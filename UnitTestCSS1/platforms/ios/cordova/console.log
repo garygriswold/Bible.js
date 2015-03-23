@@ -1,0 +1,42 @@
+2015-03-22 22:51:23.760 UnitTestCSS1[11410:3452092] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/garygriswold/Library/Developer/CoreSimulator/Devices/0BEE4EF1-BAFB-418D-8E0F-8552C95C7D1E/data/Containers/Data/Application/04A1342A-DF96-4F1B-A28C-68BDF1A87AA9/Library/Cookies/Cookies.binarycookies
+2015-03-22 22:51:23.990 UnitTestCSS1[11410:3452092] Apache Cordova native platform version 3.8.0 is starting.
+2015-03-22 22:51:23.991 UnitTestCSS1[11410:3452092] Multi-tasking -> Device: YES, App: YES
+2015-03-22 22:51:24.003 UnitTestCSS1[11410:3452092] Unlimited access to network resources
+2015-03-22 22:51:24.012 UnitTestCSS1[11410:3452092] 
+
+Started backup to iCloud! Please be careful.
+Your application might be rejected by Apple if you store too much data.
+For more information please read "iOS Data Storage Guidelines" at:
+https://developer.apple.com/icloud/documentation/data-storage/
+To disable web storage backup to iCloud, set the BackupWebStorage preference to "local" in the Cordova config.xml file
+
+2015-03-22 22:51:24.682 UnitTestCSS1[11410:3452092] Resetting plugins due to page load.
+2015-03-22 22:51:24.817 UnitTestCSS1[11410:3452092] Finished load of: file:///Users/garygriswold/Library/Developer/CoreSimulator/Devices/0BEE4EF1-BAFB-418D-8E0F-8552C95C7D1E/data/Containers/Bundle/Application/47612552-722D-403A-B425-C3E4CD2BC3DA/UnitTestCSS1.app/www/index.html
+2015-03-22 22:57:47.202 UnitTestCSS1[11562:3455383] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/garygriswold/Library/Developer/CoreSimulator/Devices/0BEE4EF1-BAFB-418D-8E0F-8552C95C7D1E/data/Containers/Data/Application/3B9F524C-F502-473A-B45A-C6F85122561C/Library/Cookies/Cookies.binarycookies
+2015-03-22 22:57:47.262 UnitTestCSS1[11562:3455383] Apache Cordova native platform version 3.8.0 is starting.
+2015-03-22 22:57:47.263 UnitTestCSS1[11562:3455383] Multi-tasking -> Device: YES, App: YES
+2015-03-22 22:57:47.264 UnitTestCSS1[11562:3455383] Unlimited access to network resources
+2015-03-22 22:57:47.266 UnitTestCSS1[11562:3455383] 
+
+Started backup to iCloud! Please be careful.
+Your application might be rejected by Apple if you store too much data.
+For more information please read "iOS Data Storage Guidelines" at:
+https://developer.apple.com/icloud/documentation/data-storage/
+To disable web storage backup to iCloud, set the BackupWebStorage preference to "local" in the Cordova config.xml file
+
+2015-03-22 22:57:47.375 UnitTestCSS1[11562:3455383] Resetting plugins due to page load.
+2015-03-22 22:57:47.437 UnitTestCSS1[11562:3455383] Finished load of: file:///Users/garygriswold/Library/Developer/CoreSimulator/Devices/0BEE4EF1-BAFB-418D-8E0F-8552C95C7D1E/data/Containers/Bundle/Application/7BB62D31-515A-4F5C-8B76-A7CC6CC2D1A5/UnitTestCSS1.app/www/prototype.html
+2015-03-22 23:03:46.564 UnitTestCSS1[11685:3459270] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/garygriswold/Library/Developer/CoreSimulator/Devices/0BEE4EF1-BAFB-418D-8E0F-8552C95C7D1E/data/Containers/Data/Application/465B1BD3-D7B6-46F7-A1DE-3CDE72FD64CB/Library/Cookies/Cookies.binarycookies
+2015-03-22 23:03:46.623 UnitTestCSS1[11685:3459270] Apache Cordova native platform version 3.8.0 is starting.
+2015-03-22 23:03:46.624 UnitTestCSS1[11685:3459270] Multi-tasking -> Device: YES, App: YES
+2015-03-22 23:03:46.625 UnitTestCSS1[11685:3459270] Unlimited access to network resources
+2015-03-22 23:03:46.627 UnitTestCSS1[11685:3459270] 
+
+Started backup to iCloud! Please be careful.
+Your application might be rejected by Apple if you store too much data.
+For more information please read "iOS Data Storage Guidelines" at:
+https://developer.apple.com/icloud/documentation/data-storage/
+To disable web storage backup to iCloud, set the BackupWebStorage preference to "local" in the Cordova config.xml file
+
+2015-03-22 23:03:46.731 UnitTestCSS1[11685:3459270] Resetting plugins due to page load.
+2015-03-22 23:03:46.769 UnitTestCSS1[11685:3459270] Finished load of: file:///Users/garygriswold/Library/Developer/CoreSimulator/Devices/0BEE4EF1-BAFB-418D-8E0F-8552C95C7D1E/data/Containers/Bundle/Application/70065A27-1CD4-4E29-A71D-D1A2066468BB/UnitTestCSS1.app/www/prototype.html
