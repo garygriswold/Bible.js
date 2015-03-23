@@ -9,4 +9,6 @@
     </author>
     <content src="prototype.html" />
     <access origin="*" />
+    <preference name="PaginationBreakingMode" value="page"/>
+    <preference name="PaginationMode" value="leftToRight"/>
 </widget>

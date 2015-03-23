@@ -9,7 +9,6 @@
     <preference name="SuppressesIncrementalRendering" value="false" />
     <preference name="GapBetweenPages" value="0" />
     <preference name="PageLength" value="0" />
-    <preference name="PaginationBreakingMode" value="page" />
     <preference name="PaginationMode" value="unpaginated" />
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
@@ -23,4 +22,6 @@
     </author>
     <content src="prototype.html" />
     <access origin="*" />
+    <preference name="PaginationBreakingMode" value="page" />
+    <preference name="PaginationMode" value="leftToRight" />
 </widget>
