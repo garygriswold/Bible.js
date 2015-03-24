@@ -22,6 +22,8 @@
     </author>
     <content src="prototype.html" />
     <access origin="*" />
+    <preference name="Fullscreen" value="false" />
+    <preference name="DisallowOverscroll" value="true" />
     <preference name="PaginationBreakingMode" value="page" />
     <preference name="PaginationMode" value="leftToRight" />
 </widget>

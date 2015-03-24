@@ -9,6 +9,9 @@
     </author>
     <content src="prototype.html" />
     <access origin="*" />
-    <preference name="PaginationBreakingMode" value="page"/>
+    <preference name="Fullscreen" value="false"/> <!-- no affect in ios -->
+    <preference name="DisallowOverscroll" value="true"/> <!-- for page mode -->
+    <preference name="PaginationBreakingMode" value="page"/> <!-- column is not working -->
     <preference name="PaginationMode" value="leftToRight"/>
+
 </widget>
