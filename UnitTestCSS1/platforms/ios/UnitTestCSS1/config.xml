@@ -13,17 +13,25 @@
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
     </feature>
+    <feature name="Notification">
+        <param name="ios-package" value="CDVNotification" />
+    </feature>
+    <feature name="StatusBar">
+        <param name="ios-package" value="CDVStatusBar" />
+        <param name="onload" value="true" />
+    </feature>
+    <preference name="StatusBarOverlaysWebView" value="true" />
+    <preference name="StatusBarStyle" value="lightcontent" />
     <name>UnitTestCSS1</name>
-    <description>
-        A sample Apache Cordova application that responds to the deviceready event.
-    </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
-    </author>
+    <description>A test program for testing components of the BibleApp</description>
+    <author email="gary@shortsands.com" href="http://shortsands.com">Gary N Griswold</author>
     <content src="prototype.html" />
     <access origin="*" />
     <preference name="Fullscreen" value="false" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="PaginationBreakingMode" value="page" />
     <preference name="PaginationMode" value="leftToRight" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarStyle" value="blacktranslucent" />
+    <preference name="StatusBarBackgroundColor" value="#AAAAAA" />
 </widget>

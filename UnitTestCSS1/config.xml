@@ -1,17 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.shortsands.unittest.css" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>UnitTestCSS1</name>
-    <description>
-        A sample Apache Cordova application that responds to the deviceready event.
-    </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
-    </author>
+    <description>A test program for testing components of the BibleApp</description>
+    <author email="gary@shortsands.com" href="http://shortsands.com">Gary N Griswold</author>
     <content src="prototype.html" />
     <access origin="*" />
     <preference name="Fullscreen" value="false"/> <!-- no affect in ios -->
     <preference name="DisallowOverscroll" value="true"/> <!-- for page mode -->
     <preference name="PaginationBreakingMode" value="page"/> <!-- column is not working -->
     <preference name="PaginationMode" value="leftToRight"/>
-
+    <preference name="StatusBarOverlaysWebView" value="false"/>
+    <preference name="StatusBarStyle" value="blacktranslucent"/><!-- default | lightcontent | blacktranslucent | blackopaque | -->
+    <preference name="StatusBarBackgroundColor" value="#AAAAAA"/>
 </widget>
