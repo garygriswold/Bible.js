@@ -5,7 +5,8 @@
 */
 "use strict";
 
-function XMLWriter() {
+function XMLWriter(filepath) {
+	this.filepath = filepath;
 	this.result = [];
 	Object.seal(this);
 };
@@ -45,5 +46,8 @@ XMLWriter.prototype.write = function(nodeType, nodeValue) {
 	}
 };
 XMLWriter.prototype.close = function() {
-	return(this.result.join(''));
+	var data = this.result.join('');
+	fs = require("fs");
+	fs.writeFileSync(this.filepath, data, "utf8");
+	return(data);
 };

@@ -2,19 +2,29 @@
 * This file is the unit test of XMLReader
 */
 "use strict";
+
 var fs = require("fs");
 var WEB_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB World English Bible";
-var BOOK_PATH = "043JHN.usx";
-var data = fs.readFileSync(WEB_BIBLE_PATH + "/" + BOOK_PATH, "utf8");
-var reader = new XMLReader(data);
-var writer = new XMLWriter();
-var count = 0;
-var type;
-while (type !== XMLNodeType.END && count < 770000) {
-	type = reader.nextToken();
-	var value = reader.tokenValue();
-	//console.log('type=|' + type + '|  value=|' + value + '|');
-	writer.write(type, value);
-	count++;
+var OUT_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB_OUT";
+
+function symmetricTest(filename) {
+	var reader = new XMLReader(WEB_BIBLE_PATH + "/" + filename);
+	var writer = new XMLWriter(OUT_BIBLE_PATH + "/" + filename);
+	var count = 0;
+	var type;
+	while (type !== XMLNodeType.END && count < 770000) {
+		type = reader.nextToken();
+		var value = reader.tokenValue();
+		//console.log('type=|' + type + '|  value=|' + value + '|');
+		writer.write(type, value);
+		count++;
+	};
+	writer.close();
+}
+
+var files = fs.readdirSync(WEB_BIBLE_PATH);
+var len = files.length;
+for (var i=0; i<len; i++) {
+	var file = files[i];
+	symmetricTest(file);
 };
-console.log(writer.close());

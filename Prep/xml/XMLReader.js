@@ -6,8 +6,14 @@
 var XMLNodeType = Object.freeze({ELE_OPEN:'ele-open', ATTR_NAME:'attr-name', ATTR_VALUE:'attr-value', ELE_END:'ele-end', 
 			WHITESP:'whitesp', TEXT:'text', ELE_EMPTY:'ele-empty', ELE_CLOSE:'ele-close', PROG_INST:'prog-inst', END:'end'});
 
-function XMLReader(data) {
-	this.data = data;
+function XMLReader(filepath) {
+	if (filepath.length < 200) {
+		this.filepath = filepath;
+		var fs = require("fs");
+		this.data = fs.readFileSync(filepath, "utf8");
+	} else {
+		this.data = filepath;
+	}
 	this.position = 0;
 
 	this.tokenStart = 0;
@@ -122,7 +128,6 @@ XMLReader.prototype.nextToken = function() {
 			case this.state.EXPECT_EMPTY_ELE:
 				if (chr === '>') {
 					this.current = this.state.START;
-					//this.tokenEnd = this.position -2;
 					this.tokenEnd = this.tokenStart;
 					return(XMLNodeType.ELE_EMPTY);
 				}
