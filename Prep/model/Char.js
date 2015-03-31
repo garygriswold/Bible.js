@@ -5,9 +5,16 @@
 
 function Char(style) {
 	this.style = style;
-	this.text = "";
+	this.children = [];
 	Object.freeze(this);
 };
+Char.prototype.tagName = 'char';
 Char.prototype.addChild = function(node) {
-	this.text = node;
+	this.children.push(node);
 };
+Char.prototype.openElement = function() {
+	return('<char style="' + this.style + '">');
+}
+Char.prototype.closeElement = function() {
+	return('</char>');
+}

@@ -7,3 +7,4 @@ function Text(text) {
 	this.text = text;
 	Object.freeze(this);
 };
+Text.prototype.tagName = 'text';

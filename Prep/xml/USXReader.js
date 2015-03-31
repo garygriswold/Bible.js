@@ -5,9 +5,6 @@
 * charStyle = [add, bk, it, k, fr, fq, fqa, ft, wj, qs, xo, xt];
 */
 "use strict";
-var WEB_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB World English Bible";
-var OLD_TESTAMENT = ["GEN", "EXO" ];
-var NEW_TESTAMENT = [];
 
 function USXReader(path) {
 	this._path = path;
@@ -31,95 +28,95 @@ USXReader.prototype.readCanon = function() {
 USXReader.prototype.readBook = function(filename, bookCode) {
 	console.log(filename, bookCode);
 
-	var data = this._fs.readFileSync(this._path + '/' + filename, 'utf8');
-	var sax = require("sax");
-	var parser = sax.parser(true);
-		
+	var reader = new XMLReader(this._path + "/" + filename);
 	var nodeStack = [];
+	var node;
+	var tempNode = {}
 
-	parser.onerror = function(err) {
-  		//console.log(err, parser.line, parser.column, parser.position);
-	};
-	parser.ontext = function(text) {
-		var textNode = new Text(text);
-		console.log('inside ontext len ' + nodeStack.length, text.length);
-		//nodeStack[nodeStack.length -1].addChild(textNode);
-		console.log(textNode.text);
-		//console.log(text);
-		//console.log("text |" + text + "|");
-		//console.log(typeof text);
-		//console.log(text.length);
-		//console.log(text[0]);
-		//for (var i=0; i<text.length; i++) {
-		//	console.log(text.charCodeAt(i));
-		//}
-  		// got some text.  t is the string of text.
-	};
-	parser.onopentag = function(node) {
-		switch(node.name) {
-			case 'usx':
-				var usxNode = new USX(node.attributes.version);
-				nodeStack.push(usxNode);
-				console.log('*** push usx ' + nodeStack.length);
-				console.log(usxNode.toUSX());
+	var tokenType;
+	var tokenValue;
+	var priorToken;
+	var count = 0;
+	while (tokenType !== XMLNodeType.END && count < 300000) {
+		tokenType = reader.nextToken();
+		priorToken = tokenValue;
+		tokenValue = reader.tokenValue();
+		//console.log('type=|' + type + '|  value=|' + value + '|');
+		count++;
+
+		switch(tokenType) {
+			case XMLNodeType.ELE_OPEN:
+				tempNode = { tagName: tokenValue };
 				break;
-			case 'book':
-				var bookNode = new Book(node.attributes.code, node.attributes.style);
-				nodeStack[0].addChild(bookNode);
-				console.log(bookNode.toUSX());
+			case XMLNodeType.ATTR_NAME:
+				tempNode[tokenValue] = '';
 				break;
-			case 'chapter':
-				var chapterNode = new Chapter(node.attributes.number, node.attributes.style);
-				nodeStack[0].addChild(chapterNode);
-				console.log(chapterNode.toUSX());
+			case XMLNodeType.ATTR_VALUE:
+				tempNode[priorToken] = tokenValue;
 				break;
-			case 'para':
-				var paraNode = new Para(node.attributes.style);
-				nodeStack.push(paraNode);
-				console.log('*** push para ' + nodeStack.length);
-				nodeStack[0].addChild(paraNode);
-				console.log(paraNode.toUSX());
+			case XMLNodeType.ELE_END:
+				node = this.createUSXObject(tempNode);
+				console.log(node.openElement());
+				if (nodeStack.length > 0) {
+					nodeStack[nodeStack.length -1].addChild(node);
+				}
+				nodeStack.push(node);
 				break;
-			case 'verse':
-				var verseNode = new Verse(node.attributes.number, node.attributes.style);
-				nodeStack[1].addChild(verseNode);
-				console.log(verseNode.toUSX());
+			case XMLNodeType.TEXT:
+				node = new Text(tokenValue);
+				console.log(node.text);
+				nodeStack[nodeStack.length -1].addChild(node);
 				break;
-			case 'note':
-				var noteNode = new Note(node.attributes.caller, node.attributes.style);
-				nodeStack[1].addChild(noteNode);
-				console.log(noteNode.toUSX());
+			case XMLNodeType.ELE_EMPTY:
+				node = this.createUSXObject(tempNode);
+				console.log(node.openElement());
+				nodeStack[nodeStack.length -1].addChild(node);
 				break;
-			case 'char':
-				var charNode = new Char(node.attributes.style);
-				nodeStack.push(charNode);
-				console.log('*** push char ' + nodeStack.length);
-				nodeStack[1].addChild(charNode);
-				console.log('******* char' + node);
-				break;
-			default:
-				// nothing yet
-		}
-	};
-	parser.onclosetag = function(node) {
-		switch(node) {
-			case 'usx':
-			case 'para':
-			case 'char':
-				console.log('*** pop ' + node + ' ' + nodeStack.length);
-				var popped = nodeStack.pop();
-				//console.log(popped);
-				if (popped.name !== node) { // popped has no name
-					//throw Error("Popped " + popped.name + ", but expected " + node);
+			case XMLNodeType.ELE_CLOSE:
+				node = nodeStack.pop();
+				console.log(node.closeElement());
+				if (node.tagName !== tokenValue) {
+					throw new Error('closing element mismatch ' + node.openElement() + ' and ' + tokenValue);
 				}
 				break;
+			case XMLNodeType.WHITESP:
+				// do nothing
+				break;
+			case XMLNodeType.PROG_INST:
+				// do nothing
+				break;
+			case XMLNodeType.END:
+				// do nothing
+				break;
+			default:
+				throw new Error('The XMLNodeType ' + nodeType + ' is unknown in USXReader.');
 		}
 	};
-	parser.onattribute = function(attr) {
-  		// an attribute.  attr has "name" and "value"
-	};
-	parser.onend = function() {
-  		console.log('********* onend event fired *****************');
-	};
-	parser.write(data);
+};
+USXReader.prototype.createUSXObject = function(tempNode) {
+	switch(tempNode.tagName) {
+		case 'char':
+			return(new Char(tempNode.style));
+			break;
+		case 'note':
+			return(new Note(tempNode.caller, tempNode.style));
+			break;
+		case 'verse':
+			return(new Verse(tempNode.number, tempNode.style));
+			break;
+		case 'para':
+			return(new Para(tempNode.style));
+			break;
+		case 'chapter':
+			return(new Chapter(tempNode.number, tempNode.style));
+			break;
+		case 'book':
+			return(new Book(tempNode.code, tempNode.style));
+			break;
+		case 'usx':
+			return(new USX(tempNode.version));
+			break;
+		default:
+			throw new Error('USX element name ' + tempNode.tagName + ' is not known to USXReader.');
+	}
 };
