@@ -3,8 +3,10 @@
 */
 "use strict";
 
-function Para(style) {
-	this.style = style;
+function Para(node) {
+	this.style = node.style;
+	this.whiteSpace = node.whiteSpace;
+	this.emptyElement = node.emptyElement;
 	this.children = []; // contains verse | note | char | text
 	Object.freeze(this);
 };
@@ -13,11 +15,16 @@ Para.prototype.addChild = function(node) {
 	this.children.push(node);
 };
 Para.prototype.openElement = function() {
-	return('\n  <para style="' + this.style + '">');
+	var elementEnd = (this.emptyElement) ? '" />' : '">';
+	return('<para style="' + this.style + elementEnd);
 }
 Para.prototype.closeElement = function() {
-	return('</para>');
+	return(this.emptyElement ? '' : '</para>');
 }
-Para.prototype.toUSX = function() {
-	return("{ name: 'para',\n  attributes: { style: '" + this.style + "' },\n  isSelfClosing: false }");
+Para.prototype.buildUSX = function(result) {
+	result.push(this.whiteSpace, this.openElement());
+	for (var i=0; i<this.children.length; i++) {
+		this.children[i].buildUSX(result);
+	}
+	result.push(this.closeElement());
 }

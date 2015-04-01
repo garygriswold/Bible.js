@@ -3,18 +3,22 @@
 */
 "use strict";
 
-function Chapter(number, style) {
-	this.number = number;
-	this.style = style;
+function Chapter(node) {
+	this.number = node.number;
+	this.style = node.style;
+	this.whiteSpace = node.whiteSpace;
+	this.emptyElement = node.emptyElement;
 	Object.freeze(this);
 };
 Chapter.prototype.tagName = 'chapter';
 Chapter.prototype.openElement = function() {
-	return('\n  <chapter number="' + this.number + '" style="' + this.style + '" />');
+	var elementEnd = (this.emptyElement) ? '" />' : '">';
+	return('<chapter number="' + this.number + '" style="' + this.style + elementEnd);
 }
 Chapter.prototype.closeElement = function() {
-	return('');
+	return(this.emptyElement ? '' : '</chapter>');
 }
-Chapter.prototype.toUSX = function() {
-	return("{ name: 'chapter',\n  attributes: { number: '" + this.number + "', style: '" + this.style + "' },\n  isSelfClosing: true }");
+Chapter.prototype.buildUSX = function(result) {
+	result.push(this.whiteSpace, this.openElement());
+	result.push(this.closeElement());
 }

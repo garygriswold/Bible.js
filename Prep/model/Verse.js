@@ -3,18 +3,22 @@
 */
 "use strict";
 
-function Verse(number, style) {
-	this.number = number;
-	this.style = style;
+function Verse(node) {
+	this.number = node.number;
+	this.style = node.style;
+	this.whiteSpace = node.whiteSpace;
+	this.emptyElement = node.emptyElement;
 	Object.freeze(this);
 };
 Verse.prototype.tagName = 'verse';
 Verse.prototype.openElement = function() {
-	return('\n    <verse number="' + this.number + '" style="' + this.style + '" />');
-}
+	var elementEnd = (this.emptyElement) ? '" />' : '">';
+	return('<verse number="' + this.number + '" style="' + this.style + elementEnd);
+};
 Verse.prototype.closeElement = function() {
-	return('');
-}
-Verse.prototype.toUSX = function() {
-	return("{ name: 'verse',\n  attributes: { number: '" + this.number + "', style: '" + this.style + "' },\n  isSelfClosing: true }");
-}
+	return(this.emptyElement ? '' : '</verse>');
+};
+Verse.prototype.buildUSX = function(result) {
+	result.push(this.whiteSpace, this.openElement());
+	result.push(this.closeElement());
+};

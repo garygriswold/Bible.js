@@ -3,18 +3,33 @@
 */
 "use strict";
 
-function Note(caller, style) {
-	this.caller = caller;
-	this.style = style;
+function Note(node) {
+	this.caller = node.caller;
+	this.style = node.style;
+	this.whiteSpace = node.whiteSpace;
+	this.emptyElement = node.emptyElement;
+	this.children = [];
 	Object.freeze(this);
 };
 Note.prototype.tagName = 'note';
+Note.prototype.addChild = function(node) {
+	this.children.push(node);
+};
 Note.prototype.openElement = function() {
-	return('<note style="' + this.style + '" caller="' + this.caller + '">');
+	var elementEnd = (this.emptyElement) ? '" />' : '">';
+	if (this.style === 'x') {
+		return('<note caller="' + this.caller + '" style="' + this.style + elementEnd);
+	} else {
+		return('<note style="' + this.style + '" caller="' + this.caller + elementEnd);
+	}
 }
 Note.prototype.closeElement = function() {
-	return('</note>');
+	return(this.emptyElement ? '' : '</note>');
 }
-Note.prototype.toUSX = function() {
-	return("{ name: 'note',\n  attributes:\n  { style: '" + this.style + "', caller: '" + this.caller + "' },\n  isSelfClosing: false }");
+Note.prototype.buildUSX = function(result) {
+	result.push(this.whiteSpace, this.openElement());
+	for (var i=0; i<this.children.length; i++) {
+		this.children[i].buildUSX(result);
+	}
+	result.push(this.closeElement());
 }

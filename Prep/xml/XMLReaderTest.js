@@ -3,9 +3,8 @@
 */
 "use strict";
 
-var fs = require("fs");
 var WEB_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB World English Bible";
-var OUT_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB_OUT";
+var OUT_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB_XML_OUT";
 
 function symmetricTest(filename) {
 	var reader = new XMLReader(WEB_BIBLE_PATH + "/" + filename);
@@ -21,7 +20,7 @@ function symmetricTest(filename) {
 	};
 	writer.close();
 }
-
+var fs = require("fs");
 var files = fs.readdirSync(WEB_BIBLE_PATH);
 var len = files.length;
 for (var i=0; i<len; i++) {

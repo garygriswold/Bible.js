@@ -32,29 +32,29 @@ USXReader.prototype.readBook = function(filename, bookCode) {
 	var nodeStack = [];
 	var node;
 	var tempNode = {}
-
-	var tokenType;
-	var tokenValue;
-	var priorToken;
 	var count = 0;
 	while (tokenType !== XMLNodeType.END && count < 300000) {
-		tokenType = reader.nextToken();
-		priorToken = tokenValue;
-		tokenValue = reader.tokenValue();
+
+		var tokenType = reader.nextToken();
+
+		var tokenValue = reader.tokenValue();
 		//console.log('type=|' + type + '|  value=|' + value + '|');
 		count++;
 
 		switch(tokenType) {
 			case XMLNodeType.ELE_OPEN:
 				tempNode = { tagName: tokenValue };
+				tempNode.whiteSpace = (priorType === XMLNodeType.WHITESP) ? priorValue : '';
+				console.log(tokenValue, priorType, '|' + priorValue + '|');
 				break;
 			case XMLNodeType.ATTR_NAME:
 				tempNode[tokenValue] = '';
 				break;
 			case XMLNodeType.ATTR_VALUE:
-				tempNode[priorToken] = tokenValue;
+				tempNode[priorValue] = tokenValue;
 				break;
 			case XMLNodeType.ELE_END:
+				tempNode.emptyElement = false;
 				node = this.createUSXObject(tempNode);
 				console.log(node.openElement());
 				if (nodeStack.length > 0) {
@@ -68,6 +68,7 @@ USXReader.prototype.readBook = function(filename, bookCode) {
 				nodeStack[nodeStack.length -1].addChild(node);
 				break;
 			case XMLNodeType.ELE_EMPTY:
+				tempNode.emptyElement = true;
 				node = this.createUSXObject(tempNode);
 				console.log(node.openElement());
 				nodeStack[nodeStack.length -1].addChild(node);
@@ -91,30 +92,33 @@ USXReader.prototype.readBook = function(filename, bookCode) {
 			default:
 				throw new Error('The XMLNodeType ' + nodeType + ' is unknown in USXReader.');
 		}
+		var priorType = tokenType;
+		var priorValue = tokenValue;
 	};
+	return(node);
 };
 USXReader.prototype.createUSXObject = function(tempNode) {
 	switch(tempNode.tagName) {
 		case 'char':
-			return(new Char(tempNode.style));
+			return(new Char(tempNode));
 			break;
 		case 'note':
-			return(new Note(tempNode.caller, tempNode.style));
+			return(new Note(tempNode));
 			break;
 		case 'verse':
-			return(new Verse(tempNode.number, tempNode.style));
+			return(new Verse(tempNode));
 			break;
 		case 'para':
-			return(new Para(tempNode.style));
+			return(new Para(tempNode));
 			break;
 		case 'chapter':
-			return(new Chapter(tempNode.number, tempNode.style));
+			return(new Chapter(tempNode));
 			break;
 		case 'book':
-			return(new Book(tempNode.code, tempNode.style));
+			return(new Book(tempNode));
 			break;
 		case 'usx':
-			return(new USX(tempNode.version));
+			return(new USX(tempNode));
 			break;
 		default:
 			throw new Error('USX element name ' + tempNode.tagName + ' is not known to USXReader.');
