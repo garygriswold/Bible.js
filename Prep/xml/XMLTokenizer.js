@@ -6,7 +6,7 @@
 var XMLNodeType = Object.freeze({ELE_OPEN:'ele-open', ATTR_NAME:'attr-name', ATTR_VALUE:'attr-value', ELE_END:'ele-end', 
 			WHITESP:'whitesp', TEXT:'text', ELE_EMPTY:'ele-empty', ELE_CLOSE:'ele-close', PROG_INST:'prog-inst', END:'end'});
 
-function XMLReader(data) {
+function XMLTokenizer(data) {
 	this.data = data;
 	this.position = 0;
 
@@ -21,10 +21,10 @@ function XMLReader(data) {
 
 	Object.seal(this);
 };
-XMLReader.prototype.tokenValue = function() {
+XMLTokenizer.prototype.tokenValue = function() {
 	return(this.data.substring(this.tokenStart, this.tokenEnd));
 };
-XMLReader.prototype.nextToken = function() {
+XMLTokenizer.prototype.nextToken = function() {
 	this.tokenStart = this.position;
 	while(this.position < this.data.length) {
 		var chr = this.data[this.position++];

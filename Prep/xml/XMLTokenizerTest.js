@@ -1,5 +1,5 @@
 /**
-* This file is the unit test of XMLReader
+* This file is the unit test of XMLTokenizer
 */
 "use strict";
 
@@ -10,8 +10,8 @@ var OUT_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB_
 function symmetricTest(filename) {
 	var inFile = WEB_BIBLE_PATH + "/" + filename;
 	var data = fs.readFileSync(inFile, "utf8");
-	var reader = new XMLReader(data);
-	var writer = new XMLWriter();
+	var reader = new XMLTokenizer(data);
+	var writer = new XMLSerializer();
 	var count = 0;
 	var type;
 	while (type !== XMLNodeType.END && count < 770000) {

@@ -26,7 +26,7 @@ USXReader.prototype.readCanon = function() {
 USXReader.prototype.readBook = function(data, bookCode) {
 	console.log(bookCode);
 
-	var reader = new XMLReader(data);
+	var reader = new XMLTokenizer(data);
 	var nodeStack = [];
 	var node;
 	var tempNode = {}
