@@ -15,7 +15,7 @@ function symmetricTest(filename) {
 	var data = rootNode.toHTML();
 	fs.writeFileSync(OUT_BIBLE_PATH + '/' + filename.substring(0,6) + '.html', data, "utf8");
 }
-/*
+
 var files = fs.readdirSync(WEB_BIBLE_PATH);
 console.log(files);
 var len = files.length;
@@ -23,6 +23,6 @@ for (var i=0; i<len; i++) {
 	var file = files[i];
 	symmetricTest(file);
 };
-*/
-symmetricTest('049EPH.usx');
+
+//symmetricTest('049EPH.usx');
 //symmetricTest('043JHN.usx');
