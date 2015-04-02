@@ -22,14 +22,27 @@ Note.prototype.openElement = function() {
 	} else {
 		return('<note style="' + this.style + '" caller="' + this.caller + elementEnd);
 	}
-}
+};
 Note.prototype.closeElement = function() {
 	return(this.emptyElement ? '' : '</note>');
-}
+};
 Note.prototype.buildUSX = function(result) {
 	result.push(this.whiteSpace, this.openElement());
 	for (var i=0; i<this.children.length; i++) {
 		this.children[i].buildUSX(result);
 	}
 	result.push(this.closeElement());
-}
+};
+Note.prototype.toHTML = function() {
+	var result = [];
+	this.buildHTML(result);
+	return(result.join(''));
+};
+Note.prototype.buildHTML = function(result) {
+	result.push('<span class="' + this.style + '">');
+	result.push(this.caller);
+	for (var i=0; i<this.children.length; i++) {
+		this.children[i].buildHTML(result);
+	}
+	result.push('</span>');
+};

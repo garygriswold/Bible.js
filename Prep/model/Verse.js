@@ -22,3 +22,11 @@ Verse.prototype.buildUSX = function(result) {
 	result.push(this.whiteSpace, this.openElement());
 	result.push(this.closeElement());
 };
+Verse.prototype.toHTML = function() {
+	var result = [];
+	this.buildHTML(result);
+	return(result.join(''));
+};
+Verse.prototype.buildHTML = function(result) {
+	result.push('<span id="' + this.number + '" class="' + this.style + '">', this.number, ' </span>');
+};

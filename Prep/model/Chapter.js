@@ -14,11 +14,19 @@ Chapter.prototype.tagName = 'chapter';
 Chapter.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
 	return('<chapter number="' + this.number + '" style="' + this.style + elementEnd);
-}
+};
 Chapter.prototype.closeElement = function() {
 	return(this.emptyElement ? '' : '</chapter>');
-}
+};
 Chapter.prototype.buildUSX = function(result) {
 	result.push(this.whiteSpace, this.openElement());
 	result.push(this.closeElement());
-}
+};
+Chapter.prototype.toHTML = function() {
+	var result = [];
+	this.buildHTML(result);
+	return(result.join(''));
+};
+Chapter.prototype.buildHTML = function(result) {
+	result.push('\n<h4 id="' + this.number + '" class="' + this.style + '">', this.number, '</h4>');
+};

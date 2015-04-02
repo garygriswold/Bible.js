@@ -22,14 +22,26 @@ Char.prototype.openElement = function() {
 	} else {
 		return('<char style="' + this.style + elementEnd);
 	}
-}
+};
 Char.prototype.closeElement = function() {
 	return(this.emptyElement ? '' : '</char>');
-}
+};
 Char.prototype.buildUSX = function(result) {
 	result.push(this.whiteSpace, this.openElement());
 	for (var i=0; i<this.children.length; i++) {
 		this.children[i].buildUSX(result);
 	}
 	result.push(this.closeElement());
-}
+};
+Char.prototype.toHTML = function() {
+	var result = [];
+	this.buildHTML(result);
+	return(result.join(''));
+};
+Char.prototype.buildHTML = function(result) {
+	result.push('<span class="' + this.style + '">');
+	for (var i=0; i<this.children.length; i++) {
+		this.children[i].buildHTML(result);
+	}
+	result.push('</span>');
+};

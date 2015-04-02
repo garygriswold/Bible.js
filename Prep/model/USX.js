@@ -34,3 +34,17 @@ USX.prototype.buildUSX = function(result) {
 	}
 	result.push(this.closeElement());
 };
+USX.prototype.toHTML = function() {
+	var result = [];
+	this.buildHTML(result);
+	return(result.join(''));
+};
+USX.prototype.buildHTML = function(result) {
+	result.push('\uFEFF<?xml version="1.0" encoding="utf-8"?>\n');
+	result.push('<html><head>\n');
+	result.push('</head><body>\n');
+	for (var i=0; i<this.children.length; i++) {
+		this.children[i].buildHTML(result);
+	}
+	result.push('\n</body></html>')
+};

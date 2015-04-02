@@ -18,14 +18,26 @@ Book.prototype.addChild = function(node) {
 Book.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
 	return('<book code="' + this.code + '" style="' + this.style + elementEnd);
-}
+};
 Book.prototype.closeElement = function() {
 	return(this.emptyElement ? '' : '</book>');
-}
+};
 Book.prototype.buildUSX = function(result) {
 	result.push(this.whiteSpace, this.openElement());
 	for (var i=0; i<this.children.length; i++) {
 		this.children[i].buildUSX(result);
 	}
 	result.push(this.closeElement());
-}
+};
+Book.prototype.toHTML = function() {
+	var result = [];
+	this.buildHTML(result);
+	return(result.join(''));
+};
+Book.prototype.buildHTML = function(result) {
+	result.push('<h3 id="' + this.code + '" class="' + this.style + '">');
+	for(var i=0; i<this.children.length; i++) {
+		this.children[i].buildHTML(result);
+	}
+	result.push('</h3>');
+};
