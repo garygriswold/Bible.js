@@ -7,6 +7,49 @@ var fs = require("fs");
 var WEB_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB World English Bible";
 var OUT_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB_XML_OUT";
 
+function XMLSerializer() {
+	this.result = [];
+	Object.seal(this);
+};
+XMLSerializer.prototype.write = function(nodeType, nodeValue) {
+	switch(nodeType) {
+		case XMLNodeType.ELE_OPEN:
+			this.result.push('<', nodeValue);
+			break;
+		case XMLNodeType.ATTR_NAME:
+			this.result.push(' ', nodeValue, '=');
+			break;
+		case XMLNodeType.ATTR_VALUE:
+			this.result.push('"', nodeValue, '"');
+			break;
+		case XMLNodeType.ELE_END:
+			this.result.push('>');
+			break;
+		case XMLNodeType.WHITESP:
+			this.result.push(nodeValue);
+			break;
+		case XMLNodeType.TEXT:
+			this.result.push(nodeValue);
+			break;
+		case XMLNodeType.ELE_EMPTY:
+			this.result.push(' />');
+			break;
+		case XMLNodeType.ELE_CLOSE:
+			this.result.push('</', nodeValue, '>');
+			break;
+		case XMLNodeType.PROG_INST:
+			this.result.push('\uFEFF', nodeValue);
+			break;
+		case XMLNodeType.END:
+			break;
+		default:
+			throw new Error('The XMLNodeType ' + nodeType + ' is unknown in XMLWriter');
+	}
+};
+XMLSerializer.prototype.close = function() {
+	return(this.result.join(''));
+};
+
 function symmetricTest(filename) {
 	var inFile = WEB_BIBLE_PATH + "/" + filename;
 	var data = fs.readFileSync(inFile, "utf8");

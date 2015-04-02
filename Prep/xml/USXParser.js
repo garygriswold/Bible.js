@@ -6,24 +6,21 @@
 */
 "use strict";
 
-function USXReader() {
+function USXParser() {
 };
-USXReader.prototype.books = function() {
-	return(this._books);
-};
-USXReader.prototype.readAll = function() {
-	var files = this._fs.readdirSync(this._path);
-	var len = files.length;
-	for (var i=0; i<len; i++) {
-		var file = files[i];
-		var bookCode = file.substr(3, 3);
-		this.readBook(file, bookCode);
-	};
-};
-USXReader.prototype.readCanon = function() {
-
-};
-USXReader.prototype.readBook = function(data, bookCode) {
+//USXParser.prototype.books = function() {
+//	return(this._books);
+//};
+//USXParser.prototype.readAll = function() {
+//	var files = this._fs.readdirSync(this._path);
+//	var len = files.length;
+//	for (var i=0; i<len; i++) {
+//		var file = files[i];
+//		var bookCode = file.substr(3, 3);
+//		this.readBook(file, bookCode);
+//	};
+//};
+USXParser.prototype.readBook = function(data, bookCode) {
 	console.log(bookCode);
 
 	var reader = new XMLTokenizer(data);
@@ -88,14 +85,14 @@ USXReader.prototype.readBook = function(data, bookCode) {
 				// do nothing
 				break;
 			default:
-				throw new Error('The XMLNodeType ' + nodeType + ' is unknown in USXReader.');
+				throw new Error('The XMLNodeType ' + nodeType + ' is unknown in USXParser.');
 		}
 		var priorType = tokenType;
 		var priorValue = tokenValue;
 	};
 	return(node);
 };
-USXReader.prototype.createUSXObject = function(tempNode) {
+USXParser.prototype.createUSXObject = function(tempNode) {
 	switch(tempNode.tagName) {
 		case 'char':
 			return(new Char(tempNode));
@@ -119,6 +116,6 @@ USXReader.prototype.createUSXObject = function(tempNode) {
 			return(new USX(tempNode));
 			break;
 		default:
-			throw new Error('USX element name ' + tempNode.tagName + ' is not known to USXReader.');
+			throw new Error('USX element name ' + tempNode.tagName + ' is not known to USXParser.');
 	}
 };

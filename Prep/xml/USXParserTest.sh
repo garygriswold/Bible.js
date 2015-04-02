@@ -8,7 +8,7 @@ cat ../model/Note.js >> temp.js
 cat ../model/Char.js >> temp.js
 cat ../model/Text.js >> temp.js
 cat XMLTokenizer.js >> temp.js
-cat USXReader.js >> temp.js
-cat USXReaderTest.js >> temp.js
+cat USXParser.js >> temp.js
+cat USXParserTest.js >> temp.js
 node temp.js
 
