@@ -8,15 +8,12 @@ var OUT_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB_
 var fs = require("fs");
 
 function symmetricTest(filename) {
-	var reader = new USXReader(WEB_BIBLE_PATH);
+	var reader = new USXReader();
 	var bookCode = filename.substring(3, 3);
-	var rootNode = reader.readBook(filename, bookCode);
+	var data = fs.readFileSync(WEB_BIBLE_PATH + '/' + filename, "utf8");
+	var rootNode = reader.readBook(data, bookCode);
 
-	var result = [];
-	console.log('before to USX');
-	result.push(rootNode.toUSX());
-	console.log('after to USX');
-	var data = result.join('');
+	var data = rootNode.toUSX();
 	fs.writeFileSync(OUT_BIBLE_PATH + '/' + filename, data, "utf8");
 }
 

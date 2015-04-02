@@ -5,8 +5,7 @@
 */
 "use strict";
 
-function XMLWriter(filepath) {
-	this.filepath = filepath;
+function XMLWriter() {
 	this.result = [];
 	Object.seal(this);
 };
@@ -37,7 +36,7 @@ XMLWriter.prototype.write = function(nodeType, nodeValue) {
 			this.result.push('</', nodeValue, '>');
 			break;
 		case XMLNodeType.PROG_INST:
-			this.result.push(nodeValue);
+			this.result.push('\uFEFF', nodeValue);
 			break;
 		case XMLNodeType.END:
 			break;
@@ -46,8 +45,5 @@ XMLWriter.prototype.write = function(nodeType, nodeValue) {
 	}
 };
 XMLWriter.prototype.close = function() {
-	var data = this.result.join('');
-	fs = require("fs");
-	fs.writeFileSync(this.filepath, data, "utf8");
-	return(data);
+	return(this.result.join(''));
 };

@@ -1,8 +1,11 @@
 #!/bin/sh
 
+# Original USX input
 WEB_BIBLE_PATH="/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB World English Bible"
+# Output location of XMLReaderTest
+#OUT_BIBLE_PATH="/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB_XML_OUT"
+# Output location of USXReaderTest
 OUT_BIBLE_PATH="/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB_USX_OUT"
-
 
 books=( "001GEN" "002EXO" "003LEV" "004NUM" "005DEU" "006JOS" "007JDG" "008RUT" "0091SA" "0102SA" "0111KI" "0122KI" "0131CH" 
 	"0142CH" "015EZR" "016NEH" "017EST" "018JOB" "019PSA" "020PRO" "021ECC" "022SNG" "023ISA" "024JER" "025LAM" "026EZK" "027DAN"

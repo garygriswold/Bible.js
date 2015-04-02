@@ -6,9 +6,7 @@
 */
 "use strict";
 
-function USXReader(path) {
-	this._path = path;
-	this._fs = require("fs");
+function USXReader() {
 };
 USXReader.prototype.books = function() {
 	return(this._books);
@@ -25,10 +23,10 @@ USXReader.prototype.readAll = function() {
 USXReader.prototype.readCanon = function() {
 
 };
-USXReader.prototype.readBook = function(filename, bookCode) {
-	console.log(filename, bookCode);
+USXReader.prototype.readBook = function(data, bookCode) {
+	console.log(bookCode);
 
-	var reader = new XMLReader(this._path + "/" + filename);
+	var reader = new XMLReader(data);
 	var nodeStack = [];
 	var node;
 	var tempNode = {}
