@@ -22,11 +22,24 @@ Concordance.prototype.dumpAlphaSort = function() {
 	this.dump(alphaWords);
 };
 Concordance.prototype.dumpFrequencySort = function() {
+	var freqMap = {};
 	var words = Object.keys(this.index);
-	var freqWords = words.sort(function(a,b) {
-//		return <0, 0, >0}) -> mutates and returns array
+	for (var i=0; i<words.length; i++) {
+		var key = words[i];
+		var len = this.index[key].length;
+		console.log('***', key, len);
+		if (freqMap[len] === undefined) {
+			freqMap[len] = [];
+		}
+		freqMap[len].push(key);
+	}
+	var freqSort = Object.keys(freqMap).sort(function(a, b) {
+		return(a-b);
 	});
-//	this.dump(freqWords);
+	for (var i=0; i<freqSort.length; i++) {
+		var freq = freqSort[i];
+		console.log(freq, freqMap[freq]);
+	}
 };
 Concordance.prototype.dump = function(words) {
 	for (var i=0; i<words.length; i++) {

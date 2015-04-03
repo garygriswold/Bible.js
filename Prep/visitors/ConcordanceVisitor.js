@@ -1,6 +1,8 @@
 /**
 * This class traverses the USX data model in order to find each word, and 
 * reference to that word.
+*
+* This solution might not be unicode safe. GNG Apr 2, 2015
 */
 "use strict"
 
@@ -26,11 +28,13 @@ ConcordanceVisitor.prototype.readRecursively = function(node) {
 			this.verse = node.number;
 			break;
 		case 'text':
-			var words = node.text.split(/\s+/);
+			var words = node.text.split(/\b/);
 			for (var i=0; i<words.length; i++) {
-				var word = words[i].replace(/[\?\"\'.!@#$%,]/, '');
-				var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-				this.concordance.addEntry(word, reference);
+				var word = words[i].replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]/g, '');
+				if (word.length > 0 && this.chapter > 0 && this.verse > 0) {
+					var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
+					this.concordance.addEntry(word.toLowerCase(), reference);
+				}
 			}
 			break;
 		default:

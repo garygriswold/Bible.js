@@ -9,18 +9,6 @@
 function USXParser() {
 	this.styleCount = {};
 };
-//USXParser.prototype.books = function() {
-//	return(this._books);
-//};
-//USXParser.prototype.readAll = function() {
-//	var files = this._fs.readdirSync(this._path);
-//	var len = files.length;
-//	for (var i=0; i<len; i++) {
-//		var file = files[i];
-//		var bookCode = file.substr(3, 3);
-//		this.readBook(file, bookCode);
-//	};
-//};
 USXParser.prototype.readBook = function(data, bookCode) {
 	console.log(bookCode);
 
