@@ -10,6 +10,6 @@ cat ../model/usx/Text.js >> temp.js
 cat ../xml/XMLTokenizer.js >> temp.js
 cat ../xml/USXParser.js >> temp.js
 cat ../model/meta/Concordance.js >> temp.js
-cat ConcordanceVisitor.js >> temp.js
-cat ConcordanceTest.js >> temp.js
+cat ConcordanceBuilder.js >> temp.js
+cat ConcordanceBuilderTest.js >> temp.js
 node temp.js

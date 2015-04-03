@@ -6,17 +6,17 @@
 */
 "use strict"
 
-function ConcordanceVisitor() {
+function ConcordanceBuilder() {
 	this.concordance = new Concordance();
 };
-ConcordanceVisitor.prototype.readBook = function(usxRoot) {
+ConcordanceBuilder.prototype.readBook = function(usxRoot) {
 	this.usxRoot = usxRoot;
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
 	this.readRecursively(this.usxRoot);
 };
-ConcordanceVisitor.prototype.readRecursively = function(node) {
+ConcordanceBuilder.prototype.readRecursively = function(node) {
 	switch(node.tagName) {
 		case 'book':
 			this.bookCode = node.code;

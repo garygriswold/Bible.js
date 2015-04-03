@@ -2,14 +2,14 @@
 
 var WEB_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB World English Bible";
 var fs = require("fs");
-var visitor = new ConcordanceVisitor();
+var builder = new ConcordanceBuilder();
 
 function test(filename) {
 	var bookCode = filename.substring(3, 3);
 	var data = fs.readFileSync(WEB_BIBLE_PATH + '/' + filename, "utf8");
 	var rootNode = parser.readBook(data, bookCode);
 
-	visitor.readBook(rootNode);
+	builder.readBook(rootNode);
 }
 
 var parser = new USXParser();
@@ -21,7 +21,7 @@ for (var i=0; i<len; i++) {
 	test(file);
 };
 
-var concordance = visitor.concordance;
+var concordance = builder.concordance;
 //concordance.dumpAlphaSort();
 
 concordance.dumpFrequencySort();
