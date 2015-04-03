@@ -6,13 +6,12 @@ var fs = require("fs");
 
 function symmetricTest(filename) {
 	var bookCode = filename.substring(3, 3);
+	console.log(bookCode);
 	var data = fs.readFileSync(WEB_BIBLE_PATH + '/' + filename, "utf8");
-	var rootNode = parser.readBook(data, bookCode);
+	var rootNode = parser.readBook(data);
 
 	var data = rootNode.toUSX();
 	fs.writeFileSync(OUT_BIBLE_PATH + '/' + filename, data, "utf8");
-
-	parser.countStyles();
 }
 
 var parser = new USXParser();

@@ -9,9 +9,7 @@
 function USXParser() {
 	this.styleCount = {};
 };
-USXParser.prototype.readBook = function(data, bookCode) {
-	console.log(bookCode);
-
+USXParser.prototype.readBook = function(data) {
 	var reader = new XMLTokenizer(data);
 	var nodeStack = [];
 	var node;
@@ -40,7 +38,6 @@ USXParser.prototype.readBook = function(data, bookCode) {
 			case XMLNodeType.ELE_END:
 				tempNode.emptyElement = false;
 				node = this.createUSXObject(tempNode);
-				this.styleInventory(node);
 				console.log(node.openElement());
 				if (nodeStack.length > 0) {
 					nodeStack[nodeStack.length -1].addChild(node);
@@ -55,7 +52,6 @@ USXParser.prototype.readBook = function(data, bookCode) {
 			case XMLNodeType.ELE_EMPTY:
 				tempNode.emptyElement = true;
 				node = this.createUSXObject(tempNode);
-				this.styleInventory(node);
 				console.log(node.openElement());
 				nodeStack[nodeStack.length -1].addChild(node);
 				break;
@@ -110,15 +106,3 @@ USXParser.prototype.createUSXObject = function(tempNode) {
 			throw new Error('USX element name ' + tempNode.tagName + ' is not known to USXParser.');
 	}
 };
-USXParser.prototype.styleInventory = function(node) {
-	if (node.style) {
-		var name = node.tagName + '.' + node.style;
-		var count = this.styleCount[name] || 0;
-		this.styleCount[name] = ++count;
-	}
-};
-USXParser.prototype.countStyles = function() {
-	for (var name in this.styleCount) {
-		console.log(name + ':  ' + this.styleCount[name]);
-	}
-}
