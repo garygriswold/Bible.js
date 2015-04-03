@@ -10,11 +10,10 @@ function ConcordanceBuilder() {
 	this.concordance = new Concordance();
 };
 ConcordanceBuilder.prototype.readBook = function(usxRoot) {
-	this.usxRoot = usxRoot;
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
-	this.readRecursively(this.usxRoot);
+	this.readRecursively(usxRoot);
 };
 ConcordanceBuilder.prototype.readRecursively = function(node) {
 	switch(node.tagName) {
