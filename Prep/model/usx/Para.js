@@ -34,9 +34,12 @@ Para.prototype.toHTML = function() {
 	return(result.join(''));
 };
 Para.prototype.buildHTML = function(result) {
-	result.push('\n<p class="' + this.style + '">');
-	for (var i=0; i<this.children.length; i++) {
-		this.children[i].buildHTML(result);
+	var identStyles = [ 'ide', 'sts', 'rem', 'h', 'toc1', 'toc2', 'toc3' ];
+	if (identStyles.indexOf(this.style) === -1) {
+		result.push('\n<p class="' + this.style + '">');
+		for (var i=0; i<this.children.length; i++) {
+			this.children[i].buildHTML(result);
+		}
+		result.push('</p>');
 	}
-	result.push('</p>');
 };

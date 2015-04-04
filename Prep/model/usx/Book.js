@@ -35,9 +35,4 @@ Book.prototype.toHTML = function() {
 	return(result.join(''));
 };
 Book.prototype.buildHTML = function(result) {
-	result.push('<h3 id="' + this.code + '" class="' + this.style + '">');
-	for(var i=0; i<this.children.length; i++) {
-		this.children[i].buildHTML(result);
-	}
-	result.push('</h3>');
 };

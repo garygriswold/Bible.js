@@ -42,7 +42,22 @@ USX.prototype.toHTML = function() {
 USX.prototype.buildHTML = function(result) {
 	result.push('\uFEFF<?xml version="1.0" encoding="utf-8"?>\n');
 	result.push('<html><head>\n');
-	result.push('</head><body>\n');
+	result.push('\t<meta charset="utf-8" />\n');
+	result.push('\t<meta name="format-detection" content="telephone=no" />\n');
+	result.push('\t<meta name="msapplication-tap-highlight" content="no" />\n');
+    result.push('\t<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />\n');
+	result.push('\t<link rel="stylesheet" href="../css/prototype.css"/>\n');
+	result.push('\t<script type="text/javascript" src="cordova.js"></script>\n');
+	result.push('\t<script type="text/javascript">\n');
+	result.push('\t\tfunction onBodyLoad() {\n');
+	result.push('\t\t\tdocument.addEventListener("deviceready", onDeviceReady, false);\n');
+	result.push('\t\t}\n');
+	result.push('\t\tfunction onDeviceReady() {\n');
+	result.push('\t\t\t// app = new BibleApp();\n');
+	result.push('\t\t\t// app.something();\n');
+	result.push('\t\t}\n');
+	result.push('\t</script>\n');
+	result.push('</head><body onload="onBodyLoad()">');
 	for (var i=0; i<this.children.length; i++) {
 		this.children[i].buildHTML(result);
 	}

@@ -2,11 +2,12 @@
 * The HTMLGeneratorTest parses a book of the Bible and outputs an HTML document of that book.
 */
 var WEB_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB World English Bible";
-var OUT_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB_HTML_OUT";
+//var OUT_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB_HTML_OUT";
+var OUT_BIBLE_PATH = "/Users/garygriswold/Philip/UnitTestCSS1/www/html";
 
 var fs = require("fs");
 
-function symmetricTest(filename) {
+function test(filename) {
 	var reader = new USXParser();
 	var bookCode = filename.substring(3, 3);
 	var data = fs.readFileSync(WEB_BIBLE_PATH + '/' + filename, "utf8");
@@ -19,10 +20,10 @@ function symmetricTest(filename) {
 var files = fs.readdirSync(WEB_BIBLE_PATH);
 console.log(files);
 var len = files.length;
+len = 66;
 for (var i=0; i<len; i++) {
 	var file = files[i];
-	symmetricTest(file);
+	test(file);
 };
-
-//symmetricTest('049EPH.usx');
-//symmetricTest('043JHN.usx');
+test('100FRT.usx');
+test('109GLO.usx');

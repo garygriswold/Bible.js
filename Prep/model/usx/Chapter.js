@@ -28,5 +28,5 @@ Chapter.prototype.toHTML = function() {
 	return(result.join(''));
 };
 Chapter.prototype.buildHTML = function(result) {
-	result.push('\n<h4 id="' + this.number + '" class="' + this.style + '">', this.number, '</h4>');
+	result.push('\n<p id="' + this.number + '" class="' + this.style + '">', this.number, '</p>');
 };
