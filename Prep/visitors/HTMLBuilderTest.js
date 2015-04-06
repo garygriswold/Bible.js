@@ -1,5 +1,5 @@
 /**
-* The HTMLGeneratorTest parses a book of the Bible and outputs an HTML document of that book.
+* The HTMLBuilderTest parses a book of the Bible and outputs an HTML document of that book.
 */
 var WEB_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB World English Bible";
 //var OUT_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB_HTML_OUT";
