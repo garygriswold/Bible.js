@@ -23,7 +23,7 @@ main, article, section {
 /* Text Format */
 body > main {
 	font-family: serif;
-	font-size: 1em;
+	font-size: 1.5em;
 	color: #000000;
 	line-height: 1.2;
 	text-align: justify; /* or start */

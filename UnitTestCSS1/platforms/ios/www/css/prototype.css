@@ -1,18 +1,18 @@
 /* background */
-main {
-	background-color: #00000;
+body {
+	background-color: #FF000;
 	background-image: url(<uri>);
 	/* gradient is possible by using canvas */
 }
 /* margins */
-body > main {
+body {
 	padding-left: 5%;
 	padding-right: 5%;
 	padding-top: 5%;
 	padding-bottom: 5%;
 }
 /* Paged Layout */
-main, article, section {
+body {
 	page: auto;
 	break-before: avoid-page;/* or avoid-column */
 	orphans: 2;
@@ -21,58 +21,82 @@ main, article, section {
 	column-gap: 2.5%;
 }
 /* Text Format */
-body > main {
+body {
 	font-family: serif;
-	font-size: 1.5em;
-	color: #000000;
+	font-size: 1.0em;
+	color: #00FF00;
 	line-height: 1.2;
 	text-align: justify; /* or start */
 	direction: ltr;
-	word-spacing: normal;
-	letter-spacing: normal;
-	white-space: normal;
 }
-/* Book Title */
-body > main > article > header > p.t {
+/* Book Title Main */
+p.mt {
 	font-family: serif;
 	font-size: 2.5em;
+	/*color: #005AB3; *//* Dark Blue */
+	color: #0943B2;
+	line-height: 1.0;
+	text-align: center;
+	direction: ltr;
+}
+/* Book Title Smaller */
+p.mt2 {
+	font-family: serif;
+	font-size: 1.5em;
+	/*color: #005AB3; *//* Dark Blue */
+	color: #0943B2;
+	line-height: 1.0;
+	text-align: center;
+	direction: ltr;
+}
+/* Book Title Smallest */
+p.mt3 {
+	font-family: serif;
+	font-size: 1.2em;
 	color: #005AB3; /* Dark Blue */
 	line-height: 1.0;
 	text-align: center;
 	direction: ltr;
-	word-spacing: normal;
-	letter-spacing: normal;
-	white-space: normal;
 }
 /* Chapter Number Format */
-body > main > article > section > p.cn {
+p.c {
 	font-family: sans-serif;
-	font-size: 2em;
+	font-size: 1.5em;
 	color: #005AB3;
 	line-height: 1.0;
 }
-/* Paragraph Title */
-body > main > article > section > p.et {
-	font-family: serif;
-	font-size: 1.2em;
-	color: #005AB3;
-	text-align: start;
-	line-height: 1.0;
-}
-/* First Letter Format NOT WORKING WELL */
-/*body > main > article > section > p.p:first-letter {
-	font-family: serif;
-	font-size: 50px;
-	color: #FF0000;
-	line-height: normal;
-	vertical-align: bottom;
-	border-style: solid;
-}*/
 /* Verse Number Format */
-body > main > article > section > p > span.vn {
+span.v {
 	font-family: sans-serif;
 	font-size: 0.7em;
 	color: #777777;
 	line-height: 0.7em;
 	vertical-align: super;
+}
+/* Normal Paragraph Text */
+p.p {
+	text-indent: 5%;
+	color: #000000;
+}
+/* Poetry First Line */
+p.q {
+	color: #000000;
+	padding-left: 6%;
+	padding-right: 6%;
+	margin: 0;
+}
+/* Poetry Second Line */
+p.q2 {
+	color: #000000;
+	padding-left: 10%;
+	margin: 0;
+}
+/* Continuation Paragraph as start of Chapter */
+p.nb {
+	color: #000000;
+	text-indent: 0;
+}
+/* Words of Jesus */
+span.wj {
+	color: #FF3333;
 }
