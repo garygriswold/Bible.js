@@ -22,6 +22,9 @@ Verse.prototype.buildUSX = function(result) {
 	result.push(this.whiteSpace, this.openElement());
 	result.push(this.closeElement());
 };
+Verse.prototype.toDOM = function(node) {
+	return(node);
+};
 Verse.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);

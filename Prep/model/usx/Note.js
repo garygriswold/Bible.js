@@ -33,6 +33,9 @@ Note.prototype.buildUSX = function(result) {
 	}
 	result.push(this.closeElement());
 };
+Note.prototype.toDOM = function(node) {
+	return(node);
+};
 Note.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);

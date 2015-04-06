@@ -29,6 +29,9 @@ Book.prototype.buildUSX = function(result) {
 	}
 	result.push(this.closeElement());
 };
+Book.prototype.toDOM = function(node) {
+	return(node);
+};
 Book.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);

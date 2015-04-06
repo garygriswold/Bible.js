@@ -28,6 +28,9 @@ Para.prototype.buildUSX = function(result) {
 	}
 	result.push(this.closeElement());
 };
+Para.prototype.toDOM = function(node) {
+	return(node);
+};
 Para.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);

@@ -33,6 +33,9 @@ Char.prototype.buildUSX = function(result) {
 	}
 	result.push(this.closeElement());
 };
+Char.prototype.toDOM = function(node) {
+	return(node);
+};
 Char.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);

@@ -4,8 +4,8 @@
 */
 "use strict"
 
-function HTMLBuilder() {
-	this.concordance = new Concordance();
+function HTMLBuilder(document) {
+	this.document = document;
 };
 HTMLBuilder.prototype.readBook = function(usxRoot) {
 	this.bookCode = '';
@@ -25,14 +25,6 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 			this.verse = node.number;
 			break;
 		case 'text':
-			var words = node.text.split(/\b/);
-			for (var i=0; i<words.length; i++) {
-				var word = words[i].replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]/g, '');
-				if (word.length > 0 && this.chapter > 0 && this.verse > 0) {
-					var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-					this.concordance.addEntry(word.toLowerCase(), reference);
-				}
-			}
 			break;
 		default:
 			break;

@@ -11,6 +11,9 @@ Text.prototype.tagName = 'text';
 Text.prototype.buildUSX = function(result) {
 	result.push(this.text);
 };
+Text.prototype.toDOM = function(node) {
+	return(node);
+};
 Text.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);
