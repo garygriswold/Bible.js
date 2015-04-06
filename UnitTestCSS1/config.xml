@@ -3,7 +3,7 @@
     <name>UnitTestCSS1</name>
     <description>A test program for testing components of the BibleApp</description>
     <author email="gary@shortsands.com" href="http://shortsands.com">Gary N Griswold</author>
-    <content src="html/043JHN.html" />
+    <content src="html/001GEN.html" />
     <access origin="*" />
     <preference name="Fullscreen" value="false"/> <!-- no affect in ios -->
     <preference name="DisallowOverscroll" value="true"/> <!-- for page mode -->
