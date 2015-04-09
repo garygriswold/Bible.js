@@ -22,8 +22,12 @@ Chapter.prototype.buildUSX = function(result) {
 	result.push(this.whiteSpace, this.openElement());
 	result.push(this.closeElement());
 };
-Chapter.prototype.toDOM = function(node) {
-	return(node);
+Chapter.prototype.toDOM = function(document, parentNode) {
+	var child = document.createElement('p');
+	child.setAttribute('id', this.number);
+	child.setAttribute('class', this.style);
+	parentNode.addChild(child);
+	return(child);
 };
 Chapter.prototype.toHTML = function() {
 	var result = [];

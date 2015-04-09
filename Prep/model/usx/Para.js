@@ -28,8 +28,17 @@ Para.prototype.buildUSX = function(result) {
 	}
 	result.push(this.closeElement());
 };
-Para.prototype.toDOM = function(node) {
-	return(node);
+Para.prototype.toDOM = function(document, parentNode) {
+	var identStyles = [ 'ide', 'sts', 'rem', 'h', 'toc1', 'toc2', 'toc3', 'cl' ];
+	if (identStyles.indexOf(this.style) === -1) {
+		var child = document.createElement('p');
+		child.setAttribute('class', this.style);
+		parentNode.addChild(child);
+		return(child);
+	}
+	else {
+		return(parentNode);
+	}
 };
 Para.prototype.toHTML = function() {
 	var result = [];

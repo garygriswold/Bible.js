@@ -8,7 +8,7 @@ function StyleIndex() {
 	this.completed = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl',
 		'para.mt', 'para.mt2', 'para.mt3', 'para.ms', 'para.d',
 		'chapter.c', 'verse.v',
-		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 
+		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 'para.nb',
 		'para.sp', 'para.q', 'para.q2',
 		'char.wj', 'char.qs'];
 	Object.freeze(this);

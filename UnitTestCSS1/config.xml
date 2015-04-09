@@ -3,13 +3,15 @@
     <name>UnitTestCSS1</name>
     <description>A test program for testing components of the BibleApp</description>
     <author email="gary@shortsands.com" href="http://shortsands.com">Gary N Griswold</author>
-    <content src="html/001GEN.html" />
+    <content src="page.html" />
+    <!--<content src="html/043JHN.html"/>-->
     <access origin="*" />
     <preference name="Fullscreen" value="false"/> <!-- no affect in ios -->
     <preference name="DisallowOverscroll" value="true"/> <!-- for page mode -->
-    <preference name="PaginationBreakingMode" value="page"/> <!-- column is not working -->
-    <preference name="PaginationMode" value="leftToRight"/>
+    <!--<preference name="PaginationBreakingMode" value="page"/>--> <!-- column is not working -->
+    <!--<preference name="PaginationMode" value="leftToRight"/>-->
     <preference name="StatusBarOverlaysWebView" value="false"/>
     <preference name="StatusBarStyle" value="blacktranslucent"/><!-- default | lightcontent | blacktranslucent | blackopaque | -->
     <preference name="StatusBarBackgroundColor" value="#AAAAAA"/>
+    <preference name="iosPersistentFileLocation" value="Library"/><!-- make dataDirectory on ios not visible to iTunes -->
 </widget>

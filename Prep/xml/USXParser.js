@@ -7,7 +7,6 @@
 "use strict";
 
 function USXParser() {
-	this.styleCount = {};
 };
 USXParser.prototype.readBook = function(data) {
 	var reader = new XMLTokenizer(data);

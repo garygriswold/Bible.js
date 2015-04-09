@@ -33,8 +33,11 @@ Note.prototype.buildUSX = function(result) {
 	}
 	result.push(this.closeElement());
 };
-Note.prototype.toDOM = function(node) {
-	return(node);
+Note.prototype.toDOM = function(document, parentNode) {
+	var child = document.createElement('span');
+	child.setAttribute('class', this.style);
+	parentNode.addChild(child);
+	return(child);
 };
 Note.prototype.toHTML = function() {
 	var result = [];

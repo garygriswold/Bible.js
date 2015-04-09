@@ -10,5 +10,17 @@
             "type": "registry",
             "id": "org.apache.cordova.statusbar"
         }
+    },
+    "org.apache.cordova.console": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.console"
+        }
+    },
+    "org.apache.cordova.file": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.file"
+        }
     }
 }
