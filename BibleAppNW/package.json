@@ -1,0 +1,12 @@
+{
+	"name": "BibleAppNW",
+	"description": "Desktop Version of the Shortsands Bible App",
+	"main": "index.html",
+	"window: {
+		"toolbar": true,
+		"show": true
+	},
+	"scripts": {
+    "start": "nodewebkit"
+  	}
+}
