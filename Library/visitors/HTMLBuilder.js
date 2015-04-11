@@ -1,57 +1,45 @@
 /**
-* This class traverses the USX data model in order to generate the DOM nodes of
-* HTML, and optionally generates the HTML string, which can be stored as a file.
+* This class traverses a DOM tree in order to create an equivalent HTML document.
 */
 "use strict"
 
-function HTMLBuilder(document) {
-	this.document = document;
-	this.top = this.document.createElement('div');
-	this.parent = this.topDiv
+function HTMLBuilder() {
+	this.result = [];
+	Object.freeze(this);
 };
-HTMLBuilder.prototype.readBook = function(usxRoot) {
-	this.bookCode = '';
-	this.chapter = 0;
-	this.verse = 0;
-	this.readRecursively(usxRoot);
-	return(this.top);
+HTMLBuilder.prototype.toHTML = function(fragment) {
+	this.readRecursively(fragment);
+	return(this.result.join(''));
 };
 HTMLBuilder.prototype.readRecursively = function(node) {
-	switch(node.tagName) {
-		case 'usx':
-		this.parent = node.toDOM(this.document, this.parent);
+	console.log('size result ', this.result.length);
+	switch(node.nodeType) {
+		case 11: // fragment
+			//this.parent = node.toDOM(this.document, this.parent);
 			break;
-		case 'book':
+		case 1: // element
 			this.bookCode = node.code;
 			this.parent = node.toDOM(this.document, this.parent);
+			this.result.push('<', node.tagName);
+			for (var i=0; i<node.attributes.length; i++) {
+				this.result.push(' ', node.attributes[i].nodeName, '="', node.attributes[i].nodeValue, '"');
+			}
+			this.result.push('>');
 			break;
-		case 'chapter':
-			this.chapter = node.number;
-			this.parent = node.toDOM(this.document, this.parent);
-			break;
-		case 'verse':
-			this.verse = node.number;
-			this.parent = node.toDOM(this.document, this.parent);
-			break;
-		case 'para':
-			this.parent = node.toDOM(this.document, this.parent);
-			break;
-		case 'text':
-			this.parent = node.toDOM(this.document, this.parent);
-			break;
-		case 'char':
-			this.parent = node.toDOM(this.document, this.parent);
-			break;
-		case 'note':
-			this.parent = node.toDOM(this.document, this.parent);
+		case 3: // text
+			this.result.push(node.text);
 			break;
 		default:
+			throw new Error('Unexpected nodeType ' + node.nodeType + ' in HTMLBuilder.toHTML().');
 			break;
 	}
 	if ('children' in node) {
 		for (var i=0; i<node.children.length; i++) {
 			this.readRecursively(node.children[i]);
 		}
+	}
+	if (node.nodeType === 1) {
+		this.result.push('</', node.tagName, '>');
 	}
 };
 

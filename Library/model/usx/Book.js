@@ -29,8 +29,12 @@ Book.prototype.buildUSX = function(result) {
 	}
 	result.push(this.closeElement());
 };
-Book.prototype.toDOM = function(document, parentNode) {
-	return(parentNode);
+Book.prototype.toDOM = function(parentNode) {
+	var article = document.createElement('article');
+	article.setAttribute('id', this.code);
+	article.setAttribute('class', this.style);
+	parentNode.appendChild(article);
+	return(article);
 };
 Book.prototype.toHTML = function() {
 	var result = [];

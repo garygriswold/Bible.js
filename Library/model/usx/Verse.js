@@ -22,11 +22,13 @@ Verse.prototype.buildUSX = function(result) {
 	result.push(this.whiteSpace, this.openElement());
 	result.push(this.closeElement());
 };
-Verse.prototype.toDOM = function(document, parentNode) {
+Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
+	var reference = bookCode + ':' + chapterNum + ':' + this.number;
 	var child = document.createElement('span');
-	child.setAttribute('id', this.number);
+	child.setAttribute('id', reference);
 	child.setAttribute('class', this.style);
-	parentNode.addChild(child);
+	child.textContent = this.number + ' ';
+	parentNode.appendChild(child);
 	return(child);
 };
 Verse.prototype.toHTML = function() {

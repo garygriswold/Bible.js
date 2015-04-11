@@ -26,7 +26,7 @@ USXParser.prototype.readBook = function(data) {
 			case XMLNodeType.ELE_OPEN:
 				tempNode = { tagName: tokenValue };
 				tempNode.whiteSpace = (priorType === XMLNodeType.WHITESP) ? priorValue : '';
-				console.log(tokenValue, priorType, '|' + priorValue + '|');
+				//console.log(tokenValue, priorType, '|' + priorValue + '|');
 				break;
 			case XMLNodeType.ATTR_NAME:
 				tempNode[tokenValue] = '';
@@ -37,7 +37,7 @@ USXParser.prototype.readBook = function(data) {
 			case XMLNodeType.ELE_END:
 				tempNode.emptyElement = false;
 				node = this.createUSXObject(tempNode);
-				console.log(node.openElement());
+				//console.log(node.openElement());
 				if (nodeStack.length > 0) {
 					nodeStack[nodeStack.length -1].addChild(node);
 				}
@@ -45,18 +45,18 @@ USXParser.prototype.readBook = function(data) {
 				break;
 			case XMLNodeType.TEXT:
 				node = new Text(tokenValue);
-				console.log(node.text);
+				//console.log(node.text);
 				nodeStack[nodeStack.length -1].addChild(node);
 				break;
 			case XMLNodeType.ELE_EMPTY:
 				tempNode.emptyElement = true;
 				node = this.createUSXObject(tempNode);
-				console.log(node.openElement());
+				//console.log(node.openElement());
 				nodeStack[nodeStack.length -1].addChild(node);
 				break;
 			case XMLNodeType.ELE_CLOSE:
 				node = nodeStack.pop();
-				console.log(node.closeElement());
+				//console.log(node.closeElement());
 				if (node.tagName !== tokenValue) {
 					throw new Error('closing element mismatch ' + node.openElement() + ' and ' + tokenValue);
 				}

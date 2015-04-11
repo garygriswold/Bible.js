@@ -14,9 +14,37 @@
 			presentBook('WEB/043JHN.usx');
 		};
 		function presentBook(filename) {
-			var dom = new DOMBuilder();
-			dom.insertAfter(null, filename);
+			var reader = new NodeFileReader();
+			reader.readTextFile('application', 'usx/' + filename, readSuccessHandler, readFailedHandler);
 		};
+		function readSuccessHandler(data) {
+			var parser = new USXParser();
+			var usxNode = parser.readBook(data);
+			//var html = usxNode.toHTML();
+			//console.log(html);
+			var dom = new DOMBuilder();
+			var fragment = dom.toDOM(usxNode);
+			var bodyNodes = document.getElementsByTagName('body');
+			console.log('len ' + bodyNodes.length);
+			console.log('body: ' + bodyNodes[0].nodeName);
+			bodyNodes[0].appendChild(fragment);
+
+			var builder = new HTMLBuilder();
+			var html2 = builder.toHTML(fragment);
+			console.log('html output ' + html2.length);
+
+			var writer = new NodeFileWriter();
+			writer.writeTextFile('application', 'usx/999test.html', html2, writeSuccessHandler, writeFailedHandler);
+		};
+		function readFailedHandler(err) {
+			console.log(JSON.stringify(err));
+		};
+		function writeSuccessHandler() {
+			console.log('write file success');
+		}
+		function writeFailedHandler(err) {
+			console.log(JSON.stringify(err));
+		}
 	</script>
   </head>
   <body onload="onBodyLoad()">

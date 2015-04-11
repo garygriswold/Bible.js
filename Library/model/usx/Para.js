@@ -28,17 +28,14 @@ Para.prototype.buildUSX = function(result) {
 	}
 	result.push(this.closeElement());
 };
-Para.prototype.toDOM = function(document, parentNode) {
+Para.prototype.toDOM = function(parentNode) {
 	var identStyles = [ 'ide', 'sts', 'rem', 'h', 'toc1', 'toc2', 'toc3', 'cl' ];
+	var child = document.createElement('p');
+	child.setAttribute('class', this.style);
 	if (identStyles.indexOf(this.style) === -1) {
-		var child = document.createElement('p');
-		child.setAttribute('class', this.style);
-		parentNode.addChild(child);
-		return(child);
+		parentNode.appendChild(child);
 	}
-	else {
-		return(parentNode);
-	}
+	return(child);
 };
 Para.prototype.toHTML = function() {
 	var result = [];

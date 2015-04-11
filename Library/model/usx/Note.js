@@ -33,10 +33,10 @@ Note.prototype.buildUSX = function(result) {
 	}
 	result.push(this.closeElement());
 };
-Note.prototype.toDOM = function(document, parentNode) {
+Note.prototype.toDOM = function(parentNode) {
 	var child = document.createElement('span');
 	child.setAttribute('class', this.style);
-	parentNode.addChild(child);
+	parentNode.appendChild(child);
 	return(child);
 };
 Note.prototype.toHTML = function() {

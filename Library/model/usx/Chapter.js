@@ -22,12 +22,17 @@ Chapter.prototype.buildUSX = function(result) {
 	result.push(this.whiteSpace, this.openElement());
 	result.push(this.closeElement());
 };
-Chapter.prototype.toDOM = function(document, parentNode) {
+Chapter.prototype.toDOM = function(parentNode, bookCode) {
+	var reference = bookCode + ':' + this.number;
+	var section = document.createElement('section');
+	section.setAttribute('id', reference);
+	parentNode.appendChild(section);
+
 	var child = document.createElement('p');
-	child.setAttribute('id', this.number);
 	child.setAttribute('class', this.style);
-	parentNode.addChild(child);
-	return(child);
+	child.textContent = this.number;
+	section.appendChild(child);
+	return(section);
 };
 Chapter.prototype.toHTML = function() {
 	var result = [];

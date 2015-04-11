@@ -4,110 +4,68 @@
 * in the page.
 */
 function DOMBuilder() {
-	this.direction = '';
-	this.siblingNode = null;
-	this.filepath = '';
-	//Object.seal(this);
+	this.bookCode = '';
+	this.chapter = 0;
+	this.verse = 0;
+
+	this.tree = null;
+	this.currBook = null;
+	this.currChapter = null;
+	this.currPara = null;
+	this.currElement = null;
+	Object.seal(this);
 };
-DOMBuilder.prototype.insertBefore = function(siblingNode, filepath) {
-	this.direction = 'before';
-	this.siblingNode = siblingNode;
-	this.filepath = filepath;
-	this.insert();
+DOMBuilder.prototype.toDOM = function(usxRoot) {
+	this.bookCode = '';
+	this.chapter = 0;
+	this.verse = 0;
+	this.tree = document.createDocumentFragment();
+	this.readRecursively(usxRoot);
+	return(this.tree);
 };
-DOMBuilder.prototype.insertAfter = function(siblingNode, filepath) {
-	this.direction = 'after';
-	this.siblingNode = siblingNode;
-	this.filepath = filepath;
-	this.insert();
-};
-DOMBuilder.prototype.insert = function() {
-	var bytes = 1024 * 1024 * 10;
-	var filepath = this.filepath;
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, bytes, onAccessReqSuccess, onAccessError);
-
-	function onAccessReqSuccess(fileSystem) {
-		window.alert('name: ' + fileSystem.root.name);
-		window.alert('root: ' + fileSystem.root.fullPath);
-		window.alert('native: ' + fileSystem.root.nativeURL);
-		window.alert('inside access success ' + bytes);
-		console.log('inside access success reading: ' + filepath);
-
-		fileSystem.root.getFile(filepath, { create:false }, onGetFileSuccess, onGetFileError);
-
-		/*function onWriteFileSuccess(file) {
-			window.alert('created file ' + file.name);
-			file.createWriter(onSuccess2, onError2);
-
-			function onSuccess2(writer) {
-				writer.onabort = function(e) {
-					console.log("Write aborted");
-				};
-				writer.onwritestart = function(e) {
-					console.log("Write start");
-				};
-				writer.onwrite = function(e) {
-					console.log("Write completed");
-				};
-				writer.onwriteend = function(e) {
-					console.log("Write end");
-				};
-				writer.onerror = function(e) {
-					console.error("Write error");
-					console.error(JSON.stringify(e));
-				};
-				writer.write("This file created Example 10.1");
-			};
-			function onError2(err) {
-				window.alert('write err ' + err.code);
-			};
-		};
-		function onWriteFileError(err) {
-			window.alert('inside write file err ' + err.code);
-		};*/
-		function onGetFileSuccess(file) {
-			//window.alert('fullpath ' + file.fullPath);
-			//window.alert('isfile ' + file.isFile);
-			//window.alert('url ' + file.nativeURL);
-
-			file.getMetadata(onMetaDataSuccess, onMetaDataError);
-			function onMetaDataSuccess(metadata) {
-				//window.alert(JSON.stringify(metadata));
-			};
-			function onMetaDataError(err) {
-				//window.alert(JSON.stringify(err));
-			};
-
-			var reader = new FileReader();
-			var keys = Object.keys(reader);
-			//window.alert(keys);
-			for (var i=0; i<keys.length; i++) {
-			//	window.alert(keys[i] + ': ' + reader[keys[i]]);
+DOMBuilder.prototype.readRecursively = function(node) {
+	switch(node.tagName) {
+		case 'usx':
+			break;
+		case 'book':
+			this.bookCode = node.code;
+			this.currBook = node.toDOM(this.tree);
+			this.currChapter = this.currPara = this.currElement = null;
+			break;
+		case 'chapter':
+			this.chapter = node.number;
+			this.currChapter = node.toDOM(this.currBook, this.bookCode);
+			this.currPara = this.currElement = null;
+			break;
+		case 'para':
+			var paraParent = this.currChapter || this.currBook;
+			this.currPara = node.toDOM(paraParent);
+			this.currElement = null;
+			break;
+		case 'verse':
+			this.verse = node.number;
+			node.toDOM(this.currPara, this.bookCode, this.chapter);
+			this.currElement = null;
+			break;
+		case 'text':
+			var textPara = this.currElement || this.currPara;
+			if (textPara) {
+				node.toDOM(textPara);
 			}
-
-			reader.onloadstart = function(evt) {
-				//console.log('read file started');
-				window.alert('start read ' + JSON.stringify(evt));
-			};
-			reader.onloadend = function(evt) {
-				window.alert('done' + reader.result);
-				console.log('read file ended');
-				var result = JSON.stringify(evt);
-				window.alert(result.substring(0,100));
-				console.log(evt.target.result);
-			};
-			//reader.onloaderror = function(event) {
-			//	console.log('error: ' + event.code);
-			//};
-			reader.readAsText(file, 'utf-8');
-			//window.alert('after readAsText');
-		};
-		function onGetFileError(err) {
-			window.alert('error ' + err.code);
-		};
-	};
-	function onAccessError(err) {
-		window.alert('inside access error');
-	};
+			break;
+		case 'char':
+			this.currElement = node.toDOM(this.currPara);
+			break;
+		case 'note':
+			this.currElement = node.toDOM(this.currPara);
+			break;
+		default:
+			throw new Error('Unknown tagname ' + node.tagName + ' in DOMBuilder.readBook');
+			break;
+	}
+	if ('children' in node) {
+		for (var i=0; i<node.children.length; i++) {
+			this.readRecursively(node.children[i]);
+		}
+	}
 };
-
