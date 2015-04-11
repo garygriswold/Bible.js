@@ -27,8 +27,6 @@ USX.prototype.toUSX = function() {
 	return(result.join(''));
 };
 USX.prototype.toDOM = function() {
-//	var fragment = document.createDocumentFragment();
-//	return(fragment);
 };
 USX.prototype.buildUSX = function(result) {
 	result.push('\uFEFF<?xml version="1.0" encoding="utf-8"?>');
@@ -185,17 +183,12 @@ Para.prototype.buildUSX = function(result) {
 };
 Para.prototype.toDOM = function(parentNode) {
 	var identStyles = [ 'ide', 'sts', 'rem', 'h', 'toc1', 'toc2', 'toc3', 'cl' ];
-	//if (identStyles.indexOf(this.style) === -1) {
-		var child = document.createElement('p');
-		child.setAttribute('class', this.style);
-		if (identStyles.indexOf(this.style) === -1) {
-			parentNode.appendChild(child);
-		}
-		return(child);
-	//}
-	//else {
-	//	return(parentNode);
-	//}
+	var child = document.createElement('p');
+	child.setAttribute('class', this.style);
+	if (identStyles.indexOf(this.style) === -1) {
+		parentNode.appendChild(child);
+	}
+	return(child);
 };
 Para.prototype.toHTML = function() {
 	var result = [];
@@ -779,34 +772,30 @@ HTMLBuilder.prototype.toHTML = function(fragment) {
 	return(this.result.join(''));
 };
 HTMLBuilder.prototype.readRecursively = function(node) {
-	console.log('size result ', this.result.length);
 	switch(node.nodeType) {
 		case 11: // fragment
-			//this.parent = node.toDOM(this.document, this.parent);
 			break;
 		case 1: // element
-			this.bookCode = node.code;
-			this.parent = node.toDOM(this.document, this.parent);
-			this.result.push('<', node.tagName);
+			this.result.push('\n<', node.tagName.toLowerCase());
 			for (var i=0; i<node.attributes.length; i++) {
-				this.result.push(' ', node.attributes[i].nodeName, '="', node.attributes[i].nodeValue, '"');
+				this.result.push(' ', node.attributes[i].nodeName, '="', node.attributes[i].value, '"');
 			}
 			this.result.push('>');
 			break;
 		case 3: // text
-			this.result.push(node.text);
+			this.result.push(node.wholeText);
 			break;
 		default:
 			throw new Error('Unexpected nodeType ' + node.nodeType + ' in HTMLBuilder.toHTML().');
 			break;
 	}
-	if ('children' in node) {
-		for (var i=0; i<node.children.length; i++) {
-			this.readRecursively(node.children[i]);
+	if ('childNodes' in node) {
+		for (var i=0; i<node.childNodes.length; i++) {
+			this.readRecursively(node.childNodes[i]);
 		}
 	}
 	if (node.nodeType === 1) {
-		this.result.push('</', node.tagName, '>');
+		this.result.push('</', node.tagName.toLowerCase(), '>\n');
 	}
 };
 

@@ -1,4 +1,5 @@
 #!/bin/sh
+# OBSOLETE
 cat ../model/usx/USX.js > temp.js
 cat ../model/usx/Book.js >> temp.js
 cat ../model/usx/Chapter.js >> temp.js

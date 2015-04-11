@@ -24,14 +24,12 @@
 			//console.log(html);
 			var dom = new DOMBuilder();
 			var fragment = dom.toDOM(usxNode);
-			var bodyNodes = document.getElementsByTagName('body');
-			console.log('len ' + bodyNodes.length);
-			console.log('body: ' + bodyNodes[0].nodeName);
-			bodyNodes[0].appendChild(fragment);
 
 			var builder = new HTMLBuilder();
 			var html2 = builder.toHTML(fragment);
-			console.log('html output ' + html2.length);
+
+			var bodyNodes = document.getElementsByTagName('body');
+			bodyNodes[0].appendChild(fragment);
 
 			var writer = new NodeFileWriter();
 			writer.writeTextFile('application', 'usx/999test.html', html2, writeSuccessHandler, writeFailedHandler);
