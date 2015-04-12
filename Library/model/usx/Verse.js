@@ -27,7 +27,7 @@ Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 	var child = document.createElement('span');
 	child.setAttribute('id', reference);
 	child.setAttribute('class', this.style);
-	child.textContent = this.number + ' ';
+	child.textContent = ' ' + this.number + ' ';
 	parentNode.appendChild(child);
 	return(child);
 };

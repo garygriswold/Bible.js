@@ -1,9 +1,7 @@
 /* background */
-/*body { not working
-	background-color: #FF000;
-	background-image: url(<uri>);
-	/* gradient is possible by using canvas
-}*/
+body {
+	background-color: #FEFEFE;
+}
 /* margins */
 body {
 	/*padding-left: 5%;
@@ -27,7 +25,7 @@ body {
 	font-family: serif;
 	font-size: 1.0em;
 	color: #000000;
-	line-height: 1.2;
+	line-height: 1.3;
 	text-align: justify; /* or start */
 	direction: ltr;
 	/*width: 100;
@@ -147,5 +145,9 @@ span.qs {
 /* Words of Jesus */
 span.wj {
 	color: #FF3333;
+}
+/* footnotes */
+span.f {
+	background-color: #DDDDDD;
 }
 

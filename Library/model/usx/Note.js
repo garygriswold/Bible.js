@@ -35,7 +35,10 @@ Note.prototype.buildUSX = function(result) {
 };
 Note.prototype.toDOM = function(parentNode) {
 	var child = document.createElement('span');
+	child.setAttribute('id', 'demo');
 	child.setAttribute('class', this.style);
+	child.setAttribute('onclick', 'codex.showFootnote("demo", "' + this.caller + '")');
+	child.textContent = ' \u27A0 ';
 	parentNode.appendChild(child);
 	return(child);
 };

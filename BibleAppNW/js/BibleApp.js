@@ -234,7 +234,7 @@ Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 	var child = document.createElement('span');
 	child.setAttribute('id', reference);
 	child.setAttribute('class', this.style);
-	child.textContent = this.number + ' ';
+	child.textContent = ' ' + this.number + ' ';
 	parentNode.appendChild(child);
 	return(child);
 };
@@ -282,7 +282,10 @@ Note.prototype.buildUSX = function(result) {
 };
 Note.prototype.toDOM = function(parentNode) {
 	var child = document.createElement('span');
+	child.setAttribute('id', 'demo');
 	child.setAttribute('class', this.style);
+	child.setAttribute('onclick', 'codex.showFootnote("demo", "' + this.caller + '")');
+	child.textContent = ' \u27A0 ';
 	parentNode.appendChild(child);
 	return(child);
 };
@@ -692,6 +695,11 @@ NodeFileWriter.prototype.writeTextFile = function(location, filepath, data, succ
 * This class reads a file using the Cordova File Plugin, parses the contents into USX,
 * translates the contents to DOM, and the plugs the content into the correct location 
 * in the page.
+*
+* I think this needs to be rewritten with the children call beneath each of the cases.
+* This is necessary to maintain context.  The current solution cannot distinquish between
+* a child text node, and a sibling text node that follows.  GNG 4/11/15.  Or, possibly
+* it would work to use a stack to represent the heirarchy being constructed.
 */
 function DOMBuilder() {
 	this.bookCode = '';
@@ -747,7 +755,7 @@ DOMBuilder.prototype.readRecursively = function(node) {
 			this.currElement = node.toDOM(this.currPara);
 			break;
 		case 'note':
-			this.currElement = node.toDOM(this.currPara);
+			node.toDOM(this.currPara);
 			break;
 		default:
 			throw new Error('Unknown tagname ' + node.tagName + ' in DOMBuilder.readBook');
@@ -800,3 +808,23 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 };
 
 
+/**
+* This class contains user interface features for the display of the Bible text
+*/
+"use strict";
+
+function CodexGUI() {
+};
+CodexGUI.prototype.showFootnote = function(nodeId, text) {
+	//document.getElementById(nodeId).innerHTML = text + '<span onclick="codex.hideFootnote(\"demo\")"> \u27A0 </span>';
+	var node = document.getElementById(nodeId);
+	node.textContent = text;
+	var span = document.createElement('span');
+	span.setAttribute('onclick', 'codex.hideFootnote("demo")');
+	span.textContent = ' \u27A0 ';
+	node.appendChild(span);
+};
+CodexGUI.prototype.hideFootnote = function(nodeId) {
+	document.getElementById(nodeId).textContent = '';
+};
+var codex = new CodexGUI();
