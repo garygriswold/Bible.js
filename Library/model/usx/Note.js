@@ -33,14 +33,20 @@ Note.prototype.buildUSX = function(result) {
 	}
 	result.push(this.closeElement());
 };
-Note.prototype.toDOM = function(parentNode) {
-	var child = document.createElement('span');
-	child.setAttribute('id', 'demo');
-	child.setAttribute('class', this.style);
-	child.setAttribute('onclick', 'codex.showFootnote("demo", "' + this.caller + '")');
-	child.textContent = ' \u27A0 ';
-	parentNode.appendChild(child);
-	return(child);
+Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
+	var nodeId = bookCode + chapterNum + '*' + noteNum;
+	var refChild = document.createElement('span');
+	refChild.setAttribute('class', 'fnref');
+	refChild.setAttribute('onclick', "codex.showFootnote('" + nodeId + "', '" + this.caller + "')");
+	refChild.textContent = '* ';
+	parentNode.appendChild(refChild);
+
+	var noteChild = document.createElement('span');
+	noteChild.setAttribute('id', nodeId);
+	noteChild.setAttribute('class', this.style);
+	noteChild.setAttribute('onclick', "codex.hideFootnote('" + nodeId + "')");
+	parentNode.appendChild(noteChild);
+	return(refChild);
 };
 Note.prototype.toHTML = function() {
 	var result = [];

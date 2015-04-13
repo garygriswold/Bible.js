@@ -12,6 +12,7 @@ function DOMBuilder() {
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
+	this.noteNum = 0;
 
 	this.tree = null;
 	this.currBook = null;
@@ -39,6 +40,7 @@ DOMBuilder.prototype.readRecursively = function(node) {
 			break;
 		case 'chapter':
 			this.chapter = node.number;
+			this.noteNum = 0;
 			this.currChapter = node.toDOM(this.currBook, this.bookCode);
 			this.currPara = this.currElement = null;
 			break;
@@ -62,7 +64,7 @@ DOMBuilder.prototype.readRecursively = function(node) {
 			this.currElement = node.toDOM(this.currPara);
 			break;
 		case 'note':
-			node.toDOM(this.currPara);
+			node.toDOM(this.currPara, this.bookCode, this.chapter, ++this.noteNum);
 			break;
 		default:
 			throw new Error('Unknown tagname ' + node.tagName + ' in DOMBuilder.readBook');

@@ -86,7 +86,7 @@ span.v {
 	font-size: 0.7em;
 	color: #777777;
 	line-height: 0.7em;
-	vertical-align: super;
+	vertical-align: text-top;
 }
 /* Normal Paragraph Text */
 p.p {
@@ -146,8 +146,16 @@ span.qs {
 span.wj {
 	color: #FF3333;
 }
+/* footnote references */
+span.fnref {
+	font-family: serif;
+	font-size: 1.0em;
+	color: #BC6C1C;
+	line-height: 0.7em;
+	vertical-align: text-top;	
+}
 /* footnotes */
 span.f {
-	background-color: #DDDDDD;
+	background-color: #D1D1D1;
 }
 

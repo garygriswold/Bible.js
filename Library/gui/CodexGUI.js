@@ -5,16 +5,10 @@
 
 function CodexGUI() {
 };
-CodexGUI.prototype.showFootnote = function(nodeId, text) {
-	//document.getElementById(nodeId).innerHTML = text + '<span onclick="codex.hideFootnote(\"demo\")"> \u27A0 </span>';
-	var node = document.getElementById(nodeId);
-	node.textContent = text;
-	var span = document.createElement('span');
-	span.setAttribute('onclick', 'codex.hideFootnote("demo")');
-	span.textContent = ' \u27A0 ';
-	node.appendChild(span);
+CodexGUI.prototype.showFootnote = function(noteId, text) {
+	document.getElementById(noteId).innerHTML = text;
 };
-CodexGUI.prototype.hideFootnote = function(nodeId) {
-	document.getElementById(nodeId).textContent = '';
+CodexGUI.prototype.hideFootnote = function(noteId, text) {
+	document.getElementById(noteId).innerHTML = '';
 };
 var codex = new CodexGUI();
