@@ -1,6 +1,6 @@
 "use strict"
 
-var WEB_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB World English Bible";
+var WEB_BIBLE_PATH = "/Users/garygriswold/Desktop/BibleApp Project/Bibles/USX/WEB World English Bible";
 var fs = require("fs");
 var builder = new TOCBuilder();
 

@@ -251,7 +251,12 @@ Verse.prototype.buildHTML = function(result) {
 "use strict";
 
 function Note(node) {
-	this.caller = node.caller;
+	this.type = node.caller.charAt(0);
+	if (this.type !== '+') {
+		console.log(JSON.stringify(node));
+		throw new Error('Callout with no +');
+	}
+	this.caller = node.caller.substring(1);
 	this.style = node.style;
 	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;

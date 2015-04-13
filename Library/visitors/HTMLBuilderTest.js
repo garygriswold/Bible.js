@@ -3,7 +3,7 @@
 *
 * This test does not work with the current HTMLBuilder
 */
-var WEB_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB World English Bible";
+var WEB_BIBLE_PATH = "/Users/garygriswold/Desktop/BibleApp Project/Bibles/USX/WEB World English Bible";
 //var OUT_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB_HTML_OUT";
 var OUT_BIBLE_PATH = "/Users/garygriswold/Philip/UnitTestCSS1/www/html";
 
