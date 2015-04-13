@@ -286,7 +286,7 @@ Note.prototype.buildUSX = function(result) {
 	result.push(this.closeElement());
 };
 Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
-	var nodeId = bookCode + chapterNum + '*' + noteNum;
+	var nodeId = bookCode + chapterNum + '-' + noteNum;
 	var refChild = document.createElement('span');
 	refChild.setAttribute('class', 'fnref');
 	refChild.setAttribute('onclick', "codex.showFootnote('" + nodeId + "', '" + this.caller + "')");
@@ -831,6 +831,8 @@ function CodexGUI() {
 };
 CodexGUI.prototype.showFootnote = function(noteId, text) {
 	document.getElementById(noteId).innerHTML = text;
+	// TextPlugin did not work well, because it caused page to reformat as the text was added
+	TweenLite.to('#' + noteId, 1, {text: {value: text, delimiter: ' ', padSpace: true}}); 
 };
 CodexGUI.prototype.hideFootnote = function(noteId, text) {
 	document.getElementById(noteId).innerHTML = '';
