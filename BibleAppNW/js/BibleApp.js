@@ -256,7 +256,7 @@ function Note(node) {
 		console.log(JSON.stringify(node));
 		throw new Error('Callout with no +');
 	}
-	this.caller = node.caller.substring(1);
+	this.caller = node.caller.substring(1).replace(/^\s\s*/, '');
 	this.style = node.style;
 	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
@@ -290,7 +290,16 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	var refChild = document.createElement('span');
 	refChild.setAttribute('class', 'fnref');
 	refChild.setAttribute('onclick', "codex.showFootnote('" + nodeId + "', '" + this.caller + "')");
-	refChild.textContent = '* ';
+	switch(this.style) {
+		case 'f':
+			refChild.textContent = '\u261E ';
+			break;
+		case 'x':
+			refChild.textContent = '\u261B ';
+			break;
+		default:
+			refChild.textContent = '* ';
+	}
 	parentNode.appendChild(refChild);
 
 	var noteChild = document.createElement('span');

@@ -158,4 +158,8 @@ span.fnref {
 span.f {
 	background-color: #D1D1D1;
 }
+/* cross references */
+span.x {
+	background-color: #DDDDDD;
+}
 
