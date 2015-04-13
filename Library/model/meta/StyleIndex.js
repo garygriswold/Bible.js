@@ -10,6 +10,7 @@ function StyleIndex() {
 		'chapter.c', 'verse.v',
 		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 'para.nb',
 		'para.sp', 'para.q', 'para.q2',
+		'note.f', 'note.x',
 		'char.wj', 'char.qs'];
 	Object.freeze(this);
 };
