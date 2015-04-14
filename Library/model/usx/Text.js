@@ -12,8 +12,10 @@ Text.prototype.buildUSX = function(result) {
 	result.push(this.text);
 };
 Text.prototype.toDOM = function(parentNode) {
-	var child = document.createTextNode(this.text);
-	parentNode.appendChild(child);
+	if (parentNode.tagName !== 'ARTICLE') {
+		var child = document.createTextNode(this.text);
+		parentNode.appendChild(child);
+	}
 };
 Text.prototype.toHTML = function() {
 	var result = [];

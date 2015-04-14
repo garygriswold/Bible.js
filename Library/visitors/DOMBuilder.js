@@ -1,12 +1,9 @@
 /**
-* This class reads a file using the Cordova File Plugin, parses the contents into USX,
-* translates the contents to DOM, and the plugs the content into the correct location 
-* in the page.
+* This class iterates over the USX data model, and translates the contents to DOM.
 *
-* I think this needs to be rewritten with the children call beneath each of the cases.
-* This is necessary to maintain context.  The current solution cannot distinquish between
-* a child text node, and a sibling text node that follows.  GNG 4/11/15.  Or, possibly
-* it would work to use a stack to represent the heirarchy being constructed.
+* This method generates a DOM tree that has exactly the same parentage as the USX model.
+* This is probably a problem.  The easy insertion and deletion of nodes probably requires
+* having a hierarchy of books and chapters. GNG April 13, 2015
 */
 function DOMBuilder() {
 	this.bookCode = '';
@@ -14,57 +11,49 @@ function DOMBuilder() {
 	this.verse = 0;
 	this.noteNum = 0;
 
-	this.tree = null;
-	this.currBook = null;
-	this.currChapter = null;
-	this.currPara = null;
-	this.currElement = null;
+	this.treeRoot = null;
 	Object.seal(this);
 };
 DOMBuilder.prototype.toDOM = function(usxRoot) {
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
-	this.tree = document.createDocumentFragment();
-	this.readRecursively(usxRoot);
-	return(this.tree);
+	this.noteNum = 0;
+	this.treeRoot = document.createDocumentFragment();
+	this.readRecursively(this.treeRoot, usxRoot);
+	return(this.treeRoot);
 };
-DOMBuilder.prototype.readRecursively = function(node) {
+DOMBuilder.prototype.readRecursively = function(domParent, node) {
+	var domNode;
+	//console.log('dom-parent: ', domParent.nodeName, domParent.nodeType, '  node: ', node.tagName);
 	switch(node.tagName) {
 		case 'usx':
+			domNode = domParent;
 			break;
 		case 'book':
 			this.bookCode = node.code;
-			this.currBook = node.toDOM(this.tree);
-			this.currChapter = this.currPara = this.currElement = null;
+			domNode = node.toDOM(domParent);
 			break;
 		case 'chapter':
 			this.chapter = node.number;
-			this.noteNum = 0;
-			this.currChapter = node.toDOM(this.currBook, this.bookCode);
-			this.currPara = this.currElement = null;
+			domNode = node.toDOM(domParent, this.bookCode);
 			break;
 		case 'para':
-			var paraParent = this.currChapter || this.currBook;
-			this.currPara = node.toDOM(paraParent);
-			this.currElement = null;
+			domNode = node.toDOM(domParent);
 			break;
 		case 'verse':
 			this.verse = node.number;
-			node.toDOM(this.currPara, this.bookCode, this.chapter);
-			this.currElement = null;
+			domNode = node.toDOM(domParent, this.bookCode, this.chapter);
 			break;
 		case 'text':
-			var textPara = this.currElement || this.currPara;
-			if (textPara) {
-				node.toDOM(textPara);
-			}
+			node.toDOM(domParent);
+			domNode = domParent;
 			break;
 		case 'char':
-			this.currElement = node.toDOM(this.currPara);
+			domNode = node.toDOM(domParent);
 			break;
 		case 'note':
-			node.toDOM(this.currPara, this.bookCode, this.chapter, ++this.noteNum);
+			domNode = node.toDOM(domParent, this.bookCode, this.chapter, ++this.noteNum);
 			break;
 		default:
 			throw new Error('Unknown tagname ' + node.tagName + ' in DOMBuilder.readBook');
@@ -72,7 +61,7 @@ DOMBuilder.prototype.readRecursively = function(node) {
 	}
 	if ('children' in node) {
 		for (var i=0; i<node.children.length; i++) {
-			this.readRecursively(node.children[i]);
+			this.readRecursively(domNode, node.children[i]);
 		}
 	}
 };
