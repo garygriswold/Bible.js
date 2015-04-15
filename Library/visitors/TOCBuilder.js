@@ -13,7 +13,7 @@ TOCBuilder.prototype.readBook = function(usxRoot) {
 TOCBuilder.prototype.readRecursively = function(node) {
 	switch(node.tagName) {
 		case 'book':
-			this.tocBook = new TOCBook(this.bookCode);
+			this.tocBook = new TOCBook(node.code);
 			this.toc.addBook(this.tocBook);
 			break;
 		case 'chapter':

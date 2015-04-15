@@ -4,7 +4,8 @@
 */
 "use strict";
 
-var FILE_ROOTS = { 'application': '', 'document': '?', 'temporary': '?' };
+// file roots has been moved to CommonIO.js
+var FILE_ROOTS = { 'application': '', 'document': '?', 'temporary': '?', 'test2application': '../../BibleAppNW/' };
 
 function NodeFileReader() {
 	this.fs = require('fs');

@@ -11,6 +11,7 @@ cat ../xml/XMLTokenizer.js >> temp.js
 cat ../xml/USXParser.js >> temp.js
 cat ../model/meta/TOC.js >> temp.js
 cat ../model/meta/TOCBook.js >> temp.js
+cat ../io/CommonIO.js >> temp.js
 cat TOCBuilder.js >> temp.js
 cat TOCBuilderTest.js >> temp.js
 node temp.js

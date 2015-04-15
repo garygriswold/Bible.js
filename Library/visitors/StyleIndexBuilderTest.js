@@ -22,7 +22,6 @@ for (var i=0; i<len; i++) {
 var styleIndex = builder.styleIndex;
 styleIndex.dumpAlphaSort();
 
-console.log('after dump alpha sort');
 
 var json = JSON.stringify(styleIndex, null, ' ');
 fs.writeFileSync('/Users/garygriswold/Desktop/styleIndex.json', json, 'utf-8');

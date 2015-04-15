@@ -4,9 +4,11 @@
 "use strict";
 
 function TOC() {
-	this.books = [];
+	this.bookList = [];
+	this.bookMap = {};
 	Object.freeze(this);
 };
 TOC.prototype.addBook = function(book) {
-	this.books.push(book);
+	this.bookList.push(book);
+	this.bookMap[book.code] = book;
 };
