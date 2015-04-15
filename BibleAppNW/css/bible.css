@@ -148,18 +148,22 @@ span.wj {
 }
 /* footnote references */
 span.fnref {
-	font-family: serif;
 	font-size: 1.0em;
-	color: #BC6C1C;
-	line-height: 0.7em;
-	vertical-align: text-top;	
+	color: #FFB4B5;
 }
 /* footnotes */
-span.f {
-	background-color: #D1D1D1;
+span.f, span.ft {
+	color: #555555;
+	background-color: #FFFFB4;
+	font-style: italic;
+}
+span.fqa {
+	color: #999999 ;
+	background-color: #FFFFB4;
 }
 /* cross references */
-span.x {
-	background-color: #DDDDDD;
+span.x, span.xt {
+	color: #555555;
+	background-color: #CEE7FF;
 }
 

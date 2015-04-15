@@ -34,10 +34,15 @@ Char.prototype.buildUSX = function(result) {
 	result.push(this.closeElement());
 };
 Char.prototype.toDOM = function(parentNode) {
-	var child = document.createElement('span');
-	child.setAttribute('class', this.style);
-	parentNode.appendChild(child);
-	return(child);
+	if (this.style === 'fr' || this.style === 'xo') {
+		return(undefined);
+	}
+	else {
+		var child = document.createElement('span');
+		child.setAttribute('class', this.style);
+		parentNode.appendChild(child);
+		return(child);
+	}
 };
 Char.prototype.toHTML = function() {
 	var result = [];

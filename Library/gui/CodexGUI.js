@@ -5,12 +5,22 @@
 
 function CodexGUI() {
 };
-CodexGUI.prototype.showFootnote = function(noteId, text) {
-	document.getElementById(noteId).innerHTML = text;
-	// TextPlugin did not work well, because it caused page to reformat as the text was added
-	TweenLite.to('#' + noteId, 1, {text: {value: text, delimiter: ' ', padSpace: true}}); 
+CodexGUI.prototype.showFootnote = function(noteId) {
+	var note = document.getElementById(noteId);
+	for (var i=0; i<note.children.length; i++) {
+		var child = note.children[i];
+		if (child.nodeName === 'SPAN') {
+			child.innerHTML = child.getAttribute('note'); + ' ';
+		}
+	} 
 };
-CodexGUI.prototype.hideFootnote = function(noteId, text) {
-	document.getElementById(noteId).innerHTML = '';
+CodexGUI.prototype.hideFootnote = function(noteId) {
+	var note = document.getElementById(noteId);
+	for (var i=0; i<note.children.length; i++) {
+		var child = note.children[i];
+		if (child.nodeName === 'SPAN') {
+			child.innerHTML = '';
+		}
+	}
 };
 var codex = new CodexGUI();

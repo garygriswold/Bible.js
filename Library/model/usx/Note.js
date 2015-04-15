@@ -4,12 +4,12 @@
 "use strict";
 
 function Note(node) {
-	this.type = node.caller.charAt(0);
-	if (this.type !== '+') {
+	this.caller = node.caller.charAt(0);
+	if (this.caller !== '+') {
 		console.log(JSON.stringify(node));
-		throw new Error('Callout with no +');
+		throw new Error('Caller with no +');
 	}
-	this.caller = node.caller.substring(1).replace(/^\s\s*/, '');
+	this.note = node.caller.substring(1).replace(/^\s\s*/, '');
 	this.style = node.style;
 	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
@@ -41,8 +41,9 @@ Note.prototype.buildUSX = function(result) {
 Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	var nodeId = bookCode + chapterNum + '-' + noteNum;
 	var refChild = document.createElement('span');
+	refChild.setAttribute('id', nodeId);
 	refChild.setAttribute('class', 'fnref');
-	refChild.setAttribute('onclick', "codex.showFootnote('" + nodeId + "', '" + this.caller + "')");
+	refChild.setAttribute('onclick', "codex.showFootnote('" + nodeId + "');");
 	switch(this.style) {
 		case 'f':
 			refChild.textContent = '\u261E ';
@@ -55,11 +56,13 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	}
 	parentNode.appendChild(refChild);
 
-	var noteChild = document.createElement('span');
-	noteChild.setAttribute('id', nodeId);
-	noteChild.setAttribute('class', this.style);
-	noteChild.setAttribute('onclick', "codex.hideFootnote('" + nodeId + "')");
-	parentNode.appendChild(noteChild);
+	if (this.note !== undefined && this.note.length > 0) {
+		var noteChild = document.createElement('span');
+		noteChild.setAttribute('class', this.style);
+		noteChild.setAttribute('note', this.note);
+		noteChild.setAttribute('onclick', "codex.hideFootnote('" + nodeId + "'); event.stopPropagation();");
+		refChild.appendChild(noteChild);
+	}
 	return(refChild);
 };
 Note.prototype.toHTML = function() {

@@ -36,6 +36,7 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 			break;
 		case 'chapter':
 			this.chapter = node.number;
+			this.noteNum = 0;
 			domNode = node.toDOM(domParent, this.bookCode);
 			break;
 		case 'para':
@@ -46,7 +47,7 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 			domNode = node.toDOM(domParent, this.bookCode, this.chapter);
 			break;
 		case 'text':
-			node.toDOM(domParent);
+			node.toDOM(domParent, this.bookCode, this.chapter, this.noteNum);
 			domNode = domParent;
 			break;
 		case 'char':

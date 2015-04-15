@@ -8,7 +8,6 @@ function USX(node) {
 	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
 	this.children = []; // includes books, chapters, and paragraphs
-	this.bookList = [];
 	Object.freeze(this);
 };
 USX.prototype.tagName = 'usx';
@@ -252,12 +251,12 @@ Verse.prototype.buildHTML = function(result) {
 "use strict";
 
 function Note(node) {
-	this.type = node.caller.charAt(0);
-	if (this.type !== '+') {
+	this.caller = node.caller.charAt(0);
+	if (this.caller !== '+') {
 		console.log(JSON.stringify(node));
-		throw new Error('Callout with no +');
+		throw new Error('Caller with no +');
 	}
-	this.caller = node.caller.substring(1).replace(/^\s\s*/, '');
+	this.note = node.caller.substring(1).replace(/^\s\s*/, '');
 	this.style = node.style;
 	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
@@ -289,8 +288,9 @@ Note.prototype.buildUSX = function(result) {
 Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	var nodeId = bookCode + chapterNum + '-' + noteNum;
 	var refChild = document.createElement('span');
+	refChild.setAttribute('id', nodeId);
 	refChild.setAttribute('class', 'fnref');
-	refChild.setAttribute('onclick', "codex.showFootnote('" + nodeId + "', '" + this.caller + "')");
+	refChild.setAttribute('onclick', "codex.showFootnote('" + nodeId + "');");
 	switch(this.style) {
 		case 'f':
 			refChild.textContent = '\u261E ';
@@ -303,11 +303,13 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	}
 	parentNode.appendChild(refChild);
 
-	var noteChild = document.createElement('span');
-	noteChild.setAttribute('id', nodeId);
-	noteChild.setAttribute('class', this.style);
-	noteChild.setAttribute('onclick', "codex.hideFootnote('" + nodeId + "')");
-	parentNode.appendChild(noteChild);
+	if (this.note !== undefined && this.note.length > 0) {
+		var noteChild = document.createElement('span');
+		noteChild.setAttribute('class', this.style);
+		noteChild.setAttribute('note', this.note);
+		noteChild.setAttribute('onclick', "codex.hideFootnote('" + nodeId + "'); event.stopPropagation();");
+		refChild.appendChild(noteChild);
+	}
 	return(refChild);
 };
 Note.prototype.toHTML = function() {
@@ -358,10 +360,15 @@ Char.prototype.buildUSX = function(result) {
 	result.push(this.closeElement());
 };
 Char.prototype.toDOM = function(parentNode) {
-	var child = document.createElement('span');
-	child.setAttribute('class', this.style);
-	parentNode.appendChild(child);
-	return(child);
+	if (this.style === 'fr' || this.style === 'xo') {
+		return(undefined);
+	}
+	else {
+		var child = document.createElement('span');
+		child.setAttribute('class', this.style);
+		parentNode.appendChild(child);
+		return(child);
+	}
 };
 Char.prototype.toHTML = function() {
 	var result = [];
@@ -381,16 +388,24 @@ Char.prototype.buildHTML = function(result) {
 
 function Text(text) {
 	this.text = text;
+	this.footnotes = [ 'f', 'fr', 'ft', 'fqa', 'x', 'xt', 'xo' ];
 	Object.freeze(this);
 };
 Text.prototype.tagName = 'text';
 Text.prototype.buildUSX = function(result) {
 	result.push(this.text);
 };
-Text.prototype.toDOM = function(parentNode) {
-	if (parentNode.tagName !== 'ARTICLE') {
-		var child = document.createTextNode(this.text);
-		parentNode.appendChild(child);
+Text.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
+	if (parentNode !== undefined && parentNode.tagName !== 'ARTICLE') {
+		if (parentNode.nodeType === 1 && this.footnotes.indexOf(parentNode.getAttribute('class')) >= 0) {
+			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of parent.
+			var nodeId = bookCode + chapterNum + '-' + noteNum;
+			parentNode.setAttribute('onclick', "codex.hideFootnote('" + nodeId + "'); event.stopPropagation();");
+		}
+		else {
+			var child = document.createTextNode(this.text);
+			parentNode.appendChild(child);
+		}
 	}
 };
 Text.prototype.toHTML = function() {
@@ -752,6 +767,7 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 			break;
 		case 'chapter':
 			this.chapter = node.number;
+			this.noteNum = 0;
 			domNode = node.toDOM(domParent, this.bookCode);
 			break;
 		case 'para':
@@ -762,7 +778,7 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 			domNode = node.toDOM(domParent, this.bookCode, this.chapter);
 			break;
 		case 'text':
-			node.toDOM(domParent);
+			node.toDOM(domParent, this.bookCode, this.chapter, this.noteNum);
 			domNode = domParent;
 			break;
 		case 'char':
@@ -830,12 +846,22 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 
 function CodexGUI() {
 };
-CodexGUI.prototype.showFootnote = function(noteId, text) {
-	document.getElementById(noteId).innerHTML = text;
-	// TextPlugin did not work well, because it caused page to reformat as the text was added
-	TweenLite.to('#' + noteId, 1, {text: {value: text, delimiter: ' ', padSpace: true}}); 
+CodexGUI.prototype.showFootnote = function(noteId) {
+	var note = document.getElementById(noteId);
+	for (var i=0; i<note.children.length; i++) {
+		var child = note.children[i];
+		if (child.nodeName === 'SPAN') {
+			child.innerHTML = child.getAttribute('note'); + ' ';
+		}
+	} 
 };
-CodexGUI.prototype.hideFootnote = function(noteId, text) {
-	document.getElementById(noteId).innerHTML = '';
+CodexGUI.prototype.hideFootnote = function(noteId) {
+	var note = document.getElementById(noteId);
+	for (var i=0; i<note.children.length; i++) {
+		var child = note.children[i];
+		if (child.nodeName === 'SPAN') {
+			child.innerHTML = '';
+		}
+	}
 };
 var codex = new CodexGUI();
