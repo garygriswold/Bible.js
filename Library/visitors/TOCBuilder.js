@@ -5,7 +5,7 @@
 "use strict"
 
 function TOCBuilder() {
-	this.toc = new TOC();
+	this.toc = new TOC([]);
 };
 TOCBuilder.prototype.readBook = function(usxRoot) {
 	this.readRecursively(usxRoot);

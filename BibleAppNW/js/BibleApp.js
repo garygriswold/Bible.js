@@ -417,6 +417,57 @@ Text.prototype.buildHTML = function(result) {
 	result.push(this.text);
 };
 /**
+* This class holds data for the table of contents of the entire Bible, or whatever part of the Bible was loaded.
+*/
+"use strict";
+
+function TOC(books) {
+	this.bookList = books || [];
+	this.bookMap = {};
+	for (var i=0; i<this.bookList.length; i++) {
+		var book = this.bookList[i];
+		this.bookMap[book.code] = book;
+		Object.freeze(book);
+	}
+	Object.freeze(this);
+};
+TOC.prototype.addBook = function(book) {
+	this.bookList.push(book);
+	this.bookMap[book.code] = book;
+};
+TOC.prototype.find = function(code) {
+	return(this.bookMap[code]);
+};/**
+* This class holds the table of contents data each book of the Bible, or whatever books were loaded.
+*/
+"use strict";
+
+function TOCBook(code) {
+	this.code = code;
+	this.encoding = '';
+	this.heading = '';
+	this.title = '';
+	this.name = '';
+	this.abbrev = '';
+	this.lastChapter = 0;
+	Object.seal(this);
+};/**
+* BibleApp is a global object that contains pointers to all of the key elements of
+* a user's session with the App.
+*/
+"use strict"
+
+function AppContext() {
+	this.tableContentsGUI = new TableContentsGUI();
+	//this.toc = null;
+	//this.codex = null;
+	//this.concordance = null;
+	//this.history = null;
+	Object.freeze(this);
+};
+
+
+/**
 * This class does a stream read of an XML string to return XML tokens and their token type.
 */
 "use strict";
@@ -693,7 +744,8 @@ USXParser.prototype.createUSXObject = function(tempNode) {
 */
 "use strict";
 
-var FILE_ROOTS = { 'application': '', 'document': '?', 'temporary': '?' };
+// file roots has been moved to CommonIO.js
+var FILE_ROOTS = { 'application': '', 'document': '?', 'temporary': '?', 'test2application': '../../BibleAppNW/' };
 
 function NodeFileReader() {
 	this.fs = require('fs');
@@ -838,6 +890,105 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 	}
 };
 
+
+/**
+* This class presents the table of contents, and responds to user actions.
+*/
+"use strict";
+
+function TableContentsGUI() {
+	this.toc = null;
+	var bodyNodes = document.getElementsByTagName('body');
+	this.bodyNode = bodyNodes[0];
+	Object.seal(this);
+};
+TableContentsGUI.prototype.showTocBookList = function(versionCode) {
+	if (app.toc) { // should check the version
+		this.buildTocBookList();
+	}
+	else {
+		var that = this;
+		var reader = new NodeFileReader();
+		var filename = 'usx/' + versionCode + '/toc.json';
+		reader.readTextFile('application', filename, readSuccessHandler, readFailureHandler);
+	}
+	function readSuccessHandler(data) {
+		var bookList = JSON.parse(data);
+		that.toc = new TOC(bookList);
+		that.buildTocBookList();
+	};
+	function readFailureHandler(err) {
+		console.log('read TOC.json failure ' + JSON.stringify(err));
+		that.toc = new TOC([]);
+	};
+}
+TableContentsGUI.prototype.buildTocBookList = function() {//versionCode) {
+	var root = document.createDocumentFragment();
+	console.log('length ' + this.toc.bookList.length);
+	for (var i=0; i<this.toc.bookList.length; i++) {
+		var book = this.toc.bookList[i];
+		var bookNode = document.createElement('p');
+		bookNode.setAttribute('id', book.code + 'toc');
+		bookNode.setAttribute('class', 'tocBook');
+		bookNode.setAttribute('onclick', 'app.tableContentsGUI.showTocChapterList("' +  book.code + '");');
+		bookNode.textContent = book.name;
+		root.appendChild(bookNode);
+	}
+	this.removeBody();
+	this.bodyNode.appendChild(root);
+};
+TableContentsGUI.prototype.showTocChapterList = function(bookCode) {
+	var book = this.toc.find(bookCode);
+	if (book) {
+		var root = document.createDocumentFragment();
+		var table = document.createElement('table');
+		table.setAttribute('id', book.code + 'ch');
+		table.setAttribute('class', 'tocChap');
+		root.appendChild(table);
+		var numCellPerRow = this.cellsPerRow();
+		var numRows = Math.ceil(book.lastChapter / numCellPerRow);
+		console.log('numRows ', numRows);;
+		var chaptNum = 1;
+		for (var r=0; r<numRows; r++) {
+			var row = document.createElement('tr');
+			table.appendChild(row);
+			for (var c=0; c<numCellPerRow && chaptNum <= book.lastChapter; c++) {
+				var cell = document.createElement('td');
+				cell.setAttribute('onclick', 'app.tableContentsGUI.openChapter("' + bookCode + '", "' + chaptNum + '");');
+				cell.textContent = chaptNum;
+				row.appendChild(cell);
+				chaptNum++;
+			}
+		}
+		this.removeAllChapters();
+		var bookNode = document.getElementById(book.code + 'toc');
+		if (bookNode) {
+			bookNode.appendChild(root);
+		}
+	}
+};
+TableContentsGUI.prototype.cellsPerRow = function() {
+	return(5); // some calculation based upon the width of the screen
+}
+TableContentsGUI.prototype.removeBody = function() {
+	for (var i=0; i<this.bodyNode.children.length; i++) {
+		var childNode = this.bodyNode.children[i];
+		this.bodyNode.removeChild(childNode);
+	}
+};
+TableContentsGUI.prototype.removeAllChapters = function() {
+	for (var i=0; i<this.bodyNode.children.length; i++) {
+		var bookNode = this.bodyNode.children[i];
+		for (var j=0; j<bookNode.children.length; j++) {
+			var chaptTable = bookNode.children[j];
+			bookNode.removeChild(chaptTable);
+		}
+	}
+};
+TableContentsGUI.prototype.openChapter = function(bookCode, chapterNum) {
+	var book = this.toc.find(bookCode);
+	console.log('open chapter', book.code, chapterNum);
+};
 
 /**
 * This class contains user interface features for the display of the Bible text
