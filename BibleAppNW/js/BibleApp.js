@@ -459,10 +459,6 @@ function TOCBook(code) {
 
 function AppContext() {
 	this.tableContentsGUI = new TableContentsGUI();
-	//this.toc = null;
-	//this.codex = null;
-	//this.concordance = null;
-	//this.history = null;
 	Object.freeze(this);
 };
 
@@ -924,7 +920,10 @@ TableContentsGUI.prototype.showTocBookList = function(versionCode) {
 }
 TableContentsGUI.prototype.buildTocBookList = function() {//versionCode) {
 	var root = document.createDocumentFragment();
-	console.log('length ' + this.toc.bookList.length);
+	var div = document.createElement('div');
+	div.setAttribute('id', 'toc');
+	div.setAttribute('class', 'tocPage');
+	root.appendChild(div);
 	for (var i=0; i<this.toc.bookList.length; i++) {
 		var book = this.toc.bookList[i];
 		var bookNode = document.createElement('p');
@@ -932,7 +931,7 @@ TableContentsGUI.prototype.buildTocBookList = function() {//versionCode) {
 		bookNode.setAttribute('class', 'tocBook');
 		bookNode.setAttribute('onclick', 'app.tableContentsGUI.showTocChapterList("' +  book.code + '");');
 		bookNode.textContent = book.name;
-		root.appendChild(bookNode);
+		div.appendChild(bookNode);
 	}
 	this.removeBody();
 	this.bodyNode.appendChild(root);
@@ -971,15 +970,16 @@ TableContentsGUI.prototype.cellsPerRow = function() {
 	return(5); // some calculation based upon the width of the screen
 }
 TableContentsGUI.prototype.removeBody = function() {
-	for (var i=0; i<this.bodyNode.children.length; i++) {
+	for (var i=this.bodyNode.children.length -1; i>=0; i--) {
 		var childNode = this.bodyNode.children[i];
-		this.bodyNode.removeChild(childNode);
+		div.removeChild(childNode);
 	}
 };
 TableContentsGUI.prototype.removeAllChapters = function() {
-	for (var i=0; i<this.bodyNode.children.length; i++) {
-		var bookNode = this.bodyNode.children[i];
-		for (var j=0; j<bookNode.children.length; j++) {
+	var div = document.getElementById('toc');
+	for (var i=div.children.length -1; i>=0; i--) {
+		var bookNode = div.children[i];
+		for (var j=bookNode.children.length -1; j>=0; j--) {
 			var chaptTable = bookNode.children[j];
 			bookNode.removeChild(chaptTable);
 		}
