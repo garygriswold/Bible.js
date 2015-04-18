@@ -20,3 +20,14 @@ TOC.prototype.addBook = function(book) {
 TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
 };
+// This needs a better solution. Filename should be stored somewhere
+TOC.prototype.findFilename = function(book) {
+	for (var i=0; i<this.bookList.length; i++) {
+		if (book.code === this.bookList[i].code) {
+			var num = i +1;
+			var zeroPad = (num < 10) ? '00' : '0';
+			return(zeroPad + num + book.code + '.usx');
+		}
+	}
+	return(null);
+};

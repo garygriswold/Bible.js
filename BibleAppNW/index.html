@@ -19,40 +19,39 @@
 			//presentBook('WEB/004NUM.usx');
 			//presentBook('WEB/049EPH.usx');
 			//presentBook('WEB/042LUK.usx');
-			app = new AppViewController(); // Global root of the application
-
-			app.tableContentsView.showTocBookList('WEB');
+			app = new AppViewController('WEB'); // Global root of the application
+			app.begin();
 		};
-		function presentBook(filename) {
-			var reader = new NodeFileReader();
-			reader.readTextFile('application', 'usx/' + filename, readSuccessHandler, readFailedHandler);
-		};
-		function readSuccessHandler(data) {
-			var parser = new USXParser();
-			var usxNode = parser.readBook(data);
-			//var html = usxNode.toHTML();
-			//console.log(html);
-			var dom = new DOMBuilder();
-			var fragment = dom.toDOM(usxNode);
-
-			var builder = new HTMLBuilder();
-			var html2 = builder.toHTML(fragment);
-
-			var bodyNodes = document.getElementsByTagName('body');
-			bodyNodes[0].appendChild(fragment);
-
-			var writer = new NodeFileWriter();
-			writer.writeTextFile('application', 'usx/999test.html', html2, writeSuccessHandler, writeFailedHandler);
-		};
-		function readFailedHandler(err) {
-			console.log(JSON.stringify(err));
-		};
-		function writeSuccessHandler() {
-			console.log('write file success');
-		}
-		function writeFailedHandler(err) {
-			console.log(JSON.stringify(err));
-		}
+//		function presentBook(filename) {
+//			var reader = new NodeFileReader();
+//			reader.readTextFile('application', 'usx/' + filename, readSuccessHandler, readFailedHandler);
+//		};
+//		function readSuccessHandler(data) {
+//			var parser = new USXParser();
+//			var usxNode = parser.readBook(data);
+//			//var html = usxNode.toHTML();
+//			//console.log(html);
+//			var dom = new DOMBuilder();
+//			var fragment = dom.toDOM(usxNode);
+//
+//			var builder = new HTMLBuilder();
+//			var html2 = builder.toHTML(fragment);
+//
+//			var bodyNodes = document.getElementsByTagName('body');
+//			bodyNodes[0].appendChild(fragment);
+//
+//			var writer = new NodeFileWriter();
+//			writer.writeTextFile('application', 'usx/999test.html', html2, writeSuccessHandler, writeFailedHandler);
+//		};
+//		function readFailedHandler(err) {
+//			console.log(JSON.stringify(err));
+//		};
+//		function writeSuccessHandler() {
+//			console.log('write file success');
+//		}
+//		function writeFailedHandler(err) {
+//			console.log(JSON.stringify(err));
+//		}
 	</script>
   </head>
   <body onload="onBodyLoad()">

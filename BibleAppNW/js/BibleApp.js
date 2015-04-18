@@ -437,6 +437,17 @@ TOC.prototype.addBook = function(book) {
 };
 TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
+};
+// This needs a better solution. Filename should be stored somewhere
+TOC.prototype.findFilename = function(book) {
+	for (var i=0; i<this.bookList.length; i++) {
+		if (book.code === this.bookList[i].code) {
+			var num = i +1;
+			var zeroPad = (num < 10) ? '00' : '0';
+			return(zeroPad + num + book.code + '.usx');
+		}
+	}
+	return(null);
 };/**
 * This class holds the table of contents data each book of the Bible, or whatever books were loaded.
 */
@@ -880,20 +891,21 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 */
 "use strict";
 
-function TableContentsView() {
+function TableContentsView(versionCode) {
+	this.versionCode = versionCode;
 	this.toc = null;
 	var bodyNodes = document.getElementsByTagName('body');
 	this.bodyNode = bodyNodes[0];
 	Object.seal(this);
 };
-TableContentsView.prototype.showTocBookList = function(versionCode) {
+TableContentsView.prototype.showTocBookList = function() {
 	if (this.toc) { // should check the version
 		this.buildTocBookList();
 	}
 	else {
 		var that = this;
 		var reader = new NodeFileReader();
-		var filename = 'usx/' + versionCode + '/toc.json';
+		var filename = 'usx/' + this.versionCode + '/toc.json';
 		reader.readTextFile('application', filename, readSuccessHandler, readFailureHandler);
 	}
 	function readSuccessHandler(data) {
@@ -917,7 +929,7 @@ TableContentsView.prototype.buildTocBookList = function() {//versionCode) {
 		var bookNode = document.createElement('p');
 		bookNode.setAttribute('id', book.code + 'toc');
 		bookNode.setAttribute('class', 'tocBook');
-		bookNode.setAttribute('onclick', 'app.tableContentsGUI.showTocChapterList("' +  book.code + '");');
+		bookNode.setAttribute('onclick', 'app.tableContents.showTocChapterList("' +  book.code + '");');
 		bookNode.textContent = book.name;
 		div.appendChild(bookNode);
 	}
@@ -941,7 +953,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 			table.appendChild(row);
 			for (var c=0; c<numCellPerRow && chaptNum <= book.lastChapter; c++) {
 				var cell = document.createElement('td');
-				cell.setAttribute('onclick', 'app.tableContentsGUI.openChapter("' + bookCode + '", "' + chaptNum + '");');
+				cell.setAttribute('onclick', 'app.tableContents.openChapter("' + bookCode + '", "' + chaptNum + '");');
 				cell.textContent = chaptNum;
 				row.appendChild(cell);
 				chaptNum++;
@@ -975,16 +987,50 @@ TableContentsView.prototype.removeAllChapters = function() {
 };
 TableContentsView.prototype.openChapter = function(bookCode, chapterNum) {
 	var book = this.toc.find(bookCode);
+	var filename = this.toc.findFilename(book);
 	console.log('open chapter', book.code, chapterNum);
+	this.bodyNode.dispatchEvent(new CustomEvent(EVENT.TOC2PASSAGE, 
+		{ detail: { filename: filename, book: book.code, chapter: chapterNum, verse: 1 }}));
 };
+
 
 /**
 * This class contains user interface features for the display of the Bible text
 */
 "use strict";
 
-function CodexView() {
+function CodexView(versionCode) {
+	this.versionCode = versionCode;
+	var bodyNodes = document.getElementsByTagName('body');
+	this.bodyNode = bodyNodes[0];
+	Object.freeze(this);
 };
+CodexView.prototype.showPassage = function(filename, book, chapter, verse) {
+	var that = this;
+	var reader = new NodeFileReader();
+	var filepath = 'usx/' + this.versionCode + '/' + filename;
+	reader.readTextFile('application', filepath, readSuccessHandler, readFailedHandler);
+
+	function readSuccessHandler(data) {
+		var parser = new USXParser();
+		var usxNode = parser.readBook(data);
+	
+		var dom = new DOMBuilder();
+		var fragment = dom.toDOM(usxNode);
+
+		that.removeBody();
+		var bodyNodes = document.getElementsByTagName('body');
+		bodyNodes[0].appendChild(fragment);
+
+		that.scrollTo(book, chapter, verse);
+	};
+	function readFailedHandler(err) {
+		console.log(JSON.stringify(err));
+	};
+};
+CodexView.prototype.scrollTo = function(book, chapter, verse) {
+	console.log('Scroll To', book.code, chapter, verse);
+} 
 CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);
 	for (var i=0; i<note.children.length; i++) {
@@ -1003,16 +1049,43 @@ CodexView.prototype.hideFootnote = function(noteId) {
 		}
 	}
 };
-var codex = new CodexView();
+CodexView.prototype.removeBody = function() {
+	for (var i=this.bodyNode.children.length -1; i>=0; i--) {
+		var childNode = this.bodyNode.children[i];
+		this.bodyNode.removeChild(childNode);
+	}
+};
+//var codex = new CodexView();
 /**
 * BibleApp is a global object that contains pointers to all of the key elements of
 * a user's session with the App.
 */
 "use strict"
 
-function AppViewController() {
-	this.tableContentsView = new TableContentsView();
-	Object.freeze(this);
+var EVENT = { TOC2PASSAGE: 'toc2passage' };
+
+function AppViewController(versionCode) {
+	this.versionCode = versionCode;
+	this.tableContents = new TableContentsView(versionCode);
+	this.codex = new CodexView(versionCode);
+
+	this.bodyNode = this.tableContents.bodyNode;
+	this.bodyNode.addEventListener(EVENT.TOC2PASSAGE, toc2PassageHandler);
+	var that = this;
+	//Object.freeze(this);
+	console.log('vers 1', this.codex.versionCode);
+
+	function toc2PassageHandler(event) {
+		console.log('inside toc2passage handler');
+		console.log('vers 3', that.versionCode);
+		console.log('vers 2', that.codex.versionCode);
+		var detail = event.detail;
+		console.log(JSON.stringify(detail));
+		that.codex.showPassage(detail.filename, detail.book, detail.chapter, detail.verse);		
+	}
+};
+AppViewController.prototype.begin = function() {
+	this.tableContents.showTocBookList();
 };
 
 

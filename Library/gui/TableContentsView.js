@@ -3,20 +3,21 @@
 */
 "use strict";
 
-function TableContentsView() {
+function TableContentsView(versionCode) {
+	this.versionCode = versionCode;
 	this.toc = null;
 	var bodyNodes = document.getElementsByTagName('body');
 	this.bodyNode = bodyNodes[0];
 	Object.seal(this);
 };
-TableContentsView.prototype.showTocBookList = function(versionCode) {
+TableContentsView.prototype.showTocBookList = function() {
 	if (this.toc) { // should check the version
 		this.buildTocBookList();
 	}
 	else {
 		var that = this;
 		var reader = new NodeFileReader();
-		var filename = 'usx/' + versionCode + '/toc.json';
+		var filename = 'usx/' + this.versionCode + '/toc.json';
 		reader.readTextFile('application', filename, readSuccessHandler, readFailureHandler);
 	}
 	function readSuccessHandler(data) {
@@ -40,7 +41,7 @@ TableContentsView.prototype.buildTocBookList = function() {//versionCode) {
 		var bookNode = document.createElement('p');
 		bookNode.setAttribute('id', book.code + 'toc');
 		bookNode.setAttribute('class', 'tocBook');
-		bookNode.setAttribute('onclick', 'app.tableContentsGUI.showTocChapterList("' +  book.code + '");');
+		bookNode.setAttribute('onclick', 'app.tableContents.showTocChapterList("' +  book.code + '");');
 		bookNode.textContent = book.name;
 		div.appendChild(bookNode);
 	}
@@ -64,7 +65,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 			table.appendChild(row);
 			for (var c=0; c<numCellPerRow && chaptNum <= book.lastChapter; c++) {
 				var cell = document.createElement('td');
-				cell.setAttribute('onclick', 'app.tableContentsGUI.openChapter("' + bookCode + '", "' + chaptNum + '");');
+				cell.setAttribute('onclick', 'app.tableContents.openChapter("' + bookCode + '", "' + chaptNum + '");');
 				cell.textContent = chaptNum;
 				row.appendChild(cell);
 				chaptNum++;
@@ -98,6 +99,10 @@ TableContentsView.prototype.removeAllChapters = function() {
 };
 TableContentsView.prototype.openChapter = function(bookCode, chapterNum) {
 	var book = this.toc.find(bookCode);
+	var filename = this.toc.findFilename(book);
 	console.log('open chapter', book.code, chapterNum);
+	this.bodyNode.dispatchEvent(new CustomEvent(EVENT.TOC2PASSAGE, 
+		{ detail: { filename: filename, book: book.code, chapter: chapterNum, verse: 1 }}));
 };
+
 
