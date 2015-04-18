@@ -19,9 +19,9 @@
 			//presentBook('WEB/004NUM.usx');
 			//presentBook('WEB/049EPH.usx');
 			//presentBook('WEB/042LUK.usx');
-			app = new AppContext(); // Global root of the application
+			app = new AppViewController(); // Global root of the application
 
-			app.tableContentsGUI.showTocBookList('WEB');
+			app.tableContentsView.showTocBookList('WEB');
 		};
 		function presentBook(filename) {
 			var reader = new NodeFileReader();

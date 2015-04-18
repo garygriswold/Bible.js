@@ -16,7 +16,8 @@ cat ../Library/io/NodeFileReader.js >> js/BibleApp.js
 cat ../Library/io/NodeFileWriter.js >> js/BibleApp.js
 cat ../Library/visitors/DOMBuilder.js >> js/BibleApp.js
 cat ../Library/visitors/HTMLBuilder.js >> js/BibleApp.js
-cat ../Library/gui/TableContentsGUI.js >> js/BibleApp.js
-cat ../Library/gui/CodexGUI.js >> js/BibleApp.js
+cat ../Library/gui/TableContentsView.js >> js/BibleApp.js
+cat ../Library/gui/CodexView.js >> js/BibleApp.js
+cat ../Library/gui/AppViewController.js >> js/BibleApp.js
 #node js/BibleApp.js
 npm start

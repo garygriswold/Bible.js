@@ -5,7 +5,7 @@
 */
 var WEB_BIBLE_PATH = "/Users/garygriswold/Desktop/BibleApp Project/Bibles/USX/WEB World English Bible";
 //var OUT_BIBLE_PATH = "/Users/garygriswold/Desktop/Philip Project/Bibles/USX/WEB_HTML_OUT";
-var OUT_BIBLE_PATH = "/Users/garygriswold/Philip/UnitTestCSS1/www/html";
+var OUT_BIBLE_PATH = "/Users/garygriswold/BibleApp/UnitTestCSS1/www/html";
 
 var fs = require("fs");
 

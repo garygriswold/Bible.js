@@ -3,9 +3,9 @@
 */
 "use strict";
 
-function CodexGUI() {
+function CodexView() {
 };
-CodexGUI.prototype.showFootnote = function(noteId) {
+CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);
 	for (var i=0; i<note.children.length; i++) {
 		var child = note.children[i];
@@ -14,7 +14,7 @@ CodexGUI.prototype.showFootnote = function(noteId) {
 		}
 	} 
 };
-CodexGUI.prototype.hideFootnote = function(noteId) {
+CodexView.prototype.hideFootnote = function(noteId) {
 	var note = document.getElementById(noteId);
 	for (var i=0; i<note.children.length; i++) {
 		var child = note.children[i];
@@ -23,4 +23,4 @@ CodexGUI.prototype.hideFootnote = function(noteId) {
 		}
 	}
 };
-var codex = new CodexGUI();
+var codex = new CodexView();

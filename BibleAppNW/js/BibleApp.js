@@ -452,18 +452,6 @@ function TOCBook(code) {
 	this.lastChapter = 0;
 	Object.seal(this);
 };/**
-* BibleApp is a global object that contains pointers to all of the key elements of
-* a user's session with the App.
-*/
-"use strict"
-
-function AppContext() {
-	this.tableContentsGUI = new TableContentsGUI();
-	Object.freeze(this);
-};
-
-
-/**
 * This class does a stream read of an XML string to return XML tokens and their token type.
 */
 "use strict";
@@ -892,14 +880,14 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 */
 "use strict";
 
-function TableContentsGUI() {
+function TableContentsView() {
 	this.toc = null;
 	var bodyNodes = document.getElementsByTagName('body');
 	this.bodyNode = bodyNodes[0];
 	Object.seal(this);
 };
-TableContentsGUI.prototype.showTocBookList = function(versionCode) {
-	if (app.toc) { // should check the version
+TableContentsView.prototype.showTocBookList = function(versionCode) {
+	if (this.toc) { // should check the version
 		this.buildTocBookList();
 	}
 	else {
@@ -918,7 +906,7 @@ TableContentsGUI.prototype.showTocBookList = function(versionCode) {
 		that.toc = new TOC([]);
 	};
 }
-TableContentsGUI.prototype.buildTocBookList = function() {//versionCode) {
+TableContentsView.prototype.buildTocBookList = function() {//versionCode) {
 	var root = document.createDocumentFragment();
 	var div = document.createElement('div');
 	div.setAttribute('id', 'toc');
@@ -936,7 +924,7 @@ TableContentsGUI.prototype.buildTocBookList = function() {//versionCode) {
 	this.removeBody();
 	this.bodyNode.appendChild(root);
 };
-TableContentsGUI.prototype.showTocChapterList = function(bookCode) {
+TableContentsView.prototype.showTocChapterList = function(bookCode) {
 	var book = this.toc.find(bookCode);
 	if (book) {
 		var root = document.createDocumentFragment();
@@ -966,16 +954,16 @@ TableContentsGUI.prototype.showTocChapterList = function(bookCode) {
 		}
 	}
 };
-TableContentsGUI.prototype.cellsPerRow = function() {
+TableContentsView.prototype.cellsPerRow = function() {
 	return(5); // some calculation based upon the width of the screen
 }
-TableContentsGUI.prototype.removeBody = function() {
+TableContentsView.prototype.removeBody = function() {
 	for (var i=this.bodyNode.children.length -1; i>=0; i--) {
 		var childNode = this.bodyNode.children[i];
 		div.removeChild(childNode);
 	}
 };
-TableContentsGUI.prototype.removeAllChapters = function() {
+TableContentsView.prototype.removeAllChapters = function() {
 	var div = document.getElementById('toc');
 	for (var i=div.children.length -1; i>=0; i--) {
 		var bookNode = div.children[i];
@@ -985,7 +973,7 @@ TableContentsGUI.prototype.removeAllChapters = function() {
 		}
 	}
 };
-TableContentsGUI.prototype.openChapter = function(bookCode, chapterNum) {
+TableContentsView.prototype.openChapter = function(bookCode, chapterNum) {
 	var book = this.toc.find(bookCode);
 	console.log('open chapter', book.code, chapterNum);
 };
@@ -995,9 +983,9 @@ TableContentsGUI.prototype.openChapter = function(bookCode, chapterNum) {
 */
 "use strict";
 
-function CodexGUI() {
+function CodexView() {
 };
-CodexGUI.prototype.showFootnote = function(noteId) {
+CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);
 	for (var i=0; i<note.children.length; i++) {
 		var child = note.children[i];
@@ -1006,7 +994,7 @@ CodexGUI.prototype.showFootnote = function(noteId) {
 		}
 	} 
 };
-CodexGUI.prototype.hideFootnote = function(noteId) {
+CodexView.prototype.hideFootnote = function(noteId) {
 	var note = document.getElementById(noteId);
 	for (var i=0; i<note.children.length; i++) {
 		var child = note.children[i];
@@ -1015,4 +1003,16 @@ CodexGUI.prototype.hideFootnote = function(noteId) {
 		}
 	}
 };
-var codex = new CodexGUI();
+var codex = new CodexView();
+/**
+* BibleApp is a global object that contains pointers to all of the key elements of
+* a user's session with the App.
+*/
+"use strict"
+
+function AppViewController() {
+	this.tableContentsView = new TableContentsView();
+	Object.freeze(this);
+};
+
+

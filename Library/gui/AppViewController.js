@@ -4,8 +4,8 @@
 */
 "use strict"
 
-function AppContext() {
-	this.tableContentsGUI = new TableContentsGUI();
+function AppViewController() {
+	this.tableContentsView = new TableContentsView();
 	Object.freeze(this);
 };
 

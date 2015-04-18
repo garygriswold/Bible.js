@@ -3,14 +3,14 @@
 */
 "use strict";
 
-function TableContentsGUI() {
+function TableContentsView() {
 	this.toc = null;
 	var bodyNodes = document.getElementsByTagName('body');
 	this.bodyNode = bodyNodes[0];
 	Object.seal(this);
 };
-TableContentsGUI.prototype.showTocBookList = function(versionCode) {
-	if (app.toc) { // should check the version
+TableContentsView.prototype.showTocBookList = function(versionCode) {
+	if (this.toc) { // should check the version
 		this.buildTocBookList();
 	}
 	else {
@@ -29,7 +29,7 @@ TableContentsGUI.prototype.showTocBookList = function(versionCode) {
 		that.toc = new TOC([]);
 	};
 }
-TableContentsGUI.prototype.buildTocBookList = function() {//versionCode) {
+TableContentsView.prototype.buildTocBookList = function() {//versionCode) {
 	var root = document.createDocumentFragment();
 	var div = document.createElement('div');
 	div.setAttribute('id', 'toc');
@@ -47,7 +47,7 @@ TableContentsGUI.prototype.buildTocBookList = function() {//versionCode) {
 	this.removeBody();
 	this.bodyNode.appendChild(root);
 };
-TableContentsGUI.prototype.showTocChapterList = function(bookCode) {
+TableContentsView.prototype.showTocChapterList = function(bookCode) {
 	var book = this.toc.find(bookCode);
 	if (book) {
 		var root = document.createDocumentFragment();
@@ -77,16 +77,16 @@ TableContentsGUI.prototype.showTocChapterList = function(bookCode) {
 		}
 	}
 };
-TableContentsGUI.prototype.cellsPerRow = function() {
+TableContentsView.prototype.cellsPerRow = function() {
 	return(5); // some calculation based upon the width of the screen
 }
-TableContentsGUI.prototype.removeBody = function() {
+TableContentsView.prototype.removeBody = function() {
 	for (var i=this.bodyNode.children.length -1; i>=0; i--) {
 		var childNode = this.bodyNode.children[i];
 		div.removeChild(childNode);
 	}
 };
-TableContentsGUI.prototype.removeAllChapters = function() {
+TableContentsView.prototype.removeAllChapters = function() {
 	var div = document.getElementById('toc');
 	for (var i=div.children.length -1; i>=0; i--) {
 		var bookNode = div.children[i];
@@ -96,7 +96,7 @@ TableContentsGUI.prototype.removeAllChapters = function() {
 		}
 	}
 };
-TableContentsGUI.prototype.openChapter = function(bookCode, chapterNum) {
+TableContentsView.prototype.openChapter = function(bookCode, chapterNum) {
 	var book = this.toc.find(bookCode);
 	console.log('open chapter', book.code, chapterNum);
 };
