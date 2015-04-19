@@ -30,7 +30,7 @@ TableContentsView.prototype.showTocBookList = function() {
 		that.toc = new TOC([]);
 	};
 }
-TableContentsView.prototype.buildTocBookList = function() {//versionCode) {
+TableContentsView.prototype.buildTocBookList = function() {
 	var root = document.createDocumentFragment();
 	var div = document.createElement('div');
 	div.setAttribute('id', 'toc');
@@ -39,11 +39,15 @@ TableContentsView.prototype.buildTocBookList = function() {//versionCode) {
 	for (var i=0; i<this.toc.bookList.length; i++) {
 		var book = this.toc.bookList[i];
 		var bookNode = document.createElement('p');
-		bookNode.setAttribute('id', book.code + 'toc');
+		bookNode.setAttribute('id', 'toc' + book.code);
 		bookNode.setAttribute('class', 'tocBook');
-		bookNode.setAttribute('onclick', 'app.tableContents.showTocChapterList("' +  book.code + '");');
 		bookNode.textContent = book.name;
 		div.appendChild(bookNode);
+		var that = this;
+		bookNode.addEventListener('click', function() {
+			var bookCode = this.id.substring(3);
+			that.showTocChapterList(bookCode);
+		});
 	}
 	this.removeBody();
 	this.bodyNode.appendChild(root);
@@ -53,26 +57,29 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 	if (book) {
 		var root = document.createDocumentFragment();
 		var table = document.createElement('table');
-		table.setAttribute('id', book.code + 'ch');
 		table.setAttribute('class', 'tocChap');
 		root.appendChild(table);
 		var numCellPerRow = this.cellsPerRow();
 		var numRows = Math.ceil(book.lastChapter / numCellPerRow);
-		console.log('numRows ', numRows);;
 		var chaptNum = 1;
 		for (var r=0; r<numRows; r++) {
 			var row = document.createElement('tr');
 			table.appendChild(row);
 			for (var c=0; c<numCellPerRow && chaptNum <= book.lastChapter; c++) {
 				var cell = document.createElement('td');
-				cell.setAttribute('onclick', 'app.tableContents.openChapter("' + bookCode + '", "' + chaptNum + '");');
+				cell.setAttribute('id', 'toc' + bookCode + ':' + chaptNum);
 				cell.textContent = chaptNum;
 				row.appendChild(cell);
 				chaptNum++;
+				var that = this;
+				cell.addEventListener('click', function() {
+					var nodeId = this.id.substring(3);
+					that.openChapter(nodeId);
+				});
 			}
 		}
 		this.removeAllChapters();
-		var bookNode = document.getElementById(book.code + 'toc');
+		var bookNode = document.getElementById('toc' + book.code);
 		if (bookNode) {
 			bookNode.appendChild(root);
 		}
@@ -97,12 +104,12 @@ TableContentsView.prototype.removeAllChapters = function() {
 		}
 	}
 };
-TableContentsView.prototype.openChapter = function(bookCode, chapterNum) {
-	var book = this.toc.find(bookCode);
+TableContentsView.prototype.openChapter = function(nodeId) {
+	var parts = nodeId.split(':');
+	var book = this.toc.find(parts[0]);
 	var filename = this.toc.findFilename(book);
-	console.log('open chapter', book.code, chapterNum);
-	this.bodyNode.dispatchEvent(new CustomEvent(EVENT.TOC2PASSAGE, 
-		{ detail: { filename: filename, book: book.code, chapter: chapterNum }}));
+	console.log('open chapter', nodeId);
+	this.bodyNode.dispatchEvent(new CustomEvent(EVENT.TOC2PASSAGE, { detail: { filename: filename, id: nodeId }}));
 };
 
 

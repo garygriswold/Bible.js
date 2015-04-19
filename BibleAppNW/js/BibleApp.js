@@ -918,7 +918,7 @@ TableContentsView.prototype.showTocBookList = function() {
 		that.toc = new TOC([]);
 	};
 }
-TableContentsView.prototype.buildTocBookList = function() {//versionCode) {
+TableContentsView.prototype.buildTocBookList = function() {
 	var root = document.createDocumentFragment();
 	var div = document.createElement('div');
 	div.setAttribute('id', 'toc');
@@ -927,11 +927,15 @@ TableContentsView.prototype.buildTocBookList = function() {//versionCode) {
 	for (var i=0; i<this.toc.bookList.length; i++) {
 		var book = this.toc.bookList[i];
 		var bookNode = document.createElement('p');
-		bookNode.setAttribute('id', book.code + 'toc');
+		bookNode.setAttribute('id', 'toc' + book.code);
 		bookNode.setAttribute('class', 'tocBook');
-		bookNode.setAttribute('onclick', 'app.tableContents.showTocChapterList("' +  book.code + '");');
 		bookNode.textContent = book.name;
 		div.appendChild(bookNode);
+		var that = this;
+		bookNode.addEventListener('click', function() {
+			var bookCode = this.id.substring(3);
+			that.showTocChapterList(bookCode);
+		});
 	}
 	this.removeBody();
 	this.bodyNode.appendChild(root);
@@ -941,26 +945,29 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 	if (book) {
 		var root = document.createDocumentFragment();
 		var table = document.createElement('table');
-		table.setAttribute('id', book.code + 'ch');
 		table.setAttribute('class', 'tocChap');
 		root.appendChild(table);
 		var numCellPerRow = this.cellsPerRow();
 		var numRows = Math.ceil(book.lastChapter / numCellPerRow);
-		console.log('numRows ', numRows);;
 		var chaptNum = 1;
 		for (var r=0; r<numRows; r++) {
 			var row = document.createElement('tr');
 			table.appendChild(row);
 			for (var c=0; c<numCellPerRow && chaptNum <= book.lastChapter; c++) {
 				var cell = document.createElement('td');
-				cell.setAttribute('onclick', 'app.tableContents.openChapter("' + bookCode + '", "' + chaptNum + '");');
+				cell.setAttribute('id', 'toc' + bookCode + ':' + chaptNum);
 				cell.textContent = chaptNum;
 				row.appendChild(cell);
 				chaptNum++;
+				var that = this;
+				cell.addEventListener('click', function() {
+					var nodeId = this.id.substring(3);
+					that.openChapter(nodeId);
+				});
 			}
 		}
 		this.removeAllChapters();
-		var bookNode = document.getElementById(book.code + 'toc');
+		var bookNode = document.getElementById('toc' + book.code);
 		if (bookNode) {
 			bookNode.appendChild(root);
 		}
@@ -985,12 +992,12 @@ TableContentsView.prototype.removeAllChapters = function() {
 		}
 	}
 };
-TableContentsView.prototype.openChapter = function(bookCode, chapterNum) {
-	var book = this.toc.find(bookCode);
+TableContentsView.prototype.openChapter = function(nodeId) {
+	var parts = nodeId.split(':');
+	var book = this.toc.find(parts[0]);
 	var filename = this.toc.findFilename(book);
-	console.log('open chapter', book.code, chapterNum);
-	this.bodyNode.dispatchEvent(new CustomEvent(EVENT.TOC2PASSAGE, 
-		{ detail: { filename: filename, book: book.code, chapter: chapterNum }}));
+	console.log('open chapter', nodeId);
+	this.bodyNode.dispatchEvent(new CustomEvent(EVENT.TOC2PASSAGE, { detail: { filename: filename, id: nodeId }}));
 };
 
 
@@ -1005,7 +1012,7 @@ function CodexView(versionCode) {
 	this.bodyNode = bodyNodes[0];
 	Object.freeze(this);
 };
-CodexView.prototype.showPassage = function(filename, book, chapter, verse) {
+CodexView.prototype.showPassage = function(filename, nodeId) {
 	var that = this;
 	var reader = new NodeFileReader();
 	var filepath = 'usx/' + this.versionCode + '/' + filename;
@@ -1022,34 +1029,18 @@ CodexView.prototype.showPassage = function(filename, book, chapter, verse) {
 		var bodyNodes = document.getElementsByTagName('body');
 		bodyNodes[0].appendChild(fragment);
 
-		that.scrollTo(book, chapter, verse);
+		that.scrollTo(nodeId);
 	};
 	function readFailedHandler(err) {
 		console.log(JSON.stringify(err));
 	};
 };
-CodexView.prototype.scrollTo = function(book, chapter, verse) {
-	var id = this.getId(book, chapter, verse);
-	console.log('verse', id);
-	var verse = document.getElementById(id);
+CodexView.prototype.scrollTo = function(nodeId) {
+	console.log('verse', nodeId);
+	var verse = document.getElementById(nodeId);
 	var rect = verse.getBoundingClientRect();
-	console.log('rect ', rect.left, rect.top, rect.right, rect.bottom);
-	console.log('pos ', window.scrollX, window.scrollY);
-	console.log('pos2 ', window.pageXOffset, window.pageYOffset);
 	window.scrollTo(rect.left + window.scrollY, rect.top + window.scrollY);
-
-	console.log('Scroll To', book.code, chapter, verse);
 };
-CodexView.prototype.getId = function(book, chapter, verse) {
-	var id = book;
-	if (chapter && chapter > 0) {
-		id += ':' + chapter;
-		if (verse && verse > 0) {
-			id += ':' + verse;
-		}
-	}
-	return(id);
-}
 CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);
 	for (var i=0; i<note.children.length; i++) {
@@ -1091,16 +1082,12 @@ function AppViewController(versionCode) {
 	this.bodyNode = this.tableContents.bodyNode;
 	this.bodyNode.addEventListener(EVENT.TOC2PASSAGE, toc2PassageHandler);
 	var that = this;
-	//Object.freeze(this);
-	console.log('vers 1', this.codex.versionCode);
+	Object.freeze(this);
 
 	function toc2PassageHandler(event) {
-		console.log('inside toc2passage handler');
-		console.log('vers 3', that.versionCode);
-		console.log('vers 2', that.codex.versionCode);
 		var detail = event.detail;
 		console.log(JSON.stringify(detail));
-		that.codex.showPassage(detail.filename, detail.book, detail.chapter, detail.verse);		
+		that.codex.showPassage(detail.filename, detail.id);	
 	}
 };
 AppViewController.prototype.begin = function() {

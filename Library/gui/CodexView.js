@@ -9,7 +9,7 @@ function CodexView(versionCode) {
 	this.bodyNode = bodyNodes[0];
 	Object.freeze(this);
 };
-CodexView.prototype.showPassage = function(filename, book, chapter, verse) {
+CodexView.prototype.showPassage = function(filename, nodeId) {
 	var that = this;
 	var reader = new NodeFileReader();
 	var filepath = 'usx/' + this.versionCode + '/' + filename;
@@ -26,29 +26,18 @@ CodexView.prototype.showPassage = function(filename, book, chapter, verse) {
 		var bodyNodes = document.getElementsByTagName('body');
 		bodyNodes[0].appendChild(fragment);
 
-		that.scrollTo(book, chapter, verse);
+		that.scrollTo(nodeId);
 	};
 	function readFailedHandler(err) {
 		console.log(JSON.stringify(err));
 	};
 };
-CodexView.prototype.scrollTo = function(book, chapter, verse) {
-	var id = this.getId(book, chapter, verse);
-	console.log('verse', id);
-	var verse = document.getElementById(id);
+CodexView.prototype.scrollTo = function(nodeId) {
+	console.log('verse', nodeId);
+	var verse = document.getElementById(nodeId);
 	var rect = verse.getBoundingClientRect();
 	window.scrollTo(rect.left + window.scrollY, rect.top + window.scrollY);
 };
-CodexView.prototype.getId = function(book, chapter, verse) {
-	var id = book;
-	if (chapter && chapter > 0) {
-		id += ':' + chapter;
-		if (verse && verse > 0) {
-			id += ':' + verse;
-		}
-	}
-	return(id);
-}
 CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);
 	for (var i=0; i<note.children.length; i++) {

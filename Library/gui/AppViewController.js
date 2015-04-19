@@ -14,16 +14,12 @@ function AppViewController(versionCode) {
 	this.bodyNode = this.tableContents.bodyNode;
 	this.bodyNode.addEventListener(EVENT.TOC2PASSAGE, toc2PassageHandler);
 	var that = this;
-	//Object.freeze(this);
-	console.log('vers 1', this.codex.versionCode);
+	Object.freeze(this);
 
 	function toc2PassageHandler(event) {
-		console.log('inside toc2passage handler');
-		console.log('vers 3', that.versionCode);
-		console.log('vers 2', that.codex.versionCode);
 		var detail = event.detail;
 		console.log(JSON.stringify(detail));
-		that.codex.showPassage(detail.filename, detail.book, detail.chapter, detail.verse);		
+		that.codex.showPassage(detail.filename, detail.id);	
 	}
 };
 AppViewController.prototype.begin = function() {
