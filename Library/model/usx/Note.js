@@ -43,7 +43,6 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	var refChild = document.createElement('span');
 	refChild.setAttribute('id', nodeId);
 	refChild.setAttribute('class', 'fnref');
-	refChild.setAttribute('onclick', "codex.showFootnote('" + nodeId + "');");
 	switch(this.style) {
 		case 'f':
 			refChild.textContent = '\u261E ';
@@ -55,13 +54,19 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 			refChild.textContent = '* ';
 	}
 	parentNode.appendChild(refChild);
+	refChild.addEventListener('click', function() {
+		app.codex.showFootnote(this.id);
+	});
 
 	if (this.note !== undefined && this.note.length > 0) {
 		var noteChild = document.createElement('span');
 		noteChild.setAttribute('class', this.style);
 		noteChild.setAttribute('note', this.note);
-		noteChild.setAttribute('onclick', "codex.hideFootnote('" + nodeId + "'); event.stopPropagation();");
 		refChild.appendChild(noteChild);
+		noteChild.addEventListener('click', function() {
+			app.codex.hideFootnote(nodeId);
+			event.stopPropagation();
+		});
 	}
 	return(refChild);
 };

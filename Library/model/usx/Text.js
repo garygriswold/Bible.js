@@ -17,7 +17,10 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 		if (parentNode.nodeType === 1 && this.footnotes.indexOf(parentNode.getAttribute('class')) >= 0) {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of parent.
 			var nodeId = bookCode + chapterNum + '-' + noteNum;
-			parentNode.setAttribute('onclick', "codex.hideFootnote('" + nodeId + "'); event.stopPropagation();");
+			parentNode.addEventListener('click', function() {
+				app.codex.hideFootnote(nodeId);
+				event.stopPropagation();
+			});
 		}
 		else {
 			var child = document.createTextNode(this.text);
