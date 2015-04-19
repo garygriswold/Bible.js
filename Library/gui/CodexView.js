@@ -33,8 +33,22 @@ CodexView.prototype.showPassage = function(filename, book, chapter, verse) {
 	};
 };
 CodexView.prototype.scrollTo = function(book, chapter, verse) {
-	console.log('Scroll To', book.code, chapter, verse);
-} 
+	var id = this.getId(book, chapter, verse);
+	console.log('verse', id);
+	var verse = document.getElementById(id);
+	var rect = verse.getBoundingClientRect();
+	window.scrollTo(rect.left + window.scrollY, rect.top + window.scrollY);
+};
+CodexView.prototype.getId = function(book, chapter, verse) {
+	var id = book;
+	if (chapter && chapter > 0) {
+		id += ':' + chapter;
+		if (verse && verse > 0) {
+			id += ':' + verse;
+		}
+	}
+	return(id);
+}
 CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);
 	for (var i=0; i<note.children.length; i++) {

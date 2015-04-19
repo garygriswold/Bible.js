@@ -990,7 +990,7 @@ TableContentsView.prototype.openChapter = function(bookCode, chapterNum) {
 	var filename = this.toc.findFilename(book);
 	console.log('open chapter', book.code, chapterNum);
 	this.bodyNode.dispatchEvent(new CustomEvent(EVENT.TOC2PASSAGE, 
-		{ detail: { filename: filename, book: book.code, chapter: chapterNum, verse: 1 }}));
+		{ detail: { filename: filename, book: book.code, chapter: chapterNum }}));
 };
 
 
@@ -1029,8 +1029,27 @@ CodexView.prototype.showPassage = function(filename, book, chapter, verse) {
 	};
 };
 CodexView.prototype.scrollTo = function(book, chapter, verse) {
+	var id = this.getId(book, chapter, verse);
+	console.log('verse', id);
+	var verse = document.getElementById(id);
+	var rect = verse.getBoundingClientRect();
+	console.log('rect ', rect.left, rect.top, rect.right, rect.bottom);
+	console.log('pos ', window.scrollX, window.scrollY);
+	console.log('pos2 ', window.pageXOffset, window.pageYOffset);
+	window.scrollTo(rect.left + window.scrollY, rect.top + window.scrollY);
+
 	console.log('Scroll To', book.code, chapter, verse);
-} 
+};
+CodexView.prototype.getId = function(book, chapter, verse) {
+	var id = book;
+	if (chapter && chapter > 0) {
+		id += ':' + chapter;
+		if (verse && verse > 0) {
+			id += ':' + verse;
+		}
+	}
+	return(id);
+}
 CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);
 	for (var i=0; i<note.children.length; i++) {

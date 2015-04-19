@@ -102,7 +102,7 @@ TableContentsView.prototype.openChapter = function(bookCode, chapterNum) {
 	var filename = this.toc.findFilename(book);
 	console.log('open chapter', book.code, chapterNum);
 	this.bodyNode.dispatchEvent(new CustomEvent(EVENT.TOC2PASSAGE, 
-		{ detail: { filename: filename, book: book.code, chapter: chapterNum, verse: 1 }}));
+		{ detail: { filename: filename, book: book.code, chapter: chapterNum }}));
 };
 
 
