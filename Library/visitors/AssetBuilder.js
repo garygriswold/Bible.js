@@ -32,7 +32,7 @@ AssetBuilder.prototype.build = function(successCallback, failureCallback) {
 
 	function dirReadFailure(err) {
 		console.log('directory read err ', JSON.stringify(err));
-		// what do we do now???
+		failureCallback(err);
 	}
 	function dirReadSuccess(files) {
 		var count = 0
@@ -42,36 +42,42 @@ AssetBuilder.prototype.build = function(successCallback, failureCallback) {
 				count++;
 			}
 		}
-		processFile(that.filesToProcess.shift());
+		processReadFile(that.filesToProcess.shift());
 	}
 	function fileReadFailure(err) {
 		console.log('file read err ', JSON.stringify(err));
-		// now what?
+		failureCallback(err);
 	}
 	function fileReadSuccess(data) {
 		var rootNode = that.parser.readBook(data);
 		for (var i=0; i<that.builders.length; i++) {
 			that.builders[i].readBook(rootNode);
 		}
-		processFile(that.filesToProcess.shift());
+		processReadFile(that.filesToProcess.shift());
 	}
-	function processFile(file) {
+	function processReadFile(file) {
 		if (file) {
 			that.reader.readTextFile(that.getPath(file), fileReadSuccess, fileReadFailure);
 		} else {
-			for (var i=0; i<that.builders.length; i++) {
-				var json = that.builders[i].toJSON();
-				var filepath = that.getPath(that.builders[i].filename);
-				that.writer.writeTextFile(filepath, json, fileWriteSuccess, fileWriteFailure);
-			}
+			processWriteResult(that.builders.shift());
+		}
+	}
+	function processWriteResult(builder) {
+		if (builder) {
+			var json = builder.toJSON();
+			var filepath = that.getPath(builder.filename);
+			that.writer.writeTextFile(filepath, json, fileWriteSuccess, fileWriteFailure);
+		} else {
+			successCallback();
 		}
 	}
 	function fileWriteFailure(err) {
 		console.log('file write failure ', err);
-		// what now
+		failureCallback(err);
 	}
 	function fileWriteSuccess(filename) {
 		console.log('file write success ', filename);
+		processWriteResult(that.builders.shift());
 	}
 };
 AssetBuilder.prototype.getPath = function(filename) {
