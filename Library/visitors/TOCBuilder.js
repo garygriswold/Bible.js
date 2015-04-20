@@ -7,7 +7,7 @@
 function TOCBuilder() {
 	this.toc = new TOC([]);
 	this.tocBook = null;
-	this.filename = 'toc.json';
+	this.filename = this.toc.filename;
 	Object.seal(this);
 };
 TOCBuilder.prototype.readBook = function(usxRoot) {
@@ -48,5 +48,5 @@ TOCBuilder.prototype.readRecursively = function(node) {
 	}
 };
 TOCBuilder.prototype.toJSON = function() {
-	return(JSON.stringify(this.toc.bookList, null, ' '));
+	return(this.toc.toJSON());
 };

@@ -5,6 +5,7 @@
 
 function StyleIndex() {
 	this.index = {};
+	this.filename = 'styleIndex.json';
 	this.completed = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl',
 		'para.mt', 'para.mt2', 'para.mt3', 'para.ms', 'para.d',
 		'chapter.c', 'verse.v',
@@ -37,4 +38,7 @@ StyleIndex.prototype.dump = function(words) {
 		var word = words[i];
 		console.log(word, this.index[word]);
 	};	
+};
+StyleIndex.prototype.toJSON = function() {
+	return(JSON.stringify(this.index, null, ' '));
 };

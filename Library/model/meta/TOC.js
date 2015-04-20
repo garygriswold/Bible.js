@@ -6,6 +6,7 @@
 function TOC(books) {
 	this.bookList = books || [];
 	this.bookMap = {};
+	this.filename = 'toc.json';
 	for (var i=0; i<this.bookList.length; i++) {
 		var book = this.bookList[i];
 		this.bookMap[book.code] = book;
@@ -30,4 +31,7 @@ TOC.prototype.findFilename = function(book) {
 		}
 	}
 	return(null);
+};
+TOC.prototype.toJSON = function() {
+	return(JSON.stringify(this.bookList, null, ' '));
 };

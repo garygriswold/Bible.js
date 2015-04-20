@@ -5,6 +5,7 @@
 
 function Concordance() {
 	this.index = {};
+	this.filename = 'concordance.json';
 	Object.freeze(this);
 };
 Concordance.prototype.addEntry = function(word, reference) {
@@ -46,4 +47,7 @@ Concordance.prototype.dump = function(words) {
 		var word = words[i];
 		console.log(word, this.index[word]);
 	};	
+};
+Concordance.prototype.toJSON = function() {
+	return(JSON.stringify(this.index, null, ' '));
 };

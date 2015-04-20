@@ -7,7 +7,7 @@
 
 function StyleIndexBuilder() {
 	this.styleIndex = new StyleIndex();
-	this.filename = 'styleIndex.json';
+	this.filename = this.styleIndex.filename;
 };
 StyleIndexBuilder.prototype.readBook = function(usxRoot) {
 	this.bookCode = '';
@@ -51,5 +51,5 @@ StyleIndexBuilder.prototype.readRecursively = function(node) {
 	}
 };
 StyleIndexBuilder.prototype.toJSON = function() {
-	return(JSON.stringify(this.styleIndex, null, ' '));
+	return(this.styleIndex.toJSON());
 };
