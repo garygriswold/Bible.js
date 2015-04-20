@@ -16,9 +16,9 @@ TableContentsView.prototype.showTocBookList = function() {
 	}
 	else {
 		var that = this;
-		var reader = new NodeFileReader();
+		var reader = new NodeFileReader('application');
 		var filename = 'usx/' + this.versionCode + '/toc.json';
-		reader.readTextFile('application', filename, readSuccessHandler, readFailureHandler);
+		reader.readTextFile(filename, readSuccessHandler, readFailureHandler);
 	}
 	function readSuccessHandler(data) {
 		var bookList = JSON.parse(data);

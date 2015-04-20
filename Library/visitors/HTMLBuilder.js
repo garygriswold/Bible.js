@@ -5,6 +5,7 @@
 
 function HTMLBuilder() {
 	this.result = [];
+	this.filename = 'bible.html';
 	Object.freeze(this);
 };
 HTMLBuilder.prototype.toHTML = function(fragment) {
@@ -37,6 +38,9 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 	if (node.nodeType === 1) {
 		this.result.push('</', node.tagName.toLowerCase(), '>\n');
 	}
+};
+HTMLBuilder.prototype.toJSON = function() {
+	return(this.result.join(''));
 };
 
 

@@ -8,6 +8,11 @@
 
 function ConcordanceBuilder() {
 	this.concordance = new Concordance();
+	this.filename = 'concordance.json';
+	this.bookCode = '';
+	this.chapter = 0;
+	this.verse = 0;
+	Object.seal(this);
 };
 ConcordanceBuilder.prototype.readBook = function(usxRoot) {
 	this.bookCode = '';
@@ -44,4 +49,7 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 			}
 
 	}
+};
+ConcordanceBuilder.prototype.toJSON = function() {
+	return(JSON.stringify(this.concordance, null, ' '));
 };

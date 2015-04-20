@@ -4,18 +4,20 @@
 */
 "use strict";
 
-function NodeFileWriter() {
+function NodeFileWriter(location) {
 	this.fs = require('fs');
+	this.location = location;
 	Object.freeze(this);
 };
-NodeFileWriter.prototype.writeTextFile = function(location, filepath, data, successCallback, failureCallback) {
-	var fullPath = FILE_ROOTS[location] + filepath;
+NodeFileWriter.prototype.writeTextFile = function(filepath, data, successCallback, failureCallback) {
+	var fullPath = FILE_ROOTS[this.location] + filepath;
 	var options = { encoding: 'utf-8'};
 	this.fs.writeFile(fullPath, data, options, function(err) {
 		if (err) {
+			err.filepath = filepath;
 			failureCallback(err);
 		} else {
-			successCallback();
+			successCallback(filepath);
 		}
 	});
 };

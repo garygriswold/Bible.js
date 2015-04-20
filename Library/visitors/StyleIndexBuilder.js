@@ -7,6 +7,7 @@
 
 function StyleIndexBuilder() {
 	this.styleIndex = new StyleIndex();
+	this.filename = 'styleIndex.json';
 };
 StyleIndexBuilder.prototype.readBook = function(usxRoot) {
 	this.bookCode = '';
@@ -48,4 +49,7 @@ StyleIndexBuilder.prototype.readRecursively = function(node) {
 			this.readRecursively(node.children[i]);
 		}
 	}
+};
+StyleIndexBuilder.prototype.toJSON = function() {
+	return(JSON.stringify(this.styleIndex, null, ' '));
 };
