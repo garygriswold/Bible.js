@@ -3,8 +3,9 @@
 */
 "use strict";
 
-function Concordance() {
-	this.index = {};
+function Concordance(words) {
+	this.index = words || {};
+	console.log('index assigned ' , Object.keys(this.index).length);
 	this.filename = 'concordance.json';
 	Object.freeze(this);
 };
@@ -14,6 +15,9 @@ Concordance.prototype.addEntry = function(word, reference) {
 	}
 	this.index[word].push(reference);
 };
+Concordance.prototype.size = function() {
+	return(Object.keys(this.index).length);
+}
 Concordance.prototype.find = function(word) {
 	return(this.index[word]);
 };

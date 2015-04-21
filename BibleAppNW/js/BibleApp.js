@@ -405,7 +405,6 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 		if (parentNode.nodeType === 1 && this.footnotes.indexOf(parentNode.getAttribute('class')) >= 0) {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of parent.
 			var nodeId = bookCode + chapterNum + '-' + noteNum;
-			//parentNode.setAttribute('onclick', "codex.hideFootnote('" + nodeId + "'); event.stopPropagation();");
 			parentNode.addEventListener('click', function() {
 				app.codex.hideFootnote(nodeId);
 				event.stopPropagation();
@@ -433,6 +432,7 @@ Text.prototype.buildHTML = function(result) {
 function TOC(books) {
 	this.bookList = books || [];
 	this.bookMap = {};
+	this.filename = 'toc.json';
 	for (var i=0; i<this.bookList.length; i++) {
 		var book = this.bookList[i];
 		this.bookMap[book.code] = book;
@@ -457,6 +457,9 @@ TOC.prototype.findFilename = function(book) {
 		}
 	}
 	return(null);
+};
+TOC.prototype.toJSON = function() {
+	return(JSON.stringify(this.bookList, null, ' '));
 };/**
 * This class holds the table of contents data each book of the Bible, or whatever books were loaded.
 */
@@ -471,6 +474,105 @@ function TOCBook(code) {
 	this.abbrev = '';
 	this.lastChapter = 0;
 	Object.seal(this);
+};/**
+* This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
+*/
+"use strict";
+
+function Concordance(words) {
+	this.index = words || {};
+	console.log('index assigned ' , Object.keys(this.index).length);
+	this.filename = 'concordance.json';
+	Object.freeze(this);
+};
+Concordance.prototype.addEntry = function(word, reference) {
+	if (this.index[word] === undefined) {
+		this.index[word] = [];
+	}
+	this.index[word].push(reference);
+};
+Concordance.prototype.size = function() {
+	return(Object.keys(this.index).length);
+}
+Concordance.prototype.find = function(word) {
+	return(this.index[word]);
+};
+Concordance.prototype.dumpAlphaSort = function() {
+	var words = Object.keys(this.index);
+	var alphaWords = words.sort();
+	this.dump(alphaWords);
+};
+Concordance.prototype.dumpFrequencySort = function() {
+	var freqMap = {};
+	var words = Object.keys(this.index);
+	for (var i=0; i<words.length; i++) {
+		var key = words[i];
+		var len = this.index[key].length;
+		console.log('***', key, len);
+		if (freqMap[len] === undefined) {
+			freqMap[len] = [];
+		}
+		freqMap[len].push(key);
+	}
+	var freqSort = Object.keys(freqMap).sort(function(a, b) {
+		return(a-b);
+	});
+	for (var i=0; i<freqSort.length; i++) {
+		var freq = freqSort[i];
+		console.log(freq, freqMap[freq]);
+	}
+};
+Concordance.prototype.dump = function(words) {
+	for (var i=0; i<words.length; i++) {
+		var word = words[i];
+		console.log(word, this.index[word]);
+	};	
+};
+Concordance.prototype.toJSON = function() {
+	return(JSON.stringify(this.index, null, ' '));
+};/**
+* This class holds an index of styles of the entire Bible, or whatever part of the Bible was loaded into it.
+*/
+"use strict";
+
+function StyleIndex() {
+	this.index = {};
+	this.filename = 'styleIndex.json';
+	this.completed = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl',
+		'para.mt', 'para.mt2', 'para.mt3', 'para.ms', 'para.d',
+		'chapter.c', 'verse.v',
+		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 'para.nb',
+		'para.sp', 'para.q', 'para.q2',
+		'note.f', 'note.x',
+		'char.wj', 'char.qs'];
+	Object.freeze(this);
+};
+StyleIndex.prototype.addEntry = function(word, reference) {
+	if (this.completed.indexOf(word) < 0) {
+		if (this.index[word] === undefined) {
+			this.index[word] = [];
+		}
+		if (this.index[word].length < 100) {
+			this.index[word].push(reference);
+		}
+	}
+};
+StyleIndex.prototype.find = function(word) {
+	return(this.index[word]);
+};
+StyleIndex.prototype.dumpAlphaSort = function() {
+	var words = Object.keys(this.index);
+	var alphaWords = words.sort();
+	this.dump(alphaWords);
+};
+StyleIndex.prototype.dump = function(words) {
+	for (var i=0; i<words.length; i++) {
+		var word = words[i];
+		console.log(word, this.index[word]);
+	};	
+};
+StyleIndex.prototype.toJSON = function() {
+	return(JSON.stringify(this.index, null, ' '));
 };/**
 * This class does a stream read of an XML string to return XML tokens and their token type.
 */
@@ -743,21 +845,45 @@ USXParser.prototype.createUSXObject = function(tempNode) {
 	}
 };
 /**
+* This file contains IO constants and functions which are common to all file methods, which might include node.js, cordova, javascript, etc.
+*/
+var FILE_ROOTS = { 'application': '', 'document': '?', 'temporary': '?', 'test2application': '../../BibleAppNW/' };
+/**
 * This class is a file reader for Node.  It can be used with node.js and node-webkit.
 * cordova requires using another class, but the interface should be the same.
 */
 "use strict";
 
-// file roots has been moved to CommonIO.js
-var FILE_ROOTS = { 'application': '', 'document': '?', 'temporary': '?', 'test2application': '../../BibleAppNW/' };
-
-function NodeFileReader() {
+function NodeFileReader(location) {
 	this.fs = require('fs');
+	this.location = location;
 	Object.freeze(this);
 };
-NodeFileReader.prototype.readTextFile = function(location, filepath, successCallback, failureCallback) {
-	var fullPath = FILE_ROOTS[location] + filepath;
-	console.log('fullpath ', fullPath);
+NodeFileReader.prototype.fileExists = function(filepath, successCallback, failureCallback) {
+	this.fs.stat(filepath, function(err, stat) {
+		if (err) {
+			err.filepath;
+			failureCallback(err);
+		} else {
+			successCallback(stat);
+		}
+	});
+};
+NodeFileReader.prototype.readDirectory = function(filepath, successCallback, failureCallback) {
+	var fullPath = FILE_ROOTS[this.location] + filepath;
+	console.log('read directory ', fullPath);
+	this.fs.readdir(fullPath, function(err, data) {
+		if (err) {
+			err.filepath = filepath;
+			failureCallback(err);
+		} else {
+			successCallback(data);
+		}
+	});
+};
+NodeFileReader.prototype.readTextFile = function(filepath, successCallback, failureCallback) {
+	var fullPath = FILE_ROOTS[this.location] + filepath;
+	console.log('read file ', fullPath);
 	this.fs.readFile(fullPath, { encoding: 'utf-8'}, function(err, data) {
 		if (err) {
 			failureCallback(err);
@@ -771,18 +897,20 @@ NodeFileReader.prototype.readTextFile = function(location, filepath, successCall
 */
 "use strict";
 
-function NodeFileWriter() {
+function NodeFileWriter(location) {
 	this.fs = require('fs');
+	this.location = location;
 	Object.freeze(this);
 };
-NodeFileWriter.prototype.writeTextFile = function(location, filepath, data, successCallback, failureCallback) {
-	var fullPath = FILE_ROOTS[location] + filepath;
+NodeFileWriter.prototype.writeTextFile = function(filepath, data, successCallback, failureCallback) {
+	var fullPath = FILE_ROOTS[this.location] + filepath;
 	var options = { encoding: 'utf-8'};
 	this.fs.writeFile(fullPath, data, options, function(err) {
 		if (err) {
+			err.filepath = filepath;
 			failureCallback(err);
 		} else {
-			successCallback();
+			successCallback(filepath);
 		}
 	});
 };/**
@@ -860,6 +988,7 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 
 function HTMLBuilder() {
 	this.result = [];
+	this.filename = 'bible.html';
 	Object.freeze(this);
 };
 HTMLBuilder.prototype.toHTML = function(fragment) {
@@ -893,8 +1022,255 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 		this.result.push('</', node.tagName.toLowerCase(), '>\n');
 	}
 };
+HTMLBuilder.prototype.toJSON = function() {
+	return(this.result.join(''));
+};
 
 
+/**
+* The Table of Contents and Concordance must be created by processing the entire text.  Since the parsing of the XML
+* is a significant amount of the time to do this, this class reads over the entire Bible text and creates
+* all of the required assets.
+*/
+"use strict";
+
+function AssetBuilder(location, versionCode, options) {
+	this.versionCode = versionCode;
+	this.builders = [];
+	if (options.buildTableContents) {
+		this.builders.push(new TOCBuilder());
+	}
+	if (options.buildConcordance) {
+		this.builders.push(new ConcordanceBuilder());
+	}
+	if (options.buildStyleIndex) {
+		this.builders.push(new StyleIndexBuilder());
+	}
+	if (options.buildHTML) {
+		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.
+	}
+	this.reader = new NodeFileReader(location);
+	this.parser = new USXParser();
+	this.writer = new NodeFileWriter(location);
+	this.filesToProcess = [];
+	Object.freeze(this);
+};
+AssetBuilder.prototype.build = function(successCallback, failureCallback) {
+	var that = this;
+	this.reader.readDirectory(this.getPath(''), dirReadSuccess, dirReadFailure);
+
+	function dirReadFailure(err) {
+		console.log('directory read err ', JSON.stringify(err));
+		failureCallback(err);
+	}
+	function dirReadSuccess(files) {
+		var count = 0
+		for (var i=0; i<files.length && count < 66; i++) {
+			if (files[i].indexOf('.usx') > 0) {
+				that.filesToProcess.push(files[i]);
+				count++;
+			}
+		}
+		processReadFile(that.filesToProcess.shift());
+	}
+	function fileReadFailure(err) {
+		console.log('file read err ', JSON.stringify(err));
+		failureCallback(err);
+	}
+	function fileReadSuccess(data) {
+		var rootNode = that.parser.readBook(data);
+		for (var i=0; i<that.builders.length; i++) {
+			that.builders[i].readBook(rootNode);
+		}
+		processReadFile(that.filesToProcess.shift());
+	}
+	function processReadFile(file) {
+		if (file) {
+			that.reader.readTextFile(that.getPath(file), fileReadSuccess, fileReadFailure);
+		} else {
+			processWriteResult(that.builders.shift());
+		}
+	}
+	function processWriteResult(builder) {
+		if (builder) {
+			var json = builder.toJSON();
+			var filepath = that.getPath(builder.filename);
+			that.writer.writeTextFile(filepath, json, fileWriteSuccess, fileWriteFailure);
+		} else {
+			successCallback();
+		}
+	}
+	function fileWriteFailure(err) {
+		console.log('file write failure ', err);
+		failureCallback(err);
+	}
+	function fileWriteSuccess(filename) {
+		console.log('file write success ', filename);
+		processWriteResult(that.builders.shift());
+	}
+};
+AssetBuilder.prototype.getPath = function(filename) {
+	return('usx/' + this.versionCode + '/' + filename);
+};/**
+* This class traverses the USX data model in order to find each book, and chapter
+* in order to create a table of contents that is localized to the language of the text.
+*/
+"use strict"
+
+function TOCBuilder() {
+	this.toc = new TOC([]);
+	this.tocBook = null;
+	this.filename = this.toc.filename;
+	Object.seal(this);
+};
+TOCBuilder.prototype.readBook = function(usxRoot) {
+	this.readRecursively(usxRoot);
+};
+TOCBuilder.prototype.readRecursively = function(node) {
+	switch(node.tagName) {
+		case 'book':
+			this.tocBook = new TOCBook(node.code);
+			this.toc.addBook(this.tocBook);
+			break;
+		case 'chapter':
+			this.tocBook.lastChapter = node.number;
+			break;
+		case 'para':
+			switch(node.style) {
+				case 'ide':
+					this.tocBook.encoding = node.children[0].text;
+					break;
+				case 'h':
+					this.tocBook.heading = node.children[0].text;
+					break;
+				case 'toc1':
+					this.tocBook.title = node.children[0].text;
+					break;
+				case 'toc2':
+					this.tocBook.name = node.children[0].text;
+					break;
+				case 'toc3':
+					this.tocBook.abbrev = node.children[0].text;
+					break;
+			}
+	}
+	if ('children' in node) {
+		for (var i=0; i<node.children.length; i++) {
+			this.readRecursively(node.children[i]);
+		}
+	}
+};
+TOCBuilder.prototype.toJSON = function() {
+	return(this.toc.toJSON());
+};/**
+* This class traverses the USX data model in order to find each word, and 
+* reference to that word.
+*
+* This solution might not be unicode safe. GNG Apr 2, 2015
+*/
+"use strict"
+
+function ConcordanceBuilder() {
+	this.concordance = new Concordance();
+	this.filename = this.concordance.filename;
+	this.bookCode = '';
+	this.chapter = 0;
+	this.verse = 0;
+	Object.seal(this);
+};
+ConcordanceBuilder.prototype.readBook = function(usxRoot) {
+	this.bookCode = '';
+	this.chapter = 0;
+	this.verse = 0;
+	this.readRecursively(usxRoot);
+};
+ConcordanceBuilder.prototype.readRecursively = function(node) {
+	switch(node.tagName) {
+		case 'book':
+			this.bookCode = node.code;
+			break;
+		case 'chapter':
+			this.chapter = node.number;
+			break;
+		case 'verse':
+			this.verse = node.number;
+			break;
+		case 'text':
+			var words = node.text.split(/\b/);
+			for (var i=0; i<words.length; i++) {
+				var word = words[i].replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]/g, '');
+				if (word.length > 0 && this.chapter > 0 && this.verse > 0) {
+					var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
+					this.concordance.addEntry(word.toLowerCase(), reference);
+				}
+			}
+			break;
+		default:
+			if ('children' in node) {
+				for (var i=0; i<node.children.length; i++) {
+					this.readRecursively(node.children[i]);
+				}
+			}
+
+	}
+};
+ConcordanceBuilder.prototype.toJSON = function() {
+	return(this.concordance.toJSON());
+};/**
+* This class traverses the USX data model in order to find each style, and 
+* reference to that style.  It builds an index to each style showing
+* all of the references where each style is used.
+*/
+"use strict"
+
+function StyleIndexBuilder() {
+	this.styleIndex = new StyleIndex();
+	this.filename = this.styleIndex.filename;
+};
+StyleIndexBuilder.prototype.readBook = function(usxRoot) {
+	this.bookCode = '';
+	this.chapter = 0;
+	this.verse = 0;
+	this.readRecursively(usxRoot);
+};
+StyleIndexBuilder.prototype.readRecursively = function(node) {
+	switch(node.tagName) {
+		case 'book':
+			this.bookCode = node.code;
+			var style = 'book.' + node.style;
+			var reference = this.bookCode;
+			this.styleIndex.addEntry(style, reference);
+			break;
+		case 'chapter':
+			this.chapter = node.number;
+			style = 'chapter.' + node.style;
+			reference = this.bookCode + ':' + this.chapter;
+			this.styleIndex.addEntry(style, reference);
+			break;
+		case 'verse':
+			this.verse = node.number;
+			style = 'verse.' + node.style;
+			reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
+			this.styleIndex.addEntry(style, reference);
+			break;
+		case 'usx':
+		case 'text':
+			// do nothing
+			break;
+		default:
+			var style = node.tagName + '.' + node.style;
+			var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
+			this.styleIndex.addEntry(style, reference);
+	}
+	if ('children' in node) {
+		for (var i=0; i<node.children.length; i++) {
+			this.readRecursively(node.children[i]);
+		}
+	}
+};
+StyleIndexBuilder.prototype.toJSON = function() {
+	return(this.styleIndex.toJSON());
+};
 /**
 * This class presents the table of contents, and responds to user actions.
 */
@@ -913,9 +1289,9 @@ TableContentsView.prototype.showTocBookList = function() {
 	}
 	else {
 		var that = this;
-		var reader = new NodeFileReader();
+		var reader = new NodeFileReader('application');
 		var filename = 'usx/' + this.versionCode + '/toc.json';
-		reader.readTextFile('application', filename, readSuccessHandler, readFailureHandler);
+		reader.readTextFile(filename, readSuccessHandler, readFailureHandler);
 	}
 	function readSuccessHandler(data) {
 		var bookList = JSON.parse(data);
@@ -1087,6 +1463,7 @@ function AppViewController(versionCode) {
 	this.versionCode = versionCode;
 	this.tableContents = new TableContentsView(versionCode);
 	this.codex = new CodexView(versionCode);
+	this.searchViewBuilder = new SearchViewBuilder(versionCode);
 
 	this.bodyNode = this.tableContents.bodyNode;
 	this.bodyNode.addEventListener(EVENT.TOC2PASSAGE, toc2PassageHandler);
@@ -1100,7 +1477,108 @@ function AppViewController(versionCode) {
 	}
 };
 AppViewController.prototype.begin = function() {
-	this.tableContents.showTocBookList();
+	//this.tableContents.showTocBookList();
+	this.searchViewBuilder.showSearch();
 };
 
 
+/**
+* This class provides the User Interface part of the concordance and search capabilities of the app.
+* It does a lazy create of all of the objects needed.
+* Each presentation of a searchView presents its last state and last found results.
+*/
+"use strict";
+
+function SearchView(concordance) {
+	this.concordance = concordance;
+	Object.freeze(this);
+};
+SearchView.prototype.build = function() {
+
+};/**
+* This class does a lazy construction of all of the parts of the SearchView, or just attaches
+* the searchView if it already exists.
+*/
+"use strict";
+
+function SearchViewBuilder(versionCode) {
+	this.versionCode = versionCode;
+	this.searchView = null;
+	this.concordance = new Concordance();
+
+	Object.seal(this);
+};
+SearchViewBuilder.prototype.showSearch = function() {
+	if (this.searchView) {
+		this.attachSearchView();
+	} 
+	else if (this.concordance.size > 1000) {
+		this.buildSearchView();
+	}
+	else {
+		var that = this;
+		var reader = new NodeFileReader('application');
+		reader.fileExists(this.getPath(this.concordance.filename), existsSuccessHandler, existsFailureHandler);
+	}
+
+	function existsFailureHandler(err) {
+		if (err.code === 'ENOENT') {
+			console.log('check exists concordance json is not found');
+			that.createConcordanceFile();
+		} 
+		else {
+			console.log('check exists concordance.json failure ' + JSON.stringify(err));
+		}
+	}
+	function existsSuccessHandler(stat) {
+		console.log('concordance.json exists ' + JSON.stringify(stat));
+		that.readConcordanceFile();
+ 	}
+};
+SearchViewBuilder.prototype.createConcordanceFile = function() {
+	var that = this;
+	var options = { buildTableContents: true, buildConcordance: true, buildStyleIndex: true };
+	var builder = new AssetBuilder('application', this.versionCode, options);
+	builder.build(createConcordanceSuccess, createConcordanceFailure);
+
+	function createConcordanceFailure(err) {
+		console.log('create concordance file failure');
+	}
+	function createConcordanceSuccess() {
+		that.readConcordanceFile();
+	}
+};
+SearchViewBuilder.prototype.readConcordanceFile = function() {
+	var that = this;
+	var reader = new NodeFileReader('application');
+	var fullPath = this.getPath(this.concordance.filename);
+	reader.readTextFile(fullPath, readSuccessHandler, readFailureHandler);
+	
+	function readFailureHandler(err) {
+		console.log('read concordance.json failure ' + JSON.stringify(err));
+	};
+	function readSuccessHandler(data) {
+		that.concordance = new Concordance(JSON.parse(data));
+		console.log('condordance word ' + that.concordance.size());
+		that.buildSearchView();
+	};
+};
+SearchViewBuilder.prototype.buildSearchView = function() {
+	this.searchView = new SearchView(this.concordance);
+	this.searchView.build();
+	this.attachSearchView();
+};
+SearchViewBuilder.prototype.attachSearchView = function() {
+	var appTop = document.getElementById('appTop');
+	for (var i=appTop.children.length -1; i>=0; i--) {
+		var child = appTop.children[i];
+		appTop.removeChild(child);
+	}
+	//appTop.appendChild(this.searchView);
+};
+SearchViewBuilder.prototype.processFailure = function(err) {
+	console.log('process failure  ' + JSON.stringify(err));
+};
+SearchViewBuilder.prototype.getPath = function(filename) {
+	return('usx/' + this.versionCode + '/' + filename);
+};

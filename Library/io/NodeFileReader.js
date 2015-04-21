@@ -9,10 +9,16 @@ function NodeFileReader(location) {
 	this.location = location;
 	Object.freeze(this);
 };
-NodeFileReader.prototype.fileExists = function(filepath) {
-	// to be written.
-	return(false);
-}
+NodeFileReader.prototype.fileExists = function(filepath, successCallback, failureCallback) {
+	this.fs.stat(filepath, function(err, stat) {
+		if (err) {
+			err.filepath;
+			failureCallback(err);
+		} else {
+			successCallback(stat);
+		}
+	});
+};
 NodeFileReader.prototype.readDirectory = function(filepath, successCallback, failureCallback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	console.log('read directory ', fullPath);

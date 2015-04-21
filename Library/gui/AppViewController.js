@@ -10,6 +10,7 @@ function AppViewController(versionCode) {
 	this.versionCode = versionCode;
 	this.tableContents = new TableContentsView(versionCode);
 	this.codex = new CodexView(versionCode);
+	this.searchViewBuilder = new SearchViewBuilder(versionCode);
 
 	this.bodyNode = this.tableContents.bodyNode;
 	this.bodyNode.addEventListener(EVENT.TOC2PASSAGE, toc2PassageHandler);
@@ -23,7 +24,8 @@ function AppViewController(versionCode) {
 	}
 };
 AppViewController.prototype.begin = function() {
-	this.tableContents.showTocBookList();
+	//this.tableContents.showTocBookList();
+	this.searchViewBuilder.showSearch();
 };
 
 
