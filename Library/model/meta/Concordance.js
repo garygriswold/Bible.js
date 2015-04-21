@@ -12,8 +12,14 @@ function Concordance(words) {
 Concordance.prototype.addEntry = function(word, reference) {
 	if (this.index[word] === undefined) {
 		this.index[word] = [];
+		this.index[word].push(reference);
 	}
-	this.index[word].push(reference);
+	else {
+		var refList = this.index[word];
+		if (reference !== refList[refList.length -1]) {
+			refList.push(reference);
+		}
+	}
 };
 Concordance.prototype.size = function() {
 	return(Object.keys(this.index).length);
