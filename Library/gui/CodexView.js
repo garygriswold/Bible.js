@@ -38,6 +38,13 @@ CodexView.prototype.scrollTo = function(nodeId) {
 	var rect = verse.getBoundingClientRect();
 	window.scrollTo(rect.left + window.scrollY, rect.top + window.scrollY);
 };
+CodexView.prototype.findVerse = function(reference) {
+	// This command must access the passage, and recall the text of the verse
+	// How does it do this?  Is the USX copy of the Bible in memory?
+	// Or, does it read the verse from permanent storage.
+	// Reading would require having a good idea where each chapter or chapter and
+	// verse are located.
+};
 CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);
 	for (var i=0; i<note.children.length; i++) {

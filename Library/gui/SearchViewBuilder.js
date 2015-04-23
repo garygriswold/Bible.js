@@ -4,8 +4,9 @@
 */
 "use strict";
 
-function SearchViewBuilder(versionCode) {
+function SearchViewBuilder(versionCode, toc) {
 	this.versionCode = versionCode;
+	this.toc = toc;
 	this.searchView = null;
 	this.concordance = new Concordance();
 
@@ -67,7 +68,7 @@ SearchViewBuilder.prototype.readConcordanceFile = function() {
 	};
 };
 SearchViewBuilder.prototype.buildSearchView = function() {
-	this.searchView = new SearchView(this.concordance);
+	this.searchView = new SearchView(this.concordance, this.toc);
 	this.searchView.build();
 	this.attachSearchView();
 };
