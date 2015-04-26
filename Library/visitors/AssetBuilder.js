@@ -8,6 +8,9 @@
 function AssetBuilder(location, versionCode, options) {
 	this.versionCode = versionCode;
 	this.builders = [];
+	if (options.buildChapters) {
+		this.builders.push(new ChapterBuilder(location, versionCode));
+	}
 	if (options.buildTableContents) {
 		this.builders.push(new TOCBuilder());
 	}

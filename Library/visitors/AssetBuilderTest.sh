@@ -16,6 +16,7 @@ cat ../model/meta/StyleIndex.js >> temp.js
 cat ../io/CommonIO.js >> temp.js
 cat ../io/NodeFileReader.js >> temp.js
 cat ../io/NodeFileWriter.js >> temp.js
+cat ChapterBuilder.js >> temp.js
 cat TOCBuilder.js >> temp.js
 cat ConcordanceBuilder.js >> temp.js
 cat StyleIndexBuilder.js >> temp.js

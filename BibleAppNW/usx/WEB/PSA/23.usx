@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?><usx version="2">
+  <chapter number="23" style="c" />
+  <para style="d">A Psalm by David.</para>
+  <para style="q">
+    <verse number="1" style="v" />Yahweh is my shepherd:</para>
+  <para style="q2">I shall lack nothing.</para>
+  <para style="q">
+    <verse number="2" style="v" />He makes me lie down in green pastures.</para>
+  <para style="q2">He leads me beside still waters.</para>
+  <para style="q">
+    <verse number="3" style="v" />He restores my soul.</para>
+  <para style="q2">He guides me in the paths of righteousness for his name’s sake.</para>
+  <para style="q">
+    <verse number="4" style="v" />Even though I walk through the valley of the shadow of death,</para>
+  <para style="q2">I will fear no evil, for you are with me.</para>
+  <para style="q">Your rod and your staff,</para>
+  <para style="q2">they comfort me.</para>
+  <para style="q">
+    <verse number="5" style="v" />You prepare a table before me</para>
+  <para style="q2">in the presence of my enemies.</para>
+  <para style="q">You anoint my head with oil.</para>
+  <para style="q2">My cup runs over.</para>
+  <para style="q">
+    <verse number="6" style="v" />Surely goodness and loving kindness shall follow me all the days of my life,</para>
+  <para style="q2">and I will dwell in Yahweh’s house forever.</para>
+</usx>
