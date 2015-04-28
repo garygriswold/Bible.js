@@ -3,35 +3,74 @@
 * and it also handles all requests from concordance search requests to display individual verses.
 * It will deliver the content from cache if it is present.  Or, it will find the content in persistent storage if it is
 * not present in cache.  All content retrieved from persistent storage is added to the cache.
-*
-* Note: GNG 4/23/15 In the first writing of this class, it is a cache which holds the entire text of the Bible
 */
 "use strict";
 
-function BibleCache() {
-	this.bookList = [];
-	this.bookMap = {};
+function BibleCache(versionCode) {
+	this.versionCode = versionCode;
+	this.chapterMap = {};
+	this.reader = new NodeFileReader('application');
+	this.parser = new USXParser();
 	Object.freeze(this);
 };
-BibleCache.prototype.addBook = function(usx) {
-	var book = findBook(usx);
-	this.bookList.push(book);
-	this.bookMap[book.code] = book;
+BibleCache.prototype.getChapter = function(nodeId, callback) {
+	var that = this;
+	var chapter = this.chapterMap[nodeId];
+	
+	if (chapter === undefined) {
+		var filepath = 'usx/' + this.versionCode + '/' + nodeId.replace(':', '/') + '.usx';
+		this.reader.readTextFile(filepath, readFileSuccess, function(err) {
+			console.log('BibleCache.getChapter ', JSON.stringify(err));
+			callback(err);
+		});
+	}
+	function readFileSuccess(data) {
+		chapter = that.parser.readBook(data);
+		console.log('READ ', JSON.stringify(chapter));
+		that.chapterMap[nodeId] = chapter;
+		callback(chapter);
+	}
 };
-BibleCache.prototype.getVerseById = function(nodeId) {
+
+BibleCache.prototype.getVerse = function(nodeId, callback) {
 	var parts = nodeId.split(':');
-	return(this.getVerse(parts[0], parts[1], parts[2]));
-};
-BibleCache.prototype.getVerse = function(bookCode, chapterNum, verseNum) {
-	var book = this.bookMap[bookCode];
-	var chapter = book.getChapter(chapterNum);
-	return(chapter.getVerse(verseNum));
-};
-BibleCache.prototype.getChapterById = function(nodeId) {
-	var parts = nodeId.split(':');
-	return(this.getChapter(parts[0], parts[1]));
-};
-BibleCache.prototype.getChapter = function(bookCode, chapterNum) {
-	var book = this.bookMap[bookCode];
-	return(book.getChapter(chapterNum));
+	this.getChapter(parts[0] + ':' + parts[1], function(chapter) {
+		if (chapter instanceof Error) {
+			callback(chapter);
+		} else {
+			var versePosition = findVerse(parts[2], chapter);
+			var verseContent = findVerseContent(versePosition);
+			callback(verseContent);
+		}
+	});
+	function findVerse(verseNum, chapter) {
+		for (var i=0; i<chapter.children.length; i++) {
+			var child = chapter.children[i];
+			if (child.tagName === 'verse' && child.number === verseNum) {
+				return({parent: chapter, childIndex: i+1});
+			}
+			else if (child.tagName === 'para') {
+				for (var j=0; j<child.children.length; j++) {
+					var grandChild = child.children[i];
+					if (grandChild.tagName === 'verse' && grandChild.number === verseNum) {
+						return({parent: child, childIndex: j+1});
+					}
+				}
+			}
+		}
+		return(undefined);		
+	}
+	function findVerseContent(position) {
+		var result = [];
+		for (var i=position.childIndex; i<position.parent.children.length; i++) {
+			var child = parent.children[i];
+			if (child.tagName !== 'verse') {
+				result.push(child);
+			}
+			else {
+				return(result);
+			}
+		}
+		return(result);
+	}
 };

@@ -5,37 +5,36 @@
 
 function CodexView(versionCode) {
 	this.versionCode = versionCode;
-	var bodyNodes = document.getElementsByTagName('body');
-	this.bodyNode = bodyNodes[0];
+	this.bibleCache = new BibleCache(versionCode);
+	this.bodyNode = document.getElementById('appTop');
 	Object.freeze(this);
 };
-CodexView.prototype.showPassage = function(filename, nodeId) {
+CodexView.prototype.showPassage = function(nodeId) {
 	var that = this;
-	var reader = new NodeFileReader();
-	var filepath = 'usx/' + this.versionCode + '/' + filename;
-	reader.readTextFile('application', filepath, readSuccessHandler, readFailedHandler);
-
-	function readSuccessHandler(data) {
-		var parser = new USXParser();
-		var usxNode = parser.readBook(data);
-	
-		var dom = new DOMBuilder();
-		var fragment = dom.toDOM(usxNode);
-
-		that.removeBody();
-		var bodyNodes = document.getElementsByTagName('body');
-		bodyNodes[0].appendChild(fragment);
-
-		that.scrollTo(nodeId);
-	};
-	function readFailedHandler(err) {
-		console.log(JSON.stringify(err));
-	};
+	this.bibleCache.getChapter(nodeId, function(usxNode) {
+		if (usxNode instanceof Error) {
+			// what to do here?
+			console.log((JSON.stringify(usxNode)));
+		} else {
+			var util = require('util');
+			var dom = new DOMBuilder();
+			dom.bookCode = nodeId.split(':')[0];
+			var fragment = dom.toDOM(usxNode);
+			var verse = fragment.children[0];
+			that.removeBody();
+			that.bodyNode.appendChild(fragment);
+			that.scrollToNode(verse);
+		}
+	});
 };
 CodexView.prototype.scrollTo = function(nodeId) {
-	console.log('verse', nodeId);
+	console.log('scroll to verse', nodeId);
 	var verse = document.getElementById(nodeId);
 	var rect = verse.getBoundingClientRect();
+	window.scrollTo(rect.left + window.scrollY, rect.top + window.scrollY);
+};
+CodexView.prototype.scrollToNode = function(node) {
+	var rect = node.getBoundingClientRect();
 	window.scrollTo(rect.left + window.scrollY, rect.top + window.scrollY);
 };
 CodexView.prototype.findVerse = function(reference) {

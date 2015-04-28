@@ -21,17 +21,17 @@ function AppViewController(versionCode) {
 	function toc2PassageHandler(event) {
 		var detail = event.detail;
 		console.log(JSON.stringify(detail));
-		that.codex.showPassage(detail.filename, detail.id);	
+		that.codex.showPassage(detail.id);	
 	}
 	function con2PassageHandler(event) {
 		var detail = event.detail;
 		console.log(JSON.stringify(detail));
-		that.codex.showPassage(detail.filename, detail.id);
+		that.codex.showPassage(detail.id);
 	}
 };
 AppViewController.prototype.begin = function() {
-	//this.tableContents.showTocBookList();
-	this.searchViewBuilder.showSearch();
+	this.tableContents.showTocBookList();
+	//this.searchViewBuilder.showSearch();
 };
 
 

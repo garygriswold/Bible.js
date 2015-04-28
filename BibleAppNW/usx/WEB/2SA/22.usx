@@ -17,7 +17,7 @@
     <verse number="5" style="v" />For the waves of death surrounded me.</para>
   <para style="q2">The floods of ungodliness made me afraid.</para>
   <para style="q">
-    <verse number="6" style="v" />The cords of Sheol<note style="f" caller="+"></note> were around me.</para>
+    <verse number="6" style="v" />The cords of Sheol<note style="f" caller="+ Sheol is the place of the dead."></note> were around me.</para>
   <para style="q2">The snares of death caught me.</para>
   <para style="q">
     <verse number="7" style="v" />In my distress, I called on Yahweh.</para>
@@ -165,5 +165,5 @@
   <para style="q">
     <verse number="51" style="v" />He gives great deliverance to his king,</para>
   <para style="q2">and shows loving kindness to his anointed,</para>
-  <para style="q2">to David and to his offspring,<note style="f" caller="+"></note> forever more.”</para>
+  <para style="q2">to David and to his offspring,<note style="f" caller="+ or, seed"></note> forever more.”</para>
 </usx>

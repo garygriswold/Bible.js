@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><usx version="2">
   <chapter number="145" style="c" />
-  <para style="d">A praise psalm by David.<note style="f" caller="+"></note></para>
+  <para style="d">A praise psalm by David.<note style="f" caller="+ This is an acrostic psalm, with every verse (including the second half of verse 13) starting with a consecutive letter of the Hebrew alphabet."></note></para>
   <para style="q">
     <verse number="1" style="v" />I will exalt you, my God, the King.</para>
   <para style="q2">I will praise your name forever and ever.</para>
@@ -41,7 +41,7 @@
     <verse number="13" style="v" />Your kingdom is an everlasting kingdom.</para>
   <para style="q2">Your dominion endures throughout all generations.</para>
   <para style="q">Yahweh is faithful in all his words,</para>
-  <para style="q2">and loving in all his deeds.<note style="f" caller="+"></note></para>
+  <para style="q2">and loving in all his deeds.<note style="f" caller="+ Some manuscripts omit these last two lines."></note></para>
   <para style="q">
     <verse number="14" style="v" />Yahweh upholds all who fall,</para>
   <para style="q2">and raises up all those who are bowed down.</para>

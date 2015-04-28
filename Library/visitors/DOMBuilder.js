@@ -15,7 +15,7 @@ function DOMBuilder() {
 	Object.seal(this);
 };
 DOMBuilder.prototype.toDOM = function(usxRoot) {
-	this.bookCode = '';
+	//this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
 	this.noteNum = 0;
