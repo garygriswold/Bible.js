@@ -5,7 +5,7 @@
 "use strict"
 
 function TOCBuilder() {
-	this.toc = new TOC([]);
+	this.toc = new TOC();
 	this.tocBook = null;
 	this.filename = this.toc.filename;
 	Object.seal(this);

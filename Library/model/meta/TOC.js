@@ -3,34 +3,27 @@
 */
 "use strict";
 
-function TOC(books) {
-	this.bookList = books || [];
+function TOC() {
+	this.bookList = [];
 	this.bookMap = {};
 	this.filename = 'toc.json';
-	for (var i=0; i<this.bookList.length; i++) {
-		var book = this.bookList[i];
-		this.bookMap[book.code] = book;
-		Object.freeze(book);
-	}
-	Object.freeze(this);
+	this.isFilled = false;
+	Object.seal(this);
 };
+TOC.prototype.fill = function(books) {
+	for (var i=0; i<books.length; i++) {
+		this.addBook(books[i]);
+	}
+	this.isFilled = true;
+	Object.freeze(this);	
+}
 TOC.prototype.addBook = function(book) {
 	this.bookList.push(book);
 	this.bookMap[book.code] = book;
+	Object.freeze(book);
 };
 TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
-};
-// This needs a better solution. Filename should be stored somewhere
-TOC.prototype.findFilename = function(book) {
-	for (var i=0; i<this.bookList.length; i++) {
-		if (book.code === this.bookList[i].code) {
-			var num = i +1;
-			var zeroPad = (num < 10) ? '00' : '0';
-			return(zeroPad + num + book.code + '.usx');
-		}
-	}
-	return(null);
 };
 TOC.prototype.toJSON = function() {
 	return(JSON.stringify(this.bookList, null, ' '));
