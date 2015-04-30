@@ -43,14 +43,13 @@ SearchViewBuilder.prototype.createConcordanceFile = function() {
 	var that = this;
 	var options = { buildTableContents: true, buildConcordance: true, buildStyleIndex: true };
 	var builder = new AssetBuilder('application', this.versionCode, options);
-	builder.build(createConcordanceSuccess, createConcordanceFailure);
-
-	function createConcordanceFailure(err) {
-		console.log('create concordance file failure');
-	}
-	function createConcordanceSuccess() {
-		that.readConcordanceFile();
-	}
+	builder.build(function(result) {
+		if (result instanceof Error) {
+			console.log('create concordance file failure', JSON.stringify(result));
+		} else {
+			that.readConcordanceFile();
+		}
+	});
 };
 SearchViewBuilder.prototype.readConcordanceFile = function() {
 	var that = this;

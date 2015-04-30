@@ -29,12 +29,12 @@ function AssetBuilder(location, versionCode, options) {
 	this.filesToProcess = [];
 	Object.freeze(this);
 };
-AssetBuilder.prototype.build = function(successCallback, failureCallback) {
+AssetBuilder.prototype.build = function(callback) {
 	var that = this;
 	this.reader.readDirectory(this.getPath(''), function(files) {
 		if (files instanceof Error) {
-			console.log('directory read err ', JSON.stringify(err));
-			failureCallback(err);
+			console.log('directory read err ', JSON.stringify(files));
+			callback(files);
 		} else {
 			var count = 0
 			for (var i=0; i<files.length && count < 66; i++) {
@@ -51,7 +51,7 @@ AssetBuilder.prototype.build = function(successCallback, failureCallback) {
 			that.reader.readTextFile(that.getPath(file), function(data) {
 				if (data instanceof Error) {
 					console.log('file read err ', JSON.stringify(data));
-					failureCallback(data);
+					callback(data);
 				} else {
 					var rootNode = that.parser.readBook(data);
 					for (var i=0; i<that.builders.length; i++) {
@@ -71,14 +71,14 @@ AssetBuilder.prototype.build = function(successCallback, failureCallback) {
 			that.writer.writeTextFile(filepath, json, function(filename) {
 				if (filename instanceof Error) {
 					console.log('file write failure ', filename);
-					failureCallback(filename);
+					callback(filename);
 				} else {
 					console.log('file write success ', filename);
 					processWriteResult(that.builders.shift());
 				}
 			});
 		} else {
-			successCallback();
+			callback();
 		}
 	}
 };

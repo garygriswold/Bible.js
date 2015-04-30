@@ -53,14 +53,12 @@ TableContentsView.prototype.showTocBookList = function() {
 	}
 	else {
 		this.readTocFile();
-		//this.buildTocBookList();
 	}
 }
 TableContentsView.prototype.readTocFile = function() {
 	var that = this;
 	var reader = new NodeFileReader('application');
 	var filename = 'usx/' + this.versionCode + '/' + this.toc.filename;
-//	reader.readTextFile(filename, readSuccessHandler, readFailureHandler);
 	reader.readTextFile(filename, function(data) {
 		if (data instanceof Error) {
 			console.log('read TOC.json failure ' + JSON.stringify(data));
@@ -70,15 +68,6 @@ TableContentsView.prototype.readTocFile = function() {
 			that.buildTocBookList();			
 		}
 	});
-	
-//	function readSuccessHandler(data) {
-//		var bookList = JSON.parse(data);
-//		that.toc.fill(bookList);
-//		that.buildTocBookList();
-//	};
-//	function readFailureHandler(err) {
-//		console.log('read TOC.json failure ' + JSON.stringify(err));
-//	};
 };
 TableContentsView.prototype.buildTocBookList = function() {
 	var root = document.createDocumentFragment();
@@ -252,7 +241,6 @@ SearchViewBuilder.prototype.showSearch = function(query) {
 	else {
 		var that = this;
 		var reader = new NodeFileReader('application');
-//		reader.fileExists(this.getPath(this.concordance.filename), existsSuccessHandler, existsFailureHandler);
 		reader.fileExists(this.getPath(this.concordance.filename), function(stat) {
 			if (stat instanceof Error) {
 				if (stat.code === 'ENOENT') {
@@ -266,38 +254,23 @@ SearchViewBuilder.prototype.showSearch = function(query) {
 			}
 		});
 	}
-
-//	function existsFailureHandler(err) {
-//		if (err.code === 'ENOENT') {
-//			console.log('check exists concordance json is not found');
-//			that.createConcordanceFile();
-//		} 
-//		else {
-//			console.log('check exists concordance.json failure ' + JSON.stringify(err));
-//		}
-//	}
-//	function existsSuccessHandler(stat) {
-//		that.readConcordanceFile();
-// 	}
 };
 SearchViewBuilder.prototype.createConcordanceFile = function() {
 	var that = this;
 	var options = { buildTableContents: true, buildConcordance: true, buildStyleIndex: true };
 	var builder = new AssetBuilder('application', this.versionCode, options);
-	builder.build(createConcordanceSuccess, createConcordanceFailure);
-
-	function createConcordanceFailure(err) {
-		console.log('create concordance file failure');
-	}
-	function createConcordanceSuccess() {
-		that.readConcordanceFile();
-	}
+	builder.build(function(result) {
+		if (result instanceof Error) {
+			console.log('create concordance file failure', JSON.stringify(result));
+		} else {
+			that.readConcordanceFile();
+		}
+	});
 };
 SearchViewBuilder.prototype.readConcordanceFile = function() {
 	var that = this;
 	var reader = new NodeFileReader('application');
 	var fullPath = this.getPath(this.concordance.filename);
-//	reader.readTextFile(fullPath, readSuccessHandler, readFailureHandler);
 	reader.readTextFile(fullPath, function(data) {
 		if (data instanceof Error) {
 			console.log('read concordance.json failure ' + JSON.stringify(data));
@@ -306,14 +279,6 @@ SearchViewBuilder.prototype.readConcordanceFile = function() {
 			that.buildSearchView(that.query);
 		}
 	});
-	
-//	function readFailureHandler(err) {
-//		console.log('read concordance.json failure ' + JSON.stringify(err));
-//	};
-//	function readSuccessHandler(data) {
-//		that.concordance = new Concordance(JSON.parse(data));
-//		that.buildSearchView(that.query);
-//	};
 };
 SearchViewBuilder.prototype.buildSearchView = function(query) {
 	this.searchView = new SearchView(this.concordance, this.toc, this.bibleCache);
@@ -481,7 +446,6 @@ BibleCache.prototype.getChapter = function(nodeId, callback) {
 		callback(chapter);
 	} else {
 		var filepath = 'usx/' + this.versionCode + '/' + nodeId.replace(':', '/') + '.usx';
-		//this.reader.readTextFile(filepath, readFileSuccess, function(err) {
 		this.reader.readTextFile(filepath, function(data) {
 			if (data instanceof Error) {
 				console.log('BibleCache.getChapter ', JSON.stringify(data));
@@ -493,11 +457,6 @@ BibleCache.prototype.getChapter = function(nodeId, callback) {
 			}
 		});
 	}
-//	function readFileSuccess(data) {
-//		chapter = that.parser.readBook(data);
-//		that.chapterMap[nodeId] = chapter;
-//		callback(chapter);
-//	}
 };
 BibleCache.prototype.getVerse = function(nodeId, callback) {
 	var parts = nodeId.split(':');
