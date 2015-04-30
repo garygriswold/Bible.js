@@ -21,7 +21,7 @@ NodeFileReader.prototype.fileExists = function(filepath, successCallback, failur
 };
 NodeFileReader.prototype.readDirectory = function(filepath, successCallback, failureCallback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
-	console.log('read directory ', fullPath);
+	//console.log('read directory ', fullPath);
 	this.fs.readdir(fullPath, function(err, data) {
 		if (err) {
 			err.filepath = filepath;
@@ -33,7 +33,7 @@ NodeFileReader.prototype.readDirectory = function(filepath, successCallback, fai
 };
 NodeFileReader.prototype.readTextFile = function(filepath, successCallback, failureCallback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
-	console.log('read file ', fullPath);
+	//console.log('read file ', fullPath);
 	this.fs.readFile(fullPath, { encoding: 'utf-8'}, function(err, data) {
 		if (err) {
 			failureCallback(err);

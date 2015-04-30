@@ -43,7 +43,6 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	var refChild = document.createElement('span');
 	refChild.setAttribute('id', nodeId);
 	refChild.setAttribute('class', 'fnref');
-	console.log('inside note toDOM');
 	if (this.note) {
 		refChild.setAttribute('note', this.note);
 	}

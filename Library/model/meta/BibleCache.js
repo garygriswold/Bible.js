@@ -17,7 +17,9 @@ BibleCache.prototype.getChapter = function(nodeId, callback) {
 	var that = this;
 	var chapter = this.chapterMap[nodeId];
 	
-	if (chapter === undefined) {
+	if (chapter !== undefined) {
+		callback(chapter);
+	} else {
 		var filepath = 'usx/' + this.versionCode + '/' + nodeId.replace(':', '/') + '.usx';
 		this.reader.readTextFile(filepath, readFileSuccess, function(err) {
 			console.log('BibleCache.getChapter ', JSON.stringify(err));
@@ -26,12 +28,10 @@ BibleCache.prototype.getChapter = function(nodeId, callback) {
 	}
 	function readFileSuccess(data) {
 		chapter = that.parser.readBook(data);
-		console.log('READ ', JSON.stringify(chapter));
 		that.chapterMap[nodeId] = chapter;
 		callback(chapter);
 	}
 };
-
 BibleCache.prototype.getVerse = function(nodeId, callback) {
 	var parts = nodeId.split(':');
 	this.getChapter(parts[0] + ':' + parts[1], function(chapter) {
@@ -51,7 +51,7 @@ BibleCache.prototype.getVerse = function(nodeId, callback) {
 			}
 			else if (child.tagName === 'para') {
 				for (var j=0; j<child.children.length; j++) {
-					var grandChild = child.children[i];
+					var grandChild = child.children[j];
 					if (grandChild.tagName === 'verse' && grandChild.number === verseNum) {
 						return({parent: child, childIndex: j+1});
 					}
@@ -63,14 +63,14 @@ BibleCache.prototype.getVerse = function(nodeId, callback) {
 	function findVerseContent(position) {
 		var result = [];
 		for (var i=position.childIndex; i<position.parent.children.length; i++) {
-			var child = parent.children[i];
+			var child = position.parent.children[i];
 			if (child.tagName !== 'verse') {
-				result.push(child);
+				result.push(child.text);
 			}
 			else {
-				return(result);
+				return(result.join(' '));
 			}
 		}
-		return(result);
+		return(result.join(' '));
 	}
 };

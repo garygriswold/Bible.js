@@ -3,6 +3,7 @@ cat ../Library/gui/AppViewController.js > js/BibleApp.js
 cat ../Library/gui/TableContentsView.js >> js/BibleApp.js
 cat ../Library/gui/CodexView.js >> js/BibleApp.js
 cat ../Library/gui/SearchViewBuilder.js >> js/BibleApp.js
+cat ../Library/gui/SearchView.js >> js/BibleApp.js
 
 cat ../Library/model/meta/BibleCache.js >> js/BibleApp.js
 cat ../Library/model/meta/Concordance.js >> js/BibleApp.js
@@ -34,7 +35,4 @@ cat ../Library/model/usx/Text.js >> js/BibleApp.js
 #cat ../Library/visitors/TOCBuilder.js >> js/BibleApp.js
 #cat ../Library/visitors/ConcordanceBuilder.js >> js/BibleApp.js
 #cat ../Library/visitors/StyleIndexBuilder.js >> js/BibleApp.js
-#cat ../Library/gui/SearchView.js >> js/BibleApp.js
-
-#node js/BibleApp.js
 npm start

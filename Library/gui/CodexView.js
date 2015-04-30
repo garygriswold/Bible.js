@@ -11,14 +11,15 @@ function CodexView(versionCode) {
 };
 CodexView.prototype.showPassage = function(nodeId) {
 	var that = this;
-	this.bibleCache.getChapter(nodeId, function(usxNode) {
+	var parts = nodeId.split(':');
+	var chapter = parts[0] + ':' + parts[1];
+	this.bibleCache.getChapter(chapter, function(usxNode) {
 		if (usxNode instanceof Error) {
 			// what to do here?
 			console.log((JSON.stringify(usxNode)));
 		} else {
-			var util = require('util');
 			var dom = new DOMBuilder();
-			dom.bookCode = nodeId.split(':')[0];
+			dom.bookCode = parts[0];
 			var fragment = dom.toDOM(usxNode);
 			var verse = fragment.children[0];
 			that.removeBody();
@@ -36,13 +37,6 @@ CodexView.prototype.scrollTo = function(nodeId) {
 CodexView.prototype.scrollToNode = function(node) {
 	var rect = node.getBoundingClientRect();
 	window.scrollTo(rect.left + window.scrollY, rect.top + window.scrollY);
-};
-CodexView.prototype.findVerse = function(reference) {
-	// This command must access the passage, and recall the text of the verse
-	// How does it do this?  Is the USX copy of the Bible in memory?
-	// Or, does it read the verse from permanent storage.
-	// Reading would require having a good idea where each chapter or chapter and
-	// verse are located.
 };
 CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);

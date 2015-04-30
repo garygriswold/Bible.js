@@ -14,11 +14,16 @@ TableContentsView.prototype.showTocBookList = function() {
 		this.buildTocBookList();
 	}
 	else {
-		var that = this;
-		var reader = new NodeFileReader('application');
-		var filename = 'usx/' + this.versionCode + '/' + this.toc.filename;
-		reader.readTextFile(filename, readSuccessHandler, readFailureHandler);
+		this.readTocFile();
+		//this.buildTocBookList();
 	}
+}
+TableContentsView.prototype.readTocFile = function() {
+	var that = this;
+	var reader = new NodeFileReader('application');
+	var filename = 'usx/' + this.versionCode + '/' + this.toc.filename;
+	reader.readTextFile(filename, readSuccessHandler, readFailureHandler);
+	
 	function readSuccessHandler(data) {
 		var bookList = JSON.parse(data);
 		that.toc.fill(bookList);
@@ -27,7 +32,7 @@ TableContentsView.prototype.showTocBookList = function() {
 	function readFailureHandler(err) {
 		console.log('read TOC.json failure ' + JSON.stringify(err));
 	};
-}
+};
 TableContentsView.prototype.buildTocBookList = function() {
 	var root = document.createDocumentFragment();
 	var div = document.createElement('div');

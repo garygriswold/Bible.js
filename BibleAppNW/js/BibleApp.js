@@ -9,8 +9,9 @@ var EVENT = { TOC2PASSAGE: 'toc2passage', CON2PASSAGE: 'con2passage' };
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
 	this.tableContents = new TableContentsView(versionCode);
+	//this.tableContents.readTocFile();
 	this.codex = new CodexView(versionCode);
-	this.searchViewBuilder = new SearchViewBuilder(versionCode, this.tableContents.toc);
+	this.searchViewBuilder = new SearchViewBuilder(versionCode, this.tableContents.toc, this.codex.bibleCache);
 
 	this.bodyNode = this.tableContents.bodyNode;
 	this.bodyNode.addEventListener(EVENT.TOC2PASSAGE, toc2PassageHandler);
@@ -21,17 +22,18 @@ function AppViewController(versionCode) {
 	function toc2PassageHandler(event) {
 		var detail = event.detail;
 		console.log(JSON.stringify(detail));
-		that.codex.showPassage(detail.filename, detail.id);	
+		that.codex.showPassage(detail.id);	
 	}
 	function con2PassageHandler(event) {
 		var detail = event.detail;
 		console.log(JSON.stringify(detail));
-		that.codex.showPassage(detail.filename, detail.id);
+		that.codex.showPassage(detail.id);
 	}
 };
 AppViewController.prototype.begin = function() {
-	this.tableContents.showTocBookList();
-	//this.searchViewBuilder.showSearch();
+	//this.tableContents.showTocBookList();
+	this.tableContents.readTocFile();
+	this.searchViewBuilder.showSearch("risen");
 };
 
 
@@ -42,31 +44,34 @@ AppViewController.prototype.begin = function() {
 
 function TableContentsView(versionCode) {
 	this.versionCode = versionCode;
-	this.toc = null;
-	var bodyNodes = document.getElementsByTagName('body');
-	this.bodyNode = bodyNodes[0];
+	this.toc = new TOC();
+	this.bodyNode = document.getElementById('appTop');
 	Object.seal(this);
 };
 TableContentsView.prototype.showTocBookList = function() {
-	if (this.toc) { // should check the version
+	if (this.toc.isFilled) { // should check the version
 		this.buildTocBookList();
 	}
 	else {
-		var that = this;
-		var reader = new NodeFileReader('application');
-		var filename = 'usx/' + this.versionCode + '/toc.json';
-		reader.readTextFile(filename, readSuccessHandler, readFailureHandler);
+		this.readTocFile();
+		//this.buildTocBookList();
 	}
+}
+TableContentsView.prototype.readTocFile = function() {
+	var that = this;
+	var reader = new NodeFileReader('application');
+	var filename = 'usx/' + this.versionCode + '/' + this.toc.filename;
+	reader.readTextFile(filename, readSuccessHandler, readFailureHandler);
+	
 	function readSuccessHandler(data) {
 		var bookList = JSON.parse(data);
-		that.toc = new TOC(bookList);
+		that.toc.fill(bookList);
 		that.buildTocBookList();
 	};
 	function readFailureHandler(err) {
 		console.log('read TOC.json failure ' + JSON.stringify(err));
-		that.toc = new TOC([]);
 	};
-}
+};
 TableContentsView.prototype.buildTocBookList = function() {
 	var root = document.createDocumentFragment();
 	var div = document.createElement('div');
@@ -142,11 +147,8 @@ TableContentsView.prototype.removeAllChapters = function() {
 	}
 };
 TableContentsView.prototype.openChapter = function(nodeId) {
-	var parts = nodeId.split(':');
-	var book = this.toc.find(parts[0]);
-	var filename = this.toc.findFilename(book);
 	console.log('open chapter', nodeId);
-	this.bodyNode.dispatchEvent(new CustomEvent(EVENT.TOC2PASSAGE, { detail: { filename: filename, id: nodeId }}));
+	this.bodyNode.dispatchEvent(new CustomEvent(EVENT.TOC2PASSAGE, { detail: { id: nodeId }}));
 };
 
 
@@ -161,36 +163,21 @@ function CodexView(versionCode) {
 	this.bodyNode = document.getElementById('appTop');
 	Object.freeze(this);
 };
-CodexView.prototype.showPassage = function(filename, nodeId) {
+CodexView.prototype.showPassage = function(nodeId) {
 	var that = this;
-	//var reader = new NodeFileReader();
-	//var filepath = 'usx/' + this.versionCode + '/' + filename;
-	//reader.readTextFile('application', filepath, readSuccessHandler, readFailedHandler);
-
-	//function readSuccessHandler(data) {
-	//	var parser = new USXParser();
-	//	var usxNode = parser.readBook(data);
-	console.log('reading passage', nodeId);
-	this.bibleCache.getChapter(nodeId, function(usxNode) {
+	var parts = nodeId.split(':');
+	var chapter = parts[0] + ':' + parts[1];
+	this.bibleCache.getChapter(chapter, function(usxNode) {
 		if (usxNode instanceof Error) {
 			// what to do here?
 			console.log((JSON.stringify(usxNode)));
 		} else {
-			var util = require('util');
 			var dom = new DOMBuilder();
-			console.log('nodeid ', nodeId);
-			dom.bookCode = nodeId.split(':')[0];
+			dom.bookCode = parts[0];
 			var fragment = dom.toDOM(usxNode);
-			//var verse = fragment.getElementById(nodeId);
 			var verse = fragment.children[0];
-			//console.log('node', util.inspect(verse));
-
-			//console.log('fragment', util.inspect(fragment));
 			that.removeBody();
-			//console.log('body node', util.inspect(that.bodyNode));
 			that.bodyNode.appendChild(fragment);
-
-			//that.scrollTo(nodeId);
 			that.scrollToNode(verse);
 		}
 	});
@@ -198,22 +185,12 @@ CodexView.prototype.showPassage = function(filename, nodeId) {
 CodexView.prototype.scrollTo = function(nodeId) {
 	console.log('scroll to verse', nodeId);
 	var verse = document.getElementById(nodeId);
-	var util = require('util');
-	console.log('verse', util.inspect(verse));
-
 	var rect = verse.getBoundingClientRect();
 	window.scrollTo(rect.left + window.scrollY, rect.top + window.scrollY);
 };
 CodexView.prototype.scrollToNode = function(node) {
 	var rect = node.getBoundingClientRect();
 	window.scrollTo(rect.left + window.scrollY, rect.top + window.scrollY);
-};
-CodexView.prototype.findVerse = function(reference) {
-	// This command must access the passage, and recall the text of the verse
-	// How does it do this?  Is the USX copy of the Bible in memory?
-	// Or, does it read the verse from permanent storage.
-	// Reading would require having a good idea where each chapter or chapter and
-	// verse are located.
 };
 CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);
@@ -246,20 +223,23 @@ CodexView.prototype.removeBody = function() {
 */
 "use strict";
 
-function SearchViewBuilder(versionCode, toc) {
+function SearchViewBuilder(versionCode, toc, bibleCache) {
 	this.versionCode = versionCode;
 	this.toc = toc;
+	this.bibleCache = bibleCache;
 	this.searchView = null;
+	this.query = '';
 	this.concordance = new Concordance();
 
 	Object.seal(this);
 };
-SearchViewBuilder.prototype.showSearch = function() {
+SearchViewBuilder.prototype.showSearch = function(query) {
+	this.query = query;
 	if (this.searchView) {
 		this.attachSearchView();
 	} 
 	else if (this.concordance.size > 1000) {
-		this.buildSearchView();
+		this.buildSearchView(query);
 	}
 	else {
 		var that = this;
@@ -277,7 +257,6 @@ SearchViewBuilder.prototype.showSearch = function() {
 		}
 	}
 	function existsSuccessHandler(stat) {
-		console.log('concordance.json exists ' + JSON.stringify(stat));
 		that.readConcordanceFile();
  	}
 };
@@ -305,13 +284,12 @@ SearchViewBuilder.prototype.readConcordanceFile = function() {
 	};
 	function readSuccessHandler(data) {
 		that.concordance = new Concordance(JSON.parse(data));
-		console.log('condordance word ' + that.concordance.size());
-		that.buildSearchView();
+		that.buildSearchView(that.query);
 	};
 };
-SearchViewBuilder.prototype.buildSearchView = function() {
-	this.searchView = new SearchView(this.concordance, this.toc);
-	this.searchView.build();
+SearchViewBuilder.prototype.buildSearchView = function(query) {
+	this.searchView = new SearchView(this.concordance, this.toc, this.bibleCache);
+	this.searchView.showSearch(query);
 	this.attachSearchView();
 };
 SearchViewBuilder.prototype.attachSearchView = function() {
@@ -320,7 +298,7 @@ SearchViewBuilder.prototype.attachSearchView = function() {
 		var child = appTop.children[i];
 		appTop.removeChild(child);
 	}
-	//appTop.appendChild(this.searchView);
+	appTop.appendChild(this.searchView.viewRoot);
 };
 SearchViewBuilder.prototype.processFailure = function(err) {
 	console.log('process failure  ' + JSON.stringify(err));
@@ -328,6 +306,130 @@ SearchViewBuilder.prototype.processFailure = function(err) {
 SearchViewBuilder.prototype.getPath = function(filename) {
 	return('usx/' + this.versionCode + '/' + filename);
 };
+/**
+* This class provides the User Interface part of the concordance and search capabilities of the app.
+* It does a lazy create of all of the objects needed.
+* Each presentation of a searchView presents its last state and last found results.
+*/
+"use strict";
+
+function SearchView(concordance, toc, bibleCache) {
+	this.concordance = concordance;
+	this.toc = toc;
+	this.bibleCache = bibleCache;
+	this.words = [];
+	this.bookList = [];
+	this.viewRoot = document.createDocumentFragment();
+	this.bodyNode = document.getElementById('appTop');
+	Object.seal(this);
+};
+SearchView.prototype.showSearch = function(query) {
+	this.words = query.split(' ');
+	var refList = this.concordance.search(query);
+	this.bookList = this.refListsByBook(refList);
+	for (var i=0; i<this.bookList.length; i++) {
+		var bookRef = this.bookList[i];
+		this.appendBook(bookRef.bookCode);
+		for (var j=0; j<bookRef.refList.length && j < 3; j++) {
+			this.appendReference(bookRef.refList[j]);
+		}
+		if (bookRef.refList.length > 2) {
+			this.appendSeeMore(bookRef);
+		}
+	}
+};
+SearchView.prototype.refListsByBook = function(refList) {
+	var bookList = [];
+	var priorBook = '';
+	for (var i=0; i<refList.length; i++) {
+		var bookCode = refList[i].substr(0, 3);
+		if (bookCode !== priorBook) {
+			var bookRef = { bookCode: bookCode, refList: [ refList[i] ] };
+			Object.freeze(bookRef);
+			bookList.push(bookRef);
+			priorBook = bookCode;
+		}
+		else {
+			bookRef.refList.push(refList[i]);
+		}
+	}
+	Object.freeze(bookList);
+	return(bookList);
+};
+SearchView.prototype.appendBook = function(bookCode) {
+	var book = this.toc.find(bookCode);
+	var bookNode = document.createElement('p');
+	bookNode.setAttribute('class', 'conBook');
+	var tocBook = this.toc.find(bookCode);
+	bookNode.textContent = tocBook.name;
+	this.viewRoot.appendChild(bookNode);
+	this.viewRoot.appendChild(document.createElement('hr'));
+};
+SearchView.prototype.appendReference = function(reference) {
+	var that = this;
+	var entryNode = document.createElement('p');
+	this.viewRoot.appendChild(entryNode);
+	var refNode = document.createElement('span');
+	refNode.setAttribute('class', 'conRef');
+	refNode.textContent = reference.substr(4);
+	entryNode.appendChild(refNode);
+	entryNode.appendChild(document.createElement('br'));
+	this.bibleCache.getVerse(reference, function(verseText) {
+		if (verseText instanceof Error) {
+			console.log('Error in get verse', JSON.stringify(verseText));
+		} else {
+			var verseNode = document.createElement('span');
+			verseNode.setAttribute('id', 'con' + reference);
+			verseNode.setAttribute('class', 'conVerse');
+			verseNode.innerHTML = styleSearchWords(verseText);
+			entryNode.appendChild(verseNode);
+			verseNode.addEventListener('click', function() {
+				var nodeId = this.id.substr(3);
+				console.log('open chapter', nodeId);
+				that.bodyNode.dispatchEvent(new CustomEvent(EVENT.CON2PASSAGE, { detail: { id: nodeId }}));
+			});
+		}	
+	});
+
+
+	function styleSearchWords(verseText) {
+		for (var i=0; i<that.words.length; i++) {
+			var search = ' ' + that.words[i] + ' ';
+			var regex = new RegExp(search, 'g');
+			verseText = verseText.replace(regex, '<span class="conWord"> ' + that.words[i] + ' </span>');
+		}
+		return(verseText);
+	}
+};
+SearchView.prototype.appendSeeMore = function(bookRef) {
+	var that = this;
+	var entryNode = document.createElement('p');
+	entryNode.setAttribute('id', 'mor' + bookRef.bookCode);
+	entryNode.setAttribute('class', 'conMore');
+	entryNode.textContent = '...';
+	this.viewRoot.appendChild(entryNode);
+	entryNode.addEventListener('click', function() {
+		var moreNode = document.getElementById(this.id);
+		var parentNode = moreNode.parentNode;
+		parentNode.removeChild(moreNode);
+
+		var bookCode = this.id.substr(3);
+		var bookListItem = findBookInBookList(bookCode);
+		for (var i=0; i<bookListItem.length; i++) {
+			that.appendReference(bookListItem[i]);
+		}
+	});
+
+	function findBookInBookList(bookCode) {
+		for (var i=0; i<this.bookList.length; i++) {
+			if (this.bookList[i].bookCode === bookCode) {
+				return(this.bookList[i]);
+			}
+		}
+		return(null);
+	}
+};
+
 /**
 * This class handles all request to deliver scripture.  It handles all passage display requests to display passages of text,
 * and it also handles all requests from concordance search requests to display individual verses.
@@ -347,7 +449,9 @@ BibleCache.prototype.getChapter = function(nodeId, callback) {
 	var that = this;
 	var chapter = this.chapterMap[nodeId];
 	
-	if (chapter === undefined) {
+	if (chapter !== undefined) {
+		callback(chapter);
+	} else {
 		var filepath = 'usx/' + this.versionCode + '/' + nodeId.replace(':', '/') + '.usx';
 		this.reader.readTextFile(filepath, readFileSuccess, function(err) {
 			console.log('BibleCache.getChapter ', JSON.stringify(err));
@@ -356,12 +460,10 @@ BibleCache.prototype.getChapter = function(nodeId, callback) {
 	}
 	function readFileSuccess(data) {
 		chapter = that.parser.readBook(data);
-		console.log('READ ', JSON.stringify(chapter));
 		that.chapterMap[nodeId] = chapter;
 		callback(chapter);
 	}
 };
-
 BibleCache.prototype.getVerse = function(nodeId, callback) {
 	var parts = nodeId.split(':');
 	this.getChapter(parts[0] + ':' + parts[1], function(chapter) {
@@ -381,7 +483,7 @@ BibleCache.prototype.getVerse = function(nodeId, callback) {
 			}
 			else if (child.tagName === 'para') {
 				for (var j=0; j<child.children.length; j++) {
-					var grandChild = child.children[i];
+					var grandChild = child.children[j];
 					if (grandChild.tagName === 'verse' && grandChild.number === verseNum) {
 						return({parent: child, childIndex: j+1});
 					}
@@ -393,15 +495,15 @@ BibleCache.prototype.getVerse = function(nodeId, callback) {
 	function findVerseContent(position) {
 		var result = [];
 		for (var i=position.childIndex; i<position.parent.children.length; i++) {
-			var child = parent.children[i];
+			var child = position.parent.children[i];
 			if (child.tagName !== 'verse') {
-				result.push(child);
+				result.push(child.text);
 			}
 			else {
-				return(result);
+				return(result.join(' '));
 			}
 		}
-		return(result);
+		return(result.join(' '));
 	}
 };
 /**
@@ -411,7 +513,6 @@ BibleCache.prototype.getVerse = function(nodeId, callback) {
 
 function Concordance(words) {
 	this.index = words || {};
-	console.log('index assigned ' , Object.keys(this.index).length);
 	this.filename = 'concordance.json';
 	Object.freeze(this);
 };
@@ -430,17 +531,14 @@ Concordance.prototype.addEntry = function(word, reference) {
 Concordance.prototype.size = function() {
 	return(Object.keys(this.index).length);
 }
-Concordance.prototype.find = function(word) {
-	return(this.index[word]);
-};
 Concordance.prototype.search = function(search) {
 	var refList = []; 
 	var words = search.split(' ');
 	for (var i=0; i<words.length; i++) {
 		var word = words[i];
-		refList.push(this.concordance.find)
+		refList.push(this.index[word]);
 	}
-	return(intersection(refLists));
+	return(this.intersection(refList));
 }
 Concordance.prototype.intersection = function(refLists) {
 	if (refLists.length === 0) {
@@ -477,7 +575,7 @@ Concordance.prototype.intersection = function(refLists) {
 	}
 }
 /** This is a fast intersection method, but it requires the lists to be sorted. */
-Concordance.prototype.intersection = function(a, b) {
+Concordance.prototype.intersectionOld = function(a, b) {
 	var ai = 0
 	var bi = 0;
 	var result = [];
@@ -531,34 +629,27 @@ Concordance.prototype.toJSON = function() {
 */
 "use strict";
 
-function TOC(books) {
-	this.bookList = books || [];
+function TOC() {
+	this.bookList = [];
 	this.bookMap = {};
 	this.filename = 'toc.json';
-	for (var i=0; i<this.bookList.length; i++) {
-		var book = this.bookList[i];
-		this.bookMap[book.code] = book;
-		Object.freeze(book);
-	}
-	Object.freeze(this);
+	this.isFilled = false;
+	Object.seal(this);
 };
+TOC.prototype.fill = function(books) {
+	for (var i=0; i<books.length; i++) {
+		this.addBook(books[i]);
+	}
+	this.isFilled = true;
+	Object.freeze(this);	
+}
 TOC.prototype.addBook = function(book) {
 	this.bookList.push(book);
 	this.bookMap[book.code] = book;
+	Object.freeze(book);
 };
 TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
-};
-// This needs a better solution. Filename should be stored somewhere
-TOC.prototype.findFilename = function(book) {
-	for (var i=0; i<this.bookList.length; i++) {
-		if (book.code === this.bookList[i].code) {
-			var num = i +1;
-			var zeroPad = (num < 10) ? '00' : '0';
-			return(zeroPad + num + book.code + '.usx');
-		}
-	}
-	return(null);
 };
 TOC.prototype.toJSON = function() {
 	return(JSON.stringify(this.bookList, null, ' '));
@@ -589,7 +680,7 @@ NodeFileReader.prototype.fileExists = function(filepath, successCallback, failur
 };
 NodeFileReader.prototype.readDirectory = function(filepath, successCallback, failureCallback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
-	console.log('read directory ', fullPath);
+	//console.log('read directory ', fullPath);
 	this.fs.readdir(fullPath, function(err, data) {
 		if (err) {
 			err.filepath = filepath;
@@ -601,7 +692,7 @@ NodeFileReader.prototype.readDirectory = function(filepath, successCallback, fai
 };
 NodeFileReader.prototype.readTextFile = function(filepath, successCallback, failureCallback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
-	console.log('read file ', fullPath);
+	//console.log('read file ', fullPath);
 	this.fs.readFile(fullPath, { encoding: 'utf-8'}, function(err, data) {
 		if (err) {
 			failureCallback(err);
@@ -1240,7 +1331,6 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	var refChild = document.createElement('span');
 	refChild.setAttribute('id', nodeId);
 	refChild.setAttribute('class', 'fnref');
-	console.log('inside note toDOM');
 	if (this.note) {
 		refChild.setAttribute('note', this.note);
 	}

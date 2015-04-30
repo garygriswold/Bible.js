@@ -4,20 +4,23 @@
 */
 "use strict";
 
-function SearchViewBuilder(versionCode, toc) {
+function SearchViewBuilder(versionCode, toc, bibleCache) {
 	this.versionCode = versionCode;
 	this.toc = toc;
+	this.bibleCache = bibleCache;
 	this.searchView = null;
+	this.query = '';
 	this.concordance = new Concordance();
 
 	Object.seal(this);
 };
-SearchViewBuilder.prototype.showSearch = function() {
+SearchViewBuilder.prototype.showSearch = function(query) {
+	this.query = query;
 	if (this.searchView) {
 		this.attachSearchView();
 	} 
 	else if (this.concordance.size > 1000) {
-		this.buildSearchView();
+		this.buildSearchView(query);
 	}
 	else {
 		var that = this;
@@ -35,7 +38,6 @@ SearchViewBuilder.prototype.showSearch = function() {
 		}
 	}
 	function existsSuccessHandler(stat) {
-		console.log('concordance.json exists ' + JSON.stringify(stat));
 		that.readConcordanceFile();
  	}
 };
@@ -63,13 +65,12 @@ SearchViewBuilder.prototype.readConcordanceFile = function() {
 	};
 	function readSuccessHandler(data) {
 		that.concordance = new Concordance(JSON.parse(data));
-		console.log('condordance word ' + that.concordance.size());
-		that.buildSearchView();
+		that.buildSearchView(that.query);
 	};
 };
-SearchViewBuilder.prototype.buildSearchView = function() {
-	this.searchView = new SearchView(this.concordance, this.toc);
-	this.searchView.build();
+SearchViewBuilder.prototype.buildSearchView = function(query) {
+	this.searchView = new SearchView(this.concordance, this.toc, this.bibleCache);
+	this.searchView.showSearch(query);
 	this.attachSearchView();
 };
 SearchViewBuilder.prototype.attachSearchView = function() {
@@ -78,7 +79,7 @@ SearchViewBuilder.prototype.attachSearchView = function() {
 		var child = appTop.children[i];
 		appTop.removeChild(child);
 	}
-	//appTop.appendChild(this.searchView);
+	appTop.appendChild(this.searchView.viewRoot);
 };
 SearchViewBuilder.prototype.processFailure = function(err) {
 	console.log('process failure  ' + JSON.stringify(err));

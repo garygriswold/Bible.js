@@ -5,7 +5,6 @@
 
 function Concordance(words) {
 	this.index = words || {};
-	console.log('index assigned ' , Object.keys(this.index).length);
 	this.filename = 'concordance.json';
 	Object.freeze(this);
 };
@@ -24,17 +23,14 @@ Concordance.prototype.addEntry = function(word, reference) {
 Concordance.prototype.size = function() {
 	return(Object.keys(this.index).length);
 }
-Concordance.prototype.find = function(word) {
-	return(this.index[word]);
-};
 Concordance.prototype.search = function(search) {
 	var refList = []; 
 	var words = search.split(' ');
 	for (var i=0; i<words.length; i++) {
 		var word = words[i];
-		refList.push(this.concordance.find)
+		refList.push(this.index[word]);
 	}
-	return(intersection(refLists));
+	return(this.intersection(refList));
 }
 Concordance.prototype.intersection = function(refLists) {
 	if (refLists.length === 0) {
@@ -71,7 +67,7 @@ Concordance.prototype.intersection = function(refLists) {
 	}
 }
 /** This is a fast intersection method, but it requires the lists to be sorted. */
-Concordance.prototype.intersection = function(a, b) {
+Concordance.prototype.intersectionOld = function(a, b) {
 	var ai = 0
 	var bi = 0;
 	var result = [];
