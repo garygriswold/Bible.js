@@ -9,25 +9,26 @@ function NodeFileWriter(location) {
 	this.location = location;
 	Object.freeze(this);
 };
-NodeFileWriter.prototype.createDirectory = function(dirName, successCallback, failureCallback) {
-	var fullPath = FILE_ROOTS[this.location] + '/' + dirName;
+NodeFileWriter.prototype.createDirectory = function(filepath, callback) {
+	var fullPath = FILE_ROOTS[this.location] + filepath;
 	this.fs.mkdir(fullPath, function(err) {
 		if (err) {
-			failureCallback(err);
+			err.filepath = filepath;
+			callback(err);
 		} else {
-			successCallback(dirName);
+			callback(filepath);
 		}
 	});
 }
-NodeFileWriter.prototype.writeTextFile = function(filepath, data, successCallback, failureCallback) {
+NodeFileWriter.prototype.writeTextFile = function(filepath, data, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	var options = { encoding: 'utf-8'};
 	this.fs.writeFile(fullPath, data, options, function(err) {
 		if (err) {
 			err.filepath = filepath;
-			failureCallback(err);
+			callback(err);
 		} else {
-			successCallback(filepath);
+			callback(filepath);
 		}
 	});
 };

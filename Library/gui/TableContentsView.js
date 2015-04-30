@@ -15,23 +15,21 @@ TableContentsView.prototype.showTocBookList = function() {
 	}
 	else {
 		this.readTocFile();
-		//this.buildTocBookList();
 	}
 }
 TableContentsView.prototype.readTocFile = function() {
 	var that = this;
 	var reader = new NodeFileReader('application');
 	var filename = 'usx/' + this.versionCode + '/' + this.toc.filename;
-	reader.readTextFile(filename, readSuccessHandler, readFailureHandler);
-	
-	function readSuccessHandler(data) {
-		var bookList = JSON.parse(data);
-		that.toc.fill(bookList);
-		that.buildTocBookList();
-	};
-	function readFailureHandler(err) {
-		console.log('read TOC.json failure ' + JSON.stringify(err));
-	};
+	reader.readTextFile(filename, function(data) {
+		if (data instanceof Error) {
+			console.log('read TOC.json failure ' + JSON.stringify(data));
+		} else {
+			var bookList = JSON.parse(data);
+			that.toc.fill(bookList);
+			that.buildTocBookList();			
+		}
+	});
 };
 TableContentsView.prototype.buildTocBookList = function() {
 	var root = document.createDocumentFragment();

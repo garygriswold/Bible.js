@@ -31,36 +31,35 @@ function AssetBuilder(location, versionCode, options) {
 };
 AssetBuilder.prototype.build = function(successCallback, failureCallback) {
 	var that = this;
-	this.reader.readDirectory(this.getPath(''), dirReadSuccess, dirReadFailure);
-
-	function dirReadFailure(err) {
-		console.log('directory read err ', JSON.stringify(err));
-		failureCallback(err);
-	}
-	function dirReadSuccess(files) {
-		var count = 0
-		for (var i=0; i<files.length && count < 66; i++) {
-			if (files[i].indexOf('.usx') > 0) {
-				that.filesToProcess.push(files[i]);
-				count++;
+	this.reader.readDirectory(this.getPath(''), function(files) {
+		if (files instanceof Error) {
+			console.log('directory read err ', JSON.stringify(err));
+			failureCallback(err);
+		} else {
+			var count = 0
+			for (var i=0; i<files.length && count < 66; i++) {
+				if (files[i].indexOf('.usx') > 0) {
+					that.filesToProcess.push(files[i]);
+					count++;
+				}
 			}
+			processReadFile(that.filesToProcess.shift());
 		}
-		processReadFile(that.filesToProcess.shift());
-	}
-	function fileReadFailure(err) {
-		console.log('file read err ', JSON.stringify(err));
-		failureCallback(err);
-	}
-	function fileReadSuccess(data) {
-		var rootNode = that.parser.readBook(data);
-		for (var i=0; i<that.builders.length; i++) {
-			that.builders[i].readBook(rootNode);
-		}
-		processReadFile(that.filesToProcess.shift());
-	}
+	});
 	function processReadFile(file) {
 		if (file) {
-			that.reader.readTextFile(that.getPath(file), fileReadSuccess, fileReadFailure);
+			that.reader.readTextFile(that.getPath(file), function(data) {
+				if (data instanceof Error) {
+					console.log('file read err ', JSON.stringify(data));
+					failureCallback(data);
+				} else {
+					var rootNode = that.parser.readBook(data);
+					for (var i=0; i<that.builders.length; i++) {
+						that.builders[i].readBook(rootNode);
+					}
+					processReadFile(that.filesToProcess.shift());
+				}
+			});
 		} else {
 			processWriteResult(that.builders.shift());
 		}
@@ -69,18 +68,18 @@ AssetBuilder.prototype.build = function(successCallback, failureCallback) {
 		if (builder) {
 			var json = builder.toJSON();
 			var filepath = that.getPath(builder.filename);
-			that.writer.writeTextFile(filepath, json, fileWriteSuccess, fileWriteFailure);
+			that.writer.writeTextFile(filepath, json, function(filename) {
+				if (filename instanceof Error) {
+					console.log('file write failure ', filename);
+					failureCallback(filename);
+				} else {
+					console.log('file write success ', filename);
+					processWriteResult(that.builders.shift());
+				}
+			});
 		} else {
 			successCallback();
 		}
-	}
-	function fileWriteFailure(err) {
-		console.log('file write failure ', err);
-		failureCallback(err);
-	}
-	function fileWriteSuccess(filename) {
-		console.log('file write success ', filename);
-		processWriteResult(that.builders.shift());
 	}
 };
 AssetBuilder.prototype.getPath = function(filename) {

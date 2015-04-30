@@ -20,7 +20,6 @@ TOC.prototype.fill = function(books) {
 TOC.prototype.addBook = function(book) {
 	this.bookList.push(book);
 	this.bookMap[book.code] = book;
-	Object.freeze(book);
 };
 TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);

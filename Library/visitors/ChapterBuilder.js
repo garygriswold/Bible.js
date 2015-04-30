@@ -53,35 +53,34 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 	}
 	function createDirectory(bookCode) {
 		var filepath = getPath(bookCode);
-		writer.createDirectory(filepath, createDirectorySuccess, createDirectoryFailure);
+		writer.createDirectory(filepath, function(dirName) {
+			if (dirName instanceof Error) {
+				console.log('ChapterBuilder.createDirectory ', JSON.stringify(dirName));
+				writeChapter(bookCode, chapterNum, oneChapter);				
+			} else {
+				console.log('ChapterBuilder directory created ', dirName);
+				writeChapter(bookCode, chapterNum, oneChapter);	
+			}
+		});
 	}
-	function createDirectoryFailure(err) {
-		console.log('ChapterBuilder.createDirectory ', JSON.stringify(err));
-		writeChapter(bookCode, chapterNum, oneChapter);
-	}
-	function createDirectorySuccess(dirName) {
-		console.log('ChapterBuilder directory created ', dirName);
-		writeChapter(bookCode, chapterNum, oneChapter);
-	}
-
 	function writeChapter(bookCode, chapterNum, oneChapter) {
 		console.log('inside write chapter', bookCode, chapterNum, oneChapter.children.length);
 		var filepath = getPath(bookCode) + '/' + chapterNum + '.usx';
 		var data = oneChapter.toUSX();
-		writer.writeTextFile(filepath, data, writeChapterSuccess, function(err) {
-			console.log('ChapterBuilder.writeChapterFailure ', JSON.stringify(err));
+		writer.writeTextFile(filepath, data, function(filename) {	
+			if (filename instanceof Error) {
+				console.log('ChapterBuilder.writeChapterFailure ', JSON.stringify(filename));
+			} else {
+				console.log('ChapterBuilder.writeChapterSuccess ', filename);
+				oneChapter = chapters.shift();
+				if (oneChapter) {
+					chapterNum = findChapterNum(oneChapter);
+					writeChapter(bookCode, chapterNum, oneChapter);
+				} else {
+					// done
+				}
+			}
 		});
-	}
-	function writeChapterSuccess(filename) {
-		console.log('ChapterBuilder.writeChapterSuccess ', filename);
-		oneChapter = chapters.shift();
-		if (oneChapter) {
-			chapterNum = findChapterNum(oneChapter);
-			writeChapter(bookCode, chapterNum, oneChapter);
-		}
-		else {
-			// done
-		}
 	}
 	function getPath(filename) {
 		return('usx/' + that.versionCode + '/' + filename);

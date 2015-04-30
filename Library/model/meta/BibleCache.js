@@ -21,15 +21,16 @@ BibleCache.prototype.getChapter = function(nodeId, callback) {
 		callback(chapter);
 	} else {
 		var filepath = 'usx/' + this.versionCode + '/' + nodeId.replace(':', '/') + '.usx';
-		this.reader.readTextFile(filepath, readFileSuccess, function(err) {
-			console.log('BibleCache.getChapter ', JSON.stringify(err));
-			callback(err);
+		this.reader.readTextFile(filepath, function(data) {
+			if (data instanceof Error) {
+				console.log('BibleCache.getChapter ', JSON.stringify(data));
+				callback(data);
+			} else {
+				chapter = that.parser.readBook(data);
+				that.chapterMap[nodeId] = chapter;
+				callback(chapter);				
+			}
 		});
-	}
-	function readFileSuccess(data) {
-		chapter = that.parser.readBook(data);
-		that.chapterMap[nodeId] = chapter;
-		callback(chapter);
 	}
 };
 BibleCache.prototype.getVerse = function(nodeId, callback) {

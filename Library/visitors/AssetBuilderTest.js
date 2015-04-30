@@ -3,7 +3,7 @@
 */
 "use strict";
 
-var options = { buildChapters: true, buildTableContents: false, buildConcordance: false, buildStyleIndex: false, buildHTML: false };
+var options = { buildChapters: true, buildTableContents: true, buildConcordance: true, buildStyleIndex: true, buildHTML: false };
 var builder = new AssetBuilder('test2application', 'WEB', options);
 builder.build(assetBuilderSuccessCallback, assetBuilderFailureCallback);
 

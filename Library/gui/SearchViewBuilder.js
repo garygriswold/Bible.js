@@ -25,21 +25,19 @@ SearchViewBuilder.prototype.showSearch = function(query) {
 	else {
 		var that = this;
 		var reader = new NodeFileReader('application');
-		reader.fileExists(this.getPath(this.concordance.filename), existsSuccessHandler, existsFailureHandler);
+		reader.fileExists(this.getPath(this.concordance.filename), function(stat) {
+			if (stat instanceof Error) {
+				if (stat.code === 'ENOENT') {
+					console.log('check exists concordance json is not found');
+					that.createConcordanceFile();	
+				} else {
+					console.log('check exists concordance.json failure ' + JSON.stringify(stat));
+				}
+			} else {
+				that.readConcordanceFile();
+			}
+		});
 	}
-
-	function existsFailureHandler(err) {
-		if (err.code === 'ENOENT') {
-			console.log('check exists concordance json is not found');
-			that.createConcordanceFile();
-		} 
-		else {
-			console.log('check exists concordance.json failure ' + JSON.stringify(err));
-		}
-	}
-	function existsSuccessHandler(stat) {
-		that.readConcordanceFile();
- 	}
 };
 SearchViewBuilder.prototype.createConcordanceFile = function() {
 	var that = this;
@@ -58,15 +56,14 @@ SearchViewBuilder.prototype.readConcordanceFile = function() {
 	var that = this;
 	var reader = new NodeFileReader('application');
 	var fullPath = this.getPath(this.concordance.filename);
-	reader.readTextFile(fullPath, readSuccessHandler, readFailureHandler);
-	
-	function readFailureHandler(err) {
-		console.log('read concordance.json failure ' + JSON.stringify(err));
-	};
-	function readSuccessHandler(data) {
-		that.concordance = new Concordance(JSON.parse(data));
-		that.buildSearchView(that.query);
-	};
+	reader.readTextFile(fullPath, function(data) {
+		if (data instanceof Error) {
+			console.log('read concordance.json failure ' + JSON.stringify(data));
+		} else {
+			that.concordance = new Concordance(JSON.parse(data));
+			that.buildSearchView(that.query);
+		}
+	});
 };
 SearchViewBuilder.prototype.buildSearchView = function(query) {
 	this.searchView = new SearchView(this.concordance, this.toc, this.bibleCache);

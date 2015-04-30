@@ -9,7 +9,6 @@ var EVENT = { TOC2PASSAGE: 'toc2passage', CON2PASSAGE: 'con2passage' };
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
 	this.tableContents = new TableContentsView(versionCode);
-	//this.tableContents.readTocFile();
 	this.codex = new CodexView(versionCode);
 	this.searchViewBuilder = new SearchViewBuilder(versionCode, this.tableContents.toc, this.codex.bibleCache);
 
@@ -31,9 +30,9 @@ function AppViewController(versionCode) {
 	}
 };
 AppViewController.prototype.begin = function() {
-	//this.tableContents.showTocBookList();
-	this.tableContents.readTocFile();
-	this.searchViewBuilder.showSearch("risen");
+	this.tableContents.showTocBookList();
+	//this.tableContents.readTocFile();
+	//this.searchViewBuilder.showSearch("risen");
 };
 
 
@@ -61,16 +60,25 @@ TableContentsView.prototype.readTocFile = function() {
 	var that = this;
 	var reader = new NodeFileReader('application');
 	var filename = 'usx/' + this.versionCode + '/' + this.toc.filename;
-	reader.readTextFile(filename, readSuccessHandler, readFailureHandler);
+//	reader.readTextFile(filename, readSuccessHandler, readFailureHandler);
+	reader.readTextFile(filename, function(data) {
+		if (data instanceof Error) {
+			console.log('read TOC.json failure ' + JSON.stringify(data));
+		} else {
+			var bookList = JSON.parse(data);
+			that.toc.fill(bookList);
+			that.buildTocBookList();			
+		}
+	});
 	
-	function readSuccessHandler(data) {
-		var bookList = JSON.parse(data);
-		that.toc.fill(bookList);
-		that.buildTocBookList();
-	};
-	function readFailureHandler(err) {
-		console.log('read TOC.json failure ' + JSON.stringify(err));
-	};
+//	function readSuccessHandler(data) {
+//		var bookList = JSON.parse(data);
+//		that.toc.fill(bookList);
+//		that.buildTocBookList();
+//	};
+//	function readFailureHandler(err) {
+//		console.log('read TOC.json failure ' + JSON.stringify(err));
+//	};
 };
 TableContentsView.prototype.buildTocBookList = function() {
 	var root = document.createDocumentFragment();
@@ -244,21 +252,33 @@ SearchViewBuilder.prototype.showSearch = function(query) {
 	else {
 		var that = this;
 		var reader = new NodeFileReader('application');
-		reader.fileExists(this.getPath(this.concordance.filename), existsSuccessHandler, existsFailureHandler);
+//		reader.fileExists(this.getPath(this.concordance.filename), existsSuccessHandler, existsFailureHandler);
+		reader.fileExists(this.getPath(this.concordance.filename), function(stat) {
+			if (stat instanceof Error) {
+				if (stat.code === 'ENOENT') {
+					console.log('check exists concordance json is not found');
+					that.createConcordanceFile();	
+				} else {
+					console.log('check exists concordance.json failure ' + JSON.stringify(stat));
+				}
+			} else {
+				that.readConcordanceFile();
+			}
+		});
 	}
 
-	function existsFailureHandler(err) {
-		if (err.code === 'ENOENT') {
-			console.log('check exists concordance json is not found');
-			that.createConcordanceFile();
-		} 
-		else {
-			console.log('check exists concordance.json failure ' + JSON.stringify(err));
-		}
-	}
-	function existsSuccessHandler(stat) {
-		that.readConcordanceFile();
- 	}
+//	function existsFailureHandler(err) {
+//		if (err.code === 'ENOENT') {
+//			console.log('check exists concordance json is not found');
+//			that.createConcordanceFile();
+//		} 
+//		else {
+//			console.log('check exists concordance.json failure ' + JSON.stringify(err));
+//		}
+//	}
+//	function existsSuccessHandler(stat) {
+//		that.readConcordanceFile();
+// 	}
 };
 SearchViewBuilder.prototype.createConcordanceFile = function() {
 	var that = this;
@@ -277,15 +297,23 @@ SearchViewBuilder.prototype.readConcordanceFile = function() {
 	var that = this;
 	var reader = new NodeFileReader('application');
 	var fullPath = this.getPath(this.concordance.filename);
-	reader.readTextFile(fullPath, readSuccessHandler, readFailureHandler);
+//	reader.readTextFile(fullPath, readSuccessHandler, readFailureHandler);
+	reader.readTextFile(fullPath, function(data) {
+		if (data instanceof Error) {
+			console.log('read concordance.json failure ' + JSON.stringify(data));
+		} else {
+			that.concordance = new Concordance(JSON.parse(data));
+			that.buildSearchView(that.query);
+		}
+	});
 	
-	function readFailureHandler(err) {
-		console.log('read concordance.json failure ' + JSON.stringify(err));
-	};
-	function readSuccessHandler(data) {
-		that.concordance = new Concordance(JSON.parse(data));
-		that.buildSearchView(that.query);
-	};
+//	function readFailureHandler(err) {
+//		console.log('read concordance.json failure ' + JSON.stringify(err));
+//	};
+//	function readSuccessHandler(data) {
+//		that.concordance = new Concordance(JSON.parse(data));
+//		that.buildSearchView(that.query);
+//	};
 };
 SearchViewBuilder.prototype.buildSearchView = function(query) {
 	this.searchView = new SearchView(this.concordance, this.toc, this.bibleCache);
@@ -453,16 +481,23 @@ BibleCache.prototype.getChapter = function(nodeId, callback) {
 		callback(chapter);
 	} else {
 		var filepath = 'usx/' + this.versionCode + '/' + nodeId.replace(':', '/') + '.usx';
-		this.reader.readTextFile(filepath, readFileSuccess, function(err) {
-			console.log('BibleCache.getChapter ', JSON.stringify(err));
-			callback(err);
+		//this.reader.readTextFile(filepath, readFileSuccess, function(err) {
+		this.reader.readTextFile(filepath, function(data) {
+			if (data instanceof Error) {
+				console.log('BibleCache.getChapter ', JSON.stringify(data));
+				callback(data);
+			} else {
+				chapter = that.parser.readBook(data);
+				that.chapterMap[nodeId] = chapter;
+				callback(chapter);				
+			}
 		});
 	}
-	function readFileSuccess(data) {
-		chapter = that.parser.readBook(data);
-		that.chapterMap[nodeId] = chapter;
-		callback(chapter);
-	}
+//	function readFileSuccess(data) {
+//		chapter = that.parser.readBook(data);
+//		that.chapterMap[nodeId] = chapter;
+//		callback(chapter);
+//	}
 };
 BibleCache.prototype.getVerse = function(nodeId, callback) {
 	var parts = nodeId.split(':');
@@ -646,7 +681,6 @@ TOC.prototype.fill = function(books) {
 TOC.prototype.addBook = function(book) {
 	this.bookList.push(book);
 	this.bookMap[book.code] = book;
-	Object.freeze(book);
 };
 TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
@@ -668,36 +702,37 @@ function NodeFileReader(location) {
 	this.location = location;
 	Object.freeze(this);
 };
-NodeFileReader.prototype.fileExists = function(filepath, successCallback, failureCallback) {
+NodeFileReader.prototype.fileExists = function(filepath, callback) {
 	this.fs.stat(filepath, function(err, stat) {
 		if (err) {
-			err.filepath;
-			failureCallback(err);
+			err.filepath = filepath;
+			callback(err);
 		} else {
-			successCallback(stat);
+			callback(stat);
 		}
 	});
 };
-NodeFileReader.prototype.readDirectory = function(filepath, successCallback, failureCallback) {
+NodeFileReader.prototype.readDirectory = function(filepath, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	//console.log('read directory ', fullPath);
 	this.fs.readdir(fullPath, function(err, data) {
 		if (err) {
 			err.filepath = filepath;
-			failureCallback(err);
+			callback(err);
 		} else {
-			successCallback(data);
+			callback(data);
 		}
 	});
 };
-NodeFileReader.prototype.readTextFile = function(filepath, successCallback, failureCallback) {
+NodeFileReader.prototype.readTextFile = function(filepath, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	//console.log('read file ', fullPath);
 	this.fs.readFile(fullPath, { encoding: 'utf-8'}, function(err, data) {
 		if (err) {
-			failureCallback(err);
+			err.filepath = filepath;
+			callback(err);
 		} else {
-			successCallback(data);
+			callback(data);
 		}
 	});
 };/**
