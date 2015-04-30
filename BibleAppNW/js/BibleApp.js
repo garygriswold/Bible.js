@@ -30,9 +30,9 @@ function AppViewController(versionCode) {
 	}
 };
 AppViewController.prototype.begin = function() {
-	this.tableContents.showTocBookList();
-	//this.tableContents.readTocFile();
-	//this.searchViewBuilder.showSearch("risen");
+	//this.tableContents.showTocBookList();
+	this.tableContents.readTocFile();
+	this.searchViewBuilder.showSearch("risen");
 };
 
 
