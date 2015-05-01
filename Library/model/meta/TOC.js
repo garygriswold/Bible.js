@@ -24,6 +24,9 @@ TOC.prototype.addBook = function(book) {
 TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
 };
+TOC.prototype.size = function() {
+	return(this.bookList.length);
+};
 TOC.prototype.toJSON = function() {
 	return(JSON.stringify(this.bookList, null, ' '));
 };

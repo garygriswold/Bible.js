@@ -30,22 +30,26 @@ function AssetBuilder(types) {
 	Object.freeze(this);
 };
 AssetBuilder.prototype.build = function(callback) {
-	var that = this;
-	this.reader.readDirectory(this.getPath(''), function(files) {
-		if (files instanceof Error) {
-			console.log('directory read err ', JSON.stringify(files));
-			callback(files);
-		} else {
-			var count = 0
-			for (var i=0; i<files.length && count < 66; i++) {
-				if (files[i].indexOf('.usx') > 0) {
-					that.filesToProcess.push(files[i]);
-					count++;
+	if (this.builders.length > 0) {
+		var that = this;
+		this.reader.readDirectory(this.getPath(''), function(files) {
+			if (files instanceof Error) {
+				console.log('directory read err ', JSON.stringify(files));
+				callback(files);
+			} else {
+				var count = 0
+				for (var i=0; i<files.length && count < 66; i++) {
+					if (files[i].indexOf('.usx') > 0) {
+						that.filesToProcess.push(files[i]);
+						count++;
+					}
 				}
+				processReadFile(that.filesToProcess.shift());
 			}
-			processReadFile(that.filesToProcess.shift());
-		}
-	});
+		});
+	} else {
+		callback();
+	}
 	function processReadFile(file) {
 		if (file) {
 			that.reader.readTextFile(that.getPath(file), function(data) {

@@ -30,7 +30,6 @@ AssetType.prototype.mustDoQueue = function(filename) {
 			break;
 		default:
 			throw new Error('File ' + filename + ' is not known in AssetType.mustDo.');
-
 	}
 };
 AssetType.prototype.toBeDoneQueue = function() {

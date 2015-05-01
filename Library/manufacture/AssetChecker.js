@@ -11,12 +11,12 @@ function AssetChecker(types) {
 AssetChecker.prototype.check = function(callback) {
 	var that = this;
 	var result = new AssetType(this.types.location, this.types.versionCode);
+	var reader = new NodeFileReader(that.types.location);
 	var toDo = this.types.toBeDoneQueue();
 	checkExists(toDo.shift());
 
 	function checkExists(filename) {
 		if (filename) {
-			var reader = new NodeFileReader(that.types.location);
 			var fullPath = 'usx/' + that.types.versionCode + '/' + filename; // this needs to be somewhere central
 			console.log('checking for ', fullPath);
 			reader.fileExists(fullPath, function(stat) {

@@ -6,6 +6,7 @@
 function StyleIndex() {
 	this.index = {};
 	this.filename = 'styleIndex.json';
+	this.isFilled = false;
 	this.completed = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl',
 		'para.mt', 'para.mt2', 'para.mt3', 'para.ms', 'para.d',
 		'chapter.c', 'verse.v',
@@ -13,6 +14,11 @@ function StyleIndex() {
 		'para.sp', 'para.q', 'para.q2',
 		'note.f', 'note.x',
 		'char.wj', 'char.qs'];
+	Object.seal(this);
+};
+StyleIndex.prototype.fill = function(entries) {
+	this.index = entries;
+	this.isFilled = true;
 	Object.freeze(this);
 };
 StyleIndex.prototype.addEntry = function(word, reference) {
@@ -27,6 +33,9 @@ StyleIndex.prototype.addEntry = function(word, reference) {
 };
 StyleIndex.prototype.find = function(word) {
 	return(this.index[word]);
+};
+StyleIndex.prototype.size = function() {
+	return(Object.keys(this.index).length);
 };
 StyleIndex.prototype.dumpAlphaSort = function() {
 	var words = Object.keys(this.index);

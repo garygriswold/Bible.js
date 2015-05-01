@@ -3,9 +3,15 @@
 */
 "use strict";
 
-function Concordance(words) {
-	this.index = words || {};
+function Concordance() {
+	this.index = {};
 	this.filename = 'concordance.json';
+	this.isFilled = false;
+	Object.seal(this);
+};
+Concordance.prototype.fill = function(words) {
+	this.index = words;
+	this.isFilled = true;
 	Object.freeze(this);
 };
 Concordance.prototype.addEntry = function(word, reference) {
