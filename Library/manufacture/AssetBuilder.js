@@ -5,27 +5,27 @@
 */
 "use strict";
 
-function AssetBuilder(location, versionCode, options) {
-	this.versionCode = versionCode;
+function AssetBuilder(types) {
+	this.versionCode = types.versionCode;
 	this.builders = [];
-	if (options.buildChapters) {
-		this.builders.push(new ChapterBuilder(location, versionCode));
+	if (types.chapterFiles) {
+		this.builders.push(new ChapterBuilder(types.location, types.versionCode));
 	}
-	if (options.buildTableContents) {
+	if (types.tableContents) {
 		this.builders.push(new TOCBuilder());
 	}
-	if (options.buildConcordance) {
+	if (types.concordance) {
 		this.builders.push(new ConcordanceBuilder());
 	}
-	if (options.buildStyleIndex) {
+	if (types.styleIndex) {
 		this.builders.push(new StyleIndexBuilder());
 	}
-	if (options.buildHTML) {
+	if (types.html) {
 		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.
 	}
-	this.reader = new NodeFileReader(location);
+	this.reader = new NodeFileReader(types.location);
 	this.parser = new USXParser();
-	this.writer = new NodeFileWriter(location);
+	this.writer = new NodeFileWriter(types.location);
 	this.filesToProcess = [];
 	Object.freeze(this);
 };

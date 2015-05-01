@@ -10,5 +10,10 @@ types.concordance = true;
 types.styleIndex = true;
 var controller = new AssetController();
 controller.check(types, function(resultTypes) {
-	console.log('AssetControllerTest ', resultTypes);
+	console.log('AssetControllerTest.check ', resultTypes);
+	
 });
+controller.build(types, function(whatever) {
+	console.log('AssetControllerTest.build');
+});
+

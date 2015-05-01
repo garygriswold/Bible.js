@@ -5,18 +5,19 @@
 */
 "use strict";
 
-function AssetChecker() {
+function AssetChecker(types) {
+	this.types = types;
 };
-AssetChecker.prototype.check = function(types, callback) {
+AssetChecker.prototype.check = function(callback) {
 	var that = this;
-	var result = new AssetType(types.location, types.versionCode);
-	var toDo = types.toBeDoneQueue();
+	var result = new AssetType(this.types.location, this.types.versionCode);
+	var toDo = this.types.toBeDoneQueue();
 	checkExists(toDo.shift());
 
 	function checkExists(filename) {
 		if (filename) {
-			var reader = new NodeFileReader(types.location);
-			var fullPath = 'usx/' + types.versionCode + '/' + filename; // this needs to be somewhere central
+			var reader = new NodeFileReader(that.types.location);
+			var fullPath = 'usx/' + that.types.versionCode + '/' + filename; // this needs to be somewhere central
 			console.log('checking for ', fullPath);
 			reader.fileExists(fullPath, function(stat) {
 				if (stat instanceof Error) {
