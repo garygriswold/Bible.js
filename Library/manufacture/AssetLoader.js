@@ -21,7 +21,7 @@ AssetLoader.prototype.load = function(callback) {
 		if (filename) {
 			var fullPath = that.types.getPath(filename);
 			reader.readTextFile(fullPath, function(data) {
-				if (data instanceof Error) {
+				if (data.errno) {
 					console.log('read concordance.json failure ' + JSON.stringify(data));
 				} else {
 					switch(filename) {

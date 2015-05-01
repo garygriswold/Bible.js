@@ -16,7 +16,6 @@ function SearchView(toc, concordance, bibleCache) {
 	Object.seal(this);
 };
 SearchView.prototype.showSearch = function(query) {
-	
 	this.words = query.split(' ');
 	var refList = this.concordance.search(query);
 	this.bookList = this.refListsByBook(refList);
@@ -69,7 +68,7 @@ SearchView.prototype.appendReference = function(reference) {
 	entryNode.appendChild(refNode);
 	entryNode.appendChild(document.createElement('br'));
 	this.bibleCache.getVerse(reference, function(verseText) {
-		if (verseText instanceof Error) {
+		if (verseText.errno) {
 			console.log('Error in get verse', JSON.stringify(verseText));
 		} else {
 			var verseNode = document.createElement('span');
@@ -84,7 +83,6 @@ SearchView.prototype.appendReference = function(reference) {
 			});
 		}	
 	});
-
 
 	function styleSearchWords(verseText) {
 		for (var i=0; i<that.words.length; i++) {

@@ -33,7 +33,7 @@ AssetBuilder.prototype.build = function(callback) {
 	if (this.builders.length > 0) {
 		var that = this;
 		this.reader.readDirectory(this.types.getPath(''), function(files) {
-			if (files instanceof Error) {
+			if (files.errno) {
 				console.log('directory read err ', JSON.stringify(files));
 				callback(files);
 			} else {
@@ -53,7 +53,7 @@ AssetBuilder.prototype.build = function(callback) {
 	function processReadFile(file) {
 		if (file) {
 			that.reader.readTextFile(that.types.getPath(file), function(data) {
-				if (data instanceof Error) {
+				if (data.errno) {
 					console.log('file read err ', JSON.stringify(data));
 					callback(data);
 				} else {
@@ -73,7 +73,7 @@ AssetBuilder.prototype.build = function(callback) {
 			var json = builder.toJSON();
 			var filepath = that.types.getPath(builder.filename);
 			that.writer.writeTextFile(filepath, json, function(filename) {
-				if (filename instanceof Error) {
+				if (filename.errno) {
 					console.log('file write failure ', filename);
 					callback(filename);
 				} else {

@@ -158,7 +158,7 @@ CodexView.prototype.showPassage = function(nodeId) {
 	var parts = nodeId.split(':');
 	var chapter = parts[0] + ':' + parts[1];
 	this.bibleCache.getChapter(chapter, function(usxNode) {
-		if (usxNode instanceof Error) {
+		if (usxNode.errno) {
 			// what to do here?
 			console.log((JSON.stringify(usxNode)));
 		} else {
@@ -224,7 +224,7 @@ function SearchView(toc, concordance, bibleCache) {
 	Object.seal(this);
 };
 SearchView.prototype.showSearch = function(query) {
-	
+
 	this.words = query.split(' ');
 	var refList = this.concordance.search(query);
 	this.bookList = this.refListsByBook(refList);
@@ -277,7 +277,7 @@ SearchView.prototype.appendReference = function(reference) {
 	entryNode.appendChild(refNode);
 	entryNode.appendChild(document.createElement('br'));
 	this.bibleCache.getVerse(reference, function(verseText) {
-		if (verseText instanceof Error) {
+		if (verseText.errno) {
 			console.log('Error in get verse', JSON.stringify(verseText));
 		} else {
 			var verseNode = document.createElement('span');
@@ -364,7 +364,7 @@ BibleCache.prototype.getChapter = function(nodeId, callback) {
 	} else {
 		var filepath = 'usx/' + this.versionCode + '/' + nodeId.replace(':', '/') + '.usx';
 		this.reader.readTextFile(filepath, function(data) {
-			if (data instanceof Error) {
+			if (data.errno) {
 				console.log('BibleCache.getChapter ', JSON.stringify(data));
 				callback(data);
 			} else {
@@ -378,7 +378,7 @@ BibleCache.prototype.getChapter = function(nodeId, callback) {
 BibleCache.prototype.getVerse = function(nodeId, callback) {
 	var parts = nodeId.split(':');
 	this.getChapter(parts[0] + ':' + parts[1], function(chapter) {
-		if (chapter instanceof Error) {
+		if (chapter.errno) {
 			callback(chapter);
 		} else {
 			var versePosition = findVerse(parts[2], chapter);
@@ -572,6 +572,20 @@ TOC.prototype.size = function() {
 };
 TOC.prototype.toJSON = function() {
 	return(JSON.stringify(this.bookList, null, ' '));
+};/**
+* This class holds the table of contents data each book of the Bible, or whatever books were loaded.
+*/
+"use strict";
+
+function TOCBook(code) {
+	this.code = code;
+	this.encoding = '';
+	this.heading = '';
+	this.title = '';
+	this.name = '';
+	this.abbrev = '';
+	this.lastChapter = 0;
+	Object.seal(this);
 };/**
 * This class holds an index of styles of the entire Bible, or whatever part of the Bible was loaded into it.
 */
@@ -1104,7 +1118,7 @@ AssetChecker.prototype.check = function(callback) {
 			var fullPath = that.types.getPath(filename);
 			console.log('checking for ', fullPath);
 			reader.fileExists(fullPath, function(stat) {
-				if (stat instanceof Error) {
+				if (stat.errno) {
 					if (stat.code === 'ENOENT') {
 						console.log('check exists ' + filename + ' is not found');
 						result.mustDoQueue(filename);
@@ -1157,7 +1171,7 @@ AssetBuilder.prototype.build = function(callback) {
 	if (this.builders.length > 0) {
 		var that = this;
 		this.reader.readDirectory(this.types.getPath(''), function(files) {
-			if (files instanceof Error) {
+			if (files.errno) {
 				console.log('directory read err ', JSON.stringify(files));
 				callback(files);
 			} else {
@@ -1177,7 +1191,7 @@ AssetBuilder.prototype.build = function(callback) {
 	function processReadFile(file) {
 		if (file) {
 			that.reader.readTextFile(that.types.getPath(file), function(data) {
-				if (data instanceof Error) {
+				if (data.errno) {
 					console.log('file read err ', JSON.stringify(data));
 					callback(data);
 				} else {
@@ -1197,7 +1211,7 @@ AssetBuilder.prototype.build = function(callback) {
 			var json = builder.toJSON();
 			var filepath = that.types.getPath(builder.filename);
 			that.writer.writeTextFile(filepath, json, function(filename) {
-				if (filename instanceof Error) {
+				if (filename.errno) {
 					console.log('file write failure ', filename);
 					callback(filename);
 				} else {
@@ -1210,6 +1224,253 @@ AssetBuilder.prototype.build = function(callback) {
 		}
 	}
 };
+/**
+* This class traverses the USX data model in order to find each book, and chapter
+* in order to create a table of contents that is localized to the language of the text.
+*/
+"use strict"
+
+function TOCBuilder() {
+	this.toc = new TOC();
+	this.tocBook = null;
+	this.filename = this.toc.filename;
+	Object.seal(this);
+};
+TOCBuilder.prototype.readBook = function(usxRoot) {
+	this.readRecursively(usxRoot);
+};
+TOCBuilder.prototype.readRecursively = function(node) {
+	switch(node.tagName) {
+		case 'book':
+			this.tocBook = new TOCBook(node.code);
+			this.toc.addBook(this.tocBook);
+			break;
+		case 'chapter':
+			this.tocBook.lastChapter = node.number;
+			break;
+		case 'para':
+			switch(node.style) {
+				case 'ide':
+					this.tocBook.encoding = node.children[0].text;
+					break;
+				case 'h':
+					this.tocBook.heading = node.children[0].text;
+					break;
+				case 'toc1':
+					this.tocBook.title = node.children[0].text;
+					break;
+				case 'toc2':
+					this.tocBook.name = node.children[0].text;
+					break;
+				case 'toc3':
+					this.tocBook.abbrev = node.children[0].text;
+					break;
+			}
+	}
+	if ('children' in node) {
+		for (var i=0; i<node.children.length; i++) {
+			this.readRecursively(node.children[i]);
+		}
+	}
+};
+TOCBuilder.prototype.toJSON = function() {
+	return(this.toc.toJSON());
+};/**
+* This class traverses the USX data model in order to find each word, and 
+* reference to that word.
+*
+* This solution might not be unicode safe. GNG Apr 2, 2015
+*/
+"use strict"
+
+function ConcordanceBuilder() {
+	this.concordance = new Concordance();
+	this.filename = this.concordance.filename;
+	this.bookCode = '';
+	this.chapter = 0;
+	this.verse = 0;
+	Object.seal(this);
+};
+ConcordanceBuilder.prototype.readBook = function(usxRoot) {
+	this.bookCode = '';
+	this.chapter = 0;
+	this.verse = 0;
+	this.readRecursively(usxRoot);
+};
+ConcordanceBuilder.prototype.readRecursively = function(node) {
+	switch(node.tagName) {
+		case 'book':
+			this.bookCode = node.code;
+			break;
+		case 'chapter':
+			this.chapter = node.number;
+			break;
+		case 'verse':
+			this.verse = node.number;
+			break;
+		case 'text':
+			var words = node.text.split(/\b/);
+			for (var i=0; i<words.length; i++) {
+				var word = words[i].replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]/g, '');
+				if (word.length > 0 && this.chapter > 0 && this.verse > 0) {
+					var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
+					this.concordance.addEntry(word.toLowerCase(), reference);
+				}
+			}
+			break;
+		default:
+			if ('children' in node) {
+				for (var i=0; i<node.children.length; i++) {
+					this.readRecursively(node.children[i]);
+				}
+			}
+
+	}
+};
+ConcordanceBuilder.prototype.toJSON = function() {
+	return(this.concordance.toJSON());
+};/**
+* This class traverses the USX data model in order to find each style, and 
+* reference to that style.  It builds an index to each style showing
+* all of the references where each style is used.
+*/
+"use strict"
+
+function StyleIndexBuilder() {
+	this.styleIndex = new StyleIndex();
+	this.filename = this.styleIndex.filename;
+};
+StyleIndexBuilder.prototype.readBook = function(usxRoot) {
+	this.bookCode = '';
+	this.chapter = 0;
+	this.verse = 0;
+	this.readRecursively(usxRoot);
+};
+StyleIndexBuilder.prototype.readRecursively = function(node) {
+	switch(node.tagName) {
+		case 'book':
+			this.bookCode = node.code;
+			var style = 'book.' + node.style;
+			var reference = this.bookCode;
+			this.styleIndex.addEntry(style, reference);
+			break;
+		case 'chapter':
+			this.chapter = node.number;
+			style = 'chapter.' + node.style;
+			reference = this.bookCode + ':' + this.chapter;
+			this.styleIndex.addEntry(style, reference);
+			break;
+		case 'verse':
+			this.verse = node.number;
+			style = 'verse.' + node.style;
+			reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
+			this.styleIndex.addEntry(style, reference);
+			break;
+		case 'usx':
+		case 'text':
+			// do nothing
+			break;
+		default:
+			var style = node.tagName + '.' + node.style;
+			var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
+			this.styleIndex.addEntry(style, reference);
+	}
+	if ('children' in node) {
+		for (var i=0; i<node.children.length; i++) {
+			this.readRecursively(node.children[i]);
+		}
+	}
+};
+StyleIndexBuilder.prototype.toJSON = function() {
+	return(this.styleIndex.toJSON());
+};
+/**
+* This class iterates over the USX data model, and breaks it into files one for each chapter.
+*
+*/
+function ChapterBuilder(location, versionCode) {
+	this.location = location;
+	this.versionCode = versionCode;
+	this.filename = 'chapterMetaData.json';
+	Object.seal(this);
+};
+ChapterBuilder.prototype.readBook = function(usxRoot) {
+	var that = this;
+	var bookCode = ''; // set by side effect of breakBookIntoChapters
+	var chapters = breakBookIntoChapters(usxRoot);
+
+	var reader = new NodeFileReader(this.location);
+	var writer = new NodeFileWriter(this.location);
+
+	var oneChapter = chapters.shift();
+	var chapterNum = findChapterNum(oneChapter);
+	createDirectory(bookCode);
+
+	function breakBookIntoChapters(usxRoot) {
+		var chapters = [];
+		var chapterNum = 0;
+		var oneChapter = new USX({ version: 2.0 });
+		for (var i=0; i<usxRoot.children.length; i++) {
+			var childNode = usxRoot.children[i];
+			switch(childNode.tagName) {
+				case 'book':
+					bookCode = childNode.code;
+					break;
+				case 'chapter':
+					chapters.push(oneChapter);
+					oneChapter = new USX({ version: 2.0 });
+					chapterNum = childNode.number;
+					break;
+			}
+			oneChapter.addChild(childNode);
+		}
+		chapters.push(oneChapter);
+		return(chapters);
+	}
+	function findChapterNum(oneChapter) {
+		for (var i=0; i<oneChapter.children.length; i++) {
+			var child = oneChapter.children[i];
+			if (child.tagName === 'chapter') {
+				return(child.number);
+			}
+		}
+		return(0);
+	}
+	function createDirectory(bookCode) {
+		var filepath = getPath(bookCode);
+		writer.createDirectory(filepath, function(dirName) {
+			if (dirName.errno) {
+				writeChapter(bookCode, chapterNum, oneChapter);				
+			} else {
+				writeChapter(bookCode, chapterNum, oneChapter);	
+			}
+		});
+	}
+	function writeChapter(bookCode, chapterNum, oneChapter) {
+		var filepath = getPath(bookCode) + '/' + chapterNum + '.usx';
+		var data = oneChapter.toUSX();
+		writer.writeTextFile(filepath, data, function(filename) {	
+			if (filename.errno) {
+				console.log('ChapterBuilder.writeChapterFailure ', JSON.stringify(filename));
+			} else {
+				oneChapter = chapters.shift();
+				if (oneChapter) {
+					chapterNum = findChapterNum(oneChapter);
+					writeChapter(bookCode, chapterNum, oneChapter);
+				} else {
+					// done
+				}
+			}
+		});
+	}
+	function getPath(filename) {
+		return('usx/' + that.versionCode + '/' + filename);
+	}
+};
+ChapterBuilder.prototype.toJSON = function() {
+	//return(JSON.stringify(this.usxRoot));
+};
+
 /**
 * This class loads the each of the assets that is specified in the types file.
 */
@@ -1233,7 +1494,7 @@ AssetLoader.prototype.load = function(callback) {
 		if (filename) {
 			var fullPath = that.types.getPath(filename);
 			reader.readTextFile(fullPath, function(data) {
-				if (data instanceof Error) {
+				if (data.errno) {
 					console.log('read concordance.json failure ' + JSON.stringify(data));
 				} else {
 					switch(filename) {

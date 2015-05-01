@@ -29,7 +29,6 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 			switch(childNode.tagName) {
 				case 'book':
 					bookCode = childNode.code;
-					console.log('book code ', bookCode);
 					break;
 				case 'chapter':
 					chapters.push(oneChapter);
@@ -54,24 +53,20 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 	function createDirectory(bookCode) {
 		var filepath = getPath(bookCode);
 		writer.createDirectory(filepath, function(dirName) {
-			if (dirName instanceof Error) {
-				console.log('ChapterBuilder.createDirectory ', JSON.stringify(dirName));
+			if (dirName.errno) {
 				writeChapter(bookCode, chapterNum, oneChapter);				
 			} else {
-				console.log('ChapterBuilder directory created ', dirName);
 				writeChapter(bookCode, chapterNum, oneChapter);	
 			}
 		});
 	}
 	function writeChapter(bookCode, chapterNum, oneChapter) {
-		console.log('inside write chapter', bookCode, chapterNum, oneChapter.children.length);
 		var filepath = getPath(bookCode) + '/' + chapterNum + '.usx';
 		var data = oneChapter.toUSX();
 		writer.writeTextFile(filepath, data, function(filename) {	
-			if (filename instanceof Error) {
+			if (filename.errno) {
 				console.log('ChapterBuilder.writeChapterFailure ', JSON.stringify(filename));
 			} else {
-				console.log('ChapterBuilder.writeChapterSuccess ', filename);
 				oneChapter = chapters.shift();
 				if (oneChapter) {
 					chapterNum = findChapterNum(oneChapter);

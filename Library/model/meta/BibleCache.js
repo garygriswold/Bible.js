@@ -22,7 +22,7 @@ BibleCache.prototype.getChapter = function(nodeId, callback) {
 	} else {
 		var filepath = 'usx/' + this.versionCode + '/' + nodeId.replace(':', '/') + '.usx';
 		this.reader.readTextFile(filepath, function(data) {
-			if (data instanceof Error) {
+			if (data.errno) {
 				console.log('BibleCache.getChapter ', JSON.stringify(data));
 				callback(data);
 			} else {
@@ -36,7 +36,7 @@ BibleCache.prototype.getChapter = function(nodeId, callback) {
 BibleCache.prototype.getVerse = function(nodeId, callback) {
 	var parts = nodeId.split(':');
 	this.getChapter(parts[0] + ':' + parts[1], function(chapter) {
-		if (chapter instanceof Error) {
+		if (chapter.errno) {
 			callback(chapter);
 		} else {
 			var versePosition = findVerse(parts[2], chapter);

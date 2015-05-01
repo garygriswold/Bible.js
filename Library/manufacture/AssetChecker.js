@@ -20,7 +20,7 @@ AssetChecker.prototype.check = function(callback) {
 			var fullPath = that.types.getPath(filename);
 			console.log('checking for ', fullPath);
 			reader.fileExists(fullPath, function(stat) {
-				if (stat instanceof Error) {
+				if (stat.errno) {
 					if (stat.code === 'ENOENT') {
 						console.log('check exists ' + filename + ' is not found');
 						result.mustDoQueue(filename);

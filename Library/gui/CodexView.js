@@ -13,7 +13,7 @@ CodexView.prototype.showPassage = function(nodeId) {
 	var parts = nodeId.split(':');
 	var chapter = parts[0] + ':' + parts[1];
 	this.bibleCache.getChapter(chapter, function(usxNode) {
-		if (usxNode instanceof Error) {
+		if (usxNode.errno) {
 			// what to do here?
 			console.log((JSON.stringify(usxNode)));
 		} else {
