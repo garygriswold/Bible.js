@@ -19,7 +19,7 @@ AssetLoader.prototype.load = function(callback) {
 
 	function readTextFile(filename) {
 		if (filename) {
-			var fullPath = 'usx/' + that.types.versionCode + '/' + filename; // centrally define somewhere
+			var fullPath = that.types.getPath(filename);
 			reader.readTextFile(fullPath, function(data) {
 				if (data instanceof Error) {
 					console.log('read concordance.json failure ' + JSON.stringify(data));

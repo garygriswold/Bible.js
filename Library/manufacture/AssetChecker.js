@@ -17,7 +17,7 @@ AssetChecker.prototype.check = function(callback) {
 
 	function checkExists(filename) {
 		if (filename) {
-			var fullPath = 'usx/' + that.types.versionCode + '/' + filename; // this needs to be somewhere central
+			var fullPath = that.types.getPath(filename);
 			console.log('checking for ', fullPath);
 			reader.fileExists(fullPath, function(stat) {
 				if (stat instanceof Error) {

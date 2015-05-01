@@ -6,7 +6,7 @@
 "use strict";
 
 function AssetBuilder(types) {
-	this.versionCode = types.versionCode;
+	this.types = types;
 	this.builders = [];
 	if (types.chapterFiles) {
 		this.builders.push(new ChapterBuilder(types.location, types.versionCode));
@@ -32,7 +32,7 @@ function AssetBuilder(types) {
 AssetBuilder.prototype.build = function(callback) {
 	if (this.builders.length > 0) {
 		var that = this;
-		this.reader.readDirectory(this.getPath(''), function(files) {
+		this.reader.readDirectory(this.types.getPath(''), function(files) {
 			if (files instanceof Error) {
 				console.log('directory read err ', JSON.stringify(files));
 				callback(files);
@@ -52,7 +52,7 @@ AssetBuilder.prototype.build = function(callback) {
 	}
 	function processReadFile(file) {
 		if (file) {
-			that.reader.readTextFile(that.getPath(file), function(data) {
+			that.reader.readTextFile(that.types.getPath(file), function(data) {
 				if (data instanceof Error) {
 					console.log('file read err ', JSON.stringify(data));
 					callback(data);
@@ -71,7 +71,7 @@ AssetBuilder.prototype.build = function(callback) {
 	function processWriteResult(builder) {
 		if (builder) {
 			var json = builder.toJSON();
-			var filepath = that.getPath(builder.filename);
+			var filepath = that.types.getPath(builder.filename);
 			that.writer.writeTextFile(filepath, json, function(filename) {
 				if (filename instanceof Error) {
 					console.log('file write failure ', filename);
@@ -85,7 +85,4 @@ AssetBuilder.prototype.build = function(callback) {
 			callback();
 		}
 	}
-};
-AssetBuilder.prototype.getPath = function(filename) {
-	return('usx/' + this.versionCode + '/' + filename);
 };

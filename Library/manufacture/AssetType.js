@@ -48,3 +48,6 @@ AssetType.prototype.toBeDoneQueue = function() {
 	}
 	return(toDo);
 };
+AssetType.prototype.getPath = function(filename) {
+	return('usx/' + this.versionCode + '/' + filename);
+};
