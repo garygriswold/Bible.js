@@ -3,9 +3,8 @@
 */
 "use strict";
 
-function CodexView(versionCode) {
-	this.versionCode = versionCode;
-	this.bibleCache = new BibleCache(versionCode);
+function CodexView(bibleCache) {
+	this.bibleCache = bibleCache;
 	this.bodyNode = document.getElementById('appTop');
 	Object.freeze(this);
 };
@@ -62,4 +61,3 @@ CodexView.prototype.removeBody = function() {
 		this.bodyNode.removeChild(childNode);
 	}
 };
-//var codex = new CodexView();

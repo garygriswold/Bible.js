@@ -8,66 +8,61 @@ var EVENT = { TOC2PASSAGE: 'toc2passage', CON2PASSAGE: 'con2passage' };
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
-	this.tableContents = new TableContentsView(versionCode);
-	this.codex = new CodexView(versionCode);
-	this.searchViewBuilder = new SearchViewBuilder(versionCode, this.tableContents.toc, this.codex.bibleCache);
+	this.bibleCache = new BibleCache(this.versionCode);
+	this.codexView = new CodexView(this.bibleCache);
+};
+AppViewController.prototype.begin = function() {
+	var types = new AssetType('application', this.versionCode);
+	types.tableContents = true;
+	types.chapterFiles = true;
+	types.concordance = true;
+	var that = this;
+	var assets = new AssetController(types);
+	assets.checkBuildLoad(function(typesLoaded) {
+		that.tableContents = assets.tableContents();
+		console.log('loaded toc', that.tableContents.size());
+		that.concordance = assets.concordance();
+		console.log('loaded concordance', that.concordance.size());
 
-	this.bodyNode = this.tableContents.bodyNode;
+		that.tableContentsView = new TableContentsView(that.tableContents);
+		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache);
+		Object.freeze(that);
+
+		//that.tableContentsView.showTocBookList();
+		that.searchView.showSearch("risen");
+	});
+	this.bodyNode = document.getElementById('appTop');
 	this.bodyNode.addEventListener(EVENT.TOC2PASSAGE, toc2PassageHandler);
 	this.bodyNode.addEventListener(EVENT.CON2PASSAGE, con2PassageHandler);
-	var that = this;
-	Object.freeze(this);
 
 	function toc2PassageHandler(event) {
 		var detail = event.detail;
 		console.log(JSON.stringify(detail));
-		that.codex.showPassage(detail.id);	
+		that.codexView.showPassage(detail.id);	
 	}
 	function con2PassageHandler(event) {
 		var detail = event.detail;
 		console.log(JSON.stringify(detail));
-		that.codex.showPassage(detail.id);
+		that.codexView.showPassage(detail.id);
 	}
 };
-AppViewController.prototype.begin = function() {
-	//this.tableContents.showTocBookList();
-	this.tableContents.readTocFile();
-	this.searchViewBuilder.showSearch("risen");
-};
-
-
 /**
 * This class presents the table of contents, and responds to user actions.
 */
 "use strict";
 
-function TableContentsView(versionCode) {
-	this.versionCode = versionCode;
-	this.toc = new TOC();
+function TableContentsView(toc) {
+	this.toc = toc;
+	this.root = null;
 	this.bodyNode = document.getElementById('appTop');
 	Object.seal(this);
 };
 TableContentsView.prototype.showTocBookList = function() {
-	if (this.toc.isFilled) { // should check the version
-		this.buildTocBookList();
+	if (! this.root) {
+		this.root = this.buildTocBookList();
 	}
-	else {
-		this.readTocFile();
-	}
-}
-TableContentsView.prototype.readTocFile = function() {
-	var that = this;
-	var reader = new NodeFileReader('application');
-	var filename = 'usx/' + this.versionCode + '/' + this.toc.filename;
-	reader.readTextFile(filename, function(data) {
-		if (data instanceof Error) {
-			console.log('read TOC.json failure ' + JSON.stringify(data));
-		} else {
-			var bookList = JSON.parse(data);
-			that.toc.fill(bookList);
-			that.buildTocBookList();			
-		}
-	});
+	this.removeBody();
+	this.bodyNode.appendChild(this.root);
 };
 TableContentsView.prototype.buildTocBookList = function() {
 	var root = document.createDocumentFragment();
@@ -88,8 +83,7 @@ TableContentsView.prototype.buildTocBookList = function() {
 			that.showTocChapterList(bookCode);
 		});
 	}
-	this.removeBody();
-	this.bodyNode.appendChild(root);
+	return(root);
 };
 TableContentsView.prototype.showTocChapterList = function(bookCode) {
 	var book = this.toc.find(bookCode);
@@ -130,7 +124,7 @@ TableContentsView.prototype.cellsPerRow = function() {
 TableContentsView.prototype.removeBody = function() {
 	for (var i=this.bodyNode.children.length -1; i>=0; i--) {
 		var childNode = this.bodyNode.children[i];
-		div.removeChild(childNode);
+		this.bodyNode.removeChild(childNode);
 	}
 };
 TableContentsView.prototype.removeAllChapters = function() {
@@ -154,9 +148,8 @@ TableContentsView.prototype.openChapter = function(nodeId) {
 */
 "use strict";
 
-function CodexView(versionCode) {
-	this.versionCode = versionCode;
-	this.bibleCache = new BibleCache(versionCode);
+function CodexView(bibleCache) {
+	this.bibleCache = bibleCache;
 	this.bodyNode = document.getElementById('appTop');
 	Object.freeze(this);
 };
@@ -213,92 +206,6 @@ CodexView.prototype.removeBody = function() {
 		this.bodyNode.removeChild(childNode);
 	}
 };
-//var codex = new CodexView();
-/**
-* This class does a lazy construction of all of the parts of the SearchView, or just attaches
-* the searchView if it already exists.
-*/
-"use strict";
-
-function SearchViewBuilder(versionCode, toc, bibleCache) {
-	this.versionCode = versionCode;
-	this.toc = toc;
-	this.bibleCache = bibleCache;
-	this.searchView = null;
-	this.query = '';
-	this.concordance = new Concordance();
-
-	Object.seal(this);
-};
-SearchViewBuilder.prototype.showSearch = function(query) {
-	this.query = query;
-	if (this.searchView) {
-		this.attachSearchView();
-	} 
-	else if (this.concordance.size > 1000) {
-		this.buildSearchView(query);
-	}
-	else {
-		var that = this;
-		var reader = new NodeFileReader('application');
-		reader.fileExists(this.getPath(this.concordance.filename), function(stat) {
-			if (stat instanceof Error) {
-				if (stat.code === 'ENOENT') {
-					console.log('check exists concordance json is not found');
-					that.createConcordanceFile();	
-				} else {
-					console.log('check exists concordance.json failure ' + JSON.stringify(stat));
-				}
-			} else {
-				that.readConcordanceFile();
-			}
-		});
-	}
-};
-SearchViewBuilder.prototype.createConcordanceFile = function() {
-	var that = this;
-	var options = { buildTableContents: true, buildConcordance: true, buildStyleIndex: true };
-	var builder = new AssetBuilder('application', this.versionCode, options);
-	builder.build(function(result) {
-		if (result instanceof Error) {
-			console.log('create concordance file failure', JSON.stringify(result));
-		} else {
-			that.readConcordanceFile();
-		}
-	});
-};
-SearchViewBuilder.prototype.readConcordanceFile = function() {
-	var that = this;
-	var reader = new NodeFileReader('application');
-	var fullPath = this.getPath(this.concordance.filename);
-	reader.readTextFile(fullPath, function(data) {
-		if (data instanceof Error) {
-			console.log('read concordance.json failure ' + JSON.stringify(data));
-		} else {
-			that.concordance = new Concordance(JSON.parse(data));
-			that.buildSearchView(that.query);
-		}
-	});
-};
-SearchViewBuilder.prototype.buildSearchView = function(query) {
-	this.searchView = new SearchView(this.concordance, this.toc, this.bibleCache);
-	this.searchView.showSearch(query);
-	this.attachSearchView();
-};
-SearchViewBuilder.prototype.attachSearchView = function() {
-	var appTop = document.getElementById('appTop');
-	for (var i=appTop.children.length -1; i>=0; i--) {
-		var child = appTop.children[i];
-		appTop.removeChild(child);
-	}
-	appTop.appendChild(this.searchView.viewRoot);
-};
-SearchViewBuilder.prototype.processFailure = function(err) {
-	console.log('process failure  ' + JSON.stringify(err));
-};
-SearchViewBuilder.prototype.getPath = function(filename) {
-	return('usx/' + this.versionCode + '/' + filename);
-};
 /**
 * This class provides the User Interface part of the concordance and search capabilities of the app.
 * It does a lazy create of all of the objects needed.
@@ -306,9 +213,9 @@ SearchViewBuilder.prototype.getPath = function(filename) {
 */
 "use strict";
 
-function SearchView(concordance, toc, bibleCache) {
-	this.concordance = concordance;
+function SearchView(toc, concordance, bibleCache) {
 	this.toc = toc;
+	this.concordance = concordance;
 	this.bibleCache = bibleCache;
 	this.words = [];
 	this.bookList = [];
@@ -317,6 +224,7 @@ function SearchView(concordance, toc, bibleCache) {
 	Object.seal(this);
 };
 SearchView.prototype.showSearch = function(query) {
+	
 	this.words = query.split(' ');
 	var refList = this.concordance.search(query);
 	this.bookList = this.refListsByBook(refList);
@@ -330,6 +238,7 @@ SearchView.prototype.showSearch = function(query) {
 			this.appendSeeMore(bookRef);
 		}
 	}
+	this.attachSearchView();
 };
 SearchView.prototype.refListsByBook = function(refList) {
 	var bookList = [];
@@ -422,6 +331,14 @@ SearchView.prototype.appendSeeMore = function(bookRef) {
 		return(null);
 	}
 };
+SearchView.prototype.attachSearchView = function() {
+	var appTop = document.getElementById('appTop');
+	for (var i=appTop.children.length -1; i>=0; i--) {
+		var child = appTop.children[i];
+		appTop.removeChild(child);
+	}
+	appTop.appendChild(this.viewRoot);
+};
 
 /**
 * This class handles all request to deliver scripture.  It handles all passage display requests to display passages of text,
@@ -505,9 +422,15 @@ BibleCache.prototype.getVerse = function(nodeId, callback) {
 */
 "use strict";
 
-function Concordance(words) {
-	this.index = words || {};
+function Concordance() {
+	this.index = {};
 	this.filename = 'concordance.json';
+	this.isFilled = false;
+	Object.seal(this);
+};
+Concordance.prototype.fill = function(words) {
+	this.index = words;
+	this.isFilled = true;
 	Object.freeze(this);
 };
 Concordance.prototype.addEntry = function(word, reference) {
@@ -644,8 +567,63 @@ TOC.prototype.addBook = function(book) {
 TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
 };
+TOC.prototype.size = function() {
+	return(this.bookList.length);
+};
 TOC.prototype.toJSON = function() {
 	return(JSON.stringify(this.bookList, null, ' '));
+};/**
+* This class holds an index of styles of the entire Bible, or whatever part of the Bible was loaded into it.
+*/
+"use strict";
+
+function StyleIndex() {
+	this.index = {};
+	this.filename = 'styleIndex.json';
+	this.isFilled = false;
+	this.completed = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl',
+		'para.mt', 'para.mt2', 'para.mt3', 'para.ms', 'para.d',
+		'chapter.c', 'verse.v',
+		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 'para.nb',
+		'para.sp', 'para.q', 'para.q2',
+		'note.f', 'note.x',
+		'char.wj', 'char.qs'];
+	Object.seal(this);
+};
+StyleIndex.prototype.fill = function(entries) {
+	this.index = entries;
+	this.isFilled = true;
+	Object.freeze(this);
+};
+StyleIndex.prototype.addEntry = function(word, reference) {
+	if (this.completed.indexOf(word) < 0) {
+		if (this.index[word] === undefined) {
+			this.index[word] = [];
+		}
+		if (this.index[word].length < 100) {
+			this.index[word].push(reference);
+		}
+	}
+};
+StyleIndex.prototype.find = function(word) {
+	return(this.index[word]);
+};
+StyleIndex.prototype.size = function() {
+	return(Object.keys(this.index).length);
+};
+StyleIndex.prototype.dumpAlphaSort = function() {
+	var words = Object.keys(this.index);
+	var alphaWords = words.sort();
+	this.dump(alphaWords);
+};
+StyleIndex.prototype.dump = function(words) {
+	for (var i=0; i<words.length; i++) {
+		var word = words[i];
+		console.log(word, this.index[word]);
+	};	
+};
+StyleIndex.prototype.toJSON = function() {
+	return(JSON.stringify(this.index, null, ' '));
 };/**
 * This file contains IO constants and functions which are common to all file methods, which might include node.js, cordova, javascript, etc.
 */
@@ -662,7 +640,9 @@ function NodeFileReader(location) {
 	Object.freeze(this);
 };
 NodeFileReader.prototype.fileExists = function(filepath, callback) {
-	this.fs.stat(filepath, function(err, stat) {
+	var fullPath = FILE_ROOTS[this.location] + filepath;
+	//console.log('checking fullpath', fullPath);
+	this.fs.stat(fullPath, function(err, stat) {
 		if (err) {
 			err.filepath = filepath;
 			callback(err);
@@ -692,6 +672,39 @@ NodeFileReader.prototype.readTextFile = function(filepath, callback) {
 			callback(err);
 		} else {
 			callback(data);
+		}
+	});
+};/**
+* This class is a file writer for Node.  It can be used with node.js and node-webkit.
+* cordova requires using another class, but the interface should be the same.
+*/
+"use strict";
+
+function NodeFileWriter(location) {
+	this.fs = require('fs');
+	this.location = location;
+	Object.freeze(this);
+};
+NodeFileWriter.prototype.createDirectory = function(filepath, callback) {
+	var fullPath = FILE_ROOTS[this.location] + filepath;
+	this.fs.mkdir(fullPath, function(err) {
+		if (err) {
+			err.filepath = filepath;
+			callback(err);
+		} else {
+			callback(filepath);
+		}
+	});
+}
+NodeFileWriter.prototype.writeTextFile = function(filepath, data, callback) {
+	var fullPath = FILE_ROOTS[this.location] + filepath;
+	var options = { encoding: 'utf-8'};
+	this.fs.writeFile(fullPath, data, options, function(err) {
+		if (err) {
+			err.filepath = filepath;
+			callback(err);
+		} else {
+			callback(filepath);
 		}
 	});
 };/**
@@ -964,6 +977,295 @@ XMLTokenizer.prototype.nextToken = function() {
 		}
 	}
 	return(XMLNodeType.END);
+};
+/**
+* This object of the Director pattern, it contains a boolean member for each type of asset.
+* Setting a member to true will be used by the Builder classes to control which assets are built.
+*/
+"use strict";
+
+function AssetType(location, versionCode) {
+	this.location = location;
+	this.versionCode = versionCode;
+	this.chapterFiles = false;
+	this.tableContents = false;
+	this.concordance = false;
+	this.styleIndex = false;
+	this.html = false;// this one is not ready
+	Object.seal(this);
+};
+AssetType.prototype.mustDoQueue = function(filename) {
+	switch(filename) {
+		case 'chapterMetaData.json':
+			this.chapterFiles = true;
+			break;
+		case 'toc.json':
+			this.tableContents = true;
+			break;
+		case 'concordance.json':
+			this.concordance = true;
+			break;
+		case 'styleIndex.json':
+			this.styleIndex = true;
+			break;
+		default:
+			throw new Error('File ' + filename + ' is not known in AssetType.mustDo.');
+	}
+};
+AssetType.prototype.toBeDoneQueue = function() {
+	var toDo = [];
+	if (this.chapterFiles) {
+		toDo.push('chapterMetaData.json');
+	}
+	if (this.tableContents) {
+		toDo.push('toc.json');
+	}
+	if (this.concordance) {
+		toDo.push('concordance.json');
+	}
+	if (this.styleIndex) {
+		toDo.push('styleIndex.json');
+	}
+	return(toDo);
+};
+AssetType.prototype.getPath = function(filename) {
+	return('usx/' + this.versionCode + '/' + filename);
+};
+/**
+* The class controls the construction and loading of asset objects.  It is designed to be used
+* one both the client and the server.  It is a "builder" controller that uses the AssetType
+* as a "director" to control which assets are built.
+*/
+"use strict";
+
+function AssetController(types) {
+	this.types = types;
+	this.checker = new AssetChecker(types);
+	this.loader = new AssetLoader(types);
+};
+AssetController.prototype.tableContents = function() {
+	return(this.loader.toc);
+};
+AssetController.prototype.concordance = function() {
+	return(this.loader.concordance);
+}
+AssetController.prototype.styleIndex = function() {
+	return(this.loader.styleIndex);
+}
+AssetController.prototype.checkBuildLoad = function(callback) {
+	var that = this;
+	this.checker.check(function(absentTypes) {
+		var builder = new AssetBuilder(absentTypes);
+		builder.build(function() {
+			that.loader.load(function(loadedTypes) {
+				callback(loadedTypes)
+			});
+		});
+	});
+};
+AssetController.prototype.check = function(callback) {
+	this.checker.check(function(absentTypes) {
+		console.log('finished to be built types', absentTypes);
+		callback(absentTypes);
+	});
+};
+AssetController.prototype.build = function(callback) {
+	var builder = new AssetBuilder(this.types);
+	builder.build(function() {
+		console.log('finished asset build');
+		callback();
+	});
+};
+AssetController.prototype.load = function(callback) {
+	this.loader.load(function(loadedTypes) {
+		console.log('finished assetcontroller load');
+		callback(loadedTypes);
+	});
+};
+/**
+* This class checks for the presence of each assets that is required.
+* It should be expanded to check for the correct version of each asset as well, 
+* once assets are versioned.
+*/
+"use strict";
+
+function AssetChecker(types) {
+	this.types = types;
+};
+AssetChecker.prototype.check = function(callback) {
+	var that = this;
+	var result = new AssetType(this.types.location, this.types.versionCode);
+	var reader = new NodeFileReader(that.types.location);
+	var toDo = this.types.toBeDoneQueue();
+	checkExists(toDo.shift());
+
+	function checkExists(filename) {
+		if (filename) {
+			var fullPath = that.types.getPath(filename);
+			console.log('checking for ', fullPath);
+			reader.fileExists(fullPath, function(stat) {
+				if (stat instanceof Error) {
+					if (stat.code === 'ENOENT') {
+						console.log('check exists ' + filename + ' is not found');
+						result.mustDoQueue(filename);
+					} else {
+						console.log('check exists for ' + filename + ' failure ' + JSON.stringify(stat));
+					}
+				} else {
+					// Someday I should check version when check succeeeds.  When version is known.
+					console.log('check succeeds for ', filename);
+				}
+				checkExists(toDo.shift());
+			});
+		} else {
+			callback(result);
+		}
+	}
+};
+/**
+* The Table of Contents and Concordance must be created by processing the entire text.  Since the parsing of the XML
+* is a significant amount of the time to do this, this class reads over the entire Bible text and creates
+* all of the required assets.
+*/
+"use strict";
+
+function AssetBuilder(types) {
+	this.types = types;
+	this.builders = [];
+	if (types.chapterFiles) {
+		this.builders.push(new ChapterBuilder(types.location, types.versionCode));
+	}
+	if (types.tableContents) {
+		this.builders.push(new TOCBuilder());
+	}
+	if (types.concordance) {
+		this.builders.push(new ConcordanceBuilder());
+	}
+	if (types.styleIndex) {
+		this.builders.push(new StyleIndexBuilder());
+	}
+	if (types.html) {
+		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.
+	}
+	this.reader = new NodeFileReader(types.location);
+	this.parser = new USXParser();
+	this.writer = new NodeFileWriter(types.location);
+	this.filesToProcess = [];
+	Object.freeze(this);
+};
+AssetBuilder.prototype.build = function(callback) {
+	if (this.builders.length > 0) {
+		var that = this;
+		this.reader.readDirectory(this.types.getPath(''), function(files) {
+			if (files instanceof Error) {
+				console.log('directory read err ', JSON.stringify(files));
+				callback(files);
+			} else {
+				var count = 0
+				for (var i=0; i<files.length && count < 66; i++) {
+					if (files[i].indexOf('.usx') > 0) {
+						that.filesToProcess.push(files[i]);
+						count++;
+					}
+				}
+				processReadFile(that.filesToProcess.shift());
+			}
+		});
+	} else {
+		callback();
+	}
+	function processReadFile(file) {
+		if (file) {
+			that.reader.readTextFile(that.types.getPath(file), function(data) {
+				if (data instanceof Error) {
+					console.log('file read err ', JSON.stringify(data));
+					callback(data);
+				} else {
+					var rootNode = that.parser.readBook(data);
+					for (var i=0; i<that.builders.length; i++) {
+						that.builders[i].readBook(rootNode);
+					}
+					processReadFile(that.filesToProcess.shift());
+				}
+			});
+		} else {
+			processWriteResult(that.builders.shift());
+		}
+	}
+	function processWriteResult(builder) {
+		if (builder) {
+			var json = builder.toJSON();
+			var filepath = that.types.getPath(builder.filename);
+			that.writer.writeTextFile(filepath, json, function(filename) {
+				if (filename instanceof Error) {
+					console.log('file write failure ', filename);
+					callback(filename);
+				} else {
+					console.log('file write success ', filename);
+					processWriteResult(that.builders.shift());
+				}
+			});
+		} else {
+			callback();
+		}
+	}
+};
+/**
+* This class loads the each of the assets that is specified in the types file.
+*/
+"use strict";
+
+function AssetLoader(types) {
+	this.types = types;
+	this.toc = new TOC();
+	this.concordance = new Concordance();
+	this.styleIndex = new StyleIndex();
+};
+AssetLoader.prototype.load = function(callback) {
+	var that = this;
+	this.types.chapterFiles = false; // do not load this
+	var result = new AssetType(that.types.location, that.types.versionCode);
+	var reader = new NodeFileReader(that.types.location);
+	var toDo = this.types.toBeDoneQueue();
+	readTextFile(toDo.shift());
+
+	function readTextFile(filename) {
+		if (filename) {
+			var fullPath = that.types.getPath(filename);
+			reader.readTextFile(fullPath, function(data) {
+				if (data instanceof Error) {
+					console.log('read concordance.json failure ' + JSON.stringify(data));
+				} else {
+					switch(filename) {
+						case 'chapterMetaData.json':
+							result.chapterFiles = true;
+							break;
+						case 'toc.json':
+							result.tableContents = true;
+							var bookList = JSON.parse(data);
+							that.toc.fill(bookList);
+							break;
+						case 'concordance.json':
+							result.concordance = true;
+							var wordList = JSON.parse(data);
+							that.concordance.fill(wordList);
+							break;
+						case 'styleIndex.json':
+							result.styleIndex = true;
+							var styleList = JSON.parse(data);
+							that.styleIndex.fill(styleList);
+							break;
+						default:
+							throw new Error('File ' + filename + ' is not known in AssetLoader.load.');
+
+					}
+				}
+				readTextFile(toDo.shift());
+			});
+		} else {
+			callback(result);
+		}
+	}
 };
 /**
 * This class iterates over the USX data model, and translates the contents to DOM.

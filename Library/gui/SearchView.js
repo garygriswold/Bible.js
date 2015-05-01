@@ -5,9 +5,9 @@
 */
 "use strict";
 
-function SearchView(concordance, toc, bibleCache) {
-	this.concordance = concordance;
+function SearchView(toc, concordance, bibleCache) {
 	this.toc = toc;
+	this.concordance = concordance;
 	this.bibleCache = bibleCache;
 	this.words = [];
 	this.bookList = [];
@@ -16,6 +16,7 @@ function SearchView(concordance, toc, bibleCache) {
 	Object.seal(this);
 };
 SearchView.prototype.showSearch = function(query) {
+	
 	this.words = query.split(' ');
 	var refList = this.concordance.search(query);
 	this.bookList = this.refListsByBook(refList);
@@ -29,6 +30,7 @@ SearchView.prototype.showSearch = function(query) {
 			this.appendSeeMore(bookRef);
 		}
 	}
+	this.attachSearchView();
 };
 SearchView.prototype.refListsByBook = function(refList) {
 	var bookList = [];
@@ -120,5 +122,13 @@ SearchView.prototype.appendSeeMore = function(bookRef) {
 		}
 		return(null);
 	}
+};
+SearchView.prototype.attachSearchView = function() {
+	var appTop = document.getElementById('appTop');
+	for (var i=appTop.children.length -1; i>=0; i--) {
+		var child = appTop.children[i];
+		appTop.removeChild(child);
+	}
+	appTop.appendChild(this.viewRoot);
 };
 

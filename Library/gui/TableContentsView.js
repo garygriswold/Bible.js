@@ -3,33 +3,18 @@
 */
 "use strict";
 
-function TableContentsView(versionCode) {
-	this.versionCode = versionCode;
-	this.toc = new TOC();
+function TableContentsView(toc) {
+	this.toc = toc;
+	this.root = null;
 	this.bodyNode = document.getElementById('appTop');
 	Object.seal(this);
 };
 TableContentsView.prototype.showTocBookList = function() {
-	if (this.toc.isFilled) { // should check the version
-		this.buildTocBookList();
+	if (! this.root) {
+		this.root = this.buildTocBookList();
 	}
-	else {
-		this.readTocFile();
-	}
-}
-TableContentsView.prototype.readTocFile = function() {
-	var that = this;
-	var reader = new NodeFileReader('application');
-	var filename = 'usx/' + this.versionCode + '/' + this.toc.filename;
-	reader.readTextFile(filename, function(data) {
-		if (data instanceof Error) {
-			console.log('read TOC.json failure ' + JSON.stringify(data));
-		} else {
-			var bookList = JSON.parse(data);
-			that.toc.fill(bookList);
-			that.buildTocBookList();			
-		}
-	});
+	this.removeBody();
+	this.bodyNode.appendChild(this.root);
 };
 TableContentsView.prototype.buildTocBookList = function() {
 	var root = document.createDocumentFragment();
@@ -50,8 +35,7 @@ TableContentsView.prototype.buildTocBookList = function() {
 			that.showTocChapterList(bookCode);
 		});
 	}
-	this.removeBody();
-	this.bodyNode.appendChild(root);
+	return(root);
 };
 TableContentsView.prototype.showTocChapterList = function(bookCode) {
 	var book = this.toc.find(bookCode);
@@ -92,7 +76,7 @@ TableContentsView.prototype.cellsPerRow = function() {
 TableContentsView.prototype.removeBody = function() {
 	for (var i=this.bodyNode.children.length -1; i>=0; i--) {
 		var childNode = this.bodyNode.children[i];
-		div.removeChild(childNode);
+		this.bodyNode.removeChild(childNode);
 	}
 };
 TableContentsView.prototype.removeAllChapters = function() {

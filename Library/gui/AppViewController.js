@@ -8,31 +8,41 @@ var EVENT = { TOC2PASSAGE: 'toc2passage', CON2PASSAGE: 'con2passage' };
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
-	this.tableContents = new TableContentsView(versionCode);
-	this.codex = new CodexView(versionCode);
-	this.searchViewBuilder = new SearchViewBuilder(versionCode, this.tableContents.toc, this.codex.bibleCache);
+	this.bibleCache = new BibleCache(this.versionCode);
+	this.codexView = new CodexView(this.bibleCache);
+};
+AppViewController.prototype.begin = function() {
+	var types = new AssetType('application', this.versionCode);
+	types.tableContents = true;
+	types.chapterFiles = true;
+	types.concordance = true;
+	var that = this;
+	var assets = new AssetController(types);
+	assets.checkBuildLoad(function(typesLoaded) {
+		that.tableContents = assets.tableContents();
+		console.log('loaded toc', that.tableContents.size());
+		that.concordance = assets.concordance();
+		console.log('loaded concordance', that.concordance.size());
 
-	this.bodyNode = this.tableContents.bodyNode;
+		that.tableContentsView = new TableContentsView(that.tableContents);
+		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache);
+		Object.freeze(that);
+
+		//that.tableContentsView.showTocBookList();
+		that.searchView.showSearch("risen");
+	});
+	this.bodyNode = document.getElementById('appTop');
 	this.bodyNode.addEventListener(EVENT.TOC2PASSAGE, toc2PassageHandler);
 	this.bodyNode.addEventListener(EVENT.CON2PASSAGE, con2PassageHandler);
-	var that = this;
-	Object.freeze(this);
 
 	function toc2PassageHandler(event) {
 		var detail = event.detail;
 		console.log(JSON.stringify(detail));
-		that.codex.showPassage(detail.id);	
+		that.codexView.showPassage(detail.id);	
 	}
 	function con2PassageHandler(event) {
 		var detail = event.detail;
 		console.log(JSON.stringify(detail));
-		that.codex.showPassage(detail.id);
+		that.codexView.showPassage(detail.id);
 	}
 };
-AppViewController.prototype.begin = function() {
-	//this.tableContents.showTocBookList();
-	this.tableContents.readTocFile();
-	this.searchViewBuilder.showSearch("risen");
-};
-
-
