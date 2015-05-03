@@ -4,7 +4,8 @@
 */
 "use strict"
 
-var EVENT = { TOC2PASSAGE: 'toc2passage', CON2PASSAGE: 'con2passage' };
+var BIBLE = { TOC: 'bible-toc', LOOK: 'bible-look', SEARCH: 'bible-search', BACK: 'bible-back', FORWARD: 'bible-forward', 
+		LAST: 'bible-last' };
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
@@ -31,18 +32,4 @@ AppViewController.prototype.begin = function() {
 		//that.tableContentsView.showTocBookList();
 		that.searchView.showSearch("risen");
 	});
-	this.bodyNode = document.getElementById('appTop');
-	this.bodyNode.addEventListener(EVENT.TOC2PASSAGE, toc2PassageHandler);
-	this.bodyNode.addEventListener(EVENT.CON2PASSAGE, con2PassageHandler);
-
-	function toc2PassageHandler(event) {
-		var detail = event.detail;
-		console.log(JSON.stringify(detail));
-		that.codexView.showPassage(detail.id);	
-	}
-	function con2PassageHandler(event) {
-		var detail = event.detail;
-		console.log(JSON.stringify(detail));
-		that.codexView.showPassage(detail.id);
-	}
 };

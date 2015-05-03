@@ -9,6 +9,7 @@ function SearchView(toc, concordance, bibleCache) {
 	this.toc = toc;
 	this.concordance = concordance;
 	this.bibleCache = bibleCache;
+	this.query = '';
 	this.words = [];
 	this.bookList = [];
 	this.viewRoot = document.createDocumentFragment();
@@ -16,6 +17,7 @@ function SearchView(toc, concordance, bibleCache) {
 	Object.seal(this);
 };
 SearchView.prototype.showSearch = function(query) {
+	this.query = query;
 	this.words = query.split(' ');
 	var refList = this.concordance.search(query);
 	this.bookList = this.refListsByBook(refList);
@@ -79,7 +81,7 @@ SearchView.prototype.appendReference = function(reference) {
 			verseNode.addEventListener('click', function() {
 				var nodeId = this.id.substr(3);
 				console.log('open chapter', nodeId);
-				that.bodyNode.dispatchEvent(new CustomEvent(EVENT.CON2PASSAGE, { detail: { id: nodeId }}));
+				that.bodyNode.dispatchEvent(new CustomEvent(BIBLE.SEARCH, { detail: { id: nodeId, source: that.query }}));
 			});
 		}	
 	});

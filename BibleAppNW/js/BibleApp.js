@@ -4,7 +4,8 @@
 */
 "use strict"
 
-var EVENT = { TOC2PASSAGE: 'toc2passage', CON2PASSAGE: 'con2passage' };
+var BIBLE = { TOC: 'bible-toc', LOOK: 'bible-look', SEARCH: 'bible-search', BACK: 'bible-back', FORWARD: 'bible-forward', 
+		LAST: 'bible-last' };
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
@@ -31,20 +32,20 @@ AppViewController.prototype.begin = function() {
 		//that.tableContentsView.showTocBookList();
 		that.searchView.showSearch("risen");
 	});
-	this.bodyNode = document.getElementById('appTop');
-	this.bodyNode.addEventListener(EVENT.TOC2PASSAGE, toc2PassageHandler);
-	this.bodyNode.addEventListener(EVENT.CON2PASSAGE, con2PassageHandler);
+//	this.bodyNode = document.getElementById('appTop');
+//	this.bodyNode.addEventListener(EVENT.TOC2PASSAGE, toc2PassageHandler);
+//	this.bodyNode.addEventListener(EVENT.CON2PASSAGE, con2PassageHandler);
 
-	function toc2PassageHandler(event) {
-		var detail = event.detail;
-		console.log(JSON.stringify(detail));
-		that.codexView.showPassage(detail.id);	
-	}
-	function con2PassageHandler(event) {
-		var detail = event.detail;
-		console.log(JSON.stringify(detail));
-		that.codexView.showPassage(detail.id);
-	}
+//	function toc2PassageHandler(event) {
+//		var detail = event.detail;
+//		console.log(JSON.stringify(detail));
+//		that.codexView.showPassage(detail.id);	
+//	}
+//	function con2PassageHandler(event) {
+//		var detail = event.detail;
+//		console.log(JSON.stringify(detail));
+//		that.codexView.showPassage(detail.id);
+//	}
 };
 /**
 * This class presents the table of contents, and responds to user actions.
@@ -139,7 +140,7 @@ TableContentsView.prototype.removeAllChapters = function() {
 };
 TableContentsView.prototype.openChapter = function(nodeId) {
 	console.log('open chapter', nodeId);
-	this.bodyNode.dispatchEvent(new CustomEvent(EVENT.TOC2PASSAGE, { detail: { id: nodeId }}));
+	this.bodyNode.dispatchEvent(new CustomEvent(BIBLE.TOC, { detail: { id: nodeId }}));
 };
 
 
@@ -150,7 +151,18 @@ TableContentsView.prototype.openChapter = function(nodeId) {
 
 function CodexView(bibleCache) {
 	this.bibleCache = bibleCache;
+	var that = this;
 	this.bodyNode = document.getElementById('appTop');
+	this.bodyNode.addEventListener(BIBLE.TOC, function(event) {
+		var detail = event.detail;
+		console.log(JSON.stringify(detail));
+		that.showPassage(detail.id);	
+	});
+	this.bodyNode.addEventListener(BIBLE.SEARCH, function(event) {
+		var detail = event.detail;
+		console.log(JSON.stringify(detail));
+		that.showPassage(detail.id);
+	});
 	Object.freeze(this);
 };
 CodexView.prototype.showPassage = function(nodeId) {
@@ -217,6 +229,7 @@ function SearchView(toc, concordance, bibleCache) {
 	this.toc = toc;
 	this.concordance = concordance;
 	this.bibleCache = bibleCache;
+	this.query = '';
 	this.words = [];
 	this.bookList = [];
 	this.viewRoot = document.createDocumentFragment();
@@ -224,7 +237,7 @@ function SearchView(toc, concordance, bibleCache) {
 	Object.seal(this);
 };
 SearchView.prototype.showSearch = function(query) {
-
+	this.query = query;
 	this.words = query.split(' ');
 	var refList = this.concordance.search(query);
 	this.bookList = this.refListsByBook(refList);
@@ -288,11 +301,10 @@ SearchView.prototype.appendReference = function(reference) {
 			verseNode.addEventListener('click', function() {
 				var nodeId = this.id.substr(3);
 				console.log('open chapter', nodeId);
-				that.bodyNode.dispatchEvent(new CustomEvent(EVENT.CON2PASSAGE, { detail: { id: nodeId }}));
+				that.bodyNode.dispatchEvent(new CustomEvent(BIBLE.SEARCH, { detail: { id: nodeId, source: that.query }}));
 			});
 		}	
 	});
-
 
 	function styleSearchWords(verseText) {
 		for (var i=0; i<that.words.length; i++) {

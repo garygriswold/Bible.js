@@ -2,7 +2,6 @@
 cat ../Library/gui/AppViewController.js > js/BibleApp.js
 cat ../Library/gui/TableContentsView.js >> js/BibleApp.js
 cat ../Library/gui/CodexView.js >> js/BibleApp.js
-cat ../Library/gui/SearchViewBuilder.js >> js/BibleApp.js
 cat ../Library/gui/SearchView.js >> js/BibleApp.js
 
 cat ../Library/model/meta/BibleCache.js >> js/BibleApp.js

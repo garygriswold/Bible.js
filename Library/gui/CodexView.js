@@ -5,7 +5,18 @@
 
 function CodexView(bibleCache) {
 	this.bibleCache = bibleCache;
+	var that = this;
 	this.bodyNode = document.getElementById('appTop');
+	this.bodyNode.addEventListener(BIBLE.TOC, function(event) {
+		var detail = event.detail;
+		console.log(JSON.stringify(detail));
+		that.showPassage(detail.id);	
+	});
+	this.bodyNode.addEventListener(BIBLE.SEARCH, function(event) {
+		var detail = event.detail;
+		console.log(JSON.stringify(detail));
+		that.showPassage(detail.id);
+	});
 	Object.freeze(this);
 };
 CodexView.prototype.showPassage = function(nodeId) {
