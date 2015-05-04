@@ -38,6 +38,8 @@ cat ../Library/model/usx/Note.js >> js/BibleApp.js
 cat ../Library/model/usx/Char.js >> js/BibleApp.js
 cat ../Library/model/usx/Text.js >> js/BibleApp.js
 
+cat ../Library/util/Performance.js >> js/BibleApp.js
+
 #cat ../Library/manufacture/HTMLBuilder.js >> js/BibleApp.js
 
 npm start
