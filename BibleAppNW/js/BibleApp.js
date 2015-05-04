@@ -585,12 +585,13 @@ TOC.prototype.toJSON = function() {
 
 function TOCBook(code) {
 	this.code = code;
-	this.encoding = '';
 	this.heading = '';
 	this.title = '';
 	this.name = '';
 	this.abbrev = '';
 	this.lastChapter = 0;
+	this.priorBook = null;
+	this.nextBook = null;
 	Object.seal(this);
 };/**
 * This class holds an index of styles of the entire Bible, or whatever part of the Bible was loaded into it.
@@ -1344,7 +1345,14 @@ TOCBuilder.prototype.readBook = function(usxRoot) {
 TOCBuilder.prototype.readRecursively = function(node) {
 	switch(node.tagName) {
 		case 'book':
+			var priorBook = null;
+			//var priorBook = (this.tocBook) ? this.tocBook.code : null;
+			if (this.tocBook) {
+				this.tocBook.nextBook = node.code;
+				priorBook = this.tocBook.code;
+			}
 			this.tocBook = new TOCBook(node.code);
+			this.tocBook.priorBook = priorBook;
 			this.toc.addBook(this.tocBook);
 			break;
 		case 'chapter':
@@ -1352,9 +1360,6 @@ TOCBuilder.prototype.readRecursively = function(node) {
 			break;
 		case 'para':
 			switch(node.style) {
-				case 'ide':
-					this.tocBook.encoding = node.children[0].text;
-					break;
 				case 'h':
 					this.tocBook.heading = node.children[0].text;
 					break;

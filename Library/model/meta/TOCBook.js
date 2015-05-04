@@ -5,11 +5,12 @@
 
 function TOCBook(code) {
 	this.code = code;
-	this.encoding = '';
 	this.heading = '';
 	this.title = '';
 	this.name = '';
 	this.abbrev = '';
 	this.lastChapter = 0;
+	this.priorBook = null;
+	this.nextBook = null;
 	Object.seal(this);
 };

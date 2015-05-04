@@ -16,7 +16,13 @@ TOCBuilder.prototype.readBook = function(usxRoot) {
 TOCBuilder.prototype.readRecursively = function(node) {
 	switch(node.tagName) {
 		case 'book':
+			var priorBook = null;
+			if (this.tocBook) {
+				this.tocBook.nextBook = node.code;
+				priorBook = this.tocBook.code;
+			}
 			this.tocBook = new TOCBook(node.code);
+			this.tocBook.priorBook = priorBook;
 			this.toc.addBook(this.tocBook);
 			break;
 		case 'chapter':
@@ -24,9 +30,6 @@ TOCBuilder.prototype.readRecursively = function(node) {
 			break;
 		case 'para':
 			switch(node.style) {
-				case 'ide':
-					this.tocBook.encoding = node.children[0].text;
-					break;
 				case 'h':
 					this.tocBook.heading = node.children[0].text;
 					break;
