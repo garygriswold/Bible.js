@@ -1,5 +1,11 @@
 /**
 * This class loads the each of the assets that is specified in the types file.
+*
+* On May 3, 2015 some performance checks were done
+* 1) Toc Read 10.52ms  85.8KB heap increase
+* 2) Toc Loaded 1.22ms  322KB heap increase
+* 3) Concordance Read 20.99ms  7.695MB heap increase
+* 4) Concordance Loaded 96.49ms  27.971MB heap increase
 */
 "use strict";
 

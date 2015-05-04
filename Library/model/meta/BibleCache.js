@@ -3,6 +3,11 @@
 * and it also handles all requests from concordance search requests to display individual verses.
 * It will deliver the content from cache if it is present.  Or, it will find the content in persistent storage if it is
 * not present in cache.  All content retrieved from persistent storage is added to the cache.
+*
+* On May 3, 2015 some performance checks were done.  The time measurements where from a sample of 4, the memory from a sample of 1.
+* 1) Read Chapter 11.2ms, 49K heap increase
+* 2) Parse USX 6.0ms, 306K heap increase
+* 3) Generate Dom 2.16ms, 85K heap increase
 */
 "use strict";
 

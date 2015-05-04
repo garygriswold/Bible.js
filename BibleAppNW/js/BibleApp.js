@@ -32,20 +32,6 @@ AppViewController.prototype.begin = function() {
 		//that.tableContentsView.showTocBookList();
 		that.searchView.showSearch("risen");
 	});
-//	this.bodyNode = document.getElementById('appTop');
-//	this.bodyNode.addEventListener(EVENT.TOC2PASSAGE, toc2PassageHandler);
-//	this.bodyNode.addEventListener(EVENT.CON2PASSAGE, con2PassageHandler);
-
-//	function toc2PassageHandler(event) {
-//		var detail = event.detail;
-//		console.log(JSON.stringify(detail));
-//		that.codexView.showPassage(detail.id);	
-//	}
-//	function con2PassageHandler(event) {
-//		var detail = event.detail;
-//		console.log(JSON.stringify(detail));
-//		that.codexView.showPassage(detail.id);
-//	}
 };
 /**
 * This class presents the table of contents, and responds to user actions.
@@ -357,6 +343,11 @@ SearchView.prototype.attachSearchView = function() {
 * and it also handles all requests from concordance search requests to display individual verses.
 * It will deliver the content from cache if it is present.  Or, it will find the content in persistent storage if it is
 * not present in cache.  All content retrieved from persistent storage is added to the cache.
+*
+* On May 3, 2015 some performance checks were done.  The time measurements where from a sample of 4, the memory from a sample of 1.
+* 1) Read Chapter 11.2ms, 49K heap increase
+* 2) Parse USX 6.0ms, 306K heap increase
+* 3) Generate Dom 2.16ms, 85K heap increase
 */
 "use strict";
 
@@ -1493,6 +1484,7 @@ function AssetLoader(types) {
 	this.toc = new TOC();
 	this.concordance = new Concordance();
 	this.styleIndex = new StyleIndex();
+	this.timer = new Performance('loader');
 };
 AssetLoader.prototype.load = function(callback) {
 	var that = this;
@@ -1505,28 +1497,34 @@ AssetLoader.prototype.load = function(callback) {
 	function readTextFile(filename) {
 		if (filename) {
 			var fullPath = that.types.getPath(filename);
+			that.timer.duration('start read file');
 			reader.readTextFile(fullPath, function(data) {
 				if (data.errno) {
 					console.log('read concordance.json failure ' + JSON.stringify(data));
 				} else {
+					that.timer.duration('read file complete');
 					switch(filename) {
 						case 'chapterMetaData.json':
 							result.chapterFiles = true;
+							that.timer.duration('chapter files');
 							break;
 						case 'toc.json':
 							result.tableContents = true;
 							var bookList = JSON.parse(data);
 							that.toc.fill(bookList);
+							that.timer.duration('toc loaded');
 							break;
 						case 'concordance.json':
 							result.concordance = true;
 							var wordList = JSON.parse(data);
 							that.concordance.fill(wordList);
+							that.timer.duration('concordance loaded');
 							break;
 						case 'styleIndex.json':
 							result.styleIndex = true;
 							var styleList = JSON.parse(data);
 							that.styleIndex.fill(styleList);
+							that.timer.duration('style index loaded');
 							break;
 						default:
 							throw new Error('File ' + filename + ' is not known in AssetLoader.load.');
@@ -2037,4 +2035,26 @@ Text.prototype.toHTML = function() {
 };
 Text.prototype.buildHTML = function(result) {
 	result.push(this.text);
+};
+/**
+* This simple class is used to measure performance of the App.
+* It is not part of the production system, but is used during development
+* to instrument the code.
+*/
+"use strict";
+
+function Performance(message) {
+	this.startTime = performance.now();
+	var memory = process.memoryUsage();
+	this.heapUsed = memory.heapUsed;
+	console.log(message, 'heapUsed:', this.heapUsed, 'heapTotal:', memory.heapTotal);
+};
+Performance.prototype.duration = function(message) {
+	var now = performance.now();
+	var duration = now - this.startTime;
+	var heap = process.memoryUsage().heapUsed;
+	var memChanged = heap - this.heapUsed;
+	console.log(message, duration + 'ms', memChanged/1024 + 'KB');
+	this.startTime = now;
+	this.heapUsed = heap;
 };
