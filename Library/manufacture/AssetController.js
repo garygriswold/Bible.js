@@ -16,6 +16,9 @@ AssetController.prototype.tableContents = function() {
 AssetController.prototype.concordance = function() {
 	return(this.loader.concordance);
 }
+AssetController.prototype.history = function() {
+	return(this.loader.history);
+};
 AssetController.prototype.styleIndex = function() {
 	return(this.loader.styleIndex);
 }

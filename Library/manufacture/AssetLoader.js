@@ -1,5 +1,5 @@
 /**
-* This class loads the each of the assets that is specified in the types file.
+* This class loads each of the assets that is specified in the types file.
 *
 * On May 3, 2015 some performance checks were done
 * 1) Toc Read 10.52ms  85.8KB heap increase
@@ -13,6 +13,7 @@ function AssetLoader(types) {
 	this.types = types;
 	this.toc = new TOC();
 	this.concordance = new Concordance();
+	this.history = new History();
 	this.styleIndex = new StyleIndex();
 };
 AssetLoader.prototype.load = function(callback) {
@@ -43,6 +44,11 @@ AssetLoader.prototype.load = function(callback) {
 							result.concordance = true;
 							var wordList = JSON.parse(data);
 							that.concordance.fill(wordList);
+							break;
+						case 'history.json':
+							result.history = true;
+							var historyList = JSON.parse(data);
+							that.history.fill(historyList);
 							break;
 						case 'styleIndex.json':
 							result.styleIndex = true;

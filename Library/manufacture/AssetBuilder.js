@@ -17,6 +17,9 @@ function AssetBuilder(types) {
 	if (types.concordance) {
 		this.builders.push(new ConcordanceBuilder());
 	}
+	if (types.history) { 
+		// do nothing 
+	}
 	if (types.styleIndex) {
 		this.builders.push(new StyleIndexBuilder());
 	}

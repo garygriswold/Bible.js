@@ -16,12 +16,15 @@ AppViewController.prototype.begin = function() {
 	var types = new AssetType('application', this.versionCode);
 	types.tableContents = true;
 	types.chapterFiles = true;
+	types.history = true;
 	types.concordance = true;
 	var that = this;
 	var assets = new AssetController(types);
 	assets.checkBuildLoad(function(typesLoaded) {
 		that.tableContents = assets.tableContents();
 		console.log('loaded toc', that.tableContents.size());
+		that.history = assets.history();
+		console.log('loaded history', that.history.size());
 		that.concordance = assets.concordance();
 		console.log('loaded concordance', that.concordance.size());
 
@@ -642,6 +645,89 @@ StyleIndex.prototype.dump = function(words) {
 StyleIndex.prototype.toJSON = function() {
 	return(JSON.stringify(this.index, null, ' '));
 };/**
+* This class manages a queue of history items up to some maximum number of items.
+* It adds items when there is an event, such as a toc click, a search lookup,
+* or a concordance search.  It also responds to function requests to go back 
+* in history, forward in history, or return to the last event.
+*/
+"use strict";
+
+function History() {
+	this.items = [];
+	this.currentItem = null;
+	this.writer = new NodeFileWriter('application');
+	this.isFilled = false;
+	var that = this;
+	this.bodyNode = document.getElementById('appTop');
+	this.bodyNode.addEventListener(BIBLE.TOC, function(event) {
+		that.addEvent(event);	
+	});
+	this.bodyNode.addEventListener(BIBLE.SEARCH, function(event) {
+		that.addEvent(event);
+	});
+	Object.seal(this);
+};
+History.prototype.fill = function(itemList) {
+	this.items = itemList;
+	this.isFilled = true;
+};
+History.prototype.addEvent = function(event) {
+	var item = new HistoryItem(event.detail.id, event.type, event.detail.source);
+	this.items.push(item);
+	this.currentItem = this.items.length -1;
+	if (this.items.length > 1000) {
+		var discard = this.items.shift();
+		this.currentItem--;
+	}
+	setTimeout(this.persist(), 3000);
+};
+History.prototype.size = function() {
+	return(this.items.length);
+};
+History.prototype.back = function() {
+	return(this.item(--this.currentItem));
+};
+History.prototype.forward = function() {
+	return(this.item(++this.currentItem));
+};
+History.prototype.last = function() {
+	this.currentItem = this.items.length -1;
+	return(this.item(this.currentItem));
+};
+History.prototype.current = function() {
+	return(this.item(this.currentItem));
+};
+History.prototype.item = function(index) {
+	return((index > -1 && index < this.items.length) ? this.items[index] : 'JHN:1');
+};
+History.prototype.persist = function() {
+	var filepath = 'usx/WEB/history.json'; // Temporary path, it must be stored in data directory
+	this.writer.writeTextFile(filepath, this.toJSON(), function(filename) {
+		if (filename.errno) {
+			console.log('error writing history.json', filename);
+		} else {
+			console.log('History saved', filename);
+		}
+	});
+};
+History.prototype.toJSON = function() {
+	return(JSON.stringify(this.items, null, ' '));
+};
+
+/**
+* This class contains the details of a single history event, such as
+* clicking on the toc to get a chapter, doing a lookup of a specific passage
+* or clicking on a verse during a concordance search.
+*/
+"use strict";
+
+function HistoryItem(key, source, search) {
+	this.key = key;
+	this.source = source;
+	this.search = search;
+	this.timestamp = new Date();
+	Object.freeze(this);
+};/**
 * This file contains IO constants and functions which are common to all file methods, which might include node.js, cordova, javascript, etc.
 */
 var FILE_ROOTS = { 'application': '', 'document': '?', 'temporary': '?', 'test2application': '../../BibleAppNW/' };
@@ -1007,6 +1093,7 @@ function AssetType(location, versionCode) {
 	this.chapterFiles = false;
 	this.tableContents = false;
 	this.concordance = false;
+	this.history = false;
 	this.styleIndex = false;
 	this.html = false;// this one is not ready
 	Object.seal(this);
@@ -1021,6 +1108,9 @@ AssetType.prototype.mustDoQueue = function(filename) {
 			break;
 		case 'concordance.json':
 			this.concordance = true;
+			break;
+		case 'history.json':
+			this.history = true;
 			break;
 		case 'styleIndex.json':
 			this.styleIndex = true;
@@ -1039,6 +1129,9 @@ AssetType.prototype.toBeDoneQueue = function() {
 	}
 	if (this.concordance) {
 		toDo.push('concordance.json');
+	}
+	if (this.history) {
+		toDo.push('history.json');
 	}
 	if (this.styleIndex) {
 		toDo.push('styleIndex.json');
@@ -1066,6 +1159,9 @@ AssetController.prototype.tableContents = function() {
 AssetController.prototype.concordance = function() {
 	return(this.loader.concordance);
 }
+AssetController.prototype.history = function() {
+	return(this.loader.history);
+};
 AssetController.prototype.styleIndex = function() {
 	return(this.loader.styleIndex);
 }
@@ -1157,6 +1253,9 @@ function AssetBuilder(types) {
 	}
 	if (types.concordance) {
 		this.builders.push(new ConcordanceBuilder());
+	}
+	if (types.history) { 
+		// do nothing 
 	}
 	if (types.styleIndex) {
 		this.builders.push(new StyleIndexBuilder());
@@ -1475,7 +1574,13 @@ ChapterBuilder.prototype.toJSON = function() {
 };
 
 /**
-* This class loads the each of the assets that is specified in the types file.
+* This class loads each of the assets that is specified in the types file.
+*
+* On May 3, 2015 some performance checks were done
+* 1) Toc Read 10.52ms  85.8KB heap increase
+* 2) Toc Loaded 1.22ms  322KB heap increase
+* 3) Concordance Read 20.99ms  7.695MB heap increase
+* 4) Concordance Loaded 96.49ms  27.971MB heap increase
 */
 "use strict";
 
@@ -1483,8 +1588,8 @@ function AssetLoader(types) {
 	this.types = types;
 	this.toc = new TOC();
 	this.concordance = new Concordance();
+	this.history = new History();
 	this.styleIndex = new StyleIndex();
-	this.timer = new Performance('loader');
 };
 AssetLoader.prototype.load = function(callback) {
 	var that = this;
@@ -1497,34 +1602,33 @@ AssetLoader.prototype.load = function(callback) {
 	function readTextFile(filename) {
 		if (filename) {
 			var fullPath = that.types.getPath(filename);
-			that.timer.duration('start read file');
 			reader.readTextFile(fullPath, function(data) {
 				if (data.errno) {
 					console.log('read concordance.json failure ' + JSON.stringify(data));
 				} else {
-					that.timer.duration('read file complete');
 					switch(filename) {
 						case 'chapterMetaData.json':
 							result.chapterFiles = true;
-							that.timer.duration('chapter files');
 							break;
 						case 'toc.json':
 							result.tableContents = true;
 							var bookList = JSON.parse(data);
 							that.toc.fill(bookList);
-							that.timer.duration('toc loaded');
 							break;
 						case 'concordance.json':
 							result.concordance = true;
 							var wordList = JSON.parse(data);
 							that.concordance.fill(wordList);
-							that.timer.duration('concordance loaded');
+							break;
+						case 'history.json':
+							result.history = true;
+							var historyList = JSON.parse(data);
+							that.history.fill(historyList);
 							break;
 						case 'styleIndex.json':
 							result.styleIndex = true;
 							var styleList = JSON.parse(data);
 							that.styleIndex.fill(styleList);
-							that.timer.duration('style index loaded');
 							break;
 						default:
 							throw new Error('File ' + filename + ' is not known in AssetLoader.load.');

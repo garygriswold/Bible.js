@@ -16,12 +16,15 @@ AppViewController.prototype.begin = function() {
 	var types = new AssetType('application', this.versionCode);
 	types.tableContents = true;
 	types.chapterFiles = true;
+	types.history = true;
 	types.concordance = true;
 	var that = this;
 	var assets = new AssetController(types);
 	assets.checkBuildLoad(function(typesLoaded) {
 		that.tableContents = assets.tableContents();
 		console.log('loaded toc', that.tableContents.size());
+		that.history = assets.history();
+		console.log('loaded history', that.history.size());
 		that.concordance = assets.concordance();
 		console.log('loaded concordance', that.concordance.size());
 

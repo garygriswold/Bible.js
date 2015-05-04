@@ -9,6 +9,8 @@ cat ../Library/model/meta/Concordance.js >> js/BibleApp.js
 cat ../Library/model/meta/TOC.js >> js/BibleApp.js
 cat ../Library/model/meta/TOCBook.js >> js/BibleApp.js
 cat ../Library/model/meta/StyleIndex.js >> js/BibleApp.js
+cat ../Library/model/meta/History.js >> js/BibleApp.js
+cat ../Library/model/meta/HistoryItem.js >> js/BibleApp.js
 
 cat ../Library/io/CommonIO.js >> js/BibleApp.js
 cat ../Library/io/NodeFileReader.js >> js/BibleApp.js

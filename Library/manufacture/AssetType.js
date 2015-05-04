@@ -10,6 +10,7 @@ function AssetType(location, versionCode) {
 	this.chapterFiles = false;
 	this.tableContents = false;
 	this.concordance = false;
+	this.history = false;
 	this.styleIndex = false;
 	this.html = false;// this one is not ready
 	Object.seal(this);
@@ -24,6 +25,9 @@ AssetType.prototype.mustDoQueue = function(filename) {
 			break;
 		case 'concordance.json':
 			this.concordance = true;
+			break;
+		case 'history.json':
+			this.history = true;
 			break;
 		case 'styleIndex.json':
 			this.styleIndex = true;
@@ -42,6 +46,9 @@ AssetType.prototype.toBeDoneQueue = function() {
 	}
 	if (this.concordance) {
 		toDo.push('concordance.json');
+	}
+	if (this.history) {
+		toDo.push('history.json');
 	}
 	if (this.styleIndex) {
 		toDo.push('styleIndex.json');
