@@ -10,7 +10,6 @@ var BIBLE = { TOC: 'bible-toc', LOOK: 'bible-look', SEARCH: 'bible-search', BACK
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
 	this.bibleCache = new BibleCache(this.versionCode);
-	this.codexView = new CodexView(this.bibleCache);
 };
 AppViewController.prototype.begin = function() {
 	var types = new AssetType('application', this.versionCode);
@@ -30,6 +29,7 @@ AppViewController.prototype.begin = function() {
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache);
+		that.codexView = new CodexView(that.tableContents, that.bibleCache);
 		Object.freeze(that);
 
 		//that.tableContentsView.showTocBookList();
@@ -138,7 +138,8 @@ TableContentsView.prototype.openChapter = function(nodeId) {
 */
 "use strict";
 
-function CodexView(bibleCache) {
+function CodexView(tableContents, bibleCache) {
+	this.tableContents = tableContents;
 	this.bibleCache = bibleCache;
 	var that = this;
 	this.bodyNode = document.getElementById('appTop');
@@ -152,24 +153,48 @@ function CodexView(bibleCache) {
 		console.log(JSON.stringify(detail));
 		that.showPassage(detail.id);
 	});
+	document.addEventListener('scroll', function(event) {
+		//console.log('new scroll');
+		//for (var e in this) {
+		//	console.log(e, this[e]);
+		//}
+		//for (var e in event) {
+		//	console.log(e, event[e]);
+		//}
+	});
 	Object.freeze(this);
 };
 CodexView.prototype.showPassage = function(nodeId) {
+	var chapter = new Reference(nodeId);
+	this.removeBody();
+	this.showChapter(chapter);
+	//var verse = fragment.children[0];
+	var verse = this.bodyNode.children[0];
+	for (var i=0; i<3; i++) {
+		chapter = this.tableContents.nextChapter(chapter);
+		this.showChapter(chapter);
+	}
+	chapter = new Reference(nodeId);
+	for (var i=0; i<3; i++) {
+		chapter = this.tableContents.priorChapter(chapter);
+		this.showChapter(chapter);
+	}
+	this.scrollToNode(verse);//  TEMP REMOVE
+};
+CodexView.prototype.showChapter = function(chapter) {
 	var that = this;
-	var parts = nodeId.split(':');
-	var chapter = parts[0] + ':' + parts[1];
 	this.bibleCache.getChapter(chapter, function(usxNode) {
 		if (usxNode.errno) {
 			// what to do here?
 			console.log((JSON.stringify(usxNode)));
 		} else {
 			var dom = new DOMBuilder();
-			dom.bookCode = parts[0];
+			dom.bookCode = chapter.book;
 			var fragment = dom.toDOM(usxNode);
-			var verse = fragment.children[0];
-			that.removeBody();
+
+			//var verse = fragment.children[0];
 			that.bodyNode.appendChild(fragment);
-			that.scrollToNode(verse);
+			//that.scrollToNode(verse);  TEMP REMOVE
 		}
 	});
 };
@@ -234,7 +259,8 @@ SearchView.prototype.showSearch = function(query) {
 		var bookRef = this.bookList[i];
 		this.appendBook(bookRef.bookCode);
 		for (var j=0; j<bookRef.refList.length && j < 3; j++) {
-			this.appendReference(bookRef.refList[j]);
+			var ref = new Reference(bookRef.refList[j]);
+			this.appendReference(ref);
 		}
 		if (bookRef.refList.length > 2) {
 			this.appendSeeMore(bookRef);
@@ -275,7 +301,8 @@ SearchView.prototype.appendReference = function(reference) {
 	this.viewRoot.appendChild(entryNode);
 	var refNode = document.createElement('span');
 	refNode.setAttribute('class', 'conRef');
-	refNode.textContent = reference.substr(4);
+	//refNode.textContent = reference.substr(4);
+	refNode.textContent = reference.chapterVerse();
 	entryNode.appendChild(refNode);
 	entryNode.appendChild(document.createElement('br'));
 	this.bibleCache.getVerse(reference, function(verseText) {
@@ -283,7 +310,7 @@ SearchView.prototype.appendReference = function(reference) {
 			console.log('Error in get verse', JSON.stringify(verseText));
 		} else {
 			var verseNode = document.createElement('span');
-			verseNode.setAttribute('id', 'con' + reference);
+			verseNode.setAttribute('id', 'con' + reference.nodeId);
 			verseNode.setAttribute('class', 'conVerse');
 			verseNode.innerHTML = styleSearchWords(verseText);
 			entryNode.appendChild(verseNode);
@@ -342,6 +369,39 @@ SearchView.prototype.attachSearchView = function() {
 };
 
 /**
+* This class contains a reference to a chapter or verse.  It is used to
+* simplify the transition from the "GEN:1:1" format to the format
+* of distinct parts { book: GEN, chapter: 1, verse: 1 }
+* This class leaves unset members as undefined.
+*/
+"use strict";
+
+function Reference(book, chapter, verse) {
+	if (arguments.length > 1) {
+		this.book = book;
+		this.chapter = +chapter;
+		this.verse = +verse;
+		if (verse) {
+			this.nodeId = book + ':' + chapter + ':' + verse;
+		} else {
+			this.nodeId = book + ':' + chapter;
+		}
+	} else {
+		var parts = book.split(':');
+		this.book = parts[0];
+		this.chapter = (parts.length > 0) ? +parts[1] : NaN;
+		this.verse = (parts.length > 1) ? +parts[2] : NaN;
+		this.nodeId = book;
+	}
+	Object.freeze(this);
+};
+Reference.prototype.path = function() {
+	return(this.book + '/' + this.chapter + '.usx');
+};
+Reference.prototype.chapterVerse = function() {
+	return((this.verse) ? this.chapter + ':' + this.verse : this.chapter);
+};
+/**
 * This class handles all request to deliver scripture.  It handles all passage display requests to display passages of text,
 * and it also handles all requests from concordance search requests to display individual verses.
 * It will deliver the content from cache if it is present.  Or, it will find the content in persistent storage if it is
@@ -361,33 +421,32 @@ function BibleCache(versionCode) {
 	this.parser = new USXParser();
 	Object.freeze(this);
 };
-BibleCache.prototype.getChapter = function(nodeId, callback) {
+BibleCache.prototype.getChapter = function(reference, callback) {
 	var that = this;
-	var chapter = this.chapterMap[nodeId];
+	var chapter = this.chapterMap[reference.nodeId];
 	
 	if (chapter !== undefined) {
 		callback(chapter);
 	} else {
-		var filepath = 'usx/' + this.versionCode + '/' + nodeId.replace(':', '/') + '.usx';
+		var filepath = 'usx/' + this.versionCode + '/' + reference.path();
 		this.reader.readTextFile(filepath, function(data) {
 			if (data.errno) {
 				console.log('BibleCache.getChapter ', JSON.stringify(data));
 				callback(data);
 			} else {
 				chapter = that.parser.readBook(data);
-				that.chapterMap[nodeId] = chapter;
+				that.chapterMap[reference.nodeId] = chapter;
 				callback(chapter);				
 			}
 		});
 	}
 };
-BibleCache.prototype.getVerse = function(nodeId, callback) {
-	var parts = nodeId.split(':');
-	this.getChapter(parts[0] + ':' + parts[1], function(chapter) {
+BibleCache.prototype.getVerse = function(reference, callback) {
+	this.getChapter(reference, function(chapter) {
 		if (chapter.errno) {
 			callback(chapter);
 		} else {
-			var versePosition = findVerse(parts[2], chapter);
+			var versePosition = findVerse(reference.verse, chapter);
 			var verseContent = findVerseContent(versePosition);
 			callback(verseContent);
 		}
@@ -395,13 +454,13 @@ BibleCache.prototype.getVerse = function(nodeId, callback) {
 	function findVerse(verseNum, chapter) {
 		for (var i=0; i<chapter.children.length; i++) {
 			var child = chapter.children[i];
-			if (child.tagName === 'verse' && child.number === verseNum) {
+			if (child.tagName === 'verse' && child.number == verseNum) {
 				return({parent: chapter, childIndex: i+1});
 			}
 			else if (child.tagName === 'para') {
 				for (var j=0; j<child.children.length; j++) {
 					var grandChild = child.children[j];
-					if (grandChild.tagName === 'verse' && grandChild.number === verseNum) {
+					if (grandChild.tagName === 'verse' && grandChild.number == verseNum) {
 						return({parent: child, childIndex: j+1});
 					}
 				}
@@ -572,6 +631,22 @@ TOC.prototype.addBook = function(book) {
 };
 TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
+};
+TOC.prototype.nextChapter = function(reference) {
+	var current = this.bookMap[reference.book];
+	if (reference.chapter < current.lastChapter) {
+		return(new Reference(reference.book, reference.chapter + 1));
+	} else {
+		return(new Reference(current.nextBook, 1));
+	}
+};
+TOC.prototype.priorChapter = function(reference) {
+	var current = this.bookMap[reference.book];
+	if (reference.chapter > 1) {
+		return(new Reference(reference.book, reference.chapter -1));
+	} else {
+		return(new Reference(current.priorBook, current.lastChapter));
+	}
 };
 TOC.prototype.size = function() {
 	return(this.bookList.length);
@@ -1346,7 +1421,6 @@ TOCBuilder.prototype.readRecursively = function(node) {
 	switch(node.tagName) {
 		case 'book':
 			var priorBook = null;
-			//var priorBook = (this.tocBook) ? this.tocBook.code : null;
 			if (this.tocBook) {
 				this.tocBook.nextBook = node.code;
 				priorBook = this.tocBook.code;

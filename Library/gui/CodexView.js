@@ -3,7 +3,8 @@
 */
 "use strict";
 
-function CodexView(bibleCache) {
+function CodexView(tableContents, bibleCache) {
+	this.tableContents = tableContents;
 	this.bibleCache = bibleCache;
 	var that = this;
 	this.bodyNode = document.getElementById('appTop');
@@ -17,24 +18,48 @@ function CodexView(bibleCache) {
 		console.log(JSON.stringify(detail));
 		that.showPassage(detail.id);
 	});
+	document.addEventListener('scroll', function(event) {
+		//console.log('new scroll');
+		//for (var e in this) {
+		//	console.log(e, this[e]);
+		//}
+		//for (var e in event) {
+		//	console.log(e, event[e]);
+		//}
+	});
 	Object.freeze(this);
 };
 CodexView.prototype.showPassage = function(nodeId) {
+	var chapter = new Reference(nodeId);
+	this.removeBody();
+	this.showChapter(chapter);
+	//var verse = fragment.children[0];
+	var verse = this.bodyNode.children[0];
+	for (var i=0; i<3; i++) {
+		chapter = this.tableContents.nextChapter(chapter);
+		this.showChapter(chapter);
+	}
+	chapter = new Reference(nodeId);
+	for (var i=0; i<3; i++) {
+		chapter = this.tableContents.priorChapter(chapter);
+		this.showChapter(chapter);
+	}
+	this.scrollToNode(verse);//  TEMP REMOVE
+};
+CodexView.prototype.showChapter = function(chapter) {
 	var that = this;
-	var parts = nodeId.split(':');
-	var chapter = parts[0] + ':' + parts[1];
 	this.bibleCache.getChapter(chapter, function(usxNode) {
 		if (usxNode.errno) {
 			// what to do here?
 			console.log((JSON.stringify(usxNode)));
 		} else {
 			var dom = new DOMBuilder();
-			dom.bookCode = parts[0];
+			dom.bookCode = chapter.book;
 			var fragment = dom.toDOM(usxNode);
-			var verse = fragment.children[0];
-			that.removeBody();
+
+			//var verse = fragment.children[0];
 			that.bodyNode.appendChild(fragment);
-			that.scrollToNode(verse);
+			//that.scrollToNode(verse);  TEMP REMOVE
 		}
 	});
 };

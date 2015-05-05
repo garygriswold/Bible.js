@@ -18,33 +18,32 @@ function BibleCache(versionCode) {
 	this.parser = new USXParser();
 	Object.freeze(this);
 };
-BibleCache.prototype.getChapter = function(nodeId, callback) {
+BibleCache.prototype.getChapter = function(reference, callback) {
 	var that = this;
-	var chapter = this.chapterMap[nodeId];
+	var chapter = this.chapterMap[reference.nodeId];
 	
 	if (chapter !== undefined) {
 		callback(chapter);
 	} else {
-		var filepath = 'usx/' + this.versionCode + '/' + nodeId.replace(':', '/') + '.usx';
+		var filepath = 'usx/' + this.versionCode + '/' + reference.path();
 		this.reader.readTextFile(filepath, function(data) {
 			if (data.errno) {
 				console.log('BibleCache.getChapter ', JSON.stringify(data));
 				callback(data);
 			} else {
 				chapter = that.parser.readBook(data);
-				that.chapterMap[nodeId] = chapter;
+				that.chapterMap[reference.nodeId] = chapter;
 				callback(chapter);				
 			}
 		});
 	}
 };
-BibleCache.prototype.getVerse = function(nodeId, callback) {
-	var parts = nodeId.split(':');
-	this.getChapter(parts[0] + ':' + parts[1], function(chapter) {
+BibleCache.prototype.getVerse = function(reference, callback) {
+	this.getChapter(reference, function(chapter) {
 		if (chapter.errno) {
 			callback(chapter);
 		} else {
-			var versePosition = findVerse(parts[2], chapter);
+			var versePosition = findVerse(reference.verse, chapter);
 			var verseContent = findVerseContent(versePosition);
 			callback(verseContent);
 		}
@@ -52,13 +51,13 @@ BibleCache.prototype.getVerse = function(nodeId, callback) {
 	function findVerse(verseNum, chapter) {
 		for (var i=0; i<chapter.children.length; i++) {
 			var child = chapter.children[i];
-			if (child.tagName === 'verse' && child.number === verseNum) {
+			if (child.tagName === 'verse' && child.number == verseNum) {
 				return({parent: chapter, childIndex: i+1});
 			}
 			else if (child.tagName === 'para') {
 				for (var j=0; j<child.children.length; j++) {
 					var grandChild = child.children[j];
-					if (grandChild.tagName === 'verse' && grandChild.number === verseNum) {
+					if (grandChild.tagName === 'verse' && grandChild.number == verseNum) {
 						return({parent: child, childIndex: j+1});
 					}
 				}

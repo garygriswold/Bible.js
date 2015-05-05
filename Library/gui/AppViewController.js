@@ -10,7 +10,6 @@ var BIBLE = { TOC: 'bible-toc', LOOK: 'bible-look', SEARCH: 'bible-search', BACK
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
 	this.bibleCache = new BibleCache(this.versionCode);
-	this.codexView = new CodexView(this.bibleCache);
 };
 AppViewController.prototype.begin = function() {
 	var types = new AssetType('application', this.versionCode);
@@ -30,6 +29,7 @@ AppViewController.prototype.begin = function() {
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache);
+		that.codexView = new CodexView(that.tableContents, that.bibleCache);
 		Object.freeze(that);
 
 		//that.tableContentsView.showTocBookList();

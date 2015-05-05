@@ -25,7 +25,8 @@ SearchView.prototype.showSearch = function(query) {
 		var bookRef = this.bookList[i];
 		this.appendBook(bookRef.bookCode);
 		for (var j=0; j<bookRef.refList.length && j < 3; j++) {
-			this.appendReference(bookRef.refList[j]);
+			var ref = new Reference(bookRef.refList[j]);
+			this.appendReference(ref);
 		}
 		if (bookRef.refList.length > 2) {
 			this.appendSeeMore(bookRef);
@@ -66,7 +67,7 @@ SearchView.prototype.appendReference = function(reference) {
 	this.viewRoot.appendChild(entryNode);
 	var refNode = document.createElement('span');
 	refNode.setAttribute('class', 'conRef');
-	refNode.textContent = reference.substr(4);
+	refNode.textContent = reference.chapterVerse();
 	entryNode.appendChild(refNode);
 	entryNode.appendChild(document.createElement('br'));
 	this.bibleCache.getVerse(reference, function(verseText) {
@@ -74,7 +75,7 @@ SearchView.prototype.appendReference = function(reference) {
 			console.log('Error in get verse', JSON.stringify(verseText));
 		} else {
 			var verseNode = document.createElement('span');
-			verseNode.setAttribute('id', 'con' + reference);
+			verseNode.setAttribute('id', 'con' + reference.nodeId);
 			verseNode.setAttribute('class', 'conVerse');
 			verseNode.innerHTML = styleSearchWords(verseText);
 			entryNode.appendChild(verseNode);
