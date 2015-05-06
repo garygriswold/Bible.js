@@ -142,6 +142,7 @@ function CodexView(tableContents, bibleCache) {
 	this.tableContents = tableContents;
 	this.bibleCache = bibleCache;
 	var that = this;
+	this.scrollPosition = window.scrollY;
 	this.bodyNode = document.getElementById('appTop');
 	this.bodyNode.addEventListener(BIBLE.TOC, function(event) {
 		var detail = event.detail;
@@ -153,53 +154,74 @@ function CodexView(tableContents, bibleCache) {
 		console.log(JSON.stringify(detail));
 		that.showPassage(detail.id);
 	});
-	document.addEventListener('scroll', function(event) {
-		//console.log('new scroll');
-		//for (var e in this) {
-		//	console.log(e, this[e]);
-		//}
-		//for (var e in event) {
-		//	console.log(e, event[e]);
-		//}
+	this.bodyNode.addEventListener('scroll', function(event) {
+		var position = window.scrollY;
+		if (position > this.scrollPosition) {
+			console.log('scrolling down');
+			// check if 1st verse of last chapter is above bottom of the page
+			// if last chapter has become visible at bottom
+			// get next chapter push onto next queue
+			// what processes next queue, because it might already be in process.
+		} else {
+			console.log('scrolling up');
+			// check if last verse of first chapter is visible below top of the page
+			// if the first chapter has become visible at top
+			// get prior chapter and push onto prior queue
+			// what processes prior queue, because it might already be in process.
+		}
 	});
 	Object.freeze(this);
 };
 CodexView.prototype.showPassage = function(nodeId) {
+	var queue = [];
 	var chapter = new Reference(nodeId);
-	this.removeBody();
-	this.showChapter(chapter);
-	//var verse = fragment.children[0];
-	var verse = this.bodyNode.children[0];
-	for (var i=0; i<3; i++) {
-		chapter = this.tableContents.nextChapter(chapter);
-		this.showChapter(chapter);
-	}
-	chapter = new Reference(nodeId);
 	for (var i=0; i<3; i++) {
 		chapter = this.tableContents.priorChapter(chapter);
-		this.showChapter(chapter);
+		queue.unshift(chapter);
 	}
-	this.scrollToNode(verse);//  TEMP REMOVE
+	chapter = new Reference(nodeId);
+	queue.push(chapter);
+	for (var i=0; i<200; i++) {
+		chapter = this.tableContents.nextChapter(chapter);
+		queue.push(chapter);
+	}
+
+	var fragment = document.createDocumentFragment();
+	var topNode = document.createElement('div');
+	fragment.appendChild(topNode);
+
+	this.removeBody();
+	this.bodyNode.appendChild(fragment);
+
+	var that = this;
+	var count = 0;
+	for (var i=0; i<queue.length; i++) {
+		var chapt = queue[i];
+		topNode.appendChild(chapt.rootNode);
+		this.showChapter(chapt, function() {
+			if (++count >= queue.length -1) {
+				that.scrollTo(nodeId);
+			}
+		});
+	}
 };
-CodexView.prototype.showChapter = function(chapter) {
+CodexView.prototype.showChapter = function(chapter, callout) {
 	var that = this;
 	this.bibleCache.getChapter(chapter, function(usxNode) {
 		if (usxNode.errno) {
 			// what to do here?
 			console.log((JSON.stringify(usxNode)));
+			callout();
 		} else {
 			var dom = new DOMBuilder();
 			dom.bookCode = chapter.book;
 			var fragment = dom.toDOM(usxNode);
-
-			//var verse = fragment.children[0];
-			that.bodyNode.appendChild(fragment);
-			//that.scrollToNode(verse);  TEMP REMOVE
+			chapter.rootNode.appendChild(fragment);
+			callout();
 		}
 	});
 };
 CodexView.prototype.scrollTo = function(nodeId) {
-	console.log('scroll to verse', nodeId);
 	var verse = document.getElementById(nodeId);
 	var rect = verse.getBoundingClientRect();
 	window.scrollTo(rect.left + window.scrollY, rect.top + window.scrollY);
@@ -301,7 +323,6 @@ SearchView.prototype.appendReference = function(reference) {
 	this.viewRoot.appendChild(entryNode);
 	var refNode = document.createElement('span');
 	refNode.setAttribute('class', 'conRef');
-	//refNode.textContent = reference.substr(4);
 	refNode.textContent = reference.chapterVerse();
 	entryNode.appendChild(refNode);
 	entryNode.appendChild(document.createElement('br'));
@@ -393,6 +414,7 @@ function Reference(book, chapter, verse) {
 		this.verse = (parts.length > 1) ? +parts[2] : NaN;
 		this.nodeId = book;
 	}
+	this.rootNode = document.createElement('div');
 	Object.freeze(this);
 };
 Reference.prototype.path = function() {

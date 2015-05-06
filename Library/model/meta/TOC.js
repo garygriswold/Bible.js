@@ -25,7 +25,6 @@ TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
 };
 TOC.prototype.nextChapter = function(reference) {
-	console.log('next chapter param', reference);
 	var current = this.bookMap[reference.book];
 	if (reference.chapter < current.lastChapter) {
 		return(new Reference(reference.book, reference.chapter + 1));

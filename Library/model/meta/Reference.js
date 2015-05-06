@@ -23,6 +23,7 @@ function Reference(book, chapter, verse) {
 		this.verse = (parts.length > 1) ? +parts[2] : NaN;
 		this.nodeId = book;
 	}
+	this.rootNode = document.createElement('div');
 	Object.freeze(this);
 };
 Reference.prototype.path = function() {
