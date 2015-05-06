@@ -142,7 +142,8 @@ function CodexView(tableContents, bibleCache) {
 	this.tableContents = tableContents;
 	this.bibleCache = bibleCache;
 	var that = this;
-	this.scrollPosition = window.scrollY;
+	this.scrollSafeTop = 0;
+	this.scrollSafeBottom = 0;
 	this.bodyNode = document.getElementById('appTop');
 	this.bodyNode.addEventListener(BIBLE.TOC, function(event) {
 		var detail = event.detail;
@@ -154,23 +155,27 @@ function CodexView(tableContents, bibleCache) {
 		console.log(JSON.stringify(detail));
 		that.showPassage(detail.id);
 	});
-	this.bodyNode.addEventListener('scroll', function(event) {
+	document.addEventListener('scroll', function(event) {
 		var position = window.scrollY;
-		if (position > this.scrollPosition) {
-			console.log('scrolling down');
-			// check if 1st verse of last chapter is above bottom of the page
-			// if last chapter has become visible at bottom
-			// get next chapter push onto next queue
-			// what processes next queue, because it might already be in process.
-		} else {
-			console.log('scrolling up');
-			// check if last verse of first chapter is visible below top of the page
-			// if the first chapter has become visible at top
-			// get prior chapter and push onto prior queue
-			// what processes prior queue, because it might already be in process.
+		console.log('position', position, that.scrollSafeTop, that.scrollSafeBottom);
+		if (position > that.scrollSafeBottom) {
+			console.log('must add to end');
+			that.scrollSafeBottom = NaN;
+			// Here I must get the key for the last node,
+			// get next node
+			// show chapter
+			// on callback setScrollLimits();
+		}
+		if (position < that.scrollSafeTop) {
+			console.log('must add to beginning');
+			that.scrollSafeTop = NaN;
+			// Here I must get the key for the first node
+			// get the prior node
+			// show chapter
+			// on callback setScrollLimits();
 		}
 	});
-	Object.freeze(this);
+	Object.seal(this);// cannot freeze scrollPosition
 };
 CodexView.prototype.showPassage = function(nodeId) {
 	var queue = [];
@@ -185,24 +190,20 @@ CodexView.prototype.showPassage = function(nodeId) {
 		chapter = this.tableContents.nextChapter(chapter);
 		queue.push(chapter);
 	}
-	var fragment = document.createDocumentFragment();
-	var topNode = document.createElement('div');
-	fragment.appendChild(topNode);
-
 	this.removeBody();
-	this.bodyNode.appendChild(fragment);
-
 	var that = this;
 	processQueue(queue);
+
 	function processQueue(queue) {
 		if (queue.length > 0) {
 			var chapt = queue.shift();
-			topNode.appendChild(chapt.rootNode);
+			that.bodyNode.appendChild(chapt.rootNode);
 			that.showChapter(chapt, function() {
 				processQueue(queue);
 			});
 		} else {
 			that.scrollTo(nodeId);
+			that.setScrollLimits();
 		}
 	}
 };
@@ -225,11 +226,32 @@ CodexView.prototype.showChapter = function(chapter, callout) {
 CodexView.prototype.scrollTo = function(nodeId) {
 	var verse = document.getElementById(nodeId);
 	var rect = verse.getBoundingClientRect();
-	window.scrollTo(rect.left + window.scrollY, rect.top + window.scrollY);
+	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY);
+	//this.scrollPosition = window.scrollY;
+	console.log('first set scrollPosition', this.scrollPosition);
 };
 CodexView.prototype.scrollToNode = function(node) {
 	var rect = node.getBoundingClientRect();
-	window.scrollTo(rect.left + window.scrollY, rect.top + window.scrollY);
+	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY);
+};
+CodexView.prototype.setScrollLimits = function() {
+	var firstNode = this.bodyNode.firstElementChild;
+	//console.log('set scroll limits first', firstNode.tagName);
+	//var firstRect = firstNode.getBoundingClientRect();
+	//console.log('first ', firstRect.top, firstRect.bottom);
+	var secondNode = firstNode.nextElementSibling;
+	var secondRect = secondNode.getBoundingClientRect();
+	//console.log('second', secondNode.tagName);
+	//console.log('second ', secondRect.top, secondRect.bottom);
+	var lastNode = this.bodyNode.lastElementChild;
+	//console.log('third', lastNode.tagName);
+	var lastRect = lastNode.getBoundingClientRect();
+	//console.log('last, ', lastRect.top, lastRect.bottom);
+	this.scrollSafeTop = secondRect.top + window.scrollY;
+	this.scrollSafeBottom = lastRect.top + window.scrollY - window.innerHeight;
+	console.log('safe top', this.scrollSafeTop, '   safe bot', this.scrollSafeBottom);
+	// find the first verse of the second chapter as top
+	// find the first verse of the last chapter as the bottom
 };
 CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);
