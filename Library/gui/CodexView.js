@@ -46,11 +46,10 @@ CodexView.prototype.showPassage = function(nodeId) {
 	}
 	chapter = new Reference(nodeId);
 	queue.push(chapter);
-	for (var i=0; i<200; i++) {
+	for (var i=0; i<3; i++) {
 		chapter = this.tableContents.nextChapter(chapter);
 		queue.push(chapter);
 	}
-
 	var fragment = document.createDocumentFragment();
 	var topNode = document.createElement('div');
 	fragment.appendChild(topNode);
@@ -59,15 +58,17 @@ CodexView.prototype.showPassage = function(nodeId) {
 	this.bodyNode.appendChild(fragment);
 
 	var that = this;
-	var count = 0;
-	for (var i=0; i<queue.length; i++) {
-		var chapt = queue[i];
-		topNode.appendChild(chapt.rootNode);
-		this.showChapter(chapt, function() {
-			if (++count >= queue.length -1) {
-				that.scrollTo(nodeId);
-			}
-		});
+	processQueue(queue);
+	function processQueue(queue) {
+		if (queue.length > 0) {
+			var chapt = queue.shift();
+			topNode.appendChild(chapt.rootNode);
+			that.showChapter(chapt, function() {
+				processQueue(queue);
+			});
+		} else {
+			that.scrollTo(nodeId);
+		}
 	}
 };
 CodexView.prototype.showChapter = function(chapter, callout) {
