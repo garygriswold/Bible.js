@@ -1,950 +1,140 @@
 [
  {
-  "key": "2SA:14:7",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-04T19:42:38.808Z"
- },
- {
-  "key": "2KI:6:15",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-04T19:46:39.000Z"
- },
- {
-  "key": "GEN:19:23",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-04T19:47:36.650Z"
- },
- {
-  "key": "PSA:27:12",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-04T19:53:54.067Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-04T20:03:21.450Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-04T21:48:36.944Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-04T22:35:13.386Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T00:33:15.543Z"
- },
- {
-  "key": "1KI:8:20",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T00:37:21.642Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T00:38:43.043Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T00:42:18.491Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T00:42:18.503Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T00:51:06.898Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T00:52:06.000Z"
- },
- {
-  "key": "[object Object]",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T04:43:02.839Z"
- },
- {
-  "key": "[object Object]",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T04:47:14.228Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T04:50:26.403Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T05:05:24.325Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T05:07:09.286Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T05:08:32.378Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T05:10:50.566Z"
- },
- {
-  "key": "GEN:19:23",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T05:11:18.990Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T05:14:10.991Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T05:18:09.302Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T05:33:12.745Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T05:33:53.807Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T05:38:11.689Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T05:38:29.790Z"
- },
- {
-  "key": "2KI:6:15",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T05:40:07.929Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-05T05:41:47.716Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T03:42:00.441Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T03:42:46.926Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T03:43:25.610Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T03:43:52.351Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T03:44:35.888Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T03:44:48.319Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T03:45:13.417Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T03:51:07.250Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T03:51:34.694Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T03:59:16.499Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T03:59:43.555Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:03:25.950Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:05:00.830Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:05:26.322Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:06:10.156Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:07:19.891Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:10:45.146Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:11:14.824Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:13:17.740Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:14:05.484Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:18:39.207Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:24:00.168Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:34:51.639Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:36:07.464Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:37:56.240Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:38:33.566Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:39:12.874Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:40:13.905Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:41:53.557Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:43:23.659Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:44:50.024Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:45:45.115Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:46:35.177Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:48:20.082Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:49:16.636Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:51:42.693Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:52:47.425Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:53:06.910Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:54:44.375Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:55:46.806Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:56:22.632Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:59:07.414Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T04:59:56.330Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:00:21.338Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:01:18.499Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:02:12.487Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:10:31.298Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:10:56.273Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:11:09.660Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:19:02.877Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:20:09.568Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:23:25.260Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:24:11.227Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:26:23.516Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:30:01.455Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:31:18.230Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:32:20.510Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:33:14.731Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:34:31.650Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:37:15.416Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:38:01.606Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:38:45.403Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:40:18.654Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:56:18.459Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:57:07.133Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:57:26.302Z"
- },
- {
-  "key": "EXO:22:3",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:58:10.879Z"
- },
- {
-  "key": "RUT:2:15",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T05:58:24.852Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T06:01:31.393Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T06:02:20.055Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T06:03:49.233Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T15:56:06.819Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T15:56:31.657Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T16:04:31.411Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T16:05:28.436Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T16:06:26.756Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T16:07:34.816Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T16:08:01.829Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T16:13:25.434Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T16:15:40.499Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T16:16:35.411Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T16:18:41.320Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T16:57:37.721Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T16:58:37.769Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:01:03.014Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:02:04.594Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:04:08.348Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:04:46.502Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:05:07.622Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:06:34.745Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:07:27.310Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:08:50.020Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:09:19.956Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:09:39.960Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:11:33.448Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:15:38.972Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:18:23.407Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:19:21.013Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:20:28.598Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:24:09.399Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:24:28.774Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:25:25.796Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:26:58.091Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:39:19.735Z"
- },
- {
-  "key": "NUM:32:14",
-  "source": "bible-search",
-  "search": "risen",
-  "timestamp": "2015-05-06T17:55:28.206Z"
- },
- {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T17:57:27.745Z"
+  "timestamp": "2015-05-06T20:01:02.735Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T18:00:37.936Z"
+  "timestamp": "2015-05-06T20:02:55.597Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T18:40:49.512Z"
+  "timestamp": "2015-05-06T20:06:00.514Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T18:43:16.189Z"
+  "timestamp": "2015-05-06T20:07:31.009Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T18:44:17.173Z"
+  "timestamp": "2015-05-06T20:08:26.798Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T18:48:13.446Z"
+  "timestamp": "2015-05-06T20:09:01.731Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T18:48:24.109Z"
+  "timestamp": "2015-05-06T20:09:54.538Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T18:51:11.235Z"
+  "timestamp": "2015-05-06T20:17:17.304Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T18:54:05.367Z"
+  "timestamp": "2015-05-06T20:18:46.347Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T18:55:26.477Z"
+  "timestamp": "2015-05-06T20:20:22.256Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T18:58:03.644Z"
+  "timestamp": "2015-05-06T20:21:22.619Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T19:00:01.500Z"
+  "timestamp": "2015-05-06T20:22:04.829Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T19:00:49.307Z"
+  "timestamp": "2015-05-06T20:24:45.813Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T19:02:50.155Z"
+  "timestamp": "2015-05-06T20:26:24.486Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T19:03:13.799Z"
+  "timestamp": "2015-05-06T20:28:22.381Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T19:08:07.192Z"
+  "timestamp": "2015-05-06T20:30:32.363Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T19:12:04.817Z"
+  "timestamp": "2015-05-06T20:33:46.888Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T19:14:48.598Z"
+  "timestamp": "2015-05-07T00:36:02.377Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T19:15:39.500Z"
+  "timestamp": "2015-05-07T00:37:04.678Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T19:18:07.445Z"
+  "timestamp": "2015-05-07T00:39:57.366Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T19:19:22.982Z"
+  "timestamp": "2015-05-07T00:40:20.780Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T19:20:20.216Z"
+  "timestamp": "2015-05-07T00:42:36.790Z"
  },
  {
   "key": "NUM:32:14",
   "source": "bible-search",
   "search": "risen",
-  "timestamp": "2015-05-06T19:28:27.286Z"
+  "timestamp": "2015-05-07T00:45:04.282Z"
  }
 ]
