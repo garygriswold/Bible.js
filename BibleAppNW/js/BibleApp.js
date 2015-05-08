@@ -143,43 +143,42 @@ function CodexView(tableContents, bibleCache) {
 	this.bibleCache = bibleCache;
 	this.chapterQueue = [];
 	var that = this;
-	this.scrollSafeTop = 0;
-	this.scrollSafeBottom = 0;
-	this.bodyNode = document.getElementById('appTop');
-	this.bodyNode.addEventListener(BIBLE.TOC, function(event) {
-		var detail = event.detail;
-		console.log(JSON.stringify(detail));
-		that.showPassage(detail.id);	
+	this.addChapterInProgress = false;
+	document.body.addEventListener(BIBLE.TOC, function(event) {
+		console.log(JSON.stringify(event.detail));
+		that.showPassage(event.detail.id);	
 	});
-	this.bodyNode.addEventListener(BIBLE.SEARCH, function(event) {
-		var detail = event.detail;
-		console.log(JSON.stringify(detail));
-		that.showPassage(detail.id);
+	document.body.addEventListener(BIBLE.SEARCH, function(event) {
+		console.log(JSON.stringify(event.detail));
+		that.showPassage(event.detail.id);
 	});
 	document.addEventListener('scroll', function(event) {
-		var position = window.scrollY;
-		if (position > that.scrollSafeBottom) {
-			//console.log('must add to end');
-			that.scrollSafeBottom = NaN;
-			var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
-			var nextChapter = that.tableContents.nextChapter(lastChapter);
-			that.bodyNode.appendChild(nextChapter.rootNode);
-			that.chapterQueue.push(nextChapter);
-			that.showChapter(nextChapter, function() {
-				that.setScrollLimits();
-			});
-		}
-		if (position < that.scrollSafeTop) {
-			console.log('position', position, that.scrollSafeTop, that.scrollSafeBottom);
-			console.log('must add to beginning');
-			that.scrollSafeTop = NaN;
-			var firstChapter = that.chapterQueue[0];
-			var beforeChapter = that.tableContents.priorChapter(firstChapter);
-			that.bodyNode.insertBefore(beforeChapter.rootNode, firstChapter.rootNode);
-			that.chapterQueue.unshift(beforeChapter);
-			that.showChapter(beforeChapter, function() {
-				that.setScrollLimits();
-			});
+		//console.log('on scroll', that.bodyNode.scrollTop, that.bodyNode.scrollHeight, window.innerHeight, window.height);
+		//console.log('scrolling', that.bodyNode.scrollTop, document.body.scrollTop, window.pageYOffset, document.body.parentElement.scrollTop);
+		/// here test if chapter is being added.
+		if (! that.addChapterInProgress) {
+			if (document.body.scrollTop + (window.innerHeight * 2) >= document.body.scrollHeight) {
+				that.addChapterInProgress = true;
+				console.log('add chapter below');
+				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
+				var nextChapter = that.tableContents.nextChapter(lastChapter);
+				document.body.appendChild(nextChapter.rootNode);
+				that.chapterQueue.push(nextChapter);
+				that.showChapter(nextChapter, function() {
+					that.addChapterInProgress = false;
+				});
+			}
+			if (document.body.scrollTop < window.innerHeight) {
+				that.addChapterInProgress = true;
+				console.log('must add to beginning');
+				var firstChapter = that.chapterQueue[0];
+				var beforeChapter = that.tableContents.priorChapter(firstChapter);
+				document.body.insertBefore(beforeChapter.rootNode, firstChapter.rootNode);
+				that.chapterQueue.unshift(beforeChapter);
+				that.showChapter(beforeChapter, function() {
+					that.addChapterInProgress = false;
+				});
+			}
 		}
 	});
 	Object.seal(this);// cannot freeze scrollPosition
@@ -204,13 +203,12 @@ CodexView.prototype.showPassage = function(nodeId) {
 	function processQueue(index) {
 		if (index < that.chapterQueue.length) {
 			var chapt = that.chapterQueue[index];
-			that.bodyNode.appendChild(chapt.rootNode);
+			document.body.appendChild(chapt.rootNode);
 			that.showChapter(chapt, function() {
 				processQueue(index +1);
 			});
 		} else {
 			that.scrollTo(nodeId);
-			that.setScrollLimits();
 		}
 	}
 };
@@ -239,18 +237,6 @@ CodexView.prototype.scrollToNode = function(node) {
 	var rect = node.getBoundingClientRect();
 	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY);
 };
-CodexView.prototype.setScrollLimits = function() {
-	var timer = new Performance('message');
-	var secondChapt = this.chapterQueue[1];
-	var secondRect = secondChapt.rootNode.getBoundingClientRect();
-	//var lastNode = this.bodyNode.lastElementChild;
-	var lastChapt = this.chapterQueue[this.chapterQueue.length -1];
-	var lastRect = lastChapt.rootNode.getBoundingClientRect();
-	this.scrollSafeTop = secondRect.top + window.scrollY;
-	this.scrollSafeBottom = lastRect.top + window.scrollY - window.innerHeight;
-	timer.duration('set safe scroll');
-	//console.log('safe top', this.scrollSafeTop, '   safe bot', this.scrollSafeBottom);
-};
 CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);
 	for (var i=0; i<note.children.length; i++) {
@@ -270,9 +256,10 @@ CodexView.prototype.hideFootnote = function(noteId) {
 	}
 };
 CodexView.prototype.removeBody = function() {
-	for (var i=this.bodyNode.children.length -1; i>=0; i--) {
-		var childNode = this.bodyNode.children[i];
-		this.bodyNode.removeChild(childNode);
+	var bodyNode = document.body;
+	for (var i=bodyNode.children.length -1; i>=0; i--) {
+		var childNode = bodyNode.children[i];
+		bodyNode.removeChild(childNode);
 	}
 };
 /**
