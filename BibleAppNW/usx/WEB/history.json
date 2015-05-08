@@ -442,5 +442,36 @@
   "source": "bible-search",
   "search": "risen",
   "timestamp": "2015-05-08T01:23:24.342Z"
+ },
+ {
+  "key": "NUM:4",
+  "source": "bible-toc",
+  "timestamp": "2015-05-08T01:27:35.076Z"
+ },
+ {
+  "key": "EXO:22:3",
+  "source": "bible-search",
+  "search": "risen",
+  "timestamp": "2015-05-08T01:32:24.240Z"
+ },
+ {
+  "key": "NUM:9",
+  "source": "bible-toc",
+  "timestamp": "2015-05-08T01:32:48.599Z"
+ },
+ {
+  "key": "DEU:3",
+  "source": "bible-toc",
+  "timestamp": "2015-05-08T01:39:40.229Z"
+ },
+ {
+  "key": "NUM:13",
+  "source": "bible-toc",
+  "timestamp": "2015-05-08T01:41:13.275Z"
+ },
+ {
+  "key": "DEU:23",
+  "source": "bible-toc",
+  "timestamp": "2015-05-08T01:42:17.095Z"
  }
 ]

@@ -32,8 +32,8 @@ AppViewController.prototype.begin = function() {
 		that.codexView = new CodexView(that.tableContents, that.bibleCache);
 		Object.freeze(that);
 
-		//that.tableContentsView.showTocBookList();
-		that.searchView.showSearch("risen");
+		that.tableContentsView.showTocBookList();
+		//that.searchView.showSearch("risen");
 	});
 };
 /**
@@ -44,7 +44,7 @@ AppViewController.prototype.begin = function() {
 function TableContentsView(toc) {
 	this.toc = toc;
 	this.root = null;
-	this.bodyNode = document.getElementById('appTop');
+	//this.bodyNode = document.getElementById('appTop');
 	Object.seal(this);
 };
 TableContentsView.prototype.showTocBookList = function() {
@@ -52,7 +52,8 @@ TableContentsView.prototype.showTocBookList = function() {
 		this.root = this.buildTocBookList();
 	}
 	this.removeBody();
-	this.bodyNode.appendChild(this.root);
+	//this.bodyNode.appendChild(this.root);
+	document.body.appendChild(this.root);
 };
 TableContentsView.prototype.buildTocBookList = function() {
 	var root = document.createDocumentFragment();
@@ -112,24 +113,28 @@ TableContentsView.prototype.cellsPerRow = function() {
 	return(5); // some calculation based upon the width of the screen
 }
 TableContentsView.prototype.removeBody = function() {
-	for (var i=this.bodyNode.children.length -1; i>=0; i--) {
-		var childNode = this.bodyNode.children[i];
-		this.bodyNode.removeChild(childNode);
+	var bodyNode = document.body;
+	for (var i=bodyNode.children.length -1; i>=0; i--) {
+		var childNode = bodyNode.children[i];
+		bodyNode.removeChild(childNode);
 	}
 };
 TableContentsView.prototype.removeAllChapters = function() {
+	console.log('remove all chapters');
 	var div = document.getElementById('toc');
-	for (var i=div.children.length -1; i>=0; i--) {
-		var bookNode = div.children[i];
-		for (var j=bookNode.children.length -1; j>=0; j--) {
-			var chaptTable = bookNode.children[j];
-			bookNode.removeChild(chaptTable);
+	if (div) {
+		for (var i=div.children.length -1; i>=0; i--) {
+			var bookNode = div.children[i];
+			for (var j=bookNode.children.length -1; j>=0; j--) {
+				var chaptTable = bookNode.children[j];
+				bookNode.removeChild(chaptTable);
+			}
 		}
 	}
 };
 TableContentsView.prototype.openChapter = function(nodeId) {
 	console.log('open chapter', nodeId);
-	this.bodyNode.dispatchEvent(new CustomEvent(BIBLE.TOC, { detail: { id: nodeId }}));
+	document.body.dispatchEvent(new CustomEvent(BIBLE.TOC, { detail: { id: nodeId }}));
 };
 
 
@@ -152,7 +157,7 @@ function CodexView(tableContents, bibleCache) {
 		console.log(JSON.stringify(event.detail));
 		that.showPassage(event.detail.id);
 	});
-	document.addEventListener('scroll', function(event) {
+	/*document.addEventListener('scroll', function(event) {
 		//console.log('on scroll', that.bodyNode.scrollTop, that.bodyNode.scrollHeight, window.innerHeight, window.height);
 		//console.log('scrolling', that.bodyNode.scrollTop, document.body.scrollTop, window.pageYOffset, document.body.parentElement.scrollTop);
 		/// here test if chapter is being added.
@@ -180,7 +185,7 @@ function CodexView(tableContents, bibleCache) {
 				});
 			}
 		}
-	});
+	});*/
 	Object.seal(this);// cannot freeze scrollPosition
 };
 CodexView.prototype.showPassage = function(nodeId) {
