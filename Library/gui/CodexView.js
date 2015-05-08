@@ -89,6 +89,15 @@ CodexView.prototype.showChapter = function(chapter, callout) {
 			dom.bookCode = chapter.book;
 			var fragment = dom.toDOM(usxNode);
 			chapter.rootNode.appendChild(fragment);
+			//var topNode = chapter.rootNode.children[0];
+			//var rect = topNode.getBoundingClientRect();
+			var rect = chapter.rootNode.getBoundingClientRect();
+			console.log('addec chapter', chapter.nodeId);
+			console.log('bounding rect top=', rect.top, ' bottom=', rect.bottom);
+			console.log('element scrolltop=', chapter.rootNode.scrollTop, '  height=', chapter.rootNode.height);
+			console.log('body scrolltop ', document.body.scrollTop,  '  height=', document.body.height);
+			console.log('window innerHeight=', window.innerHeight, '  window.height=', window.height);
+			console.log('window scroll=', window.scroll, '  window pageYOffset=', window.pageYOffset);
 			callout();
 		}
 	});

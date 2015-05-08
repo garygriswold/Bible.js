@@ -32,8 +32,8 @@ AppViewController.prototype.begin = function() {
 		that.codexView = new CodexView(that.tableContents, that.bibleCache);
 		Object.freeze(that);
 
-		that.tableContentsView.showTocBookList();
-		//that.searchView.showSearch("risen");
+		//that.tableContentsView.showTocBookList();
+		that.searchView.showSearch("risen");
 	});
 };
 /**
@@ -44,7 +44,6 @@ AppViewController.prototype.begin = function() {
 function TableContentsView(toc) {
 	this.toc = toc;
 	this.root = null;
-	//this.bodyNode = document.getElementById('appTop');
 	Object.seal(this);
 };
 TableContentsView.prototype.showTocBookList = function() {
@@ -52,7 +51,6 @@ TableContentsView.prototype.showTocBookList = function() {
 		this.root = this.buildTocBookList();
 	}
 	this.removeBody();
-	//this.bodyNode.appendChild(this.root);
 	document.body.appendChild(this.root);
 };
 TableContentsView.prototype.buildTocBookList = function() {
@@ -120,7 +118,6 @@ TableContentsView.prototype.removeBody = function() {
 	}
 };
 TableContentsView.prototype.removeAllChapters = function() {
-	console.log('remove all chapters');
 	var div = document.getElementById('toc');
 	if (div) {
 		for (var i=div.children.length -1; i>=0; i--) {
@@ -157,7 +154,7 @@ function CodexView(tableContents, bibleCache) {
 		console.log(JSON.stringify(event.detail));
 		that.showPassage(event.detail.id);
 	});
-	/*document.addEventListener('scroll', function(event) {
+	document.addEventListener('scroll', function(event) {
 		//console.log('on scroll', that.bodyNode.scrollTop, that.bodyNode.scrollHeight, window.innerHeight, window.height);
 		//console.log('scrolling', that.bodyNode.scrollTop, document.body.scrollTop, window.pageYOffset, document.body.parentElement.scrollTop);
 		/// here test if chapter is being added.
@@ -185,7 +182,7 @@ function CodexView(tableContents, bibleCache) {
 				});
 			}
 		}
-	});*/
+	});
 	Object.seal(this);// cannot freeze scrollPosition
 };
 CodexView.prototype.showPassage = function(nodeId) {
@@ -229,6 +226,15 @@ CodexView.prototype.showChapter = function(chapter, callout) {
 			dom.bookCode = chapter.book;
 			var fragment = dom.toDOM(usxNode);
 			chapter.rootNode.appendChild(fragment);
+			//var topNode = chapter.rootNode.children[0];
+			//var rect = topNode.getBoundingClientRect();
+			var rect = chapter.rootNode.getBoundingClientRect();
+			console.log('addec chapter', chapter.nodeId);
+			console.log('bounding rect top=', rect.top, ' bottom=', rect.bottom);
+			console.log('element scrolltop=', chapter.rootNode.scrollTop, '  height=', chapter.rootNode.height);
+			console.log('body scrolltop ', document.body.scrollTop,  '  height=', document.body.height);
+			console.log('window innerHeight=', window.innerHeight, '  window.height=', window.height);
+			console.log('window scroll=', window.scroll, '  window pageYOffset=', window.pageYOffset);
 			callout();
 		}
 	});
@@ -672,15 +678,17 @@ TOC.prototype.nextChapter = function(reference) {
 	if (reference.chapter < current.lastChapter) {
 		return(new Reference(reference.book, reference.chapter + 1));
 	} else {
-		return(new Reference(current.nextBook, 1));
+		return(new Reference(current.nextBook, 0));
 	}
 };
 TOC.prototype.priorChapter = function(reference) {
 	var current = this.bookMap[reference.book];
-	if (reference.chapter > 1) {
+	if (reference.chapter > 0) {
 		return(new Reference(reference.book, reference.chapter -1));
 	} else {
-		return(new Reference(current.priorBook, current.lastChapter));
+		var priorBook = this.bookMap[current.priorBook];
+		return(new Reference(current.priorBook, priorBook.lastChapter));
+//		return(new Reference(current.priorBook, current.lastChapter));
 	}
 };
 TOC.prototype.size = function() {

@@ -29,15 +29,16 @@ TOC.prototype.nextChapter = function(reference) {
 	if (reference.chapter < current.lastChapter) {
 		return(new Reference(reference.book, reference.chapter + 1));
 	} else {
-		return(new Reference(current.nextBook, 1));
+		return(new Reference(current.nextBook, 0));
 	}
 };
 TOC.prototype.priorChapter = function(reference) {
 	var current = this.bookMap[reference.book];
-	if (reference.chapter > 1) {
+	if (reference.chapter > 0) {
 		return(new Reference(reference.book, reference.chapter -1));
 	} else {
-		return(new Reference(current.priorBook, current.lastChapter));
+		var priorBook = this.bookMap[current.priorBook];
+		return(new Reference(current.priorBook, priorBook.lastChapter));
 	}
 };
 TOC.prototype.size = function() {
