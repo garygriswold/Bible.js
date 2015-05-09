@@ -1,3 +1,4 @@
 *.log
 *.xcuserstate
 temp.js
+TestFileSystem/
