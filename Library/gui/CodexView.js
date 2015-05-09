@@ -18,13 +18,9 @@ function CodexView(tableContents, bibleCache) {
 		that.showPassage(event.detail.id);
 	});
 	document.addEventListener('scroll', function(event) {
-		//console.log('on scroll', that.bodyNode.scrollTop, that.bodyNode.scrollHeight, window.innerHeight, window.height);
-		//console.log('scrolling', that.bodyNode.scrollTop, document.body.scrollTop, window.pageYOffset, document.body.parentElement.scrollTop);
-		/// here test if chapter is being added.
 		if (! that.addChapterInProgress) {
-			if (document.body.scrollTop + (window.innerHeight * 2) >= document.body.scrollHeight) {
+			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.outerHeight) {
 				that.addChapterInProgress = true;
-				console.log('add chapter below');
 				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
 				var nextChapter = that.tableContents.nextChapter(lastChapter);
 				document.body.appendChild(nextChapter.rootNode);
@@ -33,20 +29,21 @@ function CodexView(tableContents, bibleCache) {
 					that.addChapterInProgress = false;
 				});
 			}
-			if (document.body.scrollTop < window.innerHeight) {
+			else if (window.scrollY <= window.outerHeight) {
 				that.addChapterInProgress = true;
-				console.log('must add to beginning');
+				var saveY = window.scrollY;
 				var firstChapter = that.chapterQueue[0];
 				var beforeChapter = that.tableContents.priorChapter(firstChapter);
 				document.body.insertBefore(beforeChapter.rootNode, firstChapter.rootNode);
 				that.chapterQueue.unshift(beforeChapter);
 				that.showChapter(beforeChapter, function() {
+					window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
 					that.addChapterInProgress = false;
 				});
 			}
 		}
 	});
-	Object.seal(this);// cannot freeze scrollPosition
+	Object.seal(this);
 };
 CodexView.prototype.showPassage = function(nodeId) {
 	this.chapterQueue.splice(0);
@@ -89,15 +86,7 @@ CodexView.prototype.showChapter = function(chapter, callout) {
 			dom.bookCode = chapter.book;
 			var fragment = dom.toDOM(usxNode);
 			chapter.rootNode.appendChild(fragment);
-			//var topNode = chapter.rootNode.children[0];
-			//var rect = topNode.getBoundingClientRect();
-			var rect = chapter.rootNode.getBoundingClientRect();
-			console.log('addec chapter', chapter.nodeId);
-			console.log('bounding rect top=', rect.top, ' bottom=', rect.bottom);
-			console.log('element scrolltop=', chapter.rootNode.scrollTop, '  height=', chapter.rootNode.height);
-			console.log('body scrolltop ', document.body.scrollTop,  '  height=', document.body.height);
-			console.log('window innerHeight=', window.innerHeight, '  window.height=', window.height);
-			console.log('window scroll=', window.scroll, '  window pageYOffset=', window.pageYOffset);
+			console.log('added chapter', chapter.nodeId);
 			callout();
 		}
 	});
