@@ -3,6 +3,8 @@
 */
 "use strict";
 
+var CODEX_VIEW = { MAX: 10 };
+
 function CodexView(tableContents, bibleCache) {
 	this.tableContents = tableContents;
 	this.bibleCache = bibleCache;
@@ -26,6 +28,7 @@ function CodexView(tableContents, bibleCache) {
 				document.body.appendChild(nextChapter.rootNode);
 				that.chapterQueue.push(nextChapter);
 				that.showChapter(nextChapter, function() {
+					that.checkChapterQueueSize('top');
 					that.addChapterInProgress = false;
 				});
 			}
@@ -38,6 +41,7 @@ function CodexView(tableContents, bibleCache) {
 				that.chapterQueue.unshift(beforeChapter);
 				that.showChapter(beforeChapter, function() {
 					window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
+					that.checkChapterQueueSize('bottom');
 					that.addChapterInProgress = false;
 				});
 			}
@@ -90,6 +94,22 @@ CodexView.prototype.showChapter = function(chapter, callout) {
 			callout();
 		}
 	});
+};
+CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
+	if (this.chapterQueue.length > CODEX_VIEW.MAX) {
+		var discard = null;
+		switch(whichEnd) {
+			case 'top':
+				discard = this.chapterQueue.shift();
+				break;
+			case 'bottom':
+				discard = this.chapterQueue.pop();
+				break;
+			default:
+				console.log('unknown end ' + whichEnd + ' in CodexView.checkChapterQueueSize.');
+		}
+		console.log('discarded chapter ', discard.nodeId, 'at', whichEnd);
+	}
 };
 CodexView.prototype.scrollTo = function(nodeId) {
 	var verse = document.getElementById(nodeId);
