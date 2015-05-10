@@ -12,11 +12,10 @@ function History() {
 	this.writer = new NodeFileWriter('application');
 	this.isFilled = false;
 	var that = this;
-	this.bodyNode = document.getElementById('appTop');
-	this.bodyNode.addEventListener(BIBLE.TOC, function(event) {
+	document.body.addEventListener(BIBLE.TOC, function(event) {
 		that.addEvent(event);	
 	});
-	this.bodyNode.addEventListener(BIBLE.SEARCH, function(event) {
+	document.body.addEventListener(BIBLE.SEARCH, function(event) {
 		that.addEvent(event);
 	});
 	Object.seal(this);

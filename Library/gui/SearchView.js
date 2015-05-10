@@ -13,7 +13,6 @@ function SearchView(toc, concordance, bibleCache) {
 	this.words = [];
 	this.bookList = [];
 	this.viewRoot = document.createDocumentFragment();
-	this.bodyNode = document.getElementById('appTop');
 	Object.seal(this);
 };
 SearchView.prototype.showSearch = function(query) {
@@ -82,7 +81,7 @@ SearchView.prototype.appendReference = function(reference) {
 			verseNode.addEventListener('click', function() {
 				var nodeId = this.id.substr(3);
 				console.log('open chapter', nodeId);
-				that.bodyNode.dispatchEvent(new CustomEvent(BIBLE.SEARCH, { detail: { id: nodeId, source: that.query }}));
+				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH, { detail: { id: nodeId, source: that.query }}));
 			});
 		}	
 	});
@@ -125,7 +124,7 @@ SearchView.prototype.appendSeeMore = function(bookRef) {
 	}
 };
 SearchView.prototype.attachSearchView = function() {
-	var appTop = document.getElementById('appTop');
+	var appTop = document.body;
 	for (var i=appTop.children.length -1; i>=0; i--) {
 		var child = appTop.children[i];
 		appTop.removeChild(child);
