@@ -19,10 +19,12 @@ cat ../model/usx/Char.js >> temp.js
 cat ../model/usx/Text.js >> temp.js
 cat ../xml/XMLTokenizer.js >> temp.js
 cat ../xml/USXParser.js >> temp.js
+cat ../model/meta/Canon.js >> temp.js
 cat ../model/meta/TOC.js >> temp.js
 cat ../model/meta/TOCBook.js >> temp.js
 cat ../model/meta/Concordance.js >> temp.js
 cat ../model/meta/StyleIndex.js >> temp.js
+cat ../model/meta/History.js >> temp.js
 cat ../io/CommonIO.js >> temp.js
 cat ../io/NodeFileReader.js >> temp.js
 cat ../io/NodeFileWriter.js >> temp.js

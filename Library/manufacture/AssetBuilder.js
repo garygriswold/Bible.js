@@ -9,7 +9,7 @@ function AssetBuilder(types) {
 	this.types = types;
 	this.builders = [];
 	if (types.chapterFiles) {
-		this.builders.push(new ChapterBuilder(types.location, types.versionCode));
+		this.builders.push(new ChapterBuilder(types));
 	}
 	if (types.tableContents) {
 		this.builders.push(new TOCBuilder());
@@ -35,27 +35,18 @@ function AssetBuilder(types) {
 AssetBuilder.prototype.build = function(callback) {
 	if (this.builders.length > 0) {
 		var that = this;
-		this.reader.readDirectory(this.types.getPath(''), function(files) {
-			if (files.errno) {
-				console.log('directory read err ', JSON.stringify(files));
-				callback(files);
-			} else {
-				var count = 0
-				for (var i=0; i<files.length && count < 66; i++) {
-					if (files[i].indexOf('.usx') > 0) {
-						that.filesToProcess.push(files[i]);
-						count++;
-					}
-				}
-				processReadFile(that.filesToProcess.shift());
-			}
-		});
+		this.filesToProcess.splice(0);
+		var canon = new Canon();
+		for (var i=0; i<canon.books.length; i++) {
+			this.filesToProcess.push(canon.books[i].code + '.usx');
+		}
+		processReadFile(this.filesToProcess.shift());
 	} else {
 		callback();
 	}
 	function processReadFile(file) {
 		if (file) {
-			that.reader.readTextFile(that.types.getPath(file), function(data) {
+			that.reader.readTextFile(that.types.getUSXPath(file), function(data) {
 				if (data.errno) {
 					console.log('file read err ', JSON.stringify(data));
 					callback(data);
@@ -74,7 +65,7 @@ AssetBuilder.prototype.build = function(callback) {
 	function processWriteResult(builder) {
 		if (builder) {
 			var json = builder.toJSON();
-			var filepath = that.types.getPath(builder.filename);
+			var filepath = that.types.getAppPath(builder.filename);
 			that.writer.writeTextFile(filepath, json, function(filename) {
 				if (filename.errno) {
 					console.log('file write failure ', filename);

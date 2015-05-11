@@ -2,9 +2,8 @@
 * This class iterates over the USX data model, and breaks it into files one for each chapter.
 *
 */
-function ChapterBuilder(location, versionCode) {
-	this.location = location;
-	this.versionCode = versionCode;
+function ChapterBuilder(types) {
+	this.types = types;
 	this.filename = 'chapterMetaData.json';
 	Object.seal(this);
 };
@@ -13,8 +12,8 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 	var bookCode = ''; // set by side effect of breakBookIntoChapters
 	var chapters = breakBookIntoChapters(usxRoot);
 
-	var reader = new NodeFileReader(this.location);
-	var writer = new NodeFileWriter(this.location);
+	var reader = new NodeFileReader(this.types.location);
+	var writer = new NodeFileWriter(this.types.location);
 
 	var oneChapter = chapters.shift();
 	var chapterNum = findChapterNum(oneChapter);
@@ -51,7 +50,7 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 		return(0);
 	}
 	function createDirectory(bookCode) {
-		var filepath = getPath(bookCode);
+		var filepath = that.types.getAppPath(bookCode);
 		writer.createDirectory(filepath, function(dirName) {
 			if (dirName.errno) {
 				writeChapter(bookCode, chapterNum, oneChapter);				
@@ -61,7 +60,7 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 		});
 	}
 	function writeChapter(bookCode, chapterNum, oneChapter) {
-		var filepath = getPath(bookCode) + '/' + chapterNum + '.usx';
+		var filepath = that.types.getAppPath(bookCode) + '/' + chapterNum + '.usx';
 		var data = oneChapter.toUSX();
 		writer.writeTextFile(filepath, data, function(filename) {	
 			if (filename.errno) {
@@ -76,9 +75,6 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 				}
 			}
 		});
-	}
-	function getPath(filename) {
-		return('usx/' + that.versionCode + '/' + filename);
 	}
 };
 ChapterBuilder.prototype.toJSON = function() {

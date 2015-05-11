@@ -13,7 +13,7 @@ function AssetLoader(types) {
 	this.types = types;
 	this.toc = new TOC();
 	this.concordance = new Concordance();
-	this.history = new History();
+	this.history = new History(types.location);
 	this.styleIndex = new StyleIndex();
 };
 AssetLoader.prototype.load = function(callback) {
@@ -26,7 +26,7 @@ AssetLoader.prototype.load = function(callback) {
 
 	function readTextFile(filename) {
 		if (filename) {
-			var fullPath = that.types.getPath(filename);
+			var fullPath = that.types.getAppPath(filename);
 			reader.readTextFile(fullPath, function(data) {
 				if (data.errno) {
 					console.log('read concordance.json failure ' + JSON.stringify(data));

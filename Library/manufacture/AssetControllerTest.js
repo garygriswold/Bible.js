@@ -3,7 +3,7 @@
 */
 "use strict";
 
-var types = new AssetType('test2application', 'WEB');
+var types = new AssetType('test2dbl', 'WEB');
 types.chapterFiles = true;
 types.tableContents = true;
 types.concordance = true;
@@ -20,7 +20,7 @@ controller.checkBuildLoad(function(loadedTypes) {
 //controller.check(function(resultTypes) {
 //	console.log('AssetControllerTest.check ', resultTypes);	
 //});
-
+//
 //controller.build(function(whatever) {
 //	console.log('AssetControllerTest.build');
 //});

@@ -55,6 +55,9 @@ AssetType.prototype.toBeDoneQueue = function() {
 	}
 	return(toDo);
 };
-AssetType.prototype.getPath = function(filename) {
-	return('usx/' + this.versionCode + '/' + filename);
+AssetType.prototype.getUSXPath = function(filename) {
+	return(this.versionCode + '/USX/' + filename);
 };
+AssetType.prototype.getAppPath = function(filename) {
+	return(this.versionCode + '/app/' + filename);
+}
