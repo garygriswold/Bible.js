@@ -16,3 +16,15 @@ License
 -------
 
 Public domain license using the MIT template.
+
+Repository Structure
+--------------------
+
+Library - This is the common javascript library.  Each project contains a shell script that copies all of the files that it needs from Library.
+
+BibleAppNW - This is a Node/WebKit App, which will run as a local (not browser) application on desktop computers.  This is where the original development is being done, because of the ease of development in this environment.
+
+BibleAppXDK - This is a mobile Cordova version of the App, developed using the Intel XDK development environment.  Real work has not yet been done in this environment.
+
+UnitTestCSS1 - This is an early unit test project, which will be deleleted when other test programs are completed.
+
