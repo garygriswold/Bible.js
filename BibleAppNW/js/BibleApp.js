@@ -9,14 +9,14 @@ var BIBLE = { TOC: 'bible-toc', LOOK: 'bible-look', SEARCH: 'bible-search', BACK
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
-	this.bibleCache = new BibleCache(this.versionCode);
 };
 AppViewController.prototype.begin = function() {
-	var types = new AssetType('application', this.versionCode);
+	var types = new AssetType('document', this.versionCode);
 	types.tableContents = true;
 	types.chapterFiles = true;
 	types.history = true;
 	types.concordance = true;
+	this.bibleCache = new BibleCache(types);
 	var that = this;
 	var assets = new AssetController(types);
 	assets.checkBuildLoad(function(typesLoaded) {
@@ -417,6 +417,83 @@ SearchView.prototype.attachSearchView = function() {
 };
 
 /**
+* This class contains the Canon of Scripture as 66 books.  It is used to control
+* which books are published using this App.  The codes are used to identify the
+* books of the Bible, while the names, which are in English are only used to document
+* the meaning of each code.  These names are not used for display in the App.
+*/
+"use strict";
+
+function Canon() {
+	this.books = [
+    	{ code: 'GEN', name: 'Genesis' },
+    	{ code: 'EXO', name: 'Exodus' },
+    	{ code: 'LEV', name: 'Leviticus' },
+    	{ code: 'NUM', name: 'Numbers' },
+    	{ code: 'DEU', name: 'Deuteronomy' },
+    	{ code: 'JOS', name: 'Joshua' },
+    	{ code: 'JDG', name: 'Judges' },
+    	{ code: 'RUT', name: 'Ruth' },
+    	{ code: '1SA', name: '1 Samuel' },
+    	{ code: '2SA', name: '2 Samuel' },
+    	{ code: '1KI', name: '1 Kings' },
+    	{ code: '2KI', name: '2 Kings' },
+    	{ code: '1CH', name: '1 Chronicles' },
+    	{ code: '2CH', name: '2 Chronicles' },
+    	{ code: 'EZR', name: 'Ezra' },
+    	{ code: 'NEH', name: 'Nehemiah' },
+    	{ code: 'EST', name: 'Esther' },
+    	{ code: 'JOB', name: 'Job' },
+    	{ code: 'PSA', name: 'Psalms' },
+    	{ code: 'PRO', name: 'Proverbs' },
+    	{ code: 'ECC', name: 'Ecclesiastes' },
+    	{ code: 'SNG', name: 'Song of Solomon' },
+    	{ code: 'ISA', name: 'Isaiah' },
+    	{ code: 'JER', name: 'Jeremiah' },
+    	{ code: 'LAM', name: 'Lamentations' },
+    	{ code: 'EZK', name: 'Ezekiel' },
+    	{ code: 'DAN', name: 'Daniel' },
+    	{ code: 'HOS', name: 'Hosea' },
+    	{ code: 'JOL', name: 'Joel' },
+    	{ code: 'AMO', name: 'Amos' },
+    	{ code: 'OBA', name: 'Obadiah' },
+    	{ code: 'JON', name: 'Jonah' },
+    	{ code: 'MIC', name: 'Micah' },
+    	{ code: 'NAM', name: 'Nahum' },
+    	{ code: 'HAB', name: 'Habakkuk' },
+    	{ code: 'ZEP', name: 'Zephaniah' },
+    	{ code: 'HAG', name: 'Haggai' },
+    	{ code: 'ZEC', name: 'Zechariah' },
+    	{ code: 'MAL', name: 'Malachi' },
+    	{ code: 'MAT', name: 'Matthew' },
+    	{ code: 'MRK', name: 'Mark' },
+    	{ code: 'LUK', name: 'Luke' },
+    	{ code: 'JHN', name: 'John' },
+    	{ code: 'ACT', name: 'Acts' },
+    	{ code: 'ROM', name: 'Romans' },
+    	{ code: '1CO', name: '1 Corinthians' },
+    	{ code: '2CO', name: '2 Corinthians' },
+    	{ code: 'GAL', name: 'Galatians' },
+    	{ code: 'EPH', name: 'Ephesians' },
+    	{ code: 'PHP', name: 'Philippians' },
+    	{ code: 'COL', name: 'Colossians' },
+    	{ code: '1TH', name: '1 Thessalonians' },
+    	{ code: '2TH', name: '2 Thessalonians' },
+    	{ code: '1TI', name: '1 Timothy' },
+    	{ code: '2TI', name: '2 Timothy' },
+    	{ code: 'TIT', name: 'Titus' },
+    	{ code: 'PHM', name: 'Philemon' },
+    	{ code: 'HEB', name: 'Hebrews' },
+    	{ code: 'JAS', name: 'James' },
+    	{ code: '1PE', name: '1 Peter' },
+    	{ code: '2PE', name: '2 Peter' },
+    	{ code: '1JN', name: '1 John' },
+    	{ code: '2JN', name: '2 John' },
+    	{ code: '3JN', name: '3 John' },
+    	{ code: 'JUD', name: 'Jude' },
+    	{ code: 'REV', name: 'Revelation' } ];
+};
+/**
 * This class contains a reference to a chapter or verse.  It is used to
 * simplify the transition from the "GEN:1:1" format to the format
 * of distinct parts { book: GEN, chapter: 1, verse: 1 }
@@ -463,10 +540,11 @@ Reference.prototype.chapterVerse = function() {
 */
 "use strict";
 
-function BibleCache(versionCode) {
-	this.versionCode = versionCode;
+function BibleCache(types) {
+	this.types = types;
+	//this.versionCode = versionCode;
 	this.chapterMap = {};
-	this.reader = new NodeFileReader('application');
+	this.reader = new NodeFileReader(types.location);
 	this.parser = new USXParser();
 	Object.freeze(this);
 };
@@ -477,7 +555,8 @@ BibleCache.prototype.getChapter = function(reference, callback) {
 	if (chapter !== undefined) {
 		callback(chapter);
 	} else {
-		var filepath = 'usx/' + this.versionCode + '/' + reference.path();
+		//var filepath = 'usx/' + this.versionCode + '/' + reference.path();
+		var filepath = this.types.getAppPath(reference.path());
 		this.reader.readTextFile(filepath, function(data) {
 			if (data.errno) {
 				console.log('BibleCache.getChapter ', JSON.stringify(data));
@@ -778,18 +857,20 @@ StyleIndex.prototype.toJSON = function() {
 */
 "use strict";
 
-function History() {
+function History(location) {
 	this.items = [];
 	this.currentItem = null;
-	this.writer = new NodeFileWriter('application');
+	this.writer = new NodeFileWriter(location);
 	this.isFilled = false;
 	var that = this;
-	document.body.addEventListener(BIBLE.TOC, function(event) {
-		that.addEvent(event);	
-	});
-	document.body.addEventListener(BIBLE.SEARCH, function(event) {
-		that.addEvent(event);
-	});
+	if (location !== 'test2dbl') { // HACK, History could be used on server
+		document.body.addEventListener(BIBLE.TOC, function(event) {
+			that.addEvent(event);	
+		});
+		document.body.addEventListener(BIBLE.SEARCH, function(event) {
+			that.addEvent(event);
+		});
+	}
 	Object.seal(this);
 };
 History.prototype.fill = function(itemList) {
@@ -855,7 +936,7 @@ function HistoryItem(key, source, search) {
 };/**
 * This file contains IO constants and functions which are common to all file methods, which might include node.js, cordova, javascript, etc.
 */
-var FILE_ROOTS = { 'application': '', 'document': '?', 'temporary': '?', 'test2application': '../../BibleAppNW/' };
+var FILE_ROOTS = { 'application': '?', 'document': '../../dbl/current/', 'temporary': '?', 'test2dbl': '../../../dbl/current/' };
 /**
 * This class is a file reader for Node.  It can be used with node.js and node-webkit.
 * cordova requires using another class, but the interface should be the same.
@@ -1263,9 +1344,12 @@ AssetType.prototype.toBeDoneQueue = function() {
 	}
 	return(toDo);
 };
-AssetType.prototype.getPath = function(filename) {
-	return('usx/' + this.versionCode + '/' + filename);
+AssetType.prototype.getUSXPath = function(filename) {
+	return(this.versionCode + '/USX/' + filename);
 };
+AssetType.prototype.getAppPath = function(filename) {
+	return(this.versionCode + '/app/' + filename);
+}
 /**
 * The class controls the construction and loading of asset objects.  It is designed to be used
 * one both the client and the server.  It is a "builder" controller that uses the AssetType
@@ -1339,7 +1423,7 @@ AssetChecker.prototype.check = function(callback) {
 
 	function checkExists(filename) {
 		if (filename) {
-			var fullPath = that.types.getPath(filename);
+			var fullPath = that.types.getAppPath(filename);
 			console.log('checking for ', fullPath);
 			reader.fileExists(fullPath, function(stat) {
 				if (stat.errno) {
@@ -1371,7 +1455,7 @@ function AssetBuilder(types) {
 	this.types = types;
 	this.builders = [];
 	if (types.chapterFiles) {
-		this.builders.push(new ChapterBuilder(types.location, types.versionCode));
+		this.builders.push(new ChapterBuilder(types));
 	}
 	if (types.tableContents) {
 		this.builders.push(new TOCBuilder());
@@ -1397,27 +1481,18 @@ function AssetBuilder(types) {
 AssetBuilder.prototype.build = function(callback) {
 	if (this.builders.length > 0) {
 		var that = this;
-		this.reader.readDirectory(this.types.getPath(''), function(files) {
-			if (files.errno) {
-				console.log('directory read err ', JSON.stringify(files));
-				callback(files);
-			} else {
-				var count = 0
-				for (var i=0; i<files.length && count < 66; i++) {
-					if (files[i].indexOf('.usx') > 0) {
-						that.filesToProcess.push(files[i]);
-						count++;
-					}
-				}
-				processReadFile(that.filesToProcess.shift());
-			}
-		});
+		this.filesToProcess.splice(0);
+		var canon = new Canon();
+		for (var i=0; i<canon.books.length; i++) {
+			this.filesToProcess.push(canon.books[i].code + '.usx');
+		}
+		processReadFile(this.filesToProcess.shift());
 	} else {
 		callback();
 	}
 	function processReadFile(file) {
 		if (file) {
-			that.reader.readTextFile(that.types.getPath(file), function(data) {
+			that.reader.readTextFile(that.types.getUSXPath(file), function(data) {
 				if (data.errno) {
 					console.log('file read err ', JSON.stringify(data));
 					callback(data);
@@ -1436,7 +1511,7 @@ AssetBuilder.prototype.build = function(callback) {
 	function processWriteResult(builder) {
 		if (builder) {
 			var json = builder.toJSON();
-			var filepath = that.types.getPath(builder.filename);
+			var filepath = that.types.getAppPath(builder.filename);
 			that.writer.writeTextFile(filepath, json, function(filename) {
 				if (filename.errno) {
 					console.log('file write failure ', filename);
@@ -1618,9 +1693,8 @@ StyleIndexBuilder.prototype.toJSON = function() {
 * This class iterates over the USX data model, and breaks it into files one for each chapter.
 *
 */
-function ChapterBuilder(location, versionCode) {
-	this.location = location;
-	this.versionCode = versionCode;
+function ChapterBuilder(types) {
+	this.types = types;
 	this.filename = 'chapterMetaData.json';
 	Object.seal(this);
 };
@@ -1629,8 +1703,8 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 	var bookCode = ''; // set by side effect of breakBookIntoChapters
 	var chapters = breakBookIntoChapters(usxRoot);
 
-	var reader = new NodeFileReader(this.location);
-	var writer = new NodeFileWriter(this.location);
+	var reader = new NodeFileReader(this.types.location);
+	var writer = new NodeFileWriter(this.types.location);
 
 	var oneChapter = chapters.shift();
 	var chapterNum = findChapterNum(oneChapter);
@@ -1667,7 +1741,7 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 		return(0);
 	}
 	function createDirectory(bookCode) {
-		var filepath = getPath(bookCode);
+		var filepath = that.types.getAppPath(bookCode);
 		writer.createDirectory(filepath, function(dirName) {
 			if (dirName.errno) {
 				writeChapter(bookCode, chapterNum, oneChapter);				
@@ -1677,7 +1751,7 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 		});
 	}
 	function writeChapter(bookCode, chapterNum, oneChapter) {
-		var filepath = getPath(bookCode) + '/' + chapterNum + '.usx';
+		var filepath = that.types.getAppPath(bookCode) + '/' + chapterNum + '.usx';
 		var data = oneChapter.toUSX();
 		writer.writeTextFile(filepath, data, function(filename) {	
 			if (filename.errno) {
@@ -1692,9 +1766,6 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 				}
 			}
 		});
-	}
-	function getPath(filename) {
-		return('usx/' + that.versionCode + '/' + filename);
 	}
 };
 ChapterBuilder.prototype.toJSON = function() {
@@ -1716,7 +1787,7 @@ function AssetLoader(types) {
 	this.types = types;
 	this.toc = new TOC();
 	this.concordance = new Concordance();
-	this.history = new History();
+	this.history = new History(types.location);
 	this.styleIndex = new StyleIndex();
 };
 AssetLoader.prototype.load = function(callback) {
@@ -1729,7 +1800,7 @@ AssetLoader.prototype.load = function(callback) {
 
 	function readTextFile(filename) {
 		if (filename) {
-			var fullPath = that.types.getPath(filename);
+			var fullPath = that.types.getAppPath(filename);
 			reader.readTextFile(fullPath, function(data) {
 				if (data.errno) {
 					console.log('read concordance.json failure ' + JSON.stringify(data));

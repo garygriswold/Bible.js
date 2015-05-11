@@ -11,10 +11,10 @@
 */
 "use strict";
 
-function BibleCache(versionCode) {
-	this.versionCode = versionCode;
+function BibleCache(types) {
+	this.types = types;
 	this.chapterMap = {};
-	this.reader = new NodeFileReader('application');
+	this.reader = new NodeFileReader(types.location);
 	this.parser = new USXParser();
 	Object.freeze(this);
 };
@@ -25,7 +25,7 @@ BibleCache.prototype.getChapter = function(reference, callback) {
 	if (chapter !== undefined) {
 		callback(chapter);
 	} else {
-		var filepath = 'usx/' + this.versionCode + '/' + reference.path();
+		var filepath = this.types.getAppPath(reference.path());
 		this.reader.readTextFile(filepath, function(data) {
 			if (data.errno) {
 				console.log('BibleCache.getChapter ', JSON.stringify(data));

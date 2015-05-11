@@ -4,6 +4,7 @@ cat ../Library/gui/TableContentsView.js >> js/BibleApp.js
 cat ../Library/gui/CodexView.js >> js/BibleApp.js
 cat ../Library/gui/SearchView.js >> js/BibleApp.js
 
+cat ../Library/model/meta/Canon.js >> js/BibleApp.js
 cat ../Library/model/meta/Reference.js >> js/BibleApp.js
 cat ../Library/model/meta/BibleCache.js >> js/BibleApp.js
 cat ../Library/model/meta/Concordance.js >> js/BibleApp.js

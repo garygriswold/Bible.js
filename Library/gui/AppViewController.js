@@ -9,14 +9,14 @@ var BIBLE = { TOC: 'bible-toc', LOOK: 'bible-look', SEARCH: 'bible-search', BACK
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
-	this.bibleCache = new BibleCache(this.versionCode);
 };
 AppViewController.prototype.begin = function() {
-	var types = new AssetType('application', this.versionCode);
+	var types = new AssetType('document', this.versionCode);
 	types.tableContents = true;
 	types.chapterFiles = true;
 	types.history = true;
 	types.concordance = true;
+	this.bibleCache = new BibleCache(types);
 	var that = this;
 	var assets = new AssetController(types);
 	assets.checkBuildLoad(function(typesLoaded) {
@@ -32,7 +32,7 @@ AppViewController.prototype.begin = function() {
 		that.codexView = new CodexView(that.tableContents, that.bibleCache);
 		Object.freeze(that);
 
-		//that.tableContentsView.showTocBookList();
-		that.searchView.showSearch("risen");
+		that.tableContentsView.showTocBookList();
+		//that.searchView.showSearch("risen");
 	});
 };
