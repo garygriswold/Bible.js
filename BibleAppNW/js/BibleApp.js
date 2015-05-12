@@ -162,25 +162,33 @@ function CodexView(tableContents, bibleCache) {
 				that.addChapterInProgress = true;
 				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
 				var nextChapter = that.tableContents.nextChapter(lastChapter);
-				document.body.appendChild(nextChapter.rootNode);
-				that.chapterQueue.push(nextChapter);
-				that.showChapter(nextChapter, function() {
-					that.checkChapterQueueSize('top');
+				if (nextChapter) {
+					document.body.appendChild(nextChapter.rootNode);
+					that.chapterQueue.push(nextChapter);
+					that.showChapter(nextChapter, function() {
+						that.checkChapterQueueSize('top');
+						that.addChapterInProgress = false;
+					});
+				} else {
 					that.addChapterInProgress = false;
-				});
+				}
 			}
 			else if (window.scrollY <= window.outerHeight) {
 				that.addChapterInProgress = true;
 				var saveY = window.scrollY;
 				var firstChapter = that.chapterQueue[0];
 				var beforeChapter = that.tableContents.priorChapter(firstChapter);
-				document.body.insertBefore(beforeChapter.rootNode, firstChapter.rootNode);
-				that.chapterQueue.unshift(beforeChapter);
-				that.showChapter(beforeChapter, function() {
-					window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
-					that.checkChapterQueueSize('bottom');
+				if (beforeChapter) {
+					document.body.insertBefore(beforeChapter.rootNode, firstChapter.rootNode);
+					that.chapterQueue.unshift(beforeChapter);
+					that.showChapter(beforeChapter, function() {
+						window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
+						that.checkChapterQueueSize('bottom');
+						that.addChapterInProgress = false;
+					});
+				} else {
 					that.addChapterInProgress = false;
-				});
+				}
 			}
 		}
 	});
@@ -189,15 +197,19 @@ function CodexView(tableContents, bibleCache) {
 CodexView.prototype.showPassage = function(nodeId) {
 	this.chapterQueue.splice(0);
 	var chapter = new Reference(nodeId);
-	for (var i=0; i<3; i++) {
+	for (var i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.priorChapter(chapter);
-		this.chapterQueue.unshift(chapter);
+		if (chapter) {
+			this.chapterQueue.unshift(chapter);
+		}
 	}
 	chapter = new Reference(nodeId);
 	this.chapterQueue.push(chapter);
-	for (var i=0; i<3; i++) {
+	for (var i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.nextChapter(chapter);
-		this.chapterQueue.push(chapter);
+		if (chapter) {
+			this.chapterQueue.push(chapter);
+		}
 	}
 	this.removeBody();
 	var that = this;
@@ -542,7 +554,6 @@ Reference.prototype.chapterVerse = function() {
 
 function BibleCache(types) {
 	this.types = types;
-	//this.versionCode = versionCode;
 	this.chapterMap = {};
 	this.reader = new NodeFileReader(types.location);
 	this.parser = new USXParser();
@@ -555,7 +566,6 @@ BibleCache.prototype.getChapter = function(reference, callback) {
 	if (chapter !== undefined) {
 		callback(chapter);
 	} else {
-		//var filepath = 'usx/' + this.versionCode + '/' + reference.path();
 		var filepath = this.types.getAppPath(reference.path());
 		this.reader.readTextFile(filepath, function(data) {
 			if (data.errno) {
@@ -683,54 +693,6 @@ Concordance.prototype.intersection = function(refLists) {
 		}
 		return(map);
 	}
-}
-/** This is a fast intersection method, but it requires the lists to be sorted. */
-Concordance.prototype.intersectionOld = function(a, b) {
-	var ai = 0
-	var bi = 0;
-	var result = [];
-
-  	while( ai < a.length && bi < b.length ) {
-    	if      (a[ai] < b[bi] ){ ai++; }
-   		else if (a[ai] > b[bi] ){ bi++; }
-   		else { /* they're equal */
-     		result.push(a[ai]);
-     		ai++;
-     		bi++;
-   		}
-  	}
-  	return result;
-};
-Concordance.prototype.dumpAlphaSort = function() {
-	var words = Object.keys(this.index);
-	var alphaWords = words.sort();
-	this.dump(alphaWords);
-};
-Concordance.prototype.dumpFrequencySort = function() {
-	var freqMap = {};
-	var words = Object.keys(this.index);
-	for (var i=0; i<words.length; i++) {
-		var key = words[i];
-		var len = this.index[key].length;
-		console.log('***', key, len);
-		if (freqMap[len] === undefined) {
-			freqMap[len] = [];
-		}
-		freqMap[len].push(key);
-	}
-	var freqSort = Object.keys(freqMap).sort(function(a, b) {
-		return(a-b);
-	});
-	for (var i=0; i<freqSort.length; i++) {
-		var freq = freqSort[i];
-		console.log(freq, freqMap[freq]);
-	}
-};
-Concordance.prototype.dump = function(words) {
-	for (var i=0; i<words.length; i++) {
-		var word = words[i];
-		console.log(word, this.index[word]);
-	};	
 };
 Concordance.prototype.toJSON = function() {
 	return(JSON.stringify(this.index, null, ' '));
@@ -765,7 +727,7 @@ TOC.prototype.nextChapter = function(reference) {
 	if (reference.chapter < current.lastChapter) {
 		return(new Reference(reference.book, reference.chapter + 1));
 	} else {
-		return(new Reference(current.nextBook, 0));
+		return((current.nextBook) ? new Reference(current.nextBook, 0) : null);
 	}
 };
 TOC.prototype.priorChapter = function(reference) {
@@ -774,7 +736,7 @@ TOC.prototype.priorChapter = function(reference) {
 		return(new Reference(reference.book, reference.chapter -1));
 	} else {
 		var priorBook = this.bookMap[current.priorBook];
-		return(new Reference(current.priorBook, priorBook.lastChapter));
+		return((priorBook) ? new Reference(current.priorBook, priorBook.lastChapter) : null);
 	}
 };
 TOC.prototype.size = function() {
@@ -807,7 +769,7 @@ function StyleIndex() {
 	this.filename = 'styleIndex.json';
 	this.isFilled = false;
 	this.completed = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl',
-		'para.mt', 'para.mt2', 'para.mt3', 'para.ms', 'para.d',
+		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.d',
 		'chapter.c', 'verse.v',
 		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 'para.nb',
 		'para.sp', 'para.q', 'para.q2',
@@ -1461,7 +1423,9 @@ function AssetBuilder(types) {
 		this.builders.push(new TOCBuilder());
 	}
 	if (types.concordance) {
-		this.builders.push(new ConcordanceBuilder());
+		var concordanceBuilder = new ConcordanceBuilder();
+		this.builders.push(concordanceBuilder);
+		this.builders.push(new WordCountBuilder(concordanceBuilder.concordance));
 	}
 	if (types.history) { 
 		// do nothing 
@@ -1635,6 +1599,51 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 ConcordanceBuilder.prototype.toJSON = function() {
 	return(this.concordance.toJSON());
 };/**
+* This class gets information from the concordance that was built, and produces 
+* a word list with frequency counts for each word.
+*/
+"use strict";
+
+function WordCountBuilder(concordance) {
+	this.concordance = concordance;
+	this.filename = 'wordCount.json';
+};
+WordCountBuilder.prototype.readBook = function(usxRoot) {
+};
+WordCountBuilder.prototype.toJSON = function() {
+	var countMap = {};
+	var freqMap = {};
+	var index = this.concordance.index;
+	var words = Object.keys(index);
+	for (var i=0; i<words.length; i++) {
+		var key = words[i];
+		var len = index[key].length;
+		countMap[key] = len;
+		if (freqMap[len] === undefined) {
+			freqMap[len] = [];
+		}
+		freqMap[len].push(key);
+	}
+	var wordSort = Object.keys(countMap).sort();
+	var freqSort = Object.keys(freqMap).sort(function(a, b) {
+		return(a - b);
+	});
+	var result = [];
+	result.push('Num Words:  ' + wordSort.length);
+	for (var i=0; i<wordSort.length; i++) {
+		var word = wordSort[i];
+		result.push(word + ':\t\t' + countMap[word]);
+	}
+	for (i=0; i<freqSort.length; i++) {
+		var freq = freqSort[i];
+		var words = freqMap[freq];
+		for (var j=0; j<words.length; j++) {
+			result.push(freq + ':\t\t' + words[j]);
+		}
+	}
+	return(result.join('\n'));
+};
+/**
 * This class traverses the USX data model in order to find each style, and 
 * reference to that style.  It builds an index to each style showing
 * all of the references where each style is used.

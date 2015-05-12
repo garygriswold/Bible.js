@@ -29,7 +29,7 @@ TOC.prototype.nextChapter = function(reference) {
 	if (reference.chapter < current.lastChapter) {
 		return(new Reference(reference.book, reference.chapter + 1));
 	} else {
-		return(new Reference(current.nextBook, 0));
+		return((current.nextBook) ? new Reference(current.nextBook, 0) : null);
 	}
 };
 TOC.prototype.priorChapter = function(reference) {
@@ -38,7 +38,7 @@ TOC.prototype.priorChapter = function(reference) {
 		return(new Reference(reference.book, reference.chapter -1));
 	} else {
 		var priorBook = this.bookMap[current.priorBook];
-		return(new Reference(current.priorBook, priorBook.lastChapter));
+		return((priorBook) ? new Reference(current.priorBook, priorBook.lastChapter) : null);
 	}
 };
 TOC.prototype.size = function() {

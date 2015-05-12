@@ -25,25 +25,33 @@ function CodexView(tableContents, bibleCache) {
 				that.addChapterInProgress = true;
 				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
 				var nextChapter = that.tableContents.nextChapter(lastChapter);
-				document.body.appendChild(nextChapter.rootNode);
-				that.chapterQueue.push(nextChapter);
-				that.showChapter(nextChapter, function() {
-					that.checkChapterQueueSize('top');
+				if (nextChapter) {
+					document.body.appendChild(nextChapter.rootNode);
+					that.chapterQueue.push(nextChapter);
+					that.showChapter(nextChapter, function() {
+						that.checkChapterQueueSize('top');
+						that.addChapterInProgress = false;
+					});
+				} else {
 					that.addChapterInProgress = false;
-				});
+				}
 			}
 			else if (window.scrollY <= window.outerHeight) {
 				that.addChapterInProgress = true;
 				var saveY = window.scrollY;
 				var firstChapter = that.chapterQueue[0];
 				var beforeChapter = that.tableContents.priorChapter(firstChapter);
-				document.body.insertBefore(beforeChapter.rootNode, firstChapter.rootNode);
-				that.chapterQueue.unshift(beforeChapter);
-				that.showChapter(beforeChapter, function() {
-					window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
-					that.checkChapterQueueSize('bottom');
+				if (beforeChapter) {
+					document.body.insertBefore(beforeChapter.rootNode, firstChapter.rootNode);
+					that.chapterQueue.unshift(beforeChapter);
+					that.showChapter(beforeChapter, function() {
+						window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
+						that.checkChapterQueueSize('bottom');
+						that.addChapterInProgress = false;
+					});
+				} else {
 					that.addChapterInProgress = false;
-				});
+				}
 			}
 		}
 	});
@@ -52,15 +60,19 @@ function CodexView(tableContents, bibleCache) {
 CodexView.prototype.showPassage = function(nodeId) {
 	this.chapterQueue.splice(0);
 	var chapter = new Reference(nodeId);
-	for (var i=0; i<3; i++) {
+	for (var i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.priorChapter(chapter);
-		this.chapterQueue.unshift(chapter);
+		if (chapter) {
+			this.chapterQueue.unshift(chapter);
+		}
 	}
 	chapter = new Reference(nodeId);
 	this.chapterQueue.push(chapter);
-	for (var i=0; i<3; i++) {
+	for (var i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.nextChapter(chapter);
-		this.chapterQueue.push(chapter);
+		if (chapter) {
+			this.chapterQueue.push(chapter);
+		}
 	}
 	this.removeBody();
 	var that = this;
