@@ -15,7 +15,9 @@ function AssetBuilder(types) {
 		this.builders.push(new TOCBuilder());
 	}
 	if (types.concordance) {
-		this.builders.push(new ConcordanceBuilder());
+		var concordanceBuilder = new ConcordanceBuilder();
+		this.builders.push(concordanceBuilder);
+		this.builders.push(new WordCountBuilder(concordanceBuilder.concordance));
 	}
 	if (types.history) { 
 		// do nothing 

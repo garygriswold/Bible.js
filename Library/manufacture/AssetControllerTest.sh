@@ -7,6 +7,7 @@ cat AssetLoader.js >> temp.js
 cat ChapterBuilder.js >> temp.js
 cat TOCBuilder.js >> temp.js
 cat ConcordanceBuilder.js >> temp.js
+cat WordCountBuilder.js >> temp.js
 cat StyleIndexBuilder.js >> temp.js
 cat HTMLBuilder.js >> temp.js
 cat ../model/usx/USX.js >> temp.js

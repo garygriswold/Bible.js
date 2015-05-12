@@ -27,6 +27,7 @@ cat ../Library/manufacture/AssetChecker.js >> js/BibleApp.js
 cat ../Library/manufacture/AssetBuilder.js >> js/BibleApp.js
 cat ../Library/manufacture/TOCBuilder.js >> js/BibleApp.js
 cat ../Library/manufacture/ConcordanceBuilder.js >> js/BibleApp.js
+cat ../Library/manufacture/WordCountBuilder.js >> js/BibleApp.js
 cat ../Library/manufacture/StyleIndexBuilder.js >> js/BibleApp.js
 cat ../Library/manufacture/ChapterBuilder.js >> js/BibleApp.js
 

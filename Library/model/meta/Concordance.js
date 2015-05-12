@@ -71,54 +71,6 @@ Concordance.prototype.intersection = function(refLists) {
 		}
 		return(map);
 	}
-}
-/** This is a fast intersection method, but it requires the lists to be sorted. */
-Concordance.prototype.intersectionOld = function(a, b) {
-	var ai = 0
-	var bi = 0;
-	var result = [];
-
-  	while( ai < a.length && bi < b.length ) {
-    	if      (a[ai] < b[bi] ){ ai++; }
-   		else if (a[ai] > b[bi] ){ bi++; }
-   		else { /* they're equal */
-     		result.push(a[ai]);
-     		ai++;
-     		bi++;
-   		}
-  	}
-  	return result;
-};
-Concordance.prototype.dumpAlphaSort = function() {
-	var words = Object.keys(this.index);
-	var alphaWords = words.sort();
-	this.dump(alphaWords);
-};
-Concordance.prototype.dumpFrequencySort = function() {
-	var freqMap = {};
-	var words = Object.keys(this.index);
-	for (var i=0; i<words.length; i++) {
-		var key = words[i];
-		var len = this.index[key].length;
-		console.log('***', key, len);
-		if (freqMap[len] === undefined) {
-			freqMap[len] = [];
-		}
-		freqMap[len].push(key);
-	}
-	var freqSort = Object.keys(freqMap).sort(function(a, b) {
-		return(a-b);
-	});
-	for (var i=0; i<freqSort.length; i++) {
-		var freq = freqSort[i];
-		console.log(freq, freqMap[freq]);
-	}
-};
-Concordance.prototype.dump = function(words) {
-	for (var i=0; i<words.length; i++) {
-		var word = words[i];
-		console.log(word, this.index[word]);
-	};	
 };
 Concordance.prototype.toJSON = function() {
 	return(JSON.stringify(this.index, null, ' '));
