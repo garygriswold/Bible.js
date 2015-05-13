@@ -7,8 +7,8 @@ function StyleIndex() {
 	this.index = {};
 	this.filename = 'styleIndex.json';
 	this.isFilled = false;
-	this.completed = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl',
-		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.d',
+	this.completed = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl', 'para.rem',
+		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.ms1', 'para.d',
 		'chapter.c', 'verse.v',
 		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 'para.nb',
 		'para.sp', 'para.q', 'para.q1', 'para.q2',

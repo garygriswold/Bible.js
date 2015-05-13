@@ -96,6 +96,16 @@ p.ms {
 	line-height: 1.0;
 	text-align: center;
 }
+/* Section Heading Level 1 */
+p.ms1 {
+	font-family: serif;
+	font-weight: bold;
+    font-size: 1.16em;
+    text-align: center;
+    margin-bottom: 4pt;
+	margin-top: 16pt;
+	border-style: none;
+}
 /* Descriptive Title */
 p.d {
 	font-size: 0.9em;

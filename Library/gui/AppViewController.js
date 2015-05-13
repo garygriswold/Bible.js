@@ -16,6 +16,7 @@ AppViewController.prototype.begin = function() {
 	types.chapterFiles = true;
 	types.history = true;
 	types.concordance = true;
+	types.styleIndex = true;
 	this.bibleCache = new BibleCache(types);
 	var that = this;
 	var assets = new AssetController(types);
