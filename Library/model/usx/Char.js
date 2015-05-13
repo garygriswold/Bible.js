@@ -35,7 +35,7 @@ Char.prototype.buildUSX = function(result) {
 };
 Char.prototype.toDOM = function(parentNode) {
 	if (this.style === 'fr' || this.style === 'xo') {
-		return(undefined);
+		return(null);// this drop these styles from presentation
 	}
 	else {
 		var child = document.createElement('span');

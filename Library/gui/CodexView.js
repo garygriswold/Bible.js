@@ -19,6 +19,12 @@ function CodexView(tableContents, bibleCache) {
 		console.log(JSON.stringify(event.detail));
 		that.showPassage(event.detail.id);
 	});
+	document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
+		that.showFootnote(event.detail.id);
+	});
+	document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
+		that.hideFootnote(event.detail.id);
+	});
 	document.addEventListener('scroll', function(event) {
 		if (! that.addChapterInProgress) {
 			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.outerHeight) {
@@ -137,7 +143,7 @@ CodexView.prototype.showFootnote = function(noteId) {
 	for (var i=0; i<note.children.length; i++) {
 		var child = note.children[i];
 		if (child.nodeName === 'SPAN') {
-			child.innerHTML = child.getAttribute('note'); + ' ';
+			child.innerHTML = child.getAttribute('note') + ' ';
 		}
 	} 
 };

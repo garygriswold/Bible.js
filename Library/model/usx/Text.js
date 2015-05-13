@@ -5,7 +5,6 @@
 
 function Text(text) {
 	this.text = text;
-	this.footnotes = [ 'f', 'fr', 'ft', 'fqa', 'x', 'xt', 'xo' ];
 	Object.freeze(this);
 };
 Text.prototype.tagName = 'text';
@@ -13,13 +12,25 @@ Text.prototype.buildUSX = function(result) {
 	result.push(this.text);
 };
 Text.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
-	if (parentNode !== undefined && parentNode.tagName !== 'ARTICLE') {
-		if (parentNode.nodeType === 1 && this.footnotes.indexOf(parentNode.getAttribute('class')) >= 0) {
+	if (parentNode === null || parentNode.tagName === 'ARTICLE') {
+		// discard text node
+	} else {
+		var nodeId = bookCode + chapterNum + '-' + noteNum;
+		var parentClass = parentNode.getAttribute('class');
+		if (parentClass.substr(0, 3) === 'top') {
+			var textNode = document.createElement('span');
+			textNode.setAttribute('class', parentClass.substr(3));
+			textNode.setAttribute('note', this.text);
+			parentNode.appendChild(textNode);
+			textNode.addEventListener('click', function() {
+				event.stopImmediatePropagation();
+				document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
+			});
+		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of parent.
-			var nodeId = bookCode + chapterNum + '-' + noteNum;
 			parentNode.addEventListener('click', function() {
-				app.codex.hideFootnote(nodeId);
-				event.stopPropagation();
+				event.stopImmediatePropagation();
+				document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
 			});
 		}
 		else {

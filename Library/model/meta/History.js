@@ -6,13 +6,14 @@
 */
 "use strict";
 
-function History(location) {
+function History(types) {
+	this.types = types;
 	this.items = [];
 	this.currentItem = null;
-	this.writer = new NodeFileWriter(location);
+	this.writer = new NodeFileWriter(types.location);
 	this.isFilled = false;
 	var that = this;
-	if (location !== 'test2dbl') { // HACK, History could be used on server
+	if (types.location !== 'test2dbl') { // HACK, History could be used on server
 		document.body.addEventListener(BIBLE.TOC, function(event) {
 			that.addEvent(event);	
 		});
@@ -56,7 +57,7 @@ History.prototype.item = function(index) {
 	return((index > -1 && index < this.items.length) ? this.items[index] : 'JHN:1');
 };
 History.prototype.persist = function() {
-	var filepath = 'usx/WEB/history.json'; // Temporary path, it must be stored in data directory
+	var filepath = this.types.getAppPath('history.json');
 	this.writer.writeTextFile(filepath, this.toJSON(), function(filename) {
 		if (filename.errno) {
 			console.log('error writing history.json', filename);

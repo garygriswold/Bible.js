@@ -7,9 +7,8 @@ function Note(node) {
 	this.caller = node.caller.charAt(0);
 	if (this.caller !== '+') {
 		console.log(JSON.stringify(node));
-		throw new Error('Caller with no +');
+		throw new Error('Note caller with no +');
 	}
-	this.note = node.caller.substring(1).replace(/^\s\s*/, '');
 	this.style = node.style;
 	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
@@ -42,10 +41,7 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	var nodeId = bookCode + chapterNum + '-' + noteNum;
 	var refChild = document.createElement('span');
 	refChild.setAttribute('id', nodeId);
-	refChild.setAttribute('class', 'fnref');
-	if (this.note) {
-		refChild.setAttribute('note', this.note);
-	}
+	refChild.setAttribute('class', 'top' + this.style);
 	switch(this.style) {
 		case 'f':
 			refChild.textContent = '\u261E ';
@@ -58,20 +54,9 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	}
 	parentNode.appendChild(refChild);
 	refChild.addEventListener('click', function() {
-		console.log('inside show footnote', this.id);
-		app.codex.showFootnote(this.id);
+		event.stopImmediatePropagation();
+		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: this.id }}));
 	});
-
-	if (this.note !== undefined && this.note.length > 0) {
-		var noteChild = document.createElement('span');
-		noteChild.setAttribute('class', this.style);
-		noteChild.setAttribute('note', this.note);
-		refChild.appendChild(noteChild);
-		noteChild.addEventListener('click', function() {
-			app.codex.hideFootnote(nodeId);
-			event.stopPropagation();
-		});
-	}
 	return(refChild);
 };
 Note.prototype.toHTML = function() {

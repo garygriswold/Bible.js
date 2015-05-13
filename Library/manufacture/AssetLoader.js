@@ -13,7 +13,7 @@ function AssetLoader(types) {
 	this.types = types;
 	this.toc = new TOC();
 	this.concordance = new Concordance();
-	this.history = new History(types.location);
+	this.history = new History(types);
 	this.styleIndex = new StyleIndex();
 };
 AssetLoader.prototype.load = function(callback) {

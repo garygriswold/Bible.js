@@ -5,7 +5,7 @@
 "use strict"
 
 var BIBLE = { TOC: 'bible-toc', LOOK: 'bible-look', SEARCH: 'bible-search', BACK: 'bible-back', FORWARD: 'bible-forward', 
-		LAST: 'bible-last' };
+		LAST: 'bible-last', SHOW_NOTE: 'bible-show-note', HIDE_NOTE: 'bible-hide-note' };
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
@@ -156,6 +156,14 @@ function CodexView(tableContents, bibleCache) {
 		console.log(JSON.stringify(event.detail));
 		that.showPassage(event.detail.id);
 	});
+	document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
+		console.log('caught show footnote', JSON.stringify(event.detail));
+		that.showFootnote(event.detail.id);
+	});
+	document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
+		console.log('caught hide footnote', JSON.stringify(event.detail));
+		that.hideFootnote(event.detail.id);
+	});
 	document.addEventListener('scroll', function(event) {
 		if (! that.addChapterInProgress) {
 			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.outerHeight) {
@@ -274,7 +282,7 @@ CodexView.prototype.showFootnote = function(noteId) {
 	for (var i=0; i<note.children.length; i++) {
 		var child = note.children[i];
 		if (child.nodeName === 'SPAN') {
-			child.innerHTML = child.getAttribute('note'); + ' ';
+			child.innerHTML = child.getAttribute('note') + ' ';
 		}
 	} 
 };
@@ -772,8 +780,8 @@ function StyleIndex() {
 		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.d',
 		'chapter.c', 'verse.v',
 		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 'para.nb',
-		'para.sp', 'para.q', 'para.q2',
-		'note.f', 'note.x',
+		'para.sp', 'para.q', 'para.q1', 'para.q2',
+		'note.f', 'note.x', 'char.fr', 'char.ft', 'char.fqa', 'char.xo',
 		'char.wj', 'char.qs'];
 	Object.seal(this);
 };
@@ -819,13 +827,14 @@ StyleIndex.prototype.toJSON = function() {
 */
 "use strict";
 
-function History(location) {
+function History(types) {
+	this.types = types;
 	this.items = [];
 	this.currentItem = null;
-	this.writer = new NodeFileWriter(location);
+	this.writer = new NodeFileWriter(types.location);
 	this.isFilled = false;
 	var that = this;
-	if (location !== 'test2dbl') { // HACK, History could be used on server
+	if (types.location !== 'test2dbl') { // HACK, History could be used on server
 		document.body.addEventListener(BIBLE.TOC, function(event) {
 			that.addEvent(event);	
 		});
@@ -869,7 +878,7 @@ History.prototype.item = function(index) {
 	return((index > -1 && index < this.items.length) ? this.items[index] : 'JHN:1');
 };
 History.prototype.persist = function() {
-	var filepath = 'usx/WEB/history.json'; // Temporary path, it must be stored in data directory
+	var filepath = this.types.getAppPath('history.json');
 	this.writer.writeTextFile(filepath, this.toJSON(), function(filename) {
 		if (filename.errno) {
 			console.log('error writing history.json', filename);
@@ -1796,7 +1805,7 @@ function AssetLoader(types) {
 	this.types = types;
 	this.toc = new TOC();
 	this.concordance = new Concordance();
-	this.history = new History(types.location);
+	this.history = new History(types);
 	this.styleIndex = new StyleIndex();
 };
 AssetLoader.prototype.load = function(callback) {
@@ -2174,9 +2183,8 @@ function Note(node) {
 	this.caller = node.caller.charAt(0);
 	if (this.caller !== '+') {
 		console.log(JSON.stringify(node));
-		throw new Error('Caller with no +');
+		throw new Error('Note caller with no +');
 	}
-	this.note = node.caller.substring(1).replace(/^\s\s*/, '');
 	this.style = node.style;
 	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
@@ -2209,10 +2217,7 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	var nodeId = bookCode + chapterNum + '-' + noteNum;
 	var refChild = document.createElement('span');
 	refChild.setAttribute('id', nodeId);
-	refChild.setAttribute('class', 'fnref');
-	if (this.note) {
-		refChild.setAttribute('note', this.note);
-	}
+	refChild.setAttribute('class', 'top' + this.style);
 	switch(this.style) {
 		case 'f':
 			refChild.textContent = '\u261E ';
@@ -2225,20 +2230,9 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	}
 	parentNode.appendChild(refChild);
 	refChild.addEventListener('click', function() {
-		console.log('inside show footnote', this.id);
-		app.codex.showFootnote(this.id);
+		event.stopImmediatePropagation();
+		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: this.id }}));
 	});
-
-	if (this.note !== undefined && this.note.length > 0) {
-		var noteChild = document.createElement('span');
-		noteChild.setAttribute('class', this.style);
-		noteChild.setAttribute('note', this.note);
-		refChild.appendChild(noteChild);
-		noteChild.addEventListener('click', function() {
-			app.codex.hideFootnote(nodeId);
-			event.stopPropagation();
-		});
-	}
 	return(refChild);
 };
 Note.prototype.toHTML = function() {
@@ -2290,7 +2284,7 @@ Char.prototype.buildUSX = function(result) {
 };
 Char.prototype.toDOM = function(parentNode) {
 	if (this.style === 'fr' || this.style === 'xo') {
-		return(undefined);
+		return(null);// this drop these styles from presentation
 	}
 	else {
 		var child = document.createElement('span');
@@ -2317,7 +2311,6 @@ Char.prototype.buildHTML = function(result) {
 
 function Text(text) {
 	this.text = text;
-	this.footnotes = [ 'f', 'fr', 'ft', 'fqa', 'x', 'xt', 'xo' ];
 	Object.freeze(this);
 };
 Text.prototype.tagName = 'text';
@@ -2325,13 +2318,25 @@ Text.prototype.buildUSX = function(result) {
 	result.push(this.text);
 };
 Text.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
-	if (parentNode !== undefined && parentNode.tagName !== 'ARTICLE') {
-		if (parentNode.nodeType === 1 && this.footnotes.indexOf(parentNode.getAttribute('class')) >= 0) {
+	if (parentNode === null || parentNode.tagName === 'ARTICLE') {
+		// discard text node
+	} else {
+		var nodeId = bookCode + chapterNum + '-' + noteNum;
+		var parentClass = parentNode.getAttribute('class');
+		if (parentClass.substr(0, 3) === 'top') {
+			var textNode = document.createElement('span');
+			textNode.setAttribute('class', parentClass.substr(3));
+			textNode.setAttribute('note', this.text);
+			parentNode.appendChild(textNode);
+			textNode.addEventListener('click', function() {
+				event.stopImmediatePropagation();
+				document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
+			});
+		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of parent.
-			var nodeId = bookCode + chapterNum + '-' + noteNum;
 			parentNode.addEventListener('click', function() {
-				app.codex.hideFootnote(nodeId);
-				event.stopPropagation();
+				event.stopImmediatePropagation();
+				document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
 			});
 		}
 		else {

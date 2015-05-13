@@ -11,8 +11,8 @@ function StyleIndex() {
 		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.d',
 		'chapter.c', 'verse.v',
 		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 'para.nb',
-		'para.sp', 'para.q', 'para.q2',
-		'note.f', 'note.x',
+		'para.sp', 'para.q', 'para.q1', 'para.q2',
+		'note.f', 'note.x', 'char.fr', 'char.ft', 'char.fqa', 'char.xo',
 		'char.wj', 'char.qs'];
 	Object.seal(this);
 };

@@ -156,6 +156,12 @@ p.q {
 	padding-right: 6%;
 	margin: 0;
 }
+/* Poetry First Line */
+p.q1 {
+	padding-left: 6%;
+	padding-right: 6%;
+	margin: 0;
+}
 /* Poetry Second Line */
 p.q2 {
 	padding-left: 10%;
@@ -177,7 +183,7 @@ span.wj {
 	color: #FF3333;
 }
 /* footnote references */
-span.fnref {
+span.topf, span.topx {
 	font-size: 1.0em;
 	color: #FFB4B5;
 }
@@ -187,6 +193,7 @@ span.f, span.ft {
 	background-color: #FFFFB4;
 	font-style: italic;
 }
+/* footnote alternate translation */
 span.fqa {
 	color: #999999 ;
 	background-color: #FFFFB4;

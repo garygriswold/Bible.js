@@ -5,7 +5,7 @@
 "use strict"
 
 var BIBLE = { TOC: 'bible-toc', LOOK: 'bible-look', SEARCH: 'bible-search', BACK: 'bible-back', FORWARD: 'bible-forward', 
-		LAST: 'bible-last' };
+		LAST: 'bible-last', SHOW_NOTE: 'bible-show-note', HIDE_NOTE: 'bible-hide-note' };
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
