@@ -33,7 +33,7 @@ AppViewController.prototype.begin = function() {
 		that.codexView = new CodexView(that.tableContents, that.bibleCache);
 		Object.freeze(that);
 
-		//that.tableContentsView.showView();
-		that.searchView.showView("risen");
+		that.tableContentsView.showView();
+		//that.searchView.showView("risen");
 	});
 };
