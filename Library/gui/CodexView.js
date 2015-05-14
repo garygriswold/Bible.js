@@ -9,6 +9,7 @@ function CodexView(tableContents, bibleCache) {
 	this.tableContents = tableContents;
 	this.bibleCache = bibleCache;
 	this.chapterQueue = [];
+	this.rootNode = document.getElementById('codexRoot');
 	var that = this;
 	this.addChapterInProgress = false;
 	document.body.addEventListener(BIBLE.TOC_FIND, function(event) {
@@ -29,6 +30,9 @@ function CodexView(tableContents, bibleCache) {
 };
 CodexView.prototype.hideView = function() {
 	document.removeEventListener('scroll', this.onScrollHandler);
+	for (var i=this.rootNode.length -1; i>=0; i--) {
+		this.rootNode.removeChild(this.rootNode.children[i]);
+	}
 };
 CodexView.prototype.showView = function(nodeId) {
 	this.chapterQueue.splice(0);
@@ -53,7 +57,7 @@ CodexView.prototype.showView = function(nodeId) {
 	function processQueue(index) {
 		if (index < that.chapterQueue.length) {
 			var chapt = that.chapterQueue[index];
-			document.body.appendChild(chapt.rootNode);
+			that.rootNode.appendChild(chapt.rootNode);
 			that.showChapter(chapt, function() {
 				processQueue(index +1);
 			});
@@ -70,7 +74,7 @@ CodexView.prototype.showView = function(nodeId) {
 				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
 				var nextChapter = that.tableContents.nextChapter(lastChapter);
 				if (nextChapter) {
-					document.body.appendChild(nextChapter.rootNode);
+					that.rootNode.appendChild(nextChapter.rootNode);
 					that.chapterQueue.push(nextChapter);
 					that.showChapter(nextChapter, function() {
 						that.checkChapterQueueSize('top');
@@ -86,7 +90,7 @@ CodexView.prototype.showView = function(nodeId) {
 				var firstChapter = that.chapterQueue[0];
 				var beforeChapter = that.tableContents.priorChapter(firstChapter);
 				if (beforeChapter) {
-					document.body.insertBefore(beforeChapter.rootNode, firstChapter.rootNode);
+					that.rootNode.insertBefore(beforeChapter.rootNode, firstChapter.rootNode);
 					that.chapterQueue.unshift(beforeChapter);
 					that.showChapter(beforeChapter, function() {
 						window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
