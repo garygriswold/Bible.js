@@ -4,7 +4,7 @@
 */
 "use strict"
 
-var BIBLE = { TOC: 'bible-toc', LOOK: 'bible-look', SEARCH: 'bible-search', BACK: 'bible-back', FORWARD: 'bible-forward', 
+var BIBLE = { TOC_FIND: 'bible-toc-find', LOOK: 'bible-look', SEARCH: 'bible-search', BACK: 'bible-back', FORWARD: 'bible-forward', 
 		LAST: 'bible-last', SHOW_NOTE: 'bible-show-note', HIDE_NOTE: 'bible-hide-note' };
 
 function AppViewController(versionCode) {
@@ -33,8 +33,8 @@ AppViewController.prototype.begin = function() {
 		that.codexView = new CodexView(that.tableContents, that.bibleCache);
 		Object.freeze(that);
 
-		that.tableContentsView.showTocBookList();
-		//that.searchView.showSearch("risen");
+		//that.tableContentsView.showView();
+		that.searchView.showView("risen");
 	});
 };
 /**
@@ -45,21 +45,26 @@ AppViewController.prototype.begin = function() {
 function TableContentsView(toc) {
 	this.toc = toc;
 	this.root = null;
+	this.rootNode = document.getElementById('tocRoot');
 	Object.seal(this);
 };
-TableContentsView.prototype.showTocBookList = function() {
+TableContentsView.prototype.showView = function() {
 	if (! this.root) {
 		this.root = this.buildTocBookList();
 	}
-	this.removeBody();
-	document.body.appendChild(this.root);
+	if (this.rootNode.children.length < 1) {
+		this.rootNode.appendChild(this.root);
+	}
+};
+TableContentsView.prototype.hideView = function() {
+	if (this.rootNode.children.length > 0) {
+		this.rootNode.removeChild(this.root);
+	}
 };
 TableContentsView.prototype.buildTocBookList = function() {
-	var root = document.createDocumentFragment();
 	var div = document.createElement('div');
 	div.setAttribute('id', 'toc');
 	div.setAttribute('class', 'tocPage');
-	root.appendChild(div);
 	for (var i=0; i<this.toc.bookList.length; i++) {
 		var book = this.toc.bookList[i];
 		var bookNode = document.createElement('p');
@@ -73,7 +78,7 @@ TableContentsView.prototype.buildTocBookList = function() {
 			that.showTocChapterList(bookCode);
 		});
 	}
-	return(root);
+	return(div);
 };
 TableContentsView.prototype.showTocChapterList = function(bookCode) {
 	var book = this.toc.find(bookCode);
@@ -111,13 +116,6 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 TableContentsView.prototype.cellsPerRow = function() {
 	return(5); // some calculation based upon the width of the screen
 }
-TableContentsView.prototype.removeBody = function() {
-	var bodyNode = document.body;
-	for (var i=bodyNode.children.length -1; i>=0; i--) {
-		var childNode = bodyNode.children[i];
-		bodyNode.removeChild(childNode);
-	}
-};
 TableContentsView.prototype.removeAllChapters = function() {
 	var div = document.getElementById('toc');
 	if (div) {
@@ -132,7 +130,8 @@ TableContentsView.prototype.removeAllChapters = function() {
 };
 TableContentsView.prototype.openChapter = function(nodeId) {
 	console.log('open chapter', nodeId);
-	document.body.dispatchEvent(new CustomEvent(BIBLE.TOC, { detail: { id: nodeId }}));
+	this.hideView();
+	document.body.dispatchEvent(new CustomEvent(BIBLE.TOC_FIND, { detail: { id: nodeId }}));
 };
 
 
@@ -149,13 +148,13 @@ function CodexView(tableContents, bibleCache) {
 	this.chapterQueue = [];
 	var that = this;
 	this.addChapterInProgress = false;
-	document.body.addEventListener(BIBLE.TOC, function(event) {
+	document.body.addEventListener(BIBLE.TOC_FIND, function(event) {
 		console.log(JSON.stringify(event.detail));
-		that.showPassage(event.detail.id);	
+		that.showView(event.detail.id);	
 	});
 	document.body.addEventListener(BIBLE.SEARCH, function(event) {
 		console.log(JSON.stringify(event.detail));
-		that.showPassage(event.detail.id);
+		that.showView(event.detail.id);
 	});
 	document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 		that.showFootnote(event.detail.id);
@@ -163,7 +162,6 @@ function CodexView(tableContents, bibleCache) {
 	document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
 		that.hideFootnote(event.detail.id);
 	});
-	/*
 	document.addEventListener('scroll', function(event) {
 		if (! that.addChapterInProgress) {
 			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.outerHeight) {
@@ -199,10 +197,13 @@ function CodexView(tableContents, bibleCache) {
 				}
 			}
 		}
-	});*/
+	});
 	Object.seal(this);
 };
-CodexView.prototype.showPassage = function(nodeId) {
+CodexView.prototype.hideView = function() {
+
+};
+CodexView.prototype.showView = function(nodeId) {
 	this.chapterQueue.splice(0);
 	var chapter = new Reference(nodeId);
 	for (var i=0; i<3 && chapter; i++) {
@@ -219,7 +220,6 @@ CodexView.prototype.showPassage = function(nodeId) {
 			this.chapterQueue.push(chapter);
 		}
 	}
-	this.removeBody();
 	var that = this;
 	processQueue(0);
 
@@ -295,13 +295,6 @@ CodexView.prototype.hideFootnote = function(noteId) {
 		}
 	}
 };
-CodexView.prototype.removeBody = function() {
-	var bodyNode = document.body;
-	for (var i=bodyNode.children.length -1; i>=0; i--) {
-		var childNode = bodyNode.children[i];
-		bodyNode.removeChild(childNode);
-	}
-};
 /**
 * This class provides the User Interface part of the concordance and search capabilities of the app.
 * It does a lazy create of all of the objects needed.
@@ -316,10 +309,30 @@ function SearchView(toc, concordance, bibleCache) {
 	this.query = '';
 	this.words = [];
 	this.bookList = [];
-	this.viewRoot = document.createDocumentFragment();
+	this.viewRoot = null;
+	this.rootNode = document.getElementById('searchRoot');
 	Object.seal(this);
 };
+SearchView.prototype.showView = function(query) {
+	if (query) {
+		this.hideView();
+		this.showSearch(query);
+		this.rootNode.appendChild(this.viewRoot);
+	} else if (this.viewRoot) {
+		if (this.rootNode.children.length < 1) {
+			this.rootNode.appendChild(this.viewRoot);
+		}
+	} else {
+		// must present search input form TO BE DONE
+	}
+};
+SearchView.prototype.hideView = function() {
+	if (this.rootNode.children.length > 0) {
+		this.rootNode.removeChild(this.viewRoot);
+	}
+};
 SearchView.prototype.showSearch = function(query) {
+	this.viewRoot = document.createElement('div');
 	this.query = query;
 	this.words = query.split(' ');
 	var refList = this.concordance.search(query);
@@ -335,7 +348,6 @@ SearchView.prototype.showSearch = function(query) {
 			this.appendSeeMore(bookRef);
 		}
 	}
-	this.attachSearchView();
 };
 SearchView.prototype.refListsByBook = function(refList) {
 	var bookList = [];
@@ -385,6 +397,7 @@ SearchView.prototype.appendReference = function(reference) {
 			verseNode.addEventListener('click', function() {
 				var nodeId = this.id.substr(3);
 				console.log('open chapter', nodeId);
+				that.hideView();
 				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH, { detail: { id: nodeId, source: that.query }}));
 			});
 		}	
@@ -426,14 +439,6 @@ SearchView.prototype.appendSeeMore = function(bookRef) {
 		}
 		return(null);
 	}
-};
-SearchView.prototype.attachSearchView = function() {
-	var appTop = document.body;
-	for (var i=appTop.children.length -1; i>=0; i--) {
-		var child = appTop.children[i];
-		appTop.removeChild(child);
-	}
-	appTop.appendChild(this.viewRoot);
 };
 
 /**

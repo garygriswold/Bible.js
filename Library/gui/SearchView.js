@@ -12,10 +12,30 @@ function SearchView(toc, concordance, bibleCache) {
 	this.query = '';
 	this.words = [];
 	this.bookList = [];
-	this.viewRoot = document.createDocumentFragment();
+	this.viewRoot = null;
+	this.rootNode = document.getElementById('searchRoot');
 	Object.seal(this);
 };
+SearchView.prototype.showView = function(query) {
+	if (query) {
+		this.hideView();
+		this.showSearch(query);
+		this.rootNode.appendChild(this.viewRoot);
+	} else if (this.viewRoot) {
+		if (this.rootNode.children.length < 1) {
+			this.rootNode.appendChild(this.viewRoot);
+		}
+	} else {
+		// must present search input form TO BE DONE
+	}
+};
+SearchView.prototype.hideView = function() {
+	if (this.rootNode.children.length > 0) {
+		this.rootNode.removeChild(this.viewRoot);
+	}
+};
 SearchView.prototype.showSearch = function(query) {
+	this.viewRoot = document.createElement('div');
 	this.query = query;
 	this.words = query.split(' ');
 	var refList = this.concordance.search(query);
@@ -31,7 +51,6 @@ SearchView.prototype.showSearch = function(query) {
 			this.appendSeeMore(bookRef);
 		}
 	}
-	this.attachSearchView();
 };
 SearchView.prototype.refListsByBook = function(refList) {
 	var bookList = [];
@@ -81,6 +100,7 @@ SearchView.prototype.appendReference = function(reference) {
 			verseNode.addEventListener('click', function() {
 				var nodeId = this.id.substr(3);
 				console.log('open chapter', nodeId);
+				that.hideView();
 				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH, { detail: { id: nodeId, source: that.query }}));
 			});
 		}	
@@ -122,13 +142,5 @@ SearchView.prototype.appendSeeMore = function(bookRef) {
 		}
 		return(null);
 	}
-};
-SearchView.prototype.attachSearchView = function() {
-	var appTop = document.body;
-	for (var i=appTop.children.length -1; i>=0; i--) {
-		var child = appTop.children[i];
-		appTop.removeChild(child);
-	}
-	appTop.appendChild(this.viewRoot);
 };
 
