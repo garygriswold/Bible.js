@@ -25,7 +25,45 @@ function CodexView(tableContents, bibleCache) {
 	document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
 		that.hideFootnote(event.detail.id);
 	});
-	document.addEventListener('scroll', function(event) {
+	Object.seal(this);
+};
+CodexView.prototype.hideView = function() {
+	document.removeEventListener('scroll', this.onScrollHandler);
+};
+CodexView.prototype.showView = function(nodeId) {
+	this.chapterQueue.splice(0);
+	var chapter = new Reference(nodeId);
+	for (var i=0; i<3 && chapter; i++) {
+		chapter = this.tableContents.priorChapter(chapter);
+		if (chapter) {
+			this.chapterQueue.unshift(chapter);
+		}
+	}
+	chapter = new Reference(nodeId);
+	this.chapterQueue.push(chapter);
+	for (var i=0; i<3 && chapter; i++) {
+		chapter = this.tableContents.nextChapter(chapter);
+		if (chapter) {
+			this.chapterQueue.push(chapter);
+		}
+	}
+	var that = this;
+	processQueue(0);
+
+	function processQueue(index) {
+		if (index < that.chapterQueue.length) {
+			var chapt = that.chapterQueue[index];
+			document.body.appendChild(chapt.rootNode);
+			that.showChapter(chapt, function() {
+				processQueue(index +1);
+			});
+		} else {
+			that.scrollTo(nodeId);
+			that.addChapterInProgress = false;
+			document.addEventListener('scroll', onScrollHandler);
+		}
+	}
+	function onScrollHandler(event) {
 		if (! that.addChapterInProgress) {
 			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.outerHeight) {
 				that.addChapterInProgress = true;
@@ -59,42 +97,6 @@ function CodexView(tableContents, bibleCache) {
 					that.addChapterInProgress = false;
 				}
 			}
-		}
-	});
-	Object.seal(this);
-};
-CodexView.prototype.hideView = function() {
-
-};
-CodexView.prototype.showView = function(nodeId) {
-	this.chapterQueue.splice(0);
-	var chapter = new Reference(nodeId);
-	for (var i=0; i<3 && chapter; i++) {
-		chapter = this.tableContents.priorChapter(chapter);
-		if (chapter) {
-			this.chapterQueue.unshift(chapter);
-		}
-	}
-	chapter = new Reference(nodeId);
-	this.chapterQueue.push(chapter);
-	for (var i=0; i<3 && chapter; i++) {
-		chapter = this.tableContents.nextChapter(chapter);
-		if (chapter) {
-			this.chapterQueue.push(chapter);
-		}
-	}
-	var that = this;
-	processQueue(0);
-
-	function processQueue(index) {
-		if (index < that.chapterQueue.length) {
-			var chapt = that.chapterQueue[index];
-			document.body.appendChild(chapt.rootNode);
-			that.showChapter(chapt, function() {
-				processQueue(index +1);
-			});
-		} else {
-			that.scrollTo(nodeId);
 		}
 	}
 };
