@@ -4,7 +4,7 @@
 */
 "use strict"
 
-var BIBLE = { TOC: 'bible-toc', LOOK: 'bible-look', SEARCH: 'bible-search', BACK: 'bible-back', FORWARD: 'bible-forward', 
+var BIBLE = { TOC_FIND: 'bible-toc-find', LOOK: 'bible-look', SEARCH: 'bible-search', BACK: 'bible-back', FORWARD: 'bible-forward', 
 		LAST: 'bible-last', SHOW_NOTE: 'bible-show-note', HIDE_NOTE: 'bible-hide-note' };
 
 function AppViewController(versionCode) {
@@ -33,7 +33,7 @@ AppViewController.prototype.begin = function() {
 		that.codexView = new CodexView(that.tableContents, that.bibleCache);
 		Object.freeze(that);
 
-		that.tableContentsView.showTocBookList();
+		that.tableContentsView.showView();
 		//that.searchView.showSearch("risen");
 	});
 };

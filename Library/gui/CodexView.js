@@ -11,13 +11,13 @@ function CodexView(tableContents, bibleCache) {
 	this.chapterQueue = [];
 	var that = this;
 	this.addChapterInProgress = false;
-	document.body.addEventListener(BIBLE.TOC, function(event) {
+	document.body.addEventListener(BIBLE.TOC_FIND, function(event) {
 		console.log(JSON.stringify(event.detail));
-		that.showPassage(event.detail.id);	
+		that.showView(event.detail.id);	
 	});
 	document.body.addEventListener(BIBLE.SEARCH, function(event) {
 		console.log(JSON.stringify(event.detail));
-		that.showPassage(event.detail.id);
+		that.showView(event.detail.id);
 	});
 	document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 		that.showFootnote(event.detail.id);
@@ -63,7 +63,10 @@ function CodexView(tableContents, bibleCache) {
 	});
 	Object.seal(this);
 };
-CodexView.prototype.showPassage = function(nodeId) {
+CodexView.prototype.hideView = function() {
+
+};
+CodexView.prototype.showView = function(nodeId) {
 	this.chapterQueue.splice(0);
 	var chapter = new Reference(nodeId);
 	for (var i=0; i<3 && chapter; i++) {
@@ -80,7 +83,6 @@ CodexView.prototype.showPassage = function(nodeId) {
 			this.chapterQueue.push(chapter);
 		}
 	}
-	this.removeBody();
 	var that = this;
 	processQueue(0);
 
@@ -154,12 +156,5 @@ CodexView.prototype.hideFootnote = function(noteId) {
 		if (child.nodeName === 'SPAN') {
 			child.innerHTML = '';
 		}
-	}
-};
-CodexView.prototype.removeBody = function() {
-	var bodyNode = document.body;
-	for (var i=bodyNode.children.length -1; i>=0; i--) {
-		var childNode = bodyNode.children[i];
-		bodyNode.removeChild(childNode);
 	}
 };

@@ -6,21 +6,26 @@
 function TableContentsView(toc) {
 	this.toc = toc;
 	this.root = null;
+	this.rootNode = document.getElementById('tocRoot');
 	Object.seal(this);
 };
-TableContentsView.prototype.showTocBookList = function() {
+TableContentsView.prototype.showView = function() {
 	if (! this.root) {
 		this.root = this.buildTocBookList();
 	}
-	this.removeBody();
-	document.body.appendChild(this.root);
+	if (this.rootNode.children.length < 1) {
+		this.rootNode.appendChild(this.root);
+	}
+};
+TableContentsView.prototype.hideView = function() {
+	if (this.rootNode.children.length > 0) {
+		this.rootNode.removeChild(this.root);
+	}
 };
 TableContentsView.prototype.buildTocBookList = function() {
-	var root = document.createDocumentFragment();
 	var div = document.createElement('div');
 	div.setAttribute('id', 'toc');
 	div.setAttribute('class', 'tocPage');
-	root.appendChild(div);
 	for (var i=0; i<this.toc.bookList.length; i++) {
 		var book = this.toc.bookList[i];
 		var bookNode = document.createElement('p');
@@ -34,7 +39,7 @@ TableContentsView.prototype.buildTocBookList = function() {
 			that.showTocChapterList(bookCode);
 		});
 	}
-	return(root);
+	return(div);
 };
 TableContentsView.prototype.showTocChapterList = function(bookCode) {
 	var book = this.toc.find(bookCode);
@@ -72,13 +77,6 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 TableContentsView.prototype.cellsPerRow = function() {
 	return(5); // some calculation based upon the width of the screen
 }
-TableContentsView.prototype.removeBody = function() {
-	var bodyNode = document.body;
-	for (var i=bodyNode.children.length -1; i>=0; i--) {
-		var childNode = bodyNode.children[i];
-		bodyNode.removeChild(childNode);
-	}
-};
 TableContentsView.prototype.removeAllChapters = function() {
 	var div = document.getElementById('toc');
 	if (div) {
@@ -93,7 +91,8 @@ TableContentsView.prototype.removeAllChapters = function() {
 };
 TableContentsView.prototype.openChapter = function(nodeId) {
 	console.log('open chapter', nodeId);
-	document.body.dispatchEvent(new CustomEvent(BIBLE.TOC, { detail: { id: nodeId }}));
+	this.hideView();
+	document.body.dispatchEvent(new CustomEvent(BIBLE.TOC_FIND, { detail: { id: nodeId }}));
 };
 
 
