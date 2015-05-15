@@ -4,8 +4,10 @@
 */
 "use strict"
 
-var BIBLE = { TOC_FIND: 'bible-toc-find', LOOK: 'bible-look', SEARCH: 'bible-search', BACK: 'bible-back', FORWARD: 'bible-forward', 
-		LAST: 'bible-last', SHOW_NOTE: 'bible-show-note', HIDE_NOTE: 'bible-hide-note' };
+var BIBLE = { SHOW_TOC: 'bible-show-toc', SHOW_SEARCH: 'bible-show-search', 
+		TOC_FIND: 'bible-toc-find', LOOK: 'bible-look', SEARCH: 'bible-search', 
+		BACK: 'bible-back', FORWARD: 'bible-forward', LAST: 'bible-last', 
+		SHOW_NOTE: 'bible-show-note', HIDE_NOTE: 'bible-hide-note' };
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
