@@ -6,16 +6,12 @@
 
 function StatusBar() {
 	this.rootNode = document.getElementById('statusRoot');
-	//this.rootNode.setAttribute('style', 'width: 500');
-	//this.rootNode.setAttribute('x', 0);
 	this.rootNode.setAttribute('style', 'border-style: solid; border-thickness: 1px;');
 	var that = this;
 	setupTocButton(100, '#CCCCCC');
+	setupHeading(100);
 	setupSearchButton(100, '#CCCCCC');
 	setupSettingsButton(100, '#CCCCCC');
-	// use canvas, hairline
-	// present three icons and three listeners, and three dispatchers
-	// setup text field and listener
 
 	function setupTocButton(hite, color) {
 		var lineThick = hite/7.0;
@@ -28,7 +24,6 @@ function StatusBar() {
 		var canvas = document.createElement('canvas');
 		canvas.setAttribute('height', hite);
 		canvas.setAttribute('width', hite + lineXSrt);
-		canvas.setAttribute('style', 'border-style: solid');
 		var graphics = canvas.getContext('2d');
 	
 		graphics.beginPath();
@@ -38,19 +33,29 @@ function StatusBar() {
 		graphics.lineTo(lineXEnd, line2Y);
 		graphics.moveTo(lineXSrt, line3Y);
 		graphics.lineTo(lineXEnd, line3Y);
-		graphics.closePath();
 
 		graphics.lineWidth = lineThick;
 		graphics.lineCap = 'square';
 		graphics.strokeStyle = color;
 		graphics.stroke();
 
-		that.rootNode.appendChild(canvas);
+		document.getElementById('tocRoot').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
 			console.log('toc button is clicked');
 			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_TOC));
+		});
+	}
+	function setupHeading(hite) {
+		var text = document.createElement('span');
+		text.setAttribute('class', 'statusBar');
+		text.textContent = 'Hello World';
+		document.getElementById('labelRoot').appendChild(text);
+
+		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
+			console.log('new heading to be presented');
+			text.textContent = event.detail.title;
 		});
 	}
 	function setupSearchButton(hite, color) {
@@ -64,7 +69,6 @@ function StatusBar() {
 		var canvas = document.createElement('canvas');
 		canvas.setAttribute('height', hite);
 		canvas.setAttribute('width', hite + lineThick * 1.5);
-		canvas.setAttribute('style', 'border-style: solid');
 		var graphics = canvas.getContext('2d');
 
 		graphics.beginPath();
@@ -77,7 +81,7 @@ function StatusBar() {
 		graphics.strokeStyle = color;
 		graphics.stroke();
 
-		that.rootNode.appendChild(canvas);
+		document.getElementById('searchRoot').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
@@ -87,25 +91,36 @@ function StatusBar() {
 	}
 	function setupSettingsButton(hite, color) {
 		var lineThick = hite/7.0;
-		var radius = (hite / 2) - (lineThick * 2);
+		var radius = (hite / 2) - (lineThick * 1.75);
 		var coord = hite / 2;
+		var circle = Math.PI * 2;
+		var increment = Math.PI / 4;
+		var first = increment / 2;
 
 		var canvas = document.createElement('canvas');
 		canvas.setAttribute('height', hite);
-		canvas.setAttribute('width', hite + lineThick * 1.5);
-		canvas.setAttribute('style', 'border-style: solid');
+		canvas.setAttribute('width', hite);
 		var graphics = canvas.getContext('2d');
 
+		console.log('radius', radius);
 		graphics.beginPath();
 		graphics.arc(coord, coord, radius, 0, Math.PI*2, true);
-
-
+		for (var angle=first; angle<circle; angle+=increment) {
+			graphics.moveTo(Math.cos(angle) * radius + coord, Math.sin(angle) * radius + coord);
+			graphics.lineTo(Math.cos(angle) * radius * 1.6 + coord, Math.sin(angle) * radius * 1.6 + coord);
+		}
 		graphics.closePath();
 
 		graphics.lineWidth = lineThick;
 		graphics.strokeStyle = color;
 		graphics.stroke();
 
-		that.rootNode.appendChild(canvas);
+		document.getElementById('settingsRoot').appendChild(canvas);
+
+		canvas.addEventListener('click', function(event) {
+			event.stopImmediatePropagation();
+			console.log('settings button is clicked');
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_SETTINGS));
+		});
 	}
 };

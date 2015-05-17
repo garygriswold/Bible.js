@@ -4,8 +4,9 @@
 */
 "use strict"
 
-var BIBLE = { SHOW_TOC: 'bible-show-toc', SHOW_SEARCH: 'bible-show-search', 
-		TOC_FIND: 'bible-toc-find', LOOK: 'bible-look', SEARCH: 'bible-search', 
+var BIBLE = { SHOW_TOC: 'bible-show-toc', SHOW_SEARCH: 'bible-show-search', SHOW_SETTINGS: 'bible-show-settings', 
+		TOC_FIND: 'bible-toc-find', LOOK: 'bible-look', SEARCH: 'bible-search',
+		CHG_HEADING: 'bible-chg-heading', 
 		BACK: 'bible-back', FORWARD: 'bible-forward', LAST: 'bible-last', 
 		SHOW_NOTE: 'bible-show-note', HIDE_NOTE: 'bible-hide-note' };
 

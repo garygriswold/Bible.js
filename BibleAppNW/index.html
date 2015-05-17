@@ -4,8 +4,7 @@
     <meta charset="utf-8" />
 	<meta name="format-detection" content="telephone=no" />
 	<meta name="msapplication-tap-highlight" content="no" />
-	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, 
-		height=device-height, target-densitydpi=device-dpi" />
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 	<link rel="stylesheet" href="css/bible.css"/>
 	<script type="text/javascript" src="js/BibleApp.js"></script>
 	<script type="text/javascript" src="js/TweenLite.js"></script>
@@ -13,16 +12,27 @@
 	<script type="text/javascript">
 		function onBodyLoad() {
 			console.log('DEVICE IS READY **');
-			app = new AppViewController('WEB'); // Global root of the application
-			app.begin();
+			//app = new AppViewController('WEB'); // Global root of the application
+			//app.begin();
+			app = new StatusBar();
 		};
 	</script>
   </head>
   <body onload="onBodyLoad()">
-  	<div id="statusRoot"></div>
+  	<div id="statusRoot" style="width: auto; margin: 0">
+  		<table>
+  			<tr>
+				<td id="tocRoot"></td>
+				<td id="labelRoot" width="100%" style="text-align: center"></td>
+				<td id="searchRoot"></td>
+				<td id="settingsRoot"></td>
+  			</tr>
+  		</table>
+  	</div>
   	<div id="tocRoot"></div>
   	<div id="codexRoot"></div>
   	<div id="searchRoot"></div>
   	<div id="historyRoot"></div>
+  	<div id="settingsRoot"></div>
   </body>
 </html>
