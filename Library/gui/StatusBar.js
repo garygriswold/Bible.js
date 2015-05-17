@@ -6,6 +6,8 @@
 
 function StatusBar() {
 	this.rootNode = document.getElementById('statusRoot');
+};
+StatusBar.prototype.showView = function() {
 	var that = this;
 
 	setupBackground(88);

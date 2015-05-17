@@ -13,6 +13,7 @@ var BIBLE = { SHOW_TOC: 'bible-show-toc', SHOW_SEARCH: 'bible-show-search', SHOW
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
 	this.statusBar = new StatusBar();
+	this.statusBar.showView();
 };
 AppViewController.prototype.begin = function() {
 	var types = new AssetType('document', this.versionCode);
@@ -49,6 +50,8 @@ AppViewController.prototype.begin = function() {
 
 function StatusBar() {
 	this.rootNode = document.getElementById('statusRoot');
+};
+StatusBar.prototype.showView = function() {
 	var that = this;
 
 	setupBackground(88);
