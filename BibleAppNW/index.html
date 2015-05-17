@@ -12,9 +12,9 @@
 	<script type="text/javascript">
 		function onBodyLoad() {
 			console.log('DEVICE IS READY **');
-			//app = new AppViewController('WEB'); // Global root of the application
-			//app.begin();
-			app = new StatusBar();
+			app = new AppViewController('WEB'); // Global root of the application
+			app.begin();
+			//app = new StatusBar();
 		};
 	</script>
   </head>
@@ -22,10 +22,10 @@
   	<div id="statusRoot" style="width: auto; margin: 0">
   		<table>
   			<tr>
-				<td id="tocRoot"></td>
-				<td id="labelRoot" width="100%" style="text-align: center"></td>
-				<td id="searchRoot"></td>
-				<td id="settingsRoot"></td>
+				<td id="tocCell"></td>
+				<td id="labelCell" width="100%" style="text-align: center"></td>
+				<td id="searchCell"></td>
+				<td id="settingsCell"></td>
   			</tr>
   		</table>
   	</div>

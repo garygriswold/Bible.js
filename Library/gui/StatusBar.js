@@ -62,7 +62,7 @@ function StatusBar() {
 		graphics.strokeStyle = color;
 		graphics.stroke();
 
-		document.getElementById('tocRoot').appendChild(canvas);
+		document.getElementById('tocCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
@@ -74,7 +74,7 @@ function StatusBar() {
 		var text = document.createElement('span');
 		text.setAttribute('class', 'statusBar');
 		text.textContent = 'Hello World';
-		document.getElementById('labelRoot').appendChild(text);
+		document.getElementById('labelCell').appendChild(text);
 
 		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
 			console.log('new heading to be presented');
@@ -104,7 +104,7 @@ function StatusBar() {
 		graphics.strokeStyle = color;
 		graphics.stroke();
 
-		document.getElementById('searchRoot').appendChild(canvas);
+		document.getElementById('searchCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
@@ -138,7 +138,7 @@ function StatusBar() {
 		graphics.strokeStyle = color;
 		graphics.stroke();
 
-		document.getElementById('settingsRoot').appendChild(canvas);
+		document.getElementById('settingsCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();

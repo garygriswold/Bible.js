@@ -1,5 +1,6 @@
 #!/bin/sh
 cat ../Library/gui/AppViewController.js > ../BibleAppNW/js/BibleApp.js
+cat ../Library/gui/StatusBar.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/gui/TableContentsView.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/gui/CodexView.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/gui/SearchView.js >> ../BibleAppNW/js/BibleApp.js

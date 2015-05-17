@@ -34,7 +34,6 @@ span.statusBar {
 }
 /* Table of Contents Page Format */
 div.tocPage { /* non-std */
-	margin: 0%;
 	padding: 0%;
 	border-style: solid;
 }
