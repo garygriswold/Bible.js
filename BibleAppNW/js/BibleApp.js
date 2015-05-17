@@ -6,13 +6,36 @@
 
 function StatusBar() {
 	this.rootNode = document.getElementById('statusRoot');
-	this.rootNode.setAttribute('style', 'border-style: solid; border-thickness: 1px;');
 	var that = this;
-	setupTocButton(100, '#CCCCCC');
-	setupHeading(100);
-	setupSearchButton(100, '#CCCCCC');
-	setupSettingsButton(100, '#CCCCCC');
 
+	setupBackground(88);
+	setupTocButton(88, '#F7F7BB');
+	setupHeading(88);
+	setupSearchButton(88, '#F7F7BB');
+	setupSettingsButton(88, '#F7F7BB');
+
+	function setupBackground(hite) {
+    	var canvas = document.createElement('canvas');
+    	canvas.setAttribute('height', hite + 7);
+    	var maxSize = (window.outHeight > window.outerWidth) ? window.outerHeight : window.outerWidth;
+    	canvas.setAttribute('width', maxSize);
+    	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
+      	var graphics = canvas.getContext('2d');
+      	graphics.rect(0, 0, canvas.width, canvas.height);
+
+      	// create radial gradient
+      	var vMidpoint = hite / 2;
+
+      	var gradient = graphics.createRadialGradient(238, vMidpoint, 10, 238, vMidpoint, window.outerHeight - hite);
+      	// light blue
+      	gradient.addColorStop(0, '#8ED6FF');
+      	// dark blue
+      	gradient.addColorStop(1, '#004CB3');
+
+      	graphics.fillStyle = gradient;
+      	graphics.fill();
+      	that.rootNode.appendChild(canvas);
+	}
 	function setupTocButton(hite, color) {
 		var lineThick = hite/7.0;
 		var line1Y = lineThick * 1.5;
