@@ -12,26 +12,6 @@ function CodexView(tableContents, bibleCache) {
 	this.rootNode = document.getElementById('codexRoot');
 	var that = this;
 	this.addChapterInProgress = false;
-	document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
-		that.hideView();
-	});
-	document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
-		that.hideView();
-	});
-	document.body.addEventListener(BIBLE.TOC_FIND, function(event) {
-		console.log(JSON.stringify(event.detail));
-		that.showView(event.detail.id);	
-	});
-	document.body.addEventListener(BIBLE.SEARCH, function(event) {
-		console.log(JSON.stringify(event.detail));
-		that.showView(event.detail.id);
-	});
-	document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
-		that.showFootnote(event.detail.id);
-	});
-	document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
-		that.hideFootnote(event.detail.id);
-	});
 	Object.seal(this);
 };
 CodexView.prototype.hideView = function() {
@@ -75,6 +55,7 @@ CodexView.prototype.showView = function(nodeId) {
 	}
 	function onScrollHandler(event) {
 		if (! that.addChapterInProgress && that.chapterQueue.length > 1) {
+			// determine the id for the node that is just visible
 			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.outerHeight) {
 				that.addChapterInProgress = true;
 				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];

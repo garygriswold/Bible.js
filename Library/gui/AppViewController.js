@@ -40,5 +40,34 @@ AppViewController.prototype.begin = function() {
 
 		//that.tableContentsView.showView();
 		that.searchView.showView("risen");
+
+		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
+			that.tableContentsView.showView();
+			that.searchView.hideView();
+			that.codexView.hideView();
+		});
+		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
+			that.searchView.showView();
+			that.tableContentsView.hideView();
+			that.codexView.hideView();
+		});
+		document.body.addEventListener(BIBLE.TOC_FIND, function(event) {
+			console.log(JSON.stringify(event.detail));
+			that.codexView.showView(event.detail.id);	
+			that.tableContentsView.hideView();
+			that.searchView.hideView();
+		});
+		document.body.addEventListener(BIBLE.SEARCH, function(event) {
+			console.log(JSON.stringify(event.detail));
+			that.codexView.showView(event.detail.id);
+			that.tableContentsView.hideView();
+			that.searchView.hideView();
+		});
+		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
+			that.codexView.showFootnote(event.detail.id);
+		});
+		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
+			that.codexView.hideFootnote(event.detail.id);
+		});
 	});
 };

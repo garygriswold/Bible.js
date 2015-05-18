@@ -40,6 +40,35 @@ AppViewController.prototype.begin = function() {
 
 		//that.tableContentsView.showView();
 		that.searchView.showView("risen");
+
+		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
+			that.tableContentsView.showView();
+			that.searchView.hideView();
+			that.codexView.hideView();
+		});
+		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
+			that.searchView.showView();
+			that.tableContentsView.hideView();
+			that.codexView.hideView();
+		});
+		document.body.addEventListener(BIBLE.TOC_FIND, function(event) {
+			console.log(JSON.stringify(event.detail));
+			that.codexView.showView(event.detail.id);	
+			that.tableContentsView.hideView();
+			that.searchView.hideView();
+		});
+		document.body.addEventListener(BIBLE.SEARCH, function(event) {
+			console.log(JSON.stringify(event.detail));
+			that.codexView.showView(event.detail.id);
+			that.tableContentsView.hideView();
+			that.searchView.hideView();
+		});
+		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
+			that.codexView.showFootnote(event.detail.id);
+		});
+		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
+			that.codexView.hideFootnote(event.detail.id);
+		});
 	});
 };
 /**
@@ -202,17 +231,6 @@ function TableContentsView(toc) {
 	this.root = null;
 	this.rootNode = document.getElementById('tocRoot');
 	var that = this;
-	document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
-		that.showView();
-	});
-	document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
-		that.hideView();
-	});
-	document.body.addEventListener(BIBLE.SEARCH, function(event) {
-		that.hideView();
-	});
-
-
 	Object.seal(this);
 };
 TableContentsView.prototype.showView = function() {
@@ -316,26 +334,6 @@ function CodexView(tableContents, bibleCache) {
 	this.rootNode = document.getElementById('codexRoot');
 	var that = this;
 	this.addChapterInProgress = false;
-	document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
-		that.hideView();
-	});
-	document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
-		that.hideView();
-	});
-	document.body.addEventListener(BIBLE.TOC_FIND, function(event) {
-		console.log(JSON.stringify(event.detail));
-		that.showView(event.detail.id);	
-	});
-	document.body.addEventListener(BIBLE.SEARCH, function(event) {
-		console.log(JSON.stringify(event.detail));
-		that.showView(event.detail.id);
-	});
-	document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
-		that.showFootnote(event.detail.id);
-	});
-	document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
-		that.hideFootnote(event.detail.id);
-	});
 	Object.seal(this);
 };
 CodexView.prototype.hideView = function() {
@@ -379,6 +377,7 @@ CodexView.prototype.showView = function(nodeId) {
 	}
 	function onScrollHandler(event) {
 		if (! that.addChapterInProgress && that.chapterQueue.length > 1) {
+			// determine the id for the node that is just visible
 			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.outerHeight) {
 				that.addChapterInProgress = true;
 				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
@@ -491,19 +490,6 @@ function SearchView(toc, concordance, bibleCache) {
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('searchRoot');
 	var that = this;
-	document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
-		that.hideView();
-	});
-	document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
-		that.showView();///????? should be null query
-	});
-	document.body.addEventListener(BIBLE.TOC_FIND, function(event) {
-		that.hideView();
-	});
-	document.body.addEventListener(BIBLE.SEARCH, function(event) {
-		that.hideView();
-	});
-
 	Object.seal(this);
 };
 SearchView.prototype.showView = function(query) {
