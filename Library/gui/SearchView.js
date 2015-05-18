@@ -14,6 +14,7 @@ function SearchView(toc, concordance, bibleCache) {
 	this.bookList = [];
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('searchRoot');
+	this.scrollPosition = 0;
 	var that = this;
 	Object.seal(this);
 };
@@ -25,6 +26,7 @@ SearchView.prototype.showView = function(query) {
 	} else if (this.viewRoot) {
 		if (this.rootNode.children.length < 1) {
 			this.rootNode.appendChild(this.viewRoot);
+			window.scrollTo(10, this.scrollPosition);
 		}
 	} else {
 		// must present search input form TO BE DONE
@@ -32,6 +34,7 @@ SearchView.prototype.showView = function(query) {
 };
 SearchView.prototype.hideView = function() {
 	if (this.rootNode.children.length > 0) {
+		this.scrollPosition = window.scrollY;
 		this.rootNode.removeChild(this.viewRoot);
 	}
 };

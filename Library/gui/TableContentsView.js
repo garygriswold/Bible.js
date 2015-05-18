@@ -7,6 +7,7 @@ function TableContentsView(toc) {
 	this.toc = toc;
 	this.root = null;
 	this.rootNode = document.getElementById('tocRoot');
+	this.scrollPosition = 0;
 	var that = this;
 	Object.seal(this);
 };
@@ -16,10 +17,13 @@ TableContentsView.prototype.showView = function() {
 	}
 	if (this.rootNode.children.length < 1) {
 		this.rootNode.appendChild(this.root);
+		window.scrollTo(10, this.scrollPosition);
 	}
 };
 TableContentsView.prototype.hideView = function() {
 	if (this.rootNode.children.length > 0) {
+		this.scrollPosition = window.scrollY;
+		console.log('save scroll position', window.scrollY);
 		this.rootNode.removeChild(this.root);
 	}
 };

@@ -12,7 +12,7 @@ var BIBLE = { SHOW_TOC: 'bible-show-toc', SHOW_SEARCH: 'bible-show-search', SHOW
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
-	this.statusBar = new StatusBar();
+	this.statusBar = new StatusBar(88);
 	this.statusBar.showView();
 };
 AppViewController.prototype.begin = function() {
@@ -35,7 +35,7 @@ AppViewController.prototype.begin = function() {
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache);
-		that.codexView = new CodexView(that.tableContents, that.bibleCache);
+		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.outerHite);
 		Object.freeze(that);
 
 		//that.tableContentsView.showView();
@@ -77,17 +77,19 @@ AppViewController.prototype.begin = function() {
 */
 "use strict";
 
-function StatusBar() {
+function StatusBar(hite) {
+	this.hite = hite;
+	this.outerHite = hite + 7;
 	this.rootNode = document.getElementById('statusRoot');
 };
 StatusBar.prototype.showView = function() {
 	var that = this;
 
-	setupBackground(88);
-	setupTocButton(88, '#F7F7BB');
-	setupHeading(88);
-	setupSearchButton(88, '#F7F7BB');
-	setupSettingsButton(88, '#F7F7BB');
+	setupBackground(this.hite);
+	setupTocButton(this.hite, '#F7F7BB');
+	setupHeading(this.hite);
+	setupSearchButton(this.hite, '#F7F7BB');
+	setupSettingsButton(this.hite, '#F7F7BB');
 
 	function setupBackground(hite) {
     	var canvas = document.createElement('canvas');
@@ -230,6 +232,7 @@ function TableContentsView(toc) {
 	this.toc = toc;
 	this.root = null;
 	this.rootNode = document.getElementById('tocRoot');
+	this.scrollPosition = 0;
 	var that = this;
 	Object.seal(this);
 };
@@ -239,10 +242,13 @@ TableContentsView.prototype.showView = function() {
 	}
 	if (this.rootNode.children.length < 1) {
 		this.rootNode.appendChild(this.root);
+		window.scrollTo(10, this.scrollPosition);
 	}
 };
 TableContentsView.prototype.hideView = function() {
 	if (this.rootNode.children.length > 0) {
+		this.scrollPosition = window.scrollY;
+		console.log('save scroll position', window.scrollY);
 		this.rootNode.removeChild(this.root);
 	}
 };
@@ -327,9 +333,10 @@ TableContentsView.prototype.openChapter = function(nodeId) {
 
 var CODEX_VIEW = { MAX: 10 };
 
-function CodexView(tableContents, bibleCache) {
+function CodexView(tableContents, bibleCache, statusBarHeight) {
 	this.tableContents = tableContents;
 	this.bibleCache = bibleCache;
+	this.statusBarHeight = statusBarHeight;
 	this.chapterQueue = [];
 	this.rootNode = document.getElementById('codexRoot');
 	var that = this;
@@ -449,11 +456,12 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 CodexView.prototype.scrollTo = function(nodeId) {
 	var verse = document.getElementById(nodeId);
 	var rect = verse.getBoundingClientRect();
-	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY);
+	console.log('status bar height', this.statusBarHeight);
+	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
 };
 CodexView.prototype.scrollToNode = function(node) {
 	var rect = node.getBoundingClientRect();
-	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY);
+	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
 };
 CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);
@@ -489,6 +497,7 @@ function SearchView(toc, concordance, bibleCache) {
 	this.bookList = [];
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('searchRoot');
+	this.scrollPosition = 0;
 	var that = this;
 	Object.seal(this);
 };
@@ -500,6 +509,7 @@ SearchView.prototype.showView = function(query) {
 	} else if (this.viewRoot) {
 		if (this.rootNode.children.length < 1) {
 			this.rootNode.appendChild(this.viewRoot);
+			window.scrollTo(10, this.scrollPosition);
 		}
 	} else {
 		// must present search input form TO BE DONE
@@ -507,6 +517,7 @@ SearchView.prototype.showView = function(query) {
 };
 SearchView.prototype.hideView = function() {
 	if (this.rootNode.children.length > 0) {
+		this.scrollPosition = window.scrollY;
 		this.rootNode.removeChild(this.viewRoot);
 	}
 };

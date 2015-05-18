@@ -5,9 +5,10 @@
 
 var CODEX_VIEW = { MAX: 10 };
 
-function CodexView(tableContents, bibleCache) {
+function CodexView(tableContents, bibleCache, statusBarHeight) {
 	this.tableContents = tableContents;
 	this.bibleCache = bibleCache;
+	this.statusBarHeight = statusBarHeight;
 	this.chapterQueue = [];
 	this.rootNode = document.getElementById('codexRoot');
 	var that = this;
@@ -127,11 +128,11 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 CodexView.prototype.scrollTo = function(nodeId) {
 	var verse = document.getElementById(nodeId);
 	var rect = verse.getBoundingClientRect();
-	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY);
+	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
 };
 CodexView.prototype.scrollToNode = function(node) {
 	var rect = node.getBoundingClientRect();
-	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY);
+	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
 };
 CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);

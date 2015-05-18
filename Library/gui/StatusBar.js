@@ -4,17 +4,19 @@
 */
 "use strict";
 
-function StatusBar() {
+function StatusBar(hite) {
+	this.hite = hite;
+	this.outerHite = hite + 7;
 	this.rootNode = document.getElementById('statusRoot');
 };
 StatusBar.prototype.showView = function() {
 	var that = this;
 
-	setupBackground(88);
-	setupTocButton(88, '#F7F7BB');
-	setupHeading(88);
-	setupSearchButton(88, '#F7F7BB');
-	setupSettingsButton(88, '#F7F7BB');
+	setupBackground(this.hite);
+	setupTocButton(this.hite, '#F7F7BB');
+	setupHeading(this.hite);
+	setupSearchButton(this.hite, '#F7F7BB');
+	setupSettingsButton(this.hite, '#F7F7BB');
 
 	function setupBackground(hite) {
     	var canvas = document.createElement('canvas');

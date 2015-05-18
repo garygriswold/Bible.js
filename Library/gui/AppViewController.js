@@ -12,7 +12,7 @@ var BIBLE = { SHOW_TOC: 'bible-show-toc', SHOW_SEARCH: 'bible-show-search', SHOW
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
-	this.statusBar = new StatusBar();
+	this.statusBar = new StatusBar(88);
 	this.statusBar.showView();
 };
 AppViewController.prototype.begin = function() {
@@ -35,7 +35,7 @@ AppViewController.prototype.begin = function() {
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache);
-		that.codexView = new CodexView(that.tableContents, that.bibleCache);
+		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.outerHite);
 		Object.freeze(that);
 
 		//that.tableContentsView.showView();
