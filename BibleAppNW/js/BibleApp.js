@@ -456,7 +456,6 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 CodexView.prototype.scrollTo = function(nodeId) {
 	var verse = document.getElementById(nodeId);
 	var rect = verse.getBoundingClientRect();
-	console.log('status bar height', this.statusBarHeight);
 	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
 };
 CodexView.prototype.scrollToNode = function(node) {
