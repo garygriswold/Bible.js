@@ -297,10 +297,12 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 				});
 			}
 		}
-		this.removeAllChapters();
 		var bookNode = document.getElementById('toc' + book.code);
 		if (bookNode) {
+			var saveYPosition = bookNode.getBoundingClientRect().top;// + window.scrollY;
+			this.removeAllChapters();
 			bookNode.appendChild(root);
+			window.scrollBy(0, bookNode.getBoundingClientRect().top - saveYPosition); // keeps toc from scrolling
 		}
 	}
 };
