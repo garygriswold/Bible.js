@@ -4,9 +4,9 @@
 */
 "use strict"
 
-var BIBLE = { SHOW_TOC: 'bible-show-toc', SHOW_SEARCH: 'bible-show-search', SHOW_SETTINGS: 'bible-show-settings', 
-		TOC_FIND: 'bible-toc-find', LOOK: 'bible-look', SEARCH: 'bible-search',
-		CHG_HEADING: 'bible-chg-heading', 
+var BIBLE = { SHOW_TOC: 'bible-show-toc', SHOW_SEARCH: 'bible-show-search', SHOW_SETTINGS: 'TBD-bible-show-settings', 
+		TOC_FIND: 'bible-toc-find', LOOK: 'TBD-bible-look', SEARCH: 'bible-search',
+		CHG_HEADING: 'TBD-bible-chg-heading', 
 		BACK: 'bible-back', FORWARD: 'bible-forward', LAST: 'bible-last', 
 		SHOW_NOTE: 'bible-show-note', HIDE_NOTE: 'bible-hide-note' };
 
@@ -201,6 +201,18 @@ function TableContentsView(toc) {
 	this.toc = toc;
 	this.root = null;
 	this.rootNode = document.getElementById('tocRoot');
+	var that = this;
+	document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
+		that.showView();
+	});
+	document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
+		that.hideView();
+	});
+	document.body.addEventListener(BIBLE.SEARCH, function(event) {
+		that.hideView();
+	});
+
+
 	Object.seal(this);
 };
 TableContentsView.prototype.showView = function() {
@@ -304,6 +316,12 @@ function CodexView(tableContents, bibleCache) {
 	this.rootNode = document.getElementById('codexRoot');
 	var that = this;
 	this.addChapterInProgress = false;
+	document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
+		that.hideView();
+	});
+	document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
+		that.hideView();
+	});
 	document.body.addEventListener(BIBLE.TOC_FIND, function(event) {
 		console.log(JSON.stringify(event.detail));
 		that.showView(event.detail.id);	
@@ -321,8 +339,8 @@ function CodexView(tableContents, bibleCache) {
 	Object.seal(this);
 };
 CodexView.prototype.hideView = function() {
-	document.removeEventListener('scroll', this.onScrollHandler);
-	for (var i=this.rootNode.length -1; i>=0; i--) {
+	this.chapterQueue.splice(0);
+	for (var i=this.rootNode.children.length -1; i>=0; i--) {
 		this.rootNode.removeChild(this.rootNode.children[i]);
 	}
 };
@@ -360,7 +378,7 @@ CodexView.prototype.showView = function(nodeId) {
 		}
 	}
 	function onScrollHandler(event) {
-		if (! that.addChapterInProgress) {
+		if (! that.addChapterInProgress && that.chapterQueue.length > 1) {
 			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.outerHeight) {
 				that.addChapterInProgress = true;
 				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
@@ -472,6 +490,20 @@ function SearchView(toc, concordance, bibleCache) {
 	this.bookList = [];
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('searchRoot');
+	var that = this;
+	document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
+		that.hideView();
+	});
+	document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
+		that.showView();///????? should be null query
+	});
+	document.body.addEventListener(BIBLE.TOC_FIND, function(event) {
+		that.hideView();
+	});
+	document.body.addEventListener(BIBLE.SEARCH, function(event) {
+		that.hideView();
+	});
+
 	Object.seal(this);
 };
 SearchView.prototype.showView = function(query) {

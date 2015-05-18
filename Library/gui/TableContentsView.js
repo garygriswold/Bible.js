@@ -7,6 +7,18 @@ function TableContentsView(toc) {
 	this.toc = toc;
 	this.root = null;
 	this.rootNode = document.getElementById('tocRoot');
+	var that = this;
+	document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
+		that.showView();
+	});
+	document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
+		that.hideView();
+	});
+	document.body.addEventListener(BIBLE.SEARCH, function(event) {
+		that.hideView();
+	});
+
+
 	Object.seal(this);
 };
 TableContentsView.prototype.showView = function() {

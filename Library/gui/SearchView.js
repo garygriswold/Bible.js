@@ -14,6 +14,20 @@ function SearchView(toc, concordance, bibleCache) {
 	this.bookList = [];
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('searchRoot');
+	var that = this;
+	document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
+		that.hideView();
+	});
+	document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
+		that.showView();
+	});
+	document.body.addEventListener(BIBLE.TOC_FIND, function(event) {
+		that.hideView();
+	});
+	document.body.addEventListener(BIBLE.SEARCH, function(event) {
+		that.hideView();
+	});
+
 	Object.seal(this);
 };
 SearchView.prototype.showView = function(query) {
