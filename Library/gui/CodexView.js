@@ -11,6 +11,7 @@ function CodexView(tableContents, bibleCache, statusBarHeight) {
 	this.statusBarHeight = statusBarHeight;
 	this.chapterQueue = [];
 	this.rootNode = document.getElementById('codexRoot');
+	this.currentNodeId = null;
 	var that = this;
 	this.addChapterInProgress = false;
 	Object.seal(this);
@@ -56,7 +57,11 @@ CodexView.prototype.showView = function(nodeId) {
 	}
 	function onScrollHandler(event) {
 		if (! that.addChapterInProgress && that.chapterQueue.length > 1) {
-			// determine the id for the node that is just visible
+			var ref = identifyCurrentChapter();
+			if (ref.nodeId !== that.currentNodeId) {
+				that.currentNodeId = ref.nodeId;
+				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));//expensive solution
+			}
 			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.outerHeight) {
 				that.addChapterInProgress = true;
 				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
@@ -88,6 +93,16 @@ CodexView.prototype.showView = function(nodeId) {
 				} else {
 					that.addChapterInProgress = false;
 				}
+			}
+		}
+	}
+	function identifyCurrentChapter() {
+		var half = window.innerHeight / 2;
+		for (var i=that.chapterQueue.length -1; i>=0; i--) {
+			var ref = that.chapterQueue[i];
+			var top = ref.rootNode.getBoundingClientRect().top;
+			if (top < half) {
+				return(ref);
 			}
 		}
 	}

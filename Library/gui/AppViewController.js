@@ -6,7 +6,7 @@
 
 var BIBLE = { SHOW_TOC: 'bible-show-toc', SHOW_SEARCH: 'bible-show-search', SHOW_SETTINGS: 'TBD-bible-show-settings', 
 		TOC_FIND: 'bible-toc-find', LOOK: 'TBD-bible-look', SEARCH: 'bible-search',
-		CHG_HEADING: 'TBD-bible-chg-heading', 
+		CHG_HEADING: 'bible-chg-heading', 
 		BACK: 'bible-back', FORWARD: 'bible-forward', LAST: 'bible-last', 
 		SHOW_NOTE: 'bible-show-note', HIDE_NOTE: 'bible-hide-note' };
 
@@ -62,6 +62,11 @@ AppViewController.prototype.begin = function() {
 			that.codexView.showView(event.detail.id);
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
+		});
+		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
+			var ref = event.detail.reference;
+			var book = that.tableContents.find(ref.book);
+			that.statusBar.title.textContent = book.name + ' ' + ((ref.chapter > 0) ? ref.chapter : 1);
 		});
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);

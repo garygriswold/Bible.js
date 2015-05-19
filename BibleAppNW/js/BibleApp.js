@@ -6,7 +6,7 @@
 
 var BIBLE = { SHOW_TOC: 'bible-show-toc', SHOW_SEARCH: 'bible-show-search', SHOW_SETTINGS: 'TBD-bible-show-settings', 
 		TOC_FIND: 'bible-toc-find', LOOK: 'TBD-bible-look', SEARCH: 'bible-search',
-		CHG_HEADING: 'TBD-bible-chg-heading', 
+		CHG_HEADING: 'bible-chg-heading', 
 		BACK: 'bible-back', FORWARD: 'bible-forward', LAST: 'bible-last', 
 		SHOW_NOTE: 'bible-show-note', HIDE_NOTE: 'bible-hide-note' };
 
@@ -63,6 +63,11 @@ AppViewController.prototype.begin = function() {
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
 		});
+		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
+			var ref = event.detail.reference;
+			var book = that.tableContents.find(ref.book);
+			that.statusBar.title.textContent = book.name + ' ' + ((ref.chapter > 0) ? ref.chapter : 1);
+		});
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);
 		});
@@ -80,6 +85,7 @@ AppViewController.prototype.begin = function() {
 function StatusBar(hite) {
 	this.hite = hite;
 	this.outerHite = hite + 7;
+	this.title = null;
 	this.rootNode = document.getElementById('statusRoot');
 };
 StatusBar.prototype.showView = function() {
@@ -148,15 +154,15 @@ StatusBar.prototype.showView = function() {
 		});
 	}
 	function setupHeading(hite) {
-		var text = document.createElement('span');
-		text.setAttribute('class', 'statusBar');
-		text.textContent = 'Hello World';
-		document.getElementById('labelCell').appendChild(text);
+		that.title = document.createElement('span');
+		that.title.setAttribute('class', 'statusBar');
+		//that.title.textContent = 'Hello World';
+		document.getElementById('labelCell').appendChild(that.title);
 
-		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
-			console.log('new heading to be presented');
-			text.textContent = event.detail.title;
-		});
+//		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
+//			console.log('new heading to be presented');
+//			text.textContent = event.detail.title;
+//		});
 	}
 	function setupSearchButton(hite, color) {
 		var lineThick = hite/7.0;
@@ -341,6 +347,7 @@ function CodexView(tableContents, bibleCache, statusBarHeight) {
 	this.statusBarHeight = statusBarHeight;
 	this.chapterQueue = [];
 	this.rootNode = document.getElementById('codexRoot');
+	this.currentNodeId = null;
 	var that = this;
 	this.addChapterInProgress = false;
 	Object.seal(this);
@@ -386,7 +393,11 @@ CodexView.prototype.showView = function(nodeId) {
 	}
 	function onScrollHandler(event) {
 		if (! that.addChapterInProgress && that.chapterQueue.length > 1) {
-			// determine the id for the node that is just visible
+			var ref = identifyCurrentChapter();
+			if (ref.nodeId !== that.currentNodeId) {
+				that.currentNodeId = ref.nodeId;
+				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));//expensive solution
+			}
 			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.outerHeight) {
 				that.addChapterInProgress = true;
 				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
@@ -418,6 +429,16 @@ CodexView.prototype.showView = function(nodeId) {
 				} else {
 					that.addChapterInProgress = false;
 				}
+			}
+		}
+	}
+	function identifyCurrentChapter() {
+		var half = window.innerHeight / 2;
+		for (var i=that.chapterQueue.length -1; i>=0; i--) {
+			var ref = that.chapterQueue[i];
+			var top = ref.rootNode.getBoundingClientRect().top;
+			if (top < half) {
+				return(ref);
 			}
 		}
 	}

@@ -7,6 +7,7 @@
 function StatusBar(hite) {
 	this.hite = hite;
 	this.outerHite = hite + 7;
+	this.title = null;
 	this.rootNode = document.getElementById('statusRoot');
 };
 StatusBar.prototype.showView = function() {
@@ -75,15 +76,9 @@ StatusBar.prototype.showView = function() {
 		});
 	}
 	function setupHeading(hite) {
-		var text = document.createElement('span');
-		text.setAttribute('class', 'statusBar');
-		text.textContent = 'Hello World';
-		document.getElementById('labelCell').appendChild(text);
-
-		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
-			console.log('new heading to be presented');
-			text.textContent = event.detail.title;
-		});
+		that.title = document.createElement('span');
+		that.title.setAttribute('class', 'statusBar');
+		document.getElementById('labelCell').appendChild(that.title);
 	}
 	function setupSearchButton(hite, color) {
 		var lineThick = hite/7.0;
