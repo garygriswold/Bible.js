@@ -66,7 +66,7 @@ AppViewController.prototype.begin = function() {
 		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
 			var ref = event.detail.reference;
 			var book = that.tableContents.find(ref.book);
-			that.statusBar.title.textContent = book.name + ' ' + ((ref.chapter > 0) ? ref.chapter : 1);
+			that.statusBar.setTitle(book.name + ' ' + ((ref.chapter > 0) ? ref.chapter : 1));
 		});
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);

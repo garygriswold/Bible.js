@@ -146,3 +146,6 @@ StatusBar.prototype.showView = function() {
 		});
 	}
 };
+StatusBar.prototype.setTitle = function(text) {
+	this.title.textContent = text;
+};

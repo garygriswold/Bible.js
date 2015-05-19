@@ -66,7 +66,8 @@ AppViewController.prototype.begin = function() {
 		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
 			var ref = event.detail.reference;
 			var book = that.tableContents.find(ref.book);
-			that.statusBar.title.textContent = book.name + ' ' + ((ref.chapter > 0) ? ref.chapter : 1);
+			//that.statusBar.title.textContent = book.name + ' ' + ((ref.chapter > 0) ? ref.chapter : 1);
+			that.statusBar.setTitle(book.name + ' ' + ((ref.chapter > 0) ? ref.chapter : 1));
 		});
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);
@@ -156,13 +157,7 @@ StatusBar.prototype.showView = function() {
 	function setupHeading(hite) {
 		that.title = document.createElement('span');
 		that.title.setAttribute('class', 'statusBar');
-		//that.title.textContent = 'Hello World';
 		document.getElementById('labelCell').appendChild(that.title);
-
-//		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
-//			console.log('new heading to be presented');
-//			text.textContent = event.detail.title;
-//		});
 	}
 	function setupSearchButton(hite, color) {
 		var lineThick = hite/7.0;
@@ -229,6 +224,9 @@ StatusBar.prototype.showView = function() {
 			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_SETTINGS));
 		});
 	}
+};
+StatusBar.prototype.setTitle = function(text) {
+	this.title.textContent = text;
 };/**
 * This class presents the table of contents, and responds to user actions.
 */
