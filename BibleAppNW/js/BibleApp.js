@@ -247,8 +247,7 @@ TableContentsView.prototype.showView = function() {
 };
 TableContentsView.prototype.hideView = function() {
 	if (this.rootNode.children.length > 0) {
-		this.scrollPosition = window.scrollY;
-		console.log('save scroll position', window.scrollY);
+		this.scrollPosition = window.scrollY; // save scroll position till next use.
 		this.rootNode.removeChild(this.root);
 	}
 };
