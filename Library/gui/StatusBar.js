@@ -44,7 +44,7 @@ StatusBar.prototype.showView = function() {
 		var lineThick = hite/7.0;
 		var line1Y = lineThick * 1.5;
 		var lineXSrt = line1Y;
-		var lineXEnd = hite;
+		var lineXEnd = hite - lineThick;
 		var line2Y = lineThick * 2 + line1Y;
 		var line3Y = lineThick * 2 + line2Y;
 

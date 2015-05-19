@@ -62,6 +62,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 			for (var c=0; c<numCellPerRow && chaptNum <= book.lastChapter; c++) {
 				var cell = document.createElement('td');
 				cell.setAttribute('id', 'toc' + bookCode + ':' + chaptNum);
+				cell.setAttribute('class', 'tocChap');
 				cell.textContent = chaptNum;
 				row.appendChild(cell);
 				chaptNum++;

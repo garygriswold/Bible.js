@@ -117,7 +117,7 @@ StatusBar.prototype.showView = function() {
 		var lineThick = hite/7.0;
 		var line1Y = lineThick * 1.5;
 		var lineXSrt = line1Y;
-		var lineXEnd = hite;
+		var lineXEnd = hite - lineThick;
 		var line2Y = lineThick * 2 + line1Y;
 		var line3Y = lineThick * 2 + line2Y;
 
@@ -287,6 +287,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 			for (var c=0; c<numCellPerRow && chaptNum <= book.lastChapter; c++) {
 				var cell = document.createElement('td');
 				cell.setAttribute('id', 'toc' + bookCode + ':' + chaptNum);
+				cell.setAttribute('class', 'tocChap');
 				cell.textContent = chaptNum;
 				row.appendChild(cell);
 				chaptNum++;
@@ -299,7 +300,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 		}
 		var bookNode = document.getElementById('toc' + book.code);
 		if (bookNode) {
-			var saveYPosition = bookNode.getBoundingClientRect().top;// + window.scrollY;
+			var saveYPosition = bookNode.getBoundingClientRect().top;
 			this.removeAllChapters();
 			bookNode.appendChild(root);
 			window.scrollBy(0, bookNode.getBoundingClientRect().top - saveYPosition); // keeps toc from scrolling
