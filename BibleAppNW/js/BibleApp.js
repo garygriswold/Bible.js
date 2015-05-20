@@ -35,7 +35,7 @@ AppViewController.prototype.begin = function() {
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache);
-		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.outerHite);
+		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
 		Object.freeze(that);
 
 		//that.tableContentsView.showView();
@@ -66,7 +66,6 @@ AppViewController.prototype.begin = function() {
 		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
 			var ref = event.detail.reference;
 			var book = that.tableContents.find(ref.book);
-			//that.statusBar.title.textContent = book.name + ' ' + ((ref.chapter > 0) ? ref.chapter : 1);
 			that.statusBar.setTitle(book.name + ' ' + ((ref.chapter > 0) ? ref.chapter : 1));
 		});
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
@@ -85,9 +84,11 @@ AppViewController.prototype.begin = function() {
 
 function StatusBar(hite) {
 	this.hite = hite;
-	this.outerHite = hite + 7;
-	this.title = null;
+	this.titleWidth = window.outerWidth - hite * 3.5;
+	this.titleCanvas = null;
+	this.titleGraphics = null;
 	this.rootNode = document.getElementById('statusRoot');
+	Object.seal(this);
 };
 StatusBar.prototype.showView = function() {
 	var that = this;
@@ -130,7 +131,7 @@ StatusBar.prototype.showView = function() {
 
 		var canvas = document.createElement('canvas');
 		canvas.setAttribute('height', hite);
-		canvas.setAttribute('width', hite + lineXSrt);
+		canvas.setAttribute('width', hite + lineXSrt * 0.5);
 		var graphics = canvas.getContext('2d');
 	
 		graphics.beginPath();
@@ -155,9 +156,19 @@ StatusBar.prototype.showView = function() {
 		});
 	}
 	function setupHeading(hite) {
-		that.title = document.createElement('span');
-		that.title.setAttribute('class', 'statusBar');
-		document.getElementById('labelCell').appendChild(that.title);
+		that.titleCanvas = document.createElement('canvas');
+		that.titleCanvas.setAttribute('id', 'titleCanvas');
+		that.titleCanvas.setAttribute('height', hite);
+		that.titleCanvas.setAttribute('width', that.titleWidth);
+
+		that.titleGraphics = that.titleCanvas.getContext('2d');
+		that.titleGraphics.fillStyle = '#000000';
+		that.titleGraphics.font = '24pt sans-serif';
+		that.titleGraphics.textAlign = 'center';
+		that.titleGraphics.textBaseline = 'middle';
+
+		var labelCell = document.getElementById('labelCell');
+		labelCell.appendChild(that.titleCanvas);
 	}
 	function setupSearchButton(hite, color) {
 		var lineThick = hite/7.0;
@@ -169,7 +180,7 @@ StatusBar.prototype.showView = function() {
 
 		var canvas = document.createElement('canvas');
 		canvas.setAttribute('height', hite);
-		canvas.setAttribute('width', hite + lineThick * 1.5);
+		canvas.setAttribute('width', hite + lineThick);
 		var graphics = canvas.getContext('2d');
 
 		graphics.beginPath();
@@ -226,7 +237,8 @@ StatusBar.prototype.showView = function() {
 	}
 };
 StatusBar.prototype.setTitle = function(text) {
-	this.title.textContent = text;
+	this.titleGraphics.clearRect(0, 0, this.titleWidth, this.hite);
+	this.titleGraphics.fillText(text, this.titleWidth / 2, this.hite / 2, this.titleWidth);
 };/**
 * This class presents the table of contents, and responds to user actions.
 */
@@ -386,6 +398,7 @@ CodexView.prototype.showView = function(nodeId) {
 		} else {
 			that.scrollTo(nodeId);
 			that.addChapterInProgress = false;
+			//document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: new Reference(nodeId) }}));
 			document.addEventListener('scroll', onScrollHandler);
 		}
 	}
@@ -475,9 +488,11 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 	}
 };
 CodexView.prototype.scrollTo = function(nodeId) {
+	console.log('scrollTo', nodeId);
 	var verse = document.getElementById(nodeId);
 	var rect = verse.getBoundingClientRect();
 	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
+	console.log('after', rect.left, window.scrollX, rect.top, window.scrollY, this.statusBarHeight);
 };
 CodexView.prototype.scrollToNode = function(node) {
 	var rect = node.getBoundingClientRect();

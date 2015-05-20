@@ -6,9 +6,11 @@
 
 function StatusBar(hite) {
 	this.hite = hite;
-	this.outerHite = hite + 7;
-	this.title = null;
+	this.titleWidth = window.outerWidth - hite * 3.5;
+	this.titleCanvas = null;
+	this.titleGraphics = null;
 	this.rootNode = document.getElementById('statusRoot');
+	Object.seal(this);
 };
 StatusBar.prototype.showView = function() {
 	var that = this;
@@ -51,7 +53,7 @@ StatusBar.prototype.showView = function() {
 
 		var canvas = document.createElement('canvas');
 		canvas.setAttribute('height', hite);
-		canvas.setAttribute('width', hite + lineXSrt);
+		canvas.setAttribute('width', hite + lineXSrt * 0.5);
 		var graphics = canvas.getContext('2d');
 	
 		graphics.beginPath();
@@ -76,9 +78,19 @@ StatusBar.prototype.showView = function() {
 		});
 	}
 	function setupHeading(hite) {
-		that.title = document.createElement('span');
-		that.title.setAttribute('class', 'statusBar');
-		document.getElementById('labelCell').appendChild(that.title);
+		that.titleCanvas = document.createElement('canvas');
+		that.titleCanvas.setAttribute('id', 'titleCanvas');
+		that.titleCanvas.setAttribute('height', hite);
+		that.titleCanvas.setAttribute('width', that.titleWidth);
+
+		that.titleGraphics = that.titleCanvas.getContext('2d');
+		that.titleGraphics.fillStyle = '#000000';
+		that.titleGraphics.font = '24pt sans-serif';
+		that.titleGraphics.textAlign = 'center';
+		that.titleGraphics.textBaseline = 'middle';
+
+		var labelCell = document.getElementById('labelCell');
+		labelCell.appendChild(that.titleCanvas);
 	}
 	function setupSearchButton(hite, color) {
 		var lineThick = hite/7.0;
@@ -90,7 +102,7 @@ StatusBar.prototype.showView = function() {
 
 		var canvas = document.createElement('canvas');
 		canvas.setAttribute('height', hite);
-		canvas.setAttribute('width', hite + lineThick * 1.5);
+		canvas.setAttribute('width', hite + lineThick);
 		var graphics = canvas.getContext('2d');
 
 		graphics.beginPath();
@@ -147,5 +159,6 @@ StatusBar.prototype.showView = function() {
 	}
 };
 StatusBar.prototype.setTitle = function(text) {
-	this.title.textContent = text;
+	this.titleGraphics.clearRect(0, 0, this.titleWidth, this.hite);
+	this.titleGraphics.fillText(text, this.titleWidth / 2, this.hite / 2, this.titleWidth);
 };

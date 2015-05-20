@@ -35,7 +35,7 @@ AppViewController.prototype.begin = function() {
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache);
-		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.outerHite);
+		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
 		Object.freeze(that);
 
 		//that.tableContentsView.showView();
