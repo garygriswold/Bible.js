@@ -398,7 +398,6 @@ CodexView.prototype.showView = function(nodeId) {
 		} else {
 			that.scrollTo(nodeId);
 			that.addChapterInProgress = false;
-			//document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: new Reference(nodeId) }}));
 			document.addEventListener('scroll', onScrollHandler);
 		}
 	}
@@ -488,11 +487,9 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 	}
 };
 CodexView.prototype.scrollTo = function(nodeId) {
-	console.log('scrollTo', nodeId);
 	var verse = document.getElementById(nodeId);
 	var rect = verse.getBoundingClientRect();
 	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
-	console.log('after', rect.left, window.scrollX, rect.top, window.scrollY, this.statusBarHeight);
 };
 CodexView.prototype.scrollToNode = function(node) {
 	var rect = node.getBoundingClientRect();
@@ -564,13 +561,13 @@ SearchView.prototype.showSearch = function(query) {
 	this.bookList = this.refListsByBook(refList);
 	for (var i=0; i<this.bookList.length; i++) {
 		var bookRef = this.bookList[i];
-		this.appendBook(bookRef.bookCode);
+		var bookNode = this.appendBook(bookRef.bookCode);
 		for (var j=0; j<bookRef.refList.length && j < 3; j++) {
 			var ref = new Reference(bookRef.refList[j]);
-			this.appendReference(ref);
+			this.appendReference(bookNode, ref);
 		}
-		if (bookRef.refList.length > 2) {
-			this.appendSeeMore(bookRef);
+		if (bookRef.refList.length > 3) {
+			this.appendSeeMore(bookNode, bookRef);
 		}
 	}
 };
@@ -595,16 +592,20 @@ SearchView.prototype.refListsByBook = function(refList) {
 SearchView.prototype.appendBook = function(bookCode) {
 	var book = this.toc.find(bookCode);
 	var bookNode = document.createElement('p');
-	bookNode.setAttribute('class', 'conBook');
-	var tocBook = this.toc.find(bookCode);
-	bookNode.textContent = tocBook.name;
+	bookNode.setAttribute('id', 'con' + bookCode);
 	this.viewRoot.appendChild(bookNode);
-	this.viewRoot.appendChild(document.createElement('hr'));
+	var titleNode = document.createElement('span');
+	titleNode.setAttribute('class', 'conBook');
+	var tocBook = this.toc.find(bookCode);
+	titleNode.textContent = tocBook.name;
+	bookNode.appendChild(titleNode);
+	bookNode.appendChild(document.createElement('hr'));
+	return(bookNode);
 };
-SearchView.prototype.appendReference = function(reference) {
+SearchView.prototype.appendReference = function(bookNode, reference) {
 	var that = this;
 	var entryNode = document.createElement('p');
-	this.viewRoot.appendChild(entryNode);
+	bookNode.appendChild(entryNode);
 	var refNode = document.createElement('span');
 	refNode.setAttribute('class', 'conRef');
 	refNode.textContent = reference.chapterVerse();
@@ -619,7 +620,7 @@ SearchView.prototype.appendReference = function(reference) {
 			verseNode.setAttribute('class', 'conVerse');
 			verseNode.innerHTML = styleSearchWords(verseText);
 			entryNode.appendChild(verseNode);
-			verseNode.addEventListener('click', function() {
+			verseNode.addEventListener('click', function(event) {
 				var nodeId = this.id.substr(3);
 				console.log('open chapter', nodeId);
 				that.hideView();
@@ -637,29 +638,31 @@ SearchView.prototype.appendReference = function(reference) {
 		return(verseText);
 	}
 };
-SearchView.prototype.appendSeeMore = function(bookRef) {
+SearchView.prototype.appendSeeMore = function(bookNode, bookRef) {
 	var that = this;
 	var entryNode = document.createElement('p');
 	entryNode.setAttribute('id', 'mor' + bookRef.bookCode);
 	entryNode.setAttribute('class', 'conMore');
 	entryNode.textContent = '...';
-	this.viewRoot.appendChild(entryNode);
-	entryNode.addEventListener('click', function() {
+	bookNode.appendChild(entryNode);
+	entryNode.addEventListener('click', function(event) {
 		var moreNode = document.getElementById(this.id);
 		var parentNode = moreNode.parentNode;
 		parentNode.removeChild(moreNode);
 
 		var bookCode = this.id.substr(3);
-		var bookListItem = findBookInBookList(bookCode);
-		for (var i=0; i<bookListItem.length; i++) {
-			that.appendReference(bookListItem[i]);
+		var bookNode = document.getElementById('con' + bookCode);
+		var refList = findBookInBookList(bookCode);
+		for (var i=3; i<refList.length; i++) {
+			var ref = new Reference(refList[i]);
+			that.appendReference(bookNode, ref);
 		}
 	});
 
 	function findBookInBookList(bookCode) {
-		for (var i=0; i<this.bookList.length; i++) {
-			if (this.bookList[i].bookCode === bookCode) {
-				return(this.bookList[i]);
+		for (var i=0; i<that.bookList.length; i++) {
+			if (that.bookList[i].bookCode === bookCode) {
+				return(that.bookList[i].refList);
 			}
 		}
 		return(null);

@@ -49,6 +49,31 @@ td.tocChap { /* non-std */
 	border-style: solid;
 	border-color: #777777;
 }
+/* Search Results Book Name */
+span.conBook {
+	font-family: sans-serif;
+	font-size: 1.3em;
+	text-align: start;
+	/*margin-top: 8pt;*/
+	margin-bottom: 0;
+}
+hr {
+	margin-top: 0;
+}
+span.conRef {
+	font-family: sans-serif;
+	font-size: 1.0em;
+	text-align: start;
+	font-weight: bold;
+}
+span.conVerse {
+	font-family: serif;
+	font-size: 1.0em;
+	text-align: start;	
+}
+span.conWord {
+	font-weight: bold;
+}
 #codexRoot {
 	margin: 10%;
 	font-family: serif;
