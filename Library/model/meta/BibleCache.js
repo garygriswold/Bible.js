@@ -38,12 +38,17 @@ BibleCache.prototype.getChapter = function(reference, callback) {
 		});
 	}
 };
+//
+// Try rewriting this without parsing.  But, I would need to parse the fragment.
+// 
 BibleCache.prototype.getVerse = function(reference, callback) {
 	this.getChapter(reference, function(chapter) {
 		if (chapter.errno) {
 			callback(chapter);
 		} else {
+			console.log(reference.nodeId, reference.verse, chapter.children.length);
 			var versePosition = findVerse(reference.verse, chapter);
+			console.log('position', versePosition);
 			var verseContent = findVerseContent(versePosition);
 			callback(verseContent);
 		}

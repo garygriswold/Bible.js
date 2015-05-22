@@ -47,6 +47,7 @@ SearchView.prototype.showSearch = function(query) {
 	for (var i=0; i<this.bookList.length; i++) {
 		var bookRef = this.bookList[i];
 		var bookNode = this.appendBook(bookRef.bookCode);
+		console.log('References', bookRef.bookCode, bookRef.refList);
 		for (var j=0; j<bookRef.refList.length && j < 3; j++) {
 			var ref = new Reference(bookRef.refList[j]);
 			this.appendReference(bookNode, ref);
