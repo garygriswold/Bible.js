@@ -34,11 +34,13 @@ Chapter.prototype.toDOM = function(parentNode, bookCode) {
 	section.appendChild(child);
 	return(section);
 };
+/** deprecated, might redo when writing tests */
 Chapter.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);
 	return(result.join(''));
 };
+/** deprecated */
 Chapter.prototype.buildHTML = function(result) {
 	result.push('\n<p id="' + this.number + '" class="' + this.style + '">', this.number, '</p>');
 };

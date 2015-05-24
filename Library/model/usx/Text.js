@@ -39,11 +39,13 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 		}
 	}
 };
+/** deprecated, might redo when writing tests */
 Text.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);
 	return(result.join(''));
 };
+/** deprecated */
 Text.prototype.buildHTML = function(result) {
 	result.push(this.text);
 };

@@ -36,11 +36,13 @@ USX.prototype.buildUSX = function(result) {
 	}
 	result.push(this.closeElement());
 };
+/** deprecated, might redo when writing tests */
 USX.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);
 	return(result.join(''));
 };
+/** deprecated */
 USX.prototype.buildHTML = function(result) {
 	result.push('\uFEFF<?xml version="1.0" encoding="utf-8"?>\n');
 	result.push('<html><head>\n');

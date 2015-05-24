@@ -59,11 +59,13 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	});
 	return(refChild);
 };
+/** deprecated, might redo when writing tests */
 Note.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);
 	return(result.join(''));
 };
+/** deprecated */
 Note.prototype.buildHTML = function(result) {
 	result.push('<span class="' + this.style + '">');
 	result.push(this.caller);

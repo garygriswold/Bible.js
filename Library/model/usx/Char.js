@@ -44,11 +44,13 @@ Char.prototype.toDOM = function(parentNode) {
 		return(child);
 	}
 };
+/** deprecated, might redo when writing tests */
 Char.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);
 	return(result.join(''));
 };
+/** deprecated */
 Char.prototype.buildHTML = function(result) {
 	result.push('<span class="' + this.style + '">');
 	for (var i=0; i<this.children.length; i++) {

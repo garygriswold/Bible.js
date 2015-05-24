@@ -36,10 +36,12 @@ Book.prototype.toDOM = function(parentNode) {
 	parentNode.appendChild(article);
 	return(article);
 };
+/** deprecated, might redo when writing tests */
 Book.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);
 	return(result.join(''));
 };
+/** deprecated */
 Book.prototype.buildHTML = function(result) {
 };
