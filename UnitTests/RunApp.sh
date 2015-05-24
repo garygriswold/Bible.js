@@ -14,6 +14,7 @@ cat ../Library/model/meta/TOCBook.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/StyleIndex.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/History.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/HistoryItem.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/model/meta/VerseAccessor.js >> ../BibleAppNW/js/BibleApp.js
 
 cat ../Library/io/CommonIO.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/io/NodeFileReader.js >> ../BibleAppNW/js/BibleApp.js

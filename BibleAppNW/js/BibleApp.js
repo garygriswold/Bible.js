@@ -39,7 +39,7 @@ AppViewController.prototype.begin = function() {
 		Object.freeze(that);
 
 		//that.tableContentsView.showView();
-		that.searchView.showView("risen");
+		that.searchView.showView("risen");// adversaries");// breathe");
 
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();
@@ -557,12 +557,11 @@ SearchView.prototype.showSearch = function(query) {
 	this.viewRoot = document.createElement('div');
 	this.query = query;
 	this.words = query.split(' ');
-	var refList = this.concordance.search(query);
+	var refList = this.concordance.search(this.words);
 	this.bookList = this.refListsByBook(refList);
 	for (var i=0; i<this.bookList.length; i++) {
 		var bookRef = this.bookList[i];
 		var bookNode = this.appendBook(bookRef.bookCode);
-		console.log('References', bookRef.bookCode, bookRef.refList);
 		for (var j=0; j<bookRef.refList.length && j < 3; j++) {
 			var ref = new Reference(bookRef.refList[j]);
 			this.appendReference(bookNode, ref);
@@ -612,7 +611,8 @@ SearchView.prototype.appendReference = function(bookNode, reference) {
 	refNode.textContent = reference.chapterVerse();
 	entryNode.appendChild(refNode);
 	entryNode.appendChild(document.createElement('br'));
-	this.bibleCache.getVerse(reference, function(verseText) {
+	var accessor = new VerseAccessor(this.bibleCache, reference);
+	accessor.getVerse(function(verseText) {
 		if (verseText.errno) {
 			console.log('Error in get verse', JSON.stringify(verseText));
 		} else {
@@ -821,49 +821,43 @@ BibleCache.prototype.getChapter = function(reference, callback) {
 		});
 	}
 };
-BibleCache.prototype.getVerse = function(reference, callback) {
-	this.getChapter(reference, function(chapter) {
-		if (chapter.errno) {
-			callback(chapter);
-		} else {
-			console.log(reference.nodeId, reference.verse, chapter.children.length);
-			var versePosition = findVerse(reference.verse, chapter);
-			console.log('position', versePosition);
-			var verseContent = findVerseContent(versePosition);
-			callback(verseContent);
-		}
-	});
-	function findVerse(verseNum, chapter) {
-		for (var i=0; i<chapter.children.length; i++) {
-			var child = chapter.children[i];
-			if (child.tagName === 'verse' && child.number == verseNum) {
-				return({parent: chapter, childIndex: i+1});
-			}
-			else if (child.tagName === 'para') {
-				for (var j=0; j<child.children.length; j++) {
-					var grandChild = child.children[j];
-					if (grandChild.tagName === 'verse' && grandChild.number == verseNum) {
-						return({parent: child, childIndex: j+1});
-					}
-				}
-			}
-		}
-		return(undefined);		
-	}
-	function findVerseContent(position) {
-		var result = [];
-		for (var i=position.childIndex; i<position.parent.children.length; i++) {
-			var child = position.parent.children[i];
-			if (child.tagName !== 'verse') {
-				result.push(child.text);
-			}
-			else {
-				return(result.join(' '));
-			}
-		}
-		return(result.join(' '));
-	}
-};
+
+//BibleCache.prototype.getVerse = function(reference, callback) {
+//
+//	this.getChapter(reference, function(chapter) {
+//		if (chapter.errno) {
+//			callback(chapter);
+//		} else {
+//			console.log(reference.nodeId, reference.verse, chapter.children.length);
+//			//var versePosition = findVerse(reference.verse, chapter);
+//			//console.log('position', versePosition);
+//			//var verseContent = findVerseContent(versePosition);
+//			var insideVerse = false;
+//			var result = [];
+//			scanRecursively(chapter, reference.verse);
+//			callback(result.join(' '));
+//		}
+//	});
+//	function scanRecursively(node, verseNum) {
+//		if (insideVerse) {
+//			if (node.tagName === 'verse') {
+//				return;
+//			}
+//			else if (node.tagName === 'text') {
+//				result.push(node.text);
+//			}
+//		} else {
+//			if (node.tagName === 'verse' && node.number === verseNum) {
+//				insideVerse = true;
+//			}
+//		}
+//		if (node.tagName !== 'note' && children in node) {
+//			for (var i=0; i<node.children.length; i++) {
+//				scanRecursively(node.children[i], verseNum);
+//			}
+//		}
+//	}
+//};
 /**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
@@ -895,13 +889,14 @@ Concordance.prototype.addEntry = function(word, reference) {
 Concordance.prototype.size = function() {
 	return(Object.keys(this.index).length);
 }
-Concordance.prototype.search = function(search) {
+Concordance.prototype.search = function(words) {
 	var refList = []; 
-	var words = search.split(' ');
+	//var words = search.split(' ');
 	for (var i=0; i<words.length; i++) {
 		var word = words[i];
 		refList.push(this.index[word]);
 	}
+	//console.log('in search refList', refList);
 	return(this.intersection(refList));
 }
 Concordance.prototype.intersection = function(refLists) {
@@ -920,12 +915,8 @@ Concordance.prototype.intersection = function(refLists) {
 	var firstList = refLists[0];
 	for (var j=0; j<firstList.length; j++) {
 		var reference = firstList[j];
-		var present = true;
-		for (var k=0; k<mapList.length; k++) {
-			present = present && mapList[k][reference];
-			if (present) {
-				result.push(reference)
-			}
+		if (presentInAllMaps(mapList, reference)) {
+			result.push(reference);
 		}
 	}
 	return(result);
@@ -936,6 +927,14 @@ Concordance.prototype.intersection = function(refLists) {
 			map[array[i]] = true;
 		}
 		return(map);
+	}
+	function presentInAllMaps(mapList, reference) {
+		for (var i=0; i<mapList.length; i++) {
+			if (mapList[i][reference] === undefined) {
+				return(false);
+			}
+		}
+		return(true);
 	}
 };
 Concordance.prototype.toJSON = function() {
@@ -1140,6 +1139,50 @@ function HistoryItem(key, source, search) {
 	this.search = search;
 	this.timestamp = new Date();
 	Object.freeze(this);
+};/**
+* This class extracts single verses from Chapters and returns the text of those
+* verses for use in Concordance Search and possibly other uses.  This is written
+* as a class, because BibleCache and SearchView both have only one instance, but
+* SearchView could be accessing the text of many verses concurrently.
+*/
+"use strict";
+function VerseAccessor(bibleCache, reference) {
+	this.bibleCache = bibleCache;
+	this.reference = reference;
+	this.insideVerse = false;
+	this.result = [];
+	Object.seal(this);
+};
+VerseAccessor.prototype.getVerse = function(callback) {
+	var that = this;
+	this.bibleCache.getChapter(this.reference, function(chapter) {
+		if (chapter.errno) {
+			callback(chapter);
+		} else {
+			var verseNum = String(that.reference.verse);
+			scanRecursively(chapter, verseNum);
+			callback(that.result.join(' '));
+		}
+	});
+	function scanRecursively(node, verseNum) {
+		if (that.insideVerse) {
+			if (node.tagName === 'verse') {
+				that.insideVerse = false;
+			}
+			else if (node.tagName === 'text') {
+				that.result.push(node.text);
+			}
+		} else {
+			if (node.tagName === 'verse' && node.number === verseNum) {
+				that.insideVerse = true;
+			}
+		}
+		if (node.tagName !== 'note' && 'children' in node) {
+			for (var i=0; i<node.children.length; i++) {
+				scanRecursively(node.children[i], verseNum);
+			}
+		}
+	}
 };/**
 * This file contains IO constants and functions which are common to all file methods, which might include node.js, cordova, javascript, etc.
 */
@@ -2550,6 +2593,9 @@ function Text(text) {
 	Object.freeze(this);
 };
 Text.prototype.tagName = 'text';
+Text.prototype.openElement = function() {
+	return(this.text);
+};
 Text.prototype.buildUSX = function(result) {
 	result.push(this.text);
 };

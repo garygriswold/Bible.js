@@ -42,12 +42,11 @@ SearchView.prototype.showSearch = function(query) {
 	this.viewRoot = document.createElement('div');
 	this.query = query;
 	this.words = query.split(' ');
-	var refList = this.concordance.search(query);
+	var refList = this.concordance.search(this.words);
 	this.bookList = this.refListsByBook(refList);
 	for (var i=0; i<this.bookList.length; i++) {
 		var bookRef = this.bookList[i];
 		var bookNode = this.appendBook(bookRef.bookCode);
-		console.log('References', bookRef.bookCode, bookRef.refList);
 		for (var j=0; j<bookRef.refList.length && j < 3; j++) {
 			var ref = new Reference(bookRef.refList[j]);
 			this.appendReference(bookNode, ref);
@@ -97,7 +96,8 @@ SearchView.prototype.appendReference = function(bookNode, reference) {
 	refNode.textContent = reference.chapterVerse();
 	entryNode.appendChild(refNode);
 	entryNode.appendChild(document.createElement('br'));
-	this.bibleCache.getVerse(reference, function(verseText) {
+	var accessor = new VerseAccessor(this.bibleCache, reference);
+	accessor.getVerse(function(verseText) {
 		if (verseText.errno) {
 			console.log('Error in get verse', JSON.stringify(verseText));
 		} else {

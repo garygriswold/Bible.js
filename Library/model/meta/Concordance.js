@@ -29,9 +29,8 @@ Concordance.prototype.addEntry = function(word, reference) {
 Concordance.prototype.size = function() {
 	return(Object.keys(this.index).length);
 }
-Concordance.prototype.search = function(search) {
-	var refList = []; 
-	var words = search.split(' ');
+Concordance.prototype.search = function(words) {
+	var refList = [];
 	for (var i=0; i<words.length; i++) {
 		var word = words[i];
 		refList.push(this.index[word]);
@@ -54,12 +53,8 @@ Concordance.prototype.intersection = function(refLists) {
 	var firstList = refLists[0];
 	for (var j=0; j<firstList.length; j++) {
 		var reference = firstList[j];
-		var present = true;
-		for (var k=0; k<mapList.length; k++) {
-			present = present && mapList[k][reference];
-			if (present) {
-				result.push(reference)
-			}
+		if (presentInAllMaps(mapList, reference)) {
+			result.push(reference);
 		}
 	}
 	return(result);
@@ -70,6 +65,14 @@ Concordance.prototype.intersection = function(refLists) {
 			map[array[i]] = true;
 		}
 		return(map);
+	}
+	function presentInAllMaps(mapList, reference) {
+		for (var i=0; i<mapList.length; i++) {
+			if (mapList[i][reference] === undefined) {
+				return(false);
+			}
+		}
+		return(true);
 	}
 };
 Concordance.prototype.toJSON = function() {
