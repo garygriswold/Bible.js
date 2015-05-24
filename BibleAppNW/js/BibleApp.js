@@ -39,7 +39,7 @@ AppViewController.prototype.begin = function() {
 		Object.freeze(that);
 
 		//that.tableContentsView.showView();
-		that.searchView.showView("risen");// adversaries");// breathe");
+		that.searchView.showView("risen have");
 
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();
@@ -631,12 +631,15 @@ SearchView.prototype.appendReference = function(bookNode, reference) {
 	});
 
 	function styleSearchWords(verseText) {
+		var verseWords = verseText.split(/\b/); // Non-destructive, preserves all characters
 		for (var i=0; i<that.words.length; i++) {
-			var search = ' ' + that.words[i] + ' ';
-			var regex = new RegExp(search, 'g');
-			verseText = verseText.replace(regex, '<span class="conWord"> ' + that.words[i] + ' </span>');
+			var word = that.words[i];
+			var wordNum = verseWords.indexOf(word);
+			if (wordNum >= 0) {
+				verseWords[wordNum] = '<span class="conWord">' + word + '</span>';
+			}
 		}
-		return(verseText);
+		return(verseWords.join(''));
 	}
 };
 SearchView.prototype.appendSeeMore = function(bookNode, bookRef) {
@@ -821,43 +824,6 @@ BibleCache.prototype.getChapter = function(reference, callback) {
 		});
 	}
 };
-
-//BibleCache.prototype.getVerse = function(reference, callback) {
-//
-//	this.getChapter(reference, function(chapter) {
-//		if (chapter.errno) {
-//			callback(chapter);
-//		} else {
-//			console.log(reference.nodeId, reference.verse, chapter.children.length);
-//			//var versePosition = findVerse(reference.verse, chapter);
-//			//console.log('position', versePosition);
-//			//var verseContent = findVerseContent(versePosition);
-//			var insideVerse = false;
-//			var result = [];
-//			scanRecursively(chapter, reference.verse);
-//			callback(result.join(' '));
-//		}
-//	});
-//	function scanRecursively(node, verseNum) {
-//		if (insideVerse) {
-//			if (node.tagName === 'verse') {
-//				return;
-//			}
-//			else if (node.tagName === 'text') {
-//				result.push(node.text);
-//			}
-//		} else {
-//			if (node.tagName === 'verse' && node.number === verseNum) {
-//				insideVerse = true;
-//			}
-//		}
-//		if (node.tagName !== 'note' && children in node) {
-//			for (var i=0; i<node.children.length; i++) {
-//				scanRecursively(node.children[i], verseNum);
-//			}
-//		}
-//	}
-//};
 /**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
@@ -890,13 +856,11 @@ Concordance.prototype.size = function() {
 	return(Object.keys(this.index).length);
 }
 Concordance.prototype.search = function(words) {
-	var refList = []; 
-	//var words = search.split(' ');
+	var refList = [];
 	for (var i=0; i<words.length; i++) {
 		var word = words[i];
 		refList.push(this.index[word]);
 	}
-	//console.log('in search refList', refList);
 	return(this.intersection(refList));
 }
 Concordance.prototype.intersection = function(refLists) {
@@ -2593,9 +2557,6 @@ function Text(text) {
 	Object.freeze(this);
 };
 Text.prototype.tagName = 'text';
-Text.prototype.openElement = function() {
-	return(this.text);
-};
 Text.prototype.buildUSX = function(result) {
 	result.push(this.text);
 };

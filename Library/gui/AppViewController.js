@@ -39,7 +39,7 @@ AppViewController.prototype.begin = function() {
 		Object.freeze(that);
 
 		//that.tableContentsView.showView();
-		that.searchView.showView("risen");// adversaries");// breathe");
+		that.searchView.showView("risen have");
 
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();

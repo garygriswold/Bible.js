@@ -116,12 +116,15 @@ SearchView.prototype.appendReference = function(bookNode, reference) {
 	});
 
 	function styleSearchWords(verseText) {
+		var verseWords = verseText.split(/\b/); // Non-destructive, preserves all characters
 		for (var i=0; i<that.words.length; i++) {
-			var search = ' ' + that.words[i] + ' ';
-			var regex = new RegExp(search, 'g');
-			verseText = verseText.replace(regex, '<span class="conWord"> ' + that.words[i] + ' </span>');
+			var word = that.words[i];
+			var wordNum = verseWords.indexOf(word);
+			if (wordNum >= 0) {
+				verseWords[wordNum] = '<span class="conWord">' + word + '</span>';
+			}
 		}
-		return(verseText);
+		return(verseWords.join(''));
 	}
 };
 SearchView.prototype.appendSeeMore = function(bookNode, bookRef) {
