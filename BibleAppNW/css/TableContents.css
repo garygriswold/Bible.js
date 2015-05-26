@@ -1,0 +1,37 @@
+/**
+* This css file pertains to the TableContentsView
+*/
+
+#tocRoot {
+	margin-top: 17%;
+	margin-bottom: 0%; /* this doesn't seem to work */
+	margin-left: 10%;
+	margin-right: 10%;
+}
+/* Table of Contents Page Format */
+div.tocPage { /* non-std */
+}
+/* Table of Contents Book Name Format */
+p.tocBook { /* non-std */
+	font-family: sans-serif;
+	font-size: 1.5em;
+	color: #777777;
+	text-align: start;
+}
+/* Table of Contents Chapter Number Format */
+table.tocChap { /* non-std */
+	table-layout: fixed;
+	border-collapse: collapse;
+	font-family: sans-serif;
+	font-size: 1.0em;
+	color: #777777;
+	width: 100%;
+	text-align: center;
+	line-height: 2.0;
+}
+/* Table of Contents Chapter number cells */
+td.tocChap { /* non-std */
+	border-width: 1px;
+	border-style: solid;
+	border-color: #777777;
+}

@@ -1,0 +1,10 @@
+/**
+* This css file pertains to the StatusBar
+*/
+
+#statusRoot {
+	margin: 0;
+	position: fixed;
+	left: 0;
+	top: 0;
+}
