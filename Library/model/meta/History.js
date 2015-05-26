@@ -12,15 +12,6 @@ function History(types) {
 	this.currentItem = null;
 	this.writer = new NodeFileWriter(types.location);
 	this.isFilled = false;
-	var that = this;
-	if (types.location !== 'test2dbl') { // HACK, History could be used on server
-		document.body.addEventListener(BIBLE.TOC, function(event) {
-			that.addEvent(event);	
-		});
-		document.body.addEventListener(BIBLE.SEARCH, function(event) {
-			that.addEvent(event);
-		});
-	}
 	Object.seal(this);
 };
 History.prototype.fill = function(itemList) {

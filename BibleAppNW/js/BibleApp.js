@@ -4,11 +4,20 @@
 */
 "use strict"
 
-var BIBLE = { SHOW_TOC: 'bible-show-toc', SHOW_SEARCH: 'bible-show-search', SHOW_SETTINGS: 'TBD-bible-show-settings', 
-		TOC_FIND: 'bible-toc-find', LOOK: 'TBD-bible-look', SEARCH: 'bible-search',
-		CHG_HEADING: 'bible-chg-heading', 
-		BACK: 'bible-back', FORWARD: 'bible-forward', LAST: 'bible-last', 
-		SHOW_NOTE: 'bible-show-note', HIDE_NOTE: 'bible-hide-note' };
+var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
+		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
+		SHOW_SETTINGS: 'TBD-bible-show-settings', // present settings page, create if needed
+		TOC_FIND: 'bible-toc-find', // lookup a passage as result of user selection in toc
+		LOOK: 'TBD-bible-look', // TBD
+		SEARCH_START: 'bible-search-start', // process user entered search string
+		SEARCH_FIND: 'bible-search-find', // lookup a pages as a result of user clicking on a search result
+		CHG_HEADING: 'bible-chg-heading', // change title at top of page as result of user scrolling
+		BACK: 'bible-back', // TBD
+		FORWARD: 'bible-forward', // TBD
+		LAST: 'bible-last', // TBD
+		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
+		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
+	};
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
@@ -48,20 +57,24 @@ AppViewController.prototype.begin = function() {
 		});
 		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
 			that.searchView.showView();
+			//that.statusBar.showSearchField();
 			that.tableContentsView.hideView();
 			that.codexView.hideView();
 		});
 		document.body.addEventListener(BIBLE.TOC_FIND, function(event) {
 			console.log(JSON.stringify(event.detail));
-			that.codexView.showView(event.detail.id);	
-			that.tableContentsView.hideView();
-			that.searchView.hideView();
-		});
-		document.body.addEventListener(BIBLE.SEARCH, function(event) {
-			console.log(JSON.stringify(event.detail));
 			that.codexView.showView(event.detail.id);
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
+			that.history.addEvent(event);
+		});
+		document.body.addEventListener(BIBLE.SEARCH_FIND, function(event) {
+			console.log(JSON.stringify(event.detail));
+			that.codexView.showView(event.detail.id);
+			//that.statusBar.showTitleField();
+			that.tableContentsView.hideView();
+			that.searchView.hideView();
+			that.history.addEvent(event);
 		});
 		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
 			var ref = event.detail.reference;
@@ -625,7 +638,7 @@ SearchView.prototype.appendReference = function(bookNode, reference) {
 				var nodeId = this.id.substr(3);
 				console.log('open chapter', nodeId);
 				that.hideView();
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH, { detail: { id: nodeId, source: that.query }}));
+				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_FIND, { detail: { id: nodeId, source: that.query }}));
 			});
 		}	
 	});
@@ -1032,15 +1045,6 @@ function History(types) {
 	this.currentItem = null;
 	this.writer = new NodeFileWriter(types.location);
 	this.isFilled = false;
-	var that = this;
-	if (types.location !== 'test2dbl') { // HACK, History could be used on server
-		document.body.addEventListener(BIBLE.TOC, function(event) {
-			that.addEvent(event);	
-		});
-		document.body.addEventListener(BIBLE.SEARCH, function(event) {
-			that.addEvent(event);
-		});
-	}
 	Object.seal(this);
 };
 History.prototype.fill = function(itemList) {
@@ -2208,11 +2212,13 @@ USX.prototype.buildUSX = function(result) {
 	}
 	result.push(this.closeElement());
 };
+/** deprecated, might redo when writing tests */
 USX.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);
 	return(result.join(''));
 };
+/** deprecated */
 USX.prototype.buildHTML = function(result) {
 	result.push('\uFEFF<?xml version="1.0" encoding="utf-8"?>\n');
 	result.push('<html><head>\n');
@@ -2274,11 +2280,13 @@ Book.prototype.toDOM = function(parentNode) {
 	parentNode.appendChild(article);
 	return(article);
 };
+/** deprecated, might redo when writing tests */
 Book.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);
 	return(result.join(''));
 };
+/** deprecated */
 Book.prototype.buildHTML = function(result) {
 };/**
 * This object contains information about a chapter of the Bible from a parsed USX Bible document.
@@ -2316,11 +2324,13 @@ Chapter.prototype.toDOM = function(parentNode, bookCode) {
 	section.appendChild(child);
 	return(section);
 };
+/** deprecated, might redo when writing tests */
 Chapter.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);
 	return(result.join(''));
 };
+/** deprecated */
 Chapter.prototype.buildHTML = function(result) {
 	result.push('\n<p id="' + this.number + '" class="' + this.style + '">', this.number, '</p>');
 };/**
@@ -2362,11 +2372,13 @@ Para.prototype.toDOM = function(parentNode) {
 	}
 	return(child);
 };
+/** deprecated, might redo when writing tests */
 Para.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);
 	return(result.join(''));
 };
+/** deprecated */
 Para.prototype.buildHTML = function(result) {
 	var identStyles = [ 'ide', 'sts', 'rem', 'h', 'toc1', 'toc2', 'toc3', 'cl' ];
 	if (identStyles.indexOf(this.style) === -1) {
@@ -2410,11 +2422,13 @@ Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 	parentNode.appendChild(child);
 	return(child);
 };
+/** deprecated, might redo when writing tests */
 Verse.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);
 	return(result.join(''));
 };
+/** deprecated */
 Verse.prototype.buildHTML = function(result) {
 	result.push('<span id="' + this.number + '" class="' + this.style + '">', this.number, ' </span>');
 };/**
@@ -2478,11 +2492,13 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	});
 	return(refChild);
 };
+/** deprecated, might redo when writing tests */
 Note.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);
 	return(result.join(''));
 };
+/** deprecated */
 Note.prototype.buildHTML = function(result) {
 	result.push('<span class="' + this.style + '">');
 	result.push(this.caller);
@@ -2536,11 +2552,13 @@ Char.prototype.toDOM = function(parentNode) {
 		return(child);
 	}
 };
+/** deprecated, might redo when writing tests */
 Char.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);
 	return(result.join(''));
 };
+/** deprecated */
 Char.prototype.buildHTML = function(result) {
 	result.push('<span class="' + this.style + '">');
 	for (var i=0; i<this.children.length; i++) {
@@ -2588,11 +2606,13 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 		}
 	}
 };
+/** deprecated, might redo when writing tests */
 Text.prototype.toHTML = function() {
 	var result = [];
 	this.buildHTML(result);
 	return(result.join(''));
 };
+/** deprecated */
 Text.prototype.buildHTML = function(result) {
 	result.push(this.text);
 };

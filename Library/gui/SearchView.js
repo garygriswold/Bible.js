@@ -110,7 +110,7 @@ SearchView.prototype.appendReference = function(bookNode, reference) {
 				var nodeId = this.id.substr(3);
 				console.log('open chapter', nodeId);
 				that.hideView();
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH, { detail: { id: nodeId, source: that.query }}));
+				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_FIND, { detail: { id: nodeId, source: that.query }}));
 			});
 		}	
 	});

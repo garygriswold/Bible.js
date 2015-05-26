@@ -4,11 +4,20 @@
 */
 "use strict"
 
-var BIBLE = { SHOW_TOC: 'bible-show-toc', SHOW_SEARCH: 'bible-show-search', SHOW_SETTINGS: 'TBD-bible-show-settings', 
-		TOC_FIND: 'bible-toc-find', LOOK: 'TBD-bible-look', SEARCH: 'bible-search',
-		CHG_HEADING: 'bible-chg-heading', 
-		BACK: 'bible-back', FORWARD: 'bible-forward', LAST: 'bible-last', 
-		SHOW_NOTE: 'bible-show-note', HIDE_NOTE: 'bible-hide-note' };
+var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
+		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
+		SHOW_SETTINGS: 'TBD-bible-show-settings', // present settings page, create if needed
+		TOC_FIND: 'bible-toc-find', // lookup a passage as result of user selection in toc
+		LOOK: 'TBD-bible-look', // TBD
+		SEARCH_START: 'bible-search-start', // process user entered search string
+		SEARCH_FIND: 'bible-search-find', // lookup a pages as a result of user clicking on a search result
+		CHG_HEADING: 'bible-chg-heading', // change title at top of page as result of user scrolling
+		BACK: 'bible-back', // TBD
+		FORWARD: 'bible-forward', // TBD
+		LAST: 'bible-last', // TBD
+		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
+		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
+	};
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
@@ -48,20 +57,24 @@ AppViewController.prototype.begin = function() {
 		});
 		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
 			that.searchView.showView();
+			//that.statusBar.showSearchField();
 			that.tableContentsView.hideView();
 			that.codexView.hideView();
 		});
 		document.body.addEventListener(BIBLE.TOC_FIND, function(event) {
 			console.log(JSON.stringify(event.detail));
-			that.codexView.showView(event.detail.id);	
-			that.tableContentsView.hideView();
-			that.searchView.hideView();
-		});
-		document.body.addEventListener(BIBLE.SEARCH, function(event) {
-			console.log(JSON.stringify(event.detail));
 			that.codexView.showView(event.detail.id);
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
+			that.history.addEvent(event);
+		});
+		document.body.addEventListener(BIBLE.SEARCH_FIND, function(event) {
+			console.log(JSON.stringify(event.detail));
+			that.codexView.showView(event.detail.id);
+			//that.statusBar.showTitleField();
+			that.tableContentsView.hideView();
+			that.searchView.hideView();
+			that.history.addEvent(event);
 		});
 		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
 			var ref = event.detail.reference;
