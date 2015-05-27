@@ -597,18 +597,13 @@ function SearchView(toc, concordance, bibleCache, history) {
 SearchView.prototype.showView = function(query) {
 	this.hideView();
 	if (query) {
-		//this.hideView();
 		this.showSearch(query);
 		this.rootNode.appendChild(this.viewRoot);
 		window.scrollTo(10, 0);
 	} else if (this.viewRoot) {
-		//if (this.rootNode.children.length < 1) {
-		//this.hideView();
 		this.rootNode.appendChild(this.viewRoot);
 		window.scrollTo(10, this.scrollPosition);
-		//}
 	} else {
-		//console.log('inside SearchView showView');
 		var lastSearch = this.history.lastConcordanceSearch();
 		if (lastSearch && lastSearch.length > 0) { // check trim also
 			document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: lastSearch }}));

@@ -161,7 +161,7 @@ p.sp {
 /* Poetry First Line */
 p.q {
 	text-align: start;
-	text-indent: -1in;
+	text-indent: -1.0in;
 	margin-left: 1.25in;
 	margin-top: 0; /* non-std */
 	margin-bottom: 0; /* non-std */
@@ -169,7 +169,7 @@ p.q {
 /* Poetry First Line */
 p.q1 {
 	text-align: start;
-	text-indent: -1in;
+	text-indent: -1.0in;
 	margin-left: 1.25in;
 	margin-top: 0; /* non-std */
 	margin-bottom: 0; /* non-std */
