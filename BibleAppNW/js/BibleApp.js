@@ -47,8 +47,16 @@ AppViewController.prototype.begin = function() {
 		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
 		Object.freeze(that);
 
+		var lastItem = that.history.last();
+		console.log(lastItem);
+		console.log('size', that.history.size());
+		if (lastItem && lastItem.key) {
+			that.codexView.showView(lastItem.key);
+		} else {
+			that.codexView.showView('JHN:1');
+		}
 		//that.tableContentsView.showView();
-		that.searchView.showView("risen have");
+		//that.searchView.showView("risen have");
 
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();
@@ -67,6 +75,10 @@ AppViewController.prototype.begin = function() {
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
 			that.history.addEvent(event);
+		});
+		document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
+			console.log('SEARCH_START', event.detail);
+			that.searchView.showView(event.detail.search);
 		});
 		document.body.addEventListener(BIBLE.SEARCH_FIND, function(event) {
 			console.log(JSON.stringify(event.detail));
@@ -233,7 +245,6 @@ StatusBar.prototype.showView = function() {
 		canvas.setAttribute('style', 'position: fixed; top: 0; right: 0');
 		var graphics = canvas.getContext('2d');
 
-		console.log('radius', radius);
 		graphics.beginPath();
 		graphics.arc(coord, coord, radius, 0, Math.PI*2, true);
 		for (var angle=first; angle<circle; angle+=increment) {

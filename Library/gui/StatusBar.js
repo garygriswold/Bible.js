@@ -142,7 +142,6 @@ StatusBar.prototype.showView = function() {
 		canvas.setAttribute('style', 'position: fixed; top: 0; right: 0');
 		var graphics = canvas.getContext('2d');
 
-		console.log('radius', radius);
 		graphics.beginPath();
 		graphics.arc(coord, coord, radius, 0, Math.PI*2, true);
 		for (var angle=first; angle<circle; angle+=increment) {
