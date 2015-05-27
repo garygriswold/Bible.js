@@ -43,7 +43,7 @@ AppViewController.prototype.begin = function() {
 		console.log('loaded concordance', that.concordance.size());
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
-		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache);
+		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
 		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
 		Object.freeze(that);
 
@@ -79,6 +79,7 @@ AppViewController.prototype.begin = function() {
 		document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
 			console.log('SEARCH_START', event.detail);
 			that.searchView.showView(event.detail.search);
+			that.statusBar.showSearchField(event.detail.search);
 		});
 		document.body.addEventListener(BIBLE.SEARCH_FIND, function(event) {
 			console.log(JSON.stringify(event.detail));
@@ -270,11 +271,12 @@ StatusBar.prototype.setTitle = function(text) {
 	this.titleGraphics.clearRect(0, 0, this.titleWidth, this.hite);
 	this.titleGraphics.fillText(text, this.titleWidth / 2, this.hite / 2, this.titleWidth);
 };
-StatusBar.prototype.showSearchField = function() {
+StatusBar.prototype.showSearchField = function(query) {
 	if (! this.searchField) {
 		this.searchField = document.createElement('input');
 		this.searchField.setAttribute('type', 'text');
 		this.searchField.setAttribute('class', 'searchField');
+		this.searchField.setAttribute('value', query);
 		var yPos = (this.hite - 40) / 2; // The 40 in this calculation is a hack.
 		var xPos = (this.hite * 1.2);
 		this.searchField.setAttribute('style', 'position: fixed; top: ' + yPos + '; left: ' + xPos);
@@ -578,10 +580,11 @@ CodexView.prototype.hideFootnote = function(noteId) {
 */
 "use strict";
 
-function SearchView(toc, concordance, bibleCache) {
+function SearchView(toc, concordance, bibleCache, history) {
 	this.toc = toc;
 	this.concordance = concordance;
 	this.bibleCache = bibleCache;
+	this.history = history;
 	this.query = '';
 	this.words = [];
 	this.bookList = [];
@@ -592,17 +595,29 @@ function SearchView(toc, concordance, bibleCache) {
 	Object.seal(this);
 };
 SearchView.prototype.showView = function(query) {
+	this.hideView();
 	if (query) {
-		this.hideView();
+		//this.hideView();
 		this.showSearch(query);
 		this.rootNode.appendChild(this.viewRoot);
+		window.scrollTo(10, 0);
 	} else if (this.viewRoot) {
-		if (this.rootNode.children.length < 1) {
-			this.rootNode.appendChild(this.viewRoot);
-			window.scrollTo(10, this.scrollPosition);
-		}
+		//if (this.rootNode.children.length < 1) {
+		//this.hideView();
+		this.rootNode.appendChild(this.viewRoot);
+		window.scrollTo(10, this.scrollPosition);
+		//}
 	} else {
-		// must present search input form TO BE DONE
+		//console.log('inside SearchView showView');
+		var lastSearch = this.history.lastConcordanceSearch();
+		if (lastSearch && lastSearch.length > 0) { // check trim also
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: lastSearch }}));
+		} else {
+			console.log('IN THE EMPTY CASE of SearchView.showView');
+			this.showSearch('');
+			this.rootNode.appendChild(this.viewRoot);
+			window.scrollTo(10, 0);			
+		}
 	}
 };
 SearchView.prototype.hideView = function() {
@@ -1124,6 +1139,15 @@ History.prototype.current = function() {
 };
 History.prototype.item = function(index) {
 	return((index > -1 && index < this.items.length) ? this.items[index] : 'JHN:1');
+};
+History.prototype.lastConcordanceSearch = function() {
+	for (var i=this.items.length -1; i>=0; i--) {
+		var item = this.items[i];
+		if (item.search && item.search.length > 0) { // also trim it
+			return(item.search);
+		}
+	}
+	return('');
 };
 History.prototype.persist = function() {
 	var filepath = this.types.getAppPath('history.json');

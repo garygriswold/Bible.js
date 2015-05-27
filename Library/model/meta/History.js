@@ -47,6 +47,15 @@ History.prototype.current = function() {
 History.prototype.item = function(index) {
 	return((index > -1 && index < this.items.length) ? this.items[index] : 'JHN:1');
 };
+History.prototype.lastConcordanceSearch = function() {
+	for (var i=this.items.length -1; i>=0; i--) {
+		var item = this.items[i];
+		if (item.search && item.search.length > 0) { // also trim it
+			return(item.search);
+		}
+	}
+	return('');
+};
 History.prototype.persist = function() {
 	var filepath = this.types.getAppPath('history.json');
 	this.writer.writeTextFile(filepath, this.toJSON(), function(filename) {

@@ -167,11 +167,12 @@ StatusBar.prototype.setTitle = function(text) {
 	this.titleGraphics.clearRect(0, 0, this.titleWidth, this.hite);
 	this.titleGraphics.fillText(text, this.titleWidth / 2, this.hite / 2, this.titleWidth);
 };
-StatusBar.prototype.showSearchField = function() {
+StatusBar.prototype.showSearchField = function(query) {
 	if (! this.searchField) {
 		this.searchField = document.createElement('input');
 		this.searchField.setAttribute('type', 'text');
 		this.searchField.setAttribute('class', 'searchField');
+		this.searchField.setAttribute('value', query);
 		var yPos = (this.hite - 40) / 2; // The 40 in this calculation is a hack.
 		var xPos = (this.hite * 1.2);
 		this.searchField.setAttribute('style', 'position: fixed; top: ' + yPos + '; left: ' + xPos);

@@ -43,7 +43,7 @@ AppViewController.prototype.begin = function() {
 		console.log('loaded concordance', that.concordance.size());
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
-		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache);
+		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
 		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
 		Object.freeze(that);
 
@@ -79,6 +79,7 @@ AppViewController.prototype.begin = function() {
 		document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
 			console.log('SEARCH_START', event.detail);
 			that.searchView.showView(event.detail.search);
+			that.statusBar.showSearchField(event.detail.search);
 		});
 		document.body.addEventListener(BIBLE.SEARCH_FIND, function(event) {
 			console.log(JSON.stringify(event.detail));
