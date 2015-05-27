@@ -57,7 +57,7 @@ AppViewController.prototype.begin = function() {
 		});
 		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
 			that.searchView.showView();
-			//that.statusBar.showSearchField();
+			that.statusBar.showSearchField();
 			that.tableContentsView.hideView();
 			that.codexView.hideView();
 		});
@@ -71,7 +71,7 @@ AppViewController.prototype.begin = function() {
 		document.body.addEventListener(BIBLE.SEARCH_FIND, function(event) {
 			console.log(JSON.stringify(event.detail));
 			that.codexView.showView(event.detail.id);
-			//that.statusBar.showTitleField();
+			that.statusBar.showTitleField();
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
 			that.history.addEvent(event);

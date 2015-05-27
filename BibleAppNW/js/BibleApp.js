@@ -57,7 +57,7 @@ AppViewController.prototype.begin = function() {
 		});
 		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
 			that.searchView.showView();
-			//that.statusBar.showSearchField();
+			that.statusBar.showSearchField();
 			that.tableContentsView.hideView();
 			that.codexView.hideView();
 		});
@@ -71,7 +71,7 @@ AppViewController.prototype.begin = function() {
 		document.body.addEventListener(BIBLE.SEARCH_FIND, function(event) {
 			console.log(JSON.stringify(event.detail));
 			that.codexView.showView(event.detail.id);
-			//that.statusBar.showTitleField();
+			that.statusBar.showTitleField();
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
 			that.history.addEvent(event);
@@ -100,7 +100,9 @@ function StatusBar(hite) {
 	this.titleWidth = window.outerWidth - hite * 3.5;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
+	this.searchField = null;
 	this.rootNode = document.getElementById('statusRoot');
+	this.labelCell = document.getElementById('labelCell');
 	Object.seal(this);
 };
 StatusBar.prototype.showView = function() {
@@ -145,6 +147,7 @@ StatusBar.prototype.showView = function() {
 		var canvas = document.createElement('canvas');
 		canvas.setAttribute('height', hite);
 		canvas.setAttribute('width', hite + lineXSrt * 0.5);
+		canvas.setAttribute('style', 'position: fixed; top: 0; left: 0');
 		var graphics = canvas.getContext('2d');
 	
 		graphics.beginPath();
@@ -173,15 +176,16 @@ StatusBar.prototype.showView = function() {
 		that.titleCanvas.setAttribute('id', 'titleCanvas');
 		that.titleCanvas.setAttribute('height', hite);
 		that.titleCanvas.setAttribute('width', that.titleWidth);
+		that.titleCanvas.setAttribute('style', 'position: fixed; top: 0; left:' + hite * 1.1);
 
 		that.titleGraphics = that.titleCanvas.getContext('2d');
 		that.titleGraphics.fillStyle = '#000000';
 		that.titleGraphics.font = '24pt sans-serif';
 		that.titleGraphics.textAlign = 'center';
 		that.titleGraphics.textBaseline = 'middle';
+		that.titleGraphics.borderStyle = 'solid';
 
-		var labelCell = document.getElementById('labelCell');
-		labelCell.appendChild(that.titleCanvas);
+		that.labelCell.appendChild(that.titleCanvas);
 	}
 	function setupSearchButton(hite, color) {
 		var lineThick = hite/7.0;
@@ -194,6 +198,7 @@ StatusBar.prototype.showView = function() {
 		var canvas = document.createElement('canvas');
 		canvas.setAttribute('height', hite);
 		canvas.setAttribute('width', hite + lineThick);
+		canvas.setAttribute('style', 'position: fixed; top: 0; right: ' + hite);
 		var graphics = canvas.getContext('2d');
 
 		graphics.beginPath();
@@ -225,6 +230,7 @@ StatusBar.prototype.showView = function() {
 		var canvas = document.createElement('canvas');
 		canvas.setAttribute('height', hite);
 		canvas.setAttribute('width', hite);
+		canvas.setAttribute('style', 'position: fixed; top: 0; right: 0');
 		var graphics = canvas.getContext('2d');
 
 		console.log('radius', radius);
@@ -252,7 +258,35 @@ StatusBar.prototype.showView = function() {
 StatusBar.prototype.setTitle = function(text) {
 	this.titleGraphics.clearRect(0, 0, this.titleWidth, this.hite);
 	this.titleGraphics.fillText(text, this.titleWidth / 2, this.hite / 2, this.titleWidth);
-};/**
+};
+StatusBar.prototype.showSearchField = function() {
+	if (! this.searchField) {
+		this.searchField = document.createElement('input');
+		this.searchField.setAttribute('type', 'text');
+		this.searchField.setAttribute('class', 'searchField');
+		var yPos = (this.hite - 40) / 2; // The 40 in this calculation is a hack.
+		var xPos = (this.hite * 1.2);
+		this.searchField.setAttribute('style', 'position: fixed; top: ' + yPos + '; left: ' + xPos);
+		var that = this;
+		this.searchField.addEventListener('keyup', function(event) {
+			if (event.keyCode === 13) {
+				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: that.searchField.value }}));
+
+			}
+		});
+	}
+	this.changeLabelCell(this.searchField);
+};
+StatusBar.prototype.showTitleField = function() {
+	this.changeLabelCell(this.titleCanvas);
+};
+StatusBar.prototype.changeLabelCell = function(node) {
+	for (var i=this.labelCell.children.length -1; i>=0; i--) {
+		this.labelCell.removeChild(this.labelCell.children[i]);
+	}
+	this.labelCell.appendChild(node);
+};
+/**
 * This class presents the table of contents, and responds to user actions.
 */
 "use strict";
