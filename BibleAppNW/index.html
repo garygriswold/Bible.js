@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="css/Search.css"/>
 	<link rel="stylesheet" href="css/Status.css"/>
 	<link rel="stylesheet" href="css/TableContents.css"/>
+	<link rel="stylesheet" href="css/History.css"/>
 	<script type="text/javascript" src="js/BibleApp.js"></script>
 	<script type="text/javascript" src="js/TweenLite.js"></script>
 	<script type="text/javascript" src="js/plugins/TextPlugin.js"></script>
@@ -17,8 +18,7 @@
 		function onBodyLoad() {
 			console.log('DEVICE IS READY **');
 			app = new AppViewController('WEB'); // Global root of the application
-			app.begin();
-			//app = new StatusBar();
+			app.begin('historyView');
 		};
 	</script>
   </head>

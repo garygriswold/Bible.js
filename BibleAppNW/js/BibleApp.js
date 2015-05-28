@@ -23,7 +23,7 @@ function AppViewController(versionCode) {
 	this.statusBar = new StatusBar(88);
 	this.statusBar.showView();
 }
-AppViewController.prototype.begin = function() {
+AppViewController.prototype.begin = function(develop) {
 	var types = new AssetType('document', this.versionCode);
 	types.tableContents = true;
 	types.chapterFiles = true;
@@ -44,18 +44,25 @@ AppViewController.prototype.begin = function() {
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
 		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
+		that.historyView = new HistoryView(that.history, that.tableContents);
 		Object.freeze(that);
 
-		var lastItem = that.history.last();
-		console.log(lastItem);
-		console.log('size', that.history.size());
-		if (lastItem && lastItem.key) {
-			that.codexView.showView(lastItem.key);
-		} else {
-			that.codexView.showView('JHN:1');
-		}
+		switch(develop) {
+		case 'historyView':
+			that.historyView.showView();
+			break;
+		default:
+			var lastItem = that.history.last();
+			console.log(lastItem);
+			console.log('size', that.history.size());
+			if (lastItem && lastItem.key) {
+				that.codexView.showView(lastItem.key);
+			} else {
+				that.codexView.showView('JHN:1');
+			}
 		//that.tableContentsView.showView();
 		//that.searchView.showView("risen have");
+		}
 
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();
@@ -733,6 +740,106 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookRef) {
 };
 
 /**
+* This class provides the user interface to display history as tabs,
+* and to respond to user interaction with those tabs.
+*/
+
+function HistoryView(history, tableContents) {
+	this.history = history;
+	this.tableContents = tableContents;
+	this.viewRoot = null;
+	this.rootNode = document.getElementById('historyRoot');
+	Object.seal(this);
+}
+HistoryView.prototype.showView = function() {
+	if (this.viewRoot) {
+		this.updateHistoryView();
+		if (this.rootNode.children.length < 1) {
+			this.rootNode.appendChild(this.viewRoot);
+		}
+	} else {
+		this.viewRoot = this.buildHistoryView();
+	}
+	this.rootNode.appendChild(this.viewRoot);
+};
+HistoryView.prototype.hideView = function() {
+	for (var i=this.rootNode.children.length -1; i>=0; i--) {
+		this.rootNode.removeChild(this.rootNode.children[i]);
+	}
+};
+HistoryView.prototype.buildHistoryView = function() {
+	var root = document.createElement('div');
+	root.setAttribute('class', 'tabs');
+	var numHistory = this.history.size();
+	for (var i=numHistory -1; i>=0 && i>numHistory -10; i--) {
+		var tab = document.createElement('div');
+		tab.setAttribute('class', 'tab');
+		root.appendChild(tab);
+
+		var historyNodeId = this.history.items[i].key;
+		var btn = document.createElement('input');
+		btn.setAttribute('type', 'radio');
+		btn.setAttribute('id', 'his' + historyNodeId);
+		btn.setAttribute('name', 'history-group');
+		tab.appendChild(btn);
+
+		var that = this;
+		var label = document.createElement('label');
+		label.setAttribute('for', 'his' + historyNodeId);
+		label.innerHTML = generateReference(historyNodeId);
+		tab.appendChild(label);
+	}
+	return(root);
+
+	function generateReference(nodeId) {
+		console.log('nodeId', nodeId);
+		var ref = new Reference(nodeId);
+		console.log('ref', ref.book);
+		var book = that.tableContents.find(ref.book);
+		console.log(book);
+		if (ref.verse) {
+			return(book.abbrev + ' ' + ref.chapter + ':' + ref.verse);
+		} else {
+			return(book.abbrev + ' ' + ref.chapter);
+		}
+	}
+};
+HistoryView.prototype.updateHistoryView = function() {
+
+};
+
+/*
+<div class="tabs">
+    
+   <div class="tab">
+       <input type="radio" id="tab-1" name="tab-group-1" checked>
+       <label for="tab-1">Tab One</label>
+       
+       <div class="content">
+           stuff
+       </div> 
+   </div>
+    
+   <div class="tab">
+       <input type="radio" id="tab-2" name="tab-group-1">
+       <label for="tab-2">Tab Two</label>
+       
+       <div class="content">
+           stuff
+       </div> 
+   </div>
+    
+    <div class="tab">
+       <input type="radio" id="tab-3" name="tab-group-1">
+       <label for="tab-3">Tab Three</label>
+     
+       <div class="content">
+           stuff
+       </div> 
+   </div>
+    
+</div>
+*//**
 * This class contains the Canon of Scripture as 66 books.  It is used to control
 * which books are published using this App.  The codes are used to identify the
 * books of the Bible, while the names, which are in English are only used to document

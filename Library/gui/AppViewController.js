@@ -22,7 +22,7 @@ function AppViewController(versionCode) {
 	this.statusBar = new StatusBar(88);
 	this.statusBar.showView();
 }
-AppViewController.prototype.begin = function() {
+AppViewController.prototype.begin = function(develop) {
 	var types = new AssetType('document', this.versionCode);
 	types.tableContents = true;
 	types.chapterFiles = true;
@@ -43,18 +43,25 @@ AppViewController.prototype.begin = function() {
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
 		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
+		that.historyView = new HistoryView(that.history, that.tableContents);
 		Object.freeze(that);
 
-		var lastItem = that.history.last();
-		console.log(lastItem);
-		console.log('size', that.history.size());
-		if (lastItem && lastItem.key) {
-			that.codexView.showView(lastItem.key);
-		} else {
-			that.codexView.showView('JHN:1');
-		}
+		switch(develop) {
+		case 'historyView':
+			that.historyView.showView();
+			break;
+		default:
+			var lastItem = that.history.last();
+			console.log(lastItem);
+			console.log('size', that.history.size());
+			if (lastItem && lastItem.key) {
+				that.codexView.showView(lastItem.key);
+			} else {
+				that.codexView.showView('JHN:1');
+			}
 		//that.tableContentsView.showView();
 		//that.searchView.showView("risen have");
+		}
 
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();
