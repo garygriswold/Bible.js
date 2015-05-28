@@ -1,8 +1,6 @@
 /**
 * This class contains a book of the Bible
 */
-"use strict";
-
 function Book(node) {
 	this.code = node.code;
 	this.style = node.style;

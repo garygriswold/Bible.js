@@ -1,8 +1,6 @@
 /**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
-"use strict";
-
 function Concordance() {
 	this.index = {};
 	this.filename = 'concordance.json';

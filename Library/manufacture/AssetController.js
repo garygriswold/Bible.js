@@ -3,8 +3,6 @@
 * one both the client and the server.  It is a "builder" controller that uses the AssetType
 * as a "director" to control which assets are built.
 */
-"use strict";
-
 function AssetController(types) {
 	this.types = types;
 	this.checker = new AssetChecker(types);

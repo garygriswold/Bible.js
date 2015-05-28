@@ -1,6 +1,7 @@
 #!/bin/sh
 # OBSOLETE
-cat ../model/usx/USX.js > temp.js
+echo \"use strict\"\; > temp.js
+cat ../model/usx/USX.js >> temp.js
 cat ../model/usx/Book.js >> temp.js
 cat ../model/usx/Chapter.js >> temp.js
 cat ../model/usx/Para.js >> temp.js

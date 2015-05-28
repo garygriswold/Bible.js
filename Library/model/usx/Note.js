@@ -1,8 +1,6 @@
 /**
 * This class contains a Note from a USX parsed Bible
 */
-"use strict";
-
 function Note(node) {
 	this.caller = node.caller.charAt(0);
 	if (this.caller !== '+') {

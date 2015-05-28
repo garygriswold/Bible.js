@@ -9,8 +9,6 @@
 * 2) Parse USX 6.0ms, 306K heap increase
 * 3) Generate Dom 2.16ms, 85K heap increase
 */
-"use strict";
-
 function BibleCache(types) {
 	this.types = types;
 	this.chapterMap = {};

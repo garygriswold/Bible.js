@@ -2,8 +2,6 @@
 * BibleApp is a global object that contains pointers to all of the key elements of
 * a user's session with the App.
 */
-"use strict";
-
 var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
 		SHOW_SETTINGS: 'TBD-bible-show-settings', // present settings page, create if needed

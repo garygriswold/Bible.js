@@ -4,8 +4,6 @@
 * of distinct parts { book: GEN, chapter: 1, verse: 1 }
 * This class leaves unset members as undefined.
 */
-"use strict";
-
 function Reference(book, chapter, verse) {
 	if (arguments.length > 1) {
 		this.book = book;

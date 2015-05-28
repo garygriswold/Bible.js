@@ -4,7 +4,6 @@
 * as a class, because BibleCache and SearchView both have only one instance, but
 * SearchView could be accessing the text of many verses concurrently.
 */
-"use strict";
 function VerseAccessor(bibleCache, reference) {
 	this.bibleCache = bibleCache;
 	this.reference = reference;

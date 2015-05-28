@@ -3,8 +3,6 @@
 * It should be expanded to check for the correct version of each asset as well, 
 * once assets are versioned.
 */
-"use strict";
-
 function AssetChecker(types) {
 	this.types = types;
 }

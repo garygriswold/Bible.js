@@ -1,8 +1,6 @@
 /**
 * Unit Test Harness for AssetController
 */
-"use strict";
-
 var types = new AssetType('test2dbl', 'WEB');
 types.chapterFiles = true;
 types.tableContents = true;

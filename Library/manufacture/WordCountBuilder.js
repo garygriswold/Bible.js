@@ -2,8 +2,6 @@
 * This class gets information from the concordance that was built, and produces 
 * a word list with frequency counts for each word.
 */
-"use strict";
-
 function WordCountBuilder(concordance) {
 	this.concordance = concordance;
 	this.filename = 'wordCount.json';

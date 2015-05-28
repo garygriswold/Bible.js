@@ -3,8 +3,6 @@
 * is a significant amount of the time to do this, this class reads over the entire Bible text and creates
 * all of the required assets.
 */
-"use strict";
-
 function AssetBuilder(types) {
 	this.types = types;
 	this.builders = [];

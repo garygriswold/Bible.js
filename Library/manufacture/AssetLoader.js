@@ -7,8 +7,6 @@
 * 3) Concordance Read 20.99ms  7.695MB heap increase
 * 4) Concordance Loaded 96.49ms  27.971MB heap increase
 */
-"use strict";
-
 function AssetLoader(types) {
 	this.types = types;
 	this.toc = new TOC();

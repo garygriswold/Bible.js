@@ -2,8 +2,6 @@
 * This class is a file reader for Node.  It can be used with node.js and node-webkit.
 * cordova requires using another class, but the interface should be the same.
 */
-"use strict";
-
 function NodeFileReader(location) {
 	this.fs = require('fs');
 	this.location = location;

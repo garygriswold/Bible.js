@@ -3,8 +3,6 @@
 * It is not part of the production system, but is used during development
 * to instrument the code.
 */
-"use strict";
-
 function Performance(message) {
 	this.startTime = performance.now();
 	var memory = process.memoryUsage();

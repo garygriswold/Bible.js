@@ -1,8 +1,6 @@
 /**
 * This class holds data for the table of contents of the entire Bible, or whatever part of the Bible was loaded.
 */
-"use strict";
-
 function TOC() {
 	this.bookList = [];
 	this.bookMap = {};

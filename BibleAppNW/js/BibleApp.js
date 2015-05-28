@@ -1,9 +1,8 @@
+"use strict";
 /**
 * BibleApp is a global object that contains pointers to all of the key elements of
 * a user's session with the App.
 */
-"use strict";
-
 var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
 		SHOW_SETTINGS: 'TBD-bible-show-settings', // present settings page, create if needed
@@ -106,8 +105,6 @@ AppViewController.prototype.begin = function() {
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
-"use strict";
-
 function StatusBar(hite) {
 	this.hite = hite;
 	this.titleWidth = window.outerWidth - hite * 3.5;
@@ -302,8 +299,6 @@ StatusBar.prototype.changeLabelCell = function(node) {
 /**
 * This class presents the table of contents, and responds to user actions.
 */
-"use strict";
-
 function TableContentsView(toc) {
 	this.toc = toc;
 	this.root = null;
@@ -407,8 +402,6 @@ TableContentsView.prototype.openChapter = function(nodeId) {
 /**
 * This class contains user interface features for the display of the Bible text
 */
-"use strict";
-
 var CODEX_VIEW = { MAX: 10 };
 
 function CodexView(tableContents, bibleCache, statusBarHeight) {
@@ -578,8 +571,6 @@ CodexView.prototype.hideFootnote = function(noteId) {
 * It does a lazy create of all of the objects needed.
 * Each presentation of a searchView presents its last state and last found results.
 */
-"use strict";
-
 function SearchView(toc, concordance, bibleCache, history) {
 	this.toc = toc;
 	this.concordance = concordance;
@@ -747,8 +738,6 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookRef) {
 * books of the Bible, while the names, which are in English are only used to document
 * the meaning of each code.  These names are not used for display in the App.
 */
-"use strict";
-
 function Canon() {
 	this.books = [
     	{ code: 'GEN', name: 'Genesis' },
@@ -824,8 +813,6 @@ function Canon() {
 * of distinct parts { book: GEN, chapter: 1, verse: 1 }
 * This class leaves unset members as undefined.
 */
-"use strict";
-
 function Reference(book, chapter, verse) {
 	if (arguments.length > 1) {
 		this.book = book;
@@ -863,8 +850,6 @@ Reference.prototype.chapterVerse = function() {
 * 2) Parse USX 6.0ms, 306K heap increase
 * 3) Generate Dom 2.16ms, 85K heap increase
 */
-"use strict";
-
 function BibleCache(types) {
 	this.types = types;
 	this.chapterMap = {};
@@ -895,8 +880,6 @@ BibleCache.prototype.getChapter = function(reference, callback) {
 /**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
-"use strict";
-
 function Concordance() {
 	this.index = {};
 	this.filename = 'concordance.json';
@@ -974,8 +957,6 @@ Concordance.prototype.toJSON = function() {
 };/**
 * This class holds data for the table of contents of the entire Bible, or whatever part of the Bible was loaded.
 */
-"use strict";
-
 function TOC() {
 	this.bookList = [];
 	this.bookMap = {};
@@ -1022,8 +1003,6 @@ TOC.prototype.toJSON = function() {
 };/**
 * This class holds the table of contents data each book of the Bible, or whatever books were loaded.
 */
-"use strict";
-
 function TOCBook(code) {
 	this.code = code;
 	this.heading = '';
@@ -1037,8 +1016,6 @@ function TOCBook(code) {
 }/**
 * This class holds an index of styles of the entire Bible, or whatever part of the Bible was loaded into it.
 */
-"use strict";
-
 function StyleIndex() {
 	this.index = {};
 	this.filename = 'styleIndex.json';
@@ -1092,8 +1069,6 @@ StyleIndex.prototype.toJSON = function() {
 * or a concordance search.  It also responds to function requests to go back 
 * in history, forward in history, or return to the last event.
 */
-"use strict";
-
 function History(types) {
 	this.types = types;
 	this.items = [];
@@ -1163,8 +1138,6 @@ History.prototype.toJSON = function() {
 * clicking on the toc to get a chapter, doing a lookup of a specific passage
 * or clicking on a verse during a concordance search.
 */
-"use strict";
-
 function HistoryItem(key, source, search) {
 	this.key = key;
 	this.source = source;
@@ -1177,7 +1150,6 @@ function HistoryItem(key, source, search) {
 * as a class, because BibleCache and SearchView both have only one instance, but
 * SearchView could be accessing the text of many verses concurrently.
 */
-"use strict";
 function VerseAccessor(bibleCache, reference) {
 	this.bibleCache = bibleCache;
 	this.reference = reference;
@@ -1223,8 +1195,6 @@ var FILE_ROOTS = { 'application': '?', 'document': '../../dbl/current/', 'tempor
 * This class is a file reader for Node.  It can be used with node.js and node-webkit.
 * cordova requires using another class, but the interface should be the same.
 */
-"use strict";
-
 function NodeFileReader(location) {
 	this.fs = require('fs');
 	this.location = location;
@@ -1269,8 +1239,6 @@ NodeFileReader.prototype.readTextFile = function(filepath, callback) {
 * This class is a file writer for Node.  It can be used with node.js and node-webkit.
 * cordova requires using another class, but the interface should be the same.
 */
-"use strict";
-
 function NodeFileWriter(location) {
 	this.fs = require('fs');
 	this.location = location;
@@ -1304,8 +1272,6 @@ NodeFileWriter.prototype.writeTextFile = function(filepath, data, callback) {
 * paraStyle = [b, d, cl, cp, h, li, p, pc, q, q2, mt, mt2, mt3, mte, toc1, toc2, toc3, ide, ip, ili, ili2, is, m, mi, ms, nb, pi, s, sp];
 * charStyle = [add, bk, it, k, fr, fq, fqa, ft, wj, qs, xo, xt];
 */
-"use strict";
-
 function USXParser() {
 }
 USXParser.prototype.readBook = function(data) {
@@ -1401,8 +1367,6 @@ USXParser.prototype.createUSXObject = function(tempNode) {
 /**
 * This class does a stream read of an XML string to return XML tokens and their token type.
 */
-"use strict";
-
 var XMLNodeType = Object.freeze({ELE_OPEN:'ele-open', ATTR_NAME:'attr-name', ATTR_VALUE:'attr-value', ELE_END:'ele-end', 
 			WHITESP:'whitesp', TEXT:'text', ELE_EMPTY:'ele-empty', ELE_CLOSE:'ele-close', PROG_INST:'prog-inst', END:'end'});
 
@@ -1566,8 +1530,6 @@ XMLTokenizer.prototype.nextToken = function() {
 * This object of the Director pattern, it contains a boolean member for each type of asset.
 * Setting a member to true will be used by the Builder classes to control which assets are built.
 */
-"use strict";
-
 function AssetType(location, versionCode) {
 	this.location = location;
 	this.versionCode = versionCode;
@@ -1630,8 +1592,6 @@ AssetType.prototype.getAppPath = function(filename) {
 * one both the client and the server.  It is a "builder" controller that uses the AssetType
 * as a "director" to control which assets are built.
 */
-"use strict";
-
 function AssetController(types) {
 	this.types = types;
 	this.checker = new AssetChecker(types);
@@ -1684,8 +1644,6 @@ AssetController.prototype.load = function(callback) {
 * It should be expanded to check for the correct version of each asset as well, 
 * once assets are versioned.
 */
-"use strict";
-
 function AssetChecker(types) {
 	this.types = types;
 }
@@ -1724,8 +1682,6 @@ AssetChecker.prototype.check = function(callback) {
 * is a significant amount of the time to do this, this class reads over the entire Bible text and creates
 * all of the required assets.
 */
-"use strict";
-
 function AssetBuilder(types) {
 	this.types = types;
 	this.builders = [];
@@ -1807,8 +1763,6 @@ AssetBuilder.prototype.build = function(callback) {
 * This class traverses the USX data model in order to find each book, and chapter
 * in order to create a table of contents that is localized to the language of the text.
 */
-"use strict";
-
 function TOCBuilder() {
 	this.toc = new TOC();
 	this.tocBook = null;
@@ -1863,8 +1817,6 @@ TOCBuilder.prototype.toJSON = function() {
 *
 * This solution might not be unicode safe. GNG Apr 2, 2015
 */
-"use strict";
-
 function ConcordanceBuilder() {
 	this.concordance = new Concordance();
 	this.filename = this.concordance.filename;
@@ -1915,8 +1867,6 @@ ConcordanceBuilder.prototype.toJSON = function() {
 * This class gets information from the concordance that was built, and produces 
 * a word list with frequency counts for each word.
 */
-"use strict";
-
 function WordCountBuilder(concordance) {
 	this.concordance = concordance;
 	this.filename = 'wordCount.json';
@@ -1961,8 +1911,6 @@ WordCountBuilder.prototype.toJSON = function() {
 * reference to that style.  It builds an index to each style showing
 * all of the references where each style is used.
 */
-"use strict";
-
 function StyleIndexBuilder() {
 	this.styleIndex = new StyleIndex();
 	this.filename = this.styleIndex.filename;
@@ -2097,8 +2045,6 @@ ChapterBuilder.prototype.toJSON = function() {
 /**
 * This class traverses a DOM tree in order to create an equivalent HTML document.
 */
-"use strict";
-
 function HTMLBuilder() {
 	this.result = [];
 	this.filename = 'bible.html';
@@ -2148,8 +2094,6 @@ HTMLBuilder.prototype.toJSON = function() {
 * 3) Concordance Read 20.99ms  7.695MB heap increase
 * 4) Concordance Loaded 96.49ms  27.971MB heap increase
 */
-"use strict";
-
 function AssetLoader(types) {
 	this.types = types;
 	this.toc = new TOC();
@@ -2278,8 +2222,6 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 /**
 * This class is the root object of a parsed USX document
 */
-"use strict";
-
 function USX(node) {
 	this.version = node.version;
 	this.whiteSpace = node.whiteSpace;
@@ -2347,8 +2289,6 @@ USX.prototype.buildHTML = function(result) {
 /**
 * This class contains a book of the Bible
 */
-"use strict";
-
 function Book(node) {
 	this.code = node.code;
 	this.style = node.style;
@@ -2393,8 +2333,6 @@ Book.prototype.buildHTML = function(result) {
 };/**
 * This object contains information about a chapter of the Bible from a parsed USX Bible document.
 */
-"use strict";
-
 function Chapter(node) {
 	this.number = node.number;
 	this.style = node.style;
@@ -2438,8 +2376,6 @@ Chapter.prototype.buildHTML = function(result) {
 };/**
 * This object contains a paragraph of the Bible text as parsed from a USX version of the Bible.
 */
-"use strict";
-
 function Para(node) {
 	this.style = node.style;
 	this.whiteSpace = node.whiteSpace;
@@ -2494,8 +2430,6 @@ Para.prototype.buildHTML = function(result) {
 /**
 * This chapter contains the verse of a Bible text as parsed from a USX Bible file.
 */
-"use strict";
-
 function Verse(node) {
 	this.number = node.number;
 	this.style = node.style;
@@ -2536,8 +2470,6 @@ Verse.prototype.buildHTML = function(result) {
 };/**
 * This class contains a Note from a USX parsed Bible
 */
-"use strict";
-
 function Note(node) {
 	this.caller = node.caller.charAt(0);
 	if (this.caller !== '+') {
@@ -2611,8 +2543,6 @@ Note.prototype.buildHTML = function(result) {
 };/**
 * This class contains a character style as parsed from a USX Bible file.
 */
-"use strict";
-
 function Char(node) {
 	this.style = node.style;
 	this.closed = node.closed;
@@ -2670,8 +2600,6 @@ Char.prototype.buildHTML = function(result) {
 };/**
 * This class contains a text string as parsed from a USX Bible file.
 */
-"use strict";
-
 function Text(text) {
 	this.text = text;
 	Object.freeze(this);
@@ -2723,8 +2651,6 @@ Text.prototype.buildHTML = function(result) {
 * It is not part of the production system, but is used during development
 * to instrument the code.
 */
-"use strict";
-
 function Performance(message) {
 	this.startTime = performance.now();
 	var memory = process.memoryUsage();

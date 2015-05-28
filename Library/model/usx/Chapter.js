@@ -1,8 +1,6 @@
 /**
 * This object contains information about a chapter of the Bible from a parsed USX Bible document.
 */
-"use strict";
-
 function Chapter(node) {
 	this.number = node.number;
 	this.style = node.style;

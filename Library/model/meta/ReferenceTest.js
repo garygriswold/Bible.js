@@ -1,8 +1,6 @@
 /**
 * Unit Tests for Reference
 */
-"use strict";
-
 var test1 = new Reference('GEN', 1, 2);
 console.log('should be complete verse ', test1);
 

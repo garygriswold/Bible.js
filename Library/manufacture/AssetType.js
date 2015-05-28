@@ -2,8 +2,6 @@
 * This object of the Director pattern, it contains a boolean member for each type of asset.
 * Setting a member to true will be used by the Builder classes to control which assets are built.
 */
-"use strict";
-
 function AssetType(location, versionCode) {
 	this.location = location;
 	this.versionCode = versionCode;

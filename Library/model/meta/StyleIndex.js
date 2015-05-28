@@ -1,8 +1,6 @@
 /**
 * This class holds an index of styles of the entire Bible, or whatever part of the Bible was loaded into it.
 */
-"use strict";
-
 function StyleIndex() {
 	this.index = {};
 	this.filename = 'styleIndex.json';

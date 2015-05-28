@@ -1,8 +1,6 @@
 /**
 * This class presents the table of contents, and responds to user actions.
 */
-"use strict";
-
 function TableContentsView(toc) {
 	this.toc = toc;
 	this.root = null;

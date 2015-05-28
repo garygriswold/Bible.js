@@ -1,8 +1,6 @@
 /**
 * This class contains a character style as parsed from a USX Bible file.
 */
-"use strict";
-
 function Char(node) {
 	this.style = node.style;
 	this.closed = node.closed;

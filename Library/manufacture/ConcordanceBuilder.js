@@ -4,8 +4,6 @@
 *
 * This solution might not be unicode safe. GNG Apr 2, 2015
 */
-"use strict";
-
 function ConcordanceBuilder() {
 	this.concordance = new Concordance();
 	this.filename = this.concordance.filename;

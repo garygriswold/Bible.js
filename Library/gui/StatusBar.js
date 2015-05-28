@@ -2,8 +2,6 @@
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
-"use strict";
-
 function StatusBar(hite) {
 	this.hite = hite;
 	this.titleWidth = window.outerWidth - hite * 3.5;

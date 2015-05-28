@@ -1,8 +1,6 @@
 /**
 * This object contains a paragraph of the Bible text as parsed from a USX version of the Bible.
 */
-"use strict";
-
 function Para(node) {
 	this.style = node.style;
 	this.whiteSpace = node.whiteSpace;

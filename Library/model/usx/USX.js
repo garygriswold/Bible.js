@@ -1,8 +1,6 @@
 /**
 * This class is the root object of a parsed USX document
 */
-"use strict";
-
 function USX(node) {
 	this.version = node.version;
 	this.whiteSpace = node.whiteSpace;

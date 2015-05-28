@@ -1,8 +1,6 @@
 /**
 * This class contains user interface features for the display of the Bible text
 */
-"use strict";
-
 var CODEX_VIEW = { MAX: 10 };
 
 function CodexView(tableContents, bibleCache, statusBarHeight) {

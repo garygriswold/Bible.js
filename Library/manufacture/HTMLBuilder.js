@@ -1,8 +1,6 @@
 /**
 * This class traverses a DOM tree in order to create an equivalent HTML document.
 */
-"use strict";
-
 function HTMLBuilder() {
 	this.result = [];
 	this.filename = 'bible.html';

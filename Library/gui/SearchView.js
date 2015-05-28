@@ -3,8 +3,6 @@
 * It does a lazy create of all of the objects needed.
 * Each presentation of a searchView presents its last state and last found results.
 */
-"use strict";
-
 function SearchView(toc, concordance, bibleCache, history) {
 	this.toc = toc;
 	this.concordance = concordance;

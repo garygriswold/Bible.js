@@ -1,8 +1,6 @@
 /**
 * This file is the unit test of XMLTokenizer
 */
-"use strict";
-
 var fs = require("fs");
 var WEB_BIBLE_PATH = "/Users/garygriswold/Desktop/BibleApp Project/Bibles/USX/WEB World English Bible";
 var OUT_BIBLE_PATH = "/Users/garygriswold/Desktop/BibleApp Project/Bibles/USX/WEB_XML_OUT";

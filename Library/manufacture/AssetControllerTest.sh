@@ -1,5 +1,6 @@
 #!/bin/sh
-cat AssetController.js > temp.js
+echo \"use strict\"\; > temp.js
+cat AssetController.js >> temp.js
 cat AssetType.js >> temp.js
 cat AssetChecker.js >> temp.js
 cat AssetBuilder.js >> temp.js

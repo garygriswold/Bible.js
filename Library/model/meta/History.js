@@ -4,8 +4,6 @@
 * or a concordance search.  It also responds to function requests to go back 
 * in history, forward in history, or return to the last event.
 */
-"use strict";
-
 function History(types) {
 	this.types = types;
 	this.items = [];

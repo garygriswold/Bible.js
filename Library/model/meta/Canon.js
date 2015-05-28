@@ -4,8 +4,6 @@
 * books of the Bible, while the names, which are in English are only used to document
 * the meaning of each code.  These names are not used for display in the App.
 */
-"use strict";
-
 function Canon() {
 	this.books = [
     	{ code: 'GEN', name: 'Genesis' },

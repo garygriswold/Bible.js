@@ -1,8 +1,6 @@
 /**
 * This chapter contains the verse of a Bible text as parsed from a USX Bible file.
 */
-"use strict";
-
 function Verse(node) {
 	this.number = node.number;
 	this.style = node.style;

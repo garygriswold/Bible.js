@@ -4,8 +4,6 @@
 * paraStyle = [b, d, cl, cp, h, li, p, pc, q, q2, mt, mt2, mt3, mte, toc1, toc2, toc3, ide, ip, ili, ili2, is, m, mi, ms, nb, pi, s, sp];
 * charStyle = [add, bk, it, k, fr, fq, fqa, ft, wj, qs, xo, xt];
 */
-"use strict";
-
 function USXParser() {
 }
 USXParser.prototype.readBook = function(data) {

@@ -3,8 +3,6 @@
 * reference to that style.  It builds an index to each style showing
 * all of the references where each style is used.
 */
-"use strict";
-
 function StyleIndexBuilder() {
 	this.styleIndex = new StyleIndex();
 	this.filename = this.styleIndex.filename;
