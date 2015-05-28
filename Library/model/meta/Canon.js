@@ -74,4 +74,4 @@ function Canon() {
     	{ code: '3JN', name: '3 John' },
     	{ code: 'JUD', name: 'Jude' },
     	{ code: 'REV', name: 'Revelation' } ];
-};
+}

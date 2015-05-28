@@ -13,7 +13,7 @@ function StatusBar(hite) {
 	this.rootNode = document.getElementById('statusRoot');
 	this.labelCell = document.getElementById('labelCell');
 	Object.seal(this);
-};
+}
 StatusBar.prototype.showView = function() {
 	var that = this;
 

@@ -13,7 +13,7 @@ function DOMBuilder() {
 
 	this.treeRoot = null;
 	Object.seal(this);
-};
+}
 DOMBuilder.prototype.toDOM = function(usxRoot) {
 	//this.bookCode = '';
 	this.chapter = 0;
@@ -58,7 +58,6 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 			break;
 		default:
 			throw new Error('Unknown tagname ' + node.tagName + ' in DOMBuilder.readBook');
-			break;
 	}
 	if ('children' in node) {
 		for (var i=0; i<node.children.length; i++) {

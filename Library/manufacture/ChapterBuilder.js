@@ -6,7 +6,7 @@ function ChapterBuilder(types) {
 	this.types = types;
 	this.filename = 'chapterMetaData.json';
 	Object.seal(this);
-};
+}
 ChapterBuilder.prototype.readBook = function(usxRoot) {
 	var that = this;
 	var bookCode = ''; // set by side effect of breakBookIntoChapters

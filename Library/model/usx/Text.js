@@ -6,7 +6,7 @@
 function Text(text) {
 	this.text = text;
 	Object.freeze(this);
-};
+}
 Text.prototype.tagName = 'text';
 Text.prototype.buildUSX = function(result) {
 	result.push(this.text);

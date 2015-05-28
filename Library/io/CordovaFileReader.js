@@ -9,7 +9,7 @@ function CordovaFileReader() {
 	this.successCallback = '';
 	this.failureCallback = '';
 	Object.seal(this);
-};
+}
 CordovaFileReader.prototype.readTextFile = function(location, filepath, successCallback, failureCallback) {
 	var bytes = 1024 * 1024 * 10;
 	var filepath = this.filepath;

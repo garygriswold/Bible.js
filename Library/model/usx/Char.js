@@ -10,7 +10,7 @@ function Char(node) {
 	this.emptyElement = node.emptyElement;
 	this.children = [];
 	Object.freeze(this);
-};
+}
 Char.prototype.tagName = 'char';
 Char.prototype.addChild = function(node) {
 	this.children.push(node);

@@ -7,12 +7,12 @@
 "use strict";
 
 function USXParser() {
-};
+}
 USXParser.prototype.readBook = function(data) {
 	var reader = new XMLTokenizer(data);
 	var nodeStack = [];
 	var node;
-	var tempNode = {}
+	var tempNode = {};
 	var count = 0;
 	while (tokenType !== XMLNodeType.END && count < 300000) {
 
@@ -71,36 +71,29 @@ USXParser.prototype.readBook = function(data) {
 				// do nothing
 				break;
 			default:
-				throw new Error('The XMLNodeType ' + nodeType + ' is unknown in USXParser.');
+				throw new Error('The XMLNodeType ' + tokenType + ' is unknown in USXParser.');
 		}
 		var priorType = tokenType;
 		var priorValue = tokenValue;
-	};
+	}
 	return(node);
 };
 USXParser.prototype.createUSXObject = function(tempNode) {
 	switch(tempNode.tagName) {
 		case 'char':
 			return(new Char(tempNode));
-			break;
 		case 'note':
 			return(new Note(tempNode));
-			break;
 		case 'verse':
 			return(new Verse(tempNode));
-			break;
 		case 'para':
 			return(new Para(tempNode));
-			break;
 		case 'chapter':
 			return(new Chapter(tempNode));
-			break;
 		case 'book':
 			return(new Book(tempNode));
-			break;
 		case 'usx':
 			return(new USX(tempNode));
-			break;
 		default:
 			throw new Error('USX element name ' + tempNode.tagName + ' is not known to USXParser.');
 	}

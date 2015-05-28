@@ -32,6 +32,7 @@ cat ../Library/manufacture/ConcordanceBuilder.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/WordCountBuilder.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/StyleIndexBuilder.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/ChapterBuilder.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/manufacture/HTMLBuilder.js >> ../BibleAppNW/js/BibleApp.js
 
 cat ../Library/manufacture/AssetLoader.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/DOMBuilder.js >> ../BibleAppNW/js/BibleApp.js
@@ -47,7 +48,6 @@ cat ../Library/model/usx/Text.js >> ../BibleAppNW/js/BibleApp.js
 
 cat ../Library/util/Performance.js >> ../BibleAppNW/js/BibleApp.js
 
-#cat ../Library/manufacture/HTMLBuilder.js >> ../BibleAppNW/js/BibleApp.js
 
 cd ../BibleAppNW
 

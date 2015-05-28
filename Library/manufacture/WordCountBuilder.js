@@ -7,7 +7,7 @@
 function WordCountBuilder(concordance) {
 	this.concordance = concordance;
 	this.filename = 'wordCount.json';
-};
+}
 WordCountBuilder.prototype.readBook = function(usxRoot) {
 };
 WordCountBuilder.prototype.toJSON = function() {
@@ -30,7 +30,7 @@ WordCountBuilder.prototype.toJSON = function() {
 	});
 	var result = [];
 	result.push('Num Words:  ' + wordSort.length);
-	for (var i=0; i<wordSort.length; i++) {
+	for (i=0; i<wordSort.length; i++) {
 		var word = wordSort[i];
 		result.push(word + ':\t\t' + countMap[word]);
 	}

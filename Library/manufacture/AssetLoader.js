@@ -15,7 +15,7 @@ function AssetLoader(types) {
 	this.concordance = new Concordance();
 	this.history = new History(types);
 	this.styleIndex = new StyleIndex();
-};
+}
 AssetLoader.prototype.load = function(callback) {
 	var that = this;
 	this.types.chapterFiles = false; // do not load this

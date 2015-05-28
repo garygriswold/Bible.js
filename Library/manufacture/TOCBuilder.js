@@ -2,14 +2,14 @@
 * This class traverses the USX data model in order to find each book, and chapter
 * in order to create a table of contents that is localized to the language of the text.
 */
-"use strict"
+"use strict";
 
 function TOCBuilder() {
 	this.toc = new TOC();
 	this.tocBook = null;
 	this.filename = this.toc.filename;
 	Object.seal(this);
-};
+}
 TOCBuilder.prototype.readBook = function(usxRoot) {
 	this.readRecursively(usxRoot);
 };

@@ -10,7 +10,7 @@ function Performance(message) {
 	var memory = process.memoryUsage();
 	this.heapUsed = memory.heapUsed;
 	console.log(message, 'heapUsed:', this.heapUsed, 'heapTotal:', memory.heapTotal);
-};
+}
 Performance.prototype.duration = function(message) {
 	var now = performance.now();
 	var duration = now - this.startTime;

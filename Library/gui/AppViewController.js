@@ -2,7 +2,7 @@
 * BibleApp is a global object that contains pointers to all of the key elements of
 * a user's session with the App.
 */
-"use strict"
+"use strict";
 
 var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
@@ -23,7 +23,7 @@ function AppViewController(versionCode) {
 	this.versionCode = versionCode;
 	this.statusBar = new StatusBar(88);
 	this.statusBar.showView();
-};
+}
 AppViewController.prototype.begin = function() {
 	var types = new AssetType('document', this.versionCode);
 	types.tableContents = true;

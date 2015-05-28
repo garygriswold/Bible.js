@@ -1,13 +1,13 @@
 /**
 * This class traverses a DOM tree in order to create an equivalent HTML document.
 */
-"use strict"
+"use strict";
 
 function HTMLBuilder() {
 	this.result = [];
 	this.filename = 'bible.html';
 	Object.freeze(this);
-};
+}
 HTMLBuilder.prototype.toHTML = function(fragment) {
 	this.readRecursively(fragment);
 	return(this.result.join(''));
@@ -28,10 +28,9 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 			break;
 		default:
 			throw new Error('Unexpected nodeType ' + node.nodeType + ' in HTMLBuilder.toHTML().');
-			break;
 	}
 	if ('childNodes' in node) {
-		for (var i=0; i<node.childNodes.length; i++) {
+		for (i=0; i<node.childNodes.length; i++) {
 			this.readRecursively(node.childNodes[i]);
 		}
 	}

@@ -2,7 +2,7 @@
 * BibleApp is a global object that contains pointers to all of the key elements of
 * a user's session with the App.
 */
-"use strict"
+"use strict";
 
 var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
@@ -23,7 +23,7 @@ function AppViewController(versionCode) {
 	this.versionCode = versionCode;
 	this.statusBar = new StatusBar(88);
 	this.statusBar.showView();
-};
+}
 AppViewController.prototype.begin = function() {
 	var types = new AssetType('document', this.versionCode);
 	types.tableContents = true;
@@ -117,7 +117,7 @@ function StatusBar(hite) {
 	this.rootNode = document.getElementById('statusRoot');
 	this.labelCell = document.getElementById('labelCell');
 	Object.seal(this);
-};
+}
 StatusBar.prototype.showView = function() {
 	var that = this;
 
@@ -311,7 +311,7 @@ function TableContentsView(toc) {
 	this.scrollPosition = 0;
 	var that = this;
 	Object.seal(this);
-};
+}
 TableContentsView.prototype.showView = function() {
 	if (! this.root) {
 		this.root = this.buildTocBookList();
@@ -339,7 +339,7 @@ TableContentsView.prototype.buildTocBookList = function() {
 		bookNode.textContent = book.name;
 		div.appendChild(bookNode);
 		var that = this;
-		bookNode.addEventListener('click', function() {
+		bookNode.addEventListener('click', function(event) {
 			var bookCode = this.id.substring(3);
 			that.showTocChapterList(bookCode);
 		});
@@ -367,7 +367,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 				row.appendChild(cell);
 				chaptNum++;
 				var that = this;
-				cell.addEventListener('click', function() {
+				cell.addEventListener('click', function(event) {
 					var nodeId = this.id.substring(3);
 					that.openChapter(nodeId);
 				});
@@ -384,7 +384,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 };
 TableContentsView.prototype.cellsPerRow = function() {
 	return(5); // some calculation based upon the width of the screen
-}
+};
 TableContentsView.prototype.removeAllChapters = function() {
 	var div = document.getElementById('toc');
 	if (div) {
@@ -421,7 +421,7 @@ function CodexView(tableContents, bibleCache, statusBarHeight) {
 	var that = this;
 	this.addChapterInProgress = false;
 	Object.seal(this);
-};
+}
 CodexView.prototype.hideView = function() {
 	this.chapterQueue.splice(0);
 	for (var i=this.rootNode.children.length -1; i>=0; i--) {
@@ -439,7 +439,7 @@ CodexView.prototype.showView = function(nodeId) {
 	}
 	chapter = new Reference(nodeId);
 	this.chapterQueue.push(chapter);
-	for (var i=0; i<3 && chapter; i++) {
+	for (i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.nextChapter(chapter);
 		if (chapter) {
 			this.chapterQueue.push(chapter);
@@ -593,7 +593,7 @@ function SearchView(toc, concordance, bibleCache, history) {
 	this.scrollPosition = 0;
 	var that = this;
 	Object.seal(this);
-};
+}
 SearchView.prototype.showView = function(query) {
 	this.hideView();
 	if (query) {
@@ -817,7 +817,7 @@ function Canon() {
     	{ code: '3JN', name: '3 John' },
     	{ code: 'JUD', name: 'Jude' },
     	{ code: 'REV', name: 'Revelation' } ];
-};
+}
 /**
 * This class contains a reference to a chapter or verse.  It is used to
 * simplify the transition from the "GEN:1:1" format to the format
@@ -845,7 +845,7 @@ function Reference(book, chapter, verse) {
 	}
 	this.rootNode = document.createElement('div');
 	Object.freeze(this);
-};
+}
 Reference.prototype.path = function() {
 	return(this.book + '/' + this.chapter + '.usx');
 };
@@ -871,7 +871,7 @@ function BibleCache(types) {
 	this.reader = new NodeFileReader(types.location);
 	this.parser = new USXParser();
 	Object.freeze(this);
-};
+}
 BibleCache.prototype.getChapter = function(reference, callback) {
 	var that = this;
 	var chapter = this.chapterMap[reference.nodeId];
@@ -902,7 +902,7 @@ function Concordance() {
 	this.filename = 'concordance.json';
 	this.isFilled = false;
 	Object.seal(this);
-};
+}
 Concordance.prototype.fill = function(words) {
 	this.index = words;
 	this.isFilled = true;
@@ -922,7 +922,7 @@ Concordance.prototype.addEntry = function(word, reference) {
 };
 Concordance.prototype.size = function() {
 	return(Object.keys(this.index).length);
-}
+};
 Concordance.prototype.search = function(words) {
 	var refList = [];
 	for (var i=0; i<words.length; i++) {
@@ -930,7 +930,7 @@ Concordance.prototype.search = function(words) {
 		refList.push(this.index[word]);
 	}
 	return(this.intersection(refList));
-}
+};
 Concordance.prototype.intersection = function(refLists) {
 	if (refLists.length === 0) {
 		return([]);
@@ -982,14 +982,14 @@ function TOC() {
 	this.filename = 'toc.json';
 	this.isFilled = false;
 	Object.seal(this);
-};
+}
 TOC.prototype.fill = function(books) {
 	for (var i=0; i<books.length; i++) {
 		this.addBook(books[i]);
 	}
 	this.isFilled = true;
 	Object.freeze(this);	
-}
+};
 TOC.prototype.addBook = function(book) {
 	this.bookList.push(book);
 	this.bookMap[book.code] = book;
@@ -1034,7 +1034,7 @@ function TOCBook(code) {
 	this.priorBook = null;
 	this.nextBook = null;
 	Object.seal(this);
-};/**
+}/**
 * This class holds an index of styles of the entire Bible, or whatever part of the Bible was loaded into it.
 */
 "use strict";
@@ -1051,7 +1051,7 @@ function StyleIndex() {
 		'note.f', 'note.x', 'char.fr', 'char.ft', 'char.fqa', 'char.xo',
 		'char.wj', 'char.qs'];
 	Object.seal(this);
-};
+}
 StyleIndex.prototype.fill = function(entries) {
 	this.index = entries;
 	this.isFilled = true;
@@ -1082,7 +1082,7 @@ StyleIndex.prototype.dump = function(words) {
 	for (var i=0; i<words.length; i++) {
 		var word = words[i];
 		console.log(word, this.index[word]);
-	};	
+	}	
 };
 StyleIndex.prototype.toJSON = function() {
 	return(JSON.stringify(this.index, null, ' '));
@@ -1101,7 +1101,7 @@ function History(types) {
 	this.writer = new NodeFileWriter(types.location);
 	this.isFilled = false;
 	Object.seal(this);
-};
+}
 History.prototype.fill = function(itemList) {
 	this.items = itemList;
 	this.isFilled = true;
@@ -1171,7 +1171,7 @@ function HistoryItem(key, source, search) {
 	this.search = search;
 	this.timestamp = new Date();
 	Object.freeze(this);
-};/**
+}/**
 * This class extracts single verses from Chapters and returns the text of those
 * verses for use in Concordance Search and possibly other uses.  This is written
 * as a class, because BibleCache and SearchView both have only one instance, but
@@ -1184,7 +1184,7 @@ function VerseAccessor(bibleCache, reference) {
 	this.insideVerse = false;
 	this.result = [];
 	Object.seal(this);
-};
+}
 VerseAccessor.prototype.getVerse = function(callback) {
 	var that = this;
 	this.bibleCache.getChapter(this.reference, function(chapter) {
@@ -1229,7 +1229,7 @@ function NodeFileReader(location) {
 	this.fs = require('fs');
 	this.location = location;
 	Object.freeze(this);
-};
+}
 NodeFileReader.prototype.fileExists = function(filepath, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	//console.log('checking fullpath', fullPath);
@@ -1275,7 +1275,7 @@ function NodeFileWriter(location) {
 	this.fs = require('fs');
 	this.location = location;
 	Object.freeze(this);
-};
+}
 NodeFileWriter.prototype.createDirectory = function(filepath, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	this.fs.mkdir(fullPath, function(err) {
@@ -1286,7 +1286,7 @@ NodeFileWriter.prototype.createDirectory = function(filepath, callback) {
 			callback(filepath);
 		}
 	});
-}
+};
 NodeFileWriter.prototype.writeTextFile = function(filepath, data, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	var options = { encoding: 'utf-8'};
@@ -1307,12 +1307,12 @@ NodeFileWriter.prototype.writeTextFile = function(filepath, data, callback) {
 "use strict";
 
 function USXParser() {
-};
+}
 USXParser.prototype.readBook = function(data) {
 	var reader = new XMLTokenizer(data);
 	var nodeStack = [];
 	var node;
-	var tempNode = {}
+	var tempNode = {};
 	var count = 0;
 	while (tokenType !== XMLNodeType.END && count < 300000) {
 
@@ -1371,36 +1371,29 @@ USXParser.prototype.readBook = function(data) {
 				// do nothing
 				break;
 			default:
-				throw new Error('The XMLNodeType ' + nodeType + ' is unknown in USXParser.');
+				throw new Error('The XMLNodeType ' + tokenType + ' is unknown in USXParser.');
 		}
 		var priorType = tokenType;
 		var priorValue = tokenValue;
-	};
+	}
 	return(node);
 };
 USXParser.prototype.createUSXObject = function(tempNode) {
 	switch(tempNode.tagName) {
 		case 'char':
 			return(new Char(tempNode));
-			break;
 		case 'note':
 			return(new Note(tempNode));
-			break;
 		case 'verse':
 			return(new Verse(tempNode));
-			break;
 		case 'para':
 			return(new Para(tempNode));
-			break;
 		case 'chapter':
 			return(new Chapter(tempNode));
-			break;
 		case 'book':
 			return(new Book(tempNode));
-			break;
 		case 'usx':
 			return(new USX(tempNode));
-			break;
 		default:
 			throw new Error('USX element name ' + tempNode.tagName + ' is not known to USXParser.');
 	}
@@ -1427,7 +1420,7 @@ function XMLTokenizer(data) {
 	this.current = this.state.BEGIN;
 
 	Object.seal(this);
-};
+}
 XMLTokenizer.prototype.tokenValue = function() {
 	return(this.data.substring(this.tokenStart, this.tokenEnd));
 };
@@ -1585,7 +1578,7 @@ function AssetType(location, versionCode) {
 	this.styleIndex = false;
 	this.html = false;// this one is not ready
 	Object.seal(this);
-};
+}
 AssetType.prototype.mustDoQueue = function(filename) {
 	switch(filename) {
 		case 'chapterMetaData.json':
@@ -1631,7 +1624,7 @@ AssetType.prototype.getUSXPath = function(filename) {
 };
 AssetType.prototype.getAppPath = function(filename) {
 	return(this.versionCode + '/app/' + filename);
-}
+};
 /**
 * The class controls the construction and loading of asset objects.  It is designed to be used
 * one both the client and the server.  It is a "builder" controller that uses the AssetType
@@ -1643,26 +1636,26 @@ function AssetController(types) {
 	this.types = types;
 	this.checker = new AssetChecker(types);
 	this.loader = new AssetLoader(types);
-};
+}
 AssetController.prototype.tableContents = function() {
 	return(this.loader.toc);
 };
 AssetController.prototype.concordance = function() {
 	return(this.loader.concordance);
-}
+};
 AssetController.prototype.history = function() {
 	return(this.loader.history);
 };
 AssetController.prototype.styleIndex = function() {
 	return(this.loader.styleIndex);
-}
+};
 AssetController.prototype.checkBuildLoad = function(callback) {
 	var that = this;
 	this.checker.check(function(absentTypes) {
 		var builder = new AssetBuilder(absentTypes);
 		builder.build(function() {
 			that.loader.load(function(loadedTypes) {
-				callback(loadedTypes)
+				callback(loadedTypes);
 			});
 		});
 	});
@@ -1695,7 +1688,7 @@ AssetController.prototype.load = function(callback) {
 
 function AssetChecker(types) {
 	this.types = types;
-};
+}
 AssetChecker.prototype.check = function(callback) {
 	var that = this;
 	var result = new AssetType(this.types.location, this.types.versionCode);
@@ -1761,7 +1754,7 @@ function AssetBuilder(types) {
 	this.writer = new NodeFileWriter(types.location);
 	this.filesToProcess = [];
 	Object.freeze(this);
-};
+}
 AssetBuilder.prototype.build = function(callback) {
 	if (this.builders.length > 0) {
 		var that = this;
@@ -1814,14 +1807,14 @@ AssetBuilder.prototype.build = function(callback) {
 * This class traverses the USX data model in order to find each book, and chapter
 * in order to create a table of contents that is localized to the language of the text.
 */
-"use strict"
+"use strict";
 
 function TOCBuilder() {
 	this.toc = new TOC();
 	this.tocBook = null;
 	this.filename = this.toc.filename;
 	Object.seal(this);
-};
+}
 TOCBuilder.prototype.readBook = function(usxRoot) {
 	this.readRecursively(usxRoot);
 };
@@ -1870,7 +1863,7 @@ TOCBuilder.prototype.toJSON = function() {
 *
 * This solution might not be unicode safe. GNG Apr 2, 2015
 */
-"use strict"
+"use strict";
 
 function ConcordanceBuilder() {
 	this.concordance = new Concordance();
@@ -1879,7 +1872,7 @@ function ConcordanceBuilder() {
 	this.chapter = 0;
 	this.verse = 0;
 	Object.seal(this);
-};
+}
 ConcordanceBuilder.prototype.readBook = function(usxRoot) {
 	this.bookCode = '';
 	this.chapter = 0;
@@ -1909,7 +1902,7 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 			break;
 		default:
 			if ('children' in node) {
-				for (var i=0; i<node.children.length; i++) {
+				for (i=0; i<node.children.length; i++) {
 					this.readRecursively(node.children[i]);
 				}
 			}
@@ -1927,7 +1920,7 @@ ConcordanceBuilder.prototype.toJSON = function() {
 function WordCountBuilder(concordance) {
 	this.concordance = concordance;
 	this.filename = 'wordCount.json';
-};
+}
 WordCountBuilder.prototype.readBook = function(usxRoot) {
 };
 WordCountBuilder.prototype.toJSON = function() {
@@ -1950,7 +1943,7 @@ WordCountBuilder.prototype.toJSON = function() {
 	});
 	var result = [];
 	result.push('Num Words:  ' + wordSort.length);
-	for (var i=0; i<wordSort.length; i++) {
+	for (i=0; i<wordSort.length; i++) {
 		var word = wordSort[i];
 		result.push(word + ':\t\t' + countMap[word]);
 	}
@@ -1968,12 +1961,12 @@ WordCountBuilder.prototype.toJSON = function() {
 * reference to that style.  It builds an index to each style showing
 * all of the references where each style is used.
 */
-"use strict"
+"use strict";
 
 function StyleIndexBuilder() {
 	this.styleIndex = new StyleIndex();
 	this.filename = this.styleIndex.filename;
-};
+}
 StyleIndexBuilder.prototype.readBook = function(usxRoot) {
 	this.bookCode = '';
 	this.chapter = 0;
@@ -2005,8 +1998,8 @@ StyleIndexBuilder.prototype.readRecursively = function(node) {
 			// do nothing
 			break;
 		default:
-			var style = node.tagName + '.' + node.style;
-			var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
+			style = node.tagName + '.' + node.style;
+			reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
 			this.styleIndex.addEntry(style, reference);
 	}
 	if ('children' in node) {
@@ -2026,7 +2019,7 @@ function ChapterBuilder(types) {
 	this.types = types;
 	this.filename = 'chapterMetaData.json';
 	Object.seal(this);
-};
+}
 ChapterBuilder.prototype.readBook = function(usxRoot) {
 	var that = this;
 	var bookCode = ''; // set by side effect of breakBookIntoChapters
@@ -2102,6 +2095,51 @@ ChapterBuilder.prototype.toJSON = function() {
 };
 
 /**
+* This class traverses a DOM tree in order to create an equivalent HTML document.
+*/
+"use strict";
+
+function HTMLBuilder() {
+	this.result = [];
+	this.filename = 'bible.html';
+	Object.freeze(this);
+}
+HTMLBuilder.prototype.toHTML = function(fragment) {
+	this.readRecursively(fragment);
+	return(this.result.join(''));
+};
+HTMLBuilder.prototype.readRecursively = function(node) {
+	switch(node.nodeType) {
+		case 11: // fragment
+			break;
+		case 1: // element
+			this.result.push('\n<', node.tagName.toLowerCase());
+			for (var i=0; i<node.attributes.length; i++) {
+				this.result.push(' ', node.attributes[i].nodeName, '="', node.attributes[i].value, '"');
+			}
+			this.result.push('>');
+			break;
+		case 3: // text
+			this.result.push(node.wholeText);
+			break;
+		default:
+			throw new Error('Unexpected nodeType ' + node.nodeType + ' in HTMLBuilder.toHTML().');
+	}
+	if ('childNodes' in node) {
+		for (i=0; i<node.childNodes.length; i++) {
+			this.readRecursively(node.childNodes[i]);
+		}
+	}
+	if (node.nodeType === 1) {
+		this.result.push('</', node.tagName.toLowerCase(), '>\n');
+	}
+};
+HTMLBuilder.prototype.toJSON = function() {
+	return(this.result.join(''));
+};
+
+
+/**
 * This class loads each of the assets that is specified in the types file.
 *
 * On May 3, 2015 some performance checks were done
@@ -2118,7 +2156,7 @@ function AssetLoader(types) {
 	this.concordance = new Concordance();
 	this.history = new History(types);
 	this.styleIndex = new StyleIndex();
-};
+}
 AssetLoader.prototype.load = function(callback) {
 	var that = this;
 	this.types.chapterFiles = false; // do not load this
@@ -2185,7 +2223,7 @@ function DOMBuilder() {
 
 	this.treeRoot = null;
 	Object.seal(this);
-};
+}
 DOMBuilder.prototype.toDOM = function(usxRoot) {
 	//this.bookCode = '';
 	this.chapter = 0;
@@ -2230,7 +2268,6 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 			break;
 		default:
 			throw new Error('Unknown tagname ' + node.tagName + ' in DOMBuilder.readBook');
-			break;
 	}
 	if ('children' in node) {
 		for (var i=0; i<node.children.length; i++) {
@@ -2249,7 +2286,7 @@ function USX(node) {
 	this.emptyElement = node.emptyElement;
 	this.children = []; // includes books, chapters, and paragraphs
 	Object.freeze(this);
-};
+}
 USX.prototype.tagName = 'usx';
 USX.prototype.addChild = function(node) {
 	this.children.push(node);
@@ -2305,8 +2342,9 @@ USX.prototype.buildHTML = function(result) {
 	for (var i=0; i<this.children.length; i++) {
 		this.children[i].buildHTML(result);
 	}
-	result.push('\n</body></html>')
-};/**
+	result.push('\n</body></html>');
+};
+/**
 * This class contains a book of the Bible
 */
 "use strict";
@@ -2318,7 +2356,7 @@ function Book(node) {
 	this.emptyElement = node.emptyElement;
 	this.children = []; // contains text
 	Object.freeze(this);
-};
+}
 Book.prototype.tagName = 'book';
 Book.prototype.addChild = function(node) {
 	this.children.push(node);
@@ -2363,7 +2401,7 @@ function Chapter(node) {
 	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
 	Object.freeze(this);
-};
+}
 Chapter.prototype.tagName = 'chapter';
 Chapter.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
@@ -2408,7 +2446,7 @@ function Para(node) {
 	this.emptyElement = node.emptyElement;
 	this.children = []; // contains verse | note | char | text
 	Object.freeze(this);
-};
+}
 Para.prototype.tagName = 'para';
 Para.prototype.addChild = function(node) {
 	this.children.push(node);
@@ -2464,7 +2502,7 @@ function Verse(node) {
 	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
 	Object.freeze(this);
-};
+}
 Verse.prototype.tagName = 'verse';
 Verse.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
@@ -2511,7 +2549,7 @@ function Note(node) {
 	this.emptyElement = node.emptyElement;
 	this.children = [];
 	Object.freeze(this);
-};
+}
 Note.prototype.tagName = 'note';
 Note.prototype.addChild = function(node) {
 	this.children.push(node);
@@ -2582,7 +2620,7 @@ function Char(node) {
 	this.emptyElement = node.emptyElement;
 	this.children = [];
 	Object.freeze(this);
-};
+}
 Char.prototype.tagName = 'char';
 Char.prototype.addChild = function(node) {
 	this.children.push(node);
@@ -2637,7 +2675,7 @@ Char.prototype.buildHTML = function(result) {
 function Text(text) {
 	this.text = text;
 	Object.freeze(this);
-};
+}
 Text.prototype.tagName = 'text';
 Text.prototype.buildUSX = function(result) {
 	result.push(this.text);
@@ -2692,7 +2730,7 @@ function Performance(message) {
 	var memory = process.memoryUsage();
 	this.heapUsed = memory.heapUsed;
 	console.log(message, 'heapUsed:', this.heapUsed, 'heapTotal:', memory.heapTotal);
-};
+}
 Performance.prototype.duration = function(message) {
 	var now = performance.now();
 	var duration = now - this.startTime;

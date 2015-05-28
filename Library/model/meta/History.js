@@ -13,7 +13,7 @@ function History(types) {
 	this.writer = new NodeFileWriter(types.location);
 	this.isFilled = false;
 	Object.seal(this);
-};
+}
 History.prototype.fill = function(itemList) {
 	this.items = itemList;
 	this.isFilled = true;

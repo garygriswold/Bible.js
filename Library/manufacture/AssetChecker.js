@@ -7,7 +7,7 @@
 
 function AssetChecker(types) {
 	this.types = types;
-};
+}
 AssetChecker.prototype.check = function(callback) {
 	var that = this;
 	var result = new AssetType(this.types.location, this.types.versionCode);

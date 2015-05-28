@@ -9,7 +9,7 @@ function USX(node) {
 	this.emptyElement = node.emptyElement;
 	this.children = []; // includes books, chapters, and paragraphs
 	Object.freeze(this);
-};
+}
 USX.prototype.tagName = 'usx';
 USX.prototype.addChild = function(node) {
 	this.children.push(node);
@@ -65,5 +65,5 @@ USX.prototype.buildHTML = function(result) {
 	for (var i=0; i<this.children.length; i++) {
 		this.children[i].buildHTML(result);
 	}
-	result.push('\n</body></html>')
+	result.push('\n</body></html>');
 };

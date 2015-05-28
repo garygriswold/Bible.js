@@ -11,7 +11,7 @@ function VerseAccessor(bibleCache, reference) {
 	this.insideVerse = false;
 	this.result = [];
 	Object.seal(this);
-};
+}
 VerseAccessor.prototype.getVerse = function(callback) {
 	var that = this;
 	this.bibleCache.getChapter(this.reference, function(chapter) {

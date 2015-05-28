@@ -9,7 +9,7 @@ function Chapter(node) {
 	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
 	Object.freeze(this);
-};
+}
 Chapter.prototype.tagName = 'chapter';
 Chapter.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';

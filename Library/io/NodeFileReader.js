@@ -8,7 +8,7 @@ function NodeFileReader(location) {
 	this.fs = require('fs');
 	this.location = location;
 	Object.freeze(this);
-};
+}
 NodeFileReader.prototype.fileExists = function(filepath, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	//console.log('checking fullpath', fullPath);

@@ -15,7 +15,7 @@ function StyleIndex() {
 		'note.f', 'note.x', 'char.fr', 'char.ft', 'char.fqa', 'char.xo',
 		'char.wj', 'char.qs'];
 	Object.seal(this);
-};
+}
 StyleIndex.prototype.fill = function(entries) {
 	this.index = entries;
 	this.isFilled = true;
@@ -46,7 +46,7 @@ StyleIndex.prototype.dump = function(words) {
 	for (var i=0; i<words.length; i++) {
 		var word = words[i];
 		console.log(word, this.index[word]);
-	};	
+	}	
 };
 StyleIndex.prototype.toJSON = function() {
 	return(JSON.stringify(this.index, null, ' '));

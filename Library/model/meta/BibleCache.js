@@ -17,7 +17,7 @@ function BibleCache(types) {
 	this.reader = new NodeFileReader(types.location);
 	this.parser = new USXParser();
 	Object.freeze(this);
-};
+}
 BibleCache.prototype.getChapter = function(reference, callback) {
 	var that = this;
 	var chapter = this.chapterMap[reference.nodeId];

@@ -9,7 +9,7 @@ function Para(node) {
 	this.emptyElement = node.emptyElement;
 	this.children = []; // contains verse | note | char | text
 	Object.freeze(this);
-};
+}
 Para.prototype.tagName = 'para';
 Para.prototype.addChild = function(node) {
 	this.children.push(node);

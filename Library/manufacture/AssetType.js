@@ -14,7 +14,7 @@ function AssetType(location, versionCode) {
 	this.styleIndex = false;
 	this.html = false;// this one is not ready
 	Object.seal(this);
-};
+}
 AssetType.prototype.mustDoQueue = function(filename) {
 	switch(filename) {
 		case 'chapterMetaData.json':
@@ -60,4 +60,4 @@ AssetType.prototype.getUSXPath = function(filename) {
 };
 AssetType.prototype.getAppPath = function(filename) {
 	return(this.versionCode + '/app/' + filename);
-}
+};

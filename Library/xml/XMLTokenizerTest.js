@@ -10,7 +10,7 @@ var OUT_BIBLE_PATH = "/Users/garygriswold/Desktop/BibleApp Project/Bibles/USX/WE
 function XMLSerializer() {
 	this.result = [];
 	Object.seal(this);
-};
+}
 XMLSerializer.prototype.write = function(nodeType, nodeValue) {
 	switch(nodeType) {
 		case XMLNodeType.ELE_OPEN:

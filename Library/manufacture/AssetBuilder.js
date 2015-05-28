@@ -33,7 +33,7 @@ function AssetBuilder(types) {
 	this.writer = new NodeFileWriter(types.location);
 	this.filesToProcess = [];
 	Object.freeze(this);
-};
+}
 AssetBuilder.prototype.build = function(callback) {
 	if (this.builders.length > 0) {
 		var that = this;

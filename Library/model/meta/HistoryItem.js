@@ -11,4 +11,4 @@ function HistoryItem(key, source, search) {
 	this.search = search;
 	this.timestamp = new Date();
 	Object.freeze(this);
-};
+}

@@ -4,7 +4,7 @@
 *
 * This solution might not be unicode safe. GNG Apr 2, 2015
 */
-"use strict"
+"use strict";
 
 function ConcordanceBuilder() {
 	this.concordance = new Concordance();
@@ -13,7 +13,7 @@ function ConcordanceBuilder() {
 	this.chapter = 0;
 	this.verse = 0;
 	Object.seal(this);
-};
+}
 ConcordanceBuilder.prototype.readBook = function(usxRoot) {
 	this.bookCode = '';
 	this.chapter = 0;
@@ -43,7 +43,7 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 			break;
 		default:
 			if ('children' in node) {
-				for (var i=0; i<node.children.length; i++) {
+				for (i=0; i<node.children.length; i++) {
 					this.readRecursively(node.children[i]);
 				}
 			}

@@ -25,7 +25,7 @@ function Reference(book, chapter, verse) {
 	}
 	this.rootNode = document.createElement('div');
 	Object.freeze(this);
-};
+}
 Reference.prototype.path = function() {
 	return(this.book + '/' + this.chapter + '.usx');
 };

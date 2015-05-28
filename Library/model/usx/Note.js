@@ -14,7 +14,7 @@ function Note(node) {
 	this.emptyElement = node.emptyElement;
 	this.children = [];
 	Object.freeze(this);
-};
+}
 Note.prototype.tagName = 'note';
 Note.prototype.addChild = function(node) {
 	this.children.push(node);

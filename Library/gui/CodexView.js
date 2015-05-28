@@ -15,7 +15,7 @@ function CodexView(tableContents, bibleCache, statusBarHeight) {
 	var that = this;
 	this.addChapterInProgress = false;
 	Object.seal(this);
-};
+}
 CodexView.prototype.hideView = function() {
 	this.chapterQueue.splice(0);
 	for (var i=this.rootNode.children.length -1; i>=0; i--) {
@@ -33,7 +33,7 @@ CodexView.prototype.showView = function(nodeId) {
 	}
 	chapter = new Reference(nodeId);
 	this.chapterQueue.push(chapter);
-	for (var i=0; i<3 && chapter; i++) {
+	for (i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.nextChapter(chapter);
 		if (chapter) {
 			this.chapterQueue.push(chapter);

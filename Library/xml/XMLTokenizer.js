@@ -20,7 +20,7 @@ function XMLTokenizer(data) {
 	this.current = this.state.BEGIN;
 
 	Object.seal(this);
-};
+}
 XMLTokenizer.prototype.tokenValue = function() {
 	return(this.data.substring(this.tokenStart, this.tokenEnd));
 };

@@ -10,7 +10,7 @@ function Book(node) {
 	this.emptyElement = node.emptyElement;
 	this.children = []; // contains text
 	Object.freeze(this);
-};
+}
 Book.prototype.tagName = 'book';
 Book.prototype.addChild = function(node) {
 	this.children.push(node);

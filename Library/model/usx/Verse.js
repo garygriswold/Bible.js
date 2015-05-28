@@ -9,7 +9,7 @@ function Verse(node) {
 	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
 	Object.freeze(this);
-};
+}
 Verse.prototype.tagName = 'verse';
 Verse.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';

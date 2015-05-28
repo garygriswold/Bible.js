@@ -8,7 +8,7 @@ function NodeFileWriter(location) {
 	this.fs = require('fs');
 	this.location = location;
 	Object.freeze(this);
-};
+}
 NodeFileWriter.prototype.createDirectory = function(filepath, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	this.fs.mkdir(fullPath, function(err) {
@@ -19,7 +19,7 @@ NodeFileWriter.prototype.createDirectory = function(filepath, callback) {
 			callback(filepath);
 		}
 	});
-}
+};
 NodeFileWriter.prototype.writeTextFile = function(filepath, data, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	var options = { encoding: 'utf-8'};

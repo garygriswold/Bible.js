@@ -3,12 +3,12 @@
 * reference to that style.  It builds an index to each style showing
 * all of the references where each style is used.
 */
-"use strict"
+"use strict";
 
 function StyleIndexBuilder() {
 	this.styleIndex = new StyleIndex();
 	this.filename = this.styleIndex.filename;
-};
+}
 StyleIndexBuilder.prototype.readBook = function(usxRoot) {
 	this.bookCode = '';
 	this.chapter = 0;
@@ -40,8 +40,8 @@ StyleIndexBuilder.prototype.readRecursively = function(node) {
 			// do nothing
 			break;
 		default:
-			var style = node.tagName + '.' + node.style;
-			var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
+			style = node.tagName + '.' + node.style;
+			reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
 			this.styleIndex.addEntry(style, reference);
 	}
 	if ('children' in node) {

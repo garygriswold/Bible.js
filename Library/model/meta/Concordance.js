@@ -8,7 +8,7 @@ function Concordance() {
 	this.filename = 'concordance.json';
 	this.isFilled = false;
 	Object.seal(this);
-};
+}
 Concordance.prototype.fill = function(words) {
 	this.index = words;
 	this.isFilled = true;
@@ -28,7 +28,7 @@ Concordance.prototype.addEntry = function(word, reference) {
 };
 Concordance.prototype.size = function() {
 	return(Object.keys(this.index).length);
-}
+};
 Concordance.prototype.search = function(words) {
 	var refList = [];
 	for (var i=0; i<words.length; i++) {
@@ -36,7 +36,7 @@ Concordance.prototype.search = function(words) {
 		refList.push(this.index[word]);
 	}
 	return(this.intersection(refList));
-}
+};
 Concordance.prototype.intersection = function(refLists) {
 	if (refLists.length === 0) {
 		return([]);

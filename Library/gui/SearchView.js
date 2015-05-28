@@ -18,7 +18,7 @@ function SearchView(toc, concordance, bibleCache, history) {
 	this.scrollPosition = 0;
 	var that = this;
 	Object.seal(this);
-};
+}
 SearchView.prototype.showView = function(query) {
 	this.hideView();
 	if (query) {

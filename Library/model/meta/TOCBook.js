@@ -13,4 +13,4 @@ function TOCBook(code) {
 	this.priorBook = null;
 	this.nextBook = null;
 	Object.seal(this);
-};
+}

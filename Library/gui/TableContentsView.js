@@ -10,7 +10,7 @@ function TableContentsView(toc) {
 	this.scrollPosition = 0;
 	var that = this;
 	Object.seal(this);
-};
+}
 TableContentsView.prototype.showView = function() {
 	if (! this.root) {
 		this.root = this.buildTocBookList();
@@ -38,7 +38,7 @@ TableContentsView.prototype.buildTocBookList = function() {
 		bookNode.textContent = book.name;
 		div.appendChild(bookNode);
 		var that = this;
-		bookNode.addEventListener('click', function() {
+		bookNode.addEventListener('click', function(event) {
 			var bookCode = this.id.substring(3);
 			that.showTocChapterList(bookCode);
 		});
@@ -66,7 +66,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 				row.appendChild(cell);
 				chaptNum++;
 				var that = this;
-				cell.addEventListener('click', function() {
+				cell.addEventListener('click', function(event) {
 					var nodeId = this.id.substring(3);
 					that.openChapter(nodeId);
 				});
@@ -83,7 +83,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 };
 TableContentsView.prototype.cellsPerRow = function() {
 	return(5); // some calculation based upon the width of the screen
-}
+};
 TableContentsView.prototype.removeAllChapters = function() {
 	var div = document.getElementById('toc');
 	if (div) {

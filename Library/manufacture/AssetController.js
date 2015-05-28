@@ -9,26 +9,26 @@ function AssetController(types) {
 	this.types = types;
 	this.checker = new AssetChecker(types);
 	this.loader = new AssetLoader(types);
-};
+}
 AssetController.prototype.tableContents = function() {
 	return(this.loader.toc);
 };
 AssetController.prototype.concordance = function() {
 	return(this.loader.concordance);
-}
+};
 AssetController.prototype.history = function() {
 	return(this.loader.history);
 };
 AssetController.prototype.styleIndex = function() {
 	return(this.loader.styleIndex);
-}
+};
 AssetController.prototype.checkBuildLoad = function(callback) {
 	var that = this;
 	this.checker.check(function(absentTypes) {
 		var builder = new AssetBuilder(absentTypes);
 		builder.build(function() {
 			that.loader.load(function(loadedTypes) {
-				callback(loadedTypes)
+				callback(loadedTypes);
 			});
 		});
 	});
