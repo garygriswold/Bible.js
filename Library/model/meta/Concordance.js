@@ -30,8 +30,10 @@ Concordance.prototype.size = function() {
 Concordance.prototype.search = function(words) {
 	var refList = [];
 	for (var i=0; i<words.length; i++) {
-		var word = words[i];
-		refList.push(this.index[word]);
+		var list = this.index[words[i]];
+		if (list) { // This is ignoring words that return no list, and allowing search to continue.
+			refList.push(list);
+		}
 	}
 	return(this.intersection(refList));
 };
