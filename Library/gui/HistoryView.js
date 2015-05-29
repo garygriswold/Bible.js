@@ -57,9 +57,9 @@ HistoryView.prototype.buildHistoryView = function() {
 		var book = that.tableContents.find(ref.book);
 		console.log(book);
 		if (ref.verse) {
-			return(book.abbrev + ' ' + ref.chapter + ':' + ref.verse);
+			return(book.abbrev + '\n' + ref.chapter + ':' + ref.verse);
 		} else {
-			return(book.abbrev + ' ' + ref.chapter);
+			return(book.abbrev + '\n' + ref.chapter);
 		}
 	}
 };
