@@ -3,8 +3,8 @@
 * clicking on the toc to get a chapter, doing a lookup of a specific passage
 * or clicking on a verse during a concordance search.
 */
-function HistoryItem(key, source, search) {
-	this.key = key;
+function HistoryItem(nodeId, source, search) {
+	this.nodeId = nodeId;
 	this.source = source;
 	this.search = search;
 	this.timestamp = new Date();

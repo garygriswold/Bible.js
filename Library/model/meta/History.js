@@ -4,6 +4,8 @@
 * or a concordance search.  It also responds to function requests to go back 
 * in history, forward in history, or return to the last event.
 */
+var MAX_HISTORY = 20;
+
 function History(types) {
 	this.types = types;
 	this.items = [];
@@ -17,14 +19,26 @@ History.prototype.fill = function(itemList) {
 	this.isFilled = true;
 };
 History.prototype.addEvent = function(event) {
+	var itemIndex = this.search(event.detail.id);
+	if (itemIndex >= 0) {
+		this.items.splice(itemIndex, 1);
+	}
 	var item = new HistoryItem(event.detail.id, event.type, event.detail.source);
 	this.items.push(item);
-	this.currentItem = this.items.length -1;
-	if (this.items.length > 1000) {
+	if (this.items.length > MAX_HISTORY) {
 		var discard = this.items.shift();
-		this.currentItem--;
 	}
+	this.currentItem = this.items.length -1;
 	setTimeout(this.persist(), 3000);
+};
+History.prototype.search = function(nodeId) {
+	for (var i=0; i<this.items.length; i++) {
+		var item = this.items[i];
+		if (item.nodeId === nodeId) {
+			return(i);
+		}
+	}
+	return(-1);
 };
 History.prototype.size = function() {
 	return(this.items.length);

@@ -771,12 +771,12 @@ HistoryView.prototype.buildHistoryView = function() {
 	var root = document.createElement('div');
 	root.setAttribute('class', 'tabs');
 	var numHistory = this.history.size();
-	for (var i=numHistory -1; i>=0 && i>numHistory -10; i--) {
+	for (var i=numHistory -1; i>=0; i--) {
 		var tab = document.createElement('div');
 		tab.setAttribute('class', 'tab');
 		root.appendChild(tab);
 
-		var historyNodeId = this.history.items[i].key;
+		var historyNodeId = this.history.items[i].nodeId;
 		var btn = document.createElement('input');
 		btn.setAttribute('type', 'radio');
 		btn.setAttribute('id', 'his' + historyNodeId);
@@ -807,39 +807,7 @@ HistoryView.prototype.buildHistoryView = function() {
 HistoryView.prototype.updateHistoryView = function() {
 
 };
-
-/*
-<div class="tabs">
-    
-   <div class="tab">
-       <input type="radio" id="tab-1" name="tab-group-1" checked>
-       <label for="tab-1">Tab One</label>
-       
-       <div class="content">
-           stuff
-       </div> 
-   </div>
-    
-   <div class="tab">
-       <input type="radio" id="tab-2" name="tab-group-1">
-       <label for="tab-2">Tab Two</label>
-       
-       <div class="content">
-           stuff
-       </div> 
-   </div>
-    
-    <div class="tab">
-       <input type="radio" id="tab-3" name="tab-group-1">
-       <label for="tab-3">Tab Three</label>
-     
-       <div class="content">
-           stuff
-       </div> 
-   </div>
-    
-</div>
-*//**
+/**
 * This class contains the Canon of Scripture as 66 books.  It is used to control
 * which books are published using this App.  The codes are used to identify the
 * books of the Bible, while the names, which are in English are only used to document
@@ -1176,6 +1144,8 @@ StyleIndex.prototype.toJSON = function() {
 * or a concordance search.  It also responds to function requests to go back 
 * in history, forward in history, or return to the last event.
 */
+var MAX_HISTORY = 20;
+
 function History(types) {
 	this.types = types;
 	this.items = [];
@@ -1189,14 +1159,26 @@ History.prototype.fill = function(itemList) {
 	this.isFilled = true;
 };
 History.prototype.addEvent = function(event) {
+	var itemIndex = this.search(event.detail.id);
+	if (itemIndex >= 0) {
+		this.items.splice(itemIndex, 1);
+	}
 	var item = new HistoryItem(event.detail.id, event.type, event.detail.source);
 	this.items.push(item);
-	this.currentItem = this.items.length -1;
-	if (this.items.length > 1000) {
+	if (this.items.length > MAX_HISTORY) {
 		var discard = this.items.shift();
-		this.currentItem--;
 	}
+	this.currentItem = this.items.length -1;
 	setTimeout(this.persist(), 3000);
+};
+History.prototype.search = function(nodeId) {
+	for (var i=0; i<this.items.length; i++) {
+		var item = this.items[i];
+		if (item.nodeId === nodeId) {
+			return(i);
+		}
+	}
+	return(-1);
 };
 History.prototype.size = function() {
 	return(this.items.length);
@@ -1245,8 +1227,8 @@ History.prototype.toJSON = function() {
 * clicking on the toc to get a chapter, doing a lookup of a specific passage
 * or clicking on a verse during a concordance search.
 */
-function HistoryItem(key, source, search) {
-	this.key = key;
+function HistoryItem(nodeId, source, search) {
+	this.nodeId = nodeId;
 	this.source = source;
 	this.search = search;
 	this.timestamp = new Date();

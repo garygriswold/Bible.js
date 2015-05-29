@@ -30,12 +30,12 @@ HistoryView.prototype.buildHistoryView = function() {
 	var root = document.createElement('div');
 	root.setAttribute('class', 'tabs');
 	var numHistory = this.history.size();
-	for (var i=numHistory -1; i>=0 && i>numHistory -10; i--) {
+	for (var i=numHistory -1; i>=0; i--) {
 		var tab = document.createElement('div');
 		tab.setAttribute('class', 'tab');
 		root.appendChild(tab);
 
-		var historyNodeId = this.history.items[i].key;
+		var historyNodeId = this.history.items[i].nodeId;
 		var btn = document.createElement('input');
 		btn.setAttribute('type', 'radio');
 		btn.setAttribute('id', 'his' + historyNodeId);
