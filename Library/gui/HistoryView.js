@@ -27,39 +27,36 @@ HistoryView.prototype.hideView = function() {
 	}
 };
 HistoryView.prototype.buildHistoryView = function() {
-	var root = document.createElement('div');
-	root.setAttribute('class', 'tabs');
+	var that = this;
+	var root = document.createElement('ul');
+	root.setAttribute('id', 'historyTabBar');
 	var numHistory = this.history.size();
 	for (var i=numHistory -1; i>=0; i--) {
-		var tab = document.createElement('div');
-		tab.setAttribute('class', 'tab');
+		var historyNodeId = this.history.items[i].nodeId;
+		var tab = document.createElement('li');
+		tab.setAttribute('class', 'historyTab');
 		root.appendChild(tab);
 
-		var historyNodeId = this.history.items[i].nodeId;
-		var btn = document.createElement('input');
-		btn.setAttribute('type', 'radio');
+		var btn = document.createElement('button');
 		btn.setAttribute('id', 'his' + historyNodeId);
-		btn.setAttribute('name', 'history-group');
+		btn.setAttribute('class', 'historyTabBtn');
+		btn.innerHTML = generateReference(historyNodeId);
 		tab.appendChild(btn);
-
-		var that = this;
-		var label = document.createElement('label');
-		label.setAttribute('for', 'his' + historyNodeId);
-		label.innerHTML = generateReference(historyNodeId);
-		tab.appendChild(label);
+		btn.addEventListener('click', function(event) {
+			console.log('btn is clicked ', btn.innerHTML);
+			var nodeId = this.id.substr(3);
+			document.body.dispatchEvent(new CustomEvent(BIBLE.TOC_FIND, { detail: { id: nodeId }}));
+		});
 	}
 	return(root);
 
 	function generateReference(nodeId) {
-		console.log('nodeId', nodeId);
 		var ref = new Reference(nodeId);
-		console.log('ref', ref.book);
 		var book = that.tableContents.find(ref.book);
-		console.log(book);
 		if (ref.verse) {
-			return(book.abbrev + '\n' + ref.chapter + ':' + ref.verse);
+			return(book.abbrev + ' ' + ref.chapter + ':' + ref.verse);
 		} else {
-			return(book.abbrev + '\n' + ref.chapter);
+			return(book.abbrev + ' ' + ref.chapter);
 		}
 	}
 };
