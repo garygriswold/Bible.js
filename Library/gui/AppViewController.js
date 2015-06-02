@@ -5,6 +5,8 @@
 var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
 		SHOW_SETTINGS: 'TBD-bible-show-settings', // present settings page, create if needed
+		SHOW_HISTORY: 'bible-show-history', // present history tabs
+		HIDE_HISTORY: 'bible-hide-history', // hide history tabs
 		TOC_FIND: 'bible-toc-find', // lookup a passage as result of user selection in toc
 		LOOK: 'TBD-bible-look', // TBD
 		SEARCH_START: 'bible-search-start', // process user entered search string
@@ -21,6 +23,7 @@ function AppViewController(versionCode) {
 	this.versionCode = versionCode;
 	this.statusBar = new StatusBar(88);
 	this.statusBar.showView();
+	this.touch = new Hammer(document.getElementById('codexRoot'));
 }
 AppViewController.prototype.begin = function(develop) {
 	var types = new AssetType('document', this.versionCode);
@@ -54,8 +57,8 @@ AppViewController.prototype.begin = function(develop) {
 			var lastItem = that.history.last();
 			console.log(lastItem);
 			console.log('size', that.history.size());
-			if (lastItem && lastItem.key) {
-				that.codexView.showView(lastItem.key);
+			if (lastItem && lastItem.nodeId) {
+				that.codexView.showView(lastItem.nodeId);
 			} else {
 				that.codexView.showView('JHN:1');
 			}
@@ -66,14 +69,26 @@ AppViewController.prototype.begin = function(develop) {
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();
 			that.searchView.hideView();
+			that.historyView.hideView();
 			that.codexView.hideView();
 		});
 		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
 			that.searchView.showView();
 			that.statusBar.showSearchField();
 			that.tableContentsView.hideView();
+			that.historyView.hideView();
 			that.codexView.hideView();
 		});
+		that.touch.on("panright", function(event) {
+    		if (event.deltaX > 4 * Math.abs(event.deltaY)) {
+    			that.historyView.showView();
+    		}
+		});
+		that.touch.on("panleft", function(event) {
+    		if ( -event.deltaX > 4 * Math.abs(event.deltaY)) {
+    			that.historyView.hideView();
+    		}
+    	});
 		document.body.addEventListener(BIBLE.TOC_FIND, function(event) {
 			console.log(JSON.stringify(event.detail));
 			that.codexView.showView(event.detail.id);

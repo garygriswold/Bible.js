@@ -12,13 +12,16 @@
 	<link rel="stylesheet" href="css/TableContents.css"/>
 	<link rel="stylesheet" href="css/History.css"/>
 	<script type="text/javascript" src="js/BibleApp.js"></script>
-	<script type="text/javascript" src="js/TweenLite.js"></script>
+	<script type="text/javascript" src="js/hammer.min.js"></script>
+	<script type="text/javascript" src="../Gitignore/GreenSock.1.17.0/src/uncompressed/TweenLite.js"></script>
+	<script type="text/javascript" src="../Gitignore/GreenSock.1.17.0/src/uncompressed/plugins/CSSPlugin.js"></script>
 	<script type="text/javascript" src="js/plugins/TextPlugin.js"></script>
 	<script type="text/javascript">
 		function onBodyLoad() {
 			console.log('DEVICE IS READY **');
 			app = new AppViewController('WEB'); // Global root of the application
-			app.begin('historyView');
+			//app.begin('historyView');
+			app.begin();
 		};
 	</script>
   </head>

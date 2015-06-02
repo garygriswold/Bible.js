@@ -9,14 +9,15 @@ var MAX_HISTORY = 20;
 function History(types) {
 	this.types = types;
 	this.items = [];
-	this.currentItem = null;
 	this.writer = new NodeFileWriter(types.location);
 	this.isFilled = false;
+	this.isViewCurrent = false;
 	Object.seal(this);
 }
 History.prototype.fill = function(itemList) {
 	this.items = itemList;
 	this.isFilled = true;
+	this.isViewCurrent = false;
 };
 History.prototype.addEvent = function(event) {
 	var itemIndex = this.search(event.detail.id);
@@ -28,7 +29,7 @@ History.prototype.addEvent = function(event) {
 	if (this.items.length > MAX_HISTORY) {
 		var discard = this.items.shift();
 	}
-	this.currentItem = this.items.length -1;
+	this.isViewCurrent = false;
 	setTimeout(this.persist(), 3000);
 };
 History.prototype.search = function(nodeId) {
@@ -43,18 +44,8 @@ History.prototype.search = function(nodeId) {
 History.prototype.size = function() {
 	return(this.items.length);
 };
-History.prototype.back = function() {
-	return(this.item(--this.currentItem));
-};
-History.prototype.forward = function() {
-	return(this.item(++this.currentItem));
-};
 History.prototype.last = function() {
-	this.currentItem = this.items.length -1;
-	return(this.item(this.currentItem));
-};
-History.prototype.current = function() {
-	return(this.item(this.currentItem));
+	return(this.item(this.items.length -1));
 };
 History.prototype.item = function(index) {
 	return((index > -1 && index < this.items.length) ? this.items[index] : 'JHN:1');

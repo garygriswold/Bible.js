@@ -4,11 +4,11 @@
 
 #historyRoot {
   position: fixed;
-  top: 95px;
-  left: 0;
+  top: 95px; /* Will need to vary with device size */
+  left: -150px; /* Will need to vary with device size */
 	margin: 0;
   padding: 0;
-  border-style: solid;
+  /*border-style: solid; for testing */
 }
 #historyTabBar {
   list-style-type: none;

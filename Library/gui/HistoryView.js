@@ -12,18 +12,21 @@ function HistoryView(history, tableContents) {
 }
 HistoryView.prototype.showView = function() {
 	if (this.viewRoot) {
-		this.updateHistoryView();
-		if (this.rootNode.children.length < 1) {
-			this.rootNode.appendChild(this.viewRoot);
+	 	if (! this.history.isViewCurrent) {
+			this.rootNode.removeChild(this.viewRoot);
+			this.viewRoot = this.buildHistoryView();
 		}
 	} else {
 		this.viewRoot = this.buildHistoryView();
 	}
+	this.history.isViewCurrent = true;
 	this.rootNode.appendChild(this.viewRoot);
+	TweenLite.to(this.rootNode, 2, { left: "0px" });
 };
 HistoryView.prototype.hideView = function() {
-	for (var i=this.rootNode.children.length -1; i>=0; i--) {
-		this.rootNode.removeChild(this.rootNode.children[i]);
+	var rect = this.rootNode.getBoundingClientRect();
+	if (rect.left > -150) {
+		TweenLite.to(this.rootNode, 2, { left: "-150px" });
 	}
 };
 HistoryView.prototype.buildHistoryView = function() {
@@ -46,6 +49,7 @@ HistoryView.prototype.buildHistoryView = function() {
 			console.log('btn is clicked ', btn.innerHTML);
 			var nodeId = this.id.substr(3);
 			document.body.dispatchEvent(new CustomEvent(BIBLE.TOC_FIND, { detail: { id: nodeId }}));
+			that.hideView();
 		});
 	}
 	return(root);
@@ -60,6 +64,4 @@ HistoryView.prototype.buildHistoryView = function() {
 		}
 	}
 };
-HistoryView.prototype.updateHistoryView = function() {
 
-};
