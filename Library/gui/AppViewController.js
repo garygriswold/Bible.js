@@ -50,8 +50,11 @@ AppViewController.prototype.begin = function(develop) {
 		Object.freeze(that);
 
 		switch(develop) {
-		case 'historyView':
+		case 'HistoryView':
 			that.historyView.showView();
+			break;
+		case 'QuestionsView':
+			that.questionsView.showView();
 			break;
 		default:
 			var lastItem = that.history.last();

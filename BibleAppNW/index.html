@@ -20,8 +20,9 @@
 		function onBodyLoad() {
 			console.log('DEVICE IS READY **');
 			app = new AppViewController('WEB'); // Global root of the application
-			//app.begin('historyView');
-			app.begin();
+			app.begin('QuestionsView')
+			//app.begin('HistoryView');
+			//app.begin();
 		};
 	</script>
   </head>
@@ -30,12 +31,14 @@
   		<div id="tocCell"></div>
   		<div id="labelCell"></div>
   		<div id="searchCell"></div>
+  		<div id="questionsCell"></div>
   		<div id="settingsCell"></div>
   	</div>
   	<div id="tocRoot"></div>
   	<div id="codexRoot"></div>
   	<div id="searchRoot"></div>
   	<div id="historyRoot"></div>
+  	<div id="questionsRoot"></div>
   	<div id="settingsRoot"></div>
   </body>
 </html>

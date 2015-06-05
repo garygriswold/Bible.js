@@ -20,8 +20,7 @@ NodeFileWriter.prototype.createDirectory = function(filepath, callback) {
 };
 NodeFileWriter.prototype.writeTextFile = function(filepath, data, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
-	var options = { encoding: 'utf-8'};
-	this.fs.writeFile(fullPath, data, options, function(err) {
+	this.fs.writeFile(fullPath, data, { encoding: 'utf8'}, function(err) {
 		if (err) {
 			err.filepath = filepath;
 			callback(err);
