@@ -48,11 +48,15 @@ AppViewController.prototype.begin = function(develop) {
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
 		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
 		that.historyView = new HistoryView(that.history, that.tableContents);
+		that.questionsView = new QuestionsView(types);
 		Object.freeze(that);
 
 		switch(develop) {
-		case 'historyView':
+		case 'HistoryView':
 			that.historyView.showView();
+			break;
+		case 'QuestionsView':
+			that.questionsView.showView();
 			break;
 		default:
 			var lastItem = that.history.last();
@@ -822,6 +826,113 @@ HistoryView.prototype.buildHistoryView = function() {
 };
 
 /**
+* This class provides the user interface to the question and answer feature.
+* This view class differs from some of the others in that it does not try
+* to keep the data in memory, but simply reads the data from a file when
+* needed.  Because the question.json file could become large, this approach
+* is essential.
+*/
+function QuestionsView(types) {
+	this.questions = new Questions(types);
+	this.viewRoot = null;
+	this.rootNode = document.getElementById('questionsRoot');
+	Object.seal(this);
+}
+QuestionsView.prototype.showView = function() {
+	var that = this;
+	this.questions.read(0, function(results) {
+		if (results === undefined || results.errno === undefined) {
+			that.viewRoot = that.buildQuestionsView();
+			that.rootNode.appendChild(that.viewRoot);
+
+			that.questions.checkServer(function(results) {
+				//that.appendToQuestionView();
+			});
+		}
+	});
+};
+QuestionsView.prototype.hideView = function() {
+	for (var i=this.rootNode.children.length -1; i>=0; i--) {
+		this.rootNode.removeChild(this.rootNode.children[i]);
+	}
+	this.viewRoot = null;
+	this.questions = null;
+};
+QuestionsView.prototype.buildQuestionsView = function() {
+	var that = this;
+	var formatter = new DateTimeFormatter();
+	var root = document.createElement('div');
+	root.setAttribute('id', 'questionsView');
+	var numQuestions = this.questions.size();
+	console.log('numQuestions', numQuestions);
+	for (var i=0; i<numQuestions; i++) {
+		var item = this.questions.find(i);
+
+		var aQuestion = document.createElement('div');
+		aQuestion.setAttribute('id', 'que' + i);
+		aQuestion.setAttribute('class', 'oneQuestion');
+		root.appendChild(aQuestion);
+
+		var line1 = document.createElement('div');
+		line1.setAttribute('class', 'queTop');
+		aQuestion.appendChild(line1);
+
+		var reference = document.createElement('p');
+		reference.setAttribute('class', 'queRef');
+		reference.textContent = item.reference;
+		line1.appendChild(reference);
+
+		var questDate = document.createElement('p');
+		questDate.setAttribute('class', 'queDate');
+		questDate.textContent = formatter.localDatetime(item.askedDateTime);
+		line1.appendChild(questDate);
+
+		var question = document.createElement('p');
+		question.setAttribute('class', 'queText');
+		question.textContent = item.questionText;
+		aQuestion.appendChild(question);
+
+		aQuestion.addEventListener('click', displayAnswer);
+	}
+	return(root);
+
+	function displayAnswer(event) {
+		console.log('selected', this.id);
+		var selectedId = this.id;
+		var idNum = selectedId.substr(3);
+		item = that.questions.find(idNum);
+
+		var selected = document.getElementById(this.id);
+		selected.removeEventListener('click', displayAnswer);
+
+		var line = document.createElement('hr');
+		line.setAttribute('class', 'ansLine');
+		selected.appendChild(line);
+
+		var answerTop = document.createElement('div');
+		answerTop.setAttribute('class', 'ansTop');
+		selected.appendChild(answerTop);
+
+		var instructor = document.createElement('p');
+		instructor.setAttribute('class', 'ansInstructor');
+		instructor.textContent = item.instructorName;
+		answerTop.appendChild(instructor);
+
+		var ansDate = document.createElement('p');
+		ansDate.setAttribute('class', 'ansDate');
+		ansDate.textContent = formatter.localDatetime(item.answeredDateTime);
+		answerTop.appendChild(ansDate);
+
+		var answer = document.createElement('p');
+		answer.setAttribute('class', 'ansText');
+		answer.textContent = item.answerText;
+		selected.appendChild(answer);
+	}
+
+	function includeActs8() {
+
+	}
+};/**
 * This class contains the Canon of Scripture as 66 books.  It is used to control
 * which books are published using this App.  The codes are used to identify the
 * books of the Bible, while the names, which are in English are only used to document
@@ -1284,6 +1395,95 @@ VerseAccessor.prototype.getVerse = function(callback) {
 		}
 	}
 };/**
+* This class contains the list of questions and answers for this student
+* or device.
+*/
+function Questions(types) {
+	this.types = types;
+	this.items = [];
+	this.fullPath = this.types.getAppPath('questions.json');
+	Object.seal(this);
+}
+Questions.prototype.fill = function(itemList) {
+	console.log('inside fill', itemList.length);
+	for (var i=0; i<itemList.length; i++) {
+		var item = itemList[i];
+		item.askedDateTime = new Date(item.askedDateTime);
+		item.answeredDateTime = new Date(item.answeredDateTime);
+	}
+	this.items = itemList;
+
+};
+Questions.prototype.size = function() {
+	return(this.items.length);
+};
+Questions.prototype.find = function(index) {
+	return((index >= 0 && index < this.items.length) ? this.items[index] : null);
+};
+Questions.prototype.addItem = function(questionItem, callback) {
+	this.items.push(questionItem);
+	// This method must add to the file, as well as add to the server
+	// callback when the addQuestion, either succeeds or fails.
+	this.write(function(result) {
+		callback(result);
+	});
+};
+Questions.prototype.read = function(pageNum, callback) {
+	var that = this;
+	var reader = new NodeFileReader(this.types.location);
+	reader.readTextFile(this.fullPath, function(data) {
+		if (data.errno) {
+			console.log('read questions.json failure ' + JSON.stringify(data));
+			callback(data);
+		} else {
+			var questionList = JSON.parse(data);
+			that.fill(questionList);
+			callback(this);
+		}
+	});
+};
+Questions.prototype.checkServer = function(callback) {
+	var that = this;
+	var lastItem = this.items[this.items.length -1];
+	if (lastItem.answeredDateTime === null) {
+		// send request to the server.
+
+		// if there is an unanswered question, the last item is updated
+		that.write(function(result) {
+			callback(lastItem);
+		});
+	}
+	else {
+		callback(null);
+	}
+};
+Questions.prototype.write = function(callback) {
+	var data = this.toJSON();
+	var writer = new NodeFileWriter(this.types.location);
+	writer.writeTextFile(this.fullPath, data, function(result) {
+		if (result.errno) {
+			console.log('write questions.json failure ' + JSON.stringify(result));
+		}
+		console.log('write result', result);
+		callback(result);
+	});
+};
+Questions.prototype.toJSON = function() {
+	return(JSON.stringify(this.items, null, ' '));
+};
+/**
+* This class contains the contents of one user question and one instructor response.
+*/
+function QuestionItem(reference, nodeId, question, askedDt, instructor, answerDt, answer) {
+	this.reference = reference;
+	this.referenceNodeId = nodeId;
+	this.questionText = question;
+	this.askedDateTime = askedDt || new Date();
+	this.instructorName = instructor;
+	this.answeredDateTime = answerDt;
+	this.answerText = answer;
+	Object.seal(this);
+}/**
 * This file contains IO constants and functions which are common to all file methods, which might include node.js, cordova, javascript, etc.
 */
 var FILE_ROOTS = { 'application': '?', 'document': '../../dbl/current/', 'temporary': '?', 'test2dbl': '../../../dbl/current/' };
@@ -1323,7 +1523,7 @@ NodeFileReader.prototype.readDirectory = function(filepath, callback) {
 NodeFileReader.prototype.readTextFile = function(filepath, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	//console.log('read file ', fullPath);
-	this.fs.readFile(fullPath, { encoding: 'utf-8'}, function(err, data) {
+	this.fs.readFile(fullPath, { encoding: 'utf8'}, function(err, data) {
 		if (err) {
 			err.filepath = filepath;
 			callback(err);
@@ -1353,8 +1553,7 @@ NodeFileWriter.prototype.createDirectory = function(filepath, callback) {
 };
 NodeFileWriter.prototype.writeTextFile = function(filepath, data, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
-	var options = { encoding: 'utf-8'};
-	this.fs.writeFile(fullPath, data, options, function(err) {
+	this.fs.writeFile(fullPath, data, { encoding: 'utf8'}, function(err) {
 		if (err) {
 			err.filepath = filepath;
 			callback(err);
@@ -2741,6 +2940,30 @@ Text.prototype.toHTML = function() {
 /** deprecated */
 Text.prototype.buildHTML = function(result) {
 	result.push(this.text);
+};
+/**
+* This class performs localized date and time formatting.
+* It is written as a distinct class, because the way this is done
+* using Cordova is different than how it is done using WebKit/Node.js
+*/
+function DateTimeFormatter() {
+	// get the students country and language information
+	this.language = 'en';
+	this.country = 'US';
+	this.locale = this.language + '-' + this.country;
+	Object.freeze(this);
+}
+DateTimeFormatter.prototype.localDate = function(date) {
+	var options = { year: 'numeric', month: 'long', day: 'numeric' };
+	return(date.toLocaleString('en-US', options));
+};
+DateTimeFormatter.prototype.localTime = function(date) {
+	var options = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
+	return(date.toLocaleString('en-US', options));
+};
+DateTimeFormatter.prototype.localDatetime = function(date) {
+	var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+	return(date.toLocaleString('en-US', options));
 };
 /**
 * This simple class is used to measure performance of the App.

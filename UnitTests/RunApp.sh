@@ -6,6 +6,7 @@ cat ../Library/gui/TableContentsView.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/gui/CodexView.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/gui/SearchView.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/gui/HistoryView.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/gui/QuestionsView.js >> ../BibleAppNW/js/BibleApp.js
 
 cat ../Library/model/meta/Canon.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/Reference.js >> ../BibleAppNW/js/BibleApp.js
@@ -17,6 +18,8 @@ cat ../Library/model/meta/StyleIndex.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/History.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/HistoryItem.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/VerseAccessor.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/model/meta/Questions.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/model/meta/QuestionItem.js >> ../BibleAppNW/js/BibleApp.js
 
 cat ../Library/io/CommonIO.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/io/NodeFileReader.js >> ../BibleAppNW/js/BibleApp.js
@@ -48,6 +51,7 @@ cat ../Library/model/usx/Note.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/usx/Char.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/usx/Text.js >> ../BibleAppNW/js/BibleApp.js
 
+cat ../Library/util/DateTimeFormatter.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/util/Performance.js >> ../BibleAppNW/js/BibleApp.js
 
 

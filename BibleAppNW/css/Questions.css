@@ -1,0 +1,50 @@
+/**
+* This css file pertains to the QuestionView
+*/
+#questionsRoot {
+	margin: 10%;
+}
+#questionsView {
+	margin: 0;
+}
+div.oneQuestion {
+	margin: 4px;
+	border-style: solid;
+	border-width: thin;
+	border-color: #777777;
+	border-radius: 5px;
+	padding: 10px;
+}
+div.queTop {
+	/*margin: 0;*/
+}
+p.queRef {
+	margin: 0;
+	float: left;
+}
+p.queDate {
+	margin: 0;
+	float: right;
+}
+p.queText {
+	margin: 0;
+	clear: both;
+}
+hr.ansLine {
+
+}
+div.ansTop {
+
+}
+p.ansInstructor {
+	margin: 0;
+	float: left;
+}
+p.ansDate {
+	margin: 0;
+	float: right;
+}
+p.ansText {
+	margin: 0;
+	clear: both;
+}

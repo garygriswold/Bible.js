@@ -9,6 +9,11 @@ function Questions(types) {
 	Object.seal(this);
 }
 Questions.prototype.fill = function(itemList) {
+	for (var i=0; i<itemList.length; i++) {
+		var item = itemList[i];
+		item.askedDateTime = new Date(item.askedDateTime);
+		item.answeredDateTime = new Date(item.answeredDateTime);
+	}
 	this.items = itemList;
 };
 Questions.prototype.size = function() {
