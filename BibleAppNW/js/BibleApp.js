@@ -838,6 +838,8 @@ function QuestionsView(types, bibleCache, tableContents) {
 	this.questions = new Questions(types, bibleCache, tableContents);
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('questionsRoot');
+	this.referenceInput = null;
+	this.questionInput = null;
 	Object.seal(this);
 }
 QuestionsView.prototype.showView = function() {
@@ -871,6 +873,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	for (var i=0; i<numQuestions; i++) {
 		buildOneQuestion(root, i);
 	}
+	includeInputBlock(root);
 	return(root);
 
 	function buildOneQuestion(parent, i) {
@@ -943,10 +946,37 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	}
 
 	function includeInputBlock(parentNode) {
-		// create top level div
-		// create reference input block
-		// create question input block
-		// create submit input button
+		var inputTop = document.createElement('div');
+		inputTop.setAttribute('id', 'quesInput');
+		parentNode.appendChild(inputTop);
+
+		that.referenceInput = document.createElement('input');
+		that.referenceInput.setAttribute('id', 'quesRef');
+		that.referenceInput.setAttribute('type', 'text');
+		that.referenceInput.setAttribute('value', 'Matt 7:7 goes here');
+		inputTop.appendChild(that.referenceInput);
+
+		that.questionInput = document.createElement('textarea');
+		that.questionInput.setAttribute('id', 'quesInput');
+		// can set rows and cols
+		inputTop.appendChild(that.questionInput);
+
+		var quesBtn = document.createElement('button');
+		quesBtn.setAttribute('id', 'quesBtn');
+		quesBtn.textContent = 'Submit';/// this is supposed to be a drawing
+		inputTop.appendChild(quesBtn);
+		quesBtn.addEventListener('click', function(event) {
+			console.log('submit button clicked');
+
+			var item = new QuestionItem();
+			item.referenceNodeId = '';// where does this come from?
+			item.reference = that.referenceInput.textContent;
+			item.questionText = that.questionInput.text;
+
+			that.questions.addItem(item, function(result) {
+				console.log('file is written to disk and server');
+			});
+		});
 	}
 };/**
 * This class contains the Canon of Scripture as 66 books.  It is used to control
@@ -1477,7 +1507,6 @@ Questions.prototype.read = function(pageNum, callback) {
 		var refActs831 = new Reference('ACT:8:31');
 		var refActs835 = new Reference('ACT:8:35');
 		acts8.reference = that.tableContents.toString(refActs830);
-		console.log('reference', acts8.reference);
 		var verseActs830 = new VerseAccessor(that.bibleCache, refActs830);
 		var verseActs831 = new VerseAccessor(that.bibleCache, refActs831);
 		var verseActs835 = new VerseAccessor(that.bibleCache, refActs835);
