@@ -2,19 +2,23 @@
 * This class contains the list of questions and answers for this student
 * or device.
 */
-function Questions(types) {
+function Questions(types, bibleCache, tableContents) {
 	this.types = types;
+	this.bibleCache = bibleCache;
+	this.tableContents = tableContents;
 	this.items = [];
 	this.fullPath = this.types.getAppPath('questions.json');
 	Object.seal(this);
 }
 Questions.prototype.fill = function(itemList) {
-	for (var i=0; i<itemList.length; i++) {
-		var item = itemList[i];
-		item.askedDateTime = new Date(item.askedDateTime);
-		item.answeredDateTime = new Date(item.answeredDateTime);
+	if (itemList) {
+		for (var i=0; i<itemList.length; i++) {
+			var item = itemList[i];
+			item.askedDateTime = new Date(item.askedDateTime);
+			item.answeredDateTime = new Date(item.answeredDateTime);
+		}
+		this.items = itemList;
 	}
-	this.items = itemList;
 };
 Questions.prototype.size = function() {
 	return(this.items.length);
@@ -34,15 +38,46 @@ Questions.prototype.read = function(pageNum, callback) {
 	var that = this;
 	var reader = new NodeFileReader(this.types.location);
 	reader.readTextFile(this.fullPath, function(data) {
-		if (data.errno) {
+		if (data.errno === -2) {
+			createActs8Question(function(item) {
+				that.items.push(item);
+				that.write(function(result) {});
+				callback(that);			
+			});
+		} else if (data.errno) {
 			console.log('read questions.json failure ' + JSON.stringify(data));
 			callback(data);
 		} else {
 			var questionList = JSON.parse(data);
 			that.fill(questionList);
-			callback(this);
+			callback(that);
 		}
 	});
+
+	function createActs8Question(callback) {
+		var acts8 = new QuestionItem();
+		acts8.referenceNodeId = 'ACT:8:30';
+		acts8.askedDateTime = new Date();
+		var refActs830 = new Reference('ACT:8:30');
+		var refActs831 = new Reference('ACT:8:31');
+		var refActs835 = new Reference('ACT:8:35');
+		acts8.reference = that.tableContents.toString(refActs830);
+		var verseActs830 = new VerseAccessor(that.bibleCache, refActs830);
+		var verseActs831 = new VerseAccessor(that.bibleCache, refActs831);
+		var verseActs835 = new VerseAccessor(that.bibleCache, refActs835);
+		verseActs830.getVerse(function(textActs830) {
+			acts8.questionText = textActs830;
+			verseActs831.getVerse(function(textActs831) {
+				acts8.questionText += textActs831;
+				verseActs835.getVerse(function(textActs835) {
+					acts8.answerText = textActs835;
+					acts8.answeredDateTime = new Date();
+					acts8.instructorName = '';
+					callback(acts8);
+				});
+			});
+		});
+	}
 };
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
@@ -66,7 +101,6 @@ Questions.prototype.write = function(callback) {
 		if (result.errno) {
 			console.log('write questions.json failure ' + JSON.stringify(result));
 		}
-		console.log('write result', result);
 		callback(result);
 	});
 };

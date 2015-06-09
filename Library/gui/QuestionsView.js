@@ -5,8 +5,10 @@
 * needed.  Because the question.json file could become large, this approach
 * is essential.
 */
-function QuestionsView(types) {
-	this.questions = new Questions(types);
+function QuestionsView(types, bibleCache, tableContents) {
+	this.bibleCache = bibleCache;
+	this.tableContents = tableContents;
+	this.questions = new Questions(types, bibleCache, tableContents);
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('questionsRoot');
 	Object.seal(this);
@@ -14,12 +16,14 @@ function QuestionsView(types) {
 QuestionsView.prototype.showView = function() {
 	var that = this;
 	this.questions.read(0, function(results) {
-		if (results === undefined || results.errno === undefined) {
+		if (results === undefined || results.errno === undefined || results.errno === -2) {
 			that.viewRoot = that.buildQuestionsView();
 			that.rootNode.appendChild(that.viewRoot);
 
 			that.questions.checkServer(function(results) {
 				//that.appendToQuestionView();
+				// when a question comes back from the server
+				// we are able to display input block.
 			});
 		}
 	});
@@ -37,14 +41,18 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	var root = document.createElement('div');
 	root.setAttribute('id', 'questionsView');
 	var numQuestions = this.questions.size();
-	console.log('numQuestions', numQuestions);
 	for (var i=0; i<numQuestions; i++) {
-		var item = this.questions.find(i);
+		buildOneQuestion(root, i);
+	}
+	return(root);
+
+	function buildOneQuestion(parent, i) {
+		var item = that.questions.find(i);
 
 		var aQuestion = document.createElement('div');
 		aQuestion.setAttribute('id', 'que' + i);
 		aQuestion.setAttribute('class', 'oneQuestion');
-		root.appendChild(aQuestion);
+		parent.appendChild(aQuestion);
 
 		var line1 = document.createElement('div');
 		line1.setAttribute('class', 'queTop');
@@ -65,18 +73,23 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		question.textContent = item.questionText;
 		aQuestion.appendChild(question);
 
-		aQuestion.addEventListener('click', displayAnswerOnRequest);
+		if (i === numQuestions -1) {
+			displayAnswer(aQuestion);
+		} else {
+			aQuestion.addEventListener('click', displayAnswerOnRequest);	
+		}
 	}
-	return(root);
 
 	function displayAnswerOnRequest(event) {
-		console.log('selected', this.id);
 		var selectedId = this.id;
-		var idNum = selectedId.substr(3);
-		item = that.questions.find(idNum);
-
 		var selected = document.getElementById(this.id);
 		selected.removeEventListener('click', displayAnswerOnRequest);
+		displayAnswer(selected);
+	}
+
+	function displayAnswer(selected) {
+		var idNum = selected.id.substr(3);
+		var item = that.questions.find(idNum);
 
 		var line = document.createElement('hr');
 		line.setAttribute('class', 'ansLine');
@@ -102,7 +115,10 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		selected.appendChild(answer);
 	}
 
-	function includeActs8() {
-
+	function includeInputBlock(parentNode) {
+		// create top level div
+		// create reference input block
+		// create question input block
+		// create submit input button
 	}
 };

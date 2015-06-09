@@ -42,6 +42,9 @@ TOC.prototype.priorChapter = function(reference) {
 TOC.prototype.size = function() {
 	return(this.bookList.length);
 };
+TOC.prototype.toString = function(reference) {
+	return(this.find(reference.book).name + ' ' + reference.chapter + ':' + reference.verse);
+};
 TOC.prototype.toJSON = function() {
 	return(JSON.stringify(this.bookList, null, ' '));
 };

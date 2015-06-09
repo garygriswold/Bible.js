@@ -48,7 +48,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
 		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
 		that.historyView = new HistoryView(that.history, that.tableContents);
-		that.questionsView = new QuestionsView(types);
+		that.questionsView = new QuestionsView(types, that.bibleCache, that.tableContents);
 		Object.freeze(that);
 
 		switch(develop) {
@@ -832,8 +832,10 @@ HistoryView.prototype.buildHistoryView = function() {
 * needed.  Because the question.json file could become large, this approach
 * is essential.
 */
-function QuestionsView(types) {
-	this.questions = new Questions(types);
+function QuestionsView(types, bibleCache, tableContents) {
+	this.bibleCache = bibleCache;
+	this.tableContents = tableContents;
+	this.questions = new Questions(types, bibleCache, tableContents);
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('questionsRoot');
 	Object.seal(this);
@@ -841,12 +843,14 @@ function QuestionsView(types) {
 QuestionsView.prototype.showView = function() {
 	var that = this;
 	this.questions.read(0, function(results) {
-		if (results === undefined || results.errno === undefined) {
+		if (results === undefined || results.errno === undefined || results.errno === -2) {
 			that.viewRoot = that.buildQuestionsView();
 			that.rootNode.appendChild(that.viewRoot);
 
 			that.questions.checkServer(function(results) {
 				//that.appendToQuestionView();
+				// when a question comes back from the server
+				// we are able to display input block.
 			});
 		}
 	});
@@ -864,14 +868,18 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	var root = document.createElement('div');
 	root.setAttribute('id', 'questionsView');
 	var numQuestions = this.questions.size();
-	console.log('numQuestions', numQuestions);
 	for (var i=0; i<numQuestions; i++) {
-		var item = this.questions.find(i);
+		buildOneQuestion(root, i);
+	}
+	return(root);
+
+	function buildOneQuestion(parent, i) {
+		var item = that.questions.find(i);
 
 		var aQuestion = document.createElement('div');
 		aQuestion.setAttribute('id', 'que' + i);
 		aQuestion.setAttribute('class', 'oneQuestion');
-		root.appendChild(aQuestion);
+		parent.appendChild(aQuestion);
 
 		var line1 = document.createElement('div');
 		line1.setAttribute('class', 'queTop');
@@ -892,18 +900,23 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		question.textContent = item.questionText;
 		aQuestion.appendChild(question);
 
-		aQuestion.addEventListener('click', displayAnswer);
+		if (i === numQuestions -1) {
+			displayAnswer(aQuestion);
+		} else {
+			aQuestion.addEventListener('click', displayAnswerOnRequest);	
+		}
 	}
-	return(root);
 
-	function displayAnswer(event) {
-		console.log('selected', this.id);
+	function displayAnswerOnRequest(event) {
 		var selectedId = this.id;
-		var idNum = selectedId.substr(3);
-		item = that.questions.find(idNum);
-
 		var selected = document.getElementById(this.id);
-		selected.removeEventListener('click', displayAnswer);
+		selected.removeEventListener('click', displayAnswerOnRequest);
+		displayAnswer(selected);
+	}
+
+	function displayAnswer(selected) {
+		var idNum = selected.id.substr(3);
+		var item = that.questions.find(idNum);
 
 		var line = document.createElement('hr');
 		line.setAttribute('class', 'ansLine');
@@ -929,8 +942,11 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		selected.appendChild(answer);
 	}
 
-	function includeActs8() {
-
+	function includeInputBlock(parentNode) {
+		// create top level div
+		// create reference input block
+		// create question input block
+		// create submit input button
 	}
 };/**
 * This class contains the Canon of Scripture as 66 books.  It is used to control
@@ -1200,6 +1216,9 @@ TOC.prototype.priorChapter = function(reference) {
 TOC.prototype.size = function() {
 	return(this.bookList.length);
 };
+TOC.prototype.toString = function(reference) {
+	return(this.find(reference.book).name + ' ' + reference.chapter + ':' + reference.verse);
+};
 TOC.prototype.toJSON = function() {
 	return(JSON.stringify(this.bookList, null, ' '));
 };/**
@@ -1398,21 +1417,23 @@ VerseAccessor.prototype.getVerse = function(callback) {
 * This class contains the list of questions and answers for this student
 * or device.
 */
-function Questions(types) {
+function Questions(types, bibleCache, tableContents) {
 	this.types = types;
+	this.bibleCache = bibleCache;
+	this.tableContents = tableContents;
 	this.items = [];
 	this.fullPath = this.types.getAppPath('questions.json');
 	Object.seal(this);
 }
 Questions.prototype.fill = function(itemList) {
-	console.log('inside fill', itemList.length);
-	for (var i=0; i<itemList.length; i++) {
-		var item = itemList[i];
-		item.askedDateTime = new Date(item.askedDateTime);
-		item.answeredDateTime = new Date(item.answeredDateTime);
+	if (itemList) {
+		for (var i=0; i<itemList.length; i++) {
+			var item = itemList[i];
+			item.askedDateTime = new Date(item.askedDateTime);
+			item.answeredDateTime = new Date(item.answeredDateTime);
+		}
+		this.items = itemList;
 	}
-	this.items = itemList;
-
 };
 Questions.prototype.size = function() {
 	return(this.items.length);
@@ -1432,15 +1453,47 @@ Questions.prototype.read = function(pageNum, callback) {
 	var that = this;
 	var reader = new NodeFileReader(this.types.location);
 	reader.readTextFile(this.fullPath, function(data) {
-		if (data.errno) {
+		if (data.errno === -2) {
+			createActs8Question(function(item) {
+				that.items.push(item);
+				that.write(function(result) {});
+				callback(that);			
+			});
+		} else if (data.errno) {
 			console.log('read questions.json failure ' + JSON.stringify(data));
 			callback(data);
 		} else {
 			var questionList = JSON.parse(data);
 			that.fill(questionList);
-			callback(this);
+			callback(that);
 		}
 	});
+
+	function createActs8Question(callback) {
+		var acts8 = new QuestionItem();
+		acts8.referenceNodeId = 'ACT:8:30';
+		acts8.askedDateTime = new Date();
+		var refActs830 = new Reference('ACT:8:30');
+		var refActs831 = new Reference('ACT:8:31');
+		var refActs835 = new Reference('ACT:8:35');
+		acts8.reference = that.tableContents.toString(refActs830);
+		console.log('reference', acts8.reference);
+		var verseActs830 = new VerseAccessor(that.bibleCache, refActs830);
+		var verseActs831 = new VerseAccessor(that.bibleCache, refActs831);
+		var verseActs835 = new VerseAccessor(that.bibleCache, refActs835);
+		verseActs830.getVerse(function(textActs830) {
+			acts8.questionText = textActs830;
+			verseActs831.getVerse(function(textActs831) {
+				acts8.questionText += textActs831;
+				verseActs835.getVerse(function(textActs835) {
+					acts8.answerText = textActs835;
+					acts8.answeredDateTime = new Date();
+					acts8.instructorName = '';
+					callback(acts8);
+				});
+			});
+		});
+	}
 };
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
@@ -1464,7 +1517,6 @@ Questions.prototype.write = function(callback) {
 		if (result.errno) {
 			console.log('write questions.json failure ' + JSON.stringify(result));
 		}
-		console.log('write result', result);
 		callback(result);
 	});
 };

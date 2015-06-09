@@ -47,7 +47,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
 		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
 		that.historyView = new HistoryView(that.history, that.tableContents);
-		that.questionsView = new QuestionsView(types);
+		that.questionsView = new QuestionsView(types, that.bibleCache, that.tableContents);
 		Object.freeze(that);
 
 		switch(develop) {
