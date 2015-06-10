@@ -1,12 +1,15 @@
 /**
 * This css file pertains to the QuestionView
 */
+/* Static container for questionsView */
 #questionsRoot {
 	margin: 10%;
 }
+/* Generated container for all questions and answers */
 #questionsView {
 	margin: 0;
 }
+/* Container for one question and answer */
 div.oneQuestion {
 	margin: 4px;
 	border-style: solid;
@@ -15,36 +18,75 @@ div.oneQuestion {
 	border-radius: 5px;
 	padding: 10px;
 }
+/* First line of Question, contains reference and date */
 div.queTop {
-	/*margin: 0;*/
 }
+/* Question Reference */
 p.queRef {
 	margin: 0;
 	float: left;
 }
+/* Question Date */
 p.queDate {
 	margin: 0;
 	float: right;
 }
+/* Question Text */
 p.queText {
 	margin: 0;
 	clear: both;
 }
+/* Line between question and answer */
 hr.ansLine {
 
 }
+/* First line of Answer, contains instructor and date */
 div.ansTop {
 
 }
+/* Instructor name */
 p.ansInstructor {
 	margin: 0;
 	float: left;
 }
+/* Answer Date */
 p.ansDate {
 	margin: 0;
 	float: right;
 }
+/* Answer Text */
 p.ansText {
 	margin: 0;
 	clear: both;
+}
+/* Div containing question input fields */
+#quesInput {
+	border-style: solid;
+	border-width: thin;
+	border-color: #777777;
+	border-radius: 5px;
+}
+/* Reference input field */
+#inputRef {
+	width: 90%;
+	margin-top: 5%;
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-bottom: 2.5%;
+}
+/* Question input field */
+#inputText {
+	width: 90%;
+	margin-top: 2.5%;
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-bottom: 5%;
+}
+/* Question submit button */
+#inputBtn {
+	float: right;
+	margin-top: 2.5%;
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-bottom: 5%;
 }

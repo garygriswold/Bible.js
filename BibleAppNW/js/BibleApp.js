@@ -951,18 +951,19 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		parentNode.appendChild(inputTop);
 
 		that.referenceInput = document.createElement('input');
-		that.referenceInput.setAttribute('id', 'quesRef');
+		that.referenceInput.setAttribute('id', 'inputRef');
 		that.referenceInput.setAttribute('type', 'text');
-		that.referenceInput.setAttribute('value', 'Matt 7:7 goes here');
+		that.referenceInput.setAttribute('value', 'reference goes here');// How does reference get here
 		inputTop.appendChild(that.referenceInput);
 
 		that.questionInput = document.createElement('textarea');
-		that.questionInput.setAttribute('id', 'quesInput');
-		// can set rows and cols
+		that.questionInput.setAttribute('id', 'inputText');
+		that.questionInput.textContent = 'Matt 7:7 goes here';
+		that.questionInput.setAttribute('rows', 10);
 		inputTop.appendChild(that.questionInput);
 
 		var quesBtn = document.createElement('button');
-		quesBtn.setAttribute('id', 'quesBtn');
+		quesBtn.setAttribute('id', 'inputBtn');
 		quesBtn.textContent = 'Submit';/// this is supposed to be a drawing
 		inputTop.appendChild(quesBtn);
 		quesBtn.addEventListener('click', function(event) {
