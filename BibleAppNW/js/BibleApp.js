@@ -173,32 +173,8 @@ StatusBar.prototype.showView = function() {
       	that.rootNode.appendChild(canvas);
 	}
 	function setupTocButton(hite, color) {
-		var lineThick = hite/7.0;
-		var line1Y = lineThick * 1.5;
-		var lineXSrt = line1Y;
-		var lineXEnd = hite - lineThick;
-		var line2Y = lineThick * 2 + line1Y;
-		var line3Y = lineThick * 2 + line2Y;
-
-		var canvas = document.createElement('canvas');
-		canvas.setAttribute('height', hite);
-		canvas.setAttribute('width', hite + lineXSrt * 0.5);
+		var canvas = drawTOCIcon(hite, color);
 		canvas.setAttribute('style', 'position: fixed; top: 0; left: 0');
-		var graphics = canvas.getContext('2d');
-	
-		graphics.beginPath();
-		graphics.moveTo(lineXSrt, line1Y);
-		graphics.lineTo(lineXEnd, line1Y);
-		graphics.moveTo(lineXSrt, line2Y);
-		graphics.lineTo(lineXEnd, line2Y);
-		graphics.moveTo(lineXSrt, line3Y);
-		graphics.lineTo(lineXEnd, line3Y);
-
-		graphics.lineWidth = lineThick;
-		graphics.lineCap = 'square';
-		graphics.strokeStyle = color;
-		graphics.stroke();
-
 		document.getElementById('tocCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -224,29 +200,8 @@ StatusBar.prototype.showView = function() {
 		that.labelCell.appendChild(that.titleCanvas);
 	}
 	function setupSearchButton(hite, color) {
-		var lineThick = hite/7.0;
-		var radius = (hite / 2) - (lineThick * 1.5);
-		var coordX = radius + (lineThick * 1.5);
-		var coordY = radius + lineThick * 1.25;
-		var edgeX = coordX + radius / 2 + 2;
-		var edgeY = coordY + radius / 2 + 2;
-
-		var canvas = document.createElement('canvas');
-		canvas.setAttribute('height', hite);
-		canvas.setAttribute('width', hite + lineThick);
+		var canvas = drawSearchIcon(hite, color);
 		canvas.setAttribute('style', 'position: fixed; top: 0; right: ' + hite);
-		var graphics = canvas.getContext('2d');
-
-		graphics.beginPath();
-		graphics.arc(coordX, coordY, radius, 0, Math.PI*2, true);
-		graphics.moveTo(edgeX, edgeY);
-		graphics.lineTo(edgeX + radius, edgeY + radius);
-		graphics.closePath();
-
-		graphics.lineWidth = lineThick;
-		graphics.strokeStyle = color;
-		graphics.stroke();
-
 		document.getElementById('searchCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -256,31 +211,8 @@ StatusBar.prototype.showView = function() {
 		});
 	}
 	function setupSettingsButton(hite, color) {
-		var lineThick = hite/7.0;
-		var radius = (hite / 2) - (lineThick * 1.75);
-		var coord = hite / 2;
-		var circle = Math.PI * 2;
-		var increment = Math.PI / 4;
-		var first = increment / 2;
-
-		var canvas = document.createElement('canvas');
-		canvas.setAttribute('height', hite);
-		canvas.setAttribute('width', hite);
+		var canvas = drawSettingsIcon(hite, color);
 		canvas.setAttribute('style', 'position: fixed; top: 0; right: 0');
-		var graphics = canvas.getContext('2d');
-
-		graphics.beginPath();
-		graphics.arc(coord, coord, radius, 0, Math.PI*2, true);
-		for (var angle=first; angle<circle; angle+=increment) {
-			graphics.moveTo(Math.cos(angle) * radius + coord, Math.sin(angle) * radius + coord);
-			graphics.lineTo(Math.cos(angle) * radius * 1.6 + coord, Math.sin(angle) * radius * 1.6 + coord);
-		}
-		graphics.closePath();
-
-		graphics.lineWidth = lineThick;
-		graphics.strokeStyle = color;
-		graphics.stroke();
-
 		document.getElementById('settingsCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -980,6 +912,175 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		});
 	}
 };/**
+* This function draws an icon that is used as a TOC button
+* on the StatusBar.
+*/
+function drawTOCIcon(hite, color) {
+	var lineThick = hite / 7.0;
+	var line1Y = lineThick * 1.5;
+	var lineXSrt = line1Y;
+	var lineXEnd = hite - lineThick;
+	var line2Y = lineThick * 2 + line1Y;
+	var line3Y = lineThick * 2 + line2Y;
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('height', hite);
+	canvas.setAttribute('width', hite + lineXSrt * 0.5);
+	var graphics = canvas.getContext('2d');
+
+	graphics.beginPath();
+	graphics.moveTo(lineXSrt, line1Y);
+	graphics.lineTo(lineXEnd, line1Y);
+	graphics.moveTo(lineXSrt, line2Y);
+	graphics.lineTo(lineXEnd, line2Y);
+	graphics.moveTo(lineXSrt, line3Y);
+	graphics.lineTo(lineXEnd, line3Y);
+
+	graphics.lineWidth = lineThick;
+	graphics.lineCap = 'square';
+	graphics.strokeStyle = color;
+	graphics.stroke();
+
+	return(canvas);
+}/**
+* This function draws the spyglass that is used as the search
+* button on the status bar.
+*/
+function drawSearchIcon(hite, color) {
+	var lineThick = hite / 7.0;
+	var radius = (hite / 2) - (lineThick * 1.5);
+	var coordX = radius + (lineThick * 1.5);
+	var coordY = radius + lineThick * 1.25;
+	var edgeX = coordX + radius / 2 + 2;
+	var edgeY = coordY + radius / 2 + 2;
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('height', hite);
+	canvas.setAttribute('width', hite + lineThick);
+	var graphics = canvas.getContext('2d');
+
+	graphics.beginPath();
+	graphics.arc(coordX, coordY, radius, 0, Math.PI*2, true);
+	graphics.moveTo(edgeX, edgeY);
+	graphics.lineTo(edgeX + radius, edgeY + radius);
+	graphics.closePath();
+
+	graphics.lineWidth = lineThick;
+	graphics.strokeStyle = color;
+	graphics.stroke();
+	return(canvas);
+}/**
+* This function draws and icon that is used as a questions button
+* on the StatusBar.
+*/
+function drawQuestionsIcon(hite, color) {
+	var widthDiff = 1.25;
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('height', hite);
+	canvas.setAttribute('width', hite * widthDiff);
+	var graphics = canvas.getContext('2d');
+
+	graphics.beginPath();
+	drawOval(graphics);
+	drawArc(graphics, hite);
+	graphics.fillStyle = color;
+   	graphics.fill();
+	return(canvas);
+
+	function drawOval(graphics) {
+    	var centerX = 0;
+    	var centerY = 0;
+    	var radius = hite * 0.45;
+
+    	graphics.save();
+    	graphics.translate(canvas.width * 0.5, canvas.height * 0.45);
+    	graphics.scale(widthDiff, 1);
+    	graphics.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+    	graphics.restore();
+    }
+    
+    function drawArc(graphics, hite) {
+    	graphics.moveTo(hite * 0.28, hite);
+    	graphics.bezierCurveTo(hite * 0.44, hite, hite * 0.66, hite * 0.73, hite * 0.72, hite * 0.45);
+    	graphics.lineTo(hite * 0.94, hite * 0.45);
+    	graphics.bezierCurveTo(hite * 0.9, hite * 0.73, hite * 0.54, hite, hite * 0.28, hite);
+    	graphics.closePath();
+    }
+}
+
+ /**
+* This function draws the gear that is used as the settings
+* button on the status bar.
+*/
+function drawSettingsIcon(hite, color) {
+	var lineThick = hite / 7.0;
+	var radius = (hite / 2) - (lineThick * 1.75);
+	var coord = hite / 2;
+	var circle = Math.PI * 2;
+	var increment = Math.PI / 4;
+	var first = increment / 2;
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('height', hite);
+	canvas.setAttribute('width', hite);
+	var graphics = canvas.getContext('2d');
+
+	graphics.beginPath();
+	graphics.arc(coord, coord, radius, 0, Math.PI*2, true);
+	for (var angle=first; angle<circle; angle+=increment) {
+		graphics.moveTo(Math.cos(angle) * radius + coord, Math.sin(angle) * radius + coord);
+		graphics.lineTo(Math.cos(angle) * radius * 1.6 + coord, Math.sin(angle) * radius * 1.6 + coord);
+	}
+	graphics.closePath();
+
+	graphics.lineWidth = lineThick;
+	graphics.strokeStyle = color;
+	graphics.stroke();
+	return(canvas);
+}/**
+* This function draws and icon that is used as a send button
+* on the QuestionsView input block.
+*/
+function drawSendIcon(hite, color) {
+	var widthDiff = 1.25;
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('height', hite);
+	canvas.setAttribute('width', hite * widthDiff);
+	var graphics = canvas.getContext('2d');
+
+	var lineWidth = hite / 7.0;
+	drawArrow(graphics, lineWidth);
+	return(canvas);
+
+	function drawArrow(graphics, lineWidth) {
+		var middle = canvas.height * 0.5;
+		var widt = canvas.width;
+		var doubleLineWidth = lineWidth * 2.0;
+		var tripleLineWidth = lineWidth * 3.5;
+		var controlX = widt - lineWidth * 2.5;
+
+		graphics.beginPath();
+		graphics.moveTo(lineWidth, middle);
+		graphics.lineTo(widt - 2 * lineWidth, middle);
+		graphics.strokeStyle = color;
+		graphics.lineWidth = lineWidth;
+		graphics.stroke();
+
+		graphics.beginPath();
+		graphics.moveTo(widt - lineWidth, middle);
+		graphics.lineTo(widt - tripleLineWidth, middle - doubleLineWidth);
+
+		graphics.moveTo(widt - lineWidth, middle);
+		graphics.lineTo(widt - tripleLineWidth, middle + doubleLineWidth);
+
+		graphics.bezierCurveTo(controlX, middle, controlX, middle, widt - tripleLineWidth, middle - doubleLineWidth);
+
+		graphics.fillStyle = color;
+		graphics.fill();
+	}
+}/**
 * This class contains the Canon of Scripture as 66 books.  It is used to control
 * which books are published using this App.  The codes are used to identify the
 * books of the Bible, while the names, which are in English are only used to document

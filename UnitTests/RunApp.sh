@@ -8,6 +8,12 @@ cat ../Library/gui/SearchView.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/gui/HistoryView.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/gui/QuestionsView.js >> ../BibleAppNW/js/BibleApp.js
 
+cat ../Library/gui/icons/drawTOCIcon.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/gui/icons/drawSearchIcon.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/gui/icons/drawQuestionsIcon.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/gui/icons/drawSettingsIcon.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/gui/icons/drawSendIcon.js >> ../BibleAppNW/js/BibleApp.js
+
 cat ../Library/model/meta/Canon.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/Reference.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/BibleCache.js >> ../BibleAppNW/js/BibleApp.js
