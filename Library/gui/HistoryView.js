@@ -48,7 +48,7 @@ HistoryView.prototype.buildHistoryView = function() {
 		btn.addEventListener('click', function(event) {
 			console.log('btn is clicked ', btn.innerHTML);
 			var nodeId = this.id.substr(3);
-			document.body.dispatchEvent(new CustomEvent(BIBLE.TOC_FIND, { detail: { id: nodeId }}));
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 			that.hideView();
 		});
 	}

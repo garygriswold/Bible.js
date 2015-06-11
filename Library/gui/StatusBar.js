@@ -2,11 +2,13 @@
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
-function StatusBar(hite) {
+function StatusBar(hite, tableContents) {
 	this.hite = hite;
+	this.tableContents = tableContents;
 	this.titleWidth = window.outerWidth - hite * 3.5;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
+	this.currentReference = null;
 	this.searchField = null;
 	this.rootNode = document.getElementById('statusRoot');
 	this.labelCell = document.getElementById('labelCell');
@@ -18,8 +20,8 @@ StatusBar.prototype.showView = function() {
 	setupBackground(this.hite);
 	setupTocButton(this.hite, '#F7F7BB');
 	setupHeading(this.hite);
+	setupQuestionsButton(this.hite, '#F7F7BB');
 	setupSearchButton(this.hite, '#F7F7BB');
-	setupSettingsButton(this.hite, '#F7F7BB');
 
 	function setupBackground(hite) {
     	var canvas = document.createElement('canvas');
@@ -69,10 +71,16 @@ StatusBar.prototype.showView = function() {
 		that.titleGraphics.borderStyle = 'solid';
 
 		that.labelCell.appendChild(that.titleCanvas);
+		that.titleCanvas.addEventListener('click', function(event) {
+			if (that.currentReference) {
+				console.log('title bar click', that.currentReference.nodeId);
+				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference.nodeId }}));
+			}
+		});
 	}
 	function setupSearchButton(hite, color) {
 		var canvas = drawSearchIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; right: ' + hite);
+		canvas.setAttribute('style', 'position: fixed; top: 0; right: 0; border: none');
 		document.getElementById('searchCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -81,19 +89,22 @@ StatusBar.prototype.showView = function() {
 			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_SEARCH));
 		});
 	}
-	function setupSettingsButton(hite, color) {
-		var canvas = drawSettingsIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; right: 0');
-		document.getElementById('settingsCell').appendChild(canvas);
+	function setupQuestionsButton(hite, color) {
+		var canvas = drawQuestionsIcon(hite, color);
+		canvas.setAttribute('style', 'position: fixed; top: 0; border: none; right: ' + hite * 1.14);
+		document.getElementById('questionsCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
-			console.log('settings button is clicked');
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_SETTINGS));
+			console.log('questions button is clicked');
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_QUESTIONS));
 		});
 	}
 };
-StatusBar.prototype.setTitle = function(text) {
+StatusBar.prototype.setTitle = function(reference) {
+	this.currentReference = reference;
+	var book = this.tableContents.find(reference.book);
+	var text = book.name + ' ' + ((reference.chapter > 0) ? reference.chapter : 1);
 	this.titleGraphics.clearRect(0, 0, this.titleWidth, this.hite);
 	this.titleGraphics.fillText(text, this.titleWidth / 2, this.hite / 2, this.titleWidth);
 };

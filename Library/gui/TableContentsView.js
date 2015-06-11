@@ -97,7 +97,7 @@ TableContentsView.prototype.removeAllChapters = function() {
 TableContentsView.prototype.openChapter = function(nodeId) {
 	console.log('open chapter', nodeId);
 	this.hideView();
-	document.body.dispatchEvent(new CustomEvent(BIBLE.TOC_FIND, { detail: { id: nodeId }}));
+	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 };
 
 

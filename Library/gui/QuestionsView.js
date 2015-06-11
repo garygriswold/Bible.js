@@ -17,6 +17,7 @@ function QuestionsView(types, bibleCache, tableContents) {
 }
 QuestionsView.prototype.showView = function() {
 	var that = this;
+	this.hideView();
 	this.questions.read(0, function(results) {
 		if (results === undefined || results.errno === undefined || results.errno === -2) {
 			that.viewRoot = that.buildQuestionsView();
@@ -35,7 +36,6 @@ QuestionsView.prototype.hideView = function() {
 		this.rootNode.removeChild(this.rootNode.children[i]);
 	}
 	this.viewRoot = null;
-	this.questions = null;
 };
 QuestionsView.prototype.buildQuestionsView = function() {
 	var that = this;
@@ -131,14 +131,15 @@ QuestionsView.prototype.buildQuestionsView = function() {
 
 		that.questionInput = document.createElement('textarea');
 		that.questionInput.setAttribute('id', 'inputText');
-		that.questionInput.textContent = 'Matt 7:7 goes here';
+		that.questionInput.textContent = 'Matt 7:7 goes here';//Matt 7:7 text goes here
 		that.questionInput.setAttribute('rows', 10);
 		inputTop.appendChild(that.questionInput);
 
 		var quesBtn = document.createElement('button');
 		quesBtn.setAttribute('id', 'inputBtn');
-		quesBtn.textContent = 'Submit';/// this is supposed to be a drawing
 		inputTop.appendChild(quesBtn);
+		quesBtn.appendChild(drawSendIcon(50, '#777777'));
+
 		quesBtn.addEventListener('click', function(event) {
 			console.log('submit button clicked');
 

@@ -16,8 +16,6 @@ function iconsTest() {
 
 	placeIcon(drawSendIcon(size, color));
 
-
-
 	function placeIcon(icon) {
 		var button = document.createElement('div');
 		button.setAttribute('style', layoutStyle);

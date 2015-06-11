@@ -1,6 +1,7 @@
 /**
 * This function draws the gear that is used as the settings
 * button on the status bar.
+* This is not yet being used.
 */
 function drawSettingsIcon(hite, color) {
 	var lineThick = hite / 7.0;

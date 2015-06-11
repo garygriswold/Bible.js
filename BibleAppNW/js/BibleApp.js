@@ -5,25 +5,21 @@
 */
 var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
-		SHOW_SETTINGS: 'TBD-bible-show-settings', // present settings page, create if needed
+		SHOW_QUESTIONS: 'bible-show-questions', // present questions page, create first
 		SHOW_HISTORY: 'bible-show-history', // present history tabs
 		HIDE_HISTORY: 'bible-hide-history', // hide history tabs
-		TOC_FIND: 'bible-toc-find', // lookup a passage as result of user selection in toc
-		LOOK: 'TBD-bible-look', // TBD
+		SHOW_PASSAGE: 'bible-show-passage', // show passage in codex view
+		LOOKUP: 'TBD-bible-lookup', // TBD
 		SEARCH_START: 'bible-search-start', // process user entered search string
-		SEARCH_FIND: 'bible-search-find', // lookup a pages as a result of user clicking on a search result
 		CHG_HEADING: 'bible-chg-heading', // change title at top of page as result of user scrolling
-		BACK: 'bible-back', // TBD
-		FORWARD: 'bible-forward', // TBD
-		LAST: 'bible-last', // TBD
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
 	};
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
-	this.statusBar = new StatusBar(88);
-	this.statusBar.showView();
+	//this.statusBar = new StatusBar(88);
+	//this.statusBar.showView();
 	this.touch = new Hammer(document.getElementById('codexRoot'));
 }
 AppViewController.prototype.begin = function(develop) {
@@ -45,6 +41,8 @@ AppViewController.prototype.begin = function(develop) {
 		console.log('loaded concordance', that.concordance.size());
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
+		that.statusBar = new StatusBar(88, that.tableContents);
+		that.statusBar.showView();
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
 		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
 		that.historyView = new HistoryView(that.history, that.tableContents);
@@ -73,8 +71,10 @@ AppViewController.prototype.begin = function(develop) {
 
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();
+			that.statusBar.showTitleField();
 			that.searchView.hideView();
 			that.historyView.hideView();
+			that.questionsView.hideView();
 			that.codexView.hideView();
 		});
 		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
@@ -82,7 +82,16 @@ AppViewController.prototype.begin = function(develop) {
 			that.statusBar.showSearchField();
 			that.tableContentsView.hideView();
 			that.historyView.hideView();
+			that.questionsView.hideView();
 			that.codexView.hideView();
+		});
+		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, function(event) {
+			that.questionsView.showView();
+			that.statusBar.showTitleField();
+			that.tableContentsView.hideView();
+			that.searchView.hideView();
+			that.historyView.hideView();
+			that.codexView.hideView();			
 		});
 		that.touch.on("panright", function(event) {
     		if (event.deltaX > 4 * Math.abs(event.deltaY)) {
@@ -94,19 +103,12 @@ AppViewController.prototype.begin = function(develop) {
     			that.historyView.hideView();
     		}
     	});
-		document.body.addEventListener(BIBLE.TOC_FIND, function(event) {
-			console.log(JSON.stringify(event.detail));
-			that.codexView.showView(event.detail.id);
-			that.tableContentsView.hideView();
-			that.searchView.hideView();
-			that.history.addEvent(event);
-		});
 		document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
 			console.log('SEARCH_START', event.detail);
 			that.searchView.showView(event.detail.search);
 			that.statusBar.showSearchField(event.detail.search);
 		});
-		document.body.addEventListener(BIBLE.SEARCH_FIND, function(event) {
+		document.body.addEventListener(BIBLE.SHOW_PASSAGE, function(event) {
 			console.log(JSON.stringify(event.detail));
 			that.codexView.showView(event.detail.id);
 			that.statusBar.showTitleField();
@@ -115,9 +117,10 @@ AppViewController.prototype.begin = function(develop) {
 			that.history.addEvent(event);
 		});
 		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
-			var ref = event.detail.reference;
-			var book = that.tableContents.find(ref.book);
-			that.statusBar.setTitle(book.name + ' ' + ((ref.chapter > 0) ? ref.chapter : 1));
+			//var ref = event.detail.reference;
+			//var book = that.tableContents.find(ref.book);
+			//that.statusBar.setTitle(book.name + ' ' + ((ref.chapter > 0) ? ref.chapter : 1));
+			that.statusBar.setTitle(event.detail.reference);
 		});
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);
@@ -131,11 +134,13 @@ AppViewController.prototype.begin = function(develop) {
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
-function StatusBar(hite) {
+function StatusBar(hite, tableContents) {
 	this.hite = hite;
+	this.tableContents = tableContents;
 	this.titleWidth = window.outerWidth - hite * 3.5;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
+	this.currentReference = null;
 	this.searchField = null;
 	this.rootNode = document.getElementById('statusRoot');
 	this.labelCell = document.getElementById('labelCell');
@@ -147,8 +152,8 @@ StatusBar.prototype.showView = function() {
 	setupBackground(this.hite);
 	setupTocButton(this.hite, '#F7F7BB');
 	setupHeading(this.hite);
+	setupQuestionsButton(this.hite, '#F7F7BB');
 	setupSearchButton(this.hite, '#F7F7BB');
-	setupSettingsButton(this.hite, '#F7F7BB');
 
 	function setupBackground(hite) {
     	var canvas = document.createElement('canvas');
@@ -198,10 +203,16 @@ StatusBar.prototype.showView = function() {
 		that.titleGraphics.borderStyle = 'solid';
 
 		that.labelCell.appendChild(that.titleCanvas);
+		that.titleCanvas.addEventListener('click', function(event) {
+			if (that.currentReference) {
+				console.log('title bar click', that.currentReference.nodeId);
+				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference.nodeId }}));
+			}
+		});
 	}
 	function setupSearchButton(hite, color) {
 		var canvas = drawSearchIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; right: ' + hite);
+		canvas.setAttribute('style', 'position: fixed; top: 0; right: 0; border: none');
 		document.getElementById('searchCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -210,19 +221,22 @@ StatusBar.prototype.showView = function() {
 			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_SEARCH));
 		});
 	}
-	function setupSettingsButton(hite, color) {
-		var canvas = drawSettingsIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; right: 0');
-		document.getElementById('settingsCell').appendChild(canvas);
+	function setupQuestionsButton(hite, color) {
+		var canvas = drawQuestionsIcon(hite, color);
+		canvas.setAttribute('style', 'position: fixed; top: 0; border: none; right: ' + hite * 1.14);
+		document.getElementById('questionsCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
-			console.log('settings button is clicked');
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_SETTINGS));
+			console.log('questions button is clicked');
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_QUESTIONS));
 		});
 	}
 };
-StatusBar.prototype.setTitle = function(text) {
+StatusBar.prototype.setTitle = function(reference) {
+	this.currentReference = reference;
+	var book = this.tableContents.find(reference.book);
+	var text = book.name + ' ' + ((reference.chapter > 0) ? reference.chapter : 1);
 	this.titleGraphics.clearRect(0, 0, this.titleWidth, this.hite);
 	this.titleGraphics.fillText(text, this.titleWidth / 2, this.hite / 2, this.titleWidth);
 };
@@ -353,7 +367,7 @@ TableContentsView.prototype.removeAllChapters = function() {
 TableContentsView.prototype.openChapter = function(nodeId) {
 	console.log('open chapter', nodeId);
 	this.hideView();
-	document.body.dispatchEvent(new CustomEvent(BIBLE.TOC_FIND, { detail: { id: nodeId }}));
+	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 };
 
 
@@ -642,7 +656,7 @@ SearchView.prototype.appendReference = function(bookNode, reference) {
 				var nodeId = this.id.substr(3);
 				console.log('open chapter', nodeId);
 				that.hideView();
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_FIND, { detail: { id: nodeId, source: that.query }}));
+				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
 			});
 		}	
 	});
@@ -740,7 +754,7 @@ HistoryView.prototype.buildHistoryView = function() {
 		btn.addEventListener('click', function(event) {
 			console.log('btn is clicked ', btn.innerHTML);
 			var nodeId = this.id.substr(3);
-			document.body.dispatchEvent(new CustomEvent(BIBLE.TOC_FIND, { detail: { id: nodeId }}));
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 			that.hideView();
 		});
 	}
@@ -776,6 +790,7 @@ function QuestionsView(types, bibleCache, tableContents) {
 }
 QuestionsView.prototype.showView = function() {
 	var that = this;
+	this.hideView();
 	this.questions.read(0, function(results) {
 		if (results === undefined || results.errno === undefined || results.errno === -2) {
 			that.viewRoot = that.buildQuestionsView();
@@ -794,7 +809,6 @@ QuestionsView.prototype.hideView = function() {
 		this.rootNode.removeChild(this.rootNode.children[i]);
 	}
 	this.viewRoot = null;
-	this.questions = null;
 };
 QuestionsView.prototype.buildQuestionsView = function() {
 	var that = this;
@@ -890,14 +904,15 @@ QuestionsView.prototype.buildQuestionsView = function() {
 
 		that.questionInput = document.createElement('textarea');
 		that.questionInput.setAttribute('id', 'inputText');
-		that.questionInput.textContent = 'Matt 7:7 goes here';
+		that.questionInput.textContent = 'Matt 7:7 goes here';//Matt 7:7 text goes here
 		that.questionInput.setAttribute('rows', 10);
 		inputTop.appendChild(that.questionInput);
 
 		var quesBtn = document.createElement('button');
 		quesBtn.setAttribute('id', 'inputBtn');
-		quesBtn.textContent = 'Submit';/// this is supposed to be a drawing
 		inputTop.appendChild(quesBtn);
+		quesBtn.appendChild(drawSendIcon(50, '#777777'));
+
 		quesBtn.addEventListener('click', function(event) {
 			console.log('submit button clicked');
 
@@ -978,40 +993,43 @@ function drawQuestionsIcon(hite, color) {
 
 	var canvas = document.createElement('canvas');
 	canvas.setAttribute('height', hite);
-	canvas.setAttribute('width', hite * widthDiff);
+	canvas.setAttribute('width', hite * 1.2);
 	var graphics = canvas.getContext('2d');
 
-	graphics.beginPath();
-	drawOval(graphics);
-	drawArc(graphics, hite);
-	graphics.fillStyle = color;
-   	graphics.fill();
+	drawOval(graphics, hite * 0.72);
+	drawArc(graphics, hite * 0.72);
 	return(canvas);
 
-	function drawOval(graphics) {
+	function drawOval(graphics, hite) {
     	var centerX = 0;
     	var centerY = 0;
-    	var radius = hite * 0.45;
+    	var radius = hite * 0.5;
 
+		graphics.beginPath();
     	graphics.save();
-    	graphics.translate(canvas.width * 0.5, canvas.height * 0.45);
+    	graphics.translate(canvas.width * 0.5, canvas.height * 0.5);
     	graphics.scale(widthDiff, 1);
     	graphics.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
     	graphics.restore();
+    	graphics.fillStyle = color;
+   		graphics.fill();
     }
     
     function drawArc(graphics, hite) {
-    	graphics.moveTo(hite * 0.28, hite);
-    	graphics.bezierCurveTo(hite * 0.44, hite, hite * 0.66, hite * 0.73, hite * 0.72, hite * 0.45);
-    	graphics.lineTo(hite * 0.94, hite * 0.45);
-    	graphics.bezierCurveTo(hite * 0.9, hite * 0.73, hite * 0.54, hite, hite * 0.28, hite);
-    	graphics.closePath();
+    	graphics.beginPath();
+    	graphics.moveTo(hite * 0.3, hite * 1.25);
+    	graphics.bezierCurveTo(hite * 0.6, hite * 1.2, hite * 0.65, hite * 1.1, hite * 0.7, hite * 0.9);
+    	graphics.lineTo(hite * 0.5, hite * 0.9);
+    	graphics.bezierCurveTo(hite * 0.5, hite * 1, hite * 0.5, hite * 1.1, hite * 0.3, hite * 1.25);
+    	graphics.fillStyle = color;
+   		graphics.fill();
     }
 }
 
  /**
 * This function draws the gear that is used as the settings
 * button on the status bar.
+* This is not yet being used.
 */
 function drawSettingsIcon(hite, color) {
 	var lineThick = hite / 7.0;
