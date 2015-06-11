@@ -1,0 +1,12 @@
+{
+	"name": "UnitTest",
+	"description": "UnitTest harness using Node and Webkit",
+	"main": "index.html",
+	"window": {
+		"toolbar": true,
+		"show": true
+	},
+	"scripts": {
+    	"start": "nodewebkit"
+  	}
+}
