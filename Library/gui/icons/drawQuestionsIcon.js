@@ -1,6 +1,6 @@
 /**
 * This function draws and icon that is used as a questions button
-* on the QuestionsView input block.
+* on the StatusBar.
 */
 function drawQuestionsIcon(hite, color) {
 	var widthDiff = 1.25;
@@ -8,8 +8,6 @@ function drawQuestionsIcon(hite, color) {
 	var canvas = document.createElement('canvas');
 	canvas.setAttribute('height', hite);
 	canvas.setAttribute('width', hite * widthDiff);
-	//canvas.setAttribute('style', 'border-style: solid');
-	//canvas.setAttribute('style', 'position: fixed; top: 0; right: ' + hite);
 	var graphics = canvas.getContext('2d');
 
 	graphics.beginPath();
