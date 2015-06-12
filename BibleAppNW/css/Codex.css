@@ -1,7 +1,9 @@
 /**
 * This css files pertains to the CodexView
 */
-
+body {
+	margin: 0;
+}
 #codexRoot {
 	margin: 10%;
 	font-family: serif;

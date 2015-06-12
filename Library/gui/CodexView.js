@@ -22,15 +22,17 @@ CodexView.prototype.hideView = function() {
 };
 CodexView.prototype.showView = function(nodeId) {
 	this.chapterQueue.splice(0);
-	var chapter = new Reference(nodeId);
+	var firstChapter = new Reference(nodeId);
+	firstChapter = this.tableContents.ensureChapter(firstChapter);
+	var chapter = firstChapter;
 	for (var i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.priorChapter(chapter);
 		if (chapter) {
 			this.chapterQueue.unshift(chapter);
 		}
 	}
-	chapter = new Reference(nodeId);
-	this.chapterQueue.push(chapter);
+	this.chapterQueue.push(firstChapter);
+	chapter = firstChapter;
 	for (i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.nextChapter(chapter);
 		if (chapter) {
@@ -48,7 +50,7 @@ CodexView.prototype.showView = function(nodeId) {
 				processQueue(index +1);
 			});
 		} else {
-			that.scrollTo(nodeId);
+			that.scrollTo(firstChapter.nodeId);
 			that.addChapterInProgress = false;
 			document.addEventListener('scroll', onScrollHandler);
 		}
@@ -139,6 +141,7 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 	}
 };
 CodexView.prototype.scrollTo = function(nodeId) {
+	console.log('scrollTo', nodeId);
 	var verse = document.getElementById(nodeId);
 	var rect = verse.getBoundingClientRect();
 	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);

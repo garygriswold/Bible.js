@@ -152,15 +152,18 @@ CodexView.prototype.hideView = function() {
 };
 CodexView.prototype.showView = function(nodeId) {
 	this.chapterQueue.splice(0);
-	var chapter = new Reference(nodeId);
+	var firstChapter = new Reference(nodeId);
+	firstChapter = this.tableContents.ensureChapter(firstChapter);
+	var chapter = firstChapter;
 	for (var i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.priorChapter(chapter);
 		if (chapter) {
 			this.chapterQueue.unshift(chapter);
 		}
 	}
-	chapter = new Reference(nodeId);
-	this.chapterQueue.push(chapter);
+	//chapter = new Reference(nodeId);
+	this.chapterQueue.push(firstChapter);
+	chapter = firstChapter;
 	for (i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.nextChapter(chapter);
 		if (chapter) {
@@ -178,7 +181,8 @@ CodexView.prototype.showView = function(nodeId) {
 				processQueue(index +1);
 			});
 		} else {
-			that.scrollTo(nodeId);
+			//that.scrollTo(nodeId);
+			that.scrollTo(firstChapter.nodeId);
 			that.addChapterInProgress = false;
 			document.addEventListener('scroll', onScrollHandler);
 		}
@@ -269,6 +273,7 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 	}
 };
 CodexView.prototype.scrollTo = function(nodeId) {
+	console.log('scrollTo', nodeId);
 	var verse = document.getElementById(nodeId);
 	var rect = verse.getBoundingClientRect();
 	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
@@ -2364,6 +2369,16 @@ TOC.prototype.addBook = function(book) {
 TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
 };
+TOC.prototype.ensureChapter = function(reference) {
+	var current = this.bookMap[reference.book];
+	if (reference.chapter > current.lastChapter) {
+		return(new Reference(reference.book, current.lastChapter, 1));
+	}
+	if (reference.chapter < 1) {
+		return(new Reference(reference.book, 1, 1));
+	}
+	return(reference);
+};
 TOC.prototype.nextChapter = function(reference) {
 	var current = this.bookMap[reference.book];
 	if (reference.chapter < current.lastChapter) {
@@ -2373,10 +2388,14 @@ TOC.prototype.nextChapter = function(reference) {
 	}
 };
 TOC.prototype.priorChapter = function(reference) {
+	console.log('REFER', reference);
 	var current = this.bookMap[reference.book];
+	console.log('CURRENT', current);
 	if (reference.chapter > 0) {
+		console.log('DECREMENT');
 		return(new Reference(reference.book, reference.chapter -1));
 	} else {
+		console.log('PRIOR BOOK');
 		var priorBook = this.bookMap[current.priorBook];
 		return((priorBook) ? new Reference(current.priorBook, priorBook.lastChapter) : null);
 	}

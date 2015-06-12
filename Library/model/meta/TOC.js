@@ -22,6 +22,16 @@ TOC.prototype.addBook = function(book) {
 TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
 };
+TOC.prototype.ensureChapter = function(reference) {
+	var current = this.bookMap[reference.book];
+	if (reference.chapter > current.lastChapter) {
+		return(new Reference(reference.book, current.lastChapter, 1));
+	}
+	if (reference.chapter < 1) {
+		return(new Reference(reference.book, 1, 1));
+	}
+	return(reference);
+};
 TOC.prototype.nextChapter = function(reference) {
 	var current = this.bookMap[reference.book];
 	if (reference.chapter < current.lastChapter) {
