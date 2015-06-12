@@ -38,6 +38,7 @@ AppViewController.prototype.begin = function(develop) {
 		console.log('loaded concordance', that.concordance.size());
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
+		that.lookup = new Lookup(that.tableContents);
 		that.statusBar = new StatusBar(88, that.tableContents);
 		that.statusBar.showView();
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
@@ -102,8 +103,10 @@ AppViewController.prototype.begin = function(develop) {
     	});
 		document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
 			console.log('SEARCH_START', event.detail);
-			that.searchView.showView(event.detail.search);
-			that.statusBar.showSearchField(event.detail.search);
+			if (! that.lookup.find(event.detail.search)) {
+				that.searchView.showView(event.detail.search);
+				that.statusBar.showSearchField(event.detail.search);
+			}
 		});
 		document.body.addEventListener(BIBLE.SHOW_PASSAGE, function(event) {
 			console.log(JSON.stringify(event.detail));

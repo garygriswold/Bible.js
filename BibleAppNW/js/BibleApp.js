@@ -18,8 +18,6 @@ var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
-	//this.statusBar = new StatusBar(88);
-	//this.statusBar.showView();
 	this.touch = new Hammer(document.getElementById('codexRoot'));
 }
 AppViewController.prototype.begin = function(develop) {
@@ -41,6 +39,7 @@ AppViewController.prototype.begin = function(develop) {
 		console.log('loaded concordance', that.concordance.size());
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
+		that.lookup = new Lookup(that.tableContents);
 		that.statusBar = new StatusBar(88, that.tableContents);
 		that.statusBar.showView();
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
@@ -105,8 +104,10 @@ AppViewController.prototype.begin = function(develop) {
     	});
 		document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
 			console.log('SEARCH_START', event.detail);
-			that.searchView.showView(event.detail.search);
-			that.statusBar.showSearchField(event.detail.search);
+			if (! that.lookup.find(event.detail.search)) {
+				that.searchView.showView(event.detail.search);
+				that.statusBar.showSearchField(event.detail.search);
+			}
 		});
 		document.body.addEventListener(BIBLE.SHOW_PASSAGE, function(event) {
 			console.log(JSON.stringify(event.detail));
@@ -117,9 +118,6 @@ AppViewController.prototype.begin = function(develop) {
 			that.history.addEvent(event);
 		});
 		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
-			//var ref = event.detail.reference;
-			//var book = that.tableContents.find(ref.book);
-			//that.statusBar.setTitle(book.name + ' ' + ((ref.chapter > 0) ? ref.chapter : 1));
 			that.statusBar.setTitle(event.detail.reference);
 		});
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
@@ -1685,6 +1683,48 @@ function QuestionItem(reference, nodeId, question, askedDt, instructor, answerDt
 	this.answerText = answer;
 	Object.seal(this);
 }/**
+* This class process search strings to determine if they are book chapter,
+* or book chapter:verse lookups.  If so, then it processes them by dispatching
+* the correct event.  If not, then it returns them to be processed as
+* concordance searches.
+*/
+function Lookup(tableContents) {
+	this.index = {};
+	for (var i=0; i<tableContents.bookList.length; i++) {
+		var tocBook = tableContents.bookList[i];
+		this.index[tocBook.name.toLowerCase()] = tocBook;
+		this.index[tocBook.abbrev.toLowerCase()] = tocBook;
+	}
+	Object.freeze(this);
+}
+
+Lookup.prototype.find = function(search) {
+	var matches = search.match(/^(\d*)\s*(\w+)\s+(\d+):?(\d*)$/i);
+	if (matches === null) {
+		return(false);
+	} else {
+		if (matches[1].length < 1) {
+			var book = matches[2].toLowerCase();
+		} else {
+			book = matches[1] + ' ' + matches[2].toLowerCase();
+		}
+		var chap = matches[3];
+		var verse = (matches.length > 4) ? matches[4] : null;
+		console.log('book=', book, '  chap=', chap, '  verse=', verse);
+		var tocBook = this.index[book];
+		if (tocBook) {
+			var nodeId = tocBook.code + ':' + chap;
+			if (verse) {
+				nodeId += ':' + verse;
+			}
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
+			return(true);
+		} else {
+			return(false);
+		}
+	}
+};
+/**
 * This file contains IO constants and functions which are common to all file methods, which might include node.js, cordova, javascript, etc.
 */
 var FILE_ROOTS = { 'application': '?', 'document': '../../dbl/current/', 'temporary': '?', 'test2dbl': '../../../dbl/current/' };
