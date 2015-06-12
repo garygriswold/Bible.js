@@ -50,7 +50,7 @@ CodexView.prototype.showView = function(nodeId) {
 				processQueue(index +1);
 			});
 		} else {
-			that.scrollTo(firstChapter.nodeId);
+			that.scrollTo(firstChapter);
 			that.addChapterInProgress = false;
 			document.addEventListener('scroll', onScrollHandler);
 		}
@@ -140,15 +140,17 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 		console.log('discarded chapter ', discard.nodeId, 'at', whichEnd);
 	}
 };
-CodexView.prototype.scrollTo = function(nodeId) {
-	console.log('scrollTo', nodeId);
-	var verse = document.getElementById(nodeId);
-	var rect = verse.getBoundingClientRect();
-	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
-};
-CodexView.prototype.scrollToNode = function(node) {
-	var rect = node.getBoundingClientRect();
-	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
+CodexView.prototype.scrollTo = function(reference) {
+	var verse = document.getElementById(reference.nodeId);
+	if (verse === null) {
+		// when null it is probably because verse num was out of range.
+		var nextChap = this.tableContents.nextChapter(reference);
+		verse = document.getElementById(nextChap.nodeId);
+	}
+	if (verse) {
+		var rect = verse.getBoundingClientRect();
+		window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
+	}
 };
 CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);

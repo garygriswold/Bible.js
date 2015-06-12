@@ -161,7 +161,6 @@ CodexView.prototype.showView = function(nodeId) {
 			this.chapterQueue.unshift(chapter);
 		}
 	}
-	//chapter = new Reference(nodeId);
 	this.chapterQueue.push(firstChapter);
 	chapter = firstChapter;
 	for (i=0; i<3 && chapter; i++) {
@@ -181,8 +180,7 @@ CodexView.prototype.showView = function(nodeId) {
 				processQueue(index +1);
 			});
 		} else {
-			//that.scrollTo(nodeId);
-			that.scrollTo(firstChapter.nodeId);
+			that.scrollTo(firstChapter);
 			that.addChapterInProgress = false;
 			document.addEventListener('scroll', onScrollHandler);
 		}
@@ -272,15 +270,17 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 		console.log('discarded chapter ', discard.nodeId, 'at', whichEnd);
 	}
 };
-CodexView.prototype.scrollTo = function(nodeId) {
-	console.log('scrollTo', nodeId);
-	var verse = document.getElementById(nodeId);
-	var rect = verse.getBoundingClientRect();
-	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
-};
-CodexView.prototype.scrollToNode = function(node) {
-	var rect = node.getBoundingClientRect();
-	window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
+CodexView.prototype.scrollTo = function(reference) {
+	var verse = document.getElementById(reference.nodeId);
+	if (verse === null) {
+		// when null it is probably because verse num was out of range.
+		var nextChap = this.tableContents.nextChapter(reference);
+		verse = document.getElementById(nextChap.nodeId);
+	}
+	if (verse) {
+		var rect = verse.getBoundingClientRect();
+		window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
+	}
 };
 CodexView.prototype.showFootnote = function(noteId) {
 	var note = document.getElementById(noteId);
@@ -2388,14 +2388,10 @@ TOC.prototype.nextChapter = function(reference) {
 	}
 };
 TOC.prototype.priorChapter = function(reference) {
-	console.log('REFER', reference);
 	var current = this.bookMap[reference.book];
-	console.log('CURRENT', current);
 	if (reference.chapter > 0) {
-		console.log('DECREMENT');
 		return(new Reference(reference.book, reference.chapter -1));
 	} else {
-		console.log('PRIOR BOOK');
 		var priorBook = this.bookMap[current.priorBook];
 		return((priorBook) ? new Reference(current.priorBook, priorBook.lastChapter) : null);
 	}
