@@ -1,35 +1,42 @@
 /*
- * Copyright © 2012-2015, Intel Corporation. All rights reserved.
  * Please see the included README.md file for license terms and conditions.
  */
+
+
+// This file is a suggested starting place for your code.
+// It is completely optional and not required.
+// Note the reference that includes it in the index.html file.
 
 
 /*jslint browser:true, devel:true, white:true, vars:true */
 /*global $:false, intel:false app:false, dev:false, cordova:false */
 
 
+// For improved debugging and maintenance of your app, it is highly
+// recommended that you separate your JavaScript from your HTML files.
+// Use the addEventListener() method to associate events with DOM elements.
+// For example:
 
-// This file contains your event handlers, the center of your application.
-// NOTE: see app.initEvents() in init-app.js for event handler initialization code.
+// var el ;
+// el = document.getElementById("id_myButton") ;
+// el.addEventListener("click", myEventHandler, false) ;
 
-function myEventHandler() {
-    "use strict" ;
 
-    var ua = navigator.userAgent ;
-    var str ;
 
-    if( window.Cordova && dev.isDeviceReady.c_cordova_ready__ ) {
-            str = "It worked! Cordova device ready detected at " + dev.isDeviceReady.c_cordova_ready__ + " milliseconds!" ;
+// The function below is an example of the best place to "start" your app.
+// It calls the standard Cordova "hide splashscreen" function. You can add
+// other code to it or add additional functions that are triggered by the same
+// event. The app.Ready event used here is created by the init-dev.js file.
+// It serves as a unifier for a variety of "ready" events. See the init-dev.js
+// file for more details. If you prefer the Cordova deviceready event, you can
+// use that in addition to, or instead of this event.
+
+// NOTE: change "dev.LOG" in "init-dev.js" to "true" to enable some console.log
+// messages that can help you debug Cordova app initialization issues.
+
+function onAppReady() {
+    if( navigator.splashscreen && navigator.splashscreen.hide ) {   // Cordova API detected
+        navigator.splashscreen.hide() ;
     }
-    else if( window.intel && intel.xdk && dev.isDeviceReady.d_xdk_ready______ ) {
-            str = "It worked! Intel XDK device ready detected at " + dev.isDeviceReady.d_xdk_ready______ + " milliseconds!" ;
-    }
-    else {
-        str = "Bad device ready, or none available because we're running in a browser." ;
-    }
-
-    alert(str) ;
 }
-
-
-// ...additional event handlers here...
+document.addEventListener("app.Ready", onAppReady, false) ;

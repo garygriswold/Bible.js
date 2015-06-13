@@ -3,9 +3,9 @@
     "projectSettingsVersion": "1.2",
     "creationData": {
       "projectTypeName": "com.intel.xdk.projecttype.jsapp",
-      "projectGuid": "a337ffed-3d3b-4de5-aff5-62a723834cdb",
-      "lastModifiedDate": 1428594860528,
-      "creationDate": 1428587107881
+      "projectGuid": "0a954b01-9c18-496e-93ec-ea2fa3519d26",
+      "lastModifiedDate": 1434223680134,
+      "creationDate": 1434223680054
     },
     "XDK-app-designer": "false",
     "sourceDirectory": "www",
@@ -33,43 +33,9 @@
         "paramvals": {},
         "dependsOn": [],
         "dependedBy": []
-      },
-      {
-        "id": "org.apache.cordova.file",
-        "version": "1.3.2",
-        "selectedState": "Included",
-        "data": {},
-        "paramvals": {},
-        "dependsOn": [],
-        "dependedBy": []
       }
     ],
     "buildConfigurations": {
-      "Android": {
-        "platform_": "android",
-        "runtime_": "Cordova 3.x",
-        "name_": "Android",
-        "preferences_": {
-          "android-minSdkVersion": "10",
-          "android-targetSdkVersion": "19",
-          "android-installLocation": "auto"
-        },
-        "isActive_": true,
-        "appName_": "BibleAppXDK",
-        "appID_": "com.shortsands.BibleApp",
-        "appAccess_": [],
-        "icons_": [],
-        "splashes_": [],
-        "addlPermissions_": "",
-        "excludedLibraries_": "",
-        "iosProvs_": [],
-        "cordovaCLIVersion_": "4.1.2",
-        "crosswalkVersion_": "10",
-        "appVersion_": "0.0.1",
-        "appDescription_": "Universal init code for Intel XDK and Cordova device ready detection.",
-        "appAuthor_": "Gary Griswold",
-        "appVersionCode_": "1"
-      },
       "Android-Crosswalk": {
         "platform_": "android",
         "runtime_": "Crosswalk with Cordova 3.x",
@@ -81,17 +47,50 @@
         },
         "isActive_": true,
         "appName_": "BibleAppXDK",
-        "appID_": "xdk.intel.blank.template.crosswalk",
-        "appAccess_": [],
+        "appID_": "xdk.intel.cordova.template.lite",
+        "appAccess_": [
+          {
+            "origin": "*"
+          }
+        ],
         "icons_": [],
         "splashes_": [],
         "addlPermissions_": "",
         "excludedLibraries_": "",
         "iosProvs_": [],
         "cordovaCLIVersion_": "4.1.2",
-        "crosswalkVersion_": "10",
+        "crosswalkVersion_": "11",
         "appVersion_": "0.0.1",
-        "appDescription_": "Universal init code for Intel XDK and Cordova device ready detection.",
+        "appDescription_": "Universal init code for Intel XDK and Cordova device ready detection, as well as within browser.",
+        "appAuthor_": "Intel XDK",
+        "appVersionCode_": "1"
+      },
+      "Android": {
+        "platform_": "android",
+        "runtime_": "Cordova 3.x",
+        "name_": "Android",
+        "preferences_": {
+          "android-minSdkVersion": "10",
+          "android-targetSdkVersion": "19",
+          "android-installLocation": "auto"
+        },
+        "isActive_": true,
+        "appName_": "BibleAppXDK",
+        "appID_": "xdk.intel.cordova.template.lite",
+        "appAccess_": [
+          {
+            "origin": "*"
+          }
+        ],
+        "icons_": [],
+        "splashes_": [],
+        "addlPermissions_": "",
+        "excludedLibraries_": "",
+        "iosProvs_": [],
+        "cordovaCLIVersion_": "4.1.2",
+        "crosswalkVersion_": "11",
+        "appVersion_": "0.0.1",
+        "appDescription_": "Universal init code for Intel XDK and Cordova device ready detection, as well as within browser.",
         "appAuthor_": "Intel XDK",
         "appVersionCode_": "1"
       },
@@ -105,18 +104,22 @@
         },
         "isActive_": true,
         "appName_": "BibleAppXDK",
-        "appID_": "xdk.intel.blank.template",
-        "appAccess_": [],
+        "appID_": "xdk.intel.cordova.template.lite",
+        "appAccess_": [
+          {
+            "origin": "*"
+          }
+        ],
         "icons_": [],
         "splashes_": [],
         "addlPermissions_": "",
         "excludedLibraries_": "",
         "iosProvs_": [],
         "cordovaCLIVersion_": "4.1.2",
-        "crosswalkVersion_": "10",
-        "appVersion_": "0.0.1",
         "appAuthor_": "Intel XDK",
-        "appDescription_": "Universal init code for Intel XDK and Cordova device ready detection."
+        "crosswalkVersion_": "11",
+        "appVersion_": "0.0.1",
+        "appDescription_": "Universal init code for Intel XDK and Cordova device ready detection, as well as within browser."
       },
       "Windows8": {
         "platform_": "windows8",
@@ -128,18 +131,22 @@
         },
         "isActive_": true,
         "appName_": "BibleAppXDK",
-        "appID_": "xdk.intel.blank.template",
-        "appAccess_": [],
+        "appID_": "xdk.intel.cordova.template.lite",
+        "appAccess_": [
+          {
+            "origin": "*"
+          }
+        ],
         "icons_": [],
         "splashes_": [],
         "addlPermissions_": "",
         "excludedLibraries_": "",
         "iosProvs_": [],
         "cordovaCLIVersion_": "4.1.2",
-        "crosswalkVersion_": "10",
-        "appVersion_": "0.0.0.1",
+        "crosswalkVersion_": "11",
         "appAuthor_": "Intel XDK",
-        "appDescription_": "Universal init code for Intel XDK and Cordova device ready detection."
+        "appVersion_": "0.0.0.1",
+        "appDescription_": "Universal init code for Intel XDK and Cordova device ready detection, as well as within browser."
       },
       "WebApp": {
         "platform_": "webapp",
@@ -158,26 +165,9 @@
         "splashes_": [],
         "addlPermissions_": "",
         "excludedLibraries_": "",
-        "appVersion_": "0.0.1"
-      },
-      "Firefox": {
-        "platform_": "firefoxos",
-        "runtime_": "W3C on Firefox OS",
-        "name_": "Firefox",
-        "preferences_": {},
-        "isActive_": false,
-        "appName_": "BibleAppXDK",
-        "appID_": "not.yet.specified",
-        "appAccess_": [
-          {
-            "origin": "*"
-          }
-        ],
-        "icons_": [],
-        "splashes_": [],
-        "addlPermissions_": "",
-        "excludedLibraries_": "",
-        "appVersion_": "0.0.1"
+        "appAuthor_": "Intel XDK",
+        "appVersion_": "0.0.1",
+        "appDescription_": "Universal init code for Intel XDK and Cordova device ready detection, as well as within browser."
       },
       "Chrome": {
         "platform_": "chromeos",
@@ -196,7 +186,30 @@
         "splashes_": [],
         "addlPermissions_": "",
         "excludedLibraries_": "",
-        "appVersion_": "0.0.1"
+        "appAuthor_": "Intel XDK",
+        "appVersion_": "0.0.1",
+        "appDescription_": "Universal init code for Intel XDK and Cordova device ready detection, as well as within browser."
+      },
+      "Firefox": {
+        "platform_": "firefoxos",
+        "runtime_": "W3C on Firefox OS",
+        "name_": "Firefox",
+        "preferences_": {},
+        "isActive_": false,
+        "appName_": "BibleAppXDK",
+        "appID_": "not.yet.specified",
+        "appAccess_": [
+          {
+            "origin": "*"
+          }
+        ],
+        "icons_": [],
+        "splashes_": [],
+        "addlPermissions_": "",
+        "excludedLibraries_": "",
+        "appAuthor_": "Intel XDK",
+        "appVersion_": "0.0.1",
+        "appDescription_": "Universal init code for Intel XDK and Cordova device ready detection, as well as within browser."
       },
       "Facebook": {
         "platform_": "facebook",
@@ -215,7 +228,9 @@
         "splashes_": [],
         "addlPermissions_": "",
         "excludedLibraries_": "",
-        "appVersion_": "0.0.1"
+        "appAuthor_": "Intel XDK",
+        "appVersion_": "0.0.1",
+        "appDescription_": "Universal init code for Intel XDK and Cordova device ready detection, as well as within browser."
       }
     },
     "gameAssetDirectory": "asset",
