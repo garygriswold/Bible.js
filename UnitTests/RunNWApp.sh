@@ -1,4 +1,11 @@
 #!/bin/sh
+cat ../Library/css/Codex.css > ../BibleAppNW/css/BibleApp.css
+cat ../Library/css/History.css >> ../BibleAppNW/css/BibleApp.css
+cat ../Library/css/Questions.css >> ../BibleAppNW/css/BibleApp.css
+cat ../Library/css/Search.css >> ../BibleAppNW/css/BibleApp.css
+cat ../Library/css/Status.css >> ../BibleAppNW/css/BibleApp.css
+cat ../Library/css/TableContents.css >> ../BibleAppNW/css/BibleApp.css
+
 echo \"use strict\"\; > ../BibleAppNW/js/BibleApp.js
 cat ../Library/gui/AppViewController.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/gui/CodexView.js >> ../BibleAppNW/js/BibleApp.js
