@@ -8,8 +8,8 @@ function Lookup(tableContents) {
 	this.index = {};
 	for (var i=0; i<tableContents.bookList.length; i++) {
 		var tocBook = tableContents.bookList[i];
-		this.index[tocBook.name.toLowerCase()] = tocBook;
-		this.index[tocBook.abbrev.toLowerCase()] = tocBook;
+		this.index[tocBook.name.toLocaleLowerCase()] = tocBook;
+		this.index[tocBook.abbrev.toLocaleLowerCase()] = tocBook;
 	}
 	Object.freeze(this);
 }
@@ -20,9 +20,9 @@ Lookup.prototype.find = function(search) {
 		return(false);
 	} else {
 		if (matches[1].length < 1) {
-			var book = matches[2].toLowerCase();
+			var book = matches[2].toLocaleLowerCase();
 		} else {
-			book = matches[1] + ' ' + matches[2].toLowerCase();
+			book = matches[1] + ' ' + matches[2].toLocaleLowerCase();
 		}
 		var chap = matches[3];
 		var verse = (matches.length > 4) ? matches[4] : null;

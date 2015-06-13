@@ -647,11 +647,14 @@ SearchView.prototype.appendReference = function(bookNode, reference) {
 
 	function styleSearchWords(verseText) {
 		var verseWords = verseText.split(/\b/); // Non-destructive, preserves all characters
+		var searchWords = verseWords.map(function(wrd) {
+			return(wrd.toLocaleLowerCase());
+		});
 		for (var i=0; i<that.words.length; i++) {
 			var word = that.words[i];
-			var wordNum = verseWords.indexOf(word);
+			var wordNum = searchWords.indexOf(word.toLocaleLowerCase());
 			if (wordNum >= 0) {
-				verseWords[wordNum] = '<span class="conWord">' + word + '</span>';
+				verseWords[wordNum] = '<span class="conWord">' + verseWords[wordNum] + '</span>';
 			}
 		}
 		return(verseWords.join(''));
@@ -1593,13 +1596,15 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 		case 'verse':
 			this.verse = node.number;
 			break;
+		case 'note':
+			break; // Do not index notes
 		case 'text':
 			var words = node.text.split(/\b/);
 			for (var i=0; i<words.length; i++) {
 				var word = words[i].replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]/g, '');
 				if (word.length > 0 && this.chapter > 0 && this.verse > 0) {
 					var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-					this.concordance.addEntry(word.toLowerCase(), reference);
+					this.concordance.addEntry(word.toLocaleLowerCase(), reference);
 				}
 			}
 			break;
@@ -2017,7 +2022,7 @@ Concordance.prototype.size = function() {
 Concordance.prototype.search = function(words) {
 	var refList = [];
 	for (var i=0; i<words.length; i++) {
-		var list = this.index[words[i]];
+		var list = this.index[words[i].toLocaleLowerCase()];
 		if (list) { // This is ignoring words that return no list, and allowing search to continue.
 			refList.push(list);
 		}
@@ -2160,8 +2165,8 @@ function Lookup(tableContents) {
 	this.index = {};
 	for (var i=0; i<tableContents.bookList.length; i++) {
 		var tocBook = tableContents.bookList[i];
-		this.index[tocBook.name.toLowerCase()] = tocBook;
-		this.index[tocBook.abbrev.toLowerCase()] = tocBook;
+		this.index[tocBook.name.toLocaleLowerCase()] = tocBook;
+		this.index[tocBook.abbrev.toLocaleLowerCase()] = tocBook;
 	}
 	Object.freeze(this);
 }
@@ -2172,9 +2177,9 @@ Lookup.prototype.find = function(search) {
 		return(false);
 	} else {
 		if (matches[1].length < 1) {
-			var book = matches[2].toLowerCase();
+			var book = matches[2].toLocaleLowerCase();
 		} else {
-			book = matches[1] + ' ' + matches[2].toLowerCase();
+			book = matches[1] + ' ' + matches[2].toLocaleLowerCase();
 		}
 		var chap = matches[3];
 		var verse = (matches.length > 4) ? matches[4] : null;

@@ -123,11 +123,14 @@ SearchView.prototype.appendReference = function(bookNode, reference) {
 
 	function styleSearchWords(verseText) {
 		var verseWords = verseText.split(/\b/); // Non-destructive, preserves all characters
+		var searchWords = verseWords.map(function(wrd) {
+			return(wrd.toLocaleLowerCase());
+		});
 		for (var i=0; i<that.words.length; i++) {
 			var word = that.words[i];
-			var wordNum = verseWords.indexOf(word);
+			var wordNum = searchWords.indexOf(word.toLocaleLowerCase());
 			if (wordNum >= 0) {
-				verseWords[wordNum] = '<span class="conWord">' + word + '</span>';
+				verseWords[wordNum] = '<span class="conWord">' + verseWords[wordNum] + '</span>';
 			}
 		}
 		return(verseWords.join(''));

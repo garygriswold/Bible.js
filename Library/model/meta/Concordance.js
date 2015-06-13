@@ -30,7 +30,7 @@ Concordance.prototype.size = function() {
 Concordance.prototype.search = function(words) {
 	var refList = [];
 	for (var i=0; i<words.length; i++) {
-		var list = this.index[words[i]];
+		var list = this.index[words[i].toLocaleLowerCase()];
 		if (list) { // This is ignoring words that return no list, and allowing search to continue.
 			refList.push(list);
 		}
