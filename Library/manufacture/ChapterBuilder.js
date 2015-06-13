@@ -12,8 +12,8 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 	var bookCode = ''; // set by side effect of breakBookIntoChapters
 	var chapters = breakBookIntoChapters(usxRoot);
 
-	var reader = new NodeFileReader(this.types.location);
-	var writer = new NodeFileWriter(this.types.location);
+	var reader = new FileReader(this.types.location);
+	var writer = new FileWriter(this.types.location);
 
 	var oneChapter = chapters.shift();
 	var chapterNum = findChapterNum(oneChapter);

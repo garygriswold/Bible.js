@@ -9,7 +9,7 @@ function AssetChecker(types) {
 AssetChecker.prototype.check = function(callback) {
 	var that = this;
 	var result = new AssetType(this.types.location, this.types.versionCode);
-	var reader = new NodeFileReader(that.types.location);
+	var reader = new FileReader(that.types.location);
 	var toDo = this.types.toBeDoneQueue();
 	checkExists(toDo.shift());
 

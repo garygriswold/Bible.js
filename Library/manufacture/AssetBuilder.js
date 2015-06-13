@@ -26,9 +26,9 @@ function AssetBuilder(types) {
 	if (types.html) {
 		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.
 	}
-	this.reader = new NodeFileReader(types.location);
+	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
-	this.writer = new NodeFileWriter(types.location);
+	this.writer = new FileWriter(types.location);
 	this.filesToProcess = [];
 	Object.freeze(this);
 }

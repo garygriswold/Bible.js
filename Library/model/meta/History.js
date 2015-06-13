@@ -9,7 +9,7 @@ var MAX_HISTORY = 20;
 function History(types) {
 	this.types = types;
 	this.items = [];
-	this.writer = new NodeFileWriter(types.location);
+	this.writer = new FileWriter(types.location);
 	this.isFilled = false;
 	this.isViewCurrent = false;
 	Object.seal(this);

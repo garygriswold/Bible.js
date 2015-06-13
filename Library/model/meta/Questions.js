@@ -36,7 +36,7 @@ Questions.prototype.addItem = function(questionItem, callback) {
 };
 Questions.prototype.read = function(pageNum, callback) {
 	var that = this;
-	var reader = new NodeFileReader(this.types.location);
+	var reader = new FileReader(this.types.location);
 	reader.readTextFile(this.fullPath, function(data) {
 		if (data.errno === -2) {
 			createActs8Question(function(item) {
@@ -96,7 +96,7 @@ Questions.prototype.checkServer = function(callback) {
 };
 Questions.prototype.write = function(callback) {
 	var data = this.toJSON();
-	var writer = new NodeFileWriter(this.types.location);
+	var writer = new FileWriter(this.types.location);
 	writer.writeTextFile(this.fullPath, data, function(result) {
 		if (result.errno) {
 			console.log('write questions.json failure ' + JSON.stringify(result));

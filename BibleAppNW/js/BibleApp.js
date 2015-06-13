@@ -1112,12 +1112,12 @@ var FILE_ROOTS = { 'application': '?', 'document': '../../dbl/current/', 'tempor
 * This class is a file reader for Node.  It can be used with node.js and node-webkit.
 * cordova requires using another class, but the interface should be the same.
 */
-function NodeFileReader(location) {
+function FileReader(location) {
 	this.fs = require('fs');
 	this.location = location;
 	Object.freeze(this);
 }
-NodeFileReader.prototype.fileExists = function(filepath, callback) {
+FileReader.prototype.fileExists = function(filepath, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	//console.log('checking fullpath', fullPath);
 	this.fs.stat(fullPath, function(err, stat) {
@@ -1129,7 +1129,7 @@ NodeFileReader.prototype.fileExists = function(filepath, callback) {
 		}
 	});
 };
-NodeFileReader.prototype.readDirectory = function(filepath, callback) {
+FileReader.prototype.readDirectory = function(filepath, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	//console.log('read directory ', fullPath);
 	this.fs.readdir(fullPath, function(err, data) {
@@ -1141,7 +1141,7 @@ NodeFileReader.prototype.readDirectory = function(filepath, callback) {
 		}
 	});
 };
-NodeFileReader.prototype.readTextFile = function(filepath, callback) {
+FileReader.prototype.readTextFile = function(filepath, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	//console.log('read file ', fullPath);
 	this.fs.readFile(fullPath, { encoding: 'utf8'}, function(err, data) {
@@ -1156,12 +1156,12 @@ NodeFileReader.prototype.readTextFile = function(filepath, callback) {
 * This class is a file writer for Node.  It can be used with node.js and node-webkit.
 * cordova requires using another class, but the interface should be the same.
 */
-function NodeFileWriter(location) {
+function FileWriter(location) {
 	this.fs = require('fs');
 	this.location = location;
 	Object.freeze(this);
 }
-NodeFileWriter.prototype.createDirectory = function(filepath, callback) {
+FileWriter.prototype.createDirectory = function(filepath, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	this.fs.mkdir(fullPath, function(err) {
 		if (err) {
@@ -1172,7 +1172,7 @@ NodeFileWriter.prototype.createDirectory = function(filepath, callback) {
 		}
 	});
 };
-NodeFileWriter.prototype.writeTextFile = function(filepath, data, callback) {
+FileWriter.prototype.writeTextFile = function(filepath, data, callback) {
 	var fullPath = FILE_ROOTS[this.location] + filepath;
 	this.fs.writeFile(fullPath, data, { encoding: 'utf8'}, function(err) {
 		if (err) {
@@ -1210,9 +1210,9 @@ function AssetBuilder(types) {
 	if (types.html) {
 		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.
 	}
-	this.reader = new NodeFileReader(types.location);
+	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
-	this.writer = new NodeFileWriter(types.location);
+	this.writer = new FileWriter(types.location);
 	this.filesToProcess = [];
 	Object.freeze(this);
 }
@@ -1275,7 +1275,7 @@ function AssetChecker(types) {
 AssetChecker.prototype.check = function(callback) {
 	var that = this;
 	var result = new AssetType(this.types.location, this.types.versionCode);
-	var reader = new NodeFileReader(that.types.location);
+	var reader = new FileReader(that.types.location);
 	var toDo = this.types.toBeDoneQueue();
 	checkExists(toDo.shift());
 
@@ -1374,7 +1374,7 @@ AssetLoader.prototype.load = function(callback) {
 	var that = this;
 	this.types.chapterFiles = false; // do not load this
 	var result = new AssetType(that.types.location, that.types.versionCode);
-	var reader = new NodeFileReader(that.types.location);
+	var reader = new FileReader(that.types.location);
 	var toDo = this.types.toBeDoneQueue();
 	readTextFile(toDo.shift());
 
@@ -1496,8 +1496,8 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 	var bookCode = ''; // set by side effect of breakBookIntoChapters
 	var chapters = breakBookIntoChapters(usxRoot);
 
-	var reader = new NodeFileReader(this.types.location);
-	var writer = new NodeFileWriter(this.types.location);
+	var reader = new FileReader(this.types.location);
+	var writer = new FileWriter(this.types.location);
 
 	var oneChapter = chapters.shift();
 	var chapterNum = findChapterNum(oneChapter);
@@ -1891,7 +1891,7 @@ WordCountBuilder.prototype.toJSON = function() {
 function BibleCache(types) {
 	this.types = types;
 	this.chapterMap = {};
-	this.reader = new NodeFileReader(types.location);
+	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
 	Object.freeze(this);
 }
@@ -2080,7 +2080,7 @@ var MAX_HISTORY = 20;
 function History(types) {
 	this.types = types;
 	this.items = [];
-	this.writer = new NodeFileWriter(types.location);
+	this.writer = new FileWriter(types.location);
 	this.isFilled = false;
 	this.isViewCurrent = false;
 	Object.seal(this);
@@ -2247,7 +2247,7 @@ Questions.prototype.addItem = function(questionItem, callback) {
 };
 Questions.prototype.read = function(pageNum, callback) {
 	var that = this;
-	var reader = new NodeFileReader(this.types.location);
+	var reader = new FileReader(this.types.location);
 	reader.readTextFile(this.fullPath, function(data) {
 		if (data.errno === -2) {
 			createActs8Question(function(item) {
@@ -2307,7 +2307,7 @@ Questions.prototype.checkServer = function(callback) {
 };
 Questions.prototype.write = function(callback) {
 	var data = this.toJSON();
-	var writer = new NodeFileWriter(this.types.location);
+	var writer = new FileWriter(this.types.location);
 	writer.writeTextFile(this.fullPath, data, function(result) {
 		if (result.errno) {
 			console.log('write questions.json failure ' + JSON.stringify(result));

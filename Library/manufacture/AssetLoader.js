@@ -18,7 +18,7 @@ AssetLoader.prototype.load = function(callback) {
 	var that = this;
 	this.types.chapterFiles = false; // do not load this
 	var result = new AssetType(that.types.location, that.types.versionCode);
-	var reader = new NodeFileReader(that.types.location);
+	var reader = new FileReader(that.types.location);
 	var toDo = this.types.toBeDoneQueue();
 	readTextFile(toDo.shift());
 

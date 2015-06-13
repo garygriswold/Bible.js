@@ -12,7 +12,7 @@
 function BibleCache(types) {
 	this.types = types;
 	this.chapterMap = {};
-	this.reader = new NodeFileReader(types.location);
+	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
 	Object.freeze(this);
 }
