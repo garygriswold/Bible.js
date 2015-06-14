@@ -35,8 +35,13 @@
 // messages that can help you debug Cordova app initialization issues.
 
 function onAppReady() {
-    if( navigator.splashscreen && navigator.splashscreen.hide ) {   // Cordova API detected
-        navigator.splashscreen.hide() ;
-    }
+//    if( navigator.splashscreen && navigator.splashscreen.hide ) {   // Cordova API detected
+//        navigator.splashscreen.hide() ;
+//    }
+	console.log('DEVICE IS READY **');
+	var bibleApp = new AppViewController('WEB'); // Global root of the application
+	//bibleApp.begin('QuestionsView')
+	//bibleApp.begin('HistoryView');
+	bibleApp.begin();
 }
 document.addEventListener("app.Ready", onAppReady, false) ;

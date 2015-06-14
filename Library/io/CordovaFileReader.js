@@ -3,13 +3,50 @@
 *
 * *** This class is not finished.
 */
-function FileReader() {
+function FileReader(location) {
 	this.location = '';
 	this.filepath = '';
 	this.successCallback = '';
 	this.failureCallback = '';
 	Object.seal(this);
 }
+FileReader.prototype.fileExists = function(filepath, callback) {
+	var fullPath = FILE_ROOTS[this.location] + filepath;
+	//console.log('checking fullpath', fullPath);
+	this.fs.stat(fullPath, function(err, stat) {
+		if (err) {
+			err.filepath = filepath;
+			callback(err);
+		} else {
+			callback(stat);
+		}
+	});
+};
+FileReader.prototype.readDirectory = function(filepath, callback) {
+	var fullPath = FILE_ROOTS[this.location] + filepath;
+	//console.log('read directory ', fullPath);
+	this.fs.readdir(fullPath, function(err, data) {
+		if (err) {
+			err.filepath = filepath;
+			callback(err);
+		} else {
+			callback(data);
+		}
+	});
+};
+FileReader.prototype.readTextFile = function(filepath, callback) {
+	var fullPath = FILE_ROOTS[this.location] + filepath;
+	//console.log('read file ', fullPath);
+	this.fs.readFile(fullPath, { encoding: 'utf8'}, function(err, data) {
+		if (err) {
+			err.filepath = filepath;
+			callback(err);
+		} else {
+			callback(data);
+		}
+	});
+};
+/*
 FileReader.prototype.readTextFile = function(location, filepath, successCallback, failureCallback) {
 	var bytes = 1024 * 1024 * 10;
 	var filepath = this.filepath;
@@ -53,7 +90,7 @@ FileReader.prototype.readTextFile = function(location, filepath, successCallback
 		};
 		function onWriteFileError(err) {
 			window.alert('inside write file err ' + err.code);
-		};*/
+		};
 		function onGetFileSuccess(file) {
 			//window.alert('fullpath ' + file.fullPath);
 			//window.alert('isfile ' + file.isFile);
@@ -99,5 +136,6 @@ FileReader.prototype.readTextFile = function(location, filepath, successCallback
 		window.alert('inside access error');
 	};
 };
+*/
 
 
