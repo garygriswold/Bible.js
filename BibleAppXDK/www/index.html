@@ -1,42 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
 <html>
-  <head>
-  	<title>Any Language Bible App, by Short Sands</title>
- 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-	<meta name="format-detection" content="telephone=no" />
-	<meta name="msapplication-tap-highlight" content="no" />
-	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-	<link rel="stylesheet" href="css/BibleApp.css"/>
-	<script type="text/javascript" src="cordova.js"></script><!-- Needed for Cordova api, added during build -->
-	<script src="js/app.js"></script><!-- Device ready start of application -->
-	<script src="js/BibleApp.js"></script>
-	<script src="js/hammer.min.js"></script>
-	<script src="js/TweenLite.js"></script>
-	<script src="js/plugins/CSSPlugin.js"></script>
-	<script src="js/plugins/TextPlugin.js"></script>
-    <script src="xdk/init-dev.js"></script><!-- normalizes device and document ready events-->
-	<!--<script type="text/javascript">
-		function onBodyLoad() {
-			console.log('DEVICE IS READY **');
-			app = new AppViewController('WEB'); // Global root of the application
-			//app.begin('QuestionsView')
-			//app.begin('HistoryView');
-			app.begin();
-		};
-	</script>-->
-  </head>
-  <body>
-  <!--<body onload="onBodyLoad()">-->
-  	<div id="statusRoot">
-  		<div id="tocCell"></div>
-  		<div id="labelCell"></div>
-  		<div id="searchCell"></div>
-  		<div id="questionsCell"></div>
-  	</div>
-  	<div id="tocRoot"></div>
-  	<div id="codexRoot"></div>
-  	<div id="searchRoot"></div>
-  	<div id="historyRoot"></div>
-  	<div id="questionsRoot"></div>
-  </body>
+<!--
+  * Please see the included README.md file for license terms and conditions.
+  -->
+<head>
+    <title>Blank Cordova Mobile App Project Template (Lite)</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+    <!-- see http://webdesign.tutsplus.com/tutorials/htmlcss-tutorials/quick-tip-dont-forget-the-viewport-meta-tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <style>
+        /* following two viewport lines are equivalent to the meta viewport statement above, needed for Windows */
+        /* see http://www.quirksmode.org/blog/archives/2014/05/html5_dev_conf.html and http://dev.w3.org/csswg/css-device-adapt/ */
+        @-ms-viewport { width: 100vw ; zoom: 100% ; }  @viewport { width: 100vw ; zoom: 100% ; }
+        @-ms-viewport { user-zoom: fixed ; }           @viewport { user-zoom: fixed ; }
+    </style>
+
+    <script src="cordova.js"></script>          <!-- phantom library, needed for Cordova api calls, added during build -->
+    <script src="js/app.js"></script>           <!-- recommended location of your JavaScript code relative to other JS files -->
+    <script src="xdk/init-dev.js"></script>     <!-- normalizes device and document ready events, see README for details -->
+    <script src="js/DeviceFileSystem.js"></script>
+</head>
+
+<body>
+
+    <p>Hello, Cordova!</p>
+
+</body>
 </html>

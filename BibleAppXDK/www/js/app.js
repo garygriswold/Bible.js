@@ -33,83 +33,20 @@
 
 // NOTE: change "dev.LOG" in "init-dev.js" to "true" to enable some console.log
 // messages that can help you debug Cordova app initialization issues.
-"use strict";
-function onAppReady() {
-//    if( navigator.splashscreen && navigator.splashscreen.hide ) {   // Cordova API detected
-//        navigator.splashscreen.hide() ;
-//    }
-	console.log('DEVICE IS READY **');
-	//var bibleApp = new AppViewController('WEB'); // Global root of the application
-	//bibleApp.begin('QuestionsView')
-	//bibleApp.begin('HistoryView');
-	//bibleApp.begin();
-    
-    var fs = new DeviceFileSystem('document');
-    fs.getPersistent(function(fileSystem) {
-        window.alert('inside callback of get persistent');
-        console.log('inside callback for getPersistent');
-        console.log('found fs ', JSON.stringify(fileSystem));
-        console.log('after');
-    });
 
-//    console.log('before new file reader');
-//	var reader = new LocalFileReader('document');
-//    console.log('after new file reader');
-//    for (var prop in reader) {
-//        console.log(prop, ' = ', reader.prop);
-//    }
-//    var filepath = 'concordance.json';
-//	reader.readTextFile(filepath, function(result) {
-//		console.log(result);
-//	});
+function onAppReady() {
+    if( navigator.splashscreen && navigator.splashscreen.hide ) {   // Cordova API detected
+        navigator.splashscreen.hide() ;
+    }
+    testDeviceFileSystem();
 }
 document.addEventListener("app.Ready", onAppReady, false) ;
 
-function DeviceFileSystem(location) {
-    this.location = location;
-    this.persistentFileSystem;
-    Object.seal(this);
+function testDeviceFileSystem() {
+    console.log('inside test device file system');
+    var fs = new DeviceFileSystem('documents');
+    console.log('new executed');
+    fs.getPersistent(function(fileSystem) {
+        console.log("FS %O", fileSystem); 
+    }); 
 }
-DeviceFileSystem.prototype.getPersistent = function(callback) {
-	var that = this;
-	if (this.persistentFileSystem) {
-        console.log('is true');
-        callback(this.persistentFileSystem);
-    } else {
-        var allocate = 1 * 1024 * 1024 * 1024;
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, allocate, successCallback, failureCallback);
-	}
-
-	function successCallback(fileSystem) {
-        //console.log('success ', fileSystem);
-		that.persistentFileSystem = fileSystem;
-		callback(that.persistentFileSystem);
-	}
-	function failureCallback(error) {
-        console.log('error ', error);
-		console.log('Error', error, error.code);
-		callback(null);
-	}    
-};
-    
-
-function LocalFileReader(location) {
-	this.location = location;
-//	this.filepath = '';
-//	this.successCallback = '';
-//	this.failureCallback = '';
-	this.persistentFileSystem = null;
-	Object.seal(this);
-}
-LocalFileReader.prototype.readTextFile = function(filepath, callback) {
-	this.getPersistentFileSystem(function(fileSystem) {
-        console.log('filesystem', fileSystem, JSON.stringify(fileSystem));
-		window.alert('name: ' + fileSystem.root.name);
-		window.alert('root: ' + fileSystem.root.fullPath);
-		window.alert('native: ' + fileSystem.root.nativeURL);
-		//window.alert('inside access success ' + bytes);
-		//console.log('inside access success reading: ' + filepath);
-	});
-};
-
-
