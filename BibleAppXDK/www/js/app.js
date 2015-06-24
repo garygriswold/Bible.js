@@ -38,7 +38,8 @@ function onAppReady() {
     if( navigator.splashscreen && navigator.splashscreen.hide ) {   // Cordova API detected
         navigator.splashscreen.hide() ;
     }
-    testDeviceFileSystem();
+    //testDeviceFileSystem();
+    testCordovaFileWriter();
 }
 document.addEventListener("app.Ready", onAppReady, false) ;
 
@@ -47,6 +48,16 @@ function testDeviceFileSystem() {
     var fs = new DeviceFileSystem('documents');
     console.log('new executed');
     fs.getPersistent(function(fileSystem) {
-        console.log("FS %O", fileSystem); 
+        console.log("FS %O", fileSystem);
+        console.log("ROOT %O", fileSystem.root);
+        console.log("URL %O", fileSystem.root.nativeURL);
     }); 
+}
+function testCordovaFileWriter() {
+    console.log('inside file writer test');
+    var writer = new LocalFileWriter('documents');
+    writer.writeTextFile('test.txt', 'Hello World', function(result) {
+        console.log('file write complete');
+        console.log('result %O', result);
+    });
 }
