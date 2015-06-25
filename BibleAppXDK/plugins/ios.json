@@ -10,7 +10,8 @@
         "org.apache.cordova.file": {},
         "org.apache.cordova.device": {},
         "org.apache.cordova.statusbar": {},
-        "org.apache.cordova.media": {}
+        "org.apache.cordova.media": {},
+        "org.apache.cordova.splashscreen": {}
     },
     "dependent_plugins": {}
 }

@@ -19,7 +19,6 @@
 var app = {
     // Application Constructor
     initialize: function() {
-        console.log('inside app.initialize()');
         this.bindEvents();
     },
     // Bind Event Listeners
@@ -46,13 +45,5 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
-
-        console.log('before new');
-        var fs = new CordovaFileSystem('document');
-        console.log('after new');
-        fs.getPersistent(function(fileSystem) {
-           console.log('GOT FS', JSON.stringify(fileSystem));
-           window.alert('got fs', fileSystem);
-        });
     }
 };

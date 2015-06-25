@@ -16,17 +16,16 @@ DeviceFileSystem.prototype.getPersistent = function(callback) {
         callback(this.persistentFileSystem);
     } else {
 		console.log('do allocate');
-        var allocate = 1024 * 1024 * 1024; // 1 GB
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, allocate, onSuccess, onError);
+        //var allocate = 1024 * 1024 * 1024; // 1 GB
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onSuccess, onError);
 		console.log('after allocate');
     }
     function onSuccess(fs) {
         that.persistentFileSystem = fs;
-        //window.alert('name: ' + fs.root.name);
-        //window.alert('root: ' + fs.root.fullPath);
-        //window.alert('native: ' + fs.root.nativeURL);
-        console.log(fs.root.nativeURL);
         console.log('success');
+        console.log("FS %O", fs);
+        console.log("ROOT %O", fs.root);
+        console.log("URL %O", fs.root.fullPath);
         callback(that.persistentFileSystem);
     }
     function onError(err) {

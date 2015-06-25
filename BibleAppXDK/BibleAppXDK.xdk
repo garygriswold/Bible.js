@@ -4,7 +4,7 @@
     "creationData": {
       "projectTypeName": "com.intel.xdk.projecttype.jsapp",
       "projectGuid": "1bcb3080-1d38-4af4-a780-0aec841eee17",
-      "lastModifiedDate": 1435115408772,
+      "lastModifiedDate": 1435207047483,
       "creationDate": 1435115408695
     },
     "XDK-app-designer": "false",
@@ -33,6 +33,15 @@
         "paramvals": {},
         "dependsOn": [],
         "dependedBy": []
+      },
+      {
+        "id": "org.apache.cordova.file",
+        "version": "1.3.2",
+        "selectedState": "Included",
+        "data": {},
+        "paramvals": {},
+        "dependsOn": [],
+        "dependedBy": []
       }
     ],
     "buildConfigurations": {
@@ -45,7 +54,7 @@
           "android-targetSdkVersion": "19",
           "android-installLocation": "auto"
         },
-        "isActive_": true,
+        "isActive_": false,
         "appName_": "BibleAppXDK",
         "appID_": "xdk.intel.cordova.template.lite",
         "appAccess_": [
@@ -129,7 +138,7 @@
           "windows-publisher-display-name": "",
           "windows-publisher-id": ""
         },
-        "isActive_": true,
+        "isActive_": false,
         "appName_": "BibleAppXDK",
         "appID_": "xdk.intel.cordova.template.lite",
         "appAccess_": [
