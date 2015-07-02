@@ -45,7 +45,57 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
+
+//        deviceFileSystem.getPersistent(function(fs) {
+//            console.log('success persistent FS', fs.name, fs.root.isFile, fs.root.isDirectory, fs.name.fullPath, fs.root.nativeURL);
+//            deviceFileSystem.getPersistent(function(fs) {
+//                console.log('2success persistent FS', fs.name, fs.root.isFile, fs.root.isDirectory, fs.name.fullPath, fs.root.nativeURL);
+//            });
+//        });
+//        var writer = new LocalFileWriter('document');
+//        writer.writeTextFile('testfile.txt', 'Hello World', function(result) {
+//            console.log('FileWriterResult', JSON.stringify(result));
+//        });
+        console.log('before open database');
+        //openDatabase('documents', '1.0', 'Offline document storage', 5*1024*1024, function (db) {
+        //    console.log('database is open', (db === null));
+        //    db.changeVersion('', '1.0', function (tx) {
+        //        console.log('dhange version');
+        //        tx.executeSql('CREATE TABLE docids (id, name)');
+        //    }, error);
+        //});
+        var db = window.openDatabase('local_name', "1.0", 'disp_name', 5*1024*1024);
+        console.log('past open database');
+        console.log('db', JSON.stringify(db));
+        db.transaction(onTranSuccess, onTranError);//, onTranVoid);
+        console.log('past transaction');
+
+        function onTranSuccess(tx) {
+            console.log('have transaction');
+            console.log('trans', JSON.stringify(tx));
+            tx.executeSql('create table if not exists abc(a int)');
+            console.log('after create table');
+            tx.executeSql('insert into abc (a) values (1)');
+            console.log('after insert into (1)');
+            tx.executeSql('insert into abc (a) values (2)');
+            console.log('after insert into (2)');
+            tx.executeSql('select * from abc', [], function(tx, results) {
+                var len = results.rows.length;
+                console.log('results len=', len);
+                for (var i=0; i<len; i++) {
+                    console.log(results.rows.item(i));
+                }
+            });
+        }
+        function onTranError(err) {
+            console.log('have tran error');
+            console.log('error', JSON.stringify(err));
+        }
+        function onTranVoid(err) {
+            console.log('have tran void');
+            console.log('error', JSON.stringify(err));
+        }
     }
-};
+}
 
 app.initialize();
