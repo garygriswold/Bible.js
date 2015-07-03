@@ -1183,6 +1183,102 @@ FileWriter.prototype.writeTextFile = function(filepath, data, callback) {
 		}
 	});
 };/**
+* This class is a facade over the database that is used to store bible text, concordance,
+* table of contents, history and questions.  At this writing, it is a facade over a
+* Web SQL Sqlite3 database, but it intended to hide all database API specifics
+* from the rest of the application so that a different database can be put in its
+* place, if that becomes advisable.
+* Gary Griswold, July 2, 2015
+*/
+function DeviceDatabase(code, name) {
+	this.code = code;
+	this.name = name;
+	var size = 30 * 1024 * 1024;
+	this.db = window.openDatabase(this.code, "1.0", this.name, size);
+	this.concordance = new DeviceCollection('concordance');
+	// access database
+	// this should access a database, or create
+	// if it does not exist.  It should create all tables and all indexes
+	// unless index creation is postponed until all data is loaded.
+	Object.seal(this);
+}
+DeviceDatabase.prototype.open = function(callback) {
+    this.db.transaction(onTranStart, onTranError, onTranSuccess);
+
+    function onTranStart(tx) {
+        tx.executeSql('create table if not exists concordance(word text, referenceList text)');
+ 		//tx.executeSql('.databases', [], function(tx, results) {
+ 		//	var len = results.rows.length;
+ 		//	for (var i=0; i<len; i++) {
+ 		//		console.log('found', results.rows.item(i));
+ 		//	}
+ 		//});
+    }
+    function onTranError(err) {
+        console.log('tran error', JSON.stringify(err));
+        callback(err);
+    }
+    function onTranSuccess() {
+        console.log('transaction completed');
+        callback(null);
+    }
+};
+DeviceDatabase.prototype.drop = function(callback) {
+	// This should drop the specific database
+};
+DeviceDatabase.prototype.index = function() {
+	// This should index all of the tables.  It is called after tables are loaded.
+};
+
+
+
+/* 
+Lawnchair:
+keys(callback)
+save(obj, callback)
+batch(array, callback)
+get(key|array, callback)
+exists(key, callback)
+each(callback)
+all(callback)
+remove(key|array, callback)
+*//**
+* This class is a facade over a collection in a database.  
+* At this writing, it is a facade over a Web SQL Sqlite3 database, 
+* but it intended to hide all database API specifics
+* from the rest of the application so that a different database can be put in its
+* place, if that becomes advisable.
+* Gary Griswold, July 2, 2015
+*/
+function DeviceCollection(table) {
+
+}
+DeviceDatabase.prototype.load = function(array, callback) {
+	// This might just iterate over the collection and call insert
+	// for each row.
+};
+DeviceDatabase.prototype.insert = function(row, callback) {
+	// This should have the sql for an insert statement for each table
+	// It could have variants that use a different table name
+	// row is a single object of name/value pairs that translate into
+	// a sql insert statement
+};
+DeviceDatabase.prototype.update = function(key, row, callback) {
+	// This should create an update statement from the element names 
+};
+DeviceDatabase.prototype.replace = function(key, row, callback) {
+	//This differs from insert and update in that it does not care whether
+	// the row already exists.
+};
+DeviceDatabase.prototype.delete = function(key, callback) {
+	// This should delete the row for the key specified in the row object
+};
+DeviceDatabase.prototype.get = function(key, callback) {
+	// This should get the single row, which satisfies that fields in key object
+};
+DeviceDatabase.prototype.find = function(condition, projection, callback) {
+	// This should return a result set of rows
+};/**
 * The Table of Contents and Concordance must be created by processing the entire text.  Since the parsing of the XML
 * is a significant amount of the time to do this, this class reads over the entire Bible text and creates
 * all of the required assets.
@@ -1213,6 +1309,10 @@ function AssetBuilder(types) {
 	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
 	this.writer = new FileWriter(types.location);
+	this.database = new DeviceDatabase(this.types.versionCode, 'versionNameHere');
+	this.database.open(function(err) {
+		console.log('connect error', err);
+	});
 	this.filesToProcess = [];
 	Object.freeze(this);
 }

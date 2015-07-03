@@ -29,6 +29,10 @@ function AssetBuilder(types) {
 	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
 	this.writer = new FileWriter(types.location);
+	this.database = new DeviceDatabase(this.types.versionCode, 'versionNameHere');
+	this.database.open(function(err) {
+		console.log('connect error', err);
+	});
 	this.filesToProcess = [];
 	Object.freeze(this);
 }

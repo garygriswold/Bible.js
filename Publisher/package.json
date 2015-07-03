@@ -1,0 +1,12 @@
+{
+	"name": "Publisher",
+	"description": "Publisher Tool for Bibles using Node and Webkit",
+	"main": "index.html",
+	"window": {
+		"toolbar": true,
+		"show": true
+	},
+	"scripts": {
+    	"start": "nodewebkit"
+  	}
+}

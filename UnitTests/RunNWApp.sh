@@ -24,6 +24,8 @@ cat ../Library/gui/icons/drawTOCIcon.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/io/CommonIO.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/io/NodeFileReader.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/io/NodeFileWriter.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/io/DeviceDatabase.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/io/DeviceCollection.js >> ../BibleAppNW/js/BibleApp.js
 
 cat ../Library/manufacture/AssetBuilder.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/AssetChecker.js >> ../BibleAppNW/js/BibleApp.js
