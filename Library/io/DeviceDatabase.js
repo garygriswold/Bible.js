@@ -14,6 +14,7 @@ function DeviceDatabase(code, name) {
 	this.tableContents = new DeviceCollection(this.db, 'tableContents');
 	this.concordance = new DeviceCollection(this.db, 'concordance');
 	this.styleIndex = new DeviceCollection(this.db, 'styleIndex');
+	this.styleUse = new DeviceCollection(this.db, 'styleUse');
 	Object.freeze(this);
 }
 

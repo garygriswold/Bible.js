@@ -21,6 +21,7 @@ function AssetBuilder(types, database) {
 	}
 	if (types.styleIndex) {
 		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));
+		this.builders.push(new StyleUseBuilder(this.database.styleUse));
 	}
 	if (types.html) {
 		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.

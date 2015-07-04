@@ -168,6 +168,7 @@ function AssetBuilder(types, database) {
 	}
 	if (types.styleIndex) {
 		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));
+		this.builders.push(new StyleUseBuilder(this.database.styleUse));
 	}
 	if (types.html) {
 		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.
@@ -571,54 +572,6 @@ ConcordanceBuilder.prototype.loadDB = function(callback) {
 ConcordanceBuilder.prototype.toJSON = function() {
 	return(JSON.stringify(this.index, null, ' '));
 };/**
-* This class gets information from the concordance that was built, and produces 
-* a word list with frequency counts for each word.
-*
-* This class is deprecated.  It is replaced by storing the reference count
-* in the concordance table and being able to query it both ways.
-*
-* I will keep until after validation code is written in case it is needed.
-*/
-function WordCountBuilder(concordanceBuilder) {
-	this.concordance = concordanceBuilder;
-	this.filename = 'wordCount.json';
-}
-WordCountBuilder.prototype.readBook = function(usxRoot) {
-};
-WordCountBuilder.prototype.toJSON = function() {
-	var countMap = {};
-	var freqMap = {};
-	var index = this.concordance.index;
-	var words = Object.keys(index);
-	for (var i=0; i<words.length; i++) {
-		var key = words[i];
-		var len = index[key].length;
-		countMap[key] = len;
-		if (freqMap[len] === undefined) {
-			freqMap[len] = [];
-		}
-		freqMap[len].push(key);
-	}
-	var wordSort = Object.keys(countMap).sort();
-	var freqSort = Object.keys(freqMap).sort(function(a, b) {
-		return(a - b);
-	});
-	var result = [];
-	result.push('Num Words:  ' + wordSort.length);
-	for (i=0; i<wordSort.length; i++) {
-		var word = wordSort[i];
-		result.push(word + ':\t\t' + countMap[word]);
-	}
-	for (i=0; i<freqSort.length; i++) {
-		var freq = freqSort[i];
-		var words = freqMap[freq];
-		for (var j=0; j<words.length; j++) {
-			result.push(freq + ':\t\t' + words[j]);
-		}
-	}
-	return(result.join('\n'));
-};
-/**
 * This class traverses the USX data model in order to find each style, and 
 * reference to that style.  It builds an index to each style showing
 * all of the references where each style is used.
@@ -715,6 +668,46 @@ StyleIndexBuilder.prototype.toJSON = function() {
 	return(this.styleIndex.toJSON());
 };
 /**
+* This class builds a table of already handled styles so that we can easily
+* query the styleIndex table for any styles that are new in a table.
+*/
+function StyleUseBuilder(collection) {
+	this.collection = collection;
+}
+StyleUseBuilder.prototype.readBook = function(usxRoot) {
+	// This table is not populated from text of the Bible
+};
+StyleUseBuilder.prototype.schema = function() {
+	var sql = 'style text not null,' +
+		'usage text not null';
+	return(sql);
+};
+StyleUseBuilder.prototype.loadDB = function(callback) {
+	var styles = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl', 'para.rem',
+		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.ms1', 'para.d',
+		'chapter.c', 'verse.v',
+		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 'para.li1', 'para.nb',
+		'para.sp', 'para.q', 'para.q1', 'para.q2',
+		'note.f', 'note.x', 'char.fr', 'char.ft', 'char.fqa', 'char.xo',
+		'char.wj', 'char.qs'];
+	var array = [];
+	for (var i=0; i<styles.length; i++) {
+		var style = styles[i];
+		var styleUse = style.split('.');
+		var values = [ styleUse[1], styleUse[0] ];
+		array.push(values);
+	}
+	var names = [ 'style', 'usage' ];
+	this.collection.load(names, array, function(err) {
+		if (err) {
+			window.alert('StyleUse Builder Failed', JSON.stringify(err));
+			callback(err);
+		} else {
+			console.log('StyleUse loaded in database');
+			callback();
+		}
+	});
+};/**
 * This class traverses a DOM tree in order to create an equivalent HTML document.
 */
 function HTMLBuilder() {
@@ -1652,13 +1645,6 @@ Concordance.prototype.intersection = function(refLists) {
 function StyleIndex() {
 	this.index = {};
 	this.isFilled = false;
-	this.completed = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl', 'para.rem',
-		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.ms1', 'para.d',
-		'chapter.c', 'verse.v',
-		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 'para.li1', 'para.nb',
-		'para.sp', 'para.q', 'para.q1', 'para.q2',
-		'note.f', 'note.x', 'char.fr', 'char.ft', 'char.fqa', 'char.xo',
-		'char.wj', 'char.qs'];
 	Object.seal(this);
 }
 StyleIndex.prototype.fill = function(entries) {
@@ -1862,6 +1848,7 @@ function DeviceDatabase(code, name) {
 	this.tableContents = new DeviceCollection(this.db, 'tableContents');
 	this.concordance = new DeviceCollection(this.db, 'concordance');
 	this.styleIndex = new DeviceCollection(this.db, 'styleIndex');
+	this.styleUse = new DeviceCollection(this.db, 'styleUse');
 	Object.freeze(this);
 }
 

@@ -4,13 +4,6 @@
 function StyleIndex() {
 	this.index = {};
 	this.isFilled = false;
-	this.completed = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl', 'para.rem',
-		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.ms1', 'para.d',
-		'chapter.c', 'verse.v',
-		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 'para.li1', 'para.nb',
-		'para.sp', 'para.q', 'para.q1', 'para.q2',
-		'note.f', 'note.x', 'char.fr', 'char.ft', 'char.fqa', 'char.xo',
-		'char.wj', 'char.qs'];
 	Object.seal(this);
 }
 StyleIndex.prototype.fill = function(entries) {

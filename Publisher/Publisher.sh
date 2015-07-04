@@ -8,8 +8,8 @@ cat ../Library/manufacture/AssetLoader.js >> Publisher.js
 cat ../Library/manufacture/ChapterBuilder.js >> Publisher.js
 cat ../Library/manufacture/TOCBuilder.js >> Publisher.js
 cat ../Library/manufacture/ConcordanceBuilder.js >> Publisher.js
-cat ../Library/manufacture/WordCountBuilder.js >> Publisher.js
 cat ../Library/manufacture/StyleIndexBuilder.js >> Publisher.js
+cat ../Library/manufacture/StyleUseBuilder.js >> Publisher.js
 cat ../Library/manufacture/HTMLBuilder.js >> Publisher.js
 cat ../Library/model/usx/USX.js >> Publisher.js
 cat ../Library/model/usx/Book.js >> Publisher.js
