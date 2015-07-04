@@ -1,10 +1,10 @@
 /**
 * This class holds data for the table of contents of the entire Bible, or whatever part of the Bible was loaded.
 */
-function TOC() {
+function TOC(collection) {
+	this.collection = collection;
 	this.bookList = [];
 	this.bookMap = {};
-	this.filename = 'toc.json';
 	this.isFilled = false;
 	Object.seal(this);
 }

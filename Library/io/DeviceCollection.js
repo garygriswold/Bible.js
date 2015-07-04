@@ -11,6 +11,42 @@ function DeviceCollection(database, table) {
 	this.table = table;
 	Object.freeze(this);
 }
+DeviceCollection.prototype.drop = function(callback) {
+	var table = this.table;
+	this.database.transaction(onTranStart, onTranError, onTranSuccess);
+
+    function onTranStart(tx) {
+    	tx.executeSql('drop table if exists ' + table);
+    }
+    function onTranError(err) {
+        console.log('drop tran error', JSON.stringify(err));
+        callback(err);
+    }
+    function onTranSuccess() {
+        console.log('drop transaction completed');
+        callback();
+    }
+};
+DeviceCollection.prototype.create = function(schema, callback) {
+	var table = this.table;
+	if (schema) {
+    	this.database.transaction(onTranStart, onTranError, onTranSuccess);
+	}
+
+    function onTranStart(tx) {
+    	var sql = 'create table if not exists ' + table + '(' + schema + ')';
+		console.log(sql);
+		tx.executeSql(sql);
+    }
+    function onTranError(err) {
+        console.log('create tran error', JSON.stringify(err));
+        callback(err);
+    }
+    function onTranSuccess() {
+        console.log('create transaction completed');
+        callback();
+    }
+};
 DeviceCollection.prototype.load = function(names, array, callback) {
 	var that = this;
 	if (names && array && array.length > 0) {

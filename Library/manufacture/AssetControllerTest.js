@@ -3,7 +3,7 @@
 */
 var types = new AssetType('document', 'WEB');
 types.chapterFiles = false;
-types.tableContents = false;
+types.tableContents = true;
 types.concordance = true;
 types.styleIndex = false;
 var database = new DeviceDatabase(types.versionCode, 'versionNameHere');

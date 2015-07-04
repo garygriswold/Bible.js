@@ -11,7 +11,7 @@ function AssetBuilder(types, database) {
 		this.builders.push(new ChapterBuilder(types));
 	}
 	if (types.tableContents) {
-		this.builders.push(new TOCBuilder());
+		this.builders.push(new TOCBuilder(this.database.tableContents));
 	}
 	if (types.concordance) {
 		this.builders.push(new ConcordanceBuilder(this.database.concordance));
@@ -33,30 +33,16 @@ function AssetBuilder(types, database) {
 }
 AssetBuilder.prototype.build = function(callback) {
 	var that = this;
-	this.database.drop(function(err) {
-		if (err) {
-			console.log('drop error', err);
-			callback(err);
-		} else {
-			that.database.create(function(err) {
-				if (err) {
-					console.log('connect error', err);
-					callback(err);
-				} else {
-					if (that.builders.length > 0) {
-						that.filesToProcess.splice(0);
-						var canon = new Canon();
-						for (var i=0; i<canon.books.length; i++) {
-							that.filesToProcess.push(canon.books[i].code + '.usx');
-						}
-						processReadFile(that.filesToProcess.shift());
-					} else {
-						callback();
-					}
-				}
-			});
+	if (this.builders.length > 0) {
+		this.filesToProcess.splice(0);
+		var canon = new Canon();
+		for (var i=0; i<canon.books.length; i++) {
+			this.filesToProcess.push(canon.books[i].code + '.usx');
 		}
-	});
+		processReadFile(this.filesToProcess.shift());
+	} else {
+		callback();
+	}
 	function processReadFile(file) {
 		if (file) {
 			that.reader.readTextFile(that.types.getUSXPath(file), function(data) {
@@ -72,34 +58,31 @@ AssetBuilder.prototype.build = function(callback) {
 				}
 			});
 		} else {
-			//processWriteResult(that.builders.shift());
 			processDatabaseLoad(that.builders.shift());
-		}
-	}
-	function processWriteResult(builder) {
-		if (builder) {
-			var json = builder.toJSON();
-			var filepath = that.types.getAppPath(builder.filename);
-			that.writer.writeTextFile(filepath, json, function(filename) {
-				if (filename.errno) {
-					console.log('file write failure ', filename);
-					callback(filename);
-				} else {
-					console.log('file write success ', filename);
-					processWriteResult(that.builders.shift());
-				}
-			});
-		} else {
-			callback();
 		}
 	}
 	function processDatabaseLoad(builder) {
 		if (builder) {
-			builder.loadDB(function(err) {
+			builder.collection.drop(function(err) {
 				if (err) {
+					console.log('drop error', err);
 					callback(err);
 				} else {
-					processDatabaseLoad(that.builders.shift());
+					builder.collection.create(builder.schema(), function(err) {
+						if (err) {
+							console.log('create error', err);
+							callback(err);
+						} else {
+							builder.loadDB(function(err) {
+								if (err) {
+									console.log('load db error', err);
+									callback(err);
+								} else {
+									processDatabaseLoad(that.builders.shift());
+								}
+							});
+						}
+					});
 				}
 			});
 		} else {

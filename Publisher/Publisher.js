@@ -158,7 +158,7 @@ function AssetBuilder(types, database) {
 		this.builders.push(new ChapterBuilder(types));
 	}
 	if (types.tableContents) {
-		this.builders.push(new TOCBuilder());
+		this.builders.push(new TOCBuilder(this.database.tableContents));
 	}
 	if (types.concordance) {
 		this.builders.push(new ConcordanceBuilder(this.database.concordance));
@@ -180,30 +180,16 @@ function AssetBuilder(types, database) {
 }
 AssetBuilder.prototype.build = function(callback) {
 	var that = this;
-	this.database.drop(function(err) {
-		if (err) {
-			console.log('drop error', err);
-			callback(err);
-		} else {
-			that.database.create(function(err) {
-				if (err) {
-					console.log('connect error', err);
-					callback(err);
-				} else {
-					if (that.builders.length > 0) {
-						that.filesToProcess.splice(0);
-						var canon = new Canon();
-						for (var i=0; i<canon.books.length; i++) {
-							that.filesToProcess.push(canon.books[i].code + '.usx');
-						}
-						processReadFile(that.filesToProcess.shift());
-					} else {
-						callback();
-					}
-				}
-			});
+	if (this.builders.length > 0) {
+		this.filesToProcess.splice(0);
+		var canon = new Canon();
+		for (var i=0; i<canon.books.length; i++) {
+			this.filesToProcess.push(canon.books[i].code + '.usx');
 		}
-	});
+		processReadFile(this.filesToProcess.shift());
+	} else {
+		callback();
+	}
 	function processReadFile(file) {
 		if (file) {
 			that.reader.readTextFile(that.types.getUSXPath(file), function(data) {
@@ -219,34 +205,31 @@ AssetBuilder.prototype.build = function(callback) {
 				}
 			});
 		} else {
-			//processWriteResult(that.builders.shift());
 			processDatabaseLoad(that.builders.shift());
-		}
-	}
-	function processWriteResult(builder) {
-		if (builder) {
-			var json = builder.toJSON();
-			var filepath = that.types.getAppPath(builder.filename);
-			that.writer.writeTextFile(filepath, json, function(filename) {
-				if (filename.errno) {
-					console.log('file write failure ', filename);
-					callback(filename);
-				} else {
-					console.log('file write success ', filename);
-					processWriteResult(that.builders.shift());
-				}
-			});
-		} else {
-			callback();
 		}
 	}
 	function processDatabaseLoad(builder) {
 		if (builder) {
-			builder.loadDB(function(err) {
+			builder.collection.drop(function(err) {
 				if (err) {
+					console.log('drop error', err);
 					callback(err);
 				} else {
-					processDatabaseLoad(that.builders.shift());
+					builder.collection.create(builder.schema(), function(err) {
+						if (err) {
+							console.log('create error', err);
+							callback(err);
+						} else {
+							builder.loadDB(function(err) {
+								if (err) {
+									console.log('load db error', err);
+									callback(err);
+								} else {
+									processDatabaseLoad(that.builders.shift());
+								}
+							});
+						}
+					});
 				}
 			});
 		} else {
@@ -408,10 +391,10 @@ ChapterBuilder.prototype.toJSON = function() {
 * This class traverses the USX data model in order to find each book, and chapter
 * in order to create a table of contents that is localized to the language of the text.
 */
-function TOCBuilder() {
-	this.toc = new TOC();
+function TOCBuilder(collection) {
+	this.collection = collection;
+	this.toc = new TOC(collection);
 	this.tocBook = null;
-	this.filename = this.toc.filename;
 	Object.seal(this);
 }
 TOCBuilder.prototype.readBook = function(usxRoot) {
@@ -453,6 +436,40 @@ TOCBuilder.prototype.readRecursively = function(node) {
 			this.readRecursively(node.children[i]);
 		}
 	}
+};
+TOCBuilder.prototype.size = function() {
+	return(this.toc.bookList.length);
+};
+TOCBuilder.prototype.schema = function() {
+	var sql = 'code text primary key not null, ' +
+    	'heading text not null, ' +
+    	'title text not null, ' +
+    	'name text not null, ' +
+    	'abbrev text not null, ' +
+		'lastChapter integer not null, ' +
+		'priorBook text null, ' +
+		'nextBook text null';
+	return(sql);
+};
+TOCBuilder.prototype.loadDB = function(callback) {
+	console.log('TOC loadDB records count', this.size());
+	var array = [];
+	var len = this.size();
+	for (var i=0; i<len; i++) {
+		var tocBook = this.toc.bookList[i];
+		var names = Object.keys(tocBook);
+		var values = this.collection.valuesToArray(names, tocBook);
+		array.push(values);
+	}
+	this.collection.load(names, array, function(err) {
+		if (err) {
+			window.alert('TOC Builder Failed', JSON.stringify(err));
+			callback(err);
+		} else {
+			console.log('TOC loaded in database');
+			callback();
+		}
+	});
 };
 TOCBuilder.prototype.toJSON = function() {
 	return(this.toc.toJSON());
@@ -522,6 +539,12 @@ ConcordanceBuilder.prototype.addEntry = function(word, reference) {
 };
 ConcordanceBuilder.prototype.size = function() {
 	return(Object.keys(this.index).length); 
+};
+ConcordanceBuilder.prototype.schema = function() {
+	var sql = 'word text primary key not null, ' +
+    	'refCount integer not null,' +
+    	'refList text not null';
+    return(sql);
 };
 ConcordanceBuilder.prototype.loadDB = function(callback) {
 	console.log('Concordance loadDB records count', this.size());
@@ -1456,10 +1479,10 @@ function Canon() {
 /**
 * This class holds data for the table of contents of the entire Bible, or whatever part of the Bible was loaded.
 */
-function TOC() {
+function TOC(collection) {
+	this.collection = collection;
 	this.bookList = [];
 	this.bookMap = {};
-	this.filename = 'toc.json';
 	this.isFilled = false;
 	Object.seal(this);
 }
@@ -1796,45 +1819,11 @@ function DeviceDatabase(code, name) {
 	this.name = name;
 	var size = 30 * 1024 * 1024;
 	this.db = window.openDatabase(this.code, "1.0", this.name, size);
+	this.tableContents = new DeviceCollection(this.db, 'tableContents');
 	this.concordance = new DeviceCollection(this.db, 'concordance');
 	Object.freeze(this);
 }
-DeviceDatabase.prototype.create = function(callback) {
-    this.db.transaction(onTranStart, onTranError, onTranSuccess);
 
-    function onTranStart(tx) {
-    	tx.executeSql('drop table if exists concordance');
-    	var concordSQL = 'create table if not exists concordance' +
-    		'(word text primary key, refCount integer, refList text)';
-        tx.executeSql(concordSQL);
-    }
-    function onTranError(err) {
-        console.log('tran error', JSON.stringify(err));
-        callback(err);
-    }
-    function onTranSuccess() {
-        console.log('transaction completed');
-        callback();
-    }
-};
-DeviceDatabase.prototype.drop = function(callback) {
-	this.db.transaction(onTranStart, onTranError, onTranSuccess);
-
-    function onTranStart(tx) {
-    	tx.executeSql('drop table if exists concordance');
-    }
-    function onTranError(err) {
-        console.log('drop tran error', JSON.stringify(err));
-        callback(err);
-    }
-    function onTranSuccess() {
-        console.log('drop transaction completed');
-        callback();
-    }
-};
-DeviceDatabase.prototype.index = function() {
-	// This should index all of the tables.  It is called after tables are loaded.
-};
 
 /**
 * This class is a facade over a collection in a database.  
@@ -1849,6 +1838,42 @@ function DeviceCollection(database, table) {
 	this.table = table;
 	Object.freeze(this);
 }
+DeviceCollection.prototype.drop = function(callback) {
+	var table = this.table;
+	this.database.transaction(onTranStart, onTranError, onTranSuccess);
+
+    function onTranStart(tx) {
+    	tx.executeSql('drop table if exists ' + table);
+    }
+    function onTranError(err) {
+        console.log('drop tran error', JSON.stringify(err));
+        callback(err);
+    }
+    function onTranSuccess() {
+        console.log('drop transaction completed');
+        callback();
+    }
+};
+DeviceCollection.prototype.create = function(schema, callback) {
+	var table = this.table;
+	if (schema) {
+    	this.database.transaction(onTranStart, onTranError, onTranSuccess);
+	}
+
+    function onTranStart(tx) {
+    	var sql = 'create table if not exists ' + table + '(' + schema + ')';
+		console.log(sql);
+		tx.executeSql(sql);
+    }
+    function onTranError(err) {
+        console.log('create tran error', JSON.stringify(err));
+        callback(err);
+    }
+    function onTranSuccess() {
+        console.log('create transaction completed');
+        callback();
+    }
+};
 DeviceCollection.prototype.load = function(names, array, callback) {
 	var that = this;
 	if (names && array && array.length > 0) {
@@ -1877,7 +1902,7 @@ DeviceCollection.prototype.insert = function(row, callback) {
 	}
     function onTranStart(tx) {
     	var names = Object.keys(row);
-		var statement = this.insertStatement(names);
+		var statement = that.insertStatement(names);
 		var values = that.valuesToArray(names, row);
   		console.log(statement);
         tx.executeSql(statement, values);
@@ -1936,7 +1961,7 @@ DeviceCollection.prototype.valuesToArray = function(names, row) {
 */
 var types = new AssetType('document', 'WEB');
 types.chapterFiles = false;
-types.tableContents = false;
+types.tableContents = true;
 types.concordance = true;
 types.styleIndex = false;
 var database = new DeviceDatabase(types.versionCode, 'versionNameHere');
