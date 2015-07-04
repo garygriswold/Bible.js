@@ -11,24 +11,17 @@ function DeviceDatabase(code, name) {
 	this.name = name;
 	var size = 30 * 1024 * 1024;
 	this.db = window.openDatabase(this.code, "1.0", this.name, size);
-	this.concordance = new DeviceCollection('concordance');
-	// access database
-	// this should access a database, or create
-	// if it does not exist.  It should create all tables and all indexes
-	// unless index creation is postponed until all data is loaded.
-	Object.seal(this);
+	this.concordance = new DeviceCollection(this.db, 'concordance');
+	Object.freeze(this);
 }
-DeviceDatabase.prototype.open = function(callback) {
+DeviceDatabase.prototype.create = function(callback) {
     this.db.transaction(onTranStart, onTranError, onTranSuccess);
 
     function onTranStart(tx) {
-        tx.executeSql('create table if not exists concordance(word text, referenceList text)');
- 		//tx.executeSql('.databases', [], function(tx, results) {
- 		//	var len = results.rows.length;
- 		//	for (var i=0; i<len; i++) {
- 		//		console.log('found', results.rows.item(i));
- 		//	}
- 		//});
+    	tx.executeSql('drop table if exists concordance');
+    	var concordSQL = 'create table if not exists concordance' +
+    		'(word text primary key, refCount integer, refList text)';
+        tx.executeSql(concordSQL);
     }
     function onTranError(err) {
         console.log('tran error', JSON.stringify(err));
@@ -36,26 +29,25 @@ DeviceDatabase.prototype.open = function(callback) {
     }
     function onTranSuccess() {
         console.log('transaction completed');
-        callback(null);
+        callback();
     }
 };
 DeviceDatabase.prototype.drop = function(callback) {
-	// This should drop the specific database
+	this.db.transaction(onTranStart, onTranError, onTranSuccess);
+
+    function onTranStart(tx) {
+    	tx.executeSql('drop table if exists concordance');
+    }
+    function onTranError(err) {
+        console.log('drop tran error', JSON.stringify(err));
+        callback(err);
+    }
+    function onTranSuccess() {
+        console.log('drop transaction completed');
+        callback();
+    }
 };
 DeviceDatabase.prototype.index = function() {
 	// This should index all of the tables.  It is called after tables are loaded.
 };
 
-
-
-/* 
-Lawnchair:
-keys(callback)
-save(obj, callback)
-batch(array, callback)
-get(key|array, callback)
-exists(key, callback)
-each(callback)
-all(callback)
-remove(key|array, callback)
-*/

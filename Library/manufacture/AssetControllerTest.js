@@ -1,33 +1,17 @@
 /**
 * Unit Test Harness for AssetController
 */
-var types = new AssetType('test2dbl', 'WEB');
-types.chapterFiles = true;
-types.tableContents = true;
+var types = new AssetType('document', 'WEB');
+types.chapterFiles = false;
+types.tableContents = false;
 types.concordance = true;
-types.styleIndex = true;
-var controller = new AssetController(types);
-/*
-controller.checkBuildLoad(function(loadedTypes) {
-	console.log('AssetControllerTest.load', loadedTypes);
-	console.log('TOC', controller.tableContents().size());
-	console.log('Concordance', controller.concordance().size());
-	console.log('StyleIndex', controller.styleIndex().size());
-});
-*/
-controller.check(function(resultTypes) {
-	console.log('AssetControllerTest.check ', resultTypes);	
-});
-//
-//controller.build(function(whatever) {
-//	console.log('AssetControllerTest.build');
-//});
+types.styleIndex = false;
+var database = new DeviceDatabase(types.versionCode, 'versionNameHere');
 
-//controller.load(function(loadedTypes) {
-//	console.log('AssetControllerTest.load', loadedTypes);
-//	console.log('TOC', controller.tableContents().size());
-//	console.log('Concordance', controller.concordance().size());
-//	console.log('StyleIndex', controller.styleIndex().size());
-//});
+var controller = new AssetController(types, database);
+controller.build(function(err) {
+	console.log('AssetControllerTest.build', err);
+});
+
 
 

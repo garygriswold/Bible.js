@@ -2,6 +2,8 @@
 * This class checks for the presence of each assets that is required.
 * It should be expanded to check for the correct version of each asset as well, 
 * once assets are versioned.
+*
+* This is deprecated and to be deleted as soon as the builders are rewritten
 */
 function AssetChecker(types) {
 	this.types = types;

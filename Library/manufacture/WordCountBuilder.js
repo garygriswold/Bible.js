@@ -1,9 +1,14 @@
 /**
 * This class gets information from the concordance that was built, and produces 
 * a word list with frequency counts for each word.
+*
+* This class is deprecated.  It is replaced by storing the reference count
+* in the concordance table and being able to query it both ways.
+*
+* I will keep until after validation code is written in case it is needed.
 */
-function WordCountBuilder(concordance) {
-	this.concordance = concordance;
+function WordCountBuilder(concordanceBuilder) {
+	this.concordance = concordanceBuilder;
 	this.filename = 'wordCount.json';
 }
 WordCountBuilder.prototype.readBook = function(usxRoot) {

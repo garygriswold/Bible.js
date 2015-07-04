@@ -1,32 +1,10 @@
 /**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
-function Concordance() {
-	this.index = {};
-	this.filename = 'concordance.json';
-	this.isFilled = false;
-	Object.seal(this);
-}
-Concordance.prototype.fill = function(words) {
-	this.index = words;
-	this.isFilled = true;
+function Concordance(collection) {
+	this.collection = collection;
 	Object.freeze(this);
-};
-Concordance.prototype.addEntry = function(word, reference) {
-	if (this.index[word] === undefined) {
-		this.index[word] = [];
-		this.index[word].push(reference);
-	}
-	else {
-		var refList = this.index[word];
-		if (reference !== refList[refList.length -1]) { /* ignore duplicate reference */
-			refList.push(reference);
-		}
-	}
-};
-Concordance.prototype.size = function() {
-	return(Object.keys(this.index).length);
-};
+}
 Concordance.prototype.search = function(words) {
 	var refList = [];
 	for (var i=0; i<words.length; i++) {
@@ -74,7 +52,4 @@ Concordance.prototype.intersection = function(refLists) {
 		}
 		return(true);
 	}
-};
-Concordance.prototype.toJSON = function() {
-	return(JSON.stringify(this.index, null, ' '));
 };

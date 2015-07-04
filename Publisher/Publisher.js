@@ -4,8 +4,9 @@
 * one both the client and the server.  It is a "builder" controller that uses the AssetType
 * as a "director" to control which assets are built.
 */
-function AssetController(types) {
+function AssetController(types, database) {
 	this.types = types;
+	this.database = database;
 	this.checker = new AssetChecker(types);
 	this.loader = new AssetLoader(types);
 }
@@ -21,30 +22,22 @@ AssetController.prototype.history = function() {
 AssetController.prototype.styleIndex = function() {
 	return(this.loader.styleIndex);
 };
-AssetController.prototype.checkBuildLoad = function(callback) {
-	var that = this;
-	this.checker.check(function(absentTypes) {
-		var builder = new AssetBuilder(absentTypes);
-		builder.build(function() {
-			that.loader.load(function(loadedTypes) {
-				callback(loadedTypes);
-			});
-		});
-	});
-};
-AssetController.prototype.check = function(callback) {
-	this.checker.check(function(absentTypes) {
-		console.log('finished to be built types', absentTypes);
-		callback(absentTypes);
-	});
-};
 AssetController.prototype.build = function(callback) {
-	var builder = new AssetBuilder(this.types);
-	builder.build(function() {
+	var builder = new AssetBuilder(this.types, this.database);
+	builder.build(function(err) {
 		console.log('finished asset build');
-		callback();
+		callback(err);
 	});
 };
+AssetController.prototype.validate = function(callback) {
+	// to be written for publisher and server
+	callback(this.types);
+};
+AssetController.prototype.smokeTest = function(callback) {
+	// to be written for device use
+	callback(this.types);
+};
+/* deprecated */
 AssetController.prototype.load = function(callback) {
 	this.loader.load(function(loadedTypes) {
 		console.log('finished assetcontroller load');
@@ -116,6 +109,8 @@ AssetType.prototype.getAppPath = function(filename) {
 * This class checks for the presence of each assets that is required.
 * It should be expanded to check for the correct version of each asset as well, 
 * once assets are versioned.
+*
+* This is deprecated and to be deleted as soon as the builders are rewritten
 */
 function AssetChecker(types) {
 	this.types = types;
@@ -155,8 +150,9 @@ AssetChecker.prototype.check = function(callback) {
 * is a significant amount of the time to do this, this class reads over the entire Bible text and creates
 * all of the required assets.
 */
-function AssetBuilder(types) {
+function AssetBuilder(types, database) {
 	this.types = types;
+	this.database = database;
 	this.builders = [];
 	if (types.chapterFiles) {
 		this.builders.push(new ChapterBuilder(types));
@@ -165,9 +161,7 @@ function AssetBuilder(types) {
 		this.builders.push(new TOCBuilder());
 	}
 	if (types.concordance) {
-		var concordanceBuilder = new ConcordanceBuilder();
-		this.builders.push(concordanceBuilder);
-		this.builders.push(new WordCountBuilder(concordanceBuilder.concordance));
+		this.builders.push(new ConcordanceBuilder(this.database.concordance));
 	}
 	if (types.history) { 
 		// do nothing 
@@ -181,25 +175,35 @@ function AssetBuilder(types) {
 	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
 	this.writer = new FileWriter(types.location);
-	this.database = new DeviceDatabase(this.types.versionCode, 'versionNameHere');
-	this.database.open(function(err) {
-		console.log('connect error', err);
-	});
 	this.filesToProcess = [];
 	Object.freeze(this);
 }
 AssetBuilder.prototype.build = function(callback) {
-	if (this.builders.length > 0) {
-		var that = this;
-		this.filesToProcess.splice(0);
-		var canon = new Canon();
-		for (var i=0; i<canon.books.length; i++) {
-			this.filesToProcess.push(canon.books[i].code + '.usx');
+	var that = this;
+	this.database.drop(function(err) {
+		if (err) {
+			console.log('drop error', err);
+			callback(err);
+		} else {
+			that.database.create(function(err) {
+				if (err) {
+					console.log('connect error', err);
+					callback(err);
+				} else {
+					if (that.builders.length > 0) {
+						that.filesToProcess.splice(0);
+						var canon = new Canon();
+						for (var i=0; i<canon.books.length; i++) {
+							that.filesToProcess.push(canon.books[i].code + '.usx');
+						}
+						processReadFile(that.filesToProcess.shift());
+					} else {
+						callback();
+					}
+				}
+			});
 		}
-		processReadFile(this.filesToProcess.shift());
-	} else {
-		callback();
-	}
+	});
 	function processReadFile(file) {
 		if (file) {
 			that.reader.readTextFile(that.types.getUSXPath(file), function(data) {
@@ -215,7 +219,8 @@ AssetBuilder.prototype.build = function(callback) {
 				}
 			});
 		} else {
-			processWriteResult(that.builders.shift());
+			//processWriteResult(that.builders.shift());
+			processDatabaseLoad(that.builders.shift());
 		}
 	}
 	function processWriteResult(builder) {
@@ -229,6 +234,19 @@ AssetBuilder.prototype.build = function(callback) {
 				} else {
 					console.log('file write success ', filename);
 					processWriteResult(that.builders.shift());
+				}
+			});
+		} else {
+			callback();
+		}
+	}
+	function processDatabaseLoad(builder) {
+		if (builder) {
+			builder.loadDB(function(err) {
+				if (err) {
+					callback(err);
+				} else {
+					processDatabaseLoad(that.builders.shift());
 				}
 			});
 		} else {
@@ -444,9 +462,9 @@ TOCBuilder.prototype.toJSON = function() {
 *
 * This solution might not be unicode safe. GNG Apr 2, 2015
 */
-function ConcordanceBuilder() {
-	this.concordance = new Concordance();
-	this.filename = this.concordance.filename;
+function ConcordanceBuilder(collection) {
+	this.collection = collection;
+	this.index = {};
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
@@ -477,7 +495,7 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 				var word = words[i].replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]/g, '');
 				if (word.length > 0 && this.chapter > 0 && this.verse > 0) {
 					var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-					this.concordance.addEntry(word.toLocaleLowerCase(), reference);
+					this.addEntry(word.toLocaleLowerCase(), reference);
 				}
 			}
 			break;
@@ -490,14 +508,56 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 
 	}
 };
+ConcordanceBuilder.prototype.addEntry = function(word, reference) {
+	if (this.index[word] === undefined) {
+		this.index[word] = [];
+		this.index[word].push(reference);
+	}
+	else {
+		var refList = this.index[word];
+		if (reference !== refList[refList.length -1]) { /* ignore duplicate reference */
+			refList.push(reference);
+		}
+	}
+};
+ConcordanceBuilder.prototype.size = function() {
+	return(Object.keys(this.index).length); 
+};
+ConcordanceBuilder.prototype.loadDB = function(callback) {
+	console.log('Concordance loadDB records count', this.size());
+	var words = Object.keys(this.index);
+	var array = [];
+	for (var i=0; i<words.length; i++) {
+		var word = words[i];
+		var refList = this.index[word];
+		var refCount = refList.length;
+		var item = [ words[i], refCount, refList ];
+		array.push(item);
+	}
+	var names = [ 'word', 'refCount', 'refList' ];
+	this.collection.load(names, array, function(err) {
+		if (err) {
+			window.alert('Concordance Builder Failed', JSON.stringify(err));
+			callback(err);
+		} else {
+			console.log('concordance loaded in database');
+			callback();
+		}
+	});
+};
 ConcordanceBuilder.prototype.toJSON = function() {
-	return(this.concordance.toJSON());
+	return(JSON.stringify(this.index, null, ' '));
 };/**
 * This class gets information from the concordance that was built, and produces 
 * a word list with frequency counts for each word.
+*
+* This class is deprecated.  It is replaced by storing the reference count
+* in the concordance table and being able to query it both ways.
+*
+* I will keep until after validation code is written in case it is needed.
 */
-function WordCountBuilder(concordance) {
-	this.concordance = concordance;
+function WordCountBuilder(concordanceBuilder) {
+	this.concordance = concordanceBuilder;
 	this.filename = 'wordCount.json';
 }
 WordCountBuilder.prototype.readBook = function(usxRoot) {
@@ -1468,32 +1528,10 @@ function TOCBook(code) {
 }/**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
-function Concordance() {
-	this.index = {};
-	this.filename = 'concordance.json';
-	this.isFilled = false;
-	Object.seal(this);
-}
-Concordance.prototype.fill = function(words) {
-	this.index = words;
-	this.isFilled = true;
+function Concordance(collection) {
+	this.collection = collection;
 	Object.freeze(this);
-};
-Concordance.prototype.addEntry = function(word, reference) {
-	if (this.index[word] === undefined) {
-		this.index[word] = [];
-		this.index[word].push(reference);
-	}
-	else {
-		var refList = this.index[word];
-		if (reference !== refList[refList.length -1]) { /* ignore duplicate reference */
-			refList.push(reference);
-		}
-	}
-};
-Concordance.prototype.size = function() {
-	return(Object.keys(this.index).length);
-};
+}
 Concordance.prototype.search = function(words) {
 	var refList = [];
 	for (var i=0; i<words.length; i++) {
@@ -1542,9 +1580,7 @@ Concordance.prototype.intersection = function(refLists) {
 		return(true);
 	}
 };
-Concordance.prototype.toJSON = function() {
-	return(JSON.stringify(this.index, null, ' '));
-};/**
+/**
 * This class holds an index of styles of the entire Bible, or whatever part of the Bible was loaded into it.
 */
 function StyleIndex() {
@@ -1760,24 +1796,17 @@ function DeviceDatabase(code, name) {
 	this.name = name;
 	var size = 30 * 1024 * 1024;
 	this.db = window.openDatabase(this.code, "1.0", this.name, size);
-	this.concordance = new DeviceCollection('concordance');
-	// access database
-	// this should access a database, or create
-	// if it does not exist.  It should create all tables and all indexes
-	// unless index creation is postponed until all data is loaded.
-	Object.seal(this);
+	this.concordance = new DeviceCollection(this.db, 'concordance');
+	Object.freeze(this);
 }
-DeviceDatabase.prototype.open = function(callback) {
+DeviceDatabase.prototype.create = function(callback) {
     this.db.transaction(onTranStart, onTranError, onTranSuccess);
 
     function onTranStart(tx) {
-        tx.executeSql('create table if not exists concordance(word text, referenceList text)');
- 		//tx.executeSql('.databases', [], function(tx, results) {
- 		//	var len = results.rows.length;
- 		//	for (var i=0; i<len; i++) {
- 		//		console.log('found', results.rows.item(i));
- 		//	}
- 		//});
+    	tx.executeSql('drop table if exists concordance');
+    	var concordSQL = 'create table if not exists concordance' +
+    		'(word text primary key, refCount integer, refList text)';
+        tx.executeSql(concordSQL);
     }
     function onTranError(err) {
         console.log('tran error', JSON.stringify(err));
@@ -1785,29 +1814,29 @@ DeviceDatabase.prototype.open = function(callback) {
     }
     function onTranSuccess() {
         console.log('transaction completed');
-        callback(null);
+        callback();
     }
 };
 DeviceDatabase.prototype.drop = function(callback) {
-	// This should drop the specific database
+	this.db.transaction(onTranStart, onTranError, onTranSuccess);
+
+    function onTranStart(tx) {
+    	tx.executeSql('drop table if exists concordance');
+    }
+    function onTranError(err) {
+        console.log('drop tran error', JSON.stringify(err));
+        callback(err);
+    }
+    function onTranSuccess() {
+        console.log('drop transaction completed');
+        callback();
+    }
 };
 DeviceDatabase.prototype.index = function() {
 	// This should index all of the tables.  It is called after tables are loaded.
 };
 
-
-
-/* 
-Lawnchair:
-keys(callback)
-save(obj, callback)
-batch(array, callback)
-get(key|array, callback)
-exists(key, callback)
-each(callback)
-all(callback)
-remove(key|array, callback)
-*//**
+/**
 * This class is a facade over a collection in a database.  
 * At this writing, it is a facade over a Web SQL Sqlite3 database, 
 * but it intended to hide all database API specifics
@@ -1815,64 +1844,107 @@ remove(key|array, callback)
 * place, if that becomes advisable.
 * Gary Griswold, July 2, 2015
 */
-function DeviceCollection(table) {
-
+function DeviceCollection(database, table) {
+	this.database = database;
+	this.table = table;
+	Object.freeze(this);
 }
-DeviceDatabase.prototype.load = function(array, callback) {
-	// This might just iterate over the collection and call insert
-	// for each row.
+DeviceCollection.prototype.load = function(names, array, callback) {
+	var that = this;
+	if (names && array && array.length > 0) {
+		this.database.transaction(onTranStart, onTranError, onTranSuccess);
+	}
+    function onTranStart(tx) {
+  		var statement = that.insertStatement(names);
+  		console.log(statement);
+  		for (var i=0; i<array.length; i++) {
+        	tx.executeSql(statement, array[i]);
+        }
+    }
+    function onTranError(err) {
+        console.log('load tran error', JSON.stringify(err));
+        callback(err);
+    }
+    function onTranSuccess() {
+        console.log('load transaction completed');
+        callback();
+    }
 };
-DeviceDatabase.prototype.insert = function(row, callback) {
-	// This should have the sql for an insert statement for each table
-	// It could have variants that use a different table name
-	// row is a single object of name/value pairs that translate into
-	// a sql insert statement
+DeviceCollection.prototype.insert = function(row, callback) {
+	var that = this;
+	if (row) {
+		this.database.transaction(onTranStart, onTranError, onTranSuccess);
+	}
+    function onTranStart(tx) {
+    	var names = Object.keys(row);
+		var statement = this.insertStatement(names);
+		var values = that.valuesToArray(names, row);
+  		console.log(statement);
+        tx.executeSql(statement, values);
+    }
+    function onTranError(err) {
+        console.log('insert tran error', JSON.stringify(err));
+        callback(err);
+    }
+    function onTranSuccess() {
+        console.log('insert transaction completed');
+        callback();
+    }
 };
-DeviceDatabase.prototype.update = function(key, row, callback) {
+DeviceCollection.prototype.insertStatement = function(names) {
+	var sql = [ 'insert into ', this.table, ' (' ];
+	for (var i=0; i<names.length; i++) {
+		if (i > 0) {
+			sql.push(', ');
+		}
+		sql.push(names[i]);
+	}
+	sql.push(') values (');
+	for (var i=0; i<names.length; i++) {
+		if (i > 0) {
+			sql.push(',');
+		}
+		sql.push('?');
+	}
+	sql.push(')');
+	return(sql.join(''));
+};
+DeviceCollection.prototype.update = function(key, row, callback) {
 	// This should create an update statement from the element names 
 };
-DeviceDatabase.prototype.replace = function(key, row, callback) {
+DeviceCollection.prototype.replace = function(key, row, callback) {
 	//This differs from insert and update in that it does not care whether
 	// the row already exists.
 };
-DeviceDatabase.prototype.delete = function(key, callback) {
+DeviceCollection.prototype.delete = function(key, callback) {
 	// This should delete the row for the key specified in the row object
 };
-DeviceDatabase.prototype.get = function(key, callback) {
+DeviceCollection.prototype.get = function(key, callback) {
 	// This should get the single row, which satisfies that fields in key object
 };
-DeviceDatabase.prototype.find = function(condition, projection, callback) {
+DeviceCollection.prototype.find = function(condition, projection, callback) {
 	// This should return a result set of rows
+};
+DeviceCollection.prototype.valuesToArray = function(names, row) {
+	var values = [ names.length ];
+	for (var i=0; i<names.length; i++) {
+		values[i] = row[names[i]];
+	}
+	return(values);
 };/**
 * Unit Test Harness for AssetController
 */
-var types = new AssetType('test2dbl', 'WEB');
-types.chapterFiles = true;
-types.tableContents = true;
+var types = new AssetType('document', 'WEB');
+types.chapterFiles = false;
+types.tableContents = false;
 types.concordance = true;
-types.styleIndex = true;
-var controller = new AssetController(types);
-/*
-controller.checkBuildLoad(function(loadedTypes) {
-	console.log('AssetControllerTest.load', loadedTypes);
-	console.log('TOC', controller.tableContents().size());
-	console.log('Concordance', controller.concordance().size());
-	console.log('StyleIndex', controller.styleIndex().size());
-});
-*/
-controller.check(function(resultTypes) {
-	console.log('AssetControllerTest.check ', resultTypes);	
-});
-//
-//controller.build(function(whatever) {
-//	console.log('AssetControllerTest.build');
-//});
+types.styleIndex = false;
+var database = new DeviceDatabase(types.versionCode, 'versionNameHere');
 
-//controller.load(function(loadedTypes) {
-//	console.log('AssetControllerTest.load', loadedTypes);
-//	console.log('TOC', controller.tableContents().size());
-//	console.log('Concordance', controller.concordance().size());
-//	console.log('StyleIndex', controller.styleIndex().size());
-//});
+var controller = new AssetController(types, database);
+controller.build(function(err) {
+	console.log('AssetControllerTest.build', err);
+});
+
 
 

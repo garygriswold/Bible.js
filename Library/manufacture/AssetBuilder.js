@@ -3,8 +3,9 @@
 * is a significant amount of the time to do this, this class reads over the entire Bible text and creates
 * all of the required assets.
 */
-function AssetBuilder(types) {
+function AssetBuilder(types, database) {
 	this.types = types;
+	this.database = database;
 	this.builders = [];
 	if (types.chapterFiles) {
 		this.builders.push(new ChapterBuilder(types));
@@ -13,9 +14,7 @@ function AssetBuilder(types) {
 		this.builders.push(new TOCBuilder());
 	}
 	if (types.concordance) {
-		var concordanceBuilder = new ConcordanceBuilder();
-		this.builders.push(concordanceBuilder);
-		this.builders.push(new WordCountBuilder(concordanceBuilder.concordance));
+		this.builders.push(new ConcordanceBuilder(this.database.concordance));
 	}
 	if (types.history) { 
 		// do nothing 
@@ -29,25 +28,35 @@ function AssetBuilder(types) {
 	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
 	this.writer = new FileWriter(types.location);
-	this.database = new DeviceDatabase(this.types.versionCode, 'versionNameHere');
-	this.database.open(function(err) {
-		console.log('connect error', err);
-	});
 	this.filesToProcess = [];
 	Object.freeze(this);
 }
 AssetBuilder.prototype.build = function(callback) {
-	if (this.builders.length > 0) {
-		var that = this;
-		this.filesToProcess.splice(0);
-		var canon = new Canon();
-		for (var i=0; i<canon.books.length; i++) {
-			this.filesToProcess.push(canon.books[i].code + '.usx');
+	var that = this;
+	this.database.drop(function(err) {
+		if (err) {
+			console.log('drop error', err);
+			callback(err);
+		} else {
+			that.database.create(function(err) {
+				if (err) {
+					console.log('connect error', err);
+					callback(err);
+				} else {
+					if (that.builders.length > 0) {
+						that.filesToProcess.splice(0);
+						var canon = new Canon();
+						for (var i=0; i<canon.books.length; i++) {
+							that.filesToProcess.push(canon.books[i].code + '.usx');
+						}
+						processReadFile(that.filesToProcess.shift());
+					} else {
+						callback();
+					}
+				}
+			});
 		}
-		processReadFile(this.filesToProcess.shift());
-	} else {
-		callback();
-	}
+	});
 	function processReadFile(file) {
 		if (file) {
 			that.reader.readTextFile(that.types.getUSXPath(file), function(data) {
@@ -63,7 +72,8 @@ AssetBuilder.prototype.build = function(callback) {
 				}
 			});
 		} else {
-			processWriteResult(that.builders.shift());
+			//processWriteResult(that.builders.shift());
+			processDatabaseLoad(that.builders.shift());
 		}
 	}
 	function processWriteResult(builder) {
@@ -77,6 +87,19 @@ AssetBuilder.prototype.build = function(callback) {
 				} else {
 					console.log('file write success ', filename);
 					processWriteResult(that.builders.shift());
+				}
+			});
+		} else {
+			callback();
+		}
+	}
+	function processDatabaseLoad(builder) {
+		if (builder) {
+			builder.loadDB(function(err) {
+				if (err) {
+					callback(err);
+				} else {
+					processDatabaseLoad(that.builders.shift());
 				}
 			});
 		} else {
