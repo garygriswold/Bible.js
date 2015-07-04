@@ -25,7 +25,6 @@ cat ../Library/model/meta/Canon.js >> Publisher.js
 cat ../Library/model/meta/TOC.js >> Publisher.js
 cat ../Library/model/meta/TOCBook.js >> Publisher.js
 cat ../Library/model/meta/Concordance.js >> Publisher.js
-cat ../Library/model/meta/StyleIndex.js >> Publisher.js
 cat ../Library/model/meta/History.js >> Publisher.js
 cat ../Library/io/CommonIO.js >> Publisher.js
 cat ../Library/io/NodeFileReader.js >> Publisher.js

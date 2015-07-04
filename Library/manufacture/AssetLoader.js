@@ -12,7 +12,6 @@ function AssetLoader(types) {
 	this.toc = new TOC();
 	this.concordance = new Concordance();
 	this.history = new History(types);
-	this.styleIndex = new StyleIndex();
 }
 AssetLoader.prototype.load = function(callback) {
 	var that = this;
@@ -47,11 +46,6 @@ AssetLoader.prototype.load = function(callback) {
 							result.history = true;
 							var historyList = JSON.parse(data);
 							that.history.fill(historyList);
-							break;
-						case 'styleIndex.json':
-							result.styleIndex = true;
-							var styleList = JSON.parse(data);
-							that.styleIndex.fill(styleList);
 							break;
 						default:
 							throw new Error('File ' + filename + ' is not known in AssetLoader.load.');

@@ -51,7 +51,7 @@ cat ../Library/model/meta/Questions.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/Reference.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/TOC.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/TOCBook.js >> ../BibleAppNW/js/BibleApp.js
-cat ../Library/model/meta/StyleIndex.js >> ../BibleAppNW/js/BibleApp.js
+#cat ../Library/model/meta/StyleIndex.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/VerseAccessor.js >> ../BibleAppNW/js/BibleApp.js
 
 cat ../Library/model/usx/Book.js >> ../BibleAppNW/js/BibleApp.js

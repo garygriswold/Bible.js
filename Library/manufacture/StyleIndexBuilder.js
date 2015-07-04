@@ -5,8 +5,16 @@
 */
 function StyleIndexBuilder(collection) {
 	this.collection = collection;
-	this.styleIndex = new StyleIndex();
+	this.index = {};
 }
+StyleIndexBuilder.prototype.addEntry = function(word, reference) {
+	if (this.index[word] === undefined) {
+		this.index[word] = [];
+	}
+	if (this.index[word].length < 100) {
+		this.index[word].push(reference);
+	}
+};
 StyleIndexBuilder.prototype.readBook = function(usxRoot) {
 	this.bookCode = '';
 	this.chapter = null;
@@ -19,19 +27,19 @@ StyleIndexBuilder.prototype.readRecursively = function(node) {
 			this.bookCode = node.code;
 			var style = 'book.' + node.style;
 			var reference = this.bookCode;
-			this.styleIndex.addEntry(style, reference);
+			this.addEntry(style, reference);
 			break;
 		case 'chapter':
 			this.chapter = node.number;
 			style = 'chapter.' + node.style;
 			reference = this.bookCode + ':' + this.chapter;
-			this.styleIndex.addEntry(style, reference);
+			this.addEntry(style, reference);
 			break;
 		case 'verse':
 			this.verse = node.number;
 			style = 'verse.' + node.style;
 			reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-			this.styleIndex.addEntry(style, reference);
+			this.addEntry(style, reference);
 			break;
 		case 'usx':
 		case 'text':
@@ -40,13 +48,16 @@ StyleIndexBuilder.prototype.readRecursively = function(node) {
 		default:
 			style = node.tagName + '.' + node.style;
 			reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-			this.styleIndex.addEntry(style, reference);
+			this.addEntry(style, reference);
 	}
 	if ('children' in node) {
 		for (var i=0; i<node.children.length; i++) {
 			this.readRecursively(node.children[i]);
 		}
 	}
+};
+StyleIndexBuilder.prototype.size = function() {
+	return(Object.keys(this.index).length);
 };
 StyleIndexBuilder.prototype.schema = function() {
 	var sql = 'style text not null, ' +
@@ -57,13 +68,13 @@ StyleIndexBuilder.prototype.schema = function() {
 	return(sql);
 };
 StyleIndexBuilder.prototype.loadDB = function(callback) {
-	console.log('style index loadDB records count', this.styleIndex.size());
+	console.log('style index loadDB records count', this.size());
 	var array = [];
-	var styles = Object.keys(this.styleIndex.index);
+	var styles = Object.keys(this.index);
 	for (var i=0; i<styles.length; i++) {
 		var style = styles[i];
 		var styleUse = style.split('.');
-		var refList = this.styleIndex.index[style];
+		var refList = this.index[style];
 		for (var j=0; j<refList.length; j++) {
 			var refItem = refList[j];
 			var reference = refItem.split(':');
@@ -92,5 +103,5 @@ StyleIndexBuilder.prototype.loadDB = function(callback) {
 	});
 };
 StyleIndexBuilder.prototype.toJSON = function() {
-	return(this.styleIndex.toJSON());
+	return(this.toJSON());
 };

@@ -252,7 +252,6 @@ function AssetLoader(types) {
 	this.toc = new TOC();
 	this.concordance = new Concordance();
 	this.history = new History(types);
-	this.styleIndex = new StyleIndex();
 }
 AssetLoader.prototype.load = function(callback) {
 	var that = this;
@@ -287,11 +286,6 @@ AssetLoader.prototype.load = function(callback) {
 							result.history = true;
 							var historyList = JSON.parse(data);
 							that.history.fill(historyList);
-							break;
-						case 'styleIndex.json':
-							result.styleIndex = true;
-							var styleList = JSON.parse(data);
-							that.styleIndex.fill(styleList);
 							break;
 						default:
 							throw new Error('File ' + filename + ' is not known in AssetLoader.load.');
@@ -578,8 +572,16 @@ ConcordanceBuilder.prototype.toJSON = function() {
 */
 function StyleIndexBuilder(collection) {
 	this.collection = collection;
-	this.styleIndex = new StyleIndex();
+	this.index = {};
 }
+StyleIndexBuilder.prototype.addEntry = function(word, reference) {
+	if (this.index[word] === undefined) {
+		this.index[word] = [];
+	}
+	if (this.index[word].length < 100) {
+		this.index[word].push(reference);
+	}
+};
 StyleIndexBuilder.prototype.readBook = function(usxRoot) {
 	this.bookCode = '';
 	this.chapter = null;
@@ -592,19 +594,19 @@ StyleIndexBuilder.prototype.readRecursively = function(node) {
 			this.bookCode = node.code;
 			var style = 'book.' + node.style;
 			var reference = this.bookCode;
-			this.styleIndex.addEntry(style, reference);
+			this.addEntry(style, reference);
 			break;
 		case 'chapter':
 			this.chapter = node.number;
 			style = 'chapter.' + node.style;
 			reference = this.bookCode + ':' + this.chapter;
-			this.styleIndex.addEntry(style, reference);
+			this.addEntry(style, reference);
 			break;
 		case 'verse':
 			this.verse = node.number;
 			style = 'verse.' + node.style;
 			reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-			this.styleIndex.addEntry(style, reference);
+			this.addEntry(style, reference);
 			break;
 		case 'usx':
 		case 'text':
@@ -613,13 +615,16 @@ StyleIndexBuilder.prototype.readRecursively = function(node) {
 		default:
 			style = node.tagName + '.' + node.style;
 			reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-			this.styleIndex.addEntry(style, reference);
+			this.addEntry(style, reference);
 	}
 	if ('children' in node) {
 		for (var i=0; i<node.children.length; i++) {
 			this.readRecursively(node.children[i]);
 		}
 	}
+};
+StyleIndexBuilder.prototype.size = function() {
+	return(Object.keys(this.index).length);
 };
 StyleIndexBuilder.prototype.schema = function() {
 	var sql = 'style text not null, ' +
@@ -630,13 +635,13 @@ StyleIndexBuilder.prototype.schema = function() {
 	return(sql);
 };
 StyleIndexBuilder.prototype.loadDB = function(callback) {
-	console.log('style index loadDB records count', this.styleIndex.size());
+	console.log('style index loadDB records count', this.size());
 	var array = [];
-	var styles = Object.keys(this.styleIndex.index);
+	var styles = Object.keys(this.index);
 	for (var i=0; i<styles.length; i++) {
 		var style = styles[i];
 		var styleUse = style.split('.');
-		var refList = this.styleIndex.index[style];
+		var refList = this.index[style];
 		for (var j=0; j<refList.length; j++) {
 			var refItem = refList[j];
 			var reference = refItem.split(':');
@@ -665,7 +670,7 @@ StyleIndexBuilder.prototype.loadDB = function(callback) {
 	});
 };
 StyleIndexBuilder.prototype.toJSON = function() {
-	return(this.styleIndex.toJSON());
+	return(this.toJSON());
 };
 /**
 * This class builds a table of already handled styles so that we can easily
@@ -678,7 +683,7 @@ StyleUseBuilder.prototype.readBook = function(usxRoot) {
 	// This table is not populated from text of the Bible
 };
 StyleUseBuilder.prototype.schema = function() {
-	var sql = 'style text not null,' +
+	var sql = 'style text not null, ' +
 		'usage text not null';
 	return(sql);
 };
@@ -1640,46 +1645,6 @@ Concordance.prototype.intersection = function(refLists) {
 	}
 };
 /**
-* This class holds an index of styles of the entire Bible, or whatever part of the Bible was loaded into it.
-*/
-function StyleIndex() {
-	this.index = {};
-	this.isFilled = false;
-	Object.seal(this);
-}
-StyleIndex.prototype.fill = function(entries) {
-	this.index = entries;
-	this.isFilled = true;
-	Object.freeze(this);
-};
-StyleIndex.prototype.addEntry = function(word, reference) {
-	if (this.index[word] === undefined) {
-		this.index[word] = [];
-	}
-	if (this.index[word].length < 100) {
-		this.index[word].push(reference);
-	}
-};
-StyleIndex.prototype.find = function(word) {
-	return(this.index[word]);
-};
-StyleIndex.prototype.size = function() {
-	return(Object.keys(this.index).length);
-};
-StyleIndex.prototype.dumpAlphaSort = function() {
-	var words = Object.keys(this.index);
-	var alphaWords = words.sort();
-	this.dump(alphaWords);
-};
-StyleIndex.prototype.dump = function(words) {
-	for (var i=0; i<words.length; i++) {
-		var word = words[i];
-		console.log(word, this.index[word]);
-	}	
-};
-StyleIndex.prototype.toJSON = function() {
-	return(JSON.stringify(this.index, null, ' '));
-};/**
 * This class manages a queue of history items up to some maximum number of items.
 * It adds items when there is an event, such as a toc click, a search lookup,
 * or a concordance search.  It also responds to function requests to go back 
