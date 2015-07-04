@@ -167,7 +167,7 @@ function AssetBuilder(types, database) {
 		// do nothing 
 	}
 	if (types.styleIndex) {
-		this.builders.push(new StyleIndexBuilder());
+		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));
 	}
 	if (types.html) {
 		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.
@@ -623,14 +623,14 @@ WordCountBuilder.prototype.toJSON = function() {
 * reference to that style.  It builds an index to each style showing
 * all of the references where each style is used.
 */
-function StyleIndexBuilder() {
+function StyleIndexBuilder(collection) {
+	this.collection = collection;
 	this.styleIndex = new StyleIndex();
-	this.filename = this.styleIndex.filename;
 }
 StyleIndexBuilder.prototype.readBook = function(usxRoot) {
 	this.bookCode = '';
-	this.chapter = 0;
-	this.verse = 0;
+	this.chapter = null;
+	this.verse = null;
 	this.readRecursively(usxRoot);
 };
 StyleIndexBuilder.prototype.readRecursively = function(node) {
@@ -667,6 +667,49 @@ StyleIndexBuilder.prototype.readRecursively = function(node) {
 			this.readRecursively(node.children[i]);
 		}
 	}
+};
+StyleIndexBuilder.prototype.schema = function() {
+	var sql = 'style text not null, ' +
+		'usage text not null, ' +
+		'book text not null, ' +
+		'chapter integer null, ' +
+		'verse integer null';
+	return(sql);
+};
+StyleIndexBuilder.prototype.loadDB = function(callback) {
+	console.log('style index loadDB records count', this.styleIndex.size());
+	var array = [];
+	var styles = Object.keys(this.styleIndex.index);
+	for (var i=0; i<styles.length; i++) {
+		var style = styles[i];
+		var styleUse = style.split('.');
+		var refList = this.styleIndex.index[style];
+		for (var j=0; j<refList.length; j++) {
+			var refItem = refList[j];
+			var reference = refItem.split(':');
+			switch(reference.length) {
+				case 1:
+					var values = [ styleUse[1], styleUse[0], reference[0], null, null ];
+					break;
+				case 2:
+					values = [ styleUse[1], styleUse[0], reference[0], reference[1], null ];
+					break;
+				case 3:
+					values = [ styleUse[1], styleUse[0], reference[0], reference[1], reference[2] ];
+			}
+			array.push(values);
+		}
+	}
+	var names = [ 'style', 'usage', 'book', 'chapter', 'verse' ];
+	this.collection.load(names, array, function(err) {
+		if (err) {
+			window.alert('StyleIndex Builder Failed', JSON.stringify(err));
+			callback(err);
+		} else {
+			console.log('StyleIndex loaded in database');
+			callback();
+		}
+	});
 };
 StyleIndexBuilder.prototype.toJSON = function() {
 	return(this.styleIndex.toJSON());
@@ -1608,7 +1651,6 @@ Concordance.prototype.intersection = function(refLists) {
 */
 function StyleIndex() {
 	this.index = {};
-	this.filename = 'styleIndex.json';
 	this.isFilled = false;
 	this.completed = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl', 'para.rem',
 		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.ms1', 'para.d',
@@ -1625,13 +1667,11 @@ StyleIndex.prototype.fill = function(entries) {
 	Object.freeze(this);
 };
 StyleIndex.prototype.addEntry = function(word, reference) {
-	if (this.completed.indexOf(word) < 0) {
-		if (this.index[word] === undefined) {
-			this.index[word] = [];
-		}
-		if (this.index[word].length < 100) {
-			this.index[word].push(reference);
-		}
+	if (this.index[word] === undefined) {
+		this.index[word] = [];
+	}
+	if (this.index[word].length < 100) {
+		this.index[word].push(reference);
 	}
 };
 StyleIndex.prototype.find = function(word) {
@@ -1821,6 +1861,7 @@ function DeviceDatabase(code, name) {
 	this.db = window.openDatabase(this.code, "1.0", this.name, size);
 	this.tableContents = new DeviceCollection(this.db, 'tableContents');
 	this.concordance = new DeviceCollection(this.db, 'concordance');
+	this.styleIndex = new DeviceCollection(this.db, 'styleIndex');
 	Object.freeze(this);
 }
 
@@ -1961,9 +2002,9 @@ DeviceCollection.prototype.valuesToArray = function(names, row) {
 */
 var types = new AssetType('document', 'WEB');
 types.chapterFiles = false;
-types.tableContents = true;
-types.concordance = true;
-types.styleIndex = false;
+types.tableContents = false;
+types.concordance = false;
+types.styleIndex = true;
 var database = new DeviceDatabase(types.versionCode, 'versionNameHere');
 
 var controller = new AssetController(types, database);

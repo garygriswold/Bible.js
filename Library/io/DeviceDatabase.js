@@ -13,6 +13,7 @@ function DeviceDatabase(code, name) {
 	this.db = window.openDatabase(this.code, "1.0", this.name, size);
 	this.tableContents = new DeviceCollection(this.db, 'tableContents');
 	this.concordance = new DeviceCollection(this.db, 'concordance');
+	this.styleIndex = new DeviceCollection(this.db, 'styleIndex');
 	Object.freeze(this);
 }
 

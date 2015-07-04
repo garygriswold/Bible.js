@@ -3,9 +3,9 @@
 */
 var types = new AssetType('document', 'WEB');
 types.chapterFiles = false;
-types.tableContents = true;
-types.concordance = true;
-types.styleIndex = false;
+types.tableContents = false;
+types.concordance = false;
+types.styleIndex = true;
 var database = new DeviceDatabase(types.versionCode, 'versionNameHere');
 
 var controller = new AssetController(types, database);

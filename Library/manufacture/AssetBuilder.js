@@ -20,7 +20,7 @@ function AssetBuilder(types, database) {
 		// do nothing 
 	}
 	if (types.styleIndex) {
-		this.builders.push(new StyleIndexBuilder());
+		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));
 	}
 	if (types.html) {
 		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.

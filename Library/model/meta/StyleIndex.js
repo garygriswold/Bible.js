@@ -3,7 +3,6 @@
 */
 function StyleIndex() {
 	this.index = {};
-	this.filename = 'styleIndex.json';
 	this.isFilled = false;
 	this.completed = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl', 'para.rem',
 		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.ms1', 'para.d',
@@ -20,13 +19,11 @@ StyleIndex.prototype.fill = function(entries) {
 	Object.freeze(this);
 };
 StyleIndex.prototype.addEntry = function(word, reference) {
-	if (this.completed.indexOf(word) < 0) {
-		if (this.index[word] === undefined) {
-			this.index[word] = [];
-		}
-		if (this.index[word].length < 100) {
-			this.index[word].push(reference);
-		}
+	if (this.index[word] === undefined) {
+		this.index[word] = [];
+	}
+	if (this.index[word].length < 100) {
+		this.index[word].push(reference);
 	}
 };
 StyleIndex.prototype.find = function(word) {
