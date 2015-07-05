@@ -12,14 +12,8 @@ function AssetController(types, database) {
 AssetController.prototype.tableContents = function() {
 	return(this.loader.toc);
 };
-AssetController.prototype.concordance = function() {
-	return(this.loader.concordance);
-};
 AssetController.prototype.history = function() {
 	return(this.loader.history);
-};
-AssetController.prototype.styleIndex = function() {
-	return(this.loader.styleIndex);
 };
 AssetController.prototype.build = function(callback) {
 	var builder = new AssetBuilder(this.types, this.database);
@@ -36,7 +30,7 @@ AssetController.prototype.smokeTest = function(callback) {
 	// to be written for device use
 	callback(this.types);
 };
-/* deprecated */
+/* deprecated *//** not sure **/
 AssetController.prototype.load = function(callback) {
 	this.loader.load(function(loadedTypes) {
 		console.log('finished assetcontroller load');

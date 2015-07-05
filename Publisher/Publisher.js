@@ -13,15 +13,15 @@ function AssetController(types, database) {
 AssetController.prototype.tableContents = function() {
 	return(this.loader.toc);
 };
-AssetController.prototype.concordance = function() {
-	return(this.loader.concordance);
-};
+//AssetController.prototype.concordance = function() {
+//	return(this.loader.concordance);
+//};
 AssetController.prototype.history = function() {
 	return(this.loader.history);
 };
-AssetController.prototype.styleIndex = function() {
-	return(this.loader.styleIndex);
-};
+//AssetController.prototype.styleIndex = function() {
+//	return(this.loader.styleIndex);
+//};
 AssetController.prototype.build = function(callback) {
 	var builder = new AssetBuilder(this.types, this.database);
 	builder.build(function(err) {
@@ -155,7 +155,7 @@ function AssetBuilder(types, database) {
 	this.database = database;
 	this.builders = [];
 	if (types.chapterFiles) {
-		this.builders.push(new ChapterBuilder(types));
+		this.builders.push(new ChapterBuilder(this.database.codex));
 	}
 	if (types.tableContents) {
 		this.builders.push(new TOCBuilder(this.database.tableContents));
@@ -303,22 +303,84 @@ AssetLoader.prototype.load = function(callback) {
 * This class iterates over the USX data model, and breaks it into files one for each chapter.
 *
 */
-function ChapterBuilder(types) {
-	this.types = types;
-	this.filename = 'chapterMetaData.json';
+function ChapterBuilder(collection) {
+	//this.types = types;
+	//this.filename = 'chapterMetaData.json';
+	this.collection = collection;
+	this.books = [];
 	Object.seal(this);
 }
 ChapterBuilder.prototype.readBook = function(usxRoot) {
 	var that = this;
-	var bookCode = ''; // set by side effect of breakBookIntoChapters
-	var chapters = breakBookIntoChapters(usxRoot);
+	this.books.push(usxRoot);
+	//var bookCode = ''; // set by side effect of breakBookIntoChapters
+	//var chapters = breakBookIntoChapters(usxRoot);
 
-	var reader = new FileReader(this.types.location);
-	var writer = new FileWriter(this.types.location);
+	//var reader = new FileReader(this.types.location);
+	//var writer = new FileWriter(this.types.location);
 
-	var oneChapter = chapters.shift();
-	var chapterNum = findChapterNum(oneChapter);
-	createDirectory(bookCode);
+	//var oneChapter = chapters.shift();
+	//var chapterNum = findChapterNum(oneChapter);
+	//createDirectory(bookCode);
+
+//	}
+//	function createDirectory(bookCode) {
+//		var filepath = that.types.getAppPath(bookCode);
+//		writer.createDirectory(filepath, function(dirName) {
+//			if (dirName.errno) {
+//				writeChapter(bookCode, chapterNum, oneChapter);				
+//			} else {
+//				writeChapter(bookCode, chapterNum, oneChapter);	
+//			}
+//		});
+//	}
+//	function writeChapter(bookCode, chapterNum, oneChapter) {
+//		var filepath = that.types.getAppPath(bookCode) + '/' + chapterNum + '.usx';
+//		var data = oneChapter.toUSX();
+//		writer.writeTextFile(filepath, data, function(filename) {	
+//			if (filename.errno) {
+//				console.log('ChapterBuilder.writeChapterFailure ', JSON.stringify(filename));
+//			} else {
+//				oneChapter = chapters.shift();
+//				if (oneChapter) {
+//					chapterNum = findChapterNum(oneChapter);
+//					writeChapter(bookCode, chapterNum, oneChapter);
+//				} else {
+//					// done
+//				}
+//			}
+//		});
+//	}
+};
+ChapterBuilder.prototype.schema = function() {
+	var sql = 'book text not null, ' +
+		'chapter integer not null, ' +
+		'xml text not null';
+	return(sql);
+};
+ChapterBuilder.prototype.loadDB = function(callback) {
+	var array = [];
+	for (var i=0; i<this.books.length; i++) {
+		var usxRoot = this.books[i];
+		var bookCode = null; // set as a side-effect of breakBookIntoChapters
+		var chapters = breakBookIntoChapters(usxRoot);
+		for (var j=0; j<chapters.length; j++) {
+			var chapter = chapters[j];
+			var chapterNum = findChapterNum(chapter);
+			var values = [ bookCode, chapterNum, chapter.toUSX() ];
+			array.push(values);
+		}
+	}
+	var names = [ 'book', 'chapter', 'xml' ];
+	this.collection.load(names, array, function(err) {
+		if (err) {
+			console.log('Storing chapters failed');
+			callback(err);
+		} else {
+			console.log('store chapters success');
+			callback();
+		}
+	});
 
 	function breakBookIntoChapters(usxRoot) {
 		var chapters = [];
@@ -349,37 +411,10 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 			}
 		}
 		return(0);
-	}
-	function createDirectory(bookCode) {
-		var filepath = that.types.getAppPath(bookCode);
-		writer.createDirectory(filepath, function(dirName) {
-			if (dirName.errno) {
-				writeChapter(bookCode, chapterNum, oneChapter);				
-			} else {
-				writeChapter(bookCode, chapterNum, oneChapter);	
-			}
-		});
-	}
-	function writeChapter(bookCode, chapterNum, oneChapter) {
-		var filepath = that.types.getAppPath(bookCode) + '/' + chapterNum + '.usx';
-		var data = oneChapter.toUSX();
-		writer.writeTextFile(filepath, data, function(filename) {	
-			if (filename.errno) {
-				console.log('ChapterBuilder.writeChapterFailure ', JSON.stringify(filename));
-			} else {
-				oneChapter = chapters.shift();
-				if (oneChapter) {
-					chapterNum = findChapterNum(oneChapter);
-					writeChapter(bookCode, chapterNum, oneChapter);
-				} else {
-					// done
-				}
-			}
-		});
-	}
+	}	
 };
 ChapterBuilder.prototype.toJSON = function() {
-	//return(JSON.stringify(this.usxRoot));
+	return('');
 };
 
 /**
@@ -1810,6 +1845,7 @@ function DeviceDatabase(code, name) {
 	this.name = name;
 	var size = 30 * 1024 * 1024;
 	this.db = window.openDatabase(this.code, "1.0", this.name, size);
+	this.codex = new DeviceCollection(this.db, 'codex');
 	this.tableContents = new DeviceCollection(this.db, 'tableContents');
 	this.concordance = new DeviceCollection(this.db, 'concordance');
 	this.styleIndex = new DeviceCollection(this.db, 'styleIndex');
@@ -1953,7 +1989,7 @@ DeviceCollection.prototype.valuesToArray = function(names, row) {
 * Unit Test Harness for AssetController
 */
 var types = new AssetType('document', 'WEB');
-types.chapterFiles = false;
+types.chapterFiles = true;
 types.tableContents = false;
 types.concordance = false;
 types.styleIndex = true;

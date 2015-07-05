@@ -2,7 +2,7 @@
 * Unit Test Harness for AssetController
 */
 var types = new AssetType('document', 'WEB');
-types.chapterFiles = false;
+types.chapterFiles = true;
 types.tableContents = false;
 types.concordance = false;
 types.styleIndex = true;
