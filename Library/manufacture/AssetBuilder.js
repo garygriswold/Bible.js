@@ -26,6 +26,9 @@ function AssetBuilder(types, database) {
 	if (types.history) {
 		this.builders.push(new HistoryBuilder(this.database.history));
 	}
+	if (types.questions) {
+		this.builders.push(new QuestionsBuilder(this.database.questions));
+	}
 	if (types.html) {
 		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.
 	}

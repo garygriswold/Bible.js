@@ -9,6 +9,7 @@ cat ../Library/manufacture/ChapterBuilder.js >> Publisher.js
 cat ../Library/manufacture/TOCBuilder.js >> Publisher.js
 cat ../Library/manufacture/ConcordanceBuilder.js >> Publisher.js
 cat ../Library/manufacture/HistoryBuilder.js >> Publisher.js
+cat ../Library/manufacture/QuestionsBuilder.js >> Publisher.js
 cat ../Library/manufacture/StyleIndexBuilder.js >> Publisher.js
 cat ../Library/manufacture/StyleUseBuilder.js >> Publisher.js
 cat ../Library/manufacture/HTMLBuilder.js >> Publisher.js

@@ -17,6 +17,7 @@ function DeviceDatabase(code, name) {
 	this.styleIndex = new DeviceCollection(this.db, 'styleIndex');
 	this.styleUse = new DeviceCollection(this.db, 'styleUse');
 	this.history = new DeviceCollection(this.db, 'history');
+	this.questions = new DeviceCollection(this.db, 'questions');
 	Object.freeze(this);
 }
 
