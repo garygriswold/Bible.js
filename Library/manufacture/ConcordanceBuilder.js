@@ -67,7 +67,7 @@ ConcordanceBuilder.prototype.size = function() {
 };
 ConcordanceBuilder.prototype.schema = function() {
 	var sql = 'word text primary key not null, ' +
-    	'refCount integer not null,' +
+    	'refCount integer not null, ' +
     	'refList text not null';
     return(sql);
 };

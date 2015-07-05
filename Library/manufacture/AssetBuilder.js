@@ -23,6 +23,9 @@ function AssetBuilder(types, database) {
 		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));
 		this.builders.push(new StyleUseBuilder(this.database.styleUse));
 	}
+	if (types.history) {
+		this.builders.push(new HistoryBuilder(this.database.history));
+	}
 	if (types.html) {
 		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.
 	}

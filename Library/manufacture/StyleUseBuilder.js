@@ -10,7 +10,8 @@ StyleUseBuilder.prototype.readBook = function(usxRoot) {
 };
 StyleUseBuilder.prototype.schema = function() {
 	var sql = 'style text not null, ' +
-		'usage text not null';
+		'usage text not null, ' +
+		'primary key(style, usage)';
 	return(sql);
 };
 StyleUseBuilder.prototype.loadDB = function(callback) {

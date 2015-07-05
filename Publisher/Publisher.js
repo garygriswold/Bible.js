@@ -13,15 +13,9 @@ function AssetController(types, database) {
 AssetController.prototype.tableContents = function() {
 	return(this.loader.toc);
 };
-//AssetController.prototype.concordance = function() {
-//	return(this.loader.concordance);
-//};
 AssetController.prototype.history = function() {
 	return(this.loader.history);
 };
-//AssetController.prototype.styleIndex = function() {
-//	return(this.loader.styleIndex);
-//};
 AssetController.prototype.build = function(callback) {
 	var builder = new AssetBuilder(this.types, this.database);
 	builder.build(function(err) {
@@ -37,7 +31,7 @@ AssetController.prototype.smokeTest = function(callback) {
 	// to be written for device use
 	callback(this.types);
 };
-/* deprecated */
+/* deprecated *//** not sure **/
 AssetController.prototype.load = function(callback) {
 	this.loader.load(function(loadedTypes) {
 		console.log('finished assetcontroller load');
@@ -169,6 +163,9 @@ function AssetBuilder(types, database) {
 	if (types.styleIndex) {
 		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));
 		this.builders.push(new StyleUseBuilder(this.database.styleUse));
+	}
+	if (types.history) {
+		this.builders.push(new HistoryBuilder(this.database.history));
 	}
 	if (types.html) {
 		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.
@@ -304,8 +301,6 @@ AssetLoader.prototype.load = function(callback) {
 *
 */
 function ChapterBuilder(collection) {
-	//this.types = types;
-	//this.filename = 'chapterMetaData.json';
 	this.collection = collection;
 	this.books = [];
 	Object.seal(this);
@@ -313,49 +308,12 @@ function ChapterBuilder(collection) {
 ChapterBuilder.prototype.readBook = function(usxRoot) {
 	var that = this;
 	this.books.push(usxRoot);
-	//var bookCode = ''; // set by side effect of breakBookIntoChapters
-	//var chapters = breakBookIntoChapters(usxRoot);
-
-	//var reader = new FileReader(this.types.location);
-	//var writer = new FileWriter(this.types.location);
-
-	//var oneChapter = chapters.shift();
-	//var chapterNum = findChapterNum(oneChapter);
-	//createDirectory(bookCode);
-
-//	}
-//	function createDirectory(bookCode) {
-//		var filepath = that.types.getAppPath(bookCode);
-//		writer.createDirectory(filepath, function(dirName) {
-//			if (dirName.errno) {
-//				writeChapter(bookCode, chapterNum, oneChapter);				
-//			} else {
-//				writeChapter(bookCode, chapterNum, oneChapter);	
-//			}
-//		});
-//	}
-//	function writeChapter(bookCode, chapterNum, oneChapter) {
-//		var filepath = that.types.getAppPath(bookCode) + '/' + chapterNum + '.usx';
-//		var data = oneChapter.toUSX();
-//		writer.writeTextFile(filepath, data, function(filename) {	
-//			if (filename.errno) {
-//				console.log('ChapterBuilder.writeChapterFailure ', JSON.stringify(filename));
-//			} else {
-//				oneChapter = chapters.shift();
-//				if (oneChapter) {
-//					chapterNum = findChapterNum(oneChapter);
-//					writeChapter(bookCode, chapterNum, oneChapter);
-//				} else {
-//					// done
-//				}
-//			}
-//		});
-//	}
 };
 ChapterBuilder.prototype.schema = function() {
 	var sql = 'book text not null, ' +
 		'chapter integer not null, ' +
-		'xml text not null';
+		'xml text not null, ' +
+		'primary key (book, chapter)';
 	return(sql);
 };
 ChapterBuilder.prototype.loadDB = function(callback) {
@@ -572,7 +530,7 @@ ConcordanceBuilder.prototype.size = function() {
 };
 ConcordanceBuilder.prototype.schema = function() {
 	var sql = 'word text primary key not null, ' +
-    	'refCount integer not null,' +
+    	'refCount integer not null, ' +
     	'refList text not null';
     return(sql);
 };
@@ -600,6 +558,28 @@ ConcordanceBuilder.prototype.loadDB = function(callback) {
 };
 ConcordanceBuilder.prototype.toJSON = function() {
 	return(JSON.stringify(this.index, null, ' '));
+};/**
+* This class creates an empty History table.  The table is filled
+* by user action.
+*/
+function HistoryBuilder(collection) {
+	this.collection = collection;
+	Object.freeze(this);
+}
+HistoryBuilder.prototype.readBook = function(usxRoot) {
+	// This class does not process the Bible
+};
+HistoryBuilder.prototype.schema = function() {
+	var sql = 'timestamp text not null primary key, ' +
+		'book text not null, ' +
+		'chapter integer not null, ' +
+		'verse integer null, ' +
+		'source text not null, ' +
+		'search text null';
+	return(sql);
+};
+HistoryBuilder.prototype.loadDB = function(callback) {
+	callback();  // This class does not load history
 };/**
 * This class traverses the USX data model in order to find each style, and 
 * reference to that style.  It builds an index to each style showing
@@ -719,7 +699,8 @@ StyleUseBuilder.prototype.readBook = function(usxRoot) {
 };
 StyleUseBuilder.prototype.schema = function() {
 	var sql = 'style text not null, ' +
-		'usage text not null';
+		'usage text not null, ' +
+		'primary key(style, usage)';
 	return(sql);
 };
 StyleUseBuilder.prototype.loadDB = function(callback) {
@@ -1850,6 +1831,7 @@ function DeviceDatabase(code, name) {
 	this.concordance = new DeviceCollection(this.db, 'concordance');
 	this.styleIndex = new DeviceCollection(this.db, 'styleIndex');
 	this.styleUse = new DeviceCollection(this.db, 'styleUse');
+	this.history = new DeviceCollection(this.db, 'history');
 	Object.freeze(this);
 }
 
@@ -1989,10 +1971,11 @@ DeviceCollection.prototype.valuesToArray = function(names, row) {
 * Unit Test Harness for AssetController
 */
 var types = new AssetType('document', 'WEB');
-types.chapterFiles = true;
+types.chapterFiles = false;
 types.tableContents = false;
 types.concordance = false;
-types.styleIndex = true;
+types.styleIndex = false;
+types.history = true;
 var database = new DeviceDatabase(types.versionCode, 'versionNameHere');
 
 var controller = new AssetController(types, database);

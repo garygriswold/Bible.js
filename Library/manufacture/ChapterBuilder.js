@@ -14,7 +14,8 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 ChapterBuilder.prototype.schema = function() {
 	var sql = 'book text not null, ' +
 		'chapter integer not null, ' +
-		'xml text not null';
+		'xml text not null, ' +
+		'primary key (book, chapter)';
 	return(sql);
 };
 ChapterBuilder.prototype.loadDB = function(callback) {
