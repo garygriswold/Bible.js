@@ -29,6 +29,7 @@ AppViewController.prototype.begin = function(develop) {
 	types.concordance = true;
 	types.styleIndex = true;
 	this.bibleCache = new BibleCache(this.database.codex);
+	this.concordance = new Concordance(this.database.concordance);
 	var that = this;
 	var assets = new AssetController(types);
 	//assets.checkBuildLoad(function(typesLoaded) {
@@ -37,9 +38,6 @@ AppViewController.prototype.begin = function(develop) {
 		console.log('loaded toc', that.tableContents.size());
 		that.history = assets.history();
 		console.log('loaded history', that.history.size());
-		//that.concordance = assets.concordance();
-		that.concordance = new Concordance();//collection);
-		//console.log('loaded concordance', that.concordance.size());
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.lookup = new Lookup(that.tableContents);
@@ -52,6 +50,8 @@ AppViewController.prototype.begin = function(develop) {
 		Object.freeze(that);
 
 		switch(develop) {
+		case 'SearchView':
+			that.searchView.showView('risen');
 		case 'HistoryView':
 			that.historyView.showView();
 			break;
@@ -243,9 +243,7 @@ CodexView.prototype.showView = function(nodeId) {
 CodexView.prototype.showChapter = function(chapter, callout) {
 	var that = this;
 	this.bibleCache.getChapter(chapter, function(usxNode) {
-		//if (usxNode.errno) {// This is not a valid test for error
 		if (usxNode instanceof IOError) {
-			// what to do here?
 			console.log((JSON.stringify(usxNode)));
 			callout();
 		} else {
@@ -573,22 +571,28 @@ SearchView.prototype.hideView = function() {
 	}
 };
 SearchView.prototype.showSearch = function(query) {
+	var that = this;
 	this.viewRoot = document.createElement('div');
 	this.query = query;
 	this.words = query.split(' ');
-	var refList = this.concordance.search(this.words);
-	this.bookList = this.refListsByBook(refList);
-	for (var i=0; i<this.bookList.length; i++) {
-		var bookRef = this.bookList[i];
-		var bookNode = this.appendBook(bookRef.bookCode);
-		for (var j=0; j<bookRef.refList.length && j < 3; j++) {
-			var ref = new Reference(bookRef.refList[j]);
-			this.appendReference(bookNode, ref);
+	this.concordance.search(this.words, function(refList) {
+		if (refList instanceof IOError) {
+			// Error presents a blank page
+		} else {
+			that.bookList = that.refListsByBook(refList);
+			for (var i=0; i<that.bookList.length; i++) {
+				var bookRef = that.bookList[i];
+				var bookNode = that.appendBook(bookRef.bookCode);
+				for (var j=0; j<bookRef.refList.length && j < 3; j++) {
+					var ref = new Reference(bookRef.refList[j]);
+					that.appendReference(bookNode, ref);
+				}
+				if (bookRef.refList.length > 3) {
+					that.appendSeeMore(bookNode, bookRef);
+				}
+			}
 		}
-		if (bookRef.refList.length > 3) {
-			this.appendSeeMore(bookNode, bookRef);
-		}
-	}
+	});
 };
 SearchView.prototype.refListsByBook = function(refList) {
 	var bookList = [];
@@ -1329,18 +1333,39 @@ DeviceCollection.prototype.insertStatement = function(names) {
 	sql.push(')');
 	return(sql.join(''));
 };
-DeviceCollection.prototype.update = function(pkey, row, callback) {
+DeviceCollection.prototype.update = function(statement, values, callback) {
 	// This should create an update statement from the element names 
 };
-DeviceCollection.prototype.replace = function(pkey, row, callback) {
+DeviceCollection.prototype.replace = function(statement, values, callback) {
 	//This differs from insert and update in that it does not care whether
 	// the row already exists.
 };
-DeviceCollection.prototype.delete = function(pkey, callback) {
+DeviceCollection.prototype.delete = function(statement, values, callback) {
 	// This should delete the row for the key specified in the row object
 };
+DeviceCollection.prototype.select = function(statement, values, callback) {
+    this.database.readTransaction(onTranStart, onTranError);
+
+    function onTranStart(tx) {
+        console.log(statement, values);
+        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
+    }
+    function onTranError(err) {
+        console.log('select tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onSelectSuccess(tx, results) {
+        console.log('success results', JSON.stringify(results.rows));
+        callback(results);
+    }
+    function onSelectError(tx, err) {
+        console.log('select error', err);
+        callback(new IOError(err));
+    }
+};
+/** This can be rewritten using select */
 DeviceCollection.prototype.get = function(statement, values, callback) {
-    this.database.readTransaction(onTranStart, onTranError);//, onTranSuccess);
+    this.database.readTransaction(onTranStart, onTranError);
 
     function onTranStart(tx) {
         console.log(statement, values);
@@ -1351,7 +1376,6 @@ DeviceCollection.prototype.get = function(statement, values, callback) {
         callback(new IOError(err));
     }
     function onSelectSuccess(tx, results) {
-        console.log('select success', results.rows.length);
         if (results.rows.length > 0) {
             var row = results.rows.item(0);
             callback(row);
@@ -1363,9 +1387,6 @@ DeviceCollection.prototype.get = function(statement, values, callback) {
         console.log('select error', err);
         callback(new IOError(err));
     }
-};
-DeviceCollection.prototype.find = function(condition, projection, callback) {
-	// This should return a result set of rows
 };
 DeviceCollection.prototype.valuesToArray = function(names, row) {
 	var values = [ names.length ];
@@ -2235,9 +2256,8 @@ BibleCache.prototype.getChapter = function(reference, callback) {
 		var statement = 'select xml from codex where book=? and chapter=?';
 		var values = [ reference.book, reference.chapter ];
 		this.collection.get(statement, values, function(row) {
-			console.log('is io error', (row instanceof IOError));
 			if (row instanceof IOError) {
-				console.log('found Error');
+				console.log('found Error', row);
 				callback(row);
 			} else {
 				chapter = that.parser.readBook(row.xml);
@@ -2330,15 +2350,31 @@ function Concordance(collection) {
 	this.collection = collection;
 	Object.freeze(this);
 }
-Concordance.prototype.search = function(words) {
-	var refList = [];
+Concordance.prototype.search = function(words, callback) {
+	var questionMarks = [ words.length ];
+	var values = [ words.length ];
 	for (var i=0; i<words.length; i++) {
-		var list = this.index[words[i].toLocaleLowerCase()];
-		if (list) { // This is ignoring words that return no list, and allowing search to continue.
-			refList.push(list);
-		}
+		questionMarks[i] = '?';
+		values[i] = words[i].toLocaleLowerCase();
 	}
-	return(this.intersection(refList));
+	var that = this;
+	var statement = 'select refList from concordance where word in(' + questionMarks.join(',') + ')';
+	this.collection.select(statement, values, function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else {
+			var refLists = [];
+			for (i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				if (row && row.refList) { // ignore words that have no ref list
+					var array = row.refList.split(',');
+					refLists.push(array);
+				}
+			}
+			var result = that.intersection(refLists);
+			callback(result);
+		}
+	});
 };
 Concordance.prototype.intersection = function(refLists) {
 	if (refLists.length === 0) {

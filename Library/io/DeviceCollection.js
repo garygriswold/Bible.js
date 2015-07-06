@@ -118,6 +118,27 @@ DeviceCollection.prototype.replace = function(statement, values, callback) {
 DeviceCollection.prototype.delete = function(statement, values, callback) {
 	// This should delete the row for the key specified in the row object
 };
+DeviceCollection.prototype.select = function(statement, values, callback) {
+    this.database.readTransaction(onTranStart, onTranError);
+
+    function onTranStart(tx) {
+        console.log(statement, values);
+        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
+    }
+    function onTranError(err) {
+        console.log('select tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onSelectSuccess(tx, results) {
+        console.log('success results', JSON.stringify(results.rows));
+        callback(results);
+    }
+    function onSelectError(tx, err) {
+        console.log('select error', err);
+        callback(new IOError(err));
+    }
+};
+/** This can be rewritten using select */
 DeviceCollection.prototype.get = function(statement, values, callback) {
     this.database.readTransaction(onTranStart, onTranError);
 
@@ -141,9 +162,6 @@ DeviceCollection.prototype.get = function(statement, values, callback) {
         console.log('select error', err);
         callback(new IOError(err));
     }
-};
-DeviceCollection.prototype.select = function(condition, projection, callback) {
-	// This should return a result set of rows
 };
 DeviceCollection.prototype.valuesToArray = function(names, row) {
 	var values = [ names.length ];

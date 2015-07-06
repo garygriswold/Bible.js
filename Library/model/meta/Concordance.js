@@ -5,15 +5,31 @@ function Concordance(collection) {
 	this.collection = collection;
 	Object.freeze(this);
 }
-Concordance.prototype.search = function(words) {
-	var refList = [];
+Concordance.prototype.search = function(words, callback) {
+	var questionMarks = [ words.length ];
+	var values = [ words.length ];
 	for (var i=0; i<words.length; i++) {
-		var list = this.index[words[i].toLocaleLowerCase()];
-		if (list) { // This is ignoring words that return no list, and allowing search to continue.
-			refList.push(list);
-		}
+		questionMarks[i] = '?';
+		values[i] = words[i].toLocaleLowerCase();
 	}
-	return(this.intersection(refList));
+	var that = this;
+	var statement = 'select refList from concordance where word in(' + questionMarks.join(',') + ')';
+	this.collection.select(statement, values, function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else {
+			var refLists = [];
+			for (i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				if (row && row.refList) { // ignore words that have no ref list
+					var array = row.refList.split(',');
+					refLists.push(array);
+				}
+			}
+			var result = that.intersection(refLists);
+			callback(result);
+		}
+	});
 };
 Concordance.prototype.intersection = function(refLists) {
 	if (refLists.length === 0) {

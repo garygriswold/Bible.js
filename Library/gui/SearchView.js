@@ -45,22 +45,28 @@ SearchView.prototype.hideView = function() {
 	}
 };
 SearchView.prototype.showSearch = function(query) {
+	var that = this;
 	this.viewRoot = document.createElement('div');
 	this.query = query;
 	this.words = query.split(' ');
-	var refList = this.concordance.search(this.words);
-	this.bookList = this.refListsByBook(refList);
-	for (var i=0; i<this.bookList.length; i++) {
-		var bookRef = this.bookList[i];
-		var bookNode = this.appendBook(bookRef.bookCode);
-		for (var j=0; j<bookRef.refList.length && j < 3; j++) {
-			var ref = new Reference(bookRef.refList[j]);
-			this.appendReference(bookNode, ref);
+	this.concordance.search(this.words, function(refList) {
+		if (refList instanceof IOError) {
+			// Error presents a blank page
+		} else {
+			that.bookList = that.refListsByBook(refList);
+			for (var i=0; i<that.bookList.length; i++) {
+				var bookRef = that.bookList[i];
+				var bookNode = that.appendBook(bookRef.bookCode);
+				for (var j=0; j<bookRef.refList.length && j < 3; j++) {
+					var ref = new Reference(bookRef.refList[j]);
+					that.appendReference(bookNode, ref);
+				}
+				if (bookRef.refList.length > 3) {
+					that.appendSeeMore(bookNode, bookRef);
+				}
+			}
 		}
-		if (bookRef.refList.length > 3) {
-			this.appendSeeMore(bookNode, bookRef);
-		}
-	}
+	});
 };
 SearchView.prototype.refListsByBook = function(refList) {
 	var bookList = [];

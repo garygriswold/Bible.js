@@ -28,6 +28,7 @@ AppViewController.prototype.begin = function(develop) {
 	types.concordance = true;
 	types.styleIndex = true;
 	this.bibleCache = new BibleCache(this.database.codex);
+	this.concordance = new Concordance(this.database.concordance);
 	var that = this;
 	var assets = new AssetController(types);
 	//assets.checkBuildLoad(function(typesLoaded) {
@@ -36,9 +37,6 @@ AppViewController.prototype.begin = function(develop) {
 		console.log('loaded toc', that.tableContents.size());
 		that.history = assets.history();
 		console.log('loaded history', that.history.size());
-		//that.concordance = assets.concordance();
-		that.concordance = new Concordance();//collection);
-		//console.log('loaded concordance', that.concordance.size());
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.lookup = new Lookup(that.tableContents);
@@ -51,6 +49,8 @@ AppViewController.prototype.begin = function(develop) {
 		Object.freeze(that);
 
 		switch(develop) {
+		case 'SearchView':
+			that.searchView.showView('risen');
 		case 'HistoryView':
 			that.historyView.showView();
 			break;

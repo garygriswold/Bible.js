@@ -30,9 +30,8 @@ BibleCache.prototype.getChapter = function(reference, callback) {
 		var statement = 'select xml from codex where book=? and chapter=?';
 		var values = [ reference.book, reference.chapter ];
 		this.collection.get(statement, values, function(row) {
-			console.log('is io error', (row instanceof IOError));
 			if (row instanceof IOError) {
-				console.log('found Error');
+				console.log('found Error', row);
 				callback(row);
 			} else {
 				chapter = that.parser.readBook(row.xml);
