@@ -138,30 +138,17 @@ DeviceCollection.prototype.select = function(statement, values, callback) {
         callback(new IOError(err));
     }
 };
-/** This can be rewritten using select */
 DeviceCollection.prototype.get = function(statement, values, callback) {
-    this.database.readTransaction(onTranStart, onTranError);
-
-    function onTranStart(tx) {
-        console.log(statement, values);
-        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
-    }
-    function onTranError(err) {
-        console.log('get tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
-    function onSelectSuccess(tx, results) {
-        if (results.rows.length > 0) {
+    this.select(statement, values, function(results) {
+        if (results instanceof IOError) {
+            callback(results);
+        } else if (results.rows.length > 0) {
             var row = results.rows.item(0);
             callback(row);
         } else {
             callback(null);
         }
-    }
-    function onSelectError(tx, err) {
-        console.log('select error', err);
-        callback(new IOError(err));
-    }
+    });
 };
 DeviceCollection.prototype.valuesToArray = function(names, row) {
 	var values = [ names.length ];
