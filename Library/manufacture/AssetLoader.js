@@ -38,14 +38,16 @@ AssetLoader.prototype.load = function(callback) {
 							that.toc.fill(bookList);
 							break;
 						case 'concordance.json':
-							result.concordance = true;
-							var wordList = JSON.parse(data);
-							that.concordance.fill(wordList);
+//							result.concordance = true;
+//							var wordList = JSON.parse(data);
+//							that.concordance.fill(wordList);
 							break;
 						case 'history.json':
 							result.history = true;
 							var historyList = JSON.parse(data);
 							that.history.fill(historyList);
+							break;
+						case 'styleIndex.json':
 							break;
 						default:
 							throw new Error('File ' + filename + ' is not known in AssetLoader.load.');

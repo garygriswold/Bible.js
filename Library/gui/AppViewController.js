@@ -18,6 +18,7 @@ var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
 	this.touch = new Hammer(document.getElementById('codexRoot'));
+	this.database = new DeviceDatabase(versionCode, 'nameForVersion');
 }
 AppViewController.prototype.begin = function(develop) {
 	var types = new AssetType('document', this.versionCode);
@@ -26,16 +27,18 @@ AppViewController.prototype.begin = function(develop) {
 	types.history = true;
 	types.concordance = true;
 	types.styleIndex = true;
-	this.bibleCache = new BibleCache(types);
+	this.bibleCache = new BibleCache(this.database.codex);
 	var that = this;
 	var assets = new AssetController(types);
-	assets.checkBuildLoad(function(typesLoaded) {
+	//assets.checkBuildLoad(function(typesLoaded) {
+	assets.load(function(typesLoaded) {
 		that.tableContents = assets.tableContents();
 		console.log('loaded toc', that.tableContents.size());
 		that.history = assets.history();
 		console.log('loaded history', that.history.size());
-		that.concordance = assets.concordance();
-		console.log('loaded concordance', that.concordance.size());
+		//that.concordance = assets.concordance();
+		that.concordance = new Concordance();//collection);
+		//console.log('loaded concordance', that.concordance.size());
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.lookup = new Lookup(that.tableContents);

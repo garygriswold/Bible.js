@@ -22,6 +22,7 @@ cat ../Library/gui/icons/drawSettingsIcon.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/gui/icons/drawTOCIcon.js >> ../BibleAppNW/js/BibleApp.js
 
 cat ../Library/io/CommonIO.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/io/IOError.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/io/NodeFileReader.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/io/NodeFileWriter.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/io/DeviceDatabase.js >> ../BibleAppNW/js/BibleApp.js

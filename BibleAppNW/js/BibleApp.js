@@ -19,6 +19,7 @@ var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
 	this.touch = new Hammer(document.getElementById('codexRoot'));
+	this.database = new DeviceDatabase(versionCode, 'nameForVersion');
 }
 AppViewController.prototype.begin = function(develop) {
 	var types = new AssetType('document', this.versionCode);
@@ -27,16 +28,18 @@ AppViewController.prototype.begin = function(develop) {
 	types.history = true;
 	types.concordance = true;
 	types.styleIndex = true;
-	this.bibleCache = new BibleCache(types);
+	this.bibleCache = new BibleCache(this.database.codex);
 	var that = this;
 	var assets = new AssetController(types);
-	assets.checkBuildLoad(function(typesLoaded) {
+	//assets.checkBuildLoad(function(typesLoaded) {
+	assets.load(function(typesLoaded) {
 		that.tableContents = assets.tableContents();
 		console.log('loaded toc', that.tableContents.size());
 		that.history = assets.history();
 		console.log('loaded history', that.history.size());
-		that.concordance = assets.concordance();
-		console.log('loaded concordance', that.concordance.size());
+		//that.concordance = assets.concordance();
+		that.concordance = new Concordance();//collection);
+		//console.log('loaded concordance', that.concordance.size());
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.lookup = new Lookup(that.tableContents);
@@ -240,7 +243,8 @@ CodexView.prototype.showView = function(nodeId) {
 CodexView.prototype.showChapter = function(chapter, callout) {
 	var that = this;
 	this.bibleCache.getChapter(chapter, function(usxNode) {
-		if (usxNode.errno) {
+		//if (usxNode.errno) {// This is not a valid test for error
+		if (usxNode instanceof IOError) {
 			// what to do here?
 			console.log((JSON.stringify(usxNode)));
 			callout();
@@ -1109,6 +1113,15 @@ function drawTOCIcon(hite, color) {
 */
 var FILE_ROOTS = { 'application': '?', 'document': '../../dbl/current/', 'temporary': '?', 'test2dbl': '../../../dbl/current/' };
 /**
+* This class is a wrapper for SQL Error so that we can always distinguish an error
+* from valid results.  Any method that calls an IO routine, which can expect valid results
+* or an error should test "if (results instanceof IOError)".
+*/
+function IOError(err) {
+	this.code = err.code;
+	this.message = err.message;
+}
+/**
 * This class is a file reader for Node.  It can be used with node.js and node-webkit.
 * cordova requires using another class, but the interface should be the same.
 */
@@ -1195,54 +1208,18 @@ function DeviceDatabase(code, name) {
 	this.name = name;
 	var size = 30 * 1024 * 1024;
 	this.db = window.openDatabase(this.code, "1.0", this.name, size);
-	this.concordance = new DeviceCollection('concordance');
-	// access database
-	// this should access a database, or create
-	// if it does not exist.  It should create all tables and all indexes
-	// unless index creation is postponed until all data is loaded.
-	Object.seal(this);
+	this.codex = new DeviceCollection(this.db, 'codex');
+	this.tableContents = new DeviceCollection(this.db, 'tableContents');
+	this.concordance = new DeviceCollection(this.db, 'concordance');
+	this.styleIndex = new DeviceCollection(this.db, 'styleIndex');
+	this.styleUse = new DeviceCollection(this.db, 'styleUse');
+	this.history = new DeviceCollection(this.db, 'history');
+	this.questions = new DeviceCollection(this.db, 'questions');
+	Object.freeze(this);
 }
-DeviceDatabase.prototype.open = function(callback) {
-    this.db.transaction(onTranStart, onTranError, onTranSuccess);
-
-    function onTranStart(tx) {
-        tx.executeSql('create table if not exists concordance(word text, referenceList text)');
- 		//tx.executeSql('.databases', [], function(tx, results) {
- 		//	var len = results.rows.length;
- 		//	for (var i=0; i<len; i++) {
- 		//		console.log('found', results.rows.item(i));
- 		//	}
- 		//});
-    }
-    function onTranError(err) {
-        console.log('tran error', JSON.stringify(err));
-        callback(err);
-    }
-    function onTranSuccess() {
-        console.log('transaction completed');
-        callback(null);
-    }
-};
-DeviceDatabase.prototype.drop = function(callback) {
-	// This should drop the specific database
-};
-DeviceDatabase.prototype.index = function() {
-	// This should index all of the tables.  It is called after tables are loaded.
-};
 
 
-
-/* 
-Lawnchair:
-keys(callback)
-save(obj, callback)
-batch(array, callback)
-get(key|array, callback)
-exists(key, callback)
-each(callback)
-all(callback)
-remove(key|array, callback)
-*//**
+/**
 * This class is a facade over a collection in a database.  
 * At this writing, it is a facade over a Web SQL Sqlite3 database, 
 * but it intended to hide all database API specifics
@@ -1250,58 +1227,182 @@ remove(key|array, callback)
 * place, if that becomes advisable.
 * Gary Griswold, July 2, 2015
 */
-function DeviceCollection(table) {
-
+function DeviceCollection(database, table) {
+	this.database = database;
+	this.table = table;
+	Object.freeze(this);
 }
-DeviceDatabase.prototype.load = function(array, callback) {
-	// This might just iterate over the collection and call insert
-	// for each row.
+DeviceCollection.prototype.drop = function(callback) {
+	var table = this.table;
+	this.database.transaction(onTranStart, onTranError, onTranSuccess);
+
+    function onTranStart(tx) {
+    	tx.executeSql('drop table if exists ' + table);
+    }
+    function onTranError(err) {
+        console.log('drop tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onTranSuccess() {
+        console.log('drop transaction completed');
+        callback();
+    }
 };
-DeviceDatabase.prototype.insert = function(row, callback) {
-	// This should have the sql for an insert statement for each table
-	// It could have variants that use a different table name
-	// row is a single object of name/value pairs that translate into
-	// a sql insert statement
+DeviceCollection.prototype.create = function(schema, callback) {
+	var table = this.table;
+	if (schema) {
+    	this.database.transaction(onTranStart, onTranError, onTranSuccess);
+	}
+
+    function onTranStart(tx) {
+    	var sql = 'create table if not exists ' + table + '(' + schema + ')';
+		console.log(sql);
+		tx.executeSql(sql);
+    }
+    function onTranError(err) {
+        console.log('create tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onTranSuccess() {
+        console.log('create transaction completed');
+        callback();
+    }
 };
-DeviceDatabase.prototype.update = function(key, row, callback) {
+DeviceCollection.prototype.load = function(names, array, callback) {
+	var that = this;
+	if (names && array && array.length > 0) {
+		this.database.transaction(onTranStart, onTranError, onTranSuccess);
+	}
+    function onTranStart(tx) {
+  		var statement = that.insertStatement(names);
+  		console.log(statement);
+  		for (var i=0; i<array.length; i++) {
+        	tx.executeSql(statement, array[i]);
+        }
+    }
+    function onTranError(err) {
+        console.log('load tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onTranSuccess() {
+        console.log('load transaction completed');
+        callback();
+    }
+};
+DeviceCollection.prototype.insert = function(row, callback) {
+	var that = this;
+	if (row) {
+		this.database.transaction(onTranStart, onTranError, onTranSuccess);
+	}
+    function onTranStart(tx) {
+    	var names = Object.keys(row);
+		var statement = that.insertStatement(names);
+		var values = that.valuesToArray(names, row);
+  		console.log(statement);
+        tx.executeSql(statement, values);
+    }
+    function onTranError(err) {
+        console.log('insert tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onTranSuccess() {
+        console.log('insert transaction completed');
+        callback();
+    }
+};
+/** deprecated for consistency insert statement into insert and load db */
+DeviceCollection.prototype.insertStatement = function(names) {
+	var sql = [ 'insert into ', this.table, ' (' ];
+	for (var i=0; i<names.length; i++) {
+		if (i > 0) {
+			sql.push(', ');
+		}
+		sql.push(names[i]);
+	}
+	sql.push(') values (');
+	for (var i=0; i<names.length; i++) {
+		if (i > 0) {
+			sql.push(',');
+		}
+		sql.push('?');
+	}
+	sql.push(')');
+	return(sql.join(''));
+};
+DeviceCollection.prototype.update = function(pkey, row, callback) {
 	// This should create an update statement from the element names 
 };
-DeviceDatabase.prototype.replace = function(key, row, callback) {
+DeviceCollection.prototype.replace = function(pkey, row, callback) {
 	//This differs from insert and update in that it does not care whether
 	// the row already exists.
 };
-DeviceDatabase.prototype.delete = function(key, callback) {
+DeviceCollection.prototype.delete = function(pkey, callback) {
 	// This should delete the row for the key specified in the row object
 };
-DeviceDatabase.prototype.get = function(key, callback) {
-	// This should get the single row, which satisfies that fields in key object
+DeviceCollection.prototype.get = function(statement, values, callback) {
+    this.database.readTransaction(onTranStart, onTranError);//, onTranSuccess);
+
+    function onTranStart(tx) {
+        console.log(statement, values);
+        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
+    }
+    function onTranError(err) {
+        console.log('get tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onSelectSuccess(tx, results) {
+        console.log('select success', results.rows.length);
+        if (results.rows.length > 0) {
+            var row = results.rows.item(0);
+            callback(row);
+        } else {
+            callback(null);
+        }
+    }
+    function onSelectError(tx, err) {
+        console.log('select error', err);
+        callback(new IOError(err));
+    }
 };
-DeviceDatabase.prototype.find = function(condition, projection, callback) {
+DeviceCollection.prototype.find = function(condition, projection, callback) {
 	// This should return a result set of rows
+};
+DeviceCollection.prototype.valuesToArray = function(names, row) {
+	var values = [ names.length ];
+	for (var i=0; i<names.length; i++) {
+		values[i] = row[names[i]];
+	}
+	return(values);
 };/**
 * The Table of Contents and Concordance must be created by processing the entire text.  Since the parsing of the XML
 * is a significant amount of the time to do this, this class reads over the entire Bible text and creates
 * all of the required assets.
 */
-function AssetBuilder(types) {
+function AssetBuilder(types, database) {
 	this.types = types;
+	this.database = database;
 	this.builders = [];
 	if (types.chapterFiles) {
-		this.builders.push(new ChapterBuilder(types));
+		this.builders.push(new ChapterBuilder(this.database.codex));
 	}
 	if (types.tableContents) {
-		this.builders.push(new TOCBuilder());
+		this.builders.push(new TOCBuilder(this.database.tableContents));
 	}
 	if (types.concordance) {
-		var concordanceBuilder = new ConcordanceBuilder();
-		this.builders.push(concordanceBuilder);
-		this.builders.push(new WordCountBuilder(concordanceBuilder.concordance));
+		this.builders.push(new ConcordanceBuilder(this.database.concordance));
 	}
 	if (types.history) { 
 		// do nothing 
 	}
 	if (types.styleIndex) {
-		this.builders.push(new StyleIndexBuilder());
+		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));
+		this.builders.push(new StyleUseBuilder(this.database.styleUse));
+	}
+	if (types.history) {
+		this.builders.push(new HistoryBuilder(this.database.history));
+	}
+	if (types.questions) {
+		this.builders.push(new QuestionsBuilder(this.database.questions));
 	}
 	if (types.html) {
 		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.
@@ -1309,16 +1410,12 @@ function AssetBuilder(types) {
 	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
 	this.writer = new FileWriter(types.location);
-	this.database = new DeviceDatabase(this.types.versionCode, 'versionNameHere');
-	this.database.open(function(err) {
-		console.log('connect error', err);
-	});
 	this.filesToProcess = [];
 	Object.freeze(this);
 }
 AssetBuilder.prototype.build = function(callback) {
+	var that = this;
 	if (this.builders.length > 0) {
-		var that = this;
 		this.filesToProcess.splice(0);
 		var canon = new Canon();
 		for (var i=0; i<canon.books.length; i++) {
@@ -1343,20 +1440,31 @@ AssetBuilder.prototype.build = function(callback) {
 				}
 			});
 		} else {
-			processWriteResult(that.builders.shift());
+			processDatabaseLoad(that.builders.shift());
 		}
 	}
-	function processWriteResult(builder) {
+	function processDatabaseLoad(builder) {
 		if (builder) {
-			var json = builder.toJSON();
-			var filepath = that.types.getAppPath(builder.filename);
-			that.writer.writeTextFile(filepath, json, function(filename) {
-				if (filename.errno) {
-					console.log('file write failure ', filename);
-					callback(filename);
+			builder.collection.drop(function(err) {
+				if (err) {
+					console.log('drop error', err);
+					callback(err);
 				} else {
-					console.log('file write success ', filename);
-					processWriteResult(that.builders.shift());
+					builder.collection.create(builder.schema(), function(err) {
+						if (err) {
+							console.log('create error', err);
+							callback(err);
+						} else {
+							builder.loadDB(function(err) {
+								if (err) {
+									console.log('load db error', err);
+									callback(err);
+								} else {
+									processDatabaseLoad(that.builders.shift());
+								}
+							});
+						}
+					});
 				}
 			});
 		} else {
@@ -1368,6 +1476,8 @@ AssetBuilder.prototype.build = function(callback) {
 * This class checks for the presence of each assets that is required.
 * It should be expanded to check for the correct version of each asset as well, 
 * once assets are versioned.
+*
+* This is deprecated and to be deleted as soon as the builders are rewritten
 */
 function AssetChecker(types) {
 	this.types = types;
@@ -1407,47 +1517,34 @@ AssetChecker.prototype.check = function(callback) {
 * one both the client and the server.  It is a "builder" controller that uses the AssetType
 * as a "director" to control which assets are built.
 */
-function AssetController(types) {
+function AssetController(types, database) {
 	this.types = types;
+	this.database = database;
 	this.checker = new AssetChecker(types);
 	this.loader = new AssetLoader(types);
 }
 AssetController.prototype.tableContents = function() {
 	return(this.loader.toc);
 };
-AssetController.prototype.concordance = function() {
-	return(this.loader.concordance);
-};
 AssetController.prototype.history = function() {
 	return(this.loader.history);
 };
-AssetController.prototype.styleIndex = function() {
-	return(this.loader.styleIndex);
-};
-AssetController.prototype.checkBuildLoad = function(callback) {
-	var that = this;
-	this.checker.check(function(absentTypes) {
-		var builder = new AssetBuilder(absentTypes);
-		builder.build(function() {
-			that.loader.load(function(loadedTypes) {
-				callback(loadedTypes);
-			});
-		});
-	});
-};
-AssetController.prototype.check = function(callback) {
-	this.checker.check(function(absentTypes) {
-		console.log('finished to be built types', absentTypes);
-		callback(absentTypes);
-	});
-};
 AssetController.prototype.build = function(callback) {
-	var builder = new AssetBuilder(this.types);
-	builder.build(function() {
+	var builder = new AssetBuilder(this.types, this.database);
+	builder.build(function(err) {
 		console.log('finished asset build');
-		callback();
+		callback(err);
 	});
 };
+AssetController.prototype.validate = function(callback) {
+	// to be written for publisher and server
+	callback(this.types);
+};
+AssetController.prototype.smokeTest = function(callback) {
+	// to be written for device use
+	callback(this.types);
+};
+/* deprecated *//** not sure **/
 AssetController.prototype.load = function(callback) {
 	this.loader.load(function(loadedTypes) {
 		console.log('finished assetcontroller load');
@@ -1468,7 +1565,6 @@ function AssetLoader(types) {
 	this.toc = new TOC();
 	this.concordance = new Concordance();
 	this.history = new History(types);
-	this.styleIndex = new StyleIndex();
 }
 AssetLoader.prototype.load = function(callback) {
 	var that = this;
@@ -1495,9 +1591,9 @@ AssetLoader.prototype.load = function(callback) {
 							that.toc.fill(bookList);
 							break;
 						case 'concordance.json':
-							result.concordance = true;
-							var wordList = JSON.parse(data);
-							that.concordance.fill(wordList);
+//							result.concordance = true;
+//							var wordList = JSON.parse(data);
+//							that.concordance.fill(wordList);
 							break;
 						case 'history.json':
 							result.history = true;
@@ -1505,9 +1601,6 @@ AssetLoader.prototype.load = function(callback) {
 							that.history.fill(historyList);
 							break;
 						case 'styleIndex.json':
-							result.styleIndex = true;
-							var styleList = JSON.parse(data);
-							that.styleIndex.fill(styleList);
 							break;
 						default:
 							throw new Error('File ' + filename + ' is not known in AssetLoader.load.');
@@ -1532,6 +1625,7 @@ function AssetType(location, versionCode) {
 	this.tableContents = false;
 	this.concordance = false;
 	this.history = false;
+	this.questions = false;
 	this.styleIndex = false;
 	this.html = false;// this one is not ready
 	Object.seal(this);
@@ -1586,22 +1680,45 @@ AssetType.prototype.getAppPath = function(filename) {
 * This class iterates over the USX data model, and breaks it into files one for each chapter.
 *
 */
-function ChapterBuilder(types) {
-	this.types = types;
-	this.filename = 'chapterMetaData.json';
+function ChapterBuilder(collection) {
+	this.collection = collection;
+	this.books = [];
 	Object.seal(this);
 }
 ChapterBuilder.prototype.readBook = function(usxRoot) {
 	var that = this;
-	var bookCode = ''; // set by side effect of breakBookIntoChapters
-	var chapters = breakBookIntoChapters(usxRoot);
-
-	var reader = new FileReader(this.types.location);
-	var writer = new FileWriter(this.types.location);
-
-	var oneChapter = chapters.shift();
-	var chapterNum = findChapterNum(oneChapter);
-	createDirectory(bookCode);
+	this.books.push(usxRoot);
+};
+ChapterBuilder.prototype.schema = function() {
+	var sql = 'book text not null, ' +
+		'chapter integer not null, ' +
+		'xml text not null, ' +
+		'primary key (book, chapter)';
+	return(sql);
+};
+ChapterBuilder.prototype.loadDB = function(callback) {
+	var array = [];
+	for (var i=0; i<this.books.length; i++) {
+		var usxRoot = this.books[i];
+		var bookCode = null; // set as a side-effect of breakBookIntoChapters
+		var chapters = breakBookIntoChapters(usxRoot);
+		for (var j=0; j<chapters.length; j++) {
+			var chapter = chapters[j];
+			var chapterNum = findChapterNum(chapter);
+			var values = [ bookCode, chapterNum, chapter.toUSX() ];
+			array.push(values);
+		}
+	}
+	var names = [ 'book', 'chapter', 'xml' ];
+	this.collection.load(names, array, function(err) {
+		if (err) {
+			console.log('Storing chapters failed');
+			callback(err);
+		} else {
+			console.log('store chapters success');
+			callback();
+		}
+	});
 
 	function breakBookIntoChapters(usxRoot) {
 		var chapters = [];
@@ -1632,37 +1749,10 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 			}
 		}
 		return(0);
-	}
-	function createDirectory(bookCode) {
-		var filepath = that.types.getAppPath(bookCode);
-		writer.createDirectory(filepath, function(dirName) {
-			if (dirName.errno) {
-				writeChapter(bookCode, chapterNum, oneChapter);				
-			} else {
-				writeChapter(bookCode, chapterNum, oneChapter);	
-			}
-		});
-	}
-	function writeChapter(bookCode, chapterNum, oneChapter) {
-		var filepath = that.types.getAppPath(bookCode) + '/' + chapterNum + '.usx';
-		var data = oneChapter.toUSX();
-		writer.writeTextFile(filepath, data, function(filename) {	
-			if (filename.errno) {
-				console.log('ChapterBuilder.writeChapterFailure ', JSON.stringify(filename));
-			} else {
-				oneChapter = chapters.shift();
-				if (oneChapter) {
-					chapterNum = findChapterNum(oneChapter);
-					writeChapter(bookCode, chapterNum, oneChapter);
-				} else {
-					// done
-				}
-			}
-		});
-	}
+	}	
 };
 ChapterBuilder.prototype.toJSON = function() {
-	//return(JSON.stringify(this.usxRoot));
+	return('');
 };
 
 /**
@@ -1671,9 +1761,9 @@ ChapterBuilder.prototype.toJSON = function() {
 *
 * This solution might not be unicode safe. GNG Apr 2, 2015
 */
-function ConcordanceBuilder() {
-	this.concordance = new Concordance();
-	this.filename = this.concordance.filename;
+function ConcordanceBuilder(collection) {
+	this.collection = collection;
+	this.index = {};
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
@@ -1704,7 +1794,7 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 				var word = words[i].replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]/g, '');
 				if (word.length > 0 && this.chapter > 0 && this.verse > 0) {
 					var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-					this.concordance.addEntry(word.toLocaleLowerCase(), reference);
+					this.addEntry(word.toLocaleLowerCase(), reference);
 				}
 			}
 			break;
@@ -1717,8 +1807,51 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 
 	}
 };
+ConcordanceBuilder.prototype.addEntry = function(word, reference) {
+	if (this.index[word] === undefined) {
+		this.index[word] = [];
+		this.index[word].push(reference);
+	}
+	else {
+		var refList = this.index[word];
+		if (reference !== refList[refList.length -1]) { /* ignore duplicate reference */
+			refList.push(reference);
+		}
+	}
+};
+ConcordanceBuilder.prototype.size = function() {
+	return(Object.keys(this.index).length); 
+};
+ConcordanceBuilder.prototype.schema = function() {
+	var sql = 'word text primary key not null, ' +
+    	'refCount integer not null, ' +
+    	'refList text not null';
+    return(sql);
+};
+ConcordanceBuilder.prototype.loadDB = function(callback) {
+	console.log('Concordance loadDB records count', this.size());
+	var words = Object.keys(this.index);
+	var array = [];
+	for (var i=0; i<words.length; i++) {
+		var word = words[i];
+		var refList = this.index[word];
+		var refCount = refList.length;
+		var item = [ words[i], refCount, refList ];
+		array.push(item);
+	}
+	var names = [ 'word', 'refCount', 'refList' ];
+	this.collection.load(names, array, function(err) {
+		if (err) {
+			window.alert('Concordance Builder Failed', JSON.stringify(err));
+			callback(err);
+		} else {
+			console.log('concordance loaded in database');
+			callback();
+		}
+	});
+};
 ConcordanceBuilder.prototype.toJSON = function() {
-	return(this.concordance.toJSON());
+	return(JSON.stringify(this.index, null, ' '));
 };/**
 * This class iterates over the USX data model, and translates the contents to DOM.
 *
@@ -1834,14 +1967,22 @@ HTMLBuilder.prototype.toJSON = function() {
 * reference to that style.  It builds an index to each style showing
 * all of the references where each style is used.
 */
-function StyleIndexBuilder() {
-	this.styleIndex = new StyleIndex();
-	this.filename = this.styleIndex.filename;
+function StyleIndexBuilder(collection) {
+	this.collection = collection;
+	this.index = {};
 }
+StyleIndexBuilder.prototype.addEntry = function(word, reference) {
+	if (this.index[word] === undefined) {
+		this.index[word] = [];
+	}
+	if (this.index[word].length < 100) {
+		this.index[word].push(reference);
+	}
+};
 StyleIndexBuilder.prototype.readBook = function(usxRoot) {
 	this.bookCode = '';
-	this.chapter = 0;
-	this.verse = 0;
+	this.chapter = null;
+	this.verse = null;
 	this.readRecursively(usxRoot);
 };
 StyleIndexBuilder.prototype.readRecursively = function(node) {
@@ -1850,19 +1991,19 @@ StyleIndexBuilder.prototype.readRecursively = function(node) {
 			this.bookCode = node.code;
 			var style = 'book.' + node.style;
 			var reference = this.bookCode;
-			this.styleIndex.addEntry(style, reference);
+			this.addEntry(style, reference);
 			break;
 		case 'chapter':
 			this.chapter = node.number;
 			style = 'chapter.' + node.style;
 			reference = this.bookCode + ':' + this.chapter;
-			this.styleIndex.addEntry(style, reference);
+			this.addEntry(style, reference);
 			break;
 		case 'verse':
 			this.verse = node.number;
 			style = 'verse.' + node.style;
 			reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-			this.styleIndex.addEntry(style, reference);
+			this.addEntry(style, reference);
 			break;
 		case 'usx':
 		case 'text':
@@ -1871,7 +2012,7 @@ StyleIndexBuilder.prototype.readRecursively = function(node) {
 		default:
 			style = node.tagName + '.' + node.style;
 			reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-			this.styleIndex.addEntry(style, reference);
+			this.addEntry(style, reference);
 	}
 	if ('children' in node) {
 		for (var i=0; i<node.children.length; i++) {
@@ -1879,17 +2020,63 @@ StyleIndexBuilder.prototype.readRecursively = function(node) {
 		}
 	}
 };
+StyleIndexBuilder.prototype.size = function() {
+	return(Object.keys(this.index).length);
+};
+StyleIndexBuilder.prototype.schema = function() {
+	var sql = 'style text not null, ' +
+		'usage text not null, ' +
+		'book text not null, ' +
+		'chapter integer null, ' +
+		'verse integer null';
+	return(sql);
+};
+StyleIndexBuilder.prototype.loadDB = function(callback) {
+	console.log('style index loadDB records count', this.size());
+	var array = [];
+	var styles = Object.keys(this.index);
+	for (var i=0; i<styles.length; i++) {
+		var style = styles[i];
+		var styleUse = style.split('.');
+		var refList = this.index[style];
+		for (var j=0; j<refList.length; j++) {
+			var refItem = refList[j];
+			var reference = refItem.split(':');
+			switch(reference.length) {
+				case 1:
+					var values = [ styleUse[1], styleUse[0], reference[0], null, null ];
+					break;
+				case 2:
+					values = [ styleUse[1], styleUse[0], reference[0], reference[1], null ];
+					break;
+				case 3:
+					values = [ styleUse[1], styleUse[0], reference[0], reference[1], reference[2] ];
+			}
+			array.push(values);
+		}
+	}
+	var names = [ 'style', 'usage', 'book', 'chapter', 'verse' ];
+	this.collection.load(names, array, function(err) {
+		if (err) {
+			window.alert('StyleIndex Builder Failed', JSON.stringify(err));
+			callback(err);
+		} else {
+			console.log('StyleIndex loaded in database');
+			callback();
+		}
+	});
+};
 StyleIndexBuilder.prototype.toJSON = function() {
-	return(this.styleIndex.toJSON());
+	return(this.toJSON());
 };
 /**
 * This class traverses the USX data model in order to find each book, and chapter
 * in order to create a table of contents that is localized to the language of the text.
 */
-function TOCBuilder() {
-	this.toc = new TOC();
+function TOCBuilder(collection) {
+	this.collection = collection;
+	this.toc = new TOC(collection);
 	this.tocBook = null;
-	this.filename = this.toc.filename;
 	Object.seal(this);
 }
 TOCBuilder.prototype.readBook = function(usxRoot) {
@@ -1932,14 +2119,53 @@ TOCBuilder.prototype.readRecursively = function(node) {
 		}
 	}
 };
+TOCBuilder.prototype.size = function() {
+	return(this.toc.bookList.length);
+};
+TOCBuilder.prototype.schema = function() {
+	var sql = 'code text primary key not null, ' +
+    	'heading text not null, ' +
+    	'title text not null, ' +
+    	'name text not null, ' +
+    	'abbrev text not null, ' +
+		'lastChapter integer not null, ' +
+		'priorBook text null, ' +
+		'nextBook text null';
+	return(sql);
+};
+TOCBuilder.prototype.loadDB = function(callback) {
+	console.log('TOC loadDB records count', this.size());
+	var array = [];
+	var len = this.size();
+	for (var i=0; i<len; i++) {
+		var tocBook = this.toc.bookList[i];
+		var names = Object.keys(tocBook);
+		var values = this.collection.valuesToArray(names, tocBook);
+		array.push(values);
+	}
+	this.collection.load(names, array, function(err) {
+		if (err) {
+			window.alert('TOC Builder Failed', JSON.stringify(err));
+			callback(err);
+		} else {
+			console.log('TOC loaded in database');
+			callback();
+		}
+	});
+};
 TOCBuilder.prototype.toJSON = function() {
 	return(this.toc.toJSON());
 };/**
 * This class gets information from the concordance that was built, and produces 
 * a word list with frequency counts for each word.
+*
+* This class is deprecated.  It is replaced by storing the reference count
+* in the concordance table and being able to query it both ways.
+*
+* I will keep until after validation code is written in case it is needed.
 */
-function WordCountBuilder(concordance) {
-	this.concordance = concordance;
+function WordCountBuilder(concordanceBuilder) {
+	this.concordance = concordanceBuilder;
 	this.filename = 'wordCount.json';
 }
 WordCountBuilder.prototype.readBook = function(usxRoot) {
@@ -1987,11 +2213,15 @@ WordCountBuilder.prototype.toJSON = function() {
 * 1) Read Chapter 11.2ms, 49K heap increase
 * 2) Parse USX 6.0ms, 306K heap increase
 * 3) Generate Dom 2.16ms, 85K heap increase
+* These tests were done when IO was file.  They need to be redone.
+*
+* This class does not yet have a means to remove old entries from cache.  
+* It is possible that DB access is fast enough, and this is not needed.
+* GNG July 5, 2015
 */
-function BibleCache(types) {
-	this.types = types;
+function BibleCache(collection) {
+	this.collection = collection;
 	this.chapterMap = {};
-	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
 	Object.freeze(this);
 }
@@ -2002,19 +2232,22 @@ BibleCache.prototype.getChapter = function(reference, callback) {
 	if (chapter !== undefined) {
 		callback(chapter);
 	} else {
-		var filepath = this.types.getAppPath(reference.path());
-		this.reader.readTextFile(filepath, function(data) {
-			if (data.errno) {
-				console.log('BibleCache.getChapter ', JSON.stringify(data));
-				callback(data);
+		var statement = 'select xml from codex where book=? and chapter=?';
+		var values = [ reference.book, reference.chapter ];
+		this.collection.get(statement, values, function(row) {
+			console.log('is io error', (row instanceof IOError));
+			if (row instanceof IOError) {
+				console.log('found Error');
+				callback(row);
 			} else {
-				chapter = that.parser.readBook(data);
+				chapter = that.parser.readBook(row.xml);
 				that.chapterMap[reference.nodeId] = chapter;
-				callback(chapter);				
+				callback(chapter);
 			}
 		});
 	}
 };
+
 /**
 * This class contains the Canon of Scripture as 66 books.  It is used to control
 * which books are published using this App.  The codes are used to identify the
@@ -2093,32 +2326,10 @@ function Canon() {
 /**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
-function Concordance() {
-	this.index = {};
-	this.filename = 'concordance.json';
-	this.isFilled = false;
-	Object.seal(this);
-}
-Concordance.prototype.fill = function(words) {
-	this.index = words;
-	this.isFilled = true;
+function Concordance(collection) {
+	this.collection = collection;
 	Object.freeze(this);
-};
-Concordance.prototype.addEntry = function(word, reference) {
-	if (this.index[word] === undefined) {
-		this.index[word] = [];
-		this.index[word].push(reference);
-	}
-	else {
-		var refList = this.index[word];
-		if (reference !== refList[refList.length -1]) { /* ignore duplicate reference */
-			refList.push(reference);
-		}
-	}
-};
-Concordance.prototype.size = function() {
-	return(Object.keys(this.index).length);
-};
+}
 Concordance.prototype.search = function(words) {
 	var refList = [];
 	for (var i=0; i<words.length; i++) {
@@ -2167,9 +2378,7 @@ Concordance.prototype.intersection = function(refLists) {
 		return(true);
 	}
 };
-Concordance.prototype.toJSON = function() {
-	return(JSON.stringify(this.index, null, ' '));
-};/**
+/**
 * This class manages a queue of history items up to some maximum number of items.
 * It adds items when there is an event, such as a toc click, a search lookup,
 * or a concordance search.  It also responds to function requests to go back 
@@ -2453,10 +2662,10 @@ Reference.prototype.chapterVerse = function() {
 /**
 * This class holds data for the table of contents of the entire Bible, or whatever part of the Bible was loaded.
 */
-function TOC() {
+function TOC(collection) {
+	this.collection = collection;
 	this.bookList = [];
 	this.bookMap = {};
-	this.filename = 'toc.json';
 	this.isFilled = false;
 	Object.seal(this);
 }
@@ -2523,56 +2732,6 @@ function TOCBook(code) {
 	this.nextBook = null;
 	Object.seal(this);
 }/**
-* This class holds an index of styles of the entire Bible, or whatever part of the Bible was loaded into it.
-*/
-function StyleIndex() {
-	this.index = {};
-	this.filename = 'styleIndex.json';
-	this.isFilled = false;
-	this.completed = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl', 'para.rem',
-		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.ms1', 'para.d',
-		'chapter.c', 'verse.v',
-		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 'para.li1', 'para.nb',
-		'para.sp', 'para.q', 'para.q1', 'para.q2',
-		'note.f', 'note.x', 'char.fr', 'char.ft', 'char.fqa', 'char.xo',
-		'char.wj', 'char.qs'];
-	Object.seal(this);
-}
-StyleIndex.prototype.fill = function(entries) {
-	this.index = entries;
-	this.isFilled = true;
-	Object.freeze(this);
-};
-StyleIndex.prototype.addEntry = function(word, reference) {
-	if (this.completed.indexOf(word) < 0) {
-		if (this.index[word] === undefined) {
-			this.index[word] = [];
-		}
-		if (this.index[word].length < 100) {
-			this.index[word].push(reference);
-		}
-	}
-};
-StyleIndex.prototype.find = function(word) {
-	return(this.index[word]);
-};
-StyleIndex.prototype.size = function() {
-	return(Object.keys(this.index).length);
-};
-StyleIndex.prototype.dumpAlphaSort = function() {
-	var words = Object.keys(this.index);
-	var alphaWords = words.sort();
-	this.dump(alphaWords);
-};
-StyleIndex.prototype.dump = function(words) {
-	for (var i=0; i<words.length; i++) {
-		var word = words[i];
-		console.log(word, this.index[word]);
-	}	
-};
-StyleIndex.prototype.toJSON = function() {
-	return(JSON.stringify(this.index, null, ' '));
-};/**
 * This class extracts single verses from Chapters and returns the text of those
 * verses for use in Concordance Search and possibly other uses.  This is written
 * as a class, because BibleCache and SearchView both have only one instance, but

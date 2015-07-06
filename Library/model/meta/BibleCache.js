@@ -8,11 +8,15 @@
 * 1) Read Chapter 11.2ms, 49K heap increase
 * 2) Parse USX 6.0ms, 306K heap increase
 * 3) Generate Dom 2.16ms, 85K heap increase
+* These tests were done when IO was file.  They need to be redone.
+*
+* This class does not yet have a means to remove old entries from cache.  
+* It is possible that DB access is fast enough, and this is not needed.
+* GNG July 5, 2015
 */
-function BibleCache(types) {
-	this.types = types;
+function BibleCache(collection) {
+	this.collection = collection;
 	this.chapterMap = {};
-	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
 	Object.freeze(this);
 }
@@ -23,16 +27,19 @@ BibleCache.prototype.getChapter = function(reference, callback) {
 	if (chapter !== undefined) {
 		callback(chapter);
 	} else {
-		var filepath = this.types.getAppPath(reference.path());
-		this.reader.readTextFile(filepath, function(data) {
-			if (data.errno) {
-				console.log('BibleCache.getChapter ', JSON.stringify(data));
-				callback(data);
+		var statement = 'select xml from codex where book=? and chapter=?';
+		var values = [ reference.book, reference.chapter ];
+		this.collection.get(statement, values, function(row) {
+			console.log('is io error', (row instanceof IOError));
+			if (row instanceof IOError) {
+				console.log('found Error');
+				callback(row);
 			} else {
-				chapter = that.parser.readBook(data);
+				chapter = that.parser.readBook(row.xml);
 				that.chapterMap[reference.nodeId] = chapter;
-				callback(chapter);				
+				callback(chapter);
 			}
 		});
 	}
 };
+

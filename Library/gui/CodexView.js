@@ -110,8 +110,7 @@ CodexView.prototype.showView = function(nodeId) {
 CodexView.prototype.showChapter = function(chapter, callout) {
 	var that = this;
 	this.bibleCache.getChapter(chapter, function(usxNode) {
-		if (usxNode.errno) {
-			// what to do here?
+		if (usxNode instanceof IOError) {
 			console.log((JSON.stringify(usxNode)));
 			callout();
 		} else {

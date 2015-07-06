@@ -20,7 +20,7 @@ DeviceCollection.prototype.drop = function(callback) {
     }
     function onTranError(err) {
         console.log('drop tran error', JSON.stringify(err));
-        callback(err);
+        callback(new IOError(err));
     }
     function onTranSuccess() {
         console.log('drop transaction completed');
@@ -40,7 +40,7 @@ DeviceCollection.prototype.create = function(schema, callback) {
     }
     function onTranError(err) {
         console.log('create tran error', JSON.stringify(err));
-        callback(err);
+        callback(new IOError(err));
     }
     function onTranSuccess() {
         console.log('create transaction completed');
@@ -61,7 +61,7 @@ DeviceCollection.prototype.load = function(names, array, callback) {
     }
     function onTranError(err) {
         console.log('load tran error', JSON.stringify(err));
-        callback(err);
+        callback(new IOError(err));
     }
     function onTranSuccess() {
         console.log('load transaction completed');
@@ -82,13 +82,14 @@ DeviceCollection.prototype.insert = function(row, callback) {
     }
     function onTranError(err) {
         console.log('insert tran error', JSON.stringify(err));
-        callback(err);
+        callback(new IOError(err));
     }
     function onTranSuccess() {
         console.log('insert transaction completed');
         callback();
     }
 };
+/** deprecated for consistency insert statement into insert and load db */
 DeviceCollection.prototype.insertStatement = function(names) {
 	var sql = [ 'insert into ', this.table, ' (' ];
 	for (var i=0; i<names.length; i++) {
@@ -107,20 +108,41 @@ DeviceCollection.prototype.insertStatement = function(names) {
 	sql.push(')');
 	return(sql.join(''));
 };
-DeviceCollection.prototype.update = function(key, row, callback) {
+DeviceCollection.prototype.update = function(statement, values, callback) {
 	// This should create an update statement from the element names 
 };
-DeviceCollection.prototype.replace = function(key, row, callback) {
+DeviceCollection.prototype.replace = function(statement, values, callback) {
 	//This differs from insert and update in that it does not care whether
 	// the row already exists.
 };
-DeviceCollection.prototype.delete = function(key, callback) {
+DeviceCollection.prototype.delete = function(statement, values, callback) {
 	// This should delete the row for the key specified in the row object
 };
-DeviceCollection.prototype.get = function(key, callback) {
-	// This should get the single row, which satisfies that fields in key object
+DeviceCollection.prototype.get = function(statement, values, callback) {
+    this.database.readTransaction(onTranStart, onTranError);
+
+    function onTranStart(tx) {
+        console.log(statement, values);
+        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
+    }
+    function onTranError(err) {
+        console.log('get tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onSelectSuccess(tx, results) {
+        if (results.rows.length > 0) {
+            var row = results.rows.item(0);
+            callback(row);
+        } else {
+            callback(null);
+        }
+    }
+    function onSelectError(tx, err) {
+        console.log('select error', err);
+        callback(new IOError(err));
+    }
 };
-DeviceCollection.prototype.find = function(condition, projection, callback) {
+DeviceCollection.prototype.select = function(condition, projection, callback) {
 	// This should return a result set of rows
 };
 DeviceCollection.prototype.valuesToArray = function(names, row) {
