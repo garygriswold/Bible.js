@@ -22,18 +22,12 @@ function AppViewController(versionCode) {
 }
 AppViewController.prototype.begin = function(develop) {
 	var types = new AssetType('document', this.versionCode);
-	types.tableContents = true;
-	types.chapterFiles = true;
-	types.history = true;
-	types.concordance = true;
-	types.styleIndex = true;
+	this.tableContents = new TOC(this.database.tableContents);
 	this.bibleCache = new BibleCache(this.database.codex);
 	this.concordance = new Concordance(this.database.concordance);
 	var that = this;
 	var assets = new AssetController(types);
-	//assets.checkBuildLoad(function(typesLoaded) {
-	assets.load(function(typesLoaded) {
-		that.tableContents = assets.tableContents();
+	fillFromDatabase(function() {
 		console.log('loaded toc', that.tableContents.size());
 		that.history = assets.history();
 		console.log('loaded history', that.history.size());
@@ -49,8 +43,12 @@ AppViewController.prototype.begin = function(develop) {
 		Object.freeze(that);
 
 		switch(develop) {
+		case 'TableContentsView':
+			that.tableContentsView.showView();
+			break;
 		case 'SearchView':
 			that.searchView.showView('risen');
+			break;
 		case 'HistoryView':
 			that.historyView.showView();
 			break;
@@ -66,67 +64,70 @@ AppViewController.prototype.begin = function(develop) {
 			} else {
 				that.codexView.showView('JHN:1');
 			}
-		//that.tableContentsView.showView();
-		//that.searchView.showView("risen have");
 		}
-
-		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
-			that.tableContentsView.showView();
-			that.statusBar.showTitleField();
-			that.searchView.hideView();
+	});
+	// This function was isolated to handle multiple data loads.
+	function fillFromDatabase(callback) {
+		that.tableContents.fill(function() {
+			callback();
+		});
+	}
+	document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
+		that.tableContentsView.showView();
+		that.statusBar.showTitleField();
+		that.searchView.hideView();
+		that.historyView.hideView();
+		that.questionsView.hideView();
+		that.codexView.hideView();
+	});
+	document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
+		that.searchView.showView();
+		that.statusBar.showSearchField();
+		that.tableContentsView.hideView();
+		that.historyView.hideView();
+		that.questionsView.hideView();
+		that.codexView.hideView();
+	});
+	document.body.addEventListener(BIBLE.SHOW_QUESTIONS, function(event) {
+		that.questionsView.showView();
+		that.statusBar.showTitleField();
+		that.tableContentsView.hideView();
+		that.searchView.hideView();
+		that.historyView.hideView();
+		that.codexView.hideView();			
+	});
+	that.touch.on("panright", function(event) {
+		if (event.deltaX > 4 * Math.abs(event.deltaY)) {
+			that.historyView.showView();
+		}
+	});
+	that.touch.on("panleft", function(event) {
+		if ( -event.deltaX > 4 * Math.abs(event.deltaY)) {
 			that.historyView.hideView();
-			that.questionsView.hideView();
-			that.codexView.hideView();
-		});
-		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
-			that.searchView.showView();
-			that.statusBar.showSearchField();
-			that.tableContentsView.hideView();
-			that.historyView.hideView();
-			that.questionsView.hideView();
-			that.codexView.hideView();
-		});
-		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, function(event) {
-			that.questionsView.showView();
-			that.statusBar.showTitleField();
-			that.tableContentsView.hideView();
-			that.searchView.hideView();
-			that.historyView.hideView();
-			that.codexView.hideView();			
-		});
-		that.touch.on("panright", function(event) {
-    		if (event.deltaX > 4 * Math.abs(event.deltaY)) {
-    			that.historyView.showView();
-    		}
-		});
-		that.touch.on("panleft", function(event) {
-    		if ( -event.deltaX > 4 * Math.abs(event.deltaY)) {
-    			that.historyView.hideView();
-    		}
-    	});
-		document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
-			console.log('SEARCH_START', event.detail);
-			if (! that.lookup.find(event.detail.search)) {
-				that.searchView.showView(event.detail.search);
-				that.statusBar.showSearchField(event.detail.search);
-			}
-		});
-		document.body.addEventListener(BIBLE.SHOW_PASSAGE, function(event) {
-			console.log(JSON.stringify(event.detail));
-			that.codexView.showView(event.detail.id);
-			that.statusBar.showTitleField();
-			that.tableContentsView.hideView();
-			that.searchView.hideView();
-			that.history.addEvent(event);
-		});
-		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
-			that.statusBar.setTitle(event.detail.reference);
-		});
-		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
-			that.codexView.showFootnote(event.detail.id);
-		});
-		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
-			that.codexView.hideFootnote(event.detail.id);
-		});
+		}
+	});
+	document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
+		console.log('SEARCH_START', event.detail);
+		if (! that.lookup.find(event.detail.search)) {
+			that.searchView.showView(event.detail.search);
+			that.statusBar.showSearchField(event.detail.search);
+		}
+	});
+	document.body.addEventListener(BIBLE.SHOW_PASSAGE, function(event) {
+		console.log(JSON.stringify(event.detail));
+		that.codexView.showView(event.detail.id);
+		that.statusBar.showTitleField();
+		that.tableContentsView.hideView();
+		that.searchView.hideView();
+		that.history.addEvent(event);
+	});
+	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
+		that.statusBar.setTitle(event.detail.reference);
+	});
+	document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
+		that.codexView.showFootnote(event.detail.id);
+	});
+	document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
+		that.codexView.hideFootnote(event.detail.id);
 	});
 };

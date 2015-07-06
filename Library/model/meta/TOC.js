@@ -8,12 +8,21 @@ function TOC(collection) {
 	this.isFilled = false;
 	Object.seal(this);
 }
-TOC.prototype.fill = function(books) {
-	for (var i=0; i<books.length; i++) {
-		this.addBook(books[i]);
-	}
-	this.isFilled = true;
-	Object.freeze(this);	
+TOC.prototype.fill = function(callback) {
+	var that = this;
+	var statement = 'select code, heading, title, name, abbrev, lastChapter, priorBook, nextBook from tableContents';
+	this.collection.select(statement, [], function(results) {
+		if (results instanceof IOError) {
+			callback();
+		} else {
+			for (var i=0; i<results.rows.length; i++) {
+				that.addBook(results.rows.item(i));
+			}
+			that.isFilled = true;
+		}
+		Object.freeze(that);
+		callback();
+	});
 };
 TOC.prototype.addBook = function(book) {
 	this.bookList.push(book);
