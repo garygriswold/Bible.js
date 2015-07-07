@@ -23,21 +23,13 @@ function AppViewController(versionCode) {
 }
 AppViewController.prototype.begin = function(develop) {
 	var types = new AssetType('document', this.versionCode);
-	//types.tableContents = true;
-	//types.chapterFiles = true;
-	//types.history = true;
-	//types.concordance = true;
-	//types.styleIndex = true;
 	this.tableContents = new TOC(this.database.tableContents);
 	this.bibleCache = new BibleCache(this.database.codex);
 	this.concordance = new Concordance(this.database.concordance);
+	this.history = new History(this.database.history);
 	var that = this;
-	var assets = new AssetController(types);
-	//assets.load(function(typesLoaded) {
-		//that.tableContents = assets.tableContents();
 	fillFromDatabase(function() {
 		console.log('loaded toc', that.tableContents.size());
-		that.history = assets.history();
 		console.log('loaded history', that.history.size());
 
 		that.tableContentsView = new TableContentsView(that.tableContents);
@@ -73,72 +65,72 @@ AppViewController.prototype.begin = function(develop) {
 				that.codexView.showView('JHN:1');
 			}
 		}
+		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
+			that.tableContentsView.showView();
+			that.statusBar.showTitleField();
+			that.searchView.hideView();
+			that.historyView.hideView();
+			that.questionsView.hideView();
+			that.codexView.hideView();
+		});
+		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
+			that.searchView.showView();
+			that.statusBar.showSearchField();
+			that.tableContentsView.hideView();
+			that.historyView.hideView();
+			that.questionsView.hideView();
+			that.codexView.hideView();
+		});
+		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, function(event) {
+			that.questionsView.showView();
+			that.statusBar.showTitleField();
+			that.tableContentsView.hideView();
+			that.searchView.hideView();
+			that.historyView.hideView();
+			that.codexView.hideView();			
+		});
+		that.touch.on("panright", function(event) {
+			if (event.deltaX > 4 * Math.abs(event.deltaY)) {
+				that.historyView.showView();
+			}
+		});
+		that.touch.on("panleft", function(event) {
+			if ( -event.deltaX > 4 * Math.abs(event.deltaY)) {
+				that.historyView.hideView();
+			}
+		});
+		document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
+			console.log('SEARCH_START', event.detail);
+			if (! that.lookup.find(event.detail.search)) {
+				that.searchView.showView(event.detail.search);
+				that.statusBar.showSearchField(event.detail.search);
+			}
+		});
+		document.body.addEventListener(BIBLE.SHOW_PASSAGE, function(event) {
+			console.log(JSON.stringify(event.detail));
+			that.codexView.showView(event.detail.id);
+			that.statusBar.showTitleField();
+			that.tableContentsView.hideView();
+			that.searchView.hideView();
+			that.history.addEvent(event);
+		});
+		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
+			that.statusBar.setTitle(event.detail.reference);
+		});
+		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
+			that.codexView.showFootnote(event.detail.id);
+		});
+		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
+			that.codexView.hideFootnote(event.detail.id);
+		});
 	});
-	// This function was isolated to handle multiple data loads.
-	//fillFromDatabase function(callback) {
 	function fillFromDatabase(callback) {
 		that.tableContents.fill(function() {
-			callback();
+			that.history.fill(function() {
+				callback();
+			});
 		});
 	}
-	document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
-		that.tableContentsView.showView();
-		that.statusBar.showTitleField();
-		that.searchView.hideView();
-		that.historyView.hideView();
-		that.questionsView.hideView();
-		that.codexView.hideView();
-	});
-	document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
-		that.searchView.showView();
-		that.statusBar.showSearchField();
-		that.tableContentsView.hideView();
-		that.historyView.hideView();
-		that.questionsView.hideView();
-		that.codexView.hideView();
-	});
-	document.body.addEventListener(BIBLE.SHOW_QUESTIONS, function(event) {
-		that.questionsView.showView();
-		that.statusBar.showTitleField();
-		that.tableContentsView.hideView();
-		that.searchView.hideView();
-		that.historyView.hideView();
-		that.codexView.hideView();			
-	});
-	that.touch.on("panright", function(event) {
-		if (event.deltaX > 4 * Math.abs(event.deltaY)) {
-			that.historyView.showView();
-		}
-	});
-	that.touch.on("panleft", function(event) {
-		if ( -event.deltaX > 4 * Math.abs(event.deltaY)) {
-			that.historyView.hideView();
-		}
-	});
-	document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
-		console.log('SEARCH_START', event.detail);
-		if (! that.lookup.find(event.detail.search)) {
-			that.searchView.showView(event.detail.search);
-			that.statusBar.showSearchField(event.detail.search);
-		}
-	});
-	document.body.addEventListener(BIBLE.SHOW_PASSAGE, function(event) {
-		console.log(JSON.stringify(event.detail));
-		that.codexView.showView(event.detail.id);
-		that.statusBar.showTitleField();
-		that.tableContentsView.hideView();
-		that.searchView.hideView();
-		that.history.addEvent(event);
-	});
-	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
-		that.statusBar.setTitle(event.detail.reference);
-	});
-	document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
-		that.codexView.showFootnote(event.detail.id);
-	});
-	document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
-		that.codexView.hideFootnote(event.detail.id);
-	});
 };
 /**
 * This class contains user interface features for the display of the Bible text
@@ -1346,8 +1338,20 @@ DeviceCollection.prototype.update = function(statement, values, callback) {
 	// This should create an update statement from the element names 
 };
 DeviceCollection.prototype.replace = function(statement, values, callback) {
-	//This differs from insert and update in that it does not care whether
-	// the row already exists.
+    this.database.transaction(onTranStart, onTranError, onTranSuccess);
+
+    function onTranStart(tx) {
+        console.log(statement, values);
+        tx.executeSql(statement, values);
+    }
+    function onTranError(err) {
+        console.log('replace tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onTranSuccess() {
+        console.log('replace transaction completed');
+        callback();
+    }
 };
 DeviceCollection.prototype.delete = function(statement, values, callback) {
 	// This should delete the row for the key specified in the row object
@@ -1490,62 +1494,18 @@ AssetBuilder.prototype.build = function(callback) {
 	}
 };
 /**
-* This class checks for the presence of each assets that is required.
-* It should be expanded to check for the correct version of each asset as well, 
-* once assets are versioned.
-*
-* This is deprecated and to be deleted as soon as the builders are rewritten
-*/
-function AssetChecker(types) {
-	this.types = types;
-}
-AssetChecker.prototype.check = function(callback) {
-	var that = this;
-	var result = new AssetType(this.types.location, this.types.versionCode);
-	var reader = new FileReader(that.types.location);
-	var toDo = this.types.toBeDoneQueue();
-	checkExists(toDo.shift());
-
-	function checkExists(filename) {
-		if (filename) {
-			var fullPath = that.types.getAppPath(filename);
-			console.log('checking for ', fullPath);
-			reader.fileExists(fullPath, function(stat) {
-				if (stat.errno) {
-					if (stat.code === 'ENOENT') {
-						console.log('check exists ' + filename + ' is not found');
-						result.mustDoQueue(filename);
-					} else {
-						console.log('check exists for ' + filename + ' failure ' + JSON.stringify(stat));
-					}
-				} else {
-					// Someday I should check version when check succeeeds.  When version is known.
-					console.log('check succeeds for ', filename);
-				}
-				checkExists(toDo.shift());
-			});
-		} else {
-			callback(result);
-		}
-	}
-};
-/**
 * The class controls the construction and loading of asset objects.  It is designed to be used
 * one both the client and the server.  It is a "builder" controller that uses the AssetType
 * as a "director" to control which assets are built.
+*
+* Deprecated.  This should be removed, and just use builder in Publisher and
+* validate in Publisher and smokeTest in BibleApp.
+* Remove after testing removal in Publisher.  It is not used in BibleAppNW
 */
 function AssetController(types, database) {
 	this.types = types;
 	this.database = database;
-	this.checker = new AssetChecker(types);
-	this.loader = new AssetLoader(types);
 }
-AssetController.prototype.tableContents = function() {
-	return(this.loader.toc);
-};
-AssetController.prototype.history = function() {
-	return(this.loader.history);
-};
 AssetController.prototype.build = function(callback) {
 	var builder = new AssetBuilder(this.types, this.database);
 	builder.build(function(err) {
@@ -1560,76 +1520,6 @@ AssetController.prototype.validate = function(callback) {
 AssetController.prototype.smokeTest = function(callback) {
 	// to be written for device use
 	callback(this.types);
-};
-/* deprecated *//** not sure **/
-AssetController.prototype.load = function(callback) {
-	this.loader.load(function(loadedTypes) {
-		console.log('finished assetcontroller load');
-		callback(loadedTypes);
-	});
-};
-/**
-* This class loads each of the assets that is specified in the types file.
-*
-* On May 3, 2015 some performance checks were done
-* 1) Toc Read 10.52ms  85.8KB heap increase
-* 2) Toc Loaded 1.22ms  322KB heap increase
-* 3) Concordance Read 20.99ms  7.695MB heap increase
-* 4) Concordance Loaded 96.49ms  27.971MB heap increase
-*/
-function AssetLoader(types) {
-	this.types = types;
-	this.toc = new TOC();
-	this.concordance = new Concordance();
-	this.history = new History(types);
-}
-AssetLoader.prototype.load = function(callback) {
-	var that = this;
-	this.types.chapterFiles = false; // do not load this
-	var result = new AssetType(that.types.location, that.types.versionCode);
-	var reader = new FileReader(that.types.location);
-	var toDo = this.types.toBeDoneQueue();
-	readTextFile(toDo.shift());
-
-	function readTextFile(filename) {
-		if (filename) {
-			var fullPath = that.types.getAppPath(filename);
-			reader.readTextFile(fullPath, function(data) {
-				if (data.errno) {
-					console.log('read concordance.json failure ' + JSON.stringify(data));
-				} else {
-					switch(filename) {
-						case 'chapterMetaData.json':
-							result.chapterFiles = true;
-							break;
-						case 'toc.json':
-							result.tableContents = true;
-							var bookList = JSON.parse(data);
-							that.toc.fill(bookList);
-							break;
-						case 'concordance.json':
-//							result.concordance = true;
-//							var wordList = JSON.parse(data);
-//							that.concordance.fill(wordList);
-							break;
-						case 'history.json':
-							result.history = true;
-							var historyList = JSON.parse(data);
-							that.history.fill(historyList);
-							break;
-						case 'styleIndex.json':
-							break;
-						default:
-							throw new Error('File ' + filename + ' is not known in AssetLoader.load.');
-
-					}
-				}
-				readTextFile(toDo.shift());
-			});
-		} else {
-			callback(result);
-		}
-	}
 };
 /**
 * This object of the Director pattern, it contains a boolean member for each type of asset.
@@ -2173,54 +2063,6 @@ TOCBuilder.prototype.loadDB = function(callback) {
 TOCBuilder.prototype.toJSON = function() {
 	return(this.toc.toJSON());
 };/**
-* This class gets information from the concordance that was built, and produces 
-* a word list with frequency counts for each word.
-*
-* This class is deprecated.  It is replaced by storing the reference count
-* in the concordance table and being able to query it both ways.
-*
-* I will keep until after validation code is written in case it is needed.
-*/
-function WordCountBuilder(concordanceBuilder) {
-	this.concordance = concordanceBuilder;
-	this.filename = 'wordCount.json';
-}
-WordCountBuilder.prototype.readBook = function(usxRoot) {
-};
-WordCountBuilder.prototype.toJSON = function() {
-	var countMap = {};
-	var freqMap = {};
-	var index = this.concordance.index;
-	var words = Object.keys(index);
-	for (var i=0; i<words.length; i++) {
-		var key = words[i];
-		var len = index[key].length;
-		countMap[key] = len;
-		if (freqMap[len] === undefined) {
-			freqMap[len] = [];
-		}
-		freqMap[len].push(key);
-	}
-	var wordSort = Object.keys(countMap).sort();
-	var freqSort = Object.keys(freqMap).sort(function(a, b) {
-		return(a - b);
-	});
-	var result = [];
-	result.push('Num Words:  ' + wordSort.length);
-	for (i=0; i<wordSort.length; i++) {
-		var word = wordSort[i];
-		result.push(word + ':\t\t' + countMap[word]);
-	}
-	for (i=0; i<freqSort.length; i++) {
-		var freq = freqSort[i];
-		var words = freqMap[freq];
-		for (var j=0; j<words.length; j++) {
-			result.push(freq + ':\t\t' + words[j]);
-		}
-	}
-	return(result.join('\n'));
-};
-/**
 * This class handles all request to deliver scripture.  It handles all passage display requests to display passages of text,
 * and it also handles all requests from concordance search requests to display individual verses.
 * It will deliver the content from cache if it is present.  Or, it will find the content in persistent storage if it is
@@ -2418,18 +2260,34 @@ Concordance.prototype.intersection = function(refLists) {
 */
 var MAX_HISTORY = 20;
 
-function History(types) {
-	this.types = types;
+function History(collection) {
+	this.collection = collection;
 	this.items = [];
-	this.writer = new FileWriter(types.location);
 	this.isFilled = false;
 	this.isViewCurrent = false;
 	Object.seal(this);
 }
-History.prototype.fill = function(itemList) {
-	this.items = itemList;
-	this.isFilled = true;
-	this.isViewCurrent = false;
+History.prototype.fill = function(callback) {
+	var that = this;
+	this.items.splice(0);
+	var statement = 'select timestamp, book, chapter, verse, source, search ' +
+		'from history order by timestamp desc limit ?';
+	this.collection.select(statement, [ MAX_HISTORY ], function(results) {
+		if (results instanceof IOError) {
+			callback();
+		} else {
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var ref = new Reference(row.book, row.chapter, row.verse);
+				var hist = new HistoryItem(ref.nodeId, row.source, row.search, row.timestamp);
+				console.log('HISTORY', hist, hist.timestamp.toISOString());
+				that.items.push(hist);
+			}
+			that.isFilled = true;
+			that.isViewCurrent = false;
+		}
+		callback();
+	});
 };
 History.prototype.addEvent = function(event) {
 	var itemIndex = this.search(event.detail.id);
@@ -2442,7 +2300,18 @@ History.prototype.addEvent = function(event) {
 		var discard = this.items.shift();
 	}
 	this.isViewCurrent = false;
-	setTimeout(this.persist(), 3000);
+	
+	// I might want a timeout to postpone this until after animation is finished.
+	var statement = 'replace into history(timestamp, book, chapter, verse, source, search) ' +
+		'values (?,?,?,?,?,?)';
+	var timestampStr = item.timestamp.toISOString();
+	var ref = new Reference(item.nodeId);
+	var values = [ timestampStr, ref.book, ref.chapter, ref.verse, item.source, item.search ];
+	this.collection.replace(statement, values, function(err) {
+		if (err instanceof IOError) {
+			console.log('replace error', JSON.stringify(err));
+		}
+	});
 };
 History.prototype.search = function(nodeId) {
 	for (var i=0; i<this.items.length; i++) {
@@ -2471,16 +2340,6 @@ History.prototype.lastConcordanceSearch = function() {
 	}
 	return('');
 };
-History.prototype.persist = function() {
-	var filepath = this.types.getAppPath('history.json');
-	this.writer.writeTextFile(filepath, this.toJSON(), function(filename) {
-		if (filename.errno) {
-			console.log('error writing history.json', filename);
-		} else {
-			console.log('History saved', filename);
-		}
-	});
-};
 History.prototype.toJSON = function() {
 	return(JSON.stringify(this.items, null, ' '));
 };
@@ -2490,11 +2349,11 @@ History.prototype.toJSON = function() {
 * clicking on the toc to get a chapter, doing a lookup of a specific passage
 * or clicking on a verse during a concordance search.
 */
-function HistoryItem(nodeId, source, search) {
+function HistoryItem(nodeId, source, search, timestamp) {
 	this.nodeId = nodeId;
 	this.source = source;
 	this.search = search;
-	this.timestamp = new Date();
+	this.timestamp = (timestamp) ? new Date(timestamp) : new Date();
 	Object.freeze(this);
 }/**
 * This class process search strings to determine if they are book chapter,
@@ -2718,7 +2577,6 @@ TOC.prototype.fill = function(callback) {
 	});
 };
 TOC.prototype.addBook = function(book) {
-	console.log('found book', book.code, book);
 	this.bookList.push(book);
 	this.bookMap[book.code] = book;
 };

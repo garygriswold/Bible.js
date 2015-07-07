@@ -112,8 +112,20 @@ DeviceCollection.prototype.update = function(statement, values, callback) {
 	// This should create an update statement from the element names 
 };
 DeviceCollection.prototype.replace = function(statement, values, callback) {
-	//This differs from insert and update in that it does not care whether
-	// the row already exists.
+    this.database.transaction(onTranStart, onTranError, onTranSuccess);
+
+    function onTranStart(tx) {
+        console.log(statement, values);
+        tx.executeSql(statement, values);
+    }
+    function onTranError(err) {
+        console.log('replace tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onTranSuccess() {
+        console.log('replace transaction completed');
+        callback();
+    }
 };
 DeviceCollection.prototype.delete = function(statement, values, callback) {
 	// This should delete the row for the key specified in the row object

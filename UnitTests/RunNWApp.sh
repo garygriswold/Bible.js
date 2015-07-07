@@ -29,9 +29,8 @@ cat ../Library/io/DeviceDatabase.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/io/DeviceCollection.js >> ../BibleAppNW/js/BibleApp.js
 
 cat ../Library/manufacture/AssetBuilder.js >> ../BibleAppNW/js/BibleApp.js
-cat ../Library/manufacture/AssetChecker.js >> ../BibleAppNW/js/BibleApp.js
+#cat ../Library/manufacture/AssetChecker.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/AssetController.js >> ../BibleAppNW/js/BibleApp.js
-cat ../Library/manufacture/AssetLoader.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/AssetType.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/ChapterBuilder.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/ConcordanceBuilder.js >> ../BibleAppNW/js/BibleApp.js
@@ -39,7 +38,7 @@ cat ../Library/manufacture/DOMBuilder.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/HTMLBuilder.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/StyleIndexBuilder.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/TOCBuilder.js >> ../BibleAppNW/js/BibleApp.js
-cat ../Library/manufacture/WordCountBuilder.js >> ../BibleAppNW/js/BibleApp.js
+#cat ../Library/manufacture/WordCountBuilder.js >> ../BibleAppNW/js/BibleApp.js
 
 cat ../Library/model/meta/BibleCache.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/Canon.js >> ../BibleAppNW/js/BibleApp.js
@@ -52,7 +51,6 @@ cat ../Library/model/meta/Questions.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/Reference.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/TOC.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/TOCBook.js >> ../BibleAppNW/js/BibleApp.js
-#cat ../Library/model/meta/StyleIndex.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/VerseAccessor.js >> ../BibleAppNW/js/BibleApp.js
 
 cat ../Library/model/usx/Book.js >> ../BibleAppNW/js/BibleApp.js

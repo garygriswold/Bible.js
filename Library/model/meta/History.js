@@ -6,18 +6,34 @@
 */
 var MAX_HISTORY = 20;
 
-function History(types) {
-	this.types = types;
+function History(collection) {
+	this.collection = collection;
 	this.items = [];
-	this.writer = new FileWriter(types.location);
 	this.isFilled = false;
 	this.isViewCurrent = false;
 	Object.seal(this);
 }
-History.prototype.fill = function(itemList) {
-	this.items = itemList;
-	this.isFilled = true;
-	this.isViewCurrent = false;
+History.prototype.fill = function(callback) {
+	var that = this;
+	this.items.splice(0);
+	var statement = 'select timestamp, book, chapter, verse, source, search ' +
+		'from history order by timestamp desc limit ?';
+	this.collection.select(statement, [ MAX_HISTORY ], function(results) {
+		if (results instanceof IOError) {
+			callback();
+		} else {
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var ref = new Reference(row.book, row.chapter, row.verse);
+				var hist = new HistoryItem(ref.nodeId, row.source, row.search, row.timestamp);
+				console.log('HISTORY', hist, hist.timestamp.toISOString());
+				that.items.push(hist);
+			}
+			that.isFilled = true;
+			that.isViewCurrent = false;
+		}
+		callback();
+	});
 };
 History.prototype.addEvent = function(event) {
 	var itemIndex = this.search(event.detail.id);
@@ -30,7 +46,18 @@ History.prototype.addEvent = function(event) {
 		var discard = this.items.shift();
 	}
 	this.isViewCurrent = false;
-	setTimeout(this.persist(), 3000);
+	
+	// I might want a timeout to postpone this until after animation is finished.
+	var statement = 'replace into history(timestamp, book, chapter, verse, source, search) ' +
+		'values (?,?,?,?,?,?)';
+	var timestampStr = item.timestamp.toISOString();
+	var ref = new Reference(item.nodeId);
+	var values = [ timestampStr, ref.book, ref.chapter, ref.verse, item.source, item.search ];
+	this.collection.replace(statement, values, function(err) {
+		if (err instanceof IOError) {
+			console.log('replace error', JSON.stringify(err));
+		}
+	});
 };
 History.prototype.search = function(nodeId) {
 	for (var i=0; i<this.items.length; i++) {
@@ -58,16 +85,6 @@ History.prototype.lastConcordanceSearch = function() {
 		}
 	}
 	return('');
-};
-History.prototype.persist = function() {
-	var filepath = this.types.getAppPath('history.json');
-	this.writer.writeTextFile(filepath, this.toJSON(), function(filename) {
-		if (filename.errno) {
-			console.log('error writing history.json', filename);
-		} else {
-			console.log('History saved', filename);
-		}
-	});
 };
 History.prototype.toJSON = function() {
 	return(JSON.stringify(this.items, null, ' '));
