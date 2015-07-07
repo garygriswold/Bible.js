@@ -52,7 +52,6 @@ function AssetBuilder(types, database) {
 	}
 	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
-	//this.writer = new FileWriter(types.location);
 	this.filesToProcess = [];
 	Object.freeze(this);
 }

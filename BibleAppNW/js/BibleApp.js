@@ -1348,9 +1348,6 @@ function AssetBuilder(types, database) {
 	if (types.concordance) {
 		this.builders.push(new ConcordanceBuilder(this.database.concordance));
 	}
-	if (types.history) { 
-		// do nothing 
-	}
 	if (types.styleIndex) {
 		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));
 		this.builders.push(new StyleUseBuilder(this.database.styleUse));
@@ -1366,7 +1363,6 @@ function AssetBuilder(types, database) {
 	}
 	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
-	this.writer = new FileWriter(types.location);
 	this.filesToProcess = [];
 	Object.freeze(this);
 }
@@ -1430,34 +1426,6 @@ AssetBuilder.prototype.build = function(callback) {
 	}
 };
 /**
-* The class controls the construction and loading of asset objects.  It is designed to be used
-* one both the client and the server.  It is a "builder" controller that uses the AssetType
-* as a "director" to control which assets are built.
-*
-* Deprecated.  This should be removed, and just use builder in Publisher and
-* validate in Publisher and smokeTest in BibleApp.
-* Remove after testing removal in Publisher.  It is not used in BibleAppNW
-*/
-function AssetController(types, database) {
-	this.types = types;
-	this.database = database;
-}
-AssetController.prototype.build = function(callback) {
-	var builder = new AssetBuilder(this.types, this.database);
-	builder.build(function(err) {
-		console.log('finished asset build');
-		callback(err);
-	});
-};
-AssetController.prototype.validate = function(callback) {
-	// to be written for publisher and server
-	callback(this.types);
-};
-AssetController.prototype.smokeTest = function(callback) {
-	// to be written for device use
-	callback(this.types);
-};
-/**
 * This object of the Director pattern, it contains a boolean member for each type of asset.
 * Setting a member to true will be used by the Builder classes to control which assets are built.
 */
@@ -1473,52 +1441,10 @@ function AssetType(location, versionCode) {
 	this.html = false;// this one is not ready
 	Object.seal(this);
 }
-AssetType.prototype.mustDoQueue = function(filename) {
-	switch(filename) {
-		case 'chapterMetaData.json':
-			this.chapterFiles = true;
-			break;
-		case 'toc.json':
-			this.tableContents = true;
-			break;
-		case 'concordance.json':
-			this.concordance = true;
-			break;
-		case 'history.json':
-			this.history = true;
-			break;
-		case 'styleIndex.json':
-			this.styleIndex = true;
-			break;
-		default:
-			throw new Error('File ' + filename + ' is not known in AssetType.mustDo.');
-	}
-};
-AssetType.prototype.toBeDoneQueue = function() {
-	var toDo = [];
-	if (this.chapterFiles) {
-		toDo.push('chapterMetaData.json');
-	}
-	if (this.tableContents) {
-		toDo.push('toc.json');
-	}
-	if (this.concordance) {
-		toDo.push('concordance.json');
-	}
-	if (this.history) {
-		toDo.push('history.json');
-	}
-	if (this.styleIndex) {
-		toDo.push('styleIndex.json');
-	}
-	return(toDo);
-};
 AssetType.prototype.getUSXPath = function(filename) {
 	return(this.versionCode + '/USX/' + filename);
 };
-AssetType.prototype.getAppPath = function(filename) {
-	return(this.versionCode + '/app/' + filename);
-};
+
 /**
 * This class iterates over the USX data model, and breaks it into files one for each chapter.
 *

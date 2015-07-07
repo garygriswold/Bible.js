@@ -26,7 +26,6 @@ cat ../Library/io/DeviceDatabase.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/io/DeviceCollection.js >> ../BibleAppNW/js/BibleApp.js
 
 cat ../Library/manufacture/AssetBuilder.js >> ../BibleAppNW/js/BibleApp.js
-cat ../Library/manufacture/AssetController.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/AssetType.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/ChapterBuilder.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/ConcordanceBuilder.js >> ../BibleAppNW/js/BibleApp.js
