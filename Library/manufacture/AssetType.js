@@ -14,49 +14,7 @@ function AssetType(location, versionCode) {
 	this.html = false;// this one is not ready
 	Object.seal(this);
 }
-AssetType.prototype.mustDoQueue = function(filename) {
-	switch(filename) {
-		case 'chapterMetaData.json':
-			this.chapterFiles = true;
-			break;
-		case 'toc.json':
-			this.tableContents = true;
-			break;
-		case 'concordance.json':
-			this.concordance = true;
-			break;
-		case 'history.json':
-			this.history = true;
-			break;
-		case 'styleIndex.json':
-			this.styleIndex = true;
-			break;
-		default:
-			throw new Error('File ' + filename + ' is not known in AssetType.mustDo.');
-	}
-};
-AssetType.prototype.toBeDoneQueue = function() {
-	var toDo = [];
-	if (this.chapterFiles) {
-		toDo.push('chapterMetaData.json');
-	}
-	if (this.tableContents) {
-		toDo.push('toc.json');
-	}
-	if (this.concordance) {
-		toDo.push('concordance.json');
-	}
-	if (this.history) {
-		toDo.push('history.json');
-	}
-	if (this.styleIndex) {
-		toDo.push('styleIndex.json');
-	}
-	return(toDo);
-};
 AssetType.prototype.getUSXPath = function(filename) {
 	return(this.versionCode + '/USX/' + filename);
 };
-AssetType.prototype.getAppPath = function(filename) {
-	return(this.versionCode + '/app/' + filename);
-};
+

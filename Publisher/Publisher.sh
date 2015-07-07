@@ -1,10 +1,7 @@
 #!/bin/sh
 echo \"use strict\"\; > Publisher.js
-cat ../Library/manufacture/AssetController.js >> Publisher.js
 cat ../Library/manufacture/AssetType.js >> Publisher.js
-cat ../Library/manufacture/AssetChecker.js >> Publisher.js
 cat ../Library/manufacture/AssetBuilder.js >> Publisher.js
-cat ../Library/manufacture/AssetLoader.js >> Publisher.js
 cat ../Library/manufacture/ChapterBuilder.js >> Publisher.js
 cat ../Library/manufacture/TOCBuilder.js >> Publisher.js
 cat ../Library/manufacture/ConcordanceBuilder.js >> Publisher.js
@@ -30,7 +27,6 @@ cat ../Library/model/meta/Concordance.js >> Publisher.js
 cat ../Library/model/meta/History.js >> Publisher.js
 cat ../Library/io/CommonIO.js >> Publisher.js
 cat ../Library/io/NodeFileReader.js >> Publisher.js
-cat ../Library/io/NodeFileWriter.js >> Publisher.js
 cat ../Library/io/DeviceDatabase.js >> Publisher.js
 cat ../Library/io/DeviceCollection.js >> Publisher.js
 cat ../Library/manufacture/AssetControllerTest.js >> Publisher.js

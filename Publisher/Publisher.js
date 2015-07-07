@@ -1,44 +1,5 @@
 "use strict";
 /**
-* The class controls the construction and loading of asset objects.  It is designed to be used
-* one both the client and the server.  It is a "builder" controller that uses the AssetType
-* as a "director" to control which assets are built.
-*/
-function AssetController(types, database) {
-	this.types = types;
-	this.database = database;
-	this.checker = new AssetChecker(types);
-	this.loader = new AssetLoader(types);
-}
-AssetController.prototype.tableContents = function() {
-	return(this.loader.toc);
-};
-AssetController.prototype.history = function() {
-	return(this.loader.history);
-};
-AssetController.prototype.build = function(callback) {
-	var builder = new AssetBuilder(this.types, this.database);
-	builder.build(function(err) {
-		console.log('finished asset build');
-		callback(err);
-	});
-};
-AssetController.prototype.validate = function(callback) {
-	// to be written for publisher and server
-	callback(this.types);
-};
-AssetController.prototype.smokeTest = function(callback) {
-	// to be written for device use
-	callback(this.types);
-};
-/* deprecated *//** not sure **/
-AssetController.prototype.load = function(callback) {
-	this.loader.load(function(loadedTypes) {
-		console.log('finished assetcontroller load');
-		callback(loadedTypes);
-	});
-};
-/**
 * This object of the Director pattern, it contains a boolean member for each type of asset.
 * Setting a member to true will be used by the Builder classes to control which assets are built.
 */
@@ -54,92 +15,10 @@ function AssetType(location, versionCode) {
 	this.html = false;// this one is not ready
 	Object.seal(this);
 }
-AssetType.prototype.mustDoQueue = function(filename) {
-	switch(filename) {
-		case 'chapterMetaData.json':
-			this.chapterFiles = true;
-			break;
-		case 'toc.json':
-			this.tableContents = true;
-			break;
-		case 'concordance.json':
-			this.concordance = true;
-			break;
-		case 'history.json':
-			this.history = true;
-			break;
-		case 'styleIndex.json':
-			this.styleIndex = true;
-			break;
-		default:
-			throw new Error('File ' + filename + ' is not known in AssetType.mustDo.');
-	}
-};
-AssetType.prototype.toBeDoneQueue = function() {
-	var toDo = [];
-	if (this.chapterFiles) {
-		toDo.push('chapterMetaData.json');
-	}
-	if (this.tableContents) {
-		toDo.push('toc.json');
-	}
-	if (this.concordance) {
-		toDo.push('concordance.json');
-	}
-	if (this.history) {
-		toDo.push('history.json');
-	}
-	if (this.styleIndex) {
-		toDo.push('styleIndex.json');
-	}
-	return(toDo);
-};
 AssetType.prototype.getUSXPath = function(filename) {
 	return(this.versionCode + '/USX/' + filename);
 };
-AssetType.prototype.getAppPath = function(filename) {
-	return(this.versionCode + '/app/' + filename);
-};
-/**
-* This class checks for the presence of each assets that is required.
-* It should be expanded to check for the correct version of each asset as well, 
-* once assets are versioned.
-*
-* This is deprecated and to be deleted as soon as the builders are rewritten
-*/
-function AssetChecker(types) {
-	this.types = types;
-}
-AssetChecker.prototype.check = function(callback) {
-	var that = this;
-	var result = new AssetType(this.types.location, this.types.versionCode);
-	var reader = new FileReader(that.types.location);
-	var toDo = this.types.toBeDoneQueue();
-	checkExists(toDo.shift());
 
-	function checkExists(filename) {
-		if (filename) {
-			var fullPath = that.types.getAppPath(filename);
-			console.log('checking for ', fullPath);
-			reader.fileExists(fullPath, function(stat) {
-				if (stat.errno) {
-					if (stat.code === 'ENOENT') {
-						console.log('check exists ' + filename + ' is not found');
-						result.mustDoQueue(filename);
-					} else {
-						console.log('check exists for ' + filename + ' failure ' + JSON.stringify(stat));
-					}
-				} else {
-					// Someday I should check version when check succeeeds.  When version is known.
-					console.log('check succeeds for ', filename);
-				}
-				checkExists(toDo.shift());
-			});
-		} else {
-			callback(result);
-		}
-	}
-};
 /**
 * The Table of Contents and Concordance must be created by processing the entire text.  Since the parsing of the XML
 * is a significant amount of the time to do this, this class reads over the entire Bible text and creates
@@ -158,9 +37,6 @@ function AssetBuilder(types, database) {
 	if (types.concordance) {
 		this.builders.push(new ConcordanceBuilder(this.database.concordance));
 	}
-	if (types.history) { 
-		// do nothing 
-	}
 	if (types.styleIndex) {
 		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));
 		this.builders.push(new StyleUseBuilder(this.database.styleUse));
@@ -176,7 +52,7 @@ function AssetBuilder(types, database) {
 	}
 	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
-	this.writer = new FileWriter(types.location);
+	//this.writer = new FileWriter(types.location);
 	this.filesToProcess = [];
 	Object.freeze(this);
 }
@@ -236,67 +112,6 @@ AssetBuilder.prototype.build = function(callback) {
 			});
 		} else {
 			callback();
-		}
-	}
-};
-/**
-* This class loads each of the assets that is specified in the types file.
-*
-* On May 3, 2015 some performance checks were done
-* 1) Toc Read 10.52ms  85.8KB heap increase
-* 2) Toc Loaded 1.22ms  322KB heap increase
-* 3) Concordance Read 20.99ms  7.695MB heap increase
-* 4) Concordance Loaded 96.49ms  27.971MB heap increase
-*/
-function AssetLoader(types) {
-	this.types = types;
-	this.toc = new TOC();
-	this.concordance = new Concordance();
-	this.history = new History(types);
-}
-AssetLoader.prototype.load = function(callback) {
-	var that = this;
-	this.types.chapterFiles = false; // do not load this
-	var result = new AssetType(that.types.location, that.types.versionCode);
-	var reader = new FileReader(that.types.location);
-	var toDo = this.types.toBeDoneQueue();
-	readTextFile(toDo.shift());
-
-	function readTextFile(filename) {
-		if (filename) {
-			var fullPath = that.types.getAppPath(filename);
-			reader.readTextFile(fullPath, function(data) {
-				if (data.errno) {
-					console.log('read concordance.json failure ' + JSON.stringify(data));
-				} else {
-					switch(filename) {
-						case 'chapterMetaData.json':
-							result.chapterFiles = true;
-							break;
-						case 'toc.json':
-							result.tableContents = true;
-							var bookList = JSON.parse(data);
-							that.toc.fill(bookList);
-							break;
-						case 'concordance.json':
-							result.concordance = true;
-							var wordList = JSON.parse(data);
-							that.concordance.fill(wordList);
-							break;
-						case 'history.json':
-							result.history = true;
-							var historyList = JSON.parse(data);
-							that.history.fill(historyList);
-							break;
-						default:
-							throw new Error('File ' + filename + ' is not known in AssetLoader.load.');
-
-					}
-				}
-				readTextFile(toDo.shift());
-			});
-		} else {
-			callback(result);
 		}
 	}
 };
@@ -1571,12 +1386,21 @@ function TOC(collection) {
 	this.isFilled = false;
 	Object.seal(this);
 }
-TOC.prototype.fill = function(books) {
-	for (var i=0; i<books.length; i++) {
-		this.addBook(books[i]);
-	}
-	this.isFilled = true;
-	Object.freeze(this);	
+TOC.prototype.fill = function(callback) {
+	var that = this;
+	var statement = 'select code, heading, title, name, abbrev, lastChapter, priorBook, nextBook from tableContents';
+	this.collection.select(statement, [], function(results) {
+		if (results instanceof IOError) {
+			callback();
+		} else {
+			for (var i=0; i<results.rows.length; i++) {
+				that.addBook(results.rows.item(i));
+			}
+			that.isFilled = true;
+		}
+		Object.freeze(that);
+		callback();
+	});
 };
 TOC.prototype.addBook = function(book) {
 	this.bookList.push(book);
@@ -1640,15 +1464,31 @@ function Concordance(collection) {
 	this.collection = collection;
 	Object.freeze(this);
 }
-Concordance.prototype.search = function(words) {
-	var refList = [];
+Concordance.prototype.search = function(words, callback) {
+	var questionMarks = [ words.length ];
+	var values = [ words.length ];
 	for (var i=0; i<words.length; i++) {
-		var list = this.index[words[i].toLocaleLowerCase()];
-		if (list) { // This is ignoring words that return no list, and allowing search to continue.
-			refList.push(list);
-		}
+		questionMarks[i] = '?';
+		values[i] = words[i].toLocaleLowerCase();
 	}
-	return(this.intersection(refList));
+	var that = this;
+	var statement = 'select refList from concordance where word in(' + questionMarks.join(',') + ')';
+	this.collection.select(statement, values, function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else {
+			var refLists = [];
+			for (i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				if (row && row.refList) { // ignore words that have no ref list
+					var array = row.refList.split(',');
+					refLists.push(array);
+				}
+			}
+			var result = that.intersection(refLists);
+			callback(result);
+		}
+	});
 };
 Concordance.prototype.intersection = function(refLists) {
 	if (refLists.length === 0) {
@@ -1696,18 +1536,34 @@ Concordance.prototype.intersection = function(refLists) {
 */
 var MAX_HISTORY = 20;
 
-function History(types) {
-	this.types = types;
+function History(collection) {
+	this.collection = collection;
 	this.items = [];
-	this.writer = new FileWriter(types.location);
 	this.isFilled = false;
 	this.isViewCurrent = false;
 	Object.seal(this);
 }
-History.prototype.fill = function(itemList) {
-	this.items = itemList;
-	this.isFilled = true;
-	this.isViewCurrent = false;
+History.prototype.fill = function(callback) {
+	var that = this;
+	this.items.splice(0);
+	var statement = 'select timestamp, book, chapter, verse, source, search ' +
+		'from history order by timestamp desc limit ?';
+	this.collection.select(statement, [ MAX_HISTORY ], function(results) {
+		if (results instanceof IOError) {
+			callback();
+		} else {
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var ref = new Reference(row.book, row.chapter, row.verse);
+				var hist = new HistoryItem(ref.nodeId, row.source, row.search, row.timestamp);
+				console.log('HISTORY', hist, hist.timestamp.toISOString());
+				that.items.push(hist);
+			}
+			that.isFilled = true;
+			that.isViewCurrent = false;
+		}
+		callback();
+	});
 };
 History.prototype.addEvent = function(event) {
 	var itemIndex = this.search(event.detail.id);
@@ -1720,7 +1576,18 @@ History.prototype.addEvent = function(event) {
 		var discard = this.items.shift();
 	}
 	this.isViewCurrent = false;
-	setTimeout(this.persist(), 3000);
+	
+	// I might want a timeout to postpone this until after animation is finished.
+	var statement = 'replace into history(timestamp, book, chapter, verse, source, search) ' +
+		'values (?,?,?,?,?,?)';
+	var timestampStr = item.timestamp.toISOString();
+	var ref = new Reference(item.nodeId);
+	var values = [ timestampStr, ref.book, ref.chapter, ref.verse, item.source, item.search ];
+	this.collection.replace(statement, values, function(err) {
+		if (err instanceof IOError) {
+			console.log('replace error', JSON.stringify(err));
+		}
+	});
 };
 History.prototype.search = function(nodeId) {
 	for (var i=0; i<this.items.length; i++) {
@@ -1748,16 +1615,6 @@ History.prototype.lastConcordanceSearch = function() {
 		}
 	}
 	return('');
-};
-History.prototype.persist = function() {
-	var filepath = this.types.getAppPath('history.json');
-	this.writer.writeTextFile(filepath, this.toJSON(), function(filename) {
-		if (filename.errno) {
-			console.log('error writing history.json', filename);
-		} else {
-			console.log('History saved', filename);
-		}
-	});
 };
 History.prototype.toJSON = function() {
 	return(JSON.stringify(this.items, null, ' '));
@@ -1812,36 +1669,6 @@ FileReader.prototype.readTextFile = function(filepath, callback) {
 		}
 	});
 };/**
-* This class is a file writer for Node.  It can be used with node.js and node-webkit.
-* cordova requires using another class, but the interface should be the same.
-*/
-function FileWriter(location) {
-	this.fs = require('fs');
-	this.location = location;
-	Object.freeze(this);
-}
-FileWriter.prototype.createDirectory = function(filepath, callback) {
-	var fullPath = FILE_ROOTS[this.location] + filepath;
-	this.fs.mkdir(fullPath, function(err) {
-		if (err) {
-			err.filepath = filepath;
-			callback(err);
-		} else {
-			callback(filepath);
-		}
-	});
-};
-FileWriter.prototype.writeTextFile = function(filepath, data, callback) {
-	var fullPath = FILE_ROOTS[this.location] + filepath;
-	this.fs.writeFile(fullPath, data, { encoding: 'utf8'}, function(err) {
-		if (err) {
-			err.filepath = filepath;
-			callback(err);
-		} else {
-			callback(filepath);
-		}
-	});
-};/**
 * This class is a facade over the database that is used to store bible text, concordance,
 * table of contents, history and questions.  At this writing, it is a facade over a
 * Web SQL Sqlite3 database, but it intended to hide all database API specifics
@@ -1887,7 +1714,7 @@ DeviceCollection.prototype.drop = function(callback) {
     }
     function onTranError(err) {
         console.log('drop tran error', JSON.stringify(err));
-        callback(err);
+        callback(new IOError(err));
     }
     function onTranSuccess() {
         console.log('drop transaction completed');
@@ -1907,7 +1734,7 @@ DeviceCollection.prototype.create = function(schema, callback) {
     }
     function onTranError(err) {
         console.log('create tran error', JSON.stringify(err));
-        callback(err);
+        callback(new IOError(err));
     }
     function onTranSuccess() {
         console.log('create transaction completed');
@@ -1928,7 +1755,7 @@ DeviceCollection.prototype.load = function(names, array, callback) {
     }
     function onTranError(err) {
         console.log('load tran error', JSON.stringify(err));
-        callback(err);
+        callback(new IOError(err));
     }
     function onTranSuccess() {
         console.log('load transaction completed');
@@ -1949,13 +1776,14 @@ DeviceCollection.prototype.insert = function(row, callback) {
     }
     function onTranError(err) {
         console.log('insert tran error', JSON.stringify(err));
-        callback(err);
+        callback(new IOError(err));
     }
     function onTranSuccess() {
         console.log('insert transaction completed');
         callback();
     }
 };
+/** deprecated for consistency insert statement into insert and load db */
 DeviceCollection.prototype.insertStatement = function(names) {
 	var sql = [ 'insert into ', this.table, ' (' ];
 	for (var i=0; i<names.length; i++) {
@@ -1974,21 +1802,59 @@ DeviceCollection.prototype.insertStatement = function(names) {
 	sql.push(')');
 	return(sql.join(''));
 };
-DeviceCollection.prototype.update = function(key, row, callback) {
+DeviceCollection.prototype.update = function(statement, values, callback) {
 	// This should create an update statement from the element names 
 };
-DeviceCollection.prototype.replace = function(key, row, callback) {
-	//This differs from insert and update in that it does not care whether
-	// the row already exists.
+DeviceCollection.prototype.replace = function(statement, values, callback) {
+    this.database.transaction(onTranStart, onTranError, onTranSuccess);
+
+    function onTranStart(tx) {
+        console.log(statement, values);
+        tx.executeSql(statement, values);
+    }
+    function onTranError(err) {
+        console.log('replace tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onTranSuccess() {
+        console.log('replace transaction completed');
+        callback();
+    }
 };
-DeviceCollection.prototype.delete = function(key, callback) {
+DeviceCollection.prototype.delete = function(statement, values, callback) {
 	// This should delete the row for the key specified in the row object
 };
-DeviceCollection.prototype.get = function(key, callback) {
-	// This should get the single row, which satisfies that fields in key object
+DeviceCollection.prototype.select = function(statement, values, callback) {
+    this.database.readTransaction(onTranStart, onTranError);
+
+    function onTranStart(tx) {
+        console.log(statement, values);
+        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
+    }
+    function onTranError(err) {
+        console.log('select tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onSelectSuccess(tx, results) {
+        console.log('success results', JSON.stringify(results.rows));
+        callback(results);
+    }
+    function onSelectError(tx, err) {
+        console.log('select error', err);
+        callback(new IOError(err));
+    }
 };
-DeviceCollection.prototype.find = function(condition, projection, callback) {
-	// This should return a result set of rows
+DeviceCollection.prototype.get = function(statement, values, callback) {
+    this.select(statement, values, function(results) {
+        if (results instanceof IOError) {
+            callback(results);
+        } else if (results.rows.length > 0) {
+            var row = results.rows.item(0);
+            callback(row);
+        } else {
+            callback(null);
+        }
+    });
 };
 DeviceCollection.prototype.valuesToArray = function(names, row) {
 	var values = [ names.length ];
@@ -2000,18 +1866,15 @@ DeviceCollection.prototype.valuesToArray = function(names, row) {
 * Unit Test Harness for AssetController
 */
 var types = new AssetType('document', 'WEB');
-types.chapterFiles = false;
-types.tableContents = false;
-types.concordance = false;
-types.styleIndex = false;
-types.history = false;
+types.chapterFiles = true;
+types.tableContents = true;
+types.concordance = true;
+types.styleIndex = true;
+types.history = true;
 types.questions = true;
 var database = new DeviceDatabase(types.versionCode, 'versionNameHere');
 
-var controller = new AssetController(types, database);
-controller.build(function(err) {
+var builder = new AssetBuilder(types, database);
+builder.build(function(err) {
 	console.log('AssetControllerTest.build', err);
 });
-
-
-

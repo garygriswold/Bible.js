@@ -16,9 +16,6 @@ function AssetBuilder(types, database) {
 	if (types.concordance) {
 		this.builders.push(new ConcordanceBuilder(this.database.concordance));
 	}
-	if (types.history) { 
-		// do nothing 
-	}
 	if (types.styleIndex) {
 		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));
 		this.builders.push(new StyleUseBuilder(this.database.styleUse));
@@ -34,7 +31,6 @@ function AssetBuilder(types, database) {
 	}
 	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
-	this.writer = new FileWriter(types.location);
 	this.filesToProcess = [];
 	Object.freeze(this);
 }
