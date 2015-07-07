@@ -3,11 +3,11 @@
 */
 function QuestionItem(reference, nodeId, question, askedDt, instructor, answerDt, answer) {
 	this.reference = reference;
-	this.referenceNodeId = nodeId;
+	this.nodeId = nodeId;
 	this.questionText = question;
-	this.askedDateTime = askedDt || new Date();
+	this.askedDateTime = (askedDt) ? new Date(askedDt) : new Date();
 	this.instructorName = instructor;
-	this.answeredDateTime = answerDt;
+	this.answeredDateTime = (answerDt) ? new Date(answerDt) : null;
 	this.answerText = answer;
 	Object.seal(this);
 }

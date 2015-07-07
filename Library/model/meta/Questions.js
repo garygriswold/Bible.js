@@ -2,24 +2,13 @@
 * This class contains the list of questions and answers for this student
 * or device.
 */
-function Questions(types, bibleCache, tableContents) {
-	this.types = types;
+function Questions(collection, bibleCache, tableContents) {
+	this.collection = collection;
 	this.bibleCache = bibleCache;
 	this.tableContents = tableContents;
 	this.items = [];
-	this.fullPath = this.types.getAppPath('questions.json');
 	Object.seal(this);
 }
-Questions.prototype.fill = function(itemList) {
-	if (itemList) {
-		for (var i=0; i<itemList.length; i++) {
-			var item = itemList[i];
-			item.askedDateTime = new Date(item.askedDateTime);
-			item.answeredDateTime = new Date(item.answeredDateTime);
-		}
-		this.items = itemList;
-	}
-};
 Questions.prototype.size = function() {
 	return(this.items.length);
 };
@@ -30,54 +19,52 @@ Questions.prototype.addItem = function(questionItem, callback) {
 	this.items.push(questionItem);
 	// This method must add to the file, as well as add to the server
 	// callback when the addQuestion, either succeeds or fails.
-	this.write(function(result) {
+	this.insert(questionItem, function(result) {
 		callback(result);
 	});
 };
-Questions.prototype.read = function(pageNum, callback) {
+Questions.prototype.fill = function(callback) {
 	var that = this;
-	var reader = new FileReader(this.types.location);
-	reader.readTextFile(this.fullPath, function(data) {
-		if (data.errno === -2) {
-			createActs8Question(function(item) {
-				that.items.push(item);
-				that.write(function(result) {});
-				callback(that);			
-			});
-		} else if (data.errno) {
-			console.log('read questions.json failure ' + JSON.stringify(data));
-			callback(data);
+	var statement = 'select askedDateTime, book, chapter, verse, question, instructor, answerDateTime, answer ' +
+		'from questions order by askedDateTime';
+	this.collection.select(statement, [], function(results) {
+		if (results instanceof IOError) {
+			console.log('select questions failure ' + JSON.stringify(results));
+			callback(results);
 		} else {
-			var questionList = JSON.parse(data);
-			that.fill(questionList);
-			callback(that);
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var ref = new Reference(row.book, row.chapter, row.verse);
+				var ques = new QuestionItem(ref, ref.nodeId, row.question, row.askedDt, row.instructor, row.answerDt, row.answer);
+				that.items.push(ques);
+			}
+			callback(results);
 		}
 	});
-
-	function createActs8Question(callback) {
-		var acts8 = new QuestionItem();
-		acts8.referenceNodeId = 'ACT:8:30';
-		acts8.askedDateTime = new Date();
-		var refActs830 = new Reference('ACT:8:30');
-		var refActs831 = new Reference('ACT:8:31');
-		var refActs835 = new Reference('ACT:8:35');
-		acts8.reference = that.tableContents.toString(refActs830);
-		var verseActs830 = new VerseAccessor(that.bibleCache, refActs830);
-		var verseActs831 = new VerseAccessor(that.bibleCache, refActs831);
-		var verseActs835 = new VerseAccessor(that.bibleCache, refActs835);
-		verseActs830.getVerse(function(textActs830) {
-			acts8.questionText = textActs830;
-			verseActs831.getVerse(function(textActs831) {
-				acts8.questionText += textActs831;
-				verseActs835.getVerse(function(textActs835) {
-					acts8.answerText = textActs835;
-					acts8.answeredDateTime = new Date();
-					acts8.instructorName = '';
-					callback(acts8);
-				});
+};
+Questions.prototype.createActs8Question = function(callback) {
+	var acts8 = new QuestionItem();
+	acts8.nodeId = 'ACT:8:30';
+	acts8.askedDateTime = new Date();
+	var refActs830 = new Reference('ACT:8:30');
+	var refActs831 = new Reference('ACT:8:31');
+	var refActs835 = new Reference('ACT:8:35');
+	acts8.reference = this.tableContents.toString(refActs830);
+	var verseActs830 = new VerseAccessor(this.bibleCache, refActs830);
+	var verseActs831 = new VerseAccessor(this.bibleCache, refActs831);
+	var verseActs835 = new VerseAccessor(this.bibleCache, refActs835);
+	verseActs830.getVerse(function(textActs830) {
+		acts8.questionText = textActs830;
+		verseActs831.getVerse(function(textActs831) {
+			acts8.questionText += textActs831;
+			verseActs835.getVerse(function(textActs835) {
+				acts8.answerText = textActs835;
+				acts8.answeredDateTime = new Date();
+				acts8.instructorName = '';
+				callback(acts8);
 			});
 		});
-	}
+	});
 };
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
@@ -86,22 +73,44 @@ Questions.prototype.checkServer = function(callback) {
 		// send request to the server.
 
 		// if there is an unanswered question, the last item is updated
-		that.write(function(result) {
-			callback(lastItem);
+		that.update(function(err) {
+			callback();
 		});
 	}
 	else {
 		callback(null);
 	}
 };
-Questions.prototype.write = function(callback) {
-	var data = this.toJSON();
-	var writer = new FileWriter(this.types.location);
-	writer.writeTextFile(this.fullPath, data, function(result) {
-		if (result.errno) {
-			console.log('write questions.json failure ' + JSON.stringify(result));
+Questions.prototype.insert = function(item, callback) {
+	var statement = 'insert into questions(askedDateTime, book, chapter, verse, question) ' +
+		'values (?,?,?,?,?)';
+	var ref = new Reference(item.nodeId);
+	var values = [ item.askedDateTime.toISOString(), ref.book, ref.chapter, ref.verse, item.questionText ];
+	this.collection.replace(statement, values, function(results) {
+		if (results instanceof IOError) {
+			console.log('Error on Insert');
+			callback(results)
+		} else if (results.rowsAffected === 0) {
+			console.log('nothing inserted');
+			callback(new IOError(1, 'No rows were inserted in questions'));
+		} else {
+			callback();
 		}
-		callback(result);
+	});
+};
+Questions.prototype.update = function(callback) {
+	var statement = 'update questions set instructor = ?, answerDateTime = ?, answer = ?' +
+		'where askedDateTime = ?';
+	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answerText, item.askedDateTime.toISOString() ];
+	this.collection.update(statement, values, function(results) {
+		if (err instanceof IOError) {
+			console.log('Error on update');
+			callback(err);
+		} else if (results.rowsAffected === 0) {
+			callback(new IOError(1, 'No rows were update in questions'));
+		} else {
+			callback();
+		}
 	});
 };
 Questions.prototype.toJSON = function() {

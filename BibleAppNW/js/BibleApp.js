@@ -39,7 +39,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
 		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
 		that.historyView = new HistoryView(that.history, that.tableContents);
-		that.questionsView = new QuestionsView(types, that.bibleCache, that.tableContents);
+		that.questionsView = new QuestionsView(that.database.questions, that.bibleCache, that.tableContents);
 		Object.freeze(that);
 
 		switch(develop) {
@@ -377,10 +377,10 @@ HistoryView.prototype.buildHistoryView = function() {
 * needed.  Because the question.json file could become large, this approach
 * is essential.
 */
-function QuestionsView(types, bibleCache, tableContents) {
+function QuestionsView(collection, bibleCache, tableContents) {
 	this.bibleCache = bibleCache;
 	this.tableContents = tableContents;
-	this.questions = new Questions(types, bibleCache, tableContents);
+	this.questions = new Questions(collection, bibleCache, tableContents);
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('questionsRoot');
 	this.referenceInput = null;
@@ -390,18 +390,32 @@ function QuestionsView(types, bibleCache, tableContents) {
 QuestionsView.prototype.showView = function() {
 	var that = this;
 	this.hideView();
-	this.questions.read(0, function(results) {
-		if (results === undefined || results.errno === undefined || results.errno === -2) {
-			that.viewRoot = that.buildQuestionsView();
-			that.rootNode.appendChild(that.viewRoot);
-
-			that.questions.checkServer(function(results) {
-				//that.appendToQuestionView();
-				// when a question comes back from the server
-				// we are able to display input block.
-			});
+	this.questions.fill(function(results) {
+		if (results instanceof IOError) {
+			console.log('QuestionView.showView');
+		} else {
+			if (results.rows.length === 0) {
+				that.questions.createActs8Question(function(item) {
+					that.questions.items.push(item);
+					that.questions.insert(item, function(err) {
+						presentView();
+					});
+				});
+			} else {
+				presentView();
+			}
 		}
 	});
+	function presentView() {
+		that.viewRoot = that.buildQuestionsView();
+		that.rootNode.appendChild(that.viewRoot);
+
+		that.questions.checkServer(function(results) {
+			//that.appendToQuestionView();
+			// when a question comes back from the server
+			// we are able to display input block.
+		});		
+	}
 };
 QuestionsView.prototype.hideView = function() {
 	for (var i=this.rootNode.children.length -1; i>=0; i--) {
@@ -516,7 +530,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 			console.log('submit button clicked');
 
 			var item = new QuestionItem();
-			item.referenceNodeId = '';// where does this come from?
+			item.nodeId = '';// where does this come from?
 			item.reference = that.referenceInput.textContent;
 			item.questionText = that.questionInput.text;
 
@@ -1114,10 +1128,6 @@ function drawTOCIcon(hite, color) {
 
 	return(canvas);
 }/**
-* This file contains IO constants and functions which are common to all file methods, which might include node.js, cordova, javascript, etc.
-*/
-var FILE_ROOTS = { 'application': '?', 'document': '../../dbl/current/', 'temporary': '?', 'test2dbl': '../../../dbl/current/' };
-/**
 * This class is a wrapper for SQL Error so that we can always distinguish an error
 * from valid results.  Any method that calls an IO routine, which can expect valid results
 * or an error should test "if (results instanceof IOError)".
@@ -1127,80 +1137,6 @@ function IOError(err) {
 	this.message = err.message;
 }
 /**
-* This class is a file reader for Node.  It can be used with node.js and node-webkit.
-* cordova requires using another class, but the interface should be the same.
-*/
-function FileReader(location) {
-	this.fs = require('fs');
-	this.location = location;
-	Object.freeze(this);
-}
-FileReader.prototype.fileExists = function(filepath, callback) {
-	var fullPath = FILE_ROOTS[this.location] + filepath;
-	//console.log('checking fullpath', fullPath);
-	this.fs.stat(fullPath, function(err, stat) {
-		if (err) {
-			err.filepath = filepath;
-			callback(err);
-		} else {
-			callback(stat);
-		}
-	});
-};
-FileReader.prototype.readDirectory = function(filepath, callback) {
-	var fullPath = FILE_ROOTS[this.location] + filepath;
-	//console.log('read directory ', fullPath);
-	this.fs.readdir(fullPath, function(err, data) {
-		if (err) {
-			err.filepath = filepath;
-			callback(err);
-		} else {
-			callback(data);
-		}
-	});
-};
-FileReader.prototype.readTextFile = function(filepath, callback) {
-	var fullPath = FILE_ROOTS[this.location] + filepath;
-	//console.log('read file ', fullPath);
-	this.fs.readFile(fullPath, { encoding: 'utf8'}, function(err, data) {
-		if (err) {
-			err.filepath = filepath;
-			callback(err);
-		} else {
-			callback(data);
-		}
-	});
-};/**
-* This class is a file writer for Node.  It can be used with node.js and node-webkit.
-* cordova requires using another class, but the interface should be the same.
-*/
-function FileWriter(location) {
-	this.fs = require('fs');
-	this.location = location;
-	Object.freeze(this);
-}
-FileWriter.prototype.createDirectory = function(filepath, callback) {
-	var fullPath = FILE_ROOTS[this.location] + filepath;
-	this.fs.mkdir(fullPath, function(err) {
-		if (err) {
-			err.filepath = filepath;
-			callback(err);
-		} else {
-			callback(filepath);
-		}
-	});
-};
-FileWriter.prototype.writeTextFile = function(filepath, data, callback) {
-	var fullPath = FILE_ROOTS[this.location] + filepath;
-	this.fs.writeFile(fullPath, data, { encoding: 'utf8'}, function(err) {
-		if (err) {
-			err.filepath = filepath;
-			callback(err);
-		} else {
-			callback(filepath);
-		}
-	});
-};/**
 * This class is a facade over the database that is used to store bible text, concordance,
 * table of contents, history and questions.  At this writing, it is a facade over a
 * Web SQL Sqlite3 database, but it intended to hide all database API specifics
@@ -2402,35 +2338,24 @@ Lookup.prototype.find = function(search) {
 */
 function QuestionItem(reference, nodeId, question, askedDt, instructor, answerDt, answer) {
 	this.reference = reference;
-	this.referenceNodeId = nodeId;
+	this.nodeId = nodeId;
 	this.questionText = question;
-	this.askedDateTime = askedDt || new Date();
+	this.askedDateTime = (askedDt) ? new Date(askedDt) : new Date();
 	this.instructorName = instructor;
-	this.answeredDateTime = answerDt;
+	this.answeredDateTime = (answerDt) ? new Date(answerDt) : null;
 	this.answerText = answer;
 	Object.seal(this);
 }/**
 * This class contains the list of questions and answers for this student
 * or device.
 */
-function Questions(types, bibleCache, tableContents) {
-	this.types = types;
+function Questions(collection, bibleCache, tableContents) {
+	this.collection = collection;
 	this.bibleCache = bibleCache;
 	this.tableContents = tableContents;
 	this.items = [];
-	this.fullPath = this.types.getAppPath('questions.json');
 	Object.seal(this);
 }
-Questions.prototype.fill = function(itemList) {
-	if (itemList) {
-		for (var i=0; i<itemList.length; i++) {
-			var item = itemList[i];
-			item.askedDateTime = new Date(item.askedDateTime);
-			item.answeredDateTime = new Date(item.answeredDateTime);
-		}
-		this.items = itemList;
-	}
-};
 Questions.prototype.size = function() {
 	return(this.items.length);
 };
@@ -2441,54 +2366,52 @@ Questions.prototype.addItem = function(questionItem, callback) {
 	this.items.push(questionItem);
 	// This method must add to the file, as well as add to the server
 	// callback when the addQuestion, either succeeds or fails.
-	this.write(function(result) {
+	this.insert(questionItem, function(result) {
 		callback(result);
 	});
 };
-Questions.prototype.read = function(pageNum, callback) {
+Questions.prototype.fill = function(callback) {
 	var that = this;
-	var reader = new FileReader(this.types.location);
-	reader.readTextFile(this.fullPath, function(data) {
-		if (data.errno === -2) {
-			createActs8Question(function(item) {
-				that.items.push(item);
-				that.write(function(result) {});
-				callback(that);			
-			});
-		} else if (data.errno) {
-			console.log('read questions.json failure ' + JSON.stringify(data));
-			callback(data);
+	var statement = 'select askedDateTime, book, chapter, verse, question, instructor, answerDateTime, answer ' +
+		'from questions order by askedDateTime';
+	this.collection.select(statement, [], function(results) {
+		if (results instanceof IOError) {
+			console.log('select questions failure ' + JSON.stringify(results));
+			callback(results);
 		} else {
-			var questionList = JSON.parse(data);
-			that.fill(questionList);
-			callback(that);
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var ref = new Reference(row.book, row.chapter, row.verse);
+				var ques = new QuestionItem(ref, ref.nodeId, row.question, row.askedDt, row.instructor, row.answerDt, row.answer);
+				that.items.push(ques);
+			}
+			callback(results);
 		}
 	});
-
-	function createActs8Question(callback) {
-		var acts8 = new QuestionItem();
-		acts8.referenceNodeId = 'ACT:8:30';
-		acts8.askedDateTime = new Date();
-		var refActs830 = new Reference('ACT:8:30');
-		var refActs831 = new Reference('ACT:8:31');
-		var refActs835 = new Reference('ACT:8:35');
-		acts8.reference = that.tableContents.toString(refActs830);
-		var verseActs830 = new VerseAccessor(that.bibleCache, refActs830);
-		var verseActs831 = new VerseAccessor(that.bibleCache, refActs831);
-		var verseActs835 = new VerseAccessor(that.bibleCache, refActs835);
-		verseActs830.getVerse(function(textActs830) {
-			acts8.questionText = textActs830;
-			verseActs831.getVerse(function(textActs831) {
-				acts8.questionText += textActs831;
-				verseActs835.getVerse(function(textActs835) {
-					acts8.answerText = textActs835;
-					acts8.answeredDateTime = new Date();
-					acts8.instructorName = '';
-					callback(acts8);
-				});
+};
+Questions.prototype.createActs8Question = function(callback) {
+	var acts8 = new QuestionItem();
+	acts8.nodeId = 'ACT:8:30';
+	acts8.askedDateTime = new Date();
+	var refActs830 = new Reference('ACT:8:30');
+	var refActs831 = new Reference('ACT:8:31');
+	var refActs835 = new Reference('ACT:8:35');
+	acts8.reference = this.tableContents.toString(refActs830);
+	var verseActs830 = new VerseAccessor(this.bibleCache, refActs830);
+	var verseActs831 = new VerseAccessor(this.bibleCache, refActs831);
+	var verseActs835 = new VerseAccessor(this.bibleCache, refActs835);
+	verseActs830.getVerse(function(textActs830) {
+		acts8.questionText = textActs830;
+		verseActs831.getVerse(function(textActs831) {
+			acts8.questionText += textActs831;
+			verseActs835.getVerse(function(textActs835) {
+				acts8.answerText = textActs835;
+				acts8.answeredDateTime = new Date();
+				acts8.instructorName = '';
+				callback(acts8);
 			});
 		});
-	}
+	});
 };
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
@@ -2497,22 +2420,44 @@ Questions.prototype.checkServer = function(callback) {
 		// send request to the server.
 
 		// if there is an unanswered question, the last item is updated
-		that.write(function(result) {
-			callback(lastItem);
+		that.update(function(err) {
+			callback();
 		});
 	}
 	else {
 		callback(null);
 	}
 };
-Questions.prototype.write = function(callback) {
-	var data = this.toJSON();
-	var writer = new FileWriter(this.types.location);
-	writer.writeTextFile(this.fullPath, data, function(result) {
-		if (result.errno) {
-			console.log('write questions.json failure ' + JSON.stringify(result));
+Questions.prototype.insert = function(item, callback) {
+	var statement = 'insert into questions(askedDateTime, book, chapter, verse, question) ' +
+		'values (?,?,?,?,?)';
+	var ref = new Reference(item.nodeId);
+	var values = [ item.askedDateTime.toISOString(), ref.book, ref.chapter, ref.verse, item.questionText ];
+	this.collection.replace(statement, values, function(results) {
+		if (results instanceof IOError) {
+			console.log('Error on Insert');
+			callback(results)
+		} else if (results.rowsAffected === 0) {
+			console.log('nothing inserted');
+			callback(new IOError(1, 'No rows were inserted in questions'));
+		} else {
+			callback();
 		}
-		callback(result);
+	});
+};
+Questions.prototype.update = function(callback) {
+	var statement = 'update questions set instructor = ?, answerDateTime = ?, answer = ?' +
+		'where askedDateTime = ?';
+	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answerText, item.askedDateTime.toISOString() ];
+	this.collection.update(statement, values, function(results) {
+		if (err instanceof IOError) {
+			console.log('Error on update');
+			callback(err);
+		} else if (results.rowsAffected === 0) {
+			callback(new IOError(1, 'No rows were update in questions'));
+		} else {
+			callback();
+		}
 	});
 };
 Questions.prototype.toJSON = function() {

@@ -5,10 +5,10 @@
 * needed.  Because the question.json file could become large, this approach
 * is essential.
 */
-function QuestionsView(types, bibleCache, tableContents) {
+function QuestionsView(collection, bibleCache, tableContents) {
 	this.bibleCache = bibleCache;
 	this.tableContents = tableContents;
-	this.questions = new Questions(types, bibleCache, tableContents);
+	this.questions = new Questions(collection, bibleCache, tableContents);
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('questionsRoot');
 	this.referenceInput = null;
@@ -18,18 +18,32 @@ function QuestionsView(types, bibleCache, tableContents) {
 QuestionsView.prototype.showView = function() {
 	var that = this;
 	this.hideView();
-	this.questions.read(0, function(results) {
-		if (results === undefined || results.errno === undefined || results.errno === -2) {
-			that.viewRoot = that.buildQuestionsView();
-			that.rootNode.appendChild(that.viewRoot);
-
-			that.questions.checkServer(function(results) {
-				//that.appendToQuestionView();
-				// when a question comes back from the server
-				// we are able to display input block.
-			});
+	this.questions.fill(function(results) {
+		if (results instanceof IOError) {
+			console.log('QuestionView.showView');
+		} else {
+			if (results.rows.length === 0) {
+				that.questions.createActs8Question(function(item) {
+					that.questions.items.push(item);
+					that.questions.insert(item, function(err) {
+						presentView();
+					});
+				});
+			} else {
+				presentView();
+			}
 		}
 	});
+	function presentView() {
+		that.viewRoot = that.buildQuestionsView();
+		that.rootNode.appendChild(that.viewRoot);
+
+		that.questions.checkServer(function(results) {
+			//that.appendToQuestionView();
+			// when a question comes back from the server
+			// we are able to display input block.
+		});		
+	}
 };
 QuestionsView.prototype.hideView = function() {
 	for (var i=this.rootNode.children.length -1; i>=0; i--) {
@@ -144,7 +158,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 			console.log('submit button clicked');
 
 			var item = new QuestionItem();
-			item.referenceNodeId = '';// where does this come from?
+			item.nodeId = '';// where does this come from?
 			item.reference = that.referenceInput.textContent;
 			item.questionText = that.questionInput.text;
 
