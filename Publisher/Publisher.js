@@ -92,6 +92,9 @@ AssetBuilder.prototype.build = function(callback) {
 					console.log('drop error', err);
 					callback(err);
 				} else {
+					processDatabaseLoad(that.builders.shift());
+					//callback(err);
+				/*	
 					builder.collection.create(builder.schema(), function(err) {
 						if (err) {
 							console.log('create error', err);
@@ -107,6 +110,7 @@ AssetBuilder.prototype.build = function(callback) {
 							});
 						}
 					});
+*/
 				}
 			});
 		} else {
@@ -1624,6 +1628,15 @@ History.prototype.toJSON = function() {
 */
 var FILE_ROOTS = { 'application': '?', 'document': '../../dbl/current/', 'temporary': '?', 'test2dbl': '../../../dbl/current/' };
 /**
+* This class is a wrapper for SQL Error so that we can always distinguish an error
+* from valid results.  Any method that calls an IO routine, which can expect valid results
+* or an error should test "if (results instanceof IOError)".
+*/
+function IOError(err) {
+	this.code = err.code;
+	this.message = err.message;
+}
+/**
 * This class is a file reader for Node.  It can be used with node.js and node-webkit.
 * cordova requires using another class, but the interface should be the same.
 */
@@ -1669,29 +1682,310 @@ FileReader.prototype.readTextFile = function(filepath, callback) {
 	});
 };/**
 * This class is a facade over the database that is used to store bible text, concordance,
-* table of contents, history and questions.  At this writing, it is a facade over a
-* Web SQL Sqlite3 database, but it intended to hide all database API specifics
-* from the rest of the application so that a different database can be put in its
-* place, if that becomes advisable.
-* Gary Griswold, July 2, 2015
+* table of contents, history and questions.
 */
 function DeviceDatabase(code, name) {
 	this.code = code;
 	this.name = name;
+    this.className = 'DeviceDatabase';
 	var size = 30 * 1024 * 1024;
-	this.db = window.openDatabase(this.code, "1.0", this.name, size);
-	this.codex = new DeviceCollection(this.db, 'codex');
-	this.tableContents = new DeviceCollection(this.db, 'tableContents');
-	this.concordance = new DeviceCollection(this.db, 'concordance');
-	this.styleIndex = new DeviceCollection(this.db, 'styleIndex');
-	this.styleUse = new DeviceCollection(this.db, 'styleUse');
-	this.history = new DeviceCollection(this.db, 'history');
-	this.questions = new DeviceCollection(this.db, 'questions');
+	this.database = window.openDatabase(this.code, "1.0", this.name, size);
+	this.codex = new CodexAdapter(this);
+	this.tableContents = new TableContentsAdapter(this);
+	this.concordance = new ConcordanceAdapter(this);
+	this.styleIndex = new StyleIndexAdapter(this);
+	this.styleUse = new StyleUseAdapter(this);
+	this.history = new HistoryAdapter(this);
+	this.questions = new QuestionsAdapter(this);
 	Object.freeze(this);
 }
+DeviceDatabase.prototype.select = function(statement, values, callback) {
+    this.database.readTransaction(onTranStart, onTranError, onTranSuccess);
 
+    function onTranStart(tx) {
+        console.log(statement, values);
+        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
+    }
+    function onTranError(err) {
+        console.log('select tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onTranSuccess() {
+    	console.log('select tran success');
+    	callback();
+    }
+    function onSelectSuccess(tx, results) {
+        console.log('select success results', JSON.stringify(results.rows));
+        callback(results);
+    }
+    function onSelectError(tx, err) {
+        console.log('select error', err);
+        callback(new IOError(err));
+    }
+};
+DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
+    var rowsAffected;
+    this.database.transaction(onTranStart, onTranError, onTranSuccess);
+
+    function onTranStart(tx) {
+        console.log('exec tran start', statement, values);
+        tx.executeSql(statement, values, onExecSuccess, onExecError);
+    }
+    function onTranError(err) {
+        console.log('execute tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onTranSuccess() {
+        console.log('execute trans completed', rowsAffected);
+        callback(rowsAffected);
+    }
+    function onExecSuccess(tx, results) {
+    	console.log('excute sql success', results.rowsAffected);
+        rowsAffected = results.rowsAffected;
+    	//if (results.rowsAffected === 0) {
+    	//	callback(new IOError(1, 'No rows affected by update'));
+    	//} else {
+    	//	callback();
+    	//}
+    }
+    function onExecError(tx, err) {
+    	console.log('execute sql error', JSON.stringify(err));
+    	callback(new IOError(err));
+    }
+};
+DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
+	this.database.transaction(onTranStart, onTranError, onTranSuccess);
+
+    function onTranStart(tx) {
+  		console.log('bulk tran start', statement, array[0], onExecSuccess, onExecError);
+  		for (var i=0; i<array.length; i++) {
+        	tx.executeSql(statement, array[i]);
+        }
+    }
+    function onTranError(err) {
+        console.log('bulk tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onTranSuccess() {
+        console.log('bulk tran completed');
+        callback();
+    }
+    function onExecSuccess(tx, results) {
+    	if (results.rowsAffected !== array.length) {
+    		callback(new IOError(1, array.length + ' rows input, but ' + results.rowsAffected + ' processed.'));
+    	} else {
+    		callback();
+    	}
+    }
+    function onExecError(tx, err) {
+    	console.log('bulk sql error', JSON.stringify(err));
+    	callback(IOError(err));
+    }
+};
+DeviceDatabase.prototype.executeDDL = function(statement, callback) {
+    this.database.transaction(onTranStart, onTranError);
+
+    function onTranStart(tx) {
+        console.log('exec tran start', statement);
+        tx.executeSql(statement, [], onExecSuccess, onExecError);
+    }
+    function onTranError(err) {
+        callback(new IOError(err));
+    }
+    function onExecSuccess(tx, results) {
+        callback();
+    }
+    function onExecError(tx, err) {
+        callback(new IOError(err));
+    }
+};
 
 /**
+* This class is the database adapter for the codex table
+*/
+function CodexAdapter(database) {
+	this.database = database;
+	this.className = 'CodexAdapter';
+	Object.freeze(this);
+}
+CodexAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists codex', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop codex success', err);
+			callback(err);
+		}
+	});
+};
+CodexAdapter.prototype.create = function(callback) {
+
+};
+CodexAdapter.prototype.load = function(array, callback) {
+
+};
+CodexAdapter.prototype.getChapter = function(values, callback) {
+
+};/**
+* This class is the database adapter for the concordance table
+*/
+function ConcordanceAdapter(database) {
+	this.database = database;
+	this.className = 'ConcordanceAdapter';
+	Object.freeze(this);
+}
+ConcordanceAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists concordance', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop concordance success', err);
+			callback(err);
+		}
+	});
+};
+ConcordanceAdapter.prototype.create = function(callback) {
+
+};
+ConcordanceAdapter.prototype.load = function(array, callback) {
+
+};
+ConcordanceAdapter.prototype.select = function(values, callback) {
+
+};/**
+* This class is the database adapter for the tableContents table
+*/
+function TableContentsAdapter(database) {
+	this.database = database;
+	this.className = 'TableContentsAdapter';
+	Object.freeze(this);
+}
+TableContentsAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists tableContents', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop tableContents success', err);
+			callback(err);
+		}
+	});
+};
+TableContentsAdapter.prototype.create = function(callback) {
+
+};
+TableContentsAdapter.prototype.load = function(array, callback) {
+
+};
+TableContentsAdapter.prototype.select = function(values, callback) {
+
+};/**
+* This class is the database adapter for the styleIndex table
+*/
+function StyleIndexAdapter(database) {
+	this.database = database;
+	this.className = 'StyleIndexAdapter';
+	Object.freeze(this);
+}
+StyleIndexAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists styleIndex', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop styleIndex success', err);
+			callback(err);
+		}
+	});
+};
+StyleIndexAdapter.prototype.create = function(callback) {
+
+};
+StyleIndexAdapter.prototype.load = function(array, callback) {
+
+};/**
+* This class is the database adapter for the styleUse table
+*/
+function StyleUseAdapter(database) {
+	this.database = database;
+	this.className = 'StyleUseAdapter';
+	Object.freeze(this);
+}
+StyleUseAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists styleUse', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop styleUse success', err);
+			callback(err);
+		}
+	});
+};
+StyleUseAdapter.prototype.create = function(callback) {
+
+};
+StyleUseAdapter.prototype.load = function(array, callback) {
+
+};/**
+* This class is the database adapter for the history table
+*/
+function HistoryAdapter(database) {
+	this.database = database;
+	this.className = 'HistoryAdapter';
+	Object.freeze(this);
+}
+HistoryAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists history', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop history success', err);
+			callback(err);
+		}
+	});
+};
+HistoryAdapter.prototype.create = function(callback) {
+
+};
+HistoryAdapter.prototype.select = function(values, callback) {
+
+};
+HistoryAdapter.prototype.insert = function(values, callback) {
+
+};
+HistoryAdapter.prototype.delete = function(values, callback) {
+
+};/**
+* This class is the database adapter for the questions table
+*/
+function QuestionsAdapter(database) {
+	this.database = database;
+	this.className = 'QuestionsAdapter';
+	Object.freeze(this);
+}
+QuestionsAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists questions', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop questions success', err);
+			callback(err);
+		}
+	});
+};
+QuestionsAdapter.prototype.create = function(callback) {
+
+};
+QuestionsAdapter.prototype.select = function(values, callback) {
+
+};
+QuestionsAdapter.prototype.insert = function(values, callback) {
+
+};
+QuestionsAdapter.prototype.update = function(values, callback) {
+
+};
+QuestionsAdapter.prototype.delete = function(values, callback) {
+
+};/**
 * This class is a facade over a collection in a database.  
 * At this writing, it is a facade over a Web SQL Sqlite3 database, 
 * but it intended to hide all database API specifics

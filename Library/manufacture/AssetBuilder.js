@@ -71,6 +71,9 @@ AssetBuilder.prototype.build = function(callback) {
 					console.log('drop error', err);
 					callback(err);
 				} else {
+					processDatabaseLoad(that.builders.shift());
+					//callback(err);
+				/*	
 					builder.collection.create(builder.schema(), function(err) {
 						if (err) {
 							console.log('create error', err);
@@ -86,6 +89,7 @@ AssetBuilder.prototype.build = function(callback) {
 							});
 						}
 					});
+*/
 				}
 			});
 		} else {

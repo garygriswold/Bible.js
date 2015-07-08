@@ -26,8 +26,16 @@ cat ../Library/model/meta/TOCBook.js >> Publisher.js
 cat ../Library/model/meta/Concordance.js >> Publisher.js
 cat ../Library/model/meta/History.js >> Publisher.js
 cat ../Library/io/CommonIO.js >> Publisher.js
+cat ../Library/io/IOError.js >> Publisher.js
 cat ../Library/io/NodeFileReader.js >> Publisher.js
 cat ../Library/io/DeviceDatabase.js >> Publisher.js
+cat ../Library/io/CodexAdapter.js >> Publisher.js
+cat ../Library/io/ConcordanceAdapter.js >> Publisher.js
+cat ../Library/io/TableContentsAdapter.js >> Publisher.js
+cat ../Library/io/StyleIndexAdapter.js >> Publisher.js
+cat ../Library/io/StyleUseAdapter.js >> Publisher.js
+cat ../Library/io/HistoryAdapter.js >> Publisher.js
+cat ../Library/io/QuestionsAdapter.js >> Publisher.js
 cat ../Library/io/DeviceCollection.js >> Publisher.js
 cat ../Library/manufacture/AssetControllerTest.js >> Publisher.js
 #node Publisher.js
