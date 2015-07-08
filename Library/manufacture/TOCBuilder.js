@@ -51,17 +51,6 @@ TOCBuilder.prototype.readRecursively = function(node) {
 TOCBuilder.prototype.size = function() {
 	return(this.toc.bookList.length);
 };
-TOCBuilder.prototype.schema = function() {
-	var sql = 'code text primary key not null, ' +
-    	'heading text not null, ' +
-    	'title text not null, ' +
-    	'name text not null, ' +
-    	'abbrev text not null, ' +
-		'lastChapter integer not null, ' +
-		'priorBook text null, ' +
-		'nextBook text null';
-	return(sql);
-};
 TOCBuilder.prototype.loadDB = function(callback) {
 	console.log('TOC loadDB records count', this.size());
 	var array = [];

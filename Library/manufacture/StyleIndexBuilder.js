@@ -59,14 +59,6 @@ StyleIndexBuilder.prototype.readRecursively = function(node) {
 StyleIndexBuilder.prototype.size = function() {
 	return(Object.keys(this.index).length);
 };
-StyleIndexBuilder.prototype.schema = function() {
-	var sql = 'style text not null, ' +
-		'usage text not null, ' +
-		'book text not null, ' +
-		'chapter integer null, ' +
-		'verse integer null';
-	return(sql);
-};
 StyleIndexBuilder.prototype.loadDB = function(callback) {
 	console.log('style index loadDB records count', this.size());
 	var array = [];

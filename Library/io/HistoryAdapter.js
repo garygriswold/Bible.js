@@ -11,13 +11,27 @@ HistoryAdapter.prototype.drop = function(callback) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop history success', err);
-			callback(err);
+			console.log('drop history success');
+			callback();
 		}
 	});
 };
 HistoryAdapter.prototype.create = function(callback) {
-
+	var statement = 'create table if not exists history(' +
+		'timestamp text not null primary key, ' +
+		'book text not null, ' +
+		'chapter integer not null, ' +
+		'verse integer null, ' +
+		'source text not null, ' +
+		'search text null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create history success');
+			callback();
+		}
+	});
 };
 HistoryAdapter.prototype.select = function(values, callback) {
 

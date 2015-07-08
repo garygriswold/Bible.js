@@ -11,13 +11,25 @@ CodexAdapter.prototype.drop = function(callback) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop codex success', err);
-			callback(err);
+			console.log('drop codex success');
+			callback();
 		}
 	});
 };
 CodexAdapter.prototype.create = function(callback) {
-
+	var statement = 'create table if not exists codex(' +
+		'book text not null, ' +
+		'chapter integer not null, ' +
+		'xml text not null, ' +
+		'primary key (book, chapter))';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create codex success');
+			callback();
+		}
+	});
 };
 CodexAdapter.prototype.load = function(array, callback) {
 

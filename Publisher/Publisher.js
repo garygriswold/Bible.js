@@ -92,14 +92,13 @@ AssetBuilder.prototype.build = function(callback) {
 					console.log('drop error', err);
 					callback(err);
 				} else {
-					processDatabaseLoad(that.builders.shift());
-					//callback(err);
-				/*	
-					builder.collection.create(builder.schema(), function(err) {
+					builder.collection.create(function(err) {
 						if (err) {
 							console.log('create error', err);
 							callback(err);
 						} else {
+							processDatabaseLoad(that.builders.shift());
+							/*
 							builder.loadDB(function(err) {
 								if (err) {
 									console.log('load db error', err);
@@ -108,9 +107,9 @@ AssetBuilder.prototype.build = function(callback) {
 									processDatabaseLoad(that.builders.shift());
 								}
 							});
+					*/
 						}
 					});
-*/
 				}
 			});
 		} else {
@@ -130,13 +129,6 @@ function ChapterBuilder(collection) {
 ChapterBuilder.prototype.readBook = function(usxRoot) {
 	var that = this;
 	this.books.push(usxRoot);
-};
-ChapterBuilder.prototype.schema = function() {
-	var sql = 'book text not null, ' +
-		'chapter integer not null, ' +
-		'xml text not null, ' +
-		'primary key (book, chapter)';
-	return(sql);
 };
 ChapterBuilder.prototype.loadDB = function(callback) {
 	var array = [];
@@ -250,17 +242,6 @@ TOCBuilder.prototype.readRecursively = function(node) {
 TOCBuilder.prototype.size = function() {
 	return(this.toc.bookList.length);
 };
-TOCBuilder.prototype.schema = function() {
-	var sql = 'code text primary key not null, ' +
-    	'heading text not null, ' +
-    	'title text not null, ' +
-    	'name text not null, ' +
-    	'abbrev text not null, ' +
-		'lastChapter integer not null, ' +
-		'priorBook text null, ' +
-		'nextBook text null';
-	return(sql);
-};
 TOCBuilder.prototype.loadDB = function(callback) {
 	console.log('TOC loadDB records count', this.size());
 	var array = [];
@@ -350,12 +331,6 @@ ConcordanceBuilder.prototype.addEntry = function(word, reference) {
 ConcordanceBuilder.prototype.size = function() {
 	return(Object.keys(this.index).length); 
 };
-ConcordanceBuilder.prototype.schema = function() {
-	var sql = 'word text primary key not null, ' +
-    	'refCount integer not null, ' +
-    	'refList text not null';
-    return(sql);
-};
 ConcordanceBuilder.prototype.loadDB = function(callback) {
 	console.log('Concordance loadDB records count', this.size());
 	var words = Object.keys(this.index);
@@ -391,15 +366,6 @@ function HistoryBuilder(collection) {
 HistoryBuilder.prototype.readBook = function(usxRoot) {
 	// This class does not process the Bible
 };
-HistoryBuilder.prototype.schema = function() {
-	var sql = 'timestamp text not null primary key, ' +
-		'book text not null, ' +
-		'chapter integer not null, ' +
-		'verse integer null, ' +
-		'source text not null, ' +
-		'search text null';
-	return(sql);
-};
 HistoryBuilder.prototype.loadDB = function(callback) {
 	callback();  // This class does not load history
 };/**
@@ -413,20 +379,10 @@ function QuestionsBuilder(collection) {
 QuestionsBuilder.prototype.readBook = function(usxRoot) {
 	// This class does not process the Bible
 };
-QuestionsBuilder.prototype.schema = function() {
-	var sql = 'askedDateTime text not null primary key, ' +
-		'book text not null, ' +
-		'chapter integer not null, ' +
-		'verse integer null, ' +
-		'question text not null, ' +
-		'instructor text not null, ' +
-		'answerDateTime text not null, ' +
-		'answer text not null';
-	return(sql);
-};
 QuestionsBuilder.prototype.loadDB = function(callback) {
 	callback();  // This class does not load history
-};/**
+};
+/**
 * This class traverses the USX data model in order to find each style, and 
 * reference to that style.  It builds an index to each style showing
 * all of the references where each style is used.
@@ -487,14 +443,6 @@ StyleIndexBuilder.prototype.readRecursively = function(node) {
 StyleIndexBuilder.prototype.size = function() {
 	return(Object.keys(this.index).length);
 };
-StyleIndexBuilder.prototype.schema = function() {
-	var sql = 'style text not null, ' +
-		'usage text not null, ' +
-		'book text not null, ' +
-		'chapter integer null, ' +
-		'verse integer null';
-	return(sql);
-};
 StyleIndexBuilder.prototype.loadDB = function(callback) {
 	console.log('style index loadDB records count', this.size());
 	var array = [];
@@ -542,12 +490,6 @@ function StyleUseBuilder(collection) {
 }
 StyleUseBuilder.prototype.readBook = function(usxRoot) {
 	// This table is not populated from text of the Bible
-};
-StyleUseBuilder.prototype.schema = function() {
-	var sql = 'style text not null, ' +
-		'usage text not null, ' +
-		'primary key(style, usage)';
-	return(sql);
 };
 StyleUseBuilder.prototype.loadDB = function(callback) {
 	var styles = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl', 'para.rem',
@@ -1813,13 +1755,25 @@ CodexAdapter.prototype.drop = function(callback) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop codex success', err);
-			callback(err);
+			console.log('drop codex success');
+			callback();
 		}
 	});
 };
 CodexAdapter.prototype.create = function(callback) {
-
+	var statement = 'create table if not exists codex(' +
+		'book text not null, ' +
+		'chapter integer not null, ' +
+		'xml text not null, ' +
+		'primary key (book, chapter))';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create codex success');
+			callback();
+		}
+	});
 };
 CodexAdapter.prototype.load = function(array, callback) {
 
@@ -1839,13 +1793,24 @@ ConcordanceAdapter.prototype.drop = function(callback) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop concordance success', err);
-			callback(err);
+			console.log('drop concordance success');
+			callback();
 		}
 	});
 };
 ConcordanceAdapter.prototype.create = function(callback) {
-
+	var statement = 'create table if not exists concordance(' +
+		'word text primary key not null, ' +
+    	'refCount integer not null, ' +
+    	'refList text not null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create concordance success');
+			callback();
+		}
+	});
 };
 ConcordanceAdapter.prototype.load = function(array, callback) {
 
@@ -1865,13 +1830,29 @@ TableContentsAdapter.prototype.drop = function(callback) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop tableContents success', err);
-			callback(err);
+			console.log('drop tableContents success');
+			callback();
 		}
 	});
 };
 TableContentsAdapter.prototype.create = function(callback) {
-
+	var statement = 'create table if not exists tableContents(' +
+		'code text primary key not null, ' +
+    	'heading text not null, ' +
+    	'title text not null, ' +
+    	'name text not null, ' +
+    	'abbrev text not null, ' +
+		'lastChapter integer not null, ' +
+		'priorBook text null, ' +
+		'nextBook text null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create tableContents success');
+			callback();
+		}
+	});
 };
 TableContentsAdapter.prototype.load = function(array, callback) {
 
@@ -1891,13 +1872,26 @@ StyleIndexAdapter.prototype.drop = function(callback) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop styleIndex success', err);
-			callback(err);
+			console.log('drop styleIndex success');
+			callback();
 		}
 	});
 };
 StyleIndexAdapter.prototype.create = function(callback) {
-
+	var statement = 'create table if not exists styleIndex(' +
+		'style text not null, ' +
+		'usage text not null, ' +
+		'book text not null, ' +
+		'chapter integer null, ' +
+		'verse integer null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create styleIndex success');
+			callback();
+		}
+	});
 };
 StyleIndexAdapter.prototype.load = function(array, callback) {
 
@@ -1914,13 +1908,24 @@ StyleUseAdapter.prototype.drop = function(callback) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop styleUse success', err);
-			callback(err);
+			console.log('drop styleUse success');
+			callback();
 		}
 	});
 };
 StyleUseAdapter.prototype.create = function(callback) {
-
+	var statement = 'create table if not exists styleUse(' +
+		'style text not null, ' +
+		'usage text not null, ' +
+		'primary key(style, usage))';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create styleUse success');
+			callback();
+		}
+	});
 };
 StyleUseAdapter.prototype.load = function(array, callback) {
 
@@ -1937,13 +1942,27 @@ HistoryAdapter.prototype.drop = function(callback) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop history success', err);
-			callback(err);
+			console.log('drop history success');
+			callback();
 		}
 	});
 };
 HistoryAdapter.prototype.create = function(callback) {
-
+	var statement = 'create table if not exists history(' +
+		'timestamp text not null primary key, ' +
+		'book text not null, ' +
+		'chapter integer not null, ' +
+		'verse integer null, ' +
+		'source text not null, ' +
+		'search text null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create history success');
+			callback();
+		}
+	});
 };
 HistoryAdapter.prototype.select = function(values, callback) {
 
@@ -1966,13 +1985,29 @@ QuestionsAdapter.prototype.drop = function(callback) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop questions success', err);
-			callback(err);
+			console.log('drop questions success');
+			callback();
 		}
 	});
 };
 QuestionsAdapter.prototype.create = function(callback) {
-
+	var statement = 'create table if not exists questions(' +
+		'askedDateTime text not null primary key, ' +
+		'book text not null, ' +
+		'chapter integer not null, ' +
+		'verse integer null, ' +
+		'question text not null, ' +
+		'instructor text not null, ' +
+		'answerDateTime text not null, ' +
+		'answer text not null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create questions success');
+			callback();
+		}
+	});
 };
 QuestionsAdapter.prototype.select = function(values, callback) {
 

@@ -8,12 +8,6 @@ function StyleUseBuilder(collection) {
 StyleUseBuilder.prototype.readBook = function(usxRoot) {
 	// This table is not populated from text of the Bible
 };
-StyleUseBuilder.prototype.schema = function() {
-	var sql = 'style text not null, ' +
-		'usage text not null, ' +
-		'primary key(style, usage)';
-	return(sql);
-};
 StyleUseBuilder.prototype.loadDB = function(callback) {
 	var styles = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl', 'para.rem',
 		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.ms1', 'para.d',

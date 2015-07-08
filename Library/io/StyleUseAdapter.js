@@ -11,13 +11,24 @@ StyleUseAdapter.prototype.drop = function(callback) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop styleUse success', err);
-			callback(err);
+			console.log('drop styleUse success');
+			callback();
 		}
 	});
 };
 StyleUseAdapter.prototype.create = function(callback) {
-
+	var statement = 'create table if not exists styleUse(' +
+		'style text not null, ' +
+		'usage text not null, ' +
+		'primary key(style, usage))';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create styleUse success');
+			callback();
+		}
+	});
 };
 StyleUseAdapter.prototype.load = function(array, callback) {
 

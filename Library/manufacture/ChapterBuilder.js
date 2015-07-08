@@ -11,13 +11,6 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 	var that = this;
 	this.books.push(usxRoot);
 };
-ChapterBuilder.prototype.schema = function() {
-	var sql = 'book text not null, ' +
-		'chapter integer not null, ' +
-		'xml text not null, ' +
-		'primary key (book, chapter)';
-	return(sql);
-};
 ChapterBuilder.prototype.loadDB = function(callback) {
 	var array = [];
 	for (var i=0; i<this.books.length; i++) {

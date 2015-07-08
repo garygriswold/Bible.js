@@ -11,13 +11,26 @@ StyleIndexAdapter.prototype.drop = function(callback) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop styleIndex success', err);
-			callback(err);
+			console.log('drop styleIndex success');
+			callback();
 		}
 	});
 };
 StyleIndexAdapter.prototype.create = function(callback) {
-
+	var statement = 'create table if not exists styleIndex(' +
+		'style text not null, ' +
+		'usage text not null, ' +
+		'book text not null, ' +
+		'chapter integer null, ' +
+		'verse integer null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create styleIndex success');
+			callback();
+		}
+	});
 };
 StyleIndexAdapter.prototype.load = function(array, callback) {
 

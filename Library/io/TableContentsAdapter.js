@@ -11,13 +11,29 @@ TableContentsAdapter.prototype.drop = function(callback) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop tableContents success', err);
-			callback(err);
+			console.log('drop tableContents success');
+			callback();
 		}
 	});
 };
 TableContentsAdapter.prototype.create = function(callback) {
-
+	var statement = 'create table if not exists tableContents(' +
+		'code text primary key not null, ' +
+    	'heading text not null, ' +
+    	'title text not null, ' +
+    	'name text not null, ' +
+    	'abbrev text not null, ' +
+		'lastChapter integer not null, ' +
+		'priorBook text null, ' +
+		'nextBook text null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create tableContents success');
+			callback();
+		}
+	});
 };
 TableContentsAdapter.prototype.load = function(array, callback) {
 

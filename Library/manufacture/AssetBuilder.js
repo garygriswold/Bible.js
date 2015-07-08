@@ -71,14 +71,13 @@ AssetBuilder.prototype.build = function(callback) {
 					console.log('drop error', err);
 					callback(err);
 				} else {
-					processDatabaseLoad(that.builders.shift());
-					//callback(err);
-				/*	
-					builder.collection.create(builder.schema(), function(err) {
+					builder.collection.create(function(err) {
 						if (err) {
 							console.log('create error', err);
 							callback(err);
 						} else {
+							processDatabaseLoad(that.builders.shift());
+							/*
 							builder.loadDB(function(err) {
 								if (err) {
 									console.log('load db error', err);
@@ -87,9 +86,9 @@ AssetBuilder.prototype.build = function(callback) {
 									processDatabaseLoad(that.builders.shift());
 								}
 							});
+					*/
 						}
 					});
-*/
 				}
 			});
 		} else {

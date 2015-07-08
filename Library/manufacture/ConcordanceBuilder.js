@@ -65,12 +65,6 @@ ConcordanceBuilder.prototype.addEntry = function(word, reference) {
 ConcordanceBuilder.prototype.size = function() {
 	return(Object.keys(this.index).length); 
 };
-ConcordanceBuilder.prototype.schema = function() {
-	var sql = 'word text primary key not null, ' +
-    	'refCount integer not null, ' +
-    	'refList text not null';
-    return(sql);
-};
 ConcordanceBuilder.prototype.loadDB = function(callback) {
 	console.log('Concordance loadDB records count', this.size());
 	var words = Object.keys(this.index);
