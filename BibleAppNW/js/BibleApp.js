@@ -1402,7 +1402,14 @@ TableContentsAdapter.prototype.selectAll = function(callback) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else {
-			callback(results);
+			var array = [];
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var tocBook = new TOCBook(row.code, row.heading, row.title, row.name, row.abbrev, 
+					row.lastChapter, row.priorBook, row.nextBook);
+				array.push(tocBook);
+			}
+			callback(array);
 		}
 	});
 };/**
@@ -1914,9 +1921,6 @@ History.prototype.addEvent = function(event) {
 	this.isViewCurrent = false;
 	
 	// I might want a timeout to postpone this until after animation is finished.
-//	var timestampStr = item.timestamp.toISOString();
-//	var ref = new Reference(item.nodeId);
-//	var values = [ timestampStr, ref.book, ref.chapter, ref.verse, item.source, item.search ];
 	this.collection.replace(item, function(err) {
 		if (err instanceof IOError) {
 			console.log('replace error', JSON.stringify(err));
@@ -2177,8 +2181,11 @@ TOC.prototype.fill = function(callback) {
 		if (results instanceof IOError) {
 			callback();
 		} else {
-			for (var i=0; i<results.rows.length; i++) {
-				that.addBook(results.rows.item(i));
+			that.bookList = results;
+			that.bookMap = {};
+			for (var i=0; i<results.length; i++) {
+				var tocBook = results[i];
+				that.bookMap[tocBook.code] = tocBook;
 			}
 			that.isFilled = true;
 		}
@@ -2231,16 +2238,20 @@ TOC.prototype.toJSON = function() {
 };/**
 * This class holds the table of contents data each book of the Bible, or whatever books were loaded.
 */
-function TOCBook(code) {
+function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook) {
 	this.code = code;
-	this.heading = '';
-	this.title = '';
-	this.name = '';
-	this.abbrev = '';
-	this.lastChapter = 0;
-	this.priorBook = null;
-	this.nextBook = null;
-	Object.seal(this);
+	this.heading = heading;
+	this.title = title;
+	this.name = name;
+	this.abbrev = abbrev;
+	this.lastChapter = lastChapter;
+	this.priorBook = priorBook;
+	this.nextBook = nextBook;
+	if (lastChapter) {
+		Object.freeze(this);
+	} else {
+		Object.seal(this);
+	}
 }/**
 * This class extracts single verses from Chapters and returns the text of those
 * verses for use in Concordance Search and possibly other uses.  This is written

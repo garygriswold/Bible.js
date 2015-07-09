@@ -54,7 +54,14 @@ TableContentsAdapter.prototype.selectAll = function(callback) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else {
-			callback(results);
+			var array = [];
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var tocBook = new TOCBook(row.code, row.heading, row.title, row.name, row.abbrev, 
+					row.lastChapter, row.priorBook, row.nextBook);
+				array.push(tocBook);
+			}
+			callback(array);
 		}
 	});
 };

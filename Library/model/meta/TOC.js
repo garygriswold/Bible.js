@@ -14,8 +14,11 @@ TOC.prototype.fill = function(callback) {
 		if (results instanceof IOError) {
 			callback();
 		} else {
-			for (var i=0; i<results.rows.length; i++) {
-				that.addBook(results.rows.item(i));
+			that.bookList = results;
+			that.bookMap = {};
+			for (var i=0; i<results.length; i++) {
+				var tocBook = results[i];
+				that.bookMap[tocBook.code] = tocBook;
 			}
 			that.isFilled = true;
 		}

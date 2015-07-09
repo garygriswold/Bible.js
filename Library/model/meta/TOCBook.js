@@ -1,14 +1,18 @@
 /**
 * This class holds the table of contents data each book of the Bible, or whatever books were loaded.
 */
-function TOCBook(code) {
+function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook) {
 	this.code = code;
-	this.heading = '';
-	this.title = '';
-	this.name = '';
-	this.abbrev = '';
-	this.lastChapter = 0;
-	this.priorBook = null;
-	this.nextBook = null;
-	Object.seal(this);
+	this.heading = heading;
+	this.title = title;
+	this.name = name;
+	this.abbrev = abbrev;
+	this.lastChapter = lastChapter;
+	this.priorBook = priorBook;
+	this.nextBook = nextBook;
+	if (lastChapter) {
+		Object.freeze(this);
+	} else {
+		Object.seal(this);
+	}
 }
