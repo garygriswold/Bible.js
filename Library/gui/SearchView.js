@@ -110,7 +110,7 @@ SearchView.prototype.appendReference = function(bookNode, reference) {
 	entryNode.appendChild(document.createElement('br'));
 	var accessor = new VerseAccessor(this.bibleCache, reference);
 	accessor.getVerse(function(verseText) {
-		if (verseText.errno) {
+		if (verseText instanceof IOError) {
 			console.log('Error in get verse', JSON.stringify(verseText));
 		} else {
 			var verseNode = document.createElement('span');

@@ -650,7 +650,7 @@ SearchView.prototype.appendReference = function(bookNode, reference) {
 	entryNode.appendChild(document.createElement('br'));
 	var accessor = new VerseAccessor(this.bibleCache, reference);
 	accessor.getVerse(function(verseText) {
-		if (verseText.errno) {
+		if (verseText instanceof IOError) {
 			console.log('Error in get verse', JSON.stringify(verseText));
 		} else {
 			var verseNode = document.createElement('span');
@@ -1151,8 +1151,7 @@ function DeviceDatabase(code, name) {
 	this.styleIndex = new StyleIndexAdapter(this);
 	this.styleUse = new StyleUseAdapter(this);
 	this.history = new HistoryAdapter(this);
-//	this.questions = new QuestionsAdapter(this);
-    this.questions = new DeviceCollection(this.database);
+	this.questions = new QuestionsAdapter(this);
 	Object.freeze(this);
 }
 DeviceDatabase.prototype.select = function(statement, values, callback) {
@@ -1172,28 +1171,20 @@ DeviceDatabase.prototype.select = function(statement, values, callback) {
     }
 };
 DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
-    this.database.transaction(onTranStart, onTranError);//, onTranSuccess);
+    this.database.transaction(onTranStart, onTranError);
 
     function onTranStart(tx) {
         console.log('exec tran start', statement, values);
-        tx.executeSql(statement, values, onExecSuccess);//, onExecError);
+        tx.executeSql(statement, values, onExecSuccess);
     }
     function onTranError(err) {
         console.log('execute tran error', JSON.stringify(err));
         callback(new IOError(err));
     }
-    //function onTranSuccess() {
-    //    console.log('execute trans completed', rowsAffected);
-    //    callback(rowsAffected);
-    //}
     function onExecSuccess(tx, results) {
     	console.log('excute sql success', results.rowsAffected);
     	callback(results.rowsAffected);
     }
-    //function onExecError(tx, err) {
-    //	console.log('execute sql error', JSON.stringify(err));
-    //	callback(new IOError(err));
-    //}
 };
 DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
     var rowCount = 0;
@@ -1578,9 +1569,9 @@ QuestionsAdapter.prototype.create = function(callback) {
 		'chapter integer not null, ' +
 		'verse integer null, ' +
 		'question text not null, ' +
-		'instructor text not null, ' +
-		'answerDateTime text not null, ' +
-		'answer text not null)';
+		'instructor text null, ' +
+		'answerDateTime text null, ' +
+		'answer text null)';
 	this.database.executeDDL(statement, function(err) {
 		if (err instanceof IOError) {
 			callback(err);
@@ -1590,188 +1581,43 @@ QuestionsAdapter.prototype.create = function(callback) {
 		}
 	});
 };
-QuestionsAdapter.prototype.select = function(values, callback) {
-
+QuestionsAdapter.prototype.selectAll = function(callback) {
+	var statement = 'select askedDateTime, book, chapter, verse, question, instructor, answerDateTime, answer ' +
+		'from questions order by askedDateTime';
+	this.database.select(statement, [], function(results) {
+		if (results instanceof IOError) {
+			console.log('select questions failure ' + JSON.stringify(results));
+			callback();
+		} else {
+			callback(results);
+		}
+	});
 };
-QuestionsAdapter.prototype.insert = function(values, callback) {
-
+QuestionsAdapter.prototype.replace = function(values, callback) {
+var statement = 'replace into questions(askedDateTime, book, chapter, verse, question) ' +
+		'values (?,?,?,?,?)';
+	this.database.executeDML(statement, values, function(results) {
+		if (results instanceof IOError) {
+			console.log('Error on Insert');
+			callback(results);
+		} else {
+			callback(results);
+		}
+	});
 };
 QuestionsAdapter.prototype.update = function(values, callback) {
-
-};
-QuestionsAdapter.prototype.delete = function(values, callback) {
-
-};/**
-* This class is a facade over a collection in a database.  
-* At this writing, it is a facade over a Web SQL Sqlite3 database, 
-* but it intended to hide all database API specifics
-* from the rest of the application so that a different database can be put in its
-* place, if that becomes advisable.
-* Gary Griswold, July 2, 2015
-*/
-function DeviceCollection(database, table) {
-	this.database = database;
-	this.table = table;
-	Object.freeze(this);
-}
-DeviceCollection.prototype.drop = function(callback) {
-	var table = this.table;
-	this.database.transaction(onTranStart, onTranError, onTranSuccess);
-
-    function onTranStart(tx) {
-    	tx.executeSql('drop table if exists ' + table);
-    }
-    function onTranError(err) {
-        console.log('drop tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
-    function onTranSuccess() {
-        console.log('drop transaction completed');
-        callback();
-    }
-};
-DeviceCollection.prototype.create = function(schema, callback) {
-	var table = this.table;
-	if (schema) {
-    	this.database.transaction(onTranStart, onTranError, onTranSuccess);
-	}
-
-    function onTranStart(tx) {
-    	var sql = 'create table if not exists ' + table + '(' + schema + ')';
-		console.log(sql);
-		tx.executeSql(sql);
-    }
-    function onTranError(err) {
-        console.log('create tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
-    function onTranSuccess() {
-        console.log('create transaction completed');
-        callback();
-    }
-};
-DeviceCollection.prototype.load = function(names, array, callback) {
-	var that = this;
-	if (names && array && array.length > 0) {
-		this.database.transaction(onTranStart, onTranError, onTranSuccess);
-	}
-    function onTranStart(tx) {
-  		var statement = that.insertStatement(names);
-  		console.log(statement);
-  		for (var i=0; i<array.length; i++) {
-        	tx.executeSql(statement, array[i]);
-        }
-    }
-    function onTranError(err) {
-        console.log('load tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
-    function onTranSuccess() {
-        console.log('load transaction completed');
-        callback();
-    }
-};
-DeviceCollection.prototype.insert = function(row, callback) {
-	var that = this;
-	if (row) {
-		this.database.transaction(onTranStart, onTranError, onTranSuccess);
-	}
-    function onTranStart(tx) {
-    	var names = Object.keys(row);
-		var statement = that.insertStatement(names);
-		var values = that.valuesToArray(names, row);
-  		console.log(statement);
-        tx.executeSql(statement, values);
-    }
-    function onTranError(err) {
-        console.log('insert tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
-    function onTranSuccess() {
-        console.log('insert transaction completed');
-        callback();
-    }
-};
-/** deprecated for consistency insert statement into insert and load db */
-DeviceCollection.prototype.insertStatement = function(names) {
-	var sql = [ 'insert into ', this.table, ' (' ];
-	for (var i=0; i<names.length; i++) {
-		if (i > 0) {
-			sql.push(', ');
+	var statement = 'update questions set instructor = ?, answerDateTime = ?, answer = ?' +
+		'where askedDateTime = ?';
+	this.database.update(statement, values, function(results) {
+		if (err instanceof IOError) {
+			console.log('Error on update');
+			callback(err);
+		} else {
+			callback();
 		}
-		sql.push(names[i]);
-	}
-	sql.push(') values (');
-	for (var i=0; i<names.length; i++) {
-		if (i > 0) {
-			sql.push(',');
-		}
-		sql.push('?');
-	}
-	sql.push(')');
-	return(sql.join(''));
+	});
 };
-DeviceCollection.prototype.update = function(statement, values, callback) {
-	// This should create an update statement from the element names 
-};
-DeviceCollection.prototype.replace = function(statement, values, callback) {
-    this.database.transaction(onTranStart, onTranError, onTranSuccess);
-
-    function onTranStart(tx) {
-        console.log(statement, values);
-        tx.executeSql(statement, values);
-    }
-    function onTranError(err) {
-        console.log('replace tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
-    function onTranSuccess() {
-        console.log('replace transaction completed');
-        callback();
-    }
-};
-DeviceCollection.prototype.delete = function(statement, values, callback) {
-	// This should delete the row for the key specified in the row object
-};
-DeviceCollection.prototype.select = function(statement, values, callback) {
-    this.database.readTransaction(onTranStart, onTranError);
-
-    function onTranStart(tx) {
-        console.log(statement, values);
-        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
-    }
-    function onTranError(err) {
-        console.log('select tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
-    function onSelectSuccess(tx, results) {
-        console.log('success results', JSON.stringify(results.rows));
-        callback(results);
-    }
-    function onSelectError(tx, err) {
-        console.log('select error', err);
-        callback(new IOError(err));
-    }
-};
-DeviceCollection.prototype.get = function(statement, values, callback) {
-    this.select(statement, values, function(results) {
-        if (results instanceof IOError) {
-            callback(results);
-        } else if (results.rows.length > 0) {
-            var row = results.rows.item(0);
-            callback(row);
-        } else {
-            callback(null);
-        }
-    });
-};
-DeviceCollection.prototype.valuesToArray = function(names, row) {
-	var values = [ names.length ];
-	for (var i=0; i<names.length; i++) {
-		values[i] = row[names[i]];
-	}
-	return(values);
-};/**
+/**
 * This class iterates over the USX data model, and translates the contents to DOM.
 *
 * This method generates a DOM tree that has exactly the same parentage as the USX model.
@@ -2204,12 +2050,10 @@ Questions.prototype.addItem = function(questionItem, callback) {
 };
 Questions.prototype.fill = function(callback) {
 	var that = this;
-	var statement = 'select askedDateTime, book, chapter, verse, question, instructor, answerDateTime, answer ' +
-		'from questions order by askedDateTime';
-	this.collection.select(statement, [], function(results) {
+	this.collection.selectAll(function(results) {
 		if (results instanceof IOError) {
 			console.log('select questions failure ' + JSON.stringify(results));
-			callback(results);
+			callback();
 		} else {
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
@@ -2217,7 +2061,7 @@ Questions.prototype.fill = function(callback) {
 				var ques = new QuestionItem(ref, ref.nodeId, row.question, row.askedDt, row.instructor, row.answerDt, row.answer);
 				that.items.push(ques);
 			}
-			callback(results);
+			callback(results);// needed to determine if zero length result
 		}
 	});
 };
@@ -2261,11 +2105,9 @@ Questions.prototype.checkServer = function(callback) {
 	}
 };
 Questions.prototype.insert = function(item, callback) {
-	var statement = 'insert into questions(askedDateTime, book, chapter, verse, question) ' +
-		'values (?,?,?,?,?)';
 	var ref = new Reference(item.nodeId);
 	var values = [ item.askedDateTime.toISOString(), ref.book, ref.chapter, ref.verse, item.questionText ];
-	this.collection.replace(statement, values, function(results) {
+	this.collection.replace(values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
 			callback(results)
@@ -2278,15 +2120,11 @@ Questions.prototype.insert = function(item, callback) {
 	});
 };
 Questions.prototype.update = function(callback) {
-	var statement = 'update questions set instructor = ?, answerDateTime = ?, answer = ?' +
-		'where askedDateTime = ?';
 	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answerText, item.askedDateTime.toISOString() ];
-	this.collection.update(statement, values, function(results) {
+	this.collection.update(values, function(results) {
 		if (err instanceof IOError) {
 			console.log('Error on update');
 			callback(err);
-		} else if (results.rowsAffected === 0) {
-			callback(new IOError(1, 'No rows were update in questions'));
 		} else {
 			callback();
 		}
@@ -2423,7 +2261,7 @@ function VerseAccessor(bibleCache, reference) {
 VerseAccessor.prototype.getVerse = function(callback) {
 	var that = this;
 	this.bibleCache.getChapter(this.reference, function(chapter) {
-		if (chapter.errno) {
+		if (chapter instanceof IOError) {
 			callback(chapter);
 		} else {
 			var verseNum = String(that.reference.verse);

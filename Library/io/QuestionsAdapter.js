@@ -23,9 +23,9 @@ QuestionsAdapter.prototype.create = function(callback) {
 		'chapter integer not null, ' +
 		'verse integer null, ' +
 		'question text not null, ' +
-		'instructor text not null, ' +
-		'answerDateTime text not null, ' +
-		'answer text not null)';
+		'instructor text null, ' +
+		'answerDateTime text null, ' +
+		'answer text null)';
 	this.database.executeDDL(statement, function(err) {
 		if (err instanceof IOError) {
 			callback(err);
@@ -35,15 +35,39 @@ QuestionsAdapter.prototype.create = function(callback) {
 		}
 	});
 };
-QuestionsAdapter.prototype.select = function(values, callback) {
-
+QuestionsAdapter.prototype.selectAll = function(callback) {
+	var statement = 'select askedDateTime, book, chapter, verse, question, instructor, answerDateTime, answer ' +
+		'from questions order by askedDateTime';
+	this.database.select(statement, [], function(results) {
+		if (results instanceof IOError) {
+			console.log('select questions failure ' + JSON.stringify(results));
+			callback();
+		} else {
+			callback(results);
+		}
+	});
 };
-QuestionsAdapter.prototype.insert = function(values, callback) {
-
+QuestionsAdapter.prototype.replace = function(values, callback) {
+var statement = 'replace into questions(askedDateTime, book, chapter, verse, question) ' +
+		'values (?,?,?,?,?)';
+	this.database.executeDML(statement, values, function(results) {
+		if (results instanceof IOError) {
+			console.log('Error on Insert');
+			callback(results);
+		} else {
+			callback(results);
+		}
+	});
 };
 QuestionsAdapter.prototype.update = function(values, callback) {
-
-};
-QuestionsAdapter.prototype.delete = function(values, callback) {
-
+	var statement = 'update questions set instructor = ?, answerDateTime = ?, answer = ?' +
+		'where askedDateTime = ?';
+	this.database.update(statement, values, function(results) {
+		if (err instanceof IOError) {
+			console.log('Error on update');
+			callback(err);
+		} else {
+			callback();
+		}
+	});
 };

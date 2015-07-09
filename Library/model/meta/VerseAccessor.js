@@ -14,7 +14,7 @@ function VerseAccessor(bibleCache, reference) {
 VerseAccessor.prototype.getVerse = function(callback) {
 	var that = this;
 	this.bibleCache.getChapter(this.reference, function(chapter) {
-		if (chapter.errno) {
+		if (chapter instanceof IOError) {
 			callback(chapter);
 		} else {
 			var verseNum = String(that.reference.verse);

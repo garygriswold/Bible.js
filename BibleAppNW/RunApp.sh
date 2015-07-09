@@ -30,7 +30,6 @@ cat ../Library/io/StyleIndexAdapter.js >> js/BibleApp.js
 cat ../Library/io/StyleUseAdapter.js >> js/BibleApp.js
 cat ../Library/io/HistoryAdapter.js >> js/BibleApp.js
 cat ../Library/io/QuestionsAdapter.js >> js/BibleApp.js
-cat ../Library/io/DeviceCollection.js >> js/BibleApp.js
 
 cat ../Library/manufacture/DOMBuilder.js >> js/BibleApp.js
 

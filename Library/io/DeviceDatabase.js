@@ -14,8 +14,7 @@ function DeviceDatabase(code, name) {
 	this.styleIndex = new StyleIndexAdapter(this);
 	this.styleUse = new StyleUseAdapter(this);
 	this.history = new HistoryAdapter(this);
-//	this.questions = new QuestionsAdapter(this);
-    this.questions = new DeviceCollection(this.database);
+	this.questions = new QuestionsAdapter(this);
 	Object.freeze(this);
 }
 DeviceDatabase.prototype.select = function(statement, values, callback) {

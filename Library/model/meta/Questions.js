@@ -25,12 +25,10 @@ Questions.prototype.addItem = function(questionItem, callback) {
 };
 Questions.prototype.fill = function(callback) {
 	var that = this;
-	var statement = 'select askedDateTime, book, chapter, verse, question, instructor, answerDateTime, answer ' +
-		'from questions order by askedDateTime';
-	this.collection.select(statement, [], function(results) {
+	this.collection.selectAll(function(results) {
 		if (results instanceof IOError) {
 			console.log('select questions failure ' + JSON.stringify(results));
-			callback(results);
+			callback();
 		} else {
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
@@ -38,7 +36,7 @@ Questions.prototype.fill = function(callback) {
 				var ques = new QuestionItem(ref, ref.nodeId, row.question, row.askedDt, row.instructor, row.answerDt, row.answer);
 				that.items.push(ques);
 			}
-			callback(results);
+			callback(results);// needed to determine if zero length result
 		}
 	});
 };
@@ -82,11 +80,9 @@ Questions.prototype.checkServer = function(callback) {
 	}
 };
 Questions.prototype.insert = function(item, callback) {
-	var statement = 'insert into questions(askedDateTime, book, chapter, verse, question) ' +
-		'values (?,?,?,?,?)';
 	var ref = new Reference(item.nodeId);
 	var values = [ item.askedDateTime.toISOString(), ref.book, ref.chapter, ref.verse, item.questionText ];
-	this.collection.replace(statement, values, function(results) {
+	this.collection.replace(values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
 			callback(results)
@@ -99,15 +95,11 @@ Questions.prototype.insert = function(item, callback) {
 	});
 };
 Questions.prototype.update = function(callback) {
-	var statement = 'update questions set instructor = ?, answerDateTime = ?, answer = ?' +
-		'where askedDateTime = ?';
 	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answerText, item.askedDateTime.toISOString() ];
-	this.collection.update(statement, values, function(results) {
+	this.collection.update(values, function(results) {
 		if (err instanceof IOError) {
 			console.log('Error on update');
 			callback(err);
-		} else if (results.rowsAffected === 0) {
-			callback(new IOError(1, 'No rows were update in questions'));
 		} else {
 			callback();
 		}
