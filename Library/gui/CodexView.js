@@ -112,7 +112,7 @@ CodexView.prototype.showChapter = function(chapter, callback) {
 	this.bibleCache.getChapter(chapter, function(usxNode) {
 		if (usxNode instanceof IOError) {
 			console.log((JSON.stringify(usxNode)));
-			callback();
+			callback(usxNode);
 		} else {
 			var dom = new DOMBuilder();
 			dom.bookCode = chapter.book;

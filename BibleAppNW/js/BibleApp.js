@@ -57,12 +57,8 @@ AppViewController.prototype.begin = function(develop) {
 		default:
 			var lastItem = that.history.last();
 			console.log(lastItem);
-			console.log('size', that.history.size());
-			if (lastItem && lastItem.nodeId) {
-				that.codexView.showView(lastItem.nodeId);
-			} else {
-				that.codexView.showView('JHN:1');
-			}
+			console.log('History size', that.history.size());
+			that.codexView.showView(lastItem.nodeId);
 		}
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();
@@ -245,7 +241,7 @@ CodexView.prototype.showChapter = function(chapter, callback) {
 	this.bibleCache.getChapter(chapter, function(usxNode) {
 		if (usxNode instanceof IOError) {
 			console.log((JSON.stringify(usxNode)));
-			callback();
+			callback(usxNode);
 		} else {
 			var dom = new DOMBuilder();
 			dom.bookCode = chapter.book;
@@ -1270,14 +1266,17 @@ CodexAdapter.prototype.load = function(array, callback) {
 CodexAdapter.prototype.getChapter = function(values, callback) {
 	var that = this;
 	var statement = 'select xml from codex where book=? and chapter=?';
-	this.database.select(statement, values, function(results) {
+	var array = [ values.book, values.chapter ];
+	console.log('CodexAdapter.getChapter', statement, array);
+	this.database.select(statement, array, function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
 			callback(results);
 		} else if (results.rows.length === 0) {
 			callback();
 		} else {
-            callback(results.rows.item(0));
+			var row = results.rows.item(0);
+			callback(row.xml);
         }
 	});
 };/**
@@ -1524,7 +1523,7 @@ HistoryAdapter.prototype.selectAll = function(callback) {
 		'from history order by timestamp desc limit ?';
 	this.database.select(statement, [ MAX_HISTORY ], function(results) {
 		if (results instanceof IOError) {
-			callback();
+			callback(results);
 		} else {
 			callback(results);
 		}
@@ -1536,7 +1535,7 @@ HistoryAdapter.prototype.replace = function(values, callback) {
 	this.database.executeDML(statement, values, function(count) {
 		if (count instanceof IOError) {
 			console.log('replace error', JSON.stringify(count));
-			callback();
+			callback(results);
 		} else {
 			callback(count);
 		}
@@ -1709,17 +1708,15 @@ function BibleCache(collection) {
 BibleCache.prototype.getChapter = function(reference, callback) {
 	var that = this;
 	var chapter = this.chapterMap[reference.nodeId];
-	
 	if (chapter !== undefined) {
 		callback(chapter);
 	} else {
-		var values = [ reference.book, reference.chapter ];
-		this.collection.getChapter(values, function(row) {
+		this.collection.getChapter(reference, function(row) {
 			if (row instanceof IOError) {
-				console.log('found Error', row);
-				callback();
+				console.log('Bible Cache found Error', row);
+				callback(row);
 			} else {
-				chapter = that.parser.readBook(row.xml);
+				chapter = that.parser.readBook(row);
 				that.chapterMap[reference.nodeId] = chapter;
 				callback(chapter);
 			}
@@ -1943,7 +1940,7 @@ History.prototype.last = function() {
 	return(this.item(this.items.length -1));
 };
 History.prototype.item = function(index) {
-	return((index > -1 && index < this.items.length) ? this.items[index] : 'JHN:1');
+	return((index > -1 && index < this.items.length) ? this.items[index] : new HistoryItem('JHN:1'));
 };
 History.prototype.lastConcordanceSearch = function() {
 	for (var i=this.items.length -1; i>=0; i--) {

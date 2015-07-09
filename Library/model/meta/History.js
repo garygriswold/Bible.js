@@ -71,7 +71,7 @@ History.prototype.last = function() {
 	return(this.item(this.items.length -1));
 };
 History.prototype.item = function(index) {
-	return((index > -1 && index < this.items.length) ? this.items[index] : 'JHN:1');
+	return((index > -1 && index < this.items.length) ? this.items[index] : new HistoryItem('JHN:1'));
 };
 History.prototype.lastConcordanceSearch = function() {
 	for (var i=this.items.length -1; i>=0; i--) {

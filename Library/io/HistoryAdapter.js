@@ -40,7 +40,7 @@ HistoryAdapter.prototype.selectAll = function(callback) {
 		'from history order by timestamp desc limit ?';
 	this.database.select(statement, [ MAX_HISTORY ], function(results) {
 		if (results instanceof IOError) {
-			callback();
+			callback(results);
 		} else {
 			callback(results);
 		}
@@ -52,7 +52,7 @@ HistoryAdapter.prototype.replace = function(values, callback) {
 	this.database.executeDML(statement, values, function(count) {
 		if (count instanceof IOError) {
 			console.log('replace error', JSON.stringify(count));
-			callback();
+			callback(results);
 		} else {
 			callback(count);
 		}

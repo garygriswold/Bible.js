@@ -56,12 +56,8 @@ AppViewController.prototype.begin = function(develop) {
 		default:
 			var lastItem = that.history.last();
 			console.log(lastItem);
-			console.log('size', that.history.size());
-			if (lastItem && lastItem.nodeId) {
-				that.codexView.showView(lastItem.nodeId);
-			} else {
-				that.codexView.showView('JHN:1');
-			}
+			console.log('History size', that.history.size());
+			that.codexView.showView(lastItem.nodeId);
 		}
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();

@@ -23,17 +23,15 @@ function BibleCache(collection) {
 BibleCache.prototype.getChapter = function(reference, callback) {
 	var that = this;
 	var chapter = this.chapterMap[reference.nodeId];
-	
 	if (chapter !== undefined) {
 		callback(chapter);
 	} else {
-		var values = [ reference.book, reference.chapter ];
-		this.collection.getChapter(values, function(row) {
+		this.collection.getChapter(reference, function(row) {
 			if (row instanceof IOError) {
-				console.log('found Error', row);
-				callback();
+				console.log('Bible Cache found Error', row);
+				callback(row);
 			} else {
-				chapter = that.parser.readBook(row.xml);
+				chapter = that.parser.readBook(row);
 				that.chapterMap[reference.nodeId] = chapter;
 				callback(chapter);
 			}

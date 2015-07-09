@@ -45,14 +45,17 @@ CodexAdapter.prototype.load = function(array, callback) {
 CodexAdapter.prototype.getChapter = function(values, callback) {
 	var that = this;
 	var statement = 'select xml from codex where book=? and chapter=?';
-	this.database.select(statement, values, function(results) {
+	var array = [ values.book, values.chapter ];
+	console.log('CodexAdapter.getChapter', statement, array);
+	this.database.select(statement, array, function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
 			callback(results);
 		} else if (results.rows.length === 0) {
 			callback();
 		} else {
-            callback(results.rows.item(0));
+			var row = results.rows.item(0);
+			callback(row.xml);
         }
 	});
 };
