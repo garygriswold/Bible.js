@@ -11,12 +11,9 @@ function DeviceDatabase(code, name) {
 	this.codex = new CodexAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
 	this.concordance = new ConcordanceAdapter(this);
-//	this.styleIndex = new StyleIndexAdapter(this);
-    this.styleIndex = new DeviceCollection(this.database);
-//	this.styleUse = new StyleUseAdapter(this);
-    this.styleUse = new DeviceCollection(this.database);
-//	this.history = new HistoryAdapter(this);
-    this.history = new DeviceCollection(this.database);
+	this.styleIndex = new StyleIndexAdapter(this);
+	this.styleUse = new StyleUseAdapter(this);
+	this.history = new HistoryAdapter(this);
 //	this.questions = new QuestionsAdapter(this);
     this.questions = new DeviceCollection(this.database);
 	Object.freeze(this);
@@ -38,33 +35,19 @@ DeviceDatabase.prototype.select = function(statement, values, callback) {
     }
 };
 DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
-    var rowsAffected;
-    this.database.transaction(onTranStart, onTranError, onTranSuccess);
+    this.database.transaction(onTranStart, onTranError);
 
     function onTranStart(tx) {
         console.log('exec tran start', statement, values);
-        tx.executeSql(statement, values, onExecSuccess, onExecError);
+        tx.executeSql(statement, values, onExecSuccess);
     }
     function onTranError(err) {
         console.log('execute tran error', JSON.stringify(err));
         callback(new IOError(err));
     }
-    function onTranSuccess() {
-        console.log('execute trans completed', rowsAffected);
-        callback(rowsAffected);
-    }
     function onExecSuccess(tx, results) {
     	console.log('excute sql success', results.rowsAffected);
-        rowsAffected = results.rowsAffected;
-    	//if (results.rowsAffected === 0) {
-    	//	callback(new IOError(1, 'No rows affected by update'));
-    	//} else {
-    	//	callback();
-    	//}
-    }
-    function onExecError(tx, err) {
-    	console.log('execute sql error', JSON.stringify(err));
-    	callback(new IOError(err));
+    	callback(results.rowsAffected);
     }
 };
 DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {

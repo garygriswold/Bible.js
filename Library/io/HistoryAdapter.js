@@ -1,6 +1,8 @@
 /**
 * This class is the database adapter for the history table
 */
+var MAX_HISTORY = 20;
+
 function HistoryAdapter(database) {
 	this.database = database;
 	this.className = 'HistoryAdapter';
@@ -33,11 +35,29 @@ HistoryAdapter.prototype.create = function(callback) {
 		}
 	});
 };
-HistoryAdapter.prototype.select = function(values, callback) {
+HistoryAdapter.prototype.selectAll = function(callback) {
+	var statement = 'select timestamp, book, chapter, verse, source, search ' +
+		'from history order by timestamp desc limit ?';
+	this.database.select(statement, [ MAX_HISTORY ], function(results) {
+		if (results instanceof IOError) {
+			callback();
+		} else {
+			callback(results);
+		}
+	});
 };
-HistoryAdapter.prototype.insert = function(values, callback) {
-
+HistoryAdapter.prototype.replace = function(values, callback) {
+	var statement = 'replace into history(timestamp, book, chapter, verse, source, search) ' +
+		'values (?,?,?,?,?,?)';
+	this.database.executeDML(statement, values, function(count) {
+		if (count instanceof IOError) {
+			console.log('replace error', JSON.stringify(count));
+			callback();
+		} else {
+			callback(count);
+		}
+	});
 };
 HistoryAdapter.prototype.delete = function(values, callback) {
-
+	// Will be needed to prevent growth of history
 };

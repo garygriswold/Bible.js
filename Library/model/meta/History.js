@@ -4,7 +4,7 @@
 * or a concordance search.  It also responds to function requests to go back 
 * in history, forward in history, or return to the last event.
 */
-var MAX_HISTORY = 20;
+//var MAX_HISTORY = 20;
 
 function History(collection) {
 	this.collection = collection;
@@ -16,9 +16,7 @@ function History(collection) {
 History.prototype.fill = function(callback) {
 	var that = this;
 	this.items.splice(0);
-	var statement = 'select timestamp, book, chapter, verse, source, search ' +
-		'from history order by timestamp desc limit ?';
-	this.collection.select(statement, [ MAX_HISTORY ], function(results) {
+	this.collection.selectAll(function(results) {
 		if (results instanceof IOError) {
 			callback();
 		} else {
@@ -48,12 +46,10 @@ History.prototype.addEvent = function(event) {
 	this.isViewCurrent = false;
 	
 	// I might want a timeout to postpone this until after animation is finished.
-	var statement = 'replace into history(timestamp, book, chapter, verse, source, search) ' +
-		'values (?,?,?,?,?,?)';
 	var timestampStr = item.timestamp.toISOString();
 	var ref = new Reference(item.nodeId);
 	var values = [ timestampStr, ref.book, ref.chapter, ref.verse, item.source, item.search ];
-	this.collection.replace(statement, values, function(err) {
+	this.collection.replace(values, function(err) {
 		if (err instanceof IOError) {
 			console.log('replace error', JSON.stringify(err));
 		}

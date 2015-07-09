@@ -1148,12 +1148,9 @@ function DeviceDatabase(code, name) {
 	this.codex = new CodexAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
 	this.concordance = new ConcordanceAdapter(this);
-//	this.styleIndex = new StyleIndexAdapter(this);
-    this.styleIndex = new DeviceCollection(this.database);
-//	this.styleUse = new StyleUseAdapter(this);
-    this.styleUse = new DeviceCollection(this.database);
-//	this.history = new HistoryAdapter(this);
-    this.history = new DeviceCollection(this.database);
+	this.styleIndex = new StyleIndexAdapter(this);
+	this.styleUse = new StyleUseAdapter(this);
+	this.history = new HistoryAdapter(this);
 //	this.questions = new QuestionsAdapter(this);
     this.questions = new DeviceCollection(this.database);
 	Object.freeze(this);
@@ -1175,34 +1172,28 @@ DeviceDatabase.prototype.select = function(statement, values, callback) {
     }
 };
 DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
-    var rowsAffected;
-    this.database.transaction(onTranStart, onTranError, onTranSuccess);
+    this.database.transaction(onTranStart, onTranError);//, onTranSuccess);
 
     function onTranStart(tx) {
         console.log('exec tran start', statement, values);
-        tx.executeSql(statement, values, onExecSuccess, onExecError);
+        tx.executeSql(statement, values, onExecSuccess);//, onExecError);
     }
     function onTranError(err) {
         console.log('execute tran error', JSON.stringify(err));
         callback(new IOError(err));
     }
-    function onTranSuccess() {
-        console.log('execute trans completed', rowsAffected);
-        callback(rowsAffected);
-    }
+    //function onTranSuccess() {
+    //    console.log('execute trans completed', rowsAffected);
+    //    callback(rowsAffected);
+    //}
     function onExecSuccess(tx, results) {
     	console.log('excute sql success', results.rowsAffected);
-        rowsAffected = results.rowsAffected;
-    	//if (results.rowsAffected === 0) {
-    	//	callback(new IOError(1, 'No rows affected by update'));
-    	//} else {
-    	//	callback();
-    	//}
+    	callback(results.rowsAffected);
     }
-    function onExecError(tx, err) {
-    	console.log('execute sql error', JSON.stringify(err));
-    	callback(new IOError(err));
-    }
+    //function onExecError(tx, err) {
+    //	console.log('execute sql error', JSON.stringify(err));
+    //	callback(new IOError(err));
+    //}
 };
 DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
     var rowCount = 0;
@@ -1415,8 +1406,96 @@ TableContentsAdapter.prototype.selectAll = function(callback) {
 		}
 	});
 };/**
+* This class is the database adapter for the styleIndex table
+*/
+function StyleIndexAdapter(database) {
+	this.database = database;
+	this.className = 'StyleIndexAdapter';
+	Object.freeze(this);
+}
+StyleIndexAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists styleIndex', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop styleIndex success');
+			callback();
+		}
+	});
+};
+StyleIndexAdapter.prototype.create = function(callback) {
+	var statement = 'create table if not exists styleIndex(' +
+		'style text not null, ' +
+		'usage text not null, ' +
+		'book text not null, ' +
+		'chapter integer null, ' +
+		'verse integer null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create styleIndex success');
+			callback();
+		}
+	});
+};
+StyleIndexAdapter.prototype.load = function(array, callback) {
+	var statement = 'insert into styleIndex(style, usage, book, chapter, verse) values (?,?,?,?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load styleIndex success', count);
+			callback();
+		}
+	});
+};/**
+* This class is the database adapter for the styleUse table
+*/
+function StyleUseAdapter(database) {
+	this.database = database;
+	this.className = 'StyleUseAdapter';
+	Object.freeze(this);
+}
+StyleUseAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists styleUse', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop styleUse success');
+			callback();
+		}
+	});
+};
+StyleUseAdapter.prototype.create = function(callback) {
+	var statement = 'create table if not exists styleUse(' +
+		'style text not null, ' +
+		'usage text not null, ' +
+		'primary key(style, usage))';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create styleUse success');
+			callback();
+		}
+	});
+};
+StyleUseAdapter.prototype.load = function(array, callback) {
+	var statement = 'insert into styleUse(style, usage) values (?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load styleUse success', count);
+			callback();
+		}
+	});
+};/**
 * This class is the database adapter for the history table
 */
+var MAX_HISTORY = 20;
+
 function HistoryAdapter(database) {
 	this.database = database;
 	this.className = 'HistoryAdapter';
@@ -1449,13 +1528,31 @@ HistoryAdapter.prototype.create = function(callback) {
 		}
 	});
 };
-HistoryAdapter.prototype.select = function(values, callback) {
+HistoryAdapter.prototype.selectAll = function(callback) {
+	var statement = 'select timestamp, book, chapter, verse, source, search ' +
+		'from history order by timestamp desc limit ?';
+	this.database.select(statement, [ MAX_HISTORY ], function(results) {
+		if (results instanceof IOError) {
+			callback();
+		} else {
+			callback(results);
+		}
+	});
 };
-HistoryAdapter.prototype.insert = function(values, callback) {
-
+HistoryAdapter.prototype.replace = function(values, callback) {
+	var statement = 'replace into history(timestamp, book, chapter, verse, source, search) ' +
+		'values (?,?,?,?,?,?)';
+	this.database.executeDML(statement, values, function(count) {
+		if (count instanceof IOError) {
+			console.log('replace error', JSON.stringify(count));
+			callback();
+		} else {
+			callback(count);
+		}
+	});
 };
 HistoryAdapter.prototype.delete = function(values, callback) {
-
+	// Will be needed to prevent growth of history
 };/**
 * This class is the database adapter for the questions table
 */
@@ -1867,14 +1964,11 @@ function Concordance(collection) {
 	Object.freeze(this);
 }
 Concordance.prototype.search = function(words, callback) {
-//	var questionMarks = [ words.length ];
 	var values = [ words.length ];
 	for (var i=0; i<words.length; i++) {
-//		questionMarks[i] = '?';
 		values[i] = words[i].toLocaleLowerCase();
 	}
 	var that = this;
-	//var statement = 'select refList from concordance where word in(' + questionMarks.join(',') + ')';
 	this.collection.select(values, function(results) {
 		if (results instanceof IOError) {
 			callback(results);
@@ -1936,7 +2030,7 @@ Concordance.prototype.intersection = function(refLists) {
 * or a concordance search.  It also responds to function requests to go back 
 * in history, forward in history, or return to the last event.
 */
-var MAX_HISTORY = 20;
+//var MAX_HISTORY = 20;
 
 function History(collection) {
 	this.collection = collection;
@@ -1948,9 +2042,7 @@ function History(collection) {
 History.prototype.fill = function(callback) {
 	var that = this;
 	this.items.splice(0);
-	var statement = 'select timestamp, book, chapter, verse, source, search ' +
-		'from history order by timestamp desc limit ?';
-	this.collection.select(statement, [ MAX_HISTORY ], function(results) {
+	this.collection.selectAll(function(results) {
 		if (results instanceof IOError) {
 			callback();
 		} else {
@@ -1980,12 +2072,10 @@ History.prototype.addEvent = function(event) {
 	this.isViewCurrent = false;
 	
 	// I might want a timeout to postpone this until after animation is finished.
-	var statement = 'replace into history(timestamp, book, chapter, verse, source, search) ' +
-		'values (?,?,?,?,?,?)';
 	var timestampStr = item.timestamp.toISOString();
 	var ref = new Reference(item.nodeId);
 	var values = [ timestampStr, ref.book, ref.chapter, ref.verse, item.source, item.search ];
-	this.collection.replace(statement, values, function(err) {
+	this.collection.replace(values, function(err) {
 		if (err instanceof IOError) {
 			console.log('replace error', JSON.stringify(err));
 		}
