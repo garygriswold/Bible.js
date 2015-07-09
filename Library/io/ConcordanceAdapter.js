@@ -41,9 +41,11 @@ ConcordanceAdapter.prototype.load = function(array, callback) {
 		}
 	});
 };
-ConcordanceAdapter.prototype.select = function(values, callback) {
-	var questMarks = [ values.length ];
-	for (var i=0; i<questMarks.length; i++) {
+ConcordanceAdapter.prototype.select = function(words, callback) {
+	var values = [ words.length ];
+	var questMarks = [ words.length ];
+	for (var i=0; i<words.length; i++) {
+		values[i] = words[i].toLocaleLowerCase();
 		questMarks[i] = '?';
 	}
 	var statement = 'select refList from concordance where word in(' + questMarks.join(',') + ')';
@@ -52,7 +54,15 @@ ConcordanceAdapter.prototype.select = function(values, callback) {
 			console.log('found Error', results);
 			callback(results);
 		} else {
-            callback(results);
+			var refLists = [];
+			for (i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				if (row && row.refList) { // ignore words that have no ref list
+					var array = row.refList.split(',');
+					refLists.push(array);
+				}
+			}
+            callback(refLists);
         }
 	});
 };

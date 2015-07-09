@@ -1322,9 +1322,11 @@ ConcordanceAdapter.prototype.load = function(array, callback) {
 		}
 	});
 };
-ConcordanceAdapter.prototype.select = function(values, callback) {
-	var questMarks = [ values.length ];
-	for (var i=0; i<questMarks.length; i++) {
+ConcordanceAdapter.prototype.select = function(words, callback) {
+	var values = [ words.length ];
+	var questMarks = [ words.length ];
+	for (var i=0; i<words.length; i++) {
+		values[i] = words[i].toLocaleLowerCase();
 		questMarks[i] = '?';
 	}
 	var statement = 'select refList from concordance where word in(' + questMarks.join(',') + ')';
@@ -1333,7 +1335,15 @@ ConcordanceAdapter.prototype.select = function(values, callback) {
 			console.log('found Error', results);
 			callback(results);
 		} else {
-            callback(results);
+			var refLists = [];
+			for (i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				if (row && row.refList) { // ignore words that have no ref list
+					var array = row.refList.split(',');
+					refLists.push(array);
+				}
+			}
+            callback(refLists);
         }
 	});
 };/**
@@ -1807,50 +1817,37 @@ function Concordance(collection) {
 	Object.freeze(this);
 }
 Concordance.prototype.search = function(words, callback) {
-	var values = [ words.length ];
-	for (var i=0; i<words.length; i++) {
-		values[i] = words[i].toLocaleLowerCase();
-	}
 	var that = this;
-	this.collection.select(values, function(results) {
-		if (results instanceof IOError) {
-			callback(results);
+	this.collection.select(words, function(refLists) {
+		if (refLists instanceof IOError) {
+			callback(refLists);
 		} else {
-			var refLists = [];
-			for (i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);
-				if (row && row.refList) { // ignore words that have no ref list
-					var array = row.refList.split(',');
-					refLists.push(array);
-				}
-			}
-			var result = that.intersection(refLists);
+			var result = intersection(refLists);
 			callback(result);
 		}
 	});
-};
-Concordance.prototype.intersection = function(refLists) {
-	if (refLists.length === 0) {
-		return([]);
-	}
-	if (refLists.length === 1) {
-		return(refLists[0]);
-	}
-	var mapList = [];
-	for (var i=1; i<refLists.length; i++) {
-		var map = arrayToMap(refLists[i]);
-		mapList.push(map);
-	}
-	var result = [];
-	var firstList = refLists[0];
-	for (var j=0; j<firstList.length; j++) {
-		var reference = firstList[j];
-		if (presentInAllMaps(mapList, reference)) {
-			result.push(reference);
+	function intersection(refLists) {
+		if (refLists.length === 0) {
+			return([]);
 		}
+		if (refLists.length === 1) {
+			return(refLists[0]);
+		}
+		var mapList = [];
+		for (var i=1; i<refLists.length; i++) {
+			var map = arrayToMap(refLists[i]);
+			mapList.push(map);
+		}
+		var result = [];
+		var firstList = refLists[0];
+		for (var j=0; j<firstList.length; j++) {
+			var reference = firstList[j];
+			if (presentInAllMaps(mapList, reference)) {
+				result.push(reference);
+			}
+		}
+		return(result);
 	}
-	return(result);
-
 	function arrayToMap(array) {
 		var map = {};
 		for (var i=0; i<array.length; i++) {
