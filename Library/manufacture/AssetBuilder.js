@@ -67,26 +67,23 @@ AssetBuilder.prototype.build = function(callback) {
 	function processDatabaseLoad(builder) {
 		if (builder) {
 			builder.collection.drop(function(err) {
-				if (err) {
+				if (err instanceof IOError) {
 					console.log('drop error', err);
 					callback(err);
 				} else {
 					builder.collection.create(function(err) {
-						if (err) {
+						if (err instanceof IOError) {
 							console.log('create error', err);
 							callback(err);
 						} else {
-							processDatabaseLoad(that.builders.shift());
-							/*
 							builder.loadDB(function(err) {
-								if (err) {
+								if (err instanceof IOError) {
 									console.log('load db error', err);
 									callback(err);
 								} else {
 									processDatabaseLoad(that.builders.shift());
 								}
 							});
-					*/
 						}
 					});
 				}

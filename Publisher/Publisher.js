@@ -88,26 +88,23 @@ AssetBuilder.prototype.build = function(callback) {
 	function processDatabaseLoad(builder) {
 		if (builder) {
 			builder.collection.drop(function(err) {
-				if (err) {
+				if (err instanceof IOError) {
 					console.log('drop error', err);
 					callback(err);
 				} else {
 					builder.collection.create(function(err) {
-						if (err) {
+						if (err instanceof IOError) {
 							console.log('create error', err);
 							callback(err);
 						} else {
-							processDatabaseLoad(that.builders.shift());
-							/*
 							builder.loadDB(function(err) {
-								if (err) {
+								if (err instanceof IOError) {
 									console.log('load db error', err);
 									callback(err);
 								} else {
 									processDatabaseLoad(that.builders.shift());
 								}
 							});
-					*/
 						}
 					});
 				}
@@ -143,9 +140,8 @@ ChapterBuilder.prototype.loadDB = function(callback) {
 			array.push(values);
 		}
 	}
-	var names = [ 'book', 'chapter', 'xml' ];
-	this.collection.load(names, array, function(err) {
-		if (err) {
+	this.collection.load(array, function(err) {
+		if (err instanceof IOError) {
 			console.log('Storing chapters failed');
 			callback(err);
 		} else {
@@ -247,14 +243,13 @@ TOCBuilder.prototype.loadDB = function(callback) {
 	var array = [];
 	var len = this.size();
 	for (var i=0; i<len; i++) {
-		var tocBook = this.toc.bookList[i];
-		var names = Object.keys(tocBook);
-		var values = this.collection.valuesToArray(names, tocBook);
+		var toc = this.toc.bookList[i];
+		var values = [ toc.code, toc.heading, toc.title, toc.name, toc.abbrev, toc.lastChapter, toc.priorBook, toc.nextBook ];
 		array.push(values);
 	}
-	this.collection.load(names, array, function(err) {
-		if (err) {
-			window.alert('TOC Builder Failed', JSON.stringify(err));
+	this.collection.load(array, function(err) {
+		if (err instanceof IOError) {
+			console.log('TOC Builder Failed', JSON.stringify(err));
 			callback(err);
 		} else {
 			console.log('TOC loaded in database');
@@ -342,10 +337,9 @@ ConcordanceBuilder.prototype.loadDB = function(callback) {
 		var item = [ words[i], refCount, refList ];
 		array.push(item);
 	}
-	var names = [ 'word', 'refCount', 'refList' ];
-	this.collection.load(names, array, function(err) {
-		if (err) {
-			window.alert('Concordance Builder Failed', JSON.stringify(err));
+	this.collection.load(array, function(err) {
+		if (err instanceof IOError) {
+			console.log('Concordance Builder Failed', JSON.stringify(err));
 			callback(err);
 		} else {
 			console.log('concordance loaded in database');
@@ -467,10 +461,9 @@ StyleIndexBuilder.prototype.loadDB = function(callback) {
 			array.push(values);
 		}
 	}
-	var names = [ 'style', 'usage', 'book', 'chapter', 'verse' ];
-	this.collection.load(names, array, function(err) {
-		if (err) {
-			window.alert('StyleIndex Builder Failed', JSON.stringify(err));
+	this.collection.load(array, function(err) {
+		if (err instanceof IOError) {
+			console.log('StyleIndex Builder Failed', JSON.stringify(err));
 			callback(err);
 		} else {
 			console.log('StyleIndex loaded in database');
@@ -506,10 +499,9 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		var values = [ styleUse[1], styleUse[0] ];
 		array.push(values);
 	}
-	var names = [ 'style', 'usage' ];
-	this.collection.load(names, array, function(err) {
-		if (err) {
-			window.alert('StyleUse Builder Failed', JSON.stringify(err));
+	this.collection.load(array, function(err) {
+		if (err instanceof IOError) {
+			console.log('StyleUse Builder Failed', JSON.stringify(err));
 			callback(err);
 		} else {
 			console.log('StyleUse loaded in database');
@@ -1696,12 +1688,13 @@ DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
     }
 };
 DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
+    var rowCount = 0;
 	this.database.transaction(onTranStart, onTranError, onTranSuccess);
 
     function onTranStart(tx) {
-  		console.log('bulk tran start', statement, array[0], onExecSuccess, onExecError);
+  		console.log('bulk tran start', statement);
   		for (var i=0; i<array.length; i++) {
-        	tx.executeSql(statement, array[i]);
+        	tx.executeSql(statement, array[i], onExecSuccess);
         }
     }
     function onTranError(err) {
@@ -1710,18 +1703,10 @@ DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
     }
     function onTranSuccess() {
         console.log('bulk tran completed');
-        callback();
+        callback(rowCount);
     }
     function onExecSuccess(tx, results) {
-    	if (results.rowsAffected !== array.length) {
-    		callback(new IOError(1, array.length + ' rows input, but ' + results.rowsAffected + ' processed.'));
-    	} else {
-    		callback();
-    	}
-    }
-    function onExecError(tx, err) {
-    	console.log('bulk sql error', JSON.stringify(err));
-    	callback(IOError(err));
+        rowCount += results.rowsAffected;
     }
 };
 DeviceDatabase.prototype.executeDDL = function(statement, callback) {
@@ -1729,16 +1714,13 @@ DeviceDatabase.prototype.executeDDL = function(statement, callback) {
 
     function onTranStart(tx) {
         console.log('exec tran start', statement);
-        tx.executeSql(statement, [], onExecSuccess, onExecError);
+        tx.executeSql(statement, [], onExecSuccess);
     }
     function onTranError(err) {
         callback(new IOError(err));
     }
     function onExecSuccess(tx, results) {
         callback();
-    }
-    function onExecError(tx, err) {
-        callback(new IOError(err));
     }
 };
 
@@ -1776,7 +1758,15 @@ CodexAdapter.prototype.create = function(callback) {
 	});
 };
 CodexAdapter.prototype.load = function(array, callback) {
-
+	var statement = 'insert into codex(book, chapter, xml) values (?,?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load codex success, rowcount', count);
+			callback();
+		}
+	});
 };
 CodexAdapter.prototype.getChapter = function(values, callback) {
 
@@ -1813,7 +1803,15 @@ ConcordanceAdapter.prototype.create = function(callback) {
 	});
 };
 ConcordanceAdapter.prototype.load = function(array, callback) {
-
+	var statement = 'insert into concordance(word, refCount, refList) values (?,?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load concordance success', count);
+			callback();
+		}
+	});
 };
 ConcordanceAdapter.prototype.select = function(values, callback) {
 
@@ -1855,7 +1853,16 @@ TableContentsAdapter.prototype.create = function(callback) {
 	});
 };
 TableContentsAdapter.prototype.load = function(array, callback) {
-
+	var statement = 'insert into tableContents(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook) ' +
+		'values (?,?,?,?,?,?,?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load tableContents success, rowcount', count);
+			callback();
+		}
+	});
 };
 TableContentsAdapter.prototype.select = function(values, callback) {
 
@@ -1894,7 +1901,15 @@ StyleIndexAdapter.prototype.create = function(callback) {
 	});
 };
 StyleIndexAdapter.prototype.load = function(array, callback) {
-
+	var statement = 'insert into styleIndex(style, usage, book, chapter, verse) values (?,?,?,?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load styleIndex success', count);
+			callback();
+		}
+	});
 };/**
 * This class is the database adapter for the styleUse table
 */
@@ -1928,7 +1943,15 @@ StyleUseAdapter.prototype.create = function(callback) {
 	});
 };
 StyleUseAdapter.prototype.load = function(array, callback) {
-
+	var statement = 'insert into styleUse(style, usage) values (?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load styleUse success', count);
+			callback();
+		}
+	});
 };/**
 * This class is the database adapter for the history table
 */
@@ -1965,7 +1988,6 @@ HistoryAdapter.prototype.create = function(callback) {
 	});
 };
 HistoryAdapter.prototype.select = function(values, callback) {
-
 };
 HistoryAdapter.prototype.insert = function(values, callback) {
 
@@ -2204,5 +2226,9 @@ var database = new DeviceDatabase(types.versionCode, 'versionNameHere');
 
 var builder = new AssetBuilder(types, database);
 builder.build(function(err) {
-	console.log('AssetControllerTest.build', err);
+	if (err instanceof IOError) {
+		window.alert('AssetController.build error=' + JSON.stringify(err));
+	} else {
+		console.log('AssetControllerTest.build', err);
+	}
 });

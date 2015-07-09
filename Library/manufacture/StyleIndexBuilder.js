@@ -83,10 +83,9 @@ StyleIndexBuilder.prototype.loadDB = function(callback) {
 			array.push(values);
 		}
 	}
-	var names = [ 'style', 'usage', 'book', 'chapter', 'verse' ];
-	this.collection.load(names, array, function(err) {
-		if (err) {
-			window.alert('StyleIndex Builder Failed', JSON.stringify(err));
+	this.collection.load(array, function(err) {
+		if (err instanceof IOError) {
+			console.log('StyleIndex Builder Failed', JSON.stringify(err));
 			callback(err);
 		} else {
 			console.log('StyleIndex loaded in database');

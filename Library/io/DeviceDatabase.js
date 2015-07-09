@@ -72,12 +72,13 @@ DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
     }
 };
 DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
+    var rowCount = 0;
 	this.database.transaction(onTranStart, onTranError, onTranSuccess);
 
     function onTranStart(tx) {
-  		console.log('bulk tran start', statement, array[0], onExecSuccess, onExecError);
+  		console.log('bulk tran start', statement);
   		for (var i=0; i<array.length; i++) {
-        	tx.executeSql(statement, array[i]);
+        	tx.executeSql(statement, array[i], onExecSuccess);
         }
     }
     function onTranError(err) {
@@ -86,18 +87,10 @@ DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
     }
     function onTranSuccess() {
         console.log('bulk tran completed');
-        callback();
+        callback(rowCount);
     }
     function onExecSuccess(tx, results) {
-    	if (results.rowsAffected !== array.length) {
-    		callback(new IOError(1, array.length + ' rows input, but ' + results.rowsAffected + ' processed.'));
-    	} else {
-    		callback();
-    	}
-    }
-    function onExecError(tx, err) {
-    	console.log('bulk sql error', JSON.stringify(err));
-    	callback(IOError(err));
+        rowCount += results.rowsAffected;
     }
 };
 DeviceDatabase.prototype.executeDDL = function(statement, callback) {
@@ -105,16 +98,13 @@ DeviceDatabase.prototype.executeDDL = function(statement, callback) {
 
     function onTranStart(tx) {
         console.log('exec tran start', statement);
-        tx.executeSql(statement, [], onExecSuccess, onExecError);
+        tx.executeSql(statement, [], onExecSuccess);
     }
     function onTranError(err) {
         callback(new IOError(err));
     }
     function onExecSuccess(tx, results) {
         callback();
-    }
-    function onExecError(tx, err) {
-        callback(new IOError(err));
     }
 };
 

@@ -23,10 +23,9 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		var values = [ styleUse[1], styleUse[0] ];
 		array.push(values);
 	}
-	var names = [ 'style', 'usage' ];
-	this.collection.load(names, array, function(err) {
-		if (err) {
-			window.alert('StyleUse Builder Failed', JSON.stringify(err));
+	this.collection.load(array, function(err) {
+		if (err instanceof IOError) {
+			console.log('StyleUse Builder Failed', JSON.stringify(err));
 			callback(err);
 		} else {
 			console.log('StyleUse loaded in database');

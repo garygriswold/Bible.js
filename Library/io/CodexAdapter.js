@@ -32,7 +32,15 @@ CodexAdapter.prototype.create = function(callback) {
 	});
 };
 CodexAdapter.prototype.load = function(array, callback) {
-
+	var statement = 'insert into codex(book, chapter, xml) values (?,?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load codex success, rowcount', count);
+			callback();
+		}
+	});
 };
 CodexAdapter.prototype.getChapter = function(values, callback) {
 

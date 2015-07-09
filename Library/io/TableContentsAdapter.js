@@ -36,7 +36,16 @@ TableContentsAdapter.prototype.create = function(callback) {
 	});
 };
 TableContentsAdapter.prototype.load = function(array, callback) {
-
+	var statement = 'insert into tableContents(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook) ' +
+		'values (?,?,?,?,?,?,?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load tableContents success, rowcount', count);
+			callback();
+		}
+	});
 };
 TableContentsAdapter.prototype.select = function(values, callback) {
 

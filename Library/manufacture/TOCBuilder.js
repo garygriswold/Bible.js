@@ -56,14 +56,13 @@ TOCBuilder.prototype.loadDB = function(callback) {
 	var array = [];
 	var len = this.size();
 	for (var i=0; i<len; i++) {
-		var tocBook = this.toc.bookList[i];
-		var names = Object.keys(tocBook);
-		var values = this.collection.valuesToArray(names, tocBook);
+		var toc = this.toc.bookList[i];
+		var values = [ toc.code, toc.heading, toc.title, toc.name, toc.abbrev, toc.lastChapter, toc.priorBook, toc.nextBook ];
 		array.push(values);
 	}
-	this.collection.load(names, array, function(err) {
-		if (err) {
-			window.alert('TOC Builder Failed', JSON.stringify(err));
+	this.collection.load(array, function(err) {
+		if (err instanceof IOError) {
+			console.log('TOC Builder Failed', JSON.stringify(err));
 			callback(err);
 		} else {
 			console.log('TOC loaded in database');

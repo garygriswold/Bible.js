@@ -76,10 +76,9 @@ ConcordanceBuilder.prototype.loadDB = function(callback) {
 		var item = [ words[i], refCount, refList ];
 		array.push(item);
 	}
-	var names = [ 'word', 'refCount', 'refList' ];
-	this.collection.load(names, array, function(err) {
-		if (err) {
-			window.alert('Concordance Builder Failed', JSON.stringify(err));
+	this.collection.load(array, function(err) {
+		if (err instanceof IOError) {
+			console.log('Concordance Builder Failed', JSON.stringify(err));
 			callback(err);
 		} else {
 			console.log('concordance loaded in database');

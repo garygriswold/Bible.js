@@ -24,9 +24,8 @@ ChapterBuilder.prototype.loadDB = function(callback) {
 			array.push(values);
 		}
 	}
-	var names = [ 'book', 'chapter', 'xml' ];
-	this.collection.load(names, array, function(err) {
-		if (err) {
+	this.collection.load(array, function(err) {
+		if (err instanceof IOError) {
 			console.log('Storing chapters failed');
 			callback(err);
 		} else {

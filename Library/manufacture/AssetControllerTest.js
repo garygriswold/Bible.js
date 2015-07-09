@@ -12,5 +12,9 @@ var database = new DeviceDatabase(types.versionCode, 'versionNameHere');
 
 var builder = new AssetBuilder(types, database);
 builder.build(function(err) {
-	console.log('AssetControllerTest.build', err);
+	if (err instanceof IOError) {
+		window.alert('AssetController.build error=' + JSON.stringify(err));
+	} else {
+		console.log('AssetControllerTest.build', err);
+	}
 });

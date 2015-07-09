@@ -34,7 +34,6 @@ HistoryAdapter.prototype.create = function(callback) {
 	});
 };
 HistoryAdapter.prototype.select = function(values, callback) {
-
 };
 HistoryAdapter.prototype.insert = function(values, callback) {
 

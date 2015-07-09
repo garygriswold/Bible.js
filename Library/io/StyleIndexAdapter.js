@@ -33,5 +33,13 @@ StyleIndexAdapter.prototype.create = function(callback) {
 	});
 };
 StyleIndexAdapter.prototype.load = function(array, callback) {
-
+	var statement = 'insert into styleIndex(style, usage, book, chapter, verse) values (?,?,?,?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load styleIndex success', count);
+			callback();
+		}
+	});
 };

@@ -31,7 +31,15 @@ ConcordanceAdapter.prototype.create = function(callback) {
 	});
 };
 ConcordanceAdapter.prototype.load = function(array, callback) {
-
+	var statement = 'insert into concordance(word, refCount, refList) values (?,?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load concordance success', count);
+			callback();
+		}
+	});
 };
 ConcordanceAdapter.prototype.select = function(values, callback) {
 
