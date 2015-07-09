@@ -27,12 +27,11 @@ BibleCache.prototype.getChapter = function(reference, callback) {
 	if (chapter !== undefined) {
 		callback(chapter);
 	} else {
-		var statement = 'select xml from codex where book=? and chapter=?';
 		var values = [ reference.book, reference.chapter ];
-		this.collection.get(statement, values, function(row) {
+		this.collection.getChapter(values, function(row) {
 			if (row instanceof IOError) {
 				console.log('found Error', row);
-				callback(row);
+				callback();
 			} else {
 				chapter = that.parser.readBook(row.xml);
 				that.chapterMap[reference.nodeId] = chapter;

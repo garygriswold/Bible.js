@@ -9,36 +9,34 @@ function DeviceDatabase(code, name) {
 	var size = 30 * 1024 * 1024;
 	this.database = window.openDatabase(this.code, "1.0", this.name, size);
 	this.codex = new CodexAdapter(this);
-	this.tableContents = new TableContentsAdapter(this);
-	this.concordance = new ConcordanceAdapter(this);
-	this.styleIndex = new StyleIndexAdapter(this);
-	this.styleUse = new StyleUseAdapter(this);
-	this.history = new HistoryAdapter(this);
-	this.questions = new QuestionsAdapter(this);
+//	this.tableContents = new TableContentsAdapter(this);
+    this.tableContents = new DeviceCollection(this.database);
+//	this.concordance = new ConcordanceAdapter(this);
+    this.concordance = new DeviceCollection(this.database);
+//	this.styleIndex = new StyleIndexAdapter(this);
+    this.styleIndex = new DeviceCollection(this.database);
+//	this.styleUse = new StyleUseAdapter(this);
+    this.styleUse = new DeviceCollection(this.database);
+//	this.history = new HistoryAdapter(this);
+    this.history = new DeviceCollection(this.database);
+//	this.questions = new QuestionsAdapter(this);
+    this.questions = new DeviceCollection(this.database);
 	Object.freeze(this);
 }
 DeviceDatabase.prototype.select = function(statement, values, callback) {
-    this.database.readTransaction(onTranStart, onTranError, onTranSuccess);
+    this.database.readTransaction(onTranStart, onTranError);
 
     function onTranStart(tx) {
         console.log(statement, values);
-        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
+        tx.executeSql(statement, values, onSelectSuccess);
     }
     function onTranError(err) {
         console.log('select tran error', JSON.stringify(err));
         callback(new IOError(err));
     }
-    function onTranSuccess() {
-    	console.log('select tran success');
-    	callback();
-    }
     function onSelectSuccess(tx, results) {
-        console.log('select success results', JSON.stringify(results.rows));
+        console.log('select success results, rowCount=', results.rows.length);
         callback(results);
-    }
-    function onSelectError(tx, err) {
-        console.log('select error', err);
-        callback(new IOError(err));
     }
 };
 DeviceDatabase.prototype.executeDML = function(statement, values, callback) {

@@ -22,7 +22,6 @@ function AppViewController(versionCode) {
 	this.database = new DeviceDatabase(versionCode, 'nameForVersion');
 }
 AppViewController.prototype.begin = function(develop) {
-	var types = new AssetType('document', this.versionCode);
 	this.tableContents = new TOC(this.database.tableContents);
 	this.bibleCache = new BibleCache(this.database.codex);
 	this.concordance = new Concordance(this.database.concordance);
@@ -31,7 +30,7 @@ AppViewController.prototype.begin = function(develop) {
 	fillFromDatabase(function() {
 		console.log('loaded toc', that.tableContents.size());
 		console.log('loaded history', that.history.size());
-
+		
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.lookup = new Lookup(that.tableContents);
 		that.statusBar = new StatusBar(88, that.tableContents);
@@ -241,19 +240,19 @@ CodexView.prototype.showView = function(nodeId) {
 		}
 	}
 };
-CodexView.prototype.showChapter = function(chapter, callout) {
+CodexView.prototype.showChapter = function(chapter, callback) {
 	var that = this;
 	this.bibleCache.getChapter(chapter, function(usxNode) {
 		if (usxNode instanceof IOError) {
 			console.log((JSON.stringify(usxNode)));
-			callout();
+			callback();
 		} else {
 			var dom = new DOMBuilder();
 			dom.bookCode = chapter.book;
 			var fragment = dom.toDOM(usxNode);
 			chapter.rootNode.appendChild(fragment);
 			console.log('added chapter', chapter.nodeId);
-			callout();
+			callback();
 		}
 	});
 };
@@ -1138,29 +1137,356 @@ function IOError(err) {
 }
 /**
 * This class is a facade over the database that is used to store bible text, concordance,
-* table of contents, history and questions.  At this writing, it is a facade over a
-* Web SQL Sqlite3 database, but it intended to hide all database API specifics
-* from the rest of the application so that a different database can be put in its
-* place, if that becomes advisable.
-* Gary Griswold, July 2, 2015
+* table of contents, history and questions.
 */
 function DeviceDatabase(code, name) {
 	this.code = code;
 	this.name = name;
+    this.className = 'DeviceDatabase';
 	var size = 30 * 1024 * 1024;
-	this.db = window.openDatabase(this.code, "1.0", this.name, size);
-	this.codex = new DeviceCollection(this.db, 'codex');
-	this.tableContents = new DeviceCollection(this.db, 'tableContents');
-	this.concordance = new DeviceCollection(this.db, 'concordance');
-	this.styleIndex = new DeviceCollection(this.db, 'styleIndex');
-	this.styleUse = new DeviceCollection(this.db, 'styleUse');
-	this.history = new DeviceCollection(this.db, 'history');
-	this.questions = new DeviceCollection(this.db, 'questions');
+	this.database = window.openDatabase(this.code, "1.0", this.name, size);
+	this.codex = new CodexAdapter(this);
+//	this.tableContents = new TableContentsAdapter(this);
+    this.tableContents = new DeviceCollection(this.database);
+//	this.concordance = new ConcordanceAdapter(this);
+    this.concordance = new DeviceCollection(this.database);
+//	this.styleIndex = new StyleIndexAdapter(this);
+    this.styleIndex = new DeviceCollection(this.database);
+//	this.styleUse = new StyleUseAdapter(this);
+    this.styleUse = new DeviceCollection(this.database);
+//	this.history = new HistoryAdapter(this);
+    this.history = new DeviceCollection(this.database);
+//	this.questions = new QuestionsAdapter(this);
+    this.questions = new DeviceCollection(this.database);
 	Object.freeze(this);
 }
+DeviceDatabase.prototype.select = function(statement, values, callback) {
+    this.database.readTransaction(onTranStart, onTranError);
 
+    function onTranStart(tx) {
+        console.log(statement, values);
+        tx.executeSql(statement, values, onSelectSuccess);
+    }
+    function onTranError(err) {
+        console.log('select tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onSelectSuccess(tx, results) {
+        console.log('select success results, rowCount=', results.rows.length);
+        callback(results);
+    }
+};
+DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
+    var rowsAffected;
+    this.database.transaction(onTranStart, onTranError, onTranSuccess);
+
+    function onTranStart(tx) {
+        console.log('exec tran start', statement, values);
+        tx.executeSql(statement, values, onExecSuccess, onExecError);
+    }
+    function onTranError(err) {
+        console.log('execute tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onTranSuccess() {
+        console.log('execute trans completed', rowsAffected);
+        callback(rowsAffected);
+    }
+    function onExecSuccess(tx, results) {
+    	console.log('excute sql success', results.rowsAffected);
+        rowsAffected = results.rowsAffected;
+    	//if (results.rowsAffected === 0) {
+    	//	callback(new IOError(1, 'No rows affected by update'));
+    	//} else {
+    	//	callback();
+    	//}
+    }
+    function onExecError(tx, err) {
+    	console.log('execute sql error', JSON.stringify(err));
+    	callback(new IOError(err));
+    }
+};
+DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
+    var rowCount = 0;
+	this.database.transaction(onTranStart, onTranError, onTranSuccess);
+
+    function onTranStart(tx) {
+  		console.log('bulk tran start', statement);
+  		for (var i=0; i<array.length; i++) {
+        	tx.executeSql(statement, array[i], onExecSuccess);
+        }
+    }
+    function onTranError(err) {
+        console.log('bulk tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+    function onTranSuccess() {
+        console.log('bulk tran completed');
+        callback(rowCount);
+    }
+    function onExecSuccess(tx, results) {
+        rowCount += results.rowsAffected;
+    }
+};
+DeviceDatabase.prototype.executeDDL = function(statement, callback) {
+    this.database.transaction(onTranStart, onTranError);
+
+    function onTranStart(tx) {
+        console.log('exec tran start', statement);
+        tx.executeSql(statement, [], onExecSuccess);
+    }
+    function onTranError(err) {
+        callback(new IOError(err));
+    }
+    function onExecSuccess(tx, results) {
+        callback();
+    }
+};
 
 /**
+* This class is the database adapter for the codex table
+*/
+function CodexAdapter(database) {
+	this.database = database;
+	this.className = 'CodexAdapter';
+	Object.freeze(this);
+}
+CodexAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists codex', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop codex success');
+			callback();
+		}
+	});
+};
+CodexAdapter.prototype.create = function(callback) {
+	var statement = 'create table if not exists codex(' +
+		'book text not null, ' +
+		'chapter integer not null, ' +
+		'xml text not null, ' +
+		'primary key (book, chapter))';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create codex success');
+			callback();
+		}
+	});
+};
+CodexAdapter.prototype.load = function(array, callback) {
+	var statement = 'insert into codex(book, chapter, xml) values (?,?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load codex success, rowcount', count);
+			callback();
+		}
+	});
+};
+CodexAdapter.prototype.getChapter = function(values, callback) {
+	var that = this;
+	var statement = 'select xml from codex where book=? and chapter=?';
+	this.database.select(statement, values, function(results) {
+		if (results instanceof IOError) {
+			console.log('found Error', results);
+			callback(results);
+		} else if (results.rows.length === 0) {
+			callback();
+		} else {
+            callback(results.rows.item(0));
+        }
+	});
+};/**
+* This class is the database adapter for the concordance table
+*/
+function ConcordanceAdapter(database) {
+	this.database = database;
+	this.className = 'ConcordanceAdapter';
+	Object.freeze(this);
+}
+ConcordanceAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists concordance', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop concordance success');
+			callback();
+		}
+	});
+};
+ConcordanceAdapter.prototype.create = function(callback) {
+	var statement = 'create table if not exists concordance(' +
+		'word text primary key not null, ' +
+    	'refCount integer not null, ' +
+    	'refList text not null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create concordance success');
+			callback();
+		}
+	});
+};
+ConcordanceAdapter.prototype.load = function(array, callback) {
+	var statement = 'insert into concordance(word, refCount, refList) values (?,?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load concordance success', count);
+			callback();
+		}
+	});
+};
+ConcordanceAdapter.prototype.select = function(values, callback) {
+
+};/**
+* This class is the database adapter for the tableContents table
+*/
+function TableContentsAdapter(database) {
+	this.database = database;
+	this.className = 'TableContentsAdapter';
+	Object.freeze(this);
+}
+TableContentsAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists tableContents', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop tableContents success');
+			callback();
+		}
+	});
+};
+TableContentsAdapter.prototype.create = function(callback) {
+	var statement = 'create table if not exists tableContents(' +
+		'code text primary key not null, ' +
+    	'heading text not null, ' +
+    	'title text not null, ' +
+    	'name text not null, ' +
+    	'abbrev text not null, ' +
+		'lastChapter integer not null, ' +
+		'priorBook text null, ' +
+		'nextBook text null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create tableContents success');
+			callback();
+		}
+	});
+};
+TableContentsAdapter.prototype.load = function(array, callback) {
+	var statement = 'insert into tableContents(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook) ' +
+		'values (?,?,?,?,?,?,?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load tableContents success, rowcount', count);
+			callback();
+		}
+	});
+};
+TableContentsAdapter.prototype.select = function(values, callback) {
+
+};/**
+* This class is the database adapter for the history table
+*/
+function HistoryAdapter(database) {
+	this.database = database;
+	this.className = 'HistoryAdapter';
+	Object.freeze(this);
+}
+HistoryAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists history', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop history success');
+			callback();
+		}
+	});
+};
+HistoryAdapter.prototype.create = function(callback) {
+	var statement = 'create table if not exists history(' +
+		'timestamp text not null primary key, ' +
+		'book text not null, ' +
+		'chapter integer not null, ' +
+		'verse integer null, ' +
+		'source text not null, ' +
+		'search text null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create history success');
+			callback();
+		}
+	});
+};
+HistoryAdapter.prototype.select = function(values, callback) {
+};
+HistoryAdapter.prototype.insert = function(values, callback) {
+
+};
+HistoryAdapter.prototype.delete = function(values, callback) {
+
+};/**
+* This class is the database adapter for the questions table
+*/
+function QuestionsAdapter(database) {
+	this.database = database;
+	this.className = 'QuestionsAdapter';
+	Object.freeze(this);
+}
+QuestionsAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists questions', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop questions success');
+			callback();
+		}
+	});
+};
+QuestionsAdapter.prototype.create = function(callback) {
+	var statement = 'create table if not exists questions(' +
+		'askedDateTime text not null primary key, ' +
+		'book text not null, ' +
+		'chapter integer not null, ' +
+		'verse integer null, ' +
+		'question text not null, ' +
+		'instructor text not null, ' +
+		'answerDateTime text not null, ' +
+		'answer text not null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create questions success');
+			callback();
+		}
+	});
+};
+QuestionsAdapter.prototype.select = function(values, callback) {
+
+};
+QuestionsAdapter.prototype.insert = function(values, callback) {
+
+};
+QuestionsAdapter.prototype.update = function(values, callback) {
+
+};
+QuestionsAdapter.prototype.delete = function(values, callback) {
+
+};/**
 * This class is a facade over a collection in a database.  
 * At this writing, it is a facade over a Web SQL Sqlite3 database, 
 * but it intended to hide all database API specifics
@@ -1331,297 +1657,6 @@ DeviceCollection.prototype.valuesToArray = function(names, row) {
 	}
 	return(values);
 };/**
-* The Table of Contents and Concordance must be created by processing the entire text.  Since the parsing of the XML
-* is a significant amount of the time to do this, this class reads over the entire Bible text and creates
-* all of the required assets.
-*/
-function AssetBuilder(types, database) {
-	this.types = types;
-	this.database = database;
-	this.builders = [];
-	if (types.chapterFiles) {
-		this.builders.push(new ChapterBuilder(this.database.codex));
-	}
-	if (types.tableContents) {
-		this.builders.push(new TOCBuilder(this.database.tableContents));
-	}
-	if (types.concordance) {
-		this.builders.push(new ConcordanceBuilder(this.database.concordance));
-	}
-	if (types.styleIndex) {
-		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));
-		this.builders.push(new StyleUseBuilder(this.database.styleUse));
-	}
-	if (types.history) {
-		this.builders.push(new HistoryBuilder(this.database.history));
-	}
-	if (types.questions) {
-		this.builders.push(new QuestionsBuilder(this.database.questions));
-	}
-	if (types.html) {
-		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.
-	}
-	this.reader = new FileReader(types.location);
-	this.parser = new USXParser();
-	this.filesToProcess = [];
-	Object.freeze(this);
-}
-AssetBuilder.prototype.build = function(callback) {
-	var that = this;
-	if (this.builders.length > 0) {
-		this.filesToProcess.splice(0);
-		var canon = new Canon();
-		for (var i=0; i<canon.books.length; i++) {
-			this.filesToProcess.push(canon.books[i].code + '.usx');
-		}
-		processReadFile(this.filesToProcess.shift());
-	} else {
-		callback();
-	}
-	function processReadFile(file) {
-		if (file) {
-			that.reader.readTextFile(that.types.getUSXPath(file), function(data) {
-				if (data.errno) {
-					console.log('file read err ', JSON.stringify(data));
-					callback(data);
-				} else {
-					var rootNode = that.parser.readBook(data);
-					for (var i=0; i<that.builders.length; i++) {
-						that.builders[i].readBook(rootNode);
-					}
-					processReadFile(that.filesToProcess.shift());
-				}
-			});
-		} else {
-			processDatabaseLoad(that.builders.shift());
-		}
-	}
-	function processDatabaseLoad(builder) {
-		if (builder) {
-			builder.collection.drop(function(err) {
-				if (err) {
-					console.log('drop error', err);
-					callback(err);
-				} else {
-					builder.collection.create(builder.schema(), function(err) {
-						if (err) {
-							console.log('create error', err);
-							callback(err);
-						} else {
-							builder.loadDB(function(err) {
-								if (err) {
-									console.log('load db error', err);
-									callback(err);
-								} else {
-									processDatabaseLoad(that.builders.shift());
-								}
-							});
-						}
-					});
-				}
-			});
-		} else {
-			callback();
-		}
-	}
-};
-/**
-* This object of the Director pattern, it contains a boolean member for each type of asset.
-* Setting a member to true will be used by the Builder classes to control which assets are built.
-*/
-function AssetType(location, versionCode) {
-	this.location = location;
-	this.versionCode = versionCode;
-	this.chapterFiles = false;
-	this.tableContents = false;
-	this.concordance = false;
-	this.history = false;
-	this.questions = false;
-	this.styleIndex = false;
-	this.html = false;// this one is not ready
-	Object.seal(this);
-}
-AssetType.prototype.getUSXPath = function(filename) {
-	return(this.versionCode + '/USX/' + filename);
-};
-
-/**
-* This class iterates over the USX data model, and breaks it into files one for each chapter.
-*
-*/
-function ChapterBuilder(collection) {
-	this.collection = collection;
-	this.books = [];
-	Object.seal(this);
-}
-ChapterBuilder.prototype.readBook = function(usxRoot) {
-	var that = this;
-	this.books.push(usxRoot);
-};
-ChapterBuilder.prototype.schema = function() {
-	var sql = 'book text not null, ' +
-		'chapter integer not null, ' +
-		'xml text not null, ' +
-		'primary key (book, chapter)';
-	return(sql);
-};
-ChapterBuilder.prototype.loadDB = function(callback) {
-	var array = [];
-	for (var i=0; i<this.books.length; i++) {
-		var usxRoot = this.books[i];
-		var bookCode = null; // set as a side-effect of breakBookIntoChapters
-		var chapters = breakBookIntoChapters(usxRoot);
-		for (var j=0; j<chapters.length; j++) {
-			var chapter = chapters[j];
-			var chapterNum = findChapterNum(chapter);
-			var values = [ bookCode, chapterNum, chapter.toUSX() ];
-			array.push(values);
-		}
-	}
-	var names = [ 'book', 'chapter', 'xml' ];
-	this.collection.load(names, array, function(err) {
-		if (err) {
-			console.log('Storing chapters failed');
-			callback(err);
-		} else {
-			console.log('store chapters success');
-			callback();
-		}
-	});
-
-	function breakBookIntoChapters(usxRoot) {
-		var chapters = [];
-		var chapterNum = 0;
-		var oneChapter = new USX({ version: 2.0 });
-		for (var i=0; i<usxRoot.children.length; i++) {
-			var childNode = usxRoot.children[i];
-			switch(childNode.tagName) {
-				case 'book':
-					bookCode = childNode.code;
-					break;
-				case 'chapter':
-					chapters.push(oneChapter);
-					oneChapter = new USX({ version: 2.0 });
-					chapterNum = childNode.number;
-					break;
-			}
-			oneChapter.addChild(childNode);
-		}
-		chapters.push(oneChapter);
-		return(chapters);
-	}
-	function findChapterNum(oneChapter) {
-		for (var i=0; i<oneChapter.children.length; i++) {
-			var child = oneChapter.children[i];
-			if (child.tagName === 'chapter') {
-				return(child.number);
-			}
-		}
-		return(0);
-	}	
-};
-ChapterBuilder.prototype.toJSON = function() {
-	return('');
-};
-
-/**
-* This class traverses the USX data model in order to find each word, and 
-* reference to that word.
-*
-* This solution might not be unicode safe. GNG Apr 2, 2015
-*/
-function ConcordanceBuilder(collection) {
-	this.collection = collection;
-	this.index = {};
-	this.bookCode = '';
-	this.chapter = 0;
-	this.verse = 0;
-	Object.seal(this);
-}
-ConcordanceBuilder.prototype.readBook = function(usxRoot) {
-	this.bookCode = '';
-	this.chapter = 0;
-	this.verse = 0;
-	this.readRecursively(usxRoot);
-};
-ConcordanceBuilder.prototype.readRecursively = function(node) {
-	switch(node.tagName) {
-		case 'book':
-			this.bookCode = node.code;
-			break;
-		case 'chapter':
-			this.chapter = node.number;
-			break;
-		case 'verse':
-			this.verse = node.number;
-			break;
-		case 'note':
-			break; // Do not index notes
-		case 'text':
-			var words = node.text.split(/\b/);
-			for (var i=0; i<words.length; i++) {
-				var word = words[i].replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]/g, '');
-				if (word.length > 0 && this.chapter > 0 && this.verse > 0) {
-					var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-					this.addEntry(word.toLocaleLowerCase(), reference);
-				}
-			}
-			break;
-		default:
-			if ('children' in node) {
-				for (i=0; i<node.children.length; i++) {
-					this.readRecursively(node.children[i]);
-				}
-			}
-
-	}
-};
-ConcordanceBuilder.prototype.addEntry = function(word, reference) {
-	if (this.index[word] === undefined) {
-		this.index[word] = [];
-		this.index[word].push(reference);
-	}
-	else {
-		var refList = this.index[word];
-		if (reference !== refList[refList.length -1]) { /* ignore duplicate reference */
-			refList.push(reference);
-		}
-	}
-};
-ConcordanceBuilder.prototype.size = function() {
-	return(Object.keys(this.index).length); 
-};
-ConcordanceBuilder.prototype.schema = function() {
-	var sql = 'word text primary key not null, ' +
-    	'refCount integer not null, ' +
-    	'refList text not null';
-    return(sql);
-};
-ConcordanceBuilder.prototype.loadDB = function(callback) {
-	console.log('Concordance loadDB records count', this.size());
-	var words = Object.keys(this.index);
-	var array = [];
-	for (var i=0; i<words.length; i++) {
-		var word = words[i];
-		var refList = this.index[word];
-		var refCount = refList.length;
-		var item = [ words[i], refCount, refList ];
-		array.push(item);
-	}
-	var names = [ 'word', 'refCount', 'refList' ];
-	this.collection.load(names, array, function(err) {
-		if (err) {
-			window.alert('Concordance Builder Failed', JSON.stringify(err));
-			callback(err);
-		} else {
-			console.log('concordance loaded in database');
-			callback();
-		}
-	});
-};
-ConcordanceBuilder.prototype.toJSON = function() {
-	return(JSON.stringify(this.index, null, ' '));
-};/**
 * This class iterates over the USX data model, and translates the contents to DOM.
 *
 * This method generates a DOM tree that has exactly the same parentage as the USX model.
@@ -1689,242 +1724,6 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 	}
 };
 /**
-* This class traverses a DOM tree in order to create an equivalent HTML document.
-*/
-function HTMLBuilder() {
-	this.result = [];
-	this.filename = 'bible.html';
-	Object.freeze(this);
-}
-HTMLBuilder.prototype.toHTML = function(fragment) {
-	this.readRecursively(fragment);
-	return(this.result.join(''));
-};
-HTMLBuilder.prototype.readRecursively = function(node) {
-	switch(node.nodeType) {
-		case 11: // fragment
-			break;
-		case 1: // element
-			this.result.push('\n<', node.tagName.toLowerCase());
-			for (var i=0; i<node.attributes.length; i++) {
-				this.result.push(' ', node.attributes[i].nodeName, '="', node.attributes[i].value, '"');
-			}
-			this.result.push('>');
-			break;
-		case 3: // text
-			this.result.push(node.wholeText);
-			break;
-		default:
-			throw new Error('Unexpected nodeType ' + node.nodeType + ' in HTMLBuilder.toHTML().');
-	}
-	if ('childNodes' in node) {
-		for (i=0; i<node.childNodes.length; i++) {
-			this.readRecursively(node.childNodes[i]);
-		}
-	}
-	if (node.nodeType === 1) {
-		this.result.push('</', node.tagName.toLowerCase(), '>\n');
-	}
-};
-HTMLBuilder.prototype.toJSON = function() {
-	return(this.result.join(''));
-};
-
-
-/**
-* This class traverses the USX data model in order to find each style, and 
-* reference to that style.  It builds an index to each style showing
-* all of the references where each style is used.
-*/
-function StyleIndexBuilder(collection) {
-	this.collection = collection;
-	this.index = {};
-}
-StyleIndexBuilder.prototype.addEntry = function(word, reference) {
-	if (this.index[word] === undefined) {
-		this.index[word] = [];
-	}
-	if (this.index[word].length < 100) {
-		this.index[word].push(reference);
-	}
-};
-StyleIndexBuilder.prototype.readBook = function(usxRoot) {
-	this.bookCode = '';
-	this.chapter = null;
-	this.verse = null;
-	this.readRecursively(usxRoot);
-};
-StyleIndexBuilder.prototype.readRecursively = function(node) {
-	switch(node.tagName) {
-		case 'book':
-			this.bookCode = node.code;
-			var style = 'book.' + node.style;
-			var reference = this.bookCode;
-			this.addEntry(style, reference);
-			break;
-		case 'chapter':
-			this.chapter = node.number;
-			style = 'chapter.' + node.style;
-			reference = this.bookCode + ':' + this.chapter;
-			this.addEntry(style, reference);
-			break;
-		case 'verse':
-			this.verse = node.number;
-			style = 'verse.' + node.style;
-			reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-			this.addEntry(style, reference);
-			break;
-		case 'usx':
-		case 'text':
-			// do nothing
-			break;
-		default:
-			style = node.tagName + '.' + node.style;
-			reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-			this.addEntry(style, reference);
-	}
-	if ('children' in node) {
-		for (var i=0; i<node.children.length; i++) {
-			this.readRecursively(node.children[i]);
-		}
-	}
-};
-StyleIndexBuilder.prototype.size = function() {
-	return(Object.keys(this.index).length);
-};
-StyleIndexBuilder.prototype.schema = function() {
-	var sql = 'style text not null, ' +
-		'usage text not null, ' +
-		'book text not null, ' +
-		'chapter integer null, ' +
-		'verse integer null';
-	return(sql);
-};
-StyleIndexBuilder.prototype.loadDB = function(callback) {
-	console.log('style index loadDB records count', this.size());
-	var array = [];
-	var styles = Object.keys(this.index);
-	for (var i=0; i<styles.length; i++) {
-		var style = styles[i];
-		var styleUse = style.split('.');
-		var refList = this.index[style];
-		for (var j=0; j<refList.length; j++) {
-			var refItem = refList[j];
-			var reference = refItem.split(':');
-			switch(reference.length) {
-				case 1:
-					var values = [ styleUse[1], styleUse[0], reference[0], null, null ];
-					break;
-				case 2:
-					values = [ styleUse[1], styleUse[0], reference[0], reference[1], null ];
-					break;
-				case 3:
-					values = [ styleUse[1], styleUse[0], reference[0], reference[1], reference[2] ];
-			}
-			array.push(values);
-		}
-	}
-	var names = [ 'style', 'usage', 'book', 'chapter', 'verse' ];
-	this.collection.load(names, array, function(err) {
-		if (err) {
-			window.alert('StyleIndex Builder Failed', JSON.stringify(err));
-			callback(err);
-		} else {
-			console.log('StyleIndex loaded in database');
-			callback();
-		}
-	});
-};
-StyleIndexBuilder.prototype.toJSON = function() {
-	return(this.toJSON());
-};
-/**
-* This class traverses the USX data model in order to find each book, and chapter
-* in order to create a table of contents that is localized to the language of the text.
-*/
-function TOCBuilder(collection) {
-	this.collection = collection;
-	this.toc = new TOC(collection);
-	this.tocBook = null;
-	Object.seal(this);
-}
-TOCBuilder.prototype.readBook = function(usxRoot) {
-	this.readRecursively(usxRoot);
-};
-TOCBuilder.prototype.readRecursively = function(node) {
-	switch(node.tagName) {
-		case 'book':
-			var priorBook = null;
-			if (this.tocBook) {
-				this.tocBook.nextBook = node.code;
-				priorBook = this.tocBook.code;
-			}
-			this.tocBook = new TOCBook(node.code);
-			this.tocBook.priorBook = priorBook;
-			this.toc.addBook(this.tocBook);
-			break;
-		case 'chapter':
-			this.tocBook.lastChapter = node.number;
-			break;
-		case 'para':
-			switch(node.style) {
-				case 'h':
-					this.tocBook.heading = node.children[0].text;
-					break;
-				case 'toc1':
-					this.tocBook.title = node.children[0].text;
-					break;
-				case 'toc2':
-					this.tocBook.name = node.children[0].text;
-					break;
-				case 'toc3':
-					this.tocBook.abbrev = node.children[0].text;
-					break;
-			}
-	}
-	if ('children' in node) {
-		for (var i=0; i<node.children.length; i++) {
-			this.readRecursively(node.children[i]);
-		}
-	}
-};
-TOCBuilder.prototype.size = function() {
-	return(this.toc.bookList.length);
-};
-TOCBuilder.prototype.schema = function() {
-	var sql = 'code text primary key not null, ' +
-    	'heading text not null, ' +
-    	'title text not null, ' +
-    	'name text not null, ' +
-    	'abbrev text not null, ' +
-		'lastChapter integer not null, ' +
-		'priorBook text null, ' +
-		'nextBook text null';
-	return(sql);
-};
-TOCBuilder.prototype.loadDB = function(callback) {
-	console.log('TOC loadDB records count', this.size());
-	var array = [];
-	var len = this.size();
-	for (var i=0; i<len; i++) {
-		var tocBook = this.toc.bookList[i];
-		var names = Object.keys(tocBook);
-		var values = this.collection.valuesToArray(names, tocBook);
-		array.push(values);
-	}
-	this.collection.load(names, array, function(err) {
-		if (err) {
-			window.alert('TOC Builder Failed', JSON.stringify(err));
-			callback(err);
-		} else {
-			console.log('TOC loaded in database');
-			callback();
-		}
-	});
-};
-TOCBuilder.prototype.toJSON = function() {
-	return(this.toc.toJSON());
-};/**
 * This class handles all request to deliver scripture.  It handles all passage display requests to display passages of text,
 * and it also handles all requests from concordance search requests to display individual verses.
 * It will deliver the content from cache if it is present.  Or, it will find the content in persistent storage if it is
@@ -1953,12 +1752,11 @@ BibleCache.prototype.getChapter = function(reference, callback) {
 	if (chapter !== undefined) {
 		callback(chapter);
 	} else {
-		var statement = 'select xml from codex where book=? and chapter=?';
 		var values = [ reference.book, reference.chapter ];
-		this.collection.get(statement, values, function(row) {
+		this.collection.getChapter(values, function(row) {
 			if (row instanceof IOError) {
 				console.log('found Error', row);
-				callback(row);
+				callback();
 			} else {
 				chapter = that.parser.readBook(row.xml);
 				that.chapterMap[reference.nodeId] = chapter;

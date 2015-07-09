@@ -21,7 +21,6 @@ function AppViewController(versionCode) {
 	this.database = new DeviceDatabase(versionCode, 'nameForVersion');
 }
 AppViewController.prototype.begin = function(develop) {
-	var types = new AssetType('document', this.versionCode);
 	this.tableContents = new TOC(this.database.tableContents);
 	this.bibleCache = new BibleCache(this.database.codex);
 	this.concordance = new Concordance(this.database.concordance);
@@ -30,7 +29,7 @@ AppViewController.prototype.begin = function(develop) {
 	fillFromDatabase(function() {
 		console.log('loaded toc', that.tableContents.size());
 		console.log('loaded history', that.history.size());
-
+		
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.lookup = new Lookup(that.tableContents);
 		that.statusBar = new StatusBar(88, that.tableContents);

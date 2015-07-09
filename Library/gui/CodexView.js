@@ -107,19 +107,19 @@ CodexView.prototype.showView = function(nodeId) {
 		}
 	}
 };
-CodexView.prototype.showChapter = function(chapter, callout) {
+CodexView.prototype.showChapter = function(chapter, callback) {
 	var that = this;
 	this.bibleCache.getChapter(chapter, function(usxNode) {
 		if (usxNode instanceof IOError) {
 			console.log((JSON.stringify(usxNode)));
-			callout();
+			callback();
 		} else {
 			var dom = new DOMBuilder();
 			dom.bookCode = chapter.book;
 			var fragment = dom.toDOM(usxNode);
 			chapter.rootNode.appendChild(fragment);
 			console.log('added chapter', chapter.nodeId);
-			callout();
+			callback();
 		}
 	});
 };

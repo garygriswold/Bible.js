@@ -23,16 +23,14 @@ cat ../Library/gui/icons/drawTOCIcon.js >> ../BibleAppNW/js/BibleApp.js
 
 cat ../Library/io/IOError.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/io/DeviceDatabase.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/io/CodexAdapter.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/io/ConcordanceAdapter.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/io/TableContentsAdapter.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/io/HistoryAdapter.js >> ../BibleAppNW/js/BibleApp.js
+cat ../Library/io/QuestionsAdapter.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/io/DeviceCollection.js >> ../BibleAppNW/js/BibleApp.js
 
-cat ../Library/manufacture/AssetBuilder.js >> ../BibleAppNW/js/BibleApp.js
-cat ../Library/manufacture/AssetType.js >> ../BibleAppNW/js/BibleApp.js
-cat ../Library/manufacture/ChapterBuilder.js >> ../BibleAppNW/js/BibleApp.js
-cat ../Library/manufacture/ConcordanceBuilder.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/manufacture/DOMBuilder.js >> ../BibleAppNW/js/BibleApp.js
-cat ../Library/manufacture/HTMLBuilder.js >> ../BibleAppNW/js/BibleApp.js
-cat ../Library/manufacture/StyleIndexBuilder.js >> ../BibleAppNW/js/BibleApp.js
-cat ../Library/manufacture/TOCBuilder.js >> ../BibleAppNW/js/BibleApp.js
 
 cat ../Library/model/meta/BibleCache.js >> ../BibleAppNW/js/BibleApp.js
 cat ../Library/model/meta/Canon.js >> ../BibleAppNW/js/BibleApp.js
