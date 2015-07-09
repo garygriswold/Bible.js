@@ -42,11 +42,21 @@ HistoryAdapter.prototype.selectAll = function(callback) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else {
-			callback(results);
+			var array = [];
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var ref = new Reference(row.book, row.chapter, row.verse);
+				var hist = new HistoryItem(ref.nodeId, row.source, row.search, row.timestamp);
+				array.push(hist);
+			}
+			callback(array);
 		}
 	});
 };
-HistoryAdapter.prototype.replace = function(values, callback) {
+HistoryAdapter.prototype.replace = function(item, callback) {
+	var timestampStr = item.timestamp.toISOString();
+	var ref = new Reference(item.nodeId);
+	var values = [ timestampStr, ref.book, ref.chapter, ref.verse, item.source, item.search ];
 	var statement = 'replace into history(timestamp, book, chapter, verse, source, search) ' +
 		'values (?,?,?,?,?,?)';
 	this.database.executeDML(statement, values, function(count) {

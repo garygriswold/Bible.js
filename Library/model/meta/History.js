@@ -4,8 +4,6 @@
 * or a concordance search.  It also responds to function requests to go back 
 * in history, forward in history, or return to the last event.
 */
-//var MAX_HISTORY = 20;
-
 function History(collection) {
 	this.collection = collection;
 	this.items = [];
@@ -18,19 +16,13 @@ History.prototype.fill = function(callback) {
 	this.items.splice(0);
 	this.collection.selectAll(function(results) {
 		if (results instanceof IOError) {
-			callback();
+			callback(results);
 		} else {
-			for (var i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);
-				var ref = new Reference(row.book, row.chapter, row.verse);
-				var hist = new HistoryItem(ref.nodeId, row.source, row.search, row.timestamp);
-				console.log('HISTORY', hist, hist.timestamp.toISOString());
-				that.items.push(hist);
-			}
+			that.items = results;
 			that.isFilled = true;
 			that.isViewCurrent = false;
+			callback();
 		}
-		callback();
 	});
 };
 History.prototype.addEvent = function(event) {
@@ -46,10 +38,7 @@ History.prototype.addEvent = function(event) {
 	this.isViewCurrent = false;
 	
 	// I might want a timeout to postpone this until after animation is finished.
-	var timestampStr = item.timestamp.toISOString();
-	var ref = new Reference(item.nodeId);
-	var values = [ timestampStr, ref.book, ref.chapter, ref.verse, item.source, item.search ];
-	this.collection.replace(values, function(err) {
+	this.collection.replace(item, function(err) {
 		if (err instanceof IOError) {
 			console.log('replace error', JSON.stringify(err));
 		}
