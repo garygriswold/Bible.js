@@ -10,8 +10,7 @@ function TOC(collection) {
 }
 TOC.prototype.fill = function(callback) {
 	var that = this;
-	var statement = 'select code, heading, title, name, abbrev, lastChapter, priorBook, nextBook from tableContents';
-	this.collection.select(statement, [], function(results) {
+	this.collection.selectAll(function(results) {
 		if (results instanceof IOError) {
 			callback();
 		} else {

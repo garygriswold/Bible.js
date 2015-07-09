@@ -47,6 +47,14 @@ TableContentsAdapter.prototype.load = function(array, callback) {
 		}
 	});
 };
-TableContentsAdapter.prototype.select = function(values, callback) {
-
+TableContentsAdapter.prototype.selectAll = function(callback) {
+	var statement = 'select code, heading, title, name, abbrev, lastChapter, priorBook, nextBook ' +
+		'from tableContents order by rowid';
+	this.database.select(statement, [], function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else {
+			callback(results);
+		}
+	});
 };

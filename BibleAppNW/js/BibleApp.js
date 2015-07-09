@@ -1146,8 +1146,7 @@ function DeviceDatabase(code, name) {
 	var size = 30 * 1024 * 1024;
 	this.database = window.openDatabase(this.code, "1.0", this.name, size);
 	this.codex = new CodexAdapter(this);
-//	this.tableContents = new TableContentsAdapter(this);
-    this.tableContents = new DeviceCollection(this.database);
+	this.tableContents = new TableContentsAdapter(this);
 //	this.concordance = new ConcordanceAdapter(this);
     this.concordance = new DeviceCollection(this.database);
 //	this.styleIndex = new StyleIndexAdapter(this);
@@ -1394,8 +1393,16 @@ TableContentsAdapter.prototype.load = function(array, callback) {
 		}
 	});
 };
-TableContentsAdapter.prototype.select = function(values, callback) {
-
+TableContentsAdapter.prototype.selectAll = function(callback) {
+	var statement = 'select code, heading, title, name, abbrev, lastChapter, priorBook, nextBook ' +
+		'from tableContents order by rowid';
+	this.database.select(statement, [], function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else {
+			callback(results);
+		}
+	});
 };/**
 * This class is the database adapter for the history table
 */
@@ -2231,8 +2238,7 @@ function TOC(collection) {
 }
 TOC.prototype.fill = function(callback) {
 	var that = this;
-	var statement = 'select code, heading, title, name, abbrev, lastChapter, priorBook, nextBook from tableContents';
-	this.collection.select(statement, [], function(results) {
+	this.collection.selectAll(function(results) {
 		if (results instanceof IOError) {
 			callback();
 		} else {
