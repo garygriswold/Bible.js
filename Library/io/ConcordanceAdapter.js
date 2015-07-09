@@ -42,5 +42,17 @@ ConcordanceAdapter.prototype.load = function(array, callback) {
 	});
 };
 ConcordanceAdapter.prototype.select = function(values, callback) {
-
+	var questMarks = [ values.length ];
+	for (var i=0; i<questMarks.length; i++) {
+		questMarks[i] = '?';
+	}
+	var statement = 'select refList from concordance where word in(' + questMarks.join(',') + ')';
+	this.database.select(statement, values, function(results) {
+		if (results instanceof IOError) {
+			console.log('found Error', results);
+			callback(results);
+		} else {
+            callback(results);
+        }
+	});
 };

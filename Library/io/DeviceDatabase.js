@@ -10,8 +10,7 @@ function DeviceDatabase(code, name) {
 	this.database = window.openDatabase(this.code, "1.0", this.name, size);
 	this.codex = new CodexAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
-//	this.concordance = new ConcordanceAdapter(this);
-    this.concordance = new DeviceCollection(this.database);
+	this.concordance = new ConcordanceAdapter(this);
 //	this.styleIndex = new StyleIndexAdapter(this);
     this.styleIndex = new DeviceCollection(this.database);
 //	this.styleUse = new StyleUseAdapter(this);

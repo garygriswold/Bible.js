@@ -1147,8 +1147,7 @@ function DeviceDatabase(code, name) {
 	this.database = window.openDatabase(this.code, "1.0", this.name, size);
 	this.codex = new CodexAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
-//	this.concordance = new ConcordanceAdapter(this);
-    this.concordance = new DeviceCollection(this.database);
+	this.concordance = new ConcordanceAdapter(this);
 //	this.styleIndex = new StyleIndexAdapter(this);
     this.styleIndex = new DeviceCollection(this.database);
 //	this.styleUse = new StyleUseAdapter(this);
@@ -1343,7 +1342,19 @@ ConcordanceAdapter.prototype.load = function(array, callback) {
 	});
 };
 ConcordanceAdapter.prototype.select = function(values, callback) {
-
+	var questMarks = [ values.length ];
+	for (var i=0; i<questMarks.length; i++) {
+		questMarks[i] = '?';
+	}
+	var statement = 'select refList from concordance where word in(' + questMarks.join(',') + ')';
+	this.database.select(statement, values, function(results) {
+		if (results instanceof IOError) {
+			console.log('found Error', results);
+			callback(results);
+		} else {
+            callback(results);
+        }
+	});
 };/**
 * This class is the database adapter for the tableContents table
 */
@@ -1856,15 +1867,15 @@ function Concordance(collection) {
 	Object.freeze(this);
 }
 Concordance.prototype.search = function(words, callback) {
-	var questionMarks = [ words.length ];
+//	var questionMarks = [ words.length ];
 	var values = [ words.length ];
 	for (var i=0; i<words.length; i++) {
-		questionMarks[i] = '?';
+//		questionMarks[i] = '?';
 		values[i] = words[i].toLocaleLowerCase();
 	}
 	var that = this;
-	var statement = 'select refList from concordance where word in(' + questionMarks.join(',') + ')';
-	this.collection.select(statement, values, function(results) {
+	//var statement = 'select refList from concordance where word in(' + questionMarks.join(',') + ')';
+	this.collection.select(values, function(results) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else {

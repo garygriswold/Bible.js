@@ -6,15 +6,12 @@ function Concordance(collection) {
 	Object.freeze(this);
 }
 Concordance.prototype.search = function(words, callback) {
-	var questionMarks = [ words.length ];
 	var values = [ words.length ];
 	for (var i=0; i<words.length; i++) {
-		questionMarks[i] = '?';
 		values[i] = words[i].toLocaleLowerCase();
 	}
 	var that = this;
-	var statement = 'select refList from concordance where word in(' + questionMarks.join(',') + ')';
-	this.collection.select(statement, values, function(results) {
+	this.collection.select(values, function(results) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else {
