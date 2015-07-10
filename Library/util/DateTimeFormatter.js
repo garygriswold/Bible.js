@@ -11,14 +11,26 @@ function DateTimeFormatter() {
 	Object.freeze(this);
 }
 DateTimeFormatter.prototype.localDate = function(date) {
-	var options = { year: 'numeric', month: 'long', day: 'numeric' };
-	return(date.toLocaleString('en-US', options));
+	if (date) {
+		var options = { year: 'numeric', month: 'long', day: 'numeric' };
+		return(date.toLocaleString('en-US', options));
+	} else {
+		return('');
+	}
 };
 DateTimeFormatter.prototype.localTime = function(date) {
-	var options = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
-	return(date.toLocaleString('en-US', options));
+	if (date) {
+		var options = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
+		return(date.toLocaleString('en-US', options));
+	} else {
+		return('');
+	}
 };
 DateTimeFormatter.prototype.localDatetime = function(date) {
-	var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-	return(date.toLocaleString('en-US', options));
+	if (date) {
+		var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+		return(date.toLocaleString('en-US', options));
+	} else {
+		return('');
+	}
 };

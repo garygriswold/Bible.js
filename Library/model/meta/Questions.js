@@ -28,37 +28,34 @@ Questions.prototype.fill = function(callback) {
 	this.collection.selectAll(function(results) {
 		if (results instanceof IOError) {
 			console.log('select questions failure ' + JSON.stringify(results));
-			callback();
+			callback(results);
 		} else {
-			for (var i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);
-				var ref = new Reference(row.book, row.chapter, row.verse);
-				var ques = new QuestionItem(ref, ref.nodeId, row.question, row.askedDt, row.instructor, row.answerDt, row.answer);
-				that.items.push(ques);
-			}
+			that.items = results;
 			callback(results);// needed to determine if zero length result
 		}
 	});
 };
 Questions.prototype.createActs8Question = function(callback) {
 	var acts8 = new QuestionItem();
-	acts8.nodeId = 'ACT:8:30';
+	acts8.book = 'ACT';
+	acts8.chapter = 8;
+	acts8.verse = 30;
 	acts8.askedDateTime = new Date();
 	var refActs830 = new Reference('ACT:8:30');
 	var refActs831 = new Reference('ACT:8:31');
 	var refActs835 = new Reference('ACT:8:35');
-	acts8.reference = this.tableContents.toString(refActs830);
+	acts8.displayRef = this.tableContents.toString(refActs830);
 	var verseActs830 = new VerseAccessor(this.bibleCache, refActs830);
 	var verseActs831 = new VerseAccessor(this.bibleCache, refActs831);
 	var verseActs835 = new VerseAccessor(this.bibleCache, refActs835);
 	verseActs830.getVerse(function(textActs830) {
-		acts8.questionText = textActs830;
+		acts8.question = textActs830;
 		verseActs831.getVerse(function(textActs831) {
-			acts8.questionText += textActs831;
+			acts8.question += textActs831;
 			verseActs835.getVerse(function(textActs835) {
-				acts8.answerText = textActs835;
-				acts8.answeredDateTime = new Date();
-				acts8.instructorName = '';
+				acts8.answer = textActs835;
+				acts8.answerDateTime = new Date();
+				acts8.instructor = '';
 				callback(acts8);
 			});
 		});
@@ -70,38 +67,36 @@ Questions.prototype.checkServer = function(callback) {
 	if (lastItem.answeredDateTime === null) {
 		// send request to the server.
 
-		// if there is an unanswered question, the last item is updated
-		that.update(function(err) {
+		
+		if (lastItem.answeredDateTime) { // if updated by server
+			that.update(lastItem, function(err) {
+				callback();
+			});
+		} else {
 			callback();
-		});
+		}
 	}
 	else {
-		callback(null);
+		callback();
 	}
 };
 Questions.prototype.insert = function(item, callback) {
-	var ref = new Reference(item.nodeId);
-	var values = [ item.askedDateTime.toISOString(), ref.book, ref.chapter, ref.verse, item.questionText ];
-	this.collection.replace(values, function(results) {
+	this.collection.replace(item, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
-			callback(results)
-		} else if (results.rowsAffected === 0) {
-			console.log('nothing inserted');
-			callback(new IOError(1, 'No rows were inserted in questions'));
+			callback(results);
 		} else {
 			callback();
 		}
 	});
 };
-Questions.prototype.update = function(callback) {
-	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answerText, item.askedDateTime.toISOString() ];
-	this.collection.update(values, function(results) {
-		if (err instanceof IOError) {
-			console.log('Error on update');
-			callback(err);
+Questions.prototype.update = function(item, callback) {
+	this.collection.update(item, function(results) {
+		if (results instanceof IOError) {
+			console.log('Error on update', results);
+			callback(results);
 		} else {
-			callback();
+			callback(results);
 		}
 	});
 };

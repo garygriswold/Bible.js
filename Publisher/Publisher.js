@@ -1329,8 +1329,11 @@ TOC.prototype.fill = function(callback) {
 		if (results instanceof IOError) {
 			callback();
 		} else {
-			for (var i=0; i<results.rows.length; i++) {
-				that.addBook(results.rows.item(i));
+			that.bookList = results;
+			that.bookMap = {};
+			for (var i=0; i<results.length; i++) {
+				var tocBook = results[i];
+				that.bookMap[tocBook.code] = tocBook;
 			}
 			that.isFilled = true;
 		}
@@ -1376,6 +1379,7 @@ TOC.prototype.size = function() {
 	return(this.bookList.length);
 };
 TOC.prototype.toString = function(reference) {
+	console.log('BOOK', reference.book, reference.nodId);
 	return(this.find(reference.book).name + ' ' + reference.chapter + ':' + reference.verse);
 };
 TOC.prototype.toJSON = function() {
@@ -1383,16 +1387,20 @@ TOC.prototype.toJSON = function() {
 };/**
 * This class holds the table of contents data each book of the Bible, or whatever books were loaded.
 */
-function TOCBook(code) {
+function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook) {
 	this.code = code;
-	this.heading = '';
-	this.title = '';
-	this.name = '';
-	this.abbrev = '';
-	this.lastChapter = 0;
-	this.priorBook = null;
-	this.nextBook = null;
-	Object.seal(this);
+	this.heading = heading;
+	this.title = title;
+	this.name = name;
+	this.abbrev = abbrev;
+	this.lastChapter = lastChapter;
+	this.priorBook = priorBook;
+	this.nextBook = nextBook;
+	if (lastChapter) {
+		Object.freeze(this);
+	} else {
+		Object.seal(this);
+	}
 }/**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
@@ -1401,50 +1409,37 @@ function Concordance(collection) {
 	Object.freeze(this);
 }
 Concordance.prototype.search = function(words, callback) {
-	var values = [ words.length ];
-	for (var i=0; i<words.length; i++) {
-		values[i] = words[i].toLocaleLowerCase();
-	}
 	var that = this;
-	this.collection.select(values, function(results) {
-		if (results instanceof IOError) {
-			callback(results);
+	this.collection.select(words, function(refLists) {
+		if (refLists instanceof IOError) {
+			callback(refLists);
 		} else {
-			var refLists = [];
-			for (i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);
-				if (row && row.refList) { // ignore words that have no ref list
-					var array = row.refList.split(',');
-					refLists.push(array);
-				}
-			}
-			var result = that.intersection(refLists);
+			var result = intersection(refLists);
 			callback(result);
 		}
 	});
-};
-Concordance.prototype.intersection = function(refLists) {
-	if (refLists.length === 0) {
-		return([]);
-	}
-	if (refLists.length === 1) {
-		return(refLists[0]);
-	}
-	var mapList = [];
-	for (var i=1; i<refLists.length; i++) {
-		var map = arrayToMap(refLists[i]);
-		mapList.push(map);
-	}
-	var result = [];
-	var firstList = refLists[0];
-	for (var j=0; j<firstList.length; j++) {
-		var reference = firstList[j];
-		if (presentInAllMaps(mapList, reference)) {
-			result.push(reference);
+	function intersection(refLists) {
+		if (refLists.length === 0) {
+			return([]);
 		}
+		if (refLists.length === 1) {
+			return(refLists[0]);
+		}
+		var mapList = [];
+		for (var i=1; i<refLists.length; i++) {
+			var map = arrayToMap(refLists[i]);
+			mapList.push(map);
+		}
+		var result = [];
+		var firstList = refLists[0];
+		for (var j=0; j<firstList.length; j++) {
+			var reference = firstList[j];
+			if (presentInAllMaps(mapList, reference)) {
+				result.push(reference);
+			}
+		}
+		return(result);
 	}
-	return(result);
-
 	function arrayToMap(array) {
 		var map = {};
 		for (var i=0; i<array.length; i++) {
@@ -1467,8 +1462,6 @@ Concordance.prototype.intersection = function(refLists) {
 * or a concordance search.  It also responds to function requests to go back 
 * in history, forward in history, or return to the last event.
 */
-//var MAX_HISTORY = 20;
-
 function History(collection) {
 	this.collection = collection;
 	this.items = [];
@@ -1481,19 +1474,13 @@ History.prototype.fill = function(callback) {
 	this.items.splice(0);
 	this.collection.selectAll(function(results) {
 		if (results instanceof IOError) {
-			callback();
+			callback(results);
 		} else {
-			for (var i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);
-				var ref = new Reference(row.book, row.chapter, row.verse);
-				var hist = new HistoryItem(ref.nodeId, row.source, row.search, row.timestamp);
-				console.log('HISTORY', hist, hist.timestamp.toISOString());
-				that.items.push(hist);
-			}
+			that.items = results;
 			that.isFilled = true;
 			that.isViewCurrent = false;
+			callback();
 		}
-		callback();
 	});
 };
 History.prototype.addEvent = function(event) {
@@ -1509,10 +1496,7 @@ History.prototype.addEvent = function(event) {
 	this.isViewCurrent = false;
 	
 	// I might want a timeout to postpone this until after animation is finished.
-	var timestampStr = item.timestamp.toISOString();
-	var ref = new Reference(item.nodeId);
-	var values = [ timestampStr, ref.book, ref.chapter, ref.verse, item.source, item.search ];
-	this.collection.replace(values, function(err) {
+	this.collection.replace(item, function(err) {
 		if (err instanceof IOError) {
 			console.log('replace error', JSON.stringify(err));
 		}
@@ -1534,7 +1518,7 @@ History.prototype.last = function() {
 	return(this.item(this.items.length -1));
 };
 History.prototype.item = function(index) {
-	return((index > -1 && index < this.items.length) ? this.items[index] : 'JHN:1');
+	return((index > -1 && index < this.items.length) ? this.items[index] : new HistoryItem('JHN:1'));
 };
 History.prototype.lastConcordanceSearch = function() {
 	for (var i=this.items.length -1; i>=0; i--) {
@@ -1741,14 +1725,17 @@ CodexAdapter.prototype.load = function(array, callback) {
 CodexAdapter.prototype.getChapter = function(values, callback) {
 	var that = this;
 	var statement = 'select xml from codex where book=? and chapter=?';
-	this.database.select(statement, values, function(results) {
+	var array = [ values.book, values.chapter ];
+	console.log('CodexAdapter.getChapter', statement, array);
+	this.database.select(statement, array, function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
 			callback(results);
 		} else if (results.rows.length === 0) {
 			callback();
 		} else {
-            callback(results.rows.item(0));
+			var row = results.rows.item(0);
+			callback(row.xml);
         }
 	});
 };/**
@@ -1794,9 +1781,11 @@ ConcordanceAdapter.prototype.load = function(array, callback) {
 		}
 	});
 };
-ConcordanceAdapter.prototype.select = function(values, callback) {
-	var questMarks = [ values.length ];
-	for (var i=0; i<questMarks.length; i++) {
+ConcordanceAdapter.prototype.select = function(words, callback) {
+	var values = [ words.length ];
+	var questMarks = [ words.length ];
+	for (var i=0; i<words.length; i++) {
+		values[i] = words[i].toLocaleLowerCase();
 		questMarks[i] = '?';
 	}
 	var statement = 'select refList from concordance where word in(' + questMarks.join(',') + ')';
@@ -1805,7 +1794,15 @@ ConcordanceAdapter.prototype.select = function(values, callback) {
 			console.log('found Error', results);
 			callback(results);
 		} else {
-            callback(results);
+			var refLists = [];
+			for (i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				if (row && row.refList) { // ignore words that have no ref list
+					var array = row.refList.split(',');
+					refLists.push(array);
+				}
+			}
+            callback(refLists);
         }
 	});
 };/**
@@ -1864,7 +1861,14 @@ TableContentsAdapter.prototype.selectAll = function(callback) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else {
-			callback(results);
+			var array = [];
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var tocBook = new TOCBook(row.code, row.heading, row.title, row.name, row.abbrev, 
+					row.lastChapter, row.priorBook, row.nextBook);
+				array.push(tocBook);
+			}
+			callback(array);
 		}
 	});
 };/**
@@ -1995,19 +1999,29 @@ HistoryAdapter.prototype.selectAll = function(callback) {
 		'from history order by timestamp desc limit ?';
 	this.database.select(statement, [ MAX_HISTORY ], function(results) {
 		if (results instanceof IOError) {
-			callback();
-		} else {
 			callback(results);
+		} else {
+			var array = [];
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var ref = new Reference(row.book, row.chapter, row.verse);
+				var hist = new HistoryItem(ref.nodeId, row.source, row.search, row.timestamp);
+				array.push(hist);
+			}
+			callback(array);
 		}
 	});
 };
-HistoryAdapter.prototype.replace = function(values, callback) {
+HistoryAdapter.prototype.replace = function(item, callback) {
+	var timestampStr = item.timestamp.toISOString();
+	var ref = new Reference(item.nodeId);
+	var values = [ timestampStr, ref.book, ref.chapter, ref.verse, item.source, item.search ];
 	var statement = 'replace into history(timestamp, book, chapter, verse, source, search) ' +
 		'values (?,?,?,?,?,?)';
 	this.database.executeDML(statement, values, function(count) {
 		if (count instanceof IOError) {
 			console.log('replace error', JSON.stringify(count));
-			callback();
+			callback(results);
 		} else {
 			callback(count);
 		}
@@ -2039,6 +2053,7 @@ QuestionsAdapter.prototype.create = function(callback) {
 		'book text not null, ' +
 		'chapter integer not null, ' +
 		'verse integer null, ' +
+		'displayRef text null, ' +
 		'question text not null, ' +
 		'instructor text null, ' +
 		'answerDateTime text null, ' +
@@ -2053,38 +2068,47 @@ QuestionsAdapter.prototype.create = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select askedDateTime, book, chapter, verse, question, instructor, answerDateTime, answer ' +
+	var statement = 'select book, chapter, verse, displayRef, question, askedDateTime, instructor, answerDateTime, answer ' +
 		'from questions order by askedDateTime';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('select questions failure ' + JSON.stringify(results));
-			callback();
-		} else {
 			callback(results);
+		} else {
+			var array = []
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var ques = new QuestionItem(row.book, row.chapter, row.verse, row.displayRef, row.question, 
+					row.askedDt, row.instructor, row.answerDt, row.answer);
+				array.push(ques);
+			}
+			callback(array);
 		}
 	});
 };
-QuestionsAdapter.prototype.replace = function(values, callback) {
-var statement = 'insert into questions(askedDateTime, book, chapter, verse, question) ' +
+QuestionsAdapter.prototype.replace = function(item, callback) {
+	var values = [ item.book, item.chapter, item.verse, item.displayRef, item.question, item.askedDateTime.toISOString() ];
+	var statement = 'replace into questions(book, chapter, verse, displayRef, question, askedDateTime) ' +
 		'values (?,?,?,?,?)';
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
 			callback(results);
 		} else {
-			callback();
+			callback(results.rowsAffected);
 		}
 	});
 };
-QuestionsAdapter.prototype.update = function(values, callback) {
+QuestionsAdapter.prototype.update = function(item, callback) {
+	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answer, item.askedDateTime.toISOString() ];
 	var statement = 'update questions set instructor = ?, answerDateTime = ?, answer = ?' +
 		'where askedDateTime = ?';
 	this.database.update(statement, values, function(results) {
-		if (err instanceof IOError) {
+		if (results instanceof IOError) {
 			console.log('Error on update');
-			callback(err);
+			callback(results);
 		} else {
-			callback();
+			callback(results.rowsAffected);
 		}
 	});
 };

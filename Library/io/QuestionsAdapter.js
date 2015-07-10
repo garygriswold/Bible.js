@@ -22,6 +22,7 @@ QuestionsAdapter.prototype.create = function(callback) {
 		'book text not null, ' +
 		'chapter integer not null, ' +
 		'verse integer null, ' +
+		'displayRef text null, ' +
 		'question text not null, ' +
 		'instructor text null, ' +
 		'answerDateTime text null, ' +
@@ -36,38 +37,47 @@ QuestionsAdapter.prototype.create = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select askedDateTime, book, chapter, verse, question, instructor, answerDateTime, answer ' +
+	var statement = 'select book, chapter, verse, displayRef, question, askedDateTime, instructor, answerDateTime, answer ' +
 		'from questions order by askedDateTime';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('select questions failure ' + JSON.stringify(results));
-			callback();
-		} else {
 			callback(results);
+		} else {
+			var array = []
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var ques = new QuestionItem(row.book, row.chapter, row.verse, row.displayRef, row.question, 
+					row.askedDt, row.instructor, row.answerDt, row.answer);
+				array.push(ques);
+			}
+			callback(array);
 		}
 	});
 };
-QuestionsAdapter.prototype.replace = function(values, callback) {
-var statement = 'replace into questions(askedDateTime, book, chapter, verse, question) ' +
-		'values (?,?,?,?,?)';
+QuestionsAdapter.prototype.replace = function(item, callback) {
+	var statement = 'replace into questions(book, chapter, verse, displayRef, question, askedDateTime) ' +
+		'values (?,?,?,?,?,?)';
+	var values = [ item.book, item.chapter, item.verse, item.displayRef, item.question, item.askedDateTime.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
 			callback(results);
 		} else {
-			callback(results);
+			callback(results.rowsAffected);
 		}
 	});
 };
-QuestionsAdapter.prototype.update = function(values, callback) {
+QuestionsAdapter.prototype.update = function(item, callback) {
 	var statement = 'update questions set instructor = ?, answerDateTime = ?, answer = ?' +
 		'where askedDateTime = ?';
-	this.database.update(statement, values, function(results) {
-		if (err instanceof IOError) {
+	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answer, item.askedDateTime.toISOString() ];
+	this.database.executeDML(statement, values, function(results) {
+		if (results instanceof IOError) {
 			console.log('Error on update');
-			callback(err);
+			callback(results);
 		} else {
-			callback();
+			callback(results.rowsAffected);
 		}
 	});
 };

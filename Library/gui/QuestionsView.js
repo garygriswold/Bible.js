@@ -22,11 +22,13 @@ QuestionsView.prototype.showView = function() {
 		if (results instanceof IOError) {
 			console.log('QuestionView.showView');
 		} else {
-			if (results.rows.length === 0) {
+			if (results.length === 0) {
 				that.questions.createActs8Question(function(item) {
 					that.questions.items.push(item);
 					that.questions.insert(item, function(err) {
-						presentView();
+						that.questions.update(item, function(err) {
+							presentView();
+						});
 					});
 				});
 			} else {
@@ -77,7 +79,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 
 		var reference = document.createElement('p');
 		reference.setAttribute('class', 'queRef');
-		reference.textContent = item.reference;
+		reference.textContent = item.displayRef;
 		line1.appendChild(reference);
 
 		var questDate = document.createElement('p');
@@ -87,7 +89,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 
 		var question = document.createElement('p');
 		question.setAttribute('class', 'queText');
-		question.textContent = item.questionText;
+		question.textContent = item.question;
 		aQuestion.appendChild(question);
 
 		if (i === numQuestions -1) {
@@ -98,7 +100,6 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	}
 
 	function displayAnswerOnRequest(event) {
-		var selectedId = this.id;
 		var selected = document.getElementById(this.id);
 		selected.removeEventListener('click', displayAnswerOnRequest);
 		displayAnswer(selected);
@@ -118,17 +119,17 @@ QuestionsView.prototype.buildQuestionsView = function() {
 
 		var instructor = document.createElement('p');
 		instructor.setAttribute('class', 'ansInstructor');
-		instructor.textContent = item.instructorName;
+		instructor.textContent = item.instructor;
 		answerTop.appendChild(instructor);
 
 		var ansDate = document.createElement('p');
 		ansDate.setAttribute('class', 'ansDate');
-		ansDate.textContent = formatter.localDatetime(item.answeredDateTime);
+		ansDate.textContent = formatter.localDatetime(item.answerDateTime);
 		answerTop.appendChild(ansDate);
 
 		var answer = document.createElement('p');
 		answer.setAttribute('class', 'ansText');
-		answer.textContent = item.answerText;
+		answer.textContent = item.answer;
 		selected.appendChild(answer);
 	}
 
@@ -158,9 +159,9 @@ QuestionsView.prototype.buildQuestionsView = function() {
 			console.log('submit button clicked');
 
 			var item = new QuestionItem();
-			item.nodeId = '';// where does this come from?
-			item.reference = that.referenceInput.textContent;
-			item.questionText = that.questionInput.text;
+			// set book, chapter, verse by position of page
+			item.displayRef = that.referenceInput.textContent;
+			item.question = that.questionInput.text;
 
 			that.questions.addItem(item, function(result) {
 				console.log('file is written to disk and server');

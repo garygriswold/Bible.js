@@ -389,11 +389,13 @@ QuestionsView.prototype.showView = function() {
 		if (results instanceof IOError) {
 			console.log('QuestionView.showView');
 		} else {
-			if (results.rows.length === 0) {
+			if (results.length === 0) {
 				that.questions.createActs8Question(function(item) {
 					that.questions.items.push(item);
 					that.questions.insert(item, function(err) {
-						presentView();
+						that.questions.update(item, function(err) {
+							presentView();
+						});
 					});
 				});
 			} else {
@@ -444,7 +446,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 
 		var reference = document.createElement('p');
 		reference.setAttribute('class', 'queRef');
-		reference.textContent = item.reference;
+		reference.textContent = item.displayRef;
 		line1.appendChild(reference);
 
 		var questDate = document.createElement('p');
@@ -454,9 +456,10 @@ QuestionsView.prototype.buildQuestionsView = function() {
 
 		var question = document.createElement('p');
 		question.setAttribute('class', 'queText');
-		question.textContent = item.questionText;
+		question.textContent = item.question;
 		aQuestion.appendChild(question);
 
+		console.log('display ***', i, numQuestions, numQuestions -1);
 		if (i === numQuestions -1) {
 			displayAnswer(aQuestion);
 		} else {
@@ -465,15 +468,19 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	}
 
 	function displayAnswerOnRequest(event) {
-		var selectedId = this.id;
+		//var selectedId = this.id;
+		console.log('clicked on id', this.id);
 		var selected = document.getElementById(this.id);
 		selected.removeEventListener('click', displayAnswerOnRequest);
 		displayAnswer(selected);
 	}
 
 	function displayAnswer(selected) {
+		console.log('inside display answr');
 		var idNum = selected.id.substr(3);
+		console.log('find idNum', idNum);
 		var item = that.questions.find(idNum);
+		console.log('found item', JSON.stringify(item));
 
 		var line = document.createElement('hr');
 		line.setAttribute('class', 'ansLine');
@@ -485,17 +492,17 @@ QuestionsView.prototype.buildQuestionsView = function() {
 
 		var instructor = document.createElement('p');
 		instructor.setAttribute('class', 'ansInstructor');
-		instructor.textContent = item.instructorName;
+		instructor.textContent = item.instructor;
 		answerTop.appendChild(instructor);
 
 		var ansDate = document.createElement('p');
 		ansDate.setAttribute('class', 'ansDate');
-		ansDate.textContent = formatter.localDatetime(item.answeredDateTime);
+		ansDate.textContent = formatter.localDatetime(item.answerDateTime);
 		answerTop.appendChild(ansDate);
 
 		var answer = document.createElement('p');
 		answer.setAttribute('class', 'ansText');
-		answer.textContent = item.answerText;
+		answer.textContent = item.answer;
 		selected.appendChild(answer);
 	}
 
@@ -526,7 +533,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 
 			var item = new QuestionItem();
 			item.nodeId = '';// where does this come from?
-			item.reference = that.referenceInput.textContent;
+			item.displayRef = that.referenceInput.textContent;
 			item.questionText = that.questionInput.text;
 
 			that.questions.addItem(item, function(result) {
@@ -1594,6 +1601,7 @@ QuestionsAdapter.prototype.create = function(callback) {
 		'book text not null, ' +
 		'chapter integer not null, ' +
 		'verse integer null, ' +
+		'displayRef text null, ' +
 		'question text not null, ' +
 		'instructor text null, ' +
 		'answerDateTime text null, ' +
@@ -1608,38 +1616,47 @@ QuestionsAdapter.prototype.create = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select askedDateTime, book, chapter, verse, question, instructor, answerDateTime, answer ' +
+	var statement = 'select book, chapter, verse, displayRef, question, askedDateTime, instructor, answerDateTime, answer ' +
 		'from questions order by askedDateTime';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('select questions failure ' + JSON.stringify(results));
-			callback();
-		} else {
 			callback(results);
+		} else {
+			var array = []
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var ques = new QuestionItem(row.book, row.chapter, row.verse, row.displayRef, row.question, 
+					row.askedDt, row.instructor, row.answerDt, row.answer);
+				array.push(ques);
+			}
+			callback(array);
 		}
 	});
 };
-QuestionsAdapter.prototype.replace = function(values, callback) {
-var statement = 'replace into questions(askedDateTime, book, chapter, verse, question) ' +
-		'values (?,?,?,?,?)';
+QuestionsAdapter.prototype.replace = function(item, callback) {
+	var statement = 'replace into questions(book, chapter, verse, displayRef, question, askedDateTime) ' +
+		'values (?,?,?,?,?,?)';
+	var values = [ item.book, item.chapter, item.verse, item.displayRef, item.question, item.askedDateTime.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
 			callback(results);
 		} else {
-			callback(results);
+			callback(results.rowsAffected);
 		}
 	});
 };
-QuestionsAdapter.prototype.update = function(values, callback) {
+QuestionsAdapter.prototype.update = function(item, callback) {
 	var statement = 'update questions set instructor = ?, answerDateTime = ?, answer = ?' +
 		'where askedDateTime = ?';
-	this.database.update(statement, values, function(results) {
-		if (err instanceof IOError) {
+	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answer, item.askedDateTime.toISOString() ];
+	this.database.executeDML(statement, values, function(results) {
+		if (results instanceof IOError) {
 			console.log('Error on update');
-			callback(err);
+			callback(results);
 		} else {
-			callback();
+			callback(results.rowsAffected);
 		}
 	});
 };
@@ -2014,14 +2031,16 @@ Lookup.prototype.find = function(search) {
 /**
 * This class contains the contents of one user question and one instructor response.
 */
-function QuestionItem(reference, nodeId, question, askedDt, instructor, answerDt, answer) {
-	this.reference = reference;
-	this.nodeId = nodeId;
-	this.questionText = question;
+function QuestionItem(book, chapter, verse, displayRef, question, askedDt, instructor, answerDt, answer) {
+	this.book = book;
+	this.chapter = chapter;
+	this.verse = verse;
+	this.displayRef = displayRef;
+	this.question = question;
 	this.askedDateTime = (askedDt) ? new Date(askedDt) : new Date();
-	this.instructorName = instructor;
-	this.answeredDateTime = (answerDt) ? new Date(answerDt) : null;
-	this.answerText = answer;
+	this.instructor = instructor;
+	this.answerDateTime = (answerDt) ? new Date(answerDt) : null;
+	this.answer = answer;
 	Object.seal(this);
 }/**
 * This class contains the list of questions and answers for this student
@@ -2053,37 +2072,35 @@ Questions.prototype.fill = function(callback) {
 	this.collection.selectAll(function(results) {
 		if (results instanceof IOError) {
 			console.log('select questions failure ' + JSON.stringify(results));
-			callback();
+			callback(results);
 		} else {
-			for (var i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);
-				var ref = new Reference(row.book, row.chapter, row.verse);
-				var ques = new QuestionItem(ref, ref.nodeId, row.question, row.askedDt, row.instructor, row.answerDt, row.answer);
-				that.items.push(ques);
-			}
+			that.items = results;
 			callback(results);// needed to determine if zero length result
 		}
 	});
 };
 Questions.prototype.createActs8Question = function(callback) {
 	var acts8 = new QuestionItem();
-	acts8.nodeId = 'ACT:8:30';
+	acts8.book = 'ACT';
+	acts8.chapter = 8;
+	acts8.verse = 30;
 	acts8.askedDateTime = new Date();
 	var refActs830 = new Reference('ACT:8:30');
 	var refActs831 = new Reference('ACT:8:31');
 	var refActs835 = new Reference('ACT:8:35');
-	acts8.reference = this.tableContents.toString(refActs830);
+	acts8.displayRef = this.tableContents.toString(refActs830);
 	var verseActs830 = new VerseAccessor(this.bibleCache, refActs830);
 	var verseActs831 = new VerseAccessor(this.bibleCache, refActs831);
 	var verseActs835 = new VerseAccessor(this.bibleCache, refActs835);
 	verseActs830.getVerse(function(textActs830) {
-		acts8.questionText = textActs830;
+		acts8.question = textActs830;
 		verseActs831.getVerse(function(textActs831) {
-			acts8.questionText += textActs831;
+			acts8.question += textActs831;
 			verseActs835.getVerse(function(textActs835) {
-				acts8.answerText = textActs835;
-				acts8.answeredDateTime = new Date();
-				acts8.instructorName = '';
+				console.log('this is the answer', textActs835);
+				acts8.answer = textActs835;
+				acts8.answerDateTime = new Date();
+				acts8.instructor = '';
 				callback(acts8);
 			});
 		});
@@ -2095,38 +2112,37 @@ Questions.prototype.checkServer = function(callback) {
 	if (lastItem.answeredDateTime === null) {
 		// send request to the server.
 
-		// if there is an unanswered question, the last item is updated
-		that.update(function(err) {
+		
+		if (lastItem.answeredDateTime) { // if updated by server
+			that.update(lastItem, function(err) {
+				callback();
+			});
+		} else {
 			callback();
-		});
+		}
 	}
 	else {
-		callback(null);
+		callback();
 	}
 };
 Questions.prototype.insert = function(item, callback) {
-	var ref = new Reference(item.nodeId);
-	var values = [ item.askedDateTime.toISOString(), ref.book, ref.chapter, ref.verse, item.questionText ];
-	this.collection.replace(values, function(results) {
+	this.collection.replace(item, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
-			callback(results)
-		} else if (results.rowsAffected === 0) {
-			console.log('nothing inserted');
-			callback(new IOError(1, 'No rows were inserted in questions'));
+			callback(results);
 		} else {
 			callback();
 		}
 	});
 };
-Questions.prototype.update = function(callback) {
-	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answerText, item.askedDateTime.toISOString() ];
-	this.collection.update(values, function(results) {
-		if (err instanceof IOError) {
-			console.log('Error on update');
-			callback(err);
+Questions.prototype.update = function(item, callback) {
+//	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answerText, item.askedDateTime.toISOString() ];
+	this.collection.update(item, function(results) {
+		if (results instanceof IOError) {
+			console.log('Error on update', results);
+			callback(results);
 		} else {
-			callback();
+			callback(results);
 		}
 	});
 };
@@ -2231,6 +2247,7 @@ TOC.prototype.size = function() {
 	return(this.bookList.length);
 };
 TOC.prototype.toString = function(reference) {
+	console.log('BOOK', reference.book, reference.nodId);
 	return(this.find(reference.book).name + ' ' + reference.chapter + ':' + reference.verse);
 };
 TOC.prototype.toJSON = function() {
@@ -2735,16 +2752,26 @@ function DateTimeFormatter() {
 	Object.freeze(this);
 }
 DateTimeFormatter.prototype.localDate = function(date) {
-	var options = { year: 'numeric', month: 'long', day: 'numeric' };
-	return(date.toLocaleString('en-US', options));
+	if (date) {
+		var options = { year: 'numeric', month: 'long', day: 'numeric' };
+		return(date.toLocaleString('en-US', options));
+	} else {
+		return('');
+	}
 };
 DateTimeFormatter.prototype.localTime = function(date) {
-	var options = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
-	return(date.toLocaleString('en-US', options));
+	if (date) {
+		var options = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
+		return(date.toLocaleString('en-US', options));
+	} else {
+		return('');
+	}
 };
 DateTimeFormatter.prototype.localDatetime = function(date) {
-	var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-	return(date.toLocaleString('en-US', options));
+	if (date) {
+		var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+		return(date.toLocaleString('en-US', options));
+	}
 };
 /**
 * This simple class is used to measure performance of the App.
