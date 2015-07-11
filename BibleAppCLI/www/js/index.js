@@ -64,7 +64,8 @@ var app = {
         //        tx.executeSql('CREATE TABLE docids (id, name)');
         //    }, error);
         //});
-        var db = window.openDatabase('local_name', "1.0", 'disp_name', 5*1024*1024);
+        
+        var db = window.openDatabase('WEB', "1.0", 'WEB', 20*1024*1024);
         console.log('past open database');
         console.log('db', JSON.stringify(db));
         db.transaction(onTranSuccess, onTranError);//, onTranVoid);
@@ -95,6 +96,26 @@ var app = {
             console.log('have tran void');
             console.log('error', JSON.stringify(err));
         }
+        var fileTransfer = new FileTransfer();
+        var uri = encodeURI('http://www.google.com');
+        var fileURL = 'cdvfile://localhost/cordova.file.dataDirectory/sample8.txt';
+
+        fileTransfer.download(
+            uri,
+            fileURL,
+            function(entry) {
+                console.log("download complete: " + entry.toURL());
+            },
+            function(error) {
+                console.log("download error source " + error.source);
+                console.log("download error target " + error.target);
+                console.log("upload error code" + error.code);
+            },
+            false,
+                {
+                    headers: {"Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA==" }
+                }
+        );
     }
 }
 

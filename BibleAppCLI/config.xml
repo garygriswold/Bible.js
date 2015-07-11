@@ -8,7 +8,8 @@
         Apache Cordova Team
     </author>
     <content src="index.html" />
-    <preference name="BackupWebStorage" value="local" /> <!-- added to prevent backup to icloud -->
+    <preference name="BackupWebStorage" value="local" /> <!-- prevent backup to icloud -->
+    <preference name="iosPersistentFileLocation" value="Library" /> <!-- store in library instead of documents ios -->
     <plugin name="cordova-plugin-whitelist" version="1" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
