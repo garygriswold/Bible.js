@@ -22,7 +22,6 @@ function AppViewController(versionCode) {
 	this.database = new DeviceDatabase(versionCode, 'nameForVersion');
 }
 AppViewController.prototype.begin = function(develop) {
-	console.log('BEGIN APP CONTROOLLER');
 	this.tableContents = new TOC(this.database.tableContents);
 	this.bibleCache = new BibleCache(this.database.codex);
 	this.concordance = new Concordance(this.database.concordance);
@@ -33,20 +32,14 @@ AppViewController.prototype.begin = function(develop) {
 		console.log('loaded history', that.history.size());
 		
 		that.tableContentsView = new TableContentsView(that.tableContents);
-		console.log('after new TableContentsView');
 		that.lookup = new Lookup(that.tableContents);
-		console.log('after lookup');
 		that.statusBar = new StatusBarView(88, that.tableContents);
-		console.log('after statusbar');
 		that.statusBar.showView();
-		console.log('after showView');
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
-		console.log('after searchview');
 		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
 		that.historyView = new HistoryView(that.history, that.tableContents);
 		that.questionsView = new QuestionsView(that.database.questions, that.bibleCache, that.tableContents);
 		Object.freeze(that);
-		console.log('FREEZE THAT');
 
 		switch(develop) {
 		case 'TableContentsView':
@@ -157,7 +150,6 @@ CodexView.prototype.hideView = function() {
 	}
 };
 CodexView.prototype.showView = function(nodeId) {
-	console.log('INSIDE CODEX.showVIew', nodeId);
 	this.chapterQueue.splice(0);
 	var firstChapter = new Reference(nodeId);
 	firstChapter = this.tableContents.ensureChapter(firstChapter);
@@ -199,7 +191,6 @@ CodexView.prototype.showView = function(nodeId) {
 				that.currentNodeId = ref.nodeId;
 				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));//expensive solution
 			}
-			//if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.outerHeight) {
 			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.innerHeight) {
 				that.addChapterInProgress = true;
 				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
@@ -215,7 +206,6 @@ CodexView.prototype.showView = function(nodeId) {
 					that.addChapterInProgress = false;
 				}
 			}
-			//else if (window.scrollY <= window.outerHeight) {
 			else if (window.scrollY <= window.innerHeight) {	
 				that.addChapterInProgress = true;
 				var saveY = window.scrollY;
@@ -725,39 +715,28 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookRef) {
 * user interactions on the status bar.
 */
 function StatusBarView(hite, tableContents) {
-	console.log('inside status bar');
 	this.hite = hite;
 	this.tableContents = tableContents;
-	//this.titleWidth = window.outerWidth - hite * 3.5;
 	this.titleWidth = window.innerWidth - hite * 3.5;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
-	console.log('mid status bar const');
 	this.currentReference = null;
 	this.searchField = null;
 	this.rootNode = document.getElementById('statusRoot');
 	this.labelCell = document.getElementById('labelCell');
 	Object.seal(this);
-	console.log('end status bar const');
 }
 StatusBarView.prototype.showView = function() {
 	var that = this;
-	console.log('before setup');
 	setupBackground(this.hite);
-	console.log('setup backbground');
 	setupTocButton(this.hite, '#F7F7BB');
-	console.log('setup toc');
 	setupHeading(this.hite);
-	console.log('setup heading');
 	setupQuestionsButton(this.hite, '#F7F7BB');
-	console.log('setup questions');
 	setupSearchButton(this.hite, '#F7F7BB');
-	console.log('set up search');
 
 	function setupBackground(hite) {
     	var canvas = document.createElement('canvas');
     	canvas.setAttribute('height', hite + 7);
-    	//var maxSize = (window.outHeight > window.outerWidth) ? window.outerHeight : window.outerWidth;
     	var maxSize = (window.innerHeight > window.innerWidth) ? window.innerHeight : window.innerWidth;
     	canvas.setAttribute('width', maxSize);
     	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
@@ -766,18 +745,14 @@ StatusBarView.prototype.showView = function() {
 
       	// create radial gradient
       	var vMidpoint = hite / 2;
-      	console.log('setup background mid', vMidpoint, window.outerHeight, window.innerHeight, window.outerWidth);
-      	//var gradient = graphics.createRadialGradient(238, vMidpoint, 10, 238, vMidpoint, window.outerHeight - hite);
       	var gradient = graphics.createRadialGradient(238, vMidpoint, 10, 238, vMidpoint, window.innerHeight - hite);
       	// light blue
-      	console.log('setup after gradient');
       	gradient.addColorStop(0, '#8ED6FF');
       	// dark blue
       	gradient.addColorStop(1, '#004CB3');
 
       	graphics.fillStyle = gradient;
       	graphics.fill();
-      	console.log('set up backgroun near end');
       	that.rootNode.appendChild(canvas);
 	}
 	function setupTocButton(hite, color) {
