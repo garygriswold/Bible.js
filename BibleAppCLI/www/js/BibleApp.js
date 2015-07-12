@@ -2792,28 +2792,6 @@ DateTimeFormatter.prototype.localDatetime = function(date) {
 	}
 };
 /**
-* This simple class is used to measure performance of the App.
-* It is not part of the production system, but is used during development
-* to instrument the code.
-*
-* This uses performance.now(), which is a node function and does not work in Cordova.
-*/
-function Performance(message) {
-	this.startTime = performance.now();
-	var memory = process.memoryUsage();
-	this.heapUsed = memory.heapUsed;
-	console.log(message, 'heapUsed:', this.heapUsed, 'heapTotal:', memory.heapTotal);
-}
-Performance.prototype.duration = function(message) {
-	var now = performance.now();
-	var duration = now - this.startTime;
-	var heap = process.memoryUsage().heapUsed;
-	var memChanged = heap - this.heapUsed;
-	console.log(message, duration + 'ms', memChanged/1024 + 'KB');
-	this.startTime = now;
-	this.heapUsed = heap;
-};
-/**
 * This class reads USX files and creates an equivalent object tree
 * elements = [usx, book, chapter, para, verse, note, char];
 * paraStyle = [b, d, cl, cp, h, li, p, pc, q, q2, mt, mt2, mt3, mte, toc1, toc2, toc3, ide, ip, ili, ili2, is, m, mi, ms, nb, pi, s, sp];

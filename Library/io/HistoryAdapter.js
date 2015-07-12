@@ -40,8 +40,10 @@ HistoryAdapter.prototype.selectAll = function(callback) {
 		'from history order by timestamp desc limit ?';
 	this.database.select(statement, [ MAX_HISTORY ], function(results) {
 		if (results instanceof IOError) {
+			console.log('HistoryAdapter.selectAll Error', JSON.stringify(results));
 			callback(results);
 		} else {
+			console.log('HistoryAdapter.selectAll Success, rows=', results.rows.length);
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);

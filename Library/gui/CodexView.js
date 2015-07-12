@@ -62,7 +62,7 @@ CodexView.prototype.showView = function(nodeId) {
 				that.currentNodeId = ref.nodeId;
 				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));//expensive solution
 			}
-			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.outerHeight) {
+			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.innerHeight) {
 				that.addChapterInProgress = true;
 				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
 				var nextChapter = that.tableContents.nextChapter(lastChapter);
@@ -77,7 +77,7 @@ CodexView.prototype.showView = function(nodeId) {
 					that.addChapterInProgress = false;
 				}
 			}
-			else if (window.scrollY <= window.outerHeight) {
+			else if (window.scrollY <= window.innerHeight) {	
 				that.addChapterInProgress = true;
 				var saveY = window.scrollY;
 				var firstChapter = that.chapterQueue[0];

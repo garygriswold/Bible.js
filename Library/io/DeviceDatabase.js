@@ -18,13 +18,11 @@ function DeviceDatabase(code, name) {
 	Object.freeze(this);
 }
 DeviceDatabase.prototype.select = function(statement, values, callback) {
-    this.database.readTransaction(onTranStart, onTranError);
-
-    function onTranStart(tx) {
+    this.database.readTransaction(function(tx) {
         console.log(statement, values);
-        tx.executeSql(statement, values, onSelectSuccess);
-    }
-    function onTranError(err) {
+        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
+    });
+    function onSelectError(tx, err) {
         console.log('select tran error', JSON.stringify(err));
         callback(new IOError(err));
     }

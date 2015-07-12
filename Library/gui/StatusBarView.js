@@ -2,10 +2,10 @@
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
-function StatusBar(hite, tableContents) {
+function StatusBarView(hite, tableContents) {
 	this.hite = hite;
 	this.tableContents = tableContents;
-	this.titleWidth = window.outerWidth - hite * 3.5;
+	this.titleWidth = window.innerWidth - hite * 3.5;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.currentReference = null;
@@ -14,9 +14,8 @@ function StatusBar(hite, tableContents) {
 	this.labelCell = document.getElementById('labelCell');
 	Object.seal(this);
 }
-StatusBar.prototype.showView = function() {
+StatusBarView.prototype.showView = function() {
 	var that = this;
-
 	setupBackground(this.hite);
 	setupTocButton(this.hite, '#F7F7BB');
 	setupHeading(this.hite);
@@ -26,7 +25,7 @@ StatusBar.prototype.showView = function() {
 	function setupBackground(hite) {
     	var canvas = document.createElement('canvas');
     	canvas.setAttribute('height', hite + 7);
-    	var maxSize = (window.outHeight > window.outerWidth) ? window.outerHeight : window.outerWidth;
+    	var maxSize = (window.innerHeight > window.innerWidth) ? window.innerHeight : window.innerWidth;
     	canvas.setAttribute('width', maxSize);
     	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
       	var graphics = canvas.getContext('2d');
@@ -34,8 +33,7 @@ StatusBar.prototype.showView = function() {
 
       	// create radial gradient
       	var vMidpoint = hite / 2;
-
-      	var gradient = graphics.createRadialGradient(238, vMidpoint, 10, 238, vMidpoint, window.outerHeight - hite);
+      	var gradient = graphics.createRadialGradient(238, vMidpoint, 10, 238, vMidpoint, window.innerHeight - hite);
       	// light blue
       	gradient.addColorStop(0, '#8ED6FF');
       	// dark blue
@@ -101,14 +99,14 @@ StatusBar.prototype.showView = function() {
 		});
 	}
 };
-StatusBar.prototype.setTitle = function(reference) {
+StatusBarView.prototype.setTitle = function(reference) {
 	this.currentReference = reference;
 	var book = this.tableContents.find(reference.book);
 	var text = book.name + ' ' + ((reference.chapter > 0) ? reference.chapter : 1);
 	this.titleGraphics.clearRect(0, 0, this.titleWidth, this.hite);
 	this.titleGraphics.fillText(text, this.titleWidth / 2, this.hite / 2, this.titleWidth);
 };
-StatusBar.prototype.showSearchField = function(query) {
+StatusBarView.prototype.showSearchField = function(query) {
 	if (! this.searchField) {
 		this.searchField = document.createElement('input');
 		this.searchField.setAttribute('type', 'text');
@@ -127,10 +125,10 @@ StatusBar.prototype.showSearchField = function(query) {
 	}
 	this.changeLabelCell(this.searchField);
 };
-StatusBar.prototype.showTitleField = function() {
+StatusBarView.prototype.showTitleField = function() {
 	this.changeLabelCell(this.titleCanvas);
 };
-StatusBar.prototype.changeLabelCell = function(node) {
+StatusBarView.prototype.changeLabelCell = function(node) {
 	for (var i=this.labelCell.children.length -1; i>=0; i--) {
 		this.labelCell.removeChild(this.labelCell.children[i]);
 	}

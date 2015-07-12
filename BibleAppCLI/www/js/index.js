@@ -45,26 +45,15 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
+        console.log('DEVICE IS READY **');
+        var appView = new AppViewController('WEB');
+        //appView.begin('TableContentsView');
+        //appView.begin('SearchView');
+        //appView.begin('QuestionsView')
+        //appView.begin('HistoryView');
+        appView.begin();
 
-//        deviceFileSystem.getPersistent(function(fs) {
-//            console.log('success persistent FS', fs.name, fs.root.isFile, fs.root.isDirectory, fs.name.fullPath, fs.root.nativeURL);
-//            deviceFileSystem.getPersistent(function(fs) {
-//                console.log('2success persistent FS', fs.name, fs.root.isFile, fs.root.isDirectory, fs.name.fullPath, fs.root.nativeURL);
-//            });
-//        });
-//        var writer = new LocalFileWriter('document');
-//        writer.writeTextFile('testfile.txt', 'Hello World', function(result) {
-//            console.log('FileWriterResult', JSON.stringify(result));
-//        });
-        console.log('before open database');
-        //openDatabase('documents', '1.0', 'Offline document storage', 5*1024*1024, function (db) {
-        //    console.log('database is open', (db === null));
-        //    db.changeVersion('', '1.0', function (tx) {
-        //        console.log('dhange version');
-        //        tx.executeSql('CREATE TABLE docids (id, name)');
-        //    }, error);
-        //});
-        
+        /*
         var db = window.openDatabase('WEB', "1.0", 'WEB', 20*1024*1024);
         console.log('past open database');
         console.log('db', JSON.stringify(db));
@@ -116,6 +105,7 @@ var app = {
                     headers: {"Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA==" }
                 }
         );
+*/
     }
 }
 

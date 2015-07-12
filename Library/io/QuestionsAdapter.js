@@ -44,7 +44,7 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 			console.log('select questions failure ' + JSON.stringify(results));
 			callback(results);
 		} else {
-			var array = []
+			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
 				var ques = new QuestionItem(row.book, row.chapter, row.verse, row.displayRef, row.question, 

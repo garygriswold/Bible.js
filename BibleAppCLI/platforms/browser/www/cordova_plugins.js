@@ -256,13 +256,6 @@ module.exports = [
         "file": "plugins/cordova-plugin-splashscreen/src/browser/SplashScreenProxy.js",
         "id": "cordova-plugin-splashscreen.SplashScreenProxy",
         "runs": true
-    },
-    {
-        "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
-        "id": "cordova-plugin-statusbar.statusbar",
-        "clobbers": [
-            "window.StatusBar"
-        ]
     }
 ];
 module.exports.metadata = 
@@ -275,7 +268,6 @@ module.exports.metadata =
     "cordova-plugin-globalization": "1.0.1",
     "cordova-plugin-network-information": "1.0.1",
     "cordova-plugin-splashscreen": "2.1.0",
-    "cordova-plugin-statusbar": "1.0.1",
     "cordova-plugin-whitelist": "1.0.0"
 }
 // BOTTOM OF METADATA

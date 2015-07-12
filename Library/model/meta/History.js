@@ -16,8 +16,10 @@ History.prototype.fill = function(callback) {
 	this.items.splice(0);
 	this.collection.selectAll(function(results) {
 		if (results instanceof IOError) {
+			console.log('History.fill Error', JSON.stringify(results));
 			callback(results);
 		} else {
+			console.log('History.fill Success, rows=', results.length);
 			that.items = results;
 			that.isFilled = true;
 			that.isViewCurrent = false;

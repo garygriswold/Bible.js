@@ -2,6 +2,8 @@
 * This simple class is used to measure performance of the App.
 * It is not part of the production system, but is used during development
 * to instrument the code.
+*
+* This uses performance.now(), which is a node function and does not work in Cordova.
 */
 function Performance(message) {
 	this.startTime = performance.now();
