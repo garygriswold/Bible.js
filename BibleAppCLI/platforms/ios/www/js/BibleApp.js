@@ -771,7 +771,7 @@ StatusBarView.prototype.showView = function() {
 		that.titleCanvas.setAttribute('id', 'titleCanvas');
 		that.titleCanvas.setAttribute('height', hite);
 		that.titleCanvas.setAttribute('width', that.titleWidth);
-		that.titleCanvas.setAttribute('style', 'position: fixed; top: 0; left:' + hite * 1.1);
+		that.titleCanvas.setAttribute('style', 'position: fixed; top: 0; left:' + hite * 1.1 + 'px');
 
 		that.titleGraphics = that.titleCanvas.getContext('2d');
 		that.titleGraphics.fillStyle = '#000000';
@@ -801,7 +801,7 @@ StatusBarView.prototype.showView = function() {
 	}
 	function setupQuestionsButton(hite, color) {
 		var canvas = drawQuestionsIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; border: none; right: ' + hite * 1.14);
+		canvas.setAttribute('style', 'position: fixed; top: 0; border: none; right: ' + hite * 1.14 + 'px');
 		document.getElementById('questionsCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -826,7 +826,7 @@ StatusBarView.prototype.showSearchField = function(query) {
 		this.searchField.setAttribute('value', query);
 		var yPos = (this.hite - 40) / 2; // The 40 in this calculation is a hack.
 		var xPos = (this.hite * 1.2);
-		this.searchField.setAttribute('style', 'position: fixed; top: ' + yPos + '; left: ' + xPos);
+		this.searchField.setAttribute('style', 'position: fixed; top: ' + yPos + 'px; left: ' + xPos + 'px');
 		var that = this;
 		this.searchField.addEventListener('keyup', function(event) {
 			if (event.keyCode === 13) {
