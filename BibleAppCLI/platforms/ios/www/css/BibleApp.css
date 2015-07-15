@@ -244,7 +244,7 @@ span.x, span.xt {
 }
 li.historyTab {
   margin: 0;
-  padding: 2;
+  padding: 2px;
   text-align: right;
 }
 button.historyTabBtn {
