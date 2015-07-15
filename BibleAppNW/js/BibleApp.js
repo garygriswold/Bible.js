@@ -771,7 +771,7 @@ StatusBarView.prototype.showView = function() {
 		that.titleCanvas.setAttribute('id', 'titleCanvas');
 		that.titleCanvas.setAttribute('height', hite);
 		that.titleCanvas.setAttribute('width', that.titleWidth);
-		that.titleCanvas.setAttribute('style', 'position: fixed; top: 0; left:' + hite * 1.1);
+		that.titleCanvas.setAttribute('style', 'position: fixed; top: 0; left:' + hite * 1.1 + 'px');
 
 		that.titleGraphics = that.titleCanvas.getContext('2d');
 		that.titleGraphics.fillStyle = '#000000';
@@ -801,7 +801,7 @@ StatusBarView.prototype.showView = function() {
 	}
 	function setupQuestionsButton(hite, color) {
 		var canvas = drawQuestionsIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; border: none; right: ' + hite * 1.14);
+		canvas.setAttribute('style', 'position: fixed; top: 0; border: none; right: ' + hite * 1.14 + 'px');
 		document.getElementById('questionsCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -826,7 +826,7 @@ StatusBarView.prototype.showSearchField = function(query) {
 		this.searchField.setAttribute('value', query);
 		var yPos = (this.hite - 40) / 2; // The 40 in this calculation is a hack.
 		var xPos = (this.hite * 1.2);
-		this.searchField.setAttribute('style', 'position: fixed; top: ' + yPos + '; left: ' + xPos);
+		this.searchField.setAttribute('style', 'position: fixed; top: ' + yPos + 'px; left: ' + xPos + 'px');
 		var that = this;
 		this.searchField.addEventListener('keyup', function(event) {
 			if (event.keyCode === 13) {
@@ -1139,7 +1139,13 @@ function DeviceDatabase(code, name) {
 	this.name = name;
     this.className = 'DeviceDatabase';
 	var size = 30 * 1024 * 1024;
-	this.database = window.openDatabase(this.code, "1.0", this.name, size);
+    if (window.sqlitePlugin === undefined) {
+        console.log('opening WEB SQL Database, stores in Cache');
+        this.database = window.openDatabase(this.code, "1.0", this.name, size);
+    } else {
+        console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
+        this.database = window.sqlitePlugin.openDatabase({name: this.code + '.sqlite', location: 2});
+    }
 	this.codex = new CodexAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
 	this.concordance = new ConcordanceAdapter(this);

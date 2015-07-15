@@ -221,6 +221,13 @@ module.exports = [
         "clobbers": [
             "navigator.splashscreen"
         ]
+    },
+    {
+        "file": "plugins/io.litehelpers.cordova.sqlite/www/SQLitePlugin.js",
+        "id": "io.litehelpers.cordova.sqlite.SQLitePlugin",
+        "clobbers": [
+            "SQLitePlugin"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -233,7 +240,8 @@ module.exports.metadata =
     "cordova-plugin-file-transfer": "1.2.0",
     "cordova-plugin-globalization": "1.0.1",
     "cordova-plugin-network-information": "1.0.1",
-    "cordova-plugin-splashscreen": "2.1.0"
+    "cordova-plugin-splashscreen": "2.1.0",
+    "io.litehelpers.cordova.sqlite": "0.7.10-pre"
 }
 // BOTTOM OF METADATA
 });

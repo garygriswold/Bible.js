@@ -41,6 +41,9 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "io.cordova.hellocordova"
+        },
+        "io.litehelpers.cordova.sqlite": {
+            "PACKAGE_NAME": "com.shortsands.hellocordova"
         }
     },
     "dependent_plugins": {}

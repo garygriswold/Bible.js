@@ -1139,7 +1139,13 @@ function DeviceDatabase(code, name) {
 	this.name = name;
     this.className = 'DeviceDatabase';
 	var size = 30 * 1024 * 1024;
-	this.database = window.openDatabase(this.code, "1.0", this.name, size);
+    if (window.sqlitePlugin === undefined) {
+        console.log('opening WEB SQL Database, stores in Cache');
+        this.database = window.openDatabase(this.code, "1.0", this.name, size);
+    } else {
+        console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
+        this.database = window.sqlitePlugin.openDatabase({name: this.code + '.sqlite', location: 2});
+    }
 	this.codex = new CodexAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
 	this.concordance = new ConcordanceAdapter(this);
