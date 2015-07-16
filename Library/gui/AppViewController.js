@@ -26,7 +26,7 @@ AppViewController.prototype.begin = function(develop) {
 	this.concordance = new Concordance(this.database.concordance);
 	this.history = new History(this.database.history);
 	var that = this;
-	fillFromDatabase(function() {
+	initDatabase(function() {
 		console.log('loaded toc', that.tableContents.size());
 		console.log('loaded history', that.history.size());
 		
@@ -118,6 +118,32 @@ AppViewController.prototype.begin = function(develop) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
 	});
+	function initDatabase(callback) {
+		that.database.smokeTest(function(databaseOK) {
+			if (databaseOK) {
+				console.log('database passed smoke test');
+				fillFromDatabase(function() {
+					callback();
+				});
+			} else {
+				console.log('attempt download');
+				console.log('download', that.versionCode);
+				var downloader = new FileDownload('72.2.112.243', '8080');
+				downloader.download(that.versionCode, function(result) {
+					if (result instanceof IOError) {
+						window.alert('Unable to load Bible');
+						callback();
+					} else {
+						console.log('download succeeded');
+						that.database.refreshOpen();
+						fillFromDatabase(function() {
+							callback();
+						});
+					}
+				});
+			}
+		});
+	}
 	function fillFromDatabase(callback) {
 		that.tableContents.fill(function() {
 			that.history.fill(function() {

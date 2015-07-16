@@ -23,6 +23,16 @@ function DeviceDatabase(code, name) {
 	this.questions = new QuestionsAdapter(this);
 	Object.freeze(this);
 }
+DeviceDatabase.prototype.refreshOpen = function() {
+    if (window.sqlitePlugin === undefined) {
+        var size = 30 * 1024 * 1024;
+        console.log('opening WEB SQL Database, stores in Cache');
+        this.database = window.openDatabase(this.code, "1.0", this.name, size);
+    } else {
+        console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
+        this.database = window.sqlitePlugin.openDatabase({name: this.code + '.sqlite', location: 2});
+    }
+};
 DeviceDatabase.prototype.select = function(statement, values, callback) {
     this.database.readTransaction(function(tx) {
         console.log(statement, values);
@@ -88,5 +98,22 @@ DeviceDatabase.prototype.executeDDL = function(statement, callback) {
     function onExecSuccess(tx, results) {
         callback();
     }
+};
+DeviceDatabase.prototype.smokeTest = function(callback) {
+    var statement = 'select count(*) from tableContents';
+    this.select(statement, [], function(results) {
+        if (results instanceof IOError) {
+            console.log('found Error', JSON.stringify(results));
+            callback(false);
+        } else if (results.rows.length === 0) {
+            callback(false);
+        } else {
+            var row = results.rows.item(0);
+            console.log('found', JSON.stringify(row));
+            var count = row['count(*)'];
+            console.log('count=', count);
+            callback(count > 0);
+        }
+    });
 };
 

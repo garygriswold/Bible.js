@@ -1,16 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.shortsands.hellocordova" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>HelloCordova</name>
+<widget id="com.shortsands.bibleapp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>The Bible</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        A Bible App designed for the free distribution of the Bible in any language.
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="gary@shortsands.com" href="http://shortsands.com">
+        Gary N Griswold, Short Sands
     </author>
     <content src="index.html" />
     <preference name="BackupWebStorage" value="local" /> <!-- prevent backup to icloud -->
     <preference name="iosPersistentFileLocation" value="Library" /> <!-- store in library instead of documents ios -->
     <plugin name="cordova-plugin-whitelist" version="1" />
+    <!-- I don't know what the following do -->
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />

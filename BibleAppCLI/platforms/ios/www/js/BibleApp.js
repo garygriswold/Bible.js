@@ -27,7 +27,7 @@ AppViewController.prototype.begin = function(develop) {
 	this.concordance = new Concordance(this.database.concordance);
 	this.history = new History(this.database.history);
 	var that = this;
-	fillFromDatabase(function() {
+	initDatabase(function() {
 		console.log('loaded toc', that.tableContents.size());
 		console.log('loaded history', that.history.size());
 		
@@ -119,6 +119,32 @@ AppViewController.prototype.begin = function(develop) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
 	});
+	function initDatabase(callback) {
+		that.database.smokeTest(function(databaseOK) {
+			if (databaseOK) {
+				console.log('database passed smoke test');
+				fillFromDatabase(function() {
+					callback();
+				});
+			} else {
+				console.log('attempt download');
+				console.log('download', that.versionCode);
+				var downloader = new FileDownload('72.2.112.243', '8080');
+				downloader.download(that.versionCode, function(result) {
+					if (result instanceof IOError) {
+						window.alert('Unable to load Bible');
+						callback();
+					} else {
+						console.log('download succeeded');
+						that.database.refreshOpen();
+						fillFromDatabase(function() {
+							callback();
+						});
+					}
+				});
+			}
+		});
+	}
 	function fillFromDatabase(callback) {
 		that.tableContents.fill(function() {
 			that.history.fill(function() {
@@ -1155,6 +1181,16 @@ function DeviceDatabase(code, name) {
 	this.questions = new QuestionsAdapter(this);
 	Object.freeze(this);
 }
+DeviceDatabase.prototype.refreshOpen = function() {
+    if (window.sqlitePlugin === undefined) {
+        var size = 30 * 1024 * 1024;
+        console.log('opening WEB SQL Database, stores in Cache');
+        this.database = window.openDatabase(this.code, "1.0", this.name, size);
+    } else {
+        console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
+        this.database = window.sqlitePlugin.openDatabase({name: this.code + '.sqlite', location: 2});
+    }
+};
 DeviceDatabase.prototype.select = function(statement, values, callback) {
     this.database.readTransaction(function(tx) {
         console.log(statement, values);
@@ -1220,6 +1256,23 @@ DeviceDatabase.prototype.executeDDL = function(statement, callback) {
     function onExecSuccess(tx, results) {
         callback();
     }
+};
+DeviceDatabase.prototype.smokeTest = function(callback) {
+    var statement = 'select count(*) from tableContents';
+    this.select(statement, [], function(results) {
+        if (results instanceof IOError) {
+            console.log('found Error', JSON.stringify(results));
+            callback(false);
+        } else if (results.rows.length === 0) {
+            callback(false);
+        } else {
+            var row = results.rows.item(0);
+            console.log('found', JSON.stringify(row));
+            var count = row['count(*)'];
+            console.log('count=', count);
+            callback(count > 0);
+        }
+    });
 };
 
 /**
@@ -1567,7 +1620,7 @@ HistoryAdapter.prototype.replace = function(item, callback) {
 	this.database.executeDML(statement, values, function(count) {
 		if (count instanceof IOError) {
 			console.log('replace error', JSON.stringify(count));
-			callback(results);
+			callback(count);
 		} else {
 			callback(count);
 		}
@@ -1659,6 +1712,57 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 	});
 };
 /**
+* This class encapsulates the Cordova FileTransfer plugin for file download
+* It is a simple plugin, but encapsulated here in order to make it easy to change
+* the implementation.
+*
+* 'persistent' will store the file in 'Documents' in Android and 'Library' in iOS
+* 'LocalDatabase' is the file under Library where the database is expected.
+*/
+function FileDownload(host, port) {
+	this.fileTransfer = new FileTransfer();
+	this.uri = encodeURI('http://' + host + ':' + port + '/down/');
+	this.basePath = 'cdvfile://localhost/persistent/';
+}
+FileDownload.prototype.download = function(bibleVersion, callback) {
+	var remotePath = this.uri + bibleVersion;
+	//if (device === 'ios') {
+		var filePath = this.basePath + '../LocalDatabase/' + bibleVersion + '.sqlite';
+	//} else {
+	//	filePath = this.basePath + filename;
+	//}
+	console.log('download to', filePath);
+    this.fileTransfer.download(remotePath, filePath, onSuccess, onError, true, {});
+
+    function onSuccess(entry) {
+    	console.log("download complete: ", JSON(entry));//.toURL());
+       	//callback(entry.toURL());
+       	callback(entry);   	
+    }
+    function onError(error) {
+    	console.log("download error source " + error.source);
+      	console.log("download error target " + error.target);
+       	console.log("download error code" + error.code);
+       	callback(new IOError({ code: error.code, message: error.source}));   	
+    }
+    //	function(entry) {
+    //    	console.log("download complete: ", JSON(entry));//.toURL());
+    //    	//callback(entry.toURL());
+    //    	callback(entry);
+    //   	},
+    //   	function(error) {
+    //    	console.log("download error source " + error.source);
+    //       	console.log("download error target " + error.target);
+    //       	console.log("download error code" + error.code);
+    //       	callback(new IOError({ code: error.code, message: error.source}));
+	//	},
+    //	true,
+    //    {
+    //    	// some kind of header is needed.
+    //    	headers: {"Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA==" }
+    //    }
+	//);
+};/**
 * This class iterates over the USX data model, and translates the contents to DOM.
 *
 * This method generates a DOM tree that has exactly the same parentage as the USX model.

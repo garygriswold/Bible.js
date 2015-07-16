@@ -64,7 +64,7 @@ HistoryAdapter.prototype.replace = function(item, callback) {
 	this.database.executeDML(statement, values, function(count) {
 		if (count instanceof IOError) {
 			console.log('replace error', JSON.stringify(count));
-			callback(results);
+			callback(count);
 		} else {
 			callback(count);
 		}
