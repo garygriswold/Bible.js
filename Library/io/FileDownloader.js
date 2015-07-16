@@ -6,12 +6,12 @@
 * 'persistent' will store the file in 'Documents' in Android and 'Library' in iOS
 * 'LocalDatabase' is the file under Library where the database is expected.
 */
-function FileDownload(host, port) {
+function FileDownloader(host, port) {
 	this.fileTransfer = new FileTransfer();
 	this.uri = encodeURI('http://' + host + ':' + port + '/down/');
 	this.basePath = 'cdvfile://localhost/persistent/';
 }
-FileDownload.prototype.download = function(bibleVersion, callback) {
+FileDownloader.prototype.download = function(bibleVersion, callback) {
 	var remotePath = this.uri + bibleVersion;
 	//if (device === 'ios') {
 		var filePath = this.basePath + '../LocalDatabase/' + bibleVersion + '.sqlite';

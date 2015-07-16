@@ -42,7 +42,7 @@
     </feature>
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
-    <name>The Bible</name>
+    <name>TheBible</name>
     <description>
         A Bible App designed for the free distribution of the Bible in any language.
     </description>

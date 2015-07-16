@@ -128,7 +128,7 @@ AppViewController.prototype.begin = function(develop) {
 			} else {
 				console.log('attempt download');
 				console.log('download', that.versionCode);
-				var downloader = new FileDownload('72.2.112.243', '8080');
+				var downloader = new FileDownloader('72.2.112.243', '8080');
 				downloader.download(that.versionCode, function(result) {
 					if (result instanceof IOError) {
 						window.alert('Unable to load Bible');
