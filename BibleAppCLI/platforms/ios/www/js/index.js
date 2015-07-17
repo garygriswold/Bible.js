@@ -46,7 +46,7 @@ var app = {
 
         console.log('Received Event: ' + id);
         console.log('DEVICE IS READY **');
-        var appView = new AppViewController('WEB');
+        var appView = new AppViewController('WEB.word1');
         //appView.begin('TableContentsView');
         //appView.begin('SearchView');
         //appView.begin('QuestionsView')

@@ -12,7 +12,7 @@ function DeviceDatabase(code, name) {
         this.database = window.openDatabase(this.code, "1.0", this.name, size);
     } else {
         console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
-        this.database = window.sqlitePlugin.openDatabase({name: this.code + '.sqlite', location: 2});
+        this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2});
     }
 	this.codex = new CodexAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
@@ -21,30 +21,20 @@ function DeviceDatabase(code, name) {
 	this.styleUse = new StyleUseAdapter(this);
 	this.history = new HistoryAdapter(this);
 	this.questions = new QuestionsAdapter(this);
-	Object.freeze(this);
+	Object.seal(this);
 }
-DeviceDatabase.prototype.refreshOpen = function() {
-    if (window.sqlitePlugin === undefined) {
-        var size = 30 * 1024 * 1024;
-        console.log('opening WEB SQL Database, stores in Cache');
-        this.database = window.openDatabase(this.code, "1.0", this.name, size);
-    } else {
-        console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
-        this.database = window.sqlitePlugin.openDatabase({name: this.code + '.sqlite', location: 2});
-    }
-};
 DeviceDatabase.prototype.select = function(statement, values, callback) {
     this.database.readTransaction(function(tx) {
         console.log(statement, values);
         tx.executeSql(statement, values, onSelectSuccess, onSelectError);
     });
-    function onSelectError(tx, err) {
-        console.log('select tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
     function onSelectSuccess(tx, results) {
         console.log('select success results, rowCount=', results.rows.length);
         callback(results);
+    }
+    function onSelectError(tx, err) {
+        console.log('select error', JSON.stringify(err));
+        callback(new IOError(err));
     }
 };
 DeviceDatabase.prototype.executeDML = function(statement, values, callback) {

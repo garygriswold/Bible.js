@@ -14,39 +14,21 @@ function FileDownloader(host, port) {
 FileDownloader.prototype.download = function(bibleVersion, callback) {
 	var remotePath = this.uri + bibleVersion;
 	//if (device === 'ios') {
-		var filePath = this.basePath + '../LocalDatabase/' + bibleVersion + '.sqlite';
+		var filePath = this.basePath + '../LocalDatabase/' + bibleVersion;
 	//} else {
-	//	filePath = this.basePath + filename;
+	//	filePath = this.basePath + bibleVersion;
 	//}
 	console.log('download to', filePath);
-    this.fileTransfer.download(remotePath, filePath, onSuccess, onError, true, {});
+    this.fileTransfer.download(remotePath, filePath, onDownSuccess, onDownError, true, {});
 
-    function onSuccess(entry) {
-    	console.log("download complete: ", JSON(entry));//.toURL());
-       	//callback(entry.toURL());
+    function onDownSuccess(entry) {
+    	console.log("download complete: ", JSON.stringify(entry));
        	callback(entry);   	
     }
-    function onError(error) {
+    function onDownError(error) {
     	console.log("download error source " + error.source);
       	console.log("download error target " + error.target);
        	console.log("download error code" + error.code);
        	callback(new IOError({ code: error.code, message: error.source}));   	
     }
-    //	function(entry) {
-    //    	console.log("download complete: ", JSON(entry));//.toURL());
-    //    	//callback(entry.toURL());
-    //    	callback(entry);
-    //   	},
-    //   	function(error) {
-    //    	console.log("download error source " + error.source);
-    //       	console.log("download error target " + error.target);
-    //       	console.log("download error code" + error.code);
-    //       	callback(new IOError({ code: error.code, message: error.source}));
-	//	},
-    //	true,
-    //    {
-    //    	// some kind of header is needed.
-    //    	headers: {"Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA==" }
-    //    }
-	//);
 };

@@ -6,11 +6,9 @@
 * http://host/ques/GUID post json - post newly asked question for answer
 * http://host/answ/GUID - request answer to previously asked question
 */
-
-function BibleServer(port, biblesPath, biblesSuffix) {
+function BibleServer(port, biblesPath) {
 	this.port = port;
 	this.biblesPath = biblesPath;
-	this.biblesSuffix = biblesSuffix;
 }
 BibleServer.prototype.install = function() {
 	var http = require('http');
@@ -19,38 +17,40 @@ BibleServer.prototype.install = function() {
 
 	var that = this;
 	http.createServer(function(request, response) {
+		that.serverLog('Request', null, request.url);
 		var requestURL = url.parse(request.url);
 		if (requestURL) {
-			console.log('request:', requestURL.pathname);
 			var pathList = requestURL.pathname.split('/');
 			if (pathList[1] === 'down') {
-
-				var pathname = that.biblesPath + pathList[2] + that.biblesSuffix;
+				var pathname = that.biblesPath + pathList[2];
 				fs.readFile(pathname, 'binary', function(err, file) {
 					if (err) {
-						console.log('Read file error', pathname, JSON.stringify(err));
-						that.errorResponse(404, 'Version Not Found', response);
+						that.errorResponse(response, 404, 'Version Not Found', JSON.stringify(err));
 					} else {
 						response.writeHead(200);
 						response.end(file, 'binary');
+						that.serverLog('Success', 200, 'Success')
 					}
 				});
 			} else {
-				that.errorResponse(400, 'Unknown Request', response);
+				that.errorResponse(response, 400, 'Unknown Request');
 			}
 		} else {
-			that.errorResponse(400, 'Invalid Request', response);
+			that.errorResponse(response, 400, 'Invalid Request');
 		}
 	}).listen(this.port);
-	console.log('server running on http://localhost:' + this.port + '/');
+	this.serverLog('_Start_', null, 'Bible Server listening on ' + this.port);
 }
-BibleServer.prototype.errorResponse = function(code, message, response) {
-	console.log('Error', code, message);
-	response.writeHead(code, { 'Content-Type': 'text/plain' });
-	response.end(message + '\n');
+BibleServer.prototype.errorResponse = function(response, respCode, respMessage, errMessage) {
+	this.serverLog('*Error*', respCode, respMessage, errMessage);
+	response.writeHead(respCode, { 'Content-Type': 'text/plain' });
+	response.end(respMessage + '\n');
+};
+BibleServer.prototype.serverLog = function(action, respCode, respMessage, errMessage) {
+	console.log(new Date().toISOString(), action, respCode, respMessage, ((errMessage) ? errMessage : ''));
 };
 
-var server = new BibleServer(8080, process.env.HOME + '/bibles/', '.sqlite');
+var server = new BibleServer(8080, process.env.HOME + '/bibles/');
 server.install();
 
 

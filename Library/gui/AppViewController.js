@@ -14,6 +14,8 @@ var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
 	};
+var SERVER_HOST = 'localhost'; // 72.2.112.243
+var SERVER_PORT = '8080';
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
@@ -27,6 +29,7 @@ AppViewController.prototype.begin = function(develop) {
 	this.history = new History(this.database.history);
 	var that = this;
 	initDatabase(function() {
+
 		console.log('loaded toc', that.tableContents.size());
 		console.log('loaded history', that.history.size());
 		
@@ -55,9 +58,12 @@ AppViewController.prototype.begin = function(develop) {
 			break;
 		default:
 			var lastItem = that.history.last();
-			console.log(lastItem);
-			console.log('History size', that.history.size());
-			that.codexView.showView(lastItem.nodeId);
+			console.log('LastItem', JSON.stringify(lastItem));
+			if (that.tableContents.size() > 0) {
+				that.codexView.showView(lastItem.nodeId);
+			} else {
+				window.alert('There is no Bible present');
+			}
 		}
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();
@@ -128,15 +134,15 @@ AppViewController.prototype.begin = function(develop) {
 			} else {
 				console.log('attempt download');
 				console.log('download', that.versionCode);
-				var downloader = new FileDownloader('72.2.112.243', '8080');
+				var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT);
 				downloader.download(that.versionCode, function(result) {
 					if (result instanceof IOError) {
 						window.alert('Unable to load Bible');
 						callback();
 					} else {
 						console.log('download succeeded');
-						that.database.refreshOpen();
 						fillFromDatabase(function() {
+							console.log('succeeded in fill');
 							callback();
 						});
 					}
@@ -147,6 +153,7 @@ AppViewController.prototype.begin = function(develop) {
 	function fillFromDatabase(callback) {
 		that.tableContents.fill(function() {
 			that.history.fill(function() {
+				console.log('fillFromDatabase done');
 				callback();
 			});
 		});

@@ -72,4 +72,5 @@ HistoryAdapter.prototype.replace = function(item, callback) {
 };
 HistoryAdapter.prototype.delete = function(values, callback) {
 	// Will be needed to prevent growth of history
+	callback();
 };

@@ -15,6 +15,8 @@ var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
 	};
+var SERVER_HOST = 'localhost'; // 72.2.112.243
+var SERVER_PORT = '8080';
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
@@ -28,6 +30,7 @@ AppViewController.prototype.begin = function(develop) {
 	this.history = new History(this.database.history);
 	var that = this;
 	initDatabase(function() {
+
 		console.log('loaded toc', that.tableContents.size());
 		console.log('loaded history', that.history.size());
 		
@@ -56,9 +59,12 @@ AppViewController.prototype.begin = function(develop) {
 			break;
 		default:
 			var lastItem = that.history.last();
-			console.log(lastItem);
-			console.log('History size', that.history.size());
-			that.codexView.showView(lastItem.nodeId);
+			console.log('LastItem', JSON.stringify(lastItem));
+			if (that.tableContents.size() > 0) {
+				that.codexView.showView(lastItem.nodeId);
+			} else {
+				window.alert('There is no Bible present');
+			}
 		}
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();
@@ -129,15 +135,15 @@ AppViewController.prototype.begin = function(develop) {
 			} else {
 				console.log('attempt download');
 				console.log('download', that.versionCode);
-				var downloader = new FileDownloader('72.2.112.243', '8080');
+				var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT);
 				downloader.download(that.versionCode, function(result) {
 					if (result instanceof IOError) {
 						window.alert('Unable to load Bible');
 						callback();
 					} else {
 						console.log('download succeeded');
-						that.database.refreshOpen();
 						fillFromDatabase(function() {
+							console.log('succeeded in fill');
 							callback();
 						});
 					}
@@ -148,6 +154,7 @@ AppViewController.prototype.begin = function(develop) {
 	function fillFromDatabase(callback) {
 		that.tableContents.fill(function() {
 			that.history.fill(function() {
+				console.log('fillFromDatabase done');
 				callback();
 			});
 		});
@@ -1170,7 +1177,7 @@ function DeviceDatabase(code, name) {
         this.database = window.openDatabase(this.code, "1.0", this.name, size);
     } else {
         console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
-        this.database = window.sqlitePlugin.openDatabase({name: this.code + '.sqlite', location: 2});
+        this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2});
     }
 	this.codex = new CodexAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
@@ -1179,30 +1186,20 @@ function DeviceDatabase(code, name) {
 	this.styleUse = new StyleUseAdapter(this);
 	this.history = new HistoryAdapter(this);
 	this.questions = new QuestionsAdapter(this);
-	Object.freeze(this);
+	Object.seal(this);
 }
-DeviceDatabase.prototype.refreshOpen = function() {
-    if (window.sqlitePlugin === undefined) {
-        var size = 30 * 1024 * 1024;
-        console.log('opening WEB SQL Database, stores in Cache');
-        this.database = window.openDatabase(this.code, "1.0", this.name, size);
-    } else {
-        console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
-        this.database = window.sqlitePlugin.openDatabase({name: this.code + '.sqlite', location: 2});
-    }
-};
 DeviceDatabase.prototype.select = function(statement, values, callback) {
     this.database.readTransaction(function(tx) {
         console.log(statement, values);
         tx.executeSql(statement, values, onSelectSuccess, onSelectError);
     });
-    function onSelectError(tx, err) {
-        console.log('select tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
     function onSelectSuccess(tx, results) {
         console.log('select success results, rowCount=', results.rows.length);
         callback(results);
+    }
+    function onSelectError(tx, err) {
+        console.log('select error', JSON.stringify(err));
+        callback(new IOError(err));
     }
 };
 DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
@@ -1628,6 +1625,7 @@ HistoryAdapter.prototype.replace = function(item, callback) {
 };
 HistoryAdapter.prototype.delete = function(values, callback) {
 	// Will be needed to prevent growth of history
+	callback();
 };/**
 * This class is the database adapter for the questions table
 */
@@ -1727,41 +1725,23 @@ function FileDownloader(host, port) {
 FileDownloader.prototype.download = function(bibleVersion, callback) {
 	var remotePath = this.uri + bibleVersion;
 	//if (device === 'ios') {
-		var filePath = this.basePath + '../LocalDatabase/' + bibleVersion + '.sqlite';
+		var filePath = this.basePath + '../LocalDatabase/' + bibleVersion;
 	//} else {
-	//	filePath = this.basePath + filename;
+	//	filePath = this.basePath + bibleVersion;
 	//}
 	console.log('download to', filePath);
-    this.fileTransfer.download(remotePath, filePath, onSuccess, onError, true, {});
+    this.fileTransfer.download(remotePath, filePath, onDownSuccess, onDownError, true, {});
 
-    function onSuccess(entry) {
-    	console.log("download complete: ", JSON(entry));//.toURL());
-       	//callback(entry.toURL());
+    function onDownSuccess(entry) {
+    	console.log("download complete: ", JSON.stringify(entry));
        	callback(entry);   	
     }
-    function onError(error) {
+    function onDownError(error) {
     	console.log("download error source " + error.source);
       	console.log("download error target " + error.target);
        	console.log("download error code" + error.code);
        	callback(new IOError({ code: error.code, message: error.source}));   	
     }
-    //	function(entry) {
-    //    	console.log("download complete: ", JSON(entry));//.toURL());
-    //    	//callback(entry.toURL());
-    //    	callback(entry);
-    //   	},
-    //   	function(error) {
-    //    	console.log("download error source " + error.source);
-    //       	console.log("download error target " + error.target);
-    //       	console.log("download error code" + error.code);
-    //       	callback(new IOError({ code: error.code, message: error.source}));
-	//	},
-    //	true,
-    //    {
-    //    	// some kind of header is needed.
-    //    	headers: {"Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA==" }
-    //    }
-	//);
 };/**
 * This class iterates over the USX data model, and translates the contents to DOM.
 *
