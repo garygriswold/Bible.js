@@ -16,7 +16,7 @@ var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
 	};
 var SERVER_HOST = 'localhost'; // 72.2.112.243
-var SERVER_PORT = '8080';
+var SERVER_PORT = '8080'; 
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
@@ -36,7 +36,7 @@ AppViewController.prototype.begin = function(develop) {
 		
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.lookup = new Lookup(that.tableContents);
-		that.statusBar = new StatusBarView(88, that.tableContents);
+		that.statusBar = new StatusBarView(that.tableContents);
 		that.statusBar.showView();
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
 		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
@@ -125,40 +125,9 @@ AppViewController.prototype.begin = function(develop) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
 	});
-	/** This function is not needed as written, because there should always be one
-	* translation present. Instead, the App should not attempt to open a database
-	* unless there is some external verification that it is OK.
-	*/
-	function initDatabase(callback) {
-		that.database.smokeTest(function(databaseOK) {
-			if (databaseOK) {
-				console.log('database passed smoke test');
-				fillFromDatabase(function() {
-					callback();
-				});
-			} else {
-				console.log('attempt download');
-				console.log('download', that.versionCode);
-				var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT);
-				downloader.download(that.versionCode, function(result) {
-					if (result instanceof IOError) {
-						window.alert('Unable to load Bible');
-						callback();
-					} else {
-						console.log('download succeeded');
-						fillFromDatabase(function() {
-							console.log('succeeded in fill');
-							callback();
-						});
-					}
-				});
-			}
-		});
-	}
 	function fillFromDatabase(callback) {
 		that.tableContents.fill(function() {
 			that.history.fill(function() {
-				console.log('fillFromDatabase done');
 				callback();
 			});
 		});
@@ -751,10 +720,12 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookRef) {
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
-function StatusBarView(hite, tableContents) {
-	this.hite = hite;
+var STATUS_BAR_BUTTON_HEIGHT = 44;
+var STATUS_BAR_HEIGHT = 62; // ios
+function StatusBarView(tableContents) {
+	this.hite = STATUS_BAR_BUTTON_HEIGHT;
 	this.tableContents = tableContents;
-	this.titleWidth = window.innerWidth - hite * 3.5;
+	this.titleWidth = window.innerWidth - this.hite * 3.5;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.currentReference = null;
@@ -773,7 +744,7 @@ StatusBarView.prototype.showView = function() {
 
 	function setupBackground(hite) {
     	var canvas = document.createElement('canvas');
-    	canvas.setAttribute('height', hite + 7);
+    	canvas.setAttribute('height', STATUS_BAR_HEIGHT);
     	var maxSize = (window.innerHeight > window.innerWidth) ? window.innerHeight : window.innerWidth;
     	canvas.setAttribute('width', maxSize);
     	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
@@ -794,7 +765,7 @@ StatusBarView.prototype.showView = function() {
 	}
 	function setupTocButton(hite, color) {
 		var canvas = drawTOCIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; left: 0');
+		canvas.setAttribute('style', 'position: fixed; top: 14px; left: 0');
 		document.getElementById('tocCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -808,7 +779,7 @@ StatusBarView.prototype.showView = function() {
 		that.titleCanvas.setAttribute('id', 'titleCanvas');
 		that.titleCanvas.setAttribute('height', hite);
 		that.titleCanvas.setAttribute('width', that.titleWidth);
-		that.titleCanvas.setAttribute('style', 'position: fixed; top: 0; left:' + hite * 1.1 + 'px');
+		that.titleCanvas.setAttribute('style', 'position: fixed; top: 14px; left:' + hite * 1.1 + 'px');
 
 		that.titleGraphics = that.titleCanvas.getContext('2d');
 		that.titleGraphics.fillStyle = '#000000';
@@ -827,7 +798,7 @@ StatusBarView.prototype.showView = function() {
 	}
 	function setupSearchButton(hite, color) {
 		var canvas = drawSearchIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; right: 0; border: none');
+		canvas.setAttribute('style', 'position: fixed; top: 14px; right: 0; border: none');
 		document.getElementById('searchCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -838,7 +809,7 @@ StatusBarView.prototype.showView = function() {
 	}
 	function setupQuestionsButton(hite, color) {
 		var canvas = drawQuestionsIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; border: none; right: ' + hite * 1.14 + 'px');
+		canvas.setAttribute('style', 'position: fixed; top: 14px; border: none; right: ' + hite * 1.14 + 'px');
 		document.getElementById('questionsCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {

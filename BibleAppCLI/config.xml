@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.shortsands.bibleapp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.shortsands.bibleapp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" 
+    xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>TheBible</name>
     <description>
         A Bible App designed for the free distribution of the Bible in any language.
@@ -10,6 +11,8 @@
     <content src="index.html" />
     <preference name="BackupWebStorage" value="local" /> <!-- prevent backup to icloud -->
     <preference name="iosPersistentFileLocation" value="Library" /> <!-- store in library instead of documents ios -->
+    <preference name="DisallowOverscroll" value="true"/>
+    <preference name="UIWebViewBounce" value="false"/>
     <plugin name="cordova-plugin-whitelist" version="1" />
     <!-- I don't know what the following do -->
     <access origin="*" />

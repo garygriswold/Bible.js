@@ -2,10 +2,12 @@
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
-function StatusBarView(hite, tableContents) {
-	this.hite = hite;
+var STATUS_BAR_BUTTON_HEIGHT = 44;
+var STATUS_BAR_HEIGHT = 62; // ios
+function StatusBarView(tableContents) {
+	this.hite = STATUS_BAR_BUTTON_HEIGHT;
 	this.tableContents = tableContents;
-	this.titleWidth = window.innerWidth - hite * 3.5;
+	this.titleWidth = window.innerWidth - this.hite * 3.5;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.currentReference = null;
@@ -24,7 +26,7 @@ StatusBarView.prototype.showView = function() {
 
 	function setupBackground(hite) {
     	var canvas = document.createElement('canvas');
-    	canvas.setAttribute('height', hite + 7);
+    	canvas.setAttribute('height', STATUS_BAR_HEIGHT);
     	var maxSize = (window.innerHeight > window.innerWidth) ? window.innerHeight : window.innerWidth;
     	canvas.setAttribute('width', maxSize);
     	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
@@ -45,7 +47,7 @@ StatusBarView.prototype.showView = function() {
 	}
 	function setupTocButton(hite, color) {
 		var canvas = drawTOCIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; left: 0');
+		canvas.setAttribute('style', 'position: fixed; top: 14px; left: 0');
 		document.getElementById('tocCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -59,7 +61,7 @@ StatusBarView.prototype.showView = function() {
 		that.titleCanvas.setAttribute('id', 'titleCanvas');
 		that.titleCanvas.setAttribute('height', hite);
 		that.titleCanvas.setAttribute('width', that.titleWidth);
-		that.titleCanvas.setAttribute('style', 'position: fixed; top: 0; left:' + hite * 1.1 + 'px');
+		that.titleCanvas.setAttribute('style', 'position: fixed; top: 14px; left:' + hite * 1.1 + 'px');
 
 		that.titleGraphics = that.titleCanvas.getContext('2d');
 		that.titleGraphics.fillStyle = '#000000';
@@ -78,7 +80,7 @@ StatusBarView.prototype.showView = function() {
 	}
 	function setupSearchButton(hite, color) {
 		var canvas = drawSearchIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; right: 0; border: none');
+		canvas.setAttribute('style', 'position: fixed; top: 14px; right: 0; border: none');
 		document.getElementById('searchCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -89,7 +91,7 @@ StatusBarView.prototype.showView = function() {
 	}
 	function setupQuestionsButton(hite, color) {
 		var canvas = drawQuestionsIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; border: none; right: ' + hite * 1.14 + 'px');
+		canvas.setAttribute('style', 'position: fixed; top: 14px; border: none; right: ' + hite * 1.14 + 'px');
 		document.getElementById('questionsCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
