@@ -53,6 +53,7 @@
 		2EDB82EA06054059A39D2B98 /* CDVViewController+SplashScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 52AAF79796B84F6B80B95903 /* CDVViewController+SplashScreen.m */; };
 		3C23A6C10776472FA41C712F /* SQLitePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 22D353709AE745BAA26AD0F3 /* SQLitePlugin.m */; };
 		DB7AFFA7CD5D49A7AE605397 /* sqlite3.c in Resources */ = {isa = PBXBuildFile; fileRef = 3AF41AD8BE784D2DA2D0BC71 /* sqlite3.c */; };
+		66C9876C29064E6882D71181 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 337E79B64FE64FF0A6FC8D9E /* CDVStatusBar.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,6 +146,8 @@
 		3AF41AD8BE784D2DA2D0BC71 /* sqlite3.c */ = {isa = PBXFileReference; lastKnownFileType = unknown; name = "sqlite3.c"; path = "io.litehelpers.cordova.sqlite/sqlite3.c"; sourceTree = "<group>"; fileEncoding = 4; };
 		5A97470D8652491082745A25 /* SQLitePlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SQLitePlugin.h"; path = "io.litehelpers.cordova.sqlite/SQLitePlugin.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		005201C3C1524792802823F1 /* sqlite3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "sqlite3.h"; path = "io.litehelpers.cordova.sqlite/sqlite3.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		337E79B64FE64FF0A6FC8D9E /* CDVStatusBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVStatusBar.m"; path = "cordova-plugin-statusbar/CDVStatusBar.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		75F0B47EA5A24756BA1E73A5 /* CDVStatusBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVStatusBar.h"; path = "cordova-plugin-statusbar/CDVStatusBar.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,6 +274,8 @@
 				3AF41AD8BE784D2DA2D0BC71 /* sqlite3.c */,
 				5A97470D8652491082745A25 /* SQLitePlugin.h */,
 				005201C3C1524792802823F1 /* sqlite3.h */,
+				337E79B64FE64FF0A6FC8D9E /* CDVStatusBar.m */,
+				75F0B47EA5A24756BA1E73A5 /* CDVStatusBar.h */,
 			);
 			name = Plugins;
 			path = "TheBible/Plugins";
@@ -468,6 +473,7 @@
 				2EDB82EA06054059A39D2B98 /* CDVViewController+SplashScreen.m in Sources */,
 				3C23A6C10776472FA41C712F /* SQLitePlugin.m in Sources */,
 				DB7AFFA7CD5D49A7AE605397 /* sqlite3.c in Resources */,
+				66C9876C29064E6882D71181 /* CDVStatusBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

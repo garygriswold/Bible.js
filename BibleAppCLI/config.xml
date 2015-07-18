@@ -13,6 +13,7 @@
     <preference name="iosPersistentFileLocation" value="Library" /> <!-- store in library instead of documents ios -->
     <preference name="DisallowOverscroll" value="true"/>
     <preference name="UIWebViewBounce" value="false"/>
+    <preference name="StatusBarStyle" value="lightcontent" /> <!-- is default on android -->
     <plugin name="cordova-plugin-whitelist" version="1" />
     <!-- I don't know what the following do -->
     <access origin="*" />

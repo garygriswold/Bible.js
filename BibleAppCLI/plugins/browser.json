@@ -44,6 +44,9 @@
         },
         "io.litehelpers.cordova.sqlite": {
             "PACKAGE_NAME": "com.shortsands.hellocordova"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.shortsands.bibleapp"
         }
     },
     "dependent_plugins": {}
