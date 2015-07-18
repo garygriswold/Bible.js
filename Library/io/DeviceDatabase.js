@@ -2,17 +2,16 @@
 * This class is a facade over the database that is used to store bible text, concordance,
 * table of contents, history and questions.
 */
-function DeviceDatabase(code, name) {
+function DeviceDatabase(code) {
 	this.code = code;
-	this.name = name;
     this.className = 'DeviceDatabase';
 	var size = 30 * 1024 * 1024;
     if (window.sqlitePlugin === undefined) {
         console.log('opening WEB SQL Database, stores in Cache');
-        this.database = window.openDatabase(this.code, "1.0", this.name, size);
+        this.database = window.openDatabase(this.code, "1.0", this.code, size);
     } else {
         console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
-        this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2});
+        this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
     }
 	this.codex = new CodexAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
@@ -89,6 +88,8 @@ DeviceDatabase.prototype.executeDDL = function(statement, callback) {
         callback();
     }
 };
+/** A smoke test is needed before a database is opened. */
+/** A second more though test is needed after a database is opened.*/
 DeviceDatabase.prototype.smokeTest = function(callback) {
     var statement = 'select count(*) from tableContents';
     this.select(statement, [], function(results) {

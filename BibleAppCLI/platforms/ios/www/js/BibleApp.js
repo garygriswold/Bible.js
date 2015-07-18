@@ -21,7 +21,7 @@ var SERVER_PORT = '8080';
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
 	this.touch = new Hammer(document.getElementById('codexRoot'));
-	this.database = new DeviceDatabase(versionCode, 'nameForVersion');
+	this.database = new DeviceDatabase(versionCode);
 }
 AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.database.tableContents);
@@ -29,7 +29,7 @@ AppViewController.prototype.begin = function(develop) {
 	this.concordance = new Concordance(this.database.concordance);
 	this.history = new History(this.database.history);
 	var that = this;
-	initDatabase(function() {
+	fillFromDatabase(function() {
 
 		console.log('loaded toc', that.tableContents.size());
 		console.log('loaded history', that.history.size());
@@ -125,6 +125,10 @@ AppViewController.prototype.begin = function(develop) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
 	});
+	/** This function is not needed as written, because there should always be one
+	* translation present. Instead, the App should not attempt to open a database
+	* unless there is some external verification that it is OK.
+	*/
 	function initDatabase(callback) {
 		that.database.smokeTest(function(databaseOK) {
 			if (databaseOK) {
@@ -1167,17 +1171,16 @@ function IOError(err) {
 * This class is a facade over the database that is used to store bible text, concordance,
 * table of contents, history and questions.
 */
-function DeviceDatabase(code, name) {
+function DeviceDatabase(code) {
 	this.code = code;
-	this.name = name;
     this.className = 'DeviceDatabase';
 	var size = 30 * 1024 * 1024;
     if (window.sqlitePlugin === undefined) {
         console.log('opening WEB SQL Database, stores in Cache');
-        this.database = window.openDatabase(this.code, "1.0", this.name, size);
+        this.database = window.openDatabase(this.code, "1.0", this.code, size);
     } else {
         console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
-        this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2});
+        this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
     }
 	this.codex = new CodexAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
@@ -1254,6 +1257,8 @@ DeviceDatabase.prototype.executeDDL = function(statement, callback) {
         callback();
     }
 };
+/** A smoke test is needed before a database is opened. */
+/** A second more though test is needed after a database is opened.*/
 DeviceDatabase.prototype.smokeTest = function(callback) {
     var statement = 'select count(*) from tableContents';
     this.select(statement, [], function(results) {

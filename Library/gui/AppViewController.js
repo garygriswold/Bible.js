@@ -15,12 +15,12 @@ var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
 	};
 var SERVER_HOST = 'localhost'; // 72.2.112.243
-var SERVER_PORT = '8080';
+var SERVER_PORT = '8080'; 
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
 	this.touch = new Hammer(document.getElementById('codexRoot'));
-	this.database = new DeviceDatabase(versionCode, 'nameForVersion');
+	this.database = new DeviceDatabase(versionCode);
 }
 AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.database.tableContents);
@@ -28,7 +28,7 @@ AppViewController.prototype.begin = function(develop) {
 	this.concordance = new Concordance(this.database.concordance);
 	this.history = new History(this.database.history);
 	var that = this;
-	initDatabase(function() {
+	fillFromDatabase(function() {
 
 		console.log('loaded toc', that.tableContents.size());
 		console.log('loaded history', that.history.size());
@@ -124,36 +124,9 @@ AppViewController.prototype.begin = function(develop) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
 	});
-	function initDatabase(callback) {
-		that.database.smokeTest(function(databaseOK) {
-			if (databaseOK) {
-				console.log('database passed smoke test');
-				fillFromDatabase(function() {
-					callback();
-				});
-			} else {
-				console.log('attempt download');
-				console.log('download', that.versionCode);
-				var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT);
-				downloader.download(that.versionCode, function(result) {
-					if (result instanceof IOError) {
-						window.alert('Unable to load Bible');
-						callback();
-					} else {
-						console.log('download succeeded');
-						fillFromDatabase(function() {
-							console.log('succeeded in fill');
-							callback();
-						});
-					}
-				});
-			}
-		});
-	}
 	function fillFromDatabase(callback) {
 		that.tableContents.fill(function() {
 			that.history.fill(function() {
-				console.log('fillFromDatabase done');
 				callback();
 			});
 		});
