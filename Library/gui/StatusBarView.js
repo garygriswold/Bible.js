@@ -4,8 +4,10 @@
 */
 var STATUS_BAR_BUTTON_HEIGHT = 44;
 var STATUS_BAR_HEIGHT = 62; // ios
+
 function StatusBarView(tableContents) {
 	this.hite = STATUS_BAR_BUTTON_HEIGHT;
+	this.barHite = STATUS_BAR_HEIGHT;
 	this.tableContents = tableContents;
 	this.titleWidth = window.innerWidth - this.hite * 3.5;
 	this.titleCanvas = null;

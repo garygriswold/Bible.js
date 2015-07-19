@@ -17,7 +17,6 @@
  * under the License.
  */
 var app = {
-    // Application Constructor
     initialize: function() {
         this.bindEvents();
     },
@@ -33,18 +32,6 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
-    },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
         console.log('DEVICE IS READY **');
         var appView = new AppViewController('WEB.word1');
         //appView.begin('TableContentsView');
@@ -52,6 +39,7 @@ var app = {
         //appView.begin('QuestionsView')
         //appView.begin('HistoryView');
         appView.begin();
+        //app.receivedEvent('deviceready');
     }
 }
 

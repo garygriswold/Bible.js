@@ -39,7 +39,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.statusBar = new StatusBarView(that.tableContents);
 		that.statusBar.showView();
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
-		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
+		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.barHite);
 		that.historyView = new HistoryView(that.history, that.tableContents);
 		that.questionsView = new QuestionsView(that.database.questions, that.bibleCache, that.tableContents);
 		Object.freeze(that);
@@ -722,8 +722,10 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookRef) {
 */
 var STATUS_BAR_BUTTON_HEIGHT = 44;
 var STATUS_BAR_HEIGHT = 62; // ios
+
 function StatusBarView(tableContents) {
 	this.hite = STATUS_BAR_BUTTON_HEIGHT;
+	this.barHite = STATUS_BAR_HEIGHT;
 	this.tableContents = tableContents;
 	this.titleWidth = window.innerWidth - this.hite * 3.5;
 	this.titleCanvas = null;
