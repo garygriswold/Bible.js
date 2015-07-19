@@ -1379,7 +1379,6 @@ TOC.prototype.size = function() {
 	return(this.bookList.length);
 };
 TOC.prototype.toString = function(reference) {
-	console.log('BOOK', reference.book, reference.nodId);
 	return(this.find(reference.book).name + ' ' + reference.chapter + ':' + reference.verse);
 };
 TOC.prototype.toJSON = function() {
@@ -1388,14 +1387,14 @@ TOC.prototype.toJSON = function() {
 * This class holds the table of contents data each book of the Bible, or whatever books were loaded.
 */
 function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook) {
-	this.code = code;
-	this.heading = heading;
-	this.title = title;
-	this.name = name;
-	this.abbrev = abbrev;
-	this.lastChapter = lastChapter;
-	this.priorBook = priorBook;
-	this.nextBook = nextBook;
+	this.code = code || null;
+	this.heading = heading || null;
+	this.title = title || null;
+	this.name = name || null;
+	this.abbrev = abbrev || null;
+	this.lastChapter = lastChapter || null;
+	this.priorBook = priorBook || null;
+	this.nextBook = nextBook || null; // do not want undefined in database
 	if (lastChapter) {
 		Object.freeze(this);
 	} else {
@@ -1474,8 +1473,10 @@ History.prototype.fill = function(callback) {
 	this.items.splice(0);
 	this.collection.selectAll(function(results) {
 		if (results instanceof IOError) {
+			console.log('History.fill Error', JSON.stringify(results));
 			callback(results);
 		} else {
+			console.log('History.fill Success, rows=', results.length);
 			that.items = results;
 			that.isFilled = true;
 			that.isViewCurrent = false;
@@ -1594,12 +1595,17 @@ FileReader.prototype.readTextFile = function(filepath, callback) {
 * This class is a facade over the database that is used to store bible text, concordance,
 * table of contents, history and questions.
 */
-function DeviceDatabase(code, name) {
+function DeviceDatabase(code) {
 	this.code = code;
-	this.name = name;
     this.className = 'DeviceDatabase';
 	var size = 30 * 1024 * 1024;
-	this.database = window.openDatabase(this.code, "1.0", this.name, size);
+    if (window.sqlitePlugin === undefined) {
+        console.log('opening WEB SQL Database, stores in Cache');
+        this.database = window.openDatabase(this.code, "1.0", this.code, size);
+    } else {
+        console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
+        this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
+    }
 	this.codex = new CodexAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
 	this.concordance = new ConcordanceAdapter(this);
@@ -1607,22 +1613,20 @@ function DeviceDatabase(code, name) {
 	this.styleUse = new StyleUseAdapter(this);
 	this.history = new HistoryAdapter(this);
 	this.questions = new QuestionsAdapter(this);
-	Object.freeze(this);
+	Object.seal(this);
 }
 DeviceDatabase.prototype.select = function(statement, values, callback) {
-    this.database.readTransaction(onTranStart, onTranError);
-
-    function onTranStart(tx) {
+    this.database.readTransaction(function(tx) {
         console.log(statement, values);
-        tx.executeSql(statement, values, onSelectSuccess);
-    }
-    function onTranError(err) {
-        console.log('select tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
+        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
+    });
     function onSelectSuccess(tx, results) {
         console.log('select success results, rowCount=', results.rows.length);
         callback(results);
+    }
+    function onSelectError(tx, err) {
+        console.log('select error', JSON.stringify(err));
+        callback(new IOError(err));
     }
 };
 DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
@@ -1676,6 +1680,25 @@ DeviceDatabase.prototype.executeDDL = function(statement, callback) {
     function onExecSuccess(tx, results) {
         callback();
     }
+};
+/** A smoke test is needed before a database is opened. */
+/** A second more though test is needed after a database is opened.*/
+DeviceDatabase.prototype.smokeTest = function(callback) {
+    var statement = 'select count(*) from tableContents';
+    this.select(statement, [], function(results) {
+        if (results instanceof IOError) {
+            console.log('found Error', JSON.stringify(results));
+            callback(false);
+        } else if (results.rows.length === 0) {
+            callback(false);
+        } else {
+            var row = results.rows.item(0);
+            console.log('found', JSON.stringify(row));
+            var count = row['count(*)'];
+            console.log('count=', count);
+            callback(count > 0);
+        }
+    });
 };
 
 /**
@@ -1999,8 +2022,10 @@ HistoryAdapter.prototype.selectAll = function(callback) {
 		'from history order by timestamp desc limit ?';
 	this.database.select(statement, [ MAX_HISTORY ], function(results) {
 		if (results instanceof IOError) {
+			console.log('HistoryAdapter.selectAll Error', JSON.stringify(results));
 			callback(results);
 		} else {
+			console.log('HistoryAdapter.selectAll Success, rows=', results.rows.length);
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
@@ -2021,7 +2046,7 @@ HistoryAdapter.prototype.replace = function(item, callback) {
 	this.database.executeDML(statement, values, function(count) {
 		if (count instanceof IOError) {
 			console.log('replace error', JSON.stringify(count));
-			callback(results);
+			callback(count);
 		} else {
 			callback(count);
 		}
@@ -2029,6 +2054,7 @@ HistoryAdapter.prototype.replace = function(item, callback) {
 };
 HistoryAdapter.prototype.delete = function(values, callback) {
 	// Will be needed to prevent growth of history
+	callback();
 };/**
 * This class is the database adapter for the questions table
 */
@@ -2075,7 +2101,7 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 			console.log('select questions failure ' + JSON.stringify(results));
 			callback(results);
 		} else {
-			var array = []
+			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
 				var ques = new QuestionItem(row.book, row.chapter, row.verse, row.displayRef, row.question, 
@@ -2087,9 +2113,9 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.replace = function(item, callback) {
-	var values = [ item.book, item.chapter, item.verse, item.displayRef, item.question, item.askedDateTime.toISOString() ];
 	var statement = 'replace into questions(book, chapter, verse, displayRef, question, askedDateTime) ' +
-		'values (?,?,?,?,?)';
+		'values (?,?,?,?,?,?)';
+	var values = [ item.book, item.chapter, item.verse, item.displayRef, item.question, item.askedDateTime.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
@@ -2100,10 +2126,10 @@ QuestionsAdapter.prototype.replace = function(item, callback) {
 	});
 };
 QuestionsAdapter.prototype.update = function(item, callback) {
-	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answer, item.askedDateTime.toISOString() ];
 	var statement = 'update questions set instructor = ?, answerDateTime = ?, answer = ?' +
 		'where askedDateTime = ?';
-	this.database.update(statement, values, function(results) {
+	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answer, item.askedDateTime.toISOString() ];
+	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on update');
 			callback(results);
@@ -2122,7 +2148,7 @@ types.concordance = true;
 types.styleIndex = true;
 types.history = true;
 types.questions = true;
-var database = new DeviceDatabase(types.versionCode, 'versionNameHere');
+var database = new DeviceDatabase(types.versionCode + '.word1');
 
 var builder = new AssetBuilder(types, database);
 builder.build(function(err) {

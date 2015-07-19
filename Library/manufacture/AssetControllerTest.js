@@ -8,7 +8,7 @@ types.concordance = true;
 types.styleIndex = true;
 types.history = true;
 types.questions = true;
-var database = new DeviceDatabase(types.versionCode, 'versionNameHere');
+var database = new DeviceDatabase(types.versionCode + '.word1');
 
 var builder = new AssetBuilder(types, database);
 builder.build(function(err) {
