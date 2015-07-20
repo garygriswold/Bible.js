@@ -114,15 +114,16 @@ AppViewController.prototype.begin = function(develop) {
 			that.searchView.hideView();
 			that.history.addEvent(event);
 		});
-		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
-			that.statusBar.setTitle(event.detail.reference);
-		});
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);
 		});
 		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
+	});
+	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
+		console.log('caught set title event', JSON.stringify(event.detail.reference));
+		that.statusBar.setTitle(event.detail.reference);
 	});
 	function fillFromDatabase(callback) {
 		that.tableContents.fill(function() {

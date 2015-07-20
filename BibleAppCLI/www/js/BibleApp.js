@@ -115,15 +115,20 @@ AppViewController.prototype.begin = function(develop) {
 			that.searchView.hideView();
 			that.history.addEvent(event);
 		});
-		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
-			that.statusBar.setTitle(event.detail.reference);
-		});
+//		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
+//			console.log('caught set title event', JSON.stringify(event.detail.reference));
+//			that.statusBar.setTitle(event.detail.reference);
+//		});
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);
 		});
 		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
+	});
+	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
+		console.log('caught set title event', JSON.stringify(event.detail.reference));
+		that.statusBar.setTitle(event.detail.reference);
 	});
 	function fillFromDatabase(callback) {
 		that.tableContents.fill(function() {
@@ -156,9 +161,11 @@ CodexView.prototype.hideView = function() {
 	}
 };
 CodexView.prototype.showView = function(nodeId) {
+	console.log('Codex.show view', nodeId);
 	this.chapterQueue.splice(0);
 	var firstChapter = new Reference(nodeId);
 	firstChapter = this.tableContents.ensureChapter(firstChapter);
+	document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
 	var chapter = firstChapter;
 	for (var i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.priorChapter(chapter);
@@ -186,16 +193,21 @@ CodexView.prototype.showView = function(nodeId) {
 			});
 		} else {
 			that.scrollTo(firstChapter);
+			that.currentNodeId = firstChapter.nodeId;
 			that.addChapterInProgress = false;
+			console.log('add event listener SCROLL onScrollHandler');
 			document.addEventListener('scroll', onScrollHandler);
 		}
 	}
 	function onScrollHandler(event) {
+		console.log('found on scroll event', that.currentNodeId);
 		if (! that.addChapterInProgress && that.chapterQueue.length > 1) {
 			var ref = identifyCurrentChapter();
+			console.log('passed first test', ref.nodeId, that.currentNodeId);
 			if (ref.nodeId !== that.currentNodeId) {
+				console.log('passed second test');
 				that.currentNodeId = ref.nodeId;
-				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));//expensive solution
+				//document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));//expensive solution
 			}
 			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.innerHeight) {
 				that.addChapterInProgress = true;

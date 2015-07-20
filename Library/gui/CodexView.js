@@ -24,6 +24,7 @@ CodexView.prototype.showView = function(nodeId) {
 	this.chapterQueue.splice(0);
 	var firstChapter = new Reference(nodeId);
 	firstChapter = this.tableContents.ensureChapter(firstChapter);
+	document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
 	var chapter = firstChapter;
 	for (var i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.priorChapter(chapter);
@@ -51,6 +52,7 @@ CodexView.prototype.showView = function(nodeId) {
 			});
 		} else {
 			that.scrollTo(firstChapter);
+			that.currentNodeId = firstChapter.nodeId;
 			that.addChapterInProgress = false;
 			document.addEventListener('scroll', onScrollHandler);
 		}

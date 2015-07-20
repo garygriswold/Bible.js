@@ -17,7 +17,6 @@
  * under the License.
  */
 var app = {
-    // Application Constructor
     initialize: function() {
         this.bindEvents();
     },
@@ -33,79 +32,14 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
-    },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
         console.log('DEVICE IS READY **');
-        var appView = new AppViewController('WEB');
+        var appView = new AppViewController('WEB.word1');
         //appView.begin('TableContentsView');
         //appView.begin('SearchView');
         //appView.begin('QuestionsView')
         //appView.begin('HistoryView');
         appView.begin();
-
-        /*
-        var db = window.openDatabase('WEB', "1.0", 'WEB', 20*1024*1024);
-        console.log('past open database');
-        console.log('db', JSON.stringify(db));
-        db.transaction(onTranSuccess, onTranError);//, onTranVoid);
-        console.log('past transaction');
-
-        function onTranSuccess(tx) {
-            console.log('have transaction');
-            console.log('trans', JSON.stringify(tx));
-            tx.executeSql('create table if not exists abc(a int)');
-            console.log('after create table');
-            tx.executeSql('insert into abc (a) values (1)');
-            console.log('after insert into (1)');
-            tx.executeSql('insert into abc (a) values (2)');
-            console.log('after insert into (2)');
-            tx.executeSql('select * from abc', [], function(tx, results) {
-                var len = results.rows.length;
-                console.log('results len=', len);
-                for (var i=0; i<len; i++) {
-                    console.log(results.rows.item(i));
-                }
-            });
-        }
-        function onTranError(err) {
-            console.log('have tran error');
-            console.log('error', JSON.stringify(err));
-        }
-        function onTranVoid(err) {
-            console.log('have tran void');
-            console.log('error', JSON.stringify(err));
-        }
-        var fileTransfer = new FileTransfer();
-        var uri = encodeURI('http://www.google.com');
-        var fileURL = 'cdvfile://localhost/cordova.file.dataDirectory/sample8.txt';
-
-        fileTransfer.download(
-            uri,
-            fileURL,
-            function(entry) {
-                console.log("download complete: " + entry.toURL());
-            },
-            function(error) {
-                console.log("download error source " + error.source);
-                console.log("download error target " + error.target);
-                console.log("upload error code" + error.code);
-            },
-            false,
-                {
-                    headers: {"Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA==" }
-                }
-        );
-*/
+        //app.receivedEvent('deviceready');
     }
 }
 
