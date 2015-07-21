@@ -3,8 +3,7 @@
 */
 function HTMLBuilder() {
 	this.result = [];
-	this.filename = 'bible.html';
-	Object.freeze(this);
+	Object.seal(this);
 }
 HTMLBuilder.prototype.toHTML = function(fragment) {
 	this.readRecursively(fragment);

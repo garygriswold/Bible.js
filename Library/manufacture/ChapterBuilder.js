@@ -20,7 +20,12 @@ ChapterBuilder.prototype.loadDB = function(callback) {
 		for (var j=0; j<chapters.length; j++) {
 			var chapter = chapters[j];
 			var chapterNum = findChapterNum(chapter);
-			var values = [ bookCode, chapterNum, chapter.toUSX() ];
+			var usx = chapter.toUSX();
+			var domBuilder = new DOMBuilder();
+			var dom = domBuilder.toDOM(chapter);
+			var htmlBuilder = new HTMLBuilder();
+			var html = htmlBuilder.toHTML(dom);
+			var values = [ bookCode, chapterNum, usx, html ];
 			array.push(values);
 		}
 	}

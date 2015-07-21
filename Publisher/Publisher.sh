@@ -9,6 +9,7 @@ cat ../Library/manufacture/HistoryBuilder.js >> Publisher.js
 cat ../Library/manufacture/QuestionsBuilder.js >> Publisher.js
 cat ../Library/manufacture/StyleIndexBuilder.js >> Publisher.js
 cat ../Library/manufacture/StyleUseBuilder.js >> Publisher.js
+cat ../Library/manufacture/DOMBuilder.js >> Publisher.js
 cat ../Library/manufacture/HTMLBuilder.js >> Publisher.js
 cat ../Library/model/usx/USX.js >> Publisher.js
 cat ../Library/model/usx/Book.js >> Publisher.js
@@ -36,7 +37,6 @@ cat ../Library/io/StyleIndexAdapter.js >> Publisher.js
 cat ../Library/io/StyleUseAdapter.js >> Publisher.js
 cat ../Library/io/HistoryAdapter.js >> Publisher.js
 cat ../Library/io/QuestionsAdapter.js >> Publisher.js
-cat ../Library/io/DeviceCollection.js >> Publisher.js
 cat ../Library/manufacture/AssetControllerTest.js >> Publisher.js
 #node Publisher.js
 npm start

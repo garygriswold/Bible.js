@@ -26,9 +26,6 @@ function AssetBuilder(types, database) {
 	if (types.questions) {
 		this.builders.push(new QuestionsBuilder(this.database.questions));
 	}
-	if (types.html) {
-		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.
-	}
 	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
 	this.filesToProcess = [];

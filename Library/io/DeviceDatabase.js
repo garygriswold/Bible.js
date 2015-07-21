@@ -75,17 +75,15 @@ DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
     }
 };
 DeviceDatabase.prototype.executeDDL = function(statement, callback) {
-    this.database.transaction(onTranStart, onTranError);
-
-    function onTranStart(tx) {
+    this.database.transaction(function(tx) {
         console.log('exec tran start', statement);
-        tx.executeSql(statement, [], onExecSuccess);
-    }
-    function onTranError(err) {
-        callback(new IOError(err));
-    }
+        tx.executeSql(statement, [], onExecSuccess, onExecError);
+    });
     function onExecSuccess(tx, results) {
         callback();
+    }
+    function onExecError(tx, err) {
+        callback(new IOError(err));
     }
 };
 /** A smoke test is needed before a database is opened. */

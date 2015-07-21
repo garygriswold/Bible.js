@@ -12,7 +12,6 @@ function AssetType(location, versionCode) {
 	this.history = false;
 	this.questions = false;
 	this.styleIndex = false;
-	this.html = false;// this one is not ready
 	Object.seal(this);
 }
 AssetType.prototype.getUSXPath = function(filename) {
@@ -46,9 +45,6 @@ function AssetBuilder(types, database) {
 	}
 	if (types.questions) {
 		this.builders.push(new QuestionsBuilder(this.database.questions));
-	}
-	if (types.html) {
-		this.builders.push(new HTMLBuilder()); // HTMLBuilder does NOT yet have the correct interface for this.
 	}
 	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
@@ -136,7 +132,13 @@ ChapterBuilder.prototype.loadDB = function(callback) {
 		for (var j=0; j<chapters.length; j++) {
 			var chapter = chapters[j];
 			var chapterNum = findChapterNum(chapter);
-			var values = [ bookCode, chapterNum, chapter.toUSX() ];
+			var usx = chapter.toUSX();
+			console.log('chapter in USX', usx);
+			var domBuilder = new DOMBuilder();
+			var dom = domBuilder.toDOM(chapter);
+			var htmlBuilder = new HTMLBuilder();
+			var html = htmlBuilder.toHTML(dom);
+			var values = [ bookCode, chapterNum, usx, html ];
 			array.push(values);
 		}
 	}
@@ -509,12 +511,78 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		}
 	});
 };/**
+* This class iterates over the USX data model, and translates the contents to DOM.
+*
+* This method generates a DOM tree that has exactly the same parentage as the USX model.
+* This is probably a problem.  The easy insertion and deletion of nodes probably requires
+* having a hierarchy of books and chapters. GNG April 13, 2015
+*/
+function DOMBuilder() {
+	this.bookCode = '';
+	this.chapter = 0;
+	this.verse = 0;
+	this.noteNum = 0;
+
+	this.treeRoot = null;
+	Object.seal(this);
+}
+DOMBuilder.prototype.toDOM = function(usxRoot) {
+	//this.bookCode = '';
+	this.chapter = 0;
+	this.verse = 0;
+	this.noteNum = 0;
+	this.treeRoot = document.createDocumentFragment();
+	this.readRecursively(this.treeRoot, usxRoot);
+	return(this.treeRoot);
+};
+DOMBuilder.prototype.readRecursively = function(domParent, node) {
+	var domNode;
+	//console.log('dom-parent: ', domParent.nodeName, domParent.nodeType, '  node: ', node.tagName);
+	switch(node.tagName) {
+		case 'usx':
+			domNode = domParent;
+			break;
+		case 'book':
+			this.bookCode = node.code;
+			domNode = node.toDOM(domParent);
+			break;
+		case 'chapter':
+			this.chapter = node.number;
+			this.noteNum = 0;
+			domNode = node.toDOM(domParent, this.bookCode);
+			break;
+		case 'para':
+			domNode = node.toDOM(domParent);
+			break;
+		case 'verse':
+			this.verse = node.number;
+			domNode = node.toDOM(domParent, this.bookCode, this.chapter);
+			break;
+		case 'text':
+			node.toDOM(domParent, this.bookCode, this.chapter, this.noteNum);
+			domNode = domParent;
+			break;
+		case 'char':
+			domNode = node.toDOM(domParent);
+			break;
+		case 'note':
+			domNode = node.toDOM(domParent, this.bookCode, this.chapter, ++this.noteNum);
+			break;
+		default:
+			throw new Error('Unknown tagname ' + node.tagName + ' in DOMBuilder.readBook');
+	}
+	if ('children' in node) {
+		for (var i=0; i<node.children.length; i++) {
+			this.readRecursively(domNode, node.children[i]);
+		}
+	}
+};
+/**
 * This class traverses a DOM tree in order to create an equivalent HTML document.
 */
 function HTMLBuilder() {
 	this.result = [];
-	this.filename = 'bible.html';
-	Object.freeze(this);
+	Object.seal(this);
 }
 HTMLBuilder.prototype.toHTML = function(fragment) {
 	this.readRecursively(fragment);
@@ -1668,17 +1736,15 @@ DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
     }
 };
 DeviceDatabase.prototype.executeDDL = function(statement, callback) {
-    this.database.transaction(onTranStart, onTranError);
-
-    function onTranStart(tx) {
+    this.database.transaction(function(tx) {
         console.log('exec tran start', statement);
-        tx.executeSql(statement, [], onExecSuccess);
-    }
-    function onTranError(err) {
-        callback(new IOError(err));
-    }
+        tx.executeSql(statement, [], onExecSuccess, onExecError);
+    });
     function onExecSuccess(tx, results) {
         callback();
+    }
+    function onExecError(tx, err) {
+        callback(new IOError(err));
     }
 };
 /** A smoke test is needed before a database is opened. */
@@ -1724,6 +1790,7 @@ CodexAdapter.prototype.create = function(callback) {
 		'book text not null, ' +
 		'chapter integer not null, ' +
 		'xml text not null, ' +
+		'html text null, ' +
 		'primary key (book, chapter))';
 	this.database.executeDDL(statement, function(err) {
 		if (err instanceof IOError) {
@@ -1735,7 +1802,7 @@ CodexAdapter.prototype.create = function(callback) {
 	});
 };
 CodexAdapter.prototype.load = function(array, callback) {
-	var statement = 'insert into codex(book, chapter, xml) values (?,?,?)';
+	var statement = 'insert into codex(book, chapter, xml, html) values (?,?,?,?)';
 	this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
 			callback(count);

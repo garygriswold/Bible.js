@@ -1276,6 +1276,8 @@ CodexAdapter.prototype.create = function(callback) {
 		'book text not null, ' +
 		'chapter integer not null, ' +
 		'xml text not null, ' +
+		'json text null, ' +
+		'html text null, ' +
 		'primary key (book, chapter))';
 	this.database.executeDDL(statement, function(err) {
 		if (err instanceof IOError) {
@@ -1287,7 +1289,7 @@ CodexAdapter.prototype.create = function(callback) {
 	});
 };
 CodexAdapter.prototype.load = function(array, callback) {
-	var statement = 'insert into codex(book, chapter, xml) values (?,?,?)';
+	var statement = 'insert into codex(book, chapter, xml, json, html) values (?,?,?,?,?)';
 	this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
 			callback(count);
