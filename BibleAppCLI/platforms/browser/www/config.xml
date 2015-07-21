@@ -3,7 +3,7 @@
     <feature name="Device">
         <param name="browser-package" value="Device" />
     </feature>
-    <name>TheBible</name>
+    <name>Bible.js</name>
     <description>
         A Bible App designed for the free distribution of the Bible in any language.
     </description>
@@ -13,11 +13,8 @@
     <content src="index.html" />
     <preference name="BackupWebStorage" value="local" />
     <preference name="iosPersistentFileLocation" value="Library" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="UIWebViewBounce" value="false" />
+    <preference name="StatusBarStyle" value="lightcontent" />
     <access origin="*" />
-    <allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
-    <allow-intent href="tel:*" />
-    <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
-    <allow-intent href="geo:*" />
 </widget>

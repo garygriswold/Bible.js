@@ -32,7 +32,7 @@
         <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
         <param name="onload" value="true" />
     </feature>
-    <name>TheBible</name>
+    <name>Bible.js</name>
     <description>
         A Bible App designed for the free distribution of the Bible in any language.
     </description>

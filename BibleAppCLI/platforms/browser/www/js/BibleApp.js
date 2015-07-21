@@ -39,7 +39,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.statusBar = new StatusBarView(that.tableContents);
 		that.statusBar.showView();
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
-		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
+		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.barHite);
 		that.historyView = new HistoryView(that.history, that.tableContents);
 		that.questionsView = new QuestionsView(that.database.questions, that.bibleCache, that.tableContents);
 		Object.freeze(that);
@@ -115,15 +115,16 @@ AppViewController.prototype.begin = function(develop) {
 			that.searchView.hideView();
 			that.history.addEvent(event);
 		});
-		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
-			that.statusBar.setTitle(event.detail.reference);
-		});
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);
 		});
 		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
+	});
+	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
+		console.log('caught set title event', JSON.stringify(event.detail.reference));
+		that.statusBar.setTitle(event.detail.reference);
 	});
 	function fillFromDatabase(callback) {
 		that.tableContents.fill(function() {
@@ -159,6 +160,7 @@ CodexView.prototype.showView = function(nodeId) {
 	this.chapterQueue.splice(0);
 	var firstChapter = new Reference(nodeId);
 	firstChapter = this.tableContents.ensureChapter(firstChapter);
+	document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
 	var chapter = firstChapter;
 	for (var i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.priorChapter(chapter);
@@ -186,6 +188,7 @@ CodexView.prototype.showView = function(nodeId) {
 			});
 		} else {
 			that.scrollTo(firstChapter);
+			that.currentNodeId = firstChapter.nodeId;
 			that.addChapterInProgress = false;
 			document.addEventListener('scroll', onScrollHandler);
 		}
@@ -720,10 +723,14 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookRef) {
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
+var STATUS_BAR_BUTTON_HEIGHT = 44;
+var STATUS_BAR_HEIGHT = 62; // ios
+
 function StatusBarView(tableContents) {
-	this.hite = hite;
+	this.hite = STATUS_BAR_BUTTON_HEIGHT;
+	this.barHite = STATUS_BAR_HEIGHT;
 	this.tableContents = tableContents;
-	this.titleWidth = window.innerWidth - hite * 3.5;
+	this.titleWidth = window.innerWidth - this.hite * 3.5;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.currentReference = null;
@@ -742,7 +749,7 @@ StatusBarView.prototype.showView = function() {
 
 	function setupBackground(hite) {
     	var canvas = document.createElement('canvas');
-    	canvas.setAttribute('height', hite + 7);
+    	canvas.setAttribute('height', STATUS_BAR_HEIGHT);
     	var maxSize = (window.innerHeight > window.innerWidth) ? window.innerHeight : window.innerWidth;
     	canvas.setAttribute('width', maxSize);
     	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
@@ -763,9 +770,7 @@ StatusBarView.prototype.showView = function() {
 	}
 	function setupTocButton(hite, color) {
 		var canvas = drawTOCIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; left: 0');
-		canvas.setAttribute('width', '18pt');
-		canvas.setAttribute('height', '18pt');
+		canvas.setAttribute('style', 'position: fixed; top: 14px; left: 0');
 		document.getElementById('tocCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -779,7 +784,7 @@ StatusBarView.prototype.showView = function() {
 		that.titleCanvas.setAttribute('id', 'titleCanvas');
 		that.titleCanvas.setAttribute('height', hite);
 		that.titleCanvas.setAttribute('width', that.titleWidth);
-		that.titleCanvas.setAttribute('style', 'position: fixed; top: 0; left:' + hite * 1.1 + 'px');
+		that.titleCanvas.setAttribute('style', 'position: fixed; top: 14px; left:' + hite * 1.1 + 'px');
 
 		that.titleGraphics = that.titleCanvas.getContext('2d');
 		that.titleGraphics.fillStyle = '#000000';
@@ -798,7 +803,7 @@ StatusBarView.prototype.showView = function() {
 	}
 	function setupSearchButton(hite, color) {
 		var canvas = drawSearchIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; right: 0; border: none');
+		canvas.setAttribute('style', 'position: fixed; top: 14px; right: 0; border: none');
 		document.getElementById('searchCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -809,7 +814,7 @@ StatusBarView.prototype.showView = function() {
 	}
 	function setupQuestionsButton(hite, color) {
 		var canvas = drawQuestionsIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; border: none; right: ' + hite * 1.14 + 'px');
+		canvas.setAttribute('style', 'position: fixed; top: 14px; border: none; right: ' + hite * 1.14 + 'px');
 		document.getElementById('questionsCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -2313,14 +2318,14 @@ TOC.prototype.toJSON = function() {
 * This class holds the table of contents data each book of the Bible, or whatever books were loaded.
 */
 function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook) {
-	this.code = code;
-	this.heading = heading;
-	this.title = title;
-	this.name = name;
-	this.abbrev = abbrev;
-	this.lastChapter = lastChapter;
-	this.priorBook = priorBook;
-	this.nextBook = nextBook;
+	this.code = code || null;
+	this.heading = heading || null;
+	this.title = title || null;
+	this.name = name || null;
+	this.abbrev = abbrev || null;
+	this.lastChapter = lastChapter || null;
+	this.priorBook = priorBook || null;
+	this.nextBook = nextBook || null; // do not want undefined in database
 	if (lastChapter) {
 		Object.freeze(this);
 	} else {
