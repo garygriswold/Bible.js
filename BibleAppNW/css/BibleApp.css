@@ -5,7 +5,7 @@ body {
 	margin: 0;
 }
 #codexRoot {
-	margin: 10%;
+	margin: 7%;
 	font-family: serif;
 	font-size: 14pt;
 	color: #000000;
@@ -399,7 +399,7 @@ input.searchField {
 */
 
 #tocRoot {
-	margin-top: 17%;
+	margin-top: 80px;
 	margin-bottom: 0%; /* this doesn't seem to work */
 	margin-left: 10%;
 	margin-right: 10%;

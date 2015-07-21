@@ -122,7 +122,7 @@ AppViewController.prototype.begin = function(develop) {
 		});
 	});
 	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
-		console.log('caught set title event', JSON.stringify(event.detail.reference));
+		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
 		that.statusBar.setTitle(event.detail.reference);
 	});
 	function fillFromDatabase(callback) {

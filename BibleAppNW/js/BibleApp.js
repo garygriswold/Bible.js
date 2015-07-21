@@ -15,11 +15,13 @@ var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
 	};
+var SERVER_HOST = 'localhost'; // 72.2.112.243
+var SERVER_PORT = '8080'; 
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
 	this.touch = new Hammer(document.getElementById('codexRoot'));
-	this.database = new DeviceDatabase(versionCode, 'nameForVersion');
+	this.database = new DeviceDatabase(versionCode);
 }
 AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.database.tableContents);
@@ -28,15 +30,16 @@ AppViewController.prototype.begin = function(develop) {
 	this.history = new History(this.database.history);
 	var that = this;
 	fillFromDatabase(function() {
+
 		console.log('loaded toc', that.tableContents.size());
 		console.log('loaded history', that.history.size());
 		
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.lookup = new Lookup(that.tableContents);
-		that.statusBar = new StatusBarView(88, that.tableContents);
+		that.statusBar = new StatusBarView(that.tableContents);
 		that.statusBar.showView();
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
-		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.hite + 7);
+		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.barHite);
 		that.historyView = new HistoryView(that.history, that.tableContents);
 		that.questionsView = new QuestionsView(that.database.questions, that.bibleCache, that.tableContents);
 		Object.freeze(that);
@@ -56,9 +59,12 @@ AppViewController.prototype.begin = function(develop) {
 			break;
 		default:
 			var lastItem = that.history.last();
-			console.log(lastItem);
-			console.log('History size', that.history.size());
-			that.codexView.showView(lastItem.nodeId);
+			console.log('LastItem', JSON.stringify(lastItem));
+			if (that.tableContents.size() > 0) {
+				that.codexView.showView(lastItem.nodeId);
+			} else {
+				window.alert('There is no Bible present');
+			}
 		}
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();
@@ -109,15 +115,16 @@ AppViewController.prototype.begin = function(develop) {
 			that.searchView.hideView();
 			that.history.addEvent(event);
 		});
-		document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
-			that.statusBar.setTitle(event.detail.reference);
-		});
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);
 		});
 		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
+	});
+	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
+		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
+		that.statusBar.setTitle(event.detail.reference);
 	});
 	function fillFromDatabase(callback) {
 		that.tableContents.fill(function() {
@@ -153,6 +160,7 @@ CodexView.prototype.showView = function(nodeId) {
 	this.chapterQueue.splice(0);
 	var firstChapter = new Reference(nodeId);
 	firstChapter = this.tableContents.ensureChapter(firstChapter);
+	document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
 	var chapter = firstChapter;
 	for (var i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.priorChapter(chapter);
@@ -180,6 +188,7 @@ CodexView.prototype.showView = function(nodeId) {
 			});
 		} else {
 			that.scrollTo(firstChapter);
+			that.currentNodeId = firstChapter.nodeId;
 			that.addChapterInProgress = false;
 			document.addEventListener('scroll', onScrollHandler);
 		}
@@ -714,10 +723,14 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookRef) {
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
-function StatusBarView(hite, tableContents) {
-	this.hite = hite;
+var STATUS_BAR_BUTTON_HEIGHT = 44;
+var STATUS_BAR_HEIGHT = 62; // ios
+
+function StatusBarView(tableContents) {
+	this.hite = STATUS_BAR_BUTTON_HEIGHT;
+	this.barHite = STATUS_BAR_HEIGHT;
 	this.tableContents = tableContents;
-	this.titleWidth = window.innerWidth - hite * 3.5;
+	this.titleWidth = window.innerWidth - this.hite * 3.5;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.currentReference = null;
@@ -736,7 +749,7 @@ StatusBarView.prototype.showView = function() {
 
 	function setupBackground(hite) {
     	var canvas = document.createElement('canvas');
-    	canvas.setAttribute('height', hite + 7);
+    	canvas.setAttribute('height', STATUS_BAR_HEIGHT);
     	var maxSize = (window.innerHeight > window.innerWidth) ? window.innerHeight : window.innerWidth;
     	canvas.setAttribute('width', maxSize);
     	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
@@ -757,7 +770,7 @@ StatusBarView.prototype.showView = function() {
 	}
 	function setupTocButton(hite, color) {
 		var canvas = drawTOCIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; left: 0');
+		canvas.setAttribute('style', 'position: fixed; top: 14px; left: 0');
 		document.getElementById('tocCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -771,7 +784,7 @@ StatusBarView.prototype.showView = function() {
 		that.titleCanvas.setAttribute('id', 'titleCanvas');
 		that.titleCanvas.setAttribute('height', hite);
 		that.titleCanvas.setAttribute('width', that.titleWidth);
-		that.titleCanvas.setAttribute('style', 'position: fixed; top: 0; left:' + hite * 1.1 + 'px');
+		that.titleCanvas.setAttribute('style', 'position: fixed; top: 14px; left:' + hite * 1.1 + 'px');
 
 		that.titleGraphics = that.titleCanvas.getContext('2d');
 		that.titleGraphics.fillStyle = '#000000';
@@ -790,7 +803,7 @@ StatusBarView.prototype.showView = function() {
 	}
 	function setupSearchButton(hite, color) {
 		var canvas = drawSearchIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; right: 0; border: none');
+		canvas.setAttribute('style', 'position: fixed; top: 14px; right: 0; border: none');
 		document.getElementById('searchCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -801,7 +814,7 @@ StatusBarView.prototype.showView = function() {
 	}
 	function setupQuestionsButton(hite, color) {
 		var canvas = drawQuestionsIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 0; border: none; right: ' + hite * 1.14 + 'px');
+		canvas.setAttribute('style', 'position: fixed; top: 14px; border: none; right: ' + hite * 1.14 + 'px');
 		document.getElementById('questionsCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -1134,17 +1147,16 @@ function IOError(err) {
 * This class is a facade over the database that is used to store bible text, concordance,
 * table of contents, history and questions.
 */
-function DeviceDatabase(code, name) {
+function DeviceDatabase(code) {
 	this.code = code;
-	this.name = name;
     this.className = 'DeviceDatabase';
 	var size = 30 * 1024 * 1024;
     if (window.sqlitePlugin === undefined) {
         console.log('opening WEB SQL Database, stores in Cache');
-        this.database = window.openDatabase(this.code, "1.0", this.name, size);
+        this.database = window.openDatabase(this.code, "1.0", this.code, size);
     } else {
         console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
-        this.database = window.sqlitePlugin.openDatabase({name: this.code + '.sqlite', location: 2});
+        this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
     }
 	this.codex = new CodexAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
@@ -1153,20 +1165,20 @@ function DeviceDatabase(code, name) {
 	this.styleUse = new StyleUseAdapter(this);
 	this.history = new HistoryAdapter(this);
 	this.questions = new QuestionsAdapter(this);
-	Object.freeze(this);
+	Object.seal(this);
 }
 DeviceDatabase.prototype.select = function(statement, values, callback) {
     this.database.readTransaction(function(tx) {
         console.log(statement, values);
         tx.executeSql(statement, values, onSelectSuccess, onSelectError);
     });
-    function onSelectError(tx, err) {
-        console.log('select tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
     function onSelectSuccess(tx, results) {
         console.log('select success results, rowCount=', results.rows.length);
         callback(results);
+    }
+    function onSelectError(tx, err) {
+        console.log('select error', JSON.stringify(err));
+        callback(new IOError(err));
     }
 };
 DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
@@ -1220,6 +1232,25 @@ DeviceDatabase.prototype.executeDDL = function(statement, callback) {
     function onExecSuccess(tx, results) {
         callback();
     }
+};
+/** A smoke test is needed before a database is opened. */
+/** A second more though test is needed after a database is opened.*/
+DeviceDatabase.prototype.smokeTest = function(callback) {
+    var statement = 'select count(*) from tableContents';
+    this.select(statement, [], function(results) {
+        if (results instanceof IOError) {
+            console.log('found Error', JSON.stringify(results));
+            callback(false);
+        } else if (results.rows.length === 0) {
+            callback(false);
+        } else {
+            var row = results.rows.item(0);
+            console.log('found', JSON.stringify(row));
+            var count = row['count(*)'];
+            console.log('count=', count);
+            callback(count > 0);
+        }
+    });
 };
 
 /**
@@ -1567,7 +1598,7 @@ HistoryAdapter.prototype.replace = function(item, callback) {
 	this.database.executeDML(statement, values, function(count) {
 		if (count instanceof IOError) {
 			console.log('replace error', JSON.stringify(count));
-			callback(results);
+			callback(count);
 		} else {
 			callback(count);
 		}
@@ -1575,6 +1606,7 @@ HistoryAdapter.prototype.replace = function(item, callback) {
 };
 HistoryAdapter.prototype.delete = function(values, callback) {
 	// Will be needed to prevent growth of history
+	callback();
 };/**
 * This class is the database adapter for the questions table
 */
@@ -1735,7 +1767,12 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 * 1) Read Chapter 11.2ms, 49K heap increase
 * 2) Parse USX 6.0ms, 306K heap increase
 * 3) Generate Dom 2.16ms, 85K heap increase
-* These tests were done when IO was file.  They need to be redone.
+* These tests were done when IO was file.
+*
+* On Jul 21, 2015 some performance checks were done using SQLite as the datastore.
+* 1) Read Chapter 4.4 ms, 4K heap increase
+* 2) Parse USX 1.8 ms, still large heap increase
+* 3) Generate Dom  1ms, still large heap increase
 *
 * This class does not yet have a means to remove old entries from cache.  
 * It is possible that DB access is fast enough, and this is not needed.
@@ -2253,14 +2290,14 @@ TOC.prototype.toJSON = function() {
 * This class holds the table of contents data each book of the Bible, or whatever books were loaded.
 */
 function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook) {
-	this.code = code;
-	this.heading = heading;
-	this.title = title;
-	this.name = name;
-	this.abbrev = abbrev;
-	this.lastChapter = lastChapter;
-	this.priorBook = priorBook;
-	this.nextBook = nextBook;
+	this.code = code || null;
+	this.heading = heading || null;
+	this.title = title || null;
+	this.name = name || null;
+	this.abbrev = abbrev || null;
+	this.lastChapter = lastChapter || null;
+	this.priorBook = priorBook || null;
+	this.nextBook = nextBook || null; // do not want undefined in database
 	if (lastChapter) {
 		Object.freeze(this);
 	} else {

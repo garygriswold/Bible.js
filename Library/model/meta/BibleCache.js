@@ -8,7 +8,12 @@
 * 1) Read Chapter 11.2ms, 49K heap increase
 * 2) Parse USX 6.0ms, 306K heap increase
 * 3) Generate Dom 2.16ms, 85K heap increase
-* These tests were done when IO was file.  They need to be redone.
+* These tests were done when IO was file.
+*
+* On Jul 21, 2015 some performance checks were done using SQLite as the datastore.
+* 1) Read Chapter 4.4 ms, 4K heap increase
+* 2) Parse USX 1.8 ms, still large heap increase
+* 3) Generate Dom  1ms, still large heap increase
 *
 * This class does not yet have a means to remove old entries from cache.  
 * It is possible that DB access is fast enough, and this is not needed.
