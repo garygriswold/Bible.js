@@ -1837,21 +1837,15 @@ function BibleCache(collection) {
 }
 BibleCache.prototype.getChapter = function(reference, callback) {
 	var that = this;
-	//var chapter = this.chapterMap[reference.nodeId];
-	//if (chapter !== undefined) {
-	//	callback(chapter);
-	//} else {
 	this.collection.getChapter(reference, function(row) {
 		if (row instanceof IOError) {
 			console.log('Bible Cache found Error', row);
 			callback(row);
 		} else {
 			chapter = that.parser.readBook(row);
-			//that.chapterMap[reference.nodeId] = chapter;
 			callback(chapter);
 		}
 	});
-	//}
 };
 BibleCache.prototype.getChapterHTML = function(reference, callback) {
 	var that = this;
