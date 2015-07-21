@@ -111,15 +111,12 @@ CodexView.prototype.showView = function(nodeId) {
 };
 CodexView.prototype.showChapter = function(chapter, callback) {
 	var that = this;
-	this.bibleCache.getChapter(chapter, function(usxNode) {
-		if (usxNode instanceof IOError) {
-			console.log((JSON.stringify(usxNode)));
-			callback(usxNode);
+	this.bibleCache.getChapterHTML(chapter, function(html) {
+		if (html instanceof IOError) {
+			console.log((JSON.stringify(html)));
+			callback(html);
 		} else {
-			var dom = new DOMBuilder();
-			dom.bookCode = chapter.book;
-			var fragment = dom.toDOM(usxNode);
-			chapter.rootNode.appendChild(fragment);
+			chapter.rootNode.outerHTML = html;
 			console.log('added chapter', chapter.nodeId);
 			callback();
 		}

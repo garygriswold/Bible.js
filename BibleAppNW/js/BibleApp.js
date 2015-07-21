@@ -247,14 +247,14 @@ CodexView.prototype.showView = function(nodeId) {
 };
 CodexView.prototype.showChapter = function(chapter, callback) {
 	var that = this;
-	this.bibleCache.getChapter(chapter, function(usxNode) {
+	console.log('inside showChapter', chapter.nodeId);
+	this.bibleCache.getChapterHTML(chapter, function(usxNode) {
 		if (usxNode instanceof IOError) {
 			console.log((JSON.stringify(usxNode)));
 			callback(usxNode);
 		} else {
-			var dom = new DOMBuilder();
-			dom.bookCode = chapter.book;
-			var fragment = dom.toDOM(usxNode);
+			var fragment = document.createElement('div');
+			fragment.innerHTML = usxNode;
 			chapter.rootNode.appendChild(fragment);
 			console.log('added chapter', chapter.nodeId);
 			callback();
@@ -1220,17 +1220,15 @@ DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
     }
 };
 DeviceDatabase.prototype.executeDDL = function(statement, callback) {
-    this.database.transaction(onTranStart, onTranError);
-
-    function onTranStart(tx) {
+    this.database.transaction(function(tx) {
         console.log('exec tran start', statement);
-        tx.executeSql(statement, [], onExecSuccess);
-    }
-    function onTranError(err) {
-        callback(new IOError(err));
-    }
+        tx.executeSql(statement, [], onExecSuccess, onExecError);
+    });
     function onExecSuccess(tx, results) {
         callback();
+    }
+    function onExecError(tx, err) {
+        callback(new IOError(err));
     }
 };
 /** A smoke test is needed before a database is opened. */
@@ -1276,7 +1274,6 @@ CodexAdapter.prototype.create = function(callback) {
 		'book text not null, ' +
 		'chapter integer not null, ' +
 		'xml text not null, ' +
-		'json text null, ' +
 		'html text null, ' +
 		'primary key (book, chapter))';
 	this.database.executeDDL(statement, function(err) {
@@ -1289,7 +1286,7 @@ CodexAdapter.prototype.create = function(callback) {
 	});
 };
 CodexAdapter.prototype.load = function(array, callback) {
-	var statement = 'insert into codex(book, chapter, xml, json, html) values (?,?,?,?,?)';
+	var statement = 'insert into codex(book, chapter, xml, html) values (?,?,?,?)';
 	this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
 			callback(count);
@@ -1297,6 +1294,23 @@ CodexAdapter.prototype.load = function(array, callback) {
 			console.log('load codex success, rowcount', count);
 			callback();
 		}
+	});
+};
+CodexAdapter.prototype.getChapterHTML = function(values, callback) {
+	var that = this;
+	var statement = 'select html from codex where book=? and chapter=?';
+	var array = [ values.book, values.chapter ];
+	console.log('CodexAdapter.getChapterHTML', statement, array);
+	this.database.select(statement, array, function(results) {
+		if (results instanceof IOError) {
+			console.log('found Error', results);
+			callback(results);
+		} else if (results.rows.length === 0) {
+			callback();
+		} else {
+			var row = results.rows.item(0);
+			callback(row.html);
+        }
 	});
 };
 CodexAdapter.prototype.getChapter = function(values, callback) {
@@ -1776,6 +1790,11 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 * 2) Parse USX 1.8 ms, still large heap increase
 * 3) Generate Dom  1ms, still large heap increase
 *
+* On Jul 22, 2015 stored HTML in DB and changed to use that so there is less App processing
+* 1) Read Chapter 2.0 ms
+* 2) Assign using innerHTML 0.5 ms
+* 3) Append 0.13 ms
+*
 * This class does not yet have a means to remove old entries from cache.  
 * It is possible that DB access is fast enough, and this is not needed.
 * GNG July 5, 2015
@@ -1788,22 +1807,40 @@ function BibleCache(collection) {
 }
 BibleCache.prototype.getChapter = function(reference, callback) {
 	var that = this;
+	//var chapter = this.chapterMap[reference.nodeId];
+	//if (chapter !== undefined) {
+	//	callback(chapter);
+	//} else {
+	this.collection.getChapter(reference, function(row) {
+		if (row instanceof IOError) {
+			console.log('Bible Cache found Error', row);
+			callback(row);
+		} else {
+			chapter = that.parser.readBook(row);
+			//that.chapterMap[reference.nodeId] = chapter;
+			callback(chapter);
+		}
+	});
+	//}
+};
+BibleCache.prototype.getChapterHTML = function(reference, callback) {
+	var that = this;
 	var chapter = this.chapterMap[reference.nodeId];
 	if (chapter !== undefined) {
 		callback(chapter);
 	} else {
-		this.collection.getChapter(reference, function(row) {
-			if (row instanceof IOError) {
-				console.log('Bible Cache found Error', row);
-				callback(row);
+		this.collection.getChapterHTML(reference, function(chapter) {
+			if (chapter instanceof IOError) {
+				console.log('Bible Cache found Error', chapter);
+				callback(chapter);
 			} else {
-				chapter = that.parser.readBook(row);
 				that.chapterMap[reference.nodeId] = chapter;
 				callback(chapter);
 			}
 		});
 	}
 };
+
 
 /**
 * This class contains the Canon of Scripture as 66 books.  It is used to control

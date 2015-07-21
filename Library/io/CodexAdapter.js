@@ -43,6 +43,23 @@ CodexAdapter.prototype.load = function(array, callback) {
 		}
 	});
 };
+CodexAdapter.prototype.getChapterHTML = function(values, callback) {
+	var that = this;
+	var statement = 'select html from codex where book=? and chapter=?';
+	var array = [ values.book, values.chapter ];
+	console.log('CodexAdapter.getChapterHTML', statement, array);
+	this.database.select(statement, array, function(results) {
+		if (results instanceof IOError) {
+			console.log('found Error', results);
+			callback(results);
+		} else if (results.rows.length === 0) {
+			callback();
+		} else {
+			var row = results.rows.item(0);
+			callback(row.html);
+        }
+	});
+};
 CodexAdapter.prototype.getChapter = function(values, callback) {
 	var that = this;
 	var statement = 'select xml from codex where book=? and chapter=?';

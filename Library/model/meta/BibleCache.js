@@ -15,6 +15,11 @@
 * 2) Parse USX 1.8 ms, still large heap increase
 * 3) Generate Dom  1ms, still large heap increase
 *
+* On Jul 22, 2015 stored HTML in DB and changed to use that so there is less App processing
+* 1) Read Chapter 2.0 ms
+* 2) Assign using innerHTML 0.5 ms
+* 3) Append 0.13 ms
+*
 * This class does not yet have a means to remove old entries from cache.  
 * It is possible that DB access is fast enough, and this is not needed.
 * GNG July 5, 2015
@@ -27,20 +32,32 @@ function BibleCache(collection) {
 }
 BibleCache.prototype.getChapter = function(reference, callback) {
 	var that = this;
+	this.collection.getChapter(reference, function(row) {
+		if (row instanceof IOError) {
+			console.log('Bible Cache found Error', row);
+			callback(row);
+		} else {
+			chapter = that.parser.readBook(row);
+			callback(chapter);
+		}
+	});
+};
+BibleCache.prototype.getChapterHTML = function(reference, callback) {
+	var that = this;
 	var chapter = this.chapterMap[reference.nodeId];
 	if (chapter !== undefined) {
 		callback(chapter);
 	} else {
-		this.collection.getChapter(reference, function(row) {
-			if (row instanceof IOError) {
-				console.log('Bible Cache found Error', row);
-				callback(row);
+		this.collection.getChapterHTML(reference, function(chapter) {
+			if (chapter instanceof IOError) {
+				console.log('Bible Cache found Error', chapter);
+				callback(chapter);
 			} else {
-				chapter = that.parser.readBook(row);
 				that.chapterMap[reference.nodeId] = chapter;
 				callback(chapter);
 			}
 		});
 	}
 };
+
 
