@@ -31,6 +31,7 @@ cat ../Library/io/IOError.js >> Publisher.js
 cat ../Library/io/NodeFileReader.js >> Publisher.js
 cat ../Library/io/DeviceDatabase.js >> Publisher.js
 cat ../Library/io/CodexAdapter.js >> Publisher.js
+cat ../Library/io/VersesAdapter.js >> Publisher.js
 cat ../Library/io/ConcordanceAdapter.js >> Publisher.js
 cat ../Library/io/TableContentsAdapter.js >> Publisher.js
 cat ../Library/io/StyleIndexAdapter.js >> Publisher.js

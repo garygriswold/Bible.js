@@ -6,6 +6,7 @@ function AssetType(location, versionCode) {
 	this.location = location;
 	this.versionCode = versionCode;
 	this.chapterFiles = false;
+	this.verseFiles = false;
 	this.tableContents = false;
 	this.concordance = false;
 	this.history = false;

@@ -4,30 +4,41 @@
 */
 function ChapterBuilder(collection) {
 	this.collection = collection;
-	this.books = [];
+	this.chapters = [];
 	Object.seal(this);
 }
 ChapterBuilder.prototype.readBook = function(usxRoot) {
 	var that = this;
-	this.books.push(usxRoot);
+	var bookCode = null;
+	var chapterNum = 0;
+	var oneChapter = new USX({ version: 2.0 });
+	for (var i=0; i<usxRoot.children.length; i++) {
+		var childNode = usxRoot.children[i];
+		switch(childNode.tagName) {
+			case 'book':
+				bookCode = childNode.code;
+				break;
+			case 'chapter':
+				this.chapters.push({bookCode: bookCode, chapterNum: chapterNum, usxTree: oneChapter});
+				oneChapter = new USX({ version: 2.0 });
+				chapterNum = childNode.number;
+				break;
+		}
+		oneChapter.addChild(childNode);
+	}
+	this.chapters.push({bookCode: bookCode, chapterNum: chapterNum, usxTree: oneChapter});
 };
 ChapterBuilder.prototype.loadDB = function(callback) {
 	var array = [];
-	for (var i=0; i<this.books.length; i++) {
-		var usxRoot = this.books[i];
-		var bookCode = null; // set as a side-effect of breakBookIntoChapters
-		var chapters = breakBookIntoChapters(usxRoot);
-		for (var j=0; j<chapters.length; j++) {
-			var chapter = chapters[j];
-			var chapterNum = findChapterNum(chapter);
-			var usx = chapter.toUSX();
-			var domBuilder = new DOMBuilder();
-			var dom = domBuilder.toDOM(chapter);
-			var htmlBuilder = new HTMLBuilder();
-			var html = htmlBuilder.toHTML(dom);
-			var values = [ bookCode, chapterNum, usx, html ];
-			array.push(values);
-		}
+	for (var i=0; i<this.chapters.length; i++) {
+		var chapObj = this.chapters[i];
+		var xml = chapObj.usxTree.toUSX();
+		var domBuilder = new DOMBuilder();
+		var dom = domBuilder.toDOM(chapObj.usxTree);
+		var htmlBuilder = new HTMLBuilder();
+		var html = htmlBuilder.toHTML(dom);
+		var values = [ chapObj.bookCode, chapObj.chapterNum, xml, html ];
+		array.push(values);
 	}
 	this.collection.load(array, function(err) {
 		if (err instanceof IOError) {
@@ -37,40 +48,5 @@ ChapterBuilder.prototype.loadDB = function(callback) {
 			console.log('store chapters success');
 			callback();
 		}
-	});
-
-	function breakBookIntoChapters(usxRoot) {
-		var chapters = [];
-		var chapterNum = 0;
-		var oneChapter = new USX({ version: 2.0 });
-		for (var i=0; i<usxRoot.children.length; i++) {
-			var childNode = usxRoot.children[i];
-			switch(childNode.tagName) {
-				case 'book':
-					bookCode = childNode.code;
-					break;
-				case 'chapter':
-					chapters.push(oneChapter);
-					oneChapter = new USX({ version: 2.0 });
-					chapterNum = childNode.number;
-					break;
-			}
-			oneChapter.addChild(childNode);
-		}
-		chapters.push(oneChapter);
-		return(chapters);
-	}
-	function findChapterNum(oneChapter) {
-		for (var i=0; i<oneChapter.children.length; i++) {
-			var child = oneChapter.children[i];
-			if (child.tagName === 'chapter') {
-				return(child.number);
-			}
-		}
-		return(0);
-	}	
+	});	
 };
-ChapterBuilder.prototype.toJSON = function() {
-	return('');
-};
-

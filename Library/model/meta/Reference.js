@@ -22,6 +22,7 @@ function Reference(book, chapter, verse) {
 		this.nodeId = book;
 	}
 	this.rootNode = document.createElement('div');
+	this.rootNode.setAttribute('id', 'top' + this.nodeId);
 	Object.freeze(this);
 }
 Reference.prototype.path = function() {

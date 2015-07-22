@@ -7,6 +7,7 @@ function AssetType(location, versionCode) {
 	this.location = location;
 	this.versionCode = versionCode;
 	this.chapterFiles = false;
+	this.verseFiles = false;
 	this.tableContents = false;
 	this.concordance = false;
 	this.history = false;
@@ -27,8 +28,11 @@ function AssetBuilder(types, database) {
 	this.types = types;
 	this.database = database;
 	this.builders = [];
-	if (types.chapterFiles) {
+	if (types.chapterFiles || types.verseFiles) {
 		this.builders.push(new ChapterBuilder(this.database.codex));
+	}
+	if (types.verseFiles) {
+		this.builders.push(new VerseBuilder(this.database.verses));
 	}
 	if (types.tableContents) {
 		this.builders.push(new TOCBuilder(this.database.tableContents));
@@ -116,31 +120,41 @@ AssetBuilder.prototype.build = function(callback) {
 */
 function ChapterBuilder(collection) {
 	this.collection = collection;
-	this.books = [];
+	this.chapters = [];
 	Object.seal(this);
 }
 ChapterBuilder.prototype.readBook = function(usxRoot) {
 	var that = this;
-	this.books.push(usxRoot);
+	var bookCode = null;
+	var chapterNum = 0;
+	var oneChapter = new USX({ version: 2.0 });
+	for (var i=0; i<usxRoot.children.length; i++) {
+		var childNode = usxRoot.children[i];
+		switch(childNode.tagName) {
+			case 'book':
+				bookCode = childNode.code;
+				break;
+			case 'chapter':
+				this.chapters.push({bookCode: bookCode, chapterNum: chapterNum, usxTree: oneChapter});
+				oneChapter = new USX({ version: 2.0 });
+				chapterNum = childNode.number;
+				break;
+		}
+		oneChapter.addChild(childNode);
+	}
+	this.chapters.push({bookCode: bookCode, chapterNum: chapterNum, usxTree: oneChapter});
 };
 ChapterBuilder.prototype.loadDB = function(callback) {
 	var array = [];
-	for (var i=0; i<this.books.length; i++) {
-		var usxRoot = this.books[i];
-		var bookCode = null; // set as a side-effect of breakBookIntoChapters
-		var chapters = breakBookIntoChapters(usxRoot);
-		for (var j=0; j<chapters.length; j++) {
-			var chapter = chapters[j];
-			var chapterNum = findChapterNum(chapter);
-			var usx = chapter.toUSX();
-			console.log('chapter in USX', usx);
-			var domBuilder = new DOMBuilder();
-			var dom = domBuilder.toDOM(chapter);
-			var htmlBuilder = new HTMLBuilder();
-			var html = htmlBuilder.toHTML(dom);
-			var values = [ bookCode, chapterNum, usx, html ];
-			array.push(values);
-		}
+	for (var i=0; i<this.chapters.length; i++) {
+		var chapObj = this.chapters[i];
+		var xml = chapObj.usxTree.toUSX();
+		var domBuilder = new DOMBuilder();
+		var dom = domBuilder.toDOM(chapObj.usxTree);
+		var htmlBuilder = new HTMLBuilder();
+		var html = htmlBuilder.toHTML(dom);
+		var values = [ chapObj.bookCode, chapObj.chapterNum, xml, html ];
+		array.push(values);
 	}
 	this.collection.load(array, function(err) {
 		if (err instanceof IOError) {
@@ -150,43 +164,8 @@ ChapterBuilder.prototype.loadDB = function(callback) {
 			console.log('store chapters success');
 			callback();
 		}
-	});
-
-	function breakBookIntoChapters(usxRoot) {
-		var chapters = [];
-		var chapterNum = 0;
-		var oneChapter = new USX({ version: 2.0 });
-		for (var i=0; i<usxRoot.children.length; i++) {
-			var childNode = usxRoot.children[i];
-			switch(childNode.tagName) {
-				case 'book':
-					bookCode = childNode.code;
-					break;
-				case 'chapter':
-					chapters.push(oneChapter);
-					oneChapter = new USX({ version: 2.0 });
-					chapterNum = childNode.number;
-					break;
-			}
-			oneChapter.addChild(childNode);
-		}
-		chapters.push(oneChapter);
-		return(chapters);
-	}
-	function findChapterNum(oneChapter) {
-		for (var i=0; i<oneChapter.children.length; i++) {
-			var child = oneChapter.children[i];
-			if (child.tagName === 'chapter') {
-				return(child.number);
-			}
-		}
-		return(0);
-	}	
+	});	
 };
-ChapterBuilder.prototype.toJSON = function() {
-	return('');
-};
-
 /**
 * This class traverses the USX data model in order to find each book, and chapter
 * in order to create a table of contents that is localized to the language of the text.
@@ -1675,6 +1654,7 @@ function DeviceDatabase(code) {
         this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
     }
 	this.codex = new CodexAdapter(this);
+    this.verses = new VersesAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
 	this.concordance = new ConcordanceAdapter(this);
 	this.styleIndex = new StyleIndexAdapter(this);
@@ -1812,6 +1792,23 @@ CodexAdapter.prototype.load = function(array, callback) {
 		}
 	});
 };
+CodexAdapter.prototype.getChapterHTML = function(values, callback) {
+	var that = this;
+	var statement = 'select html from codex where book=? and chapter=?';
+	var array = [ values.book, values.chapter ];
+	console.log('CodexAdapter.getChapterHTML', statement, array);
+	this.database.select(statement, array, function(results) {
+		if (results instanceof IOError) {
+			console.log('found Error', results);
+			callback(results);
+		} else if (results.rows.length === 0) {
+			callback();
+		} else {
+			var row = results.rows.item(0);
+			callback(row.html);
+        }
+	});
+};
 CodexAdapter.prototype.getChapter = function(values, callback) {
 	var that = this;
 	var statement = 'select xml from codex where book=? and chapter=?';
@@ -1828,6 +1825,76 @@ CodexAdapter.prototype.getChapter = function(values, callback) {
 			callback(row.xml);
         }
 	});
+};/**
+* This class is the database adapter for the verses table
+*/
+function VersesAdapter(database) {
+	this.database = database;
+	this.className = 'VersesAdapter';
+	Object.freeze(this);
+}
+VersesAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists verses', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop verses success');
+			callback();
+		}
+	});
+};
+VersesAdapter.prototype.create = function(callback) {
+	var statement = 'create table if not exists verses(' +
+		'reference text not null primary key, ' +
+		'xml text not null, ' +
+		'html text not null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create verses success');
+			callback();
+		}
+	});
+};
+VersesAdapter.prototype.load = function(array, callback) {
+	var statement = 'insert into verses(reference, xml, html) values (?,?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load verses success, rowcount', count);
+			callback();
+		}
+	});
+};
+VersesAdapter.prototype.getVerseHTML = function(values, callback) {
+	var that = this;
+	var statement = createStatement(values.length);
+	this.database.select(statement, values, function(results) {
+		if (results instanceof IOError) {
+			console.log('VersesAdapter select found Error', results);
+			callback(results);
+		} else if (results.rows.length === 0) {
+			callback(new IOError({code: 0, message: 'No Rows Found'}));
+		} else {
+			var row = results.rows.item(0);
+			callback(row.html);
+        }
+	});
+	function createStatement(numValues) {
+		if (numValues === 1) {
+			return('select html from verses where reference=?');
+		} else if (numValues === undefined || numValues === 0) {
+			return('select html from verses where reference=XXXXXXXX');
+		} else {
+			var array = new Array[numValues];
+			for (var i=0; i<numValues; i++) {
+				array[i] = '?';
+			}
+			return('select html from verses where reference in (' + array.join(',') + ')');
+		}
+	}
 };/**
 * This class is the database adapter for the concordance table
 */
@@ -2210,11 +2277,12 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 */
 var types = new AssetType('document', 'WEB');
 types.chapterFiles = true;
-types.tableContents = true;
-types.concordance = true;
-types.styleIndex = true;
-types.history = true;
-types.questions = true;
+types.verseFiles = false;
+types.tableContents = false;
+types.concordance = false;
+types.styleIndex = false;
+types.history = false;
+types.questions = false;
 var database = new DeviceDatabase(types.versionCode + '.word1');
 
 var builder = new AssetBuilder(types, database);

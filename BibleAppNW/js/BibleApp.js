@@ -147,7 +147,6 @@ function CodexView(tableContents, bibleCache, statusBarHeight) {
 	this.rootNode = document.getElementById('codexRoot');
 	this.currentNodeId = null;
 	var that = this;
-	this.addChapterInProgress = false;
 	Object.seal(this);
 }
 CodexView.prototype.hideView = function() {
@@ -157,6 +156,7 @@ CodexView.prototype.hideView = function() {
 	}
 };
 CodexView.prototype.showView = function(nodeId) {
+	console.log('show', nodeId);
 	this.chapterQueue.splice(0);
 	var firstChapter = new Reference(nodeId);
 	firstChapter = this.tableContents.ensureChapter(firstChapter);
@@ -187,51 +187,51 @@ CodexView.prototype.showView = function(nodeId) {
 				processQueue(index +1);
 			});
 		} else {
+			console.log('scrollTo', firstChapter.nodeId);
 			that.scrollTo(firstChapter);
 			that.currentNodeId = firstChapter.nodeId;
-			that.addChapterInProgress = false;
 			document.addEventListener('scroll', onScrollHandler);
 		}
 	}
 	function onScrollHandler(event) {
-		if (! that.addChapterInProgress && that.chapterQueue.length > 1) {
-			var ref = identifyCurrentChapter();
-			if (ref.nodeId !== that.currentNodeId) {
-				that.currentNodeId = ref.nodeId;
-				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));//expensive solution
+		document.removeEventListener('scroll', onScrollHandler);
+		console.log('root node', that.rootNode.children.length, that.chapterQueue.length);
+		var ref = identifyCurrentChapter();
+		if (ref.nodeId !== that.currentNodeId) {
+			that.currentNodeId = ref.nodeId;
+			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));//expensive solution
+		}
+		if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.innerHeight) {
+			var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
+			var nextChapter = that.tableContents.nextChapter(lastChapter);
+			if (nextChapter) {
+				that.rootNode.appendChild(nextChapter.rootNode);
+				that.chapterQueue.push(nextChapter);
+				that.showChapter(nextChapter, function() {
+					that.checkChapterQueueSize('top');
+					document.addEventListener('scroll', onScrollHandler);
+				});
+			} else {
+				document.addEventListener('scroll', onScrollHandler);
 			}
-			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.innerHeight) {
-				that.addChapterInProgress = true;
-				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
-				var nextChapter = that.tableContents.nextChapter(lastChapter);
-				if (nextChapter) {
-					that.rootNode.appendChild(nextChapter.rootNode);
-					that.chapterQueue.push(nextChapter);
-					that.showChapter(nextChapter, function() {
-						that.checkChapterQueueSize('top');
-						that.addChapterInProgress = false;
-					});
-				} else {
-					that.addChapterInProgress = false;
-				}
+		}
+		else if (window.scrollY <= window.innerHeight) {
+			var saveY = window.scrollY;
+			var firstChapter = that.chapterQueue[0];
+			var beforeChapter = that.tableContents.priorChapter(firstChapter);
+			if (beforeChapter) {
+				that.rootNode.insertBefore(beforeChapter.rootNode, that.rootNode.firstChild);
+				that.chapterQueue.unshift(beforeChapter);
+				that.showChapter(beforeChapter, function() {
+					window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
+					that.checkChapterQueueSize('bottom');
+					document.addEventListener('scroll', onScrollHandler);
+				});
+			} else {
+				document.addEventListener('scroll', onScrollHandler);
 			}
-			else if (window.scrollY <= window.innerHeight) {	
-				that.addChapterInProgress = true;
-				var saveY = window.scrollY;
-				var firstChapter = that.chapterQueue[0];
-				var beforeChapter = that.tableContents.priorChapter(firstChapter);
-				if (beforeChapter) {
-					that.rootNode.insertBefore(beforeChapter.rootNode, firstChapter.rootNode);
-					that.chapterQueue.unshift(beforeChapter);
-					that.showChapter(beforeChapter, function() {
-						window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
-						that.checkChapterQueueSize('bottom');
-						that.addChapterInProgress = false;
-					});
-				} else {
-					that.addChapterInProgress = false;
-				}
-			}
+		} else {
+			document.addEventListener('scroll', onScrollHandler);
 		}
 	}
 	function identifyCurrentChapter() {
@@ -247,15 +247,12 @@ CodexView.prototype.showView = function(nodeId) {
 };
 CodexView.prototype.showChapter = function(chapter, callback) {
 	var that = this;
-	console.log('inside showChapter', chapter.nodeId);
-	this.bibleCache.getChapterHTML(chapter, function(usxNode) {
-		if (usxNode instanceof IOError) {
-			console.log((JSON.stringify(usxNode)));
-			callback(usxNode);
+	this.bibleCache.getChapterHTML(chapter, function(html) {
+		if (html instanceof IOError) {
+			console.log((JSON.stringify(html)));
+			callback(html);
 		} else {
-			var fragment = document.createElement('div');
-			fragment.innerHTML = usxNode;
-			chapter.rootNode.appendChild(fragment);
+			chapter.rootNode.innerHTML = html;
 			console.log('added chapter', chapter.nodeId);
 			callback();
 		}
@@ -267,9 +264,11 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 		switch(whichEnd) {
 			case 'top':
 				discard = this.chapterQueue.shift();
+				this.rootNode.removeChild(discard.rootNode);
 				break;
 			case 'bottom':
 				discard = this.chapterQueue.pop();
+				this.rootNode.removeChild(discard.rootNode);
 				break;
 			default:
 				console.log('unknown end ' + whichEnd + ' in CodexView.checkChapterQueueSize.');
@@ -278,13 +277,16 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 	}
 };
 CodexView.prototype.scrollTo = function(reference) {
+	console.log('scrollTo', reference.nodeId);
 	var verse = document.getElementById(reference.nodeId);
 	if (verse === null) {
+		console.log('verse is not found');
 		// when null it is probably because verse num was out of range.
 		var nextChap = this.tableContents.nextChapter(reference);
 		verse = document.getElementById(nextChap.nodeId);
 	}
 	if (verse) {
+		console.log('verse is found');
 		var rect = verse.getBoundingClientRect();
 		window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
 	}
@@ -1159,6 +1161,7 @@ function DeviceDatabase(code) {
         this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
     }
 	this.codex = new CodexAdapter(this);
+    this.verses = new VersesAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
 	this.concordance = new ConcordanceAdapter(this);
 	this.styleIndex = new StyleIndexAdapter(this);
@@ -1300,7 +1303,6 @@ CodexAdapter.prototype.getChapterHTML = function(values, callback) {
 	var that = this;
 	var statement = 'select html from codex where book=? and chapter=?';
 	var array = [ values.book, values.chapter ];
-	console.log('CodexAdapter.getChapterHTML', statement, array);
 	this.database.select(statement, array, function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
@@ -1317,7 +1319,6 @@ CodexAdapter.prototype.getChapter = function(values, callback) {
 	var that = this;
 	var statement = 'select xml from codex where book=? and chapter=?';
 	var array = [ values.book, values.chapter ];
-	console.log('CodexAdapter.getChapter', statement, array);
 	this.database.select(statement, array, function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
@@ -1329,6 +1330,76 @@ CodexAdapter.prototype.getChapter = function(values, callback) {
 			callback(row.xml);
         }
 	});
+};/**
+* This class is the database adapter for the verses table
+*/
+function VersesAdapter(database) {
+	this.database = database;
+	this.className = 'VersesAdapter';
+	Object.freeze(this);
+}
+VersesAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists verses', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop verses success');
+			callback();
+		}
+	});
+};
+VersesAdapter.prototype.create = function(callback) {
+	var statement = 'create table if not exists verses(' +
+		'reference text not null primary key, ' +
+		'xml text not null, ' +
+		'html text not null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create verses success');
+			callback();
+		}
+	});
+};
+VersesAdapter.prototype.load = function(array, callback) {
+	var statement = 'insert into verses(reference, xml, html) values (?,?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load verses success, rowcount', count);
+			callback();
+		}
+	});
+};
+VersesAdapter.prototype.getVerseHTML = function(values, callback) {
+	var that = this;
+	var statement = createStatement(values.length);
+	this.database.select(statement, values, function(results) {
+		if (results instanceof IOError) {
+			console.log('VersesAdapter select found Error', results);
+			callback(results);
+		} else if (results.rows.length === 0) {
+			callback(new IOError({code: 0, message: 'No Rows Found'}));
+		} else {
+			var row = results.rows.item(0);
+			callback(row.html);
+        }
+	});
+	function createStatement(numValues) {
+		if (numValues === 1) {
+			return('select html from verses where reference=?');
+		} else if (numValues === undefined || numValues === 0) {
+			return('select html from verses where reference=XXXXXXXX');
+		} else {
+			var array = new Array[numValues];
+			for (var i=0; i<numValues; i++) {
+				array[i] = '?';
+			}
+			return('select html from verses where reference in (' + array.join(',') + ')');
+		}
+	}
 };/**
 * This class is the database adapter for the concordance table
 */
@@ -1807,21 +1878,15 @@ function BibleCache(collection) {
 }
 BibleCache.prototype.getChapter = function(reference, callback) {
 	var that = this;
-	//var chapter = this.chapterMap[reference.nodeId];
-	//if (chapter !== undefined) {
-	//	callback(chapter);
-	//} else {
 	this.collection.getChapter(reference, function(row) {
 		if (row instanceof IOError) {
 			console.log('Bible Cache found Error', row);
 			callback(row);
 		} else {
 			chapter = that.parser.readBook(row);
-			//that.chapterMap[reference.nodeId] = chapter;
 			callback(chapter);
 		}
 	});
-	//}
 };
 BibleCache.prototype.getChapterHTML = function(reference, callback) {
 	var that = this;
@@ -2247,6 +2312,7 @@ function Reference(book, chapter, verse) {
 		this.nodeId = book;
 	}
 	this.rootNode = document.createElement('div');
+	this.rootNode.setAttribute('id', 'rot' + this.nodeId);
 	Object.freeze(this);
 }
 Reference.prototype.path = function() {

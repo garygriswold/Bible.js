@@ -7,8 +7,11 @@ function AssetBuilder(types, database) {
 	this.types = types;
 	this.database = database;
 	this.builders = [];
-	if (types.chapterFiles) {
+	if (types.chapterFiles || types.verseFiles) {
 		this.builders.push(new ChapterBuilder(this.database.codex));
+	}
+	if (types.verseFiles) {
+		this.builders.push(new VerseBuilder(this.database.verses));
 	}
 	if (types.tableContents) {
 		this.builders.push(new TOCBuilder(this.database.tableContents));

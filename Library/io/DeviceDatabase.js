@@ -14,6 +14,7 @@ function DeviceDatabase(code) {
         this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
     }
 	this.codex = new CodexAdapter(this);
+    this.verses = new VersesAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
 	this.concordance = new ConcordanceAdapter(this);
 	this.styleIndex = new StyleIndexAdapter(this);

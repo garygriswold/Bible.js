@@ -11,7 +11,6 @@ function CodexView(tableContents, bibleCache, statusBarHeight) {
 	this.rootNode = document.getElementById('codexRoot');
 	this.currentNodeId = null;
 	var that = this;
-	this.addChapterInProgress = false;
 	Object.seal(this);
 }
 CodexView.prototype.hideView = function() {
@@ -53,49 +52,47 @@ CodexView.prototype.showView = function(nodeId) {
 		} else {
 			that.scrollTo(firstChapter);
 			that.currentNodeId = firstChapter.nodeId;
-			that.addChapterInProgress = false;
 			document.addEventListener('scroll', onScrollHandler);
 		}
 	}
 	function onScrollHandler(event) {
-		if (! that.addChapterInProgress && that.chapterQueue.length > 1) {
-			var ref = identifyCurrentChapter();
-			if (ref.nodeId !== that.currentNodeId) {
-				that.currentNodeId = ref.nodeId;
-				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));//expensive solution
+		document.removeEventListener('scroll', onScrollHandler);
+		var ref = identifyCurrentChapter();
+		if (ref.nodeId !== that.currentNodeId) {
+			that.currentNodeId = ref.nodeId;
+			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));//expensive solution
+		}
+		if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.innerHeight) {
+			var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
+			var nextChapter = that.tableContents.nextChapter(lastChapter);
+			if (nextChapter) {
+				that.rootNode.appendChild(nextChapter.rootNode);
+				that.chapterQueue.push(nextChapter);
+				that.showChapter(nextChapter, function() {
+					that.checkChapterQueueSize('top');
+					document.addEventListener('scroll', onScrollHandler);
+				});
+			} else {
+				document.addEventListener('scroll', onScrollHandler);
 			}
-			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.innerHeight) {
-				that.addChapterInProgress = true;
-				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
-				var nextChapter = that.tableContents.nextChapter(lastChapter);
-				if (nextChapter) {
-					that.rootNode.appendChild(nextChapter.rootNode);
-					that.chapterQueue.push(nextChapter);
-					that.showChapter(nextChapter, function() {
-						that.checkChapterQueueSize('top');
-						that.addChapterInProgress = false;
-					});
-				} else {
-					that.addChapterInProgress = false;
-				}
+		}
+		else if (window.scrollY <= window.innerHeight) {
+			var saveY = window.scrollY;
+			var firstChapter = that.chapterQueue[0];
+			var beforeChapter = that.tableContents.priorChapter(firstChapter);
+			if (beforeChapter) {
+				that.rootNode.insertBefore(beforeChapter.rootNode, that.rootNode.firstChild);
+				that.chapterQueue.unshift(beforeChapter);
+				that.showChapter(beforeChapter, function() {
+					window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
+					that.checkChapterQueueSize('bottom');
+					document.addEventListener('scroll', onScrollHandler);
+				});
+			} else {
+				document.addEventListener('scroll', onScrollHandler);
 			}
-			else if (window.scrollY <= window.innerHeight) {	
-				that.addChapterInProgress = true;
-				var saveY = window.scrollY;
-				var firstChapter = that.chapterQueue[0];
-				var beforeChapter = that.tableContents.priorChapter(firstChapter);
-				if (beforeChapter) {
-					that.rootNode.insertBefore(beforeChapter.rootNode, firstChapter.rootNode);
-					that.chapterQueue.unshift(beforeChapter);
-					that.showChapter(beforeChapter, function() {
-						window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
-						that.checkChapterQueueSize('bottom');
-						that.addChapterInProgress = false;
-					});
-				} else {
-					that.addChapterInProgress = false;
-				}
-			}
+		} else {
+			document.addEventListener('scroll', onScrollHandler);
 		}
 	}
 	function identifyCurrentChapter() {
@@ -116,7 +113,7 @@ CodexView.prototype.showChapter = function(chapter, callback) {
 			console.log((JSON.stringify(html)));
 			callback(html);
 		} else {
-			chapter.rootNode.outerHTML = html;
+			chapter.rootNode.innerHTML = html;
 			console.log('added chapter', chapter.nodeId);
 			callback();
 		}
@@ -128,9 +125,11 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 		switch(whichEnd) {
 			case 'top':
 				discard = this.chapterQueue.shift();
+				this.rootNode.removeChild(discard.rootNode);
 				break;
 			case 'bottom':
 				discard = this.chapterQueue.pop();
+				this.rootNode.removeChild(discard.rootNode);
 				break;
 			default:
 				console.log('unknown end ' + whichEnd + ' in CodexView.checkChapterQueueSize.');
@@ -139,6 +138,7 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 	}
 };
 CodexView.prototype.scrollTo = function(reference) {
+	console.log('scrollTo', reference.nodeId);
 	var verse = document.getElementById(reference.nodeId);
 	if (verse === null) {
 		// when null it is probably because verse num was out of range.
