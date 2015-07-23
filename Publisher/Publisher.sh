@@ -3,6 +3,7 @@ echo \"use strict\"\; > Publisher.js
 cat ../Library/manufacture/AssetType.js >> Publisher.js
 cat ../Library/manufacture/AssetBuilder.js >> Publisher.js
 cat ../Library/manufacture/ChapterBuilder.js >> Publisher.js
+cat ../Library/manufacture/VerseBuilder.js >> Publisher.js
 cat ../Library/manufacture/TOCBuilder.js >> Publisher.js
 cat ../Library/manufacture/ConcordanceBuilder.js >> Publisher.js
 cat ../Library/manufacture/HistoryBuilder.js >> Publisher.js

@@ -24,15 +24,15 @@
 * It is possible that DB access is fast enough, and this is not needed.
 * GNG July 5, 2015
 */
-function BibleCache(collection) {
-	this.collection = collection;
+function BibleCache(adapter) {
+	this.adapter = adapter;
 	this.chapterMap = {};
 	this.parser = new USXParser();
 	Object.freeze(this);
 }
 BibleCache.prototype.getChapter = function(reference, callback) {
 	var that = this;
-	this.collection.getChapter(reference, function(row) {
+	this.adapter.getChapter(reference, function(row) {
 		if (row instanceof IOError) {
 			console.log('Bible Cache found Error', row);
 			callback(row);
@@ -48,7 +48,7 @@ BibleCache.prototype.getChapterHTML = function(reference, callback) {
 	if (chapter !== undefined) {
 		callback(chapter);
 	} else {
-		this.collection.getChapterHTML(reference, function(chapter) {
+		this.adapter.getChapterHTML(reference, function(chapter) {
 			if (chapter instanceof IOError) {
 				console.log('Bible Cache found Error', chapter);
 				callback(chapter);

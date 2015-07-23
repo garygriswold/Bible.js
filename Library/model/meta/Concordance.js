@@ -1,13 +1,13 @@
 /**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
-function Concordance(collection) {
-	this.collection = collection;
+function Concordance(adapter) {
+	this.adapter = adapter;
 	Object.freeze(this);
 }
 Concordance.prototype.search = function(words, callback) {
 	var that = this;
-	this.collection.select(words, function(refLists) {
+	this.adapter.select(words, function(refLists) {
 		if (refLists instanceof IOError) {
 			callback(refLists);
 		} else {

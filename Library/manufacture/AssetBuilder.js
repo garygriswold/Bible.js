@@ -7,11 +7,10 @@ function AssetBuilder(types, database) {
 	this.types = types;
 	this.database = database;
 	this.builders = [];
-	if (types.chapterFiles || types.verseFiles) {
-		this.builders.push(new ChapterBuilder(this.database.codex));
-	}
-	if (types.verseFiles) {
-		this.builders.push(new VerseBuilder(this.database.verses));
+	if (types.chapterFiles) {
+		var chapterBuilder = new ChapterBuilder(this.database.codex);
+		this.builders.push(chapterBuilder);
+		this.builders.push(new VerseBuilder(this.database.verses, chapterBuilder));
 	}
 	if (types.tableContents) {
 		this.builders.push(new TOCBuilder(this.database.tableContents));
@@ -66,12 +65,12 @@ AssetBuilder.prototype.build = function(callback) {
 	}
 	function processDatabaseLoad(builder) {
 		if (builder) {
-			builder.collection.drop(function(err) {
+			builder.adapter.drop(function(err) {
 				if (err instanceof IOError) {
 					console.log('drop error', err);
 					callback(err);
 				} else {
-					builder.collection.create(function(err) {
+					builder.adapter.create(function(err) {
 						if (err instanceof IOError) {
 							console.log('create error', err);
 							callback(err);

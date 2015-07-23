@@ -2,8 +2,8 @@
 * This class iterates over the USX data model, and breaks it into files one for each chapter.
 *
 */
-function ChapterBuilder(collection) {
-	this.collection = collection;
+function ChapterBuilder(adapter) {
+	this.adapter = adapter;
 	this.chapters = [];
 	Object.seal(this);
 }
@@ -40,7 +40,7 @@ ChapterBuilder.prototype.loadDB = function(callback) {
 		var values = [ chapObj.bookCode, chapObj.chapterNum, xml, html ];
 		array.push(values);
 	}
-	this.collection.load(array, function(err) {
+	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {
 			console.log('Storing chapters failed');
 			callback(err);

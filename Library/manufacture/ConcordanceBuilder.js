@@ -4,8 +4,8 @@
 *
 * This solution might not be unicode safe. GNG Apr 2, 2015
 */
-function ConcordanceBuilder(collection) {
-	this.collection = collection;
+function ConcordanceBuilder(adapter) {
+	this.adapter = adapter;
 	this.index = {};
 	this.bookCode = '';
 	this.chapter = 0;
@@ -76,7 +76,7 @@ ConcordanceBuilder.prototype.loadDB = function(callback) {
 		var item = [ words[i], refCount, refList ];
 		array.push(item);
 	}
-	this.collection.load(array, function(err) {
+	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {
 			console.log('Concordance Builder Failed', JSON.stringify(err));
 			callback(err);

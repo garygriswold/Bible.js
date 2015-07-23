@@ -3,8 +3,8 @@
 * reference to that style.  It builds an index to each style showing
 * all of the references where each style is used.
 */
-function StyleIndexBuilder(collection) {
-	this.collection = collection;
+function StyleIndexBuilder(adapter) {
+	this.adapter = adapter;
 	this.index = {};
 }
 StyleIndexBuilder.prototype.addEntry = function(word, reference) {
@@ -83,7 +83,7 @@ StyleIndexBuilder.prototype.loadDB = function(callback) {
 			array.push(values);
 		}
 	}
-	this.collection.load(array, function(err) {
+	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {
 			console.log('StyleIndex Builder Failed', JSON.stringify(err));
 			callback(err);

@@ -4,8 +4,8 @@
 * or a concordance search.  It also responds to function requests to go back 
 * in history, forward in history, or return to the last event.
 */
-function History(collection) {
-	this.collection = collection;
+function History(adapter) {
+	this.adapter = adapter;
 	this.items = [];
 	this.isFilled = false;
 	this.isViewCurrent = false;
@@ -14,7 +14,7 @@ function History(collection) {
 History.prototype.fill = function(callback) {
 	var that = this;
 	this.items.splice(0);
-	this.collection.selectAll(function(results) {
+	this.adapter.selectAll(function(results) {
 		if (results instanceof IOError) {
 			console.log('History.fill Error', JSON.stringify(results));
 			callback(results);
@@ -40,7 +40,7 @@ History.prototype.addEvent = function(event) {
 	this.isViewCurrent = false;
 	
 	// I might want a timeout to postpone this until after animation is finished.
-	this.collection.replace(item, function(err) {
+	this.adapter.replace(item, function(err) {
 		if (err instanceof IOError) {
 			console.log('replace error', JSON.stringify(err));
 		}

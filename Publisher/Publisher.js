@@ -7,7 +7,6 @@ function AssetType(location, versionCode) {
 	this.location = location;
 	this.versionCode = versionCode;
 	this.chapterFiles = false;
-	this.verseFiles = false;
 	this.tableContents = false;
 	this.concordance = false;
 	this.history = false;
@@ -28,11 +27,10 @@ function AssetBuilder(types, database) {
 	this.types = types;
 	this.database = database;
 	this.builders = [];
-	if (types.chapterFiles || types.verseFiles) {
-		this.builders.push(new ChapterBuilder(this.database.codex));
-	}
-	if (types.verseFiles) {
-		this.builders.push(new VerseBuilder(this.database.verses));
+	if (types.chapterFiles) {
+		var chapterBuilder = new ChapterBuilder(this.database.codex);
+		this.builders.push(chapterBuilder);
+		this.builders.push(new VerseBuilder(this.database.verses, chapterBuilder));
 	}
 	if (types.tableContents) {
 		this.builders.push(new TOCBuilder(this.database.tableContents));
@@ -87,12 +85,12 @@ AssetBuilder.prototype.build = function(callback) {
 	}
 	function processDatabaseLoad(builder) {
 		if (builder) {
-			builder.collection.drop(function(err) {
+			builder.adapter.drop(function(err) {
 				if (err instanceof IOError) {
 					console.log('drop error', err);
 					callback(err);
 				} else {
-					builder.collection.create(function(err) {
+					builder.adapter.create(function(err) {
 						if (err instanceof IOError) {
 							console.log('create error', err);
 							callback(err);
@@ -118,8 +116,8 @@ AssetBuilder.prototype.build = function(callback) {
 * This class iterates over the USX data model, and breaks it into files one for each chapter.
 *
 */
-function ChapterBuilder(collection) {
-	this.collection = collection;
+function ChapterBuilder(adapter) {
+	this.adapter = adapter;
 	this.chapters = [];
 	Object.seal(this);
 }
@@ -156,7 +154,7 @@ ChapterBuilder.prototype.loadDB = function(callback) {
 		var values = [ chapObj.bookCode, chapObj.chapterNum, xml, html ];
 		array.push(values);
 	}
-	this.collection.load(array, function(err) {
+	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {
 			console.log('Storing chapters failed');
 			callback(err);
@@ -167,12 +165,112 @@ ChapterBuilder.prototype.loadDB = function(callback) {
 	});	
 };
 /**
+* This class reads the USX files of the Bibles, and divides them up into verses
+* and stores the individual verses in the verses table.
+*/
+function VerseBuilder(adapter, chapterBuilder) {
+	this.adapter = adapter;
+	this.chapterBuilder = chapterBuilder;
+	this.verses = [];
+	this.breakList = []; // temp used by breakChapterIntoVerses
+	this.oneVerse = null; // temp used by breakChapterIntoVerses
+	this.scanResult = []; // temp used by extractVerseText
+	Object.seal(this); 
+}
+VerseBuilder.prototype.readBook = function(usxRoot) {
+	// Do nothing here. Data collection is done by using chapterBuilder
+};
+VerseBuilder.prototype.loadDB = function(callback) {
+	var that = this;
+	var chapters = this.chapterBuilder.chapters;
+	for (var i=0; i<chapters.length; i++) {
+		var chapObj = chapters[i];
+		console.log('splitting', chapObj.bookCode, chapObj.chapterNum);
+		if (chapObj.chapterNum > 0) {
+			var verseList = breakChapterIntoVerses(chapObj.usxTree);
+			console.log('num after break', verseList.length);
+			for (var j=0; j<verseList.length; j++) {
+				console.log('reading verse ', j);
+				var verseUSX = verseList[j];
+				//console.log('USX', JSON.stringify(verseUSX));
+				var verseNum = verseUSX.children[0].number;
+				var verseHTML = extractVerseText(verseUSX);
+				var reference = chapObj.bookCode + ':' + chapObj.chapterNum + ':' + verseNum;
+				console.log('Found ', reference);
+				this.verses.push([ reference, verseUSX.toUSX(), verseHTML ]);		
+			}
+		}
+	}
+	console.log('num verses', this.verses.length);
+	this.adapter.load(this.verses, function(err) {
+		if (err instanceof IOError) {
+			console.log('Storing verses failed');
+			callback(err);
+		} else {
+			console.log('store verses success');
+			callback();
+		}
+	});
+	function breakChapterIntoVerses(chapterUSX) {
+		that.breakList = [];
+		that.oneVerse = null;
+		breakRecursively(chapterUSX);
+		that.breakList.push(that.oneVerse); // last verse in chapter
+		return(that.breakList);
+	}
+	function breakRecursively(verseUSX) {
+		console.log('break recursively', verseUSX.tagName);
+		switch(verseUSX.tagName) {
+			case 'book':
+			case 'chapter':
+			case 'note':
+				break;
+			case 'usx':
+			case 'para':
+				for (var i=0; i<verseUSX.children.length; i++) {
+					breakRecursively(verseUSX.children[i]);
+				}
+				break;
+			case 'verse':
+				if (that.oneVerse) {
+					that.breakList.push(that.oneVerse);
+				}
+				that.oneVerse = new USX({ version: 2.0 });
+				that.oneVerse.addChild(verseUSX);
+				break;
+			case 'char':
+			case 'text':
+				if (that.oneVerse) {
+					that.oneVerse.addChild(verseUSX);
+				}
+				break;
+			default:
+				throw new Error('Unknown tagName ' + verseUSX.tagName + ' in VerseBuilder.breakRecursively.');
+		}
+	}
+	function extractVerseText(verseUSX) {
+		that.scanResult = [];
+		scanRecursively(verseUSX);
+		return(that.scanResult.join(' '));
+	}
+	function scanRecursively(node) {
+		if (node.tagName === 'text') {
+			that.scanResult.push(node.text);
+		}
+		if (node.tagName !== 'note' && 'children' in node) {
+			for (var i=0; i<node.children.length; i++) {
+				scanRecursively(node.children[i]);
+			}
+		}
+	}
+};
+/**
 * This class traverses the USX data model in order to find each book, and chapter
 * in order to create a table of contents that is localized to the language of the text.
 */
-function TOCBuilder(collection) {
-	this.collection = collection;
-	this.toc = new TOC(collection);
+function TOCBuilder(adapter) {
+	this.adapter = adapter;
+	this.toc = new TOC(adapter);
 	this.tocBook = null;
 	Object.seal(this);
 }
@@ -228,7 +326,7 @@ TOCBuilder.prototype.loadDB = function(callback) {
 		var values = [ toc.code, toc.heading, toc.title, toc.name, toc.abbrev, toc.lastChapter, toc.priorBook, toc.nextBook ];
 		array.push(values);
 	}
-	this.collection.load(array, function(err) {
+	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {
 			console.log('TOC Builder Failed', JSON.stringify(err));
 			callback(err);
@@ -246,8 +344,8 @@ TOCBuilder.prototype.toJSON = function() {
 *
 * This solution might not be unicode safe. GNG Apr 2, 2015
 */
-function ConcordanceBuilder(collection) {
-	this.collection = collection;
+function ConcordanceBuilder(adapter) {
+	this.adapter = adapter;
 	this.index = {};
 	this.bookCode = '';
 	this.chapter = 0;
@@ -318,7 +416,7 @@ ConcordanceBuilder.prototype.loadDB = function(callback) {
 		var item = [ words[i], refCount, refList ];
 		array.push(item);
 	}
-	this.collection.load(array, function(err) {
+	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {
 			console.log('Concordance Builder Failed', JSON.stringify(err));
 			callback(err);
@@ -334,8 +432,8 @@ ConcordanceBuilder.prototype.toJSON = function() {
 * This class creates an empty History table.  The table is filled
 * by user action.
 */
-function HistoryBuilder(collection) {
-	this.collection = collection;
+function HistoryBuilder(adapter) {
+	this.adapter = adapter;
 	Object.freeze(this);
 }
 HistoryBuilder.prototype.readBook = function(usxRoot) {
@@ -347,8 +445,8 @@ HistoryBuilder.prototype.loadDB = function(callback) {
 * This class creates an initial Questions table.  The table is filled
 * by user and instructor input.
 */
-function QuestionsBuilder(collection) {
-	this.collection = collection;
+function QuestionsBuilder(adapter) {
+	this.adapter = adapter;
 	Object.freeze(this);
 }
 QuestionsBuilder.prototype.readBook = function(usxRoot) {
@@ -362,8 +460,8 @@ QuestionsBuilder.prototype.loadDB = function(callback) {
 * reference to that style.  It builds an index to each style showing
 * all of the references where each style is used.
 */
-function StyleIndexBuilder(collection) {
-	this.collection = collection;
+function StyleIndexBuilder(adapter) {
+	this.adapter = adapter;
 	this.index = {};
 }
 StyleIndexBuilder.prototype.addEntry = function(word, reference) {
@@ -442,7 +540,7 @@ StyleIndexBuilder.prototype.loadDB = function(callback) {
 			array.push(values);
 		}
 	}
-	this.collection.load(array, function(err) {
+	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {
 			console.log('StyleIndex Builder Failed', JSON.stringify(err));
 			callback(err);
@@ -459,8 +557,8 @@ StyleIndexBuilder.prototype.toJSON = function() {
 * This class builds a table of already handled styles so that we can easily
 * query the styleIndex table for any styles that are new in a table.
 */
-function StyleUseBuilder(collection) {
-	this.collection = collection;
+function StyleUseBuilder(adapter) {
+	this.adapter = adapter;
 }
 StyleUseBuilder.prototype.readBook = function(usxRoot) {
 	// This table is not populated from text of the Bible
@@ -480,7 +578,7 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		var values = [ styleUse[1], styleUse[0] ];
 		array.push(values);
 	}
-	this.collection.load(array, function(err) {
+	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {
 			console.log('StyleUse Builder Failed', JSON.stringify(err));
 			callback(err);
@@ -1363,8 +1461,8 @@ function Canon() {
 /**
 * This class holds data for the table of contents of the entire Bible, or whatever part of the Bible was loaded.
 */
-function TOC(collection) {
-	this.collection = collection;
+function TOC(adapter) {
+	this.adapter = adapter;
 	this.bookList = [];
 	this.bookMap = {};
 	this.isFilled = false;
@@ -1372,7 +1470,7 @@ function TOC(collection) {
 }
 TOC.prototype.fill = function(callback) {
 	var that = this;
-	this.collection.selectAll(function(results) {
+	this.adapter.selectAll(function(results) {
 		if (results instanceof IOError) {
 			callback();
 		} else {
@@ -1450,13 +1548,13 @@ function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nex
 }/**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
-function Concordance(collection) {
-	this.collection = collection;
+function Concordance(adapter) {
+	this.adapter = adapter;
 	Object.freeze(this);
 }
 Concordance.prototype.search = function(words, callback) {
 	var that = this;
-	this.collection.select(words, function(refLists) {
+	this.adapter.select(words, function(refLists) {
 		if (refLists instanceof IOError) {
 			callback(refLists);
 		} else {
@@ -1508,8 +1606,8 @@ Concordance.prototype.search = function(words, callback) {
 * or a concordance search.  It also responds to function requests to go back 
 * in history, forward in history, or return to the last event.
 */
-function History(collection) {
-	this.collection = collection;
+function History(adapter) {
+	this.adapter = adapter;
 	this.items = [];
 	this.isFilled = false;
 	this.isViewCurrent = false;
@@ -1518,7 +1616,7 @@ function History(collection) {
 History.prototype.fill = function(callback) {
 	var that = this;
 	this.items.splice(0);
-	this.collection.selectAll(function(results) {
+	this.adapter.selectAll(function(results) {
 		if (results instanceof IOError) {
 			console.log('History.fill Error', JSON.stringify(results));
 			callback(results);
@@ -1544,7 +1642,7 @@ History.prototype.addEvent = function(event) {
 	this.isViewCurrent = false;
 	
 	// I might want a timeout to postpone this until after animation is finished.
-	this.collection.replace(item, function(err) {
+	this.adapter.replace(item, function(err) {
 		if (err instanceof IOError) {
 			console.log('replace error', JSON.stringify(err));
 		}
@@ -1796,7 +1894,6 @@ CodexAdapter.prototype.getChapterHTML = function(values, callback) {
 	var that = this;
 	var statement = 'select html from codex where book=? and chapter=?';
 	var array = [ values.book, values.chapter ];
-	console.log('CodexAdapter.getChapterHTML', statement, array);
 	this.database.select(statement, array, function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
@@ -1813,7 +1910,6 @@ CodexAdapter.prototype.getChapter = function(values, callback) {
 	var that = this;
 	var statement = 'select xml from codex where book=? and chapter=?';
 	var array = [ values.book, values.chapter ];
-	console.log('CodexAdapter.getChapter', statement, array);
 	this.database.select(statement, array, function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
@@ -2277,12 +2373,11 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 */
 var types = new AssetType('document', 'WEB');
 types.chapterFiles = true;
-types.verseFiles = false;
-types.tableContents = false;
-types.concordance = false;
-types.styleIndex = false;
-types.history = false;
-types.questions = false;
+types.tableContents = true;
+types.concordance = true;
+types.styleIndex = true;
+types.history = true;
+types.questions = true;
 var database = new DeviceDatabase(types.versionCode + '.word1');
 
 var builder = new AssetBuilder(types, database);

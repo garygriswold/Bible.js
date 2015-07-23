@@ -2,9 +2,9 @@
 * This class traverses the USX data model in order to find each book, and chapter
 * in order to create a table of contents that is localized to the language of the text.
 */
-function TOCBuilder(collection) {
-	this.collection = collection;
-	this.toc = new TOC(collection);
+function TOCBuilder(adapter) {
+	this.adapter = adapter;
+	this.toc = new TOC(adapter);
 	this.tocBook = null;
 	Object.seal(this);
 }
@@ -60,7 +60,7 @@ TOCBuilder.prototype.loadDB = function(callback) {
 		var values = [ toc.code, toc.heading, toc.title, toc.name, toc.abbrev, toc.lastChapter, toc.priorBook, toc.nextBook ];
 		array.push(values);
 	}
-	this.collection.load(array, function(err) {
+	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {
 			console.log('TOC Builder Failed', JSON.stringify(err));
 			callback(err);

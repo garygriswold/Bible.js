@@ -1,8 +1,8 @@
 /**
 * This class holds data for the table of contents of the entire Bible, or whatever part of the Bible was loaded.
 */
-function TOC(collection) {
-	this.collection = collection;
+function TOC(adapter) {
+	this.adapter = adapter;
 	this.bookList = [];
 	this.bookMap = {};
 	this.isFilled = false;
@@ -10,7 +10,7 @@ function TOC(collection) {
 }
 TOC.prototype.fill = function(callback) {
 	var that = this;
-	this.collection.selectAll(function(results) {
+	this.adapter.selectAll(function(results) {
 		if (results instanceof IOError) {
 			callback();
 		} else {

@@ -2,8 +2,8 @@
 * This class builds a table of already handled styles so that we can easily
 * query the styleIndex table for any styles that are new in a table.
 */
-function StyleUseBuilder(collection) {
-	this.collection = collection;
+function StyleUseBuilder(adapter) {
+	this.adapter = adapter;
 }
 StyleUseBuilder.prototype.readBook = function(usxRoot) {
 	// This table is not populated from text of the Bible
@@ -23,7 +23,7 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		var values = [ styleUse[1], styleUse[0] ];
 		array.push(values);
 	}
-	this.collection.load(array, function(err) {
+	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {
 			console.log('StyleUse Builder Failed', JSON.stringify(err));
 			callback(err);

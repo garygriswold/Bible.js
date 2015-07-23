@@ -2,8 +2,8 @@
 * This class creates an empty History table.  The table is filled
 * by user action.
 */
-function HistoryBuilder(collection) {
-	this.collection = collection;
+function HistoryBuilder(adapter) {
+	this.adapter = adapter;
 	Object.freeze(this);
 }
 HistoryBuilder.prototype.readBook = function(usxRoot) {

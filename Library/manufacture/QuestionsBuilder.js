@@ -2,8 +2,8 @@
 * This class creates an initial Questions table.  The table is filled
 * by user and instructor input.
 */
-function QuestionsBuilder(collection) {
-	this.collection = collection;
+function QuestionsBuilder(adapter) {
+	this.adapter = adapter;
 	Object.freeze(this);
 }
 QuestionsBuilder.prototype.readBook = function(usxRoot) {
