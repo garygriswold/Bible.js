@@ -1177,7 +1177,7 @@ function DeviceDatabase(code) {
         console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
         this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
     }
-	this.codex = new CodexAdapter(this);
+	this.codex = new ChaptersAdapter(this);
     this.verses = new VersesAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
 	this.concordance = new ConcordanceAdapter(this);
@@ -1274,12 +1274,12 @@ DeviceDatabase.prototype.smokeTest = function(callback) {
 /**
 * This class is the database adapter for the codex table
 */
-function CodexAdapter(database) {
+function ChaptersAdapter(database) {
 	this.database = database;
-	this.className = 'CodexAdapter';
+	this.className = 'ChaptersAdapter';
 	Object.freeze(this);
 }
-CodexAdapter.prototype.drop = function(callback) {
+ChaptersAdapter.prototype.drop = function(callback) {
 	this.database.executeDDL('drop table if exists codex', function(err) {
 		if (err instanceof IOError) {
 			callback(err);
@@ -1289,7 +1289,7 @@ CodexAdapter.prototype.drop = function(callback) {
 		}
 	});
 };
-CodexAdapter.prototype.create = function(callback) {
+ChaptersAdapter.prototype.create = function(callback) {
 	var statement = 'create table if not exists codex(' +
 		'book text not null, ' +
 		'chapter integer not null, ' +
@@ -1305,7 +1305,7 @@ CodexAdapter.prototype.create = function(callback) {
 		}
 	});
 };
-CodexAdapter.prototype.load = function(array, callback) {
+ChaptersAdapter.prototype.load = function(array, callback) {
 	var statement = 'insert into codex(book, chapter, xml, html) values (?,?,?,?)';
 	this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
@@ -1316,7 +1316,7 @@ CodexAdapter.prototype.load = function(array, callback) {
 		}
 	});
 };
-CodexAdapter.prototype.getChapterHTML = function(values, callback) {
+ChaptersAdapter.prototype.getChapterHTML = function(values, callback) {
 	var that = this;
 	var statement = 'select html from codex where book=? and chapter=?';
 	var array = [ values.book, values.chapter ];
@@ -1332,7 +1332,7 @@ CodexAdapter.prototype.getChapterHTML = function(values, callback) {
         }
 	});
 };
-CodexAdapter.prototype.getChapter = function(values, callback) {
+ChaptersAdapter.prototype.getChapters = function(values, callback) {
 	var that = this;
 	var statement = 'select xml from codex where book=? and chapter=?';
 	var array = [ values.book, values.chapter ];
@@ -2223,12 +2223,7 @@ Questions.prototype.createActs8Question = function(callback) {
 	acts8.verse = 30;
 	acts8.askedDateTime = new Date();
 	var refActs830 = new Reference('ACT:8:30');
-	//var refActs831 = new Reference('ACT:8:31');
-	//var refActs835 = new Reference('ACT:8:35');
 	acts8.displayRef = this.tableContents.toString(refActs830);
-//	var verseActs830 = new VerseAccessor(this.bibleCache, refActs830);
-//	var verseActs831 = new VerseAccessor(this.bibleCache, refActs831);
-//	var verseActs835 = new VerseAccessor(this.bibleCache, refActs835);
 	var verseList = [ 'ACT:8:30', 'ACT:8:31', 'ACT:8:35' ];
 	this.versesAdapter.getVerses(verseList, function(results) {
 		if (results instanceof IOError) {
@@ -2244,18 +2239,6 @@ Questions.prototype.createActs8Question = function(callback) {
 			callback(acts8);
 		}
 	});
-//	verseActs830.getVerse(function(textActs830) {
-//		acts8.question = textActs830;
-//		verseActs831.getVerse(function(textActs831) {
-//			acts8.question += textActs831;
-//			verseActs835.getVerse(function(textActs835) {
-//				acts8.answer = textActs835;
-//				acts8.answerDateTime = new Date();
-//				acts8.instructor = '';
-//				callback(acts8);
-//			});
-//		});
-//	});
 };
 Questions.prototype.checkServer = function(callback) {
 	var that = this;

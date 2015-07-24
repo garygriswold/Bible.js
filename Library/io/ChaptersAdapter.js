@@ -1,12 +1,12 @@
 /**
 * This class is the database adapter for the codex table
 */
-function CodexAdapter(database) {
+function ChaptersAdapter(database) {
 	this.database = database;
-	this.className = 'CodexAdapter';
+	this.className = 'ChaptersAdapter';
 	Object.freeze(this);
 }
-CodexAdapter.prototype.drop = function(callback) {
+ChaptersAdapter.prototype.drop = function(callback) {
 	this.database.executeDDL('drop table if exists codex', function(err) {
 		if (err instanceof IOError) {
 			callback(err);
@@ -16,7 +16,7 @@ CodexAdapter.prototype.drop = function(callback) {
 		}
 	});
 };
-CodexAdapter.prototype.create = function(callback) {
+ChaptersAdapter.prototype.create = function(callback) {
 	var statement = 'create table if not exists codex(' +
 		'book text not null, ' +
 		'chapter integer not null, ' +
@@ -32,7 +32,7 @@ CodexAdapter.prototype.create = function(callback) {
 		}
 	});
 };
-CodexAdapter.prototype.load = function(array, callback) {
+ChaptersAdapter.prototype.load = function(array, callback) {
 	var statement = 'insert into codex(book, chapter, xml, html) values (?,?,?,?)';
 	this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
@@ -43,7 +43,7 @@ CodexAdapter.prototype.load = function(array, callback) {
 		}
 	});
 };
-CodexAdapter.prototype.getChapterHTML = function(values, callback) {
+ChaptersAdapter.prototype.getChapterHTML = function(values, callback) {
 	var that = this;
 	var statement = 'select html from codex where book=? and chapter=?';
 	var array = [ values.book, values.chapter ];
@@ -59,7 +59,7 @@ CodexAdapter.prototype.getChapterHTML = function(values, callback) {
         }
 	});
 };
-CodexAdapter.prototype.getChapter = function(values, callback) {
+ChaptersAdapter.prototype.getChapters = function(values, callback) {
 	var that = this;
 	var statement = 'select xml from codex where book=? and chapter=?';
 	var array = [ values.book, values.chapter ];

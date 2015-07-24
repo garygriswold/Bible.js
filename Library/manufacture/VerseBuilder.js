@@ -47,7 +47,6 @@ VerseBuilder.prototype.loadDB = function(callback) {
 		return(that.breakList);
 	}
 	function breakRecursively(verseUSX) {
-		console.log('break recursively', verseUSX.tagName);
 		switch(verseUSX.tagName) {
 			case 'book':
 			case 'chapter':
