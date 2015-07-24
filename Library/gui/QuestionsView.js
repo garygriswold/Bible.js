@@ -5,10 +5,9 @@
 * needed.  Because the question.json file could become large, this approach
 * is essential.
 */
-function QuestionsView(collection, bibleCache, tableContents) {
-	this.bibleCache = bibleCache;
+function QuestionsView(questionsAdapter, versesAdapter, tableContents) {
 	this.tableContents = tableContents;
-	this.questions = new Questions(collection, bibleCache, tableContents);
+	this.questions = new Questions(questionsAdapter, versesAdapter, tableContents);
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('questionsRoot');
 	this.referenceInput = null;

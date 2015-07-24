@@ -2,9 +2,9 @@
 * This class contains the list of questions and answers for this student
 * or device.
 */
-function Questions(collection, bibleCache, tableContents) {
-	this.collection = collection;
-	this.bibleCache = bibleCache;
+function Questions(questionsAdapter, versesAdapter, tableContents) {
+	this.questionsAdapter = questionsAdapter;
+	this.versesAdapter = versesAdapter;
 	this.tableContents = tableContents;
 	this.items = [];
 	Object.seal(this);
@@ -17,7 +17,7 @@ Questions.prototype.find = function(index) {
 };
 Questions.prototype.addItem = function(questionItem, callback) {
 	this.items.push(questionItem);
-	// This method must add to the file, as well as add to the server
+	// This method must add to the database, as well as add to the server
 	// callback when the addQuestion, either succeeds or fails.
 	this.insert(questionItem, function(result) {
 		callback(result);
@@ -25,7 +25,7 @@ Questions.prototype.addItem = function(questionItem, callback) {
 };
 Questions.prototype.fill = function(callback) {
 	var that = this;
-	this.collection.selectAll(function(results) {
+	this.questionsAdapter.selectAll(function(results) {
 		if (results instanceof IOError) {
 			console.log('select questions failure ' + JSON.stringify(results));
 			callback(results);
@@ -42,23 +42,21 @@ Questions.prototype.createActs8Question = function(callback) {
 	acts8.verse = 30;
 	acts8.askedDateTime = new Date();
 	var refActs830 = new Reference('ACT:8:30');
-	var refActs831 = new Reference('ACT:8:31');
-	var refActs835 = new Reference('ACT:8:35');
 	acts8.displayRef = this.tableContents.toString(refActs830);
-	var verseActs830 = new VerseAccessor(this.bibleCache, refActs830);
-	var verseActs831 = new VerseAccessor(this.bibleCache, refActs831);
-	var verseActs835 = new VerseAccessor(this.bibleCache, refActs835);
-	verseActs830.getVerse(function(textActs830) {
-		acts8.question = textActs830;
-		verseActs831.getVerse(function(textActs831) {
-			acts8.question += textActs831;
-			verseActs835.getVerse(function(textActs835) {
-				acts8.answer = textActs835;
-				acts8.answerDateTime = new Date();
-				acts8.instructor = '';
-				callback(acts8);
-			});
-		});
+	var verseList = [ 'ACT:8:30', 'ACT:8:31', 'ACT:8:35' ];
+	this.versesAdapter.getVerses(verseList, function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else {
+			var acts830 = results.rows.item(0);
+			var acts831 = results.rows.item(1);
+			var acts835 = results.rows.item(2);
+			acts8.question = acts830.html + ' ' + acts831.html;
+			acts8.answer = acts835.html;
+			acts8.instructor = '';
+			acts8.answerDateTime = new Date();
+			callback(acts8);
+		}
 	});
 };
 Questions.prototype.checkServer = function(callback) {
@@ -81,7 +79,7 @@ Questions.prototype.checkServer = function(callback) {
 	}
 };
 Questions.prototype.insert = function(item, callback) {
-	this.collection.replace(item, function(results) {
+	this.questionsAdapter.replace(item, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
 			callback(results);
@@ -91,7 +89,7 @@ Questions.prototype.insert = function(item, callback) {
 	});
 };
 Questions.prototype.update = function(item, callback) {
-	this.collection.update(item, function(results) {
+	this.questionsAdapter.update(item, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on update', results);
 			callback(results);
