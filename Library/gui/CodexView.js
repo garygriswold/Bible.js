@@ -3,9 +3,9 @@
 */
 var CODEX_VIEW = { MAX: 10 };
 
-function CodexView(tableContents, bibleCache, statusBarHeight) {
+function CodexView(chaptersAdapter, tableContents, statusBarHeight) {
+	this.chaptersAdapter = chaptersAdapter;
 	this.tableContents = tableContents;
-	this.bibleCache = bibleCache;
 	this.statusBarHeight = statusBarHeight;
 	this.chapterQueue = [];
 	this.rootNode = document.getElementById('codexRoot');
@@ -41,26 +41,17 @@ CodexView.prototype.showView = function(nodeId) {
 		}
 	}
 	var that = this;
-	processQueue(0);
+	this.showChapters(this.chapterQueue, true, function(results) {
+		document.removeEventListener('scroll', onScrollHandler);
+		that.scrollTo(firstChapter);
+		that.currentNodeId = firstChapter.nodeId;
+		document.addEventListener('scroll', onScrollHandler);
+		that.visible = true;
+	});
 
-	function processQueue(index) {
-		if (index < that.chapterQueue.length) {
-			var chapt = that.chapterQueue[index];
-			that.rootNode.appendChild(chapt.rootNode);
-			that.showChapter(chapt, function() {
-				processQueue(index +1);
-			});
-		} else {
-			that.scrollTo(firstChapter);
-			that.currentNodeId = firstChapter.nodeId;
-			document.addEventListener('scroll', onScrollHandler);
-			that.visible = true;
-		}
-	}
 	function onScrollHandler(event) {
-		console.log('inside Codex onScrollHandler');
+		document.removeEventListener('scroll', onScrollHandler);
 		if (that.visible) {
-			document.removeEventListener('scroll', onScrollHandler);
 			var ref = identifyCurrentChapter();
 			if (ref && ref.nodeId !== that.currentNodeId) {
 				that.currentNodeId = ref.nodeId;
@@ -70,9 +61,8 @@ CodexView.prototype.showView = function(nodeId) {
 				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
 				var nextChapter = that.tableContents.nextChapter(lastChapter);
 				if (nextChapter) {
-					that.rootNode.appendChild(nextChapter.rootNode);
 					that.chapterQueue.push(nextChapter);
-					that.showChapter(nextChapter, function() {
+					that.showChapters([nextChapter], true, function() {
 						that.checkChapterQueueSize('top');
 						document.addEventListener('scroll', onScrollHandler);
 					});
@@ -85,9 +75,8 @@ CodexView.prototype.showView = function(nodeId) {
 				var firstChapter = that.chapterQueue[0];
 				var beforeChapter = that.tableContents.priorChapter(firstChapter);
 				if (beforeChapter) {
-					that.rootNode.insertBefore(beforeChapter.rootNode, that.rootNode.firstChild);
 					that.chapterQueue.unshift(beforeChapter);
-					that.showChapter(beforeChapter, function() {
+					that.showChapters([beforeChapter], false, function() {
 						window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
 						that.checkChapterQueueSize('bottom');
 						document.addEventListener('scroll', onScrollHandler);
@@ -111,15 +100,28 @@ CodexView.prototype.showView = function(nodeId) {
 		}
 	}
 };
-CodexView.prototype.showChapter = function(chapter, callback) {
+CodexView.prototype.showChapters = function(chapters, append, callback) {
 	var that = this;
-	this.bibleCache.getChapterHTML(chapter, function(html) {
-		if (html instanceof IOError) {
-			console.log((JSON.stringify(html)));
-			callback(html);
+	var selectList = [];
+	for (var i=0; i<chapters.length; i++) {
+		selectList.push(chapters[i].nodeId);
+	}
+	this.chaptersAdapter.getChapters(selectList, function(results) {
+		if (results instanceof IOError) {
+			console.log((JSON.stringify(results)));
+			callback(results);
 		} else {
-			chapter.rootNode.innerHTML = html;
-			console.log('added chapter', chapter.nodeId);
+			for (i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var reference = new Reference(row.reference);
+				reference.rootNode.innerHTML = row.html;
+				if (append) {
+					that.rootNode.appendChild(reference.rootNode);
+				} else {
+					that.rootNode.insertBefore(reference.rootNode, that.rootNode.firstChild);
+				}
+				console.log('added chapter', reference.nodeId);
+			}
 			callback();
 		}
 	});
@@ -130,11 +132,11 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 		switch(whichEnd) {
 			case 'top':
 				discard = this.chapterQueue.shift();
-				this.rootNode.removeChild(discard.rootNode);
+				this.rootNode.removeChild(this.rootNode.firstChild);
 				break;
 			case 'bottom':
 				discard = this.chapterQueue.pop();
-				this.rootNode.removeChild(discard.rootNode);
+				this.rootNode.removeChild(this.rootNode.lastChild);
 				break;
 			default:
 				console.log('unknown end ' + whichEnd + ' in CodexView.checkChapterQueueSize.');

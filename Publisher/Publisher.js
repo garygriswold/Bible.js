@@ -28,7 +28,7 @@ function AssetBuilder(types, database) {
 	this.database = database;
 	this.builders = [];
 	if (types.chapterFiles) {
-		var chapterBuilder = new ChapterBuilder(this.database.codex);
+		var chapterBuilder = new ChapterBuilder(this.database.chapters);
 		this.builders.push(chapterBuilder);
 		this.builders.push(new VerseBuilder(this.database.verses, chapterBuilder));
 	}
@@ -144,14 +144,14 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 };
 ChapterBuilder.prototype.loadDB = function(callback) {
 	var array = [];
+	var domBuilder = new DOMBuilder();
+	var htmlBuilder = new HTMLBuilder();
 	for (var i=0; i<this.chapters.length; i++) {
 		var chapObj = this.chapters[i];
 		var xml = chapObj.usxTree.toUSX();
-		var domBuilder = new DOMBuilder();
 		var dom = domBuilder.toDOM(chapObj.usxTree);
-		var htmlBuilder = new HTMLBuilder();
 		var html = htmlBuilder.toHTML(dom);
-		var values = [ chapObj.bookCode, chapObj.chapterNum, xml, html ];
+		var values = [ chapObj.bookCode + ':' + chapObj.chapterNum, xml, html ];
 		array.push(values);
 	}
 	this.adapter.load(array, function(err) {
@@ -586,18 +586,19 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 * This method generates a DOM tree that has exactly the same parentage as the USX model.
 * This is probably a problem.  The easy insertion and deletion of nodes probably requires
 * having a hierarchy of books and chapters. GNG April 13, 2015
+*
+* NOTE: This class must be instantiated once for an entire book are all books, not just one chapter,
+* because the bookCode is only present in chapter 0, but is needed by all chapters.
 */
 function DOMBuilder() {
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
 	this.noteNum = 0;
-
-	this.treeRoot = null;
+	this.treeRoot = null;//document.createDocumentFragment();
 	Object.seal(this);
 }
 DOMBuilder.prototype.toDOM = function(usxRoot) {
-	//this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
 	this.noteNum = 0;
@@ -655,6 +656,7 @@ function HTMLBuilder() {
 	Object.seal(this);
 }
 HTMLBuilder.prototype.toHTML = function(fragment) {
+	this.result = [];
 	this.readRecursively(fragment);
 	return(this.result.join(''));
 };
@@ -1744,7 +1746,7 @@ function DeviceDatabase(code) {
         console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
         this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
     }
-	this.codex = new CodexAdapter(this);
+	this.chapters = new ChaptersAdapter(this);
     this.verses = new VersesAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
 	this.concordance = new ConcordanceAdapter(this);
@@ -1841,77 +1843,79 @@ DeviceDatabase.prototype.smokeTest = function(callback) {
 /**
 * This class is the database adapter for the codex table
 */
-function CodexAdapter(database) {
+function ChaptersAdapter(database) {
 	this.database = database;
-	this.className = 'CodexAdapter';
+	this.className = 'ChaptersAdapter';
 	Object.freeze(this);
 }
-CodexAdapter.prototype.drop = function(callback) {
-	this.database.executeDDL('drop table if exists codex', function(err) {
+ChaptersAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists chapters', function(err) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop codex success');
+			console.log('drop chapters success');
 			callback();
 		}
 	});
 };
-CodexAdapter.prototype.create = function(callback) {
-	var statement = 'create table if not exists codex(' +
-		'book text not null, ' +
-		'chapter integer not null, ' +
+ChaptersAdapter.prototype.create = function(callback) {
+	var statement = 'create table if not exists chapters(' +
+		'reference text not null primary key, ' +
 		'xml text not null, ' +
-		'html text null, ' +
-		'primary key (book, chapter))';
+		'html text not null)';
 	this.database.executeDDL(statement, function(err) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('create codex success');
+			console.log('create chapters success');
 			callback();
 		}
 	});
 };
-CodexAdapter.prototype.load = function(array, callback) {
-	var statement = 'insert into codex(book, chapter, xml, html) values (?,?,?,?)';
+ChaptersAdapter.prototype.load = function(array, callback) {
+	var statement = 'insert into chapters(reference, xml, html) values (?,?,?)';
 	this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
 			callback(count);
 		} else {
-			console.log('load codex success, rowcount', count);
+			console.log('load chapters success, rowcount', count);
 			callback();
 		}
 	});
 };
-CodexAdapter.prototype.getChapterHTML = function(values, callback) {
+/** deprecated */
+//ChaptersAdapter.prototype.getChapterHTML = function(values, callback) {
+//	var that = this;
+//	var statement = 'select html from codex where book=? and chapter=?';
+//	var array = [ values.book, values.chapter ];
+//	this.database.select(statement, array, function(results) {
+//		if (results instanceof IOError) {
+//			console.log('found Error', results);
+//			callback(results);
+//		} else if (results.rows.length === 0) {
+//			callback();
+//		} else {
+//			var row = results.rows.item(0);
+//			callback(row.html);
+//        }
+//	});
+//};
+ChaptersAdapter.prototype.getChapters = function(values, callback) {
 	var that = this;
-	var statement = 'select html from codex where book=? and chapter=?';
-	var array = [ values.book, values.chapter ];
-	this.database.select(statement, array, function(results) {
+	var numValues = values.length || 0;
+	var array = [numValues];
+	for (var i=0; i<numValues; i++) {
+		array[i] = '?';
+	}
+	var statement = 'select reference, html from chapters where reference in (' + array.join(',') + ') order by rowid';
+	this.database.select(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
 			callback(results);
-		} else if (results.rows.length === 0) {
-			callback();
+//		} else if (results.rows.length === 0) {
+//			callback();
 		} else {
-			var row = results.rows.item(0);
-			callback(row.html);
-        }
-	});
-};
-CodexAdapter.prototype.getChapter = function(values, callback) {
-	var that = this;
-	var statement = 'select xml from codex where book=? and chapter=?';
-	var array = [ values.book, values.chapter ];
-	this.database.select(statement, array, function(results) {
-		if (results instanceof IOError) {
-			console.log('found Error', results);
 			callback(results);
-		} else if (results.rows.length === 0) {
-			callback();
-		} else {
-			var row = results.rows.item(0);
-			callback(row.xml);
         }
 	});
 };/**

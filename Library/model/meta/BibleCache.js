@@ -30,6 +30,7 @@ function BibleCache(adapter) {
 	this.parser = new USXParser();
 	Object.freeze(this);
 }
+/** deprecated */
 BibleCache.prototype.getChapterHTML = function(reference, callback) {
 	var that = this;
 	var chapter = this.chapterMap[reference.nodeId];
@@ -47,5 +48,7 @@ BibleCache.prototype.getChapterHTML = function(reference, callback) {
 		});
 	}
 };
+
+// Before deleting be sure to move performance nots to CodexView
 
 

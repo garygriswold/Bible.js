@@ -8,7 +8,7 @@ function AssetBuilder(types, database) {
 	this.database = database;
 	this.builders = [];
 	if (types.chapterFiles) {
-		var chapterBuilder = new ChapterBuilder(this.database.codex);
+		var chapterBuilder = new ChapterBuilder(this.database.chapters);
 		this.builders.push(chapterBuilder);
 		this.builders.push(new VerseBuilder(this.database.verses, chapterBuilder));
 	}

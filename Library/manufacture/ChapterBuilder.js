@@ -30,14 +30,14 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 };
 ChapterBuilder.prototype.loadDB = function(callback) {
 	var array = [];
+	var domBuilder = new DOMBuilder();
+	var htmlBuilder = new HTMLBuilder();
 	for (var i=0; i<this.chapters.length; i++) {
 		var chapObj = this.chapters[i];
 		var xml = chapObj.usxTree.toUSX();
-		var domBuilder = new DOMBuilder();
 		var dom = domBuilder.toDOM(chapObj.usxTree);
-		var htmlBuilder = new HTMLBuilder();
 		var html = htmlBuilder.toHTML(dom);
-		var values = [ chapObj.bookCode, chapObj.chapterNum, xml, html ];
+		var values = [ chapObj.bookCode + ':' + chapObj.chapterNum, xml, html ];
 		array.push(values);
 	}
 	this.adapter.load(array, function(err) {

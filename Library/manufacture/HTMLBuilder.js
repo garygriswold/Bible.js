@@ -6,6 +6,7 @@ function HTMLBuilder() {
 	Object.seal(this);
 }
 HTMLBuilder.prototype.toHTML = function(fragment) {
+	this.result = [];
 	this.readRecursively(fragment);
 	return(this.result.join(''));
 };

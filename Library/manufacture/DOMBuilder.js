@@ -4,18 +4,19 @@
 * This method generates a DOM tree that has exactly the same parentage as the USX model.
 * This is probably a problem.  The easy insertion and deletion of nodes probably requires
 * having a hierarchy of books and chapters. GNG April 13, 2015
+*
+* NOTE: This class must be instantiated once for an entire book are all books, not just one chapter,
+* because the bookCode is only present in chapter 0, but is needed by all chapters.
 */
 function DOMBuilder() {
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
 	this.noteNum = 0;
-
 	this.treeRoot = null;
 	Object.seal(this);
 }
 DOMBuilder.prototype.toDOM = function(usxRoot) {
-	//this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
 	this.noteNum = 0;

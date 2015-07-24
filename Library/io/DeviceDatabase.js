@@ -13,7 +13,7 @@ function DeviceDatabase(code) {
         console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
         this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
     }
-	this.codex = new ChaptersAdapter(this);
+	this.chapters = new ChaptersAdapter(this);
     this.verses = new VersesAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
 	this.concordance = new ConcordanceAdapter(this);
