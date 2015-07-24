@@ -10,10 +10,11 @@ function CodexView(tableContents, bibleCache, statusBarHeight) {
 	this.chapterQueue = [];
 	this.rootNode = document.getElementById('codexRoot');
 	this.currentNodeId = null;
-	var that = this;
+	this.visible = false; // HACK because I have not been able to remove onscroll listener.
 	Object.seal(this);
 }
 CodexView.prototype.hideView = function() {
+	this.visible = false;
 	this.chapterQueue.splice(0);
 	for (var i=this.rootNode.children.length -1; i>=0; i--) {
 		this.rootNode.removeChild(this.rootNode.children[i]);
@@ -53,46 +54,50 @@ CodexView.prototype.showView = function(nodeId) {
 			that.scrollTo(firstChapter);
 			that.currentNodeId = firstChapter.nodeId;
 			document.addEventListener('scroll', onScrollHandler);
+			that.visible = true;
 		}
 	}
 	function onScrollHandler(event) {
-		document.removeEventListener('scroll', onScrollHandler);
-		var ref = identifyCurrentChapter();
-		if (ref.nodeId !== that.currentNodeId) {
-			that.currentNodeId = ref.nodeId;
-			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));//expensive solution
-		}
-		if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.innerHeight) {
-			var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
-			var nextChapter = that.tableContents.nextChapter(lastChapter);
-			if (nextChapter) {
-				that.rootNode.appendChild(nextChapter.rootNode);
-				that.chapterQueue.push(nextChapter);
-				that.showChapter(nextChapter, function() {
-					that.checkChapterQueueSize('top');
+		console.log('inside Codex onScrollHandler');
+		if (that.visible) {
+			document.removeEventListener('scroll', onScrollHandler);
+			var ref = identifyCurrentChapter();
+			if (ref && ref.nodeId !== that.currentNodeId) {
+				that.currentNodeId = ref.nodeId;
+				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));//expensive solution
+			}
+			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.innerHeight) {
+				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
+				var nextChapter = that.tableContents.nextChapter(lastChapter);
+				if (nextChapter) {
+					that.rootNode.appendChild(nextChapter.rootNode);
+					that.chapterQueue.push(nextChapter);
+					that.showChapter(nextChapter, function() {
+						that.checkChapterQueueSize('top');
+						document.addEventListener('scroll', onScrollHandler);
+					});
+				} else {
 					document.addEventListener('scroll', onScrollHandler);
-				});
+				}
+			}
+			else if (window.scrollY <= window.innerHeight) {
+				var saveY = window.scrollY;
+				var firstChapter = that.chapterQueue[0];
+				var beforeChapter = that.tableContents.priorChapter(firstChapter);
+				if (beforeChapter) {
+					that.rootNode.insertBefore(beforeChapter.rootNode, that.rootNode.firstChild);
+					that.chapterQueue.unshift(beforeChapter);
+					that.showChapter(beforeChapter, function() {
+						window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
+						that.checkChapterQueueSize('bottom');
+						document.addEventListener('scroll', onScrollHandler);
+					});
+				} else {
+					document.addEventListener('scroll', onScrollHandler);
+				}
 			} else {
 				document.addEventListener('scroll', onScrollHandler);
 			}
-		}
-		else if (window.scrollY <= window.innerHeight) {
-			var saveY = window.scrollY;
-			var firstChapter = that.chapterQueue[0];
-			var beforeChapter = that.tableContents.priorChapter(firstChapter);
-			if (beforeChapter) {
-				that.rootNode.insertBefore(beforeChapter.rootNode, that.rootNode.firstChild);
-				that.chapterQueue.unshift(beforeChapter);
-				that.showChapter(beforeChapter, function() {
-					window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
-					that.checkChapterQueueSize('bottom');
-					document.addEventListener('scroll', onScrollHandler);
-				});
-			} else {
-				document.addEventListener('scroll', onScrollHandler);
-			}
-		} else {
-			document.addEventListener('scroll', onScrollHandler);
 		}
 	}
 	function identifyCurrentChapter() {

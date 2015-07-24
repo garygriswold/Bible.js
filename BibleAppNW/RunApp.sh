@@ -45,7 +45,6 @@ cat ../Library/model/meta/Questions.js >> js/BibleApp.js
 cat ../Library/model/meta/Reference.js >> js/BibleApp.js
 cat ../Library/model/meta/TOC.js >> js/BibleApp.js
 cat ../Library/model/meta/TOCBook.js >> js/BibleApp.js
-cat ../Library/model/meta/VerseAccessor.js >> js/BibleApp.js
 
 cat ../Library/model/usx/Book.js >> js/BibleApp.js
 cat ../Library/model/usx/Chapter.js >> js/BibleApp.js

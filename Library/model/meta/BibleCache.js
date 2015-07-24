@@ -30,18 +30,6 @@ function BibleCache(adapter) {
 	this.parser = new USXParser();
 	Object.freeze(this);
 }
-BibleCache.prototype.getChapter = function(reference, callback) {
-	var that = this;
-	this.adapter.getChapter(reference, function(row) {
-		if (row instanceof IOError) {
-			console.log('Bible Cache found Error', row);
-			callback(row);
-		} else {
-			chapter = that.parser.readBook(row);
-			callback(chapter);
-		}
-	});
-};
 BibleCache.prototype.getChapterHTML = function(reference, callback) {
 	var that = this;
 	var chapter = this.chapterMap[reference.nodeId];

@@ -3,27 +3,28 @@
 * It does a lazy create of all of the objects needed.
 * Each presentation of a searchView presents its last state and last found results.
 */
-function SearchView(toc, concordance, bibleCache, history) {
+function SearchView(toc, concordance, versesAdapter, history) {
 	this.toc = toc;
 	this.concordance = concordance;
-	this.bibleCache = bibleCache;
+	this.versesAdapter = versesAdapter;
 	this.history = history;
 	this.query = '';
 	this.words = [];
-	this.bookList = [];
+	this.bookList = {};
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('searchRoot');
 	this.scrollPosition = 0;
-	var that = this;
 	Object.seal(this);
 }
 SearchView.prototype.showView = function(query) {
 	this.hideView();
 	if (query) {
+		console.log('Create new search page');
 		this.showSearch(query);
 		this.rootNode.appendChild(this.viewRoot);
 		window.scrollTo(10, 0);
 	} else if (this.viewRoot) {
+		console.log('Reattach existing search page');
 		this.rootNode.appendChild(this.viewRoot);
 		window.scrollTo(10, this.scrollPosition);
 	} else {
@@ -31,7 +32,7 @@ SearchView.prototype.showView = function(query) {
 		if (lastSearch && lastSearch.length > 0) { // check trim also
 			document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: lastSearch }}));
 		} else {
-			console.log('IN THE EMPTY CASE of SearchView.showView');
+			console.log('Nothing to search for, display blank page');
 			this.showSearch('');
 			this.rootNode.appendChild(this.viewRoot);
 			window.scrollTo(10, 0);			
@@ -51,40 +52,63 @@ SearchView.prototype.showSearch = function(query) {
 	this.words = query.split(' ');
 	this.concordance.search(this.words, function(refList) {
 		if (refList instanceof IOError) {
-			// Error presents a blank page
+			// Error should display some kind of icon to represent error.
 		} else {
-			that.bookList = that.refListsByBook(refList);
-			for (var i=0; i<that.bookList.length; i++) {
-				var bookRef = that.bookList[i];
-				var bookNode = that.appendBook(bookRef.bookCode);
-				for (var j=0; j<bookRef.refList.length && j < 3; j++) {
-					var ref = new Reference(bookRef.refList[j]);
-					that.appendReference(bookNode, ref);
+			that.bookList = refListsByBook(refList);
+			var selectList = selectListWithLimit(that.bookList);
+			that.versesAdapter.getVerses(selectList, function(results) {
+				if (results instanceof IOError) {
+					// Error should display some kind of error icon
+				} else {
+					var priorBook = null;
+					var bookNode = null;
+					for (var i=0; i<results.rows.length; i++) {
+						var row = results.rows.item(i);
+						var nodeId = row.reference;
+						var verseText = row.html;
+						var reference = new Reference(nodeId);
+						var bookCode = reference.book;
+						if (bookCode !== priorBook) {
+							if (priorBook) {
+								var priorList = that.bookList[priorBook];
+								if (priorList && priorList.length > 3) {
+									that.appendSeeMore(bookNode, priorBook);
+								}
+							}
+							bookNode = that.appendBook(bookCode);
+							priorBook = bookCode;
+						}
+						that.appendReference(bookNode, reference, verseText);
+					}
 				}
-				if (bookRef.refList.length > 3) {
-					that.appendSeeMore(bookNode, bookRef);
-				}
-			}
+			});
 		}
 	});
-};
-SearchView.prototype.refListsByBook = function(refList) {
-	var bookList = [];
-	var priorBook = '';
-	for (var i=0; i<refList.length; i++) {
-		var bookCode = refList[i].substr(0, 3);
-		if (bookCode !== priorBook) {
-			var bookRef = { bookCode: bookCode, refList: [ refList[i] ] };
-			Object.freeze(bookRef);
-			bookList.push(bookRef);
-			priorBook = bookCode;
+	function refListsByBook(refList) {
+		var bookList = {};
+		for (var i=0; i<refList.length; i++) {
+			var bookCode = refList[i].substr(0, 3);
+			if (bookList[bookCode] === undefined) {
+				bookList[bookCode] = [ refList[i] ];
+			} else {
+				bookList[bookCode].push(refList[i]);
+			}
 		}
-		else {
-			bookRef.refList.push(refList[i]);
-		}
+		Object.freeze(bookList);
+		return(bookList);
 	}
-	Object.freeze(bookList);
-	return(bookList);
+	function selectListWithLimit(bookList) {
+		var selectList = [];
+		var books = Object.keys(bookList);
+		for (var i=0; i<books.length; i++) {
+			var refList = bookList[books[i]];
+			for (var j=0; j<refList.length && j<3; j++) {
+				selectList.push(refList[j]);
+			}
+		}
+		Object.freeze(selectList);
+		return(selectList);
+	}
 };
 SearchView.prototype.appendBook = function(bookCode) {
 	var book = this.toc.find(bookCode);
@@ -99,7 +123,7 @@ SearchView.prototype.appendBook = function(bookCode) {
 	bookNode.appendChild(document.createElement('hr'));
 	return(bookNode);
 };
-SearchView.prototype.appendReference = function(bookNode, reference) {
+SearchView.prototype.appendReference = function(bookNode, reference, verseText) {
 	var that = this;
 	var entryNode = document.createElement('p');
 	bookNode.appendChild(entryNode);
@@ -108,23 +132,17 @@ SearchView.prototype.appendReference = function(bookNode, reference) {
 	refNode.textContent = reference.chapterVerse();
 	entryNode.appendChild(refNode);
 	entryNode.appendChild(document.createElement('br'));
-	var accessor = new VerseAccessor(this.bibleCache, reference);
-	accessor.getVerse(function(verseText) {
-		if (verseText instanceof IOError) {
-			console.log('Error in get verse', JSON.stringify(verseText));
-		} else {
-			var verseNode = document.createElement('span');
-			verseNode.setAttribute('id', 'con' + reference.nodeId);
-			verseNode.setAttribute('class', 'conVerse');
-			verseNode.innerHTML = styleSearchWords(verseText);
-			entryNode.appendChild(verseNode);
-			verseNode.addEventListener('click', function(event) {
-				var nodeId = this.id.substr(3);
-				console.log('open chapter', nodeId);
-				that.hideView();
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
-			});
-		}	
+
+	var verseNode = document.createElement('span');
+	verseNode.setAttribute('id', 'con' + reference.nodeId);
+	verseNode.setAttribute('class', 'conVerse');
+	verseNode.innerHTML = styleSearchWords(verseText);
+	entryNode.appendChild(verseNode);
+	verseNode.addEventListener('click', function(event) {
+		var nodeId = this.id.substr(3);
+		console.log('open chapter', nodeId);
+		that.hideView();
+		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
 	});
 
 	function styleSearchWords(verseText) {
@@ -142,10 +160,10 @@ SearchView.prototype.appendReference = function(bookNode, reference) {
 		return(verseWords.join(''));
 	}
 };
-SearchView.prototype.appendSeeMore = function(bookNode, bookRef) {
+SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 	var that = this;
 	var entryNode = document.createElement('p');
-	entryNode.setAttribute('id', 'mor' + bookRef.bookCode);
+	entryNode.setAttribute('id', 'mor' + bookCode);
 	entryNode.setAttribute('class', 'conMore');
 	entryNode.textContent = '...';
 	bookNode.appendChild(entryNode);
@@ -156,20 +174,20 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookRef) {
 
 		var bookCode = this.id.substr(3);
 		var bookNode = document.getElementById('con' + bookCode);
-		var refList = findBookInBookList(bookCode);
-		for (var i=3; i<refList.length; i++) {
-			var ref = new Reference(refList[i]);
-			that.appendReference(bookNode, ref);
-		}
-	});
+		var refList = that.bookList[bookCode];
 
-	function findBookInBookList(bookCode) {
-		for (var i=0; i<that.bookList.length; i++) {
-			if (that.bookList[i].bookCode === bookCode) {
-				return(that.bookList[i].refList);
+		that.versesAdapter.getVerses(refList, function(results) {
+			if (results instanceof IOError) {
+				// display some error graphic?
+			} else {
+				for (var i=3; i<results.rows.length; i++) {
+					var row = results.rows.item(i);
+					var nodeId = row.reference;
+					var verseText = row.html;
+					var reference = new Reference(nodeId);
+					that.appendReference(bookNode, reference, verseText);
+				}
 			}
-		}
-		return(null);
-	}
+		});
+	});
 };
-

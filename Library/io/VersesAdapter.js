@@ -41,31 +41,22 @@ VersesAdapter.prototype.load = function(array, callback) {
 		}
 	});
 };
-VersesAdapter.prototype.getVerseHTML = function(values, callback) {
+VersesAdapter.prototype.getVerses = function(values, callback) {
 	var that = this;
-	var statement = createStatement(values.length);
+	var numValues = values.length || 0;
+	var array = [numValues];
+	for (var i=0; i<numValues; i++) {
+		array[i] = '?';
+	}
+	var statement = 'select reference, html from verses where reference in (' + array.join(',') + ') order by rowid';
 	this.database.select(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('VersesAdapter select found Error', results);
 			callback(results);
 		} else if (results.rows.length === 0) {
-			callback(new IOError({code: 0, message: 'No Rows Found'}));
+			callback(new IOError({code: 0, message: 'No Rows Found'}));// Is this really an error?
 		} else {
-			var row = results.rows.item(0);
-			callback(row.html);
+			callback(results);
         }
 	});
-	function createStatement(numValues) {
-		if (numValues === 1) {
-			return('select html from verses where reference=?');
-		} else if (numValues === undefined || numValues === 0) {
-			return('select html from verses where reference=XXXXXXXX');
-		} else {
-			var array = new Array[numValues];
-			for (var i=0; i<numValues; i++) {
-				array[i] = '?';
-			}
-			return('select html from verses where reference in (' + array.join(',') + ')');
-		}
-	}
 };

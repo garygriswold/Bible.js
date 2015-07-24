@@ -37,7 +37,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.lookup = new Lookup(that.tableContents);
 		that.statusBar = new StatusBarView(that.tableContents);
 		that.statusBar.showView();
-		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
+		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.history);
 		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.barHite);
 		that.historyView = new HistoryView(that.history, that.tableContents);
 		that.questionsView = new QuestionsView(that.database.questions, that.bibleCache, that.tableContents);
