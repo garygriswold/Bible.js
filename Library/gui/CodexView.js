@@ -10,11 +10,9 @@ function CodexView(chaptersAdapter, tableContents, statusBarHeight) {
 	this.rootNode = document.getElementById('codexRoot');
 	this.currentNodeId = null;
 	this.checkScrollID = null;
-	//this.visible = false; // HACK because I have not been able to remove onscroll listener.
 	Object.seal(this);
 }
 CodexView.prototype.hideView = function() {
-	//this.visible = false;
 	window.clearTimeout(this.checkScrollID);
 	for (var i=this.rootNode.children.length -1; i>=0; i--) {
 		this.rootNode.removeChild(this.rootNode.children[i]);
@@ -42,58 +40,45 @@ CodexView.prototype.showView = function(nodeId) {
 	}
 	var that = this;
 	this.showChapters(chapterQueue, true, function(results) {
-		//document.removeEventListener('scroll', onScrollHandler);
 		that.scrollTo(firstChapter);
 		that.currentNodeId = firstChapter.nodeId;
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-		//document.addEventListener('scroll', onScrollHandler);
-		//that.visible = true;
 	});
 
 	function onScrollHandler(event) {
-		//window.clearInterval(that.checkScrollID);
-		//if (that.visible) {
 		var ref = identifyCurrentChapter();//expensive solution
 		if (ref && ref.nodeId !== that.currentNodeId) {
 			that.currentNodeId = ref.nodeId;
 			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));
 		}
-		if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.innerHeight) {
+		if (document.body.scrollHeight - window.scrollY <= 2 * window.innerHeight) {
 			var lastNode = that.rootNode.lastChild;
 			var lastChapter = new Reference(lastNode.id.substr(3));
 			var nextChapter = that.tableContents.nextChapter(lastChapter);
 			if (nextChapter) {
 				that.showChapters([nextChapter], true, function() {
 					that.checkChapterQueueSize('top');
-					//document.addEventListener('scroll', onScrollHandler);
 					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
 				});
 			} else {
-				//document.addEventListener('scroll', onScrollHandler);
 				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
 			}
 		}
 		else if (window.scrollY <= window.innerHeight) {
-			var saveY = window.scrollY;
 			var firstNode = that.rootNode.firstChild;
 			var firstChapter = new Reference(firstNode.id.substr(3));
 			var beforeChapter = that.tableContents.priorChapter(firstChapter);
 			if (beforeChapter) {
 				that.showChapters([beforeChapter], false, function() {
-					window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
 					that.checkChapterQueueSize('bottom');
-					//document.addEventListener('scroll', onScrollHandler);
 					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
 				});
 			} else {
-				//document.addEventListener('scroll', onScrollHandler);
 				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
 			}
 		} else {
-			//document.addEventListener('scroll', onScrollHandler);
 			that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
 		}
-		//}
 	}
 	function identifyCurrentChapter() {
 		var half = window.innerHeight / 2;
@@ -126,6 +111,8 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 					that.rootNode.appendChild(reference.rootNode);
 				} else {
 					that.rootNode.insertBefore(reference.rootNode, that.rootNode.firstChild);
+					// Scroll by the offset of the element added at the top to stay in the same place
+					window.scrollBy(0, reference.rootNode.offsetHeight);
 				}
 				console.log('added chapter', reference.nodeId);
 			}
@@ -135,21 +122,22 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 };
 CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 	if (this.rootNode.children.length > CODEX_VIEW.MAX) {
-		var discard = null;
 		switch(whichEnd) {
 			case 'top':
-				discard = this.rootNode.firstChild;
+				var discard = this.rootNode.firstChild;
+				var offsetHeight = discard.offsetHeight;
+				this.rootNode.removeChild(discard);
+				// Scroll the offset of the removed element to stay in the same place.
+				window.scrollBy(0, - offsetHeight);
 				break;
 			case 'bottom':
 				discard = this.rootNode.lastChild;
+				this.rootNode.removeChild(discard);
 				break;
 			default:
 				console.log('unknown end ' + whichEnd + ' in CodexView.checkChapterQueueSize.');
 		}
-		if (discard) {
-			this.rootNode.removeChild(discard);
-			console.log('discarded chapter ', discard.id.substr(3), 'at', whichEnd);
-		}
+		console.log('discarded chapter ', discard.id.substr(3), 'at', whichEnd);
 	}
 };
 CodexView.prototype.scrollTo = function(reference) {

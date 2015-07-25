@@ -38,10 +38,10 @@ AppViewController.prototype.begin = function(develop) {
 		that.lookup = new Lookup(that.tableContents);
 		that.statusBar = new StatusBarView(that.tableContents);
 		that.statusBar.showView();
-		that.searchView = new SearchView(that.tableContents, that.concordance, that.bibleCache, that.history);
-		that.codexView = new CodexView(that.tableContents, that.bibleCache, that.statusBar.barHite);
+		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.history);
+		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.statusBar.barHite);
 		that.historyView = new HistoryView(that.history, that.tableContents);
-		that.questionsView = new QuestionsView(that.database.questions, that.bibleCache, that.tableContents);
+		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
 		Object.freeze(that);
 
 		switch(develop) {
@@ -137,27 +137,27 @@ AppViewController.prototype.begin = function(develop) {
 /**
 * This class contains user interface features for the display of the Bible text
 */
-var CODEX_VIEW = { MAX: 10 };
+var CODEX_VIEW = { MAX: 10, SCROLL_TIMEOUT: 5000 };
 
-function CodexView(tableContents, bibleCache, statusBarHeight) {
+function CodexView(chaptersAdapter, tableContents, statusBarHeight) {
+	this.chaptersAdapter = chaptersAdapter;
 	this.tableContents = tableContents;
-	this.bibleCache = bibleCache;
 	this.statusBarHeight = statusBarHeight;
-	this.chapterQueue = [];
 	this.rootNode = document.getElementById('codexRoot');
 	this.currentNodeId = null;
-	var that = this;
-	this.addChapterInProgress = false;
+	this.checkScrollID = null;
+	//this.visible = false; // HACK because I have not been able to remove onscroll listener.
 	Object.seal(this);
 }
 CodexView.prototype.hideView = function() {
-	this.chapterQueue.splice(0);
+	//this.visible = false;
+	window.clearTimeout(this.checkScrollID);
 	for (var i=this.rootNode.children.length -1; i>=0; i--) {
 		this.rootNode.removeChild(this.rootNode.children[i]);
 	}
 };
 CodexView.prototype.showView = function(nodeId) {
-	this.chapterQueue.splice(0);
+	var chapterQueue = [];
 	var firstChapter = new Reference(nodeId);
 	firstChapter = this.tableContents.ensureChapter(firstChapter);
 	document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
@@ -165,116 +165,134 @@ CodexView.prototype.showView = function(nodeId) {
 	for (var i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.priorChapter(chapter);
 		if (chapter) {
-			this.chapterQueue.unshift(chapter);
+			chapterQueue.unshift(chapter);
 		}
 	}
-	this.chapterQueue.push(firstChapter);
+	chapterQueue.push(firstChapter);
 	chapter = firstChapter;
 	for (i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.nextChapter(chapter);
 		if (chapter) {
-			this.chapterQueue.push(chapter);
+			chapterQueue.push(chapter);
 		}
 	}
 	var that = this;
-	processQueue(0);
+	this.showChapters(chapterQueue, true, function(results) {
+		//document.removeEventListener('scroll', onScrollHandler);
+		that.scrollTo(firstChapter);
+		that.currentNodeId = firstChapter.nodeId;
+		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+		//document.addEventListener('scroll', onScrollHandler);
+		//that.visible = true;
+	});
 
-	function processQueue(index) {
-		if (index < that.chapterQueue.length) {
-			var chapt = that.chapterQueue[index];
-			that.rootNode.appendChild(chapt.rootNode);
-			that.showChapter(chapt, function() {
-				processQueue(index +1);
-			});
-		} else {
-			that.scrollTo(firstChapter);
-			that.currentNodeId = firstChapter.nodeId;
-			that.addChapterInProgress = false;
-			document.addEventListener('scroll', onScrollHandler);
-		}
-	}
 	function onScrollHandler(event) {
-		if (! that.addChapterInProgress && that.chapterQueue.length > 1) {
-			var ref = identifyCurrentChapter();
-			if (ref.nodeId !== that.currentNodeId) {
-				that.currentNodeId = ref.nodeId;
-				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));//expensive solution
-			}
-			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.innerHeight) {
-				that.addChapterInProgress = true;
-				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
-				var nextChapter = that.tableContents.nextChapter(lastChapter);
-				if (nextChapter) {
-					that.rootNode.appendChild(nextChapter.rootNode);
-					that.chapterQueue.push(nextChapter);
-					that.showChapter(nextChapter, function() {
-						that.checkChapterQueueSize('top');
-						that.addChapterInProgress = false;
-					});
-				} else {
-					that.addChapterInProgress = false;
-				}
-			}
-			else if (window.scrollY <= window.innerHeight) {	
-				that.addChapterInProgress = true;
-				var saveY = window.scrollY;
-				var firstChapter = that.chapterQueue[0];
-				var beforeChapter = that.tableContents.priorChapter(firstChapter);
-				if (beforeChapter) {
-					that.rootNode.insertBefore(beforeChapter.rootNode, firstChapter.rootNode);
-					that.chapterQueue.unshift(beforeChapter);
-					that.showChapter(beforeChapter, function() {
-						window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
-						that.checkChapterQueueSize('bottom');
-						that.addChapterInProgress = false;
-					});
-				} else {
-					that.addChapterInProgress = false;
-				}
+		//window.clearInterval(that.checkScrollID);
+		//if (that.visible) {
+		var ref = identifyCurrentChapter();//expensive solution
+		if (ref && ref.nodeId !== that.currentNodeId) {
+			that.currentNodeId = ref.nodeId;
+			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));
+		}
+		console.log('scrollHeight', document.body.scrollHeight);
+		console.log('scrollY', window.scrollY);
+		console.log('innerHeight', window.innerHeight);
+		if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.innerHeight) {
+			var lastNode = that.rootNode.lastChild;
+			var lastChapter = new Reference(lastNode.id.substr(3));
+			var nextChapter = that.tableContents.nextChapter(lastChapter);
+			if (nextChapter) {
+				that.showChapters([nextChapter], true, function() {
+					that.checkChapterQueueSize('top');
+					//document.addEventListener('scroll', onScrollHandler);
+					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+				});
+			} else {
+				//document.addEventListener('scroll', onScrollHandler);
+				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
 			}
 		}
+		else if (window.scrollY <= window.innerHeight) {
+			var saveY = window.scrollY;
+			var firstNode = that.rootNode.firstChild;
+			var firstChapter = new Reference(firstNode.id.substr(3));
+			var beforeChapter = that.tableContents.priorChapter(firstChapter);
+			if (beforeChapter) {
+				that.showChapters([beforeChapter], false, function() {
+					window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
+					that.checkChapterQueueSize('bottom');
+					//document.addEventListener('scroll', onScrollHandler);
+					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+				});
+			} else {
+				//document.addEventListener('scroll', onScrollHandler);
+				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+			}
+		} else {
+			//document.addEventListener('scroll', onScrollHandler);
+			that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+		}
+		//}
 	}
 	function identifyCurrentChapter() {
 		var half = window.innerHeight / 2;
-		for (var i=that.chapterQueue.length -1; i>=0; i--) {
-			var ref = that.chapterQueue[i];
-			var top = ref.rootNode.getBoundingClientRect().top;
+		for (var i=that.rootNode.children.length -1; i>=0; i--) {
+			var node = that.rootNode.children[i];
+			var top = node.getBoundingClientRect().top;
 			if (top < half) {
-				return(ref);
+				return(new Reference(node.id.substr(3)));
 			}
 		}
+		return(null);
 	}
 };
-CodexView.prototype.showChapter = function(chapter, callback) {
+CodexView.prototype.showChapters = function(chapters, append, callback) {
 	var that = this;
-	this.bibleCache.getChapterHTML(chapter, function(html) {
-		if (html instanceof IOError) {
-			console.log((JSON.stringify(html)));
-			callback(html);
+	var selectList = [];
+	for (var i=0; i<chapters.length; i++) {
+		selectList.push(chapters[i].nodeId);
+	}
+	this.chaptersAdapter.getChapters(selectList, function(results) {
+		if (results instanceof IOError) {
+			console.log((JSON.stringify(results)));
+			callback(results);
 		} else {
-			chapter.rootNode.outerHTML = html;
-			console.log('added chapter', chapter.nodeId);
+			for (i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var reference = new Reference(row.reference);
+				reference.rootNode.innerHTML = row.html;
+				if (append) {
+					that.rootNode.appendChild(reference.rootNode);
+				} else {
+					that.rootNode.insertBefore(reference.rootNode, that.rootNode.firstChild);
+				}
+				console.log('added chapter', reference.nodeId);
+			}
 			callback();
 		}
 	});
 };
 CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
-	if (this.chapterQueue.length > CODEX_VIEW.MAX) {
+	if (this.rootNode.children.length > CODEX_VIEW.MAX) {
 		var discard = null;
 		switch(whichEnd) {
 			case 'top':
-				discard = this.chapterQueue.shift();
+				discard = this.rootNode.firstChild;
 				break;
 			case 'bottom':
-				discard = this.chapterQueue.pop();
+				discard = this.rootNode.lastChild;
 				break;
 			default:
 				console.log('unknown end ' + whichEnd + ' in CodexView.checkChapterQueueSize.');
 		}
-		console.log('discarded chapter ', discard.nodeId, 'at', whichEnd);
+		if (discard) {
+			this.rootNode.removeChild(discard);
+			console.log('discarded chapter ', discard.id.substr(3), 'at', whichEnd);
+		}
 	}
 };
 CodexView.prototype.scrollTo = function(reference) {
+	console.log('scrollTo', reference.nodeId);
 	var verse = document.getElementById(reference.nodeId);
 	if (verse === null) {
 		// when null it is probably because verse num was out of range.
@@ -378,10 +396,9 @@ HistoryView.prototype.buildHistoryView = function() {
 * needed.  Because the question.json file could become large, this approach
 * is essential.
 */
-function QuestionsView(collection, bibleCache, tableContents) {
-	this.bibleCache = bibleCache;
+function QuestionsView(questionsAdapter, versesAdapter, tableContents) {
 	this.tableContents = tableContents;
-	this.questions = new Questions(collection, bibleCache, tableContents);
+	this.questions = new Questions(questionsAdapter, versesAdapter, tableContents);
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('questionsRoot');
 	this.referenceInput = null;
@@ -546,27 +563,28 @@ QuestionsView.prototype.buildQuestionsView = function() {
 * It does a lazy create of all of the objects needed.
 * Each presentation of a searchView presents its last state and last found results.
 */
-function SearchView(toc, concordance, bibleCache, history) {
+function SearchView(toc, concordance, versesAdapter, history) {
 	this.toc = toc;
 	this.concordance = concordance;
-	this.bibleCache = bibleCache;
+	this.versesAdapter = versesAdapter;
 	this.history = history;
 	this.query = '';
 	this.words = [];
-	this.bookList = [];
+	this.bookList = {};
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('searchRoot');
 	this.scrollPosition = 0;
-	var that = this;
 	Object.seal(this);
 }
 SearchView.prototype.showView = function(query) {
 	this.hideView();
 	if (query) {
+		console.log('Create new search page');
 		this.showSearch(query);
 		this.rootNode.appendChild(this.viewRoot);
 		window.scrollTo(10, 0);
 	} else if (this.viewRoot) {
+		console.log('Reattach existing search page');
 		this.rootNode.appendChild(this.viewRoot);
 		window.scrollTo(10, this.scrollPosition);
 	} else {
@@ -574,7 +592,7 @@ SearchView.prototype.showView = function(query) {
 		if (lastSearch && lastSearch.length > 0) { // check trim also
 			document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: lastSearch }}));
 		} else {
-			console.log('IN THE EMPTY CASE of SearchView.showView');
+			console.log('Nothing to search for, display blank page');
 			this.showSearch('');
 			this.rootNode.appendChild(this.viewRoot);
 			window.scrollTo(10, 0);			
@@ -594,40 +612,63 @@ SearchView.prototype.showSearch = function(query) {
 	this.words = query.split(' ');
 	this.concordance.search(this.words, function(refList) {
 		if (refList instanceof IOError) {
-			// Error presents a blank page
+			// Error should display some kind of icon to represent error.
 		} else {
-			that.bookList = that.refListsByBook(refList);
-			for (var i=0; i<that.bookList.length; i++) {
-				var bookRef = that.bookList[i];
-				var bookNode = that.appendBook(bookRef.bookCode);
-				for (var j=0; j<bookRef.refList.length && j < 3; j++) {
-					var ref = new Reference(bookRef.refList[j]);
-					that.appendReference(bookNode, ref);
+			that.bookList = refListsByBook(refList);
+			var selectList = selectListWithLimit(that.bookList);
+			that.versesAdapter.getVerses(selectList, function(results) {
+				if (results instanceof IOError) {
+					// Error should display some kind of error icon
+				} else {
+					var priorBook = null;
+					var bookNode = null;
+					for (var i=0; i<results.rows.length; i++) {
+						var row = results.rows.item(i);
+						var nodeId = row.reference;
+						var verseText = row.html;
+						var reference = new Reference(nodeId);
+						var bookCode = reference.book;
+						if (bookCode !== priorBook) {
+							if (priorBook) {
+								var priorList = that.bookList[priorBook];
+								if (priorList && priorList.length > 3) {
+									that.appendSeeMore(bookNode, priorBook);
+								}
+							}
+							bookNode = that.appendBook(bookCode);
+							priorBook = bookCode;
+						}
+						that.appendReference(bookNode, reference, verseText);
+					}
 				}
-				if (bookRef.refList.length > 3) {
-					that.appendSeeMore(bookNode, bookRef);
-				}
-			}
+			});
 		}
 	});
-};
-SearchView.prototype.refListsByBook = function(refList) {
-	var bookList = [];
-	var priorBook = '';
-	for (var i=0; i<refList.length; i++) {
-		var bookCode = refList[i].substr(0, 3);
-		if (bookCode !== priorBook) {
-			var bookRef = { bookCode: bookCode, refList: [ refList[i] ] };
-			Object.freeze(bookRef);
-			bookList.push(bookRef);
-			priorBook = bookCode;
+	function refListsByBook(refList) {
+		var bookList = {};
+		for (var i=0; i<refList.length; i++) {
+			var bookCode = refList[i].substr(0, 3);
+			if (bookList[bookCode] === undefined) {
+				bookList[bookCode] = [ refList[i] ];
+			} else {
+				bookList[bookCode].push(refList[i]);
+			}
 		}
-		else {
-			bookRef.refList.push(refList[i]);
-		}
+		Object.freeze(bookList);
+		return(bookList);
 	}
-	Object.freeze(bookList);
-	return(bookList);
+	function selectListWithLimit(bookList) {
+		var selectList = [];
+		var books = Object.keys(bookList);
+		for (var i=0; i<books.length; i++) {
+			var refList = bookList[books[i]];
+			for (var j=0; j<refList.length && j<3; j++) {
+				selectList.push(refList[j]);
+			}
+		}
+		Object.freeze(selectList);
+		return(selectList);
+	}
 };
 SearchView.prototype.appendBook = function(bookCode) {
 	var book = this.toc.find(bookCode);
@@ -642,7 +683,7 @@ SearchView.prototype.appendBook = function(bookCode) {
 	bookNode.appendChild(document.createElement('hr'));
 	return(bookNode);
 };
-SearchView.prototype.appendReference = function(bookNode, reference) {
+SearchView.prototype.appendReference = function(bookNode, reference, verseText) {
 	var that = this;
 	var entryNode = document.createElement('p');
 	bookNode.appendChild(entryNode);
@@ -651,23 +692,17 @@ SearchView.prototype.appendReference = function(bookNode, reference) {
 	refNode.textContent = reference.chapterVerse();
 	entryNode.appendChild(refNode);
 	entryNode.appendChild(document.createElement('br'));
-	var accessor = new VerseAccessor(this.bibleCache, reference);
-	accessor.getVerse(function(verseText) {
-		if (verseText instanceof IOError) {
-			console.log('Error in get verse', JSON.stringify(verseText));
-		} else {
-			var verseNode = document.createElement('span');
-			verseNode.setAttribute('id', 'con' + reference.nodeId);
-			verseNode.setAttribute('class', 'conVerse');
-			verseNode.innerHTML = styleSearchWords(verseText);
-			entryNode.appendChild(verseNode);
-			verseNode.addEventListener('click', function(event) {
-				var nodeId = this.id.substr(3);
-				console.log('open chapter', nodeId);
-				that.hideView();
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
-			});
-		}	
+
+	var verseNode = document.createElement('span');
+	verseNode.setAttribute('id', 'con' + reference.nodeId);
+	verseNode.setAttribute('class', 'conVerse');
+	verseNode.innerHTML = styleSearchWords(verseText);
+	entryNode.appendChild(verseNode);
+	verseNode.addEventListener('click', function(event) {
+		var nodeId = this.id.substr(3);
+		console.log('open chapter', nodeId);
+		that.hideView();
+		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
 	});
 
 	function styleSearchWords(verseText) {
@@ -685,10 +720,10 @@ SearchView.prototype.appendReference = function(bookNode, reference) {
 		return(verseWords.join(''));
 	}
 };
-SearchView.prototype.appendSeeMore = function(bookNode, bookRef) {
+SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 	var that = this;
 	var entryNode = document.createElement('p');
-	entryNode.setAttribute('id', 'mor' + bookRef.bookCode);
+	entryNode.setAttribute('id', 'mor' + bookCode);
 	entryNode.setAttribute('class', 'conMore');
 	entryNode.textContent = '...';
 	bookNode.appendChild(entryNode);
@@ -699,23 +734,23 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookRef) {
 
 		var bookCode = this.id.substr(3);
 		var bookNode = document.getElementById('con' + bookCode);
-		var refList = findBookInBookList(bookCode);
-		for (var i=3; i<refList.length; i++) {
-			var ref = new Reference(refList[i]);
-			that.appendReference(bookNode, ref);
-		}
-	});
+		var refList = that.bookList[bookCode];
 
-	function findBookInBookList(bookCode) {
-		for (var i=0; i<that.bookList.length; i++) {
-			if (that.bookList[i].bookCode === bookCode) {
-				return(that.bookList[i].refList);
+		that.versesAdapter.getVerses(refList, function(results) {
+			if (results instanceof IOError) {
+				// display some error graphic?
+			} else {
+				for (var i=3; i<results.rows.length; i++) {
+					var row = results.rows.item(i);
+					var nodeId = row.reference;
+					var verseText = row.html;
+					var reference = new Reference(nodeId);
+					that.appendReference(bookNode, reference, verseText);
+				}
 			}
-		}
-		return(null);
-	}
+		});
+	});
 };
-
 /**
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
@@ -1155,7 +1190,7 @@ function DeviceDatabase(code) {
         console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
         this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
     }
-	this.codex = new CodexAdapter(this);
+	this.chapters = new ChaptersAdapter(this);
     this.verses = new VersesAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
 	this.concordance = new ConcordanceAdapter(this);
@@ -1252,77 +1287,60 @@ DeviceDatabase.prototype.smokeTest = function(callback) {
 /**
 * This class is the database adapter for the codex table
 */
-function CodexAdapter(database) {
+function ChaptersAdapter(database) {
 	this.database = database;
-	this.className = 'CodexAdapter';
+	this.className = 'ChaptersAdapter';
 	Object.freeze(this);
 }
-CodexAdapter.prototype.drop = function(callback) {
-	this.database.executeDDL('drop table if exists codex', function(err) {
+ChaptersAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists chapters', function(err) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop codex success');
+			console.log('drop chapters success');
 			callback();
 		}
 	});
 };
-CodexAdapter.prototype.create = function(callback) {
-	var statement = 'create table if not exists codex(' +
-		'book text not null, ' +
-		'chapter integer not null, ' +
+ChaptersAdapter.prototype.create = function(callback) {
+	var statement = 'create table if not exists chapters(' +
+		'reference text not null primary key, ' +
 		'xml text not null, ' +
-		'html text null, ' +
-		'primary key (book, chapter))';
+		'html text not null)';
 	this.database.executeDDL(statement, function(err) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('create codex success');
+			console.log('create chapters success');
 			callback();
 		}
 	});
 };
-CodexAdapter.prototype.load = function(array, callback) {
-	var statement = 'insert into codex(book, chapter, xml, html) values (?,?,?,?)';
+ChaptersAdapter.prototype.load = function(array, callback) {
+	var statement = 'insert into chapters(reference, xml, html) values (?,?,?)';
 	this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
 			callback(count);
 		} else {
-			console.log('load codex success, rowcount', count);
+			console.log('load chapters success, rowcount', count);
 			callback();
 		}
 	});
 };
-CodexAdapter.prototype.getChapterHTML = function(values, callback) {
+ChaptersAdapter.prototype.getChapters = function(values, callback) {
 	var that = this;
-	var statement = 'select html from codex where book=? and chapter=?';
-	var array = [ values.book, values.chapter ];
-	this.database.select(statement, array, function(results) {
+	var numValues = values.length || 0;
+	var array = [numValues];
+	for (var i=0; i<numValues; i++) {
+		array[i] = '?';
+	}
+	var statement = 'select reference, html from chapters where reference in (' + array.join(',') + ') order by rowid';
+	this.database.select(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
 			callback(results);
-		} else if (results.rows.length === 0) {
-			callback();
 		} else {
-			var row = results.rows.item(0);
-			callback(row.html);
-        }
-	});
-};
-CodexAdapter.prototype.getChapter = function(values, callback) {
-	var that = this;
-	var statement = 'select xml from codex where book=? and chapter=?';
-	var array = [ values.book, values.chapter ];
-	this.database.select(statement, array, function(results) {
-		if (results instanceof IOError) {
-			console.log('found Error', results);
 			callback(results);
-		} else if (results.rows.length === 0) {
-			callback();
-		} else {
-			var row = results.rows.item(0);
-			callback(row.xml);
         }
 	});
 };/**
@@ -1368,33 +1386,24 @@ VersesAdapter.prototype.load = function(array, callback) {
 		}
 	});
 };
-VersesAdapter.prototype.getVerseHTML = function(values, callback) {
+VersesAdapter.prototype.getVerses = function(values, callback) {
 	var that = this;
-	var statement = createStatement(values.length);
+	var numValues = values.length || 0;
+	var array = [numValues];
+	for (var i=0; i<numValues; i++) {
+		array[i] = '?';
+	}
+	var statement = 'select reference, html from verses where reference in (' + array.join(',') + ') order by rowid';
 	this.database.select(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('VersesAdapter select found Error', results);
 			callback(results);
 		} else if (results.rows.length === 0) {
-			callback(new IOError({code: 0, message: 'No Rows Found'}));
+			callback(new IOError({code: 0, message: 'No Rows Found'}));// Is this really an error?
 		} else {
-			var row = results.rows.item(0);
-			callback(row.html);
+			callback(results);
         }
 	});
-	function createStatement(numValues) {
-		if (numValues === 1) {
-			return('select html from verses where reference=?');
-		} else if (numValues === undefined || numValues === 0) {
-			return('select html from verses where reference=XXXXXXXX');
-		} else {
-			var array = new Array[numValues];
-			for (var i=0; i<numValues; i++) {
-				array[i] = '?';
-			}
-			return('select html from verses where reference in (' + array.join(',') + ')');
-		}
-	}
 };/**
 * This class is the database adapter for the concordance table
 */
@@ -1811,18 +1820,19 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 * This method generates a DOM tree that has exactly the same parentage as the USX model.
 * This is probably a problem.  The easy insertion and deletion of nodes probably requires
 * having a hierarchy of books and chapters. GNG April 13, 2015
+*
+* NOTE: This class must be instantiated once for an entire book are all books, not just one chapter,
+* because the bookCode is only present in chapter 0, but is needed by all chapters.
 */
 function DOMBuilder() {
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
 	this.noteNum = 0;
-
 	this.treeRoot = null;
 	Object.seal(this);
 }
 DOMBuilder.prototype.toDOM = function(usxRoot) {
-	//this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
 	this.noteNum = 0;
@@ -1898,31 +1908,20 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 * It is possible that DB access is fast enough, and this is not needed.
 * GNG July 5, 2015
 */
-function BibleCache(collection) {
-	this.collection = collection;
+function BibleCache(adapter) {
+	this.adapter = adapter;
 	this.chapterMap = {};
 	this.parser = new USXParser();
 	Object.freeze(this);
 }
-BibleCache.prototype.getChapter = function(reference, callback) {
-	var that = this;
-	this.collection.getChapter(reference, function(row) {
-		if (row instanceof IOError) {
-			console.log('Bible Cache found Error', row);
-			callback(row);
-		} else {
-			chapter = that.parser.readBook(row);
-			callback(chapter);
-		}
-	});
-};
+/** deprecated */
 BibleCache.prototype.getChapterHTML = function(reference, callback) {
 	var that = this;
 	var chapter = this.chapterMap[reference.nodeId];
 	if (chapter !== undefined) {
 		callback(chapter);
 	} else {
-		this.collection.getChapterHTML(reference, function(chapter) {
+		this.adapter.getChapterHTML(reference, function(chapter) {
 			if (chapter instanceof IOError) {
 				console.log('Bible Cache found Error', chapter);
 				callback(chapter);
@@ -1933,6 +1932,8 @@ BibleCache.prototype.getChapterHTML = function(reference, callback) {
 		});
 	}
 };
+
+// Before deleting be sure to move performance nots to CodexView
 
 
 /**
@@ -2013,13 +2014,13 @@ function Canon() {
 /**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
-function Concordance(collection) {
-	this.collection = collection;
+function Concordance(adapter) {
+	this.adapter = adapter;
 	Object.freeze(this);
 }
 Concordance.prototype.search = function(words, callback) {
 	var that = this;
-	this.collection.select(words, function(refLists) {
+	this.adapter.select(words, function(refLists) {
 		if (refLists instanceof IOError) {
 			callback(refLists);
 		} else {
@@ -2071,8 +2072,8 @@ Concordance.prototype.search = function(words, callback) {
 * or a concordance search.  It also responds to function requests to go back 
 * in history, forward in history, or return to the last event.
 */
-function History(collection) {
-	this.collection = collection;
+function History(adapter) {
+	this.adapter = adapter;
 	this.items = [];
 	this.isFilled = false;
 	this.isViewCurrent = false;
@@ -2081,7 +2082,7 @@ function History(collection) {
 History.prototype.fill = function(callback) {
 	var that = this;
 	this.items.splice(0);
-	this.collection.selectAll(function(results) {
+	this.adapter.selectAll(function(results) {
 		if (results instanceof IOError) {
 			console.log('History.fill Error', JSON.stringify(results));
 			callback(results);
@@ -2107,7 +2108,7 @@ History.prototype.addEvent = function(event) {
 	this.isViewCurrent = false;
 	
 	// I might want a timeout to postpone this until after animation is finished.
-	this.collection.replace(item, function(err) {
+	this.adapter.replace(item, function(err) {
 		if (err instanceof IOError) {
 			console.log('replace error', JSON.stringify(err));
 		}
@@ -2215,9 +2216,9 @@ function QuestionItem(book, chapter, verse, displayRef, question, askedDt, instr
 * This class contains the list of questions and answers for this student
 * or device.
 */
-function Questions(collection, bibleCache, tableContents) {
-	this.collection = collection;
-	this.bibleCache = bibleCache;
+function Questions(questionsAdapter, versesAdapter, tableContents) {
+	this.questionsAdapter = questionsAdapter;
+	this.versesAdapter = versesAdapter;
 	this.tableContents = tableContents;
 	this.items = [];
 	Object.seal(this);
@@ -2230,7 +2231,7 @@ Questions.prototype.find = function(index) {
 };
 Questions.prototype.addItem = function(questionItem, callback) {
 	this.items.push(questionItem);
-	// This method must add to the file, as well as add to the server
+	// This method must add to the database, as well as add to the server
 	// callback when the addQuestion, either succeeds or fails.
 	this.insert(questionItem, function(result) {
 		callback(result);
@@ -2238,7 +2239,7 @@ Questions.prototype.addItem = function(questionItem, callback) {
 };
 Questions.prototype.fill = function(callback) {
 	var that = this;
-	this.collection.selectAll(function(results) {
+	this.questionsAdapter.selectAll(function(results) {
 		if (results instanceof IOError) {
 			console.log('select questions failure ' + JSON.stringify(results));
 			callback(results);
@@ -2255,23 +2256,21 @@ Questions.prototype.createActs8Question = function(callback) {
 	acts8.verse = 30;
 	acts8.askedDateTime = new Date();
 	var refActs830 = new Reference('ACT:8:30');
-	var refActs831 = new Reference('ACT:8:31');
-	var refActs835 = new Reference('ACT:8:35');
 	acts8.displayRef = this.tableContents.toString(refActs830);
-	var verseActs830 = new VerseAccessor(this.bibleCache, refActs830);
-	var verseActs831 = new VerseAccessor(this.bibleCache, refActs831);
-	var verseActs835 = new VerseAccessor(this.bibleCache, refActs835);
-	verseActs830.getVerse(function(textActs830) {
-		acts8.question = textActs830;
-		verseActs831.getVerse(function(textActs831) {
-			acts8.question += textActs831;
-			verseActs835.getVerse(function(textActs835) {
-				acts8.answer = textActs835;
-				acts8.answerDateTime = new Date();
-				acts8.instructor = '';
-				callback(acts8);
-			});
-		});
+	var verseList = [ 'ACT:8:30', 'ACT:8:31', 'ACT:8:35' ];
+	this.versesAdapter.getVerses(verseList, function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else {
+			var acts830 = results.rows.item(0);
+			var acts831 = results.rows.item(1);
+			var acts835 = results.rows.item(2);
+			acts8.question = acts830.html + ' ' + acts831.html;
+			acts8.answer = acts835.html;
+			acts8.instructor = '';
+			acts8.answerDateTime = new Date();
+			callback(acts8);
+		}
 	});
 };
 Questions.prototype.checkServer = function(callback) {
@@ -2294,7 +2293,7 @@ Questions.prototype.checkServer = function(callback) {
 	}
 };
 Questions.prototype.insert = function(item, callback) {
-	this.collection.replace(item, function(results) {
+	this.questionsAdapter.replace(item, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
 			callback(results);
@@ -2304,7 +2303,7 @@ Questions.prototype.insert = function(item, callback) {
 	});
 };
 Questions.prototype.update = function(item, callback) {
-	this.collection.update(item, function(results) {
+	this.questionsAdapter.update(item, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on update', results);
 			callback(results);
@@ -2340,6 +2339,7 @@ function Reference(book, chapter, verse) {
 		this.nodeId = book;
 	}
 	this.rootNode = document.createElement('div');
+	this.rootNode.setAttribute('id', 'top' + this.nodeId);
 	Object.freeze(this);
 }
 Reference.prototype.path = function() {
@@ -2351,8 +2351,8 @@ Reference.prototype.chapterVerse = function() {
 /**
 * This class holds data for the table of contents of the entire Bible, or whatever part of the Bible was loaded.
 */
-function TOC(collection) {
-	this.collection = collection;
+function TOC(adapter) {
+	this.adapter = adapter;
 	this.bookList = [];
 	this.bookMap = {};
 	this.isFilled = false;
@@ -2360,7 +2360,7 @@ function TOC(collection) {
 }
 TOC.prototype.fill = function(callback) {
 	var that = this;
-	this.collection.selectAll(function(results) {
+	this.adapter.selectAll(function(results) {
 		if (results instanceof IOError) {
 			callback();
 		} else {
@@ -2436,49 +2436,6 @@ function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nex
 		Object.seal(this);
 	}
 }/**
-* This class extracts single verses from Chapters and returns the text of those
-* verses for use in Concordance Search and possibly other uses.  This is written
-* as a class, because BibleCache and SearchView both have only one instance, but
-* SearchView could be accessing the text of many verses concurrently.
-*/
-function VerseAccessor(bibleCache, reference) {
-	this.bibleCache = bibleCache;
-	this.reference = reference;
-	this.insideVerse = false;
-	this.result = [];
-	Object.seal(this);
-}
-VerseAccessor.prototype.getVerse = function(callback) {
-	var that = this;
-	this.bibleCache.getChapter(this.reference, function(chapter) {
-		if (chapter instanceof IOError) {
-			callback(chapter);
-		} else {
-			var verseNum = String(that.reference.verse);
-			scanRecursively(chapter, verseNum);
-			callback(that.result.join(' '));
-		}
-	});
-	function scanRecursively(node, verseNum) {
-		if (that.insideVerse) {
-			if (node.tagName === 'verse') {
-				that.insideVerse = false;
-			}
-			else if (node.tagName === 'text') {
-				that.result.push(node.text);
-			}
-		} else {
-			if (node.tagName === 'verse' && node.number === verseNum) {
-				that.insideVerse = true;
-			}
-		}
-		if (node.tagName !== 'note' && 'children' in node) {
-			for (var i=0; i<node.children.length; i++) {
-				scanRecursively(node.children[i], verseNum);
-			}
-		}
-	}
-};/**
 * This class contains a book of the Bible
 */
 function Book(node) {
