@@ -7,7 +7,6 @@ function CodexView(chaptersAdapter, tableContents, statusBarHeight) {
 	this.chaptersAdapter = chaptersAdapter;
 	this.tableContents = tableContents;
 	this.statusBarHeight = statusBarHeight;
-	this.chapterQueue = [];
 	this.rootNode = document.getElementById('codexRoot');
 	this.currentNodeId = null;
 	this.visible = false; // HACK because I have not been able to remove onscroll listener.
@@ -15,13 +14,12 @@ function CodexView(chaptersAdapter, tableContents, statusBarHeight) {
 }
 CodexView.prototype.hideView = function() {
 	this.visible = false;
-	this.chapterQueue.splice(0);
 	for (var i=this.rootNode.children.length -1; i>=0; i--) {
 		this.rootNode.removeChild(this.rootNode.children[i]);
 	}
 };
 CodexView.prototype.showView = function(nodeId) {
-	this.chapterQueue.splice(0);
+	var chapterQueue = [];
 	var firstChapter = new Reference(nodeId);
 	firstChapter = this.tableContents.ensureChapter(firstChapter);
 	document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
@@ -29,19 +27,19 @@ CodexView.prototype.showView = function(nodeId) {
 	for (var i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.priorChapter(chapter);
 		if (chapter) {
-			this.chapterQueue.unshift(chapter);
+			chapterQueue.unshift(chapter);
 		}
 	}
-	this.chapterQueue.push(firstChapter);
+	chapterQueue.push(firstChapter);
 	chapter = firstChapter;
 	for (i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.nextChapter(chapter);
 		if (chapter) {
-			this.chapterQueue.push(chapter);
+			chapterQueue.push(chapter);
 		}
 	}
 	var that = this;
-	this.showChapters(this.chapterQueue, true, function(results) {
+	this.showChapters(chapterQueue, true, function(results) {
 		document.removeEventListener('scroll', onScrollHandler);
 		that.scrollTo(firstChapter);
 		that.currentNodeId = firstChapter.nodeId;
@@ -52,16 +50,16 @@ CodexView.prototype.showView = function(nodeId) {
 	function onScrollHandler(event) {
 		document.removeEventListener('scroll', onScrollHandler);
 		if (that.visible) {
-			var ref = identifyCurrentChapter();
+			var ref = identifyCurrentChapter();//expensive solution
 			if (ref && ref.nodeId !== that.currentNodeId) {
 				that.currentNodeId = ref.nodeId;
-				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));//expensive solution
+				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));
 			}
 			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.innerHeight) {
-				var lastChapter = that.chapterQueue[that.chapterQueue.length -1];
+				var lastNode = that.rootNode.lastChild;
+				var lastChapter = new Reference(lastNode.id.substr(3));
 				var nextChapter = that.tableContents.nextChapter(lastChapter);
 				if (nextChapter) {
-					that.chapterQueue.push(nextChapter);
 					that.showChapters([nextChapter], true, function() {
 						that.checkChapterQueueSize('top');
 						document.addEventListener('scroll', onScrollHandler);
@@ -72,10 +70,10 @@ CodexView.prototype.showView = function(nodeId) {
 			}
 			else if (window.scrollY <= window.innerHeight) {
 				var saveY = window.scrollY;
-				var firstChapter = that.chapterQueue[0];
+				var firstNode = that.rootNode.firstChild;
+				var firstChapter = new Reference(firstNode.id.substr(3));
 				var beforeChapter = that.tableContents.priorChapter(firstChapter);
 				if (beforeChapter) {
-					that.chapterQueue.unshift(beforeChapter);
 					that.showChapters([beforeChapter], false, function() {
 						window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
 						that.checkChapterQueueSize('bottom');
@@ -91,13 +89,14 @@ CodexView.prototype.showView = function(nodeId) {
 	}
 	function identifyCurrentChapter() {
 		var half = window.innerHeight / 2;
-		for (var i=that.chapterQueue.length -1; i>=0; i--) {
-			var ref = that.chapterQueue[i];
-			var top = ref.rootNode.getBoundingClientRect().top;
+		for (var i=that.rootNode.children.length -1; i>=0; i--) {
+			var node = that.rootNode.children[i];
+			var top = node.getBoundingClientRect().top;
 			if (top < half) {
-				return(ref);
+				return(new Reference(node.id.substr(3)));
 			}
 		}
+		return(null);
 	}
 };
 CodexView.prototype.showChapters = function(chapters, append, callback) {
@@ -127,21 +126,22 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 	});
 };
 CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
-	if (this.chapterQueue.length > CODEX_VIEW.MAX) {
+	if (this.rootNode.children.length > CODEX_VIEW.MAX) {
 		var discard = null;
 		switch(whichEnd) {
 			case 'top':
-				discard = this.chapterQueue.shift();
-				this.rootNode.removeChild(this.rootNode.firstChild);
+				discard = this.rootNode.firstChild;
 				break;
 			case 'bottom':
-				discard = this.chapterQueue.pop();
-				this.rootNode.removeChild(this.rootNode.lastChild);
+				discard = this.rootNode.lastChild;
 				break;
 			default:
 				console.log('unknown end ' + whichEnd + ' in CodexView.checkChapterQueueSize.');
 		}
-		console.log('discarded chapter ', discard.nodeId, 'at', whichEnd);
+		if (discard) {
+			this.rootNode.removeChild(discard);
+			console.log('discarded chapter ', discard.id.substr(3), 'at', whichEnd);
+		}
 	}
 };
 CodexView.prototype.scrollTo = function(reference) {
