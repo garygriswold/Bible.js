@@ -137,7 +137,7 @@ AppViewController.prototype.begin = function(develop) {
 /**
 * This class contains user interface features for the display of the Bible text
 */
-var CODEX_VIEW = { MAX: 10 };
+var CODEX_VIEW = { MAX: 10, SCROLL_TIMEOUT: 1000 };
 
 function CodexView(chaptersAdapter, tableContents, statusBarHeight) {
 	this.chaptersAdapter = chaptersAdapter;
@@ -145,11 +145,13 @@ function CodexView(chaptersAdapter, tableContents, statusBarHeight) {
 	this.statusBarHeight = statusBarHeight;
 	this.rootNode = document.getElementById('codexRoot');
 	this.currentNodeId = null;
-	this.visible = false; // HACK because I have not been able to remove onscroll listener.
+	this.checkScrollID = null;
+	//this.visible = false; // HACK because I have not been able to remove onscroll listener.
 	Object.seal(this);
 }
 CodexView.prototype.hideView = function() {
-	this.visible = false;
+	//this.visible = false;
+	window.clearTimeout(this.checkScrollID);
 	for (var i=this.rootNode.children.length -1; i>=0; i--) {
 		this.rootNode.removeChild(this.rootNode.children[i]);
 	}
@@ -176,52 +178,58 @@ CodexView.prototype.showView = function(nodeId) {
 	}
 	var that = this;
 	this.showChapters(chapterQueue, true, function(results) {
-		document.removeEventListener('scroll', onScrollHandler);
+		//document.removeEventListener('scroll', onScrollHandler);
 		that.scrollTo(firstChapter);
 		that.currentNodeId = firstChapter.nodeId;
-		document.addEventListener('scroll', onScrollHandler);
-		that.visible = true;
+		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+		//document.addEventListener('scroll', onScrollHandler);
+		//that.visible = true;
 	});
 
 	function onScrollHandler(event) {
-		document.removeEventListener('scroll', onScrollHandler);
-		if (that.visible) {
-			var ref = identifyCurrentChapter();//expensive solution
-			if (ref && ref.nodeId !== that.currentNodeId) {
-				that.currentNodeId = ref.nodeId;
-				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));
-			}
-			if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.innerHeight) {
-				var lastNode = that.rootNode.lastChild;
-				var lastChapter = new Reference(lastNode.id.substr(3));
-				var nextChapter = that.tableContents.nextChapter(lastChapter);
-				if (nextChapter) {
-					that.showChapters([nextChapter], true, function() {
-						that.checkChapterQueueSize('top');
-						document.addEventListener('scroll', onScrollHandler);
-					});
-				} else {
-					document.addEventListener('scroll', onScrollHandler);
-				}
-			}
-			else if (window.scrollY <= window.innerHeight) {
-				var saveY = window.scrollY;
-				var firstNode = that.rootNode.firstChild;
-				var firstChapter = new Reference(firstNode.id.substr(3));
-				var beforeChapter = that.tableContents.priorChapter(firstChapter);
-				if (beforeChapter) {
-					that.showChapters([beforeChapter], false, function() {
-						window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
-						that.checkChapterQueueSize('bottom');
-						document.addEventListener('scroll', onScrollHandler);
-					});
-				} else {
-					document.addEventListener('scroll', onScrollHandler);
-				}
+		//window.clearInterval(that.checkScrollID);
+		//if (that.visible) {
+		var ref = identifyCurrentChapter();//expensive solution
+		if (ref && ref.nodeId !== that.currentNodeId) {
+			that.currentNodeId = ref.nodeId;
+			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));
+		}
+		if (document.body.scrollHeight - (window.scrollY + window.innerHeight) <= window.innerHeight) {
+			var lastNode = that.rootNode.lastChild;
+			var lastChapter = new Reference(lastNode.id.substr(3));
+			var nextChapter = that.tableContents.nextChapter(lastChapter);
+			if (nextChapter) {
+				that.showChapters([nextChapter], true, function() {
+					that.checkChapterQueueSize('top');
+					//document.addEventListener('scroll', onScrollHandler);
+					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+				});
 			} else {
-				document.addEventListener('scroll', onScrollHandler);
+				//document.addEventListener('scroll', onScrollHandler);
+				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
 			}
 		}
+		else if (window.scrollY <= window.innerHeight) {
+			var saveY = window.scrollY;
+			var firstNode = that.rootNode.firstChild;
+			var firstChapter = new Reference(firstNode.id.substr(3));
+			var beforeChapter = that.tableContents.priorChapter(firstChapter);
+			if (beforeChapter) {
+				that.showChapters([beforeChapter], false, function() {
+					window.scrollTo(10, saveY + beforeChapter.rootNode.scrollHeight);
+					that.checkChapterQueueSize('bottom');
+					//document.addEventListener('scroll', onScrollHandler);
+					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+				});
+			} else {
+				//document.addEventListener('scroll', onScrollHandler);
+				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+			}
+		} else {
+			//document.addEventListener('scroll', onScrollHandler);
+			that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+		}
+		//}
 	}
 	function identifyCurrentChapter() {
 		var half = window.innerHeight / 2;
