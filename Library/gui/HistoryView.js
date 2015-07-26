@@ -21,12 +21,12 @@ HistoryView.prototype.showView = function() {
 	}
 	this.history.isViewCurrent = true;
 	this.rootNode.appendChild(this.viewRoot);
-	TweenLite.to(this.rootNode, 2, { left: "0px" });
+	TweenLite.to(this.rootNode, 0.7, { left: "0px" });
 };
 HistoryView.prototype.hideView = function() {
 	var rect = this.rootNode.getBoundingClientRect();
 	if (rect.left > -150) {
-		TweenLite.to(this.rootNode, 2, { left: "-150px" });
+		TweenLite.to(this.rootNode, 0.7, { left: "-150px" });
 	}
 };
 HistoryView.prototype.buildHistoryView = function() {

@@ -1,21 +1,26 @@
 /**
 * This class contains user interface features for the display of the Bible text
 */
-var CODEX_VIEW = { MAX: 10, SCROLL_TIMEOUT: 100 };
+var CODEX_VIEW = { MAX: 10, SCROLL_TIMEOUT: 100, USE_DRAGGABLE: false };
 
 function CodexView(chaptersAdapter, tableContents, statusBarHeight) {
 	this.chaptersAdapter = chaptersAdapter;
 	this.tableContents = tableContents;
 	this.statusBarHeight = statusBarHeight;
 	this.rootNode = document.getElementById('codexRoot');
+	this.viewport = this.rootNode;
+	if (CODEX_VIEW.USE_DRAGGABLE) {
+		Draggable.create(this.rootNode, {type:'scrollTop', throwProps: true});
+		this.viewport = this.rootNode.firstChild; // Draggable adds a div wrapper		
+	}
 	this.currentNodeId = null;
 	this.checkScrollID = null;
 	Object.seal(this);
 }
 CodexView.prototype.hideView = function() {
 	window.clearTimeout(this.checkScrollID);
-	for (var i=this.rootNode.children.length -1; i>=0; i--) {
-		this.rootNode.removeChild(this.rootNode.children[i]);
+	for (var i=this.viewport.children.length -1; i>=0; i--) {
+		this.viewport.removeChild(this.viewport.children[i]);
 	}
 };
 CodexView.prototype.showView = function(nodeId) {
@@ -51,8 +56,10 @@ CodexView.prototype.showView = function(nodeId) {
 			that.currentNodeId = ref.nodeId;
 			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));
 		}
+		//console.log('windowHeight=', window.innerHeight, '  scrollHeight=', document.body.scrollHeight, '  scrollY=', window.scrollY);
+		//console.log('left', (document.body.scrollHeight - window.scrollY));
 		if (document.body.scrollHeight - window.scrollY <= 2 * window.innerHeight) {
-			var lastNode = that.rootNode.lastChild;
+			var lastNode = that.viewport.lastChild;
 			var lastChapter = new Reference(lastNode.id.substr(3));
 			var nextChapter = that.tableContents.nextChapter(lastChapter);
 			if (nextChapter) {
@@ -65,7 +72,7 @@ CodexView.prototype.showView = function(nodeId) {
 			}
 		}
 		else if (window.scrollY <= window.innerHeight) {
-			var firstNode = that.rootNode.firstChild;
+			var firstNode = that.viewport.firstChild;
 			var firstChapter = new Reference(firstNode.id.substr(3));
 			var beforeChapter = that.tableContents.priorChapter(firstChapter);
 			if (beforeChapter) {
@@ -82,8 +89,8 @@ CodexView.prototype.showView = function(nodeId) {
 	}
 	function identifyCurrentChapter() {
 		var half = window.innerHeight / 2;
-		for (var i=that.rootNode.children.length -1; i>=0; i--) {
-			var node = that.rootNode.children[i];
+		for (var i=that.viewport.children.length -1; i>=0; i--) {
+			var node = that.viewport.children[i];
 			var top = node.getBoundingClientRect().top;
 			if (top < half) {
 				return(new Reference(node.id.substr(3)));
@@ -108,9 +115,9 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 				var reference = new Reference(row.reference);
 				reference.rootNode.innerHTML = row.html;
 				if (append) {
-					that.rootNode.appendChild(reference.rootNode);
+					that.viewport.appendChild(reference.rootNode);
 				} else {
-					that.rootNode.insertBefore(reference.rootNode, that.rootNode.firstChild);
+					that.viewport.insertBefore(reference.rootNode, that.viewport.firstChild);
 					// Scroll by the offset of the element added at the top to stay in the same place
 					window.scrollBy(0, reference.rootNode.offsetHeight);
 				}
@@ -121,18 +128,18 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 	});
 };
 CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
-	if (this.rootNode.children.length > CODEX_VIEW.MAX) {
+	if (this.viewport.children.length > CODEX_VIEW.MAX) {
 		switch(whichEnd) {
 			case 'top':
-				var discard = this.rootNode.firstChild;
+				var discard = this.viewport.firstChild;
 				var offsetHeight = discard.offsetHeight;
-				this.rootNode.removeChild(discard);
+				this.viewport.removeChild(discard);
 				// Scroll the offset of the removed element to stay in the same place.
 				window.scrollBy(0, - offsetHeight);
 				break;
 			case 'bottom':
-				discard = this.rootNode.lastChild;
-				this.rootNode.removeChild(discard);
+				discard = this.viewport.lastChild;
+				this.viewport.removeChild(discard);
 				break;
 			default:
 				console.log('unknown end ' + whichEnd + ' in CodexView.checkChapterQueueSize.');
