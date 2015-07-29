@@ -3,10 +3,14 @@
 */
 
 #tocRoot {
-	margin-top: 80px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	margin-top: 7%;
 	margin-bottom: 0%; /* this doesn't seem to work */
 	margin-left: 10%;
 	margin-right: 10%;
+	z-index: 100;
 }
 /* Table of Contents Page Format */
 div.tocPage { /* non-std */

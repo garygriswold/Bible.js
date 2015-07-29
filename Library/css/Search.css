@@ -4,6 +4,7 @@
 
 #searchRoot {
 	margin: 10%;
+	z-index: 30;
 }
 /* Search Results Book Name */
 span.conBook {
