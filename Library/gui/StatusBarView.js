@@ -115,7 +115,7 @@ StatusBarView.prototype.showSearchField = function(query) {
 		this.searchField = document.createElement('input');
 		this.searchField.setAttribute('type', 'text');
 		this.searchField.setAttribute('class', 'searchField');
-		this.searchField.setAttribute('value', query);
+		this.searchField.setAttribute('value', query || '');
 		var yPos = (this.hite - 40) / 2; // The 40 in this calculation is a hack.
 		var xPos = (this.hite * 1.2);
 		this.searchField.setAttribute('style', 'position: fixed; top: ' + yPos + 'px; left: ' + xPos + 'px');

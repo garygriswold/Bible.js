@@ -32,13 +32,9 @@ cat ../Library/io/StyleUseAdapter.js >> js/BibleApp.js
 cat ../Library/io/HistoryAdapter.js >> js/BibleApp.js
 cat ../Library/io/QuestionsAdapter.js >> js/BibleApp.js
 
-cat ../Library/manufacture/DOMBuilder.js >> js/BibleApp.js
-
 cat ../Library/model/meta/BibleCache.js >> js/BibleApp.js
 cat ../Library/model/meta/Canon.js >> js/BibleApp.js
 cat ../Library/model/meta/Concordance.js >> js/BibleApp.js
-cat ../Library/model/meta/History.js >> js/BibleApp.js
-cat ../Library/model/meta/HistoryItem.js >> js/BibleApp.js
 cat ../Library/model/meta/Lookup.js >> js/BibleApp.js
 cat ../Library/model/meta/QuestionItem.js >> js/BibleApp.js
 cat ../Library/model/meta/Questions.js >> js/BibleApp.js

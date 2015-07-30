@@ -6,7 +6,8 @@ var MAX_HISTORY = 20;
 function HistoryAdapter(database) {
 	this.database = database;
 	this.className = 'HistoryAdapter';
-	Object.freeze(this);
+	this.lastSelectCurrent = false;
+	Object.seal(this);
 }
 HistoryAdapter.prototype.drop = function(callback) {
 	this.database.executeDDL('drop table if exists history', function(err) {
@@ -21,9 +22,7 @@ HistoryAdapter.prototype.drop = function(callback) {
 HistoryAdapter.prototype.create = function(callback) {
 	var statement = 'create table if not exists history(' +
 		'timestamp text not null primary key, ' +
-		'book text not null, ' +
-		'chapter integer not null, ' +
-		'verse integer null, ' +
+		'reference text not null unique, ' +
 		'source text not null, ' +
 		'search text null)';
 	this.database.executeDDL(statement, function(err) {
@@ -36,41 +35,80 @@ HistoryAdapter.prototype.create = function(callback) {
 	});
 };
 HistoryAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select timestamp, book, chapter, verse, source, search ' +
-		'from history order by timestamp desc limit ?';
+	var that = this;
+	var statement = 'select reference from history order by timestamp desc limit ?';
 	this.database.select(statement, [ MAX_HISTORY ], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.selectAll Error', JSON.stringify(results));
 			callback(results);
 		} else {
-			console.log('HistoryAdapter.selectAll Success, rows=', results.rows.length);
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
-				var ref = new Reference(row.book, row.chapter, row.verse);
-				var hist = new HistoryItem(ref.nodeId, row.source, row.search, row.timestamp);
-				array.push(hist);
+				array.push(row.reference);
 			}
+			that.lastSelectCurrent = true;
 			callback(array);
+		}
+	});
+};
+HistoryAdapter.prototype.lastItem = function(callback) {
+	var statement = 'select reference from history where timestamp = (select max(timestamp) from history);';
+	this.database.select(statement, [], function(results) {
+		if (results instanceof IOError) {
+			console.log('HistoryAdapter.lastItem Error', JSON.stringify(results));
+			callback(results);
+		} else {
+			if (results.rows.length > 0) {
+				var row = results.rows.item(0);
+				callback(row.reference);
+			} else {
+				callback(null);
+			}
+		}
+	});
+};
+HistoryAdapter.prototype.lastConcordanceSearch = function(callback) {
+	var statement = 'select reference from history where search is not null order by timestamp desc limit 1';
+	this.database.select(statement, [ MAX_HISTORY ], function(results) {
+		if (results instanceof IOError) {
+			console.log('HistoryAdapter.lastConcordance Error', JSON.stringify(results));
+			callback(results);
+		} else {
+			if (results.rows.length > 0) {
+				var row = results.rows.item(0);
+				callback(row.reference);
+			} else {
+				callback(null);
+			}
 		}
 	});
 };
 HistoryAdapter.prototype.replace = function(item, callback) {
 	var timestampStr = item.timestamp.toISOString();
-	var ref = new Reference(item.nodeId);
-	var values = [ timestampStr, ref.book, ref.chapter, ref.verse, item.source, item.search ];
-	var statement = 'replace into history(timestamp, book, chapter, verse, source, search) ' +
-		'values (?,?,?,?,?,?)';
+	var values = [ timestampStr, item.reference, item.source, item.search || null ];
+	var statement = 'replace into history(timestamp, reference, source, search) values (?,?,?,?)';
+	var that = this;
+	this.lastSelectCurrent = false;
 	this.database.executeDML(statement, values, function(count) {
 		if (count instanceof IOError) {
 			console.log('replace error', JSON.stringify(count));
 			callback(count);
 		} else {
-			callback(count);
+			that.cleanup(function(count) {
+				callback(count);
+			});
 		}
 	});
 };
-HistoryAdapter.prototype.delete = function(values, callback) {
-	// Will be needed to prevent growth of history
-	callback();
+HistoryAdapter.prototype.cleanup = function(callback) {
+	var statement = ' delete from history where ? < (select count(*) from history) and timestamp = (select min(timestamp) from history)';
+	this.database.executeDML(statement, [ MAX_HISTORY ], function(count) {
+		if (count instanceof IOError) {
+			console.log('delete error', JSON.stringify(count));
+			callback(count);
+		} else {
+			callback(count);
+		}
+	});
 };

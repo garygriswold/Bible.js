@@ -3,7 +3,7 @@
 */
 
 #tocRoot {
-	position: absolute;
+	position: absolute; /* I wonder if fixed would give better animation results? */
 	left: 0;
 	top: 0;
 	margin-top: 7%;

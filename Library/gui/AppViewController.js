@@ -26,20 +26,18 @@ AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.database.tableContents);
 	this.bibleCache = new BibleCache(this.database.codex);
 	this.concordance = new Concordance(this.database.concordance);
-	this.history = new History(this.database.history);
 	var that = this;
 	fillFromDatabase(function() {
 
 		console.log('loaded toc', that.tableContents.size());
-		console.log('loaded history', that.history.size());
 		
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.lookup = new Lookup(that.tableContents);
 		that.statusBar = new StatusBarView(that.tableContents);
 		that.statusBar.showView();
-		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.history);
+		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.database.history);
 		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.statusBar.barHite);
-		that.historyView = new HistoryView(that.history, that.tableContents);
+		that.historyView = new HistoryView(that.database.history, that.tableContents);
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
 		Object.freeze(that);
 
@@ -51,25 +49,26 @@ AppViewController.prototype.begin = function(develop) {
 			that.searchView.showView('risen');
 			break;
 		case 'HistoryView':
-			that.historyView.showView();
+			that.historyView.showView(function() {});
 			break;
 		case 'QuestionsView':
 			that.questionsView.showView();
 			break;
 		default:
-			var lastItem = that.history.last();
-			console.log('LastItem', JSON.stringify(lastItem));
-			if (that.tableContents.size() > 0) {
-				that.codexView.showView(lastItem.nodeId);
-			} else {
-				window.alert('There is no Bible present');
-			}
+			that.database.history.lastItem(function(lastItem) {
+				if (lastItem instanceof IOError || lastItem === null || lastItem === undefined) {
+					that.codexView.showView('JHN:1');
+				} else {
+					console.log('LastItem', JSON.stringify(lastItem));
+					that.codexView.showView(lastItem);
+				}
+			});
 		}
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();
 			that.statusBar.showTitleField();
 			that.searchView.hideView();
-			that.historyView.hideView();
+			that.historyView.hideView(function() {});
 			that.questionsView.hideView();
 			that.codexView.hideView();
 		});
@@ -77,7 +76,7 @@ AppViewController.prototype.begin = function(develop) {
 			that.searchView.showView();
 			that.statusBar.showSearchField();
 			that.tableContentsView.hideView();
-			that.historyView.hideView();
+			that.historyView.hideView(function() {});
 			that.questionsView.hideView();
 			that.codexView.hideView();
 		});
@@ -86,17 +85,25 @@ AppViewController.prototype.begin = function(develop) {
 			that.statusBar.showTitleField();
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
-			that.historyView.hideView();
+			that.historyView.hideView(function() {});
 			that.codexView.hideView();			
 		});
+		var panRightEnabled = true;
 		that.touch.on("panright", function(event) {
-			if (event.deltaX > 4 * Math.abs(event.deltaY)) {
-				that.historyView.showView();
+			if (panRightEnabled && event.deltaX > 4 * Math.abs(event.deltaY)) {
+				panRightEnabled = false;
+				that.historyView.showView(function() {
+					panRightEnabled = true;
+				});
 			}
 		});
+		var panLeftEnabled = true;
 		that.touch.on("panleft", function(event) {
-			if ( -event.deltaX > 4 * Math.abs(event.deltaY)) {
-				that.historyView.hideView();
+			if (panLeftEnabled && -event.deltaX > 4 * Math.abs(event.deltaY)) {
+				panLeftEnabled = false;
+				that.historyView.hideView(function() {
+					panLeftEnabled = true;		
+				});
 			}
 		});
 		document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
@@ -112,7 +119,9 @@ AppViewController.prototype.begin = function(develop) {
 			that.statusBar.showTitleField();
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
-			that.history.addEvent(event);
+			var historyItem = { timestamp: new Date(), reference: event.detail.id, 
+				source: event.type, search: event.detail.source };
+			that.database.history.replace(historyItem, function(count) {});
 		});
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);
@@ -127,9 +136,7 @@ AppViewController.prototype.begin = function(develop) {
 	});
 	function fillFromDatabase(callback) {
 		that.tableContents.fill(function() {
-			that.history.fill(function() {
-				callback();
-			});
+			callback();
 		});
 	}
 };

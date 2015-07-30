@@ -595,7 +595,7 @@ function DOMBuilder() {
 	this.chapter = 0;
 	this.verse = 0;
 	this.noteNum = 0;
-	this.treeRoot = null;//document.createDocumentFragment();
+	this.treeRoot = null;
 	Object.seal(this);
 }
 DOMBuilder.prototype.toDOM = function(usxRoot) {
@@ -1596,85 +1596,6 @@ Concordance.prototype.search = function(words, callback) {
 	}
 };
 /**
-* This class manages a queue of history items up to some maximum number of items.
-* It adds items when there is an event, such as a toc click, a search lookup,
-* or a concordance search.  It also responds to function requests to go back 
-* in history, forward in history, or return to the last event.
-*/
-function History(adapter) {
-	this.adapter = adapter;
-	this.items = [];
-	this.isFilled = false;
-	this.isViewCurrent = false;
-	Object.seal(this);
-}
-History.prototype.fill = function(callback) {
-	var that = this;
-	this.items.splice(0);
-	this.adapter.selectAll(function(results) {
-		if (results instanceof IOError) {
-			console.log('History.fill Error', JSON.stringify(results));
-			callback(results);
-		} else {
-			console.log('History.fill Success, rows=', results.length);
-			that.items = results;
-			that.isFilled = true;
-			that.isViewCurrent = false;
-			callback();
-		}
-	});
-};
-History.prototype.addEvent = function(event) {
-	var itemIndex = this.search(event.detail.id);
-	if (itemIndex >= 0) {
-		this.items.splice(itemIndex, 1);
-	}
-	var item = new HistoryItem(event.detail.id, event.type, event.detail.source);
-	this.items.push(item);
-	if (this.items.length > MAX_HISTORY) {
-		var discard = this.items.shift();
-	}
-	this.isViewCurrent = false;
-	
-	// I might want a timeout to postpone this until after animation is finished.
-	this.adapter.replace(item, function(err) {
-		if (err instanceof IOError) {
-			console.log('replace error', JSON.stringify(err));
-		}
-	});
-};
-History.prototype.search = function(nodeId) {
-	for (var i=0; i<this.items.length; i++) {
-		var item = this.items[i];
-		if (item.nodeId === nodeId) {
-			return(i);
-		}
-	}
-	return(-1);
-};
-History.prototype.size = function() {
-	return(this.items.length);
-};
-History.prototype.last = function() {
-	return(this.item(this.items.length -1));
-};
-History.prototype.item = function(index) {
-	return((index > -1 && index < this.items.length) ? this.items[index] : new HistoryItem('JHN:1'));
-};
-History.prototype.lastConcordanceSearch = function() {
-	for (var i=this.items.length -1; i>=0; i--) {
-		var item = this.items[i];
-		if (item.search && item.search.length > 0) { // also trim it
-			return(item.search);
-		}
-	}
-	return('');
-};
-History.prototype.toJSON = function() {
-	return(JSON.stringify(this.items, null, ' '));
-};
-
-/**
 * This file contains IO constants and functions which are common to all file methods, which might include node.js, cordova, javascript, etc.
 */
 var FILE_ROOTS = { 'application': '?', 'document': '../../dbl/current/', 'temporary': '?', 'test2dbl': '../../../dbl/current/' };
@@ -1883,23 +1804,6 @@ ChaptersAdapter.prototype.load = function(array, callback) {
 		}
 	});
 };
-/** deprecated */
-//ChaptersAdapter.prototype.getChapterHTML = function(values, callback) {
-//	var that = this;
-//	var statement = 'select html from codex where book=? and chapter=?';
-//	var array = [ values.book, values.chapter ];
-//	this.database.select(statement, array, function(results) {
-//		if (results instanceof IOError) {
-//			console.log('found Error', results);
-//			callback(results);
-//		} else if (results.rows.length === 0) {
-//			callback();
-//		} else {
-//			var row = results.rows.item(0);
-//			callback(row.html);
-//        }
-//	});
-//};
 ChaptersAdapter.prototype.getChapters = function(values, callback) {
 	var that = this;
 	var numValues = values.length || 0;
@@ -1912,8 +1816,6 @@ ChaptersAdapter.prototype.getChapters = function(values, callback) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
 			callback(results);
-//		} else if (results.rows.length === 0) {
-//			callback();
 		} else {
 			callback(results);
         }
@@ -2206,7 +2108,8 @@ var MAX_HISTORY = 20;
 function HistoryAdapter(database) {
 	this.database = database;
 	this.className = 'HistoryAdapter';
-	Object.freeze(this);
+	this.lastSelectCurrent = false;
+	Object.seal(this);
 }
 HistoryAdapter.prototype.drop = function(callback) {
 	this.database.executeDDL('drop table if exists history', function(err) {
@@ -2221,9 +2124,7 @@ HistoryAdapter.prototype.drop = function(callback) {
 HistoryAdapter.prototype.create = function(callback) {
 	var statement = 'create table if not exists history(' +
 		'timestamp text not null primary key, ' +
-		'book text not null, ' +
-		'chapter integer not null, ' +
-		'verse integer null, ' +
+		'reference text not null unique, ' +
 		'source text not null, ' +
 		'search text null)';
 	this.database.executeDDL(statement, function(err) {
@@ -2236,8 +2137,8 @@ HistoryAdapter.prototype.create = function(callback) {
 	});
 };
 HistoryAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select timestamp, book, chapter, verse, source, search ' +
-		'from history order by timestamp desc limit ?';
+	var that = this;
+	var statement = 'select reference from history order by timestamp desc limit ?';
 	this.database.select(statement, [ MAX_HISTORY ], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.selectAll Error', JSON.stringify(results));
@@ -2247,32 +2148,73 @@ HistoryAdapter.prototype.selectAll = function(callback) {
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
-				var ref = new Reference(row.book, row.chapter, row.verse);
-				var hist = new HistoryItem(ref.nodeId, row.source, row.search, row.timestamp);
-				array.push(hist);
+				array.push(row.reference);
 			}
+			that.lastSelectCurrent = true;
 			callback(array);
+		}
+	});
+};
+HistoryAdapter.prototype.lastItem = function(callback) {
+	var statement = 'select reference from history where timestamp = max(timestamp)';
+	this.database.select(statement, [ MAX_HISTORY ], function(results) {
+		if (results instanceof IOError) {
+			console.log('HistoryAdapter.lastItem Error', JSON.stringify(results));
+			callback(results);
+		} else {
+			console.log('HistoryAdapter.lastItem Success, rows=', results.rows.length);
+			if (results.rows.length > 0) {
+				var row = results.rows.item(0);
+				callback(row.reference);
+			} else {
+				callback(null);
+			}
+		}
+	});
+};
+HistoryAdapter.prototype.lastConcordanceSearch = function(callback) {
+	var statement = 'select reference from history where search is not null order by timestamp desc limit 1';
+	this.database.select(statement, [ MAX_HISTORY ], function(results) {
+		if (results instanceof IOError) {
+			console.log('HistoryAdapter.lastConcordance Error', JSON.stringify(results));
+			callback(results);
+		} else {
+			if (results.rows.length > 0) {
+				var row = results.rows.item(0);
+				callback(row.reference);
+			} else {
+				callback(null);
+			}
 		}
 	});
 };
 HistoryAdapter.prototype.replace = function(item, callback) {
 	var timestampStr = item.timestamp.toISOString();
-	var ref = new Reference(item.nodeId);
-	var values = [ timestampStr, ref.book, ref.chapter, ref.verse, item.source, item.search ];
-	var statement = 'replace into history(timestamp, book, chapter, verse, source, search) ' +
-		'values (?,?,?,?,?,?)';
+	var values = [ timestampStr, item.reference, item.source, item.search ];
+	var statement = 'replace into history(timestamp, reference, source, search) values (?,?,?,?)';
+	var that = this;
+	this.lastSelectCurrent = false;
 	this.database.executeDML(statement, values, function(count) {
 		if (count instanceof IOError) {
 			console.log('replace error', JSON.stringify(count));
 			callback(count);
 		} else {
-			callback(count);
+			that.cleanup(function(count) {
+				callback(count);
+			});
 		}
 	});
 };
-HistoryAdapter.prototype.delete = function(values, callback) {
-	// Will be needed to prevent growth of history
-	callback();
+HistoryAdapter.prototype.cleanup = function(callback) {
+	var statement = 'delete from history where count(*) > ? and timestamp = min(timestamp)';
+	this.database.executeDML(statement, [ MAX_HISTORY ], function(count) {
+		if (count instanceof IOError) {
+			console.log('delete error', JSON.stringify(count));
+			callback(count);
+		} else {
+			callback(count);
+		}
+	});
 };/**
 * This class is the database adapter for the questions table
 */

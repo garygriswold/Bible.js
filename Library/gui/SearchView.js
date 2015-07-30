@@ -3,11 +3,11 @@
 * It does a lazy create of all of the objects needed.
 * Each presentation of a searchView presents its last state and last found results.
 */
-function SearchView(toc, concordance, versesAdapter, history) {
+function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	this.toc = toc;
 	this.concordance = concordance;
 	this.versesAdapter = versesAdapter;
-	this.history = history;
+	this.historyAdapter = historyAdapter;
 	this.query = '';
 	this.words = [];
 	this.bookList = {};
@@ -28,15 +28,17 @@ SearchView.prototype.showView = function(query) {
 		this.rootNode.appendChild(this.viewRoot);
 		window.scrollTo(10, this.scrollPosition);
 	} else {
-		var lastSearch = this.history.lastConcordanceSearch();
-		if (lastSearch && lastSearch.length > 0) { // check trim also
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: lastSearch }}));
-		} else {
-			console.log('Nothing to search for, display blank page');
-			this.showSearch('');
-			this.rootNode.appendChild(this.viewRoot);
-			window.scrollTo(10, 0);			
-		}
+		var that = this;
+		this.historyAdapter.lastConcordanceSearch(function(lastSearch) {
+			if (lastSearch instanceof IOError || lastSearch === null) {
+				console.log('Nothing to search for, display blank page');
+				that.showSearch('');
+				that.rootNode.appendChild(that.viewRoot);
+				window.scrollTo(10, 0);	
+			} else {
+				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: lastSearch }}));	
+			}
+		});
 	}
 };
 SearchView.prototype.hideView = function() {
