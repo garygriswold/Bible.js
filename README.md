@@ -12,7 +12,7 @@ In order to provide Bible readers with an experience similar to the Ethiopian of
 
 This App will provide the ability for peer to peer installation using NFC, and for operating systems that will not permit this, in the future there will be an ePub3 (ebook) version of the App.  This will be done so that it is possible for people to share the Bible in locations of the world where governments are hostile to Christianity.
 
-The App will use Ethnologic information to present each user with a limited number of languages that is used in their geographic area.
+The App will use Ethnologic information to present each user with a limited number of languages that are used in their geographic area.
 
 License
 -------
