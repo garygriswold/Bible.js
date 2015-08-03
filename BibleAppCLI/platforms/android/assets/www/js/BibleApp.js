@@ -27,20 +27,18 @@ AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.database.tableContents);
 	this.bibleCache = new BibleCache(this.database.codex);
 	this.concordance = new Concordance(this.database.concordance);
-	this.history = new History(this.database.history);
 	var that = this;
 	fillFromDatabase(function() {
 
 		console.log('loaded toc', that.tableContents.size());
-		console.log('loaded history', that.history.size());
 		
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.lookup = new Lookup(that.tableContents);
 		that.statusBar = new StatusBarView(that.tableContents);
 		that.statusBar.showView();
-		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.history);
+		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.database.history);
 		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.statusBar.barHite);
-		that.historyView = new HistoryView(that.history, that.tableContents);
+		that.historyView = new HistoryView(that.database.history, that.tableContents);
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
 		Object.freeze(that);
 
@@ -52,25 +50,26 @@ AppViewController.prototype.begin = function(develop) {
 			that.searchView.showView('risen');
 			break;
 		case 'HistoryView':
-			that.historyView.showView();
+			that.historyView.showView(function() {});
 			break;
 		case 'QuestionsView':
 			that.questionsView.showView();
 			break;
 		default:
-			var lastItem = that.history.last();
-			console.log('LastItem', JSON.stringify(lastItem));
-			if (that.tableContents.size() > 0) {
-				that.codexView.showView(lastItem.nodeId);
-			} else {
-				window.alert('There is no Bible present');
-			}
+			that.database.history.lastItem(function(lastItem) {
+				if (lastItem instanceof IOError || lastItem === null || lastItem === undefined) {
+					that.codexView.showView('JHN:1');
+				} else {
+					console.log('LastItem', JSON.stringify(lastItem));
+					that.codexView.showView(lastItem);
+				}
+			});
 		}
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();
 			that.statusBar.showTitleField();
 			that.searchView.hideView();
-			that.historyView.hideView();
+			that.historyView.hideView(function() {});
 			that.questionsView.hideView();
 			that.codexView.hideView();
 		});
@@ -78,7 +77,7 @@ AppViewController.prototype.begin = function(develop) {
 			that.searchView.showView();
 			that.statusBar.showSearchField();
 			that.tableContentsView.hideView();
-			that.historyView.hideView();
+			that.historyView.hideView(function() {});
 			that.questionsView.hideView();
 			that.codexView.hideView();
 		});
@@ -87,17 +86,25 @@ AppViewController.prototype.begin = function(develop) {
 			that.statusBar.showTitleField();
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
-			that.historyView.hideView();
+			that.historyView.hideView(function() {});
 			that.codexView.hideView();			
 		});
+		var panRightEnabled = true;
 		that.touch.on("panright", function(event) {
-			if (event.deltaX > 4 * Math.abs(event.deltaY)) {
-				that.historyView.showView();
+			if (panRightEnabled && event.deltaX > 4 * Math.abs(event.deltaY)) {
+				panRightEnabled = false;
+				that.historyView.showView(function() {
+					panRightEnabled = true;
+				});
 			}
 		});
+		var panLeftEnabled = true;
 		that.touch.on("panleft", function(event) {
-			if ( -event.deltaX > 4 * Math.abs(event.deltaY)) {
-				that.historyView.hideView();
+			if (panLeftEnabled && -event.deltaX > 4 * Math.abs(event.deltaY)) {
+				panLeftEnabled = false;
+				that.historyView.hideView(function() {
+					panLeftEnabled = true;		
+				});
 			}
 		});
 		document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
@@ -113,7 +120,9 @@ AppViewController.prototype.begin = function(develop) {
 			that.statusBar.showTitleField();
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
-			that.history.addEvent(event);
+			var historyItem = { timestamp: new Date(), reference: event.detail.id, 
+				source: event.type, search: event.detail.source };
+			that.database.history.replace(historyItem, function(count) {});
 		});
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);
@@ -128,9 +137,7 @@ AppViewController.prototype.begin = function(develop) {
 	});
 	function fillFromDatabase(callback) {
 		that.tableContents.fill(function() {
-			that.history.fill(function() {
-				callback();
-			});
+			callback();
 		});
 	}
 };
@@ -319,56 +326,72 @@ CodexView.prototype.hideFootnote = function(noteId) {
 * and to respond to user interaction with those tabs.
 */
 
-function HistoryView(history, tableContents) {
-	this.history = history;
+function HistoryView(historyAdapter, tableContents) {
+	this.historyAdapter = historyAdapter;
 	this.tableContents = tableContents;
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('historyRoot');
 	Object.seal(this);
 }
-HistoryView.prototype.showView = function() {
+HistoryView.prototype.showView = function(callback) {
 	if (this.viewRoot) {
-	 	if (! this.history.isViewCurrent) {
+	 	if (this.historyAdapter.lastSelectCurrent) {
+	 		TweenMax.to(this.rootNode, 0.7, { left: "0px", onComplete: callback });
+	 	} else {
 			this.rootNode.removeChild(this.viewRoot);
-			this.viewRoot = this.buildHistoryView();
+			this.buildHistoryView(function(result) {
+				installView(result);
+			});
 		}
 	} else {
-		this.viewRoot = this.buildHistoryView();
+		this.buildHistoryView(function(result) {
+			installView(result);
+		});
 	}
-	this.history.isViewCurrent = true;
-	this.rootNode.appendChild(this.viewRoot);
-	TweenLite.to(this.rootNode, 0.7, { left: "0px" });
+	var that = this;
+	function installView(root) {
+		that.viewRoot = root;
+		that.rootNode.appendChild(that.viewRoot);
+		TweenMax.to(that.rootNode, 0.7, { left: "0px", onComplete: callback });
+	}
 };
-HistoryView.prototype.hideView = function() {
+HistoryView.prototype.hideView = function(callback) {
 	var rect = this.rootNode.getBoundingClientRect();
 	if (rect.left > -150) {
-		TweenLite.to(this.rootNode, 0.7, { left: "-150px" });
+		TweenMax.to(this.rootNode, 0.7, { left: "-150px", onComplete: callback });
+	} else {
+		callback();
 	}
 };
-HistoryView.prototype.buildHistoryView = function() {
+HistoryView.prototype.buildHistoryView = function(callback) {
 	var that = this;
 	var root = document.createElement('ul');
 	root.setAttribute('id', 'historyTabBar');
-	var numHistory = this.history.size();
-	for (var i=numHistory -1; i>=0; i--) {
-		var historyNodeId = this.history.items[i].nodeId;
-		var tab = document.createElement('li');
-		tab.setAttribute('class', 'historyTab');
-		root.appendChild(tab);
+	this.historyAdapter.selectAll(function(results) {
+		if (results instanceof IOError) {
+			callback(root);
+		} else {
+			for (var i=0; i<results.length; i++) {
+				var historyNodeId = results[i];
+				var tab = document.createElement('li');
+				tab.setAttribute('class', 'historyTab');
+				root.appendChild(tab);
 
-		var btn = document.createElement('button');
-		btn.setAttribute('id', 'his' + historyNodeId);
-		btn.setAttribute('class', 'historyTabBtn');
-		btn.innerHTML = generateReference(historyNodeId);
-		tab.appendChild(btn);
-		btn.addEventListener('click', function(event) {
-			console.log('btn is clicked ', btn.innerHTML);
-			var nodeId = this.id.substr(3);
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
-			that.hideView();
-		});
-	}
-	return(root);
+				var btn = document.createElement('button');
+				btn.setAttribute('id', 'his' + historyNodeId);
+				btn.setAttribute('class', 'historyTabBtn');
+				btn.textContent = generateReference(historyNodeId);
+				tab.appendChild(btn);
+				btn.addEventListener('click', function(event) {
+					console.log('btn is clicked ', btn.innerHTML);
+					var nodeId = this.id.substr(3);
+					document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
+					that.hideView();
+				});
+			}
+			callback(root);
+		}
+	});
 
 	function generateReference(nodeId) {
 		var ref = new Reference(nodeId);
@@ -555,11 +578,11 @@ QuestionsView.prototype.buildQuestionsView = function() {
 * It does a lazy create of all of the objects needed.
 * Each presentation of a searchView presents its last state and last found results.
 */
-function SearchView(toc, concordance, versesAdapter, history) {
+function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	this.toc = toc;
 	this.concordance = concordance;
 	this.versesAdapter = versesAdapter;
-	this.history = history;
+	this.historyAdapter = historyAdapter;
 	this.query = '';
 	this.words = [];
 	this.bookList = {};
@@ -580,15 +603,17 @@ SearchView.prototype.showView = function(query) {
 		this.rootNode.appendChild(this.viewRoot);
 		window.scrollTo(10, this.scrollPosition);
 	} else {
-		var lastSearch = this.history.lastConcordanceSearch();
-		if (lastSearch && lastSearch.length > 0) { // check trim also
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: lastSearch }}));
-		} else {
-			console.log('Nothing to search for, display blank page');
-			this.showSearch('');
-			this.rootNode.appendChild(this.viewRoot);
-			window.scrollTo(10, 0);			
-		}
+		var that = this;
+		this.historyAdapter.lastConcordanceSearch(function(lastSearch) {
+			if (lastSearch instanceof IOError || lastSearch === null) {
+				console.log('Nothing to search for, display blank page');
+				that.showSearch('');
+				that.rootNode.appendChild(that.viewRoot);
+				window.scrollTo(10, 0);	
+			} else {
+				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: lastSearch }}));	
+			}
+		});
 	}
 };
 SearchView.prototype.hideView = function() {
@@ -860,7 +885,7 @@ StatusBarView.prototype.showSearchField = function(query) {
 		this.searchField = document.createElement('input');
 		this.searchField.setAttribute('type', 'text');
 		this.searchField.setAttribute('class', 'searchField');
-		this.searchField.setAttribute('value', query);
+		this.searchField.setAttribute('value', query || '');
 		var yPos = (this.hite - 40) / 2; // The 40 in this calculation is a hack.
 		var xPos = (this.hite * 1.2);
 		this.searchField.setAttribute('style', 'position: fixed; top: ' + yPos + 'px; left: ' + xPos + 'px');
@@ -1623,7 +1648,8 @@ var MAX_HISTORY = 20;
 function HistoryAdapter(database) {
 	this.database = database;
 	this.className = 'HistoryAdapter';
-	Object.freeze(this);
+	this.lastSelectCurrent = false;
+	Object.seal(this);
 }
 HistoryAdapter.prototype.drop = function(callback) {
 	this.database.executeDDL('drop table if exists history', function(err) {
@@ -1638,9 +1664,7 @@ HistoryAdapter.prototype.drop = function(callback) {
 HistoryAdapter.prototype.create = function(callback) {
 	var statement = 'create table if not exists history(' +
 		'timestamp text not null primary key, ' +
-		'book text not null, ' +
-		'chapter integer not null, ' +
-		'verse integer null, ' +
+		'reference text not null unique, ' +
 		'source text not null, ' +
 		'search text null)';
 	this.database.executeDDL(statement, function(err) {
@@ -1653,43 +1677,82 @@ HistoryAdapter.prototype.create = function(callback) {
 	});
 };
 HistoryAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select timestamp, book, chapter, verse, source, search ' +
-		'from history order by timestamp desc limit ?';
+	var that = this;
+	var statement = 'select reference from history order by timestamp desc limit ?';
 	this.database.select(statement, [ MAX_HISTORY ], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.selectAll Error', JSON.stringify(results));
 			callback(results);
 		} else {
-			console.log('HistoryAdapter.selectAll Success, rows=', results.rows.length);
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
-				var ref = new Reference(row.book, row.chapter, row.verse);
-				var hist = new HistoryItem(ref.nodeId, row.source, row.search, row.timestamp);
-				array.push(hist);
+				array.push(row.reference);
 			}
+			that.lastSelectCurrent = true;
 			callback(array);
+		}
+	});
+};
+HistoryAdapter.prototype.lastItem = function(callback) {
+	var statement = 'select reference from history where timestamp = (select max(timestamp) from history);';
+	this.database.select(statement, [], function(results) {
+		if (results instanceof IOError) {
+			console.log('HistoryAdapter.lastItem Error', JSON.stringify(results));
+			callback(results);
+		} else {
+			if (results.rows.length > 0) {
+				var row = results.rows.item(0);
+				callback(row.reference);
+			} else {
+				callback(null);
+			}
+		}
+	});
+};
+HistoryAdapter.prototype.lastConcordanceSearch = function(callback) {
+	var statement = 'select reference from history where search is not null order by timestamp desc limit 1';
+	this.database.select(statement, [ MAX_HISTORY ], function(results) {
+		if (results instanceof IOError) {
+			console.log('HistoryAdapter.lastConcordance Error', JSON.stringify(results));
+			callback(results);
+		} else {
+			if (results.rows.length > 0) {
+				var row = results.rows.item(0);
+				callback(row.reference);
+			} else {
+				callback(null);
+			}
 		}
 	});
 };
 HistoryAdapter.prototype.replace = function(item, callback) {
 	var timestampStr = item.timestamp.toISOString();
-	var ref = new Reference(item.nodeId);
-	var values = [ timestampStr, ref.book, ref.chapter, ref.verse, item.source, item.search ];
-	var statement = 'replace into history(timestamp, book, chapter, verse, source, search) ' +
-		'values (?,?,?,?,?,?)';
+	var values = [ timestampStr, item.reference, item.source, item.search || null ];
+	var statement = 'replace into history(timestamp, reference, source, search) values (?,?,?,?)';
+	var that = this;
+	this.lastSelectCurrent = false;
 	this.database.executeDML(statement, values, function(count) {
 		if (count instanceof IOError) {
 			console.log('replace error', JSON.stringify(count));
 			callback(count);
 		} else {
-			callback(count);
+			that.cleanup(function(count) {
+				callback(count);
+			});
 		}
 	});
 };
-HistoryAdapter.prototype.delete = function(values, callback) {
-	// Will be needed to prevent growth of history
-	callback();
+HistoryAdapter.prototype.cleanup = function(callback) {
+	var statement = ' delete from history where ? < (select count(*) from history) and timestamp = (select min(timestamp) from history)';
+	this.database.executeDML(statement, [ MAX_HISTORY ], function(count) {
+		if (count instanceof IOError) {
+			console.log('delete error', JSON.stringify(count));
+			callback(count);
+		} else {
+			callback(count);
+		}
+	});
 };/**
 * This class is the database adapter for the questions table
 */
@@ -2059,96 +2122,6 @@ Concordance.prototype.search = function(words, callback) {
 	}
 };
 /**
-* This class manages a queue of history items up to some maximum number of items.
-* It adds items when there is an event, such as a toc click, a search lookup,
-* or a concordance search.  It also responds to function requests to go back 
-* in history, forward in history, or return to the last event.
-*/
-function History(adapter) {
-	this.adapter = adapter;
-	this.items = [];
-	this.isFilled = false;
-	this.isViewCurrent = false;
-	Object.seal(this);
-}
-History.prototype.fill = function(callback) {
-	var that = this;
-	this.items.splice(0);
-	this.adapter.selectAll(function(results) {
-		if (results instanceof IOError) {
-			console.log('History.fill Error', JSON.stringify(results));
-			callback(results);
-		} else {
-			console.log('History.fill Success, rows=', results.length);
-			that.items = results;
-			that.isFilled = true;
-			that.isViewCurrent = false;
-			callback();
-		}
-	});
-};
-History.prototype.addEvent = function(event) {
-	var itemIndex = this.search(event.detail.id);
-	if (itemIndex >= 0) {
-		this.items.splice(itemIndex, 1);
-	}
-	var item = new HistoryItem(event.detail.id, event.type, event.detail.source);
-	this.items.push(item);
-	if (this.items.length > MAX_HISTORY) {
-		var discard = this.items.shift();
-	}
-	this.isViewCurrent = false;
-	
-	// I might want a timeout to postpone this until after animation is finished.
-	this.adapter.replace(item, function(err) {
-		if (err instanceof IOError) {
-			console.log('replace error', JSON.stringify(err));
-		}
-	});
-};
-History.prototype.search = function(nodeId) {
-	for (var i=0; i<this.items.length; i++) {
-		var item = this.items[i];
-		if (item.nodeId === nodeId) {
-			return(i);
-		}
-	}
-	return(-1);
-};
-History.prototype.size = function() {
-	return(this.items.length);
-};
-History.prototype.last = function() {
-	return(this.item(this.items.length -1));
-};
-History.prototype.item = function(index) {
-	return((index > -1 && index < this.items.length) ? this.items[index] : new HistoryItem('JHN:1'));
-};
-History.prototype.lastConcordanceSearch = function() {
-	for (var i=this.items.length -1; i>=0; i--) {
-		var item = this.items[i];
-		if (item.search && item.search.length > 0) { // also trim it
-			return(item.search);
-		}
-	}
-	return('');
-};
-History.prototype.toJSON = function() {
-	return(JSON.stringify(this.items, null, ' '));
-};
-
-/**
-* This class contains the details of a single history event, such as
-* clicking on the toc to get a chapter, doing a lookup of a specific passage
-* or clicking on a verse during a concordance search.
-*/
-function HistoryItem(nodeId, source, search, timestamp) {
-	this.nodeId = nodeId;
-	this.source = source;
-	this.search = search;
-	this.timestamp = (timestamp) ? new Date(timestamp) : new Date();
-	Object.freeze(this);
-}/**
 * This class process search strings to determine if they are book chapter,
 * or book chapter:verse lookups.  If so, then it processes them by dispatching
 * the correct event.  If not, then it returns them to be processed as
