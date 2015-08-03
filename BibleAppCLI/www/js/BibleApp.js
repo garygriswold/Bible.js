@@ -60,7 +60,7 @@ AppViewController.prototype.begin = function(develop) {
 				if (lastItem instanceof IOError || lastItem === null || lastItem === undefined) {
 					that.codexView.showView('JHN:1');
 				} else {
-					console.log('LastItem', JSON.stringify(lastItem));
+					console.log('LastItem' + JSON.stringify(lastItem));
 					that.codexView.showView(lastItem);
 				}
 			});
@@ -783,6 +783,7 @@ function HeaderView(tableContents) {
 	this.barHite = (this.statusBarInHeader) ? HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT : HEADER_BAR_HEIGHT;
 	this.tableContents = tableContents;
 	this.titleWidth = window.innerWidth - this.hite * 3.5;
+	this.backgroundCanvas = null;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.currentReference = null;
@@ -793,17 +794,23 @@ function HeaderView(tableContents) {
 }
 HeaderView.prototype.showView = function() {
 	var that = this;
-	setupBackground(this.hite);
+
+	this.backgroundCanvas = document.createElement('canvas');
+	paintBackground(this.backgroundCanvas, this.hite);
+	this.rootNode.appendChild(this.backgroundCanvas);
+
 	setupTocButton(this.hite, '#F7F7BB');
 	setupHeading(this.hite);
 	setupQuestionsButton(this.hite, '#F7F7BB');
 	setupSearchButton(this.hite, '#F7F7BB');
 
-	function setupBackground(hite) {
-    	var canvas = document.createElement('canvas');
+	window.addEventListener('resize', function(event) {
+		paintBackground(that.backgroundCanvas, that.hite);
+	});
+
+	function paintBackground(canvas, hite) {
     	canvas.setAttribute('height', that.barHite);
-    	var maxSize = (window.innerHeight > window.innerWidth) ? window.innerHeight : window.innerWidth;
-    	canvas.setAttribute('width', maxSize);
+    	canvas.setAttribute('width', window.innerWidth);
     	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
       	var graphics = canvas.getContext('2d');
       	graphics.rect(0, 0, canvas.width, canvas.height);
@@ -818,7 +825,6 @@ HeaderView.prototype.showView = function() {
 
       	graphics.fillStyle = gradient;
       	graphics.fill();
-      	that.rootNode.appendChild(canvas);
 	}
 	function setupTocButton(hite, color) {
 		var canvas = drawTOCIcon(hite, color);

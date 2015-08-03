@@ -60,7 +60,7 @@ AppViewController.prototype.begin = function(develop) {
 				if (lastItem instanceof IOError || lastItem === null || lastItem === undefined) {
 					that.codexView.showView('JHN:1');
 				} else {
-					console.log('LastItem', JSON.stringify(lastItem));
+					console.log('LastItem' + JSON.stringify(lastItem));
 					that.codexView.showView(lastItem);
 				}
 			});
@@ -783,6 +783,7 @@ function HeaderView(tableContents) {
 	this.barHite = (this.statusBarInHeader) ? HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT : HEADER_BAR_HEIGHT;
 	this.tableContents = tableContents;
 	this.titleWidth = window.innerWidth - this.hite * 3.5;
+	this.backgroundCanvas = null;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.currentReference = null;
@@ -793,14 +794,36 @@ function HeaderView(tableContents) {
 }
 HeaderView.prototype.showView = function() {
 	var that = this;
-	setupBackground(this.hite);
+	//this.backgroundCanvas = setupBackground(this.hite);
+	this.backgroundCanvas = document.createElement('canvas');
+	paintBackground(this.backgroundCanvas, this.hite);
+	this.rootNode.appendChild(this.backgroundCanvas);
+
 	setupTocButton(this.hite, '#F7F7BB');
 	setupHeading(this.hite);
 	setupQuestionsButton(this.hite, '#F7F7BB');
 	setupSearchButton(this.hite, '#F7F7BB');
 
-	function setupBackground(hite) {
-    	var canvas = document.createElement('canvas');
+	window.addEventListener('resize', function(event) {
+		window.alert('resize outer ' + window.outerWidth + ' x ' + window.outerHeight);
+		paintBackground(that.backgroundCanvas, that.hite);
+		//that.backgroundCanvas.setAttribute('width', window.outerWidth);
+		//var graphics = that.backgroundCanvas.getContext('2d');
+      	//graphics.rect(0, 0, that.backgroundCanvas.width, that.backgroundCanvas.height);
+		//var vMidpoint = hite / 2;
+      	//var gradient = graphics.createRadialGradient(238, vMidpoint, 10, 238, vMidpoint, window.innerHeight - hite);
+      	//// light blue
+      	//gradient.addColorStop(0, '#8ED6FF');
+      	//// dark blue
+      	//gradient.addColorStop(1, '#004CB3');
+//
+//      	graphics.fillStyle = gradient;
+  //    	graphics.fill();
+	});
+
+	//function setupBackground(hite) {
+	function paintBackground(canvas, hite) {
+    	//var canvas = document.createElement('canvas');
     	canvas.setAttribute('height', that.barHite);
     	var maxSize = (window.innerHeight > window.innerWidth) ? window.innerHeight : window.innerWidth;
     	canvas.setAttribute('width', maxSize);
@@ -818,12 +841,13 @@ HeaderView.prototype.showView = function() {
 
       	graphics.fillStyle = gradient;
       	graphics.fill();
-      	that.rootNode.appendChild(canvas);
+      	//that.rootNode.appendChild(canvas);
+      	//return(canvas);
 	}
 	function setupTocButton(hite, color) {
 		var canvas = drawTOCIcon(hite, color);
 		if (that.statusBarInHeader) {
-			canvas.setAttribute('style', 'position: fixed; top: 20px; left: 0');
+			canvas.setAttribute('style', 'position: fixed; top: 16px; left: 0');
 		} else {
 			canvas.setAttribute('style', 'position: fixed; top: 4px; left: 0');
 		}
@@ -841,7 +865,7 @@ HeaderView.prototype.showView = function() {
 		that.titleCanvas.setAttribute('height', hite);
 		that.titleCanvas.setAttribute('width', that.titleWidth);
 		if (that.statusBarInHeader) {
-			that.titleCanvas.setAttribute('style', 'position: fixed; top: 14px; left:' + hite * 1.1 + 'px');			
+			that.titleCanvas.setAttribute('style', 'position: fixed; top: 16px; left:' + hite * 1.1 + 'px');			
 		} else {
 			that.titleCanvas.setAttribute('style', 'position: fixed; top: 4px; left:' + hite * 1.1 + 'px');
 		}
@@ -864,7 +888,7 @@ HeaderView.prototype.showView = function() {
 	function setupSearchButton(hite, color) {
 		var canvas = drawSearchIcon(hite, color);
 		if (that.statusBarInHeader) {
-			canvas.setAttribute('style', 'position: fixed; top: 14px; right: 0; border: none');			
+			canvas.setAttribute('style', 'position: fixed; top: 16px; right: 0; border: none');			
 		} else {
 			canvas.setAttribute('style', 'position: fixed; top: 4px; right: 0; border: none');
 		}
@@ -879,7 +903,7 @@ HeaderView.prototype.showView = function() {
 	function setupQuestionsButton(hite, color) {
 		var canvas = drawQuestionsIcon(hite, color);
 		if (that.statusBarInHeader) {
-			canvas.setAttribute('style', 'position: fixed; top: 14px; border: none; right: ' + hite * 1.14 + 'px');
+			canvas.setAttribute('style', 'position: fixed; top: 16px; border: none; right: ' + hite * 1.14 + 'px');
 		} else {
 			canvas.setAttribute('style', 'position: fixed; top: 4px; border: none; right: ' + hite * 1.14 + 'px');
 		}

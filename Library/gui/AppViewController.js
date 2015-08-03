@@ -59,7 +59,7 @@ AppViewController.prototype.begin = function(develop) {
 				if (lastItem instanceof IOError || lastItem === null || lastItem === undefined) {
 					that.codexView.showView('JHN:1');
 				} else {
-					console.log('LastItem', JSON.stringify(lastItem));
+					console.log('LastItem' + JSON.stringify(lastItem));
 					that.codexView.showView(lastItem);
 				}
 			});
