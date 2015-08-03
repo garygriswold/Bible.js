@@ -773,11 +773,14 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 * user interactions on the status bar.
 */
 var HEADER_BUTTON_HEIGHT = 44;
-var HEADER_BAR_HEIGHT = 62; // ios
+var HEADER_BAR_HEIGHT = 52;
+var STATUS_BAR_HEIGHT = 14;
 
 function HeaderView(tableContents) {
+	this.statusBarInHeader = (deviceSettings.platform() === 'ios') ? true : false;
+
 	this.hite = HEADER_BUTTON_HEIGHT;
-	this.barHite = HEADER_BAR_HEIGHT;
+	this.barHite = (this.statusBarInHeader) ? HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT : HEADER_BAR_HEIGHT;
 	this.tableContents = tableContents;
 	this.titleWidth = window.innerWidth - this.hite * 3.5;
 	this.titleCanvas = null;
@@ -798,7 +801,7 @@ HeaderView.prototype.showView = function() {
 
 	function setupBackground(hite) {
     	var canvas = document.createElement('canvas');
-    	canvas.setAttribute('height', HEADER_BAR_HEIGHT);
+    	canvas.setAttribute('height', that.barHite);
     	var maxSize = (window.innerHeight > window.innerWidth) ? window.innerHeight : window.innerWidth;
     	canvas.setAttribute('width', maxSize);
     	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
@@ -819,7 +822,11 @@ HeaderView.prototype.showView = function() {
 	}
 	function setupTocButton(hite, color) {
 		var canvas = drawTOCIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 14px; left: 0');
+		if (that.statusBarInHeader) {
+			canvas.setAttribute('style', 'position: fixed; top: 16px; left: 0');
+		} else {
+			canvas.setAttribute('style', 'position: fixed; top: 4px; left: 0');
+		}
 		document.getElementById('tocCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -833,7 +840,11 @@ HeaderView.prototype.showView = function() {
 		that.titleCanvas.setAttribute('id', 'titleCanvas');
 		that.titleCanvas.setAttribute('height', hite);
 		that.titleCanvas.setAttribute('width', that.titleWidth);
-		that.titleCanvas.setAttribute('style', 'position: fixed; top: 14px; left:' + hite * 1.1 + 'px');
+		if (that.statusBarInHeader) {
+			that.titleCanvas.setAttribute('style', 'position: fixed; top: 16px; left:' + hite * 1.1 + 'px');			
+		} else {
+			that.titleCanvas.setAttribute('style', 'position: fixed; top: 4px; left:' + hite * 1.1 + 'px');
+		}
 
 		that.titleGraphics = that.titleCanvas.getContext('2d');
 		that.titleGraphics.fillStyle = '#000000';
@@ -852,7 +863,11 @@ HeaderView.prototype.showView = function() {
 	}
 	function setupSearchButton(hite, color) {
 		var canvas = drawSearchIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 14px; right: 0; border: none');
+		if (that.statusBarInHeader) {
+			canvas.setAttribute('style', 'position: fixed; top: 16px; right: 0; border: none');			
+		} else {
+			canvas.setAttribute('style', 'position: fixed; top: 4px; right: 0; border: none');
+		}
 		document.getElementById('searchCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -863,7 +878,11 @@ HeaderView.prototype.showView = function() {
 	}
 	function setupQuestionsButton(hite, color) {
 		var canvas = drawQuestionsIcon(hite, color);
-		canvas.setAttribute('style', 'position: fixed; top: 14px; border: none; right: ' + hite * 1.14 + 'px');
+		if (that.statusBarInHeader) {
+			canvas.setAttribute('style', 'position: fixed; top: 16px; border: none; right: ' + hite * 1.14 + 'px');
+		} else {
+			canvas.setAttribute('style', 'position: fixed; top: 4px; border: none; right: ' + hite * 1.14 + 'px');
+		}
 		document.getElementById('questionsCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
