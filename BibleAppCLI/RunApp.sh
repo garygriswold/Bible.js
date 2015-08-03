@@ -12,7 +12,7 @@ cat ../Library/gui/CodexView.js >> www/js/BibleApp.js
 cat ../Library/gui/HistoryView.js >> www/js/BibleApp.js
 cat ../Library/gui/QuestionsView.js >> www/js/BibleApp.js
 cat ../Library/gui/SearchView.js >> www/js/BibleApp.js
-cat ../Library/gui/StatusBarView.js >> www/js/BibleApp.js
+cat ../Library/gui/HeaderView.js >> www/js/BibleApp.js
 cat ../Library/gui/TableContentsView.js >> www/js/BibleApp.js
 
 cat ../Library/gui/icons/drawQuestionsIcon.js >> www/js/BibleApp.js

@@ -33,10 +33,10 @@ AppViewController.prototype.begin = function(develop) {
 		
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.lookup = new Lookup(that.tableContents);
-		that.statusBar = new StatusBarView(that.tableContents);
-		that.statusBar.showView();
+		that.header = new HeaderView(that.tableContents);
+		that.header.showView();
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.database.history);
-		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.statusBar.barHite);
+		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.header.barHite);
 		that.historyView = new HistoryView(that.database.history, that.tableContents);
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
 		Object.freeze(that);
@@ -66,7 +66,7 @@ AppViewController.prototype.begin = function(develop) {
 		}
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();
-			that.statusBar.showTitleField();
+			that.header.showTitleField();
 			that.searchView.hideView();
 			that.historyView.hideView(function() {});
 			that.questionsView.hideView();
@@ -74,7 +74,7 @@ AppViewController.prototype.begin = function(develop) {
 		});
 		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
 			that.searchView.showView();
-			that.statusBar.showSearchField();
+			that.header.showSearchField();
 			that.tableContentsView.hideView();
 			that.historyView.hideView(function() {});
 			that.questionsView.hideView();
@@ -82,7 +82,7 @@ AppViewController.prototype.begin = function(develop) {
 		});
 		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, function(event) {
 			that.questionsView.showView();
-			that.statusBar.showTitleField();
+			that.header.showTitleField();
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
 			that.historyView.hideView(function() {});
@@ -110,13 +110,13 @@ AppViewController.prototype.begin = function(develop) {
 			console.log('SEARCH_START', event.detail);
 			if (! that.lookup.find(event.detail.search)) {
 				that.searchView.showView(event.detail.search);
-				that.statusBar.showSearchField(event.detail.search);
+				that.header.showSearchField(event.detail.search);
 			}
 		});
 		document.body.addEventListener(BIBLE.SHOW_PASSAGE, function(event) {
 			console.log(JSON.stringify(event.detail));
 			that.codexView.showView(event.detail.id);
-			that.statusBar.showTitleField();
+			that.header.showTitleField();
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
 			var historyItem = { timestamp: new Date(), reference: event.detail.id, 
@@ -132,7 +132,7 @@ AppViewController.prototype.begin = function(develop) {
 	});
 	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
 		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
-		that.statusBar.setTitle(event.detail.reference);
+		that.header.setTitle(event.detail.reference);
 	});
 	function fillFromDatabase(callback) {
 		that.tableContents.fill(function() {

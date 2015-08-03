@@ -3,10 +3,10 @@
 */
 var CODEX_VIEW = { MAX: 10, SCROLL_TIMEOUT: 100, USE_DRAGGABLE: false };
 
-function CodexView(chaptersAdapter, tableContents, statusBarHeight) {
+function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.chaptersAdapter = chaptersAdapter;
 	this.tableContents = tableContents;
-	this.statusBarHeight = statusBarHeight;
+	this.headerHeight = headerHeight;
 	this.rootNode = document.getElementById('codexRoot');
 	this.viewport = this.rootNode;
 	if (CODEX_VIEW.USE_DRAGGABLE) {
@@ -157,7 +157,7 @@ CodexView.prototype.scrollTo = function(reference) {
 	}
 	if (verse) {
 		var rect = verse.getBoundingClientRect();
-		window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
+		window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.headerHeight);
 	}
 };
 CodexView.prototype.showFootnote = function(noteId) {

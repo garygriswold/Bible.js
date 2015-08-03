@@ -2,12 +2,12 @@
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
-var STATUS_BAR_BUTTON_HEIGHT = 44;
-var STATUS_BAR_HEIGHT = 62; // ios
+var HEADER_BUTTON_HEIGHT = 44;
+var HEADER_BAR_HEIGHT = 62; // ios
 
-function StatusBarView(tableContents) {
-	this.hite = STATUS_BAR_BUTTON_HEIGHT;
-	this.barHite = STATUS_BAR_HEIGHT;
+function HeaderView(tableContents) {
+	this.hite = HEADER_BUTTON_HEIGHT;
+	this.barHite = HEADER_BAR_HEIGHT;
 	this.tableContents = tableContents;
 	this.titleWidth = window.innerWidth - this.hite * 3.5;
 	this.titleCanvas = null;
@@ -18,7 +18,7 @@ function StatusBarView(tableContents) {
 	this.labelCell = document.getElementById('labelCell');
 	Object.seal(this);
 }
-StatusBarView.prototype.showView = function() {
+HeaderView.prototype.showView = function() {
 	var that = this;
 	setupBackground(this.hite);
 	setupTocButton(this.hite, '#F7F7BB');
@@ -28,7 +28,7 @@ StatusBarView.prototype.showView = function() {
 
 	function setupBackground(hite) {
     	var canvas = document.createElement('canvas');
-    	canvas.setAttribute('height', STATUS_BAR_HEIGHT);
+    	canvas.setAttribute('height', HEADER_BAR_HEIGHT);
     	var maxSize = (window.innerHeight > window.innerWidth) ? window.innerHeight : window.innerWidth;
     	canvas.setAttribute('width', maxSize);
     	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
@@ -103,14 +103,14 @@ StatusBarView.prototype.showView = function() {
 		});
 	}
 };
-StatusBarView.prototype.setTitle = function(reference) {
+HeaderView.prototype.setTitle = function(reference) {
 	this.currentReference = reference;
 	var book = this.tableContents.find(reference.book);
 	var text = book.name + ' ' + ((reference.chapter > 0) ? reference.chapter : 1);
 	this.titleGraphics.clearRect(0, 0, this.titleWidth, this.hite);
 	this.titleGraphics.fillText(text, this.titleWidth / 2, this.hite / 2, this.titleWidth);
 };
-StatusBarView.prototype.showSearchField = function(query) {
+HeaderView.prototype.showSearchField = function(query) {
 	if (! this.searchField) {
 		this.searchField = document.createElement('input');
 		this.searchField.setAttribute('type', 'text');
@@ -129,10 +129,10 @@ StatusBarView.prototype.showSearchField = function(query) {
 	}
 	this.changeLabelCell(this.searchField);
 };
-StatusBarView.prototype.showTitleField = function() {
+HeaderView.prototype.showTitleField = function() {
 	this.changeLabelCell(this.titleCanvas);
 };
-StatusBarView.prototype.changeLabelCell = function(node) {
+HeaderView.prototype.changeLabelCell = function(node) {
 	for (var i=this.labelCell.children.length -1; i>=0; i--) {
 		this.labelCell.removeChild(this.labelCell.children[i]);
 	}

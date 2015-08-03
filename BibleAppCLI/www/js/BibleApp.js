@@ -34,10 +34,10 @@ AppViewController.prototype.begin = function(develop) {
 		
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.lookup = new Lookup(that.tableContents);
-		that.statusBar = new StatusBarView(that.tableContents);
-		that.statusBar.showView();
+		that.header = new HeaderView(that.tableContents);
+		that.header.showView();
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.database.history);
-		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.statusBar.barHite);
+		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.header.barHite);
 		that.historyView = new HistoryView(that.database.history, that.tableContents);
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
 		Object.freeze(that);
@@ -67,7 +67,7 @@ AppViewController.prototype.begin = function(develop) {
 		}
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			that.tableContentsView.showView();
-			that.statusBar.showTitleField();
+			that.header.showTitleField();
 			that.searchView.hideView();
 			that.historyView.hideView(function() {});
 			that.questionsView.hideView();
@@ -75,7 +75,7 @@ AppViewController.prototype.begin = function(develop) {
 		});
 		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
 			that.searchView.showView();
-			that.statusBar.showSearchField();
+			that.header.showSearchField();
 			that.tableContentsView.hideView();
 			that.historyView.hideView(function() {});
 			that.questionsView.hideView();
@@ -83,7 +83,7 @@ AppViewController.prototype.begin = function(develop) {
 		});
 		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, function(event) {
 			that.questionsView.showView();
-			that.statusBar.showTitleField();
+			that.header.showTitleField();
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
 			that.historyView.hideView(function() {});
@@ -111,13 +111,13 @@ AppViewController.prototype.begin = function(develop) {
 			console.log('SEARCH_START', event.detail);
 			if (! that.lookup.find(event.detail.search)) {
 				that.searchView.showView(event.detail.search);
-				that.statusBar.showSearchField(event.detail.search);
+				that.header.showSearchField(event.detail.search);
 			}
 		});
 		document.body.addEventListener(BIBLE.SHOW_PASSAGE, function(event) {
 			console.log(JSON.stringify(event.detail));
 			that.codexView.showView(event.detail.id);
-			that.statusBar.showTitleField();
+			that.header.showTitleField();
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
 			var historyItem = { timestamp: new Date(), reference: event.detail.id, 
@@ -133,7 +133,7 @@ AppViewController.prototype.begin = function(develop) {
 	});
 	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
 		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
-		that.statusBar.setTitle(event.detail.reference);
+		that.header.setTitle(event.detail.reference);
 	});
 	function fillFromDatabase(callback) {
 		that.tableContents.fill(function() {
@@ -146,10 +146,10 @@ AppViewController.prototype.begin = function(develop) {
 */
 var CODEX_VIEW = { MAX: 10, SCROLL_TIMEOUT: 100, USE_DRAGGABLE: false };
 
-function CodexView(chaptersAdapter, tableContents, statusBarHeight) {
+function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.chaptersAdapter = chaptersAdapter;
 	this.tableContents = tableContents;
-	this.statusBarHeight = statusBarHeight;
+	this.headerHeight = headerHeight;
 	this.rootNode = document.getElementById('codexRoot');
 	this.viewport = this.rootNode;
 	if (CODEX_VIEW.USE_DRAGGABLE) {
@@ -300,7 +300,7 @@ CodexView.prototype.scrollTo = function(reference) {
 	}
 	if (verse) {
 		var rect = verse.getBoundingClientRect();
-		window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.statusBarHeight);
+		window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.headerHeight);
 	}
 };
 CodexView.prototype.showFootnote = function(noteId) {
@@ -772,14 +772,12 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
-var STATUS_BAR_BUTTON_HEIGHT = 44;
-var STATUS_BAR_HEIGHT_IOS = 62;
-var STATUS_BAR_HEIGHT_OTHER = 44;
+var HEADER_BUTTON_HEIGHT = 44;
+var HEADER_BAR_HEIGHT = 62; // ios
 
-function StatusBarView(tableContents) {
-	this.hite = STATUS_BAR_BUTTON_HEIGHT;
-	this.barHite = (deviceSettings.platform() === 'ios') ? STATUS_BAR_HEIGHT_IOS : STATUS_BAR_HEIGHT_OTHER;
-	console.log('this.barHEIGHT', this.barHite, deviceSettings.platform());
+function HeaderView(tableContents) {
+	this.hite = HEADER_BUTTON_HEIGHT;
+	this.barHite = HEADER_BAR_HEIGHT;
 	this.tableContents = tableContents;
 	this.titleWidth = window.innerWidth - this.hite * 3.5;
 	this.titleCanvas = null;
@@ -790,7 +788,7 @@ function StatusBarView(tableContents) {
 	this.labelCell = document.getElementById('labelCell');
 	Object.seal(this);
 }
-StatusBarView.prototype.showView = function() {
+HeaderView.prototype.showView = function() {
 	var that = this;
 	setupBackground(this.hite);
 	setupTocButton(this.hite, '#F7F7BB');
@@ -800,7 +798,7 @@ StatusBarView.prototype.showView = function() {
 
 	function setupBackground(hite) {
     	var canvas = document.createElement('canvas');
-    	canvas.setAttribute('height', that.barHite);
+    	canvas.setAttribute('height', HEADER_BAR_HEIGHT);
     	var maxSize = (window.innerHeight > window.innerWidth) ? window.innerHeight : window.innerWidth;
     	canvas.setAttribute('width', maxSize);
     	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
@@ -875,14 +873,14 @@ StatusBarView.prototype.showView = function() {
 		});
 	}
 };
-StatusBarView.prototype.setTitle = function(reference) {
+HeaderView.prototype.setTitle = function(reference) {
 	this.currentReference = reference;
 	var book = this.tableContents.find(reference.book);
 	var text = book.name + ' ' + ((reference.chapter > 0) ? reference.chapter : 1);
 	this.titleGraphics.clearRect(0, 0, this.titleWidth, this.hite);
 	this.titleGraphics.fillText(text, this.titleWidth / 2, this.hite / 2, this.titleWidth);
 };
-StatusBarView.prototype.showSearchField = function(query) {
+HeaderView.prototype.showSearchField = function(query) {
 	if (! this.searchField) {
 		this.searchField = document.createElement('input');
 		this.searchField.setAttribute('type', 'text');
@@ -901,10 +899,10 @@ StatusBarView.prototype.showSearchField = function(query) {
 	}
 	this.changeLabelCell(this.searchField);
 };
-StatusBarView.prototype.showTitleField = function() {
+HeaderView.prototype.showTitleField = function() {
 	this.changeLabelCell(this.titleCanvas);
 };
-StatusBarView.prototype.changeLabelCell = function(node) {
+HeaderView.prototype.changeLabelCell = function(node) {
 	for (var i=this.labelCell.children.length -1; i>=0; i--) {
 		this.labelCell.removeChild(this.labelCell.children[i]);
 	}
