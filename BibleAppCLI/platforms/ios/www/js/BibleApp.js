@@ -773,11 +773,13 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 * user interactions on the status bar.
 */
 var STATUS_BAR_BUTTON_HEIGHT = 44;
-var STATUS_BAR_HEIGHT = 62; // ios
+var STATUS_BAR_HEIGHT_IOS = 62;
+var STATUS_BAR_HEIGHT_OTHER = 44;
 
 function StatusBarView(tableContents) {
 	this.hite = STATUS_BAR_BUTTON_HEIGHT;
-	this.barHite = STATUS_BAR_HEIGHT;
+	this.barHite = (deviceSettings.platform() === 'ios') ? STATUS_BAR_HEIGHT_IOS : STATUS_BAR_HEIGHT_OTHER;
+	console.log('this.barHEIGHT', this.barHite, deviceSettings.platform());
 	this.tableContents = tableContents;
 	this.titleWidth = window.innerWidth - this.hite * 3.5;
 	this.titleCanvas = null;
@@ -798,7 +800,7 @@ StatusBarView.prototype.showView = function() {
 
 	function setupBackground(hite) {
     	var canvas = document.createElement('canvas');
-    	canvas.setAttribute('height', STATUS_BAR_HEIGHT);
+    	canvas.setAttribute('height', that.barHite);
     	var maxSize = (window.innerHeight > window.innerWidth) ? window.innerHeight : window.innerWidth;
     	canvas.setAttribute('width', maxSize);
     	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
@@ -2864,6 +2866,43 @@ DateTimeFormatter.prototype.localDatetime = function(date) {
 	}
 };
 /**
+ * This class accesses the device locale and language information using the globalization plugin
+ * and the versions, platform and model of the device plugin, and the network status.
+ */
+var deviceSettings = {
+    prefLanguage: function(callback) {
+        navigator.globalization.getPreferredLanguage(onSuccess, onError);
+
+        function onSuccess(pref) {
+            callback(pref.value);
+        }
+        function onError() {
+            callback('en-XX');
+        }
+    },
+    platform: function() {
+        return((device.platform) ? device.platform.toLowerCase() : null);
+    },
+    model: function() {
+        return(device.model);
+    },
+    uuid: function() {
+        return(device.uuid);
+    },
+    osVersion: function() {
+        return(device.version);
+    },
+    cordovaVersion: function() {
+        return(device.cordova);
+    },
+    connectionType: function() {
+        return(navigator.connection.type);
+    },
+    hasConnection: function() {
+        var type = navigator.connection.type;
+        return(type !== 'none' && type !== 'unknown'); // not sure of correct value for UNKNOWN
+    }
+}/**
 * This class reads USX files and creates an equivalent object tree
 * elements = [usx, book, chapter, para, verse, note, char];
 * paraStyle = [b, d, cl, cp, h, li, p, pc, q, q2, mt, mt2, mt3, mte, toc1, toc2, toc3, ide, ip, ili, ili2, is, m, mi, ms, nb, pi, s, sp];

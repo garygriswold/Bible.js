@@ -55,7 +55,7 @@ cat ../Library/model/usx/USX.js >> www/js/BibleApp.js
 cat ../Library/model/usx/Verse.js >> www/js/BibleApp.js
 
 cat ../Library/util/DateTimeFormatter.js >> www/js/BibleApp.js
-#cat ../Library/util/Performance.js >> www/js/BibleApp.js
+cat ../Library/util/cordovaDeviceSettings.js >> www/js/BibleApp.js
 
 cat ../Library/xml/USXParser.js >> www/js/BibleApp.js
 cat ../Library/xml/XMLTokenizer.js >> www/js/BibleApp.js

@@ -52,6 +52,7 @@ cat ../Library/model/usx/USX.js >> js/BibleApp.js
 cat ../Library/model/usx/Verse.js >> js/BibleApp.js
 
 cat ../Library/util/DateTimeFormatter.js >> js/BibleApp.js
+cat ../Library/util/nodeDeviceSettings.js >> js/BibleApp.js
 cat ../Library/util/Performance.js >> js/BibleApp.js
 
 cat ../Library/xml/USXParser.js >> js/BibleApp.js

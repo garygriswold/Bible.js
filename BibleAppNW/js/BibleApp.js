@@ -773,11 +773,13 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 * user interactions on the status bar.
 */
 var STATUS_BAR_BUTTON_HEIGHT = 44;
-var STATUS_BAR_HEIGHT = 62; // ios
+var STATUS_BAR_HEIGHT_IOS = 62;
+var STATUS_BAR_HEIGHT_OTHER = 44;
 
 function StatusBarView(tableContents) {
 	this.hite = STATUS_BAR_BUTTON_HEIGHT;
-	this.barHite = STATUS_BAR_HEIGHT;
+	this.barHite = (deviceSettings.platform() === 'ios') ? STATUS_BAR_HEIGHT_IOS : STATUS_BAR_HEIGHT_OTHER;
+	console.log('this.barHEIGHT', this.barHite, deviceSettings.platform());
 	this.tableContents = tableContents;
 	this.titleWidth = window.innerWidth - this.hite * 3.5;
 	this.titleCanvas = null;
@@ -798,7 +800,7 @@ StatusBarView.prototype.showView = function() {
 
 	function setupBackground(hite) {
     	var canvas = document.createElement('canvas');
-    	canvas.setAttribute('height', STATUS_BAR_HEIGHT);
+    	canvas.setAttribute('height', that.barHite);
     	var maxSize = (window.innerHeight > window.innerWidth) ? window.innerHeight : window.innerWidth;
     	canvas.setAttribute('width', maxSize);
     	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
@@ -2763,6 +2765,14 @@ DateTimeFormatter.prototype.localDatetime = function(date) {
 	}
 };
 /**
+ * This is the Node/WebKit standin for the Device and Globalization and Connection
+ * Cordova plugins.
+ */
+var deviceSettings = {
+    platform: function() {
+        return('node');
+    }
+}/**
 * This simple class is used to measure performance of the App.
 * It is not part of the production system, but is used during development
 * to instrument the code.

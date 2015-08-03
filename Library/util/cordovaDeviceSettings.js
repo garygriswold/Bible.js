@@ -14,7 +14,7 @@ var deviceSettings = {
         }
     },
     platform: function() {
-        return(device.platform);
+        return((device.platform) ? device.platform.toLowerCase() : null);
     },
     model: function() {
         return(device.model);
