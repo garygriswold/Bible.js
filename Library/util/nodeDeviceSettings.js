@@ -6,4 +6,4 @@ var deviceSettings = {
     platform: function() {
         return('node');
     }
-}
+};

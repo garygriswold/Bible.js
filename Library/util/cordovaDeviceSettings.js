@@ -35,4 +35,4 @@ var deviceSettings = {
         var type = navigator.connection.type;
         return(type !== 'none' && type !== 'unknown'); // not sure of correct value for UNKNOWN
     }
-}
+};
