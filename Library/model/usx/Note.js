@@ -40,6 +40,7 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	var refChild = document.createElement('span');
 	refChild.setAttribute('id', nodeId);
 	refChild.setAttribute('class', 'top' + this.style);
+	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	switch(this.style) {
 		case 'f':
 			refChild.textContent = '\u261E ';
@@ -51,10 +52,10 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 			refChild.textContent = '* ';
 	}
 	parentNode.appendChild(refChild);
-	refChild.addEventListener('click', function() {
-		event.stopImmediatePropagation();
-		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: this.id }}));
-	});
+//	refChild.addEventListener('click', function() {
+//		event.stopImmediatePropagation();
+//		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: this.id }}));
+//	});
 	return(refChild);
 };
 /** deprecated, might redo when writing tests */

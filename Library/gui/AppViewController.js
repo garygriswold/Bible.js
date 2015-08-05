@@ -15,7 +15,26 @@ var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
 	};
 var SERVER_HOST = 'localhost'; // 72.2.112.243
-var SERVER_PORT = '8080'; 
+var SERVER_PORT = '8080';
+
+function bibleShowNoteClick(nodeId) {
+	console.log('show note clicked', nodeId);
+	event.stopImmediatePropagation();
+	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: nodeId }}));
+	var node = document.getElementById(nodeId);
+	if (node) {
+		node.setAttribute('onclick', "bibleHideNoteClick('" + nodeId + "');");
+	}
+}
+function bibleHideNoteClick(nodeId) {
+	console.log('hide note clicked', nodeId);
+	event.stopImmediatePropagation();
+	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
+	var node = document.getElementById(nodeId);
+	if (node) {
+		node.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
+	}
+}
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;

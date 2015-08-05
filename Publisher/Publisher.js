@@ -979,8 +979,9 @@ Note.prototype.buildUSX = function(result) {
 Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	var nodeId = bookCode + chapterNum + '-' + noteNum;
 	var refChild = document.createElement('span');
-	refChild.setAttribute('id', nodeId);
+	refChild.setAttribute('id', nodeId); /// I may not need this element given the parameter
 	refChild.setAttribute('class', 'top' + this.style);
+	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	switch(this.style) {
 		case 'f':
 			refChild.textContent = '\u261E ';
@@ -992,10 +993,10 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 			refChild.textContent = '* ';
 	}
 	parentNode.appendChild(refChild);
-	refChild.addEventListener('click', function() {
-		event.stopImmediatePropagation();
-		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: this.id }}));
-	});
+//	refChild.addEventListener('click', function() {
+//		event.stopImmediatePropagation();
+//		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: this.id }}));
+//	});
 	return(refChild);
 };
 /** deprecated, might redo when writing tests */
@@ -1091,16 +1092,16 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 			textNode.setAttribute('class', parentClass.substr(3));
 			textNode.setAttribute('note', this.text);
 			parentNode.appendChild(textNode);
-			textNode.addEventListener('click', function() {
-				event.stopImmediatePropagation();
-				document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
-			});
+			//textNode.addEventListener('click', function() {
+			//	event.stopImmediatePropagation();
+			//	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
+			//});
 		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of parent.
-			parentNode.addEventListener('click', function() {
-				event.stopImmediatePropagation();
-				document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
-			});
+			//parentNode.addEventListener('click', function() {
+			//	event.stopImmediatePropagation();
+			//	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
+			//});
 		}
 		else {
 			var child = document.createTextNode(this.text);
@@ -2144,7 +2145,6 @@ HistoryAdapter.prototype.selectAll = function(callback) {
 			console.log('HistoryAdapter.selectAll Error', JSON.stringify(results));
 			callback(results);
 		} else {
-			console.log('HistoryAdapter.selectAll Success, rows=', results.rows.length);
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
@@ -2156,13 +2156,12 @@ HistoryAdapter.prototype.selectAll = function(callback) {
 	});
 };
 HistoryAdapter.prototype.lastItem = function(callback) {
-	var statement = 'select reference from history where timestamp = max(timestamp)';
-	this.database.select(statement, [ MAX_HISTORY ], function(results) {
+	var statement = 'select reference from history where timestamp = (select max(timestamp) from history);';
+	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.lastItem Error', JSON.stringify(results));
 			callback(results);
 		} else {
-			console.log('HistoryAdapter.lastItem Success, rows=', results.rows.length);
 			if (results.rows.length > 0) {
 				var row = results.rows.item(0);
 				callback(row.reference);
@@ -2190,7 +2189,7 @@ HistoryAdapter.prototype.lastConcordanceSearch = function(callback) {
 };
 HistoryAdapter.prototype.replace = function(item, callback) {
 	var timestampStr = item.timestamp.toISOString();
-	var values = [ timestampStr, item.reference, item.source, item.search ];
+	var values = [ timestampStr, item.reference, item.source, item.search || null ];
 	var statement = 'replace into history(timestamp, reference, source, search) values (?,?,?,?)';
 	var that = this;
 	this.lastSelectCurrent = false;
@@ -2206,7 +2205,7 @@ HistoryAdapter.prototype.replace = function(item, callback) {
 	});
 };
 HistoryAdapter.prototype.cleanup = function(callback) {
-	var statement = 'delete from history where count(*) > ? and timestamp = min(timestamp)';
+	var statement = ' delete from history where ? < (select count(*) from history) and timestamp = (select min(timestamp) from history)';
 	this.database.executeDML(statement, [ MAX_HISTORY ], function(count) {
 		if (count instanceof IOError) {
 			console.log('delete error', JSON.stringify(count));

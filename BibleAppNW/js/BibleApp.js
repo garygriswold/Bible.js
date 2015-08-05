@@ -16,7 +16,26 @@ var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
 	};
 var SERVER_HOST = 'localhost'; // 72.2.112.243
-var SERVER_PORT = '8080'; 
+var SERVER_PORT = '8080';
+
+function bibleShowNoteClick(nodeId) {
+	console.log('show note clicked', nodeId);
+	event.stopImmediatePropagation();
+	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: nodeId }}));
+	var node = document.getElementById(nodeId);
+	if (node) {
+		node.setAttribute('onclick', "bibleHideNoteClick('" + nodeId + "');");
+	}
+}
+function bibleHideNoteClick(nodeId) {
+	console.log('hide note clicked', nodeId);
+	event.stopImmediatePropagation();
+	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
+	var node = document.getElementById(nodeId);
+	if (node) {
+		node.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
+	}
+}
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
@@ -927,7 +946,6 @@ HeaderView.prototype.showSearchField = function(query) {
 			style.push('height:' + (HEADER_BAR_HEIGHT * 0.65) + 'px');
 			style.push('top:' + (HEADER_BAR_HEIGHT * 0.15) + 'px');
 		}
-		//style.push('font-size:1.0em');
 		this.searchField.setAttribute('style', style.join(';'));
 
 		var that = this;
@@ -2526,6 +2544,7 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	var refChild = document.createElement('span');
 	refChild.setAttribute('id', nodeId);
 	refChild.setAttribute('class', 'top' + this.style);
+	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	switch(this.style) {
 		case 'f':
 			refChild.textContent = '\u261E ';
@@ -2537,10 +2556,10 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 			refChild.textContent = '* ';
 	}
 	parentNode.appendChild(refChild);
-	refChild.addEventListener('click', function() {
-		event.stopImmediatePropagation();
-		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: this.id }}));
-	});
+//	refChild.addEventListener('click', function() {
+//		event.stopImmediatePropagation();
+//		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: this.id }}));
+//	});
 	return(refChild);
 };
 /** deprecated, might redo when writing tests */
@@ -2633,16 +2652,16 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 			textNode.setAttribute('class', parentClass.substr(3));
 			textNode.setAttribute('note', this.text);
 			parentNode.appendChild(textNode);
-			textNode.addEventListener('click', function() {
-				event.stopImmediatePropagation();
-				document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
-			});
+			//textNode.addEventListener('click', function() {
+			//	event.stopImmediatePropagation();
+			//	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
+			//});
 		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of parent.
-			parentNode.addEventListener('click', function() {
-				event.stopImmediatePropagation();
-				document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
-			});
+			//parentNode.addEventListener('click', function() {
+			//	event.stopImmediatePropagation();
+			//	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
+			//});
 		}
 		else {
 			var child = document.createTextNode(this.text);

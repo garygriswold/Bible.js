@@ -20,16 +20,16 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 			textNode.setAttribute('class', parentClass.substr(3));
 			textNode.setAttribute('note', this.text);
 			parentNode.appendChild(textNode);
-			textNode.addEventListener('click', function() {
-				event.stopImmediatePropagation();
-				document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
-			});
+			//textNode.addEventListener('click', function() {
+			//	event.stopImmediatePropagation();
+			//	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
+			//});
 		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of parent.
-			parentNode.addEventListener('click', function() {
-				event.stopImmediatePropagation();
-				document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
-			});
+			//parentNode.addEventListener('click', function() {
+			//	event.stopImmediatePropagation();
+			//	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
+			//});
 		}
 		else {
 			var child = document.createTextNode(this.text);
