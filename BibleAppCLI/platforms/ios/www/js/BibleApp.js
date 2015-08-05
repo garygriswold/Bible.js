@@ -917,9 +917,18 @@ HeaderView.prototype.showSearchField = function(query) {
 		this.searchField.setAttribute('type', 'text');
 		this.searchField.setAttribute('class', 'searchField');
 		this.searchField.setAttribute('value', query || '');
-		var yPos = (this.hite - 40) / 2; // The 40 in this calculation is a hack.
-		var xPos = (this.hite * 1.2);
-		this.searchField.setAttribute('style', 'position: fixed; top: ' + yPos + 'px; left: ' + xPos + 'px');
+		var style = [ 'position:fixed;' ];
+		style.push('left:' + (this.hite * 1.1) + 'px');
+		style.push('width:' + (window.innerWidth - this.hite * 4.0) + 'px');
+		if (this.statusBarInHeader) {
+			style.push('height:' + (HEADER_BAR_HEIGHT * 0.5) + 'px');
+			style.push('top:' + (HEADER_BAR_HEIGHT * 0.15 + STATUS_BAR_HEIGHT) + 'px');
+		} else {
+			style.push('height:' + (HEADER_BAR_HEIGHT * 0.65) + 'px');
+			style.push('top:' + (HEADER_BAR_HEIGHT * 0.15) + 'px');
+		}
+		this.searchField.setAttribute('style', style.join(';'));
+
 		var that = this;
 		this.searchField.addEventListener('keyup', function(event) {
 			if (event.keyCode === 13) {

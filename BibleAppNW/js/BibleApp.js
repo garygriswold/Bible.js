@@ -782,7 +782,6 @@ function HeaderView(tableContents) {
 	this.hite = HEADER_BUTTON_HEIGHT;
 	this.barHite = (this.statusBarInHeader) ? HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT : HEADER_BAR_HEIGHT;
 	this.tableContents = tableContents;
-	this.titleWidth = window.innerWidth - this.hite * 3.5;
 	this.backgroundCanvas = null;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
@@ -794,39 +793,27 @@ function HeaderView(tableContents) {
 }
 HeaderView.prototype.showView = function() {
 	var that = this;
-	//this.backgroundCanvas = setupBackground(this.hite);
+
 	this.backgroundCanvas = document.createElement('canvas');
 	paintBackground(this.backgroundCanvas, this.hite);
 	this.rootNode.appendChild(this.backgroundCanvas);
 
 	setupTocButton(this.hite, '#F7F7BB');
-	setupHeading(this.hite);
 	setupQuestionsButton(this.hite, '#F7F7BB');
 	setupSearchButton(this.hite, '#F7F7BB');
 
+	this.titleCanvas = document.createElement('canvas');
+	drawTitleField(this.titleCanvas, this.hite);
+	this.labelCell.appendChild(this.titleCanvas);
+
 	window.addEventListener('resize', function(event) {
-		window.alert('resize outer ' + window.outerWidth + ' x ' + window.outerHeight);
 		paintBackground(that.backgroundCanvas, that.hite);
-		//that.backgroundCanvas.setAttribute('width', window.outerWidth);
-		//var graphics = that.backgroundCanvas.getContext('2d');
-      	//graphics.rect(0, 0, that.backgroundCanvas.width, that.backgroundCanvas.height);
-		//var vMidpoint = hite / 2;
-      	//var gradient = graphics.createRadialGradient(238, vMidpoint, 10, 238, vMidpoint, window.innerHeight - hite);
-      	//// light blue
-      	//gradient.addColorStop(0, '#8ED6FF');
-      	//// dark blue
-      	//gradient.addColorStop(1, '#004CB3');
-//
-//      	graphics.fillStyle = gradient;
-  //    	graphics.fill();
+		drawTitleField(that.titleCanvas, that.hite);
 	});
 
-	//function setupBackground(hite) {
 	function paintBackground(canvas, hite) {
-    	//var canvas = document.createElement('canvas');
     	canvas.setAttribute('height', that.barHite);
-    	var maxSize = (window.innerHeight > window.innerWidth) ? window.innerHeight : window.innerWidth;
-    	canvas.setAttribute('width', maxSize);
+    	canvas.setAttribute('width', window.innerWidth);// outerWidth is zero on iOS
     	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
       	var graphics = canvas.getContext('2d');
       	graphics.rect(0, 0, canvas.width, canvas.height);
@@ -841,8 +828,6 @@ HeaderView.prototype.showView = function() {
 
       	graphics.fillStyle = gradient;
       	graphics.fill();
-      	//that.rootNode.appendChild(canvas);
-      	//return(canvas);
 	}
 	function setupTocButton(hite, color) {
 		var canvas = drawTOCIcon(hite, color);
@@ -859,28 +844,26 @@ HeaderView.prototype.showView = function() {
 			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_TOC));
 		});
 	}
-	function setupHeading(hite) {
-		that.titleCanvas = document.createElement('canvas');
-		that.titleCanvas.setAttribute('id', 'titleCanvas');
-		that.titleCanvas.setAttribute('height', hite);
-		that.titleCanvas.setAttribute('width', that.titleWidth);
+	function drawTitleField(canvas, hite) {
+		canvas.setAttribute('id', 'titleCanvas');
+		canvas.setAttribute('height', hite);
+		var titleWidth = window.innerWidth - hite * 3.5;
+		canvas.setAttribute('width', titleWidth);
 		if (that.statusBarInHeader) {
-			that.titleCanvas.setAttribute('style', 'position: fixed; top: 16px; left:' + hite * 1.1 + 'px');			
+			canvas.setAttribute('style', 'position: fixed; top: 16px; left:' + hite * 1.1 + 'px');			
 		} else {
-			that.titleCanvas.setAttribute('style', 'position: fixed; top: 4px; left:' + hite * 1.1 + 'px');
+			canvas.setAttribute('style', 'position: fixed; top: 4px; left:' + hite * 1.1 + 'px');
 		}
-
-		that.titleGraphics = that.titleCanvas.getContext('2d');
+		that.titleGraphics = canvas.getContext('2d');
 		that.titleGraphics.fillStyle = '#000000';
 		that.titleGraphics.font = '24pt sans-serif';
 		that.titleGraphics.textAlign = 'center';
 		that.titleGraphics.textBaseline = 'middle';
 		that.titleGraphics.borderStyle = 'solid';
+		that.drawTitle();
 
-		that.labelCell.appendChild(that.titleCanvas);
 		that.titleCanvas.addEventListener('click', function(event) {
 			if (that.currentReference) {
-				console.log('title bar click', that.currentReference.nodeId);
 				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference.nodeId }}));
 			}
 		});
@@ -918,10 +901,15 @@ HeaderView.prototype.showView = function() {
 };
 HeaderView.prototype.setTitle = function(reference) {
 	this.currentReference = reference;
-	var book = this.tableContents.find(reference.book);
-	var text = book.name + ' ' + ((reference.chapter > 0) ? reference.chapter : 1);
-	this.titleGraphics.clearRect(0, 0, this.titleWidth, this.hite);
-	this.titleGraphics.fillText(text, this.titleWidth / 2, this.hite / 2, this.titleWidth);
+	this.drawTitle();
+};
+HeaderView.prototype.drawTitle = function() {
+	if (this.currentReference) {
+		var book = this.tableContents.find(this.currentReference.book);
+		var text = book.name + ' ' + ((this.currentReference.chapter > 0) ? this.currentReference.chapter : 1);
+		this.titleGraphics.clearRect(0, 0, this.titleCanvas.width, this.hite);
+		this.titleGraphics.fillText(text, this.titleCanvas.width / 2, this.hite / 2, this.titleCanvas.width);
+	}
 };
 HeaderView.prototype.showSearchField = function(query) {
 	if (! this.searchField) {
@@ -929,9 +917,19 @@ HeaderView.prototype.showSearchField = function(query) {
 		this.searchField.setAttribute('type', 'text');
 		this.searchField.setAttribute('class', 'searchField');
 		this.searchField.setAttribute('value', query || '');
-		var yPos = (this.hite - 40) / 2; // The 40 in this calculation is a hack.
-		var xPos = (this.hite * 1.2);
-		this.searchField.setAttribute('style', 'position: fixed; top: ' + yPos + 'px; left: ' + xPos + 'px');
+		var style = [ 'position:fixed;' ];
+		style.push('left:' + (this.hite * 1.1) + 'px');
+		style.push('width:' + (window.innerWidth - this.hite * 4.0) + 'px');
+		if (this.statusBarInHeader) {
+			style.push('height:' + (HEADER_BAR_HEIGHT * 0.5) + 'px');
+			style.push('top:' + (HEADER_BAR_HEIGHT * 0.15 + STATUS_BAR_HEIGHT) + 'px');
+		} else {
+			style.push('height:' + (HEADER_BAR_HEIGHT * 0.65) + 'px');
+			style.push('top:' + (HEADER_BAR_HEIGHT * 0.15) + 'px');
+		}
+		//style.push('font-size:1.0em');
+		this.searchField.setAttribute('style', style.join(';'));
+
 		var that = this;
 		this.searchField.addEventListener('keyup', function(event) {
 			if (event.keyCode === 13) {
@@ -2813,7 +2811,7 @@ var deviceSettings = {
     platform: function() {
         return('node');
     }
-}/**
+};/**
 * This simple class is used to measure performance of the App.
 * It is not part of the production system, but is used during development
 * to instrument the code.
