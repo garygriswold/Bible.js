@@ -6,7 +6,7 @@
 */
 function DeviceDatabase(code) {
 	this.code = code;
-    this.className = 'DeviceDatabase';
+    this.className = 'DeviceDatabaseWebSQL';
 	var size = 30 * 1024 * 1024;
     if (window.sqlitePlugin === undefined) {
         console.log('opening WEB SQL Database, stores in Cache');

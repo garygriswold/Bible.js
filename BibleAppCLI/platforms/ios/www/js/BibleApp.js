@@ -1248,9 +1248,15 @@ function drawTOCIcon(hite, color) {
 * or an error should test "if (results instanceof IOError)".
 */
 function IOError(err) {
-	this.code = err.code;
-	this.message = err.message;
+	if (err.code && err.message) {
+		this.code = err.code;
+		this.message = err.message;
+	} else {
+		this.code = 0;
+		this.message = JSON.stringify(err);
+	}
 }
+//module.exports = IOError;
 /**
 * This class is a facade over the database that is used to store bible text, concordance,
 * table of contents, history and questions.
@@ -1259,7 +1265,7 @@ function IOError(err) {
 */
 function DeviceDatabase(code) {
 	this.code = code;
-    this.className = 'DeviceDatabase';
+    this.className = 'DeviceDatabaseWebSQL';
 	var size = 30 * 1024 * 1024;
     if (window.sqlitePlugin === undefined) {
         console.log('opening WEB SQL Database, stores in Cache');

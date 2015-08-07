@@ -1,0 +1,26 @@
+{
+  "name": "nativescript-sqlite",
+  "version": "0.1.1",
+  "description": "A sqlite NativeScript module for Android and iOS",
+  "main": "sqlite.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nathanaela/nativescript-sqlite.git"
+  },
+  "keywords": [
+    "NativeScript"
+  ],
+  "author": {
+    "name": "Nathanael Anderson",
+    "email": "nathan@master-technology.com"
+  },
+  "license": {
+    "type": "MIT",
+    "url": "https://github.com/nathanaela/nativescript-sqlite/blob/master/LICENSE"
+  },
+  "bugs": {
+    "url": "https://github.com/nathanaela/nativescript-sqlite/issues"
+  },
+  "homepage": "https://github.com/nathanaela/nativescript-sqlite",
+  "readmeFilename": "README.md"
+}

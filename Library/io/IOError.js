@@ -4,6 +4,11 @@
 * or an error should test "if (results instanceof IOError)".
 */
 function IOError(err) {
-	this.code = err.code;
-	this.message = err.message;
+	if (err.code && err.message) {
+		this.code = err.code;
+		this.message = err.message;
+	} else {
+		this.code = 0;
+		this.message = JSON.stringify(err);
+	}
 }

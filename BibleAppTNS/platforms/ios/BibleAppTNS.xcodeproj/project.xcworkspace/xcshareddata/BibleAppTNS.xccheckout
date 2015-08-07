@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>207F5C31-134E-4402-A771-A1A775E90A5F</string>
+	<key>IDESourceControlProjectName</key>
+	<string>BibleAppTNS</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>4862AD34200F1FB8465A480D93E7909C8BF79247</key>
+		<string>github.com:garygriswold/bible.js.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>BibleAppTNS/platforms/ios/BibleAppTNS.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>4862AD34200F1FB8465A480D93E7909C8BF79247</key>
+		<string>../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:garygriswold/bible.js.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>4862AD34200F1FB8465A480D93E7909C8BF79247</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4862AD34200F1FB8465A480D93E7909C8BF79247</string>
+			<key>IDESourceControlWCCName</key>
+			<string>BibleApp</string>
+		</dict>
+	</array>
+</dict>
+</plist>
