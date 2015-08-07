@@ -1254,6 +1254,8 @@ function IOError(err) {
 /**
 * This class is a facade over the database that is used to store bible text, concordance,
 * table of contents, history and questions.
+*
+* This file is DeviceDatabaseWebSQL, which implements the WebSQL interface.
 */
 function DeviceDatabase(code) {
 	this.code = code;

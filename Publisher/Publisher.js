@@ -979,7 +979,7 @@ Note.prototype.buildUSX = function(result) {
 Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	var nodeId = bookCode + chapterNum + '-' + noteNum;
 	var refChild = document.createElement('span');
-	refChild.setAttribute('id', nodeId); /// I may not need this element given the parameter
+	refChild.setAttribute('id', nodeId);
 	refChild.setAttribute('class', 'top' + this.style);
 	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	switch(this.style) {

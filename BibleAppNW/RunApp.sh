@@ -22,7 +22,7 @@ cat ../Library/gui/icons/drawSettingsIcon.js >> js/BibleApp.js
 cat ../Library/gui/icons/drawTOCIcon.js >> js/BibleApp.js
 
 cat ../Library/io/IOError.js >> js/BibleApp.js
-cat ../Library/io/DeviceDatabase.js >> js/BibleApp.js
+cat ../Library/io/DeviceDatabaseWebSQL.js >> js/BibleApp.js
 cat ../Library/io/ChaptersAdapter.js >> js/BibleApp.js
 cat ../Library/io/VersesAdapter.js >> js/BibleApp.js
 cat ../Library/io/ConcordanceAdapter.js >> js/BibleApp.js

@@ -1,6 +1,9 @@
 /**
 * This class is a facade over the database that is used to store bible text, concordance,
 * table of contents, history and questions.
+*
+* This file is the DeviceDatabaseNative file, which implements the interface by Nathan Anderson
+* https://github.com/nathanaela/nativescript-sqlite
 */
 function DeviceDatabase(code) {
 	this.code = code;

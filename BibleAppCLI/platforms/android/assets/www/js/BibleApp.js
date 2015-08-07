@@ -19,6 +19,7 @@ var SERVER_HOST = 'localhost'; // 72.2.112.243
 var SERVER_PORT = '8080';
 
 function bibleShowNoteClick(nodeId) {
+	console.log('show note clicked', nodeId);
 	event.stopImmediatePropagation();
 	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: nodeId }}));
 	var node = document.getElementById(nodeId);
@@ -27,6 +28,7 @@ function bibleShowNoteClick(nodeId) {
 	}
 }
 function bibleHideNoteClick(nodeId) {
+	console.log('hide note clicked', nodeId);
 	event.stopImmediatePropagation();
 	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
 	var node = document.getElementById(nodeId);
@@ -2641,7 +2643,7 @@ Note.prototype.buildUSX = function(result) {
 Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	var nodeId = bookCode + chapterNum + '-' + noteNum;
 	var refChild = document.createElement('span');
-	refChild.setAttribute('id', nodeId); /// I may not need this element given the parameter
+	refChild.setAttribute('id', nodeId);
 	refChild.setAttribute('class', 'top' + this.style);
 	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	switch(this.style) {

@@ -29,7 +29,7 @@ cat ../Library/model/meta/Concordance.js >> Publisher.js
 cat ../Library/io/CommonIO.js >> Publisher.js
 cat ../Library/io/IOError.js >> Publisher.js
 cat ../Library/io/NodeFileReader.js >> Publisher.js
-cat ../Library/io/DeviceDatabase.js >> Publisher.js
+cat ../Library/io/DeviceDatabaseWebSQL.js >> Publisher.js
 cat ../Library/io/ChaptersAdapter.js >> Publisher.js
 cat ../Library/io/VersesAdapter.js >> Publisher.js
 cat ../Library/io/ConcordanceAdapter.js >> Publisher.js
