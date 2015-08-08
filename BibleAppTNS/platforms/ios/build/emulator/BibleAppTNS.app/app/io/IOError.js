@@ -12,5 +12,4 @@ function IOError(err) {
 		this.message = JSON.stringify(err);
 	}
 }
-//module.exports = IOError;
 module.exports = IOError;

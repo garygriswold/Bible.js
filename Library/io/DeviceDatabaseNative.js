@@ -5,12 +5,15 @@
 * This file is the DeviceDatabaseNative file, which implements the interface by Nathan Anderson
 * https://github.com/nathanaela/nativescript-sqlite
 */
-//console.log('before DeviceDatabase');
+
+var IOError = require('./IOError');
+var ChaptersAdapter = require('./ChaptersAdapter');
+
 function DeviceDatabase(code) {
 	this.code = code;
     this.className = 'DeviceDatabaseNative';
     this.database = null;
-//    this.chapters = new ChaptersAdapter(this);
+    this.chapters = new ChaptersAdapter(this);
 //    this.verses = new VersesAdapter(this);
 //    this.tableContents = new TableContentsAdapter(this);
 //    this.concordance = new ConcordanceAdapter(this);
@@ -18,9 +21,8 @@ function DeviceDatabase(code) {
 //    this.styleUse = new StyleUseAdapter(this);
 //    this.history = new HistoryAdapter(this);
 //    this.questions = new QuestionsAdapter(this);
-//    Object.seal(this);
+    Object.seal(this);
 }
-//console.log('after DeviceDatabase');
 DeviceDatabase.prototype.open = function(callback) {
     var that = this;
     // We need to refine the path to be a no-cache path
@@ -91,6 +93,3 @@ DeviceDatabase.prototype.executeDDL = function(statement, callback) {
 DeviceDatabase.prototype.close = function() {
     this.database.close();
 };
-//module.exports = DeviceDatabase;
-
-//console.log('After DeviceDatabase class');

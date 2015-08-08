@@ -1,6 +1,7 @@
 var vmModule = require("./main-view-model");
 var IOError = require('./io/IOError');
 var DeviceDatabase = require("./io/DeviceDatabase");
+
 function pageLoaded(args) {
     var page = args.object;
     page.bindingContext = vmModule.mainViewModel;
@@ -10,21 +11,23 @@ function pageLoaded(args) {
     database.open(function(error) {
     	console.log('returned from open');
     	if (error instanceof IOError) {
-    	//if (false) {
     		console.log('error found after open', error);
     		callback(error);
     	} else {
     		console.log('going to do select');
-    		database.get('select code, lastChapter from tableContents', [], function(row) {
-    			console.log('return from get');
-    			if (row instanceof IOEror) {
-    			//	if (false) {
-    				callback(row);
-    			} else {
-    				console.log('Found Row' + JSON.stringify(row));
-    				callback();
-    			}
-    		})
+            database.chapters.getChapters(['JHN:1', 'JHN:2', 'JHN:3', 'JHN:4'], function(results) {
+                console.log('back from select');
+                if (results instanceof IOError) {
+                    console.log('Error found ' + results.message);
+                    callback(results);
+                } else {
+                    for (var i=0; i<results.length; i++) {
+                        var row = results[i];
+                        console.log(row['reference'], row['html']);
+                    }
+                    callback(results);
+                }
+            });
     	}
     });
 }

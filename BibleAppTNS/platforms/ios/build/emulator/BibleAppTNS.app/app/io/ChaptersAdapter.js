@@ -58,3 +58,4 @@ ChaptersAdapter.prototype.getChapters = function(values, callback) {
         }
 	});
 };
+module.exports = ChaptersAdapter;
