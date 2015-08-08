@@ -22,11 +22,17 @@ Public domain license using the MIT template.
 Repository Structure
 --------------------
 
-Library - This is the common javascript library.  Each project contains a shell script that copies all of the files that it needs from Library.
+Library - This is the common javascript library.  Each project contains a shell script that copies all of the files that it needs from this Library.
+
+Publisher - This project prepares copies of the Bible for publication.  It takes as input a USX package from the Digital Bible Library and produces a SQLite database of the content, concordance, and table of contents in the form needed by the App.
 
 BibleAppNW - This is a Node/WebKit App, which will run as a local (not browser) application on desktop computers.  This is where the original development is being done, because of the ease of development in this environment.
 
-BibleAppXDK - This is a mobile Cordova version of the App, developed using the Intel XDK development environment.  Real work has not yet been done in this environment.
+BibleAppCLI - This is a mobile Cordova version of the App.  This version of the App runs on mobile devices. It currently runs well on Android, but with problems on iOS.
 
-UnitTestCSS1 - This is an early unit test project, which will be deleleted when other test programs are completed.
+BibleAppTNS - This is a Telerik Native Script version of the App, which is just now in an experimental stage.  It is hoped that this will be a much nicer performing version of the App.
+
+Server - This is a project for the server, which will deliver copies of the Bible and handle the delivery of student questions and Instructor answers.
+
+UnitTest - This is a repository of UnitTests for various parts of the system.
 
