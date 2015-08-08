@@ -1,5 +1,8 @@
 {
 	"nativescript": {
-		"id": "com.shortsands.BibleAppTNS"
+		"id": "com.shortsands.BibleAppTNS",
+		"tns-ios": {
+			"version": "1.2.0"
+		}
 	}
 }
