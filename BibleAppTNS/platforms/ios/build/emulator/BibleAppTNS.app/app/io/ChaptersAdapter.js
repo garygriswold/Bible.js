@@ -1,6 +1,8 @@
 /**
 * This class is the database adapter for the codex table
 */
+var IOError = require('./IOError');
+
 function ChaptersAdapter(database) {
 	this.database = database;
 	this.className = 'ChaptersAdapter';

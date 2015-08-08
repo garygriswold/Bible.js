@@ -33,13 +33,11 @@ DeviceDatabase.prototype.open = function(callback) {
         if (err) { 
             console.error("We failed to open database", err);
             callback(new IOError(err));
-            // callback IOError
         } else {
             // This should ALWAYS be true, db object is open in the "Callback" if no errors occurred
             console.log("Are we open yet (Inside Callback)? ", db.isOpen() ? "Yes" : "No"); // Yes
             that.database = db;
             console.log('set database');
-            that.database.resultType = Sqlite.RESULTASOBJECT;
             console.log('set result type');
             callback();
             console.log('after open callback');
@@ -51,7 +49,6 @@ DeviceDatabase.prototype.select = function(statement, values, callback) {
         if (err) {
             callback(new IOError(err));
         } else {
-            console.log("Result set is:", resultSet);
             callback(resultSet);
         }
     });
@@ -62,7 +59,6 @@ DeviceDatabase.prototype.get = function(statement, values, callback) {
         if (err) {
             callback(new IOError(err));
         } else {
-            console.log("Row is:", row);
             callback(row);
         }
     });
