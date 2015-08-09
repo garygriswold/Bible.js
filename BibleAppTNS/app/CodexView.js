@@ -33,7 +33,7 @@ function pageLoaded(args) {
                     var content = String(results[3][1]);
                     var sectionEnd = content.indexOf('</section>');
                     content = content.substr(sectionEnd + 10);
-                    var content = '<div class="top">' + content + '</div>';
+                    var content = getStyles() + '<div class="top">' + content + '</div>';
                     htmlView.html = content;
                     console.log('******* |' + content + '| *******');
                     callback();
@@ -41,6 +41,18 @@ function pageLoaded(args) {
             });
     	}
     });
+}
+function getStyles() {
+    var style = [ '<style type="text/css">' ];
+    style.push('<!--');
+    style.push('span.v {');
+    style.push('  color: "#FF0000";');
+    style.push('}');
+    style.push('-->')
+    style.push('</style>');
+    var str = style.join('\n') + '\n';
+    console.log(str);
+    return(str);
 }
 
 exports.pageLoaded = pageLoaded;
