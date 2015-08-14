@@ -1,6 +1,8 @@
-<html>
+<!DOCTYPE html>
+<html style="height: 100%">
 <head>
-	<style>
+	<title>Title</title>
+	<style type="text/css">
 /* CSS styling of input fields taken from http://webdesignerwall.com/tutorials/beautiful-css3-search-form */
 .fieldBorder {
 	display: inline-block;
@@ -60,31 +62,29 @@
 }
 	</style>
 </head>
-<body style="background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">
-	<table id="loginView" height="100%" width="100%" style="font-family: helvetica, sans-serif">
-		<tr height="33%">
-			<td width="25%"/>
-			<td width="50%" style="text-align: center; vertical-align: bottom">
+<body style="height: 100%; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">
+	<table id="loginView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif;">
+		<tr style="height: 33%">
+			<td style="width: 25%"></td>
+			<td style="width: 50%; text-align: center; vertical-align: bottom">
 				<p style="font-family: Avenir-Light; font-size: 1.5rem; color: #f9fbfc">Forgot Username or Password?<br> Enter your email to get started.</p>
 			</td>
-			<td width="25%"/>
+			<td style="width: 25%"></td>
 		</tr>
-		<tr height="34%">
-			<td/>
-			<td id="loginForm" style="text-align: center; vertical-align: middle;">				
-				<p>
-					<p class="fieldBorder" style="">
-						<input class="inputField" type="text" placeholder="Email Address" size="24" style="font-size: large">
-						<input type="button" class="goButton" value="Go">
-					</p>
+		<tr style="height: 34%">
+			<td></td>
+			<td id="loginForm" style="text-align: center; vertical-align: middle;">
+				<p class="fieldBorder">
+					<input class="inputField" type="text" placeholder="Email Address" size="24" style="font-size: large">
+					<input type="button" class="goButton" value="Go">
 				</p>
 			</td>
-			<td/>
-			<tr height="33%">
-				<td/>
-				<td style="text-align: center; font-size: 0.8rem; vertical-align: top;"><span id="forgotResponse"></span></td>
-				<td/>
-			</tr>
+			<td></td>
+		<tr style="height: 33%">
+			<td></td>
+			<td style="text-align: center; font-size: 0.8rem; vertical-align: top;"><span id="forgotResponse"></span></td>
+			<td></td>
+		</tr>
 	</table>
 </body>
 </html>
