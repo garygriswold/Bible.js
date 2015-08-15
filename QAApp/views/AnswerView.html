@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html style="height: 100%; width: 100%">
+	<head>
+		<title>Title</title>
+		<script type="text/javascript">
+		</script>
+		<style type="text/css">
+			* {
+				-moz-box-sizing: border-box;
+				-webkit-box-sizing: border-box;
+				box-sizing: border-box; 
+			}
+			.fieldTable {
+				border: solid; 
+				color: red; 
+				height: 50%; 
+				width: 100%;
+			}
+			.fieldRow {
+				width: 100%;
+			}
+			.labelCell {
+				width: 30%; 
+				text-align: right
+			}
+			.valueCell {
+				width: 60%;
+			}
+		</style>
+	</head>
+	<body style="height: 100%; width: 100%">
+		<div id="answerView" style="height: 100%; width: 100%;">
+			<div style="border: solid; height: 90%; width: 100%;">
+				<div style="height: 100%; width: 50%; float: left">
+					<table class="fieldTable">
+						<tr class="fieldRow">
+							<td class="labelCell">Name</td>
+							<td class="valueCell"><input type="text" style="width: 100%" value="B"></input></td>
+						</tr>
+						<tr class="fieldRow">
+							<td class="labelCell">Reference</td>
+							<td class="valueCell"><input type="text" style="width: 100%;" value="C"></input></td>
+						</tr>
+						<tr class="fieldRow">
+							<td class="labelCell">Submitted</td>
+							<td class="valueCell"><input type="text" style="width: 100%;" value="D"></input></td>
+						</tr>
+						<tr class="fieldRow">
+							<td class="labelCell">Expires</td>
+							<td class="valueCell"><input type="text" style="width: 100%;" value="E"></input></td>
+						</tr>
+						<tr class="fieldRow">
+							<td class="labelCell">Expiration</td>
+							<td class="valueCell"><input type="text" style="width: 100%;" value="F"></input></td>
+						</tr>
+					</table>
+					<div style="border: solid; color: purple; height: 50%; width: 100%; padding: 10px">
+						<span>Student Question</span>
+						<textarea style="width:100%; height:90%"></textarea>
+					</div>
+				</div>
+				<div style="border: solid; color: blue; height: 100%; width: 50%; float: right; overflow: hidden; padding: 10px">
+					<span>Your Answer</span>
+					<textarea style="width:100%; height:90%"></textarea>
+				</div>
+			</div>
+			<div style="border: solid green; height: 10%; width: 100%; text-align: center;">
+				<button class="button bigrounded blue" style="margin-right: 20px;" onclick="refuseQuestion()">Return Unanswered</button>
+				<button class="button bigrounded blue" style="margin-right: 20px;" onclick="anotherQuestion()">Different Question</button>
+				<button class="button bigrounded blue" style="margin-right: 20px;" onclick="saveDraft()">Save Draft Answer</button>
+				<button class="button bigrounded blue" style="margin-right: 20px;" onclick="sendAnswer()">Send Answer</button>
+			</div>
+		</div>
+	</body>
+</html>

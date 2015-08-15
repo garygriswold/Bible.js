@@ -28,9 +28,9 @@ Publisher - This project prepares copies of the Bible for publication.  It takes
 
 BibleAppNW - This is a Node/WebKit App, which will run as a local (not browser) application on desktop computers.  This is where the original development is being done, because of the ease of development in this environment.
 
-BibleAppCLI - This is a mobile Cordova version of the App.  This version of the App runs on mobile devices. It currently runs well on Android, but with problems on iOS.
+BibleAppCLI - This is a mobile Cordova version of the App.  This version of the App runs on mobile devices. It currently runs well on Android, but awkwardly on iOS.
 
-BibleAppTNS - This is a Telerik Native Script version of the App, which is just now in an experimental stage.  It is hoped that this will be a much nicer performing version of the App.
+QAApp - This is a web App that is used by instructors to answer questions of students.  It is written in a single-page architecture so that it could be rewritten as a mobile App.
 
 Server - This is a project for the server, which will deliver copies of the Bible and handle the delivery of student questions and Instructor answers.
 
