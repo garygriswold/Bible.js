@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html style="height: 100%; width: 100%">
+	<head>
+		<title>My Bible QA App</title>
+		<script type="text/javascript" src="Transition.js"></script>
+		<script type="text/javascript" src="ViewNavigator.js"></script>
+		<script type="text/javascript" src="ViewLibrary.js"></script>
+		<script type="text/javascript">
+			function onLoad() {
+				console.log('onloaded event fired');
+				var nav = new ViewNavigator(); 
+				nav.start();
+			}
+			function firstTransition() {
+				console.log('inside first Transition');
+				//var t = new Transition('a', 'b', 'c');
+				console.log('Transiton Type', TRANSITION.EVENT);
+				dispatchTransition('splashView', 'loginView', TRANSITION.IMMEDIATE);
+			}
+		</script>
+		<link rel="StyleSheet" type="text/css" href="./Buttons.css">
+	</head>
+	<body onload="onLoad()">
+		<div id="splashView">
+			<p>Hello World 1<p>
+			<button onclick="firstTransition()">Start App</button>
+		</div>
+	</body>
+</html>

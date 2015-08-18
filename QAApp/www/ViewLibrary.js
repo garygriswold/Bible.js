@@ -1,3 +1,9 @@
+var viewLibrary = {};
+viewLibrary['loginView'] = '<div id="loginView">' +
+			'<h1>Hello World Again</h1>' +
+			'</div>';
+console.log('display loginView', viewLibrary['loginView']);
+/*
 var answerView = '<div id="answerView" style="height: 100%; width: 100%;">
 			<div style="height: 90%; width: 100%;">
 				<div style="height: 100%; width: 50%; float: left">
@@ -118,3 +124,4 @@ var queueView = '<table id="queueView" style="height: 100%">
 				<td style="text-align: center"><button class="button bigrounded blue" onclick="assignQuestion()">Assign Me A Question</button></td>
 				<td></td>
 		</table>';
+		*/
