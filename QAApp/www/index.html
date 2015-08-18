@@ -17,6 +17,9 @@
 			function transitionToForgotView() {
 				dispatchTransition('loginView', 'forgotView', TRANSITION.SLIDE_LEFT);
 			}
+			function transitionBackToLoginView() {
+				dispatchTransition('forgotView', 'loginView', TRANSITION.SLIDE_RIGHT);
+			}
 		</script>
 		<link rel="stylesheet" type="text/css" href="./Buttons.css">
 		<link rel="stylesheet" type="text/css" href="./Fields.css">

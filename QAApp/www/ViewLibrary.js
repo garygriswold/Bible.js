@@ -62,7 +62,10 @@ viewLibrary['forgotView'] = '<table id="forgotView" style="height: 100%; width: 
 	'<td></td>' +
 	'<tr style="height: 33%">' +
 	'<td></td>' +
-	'<td style="text-align: center; font-size: 0.8rem; vertical-align: top;"><span id="forgotResponse"></span></td>' +
+	'<td style="text-align: center; font-size: 0.8rem; vertical-align: top;">' +
+	'<span id="forgotResponse">' +
+	'<a onclick="transitionBackToLoginView()" style="color:#f1f4b2;">Did you remember your password?</a>' +
+	'</span></td>' +
 	'<td></td>' +
 	'</tr>' +
 	'</table>';
