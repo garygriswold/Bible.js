@@ -12,12 +12,13 @@
 				nav.start();
 			}
 			function firstTransition() {
-				dispatchTransition('splashView', 'loginView', TRANSITION.SLIDE_RIGHT);
+				dispatchTransition('splashView', 'loginView', TRANSITION.SLIDE_LEFT);
 			}
 		</script>
-		<link rel="StyleSheet" type="text/css" href="./Buttons.css">
+		<link rel="stylesheet" type="text/css" href="./Buttons.css">
+		<link rel="stylesheet" type="text/css" href="./Fields.css">
 	</head>
-	<body onload="onLoad()" style="display: block, position: relative">
+	<body onload="onLoad()" style="height: 100%; display: block, position: relative">
 		<div id="splashView" style="position: absolute; background: white">
 			<p>Hello World 1<p>
 			<button onclick="firstTransition()">Start App</button>

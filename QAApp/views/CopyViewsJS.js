@@ -4,7 +4,7 @@ function CopyViewsJS() {
 }
 CopyViewsJS.prototype.copy = function(sourceDir, targetFile) {
 	var that = this;
-	var result = [];
+	var result = ['var viewLibrary = {};'];
 	this.readDirs(sourceDir, function(fileList) {
 		console.log(fileList);
 		for (var i=0; i<fileList.length; i++) {
@@ -12,9 +12,9 @@ CopyViewsJS.prototype.copy = function(sourceDir, targetFile) {
 			console.log('READ', filename);
 			that.readFile(filename, function(file) {
 				var code = that.extractCode(file);
-				//console.log(code);
 				var name = that.extractId(code);
-				result.push("var " + name + " = '" + code.trim() + "';");
+				var manyLines = that.concatonate(code);
+				result.push("viewLibrary['" + name + "'] = " + manyLines + ";");
 				if (result.length >= fileList.length) {
 					that.writeViewFile(targetFile, result.join('\n\n'));
 				}
@@ -72,6 +72,18 @@ CopyViewsJS.prototype.extractId = function(code) {
 		return(code.substring(startId + 4, endId));
 	}
 	return('');
+};
+CopyViewsJS.prototype.concatonate = function(code) {
+	var result = [];
+	var lines = code.split('\n');
+	var numLines = lines.length;
+	for (var i=0; i<numLines; i++) {
+		var trimmed = lines[i].trim();
+		if (trimmed && trimmed.length > 0) {
+			result.push("'" + trimmed + "'");
+		}
+	}
+	return(result.join(' +\n\t'));
 };
 CopyViewsJS.prototype.writeViewFile = function(destFile, content) {
 	this.fs.writeFile(destFile, content, { encoding: 'utf8'}, function(err) {

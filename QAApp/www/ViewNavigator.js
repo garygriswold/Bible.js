@@ -33,6 +33,8 @@ ViewNavigator.prototype.start = function() {
 			var newView = document.createElement('div');
 			if (newView) {
 				newView.id = transition.toView;
+				newView.style.height = '100%';
+				newView.style.width = '100%';
 				newView.style.position = 'absolute';
 				newView.innerHTML = viewLibrary[transition.toView];
 				document.body.appendChild(newView);
