@@ -23,7 +23,6 @@
 * We also do not want to include it in the transition.
 */
 function ViewNavigator() {
-	
 }
 ViewNavigator.prototype.start = function() {
 	document.body.addEventListener(TRANSITION.EVENT, function(event) {
