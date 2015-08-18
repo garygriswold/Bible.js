@@ -1,5 +1,5 @@
 var viewLibrary = {};
-viewLibrary['loginView'] = '<div id="loginView">' +
+viewLibrary['loginView'] = '<div style="background: white">' +
 			'<h1>Hello World Again</h1>' +
 			'</div>';
 console.log('display loginView', viewLibrary['loginView']);

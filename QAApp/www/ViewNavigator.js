@@ -22,34 +22,34 @@
 * We want to fix HeaderView once it is added, and never delete it.
 * We also do not want to include it in the transition.
 */
-console.log('loading ViewNavigator starts');
 function ViewNavigator() {
 	
 }
 ViewNavigator.prototype.start = function() {
-	//var d = document.createElement('div');
-	//d.textContent = 'Hello World';
-	//document.body.appendChild(d);
-	console.log('inside ViewNavigator.start');
-	
 	document.body.addEventListener(TRANSITION.EVENT, function(event) {
 		var transition = event.detail;
 		console.log('found transition', JSON.stringify(transition));
 		var fromView = document.getElementById(transition.fromView);
 		if (fromView) {
-			fromView.setAttribute('z-index', 0);
 			var newView = document.createElement('div');
 			if (newView) {
-				newView.setAttribute('id', transition.toView);
-				newView.setAttribute('z-index', 1);
-				document.body.appendChild(newView);
+				newView.id = transition.toView;
+				newView.style.position = 'absolute';
 				newView.innerHTML = viewLibrary[transition.toView];
-				switch(transition.transTye) {
+				document.body.appendChild(newView);
+				switch(transition.transType) {
 					case TRANSITION.SLIDE_LEFT:
-						TweenMax.fromTo(newView, 3, {left: 1000}, {left: 0});// what are correct measurements?
+						fromView.style.zIndex = 0;
+						newView.style.zIndex = 10;
+						TweenMax.set(newView, {x: window.outerWidth}); // what is correct location
+						TweenMax.to(newView, 1.0, {x: 0, 
+							onComplete: finishTransition, onCompleteParams: [fromView]});
 						break;
 					case TRANSITION.SLIDE_RIGHT:
-						TweenMax.fromTo(newView, 3, {left: 0}, {left: 1000})
+						fromView.style.zIndex = 10;
+						newView.style.zIndex = 0;
+						TweenMax.to(fromView, 1.0, {left: window.outerWidth,
+							onComplete: finishTransition, onCompleteParams: [fromView]});
 						break;
 					default:
 						finishTransition(fromView);
@@ -63,4 +63,3 @@ ViewNavigator.prototype.start = function() {
 		document.body.removeChild(fromView);
 	}
 };
-console.log('loading ViewNavigator ends');
