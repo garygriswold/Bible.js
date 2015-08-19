@@ -1,6 +1,6 @@
 var viewLibrary = {};
 
-viewLibrary['answerView'] = '<div id="answerView" style="height: 100%; width: 100%;">' +
+viewLibrary['answerView'] = '<div id="answerView" style="height: 100%; width: 100%; background: white">' +
 	'<div style="height: 90%; width: 100%;">' +
 	'<div style="height: 100%; width: 50%; float: left">' +
 	'<table style="height: 40%; width: 100%">' +
@@ -20,10 +20,6 @@ viewLibrary['answerView'] = '<div id="answerView" style="height: 100%; width: 10
 	'<td class="labelCell">Expires</td>' +
 	'<td class="valueCell"><input id="expiresDesc" type="text" value="E" readonly></input></td>' +
 	'</tr>' +
-	'<!--<tr class="fieldRow"> Include the hours in the Expires field, e.g. in 10 hours, 2 min.' +
-	'<td class="labelCell">Expiration</td>' +
-	'<td class="valueCell"><input type="text" style="width: 100%;" value="F"></input></td>' +
-	'</tr>-->' +
 	'</table>' +
 	'<div style="height: 60%; width: 100%; padding-left: 2%; padding-right: 2%; padding-bottom: 2%; border: none">' +
 	'<span>Student Question</span>' +
@@ -41,7 +37,52 @@ viewLibrary['answerView'] = '<div id="answerView" style="height: 100%; width: 10
 	'<button class="button bigrounded blue" style="margin-right: 2%;" onclick="saveDraft()">Save Draft Answer</button>' +
 	'<button class="button bigrounded blue" style="margin-right: 2%;" onclick="sendAnswer()">Send Answer</button>' +
 	'</div>' +
-	'</div>';
+	'</div>' +
+	'<style type="text/css">' +
+	'html, *, *:before, *:after {' +
+	'-moz-box-sizing: border-box;' +
+	'-webkit-box-sizing: border-box;' +
+	'box-sizing: border-box;' +
+	'}' +
+	'.fieldRow {' +
+	'width: 100%;' +
+	'height: 25%;' +
+	'}' +
+	'.labelCell {' +
+	'width: 30%;' +
+	'text-align: right;' +
+	'font-family: sans-serif;' +
+	'font-size: 0.8rem;' +
+	'color: gray;' +
+	'}' +
+	'.valueCell {' +
+	'width: 60%;' +
+	'}' +
+	'input {' +
+	'width: 95%;' +
+	'height: 100%;' +
+	'background: #f7e0b6;' +
+	'border: none;' +
+	'padding: 10px;' +
+	'}' +
+	'span {' +
+	'font-family: sans-serif;' +
+	'font-size: 0.8rem;' +
+	'color: gray;' +
+	'}' +
+	'textarea {' +
+	'font-family: sans-serif;' +
+	'font-size: 1rem;' +
+	'background: #f7e0b6;' +
+	'border: none;' +
+	'}' +
+	'textarea#answer {' +
+	'width: 100%;' +
+	'height: 100%;' +
+	'background: rgba(0, 198, 238, 0.49);' +
+	'border: solid thin;' +
+	'}' +
+	'</style>';
 
 viewLibrary['forgotView'] = '<table id="forgotView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">' +
 	'<tr style="height: 33%">' +
@@ -123,15 +164,10 @@ viewLibrary['queueView'] = '<table id="queueView" style="height: 100%; width: 10
 	'</tr>' +
 	'<tr style="height: 60%">' +
 	'<td></td>' +
-	'<td style="text-align: center"><button class="button bigrounded blue" onclick="assignQuestion()">Assign Me A Question</button></td>' +
+	'<td style="text-align: center"><button class="button bigrounded blue" onclick="assignMeAQuestion()">Assign Me A Question</button></td>' +
 	'<td></td>' +
 	'</tr>' +
 	'</table>' +
-	'<script type="text/javascript">' +
-	'function assignQuestion() {' +
-	'console.log("Assign Question Clicked");' +
-	'}' +
-	'</script>' +
 	'<style type="text/css">' +
 	'p.queueText {' +
 	'font-family: sans-serif;' +

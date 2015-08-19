@@ -40,8 +40,13 @@ ViewNavigator.prototype.start = function() {
 				document.body.appendChild(newView);
 				switch(transition.toView) {
 					case 'queueView':
-						var viewModel = new QueueViewModel();
-						viewModel.display();
+						var queueModel = new QueueViewModel();
+						queueModel.display();
+						break;
+					case 'answerView':
+						var answerModel = new AnswerViewModel();
+						answerModel.display();
+						break;
 				}
 				switch(transition.transType) {
 					case TRANSITION.SLIDE_LEFT:

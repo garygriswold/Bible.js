@@ -7,6 +7,7 @@
 		<script type="text/javascript" src="ViewNavigator.js"></script>
 		<script type="text/javascript" src="ViewLibrary.js"></script>
 		<script type="text/javascript" src="QueueViewModel.js"></script>
+		<script type="text/javascript" src="AnswerViewModel.js"></script>
 		<script type="text/javascript">
 			function onLoad() {
 				var nav = new ViewNavigator(); 
@@ -23,6 +24,21 @@
 			}
 			function transitionToQueueView() {
 				dispatchTransition('loginView', 'queueView', TRANSITION.SLIDE_LEFT);
+			}
+			function assignMeAQuestion() {
+				dispatchTransition('queueView', 'answerView', TRANSITION.SLIDE_LEFT);
+			}
+			function refuseQuestion() {
+				dispatchTransition('answerView', 'queueView', TRANSITION.SLIDE_RIGHT);
+			}
+			function anotherQuestion() {
+				dispatchTransition('answerView', 'queueView', TRANSITION.SLIDE_RIGHT);
+			}
+			function saveDraft() {
+				dispatchTransition('answerView', 'queueView', TRANSITION.SLIDE_RIGHT);
+			}
+			function sendAnswer() {
+				dispatchTransition('answerView', 'queueView', TRANSITION.SLIDE_RIGHT);
 			}
 		</script>
 		<link rel="stylesheet" type="text/css" href="./Buttons.css">
