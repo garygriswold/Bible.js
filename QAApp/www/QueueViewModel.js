@@ -20,20 +20,15 @@ QueueViewModel.prototype.waitTimeMsg = function() {
 };
 
 QueueViewModel.prototype.display = function() {
-	var numQuestionsNode = document.getElementById("numQuestions");
-	console.log('numQuestionsNode', numQuestionsNode);
-	if (numQuestionsNode) {
-		numQuestionsNode.textContent = this.numQuestionsMsg();
-	}
+	setNodeValue('numQuestions', this.numQuestionsMsg());
+	setNodeValue('oldestQuestion', this.oldestQuestionMsg());
+	setNodeValue('waitTime', this.waitTimeMsg());
 	
-	var oldestQuestionNode = document.getElementById("oldestQuestion");
-	if (oldestQuestionNode) {
-		oldestQuestionNode.textContent = this.oldestQuestionMsg();
-	}
-	
-	var waitTimeNode = document.getElementById("waitTime");
-	if (waitTimeNode) {
-		waitTimeNode.textContent = this.waitTimeMsg();
+	function setNodeValue(nodeId, property) {
+		var node = document.getElementById(nodeId);
+		if (node) {
+			node.textContent = property;
+		}
 	}
 };
 QueueViewModel.prototype.update = function() {

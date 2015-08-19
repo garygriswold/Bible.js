@@ -4,7 +4,7 @@
 
 function AnswerViewModel() {
 	this.studentName = 'Bob';
-	this.displayReference = 'John 3:16';
+	this.displayReference = 'John 3:18';
 	this.submittedDt = 'Jan 3, 2015 10:43 am';
 	this.expires = '2 hrs';
 	this.question = 'How can I understand unless someone show me.';
@@ -22,14 +22,15 @@ AnswerViewModel.prototype.display = function() {
 	function setNodeValue(nodeId, type, property) {
 		var node = document.getElementById(nodeId);
 		if (node) {
-			switch(type) {
-				case 'value':
-					node.value = property;
-					break;
-				case 'textContent':
-					node.textContent = property;
-					break;
-			}
+			node[type] = property;
+//			switch(type) {
+//				case 'value':
+//					node.value = property;
+//					break;
+//				case 'textContent':
+//					node.textContent = property;
+//					break;
+//			}
 		}
 	}
 };
