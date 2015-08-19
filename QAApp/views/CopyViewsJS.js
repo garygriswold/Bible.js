@@ -80,6 +80,7 @@ CopyViewsJS.prototype.concatonate = function(code) {
 	for (var i=0; i<numLines; i++) {
 		var trimmed = lines[i].trim();
 		if (trimmed && trimmed.length > 0) {
+			trimmed = trimmed.replace(/\'/g, '"');
 			result.push("'" + trimmed + "'");
 		}
 	}

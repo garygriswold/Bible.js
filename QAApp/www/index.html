@@ -6,6 +6,7 @@
 		<script type="text/javascript" src="Transition.js"></script>
 		<script type="text/javascript" src="ViewNavigator.js"></script>
 		<script type="text/javascript" src="ViewLibrary.js"></script>
+		<script type="text/javascript" src="QueueViewModel.js"></script>
 		<script type="text/javascript">
 			function onLoad() {
 				var nav = new ViewNavigator(); 
@@ -19,6 +20,9 @@
 			}
 			function transitionBackToLoginView() {
 				dispatchTransition('forgotView', 'loginView', TRANSITION.SLIDE_RIGHT);
+			}
+			function transitionToQueueView() {
+				dispatchTransition('loginView', 'queueView', TRANSITION.SLIDE_LEFT);
 			}
 		</script>
 		<link rel="stylesheet" type="text/css" href="./Buttons.css">

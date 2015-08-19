@@ -2,36 +2,25 @@
 <html style="height: 100%">
 	<head>
 		<title>Title</title>
-		<script type="text/javascript">
-			function unitTest() {
-				var numQuestions = document.getElementById('numQuestions');
-				numQuestions.textContent = 'There are 21 unassigned questions';
-				var oldestQuestion = document.getElementById('oldestQuestion');
-				oldestQuestion.textContent = 'The oldest question was submitted at Aug 24, 2015, 8:23 AM.'
-				var waitTime = document.getElementById('waitTime');
-				waitTime.textContent = 'The oldest question has been waiting 10 hours.'
-			}
-			function assignQuestion() {
-				console.log('Assign Question Clicked');
+		<link rel="stylesheet" type="text/css" href="../www/Buttons.css">
+		<script type="text/javascript" src="../www/QueueViewModel.js"></script>
+		<script>
+			function loadPageData() {
+				//document.alert("inside javascript setup");
+				var viewModel = new QueueViewModel();
+				viewModel.display();
 			}
 		</script>
-		<link rel="StyleSheet" type="text/css" href="../www/Buttons.css">
-		<style type="text/css">
-			p.queueText {
-				font-family: sans-serif;
-				font-size: large;
-				color: grey;
-			}
-		</style>
 	</head>
-	<body onload="unitTest()" style="height: 100%">
-		<table id="queueView" style="height: 100%">
+	<body onload="loadPageData()" style="height: 100%; width: 100%">
+		<table id="queueView" style="height: 100%; width: 100%; background: white">
 			<tr style="height: 25%">
 			</tr>
 			<tr style="height: 5%">
 				<td style="width: 20%"></td>
 				<td style="width: 60%"><p id="numQuestions" class="queueText">num</p></td>
 				<td style="width: 20%"></td>
+			</tr>
 			<tr style="height: 5%">
 				<td></td>
 				<td><p id="oldestQuestion" class="queueText">oldest</p></td>
@@ -46,6 +35,19 @@
 				<td></td>
 				<td style="text-align: center"><button class="button bigrounded blue" onclick="assignQuestion()">Assign Me A Question</button></td>
 				<td></td>
+			</tr>
 		</table>
+		<script type="text/javascript">
+			function assignQuestion() {
+				console.log("Assign Question Clicked");
+			}
+		</script>
+		<style type="text/css">
+			p.queueText {
+				font-family: sans-serif;
+				font-size: large;
+				color: grey;
+			}
+		</style>
 	</body>
 </html>

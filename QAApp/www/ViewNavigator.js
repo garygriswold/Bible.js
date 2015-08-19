@@ -38,6 +38,11 @@ ViewNavigator.prototype.start = function() {
 				newView.style.position = 'absolute';
 				newView.innerHTML = viewLibrary[transition.toView];
 				document.body.appendChild(newView);
+				switch(transition.toView) {
+					case 'queueView':
+						var viewModel = new QueueViewModel();
+						viewModel.display();
+				}
 				switch(transition.transType) {
 					case TRANSITION.SLIDE_LEFT:
 						fromView.style.zIndex = 0;

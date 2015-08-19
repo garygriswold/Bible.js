@@ -90,7 +90,7 @@ viewLibrary['loginView'] = '<table id="loginView" style="height: 100%; width: 10
 	'</p>' +
 	'<p class="fieldBorder" style="margin-top: 1px">' +
 	'<input class="inputField" type="password" placeholder="Password" size="17" style="font-size: large">' +
-	'<input type="button" class="goButton" value="Go">' +
+	'<input type="button" class="goButton" value="Go" onclick="transitionToQueueView()">' +
 	'</p>' +
 	'</td>' +
 	'<td></td>' +
@@ -103,13 +103,14 @@ viewLibrary['loginView'] = '<table id="loginView" style="height: 100%; width: 10
 	'</tr>' +
 	'</table>';
 
-viewLibrary['queueView'] = '<table id="queueView" style="height: 100%">' +
+viewLibrary['queueView'] = '<table id="queueView" style="height: 100%; width: 100%; background: white">' +
 	'<tr style="height: 25%">' +
 	'</tr>' +
 	'<tr style="height: 5%">' +
 	'<td style="width: 20%"></td>' +
 	'<td style="width: 60%"><p id="numQuestions" class="queueText">num</p></td>' +
 	'<td style="width: 20%"></td>' +
+	'</tr>' +
 	'<tr style="height: 5%">' +
 	'<td></td>' +
 	'<td><p id="oldestQuestion" class="queueText">oldest</p></td>' +
@@ -124,4 +125,17 @@ viewLibrary['queueView'] = '<table id="queueView" style="height: 100%">' +
 	'<td></td>' +
 	'<td style="text-align: center"><button class="button bigrounded blue" onclick="assignQuestion()">Assign Me A Question</button></td>' +
 	'<td></td>' +
-	'</table>';
+	'</tr>' +
+	'</table>' +
+	'<script type="text/javascript">' +
+	'function assignQuestion() {' +
+	'console.log("Assign Question Clicked");' +
+	'}' +
+	'</script>' +
+	'<style type="text/css">' +
+	'p.queueText {' +
+	'font-family: sans-serif;' +
+	'font-size: large;' +
+	'color: grey;' +
+	'}' +
+	'</style>';
