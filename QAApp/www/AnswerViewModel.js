@@ -23,14 +23,6 @@ AnswerViewModel.prototype.display = function() {
 		var node = document.getElementById(nodeId);
 		if (node) {
 			node[type] = property;
-//			switch(type) {
-//				case 'value':
-//					node.value = property;
-//					break;
-//				case 'textContent':
-//					node.textContent = property;
-//					break;
-//			}
 		}
 	}
 };
