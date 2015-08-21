@@ -3,6 +3,9 @@
 * to individual controllers.
 */
 "use strict";
+var ethnology = require('./EthnologyController');
+var ethnologyController = new ethnology.EthnologyController();
+
 var restify = require('restify');
 var server = restify.createServer({
 	name: 'BibleJS'
@@ -26,7 +29,8 @@ server.post('/user', function registerUser(request, response, next) {
 
 server.get('/locale/:locale', function getVersions(request, response, next) {
 	console.log('Download Ethnologe info ', request.params.locale);
-	response.send(200, 'Download Ethnologe info = ' + request.params.locale);
+	var result = ethnologyController.availVersions();
+	response.send(200, result);
 	return(next());	
 });
 
