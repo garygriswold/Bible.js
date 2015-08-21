@@ -3,8 +3,8 @@
 * to individual controllers.
 */
 "use strict";
-var ethnology = require('./EthnologyController');
-var ethnologyController = new ethnology.EthnologyController();
+var EthnologyController = require('./EthnologyController');
+var ethnologyController = new EthnologyController();
 
 var restify = require('restify');
 var server = restify.createServer({

@@ -1,11 +1,14 @@
 
+curl -i http://localhost:8080/bible/WEB.bible1 > out
+
+curl -i http://localhost:8080/bible/xxx.bible1 > out
+
+
 curl -i http://localhost:8080/user -X POST -d 'username=BobSmith'
 
 curl -i -H "Content-Type: application/json" http://localhost:8080/user -X POST -d '{"username": "Bob Smith"}'
 
-curl -i http://localhost:8080/version/WEB
-
-curl -i http://localhost:8080/locale/US-en
+curl -i http://localhost:8080/versions/US-en
 
 curl -i http://localhost:8080/question -X POST -d 'question=This is my questions'
 

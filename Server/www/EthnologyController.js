@@ -18,4 +18,4 @@ EthnologyController.prototype.availVersions = function(locale) {
 	return([ "WEB.bible1", "KJV.bible1" ]);
 };
 
-module.exports.EthnologyController = EthnologyController;
+module.exports = EthnologyController;
