@@ -1,0 +1,10 @@
+
+
+curl http://localhost:8080/version/WEB
+
+curl http://localhost:8080/locale/US-en
+
+curl http://localhost:8080/question -X POST -d 'question=This is my questions'
+
+# The following does not yet work
+curl -H "Content-Type: application/json" http://localhost:8080/question -X POST -d '{"question":"This is my questions", "hello": "world"}'
