@@ -3,8 +3,9 @@
 * to individual controllers.
 */
 var restify = require('restify');
-var serverOptions = {};
-var server = restify.createServer(serverOptions);
+var server = restify.createServer({
+	name: 'BibleJS'
+});
 server.pre(restify.pre.userAgentConnection()); // if UA is curl, close connection.
 
 server.use(restify.bodyParser({
