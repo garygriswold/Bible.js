@@ -2,6 +2,7 @@
 * This class is the front-end of the server, and performs all routing
 * to individual controllers.
 */
+"use strict";
 var restify = require('restify');
 var server = restify.createServer({
 	name: 'BibleJS'
@@ -13,15 +14,13 @@ server.use(restify.bodyParser({
 	mapParams: true
 }));
 
+server.get(/\/bible\/?.*/, restify.serveStatic({
+	directory: '../../StaticRoot'
+}));
+
 server.post('/user', function registerUser(request, response, next) {
 	console.log('Register a new user', request.params.username);
 	response.send(200, 'Register a new user ' + request.params.username);
-	return(next());
-});
-
-server.get('/version/:version', function downloadVersion(request, response, next) {
-	console.log('Download version transaction ', request.params.version);
-	response.send(200, 'Download Version TBD = ' + request.params.version);
 	return(next());
 });
 
