@@ -27,10 +27,10 @@ server.post('/user', function registerUser(request, response, next) {
 	return(next());
 });
 
-server.get('/locale/:locale', function getVersions(request, response, next) {
+server.get('/versions/:locale', function getVersions(request, response, next) {
 	console.log('Download Ethnologe info ', request.params.locale);
-	var result = ethnologyController.availVersions();
-	response.send(200, result);
+	var result = ethnologyController.availVersions(request.params.locale);
+	response.send(200, JSON.stringify(result));
 	return(next());	
 });
 
