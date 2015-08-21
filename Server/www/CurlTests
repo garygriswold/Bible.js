@@ -1,10 +1,30 @@
 
+curl -i http://localhost:8080/user -X POST -d 'username=BobSmith'
 
-curl http://localhost:8080/version/WEB
+curl -i -H "Content-Type: application/json" http://localhost:8080/user -X POST -d '{"username": "Bob Smith"}'
 
-curl http://localhost:8080/locale/US-en
+curl -i http://localhost:8080/version/WEB
 
-curl http://localhost:8080/question -X POST -d 'question=This is my questions'
+curl -i http://localhost:8080/locale/US-en
 
-# The following does not yet work
-curl -H "Content-Type: application/json" http://localhost:8080/question -X POST -d '{"question":"This is my questions", "hello": "world"}'
+curl -i http://localhost:8080/question -X POST -d 'question=This is my questions'
+
+curl -i -H "Content-Type: application/json" http://localhost:8080/question -X POST -d '{"question":"This is my questions", "hello": "World"}'
+
+curl -i http://localhost:8080/assign/WEB
+
+curl -i http://localhost:8080/return/ABCDEFGH
+
+curl -i http://localhost:8080/send -X POST -d 'message=This is a finished message'
+
+curl -i -H "Content-Type: application/json" http://localhost:8080/send -X POST -d '{"message": "This is a finished message"}'
+
+curl -i http://localhost:8080/draft -X POST -d 'message=This is the draft to save'
+
+curl -i -H "Content-Type: application/json" http://localhost:8080/send -X POST -d '{"message": "This is the draft to save"}'
+
+curl -i http://localhost:8080/draft/ASBCDEF
+
+curl -i http://localhost:8080/draft/ASBCDEF -X DELETE
+
+curl -i http://localhost:8080/widget
