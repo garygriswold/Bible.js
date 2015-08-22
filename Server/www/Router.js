@@ -21,9 +21,38 @@ server.get(/\/bible\/?.*/, restify.serveStatic({
 	directory: '../../StaticRoot'
 }));
 
-server.post('/user', function registerUser(request, response, next) {
+server.put('/user', function registerUser(request, response, next) {
 	console.log('Register a new user', request.params.username);
 	response.send(200, 'Register a new user ' + request.params.username);
+	// Uses database transaction insertUser
+	return(next());
+});
+
+server.post('/user', function updateUser(request, response, next) {
+	console.log('Update a user', request.params.username);
+	response.send(200, 'Update new user ' + request.params.username);
+	// Uses database transaction updateUser
+	return(next());
+});
+
+server.del('/user', function deleteUser(request, response, next) {
+	console.log('Delete user', request.params.username);
+	response.send(200, 'Delete user ' + request.params.username);
+	// Uses database transaction deleteUser
+	return(next());
+});
+
+server.put('/position', function insertPosition(request, response, next) {
+	console.log('Give user a new privilege', request.params.username);
+	response.send(200, 'Register a new user ' + request.params.username);
+	// Uses database transaction insertPosition
+	return(next());
+});
+
+server.del('/position', function deletePosition(request, response, next) {
+	console.log('Remove a privilege', request.params.username);
+	response.send(200, 'Remove a privilege ' + request.params.username);
+	// Uses database transaction insertPosition
 	return(next());
 });
 
@@ -34,9 +63,21 @@ server.get('/versions/:locale', function getVersions(request, response, next) {
 	return(next());	
 });
 
+server.put('/question', function insertQuestion(request, response, next) {
+	console.log('Insert question ' + request.params.question);
+	response.send(200, 'Insert Question ' + request.params.question + ' ' + request.params.hello);
+	return(next());	
+});
+
 server.post('/question', function updateQuestion(request, response, next) {
 	console.log('POST question ' + request.params.question);
 	response.send(200, 'POST Question ' + request.params.question + ' ' + request.params.hello);
+	return(next());	
+});
+
+server.del('/question', function deleteQuestion(request, response, next) {
+	console.log('Delete question ' + request.params.question);
+	response.send(200, 'Delete Question ' + request.params.question + ' ' + request.params.hello);
 	return(next());	
 });
 
@@ -52,21 +93,39 @@ server.get('/return/:questionId', function returnQuestion(request, response, nex
 	return(next());
 });
 
-server.post('/send', function sendQuestion(request, response, next) {
+server.get('/answer/:conversationId', function getAnswers(request, response, next) {
+	console.log('Get responses ', request.params.message);
+	response.send(200, 'Get responses ' + request.params.message);
+	return(next());
+});
+
+server.put('/answer', function insertAnswer(request, response, next) {
 	console.log('Send response ', request.params.message);
 	response.send(200, 'Send response ' + request.params.message);
 	return(next());
 });
 
-server.post('/draft', function saveDraft(request, response, next) {
-	console.log('Save Draft ' + request.params.message);
-	response.send(200, 'Save Draft ' + request.params.message);
+server.post('/answer', function updateAnswer(request, response, next) {
+	console.log('Update response ', request.params.message);
+	response.send(200, 'Update response ' + request.params.message);
+	return(next());
+});
+
+server.del('/answer', function deleteAnswer(request, response, next) {
+	console.log('Delete response ', request.params.message);
+	response.send(200, 'Delete response ' + request.params.message);
 	return(next());
 });
 
 server.get('/draft/:draftId', function getDraft(request, response, next) {
 	console.log('Get Draft ' + request.params.draftId);
 	response.send(200, 'Get Draft ' + request.params.draftId);
+	return(next());
+});
+
+server.post('/draft', function saveDraft(request, response, next) {
+	console.log('Save Draft ' + request.params.message);
+	response.send(200, 'Save Draft ' + request.params.message);
 	return(next());
 });
 
