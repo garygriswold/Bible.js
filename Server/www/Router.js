@@ -21,21 +21,21 @@ server.get(/\/bible\/?.*/, restify.serveStatic({
 	directory: '../../StaticRoot'
 }));
 
-server.put('/user', function registerUser(request, response, next) {
+server.put('/user', function registerTeacher(request, response, next) {
 	console.log('Register a new user', request.params.username);
 	response.send(200, 'Register a new user ' + request.params.username);
 	// Uses database transaction insertUser
 	return(next());
 });
 
-server.post('/user', function updateUser(request, response, next) {
+server.post('/user', function updateTeacher(request, response, next) {
 	console.log('Update a user', request.params.username);
 	response.send(200, 'Update new user ' + request.params.username);
 	// Uses database transaction updateUser
 	return(next());
 });
 
-server.del('/user', function deleteUser(request, response, next) {
+server.del('/user', function deleteTeacher(request, response, next) {
 	console.log('Delete user', request.params.username);
 	response.send(200, 'Delete user ' + request.params.username);
 	// Uses database transaction deleteUser
@@ -81,6 +81,12 @@ server.del('/question', function deleteQuestion(request, response, next) {
 	return(next());	
 });
 
+server.get('/open/:versionId', function openCount(request, response, next) {
+	console.log('Open Question Status Message ', request.params.versionId);
+	response.send(200, 'Open Question Status', request.params.versionId);
+	return(next());
+});
+
 server.get('/assign/:version', function assignQuestion(request, response, next) {
 	console.log('Assign Question ', request.params.version);
 	response.send(200, 'Assign Question ' + request.params.version);
@@ -90,12 +96,6 @@ server.get('/assign/:version', function assignQuestion(request, response, next) 
 server.get('/return/:questionId', function returnQuestion(request, response, next) {
 	console.log('Return question ', request.params.questionId);
 	response.send(200, 'Return question ' + request.params.questionId);
-	return(next());
-});
-
-server.get('/answer/:conversationId', function getAnswers(request, response, next) {
-	console.log('Get responses ', request.params.message);
-	response.send(200, 'Get responses ' + request.params.message);
 	return(next());
 });
 
@@ -114,6 +114,12 @@ server.post('/answer', function updateAnswer(request, response, next) {
 server.del('/answer', function deleteAnswer(request, response, next) {
 	console.log('Delete response ', request.params.message);
 	response.send(200, 'Delete response ' + request.params.message);
+	return(next());
+});
+
+server.get('/answer/:discourseId', function getAnswers(request, response, next) {
+	console.log('Get responses ', request.params.message);
+	response.send(200, 'Get responses ' + request.params.message);
 	return(next());
 });
 
