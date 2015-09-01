@@ -177,45 +177,99 @@ server.get('/return/:discourseId', function returnQuestion(request, response, ne
 });
 
 server.put('/answer', function insertAnswer(request, response, next) {
-	console.log('Send response ', request.params.message);
-	response.send(200, 'Send response ' + request.params.message);
-	return(next());
+	console.log('Send response ', request.params);
+	database.insertAnswer(request.params, function(err, results) {
+		if (err) {
+			response.send(409, err);
+		} else {
+			response.send(201, results);
+		}
+		return(next());
+	});
 });
 
 server.post('/answer', function updateAnswer(request, response, next) {
-	console.log('Update response ', request.params.message);
-	response.send(200, 'Update response ' + request.params.message);
-	return(next());
+	console.log('Update response ', request.params);
+	database.updateAnswer(request.params, function(err, results) {
+		if (err) {
+			response.send(404, err);
+		} else {
+			response.send(200, results);
+		}
+		return(next());
+	});
 });
 
 server.del('/answer', function deleteAnswer(request, response, next) {
-	console.log('Delete response ', request.params.message);
-	response.send(200, 'Delete response ' + request.params.message);
-	return(next());
+	console.log('Delete response ', request.params);
+	database.deleteAnswer(request.params, function(err, results) {
+		if (err) {
+			response.send(404, err);
+		} else {
+			response.send(200, results);
+		}
+		return(next());
+	});
 });
 
 server.get('/answer/:discourseId', function getAnswers(request, response, next) {
-	console.log('Get responses ', request.params.message);
-	response.send(200, 'Get responses ' + request.params.message);
-	return(next());
+	console.log('Get responses ', request.params);
+	database.selectAnswer(request.params, function(err, results) {
+		if (err) {
+			response.send(404, err); // what is the correct status code here
+		} else {
+			response.send(200, results);
+		}
+		return(next());
+	});
 });
 
-server.get('/draft/:draftId', function getDraft(request, response, next) {
-	console.log('Get Draft ' + request.params.draftId);
-	response.send(200, 'Get Draft ' + request.params.draftId);
-	return(next());
+server.put('/draft', function insertDraft(request, response, next) {
+	console.log('Save Draft ' + request.params);
+	database.insertDraft(request.params, function(err, results) {
+		if (err) {
+			response.send(409, err);
+		} else {
+			response.send(200, results);
+		}
+		return(next());
+	});
 });
 
-server.post('/draft', function saveDraft(request, response, next) {
-	console.log('Save Draft ' + request.params.message);
-	response.send(200, 'Save Draft ' + request.params.message);
-	return(next());
+server.post('/draft', function updateDraft(request, response, next) {
+	console.log('Save Draft ' + request.params);
+	database.updateDraft(request.params, function(err, results) {
+		if (err) {
+			response.send(404, err);
+		} else {
+			response.send(200, results);
+		}
+		return(next());
+	});
 });
 
-server.del('/draft/:draftId', function deleteDraft(request, response, next) {
-	console.log('Delete Draft ' + request.params.draftId);
-	response.send(200, 'Delete Draft ' + request.params.draftId);
-	return(next());
+server.del('/draft', function deleteDraft(request, response, next) {
+	console.log('Delete Draft ' + request.params);
+	database.deleteDraft(request.params, function(err, results) {
+		if (err) {
+			response.send(404, err);
+		} else {
+			response.send(200, results);
+		}
+		return(next());
+	});
+});
+
+server.get('/draft/:messageId', function getDraft(request, response, next) {
+	console.log('Get Draft ' + request.params);
+	database.selectDraft(request.params, function(err, results) {
+		if (err) {
+			response.send(404, err);
+		} else {
+			response.send(200, results || {});
+		}
+		return(next());
+	});
 });
 
 server.get(/^.*$/, function getCatchAll(request, response, next) {
@@ -241,7 +295,7 @@ server.listen(8080, function() {
 
 function invalidRequest(request, response, next) {
 	console.log('No Valid Route', request.url);
-	response.send(404, 'No Valid Route ' + request.url);
+	response.send(400, 'No Valid Route ' + request.url);
 	return(next());
 }
 

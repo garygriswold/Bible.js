@@ -55,22 +55,45 @@ curl -i http://localhost:8080/open/XXX # 200
 
 curl -i http://localhost:8080/assign/KJV/ABCDE #200
 
-curl -i http://localhost:8080/assign/KJV/ABCDEFGHIJ
+curl -i http://localhost:8080/assign/KJV/XXXXX #404
+
+curl -i http://localhost:8080/return/12345 #200
+
+curl -i http://localhost:8080/return/XXXX #404
 
 
 
-curl -i http://localhost:8080/return/ABCDEFGH
+curl -i http://localhost:8080/answer -X PUT -H "Content-Type: application/json" -d '{"discourseId":"12345", "reference":"John6", "teacherId":"ABCDE", "message":"This is the answer"}' #201
 
-curl -i http://localhost:8080/send -X POST -d 'message=This is a finished message'
+curl -i http://localhost:8080/answer -X PUT -H "Content-Type: application/json" -d '{"discourseId":"1234567", "reference":"John6", "teacherId":"XXXX", "message":"This is the answer"}' #409
 
-curl -i -H "Content-Type: application/json" http://localhost:8080/send -X POST -d '{"message": "This is a finished message"}'
+curl -i http://localhost:8080/answer -X PUT -H "Content-Type: application/json" -d '{"discourseId":"12345", "reference":"John6", "teacherId":"ABCDE", "message":"This is the answer"}' #201
 
-curl -i http://localhost:8080/draft -X POST -d 'message=This is the draft to save'
+curl -i http://localhost:8080/answer -X POST -H "Content-Type: application/json" -d '{"messageId":4, "reference":"John7", "message":"This is the revised answer"}' #200
 
-curl -i -H "Content-Type: application/json" http://localhost:8080/send -X POST -d '{"message": "This is the draft to save"}'
+curl -i http://localhost:8080/answer -X POST -H "Content-Type: application/json" -d '{"messageId":1000, "reference":"John7", "message":"This is the revised answer"}' #404
 
-curl -i http://localhost:8080/draft/ASBCDEF
+curl -i http://localhost:8080/answer -X DELETE -H "Content-Type: application/json" -d '{"messageId":4}' #200
 
-curl -i http://localhost:8080/draft/ASBCDEF -X DELETE
+curl -i http://localhost:8080/answer -X DELETE -H "Content-Type: application/json" -d '{"messageId":400}' #404
+
+
+
+curl -i http://localhost:8080/draft -X PUT -H "Content-Type: application/json" -d '{"discourseId":"12345", "reference":"John7", "message":"This is a draft message"}' #200
+
+curl -i http://localhost:8080/draft -X PUT -H "Content-Type: application/json" -d '{"discourseId":"123", "reference":"John8", "message":"This is a draft message"}' #409
+
+curl -i http://localhost:8080/draft -X POST -H "Content-Type: application/json" -d '{"messageId":6, "reference":"John8", "message":"This is a revised draft message"}' #200
+
+curl -i http://localhost:8080/draft -X POST -H "Content-Type: application/json" -d '{"messageId":600, "reference":"John8", "message":"This is a revised draft message"}' #409
+
+curl -i http://localhost:8080/draft -X DELETE -H "Content-Type: application/json" -d '{"messageId":6}' #200
+
+curl -i http://localhost:8080/draft -X DELETE -H "Content-Type: application/json" -d '{"messageId":6}' #404
+
+curl -i http://localhost:8080/draft/5 #200
+
+curl -i http://localhost:8080/draft/500 #200
+
 
 curl -i http://localhost:8080/widget

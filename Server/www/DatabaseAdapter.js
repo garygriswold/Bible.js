@@ -197,7 +197,7 @@ DatabaseAdapter.prototype.returnQuestion = function(obj, callback) {
 DatabaseAdapter.prototype.insertAnswer = function(obj, callback) {
 	var statements = [
 		'insert into Message(discourseId, reference, timestamp, message) values (?,?,?,?)',
-		'update Discourse set status="answered", teacherId=? where discourseId=?'
+		'update Discourse set status="answered", teacherId=? where discourseId=? and status="assigned"'
 	];
 	var values = [
 		[ obj.discourseId, obj.reference, this.getTimestamp(), obj.message ],
@@ -213,8 +213,8 @@ DatabaseAdapter.prototype.updateAnswer = function(obj, callback) {
 DatabaseAdapter.prototype.deleteAnswer = function(obj, callback) {
 	var that = this;
 	this.db.get('select discourseId from Message where messageId=?', obj.messageId, function(err, row) {
-		if (err) {
-			callback(err);
+		if (err || row === undefined) {
+			callback(err || {});
 		} else if (row) {
 			var statements = [ 
 				'delete from Message where messageId=?',
@@ -237,16 +237,19 @@ DatabaseAdapter.prototype.deleteAnswer = function(obj, callback) {
 * This is returning the student's question as well as the answer, 
 * because Message does not mark whose is whose.
 */
-DatabaseAdapter.prototype.selectAnswers = function(obj, callback) {
+DatabaseAdapter.prototype.selectAnswer = function(obj, callback) {
 	var statement = 'select t.pseudonym, m.reference, m.timestamp, m.message from Discourse d, Message m, Teacher t' +
 		' where d.discourseId = m.discourseId and d.teacherId = t.teacherId and d.discourseId = ? and d.status = "answered"';
-	this.db.all(statement, obj.discourseId, function(err, results) {
-		callback(err, results);
-	});
+	this.db.all(statement, obj.discourseId, callback);
 };
-DatabaseAdapter.prototype.replaceDraft = function(obj, callback) {
-	var statements = [ 'replace into Message(discourseId, reference, timestamp, message) values (?,?,?,?)' ];
+DatabaseAdapter.prototype.insertDraft = function(obj, callback) {
+	var statements = [ 'insert into Message(discourseId, reference, timestamp, message) values (?,?,?,?)' ];
 	var values = [[ obj.discourseId, obj.reference, this.getTimestamp(), obj.message ]];
+	this.executeSQL(statements, values, 1, callback);
+};
+DatabaseAdapter.prototype.updateDraft = function(obj, callback) {
+	var statements = [ 'update Message set reference=?, timestamp=?, message=? where messageId=?' ];
+	var values = [[ obj.reference, this.getTimestamp(), obj.message, obj.messageId ]];
 	this.executeSQL(statements, values, 1, callback);
 };
 DatabaseAdapter.prototype.deleteDraft = function(obj, callback) {
@@ -256,58 +259,49 @@ DatabaseAdapter.prototype.deleteDraft = function(obj, callback) {
 };
 DatabaseAdapter.prototype.selectDraft = function(obj, callback) {
 	var statement = 'select reference, message from Message where messageId=?';
-	var values = [ obj.messageId ];
-	this.selectSQL(statement, values, callback);
+	this.db.get(statement, obj.messageId, callback);
 };
 DatabaseAdapter.prototype.executeSQL = function(statements, values, affectedRows, callback) {
-	// if statements length is not = values length it is an error
-	var rowCount = 0;
-	var lastID = null;
-	var that = this;
-	that.db.run("begin immediate transaction", [], function(err) {
-		executeStatement(0);
-	});
-	
-	function executeStatement(index) {
-		if (index < statements.length) {
-			that.db.run(statements[index], values[index], function(err) {
-				if (err) {
-					console.log('Has error ', err);
+	if (statements.length !== values.length) {
+		callback(new Error('Incorrect number of value array, expected=' + statements.length + ', found=' + values.length));
+	} else {
+		var rowCount = 0;
+		var lastID = null;
+		var that = this;
+		that.db.run("begin immediate transaction", [], function(err) {
+			executeStatement(0);
+		});
+		
+		function executeStatement(index) {
+			if (index < statements.length) {
+				that.db.run(statements[index], values[index], function(err) {
+					if (err) {
+						console.log('Has error ', err);
+						that.db.run("rollback transaction", [], function(rollErr) {
+							callback(rollErr || err);
+						});
+					} else {
+						rowCount += this.changes;
+						lastID = this.lastID || lastID;
+						console.log('lastID', this.lastID, 'changes', this.changes);
+						executeStatement(index + 1);
+					}
+				});
+			} else {
+				if (affectedRows >= 0 && affectedRows !== rowCount) {
+					var err = new Error('expected=' + affectedRows + '  actual=' + rowCount);
 					that.db.run("rollback transaction", [], function(rollErr) {
 						callback(rollErr || err);
 					});
 				} else {
-					rowCount += this.changes;
-					lastID = this.lastID || lastID;
-					console.log('lastID', this.lastID, 'changes', this.changes);
-					// Do I do something about ID or changes?
-					executeStatement(index + 1);
+					that.db.run("commit transaction", [], function(err) {
+						callback(err, {rowCount: rowCount, lastID: lastID});
+					});
 				}
-			});
-		} else {
-			if (affectedRows >= 0 && affectedRows !== rowCount) {
-				var err = new Error('expected=' + affectedRows + '  actual=' + rowCount);
-				that.db.run("rollback transaction", [], function(rollErr) {
-					callback(rollErr || err);
-				});
-			} else {
-				that.db.run("commit transaction", [], function(err) {
-					callback(err, {rowCount: rowCount, lastID: lastID});
-				});
 			}
 		}
 	}
 };
-DatabaseAdapter.prototype.querySQL = function(statement, values, callback) {
-	this.db.all(statement, values, function(err, rows) {
-		callback(err, rows);
-	});
-};
-//DatabaseAdapter.prototype.getSQL = function(statement, values, callback) {
-//	this.db.get(statement, values, function(err, row) {
-//		callback(err, row);
-//	});
-//};
 DatabaseAdapter.prototype.getTimestamp = function() {
 	var date = new Date();
 	return(date.toISOString());
@@ -315,31 +309,5 @@ DatabaseAdapter.prototype.getTimestamp = function() {
 
 //var database = new DatabaseAdapter({filename: './TestDatabase.db', verbose: true});
 //database.create(function(err) { console.log('CREATE ERROR', err); });
-var person1 = { teacherId: "ABCDE", fullname: "Gary Griswold", pseudonym: "Gary G", signature: 'XXXX', versionId: 'KJV' };
-//database.insertTeacher(person1, function(err) { console.log('INSERT ERROR', err); });
-var person1rev1 = { teacherId: "ABCDE", fullname: "Gary N Griswold", pseudonym: "Gary", email: "gary@shortsands.us", phone: "513"};
-//database.updateTeacher(person1rev1, function(err) { console.log('UPDATE ERROR', err); });
-var person1rev2 = { teacherId: "ABCDE" };
-//database.deleteTeacher(person1rev2, function(err) { console.log('DELETE ERROR', err); });
-var person1rev3 = { teacherId: "ABCDE", versionId: 'WEB', position: 'principal' };
-//database.insertPosition(person1rev3, function(err) { console.log('INSERT POS ERROR', err); });
-//database.deletePosition({positionId: 2}, function(err) { console.log('DELETE POS ERROR', err); });
-var message1 = { discourseId: "KLMN", versionId: 'WEB', studentName: 'Bob Smith', reference: 'JHN:1:1', message: 'What does this mean' };
-//database.insertQuestion(message1, function(err) { console.log('INSERT QUESTION', err); });
-var message1rev1 = { reference: 'JHN:3', message: 'Now I understand', messageId: 3 };
-//database.updateQuestion(message1rev1, function(err) { console.log('UPDATE QUESTION', err); });
-var message1rev2 = { discourseId: "KLMN" };
-//database.deleteQuestion(message1rev2, function(err) { console.log('DELETE QUESTION', err); });
-//database.openQuestions({ versionId: 'WEB' }, function(err, row) { console.log('ERROR', err, ' ROW', row); });
-//database.assignQuestion({versionId: 'WEB', teacherId: 'ABCDE'}, function(err, row) { console.log('ERROR', err, ' ROW', row ); });
-//database.returnQuestion({discourseId: 2}, function(err) { console.log('RETURN ERROR', err); });
-var answer1 = { discourseId: 2, reference: 'JHN:3:16', message: 'This is it', teacherId: 'ABCDE' }
-//database.insertAnswer(answer1, function(err) { console.log('INSERT ERR', err); });
-var answer2 = { messageId: 4, reference: 'JHN:3:17', message: 'There is more' }
-//database.updateAnswer(answer2, function(err) { console.log('UPDATE ERR', err); });
-var answer3 = { messageId: 4 };
-//database.deleteAnswer(answer3, function(err) { console.log('DELETE ERR', err); });
-var answer4 = { discourseId: 2 };
-//database.selectAnswers(answer4, function(err, results) { console.log('SELECT', err, results); });
 
 module.exports = DatabaseAdapter;
