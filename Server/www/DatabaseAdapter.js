@@ -31,14 +31,12 @@ DatabaseAdapter.prototype.create = function(callback) {
 			' signature text NOT NULL)',
 			
 		'CREATE TABLE Position(' +
-			' positionId INTEGER PRIMARY KEY NOT NULL,' +
-			' teacherId text REFERENCES Teacher(teacherId) ON DELETE CASCADE NOT NULL,' +
 			' versionId text NOT NULL,' + // may reference a Version table
-			' position text check(position in ("teacher", "principal", "super")) NOT NULL)',
+			' teacherId text REFERENCES Teacher(teacherId) ON DELETE CASCADE NOT NULL,' +
+			' position text check(position in ("teacher", "principal", "super", "removed")) NOT NULL,' +
+			' PRIMARY KEY(versionId, teacherId))',
 			
 		'CREATE INDEX PositionTeacherId ON Position(teacherId)',
-		'CREATE INDEX PositionVersionId ON Position(versionId)',
-		'CREATE UNIQUE INDEX PositionTable ON Position(teacherId, versionId, position)',
 		
 		'CREATE TABLE Discourse(' +
 			' discourseId text PRIMARY KEY NOT NULL,' + // GUID
@@ -116,13 +114,13 @@ DatabaseAdapter.prototype.insertPosition = function(obj, callback) {
 	this.executeSQL(statements, values, 1, callback);
 };
 DatabaseAdapter.prototype.updatePosition = function(obj, callback) {
-	var statements = [ 'update Position set position=? where positionId=?' ];
-	var values = [[ obj.position, obj.positionId ]];
+	var statements = [ 'update Position set position=? where teacherId=? and versionId=?' ];
+	var values = [[ obj.position, obj.teacherId, obj.versionId ]];
 	this.executeSQL(statements, values, 1, callback);	
 };
 DatabaseAdapter.prototype.deletePosition = function(obj, callback) {
-	var statements = [ 'delete from Position where positionId=?' ];
-	var values = [[ obj.positionId ]];
+	var statements = [ 'delete from Position where teacherId=? and versionId=?' ];
+	var values = [[ obj.teacherId, obj.versionId ]];
 	this.executeSQL(statements, values, 1, callback);
 };
 /**
@@ -153,10 +151,10 @@ DatabaseAdapter.prototype.deleteQuestion = function(obj, callback) {
 	var values = [[ obj.discourseId ]];
 	this.executeSQL(statements, values, 1, callback);
 };
-DatabaseAdapter.prototype.openQuestions = function(obj, callback) {
-	var statement = 'select count(*), min(m.timestamp) from Discourse d, Message m where d.discourseId=m.discourseId' +
+DatabaseAdapter.prototype.openQuestionCount = function(obj, callback) {
+	var statement = 'select count(*) as count, min(m.timestamp) as timestamp from Discourse d, Message m where d.discourseId=m.discourseId' +
 		' and d.status="open" and d.versionId=?';
-	this.getSQL(statement, [ obj.versionId ], callback);
+	this.db.get(statement, obj.versionId, callback);
 };
 /**
 * Because this method does a select and an update in a transaction, it seemed best to
@@ -172,7 +170,7 @@ DatabaseAdapter.prototype.assignQuestion = function(obj, callback) {
 		that.db.get(statement, obj.versionId, function(err, row) {
 			if (err || row === undefined) {
 				that.db.run("rollback transaction", [], function(rollErr) {
-					callback(rollErr || err);
+					callback(rollErr || err || {});
 				});
 			} else {
 				var statement = 'update Discourse set status="assigned", teacherId=? where discourseId=?';
@@ -288,11 +286,15 @@ DatabaseAdapter.prototype.executeSQL = function(statements, values, affectedRows
 			});
 		} else {
 			if (affectedRows >= 0 && affectedRows !== rowCount) {
-				console.warn(statements[0], 'expected=' + affectedRows, '  actual=' + rowCount);
+				var err = new Error('expected=' + affectedRows + '  actual=' + rowCount);
+				that.db.run("rollback transaction", [], function(rollErr) {
+					callback(rollErr || err);
+				});
+			} else {
+				that.db.run("commit transaction", [], function(err) {
+					callback(err, {rowCount: rowCount, lastID: lastID});
+				});
 			}
-			that.db.run("commit transaction", [], function(err) {
-				callback(err, {rowCount: rowCount, lastID: lastID});
-			});
 		}
 	}
 };
@@ -301,17 +303,17 @@ DatabaseAdapter.prototype.querySQL = function(statement, values, callback) {
 		callback(err, rows);
 	});
 };
-DatabaseAdapter.prototype.getSQL = function(statement, values, callback) {
-	this.db.get(statement, values, function(err, row) {
-		callback(err, row);
-	});
-};
+//DatabaseAdapter.prototype.getSQL = function(statement, values, callback) {
+//	this.db.get(statement, values, function(err, row) {
+//		callback(err, row);
+//	});
+//};
 DatabaseAdapter.prototype.getTimestamp = function() {
 	var date = new Date();
 	return(date.toISOString());
 };
 
-var database = new DatabaseAdapter({filename: './TestDatabase.db', verbose: true});
+//var database = new DatabaseAdapter({filename: './TestDatabase.db', verbose: true});
 //database.create(function(err) { console.log('CREATE ERROR', err); });
 var person1 = { teacherId: "ABCDE", fullname: "Gary Griswold", pseudonym: "Gary G", signature: 'XXXX', versionId: 'KJV' };
 //database.insertTeacher(person1, function(err) { console.log('INSERT ERROR', err); });
@@ -329,7 +331,7 @@ var message1rev1 = { reference: 'JHN:3', message: 'Now I understand', messageId:
 var message1rev2 = { discourseId: "KLMN" };
 //database.deleteQuestion(message1rev2, function(err) { console.log('DELETE QUESTION', err); });
 //database.openQuestions({ versionId: 'WEB' }, function(err, row) { console.log('ERROR', err, ' ROW', row); });
-database.assignQuestion({versionId: 'WEB', teacherId: 'ABCDE'}, function(err, row) { console.log('ERROR', err, ' ROW', row ); });
+//database.assignQuestion({versionId: 'WEB', teacherId: 'ABCDE'}, function(err, row) { console.log('ERROR', err, ' ROW', row ); });
 //database.returnQuestion({discourseId: 2}, function(err) { console.log('RETURN ERROR', err); });
 var answer1 = { discourseId: 2, reference: 'JHN:3:16', message: 'This is it', teacherId: 'ABCDE' }
 //database.insertAnswer(answer1, function(err) { console.log('INSERT ERR', err); });

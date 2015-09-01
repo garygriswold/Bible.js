@@ -24,88 +24,156 @@ server.get(/\/bible\/?.*/, restify.serveStatic({
 	directory: '../../StaticRoot'
 }));
 
+server.get('/versions/:locale', function getVersions(request, response, next) {
+	console.log('Download Ethnologe info ', request.params.locale);
+	var result = ethnologyController.availVersions(request.params.locale);
+	response.send(200, result);
+	return(next());	
+});
+
 server.put('/user', function registerTeacher(request, response, next) {
-	console.log('Register a new user', request.params.username);
+	console.log('Register a new user', request.params);
 	// Need to generate signature and add to request.params
 	database.insertTeacher(request.params, function(err, results) {
 		if (err) {
 			response.send(409, err);
 		} else {
-			response.send(200, JSON.stringify(results));	
+			response.send(201, results);	
 		}
 		return(next());
 	});
 });
 
 server.post('/user', function updateTeacher(request, response, next) {
-	console.log('Update a user', request.params.username);
-	response.send(200, 'Update new user ' + request.params.username);
-	// Uses database transaction updateUser
-	return(next());
+	console.log('Update a user', request.params);
+	database.updateTeacher(request.params, function(err, results) {
+		if (err) {
+			response.send(404, err);
+		} else {
+			response.send(200, results);
+		}
+		return(next());
+	});
 });
 
-server.del('/user', function deleteTeacher(request, response, next) {
-	console.log('Delete user', request.params.username);
-	response.send(200, 'Delete user ' + request.params.username);
-	// Uses database transaction deleteUser
-	return(next());
+server.del('/user/:teacherId', function deleteTeacher(request, response, next) {
+	console.log('Delete user', request.params);
+	database.deleteTeacher(request.params, function(err, results) {
+		if (err) {
+			response.send(404, err); // could this also be a conflict error 409
+		} else {
+			response.send(200, results);
+		}
+		return(next());
+	});
 });
 
 server.put('/position', function insertPosition(request, response, next) {
-	console.log('Give user a new privilege', request.params.username);
-	response.send(200, 'Register a new user ' + request.params.username);
-	// Uses database transaction insertPosition
-	return(next());
+	console.log('Give user a new privilege', request.params);
+	database.insertPosition(request.params, function(err, results) {
+		if (err) {
+			response.send(409, err); // not sure about status code
+		} else {
+			response.send(201, results);
+		}
+		return(next());
+	});
+});
+
+server.post('/position', function updatePosition(request, response, next) {
+	console.log('Give user a new privilege', request.params);
+	database.updatePosition(request.params, function(err, results) {
+		if (err) {
+			response.send(409, err); // not sure about status code
+		} else {
+			response.send(200, results);
+		}
+		return(next());
+	});
 });
 
 server.del('/position', function deletePosition(request, response, next) {
-	console.log('Remove a privilege', request.params.username);
-	response.send(200, 'Remove a privilege ' + request.params.username);
-	// Uses database transaction insertPosition
-	return(next());
-});
-
-server.get('/versions/:locale', function getVersions(request, response, next) {
-	console.log('Download Ethnologe info ', request.params.locale);
-	var result = ethnologyController.availVersions(request.params.locale);
-	response.send(200, JSON.stringify(result));
-	return(next());	
+	console.log('Remove a privilege', request.params);
+	database.deletePosition(request.params, function(err, results) {
+		if (err) {
+			response.send(404, err);
+		} else {
+			response.send(200, results);
+		}
+		return(next());
+	});
 });
 
 server.put('/question', function insertQuestion(request, response, next) {
-	console.log('Insert question ' + request.params.question);
-	response.send(200, 'Insert Question ' + request.params.question + ' ' + request.params.hello);
-	return(next());	
+	console.log('Insert question ' + request.params);
+	database.insertQuestion(request.params, function(err, results) {
+		if (err) {
+			response.send(409, err);
+		} else {
+			response.send(201, results);
+		}
+		return(next());
+	});
 });
 
 server.post('/question', function updateQuestion(request, response, next) {
 	console.log('POST question ' + request.params.question);
-	response.send(200, 'POST Question ' + request.params.question + ' ' + request.params.hello);
-	return(next());	
+	database.updateQuestion(request.params, function(err, results) {
+		if (err) {
+			response.send(404, err);
+		} else {
+			response.send(200, results);
+		}
+		return(next());
+	});
 });
 
 server.del('/question', function deleteQuestion(request, response, next) {
 	console.log('Delete question ' + request.params.question);
-	response.send(200, 'Delete Question ' + request.params.question + ' ' + request.params.hello);
-	return(next());	
+	database.deleteQuestion(request.params, function(err, results) {
+		if (err) {
+			response.send(404, err);
+		} else {
+			response.send(200, results);
+		}
+		return(next());
+	});
 });
 
-server.get('/open/:versionId', function openCount(request, response, next) {
+server.get('/open/:versionId', function openQuestionCount(request, response, next) {
 	console.log('Open Question Status Message ', request.params.versionId);
-	response.send(200, 'Open Question Status', request.params.versionId);
-	return(next());
+	database.openQuestionCount(request.params, function(err, results) {
+		if (err) {
+			response.send(500, err);
+		} else {
+			response.send(200, results);
+		}
+		return(next());
+	});
 });
 
-server.get('/assign/:version', function assignQuestion(request, response, next) {
+server.get('/assign/:versionId/:teacherId', function assignQuestion(request, response, next) {
 	console.log('Assign Question ', request.params.version);
-	response.send(200, 'Assign Question ' + request.params.version);
-	return(next());
+	database.assignQuestion(request.params, function(err, results) {
+		if (err) {
+			response.send(404, err);
+		} else {
+			response.send(200, results);
+		}
+		return(next());
+	})
 });
 
-server.get('/return/:questionId', function returnQuestion(request, response, next) {
-	console.log('Return question ', request.params.questionId);
-	response.send(200, 'Return question ' + request.params.questionId);
-	return(next());
+server.get('/return/:discourseId', function returnQuestion(request, response, next) {
+	console.log('Return question ', request.params.discourseId);
+	database.returnQuestion(request.params, function(err, results) {
+		if (err) {
+			response.send(404, err);
+		} else {
+			response.send(200, results);
+		}
+		return(next());
+	});
 });
 
 server.put('/answer', function insertAnswer(request, response, next) {

@@ -3,20 +3,61 @@ curl -i http://localhost:8080/bible/WEB.bible1 > out
 
 curl -i http://localhost:8080/bible/xxx.bible1 > out
 
+curl -i http://localhost:8080/versions/en-US
 
-curl -i http://localhost:8080/user -X PUT -d 'teacherId=ABCDEFG&fullname=Gary Griswold&pseudonym=Gary G&signature=XXXX&versionId=KJV'
 
-curl -i http://localhost:8080/user -X POST -d 'username=BobSmith'
+curl -i http://localhost:8080/user -X PUT -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "fullname":"Gary Griswold", "pseudonym":"Gary G", "signature":"XXXX", "versionId":"KJV"}' # 201
 
-curl -i -H "Content-Type: application/json" http://localhost:8080/user -X POST -d '{"username": "Bob Smith"}'
+curl -i http://localhost:8080/user -X PUT -H "Content-Type: application/json" -d '{"teacherId":"ABCDEFGHIJ", "fullname":"Gary Griswold", "pseudonym":"Gary G", "signature":"XXXX", "versionId":"KJV"}' # 201
 
-curl -i http://localhost:8080/versions/US-en
+curl -i http://localhost:8080/user -X PUT -H "Content-Type: application/json" -d '{"teacherId":"ABCDEFGHIJ", "fullname":"Gary Griswold", "pseudonym":"Gary G", "signature":"XXXX", "versionId":"KJV"}' #409
 
-curl -i http://localhost:8080/question -X POST -d 'question=This is my questions'
+curl -i http://localhost:8080/user -X POST -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "fullname":"Gary N Griswold", "pseudonym":"Gary N"}' # 200
 
-curl -i -H "Content-Type: application/json" http://localhost:8080/question -X POST -d '{"question":"This is my questions", "hello": "World"}'
+curl -i http://localhost:8080/user -X POST -H "Content-Type: application/json" -d '{"teacherId":"AB", "fullname":"Gary N Griswold", "pseudonym":"Gary N"}' # 404
 
-curl -i http://localhost:8080/assign/WEB
+curl -i http://localhost:8080/user/ABCDEFGHIJ -X DELETE # 200
+
+curl -i http://localhost:8080/user/ABCDEFG -X DELETE # 404
+
+
+curl -i http://localhost:8080/position -X PUT -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "position":"super", "versionId":"KJVA"}' #201
+
+curl -i http://localhost:8080/position -X PUT -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "position":"super", "versionId":"KJVA"}' #409
+
+curl -i http://localhost:8080/position -X POST -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "versionId":"KJVA", "position":"removed"}' #200
+
+curl -i http://localhost:8080/position -X POST -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "versionId":"KJVA", "position":"XXXX"}' #409
+
+curl -i http://localhost:8080/position -X DELETE -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "versionId":"KJVA"}' #200
+
+curl -i http://localhost:8080/position -X DELETE -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "versionId":"KJVA"}' #404
+
+
+
+curl -i http://localhost:8080/question -X PUT -H "Content-Type: application/json" -d '{"discourseId":"12345", "versionId":"KJV", "reference":"John1", "message":"This is my questions"}' #201
+
+curl -i http://localhost:8080/question -X PUT -H "Content-Type: application/json" -d '{"discourseId":"12345", "versionId":"KJV", "reference":"John1", "message":"This is my questions"}' #409
+
+curl -i http://localhost:8080/question -X POST -H "Content-Type: application/json" -d '{"messageId":1, "reference":"John3", "message":"This is my revised questions"}' #200
+
+curl -i http://localhost:8080/question -X POST -H "Content-Type: application/json" -d '{"messageId":100, "reference":"John3", "message":"This is my revised questions"}' #404
+
+curl -i http://localhost:8080/question -X DELETE -H "Content-Type: application/json" -d '{"discourseId":"12345"}' # 200
+
+curl -i http://localhost:8080/question -X DELETE -H "Content-Type: application/json" -d '{"discourseId":"12345"}' # 404
+
+
+
+curl -i http://localhost:8080/open/KJV # 200
+
+curl -i http://localhost:8080/open/XXX # 200
+
+curl -i http://localhost:8080/assign/KJV/ABCDE #200
+
+curl -i http://localhost:8080/assign/KJV/ABCDEFGHIJ
+
+
 
 curl -i http://localhost:8080/return/ABCDEFGH
 
