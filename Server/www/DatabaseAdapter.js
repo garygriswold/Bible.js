@@ -28,8 +28,6 @@ DatabaseAdapter.prototype.create = function(callback) {
 			' teacherId text PRIMARY KEY NOT NULL,' + // GUID
 			' fullname text NOT NULL,' +
 			' pseudonym text NOT NULL,' +
-			' email text NOT NULL,' +
-			' phone text NOT NULL,' +
 			' signature text NOT NULL)',
 			
 		'CREATE TABLE Position(' +
@@ -43,12 +41,10 @@ DatabaseAdapter.prototype.create = function(callback) {
 		'CREATE UNIQUE INDEX PositionTable ON Position(teacherId, versionId, position)',
 		
 		'CREATE TABLE Discourse(' +
-			' discourseId INTEGER PRIMARY KEY NOT NULL,' +
+			' discourseId text PRIMARY KEY NOT NULL,' + // GUID
 			' versionId text NOT NULL,' +
 			' status text check(status in ("open", "assigned", "answered", "sent")) NOT NULL,' +
-			' teacherId text REFERENCES Teacher(teacherId) NULL,' +
-			' studentName text NOT NULL)', // needs an index
-			// should there be a student id?
+			' teacherId text REFERENCES Teacher(teacherId) NULL)',
 			
 		'CREATE INDEX DiscourseTeacher ON Discourse(teacherId)',
 		'CREATE INDEX DiscourseVersion ON Discourse(versionId, status)', // Needed for Assign Question
@@ -80,11 +76,11 @@ DatabaseAdapter.prototype.selectTeachers = function(versionId, callback) {
 */
 DatabaseAdapter.prototype.insertTeacher = function(obj, callback) {
 	var statements = [ 
-		'insert into Teacher(teacherId, fullname, pseudonym, email, phone, signature) values (?,?,?,?,?,?)',
+		'insert into Teacher(teacherId, fullname, pseudonym, signature) values (?,?,?,?)',
 		'insert into Position(teacherId, versionId, position) values (?,?,?)'
 	 ];
 	var values = [
-		[ obj.teacherId, obj.fullname, obj.pseudonym, obj.email, obj.phone, obj.signature ],
+		[ obj.teacherId, obj.fullname, obj.pseudonym, obj.signature ],
 		[ obj.teacherId, obj.versionId, obj.position || "teacher" ]
 	];
 	this.executeSQL(statements, values, callback);
@@ -94,8 +90,8 @@ DatabaseAdapter.prototype.insertTeacher = function(obj, callback) {
 * If I need to update individual fields, then I will need to change this to generate SQL
 */
 DatabaseAdapter.prototype.updateTeacher = function(obj, callback) {
-	var statements = [ 'update Teacher set fullname=?, pseudonym=?, email=?, phone=? where teacherId=?' ];
-	var values = [[ obj.fullname, obj.pseudonym, obj.email, obj.phone, obj.teacherId ]];
+	var statements = [ 'update Teacher set fullname=?, pseudonym=? where teacherId=?' ];
+	var values = [[ obj.fullname, obj.pseudonym, obj.teacherId ]];
 	this.executeSQL(statements, values, callback);
 };
 /**
@@ -134,12 +130,12 @@ DatabaseAdapter.prototype.deletePosition = function(obj, callback) {
 */
 DatabaseAdapter.prototype.insertQuestion = function(obj, callback) {
 	var statements = [ 
-		'insert into Discourse(versionId, studentName, status) values (?,?,"open")',
-		'insert into Message(discourseId, reference, timestamp, message) values(last_insert_rowid(),?,?,?)'
+		'insert into Discourse(discourseId, versionId, status) values (?,?,"open")',
+		'insert into Message(discourseId, reference, timestamp, message) values(?,?,?,?)'
 	];
 	var values = [
-		[ obj.versionId, obj.studentName ],
-		[ obj.reference, this.getTimestamp(), obj.message ]
+		[ obj.discourseId, obj.versionId ],
+		[ obj.discourseId, obj.reference, this.getTimestamp(), obj.message ]
 	];
 	this.executeSQL(statements, values, callback);
 };
@@ -169,12 +165,12 @@ DatabaseAdapter.prototype.openQuestions = function(obj, callback) {
 DatabaseAdapter.prototype.assignQuestion = function(obj, callback) {
 	var that = this;
 	this.db.run("begin immediate transaction", [], function(err) {
-		var statement = 'select d.discourseId, d.studentName, m.reference, m.timestamp, m.message' +
+		var statement = 'select d.discourseId, m.reference, m.timestamp, m.message' +
 			' from Discourse d, Message m where d.discourseId=m.discourseId' +
 			' and d.versionId = ?' +
 			' and d.status="open" order by m.timestamp limit 1';
 		that.db.get(statement, obj.versionId, function(err, row) {
-			if (err || row === null) {
+			if (err || row === undefined) {
 				that.db.run("rollback transaction", [], function(rollErr) {
 					callback(rollErr || err);
 				});
@@ -320,14 +316,14 @@ var person1rev2 = { teacherId: "ABCDE" };
 var person1rev3 = { teacherId: "ABCDE", versionId: 'WEB', position: 'principal' };
 //database.insertPosition(person1rev3, function(err) { console.log('INSERT POS ERROR', err); });
 //database.deletePosition({positionId: 2}, function(err) { console.log('DELETE POS ERROR', err); });
-var message1 = { versionId: 'WEB', studentName: 'Bob Smith', reference: 'JHN:1:1', message: 'What does this mean' };
+var message1 = { discourseId: "KLMN", versionId: 'WEB', studentName: 'Bob Smith', reference: 'JHN:1:1', message: 'What does this mean' };
 //database.insertQuestion(message1, function(err) { console.log('INSERT QUESTION', err); });
 var message1rev1 = { reference: 'JHN:3', message: 'Now I understand', messageId: 3 };
 //database.updateQuestion(message1rev1, function(err) { console.log('UPDATE QUESTION', err); });
-var message1rev2 = { discourseId: 1 };
+var message1rev2 = { discourseId: "KLMN" };
 //database.deleteQuestion(message1rev2, function(err) { console.log('DELETE QUESTION', err); });
 //database.openQuestions({ versionId: 'WEB' }, function(err, row) { console.log('ERROR', err, ' ROW', row); });
-//database.assignQuestion({versionId: 'WEB', teacherId: 'ABCDE'}, function(err, row) { console.log('ERROR', err, ' ROW', row ); });
+database.assignQuestion({versionId: 'WEB', teacherId: 'ABCDE'}, function(err, row) { console.log('ERROR', err, ' ROW', row ); });
 //database.returnQuestion({discourseId: 2}, function(err) { console.log('RETURN ERROR', err); });
 var answer1 = { discourseId: 2, reference: 'JHN:3:16', message: 'This is it', teacherId: 'ABCDE' }
 //database.insertAnswer(answer1, function(err) { console.log('INSERT ERR', err); });
@@ -336,4 +332,4 @@ var answer2 = { messageId: 4, reference: 'JHN:3:17', message: 'There is more' }
 var answer3 = { messageId: 4 };
 //database.deleteAnswer(answer3, function(err) { console.log('DELETE ERR', err); });
 var answer4 = { discourseId: 2 };
-database.selectAnswers(answer4, function(err, results) { console.log('SELECT', err, results); });
+//database.selectAnswers(answer4, function(err, results) { console.log('SELECT', err, results); });
