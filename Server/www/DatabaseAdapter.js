@@ -59,7 +59,7 @@ DatabaseAdapter.prototype.create = function(callback) {
 		'CREATE INDEX MessageDiscourseId ON Message(discourseId)'
 	];
 	var values = new Array(statements.length);
-	this.executeSQL(statements, values, callback);
+	this.executeSQL(statements, values, 0, callback);
 	
 	// Message primary key could be discourseId + timestamp
 	// Position primary key could be teacherId, versionId
@@ -83,7 +83,7 @@ DatabaseAdapter.prototype.insertTeacher = function(obj, callback) {
 		[ obj.teacherId, obj.fullname, obj.pseudonym, obj.signature ],
 		[ obj.teacherId, obj.versionId, obj.position || "teacher" ]
 	];
-	this.executeSQL(statements, values, callback);
+	this.executeSQL(statements, values, 2, callback);
 };
 /**
 * Needs primary key Teacher.teacherId
@@ -92,7 +92,7 @@ DatabaseAdapter.prototype.insertTeacher = function(obj, callback) {
 DatabaseAdapter.prototype.updateTeacher = function(obj, callback) {
 	var statements = [ 'update Teacher set fullname=?, pseudonym=? where teacherId=?' ];
 	var values = [[ obj.fullname, obj.pseudonym, obj.teacherId ]];
-	this.executeSQL(statements, values, callback);
+	this.executeSQL(statements, values, 1, callback);
 };
 /**
 * Needs primary key Teacher.teacherId
@@ -102,7 +102,7 @@ DatabaseAdapter.prototype.updateTeacher = function(obj, callback) {
 DatabaseAdapter.prototype.deleteTeacher = function(obj, callback) {
 	var statements = [ 'delete from Teacher where teacherId = ?' ];
 	var values = [[ obj.teacherId ]];
-	this.executeSQL(statements, values, callback);
+	this.executeSQL(statements, values, 1, callback);
 };
 DatabaseAdapter.prototype.selectPositions = function(teacherId, callback) {
 	// ????? What uses this????
@@ -113,17 +113,17 @@ DatabaseAdapter.prototype.selectPositions = function(teacherId, callback) {
 DatabaseAdapter.prototype.insertPosition = function(obj, callback) {
 	var statements = [ 'insert into Position(teacherId, versionId, position) values (?,?,?)' ];
 	var values = [[ obj.teacherId, obj.versionId, obj.position ]];
-	this.executeSQL(statements, values, callback);
+	this.executeSQL(statements, values, 1, callback);
 };
 DatabaseAdapter.prototype.updatePosition = function(obj, callback) {
 	var statements = [ 'update Position set position=? where positionId=?' ];
 	var values = [[ obj.position, obj.positionId ]];
-	this.executeSQL(statements, values, callback);	
+	this.executeSQL(statements, values, 1, callback);	
 };
 DatabaseAdapter.prototype.deletePosition = function(obj, callback) {
 	var statements = [ 'delete from Position where positionId=?' ];
 	var values = [[ obj.positionId ]];
-	this.executeSQL(statements, values, callback);
+	this.executeSQL(statements, values, 1, callback);
 };
 /**
 * Initiate discourse and enter first message from student
@@ -137,12 +137,12 @@ DatabaseAdapter.prototype.insertQuestion = function(obj, callback) {
 		[ obj.discourseId, obj.versionId ],
 		[ obj.discourseId, obj.reference, this.getTimestamp(), obj.message ]
 	];
-	this.executeSQL(statements, values, callback);
+	this.executeSQL(statements, values, 2, callback);
 };
 DatabaseAdapter.prototype.updateQuestion = function(obj, callback) {
 	var statements = [ 'update Message set reference=?, message=? where messageId=?' ];
 	var values = [[ obj.reference, obj.message, obj.messageId ]];
-	this.executeSQL(statements, values, callback);
+	this.executeSQL(statements, values, 1, callback);
 };
 /**
 * Needs Discourse.discourseId primary key
@@ -151,7 +151,7 @@ DatabaseAdapter.prototype.updateQuestion = function(obj, callback) {
 DatabaseAdapter.prototype.deleteQuestion = function(obj, callback) {
 	var statements = [ 'delete from Discourse where discourseId=?' ];
 	var values = [[ obj.discourseId ]];
-	this.executeSQL(statements, values, callback);
+	this.executeSQL(statements, values, 1, callback);
 };
 DatabaseAdapter.prototype.openQuestions = function(obj, callback) {
 	var statement = 'select count(*), min(m.timestamp) from Discourse d, Message m where d.discourseId=m.discourseId' +
@@ -193,7 +193,7 @@ DatabaseAdapter.prototype.assignQuestion = function(obj, callback) {
 };
 DatabaseAdapter.prototype.returnQuestion = function(obj, callback) {
 	var statements = [ 'update Discourse set status="open", teacherId=null where discourseId=?' ];
-	this.executeSQL(statements, [[ obj.discourseId ]], callback);
+	this.executeSQL(statements, [[ obj.discourseId ]], 1, callback);
 };
 
 DatabaseAdapter.prototype.insertAnswer = function(obj, callback) {
@@ -205,12 +205,12 @@ DatabaseAdapter.prototype.insertAnswer = function(obj, callback) {
 		[ obj.discourseId, obj.reference, this.getTimestamp(), obj.message ],
 		[ obj.teacherId, obj.discourseId ]
 	];
-	this.executeSQL(statements, values, callback);
+	this.executeSQL(statements, values, 2, callback);
 };
 DatabaseAdapter.prototype.updateAnswer = function(obj, callback) {
 	var statements = [ 'update Message set reference=?, message=? where messageId=?' ];
 	var values = [[ obj.reference, obj.message, obj.messageId ]];
-	this.executeSQL(statements, values, callback);
+	this.executeSQL(statements, values, 1, callback);
 };
 DatabaseAdapter.prototype.deleteAnswer = function(obj, callback) {
 	var that = this;
@@ -226,7 +226,7 @@ DatabaseAdapter.prototype.deleteAnswer = function(obj, callback) {
 				[ obj.messageId ],
 				[ row.discourseId ]
 			];
-			that.executeSQL(statements, values, callback);			
+			that.executeSQL(statements, values, 2, callback);			
 		} else {
 			callback(); // No an error, but there were no rows.
 		}
@@ -249,20 +249,22 @@ DatabaseAdapter.prototype.selectAnswers = function(obj, callback) {
 DatabaseAdapter.prototype.replaceDraft = function(obj, callback) {
 	var statements = [ 'replace into Message(discourseId, reference, timestamp, message) values (?,?,?,?)' ];
 	var values = [[ obj.discourseId, obj.reference, this.getTimestamp(), obj.message ]];
-	this.executeSQL(statements, values, callback);
+	this.executeSQL(statements, values, 1, callback);
 };
 DatabaseAdapter.prototype.deleteDraft = function(obj, callback) {
 	var statements = [ 'delete from Message where messageId=?' ];
 	var values = [[ obj.messageId ]];
-	this.executeSQL(statements, values, callback);
+	this.executeSQL(statements, values, 1, callback);
 };
 DatabaseAdapter.prototype.selectDraft = function(obj, callback) {
 	var statement = 'select reference, message from Message where messageId=?';
 	var values = [ obj.messageId ];
 	this.selectSQL(statement, values, callback);
 };
-DatabaseAdapter.prototype.executeSQL = function(statements, values, callback) {
+DatabaseAdapter.prototype.executeSQL = function(statements, values, affectedRows, callback) {
 	// if statements length is not = values length it is an error
+	var rowCount = 0;
+	var lastID = null;
 	var that = this;
 	that.db.run("begin immediate transaction", [], function(err) {
 		executeStatement(0);
@@ -277,14 +279,19 @@ DatabaseAdapter.prototype.executeSQL = function(statements, values, callback) {
 						callback(rollErr || err);
 					});
 				} else {
+					rowCount += this.changes;
+					lastID = this.lastID || lastID;
 					console.log('lastID', this.lastID, 'changes', this.changes);
 					// Do I do something about ID or changes?
 					executeStatement(index + 1);
 				}
 			});
 		} else {
+			if (affectedRows >= 0 && affectedRows !== rowCount) {
+				console.warn(statements[0], 'expected=' + affectedRows, '  actual=' + rowCount);
+			}
 			that.db.run("commit transaction", [], function(err) {
-				callback(err);
+				callback(err, {rowCount: rowCount, lastID: lastID});
 			});
 		}
 	}
@@ -306,8 +313,7 @@ DatabaseAdapter.prototype.getTimestamp = function() {
 
 var database = new DatabaseAdapter({filename: './TestDatabase.db', verbose: true});
 //database.create(function(err) { console.log('CREATE ERROR', err); });
-var person1 = { teacherId: "ABCDE", fullname: "Gary Griswold", pseudonym: "Gary G", email: "gary@shortsands.com", phone: "513-508-6127", signature: 'XXXX',
-	versionId: 'KJV' };
+var person1 = { teacherId: "ABCDE", fullname: "Gary Griswold", pseudonym: "Gary G", signature: 'XXXX', versionId: 'KJV' };
 //database.insertTeacher(person1, function(err) { console.log('INSERT ERROR', err); });
 var person1rev1 = { teacherId: "ABCDE", fullname: "Gary N Griswold", pseudonym: "Gary", email: "gary@shortsands.us", phone: "513"};
 //database.updateTeacher(person1rev1, function(err) { console.log('UPDATE ERROR', err); });
@@ -333,3 +339,5 @@ var answer3 = { messageId: 4 };
 //database.deleteAnswer(answer3, function(err) { console.log('DELETE ERR', err); });
 var answer4 = { discourseId: 2 };
 //database.selectAnswers(answer4, function(err, results) { console.log('SELECT', err, results); });
+
+module.exports = DatabaseAdapter;

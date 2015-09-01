@@ -4,6 +4,8 @@ curl -i http://localhost:8080/bible/WEB.bible1 > out
 curl -i http://localhost:8080/bible/xxx.bible1 > out
 
 
+curl -i http://localhost:8080/user -X PUT -d 'teacherId=ABCDEFG&fullname=Gary Griswold&pseudonym=Gary G&signature=XXXX&versionId=KJV'
+
 curl -i http://localhost:8080/user -X POST -d 'username=BobSmith'
 
 curl -i -H "Content-Type: application/json" http://localhost:8080/user -X POST -d '{"username": "Bob Smith"}'

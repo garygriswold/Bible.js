@@ -6,6 +6,9 @@
 var EthnologyController = require('./EthnologyController');
 var ethnologyController = new EthnologyController();
 
+var DatabaseAdapter = require('./DatabaseAdapter');
+var database = new DatabaseAdapter({filename: './TestDatabase.db', verbose: true}) 
+
 var restify = require('restify');
 var server = restify.createServer({
 	name: 'BibleJS'
@@ -23,9 +26,15 @@ server.get(/\/bible\/?.*/, restify.serveStatic({
 
 server.put('/user', function registerTeacher(request, response, next) {
 	console.log('Register a new user', request.params.username);
-	response.send(200, 'Register a new user ' + request.params.username);
-	// Uses database transaction insertUser
-	return(next());
+	// Need to generate signature and add to request.params
+	database.insertTeacher(request.params, function(err, results) {
+		if (err) {
+			response.send(409, err);
+		} else {
+			response.send(200, JSON.stringify(results));	
+		}
+		return(next());
+	});
 });
 
 server.post('/user', function updateTeacher(request, response, next) {
