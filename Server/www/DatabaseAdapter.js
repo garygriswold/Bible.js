@@ -60,9 +60,6 @@ DatabaseAdapter.prototype.create = function(callback) {
 	this.executeSQL(statements, values, 0, callback);
 	
 	// Message primary key could be discourseId + timestamp
-	// Position primary key could be teacherId, versionId
-	// But I might need both sequence.  When getting infomration on a teacher I would want teacher/version
-	// When providing assignment information I would want version/position
 };
 DatabaseAdapter.prototype.selectTeachers = function(versionId, callback) {
 	// Must select teachers where versionId, join or two queries
