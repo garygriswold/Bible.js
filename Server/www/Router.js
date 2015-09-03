@@ -7,7 +7,10 @@ var EthnologyController = require('./EthnologyController');
 var ethnologyController = new EthnologyController();
 
 var DatabaseAdapter = require('./DatabaseAdapter');
-var database = new DatabaseAdapter({filename: './TestDatabase.db', verbose: true}) 
+var database = new DatabaseAdapter({filename: './TestDatabase.db', verbose: true});
+
+var log = require('./Logger');
+//log.init('BibleApp.log');
 
 var restify = require('restify');
 var server = restify.createServer({
@@ -22,8 +25,13 @@ server.use(restify.bodyParser({
 
 server.on('after', function(request, response, route, error) {
 	var date = new Date();
-	var msg = { time: date.toISOString(), method: request.method, url: request.url, body: request.body, statusCode: response.statusCode, error: error };
-	console.log(msg);
+	var msg = { time: date.toISOString(), method: request.method, url: request.url, body: request.body, statusCode: response.statusCode };
+	if (error) {
+		msg.error = error;
+		log.error(msg);
+	} else {
+		log.info(msg);
+	}
 });
 
 server.get(/\/bible\/?.*/, restify.serveStatic({
@@ -172,7 +180,6 @@ function respond(error, results, successCode, response, next) {
 
 function errorStatusCode(err) {
 	var message = err.message;
-	console.log('ERROR', err.message);
 	if (message.indexOf('SQLITE_CONSTRAINT') > -1) return(409);
 	if (message.indexOf('actual=0') > -1) return(410);
 	return(500);
