@@ -31,13 +31,9 @@ var log = {
 		} else {
 			if (msg.error) {
 				error = msg.error;
+				// restify next(err) is making message property non-iterable
+				// this step is needed to recover it, so it will be in JSON.
 				msg.error = error.message;
-
-				//for (var prop in error) {
-				//	console.log('ERROR', '|' + prop + '|' , '{' + error[prop] + '}');
-				//}
-				//var part1 = error.message;
-				//console.log('ERR MSG', part1);
 			}
 			var str = JSON.stringify(msg) + '\n';
 		  	FS.appendFile(log.filepath, str, function(err) {
