@@ -14,7 +14,8 @@ var log = require('./Logger');
 
 var restify = require('restify');
 var server = restify.createServer({
-	name: 'BibleJS'
+	name: 'BibleJS',
+	version: "1.0.0"
 });
 server.pre(restify.pre.userAgentConnection()); // if UA is curl, close connection.
 
