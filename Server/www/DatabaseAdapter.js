@@ -9,12 +9,14 @@
 function DatabaseAdapter(options) {
 	var sqlite3 = (options.verbose) ? require('sqlite3').verbose() : require('sqlite3');
 	this.db = new sqlite3.Database(options.filename);
-	this.db.on('trace', function(sql) {
-		console.log('DO ', sql);
-	});
-	this.db.on('profile', function(sql, ms) {
-		console.log(ms, 'DONE', sql);
-	});
+	if (options.verbose) {
+		this.db.on('trace', function(sql) {
+			console.log('DO ', sql);
+		});
+		this.db.on('profile', function(sql, ms) {
+			console.log(ms, 'DONE', sql);
+		});
+	}
 	this.db.run("PRAGMA foreign_keys = ON");
 }
 DatabaseAdapter.prototype.create = function(callback) {
