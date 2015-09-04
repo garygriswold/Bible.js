@@ -1,19 +1,11 @@
 var fs = require('fs');
-var https = require('https');
+var http = require('http');
 var httpSignature = require('http-signature');
 
-var options = {
-  //key: fs.readFileSync('./key.pem'),
-  //cert: fs.readFileSync('./cert.pem')
-  key: fs.readFileSync('./ssh/id_rsa.pub'),
-  cert: fs.readFileSync('./ssh/id_rsa')
-};
-
-https.createServer(options, function (req, res) {
+http.createServer(function(req, res) {
   var rc = 200;
   var parsed = httpSignature.parseRequest(req);
-  //var pub = fs.readFileSync(parsed.keyId, 'ascii');
-  var pub = fs.readFileSync('ssh/id_rsa');
+  var pub = fs.readFileSync(parsed.keyId, 'ascii');
   if (!httpSignature.verifySignature(parsed, pub))
     rc = 401;
 

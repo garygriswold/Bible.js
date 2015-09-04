@@ -1,9 +1,9 @@
 var fs = require('fs');
-var https = require('https');
+var http = require('http');
 var httpSignature = require('http-signature');
 
-//var key = fs.readFileSync('./key.pem', 'ascii');
-var key = fs.readFileSync('ssh/id_rsa.pub');
+var key = fs.readFileSync('./private.pem', 'ascii');
+console.log("KEY", key);
 
 var options = {
   host: 'localhost',
@@ -15,15 +15,22 @@ var options = {
 
 // Adds a 'Date' header in, signs it, and adds the
 // 'Authorization' header in.
-var req = https.request(options, function(res) {
+var req = http.request(options, function(res) {
   console.log(res.statusCode);
 });
 
-
 httpSignature.sign(req, {
   key: key,
-  keyId: './cert.pem'
+  keyId: './public.pem'
 });
 
 req.end();
+
+
+/*
+
+openssl genpkey -algorithm RSA -out private.pem
+openssl pkey -pubout -in private.pem -out public.pem
+
+*/
 
