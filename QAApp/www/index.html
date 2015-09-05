@@ -8,6 +8,7 @@
 		<script type="text/javascript" src="ViewLibrary.js"></script>
 		<script type="text/javascript" src="QueueViewModel.js"></script>
 		<script type="text/javascript" src="AnswerViewModel.js"></script>
+		<script type="text/javascript" src="HttpClient.js"></script>
 		<script type="text/javascript">
 			function onLoad() {
 				var nav = new ViewNavigator(); 
@@ -32,7 +33,8 @@
 				dispatchTransition('answerView', 'queueView', TRANSITION.SLIDE_RIGHT);
 			}
 			function anotherQuestion() {
-				dispatchTransition('answerView', 'queueView', TRANSITION.SLIDE_RIGHT);
+				// Not a transition
+				dispatchTransition('answerView', 'answerView', TRANSITION.IMMEDIATE);
 			}
 			function saveDraft() {
 				dispatchTransition('answerView', 'queueView', TRANSITION.SLIDE_RIGHT);
