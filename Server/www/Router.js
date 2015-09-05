@@ -111,15 +111,39 @@ server.get('/assign/:versionId/:teacherId', function assignQuestion(request, res
 	});
 });
 
-server.get('/return/:discourseId', function returnQuestion(request, response, next) {
+server.get('/refuse/:discourseId', function returnQuestion(request, response, next) {
 	database.returnQuestion(request.params, function(err, results) {
-		respond(err, results, 200, response, next);
+		if (err) {
+			respond(err, results, 200, response, next);
+		} else {
+			database.openQuestionCount(request.params, function(err, results) {
+				respond(err, results, 200, response, next);
+			});			
+		}
+	});
+});
+
+server.get('/another/:discourseId/:versionId/:teacherId', function returnQuestion(request, response, next) {
+	database.returnQuestion(request.params, function(err, results) {
+		if (err) {
+			respond(err, results, 200, response, next);
+		} else {
+			database.assignQuestion(request.params, function(err, results) {
+				respond(err, results, 200, response, next);
+			});
+		}
 	});
 });
 
 server.put('/answer', function insertAnswer(request, response, next) {
 	database.insertAnswer(request.params, function(err, results) {
-		respond(err, results, 201, response, next);
+		if (err) {
+			respond(err, results, 201, response, next);			
+		} else {
+			database.openQuestionCount(request.params, function(err, results) {
+				respond(err, results, 201, response, next);
+			});
+		}
 	});
 });
 
@@ -143,7 +167,13 @@ server.get('/answer/:discourseId', function getAnswers(request, response, next) 
 
 server.put('/draft', function insertDraft(request, response, next) {
 	database.insertDraft(request.params, function(err, results) {
-		respond(err, results, 201, response, next);
+		if (err) {
+			respond(err, results, 201, response, next);
+		} else {
+			database.openQuestionCount(request.params, function(err, results) {
+				respond(err, results, 201, response, next);
+			});
+		}
 	});
 });
 

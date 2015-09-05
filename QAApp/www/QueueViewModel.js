@@ -2,7 +2,8 @@
 * This class is the model supportting QueueView.html
 */
 
-function QueueViewModel() {
+function QueueViewModel(httpClient) {
+	this.httpClient = httpClient;
 	this.numQuestions = 25;
 	this.oldestQuestion = 'Aug 24, 2016, 8:23 AM';
 	this.waitTime = 10;
@@ -31,7 +32,8 @@ QueueViewModel.prototype.display = function() {
 		}
 	}
 };
-QueueViewModel.prototype.update = function() {
+QueueViewModel.prototype.queueCount = function() {
 	// Get current data from the server, and call display() when finished.	
 };
+
 

@@ -23,52 +23,50 @@
 * We also do not want to include it in the transition.
 */
 function ViewNavigator() {
+	this.httpClient = new HttpClient('localhost', '8080');
+	this.queueModel = new QueueViewModel(this.httpClient);
+	this.answerModel = new AnswerViewModel(this.httpClient);
 }
-ViewNavigator.prototype.start = function() {
-	document.body.addEventListener(TRANSITION.EVENT, function(event) {
-		var transition = event.detail;
-		console.log('found transition', JSON.stringify(transition));
-		var fromView = document.getElementById(transition.fromView);
-		if (fromView) {
-			var newView = document.createElement('div');
-			if (newView) {
-				newView.id = transition.toView;
-				newView.style.height = '100%';
-				newView.style.width = '100%';
-				newView.style.position = 'absolute';
-				newView.innerHTML = viewLibrary[transition.toView];
-				document.body.appendChild(newView);
-				switch(transition.toView) {
-					case 'queueView':
-						var queueModel = new QueueViewModel();
-						queueModel.display();
-						break;
-					case 'answerView':
-						var answerModel = new AnswerViewModel();
-						answerModel.display();
-						break;
-				}
-				switch(transition.transType) {
-					case TRANSITION.SLIDE_LEFT:
-						fromView.style.zIndex = 0;
-						newView.style.zIndex = 10;
-						TweenMax.set(newView, {x: window.outerWidth}); // what is correct location
-						TweenMax.to(newView, 1.0, {x: 0, 
-							onComplete: finishTransition, onCompleteParams: [fromView]});
-						break;
-					case TRANSITION.SLIDE_RIGHT:
-						fromView.style.zIndex = 10;
-						newView.style.zIndex = 0;
-						TweenMax.to(fromView, 1.0, {left: window.outerWidth,
-							onComplete: finishTransition, onCompleteParams: [fromView]});
-						break;
-					default:
-						finishTransition(fromView);
-						break;
-				}
+ViewNavigator.prototype.transition = function(fromViewName, toViewName, transaction, animation) {
+	console.log('Transition', fromViewName, toViewName, transaction, animation);
+	var fromView = document.getElementById(fromViewName);
+	if (fromView) {
+		var newView = document.createElement('div');
+		if (newView) {
+			newView.id = toViewName;
+			newView.style.height = '100%';
+			newView.style.width = '100%';
+			newView.style.position = 'absolute';
+			newView.innerHTML = viewLibrary[toViewName];
+			document.body.appendChild(newView);
+			switch(toViewName) {
+				case 'queueView':
+					this.queueModel.display();
+					break;
+				case 'answerView':
+					this.answerModel.display();
+					break;
+			}
+			switch(animation) {
+				case TRANSITION.SLIDE_LEFT:
+					fromView.style.zIndex = 0;
+					newView.style.zIndex = 10;
+					TweenMax.set(newView, {x: window.outerWidth}); // what is correct location
+					TweenMax.to(newView, 1.0, {x: 0, 
+						onComplete: finishTransition, onCompleteParams: [fromView]});
+					break;
+				case TRANSITION.SLIDE_RIGHT:
+					fromView.style.zIndex = 10;
+					newView.style.zIndex = 0;
+					TweenMax.to(fromView, 1.0, {left: window.outerWidth,
+						onComplete: finishTransition, onCompleteParams: [fromView]});
+					break;
+				default:
+					finishTransition(fromView);
+					break;
 			}
 		}
-	});
+	}
 	
 	function finishTransition(fromView) {
 		document.body.removeChild(fromView);

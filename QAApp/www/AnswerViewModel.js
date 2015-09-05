@@ -2,7 +2,8 @@
 * This class is the model supportting AnswerView.html
 */
 
-function AnswerViewModel() {
+function AnswerViewModel(httpClient) {
+	this.httpClient = httpClient;
 	this.studentName = 'Bob';
 	this.displayReference = 'John 3:18';
 	this.submittedDt = 'Jan 3, 2015 10:43 am';
@@ -26,7 +27,14 @@ AnswerViewModel.prototype.display = function() {
 		}
 	}
 };
-AnswerViewModel.prototype.update = function() {
+AnswerViewModel.prototype.getDraft = function() {
+	
+};
+AnswerViewModel.prototype.assign = function() {
 	// Get current data from the server, and call display() when finished.	
+};
+AnswerViewModel.prototype.assignAnother = function() {
+	// first call return assigned
+	// then call assign inside return
 };
 
