@@ -37,7 +37,7 @@ HttpClient.prototype.request = function(method, path, postData, callback) {
 	function progressEvents() {
 		try {
 	    	if (request.readyState === 4) {
-		    	callback(request.status, request.responseText);
+		    	callback(request.status, JSON.parse(request.responseText));
 	    	}
 	    } catch(error) {
 		    callback(-1, error)

@@ -4,11 +4,10 @@
 
 function QueueViewModel(httpClient) {
 	this.httpClient = httpClient;
-	this.numQuestions = 25;
-	this.oldestQuestion = 'Aug 24, 2016, 8:23 AM';
-	this.waitTime = 10;
+	this.numQuestions = 0;
+	this.oldestQuestion = null;
+	this.waitTime = 0;
 	Object.seal(this);
-	console.log('INSIDE QUEUE VIEW MODEL CONSTRICTOR' )
 }
 QueueViewModel.prototype.numQuestionsMsg = function() {
 	return("There are " + this.numQuestions + " unassigned questions.");
@@ -17,7 +16,7 @@ QueueViewModel.prototype.oldestQuestionMsg = function() {
 	return((this.oldestQuestion && this.numQuestions > 0) ? "The oldest question was submitted at " + this.oldestQuestion + "." : '');
 };
 QueueViewModel.prototype.waitTimeMsg = function() {
-	return((this.waitTime && this.numQuestions > 0) ? "The oldest question has been waiting " + this.waitTime + " hours." : '');
+	return((this.waitTime && this.numQuestions > 0) ? "The oldest question has been waiting " + this.waitTime + " minutes." : '');
 };
 
 QueueViewModel.prototype.display = function() {
@@ -32,8 +31,19 @@ QueueViewModel.prototype.display = function() {
 		}
 	}
 };
-QueueViewModel.prototype.queueCount = function() {
-	// Get current data from the server, and call display() when finished.	
+QueueViewModel.prototype.openQuestionCount = function(versionId) {
+	var that = this;
+	this.httpClient.get('/open/' + versionId, function(status, results) {
+		console.log('open results', status, results);
+		if (status === 200) {
+			that.numQuestions = results.count;
+			var timestamp = new Date(results.timestamp);
+			that.oldestQuestion = timestamp.toLocaleString();
+			var lapsed = new Date().getTime() - timestamp.getTime();
+			that.waitTime = Math.round(lapsed / (1000 * 60));
+			that.display();
+		} 
+	});
 };
 
 
