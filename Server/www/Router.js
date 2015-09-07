@@ -105,7 +105,7 @@ server.get('/open/:versionId', function openQuestionCount(request, response, nex
 	});
 });
 
-server.get('/assign/:versionId/:teacherId', function assignQuestion(request, response, next) {
+server.get('/assign/:teacherId/:versionId', function assignQuestion(request, response, next) {
 	database.assignQuestion(request.params, function(err, results) {
 		respond(err, results, 200, response, next);
 	});
@@ -211,7 +211,9 @@ function respond(error, results, successCode, response, next) {
 
 function errorStatusCode(err) {
 	var message = err.message;
-	if (message.indexOf('SQLITE_CONSTRAINT') > -1) return(409);
-	if (message.indexOf('actual=0') > -1) return(410);
+	if (message) {
+		if (message.indexOf('SQLITE_CONSTRAINT') > -1) return(409);
+		if (message.indexOf('actual=0') > -1) return(410);
+	}
 	return(500);
 }

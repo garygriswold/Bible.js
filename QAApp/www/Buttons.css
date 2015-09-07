@@ -61,3 +61,10 @@
 	background: -moz-linear-gradient(top,  #0078a5,  #00adee);
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
 }
+.blue:disabled {
+	color: #6C777B;
+	border: solid 1px #003B51;
+	background: #004A66;
+	background: -webkit-gradient(linear, left top, left bottom, from(#005677), to(#003C52));
+	background: -moz-linear-gradient(top,  #005677,  #003C52);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#005677', endColorstr='#003C52');}

@@ -26,7 +26,6 @@ function ViewNavigator() {
 	this.httpClient = new HttpClient('localhost', '8080');
 	this.queueModel = new QueueViewModel(this.httpClient);
 	this.answerModel = new AnswerViewModel(this.httpClient);
-	this.versionId = 'KJV'; // where does this come from?
 }
 ViewNavigator.prototype.transition = function(fromViewName, toViewName, transaction, animation) {
 	console.log('Transition', fromViewName, toViewName, transaction, animation);
@@ -43,13 +42,17 @@ ViewNavigator.prototype.transition = function(fromViewName, toViewName, transact
 			switch(toViewName) {
 				case 'queueView':
 					if (transaction === 'openQuestionCount') {
-						this.queueModel.openQuestionCount(this.versionId);
+						this.queueModel.openQuestionCount();
 					} else {
 						this.queueModel.display();
 					}
 					break;
 				case 'answerView':
-					this.answerModel.display();
+					if (transaction === 'assignQuestion') {
+						this.answerModel.assignQuestion();
+					} else {
+						this.answerModel.display();
+					}
 					break;
 			}
 			switch(animation) {

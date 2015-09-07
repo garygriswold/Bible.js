@@ -4,16 +4,17 @@
 
 function AnswerViewModel(httpClient) {
 	this.httpClient = httpClient;
-	this.studentName = 'Bob';
-	this.displayReference = 'John 3:18';
-	this.submittedDt = 'Jan 3, 2015 10:43 am';
-	this.expires = '2 hrs';
-	this.question = 'How can I understand unless someone show me.';
-	this.answer = 'Here is Isahiah';
+	this.discourseId = null;
+	this.displayReference = null;
+	this.submittedDt = null;
+	this.expires = null;
+	this.question = null;
+	this.answer = null;
+	this.teacherId = 'ABCDE';
+	this.versionId = 'KJV';
 	Object.seal(this);
 }
 AnswerViewModel.prototype.display = function() {
-	setNodeValue('studentName', 'value', this.studentName);
 	setNodeValue('displayReference', 'value', this.displayReference);
 	setNodeValue('submittedDt', 'value', this.submittedDt);
 	setNodeValue('expiresDesc', 'value', this.expired);
@@ -27,12 +28,25 @@ AnswerViewModel.prototype.display = function() {
 		}
 	}
 };
+AnswerViewModel.prototype.assignQuestion = function() {
+	var that = this;
+	this.httpClient.get('/assign/' + this.teacherId + '/' + this.versionId, function(status, results) {
+		console.log('assign results', status, results);
+		if (status === 200) {
+			that.discourseId = results.discourseId;
+			that.displayReference = results.reference;
+			var timestamp = new Date(results.timestamp);
+			that.submittedDt = timestamp.toLocaleString();
+			that.question = results.message;
+
+			that.display();
+		} 
+	});	
+};
 AnswerViewModel.prototype.getDraft = function() {
 	
 };
-AnswerViewModel.prototype.assign = function() {
-	// Get current data from the server, and call display() when finished.	
-};
+
 AnswerViewModel.prototype.assignAnother = function() {
 	// first call return assigned
 	// then call assign inside return

@@ -22,11 +22,11 @@
 			function transitionBackToLoginView() {
 				viewNavigator.transition('forgotView', 'loginView', null, TRANSITION.SLIDE_RIGHT);
 			}
-			function transitionToQueueView() {
+			function openQuestionCount() {
 				viewNavigator.transition('loginView', 'queueView', 'openQuestionCount', TRANSITION.SLIDE_LEFT);
 			}
-			function assignMeAQuestion() {
-				viewNavigator.transition('queueView', 'answerView', null, TRANSITION.SLIDE_LEFT);
+			function assignQuestion() {
+				viewNavigator.transition('queueView', 'answerView', 'assignQuestion', TRANSITION.SLIDE_LEFT);
 			}
 			function refuseQuestion() {
 				viewNavigator.transition('answerView', 'queueView', null, TRANSITION.SLIDE_RIGHT);

@@ -5,10 +5,6 @@ viewLibrary['answerView'] = '<div id="answerView" style="height: 100%; width: 10
 	'<div style="height: 100%; width: 50%; float: left">' +
 	'<table style="height: 40%; width: 100%">' +
 	'<tr class="fieldRow">' +
-	'<td class="labelCell">Name</td>' +
-	'<td class="valueCell"><input id="studentName" type="text" value="B" readonly></input></td>' +
-	'</tr>' +
-	'<tr class="fieldRow">' +
 	'<td class="labelCell">Reference</td>' +
 	'<td class="valueCell"><input id="displayReference" type="text" value="C" readonly></input></td>' +
 	'</tr>' +
@@ -64,15 +60,16 @@ viewLibrary['answerView'] = '<div id="answerView" style="height: 100%; width: 10
 	'background: #f7e0b6;' +
 	'border: none;' +
 	'padding: 10px;' +
+	'font-size: 0.9em;' +
 	'}' +
 	'span {' +
 	'font-family: sans-serif;' +
-	'font-size: 0.8rem;' +
+	'font-size: 0.9rem;' +
 	'color: gray;' +
 	'}' +
 	'textarea {' +
 	'font-family: sans-serif;' +
-	'font-size: 1rem;' +
+	'font-size: 0.9rem;' +
 	'background: #f7e0b6;' +
 	'border: none;' +
 	'}' +
@@ -131,7 +128,7 @@ viewLibrary['loginView'] = '<table id="loginView" style="height: 100%; width: 10
 	'</p>' +
 	'<p class="fieldBorder" style="margin-top: 1px">' +
 	'<input class="inputField" type="password" placeholder="Password" size="17" style="font-size: large">' +
-	'<input type="button" class="goButton" value="Go" onclick="transitionToQueueView()">' +
+	'<input type="button" class="goButton" value="Go" onclick="openQuestionCount()">' +
 	'</p>' +
 	'</td>' +
 	'<td></td>' +
@@ -164,7 +161,7 @@ viewLibrary['queueView'] = '<table id="queueView" style="height: 100%; width: 10
 	'</tr>' +
 	'<tr style="height: 60%">' +
 	'<td></td>' +
-	'<td style="text-align: center"><button class="button bigrounded blue" onclick="assignMeAQuestion()">Assign Me A Question</button></td>' +
+	'<td style="text-align: center"><button id="assign" class="button bigrounded blue" onclick="assignQuestion()">Assign Me A Question</button></td>' +
 	'<td></td>' +
 	'</tr>' +
 	'</table>' +

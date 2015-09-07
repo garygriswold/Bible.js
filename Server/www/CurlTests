@@ -53,9 +53,9 @@ curl -i http://localhost:8080/open/KJV # 200
 
 curl -i http://localhost:8080/open/XXX # 200
 
-curl -i http://localhost:8080/assign/KJV/ABCDE #200
+curl -i http://localhost:8080/assign/ABCDE/KJV #200
 
-curl -i http://localhost:8080/assign/KJV/XXXXX #404
+curl -i http://localhost:8080/assign/XXXXX/KJV #404
 
 curl -i http://localhost:8080/return/12345 #200
 
