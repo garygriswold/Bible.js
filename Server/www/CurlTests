@@ -1,65 +1,60 @@
 
+# staticServer
 curl -i http://localhost:8080/bible/WEB.bible1 > out
 
 curl -i http://localhost:8080/bible/xxx.bible1 > out
 
-curl -i http://localhost:8080/versions/en-US
 
 
-curl -i http://localhost:8080/user -X PUT -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "fullname":"Gary Griswold", "pseudonym":"Gary G", "signature":"XXXX", "versionId":"KJV"}' # 201
-
-curl -i http://localhost:8080/user -X PUT -H "Content-Type: application/json" -d '{"teacherId":"ABCDEFGHIJ", "fullname":"Gary Griswold", "pseudonym":"Gary G", "signature":"XXXX", "versionId":"KJV"}' # 201
-
-curl -i http://localhost:8080/user -X PUT -H "Content-Type: application/json" -d '{"teacherId":"ABCDEFGHIJ", "fullname":"Gary Griswold", "pseudonym":"Gary G", "signature":"XXXX", "versionId":"KJV"}' #409
-
-curl -i http://localhost:8080/user -X POST -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "fullname":"Gary N Griswold", "pseudonym":"Gary N"}' # 200
-
-curl -i http://localhost:8080/user -X POST -H "Content-Type: application/json" -d '{"teacherId":"AB", "fullname":"Gary N Griswold", "pseudonym":"Gary N"}' # 404
-
-curl -i http://localhost:8080/user/ABCDEFGHIJ -X DELETE # 200
-
-curl -i http://localhost:8080/user/ABCDEFG -X DELETE # 404
 
 
-curl -i http://localhost:8080/position -X PUT -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "position":"super", "versionId":"KJVA"}' #201
 
 curl -i http://localhost:8080/position -X PUT -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "position":"super", "versionId":"KJVA"}' #409
 
-curl -i http://localhost:8080/position -X POST -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "versionId":"KJVA", "position":"removed"}' #200
-
-curl -i http://localhost:8080/position -X POST -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "versionId":"KJVA", "position":"XXXX"}' #409
-
-curl -i http://localhost:8080/position -X DELETE -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "versionId":"KJVA"}' #200
-
-curl -i http://localhost:8080/position -X DELETE -H "Content-Type: application/json" -d '{"teacherId":"ABCDE", "versionId":"KJVA"}' #404
-
-
-
+#insertQuestion
 curl -i http://localhost:8080/question -X PUT -H "Content-Type: application/json" -d '{"discourseId":"12345", "versionId":"KJV", "reference":"John1", "message":"This is my questions"}' #201
 
-curl -i http://localhost:8080/question -X PUT -H "Content-Type: application/json" -d '{"discourseId":"12345", "versionId":"KJV", "reference":"John1", "message":"This is my questions"}' #409
-
+#updateQuestion
 curl -i http://localhost:8080/question -X POST -H "Content-Type: application/json" -d '{"messageId":1, "reference":"John3", "message":"This is my revised questions"}' #200
 
-curl -i http://localhost:8080/question -X POST -H "Content-Type: application/json" -d '{"messageId":100, "reference":"John3", "message":"This is my revised questions"}' #404
+curl -i http://localhost:8080/question -X POST -H "Content-Type: application/json" -d '{"messageId":100, "reference":"John3", "message":"This is my revised questions"}' #410
 
+#deleteQuestion
 curl -i http://localhost:8080/question -X DELETE -H "Content-Type: application/json" -d '{"discourseId":"12345"}' # 200
 
-curl -i http://localhost:8080/question -X DELETE -H "Content-Type: application/json" -d '{"discourseId":"12345"}' # 404
+curl -i http://localhost:8080/question -X DELETE -H "Content-Type: application/json" -d '{"discourseId":"12345"}' # 410
 
+#openQuestionCount
+curl -i http://localhost:8080/open/KJV # 404
 
+curl -i http://localhost:8080/open/ABCDE/KJV #200
 
-curl -i http://localhost:8080/open/KJV # 200
+curl -i http://localhost:8080/open/ABCDE/XXX # 200
 
-curl -i http://localhost:8080/open/XXX # 200
+curl -i http://localhost:8080/open/XXXX/XXX # 200 Is 200 correct?
 
+#assignQuestion
 curl -i http://localhost:8080/assign/ABCDE/KJV #200
 
 curl -i http://localhost:8080/assign/XXXXX/KJV #404
 
-curl -i http://localhost:8080/return/12345 #200
+curl -i http://localhost:8080/beginTest #200
 
-curl -i http://localhost:8080/return/XXXX #404
+
+#returnQuestion
+curl -i http://localhost:8080/return/12345/KJV #200
+
+curl -i http://localhost:8080/return/12345/KJV #200
+#surprisingly, the above is always returning 200, because sqlite counts the update of a single row even though there is no change to the row.
+
+#openQuestionCount, when one is already assigned
+curl -i http://localhost:8080/open/ABCDE/KJV #200, returns an array
+
+#assignQuestion, when one is already assigned
+#curl -i http://localhost:8080/assign/ABCDE/KJV #200
+
+#returnQuestion
+curl -i http://localhost:8080/return/12345/KJV #200, returns counts
 
 
 

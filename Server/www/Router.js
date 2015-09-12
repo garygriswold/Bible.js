@@ -35,6 +35,16 @@ server.on('after', function(request, response, route, error) {
 	}
 });
 
+/**
+* This route should be commented out of a production server.
+*/
+server.get('/beginTest', function beginTest(request, response, next) {
+	database = new DatabaseAdapter({filename: './AutoTestDatabase.db', verbose: true});
+	database.create(function(err) {
+		respond(err, {"message":"AutoTestDatabase.db created"}, 201, response, next);
+	});
+});
+
 server.get(/\/bible\/?.*/, restify.serveStatic({
 	directory: '../../StaticRoot'
 }));
@@ -99,9 +109,15 @@ server.del('/question', function deleteQuestion(request, response, next) {
 	});
 });
 
-server.get('/open/:versionId', function openQuestionCount(request, response, next) {
-	database.openQuestionCount(request.params, function(err, results) {
-		respond(err, results, 200, response, next);
+server.get('/open/:teacherId/:versionId', function openQuestionCount(request, response, next) {
+	database.getAssignment(request.params, function(err, results) {
+		if (err || results.length > 0) {
+			respond(err, results, 200, response, next);
+		} else {
+			database.openQuestionCount(request.params, function(err, results) {
+				respond(err, results, 200, response, next);
+			});
+		}
 	});
 });
 
@@ -111,7 +127,7 @@ server.get('/assign/:teacherId/:versionId', function assignQuestion(request, res
 	});
 });
 
-server.get('/refuse/:discourseId', function returnQuestion(request, response, next) {
+server.get('/return/:discourseId/:versionId', function returnQuestion(request, response, next) {
 	database.returnQuestion(request.params, function(err, results) {
 		if (err) {
 			respond(err, results, 200, response, next);
@@ -123,7 +139,7 @@ server.get('/refuse/:discourseId', function returnQuestion(request, response, ne
 	});
 });
 
-server.get('/another/:discourseId/:versionId/:teacherId', function returnQuestion(request, response, next) {
+server.get('/another/:discourseId/:versionId/:teacherId', function anotherQuestion(request, response, next) {
 	database.returnQuestion(request.params, function(err, results) {
 		if (err) {
 			respond(err, results, 200, response, next);
@@ -208,12 +224,15 @@ function respond(error, results, successCode, response, next) {
 		return(next());
 	}
 }
-
+/**
+* I need to extend error so that I have a code that I can use in a language independent way to identify errors
+*/
 function errorStatusCode(err) {
 	var message = err.message;
 	if (message) {
 		if (message.indexOf('SQLITE_CONSTRAINT') > -1) return(409);
 		if (message.indexOf('actual=0') > -1) return(410);
+		if (message.indexOf('no questions') > -1) return(410);
 	}
 	return(500);
 }

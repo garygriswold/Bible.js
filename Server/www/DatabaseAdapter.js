@@ -167,10 +167,14 @@ DatabaseAdapter.prototype.assignQuestion = function(obj, callback) {
 			' and d.versionId = ?' +
 			' and d.status="open" order by m.timestamp limit 1';
 		that.db.get(statement, obj.versionId, function(err, row) {
-			if (err || row === undefined) {
+			if (err) {
 				that.db.run("rollback transaction", [], function(rollErr) {
-					callback(rollErr || err || {});
+					callback(err);
 				});
+			} else if (row === undefined) {
+				that.db.run("rollback transaction", [], function(rollErr) {
+					callback(new Error('There are no questions to assign.','Bob'));
+				});				
 			} else {
 				var statement = 'update Discourse set status="assigned", teacherId=? where discourseId=?';
 				that.db.run(statement, obj.teacherId, row.discourseId, function(err) {
@@ -187,6 +191,16 @@ DatabaseAdapter.prototype.assignQuestion = function(obj, callback) {
 			}
 		});
 	});
+};
+/**
+* This function is called to return an assignment if one exists for the teacher, or none.
+*/
+DatabaseAdapter.prototype.getAssignment = function(obj, callback) {
+	var statement = 'select d.discourseId, d.versionId, m.messageId, m.reference, m.timestamp, m.message' +
+			' from Discourse d, Message m where d.discourseId=m.discourseId' +
+			' and d.teacherId = ?' +
+			' and d.status = "assigned"';
+	this.db.all(statement, obj.teacherId, callback);
 };
 DatabaseAdapter.prototype.returnQuestion = function(obj, callback) {
 	var statements = [ 'update Discourse set status="open", teacherId=null where discourseId=?' ];
