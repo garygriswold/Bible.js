@@ -67,7 +67,7 @@ server.post('/user', function updateTeacher(request, response, next) {
 	});
 });
 
-server.del('/user/:teacherId', function deleteTeacher(request, response, next) {
+server.del('/user/', function deleteTeacher(request, response, next) {
 	database.deleteTeacher(request.params, function(err, results) {
 		respond(err, results, 200, response, next);
 	});
@@ -139,7 +139,7 @@ server.get('/return/:discourseId/:versionId', function returnQuestion(request, r
 	});
 });
 
-server.get('/another/:discourseId/:versionId/:teacherId', function anotherQuestion(request, response, next) {
+server.get('/another/:teacherId/:versionId/:discourseId', function anotherQuestion(request, response, next) {
 	database.returnQuestion(request.params, function(err, results) {
 		if (err) {
 			respond(err, results, 200, response, next);
@@ -232,6 +232,7 @@ function errorStatusCode(err) {
 	if (message) {
 		if (message.indexOf('SQLITE_CONSTRAINT') > -1) return(409);
 		if (message.indexOf('actual=0') > -1) return(410);
+		if (message.indexOf('expected=2  actual=1') > -1) return(410);
 		if (message.indexOf('no questions') > -1) return(410);
 	}
 	return(500);

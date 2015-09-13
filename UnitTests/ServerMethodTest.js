@@ -64,15 +64,34 @@ ServerMethodTest.prototype.runTests = function() {
 	}
 	
 	function compareResponse(test, status, results) {
-		var expected = JSON.stringify(test.results);
-		if (status == test.status && results == expected) {
-			console.log('OK', test.name);
-			console.log('FOUND:', status, results);
-		} else {
-			console.log('EXPECTED:', test);
-			console.log('FOUND:', status, results);
-			process.exit(1);
+		if (status != test.status) {
+			displayError(test, status, results);
 		}
+		var actual = removeChangeableFields(results);
+		if (actual != JSON.stringify(test.results)) {
+			displayError(test, status, results);	
+		} else {
+			console.log('OK', test.name);
+			console.log('FOUND:', status, results);			
+		}
+	}
+	
+	function removeChangeableFields(results) {
+		var actual = JSON.parse(results);
+		if (actual.length) {
+			for (var i=0; i<actual.length; i++) {
+				delete actual[i]['timestamp'];
+			}
+		} else {
+			delete actual['timestamp'];
+		}
+		return(JSON.stringify(actual));
+	}
+	
+	function displayError(test, status, results) {
+		console.log('EXPECTED:', test);
+		console.log('FOUND:', status, results);
+		process.exit(1);		
 	}
 };
 
@@ -152,7 +171,8 @@ var tests = [
 		name: 'deleteTeacher',
 		description: 'Delete existing teacher',
 		method: 'DELETE',
-		path: '/user/ABCDEFGHIJ',	
+		path: '/user',
+		postData: {teacherId: 'ABCDEFGHIJ'},
 		status: 200,
 		results: {rowCount:1, lastID:2}
 	},
@@ -160,7 +180,8 @@ var tests = [
 		name: 'deleteTeacher',
 		description: 'Delete non-existing teacher',
 		method: 'DELETE',
-		path: '/user/ABCDEFG',	
+		path: '/user',
+		postData: {teacherId: 'ABCXXX'},	
 		status: 410,
 		results: {message:'expected=1  actual=0'}
 	},
@@ -216,9 +237,230 @@ var tests = [
 		path: '/position',
 		postData: {teacherId:'ABCDE', versionId:'KJVA'},
 		status: 410,
+		results: {message:'expected=1  actual=0'}
+	},
+	{
+		name: 'insertQuestion',
+		description: 'Insert a new valid question',
+		method: 'PUT',
+		path: '/question',
+		postData: {discourseId:'12345', versionId:'KJV', reference:'John1', message:'This is my questions'},
+		status: 201,
+		results: {rowCount:2, lastID:1}
+	},
+	{
+		name: 'updateQuestion',
+		description: 'Update an existing question',
+		method: 'POST',
+		path: '/question',
+		postData: {messageId:1, reference:'John3', message:'This is my revised questions'},
+		status: 200,
+		results: {rowCount:1, lastID:1}
+	},
+	{
+		name: 'updateQuestion',
+		description: 'Attempt to update non-existing question',
+		method: 'POST',
+		path: '/question',
+		postData: {messageId:100, reference:'John3', message:'This is my revised questions'},
+		status: 410,
+		results: {message:'expected=1  actual=0'}
+	},
+	{
+		name: 'deleteQuestion',
+		description: 'Delete existing question',
+		method: 'DELETE',
+		path: '/question',
+		postData: {discourseId:'12345'},
+		status: 200,
+		results: {rowCount:1, lastID:1}	
+	},
+	{
+		name: 'deleteQuestion',
+		description: 'Delete already deleted question',
+		method: 'DELETE',
+		path: '/question',
+		postData: {discourseId:'12345'},
+		status: 410,
+		results: {message:'expected=1  actual=0'}
+	},
+	{
+		name: 'insertQuestion',
+		description: 'Re-insert a valid question after deletion',
+		method: 'PUT',
+		path: '/question',
+		postData: {discourseId:'12345', versionId:'KJV', reference:'John1', message:'This is my questions'},
+		status: 201,
+		results: {rowCount:2, lastID:1}
+	},
+	{
+		name: 'openQuestionCount',
+		description: 'Incomplete Open Question Count call',
+		method: 'GET',
+		path: '/open/KJV',
+		status: 404,
+		results: {code:'ResourceNotFound', message:'/open/KJV does not exist'}
+	},
+	{
+		name: 'openQuestionCount',
+		description: 'Valid open question count request',
+		method: 'GET',
+		path: '/open/ABCDE/KJV',
+		status: 200,
+		results: {count:1}
+	},
+	{
+		name: 'openQuestionCount',
+		description: 'Open question count of non-existing version',
+		method: 'GET',
+		path: '/open/ABCDE/XXX',
+		status: 200,
+		results: {count:0}
+	},
+	{
+		name: 'openQuestionCount',
+		description: 'Open question count of non-existent version and non-existent student',
+		method: 'GET',
+		path: '/open/XXXXX/XXXX',
+		status: 200,	// is this the correct result
+		results: {count:0}	
+	},
+	{
+		name: 'assignQuestion',
+		description: 'Assign question to non-existent user',
+		method: 'GET',
+		path: '/assign/XXXXX/KJV',
+		status: 409,
+		results: {message:'SQLITE_CONSTRAINT: FOREIGN KEY constraint failed'}	
+	},
+	{
+		name: 'assignQuestion',
+		description: 'Assign existing question to valid user',
+		method: 'GET',
+		path: '/assign/ABCDE/KJV',
+		status: 200,
+		results: {discourseId:'12345', reference:'John1', message:'This is my questions'}
+	},
+	{
+		name: 'assignQuestion',
+		description: 'Assign to valid user when no questions remain',
+		method: 'GET',
+		path: '/assign/ABCDE/KJV',
+		status: 410,
+		results: {message:'There are no questions to assign.'}
+	},
+	{
+		name: 'returnQuestion',
+		description: 'Return assigned question',
+		method: 'GET',
+		path: '/return/12345/KJV',
+		status: 200,
+		results: {count:1}	
+	},
+	{
+		name: 'returnQuestion',
+		description: 'Return the same assigned question that has already been returned',
+		method: 'GET',
+		path: '/return/12345/KJV',
+		status: 200, // Because return is an update, it succeeds when there is not change.
+		results: {count:1}		
+	},
+	{
+		name: 'assignQuestion',
+		description: 'Assign to valid user again',
+		method: 'GET',
+		path: '/assign/ABCDE/KJV',
+		status: 200,
+		results: {discourseId:'12345', reference:'John1', message:'This is my questions'}	
+	},
+	{
+		name: 'openQuestionCount',
+		description: 'Attempt openQuestionCount when there is an assigned question',
+		method: 'GET',
+		path: '/open/ABCDE/KJV',
+		status: 200,
+		results: [{discourseId:'12345', versionId:'KJV', messageId:1, reference:'John1', message:'This is my questions'}]
+	},
+	{
+		name: 'anotherQuestion',
+		description: 'Assign a different question, using invalid discourseId',
+		method: 'GET',
+		path: '/another/ABCDE/KJV/XXXX',
+		status: 410,
+		results: {message:'expected=1  actual=0'}
+	},
+	{
+		name: 'anotherQuestion',
+		description: 'Assign a different question, but teacherId is invalid',
+		method: 'GET',
+		path: '/another/XXXXX/KJV/12345',
+		status: 409,
+		results: {message:'SQLITE_CONSTRAINT: FOREIGN KEY constraint failed'}
+	},
+	{
+		name: 'anotherQuestion',
+		description: 'Assign a different question, with valid input, but there are none to assign',
+		method: 'GET',
+		path: '/another/ABCDE/KJV/12345',
+		status: 200, // assigns the same question over again, maybe this should be corrected, but it is complicated method
+		results: {discourseId:'12345', reference:'John1', message:'This is my questions'}
+	},
+	{
+		name: 'insertAnswer',
+		description: 'Insert an answer with valid input',
+		method: 'PUT',
+		path: '/answer',
+		postData: {discourseId:'12345', reference:'John6', teacherId:'ABCDE', message:'This is the answer'},
+		status: 201,
+		results: {count: 0}
+	},
+	{
+		name: 'insertAnswer',
+		description: 'Insert an identical answer',
+		method: 'PUT',
+		path: '/answer',
+		postData: {discourseId:'12345', reference:'John6', teacherId:'ABCDE', message:'This is the answer'},
+		status: 410,
+		results: {message:'expected=2  actual=1'}	
+	},
+	{
+		name: 'updateAnswer',
+		description: 'Update an answer with valid input',
+		method: 'POST',
+		path: '/answer',
+		postData: {messageId:2, reference:'John7', message:'This is the revised answer'},
+		status: 200,
+		results: {rowCount:1, lastID:3}
+	},
+	{
+		name: 'updateAnswer',
+		description: 'Update an answer with invalid messageId',
+		method: 'POST',
+		path: '/answer',
+		postData: {messageId:1000, reference:'John7', message:'This is the revised answer'},
+		status: 410,
 		results:  {message:'expected=1  actual=0'}
+	},
+	{
+		name: 'deleteAnswer',
+		description: 'Delete an answer',
+		method: 'DELETE',
+		path: '/answer',
+		postData: {messageId:2},
+		status: 200,
+		results: {rowCount:2, lastID:3}
+	},
+	{
+		name: 'deleteAnswer',
+		description: 'Delete an non-existent answer',
+		method: 'DELETE',
+		path: '/answer',
+		postData: {messageId:1000},
+		status: 410,
+		results: {message: 'expected=1  actual=0'}		
 	}
 ]
+
 
 var runTest = new ServerMethodTest('localhost', 8080);
 runTest.runTests();

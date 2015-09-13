@@ -173,7 +173,7 @@ DatabaseAdapter.prototype.assignQuestion = function(obj, callback) {
 				});
 			} else if (row === undefined) {
 				that.db.run("rollback transaction", [], function(rollErr) {
-					callback(new Error('There are no questions to assign.','Bob'));
+					callback(new Error('There are no questions to assign.'));
 				});				
 			} else {
 				var statement = 'update Discourse set status="assigned", teacherId=? where discourseId=?';
@@ -226,9 +226,11 @@ DatabaseAdapter.prototype.updateAnswer = function(obj, callback) {
 DatabaseAdapter.prototype.deleteAnswer = function(obj, callback) {
 	var that = this;
 	this.db.get('select discourseId from Message where messageId=?', obj.messageId, function(err, row) {
-		if (err || row === undefined) {
-			callback(err || {});
-		} else if (row) {
+		if (err) {
+			callback(err);
+		} else if (row === undefined) {
+			callback(new Error("expected=1  actual=0"));
+		} else {
 			var statements = [ 
 				'delete from Message where messageId=?',
 				'update Discourse set status="open", teacherId=null where discourseId=?'
@@ -238,8 +240,6 @@ DatabaseAdapter.prototype.deleteAnswer = function(obj, callback) {
 				[ row.discourseId ]
 			];
 			that.executeSQL(statements, values, 2, callback);			
-		} else {
-			callback(); // No an error, but there were no rows.
 		}
 	});
 };
