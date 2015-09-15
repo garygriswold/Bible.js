@@ -127,7 +127,7 @@ server.get('/assign/:teacherId/:versionId', function assignQuestion(request, res
 	});
 });
 
-server.get('/return/:discourseId/:versionId', function returnQuestion(request, response, next) {
+server.get('/return/:versionId/:discourseId', function returnQuestion(request, response, next) {
 	database.returnQuestion(request.params, function(err, results) {
 		if (err) {
 			respond(err, results, 200, response, next);

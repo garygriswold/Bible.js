@@ -24,10 +24,10 @@
 */
 function ViewNavigator() {
 	this.httpClient = new HttpClient('localhost', '8080');
-	this.queueModel = new QueueViewModel(this.httpClient);
-	this.answerModel = new AnswerViewModel(this.httpClient);
+	this.queueModel = new QueueViewModel(this);
+	this.answerModel = new AnswerViewModel(this);
 }
-ViewNavigator.prototype.transition = function(fromViewName, toViewName, transaction, animation) {
+ViewNavigator.prototype.transition = function(fromViewName, toViewName, transaction, animation, status, results) {
 	console.log('Transition', fromViewName, toViewName, transaction, animation);
 	var fromView = document.getElementById(fromViewName);
 	if (fromView) {
@@ -43,6 +43,8 @@ ViewNavigator.prototype.transition = function(fromViewName, toViewName, transact
 				case 'queueView':
 					if (transaction === 'openQuestionCount') {
 						this.queueModel.openQuestionCount();
+					} else if (transaction === 'returnQuestion') {
+						this.queueModel.returnQuestion();
 					} else {
 						this.queueModel.display();
 					}
@@ -50,6 +52,8 @@ ViewNavigator.prototype.transition = function(fromViewName, toViewName, transact
 				case 'answerView':
 					if (transaction === 'assignQuestion') {
 						this.answerModel.assignQuestion();
+					} if (transaction === 'setProperties') {
+						this.answerModel.setProperties(status, results);
 					} else {
 						this.answerModel.display();
 					}

@@ -22,14 +22,17 @@
 			function transitionBackToLoginView() {
 				viewNavigator.transition('forgotView', 'loginView', null, TRANSITION.SLIDE_RIGHT);
 			}
+			// If person already has been assigned a question, it should go directly to that question, and not show them the queue.
+			// Is this another transaction, are simply part of the opneQuestionCount transaction
+			// What about draft.  If there is a draft it needs to be retreived, but by what Id?
 			function openQuestionCount() {
 				viewNavigator.transition('loginView', 'queueView', 'openQuestionCount', TRANSITION.SLIDE_LEFT);
 			}
 			function assignQuestion() {
 				viewNavigator.transition('queueView', 'answerView', 'assignQuestion', TRANSITION.SLIDE_LEFT);
 			}
-			function refuseQuestion() {
-				viewNavigator.transition('answerView', 'queueView', null, TRANSITION.SLIDE_RIGHT);
+			function returnQuestion() {
+				viewNavigator.transition('answerView', 'queueView', 'returnQuestion', TRANSITION.SLIDE_RIGHT);
 			}
 			function anotherQuestion() {
 				// Not a transition

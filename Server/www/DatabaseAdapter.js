@@ -196,10 +196,10 @@ DatabaseAdapter.prototype.assignQuestion = function(obj, callback) {
 * This function is called to return an assignment if one exists for the teacher, or none.
 */
 DatabaseAdapter.prototype.getAssignment = function(obj, callback) {
-	var statement = 'select d.discourseId, d.versionId, m.messageId, m.reference, m.timestamp, m.message' +
-			' from Discourse d, Message m where d.discourseId=m.discourseId' +
-			' and d.teacherId = ?' +
-			' and d.status = "assigned"';
+	var statement = 'SELECT d.discourseId, d.versionId, m.messageId, m.reference, m.timestamp, m.message' +
+			' FROM Discourse d JOIN Message m ON d.discourseId=m.discourseId' +
+			' WHERE d.teacherId = ?' +
+			' AND d.status = "assigned"';
 	this.db.all(statement, obj.teacherId, callback);
 };
 DatabaseAdapter.prototype.returnQuestion = function(obj, callback) {

@@ -2,16 +2,26 @@
 * This class is the model supportting QueueView.html
 */
 
-function QueueViewModel(httpClient) {
-	this.httpClient = httpClient;
+function QueueViewModel(viewNavigator) {
+	this.viewNavigator = viewNavigator;
+	this.httpClient = viewNavigator.httpClient;
 	this.numQuestions = 0;
 	this.oldestQuestion = null;
 	this.waitTime = 0;
+	this.discourseId = '12345';// how is this set?
 	this.versionId = 'KJV'; // how is this set?
+	this.teacherId = 'ABCDE'; // how is this set?
 	Object.seal(this);
 }
 QueueViewModel.prototype.numQuestionsMsg = function() {
-	return((this.numQuestion > 0) ? "There are " + this.numQuestions + " unassigned questions." : "There are no unanswered questions.");
+	switch(this.numQuestions) {
+		case 0:
+			return('There are no unanswered questions.');
+		case 1:
+			return('There is one unassigned question.' );
+		default:
+			return('There are ' + this.numQuestions + ' unassigned questions.');
+	}
 };
 QueueViewModel.prototype.oldestQuestionMsg = function() {
 	return((this.oldestQuestion && this.numQuestions > 0) ? "The oldest question was submitted at " + this.oldestQuestion + "." : '');
@@ -39,18 +49,32 @@ QueueViewModel.prototype.display = function() {
 		}
 	}
 };
+QueueViewModel.prototype.setProperties = function(status, results) {
+	console.log('open results', status, results);
+	if (status === 200) {
+		this.numQuestions = results.count;
+		var timestamp = new Date(results.timestamp);
+		this.oldestQuestion = timestamp.toLocaleString();
+		var lapsed = new Date().getTime() - timestamp.getTime();
+		this.waitTime = Math.round(lapsed / (1000 * 60));
+		
+		this.display();
+	}
+};
 QueueViewModel.prototype.openQuestionCount = function() {
 	var that = this;
-	this.httpClient.get('/open/' + this.versionId, function(status, results) {
-		console.log('open results', status, results);
-		if (status === 200) {
-			that.numQuestions = results.count;
-			var timestamp = new Date(results.timestamp);
-			that.oldestQuestion = timestamp.toLocaleString();
-			var lapsed = new Date().getTime() - timestamp.getTime();
-			that.waitTime = Math.round(lapsed / (1000 * 60));
-			that.display();
+	this.httpClient.get('/open/' + this.teacherId + '/' + this.versionId, function(status, results) {
+		if (status === 200 && results.count) {
+			that.setProperties(status, results);
+		} else {
+			that.viewNavigator.transition('queueView', 'answerView', 'setProperties', TRANSITION.SLIDE_RIGHT, status, results);
 		}
+	});
+};
+QueueViewModel.prototype.returnQuestion = function() {
+	var that = this;
+	this.httpClient.get('/return/' + this.versionId + '/' + this.discourseId, function(status, results) {
+		that.setProperties(status, results);
 	});
 };
 

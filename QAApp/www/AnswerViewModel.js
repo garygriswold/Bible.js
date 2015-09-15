@@ -2,8 +2,9 @@
 * This class is the model supportting AnswerView.html
 */
 
-function AnswerViewModel(httpClient) {
-	this.httpClient = httpClient;
+function AnswerViewModel(viewNavigator) {
+	this.viewNavigator = viewNavigator;
+	this.httpClient = viewNavigator.httpClient;
 	this.discourseId = null;
 	this.displayReference = null;
 	this.submittedDt = null;
@@ -28,19 +29,34 @@ AnswerViewModel.prototype.display = function() {
 		}
 	}
 };
+/** It seems like this function might not be correctly distinquishing between questions and answers */
+AnswerViewModel.prototype.setProperties = function(status, results) {
+	var that = this;
+	if (status === 200) {
+		if (results.length) {
+			firstRow(results[0]);
+			if (results.length > 1) secondRow(results[1]);
+		} else {
+			firstRow(results);
+		}
+		this.display();
+	}
+	
+	function firstRow(row) {
+		that.discourseId = row.discourseId;
+		that.displayReference = row.reference;
+		var timestamp = new Date(row.timestamp);
+		that.submittedDt = timestamp.toLocaleString();
+		that.question = row.message;		
+	}
+	function secondRow(row) {
+		that.answer = row.message;
+	}
+};
 AnswerViewModel.prototype.assignQuestion = function() {
 	var that = this;
 	this.httpClient.get('/assign/' + this.teacherId + '/' + this.versionId, function(status, results) {
-		console.log('assign results', status, results);
-		if (status === 200) {
-			that.discourseId = results.discourseId;
-			that.displayReference = results.reference;
-			var timestamp = new Date(results.timestamp);
-			that.submittedDt = timestamp.toLocaleString();
-			that.question = results.message;
-
-			that.display();
-		} 
+		that.setProperties(status, results);
 	});	
 };
 AnswerViewModel.prototype.getDraft = function() {

@@ -22,7 +22,7 @@ Public domain license using the MIT template.
 Repository Structure
 --------------------
 
-Library - This is the common javascript library.  Each project contains a shell script that copies all of the files that it needs from this Library.
+Library - This is the common javascript library.  Most projects contain a shell script that copies all of the files that they need from this Library.
 
 Publisher - This project prepares copies of the Bible for publication.  It takes as input a USX package from the Digital Bible Library and produces a SQLite database of the content, concordance, and table of contents in the form needed by the App.
 

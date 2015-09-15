@@ -353,7 +353,7 @@ var tests = [
 		name: 'returnQuestion',
 		description: 'Return assigned question',
 		method: 'GET',
-		path: '/return/12345/KJV',
+		path: '/return/KJV/12345',
 		status: 200,
 		results: {count:1}	
 	},
@@ -361,7 +361,7 @@ var tests = [
 		name: 'returnQuestion',
 		description: 'Return the same assigned question that has already been returned',
 		method: 'GET',
-		path: '/return/12345/KJV',
+		path: '/return/KJV/12345',
 		status: 200, // Because return is an update, it succeeds when there is not change.
 		results: {count:1}		
 	},

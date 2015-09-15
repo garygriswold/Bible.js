@@ -28,7 +28,7 @@ viewLibrary['answerView'] = '<div id="answerView" style="height: 100%; width: 10
 	'</div>' +
 	'</div>' +
 	'<div style="height: 10%; width: 100%; text-align: center; padding-top: 10px">' +
-	'<button class="button bigrounded blue" style="margin-right: 2%;" onclick="refuseQuestion()">Return Unanswered</button>' +
+	'<button class="button bigrounded blue" style="margin-right: 2%;" onclick="returnQuestion()">Return Unanswered</button>' +
 	'<button class="button bigrounded blue" style="margin-right: 2%;" onclick="anotherQuestion()">Different Question</button>' +
 	'<button class="button bigrounded blue" style="margin-right: 2%;" onclick="saveDraft()">Save Draft Answer</button>' +
 	'<button class="button bigrounded blue" style="margin-right: 2%;" onclick="sendAnswer()">Send Answer</button>' +
