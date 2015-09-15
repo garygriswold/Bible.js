@@ -13,6 +13,7 @@ function AnswerViewModel(viewNavigator) {
 	this.answer = null;
 	this.teacherId = 'ABCDE';
 	this.versionId = 'KJV';
+	this.discourseId = '12345';
 	Object.seal(this);
 }
 AnswerViewModel.prototype.display = function() {
@@ -29,7 +30,6 @@ AnswerViewModel.prototype.display = function() {
 		}
 	}
 };
-/** It seems like this function might not be correctly distinquishing between questions and answers */
 AnswerViewModel.prototype.setProperties = function(status, results) {
 	var that = this;
 	if (status === 200) {
@@ -59,12 +59,15 @@ AnswerViewModel.prototype.assignQuestion = function() {
 		that.setProperties(status, results);
 	});	
 };
+AnswerViewModel.prototype.anotherQuestion = function() {
+	var that = this;
+	this.httpClient.get('/another/' + this.teacherId + '/' + this.versionId + '/' + this.discourseId, function(status, results) {
+		that.setProperties(status, results);
+	});
+};
 AnswerViewModel.prototype.getDraft = function() {
 	
 };
 
-AnswerViewModel.prototype.assignAnother = function() {
-	// first call return assigned
-	// then call assign inside return
-};
+
 

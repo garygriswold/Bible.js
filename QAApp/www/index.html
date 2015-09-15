@@ -35,8 +35,7 @@
 				viewNavigator.transition('answerView', 'queueView', 'returnQuestion', TRANSITION.SLIDE_RIGHT);
 			}
 			function anotherQuestion() {
-				// Not a transition
-				viewNavigator.transition('answerView', 'answerView', null, TRANSITION.IMMEDIATE);
+				viewNavigator.transition('answerView', 'answerView', 'anotherQuestion', TRANSITION.IMMEDIATE);
 			}
 			function saveDraft() {
 				viewNavigator.transition('answerView', 'queueView', null, TRANSITION.SLIDE_RIGHT);

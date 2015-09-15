@@ -52,7 +52,9 @@ ViewNavigator.prototype.transition = function(fromViewName, toViewName, transact
 				case 'answerView':
 					if (transaction === 'assignQuestion') {
 						this.answerModel.assignQuestion();
-					} if (transaction === 'setProperties') {
+					} else if (transaction === 'anotherQuestion') {
+						this.answerModel.anotherQuestion();
+					} else if (transaction === 'setProperties') {
 						this.answerModel.setProperties(status, results);
 					} else {
 						this.answerModel.display();

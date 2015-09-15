@@ -199,7 +199,8 @@ DatabaseAdapter.prototype.getAssignment = function(obj, callback) {
 	var statement = 'SELECT d.discourseId, d.versionId, m.messageId, m.reference, m.timestamp, m.message' +
 			' FROM Discourse d JOIN Message m ON d.discourseId=m.discourseId' +
 			' WHERE d.teacherId = ?' +
-			' AND d.status = "assigned"';
+			' AND d.status = "assigned"' +
+			' ORDER BY m.timestamp'; // keep question row before answer row
 	this.db.all(statement, obj.teacherId, callback);
 };
 DatabaseAdapter.prototype.returnQuestion = function(obj, callback) {
