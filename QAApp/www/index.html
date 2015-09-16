@@ -12,8 +12,6 @@
 			function onLoad() {
 				TRANSITION = { EVENT: 'transition', IMMEDIATE: 'immediate', SLIDE_LEFT: 'slide-left', SLIDE_RIGHT: 'slide-right' };
 				viewNavigator = new ViewNavigator();
-			}
-			function firstTransition() {
 				viewNavigator.transition('splashView', 'loginView', null, TRANSITION.IMMEDIATE);
 			}
 			function transitionToForgotView() {
@@ -38,7 +36,7 @@
 				viewNavigator.transition('answerView', 'answerView', 'anotherQuestion', TRANSITION.IMMEDIATE);
 			}
 			function saveDraft() {
-				viewNavigator.transition('answerView', 'queueView', null, TRANSITION.SLIDE_RIGHT);
+				viewNavigator.transition('answerView', 'answerView', 'saveDraft', null);
 			}
 			function sendAnswer() {
 				viewNavigator.transition('answerView', 'queueView', null, TRANSITION.SLIDE_RIGHT);
@@ -50,7 +48,6 @@
 	<body onload="onLoad()" style="height: 100%; width: 100%; display: block, position: relative">
 		<div id="splashView" style="position: absolute; background: white">
 			<p>Hello World 1<p>
-			<button onclick="firstTransition()">Start App</button>
 		</div>
 	</body>
 </html>

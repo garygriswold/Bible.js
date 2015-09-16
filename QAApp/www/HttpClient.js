@@ -20,18 +20,20 @@ HttpClient.prototype.delete = function(path, callback) {
 	this.request('DELETE', path, postData, callback);
 };
 HttpClient.prototype.request = function(method, path, postData, callback) {
+	var data = (postData) ? JSON.stringify(postData) : null;
+			
 	var request = createRequest();
 	if (request) {
 		request.onreadystatechange = progressEvents;
 		request.open(method, this.authority + path, true);
-		if (postData) {
+		if (data) {
 			request.setRequestHeader('Content-Type', 'application/json');
-			request.setRequestHeader('Content-Length', postData.length);
+			request.setRequestHeader('Content-Length', data.length);
 		}		
-		request.send(postData);		
+		request.send(data);		
 	} else {
 		window.alert('Please try a different web browser.  This one does not have the abilities needed.');
-		callback(-1, '');
+		callback(-1, {});
 	}
 
 	function progressEvents() {

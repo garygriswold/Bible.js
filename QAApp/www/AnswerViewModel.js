@@ -20,8 +20,8 @@ AnswerViewModel.prototype.display = function() {
 	setNodeValue('displayReference', 'value', this.displayReference);
 	setNodeValue('submittedDt', 'value', this.submittedDt);
 	setNodeValue('expiresDesc', 'value', this.expired);
-	setNodeValue('question', 'textContent', this.question);
-	setNodeValue('answer', 'textContent', this.answer);
+	setNodeValue('question', 'value', this.question);
+	setNodeValue('answer', 'value', this.answer);
 	
 	function setNodeValue(nodeId, type, property) {
 		var node = document.getElementById(nodeId);
@@ -65,8 +65,22 @@ AnswerViewModel.prototype.anotherQuestion = function() {
 		that.setProperties(status, results);
 	});
 };
-AnswerViewModel.prototype.getDraft = function() {
+AnswerViewModel.prototype.saveDraft = function() {
+	this.answer = getNodeValue('answer', 'value');
+	var data = { discourseId:this.discourseId, reference:null, message:this.answer };
+	console.log('inside saveDraft', data);
+	this.httpClient.post('/draft', data, function(status, results) {
+		if (status === 200 || status === 201) {
+			window.alert('Your work has been saved.');
+		} else {
+			window.alert('' + status + 'Error: ' + JSON.stringify(results));
+		}
+	});
 	
+	function getNodeValue(nodeId, type) {
+		var node = document.getElementById(nodeId);
+		return((node) ? node[type] : null);
+	}
 };
 
 

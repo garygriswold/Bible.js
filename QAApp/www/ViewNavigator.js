@@ -54,6 +54,8 @@ ViewNavigator.prototype.transition = function(fromViewName, toViewName, transact
 						this.answerModel.assignQuestion();
 					} else if (transaction === 'anotherQuestion') {
 						this.answerModel.anotherQuestion();
+					} else if (transaction === 'saveDraft') {
+						this.answerModel.saveDraft();
 					} else if (transaction === 'setProperties') {
 						this.answerModel.setProperties(status, results);
 					} else {
