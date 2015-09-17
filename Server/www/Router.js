@@ -156,7 +156,9 @@ server.put('/answer', function insertAnswer(request, response, next) {
 		if (err) {
 			respond(err, results, 201, response, next);			
 		} else {
+			var timestamp = results.timestamp;
 			database.openQuestionCount(request.params, function(err, results) {
+				results.messageTimestamp = timestamp;
 				respond(err, results, 201, response, next);
 			});
 		}
@@ -183,13 +185,7 @@ server.get('/answer/:discourseId', function getAnswers(request, response, next) 
 
 server.put('/draft', function insertDraft(request, response, next) {
 	database.insertDraft(request.params, function(err, results) {
-		if (err) {
-			respond(err, results, 201, response, next);
-		} else {
-			database.openQuestionCount(request.params, function(err, results) {
-				respond(err, results, 201, response, next);
-			});
-		}
+		respond(err, results, 201, response, next);
 	});
 });
 
@@ -205,11 +201,11 @@ server.del('/draft', function deleteDraft(request, response, next) {
 	});
 });
 
-server.get('/draft/:messageId', function getDraft(request, response, next) {
-	database.selectDraft(request.params, function(err, results) {
-		respond(err, results, 200, response, next);
-	});
-});
+//server.get('/draft/:discourseId/:timestamp', function getDraft(request, response, next) {
+//	database.selectDraft(request.params, function(err, results) {
+//		respond(err, results, 200, response, next);
+//	});
+//});
 
 server.listen(8080, function() {
 	console.log('listening on 8080');
