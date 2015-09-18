@@ -46,6 +46,8 @@ ViewNavigator.prototype.transition = function(fromViewName, toViewName, transact
 						this.queueModel.openQuestionCount();
 					} else if (transaction === 'returnQuestion') {
 						this.queueModel.returnQuestion();
+					} else if (transaction === 'sendAnswer') {
+						this.queueModel.sendAnswer();
 					} else {
 						this.queueModel.display();
 					}

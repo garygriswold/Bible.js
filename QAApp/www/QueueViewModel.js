@@ -65,7 +65,8 @@ QueueViewModel.prototype.openQuestionCount = function() {
 		if (status === 200 && results.count) {
 			that.setProperties(status, results);
 		} else {
-			that.viewNavigator.transition('queueView', 'answerView', 'setProperties', TRANSITION.SLIDE_RIGHT, status, results);
+			TweenMax.killAll();
+			that.viewNavigator.transition('queueView', 'answerView', 'setProperties', TRANSITION.SLIDE_LEFT, status, results);
 		}
 	});
 };
@@ -74,6 +75,19 @@ QueueViewModel.prototype.returnQuestion = function() {
 	this.httpClient.get('/return/' + this.state.versionId + '/' + this.state.discourseId, function(status, results) {
 		that.setProperties(status, results);
 	});
+};
+QueueViewModel.prototype.sendAnswer = function() {
+	var that = this;
+	var answer = getNodeValue('answer', 'value');
+	var postData = {discourseId:this.state.discourseId, timestamp:this.state.answerTimestamp, reference:null, message:answer};
+	this.httpClient.post('/answer', postData, function(status, results) {
+		that.setProperties(status, results);
+	});
+	
+	function getNodeValue(nodeId, type) {
+		var node = document.getElementById(nodeId);
+		return((node) ? node[type] : null);
+	}
 };
 
 

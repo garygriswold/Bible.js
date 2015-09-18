@@ -511,8 +511,8 @@ var tests = [
 		method: 'POST',
 		path: '/answer',
 		postData: {discourseId:'Disc2:discourseId', reference:'John6', teacherId:'Bob:teacherId', message:'This is a repeated answer'},
-		status: 410,
-		results: {message:'expected=2  actual=1'}	
+		status: 200,
+		results: {count: 0, timestamp: null, rowCount: 2, messageTimestamp: 'TIME'}	
 	},
 	{
 		number: 390,
@@ -522,7 +522,7 @@ var tests = [
 		path: '/answer',
 		postData: {discourseId:'Disc2:discourseId', timestamp:'Msg2:messageTimestamp', reference:'John7', message:'This is the revised answer'},
 		status: 200,
-		results: {count: 0, timestamp: null, rowCount: 1, messageTimestamp: 'TIME'}
+		results: {count: 0, timestamp: null, rowCount: 2, messageTimestamp: 'TIME'}
 	},
 	{
 		number: 400,

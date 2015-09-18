@@ -41,13 +41,15 @@ AnswerViewModel.prototype.setProperties = function(status, results) {
 	
 	function firstRow(row) {
 		that.state.discourseId = row.discourseId;
-		that.state.timestamp = row.timestamp;
+		that.state.questionTimestamp = row.timestamp;
+		that.state.answerTimestamp = null;
 		that.displayReference = row.reference;
 		var timestamp = new Date(row.timestamp);
 		that.submittedDt = timestamp.toLocaleString();
 		that.question = row.message;		
 	}
 	function secondRow(row) {
+		that.state.answerTimestamp = row.timestamp;
 		that.answer = row.message;
 	}
 };
@@ -66,11 +68,12 @@ AnswerViewModel.prototype.anotherQuestion = function() {
 AnswerViewModel.prototype.saveDraft = function() {
 	var that = this;
 	this.answer = getNodeValue('answer', 'value');
-	var data = { discourseId:this.state.discourseId, reference:null, message:this.answer };
-	console.log('inside saveDraft', data);
+	var data = { discourseId:this.state.discourseId, timestamp:this.state.answerTimestamp, reference:null, message:this.answer};
+	console.log('saving draft', data);
 	this.httpClient.post('/draft', data, function(status, results) {
-		if (status === 200 || status === 201) {
-			that.state.draft = { discourseId:that.state.discourseId, timestamp:results.timestamp };
+		if (status === 200) {
+			console.log('save draft results', results);
+			that.state.answerTimestamp = results.timestamp;
 			window.alert('Your work has been saved.');
 		} else {
 			window.alert('' + status + 'Error: ' + JSON.stringify(results));

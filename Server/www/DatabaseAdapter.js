@@ -224,19 +224,16 @@ DatabaseAdapter.prototype.returnQuestion = function(obj, callback) {
 DatabaseAdapter.prototype.saveAnswer = function(obj, callback) {
 	var statements = [
 		'replace into Message(discourseId, person, timestamp, reference, message) values (?,"T",?,?,?)',
-		'update Discourse set status="answered", teacherId=? where discourseId=? and status="assigned"'
+		'update Discourse set status="answered", teacherId=? where discourseId=?'
 	];
 	if (! obj.timestamp) {
 		obj.timestamp = this.getTimestamp();
-		var expected = 2;
-	} else {
-		expected = 1;
 	}
 	var values = [
 		[ obj.discourseId, obj.timestamp, obj.reference, obj.message ],
 		[ obj.teacherId, obj.discourseId ]
 	];
-	this.executeSQL(statements, values, expected, function(err, results) {
+	this.executeSQL(statements, values, 2, function(err, results) {
 		results.timestamp = obj.timestamp;
 		callback(err, results);
 	});

@@ -3,9 +3,10 @@
 * back and forth from view to view.
 */
 function CurrentState() {
-	this.teacherId = '2be0ea12-9966-4236-b5a3-c8929dfa0c25';
+	this.teacherId = 'e41558d4-ef69-48e4-a0ef-fc62216a46a5';
 	this.versionId = 'KJV';
 	this.discourseId = null;
-	this.timestamp = null;
-	this.draft = null;
+	this.questionTimestamp = null;
+	this.answerTimestamp = null;
+	Object.seal(this);
 }
