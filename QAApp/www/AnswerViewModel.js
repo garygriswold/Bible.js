@@ -68,7 +68,7 @@ AnswerViewModel.prototype.saveDraft = function() {
 	this.answer = getNodeValue('answer', 'value');
 	var data = { discourseId:this.state.discourseId, reference:null, message:this.answer };
 	console.log('inside saveDraft', data);
-	this.httpClient.put('/draft', data, function(status, results) {
+	this.httpClient.post('/draft', data, function(status, results) {
 		if (status === 200 || status === 201) {
 			that.state.draft = { discourseId:that.state.discourseId, timestamp:results.timestamp };
 			window.alert('Your work has been saved.');

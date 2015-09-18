@@ -556,24 +556,24 @@ var tests = [
 	},
 	{
 		number: 430,
-		name: 'insertDraft',
+		name: 'saveDraft',
 		description: 'Insert a valid draft answer',
-		method: 'PUT',
+		method: 'POST',
 		path: '/draft',
 		postData: {discourseId:'Disc2:discourseId', reference:'John8', message:'Save this incomplete answer till later'},
-		status: 201,
+		status: 200,
 		results: {rowCount: 1, timestamp:'TIME'},
 		save: 'Draft1'	
 	},
 	{
 		number: 440,
-		name: 'updateDraft',
+		name: 'saveDraft',
 		description: 'Update a valid draft answer',
 		method: 'POST',
 		path: '/draft',
 		postData: {discourseId:'Disc2:discourseId', timestamp:'Draft1:timestamp', reference:'John9', message:'Revised again'},
 		status: 200,
-		results: {rowCount: 1}		
+		results: {rowCount: 1, timestamp:'TIME'}		
 	},
 	{
 		number: 450,

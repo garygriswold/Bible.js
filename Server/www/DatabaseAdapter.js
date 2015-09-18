@@ -262,19 +262,16 @@ DatabaseAdapter.prototype.selectAnswer = function(obj, callback) {
 		' where d.discourseId = m.discourseId and d.teacherId = t.teacherId and d.discourseId = ? and d.status = "answered"';
 	this.db.all(statement, obj.discourseId, callback);
 };
-DatabaseAdapter.prototype.insertDraft = function(obj, callback) {
-	var statements = [ 'insert into Message(discourseId, timestamp, reference, message) values (?,?,?,?)' ];
-	var timestamp = this.getTimestamp();
-	var values = [[ obj.discourseId, timestamp, obj.reference, obj.message ]];
+DatabaseAdapter.prototype.saveDraft = function(obj, callback) {
+	var statements = [ 'replace into Message(discourseId, timestamp, reference, message) values (?,?,?,?)' ];
+	if (! obj.timestamp) {
+		obj.timestamp = this.getTimestamp();
+	}
+	var values = [[ obj.discourseId, obj.timestamp, obj.reference, obj.message ]];
 	this.executeSQL(statements, values, 1, function(err, results) {
-		results.timestamp = timestamp;
+		results.timestamp = obj.timestamp;
 		callback(err, results);
 	});
-};
-DatabaseAdapter.prototype.updateDraft = function(obj, callback) {
-	var statements = [ 'update Message set reference=?, message=? where discourseId=? and timestamp=?' ];
-	var values = [[ obj.reference, obj.message, obj.discourseId, obj.timestamp ]];
-	this.executeSQL(statements, values, 1, callback);
 };
 DatabaseAdapter.prototype.deleteDraft = function(obj, callback) {
 	var statements = [ 'delete from Message where discourseId=? and timestamp=?' ];

@@ -183,14 +183,8 @@ server.get('/answer/:discourseId', function getAnswers(request, response, next) 
 	});
 });
 
-server.put('/draft', function insertDraft(request, response, next) {
-	database.insertDraft(request.params, function(err, results) {
-		respond(err, results, 201, response, next);
-	});
-});
-
-server.post('/draft', function updateDraft(request, response, next) {
-	database.updateDraft(request.params, function(err, results) {
+server.post('/draft', function saveDraft(request, response, next) {
+	database.saveDraft(request.params, function(err, results) {
 		respond(err, results, 200, response, next);
 	});
 });
