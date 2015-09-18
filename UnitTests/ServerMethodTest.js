@@ -495,20 +495,20 @@ var tests = [
 	},
 	{
 		number: 370,
-		name: 'insertAnswer',
+		name: 'sendAnswer',
 		description: 'Insert an answer with valid input',
-		method: 'PUT',
+		method: 'POST',
 		path: '/answer',
 		postData: {discourseId:'Disc2:discourseId', reference:'John6', teacherId:'Bob:teacherId', message:'This is the answer'},
-		status: 201,
-		results: {count: 0, timestamp: null, messageTimestamp: 'TIME'},
+		status: 200,
+		results: {count: 0, timestamp: null, rowCount: 2, messageTimestamp: 'TIME'},
 		save: 'Msg2'
 	},
 	{
 		number: 380,
-		name: 'insertAnswer',
+		name: 'sendAnswer',
 		description: 'Insert an identical answer',
-		method: 'PUT',
+		method: 'POST',
 		path: '/answer',
 		postData: {discourseId:'Disc2:discourseId', reference:'John6', teacherId:'Bob:teacherId', message:'This is a repeated answer'},
 		status: 410,
@@ -516,23 +516,23 @@ var tests = [
 	},
 	{
 		number: 390,
-		name: 'updateAnswer',
+		name: 'sendAnswer',
 		description: 'Update an answer with valid input',
 		method: 'POST',
 		path: '/answer',
 		postData: {discourseId:'Disc2:discourseId', timestamp:'Msg2:messageTimestamp', reference:'John7', message:'This is the revised answer'},
 		status: 200,
-		results: {rowCount:1}
+		results: {count: 0, timestamp: null, rowCount: 1, messageTimestamp: 'TIME'}
 	},
 	{
 		number: 400,
-		name: 'updateAnswer',
-		description: 'Update an answer with invalid messageId',
+		name: 'sendAnswer',
+		description: 'Update an answer with invalid discourseId',
 		method: 'POST',
 		path: '/answer',
-		postData: {messageId:1000, reference:'John7', message:'This is the revised answer'},
-		status: 410,
-		results: {message:'expected=1  actual=0'}
+		postData: {discourseId:'XXXXX', reference:'John7', message:'This is the revised answer'},
+		status: 409,
+		results: {message: 'SQLITE_CONSTRAINT: FOREIGN KEY constraint failed'}
 	},
 	{
 		number: 410,

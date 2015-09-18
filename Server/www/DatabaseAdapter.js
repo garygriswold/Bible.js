@@ -219,25 +219,25 @@ DatabaseAdapter.prototype.returnQuestion = function(obj, callback) {
 	this.executeSQL(statements, [[ obj.discourseId ]], 1, callback);
 };
 
-DatabaseAdapter.prototype.insertAnswer = function(obj, callback) {
+DatabaseAdapter.prototype.saveAnswer = function(obj, callback) {
 	var statements = [
-		'insert into Message(discourseId, timestamp, reference, message) values (?,?,?,?)',
+		'replace into Message(discourseId, timestamp, reference, message) values (?,?,?,?)',
 		'update Discourse set status="answered", teacherId=? where discourseId=? and status="assigned"'
 	];
-	var timestamp = this.getTimestamp();
+	if (! obj.timestamp) {
+		obj.timestamp = this.getTimestamp();
+		var expected = 2;
+	} else {
+		expected = 1;
+	}
 	var values = [
-		[ obj.discourseId, timestamp, obj.reference, obj.message ],
+		[ obj.discourseId, obj.timestamp, obj.reference, obj.message ],
 		[ obj.teacherId, obj.discourseId ]
 	];
-	this.executeSQL(statements, values, 2, function(err, results) {
-		results.timestamp = timestamp;
+	this.executeSQL(statements, values, expected, function(err, results) {
+		results.timestamp = obj.timestamp;
 		callback(err, results);
 	});
-};
-DatabaseAdapter.prototype.updateAnswer = function(obj, callback) {
-	var statements = [ 'update Message set reference=?, message=? where discourseId=? and timestamp=?' ];
-	var values = [[ obj.reference, obj.message, obj.discourseId, obj.timestamp ]];
-	this.executeSQL(statements, values, 1, callback);
 };
 DatabaseAdapter.prototype.deleteAnswer = function(obj, callback) {
 	var statements = [ 

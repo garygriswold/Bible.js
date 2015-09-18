@@ -41,7 +41,7 @@ server.on('after', function(request, response, route, error) {
 server.get('/beginTest', function beginTest(request, response, next) {
 	database = new DatabaseAdapter({filename: './AutoTestDatabase.db', verbose: true});
 	database.create(function(err) {
-		respond(err, {"message":"AutoTestDatabase.db created"}, 201, response, next);
+		respond(err, {'message': 'AutoTestDatabase.db created'}, 201, response, next);
 	});
 });
 
@@ -50,9 +50,8 @@ server.get(/\/bible\/?.*/, restify.serveStatic({
 }));
 
 server.get('/versions/:locale', function getVersions(request, response, next) {
-	var result = ethnologyController.availVersions(request.params.locale);
-	response.send(200, result);
-	return(next());	
+	var results = ethnologyController.availVersions(request.params.locale);
+	respond(null, results, 200, response, next);
 });
 
 server.put('/user', function registerTeacher(request, response, next) {
@@ -151,23 +150,17 @@ server.get('/another/:teacherId/:versionId/:discourseId', function anotherQuesti
 	});
 });
 
-server.put('/answer', function insertAnswer(request, response, next) {
-	database.insertAnswer(request.params, function(err, results) {
+server.post('/answer', function sendAnswer(request, response, next) {
+	database.saveAnswer(request.params, function(err, saveResults) {
 		if (err) {
-			respond(err, results, 201, response, next);			
+			respond(err, saveResults, 200, response, next);			
 		} else {
-			var timestamp = results.timestamp;
 			database.openQuestionCount(request.params, function(err, results) {
-				results.messageTimestamp = timestamp;
-				respond(err, results, 201, response, next);
+				results.rowCount = saveResults.rowCount;
+				results.messageTimestamp = saveResults.timestamp;
+				respond(err, results, 200, response, next);
 			});
 		}
-	});
-});
-
-server.post('/answer', function updateAnswer(request, response, next) {
-	database.updateAnswer(request.params, function(err, results) {
-		respond(err, results, 200, response, next);
 	});
 });
 
