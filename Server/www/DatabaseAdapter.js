@@ -52,10 +52,11 @@ DatabaseAdapter.prototype.create = function(callback) {
 			
 		'CREATE TABLE Message(' +
 			' discourseId text REFERENCES Discourse(discourseId) ON DELETE CASCADE NOT NULL,' +
+			' person text check(person in ("S", "T")) NOT NULL,' +
 			' timestamp text NOT NULL,' +
 			' reference text NULL,' +
 			' message text NOT NULL,' +
-			' PRIMARY KEY(discourseId, timestamp))',
+			' PRIMARY KEY(discourseId, person, timestamp))',
 			
 		'CREATE INDEX MessageDiscourseId ON Message(discourseId)'
 	];
@@ -133,13 +134,13 @@ DatabaseAdapter.prototype.deletePosition = function(obj, callback) {
 DatabaseAdapter.prototype.insertQuestion = function(obj, callback) {
 	var statements = [ 
 		'insert into Discourse(discourseId, versionId, status) values (?,?,"open")',
-		'insert into Message(discourseId, reference, timestamp, message) values(?,?,?,?)'
+		'insert into Message(discourseId, person, timestamp, reference, message) values(?,"S",?,?,?)'
 	];
 	var discourseId = this.uuid();
 	var timestamp = this.getTimestamp();
 	var values = [
 		[ discourseId, obj.versionId ],
-		[ discourseId, obj.reference, timestamp, obj.message ]
+		[ discourseId, timestamp, obj.reference, obj.message ]
 	];
 	this.executeSQL(statements, values, 2, function(err, results) {
 		results.discourseId = discourseId;
@@ -148,7 +149,7 @@ DatabaseAdapter.prototype.insertQuestion = function(obj, callback) {
 	});
 };
 DatabaseAdapter.prototype.updateQuestion = function(obj, callback) {
-	var statements = [ 'update Message set reference=?, message=? where discourseId=? and timestamp=?' ];
+	var statements = [ 'update Message set reference=?, message=? where discourseId=? and person="S" and timestamp=?' ];
 	var values = [[ obj.reference, obj.message, obj.discourseId, obj.timestamp ]];
 	this.executeSQL(statements, values, 1, callback);
 };
@@ -162,8 +163,9 @@ DatabaseAdapter.prototype.deleteQuestion = function(obj, callback) {
 	this.executeSQL(statements, values, 1, callback);
 };
 DatabaseAdapter.prototype.openQuestionCount = function(obj, callback) {
-	var statement = 'SELECT count(*) as count, min(m.timestamp) as timestamp from Discourse d JOIN Message m ON d.discourseId=m.discourseId' +
-		' WHERE d.status="open" and d.versionId=?';
+	var statement = 'SELECT count(*) as count, min(m.timestamp) as timestamp' +
+		' FROM Discourse d JOIN Message m ON d.discourseId=m.discourseId' +
+		' WHERE d.status="open" and m.person="S" and d.versionId=?';
 	this.db.get(statement, obj.versionId, callback);
 };
 /**
@@ -173,10 +175,10 @@ DatabaseAdapter.prototype.openQuestionCount = function(obj, callback) {
 DatabaseAdapter.prototype.assignQuestion = function(obj, callback) {
 	var that = this;
 	this.db.run('begin immediate transaction', [], function(err) {
-		var statement = 'select d.discourseId, m.reference, m.timestamp, m.message' +
+		var statement = 'select d.discourseId, d.versionId, m.person, m.timestamp, m.reference, m.message' +
 			' from Discourse d, Message m where d.discourseId=m.discourseId' +
 			' and d.versionId = ?' +
-			' and d.status="open" order by m.timestamp limit 1';
+			' and d.status="open" and m.person="S" order by m.timestamp limit 1';
 		that.db.get(statement, obj.versionId, function(err, row) {
 			if (err) {
 				that.db.run('rollback transaction', [], function(rollErr) {
@@ -207,7 +209,7 @@ DatabaseAdapter.prototype.assignQuestion = function(obj, callback) {
 * This function is called to return an assignment if one exists for the teacher, or none.
 */
 DatabaseAdapter.prototype.getAssignment = function(obj, callback) {
-	var statement = 'SELECT d.discourseId, d.versionId, m.timestamp, m.reference, m.message' +
+	var statement = 'SELECT d.discourseId, d.versionId, m.person, m.timestamp, m.reference, m.message' +
 			' FROM Discourse d JOIN Message m ON d.discourseId=m.discourseId' +
 			' WHERE d.teacherId = ?' +
 			' AND d.status = "assigned"' +
@@ -221,7 +223,7 @@ DatabaseAdapter.prototype.returnQuestion = function(obj, callback) {
 
 DatabaseAdapter.prototype.saveAnswer = function(obj, callback) {
 	var statements = [
-		'replace into Message(discourseId, timestamp, reference, message) values (?,?,?,?)',
+		'replace into Message(discourseId, person, timestamp, reference, message) values (?,"T",?,?,?)',
 		'update Discourse set status="answered", teacherId=? where discourseId=? and status="assigned"'
 	];
 	if (! obj.timestamp) {
@@ -241,7 +243,7 @@ DatabaseAdapter.prototype.saveAnswer = function(obj, callback) {
 };
 DatabaseAdapter.prototype.deleteAnswer = function(obj, callback) {
 	var statements = [ 
-		'delete from Message where discourseId=? and timestamp=?',
+		'delete from Message where discourseId=? and person="T" and timestamp=?',
 		'update Discourse set status="open", teacherId=null where discourseId=?'
 	];
 	var values = [
@@ -258,12 +260,14 @@ DatabaseAdapter.prototype.deleteAnswer = function(obj, callback) {
 * because Message does not mark whose is whose.
 */
 DatabaseAdapter.prototype.selectAnswer = function(obj, callback) {
-	var statement = 'select t.pseudonym, m.reference, m.timestamp, m.message from Discourse d, Message m, Teacher t' +
-		' where d.discourseId = m.discourseId and d.teacherId = t.teacherId and d.discourseId = ? and d.status = "answered"';
+	var statement = 'select t.pseudonym, m.reference, m.timestamp, m.message' +
+		' from Discourse d, Message m, Teacher t' +
+		' where d.discourseId = m.discourseId and d.teacherId = t.teacherId' +
+		' and d.discourseId = ? and d.status = "answered" and m.person="T"';
 	this.db.all(statement, obj.discourseId, callback);
 };
 DatabaseAdapter.prototype.saveDraft = function(obj, callback) {
-	var statements = [ 'replace into Message(discourseId, timestamp, reference, message) values (?,?,?,?)' ];
+	var statements = [ 'replace into Message(discourseId, person, timestamp, reference, message) values (?,"T",?,?,?)' ];
 	if (! obj.timestamp) {
 		obj.timestamp = this.getTimestamp();
 	}
@@ -274,12 +278,12 @@ DatabaseAdapter.prototype.saveDraft = function(obj, callback) {
 	});
 };
 DatabaseAdapter.prototype.deleteDraft = function(obj, callback) {
-	var statements = [ 'delete from Message where discourseId=? and timestamp=?' ];
+	var statements = [ 'delete from Message where discourseId=? and person="T" and timestamp=?' ];
 	var values = [[ obj.discourseId, obj.timestamp ]];
 	this.executeSQL(statements, values, 1, callback);
 };
 DatabaseAdapter.prototype.selectDraft = function(obj, callback) {
-	var statement = 'select reference, message from Message where where discourseId=? and timestamp=?';
+	var statement = 'select reference, message from Message where where discourseId=? and person="T" and timestamp=?';
 	this.db.get(statement, obj.discourseId, timestamp, callback);
 };
 DatabaseAdapter.prototype.executeSQL = function(statements, values, affectedRows, callback) {

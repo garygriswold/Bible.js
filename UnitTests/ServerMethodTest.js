@@ -419,7 +419,7 @@ var tests = [
 		method: 'GET',
 		path: '/assign/Bob:teacherId/KJV',
 		status: 200,
-		results: {discourseId:'GUID', timestamp: 'TIME', reference:'John1', message:'This is my questions'}
+		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp: 'TIME', reference:'John1', message:'This is my questions'}
 	},
 	{
 		number: 290,
@@ -455,7 +455,7 @@ var tests = [
 		method: 'GET',
 		path: '/assign/Bob:teacherId/KJV',
 		status: 200,
-		results: {discourseId:'GUID', timestamp:'TIME', reference:'John1', message:'This is my questions'}	
+		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}	
 	},
 	{
 		number: 330,
@@ -464,7 +464,7 @@ var tests = [
 		method: 'GET',
 		path: '/open/Bob:teacherId/KJV',
 		status: 200,
-		results: [{discourseId:'GUID', timestamp:'TIME', versionId:'KJV', reference:'John1', message:'This is my questions'}]
+		results: [{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}]
 	},
 	{
 		number: 340,
@@ -491,7 +491,7 @@ var tests = [
 		method: 'GET',
 		path: '/another/Bob:teacherId/KJV/Disc2:discourseId',
 		status: 200, // assigns the same question over again, maybe this should be corrected, but it is complicated method
-		results: {discourseId:'GUID', timestamp:'TIME', reference:'John1', message:'This is my questions'}
+		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}
 	},
 	{
 		number: 370,
