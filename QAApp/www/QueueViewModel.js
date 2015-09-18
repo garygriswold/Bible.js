@@ -5,12 +5,10 @@
 function QueueViewModel(viewNavigator) {
 	this.viewNavigator = viewNavigator;
 	this.httpClient = viewNavigator.httpClient;
+	this.state = viewNavigator.currentState;
 	this.numQuestions = 0;
 	this.oldestQuestion = null;
 	this.waitTime = 0;
-	this.discourseId = '12345';// how is this set?
-	this.versionId = 'KJV'; // how is this set?
-	this.teacherId = 'ABCDE'; // how is this set?
 	Object.seal(this);
 }
 QueueViewModel.prototype.numQuestionsMsg = function() {
@@ -63,7 +61,7 @@ QueueViewModel.prototype.setProperties = function(status, results) {
 };
 QueueViewModel.prototype.openQuestionCount = function() {
 	var that = this;
-	this.httpClient.get('/open/' + this.teacherId + '/' + this.versionId, function(status, results) {
+	this.httpClient.get('/open/' + this.state.teacherId + '/' + this.state.versionId, function(status, results) {
 		if (status === 200 && results.count) {
 			that.setProperties(status, results);
 		} else {
@@ -73,7 +71,7 @@ QueueViewModel.prototype.openQuestionCount = function() {
 };
 QueueViewModel.prototype.returnQuestion = function() {
 	var that = this;
-	this.httpClient.get('/return/' + this.versionId + '/' + this.discourseId, function(status, results) {
+	this.httpClient.get('/return/' + this.state.versionId + '/' + this.state.discourseId, function(status, results) {
 		that.setProperties(status, results);
 	});
 };

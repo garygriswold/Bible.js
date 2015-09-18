@@ -5,15 +5,12 @@
 function AnswerViewModel(viewNavigator) {
 	this.viewNavigator = viewNavigator;
 	this.httpClient = viewNavigator.httpClient;
-	this.discourseId = null;
+	this.state = viewNavigator.currentState;
 	this.displayReference = null;
 	this.submittedDt = null;
 	this.expires = null;
 	this.question = null;
 	this.answer = null;
-	this.teacherId = 'ABCDE';
-	this.versionId = 'KJV';
-	this.discourseId = '12345';
 	Object.seal(this);
 }
 AnswerViewModel.prototype.display = function() {
@@ -43,7 +40,8 @@ AnswerViewModel.prototype.setProperties = function(status, results) {
 	}
 	
 	function firstRow(row) {
-		that.discourseId = row.discourseId;
+		that.state.discourseId = row.discourseId;
+		that.state.timestamp = row.timestamp;
 		that.displayReference = row.reference;
 		var timestamp = new Date(row.timestamp);
 		that.submittedDt = timestamp.toLocaleString();
@@ -55,22 +53,24 @@ AnswerViewModel.prototype.setProperties = function(status, results) {
 };
 AnswerViewModel.prototype.assignQuestion = function() {
 	var that = this;
-	this.httpClient.get('/assign/' + this.teacherId + '/' + this.versionId, function(status, results) {
+	this.httpClient.get('/assign/' + this.state.teacherId + '/' + this.state.versionId, function(status, results) {
 		that.setProperties(status, results);
 	});	
 };
 AnswerViewModel.prototype.anotherQuestion = function() {
 	var that = this;
-	this.httpClient.get('/another/' + this.teacherId + '/' + this.versionId + '/' + this.discourseId, function(status, results) {
+	this.httpClient.get('/another/' + this.state.teacherId + '/' + this.state.versionId + '/' + this.state.discourseId, function(status, results) {
 		that.setProperties(status, results);
 	});
 };
 AnswerViewModel.prototype.saveDraft = function() {
+	var that = this;
 	this.answer = getNodeValue('answer', 'value');
-	var data = { discourseId:this.discourseId, reference:null, message:this.answer };
+	var data = { discourseId:this.state.discourseId, reference:null, message:this.answer };
 	console.log('inside saveDraft', data);
-	this.httpClient.post('/draft', data, function(status, results) {
+	this.httpClient.put('/draft', data, function(status, results) {
 		if (status === 200 || status === 201) {
+			that.state.draft = { discourseId:that.state.discourseId, timestamp:results.timestamp };
 			window.alert('Your work has been saved.');
 		} else {
 			window.alert('' + status + 'Error: ' + JSON.stringify(results));
@@ -82,6 +82,4 @@ AnswerViewModel.prototype.saveDraft = function() {
 		return((node) ? node[type] : null);
 	}
 };
-
-
 

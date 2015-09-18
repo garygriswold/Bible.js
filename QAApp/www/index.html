@@ -8,6 +8,7 @@
 		<script type="text/javascript" src="QueueViewModel.js"></script>
 		<script type="text/javascript" src="AnswerViewModel.js"></script>
 		<script type="text/javascript" src="HttpClient.js"></script>
+		<script type="text/javascript" src="CurrentState.js"></script>
 		<script type="text/javascript">
 			function onLoad() {
 				TRANSITION = { EVENT: 'transition', IMMEDIATE: 'immediate', SLIDE_LEFT: 'slide-left', SLIDE_RIGHT: 'slide-right' };
@@ -36,7 +37,7 @@
 				viewNavigator.transition('answerView', 'answerView', 'anotherQuestion', TRANSITION.IMMEDIATE);
 			}
 			function saveDraft() {
-				viewNavigator.transition('answerView', 'answerView', 'saveDraft', null);
+				viewNavigator.saveDraft();
 			}
 			function sendAnswer() {
 				viewNavigator.transition('answerView', 'queueView', null, TRANSITION.SLIDE_RIGHT);

@@ -201,11 +201,11 @@ server.del('/draft', function deleteDraft(request, response, next) {
 	});
 });
 
-//server.get('/draft/:discourseId/:timestamp', function getDraft(request, response, next) {
-//	database.selectDraft(request.params, function(err, results) {
-//		respond(err, results, 200, response, next);
-//	});
-//});
+server.get('/draft/:discourseId/:timestamp', function getDraft(request, response, next) {
+	database.selectDraft(request.params, function(err, results) {
+		respond(err, results, 200, response, next);
+	});
+});
 
 server.listen(8080, function() {
 	console.log('listening on 8080');

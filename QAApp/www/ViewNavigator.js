@@ -23,6 +23,7 @@
 * We also do not want to include it in the transition.
 */
 function ViewNavigator() {
+	this.currentState = new CurrentState();
 	this.httpClient = new HttpClient('localhost', '8080');
 	this.queueModel = new QueueViewModel(this);
 	this.answerModel = new AnswerViewModel(this);
@@ -54,8 +55,6 @@ ViewNavigator.prototype.transition = function(fromViewName, toViewName, transact
 						this.answerModel.assignQuestion();
 					} else if (transaction === 'anotherQuestion') {
 						this.answerModel.anotherQuestion();
-					} else if (transaction === 'saveDraft') {
-						this.answerModel.saveDraft();
 					} else if (transaction === 'setProperties') {
 						this.answerModel.setProperties(status, results);
 					} else {
@@ -87,4 +86,7 @@ ViewNavigator.prototype.transition = function(fromViewName, toViewName, transact
 	function finishTransition(fromView) {
 		document.body.removeChild(fromView);
 	}
+};
+ViewNavigator.prototype.saveDraft = function() {
+	this.answerModel.saveDraft();
 };
