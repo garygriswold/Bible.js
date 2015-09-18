@@ -368,6 +368,28 @@ var tests = [
 		save: 'Disc2'
 	},
 	{
+		number: 221,
+		name: 'insertQuestion',
+		description: 'Insert a valid 2nd question',
+		method: 'PUT',
+		path: '/question',
+		postData: {versionId:'KJV', reference:'John2', message:'This is another question'},
+		status: 201,
+		results: {rowCount:2, discourseId: 'GUID', timestamp: 'TIME' },
+		save: 'Desc3'
+	},
+	{
+		number: 222,
+		name: 'insertQuestion',
+		description: 'Insert a valid 3rd question',
+		method: 'PUT',
+		path: '/question',
+		postData: {versionId:'KJV', reference:'John3', message:'This is my third question'},
+		status: 201,
+		results: {rowCount:2, discourseId: 'GUID', timestamp: 'TIME' },
+		save: 'Desc4'		
+	},
+	{
 		number: 230,
 		name: 'openQuestionCount',
 		description: 'Incomplete Open Question Count call',
@@ -383,7 +405,7 @@ var tests = [
 		method: 'GET',
 		path: '/open/Bob:teacherId/KJV',
 		status: 200,
-		results: {count:1, timestamp: 'TIME'}
+		results: {count:3, timestamp: 'TIME'}
 	},
 	{
 		number: 250,
@@ -421,15 +443,15 @@ var tests = [
 		status: 200,
 		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp: 'TIME', reference:'John1', message:'This is my questions'}
 	},
-	{
-		number: 290,
-		name: 'assignQuestion',
-		description: 'Assign to valid user when no questions remain',
-		method: 'GET',
-		path: '/assign/Bob:teacherId/KJV',
-		status: 410,
-		results: {message:'There are no questions to assign.'}
-	},
+	//{
+	//	number: 290,
+	//	name: 'assignQuestion',
+	//	description: 'Assign to valid user when no questions remain',
+	//	method: 'GET',
+	//	path: '/assign/Bob:teacherId/KJV',
+	//	status: 410,
+	//	results: {message:'There are no questions to assign.'}
+	//},
 	{
 		number: 300,
 		name: 'returnQuestion',
@@ -437,7 +459,7 @@ var tests = [
 		method: 'GET',
 		path: '/return/KJV/Disc2:discourseId',
 		status: 200,
-		results: {count:1, timestamp: 'TIME'}	
+		results: {count:3, timestamp: 'TIME'}	
 	},
 	{
 		number: 310,
@@ -446,7 +468,7 @@ var tests = [
 		method: 'GET',
 		path: '/return/KJV/Disc2:discourseId',
 		status: 200, // Because return is an update, it succeeds when there is not change.
-		results: {count:1, timestamp: 'TIME'}		
+		results: {count:3, timestamp: 'TIME'}		
 	},
 	{
 		number: 320,
