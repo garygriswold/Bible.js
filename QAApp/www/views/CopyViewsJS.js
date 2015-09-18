@@ -96,6 +96,6 @@ CopyViewsJS.prototype.writeViewFile = function(destFile, content) {
 
 
 var copy = new CopyViewsJS();
-copy.copy('./', '../www/ViewLibrary.js');
+copy.copy('./', '../ViewLibrary.js');
 
 

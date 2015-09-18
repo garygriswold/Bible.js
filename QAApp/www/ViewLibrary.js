@@ -1,5 +1,34 @@
 var viewLibrary = {};
 
+viewLibrary['loginView'] = '<table id="loginView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000);">' +
+	'<tr style="height: 33%">' +
+	'<td style="width: 25%"></td>' +
+	'<td style="width: 50%; text-align: center; vertical-align: bottom">' +
+	'<p style="font-family: Avenir-Light; font-size: 1.5rem; color: #f9fbfc">Sign-In to My Bible Q & A</p>' +
+	'</td>' +
+	'<td style="width: 25%"></td>' +
+	'</tr>' +
+	'<tr style="height: 34%">' +
+	'<td></td>' +
+	'<td id="loginForm" style="text-align: center; vertical-align: middle;">' +
+	'<p class="fieldBorder" style="margin-bottom: 1px">' +
+	'<input class="inputField" type="text" placeholder="Username" size="20" style="font-size: large">' +
+	'</p>' +
+	'<p class="fieldBorder" style="margin-top: 1px">' +
+	'<input class="inputField" type="password" placeholder="Password" size="17" style="font-size: large">' +
+	'<input type="button" class="goButton" value="Go" onclick="openQuestionCount()">' +
+	'</p>' +
+	'</td>' +
+	'<td></td>' +
+	'<tr style="height: 33%">' +
+	'<td></td>' +
+	'<td style="text-align: center; font-size: 0.8rem; vertical-align: top;"><span id="loginResponse">' +
+	'<a onclick="transitionToForgotView()" style="color:#f1f4b2;">Did you forgot your Username or Password?</a>' +
+	'</span></td>' +
+	'<td></td>' +
+	'</tr>' +
+	'</table>';
+
 viewLibrary['answerView'] = '<div id="answerView" style="height: 100%; width: 100%; background: white">' +
 	'<div style="height: 90%; width: 100%;">' +
 	'<div style="height: 100%; width: 50%; float: left">' +
@@ -81,6 +110,10 @@ viewLibrary['answerView'] = '<div id="answerView" style="height: 100%; width: 10
 	'}' +
 	'</style>';
 
+viewLibrary['headerView'] = '<table id="headerView" style="height: 15%; width: 100%; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">' +
+	'<tr style="height: 100%"><td style="text-align: center; vertical-align: middle; color: white">My Bible Q & A</td><tr>' +
+	'</table>';
+
 viewLibrary['forgotView'] = '<table id="forgotView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">' +
 	'<tr style="height: 33%">' +
 	'<td style="width: 25%"></td>' +
@@ -103,39 +136,6 @@ viewLibrary['forgotView'] = '<table id="forgotView" style="height: 100%; width: 
 	'<td style="text-align: center; font-size: 0.8rem; vertical-align: top;">' +
 	'<span id="forgotResponse">' +
 	'<a onclick="transitionBackToLoginView()" style="color:#f1f4b2;">Did you remember your password?</a>' +
-	'</span></td>' +
-	'<td></td>' +
-	'</tr>' +
-	'</table>';
-
-viewLibrary['headerView'] = '<table id="headerView" style="height: 15%; width: 100%; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">' +
-	'<tr style="height: 100%"><td style="text-align: center; vertical-align: middle; color: white">My Bible Q & A</td><tr>' +
-	'</table>';
-
-viewLibrary['loginView'] = '<table id="loginView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000);">' +
-	'<tr style="height: 33%">' +
-	'<td style="width: 25%"></td>' +
-	'<td style="width: 50%; text-align: center; vertical-align: bottom">' +
-	'<p style="font-family: Avenir-Light; font-size: 1.5rem; color: #f9fbfc">Sign-In to My Bible Q & A</p>' +
-	'</td>' +
-	'<td style="width: 25%"></td>' +
-	'</tr>' +
-	'<tr style="height: 34%">' +
-	'<td></td>' +
-	'<td id="loginForm" style="text-align: center; vertical-align: middle;">' +
-	'<p class="fieldBorder" style="margin-bottom: 1px">' +
-	'<input class="inputField" type="text" placeholder="Username" size="20" style="font-size: large">' +
-	'</p>' +
-	'<p class="fieldBorder" style="margin-top: 1px">' +
-	'<input class="inputField" type="password" placeholder="Password" size="17" style="font-size: large">' +
-	'<input type="button" class="goButton" value="Go" onclick="openQuestionCount()">' +
-	'</p>' +
-	'</td>' +
-	'<td></td>' +
-	'<tr style="height: 33%">' +
-	'<td></td>' +
-	'<td style="text-align: center; font-size: 0.8rem; vertical-align: top;"><span id="loginResponse">' +
-	'<a onclick="transitionToForgotView()" style="color:#f1f4b2;">Did you forgot your Username or Password?</a>' +
 	'</span></td>' +
 	'<td></td>' +
 	'</tr>' +
