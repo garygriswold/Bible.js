@@ -55,22 +55,24 @@ AnswerViewModel.prototype.setProperties = function(status, results) {
 };
 AnswerViewModel.prototype.assignQuestion = function() {
 	var that = this;
-	this.httpClient.get('/assign/' + this.state.teacherId + '/' + this.state.versionId, function(status, results) {
+	var postData = {teacherId:this.state.teacherId, versionId:this.state.versionId};//add optional timestamp
+	this.httpClient.post('/assign', postData, function(status, results) {
 		that.setProperties(status, results);
 	});	
 };
 AnswerViewModel.prototype.anotherQuestion = function() {
 	var that = this;
-	this.httpClient.get('/another/' + this.state.teacherId + '/' + this.state.versionId + '/' + this.state.discourseId, function(status, results) {
+	var postData = {teacherId:this.state.teacherId, versionId:this.state.versionId, discourseId:this.state.discourseId};// add optional timestamp?
+	this.httpClient.post('/another', postData, function(status, results) {
 		that.setProperties(status, results);
 	});
 };
 AnswerViewModel.prototype.saveDraft = function() {
 	var that = this;
 	this.answer = getNodeValue('answer', 'value');
-	var data = { discourseId:this.state.discourseId, timestamp:this.state.answerTimestamp, reference:null, message:this.answer};
-	console.log('saving draft', data);
-	this.httpClient.post('/draft', data, function(status, results) {
+	var postData = { discourseId:this.state.discourseId, timestamp:this.state.answerTimestamp, reference:null, message:this.answer};
+	console.log('saving draft', postData);
+	this.httpClient.post('/draft', postData, function(status, results) {
 		if (status === 200) {
 			console.log('save draft results', results);
 			that.state.answerTimestamp = results.timestamp;

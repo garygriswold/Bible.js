@@ -72,14 +72,15 @@ QueueViewModel.prototype.openQuestionCount = function() {
 };
 QueueViewModel.prototype.returnQuestion = function() {
 	var that = this;
-	this.httpClient.get('/return/' + this.state.versionId + '/' + this.state.discourseId, function(status, results) {
+	var postData = {versionId:this.state.versionId, discourseId:this.state.discourseId};
+	this.httpClient.post('/return', postData, function(status, results) {
 		that.setProperties(status, results);
 	});
 };
 QueueViewModel.prototype.sendAnswer = function() {
 	var that = this;
 	var answer = getNodeValue('answer', 'value');
-	var postData = {discourseId:this.state.discourseId, timestamp:this.state.answerTimestamp, reference:null, message:answer};
+	var postData = {discourseId:this.state.discourseId, versionId:this.state.versionId, timestamp:this.state.answerTimestamp, reference:null, message:answer};
 	this.httpClient.post('/answer', postData, function(status, results) {
 		that.setProperties(status, results);
 	});
