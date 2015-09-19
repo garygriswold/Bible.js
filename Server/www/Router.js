@@ -119,14 +119,20 @@ server.get('/open/:teacherId/:versionId', function openQuestionCount(request, re
 		}
 	});
 });
-
-server.get('/assign/:teacherId/:versionId', function assignQuestion(request, response, next) {
-	database.assignQuestion(request.params, function(err, results) {
-		respond(err, results, 200, response, next);
+/** teacherId, versionId, optional timestamp */
+server.post('/assign', function assignQuestion(request, response, next) {
+	database.getAssignment(request.params, function(err, results) {
+		if (err || results.length > 0) {
+			respond(err, results, 200, response, next);
+		} else {
+			database.assignQuestion(request.params, function(err, results) {
+				respond(err, results, 200, response, next);
+			});
+		}
 	});
 });
-
-server.get('/return/:versionId/:discourseId', function returnQuestion(request, response, next) {
+/** teacherId, versionId, discourseId */
+server.post('/return', function returnQuestion(request, response, next) {
 	database.returnQuestion(request.params, function(err, results) {
 		if (err) {
 			respond(err, results, 200, response, next);
@@ -137,8 +143,8 @@ server.get('/return/:versionId/:discourseId', function returnQuestion(request, r
 		}
 	});
 });
-
-server.get('/another/:teacherId/:versionId/:discourseId', function anotherQuestion(request, response, next) {
+/** teacherId, versionId, discourseId, optional timestamp */
+server.post('/another', function anotherQuestion(request, response, next) {
 	database.returnQuestion(request.params, function(err, results) {
 		if (err) {
 			respond(err, results, 200, response, next);

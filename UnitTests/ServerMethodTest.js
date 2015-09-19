@@ -394,9 +394,9 @@ var tests = [
 		name: 'openQuestionCount',
 		description: 'Incomplete Open Question Count call',
 		method: 'GET',
-		path: '/open/KJV',
+		path: '/open',
 		status: 404,
-		results: {code:'ResourceNotFound', message:'/open/KJV does not exist'}
+		results: { code: 'ResourceNotFound', message: '/open does not exist' }
 	},
 	{
 		number: 240,
@@ -419,18 +419,19 @@ var tests = [
 	{
 		number: 260,
 		name: 'openQuestionCount',
-		description: 'Open question count of non-existent version and non-existent student',
+		description: 'Open question count of non-existent version and non-existent teacher',
 		method: 'GET',
 		path: '/open/XXXXX/XXXX',
-		status: 200,	// is this the correct result
-		results: {count:0, timestamp: null}	
+		status: 200,
+		results: {count:0, timestamp:null}	
 	},
 	{
 		number: 270,
 		name: 'assignQuestion',
 		description: 'Assign question to non-existent user',
-		method: 'GET',
-		path: '/assign/XXXXX/KJV',
+		method: 'POST',
+		path: '/assign',
+		postData: {teacherId:'XXXXX', versionId:'KJV'},
 		status: 409,
 		results: {message:'SQLITE_CONSTRAINT: FOREIGN KEY constraint failed'}	
 	},
@@ -438,47 +439,95 @@ var tests = [
 		number: 280,
 		name: 'assignQuestion',
 		description: 'Assign existing question to valid user',
-		method: 'GET',
-		path: '/assign/Bob:teacherId/KJV',
+		method: 'POST',
+		path: '/assign',
+		postData: {teacherId:'Bob:teacherId', versionId:'KJV'},
 		status: 200,
-		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp: 'TIME', reference:'John1', message:'This is my questions'}
+		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp: 'TIME', reference:'John1', message:'This is my questions'},
+		save: 'Assign'
 	},
-	//{
-	//	number: 290,
-	//	name: 'assignQuestion',
-	//	description: 'Assign to valid user when no questions remain',
-	//	method: 'GET',
-	//	path: '/assign/Bob:teacherId/KJV',
-	//	status: 410,
-	//	results: {message:'There are no questions to assign.'}
-	//},
+	{
+		number: 290,
+		name: 'assignQuestion',
+		description: 'Assign attempt when there is already one assign, should get already assigned ',
+		method: 'POST',
+		path: '/assign',
+		postData: {teacherId:'Bob:teacherId', versionId:'KJV'},
+		status: 200,
+		results: [{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}],
+	},
+	{
+		number: 291,
+		name: 'assignQuestion',
+		description: 'Assign attempt when there is already one assign using timestamp, should get already assigned ',
+		method: 'POST',
+		path: '/assign',
+		postData: {teacherId:'Bob:teacherId', versionId:'KJV', timestamp:'Assign:timestamp'},
+		status: 200,
+		results: [{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}],
+	},
 	{
 		number: 300,
 		name: 'returnQuestion',
 		description: 'Return assigned question',
-		method: 'GET',
-		path: '/return/KJV/Disc2:discourseId',
+		method: 'POST',
+		path: '/return',
+		postData: {versionId:'KJV', discourseId:'Disc2:discourseId'},
 		status: 200,
 		results: {count:3, timestamp: 'TIME'}	
 	},
 	{
-		number: 310,
+		number: 301,
+		name: 'assignQuestion',
+		description: 'Assign without timestamp to get same question again',
+		method: 'POST',
+		path: '/assign',
+		postData: {teacherId:'Bob:teacherId', versionId:'KJV'}, //timestamp:'Assign:timestamp'},
+		status: 200,
+		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'},
+		save: 'Assign'				
+	},
+	{
+		number: 302,
 		name: 'returnQuestion',
-		description: 'Return the same assigned question that has already been returned',
-		method: 'GET',
-		path: '/return/KJV/Disc2:discourseId',
-		status: 200, // Because return is an update, it succeeds when there is not change.
+		description: 'Return assigned question',
+		method: 'POST',
+		path: '/return',
+		postData: {versionId:'KJV', discourseId:'Assign:discourseId'},
+		status: 200,
 		results: {count:3, timestamp: 'TIME'}		
 	},
 	{
-		number: 320,
+		number: 303,
 		name: 'assignQuestion',
-		description: 'Assign to valid user again',
-		method: 'GET',
-		path: '/assign/Bob:teacherId/KJV',
+		description: 'Assign to valid user when no questions remain',
+		method: 'POST',
+		path: '/assign',
+		postData: {teacherId:'Bob:teacherId', versionId:'KJV', timestamp:'Assign:timestamp'},
 		status: 200,
-		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}	
+		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John2', message:'This is another question'},
+		save: 'Assign'		
 	},
+	///{
+	//	number: 310,
+	//	name: 'returnQuestion',
+	//	description: 'Return the same assigned question that has already been returned',
+	//	method: 'POST',
+	//	path: '/return',
+	//	postData: {versionId:'KJV', discourseId:'Assign:discourseId'},
+	//	status: 200,
+	//	results: {count:3, timestamp: 'TIME'}		
+	//},
+	//{
+	//	number: 320,
+	//	name: 'assignQuestion',
+	//	description: 'Assign to valid user again',
+	//	method: 'POST',
+	//	path: '/assign',
+	//	postData: {teacherId:'Bob:teacherId', versionId:'KJV'},
+	//	status: 200,
+	//	results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}	
+	//},
 	{
 		number: 330,
 		name: 'openQuestionCount',
@@ -486,14 +535,15 @@ var tests = [
 		method: 'GET',
 		path: '/open/Bob:teacherId/KJV',
 		status: 200,
-		results: [{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}]
+		results: [{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John2', message:'This is another question'}]
 	},
 	{
 		number: 340,
 		name: 'anotherQuestion',
 		description: 'Assign a different question, using invalid discourseId',
-		method: 'GET',
-		path: '/another/Bob:teacherId/KJV/XXXX',
+		method: 'POST',
+		path: '/another',
+		postData: {teacherId:'Bob:teacherId', versionId:'KJV', discourseId:'XXXX'},
 		status: 410,
 		results: {message:'expected=1  actual=0'}
 	},
@@ -501,19 +551,33 @@ var tests = [
 		number: 350,
 		name: 'anotherQuestion',
 		description: 'Assign a different question, but teacherId is invalid',
-		method: 'GET',
-		path: '/another/XXXXX/KJV/Disc2:discourseId',
+		method: 'POST',
+		path: '/another',
+		postData: {teacherId:'XXXXX', versionId:'KJV', discourseId:'Disc2:discourseId'},
 		status: 409,
 		results: {message:'SQLITE_CONSTRAINT: FOREIGN KEY constraint failed'}
 	},
 	{
 		number: 360,
 		name: 'anotherQuestion',
-		description: 'Assign a different question, with valid input, but there are none to assign',
-		method: 'GET',
-		path: '/another/Bob:teacherId/KJV/Disc2:discourseId',
-		status: 200, // assigns the same question over again, maybe this should be corrected, but it is complicated method
-		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}
+		description: 'Assign a different question, with valid input',
+		method: 'POST',
+		path: '/another',
+		postData: {teacherId:'Bob:teacherId', versionId:'KJV', discourseId:'Assign:discourseId', timestamp:'Assign:timestamp'},
+		status: 200,
+		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John3', message:'This is my third question'},
+		save: 'Assign'
+	},
+	{
+		number: 361,
+		name: 'anotherQuestion',
+		description: 'Assign a different question, with valid input, but no more questions',
+		method: 'POST',
+		path: '/another',
+		postData: {teacherId:'Bob:teacherId', versionId:'KJV', discourseId:'Assign:discourseId', timestamp:'Assign:timestamp'},
+		status: 410,
+		results: {message: 'There are no questions to assign.'},
+		save: 'Assign'		
 	},
 	{
 		number: 370,

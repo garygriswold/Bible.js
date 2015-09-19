@@ -175,11 +175,15 @@ DatabaseAdapter.prototype.openQuestionCount = function(obj, callback) {
 DatabaseAdapter.prototype.assignQuestion = function(obj, callback) {
 	var that = this;
 	this.db.run('begin immediate transaction', [], function(err) {
-		var statement = 'select d.discourseId, d.versionId, m.person, m.timestamp, m.reference, m.message' +
-			' from Discourse d, Message m where d.discourseId=m.discourseId' +
-			' and d.versionId = ?' +
-			' and d.status="open" and m.person="S" order by m.timestamp limit 1';
-		that.db.get(statement, obj.versionId, function(err, row) {
+		var statement = 'SELECT d.discourseId, d.versionId, m.person, m.timestamp, m.reference, m.message' +
+			' FROM Discourse d JOIN Message m ON d.discourseId=m.discourseId' +
+			' WHERE d.versionId = ?' +
+			' AND d.status="open"' +
+			' AND m.person="S"' +
+			' AND m.timestamp > ?'
+			' ORDER BY m.timestamp LIMIT 1';
+		var timestamp = (obj.timestamp) ? obj.timestamp : '1970-01-01';
+		that.db.get(statement, obj.versionId, timestamp, function(err, row) {
 			if (err) {
 				that.db.run('rollback transaction', [], function(rollErr) {
 					callback(err, {rowCount:0});
