@@ -3,7 +3,7 @@
 * back and forth from view to view.
 */
 function CurrentState() {
-	this.teacherId = '6b63b04f-9441-4603-895d-9ed16facbe3f';
+	this.teacherId = '5382a5a8-0677-47ce-ba7a-3c57ae5356eb';
 	this.versionId = 'KJV';
 	this.discourseId = null;
 	this.questionTimestamp = null;

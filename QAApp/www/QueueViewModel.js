@@ -72,7 +72,7 @@ QueueViewModel.prototype.openQuestionCount = function() {
 };
 QueueViewModel.prototype.returnQuestion = function() {
 	var that = this;
-	var postData = {versionId:this.state.versionId, discourseId:this.state.discourseId};
+	var postData = {teacherId:this.state.teacherId, versionId:this.state.versionId, discourseId:this.state.discourseId};
 	this.httpClient.post('/return', postData, function(status, results) {
 		that.setProperties(status, results);
 	});

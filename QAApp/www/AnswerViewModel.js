@@ -62,9 +62,13 @@ AnswerViewModel.prototype.assignQuestion = function() {
 };
 AnswerViewModel.prototype.anotherQuestion = function() {
 	var that = this;
-	var postData = {teacherId:this.state.teacherId, versionId:this.state.versionId, discourseId:this.state.discourseId};// add optional timestamp?
+	var postData = {teacherId:this.state.teacherId, versionId:this.state.versionId, discourseId:this.state.discourseId};
 	this.httpClient.post('/another', postData, function(status, results) {
-		that.setProperties(status, results);
+		if (status === 200) {
+			that.setProperties(status, results);
+		} else {
+			that.viewNavigator.transition('answerView', 'queueView', 'openQuestionCount', TRANSITION.SLIDE_RIGHT, status, results);
+		}
 	});
 };
 AnswerViewModel.prototype.saveDraft = function() {

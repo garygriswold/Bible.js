@@ -31,7 +31,7 @@
 				viewNavigator.transition('answerView', 'queueView', 'returnQuestion', TRANSITION.SLIDE_RIGHT);
 			}
 			function anotherQuestion() {
-				viewNavigator.transition('answerView', 'answerView', 'anotherQuestion', TRANSITION.IMMEDIATE);
+				viewNavigator.transition('answerView', 'answerView', 'anotherQuestion', TRANSITION.IMMEDIATE);// is this needed, or shoudl it be like safe draft
 			}
 			function saveDraft() {
 				viewNavigator.saveDraft();
