@@ -221,8 +221,23 @@ DatabaseAdapter.prototype.getAssignment = function(obj, callback) {
 	this.db.all(statement, obj.teacherId, callback);
 };
 DatabaseAdapter.prototype.returnQuestion = function(obj, callback) {
-	var statements = [ 'update Discourse set status="open", teacherId=null where discourseId=?' ];
-	this.executeSQL(statements, [[ obj.discourseId ]], 1, callback);
+	var that = this;
+	var statement = 'SELECT d.rowid, m.timestamp FROM Message m JOIN Discourse d ON m.discourseId=d.discourseId' +
+			' WHERE d.discourseId=? AND d.teacherId=? AND m.person="S"';
+	this.db.get(statement, obj.discourseId, obj.teacherId, function(err, row) {
+		if (err) {
+			callback(err, row);
+		} else if (row === undefined || row.rowid === undefined) {
+			callback(new Error('expected=1  actual=0'), null);
+		} else {
+			var statements = [ 'UPDATE Discourse SET status="open", teacherId=null WHERE rowid=?' ];
+			that.executeSQL(statements, [[ row.rowid ]], 1, function(err, results) {
+				results.timestamp = row.timestamp;
+				callback(err, results);
+			});
+		}
+	});
+
 };
 
 DatabaseAdapter.prototype.saveAnswer = function(obj, callback) {

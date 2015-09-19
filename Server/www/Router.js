@@ -143,12 +143,13 @@ server.post('/return', function returnQuestion(request, response, next) {
 		}
 	});
 });
-/** teacherId, versionId, discourseId, optional timestamp */
+/** teacherId, versionId, discourseId */
 server.post('/another', function anotherQuestion(request, response, next) {
 	database.returnQuestion(request.params, function(err, results) {
-		if (err) {
+		if (err || results === undefined || results.timestamp === undefined) {
 			respond(err, results, 200, response, next);
 		} else {
+			request.params.timestamp = results.timestamp; // set to assign a later question.
 			database.assignQuestion(request.params, function(err, results) {
 				respond(err, results, 200, response, next);
 			});

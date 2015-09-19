@@ -125,7 +125,7 @@ ServerMethodTest.prototype.runTests = function() {
 				displayError('TEST MISSING PROP ERROR', test, status, actual);
 			}
 		}
-		console.log('OK', test.name);
+		console.log('OK', test.number, test.name);
 		console.log('FOUND:', status, JSON.stringify(actual));
 		if (test.save) {
 			database[test.save] = actual;
@@ -368,7 +368,7 @@ var tests = [
 		save: 'Disc2'
 	},
 	{
-		number: 221,
+		number: 230,
 		name: 'insertQuestion',
 		description: 'Insert a valid 2nd question',
 		method: 'PUT',
@@ -379,7 +379,7 @@ var tests = [
 		save: 'Desc3'
 	},
 	{
-		number: 222,
+		number: 240,
 		name: 'insertQuestion',
 		description: 'Insert a valid 3rd question',
 		method: 'PUT',
@@ -390,7 +390,7 @@ var tests = [
 		save: 'Desc4'		
 	},
 	{
-		number: 230,
+		number: 250,
 		name: 'openQuestionCount',
 		description: 'Incomplete Open Question Count call',
 		method: 'GET',
@@ -399,7 +399,7 @@ var tests = [
 		results: { code: 'ResourceNotFound', message: '/open does not exist' }
 	},
 	{
-		number: 240,
+		number: 260,
 		name: 'openQuestionCount',
 		description: 'Valid open question count request',
 		method: 'GET',
@@ -408,7 +408,7 @@ var tests = [
 		results: {count:3, timestamp: 'TIME'}
 	},
 	{
-		number: 250,
+		number: 270,
 		name: 'openQuestionCount',
 		description: 'Open question count of non-existing version',
 		method: 'GET',
@@ -417,7 +417,7 @@ var tests = [
 		results: {count:0, timestamp: null}
 	},
 	{
-		number: 260,
+		number: 280,
 		name: 'openQuestionCount',
 		description: 'Open question count of non-existent version and non-existent teacher',
 		method: 'GET',
@@ -426,7 +426,7 @@ var tests = [
 		results: {count:0, timestamp:null}	
 	},
 	{
-		number: 270,
+		number: 290,
 		name: 'assignQuestion',
 		description: 'Assign question to non-existent user',
 		method: 'POST',
@@ -436,7 +436,7 @@ var tests = [
 		results: {message:'SQLITE_CONSTRAINT: FOREIGN KEY constraint failed'}	
 	},
 	{
-		number: 280,
+		number: 300,
 		name: 'assignQuestion',
 		description: 'Assign existing question to valid user',
 		method: 'POST',
@@ -447,7 +447,7 @@ var tests = [
 		save: 'Assign'
 	},
 	{
-		number: 290,
+		number: 310,
 		name: 'assignQuestion',
 		description: 'Assign attempt when there is already one assign, should get already assigned ',
 		method: 'POST',
@@ -457,7 +457,7 @@ var tests = [
 		results: [{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}],
 	},
 	{
-		number: 291,
+		number: 320,
 		name: 'assignQuestion',
 		description: 'Assign attempt when there is already one assign using timestamp, should get already assigned ',
 		method: 'POST',
@@ -467,17 +467,17 @@ var tests = [
 		results: [{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}],
 	},
 	{
-		number: 300,
+		number: 330,
 		name: 'returnQuestion',
 		description: 'Return assigned question',
 		method: 'POST',
 		path: '/return',
-		postData: {versionId:'KJV', discourseId:'Disc2:discourseId'},
+		postData: {teacherId:'Bob:teacherId', versionId:'KJV', discourseId:'Disc2:discourseId'},
 		status: 200,
 		results: {count:3, timestamp: 'TIME'}	
 	},
 	{
-		number: 301,
+		number: 340,
 		name: 'assignQuestion',
 		description: 'Assign without timestamp to get same question again',
 		method: 'POST',
@@ -488,17 +488,17 @@ var tests = [
 		save: 'Assign'				
 	},
 	{
-		number: 302,
+		number: 350,
 		name: 'returnQuestion',
 		description: 'Return assigned question',
 		method: 'POST',
 		path: '/return',
-		postData: {versionId:'KJV', discourseId:'Assign:discourseId'},
+		postData: {teacherId:'Bob:teacherId', versionId:'KJV', discourseId:'Assign:discourseId'},
 		status: 200,
 		results: {count:3, timestamp: 'TIME'}		
 	},
 	{
-		number: 303,
+		number: 360,
 		name: 'assignQuestion',
 		description: 'Assign to valid user when no questions remain',
 		method: 'POST',
@@ -529,7 +529,7 @@ var tests = [
 	//	results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}	
 	//},
 	{
-		number: 330,
+		number: 370,
 		name: 'openQuestionCount',
 		description: 'Attempt openQuestionCount when there is an assigned question',
 		method: 'GET',
@@ -538,7 +538,7 @@ var tests = [
 		results: [{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John2', message:'This is another question'}]
 	},
 	{
-		number: 340,
+		number: 380,
 		name: 'anotherQuestion',
 		description: 'Assign a different question, using invalid discourseId',
 		method: 'POST',
@@ -548,39 +548,39 @@ var tests = [
 		results: {message:'expected=1  actual=0'}
 	},
 	{
-		number: 350,
+		number: 390,
 		name: 'anotherQuestion',
 		description: 'Assign a different question, but teacherId is invalid',
 		method: 'POST',
 		path: '/another',
 		postData: {teacherId:'XXXXX', versionId:'KJV', discourseId:'Disc2:discourseId'},
-		status: 409,
-		results: {message:'SQLITE_CONSTRAINT: FOREIGN KEY constraint failed'}
+		status: 410,
+		results: {message: 'expected=1  actual=0'}
 	},
 	{
-		number: 360,
+		number: 400,
 		name: 'anotherQuestion',
 		description: 'Assign a different question, with valid input',
 		method: 'POST',
 		path: '/another',
-		postData: {teacherId:'Bob:teacherId', versionId:'KJV', discourseId:'Assign:discourseId', timestamp:'Assign:timestamp'},
+		postData: {teacherId:'Bob:teacherId', versionId:'KJV', discourseId:'Assign:discourseId'},
 		status: 200,
 		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John3', message:'This is my third question'},
 		save: 'Assign'
 	},
 	{
-		number: 361,
+		number: 410,
 		name: 'anotherQuestion',
 		description: 'Assign a different question, with valid input, but no more questions',
 		method: 'POST',
 		path: '/another',
-		postData: {teacherId:'Bob:teacherId', versionId:'KJV', discourseId:'Assign:discourseId', timestamp:'Assign:timestamp'},
+		postData: {teacherId:'Bob:teacherId', versionId:'KJV', discourseId:'Assign:discourseId'},
 		status: 410,
 		results: {message: 'There are no questions to assign.'},
 		save: 'Assign'		
 	},
 	{
-		number: 370,
+		number: 420,
 		name: 'sendAnswer',
 		description: 'Insert an answer with valid input',
 		method: 'POST',
@@ -591,7 +591,7 @@ var tests = [
 		save: 'Msg2'
 	},
 	{
-		number: 380,
+		number: 430,
 		name: 'sendAnswer',
 		description: 'Insert an identical answer',
 		method: 'POST',
@@ -601,7 +601,7 @@ var tests = [
 		results: {count: 0, timestamp: null, rowCount: 2, messageTimestamp: 'TIME'}	
 	},
 	{
-		number: 390,
+		number: 440,
 		name: 'sendAnswer',
 		description: 'Update an answer with valid input',
 		method: 'POST',
@@ -611,7 +611,7 @@ var tests = [
 		results: {count: 0, timestamp: null, rowCount: 2, messageTimestamp: 'TIME'}
 	},
 	{
-		number: 400,
+		number: 450,
 		name: 'sendAnswer',
 		description: 'Update an answer with invalid discourseId',
 		method: 'POST',
@@ -621,7 +621,7 @@ var tests = [
 		results: {message: 'SQLITE_CONSTRAINT: FOREIGN KEY constraint failed'}
 	},
 	{
-		number: 410,
+		number: 460,
 		name: 'deleteAnswer',
 		description: 'Delete an answer',
 		method: 'DELETE',
@@ -631,7 +631,7 @@ var tests = [
 		results: {rowCount: 2}
 	},
 	{
-		number: 420,
+		number: 470,
 		name: 'deleteAnswer',
 		description: 'Delete an non-existent answer',
 		method: 'DELETE',
@@ -641,7 +641,7 @@ var tests = [
 		results: {message: 'expected=2  actual=1'}		
 	},
 	{
-		number: 430,
+		number: 480,
 		name: 'saveDraft',
 		description: 'Insert a valid draft answer',
 		method: 'POST',
@@ -652,7 +652,7 @@ var tests = [
 		save: 'Draft1'	
 	},
 	{
-		number: 440,
+		number: 490,
 		name: 'saveDraft',
 		description: 'Update a valid draft answer',
 		method: 'POST',
@@ -662,7 +662,7 @@ var tests = [
 		results: {rowCount: 1, timestamp:'TIME'}		
 	},
 	{
-		number: 450,
+		number: 500,
 		name: 'deleteDraft',
 		description: 'Delete a valid draft answer',
 		method: 'DELETE',
