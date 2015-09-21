@@ -3,6 +3,7 @@
 	<head>
 		<title>My Bible QA App</title>
 		<script type="text/javascript" src="lib/TweenMax.js"></script>
+		<script type="text/javascript" src="lib/aes.js"></script>
 		<script type="text/javascript" src="ViewNavigator.js"></script>
 		<script type="text/javascript" src="ViewLibrary.js"></script>
 		<script type="text/javascript" src="QueueViewModel.js"></script>
@@ -11,6 +12,19 @@
 		<script type="text/javascript" src="CurrentState.js"></script>
 		<script type="text/javascript">
 			function onLoad() {
+				
+				var passphrase = 'JabberwokkyInTheHouseNow';
+
+				var now = new Date();
+				var message = now.toString();
+				console.log('before message', message);
+
+				var encrypted = CryptoJS.AES.encrypt(message, passphrase);
+				console.log('encrypted', encrypted);
+
+				var decrypted = CryptoJS.AES.decrypt(encrypted, passphrase);
+				console.log('decrypted', decrypted.toString(CryptoJS.enc.Utf8));
+				
 				TRANSITION = { EVENT: 'transition', IMMEDIATE: 'immediate', SLIDE_LEFT: 'slide-left', SLIDE_RIGHT: 'slide-right' };
 				viewNavigator = new ViewNavigator();
 				viewNavigator.transition('splashView', 'loginView', null, TRANSITION.IMMEDIATE);
