@@ -9,6 +9,9 @@ var ethnologyController = new EthnologyController();
 var DatabaseAdapter = require('./DatabaseAdapter');
 var database = new DatabaseAdapter({filename: './TestDatabase.db', verbose: true});
 
+var AuthController = require('./AuthController');
+var authController = new AuthController(database);
+
 var log = require('./Logger');
 //log.init('BibleApp.log');
 
@@ -17,12 +20,29 @@ var server = restify.createServer({
 	name: 'BibleJS',
 	version: "1.0.0"
 });
-server.pre(restify.pre.userAgentConnection()); // if UA is curl, close connection.
 
 server.use(restify.bodyParser({
 	maxBodySize: 10000,
 	mapParams: true
 }));
+
+// don't forget server.use(restify.throttle);
+
+server.pre(restify.pre.userAgentConnection()); // if UA is curl, close connection.
+
+/**
+* This pre-step is to authorize transactions.
+*/
+server.pre(function(request, response, next) {
+	var path = request.getPath().substr(1,5);
+	if (path === 'bible' || path === 'versi' || path === 'quest' || path === 'login' || path === 'begin') return(next());
+	authController.auth(request, function(err) {
+		if (err) {
+			return(next(err));
+		}
+		return(next());
+	});
+});
 
 server.on('after', function(request, response, route, error) {
 	var date = new Date();
@@ -42,6 +62,7 @@ server.get('/beginTest', function beginTest(request, response, next) {
 	database = new DatabaseAdapter({filename: './AutoTestDatabase.db', verbose: true});
 	database.create(function(err) {
 		respond(err, {'message': 'AutoTestDatabase.db created'}, 201, response, next);
+		authController.database = database;
 	});
 });
 
@@ -54,8 +75,15 @@ server.get('/versions/:locale', function getVersions(request, response, next) {
 	respond(null, results, 200, response, next);
 });
 
+server.post('/login', function loginTeacher(request, response, next) {
+	authController.login(request.authorization, function(err, results) {
+		respond(err, results, 200, response, next);
+	});
+});
+
 server.put('/user', function registerTeacher(request, response, next) {
-	database.insertTeacher(request.params, function(err, results) {
+	request.params.authorizerId = request.headers.authId;
+	authController.register(request.params, function(err, results) {
 		respond(err, results, 201, response, next);
 	});
 });
@@ -207,7 +235,9 @@ server.listen(8080, function() {
 
 function respond(error, results, successCode, response, next) {
 	if (error) {
-		error.statusCode = errorStatusCode(error);
+		if (! error.statusCode) {
+			error.statusCode = errorStatusCode(error);
+		}
 		return(next(error));
 	} else {
 		response.send(successCode, results);
@@ -224,6 +254,7 @@ function errorStatusCode(err) {
 		if (message.indexOf('actual=0') > -1) return(410);
 		if (message.indexOf('expected=2  actual=1') > -1) return(410);
 		if (message.indexOf('no questions') > -1) return(410);
+		if (message.indexOf('Register') > -1) return(400);
 	}
 	return(500);
 }

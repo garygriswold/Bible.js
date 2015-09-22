@@ -7,6 +7,7 @@
 function ServerMethodTest(server, port) {
 	this.server = server;
 	this.port = port;
+	this.CryptoJS = require('./lib/aes.js');
 }
 ServerMethodTest.prototype.runTests = function() {
 	var that = this;
@@ -24,22 +25,30 @@ ServerMethodTest.prototype.runTests = function() {
 	}
 	
 	function sendTestToServer(test, callback) {
-		var postData = dataKeyReplace(test.postData);
-		
 		options = {
 			hostname: that.server,
 			port: that.port,
 			method: test.method,
 			path: pathKeyReplace(test.path),
-			agent: false };
+			agent: false 
+		};
+		
+		var headers = {};
+		var postData = dataKeyReplace(test.postData);
 		if (postData) {
-			dataHeaders = {
-				'Content-Type': 'application/json',
-				'Content-Length': postData.length
-			}
-			options.headers = dataHeaders;
+			headers['Content-Type'] = 'application/json';
+			headers['Content-Length'] = postData.length;
 		}
 		
+		var datetime = new Date().toString();
+		headers['Date'] = datetime;
+		
+		if (test.user && test.passPhrase) {
+			var encrypted = that.CryptoJS.AES.encrypt(datetime, test.passPhrase);
+			headers['Authorization'] = 'Signature' + '  ' + test.user + '  ' + encrypted;
+		}
+		options.headers = headers;
+
 		var http = require('http');
 		var request = http.request(options, function(response) {
 			response.setEncoding('utf8');
@@ -91,6 +100,7 @@ ServerMethodTest.prototype.runTests = function() {
 	}
 	
 	function compareResponse(test, status, results) {
+		console.log('COMPARE RESULT', results);
 		var actual = JSON.parse(results);
 		if (status != test.status) {
 			displayError('STATUS ERROR', test, status, actual);
@@ -114,7 +124,7 @@ ServerMethodTest.prototype.runTests = function() {
 			if (! actual.hasOwnProperty(prop)) {
 				displayError('RESULTS MISSING PROP ERROR', test, status, actual);
 			}
-			if (prop !== 'teacherId' && prop !== 'discourseId' && prop !== 'timestamp' && prop !== 'messageTimestamp') {
+			if (prop !== 'teacherId' && prop !== 'passPhrase' && prop !== 'discourseId' && prop !== 'timestamp' && prop !== 'messageTimestamp') {
 				if (actual[prop] != testResults[prop]) {
 					displayError('RESULTS VALUE ERROR', test, status, actual);
 				}
@@ -176,24 +186,61 @@ var tests = [
 	{
 		number: 40,
 		name: 'registerTeacher',
+		description: 'A registration with no credentials',
+		method: 'PUT',
+		path: '/user',
+		postData: {fullname:'Bob Smith', pseudonym:'Bob S', versionId:'KJV'},
+		status: 401,
+		results: {message: 'Authorization Data Incomplete'}
+	},
+	{
+		number: 41,
+		name: 'registerTeacher',
+		description: 'A registration with credentials, but not existent teacher',
+		method: 'PUT',
+		path: '/user',
+		postData: {fullname:'Bob Smith', pseudonym:'Bob S', versionId:'KJV'},
+		user: 'XXXXXX',
+		passPhrase: 'InTheWordIsLife',
+		status: 401,
+		results: {message: 'Unknown TeacherId'}
+	},
+	{
+		number: 42,
+		name: 'registerTeacher',
+		description: 'A registration with credentials, but not incorrect passPhrase',
+		method: 'PUT',
+		path: '/user',
+		postData: {fullname:'Bob Smith', pseudonym:'Bob S', versionId:'KJV'},
+		user: 'GNG',
+		passPhrase: 'ABCDEFGHIJ',
+		status: 401,
+		results: {message: 'Verification Failure'}		
+	},
+	{
+		number: 43,
+		name: 'registerTeacher',
 		description: 'A Valid registerTeacher call',
 		method: 'PUT',
 		path: '/user',
-		postData: {fullname:'Gary Griswold', pseudonym:'Gary G', signature:'XXXX', versionId:'KJV'},
+		postData: {fullname:'Bob Smith', pseudonym:'Bob S', versionId:'WEB'},
+		user: 'GNG',
+		passPhrase: 'InTheWordIsLife',
 		status: 201,
-		results: {rowCount:2, teacherId:'GUID'},
+		results: {rowCount:2, teacherId:'GUID', passPhrase:'PASS'},
 		save: 'Bob'
 	},
 	{
 		number: 50,
 		name: 'registerTeacher',
-		description: 'A 2nd Valid registerTeacher call',
+		description: 'A registerTeacher call, but with unknown version',
 		method: 'PUT',
 		path: '/user',
-		postData: {fullname:'Gary Norris', pseudonym:'Gary G2', signature:'XXXX', versionId:'KJVA'},
-		status: 201,
-		results: {rowCount:2, teacherId:'GUID'},
-		save: 'Bill'	
+		postData: {fullname:'Bill Will', pseudonym:'Bill W', versionId:'XXXX'},
+		user: 'GNG',
+		passPhrase: 'InTheWordIsLife',
+		status: 500,
+		results: {message: 'SQLITE_ERROR: no such table: concordance'}
 	},
 	{
 		number: 60,
@@ -201,9 +248,24 @@ var tests = [
 		description: 'A teacher with invalid input',
 		method: 'PUT',
 		path: '/user',
-		postData: {fullname: null, pseudonym: null, signature: null, versionId:'KJVA'},
-		status: 409,
-		results: {message:'SQLITE_CONSTRAINT: NOT NULL constraint failed: Teacher.fullname'}
+		postData: {fullname: null, pseudonym: null, versionId:'WEB'},
+		user: 'GNG',
+		passPhrase: 'InTheWordIsLife',
+		status: 400,
+		results: {message: 'Register with fullname and pseudonym'}
+	},
+	{
+		number: 61,
+		name: 'registerTeacher',
+		description: 'A teacher with invalid input',
+		method: 'PUT',
+		path: '/user',
+		postData: {fullname: 'Bill Will', pseudonym: 'Billy', versionId:'WEB'},
+		user: 'GNG',
+		passPhrase: 'InTheWordIsLife',
+		status: 201,
+		results: {rowCount:2, teacherId:'GUID', passPhrase:'PASS'},
+		save: 'Bill'
 	},
 	{
 		number: 70,
@@ -211,7 +273,9 @@ var tests = [
 		description: 'Valid updateTeacher call',
 		method: 'POST',
 		path: '/user',
-		postData: {teacherId: 'Bob:teacherId', fullname:'Gary N Griswold', pseudonym:'Gary N'},
+		postData: {teacherId: 'Bob:teacherId', fullname:'Bob Jones', pseudonym:'Bobby'},
+		user: 'GNG',
+		passPhrase: 'InTheWordIsLife',
 		status: 200,
 		results: {rowCount:1}
 	},
@@ -221,7 +285,9 @@ var tests = [
 		description: 'Update non-existent teacher',
 		method: 'POST',
 		path: '/user',
-		postData: {teacherId: 'XXXX', fullname:'Gary N Griswold', pseudonym:'Gary N'},
+		postData: {teacherId: 'XXXX', fullname:'Whoever', pseudonym:'Watt'},
+		user: 'GNG',
+		passPhrase: 'InTheWordIsLife',
 		status: 410,
 		results: {message:'expected=1  actual=0'}
 	},
@@ -232,6 +298,8 @@ var tests = [
 		method: 'DELETE',
 		path: '/user',
 		postData: {teacherId: 'Bill:teacherId'},
+		user: 'GNG',
+		passPhrase: 'InTheWordIsLife',
 		status: 200,
 		results: {rowCount:1}
 	},
@@ -241,7 +309,9 @@ var tests = [
 		description: 'Delete non-existing teacher',
 		method: 'DELETE',
 		path: '/user',
-		postData: {teacherId: 'XXXXX'},	
+		postData: {teacherId: 'XXXXX'},
+		user: 'GNG',
+		passPhrase: 'InTheWordIsLife',	
 		status: 410,
 		results: {message:'expected=1  actual=0'}
 	},
@@ -252,6 +322,8 @@ var tests = [
 		method: 'PUT',
 		path: '/position',
 		postData: {teacherId:'Bob:teacherId', versionId:'KJVA', position:'super'},
+		user: 'GNG',
+		passPhrase: 'InTheWordIsLife',
 		status: 201,
 		results: {rowCount:1}
 	},
@@ -262,6 +334,8 @@ var tests = [
 		method: 'PUT',
 		path: '/position',
 		postData: {teacherId:'Bob:teacherId', versionId:'KJVA', position:'super'},
+		user: 'GNG',
+		passPhrase: 'InTheWordIsLife',
 		status: 409,
 		results: {message:'SQLITE_CONSTRAINT: UNIQUE constraint failed: Position.versionId, Position.teacherId'}	
 	},
@@ -272,6 +346,8 @@ var tests = [
 		method: 'POST',
 		path: '/position',
 		postData: {teacherId:'Bob:teacherId', versionId:'KJVA', position:'removed'},
+		user: 'GNG',
+		passPhrase: 'InTheWordIsLife',
 		status: 200,
 		results: {rowCount:1}
 	},
@@ -282,6 +358,8 @@ var tests = [
 		method: 'POST',
 		path: '/position',
 		postData: {teacherId:'Bob:teacherId', versionId:'KJVA', position:'XXXX'},
+		user: 'GNG',
+		passPhrase: 'InTheWordIsLife',
 		status: 409,
 		results: {message:'SQLITE_CONSTRAINT: CHECK constraint failed: Position'}	
 	},
@@ -292,6 +370,8 @@ var tests = [
 		method: 'DELETE',
 		path: '/position',
 		postData: {teacherId:'Bob:teacherId', versionId:'KJVA'},
+		user: 'GNG',
+		passPhrase: 'InTheWordIsLife',
 		status: 200,
 		results: {rowCount:1}
 	},
@@ -302,6 +382,8 @@ var tests = [
 		method: 'DELETE',
 		path: '/position',
 		postData: {teacherId:'Bob:teacherId', versionId:'KJVA'},
+		user: 'GNG',
+		passPhrase: 'InTheWordIsLife',
 		status: 410,
 		results: {message:'expected=1  actual=0'}
 	},
@@ -395,6 +477,8 @@ var tests = [
 		description: 'Incomplete Open Question Count call',
 		method: 'GET',
 		path: '/open',
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 404,
 		results: { code: 'ResourceNotFound', message: '/open does not exist' }
 	},
@@ -404,6 +488,8 @@ var tests = [
 		description: 'Valid open question count request',
 		method: 'GET',
 		path: '/open/Bob:teacherId/KJV',
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {count:3, timestamp: 'TIME'}
 	},
@@ -413,6 +499,8 @@ var tests = [
 		description: 'Open question count of non-existing version',
 		method: 'GET',
 		path: '/open/Bob:teacherId/XXX',
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {count:0, timestamp: null}
 	},
@@ -422,6 +510,8 @@ var tests = [
 		description: 'Open question count of non-existent version and non-existent teacher',
 		method: 'GET',
 		path: '/open/XXXXX/XXXX',
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {count:0, timestamp:null}	
 	},

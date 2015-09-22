@@ -5,25 +5,3 @@ curl -i http://localhost:8080/bible/WEB.bible1 > out
 curl -i http://localhost:8080/bible/xxx.bible1 > out
 
 
-
-
-
-
-curl -i http://localhost:8080/draft -X PUT -H "Content-Type: application/json" -d '{"discourseId":"12345", "reference":"John7", "message":"This is a draft message"}' #200
-
-curl -i http://localhost:8080/draft -X PUT -H "Content-Type: application/json" -d '{"discourseId":"123", "reference":"John8", "message":"This is a draft message"}' #409
-
-curl -i http://localhost:8080/draft -X POST -H "Content-Type: application/json" -d '{"messageId":6, "reference":"John8", "message":"This is a revised draft message"}' #200
-
-curl -i http://localhost:8080/draft -X POST -H "Content-Type: application/json" -d '{"messageId":600, "reference":"John8", "message":"This is a revised draft message"}' #409
-
-curl -i http://localhost:8080/draft -X DELETE -H "Content-Type: application/json" -d '{"messageId":6}' #200
-
-curl -i http://localhost:8080/draft -X DELETE -H "Content-Type: application/json" -d '{"messageId":6}' #404
-
-curl -i http://localhost:8080/draft/5 #200
-
-curl -i http://localhost:8080/draft/500 #200
-
-
-curl -i http://localhost:8080/widget

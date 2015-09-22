@@ -27,11 +27,15 @@ DatabaseAdapter.prototype.create = function(callback) {
 		'drop table if exists Position',
 		'drop table if exists Teacher',
 		
-		'create table Teacher(' +
+		'CREATE TABLE Teacher(' +
 			' teacherId text PRIMARY KEY NOT NULL,' + // GUID
 			' fullname text NOT NULL,' +
 			' pseudonym text NOT NULL,' +
-			' signature text NOT NULL)',
+			' authorizerId text REFERENCES Teacher(teacherId) NOT NULL,' +
+			' passPhrase text NOT NULL)',
+			
+		'CREATE UNIQUE INDEX passPhraseIndex ON Teacher(passPhrase)',
+		'CREATE INDEX authorizerIdIndex ON Teacher(authorizerId)',
 			
 		'CREATE TABLE Position(' +
 			' versionId text NOT NULL,' + // may reference a Version table
@@ -58,10 +62,14 @@ DatabaseAdapter.prototype.create = function(callback) {
 			' message text NOT NULL,' +
 			' PRIMARY KEY(discourseId, person, timestamp))',
 			
-		'CREATE INDEX MessageDiscourseId ON Message(discourseId)'
+		'CREATE INDEX MessageDiscourseId ON Message(discourseId)',
+		
+		'INSERT INTO Teacher (teacherId, fullname, pseudonym, authorizerId, passPhrase)' +
+			' values ("GNG", "Gary N Griswold", "Gary G", "GNG", "InTheWordIsLife")',
+		'INSERT INTO Position (versionId, teacherId, position) values ("KJV", "GNG", "super")',
 	];
 	var values = new Array(statements.length);
-	this.executeSQL(statements, values, 0, callback);
+	this.executeSQL(statements, values, -1, callback);
 	
 	// Message primary key could be discourseId + timestamp
 };
@@ -75,12 +83,12 @@ DatabaseAdapter.prototype.selectTeachers = function(versionId, callback) {
 */
 DatabaseAdapter.prototype.insertTeacher = function(obj, callback) {
 	var statements = [ 
-		'insert into Teacher(teacherId, fullname, pseudonym, signature) values (?,?,?,?)',
+		'insert into Teacher(teacherId, fullname, pseudonym, authorizerId, passPhrase) values (?,?,?,?,?)',
 		'insert into Position(teacherId, versionId, position) values (?,?,?)'
 	 ];
 	var teacherId = this.uuid();
 	var values = [
-		[ teacherId, obj.fullname, obj.pseudonym, obj.signature ],
+		[ teacherId, obj.fullname, obj.pseudonym, obj.authorizerId, obj.passPhrase ],
 		[ teacherId, obj.versionId, obj.position || "teacher" ]
 	];
 	this.executeSQL(statements, values, 2, function(err, results) {
