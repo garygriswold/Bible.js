@@ -46,7 +46,8 @@ server.pre(function(request, response, next) {
 
 server.on('after', function(request, response, route, error) {
 	var date = new Date();
-	var msg = { time: date.toISOString(), method: request.method, url: request.url, body: request.body, statusCode: response.statusCode };
+	var duration = date.getTime() - request.time();
+	var msg = { time: date.toISOString(), method: request.method, url: request.url, body: request.body, statusCode: response.statusCode, duration: duration };
 	if (error) {
 		msg.error = error;
 		log.error(msg);

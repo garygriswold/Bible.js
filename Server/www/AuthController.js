@@ -1,5 +1,41 @@
 /**
 * This class is handles registration, first login, and regular transaction authentication.
+*
+* Transactions that are restricted contain a Signature authorization header of the form:
+* Authorization: Signature  teacherId  encryptedDateTime
+* Where the datetime was encrypted using the passPhrase as a key.  These headers are checked
+* by the auth method, which uses the teacherId to lookup the passPhrase to decrypt the
+* third part of the signature, which is then checked against the Date header.  If the
+* auth method does not approve the user, the server responds with a 401.
+*
+* When a user is registered they are given a passPhrase by some means that is deliberately
+* outside the scope of the system.  In cases where confidentiality is of most concern, the
+* passPhrase might be given to the user on a slip of paper.  The user enters this into the
+* QAApp on first use, and it is transmitted to the server as a login transaction.  The passPhrase
+* is encrypted using the Datetime as the key.  The server decrypts it, and looks it up to find
+* the associated teacherId, which is transmitted back to the user.  The QAApp puts the teacherId
+* and the passPhrase into localstorage where they can be used to send Signature authorization
+* headers.
+*
+* In order for a person wishing to be a teacher to receive a teacherId and a passPhrase,
+* they must be registered by someone who is registered as a principal or superintendent.
+* This authorizing person enters person's name and pseudonym (public name) into the
+* QAApp, which sends it to the server.  The server generates a teacherId, and a passPhrase
+* from the intended teacher.
+*
+* The following describes this process as a series of steps.
+* 1) Principal or Super registers a new teacher.
+* 2) Server generates, a GUID to be a teacherId.
+* 3) Server generates a Pass-Phrase as a concatenation of multiple words.
+* 4) The Pass-Phrase and the GUID are both guaranteed to be unique.
+* 5) Teacher name, GUID, and Pass-Phrase are all stored in the Teacher table.
+* 6) The Pass-Phrase is manually, by email, or by text communicated to the user.
+* 7) The first time the new user logs into the QAApp, they are asked for the Pass-Phrase.
+* 8) When a correct Pass-Phrase is entered, the GUID is downloaded to the QAApp.
+* 9) The QAApp stores the GUID and pass-phrase in local storage.
+* 10) Each subsequent message to the server contain the GUID and an encrypted datetime
+* 11) Authentication is done by decrypting the datetime and comparing it to datetime header.
+*
 */
 "use strict";
 function AuthController(database) {
