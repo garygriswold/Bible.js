@@ -35,12 +35,9 @@ server.pre(restify.pre.userAgentConnection()); // if UA is curl, close connectio
 */
 server.pre(function(request, response, next) {
 	var path = request.getPath().substr(1,5);
-	if (path === 'bible' || path === 'versi' || path === 'quest' || path === 'login' || path === 'begin') return(next());
-	authController.auth(request, function(err) {
-		if (err) {
-			return(next(err));
-		}
-		return(next());
+	if (path === 'bible' || path === 'versi' || path === 'quest' || path === 'respo' || path === 'login') return(next());
+	authController.authenticate(request, function(err) {
+		return(next(err));
 	});
 });
 
@@ -137,65 +134,100 @@ server.del('/question', function deleteQuestion(request, response, next) {
 	});
 });
 
-server.get('/open/:teacherId/:versionId', function openQuestionCount(request, response, next) {
-	database.getAssignment(request.params, function(err, results) {
-		if (err || results.length > 0) {
-			respond(err, results, 200, response, next);
-		} else {
-			database.openQuestionCount(request.params, function(err, results) {
-				respond(err, results, 200, response, next);
-			});
-		}
-	});
-});
-/** teacherId, versionId, optional timestamp */
-server.post('/assign', function assignQuestion(request, response, next) {
-	database.getAssignment(request.params, function(err, results) {
-		if (err || results.length > 0) {
-			respond(err, results, 200, response, next);
-		} else {
-			database.assignQuestion(request.params, function(err, results) {
-				respond(err, results, 200, response, next);
-			});
-		}
-	});
-});
-/** teacherId, versionId, discourseId */
-server.post('/return', function returnQuestion(request, response, next) {
-	database.returnQuestion(request.params, function(err, results) {
+server.get('/open/:versionId', function openQuestionCount(request, response, next) {
+	authController.authorizeVersion(request.headers.authId, request.params.versionId, function(err) {
 		if (err) {
-			respond(err, results, 200, response, next);
+			return(next(err));
 		} else {
-			database.openQuestionCount(request.params, function(err, results) {
-				respond(err, results, 200, response, next);
-			});			
+			request.params.teacherId = request.headers.authId;
+			database.getAssignment(request.params, function(err, results) {
+				if (err || results.length > 0) {
+					respond(err, results, 200, response, next);
+				} else {
+					database.openQuestionCount(request.params, function(err, results) {
+						respond(err, results, 200, response, next);
+					});
+				}
+			});
+		}	
+	});
+});
+/** versionId, optional timestamp */
+server.post('/assign', function assignQuestion(request, response, next) {
+	authController.authorizeVersion(request.headers.authId, request.params.versionId, function(err) {
+		if (err) {
+			return(next(err));
+		} else {
+			request.params.teacherId = request.headers.authId;
+			database.getAssignment(request.params, function(err, results) {
+				if (err || results.length > 0) {
+					respond(err, results, 200, response, next);
+				} else {
+					database.assignQuestion(request.params, function(err, results) {
+						respond(err, results, 200, response, next);
+					});
+				}
+			});	
 		}
 	});
 });
-/** teacherId, versionId, discourseId */
-server.post('/another', function anotherQuestion(request, response, next) {
-	database.returnQuestion(request.params, function(err, results) {
-		if (err || results === undefined || results.timestamp === undefined) {
-			respond(err, results, 200, response, next);
+/** versionId, discourseId */
+server.post('/return', function returnQuestion(request, response, next) {
+	authController.authorizeVersion(request.headers.authId, request.params.versionId, function(err) {
+		if (err) {
+			return(next(err));
 		} else {
-			request.params.timestamp = results.timestamp; // set to assign a later question.
-			database.assignQuestion(request.params, function(err, results) {
-				respond(err, results, 200, response, next);
-			});
+			request.params.teacherId = request.headers.authId;
+			database.returnQuestion(request.params, function(err, results) {
+				if (err) {
+					respond(err, results, 200, response, next);
+				} else {
+					database.openQuestionCount(request.params, function(err, results) {
+						respond(err, results, 200, response, next);
+					});			
+				}
+			});	
+		}
+	});
+});
+/** versionId, discourseId */
+server.post('/another', function anotherQuestion(request, response, next) {
+	authController.authorizeVersion(request.headers.authId, request.params.versionId, function(err) {
+		if (err) {
+			return(next(err));
+		} else {
+			request.params.teacherId = request.headers.authId;
+			database.returnQuestion(request.params, function(err, results) {
+				if (err || results === undefined || results.timestamp === undefined) {
+					respond(err, results, 200, response, next);
+				} else {
+					request.params.timestamp = results.timestamp; // set to assign a later question.
+					database.assignQuestion(request.params, function(err, results) {
+						respond(err, results, 200, response, next);
+					});
+				}
+			});	
 		}
 	});
 });
 
 server.post('/answer', function sendAnswer(request, response, next) {
-	database.saveAnswer(request.params, function(err, saveResults) {
+	authController.authorizeVersion(request.headers.authId, request.params.versionId, function(err) {
 		if (err) {
-			respond(err, saveResults, 200, response, next);			
+			return(next(err));
 		} else {
-			database.openQuestionCount(request.params, function(err, results) {
-				results.rowCount = saveResults.rowCount;
-				results.messageTimestamp = saveResults.timestamp;
-				respond(err, results, 200, response, next);
-			});
+			request.params.teacherId = request.headers.authId;
+			database.saveAnswer(request.params, function(err, saveResults) {
+				if (err) {
+					respond(err, saveResults, 200, response, next);			
+				} else {
+					database.openQuestionCount(request.params, function(err, results) {
+						results.rowCount = saveResults.rowCount;
+						results.messageTimestamp = saveResults.timestamp;
+						respond(err, results, 200, response, next);
+					});
+				}
+			});	
 		}
 	});
 });
@@ -206,7 +238,7 @@ server.del('/answer', function deleteAnswer(request, response, next) {
 	});
 });
 
-server.get('/answer/:discourseId', function getAnswers(request, response, next) {
+server.get('/response/:discourseId', function getAnswers(request, response, next) {
 	database.selectAnswer(request.params, function(err, results) {
 		respond(err, results, 200, response, next);
 	});

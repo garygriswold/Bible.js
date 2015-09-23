@@ -45,7 +45,7 @@ function AuthController(database) {
 	var fs = require('fs');
 	this.biblePath = fs.realpathSync(__dirname + '/../../StaticRoot/bible/');
 }
-AuthController.prototype.auth = function(request, callback) {
+AuthController.prototype.authenticate = function(request, callback) {
 	var that = this;
 	var authorization = request.headers.authorization;
 	var authParts = (authorization) ? authorization.split(/\s+/) : null;
@@ -139,6 +139,19 @@ AuthController.prototype.newPassPhrase = function(obj, callback) {
 			row.passPhrase = passPhrase;
 		}
 		callback(err, row);
+	});
+};
+AuthController.prototype.authorizeVersion = function(authorizedId, versionId, callback) {
+	this.database.db.get('SELECT count(*) as count FROM Position WHERE TeacherId=? AND position IN ("teacher", "principal") AND versionId=?', authorizedId, versionId, function(err, row) {
+		if (err) {
+			callback(err);
+		} else if (row.count === 0) {
+			var error = new Error('User is not authorized for version.');
+			error.statusCode = 403;
+			callback(error);
+		} else {
+			callback();
+		}
 	});
 };
 AuthController.prototype.uniquePassPhrase = function(obj, callback) {
