@@ -44,8 +44,11 @@ ServerMethodTest.prototype.runTests = function() {
 		headers['Date'] = datetime;
 		
 		if (test.user && test.passPhrase) {
-			var encrypted = that.CryptoJS.AES.encrypt(datetime, test.passPhrase);
-			headers['Authorization'] = 'Signature' + '  ' + test.user + '  ' + encrypted;
+			var encrypted = that.CryptoJS.AES.encrypt(datetime, itemKeyReplace(test.passPhrase));
+			headers['Authorization'] = 'Signature  ' + itemKeyReplace(test.user) + '  ' + encrypted;
+		}
+		else if (test.passPhrase) {
+			headers['Authorization'] = 'Login  ' + itemKeyReplace(test.passPhrase);
 		}
 		options.headers = headers;
 
@@ -77,10 +80,7 @@ ServerMethodTest.prototype.runTests = function() {
 			for (var prop in postData) {
 				var value = postData[prop];
 				if (value && (typeof value) == 'string') {
-					var parts = value.split(':');
-					if (parts.length > 1) {
-						postData[prop] = database[parts[0]][parts[1]];
-					}
+					postData[prop] = itemKeyReplace(value);
 				}
 			}
 			return(JSON.stringify(postData));
@@ -91,16 +91,19 @@ ServerMethodTest.prototype.runTests = function() {
 	function pathKeyReplace(path) {
 		var items = path.split('/');
 		for (var i=0; i<items.length; i++) {
-			var parts = items[i].split(':');
-			if (parts.length > 1) {
-				items[i] = database[parts[0]][parts[1]];
-			}
+			items[i] = itemKeyReplace(items[i]);
 		}
 		return(items.join('/'));
 	}
+	function itemKeyReplace(item) {
+		var parts = item.split(':');
+		if (parts.length > 1) {
+			item = database[parts[0]][parts[1]];
+		}
+		return(item);
+	}
 	
 	function compareResponse(test, status, results) {
-		console.log('COMPARE RESULT', results);
 		var actual = JSON.parse(results);
 		if (status != test.status) {
 			displayError('STATUS ERROR', test, status, actual);
@@ -109,6 +112,7 @@ ServerMethodTest.prototype.runTests = function() {
 			if (actual.length !== test.results.length) {
 				displayError('RESULT ARRAY DIFFER IN SIZE', test, status, actual);
 			}
+			console.log('TST RESULTS', test.results[i]);
 			for (var i=0; i<actual.length; i++) {
 				compareObjects(test, test.results[i], status, actual[i]);
 			}
@@ -266,6 +270,36 @@ var tests = [
 		status: 201,
 		results: {rowCount:2, teacherId:'GUID', passPhrase:'PASS'},
 		save: 'Bill'
+	},
+	{
+		number: 62,
+		name: 'login',
+		description: 'Attempt to login with empty passPhrase',
+		method: 'GET',
+		path: '/login',
+		passPhrase: '',
+		status: 401,
+		results: {message:'Login Data Incomplete'}
+	},
+	{
+		number: 63,
+		name: 'login',
+		description: 'Attempt to login with non-existent passPhrase',
+		method: 'GET',
+		path: '/login',
+		passPhrase: 'XXXXXXXXXX',
+		status: 401,
+		results: {message: 'Unknown PassPhrase'}		
+	},
+	{
+		number: 64,
+		name: 'login',
+		description: 'Attempt to login with valid passPhrase',
+		method: 'GET',
+		path: '/login',
+		passPhrase: 'InTheWordIsLife',
+		status: 200,
+		results: {teacherId: 'GNG'}		
 	},
 	{
 		number: 70,
@@ -522,6 +556,8 @@ var tests = [
 		method: 'POST',
 		path: '/assign',
 		postData: {teacherId:'XXXXX', versionId:'KJV'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 409,
 		results: {message:'SQLITE_CONSTRAINT: FOREIGN KEY constraint failed'}	
 	},
@@ -532,6 +568,8 @@ var tests = [
 		method: 'POST',
 		path: '/assign',
 		postData: {teacherId:'Bob:teacherId', versionId:'KJV'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp: 'TIME', reference:'John1', message:'This is my questions'},
 		save: 'Assign'
@@ -543,6 +581,8 @@ var tests = [
 		method: 'POST',
 		path: '/assign',
 		postData: {teacherId:'Bob:teacherId', versionId:'KJV'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: [{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}],
 	},
@@ -553,6 +593,8 @@ var tests = [
 		method: 'POST',
 		path: '/assign',
 		postData: {teacherId:'Bob:teacherId', versionId:'KJV', timestamp:'Assign:timestamp'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: [{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}],
 	},
@@ -563,6 +605,8 @@ var tests = [
 		method: 'POST',
 		path: '/return',
 		postData: {teacherId:'Bob:teacherId', versionId:'KJV', discourseId:'Disc2:discourseId'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {count:3, timestamp: 'TIME'}	
 	},
@@ -572,7 +616,9 @@ var tests = [
 		description: 'Assign without timestamp to get same question again',
 		method: 'POST',
 		path: '/assign',
-		postData: {teacherId:'Bob:teacherId', versionId:'KJV'}, //timestamp:'Assign:timestamp'},
+		postData: {teacherId:'Bob:teacherId', versionId:'KJV'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'},
 		save: 'Assign'				
@@ -584,6 +630,8 @@ var tests = [
 		method: 'POST',
 		path: '/return',
 		postData: {teacherId:'Bob:teacherId', versionId:'KJV', discourseId:'Assign:discourseId'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {count:3, timestamp: 'TIME'}		
 	},
@@ -594,36 +642,20 @@ var tests = [
 		method: 'POST',
 		path: '/assign',
 		postData: {teacherId:'Bob:teacherId', versionId:'KJV', timestamp:'Assign:timestamp'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John2', message:'This is another question'},
 		save: 'Assign'		
 	},
-	///{
-	//	number: 310,
-	//	name: 'returnQuestion',
-	//	description: 'Return the same assigned question that has already been returned',
-	//	method: 'POST',
-	//	path: '/return',
-	//	postData: {versionId:'KJV', discourseId:'Assign:discourseId'},
-	//	status: 200,
-	//	results: {count:3, timestamp: 'TIME'}		
-	//},
-	//{
-	//	number: 320,
-	//	name: 'assignQuestion',
-	//	description: 'Assign to valid user again',
-	//	method: 'POST',
-	//	path: '/assign',
-	//	postData: {teacherId:'Bob:teacherId', versionId:'KJV'},
-	//	status: 200,
-	//	results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}	
-	//},
 	{
 		number: 370,
 		name: 'openQuestionCount',
 		description: 'Attempt openQuestionCount when there is an assigned question',
 		method: 'GET',
 		path: '/open/Bob:teacherId/KJV',
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: [{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John2', message:'This is another question'}]
 	},
@@ -634,6 +666,8 @@ var tests = [
 		method: 'POST',
 		path: '/another',
 		postData: {teacherId:'Bob:teacherId', versionId:'KJV', discourseId:'XXXX'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 410,
 		results: {message:'expected=1  actual=0'}
 	},
@@ -644,6 +678,8 @@ var tests = [
 		method: 'POST',
 		path: '/another',
 		postData: {teacherId:'XXXXX', versionId:'KJV', discourseId:'Disc2:discourseId'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 410,
 		results: {message: 'expected=1  actual=0'}
 	},
@@ -654,6 +690,8 @@ var tests = [
 		method: 'POST',
 		path: '/another',
 		postData: {teacherId:'Bob:teacherId', versionId:'KJV', discourseId:'Assign:discourseId'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John3', message:'This is my third question'},
 		save: 'Assign'
@@ -665,6 +703,8 @@ var tests = [
 		method: 'POST',
 		path: '/another',
 		postData: {teacherId:'Bob:teacherId', versionId:'KJV', discourseId:'Assign:discourseId'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 410,
 		results: {message: 'There are no questions to assign.'},
 		save: 'Assign'		
@@ -676,6 +716,8 @@ var tests = [
 		method: 'POST',
 		path: '/answer',
 		postData: {discourseId:'Disc2:discourseId', reference:'John6', teacherId:'Bob:teacherId', message:'This is the answer'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {count: 0, timestamp: null, rowCount: 2, messageTimestamp: 'TIME'},
 		save: 'Msg2'
@@ -687,6 +729,8 @@ var tests = [
 		method: 'POST',
 		path: '/answer',
 		postData: {discourseId:'Disc2:discourseId', reference:'John6', teacherId:'Bob:teacherId', message:'This is a repeated answer'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {count: 0, timestamp: null, rowCount: 2, messageTimestamp: 'TIME'}	
 	},
@@ -697,6 +741,8 @@ var tests = [
 		method: 'POST',
 		path: '/answer',
 		postData: {discourseId:'Disc2:discourseId', timestamp:'Msg2:messageTimestamp', reference:'John7', message:'This is the revised answer'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {count: 0, timestamp: null, rowCount: 2, messageTimestamp: 'TIME'}
 	},
@@ -707,6 +753,8 @@ var tests = [
 		method: 'POST',
 		path: '/answer',
 		postData: {discourseId:'XXXXX', reference:'John7', message:'This is the revised answer'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 409,
 		results: {message: 'SQLITE_CONSTRAINT: FOREIGN KEY constraint failed'}
 	},
@@ -717,6 +765,8 @@ var tests = [
 		method: 'DELETE',
 		path: '/answer',
 		postData: {discourseId:'Disc2:discourseId', timestamp:'Msg2:messageTimestamp'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {rowCount: 2}
 	},
@@ -727,6 +777,8 @@ var tests = [
 		method: 'DELETE',
 		path: '/answer',
 		postData: {discourseId:'Disc2:discourseId', timestamp:'Msg2:messageTimestamp'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 410,
 		results: {message: 'expected=2  actual=1'}		
 	},
@@ -737,6 +789,8 @@ var tests = [
 		method: 'POST',
 		path: '/draft',
 		postData: {discourseId:'Disc2:discourseId', reference:'John8', message:'Save this incomplete answer till later'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {rowCount: 1, timestamp:'TIME'},
 		save: 'Draft1'	
@@ -748,6 +802,8 @@ var tests = [
 		method: 'POST',
 		path: '/draft',
 		postData: {discourseId:'Disc2:discourseId', timestamp:'Draft1:timestamp', reference:'John9', message:'Revised again'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {rowCount: 1, timestamp:'TIME'}		
 	},
@@ -758,6 +814,8 @@ var tests = [
 		method: 'DELETE',
 		path: '/draft',
 		postData: {discourseId:'Disc2:discourseId', timestamp:'Draft1:timestamp'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {rowCount: 1}		
 	}

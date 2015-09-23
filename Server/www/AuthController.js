@@ -22,7 +22,6 @@ AuthController.prototype.auth = function(request, callback) {
 			if (err) {
 				callback(err);
 			} else if (row === undefined) {
-				console.log('UNKNOWN TEACHERID', authId);
 				authorizationError('Unknown TeacherId');
 			} else {
 				try {
@@ -72,17 +71,29 @@ AuthController.prototype.register = function(obj, callback) {
 	}
 };
 AuthController.prototype.login = function(request, callback) {
-	console.log('AUTHORIZATION', request.authorization);
-	var datetime = request.getHeader('Date');
-	var encryptedPassPhrase = request.authorization.basic.password;
-	var passPhrase = this.CryptoJS.AES.decrypt(encryptedDatetime, key);
-	this.database.db.get('SELECT teacherId FROM Teacher WHERE passPhrase=?', passPhrase, function(err, row) {
-		if (err && row === null) {
-			var err = new Error('Unknown passPhrase');
-			err.statusCode = 401;
-		}
-		callback(err, row);
-	});
+	var authorization = request.headers.authorization;
+	var authParts = (authorization) ? authorization.split(/\s+/) : null;
+	var datetime = request.headers.date;
+	if (authorization && authParts.length === 2 && datetime) {
+		var passPhrase = authParts[1];
+		this.database.db.get('SELECT teacherId FROM Teacher WHERE passPhrase=?', passPhrase, function(err, row) {
+			if (err) {
+				callback(err);
+			} else if (row === undefined) {
+				loginError('Unknown PassPhrase');
+			} else {
+				callback(null, {teacherId: row.teacherId});
+			}
+		});
+	} else {
+		loginError('Login Data Incomplete');
+	}
+	
+	function loginError(message) {
+		var error = new Error(message);
+		error.statusCode = 401;
+		callback(error);
+	}
 };
 AuthController.prototype.newPassPhrase = function(obj, callback) {
 	var passPhrase = this.uniquePassPhrase(obj);

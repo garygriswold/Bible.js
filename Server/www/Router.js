@@ -75,8 +75,8 @@ server.get('/versions/:locale', function getVersions(request, response, next) {
 	respond(null, results, 200, response, next);
 });
 
-server.post('/login', function loginTeacher(request, response, next) {
-	authController.login(request.authorization, function(err, results) {
+server.get('/login', function loginTeacher(request, response, next) {
+	authController.login(request, function(err, results) {
 		respond(err, results, 200, response, next);
 	});
 });
