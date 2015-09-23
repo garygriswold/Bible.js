@@ -7,7 +7,7 @@ var EthnologyController = require('./EthnologyController');
 var ethnologyController = new EthnologyController();
 
 var DatabaseAdapter = require('./DatabaseAdapter');
-var database = new DatabaseAdapter({filename: './TestDatabase.db', verbose: true});
+var database = new DatabaseAdapter({filename: './TestDatabase.db', verbose: false});
 
 var AuthController = require('./AuthController');
 var authController = new AuthController(database);
