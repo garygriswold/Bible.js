@@ -75,7 +75,8 @@ AuthController.prototype.login = function(request, callback) {
 	var authParts = (authorization) ? authorization.split(/\s+/) : null;
 	var datetime = request.headers.date;
 	if (authorization && authParts.length === 2 && datetime) {
-		var passPhrase = authParts[1];
+		var decrypted = this.CryptoJS.AES.decrypt(authParts[1], datetime);
+		var passPhrase = decrypted.toString(this.CryptoJS.enc.Latin1);		
 		this.database.db.get('SELECT teacherId FROM Teacher WHERE passPhrase=?', passPhrase, function(err, row) {
 			if (err) {
 				callback(err);

@@ -48,7 +48,8 @@ ServerMethodTest.prototype.runTests = function() {
 			headers['Authorization'] = 'Signature  ' + itemKeyReplace(test.user) + '  ' + encrypted;
 		}
 		else if (test.passPhrase) {
-			headers['Authorization'] = 'Login  ' + itemKeyReplace(test.passPhrase);
+			var encrypted = that.CryptoJS.AES.encrypt(itemKeyReplace(test.passPhrase), datetime);
+			headers['Authorization'] = 'Login  ' + encrypted;
 		}
 		options.headers = headers;
 
