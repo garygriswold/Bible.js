@@ -99,21 +99,39 @@ server.del('/user/', function deleteTeacher(request, response, next) {
 });
 
 server.put('/position', function insertPosition(request, response, next) {
-	database.insertPosition(request.params, function(err, results) {
-		respond(err, results, 201, response, next);
+	authController.authorizePosition(request.headers.authId, request.params.versionId, function(err) {
+		if (err) {
+			return(next(err));
+		} else {
+			database.insertPosition(request.params, function(err, results) {
+				respond(err, results, 201, response, next);
+			});			
+		}
 	});
 });
 
 server.post('/position', function updatePosition(request, response, next) {
-	database.updatePosition(request.params, function(err, results) {
-		respond(err, results, 200, response, next);
-	});
+	authController.authorizePosition(request.headers.authId, request.params.versionId, function(err) {
+		if (err) {
+			return(next(err));
+		} else {
+			database.updatePosition(request.params, function(err, results) {
+				respond(err, results, 200, response, next);
+			});
+		}
+	});	
 });
 
 server.del('/position', function deletePosition(request, response, next) {
-	database.deletePosition(request.params, function(err, results) {
-		respond(err, results, 200, response, next);
-	});
+	authController.authorizePosition(request.headers.authId, request.params.versionId, function(err) {
+		if (err) {
+			return(next(err));
+		} else {
+			database.deletePosition(request.params, function(err, results) {
+				respond(err, results, 200, response, next);
+			});
+		}
+	});	
 });
 
 server.put('/question', function insertQuestion(request, response, next) {

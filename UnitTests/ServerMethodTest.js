@@ -353,16 +353,40 @@ var tests = [
 		results: {message:'expected=1  actual=0'}
 	},
 	{
+		number: 101,
+		name: 'insertPosition',
+		description: 'Insert position without any qualification',
+		method: 'PUT',
+		path: '/position',
+		postData: {teacherId:'Bob:teacherId', versionId:'KJV', position:'principal'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
+		status: 403,
+		results:  { message:'You are not authorized for this action.'}
+	},
+	{
 		number: 110,
 		name: 'insertPosition',
 		description: 'Insert valid position',
 		method: 'PUT',
 		path: '/position',
-		postData: {teacherId:'Bob:teacherId', versionId:'KJVA', position:'super'},
+		postData: {teacherId:'Bob:teacherId', versionId:'KJVA', position:'principal'},
 		user: 'GNG',
 		passPhrase: 'InTheWordIsLife',
 		status: 201,
 		results: {rowCount:1}
+	},
+	{
+		number: 111,
+		name: 'insertPosition',
+		description: 'Insert position when authorized has no authority for position',
+		method: 'PUT',
+		path: '/position',
+		postData: {teacherId:'Bob:teacherId', versionId:'WEB', position:'principal'},
+		user: 'Bob:teacherId',
+		passPhrase: 'Bob:passPhrase',
+		status: 403,
+		results: {message: 'You are not authorized for this action.'}		
 	},
 	{
 		number: 120,
@@ -370,7 +394,7 @@ var tests = [
 		description: 'Insert duplicate position',
 		method: 'PUT',
 		path: '/position',
-		postData: {teacherId:'Bob:teacherId', versionId:'KJVA', position:'super'},
+		postData: {teacherId:'Bob:teacherId', versionId:'KJVA', position:'principal'},
 		user: 'GNG',
 		passPhrase: 'InTheWordIsLife',
 		status: 409,
@@ -528,7 +552,7 @@ var tests = [
 		user: 'Bob:teacherId',
 		passPhrase: 'Bob:passPhrase',
 		status: 403,
-		results: {message: 'User is not authorized for version.'}
+		results: {message: 'User is not authorized for this version.'}
 	},
 	{
 		number: 261,
@@ -550,7 +574,7 @@ var tests = [
 		user: 'Bob:teacherId',
 		passPhrase: 'Bob:passPhrase',
 		status: 403,
-		results: {message: 'User is not authorized for version.'}
+		results: {message: 'User is not authorized for this version.'}
 	},
 	{
 		number: 280,
@@ -561,7 +585,7 @@ var tests = [
 		user: 'Bob:teacherId',
 		passPhrase: 'Bob:passPhrase',
 		status: 403,
-		results: {message: 'User is not authorized for version.'}	
+		results: {message: 'User is not authorized for this version.'}	
 	},
 	{
 		number: 290,
