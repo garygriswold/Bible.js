@@ -80,21 +80,52 @@ server.get('/login', function loginTeacher(request, response, next) {
 });
 
 server.put('/user', function registerTeacher(request, response, next) {
-	request.params.authorizerId = request.headers.authId;
-	authController.register(request.params, function(err, results) {
-		respond(err, results, 201, response, next);
+	authController.authorizePosition(request.headers.authId, request.params.position, request.params.versionId, function(err) {
+		if (err) {
+			return(next(err));
+		} else {
+			request.params.authorizerId = request.headers.authId;
+			authController.register(request.params, function(err, results) {
+				respond(err, results, 201, response, next);
+			});			
+		}
 	});
+
 });
 
 server.post('/user', function updateTeacher(request, response, next) {
-	database.updateTeacher(request.params, function(err, results) {
-		respond(err, results, 200, response, next);
+	authController.authorizeUser(request.headers.authId, function(err) {
+		if (err) {
+			return(next(err));
+		} else {
+			database.updateTeacher(request.params, function(err, results) {
+				respond(err, results, 200, response, next);
+			});			
+		}
 	});
 });
 
-server.del('/user/', function deleteTeacher(request, response, next) {
-	database.deleteTeacher(request.params, function(err, results) {
-		respond(err, results, 200, response, next);
+server.del('/user', function deleteTeacher(request, response, next) {
+	authController.authorizeUser(request.headers.authId, function(err) {
+		if (err) {
+			return(next(err));
+		} else {
+			database.deleteTeacher(request.params, function(err, results) {
+				respond(err, results, 200, response, next);
+			});
+		}
+	});
+});
+
+server.get('/phrase/:teacherId/:versionId', function newPassPhrase(request, response, next) {
+	authController.authorizeUser(request.headers.authId, function(err) {
+		if (err) {
+			return(next(err));
+		} else {
+			authController.newPassPhrase(request.params, function(err, results) {
+				respond(err, results, 200, response, next);
+			});
+		}
 	});
 });
 
@@ -103,6 +134,7 @@ server.put('/position', function insertPosition(request, response, next) {
 		if (err) {
 			return(next(err));
 		} else {
+			request.params.authorizerId = request.headers.authId;
 			database.insertPosition(request.params, function(err, results) {
 				respond(err, results, 201, response, next);
 			});			

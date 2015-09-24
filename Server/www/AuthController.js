@@ -89,7 +89,7 @@ AuthController.prototype.register = function(obj, callback) {
 	if (obj.fullname && obj.pseudonym) {
 		this.uniquePassPhrase(obj, function(err, passPhrase) {
 			if (err) {
-				callback(err, passPhrase)
+				callback(err)
 			} else {
 				obj.passPhrase = passPhrase;
 				that.database.insertTeacher(obj, function(err, results) {
@@ -133,59 +133,61 @@ AuthController.prototype.login = function(request, callback) {
 	}
 };
 AuthController.prototype.newPassPhrase = function(obj, callback) {
-	var passPhrase = this.uniquePassPhrase(obj);
-	this.database.executeSQL(['UPDATE Teacher SET passPhrase=? WHERE teacherId=?'], [[ passPhrase, obj.teacherId ]], 1, function(err, row) {
-		if (row) {
-			row.passPhrase = passPhrase;
+	var that = this;
+	this.uniquePassPhrase(obj, function(err, passPhrase) {
+		if (err) {
+			callback(err);
+		} else {
+			that.database.executeSQL(['UPDATE Teacher SET passPhrase=? WHERE teacherId=?'], [[ passPhrase, obj.teacherId ]], 1, function(err, row) {
+				if (row) {
+					row.passPhrase = passPhrase;
+				}
+				callback(err, row);
+			});
 		}
-		callback(err, row);
 	});
 };
+/**
+* This auth function is used for /user update and /user delete.  It does not really check all necessary conditions, because it does not check 
+* that principal/super has a common version with the teacher.  Doing this would require a join.
+*/
+AuthController.prototype.authorizeUser = function(authorizedId, callback) {
+	this.authorize('SELECT count(*) as count FROM Position WHERE teacherId=? AND position IN ("principal", "super")',
+		[ authorizedId ], 'You are not authorized for this action.', callback);
+};
+
 AuthController.prototype.authorizePosition = function(authorizedId, position, versionId, callback) {
 	if (position === 'super') {
 		var error = new Error('You are not authorized for this action.');
 		error.statusCode = 403;
 		callback(error);
 	} else {
-		var statement = 'SELECT count(*) as count FROM Position WHERE teacherId=? AND (position="super" OR (position="principal" AND versionId=?))';
-		this.database.db.get(statement, authorizedId, versionId, function(err, row) {
-			if (err) {
-				callback(err);
-			} else if (row.count === 0) {
-				var error = new Error('You are not authorized for this action.');
-				error.statusCode = 403;
-				callback(error);
-			} else {
-				callback();
-			}
-		});
-	}
-		
+		this.authorize('SELECT count(*) as count FROM Position WHERE teacherId=? AND (position="super" OR (position="principal" AND versionId=?))',
+			[ authorizedId, versionId ], 'You are not authorized for this action.', callback);
+	}	
 };
+
 AuthController.prototype.authorizeVersion = function(authorizedId, versionId, callback) {
-	this.database.db.get('SELECT count(*) as count FROM Position WHERE teacherId=? AND position IN ("teacher", "principal") AND versionId=?', authorizedId, versionId, function(err, row) {
-		if (err) {
-			callback(err);
-		} else if (row.count === 0) {
-			var error = new Error('User is not authorized for this version.');
-			error.statusCode = 403;
-			callback(error);
-		} else {
-			callback();
-		}
-	});
+	this.authorize('SELECT count(*) as count FROM Position WHERE teacherId=? AND position IN ("teacher", "principal") AND versionId=?',
+		[ authorizedId, versionId ], 'User is not authorized for this version.', callback);
 };
+
 AuthController.prototype.authorizeDiscourse = function(authorizedId, discourseId, callback) {
-	this.database.db.get('SELECT count(*) as count FROM Discourse where teacherId=? AND discourseId=? AND status IN ("assigned", "answered")', authorizedId, discourseId, function(err, row) {
+	this.authorize('SELECT count(*) as count FROM Discourse where teacherId=? AND discourseId=? AND status IN ("assigned", "answered")', 
+		[ authorizedId, discourseId ], 'User is not assigned this question.', callback);
+};
+
+AuthController.prototype.authorize = function(statement, values, message, callback) {
+	this.database.db.get(statement, values, function(err, row) {
 		if (err) {
 			callback(err);
 		} else if (row.count === 0) {
-			var error = new Error('User is not assigned this question.');
+			var error = new Error(message);
 			error.statusCode = 403;
 			callback(error);
 		} else {
 			callback();
-		}
+		}		
 	});
 };
 AuthController.prototype.uniquePassPhrase = function(obj, callback) {
@@ -227,6 +229,7 @@ AuthController.prototype.uniquePassPhrase = function(obj, callback) {
 		}
 	});	
 };
+
 
 
 module.exports = AuthController;

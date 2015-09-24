@@ -201,7 +201,7 @@ var tests = [
 		results: {message: 'Authorization Data Incomplete'}
 	},
 	{
-		number: 41,
+		number: 50,
 		name: 'registerTeacher',
 		description: 'A registration with credentials, but not existent teacher',
 		method: 'PUT',
@@ -213,7 +213,7 @@ var tests = [
 		results: {message: 'Unknown TeacherId'}
 	},
 	{
-		number: 42,
+		number: 60,
 		name: 'registerTeacher',
 		description: 'A registration with credentials, but not incorrect passPhrase',
 		method: 'PUT',
@@ -225,7 +225,7 @@ var tests = [
 		results: {message: 'Verification Failure'}		
 	},
 	{
-		number: 43,
+		number: 70,
 		name: 'registerTeacher',
 		description: 'A Valid registerTeacher call',
 		method: 'PUT',
@@ -238,7 +238,7 @@ var tests = [
 		save: 'Bob'
 	},
 	{
-		number: 50,
+		number: 80,
 		name: 'registerTeacher',
 		description: 'A registerTeacher call, but with unknown version',
 		method: 'PUT',
@@ -250,7 +250,7 @@ var tests = [
 		results: {message: 'SQLITE_ERROR: no such table: concordance'}
 	},
 	{
-		number: 60,
+		number: 90,
 		name: 'registerTeacher',
 		description: 'A teacher with invalid input',
 		method: 'PUT',
@@ -262,7 +262,7 @@ var tests = [
 		results: {message: 'Register with fullname and pseudonym'}
 	},
 	{
-		number: 61,
+		number: 100,
 		name: 'registerTeacher',
 		description: 'A teacher with invalid input',
 		method: 'PUT',
@@ -275,7 +275,7 @@ var tests = [
 		save: 'Bill'
 	},
 	{
-		number: 62,
+		number: 110,
 		name: 'login',
 		description: 'Attempt to login with empty passPhrase',
 		method: 'GET',
@@ -285,7 +285,7 @@ var tests = [
 		results: {message:'Login Data Incomplete'}
 	},
 	{
-		number: 63,
+		number: 120,
 		name: 'login',
 		description: 'Attempt to login with non-existent passPhrase',
 		method: 'GET',
@@ -295,7 +295,7 @@ var tests = [
 		results: {message: 'Unknown PassPhrase'}		
 	},
 	{
-		number: 64,
+		number: 130,
 		name: 'login',
 		description: 'Attempt to login with valid passPhrase',
 		method: 'GET',
@@ -305,7 +305,7 @@ var tests = [
 		results: {teacherId: 'GNG'}		
 	},
 	{
-		number: 70,
+		number: 140,
 		name: 'updateTeacher',
 		description: 'Valid updateTeacher call',
 		method: 'POST',
@@ -317,7 +317,7 @@ var tests = [
 		results: {rowCount:1}
 	},
 	{
-		number: 80,
+		number: 150,
 		name: 'updateTeacher',
 		description: 'Update non-existent teacher',
 		method: 'POST',
@@ -329,7 +329,7 @@ var tests = [
 		results: {message:'expected=1  actual=0'}
 	},
 	{
-		number: 90,
+		number: 160,
 		name: 'deleteTeacher',
 		description: 'Delete existing teacher',
 		method: 'DELETE',
@@ -341,7 +341,7 @@ var tests = [
 		results: {rowCount:1}
 	},
 	{
-		number: 100,
+		number: 170,
 		name: 'deleteTeacher',
 		description: 'Delete non-existing teacher',
 		method: 'DELETE',
@@ -353,7 +353,7 @@ var tests = [
 		results: {message:'expected=1  actual=0'}
 	},
 	{
-		number: 101,
+		number: 180,
 		name: 'insertPosition',
 		description: 'Insert position without any qualification',
 		method: 'PUT',
@@ -365,7 +365,7 @@ var tests = [
 		results:  { message:'You are not authorized for this action.'}
 	},
 	{
-		number: 110,
+		number: 190,
 		name: 'insertPosition',
 		description: 'Insert valid position',
 		method: 'PUT',
@@ -377,7 +377,7 @@ var tests = [
 		results: {rowCount:1}
 	},
 	{
-		number: 111,
+		number: 200,
 		name: 'insertPosition',
 		description: 'Insert position when authorized has no authority for position',
 		method: 'PUT',
@@ -389,7 +389,7 @@ var tests = [
 		results: {message: 'You are not authorized for this action.'}		
 	},
 	{
-		number: 120,
+		number: 210,
 		name: 'insertPosition',
 		description: 'Insert duplicate position',
 		method: 'PUT',
@@ -401,7 +401,7 @@ var tests = [
 		results: {message:'SQLITE_CONSTRAINT: UNIQUE constraint failed: Position.versionId, Position.teacherId'}	
 	},
 	{
-		number: 130,
+		number: 220,
 		name: 'updatePosition',
 		description: 'Update valid position',
 		method: 'POST',
@@ -413,7 +413,7 @@ var tests = [
 		results: {rowCount:1}
 	},
 	{
-		number: 140,
+		number: 230,
 		name: 'updatePosition',
 		description: 'Update position with invalid position value',
 		method: 'POST',
@@ -425,7 +425,7 @@ var tests = [
 		results: {message:'SQLITE_CONSTRAINT: CHECK constraint failed: Position'}	
 	},
 	{
-		number: 150,
+		number: 240,
 		name: 'deletePosition',
 		description: 'Delete existing position',
 		method: 'DELETE',
@@ -437,7 +437,7 @@ var tests = [
 		results: {rowCount:1}
 	},
 	{
-		number: 160,
+		number: 250,
 		name: 'deletePosition',
 		description: 'Delete already deleted position',
 		method: 'DELETE',
@@ -449,7 +449,7 @@ var tests = [
 		results: {message:'expected=1  actual=0'}
 	},
 	{
-		number: 170,
+		number: 260,
 		name: 'insertQuestion',
 		description: 'Insert a new valid question',
 		method: 'PUT',
@@ -460,7 +460,7 @@ var tests = [
 		save: 'Disc1'
 	},
 	{
-		number: 180,
+		number: 270,
 		name: 'updateQuestion',
 		description: 'Update an existing question',
 		method: 'POST',
@@ -470,7 +470,7 @@ var tests = [
 		results: {rowCount:1}
 	},
 	{
-		number: 190,
+		number: 280,
 		name: 'updateQuestion',
 		description: 'Attempt to update non-existing question',
 		method: 'POST',
@@ -480,7 +480,7 @@ var tests = [
 		results: {message:'expected=1  actual=0'}
 	},
 	{
-		number: 200,
+		number: 290,
 		name: 'deleteQuestion',
 		description: 'Delete existing question',
 		method: 'DELETE',
@@ -490,7 +490,7 @@ var tests = [
 		results: {rowCount:1}	
 	},
 	{
-		number: 210,
+		number: 300,
 		name: 'deleteQuestion',
 		description: 'Delete already deleted question',
 		method: 'DELETE',
@@ -500,7 +500,7 @@ var tests = [
 		results: {message:'expected=1  actual=0'}
 	},
 	{
-		number: 220,
+		number: 310,
 		name: 'insertQuestion',
 		description: 'Re-insert a valid question after deletion',
 		method: 'PUT',
@@ -511,7 +511,7 @@ var tests = [
 		save: 'Disc2'
 	},
 	{
-		number: 230,
+		number: 320,
 		name: 'insertQuestion',
 		description: 'Insert a valid 2nd question',
 		method: 'PUT',
@@ -522,7 +522,7 @@ var tests = [
 		save: 'Desc3'
 	},
 	{
-		number: 240,
+		number: 330,
 		name: 'insertQuestion',
 		description: 'Insert a valid 3rd question',
 		method: 'PUT',
@@ -533,7 +533,7 @@ var tests = [
 		save: 'Desc4'		
 	},
 	{
-		number: 250,
+		number: 340,
 		name: 'openQuestionCount',
 		description: 'Incomplete Open Question Count call',
 		method: 'GET',
@@ -544,7 +544,7 @@ var tests = [
 		results: { code: 'ResourceNotFound', message: '/open does not exist' }
 	},
 	{
-		number: 260,
+		number: 350,
 		name: 'openQuestionCount',
 		description: 'Open question count request on version with no privilege',
 		method: 'GET',
@@ -555,7 +555,7 @@ var tests = [
 		results: {message: 'User is not authorized for this version.'}
 	},
 	{
-		number: 261,
+		number: 360,
 		name: 'openQuestionCount',
 		description: 'Valid open question count request',
 		method: 'GET',
@@ -566,7 +566,7 @@ var tests = [
 		results: {count:3, timestamp: 'TIME'}
 	},	
 	{
-		number: 270,
+		number: 370,
 		name: 'openQuestionCount',
 		description: 'Open question count of non-existing version',
 		method: 'GET',
@@ -577,7 +577,7 @@ var tests = [
 		results: {message: 'User is not authorized for this version.'}
 	},
 	{
-		number: 280,
+		number: 380,
 		name: 'openQuestionCount',
 		description: 'Open question count of non-existent version and non-existent teacher',
 		method: 'GET',
@@ -588,7 +588,7 @@ var tests = [
 		results: {message: 'User is not authorized for this version.'}	
 	},
 	{
-		number: 290,
+		number: 390,
 		name: 'assignQuestion',
 		description: 'Assign question to non-existent user',
 		method: 'POST',
@@ -600,7 +600,7 @@ var tests = [
 		results: {message: 'Unknown TeacherId'}	
 	},
 	{
-		number: 300,
+		number: 400,
 		name: 'assignQuestion',
 		description: 'Assign existing question to valid user',
 		method: 'POST',
@@ -613,7 +613,7 @@ var tests = [
 		save: 'Assign'
 	},
 	{
-		number: 310,
+		number: 410,
 		name: 'assignQuestion',
 		description: 'Assign attempt when there is already one assign, should get already assigned ',
 		method: 'POST',
@@ -625,7 +625,7 @@ var tests = [
 		results: [{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}],
 	},
 	{
-		number: 320,
+		number: 420,
 		name: 'assignQuestion',
 		description: 'Assign attempt when there is already one assign using timestamp, should get already assigned ',
 		method: 'POST',
@@ -637,7 +637,7 @@ var tests = [
 		results: [{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John1', message:'This is my questions'}],
 	},
 	{
-		number: 330,
+		number: 430,
 		name: 'returnQuestion',
 		description: 'Return assigned question',
 		method: 'POST',
@@ -649,7 +649,7 @@ var tests = [
 		results: {count:3, timestamp: 'TIME'}	
 	},
 	{
-		number: 340,
+		number: 440,
 		name: 'assignQuestion',
 		description: 'Assign without timestamp to get same question again',
 		method: 'POST',
@@ -662,7 +662,7 @@ var tests = [
 		save: 'Assign'				
 	},
 	{
-		number: 350,
+		number: 450,
 		name: 'returnQuestion',
 		description: 'Return assigned question',
 		method: 'POST',
@@ -674,7 +674,7 @@ var tests = [
 		results: {count:3, timestamp: 'TIME'}		
 	},
 	{
-		number: 360,
+		number: 460,
 		name: 'assignQuestion',
 		description: 'Assign to valid user when no questions remain',
 		method: 'POST',
@@ -687,7 +687,7 @@ var tests = [
 		save: 'Assign'		
 	},
 	{
-		number: 370,
+		number: 470,
 		name: 'openQuestionCount',
 		description: 'Attempt openQuestionCount when there is an assigned question',
 		method: 'GET',
@@ -698,7 +698,7 @@ var tests = [
 		results: [{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John2', message:'This is another question'}]
 	},
 	{
-		number: 380,
+		number: 480,
 		name: 'anotherQuestion',
 		description: 'Assign a different question, using invalid discourseId',
 		method: 'POST',
@@ -710,7 +710,7 @@ var tests = [
 		results: {message:'expected=1  actual=0'}
 	},
 	{
-		number: 390,
+		number: 490,
 		name: 'anotherQuestion',
 		description: 'Assign a different question, but teacherId is invalid',
 		method: 'POST',
@@ -722,7 +722,7 @@ var tests = [
 		results: {message: 'expected=1  actual=0'}
 	},
 	{
-		number: 400,
+		number: 500,
 		name: 'anotherQuestion',
 		description: 'Assign a different question, with valid input',
 		method: 'POST',
@@ -735,7 +735,7 @@ var tests = [
 		save: 'Assign'
 	},
 	{
-		number: 410,
+		number: 510,
 		name: 'anotherQuestion',
 		description: 'Assign a different question, with valid input, but no more questions',
 		method: 'POST',
@@ -748,7 +748,7 @@ var tests = [
 		save: 'Assign'		
 	},
 	{
-		number: 420,
+		number: 520,
 		name: 'sendAnswer',
 		description: 'Insert an answer with valid input',
 		method: 'POST',
@@ -760,7 +760,7 @@ var tests = [
 		results: {message: 'User is not assigned this question.'}
 	},
 	{
-		number: 421,
+		number: 530,
 		name: 'assignQuestion',
 		description: 'Valid assign question',
 		method: 'POST',
@@ -773,7 +773,7 @@ var tests = [
 		save: 'Assign'
 	},
 	{
-		number: 422,
+		number: 540,
 		name: 'sendAnswer',
 		description: 'Insert an answer with valid input',
 		method: 'POST',
@@ -786,7 +786,7 @@ var tests = [
 		save: 'Answer'	
 	},
 	{
-		number: 430,
+		number: 550,
 		name: 'sendAnswer',
 		description: 'Insert an identical answer',
 		method: 'POST',
@@ -798,7 +798,7 @@ var tests = [
 		results: {count: 2, timestamp: null, rowCount: 2, messageTimestamp: 'TIME'}	
 	},
 	{
-		number: 440,
+		number: 560,
 		name: 'sendAnswer',
 		description: 'Update an answer with valid input, but invalid versionId',
 		method: 'POST',
@@ -810,7 +810,7 @@ var tests = [
 		results: {count: 0, timestamp: null, rowCount: 2, messageTimestamp: 'TIME'}
 	},
 	{
-		number: 450,
+		number: 570,
 		name: 'sendAnswer',
 		description: 'Update an answer with invalid discourseId',
 		method: 'POST',
@@ -822,7 +822,7 @@ var tests = [
 		results: {message: 'User is not assigned this question.'}
 	},
 	{
-		number: 460,
+		number: 580,
 		name: 'deleteAnswer',
 		description: 'Delete an answer',
 		method: 'DELETE',
@@ -834,7 +834,7 @@ var tests = [
 		results: {rowCount: 2}
 	},
 	{
-		number: 470,
+		number: 590,
 		name: 'deleteAnswer',
 		description: 'Delete an non-existent answer',
 		method: 'DELETE',
@@ -846,7 +846,7 @@ var tests = [
 		results: {message: 'User is not assigned this question.'}		
 	},
 	{
-		number: 471,
+		number: 600,
 		name: 'assignQuestion',
 		description: 'Valid assign question',
 		method: 'POST',
@@ -860,7 +860,7 @@ var tests = [
 		
 	},
 	{
-		number: 480,
+		number: 610,
 		name: 'saveDraft',
 		description: 'Insert a valid draft answer',
 		method: 'POST',
@@ -873,7 +873,7 @@ var tests = [
 		save: 'Draft1'	
 	},
 	{
-		number: 490,
+		number: 620,
 		name: 'saveDraft',
 		description: 'Update a valid draft answer',
 		method: 'POST',
@@ -885,7 +885,7 @@ var tests = [
 		results: {rowCount: 1, timestamp:'TIME'}		
 	},
 	{
-		number: 500,
+		number: 630,
 		name: 'deleteDraft',
 		description: 'Delete a valid draft answer',
 		method: 'DELETE',
@@ -895,6 +895,17 @@ var tests = [
 		passPhrase: 'Bob:passPhrase',
 		status: 200,
 		results: {rowCount: 1}		
+	},
+	{
+		number: 640,
+		name: 'newPassPhrase',
+		description: 'Receive a new passPhrase',
+		method: 'GET',
+		path: '/phrase/Bob:teacherId/KJV',
+		user: 'GNG',
+		passPhrase: 'InTheWordIsLife',
+		status: 200,
+		results: {rowCount: 1, passPhrase: 'PASS' }
 	}
 ]
 
