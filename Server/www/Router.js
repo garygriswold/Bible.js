@@ -212,7 +212,7 @@ server.post('/another', function anotherQuestion(request, response, next) {
 });
 
 server.post('/answer', function sendAnswer(request, response, next) {
-	authController.authorizeVersion(request.headers.authId, request.params.versionId, function(err) {
+	authController.authorizeDiscourse(request.headers.authId, request.params.discourseId, function(err) {
 		if (err) {
 			return(next(err));
 		} else {
@@ -233,8 +233,15 @@ server.post('/answer', function sendAnswer(request, response, next) {
 });
 
 server.del('/answer', function deleteAnswer(request, response, next) {
-	database.deleteAnswer(request.params, function(err, results) {
-		respond(err, results, 200, response, next);
+	authController.authorizeDiscourse(request.headers.authId, request.params.discourseId, function(err) {
+		if (err) {
+			return(next(err));
+		} else {
+			request.params.teacherId = request.headers.authId;
+			database.deleteAnswer(request.params, function(err, results) {
+				respond(err, results, 200, response, next);
+			});
+		}
 	});
 });
 
@@ -245,20 +252,41 @@ server.get('/response/:discourseId', function getAnswers(request, response, next
 });
 
 server.post('/draft', function saveDraft(request, response, next) {
-	database.saveDraft(request.params, function(err, results) {
-		respond(err, results, 200, response, next);
+	authController.authorizeDiscourse(request.headers.authId, request.params.discourseId, function(err) {
+		if (err) {
+			return(next(err));
+		} else {
+			request.params.teacherId = request.headers.authId;
+			database.saveDraft(request.params, function(err, results) {
+				respond(err, results, 200, response, next);
+			});
+		}
 	});
 });
 
 server.del('/draft', function deleteDraft(request, response, next) {
-	database.deleteDraft(request.params, function(err, results) {
-		respond(err, results, 200, response, next);
-	});
+	authController.authorizeDiscourse(request.headers.authId, request.params.discourseId, function(err) {
+		if (err) {
+			return(next(err));
+		} else {
+			request.params.teacherId = request.headers.authId;
+			database.deleteDraft(request.params, function(err, results) {
+				respond(err, results, 200, response, next);
+			});
+		}
+	});			
 });
 
 server.get('/draft/:discourseId/:timestamp', function getDraft(request, response, next) {
-	database.selectDraft(request.params, function(err, results) {
-		respond(err, results, 200, response, next);
+	authController.authorizeDiscourse(request.headers.authId, request.params.discourseId, function(err) {
+		if (err) {
+			return(next(err));
+		} else {
+			request.params.teacherId = request.headers.authId;
+			database.selectDraft(request.params, function(err, results) {
+				respond(err, results, 200, response, next);
+			});
+		}
 	});
 });
 

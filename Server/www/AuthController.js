@@ -154,6 +154,19 @@ AuthController.prototype.authorizeVersion = function(authorizedId, versionId, ca
 		}
 	});
 };
+AuthController.prototype.authorizeDiscourse = function(authorizedId, discourseId, callback) {
+	this.database.db.get('SELECT count(*) as count FROM Discourse where teacherId=? AND discourseId=? AND status IN ("assigned", "answered")', authorizedId, discourseId, function(err, row) {
+		if (err) {
+			callback(err);
+		} else if (row.count === 0) {
+			var error = new Error('User is not assigned this question.');
+			error.statusCode = 403;
+			callback(error);
+		} else {
+			callback();
+		}
+	});
+};
 AuthController.prototype.uniquePassPhrase = function(obj, callback) {
 	var that = this;
 	var bible = new that.sqlite3.Database(this.biblePath + '/' + obj.versionId + '.bible1');
