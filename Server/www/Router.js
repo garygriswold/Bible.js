@@ -99,7 +99,7 @@ server.del('/user/', function deleteTeacher(request, response, next) {
 });
 
 server.put('/position', function insertPosition(request, response, next) {
-	authController.authorizePosition(request.headers.authId, request.params.versionId, function(err) {
+	authController.authorizePosition(request.headers.authId, request.params.position, request.params.versionId, function(err) {
 		if (err) {
 			return(next(err));
 		} else {
@@ -111,7 +111,7 @@ server.put('/position', function insertPosition(request, response, next) {
 });
 
 server.post('/position', function updatePosition(request, response, next) {
-	authController.authorizePosition(request.headers.authId, request.params.versionId, function(err) {
+	authController.authorizePosition(request.headers.authId, request.params.position, request.params.versionId, function(err) {
 		if (err) {
 			return(next(err));
 		} else {
@@ -123,7 +123,7 @@ server.post('/position', function updatePosition(request, response, next) {
 });
 
 server.del('/position', function deletePosition(request, response, next) {
-	authController.authorizePosition(request.headers.authId, request.params.versionId, function(err) {
+	authController.authorizePosition(request.headers.authId, request.params.position, request.params.versionId, function(err) {
 		if (err) {
 			return(next(err));
 		} else {

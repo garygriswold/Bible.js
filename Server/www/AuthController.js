@@ -141,19 +141,25 @@ AuthController.prototype.newPassPhrase = function(obj, callback) {
 		callback(err, row);
 	});
 };
-AuthController.prototype.authorizePosition = function(authorizedId, versionId, callback) {
-	var statement = 'SELECT count(*) as count FROM Position WHERE teacherId=? AND (position="super" OR (position="principal" AND versionId=?))';
-	this.database.db.get(statement, authorizedId, versionId, function(err, row) {
-		if (err) {
-			callback(err);
-		} else if (row.count === 0) {
-			var error = new Error('You are not authorized for this action.');
-			error.statusCode = 403;
-			callback(error);
-		} else {
-			callback();
-		}
-	});
+AuthController.prototype.authorizePosition = function(authorizedId, position, versionId, callback) {
+	if (position === 'super') {
+		var error = new Error('You are not authorized for this action.');
+		error.statusCode = 403;
+		callback(error);
+	} else {
+		var statement = 'SELECT count(*) as count FROM Position WHERE teacherId=? AND (position="super" OR (position="principal" AND versionId=?))';
+		this.database.db.get(statement, authorizedId, versionId, function(err, row) {
+			if (err) {
+				callback(err);
+			} else if (row.count === 0) {
+				var error = new Error('You are not authorized for this action.');
+				error.statusCode = 403;
+				callback(error);
+			} else {
+				callback();
+			}
+		});
+	}
 		
 };
 AuthController.prototype.authorizeVersion = function(authorizedId, versionId, callback) {
