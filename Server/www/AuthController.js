@@ -152,17 +152,17 @@ AuthController.prototype.newPassPhrase = function(obj, callback) {
 * that principal/super has a common version with the teacher.  Doing this would require a join.
 */
 AuthController.prototype.authorizeUser = function(authorizedId, callback) {
-	this.authorize('SELECT count(*) as count FROM Position WHERE teacherId=? AND position IN ("principal", "super")',
+	this.authorize('SELECT count(*) as count FROM Position WHERE teacherId=? AND position IN ("principal", "super", "board")',
 		[ authorizedId ], 'You are not authorized for this action.', callback);
 };
 
 AuthController.prototype.authorizePosition = function(authorizedId, position, versionId, callback) {
-	if (position === 'super') {
+	if (position === 'board') {
 		var error = new Error('You are not authorized for this action.');
 		error.statusCode = 403;
 		callback(error);
 	} else {
-		this.authorize('SELECT count(*) as count FROM Position WHERE teacherId=? AND (position="super" OR (position="principal" AND versionId=?))',
+		this.authorize('SELECT count(*) as count FROM Position WHERE teacherId=? AND (position IN("super", "board") OR (position="principal" AND versionId=?))',
 			[ authorizedId, versionId ], 'You are not authorized for this action.', callback);
 	}	
 };

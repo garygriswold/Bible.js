@@ -67,7 +67,7 @@ DatabaseAdapter.prototype.create = function(callback) {
 		
 		'INSERT INTO Teacher (teacherId, fullname, pseudonym, authorizerId, passPhrase)' +
 			' values ("GNG", "Gary N Griswold", "Gary G", "GNG", "InTheWordIsLife")',
-		'INSERT INTO Position (versionId, teacherId, position) values ("KJV", "GNG", "super")',
+		'INSERT INTO Position (versionId, teacherId, position) values ("KJV", "GNG", "board")',
 	];
 	var values = new Array(statements.length);
 	this.executeSQL(statements, values, -1, callback);
