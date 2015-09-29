@@ -40,7 +40,8 @@ DatabaseAdapter.prototype.create = function(callback) {
 		'CREATE TABLE Position(' +
 			' versionId text NOT NULL,' + // may reference a Version table
 			' teacherId text REFERENCES Teacher(teacherId) ON DELETE CASCADE NOT NULL,' +
-			' position text check(position in ("teacher", "principal", "super", "removed")) NOT NULL,' +
+			' position text check(position in ("removed", "teacher", "principal", "super", "board")) NOT NULL,' +
+			' created text DEFAULT CURRENT_TIMESTAMP NOT NULL,' +
 			' PRIMARY KEY(versionId, teacherId))',
 			
 		'CREATE INDEX PositionTeacherId ON Position(teacherId)',
@@ -70,13 +71,34 @@ DatabaseAdapter.prototype.create = function(callback) {
 	];
 	var values = new Array(statements.length);
 	this.executeSQL(statements, values, -1, callback);
-	
-	// Message primary key could be discourseId + timestamp
 };
-DatabaseAdapter.prototype.selectTeachers = function(versionId, callback) {
-	// Must select teachers where versionId, join or two queries
-	// Must select positions where version
-	// Join or two queries?
+DatabaseAdapter.prototype.selectTeachers = function(obj, callback) {
+	var that = this;
+	var statement = 'SELECT t.teacherId, t.fullname, t.pseudonym, t.authorizerId, p.position, p.versionId, p.created' +
+		' FROM Teacher t JOIN Position p ON t.teacherId=p.teacherId';
+		
+	this.db.all(statement + ' WHERE t.authorizerId=? ORDER BY t.fullname', obj.authorizerId, function(err, memberResults) {
+		if (err) {
+			callback(err);
+		} else {
+			that.db.all(statement + ' WHERE t.teacherId=?', obj.authorizerId, function(err, selfResults) {
+				if (err) {
+					callback(err);
+				} else if (selfResults === null || selfResults.length === 0) {
+					callback(new Error('Did not find self in select'));
+				} else {
+					var selfId = selfResults[0].teacherId;
+					that.db.all('SELECT teacherId, fullname, pseudonym FROM Teacher WHERE teacherId=?', selfId, function(err, superResults) {
+						if (err) {
+							callback(err);
+						} else {
+							callback(null, [superResults, selfResults, memberResults]);
+						}
+					});
+				}
+			});			
+		}
+	});
 };
 /**
 * Teacher registration transaction

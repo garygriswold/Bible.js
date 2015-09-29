@@ -79,6 +79,13 @@ server.get('/login', function loginTeacher(request, response, next) {
 	});
 });
 
+server.get('/user', function selectTeachers(request, response, next) {
+	request.params.authorizerId = request.headers.authId;
+	database.selectTeachers(request.params, function(err, results) {
+		respond(err, results, 200, response, next);
+	});
+});
+
 server.put('/user', function registerTeacher(request, response, next) {
 	authController.authorizePosition(request.headers.authId, request.params.position, request.params.versionId, function(err) {
 		if (err) {
