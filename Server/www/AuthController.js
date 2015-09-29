@@ -199,7 +199,7 @@ AuthController.prototype.uniquePassPhrase = function(obj, callback) {
 			callback(err, row);
 		} else {
 			var array = [];
-			for (var i=0; i<5; i++) {
+			for (var i=0; i<3; i++) {
 				array.push(Math.round(Math.random() * row.count));
 			}
 			bible.all('SELECT word FROM concordance WHERE rowid IN (?,?,?,?,?)', array, function(err, results) {

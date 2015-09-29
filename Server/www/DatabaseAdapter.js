@@ -42,7 +42,7 @@ DatabaseAdapter.prototype.create = function(callback) {
 			' teacherId text REFERENCES Teacher(teacherId) ON DELETE CASCADE NOT NULL,' +
 			' position text check(position in ("removed", "teacher", "principal", "super", "board")) NOT NULL,' +
 			' created text DEFAULT CURRENT_TIMESTAMP NOT NULL,' +
-			' PRIMARY KEY(versionId, teacherId))',
+			' PRIMARY KEY(versionId, position, teacherId))',
 			
 		'CREATE INDEX PositionTeacherId ON Position(teacherId)',
 		
@@ -75,7 +75,7 @@ DatabaseAdapter.prototype.create = function(callback) {
 DatabaseAdapter.prototype.selectTeachers = function(obj, callback) {
 	var that = this;
 	var statement = 'SELECT t.teacherId, t.fullname, t.pseudonym, t.authorizerId, p.position, p.versionId, p.created' +
-		' FROM Teacher t JOIN Position p ON t.teacherId=p.teacherId';
+		' FROM Teacher t LEFT OUTER JOIN Position p ON t.teacherId=p.teacherId';
 		
 	this.db.all(statement + ' WHERE t.authorizerId=? ORDER BY t.fullname', obj.authorizerId, function(err, memberResults) {
 		if (err) {
