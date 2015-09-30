@@ -1,7 +1,7 @@
 /**
 * This class is the model supportting AnswerView.html
 */
-
+"use strict";
 function AnswerViewModel(viewNavigator) {
 	this.viewNavigator = viewNavigator;
 	this.httpClient = viewNavigator.httpClient;

@@ -9,35 +9,45 @@
 		<script type="text/javascript" src="QueueViewModel.js"></script>
 		<script type="text/javascript" src="AnswerViewModel.js"></script>
 		<script type="text/javascript" src="HttpClient.js"></script>
+		<script type="text/javascript" src="AuthClient.js"></script>
 		<script type="text/javascript" src="CurrentState.js"></script>
 		<script type="text/javascript">
 			function onLoad() {
 				
-				var passphrase = 'JabberwokkyInTheHouseNow';
-
-				var now = new Date();
-				var message = now.toString();
-				console.log('before message', message);
-
-				var encrypted = CryptoJS.AES.encrypt(message, passphrase);
-				console.log('encrypted', encrypted);
-
-				var decrypted = CryptoJS.AES.decrypt(encrypted, passphrase);
-				console.log('decrypted', decrypted.toString(CryptoJS.enc.Utf8));
-				
 				TRANSITION = { EVENT: 'transition', IMMEDIATE: 'immediate', SLIDE_LEFT: 'slide-left', SLIDE_RIGHT: 'slide-right' };
 				viewNavigator = new ViewNavigator();
-				viewNavigator.transition('splashView', 'loginView', null, TRANSITION.IMMEDIATE);
+				
+				if (viewNavigator.httpClient.authClient.hasCredentials()) {
+					viewNavigator.transition('splashView', 'queueView', 'openQuestionCount', TRANSITION.IMMEDIATE);
+				} else {
+					viewNavigator.transition('splashView', 'loginView', null, TRANSITION.IMMEDIATE);
+				}
 			}
-			function transitionToForgotView() {
-				viewNavigator.transition('loginView', 'forgotView', null, TRANSITION.SLIDE_LEFT);
+			function processPassPhrase() {
+				var node = document.getElementById('passPhraseNode');
+				var passPhrase = node.value;
+				console.log('PASS PHRASE', passPhrase);
+				if (passPhrase) {
+				var authClient = viewNavigator.httpClient.authClient;
+					authClient.login(passPhrase, function(err) {
+						if (err) {
+							window.alert('Failure in Login ' + JSON.stringify(err));
+						} else {
+							window.alert('You are permanently logged in on this device.');
+							viewNavigator.transition('splashView', 'queueView', 'openQuestionCount', TRANSITION.SLIDE_LEFT);
+						}
+					});
+				}
 			}
-			function transitionBackToLoginView() {
-				viewNavigator.transition('forgotView', 'loginView', null, TRANSITION.SLIDE_RIGHT);
-			}
-			function openQuestionCount() {
-				viewNavigator.transition('loginView', 'queueView', 'openQuestionCount', TRANSITION.SLIDE_LEFT);
-			}
+			//function transitionToForgotView() {
+			//	viewNavigator.transition('loginView', 'forgotView', null, TRANSITION.SLIDE_LEFT);
+			//}
+			//function transitionBackToLoginView() {
+			//	viewNavigator.transition('forgotView', 'loginView', null, TRANSITION.SLIDE_RIGHT);
+			//}
+			//function openQuestionCount() {
+			//	viewNavigator.transition('loginView', 'queueView', 'openQuestionCount', TRANSITION.SLIDE_LEFT);
+			//}
 			function assignQuestion() {
 				viewNavigator.transition('queueView', 'answerView', 'assignQuestion', TRANSITION.SLIDE_LEFT);
 			}

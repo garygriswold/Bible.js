@@ -1,7 +1,7 @@
 /**
 * This class is the model supportting QueueView.html
 */
-
+"use strict";
 function QueueViewModel(viewNavigator) {
 	this.viewNavigator = viewNavigator;
 	this.httpClient = viewNavigator.httpClient;

@@ -22,6 +22,7 @@
 * We want to fix HeaderView once it is added, and never delete it.
 * We also do not want to include it in the transition.
 */
+"use strict";
 function ViewNavigator() {
 	this.currentState = new CurrentState();
 	this.httpClient = new HttpClient('localhost', '8080');

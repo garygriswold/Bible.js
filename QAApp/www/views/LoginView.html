@@ -16,19 +16,16 @@
 		<tr style="height: 34%">
 			<td></td>
 			<td id="loginForm" style="text-align: center; vertical-align: middle;">
-				<p class="fieldBorder" style="margin-bottom: 1px">
-					<input class="inputField" type="text" placeholder="Username" size="20" style="font-size: large">
-				</p>
 				<p class="fieldBorder" style="margin-top: 1px">
-					<input class="inputField" type="password" placeholder="Password" size="17" style="font-size: large">
-					<input type="button" class="goButton" value="Go" onclick="openQuestionCount()">
+					<input id="passPhraseNode" class="inputField" type="text" placeholder="Pass Phrase" size="30" style="font-size: large">
+					<input type="button" class="goButton" value="Go" onclick="processPassPhrase()">
 				</p>
 			</td>
 			<td></td>
 		<tr style="height: 33%">
 			<td></td>
-			<td style="text-align: center; font-size: 0.8rem; vertical-align: top;"><span id="loginResponse">
-				<a onclick="transitionToForgotView()" style="color:#f1f4b2;">Did you forgot your Username or Password?</a>
+			<td style="text-align: center; font-size: 0.8rem; vertical-align: top; color: white;"><span id="loginResponse">
+				Enter the Pass Phrase that was given to you to login.<br/>You need to do this only once for each device you use.
 			</span></td>
 			<td></td>
 		</tr>
