@@ -61,7 +61,7 @@ QueueViewModel.prototype.setProperties = function(status, results) {
 };
 QueueViewModel.prototype.openQuestionCount = function() {
 	var that = this;
-	this.httpClient.get('/open/' + this.state.teacherId + '/' + this.state.versionId, function(status, results) {
+	this.httpClient.get('/open/' + this.state.versionId, function(status, results) {
 		if (status === 200 && results.count) {
 			that.setProperties(status, results);
 		} else {
