@@ -68,7 +68,7 @@ DatabaseAdapter.prototype.create = function(callback) {
 		
 		'INSERT INTO Teacher (teacherId, fullname, pseudonym, authorizerId, passPhrase)' +
 			' values ("GNG", "Gary N Griswold", "Gary G", "GNG", "InTheWordIsLife")',
-		'INSERT INTO Position (versionId, teacherId, position) values ("KJV", "GNG", "board")',
+		'INSERT INTO Position (versionId, teacherId, position) values ("", "GNG", "board")',
 	];
 	var values = new Array(statements.length);
 	this.executeSQL(statements, values, -1, callback);
@@ -194,10 +194,11 @@ DatabaseAdapter.prototype.deleteQuestion = function(obj, callback) {
 	this.executeSQL(statements, values, 1, callback);
 };
 DatabaseAdapter.prototype.openQuestionCount = function(obj, callback) {
-	var statement = 'SELECT count(*) as count, min(m.timestamp) as timestamp' +
+	var statement = 'SELECT d.versionId, count(*) as count, min(m.timestamp) as timestamp' +
 		' FROM Discourse d JOIN Message m ON d.discourseId=m.discourseId' +
-		' WHERE d.status="open" and m.person="S" and d.versionId=?';
-	this.db.get(statement, obj.versionId, callback);
+		' WHERE d.status="open" AND m.person="S"' +
+		' GROUP BY d.versionId';
+	this.db.all(statement, callback);
 };
 /**
 * Because this method does a select and an update in a transaction, it seemed best to
