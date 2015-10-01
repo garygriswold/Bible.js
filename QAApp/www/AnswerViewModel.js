@@ -55,14 +55,14 @@ AnswerViewModel.prototype.setProperties = function(status, results) {
 };
 AnswerViewModel.prototype.assignQuestion = function() {
 	var that = this;
-	var postData = {teacherId:this.state.teacherId, versionId:this.state.versionId};//add optional timestamp
+	var postData = {versionId:this.state.versionId};
 	this.httpClient.post('/assign', postData, function(status, results) {
 		that.setProperties(status, results);
 	});	
 };
 AnswerViewModel.prototype.anotherQuestion = function() {
 	var that = this;
-	var postData = {teacherId:this.state.teacherId, versionId:this.state.versionId, discourseId:this.state.discourseId};
+	var postData = {versionId:this.state.versionId, discourseId:this.state.discourseId};
 	this.httpClient.post('/another', postData, function(status, results) {
 		if (status === 200) {
 			that.setProperties(status, results);
