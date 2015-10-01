@@ -30,7 +30,6 @@ HttpClient.prototype.request = function(method, path, postData, callback) {
 	if (request) {
 		request.onreadystatechange = progressEvents;
 		request.open(method, this.authority + path, true);
-		request.setRequestHeader('Date', new Date().toString())
 		if (path === '/login') {
 			this.authClient.signLogin(request, postData.passPhrase);
 			postData = null;

@@ -30,32 +30,34 @@ AuthClient.prototype.login = function(passPhrase, callback) {
 	});
 };
 AuthClient.prototype.signLogin = function(request, passPhrase) {
-	//var datetime = request.getRequestHeader('Date');
-	var datetime = new Date().toString();
-	console.log('request date', datetime);
+	var datetime = new Date().toISOString();
+	request.setRequestHeader('x-time', datetime);
 	var encrypted = CryptoJS.AES.encrypt(passPhrase, datetime);
 	request.setRequestHeader('Authorization', 'Login  ' + encrypted);
 };
-//AuthClient.prototype.loginResponse = function(result) {
-//	if (result && result.teacherId) {
-//		this.setCredentials(result.teacherId, this.passPhrase);
-//	}
-//};
 AuthClient.prototype.signRequest = function(request) {
 	var credential = this.getCredentials();
-		if (credential) {
-		var datetime = request.getRequestHeader('Date');
-		var encrypted = CryptoJS.AES.encrypt(datetime, credential.passPhrase);
+	if (credential && credential.user && credential.pass) {
+		var datetime = new Date().toISOString();
+		request.setRequestHeader('x-time', datetime);
+		var encrypted = CryptoJS.AES.encrypt(datetime, credential.pass);
 		request.setRequestHeader('Authorization', 'Signature  ' + credential.user + '  ' + encrypted);
 	}
 };
+AuthClient.prototype.clearCredentials = function() {
+	localStorage.removeItem('user');
+	localStorage.removeItem('pass');
+}
 AuthClient.prototype.hasCredentials = function() {
 	return(localStorage.getItem('user') !== null);
 }
 AuthClient.prototype.getCredentials = function() {
-	return(localStorage.getItem('user'));
+	var user = localStorage.getItem('user');
+	var pass = localStorage.getItem('pass');
+	return({user:user, pass:pass});
 };
 AuthClient.prototype.setCredentials = function(guid, passPhrase) {
-	localStorage.setItem('user', {user:guid, passPhrase:passPhrase});
+	localStorage.setItem('user', guid);
+	localStorage.setItem('pass', passPhrase);
 };
 

@@ -17,6 +17,7 @@
 				TRANSITION = { EVENT: 'transition', IMMEDIATE: 'immediate', SLIDE_LEFT: 'slide-left', SLIDE_RIGHT: 'slide-right' };
 				viewNavigator = new ViewNavigator();
 				
+				viewNavigator.httpClient.authClient.clearCredentials();
 				if (viewNavigator.httpClient.authClient.hasCredentials()) {
 					viewNavigator.transition('splashView', 'queueView', 'openQuestionCount', TRANSITION.IMMEDIATE);
 				} else {
@@ -34,7 +35,7 @@
 							window.alert('Failure in Login ' + JSON.stringify(err));
 						} else {
 							window.alert('You are permanently logged in on this device.');
-							viewNavigator.transition('splashView', 'queueView', 'openQuestionCount', TRANSITION.SLIDE_LEFT);
+							viewNavigator.transition('loginView', 'queueView', 'openQuestionCount', TRANSITION.SLIDE_LEFT);
 						}
 					});
 				}
