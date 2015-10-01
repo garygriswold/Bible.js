@@ -49,7 +49,7 @@ AuthController.prototype.authenticate = function(request, callback) {
 	var that = this;
 	var authorization = request.headers.authorization;
 	var authParts = (authorization) ? authorization.split(/\s+/) : null;
-	var datetime = request.headers.date;
+	var datetime = request.headers['x-time'];
 	
 	if (authorization && authParts.length === 3 && datetime) {
 		var authId = authParts[1];
@@ -109,7 +109,7 @@ AuthController.prototype.register = function(obj, callback) {
 AuthController.prototype.login = function(request, callback) {
 	var authorization = request.headers.authorization;
 	var authParts = (authorization) ? authorization.split(/\s+/) : null;
-	var datetime = request.headers.date;
+	var datetime = request.headers['x-time'];
 	if (authorization && authParts.length === 2 && datetime) {
 		var decrypted = this.CryptoJS.AES.decrypt(authParts[1], datetime);
 		var passPhrase = decrypted.toString(this.CryptoJS.enc.Latin1);		

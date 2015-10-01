@@ -6,6 +6,7 @@
 * Note: as of 8/24/2015, when no rows are updated or deleted, because
 * key was wrong, no error is being generated.
 */
+"use strict";
 function DatabaseAdapter(options) {
 	var sqlite3 = (options.verbose) ? require('sqlite3').verbose() : require('sqlite3');
 	this.db = new sqlite3.Database(options.filename);
@@ -341,31 +342,31 @@ DatabaseAdapter.prototype.executeSQL = function(statements, values, affectedRows
 		that.db.run('begin immediate transaction', [], function(err) {
 			executeStatement(0);
 		});
+	}
 		
-		function executeStatement(index) {
-			if (index < statements.length) {
-				that.db.run(statements[index], values[index], function(err) {
-					if (err) {
-						console.log('Has error ', err);
-						that.db.run('rollback transaction', [], function(rollErr) {
-							callback(rollErr || err, {rowCount: 0});
-						});
-					} else {
-						rowCount += this.changes;
-						executeStatement(index + 1);
-					}
-				});
-			} else {
-				if (affectedRows >= 0 && affectedRows !== rowCount) {
-					var err = new Error('expected=' + affectedRows + '  actual=' + rowCount);
+	function executeStatement(index) {
+		if (index < statements.length) {
+			that.db.run(statements[index], values[index], function(err) {
+				if (err) {
+					console.log('Has error ', err);
 					that.db.run('rollback transaction', [], function(rollErr) {
 						callback(rollErr || err, {rowCount: 0});
 					});
 				} else {
-					that.db.run('commit transaction', [], function(err) {
-						callback(err, {rowCount: rowCount});
-					});
+					rowCount += this.changes;
+					executeStatement(index + 1);
 				}
+			});
+		} else {
+			if (affectedRows >= 0 && affectedRows !== rowCount) {
+				var err = new Error('expected=' + affectedRows + '  actual=' + rowCount);
+				that.db.run('rollback transaction', [], function(rollErr) {
+					callback(rollErr || err, {rowCount: 0});
+				});
+			} else {
+				that.db.run('commit transaction', [], function(err) {
+					callback(err, {rowCount: rowCount});
+				});
 			}
 		}
 	}

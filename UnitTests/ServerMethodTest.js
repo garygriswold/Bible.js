@@ -4,6 +4,7 @@
 * results.  It stops on the first error found, and only runs to completion
 * when there are no errors.
 */
+"use strict";
 function ServerMethodTest(server, port) {
 	this.server = server;
 	this.port = port;
@@ -25,7 +26,7 @@ ServerMethodTest.prototype.runTests = function() {
 	}
 	
 	function sendTestToServer(test, callback) {
-		options = {
+		var options = {
 			hostname: that.server,
 			port: that.port,
 			method: test.method,
@@ -40,8 +41,8 @@ ServerMethodTest.prototype.runTests = function() {
 			headers['Content-Length'] = postData.length;
 		}
 		
-		var datetime = new Date().toString();
-		headers['Date'] = datetime;
+		var datetime = new Date().toISOString();
+		headers['x-time'] = datetime;
 		
 		if (test.user && test.passPhrase) {
 			var encrypted = that.CryptoJS.AES.encrypt(datetime, itemKeyReplace(test.passPhrase));

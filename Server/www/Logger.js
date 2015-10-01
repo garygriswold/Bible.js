@@ -2,7 +2,7 @@
 * This class implements a simplified logger, which is similar to a log4j logger
 * in the most basic of ways.
 */
-
+"use strict";
 var FS = require('fs');
 
 var log = {
