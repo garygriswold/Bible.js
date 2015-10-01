@@ -4,7 +4,7 @@
 */
 "use strict";
 function CurrentState() {
-	this.teacherId = '5382a5a8-0677-47ce-ba7a-3c57ae5356eb';
+	this.teacherId = null;
 	this.versionId = 'KJV';
 	this.discourseId = null;
 	this.questionTimestamp = null;

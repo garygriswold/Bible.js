@@ -17,8 +17,11 @@
 				TRANSITION = { EVENT: 'transition', IMMEDIATE: 'immediate', SLIDE_LEFT: 'slide-left', SLIDE_RIGHT: 'slide-right' };
 				viewNavigator = new ViewNavigator();
 				
-				viewNavigator.httpClient.authClient.clearCredentials();
-				if (viewNavigator.httpClient.authClient.hasCredentials()) {
+				var authClient = viewNavigator.httpClient.authClient;
+				authClient.clearCredentials();// Keep for Testing
+				if (authClient.hasCredentials()) {
+					var credentials = authClient.getCredentials();
+					viewNavigator.currentState.teacherId = credentials.user;
 					viewNavigator.transition('splashView', 'queueView', 'openQuestionCount', TRANSITION.IMMEDIATE);
 				} else {
 					viewNavigator.transition('splashView', 'loginView', null, TRANSITION.IMMEDIATE);
@@ -32,9 +35,11 @@
 				var authClient = viewNavigator.httpClient.authClient;
 					authClient.login(passPhrase, function(err) {
 						if (err) {
-							window.alert('Failure in Login ' + JSON.stringify(err));
+							window.alert('Failure to Login: ' + err.message);
 						} else {
-							window.alert('You are permanently logged in on this device.');
+							var credentials = authClient.getCredentials();
+							viewNavigator.currentState.teacherId = credentials.user;
+							window.alert('You are now permanently logged in on this device.');
 							viewNavigator.transition('loginView', 'queueView', 'openQuestionCount', TRANSITION.SLIDE_LEFT);
 						}
 					});

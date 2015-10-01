@@ -117,7 +117,7 @@ AuthController.prototype.login = function(request, callback) {
 			if (err) {
 				callback(err);
 			} else if (row === undefined) {
-				loginError('Unknown PassPhrase');
+				loginError('Unknown Pass Phrase');
 			} else {
 				callback(null, {teacherId: row.teacherId});
 			}

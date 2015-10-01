@@ -42,14 +42,18 @@ HttpClient.prototype.request = function(method, path, postData, callback) {
 		this.authClient.signRequest(request);
 		request.send(data);		
 	} else {
-		window.alert('Please try a different web browser.  This one does not have the abilities needed.');
-		callback(-1, {});
+		callback(-2, new Error('Please try a different web browser.  This one does not have the abilities needed.'));
 	}
 
 	function progressEvents() {
 		try {
+			console.log(request.readyState, request.status);
 	    	if (request.readyState === 4) {
-		    	callback(request.status, JSON.parse(request.responseText));
+		    	if (request.status === 0) {
+			    	callback(request.status, new Error('Could not reach the server, please try again when you have a better connection.'));
+		    	} else {
+		    		callback(request.status, JSON.parse(request.responseText));
+		    	}
 	    	}
 	    } catch(error) {
 		    callback(-1, error)
