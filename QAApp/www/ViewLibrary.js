@@ -1,30 +1,6 @@
-var viewLibrary = {};
+"use strict";
 
-viewLibrary['loginView'] = '<table id="loginView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000);">' +
-	'<tr style="height: 33%">' +
-	'<td style="width: 25%"></td>' +
-	'<td style="width: 50%; text-align: center; vertical-align: bottom">' +
-	'<p style="font-family: Avenir-Light; font-size: 1.5rem; color: #f9fbfc">Sign-In to My Bible Q & A</p>' +
-	'</td>' +
-	'<td style="width: 25%"></td>' +
-	'</tr>' +
-	'<tr style="height: 34%">' +
-	'<td></td>' +
-	'<td id="loginForm" style="text-align: center; vertical-align: middle;">' +
-	'<p class="fieldBorder" style="margin-top: 1px">' +
-	'<input id="passPhraseNode" class="inputField" type="text" placeholder="Pass Phrase" size="30" style="font-size: large">' +
-	'<input type="button" class="goButton" value="Go" onclick="processPassPhrase()">' +
-	'</p>' +
-	'</td>' +
-	'<td></td>' +
-	'<tr style="height: 33%">' +
-	'<td></td>' +
-	'<td style="text-align: center; font-size: 0.8rem; vertical-align: top; color: white;"><span id="loginResponse">' +
-	'Enter the Pass Phrase that was given to you to login.<br/>You need to do this only once for each device you use.' +
-	'</span></td>' +
-	'<td></td>' +
-	'</tr>' +
-	'</table>';
+var viewLibrary = {};
 
 viewLibrary['answerView'] = '<div id="answerView" style="height: 100%; width: 100%; background: white">' +
 	'<div style="height: 90%; width: 100%;">' +
@@ -107,6 +83,99 @@ viewLibrary['answerView'] = '<div id="answerView" style="height: 100%; width: 10
 	'}' +
 	'</style>';
 
+viewLibrary['queueView'] = '<div id="queueView">' +
+	'<!--<p>Unassigned Questions</p>' +
+	'<table>' +
+	'<tr>' +
+	'<th colspan="3">KJV</th>' +
+	'</tr>' +
+	'<tr>' +
+	'<th style="width:33%">Unanswered Questions</th>' +
+	'<th style="width:33%">Oldest Question</th>' +
+	'<th style="width:33%">Waiting Minutes</th>' +
+	'</tr>' +
+	'<tr>' +
+	'<td>23</td>' +
+	'<td>Sept 23, 2015 13:23</td>' +
+	'<td>234</td>' +
+	'</tr>' +
+	'<tr>' +
+	'<td colspan="3"><button id="assignKJV" class="button bigrounded blue" onclick="assignQuestion()">Assign Me A Question</button></td>' +
+	'</tr>' +
+	'</table>-->' +
+	'</div>' +
+	'<style>' +
+	'table {' +
+	'width: 80%;' +
+	'background: white;' +
+	'margin: 30px auto;' +
+	'}' +
+	'th {' +
+	'border: solid;' +
+	'font-family: sans-serif;' +
+	'font-size: medium;' +
+	'color: grey;' +
+	'color: #6D929B;' +
+	'border-right: 1px solid #C1DAD7;' +
+	'border-bottom: 1px solid #C1DAD7;' +
+	'border-top: 1px solid #C1DAD7;' +
+	'letter-spacing: 2px;' +
+	'text-transform: uppercase;' +
+	'text-align: center;' +
+	'padding: 6px 6px 6px 12px;' +
+	'background: #CAE8EA' +
+	'}' +
+	'td {' +
+	'border: solid;' +
+	'border-right: 1px solid #C1DAD7;' +
+	'border-bottom: 1px solid #C1DAD7;' +
+	'background: #ffffff;' +
+	'padding: 6px 6px 6px 12px;' +
+	'color: #6D929B;' +
+	'font-family: sans-serif;' +
+	'font-size: large;' +
+	'text-align: center;' +
+	'}' +
+	'p {' +
+	'font-family: sans-serif;' +
+	'text-transform: uppercase;' +
+	'letter-spacing: 2px;' +
+	'font-size: x-large;' +
+	'color: #6D929B;' +
+	'text-align: center;' +
+	'}' +
+	'</style>';
+
+viewLibrary['loginView'] = '<table id="loginView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000);">' +
+	'<tr style="height: 33%">' +
+	'<td style="width: 25%"></td>' +
+	'<td style="width: 50%; text-align: center; vertical-align: bottom">' +
+	'<p style="font-family: Avenir-Light; font-size: 1.5rem; color: #f9fbfc">Sign-In to My Bible Q & A</p>' +
+	'</td>' +
+	'<td style="width: 25%"></td>' +
+	'</tr>' +
+	'<tr style="height: 34%">' +
+	'<td></td>' +
+	'<td id="loginForm" style="text-align: center; vertical-align: middle;">' +
+	'<p class="fieldBorder" style="margin-top: 1px">' +
+	'<input id="passPhraseNode" class="inputField" type="text" placeholder="Pass Phrase" size="30" style="font-size: large">' +
+	'<input type="button" class="goButton" value="Go" onclick="processPassPhrase()">' +
+	'</p>' +
+	'</td>' +
+	'<td></td>' +
+	'<tr style="height: 33%">' +
+	'<td></td>' +
+	'<td style="text-align: center; font-size: 0.8rem; vertical-align: top; color: white;"><span id="loginResponse">' +
+	'Enter the Pass Phrase that was given to you to login.<br/>You need to do this only once for each device you use.' +
+	'</span></td>' +
+	'<td></td>' +
+	'</tr>' +
+	'</table>';
+
+viewLibrary['headerView'] = '<table id="headerView" style="height: 15%; width: 100%; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">' +
+	'<tr style="height: 100%"><td style="text-align: center; vertical-align: middle; color: white">My Bible Q & A</td><tr>' +
+	'</table>';
+
 viewLibrary['forgotView'] = '<table id="forgotView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">' +
 	'<tr style="height: 33%">' +
 	'<td style="width: 25%"></td>' +
@@ -133,42 +202,6 @@ viewLibrary['forgotView'] = '<table id="forgotView" style="height: 100%; width: 
 	'<td></td>' +
 	'</tr>' +
 	'</table>';
-
-viewLibrary['headerView'] = '<table id="headerView" style="height: 15%; width: 100%; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">' +
-	'<tr style="height: 100%"><td style="text-align: center; vertical-align: middle; color: white">My Bible Q & A</td><tr>' +
-	'</table>';
-
-viewLibrary['queueView'] = '<table id="queueView" style="height: 100%; width: 100%; background: white">' +
-	'<tr style="height: 25%">' +
-	'</tr>' +
-	'<tr style="height: 5%">' +
-	'<td style="width: 20%"></td>' +
-	'<td style="width: 60%"><p id="numQuestions" class="queueText">num</p></td>' +
-	'<td style="width: 20%"></td>' +
-	'</tr>' +
-	'<tr style="height: 5%">' +
-	'<td></td>' +
-	'<td><p id="oldestQuestion" class="queueText">oldest</p></td>' +
-	'<td></td>' +
-	'</tr>' +
-	'<tr style="height: 5%">' +
-	'<td></td>' +
-	'<td><p id="waitTime" class="queueText">wait</p></td>' +
-	'<td></td>' +
-	'</tr>' +
-	'<tr style="height: 60%">' +
-	'<td></td>' +
-	'<td style="text-align: center"><button id="assign" class="button bigrounded blue" onclick="assignQuestion()">Assign Me A Question</button></td>' +
-	'<td></td>' +
-	'</tr>' +
-	'</table>' +
-	'<style type="text/css">' +
-	'p.queueText {' +
-	'font-family: sans-serif;' +
-	'font-size: large;' +
-	'color: grey;' +
-	'}' +
-	'</style>';
 
 viewLibrary['rolesView'] = '<h1 style="text-align: center">Manage Roles</h1>' +
 	'<table id="rolesView" style="width: 90%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000);">' +

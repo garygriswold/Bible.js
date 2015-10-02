@@ -27,7 +27,6 @@ QueueViewModel.prototype.oldestQuestionMsg = function() {
 QueueViewModel.prototype.waitTimeMsg = function() {
 	return((this.waitTime && this.numQuestions > 0) ? "The oldest question has been waiting " + this.waitTime + " minutes." : '');
 };
-
 QueueViewModel.prototype.display = function() {
 	setNodeValue('numQuestions', this.numQuestionsMsg());
 	setNodeValue('oldestQuestion', this.oldestQuestionMsg());
@@ -61,7 +60,7 @@ QueueViewModel.prototype.setProperties = function(status, results) {
 };
 QueueViewModel.prototype.openQuestionCount = function() {
 	var that = this;
-	this.httpClient.get('/open/' + this.state.versionId, function(status, results) {
+	this.httpClient.get('/open', function(status, results) {
 		if (status === 200 && results.count) {
 			that.setProperties(status, results);
 		} else {

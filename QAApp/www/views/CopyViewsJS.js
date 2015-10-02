@@ -4,7 +4,8 @@ function CopyViewsJS() {
 }
 CopyViewsJS.prototype.copy = function(sourceDir, targetFile) {
 	var that = this;
-	var result = ['var viewLibrary = {};'];
+	var result = ['"use strict";'];
+	result.push('var viewLibrary = {};');
 	this.readDirs(sourceDir, function(fileList) {
 		console.log(fileList);
 		for (var i=0; i<fileList.length; i++) {
