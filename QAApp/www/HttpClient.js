@@ -47,7 +47,6 @@ HttpClient.prototype.request = function(method, path, postData, callback) {
 
 	function progressEvents() {
 		try {
-			console.log(request.readyState, request.status);
 	    	if (request.readyState === 4) {
 		    	if (request.status === 0) {
 			    	callback(request.status, new Error('Could not reach the server, please try again when you have a better connection.'));

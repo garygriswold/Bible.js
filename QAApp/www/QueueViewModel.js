@@ -6,62 +6,74 @@ function QueueViewModel(viewNavigator) {
 	this.viewNavigator = viewNavigator;
 	this.httpClient = viewNavigator.httpClient;
 	this.state = viewNavigator.currentState;
-	this.numQuestions = 0;
-	this.oldestQuestion = null;
-	this.waitTime = 0;
+	this.queueCounts = null;
 	Object.seal(this);
 }
-QueueViewModel.prototype.numQuestionsMsg = function() {
-	switch(this.numQuestions) {
-		case 0:
-			return('There are no unanswered questions.');
-		case 1:
-			return('There is one unassigned question.' );
-		default:
-			return('There are ' + this.numQuestions + ' unassigned questions.');
-	}
-};
-QueueViewModel.prototype.oldestQuestionMsg = function() {
-	return((this.oldestQuestion && this.numQuestions > 0) ? "The oldest question was submitted at " + this.oldestQuestion + "." : '');
-};
-QueueViewModel.prototype.waitTimeMsg = function() {
-	return((this.waitTime && this.numQuestions > 0) ? "The oldest question has been waiting " + this.waitTime + " minutes." : '');
-};
 QueueViewModel.prototype.display = function() {
-	setNodeValue('numQuestions', this.numQuestionsMsg());
-	setNodeValue('oldestQuestion', this.oldestQuestionMsg());
-	setNodeValue('waitTime', this.waitTimeMsg());
-	
-	var assignedBtn = document.getElementById('assign');
-	if (this.numQuestions > 0) {
-		assignedBtn.removeAttribute('disabled');
-	} else {
-		assignedBtn.setAttribute('disabled');
+	var root = document.getElementById('queueView');
+	addNode(root, 'p', 'Unassigned Questions');
+	if (this.queueCounts && this.queueCounts.length) {
+		for (var i=0; i<this.queueCounts.length; i++) {
+			var row = this.queueCounts[i];
+			displayOneQueueCount(root, row);			
+		}
 	}
 	
-	function setNodeValue(nodeId, property) {
-		var node = document.getElementById(nodeId);
-		if (node) {
-			node.textContent = property;
+	function displayOneQueueCount(parent, queue) {
+		var table = addNode(parent, 'table');
+		
+		var row1 = addNode(table, 'tr');
+		var vers = addNode(row1, 'th', queue.versionId);
+		vers.setAttribute('colspan', 3);
+		
+		var row2 = addNode(table, 'tr');
+		var head1 = addNode(row2, 'th', 'Unanswered Questions');
+		head1.setAttribute('style', 'width:25%');
+		var head2 = addNode(row2, 'th', 'Oldest Question');
+		head2.setAttribute('style', 'width:50%');
+		var head3 = addNode(row2, 'th', 'Minutes Waiting');
+		head3.setAttribute('style', 'width:25%');
+		
+		var row3 = addNode(table, 'tr');
+		addNode(row3, 'td', queue.count);
+		var timestamp = new Date(queue.timestamp);
+		addNode(row3, 'td', timestamp.toLocaleString());
+		var lapsed = new Date().getTime() - timestamp.getTime();
+		var waiting = Math.round(lapsed / (1000 * 60));
+		addNode(row3, 'td', waiting);
+		
+		var row4 = addNode(table, 'tr');
+		var rtd4 = addNode(row4, 'td');
+		rtd4.setAttribute('colspan', 3);
+		var bttn = addNode(rtd4, 'button', 'Assign Me A Question');
+		bttn.setAttribute('id', 'assign' + queue.versionId);
+		bttn.setAttribute('class', 'button bigrounded blue');
+		bttn.addEventListener('click', assignQuestion);
+	}
+	function addNode(parent, elementType, content) {
+		var element = document.createElement(elementType);
+		if (content) {
+			element.textContent = content;
 		}
+		parent.appendChild(element);
+		return(element);
 	}
 };
 QueueViewModel.prototype.setProperties = function(status, results) {
 	console.log('open results', status, results);
 	if (status === 200) {
-		this.numQuestions = results.count;
-		var timestamp = new Date(results.timestamp);
-		this.oldestQuestion = timestamp.toLocaleString();
-		var lapsed = new Date().getTime() - timestamp.getTime();
-		this.waitTime = Math.round(lapsed / (1000 * 60));
-		
+		this.queueCounts = results;
 		this.display();
 	}
 };
 QueueViewModel.prototype.openQuestionCount = function() {
 	var that = this;
 	this.httpClient.get('/open', function(status, results) {
-		if (status === 200 && results.count) {
+		if (status !== 200) {
+			if (results.message) window.alert(results.message);
+			else window.alert('unknown error');
+		}
+		else if (results[0].count) {
 			that.setProperties(status, results);
 		} else {
 			TweenMax.killAll();
