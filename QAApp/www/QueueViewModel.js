@@ -54,6 +54,7 @@ QueueViewModel.prototype.display = function() {
 	}
 	function addNode(parent, elementType, content) {
 		var element = document.createElement(elementType);
+		element.setAttribute('class', 'queue');
 		if (content) {
 			element.textContent = content;
 		}
