@@ -193,16 +193,33 @@ server.del('/question', function deleteQuestion(request, response, next) {
 
 server.get('/open', function openQuestionCount(request, response, next) {
 	request.params.teacherId = request.headers.authId;
-	database.getAssignment(request.params, function(err, results) {
-		if (err || results.length > 0) {
-			respond(err, results, 200, response, next);
+	var finalResults = {};
+	database.selectPositions(request.params, function(err, results) {
+		if (err) {
+			respond(err, finalResults, 200, response, next);
 		} else {
-			database.openQuestionCount(request.params, function(err, results) {
-				respond(err, results, 200, response, next);
+			finalResults['positions'] = results;
+			database.getAssignment(request.params, function(err, results) {
+				if (err) {
+					respond(err, finalResults, 200, response, next);
+				} else if (results.length > 0) {
+					finalResults['assigned'] = results;
+					respond(err, finalResults, 200, response, next);
+				} else {
+					database.openQuestionCount(request.params, function(err, results) {
+						if (err) {
+							respond(err, finalResults, 200, response, next);
+						} else {
+							finalResults['queue'] = results;
+							respond(err, finalResults, 200, response, next);
+						}
+					});
+				}
 			});
 		}
-	});
+	})
 });
+
 /** versionId, optional timestamp */
 server.post('/assign', function assignQuestion(request, response, next) {
 	authController.authorizeVersion(request.headers.authId, request.params.versionId, function(err) {

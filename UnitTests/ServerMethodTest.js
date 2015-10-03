@@ -109,42 +109,68 @@ ServerMethodTest.prototype.runTests = function() {
 		var actual = JSON.parse(results);
 		if (status != test.status) {
 			displayError('STATUS ERROR', test, status, actual);
-		}		
-		if (actual.length && test.results.length) {
-			if (actual.length !== test.results.length) {
-				displayError('RESULT ARRAY DIFFER IN SIZE', test, status, actual);
-			}
-			console.log('TST RESULTS', test.results[i]);
-			for (var i=0; i<actual.length; i++) {
-				compareObjects(test, test.results[i], status, actual[i]);
-			}
-		} else if (actual.length && ! test.results.length) {
-			displayError('ARRAY-OBJECT MISMATCH ERROR', test, status, actual);
-		} else {
-			compareObjects(test, test.results, status, actual);
 		}
-	}
-	
-	function compareObjects(test, testResults, status, actual) {
-		for (var prop in testResults) {
-			if (! actual.hasOwnProperty(prop)) {
-				displayError('RESULTS MISSING PROP ERROR', test, status, actual);
-			}
-			if (prop !== 'teacherId' && prop !== 'passPhrase' && prop !== 'discourseId' && prop !== 'timestamp' && prop !== 'messageTimestamp') {
-				if (actual[prop] != testResults[prop]) {
-					displayError('RESULTS VALUE ERROR', test, status, actual);
-				}
-			}
+		var actualFlat = flatten(actual);
+		var expectedFlat = flatten(test.results);
+		if (actualFlat.length !== expectedFlat.length) {
+			displayError('RESULT ARRAY DIFFER IN SIZE', test, status, actual);
 		}
-		for (var prop in actual) {
-			if (! testResults.hasOwnProperty(prop)) {
-				displayError('TEST MISSING PROP ERROR', test, status, actual);
+		for (var i=0; i<actualFlat.length; i++) {
+			if (actualFlat[i] != expectedFlat[i]) {
+				displayError('RESULT VALUE ERROR', test, status, actual);	
 			}
 		}
 		console.log('OK', test.number, test.name);
 		console.log('FOUND:', status, JSON.stringify(actual));
 		if (test.save) {
 			database[test.save] = actual;
+		}
+	}
+	
+	function flatten(obj) {
+		var result = [];
+		flattenRecursive(result, obj);
+		return(result);
+	}
+	function flattenRecursive(result, obj) {
+		switch(typeof obj) {
+			case 'string':
+				result.push(obj);
+				break;
+			case 'number':
+				result.push(obj);
+				break;
+			case 'boolean':
+				result.push(obj);
+				break;
+			case 'object':
+				if (obj.length) {
+					for (var i=0; i<obj.length; i++) {
+						flattenRecursive(result, obj[i]);
+					}
+				} else {
+					var props = Object.keys(obj);
+					for (i=0; i<props.length; i++) {
+						var prop = props[i];
+						flattenRecursive(result, prop);
+						var value = normalizeValue(prop, obj[prop]);
+						flattenRecursive(result, value);
+					}
+				}
+				break;	
+			default:
+				throw new Error('unknown type ' + (typeof obj));
+		}
+	}
+	function normalizeValue(prop, value) {
+		if (value === null) return(value);
+		switch(prop) {
+			case 'teacherId': return('GUID');
+			case 'passPhrase': return('PASS');
+			case 'discourseId': return('GUID');
+			case 'timestamp': return('TIME');
+			case 'messageTimestamp': return('TIME');
+			default: return(value);
 		}
 	}
 	
@@ -553,7 +579,7 @@ var tests = [
 		user: 'Bob:teacherId',
 		passPhrase: 'Bob:passPhrase',
 		status: 200,
-		results: [{versionId:'KJV', count:3, timestamp:'TIME'}]
+		results: {positions:[{versionId:'KJV', position:'teacher'}], queue:[{versionId:'KJV', count:3, timestamp:'TIME'}]}
 	},
 	{
 		number: 390,
@@ -663,7 +689,7 @@ var tests = [
 		user: 'Bob:teacherId',
 		passPhrase: 'Bob:passPhrase',
 		status: 200,
-		results: [{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John2', message:'This is another question'}]
+		results:  {positions:[{versionId:'KJV', position:'teacher'}], assigned:[{discourseId:'GUID', versionId:'KJV', person:'S', timestamp:'TIME', reference:'John2', message:'This is another question'}]}
 	},
 	{
 		number: 480,

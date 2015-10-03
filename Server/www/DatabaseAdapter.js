@@ -138,8 +138,9 @@ DatabaseAdapter.prototype.deleteTeacher = function(obj, callback) {
 	var values = [[ obj.teacherId ]];
 	this.executeSQL(statements, values, 1, callback);
 };
-DatabaseAdapter.prototype.selectPositions = function(teacherId, callback) {
-	// ????? What uses this????
+DatabaseAdapter.prototype.selectPositions = function(obj, callback) {
+	var statement = 'SELECT versionId, position FROM Position WHERE teacherId=?';
+	this.db.all(statement, obj.teacherId, callback);
 };
 /**
 * Needs Position.positionId, which it autogenerates
