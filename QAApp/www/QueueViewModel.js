@@ -48,7 +48,9 @@ QueueViewModel.prototype.display = function() {
 		var bttn = addNode(rtd4, 'button', 'Assign Me A Question');
 		bttn.setAttribute('id', 'assign' + queue.versionId);
 		bttn.setAttribute('class', 'button bigrounded blue');
-		bttn.addEventListener('click', assignQuestion);
+		bttn.addEventListener('click', function(event) {
+			assignQuestion(this.id.substr(6));
+		});
 	}
 	function addNode(parent, elementType, content) {
 		var element = document.createElement(elementType);
@@ -60,7 +62,6 @@ QueueViewModel.prototype.display = function() {
 	}
 };
 QueueViewModel.prototype.setProperties = function(status, results) {
-	console.log('open results', status, results);
 	if (status === 200) {
 		this.queueCounts = results;
 		this.display();
@@ -73,11 +74,11 @@ QueueViewModel.prototype.openQuestionCount = function() {
 			if (results.message) window.alert(results.message);
 			else window.alert('unknown error');
 		}
-		else if (results[0].count) {
-			that.setProperties(status, results);
-		} else {
+		if (results.positions) that.state.setRoles(results.positions);
+		if (results.queue) that.setProperties(status, results.queue);
+		else if (results.assigned) {
 			TweenMax.killAll();
-			that.viewNavigator.transition('queueView', 'answerView', 'setProperties', TRANSITION.SLIDE_LEFT, status, results);
+			that.viewNavigator.transition('queueView', 'answerView', 'setProperties', TRANSITION.SLIDE_LEFT, status, results.assigned);
 		}
 	});
 };

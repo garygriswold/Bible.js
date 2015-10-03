@@ -54,7 +54,8 @@
 			//function openQuestionCount() {
 			//	viewNavigator.transition('loginView', 'queueView', 'openQuestionCount', TRANSITION.SLIDE_LEFT);
 			//}
-			function assignQuestion() {
+			function assignQuestion(versionId) {
+				viewNavigator.currentState.versionId = versionId;
 				viewNavigator.transition('queueView', 'answerView', 'assignQuestion', TRANSITION.SLIDE_LEFT);
 			}
 			function returnQuestion() {

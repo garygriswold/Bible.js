@@ -41,6 +41,7 @@ AnswerViewModel.prototype.setProperties = function(status, results) {
 	
 	function firstRow(row) {
 		that.state.discourseId = row.discourseId;
+		that.state.versionId = row.versionId;
 		that.state.questionTimestamp = row.timestamp;
 		that.state.answerTimestamp = null;
 		that.displayReference = row.reference;

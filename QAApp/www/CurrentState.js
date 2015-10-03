@@ -9,7 +9,7 @@ function CurrentState() {
 	this.isSuper = false;
 	this.principal = null;
 	this.teacher = null;
-	//this.versionId = 'KJV';
+	this.versionId = null;
 	this.discourseId = null;
 	this.questionTimestamp = null;
 	this.answerTimestamp = null;
@@ -55,7 +55,6 @@ CurrentState.prototype.setRoles = function(roles) {
 					break;
 				default:
 					throw new Error('Unknown position in CurrentState.setRoles');
-				}
 			}
 		}
 	}
