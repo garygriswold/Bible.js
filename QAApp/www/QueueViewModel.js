@@ -10,12 +10,18 @@ function QueueViewModel(viewNavigator) {
 	Object.seal(this);
 }
 QueueViewModel.prototype.display = function() {
+	var that = this;
+	if (this.state.canManageRoles()) {
+		// Add Manage Roles button somewhere
+	}
 	var root = document.getElementById('queueView');
 	addNode(root, 'p', 'Unassigned Questions');
 	if (this.queueCounts && this.queueCounts.length) {
 		for (var i=0; i<this.queueCounts.length; i++) {
 			var row = this.queueCounts[i];
-			displayOneQueueCount(root, row);			
+			if (this.state.canSeeAllVersions() || this.state.canSeeVersion(row.versionId)) {
+				displayOneQueueCount(root, row);
+			}
 		}
 	}
 	
@@ -42,15 +48,17 @@ QueueViewModel.prototype.display = function() {
 		var waiting = Math.round(lapsed / (1000 * 60));
 		addNode(row3, 'td', waiting);
 		
-		var row4 = addNode(table, 'tr');
-		var rtd4 = addNode(row4, 'td');
-		rtd4.setAttribute('colspan', 3);
-		var bttn = addNode(rtd4, 'button', 'Assign Me A Question');
-		bttn.setAttribute('id', 'assign' + queue.versionId);
-		bttn.setAttribute('class', 'button bigrounded blue');
-		bttn.addEventListener('click', function(event) {
-			assignQuestion(this.id.substr(6));
-		});
+		if (that.state.canAnswer(queue.versionId)) {
+			var row4 = addNode(table, 'tr');
+			var rtd4 = addNode(row4, 'td');
+			rtd4.setAttribute('colspan', 3);
+			var bttn = addNode(rtd4, 'button', 'Assign Me A Question');
+			bttn.setAttribute('id', 'assign' + queue.versionId);
+			bttn.setAttribute('class', 'button bigrounded blue');
+			bttn.addEventListener('click', function(event) {
+				assignQuestion(this.id.substr(6));
+			});
+		}
 	}
 	function addNode(parent, elementType, content) {
 		var element = document.createElement(elementType);

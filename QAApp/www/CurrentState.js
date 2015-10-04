@@ -25,7 +25,7 @@ CurrentState.prototype.canSeeVersion = function(versionId) {
 	return((this.principal && this.principal[versionId]) || (this.teacher && this.teacher[versionId]));
 };
 CurrentState.prototype.canAnswer = function(versionId) {
-	(this.teacher && this.teacher[versionId]);
+	return(this.teacher && this.teacher[versionId]);
 };
 CurrentState.prototype.setRoles = function(roles) {
 	this.clearRoles();
