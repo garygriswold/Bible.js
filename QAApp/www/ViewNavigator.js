@@ -28,6 +28,7 @@ function ViewNavigator() {
 	this.httpClient = new HttpClient('localhost', '8080');
 	this.queueModel = new QueueViewModel(this);
 	this.answerModel = new AnswerViewModel(this);
+	this.rolesModel = new RolesViewModel(this);
 }
 ViewNavigator.prototype.transition = function(fromViewName, toViewName, transaction, animation, status, results) {
 	console.log('Transition', fromViewName, toViewName, transaction, animation);
@@ -62,6 +63,11 @@ ViewNavigator.prototype.transition = function(fromViewName, toViewName, transact
 						this.answerModel.setProperties(status, results);
 					} else {
 						this.answerModel.display();
+					}
+					break;
+				case 'rolesView':
+					if (transaction === 'presentRoles') {
+						this.rolesModel.presentRoles();
 					}
 					break;
 			}

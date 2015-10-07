@@ -88,8 +88,8 @@ DatabaseAdapter.prototype.selectTeachers = function(obj, callback) {
 				} else if (selfResults === null || selfResults.length === 0) {
 					callback(new Error('Did not find self in select'));
 				} else {
-					var selfId = selfResults[0].teacherId;
-					that.db.all('SELECT teacherId, fullname, pseudonym FROM Teacher WHERE teacherId=?', selfId, function(err, superResults) {
+					var bossId = selfResults[0].authorizerId;
+					that.db.all('SELECT teacherId, fullname, pseudonym FROM Teacher WHERE teacherId=?', bossId, function(err, superResults) {
 						if (err) {
 							callback(err);
 						} else {

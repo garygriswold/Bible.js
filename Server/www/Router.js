@@ -56,6 +56,7 @@ server.on('after', function(request, response, route, error) {
 /**
 * This route should be commented out of a production server.
 */
+// This should have an authcontroller method that insures the user is id GNG
 server.get('/beginTest', function beginTest(request, response, next) {
 	database = new DatabaseAdapter({filename: './AutoTestDatabase.db', verbose: true});
 	database.create(function(err) {

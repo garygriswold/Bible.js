@@ -11,10 +11,17 @@ function QueueViewModel(viewNavigator) {
 }
 QueueViewModel.prototype.display = function() {
 	var that = this;
-	if (this.state.canManageRoles()) {
-		// Add Manage Roles button somewhere
-	}
 	var root = document.getElementById('queueView');
+	if (this.state.canManageRoles()) {
+		var btnPar = addNode(root, 'p');
+		btnPar.setAttribute('style', 'text-align:center');
+		var mgrBtn = addNode(btnPar, 'button', 'Manage Roles');
+		mgrBtn.setAttribute('class', 'button bigrounded blue');
+		mgrBtn.setAttribute('style', 'text-align:center');
+		mgrBtn.addEventListener('click', function(event) {
+			presentRoles();
+		});
+	}
 	addNode(root, 'p', 'Unassigned Questions');
 	if (this.queueCounts && this.queueCounts.length) {
 		for (var i=0; i<this.queueCounts.length; i++) {
