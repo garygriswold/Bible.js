@@ -9,6 +9,7 @@ function RolesViewModel(viewNavigator) {
 	this.boss = null;
 	this.self = null;
 	this.members = null;
+	this.buttonRow = null;
 	Object.seal(this);
 }
 RolesViewModel.prototype.display = function() {
@@ -64,7 +65,6 @@ RolesViewModel.prototype.display = function() {
 		return(element);
 	}
 	function addCheckbox(parent, teacherId, versionId, position) {
-		//console.log('INSIDE ADD CHECKBOX', teacherId, type);
 		var element = document.createElement('input');
 		element.setAttribute('type', 'checkbox');
 		var id = 'id.' + teacherId;
@@ -75,15 +75,27 @@ RolesViewModel.prototype.display = function() {
 		element.setAttribute('class', 'role');
 		parent.appendChild(element);
 		element.addEventListener('change', function(event) {
-			var parts = this.id.split('.');
-			var clickedTeacherId = parts[1];
-			var clickedVersionId = (parts.length > 2) ? parts[2] : null;
-			var clickedPosition = (parts.length > 3) ? parts[3] : null;
-			console.log('clicked', clickedTeacherId, clickedVersionId, clickedPosition)
-			if (clickedVersionId) {
-				// call functions to display position buttons
+			if (event.target.checked) {
+				if (that.buttonRow === null) { // only turn button if none others are
+					var tableRow = this.parentNode.parentNode;
+					var parts = this.id.split('.');
+					var clickedTeacherId = parts[1];
+					var clickedVersionId = (parts.length > 2) ? parts[2] : null;
+					var clickedPosition = (parts.length > 3) ? parts[3] : null;
+					console.log('clicked', clickedTeacherId, clickedVersionId, clickedPosition)
+					if (clickedVersionId) {
+						that.displayVersionUpdateButtons(tableRow, clickedTeacherId, clickedVersionId, clickedPosition);
+					} else {
+						that.displayNameUpdateButtons(tableRow, clickedTeacherId);
+					}
+				} else {
+					event.target.checked = false;//don't turn on, because another button is on
+				}
 			} else {
-				// call functions to display name buttons
+				if (that.buttonRow) {
+					that.buttonRow.close();
+					that.buttonRow = null;
+				}
 			}
 		});
 	}
@@ -104,5 +116,23 @@ RolesViewModel.prototype.presentRoles = function() {
 			else window.alert('unknown error');
 		}
 		that.setProperties(status, results);
+	});
+};
+RolesViewModel.prototype.displayNameUpdateButtons = function(parent, teacherId) {
+	this.buttonRow = new ButtonRow(parent, 8);
+	this.buttonRow.addButton('Change Name', 'name.' + teacherId, function(event) {
+		console.log('Change name button is clicked');
+	});
+	this.buttonRow.addButton('New PassPhrase', 'pass.' + teacherId, function(event) {
+		console.log('New Passphrase button click');
+	});
+};
+RolesViewModel.prototype.displayVersionUpdateButtons = function(parent, teacherId, versionId, position) {
+	this.buttonRow = new ButtonRow(parent, 8);
+	this.buttonRow.addButton('Add Role', 'add.' + teacherId, function(event) {
+		console.log('Add Role button click');
+	});
+	this.buttonRow.addButton('Remove Role', 'rem.' + teacherId + '.' + versionId + '.' + position, function(event) {
+		console.log('Remove role button click');
 	});
 };
