@@ -6,6 +6,7 @@ function RolesViewModel(viewNavigator) {
 	this.viewNavigator = viewNavigator;
 	this.httpClient = viewNavigator.httpClient;
 	this.state = viewNavigator.currentState;
+	this.numColumns = 7;
 	this.boss = null;
 	this.self = null;
 	this.members = null;
@@ -21,13 +22,14 @@ RolesViewModel.prototype.display = function() {
 	iteratePersons(this.members, 'memb');
 	
 	function iteratePersons(list, type) {
-		console.log('PROCESS', type, list);
 		var priorId = null;
+		var versionRowCount = 0;
 		for (var i=0; i<list.length; i++) {
 			var row = list[i];
 			var line = addNode(root, 'tr');
 			if (row.teacherId !== priorId) {
 				priorId = row.teacherId;
+				versionRowCount = 1;
 				
 				var check1 = addNode(line, 'td');
 				if (type === 'memb') {
@@ -36,9 +38,10 @@ RolesViewModel.prototype.display = function() {
 				var name = addNode(line, 'td', row.fullname);
 				var pseudo = addNode(line, 'td', row.pseudonym);
 			} else {
-				check1.setAttribute('rowspan', 2);
-				name.setAttribute('rowspan', 2);
-				pseudo.setAttribute('rowspan', 2);
+				versionRowCount += 1;
+				check1.setAttribute('rowspan', versionRowCount);
+				name.setAttribute('rowspan', versionRowCount);
+				pseudo.setAttribute('rowspan', versionRowCount);
 			}
 			if (type === 'boss') {
 				addNode(line, 'td', 'super');
@@ -48,7 +51,6 @@ RolesViewModel.prototype.display = function() {
 				addNode(line, 'td', row.position);
 				addNode(line, 'td', row.versionId);
 				addNode(line, 'td', row.created);
-				addNode(line, 'td');//count
 				var check2 = addNode(line, 'td');
 				addCheckbox(check2, row.teacherId, row.versionId, row.position);
 			}
@@ -86,7 +88,7 @@ RolesViewModel.prototype.display = function() {
 					if (clickedVersionId) {
 						that.displayVersionUpdateButtons(tableRow, clickedTeacherId, clickedVersionId, clickedPosition);
 					} else {
-						that.displayNameUpdateButtons(tableRow, clickedTeacherId);
+						that.displayPersonUpdateButtons(tableRow, clickedTeacherId);
 					}
 				} else {
 					event.target.checked = false;//don't turn on, because another button is on
@@ -118,8 +120,28 @@ RolesViewModel.prototype.presentRoles = function() {
 		that.setProperties(status, results);
 	});
 };
+RolesViewModel.prototype.displayPersonUpdateButtons = function(parent, teacherId) {
+	this.buttonRow = new ButtonRow(parent, this.numColumns);
+	this.buttonRow.addButton('Change Name', 'name.' + teacherId, function(event) {
+		console.log('clicked name change button');
+	});
+	this.buttonRow.addButton('New Pass Phrase', 'pass.' + teacherId, function(event) {
+		console.log('clicked new pass phrase');
+	});
+	this.buttonRow.addButton('Replace Person', 'repl.' + teacherId, function(event) {
+		console.log('clicked replace person');
+	});
+	// This is only possible for someone who has a boss.
+	this.buttonRow.addButton('Promote Person', 'prom.' + teacherId, function(event) {
+		console.log('clicked promote person');
+	});
+	// This is not possible of authorizing person has no principal under them.
+	this.buttonRow.addButton('Demote Person', 'demt.' + teacherId, function(event) {
+		console.log('clicked demote person');
+	})
+};
 RolesViewModel.prototype.displayNameUpdateButtons = function(parent, teacherId) {
-	this.buttonRow = new ButtonRow(parent, 8);
+	this.buttonRow = new ButtonRow(parent, this.numColumns);
 	this.buttonRow.addButton('Change Name', 'name.' + teacherId, function(event) {
 		console.log('Change name button is clicked');
 	});
@@ -128,7 +150,7 @@ RolesViewModel.prototype.displayNameUpdateButtons = function(parent, teacherId) 
 	});
 };
 RolesViewModel.prototype.displayVersionUpdateButtons = function(parent, teacherId, versionId, position) {
-	this.buttonRow = new ButtonRow(parent, 8);
+	this.buttonRow = new ButtonRow(parent, this.numColumns);
 	this.buttonRow.addButton('Add Role', 'add.' + teacherId, function(event) {
 		console.log('Add Role button click');
 	});

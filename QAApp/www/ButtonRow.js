@@ -34,6 +34,7 @@ ButtonRow.prototype.addButton = function(label, id, callback) {
 	var button = document.createElement('button');
 	button.setAttribute('id', id);
 	button.setAttribute('class', 'button bigrounded blue');
+	button.setAttribute('style', 'margin: 10px 30px 10px 30px');
 	button.textContent = label;
 	this.parentCell.appendChild(button);
 	button.addEventListener('click', callback);
