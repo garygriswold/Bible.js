@@ -2,32 +2,26 @@
 * This table is used to define a list of buttons in a row.
 */
 function ButtonRow(rowAbove, colspan) {
-	var next = findNextRow(rowAbove, colspan);
-		
-	this.row = document.createElement('tr');
-	rowAbove.parentNode.insertBefore(this.row, next);
-	var cell = document.createElement('td');
-	cell.setAttribute('class', 'role');
-	cell.setAttribute('colspan', colspan);
-	this.row.appendChild(cell);
-	this.parentCell = cell;
+	var tBody = rowAbove.parentElement;
+	var next = findNextRow(tBody, rowAbove, colspan);
+	this.row = tBody.insertRow(next);
+	this.cell = this.row.insertCell();
+	this.cell.setAttribute('class', 'role');
+	this.cell.setAttribute('colspan', colspan);
 	
-	function findNextRow(rowAbove, colspan) {
+	function findNextRow(tBody, rowAbove, colspan) {
 		var after = false;
-		var parent = rowAbove.parentElement;
-		var children = parent.childNodes;
-		for (var i=0; i<children.length; i++) {
-			var child = children[i];
-			if (child.nodeType === 1 && child.nodeName === 'TR') {
-				if (after && child.childNodes.length === colspan) {
-					return(child);
-				}
-				if (child === rowAbove) {
-					after = true;
-				}
+		var rows = tBody.rows;
+		for (var i=0; i<rows.length; i++) {
+			var row = rows[i];
+			if (after && row.cells.length === colspan) {
+				return(i);
+			}
+			if (row === rowAbove) {
+				after = true;
 			}
 		}
-		return(null);
+		return(-1);
 	}
 }
 ButtonRow.prototype.addButton = function(label, id, callback) {
@@ -36,11 +30,12 @@ ButtonRow.prototype.addButton = function(label, id, callback) {
 	button.setAttribute('class', 'button bigrounded blue');
 	button.setAttribute('style', 'margin: 10px 30px 10px 30px');
 	button.textContent = label;
-	this.parentCell.appendChild(button);
+	this.cell.appendChild(button);
 	button.addEventListener('click', callback);
 };
 ButtonRow.prototype.close = function() {
 	if (this.row) {
+		//TweenMax.to(this.cell, 0.5, {scaleY:0, opacity:0.2, onComplete:finishRemove});
 		this.row.parentElement.removeChild(this.row);
 	}
 };

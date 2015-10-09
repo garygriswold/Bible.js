@@ -138,7 +138,7 @@ RolesViewModel.prototype.displayPersonUpdateButtons = function(parent, teacherId
 	// This is not possible of authorizing person has no principal under them.
 	this.buttonRow.addButton('Demote Person', 'demt.' + teacherId, function(event) {
 		console.log('clicked demote person');
-	})
+	});
 };
 RolesViewModel.prototype.displayNameUpdateButtons = function(parent, teacherId) {
 	this.buttonRow = new ButtonRow(parent, this.numColumns);
