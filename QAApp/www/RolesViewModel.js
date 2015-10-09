@@ -139,6 +139,7 @@ RolesViewModel.prototype.displayPersonUpdateButtons = function(parent, teacherId
 	this.buttonRow.addButton('Demote Person', 'demt.' + teacherId, function(event) {
 		console.log('clicked demote person');
 	});
+	this.buttonRow.open();
 };
 RolesViewModel.prototype.displayNameUpdateButtons = function(parent, teacherId) {
 	this.buttonRow = new ButtonRow(parent, this.numColumns);
@@ -148,6 +149,7 @@ RolesViewModel.prototype.displayNameUpdateButtons = function(parent, teacherId) 
 	this.buttonRow.addButton('New PassPhrase', 'pass.' + teacherId, function(event) {
 		console.log('New Passphrase button click');
 	});
+	this.buttonRow.open();
 };
 RolesViewModel.prototype.displayVersionUpdateButtons = function(parent, teacherId, versionId, position) {
 	this.buttonRow = new ButtonRow(parent, this.numColumns);
@@ -157,4 +159,5 @@ RolesViewModel.prototype.displayVersionUpdateButtons = function(parent, teacherI
 	this.buttonRow.addButton('Remove Role', 'rem.' + teacherId + '.' + versionId + '.' + position, function(event) {
 		console.log('Remove role button click');
 	});
+	this.buttonRow.open();
 };
