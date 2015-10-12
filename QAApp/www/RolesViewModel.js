@@ -29,7 +29,6 @@ RolesViewModel.prototype.display = function() {
 			var row = list[i];
 			var line = addNode(root, 'tr');
 			if (row.teacherId !== priorId) {
-				that.state.teachers[row.teacherId] = {fullname:row.fullname, pseudonym:row.pseudonym, roles:[{position:row.position, versionId:row.versionId, created:row.created}]};
 				priorId = row.teacherId;
 				versionRowCount = 1;
 				
@@ -39,8 +38,9 @@ RolesViewModel.prototype.display = function() {
 				}
 				var name = addNode(line, 'td', row.fullname);
 				var pseudo = addNode(line, 'td', row.pseudonym);
+				that.state.teachers[row.teacherId] = {fullname:name, pseudonym:pseudo};//, roles:[{position:row.position, versionId:row.versionId, created:row.created}]};
 			} else {
-				that.state.teachers[row.teacherId].roles.push({position:row.position, versionId:row.versionId, created:row.created});
+				//that.state.teachers[row.teacherId].roles.push({position:row.position, versionId:row.versionId, created:row.created});
 				versionRowCount += 1;
 				check1.setAttribute('rowspan', versionRowCount);
 				name.setAttribute('rowspan', versionRowCount);

@@ -2,41 +2,31 @@
 * This table is used to define a list of fields in a Row.
 */
 function FormRow(tBody, rowIndex) {
-	// Possibly this should be replaced by using the row that
-	// was left behind by the buttons.
-	// But if not, this will work
 	this.colspan = 7;
 	//var tBody = row.parentElement;
 	//var next = findNextRow(tBody, rowAbove, this.colspan);
 	this.formRow = tBody.insertRow(rowIndex);
-	
-//	var msgRow = tBody.insertRow(rowIndex + 1);
-//	this.msgCell = msgRow.insertCell();
-//	this.msgCell.setAttribute('class', 'role');
-	
-	this.nameField = null;
-	this.pseudoField = null;
-	this.positionField = null;
-	this.versionField = null;
-	this.goButton = null;
-	this.cancelButton = null;
+
 }
-FormRow.prototype.addName = function(value) {
-	this.nameField = this.stdTextField(1, value);	
+FormRow.prototype.addName = function(name) {
+	return(this.stdTextField(1, name));	
 };
-FormRow.prototype.addPseudo = function(value) {
-	this.pseudoField = this.stdTextField(2, value);
+FormRow.prototype.addPseudo = function(pseudo) {
+	return(this.stdTextField(2, pseudo));
 };
 FormRow.prototype.addPosition = function(positions, value) {
-	this.positionField = this.stdSelectList(3, positions, value);
+	return(this.stdSelectList(3, positions, value));
 };
 FormRow.prototype.addVersion = function() {
-	this.versionField = this.stdSelectList(4);
+	return(this.stdSelectList(4));
 };
-FormRow.prototype.addButtons = function(goCallback, cancelCallback) {
+FormRow.prototype.addButtons = function(callback) {
+	var that = this;
 	var cell = this.addCell(5);
-	this.goButton = this.stdButton(cell, 'Go', goCallback);
-	this.cancelButton = this.stdButton(cell, 'Cancel', cancelCallback);
+	this.goButton = this.stdButton(cell, 'Go', callback);
+	this.cancelButton = this.stdButton(cell, 'Cancel', function() {
+		that.close2(that.formRow);
+	});
 };
 FormRow.prototype.addCell = function(col) {
 	var cell = null;
@@ -85,8 +75,12 @@ FormRow.prototype.open = function() {
 	// Animate the from 0 to open the row	
 };
 FormRow.prototype.close = function() {
-	if (this.row) {
+	this.close2(this.formRow);
+};
+FormRow.prototype.close2 = function(row) {
+	if (row) {
 		//TweenMax.to(this.cell, 0.5, {scaleY:0, opacity:0.2, onComplete:finishRemove});
-		this.row.parentElement.removeChild(this.row);
+		row.parentElement.removeChild(row);
 	}
 };
+

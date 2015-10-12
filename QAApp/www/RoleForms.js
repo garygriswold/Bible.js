@@ -12,24 +12,18 @@ RoleForms.prototype.register = function() {
 RoleForms.prototype.name = function(teacherId) {
 	var that = this;
 	var teacher = this.state.teachers[teacherId];
-	var nameField = this.formRow.addName(teacher.fullname);
-	this.formRow.addPseudo(teacher.pseudonym);
-	this.formRow.addButtons(goCallback, this.cancelCallback);
-	this.formRow.open();
-	function goCallback() {
-		// This must submit an update to the server
-		// on response, it must find the teacherId in the grid
-		// and update the grid with the correct data.
-		// 1) update teachers
-		// 2) update the correct 
-		var newFullname = that.formRow.nameField.value;
-		var newPseudo = that.formRow.pseudoField.value;
-		console.log('UPDATED', newFullname, newPseudo);
+	var nameField = this.formRow.addName(teacher.fullname.textContent);
+	var pseudoField = this.formRow.addPseudo(teacher.pseudonym.textContent);
+	this.formRow.addButtons(function() {
+		// submit to server, on 200 update model
+		//var newFullname = nameField.value;
+		//var newPseudo = pseudoField.value;
 		
-		var teacher = that.state.teachers[teacherId];
-		teacher.fullname = newFullname;
-		teacher.pseudonym = newPseudo;
-	}
+		teacher.fullname.textContent = nameField.value;
+		teacher.pseudonym.textContent = pseudoField.value;
+		that.formRow.close();
+	});
+	this.formRow.open();
 };
 RoleForms.prototype.passPhrase = function(teacherId) {
 	
@@ -63,7 +57,4 @@ RoleForms.prototype.addRole = function(teacherId) {
 };
 RoleForms.prototype.removeRole = function(teacherId, versionId, position) {
 	
-};
-RoleForms.prototype.cancelCallback = function() {
-	// must unwind the form here, and delete the row	
 };
