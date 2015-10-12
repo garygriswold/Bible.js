@@ -17,6 +17,7 @@ RolesViewModel.prototype.display = function() {
 	var that = this;
 	var root = document.getElementById('rolesBody');
 	
+	this.state.teachers = {};
 	iteratePersons(this.boss, 'boss');
 	iteratePersons(this.self, 'self');
 	iteratePersons(this.members, 'memb');
@@ -28,6 +29,7 @@ RolesViewModel.prototype.display = function() {
 			var row = list[i];
 			var line = addNode(root, 'tr');
 			if (row.teacherId !== priorId) {
+				that.state.teachers[row.teacherId] = {fullname:row.fullname, pseudonym:row.pseudonym, roles:[{position:row.position, versionId:row.versionId, created:row.created}]};
 				priorId = row.teacherId;
 				versionRowCount = 1;
 				
@@ -38,6 +40,7 @@ RolesViewModel.prototype.display = function() {
 				var name = addNode(line, 'td', row.fullname);
 				var pseudo = addNode(line, 'td', row.pseudonym);
 			} else {
+				that.state.teachers[row.teacherId].roles.push({position:row.position, versionId:row.versionId, created:row.created});
 				versionRowCount += 1;
 				check1.setAttribute('rowspan', versionRowCount);
 				name.setAttribute('rowspan', versionRowCount);
@@ -94,13 +97,16 @@ RolesViewModel.prototype.display = function() {
 					event.target.checked = false;//don't turn on, because another button is on
 				}
 			} else {
-				if (that.buttonRow) {
-					that.buttonRow.close();
-					that.buttonRow = null;
-				}
+				that.closeButtonRow();
 			}
 		});
 	}
+};
+RolesViewModel.prototype.closeButtonRow = function() {
+	if (this.buttonRow) {
+		this.buttonRow.close();
+		this.buttonRow = null;
+	}	
 };
 RolesViewModel.prototype.setProperties = function(status, results) {
 	if (status === 200) {
@@ -121,9 +127,13 @@ RolesViewModel.prototype.presentRoles = function() {
 	});
 };
 RolesViewModel.prototype.displayPersonUpdateButtons = function(parent, teacherId) {
+	var that = this;
 	this.buttonRow = new ButtonRow(parent, this.numColumns);
 	this.buttonRow.addButton('Change Name', 'name.' + teacherId, function(event) {
 		console.log('clicked name change button');
+		var roleForms = that.buttonRow.createRoleForms(that.state);
+		that.closeButtonRow();
+		roleForms.name(teacherId);
 	});
 	this.buttonRow.addButton('New Pass Phrase', 'pass.' + teacherId, function(event) {
 		console.log('clicked new pass phrase');
@@ -152,9 +162,14 @@ RolesViewModel.prototype.displayNameUpdateButtons = function(parent, teacherId) 
 	this.buttonRow.open();
 };
 RolesViewModel.prototype.displayVersionUpdateButtons = function(parent, teacherId, versionId, position) {
+	var that = this;
 	this.buttonRow = new ButtonRow(parent, this.numColumns);
 	this.buttonRow.addButton('Add Role', 'add.' + teacherId, function(event) {
 		console.log('Add Role button click');
+		var roleForms = that.buttonRow.createRoleForms(that.state);
+		that.closeButtonRow();
+		
+		roleForms.addRole(teacherId);
 	});
 	this.buttonRow.addButton('Remove Role', 'rem.' + teacherId + '.' + versionId + '.' + position, function(event) {
 		console.log('Remove role button click');

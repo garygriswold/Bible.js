@@ -3,9 +3,9 @@
 */
 function ButtonRow(rowAbove) {
 	this.colspan = 7;
-	var tBody = rowAbove.parentElement;
-	var next = findNextRow(tBody, rowAbove, this.colspan);
-	this.row = tBody.insertRow(next);
+	this.tBody = rowAbove.parentElement;
+	this.next = findNextRow(this.tBody, rowAbove, this.colspan);
+	this.row = this.tBody.insertRow(this.next);
 	this.cell = this.row.insertCell();
 	this.cell.setAttribute('class', 'role');
 	this.cell.setAttribute('colspan', this.colspan);
@@ -49,4 +49,7 @@ ButtonRow.prototype.close = function() {
 			}	
 		});
 	}
+};
+ButtonRow.prototype.createRoleForms = function(currentState) {
+	return(new RoleForms(currentState, this.tBody, this.next));	
 };

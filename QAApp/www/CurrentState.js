@@ -13,6 +13,7 @@ function CurrentState() {
 	this.discourseId = null;
 	this.questionTimestamp = null;
 	this.answerTimestamp = null;
+	this.teachers = {};
 	Object.seal(this);
 }
 CurrentState.prototype.canManageRoles = function() {
@@ -26,6 +27,17 @@ CurrentState.prototype.canSeeVersion = function(versionId) {
 };
 CurrentState.prototype.canAnswer = function(versionId) {
 	return(this.teacher && this.teacher[versionId]);
+};
+CurrentState.prototype.positionsCanManage = function() {
+	if (this.isBoard) {
+		return(['teacher', 'principal', 'super']);
+	} else if (this.isSuper) {
+		return(['teacher', 'principal']);
+	} else if (this.principal) {
+		return(['teacher']);
+	} else {
+		return([]);
+	}
 };
 CurrentState.prototype.setRoles = function(roles) {
 	this.clearRoles();
