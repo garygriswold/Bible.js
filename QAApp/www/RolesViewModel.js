@@ -47,7 +47,7 @@ RolesViewModel.prototype.display = function() {
 				pseudo.setAttribute('rowspan', versionRowCount);
 			}
 			if (type === 'boss') {
-				addNode(line, 'td', 'super');
+				addNode(line, 'td', 'director');
 				var blank = addNode(line, 'td');
 				blank.setAttribute('colspan', 4);
 			} else {

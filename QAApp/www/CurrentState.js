@@ -6,7 +6,7 @@
 function CurrentState() {
 	this.teacherId = null;
 	this.isBoard = false;
-	this.isSuper = false;
+	this.isDirector = false;
 	this.principal = null;
 	this.teacher = null;
 	this.versionId = null;
@@ -17,10 +17,10 @@ function CurrentState() {
 	Object.seal(this);
 }
 CurrentState.prototype.canManageRoles = function() {
-	return(this.principal || this.isSuper || this.isBoard);	
+	return(this.principal || this.isDirector || this.isBoard);	
 };
 CurrentState.prototype.canSeeAllVersions = function() {
-	return(this.isSuper || this.isBoard);
+	return(this.isDirector || this.isBoard);
 };
 CurrentState.prototype.canSeeVersion = function(versionId) {
 	return((this.principal && this.principal[versionId]) || (this.teacher && this.teacher[versionId]));
@@ -30,8 +30,8 @@ CurrentState.prototype.canAnswer = function(versionId) {
 };
 CurrentState.prototype.positionsCanManage = function() {
 	if (this.isBoard) {
-		return(['teacher', 'principal', 'super']);
-	} else if (this.isSuper) {
+		return(['teacher', 'principal', 'director']);
+	} else if (this.isDirector) {
 		return(['teacher', 'principal']);
 	} else if (this.principal) {
 		return(['teacher']);
@@ -48,8 +48,8 @@ CurrentState.prototype.setRoles = function(roles) {
 				case 'board':
 					this.isBoard = true;
 					break;
-				case 'super':
-					this.isSuper = true;
+				case 'director':
+					this.isDirector = true;
 					break;
 				case 'principal':
 					if (this.principal === null) {
@@ -73,7 +73,7 @@ CurrentState.prototype.setRoles = function(roles) {
 };
 CurrentState.prototype.clearRoles = function() {
 	this.isBoard = false;
-	this.isSuper = false;
+	this.isDirector = false;
 	this.principal = null;
 	this.teacher = null;		
 };

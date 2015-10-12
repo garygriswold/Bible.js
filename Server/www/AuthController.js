@@ -18,13 +18,13 @@
 * headers.
 *
 * In order for a person wishing to be a teacher to receive a teacherId and a passPhrase,
-* they must be registered by someone who is registered as a principal or superintendent.
+* they must be registered by someone who is registered as a principal or director.
 * This authorizing person enters person's name and pseudonym (public name) into the
 * QAApp, which sends it to the server.  The server generates a teacherId, and a passPhrase
 * from the intended teacher.
 *
 * The following describes this process as a series of steps.
-* 1) Principal or Super registers a new teacher.
+* 1) Principal or director registers a new teacher.
 * 2) Server generates, a GUID to be a teacherId.
 * 3) Server generates a Pass-Phrase as a concatenation of multiple words.
 * 4) The Pass-Phrase and the GUID are both guaranteed to be unique.
@@ -161,10 +161,10 @@ AuthController.prototype.authorizeTester = function(authorizedId, callback) {
 };
 /**
 * This auth function is used for /user update and /user delete.  It does not really check all necessary conditions, because it does not check 
-* that principal/super has a common version with the teacher.  Doing this would require a join.
+* that principal/director has a common version with the teacher.  Doing this would require a join.
 */
 AuthController.prototype.authorizeUser = function(authorizedId, callback) {
-	this.authorize('SELECT count(*) as count FROM Position WHERE teacherId=? AND position IN ("principal", "super", "board")',
+	this.authorize('SELECT count(*) as count FROM Position WHERE teacherId=? AND position IN ("principal", "director", "board")',
 		[ authorizedId ], 'You are not authorized for this action.', callback);
 };
 
@@ -174,7 +174,7 @@ AuthController.prototype.authorizePosition = function(authorizedId, position, ve
 		error.statusCode = 403;
 		callback(error);
 	} else {
-		this.authorize('SELECT count(*) as count FROM Position WHERE teacherId=? AND (position IN("super", "board") OR (position="principal" AND versionId=?))',
+		this.authorize('SELECT count(*) as count FROM Position WHERE teacherId=? AND (position IN("director", "board") OR (position="principal" AND versionId=?))',
 			[ authorizedId, versionId ], 'You are not authorized for this action.', callback);
 	}	
 };

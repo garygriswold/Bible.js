@@ -1,5 +1,5 @@
 
-insert into Position(teacherId, position, versionId) values ('GNG', 'super', 'XXX');
+insert into Position(teacherId, position, versionId) values ('GNG', 'director', '');
 insert into Position(teacherId, position, versionId) values ('GNG', 'principal', 'KJV');
 
 insert into Teacher(teacherId, fullname, pseudonym, passPhrase, authorizerId) values ('BOB112', 'Bob Smith', 'Bob', 'IntoTheDark', 'GNG');
@@ -19,5 +19,5 @@ insert into Position(teacherId, position, versionId) values ('JOE1', 'teacher', 
 insert into Teacher(teacherId, fullname, pseudonym, passPhrase, authorizerId) values ('JOHN1', 'John Rush', 'John', 'IntoTheLight3', 'BILL112');
 insert into Position(teacherId, position, versionId) values ('JOHN1', 'teacher', 'KJV');
 insert into Position(teacherId, position, versionId) values ('JOHN1', 'teacher', 'WEB');
-insert into Position(teacherId, position, versionId) values ('JOHN1', 'teacher', 'AAE');
+insert into Position(teacherId, position, versionId) values ('JOHN1', 'teacher', 'KJVA');
 

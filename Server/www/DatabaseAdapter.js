@@ -47,7 +47,7 @@ DatabaseAdapter.prototype.create = function(callback) {
 			
 		'CREATE TABLE Position(' +
 			' teacherId text REFERENCES Teacher(teacherId) ON DELETE CASCADE NOT NULL,' +
-			' position text check(position in ("removed", "teacher", "principal", "super", "board")) NOT NULL,' +
+			' position text check(position in ("removed", "teacher", "principal", "director", "board")) NOT NULL,' +
 			' versionId text REFERENCES Version(versionId) NOT NULL,' +
 			' created text DEFAULT CURRENT_TIMESTAMP NOT NULL,' +
 			' PRIMARY KEY(teacherId, position, versionId))',
