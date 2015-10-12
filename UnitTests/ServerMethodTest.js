@@ -425,7 +425,7 @@ var tests = [
 		user: 'GNG',
 		passPhrase: 'InTheWordIsLife',
 		status: 409,
-		results: {message:'SQLITE_CONSTRAINT: UNIQUE constraint failed: Position.versionId, Position.position, Position.teacherId'}	
+		results: {message:'SQLITE_CONSTRAINT: UNIQUE constraint failed: Position.teacherId, Position.position, Position.versionId'}	
 	},
 	{
 		number: 220,

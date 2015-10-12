@@ -27,6 +27,13 @@ DatabaseAdapter.prototype.create = function(callback) {
 		'drop table if exists Discourse',
 		'drop table if exists Position',
 		'drop table if exists Teacher',
+		'drop table if exists Version',
+		
+		'CREATE TABLE Version(' +
+			' versionId text PRIMARY KEY NOT NULL,' + // From Ethnologue
+			' engName text NOT NULL,' +
+			' localName text NULL,' +
+			' isActive bool NOT NULL)',
 		
 		'CREATE TABLE Teacher(' +
 			' teacherId text PRIMARY KEY NOT NULL,' + // GUID
@@ -39,13 +46,14 @@ DatabaseAdapter.prototype.create = function(callback) {
 		'CREATE INDEX authorizerIdIndex ON Teacher(authorizerId)',
 			
 		'CREATE TABLE Position(' +
-			' versionId text NOT NULL,' + // may reference a Version table
 			' teacherId text REFERENCES Teacher(teacherId) ON DELETE CASCADE NOT NULL,' +
 			' position text check(position in ("removed", "teacher", "principal", "super", "board")) NOT NULL,' +
+			' versionId text REFERENCES Version(versionId) NOT NULL,' +
 			' created text DEFAULT CURRENT_TIMESTAMP NOT NULL,' +
-			' PRIMARY KEY(versionId, position, teacherId))',
+			' PRIMARY KEY(teacherId, position, versionId))',
 			
 		'CREATE INDEX PositionTeacherId ON Position(teacherId)',
+		'CREATE INDEX PositionVersionId ON Position(versionId)',
 		
 		'CREATE TABLE Discourse(' +
 			' discourseId text PRIMARY KEY NOT NULL,' + // GUID
@@ -66,6 +74,10 @@ DatabaseAdapter.prototype.create = function(callback) {
 			
 		'CREATE INDEX MessageDiscourseId ON Message(discourseId)',
 		
+		'INSERT INTO Version (versionId, engName, isActive) values ("", "Any Version", 0)',
+		'INSERT INTO Version (versionId, engName, isActive) values ("KJV", "King James Version", 1)',
+		'INSERT INTO Version (versionId, engName, isActive) values ("KJVA", "King James and Apocrapha", 1)',
+		'INSERT INTO Version (versionId, engName, isActive) values ("WEB", "World English Bible", 1)',
 		'INSERT INTO Teacher (teacherId, fullname, pseudonym, authorizerId, passPhrase)' +
 			' values ("GNG", "Gary N Griswold", "Gary G", "GNG", "InTheWordIsLife")',
 		'INSERT INTO Position (versionId, teacherId, position) values ("", "GNG", "board")',

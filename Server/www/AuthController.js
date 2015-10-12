@@ -148,6 +148,18 @@ AuthController.prototype.newPassPhrase = function(obj, callback) {
 	});
 };
 /**
+* This method is used to authorize test methods that should never be run in production.
+*/
+AuthController.prototype.authorizeTester = function(authorizedId, callback) {
+	if (authorizedId === 'GNG') {
+		callback();
+	} else {
+		var error = new Error('You are not authorized to run this test routine.');
+		error.statusCode = 403;
+		callback(error);
+	}
+};
+/**
 * This auth function is used for /user update and /user delete.  It does not really check all necessary conditions, because it does not check 
 * that principal/super has a common version with the teacher.  Doing this would require a join.
 */
