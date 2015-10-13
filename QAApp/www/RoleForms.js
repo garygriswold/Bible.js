@@ -2,10 +2,10 @@
 *
 */
 "use strict";
-function RoleForms(currentState, tBody, rowIndex) {
-	this.colspan = 7;
+function RoleForms(currentState, tBody, rowIndex, numColumns) {
+	this.colspan = numColumns;
 	this.state = currentState;
-	this.formRow = new FormRow(tBody, rowIndex);
+	this.formRow = new FormRow(tBody, rowIndex, numColumns);
 }
 RoleForms.prototype.register = function() {
 	

@@ -2,8 +2,8 @@
 * This table is used to define a list of fields in a Row.
 */
 "use strict";
-function FormRow(tBody, rowIndex) {
-	this.colspan = 7;
+function FormRow(tBody, rowIndex, numColumns) {
+	this.colspan = numColumns;
 	this.formRow = tBody.insertRow(rowIndex);
 	this.divArray = [this.colspan];
 }
