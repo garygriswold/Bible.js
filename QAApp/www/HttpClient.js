@@ -19,7 +19,7 @@ HttpClient.prototype.post = function(path, postData, callback) {
 	this.request('POST', path, postData, callback);
 };
 HttpClient.prototype.delete = function(path, callback) {
-	this.request('DELETE', path, postData, callback);
+	this.request('DELETE', path, null, callback);
 };
 HttpClient.prototype.login = function(passPhrase, callback) {
 	this.request('GET', '/login', {passPhrase:passPhrase}, callback);	
@@ -55,7 +55,7 @@ HttpClient.prototype.request = function(method, path, postData, callback) {
 		    	}
 	    	}
 	    } catch(error) {
-		    callback(-1, error)
+		    callback(-1, error);
 	    }
   	}
 

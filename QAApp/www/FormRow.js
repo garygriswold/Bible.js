@@ -1,12 +1,11 @@
 /**
 * This table is used to define a list of fields in a Row.
 */
+"use strict";
 function FormRow(tBody, rowIndex) {
 	this.colspan = 7;
-	//var tBody = row.parentElement;
-	//var next = findNextRow(tBody, rowAbove, this.colspan);
 	this.formRow = tBody.insertRow(rowIndex);
-
+	this.divArray = [this.colspan];
 }
 FormRow.prototype.addName = function(name) {
 	return(this.stdTextField(1, name));	
@@ -29,12 +28,15 @@ FormRow.prototype.addButtons = function(callback) {
 	});
 };
 FormRow.prototype.addCell = function(col) {
-	var cell = null;
+	var div = null;
 	while(this.formRow.cells.length <= col) {
-		cell = this.formRow.insertCell();
+		var cell = this.formRow.insertCell();
 		cell.setAttribute('class', 'role');
+		div = document.createElement('div');
+		cell.appendChild(div);
+		this.divArray[this.formRow.cells.length -1] = div;
 	}
-	return(cell);
+	return(div);
 };
 FormRow.prototype.stdTextField = function(col, value) {
 	var cell = this.addCell(col);
@@ -72,15 +74,29 @@ FormRow.prototype.stdButton = function(cell, label, callback) {
 };
 FormRow.prototype.open = function() {
 	this.addCell(6);
-	// Animate the from 0 to open the row	
+	for (var i=0; i<this.divArray.length; i++) {
+		TweenMax.from(this.divArray[i], 0.5, {height:0, scaleY:0, margin:0, padding:0});
+	}
 };
 FormRow.prototype.close = function() {
 	this.close2(this.formRow);
 };
 FormRow.prototype.close2 = function(row) {
+	var that = this;
 	if (row) {
-		//TweenMax.to(this.cell, 0.5, {scaleY:0, opacity:0.2, onComplete:finishRemove});
-		row.parentElement.removeChild(row);
+		TweenMax.to(row, 0.4, {padding:0, margin:0});
+		for (var i=0; i<this.divArray.length; i++) {
+			var div = this.divArray[i];
+			var cell = div.parentElement;
+			TweenMax.to(cell, 0.4, {padding:0, margin:0});
+			if (i > 0) {
+				TweenMax.to(div, 0.5, {height:0, scaleY:0, margin:0, padding:0});
+			} else {
+				TweenMax.to(div, 0.5, {height:0, scaleY:0, margin:0, padding:0, onComplete:function() {
+					row.parentElement.removeChild(row);	
+				}});				
+			}	
+		}
 	}
 };
 

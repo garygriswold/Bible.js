@@ -47,10 +47,10 @@ AuthClient.prototype.signRequest = function(request) {
 AuthClient.prototype.clearCredentials = function() {
 	localStorage.removeItem('user');
 	localStorage.removeItem('pass');
-}
+};
 AuthClient.prototype.hasCredentials = function() {
 	return(localStorage.getItem('user') !== null);
-}
+};
 AuthClient.prototype.getCredentials = function() {
 	var user = localStorage.getItem('user');
 	var pass = localStorage.getItem('pass');

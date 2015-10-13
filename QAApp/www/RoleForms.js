@@ -1,6 +1,7 @@
 /**
 *
 */
+"use strict";
 function RoleForms(currentState, tBody, rowIndex) {
 	this.colspan = 7;
 	this.state = currentState;

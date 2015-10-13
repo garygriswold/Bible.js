@@ -1,6 +1,7 @@
 /**
 * This table is used to define a list of buttons in a row.
 */
+"use strict";
 function ButtonRow(rowAbove) {
 	this.colspan = 7;
 	this.tBody = rowAbove.parentElement;

@@ -87,7 +87,7 @@ RolesViewModel.prototype.display = function() {
 					var clickedTeacherId = parts[1];
 					var clickedVersionId = (parts.length > 2) ? parts[2] : null;
 					var clickedPosition = (parts.length > 3) ? parts[3] : null;
-					console.log('clicked', clickedTeacherId, clickedVersionId, clickedPosition)
+					console.log('clicked', clickedTeacherId, clickedVersionId, clickedPosition);
 					if (clickedVersionId) {
 						that.displayVersionUpdateButtons(tableRow, clickedTeacherId, clickedVersionId, clickedPosition);
 					} else {
