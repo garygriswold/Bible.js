@@ -16,8 +16,8 @@ FormRow.prototype.addPseudo = function(pseudo) {
 FormRow.prototype.addPosition = function(positions, value) {
 	return(this.stdSelectList(3, positions, value));
 };
-FormRow.prototype.addVersion = function() {
-	return(this.stdSelectList(4));
+FormRow.prototype.addVersion = function(versions, value) {
+	return(this.stdSelectList(4, versions, value));
 };
 FormRow.prototype.addButtons = function(callback) {
 	var that = this;
@@ -47,10 +47,9 @@ FormRow.prototype.stdTextField = function(col, value) {
 	cell.appendChild(input);
 	return(input);
 };
-FormRow.prototype.stdSelectList = function(col, id, values, current) {
+FormRow.prototype.stdSelectList = function(col, values, current) {
 	var cell = this.addCell(col);
 	var input = document.createElement('select');
-	input.setAttribute('id', id);
 	input.setAttribute('class', 'role');
 	for (var i=0; i<values.length; i++) {
 		var option = document.createElement('option');
@@ -62,6 +61,19 @@ FormRow.prototype.stdSelectList = function(col, id, values, current) {
 	}
 	cell.appendChild(input);
 	return(input);
+};
+FormRow.prototype.updateSelectList = function(field, values, current) {
+	for (var i=field.children.length -1; i>=0; i--) {
+		field.removeChild(field.children[i]);
+	}
+	for (i=0; i<values.length; i++) {
+		var option = document.createElement('option');
+		option.textContent = values[i];
+		if (values[i] === current) {
+			option.setAttribute('selected', 'selected');
+		}
+		input.appendChild(option);
+	}
 };
 FormRow.prototype.stdButton = function(cell, label, callback) {
 	var button = document.createElement('button');

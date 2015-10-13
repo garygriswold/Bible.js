@@ -1,6 +1,5 @@
 /**
-* This class contains the primary keys and any other data that must be passed 
-* back and forth from view to view.
+* This class contains the internal data model that is used by the Application.
 */
 "use strict";
 function CurrentState() {
@@ -14,6 +13,7 @@ function CurrentState() {
 	this.questionTimestamp = null;
 	this.answerTimestamp = null;
 	this.teachers = {};
+	this.roles = {};
 	Object.seal(this);
 }
 CurrentState.prototype.canManageRoles = function() {
@@ -76,4 +76,21 @@ CurrentState.prototype.clearRoles = function() {
 	this.isDirector = false;
 	this.principal = null;
 	this.teacher = null;		
+};
+CurrentState.prototype.addTeacher = function(teacherId, name, pseudo) {
+	this.teachers[teacherId] = {fullname:name, pseudonym:pseudo};
+};
+CurrentState.prototype.removeTeacher = function(teacherId) {
+	delete this.teachers[teacherId];
+};
+CurrentState.prototype.addRole = function(teacherId, position, version, created) {
+	var key = this.roleKey(teacherId, position, version);
+	this.roles[key] = {created:created};
+};
+CurrentState.prototype.removeRole = function(teacherId, position, version) {
+	var key = this.roleKey(teacherId, position, version);
+	delete this.roles[key];
+};
+CurrentState.prototype.roleKey = function(teacherId, position, version) {
+	return(teacherId + '.' + position + '.' + version);
 };

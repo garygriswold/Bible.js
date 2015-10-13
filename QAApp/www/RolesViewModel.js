@@ -39,9 +39,8 @@ RolesViewModel.prototype.display = function() {
 				}
 				var name = addNode(line, 'td', row.fullname);
 				var pseudo = addNode(line, 'td', row.pseudonym);
-				that.state.teachers[row.teacherId] = {fullname:name, pseudonym:pseudo};//, roles:[{position:row.position, versionId:row.versionId, created:row.created}]};
+				that.state.addTeacher(row.teacherId, name, pseudo);
 			} else {
-				//that.state.teachers[row.teacherId].roles.push({position:row.position, versionId:row.versionId, created:row.created});
 				versionRowCount += 1;
 				check1.setAttribute('rowspan', versionRowCount);
 				name.setAttribute('rowspan', versionRowCount);
@@ -52,11 +51,12 @@ RolesViewModel.prototype.display = function() {
 				var blank = addNode(line, 'td');
 				blank.setAttribute('colspan', 4);
 			} else {
-				addNode(line, 'td', row.position);
-				addNode(line, 'td', row.versionId);
-				addNode(line, 'td', row.created);
+				var position = addNode(line, 'td', row.position);
+				var version = addNode(line, 'td', row.versionId);
+				var created = addNode(line, 'td', row.created);
 				var check2 = addNode(line, 'td');
 				addCheckbox(check2, row.teacherId, row.versionId, row.position);
+				that.state.addRole(row.teacherId, position, version, created);
 			}
 		}
 	}
@@ -91,7 +91,7 @@ RolesViewModel.prototype.display = function() {
 					var clickedPosition = (parts.length > 3) ? parts[3] : null;
 					console.log('clicked', clickedTeacherId, clickedVersionId, clickedPosition);
 					if (clickedVersionId) {
-						that.displayVersionUpdateButtons(tableRow, clickedTeacherId, clickedVersionId, clickedPosition);
+						that.displayVersionUpdateButtons(tableRow, clickedTeacherId, clickedPosition, clickedVersionId);
 					} else {
 						that.displayPersonUpdateButtons(tableRow, clickedTeacherId);
 					}
@@ -144,50 +144,41 @@ RolesViewModel.prototype.presentRoles = function() {
 RolesViewModel.prototype.displayPersonUpdateButtons = function(parent, teacherId) {
 	var that = this;
 	this.buttonRow = new ButtonRow(parent, this.numColumns);
-	this.buttonRow.addButton('Change Name', 'name.' + teacherId, function(event) {
-		console.log('clicked name change button');
+	this.buttonRow.addButton('Change Name', function(event) {
 		var roleForms = that.buttonRow.createRoleForms(that.state);
 		that.closeButtonRow();
 		roleForms.name(teacherId);
 	});
-	this.buttonRow.addButton('New Pass Phrase', 'pass.' + teacherId, function(event) {
+	this.buttonRow.addButton('New Pass Phrase', function(event) {
 		console.log('clicked new pass phrase');
 	});
-	this.buttonRow.addButton('Replace Person', 'repl.' + teacherId, function(event) {
+	this.buttonRow.addButton('Replace Person', function(event) {
 		console.log('clicked replace person');
 	});
 	// This is only possible for someone who has a boss.
-	this.buttonRow.addButton('Promote Person', 'prom.' + teacherId, function(event) {
+	this.buttonRow.addButton('Promote Person', function(event) {
 		console.log('clicked promote person');
 	});
 	// This is not possible of authorizing person has no principal under them.
-	this.buttonRow.addButton('Demote Person', 'demt.' + teacherId, function(event) {
+	this.buttonRow.addButton('Demote Person', function(event) {
 		console.log('clicked demote person');
 	});
 	this.buttonRow.open();
 };
-RolesViewModel.prototype.displayNameUpdateButtons = function(parent, teacherId) {
-	this.buttonRow = new ButtonRow(parent, this.numColumns);
-	this.buttonRow.addButton('Change Name', 'name.' + teacherId, function(event) {
-		console.log('Change name button is clicked');
-	});
-	this.buttonRow.addButton('New PassPhrase', 'pass.' + teacherId, function(event) {
-		console.log('New Passphrase button click');
-	});
-	this.buttonRow.open();
-};
-RolesViewModel.prototype.displayVersionUpdateButtons = function(parent, teacherId, versionId, position) {
+RolesViewModel.prototype.displayVersionUpdateButtons = function(parent, teacherId, position, versionId) {
 	var that = this;
 	this.buttonRow = new ButtonRow(parent, this.numColumns);
-	this.buttonRow.addButton('Add Role', 'add.' + teacherId, function(event) {
+	this.buttonRow.addButton('Add Role', function(event) {
 		console.log('Add Role button click');
 		var roleForms = that.buttonRow.createRoleForms(that.state);
 		that.closeButtonRow();
-		
 		roleForms.addRole(teacherId);
 	});
-	this.buttonRow.addButton('Remove Role', 'rem.' + teacherId + '.' + versionId + '.' + position, function(event) {
+	this.buttonRow.addButton('Remove Role', function(event) {
 		console.log('Remove role button click');
+		var roleForms = that.buttonRow.createRoleForms(that.state);
+		that.closeButtonRow();
+		roleForms.removeRole(teacherId, position, versionId);
 	});
 	this.buttonRow.open();
 };
