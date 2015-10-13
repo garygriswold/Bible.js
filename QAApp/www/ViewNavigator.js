@@ -99,3 +99,6 @@ ViewNavigator.prototype.transition = function(fromViewName, toViewName, transact
 ViewNavigator.prototype.saveDraft = function() {
 	this.answerModel.saveDraft();
 };
+ViewNavigator.prototype.allCheckboxesOff = function() {
+	this.rolesModel.allCheckboxesOff();	
+};

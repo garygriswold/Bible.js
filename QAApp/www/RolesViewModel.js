@@ -11,11 +11,12 @@ function RolesViewModel(viewNavigator) {
 	this.self = null;
 	this.members = null;
 	this.buttonRow = null;
+	this.tBody = null;
 	Object.seal(this);
 }
 RolesViewModel.prototype.display = function() {
 	var that = this;
-	var root = document.getElementById('rolesBody');
+	this.tBody = document.getElementById('rolesBody');
 	
 	this.state.teachers = {};
 	iteratePersons(this.boss, 'boss');
@@ -27,7 +28,7 @@ RolesViewModel.prototype.display = function() {
 		var versionRowCount = 0;
 		for (var i=0; i<list.length; i++) {
 			var row = list[i];
-			var line = addNode(root, 'tr');
+			var line = addNode(that.tBody, 'tr');
 			if (row.teacherId !== priorId) {
 				priorId = row.teacherId;
 				versionRowCount = 1;
@@ -80,6 +81,7 @@ RolesViewModel.prototype.display = function() {
 		element.setAttribute('class', 'role');
 		parent.appendChild(element);
 		element.addEventListener('change', function(event) {
+			console.log('CHECKBOX CHANGE EVENT CAUGHT', event.target.checked);
 			if (event.target.checked) {
 				if (that.buttonRow === null) { // only turn button if none others are
 					var tableRow = this.parentNode.parentNode;
@@ -107,6 +109,19 @@ RolesViewModel.prototype.closeButtonRow = function() {
 		this.buttonRow.close();
 		this.buttonRow = null;
 	}	
+};
+RolesViewModel.prototype.allCheckboxesOff = function() {
+	for (var i=0; i<this.tBody.rows.length; i++) {
+		var row = this.tBody.rows[i];
+		turnOffCheckbox(row.cells[0]);
+		turnOffCheckbox(row.cells[row.cells.length -1])	
+	}
+	
+	function turnOffCheckbox(cell) {
+		if (cell.children && cell.children.length > 0 && cell.firstChild.nodeName === 'INPUT' && cell.firstChild.checked) {
+			cell.firstChild.checked = false;
+		}	 
+	}
 };
 RolesViewModel.prototype.setProperties = function(status, results) {
 	if (status === 200) {
