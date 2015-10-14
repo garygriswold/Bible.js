@@ -39,7 +39,7 @@ RolesViewModel.prototype.display = function() {
 				}
 				var name = addNode(line, 'td', row.fullname);
 				var pseudo = addNode(line, 'td', row.pseudonym);
-				that.state.addTeacher(row.teacherId, name, pseudo);
+				that.state.addTeacher(row.teacherId, line, name, pseudo);
 			} else {
 				versionRowCount += 1;
 				check1.setAttribute('rowspan', versionRowCount);
@@ -55,7 +55,7 @@ RolesViewModel.prototype.display = function() {
 				var version = addNode(line, 'td', row.versionId);
 				var created = addNode(line, 'td', row.created);
 				var check2 = addNode(line, 'td');
-				addCheckbox(check2, row.teacherId, row.versionId, row.position);
+				addCheckbox(check2, row.teacherId, line, row.versionId, row.position);
 				that.state.addRole(row.teacherId, position, version, created);
 			}
 		}
@@ -130,6 +130,17 @@ RolesViewModel.prototype.setProperties = function(status, results) {
 		this.members = (results.length > 2) ? results[2] : null;
 		this.display();
 	}
+};
+RolesViewModel.prototype.addPerson = function() {
+	
+};
+RolesViewModel.prototype.addRole = function(teacherId, position, version) {
+	// retrieve person row
+	// retrieve role row
+	
+};
+RolesViewModel.prototype.removeRole = function() {
+	
 };
 RolesViewModel.prototype.presentRoles = function() {
 	var that = this;
