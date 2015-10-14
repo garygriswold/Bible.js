@@ -10,15 +10,12 @@ function RolesViewModel(viewNavigator) {
 	this.boss = null;
 	this.self = null;
 	this.members = null;
-	this.buttonRow = null;
-	this.tBody = null;
+	this.table = new RolesTable(this.state, this.numColumns);
 	Object.seal(this);
 }
 RolesViewModel.prototype.display = function() {
 	var that = this;
-	this.tBody = document.getElementById('rolesBody');
-	
-	this.state.teachers = {};
+	this.state.clearCache();
 	iteratePersons(this.boss, 'boss');
 	iteratePersons(this.self, 'self');
 	iteratePersons(this.members, 'memb');
@@ -28,100 +25,12 @@ RolesViewModel.prototype.display = function() {
 		var versionRowCount = 0;
 		for (var i=0; i<list.length; i++) {
 			var row = list[i];
-			var line = addNode(that.tBody, 'tr');
-			if (row.teacherId !== priorId) {
-				priorId = row.teacherId;
-				versionRowCount = 1;
-				
-				var check1 = addNode(line, 'td');
-				if (type === 'memb') {
-					addCheckbox(check1, row.teacherId);
-				}
-				var name = addNode(line, 'td', row.fullname);
-				var pseudo = addNode(line, 'td', row.pseudonym);
-				that.state.addTeacher(row.teacherId, line, name, pseudo);
-			} else {
-				versionRowCount += 1;
-				check1.setAttribute('rowspan', versionRowCount);
-				name.setAttribute('rowspan', versionRowCount);
-				pseudo.setAttribute('rowspan', versionRowCount);
-			}
-			if (type === 'boss') {
-				addNode(line, 'td', 'director');
-				var blank = addNode(line, 'td');
-				blank.setAttribute('colspan', 4);
-			} else {
-				var position = addNode(line, 'td', row.position);
-				var version = addNode(line, 'td', row.versionId);
-				var created = addNode(line, 'td', row.created);
-				var check2 = addNode(line, 'td');
-				addCheckbox(check2, row.teacherId, line, row.versionId, row.position);
-				that.state.addRole(row.teacherId, position, version, created);
-			}
+			that.table.insertRow(-1, type, row.teacherId, row.fullname, row.pseudonym, row.position, row.versionId, row.created);
 		}
 	}
-	
-	function addNode(parent, elementType, content) {
-		var element = document.createElement(elementType);
-		element.setAttribute('class', 'role');
-		if (content) {
-			element.textContent = content;
-		}
-		parent.appendChild(element);
-		return(element);
-	}
-	function addCheckbox(parent, teacherId, versionId, position) {
-		var element = document.createElement('input');
-		element.setAttribute('type', 'checkbox');
-		var id = 'id.' + teacherId;
-		if (versionId && position) {
-			id += '.' + versionId + '.' + position;
-		}
-		element.setAttribute('id', id);
-		element.setAttribute('class', 'role');
-		parent.appendChild(element);
-		element.addEventListener('change', function(event) {
-			console.log('CHECKBOX CHANGE EVENT CAUGHT', event.target.checked);
-			if (event.target.checked) {
-				if (that.buttonRow === null) { // only turn button if none others are
-					var tableRow = this.parentNode.parentNode;
-					var parts = this.id.split('.');
-					var clickedTeacherId = parts[1];
-					var clickedVersionId = (parts.length > 2) ? parts[2] : null;
-					var clickedPosition = (parts.length > 3) ? parts[3] : null;
-					console.log('clicked', clickedTeacherId, clickedVersionId, clickedPosition);
-					if (clickedVersionId) {
-						that.displayVersionUpdateButtons(tableRow, clickedTeacherId, clickedPosition, clickedVersionId);
-					} else {
-						that.displayPersonUpdateButtons(tableRow, clickedTeacherId);
-					}
-				} else {
-					event.target.checked = false;//don't turn on, because another button is on
-				}
-			} else {
-				that.closeButtonRow();
-			}
-		});
-	}
-};
-RolesViewModel.prototype.closeButtonRow = function() {
-	if (this.buttonRow) {
-		this.buttonRow.close();
-		this.buttonRow = null;
-	}	
 };
 RolesViewModel.prototype.allCheckboxesOff = function() {
-	for (var i=0; i<this.tBody.rows.length; i++) {
-		var row = this.tBody.rows[i];
-		turnOffCheckbox(row.cells[0]);
-		turnOffCheckbox(row.cells[row.cells.length -1])	
-	}
-	
-	function turnOffCheckbox(cell) {
-		if (cell.children && cell.children.length > 0 && cell.firstChild.nodeName === 'INPUT' && cell.firstChild.checked) {
-			cell.firstChild.checked = false;
-		}	 
-	}
+	this.table.allCheckboxesOff();
 };
 RolesViewModel.prototype.setProperties = function(status, results) {
 	if (status === 200) {
@@ -136,11 +45,18 @@ RolesViewModel.prototype.addPerson = function() {
 };
 RolesViewModel.prototype.addRole = function(teacherId, position, version) {
 	// retrieve person row
-	// retrieve role row
+	// for columns 0,1,2 increment colspan by 1
+	// insert role row
 	
 };
-RolesViewModel.prototype.removeRole = function() {
+RolesViewModel.prototype.removeRole = function(teacherId, position, version) {
+	// retrieve person row 
+	// for columns 0, 1, 2 decrement colspan by 1
+	// retreive the row by teacher/position/version
+	// remove the row retrieved, ideally with animation
+	// What about removing the only role of a person, do they disappear.
 	
+	// Or, should there only be a modify Role and allow the modification to removed.
 };
 RolesViewModel.prototype.presentRoles = function() {
 	var that = this;
@@ -152,44 +68,4 @@ RolesViewModel.prototype.presentRoles = function() {
 		that.setProperties(status, results);
 	});
 };
-RolesViewModel.prototype.displayPersonUpdateButtons = function(parent, teacherId) {
-	var that = this;
-	this.buttonRow = new ButtonRow(parent, this.numColumns);
-	this.buttonRow.addButton('Change Name', function(event) {
-		var roleForms = that.buttonRow.createRoleForms(that.state);
-		that.closeButtonRow();
-		roleForms.name(teacherId);
-	});
-	this.buttonRow.addButton('New Pass Phrase', function(event) {
-		console.log('clicked new pass phrase');
-	});
-	this.buttonRow.addButton('Replace Person', function(event) {
-		console.log('clicked replace person');
-	});
-	// This is only possible for someone who has a boss.
-	this.buttonRow.addButton('Promote Person', function(event) {
-		console.log('clicked promote person');
-	});
-	// This is not possible of authorizing person has no principal under them.
-	this.buttonRow.addButton('Demote Person', function(event) {
-		console.log('clicked demote person');
-	});
-	this.buttonRow.open();
-};
-RolesViewModel.prototype.displayVersionUpdateButtons = function(parent, teacherId, position, versionId) {
-	var that = this;
-	this.buttonRow = new ButtonRow(parent, this.numColumns);
-	this.buttonRow.addButton('Add Role', function(event) {
-		console.log('Add Role button click');
-		var roleForms = that.buttonRow.createRoleForms(that.state);
-		that.closeButtonRow();
-		roleForms.addRole(teacherId);
-	});
-	this.buttonRow.addButton('Remove Role', function(event) {
-		console.log('Remove role button click');
-		var roleForms = that.buttonRow.createRoleForms(that.state);
-		that.closeButtonRow();
-		roleForms.removeRole(teacherId, position, versionId);
-	});
-	this.buttonRow.open();
-};
+

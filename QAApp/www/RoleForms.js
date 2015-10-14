@@ -12,7 +12,7 @@ RoleForms.prototype.register = function() {
 };
 RoleForms.prototype.name = function(teacherId) {
 	var that = this;
-	var teacher = this.state.teachers[teacherId];
+	var teacher = this.state.getTeacher(teacherId);
 	var nameField = this.formRow.addName(teacher.fullname.textContent);
 	var pseudoField = this.formRow.addPseudo(teacher.pseudonym.textContent);
 	this.formRow.addButtons(function() {
@@ -25,7 +25,7 @@ RoleForms.prototype.name = function(teacherId) {
 };
 RoleForms.prototype.passPhrase = function(teacherId) {
 	var that = this;
-	var teacher = this.state.teachers[teacherId];
+	var teacher = this.state.getTeacher(teacherId);
 	// Add Explaination to leading columns
 	// Add button Go to 
 	// Add button Cancel

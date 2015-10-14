@@ -77,15 +77,21 @@ CurrentState.prototype.clearRoles = function() {
 	this.principal = null;
 	this.teacher = null;		
 };
-CurrentState.prototype.addTeacher = function(teacherId, row, name, pseudo) {
-	this.teachers[teacherId] = {row:row, fullname:name, pseudonym:pseudo};
+CurrentState.prototype.getTeacher = function(teacherId) {
+	return(this.teachers[teacherId]);	
+};
+CurrentState.prototype.addTeacher = function(teacherId, name, pseudo, row) {
+	this.teachers[teacherId] = {fullname:name, pseudonym:pseudo, row:row};
 };
 CurrentState.prototype.removeTeacher = function(teacherId) {
 	delete this.teachers[teacherId];
 };
-CurrentState.prototype.addRole = function(teacherId, row, position, version, created) {
+CurrentState.prototype.getRole = function(teacherId, position, version) {
+	return(this.roles[this.roleKey(teacher, position, version)]);	
+};
+CurrentState.prototype.addRole = function(teacherId, position, version, created, row) {
 	var key = this.roleKey(teacherId, position, version);
-	this.roles[key] = {row:row, created:created};
+	this.roles[key] = {created:created, row:row};
 };
 CurrentState.prototype.removeRole = function(teacherId, position, version) {
 	var key = this.roleKey(teacherId, position, version);
@@ -94,3 +100,7 @@ CurrentState.prototype.removeRole = function(teacherId, position, version) {
 CurrentState.prototype.roleKey = function(teacherId, position, version) {
 	return(teacherId + '.' + position + '.' + version);
 };
+CurrentState.prototype.clearCache = function() {
+	this.teachers = {};
+	this.roles = {};
+}
