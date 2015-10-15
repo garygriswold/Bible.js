@@ -71,7 +71,7 @@ FormRow.prototype.updateSelectList = function(field, values, current) {
 		if (values[i] === current) {
 			option.setAttribute('selected', 'selected');
 		}
-		input.appendChild(option);
+		field.appendChild(option);
 	}
 };
 FormRow.prototype.stdButton = function(cell, label, callback) {

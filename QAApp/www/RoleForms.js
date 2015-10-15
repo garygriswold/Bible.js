@@ -87,7 +87,7 @@ RoleForms.prototype.removeRole = function(teacherId, position, versionId) {
 	var that = this;
 	this.formRow.addButtons(function() {
 		//submit to server if 200 do the following
-		that.state.removeRole(teacherId, position, versionId);
+		that.table.deleteRole(teacherId, position, versionId);
 		that.formRow.close();
 	});
 	this.formRow.open();

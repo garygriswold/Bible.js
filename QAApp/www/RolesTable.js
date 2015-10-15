@@ -36,7 +36,7 @@ RolesTable.prototype.insertRow = function(index, type, teacherId, fullname, pseu
 		var createdCell = this.addTableCell(newRow, created);
 		var check2 = this.addTableCell(newRow);
 		this.addCheckbox(check2, teacherId, position, versionId);
-		this.state.addRole(teacherId, positionCell, versionCell, createdCell, newRow);
+		this.state.addRole(teacherId, position, versionId, positionCell, versionCell, createdCell, newRow);
 	}
 };
 RolesTable.prototype.updatePerson = function(teacherId, name, pseudo) {
@@ -49,11 +49,15 @@ RolesTable.prototype.updateRole = function(teacherId, position, version) {
 	// insert the position in the very next row.	
 };
 RolesTable.prototype.deleteRole = function(teacherId, position, version) {
-	// lookup role in roles
-	// lookup in teacherId
-	// decrement the 0, 1, 2 columns
-	// remove the role
-	// What prevents deleting the last role.
+	var teacher = this.state.getTeacher(teacherId);
+	var rowCount = Number(teacher.row.cells[0].getAttribute('rowspan')) - 1;
+		for (var i=0; i<3; i++) {
+			teacher.row.cells[i].setAttribute('rowspan', rowCount);
+		}
+	var role = this.state.getRole(teacherId, position, version);
+	var rowIndex = role.row.rowIndex;
+	this.tBody.deleteRow(rowIndex - 2);
+	this.state.removeRole(teacherId, position, version);
 };
 
 
@@ -118,7 +122,7 @@ RolesTable.prototype.allCheckboxesOff = function() {
 	for (var i=0; i<this.tBody.rows.length; i++) {
 		var row = this.tBody.rows[i];
 		turnOffCheckbox(row.cells[0]);
-		turnOffCheckbox(row.cells[row.cells.length -1])	
+		turnOffCheckbox(row.cells[row.cells.length -1]);
 	}
 	
 	function turnOffCheckbox(cell) {
