@@ -2,10 +2,10 @@
 *
 */
 "use strict";
-function RoleForms(currentState, tBody, rowIndex, numColumns) {
-	this.colspan = numColumns;
-	this.state = currentState;
-	this.formRow = new FormRow(tBody, rowIndex, numColumns);
+function RoleForms(rowIndex, table) {
+	this.table = table;
+	this.state = table.state;
+	this.formRow = new FormRow(table.tBody, rowIndex, table.numColumns);
 }
 RoleForms.prototype.register = function() {
 	
@@ -73,10 +73,12 @@ RoleForms.prototype.addRole = function(teacherId) {
 	}
 	this.formRow.addButtons(function() {
 		// submit to server if 201 do the following
-		var position = positionsField.selected;
-		var versionId = versionsField.selected;
-		var created = new Date().toString();
-		that.state.addRole(teacherId, position, versionId, created);
+		var teacher = that.state.getTeacher(teacherId);
+		var position = positionsField.options[positionsField.selectedIndex].textContent;
+		var versionId = versionsField.options[versionsField.selectedIndex].textContent;
+		var created = new Date().toISOString().substr(0,19);
+		//rowIndex includes header, ergo -2 is top row
+		that.table.insertRow(teacher.row.rowIndex - 1, 'memb', teacherId, null, null, position, versionId, created);
 		that.formRow.close();
 	});
 	this.formRow.open();

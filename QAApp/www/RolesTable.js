@@ -89,7 +89,6 @@ RolesTable.prototype.addCheckbox = function(cell, teacherId, position, versionId
 		if (event.target.checked) {
 			if (that.buttonRow === null) { // only turn button if none others are on
 				var tableRow = this.parentElement.parentElement;
-				console.log('ROW', tableRow.nodeName);
 				var parts = this.id.split('.');
 				var clickedTeacherId = parts[0];
 				var clickedPosition = (parts.length > 1) ? parts[1] : null;
@@ -130,9 +129,9 @@ RolesTable.prototype.allCheckboxesOff = function() {
 };
 RolesTable.prototype.displayPersonUpdateButtons = function(parent, teacherId) {
 	var that = this;
-	this.buttonRow = new ButtonRow(parent, this.numColumns);
+	this.buttonRow = new ButtonRow(parent, this);
 	this.buttonRow.addButton('Change Name', function(event) {
-		var roleForms = that.buttonRow.createRoleForms(that.state);
+		var roleForms = that.buttonRow.createRoleForms();
 		that.closeButtonRow();
 		roleForms.name(teacherId);
 	});
@@ -154,16 +153,16 @@ RolesTable.prototype.displayPersonUpdateButtons = function(parent, teacherId) {
 };
 RolesTable.prototype.displayVersionUpdateButtons = function(parent, teacherId, position, versionId) {
 	var that = this;
-	this.buttonRow = new ButtonRow(parent, this.numColumns);
+	this.buttonRow = new ButtonRow(parent, this);
 	this.buttonRow.addButton('Add Role', function(event) {
 		console.log('Add Role button click');
-		var roleForms = that.buttonRow.createRoleForms(that.state);
+		var roleForms = that.buttonRow.createRoleForms();
 		that.closeButtonRow();
 		roleForms.addRole(teacherId);
 	});
 	this.buttonRow.addButton('Remove Role', function(event) {
 		console.log('Remove role button click');
-		var roleForms = that.buttonRow.createRoleForms(that.state);
+		var roleForms = that.buttonRow.createRoleForms();
 		that.closeButtonRow();
 		roleForms.removeRole(teacherId, position, versionId);
 	});

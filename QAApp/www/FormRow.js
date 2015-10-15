@@ -3,9 +3,8 @@
 */
 "use strict";
 function FormRow(tBody, rowIndex, numColumns) {
-	this.colspan = numColumns;
 	this.formRow = tBody.insertRow(rowIndex);
-	this.divArray = [this.colspan];
+	this.divArray = [numColumns];
 }
 FormRow.prototype.addName = function(name) {
 	return(this.stdTextField(1, name));	

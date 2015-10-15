@@ -2,11 +2,11 @@
 * This table is used to define a list of buttons in a row.
 */
 "use strict";
-function ButtonRow(rowAbove, numColumns) {
-	this.colspan = numColumns;
-	this.tBody = rowAbove.parentElement;
-	this.next = findNextRow(this.tBody, rowAbove, this.colspan);
-	this.row = this.tBody.insertRow(this.next);
+function ButtonRow(rowAbove, table) {
+	this.colspan = table.numColumns;
+	this.table = table;
+	this.next = findNextRow(this.table.tBody, rowAbove, this.colspan);
+	this.row = this.table.tBody.insertRow(this.next);
 	this.cell = this.row.insertCell();
 	this.cell.setAttribute('class', 'role');
 	this.cell.setAttribute('colspan', this.colspan);
@@ -50,6 +50,6 @@ ButtonRow.prototype.close = function() {
 		});
 	}
 };
-ButtonRow.prototype.createRoleForms = function(currentState) {
-	return(new RoleForms(currentState, this.tBody, this.next, this.colspan));	
+ButtonRow.prototype.createRoleForms = function() {
+	return(new RoleForms(this.next, this.table));	
 };
