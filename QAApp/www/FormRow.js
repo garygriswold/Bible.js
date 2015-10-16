@@ -21,10 +21,28 @@ FormRow.prototype.addVersion = function(versions, value) {
 FormRow.prototype.addButtons = function(callback) {
 	var that = this;
 	var cell = this.addCell(5);
-	this.goButton = this.stdButton(cell, 'Go', callback);
+	this.goButton = this.stdButton(cell, 'Do It', callback);
 	this.cancelButton = this.stdButton(cell, 'Cancel', function() {
 		that.close2(that.formRow);
 	});
+};
+FormRow.prototype.setDoneButton = function() {
+	var that = this;
+	var cell5 = this.divArray[5];
+	for (var i=cell5.children.length -1; i>=0; i--) {
+		cell5.removeChild(cell5.children[i]);
+	}
+	this.stdButton(cell5, 'Done', function() {
+		that.close2(that.formRow);
+	});
+};
+FormRow.prototype.addMessage = function(col, message) {
+	var cell = this.addCell(col);
+	cell.textContent = message;
+};
+FormRow.prototype.setMessage = function(col, message) {
+	var div = this.divArray[col];
+	div.textContent = message;	
 };
 FormRow.prototype.addCell = function(col) {
 	var div = null;

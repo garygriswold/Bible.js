@@ -110,10 +110,6 @@ viewLibrary['forgotView'] = '<table id="forgotView" style="height: 100%; width: 
 	'</tr>' +
 	'</table>';
 
-viewLibrary['headerView'] = '<table id="headerView" style="height: 15%; width: 100%; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">' +
-	'<tr style="height: 100%"><td style="text-align: center; vertical-align: middle; color: white">My Bible Q & A</td><tr>' +
-	'</table>';
-
 viewLibrary['loginView'] = '<table id="loginView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000);">' +
 	'<tr style="height: 33%">' +
 	'<td style="width: 25%"></td>' +
@@ -138,6 +134,10 @@ viewLibrary['loginView'] = '<table id="loginView" style="height: 100%; width: 10
 	'</span></td>' +
 	'<td></td>' +
 	'</tr>' +
+	'</table>';
+
+viewLibrary['headerView'] = '<table id="headerView" style="height: 15%; width: 100%; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">' +
+	'<tr style="height: 100%"><td style="text-align: center; vertical-align: middle; color: white">My Bible Q & A</td><tr>' +
 	'</table>';
 
 viewLibrary['queueView'] = '<div id="queueView">' +
@@ -275,6 +275,12 @@ viewLibrary['rolesView'] = '<!-- <div id="rolesView" style="width:100%; height:1
 	'font-family: sans-serif;' +
 	'font-size: large;' +
 	'text-align: center;' +
+	'}' +
+	'td.roleHead {' +
+	'border-right: 1px solid #C1DAD7;' +
+	'border-bottom: 1px solid #C1DAD7;' +
+	'border-top: 1px solid #C1DAD7;' +
+	'background: #CAE8EA;' +
 	'}' +
 	'</style>' +
 	'<script>' +

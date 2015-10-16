@@ -40,24 +40,6 @@ RolesViewModel.prototype.setProperties = function(status, results) {
 		this.display();
 	}
 };
-RolesViewModel.prototype.addPerson = function() {
-	
-};
-RolesViewModel.prototype.addRole = function(teacherId, position, version) {
-	// retrieve person row
-	// for columns 0,1,2 increment colspan by 1
-	// insert role row
-	
-};
-RolesViewModel.prototype.removeRole = function(teacherId, position, version) {
-	// retrieve person row 
-	// for columns 0, 1, 2 decrement colspan by 1
-	// retreive the row by teacher/position/version
-	// remove the row retrieved, ideally with animation
-	// What about removing the only role of a person, do they disappear.
-	
-	// Or, should there only be a modify Role and allow the modification to removed.
-};
 RolesViewModel.prototype.presentRoles = function() {
 	var that = this;
 	this.httpClient.get('/user', function(status, results) {

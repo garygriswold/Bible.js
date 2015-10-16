@@ -26,13 +26,16 @@ RoleForms.prototype.name = function(teacherId) {
 RoleForms.prototype.passPhrase = function(teacherId) {
 	var that = this;
 	var teacher = this.state.getTeacher(teacherId);
-	// Add Explaination to leading columns
-	// Add button Go to 
-	// Add button Cancel
-	// Generate a new passphrase
-	
-	// Display response passPhrase, where explanation
-	// Develop and test with server
+	var message = 'When you create a new Pass Phrase, the user will not be able to access their account until after they login with their new Pass Phrase.';
+	this.formRow.addMessage(1, message);
+	this.formRow.addButtons(function() {
+		// submit to server, on 200 display passphrase
+		message = 'Be sure to give this user their new Pass Phrase, exactly.'
+		that.formRow.setMessage(1, message);
+		that.formRow.setMessage(2, 'TheirNewPassPhrase');
+		that.formRow.setDoneButton();
+	});
+	this.formRow.open();
 };
 RoleForms.prototype.replace = function(teacherId) {
 	// Combines passPhrase and name

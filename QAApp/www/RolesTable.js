@@ -22,6 +22,7 @@ RolesTable.prototype.insertRow = function(index, type, teacherId, fullname, pseu
 		var pseudoCell = this.addTableCell(firstRow, pseudonym);
 		var blankCell = this.addTableCell(firstRow);
 		blankCell.setAttribute('colspan', 4);
+		blankCell.setAttribute('class', 'roleHead');
 		this.state.addTeacher(teacherId, nameCell, pseudoCell, firstRow);
 	} else {
 		firstRow = teacher.row;
@@ -44,15 +45,6 @@ RolesTable.prototype.insertRow = function(index, type, teacherId, fullname, pseu
 		this.state.addRole(teacherId, position, versionId, positionCell, versionCell, createdCell, newRow);
 	}
 };
-RolesTable.prototype.updatePerson = function(teacherId, name, pseudo) {
-	// lookup person in teachers
-	// update name, and pseudo	
-};
-RolesTable.prototype.updateRole = function(teacherId, position, version) {
-	// lookup teacherId, increment the colspans
-	// get the row id
-	// insert the position in the very next row.	
-};
 RolesTable.prototype.deleteRole = function(teacherId, position, version) {
 	var teacher = this.state.getTeacher(teacherId);
 	var rowCount = Number(teacher.row.cells[0].getAttribute('rowspan')) - 1;
@@ -64,10 +56,6 @@ RolesTable.prototype.deleteRole = function(teacherId, position, version) {
 	this.tBody.deleteRow(rowIndex - 2);
 	this.state.removeRole(teacherId, position, version);
 };
-
-
-
-
 RolesTable.prototype.addTableRow = function(index) {
 	if (this.tBody === null) {
 		this.tBody = document.getElementById('rolesBody');
@@ -94,7 +82,6 @@ RolesTable.prototype.addCheckbox = function(cell, teacherId, position, versionId
 	input.setAttribute('class', 'role');
 	cell.appendChild(input);
 	input.addEventListener('change', function(event) {
-		console.log('CHECKBOX CHANGE EVENT CAUGHT', event.target.checked);
 		if (event.target.checked) {
 			if (that.buttonRow === null) { // only turn button if none others are on
 				var tableRow = this.parentElement.parentElement;
@@ -129,7 +116,6 @@ RolesTable.prototype.allCheckboxesOff = function() {
 		turnOffCheckbox(row.cells[0]);
 		turnOffCheckbox(row.cells[row.cells.length -1]);
 	}
-	
 	function turnOffCheckbox(cell) {
 		if (cell.children && cell.children.length > 0 && cell.firstChild.nodeName === 'INPUT' && cell.firstChild.checked) {
 			cell.firstChild.checked = false;
@@ -141,22 +127,30 @@ RolesTable.prototype.displayPersonUpdateButtons = function(parent, teacherId) {
 	this.buttonRow = new ButtonRow(parent, this);
 	this.buttonRow.addButton('Change Name', function(event) {
 		var roleForms = that.buttonRow.createRoleForms();
-		that.closeButtonRow();
 		roleForms.name(teacherId);
+		that.closeButtonRow();		
 	});
 	this.buttonRow.addButton('New Pass Phrase', function(event) {
-		console.log('clicked new pass phrase');
+		var roleForms = that.buttonRow.createRoleForms();
+		roleForms.passPhrase(teacherId);
+		that.closeButtonRow();		
 	});
 	this.buttonRow.addButton('Replace Person', function(event) {
-		console.log('clicked replace person');
+		var roleForms = that.buttonRow.createRoleForms();
+		roleForms.replace(teacherId);
+		that.closeButtonRow();		
 	});
 	// This is only possible for someone who has a boss.
 	this.buttonRow.addButton('Promote Person', function(event) {
-		console.log('clicked promote person');
+		var roleForms = that.buttonRow.createRoleForms();
+		roleForms.promote(teacherId);
+		that.closeButtonRow();		
 	});
 	// This is not possible of authorizing person has no principal under them.
 	this.buttonRow.addButton('Demote Person', function(event) {
-		console.log('clicked demote person');
+		var roleForms = that.buttonRow.createRoleForms();
+		roleForms.demote(teacherId);
+		that.closeButtonRow();	
 	});
 	this.buttonRow.open();
 };
@@ -164,16 +158,14 @@ RolesTable.prototype.displayVersionUpdateButtons = function(parent, teacherId, p
 	var that = this;
 	this.buttonRow = new ButtonRow(parent, this);
 	this.buttonRow.addButton('Add Role', function(event) {
-		console.log('Add Role button click');
 		var roleForms = that.buttonRow.createRoleForms();
-		that.closeButtonRow();
 		roleForms.addRole(teacherId);
+		that.closeButtonRow();
 	});
 	this.buttonRow.addButton('Remove Role', function(event) {
-		console.log('Remove role button click');
 		var roleForms = that.buttonRow.createRoleForms();
-		that.closeButtonRow();
 		roleForms.removeRole(teacherId, position, versionId);
+		that.closeButtonRow();
 	});
 	this.buttonRow.open();
 };
