@@ -15,7 +15,7 @@ CopyViewsJS.prototype.copy = function(sourceDir, targetFile) {
 				var code = that.extractCode(file);
 				var name = that.extractId(code);
 				var manyLines = that.concatonate(code);
-				result.push("viewLibrary['" + name + "'] = " + manyLines + ";");
+				result.push("viewLibrary." + name + " = " + manyLines + ";");
 				if (result.length >= fileList.length) {
 					that.writeViewFile(targetFile, result.join('\n\n'));
 				}

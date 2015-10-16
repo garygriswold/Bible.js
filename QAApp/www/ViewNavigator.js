@@ -93,7 +93,7 @@ ViewNavigator.prototype.transition = function(fromViewName, toViewName, transact
 	}
 	
 	function finishTransition(fromView) {
-		document.body.removeChild(fromView);
+		document.body.removeChild(fromView); // getting itermittent error that fromView does not exist at startup.
 	}
 };
 ViewNavigator.prototype.saveDraft = function() {
