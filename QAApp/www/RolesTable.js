@@ -45,6 +45,18 @@ RolesTable.prototype.insertRow = function(index, type, teacherId, fullname, pseu
 		this.state.addRole(teacherId, position, versionId, positionCell, versionCell, createdCell, newRow);
 	}
 };
+RolesTable.prototype.deletePerson = function(teacher) {
+	var rowIndex = teacher.row.rowIndex - 2;
+	this.state.removeTeacher(teacher.teacherId);
+	this.tBody.deleteRow(rowIndex);
+	
+	var cell = this.tBody.rows[rowIndex].firstChild;
+	while (cell.children === null || cell.children.length === 0 || cell.firstChild.nodeName !== 'INPUT') {
+		// this is not removing teacherRole from state.  Is this a problem?
+		this.tBody.deleteRow(rowIndex);
+		cell = this.tBody.rows[rowIndex].firstChild;
+	}
+};
 RolesTable.prototype.deleteRole = function(teacher, role) {
 	var rowCount = Number(teacher.row.cells[0].getAttribute('rowspan')) - 1;
 	for (var i=0; i<3; i++) {

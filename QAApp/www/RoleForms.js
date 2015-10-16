@@ -39,7 +39,7 @@ RoleForms.prototype.replace = function(teacher) {
 	var that = this;
 	var nameField = this.formRow.addName('');
 	var pseudoField = this.formRow.addPseudo('');
-	this.formRow.addMessage(3, 'Use this to replace a person with a new person');
+	this.formRow.addMessage(1, 'Use this to replace a person with a new person');
 	this.formRow.addButtons(function() {
 		// submit to server, on 200 update model
 		teacher.fullname.textContent = nameField.value;
@@ -54,21 +54,44 @@ RoleForms.prototype.replace = function(teacher) {
 };
 RoleForms.prototype.promote = function(teacher) {
 	var that = this;
-	// Add Explaination to leading columns
-	// Add button Go
-	// Add button Cancel
-	// Change the members authorizer
-	
-	// Result should delete the row from my own people
-	
+	this.formRow.addMessage(1, 'Use this to move a person out of your authority to the person who authorizes you.');
+	this.formRow.addButtons(function() {
+		// submit to server, on 200 update model
+		that.table.deletePerson(teacher);
+		that.formRow.close();
+	});
+	this.formRow.open();
 };
 RoleForms.prototype.demote = function(teacher) {
-	// Present pulldown of all names under me, who have at least principal status and the correct versions
-	// Add Go button
-	// Add Cancel button
-	// Change the members authorizer
+	var that = this;
+	this.formRow.addMessage(1, 'Use this to move a person out of your authority to one of your members.');
+	// produce a list of all persons under me who are above principle, or who are principal and have
+	// all of the versions this person has.
+	// There is a problem here.
+	// I have no way to easily get all of the roles of this person.
+	// This is a problem with the structure of the model
+	var personsField  this.formRow.addPersons(persons);
+	this.formRow.addButtons(function() {
+		// submit to server, on 200 do the following
+		that.table.deletePerson(teacher);
+		that.formRow.close();
+	});
+	this.formRow.open();
 	
-	// Result should delete the row from my own members
+	function findQualifiedMembers() {
+		var persons = [];
+		var teacherKeys = Object.keys(that.state.teachers);
+		for (var i=0; i<teacherKeys.length; i++) {
+			var teacher = that.state.getTeacher(teacherKeys[i]);
+			var position = teacher.position.textContent;
+			if (position === 'board' || position === 'director') {
+				positions.push({teacherId:teacher.teacherId, fullname:teacher.fullname.textContent});
+			} 
+			else if (teacher.position.textContent === 'principal') {
+				// if the principal has authority for the same languages as the one being demoted
+			}
+		}
+	}
 };
 RoleForms.prototype.addRole = function(teacher) {
 	var that = this;
