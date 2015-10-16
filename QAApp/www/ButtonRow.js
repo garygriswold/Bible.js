@@ -18,7 +18,7 @@ function ButtonRow(rowAbove, table) {
 		var rows = tBody.rows;
 		for (var i=0; i<rows.length; i++) {
 			var row = rows[i];
-			if (after && row.cells.length === colspan) {
+			if (after && row.cells[0].firstChild && row.cells[0].firstChild.nodeName === 'INPUT') {
 				return(i);
 			}
 			if (row === rowAbove) {

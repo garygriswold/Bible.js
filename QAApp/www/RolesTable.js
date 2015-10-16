@@ -10,26 +10,31 @@ function RolesTable(currentState, numColumns) {
 	this.buttonRow = null;
 }
 RolesTable.prototype.insertRow = function(index, type, teacherId, fullname, pseudonym, position, versionId, created) {
-	var newRow = this.addTableRow(index);
-	var firstRow = this.state.getTeacher(teacherId);
-	if (firstRow) {
-		var rowCount = Number(firstRow.row.cells[0].getAttribute('rowspan')) + 1;
-		for (var i=0; i<3; i++) {
-			firstRow.row.cells[i].setAttribute('rowspan', rowCount);
-		}
-	} else {
-		var check1 = this.addTableCell(newRow);
+	var firstRow = null;
+	var teacher = this.state.getTeacher(teacherId);
+	if (teacher == null) {
+		firstRow = this.addTableRow(index);
+		var check1 = this.addTableCell(firstRow);
 		if (type === 'memb') {
 			this.addCheckbox(check1, teacherId);
 		}
-		var nameCell = this.addTableCell(newRow, fullname);
-		var pseudoCell = this.addTableCell(newRow, pseudonym);
-		this.state.addTeacher(teacherId, nameCell, pseudoCell, newRow);
+		var nameCell = this.addTableCell(firstRow, fullname);
+		var pseudoCell = this.addTableCell(firstRow, pseudonym);
+		var blankCell = this.addTableCell(firstRow);
+		blankCell.setAttribute('colspan', 4);
+		this.state.addTeacher(teacherId, nameCell, pseudoCell, firstRow);
+	} else {
+		firstRow = teacher.row;
 	}
+	var rowCount = Number(firstRow.cells[0].getAttribute('rowspan')) + 1;
+	for (var i=0; i<3; i++) {
+		firstRow.cells[i].setAttribute('rowspan', rowCount);
+	}
+	var newRow = this.addTableRow(index);
 	if (type === 'boss') {
 		this.addTableCell(newRow, 'director');
 		var blank = this.addTableCell(newRow);
-		blank.setAttribute('colspan', 4);
+		blank.setAttribute('colspan', 3);
 	} else {
 		var positionCell = this.addTableCell(newRow, position);
 		var versionCell = this.addTableCell(newRow, versionId);
