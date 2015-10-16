@@ -38,9 +38,25 @@ RoleForms.prototype.passPhrase = function(teacherId) {
 	this.formRow.open();
 };
 RoleForms.prototype.replace = function(teacherId) {
-	// Combines passPhrase and name
+	var that = this;
+	var teacher = this.state.getTeacher(teacherId);
+	var nameField = this.formRow.addName(teacher.fullname.textContent);
+	var pseudoField = this.formRow.addPseudo(teacher.pseudonym.textContent);
+	this.formRow.addMessage(3, 'Use this to replace a person with a new person');
+	this.formRow.addButtons(function() {
+		// submit to server, on 200 update model
+		teacher.fullname.textContent = nameField.value;
+		teacher.pseudonym.textContent = pseudoField.value;
+		
+		var message = 'Be sure to give this user their new Pass Phrase, exactly.'
+		that.formRow.setMessage(1, message);
+		that.formRow.setMessage(2, 'TheirNewPassPhrase');
+		that.formRow.setDoneButton();
+	});
+	this.formRow.open();
 };
 RoleForms.prototype.promote = function(teacherId) {
+	
 	// Add Explaination to leading columns
 	// Add button Go
 	// Add button Cancel
