@@ -45,16 +45,14 @@ RolesTable.prototype.insertRow = function(index, type, teacherId, fullname, pseu
 		this.state.addRole(teacherId, position, versionId, positionCell, versionCell, createdCell, newRow);
 	}
 };
-RolesTable.prototype.deleteRole = function(teacherId, position, version) {
-	var teacher = this.state.getTeacher(teacherId);
+RolesTable.prototype.deleteRole = function(teacher, role) {
 	var rowCount = Number(teacher.row.cells[0].getAttribute('rowspan')) - 1;
-		for (var i=0; i<3; i++) {
-			teacher.row.cells[i].setAttribute('rowspan', rowCount);
-		}
-	var role = this.state.getRole(teacherId, position, version);
+	for (var i=0; i<3; i++) {
+		teacher.row.cells[i].setAttribute('rowspan', rowCount);
+	}
 	var rowIndex = role.row.rowIndex;
 	this.tBody.deleteRow(rowIndex - 2);
-	this.state.removeRole(teacherId, position, version);
+	this.state.removeRole(teacher.teacherId, role.position.textContent, role.versionId.textContent);
 };
 RolesTable.prototype.addTableRow = function(index) {
 	if (this.tBody === null) {
@@ -90,10 +88,12 @@ RolesTable.prototype.addCheckbox = function(cell, teacherId, position, versionId
 				var clickedPosition = (parts.length > 1) ? parts[1] : null;
 				var clickedVersionId = (parts.length > 2) ? parts[2] : null;
 				console.log('clicked', clickedTeacherId, clickedPosition, clickedVersionId);
+				var teacher = that.state.getTeacher(clickedTeacherId);	
 				if (clickedVersionId) {
-					that.displayVersionUpdateButtons(tableRow, clickedTeacherId, clickedPosition, clickedVersionId);
+					var teacherRole = that.state.getRole(clickedTeacherId, clickedPosition, clickedVersionId);
+					that.displayVersionUpdateButtons(tableRow, teacher, teacherRole);
 				} else {
-					that.displayPersonUpdateButtons(tableRow, clickedTeacherId);
+					that.displayPersonUpdateButtons(tableRow, teacher);
 				}
 			} else {
 				event.target.checked = false;//don't turn on, because another button is on
@@ -122,49 +122,49 @@ RolesTable.prototype.allCheckboxesOff = function() {
 		}	 
 	}
 };
-RolesTable.prototype.displayPersonUpdateButtons = function(parent, teacherId) {
+RolesTable.prototype.displayPersonUpdateButtons = function(parent, teacher) {
 	var that = this;
 	this.buttonRow = new ButtonRow(parent, this);
 	this.buttonRow.addButton('Change Name', function(event) {
 		var roleForms = that.buttonRow.createRoleForms();
-		roleForms.name(teacherId);
+		roleForms.name(teacher);
 		that.closeButtonRow();		
 	});
 	this.buttonRow.addButton('New Pass Phrase', function(event) {
 		var roleForms = that.buttonRow.createRoleForms();
-		roleForms.passPhrase(teacherId);
+		roleForms.passPhrase(teacher);
 		that.closeButtonRow();		
 	});
 	this.buttonRow.addButton('Replace Person', function(event) {
 		var roleForms = that.buttonRow.createRoleForms();
-		roleForms.replace(teacherId);
+		roleForms.replace(teacher);
 		that.closeButtonRow();		
 	});
 	// This is only possible for someone who has a boss.
 	this.buttonRow.addButton('Promote Person', function(event) {
 		var roleForms = that.buttonRow.createRoleForms();
-		roleForms.promote(teacherId);
+		roleForms.promote(teacher);
 		that.closeButtonRow();		
 	});
 	// This is not possible of authorizing person has no principal under them.
 	this.buttonRow.addButton('Demote Person', function(event) {
 		var roleForms = that.buttonRow.createRoleForms();
-		roleForms.demote(teacherId);
+		roleForms.demote(teacher);
 		that.closeButtonRow();	
 	});
 	this.buttonRow.open();
 };
-RolesTable.prototype.displayVersionUpdateButtons = function(parent, teacherId, position, versionId) {
+RolesTable.prototype.displayVersionUpdateButtons = function(parent, teacher, teacherRole) {
 	var that = this;
 	this.buttonRow = new ButtonRow(parent, this);
 	this.buttonRow.addButton('Add Role', function(event) {
 		var roleForms = that.buttonRow.createRoleForms();
-		roleForms.addRole(teacherId);
+		roleForms.addRole(teacher);
 		that.closeButtonRow();
 	});
 	this.buttonRow.addButton('Remove Role', function(event) {
 		var roleForms = that.buttonRow.createRoleForms();
-		roleForms.removeRole(teacherId, position, versionId);
+		roleForms.removeRole(teacher, teacherRole);
 		that.closeButtonRow();
 	});
 	this.buttonRow.open();

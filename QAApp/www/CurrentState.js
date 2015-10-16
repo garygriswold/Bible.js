@@ -81,7 +81,7 @@ CurrentState.prototype.getTeacher = function(teacherId) {
 	return(this.teachers[teacherId]);	
 };
 CurrentState.prototype.addTeacher = function(teacherId, nameCell, pseudoCell, row) {
-	this.teachers[teacherId] = {fullname:nameCell, pseudonym:pseudoCell, row:row};
+	this.teachers[teacherId] = {teacherId:teacherId, fullname:nameCell, pseudonym:pseudoCell, row:row};
 };
 CurrentState.prototype.removeTeacher = function(teacherId) {
 	delete this.teachers[teacherId];

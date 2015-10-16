@@ -10,9 +10,8 @@ function RoleForms(rowIndex, table) {
 RoleForms.prototype.register = function() {
 	
 };
-RoleForms.prototype.name = function(teacherId) {
+RoleForms.prototype.name = function(teacher) {
 	var that = this;
-	var teacher = this.state.getTeacher(teacherId);
 	var nameField = this.formRow.addName(teacher.fullname.textContent);
 	var pseudoField = this.formRow.addPseudo(teacher.pseudonym.textContent);
 	this.formRow.addButtons(function() {
@@ -23,9 +22,8 @@ RoleForms.prototype.name = function(teacherId) {
 	});
 	this.formRow.open();
 };
-RoleForms.prototype.passPhrase = function(teacherId) {
+RoleForms.prototype.passPhrase = function(teacher) {
 	var that = this;
-	var teacher = this.state.getTeacher(teacherId);
 	var message = 'When you create a new Pass Phrase, the user will not be able to access their account until after they login with their new Pass Phrase.';
 	this.formRow.addMessage(1, message);
 	this.formRow.addButtons(function() {
@@ -37,11 +35,10 @@ RoleForms.prototype.passPhrase = function(teacherId) {
 	});
 	this.formRow.open();
 };
-RoleForms.prototype.replace = function(teacherId) {
+RoleForms.prototype.replace = function(teacher) {
 	var that = this;
-	var teacher = this.state.getTeacher(teacherId);
-	var nameField = this.formRow.addName(teacher.fullname.textContent);
-	var pseudoField = this.formRow.addPseudo(teacher.pseudonym.textContent);
+	var nameField = this.formRow.addName('');
+	var pseudoField = this.formRow.addPseudo('');
 	this.formRow.addMessage(3, 'Use this to replace a person with a new person');
 	this.formRow.addButtons(function() {
 		// submit to server, on 200 update model
@@ -55,8 +52,8 @@ RoleForms.prototype.replace = function(teacherId) {
 	});
 	this.formRow.open();
 };
-RoleForms.prototype.promote = function(teacherId) {
-	
+RoleForms.prototype.promote = function(teacher) {
+	var that = this;
 	// Add Explaination to leading columns
 	// Add button Go
 	// Add button Cancel
@@ -65,7 +62,7 @@ RoleForms.prototype.promote = function(teacherId) {
 	// Result should delete the row from my own people
 	
 };
-RoleForms.prototype.demote = function(teacherId) {
+RoleForms.prototype.demote = function(teacher) {
 	// Present pulldown of all names under me, who have at least principal status and the correct versions
 	// Add Go button
 	// Add Cancel button
@@ -73,7 +70,7 @@ RoleForms.prototype.demote = function(teacherId) {
 	
 	// Result should delete the row from my own members
 };
-RoleForms.prototype.addRole = function(teacherId) {
+RoleForms.prototype.addRole = function(teacher) {
 	var that = this;
 	var positions = this.state.positionsCanManage();
 	var positionsField = this.formRow.addPosition(positions, 'teacher');
@@ -92,21 +89,20 @@ RoleForms.prototype.addRole = function(teacherId) {
 	}
 	this.formRow.addButtons(function() {
 		// submit to server if 201 do the following
-		var teacher = that.state.getTeacher(teacherId);
 		var position = positionsField.options[positionsField.selectedIndex].textContent;
 		var versionId = versionsField.options[versionsField.selectedIndex].textContent;
 		var created = new Date().toISOString().substr(0,19);
 		//rowIndex includes header, ergo -2 is top row
-		that.table.insertRow(teacher.row.rowIndex - 1, 'memb', teacherId, null, null, position, versionId, created);
+		that.table.insertRow(teacher.row.rowIndex - 1, 'memb', teacher.teacherId, null, null, position, versionId, created);
 		that.formRow.close();
 	});
 	this.formRow.open();
 };
-RoleForms.prototype.removeRole = function(teacherId, position, versionId) {
+RoleForms.prototype.removeRole = function(teacher, teacherRole) {
 	var that = this;
 	this.formRow.addButtons(function() {
 		//submit to server if 200 do the following
-		that.table.deleteRole(teacherId, position, versionId);
+		that.table.deleteRole(teacher, teacherRole);
 		that.formRow.close();
 	});
 	this.formRow.open();
