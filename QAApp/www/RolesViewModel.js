@@ -15,7 +15,7 @@ function RolesViewModel(viewNavigator) {
 }
 RolesViewModel.prototype.display = function() {
 	var that = this;
-	this.state.clearCache();
+	this.state.clearTeachers();
 	iteratePersons(this.boss, 'boss');
 	iteratePersons(this.self, 'self');
 	iteratePersons(this.members, 'memb');

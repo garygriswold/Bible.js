@@ -18,6 +18,9 @@ FormRow.prototype.addPosition = function(positions, value) {
 FormRow.prototype.addVersion = function(versions, value) {
 	return(this.stdSelectList(4, versions, value));
 };
+FormRow.prototype.addQualified = function(qualified) {
+	return(this.stdSelectList(1, qualified));
+};
 FormRow.prototype.addButtons = function(callback) {
 	var that = this;
 	var cell = this.addCell(5);
@@ -70,7 +73,12 @@ FormRow.prototype.stdSelectList = function(col, values, current) {
 	input.setAttribute('class', 'role');
 	for (var i=0; i<values.length; i++) {
 		var option = document.createElement('option');
-		option.textContent = values[i];
+		if ((typeof values[i]) === 'string') {
+			option.textContent = values[i];
+		} else {
+			option.value = values[i].value;
+			option.textContent = values[i].label;
+		}
 		if (values[i] === current) {
 			option.setAttribute('selected', 'selected');
 		}

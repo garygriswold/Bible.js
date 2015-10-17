@@ -52,7 +52,6 @@ RolesTable.prototype.deletePerson = function(teacher) {
 	
 	var cell = this.tBody.rows[rowIndex].firstChild;
 	while (cell.children === null || cell.children.length === 0 || cell.firstChild.nodeName !== 'INPUT') {
-		// this is not removing teacherRole from state.  Is this a problem?
 		this.tBody.deleteRow(rowIndex);
 		cell = this.tBody.rows[rowIndex].firstChild;
 	}

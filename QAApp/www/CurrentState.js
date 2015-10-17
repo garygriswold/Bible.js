@@ -6,8 +6,8 @@ function CurrentState() {
 	this.teacherId = null;
 	this.isBoard = false;
 	this.isDirector = false;
-	this.principal = null;
-	this.teacher = null;
+	this.principal = null; // consider changing to an array initialized as []
+	this.teacher = null; // ditto
 	this.versionId = null;
 	this.discourseId = null;
 	this.questionTimestamp = null;
@@ -103,6 +103,6 @@ CurrentState.prototype.removeRole = function(teacherId, position, version) {
 CurrentState.prototype.roleKey = function(position, version) {
 	return(position + '.' + version);
 };
-CurrentState.prototype.clearCache = function() {
+CurrentState.prototype.clearTeachers = function() {
 	this.teachers = {};
 };

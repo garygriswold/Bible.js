@@ -64,33 +64,55 @@ RoleForms.prototype.promote = function(teacher) {
 };
 RoleForms.prototype.demote = function(teacher) {
 	var that = this;
-	this.formRow.addMessage(1, 'Use this to move a person out of your authority to one of your members.');
-	// produce a list of all persons under me who are above principle, or who are principal and have
-	// all of the versions this person has.
-	// There is a problem here.
-	// I have no way to easily get all of the roles of this person.
-	// This is a problem with the structure of the model
-	var persons = [];
-	var personsField = this.formRow.addPersons(persons);
+	var teacherState = getRoleState(teacher);
+	var qualified = findQualifiedMembers();
+	var personsField = this.formRow.addQualified(qualified);
+	this.formRow.addMessage(3, 'Use this to move a person out of your authority to one of your members.');
 	this.formRow.addButtons(function() {
 		// submit to server, on 200 do the following
 		that.table.deletePerson(teacher);
 		that.formRow.close();
 	});
-	this.formRow.open();
+	this.formRow.open();	
 	
 	function findQualifiedMembers() {
-		var persons = [];
-		var teacherKeys = Object.keys(that.state.teachers);
-		for (var i=0; i<teacherKeys.length; i++) {
-			var teacher = that.state.getTeacher(teacherKeys[i]);
-			var position = teacher.position.textContent;
-			if (position === 'board' || position === 'director') {
-				persons.push({teacherId:teacher.teacherId, fullname:teacher.fullname.textContent});
-			} 
-			else if (teacher.position.textContent === 'principal') {
-				// if the principal has authority for the same languages as the one being demoted
+		var qualified = [];
+		var memberKeys = Object.keys(that.state.teachers);
+		for (var i=0; i<memberKeys.length; i++) {
+			var member = that.state.getTeacher(memberKeys[i]);
+			var memberState = getRoleState(member);
+			if (isQualifiedTest(memberState, teacherState)) {
+				qualified.push({value:member.teacherId, label:member.fullname.textContent});
 			}
+		}
+		return(qualified);
+	}
+	function getRoleState(teacher) {
+		var roles = [];
+		var roleKeys = Object.keys(teacher.roles);
+		for (var i=0; i<roleKeys.length; i++) {
+			var parts = roleKeys[i].split('.');
+			roles.push({position:parts[0], versionId:parts[1]});
+		}
+		var roleState = new CurrentState();
+		roleState.setRoles(roles);
+		return(roleState);
+	}
+	function isQualifiedTest(member, teacher) {
+		if (member.isBoard && ! teacher.isBoard) {
+			return(true);
+		}
+		if (member.isDirector && ! teacher.isDirector) {
+			return(true);
+		}
+		if (member.isPrincipal && ! teacher.isPrincipal) {
+			for (var i=0; i<teacher.principal.length; i++) {
+				var teacherVersion = teacher.principal[i];
+				if (member.principal.indexOf(teacherVersion) < 0) {
+					return(false);
+				}
+			}
+			return(true);
 		}
 	}
 };
