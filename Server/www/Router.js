@@ -155,18 +155,6 @@ server.put('/position', function insertPosition(request, response, next) {
 	});
 });
 
-server.post('/position', function updatePosition(request, response, next) {
-	authController.authorizePosition(request.headers.authId, request.params.position, request.params.versionId, function(err) {
-		if (err) {
-			return(next(err));
-		} else {
-			database.updatePosition(request.params, function(err, results) {
-				respond(err, results, 200, response, next);
-			});
-		}
-	});	
-});
-
 server.del('/position', function deletePosition(request, response, next) {
 	authController.authorizePosition(request.headers.authId, request.params.position, request.params.versionId, function(err) {
 		if (err) {

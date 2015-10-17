@@ -158,18 +158,13 @@ DatabaseAdapter.prototype.selectPositions = function(obj, callback) {
 * Needs Position.positionId, which it autogenerates
 */
 DatabaseAdapter.prototype.insertPosition = function(obj, callback) {
-	var statements = [ 'insert into Position(teacherId, versionId, position) values (?,?,?)' ];
-	var values = [[ obj.teacherId, obj.versionId, obj.position ]];
+	var statements = [ 'insert into Position(teacherId, position, versionId) values (?,?,?)' ];
+	var values = [[ obj.teacherId, obj.position, obj.versionId ]];
 	this.executeSQL(statements, values, 1, callback);
 };
-DatabaseAdapter.prototype.updatePosition = function(obj, callback) {
-	var statements = [ 'update Position set position=? where teacherId=? and versionId=?' ];
-	var values = [[ obj.position, obj.teacherId, obj.versionId ]];
-	this.executeSQL(statements, values, 1, callback);	
-};
 DatabaseAdapter.prototype.deletePosition = function(obj, callback) {
-	var statements = [ 'delete from Position where teacherId=? and versionId=?' ];
-	var values = [[ obj.teacherId, obj.versionId ]];
+	var statements = [ 'delete from Position where teacherId=? and position=? and versionId=?' ];
+	var values = [[ obj.teacherId, obj.position, obj.versionId ]];
 	this.executeSQL(statements, values, 1, callback);
 };
 /**

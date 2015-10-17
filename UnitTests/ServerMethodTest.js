@@ -428,36 +428,12 @@ var tests = [
 		results: {message:'SQLITE_CONSTRAINT: UNIQUE constraint failed: Position.teacherId, Position.position, Position.versionId'}	
 	},
 	{
-		number: 220,
-		name: 'updatePosition',
-		description: 'Update valid position',
-		method: 'POST',
-		path: '/position',
-		postData: {teacherId:'Bob:teacherId', versionId:'KJVA', position:'removed'},
-		user: 'GNG',
-		passPhrase: 'InTheWordIsLife',
-		status: 200,
-		results: {rowCount:1}
-	},
-	{
-		number: 230,
-		name: 'updatePosition',
-		description: 'Update position with invalid position value',
-		method: 'POST',
-		path: '/position',
-		postData: {teacherId:'Bob:teacherId', versionId:'KJVA', position:'XXXX'},
-		user: 'GNG',
-		passPhrase: 'InTheWordIsLife',
-		status: 409,
-		results: {message:'SQLITE_CONSTRAINT: CHECK constraint failed: Position'}	
-	},
-	{
 		number: 240,
 		name: 'deletePosition',
 		description: 'Delete existing position',
 		method: 'DELETE',
 		path: '/position',
-		postData: {teacherId:'Bob:teacherId', versionId:'KJVA'},
+		postData: {teacherId:'Bob:teacherId', position:'principal', versionId:'KJVA'},
 		user: 'GNG',
 		passPhrase: 'InTheWordIsLife',
 		status: 200,
