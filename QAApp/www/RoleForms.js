@@ -28,7 +28,7 @@ RoleForms.prototype.passPhrase = function(teacher) {
 	this.formRow.addMessage(1, message);
 	this.formRow.addButtons(function() {
 		// submit to server, on 200 display passphrase
-		message = 'Be sure to give this user their new Pass Phrase, exactly.'
+		message = 'Be sure to give this user their new Pass Phrase, exactly.';
 		that.formRow.setMessage(1, message);
 		that.formRow.setMessage(2, 'TheirNewPassPhrase');
 		that.formRow.setDoneButton();
@@ -39,13 +39,13 @@ RoleForms.prototype.replace = function(teacher) {
 	var that = this;
 	var nameField = this.formRow.addName('');
 	var pseudoField = this.formRow.addPseudo('');
-	this.formRow.addMessage(1, 'Use this to replace a person with a new person');
+	this.formRow.addMessage(3, 'Use this to replace a person with a new person.');
 	this.formRow.addButtons(function() {
 		// submit to server, on 200 update model
 		teacher.fullname.textContent = nameField.value;
 		teacher.pseudonym.textContent = pseudoField.value;
 		
-		var message = 'Be sure to give this user their new Pass Phrase, exactly.'
+		var message = 'Be sure to give this user their new Pass Phrase, exactly.';
 		that.formRow.setMessage(1, message);
 		that.formRow.setMessage(2, 'TheirNewPassPhrase');
 		that.formRow.setDoneButton();
@@ -70,7 +70,8 @@ RoleForms.prototype.demote = function(teacher) {
 	// There is a problem here.
 	// I have no way to easily get all of the roles of this person.
 	// This is a problem with the structure of the model
-	var personsField  this.formRow.addPersons(persons);
+	var persons = [];
+	var personsField = this.formRow.addPersons(persons);
 	this.formRow.addButtons(function() {
 		// submit to server, on 200 do the following
 		that.table.deletePerson(teacher);
@@ -85,7 +86,7 @@ RoleForms.prototype.demote = function(teacher) {
 			var teacher = that.state.getTeacher(teacherKeys[i]);
 			var position = teacher.position.textContent;
 			if (position === 'board' || position === 'director') {
-				positions.push({teacherId:teacher.teacherId, fullname:teacher.fullname.textContent});
+				persons.push({teacherId:teacher.teacherId, fullname:teacher.fullname.textContent});
 			} 
 			else if (teacher.position.textContent === 'principal') {
 				// if the principal has authority for the same languages as the one being demoted
@@ -106,7 +107,7 @@ RoleForms.prototype.addRole = function(teacher) {
 			if (currPos === 'teacher') {
 				this.formRow.updateSelectList(positionsField, positions);
 			} else {
-				this.formRow.updateSelectList(positionsField, [])
+				this.formRow.updateSelectList(positionsField, []);
 			}
 		});
 	}

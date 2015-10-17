@@ -13,7 +13,6 @@ function CurrentState() {
 	this.questionTimestamp = null;
 	this.answerTimestamp = null;
 	this.teachers = {};
-	this.roles = {};
 	Object.seal(this);
 }
 CurrentState.prototype.canManageRoles = function() {
@@ -81,26 +80,29 @@ CurrentState.prototype.getTeacher = function(teacherId) {
 	return(this.teachers[teacherId]);	
 };
 CurrentState.prototype.addTeacher = function(teacherId, nameCell, pseudoCell, row) {
-	this.teachers[teacherId] = {teacherId:teacherId, fullname:nameCell, pseudonym:pseudoCell, row:row};
+	this.teachers[teacherId] = {teacherId:teacherId, fullname:nameCell, pseudonym:pseudoCell, roles:{}, row:row};
 };
 CurrentState.prototype.removeTeacher = function(teacherId) {
 	delete this.teachers[teacherId];
 };
 CurrentState.prototype.getRole = function(teacherId, position, version) {
-	return(this.roles[this.roleKey(teacherId, position, version)]);	
+	var teacher = this.getTeacher(teacherId);
+	var key = this.roleKey(position, version);
+	return(teacher.roles[key]);
 };
 CurrentState.prototype.addRole = function(teacherId, position, version, positionCell, versionCell, createdCell, row) {
-	var key = this.roleKey(teacherId, position, version);
-	this.roles[key] = {position:positionCell, versionId:versionCell, created:createdCell, row:row};
+	var teacher = this.getTeacher(teacherId);
+	var key = this.roleKey(position, version);
+	teacher.roles[key] = {position:positionCell, versionId:versionCell, created:createdCell, row:row};
 };
 CurrentState.prototype.removeRole = function(teacherId, position, version) {
-	var key = this.roleKey(teacherId, position, version);
-	delete this.roles[key];
+	var teacher = this.getTeacher(teacherId);
+	var key = this.roleKey(position, version);
+	delete teacher.roles[key];
 };
-CurrentState.prototype.roleKey = function(teacherId, position, version) {
-	return(teacherId + '.' + position + '.' + version);
+CurrentState.prototype.roleKey = function(position, version) {
+	return(position + '.' + version);
 };
 CurrentState.prototype.clearCache = function() {
 	this.teachers = {};
-	this.roles = {};
 };
