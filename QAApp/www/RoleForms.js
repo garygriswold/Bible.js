@@ -74,13 +74,29 @@ RoleForms.prototype.passPhrase = function(teacher) {
 	var message = 'When you create a new Pass Phrase, the user will not be able to access their account until after they login with their new Pass Phrase.';
 	this.formRow.addMessage(1, message);
 	this.formRow.addButtons(function() {
-		// submit to server, on 200 display passphrase
-		message = 'Be sure to give this user their new Pass Phrase, exactly.';
-		that.formRow.setMessage(1, message);
-		that.formRow.setMessage(2, 'TheirNewPassPhrase');
-		that.formRow.setDoneButton();
+		that.httpClient.get('/phrase/' + teacher.teacherId + '/' + bestLanguage(), function(status, results) {
+			if (status === 200) {
+				message = 'Be sure to give this user their new Pass Phrase, exactly.';
+				that.formRow.setMessage(1, message);
+				that.formRow.setMessage(2, results.passPhrase);
+				that.formRow.setDoneButton();				
+			} else {
+				window.alert(results);
+			}
+		});
 	});
 	this.formRow.open();
+	
+	function bestLanguage() {
+		var roles = Object.keys(teacher.roles);
+		for(var i=0; i<roles.length; i++) {
+			var parts = roles[i].split('.');
+			if (parts[1] && parts[1].length > 2) {
+				return(parts[1])
+			}
+		}
+		return('WEB');
+	}
 };
 RoleForms.prototype.replace = function(teacher) {
 	var that = this;
