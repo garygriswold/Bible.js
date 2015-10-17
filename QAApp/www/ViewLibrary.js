@@ -83,66 +83,14 @@ viewLibrary.answerView = '<div id="answerView" style="height: 100%; width: 100%;
 	'}' +
 	'</style>';
 
-viewLibrary.forgotView = '<table id="forgotView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">' +
-	'<tr style="height: 33%">' +
-	'<td style="width: 25%"></td>' +
-	'<td style="width: 50%; text-align: center; vertical-align: bottom">' +
-	'<p style="font-family: Avenir-Light; font-size: 1.5rem; color: #f9fbfc">Forgot Username or Password?<br> Enter your email to get started.</p>' +
-	'</td>' +
-	'<td style="width: 25%"></td>' +
-	'</tr>' +
-	'<tr style="height: 34%">' +
-	'<td></td>' +
-	'<td id="loginForm" style="text-align: center; vertical-align: middle;">' +
-	'<p class="fieldBorder">' +
-	'<input class="inputField" type="text" placeholder="Email Address" size="24" style="font-size: large">' +
-	'<input type="button" class="goButton" value="Go">' +
-	'</p>' +
-	'</td>' +
-	'<td></td>' +
-	'<tr style="height: 33%">' +
-	'<td></td>' +
-	'<td style="text-align: center; font-size: 0.8rem; vertical-align: top;">' +
-	'<span id="forgotResponse">' +
-	'<a onclick="transitionBackToLoginView()" style="color:#f1f4b2;">Did you remember your password?</a>' +
-	'</span></td>' +
-	'<td></td>' +
-	'</tr>' +
-	'</table>';
-
 viewLibrary.headerView = '<table id="headerView" style="height: 15%; width: 100%; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">' +
 	'<tr style="height: 100%"><td style="text-align: center; vertical-align: middle; color: white">My Bible Q & A</td><tr>' +
-	'</table>';
-
-viewLibrary.loginView = '<table id="loginView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000);">' +
-	'<tr style="height: 33%">' +
-	'<td style="width: 25%"></td>' +
-	'<td style="width: 50%; text-align: center; vertical-align: bottom">' +
-	'<p style="font-family: Avenir-Light; font-size: 1.5rem; color: #f9fbfc">Sign-In to My Bible Q & A</p>' +
-	'</td>' +
-	'<td style="width: 25%"></td>' +
-	'</tr>' +
-	'<tr style="height: 34%">' +
-	'<td></td>' +
-	'<td id="loginForm" style="text-align: center; vertical-align: middle;">' +
-	'<p class="fieldBorder" style="margin-top: 1px">' +
-	'<input id="passPhraseNode" class="inputField" type="text" placeholder="Pass Phrase" size="30" style="font-size: large">' +
-	'<input type="button" class="goButton" value="Go" onclick="processPassPhrase()">' +
-	'</p>' +
-	'</td>' +
-	'<td></td>' +
-	'<tr style="height: 33%">' +
-	'<td></td>' +
-	'<td style="text-align: center; font-size: 0.8rem; vertical-align: top; color: white;"><span id="loginResponse">' +
-	'Enter the Pass Phrase that was given to you to login.<br/>You need to do this only once for each device you use.' +
-	'</span></td>' +
-	'<td></td>' +
-	'</tr>' +
 	'</table>';
 
 viewLibrary.rolesView = '<!-- <div id="rolesView" style="width:100%; height:100%; margin:0; padding:0; border:solid; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)"> -->' +
 	'<div id="rolesView" style="width:100%; height:100%; margin:0; padding:0; background: white;">' +
 	'<h1 class="role">Manage Roles</h1>' +
+	'<p style="width:90%; text-align:right;"><button class="button bigrounded blue" style="margin:10px 30px 10px 30px" onclick="registerNewPerson()">Register New Person</button></p>' +
 	'<table id="rolesView" class="role">' +
 	'<tr class="role">' +
 	'<th class="role" colspan="3">Person</th>' +
@@ -292,3 +240,56 @@ viewLibrary.queueView = '<div id="queueView">' +
 	'text-align: center;' +
 	'}' +
 	'</style>';
+
+viewLibrary.loginView = '<table id="loginView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000);">' +
+	'<tr style="height: 33%">' +
+	'<td style="width: 25%"></td>' +
+	'<td style="width: 50%; text-align: center; vertical-align: bottom">' +
+	'<p style="font-family: Avenir-Light; font-size: 1.5rem; color: #f9fbfc">Sign-In to My Bible Q & A</p>' +
+	'</td>' +
+	'<td style="width: 25%"></td>' +
+	'</tr>' +
+	'<tr style="height: 34%">' +
+	'<td></td>' +
+	'<td id="loginForm" style="text-align: center; vertical-align: middle;">' +
+	'<p class="fieldBorder" style="margin-top: 1px">' +
+	'<input id="passPhraseNode" class="inputField" type="text" placeholder="Pass Phrase" size="30" style="font-size: large">' +
+	'<input type="button" class="goButton" value="Go" onclick="processPassPhrase()">' +
+	'</p>' +
+	'</td>' +
+	'<td></td>' +
+	'<tr style="height: 33%">' +
+	'<td></td>' +
+	'<td style="text-align: center; font-size: 0.8rem; vertical-align: top; color: white;"><span id="loginResponse">' +
+	'Enter the Pass Phrase that was given to you to login.<br/>You need to do this only once for each device you use.' +
+	'</span></td>' +
+	'<td></td>' +
+	'</tr>' +
+	'</table>';
+
+viewLibrary.forgotView = '<table id="forgotView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">' +
+	'<tr style="height: 33%">' +
+	'<td style="width: 25%"></td>' +
+	'<td style="width: 50%; text-align: center; vertical-align: bottom">' +
+	'<p style="font-family: Avenir-Light; font-size: 1.5rem; color: #f9fbfc">Forgot Username or Password?<br> Enter your email to get started.</p>' +
+	'</td>' +
+	'<td style="width: 25%"></td>' +
+	'</tr>' +
+	'<tr style="height: 34%">' +
+	'<td></td>' +
+	'<td id="loginForm" style="text-align: center; vertical-align: middle;">' +
+	'<p class="fieldBorder">' +
+	'<input class="inputField" type="text" placeholder="Email Address" size="24" style="font-size: large">' +
+	'<input type="button" class="goButton" value="Go">' +
+	'</p>' +
+	'</td>' +
+	'<td></td>' +
+	'<tr style="height: 33%">' +
+	'<td></td>' +
+	'<td style="text-align: center; font-size: 0.8rem; vertical-align: top;">' +
+	'<span id="forgotResponse">' +
+	'<a onclick="transitionBackToLoginView()" style="color:#f1f4b2;">Did you remember your password?</a>' +
+	'</span></td>' +
+	'<td></td>' +
+	'</tr>' +
+	'</table>';

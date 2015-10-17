@@ -3,12 +3,42 @@
 */
 "use strict";
 function RoleForms(rowIndex, table) {
+	this.formRowIndex = rowIndex;
 	this.table = table;
 	this.state = table.state;
 	this.formRow = new FormRow(table.tBody, rowIndex, table.numColumns);
 }
 RoleForms.prototype.register = function() {
-	
+	var that = this;
+	var nameField = this.formRow.addName('');
+	var pseudoField = this.formRow.addPseudo('');
+	var positions = this.state.positionsCanManage();
+	var positionsField = this.formRow.addPosition(positions, 'teacher');
+	var versions = Object.keys(this.state.principal);
+	var versionsField = this.formRow.addVersion(versions);
+	if (positions.length > 1) {
+		positionsField.addEventListener('change', function() {
+			console.log('position select list change event', event.target.selected);
+			var currPos = event.target.selected;
+			if (currPos === 'teacher') {
+				this.formRow.updateSelectList(positionsField, positions);
+			} else {
+				this.formRow.updateSelectList(positionsField, []);
+			}
+		});
+	}
+	this.formRow.addButtons(function() {
+		// submit to server if 201 do the following
+		var teacherId = 'XXXXX';//from server
+		var fullname = nameField.value;
+		var pseudonym = pseudoField.value;
+		var position = positionsField.options[positionsField.selectedIndex].textContent;
+		var versionId = versionsField.options[versionsField.selectedIndex].textContent;
+		var created = new Date().toISOString().substr(0,19);
+		that.table.insertRow(that.formRowIndex, 'memb', teacherId, fullname, pseudonym, position, versionId, created);
+		that.formRow.close();
+	});
+	this.formRow.open();
 };
 RoleForms.prototype.name = function(teacher) {
 	var that = this;

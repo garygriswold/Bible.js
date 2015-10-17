@@ -6,8 +6,8 @@ function CurrentState() {
 	this.teacherId = null;
 	this.isBoard = false;
 	this.isDirector = false;
-	this.principal = null; // consider changing to an array initialized as []
-	this.teacher = null; // ditto
+	this.principal = null;
+	this.teacher = null;
 	this.versionId = null;
 	this.discourseId = null;
 	this.questionTimestamp = null;

@@ -102,3 +102,6 @@ ViewNavigator.prototype.saveDraft = function() {
 ViewNavigator.prototype.allCheckboxesOff = function() {
 	this.rolesModel.allCheckboxesOff();	
 };
+ViewNavigator.prototype.registerNewPerson = function() {
+	this.rolesModel.registerNewPerson();	
+};

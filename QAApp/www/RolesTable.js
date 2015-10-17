@@ -31,7 +31,8 @@ RolesTable.prototype.insertRow = function(index, type, teacherId, fullname, pseu
 	for (var i=0; i<3; i++) {
 		firstRow.cells[i].setAttribute('rowspan', rowCount);
 	}
-	var newRow = this.addTableRow(index);
+	var nextIndex = (index >= 0) ? index + 1: index;
+	var newRow = this.addTableRow(nextIndex);
 	if (type === 'boss') {
 		this.addTableCell(newRow, 'director');
 		var blank = this.addTableCell(newRow);

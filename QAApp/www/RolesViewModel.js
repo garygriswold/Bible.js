@@ -50,4 +50,9 @@ RolesViewModel.prototype.presentRoles = function() {
 		that.setProperties(status, results);
 	});
 };
+RolesViewModel.prototype.registerNewPerson = function() {
+	var rowPosition = this.boss.length + this.self.length + 2;
+	var roleForms = new RoleForms(rowPosition, this.table);
+	roleForms.register();
+};
 
