@@ -2,10 +2,11 @@
 *
 */
 "use strict";
-function RoleForms(rowIndex, table) {
+function RoleForms(rowIndex, table, httpClient) {
 	this.formRowIndex = rowIndex;
 	this.table = table;
 	this.state = table.state;
+	this.httpClient = httpClient;
 	this.formRow = new FormRow(table.tBody, rowIndex, table.numColumns);
 }
 RoleForms.prototype.register = function() {
@@ -28,15 +29,23 @@ RoleForms.prototype.register = function() {
 		});
 	}
 	this.formRow.addButtons(function() {
-		// submit to server if 201 do the following
-		var teacherId = 'XXXXX';//from server
 		var fullname = nameField.value;
 		var pseudonym = pseudoField.value;
 		var position = positionsField.options[positionsField.selectedIndex].textContent;
 		var versionId = versionsField.options[versionsField.selectedIndex].textContent;
 		var created = new Date().toISOString().substr(0,19);
-		that.table.insertRow(that.formRowIndex, 'memb', teacherId, fullname, pseudonym, position, versionId, created);
-		that.formRow.close();
+		var postData = {fullname:fullname, pseudonym:pseudonym, position:position, versionId:versionId};
+		that.httpClient.put('/user', postData, function(status, results) {
+			console.log('register returned', results);
+			if (status === 201) {
+				var teacherId = results.teacherId;
+				var passPhrase = results.passPhrase;  /// This must be displayed for user to record.
+				that.table.insertRow(that.formRowIndex, 'memb', teacherId, fullname, pseudonym, position, versionId, created);
+				that.formRow.close();
+			} else {
+				window.alert(results);
+			}	
+		});
 	});
 	this.formRow.open();
 };

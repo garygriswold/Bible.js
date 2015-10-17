@@ -10,7 +10,7 @@ function RolesViewModel(viewNavigator) {
 	this.boss = null;
 	this.self = null;
 	this.members = null;
-	this.table = new RolesTable(this.state, this.numColumns);
+	this.table = new RolesTable(this.state, this.numColumns, this.httpClient);
 	Object.seal(this);
 }
 RolesViewModel.prototype.display = function() {
@@ -52,7 +52,7 @@ RolesViewModel.prototype.presentRoles = function() {
 };
 RolesViewModel.prototype.registerNewPerson = function() {
 	var rowPosition = this.boss.length + this.self.length + 2;
-	var roleForms = new RoleForms(rowPosition, this.table);
+	var roleForms = new RoleForms(rowPosition, this.table, this.httpClient);
 	roleForms.register();
 };
 

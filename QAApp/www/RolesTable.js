@@ -3,9 +3,10 @@
 * with selected data, and updated by user interaction.
 */
 "use strict";
-function RolesTable(currentState, numColumns) {
+function RolesTable(currentState, numColumns, httpClient) {
 	this.state = currentState;
 	this.numColumns = numColumns;
+	this.httpClient = httpClient;
 	this.tBody = null;
 	this.buttonRow = null;
 }
@@ -138,29 +139,29 @@ RolesTable.prototype.displayPersonUpdateButtons = function(parent, teacher) {
 	var that = this;
 	this.buttonRow = new ButtonRow(parent, this);
 	this.buttonRow.addButton('Change Name', function(event) {
-		var roleForms = that.buttonRow.createRoleForms();
+		var roleForms = that.buttonRow.createRoleForms(that.httpClient);
 		roleForms.name(teacher);
 		that.closeButtonRow();		
 	});
 	this.buttonRow.addButton('New Pass Phrase', function(event) {
-		var roleForms = that.buttonRow.createRoleForms();
+		var roleForms = that.buttonRow.createRoleForms(that.httpClient);
 		roleForms.passPhrase(teacher);
 		that.closeButtonRow();		
 	});
 	this.buttonRow.addButton('Replace Person', function(event) {
-		var roleForms = that.buttonRow.createRoleForms();
+		var roleForms = that.buttonRow.createRoleForms(that.httpClient);
 		roleForms.replace(teacher);
 		that.closeButtonRow();		
 	});
 	// This is only possible for someone who has a boss.
 	this.buttonRow.addButton('Promote Person', function(event) {
-		var roleForms = that.buttonRow.createRoleForms();
+		var roleForms = that.buttonRow.createRoleForms(that.httpClient);
 		roleForms.promote(teacher);
 		that.closeButtonRow();		
 	});
 	// This is not possible of authorizing person has no principal under them.
 	this.buttonRow.addButton('Demote Person', function(event) {
-		var roleForms = that.buttonRow.createRoleForms();
+		var roleForms = that.buttonRow.createRoleForms(that.httpClient);
 		roleForms.demote(teacher);
 		that.closeButtonRow();	
 	});
@@ -170,12 +171,12 @@ RolesTable.prototype.displayVersionUpdateButtons = function(parent, teacher, tea
 	var that = this;
 	this.buttonRow = new ButtonRow(parent, this);
 	this.buttonRow.addButton('Add Role', function(event) {
-		var roleForms = that.buttonRow.createRoleForms();
+		var roleForms = that.buttonRow.createRoleForms(that.httpClient);
 		roleForms.addRole(teacher);
 		that.closeButtonRow();
 	});
 	this.buttonRow.addButton('Remove Role', function(event) {
-		var roleForms = that.buttonRow.createRoleForms();
+		var roleForms = that.buttonRow.createRoleForms(that.httpClient);
 		roleForms.removeRole(teacher, teacherRole);
 		that.closeButtonRow();
 	});
