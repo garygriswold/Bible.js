@@ -54,10 +54,18 @@ RoleForms.prototype.name = function(teacher) {
 	var nameField = this.formRow.addName(teacher.fullname.textContent);
 	var pseudoField = this.formRow.addPseudo(teacher.pseudonym.textContent);
 	this.formRow.addButtons(function() {
-		// submit to server, on 200 update model
-		teacher.fullname.textContent = nameField.value;
-		teacher.pseudonym.textContent = pseudoField.value;
-		that.formRow.close();
+		var fullname = nameField.value;
+		var pseudonym = pseudoField.value;
+		var postData = {teacherId:teacher.teacherId, fullname:fullname, pseudonym:pseudonym};
+		that.httpClient.post('/user', postData, function(status, results) {
+			if (status === 200) {
+				teacher.fullname.textContent = fullname;
+				teacher.pseudonym.textContent = pseudonym;
+				that.formRow.close();
+			} else {
+				window.alert(results);
+			}
+		});
 	});
 	this.formRow.open();
 };

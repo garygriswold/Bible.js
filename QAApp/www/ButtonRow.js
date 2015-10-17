@@ -50,6 +50,6 @@ ButtonRow.prototype.close = function() {
 		});
 	}
 };
-ButtonRow.prototype.createRoleForms = function() {
-	return(new RoleForms(this.next, this.table));	
+ButtonRow.prototype.createRoleForms = function(httpClient) {
+	return(new RoleForms(this.next, this.table, httpClient));	
 };
