@@ -43,7 +43,7 @@ RoleForms.prototype.register = function() {
 				that.table.insertRow(that.formRowIndex, 'memb', teacherId, fullname, pseudonym, position, versionId, created);
 				that.formRow.close();
 			} else {
-				window.alert(results);
+				window.alert(JSON.stringify(results));
 			}	
 		});
 	});
@@ -63,7 +63,7 @@ RoleForms.prototype.name = function(teacher) {
 				teacher.pseudonym.textContent = pseudonym;
 				that.formRow.close();
 			} else {
-				window.alert(results);
+				window.alert(JSON.stringify(results));
 			}
 		});
 	});
@@ -81,7 +81,7 @@ RoleForms.prototype.passPhrase = function(teacher) {
 				that.formRow.setMessage(2, results.passPhrase);
 				that.formRow.setDoneButton();				
 			} else {
-				window.alert(results);
+				window.alert(JSON.stringify(results));
 			}
 		});
 	});
@@ -107,7 +107,7 @@ RoleForms.prototype.replace = function(teacher) {
 						that.formRow.setMessage(2, results.passPhrase);
 						that.formRow.setDoneButton();
 					} else {
-						window.alert(results);
+						window.alert(JSON.stringify(results));
 					}			
 				});		
 			} else {
@@ -137,7 +137,7 @@ RoleForms.prototype.promote = function(teacher) {
 				that.table.deletePerson(teacher);
 				that.formRow.close();
 			} else {
-				window.alert(results);
+				window.alert(JSON.stringify(results));
 			}
 		});
 	});
@@ -157,7 +157,7 @@ RoleForms.prototype.demote = function(teacher) {
 				that.table.deletePerson(teacher);
 				that.formRow.close();	
 			} else {
-				window.alert(results);
+				window.alert(JSON.stringify(results));
 			}
 		});
 	});
@@ -222,22 +222,33 @@ RoleForms.prototype.addRole = function(teacher) {
 		});
 	}
 	this.formRow.addButtons(function() {
-		// submit to server if 201 do the following
 		var position = positionsField.options[positionsField.selectedIndex].textContent;
 		var versionId = versionsField.options[versionsField.selectedIndex].textContent;
 		var created = new Date().toISOString().substr(0,19);
-		//rowIndex includes header, ergo -2 is top row
-		that.table.insertRow(teacher.row.rowIndex - 1, 'memb', teacher.teacherId, null, null, position, versionId, created);
-		that.formRow.close();
+		var postData = {teacherId:teacher.teacherId, position:position, versionId:versionId};
+		that.httpClient.put('/position', postData, function(status, results) {
+			if (status === 201) {
+				that.table.insertRow(teacher.row.rowIndex - 1, 'memb', teacher.teacherId, null, null, position, versionId, created);
+				that.formRow.close();
+			} else {
+				window.alert(JSON.stringify(results));
+			}
+		});
 	});
 	this.formRow.open();
 };
-RoleForms.prototype.removeRole = function(teacher, teacherRole) {
+RoleForms.prototype.removeRole = function(teacher, role) {
 	var that = this;
 	this.formRow.addButtons(function() {
-		//submit to server if 200 do the following
-		that.table.deleteRole(teacher, teacherRole);
-		that.formRow.close();
+		var postData = {teacherId:teacher.teacherId, position:role.position.textContent, versionId:role.versionId.textContent};
+		that.httpClient.delete('/position', postData, function(status, results) {
+			if (status === 200) {
+				that.table.deleteRole(teacher, role);
+				that.formRow.close();	
+			} else {
+				window.alert(JSON.stringify(results));
+			}
+		});
 	});
 	this.formRow.open();
 };
