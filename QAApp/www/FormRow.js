@@ -121,7 +121,7 @@ FormRow.prototype.close = function() {
 FormRow.prototype.close2 = function(row) {
 	var that = this;
 	allCheckboxesOff();
-	if (row) {
+	if (row && row.parentElement) {
 		TweenMax.to(row, 0.4, {padding:0, margin:0});
 		for (var i=0; i<this.divArray.length; i++) {
 			var div = this.divArray[i];

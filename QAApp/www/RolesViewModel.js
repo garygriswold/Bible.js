@@ -35,6 +35,7 @@ RolesViewModel.prototype.allCheckboxesOff = function() {
 RolesViewModel.prototype.setProperties = function(status, results) {
 	if (status === 200) {
 		this.boss = results[0];
+		this.state.bossId = this.boss[0].teacherId;
 		this.self = (results.length > 0) ? results[1] : null;
 		this.members = (results.length > 2) ? results[2] : null;
 		this.display();

@@ -140,6 +140,11 @@ DatabaseAdapter.prototype.updateTeacher = function(obj, callback) {
 	var values = [[ obj.fullname, obj.pseudonym, obj.teacherId ]];
 	this.executeSQL(statements, values, 1, callback);
 };
+DatabaseAdapter.prototype.updateAuthorizer = function(obj, callback) {
+	var statements = [ 'update Teacher set authorizerId=? where teacherId=?' ];
+	var values = [[ obj.authorizerId, obj.teacherId ]];
+	this.executeSQL(statements, values, 1, callback);		
+};
 /**
 * Needs primary key Teacher.teacherId
 * Requires Position.teacherId to be on delete cascade

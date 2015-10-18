@@ -47,16 +47,15 @@ RolesTable.prototype.insertRow = function(index, type, teacherId, fullname, pseu
 		this.state.addRole(teacherId, position, versionId, positionCell, versionCell, createdCell, newRow);
 	}
 };
-RolesTable.prototype.deletePerson = function(teacher) {
+RolesTable.prototype.deletePerson = function(teacher) {	
+	var roleKeys = Object.keys(teacher.roles);
+	for (var i=roleKeys.length -1; i>=0; i--) {
+		var role = teacher.roles[roleKeys[i]];
+		this.tBody.deleteRow(role.row.rowIndex - 2);
+	}
 	var rowIndex = teacher.row.rowIndex - 2;
 	this.state.removeTeacher(teacher.teacherId);
 	this.tBody.deleteRow(rowIndex);
-	
-	var cell = this.tBody.rows[rowIndex].firstChild;
-	while (cell.children === null || cell.children.length === 0 || cell.firstChild.nodeName !== 'INPUT') {
-		this.tBody.deleteRow(rowIndex);
-		cell = this.tBody.rows[rowIndex].firstChild;
-	}
 };
 RolesTable.prototype.deleteRole = function(teacher, role) {
 	var rowCount = Number(teacher.row.cells[0].getAttribute('rowspan')) - 1;

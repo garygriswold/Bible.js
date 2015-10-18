@@ -131,9 +131,15 @@ RoleForms.prototype.promote = function(teacher) {
 	var that = this;
 	this.formRow.addMessage(1, 'Use this to move a person out of your authority to the person who authorizes you.');
 	this.formRow.addButtons(function() {
-		// submit to server, on 200 update model
-		that.table.deletePerson(teacher);
-		that.formRow.close();
+		var postData = {authorizerId:that.state.bossId, teacherId:teacher.teacherId};
+		that.httpClient.post('/auth', postData, function(status, results) {
+			if (status === 200) {
+				that.table.deletePerson(teacher);
+				that.formRow.close();
+			} else {
+				window.alert(results);
+			}
+		});
 	});
 	this.formRow.open();
 };

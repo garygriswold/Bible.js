@@ -4,6 +4,7 @@
 "use strict";
 function CurrentState() {
 	this.teacherId = null;
+	this.bossId = null; // sent by get /user
 	this.isBoard = false;
 	this.isDirector = false;
 	this.principal = null;

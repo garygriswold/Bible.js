@@ -130,6 +130,18 @@ server.del('/user', function deleteTeacher(request, response, next) {
 	});
 });
 
+server.post('/auth', function updateAuthorizer(request, response, next) {
+	authController.authorizeUser(request.headers.authId, function(err) {
+		if (err) {
+			return(next(err));
+		} else {
+			database.updateAuthorizer(request.params, function(err, results) {
+				respond(err, results, 200, response, next);
+			});			
+		}
+	});	
+});
+
 server.get('/phrase/:teacherId/:versionId', function newPassPhrase(request, response, next) {
 	authController.authorizeUser(request.headers.authId, function(err) {
 		if (err) {
