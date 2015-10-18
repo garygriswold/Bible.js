@@ -74,7 +74,7 @@ RoleForms.prototype.passPhrase = function(teacher) {
 	var message = 'When you create a new Pass Phrase, the user will not be able to access their account until after they login with their new Pass Phrase.';
 	this.formRow.addMessage(1, message);
 	this.formRow.addButtons(function() {
-		that.httpClient.get('/phrase/' + teacher.teacherId + '/' + bestLanguage(), function(status, results) {
+		that.httpClient.get('/phrase/' + teacher.teacherId + '/' + that.bestLanguage(teacher), function(status, results) {
 			if (status === 200) {
 				message = 'Be sure to give this user their new Pass Phrase, exactly.';
 				that.formRow.setMessage(1, message);
@@ -86,34 +86,46 @@ RoleForms.prototype.passPhrase = function(teacher) {
 		});
 	});
 	this.formRow.open();
-	
-	function bestLanguage() {
-		var roles = Object.keys(teacher.roles);
-		for(var i=0; i<roles.length; i++) {
-			var parts = roles[i].split('.');
-			if (parts[1] && parts[1].length > 2) {
-				return(parts[1])
-			}
-		}
-		return('WEB');
-	}
 };
 RoleForms.prototype.replace = function(teacher) {
 	var that = this;
 	var nameField = this.formRow.addName('');
 	var pseudoField = this.formRow.addPseudo('');
-	this.formRow.addMessage(3, 'Use this to replace a person with a new person.');
+	this.formRow.addMessage(3, 'Use this to replace one person with a another person.');
 	this.formRow.addButtons(function() {
-		// submit to server, on 200 update model
-		teacher.fullname.textContent = nameField.value;
-		teacher.pseudonym.textContent = pseudoField.value;
-		
-		var message = 'Be sure to give this user their new Pass Phrase, exactly.';
-		that.formRow.setMessage(1, message);
-		that.formRow.setMessage(2, 'TheirNewPassPhrase');
-		that.formRow.setDoneButton();
+		var fullname = nameField.value;
+		var pseudonym = pseudoField.value;
+		var postData = {teacherId:teacher.teacherId, fullname:fullname, pseudonym:pseudonym};
+		that.httpClient.post('/user', postData, function(status, results) {
+			if (status === 200) {
+				teacher.fullname.textContent = fullname;
+				teacher.pseudonym.textContent = pseudonym;
+				that.httpClient.get('/phrase/' + teacher.teacherId + '/' + that.bestLanguage(teacher), function(status, results) {
+					if (status === 200) {
+						var message = 'Be sure to give this user their new Pass Phrase, exactly.';
+						that.formRow.setMessage(1, message);
+						that.formRow.setMessage(2, results.passPhrase);
+						that.formRow.setDoneButton();
+					} else {
+						window.alert(results);
+					}			
+				});		
+			} else {
+				window.alert(results);
+			}
+		});		
 	});
 	this.formRow.open();
+};
+RoleForms.prototype.bestLanguage = function(teacher) {
+	var roles = Object.keys(teacher.roles);
+	for(var i=0; i<roles.length; i++) {
+		var parts = roles[i].split('.');
+		if (parts[1] && parts[1].length > 2) {
+			return(parts[1])
+		}
+	}
+	return('WEB');
 };
 RoleForms.prototype.promote = function(teacher) {
 	var that = this;
