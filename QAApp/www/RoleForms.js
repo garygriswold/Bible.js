@@ -150,9 +150,16 @@ RoleForms.prototype.demote = function(teacher) {
 	var personsField = this.formRow.addQualified(qualified);
 	this.formRow.addMessage(3, 'Use this to move a person out of your authority to one of your members.');
 	this.formRow.addButtons(function() {
-		// submit to server, on 200 do the following
-		that.table.deletePerson(teacher);
-		that.formRow.close();
+		var selected = personsField.options[personsField.selectedIndex];
+		var postData = {authorizerId:selected.value, teacherId:teacher.teacherId};
+		that.httpClient.post('/auth', postData, function(status, results) {
+			if (status === 200) {
+				that.table.deletePerson(teacher);
+				that.formRow.close();	
+			} else {
+				window.alert(results);
+			}
+		});
 	});
 	this.formRow.open();	
 	

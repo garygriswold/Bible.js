@@ -20,4 +20,5 @@ insert into Teacher(teacherId, fullname, pseudonym, passPhrase, authorizerId) va
 insert into Position(teacherId, position, versionId) values ('JOHN1', 'teacher', 'KJV');
 insert into Position(teacherId, position, versionId) values ('JOHN1', 'teacher', 'WEB');
 insert into Position(teacherId, position, versionId) values ('JOHN1', 'teacher', 'KJVA');
+insert into Position(teacherId, position, versionId) values ('JOHN1', 'board', '');
 
