@@ -108,7 +108,7 @@ FormRow.prototype.updateSelectList = function(field, values, current) {
 FormRow.prototype.stdButton = function(cell, label, callback) {
 	var button = document.createElement('button');
 	button.setAttribute('class', 'button bigrounded blue');
-	button.setAttribute('style', 'margin: 10px 30px 10px 30px');
+	button.setAttribute('style', 'margin: 10px 10px 10px 10px');
 	button.textContent = label;
 	cell.appendChild(button);
 	button.addEventListener('click', callback);
