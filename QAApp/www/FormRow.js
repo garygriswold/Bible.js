@@ -2,7 +2,7 @@
 * This table is used to define a list of fields in a Row.
 */
 "use strict";
-function FormRow(tBody, rowIndex, numColumns) {
+function FormRow(tBody, rowIndex) {
 	this.formRow = tBody.insertRow(rowIndex);
 	this.divArray = [];
 }

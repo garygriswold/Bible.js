@@ -7,7 +7,7 @@ function RoleForms(rowIndex, table, httpClient) {
 	this.table = table;
 	this.state = table.state;
 	this.httpClient = httpClient;
-	this.formRow = new FormRow(table.tBody, rowIndex, table.numColumns);
+	this.formRow = new FormRow(table.tBody, rowIndex);
 }
 RoleForms.prototype.register = function() {
 	var that = this;
