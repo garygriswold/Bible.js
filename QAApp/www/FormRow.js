@@ -4,29 +4,29 @@
 "use strict";
 function FormRow(tBody, rowIndex, numColumns) {
 	this.formRow = tBody.insertRow(rowIndex);
-	this.divArray = [numColumns];
+	this.divArray = [];
 }
 FormRow.prototype.addBlank = function(pos, colspan) {
 	this.addCell(pos, colspan);	
 };
 FormRow.prototype.addName = function(name) {
-	return(this.stdTextField(1, name));	
+	return(this.stdTextField(name));	
 };
 FormRow.prototype.addPseudo = function(pseudo) {
-	return(this.stdTextField(2, pseudo));
+	return(this.stdTextField(pseudo));
 };
 FormRow.prototype.addPosition = function(positions, value) {
-	return(this.stdSelectList(3, positions, value));
+	return(this.stdSelectList(positions, value));
 };
 FormRow.prototype.addVersion = function(versions, value) {
-	return(this.stdSelectList(4, versions, value));
+	return(this.stdSelectList(versions, value));
 };
 FormRow.prototype.addQualified = function(qualified) {
-	return(this.stdSelectList(1, qualified));
+	return(this.stdSelectList(qualified));
 };
 FormRow.prototype.addButtons = function(callback) {
 	var that = this;
-	var cell = this.addCell(5, 2);
+	var cell = this.addCell(2);
 	this.goButton = this.stdButton(cell, 'Do It', callback);
 	this.cancelButton = this.stdButton(cell, 'Cancel', function() {
 		that.close2(that.formRow);
@@ -42,8 +42,8 @@ FormRow.prototype.setDoneButton = function(pos) {
 		that.close2(that.formRow);
 	});
 };
-FormRow.prototype.addMessage = function(col, colspan, message) {
-	var cell = this.addCell(col, colspan);
+FormRow.prototype.addMessage = function(colspan, message) {
+	var cell = this.addCell(colspan);
 	cell.textContent = message;
 };
 FormRow.prototype.setMessage = function(col, message1, message2) {
@@ -54,17 +54,17 @@ FormRow.prototype.setMessage = function(col, message1, message2) {
 		div.appendChild(document.createTextNode(message2));
 	}
 };
-FormRow.prototype.addCell = function(col, colspan) {
+FormRow.prototype.addCell = function(colspan) {
 	var cell = this.formRow.insertCell();
 	cell.setAttribute('class', 'role');
 	cell.setAttribute('colspan', colspan);
 	var div = document.createElement('div');
 	cell.appendChild(div);
-	this.divArray[this.formRow.cells.length -1] = div;
+	this.divArray.push(div);
 	return(div);
 };
-FormRow.prototype.stdTextField = function(col, value) {
-	var cell = this.addCell(col, 1);
+FormRow.prototype.stdTextField = function(value) {
+	var cell = this.addCell(1);
 	var input = document.createElement('input');
 	input.setAttribute('type', 'text');
 	input.setAttribute('class', 'role');
@@ -72,8 +72,8 @@ FormRow.prototype.stdTextField = function(col, value) {
 	cell.appendChild(input);
 	return(input);
 };
-FormRow.prototype.stdSelectList = function(col, values, current) {
-	var cell = this.addCell(col, 1);
+FormRow.prototype.stdSelectList = function(values, current) {
+	var cell = this.addCell(1);
 	var input = document.createElement('select');
 	input.setAttribute('class', 'role');
 	for (var i=0; i<values.length; i++) {
