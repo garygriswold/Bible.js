@@ -6,6 +6,9 @@ function FormRow(tBody, rowIndex, numColumns) {
 	this.formRow = tBody.insertRow(rowIndex);
 	this.divArray = [numColumns];
 }
+FormRow.prototype.addBlank = function(pos, colspan) {
+	this.addCell(pos, colspan);	
+};
 FormRow.prototype.addName = function(name) {
 	return(this.stdTextField(1, name));	
 };
@@ -23,15 +26,15 @@ FormRow.prototype.addQualified = function(qualified) {
 };
 FormRow.prototype.addButtons = function(callback) {
 	var that = this;
-	var cell = this.addCell(5);
+	var cell = this.addCell(5, 2);
 	this.goButton = this.stdButton(cell, 'Do It', callback);
 	this.cancelButton = this.stdButton(cell, 'Cancel', function() {
 		that.close2(that.formRow);
 	});
 };
-FormRow.prototype.setDoneButton = function() {
+FormRow.prototype.setDoneButton = function(pos) {
 	var that = this;
-	var cell5 = this.divArray[5];
+	var cell5 = this.divArray[pos];
 	for (var i=cell5.children.length -1; i>=0; i--) {
 		cell5.removeChild(cell5.children[i]);
 	}
@@ -39,27 +42,29 @@ FormRow.prototype.setDoneButton = function() {
 		that.close2(that.formRow);
 	});
 };
-FormRow.prototype.addMessage = function(col, message) {
-	var cell = this.addCell(col);
+FormRow.prototype.addMessage = function(col, colspan, message) {
+	var cell = this.addCell(col, colspan);
 	cell.textContent = message;
 };
-FormRow.prototype.setMessage = function(col, message) {
+FormRow.prototype.setMessage = function(col, message1, message2) {
 	var div = this.divArray[col];
-	div.textContent = message;	
-};
-FormRow.prototype.addCell = function(col) {
-	var div = null;
-	while(this.formRow.cells.length <= col) {
-		var cell = this.formRow.insertCell();
-		cell.setAttribute('class', 'role');
-		div = document.createElement('div');
-		cell.appendChild(div);
-		this.divArray[this.formRow.cells.length -1] = div;
+	div.textContent = message1;
+	if (message2) {
+		div.appendChild(document.createElement('br'));
+		div.appendChild(document.createTextNode(message2));
 	}
+};
+FormRow.prototype.addCell = function(col, colspan) {
+	var cell = this.formRow.insertCell();
+	cell.setAttribute('class', 'role');
+	cell.setAttribute('colspan', colspan);
+	var div = document.createElement('div');
+	cell.appendChild(div);
+	this.divArray[this.formRow.cells.length -1] = div;
 	return(div);
 };
 FormRow.prototype.stdTextField = function(col, value) {
-	var cell = this.addCell(col);
+	var cell = this.addCell(col, 1);
 	var input = document.createElement('input');
 	input.setAttribute('type', 'text');
 	input.setAttribute('class', 'role');
@@ -68,7 +73,7 @@ FormRow.prototype.stdTextField = function(col, value) {
 	return(input);
 };
 FormRow.prototype.stdSelectList = function(col, values, current) {
-	var cell = this.addCell(col);
+	var cell = this.addCell(col, 1);
 	var input = document.createElement('select');
 	input.setAttribute('class', 'role');
 	for (var i=0; i<values.length; i++) {
@@ -110,7 +115,6 @@ FormRow.prototype.stdButton = function(cell, label, callback) {
 	return(button);
 };
 FormRow.prototype.open = function() {
-	this.addCell(6);
 	for (var i=0; i<this.divArray.length; i++) {
 		TweenMax.from(this.divArray[i], 0.5, {height:0, scaleY:0, margin:0, padding:0});
 	}

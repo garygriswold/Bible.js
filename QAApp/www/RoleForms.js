@@ -11,6 +11,7 @@ function RoleForms(rowIndex, table, httpClient) {
 }
 RoleForms.prototype.register = function() {
 	var that = this;
+	this.formRow.addBlank(0, 1);
 	var nameField = this.formRow.addName('');
 	var pseudoField = this.formRow.addPseudo('');
 	var positions = this.state.positionsCanManage();
@@ -51,8 +52,10 @@ RoleForms.prototype.register = function() {
 };
 RoleForms.prototype.name = function(teacher) {
 	var that = this;
+	this.formRow.addBlank(0, 1);
 	var nameField = this.formRow.addName(teacher.fullname.textContent);
 	var pseudoField = this.formRow.addPseudo(teacher.pseudonym.textContent);
+	this.formRow.addMessage(2, 2, "You may change a user's name or pseudonym.");
 	this.formRow.addButtons(function() {
 		var fullname = nameField.value;
 		var pseudonym = pseudoField.value;
@@ -72,14 +75,13 @@ RoleForms.prototype.name = function(teacher) {
 RoleForms.prototype.passPhrase = function(teacher) {
 	var that = this;
 	var message = 'When you create a new Pass Phrase, the user will not be able to access their account until after they login with their new Pass Phrase.';
-	this.formRow.addMessage(1, message);
+	this.formRow.addMessage(0, 5, message);
 	this.formRow.addButtons(function() {
 		that.httpClient.get('/phrase/' + teacher.teacherId + '/' + that.bestLanguage(teacher), function(status, results) {
 			if (status === 200) {
 				message = 'Be sure to give this user their new Pass Phrase, exactly.';
-				that.formRow.setMessage(1, message);
-				that.formRow.setMessage(2, results.passPhrase);
-				that.formRow.setDoneButton();				
+				that.formRow.setMessage(0, message, results.passPhrase);
+				that.formRow.setDoneButton(1);				
 			} else {
 				window.alert(JSON.stringify(results));
 			}
@@ -89,9 +91,10 @@ RoleForms.prototype.passPhrase = function(teacher) {
 };
 RoleForms.prototype.replace = function(teacher) {
 	var that = this;
+	this.formRow.addBlank(0, 1);
 	var nameField = this.formRow.addName('');
 	var pseudoField = this.formRow.addPseudo('');
-	this.formRow.addMessage(3, 'Use this to replace one person with a another person.');
+	this.formRow.addMessage(3, 2, 'Use this to replace one person with a another person.');
 	this.formRow.addButtons(function() {
 		var fullname = nameField.value;
 		var pseudonym = pseudoField.value;
@@ -103,9 +106,8 @@ RoleForms.prototype.replace = function(teacher) {
 				that.httpClient.get('/phrase/' + teacher.teacherId + '/' + that.bestLanguage(teacher), function(status, results) {
 					if (status === 200) {
 						var message = 'Be sure to give this user their new Pass Phrase, exactly.';
-						that.formRow.setMessage(1, message);
-						that.formRow.setMessage(2, results.passPhrase);
-						that.formRow.setDoneButton();
+						that.formRow.setMessage(3, message, results.passPhrase);
+						that.formRow.setDoneButton(4);
 					} else {
 						window.alert(JSON.stringify(results));
 					}			
@@ -129,7 +131,7 @@ RoleForms.prototype.bestLanguage = function(teacher) {
 };
 RoleForms.prototype.promote = function(teacher) {
 	var that = this;
-	this.formRow.addMessage(1, 'Use this to move a person out of your authority to the person who authorizes you.');
+	this.formRow.addMessage(0, 4, 'Use this to move a person out of your authority to the person who authorizes you.');
 	this.formRow.addButtons(function() {
 		var postData = {authorizerId:that.state.bossId, teacherId:teacher.teacherId};
 		that.httpClient.post('/auth', postData, function(status, results) {
@@ -145,10 +147,11 @@ RoleForms.prototype.promote = function(teacher) {
 };
 RoleForms.prototype.demote = function(teacher) {
 	var that = this;
+	this.formRow.addBlank(0, 1);
 	var teacherState = getRoleState(teacher);
 	var qualified = findQualifiedMembers();
 	var personsField = this.formRow.addQualified(qualified);
-	this.formRow.addMessage(3, 'Use this to move a person out of your authority to one of your members.');
+	this.formRow.addMessage(2, 3, 'Use this to move a person out of your authority to one of your members.');
 	this.formRow.addButtons(function() {
 		var selected = personsField.options[personsField.selectedIndex];
 		var postData = {authorizerId:selected.value, teacherId:teacher.teacherId};
@@ -206,6 +209,7 @@ RoleForms.prototype.demote = function(teacher) {
 };
 RoleForms.prototype.addRole = function(teacher) {
 	var that = this;
+	this.formRow.addMessage(0, 3, "Use this to give this person a new responsibility.");
 	var positions = this.state.positionsCanManage();
 	var positionsField = this.formRow.addPosition(positions, 'teacher');
 	var versions = Object.keys(this.state.principal);
@@ -239,6 +243,7 @@ RoleForms.prototype.addRole = function(teacher) {
 };
 RoleForms.prototype.removeRole = function(teacher, role) {
 	var that = this;
+	this.formRow.addMessage(0, 5, "Use this to remove a responsibility from this person.");
 	this.formRow.addButtons(function() {
 		var postData = {teacherId:teacher.teacherId, position:role.position.textContent, versionId:role.versionId.textContent};
 		that.httpClient.delete('/position', postData, function(status, results) {
