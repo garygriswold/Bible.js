@@ -31,7 +31,7 @@ function ButtonRow(rowAbove, table) {
 ButtonRow.prototype.addButton = function(label, callback) {
 	var button = document.createElement('button');
 	button.setAttribute('class', 'button bigrounded blue');
-	button.setAttribute('style', 'margin: 10px 30px 10px 30px');
+	button.setAttribute('style', 'margin: 10px 3px 10px 3px');
 	button.textContent = label;
 	this.div.appendChild(button);
 	button.addEventListener('click', callback);
