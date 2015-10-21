@@ -137,6 +137,11 @@ RolesTable.prototype.allCheckboxesOff = function() {
 RolesTable.prototype.displayPersonUpdateButtons = function(parent, teacher) {
 	var that = this;
 	this.buttonRow = new ButtonRow(parent, this);
+	this.buttonRow.addButton('Add Role', function(event) {
+		var roleForms = that.buttonRow.createRoleForms(that.httpClient);
+		roleForms.addRole(teacher);
+		that.closeButtonRow();
+	});
 	this.buttonRow.addButton('Change Name', function(event) {
 		var roleForms = that.buttonRow.createRoleForms(that.httpClient);
 		roleForms.name(teacher);
@@ -169,11 +174,6 @@ RolesTable.prototype.displayPersonUpdateButtons = function(parent, teacher) {
 RolesTable.prototype.displayVersionUpdateButtons = function(parent, teacher, teacherRole) {
 	var that = this;
 	this.buttonRow = new ButtonRow(parent, this);
-	this.buttonRow.addButton('Add Role', function(event) {
-		var roleForms = that.buttonRow.createRoleForms(that.httpClient);
-		roleForms.addRole(teacher);
-		that.closeButtonRow();
-	});
 	this.buttonRow.addButton('Remove Role', function(event) {
 		var roleForms = that.buttonRow.createRoleForms(that.httpClient);
 		roleForms.removeRole(teacher, teacherRole);
