@@ -41,7 +41,7 @@ RolesTable.prototype.insertRow = function(index, type, teacherId, fullname, pseu
 	} else {
 		var positionCell = this.addTableCell(newRow, position);
 		var versionCell = this.addTableCell(newRow, versionId);
-		var createdCell = this.addTableCell(newRow, created);
+		var createdCell = this.addTableCell(newRow, created.substr(0,10));
 		var check2 = this.addTableCell(newRow);
 		this.addCheckbox(check2, teacherId, position, versionId);
 		this.state.addRole(teacherId, position, versionId, positionCell, versionCell, createdCell, newRow);
