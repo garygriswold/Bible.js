@@ -30,23 +30,28 @@ RoleForms.prototype.register = function() {
 		});
 	}
 	this.formRow.addButtons(function() {
-		var fullname = nameField.value;
-		var pseudonym = pseudoField.value;
-		var position = positionsField.options[positionsField.selectedIndex].textContent;
-		var versionId = versionsField.options[versionsField.selectedIndex].textContent;
-		var created = new Date().toISOString().substr(0,19);
-		var postData = {fullname:fullname, pseudonym:pseudonym, position:position, versionId:versionId};
-		that.httpClient.put('/user', postData, function(status, results) {
-			console.log('register returned', results);
-			if (status === 201) {
-				var teacherId = results.teacherId;
-				var passPhrase = results.passPhrase;  /// This must be displayed for user to record.
-				that.table.insertRow(that.formRowIndex, 'memb', teacherId, fullname, pseudonym, position, versionId, created);
-				that.formRow.close();
-			} else {
-				window.alert(JSON.stringify(results));
-			}	
-		});
+		var validMsg = that.formRow.validateFields();
+		if (validMsg) {
+			window.alert(validMsg);
+		} else {
+			var fullname = nameField.value;
+			var pseudonym = pseudoField.value;
+			var position = positionsField.options[positionsField.selectedIndex].textContent;
+			var versionId = versionsField.options[versionsField.selectedIndex].textContent;
+			var created = new Date().toISOString().substr(0,19);
+			var postData = {fullname:fullname, pseudonym:pseudonym, position:position, versionId:versionId};
+			that.httpClient.put('/user', postData, function(status, results) {
+				console.log('register returned', results);
+				if (status === 201) {
+					var teacherId = results.teacherId;
+					var passPhrase = results.passPhrase;  /// This must be displayed for user to record.
+					that.table.insertRow(that.formRowIndex, 'memb', teacherId, fullname, pseudonym, position, versionId, created);
+					that.formRow.close();
+				} else {
+					window.alert(JSON.stringify(results));
+				}	
+			});
+		}
 	});
 	this.formRow.open();
 };
@@ -57,18 +62,23 @@ RoleForms.prototype.name = function(teacher) {
 	var pseudoField = this.formRow.addPseudo(teacher.pseudonym.textContent);
 	this.formRow.addMessage(2, "You may change a user's name or pseudonym.");
 	this.formRow.addButtons(function() {
-		var fullname = nameField.value;
-		var pseudonym = pseudoField.value;
-		var postData = {teacherId:teacher.teacherId, fullname:fullname, pseudonym:pseudonym};
-		that.httpClient.post('/user', postData, function(status, results) {
-			if (status === 200) {
-				teacher.fullname.textContent = fullname;
-				teacher.pseudonym.textContent = pseudonym;
-				that.formRow.close();
-			} else {
-				window.alert(JSON.stringify(results));
-			}
-		});
+		var validMsg = that.formRow.validateFields();
+		if (validMsg) {
+			window.alert(validMsg);
+		} else {
+			var fullname = nameField.value;
+			var pseudonym = pseudoField.value;
+			var postData = {teacherId:teacher.teacherId, fullname:fullname, pseudonym:pseudonym};
+			that.httpClient.post('/user', postData, function(status, results) {
+				if (status === 200) {
+					teacher.fullname.textContent = fullname;
+					teacher.pseudonym.textContent = pseudonym;
+					that.formRow.close();
+				} else {
+					window.alert(JSON.stringify(results));
+				}
+			});
+		}
 	});
 	this.formRow.open();
 };
@@ -96,26 +106,31 @@ RoleForms.prototype.replace = function(teacher) {
 	var pseudoField = this.formRow.addPseudo('');
 	this.formRow.addMessage(2, 'Use this to replace one person with a another person.');
 	this.formRow.addButtons(function() {
-		var fullname = nameField.value;
-		var pseudonym = pseudoField.value;
-		var postData = {teacherId:teacher.teacherId, fullname:fullname, pseudonym:pseudonym};
-		that.httpClient.post('/user', postData, function(status, results) {
-			if (status === 200) {
-				teacher.fullname.textContent = fullname;
-				teacher.pseudonym.textContent = pseudonym;
-				that.httpClient.get('/phrase/' + teacher.teacherId + '/' + that.bestLanguage(teacher), function(status, results) {
-					if (status === 200) {
-						var message = 'Be sure to give this user their new Pass Phrase, exactly.';
-						that.formRow.setMessage(3, message, results.passPhrase);
-						that.formRow.setDoneButton(4);
-					} else {
-						window.alert(JSON.stringify(results));
-					}			
-				});		
-			} else {
-				window.alert(results);
-			}
-		});		
+		var validMsg = that.formRow.validateFields();
+		if (validMsg) {
+			window.alert(validMsg);
+		} else {
+			var fullname = nameField.value;
+			var pseudonym = pseudoField.value;
+			var postData = {teacherId:teacher.teacherId, fullname:fullname, pseudonym:pseudonym};
+			that.httpClient.post('/user', postData, function(status, results) {
+				if (status === 200) {
+					teacher.fullname.textContent = fullname;
+					teacher.pseudonym.textContent = pseudonym;
+					that.httpClient.get('/phrase/' + teacher.teacherId + '/' + that.bestLanguage(teacher), function(status, results) {
+						if (status === 200) {
+							var message = 'Be sure to give this user their new Pass Phrase, exactly.';
+							that.formRow.setMessage(3, message, results.passPhrase);
+							that.formRow.setDoneButton(4);
+						} else {
+							window.alert(JSON.stringify(results));
+						}			
+					});		
+				} else {
+					window.alert(results);
+				}
+			});
+		}		
 	});
 	this.formRow.open();
 };

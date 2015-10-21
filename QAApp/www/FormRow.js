@@ -4,16 +4,20 @@
 "use strict";
 function FormRow(tBody, rowIndex) {
 	this.formRow = tBody.insertRow(rowIndex);
+	this.nameField = null;
+	this.pseudoField = null;
 	this.divArray = [];
 }
 FormRow.prototype.addBlank = function(pos, colspan) {
 	this.addCell(pos, colspan);	
 };
 FormRow.prototype.addName = function(name) {
-	return(this.stdTextField(name));	
+	this.nameField = this.stdTextField(name);
+	return(this.nameField);
 };
 FormRow.prototype.addPseudo = function(pseudo) {
-	return(this.stdTextField(pseudo));
+	this.pseudoField = this.stdTextField(pseudo);
+	return(this.pseudoField);
 };
 FormRow.prototype.addPosition = function(positions, value) {
 	return(this.stdSelectList(positions, value));
@@ -113,6 +117,15 @@ FormRow.prototype.stdButton = function(cell, label, callback) {
 	cell.appendChild(button);
 	button.addEventListener('click', callback);
 	return(button);
+};
+FormRow.prototype.validateFields = function() {
+	if (this.nameField && (this.nameField.value === null || this.nameField.value.length === 0)) {
+		return('You must enter a fullname.');
+	}
+	if (this.pseudoField && (this.pseudoField.value === null || this.pseudoField.value.length === 0)) {
+		return('You must enter a pseudonym.');
+	}
+	return(null);
 };
 FormRow.prototype.open = function() {
 	for (var i=0; i<this.divArray.length; i++) {
