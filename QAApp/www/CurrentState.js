@@ -3,17 +3,21 @@
 */
 "use strict";
 function CurrentState() {
+	// About logged in user
 	this.teacherId = null;
 	this.bossId = null; // sent by get /user
 	this.isBoard = false;
 	this.isDirector = false;
 	this.principal = null;
 	this.teacher = null;
+	// About members
+	this.topMemberPosition = null;
+	this.teachers = {};
+	// About questions and answers
 	this.versionId = null;
 	this.discourseId = null;
 	this.questionTimestamp = null;
 	this.answerTimestamp = null;
-	this.teachers = {};
 	Object.seal(this);
 }
 CurrentState.prototype.canManageRoles = function() {

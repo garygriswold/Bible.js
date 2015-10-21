@@ -164,7 +164,7 @@ RolesTable.prototype.displayPersonUpdateButtons = function(parent, teacher) {
 		roleForms.promote(teacher);
 		that.closeButtonRow();		
 	});
-	if (canDemote()) {
+	if (canDemote(teacher)) {
 		this.buttonRow.addButton('Demote Person', function(event) {
 			var roleForms = that.buttonRow.createRoleForms(that.httpClient);
 			roleForms.demote(teacher);
@@ -183,7 +183,13 @@ RolesTable.prototype.displayPersonUpdateButtons = function(parent, teacher) {
 		}
 		return(false);
 	}
-	function canDemote() {
+	function canDemote(teacher) {
+		var roleKeys = Object.keys(teacher.roles);
+		for (var i=0; i<roleKeys.length; i++) {
+			if (roleKeys[i] <= that.state.topMemberPosition) {
+				return(false);
+			}
+		}
 		return(true);
 	}
 };
