@@ -137,11 +137,13 @@ RolesTable.prototype.allCheckboxesOff = function() {
 RolesTable.prototype.displayPersonUpdateButtons = function(parent, teacher) {
 	var that = this;
 	this.buttonRow = new ButtonRow(parent, this);
-	this.buttonRow.addButton('Add Role', function(event) {
-		var roleForms = that.buttonRow.createRoleForms(that.httpClient);
-		roleForms.addRole(teacher);
-		that.closeButtonRow();
-	});
+	if (canAddRole(teacher)) {
+		this.buttonRow.addButton('Add Role', function(event) {
+			var roleForms = that.buttonRow.createRoleForms(that.httpClient);
+			roleForms.addRole(teacher);
+			that.closeButtonRow();
+		});	
+	}
 	this.buttonRow.addButton('Change Name', function(event) {
 		var roleForms = that.buttonRow.createRoleForms(that.httpClient);
 		roleForms.name(teacher);
@@ -157,19 +159,33 @@ RolesTable.prototype.displayPersonUpdateButtons = function(parent, teacher) {
 		roleForms.replace(teacher);
 		that.closeButtonRow();		
 	});
-	// This is only possible for someone who has a boss.
 	this.buttonRow.addButton('Promote Person', function(event) {
 		var roleForms = that.buttonRow.createRoleForms(that.httpClient);
 		roleForms.promote(teacher);
 		that.closeButtonRow();		
 	});
-	// This is not possible of authorizing person has no principal under them.
-	this.buttonRow.addButton('Demote Person', function(event) {
-		var roleForms = that.buttonRow.createRoleForms(that.httpClient);
-		roleForms.demote(teacher);
-		that.closeButtonRow();	
-	});
+	if (canDemote()) {
+		this.buttonRow.addButton('Demote Person', function(event) {
+			var roleForms = that.buttonRow.createRoleForms(that.httpClient);
+			roleForms.demote(teacher);
+			that.closeButtonRow();	
+		});
+	}
 	this.buttonRow.open();
+	
+	function canAddRole(teacher) {
+		if (that.state.isBoard || that.state.isDirector) return(true);
+		if (that.state.principal) {
+			var versionKeys = Object.keys(that.state.principal);
+			for (var i=0; i<versionKeys.length; i++) {
+				if (teacher.roles['teacher.' + versionKeys[i]] === undefined) return(true);
+			}
+		}
+		return(false);
+	}
+	function canDemote() {
+		return(true);
+	}
 };
 RolesTable.prototype.displayVersionUpdateButtons = function(parent, teacher, teacherRole) {
 	var that = this;
