@@ -84,6 +84,9 @@
 			function registerNewPerson() {
 				viewNavigator.registerNewPerson();
 			}
+			function roleBackToQueue() {
+				viewNavigator.transition('rolesView', 'queueView', 'openQuestionCount', TRANSITION.SLIDE_RIGHT);
+			}
 		</script>
 		<link rel="stylesheet" type="text/css" href="./Buttons.css">
 		<link rel="stylesheet" type="text/css" href="./Fields.css">

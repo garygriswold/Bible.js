@@ -15,6 +15,7 @@ function RolesViewModel(viewNavigator) {
 }
 RolesViewModel.prototype.display = function() {
 	var that = this;
+	this.table.clearRows(); // Check if needed after viewNavigator bug is fixed.
 	this.state.clearTeachers();
 	iteratePersons(this.boss, 'boss');
 	iteratePersons(this.self, 'self');

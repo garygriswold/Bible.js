@@ -10,6 +10,14 @@ function RolesTable(currentState, numColumns, httpClient) {
 	this.tBody = null;
 	this.buttonRow = null;
 }
+// Check if this is really needed after ViewNavigator bug is fixed.
+RolesTable.prototype.clearRows = function() {
+	if (this.tBody) {
+		for (var i=this.tBody.children.length - 1; i>=0; i--) {
+			this.tBody.removeChild(this.tBody.children[i]);
+		}
+	}	
+};
 RolesTable.prototype.insertRow = function(index, type, teacherId, fullname, pseudonym, position, versionId, created) {
 	var firstRow = null;
 	var teacher = this.state.getTeacher(teacherId);
