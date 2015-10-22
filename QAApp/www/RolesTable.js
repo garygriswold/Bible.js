@@ -10,13 +10,8 @@ function RolesTable(currentState, numColumns, httpClient) {
 	this.tBody = null;
 	this.buttonRow = null;
 }
-// Check if this is really needed after ViewNavigator bug is fixed.
-RolesTable.prototype.clearRows = function() {
-	if (this.tBody) {
-		for (var i=this.tBody.children.length - 1; i>=0; i--) {
-			this.tBody.removeChild(this.tBody.children[i]);
-		}
-	}	
+RolesTable.prototype.init = function() {
+	this.tBody = document.getElementById('rolesBody');
 };
 RolesTable.prototype.insertRow = function(index, type, teacherId, fullname, pseudonym, position, versionId, created) {
 	var firstRow = null;
@@ -75,9 +70,6 @@ RolesTable.prototype.deleteRole = function(teacher, role) {
 	this.state.removeRole(teacher.teacherId, role.position.textContent, role.versionId.textContent);
 };
 RolesTable.prototype.addTableRow = function(index) {
-	if (this.tBody === null) {
-		this.tBody = document.getElementById('rolesBody');
-	}
 	var row = this.tBody.insertRow(index); // -1 index inserts at end
 	row.setAttribute('class', 'role');
 	return(row);	
