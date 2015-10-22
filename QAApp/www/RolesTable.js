@@ -12,6 +12,11 @@ function RolesTable(currentState, numColumns, httpClient) {
 }
 RolesTable.prototype.init = function() {
 	this.tBody = document.getElementById('rolesBody');
+	var pencil = String.fromCharCode('0x270E');
+	var node1 = document.getElementById('it1');
+	node1.textContent = pencil;
+	var node2 = document.getElementById('it2');
+	node2.textContent = pencil;
 };
 RolesTable.prototype.insertRow = function(index, type, teacherId, fullname, pseudonym, position, versionId, created) {
 	var firstRow = null;
