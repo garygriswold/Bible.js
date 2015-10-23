@@ -1,34 +1,64 @@
 <!DOCTYPE html>
-<html style="height: 100%">
+<html style="height:100%; width:100%">
 <head>
 	<title>Title</title>
-	<link rel="stylesheet" type="text/css" href="../www/Fields.css">
+	<link rel="stylesheet" type="text/css" href="../Fields.css">
 </head>
-<body style="height: 100%;">
-	<table id="loginView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000);">
-		<tr style="height: 33%">
-			<td style="width: 25%"></td>
-			<td style="width: 50%; text-align: center; vertical-align: bottom">
-				<p style="font-family: Avenir-Light; font-size: 1.5rem; color: #f9fbfc">Sign-In to My Bible Q & A</p>
-			</td>
-			<td style="width: 25%"></td>
-		</tr>
-		<tr style="height: 34%">
-			<td></td>
-			<td id="loginForm" style="text-align: center; vertical-align: middle;">
-				<p class="fieldBorder" style="margin-top: 1px">
-					<input id="passPhraseNode" class="inputField" type="text" placeholder="Pass Phrase" size="30" style="font-size: large">
-					<input type="button" class="goButton" value="Go" onclick="processPassPhrase()">
-				</p>
-			</td>
-			<td></td>
-		<tr style="height: 33%">
-			<td></td>
-			<td style="text-align: center; font-size: 0.8rem; vertical-align: top; color: white;"><span id="loginResponse">
-				Enter the Pass Phrase that was given to you to login.<br/>You need to do this only once for each device you use.
-			</span></td>
-			<td></td>
-		</tr>
-	</table>
+<body style="height:100%; width:100%;">
+	<div style="height:100%; width:100%; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000);">
+		<table id="loginView" class="login">
+			<tr class="login">
+				<td style="text-align: center; vertical-align: bottom">
+					<p style="font-family: Avenir-Light; font-size: 1.5rem; color: #f9fbfc">Sign-In to My Bible Q & A</p>
+					<p style="font-family: sans-serif; font-size:0.8rem; color:white">You must do this once for each device you own.</p>
+				</td>
+			</tr>
+			<tr class="belief">
+				<td class="belief">
+				<ul>
+					<li>I believe the Bible is inspired by God; as a result it is free from error and is the supreme authority in matters of faith.</li>
+					<li>I believe there is one God, creator of all, who exists eternally in three persons: Father, Son, and Holy Spirit.</li>
+					<li>I believe that Jesus Christ, the Son of God, is both fully human and fully God, and has lived a sinless life.</li>
+					<li>I believe that Jesus Christ died on the cross as a substitute for the punishment that is due all people, because of their sin.  By doing this, he has given everyone their only opportunity of eternal salvation by putting their trust in Him.</li>
+					<li>I believe that the Holy Spirit dwells within each person who has put their trust in Jesus Christ, and is there to teach, and help believers lead a life that is glorifying to God.</li>
+					<li>I believe that all, who have put their trust in Jesus Christ, without regard to religious denomination, are part of the Church.</li>
+					<li>I believe in the bodily resurrection of Jesus Christ three days after His death on the cross, and that all those who have placed their trust in Him will also be resurrected to eternal life with Him, and those who have not will be resurrected to judgment.</li>
+				</ul>
+				</td>
+			</tr>
+			<tr class="login">
+				<td id="loginForm" style="text-align: center; vertical-align: middle;">
+					<p class="fieldBorder" style="margin-top: 1px">
+						<input id="passPhraseNode" class="inputField" type="text" placeholder="Pass Phrase" size="30" style="font-size: large">
+						<input type="button" class="goButton" value="Go" onclick="processPassPhrase()">
+					</p>
+				</td>
+			<tr class="login">
+				<td style="text-align: center; font-size: 0.8rem; vertical-align: top; color: white;">
+					Enter the Pass Phrase that was given to you to express your agreement with the above statement of beliefs.
+				</td>
+			</tr>
+		</table>
+	</div>
+	<style>
+		table.login {
+			height:100%; 
+			width:80%; 
+			margin:auto; 
+			font-family: sans-serif;
+		}
+		tr.login {
+			width:100%;
+			height:20%;
+		}
+		tr.belief {
+			height:40%;
+		}
+		td.belief {
+			font-size:1.0rem;
+			color:#DDDDDD;
+		}
+	</style>
 </body>
 </html>
+

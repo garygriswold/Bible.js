@@ -23,7 +23,7 @@
 				viewNavigator = new ViewNavigator();
 				
 				var authClient = viewNavigator.httpClient.authClient;
-				//authClient.clearCredentials();// Keep for Testing
+				authClient.clearCredentials();// Keep for Testing
 				if (authClient.hasCredentials()) {
 					var credentials = authClient.getCredentials();
 					viewNavigator.currentState.teacherId = credentials.user;

@@ -83,9 +83,124 @@ viewLibrary.answerView = '<div id="answerView" style="height: 100%; width: 100%;
 	'}' +
 	'</style>';
 
-viewLibrary.headerView = '<table id="headerView" style="height: 15%; width: 100%; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">' +
-	'<tr style="height: 100%"><td style="text-align: center; vertical-align: middle; color: white">My Bible Q & A</td><tr>' +
-	'</table>';
+viewLibrary.loginView = '<div style="height:100%; width:100%; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000);">' +
+	'<table id="loginView" class="login">' +
+	'<tr class="login">' +
+	'<td style="text-align: center; vertical-align: bottom">' +
+	'<p style="font-family: Avenir-Light; font-size: 1.5rem; color: #f9fbfc">Sign-In to My Bible Q & A</p>' +
+	'<p style="font-family: sans-serif; font-size:0.8rem; color:white">You must do this once for each device you own.</p>' +
+	'</td>' +
+	'</tr>' +
+	'<tr class="belief">' +
+	'<td class="belief">' +
+	'<ul>' +
+	'<li>I believe the Bible is inspired by God; as a result it is free from error and is the supreme authority in matters of faith.</li>' +
+	'<li>I believe there is one God, creator of all, who exists eternally in three persons: Father, Son, and Holy Spirit.</li>' +
+	'<li>I believe that Jesus Christ, the Son of God, is both fully human and fully God, and has lived a sinless life.</li>' +
+	'<li>I believe that Jesus Christ died on the cross as a substitute for the punishment that is due all people, because of their sin.  By doing this, he has given everyone their only opportunity of eternal salvation by putting their trust in Him.</li>' +
+	'<li>I believe that the Holy Spirit dwells within each person who has put their trust in Jesus Christ, and is there to teach, and help believers lead a life that is glorifying to God.</li>' +
+	'<li>I believe that all, who have put their trust in Jesus Christ, without regard to religious denomination, are part of the Church.</li>' +
+	'<li>I believe in the bodily resurrection of Jesus Christ three days after His death on the cross, and that all those who have placed their trust in Him will also be resurrected to eternal life with Him, and those who have not will be resurrected to judgment.</li>' +
+	'</ul>' +
+	'</td>' +
+	'</tr>' +
+	'<tr class="login">' +
+	'<td id="loginForm" style="text-align: center; vertical-align: middle;">' +
+	'<p class="fieldBorder" style="margin-top: 1px">' +
+	'<input id="passPhraseNode" class="inputField" type="text" placeholder="Pass Phrase" size="30" style="font-size: large">' +
+	'<input type="button" class="goButton" value="Go" onclick="processPassPhrase()">' +
+	'</p>' +
+	'</td>' +
+	'<tr class="login">' +
+	'<td style="text-align: center; font-size: 0.8rem; vertical-align: top; color: white;">' +
+	'Enter the Pass Phrase that was given to you to express your agreement with the above statement of beliefs.' +
+	'</td>' +
+	'</tr>' +
+	'</table>' +
+	'</div>' +
+	'<style>' +
+	'table.login {' +
+	'height:100%;' +
+	'width:80%;' +
+	'margin:auto;' +
+	'font-family: sans-serif;' +
+	'}' +
+	'tr.login {' +
+	'width:100%;' +
+	'height:20%;' +
+	'}' +
+	'tr.belief {' +
+	'height:40%;' +
+	'}' +
+	'td.belief {' +
+	'font-size:1.0rem;' +
+	'color:#DDDDDD;' +
+	'}' +
+	'</style>';
+
+viewLibrary.queueView = '<div id="queueView">' +
+	'<!-- <p style="text-align: center"><button id="assignKJV" class="button bigrounded blue" onclick="assignQuestion()">Manage Roles</button></p>' +
+	'<p class="queue">Unassigned Questions</p>' +
+	'<table class="queue">' +
+	'<tr class="queue">' +
+	'<th class="queue" colspan="3">KJV</th>' +
+	'</tr>' +
+	'<tr class="queue">' +
+	'<th class="queue" style="width:33%">Unanswered Questions</th>' +
+	'<th class="queue" style="width:33%">Oldest Question</th>' +
+	'<th class="queue" style="width:33%">Waiting Minutes</th>' +
+	'</tr>' +
+	'<tr class="queue">' +
+	'<td class="queue">23</td>' +
+	'<td class="queue">Sept 23, 2015 13:23</td>' +
+	'<td class="queue">234</td>' +
+	'</tr>' +
+	'<tr class="queue">' +
+	'<td class="queue" colspan="3"><button id="assignKJV" class="button bigrounded blue" onclick="assignQuestion()">Assign Me A Question</button></td>' +
+	'</tr>' +
+	'</table> -->' +
+	'</div>' +
+	'<style>' +
+	'table.queue {' +
+	'width: 80%;' +
+	'background: white;' +
+	'margin: 30px auto;' +
+	'}' +
+	'th.queue {' +
+	'border: solid;' +
+	'font-family: sans-serif;' +
+	'font-size: medium;' +
+	'color: grey;' +
+	'color: #6D929B;' +
+	'border-right: 1px solid #C1DAD7;' +
+	'border-bottom: 1px solid #C1DAD7;' +
+	'border-top: 1px solid #C1DAD7;' +
+	'letter-spacing: 2px;' +
+	'text-transform: uppercase;' +
+	'text-align: center;' +
+	'padding: 6px 6px 6px 12px;' +
+	'background: #CAE8EA' +
+	'}' +
+	'td.queue {' +
+	'border: solid;' +
+	'border-right: 1px solid #C1DAD7;' +
+	'border-bottom: 1px solid #C1DAD7;' +
+	'background: #ffffff;' +
+	'padding: 6px 6px 6px 12px;' +
+	'color: #6D929B;' +
+	'font-family: sans-serif;' +
+	'font-size: large;' +
+	'text-align: center;' +
+	'}' +
+	'p.queue {' +
+	'font-family: sans-serif;' +
+	'text-transform: uppercase;' +
+	'letter-spacing: 2px;' +
+	'font-size: x-large;' +
+	'color: #6D929B;' +
+	'text-align: center;' +
+	'}' +
+	'</style>';
 
 viewLibrary.rolesView = '<div id="rolesView" style="width:100%; height:100%; margin:0; padding:0; background: white;">' +
 	'<h1 class="role">Manage Responsibilities</h1>' +
@@ -176,7 +291,7 @@ viewLibrary.rolesView = '<div id="rolesView" style="width:100%; height:100%; mar
 	'}' +
 	'</style>' +
 	'<script>' +
-	'function loadPageData() {' +
+	'function loadPageFunction() {' +
 	'var pencil = String.fromCharCode("0x270E");' +
 	'var node1 = document.getElementById("it1");' +
 	'node1.textContent = pencil;' +
@@ -184,120 +299,3 @@ viewLibrary.rolesView = '<div id="rolesView" style="width:100%; height:100%; mar
 	'node2.textContent = pencil;' +
 	'}' +
 	'</script>';
-
-viewLibrary.loginView = '<table id="loginView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000);">' +
-	'<tr style="height: 33%">' +
-	'<td style="width: 25%"></td>' +
-	'<td style="width: 50%; text-align: center; vertical-align: bottom">' +
-	'<p style="font-family: Avenir-Light; font-size: 1.5rem; color: #f9fbfc">Sign-In to My Bible Q & A</p>' +
-	'</td>' +
-	'<td style="width: 25%"></td>' +
-	'</tr>' +
-	'<tr style="height: 34%">' +
-	'<td></td>' +
-	'<td id="loginForm" style="text-align: center; vertical-align: middle;">' +
-	'<p class="fieldBorder" style="margin-top: 1px">' +
-	'<input id="passPhraseNode" class="inputField" type="text" placeholder="Pass Phrase" size="30" style="font-size: large">' +
-	'<input type="button" class="goButton" value="Go" onclick="processPassPhrase()">' +
-	'</p>' +
-	'</td>' +
-	'<td></td>' +
-	'<tr style="height: 33%">' +
-	'<td></td>' +
-	'<td style="text-align: center; font-size: 0.8rem; vertical-align: top; color: white;"><span id="loginResponse">' +
-	'Enter the Pass Phrase that was given to you to login.<br/>You need to do this only once for each device you use.' +
-	'</span></td>' +
-	'<td></td>' +
-	'</tr>' +
-	'</table>';
-
-viewLibrary.queueView = '<div id="queueView">' +
-	'<!-- <p style="text-align: center"><button id="assignKJV" class="button bigrounded blue" onclick="assignQuestion()">Manage Roles</button></p>' +
-	'<p class="queue">Unassigned Questions</p>' +
-	'<table class="queue">' +
-	'<tr class="queue">' +
-	'<th class="queue" colspan="3">KJV</th>' +
-	'</tr>' +
-	'<tr class="queue">' +
-	'<th class="queue" style="width:33%">Unanswered Questions</th>' +
-	'<th class="queue" style="width:33%">Oldest Question</th>' +
-	'<th class="queue" style="width:33%">Waiting Minutes</th>' +
-	'</tr>' +
-	'<tr class="queue">' +
-	'<td class="queue">23</td>' +
-	'<td class="queue">Sept 23, 2015 13:23</td>' +
-	'<td class="queue">234</td>' +
-	'</tr>' +
-	'<tr class="queue">' +
-	'<td class="queue" colspan="3"><button id="assignKJV" class="button bigrounded blue" onclick="assignQuestion()">Assign Me A Question</button></td>' +
-	'</tr>' +
-	'</table> -->' +
-	'</div>' +
-	'<style>' +
-	'table.queue {' +
-	'width: 80%;' +
-	'background: white;' +
-	'margin: 30px auto;' +
-	'}' +
-	'th.queue {' +
-	'border: solid;' +
-	'font-family: sans-serif;' +
-	'font-size: medium;' +
-	'color: grey;' +
-	'color: #6D929B;' +
-	'border-right: 1px solid #C1DAD7;' +
-	'border-bottom: 1px solid #C1DAD7;' +
-	'border-top: 1px solid #C1DAD7;' +
-	'letter-spacing: 2px;' +
-	'text-transform: uppercase;' +
-	'text-align: center;' +
-	'padding: 6px 6px 6px 12px;' +
-	'background: #CAE8EA' +
-	'}' +
-	'td.queue {' +
-	'border: solid;' +
-	'border-right: 1px solid #C1DAD7;' +
-	'border-bottom: 1px solid #C1DAD7;' +
-	'background: #ffffff;' +
-	'padding: 6px 6px 6px 12px;' +
-	'color: #6D929B;' +
-	'font-family: sans-serif;' +
-	'font-size: large;' +
-	'text-align: center;' +
-	'}' +
-	'p.queue {' +
-	'font-family: sans-serif;' +
-	'text-transform: uppercase;' +
-	'letter-spacing: 2px;' +
-	'font-size: x-large;' +
-	'color: #6D929B;' +
-	'text-align: center;' +
-	'}' +
-	'</style>';
-
-viewLibrary.forgotView = '<table id="forgotView" style="height: 100%; width: 100%; font-family: helvetica, sans-serif; background: radial-gradient(at top right, rgba(255, 255, 0, 0.8), #006bff, rgba(3, 47, 167, 0.83), #009970, #148000)">' +
-	'<tr style="height: 33%">' +
-	'<td style="width: 25%"></td>' +
-	'<td style="width: 50%; text-align: center; vertical-align: bottom">' +
-	'<p style="font-family: Avenir-Light; font-size: 1.5rem; color: #f9fbfc">Forgot Username or Password?<br> Enter your email to get started.</p>' +
-	'</td>' +
-	'<td style="width: 25%"></td>' +
-	'</tr>' +
-	'<tr style="height: 34%">' +
-	'<td></td>' +
-	'<td id="loginForm" style="text-align: center; vertical-align: middle;">' +
-	'<p class="fieldBorder">' +
-	'<input class="inputField" type="text" placeholder="Email Address" size="24" style="font-size: large">' +
-	'<input type="button" class="goButton" value="Go">' +
-	'</p>' +
-	'</td>' +
-	'<td></td>' +
-	'<tr style="height: 33%">' +
-	'<td></td>' +
-	'<td style="text-align: center; font-size: 0.8rem; vertical-align: top;">' +
-	'<span id="forgotResponse">' +
-	'<a onclick="transitionBackToLoginView()" style="color:#f1f4b2;">Did you remember your password?</a>' +
-	'</span></td>' +
-	'<td></td>' +
-	'</tr>' +
-	'</table>';
