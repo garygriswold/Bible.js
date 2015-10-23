@@ -2,7 +2,7 @@
 
 var viewLibrary = {};
 
-viewLibrary.answerView = '<div id="answerView" style="height: 100%; width: 100%; background: white">' +
+viewLibrary.answerView = '<div id="answerView" style="height: 100%; width: 100%;">' +
 	'<div style="height: 90%; width: 100%;">' +
 	'<div style="height: 100%; width: 50%; float: left">' +
 	'<table style="height: 40%; width: 100%">' +
@@ -138,7 +138,7 @@ viewLibrary.loginView = '<div style="height:100%; width:100%; background: radial
 	'}' +
 	'</style>';
 
-viewLibrary.queueView = '<div id="queueView">' +
+viewLibrary.queueView = '<div id="queueView" style="background: red">' +
 	'<!-- <p style="text-align: center"><button id="assignKJV" class="button bigrounded blue" onclick="assignQuestion()">Manage Roles</button></p>' +
 	'<p class="queue">Unassigned Questions</p>' +
 	'<table class="queue">' +
@@ -202,7 +202,7 @@ viewLibrary.queueView = '<div id="queueView">' +
 	'}' +
 	'</style>';
 
-viewLibrary.rolesView = '<div id="rolesView" style="width:100%; height:100%; margin:0; padding:0; background: white;">' +
+viewLibrary.rolesView = '<div id="rolesView" style="width:100%; height:100%; margin:0; padding:0;">' +
 	'<h1 class="role">Manage Responsibilities</h1>' +
 	'<table style="width:75%; margin:auto">' +
 	'<tr>' +

@@ -40,6 +40,7 @@ ViewNavigator.prototype.transition = function(fromViewName, toViewName, transact
 			newView.style.height = '100%';
 			newView.style.width = '100%';
 			newView.style.position = 'absolute';
+			newView.style.backgroundColor = 'white';
 			newView.innerHTML = viewLibrary[toViewName];
 			document.body.appendChild(newView);
 			switch(toViewName) {
