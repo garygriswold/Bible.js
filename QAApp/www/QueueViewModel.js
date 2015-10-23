@@ -11,18 +11,10 @@ function QueueViewModel(viewNavigator) {
 }
 QueueViewModel.prototype.display = function() {
 	var that = this;
-	var root = document.getElementById('queueView');
-	if (this.state.canManageRoles()) {
-		var btnPar = addNode(root, 'p');
-		btnPar.setAttribute('style', 'text-align:center');
-		var mgrBtn = addNode(btnPar, 'button', 'Manage Responsibilities');
-		mgrBtn.setAttribute('class', 'button bigrounded blue');
-		mgrBtn.setAttribute('style', 'text-align:center');
-		mgrBtn.addEventListener('click', function(event) {
-			presentRoles();
-		});
+	var root = document.getElementById('queueTables');
+	if (! this.state.canManageRoles()) {
+		removeManageRoles();
 	}
-	addNode(root, 'p', 'Unassigned Questions');
 	if (this.queueCounts && this.queueCounts.length) {
 		for (var i=0; i<this.queueCounts.length; i++) {
 			var row = this.queueCounts[i];
@@ -32,6 +24,12 @@ QueueViewModel.prototype.display = function() {
 		}
 	}
 	
+	function removeManageRoles() {
+		var btn = document.getElementById('manageBtn');
+		if (btn && btn.parentNode) {
+			btn.parentNode.removeChild(btn);
+		}	
+	}
 	function displayOneQueueCount(parent, queue) {
 		var table = addNode(parent, 'table');
 		
