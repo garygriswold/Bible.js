@@ -88,7 +88,7 @@ viewLibrary.loginView = '<div style="height:100%; width:100%; background: radial
 	'<tr class="login">' +
 	'<td style="text-align: center; vertical-align: bottom">' +
 	'<p style="font-family: Avenir-Light; font-size: 1.5rem; color: #f9fbfc">Sign-In to My Bible Q & A</p>' +
-	'<p style="font-family: sans-serif; font-size:0.8rem; color:white">You must do this once for each device you own.</p>' +
+	'<p style="font-family: sans-serif; font-size:0.8rem; color:white">You must do this once on each device you own.</p>' +
 	'</td>' +
 	'</tr>' +
 	'<tr class="belief">' +

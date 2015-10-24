@@ -34,7 +34,6 @@
 			function processPassPhrase() {
 				var node = document.getElementById('passPhraseNode');
 				var passPhrase = node.value;
-				console.log('PASS PHRASE', passPhrase);
 				if (passPhrase) {
 				var authClient = viewNavigator.httpClient.authClient;
 					authClient.login(passPhrase, function(err) {
@@ -63,7 +62,11 @@
 				viewNavigator.saveDraft();
 			}
 			function sendAnswer() {
-				viewNavigator.transition('answerView', 'queueView', 'sendAnswer', TRANSITION.SLIDE_RIGHT);
+				var answerNode = document.getElementById('answer');
+				var answer = (answerNode) ? answerNode.value : null;
+				if (answer && answer.length > 10) {
+					viewNavigator.transition('answerView', 'queueView', 'sendAnswer', TRANSITION.SLIDE_RIGHT);
+				}
 			}
 			function presentRoles() {
 				viewNavigator.transition('queueView', 'rolesView', 'presentRoles', TRANSITION.SLIDE_LEFT);

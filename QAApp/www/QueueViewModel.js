@@ -15,13 +15,19 @@ QueueViewModel.prototype.display = function() {
 	if (! this.state.canManageRoles()) {
 		removeManageRoles();
 	}
-	if (this.queueCounts && this.queueCounts.length) {
+	var displayCount = 0;
+	if (this.queueCounts) {
 		for (var i=0; i<this.queueCounts.length; i++) {
 			var row = this.queueCounts[i];
 			if (this.state.canSeeAllVersions() || this.state.canSeeVersion(row.versionId)) {
 				displayOneQueueCount(root, row);
+				displayCount++;
 			}
 		}
+	}
+	if (displayCount === 0) {
+		console.log('Display no questions');
+		addNode(root, 'p', 'There are no unanswered questions, right now.');
 	}
 	
 	function removeManageRoles() {
@@ -76,23 +82,21 @@ QueueViewModel.prototype.display = function() {
 	}
 };
 QueueViewModel.prototype.setProperties = function(status, results) {
-	if (status === 200) {
-		this.queueCounts = results;
-		this.display();
-	}
+	this.queueCounts = results;
+	this.display();
 };
 QueueViewModel.prototype.openQuestionCount = function() {
 	var that = this;
 	this.httpClient.get('/open', function(status, results) {
 		if (status !== 200) {
-			if (results.message) window.alert(results.message);
-			else window.alert('unknown error');
-		}
-		if (results.positions) that.state.setRoles(results.positions);
-		if (results.queue) that.setProperties(status, results.queue);
-		else if (results.assigned) {
-			TweenMax.killAll();
-			that.viewNavigator.transition('queueView', 'answerView', 'setProperties', TRANSITION.SLIDE_LEFT, status, results.assigned);
+			window.alert('Unexpected Error: ' + results.message);
+		} else {
+			if (results.positions) that.state.setRoles(results.positions);
+			if (results.queue) that.setProperties(status, results.queue);
+			else if (results.assigned) {
+				TweenMax.killAll();
+				that.viewNavigator.transition('queueView', 'answerView', 'setProperties', TRANSITION.SLIDE_LEFT, status, results.assigned);
+			}
 		}
 	});
 };
@@ -100,7 +104,11 @@ QueueViewModel.prototype.returnQuestion = function() {
 	var that = this;
 	var postData = {versionId:this.state.versionId, discourseId:this.state.discourseId};
 	this.httpClient.post('/return', postData, function(status, results) {
-		that.setProperties(status, results);
+		if (status !== 200) {
+			window.alert('Unexpected Error: ' + results.message);
+		} else {
+			that.setProperties(status, results);
+		}
 	});
 };
 QueueViewModel.prototype.sendAnswer = function() {
@@ -108,7 +116,11 @@ QueueViewModel.prototype.sendAnswer = function() {
 	var answer = getNodeValue('answer', 'value');
 	var postData = {discourseId:this.state.discourseId, versionId:this.state.versionId, timestamp:this.state.answerTimestamp, reference:null, message:answer};
 	this.httpClient.post('/answer', postData, function(status, results) {
-		that.setProperties(status, results);
+		if (status !== 200) {
+			window.alert('Unexpected Error: ' + results.message);
+		} else {
+			that.setProperties(status, results);
+		}
 	});
 	
 	function getNodeValue(nodeId, type) {
