@@ -8,15 +8,15 @@ viewLibrary.answerView = '<div id="answerView" style="height: 100%; width: 100%;
 	'<table style="height: 40%; width: 100%">' +
 	'<tr class="fieldRow">' +
 	'<td class="labelCell">Reference</td>' +
-	'<td class="valueCell"><input id="displayReference" type="text" value="C" readonly></input></td>' +
+	'<td class="valueCell"><input id="displayReference" type="text" value="" readonly></input></td>' +
 	'</tr>' +
 	'<tr class="fieldRow">' +
 	'<td class="labelCell">Submitted</td>' +
-	'<td class="valueCell"><input id="submittedDt" type="text" value="D" readonly></input></td>' +
+	'<td class="valueCell"><input id="submittedDt" type="text" value="" readonly></input></td>' +
 	'</tr>' +
 	'<tr class="fieldRow">' +
 	'<td class="labelCell">Expires</td>' +
-	'<td class="valueCell"><input id="expiresDesc" type="text" value="E" readonly></input></td>' +
+	'<td class="valueCell"><input id="expiresDesc" type="text" value="" readonly></input></td>' +
 	'</tr>' +
 	'</table>' +
 	'<div style="height: 60%; width: 100%; padding-left: 2%; padding-right: 2%; padding-bottom: 2%; border: none">' +

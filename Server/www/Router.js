@@ -387,7 +387,7 @@ function errorStatusCode(err) {
 		if (message.indexOf('SQLITE_CONSTRAINT') > -1) return(409);
 		if (message.indexOf('actual=0') > -1) return(410);
 		if (message.indexOf('expected=2  actual=1') > -1) return(410);
-		if (message.indexOf('no questions') > -1) return(410);
+		if (message.indexOf('no questions') > -1) return(404);
 		if (message.indexOf('Register') > -1) return(400);
 	}
 	return(500);

@@ -58,7 +58,11 @@ AnswerViewModel.prototype.assignQuestion = function() {
 	var that = this;
 	var postData = {versionId:this.state.versionId};
 	this.httpClient.post('/assign', postData, function(status, results) {
-		that.setProperties(status, results);
+		if (status !== 200) {
+			window.alert('Unexpected Error: ' + results.message);
+		} else {
+			that.setProperties(status, results);
+		}
 	});	
 };
 AnswerViewModel.prototype.anotherQuestion = function() {
@@ -67,15 +71,18 @@ AnswerViewModel.prototype.anotherQuestion = function() {
 	this.httpClient.post('/another', postData, function(status, results) {
 		if (status === 200) {
 			that.setProperties(status, results);
+		} else if (status === 404) { // There are no more questions
+			that.viewNavigator.transition('answerView', 'queueView', 'openQuestionCount', TRANSITION.SLIDE_RIGHT);
 		} else {
-			that.viewNavigator.transition('answerView', 'queueView', 'openQuestionCount', TRANSITION.SLIDE_RIGHT, status, results);
+			that.display();
+			window.alert('Unexpected Error: ' + results.message);
 		}
 	});
 };
 AnswerViewModel.prototype.saveDraft = function() {
 	var that = this;
 	this.answer = getNodeValue('answer', 'value');
-	var postData = { discourseId:this.state.discourseId, timestamp:this.state.answerTimestamp, reference:null, message:this.answer};
+	var postData = {discourseId:this.state.discourseId, timestamp:this.state.answerTimestamp, reference:null, message:this.answer};
 	console.log('saving draft', postData);
 	this.httpClient.post('/draft', postData, function(status, results) {
 		if (status === 200) {
@@ -83,7 +90,7 @@ AnswerViewModel.prototype.saveDraft = function() {
 			that.state.answerTimestamp = results.timestamp;
 			window.alert('Your work has been saved.');
 		} else {
-			window.alert('' + status + 'Error: ' + JSON.stringify(results));
+			window.alert('Unexpected Error: ' + results.message);
 		}
 	});
 	
