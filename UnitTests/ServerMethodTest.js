@@ -713,7 +713,7 @@ var tests = [
 		postData: {versionId:'KJV', discourseId:'Assign:discourseId'},
 		user: 'Bob:teacherId',
 		passPhrase: 'Bob:passPhrase',
-		status: 410,
+		status: 404,
 		results: {message: 'There are no questions to assign.'},
 		save: 'Assign'		
 	},
