@@ -6,8 +6,17 @@
 		<script type="text/javascript" src="../QueueViewModel.js"></script>
 	</head>
 	<body style="width:100%; height:100%">
-		<div id="queueView">
-			<p style="text-align:center"><button id="manageBtn" class="button bigrounded blue" onclick="presentRoles()">Manage Roles</button></p>
+		<div id="queueView" style="margin-top:30px">
+			<table style="width:75%; margin:auto">
+				<tr>
+					<td style="width:50%;">
+						<button class="button bigrounded blue" onclick="logout()">Forget Me! This Is Not My Computer</button>
+					</td>
+					<td style="width:50%; text-align:right">
+						<button id="manageBtn" class="button bigrounded blue" onclick="presentRoles()">Manage Roles</button>
+					</td>
+				</tr>
+			</table>
 			<p class="queue">Unassigned Questions</p>
 		</div>
 		<div id="queueTables">

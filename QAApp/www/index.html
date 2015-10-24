@@ -23,7 +23,6 @@
 				viewNavigator = new ViewNavigator();
 				
 				var authClient = viewNavigator.httpClient.authClient;
-				authClient.clearCredentials();// Keep for Testing
 				if (authClient.hasCredentials()) {
 					var credentials = authClient.getCredentials();
 					viewNavigator.currentState.teacherId = credentials.user;
@@ -77,6 +76,10 @@
 			}
 			function roleBackToQueue() {
 				viewNavigator.transition('rolesView', 'queueView', 'openQuestionCount', TRANSITION.SLIDE_RIGHT);
+			}
+			function logout() {
+				viewNavigator.transition('queueView', 'loginView', null, TRANSITION.SLIDE_RIGHT);
+				viewNavigator.httpClient.authClient.clearCredentials();
 			}
 		</script>
 		<link rel="stylesheet" type="text/css" href="./Buttons.css">

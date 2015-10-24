@@ -2,72 +2,6 @@
 
 var viewLibrary = {};
 
-viewLibrary.queueView = '<div id="queueView">' +
-	'<p style="text-align:center"><button id="manageBtn" class="button bigrounded blue" onclick="presentRoles()">Manage Roles</button></p>' +
-	'<p class="queue">Unassigned Questions</p>' +
-	'</div>' +
-	'<div id="queueTables">' +
-	'<!-- <table class="queue">' +
-	'<tr class="queue">' +
-	'<th class="queue" colspan="3">KJV</th>' +
-	'</tr>' +
-	'<tr class="queue">' +
-	'<th class="queue" style="width:33%">Unanswered Questions</th>' +
-	'<th class="queue" style="width:33%">Oldest Question</th>' +
-	'<th class="queue" style="width:33%">Waiting Minutes</th>' +
-	'</tr>' +
-	'<tr class="queue">' +
-	'<td class="queue">23</td>' +
-	'<td class="queue">Sept 23, 2015 13:23</td>' +
-	'<td class="queue">234</td>' +
-	'</tr>' +
-	'<tr class="queue">' +
-	'<td class="queue" colspan="3"><button id="assignKJV" class="button bigrounded blue" onclick="assignQuestion()">Assign Me A Question</button></td>' +
-	'</tr>' +
-	'</table> -->' +
-	'</div>' +
-	'<style>' +
-	'table.queue {' +
-	'width: 80%;' +
-	'background: white;' +
-	'margin: 30px auto;' +
-	'}' +
-	'th.queue {' +
-	'border: solid;' +
-	'font-family: sans-serif;' +
-	'font-size: medium;' +
-	'color: grey;' +
-	'color: #6D929B;' +
-	'border-right: 1px solid #C1DAD7;' +
-	'border-bottom: 1px solid #C1DAD7;' +
-	'border-top: 1px solid #C1DAD7;' +
-	'letter-spacing: 2px;' +
-	'text-transform: uppercase;' +
-	'text-align: center;' +
-	'padding: 6px 6px 6px 12px;' +
-	'background: #CAE8EA' +
-	'}' +
-	'td.queue {' +
-	'border: solid;' +
-	'border-right: 1px solid #C1DAD7;' +
-	'border-bottom: 1px solid #C1DAD7;' +
-	'background: #ffffff;' +
-	'padding: 6px 6px 6px 12px;' +
-	'color: #6D929B;' +
-	'font-family: sans-serif;' +
-	'font-size: large;' +
-	'text-align: center;' +
-	'}' +
-	'p.queue {' +
-	'font-family: sans-serif;' +
-	'text-transform: uppercase;' +
-	'letter-spacing: 2px;' +
-	'font-size: x-large;' +
-	'color: #6D929B;' +
-	'text-align: center;' +
-	'}' +
-	'</style>';
-
 viewLibrary.answerView = '<div id="answerView" style="height: 100%; width: 100%;">' +
 	'<div style="height: 90%; width: 100%;">' +
 	'<div style="height: 100%; width: 50%; float: left">' +
@@ -201,6 +135,81 @@ viewLibrary.loginView = '<div style="height:100%; width:100%; background: radial
 	'td.belief {' +
 	'font-size:1.0rem;' +
 	'color:#DDDDDD;' +
+	'}' +
+	'</style>';
+
+viewLibrary.queueView = '<div id="queueView" style="margin-top:30px">' +
+	'<table style="width:75%; margin:auto">' +
+	'<tr>' +
+	'<td style="width:50%;">' +
+	'<button class="button bigrounded blue" onclick="logout()">Forget Me! This Is Not My Computer</button>' +
+	'</td>' +
+	'<td style="width:50%; text-align:right">' +
+	'<button id="manageBtn" class="button bigrounded blue" onclick="presentRoles()">Manage Roles</button>' +
+	'</td>' +
+	'</tr>' +
+	'</table>' +
+	'<p class="queue">Unassigned Questions</p>' +
+	'</div>' +
+	'<div id="queueTables">' +
+	'<!-- <table class="queue">' +
+	'<tr class="queue">' +
+	'<th class="queue" colspan="3">KJV</th>' +
+	'</tr>' +
+	'<tr class="queue">' +
+	'<th class="queue" style="width:33%">Unanswered Questions</th>' +
+	'<th class="queue" style="width:33%">Oldest Question</th>' +
+	'<th class="queue" style="width:33%">Waiting Minutes</th>' +
+	'</tr>' +
+	'<tr class="queue">' +
+	'<td class="queue">23</td>' +
+	'<td class="queue">Sept 23, 2015 13:23</td>' +
+	'<td class="queue">234</td>' +
+	'</tr>' +
+	'<tr class="queue">' +
+	'<td class="queue" colspan="3"><button id="assignKJV" class="button bigrounded blue" onclick="assignQuestion()">Assign Me A Question</button></td>' +
+	'</tr>' +
+	'</table> -->' +
+	'</div>' +
+	'<style>' +
+	'table.queue {' +
+	'width: 80%;' +
+	'background: white;' +
+	'margin: 30px auto;' +
+	'}' +
+	'th.queue {' +
+	'border: solid;' +
+	'font-family: sans-serif;' +
+	'font-size: medium;' +
+	'color: grey;' +
+	'color: #6D929B;' +
+	'border-right: 1px solid #C1DAD7;' +
+	'border-bottom: 1px solid #C1DAD7;' +
+	'border-top: 1px solid #C1DAD7;' +
+	'letter-spacing: 2px;' +
+	'text-transform: uppercase;' +
+	'text-align: center;' +
+	'padding: 6px 6px 6px 12px;' +
+	'background: #CAE8EA' +
+	'}' +
+	'td.queue {' +
+	'border: solid;' +
+	'border-right: 1px solid #C1DAD7;' +
+	'border-bottom: 1px solid #C1DAD7;' +
+	'background: #ffffff;' +
+	'padding: 6px 6px 6px 12px;' +
+	'color: #6D929B;' +
+	'font-family: sans-serif;' +
+	'font-size: large;' +
+	'text-align: center;' +
+	'}' +
+	'p.queue {' +
+	'font-family: sans-serif;' +
+	'text-transform: uppercase;' +
+	'letter-spacing: 2px;' +
+	'font-size: x-large;' +
+	'color: #6D929B;' +
+	'text-align: center;' +
 	'}' +
 	'</style>';
 
