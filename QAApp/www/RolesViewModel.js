@@ -57,10 +57,10 @@ RolesViewModel.prototype.presentRoles = function() {
 	var that = this;
 	this.httpClient.get('/user', function(status, results) {
 		if (status !== 200) {
-			if (results.message) window.alert(results.message);
-			else window.alert('unknown error');
+			window.alert('Unexpected Error: ' + results.message);
+		} else {
+			that.setProperties(status, results);
 		}
-		that.setProperties(status, results);
 	});
 };
 RolesViewModel.prototype.registerNewPerson = function() {

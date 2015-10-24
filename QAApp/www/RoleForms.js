@@ -41,14 +41,13 @@ RoleForms.prototype.register = function() {
 			var created = new Date().toISOString().substr(0,19);
 			var postData = {fullname:fullname, pseudonym:pseudonym, position:position, versionId:versionId};
 			that.httpClient.put('/user', postData, function(status, results) {
-				console.log('register returned', results);
 				if (status === 201) {
 					var teacherId = results.teacherId;
 					var passPhrase = results.passPhrase;  /// This must be displayed for user to record.
 					that.table.insertRow(that.formRowIndex, 'memb', teacherId, fullname, pseudonym, position, versionId, created);
 					that.formRow.close();
 				} else {
-					window.alert(JSON.stringify(results));
+					that.displayError(status, results);
 				}	
 			});
 		}
@@ -75,7 +74,7 @@ RoleForms.prototype.name = function(teacher) {
 					teacher.pseudonym.textContent = pseudonym;
 					that.formRow.close();
 				} else {
-					window.alert(JSON.stringify(results));
+					that.displayError(status, results);
 				}
 			});
 		}
@@ -93,7 +92,7 @@ RoleForms.prototype.passPhrase = function(teacher) {
 				that.formRow.setMessage(0, message, results.passPhrase);
 				that.formRow.setDoneButton(1);				
 			} else {
-				window.alert(JSON.stringify(results));
+				that.displayError(status, results);
 			}
 		});
 	});
@@ -123,11 +122,11 @@ RoleForms.prototype.replace = function(teacher) {
 							that.formRow.setMessage(3, message, results.passPhrase);
 							that.formRow.setDoneButton(4);
 						} else {
-							window.alert(JSON.stringify(results));
+							that.displayError(status, results);
 						}			
 					});		
 				} else {
-					window.alert(results);
+					that.displayError(status, results);
 				}
 			});
 		}		
@@ -154,7 +153,7 @@ RoleForms.prototype.promote = function(teacher) {
 				that.table.deletePerson(teacher);
 				that.formRow.close();
 			} else {
-				window.alert(JSON.stringify(results));
+				that.displayError(status, results);
 			}
 		});
 	});
@@ -175,7 +174,7 @@ RoleForms.prototype.demote = function(teacher) {
 				that.table.deletePerson(teacher);
 				that.formRow.close();	
 			} else {
-				window.alert(JSON.stringify(results));
+				that.displayError(status, results);
 			}
 		});
 	});
@@ -250,7 +249,7 @@ RoleForms.prototype.addRole = function(teacher) {
 				that.table.insertRow(teacher.row.rowIndex - 1, 'memb', teacher.teacherId, null, null, position, versionId, created);
 				that.formRow.close();
 			} else {
-				window.alert(JSON.stringify(results));
+				that.displayError(status, results);
 			}
 		});
 	});
@@ -266,9 +265,12 @@ RoleForms.prototype.removeRole = function(teacher, role) {
 				that.table.deleteRole(teacher, role);
 				that.formRow.close();	
 			} else {
-				window.alert(JSON.stringify(results));
+				that.displayError(status, results);
 			}
 		});
 	});
 	this.formRow.open();
+};
+RoleForms.prototype.displayError = function(status, results) {
+	window.alert('Unexpected Error: ' + results.message);	
 };
