@@ -204,7 +204,7 @@ AuthController.prototype.authorize = function(statement, values, message, callba
 };
 AuthController.prototype.uniquePassPhrase = function(obj, callback) {
 	var that = this;
-	var bible = new that.sqlite3.Database(this.biblePath + '/' + obj.versionId + '.bible1');
+	var bible = new that.sqlite3.Database(this.biblePath + '/' + obj.versionId + '.db1');
 	bible.get('SELECT count(*) as count FROM concordance', function(err, row) {
 		if (err) {
 			bible.close();
