@@ -1,7 +1,7 @@
 /**
 * This class is the database adapter for the codex table
 */
-var IOError = require('./IOError');
+//var IOError = require('./IOError'); What needs this, Publisher does not
 
 function ChaptersAdapter(database) {
 	this.database = database;

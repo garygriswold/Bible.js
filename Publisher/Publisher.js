@@ -1465,6 +1465,7 @@ function TOC(adapter) {
 	Object.seal(this);
 }
 TOC.prototype.fill = function(callback) {
+	console.log('inside fill ', (typeof callback));
 	var that = this;
 	this.adapter.selectAll(function(results) {
 		if (results instanceof IOError) {
@@ -1606,8 +1607,13 @@ var FILE_ROOTS = { 'application': '?', 'document': '../../dbl/current/', 'tempor
 * or an error should test "if (results instanceof IOError)".
 */
 function IOError(err) {
-	this.code = err.code;
-	this.message = err.message;
+	if (err.code && err.message) {
+		this.code = err.code;
+		this.message = err.message;
+	} else {
+		this.code = 0;
+		this.message = JSON.stringify(err);
+	}
 }
 /**
 * This class is a file reader for Node.  It can be used with node.js and node-webkit.
@@ -1656,10 +1662,12 @@ FileReader.prototype.readTextFile = function(filepath, callback) {
 };/**
 * This class is a facade over the database that is used to store bible text, concordance,
 * table of contents, history and questions.
+*
+* This file is DeviceDatabaseWebSQL, which implements the WebSQL interface.
 */
 function DeviceDatabase(code) {
 	this.code = code;
-    this.className = 'DeviceDatabase';
+    this.className = 'DeviceDatabaseWebSQL';
 	var size = 30 * 1024 * 1024;
     if (window.sqlitePlugin === undefined) {
         console.log('opening WEB SQL Database, stores in Cache');
@@ -1765,6 +1773,8 @@ DeviceDatabase.prototype.smokeTest = function(callback) {
 /**
 * This class is the database adapter for the codex table
 */
+//var IOError = require('./IOError'); What needs this, Publisher does not
+
 function ChaptersAdapter(database) {
 	this.database = database;
 	this.className = 'ChaptersAdapter';
@@ -1821,7 +1831,8 @@ ChaptersAdapter.prototype.getChapters = function(values, callback) {
 			callback(results);
         }
 	});
-};/**
+};
+/**
 * This class is the database adapter for the verses table
 */
 function VersesAdapter(database) {

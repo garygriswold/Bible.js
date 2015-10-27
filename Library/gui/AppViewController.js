@@ -46,7 +46,7 @@ AppViewController.prototype.begin = function(develop) {
 	this.bibleCache = new BibleCache(this.database.codex);
 	this.concordance = new Concordance(this.database.concordance);
 	var that = this;
-	fillFromDatabase(function() {
+	this.tableContents.fill(function() {
 
 		console.log('loaded toc', that.tableContents.size());
 		
@@ -153,9 +153,4 @@ AppViewController.prototype.begin = function(develop) {
 		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
 		that.header.setTitle(event.detail.reference);
 	});
-	function fillFromDatabase(callback) {
-		that.tableContents.fill(function() {
-			callback();
-		});
-	}
 };

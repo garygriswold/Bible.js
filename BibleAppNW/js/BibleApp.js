@@ -47,7 +47,7 @@ AppViewController.prototype.begin = function(develop) {
 	this.bibleCache = new BibleCache(this.database.codex);
 	this.concordance = new Concordance(this.database.concordance);
 	var that = this;
-	fillFromDatabase(function() {
+	this.tableContents.fill(function() {
 
 		console.log('loaded toc', that.tableContents.size());
 		
@@ -154,11 +154,6 @@ AppViewController.prototype.begin = function(develop) {
 		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
 		that.header.setTitle(event.detail.reference);
 	});
-	function fillFromDatabase(callback) {
-		that.tableContents.fill(function() {
-			callback();
-		});
-	}
 };
 /**
 * This class contains user interface features for the display of the Bible text
@@ -1256,7 +1251,6 @@ function IOError(err) {
 		this.message = JSON.stringify(err);
 	}
 }
-//module.exports = IOError;
 /**
 * This class is a facade over the database that is used to store bible text, concordance,
 * table of contents, history and questions.
@@ -1371,6 +1365,8 @@ DeviceDatabase.prototype.smokeTest = function(callback) {
 /**
 * This class is the database adapter for the codex table
 */
+//var IOError = require('./IOError'); What needs this, Publisher does not
+
 function ChaptersAdapter(database) {
 	this.database = database;
 	this.className = 'ChaptersAdapter';
@@ -1427,7 +1423,8 @@ ChaptersAdapter.prototype.getChapters = function(values, callback) {
 			callback(results);
         }
 	});
-};/**
+};
+/**
 * This class is the database adapter for the verses table
 */
 function VersesAdapter(database) {
