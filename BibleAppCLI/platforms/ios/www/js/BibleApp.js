@@ -439,15 +439,12 @@ QuestionsView.prototype.showView = function() {
 	this.hideView();
 	this.questions.fill(function(results) {
 		if (results instanceof IOError) {
-			console.log('QuestionView.showView');
+			console.log('Error: QuestionView.showView.fill');
 		} else {
 			if (results.length === 0) {
 				that.questions.createActs8Question(function(item) {
-					that.questions.items.push(item);
-					that.questions.insert(item, function(err) {
-						that.questions.update(item, function(err) {
-							presentView();
-						});
+					that.questions.addItemLocal(item, function(error) {
+						presentView();
 					});
 				});
 			} else {
@@ -560,12 +557,12 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		that.referenceInput = document.createElement('input');
 		that.referenceInput.setAttribute('id', 'inputRef');
 		that.referenceInput.setAttribute('type', 'text');
-		that.referenceInput.setAttribute('value', 'reference goes here');// How does reference get here
+		that.referenceInput.setAttribute('placeholder', 'Reference');
 		inputTop.appendChild(that.referenceInput);
 
 		that.questionInput = document.createElement('textarea');
 		that.questionInput.setAttribute('id', 'inputText');
-		that.questionInput.textContent = 'Matt 7:7 goes here';//Matt 7:7 text goes here
+		that.questionInput.setAttribute('placeholder', 'Matt 7:7 goes here');
 		that.questionInput.setAttribute('rows', 10);
 		inputTop.appendChild(that.questionInput);
 
@@ -578,12 +575,19 @@ QuestionsView.prototype.buildQuestionsView = function() {
 			console.log('submit button clicked');
 
 			var item = new QuestionItem();
-			// set book, chapter, verse by position of page
-			item.displayRef = that.referenceInput.textContent;
-			item.question = that.questionInput.text;
+			// set item.reference by position of page
+			item.displayRef = that.referenceInput.value;
+			item.question = that.questionInput.value;
 
-			that.questions.addItem(item, function(result) {
-				console.log('file is written to disk and server');
+			that.questions.addItem(item, function(error) {
+				if (error) {
+					console.error('error at server', error);
+				} else {
+					console.log('file is written to disk and server');
+					that.hideView();
+					that.viewRoot = that.buildQuestionsView();
+					that.rootNode.appendChild(that.viewRoot);
+				}
 			});
 		});
 	}
@@ -1838,9 +1842,7 @@ QuestionsAdapter.prototype.drop = function(callback) {
 QuestionsAdapter.prototype.create = function(callback) {
 	var statement = 'create table if not exists questions(' +
 		'askedDateTime text not null primary key, ' +
-		'book text not null, ' +
-		'chapter integer not null, ' +
-		'verse integer null, ' +
+		'reference text not null, ' +
 		'displayRef text null, ' +
 		'question text not null, ' +
 		'instructor text null, ' +
@@ -1856,7 +1858,7 @@ QuestionsAdapter.prototype.create = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select book, chapter, verse, displayRef, question, askedDateTime, instructor, answerDateTime, answer ' +
+	var statement = 'select reference, displayRef, question, askedDateTime, instructor, answerDateTime, answer ' +
 		'from questions order by askedDateTime';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
@@ -1866,7 +1868,7 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
-				var ques = new QuestionItem(row.book, row.chapter, row.verse, row.displayRef, row.question, 
+				var ques = new QuestionItem(row.reference, row.displayRef, row.question, 
 					row.askedDt, row.instructor, row.answerDt, row.answer);
 				array.push(ques);
 			}
@@ -1875,9 +1877,9 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.replace = function(item, callback) {
-	var statement = 'replace into questions(book, chapter, verse, displayRef, question, askedDateTime) ' +
-		'values (?,?,?,?,?,?)';
-	var values = [ item.book, item.chapter, item.verse, item.displayRef, item.question, item.askedDateTime.toISOString() ];
+	var statement = 'replace into questions(reference, displayRef, question, askedDateTime) ' +
+		'values (?,?,?,?)';
+	var values = [ item.reference, item.displayRef, item.question, item.askedDateTime.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
@@ -2230,10 +2232,8 @@ Lookup.prototype.find = function(search) {
 /**
 * This class contains the contents of one user question and one instructor response.
 */
-function QuestionItem(book, chapter, verse, displayRef, question, askedDt, instructor, answerDt, answer) {
-	this.book = book;
-	this.chapter = chapter;
-	this.verse = verse;
+function QuestionItem(reference, displayRef, question, askedDt, instructor, answerDt, answer) {
+	this.reference = reference;
 	this.displayRef = displayRef;
 	this.question = question;
 	this.askedDateTime = (askedDt) ? new Date(askedDt) : new Date();
@@ -2249,6 +2249,7 @@ function Questions(questionsAdapter, versesAdapter, tableContents) {
 	this.questionsAdapter = questionsAdapter;
 	this.versesAdapter = versesAdapter;
 	this.tableContents = tableContents;
+	this.httpClient = new HttpClient(SERVER_HOST, SERVER_PORT);
 	this.items = [];
 	Object.seal(this);
 }
@@ -2258,12 +2259,28 @@ Questions.prototype.size = function() {
 Questions.prototype.find = function(index) {
 	return((index >= 0 && index < this.items.length) ? this.items[index] : null);
 };
-Questions.prototype.addItem = function(questionItem, callback) {
-	this.items.push(questionItem);
-	// This method must add to the database, as well as add to the server
-	// callback when the addQuestion, either succeeds or fails.
-	this.insert(questionItem, function(result) {
-		callback(result);
+Questions.prototype.addItem = function(item, callback) {
+	var that = this;
+	var versionId = this.questionsAdapter.database.code;
+	var postData = {versionId:versionId, displayRef:item.displayRef, message:item.question};
+	console.log('post data', postData);
+	this.httpClient.put('/question', postData, function(status, results) {
+		if (status !== 200 && status !== 201) {
+			callback(results);
+		} else {
+			that.addItemLocal(item, callback);
+		}
+	});
+};
+Questions.prototype.addItemLocal = function(item, callback) {
+	var that = this;
+	this.questionsAdapter.replace(item, function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else {
+			that.items.push(item);
+			callback();
+		}
 	});
 };
 Questions.prototype.fill = function(callback) {
@@ -2280,9 +2297,7 @@ Questions.prototype.fill = function(callback) {
 };
 Questions.prototype.createActs8Question = function(callback) {
 	var acts8 = new QuestionItem();
-	acts8.book = 'ACT';
-	acts8.chapter = 8;
-	acts8.verse = 30;
+	acts8.reference = 'ACT:8:30';
 	acts8.askedDateTime = new Date();
 	var refActs830 = new Reference('ACT:8:30');
 	acts8.displayRef = this.tableContents.toString(refActs830);
@@ -2296,7 +2311,7 @@ Questions.prototype.createActs8Question = function(callback) {
 			var acts835 = results.rows.item(2);
 			acts8.question = acts830.html + ' ' + acts831.html;
 			acts8.answer = acts835.html;
-			acts8.instructor = '';
+			acts8.instructor = 'Philip';
 			acts8.answerDateTime = new Date();
 			callback(acts8);
 		}
@@ -2305,7 +2320,7 @@ Questions.prototype.createActs8Question = function(callback) {
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
 	var lastItem = this.items[this.items.length -1];
-	if (lastItem.answeredDateTime === null) {
+	if (lastItem.answeredDateTime == null) {
 		// send request to the server.
 
 		
@@ -2320,16 +2335,6 @@ Questions.prototype.checkServer = function(callback) {
 	else {
 		callback();
 	}
-};
-Questions.prototype.insert = function(item, callback) {
-	this.questionsAdapter.replace(item, function(results) {
-		if (results instanceof IOError) {
-			console.log('Error on Insert');
-			callback(results);
-		} else {
-			callback();
-		}
-	});
 };
 Questions.prototype.update = function(item, callback) {
 	this.questionsAdapter.update(item, function(results) {

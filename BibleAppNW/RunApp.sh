@@ -31,6 +31,7 @@ cat ../Library/io/StyleIndexAdapter.js >> js/BibleApp.js
 cat ../Library/io/StyleUseAdapter.js >> js/BibleApp.js
 cat ../Library/io/HistoryAdapter.js >> js/BibleApp.js
 cat ../Library/io/QuestionsAdapter.js >> js/BibleApp.js
+cat ../Library/io/HttpClient.js >> js/BibleApp.js
 
 cat ../Library/model/meta/BibleCache.js >> js/BibleApp.js
 cat ../Library/model/meta/Canon.js >> js/BibleApp.js

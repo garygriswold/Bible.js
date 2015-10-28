@@ -19,9 +19,7 @@ QuestionsAdapter.prototype.drop = function(callback) {
 QuestionsAdapter.prototype.create = function(callback) {
 	var statement = 'create table if not exists questions(' +
 		'askedDateTime text not null primary key, ' +
-		'book text not null, ' +
-		'chapter integer not null, ' +
-		'verse integer null, ' +
+		'reference text not null, ' +
 		'displayRef text null, ' +
 		'question text not null, ' +
 		'instructor text null, ' +
@@ -37,7 +35,7 @@ QuestionsAdapter.prototype.create = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select book, chapter, verse, displayRef, question, askedDateTime, instructor, answerDateTime, answer ' +
+	var statement = 'select reference, displayRef, question, askedDateTime, instructor, answerDateTime, answer ' +
 		'from questions order by askedDateTime';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
@@ -47,7 +45,7 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
-				var ques = new QuestionItem(row.book, row.chapter, row.verse, row.displayRef, row.question, 
+				var ques = new QuestionItem(row.reference, row.displayRef, row.question, 
 					row.askedDt, row.instructor, row.answerDt, row.answer);
 				array.push(ques);
 			}
@@ -56,9 +54,9 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.replace = function(item, callback) {
-	var statement = 'replace into questions(book, chapter, verse, displayRef, question, askedDateTime) ' +
-		'values (?,?,?,?,?,?)';
-	var values = [ item.book, item.chapter, item.verse, item.displayRef, item.question, item.askedDateTime.toISOString() ];
+	var statement = 'replace into questions(reference, displayRef, question, askedDateTime) ' +
+		'values (?,?,?,?)';
+	var values = [ item.reference, item.displayRef, item.question, item.askedDateTime.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');

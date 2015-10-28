@@ -6,6 +6,7 @@ function Questions(questionsAdapter, versesAdapter, tableContents) {
 	this.questionsAdapter = questionsAdapter;
 	this.versesAdapter = versesAdapter;
 	this.tableContents = tableContents;
+	this.httpClient = new HttpClient(SERVER_HOST, SERVER_PORT);
 	this.items = [];
 	Object.seal(this);
 }
@@ -15,12 +16,28 @@ Questions.prototype.size = function() {
 Questions.prototype.find = function(index) {
 	return((index >= 0 && index < this.items.length) ? this.items[index] : null);
 };
-Questions.prototype.addItem = function(questionItem, callback) {
-	this.items.push(questionItem);
-	// This method must add to the database, as well as add to the server
-	// callback when the addQuestion, either succeeds or fails.
-	this.insert(questionItem, function(result) {
-		callback(result);
+Questions.prototype.addItem = function(item, callback) {
+	var that = this;
+	var versionId = this.questionsAdapter.database.code;
+	var postData = {versionId:versionId, displayRef:item.displayRef, message:item.question};
+	console.log('post data', postData);
+	this.httpClient.put('/question', postData, function(status, results) {
+		if (status !== 200 && status !== 201) {
+			callback(results);
+		} else {
+			that.addItemLocal(item, callback);
+		}
+	});
+};
+Questions.prototype.addItemLocal = function(item, callback) {
+	var that = this;
+	this.questionsAdapter.replace(item, function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else {
+			that.items.push(item);
+			callback();
+		}
 	});
 };
 Questions.prototype.fill = function(callback) {
@@ -37,9 +54,7 @@ Questions.prototype.fill = function(callback) {
 };
 Questions.prototype.createActs8Question = function(callback) {
 	var acts8 = new QuestionItem();
-	acts8.book = 'ACT';
-	acts8.chapter = 8;
-	acts8.verse = 30;
+	acts8.reference = 'ACT:8:30';
 	acts8.askedDateTime = new Date();
 	var refActs830 = new Reference('ACT:8:30');
 	acts8.displayRef = this.tableContents.toString(refActs830);
@@ -53,7 +68,7 @@ Questions.prototype.createActs8Question = function(callback) {
 			var acts835 = results.rows.item(2);
 			acts8.question = acts830.html + ' ' + acts831.html;
 			acts8.answer = acts835.html;
-			acts8.instructor = '';
+			acts8.instructor = 'Philip';
 			acts8.answerDateTime = new Date();
 			callback(acts8);
 		}
@@ -62,7 +77,7 @@ Questions.prototype.createActs8Question = function(callback) {
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
 	var lastItem = this.items[this.items.length -1];
-	if (lastItem.answeredDateTime === null) {
+	if (lastItem.answeredDateTime == null) {
 		// send request to the server.
 
 		
@@ -77,16 +92,6 @@ Questions.prototype.checkServer = function(callback) {
 	else {
 		callback();
 	}
-};
-Questions.prototype.insert = function(item, callback) {
-	this.questionsAdapter.replace(item, function(results) {
-		if (results instanceof IOError) {
-			console.log('Error on Insert');
-			callback(results);
-		} else {
-			callback();
-		}
-	});
 };
 Questions.prototype.update = function(item, callback) {
 	this.questionsAdapter.update(item, function(results) {

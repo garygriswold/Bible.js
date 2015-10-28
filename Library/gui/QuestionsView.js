@@ -19,15 +19,12 @@ QuestionsView.prototype.showView = function() {
 	this.hideView();
 	this.questions.fill(function(results) {
 		if (results instanceof IOError) {
-			console.log('QuestionView.showView');
+			console.log('Error: QuestionView.showView.fill');
 		} else {
 			if (results.length === 0) {
 				that.questions.createActs8Question(function(item) {
-					that.questions.items.push(item);
-					that.questions.insert(item, function(err) {
-						that.questions.update(item, function(err) {
-							presentView();
-						});
+					that.questions.addItemLocal(item, function(error) {
+						presentView();
 					});
 				});
 			} else {
@@ -140,12 +137,12 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		that.referenceInput = document.createElement('input');
 		that.referenceInput.setAttribute('id', 'inputRef');
 		that.referenceInput.setAttribute('type', 'text');
-		that.referenceInput.setAttribute('value', 'reference goes here');// How does reference get here
+		that.referenceInput.setAttribute('placeholder', 'Reference');
 		inputTop.appendChild(that.referenceInput);
 
 		that.questionInput = document.createElement('textarea');
 		that.questionInput.setAttribute('id', 'inputText');
-		that.questionInput.textContent = 'Matt 7:7 goes here';//Matt 7:7 text goes here
+		that.questionInput.setAttribute('placeholder', 'Matt 7:7 goes here');
 		that.questionInput.setAttribute('rows', 10);
 		inputTop.appendChild(that.questionInput);
 
@@ -158,12 +155,19 @@ QuestionsView.prototype.buildQuestionsView = function() {
 			console.log('submit button clicked');
 
 			var item = new QuestionItem();
-			// set book, chapter, verse by position of page
-			item.displayRef = that.referenceInput.textContent;
-			item.question = that.questionInput.text;
+			// set item.reference by position of page
+			item.displayRef = that.referenceInput.value;
+			item.question = that.questionInput.value;
 
-			that.questions.addItem(item, function(result) {
-				console.log('file is written to disk and server');
+			that.questions.addItem(item, function(error) {
+				if (error) {
+					console.error('error at server', error);
+				} else {
+					console.log('file is written to disk and server');
+					that.hideView();
+					that.viewRoot = that.buildQuestionsView();
+					that.rootNode.appendChild(that.viewRoot);
+				}
 			});
 		});
 	}
