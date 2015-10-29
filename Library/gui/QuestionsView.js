@@ -64,34 +64,27 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	function buildOneQuestion(parent, i) {
 		var item = that.questions.find(i);
 
-		var aQuestion = document.createElement('div');
-		aQuestion.setAttribute('id', 'que' + i);
-		aQuestion.setAttribute('class', 'oneQuestion');
-		parent.appendChild(aQuestion);
-
-		var line1 = document.createElement('div');
-		line1.setAttribute('class', 'queTop');
-		aQuestion.appendChild(line1);
-
-		var reference = document.createElement('p');
-		reference.setAttribute('class', 'queRef');
-		reference.textContent = item.displayRef;
-		line1.appendChild(reference);
-
-		var questDate = document.createElement('p');
-		questDate.setAttribute('class', 'queDate');
-		questDate.textContent = formatter.localDatetime(item.askedDateTime);
-		line1.appendChild(questDate);
-
-		var question = document.createElement('p');
-		question.setAttribute('class', 'queText');
-		question.textContent = item.question;
-		aQuestion.appendChild(question);
+		var aQuestion = addNode(parent, 'div', 'que' + i, 'oneQuestion');
+		var line1 = addNode(aQuestion, 'div', null, 'queTop');
+		var reference = addNode(line1, 'p', null, 'queRef', item.displayRef);
+		var questDate = addNode(line1, 'p', null, 'queDate', formatter.localDatetime(item.askedDateTime));
+		var question = addNode(aQuestion, 'p', null, 'queText', item.question);
+		
+		var discId = addNode(aQuestion, 'p', null, null, item.discourseId);
 
 		if (i === numQuestions -1) {
 			displayAnswer(aQuestion);
 		} else {
 			aQuestion.addEventListener('click', displayAnswerOnRequest);	
+		}
+		
+		function addNode(parent, type, id, clas, content) {
+			var node = document.createElement(type);
+			if (id) node.setAttribute('id', id);
+			if (clas) node.setAttribute('class', clas);
+			if (content) node.textContent = content;
+			parent.appendChild(node);
+			return(node);
 		}
 	}
 

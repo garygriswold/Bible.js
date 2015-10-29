@@ -20,17 +20,19 @@ Questions.prototype.addItem = function(item, callback) {
 	var that = this;
 	var versionId = this.questionsAdapter.database.code;
 	var postData = {versionId:versionId, displayRef:item.displayRef, message:item.question};
-	console.log('post data', postData);
 	this.httpClient.put('/question', postData, function(status, results) {
 		if (status !== 200 && status !== 201) {
 			callback(results);
 		} else {
+			item.discourseId = results.discourseId;
+			item.askedDateTime = results.timestamp;
 			that.addItemLocal(item, callback);
 		}
 	});
 };
 Questions.prototype.addItemLocal = function(item, callback) {
 	var that = this;
+	console.log('add item local', item);
 	this.questionsAdapter.replace(item, function(results) {
 		if (results instanceof IOError) {
 			callback(results);
@@ -66,6 +68,7 @@ Questions.prototype.createActs8Question = function(callback) {
 			var acts830 = results.rows.item(0);
 			var acts831 = results.rows.item(1);
 			var acts835 = results.rows.item(2);
+			acts8.discourseId = 'NONE';
 			acts8.question = acts830.html + ' ' + acts831.html;
 			acts8.answer = acts835.html;
 			acts8.instructor = 'Philip';
@@ -77,6 +80,7 @@ Questions.prototype.createActs8Question = function(callback) {
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
 	var lastItem = this.items[this.items.length -1];
+	console.log('check server', this.items.length);
 	if (lastItem.answeredDateTime == null) {
 		// send request to the server.
 

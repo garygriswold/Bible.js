@@ -40,19 +40,17 @@ DeviceDatabase.prototype.select = function(statement, values, callback) {
     }
 };
 DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
-    this.database.transaction(onTranStart, onTranError);
-
-    function onTranStart(tx) {
-        console.log('exec tran start', statement, values);
-        tx.executeSql(statement, values, onExecSuccess);
-    }
-    function onTranError(err) {
-        console.log('execute tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
+    this.database.transaction(function(tx) {
+	    console.log('exec tran start', statement, values);
+        tx.executeSql(statement, values, onExecSuccess, onExecError);
+    });
     function onExecSuccess(tx, results) {
     	console.log('excute sql success', results.rowsAffected);
     	callback(results.rowsAffected);
+    }
+    function onExecError(tx, err) {
+        console.log('execute tran error', JSON.stringify(err));
+        callback(new IOError(err));
     }
 };
 DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {

@@ -484,34 +484,50 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	function buildOneQuestion(parent, i) {
 		var item = that.questions.find(i);
 
-		var aQuestion = document.createElement('div');
-		aQuestion.setAttribute('id', 'que' + i);
-		aQuestion.setAttribute('class', 'oneQuestion');
-		parent.appendChild(aQuestion);
+		//var aQuestion = document.createElement('div');
+		//aQuestion.setAttribute('id', 'que' + i);
+		//aQuestion.setAttribute('class', 'oneQuestion');
+		//parent.appendChild(aQuestion);
+		var aQuestion = addNode(parent, 'div', 'que' + i, 'oneQuestion');
 
-		var line1 = document.createElement('div');
-		line1.setAttribute('class', 'queTop');
-		aQuestion.appendChild(line1);
+		//var line1 = document.createElement('div');
+		//line1.setAttribute('class', 'queTop');
+		//aQuestion.appendChild(line1);
+		var line1 = addNode(aQuestion, 'div', null, 'queTop');
 
-		var reference = document.createElement('p');
-		reference.setAttribute('class', 'queRef');
-		reference.textContent = item.displayRef;
-		line1.appendChild(reference);
+		//var reference = document.createElement('p');
+		//reference.setAttribute('class', 'queRef');
+		//reference.textContent = item.displayRef;
+		//line1.appendChild(reference);
+		var reference = addNode(line1, 'p', null, 'queRef', item.displayRef);
 
-		var questDate = document.createElement('p');
-		questDate.setAttribute('class', 'queDate');
-		questDate.textContent = formatter.localDatetime(item.askedDateTime);
-		line1.appendChild(questDate);
+		//var questDate = document.createElement('p');
+		//questDate.setAttribute('class', 'queDate');
+		//questDate.textContent = formatter.localDatetime(item.askedDateTime);
+		//line1.appendChild(questDate);
+		var questDate = addNode(line1, 'p', null, 'queDate', formatter.localDatetime(item.askedDateTime));
 
-		var question = document.createElement('p');
-		question.setAttribute('class', 'queText');
-		question.textContent = item.question;
-		aQuestion.appendChild(question);
+		//var question = document.createElement('p');
+		//question.setAttribute('class', 'queText');
+		//question.textContent = item.question;
+		//aQuestion.appendChild(question);
+		var question = addNode(aQuestion, 'p', null, 'queText', item.question);
+		
+		var discId = addNode(aQuestion, 'p', null, null, item.discourseId);
 
 		if (i === numQuestions -1) {
 			displayAnswer(aQuestion);
 		} else {
 			aQuestion.addEventListener('click', displayAnswerOnRequest);	
+		}
+		
+		function addNode(parent, type, id, clas, content) {
+			var node = document.createElement(type);
+			if (id) node.setAttribute('id', id);
+			if (clas) node.setAttribute('class', clas);
+			if (content) node.textContent = content;
+			parent.appendChild(node);
+			return(node);
 		}
 	}
 
@@ -1297,19 +1313,24 @@ DeviceDatabase.prototype.select = function(statement, values, callback) {
     }
 };
 DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
-    this.database.transaction(onTranStart, onTranError);
+	console.log('start update command', statement, values);
+    //this.database.transaction(onTranStart, onTranError);
+    this.database.transaction(function(tx) {
+	    console.log('exec tran start', statement, values);
+        tx.executeSql(statement, values, onExecSuccess, onExecError);
+    });
 
-    function onTranStart(tx) {
-        console.log('exec tran start', statement, values);
-        tx.executeSql(statement, values, onExecSuccess);
-    }
-    function onTranError(err) {
-        console.log('execute tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
+    //function onTranStart(tx) {
+    //    console.log('exec tran start', statement, values);
+    //    tx.executeSql(statement, values, onExecSuccess);
+    //}
     function onExecSuccess(tx, results) {
     	console.log('excute sql success', results.rowsAffected);
     	callback(results.rowsAffected);
+    }
+    function onExecError(tx, err) {
+        console.log('execute tran error', JSON.stringify(err));
+        callback(new IOError(err));
     }
 };
 DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
@@ -1842,8 +1863,9 @@ QuestionsAdapter.prototype.drop = function(callback) {
 QuestionsAdapter.prototype.create = function(callback) {
 	var statement = 'create table if not exists questions(' +
 		'askedDateTime text not null primary key, ' +
-		'reference text not null, ' +
-		'displayRef text null, ' +
+		'discourseId text not null, ' +
+		'reference text null, ' + // possibly should be not null
+		'displayRef null, ' + // possibly should be not null
 		'question text not null, ' +
 		'instructor text null, ' +
 		'answerDateTime text null, ' +
@@ -1858,7 +1880,7 @@ QuestionsAdapter.prototype.create = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select reference, displayRef, question, askedDateTime, instructor, answerDateTime, answer ' +
+	var statement = 'select discourseId, reference, displayRef, question, askedDateTime, instructor, answerDateTime, answer ' +
 		'from questions order by askedDateTime';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
@@ -1877,9 +1899,13 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.replace = function(item, callback) {
-	var statement = 'replace into questions(reference, displayRef, question, askedDateTime) ' +
-		'values (?,?,?,?)';
-	var values = [ item.reference, item.displayRef, item.question, item.askedDateTime.toISOString() ];
+	console.log('start of replace *******');
+	var statement = 'replace into questions(discourseId, reference, displayRef, question, askedDateTime) ' +
+		'values (?,?,?,?,?)';
+	console.log('statement', statement);
+	console.log('values ', item);
+	var values = [ item.discourseId, item.reference, item.displayRef, item.question, item.askedDateTime ];//.toISOString() ];
+	console.log('inside replace', statement, values);
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
@@ -1892,7 +1918,7 @@ QuestionsAdapter.prototype.replace = function(item, callback) {
 QuestionsAdapter.prototype.update = function(item, callback) {
 	var statement = 'update questions set instructor = ?, answerDateTime = ?, answer = ?' +
 		'where askedDateTime = ?';
-	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answer, item.askedDateTime.toISOString() ];
+	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answer, item.askedDateTime ];//.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on update');
@@ -2198,12 +2224,13 @@ Lookup.prototype.find = function(search) {
 * This class contains the contents of one user question and one instructor response.
 */
 function QuestionItem(reference, displayRef, question, askedDt, instructor, answerDt, answer) {
+	this.discourseId = null;
 	this.reference = reference;
 	this.displayRef = displayRef;
 	this.question = question;
-	this.askedDateTime = (askedDt) ? new Date(askedDt) : new Date();
+	this.askedDateTime = askedDt;
 	this.instructor = instructor;
-	this.answerDateTime = (answerDt) ? new Date(answerDt) : null;
+	this.answerDateTime = answerDt;
 	this.answer = answer;
 	Object.seal(this);
 }/**
@@ -2228,17 +2255,19 @@ Questions.prototype.addItem = function(item, callback) {
 	var that = this;
 	var versionId = this.questionsAdapter.database.code;
 	var postData = {versionId:versionId, displayRef:item.displayRef, message:item.question};
-	console.log('post data', postData);
 	this.httpClient.put('/question', postData, function(status, results) {
 		if (status !== 200 && status !== 201) {
 			callback(results);
 		} else {
+			item.discourseId = results.discourseId;
+			item.askedDateTime = results.timestamp;
 			that.addItemLocal(item, callback);
 		}
 	});
 };
 Questions.prototype.addItemLocal = function(item, callback) {
 	var that = this;
+	console.log('add item local', item);
 	this.questionsAdapter.replace(item, function(results) {
 		if (results instanceof IOError) {
 			callback(results);
@@ -2274,6 +2303,7 @@ Questions.prototype.createActs8Question = function(callback) {
 			var acts830 = results.rows.item(0);
 			var acts831 = results.rows.item(1);
 			var acts835 = results.rows.item(2);
+			acts8.discourseId = 'NONE';
 			acts8.question = acts830.html + ' ' + acts831.html;
 			acts8.answer = acts835.html;
 			acts8.instructor = 'Philip';
@@ -2285,6 +2315,7 @@ Questions.prototype.createActs8Question = function(callback) {
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
 	var lastItem = this.items[this.items.length -1];
+	console.log('check server', this.items.length);
 	if (lastItem.answeredDateTime == null) {
 		// send request to the server.
 
