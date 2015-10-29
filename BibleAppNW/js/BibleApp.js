@@ -428,6 +428,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 function QuestionsView(questionsAdapter, versesAdapter, tableContents) {
 	this.tableContents = tableContents;
 	this.questions = new Questions(questionsAdapter, versesAdapter, tableContents);
+	this.formatter = new DateTimeFormatter();
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('questionsRoot');
 	this.referenceInput = null;
@@ -443,8 +444,10 @@ QuestionsView.prototype.showView = function() {
 		} else {
 			if (results.length === 0) {
 				that.questions.createActs8Question(function(item) {
-					that.questions.addItemLocal(item, function(error) {
-						presentView();
+					that.questions.addQuestionLocal(item, function(error) {
+						that.questions.addAnswerLocal(item, function(error) {
+							presentView();
+						});
 					});
 				});
 			} else {
@@ -493,7 +496,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		var discId = addNode(aQuestion, 'p', null, null, item.discourseId);
 
 		if (i === numQuestions -1) {
-			displayAnswer(aQuestion);
+			that.displayAnswer(aQuestion);
 		} else {
 			aQuestion.addEventListener('click', displayAnswerOnRequest);	
 		}
@@ -511,37 +514,8 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	function displayAnswerOnRequest(event) {
 		var selected = document.getElementById(this.id);
 		selected.removeEventListener('click', displayAnswerOnRequest);
-		displayAnswer(selected);
+		that.displayAnswer(selected);
 	}
-
-	function displayAnswer(selected) {
-		var idNum = selected.id.substr(3);
-		var item = that.questions.find(idNum);
-
-		var line = document.createElement('hr');
-		line.setAttribute('class', 'ansLine');
-		selected.appendChild(line);
-
-		var answerTop = document.createElement('div');
-		answerTop.setAttribute('class', 'ansTop');
-		selected.appendChild(answerTop);
-
-		var instructor = document.createElement('p');
-		instructor.setAttribute('class', 'ansInstructor');
-		instructor.textContent = item.instructor;
-		answerTop.appendChild(instructor);
-
-		var ansDate = document.createElement('p');
-		ansDate.setAttribute('class', 'ansDate');
-		ansDate.textContent = formatter.localDatetime(item.answerDateTime);
-		answerTop.appendChild(ansDate);
-
-		var answer = document.createElement('p');
-		answer.setAttribute('class', 'ansText');
-		answer.textContent = item.answer;
-		selected.appendChild(answer);
-	}
-
 	function includeInputBlock(parentNode) {
 		var inputTop = document.createElement('div');
 		inputTop.setAttribute('id', 'quesInput');
@@ -572,7 +546,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 			item.displayRef = that.referenceInput.value;
 			item.question = that.questionInput.value;
 
-			that.questions.addItem(item, function(error) {
+			that.questions.addQuestion(item, function(error) {
 				if (error) {
 					console.error('error at server', error);
 				} else {
@@ -584,7 +558,20 @@ QuestionsView.prototype.buildQuestionsView = function() {
 			});
 		});
 	}
-};/**
+};
+QuestionsView.prototype.displayAnswer = function(parent) {
+	var idNum = parent.id.substr(3);
+	var item = this.questions.find(idNum);
+	console.log('displayAnswer', parent.id, parent.id.substr(3), idNum, item);
+
+	var dom = new DOMBuilder();
+	dom.addNode(parent, 'hr', 'ansLine');
+	var answerTop = dom.addNode(parent, 'div', 'ansTop');
+	dom.addNode(answerTop, 'p', 'ansInstructor', item.instructor);
+	dom.addNode(answerTop, 'p', 'ansDate', this.formatter.localDatetime(item.answerDateTime));
+	dom.addNode(parent, 'p', 'ansText', item.answer);
+};
+/**
 * This class provides the User Interface part of the concordance and search capabilities of the app.
 * It does a lazy create of all of the objects needed.
 * Each presentation of a searchView presents its last state and last found results.
@@ -1062,6 +1049,21 @@ TableContentsView.prototype.openChapter = function(nodeId) {
 };
 
 
+/**
+* This is a helper class to remove the repetitive operations needed
+* to dynamically create DOM objects.
+*/
+function DOMBuilder() {
+	//this.rootNode = root;
+}
+DOMBuilder.prototype.addNode = function(parent, type, clas, content, id) {
+	var node = document.createElement(type);
+	if (id) node.setAttribute('id', id);
+	if (clas) node.setAttribute('class', clas);
+	if (content) node.textContent = content;
+	parent.appendChild(node);
+	return(node);
+};
 /**
 * This function draws and icon that is used as a questions button
 * on the StatusBar.
@@ -2220,7 +2222,7 @@ Questions.prototype.size = function() {
 Questions.prototype.find = function(index) {
 	return((index >= 0 && index < this.items.length) ? this.items[index] : null);
 };
-Questions.prototype.addItem = function(item, callback) {
+Questions.prototype.addQuestion = function(item, callback) {
 	var that = this;
 	var versionId = this.questionsAdapter.database.code;
 	var postData = {versionId:versionId, displayRef:item.displayRef, message:item.question};
@@ -2230,18 +2232,27 @@ Questions.prototype.addItem = function(item, callback) {
 		} else {
 			item.discourseId = results.discourseId;
 			item.askedDateTime = new Date(results.timestamp);
-			that.addItemLocal(item, callback);
+			that.addQuestionLocal(item, callback);
 		}
 	});
 };
-Questions.prototype.addItemLocal = function(item, callback) {
+Questions.prototype.addQuestionLocal = function(item, callback) {
 	var that = this;
-	console.log('add item local', item);
 	this.questionsAdapter.replace(item, function(results) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else {
 			that.items.push(item);
+			callback();
+		}
+	});
+};
+Questions.prototype.addAnswerLocal = function(item, callback) {
+	this.questionsAdapter.update(item, function(results) {
+		if (results instanceof IOError) {
+			console.log('Error on update', results);
+			callback(results);
+		} else {
 			callback();
 		}
 	});
@@ -2283,33 +2294,23 @@ Questions.prototype.createActs8Question = function(callback) {
 };
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
-	var lastItem = this.items[this.items.length -1];
-	console.log('check server', this.items.length);
-	if (lastItem.answeredDateTime == null) {
-		// send request to the server.
-
-		
-		if (lastItem.answeredDateTime) { // if updated by server
-			that.update(lastItem, function(err) {
-				callback();
-			});
-		} else {
-			callback();
-		}
-	}
-	else {
-		callback();
-	}
-};
-Questions.prototype.update = function(item, callback) {
-	this.questionsAdapter.update(item, function(results) {
-		if (results instanceof IOError) {
-			console.log('Error on update', results);
-			callback(results);
-		} else {
-			callback(results);
-		}
-	});
+	//var lastItem = this.items[this.items.length -1];
+	//console.log('check server', this.items.length);
+	//if (lastItem.answeredDateTime == null) {
+	//	// send request to the server.
+//
+//		
+//		if (lastItem.answeredDateTime) { // if updated by server
+//			that.update(lastItem, function(err) {
+//				callback();
+//			});
+//		} else {
+//			callback();
+//		}
+//	}
+//	else {
+//		callback();
+//	}
 };
 Questions.prototype.toJSON = function() {
 	return(JSON.stringify(this.items, null, ' '));

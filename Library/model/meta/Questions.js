@@ -16,7 +16,7 @@ Questions.prototype.size = function() {
 Questions.prototype.find = function(index) {
 	return((index >= 0 && index < this.items.length) ? this.items[index] : null);
 };
-Questions.prototype.addItem = function(item, callback) {
+Questions.prototype.addQuestion = function(item, callback) {
 	var that = this;
 	var versionId = this.questionsAdapter.database.code;
 	var postData = {versionId:versionId, displayRef:item.displayRef, message:item.question};
@@ -26,18 +26,27 @@ Questions.prototype.addItem = function(item, callback) {
 		} else {
 			item.discourseId = results.discourseId;
 			item.askedDateTime = new Date(results.timestamp);
-			that.addItemLocal(item, callback);
+			that.addQuestionLocal(item, callback);
 		}
 	});
 };
-Questions.prototype.addItemLocal = function(item, callback) {
+Questions.prototype.addQuestionLocal = function(item, callback) {
 	var that = this;
-	console.log('add item local', item);
 	this.questionsAdapter.replace(item, function(results) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else {
 			that.items.push(item);
+			callback();
+		}
+	});
+};
+Questions.prototype.addAnswerLocal = function(item, callback) {
+	this.questionsAdapter.update(item, function(results) {
+		if (results instanceof IOError) {
+			console.log('Error on update', results);
+			callback(results);
+		} else {
 			callback();
 		}
 	});
@@ -79,33 +88,23 @@ Questions.prototype.createActs8Question = function(callback) {
 };
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
-	var lastItem = this.items[this.items.length -1];
-	console.log('check server', this.items.length);
-	if (lastItem.answeredDateTime == null) {
-		// send request to the server.
-
-		
-		if (lastItem.answeredDateTime) { // if updated by server
-			that.update(lastItem, function(err) {
-				callback();
-			});
-		} else {
-			callback();
-		}
-	}
-	else {
-		callback();
-	}
-};
-Questions.prototype.update = function(item, callback) {
-	this.questionsAdapter.update(item, function(results) {
-		if (results instanceof IOError) {
-			console.log('Error on update', results);
-			callback(results);
-		} else {
-			callback(results);
-		}
-	});
+	//var lastItem = this.items[this.items.length -1];
+	//console.log('check server', this.items.length);
+	//if (lastItem.answeredDateTime == null) {
+	//	// send request to the server.
+//
+//		
+//		if (lastItem.answeredDateTime) { // if updated by server
+//			that.update(lastItem, function(err) {
+//				callback();
+//			});
+//		} else {
+//			callback();
+//		}
+//	}
+//	else {
+//		callback();
+//	}
 };
 Questions.prototype.toJSON = function() {
 	return(JSON.stringify(this.items, null, ' '));
