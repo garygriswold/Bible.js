@@ -756,6 +756,15 @@ var tests = [
 		save: 'Answer'	
 	},
 	{
+		number: 541,
+		name: 'getAnswers',
+		description: 'Get Answers to multiple questions',
+		method: 'GET',
+		path: '/response/Assign:discourseId',
+		status: 200,
+		results: [{discourseId:'GUID', pseudonym:'Bobby', reference:'John6', timestamp:'TIME', message:'This is the answer'}]
+	},
+	{
 		number: 550,
 		name: 'sendAnswer',
 		description: 'Insert an identical answer',
@@ -864,7 +873,7 @@ var tests = [
 		passPhrase: 'InTheWordIsLife',
 		status: 200,
 		results: {rowCount: 1, passPhrase: 'PASS' }
-	}
+	},
 ]
 
 

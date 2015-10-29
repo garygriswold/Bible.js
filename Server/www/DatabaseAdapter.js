@@ -58,7 +58,7 @@ DatabaseAdapter.prototype.create = function(callback) {
 		'CREATE TABLE Discourse(' +
 			' discourseId text PRIMARY KEY NOT NULL,' + // GUID
 			' versionId text NOT NULL,' +
-			' status text check(status in ("open", "assigned", "answered", "sent")) NOT NULL,' +
+			' status text check(status in ("open", "assigned", "answered")) NOT NULL,' +
 			' teacherId text REFERENCES Teacher(teacherId) NULL)',
 			
 		'CREATE INDEX DiscourseTeacher ON Discourse(teacherId)',
@@ -314,18 +314,21 @@ DatabaseAdapter.prototype.deleteAnswer = function(obj, callback) {
 	this.executeSQL(statements, values, 2, callback);
 };
 /**
-* This method is called by student to get answered questions, but something must
-* set the status to sent. Is than another http transaction, Or should it be done here?
-*
-* This is returning the student's question as well as the answer, 
-* because Message does not mark whose is whose.
+* This method is called by student to get answered questions.
 */
-DatabaseAdapter.prototype.selectAnswer = function(obj, callback) {
-	var statement = 'select t.pseudonym, m.reference, m.timestamp, m.message' +
-		' from Discourse d, Message m, Teacher t' +
-		' where d.discourseId = m.discourseId and d.teacherId = t.teacherId' +
-		' and d.discourseId = ? and d.status = "answered" and m.person="T"';
-	this.db.all(statement, obj.discourseId, callback);
+DatabaseAdapter.prototype.selectAnswers = function(obj, callback) {
+	var values = obj.substr(1).split('/');
+	values.shift();
+	var numValues = values.length || 0;
+	var array = [numValues];
+	for (var i=0; i<numValues; i++) {
+		array[i] = '?';
+	}
+	var statement = 'SELECT m.discourseId, t.pseudonym, m.reference, m.timestamp, m.message' +
+		' FROM Discourse d, Message m, Teacher t' +
+		' WHERE d.discourseId = m.discourseId AND d.teacherId = t.teacherId' +
+		' AND d.status = "answered" AND m.person="T" AND d.discourseId IN(' + array.join(',') + ')';
+	this.db.all(statement, values, callback);
 };
 DatabaseAdapter.prototype.saveDraft = function(obj, callback) {
 	var statements = [ 'replace into Message(discourseId, person, timestamp, reference, message) values (?,"T",?,?,?)' ];

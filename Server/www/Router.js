@@ -318,8 +318,8 @@ server.del('/answer', function deleteAnswer(request, response, next) {
 	});
 });
 
-server.get('/response/:discourseId', function getAnswers(request, response, next) {
-	database.selectAnswer(request.params, function(err, results) {
+server.get('/\/response\/.+/', function getAnswers(request, response, next) {
+	database.selectAnswers(request.url, function(err, results) {
 		respond(err, results, 200, response, next);
 	});
 });
