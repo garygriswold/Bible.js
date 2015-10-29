@@ -484,33 +484,10 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	function buildOneQuestion(parent, i) {
 		var item = that.questions.find(i);
 
-		//var aQuestion = document.createElement('div');
-		//aQuestion.setAttribute('id', 'que' + i);
-		//aQuestion.setAttribute('class', 'oneQuestion');
-		//parent.appendChild(aQuestion);
 		var aQuestion = addNode(parent, 'div', 'que' + i, 'oneQuestion');
-
-		//var line1 = document.createElement('div');
-		//line1.setAttribute('class', 'queTop');
-		//aQuestion.appendChild(line1);
 		var line1 = addNode(aQuestion, 'div', null, 'queTop');
-
-		//var reference = document.createElement('p');
-		//reference.setAttribute('class', 'queRef');
-		//reference.textContent = item.displayRef;
-		//line1.appendChild(reference);
 		var reference = addNode(line1, 'p', null, 'queRef', item.displayRef);
-
-		//var questDate = document.createElement('p');
-		//questDate.setAttribute('class', 'queDate');
-		//questDate.textContent = formatter.localDatetime(item.askedDateTime);
-		//line1.appendChild(questDate);
 		var questDate = addNode(line1, 'p', null, 'queDate', formatter.localDatetime(item.askedDateTime));
-
-		//var question = document.createElement('p');
-		//question.setAttribute('class', 'queText');
-		//question.textContent = item.question;
-		//aQuestion.appendChild(question);
 		var question = addNode(aQuestion, 'p', null, 'queText', item.question);
 		
 		var discId = addNode(aQuestion, 'p', null, null, item.discourseId);
@@ -1313,17 +1290,10 @@ DeviceDatabase.prototype.select = function(statement, values, callback) {
     }
 };
 DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
-	console.log('start update command', statement, values);
-    //this.database.transaction(onTranStart, onTranError);
     this.database.transaction(function(tx) {
 	    console.log('exec tran start', statement, values);
         tx.executeSql(statement, values, onExecSuccess, onExecError);
     });
-
-    //function onTranStart(tx) {
-    //    console.log('exec tran start', statement, values);
-    //    tx.executeSql(statement, values, onExecSuccess);
-    //}
     function onExecSuccess(tx, results) {
     	console.log('excute sql success', results.rowsAffected);
     	callback(results.rowsAffected);
@@ -1889,9 +1859,12 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 		} else {
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);
+				var row = results.rows.item(i);		
+				var askedDateTime = (row.askedDateTime) ? new Date(row.askedDateTime) : null;
+				var answerDateTime = (row.answerDateTime) ? new Date(row.answerDateTime) : null;
 				var ques = new QuestionItem(row.reference, row.displayRef, row.question, 
-					row.askedDt, row.instructor, row.answerDt, row.answer);
+					askedDateTime, row.instructor, answerDateTime, row.answer);
+				ques.discourseId = row.discourseId;
 				array.push(ques);
 			}
 			callback(array);
@@ -1899,13 +1872,9 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.replace = function(item, callback) {
-	console.log('start of replace *******');
 	var statement = 'replace into questions(discourseId, reference, displayRef, question, askedDateTime) ' +
 		'values (?,?,?,?,?)';
-	console.log('statement', statement);
-	console.log('values ', item);
-	var values = [ item.discourseId, item.reference, item.displayRef, item.question, item.askedDateTime ];//.toISOString() ];
-	console.log('inside replace', statement, values);
+	var values = [ item.discourseId, item.reference, item.displayRef, item.question, item.askedDateTime.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
@@ -1918,7 +1887,7 @@ QuestionsAdapter.prototype.replace = function(item, callback) {
 QuestionsAdapter.prototype.update = function(item, callback) {
 	var statement = 'update questions set instructor = ?, answerDateTime = ?, answer = ?' +
 		'where askedDateTime = ?';
-	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answer, item.askedDateTime ];//.toISOString() ];
+	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answer, item.askedDateTime.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on update');
@@ -2260,7 +2229,7 @@ Questions.prototype.addItem = function(item, callback) {
 			callback(results);
 		} else {
 			item.discourseId = results.discourseId;
-			item.askedDateTime = results.timestamp;
+			item.askedDateTime = new Date(results.timestamp);
 			that.addItemLocal(item, callback);
 		}
 	});

@@ -25,7 +25,7 @@ Questions.prototype.addItem = function(item, callback) {
 			callback(results);
 		} else {
 			item.discourseId = results.discourseId;
-			item.askedDateTime = results.timestamp;
+			item.askedDateTime = new Date(results.timestamp);
 			that.addItemLocal(item, callback);
 		}
 	});

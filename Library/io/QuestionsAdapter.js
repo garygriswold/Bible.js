@@ -45,9 +45,12 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 		} else {
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);
+				var row = results.rows.item(i);		
+				var askedDateTime = (row.askedDateTime) ? new Date(row.askedDateTime) : null;
+				var answerDateTime = (row.answerDateTime) ? new Date(row.answerDateTime) : null;
 				var ques = new QuestionItem(row.reference, row.displayRef, row.question, 
-					row.askedDt, row.instructor, row.answerDt, row.answer);
+					askedDateTime, row.instructor, answerDateTime, row.answer);
+				ques.discourseId = row.discourseId;
 				array.push(ques);
 			}
 			callback(array);
@@ -55,13 +58,9 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.replace = function(item, callback) {
-	console.log('start of replace *******');
 	var statement = 'replace into questions(discourseId, reference, displayRef, question, askedDateTime) ' +
 		'values (?,?,?,?,?)';
-	console.log('statement', statement);
-	console.log('values ', item);
-	var values = [ item.discourseId, item.reference, item.displayRef, item.question, item.askedDateTime ];//.toISOString() ];
-	console.log('inside replace', statement, values);
+	var values = [ item.discourseId, item.reference, item.displayRef, item.question, item.askedDateTime.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
@@ -74,7 +73,7 @@ QuestionsAdapter.prototype.replace = function(item, callback) {
 QuestionsAdapter.prototype.update = function(item, callback) {
 	var statement = 'update questions set instructor = ?, answerDateTime = ?, answer = ?' +
 		'where askedDateTime = ?';
-	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answer, item.askedDateTime ];//.toISOString() ];
+	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answer, item.askedDateTime.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on update');
