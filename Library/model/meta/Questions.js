@@ -126,6 +126,12 @@ Questions.prototype.checkServer = function(callback) {
 				item.answerDateTime = new Date(row.timestamp);
 				item.answer = row.message;
 				indexes.push(itemId);
+				
+				that.addAnswerLocal(item, function(error) {
+					if (error) {
+						console.log('Error occurred adding answer to local store ' + error);
+					}
+				});
 			}
 		}
 		return(indexes);
