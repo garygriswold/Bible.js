@@ -2320,7 +2320,7 @@ Questions.prototype.checkServer = function(callback) {
 				console.log('Attempt to update wrong item in Questions.checkServer');
 			} else {
 				item.instructor = row.pseudonym;
-				item.answerDateTime = row.timestamp;
+				item.answerDateTime = new Date(row.timestamp);
 				item.answer = row.message;
 				indexes.push(itemId);
 			}
