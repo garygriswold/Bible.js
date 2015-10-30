@@ -45,7 +45,7 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 		} else {
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);		
+				var row = results.rows.item(i);	
 				var askedDateTime = (row.askedDateTime) ? new Date(row.askedDateTime) : null;
 				var answerDateTime = (row.answerDateTime) ? new Date(row.answerDateTime) : null;
 				var ques = new QuestionItem(row.reference, row.displayRef, row.question, 

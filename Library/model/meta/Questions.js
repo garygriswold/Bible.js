@@ -88,23 +88,48 @@ Questions.prototype.createActs8Question = function(callback) {
 };
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
-	//var lastItem = this.items[this.items.length -1];
-	//console.log('check server', this.items.length);
-	//if (lastItem.answeredDateTime == null) {
-	//	// send request to the server.
-//
-//		
-//		if (lastItem.answeredDateTime) { // if updated by server
-//			that.update(lastItem, function(err) {
-//				callback();
-//			});
-//		} else {
-//			callback();
-//		}
-//	}
-//	else {
-//		callback();
-//	}
+	var unanswered = findUnansweredQuestions();
+	var discourseIds = Object.keys(unanswered);
+	if (discourseIds.length > 0) {
+		var path = '/response/' + discourseIds.join('/');
+		this.httpClient.get(path, function(status, results) {
+			if (status === 200) {
+				var indexes = updateAnsweredQuestions(unanswered, results);
+				callback(indexes);
+			} else {
+				callback([]);
+			}
+		});
+	} else {
+		callback([]);
+	}
+	function findUnansweredQuestions() {
+		var indexes = {};
+		for (var i=0; i<that.items.length; i++) {
+			var item = that.items[i];
+			if (item.answerDateTime === null || item.answerDateTime === undefined) {
+				indexes[item.discourseId] = i;
+			}
+		}
+		return(indexes);
+	}
+	function updateAnsweredQuestions(unanswered, results) {
+		var indexes = [];
+		for (var i=0; i<results.length; i++) {
+			var row = results[i];
+			var itemId = unanswered[row.discourseId];
+			var item = that.items[itemId];
+			if (item.discourseId !== row.discourseId) {
+				console.log('Attempt to update wrong item in Questions.checkServer');
+			} else {
+				item.instructor = row.pseudonym;
+				item.answerDateTime = row.timestamp;
+				item.answer = row.message;
+				indexes.push(itemId);
+			}
+		}
+		return(indexes);
+	}
 };
 Questions.prototype.toJSON = function() {
 	return(JSON.stringify(this.items, null, ' '));

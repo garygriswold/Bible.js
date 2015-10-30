@@ -429,6 +429,7 @@ function QuestionsView(questionsAdapter, versesAdapter, tableContents) {
 	this.tableContents = tableContents;
 	this.questions = new Questions(questionsAdapter, versesAdapter, tableContents);
 	this.formatter = new DateTimeFormatter();
+	this.dom = new DOMBuilder();
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('questionsRoot');
 	this.referenceInput = null;
@@ -460,9 +461,11 @@ QuestionsView.prototype.showView = function() {
 		that.rootNode.appendChild(that.viewRoot);
 
 		that.questions.checkServer(function(results) {
-			//that.appendToQuestionView();
-			// when a question comes back from the server
-			// we are able to display input block.
+			for (var i=0; i<results.length; i++) {
+				var itemId = results[i];
+				var questionNode = document.getElementById('que' + itemId);
+				that.displayAnswer(questionNode);
+			}
 		});		
 	}
 };
@@ -474,7 +477,6 @@ QuestionsView.prototype.hideView = function() {
 };
 QuestionsView.prototype.buildQuestionsView = function() {
 	var that = this;
-	var formatter = new DateTimeFormatter();
 	var root = document.createElement('div');
 	root.setAttribute('id', 'questionsView');
 	var numQuestions = this.questions.size();
@@ -487,27 +489,18 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	function buildOneQuestion(parent, i) {
 		var item = that.questions.find(i);
 
-		var aQuestion = addNode(parent, 'div', 'que' + i, 'oneQuestion');
-		var line1 = addNode(aQuestion, 'div', null, 'queTop');
-		var reference = addNode(line1, 'p', null, 'queRef', item.displayRef);
-		var questDate = addNode(line1, 'p', null, 'queDate', formatter.localDatetime(item.askedDateTime));
-		var question = addNode(aQuestion, 'p', null, 'queText', item.question);
+		var aQuestion = that.dom.addNode(parent, 'div', 'oneQuestion', null, 'que' + i);
+		var line1 = that.dom.addNode(aQuestion, 'div', 'queTop');
+		that.dom.addNode(line1, 'p', 'queRef', item.displayRef);
+		that.dom.addNode(line1, 'p', 'queDate', that.formatter.localDatetime(item.askedDateTime));
+		that.dom.addNode(aQuestion, 'p', 'queText', item.question);
 		
-		var discId = addNode(aQuestion, 'p', null, null, item.discourseId);
+		that.dom.addNode(aQuestion, 'p', null, item.discourseId);
 
 		if (i === numQuestions -1) {
 			that.displayAnswer(aQuestion);
 		} else {
 			aQuestion.addEventListener('click', displayAnswerOnRequest);	
-		}
-		
-		function addNode(parent, type, id, clas, content) {
-			var node = document.createElement(type);
-			if (id) node.setAttribute('id', id);
-			if (clas) node.setAttribute('class', clas);
-			if (content) node.textContent = content;
-			parent.appendChild(node);
-			return(node);
 		}
 	}
 
@@ -562,14 +555,12 @@ QuestionsView.prototype.buildQuestionsView = function() {
 QuestionsView.prototype.displayAnswer = function(parent) {
 	var idNum = parent.id.substr(3);
 	var item = this.questions.find(idNum);
-	console.log('displayAnswer', parent.id, parent.id.substr(3), idNum, item);
 
-	var dom = new DOMBuilder();
-	dom.addNode(parent, 'hr', 'ansLine');
-	var answerTop = dom.addNode(parent, 'div', 'ansTop');
-	dom.addNode(answerTop, 'p', 'ansInstructor', item.instructor);
-	dom.addNode(answerTop, 'p', 'ansDate', this.formatter.localDatetime(item.answerDateTime));
-	dom.addNode(parent, 'p', 'ansText', item.answer);
+	this.dom.addNode(parent, 'hr', 'ansLine');
+	var answerTop = this.dom.addNode(parent, 'div', 'ansTop');
+	this.dom.addNode(answerTop, 'p', 'ansInstructor', item.instructor);
+	this.dom.addNode(answerTop, 'p', 'ansDate', this.formatter.localDatetime(item.answerDateTime));
+	this.dom.addNode(parent, 'p', 'ansText', item.answer);
 };
 /**
 * This class provides the User Interface part of the concordance and search capabilities of the app.
@@ -1861,7 +1852,7 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 		} else {
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);		
+				var row = results.rows.item(i);	
 				var askedDateTime = (row.askedDateTime) ? new Date(row.askedDateTime) : null;
 				var answerDateTime = (row.answerDateTime) ? new Date(row.answerDateTime) : null;
 				var ques = new QuestionItem(row.reference, row.displayRef, row.question, 
@@ -2294,23 +2285,48 @@ Questions.prototype.createActs8Question = function(callback) {
 };
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
-	//var lastItem = this.items[this.items.length -1];
-	//console.log('check server', this.items.length);
-	//if (lastItem.answeredDateTime == null) {
-	//	// send request to the server.
-//
-//		
-//		if (lastItem.answeredDateTime) { // if updated by server
-//			that.update(lastItem, function(err) {
-//				callback();
-//			});
-//		} else {
-//			callback();
-//		}
-//	}
-//	else {
-//		callback();
-//	}
+	var unanswered = findUnansweredQuestions();
+	var discourseIds = Object.keys(unanswered);
+	if (discourseIds.length > 0) {
+		var path = '/response/' + discourseIds.join('/');
+		this.httpClient.get(path, function(status, results) {
+			if (status === 200) {
+				var indexes = updateAnsweredQuestions(unanswered, results);
+				callback(indexes);
+			} else {
+				callback([]);
+			}
+		});
+	} else {
+		callback([]);
+	}
+	function findUnansweredQuestions() {
+		var indexes = {};
+		for (var i=0; i<that.items.length; i++) {
+			var item = that.items[i];
+			if (item.answerDateTime === null || item.answerDateTime === undefined) {
+				indexes[item.discourseId] = i;
+			}
+		}
+		return(indexes);
+	}
+	function updateAnsweredQuestions(unanswered, results) {
+		var indexes = [];
+		for (var i=0; i<results.length; i++) {
+			var row = results[i];
+			var itemId = unanswered[row.discourseId];
+			var item = that.items[itemId];
+			if (item.discourseId !== row.discourseId) {
+				console.log('Attempt to update wrong item in Questions.checkServer');
+			} else {
+				item.instructor = row.pseudonym;
+				item.answerDateTime = row.timestamp;
+				item.answer = row.message;
+				indexes.push(itemId);
+			}
+		}
+		return(indexes);
+	}
 };
 Questions.prototype.toJSON = function() {
 	return(JSON.stringify(this.items, null, ' '));
