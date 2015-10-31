@@ -510,25 +510,29 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		that.displayAnswer(selected);
 	}
 	function includeInputBlock(parentNode) {
-		var inputTop = document.createElement('div');
-		inputTop.setAttribute('id', 'quesInput');
-		parentNode.appendChild(inputTop);
+		//var inputTop = document.createElement('div');
+		//inputTop.setAttribute('id', 'quesInput');
+		//parentNode.appendChild(inputTop);
+		var inputTop = that.dom.addNode(parentNode, 'div', null, null, 'quesInput');
 
-		that.referenceInput = document.createElement('input');
-		that.referenceInput.setAttribute('id', 'inputRef');
+		//that.referenceInput = document.createElement('input');
+		//that.referenceInput.setAttribute('id', 'inputRef');
+		that.referenceInput = that.dom.addNode(inputTop, 'input', null, null, 'inputRef');
 		that.referenceInput.setAttribute('type', 'text');
 		that.referenceInput.setAttribute('placeholder', 'Reference');
-		inputTop.appendChild(that.referenceInput);
+		//inputTop.appendChild(that.referenceInput);
 
-		that.questionInput = document.createElement('textarea');
-		that.questionInput.setAttribute('id', 'inputText');
+		//that.questionInput = document.createElement('textarea');
+		//that.questionInput.setAttribute('id', 'inputText');
+		that.questionInput = that.dom.addNode(inputTop, 'textarea', null, null, 'inputText');
 		that.questionInput.setAttribute('placeholder', 'Matt 7:7 goes here');
 		that.questionInput.setAttribute('rows', 10);
-		inputTop.appendChild(that.questionInput);
+		//inputTop.appendChild(that.questionInput);
 
-		var quesBtn = document.createElement('button');
-		quesBtn.setAttribute('id', 'inputBtn');
-		inputTop.appendChild(quesBtn);
+		//var quesBtn = document.createElement('button');
+		//quesBtn.setAttribute('id', 'inputBtn');
+		//inputTop.appendChild(quesBtn);
+		var quesBtn = that.dom.addNode(inputTop, 'button', null, null, 'inputBtn');
 		quesBtn.appendChild(drawSendIcon(50, '#777777'));
 
 		quesBtn.addEventListener('click', function(event) {
