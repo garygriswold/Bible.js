@@ -90,7 +90,7 @@ DatabaseAdapter.prototype.selectTeachers = function(obj, callback) {
 	var statement = 'SELECT t.teacherId, t.fullname, t.pseudonym, t.authorizerId, p.position, p.versionId, p.created' +
 		' FROM Teacher t LEFT OUTER JOIN Position p ON t.teacherId=p.teacherId';
 		
-	this.db.all(statement + ' WHERE t.authorizerId=? ORDER BY t.fullname', obj.authorizerId, function(err, memberResults) {
+	this.db.all(statement + ' WHERE t.authorizerId=? AND t.teacherId!=? ORDER BY t.fullname', obj.authorizerId, obj.authorizerId, function(err, memberResults) {
 		if (err) {
 			callback(err);
 		} else {
@@ -105,7 +105,7 @@ DatabaseAdapter.prototype.selectTeachers = function(obj, callback) {
 						if (err) {
 							callback(err);
 						} else {
-							callback(null, [superResults, selfResults, memberResults]);
+							callback(null, {boss:superResults, self:selfResults, members:memberResults});
 						}
 					});
 				}

@@ -23,11 +23,13 @@ RolesViewModel.prototype.display = function() {
 	storeHighestMember(this.members);
 	
 	function iteratePersons(list, type) {
-		var priorId = null;
-		var versionRowCount = 0;
-		for (var i=0; i<list.length; i++) {
-			var row = list[i];
-			that.table.insertRow(-1, type, row.teacherId, row.fullname, row.pseudonym, row.position, row.versionId, row.created);
+		if (list) {
+			var priorId = null;
+			var versionRowCount = 0;
+			for (var i=0; i<list.length; i++) {
+				var row = list[i];
+				that.table.insertRow(-1, type, row.teacherId, row.fullname, row.pseudonym, row.position, row.versionId, row.created);
+			}
 		}
 	}
 	function storeHighestMember(list) {
@@ -46,10 +48,10 @@ RolesViewModel.prototype.allCheckboxesOff = function() {
 };
 RolesViewModel.prototype.setProperties = function(status, results) {
 	if (status === 200) {
-		this.boss = results[0];
-		this.state.bossId = this.boss[0].teacherId;
-		this.self = (results.length > 0) ? results[1] : null;
-		this.members = (results.length > 2) ? results[2] : null;
+		this.boss = results.boss;
+		this.state.bossId = (this.boss && this.boss.length > 0) ? this.boss[0].teacherId : null;
+		this.self = results.self;
+		this.members = results.members;
 		this.display();
 	}
 };
