@@ -71,11 +71,9 @@ QuestionsView.prototype.buildQuestionsView = function() {
 
 		var aQuestion = that.dom.addNode(parent, 'div', 'oneQuestion', null, 'que' + i);
 		var line1 = that.dom.addNode(aQuestion, 'div', 'queTop');
-		that.dom.addNode(line1, 'p', 'queRef', item.displayRef);
+		that.dom.addNode(line1, 'p', 'queRef', item.reference);
 		that.dom.addNode(line1, 'p', 'queDate', that.formatter.localDatetime(item.askedDateTime));
 		that.dom.addNode(aQuestion, 'p', 'queText', item.question);
-		
-		that.dom.addNode(aQuestion, 'p', null, item.discourseId);
 
 		if (i === numQuestions -1) {
 			that.displayAnswer(aQuestion);
@@ -107,8 +105,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 			console.log('submit button clicked');
 
 			var item = new QuestionItem();
-			// set item.reference by position of page
-			item.displayRef = that.referenceInput.value;
+			item.reference = that.referenceInput.value;
 			item.question = that.questionInput.value;
 
 			that.questions.addQuestion(item, function(error) {

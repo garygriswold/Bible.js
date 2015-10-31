@@ -21,7 +21,6 @@ QuestionsAdapter.prototype.create = function(callback) {
 		'askedDateTime text not null primary key, ' +
 		'discourseId text not null, ' +
 		'reference text null, ' + // possibly should be not null
-		'displayRef null, ' + // possibly should be not null
 		'question text not null, ' +
 		'instructor text null, ' +
 		'answerDateTime text null, ' +
@@ -36,7 +35,7 @@ QuestionsAdapter.prototype.create = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select discourseId, reference, displayRef, question, askedDateTime, instructor, answerDateTime, answer ' +
+	var statement = 'select discourseId, reference, question, askedDateTime, instructor, answerDateTime, answer ' +
 		'from questions order by askedDateTime';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
@@ -48,7 +47,7 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 				var row = results.rows.item(i);	
 				var askedDateTime = (row.askedDateTime) ? new Date(row.askedDateTime) : null;
 				var answerDateTime = (row.answerDateTime) ? new Date(row.answerDateTime) : null;
-				var ques = new QuestionItem(row.reference, row.displayRef, row.question, 
+				var ques = new QuestionItem(row.reference, row.question, 
 					askedDateTime, row.instructor, answerDateTime, row.answer);
 				ques.discourseId = row.discourseId;
 				array.push(ques);
@@ -58,9 +57,9 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.replace = function(item, callback) {
-	var statement = 'replace into questions(discourseId, reference, displayRef, question, askedDateTime) ' +
-		'values (?,?,?,?,?)';
-	var values = [ item.discourseId, item.reference, item.displayRef, item.question, item.askedDateTime.toISOString() ];
+	var statement = 'replace into questions(discourseId, reference, question, askedDateTime) ' +
+		'values (?,?,?,?)';
+	var values = [ item.discourseId, item.reference, item.question, item.askedDateTime.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');

@@ -491,7 +491,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 
 		var aQuestion = that.dom.addNode(parent, 'div', 'oneQuestion', null, 'que' + i);
 		var line1 = that.dom.addNode(aQuestion, 'div', 'queTop');
-		that.dom.addNode(line1, 'p', 'queRef', item.displayRef);
+		that.dom.addNode(line1, 'p', 'queRef', item.reference);
 		that.dom.addNode(line1, 'p', 'queDate', that.formatter.localDatetime(item.askedDateTime));
 		that.dom.addNode(aQuestion, 'p', 'queText', item.question);
 		
@@ -510,28 +510,16 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		that.displayAnswer(selected);
 	}
 	function includeInputBlock(parentNode) {
-		//var inputTop = document.createElement('div');
-		//inputTop.setAttribute('id', 'quesInput');
-		//parentNode.appendChild(inputTop);
 		var inputTop = that.dom.addNode(parentNode, 'div', null, null, 'quesInput');
 
-		//that.referenceInput = document.createElement('input');
-		//that.referenceInput.setAttribute('id', 'inputRef');
 		that.referenceInput = that.dom.addNode(inputTop, 'input', null, null, 'inputRef');
 		that.referenceInput.setAttribute('type', 'text');
 		that.referenceInput.setAttribute('placeholder', 'Reference');
-		//inputTop.appendChild(that.referenceInput);
 
-		//that.questionInput = document.createElement('textarea');
-		//that.questionInput.setAttribute('id', 'inputText');
 		that.questionInput = that.dom.addNode(inputTop, 'textarea', null, null, 'inputText');
 		that.questionInput.setAttribute('placeholder', 'Matt 7:7 goes here');
 		that.questionInput.setAttribute('rows', 10);
-		//inputTop.appendChild(that.questionInput);
 
-		//var quesBtn = document.createElement('button');
-		//quesBtn.setAttribute('id', 'inputBtn');
-		//inputTop.appendChild(quesBtn);
 		var quesBtn = that.dom.addNode(inputTop, 'button', null, null, 'inputBtn');
 		quesBtn.appendChild(drawSendIcon(50, '#777777'));
 
@@ -539,8 +527,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 			console.log('submit button clicked');
 
 			var item = new QuestionItem();
-			// set item.reference by position of page
-			item.displayRef = that.referenceInput.value;
+			item.reference = that.referenceInput.value;
 			item.question = that.questionInput.value;
 
 			that.questions.addQuestion(item, function(error) {
@@ -1832,7 +1819,6 @@ QuestionsAdapter.prototype.create = function(callback) {
 		'askedDateTime text not null primary key, ' +
 		'discourseId text not null, ' +
 		'reference text null, ' + // possibly should be not null
-		'displayRef null, ' + // possibly should be not null
 		'question text not null, ' +
 		'instructor text null, ' +
 		'answerDateTime text null, ' +
@@ -1847,7 +1833,7 @@ QuestionsAdapter.prototype.create = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select discourseId, reference, displayRef, question, askedDateTime, instructor, answerDateTime, answer ' +
+	var statement = 'select discourseId, reference, question, askedDateTime, instructor, answerDateTime, answer ' +
 		'from questions order by askedDateTime';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
@@ -1859,7 +1845,7 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 				var row = results.rows.item(i);	
 				var askedDateTime = (row.askedDateTime) ? new Date(row.askedDateTime) : null;
 				var answerDateTime = (row.answerDateTime) ? new Date(row.answerDateTime) : null;
-				var ques = new QuestionItem(row.reference, row.displayRef, row.question, 
+				var ques = new QuestionItem(row.reference, row.question, 
 					askedDateTime, row.instructor, answerDateTime, row.answer);
 				ques.discourseId = row.discourseId;
 				array.push(ques);
@@ -1869,9 +1855,9 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.replace = function(item, callback) {
-	var statement = 'replace into questions(discourseId, reference, displayRef, question, askedDateTime) ' +
-		'values (?,?,?,?,?)';
-	var values = [ item.discourseId, item.reference, item.displayRef, item.question, item.askedDateTime.toISOString() ];
+	var statement = 'replace into questions(discourseId, reference, question, askedDateTime) ' +
+		'values (?,?,?,?)';
+	var values = [ item.discourseId, item.reference, item.question, item.askedDateTime.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
@@ -2189,10 +2175,9 @@ Lookup.prototype.find = function(search) {
 /**
 * This class contains the contents of one user question and one instructor response.
 */
-function QuestionItem(reference, displayRef, question, askedDt, instructor, answerDt, answer) {
+function QuestionItem(reference, question, askedDt, instructor, answerDt, answer) {
 	this.discourseId = null;
 	this.reference = reference;
-	this.displayRef = displayRef;
 	this.question = question;
 	this.askedDateTime = askedDt;
 	this.instructor = instructor;
@@ -2220,7 +2205,7 @@ Questions.prototype.find = function(index) {
 Questions.prototype.addQuestion = function(item, callback) {
 	var that = this;
 	var versionId = this.questionsAdapter.database.code;
-	var postData = {versionId:versionId, displayRef:item.displayRef, message:item.question};
+	var postData = {versionId:versionId, reference:item.reference, message:item.question};
 	this.httpClient.put('/question', postData, function(status, results) {
 		if (status !== 200 && status !== 201) {
 			callback(results);
@@ -2266,10 +2251,9 @@ Questions.prototype.fill = function(callback) {
 };
 Questions.prototype.createActs8Question = function(callback) {
 	var acts8 = new QuestionItem();
-	acts8.reference = 'ACT:8:30';
 	acts8.askedDateTime = new Date();
 	var refActs830 = new Reference('ACT:8:30');
-	acts8.displayRef = this.tableContents.toString(refActs830);
+	acts8.reference = this.tableContents.toString(refActs830);
 	var verseList = [ 'ACT:8:30', 'ACT:8:31', 'ACT:8:35' ];
 	this.versesAdapter.getVerses(verseList, function(results) {
 		if (results instanceof IOError) {

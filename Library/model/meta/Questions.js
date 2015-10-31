@@ -19,7 +19,7 @@ Questions.prototype.find = function(index) {
 Questions.prototype.addQuestion = function(item, callback) {
 	var that = this;
 	var versionId = this.questionsAdapter.database.code;
-	var postData = {versionId:versionId, displayRef:item.displayRef, message:item.question};
+	var postData = {versionId:versionId, reference:item.reference, message:item.question};
 	this.httpClient.put('/question', postData, function(status, results) {
 		if (status !== 200 && status !== 201) {
 			callback(results);
@@ -65,10 +65,9 @@ Questions.prototype.fill = function(callback) {
 };
 Questions.prototype.createActs8Question = function(callback) {
 	var acts8 = new QuestionItem();
-	acts8.reference = 'ACT:8:30';
 	acts8.askedDateTime = new Date();
 	var refActs830 = new Reference('ACT:8:30');
-	acts8.displayRef = this.tableContents.toString(refActs830);
+	acts8.reference = this.tableContents.toString(refActs830);
 	var verseList = [ 'ACT:8:30', 'ACT:8:31', 'ACT:8:35' ];
 	this.versesAdapter.getVerses(verseList, function(results) {
 		if (results instanceof IOError) {
