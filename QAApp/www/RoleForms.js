@@ -14,21 +14,9 @@ RoleForms.prototype.register = function() {
 	this.formRow.addBlank(1);
 	var nameField = this.formRow.addName('');
 	var pseudoField = this.formRow.addPseudo('');
-	var positions = this.state.positionsCanManage();
-	var positionsField = this.formRow.addPosition(positions, 'teacher');
-	var versions = Object.keys(this.state.principal);
-	var versionsField = this.formRow.addVersion(versions);
-	if (positions.length > 1) {
-		positionsField.addEventListener('change', function() {
-			console.log('position select list change event', event.target.selected);
-			var currPos = event.target.selected;
-			if (currPos === 'teacher') {
-				this.formRow.updateSelectList(positionsField, positions);
-			} else {
-				this.formRow.updateSelectList(positionsField, []);
-			}
-		});
-	}
+	var posButtons = this.addRoleButtons();
+	var positionsField = posButtons.position;
+	var versionsField = posButtons.version;
 	this.formRow.addButtons(function() {
 		var validMsg = that.formRow.validateFields();
 		if (validMsg) {
@@ -224,21 +212,9 @@ RoleForms.prototype.demote = function(teacher) {
 RoleForms.prototype.addRole = function(teacher) {
 	var that = this;
 	this.formRow.addMessage(3, "Use this to give this person a new responsibility.");
-	var positions = this.state.positionsCanManage();
-	var positionsField = this.formRow.addPosition(positions, 'teacher');
-	var versions = Object.keys(this.state.principal);
-	var versionsField = this.formRow.addVersion(versions);
-	if (positions.length > 1) {
-		positionsField.addEventListener('change', function() {
-			console.log('position select list change event', event.target.selected);
-			var currPos = event.target.selected;
-			if (currPos === 'teacher') {
-				this.formRow.updateSelectList(positionsField, positions);
-			} else {
-				this.formRow.updateSelectList(positionsField, []);
-			}
-		});
-	}
+	var posButtons = this.addRoleButtons();
+	var positionsField = posButtons.position;
+	var versionsField = posButtons.version;
 	this.formRow.addButtons(function() {
 		var position = positionsField.options[positionsField.selectedIndex].textContent;
 		var versionId = versionsField.options[versionsField.selectedIndex].textContent;
@@ -255,6 +231,26 @@ RoleForms.prototype.addRole = function(teacher) {
 	});
 	this.formRow.open();
 };
+RoleForms.prototype.addRoleButtons = function() {
+	var positions = this.state.positionsCanManage();
+	console.log('POSITIONS', positions);
+	var positionsField = this.formRow.addPosition(positions, 'teacher');
+	console.log('PRINCIPAL', this.state.principal);
+	var versions = (this.state.principal) ? Object.keys(this.state.principal) : null;
+	var versionsField = this.formRow.addVersion(versions);
+	if (positions.length > 1) {
+		positionsField.addEventListener('change', function() {
+			console.log('position select list change event', event.target.selected);
+			var currPos = event.target.selected;
+			if (currPos === 'teacher') {
+				this.formRow.updateSelectList(positionsField, positions);
+			} else {
+				this.formRow.updateSelectList(positionsField, []);
+			}
+		});
+	}
+	return({position:positionsField, version:versionsField});		
+};
 RoleForms.prototype.removeRole = function(teacher, role) {
 	var that = this;
 	this.formRow.addMessage(5, "Use this to remove a responsibility from this person.");
@@ -270,6 +266,23 @@ RoleForms.prototype.removeRole = function(teacher, role) {
 		});
 	});
 	this.formRow.open();
+};
+RoleForms.prototype.roleButtons = function() {
+	var positions = this.state.positionsCanManage();
+	var positionsField = this.formRow.addPosition(positions, 'teacher');
+	var versions = Object.keys(this.state.principal);
+	var versionsField = this.formRow.addVersion(versions);
+	if (positions.length > 1) {
+		positionsField.addEventListener('change', function() {
+			console.log('position select list change event', event.target.selected);
+			var currPos = event.target.selected;
+			if (currPos === 'teacher') {
+				this.formRow.updateSelectList(positionsField, positions);
+			} else {
+				this.formRow.updateSelectList(positionsField, []);
+			}
+		});
+	}	
 };
 RoleForms.prototype.displayError = function(status, results) {
 	window.alert('Unexpected Error: ' + results.message);	

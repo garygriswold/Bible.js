@@ -80,18 +80,20 @@ FormRow.prototype.stdSelectList = function(values, current) {
 	var cell = this.addCell(1);
 	var input = document.createElement('select');
 	input.setAttribute('class', 'role');
-	for (var i=0; i<values.length; i++) {
-		var option = document.createElement('option');
-		if ((typeof values[i]) === 'string') {
-			option.textContent = values[i];
-		} else {
-			option.value = values[i].value;
-			option.textContent = values[i].label;
+	if (values) {
+		for (var i=0; i<values.length; i++) {
+			var option = document.createElement('option');
+			if ((typeof values[i]) === 'string') {
+				option.textContent = values[i];
+			} else {
+				option.value = values[i].value;
+				option.textContent = values[i].label;
+			}
+			if (values[i] === current) {
+				option.setAttribute('selected', 'selected');
+			}
+			input.appendChild(option);
 		}
-		if (values[i] === current) {
-			option.setAttribute('selected', 'selected');
-		}
-		input.appendChild(option);
 	}
 	cell.appendChild(input);
 	return(input);
