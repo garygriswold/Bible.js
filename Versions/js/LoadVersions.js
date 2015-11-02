@@ -5,12 +5,10 @@ function LoadVersions() {
 	this.database = new DatabaseAdapter({filename: './Versions.db', verbose: false});
 };
 LoadVersions.prototype.create = function() {
-	this.database.create(function(error, rowCount) {
-		if (error) { 
-			console.log('ERROR', error);
-		} else {
-			console.log('RESULTS', rowCount);
-		}
+	var that = this;
+	this.database.create(function() {
+		console.log('DONE CREATE');
+		that.database.loadAll('data');
 	});
 };
 
