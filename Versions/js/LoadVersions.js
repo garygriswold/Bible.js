@@ -8,7 +8,7 @@ LoadVersions.prototype.create = function() {
 	var that = this;
 	this.database.create(function() {
 		console.log('DONE CREATE');
-		that.database.loadAll('data');
+		that.database.loadAll('data/Versions');
 	});
 };
 

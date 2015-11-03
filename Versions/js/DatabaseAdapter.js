@@ -1,10 +1,7 @@
 /**
-* This class provides a convenient JS interface to a SQL database.
+* This class provides a convenient JS interface to a the Version.db database.
 * The interface is intended to be useful for any kind of database,
 * but this implementation is for SQLite3.
-*
-* Note: as of 8/24/2015, when no rows are updated or deleted, because
-* key was wrong, no error is being generated.
 */
 "use strict";
 function DatabaseAdapter(options) {
@@ -20,6 +17,8 @@ function DatabaseAdapter(options) {
 	}
 	this.db.run("PRAGMA foreign_keys = ON");
 	this.fs = require('fs');
+	this.directory = null;
+	Object.seal(this);
 }
 DatabaseAdapter.prototype.create = function(callback) {
 	var statements = [
@@ -79,15 +78,30 @@ DatabaseAdapter.prototype.create = function(callback) {
 };
 DatabaseAdapter.prototype.loadAll = function(directory) {
 	var that = this;
-	this.insertOwner(directory, function(rowCount) {
+	this.directory = directory;
+	var file = '/Owner-Table 1.csv';
+	var statement = 'INSERT INTO Owner(ownerCode, ownerName, comment) values (?,?,?)';
+	this.loadFile(file, statement, function(rowCount) {
 		console.log('Owner count', rowCount);
-		that.insertLanguage(directory, function(rowCount) {
+		
+		file = '/Language-Table 1.csv';
+		statement = 'INSERT INTO Language(silCode, silName, silPage, population, comment) values (?,?,?,?,?)';
+		that.loadFile(file, statement, function(rowCount) {
 			console.log('Language count', rowCount);
-			that.insertCountry(directory, function(rowCount) {
+			
+			file = '/Country-Table 1.csv';
+			statement = 'INSERT INTO Country(countryCode, englishName, primLanguage, localName, flagIcon, comment) values (?,?,?,?,?,?)';
+			that.loadFile(file, statement, function(rowCount) {
 				console.log('Country count', rowCount);
-				that.insertVersion(directory, function(rowCount) {
+				
+				file = '/Version-Table 1.csv';
+				statement = 'INSERT INTO Version(versionCode, silCode, dblName, ownerCode, copyrightYear, scope, filename, comment) values (?,?,?,?,?,?,?,?)';
+				that.loadFile(file, statement, function(rowCount) {
 					console.log('Version count', rowCount);
-					that.insertCountryVersion(directory, function(rowCount) {
+					
+					file = '/CountryVersion-Table 1.csv';
+					statement = 'INSERT INTO CountryVersion(countryCode, versionCode, localLanguageName, localVersionName, comment) values (?,?,?,?,?)';
+					that.loadFile(file, statement, function(rowCount) {
 						console.log('CountryVersion count', rowCount);
 					});
 				});
@@ -95,70 +109,19 @@ DatabaseAdapter.prototype.loadAll = function(directory) {
 		});
 	});
 };
-DatabaseAdapter.prototype.insertOwner = function(directory, callback) {
+DatabaseAdapter.prototype.loadFile = function(file, statement, callback) {
 	var that = this;
-	var file = directory + '/Versions/Owner-Table 1.csv';
-	this.readFile(file, function(data) {
-		var statement = 'INSERT INTO Owner (ownerCode, ownerName, comment) values (?,?,?)';
-		that.executeSQL(statement, data, function(rowCount) {
-			console.log('INSERT Owner ', rowCount);
-			callback(rowCount);
-		});
-	});
-};
-DatabaseAdapter.prototype.insertLanguage = function(directory, callback) {
-	var that = this;
-	var file = directory + '/Versions/Language-Table 1.csv';
-	this.readFile(file, function(data) {
-		var statement = 'INSERT INTO Language (silCode, silName, silPage, population, comment) values (?,?,?,?,?)';
-		that.executeSQL(statement, data, function(rowCount) {
-			console.log('INSERT Language', rowCount);
-			callback(rowCount);
-		});	
-	});
-};
-DatabaseAdapter.prototype.insertCountry = function(directory, callback) {
-	var that = this;
-	var file = directory + '/Versions/Country-Table 1.csv';
-	this.readFile(file, function(data) {
-		var statement = 'INSERT INTO Country(countryCode, englishName, primLanguage, localName, flagIcon, comment) values (?,?,?,?,?,?)';
-		that.executeSQL(statement, data, function(rowCount) {
-			console.log('INSERT INOT Country', rowCount);
-			callback(rowCount);
-		});
-	});
-};
-
-DatabaseAdapter.prototype.insertVersion = function(directory, callback) {
-	var that = this;
-	var file = directory + '/Versions/Version-Table 1.csv';
-	this.readFile(file, function(data) {
-		var statement = 'INSERT INTO Version(versionCode, silCode, dblName, ownerCode, copyrightYear, scope, filename, comment) values (?,?,?,?,?,?,?,?)';
-		that.executeSQL(statement, data, function(rowCount) {
-			console.log('INSERT INTO VERSION', rowCount);
-			callback(rowCount);
-		});
-	});
-};
-DatabaseAdapter.prototype.insertCountryVersion = function(directory, callback) {
-	var that = this;
-	var file = directory + '/Versions/CountryVersion-Table 1.csv';
-	this.readFile(file, function(data) {
-		var statement = 'INSERT INTO CountryVersion(countryCode, versionCode, localLanguageName, localVersionName, comment) values (?,?,?,?,?)';
-		that.executeSQL(statement, data, function(rowCount) {
-			console.log('INSERT INTO CountryVersion', rowCount);
-			callback(rowCount);
-		});
-	});
-};
-DatabaseAdapter.prototype.readFile = function(filename, callback) {
-	var that = this;
+	var filename = this.directory + '/' + file;
+	console.log('filename', filename);
 	this.fs.readFile(filename, { encoding: 'utf8'}, function(error, data) {
 		if (error) {
 			console.log(error);
+			process.exit(1);
 		} else {
 			var array = that.safeCSVSplit(data);
-			callback(array);
+			that.executeSQL(statement, array, function(rowCount) {
+				callback(rowCount);
+			});
 		}
 	});	
 };
