@@ -59,6 +59,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.header.barHite);
 		that.historyView = new HistoryView(that.database.history, that.tableContents);
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
+		that.versionsView = new VersionsView();
 		Object.freeze(that);
 
 		switch(develop) {
@@ -73,6 +74,9 @@ AppViewController.prototype.begin = function(develop) {
 			break;
 		case 'QuestionsView':
 			that.questionsView.showView();
+			break;
+		case 'VersionsView':
+			that.versionsView.showView();
 			break;
 		default:
 			that.database.history.lastItem(function(lastItem) {
@@ -494,8 +498,6 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		that.dom.addNode(line1, 'p', 'queRef', item.reference);
 		that.dom.addNode(line1, 'p', 'queDate', that.formatter.localDatetime(item.askedDateTime));
 		that.dom.addNode(aQuestion, 'p', 'queText', item.question);
-		
-		that.dom.addNode(aQuestion, 'p', null, item.discourseId);
 
 		if (i === numQuestions -1) {
 			that.displayAnswer(aQuestion);
@@ -1032,6 +1034,99 @@ TableContentsView.prototype.openChapter = function(nodeId) {
 
 
 /**
+* This class presents the list of available versions to download
+*/
+function VersionsView() {
+	this.database = new VersionsAdapter()
+	this.root = null;
+	this.rootNode = document.getElementById('settingRoot');
+	this.dom = new DOMBuilder();
+	this.scrollPosition = 0;
+	Object.seal(this);
+}
+VersionsView.prototype.showView = function() {
+	if (! this.root) {
+		this.buildCountriesList();
+	} 
+	else if (this.rootNode.children.length < 1) {
+		this.rootNode.appendChild(this.root);
+		window.scrollTo(10, this.scrollPosition);
+	}
+};
+VersionsView.prototype.hideView = function() {
+	if (this.rootNode.children.length > 0) {
+		this.scrollPosition = window.scrollY; // save scroll position till next use.
+		this.rootNode.removeChild(this.root);
+	}
+};
+VersionsView.prototype.buildCountriesList = function() {
+	var that = this;
+	var root = document.createElement('ul');
+	this.database.selectCountries(function(results) {
+		if (! (results instanceof IOError)) {
+			for (var i=0; i<results.length; i++) {
+				var row = results[i];
+				var countryNode = that.dom.addNode(root, 'li', 'ctry', row.localName, 'cty' + row.countryCode);
+				countryNode.addEventListener('click', countryClickHandler);
+			}
+		}
+		that.rootNode.appendChild(root);
+		that.root = root;
+	});
+	
+	function countryClickHandler(event) {
+		this.removeEventListener('click', countryClickHandler);
+		console.log('user clicked in', this.id);
+		that.buildVersionList(this);
+	}
+};
+VersionsView.prototype.buildVersionList = function(parent) {
+	var that = this;
+	var countryCode = parent.id.substr(3);
+	var versionNodeList = document.createElement('div');
+	this.database.selectVersions(countryCode, function(results) {
+		if (! (results instanceof IOError)) {
+			for (var i=0; i<results.length; i++) {
+				var row = results[i];
+				var versionNode = that.dom.addNode(versionNodeList, 'div');
+				that.dom.addNode(versionNode, 'p', 'langName', row.localLanguageName);
+				that.dom.addNode(versionNode, 'p', 'versName', versionName(row));
+				that.dom.addNode(versionNode, 'p', 'copy', copyright(row));
+				
+				versionNode.addEventListener('click', versionClickHandler);
+			}
+			parent.appendChild(versionNodeList);
+		}
+	});
+	
+	function versionClickHandler(event) {
+		this.removeEventListener('click', versionClickHandler);
+		console.log('click on version');
+	}
+	
+	function versionName(row) {
+		if (row.localVersionName && row.localVersionName.length > 0) {
+			return(row.localVersionName);
+		}
+		switch(row.scope) {
+			case 'BIBLE':
+				return('Bible');
+			case 'NT':
+				return('New Testament');
+			case 'PNT':
+				return('Partial New Testament');
+			default:
+				return(row.scope);
+		}
+	}
+	function copyright(row) {
+		if (row.copyrightYear === 'PUBLIC') {
+			return(row.ownerName + ' Public Domain');
+		} else {
+			return('c' + '  Copyright ' + row.ownerName + ', ' + row.copyrightYear);
+		}
+	}
+};/**
 * This is a helper class to remove the repetitive operations needed
 * to dynamically create DOM objects.
 */
@@ -1880,6 +1975,75 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 		}
 	});
 };
+/**
+* This database adapter is different from the others in this package.  It accesses
+* not the Bible, but a different database, which contains a catalog of versions of the Bible.
+*
+* The App selects from, but never modifies this data.
+*/
+function VersionsAdapter() {
+    this.className = 'VersionsAdapter';
+	var size = 2 * 1024 * 1024;
+    if (window.sqlitePlugin === undefined) {
+        console.log('opening Versions SQL Database, stores in Cache');
+        this.database = window.openDatabase("Versions", "1.0", "Versions", size);
+    } else {
+        console.log('opening SQLitePlugin Versions Database, stores in Documents with no cloud');
+        this.database = window.sqlitePlugin.openDatabase({name:"Versions", location:2, createFromLocation:1});
+    }
+	Object.seal(this);
+}
+VersionsAdapter.prototype.selectCountries = function(callback) {
+	var statement = 'SELECT countryCode, localName, flagIcon FROM Country ORDER BY localName';
+	this.select(statement, null, function(results) {
+		if (results instanceof IOError) {
+			callback(results)
+		} else {
+			var array = [];
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				array.push(row);
+			}
+			callback(array);
+		}
+	});
+};
+VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
+	var statement = 'SELECT cv.localLanguageName, cv.localVersionName, v.scope, o.ownerName, v.copyrightYear' +
+		' FROM CountryVersion cv' +
+		' JOIN Version v ON cv.versionCode=v.versionCode' +
+		' JOIN Language l ON v.silCode=l.silCode' +
+		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
+		' WHERE cv.countryCode = ?' +
+		' ORDER BY cv.localLanguageName, cv.localVersionName';
+	this.select(statement, [countryCode], function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else {
+			var array = [];
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				array.push(row);
+			}
+			callback(array);
+		}
+	});
+};
+VersionsAdapter.prototype.select = function(statement, values, callback) {
+    this.database.readTransaction(function(tx) {
+        console.log(statement, values);
+        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
+    });
+    function onSelectSuccess(tx, results) {
+        console.log('select success results, rowCount=', results.rows.length);
+        callback(results);
+    }
+    function onSelectError(tx, err) {
+        console.log('select error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+};
+
 /**
 * This class encapsulates the get and post to the BibleApp Server
 * from the BibleApp

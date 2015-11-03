@@ -14,6 +14,7 @@ cat ../Library/gui/QuestionsView.js >> js/BibleApp.js
 cat ../Library/gui/SearchView.js >> js/BibleApp.js
 cat ../Library/gui/HeaderView.js >> js/BibleApp.js
 cat ../Library/gui/TableContentsView.js >> js/BibleApp.js
+cat ../Library/gui/VersionsView.js >> js/BibleApp.js
 cat ../Library/gui/DOMBuilder.js >> js/BibleApp.js
 
 cat ../Library/gui/icons/drawQuestionsIcon.js >> js/BibleApp.js
@@ -32,6 +33,7 @@ cat ../Library/io/StyleIndexAdapter.js >> js/BibleApp.js
 cat ../Library/io/StyleUseAdapter.js >> js/BibleApp.js
 cat ../Library/io/HistoryAdapter.js >> js/BibleApp.js
 cat ../Library/io/QuestionsAdapter.js >> js/BibleApp.js
+cat ../Library/io/VersionsAdapter.js >> js/BibleApp.js
 cat ../Library/io/HttpClient.js >> js/BibleApp.js
 
 cat ../Library/model/meta/BibleCache.js >> js/BibleApp.js

@@ -58,6 +58,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.header.barHite);
 		that.historyView = new HistoryView(that.database.history, that.tableContents);
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
+		that.versionsView = new VersionsView();
 		Object.freeze(that);
 
 		switch(develop) {
@@ -72,6 +73,9 @@ AppViewController.prototype.begin = function(develop) {
 			break;
 		case 'QuestionsView':
 			that.questionsView.showView();
+			break;
+		case 'VersionsView':
+			that.versionsView.showView();
 			break;
 		default:
 			that.database.history.lastItem(function(lastItem) {
