@@ -37,7 +37,7 @@ DatabaseAdapter.prototype.create = function(callback) {
 			' comment text NULL)',
 			
 		'CREATE TABLE Country(' +
-			' code text PRIMARY KEY NOT NULL,' +
+			' countryCode text PRIMARY KEY NOT NULL,' +
 			' englishName text NOT NULL,' +
 			' primLanguage text REFERENCES Language(silCode) NOT NULL,' +
 			' localName text NOT NULL,' +
@@ -47,15 +47,15 @@ DatabaseAdapter.prototype.create = function(callback) {
 		'CREATE INDEX countryLanguageIdx ON Country(primLanguage)',
 			
 		'CREATE TABLE Owner(' +
-			' code text PRIMARY KEY NOT NULL,' +
-			' name text NOT NULL,' +
+			' ownerCode text PRIMARY KEY NOT NULL,' +
+			' ownerName text NOT NULL,' +
 			' comment text NULL)',
 			
 		'CREATE TABLE Version(' +
-			' code text PRIMARY KEY NOT NULL,' +
+			' versionCode text PRIMARY KEY NOT NULL,' +
 			' silCode text REFERENCES Language(silCode) NOT NULL,' +
 			' dblName text NULL,' +
-			' ownerCode text REFERENCES Owner(code) NOT NULL,' +
+			' ownerCode text REFERENCES Owner(ownerCode) NOT NULL,' +
 			' copyrightYear text NULL,' + // should be not null
 			' scope text CHECK(scope IN("BIBLE","NT","PNT")) NULL,' + // should be not null
 			' filename text NULL,' +
@@ -65,8 +65,8 @@ DatabaseAdapter.prototype.create = function(callback) {
 		'CREATE INDEX versionOwnerIdx ON Version(ownerCode)',
 		
 		'CREATE TABLE CountryVersion(' +
-			' countryCode text REFERENCES Country(code) NOT NULL,' +
-			' versionCode text REFERENCES Version(code) NOT NULL,' +
+			' countryCode text REFERENCES Country(countryCode) NOT NULL,' +
+			' versionCode text REFERENCES Version(versionCode) NOT NULL,' +
 			' localLanguageName text NOT NULL,' +
 			' localVersionName text NULL,' +
 			' comment text NULL,' +
@@ -99,7 +99,7 @@ DatabaseAdapter.prototype.insertOwner = function(directory, callback) {
 	var that = this;
 	var file = directory + '/Versions/Owner-Table 1.csv';
 	this.readFile(file, function(data) {
-		var statement = 'INSERT INTO Owner (code, name, comment) values (?,?,?)';
+		var statement = 'INSERT INTO Owner (ownerCode, ownerName, comment) values (?,?,?)';
 		that.executeSQL(statement, data, function(rowCount) {
 			console.log('INSERT Owner ', rowCount);
 			callback(rowCount);
@@ -121,7 +121,7 @@ DatabaseAdapter.prototype.insertCountry = function(directory, callback) {
 	var that = this;
 	var file = directory + '/Versions/Country-Table 1.csv';
 	this.readFile(file, function(data) {
-		var statement = 'INSERT INTO Country(code, englishName, primLanguage, localName, flagIcon, comment) values (?,?,?,?,?,?)';
+		var statement = 'INSERT INTO Country(countryCode, englishName, primLanguage, localName, flagIcon, comment) values (?,?,?,?,?,?)';
 		that.executeSQL(statement, data, function(rowCount) {
 			console.log('INSERT INOT Country', rowCount);
 			callback(rowCount);
@@ -133,7 +133,7 @@ DatabaseAdapter.prototype.insertVersion = function(directory, callback) {
 	var that = this;
 	var file = directory + '/Versions/Version-Table 1.csv';
 	this.readFile(file, function(data) {
-		var statement = 'INSERT INTO Version(code, silCode, dblName, ownerCode, copyrightYear, scope, filename, comment) values (?,?,?,?,?,?,?,?)';
+		var statement = 'INSERT INTO Version(versionCode, silCode, dblName, ownerCode, copyrightYear, scope, filename, comment) values (?,?,?,?,?,?,?,?)';
 		that.executeSQL(statement, data, function(rowCount) {
 			console.log('INSERT INTO VERSION', rowCount);
 			callback(rowCount);
@@ -239,9 +239,5 @@ DatabaseAdapter.prototype.executeSQL = function(statement, values, callback) {
 		}
 	}
 };
-
-
-//var database = new DatabaseAdapter({filename: './TestDatabase.db', verbose: true});
-//database.create(function(err) { console.log('CREATE ERROR', err); });
 
 module.exports = DatabaseAdapter;
