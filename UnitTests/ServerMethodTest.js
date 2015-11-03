@@ -198,26 +198,6 @@ var tests = [
 		results: {message:'AutoTestDatabase.db created'}
 	},
 	{
-		number: 20,
-		name: 'getVersions',
-		description: 'A Valid getVersions call',
-		method: 'GET',
-		path: '/versions/en-US',
-		postData: null,
-		status: 200,
-		results: ['WEB.bible1','KJV.bible1']
-	},
-	{
-		number: 30,
-		name: 'getVersions',
-		description: 'A Valid getVersions call, but it should be invalid in the future',
-		method: 'GET',
-		path: '/versions/es-ES',
-		postData: null,
-		status: 200,
-		results: ['WEB.bible1','KJV.bible1']		
-	},
-	{
 		number: 40,
 		name: 'registerTeacher',
 		description: 'A registration with no credentials',

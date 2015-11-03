@@ -3,9 +3,6 @@
 * to individual controllers.
 */
 "use strict";
-var EthnologyController = require('./EthnologyController');
-var ethnologyController = new EthnologyController();
-
 var DatabaseAdapter = require('./DatabaseAdapter');
 var database = new DatabaseAdapter({filename: './TestDatabase.db', verbose: false});
 
@@ -35,7 +32,7 @@ server.pre(restify.pre.userAgentConnection()); // if UA is curl, close connectio
 */
 server.pre(function(request, response, next) {
 	var path = request.getPath().substr(1,5);
-	if (path === 'bible' || path === 'versi' || path === 'quest' || path === 'respo' || path === 'login') return(next());
+	if (path === 'bible' || path === 'quest' || path === 'respo' || path === 'login') return(next());
 	authController.authenticate(request, function(err) {
 		return(next(err));
 	});
@@ -73,11 +70,6 @@ server.get('/beginTest', function beginTest(request, response, next) {
 server.get(/\/bible\/?.*/, restify.serveStatic({
 	directory: '../../StaticRoot'
 }));
-
-server.get('/versions/:locale', function getVersions(request, response, next) {
-	var results = ethnologyController.availVersions(request.params.locale);
-	respond(null, results, 200, response, next);
-});
 
 server.get('/login', function loginTeacher(request, response, next) {
 	authController.login(request, function(err, results) {
