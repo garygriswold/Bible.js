@@ -75,7 +75,10 @@ VersionsView.prototype.buildVersionList = function(parent) {
 		if (row.copyrightYear === 'PUBLIC') {
 			return(row.ownerName + ' Public Domain');
 		} else {
-			return('c' + '  Copyright ' + row.ownerName + ', ' + row.copyrightYear);
+			var result = [String.fromCharCode('0xA9')];
+			if (row.copyrightYear) result.push(row.copyrightYear + ',');
+			if (row.ownerName) result.push(row.ownerName);
+			return(result.join(' '));
 		}
 	}
 };
