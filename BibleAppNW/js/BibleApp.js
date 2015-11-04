@@ -1067,6 +1067,7 @@ VersionsView.prototype.buildCountriesList = function() {
 			for (var i=0; i<results.length; i++) {
 				var row = results[i];
 				var countryNode = that.dom.addNode(root, 'li', 'ctry', row.localName, 'cty' + row.countryCode);
+				countryNode.setAttribute('data-lang', row.primLanguage);
 				countryNode.addEventListener('click', countryClickHandler);
 			}
 		}
@@ -1083,14 +1084,16 @@ VersionsView.prototype.buildCountriesList = function() {
 VersionsView.prototype.buildVersionList = function(parent) {
 	var that = this;
 	var countryCode = parent.id.substr(3);
+	var primLanguage = parent.getAttribute('data-lang');
 	var versionNodeList = document.createElement('div');
-	this.database.selectVersions(countryCode, function(results) {
+	this.database.selectVersions(countryCode, primLanguage, function(results) {
 		if (! (results instanceof IOError)) {
 			for (var i=0; i<results.length; i++) {
 				var row = results[i];
 				var versionNode = that.dom.addNode(versionNodeList, 'div');
 				that.dom.addNode(versionNode, 'p', 'langName', row.localLanguageName);
-				that.dom.addNode(versionNode, 'p', 'versName', versionName(row));
+				var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
+				that.dom.addNode(versionNode, 'p', 'versName', versionName);
 				that.dom.addNode(versionNode, 'p', 'copy', copyright(row));
 				
 				versionNode.addEventListener('click', versionClickHandler);
@@ -1102,22 +1105,6 @@ VersionsView.prototype.buildVersionList = function(parent) {
 	function versionClickHandler(event) {
 		this.removeEventListener('click', versionClickHandler);
 		console.log('click on version');
-	}
-	
-	function versionName(row) {
-		if (row.localVersionName && row.localVersionName.length > 0) {
-			return(row.localVersionName);
-		}
-		switch(row.scope) {
-			case 'BIBLE':
-				return('Bible');
-			case 'NT':
-				return('New Testament');
-			case 'PNT':
-				return('Partial New Testament');
-			default:
-				return(row.scope);
-		}
 	}
 	function copyright(row) {
 		if (row.copyrightYear === 'PUBLIC') {
@@ -1994,7 +1981,7 @@ function VersionsAdapter() {
 	Object.seal(this);
 }
 VersionsAdapter.prototype.selectCountries = function(callback) {
-	var statement = 'SELECT countryCode, localName, flagIcon FROM Country ORDER BY localName';
+	var statement = 'SELECT countryCode, localName, primLanguage, flagIcon FROM Country ORDER BY localName';
 	this.select(statement, null, function(results) {
 		if (results instanceof IOError) {
 			callback(results)
@@ -2008,15 +1995,16 @@ VersionsAdapter.prototype.selectCountries = function(callback) {
 		}
 	});
 };
-VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
-	var statement = 'SELECT cv.localLanguageName, cv.localVersionName, v.scope, o.ownerName, v.copyrightYear' +
+VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, callback) {
+	var statement = 'SELECT cv.localLanguageName, cv.localVersionName, t1.translated as scope, o.ownerName, v.copyrightYear' +
 		' FROM CountryVersion cv' +
 		' JOIN Version v ON cv.versionCode=v.versionCode' +
 		' JOIN Language l ON v.silCode=l.silCode' +
 		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
+		' LEFT OUTER JOIN TextTranslation t1 ON t1.silCode=? AND t1.word=v.scope' +
 		' WHERE cv.countryCode = ?' +
 		' ORDER BY cv.localLanguageName, cv.localVersionName';
-	this.select(statement, [countryCode], function(results) {
+	this.select(statement, [primLanguage, countryCode], function(results) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else {

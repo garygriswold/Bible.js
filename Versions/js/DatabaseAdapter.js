@@ -22,6 +22,7 @@ function DatabaseAdapter(options) {
 }
 DatabaseAdapter.prototype.create = function(callback) {
 	var statements = [
+		'DROP TABLE IF EXISTS TextTranslation',
 		'DROP TABLE IF EXISTS CountryVersion',
 		'DROP TABLE IF EXISTS Version',
 		'DROP TABLE IF EXISTS Owner',
@@ -72,7 +73,13 @@ DatabaseAdapter.prototype.create = function(callback) {
 			' PRIMARY KEY(countryCode, versionCode))',
 			
 		'CREATE INDEX countryVersionCodeIdx ON CountryVersion(countryCode)',
-		'CREATE INDEX countryVersionVersionIdx ON CountryVersion(versionCode)'
+		'CREATE INDEX countryVersionVersionIdx ON CountryVersion(versionCode)',
+		
+		'CREATE TABLE TextTranslation(' +
+			' silCode text REFERENCES Language(silCode) NOT NULL,' +
+			' word text NOT NULL,' +
+			' translated text NOT NULL,' +
+			' PRIMARY KEY(silCode, word))'
 	];
 	this.executeDDL(statements, callback);
 };
@@ -103,6 +110,12 @@ DatabaseAdapter.prototype.loadAll = function(directory) {
 					statement = 'INSERT INTO CountryVersion(countryCode, versionCode, localLanguageName, localVersionName, comment) values (?,?,?,?,?)';
 					that.loadFile(file, statement, function(rowCount) {
 						console.log('CountryVersion count', rowCount);
+						
+						file = '/TextTranslation-Table 1.csv';
+						statement = 'INSERT INTO TextTranslation(silCode, word, translated) values (?,?,?)';
+						that.loadFile(file, statement, function(rowCount) {
+							console.log('TextTranslation count', rowCount);
+						})
 					});
 				});
 			});

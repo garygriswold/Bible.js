@@ -17,7 +17,7 @@ function VersionsAdapter() {
 	Object.seal(this);
 }
 VersionsAdapter.prototype.selectCountries = function(callback) {
-	var statement = 'SELECT countryCode, localName, flagIcon FROM Country ORDER BY localName';
+	var statement = 'SELECT countryCode, localName, primLanguage, flagIcon FROM Country ORDER BY localName';
 	this.select(statement, null, function(results) {
 		if (results instanceof IOError) {
 			callback(results)
@@ -31,15 +31,16 @@ VersionsAdapter.prototype.selectCountries = function(callback) {
 		}
 	});
 };
-VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
-	var statement = 'SELECT cv.localLanguageName, cv.localVersionName, v.scope, o.ownerName, v.copyrightYear' +
+VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, callback) {
+	var statement = 'SELECT cv.localLanguageName, cv.localVersionName, t1.translated as scope, o.ownerName, v.copyrightYear' +
 		' FROM CountryVersion cv' +
 		' JOIN Version v ON cv.versionCode=v.versionCode' +
 		' JOIN Language l ON v.silCode=l.silCode' +
 		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
+		' LEFT OUTER JOIN TextTranslation t1 ON t1.silCode=? AND t1.word=v.scope' +
 		' WHERE cv.countryCode = ?' +
 		' ORDER BY cv.localLanguageName, cv.localVersionName';
-	this.select(statement, [countryCode], function(results) {
+	this.select(statement, [primLanguage, countryCode], function(results) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else {
