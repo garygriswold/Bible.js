@@ -34,6 +34,9 @@ VersionsView.prototype.buildCountriesList = function() {
 				var countryNode = that.dom.addNode(root, 'li', 'ctry', row.localName, 'cty' + row.countryCode);
 				countryNode.setAttribute('data-lang', row.primLanguage);
 				countryNode.addEventListener('click', countryClickHandler);
+				var flagNode = that.dom.addNode(countryNode, 'img');
+				flagNode.setAttribute('src', 'media/flags/64/' + row.countryCode + '.png');
+				flagNode.setAttribute('alt', 'Flag');
 			}
 		}
 		that.rootNode.appendChild(root);
