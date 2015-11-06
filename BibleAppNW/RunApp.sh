@@ -5,6 +5,7 @@ cat ../Library/css/Questions.css >> css/BibleApp.css
 cat ../Library/css/Search.css >> css/BibleApp.css
 cat ../Library/css/Status.css >> css/BibleApp.css
 cat ../Library/css/TableContents.css >> css/BibleApp.css
+cat ../Library/css/Settings.css >> css/BibleApp.css
 
 echo \"use strict\"\; > js/BibleApp.js
 cat ../Library/gui/AppViewController.js >> js/BibleApp.js

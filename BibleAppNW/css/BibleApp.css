@@ -441,3 +441,51 @@ td.tocChap { /* non-std */
 	border-style: solid;
 	border-color: #777777;
 }
+body {
+    margin:0;
+}
+#settingRoot {
+    background-color: #abc;
+    padding-left:3%;
+    padding-right:3%;
+    padding-top:30px;
+    padding-bottom:20px;
+    margin:0;
+}
+div.ctry {
+    background-color: white;
+	border-radius: 48px;
+	margin-bottom: 20px;
+	font-family: sans-serif;
+	font-size: 48px;
+	font-weight: bold;
+	box-shadow: 7px 7px 7px #777;
+}
+div.ctry img {
+	vertical-align: middle;
+	margin-left: 24px;
+	padding-right: 7px;
+}
+div.vers {
+    background-color: #EEEEEE;
+	border-radius: 12px;
+	margin-bottom: 20px;
+	margin-left: 10%;
+	box-shadow: 4px 4px 5px #777;
+	padding-top: 1%;
+	padding-bottom: 1%;
+	padding-left: 4%			
+}
+div.vers p {
+	margin: 2px;
+	font-family: sans-serif;
+}
+p.langName {
+	font-size: 24px;			
+}
+span.versName {
+	font-size: 18px;
+}
+span.copy {
+	font-size: 12px;
+}
