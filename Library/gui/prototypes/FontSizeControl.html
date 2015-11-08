@@ -9,55 +9,82 @@
         <script type="text/javascript" src="../../../BibleAppNW/js/Draggable.js"></script>
         <title>The Bible</title>
     </head>
-    <body onload='startDraggable()'>
+    <body onload='startDraggable(12, 12, 48)'>
 	    <div id="settingRoot">
 			<div id="fontSizeControl">
 				<div id="slider"></div>
-				<div id="thumb"><div>
-				<div id="sampleText" style='fontSize:12'>ABC</div>
-				<!--<div id="value"></div>-->
-			</div>    
+				<div id="thumb"></div>
+			</div>
+			<div id="sampleText" style='fontSize:12'>
+				For God so loved the world, that he gave his only begotten Son, that whoever believes in Him will not perish, but have eternal life.
+			</div>
 	    </div>
     </body>
     <script type="text/javascript">
-	    console.log('execute onload');
-	    function startDraggable() {
-		    console.log('execute draggable create');
+	    function startDraggable(fontSize, ptMin, ptMax) {
+		    var sampleNode = document.getElementById('sampleText');
+		    var ptRange = ptMax - ptMin;
+		    var startPos = initialPosition(fontSize);
+		    TweenMax.set('#thumb', {x:startPos});
 	    	Draggable.create('#thumb', {type:'x', bounds:'#slider', onDrag:function() {
-		    	console.log('Update size', this.x, this.minX, this.maxX);
-		    	//var valueNode = document.getElementById('value');
-		    	var size = (this.x - this.minX) / (this.maxX - this.minX) * (48 - 12) + 12;
-		    	//valueNode.textContent = size;
-		    	var sampleNode = document.getElementById('sampleText');
-		    	sampleNode.style.fontSize = size + 'px';
+		    	console.log('x', this.x, this.minX, this.maxX);
+				resizeText(this.x, this.minX, this.maxX);
 	    	}});
+			function initialPosition(fontSize) {
+		    	var slider = document.getElementById('slider');
+		    	console.log('local left', slider.offsetLeft);
+				var bounds = slider.getBoundingClientRect();
+				var minX = bounds.left;
+				var maxX = bounds.right;
+				console.log('found bounds', minX, maxX);
+				var x = (fontSize - ptMin) / ptRange * (maxX - minX) + minX;
+				resizeText(x, minX, maxX);
+				return(x);
+	    	}
+			function resizeText(x, min, max) {
+		    	var size = (x - min) / (max - min) * ptRange + ptMin;
+				sampleNode.style.fontSize = size + 'px';		    
+	    	}
 	    }
 	</script>
 	<style>
+		body {
+		    margin:0;
+	    }
+	    #settingRoot {
+		    background-color: #abc;
+		    padding-left:3%;
+		    padding-right:3%;
+		    padding-top:30px;
+		    padding-bottom:20px;
+		    margin:0;
+	    }
 		#fontSizeControl {
 			margin:0;
-			/*background-color:#CBA;*/
 			padding:30px;
 		}
 		#slider {
 			margin-left:auto;
 			margin-right:auto;
-			border-radius: 20px;
-			background-color:#ABC;
+			margin-bottom:0px;
+			border-radius: 7px;
+			background-color:#00008B;
 			width:70%;
-			height:14px;
-			
+			height:7px;
 		}
 		#thumb {
-			height: 50px;
-			width: 50px;
-			background-color:red;
-			border-width:1px;
-			border-radius:25px;
-			margin-top: -30px
+			height: 30px;
+			width: 30px;
+			margin-top: -30px;
+			background: #eee;
+			padding: 6px;
+			border: solid 4px #bcbbbb;
+			outline: none;
+			border-radius: 2em;
+			box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
+			box-shadow: 4px 4px 5px #777;
 		}
 		#sampleText {
-			margin-top: 30px;
 		}
 	</style>
 </html>
