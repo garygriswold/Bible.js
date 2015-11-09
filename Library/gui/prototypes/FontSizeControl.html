@@ -9,38 +9,30 @@
         <script type="text/javascript" src="../../../BibleAppNW/js/Draggable.js"></script>
         <title>The Bible</title>
     </head>
-    <body onload='startDraggable(12, 12, 48)'>
+    <body onload='startFontSizeControl(12, 12, 48)'>
 	    <div id="settingRoot">
 			<div id="fontSizeControl">
 				<div id="slider"></div>
 				<div id="thumb"></div>
 			</div>
-			<div id="sampleText" style='fontSize:12'>
+			<div id="sampleText">
 				For God so loved the world, that he gave his only begotten Son, that whoever believes in Him will not perish, but have eternal life.
 			</div>
 	    </div>
     </body>
     <script type="text/javascript">
-	    function startDraggable(fontSize, ptMin, ptMax) {
+	    function startFontSizeControl(fontSize, ptMin, ptMax) {
 		    var sampleNode = document.getElementById('sampleText');
 		    var ptRange = ptMax - ptMin;
-		    var startPos = initialPosition(fontSize);
-		    TweenMax.set('#thumb', {x:startPos});
-	    	Draggable.create('#thumb', {type:'x', bounds:'#slider', onDrag:function() {
+	    	var draggable = Draggable.create('#thumb', {type:'x', bounds:'#slider', onDrag:function() {
 		    	console.log('x', this.x, this.minX, this.maxX);
 				resizeText(this.x, this.minX, this.maxX);
 	    	}});
-			function initialPosition(fontSize) {
-		    	var slider = document.getElementById('slider');
-		    	console.log('local left', slider.offsetLeft);
-				var bounds = slider.getBoundingClientRect();
-				var minX = bounds.left;
-				var maxX = bounds.right;
-				console.log('found bounds', minX, maxX);
-				var x = (fontSize - ptMin) / ptRange * (maxX - minX) + minX;
-				resizeText(x, minX, maxX);
-				return(x);
-	    	}
+	    	var drag0 = draggable[0];
+	    	var startX = (fontSize - ptMin) / ptRange * (drag0.maxX - drag0.minX) + drag0.minX;
+	    	TweenMax.set('#thumb', {x:startX});
+	    	resizeText(startX, drag0.minX, drag0.maxX);
+
 			function resizeText(x, min, max) {
 		    	var size = (x - min) / (max - min) * ptRange + ptMin;
 				sampleNode.style.fontSize = size + 'px';		    
@@ -61,7 +53,7 @@
 	    }
 		#fontSizeControl {
 			margin:0;
-			padding:30px;
+			padding:40px;
 		}
 		#slider {
 			margin-left:auto;
@@ -73,11 +65,11 @@
 			height:7px;
 		}
 		#thumb {
-			height: 30px;
-			width: 30px;
+			height: 40px;
+			width: 40px;
 			margin-top: -30px;
 			background: #eee;
-			padding: 6px;
+			/*padding: 6px;*/
 			border: solid 4px #bcbbbb;
 			outline: none;
 			border-radius: 2em;
