@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+        <script type="text/javascript" src="../../../BibleAppNW/js/TweenMax.js"></script>
+        <script type="text/javascript" src="../../../BibleAppNW/js/Draggable.js"></script>
+        <script type="text/javascript" src="../../../Gitignore/GreenSock.1.18.0/src/uncompressed/plugins/ThrowPropsPlugin.js"></script>
+        <title>The Bible</title>
+    </head>
+    <body onload='startFontColorControl(false)'>
+	    <div id="settingRoot">
+		    <table id="settingTable">
+				<tr id="fontColorControl">
+					<td id="blackBackground" class="tableLeftCol">For God so loved</td>
+					<td id="fontColorToggle" class="tableCtrlCol">
+						<div id="colorSlider">
+							<div id="colorThumb"></div>
+						</div>
+					</td>
+					<td id="whiteBackground" class="tableRightCol">For God so loved</td>
+				</tr>
+		    </table>
+	    </div>
+    </body>
+    <script type="text/javascript">
+	    function startFontColorControl(isNight) {
+		    console.log('start draggable');
+		    var sliderNode = document.getElementById('colorSlider');
+		    console.log('width', sliderNode.style.width, sliderNode.offsetWidth, sliderNode.offsetLeft);
+	    	Draggable.create('#colorThumb', {type:'x', bounds:'#colorSlider', throwProps:true, snap:[0, 47], onDrag:function() {
+				// how do I color this on left?  From this.minX to this.x
+		    	console.log('x', this.x, this.minX, this.maxX);	
+	    	}});
+	    }
+	</script>
+	<style>
+		body {
+		    margin:0;
+	    }
+	    #settingRoot {
+		    background-color: #abc;
+		    padding-left:3%;
+		    padding-right:3%;
+		    padding-top:30px;
+		    padding-bottom:20px;
+		    margin:0;
+	    }
+	    #settingTable {
+		    width:100%;
+	    }
+	    .tableLeftCol {
+		    width:40%;
+		    vertical-align:middle;
+		    padding-left:10%;
+	    }
+	    .tableCtrlCol {
+		    width:20%;
+		    vertical-align:middle;
+		    text-align:center;
+		    margin:auto;
+	    }
+	    .tableRightCol {
+		    width:40%;
+		    vertical-align:middle;
+		    text-align:right;
+		    padding-right:10%;
+		    
+	    }
+		#fontColorControl {
+			margin:0;
+			padding:30px;
+			width:100%;
+			border:solid;
+
+		}
+		#blackBackground {
+			background-color:white;
+			color:black;
+	    }
+		#whiteBackground {
+			background-color:black;
+			color:white;
+		}
+		#fontColorToggle {
+			/*display:inline-block;
+			border:solid;
+			width:40%;
+			vertical-align: middle;*/
+		}
+		#colorSlider {
+			background-color:#EEEEEE;
+			height:44px;
+			width:88px;
+			border-radius: 22px;
+			box-shadow: inset 0 0 5px #888;
+			border: solid;
+			border-width:1px;
+			margin:auto;
+			/*margin-left:auto;
+			margin-right:auto;
+			margin-bottom:0px;
+			border-radius: 7px;
+			background-color:#00008B;
+			width:70%;
+			height:7px;*/
+		}
+		#colorThumb {
+			height: 34px;
+			width: 34px;
+			background: #eee;
+			border: solid 4px #bcbbbb;
+			border-radius: 2em;
+			box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
+			box-shadow: 4px 4px 5px #777;
+		}
+	</style>
+</html>
