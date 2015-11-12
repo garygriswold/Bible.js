@@ -10,12 +10,12 @@
         <script type="text/javascript" src="../../../Gitignore/GreenSock.1.18.0/src/uncompressed/plugins/ThrowPropsPlugin.js"></script>
         <title>The Bible</title>
     </head>
-    <body onload='startFontColorControl(false)'>
+    <body onload='startFontColorControl(true)'>
 	    <div id="settingRoot">
 		    <table id="settingTable">
-				<tr id="fontColorControl">
+				<tr>
 					<td id="blackBackground" class="tableLeftCol">For God so loved</td>
-					<td id="fontColorToggle" class="tableCtrlCol">
+					<td class="tableCtrlCol">
 						<div id="colorSlider">
 							<div id="colorThumb"></div>
 						</div>
@@ -23,17 +23,37 @@
 					<td id="whiteBackground" class="tableRightCol">For God so loved</td>
 				</tr>
 		    </table>
+		    <div id="sampleText">
+				For God so loved the world, that he gave his only begotten Son, that whoever believes in Him will not perish, but have eternal life.
+			</div>
 	    </div>
     </body>
     <script type="text/javascript">
-	    function startFontColorControl(isNight) {
-		    console.log('start draggable');
+	    function startFontColorControl(state) {
+		    var onOffState = state;
 		    var sliderNode = document.getElementById('colorSlider');
-		    console.log('width', sliderNode.style.width, sliderNode.offsetWidth, sliderNode.offsetLeft);
-	    	Draggable.create('#colorThumb', {type:'x', bounds:'#colorSlider', throwProps:true, snap:[0, 47], onDrag:function() {
-				// how do I color this on left?  From this.minX to this.x
-		    	console.log('x', this.x, this.minX, this.maxX);	
+		    var thumbNode = document.getElementById('colorThumb');
+		    var sampleNode = document.getElementById('sampleText');
+	    	var draggable = Draggable.create(thumbNode, {type:'x', bounds:sliderNode, throwProps:true, onDrag:function() {
+				var newState = ((this.x / (this.minX + this.maxX)) > 0.5);
+				if (newState != onOffState) {
+					onOffState = newState;
+					setColors(onOffState);
+		    	}	
 	    	}});
+	    	var drag0 = draggable[0];
+	    	console.log('min max', drag0.minX, drag0.maxX);
+	    	drag0.snap = [drag0.minX, drag0.maxX];
+	    	var startX = (onOffState) ? drag0.maxX : drag0.minX;
+	    	TweenMax.set(thumbNode, {x:startX});
+	    	setColors(onOffState);
+	    	
+	    	function setColors(onOffState) {
+		    	var color = (onOffState) ? '#00FF00' : '#FFFFFF';
+				TweenMax.to(sliderNode, 0.4, {backgroundColor: color});
+				sampleNode.style.backgroundColor = (onOffState) ? '#000000' : '#FFFFFF';
+				sampleNode.style.color = (onOffState) ? '#FFFFFF' : '#000000';
+	    	}
 	    }
 	</script>
 	<style>
@@ -50,6 +70,7 @@
 	    }
 	    #settingTable {
 		    width:100%;
+		    margin-bottom: 40px;
 	    }
 	    .tableLeftCol {
 		    width:40%;
@@ -66,16 +87,8 @@
 		    width:40%;
 		    vertical-align:middle;
 		    text-align:right;
-		    padding-right:10%;
-		    
+		    padding-right:10%;   
 	    }
-		#fontColorControl {
-			margin:0;
-			padding:30px;
-			width:100%;
-			border:solid;
-
-		}
 		#blackBackground {
 			background-color:white;
 			color:black;
@@ -83,12 +96,6 @@
 		#whiteBackground {
 			background-color:black;
 			color:white;
-		}
-		#fontColorToggle {
-			/*display:inline-block;
-			border:solid;
-			width:40%;
-			vertical-align: middle;*/
 		}
 		#colorSlider {
 			background-color:#EEEEEE;
@@ -99,21 +106,14 @@
 			border: solid;
 			border-width:1px;
 			margin:auto;
-			/*margin-left:auto;
-			margin-right:auto;
-			margin-bottom:0px;
-			border-radius: 7px;
-			background-color:#00008B;
-			width:70%;
-			height:7px;*/
 		}
 		#colorThumb {
 			height: 34px;
 			width: 34px;
+			z-index:100;
 			background: #eee;
 			border: solid 4px #bcbbbb;
 			border-radius: 2em;
-			box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
 			box-shadow: 4px 4px 5px #777;
 		}
 	</style>
