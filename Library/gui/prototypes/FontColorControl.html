@@ -34,17 +34,17 @@
 		    var sliderNode = document.getElementById('colorSlider');
 		    var thumbNode = document.getElementById('colorThumb');
 		    var sampleNode = document.getElementById('sampleText');
-	    	var draggable = Draggable.create(thumbNode, {type:'x', bounds:sliderNode, throwProps:true, onDrag:function() {
-				var newState = ((this.x / (this.minX + this.maxX)) > 0.5);
-				if (newState != onOffState) {
-					onOffState = newState;
-					setColors(onOffState);
-		    	}	
-	    	}});
-	    	var drag0 = draggable[0];
-	    	console.log('min max', drag0.minX, drag0.maxX);
-	    	drag0.snap = [drag0.minX, drag0.maxX];
-	    	var startX = (onOffState) ? drag0.maxX : drag0.minX;
+	    	var draggable = Draggable.create(thumbNode, {type:'x', bounds:sliderNode, throwProps:true, snap:function(v) {
+		    		var snap = (v - this.minX < (this.maxX - this.minX) / 2) ? this.minX : this.maxX;
+		    		var newState = (snap > this.minX);
+		    		if (newState != onOffState) {
+			    		onOffState = newState;
+			    		setColors(onOffState);
+		    		}
+		    		return(snap);
+	    		}
+	    	});
+	    	var startX = (onOffState) ? draggable[0].maxX : draggable[0].minX;
 	    	TweenMax.set(thumbNode, {x:startX});
 	    	setColors(onOffState);
 	    	
