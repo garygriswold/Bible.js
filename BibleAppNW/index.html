@@ -20,8 +20,8 @@
 			//app.begin('QuestionsView')
 			//app.begin('HistoryView');
 			//app.begin('VersionsView');
-			app.begin('SettingsView');
-			//app.begin();
+			//app.begin('SettingsView');
+			app.begin();
 		};
 	</script>
   </head>
@@ -32,11 +32,14 @@
     <div id="questionsRoot"></div>
     <div id="tocRoot"></div>
     <div id="settingRoot"></div>
-    <div id="statusRoot">
-        <div id="tocCell"></div>
-        <div id="labelCell"></div>
-        <div id="questionsCell"></div>
-        <div id="searchCell"></div>
-    </div>
+    <table id="statusRoot">
+	    <tr>
+	        <td id="tocCell" class="statusCell"></td>
+	        <td id="searchCell" class="statusCell"></td>
+	        <td id="labelCell" class="statusCell"></td>
+	        <td id="questionsCell" class="statusCell"></td>
+	        <td id="settingsCell" class="statusCell"></td>
+	    </tr>
+    </table>
   </body>
 </html>

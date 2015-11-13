@@ -8,6 +8,7 @@ var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_HISTORY: 'bible-show-history', // present history tabs
 		HIDE_HISTORY: 'bible-hide-history', // hide history tabs
 		SHOW_PASSAGE: 'bible-show-passage', // show passage in codex view
+		SHOW_SETTINGS: 'bible-show-settings', // show settings view
 		LOOKUP: 'TBD-bible-lookup', // TBD
 		SEARCH_START: 'bible-search-start', // process user entered search string
 		CHG_HEADING: 'bible-chg-heading', // change title at top of page as result of user scrolling
@@ -98,6 +99,7 @@ AppViewController.prototype.begin = function(develop) {
 			that.historyView.hideView(function() {});
 			that.questionsView.hideView();
 			that.codexView.hideView();
+			that.settingsView.hideView();
 		});
 		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
 			that.searchView.showView();
@@ -106,6 +108,7 @@ AppViewController.prototype.begin = function(develop) {
 			that.historyView.hideView(function() {});
 			that.questionsView.hideView();
 			that.codexView.hideView();
+			that.settingsView.hideView();
 		});
 		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, function(event) {
 			that.questionsView.showView();
@@ -113,7 +116,8 @@ AppViewController.prototype.begin = function(develop) {
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
 			that.historyView.hideView(function() {});
-			that.codexView.hideView();			
+			that.codexView.hideView();
+			that.settingsView.hideView();		
 		});
 		var panRightEnabled = true;
 		that.touch.on("panright", function(event) {
@@ -146,6 +150,7 @@ AppViewController.prototype.begin = function(develop) {
 			that.header.showTitleField();
 			that.tableContentsView.hideView();
 			that.searchView.hideView();
+			that.settingsView.hideView();
 			var historyItem = { timestamp: new Date(), reference: event.detail.id, 
 				source: event.type, search: event.detail.source };
 			that.database.history.replace(historyItem, function(count) {});
@@ -155,6 +160,13 @@ AppViewController.prototype.begin = function(develop) {
 		});
 		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
 			that.codexView.hideFootnote(event.detail.id);
+		});
+		document.body.addEventListener(BIBLE.SHOW_SETTINGS, function(event) {
+			console.log('INSIDE BIBLE SHOW SETTINGS');
+			that.settingsView.showView();
+			that.codexView.hideView();
+			that.tableContentsView.hideView();
+			that.searchView.hideView();
 		});
 	});
 	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {

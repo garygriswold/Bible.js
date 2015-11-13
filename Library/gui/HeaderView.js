@@ -8,9 +8,11 @@ var STATUS_BAR_HEIGHT = 14;
 
 function HeaderView(tableContents) {
 	this.statusBarInHeader = (deviceSettings.platform() === 'ios') ? true : false;
+	this.statusBarInHeader = false;
 
 	this.hite = HEADER_BUTTON_HEIGHT;
 	this.barHite = (this.statusBarInHeader) ? HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT : HEADER_BAR_HEIGHT;
+	this.cellTopPadding = (this.statusBarInHeader) ? 'padding-top:' + STATUS_BAR_HEIGHT + 'px' : 'padding-top:0px';
 	this.tableContents = tableContents;
 	this.backgroundCanvas = null;
 	this.titleCanvas = null;
@@ -29,8 +31,9 @@ HeaderView.prototype.showView = function() {
 	this.rootNode.appendChild(this.backgroundCanvas);
 
 	setupTocButton(this.hite, '#F7F7BB');
-	setupQuestionsButton(this.hite, '#F7F7BB');
 	setupSearchButton(this.hite, '#F7F7BB');
+	setupQuestionsButton(this.hite, '#F7F7BB');
+	setupSettingsButton(this.hite, '#F7F7BB');
 
 	this.titleCanvas = document.createElement('canvas');
 	drawTitleField(this.titleCanvas, this.hite);
@@ -44,7 +47,7 @@ HeaderView.prototype.showView = function() {
 	function paintBackground(canvas, hite) {
     	canvas.setAttribute('height', that.barHite);
     	canvas.setAttribute('width', window.innerWidth);// outerWidth is zero on iOS
-    	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
+    	canvas.setAttribute('style', 'position: absolute; top:0; left:0; z-index: -1');
       	var graphics = canvas.getContext('2d');
       	graphics.rect(0, 0, canvas.width, canvas.height);
 
@@ -61,11 +64,7 @@ HeaderView.prototype.showView = function() {
 	}
 	function setupTocButton(hite, color) {
 		var canvas = drawTOCIcon(hite, color);
-		if (that.statusBarInHeader) {
-			canvas.setAttribute('style', 'position: fixed; top: 16px; left: 0');
-		} else {
-			canvas.setAttribute('style', 'position: fixed; top: 4px; left: 0');
-		}
+		canvas.setAttribute('style', that.cellTopPadding);
 		document.getElementById('tocCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -77,13 +76,7 @@ HeaderView.prototype.showView = function() {
 	function drawTitleField(canvas, hite) {
 		canvas.setAttribute('id', 'titleCanvas');
 		canvas.setAttribute('height', hite);
-		var titleWidth = window.innerWidth - hite * 3.5;
-		canvas.setAttribute('width', titleWidth);
-		if (that.statusBarInHeader) {
-			canvas.setAttribute('style', 'position: fixed; top: 16px; left:' + hite * 1.1 + 'px');			
-		} else {
-			canvas.setAttribute('style', 'position: fixed; top: 4px; left:' + hite * 1.1 + 'px');
-		}
+		canvas.setAttribute('style', that.cellTopPadding);
 		that.titleGraphics = canvas.getContext('2d');
 		that.titleGraphics.fillStyle = '#000000';
 		that.titleGraphics.font = '24pt sans-serif';
@@ -100,11 +93,7 @@ HeaderView.prototype.showView = function() {
 	}
 	function setupSearchButton(hite, color) {
 		var canvas = drawSearchIcon(hite, color);
-		if (that.statusBarInHeader) {
-			canvas.setAttribute('style', 'position: fixed; top: 16px; right: 0; border: none');			
-		} else {
-			canvas.setAttribute('style', 'position: fixed; top: 4px; right: 0; border: none');
-		}
+		canvas.setAttribute('style', that.cellTopPadding);
 		document.getElementById('searchCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
@@ -115,17 +104,24 @@ HeaderView.prototype.showView = function() {
 	}
 	function setupQuestionsButton(hite, color) {
 		var canvas = drawQuestionsIcon(hite, color);
-		if (that.statusBarInHeader) {
-			canvas.setAttribute('style', 'position: fixed; top: 16px; border: none; right: ' + hite * 1.14 + 'px');
-		} else {
-			canvas.setAttribute('style', 'position: fixed; top: 4px; border: none; right: ' + hite * 1.14 + 'px');
-		}
+		canvas.setAttribute('style', that.cellTopPadding);
 		document.getElementById('questionsCell').appendChild(canvas);
 
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
 			console.log('questions button is clicked');
 			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_QUESTIONS));
+		});
+	}
+	function setupSettingsButton(hite, color) {
+		var canvas = drawSettingsIcon(hite, color);
+		canvas.setAttribute('style', that.cellTopPadding);
+		document.getElementById('settingsCell').appendChild(canvas);
+		
+		canvas.addEventListener('click', function(event) {
+			event.stopImmediatePropagation();
+			console.log('settings button is clicked');
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_SETTINGS));
 		});
 	}
 };
@@ -147,9 +143,10 @@ HeaderView.prototype.showSearchField = function(query) {
 		this.searchField.setAttribute('type', 'text');
 		this.searchField.setAttribute('class', 'searchField');
 		this.searchField.setAttribute('value', query || '');
-		var style = [ 'position:fixed;' ];
-		style.push('left:' + (this.hite * 1.1) + 'px');
-		style.push('width:' + (window.innerWidth - this.hite * 4.0) + 'px');
+		var style = [];
+		//var style = [ 'position:fixed;' ];
+		//style.push('left:' + (this.hite * 1.1) + 'px');
+		//style.push('width:' + (window.innerWidth - this.hite * 4.0) + 'px');
 		if (this.statusBarInHeader) {
 			style.push('height:' + (HEADER_BAR_HEIGHT * 0.5) + 'px');
 			style.push('top:' + (HEADER_BAR_HEIGHT * 0.15 + STATUS_BAR_HEIGHT) + 'px');
@@ -157,7 +154,7 @@ HeaderView.prototype.showSearchField = function(query) {
 			style.push('height:' + (HEADER_BAR_HEIGHT * 0.65) + 'px');
 			style.push('top:' + (HEADER_BAR_HEIGHT * 0.15) + 'px');
 		}
-		this.searchField.setAttribute('style', style.join(';'));
+		//this.searchField.setAttribute('style', style.join(';'));
 
 		var that = this;
 		this.searchField.addEventListener('keyup', function(event) {

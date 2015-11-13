@@ -387,19 +387,33 @@ span.conWord {
 * This css file pertains to the StatusBar
 */
 
+body {
+	width:100%;
+}
+
 #statusRoot {
 	margin: 0;
 	position: fixed;
 	left: 0;
 	top: 0;
-	width: auto;
+	/*width: auto;*/
+	width:100%;
 	z-index: 1000;
+}
+td.statusCell {
+	border:solid;
+}
+#labelCell {
+	width:70%;
+	text-align: center;
 }
 /* Search input field */
 input.searchField {
 	font-family: sans-serif;
 	font-size: 1.2em;
 }
+
+
 /**
 * This css file pertains to the TableContentsView
 */
