@@ -2,6 +2,7 @@
 *.xcuserstate
 temp.js
 GitIgnore/
+licensed/
 ThrowPropsPlugin.js
 platforms/
 bible/
