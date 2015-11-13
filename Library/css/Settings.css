@@ -2,10 +2,10 @@ body {
     margin:0;
 }
 #settingRoot {
-    background-color: #abc;
+    /*backgroundColor is set in SettingsView.showView */
     padding-left:3%;
     padding-right:3%;
-    padding-top:30px;
+    padding-top:0px;
     padding-bottom:20px;
     margin:0;
 }

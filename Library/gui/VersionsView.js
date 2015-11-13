@@ -19,9 +19,11 @@ VersionsView.prototype.showView = function() {
 	}
 };
 VersionsView.prototype.hideView = function() {
-	if (this.rootNode.children.length > 0) {
-		this.scrollPosition = window.scrollY; // save scroll position till next use.
-		this.rootNode.removeChild(this.root);
+	for (var i=0; i<this.rootNode.children.length; i++) {
+		var node = this.rootNode.children[i];
+		if (node === this.node) {
+			this.rootNode.removeChild(this.root);
+		}
 	}
 };
 VersionsView.prototype.buildCountriesList = function() {

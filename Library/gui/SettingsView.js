@@ -6,6 +6,7 @@ function SettingsView() {
 	this.root = null;
 	this.rootNode = document.getElementById('settingRoot');
 	this.dom = new DOMBuilder();
+	this.versionsView = new VersionsView();
 	Object.seal(this);
 }
 SettingsView.prototype.showView = function() {
@@ -16,6 +17,8 @@ SettingsView.prototype.showView = function() {
 		this.rootNode.appendChild(this.root);
 	}
 	this.startControls();
+	this.versionsView.showView();
+	document.body.style.backgroundColor = '#ABC';
 };
 SettingsView.prototype.hideView = function() {
 	for (var i=0; i<this.rootNode.children.length; i++) {
@@ -24,6 +27,7 @@ SettingsView.prototype.hideView = function() {
 			this.rootNode.removeChild(this.root);
 		}
 	}
+	this.versionsView.hideView();
 };
 SettingsView.prototype.buildSettingsView = function() {
 	var table = document.createElement('table');
@@ -50,6 +54,7 @@ SettingsView.prototype.buildSettingsView = function() {
 	var colorThumb = this.dom.addNode(colorSlider, 'div', null, null, 'fontColorThumb');
 	var whiteCell = this.dom.addNode(colorRow, 'td', 'tableRightCol', 'For God so Loved', 'whiteBackground');
 	
+	addRowSpace(table);
 	addRowSpace(table);
 	return(table);
 	
