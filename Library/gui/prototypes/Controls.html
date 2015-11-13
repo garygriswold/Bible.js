@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html>
+  	<head>
+    	<meta charset="utf-8" />
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="msapplication-tap-highlight" content="no" />
+		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+		<link rel="stylesheet" href="../../../Library/css/Settings.css"/>
+		<script type="text/javascript" src="../../../Gitignore/GreenSock.1.18.0/src/uncompressed/TweenMax.js"></script>
+    	<script type="text/javascript" src="../../../Gitignore/GreenSock.1.18.0/src/uncompressed/utils/Draggable.js"></script>
+    	<script type="text/javascript" src="../../../Gitignore/GreenSock.1.18.0/src/uncompressed/plugins/ThrowPropsPlugin.js"></script>
+  	</head>
+  	<body onload="startControls()">
+	  	<div id="settingRoot">
+		  	<table id="settingsTable">
+				<tr>
+				 	<td id="sampleText" colspan="3">
+					  For God so loved the world, that he gave His only begotten Son, that whoever believes in Him should not perish, but have everlasting life.
+					</td>
+			  	</tr>
+			  	<tr><td class="rowSpace" colspan="3"></td></tr>
+			  	<tr>
+				  	<td id="fontSizeControl" colspan="3">
+				  		<div id="fontSizeSlider"></div>
+				  		<div id="fontSizeThumb"></div>
+					</td>
+			  	</tr>
+			  	<tr><td class="rowSpace" colspan="3"></td></tr>
+			  	<tr>
+				  	<td id="blackBackground" class="tableLeftCol">For God so</td>
+				  	<td class="tableCtrlCol">
+				  		<div id="fontColorSlider">
+							<div id="fontColorThumb"></div>
+						</div>
+				  </td>
+				  <td id="whiteBackground" class="tableRightCol">For God so</td>
+			 	</tr>
+			 	<tr><td class="rowSpace" colspan="3"></td></tr>
+		 	</table>
+	 	</div>
+	 	<script type="text/javascript">
+		 	function startControls() {
+			 	startFontSizeControl(18, 12, 48);
+			 	startFontColorControl(false);
+		 	}
+	 	</script>
+	     <script type="text/javascript">
+		    function startFontSizeControl(fontSize, ptMin, ptMax) {
+			    var sampleNode = document.getElementById('sampleText');
+			    var ptRange = ptMax - ptMin;
+		    	var draggable = Draggable.create('#fontSizeThumb', {type:'x', bounds:'#fontSizeSlider', onDrag:function() {
+			    	console.log('x', this.x, this.minX, this.maxX);
+					resizeText(this.x, this.minX, this.maxX);
+		    	}});
+		    	var drag0 = draggable[0];
+		    	var startX = (fontSize - ptMin) / ptRange * (drag0.maxX - drag0.minX) + drag0.minX;
+		    	TweenMax.set('#fontSizeThumb', {x:startX});
+		    	resizeText(startX, drag0.minX, drag0.maxX);
+	
+				function resizeText(x, min, max) {
+			    	var size = (x - min) / (max - min) * ptRange + ptMin;
+					sampleNode.style.fontSize = size + 'px';		    
+		    	}
+		    }
+		</script>
+	 	<script type="text/javascript">
+		    function startFontColorControl(state) {
+			    var onOffState = state;
+			    var sliderNode = document.getElementById('fontColorSlider');
+			    var thumbNode = document.getElementById('fontColorThumb');
+			    var sampleNode = document.getElementById('sampleText');
+		    	var draggable = Draggable.create(thumbNode, {type:'x', bounds:sliderNode, throwProps:true, snap:function(v) {
+			    		var snap = (v - this.minX < (this.maxX - this.minX) / 2) ? this.minX : this.maxX;
+			    		var newState = (snap > this.minX);
+			    		if (newState != onOffState) {
+				    		onOffState = newState;
+				    		setColors(onOffState);
+			    		}
+			    		return(snap);
+		    		}
+		    	});
+		    	var startX = (onOffState) ? draggable[0].maxX : draggable[0].minX;
+		    	TweenMax.set(thumbNode, {x:startX});
+		    	setColors(onOffState);
+		    	
+		    	function setColors(onOffState) {
+			    	var color = (onOffState) ? '#00FF00' : '#FFFFFF';
+					TweenMax.to(sliderNode, 0.4, {backgroundColor: color});
+					sampleNode.style.backgroundColor = (onOffState) ? '#000000' : '#FFFFFF';
+					sampleNode.style.color = (onOffState) ? '#FFFFFF' : '#000000';
+		    	}
+		    }
+	</script>
+ 	</body>
+</html>

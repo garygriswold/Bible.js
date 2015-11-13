@@ -15,6 +15,7 @@ cat ../Library/gui/QuestionsView.js >> js/BibleApp.js
 cat ../Library/gui/SearchView.js >> js/BibleApp.js
 cat ../Library/gui/HeaderView.js >> js/BibleApp.js
 cat ../Library/gui/TableContentsView.js >> js/BibleApp.js
+cat ../Library/gui/SettingsView.js >> js/BibleApp.js
 cat ../Library/gui/VersionsView.js >> js/BibleApp.js
 cat ../Library/gui/DOMBuilder.js >> js/BibleApp.js
 

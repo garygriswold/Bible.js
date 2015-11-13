@@ -9,6 +9,94 @@ body {
     padding-bottom:20px;
     margin:0;
 }
+td {
+	border:none;
+}
+#settingsTable {
+	width:100%;
+}
+#sampleText {
+	background-color: white;
+	color:black;
+	padding: 10px;
+}
+td.rowSpace {
+	padding: 7px;
+}
+
+/* Font Size Control */
+#fontSizeControl {
+	padding-top:25px;
+	padding-bottom:10px;
+}
+#fontSizeSlider {
+	margin-left:auto;
+	margin-right:auto;
+	border-radius: 7px;
+	background-color:#00008B;
+	width:70%;
+	height:7px;
+}
+#fontSizeThumb {
+	height: 40px;
+	width: 40px;
+	z-index:100;
+	margin-top: -30px;
+	background: #eee;
+	border: solid 4px #bcbbbb;
+	outline: none;
+	border-radius: 2em;
+	box-shadow: 4px 4px 5px #777;
+}
+
+/* Font Color Control */
+td.tableLeftCol {
+    width:40%;
+    vertical-align:middle;
+    text-align:center;
+}
+td.tableCtrlCol {
+    width:20%;
+    vertical-align:middle;
+    text-align:center;
+    margin:auto;
+}
+td.tableRightCol {
+    width:40%;
+    vertical-align:middle;
+    text-align: center;
+}
+#blackBackground {
+	background-color:white;
+	color:black;
+	border-radius: 14px;
+}
+#whiteBackground {
+	background-color:black;
+	color:white;
+	border-radius: 14px;
+}
+#fontColorSlider {
+	background-color:#EEEEEE;
+	height:44px;
+	width:88px;
+	border-radius: 22px;
+	box-shadow: inset 0 0 5px #888;
+	border: solid;
+	border-width:1px;
+	margin:auto;
+}
+#fontColorThumb {
+	height: 34px;
+	width: 34px;
+	z-index:100;
+	background: #eee;
+	border: solid 4px #bcbbbb;
+	border-radius: 2em;
+	box-shadow: 4px 4px 5px #777;
+}
+
+/* VersionsView CSS */
 div.ctry {
     background-color: white;
 	border-radius: 48px;
