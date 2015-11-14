@@ -17,7 +17,7 @@ function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	Object.seal(this);
 }
 SearchView.prototype.showView = function(query) {
-	this.hideView();
+	document.body.style.backgroundColor = '#FFF';
 	if (query) {
 		console.log('Create new search page');
 		this.showSearch(query);
@@ -44,7 +44,9 @@ SearchView.prototype.showView = function(query) {
 SearchView.prototype.hideView = function() {
 	if (this.rootNode.children.length > 0) {
 		this.scrollPosition = window.scrollY;
-		this.rootNode.removeChild(this.viewRoot);
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
 	}
 };
 SearchView.prototype.showSearch = function(query) {
@@ -143,7 +145,6 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText) 
 	verseNode.addEventListener('click', function(event) {
 		var nodeId = this.id.substr(3);
 		console.log('open chapter', nodeId);
-		that.hideView();
 		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
 	});
 

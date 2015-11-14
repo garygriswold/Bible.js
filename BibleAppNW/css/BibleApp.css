@@ -396,12 +396,11 @@ body {
 	position: fixed;
 	left: 0;
 	top: 0;
-	/*width: auto;*/
 	width:100%;
 	z-index: 1000;
 }
-td.statusCell {
-	border:solid;
+#statusRow td {
+	border:none;
 }
 #labelCell {
 	width:70%;

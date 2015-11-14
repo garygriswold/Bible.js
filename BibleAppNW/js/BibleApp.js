@@ -94,31 +94,19 @@ AppViewController.prototype.begin = function(develop) {
 			});
 		}
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
+			clearViews();		
 			that.tableContentsView.showView();
 			that.header.showTitleField();
-			that.searchView.hideView();
-			that.historyView.hideView(function() {});
-			that.questionsView.hideView();
-			that.codexView.hideView();
-			that.settingsView.hideView();
 		});
 		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
+			clearViews();	
 			that.searchView.showView();
 			that.header.showSearchField();
-			that.tableContentsView.hideView();
-			that.historyView.hideView(function() {});
-			that.questionsView.hideView();
-			that.codexView.hideView();
-			that.settingsView.hideView();
 		});
 		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, function(event) {
+			clearViews();	
 			that.questionsView.showView();
-			that.header.showTitleField();
-			that.tableContentsView.hideView();
-			that.searchView.hideView();
-			that.historyView.hideView(function() {});
-			that.codexView.hideView();
-			that.settingsView.hideView();		
+			that.header.showTitleField();	
 		});
 		var panRightEnabled = true;
 		that.touch.on("panright", function(event) {
@@ -141,17 +129,15 @@ AppViewController.prototype.begin = function(develop) {
 		document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
 			console.log('SEARCH_START', event.detail);
 			if (! that.lookup.find(event.detail.search)) {
-				that.searchView.showView(event.detail.search);
+				that.searchView.showView(event.detail.search);// needs a different method than showView
 				that.header.showSearchField(event.detail.search);
 			}
 		});
 		document.body.addEventListener(BIBLE.SHOW_PASSAGE, function(event) {
 			console.log(JSON.stringify(event.detail));
+			clearViews();
 			that.codexView.showView(event.detail.id);
 			that.header.showTitleField();
-			that.tableContentsView.hideView();
-			that.searchView.hideView();
-			that.settingsView.hideView();
 			var historyItem = { timestamp: new Date(), reference: event.detail.id, 
 				source: event.type, search: event.detail.source };
 			that.database.history.replace(historyItem, function(count) {});
@@ -163,17 +149,21 @@ AppViewController.prototype.begin = function(develop) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
 		document.body.addEventListener(BIBLE.SHOW_SETTINGS, function(event) {
-			console.log('INSIDE BIBLE SHOW SETTINGS');
+			clearViews();
 			that.settingsView.showView();
-			that.codexView.hideView();
-			that.tableContentsView.hideView();
-			that.searchView.hideView();
 		});
 	});
 	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
 		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
 		that.header.setTitle(event.detail.reference);
 	});
+	function clearViews() {
+		that.tableContentsView.hideView();
+		that.searchView.hideView();
+		that.codexView.hideView();
+		that.questionsView.hideView();
+		that.settingsView.hideView();
+	}
 };
 /**
 * This class contains user interface features for the display of the Bible text
@@ -196,11 +186,15 @@ function CodexView(chaptersAdapter, tableContents, headerHeight) {
 }
 CodexView.prototype.hideView = function() {
 	window.clearTimeout(this.checkScrollID);
-	for (var i=this.viewport.children.length -1; i>=0; i--) {
-		this.viewport.removeChild(this.viewport.children[i]);
+	if (this.viewport.children.length > 0) {
+		///this.scrollPosition = window.scrollY; // ISN'T THIS NEEDED?
+		for (var i=this.viewport.children.length -1; i>=0; i--) {
+			this.viewport.removeChild(this.viewport.children[i]);
+		}
 	}
 };
 CodexView.prototype.showView = function(nodeId) {
+	document.body.style.backgroundColor = '#FFF';
 	var chapterQueue = [];
 	var firstChapter = new Reference(nodeId);
 	firstChapter = this.tableContents.ensureChapter(firstChapter);
@@ -458,7 +452,7 @@ function QuestionsView(questionsAdapter, versesAdapter, tableContents) {
 }
 QuestionsView.prototype.showView = function() {
 	var that = this;
-	this.hideView();
+	document.body.style.backgroundColor = '#FFF';
 	this.questions.fill(function(results) {
 		if (results instanceof IOError) {
 			console.log('Error: QuestionView.showView.fill');
@@ -490,10 +484,13 @@ QuestionsView.prototype.showView = function() {
 	}
 };
 QuestionsView.prototype.hideView = function() {
-	for (var i=this.rootNode.children.length -1; i>=0; i--) {
-		this.rootNode.removeChild(this.rootNode.children[i]);
+	if (this.rootNode.children.length > 0) {
+		// why not save scroll position
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
+		this.viewRoot = null;
 	}
-	this.viewRoot = null;
 };
 QuestionsView.prototype.buildQuestionsView = function() {
 	var that = this;
@@ -553,7 +550,6 @@ QuestionsView.prototype.buildQuestionsView = function() {
 					console.error('error at server', error);
 				} else {
 					console.log('file is written to disk and server');
-					that.hideView();
 					that.viewRoot = that.buildQuestionsView();
 					that.rootNode.appendChild(that.viewRoot);
 				}
@@ -590,7 +586,7 @@ function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	Object.seal(this);
 }
 SearchView.prototype.showView = function(query) {
-	this.hideView();
+	document.body.style.backgroundColor = '#FFF';
 	if (query) {
 		console.log('Create new search page');
 		this.showSearch(query);
@@ -617,7 +613,9 @@ SearchView.prototype.showView = function(query) {
 SearchView.prototype.hideView = function() {
 	if (this.rootNode.children.length > 0) {
 		this.scrollPosition = window.scrollY;
-		this.rootNode.removeChild(this.viewRoot);
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
 	}
 };
 SearchView.prototype.showSearch = function(query) {
@@ -716,7 +714,6 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText) 
 	verseNode.addEventListener('click', function(event) {
 		var nodeId = this.id.substr(3);
 		console.log('open chapter', nodeId);
-		that.hideView();
 		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
 	});
 
@@ -818,7 +815,6 @@ HeaderView.prototype.showView = function() {
     	canvas.setAttribute('style', 'position: absolute; top:0; left:0; z-index: -1');
       	var graphics = canvas.getContext('2d');
       	graphics.rect(0, 0, canvas.width, canvas.height);
-      	console.log('hite', hite, 'canvas ht', canvas.height, 'canvas wt', canvas.width, 'wind inner', window.innerWidth);
 
       	// create radial gradient
       	var vMidpoint = hite / 2;
@@ -956,6 +952,7 @@ function TableContentsView(toc) {
 	Object.seal(this);
 }
 TableContentsView.prototype.showView = function() {
+	document.body.style.backgroundColor = '#FFF';
 	if (! this.root) {
 		this.root = this.buildTocBookList();
 	}
@@ -967,7 +964,9 @@ TableContentsView.prototype.showView = function() {
 TableContentsView.prototype.hideView = function() {
 	if (this.rootNode.children.length > 0) {
 		this.scrollPosition = window.scrollY; // save scroll position till next use.
-		this.rootNode.removeChild(this.root);
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
 	}
 };
 TableContentsView.prototype.buildTocBookList = function() {
@@ -1042,7 +1041,6 @@ TableContentsView.prototype.removeAllChapters = function() {
 };
 TableContentsView.prototype.openChapter = function(nodeId) {
 	console.log('open chapter', nodeId);
-	this.hideView();
 	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 };
 
@@ -1059,6 +1057,7 @@ function SettingsView() {
 	Object.seal(this);
 }
 SettingsView.prototype.showView = function() {
+	document.body.style.backgroundColor = '#ABC';
 	if (! this.root) {
 		this.root = this.buildSettingsView();
 	}
@@ -1067,16 +1066,14 @@ SettingsView.prototype.showView = function() {
 	}
 	this.startControls();
 	this.versionsView.showView();
-	document.body.style.backgroundColor = '#ABC';
 };
 SettingsView.prototype.hideView = function() {
-	for (var i=0; i<this.rootNode.children.length; i++) {
-		var node = this.rootNode.children[i];
-		if (node === this.node) {
-			this.rootNode.removeChild(this.root);
+	if (this.rootNode.children.length > 0) {
+		// should I save scroll position here
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
 		}
-	}
-	this.versionsView.hideView();
+	}	
 };
 SettingsView.prototype.buildSettingsView = function() {
 	var table = document.createElement('table');
@@ -1176,17 +1173,9 @@ VersionsView.prototype.showView = function() {
 	if (! this.root) {
 		this.buildCountriesList();
 	} 
-	else if (this.rootNode.children.length < 1) {
+	else if (this.rootNode.children.length < 4) {
 		this.rootNode.appendChild(this.root);
-		window.scrollTo(10, this.scrollPosition);
-	}
-};
-VersionsView.prototype.hideView = function() {
-	for (var i=0; i<this.rootNode.children.length; i++) {
-		var node = this.rootNode.children[i];
-		if (node === this.node) {
-			this.rootNode.removeChild(this.root);
-		}
+		window.scrollTo(10, this.scrollPosition);// move to settings view?
 	}
 };
 VersionsView.prototype.buildCountriesList = function() {

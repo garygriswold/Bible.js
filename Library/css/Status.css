@@ -14,8 +14,8 @@ body {
 	width:100%;
 	z-index: 1000;
 }
-td.statusCell {
-	border:solid;
+#statusRow td {
+	border:none;
 }
 #labelCell {
 	width:70%;

@@ -10,6 +10,7 @@ function TableContentsView(toc) {
 	Object.seal(this);
 }
 TableContentsView.prototype.showView = function() {
+	document.body.style.backgroundColor = '#FFF';
 	if (! this.root) {
 		this.root = this.buildTocBookList();
 	}
@@ -21,7 +22,9 @@ TableContentsView.prototype.showView = function() {
 TableContentsView.prototype.hideView = function() {
 	if (this.rootNode.children.length > 0) {
 		this.scrollPosition = window.scrollY; // save scroll position till next use.
-		this.rootNode.removeChild(this.root);
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
 	}
 };
 TableContentsView.prototype.buildTocBookList = function() {
@@ -96,7 +99,6 @@ TableContentsView.prototype.removeAllChapters = function() {
 };
 TableContentsView.prototype.openChapter = function(nodeId) {
 	console.log('open chapter', nodeId);
-	this.hideView();
 	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 };
 

@@ -18,7 +18,7 @@ function QuestionsView(questionsAdapter, versesAdapter, tableContents) {
 }
 QuestionsView.prototype.showView = function() {
 	var that = this;
-	this.hideView();
+	document.body.style.backgroundColor = '#FFF';
 	this.questions.fill(function(results) {
 		if (results instanceof IOError) {
 			console.log('Error: QuestionView.showView.fill');
@@ -50,10 +50,13 @@ QuestionsView.prototype.showView = function() {
 	}
 };
 QuestionsView.prototype.hideView = function() {
-	for (var i=this.rootNode.children.length -1; i>=0; i--) {
-		this.rootNode.removeChild(this.rootNode.children[i]);
+	if (this.rootNode.children.length > 0) {
+		// why not save scroll position
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
+		this.viewRoot = null;
 	}
-	this.viewRoot = null;
 };
 QuestionsView.prototype.buildQuestionsView = function() {
 	var that = this;
@@ -113,7 +116,6 @@ QuestionsView.prototype.buildQuestionsView = function() {
 					console.error('error at server', error);
 				} else {
 					console.log('file is written to disk and server');
-					that.hideView();
 					that.viewRoot = that.buildQuestionsView();
 					that.rootNode.appendChild(that.viewRoot);
 				}

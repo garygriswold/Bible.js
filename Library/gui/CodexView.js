@@ -19,11 +19,15 @@ function CodexView(chaptersAdapter, tableContents, headerHeight) {
 }
 CodexView.prototype.hideView = function() {
 	window.clearTimeout(this.checkScrollID);
-	for (var i=this.viewport.children.length -1; i>=0; i--) {
-		this.viewport.removeChild(this.viewport.children[i]);
+	if (this.viewport.children.length > 0) {
+		///this.scrollPosition = window.scrollY; // ISN'T THIS NEEDED?
+		for (var i=this.viewport.children.length -1; i>=0; i--) {
+			this.viewport.removeChild(this.viewport.children[i]);
+		}
 	}
 };
 CodexView.prototype.showView = function(nodeId) {
+	document.body.style.backgroundColor = '#FFF';
 	var chapterQueue = [];
 	var firstChapter = new Reference(nodeId);
 	firstChapter = this.tableContents.ensureChapter(firstChapter);

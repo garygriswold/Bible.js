@@ -10,6 +10,7 @@ function SettingsView() {
 	Object.seal(this);
 }
 SettingsView.prototype.showView = function() {
+	document.body.style.backgroundColor = '#ABC';
 	if (! this.root) {
 		this.root = this.buildSettingsView();
 	}
@@ -18,16 +19,14 @@ SettingsView.prototype.showView = function() {
 	}
 	this.startControls();
 	this.versionsView.showView();
-	document.body.style.backgroundColor = '#ABC';
 };
 SettingsView.prototype.hideView = function() {
-	for (var i=0; i<this.rootNode.children.length; i++) {
-		var node = this.rootNode.children[i];
-		if (node === this.node) {
-			this.rootNode.removeChild(this.root);
+	if (this.rootNode.children.length > 0) {
+		// should I save scroll position here
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
 		}
-	}
-	this.versionsView.hideView();
+	}	
 };
 SettingsView.prototype.buildSettingsView = function() {
 	var table = document.createElement('table');
