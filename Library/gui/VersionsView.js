@@ -1,6 +1,8 @@
 /**
 * This class presents the list of available versions to download
 */
+var FLAG_PATH = 'licensed/icondrawer/flags/64/';
+
 function VersionsView() {
 	this.database = new VersionsAdapter()
 	this.root = null;
@@ -30,7 +32,7 @@ VersionsView.prototype.buildCountriesList = function() {
 				countryNode.setAttribute('data-lang', row.primLanguage);
 				countryNode.addEventListener('click', countryClickHandler);
 				var flagNode = that.dom.addNode(countryNode, 'img');
-				flagNode.setAttribute('src', 'media/flags/64/' + row.countryCode + '.png');
+				flagNode.setAttribute('src', FLAG_PATH + row.countryCode + '.png');
 				flagNode.setAttribute('alt', 'Flag');
 				that.dom.addNode(countryNode, 'span', null, row.localName);
 			}
