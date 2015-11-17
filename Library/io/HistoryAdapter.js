@@ -70,7 +70,7 @@ HistoryAdapter.prototype.lastItem = function(callback) {
 };
 HistoryAdapter.prototype.lastConcordanceSearch = function(callback) {
 	var statement = 'select reference from history where search is not null order by timestamp desc limit 1';
-	this.database.select(statement, [ MAX_HISTORY ], function(results) {
+	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.lastConcordance Error', JSON.stringify(results));
 			callback(results);

@@ -8,22 +8,22 @@ function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	this.concordance = concordance;
 	this.versesAdapter = versesAdapter;
 	this.historyAdapter = historyAdapter;
-	this.query = '';
 	this.words = [];
 	this.bookList = {};
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('searchRoot');
 	this.scrollPosition = 0;
+	this.searchField = null;
 	Object.seal(this);
 }
-SearchView.prototype.showView = function(query) {
+SearchView.prototype.showView = function() {
 	document.body.style.backgroundColor = '#FFF';
-	if (query) {
-		console.log('Create new search page');
-		this.showSearch(query);
-		this.rootNode.appendChild(this.viewRoot);
-		window.scrollTo(10, 0);
-	} else if (this.viewRoot) {
+	if (this.searchField === null) {
+		this.searchField = this.showSearchField();
+	}
+	this.rootNode.appendChild(this.searchField);
+	 
+	if (this.viewRoot) {
 		console.log('Reattach existing search page');
 		this.rootNode.appendChild(this.viewRoot);
 		window.scrollTo(10, this.scrollPosition);
@@ -32,11 +32,10 @@ SearchView.prototype.showView = function(query) {
 		this.historyAdapter.lastConcordanceSearch(function(lastSearch) {
 			if (lastSearch instanceof IOError || lastSearch === null) {
 				console.log('Nothing to search for, display blank page');
-				that.showSearch('');
-				that.rootNode.appendChild(that.viewRoot);
-				window.scrollTo(10, 0);	
 			} else {
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: lastSearch }}));	
+				//document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: lastSearch }}));
+				this.startSearch(lastSearch);
+				window.scrollTo(10, 0);
 			}
 		});
 	}
@@ -49,10 +48,35 @@ SearchView.prototype.hideView = function() {
 		}
 	}
 };
+SearchView.prototype.startSearch = function(query) {
+	console.log('Create new search page');
+	this.showSearch(query);
+	for (var i=this.rootNode.children.length -1; i>=1; i--) { // remove viewRoot if present
+		this.rootNode.removeChild(this.rootNode.children[i]);
+	}
+	this.rootNode.appendChild(this.viewRoot);
+	window.scrollTo(10, 0);	
+};
+SearchView.prototype.showSearchField = function() {
+	var searchField = document.createElement('div');
+	var inputField = document.createElement('input');
+	inputField.setAttribute('type', 'text');
+	inputField.setAttribute('class', 'searchField');
+	inputField.setAttribute('style', 'width:100%');
+	
+	searchField.appendChild(inputField);
+	this.rootNode.appendChild(searchField);
+	var that = this;
+	inputField.addEventListener('keyup', function(event) {
+		if (event.keyCode === 13) {
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: this.value }}));
+		}
+	});
+	return(searchField);
+};
 SearchView.prototype.showSearch = function(query) {
 	var that = this;
 	this.viewRoot = document.createElement('div');
-	this.query = query;
 	this.words = query.split(' ');
 	this.concordance.search(this.words, function(refList) {
 		if (refList instanceof IOError) {
@@ -130,6 +154,7 @@ SearchView.prototype.appendBook = function(bookCode) {
 SearchView.prototype.appendReference = function(bookNode, reference, verseText) {
 	var that = this;
 	var entryNode = document.createElement('p');
+	entryNode.setAttribute('id', 'con' + reference.nodeId);
 	bookNode.appendChild(entryNode);
 	var refNode = document.createElement('span');
 	refNode.setAttribute('class', 'conRef');
@@ -138,11 +163,10 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText) 
 	entryNode.appendChild(document.createElement('br'));
 
 	var verseNode = document.createElement('span');
-	verseNode.setAttribute('id', 'con' + reference.nodeId);
 	verseNode.setAttribute('class', 'conVerse');
 	verseNode.innerHTML = styleSearchWords(verseText);
 	entryNode.appendChild(verseNode);
-	verseNode.addEventListener('click', function(event) {
+	entryNode.addEventListener('click', function(event) {
 		var nodeId = this.id.substr(3);
 		console.log('open chapter', nodeId);
 		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));

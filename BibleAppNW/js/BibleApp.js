@@ -96,17 +96,17 @@ AppViewController.prototype.begin = function(develop) {
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			clearViews();		
 			that.tableContentsView.showView();
-			that.header.showTitleField();
+			//that.header.showTitleField();
 		});
 		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
 			clearViews();	
 			that.searchView.showView();
-			that.header.showSearchField();
+			//that.header.showSearchField();
 		});
 		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, function(event) {
 			clearViews();	
 			that.questionsView.showView();
-			that.header.showTitleField();	
+			//that.header.showTitleField();	
 		});
 		var panRightEnabled = true;
 		that.touch.on("panright", function(event) {
@@ -129,15 +129,15 @@ AppViewController.prototype.begin = function(develop) {
 		document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
 			console.log('SEARCH_START', event.detail);
 			if (! that.lookup.find(event.detail.search)) {
-				that.searchView.showView(event.detail.search);// needs a different method than showView
-				that.header.showSearchField(event.detail.search);
+				that.searchView.startSearch(event.detail.search);// needs a different method than showView
+				//that.header.showSearchField(event.detail.search);
 			}
 		});
 		document.body.addEventListener(BIBLE.SHOW_PASSAGE, function(event) {
 			console.log(JSON.stringify(event.detail));
 			clearViews();
 			that.codexView.showView(event.detail.id);
-			that.header.showTitleField();
+			//that.header.showTitleField();
 			var historyItem = { timestamp: new Date(), reference: event.detail.id, 
 				source: event.type, search: event.detail.source };
 			that.database.history.replace(historyItem, function(count) {});
@@ -577,22 +577,22 @@ function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	this.concordance = concordance;
 	this.versesAdapter = versesAdapter;
 	this.historyAdapter = historyAdapter;
-	this.query = '';
 	this.words = [];
 	this.bookList = {};
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('searchRoot');
 	this.scrollPosition = 0;
+	this.searchField = null;
 	Object.seal(this);
 }
-SearchView.prototype.showView = function(query) {
+SearchView.prototype.showView = function() {
 	document.body.style.backgroundColor = '#FFF';
-	if (query) {
-		console.log('Create new search page');
-		this.showSearch(query);
-		this.rootNode.appendChild(this.viewRoot);
-		window.scrollTo(10, 0);
-	} else if (this.viewRoot) {
+	if (this.searchField === null) {
+		this.searchField = this.showSearchField();
+	}
+	this.rootNode.appendChild(this.searchField);
+	 
+	if (this.viewRoot) {
 		console.log('Reattach existing search page');
 		this.rootNode.appendChild(this.viewRoot);
 		window.scrollTo(10, this.scrollPosition);
@@ -601,11 +601,10 @@ SearchView.prototype.showView = function(query) {
 		this.historyAdapter.lastConcordanceSearch(function(lastSearch) {
 			if (lastSearch instanceof IOError || lastSearch === null) {
 				console.log('Nothing to search for, display blank page');
-				that.showSearch('');
-				that.rootNode.appendChild(that.viewRoot);
-				window.scrollTo(10, 0);	
 			} else {
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: lastSearch }}));	
+				//document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: lastSearch }}));
+				this.startSearch(lastSearch);
+				window.scrollTo(10, 0);
 			}
 		});
 	}
@@ -618,10 +617,35 @@ SearchView.prototype.hideView = function() {
 		}
 	}
 };
+SearchView.prototype.startSearch = function(query) {
+	console.log('Create new search page');
+	this.showSearch(query);
+	for (var i=this.rootNode.children.length -1; i>=1; i--) { // remove viewRoot if present
+		this.rootNode.removeChild(this.rootNode.children[i]);
+	}
+	this.rootNode.appendChild(this.viewRoot);
+	window.scrollTo(10, 0);	
+};
+SearchView.prototype.showSearchField = function() {
+	var searchField = document.createElement('div');
+	var inputField = document.createElement('input');
+	inputField.setAttribute('type', 'text');
+	inputField.setAttribute('class', 'searchField');
+	inputField.setAttribute('style', 'width:100%');
+	
+	searchField.appendChild(inputField);
+	this.rootNode.appendChild(searchField);
+	var that = this;
+	inputField.addEventListener('keyup', function(event) {
+		if (event.keyCode === 13) {
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: this.value }}));
+		}
+	});
+	return(searchField);
+};
 SearchView.prototype.showSearch = function(query) {
 	var that = this;
 	this.viewRoot = document.createElement('div');
-	this.query = query;
 	this.words = query.split(' ');
 	this.concordance.search(this.words, function(refList) {
 		if (refList instanceof IOError) {
@@ -699,6 +723,7 @@ SearchView.prototype.appendBook = function(bookCode) {
 SearchView.prototype.appendReference = function(bookNode, reference, verseText) {
 	var that = this;
 	var entryNode = document.createElement('p');
+	entryNode.setAttribute('id', 'con' + reference.nodeId);
 	bookNode.appendChild(entryNode);
 	var refNode = document.createElement('span');
 	refNode.setAttribute('class', 'conRef');
@@ -707,11 +732,10 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText) 
 	entryNode.appendChild(document.createElement('br'));
 
 	var verseNode = document.createElement('span');
-	verseNode.setAttribute('id', 'con' + reference.nodeId);
 	verseNode.setAttribute('class', 'conVerse');
 	verseNode.innerHTML = styleSearchWords(verseText);
 	entryNode.appendChild(verseNode);
-	verseNode.addEventListener('click', function(event) {
+	entryNode.addEventListener('click', function(event) {
 		var nodeId = this.id.substr(3);
 		console.log('open chapter', nodeId);
 		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
@@ -783,7 +807,6 @@ function HeaderView(tableContents) {
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.currentReference = null;
-	this.searchField = null;
 	this.rootNode = document.getElementById('statusRoot');
 	this.labelCell = document.getElementById('labelCell');
 	Object.seal(this);
@@ -902,44 +925,7 @@ HeaderView.prototype.drawTitle = function() {
 		this.titleGraphics.fillText(text, this.titleCanvas.width / 2, this.hite / 2, this.titleCanvas.width);
 	}
 };
-HeaderView.prototype.showSearchField = function(query) {
-	if (! this.searchField) {
-		this.searchField = document.createElement('input');
-		this.searchField.setAttribute('type', 'text');
-		this.searchField.setAttribute('class', 'searchField');
-		this.searchField.setAttribute('value', query || '');
-		var style = [];
-		//var style = [ 'position:fixed;' ];
-		//style.push('left:' + (this.hite * 1.1) + 'px');
-		//style.push('width:' + (window.innerWidth - this.hite * 4.0) + 'px');
-		if (this.statusBarInHeader) {
-			style.push('height:' + (HEADER_BAR_HEIGHT * 0.5) + 'px');
-			style.push('top:' + (HEADER_BAR_HEIGHT * 0.15 + STATUS_BAR_HEIGHT) + 'px');
-		} else {
-			style.push('height:' + (HEADER_BAR_HEIGHT * 0.65) + 'px');
-			style.push('top:' + (HEADER_BAR_HEIGHT * 0.15) + 'px');
-		}
-		//this.searchField.setAttribute('style', style.join(';'));
 
-		var that = this;
-		this.searchField.addEventListener('keyup', function(event) {
-			if (event.keyCode === 13) {
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: that.searchField.value }}));
-
-			}
-		});
-	}
-	this.changeLabelCell(this.searchField);
-};
-HeaderView.prototype.showTitleField = function() {
-	this.changeLabelCell(this.titleCanvas);
-};
-HeaderView.prototype.changeLabelCell = function(node) {
-	for (var i=this.labelCell.children.length -1; i>=0; i--) {
-		this.labelCell.removeChild(this.labelCell.children[i]);
-	}
-	this.labelCell.appendChild(node);
-};
 /**
 * This class presents the table of contents, and responds to user actions.
 */
@@ -1963,7 +1949,7 @@ HistoryAdapter.prototype.lastItem = function(callback) {
 };
 HistoryAdapter.prototype.lastConcordanceSearch = function(callback) {
 	var statement = 'select reference from history where search is not null order by timestamp desc limit 1';
-	this.database.select(statement, [ MAX_HISTORY ], function(results) {
+	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.lastConcordance Error', JSON.stringify(results));
 			callback(results);

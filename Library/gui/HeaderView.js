@@ -18,7 +18,6 @@ function HeaderView(tableContents) {
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.currentReference = null;
-	this.searchField = null;
 	this.rootNode = document.getElementById('statusRoot');
 	this.labelCell = document.getElementById('labelCell');
 	Object.seal(this);
@@ -137,41 +136,4 @@ HeaderView.prototype.drawTitle = function() {
 		this.titleGraphics.fillText(text, this.titleCanvas.width / 2, this.hite / 2, this.titleCanvas.width);
 	}
 };
-HeaderView.prototype.showSearchField = function(query) {
-	if (! this.searchField) {
-		this.searchField = document.createElement('input');
-		this.searchField.setAttribute('type', 'text');
-		this.searchField.setAttribute('class', 'searchField');
-		this.searchField.setAttribute('value', query || '');
-		var style = [];
-		//var style = [ 'position:fixed;' ];
-		//style.push('left:' + (this.hite * 1.1) + 'px');
-		//style.push('width:' + (window.innerWidth - this.hite * 4.0) + 'px');
-		if (this.statusBarInHeader) {
-			style.push('height:' + (HEADER_BAR_HEIGHT * 0.5) + 'px');
-			style.push('top:' + (HEADER_BAR_HEIGHT * 0.15 + STATUS_BAR_HEIGHT) + 'px');
-		} else {
-			style.push('height:' + (HEADER_BAR_HEIGHT * 0.65) + 'px');
-			style.push('top:' + (HEADER_BAR_HEIGHT * 0.15) + 'px');
-		}
-		//this.searchField.setAttribute('style', style.join(';'));
 
-		var that = this;
-		this.searchField.addEventListener('keyup', function(event) {
-			if (event.keyCode === 13) {
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: that.searchField.value }}));
-
-			}
-		});
-	}
-	this.changeLabelCell(this.searchField);
-};
-HeaderView.prototype.showTitleField = function() {
-	this.changeLabelCell(this.titleCanvas);
-};
-HeaderView.prototype.changeLabelCell = function(node) {
-	for (var i=this.labelCell.children.length -1; i>=0; i--) {
-		this.labelCell.removeChild(this.labelCell.children[i]);
-	}
-	this.labelCell.appendChild(node);
-};
