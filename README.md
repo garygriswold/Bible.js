@@ -22,7 +22,7 @@ Public domain license using the MIT template.
 Repository Structure
 --------------------
 
-Library - This is the common javascript library.  Most projects contain a shell script that copies all of the files that they need from this Library.
+Library - This is the common javascript library.  Many projects contain a shell script that copies all of the files that they need from this Library.
 
 Publisher - This project prepares copies of the Bible for publication.  It takes as input a USX package from the Digital Bible Library and produces a SQLite database of the content, concordance, and table of contents in the form needed by the App.
 
@@ -35,4 +35,6 @@ QAApp - This is a web App that is used by instructors to answer questions of stu
 Server - This is a project for the server, which will deliver copies of the Bible and handle the delivery of student questions and Instructor answers.
 
 UnitTest - This is a repository of UnitTests for various parts of the system.
+
+Versions - The project builds a database of information about versions of the Bible which can be downloaded by the App.  This database is included in the Apps.
 

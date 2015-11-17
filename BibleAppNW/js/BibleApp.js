@@ -96,17 +96,14 @@ AppViewController.prototype.begin = function(develop) {
 		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
 			clearViews();		
 			that.tableContentsView.showView();
-			//that.header.showTitleField();
 		});
 		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
 			clearViews();	
 			that.searchView.showView();
-			//that.header.showSearchField();
 		});
 		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, function(event) {
 			clearViews();	
 			that.questionsView.showView();
-			//that.header.showTitleField();	
 		});
 		var panRightEnabled = true;
 		that.touch.on("panright", function(event) {
@@ -130,14 +127,12 @@ AppViewController.prototype.begin = function(develop) {
 			console.log('SEARCH_START', event.detail);
 			if (! that.lookup.find(event.detail.search)) {
 				that.searchView.startSearch(event.detail.search);// needs a different method than showView
-				//that.header.showSearchField(event.detail.search);
 			}
 		});
 		document.body.addEventListener(BIBLE.SHOW_PASSAGE, function(event) {
 			console.log(JSON.stringify(event.detail));
 			clearViews();
 			that.codexView.showView(event.detail.id);
-			//that.header.showTitleField();
 			var historyItem = { timestamp: new Date(), reference: event.detail.id, 
 				source: event.type, search: event.detail.source };
 			that.database.history.replace(historyItem, function(count) {});
@@ -628,6 +623,7 @@ SearchView.prototype.startSearch = function(query) {
 };
 SearchView.prototype.showSearchField = function() {
 	var searchField = document.createElement('div');
+	searchField.setAttribute('class', 'searchBorder');
 	var inputField = document.createElement('input');
 	inputField.setAttribute('type', 'text');
 	inputField.setAttribute('class', 'searchField');

@@ -59,6 +59,7 @@ SearchView.prototype.startSearch = function(query) {
 };
 SearchView.prototype.showSearchField = function() {
 	var searchField = document.createElement('div');
+	searchField.setAttribute('class', 'searchBorder');
 	var inputField = document.createElement('input');
 	inputField.setAttribute('type', 'text');
 	inputField.setAttribute('class', 'searchField');
