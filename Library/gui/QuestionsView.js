@@ -72,7 +72,8 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	function buildOneQuestion(parent, i) {
 		var item = that.questions.find(i);
 
-		var aQuestion = that.dom.addNode(parent, 'div', 'oneQuestion', null, 'que' + i);
+		var questionBorder = that.dom.addNode(parent, 'div', 'questionBorder');
+		var aQuestion = that.dom.addNode(questionBorder, 'div', 'oneQuestion', null, 'que' + i);
 		var line1 = that.dom.addNode(aQuestion, 'div', 'queTop');
 		that.dom.addNode(line1, 'p', 'queRef', item.reference);
 		that.dom.addNode(line1, 'p', 'queDate', that.formatter.localDatetime(item.askedDateTime));
@@ -84,25 +85,25 @@ QuestionsView.prototype.buildQuestionsView = function() {
 			aQuestion.addEventListener('click', displayAnswerOnRequest);	
 		}
 	}
-
 	function displayAnswerOnRequest(event) {
 		var selected = document.getElementById(this.id);
 		selected.removeEventListener('click', displayAnswerOnRequest);
 		that.displayAnswer(selected);
 	}
 	function includeInputBlock(parentNode) {
-		var inputTop = that.dom.addNode(parentNode, 'div', null, null, 'quesInput');
+		var refTop = that.dom.addNode(parentNode, 'div', 'questionBorder', null, 'quesInput');
 
-		that.referenceInput = that.dom.addNode(inputTop, 'input', null, null, 'inputRef');
+		that.referenceInput = that.dom.addNode(refTop, 'input', 'questionField', null, 'inputRef');
 		that.referenceInput.setAttribute('type', 'text');
 		that.referenceInput.setAttribute('placeholder', 'Reference');
 
-		that.questionInput = that.dom.addNode(inputTop, 'textarea', null, null, 'inputText');
+		var inputTop = that.dom.addNode(parentNode, 'div', 'questionBorder');
+		that.questionInput = that.dom.addNode(inputTop, 'textarea', 'questionField', null, 'inputText');
 		that.questionInput.setAttribute('placeholder', 'Matt 7:7 goes here');
 		that.questionInput.setAttribute('rows', 10);
 
-		var quesBtn = that.dom.addNode(inputTop, 'button', null, null, 'inputBtn');
-		quesBtn.appendChild(drawSendIcon(50, '#777777'));
+		var quesBtn = that.dom.addNode(parentNode, 'button', null, null, 'inputBtn');
+		quesBtn.appendChild(drawSendIcon(50, '#F7F7BB'));
 
 		quesBtn.addEventListener('click', function(event) {
 			console.log('submit button clicked');
