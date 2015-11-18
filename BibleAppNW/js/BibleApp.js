@@ -57,7 +57,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.header.barHite);
 		that.historyView = new HistoryView(that.database.history, that.tableContents);
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
-		that.settingsView = new SettingsView();
+		that.settingsView = new SettingsView(that.database.verses);
 		//that.versionsView = new VersionsView();
 		Object.freeze(that);
 
@@ -550,7 +550,6 @@ QuestionsView.prototype.buildQuestionsView = function() {
 
 		var inputTop = that.dom.addNode(parentNode, 'div', 'questionBorder');
 		that.questionInput = that.dom.addNode(inputTop, 'textarea', 'questionField', null, 'inputText');
-		//that.questionInput.setAttribute('placeholder', 'Matt 7:7 goes here');
 		that.questionInput.setAttribute('rows', 10);
 
 		var quesBtn = that.dom.addNode(parentNode, 'button', null, null, 'inputBtn');
@@ -1065,8 +1064,9 @@ TableContentsView.prototype.openChapter = function(nodeId) {
 * This class is the UI for the controls in the settings page.
 * It also uses the VersionsView to display versions on the settings page.
 */
-function SettingsView() {
+function SettingsView(versesAdapter) {
 	this.root = null;
+	this.versesAdapter = versesAdapter;
 	this.rootNode = document.getElementById('settingRoot');
 	this.dom = new DOMBuilder();
 	this.versionsView = new VersionsView();
@@ -1092,13 +1092,13 @@ SettingsView.prototype.hideView = function() {
 	}	
 };
 SettingsView.prototype.buildSettingsView = function() {
+	var that = this;
 	var table = document.createElement('table');
 	table.id = 'settingsTable';
 	
 	addRowSpace(table);
 	var textRow = this.dom.addNode(table, 'tr');
-	// Need to access text from the Bible
-	var textCell = this.dom.addNode(textRow, 'td', null, 'For God so Loved the world', 'sampleText');
+	var textCell = this.dom.addNode(textRow, 'td', null, null, 'sampleText');
 	textCell.setAttribute('colspan', 3);
 	
 	addRowSpace(table);
@@ -1110,14 +1110,15 @@ SettingsView.prototype.buildSettingsView = function() {
 	
 	addRowSpace(table);
 	var colorRow = this.dom.addNode(table, 'tr');
-	var blackCell = this.dom.addNode(colorRow, 'td', 'tableLeftCol', 'For God so Loved', 'blackBackground');
+	var blackCell = this.dom.addNode(colorRow, 'td', 'tableLeftCol', null, 'blackBackground');
 	var colorCtrlCell = this.dom.addNode(colorRow, 'td', 'tableCtrlCol');
 	var colorSlider = this.dom.addNode(colorCtrlCell, 'div', null, null, 'fontColorSlider');
 	var colorThumb = this.dom.addNode(colorSlider, 'div', null, null, 'fontColorThumb');
-	var whiteCell = this.dom.addNode(colorRow, 'td', 'tableRightCol', 'For God so Loved', 'whiteBackground');
+	var whiteCell = this.dom.addNode(colorRow, 'td', 'tableRightCol', null, 'whiteBackground');
 	
 	addRowSpace(table);
 	addRowSpace(table);
+	addJohn316(textCell, blackCell, whiteCell);
 	return(table);
 	
 	function addRowSpace(table) {
@@ -1125,6 +1126,23 @@ SettingsView.prototype.buildSettingsView = function() {
 		var cell = row.insertCell();
 		cell.setAttribute('class', 'rowSpace');
 		cell.setAttribute('colspan', 3);
+	}
+	function addJohn316(verseNode, fragment1Node, fragment2Node) {
+		that.versesAdapter.getVerses(['JHN:3:16'], function(results) {
+			if (results instanceof IOError) {
+				console.log('Error while getting JHN:3:16');
+			} else {
+				if (results.rows.length > 0) {
+					var row = results.rows.item(0);
+					verseNode.textContent = row.html;
+					var words = row.html.split(/\s+/);
+					var fragment = words[0] + ' ' + words[1] + ' ' + words[2] + ' ' + words[3];
+					fragment1Node.textContent = fragment;
+					fragment2Node.textContent = fragment;
+				}	
+			}
+		});
+
 	}
 };
 SettingsView.prototype.startControls = function() {

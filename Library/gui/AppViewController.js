@@ -56,7 +56,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.header.barHite);
 		that.historyView = new HistoryView(that.database.history, that.tableContents);
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
-		that.settingsView = new SettingsView();
+		that.settingsView = new SettingsView(that.database.verses);
 		//that.versionsView = new VersionsView();
 		Object.freeze(that);
 
