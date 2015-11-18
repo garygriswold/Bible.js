@@ -7,6 +7,7 @@
 */
 function QuestionsView(questionsAdapter, versesAdapter, tableContents) {
 	this.tableContents = tableContents;
+	this.versesAdapter = versesAdapter;
 	this.questions = new Questions(questionsAdapter, versesAdapter, tableContents);
 	this.formatter = new DateTimeFormatter();
 	this.dom = new DOMBuilder();
@@ -99,7 +100,6 @@ QuestionsView.prototype.buildQuestionsView = function() {
 
 		var inputTop = that.dom.addNode(parentNode, 'div', 'questionBorder');
 		that.questionInput = that.dom.addNode(inputTop, 'textarea', 'questionField', null, 'inputText');
-		that.questionInput.setAttribute('placeholder', 'Matt 7:7 goes here');
 		that.questionInput.setAttribute('rows', 10);
 
 		var quesBtn = that.dom.addNode(parentNode, 'button', null, null, 'inputBtn');
@@ -121,6 +121,16 @@ QuestionsView.prototype.buildQuestionsView = function() {
 					that.rootNode.appendChild(that.viewRoot);
 				}
 			});
+		});
+		that.versesAdapter.getVerses(['MAT:7:7'], function(results) {
+			if (results instanceof IOError) {
+				console.log('Error while getting MAT:7:7');
+			} else {
+				if (results.rows.length > 0) {
+					var row = results.rows.item(0);
+					that.questionInput.setAttribute('placeholder', row.html);
+				}	
+			}
 		});
 	}
 };
