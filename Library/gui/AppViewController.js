@@ -89,17 +89,17 @@ AppViewController.prototype.begin = function(develop) {
 				}
 			});
 		}
-		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
-			clearViews();		
-			that.tableContentsView.showView();
+		document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
+		document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+		document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
+
+		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
+			that.codexView.showFootnote(event.detail.id);
 		});
-		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
-			clearViews();	
-			that.searchView.showView();
-		});
-		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, function(event) {
-			clearViews();	
-			that.questionsView.showView();
+		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
+			that.codexView.hideFootnote(event.detail.id);
 		});
 		var panRightEnabled = true;
 		that.touch.on("panright", function(event) {
@@ -119,34 +119,64 @@ AppViewController.prototype.begin = function(develop) {
 				});
 			}
 		});
-		document.body.addEventListener(BIBLE.SHOW_PASSAGE, function(event) {
-			console.log(JSON.stringify(event.detail));
-			clearViews();
-			that.codexView.showView(event.detail.id);
-			var historyItem = { timestamp: new Date(), reference: event.detail.id, 
-				source: event.type, search: event.detail.source };
-			that.database.history.replace(historyItem, function(count) {});
-		});
-		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
-			that.codexView.showFootnote(event.detail.id);
-		});
-		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
-			that.codexView.hideFootnote(event.detail.id);
-		});
-		document.body.addEventListener(BIBLE.SHOW_SETTINGS, function(event) {
-			clearViews();
-			that.settingsView.showView();
-		});
 	});
 	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
 		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
 		that.header.setTitle(event.detail.reference);
 	});
+	function showTocHandler(event) {
+		disableHandlers();
+		clearViews();		
+		that.tableContentsView.showView();
+		enableHandlersExcept(BIBLE.SHOW_TOC);
+	}
+	function showSearchHandler(event) {
+		disableHandlers();
+		clearViews();	
+		that.searchView.showView();
+		enableHandlersExcept(BIBLE.SHOW_SEARCH);
+	}		
+	function showPassageHandler(event) {
+		console.log(JSON.stringify(event.detail));
+		disableHandlers();
+		clearViews();
+		that.codexView.showView(event.detail.id);
+		enableHandlersExcept(BIBLE.SHOW_PASSAGE);
+		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
+			source: event.type, search: event.detail.source };
+		that.database.history.replace(historyItem, function(count) {});
+	}
+	function showQuestionsHandler(event) {
+		disableHandlers();
+		clearViews();	
+		that.questionsView.showView();
+		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
+	}	
+	function showSettingsHandler(event) {
+		disableHandlers();
+		clearViews();
+		that.settingsView.showView();
+		enableHandlersExcept(BIBLE.SHOW_SETTINGS);
+	}		
 	function clearViews() {
 		that.tableContentsView.hideView();
 		that.searchView.hideView();
 		that.codexView.hideView();
 		that.questionsView.hideView();
 		that.settingsView.hideView();
+	}
+	function disableHandlers() {
+		document.body.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);
+		document.body.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+		document.body.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
+	}
+	function enableHandlersExcept(name) {
+		if (name !== BIBLE.SHOW_TOC) document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
+		if (name !== BIBLE.SHOW_SEARCH) document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
 };
