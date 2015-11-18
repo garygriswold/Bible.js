@@ -8,6 +8,7 @@ function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	this.concordance = concordance;
 	this.versesAdapter = versesAdapter;
 	this.historyAdapter = historyAdapter;
+	this.lookup = new Lookup(toc);
 	this.words = [];
 	this.bookList = {};
 	this.viewRoot = null;
@@ -33,9 +34,7 @@ SearchView.prototype.showView = function() {
 			if (lastSearch instanceof IOError || lastSearch === null) {
 				console.log('Nothing to search for, display blank page');
 			} else {
-				//document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: lastSearch }}));
 				this.startSearch(lastSearch);
-				window.scrollTo(10, 0);
 			}
 		});
 	}
@@ -50,12 +49,14 @@ SearchView.prototype.hideView = function() {
 };
 SearchView.prototype.startSearch = function(query) {
 	console.log('Create new search page');
-	this.showSearch(query);
-	for (var i=this.rootNode.children.length -1; i>=1; i--) { // remove viewRoot if present
-		this.rootNode.removeChild(this.rootNode.children[i]);
+	if (! this.lookup.find(query)) {
+		this.showSearch(query);
+		for (var i=this.rootNode.children.length -1; i>=1; i--) { // remove viewRoot if present
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
+		this.rootNode.appendChild(this.viewRoot);
+		window.scrollTo(10, 0);
 	}
-	this.rootNode.appendChild(this.viewRoot);
-	window.scrollTo(10, 0);	
 };
 SearchView.prototype.showSearchField = function() {
 	var searchField = document.createElement('div');
@@ -70,7 +71,7 @@ SearchView.prototype.showSearchField = function() {
 	var that = this;
 	inputField.addEventListener('keyup', function(event) {
 		if (event.keyCode === 13) {
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: this.value }}));
+			that.startSearch(this.value);
 		}
 	});
 	return(searchField);
