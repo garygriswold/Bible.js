@@ -33,7 +33,7 @@ Lookup.prototype.find = function(search) {
 			if (verse) {
 				nodeId += ':' + verse;
 			}
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source:search }}));
 			return(true);
 		} else {
 			return(false);

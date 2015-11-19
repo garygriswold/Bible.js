@@ -144,7 +144,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.codexView.showView(event.detail.id);
 		enableHandlersExcept(BIBLE.SHOW_PASSAGE);
 		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
-			source: event.type, search: event.detail.source };
+			source: 'P', search: event.detail.source };
 		that.database.history.replace(historyItem, function(count) {});
 	}
 	function showQuestionsHandler(event) {
@@ -411,7 +411,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 	var that = this;
 	var root = document.createElement('ul');
 	root.setAttribute('id', 'historyTabBar');
-	this.historyAdapter.selectAll(function(results) {
+	this.historyAdapter.selectPassages(function(results) {
 		if (results instanceof IOError) {
 			callback(root);
 		} else {
@@ -604,6 +604,7 @@ function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	this.concordance = concordance;
 	this.versesAdapter = versesAdapter;
 	this.historyAdapter = historyAdapter;
+	this.query = null;
 	this.lookup = new Lookup(toc);
 	this.words = [];
 	this.bookList = {};
@@ -621,7 +622,6 @@ SearchView.prototype.showView = function() {
 	this.rootNode.appendChild(this.searchField);
 	 
 	if (this.viewRoot) {
-		console.log('Reattach existing search page');
 		this.rootNode.appendChild(this.viewRoot);
 		window.scrollTo(10, this.scrollPosition);
 	} else {
@@ -630,7 +630,8 @@ SearchView.prototype.showView = function() {
 			if (lastSearch instanceof IOError || lastSearch === null) {
 				console.log('Nothing to search for, display blank page');
 			} else {
-				this.startSearch(lastSearch);
+				that.searchField.children[0].value = lastSearch;
+				that.startSearch(lastSearch);
 			}
 		});
 	}
@@ -644,6 +645,7 @@ SearchView.prototype.hideView = function() {
 	}
 };
 SearchView.prototype.startSearch = function(query) {
+	this.query = query;
 	console.log('Create new search page');
 	if (! this.lookup.find(query)) {
 		this.showSearch(query);
@@ -1963,7 +1965,7 @@ HistoryAdapter.prototype.create = function(callback) {
 		}
 	});
 };
-HistoryAdapter.prototype.selectAll = function(callback) {
+HistoryAdapter.prototype.selectPassages = function(callback) {
 	var that = this;
 	var statement = 'select reference from history order by timestamp desc limit ?';
 	this.database.select(statement, [ MAX_HISTORY ], function(results) {
@@ -1982,7 +1984,7 @@ HistoryAdapter.prototype.selectAll = function(callback) {
 	});
 };
 HistoryAdapter.prototype.lastItem = function(callback) {
-	var statement = 'select reference from history where timestamp = (select max(timestamp) from history);';
+	var statement = 'select reference from history where reference timestamp = (select max(timestamp) from history);';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.lastItem Error', JSON.stringify(results));
@@ -1998,7 +2000,7 @@ HistoryAdapter.prototype.lastItem = function(callback) {
 	});
 };
 HistoryAdapter.prototype.lastConcordanceSearch = function(callback) {
-	var statement = 'select reference from history where search is not null order by timestamp desc limit 1';
+	var statement = 'select search from history where search is not null order by timestamp desc limit 1';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.lastConcordance Error', JSON.stringify(results));
@@ -2006,9 +2008,9 @@ HistoryAdapter.prototype.lastConcordanceSearch = function(callback) {
 		} else {
 			if (results.rows.length > 0) {
 				var row = results.rows.item(0);
-				callback(row.reference);
+				callback(row.search);
 			} else {
-				callback(null);
+				callback(new IOError('No rows found'));
 			}
 		}
 	});
@@ -2479,7 +2481,7 @@ Lookup.prototype.find = function(search) {
 			if (verse) {
 				nodeId += ':' + verse;
 			}
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source:search }}));
 			return(true);
 		} else {
 			return(false);

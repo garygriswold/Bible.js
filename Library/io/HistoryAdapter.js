@@ -34,7 +34,7 @@ HistoryAdapter.prototype.create = function(callback) {
 		}
 	});
 };
-HistoryAdapter.prototype.selectAll = function(callback) {
+HistoryAdapter.prototype.selectPassages = function(callback) {
 	var that = this;
 	var statement = 'select reference from history order by timestamp desc limit ?';
 	this.database.select(statement, [ MAX_HISTORY ], function(results) {
@@ -53,7 +53,7 @@ HistoryAdapter.prototype.selectAll = function(callback) {
 	});
 };
 HistoryAdapter.prototype.lastItem = function(callback) {
-	var statement = 'select reference from history where timestamp = (select max(timestamp) from history);';
+	var statement = 'select reference from history where reference timestamp = (select max(timestamp) from history);';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.lastItem Error', JSON.stringify(results));
@@ -69,7 +69,7 @@ HistoryAdapter.prototype.lastItem = function(callback) {
 	});
 };
 HistoryAdapter.prototype.lastConcordanceSearch = function(callback) {
-	var statement = 'select reference from history where search is not null order by timestamp desc limit 1';
+	var statement = 'select search from history where search is not null order by timestamp desc limit 1';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.lastConcordance Error', JSON.stringify(results));
@@ -77,9 +77,9 @@ HistoryAdapter.prototype.lastConcordanceSearch = function(callback) {
 		} else {
 			if (results.rows.length > 0) {
 				var row = results.rows.item(0);
-				callback(row.reference);
+				callback(row.search);
 			} else {
-				callback(null);
+				callback(new IOError('No rows found'));
 			}
 		}
 	});

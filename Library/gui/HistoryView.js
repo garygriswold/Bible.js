@@ -44,7 +44,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 	var that = this;
 	var root = document.createElement('ul');
 	root.setAttribute('id', 'historyTabBar');
-	this.historyAdapter.selectAll(function(results) {
+	this.historyAdapter.selectPassages(function(results) {
 		if (results instanceof IOError) {
 			callback(root);
 		} else {

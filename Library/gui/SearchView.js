@@ -8,6 +8,7 @@ function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	this.concordance = concordance;
 	this.versesAdapter = versesAdapter;
 	this.historyAdapter = historyAdapter;
+	this.query = null;
 	this.lookup = new Lookup(toc);
 	this.words = [];
 	this.bookList = {};
@@ -25,7 +26,6 @@ SearchView.prototype.showView = function() {
 	this.rootNode.appendChild(this.searchField);
 	 
 	if (this.viewRoot) {
-		console.log('Reattach existing search page');
 		this.rootNode.appendChild(this.viewRoot);
 		window.scrollTo(10, this.scrollPosition);
 	} else {
@@ -34,7 +34,8 @@ SearchView.prototype.showView = function() {
 			if (lastSearch instanceof IOError || lastSearch === null) {
 				console.log('Nothing to search for, display blank page');
 			} else {
-				this.startSearch(lastSearch);
+				that.searchField.children[0].value = lastSearch;
+				that.startSearch(lastSearch);
 			}
 		});
 	}
@@ -48,6 +49,7 @@ SearchView.prototype.hideView = function() {
 	}
 };
 SearchView.prototype.startSearch = function(query) {
+	this.query = query;
 	console.log('Create new search page');
 	if (! this.lookup.find(query)) {
 		this.showSearch(query);

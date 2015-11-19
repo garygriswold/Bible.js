@@ -143,7 +143,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.codexView.showView(event.detail.id);
 		enableHandlersExcept(BIBLE.SHOW_PASSAGE);
 		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
-			source: event.type, search: event.detail.source };
+			source: 'P', search: event.detail.source };
 		that.database.history.replace(historyItem, function(count) {});
 	}
 	function showQuestionsHandler(event) {
