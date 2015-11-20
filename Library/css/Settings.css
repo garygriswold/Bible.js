@@ -111,7 +111,11 @@ div.ctry img {
 	margin-left: 24px;
 	padding-right: 7px;
 }
-div.vers {
+div.ctry span {
+	vertical-align: middle;
+}
+table.vers {
+	width:85%;
     background-color: #EEEEEE;
 	border-radius: 12px;
 	margin-bottom: 20px;
@@ -119,14 +123,18 @@ div.vers {
 	box-shadow: 4px 4px 5px #777;
 	padding-top: 1%;
 	padding-bottom: 1%;
-	padding-left: 4%			
+	padding-left: 4%;
+	padding-right:4%;
 }
-div.vers p {
-	margin: 2px;
-	font-family: sans-serif;
+td.versLeft {
+	width:90%;
+}
+td.versRight {
+	text-align:right;
 }
 p.langName {
-	font-size: 24px;			
+	font-size: 24px;
+	margin-bottom:10px;			
 }
 span.versName {
 	font-size: 18px;

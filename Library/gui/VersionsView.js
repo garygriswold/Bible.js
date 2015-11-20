@@ -31,6 +31,7 @@ VersionsView.prototype.buildCountriesList = function() {
 				var countryNode = that.dom.addNode(groupNode, 'div', 'ctry', null, 'cty' + row.countryCode);
 				countryNode.setAttribute('data-lang', row.primLanguage);
 				countryNode.addEventListener('click', countryClickHandler);
+				
 				var flagNode = that.dom.addNode(countryNode, 'img');
 				flagNode.setAttribute('src', FLAG_PATH + row.countryCode + '.png');
 				flagNode.setAttribute('alt', 'Flag');
@@ -56,13 +57,18 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		if (! (results instanceof IOError)) {
 			for (var i=0; i<results.length; i++) {
 				var row = results[i];
-				var versionNode = that.dom.addNode(parent, 'div', 'vers');
-				that.dom.addNode(versionNode, 'p', 'langName', row.localLanguageName);
+				var versionNode = that.dom.addNode(parent, 'table', 'vers');
+				var rowNode = that.dom.addNode(versionNode, 'tr');
+				var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
+				that.dom.addNode(leftNode, 'p', 'langName', row.localLanguageName);
 				var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
-				that.dom.addNode(versionNode, 'span', 'versName', versionName + ',  ');
-				that.dom.addNode(versionNode, 'span', 'copy', copyright(row));
+				that.dom.addNode(leftNode, 'span', 'versName', versionName + ',  ');
+				that.dom.addNode(leftNode, 'span', 'copy', copyright(row));
 				
-				versionNode.addEventListener('click', versionClickHandler);
+				var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
+				var iconNode = that.dom.addNode(rightNode, 'img');
+				iconNode.setAttribute('src', 'licensed/sebastiano/cloud-download.png');
+				iconNode.addEventListener('click', versionClickHandler);
 			}
 		}
 	});
