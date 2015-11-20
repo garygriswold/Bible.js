@@ -849,10 +849,15 @@ HeaderView.prototype.showView = function() {
 	paintBackground(this.backgroundCanvas, this.hite);
 	this.rootNode.appendChild(this.backgroundCanvas);
 
-	setupTocButton(this.hite, '#F7F7BB');
-	setupSearchButton(this.hite, '#F7F7BB');
-	setupQuestionsButton(this.hite, '#F7F7BB');
-	setupSettingsButton(this.hite, '#F7F7BB');
+//	origSetupIconButton('tocCell', drawTOCIcon, this.hite, BIBLE.SHOW_TOC);
+//	origSetupIconButton('searchCell', drawSearchIcon, this.hite, BIBLE.SHOW_SEARCH);
+//	origSetupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
+//	origSetupIconButton('settingsCell', drawSettingsIcon, this.hite, BIBLE.SHOW_SETTINGS);
+	setupIconButton('tocCell', 'licensed/sebastiano/check-list.png', this.hite, BIBLE.SHOW_TOC);
+	setupIconButton('searchCell', 'licensed/sebastiano/lens.png', this.hite, BIBLE.SHOW_SEARCH);
+	setupIconButton('questionsCell', 'licensed/sebastiano/chat.png', this.hite, BIBLE.SHOW_QUESTIONS);
+	setupIconButton('settingsCell', 'licensed/sebastiano/settings.png', this.hite, BIBLE.SHOW_SETTINGS);
+	
 
 	this.titleCanvas = document.createElement('canvas');
 	drawTitleField(this.titleCanvas, this.hite);
@@ -881,17 +886,6 @@ HeaderView.prototype.showView = function() {
       	graphics.fillStyle = gradient;
       	graphics.fill();
 	}
-	function setupTocButton(hite, color) {
-		var canvas = drawTOCIcon(hite, color);
-		canvas.setAttribute('style', that.cellTopPadding);
-		document.getElementById('tocCell').appendChild(canvas);
-
-		canvas.addEventListener('click', function(event) {
-			event.stopImmediatePropagation();
-			console.log('toc button is clicked');
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_TOC));
-		});
-	}
 	function drawTitleField(canvas, hite) {
 		canvas.setAttribute('id', 'titleCanvas');
 		canvas.setAttribute('height', hite);
@@ -910,37 +904,29 @@ HeaderView.prototype.showView = function() {
 			}
 		});
 	}
-	function setupSearchButton(hite, color) {
-		var canvas = drawSearchIcon(hite, color);
+	function setupIconButton(parentCell, iconFile, hite, eventType) {
+		var canvas = document.createElement('img');
+		canvas.setAttribute('src', iconFile);
 		canvas.setAttribute('style', that.cellTopPadding);
-		document.getElementById('searchCell').appendChild(canvas);
-
+		canvas.setAttribute('width', hite);
+		canvas.setAttribute('height', hite);
+		var parent = document.getElementById(parentCell);
+		parent.appendChild(canvas);
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
-			console.log('search button is clicked');
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_SEARCH));
+			console.log('clicked', parentCell);
+			document.body.dispatchEvent(new CustomEvent(eventType));
 		});
 	}
-	function setupQuestionsButton(hite, color) {
-		var canvas = drawQuestionsIcon(hite, color);
+	function origSetupIconButton(parentCell, canvasFunction, hite, eventType) {
+		var canvas = canvasFunction(hite, '#F7F7BB');
 		canvas.setAttribute('style', that.cellTopPadding);
-		document.getElementById('questionsCell').appendChild(canvas);
-
+		var parent = document.getElementById(parentCell);
+		parent.appendChild(canvas);
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
-			console.log('questions button is clicked');
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_QUESTIONS));
-		});
-	}
-	function setupSettingsButton(hite, color) {
-		var canvas = drawSettingsIcon(hite, color);
-		canvas.setAttribute('style', that.cellTopPadding);
-		document.getElementById('settingsCell').appendChild(canvas);
-		
-		canvas.addEventListener('click', function(event) {
-			event.stopImmediatePropagation();
-			console.log('settings button is clicked');
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_SETTINGS));
+			console.log('clicked', parentCell);
+			document.body.dispatchEvent(new CustomEvent(eventType));
 		});
 	}
 };
@@ -1232,7 +1218,6 @@ VersionsView.prototype.buildCountriesList = function() {
 				flagNode.setAttribute('src', FLAG_PATH + row.countryCode + '.png');
 				flagNode.setAttribute('alt', 'Flag');
 				that.dom.addNode(countryNode, 'span', null, row.localName);
-				//s1.setAttribute('style', 'verticalAlign:middle');
 			}
 		}
 		that.rootNode.appendChild(root);
