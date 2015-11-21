@@ -60,7 +60,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 				btn.textContent = generateReference(historyNodeId);
 				tab.appendChild(btn);
 				btn.addEventListener('click', function(event) {
-					console.log('btn is clicked ', btn.innerHTML);
+					console.log('btn clicked', this.id);
 					var nodeId = this.id.substr(3);
 					document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 					that.hideView();

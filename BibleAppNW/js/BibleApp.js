@@ -138,11 +138,11 @@ AppViewController.prototype.begin = function(develop) {
 		enableHandlersExcept(BIBLE.SHOW_SEARCH);
 	}		
 	function showPassageHandler(event) {
-		console.log(JSON.stringify(event.detail));
+		console.log('SHOW PASSAGE', event.detail.id, event.detail.search);
 		disableHandlers();
 		clearViews();
 		that.codexView.showView(event.detail.id);
-		enableHandlersExcept(BIBLE.SHOW_PASSAGE);
+		enableHandlersExcept('NONE');
 		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
 			source: 'P', search: event.detail.source };
 		that.database.history.replace(historyItem, function(count) {});
@@ -220,17 +220,14 @@ CodexView.prototype.showView = function(nodeId) {
 		chapter = this.tableContents.priorChapter(chapter);
 		if (chapter) {
 			chapterQueue.unshift(chapter);
-			console.log('unshift', chapter.nodeId);
 		}
 	}
 	chapterQueue.push(firstChapter);
-	console.log('push', firstChapter.nodeId);
 	chapter = firstChapter;
 	for (i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.nextChapter(chapter);
 		if (chapter) {
 			chapterQueue.push(chapter);
-			console.log('push', chapter.nodeId);
 		}
 	}
 	var that = this;
@@ -340,7 +337,6 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 CodexView.prototype.scrollTo = function(reference) {
 	console.log('scrollTo', reference.nodeId);
 	var verse = document.getElementById(reference.nodeId);
-	console.log('verse', (typeof verse));
 	if (verse === null) {
 		// when null it is probably because verse num was out of range.
 		var nextChap = this.tableContents.nextChapter(reference);
@@ -348,11 +344,7 @@ CodexView.prototype.scrollTo = function(reference) {
 	}
 	if (verse) {
 		var rect = verse.getBoundingClientRect();
-		console.log('verse rect', rect);
-		console.log('window.scroll', window.scrollX, window.scrollY, this.headerHeight);
-		window.scrollTo(rect.left + window.scrollX, Math.round(rect.top) + window.scrollY - this.headerHeight - 200);
-		//window.scrollTo(0, Math.round(rect.top) - 200);
-		console.log('scrollTo', rect.left + window.scrollX, rect.top + window.scrollY - this.headerHeight);
+		window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.headerHeight);
 	}
 };
 CodexView.prototype.showFootnote = function(noteId) {
@@ -431,12 +423,14 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 
 				var btn = document.createElement('button');
 				btn.setAttribute('id', 'his' + historyNodeId);
+				console.log('SET HISTORY', 'his' + historyNodeId);
 				btn.setAttribute('class', 'historyTabBtn');
 				btn.textContent = generateReference(historyNodeId);
 				tab.appendChild(btn);
 				btn.addEventListener('click', function(event) {
-					console.log('btn is clicked ', btn.innerHTML);
+					console.log('btn clicked', this.id);
 					var nodeId = this.id.substr(3);
+					console.log('clicked', nodeId);
 					document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 					that.hideView();
 				});

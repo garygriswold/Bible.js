@@ -137,11 +137,11 @@ AppViewController.prototype.begin = function(develop) {
 		enableHandlersExcept(BIBLE.SHOW_SEARCH);
 	}		
 	function showPassageHandler(event) {
-		console.log(JSON.stringify(event.detail));
+		console.log('SHOW PASSAGE', event.detail.id, event.detail.search);
 		disableHandlers();
 		clearViews();
 		that.codexView.showView(event.detail.id);
-		enableHandlersExcept(BIBLE.SHOW_PASSAGE);
+		enableHandlersExcept('NONE');
 		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
 			source: 'P', search: event.detail.source };
 		that.database.history.replace(historyItem, function(count) {});
