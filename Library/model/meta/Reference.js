@@ -21,6 +21,7 @@ function Reference(book, chapter, verse) {
 		this.verse = (parts.length > 1) ? +parts[2] : NaN;
 		this.nodeId = book;
 	}
+	this.chapterId = this.book + ':' + this.chapter;
 	this.rootNode = document.createElement('div');
 	this.rootNode.setAttribute('id', 'top' + this.nodeId);
 	Object.freeze(this);

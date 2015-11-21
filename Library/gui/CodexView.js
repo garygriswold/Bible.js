@@ -107,7 +107,7 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 	var that = this;
 	var selectList = [];
 	for (var i=0; i<chapters.length; i++) {
-		selectList.push(chapters[i].nodeId);
+		selectList.push(chapters[i].chapterId);
 	}
 	this.chaptersAdapter.getChapters(selectList, function(results) {
 		if (results instanceof IOError) {

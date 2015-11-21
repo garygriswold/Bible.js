@@ -220,14 +220,17 @@ CodexView.prototype.showView = function(nodeId) {
 		chapter = this.tableContents.priorChapter(chapter);
 		if (chapter) {
 			chapterQueue.unshift(chapter);
+			console.log('unshift', chapter.nodeId);
 		}
 	}
 	chapterQueue.push(firstChapter);
+	console.log('push', firstChapter.nodeId);
 	chapter = firstChapter;
 	for (i=0; i<3 && chapter; i++) {
 		chapter = this.tableContents.nextChapter(chapter);
 		if (chapter) {
 			chapterQueue.push(chapter);
+			console.log('push', chapter.nodeId);
 		}
 	}
 	var that = this;
@@ -290,7 +293,7 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 	var that = this;
 	var selectList = [];
 	for (var i=0; i<chapters.length; i++) {
-		selectList.push(chapters[i].nodeId);
+		selectList.push(chapters[i].chapterId);
 	}
 	this.chaptersAdapter.getChapters(selectList, function(results) {
 		if (results instanceof IOError) {
@@ -337,6 +340,7 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 CodexView.prototype.scrollTo = function(reference) {
 	console.log('scrollTo', reference.nodeId);
 	var verse = document.getElementById(reference.nodeId);
+	console.log('verse', (typeof verse));
 	if (verse === null) {
 		// when null it is probably because verse num was out of range.
 		var nextChap = this.tableContents.nextChapter(reference);
@@ -344,7 +348,11 @@ CodexView.prototype.scrollTo = function(reference) {
 	}
 	if (verse) {
 		var rect = verse.getBoundingClientRect();
-		window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.headerHeight);
+		console.log('verse rect', rect);
+		console.log('window.scroll', window.scrollX, window.scrollY, this.headerHeight);
+		window.scrollTo(rect.left + window.scrollX, Math.round(rect.top) + window.scrollY - this.headerHeight - 200);
+		//window.scrollTo(0, Math.round(rect.top) - 200);
+		console.log('scrollTo', rect.left + window.scrollX, rect.top + window.scrollY - this.headerHeight);
 	}
 };
 CodexView.prototype.showFootnote = function(noteId) {
@@ -2656,6 +2664,7 @@ function Reference(book, chapter, verse) {
 		this.verse = (parts.length > 1) ? +parts[2] : NaN;
 		this.nodeId = book;
 	}
+	this.chapterId = this.book + ':' + this.chapter;
 	this.rootNode = document.createElement('div');
 	this.rootNode.setAttribute('id', 'top' + this.nodeId);
 	Object.freeze(this);
