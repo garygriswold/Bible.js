@@ -9,8 +9,7 @@ var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_HISTORY: 'bible-show-history', // present history tabs
 		HIDE_HISTORY: 'bible-hide-history', // hide history tabs
 		SHOW_PASSAGE: 'bible-show-passage', // show passage in codex view
-		LOOKUP: 'TBD-bible-lookup', // TBD
-		SEARCH_START: 'bible-search-start', // process user entered search string
+		SHOW_SETTINGS: 'bible-show-settings', // show settings view
 		CHG_HEADING: 'bible-chg-heading', // change title at top of page as result of user scrolling
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
@@ -52,13 +51,14 @@ AppViewController.prototype.begin = function(develop) {
 		console.log('loaded toc', that.tableContents.size());
 		
 		that.tableContentsView = new TableContentsView(that.tableContents);
-		that.lookup = new Lookup(that.tableContents);
 		that.header = new HeaderView(that.tableContents);
 		that.header.showView();
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.database.history);
 		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.header.barHite);
 		that.historyView = new HistoryView(that.database.history, that.tableContents);
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
+		that.settingsView = new SettingsView(that.database.verses);
+		//that.versionsView = new VersionsView();
 		Object.freeze(that);
 
 		switch(develop) {
@@ -74,6 +74,12 @@ AppViewController.prototype.begin = function(develop) {
 		case 'QuestionsView':
 			that.questionsView.showView();
 			break;
+		case 'SettingsView':
+			that.settingsView.showView();
+			break;
+		case 'VersionsView':
+			that.versionsView.showView();
+			break;
 		default:
 			that.database.history.lastItem(function(lastItem) {
 				if (lastItem instanceof IOError || lastItem === null || lastItem === undefined) {
@@ -84,29 +90,17 @@ AppViewController.prototype.begin = function(develop) {
 				}
 			});
 		}
-		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
-			that.tableContentsView.showView();
-			that.header.showTitleField();
-			that.searchView.hideView();
-			that.historyView.hideView(function() {});
-			that.questionsView.hideView();
-			that.codexView.hideView();
+		document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
+		document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+		document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
+
+		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
+			that.codexView.showFootnote(event.detail.id);
 		});
-		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
-			that.searchView.showView();
-			that.header.showSearchField();
-			that.tableContentsView.hideView();
-			that.historyView.hideView(function() {});
-			that.questionsView.hideView();
-			that.codexView.hideView();
-		});
-		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, function(event) {
-			that.questionsView.showView();
-			that.header.showTitleField();
-			that.tableContentsView.hideView();
-			that.searchView.hideView();
-			that.historyView.hideView(function() {});
-			that.codexView.hideView();			
+		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
+			that.codexView.hideFootnote(event.detail.id);
 		});
 		var panRightEnabled = true;
 		that.touch.on("panright", function(event) {
@@ -126,34 +120,66 @@ AppViewController.prototype.begin = function(develop) {
 				});
 			}
 		});
-		document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
-			console.log('SEARCH_START', event.detail);
-			if (! that.lookup.find(event.detail.search)) {
-				that.searchView.showView(event.detail.search);
-				that.header.showSearchField(event.detail.search);
-			}
-		});
-		document.body.addEventListener(BIBLE.SHOW_PASSAGE, function(event) {
-			console.log(JSON.stringify(event.detail));
-			that.codexView.showView(event.detail.id);
-			that.header.showTitleField();
-			that.tableContentsView.hideView();
-			that.searchView.hideView();
-			var historyItem = { timestamp: new Date(), reference: event.detail.id, 
-				source: event.type, search: event.detail.source };
-			that.database.history.replace(historyItem, function(count) {});
-		});
-		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
-			that.codexView.showFootnote(event.detail.id);
-		});
-		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
-			that.codexView.hideFootnote(event.detail.id);
-		});
 	});
 	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
 		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
 		that.header.setTitle(event.detail.reference);
 	});
+	function showTocHandler(event) {
+		disableHandlers();
+		clearViews();		
+		that.tableContentsView.showView();
+		enableHandlersExcept(BIBLE.SHOW_TOC);
+	}
+	function showSearchHandler(event) {
+		disableHandlers();
+		clearViews();	
+		that.searchView.showView();
+		enableHandlersExcept(BIBLE.SHOW_SEARCH);
+	}		
+	function showPassageHandler(event) {
+		console.log('SHOW PASSAGE', event.detail.id, event.detail.search);
+		disableHandlers();
+		clearViews();
+		that.codexView.showView(event.detail.id);
+		enableHandlersExcept('NONE');
+		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
+			source: 'P', search: event.detail.source };
+		that.database.history.replace(historyItem, function(count) {});
+	}
+	function showQuestionsHandler(event) {
+		disableHandlers();
+		clearViews();	
+		that.questionsView.showView();
+		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
+	}	
+	function showSettingsHandler(event) {
+		disableHandlers();
+		clearViews();
+		that.settingsView.showView();
+		enableHandlersExcept(BIBLE.SHOW_SETTINGS);
+	}		
+	function clearViews() {
+		that.tableContentsView.hideView();
+		that.searchView.hideView();
+		that.codexView.hideView();
+		that.questionsView.hideView();
+		that.settingsView.hideView();
+	}
+	function disableHandlers() {
+		document.body.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);
+		document.body.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+		document.body.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
+	}
+	function enableHandlersExcept(name) {
+		if (name !== BIBLE.SHOW_TOC) document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
+		if (name !== BIBLE.SHOW_SEARCH) document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
+	}
 };
 /**
 * This class contains user interface features for the display of the Bible text
@@ -176,11 +202,15 @@ function CodexView(chaptersAdapter, tableContents, headerHeight) {
 }
 CodexView.prototype.hideView = function() {
 	window.clearTimeout(this.checkScrollID);
-	for (var i=this.viewport.children.length -1; i>=0; i--) {
-		this.viewport.removeChild(this.viewport.children[i]);
+	if (this.viewport.children.length > 0) {
+		///this.scrollPosition = window.scrollY; // ISN'T THIS NEEDED?
+		for (var i=this.viewport.children.length -1; i>=0; i--) {
+			this.viewport.removeChild(this.viewport.children[i]);
+		}
 	}
 };
 CodexView.prototype.showView = function(nodeId) {
+	document.body.style.backgroundColor = '#FFF';
 	var chapterQueue = [];
 	var firstChapter = new Reference(nodeId);
 	firstChapter = this.tableContents.ensureChapter(firstChapter);
@@ -260,7 +290,7 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 	var that = this;
 	var selectList = [];
 	for (var i=0; i<chapters.length; i++) {
-		selectList.push(chapters[i].nodeId);
+		selectList.push(chapters[i].chapterId);
 	}
 	this.chaptersAdapter.getChapters(selectList, function(results) {
 		if (results instanceof IOError) {
@@ -381,7 +411,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 	var that = this;
 	var root = document.createElement('ul');
 	root.setAttribute('id', 'historyTabBar');
-	this.historyAdapter.selectAll(function(results) {
+	this.historyAdapter.selectPassages(function(results) {
 		if (results instanceof IOError) {
 			callback(root);
 		} else {
@@ -397,7 +427,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 				btn.textContent = generateReference(historyNodeId);
 				tab.appendChild(btn);
 				btn.addEventListener('click', function(event) {
-					console.log('btn is clicked ', btn.innerHTML);
+					console.log('btn clicked', this.id);
 					var nodeId = this.id.substr(3);
 					document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 					that.hideView();
@@ -427,7 +457,10 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 */
 function QuestionsView(questionsAdapter, versesAdapter, tableContents) {
 	this.tableContents = tableContents;
+	this.versesAdapter = versesAdapter;
 	this.questions = new Questions(questionsAdapter, versesAdapter, tableContents);
+	this.formatter = new DateTimeFormatter();
+	this.dom = new DOMBuilder();
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('questionsRoot');
 	this.referenceInput = null;
@@ -436,15 +469,17 @@ function QuestionsView(questionsAdapter, versesAdapter, tableContents) {
 }
 QuestionsView.prototype.showView = function() {
 	var that = this;
-	this.hideView();
+	document.body.style.backgroundColor = '#FFF';
 	this.questions.fill(function(results) {
 		if (results instanceof IOError) {
 			console.log('Error: QuestionView.showView.fill');
 		} else {
 			if (results.length === 0) {
 				that.questions.createActs8Question(function(item) {
-					that.questions.addItemLocal(item, function(error) {
-						presentView();
+					that.questions.addQuestionLocal(item, function(error) {
+						that.questions.addAnswerLocal(item, function(error) {
+							presentView();
+						});
 					});
 				});
 			} else {
@@ -457,21 +492,25 @@ QuestionsView.prototype.showView = function() {
 		that.rootNode.appendChild(that.viewRoot);
 
 		that.questions.checkServer(function(results) {
-			//that.appendToQuestionView();
-			// when a question comes back from the server
-			// we are able to display input block.
+			for (var i=0; i<results.length; i++) {
+				var itemId = results[i];
+				var questionNode = document.getElementById('que' + itemId);
+				that.displayAnswer(questionNode);
+			}
 		});		
 	}
 };
 QuestionsView.prototype.hideView = function() {
-	for (var i=this.rootNode.children.length -1; i>=0; i--) {
-		this.rootNode.removeChild(this.rootNode.children[i]);
+	if (this.rootNode.children.length > 0) {
+		// why not save scroll position
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
+		this.viewRoot = null;
 	}
-	this.viewRoot = null;
 };
 QuestionsView.prototype.buildQuestionsView = function() {
 	var that = this;
-	var formatter = new DateTimeFormatter();
 	var root = document.createElement('div');
 	root.setAttribute('id', 'questionsView');
 	var numQuestions = this.questions.size();
@@ -484,114 +523,78 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	function buildOneQuestion(parent, i) {
 		var item = that.questions.find(i);
 
-		var aQuestion = document.createElement('div');
-		aQuestion.setAttribute('id', 'que' + i);
-		aQuestion.setAttribute('class', 'oneQuestion');
-		parent.appendChild(aQuestion);
-
-		var line1 = document.createElement('div');
-		line1.setAttribute('class', 'queTop');
-		aQuestion.appendChild(line1);
-
-		var reference = document.createElement('p');
-		reference.setAttribute('class', 'queRef');
-		reference.textContent = item.displayRef;
-		line1.appendChild(reference);
-
-		var questDate = document.createElement('p');
-		questDate.setAttribute('class', 'queDate');
-		questDate.textContent = formatter.localDatetime(item.askedDateTime);
-		line1.appendChild(questDate);
-
-		var question = document.createElement('p');
-		question.setAttribute('class', 'queText');
-		question.textContent = item.question;
-		aQuestion.appendChild(question);
+		var questionBorder = that.dom.addNode(parent, 'div', 'questionBorder');
+		var aQuestion = that.dom.addNode(questionBorder, 'div', 'oneQuestion', null, 'que' + i);
+		var line1 = that.dom.addNode(aQuestion, 'div', 'queTop');
+		that.dom.addNode(line1, 'p', 'queRef', item.reference);
+		that.dom.addNode(line1, 'p', 'queDate', that.formatter.localDatetime(item.askedDateTime));
+		that.dom.addNode(aQuestion, 'p', 'queText', item.question);
 
 		if (i === numQuestions -1) {
-			displayAnswer(aQuestion);
+			that.displayAnswer(aQuestion);
 		} else {
 			aQuestion.addEventListener('click', displayAnswerOnRequest);	
 		}
 	}
-
 	function displayAnswerOnRequest(event) {
 		var selected = document.getElementById(this.id);
 		selected.removeEventListener('click', displayAnswerOnRequest);
-		displayAnswer(selected);
+		that.displayAnswer(selected);
 	}
-
-	function displayAnswer(selected) {
-		var idNum = selected.id.substr(3);
-		var item = that.questions.find(idNum);
-
-		var line = document.createElement('hr');
-		line.setAttribute('class', 'ansLine');
-		selected.appendChild(line);
-
-		var answerTop = document.createElement('div');
-		answerTop.setAttribute('class', 'ansTop');
-		selected.appendChild(answerTop);
-
-		var instructor = document.createElement('p');
-		instructor.setAttribute('class', 'ansInstructor');
-		instructor.textContent = item.instructor;
-		answerTop.appendChild(instructor);
-
-		var ansDate = document.createElement('p');
-		ansDate.setAttribute('class', 'ansDate');
-		ansDate.textContent = formatter.localDatetime(item.answerDateTime);
-		answerTop.appendChild(ansDate);
-
-		var answer = document.createElement('p');
-		answer.setAttribute('class', 'ansText');
-		answer.textContent = item.answer;
-		selected.appendChild(answer);
-	}
-
 	function includeInputBlock(parentNode) {
-		var inputTop = document.createElement('div');
-		inputTop.setAttribute('id', 'quesInput');
-		parentNode.appendChild(inputTop);
+		var refTop = that.dom.addNode(parentNode, 'div', 'questionBorder', null, 'quesInput');
 
-		that.referenceInput = document.createElement('input');
-		that.referenceInput.setAttribute('id', 'inputRef');
+		that.referenceInput = that.dom.addNode(refTop, 'input', 'questionField', null, 'inputRef');
 		that.referenceInput.setAttribute('type', 'text');
 		that.referenceInput.setAttribute('placeholder', 'Reference');
-		inputTop.appendChild(that.referenceInput);
 
-		that.questionInput = document.createElement('textarea');
-		that.questionInput.setAttribute('id', 'inputText');
-		that.questionInput.setAttribute('placeholder', 'Matt 7:7 goes here');
+		var inputTop = that.dom.addNode(parentNode, 'div', 'questionBorder');
+		that.questionInput = that.dom.addNode(inputTop, 'textarea', 'questionField', null, 'inputText');
 		that.questionInput.setAttribute('rows', 10);
-		inputTop.appendChild(that.questionInput);
 
-		var quesBtn = document.createElement('button');
-		quesBtn.setAttribute('id', 'inputBtn');
-		inputTop.appendChild(quesBtn);
-		quesBtn.appendChild(drawSendIcon(50, '#777777'));
+		var quesBtn = that.dom.addNode(parentNode, 'button', null, null, 'inputBtn');
+		quesBtn.appendChild(drawSendIcon(50, '#F7F7BB'));
 
 		quesBtn.addEventListener('click', function(event) {
 			console.log('submit button clicked');
 
 			var item = new QuestionItem();
-			// set item.reference by position of page
-			item.displayRef = that.referenceInput.value;
+			item.reference = that.referenceInput.value;
 			item.question = that.questionInput.value;
 
-			that.questions.addItem(item, function(error) {
+			that.questions.addQuestion(item, function(error) {
 				if (error) {
 					console.error('error at server', error);
 				} else {
 					console.log('file is written to disk and server');
-					that.hideView();
 					that.viewRoot = that.buildQuestionsView();
 					that.rootNode.appendChild(that.viewRoot);
 				}
 			});
 		});
+		that.versesAdapter.getVerses(['MAT:7:7'], function(results) {
+			if (results instanceof IOError) {
+				console.log('Error while getting MAT:7:7');
+			} else {
+				if (results.rows.length > 0) {
+					var row = results.rows.item(0);
+					that.questionInput.setAttribute('placeholder', row.html);
+				}	
+			}
+		});
 	}
-};/**
+};
+QuestionsView.prototype.displayAnswer = function(parent) {
+	var idNum = parent.id.substr(3);
+	var item = this.questions.find(idNum);
+
+	this.dom.addNode(parent, 'hr', 'ansLine');
+	var answerTop = this.dom.addNode(parent, 'div', 'ansTop');
+	this.dom.addNode(answerTop, 'p', 'ansInstructor', item.instructor);
+	this.dom.addNode(answerTop, 'p', 'ansDate', this.formatter.localDatetime(item.answerDateTime));
+	this.dom.addNode(parent, 'p', 'ansText', item.answer);
+};
+/**
 * This class provides the User Interface part of the concordance and search capabilities of the app.
 * It does a lazy create of all of the objects needed.
 * Each presentation of a searchView presents its last state and last found results.
@@ -601,23 +604,24 @@ function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	this.concordance = concordance;
 	this.versesAdapter = versesAdapter;
 	this.historyAdapter = historyAdapter;
-	this.query = '';
+	this.query = null;
+	this.lookup = new Lookup(toc);
 	this.words = [];
 	this.bookList = {};
 	this.viewRoot = null;
 	this.rootNode = document.getElementById('searchRoot');
 	this.scrollPosition = 0;
+	this.searchField = null;
 	Object.seal(this);
 }
-SearchView.prototype.showView = function(query) {
-	this.hideView();
-	if (query) {
-		console.log('Create new search page');
-		this.showSearch(query);
-		this.rootNode.appendChild(this.viewRoot);
-		window.scrollTo(10, 0);
-	} else if (this.viewRoot) {
-		console.log('Reattach existing search page');
+SearchView.prototype.showView = function() {
+	document.body.style.backgroundColor = '#FFF';
+	if (this.searchField === null) {
+		this.searchField = this.showSearchField();
+	}
+	this.rootNode.appendChild(this.searchField);
+	 
+	if (this.viewRoot) {
 		this.rootNode.appendChild(this.viewRoot);
 		window.scrollTo(10, this.scrollPosition);
 	} else {
@@ -625,11 +629,9 @@ SearchView.prototype.showView = function(query) {
 		this.historyAdapter.lastConcordanceSearch(function(lastSearch) {
 			if (lastSearch instanceof IOError || lastSearch === null) {
 				console.log('Nothing to search for, display blank page');
-				that.showSearch('');
-				that.rootNode.appendChild(that.viewRoot);
-				window.scrollTo(10, 0);	
 			} else {
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: lastSearch }}));	
+				that.searchField.children[0].value = lastSearch;
+				that.startSearch(lastSearch);
 			}
 		});
 	}
@@ -637,13 +639,44 @@ SearchView.prototype.showView = function(query) {
 SearchView.prototype.hideView = function() {
 	if (this.rootNode.children.length > 0) {
 		this.scrollPosition = window.scrollY;
-		this.rootNode.removeChild(this.viewRoot);
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
 	}
+};
+SearchView.prototype.startSearch = function(query) {
+	this.query = query;
+	console.log('Create new search page');
+	if (! this.lookup.find(query)) {
+		this.showSearch(query);
+		for (var i=this.rootNode.children.length -1; i>=1; i--) { // remove viewRoot if present
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
+		this.rootNode.appendChild(this.viewRoot);
+		window.scrollTo(10, 0);
+	}
+};
+SearchView.prototype.showSearchField = function() {
+	var searchField = document.createElement('div');
+	searchField.setAttribute('class', 'searchBorder');
+	var inputField = document.createElement('input');
+	inputField.setAttribute('type', 'text');
+	inputField.setAttribute('class', 'searchField');
+	inputField.setAttribute('style', 'width:100%');
+	
+	searchField.appendChild(inputField);
+	this.rootNode.appendChild(searchField);
+	var that = this;
+	inputField.addEventListener('keyup', function(event) {
+		if (event.keyCode === 13) {
+			that.startSearch(this.value);
+		}
+	});
+	return(searchField);
 };
 SearchView.prototype.showSearch = function(query) {
 	var that = this;
 	this.viewRoot = document.createElement('div');
-	this.query = query;
 	this.words = query.split(' ');
 	this.concordance.search(this.words, function(refList) {
 		if (refList instanceof IOError) {
@@ -721,6 +754,7 @@ SearchView.prototype.appendBook = function(bookCode) {
 SearchView.prototype.appendReference = function(bookNode, reference, verseText) {
 	var that = this;
 	var entryNode = document.createElement('p');
+	entryNode.setAttribute('id', 'con' + reference.nodeId);
 	bookNode.appendChild(entryNode);
 	var refNode = document.createElement('span');
 	refNode.setAttribute('class', 'conRef');
@@ -729,14 +763,12 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText) 
 	entryNode.appendChild(document.createElement('br'));
 
 	var verseNode = document.createElement('span');
-	verseNode.setAttribute('id', 'con' + reference.nodeId);
 	verseNode.setAttribute('class', 'conVerse');
 	verseNode.innerHTML = styleSearchWords(verseText);
 	entryNode.appendChild(verseNode);
-	verseNode.addEventListener('click', function(event) {
+	entryNode.addEventListener('click', function(event) {
 		var nodeId = this.id.substr(3);
 		console.log('open chapter', nodeId);
-		that.hideView();
 		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
 	});
 
@@ -796,15 +828,16 @@ var STATUS_BAR_HEIGHT = 14;
 
 function HeaderView(tableContents) {
 	this.statusBarInHeader = (deviceSettings.platform() === 'ios') ? true : false;
+	this.statusBarInHeader = false;
 
 	this.hite = HEADER_BUTTON_HEIGHT;
 	this.barHite = (this.statusBarInHeader) ? HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT : HEADER_BAR_HEIGHT;
+	this.cellTopPadding = (this.statusBarInHeader) ? 'padding-top:' + STATUS_BAR_HEIGHT + 'px' : 'padding-top:0px';
 	this.tableContents = tableContents;
 	this.backgroundCanvas = null;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.currentReference = null;
-	this.searchField = null;
 	this.rootNode = document.getElementById('statusRoot');
 	this.labelCell = document.getElementById('labelCell');
 	Object.seal(this);
@@ -816,9 +849,15 @@ HeaderView.prototype.showView = function() {
 	paintBackground(this.backgroundCanvas, this.hite);
 	this.rootNode.appendChild(this.backgroundCanvas);
 
-	setupTocButton(this.hite, '#F7F7BB');
-	setupQuestionsButton(this.hite, '#F7F7BB');
-	setupSearchButton(this.hite, '#F7F7BB');
+//	origSetupIconButton('tocCell', drawTOCIcon, this.hite, BIBLE.SHOW_TOC);
+//	origSetupIconButton('searchCell', drawSearchIcon, this.hite, BIBLE.SHOW_SEARCH);
+//	origSetupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
+//	origSetupIconButton('settingsCell', drawSettingsIcon, this.hite, BIBLE.SHOW_SETTINGS);
+	setupIconButton('tocCell', 'licensed/sebastiano/check-list.png', this.hite, BIBLE.SHOW_TOC);
+	setupIconButton('searchCell', 'licensed/sebastiano/lens.png', this.hite, BIBLE.SHOW_SEARCH);
+	setupIconButton('questionsCell', 'licensed/sebastiano/chat.png', this.hite, BIBLE.SHOW_QUESTIONS);
+	setupIconButton('settingsCell', 'licensed/sebastiano/settings.png', this.hite, BIBLE.SHOW_SETTINGS);
+	
 
 	this.titleCanvas = document.createElement('canvas');
 	drawTitleField(this.titleCanvas, this.hite);
@@ -832,7 +871,7 @@ HeaderView.prototype.showView = function() {
 	function paintBackground(canvas, hite) {
     	canvas.setAttribute('height', that.barHite);
     	canvas.setAttribute('width', window.innerWidth);// outerWidth is zero on iOS
-    	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
+    	canvas.setAttribute('style', 'position: absolute; top:0; left:0; z-index: -1');
       	var graphics = canvas.getContext('2d');
       	graphics.rect(0, 0, canvas.width, canvas.height);
 
@@ -847,31 +886,10 @@ HeaderView.prototype.showView = function() {
       	graphics.fillStyle = gradient;
       	graphics.fill();
 	}
-	function setupTocButton(hite, color) {
-		var canvas = drawTOCIcon(hite, color);
-		if (that.statusBarInHeader) {
-			canvas.setAttribute('style', 'position: fixed; top: 16px; left: 0');
-		} else {
-			canvas.setAttribute('style', 'position: fixed; top: 4px; left: 0');
-		}
-		document.getElementById('tocCell').appendChild(canvas);
-
-		canvas.addEventListener('click', function(event) {
-			event.stopImmediatePropagation();
-			console.log('toc button is clicked');
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_TOC));
-		});
-	}
 	function drawTitleField(canvas, hite) {
 		canvas.setAttribute('id', 'titleCanvas');
 		canvas.setAttribute('height', hite);
-		var titleWidth = window.innerWidth - hite * 3.5;
-		canvas.setAttribute('width', titleWidth);
-		if (that.statusBarInHeader) {
-			canvas.setAttribute('style', 'position: fixed; top: 16px; left:' + hite * 1.1 + 'px');			
-		} else {
-			canvas.setAttribute('style', 'position: fixed; top: 4px; left:' + hite * 1.1 + 'px');
-		}
+		canvas.setAttribute('style', that.cellTopPadding);
 		that.titleGraphics = canvas.getContext('2d');
 		that.titleGraphics.fillStyle = '#000000';
 		that.titleGraphics.font = '24pt sans-serif';
@@ -886,34 +904,29 @@ HeaderView.prototype.showView = function() {
 			}
 		});
 	}
-	function setupSearchButton(hite, color) {
-		var canvas = drawSearchIcon(hite, color);
-		if (that.statusBarInHeader) {
-			canvas.setAttribute('style', 'position: fixed; top: 16px; right: 0; border: none');			
-		} else {
-			canvas.setAttribute('style', 'position: fixed; top: 4px; right: 0; border: none');
-		}
-		document.getElementById('searchCell').appendChild(canvas);
-
+	function setupIconButton(parentCell, iconFile, hite, eventType) {
+		var canvas = document.createElement('img');
+		canvas.setAttribute('src', iconFile);
+		canvas.setAttribute('style', that.cellTopPadding);
+		canvas.setAttribute('width', hite);
+		canvas.setAttribute('height', hite);
+		var parent = document.getElementById(parentCell);
+		parent.appendChild(canvas);
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
-			console.log('search button is clicked');
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_SEARCH));
+			console.log('clicked', parentCell);
+			document.body.dispatchEvent(new CustomEvent(eventType));
 		});
 	}
-	function setupQuestionsButton(hite, color) {
-		var canvas = drawQuestionsIcon(hite, color);
-		if (that.statusBarInHeader) {
-			canvas.setAttribute('style', 'position: fixed; top: 16px; border: none; right: ' + hite * 1.14 + 'px');
-		} else {
-			canvas.setAttribute('style', 'position: fixed; top: 4px; border: none; right: ' + hite * 1.14 + 'px');
-		}
-		document.getElementById('questionsCell').appendChild(canvas);
-
+	function origSetupIconButton(parentCell, canvasFunction, hite, eventType) {
+		var canvas = canvasFunction(hite, '#F7F7BB');
+		canvas.setAttribute('style', that.cellTopPadding);
+		var parent = document.getElementById(parentCell);
+		parent.appendChild(canvas);
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
-			console.log('questions button is clicked');
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_QUESTIONS));
+			console.log('clicked', parentCell);
+			document.body.dispatchEvent(new CustomEvent(eventType));
 		});
 	}
 };
@@ -929,43 +942,7 @@ HeaderView.prototype.drawTitle = function() {
 		this.titleGraphics.fillText(text, this.titleCanvas.width / 2, this.hite / 2, this.titleCanvas.width);
 	}
 };
-HeaderView.prototype.showSearchField = function(query) {
-	if (! this.searchField) {
-		this.searchField = document.createElement('input');
-		this.searchField.setAttribute('type', 'text');
-		this.searchField.setAttribute('class', 'searchField');
-		this.searchField.setAttribute('value', query || '');
-		var style = [ 'position:fixed;' ];
-		style.push('left:' + (this.hite * 1.1) + 'px');
-		style.push('width:' + (window.innerWidth - this.hite * 4.0) + 'px');
-		if (this.statusBarInHeader) {
-			style.push('height:' + (HEADER_BAR_HEIGHT * 0.5) + 'px');
-			style.push('top:' + (HEADER_BAR_HEIGHT * 0.15 + STATUS_BAR_HEIGHT) + 'px');
-		} else {
-			style.push('height:' + (HEADER_BAR_HEIGHT * 0.65) + 'px');
-			style.push('top:' + (HEADER_BAR_HEIGHT * 0.15) + 'px');
-		}
-		this.searchField.setAttribute('style', style.join(';'));
 
-		var that = this;
-		this.searchField.addEventListener('keyup', function(event) {
-			if (event.keyCode === 13) {
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: that.searchField.value }}));
-
-			}
-		});
-	}
-	this.changeLabelCell(this.searchField);
-};
-HeaderView.prototype.showTitleField = function() {
-	this.changeLabelCell(this.titleCanvas);
-};
-HeaderView.prototype.changeLabelCell = function(node) {
-	for (var i=this.labelCell.children.length -1; i>=0; i--) {
-		this.labelCell.removeChild(this.labelCell.children[i]);
-	}
-	this.labelCell.appendChild(node);
-};
 /**
 * This class presents the table of contents, and responds to user actions.
 */
@@ -978,6 +955,7 @@ function TableContentsView(toc) {
 	Object.seal(this);
 }
 TableContentsView.prototype.showView = function() {
+	document.body.style.backgroundColor = '#FFF';
 	if (! this.root) {
 		this.root = this.buildTocBookList();
 	}
@@ -989,7 +967,9 @@ TableContentsView.prototype.showView = function() {
 TableContentsView.prototype.hideView = function() {
 	if (this.rootNode.children.length > 0) {
 		this.scrollPosition = window.scrollY; // save scroll position till next use.
-		this.rootNode.removeChild(this.root);
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
 	}
 };
 TableContentsView.prototype.buildTocBookList = function() {
@@ -1064,11 +1044,246 @@ TableContentsView.prototype.removeAllChapters = function() {
 };
 TableContentsView.prototype.openChapter = function(nodeId) {
 	console.log('open chapter', nodeId);
-	this.hideView();
 	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 };
 
 
+/**
+* This class is the UI for the controls in the settings page.
+* It also uses the VersionsView to display versions on the settings page.
+*/
+function SettingsView(versesAdapter) {
+	this.root = null;
+	this.versesAdapter = versesAdapter;
+	this.rootNode = document.getElementById('settingRoot');
+	this.dom = new DOMBuilder();
+	this.versionsView = new VersionsView();
+	Object.seal(this);
+}
+SettingsView.prototype.showView = function() {
+	document.body.style.backgroundColor = '#ABC';
+	if (! this.root) {
+		this.root = this.buildSettingsView();
+	}
+	if (this.rootNode.children.length < 1) {
+		this.rootNode.appendChild(this.root);
+	}
+	this.startControls();
+	this.versionsView.showView();
+};
+SettingsView.prototype.hideView = function() {
+	if (this.rootNode.children.length > 0) {
+		// should I save scroll position here
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
+	}	
+};
+SettingsView.prototype.buildSettingsView = function() {
+	var that = this;
+	var table = document.createElement('table');
+	table.id = 'settingsTable';
+	
+	addRowSpace(table);
+	var textRow = this.dom.addNode(table, 'tr');
+	var textCell = this.dom.addNode(textRow, 'td', null, null, 'sampleText');
+	textCell.setAttribute('colspan', 3);
+	
+	addRowSpace(table);
+	var sizeRow = this.dom.addNode(table, 'tr');
+	var sizeCell = this.dom.addNode(sizeRow, 'td', null, null, 'fontSizeControl');
+	sizeCell.setAttribute('colspan', 3);
+	var sizeSlider = this.dom.addNode(sizeCell, 'div', null, null, 'fontSizeSlider');
+	var sizeThumb = this.dom.addNode(sizeCell, 'div', null, null, 'fontSizeThumb');
+	
+	addRowSpace(table);
+	var colorRow = this.dom.addNode(table, 'tr');
+	var blackCell = this.dom.addNode(colorRow, 'td', 'tableLeftCol', null, 'blackBackground');
+	var colorCtrlCell = this.dom.addNode(colorRow, 'td', 'tableCtrlCol');
+	var colorSlider = this.dom.addNode(colorCtrlCell, 'div', null, null, 'fontColorSlider');
+	var colorThumb = this.dom.addNode(colorSlider, 'div', null, null, 'fontColorThumb');
+	var whiteCell = this.dom.addNode(colorRow, 'td', 'tableRightCol', null, 'whiteBackground');
+	
+	addRowSpace(table);
+	addRowSpace(table);
+	addJohn316(textCell, blackCell, whiteCell);
+	return(table);
+	
+	function addRowSpace(table) {
+		var row = table.insertRow();
+		var cell = row.insertCell();
+		cell.setAttribute('class', 'rowSpace');
+		cell.setAttribute('colspan', 3);
+	}
+	function addJohn316(verseNode, fragment1Node, fragment2Node) {
+		that.versesAdapter.getVerses(['JHN:3:16'], function(results) {
+			if (results instanceof IOError) {
+				console.log('Error while getting JHN:3:16');
+			} else {
+				if (results.rows.length > 0) {
+					var row = results.rows.item(0);
+					verseNode.textContent = row.html;
+					var words = row.html.split(/\s+/);
+					var fragment = words[0] + ' ' + words[1] + ' ' + words[2] + ' ' + words[3];
+					fragment1Node.textContent = fragment;
+					fragment2Node.textContent = fragment;
+				}	
+			}
+		});
+
+	}
+};
+SettingsView.prototype.startControls = function() {
+	startFontSizeControl(16, 12, 48);
+	startFontColorControl(false);
+	
+	function startFontSizeControl(fontSize, ptMin, ptMax) {
+	    var sampleNode = document.getElementById('sampleText');
+	    var ptRange = ptMax - ptMin;
+    	var draggable = Draggable.create('#fontSizeThumb', {type:'x', bounds:'#fontSizeSlider', onDrag:function() {
+			resizeText(this.x, this.minX, this.maxX);
+    	}});
+    	var drag0 = draggable[0];
+    	var startX = (fontSize - ptMin) / ptRange * (drag0.maxX - drag0.minX) + drag0.minX;
+    	TweenMax.set('#fontSizeThumb', {x:startX});
+    	resizeText(startX, drag0.minX, drag0.maxX);
+
+		function resizeText(x, min, max) {
+	    	var size = (x - min) / (max - min) * ptRange + ptMin;
+			sampleNode.style.fontSize = size + 'px';		    
+    	}
+    }
+	function startFontColorControl(state) {
+	    var onOffState = state;
+	    var sliderNode = document.getElementById('fontColorSlider');
+	    var sampleNode = document.getElementById('sampleText');
+    	var draggable = Draggable.create('#fontColorThumb', {type:'x', bounds:sliderNode, throwProps:true, snap:function(v) {
+	    		var snap = (v - this.minX < (this.maxX - this.minX) / 2) ? this.minX : this.maxX;
+	    		var newState = (snap > this.minX);
+	    		if (newState != onOffState) {
+		    		onOffState = newState;
+		    		setColors(onOffState);
+	    		}
+	    		return(snap);
+    		}
+    	});
+    	var startX = (onOffState) ? draggable[0].maxX : draggable[0].minX;
+    	TweenMax.set('#fontColorThumb', {x:startX});
+    	setColors(onOffState);
+    	
+    	function setColors(onOffState) {
+	    	var color = (onOffState) ? '#00FF00' : '#FFFFFF';
+			TweenMax.to(sliderNode, 0.4, {backgroundColor: color});
+			sampleNode.style.backgroundColor = (onOffState) ? '#000000' : '#FFFFFF';
+			sampleNode.style.color = (onOffState) ? '#FFFFFF' : '#000000';
+    	}
+    }
+};
+
+/**
+* This class presents the list of available versions to download
+*/
+var FLAG_PATH = 'licensed/icondrawer/flags/64/';
+
+function VersionsView() {
+	this.database = new VersionsAdapter()
+	this.root = null;
+	this.rootNode = document.getElementById('settingRoot');
+	this.dom = new DOMBuilder();
+	this.scrollPosition = 0;
+	Object.seal(this);
+}
+VersionsView.prototype.showView = function() {
+	if (! this.root) {
+		this.buildCountriesList();
+	} 
+	else if (this.rootNode.children.length < 4) {
+		this.rootNode.appendChild(this.root);
+		window.scrollTo(10, this.scrollPosition);// move to settings view?
+	}
+};
+VersionsView.prototype.buildCountriesList = function() {
+	var that = this;
+	var root = document.createElement('div');
+	this.database.selectCountries(function(results) {
+		if (! (results instanceof IOError)) {
+			for (var i=0; i<results.length; i++) {
+				var row = results[i];
+				var groupNode = that.dom.addNode(root, 'div');
+				var countryNode = that.dom.addNode(groupNode, 'div', 'ctry', null, 'cty' + row.countryCode);
+				countryNode.setAttribute('data-lang', row.primLanguage);
+				countryNode.addEventListener('click', countryClickHandler);
+				
+				var flagNode = that.dom.addNode(countryNode, 'img');
+				flagNode.setAttribute('src', FLAG_PATH + row.countryCode + '.png');
+				flagNode.setAttribute('alt', 'Flag');
+				that.dom.addNode(countryNode, 'span', null, row.localName);
+			}
+		}
+		that.rootNode.appendChild(root);
+		that.root = root;
+	});
+	
+	function countryClickHandler(event) {
+		this.removeEventListener('click', countryClickHandler);
+		console.log('user clicked in', this.id);
+		that.buildVersionList(this);
+	}
+};
+VersionsView.prototype.buildVersionList = function(countryNode) {
+	var that = this;
+	var parent = countryNode.parentElement;
+	var countryCode = countryNode.id.substr(3);
+	var primLanguage = countryNode.getAttribute('data-lang');
+	this.database.selectVersions(countryCode, primLanguage, function(results) {
+		if (! (results instanceof IOError)) {
+			for (var i=0; i<results.length; i++) {
+				var row = results[i];
+				var versionNode = that.dom.addNode(parent, 'table', 'vers');
+				var rowNode = that.dom.addNode(versionNode, 'tr');
+				var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
+				that.dom.addNode(leftNode, 'p', 'langName', row.localLanguageName);
+				var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
+				that.dom.addNode(leftNode, 'span', 'versName', versionName + ',  ');
+				that.dom.addNode(leftNode, 'span', 'copy', copyright(row));
+				
+				var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
+				var iconNode = that.dom.addNode(rightNode, 'img');
+				iconNode.setAttribute('src', 'licensed/sebastiano/cloud-download.png');
+				iconNode.addEventListener('click', versionClickHandler);
+			}
+		}
+	});
+	
+	function versionClickHandler(event) {
+		this.removeEventListener('click', versionClickHandler);
+		console.log('click on version');
+	}
+	function copyright(row) {
+		if (row.copyrightYear === 'PUBLIC') {
+			return(row.ownerName + ' Public Domain');
+		} else {
+			var result = [String.fromCharCode('0xA9')];
+			if (row.copyrightYear) result.push(row.copyrightYear + ',');
+			if (row.ownerName) result.push(row.ownerName);
+			return(result.join(' '));
+		}
+	}
+};/**
+* This is a helper class to remove the repetitive operations needed
+* to dynamically create DOM objects.
+*/
+function DOMBuilder() {
+	//this.rootNode = root;
+}
+DOMBuilder.prototype.addNode = function(parent, type, clas, content, id) {
+	var node = document.createElement(type);
+	if (id) node.setAttribute('id', id);
+	if (clas) node.setAttribute('class', clas);
+	if (content) node.textContent = content;
+	parent.appendChild(node);
+	return(node);
+};
 /**
 * This function draws and icon that is used as a questions button
 * on the StatusBar.
@@ -1297,19 +1512,17 @@ DeviceDatabase.prototype.select = function(statement, values, callback) {
     }
 };
 DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
-    this.database.transaction(onTranStart, onTranError);
-
-    function onTranStart(tx) {
-        console.log('exec tran start', statement, values);
-        tx.executeSql(statement, values, onExecSuccess);
-    }
-    function onTranError(err) {
-        console.log('execute tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
+    this.database.transaction(function(tx) {
+	    console.log('exec tran start', statement, values);
+        tx.executeSql(statement, values, onExecSuccess, onExecError);
+    });
     function onExecSuccess(tx, results) {
     	console.log('excute sql success', results.rowsAffected);
     	callback(results.rowsAffected);
+    }
+    function onExecError(tx, err) {
+        console.log('execute tran error', JSON.stringify(err));
+        callback(new IOError(err));
     }
 };
 DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
@@ -1744,7 +1957,7 @@ HistoryAdapter.prototype.create = function(callback) {
 		}
 	});
 };
-HistoryAdapter.prototype.selectAll = function(callback) {
+HistoryAdapter.prototype.selectPassages = function(callback) {
 	var that = this;
 	var statement = 'select reference from history order by timestamp desc limit ?';
 	this.database.select(statement, [ MAX_HISTORY ], function(results) {
@@ -1763,7 +1976,7 @@ HistoryAdapter.prototype.selectAll = function(callback) {
 	});
 };
 HistoryAdapter.prototype.lastItem = function(callback) {
-	var statement = 'select reference from history where timestamp = (select max(timestamp) from history);';
+	var statement = 'select reference from history where reference timestamp = (select max(timestamp) from history);';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.lastItem Error', JSON.stringify(results));
@@ -1779,17 +1992,17 @@ HistoryAdapter.prototype.lastItem = function(callback) {
 	});
 };
 HistoryAdapter.prototype.lastConcordanceSearch = function(callback) {
-	var statement = 'select reference from history where search is not null order by timestamp desc limit 1';
-	this.database.select(statement, [ MAX_HISTORY ], function(results) {
+	var statement = 'select search from history where search is not null order by timestamp desc limit 1';
+	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.lastConcordance Error', JSON.stringify(results));
 			callback(results);
 		} else {
 			if (results.rows.length > 0) {
 				var row = results.rows.item(0);
-				callback(row.reference);
+				callback(row.search);
 			} else {
-				callback(null);
+				callback(new IOError('No rows found'));
 			}
 		}
 	});
@@ -1842,8 +2055,8 @@ QuestionsAdapter.prototype.drop = function(callback) {
 QuestionsAdapter.prototype.create = function(callback) {
 	var statement = 'create table if not exists questions(' +
 		'askedDateTime text not null primary key, ' +
-		'reference text not null, ' +
-		'displayRef text null, ' +
+		'discourseId text not null, ' +
+		'reference text null, ' + // possibly should be not null
 		'question text not null, ' +
 		'instructor text null, ' +
 		'answerDateTime text null, ' +
@@ -1858,7 +2071,7 @@ QuestionsAdapter.prototype.create = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select reference, displayRef, question, askedDateTime, instructor, answerDateTime, answer ' +
+	var statement = 'select discourseId, reference, question, askedDateTime, instructor, answerDateTime, answer ' +
 		'from questions order by askedDateTime';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
@@ -1867,9 +2080,12 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 		} else {
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);
-				var ques = new QuestionItem(row.reference, row.displayRef, row.question, 
-					row.askedDt, row.instructor, row.answerDt, row.answer);
+				var row = results.rows.item(i);	
+				var askedDateTime = (row.askedDateTime) ? new Date(row.askedDateTime) : null;
+				var answerDateTime = (row.answerDateTime) ? new Date(row.answerDateTime) : null;
+				var ques = new QuestionItem(row.reference, row.question, 
+					askedDateTime, row.instructor, answerDateTime, row.answer);
+				ques.discourseId = row.discourseId;
 				array.push(ques);
 			}
 			callback(array);
@@ -1877,9 +2093,9 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.replace = function(item, callback) {
-	var statement = 'replace into questions(reference, displayRef, question, askedDateTime) ' +
+	var statement = 'replace into questions(discourseId, reference, question, askedDateTime) ' +
 		'values (?,?,?,?)';
-	var values = [ item.reference, item.displayRef, item.question, item.askedDateTime.toISOString() ];
+	var values = [ item.discourseId, item.reference, item.question, item.askedDateTime.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
@@ -1903,106 +2119,141 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 	});
 };
 /**
-* This class encapsulates the Cordova FileTransfer plugin for file download
-* It is a simple plugin, but encapsulated here in order to make it easy to change
-* the implementation.
+* This database adapter is different from the others in this package.  It accesses
+* not the Bible, but a different database, which contains a catalog of versions of the Bible.
 *
-* 'persistent' will store the file in 'Documents' in Android and 'Library' in iOS
-* 'LocalDatabase' is the file under Library where the database is expected.
+* The App selects from, but never modifies this data.
 */
-function FileDownloader(host, port) {
-	this.fileTransfer = new FileTransfer();
-	this.uri = encodeURI('http://' + host + ':' + port + '/down/');
-	this.basePath = 'cdvfile://localhost/persistent/';
-}
-FileDownloader.prototype.download = function(bibleVersion, callback) {
-	var remotePath = this.uri + bibleVersion;
-	//if (device === 'ios') {
-		var filePath = this.basePath + '../LocalDatabase/' + bibleVersion;
-	//} else {
-	//	filePath = this.basePath + bibleVersion;
-	//}
-	console.log('download to', filePath);
-    this.fileTransfer.download(remotePath, filePath, onDownSuccess, onDownError, true, {});
-
-    function onDownSuccess(entry) {
-    	console.log("download complete: ", JSON.stringify(entry));
-       	callback(entry);   	
+function VersionsAdapter() {
+    this.className = 'VersionsAdapter';
+	var size = 2 * 1024 * 1024;
+    if (window.sqlitePlugin === undefined) {
+        console.log('opening Versions SQL Database, stores in Cache');
+        this.database = window.openDatabase("Versions", "1.0", "Versions", size);
+    } else {
+        console.log('opening SQLitePlugin Versions Database, stores in Documents with no cloud');
+        this.database = window.sqlitePlugin.openDatabase({name:'Versions.db', location:2, createFromLocation:1});
     }
-    function onDownError(error) {
-    	console.log("download error source " + error.source);
-      	console.log("download error target " + error.target);
-       	console.log("download error code" + error.code);
-       	callback(new IOError({ code: error.code, message: error.source}));   	
-    }
-};/**
-* This class iterates over the USX data model, and translates the contents to DOM.
-*
-* This method generates a DOM tree that has exactly the same parentage as the USX model.
-* This is probably a problem.  The easy insertion and deletion of nodes probably requires
-* having a hierarchy of books and chapters. GNG April 13, 2015
-*
-* NOTE: This class must be instantiated once for an entire book are all books, not just one chapter,
-* because the bookCode is only present in chapter 0, but is needed by all chapters.
-*/
-function DOMBuilder() {
-	this.bookCode = '';
-	this.chapter = 0;
-	this.verse = 0;
-	this.noteNum = 0;
-	this.treeRoot = null;
 	Object.seal(this);
 }
-DOMBuilder.prototype.toDOM = function(usxRoot) {
-	this.chapter = 0;
-	this.verse = 0;
-	this.noteNum = 0;
-	this.treeRoot = document.createDocumentFragment();
-	this.readRecursively(this.treeRoot, usxRoot);
-	return(this.treeRoot);
-};
-DOMBuilder.prototype.readRecursively = function(domParent, node) {
-	var domNode;
-	//console.log('dom-parent: ', domParent.nodeName, domParent.nodeType, '  node: ', node.tagName);
-	switch(node.tagName) {
-		case 'usx':
-			domNode = domParent;
-			break;
-		case 'book':
-			this.bookCode = node.code;
-			domNode = node.toDOM(domParent);
-			break;
-		case 'chapter':
-			this.chapter = node.number;
-			this.noteNum = 0;
-			domNode = node.toDOM(domParent, this.bookCode);
-			break;
-		case 'para':
-			domNode = node.toDOM(domParent);
-			break;
-		case 'verse':
-			this.verse = node.number;
-			domNode = node.toDOM(domParent, this.bookCode, this.chapter);
-			break;
-		case 'text':
-			node.toDOM(domParent, this.bookCode, this.chapter, this.noteNum);
-			domNode = domParent;
-			break;
-		case 'char':
-			domNode = node.toDOM(domParent);
-			break;
-		case 'note':
-			domNode = node.toDOM(domParent, this.bookCode, this.chapter, ++this.noteNum);
-			break;
-		default:
-			throw new Error('Unknown tagname ' + node.tagName + ' in DOMBuilder.readBook');
-	}
-	if ('children' in node) {
-		for (var i=0; i<node.children.length; i++) {
-			this.readRecursively(domNode, node.children[i]);
+VersionsAdapter.prototype.selectCountries = function(callback) {
+	var statement = 'SELECT countryCode, localName, primLanguage, flagIcon FROM Country ORDER BY localName';
+	this.select(statement, null, function(results) {
+		if (results instanceof IOError) {
+			callback(results)
+		} else {
+			var array = [];
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				array.push(row);
+			}
+			callback(array);
 		}
+	});
+};
+VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, callback) {
+	var statement = 'SELECT cv.localLanguageName, cv.localVersionName, t1.translated as scope, o.ownerName, v.copyrightYear' +
+		' FROM CountryVersion cv' +
+		' JOIN Version v ON cv.versionCode=v.versionCode' +
+		' JOIN Language l ON v.silCode=l.silCode' +
+		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
+		' LEFT OUTER JOIN TextTranslation t1 ON t1.silCode=? AND t1.word=v.scope' +
+		' WHERE cv.countryCode = ?' +
+		' ORDER BY cv.localLanguageName, cv.localVersionName';
+	this.select(statement, [primLanguage, countryCode], function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else {
+			var array = [];
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				array.push(row);
+			}
+			callback(array);
+		}
+	});
+};
+VersionsAdapter.prototype.select = function(statement, values, callback) {
+    this.database.readTransaction(function(tx) {
+        console.log(statement, values);
+        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
+    });
+    function onSelectSuccess(tx, results) {
+        console.log('select success results, rowCount=', results.rows.length);
+        callback(results);
+    }
+    function onSelectError(tx, err) {
+        console.log('select error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+};
+
+/**
+* This class encapsulates the get and post to the BibleApp Server
+* from the BibleApp
+*/
+function HttpClient(server, port) {
+	this.server = server;
+	this.port = port;
+	this.authority = 'http://' + this.server + ':' + this.port;
+}
+HttpClient.prototype.get = function(path, callback) {
+	this.request('GET', path, null, callback);
+};
+HttpClient.prototype.put = function(path, postData, callback) {
+	this.request('PUT', path, postData, callback);
+};
+HttpClient.prototype.post = function(path, postData, callback) {
+	this.request('POST', path, postData, callback);
+};
+HttpClient.prototype.request = function(method, path, postData, callback) {
+	console.log(method, path, postData);	
+	var request = createRequest();
+	if (request) {
+		request.onreadystatechange = progressEvents;
+		request.open(method, this.authority + path, true);
+		var data = (postData) ? JSON.stringify(postData) : null;
+		if (data) {
+			request.setRequestHeader('Content-Type', 'application/json');
+		}
+		request.send(data);		
+	} else {
+		callback(-2, new Error('XMLHttpRequest was not created.'));
+	}
+
+	function progressEvents() {
+		try {
+	    	if (request.readyState === 4) {
+		    	if (request.status === 0) {
+			    	callback(request.status, new Error('Could not reach the server, please try again when you have a better connection.'));
+		    	} else {
+		    		callback(request.status, JSON.parse(request.responseText));
+		    	}
+	    	}
+	    } catch(error) {
+		    callback(-1, error);
+	    }
+  	}
+
+	function createRequest() {
+		var request;
+		if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+			request = new XMLHttpRequest();
+    	} else if (window.ActiveXObject) { // IE
+			try {
+				request = new ActiveXObject("Msxml2.XMLHTTP");
+      		} 
+	  		catch (e) {
+	  			try {
+	  				request = new ActiveXObject("Microsoft.XMLHTTP");
+        		} 
+				catch (e) {}
+      		}
+    	}
+    	return(request);
 	}
 };
+
 /**
 * This class handles all request to deliver scripture.  It handles all passage display requests to display passages of text,
 * and it also handles all requests from concordance search requests to display individual verses.
@@ -2222,7 +2473,7 @@ Lookup.prototype.find = function(search) {
 			if (verse) {
 				nodeId += ':' + verse;
 			}
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source:search }}));
 			return(true);
 		} else {
 			return(false);
@@ -2232,13 +2483,13 @@ Lookup.prototype.find = function(search) {
 /**
 * This class contains the contents of one user question and one instructor response.
 */
-function QuestionItem(reference, displayRef, question, askedDt, instructor, answerDt, answer) {
+function QuestionItem(reference, question, askedDt, instructor, answerDt, answer) {
+	this.discourseId = null;
 	this.reference = reference;
-	this.displayRef = displayRef;
 	this.question = question;
-	this.askedDateTime = (askedDt) ? new Date(askedDt) : new Date();
+	this.askedDateTime = askedDt;
 	this.instructor = instructor;
-	this.answerDateTime = (answerDt) ? new Date(answerDt) : null;
+	this.answerDateTime = answerDt;
 	this.answer = answer;
 	Object.seal(this);
 }/**
@@ -2259,26 +2510,37 @@ Questions.prototype.size = function() {
 Questions.prototype.find = function(index) {
 	return((index >= 0 && index < this.items.length) ? this.items[index] : null);
 };
-Questions.prototype.addItem = function(item, callback) {
+Questions.prototype.addQuestion = function(item, callback) {
 	var that = this;
 	var versionId = this.questionsAdapter.database.code;
-	var postData = {versionId:versionId, displayRef:item.displayRef, message:item.question};
-	console.log('post data', postData);
+	var postData = {versionId:versionId, reference:item.reference, message:item.question};
 	this.httpClient.put('/question', postData, function(status, results) {
 		if (status !== 200 && status !== 201) {
 			callback(results);
 		} else {
-			that.addItemLocal(item, callback);
+			item.discourseId = results.discourseId;
+			item.askedDateTime = new Date(results.timestamp);
+			that.addQuestionLocal(item, callback);
 		}
 	});
 };
-Questions.prototype.addItemLocal = function(item, callback) {
+Questions.prototype.addQuestionLocal = function(item, callback) {
 	var that = this;
 	this.questionsAdapter.replace(item, function(results) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else {
 			that.items.push(item);
+			callback();
+		}
+	});
+};
+Questions.prototype.addAnswerLocal = function(item, callback) {
+	this.questionsAdapter.update(item, function(results) {
+		if (results instanceof IOError) {
+			console.log('Error on update', results);
+			callback(results);
+		} else {
 			callback();
 		}
 	});
@@ -2297,10 +2559,9 @@ Questions.prototype.fill = function(callback) {
 };
 Questions.prototype.createActs8Question = function(callback) {
 	var acts8 = new QuestionItem();
-	acts8.reference = 'ACT:8:30';
 	acts8.askedDateTime = new Date();
 	var refActs830 = new Reference('ACT:8:30');
-	acts8.displayRef = this.tableContents.toString(refActs830);
+	acts8.reference = this.tableContents.toString(refActs830);
 	var verseList = [ 'ACT:8:30', 'ACT:8:31', 'ACT:8:35' ];
 	this.versesAdapter.getVerses(verseList, function(results) {
 		if (results instanceof IOError) {
@@ -2309,6 +2570,7 @@ Questions.prototype.createActs8Question = function(callback) {
 			var acts830 = results.rows.item(0);
 			var acts831 = results.rows.item(1);
 			var acts835 = results.rows.item(2);
+			acts8.discourseId = 'NONE';
 			acts8.question = acts830.html + ' ' + acts831.html;
 			acts8.answer = acts835.html;
 			acts8.instructor = 'Philip';
@@ -2319,32 +2581,54 @@ Questions.prototype.createActs8Question = function(callback) {
 };
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
-	var lastItem = this.items[this.items.length -1];
-	if (lastItem.answeredDateTime == null) {
-		// send request to the server.
-
-		
-		if (lastItem.answeredDateTime) { // if updated by server
-			that.update(lastItem, function(err) {
-				callback();
-			});
-		} else {
-			callback();
-		}
+	var unanswered = findUnansweredQuestions();
+	var discourseIds = Object.keys(unanswered);
+	if (discourseIds.length > 0) {
+		var path = '/response/' + discourseIds.join('/');
+		this.httpClient.get(path, function(status, results) {
+			if (status === 200) {
+				var indexes = updateAnsweredQuestions(unanswered, results);
+				callback(indexes);
+			} else {
+				callback([]);
+			}
+		});
+	} else {
+		callback([]);
 	}
-	else {
-		callback();
-	}
-};
-Questions.prototype.update = function(item, callback) {
-	this.questionsAdapter.update(item, function(results) {
-		if (results instanceof IOError) {
-			console.log('Error on update', results);
-			callback(results);
-		} else {
-			callback(results);
+	function findUnansweredQuestions() {
+		var indexes = {};
+		for (var i=0; i<that.items.length; i++) {
+			var item = that.items[i];
+			if (item.answerDateTime === null || item.answerDateTime === undefined) {
+				indexes[item.discourseId] = i;
+			}
 		}
-	});
+		return(indexes);
+	}
+	function updateAnsweredQuestions(unanswered, results) {
+		var indexes = [];
+		for (var i=0; i<results.length; i++) {
+			var row = results[i];
+			var itemId = unanswered[row.discourseId];
+			var item = that.items[itemId];
+			if (item.discourseId !== row.discourseId) {
+				console.log('Attempt to update wrong item in Questions.checkServer');
+			} else {
+				item.instructor = row.pseudonym;
+				item.answerDateTime = new Date(row.timestamp);
+				item.answer = row.message;
+				indexes.push(itemId);
+				
+				that.addAnswerLocal(item, function(error) {
+					if (error) {
+						console.log('Error occurred adding answer to local store ' + error);
+					}
+				});
+			}
+		}
+		return(indexes);
+	}
 };
 Questions.prototype.toJSON = function() {
 	return(JSON.stringify(this.items, null, ' '));
@@ -2372,6 +2656,7 @@ function Reference(book, chapter, verse) {
 		this.verse = (parts.length > 1) ? +parts[2] : NaN;
 		this.nodeId = book;
 	}
+	this.chapterId = this.book + ':' + this.chapter;
 	this.rootNode = document.createElement('div');
 	this.rootNode.setAttribute('id', 'top' + this.nodeId);
 	Object.freeze(this);

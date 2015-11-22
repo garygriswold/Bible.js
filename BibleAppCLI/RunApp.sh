@@ -5,6 +5,7 @@ cat ../Library/css/Questions.css >> www/css/BibleApp.css
 cat ../Library/css/Search.css >> www/css/BibleApp.css
 cat ../Library/css/Status.css >> www/css/BibleApp.css
 cat ../Library/css/TableContents.css >> www/css/BibleApp.css
+cat ../Library/css/Settings.css >> www/css/BibleApp.css
 
 echo \"use strict\"\; > www/js/BibleApp.js
 cat ../Library/gui/AppViewController.js >> www/js/BibleApp.js
@@ -14,6 +15,9 @@ cat ../Library/gui/QuestionsView.js >> www/js/BibleApp.js
 cat ../Library/gui/SearchView.js >> www/js/BibleApp.js
 cat ../Library/gui/HeaderView.js >> www/js/BibleApp.js
 cat ../Library/gui/TableContentsView.js >> www/js/BibleApp.js
+cat ../Library/gui/SettingsView.js >> www/js/BibleApp.js
+cat ../Library/gui/VersionsView.js >> www/js/BibleApp.js
+cat ../Library/gui/DOMBuilder.js >> www/js/BibleApp.js
 
 cat ../Library/gui/icons/drawQuestionsIcon.js >> www/js/BibleApp.js
 cat ../Library/gui/icons/drawSearchIcon.js >> www/js/BibleApp.js
@@ -31,9 +35,11 @@ cat ../Library/io/StyleIndexAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/StyleUseAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/HistoryAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/QuestionsAdapter.js >> www/js/BibleApp.js
-cat ../Library/io/FileDownloader.js >> www/js/BibleApp.js
+cat ../Library/io/VersionsAdapter.js >> www/js/BibleApp.js
+##cat ../Library/io/FileDownloader.js >> www/js/BibleApp.js
+cat ../Library/io/HttpClient.js >> www/js/BibleApp.js
 
-cat ../Library/manufacture/DOMBuilder.js >> www/js/BibleApp.js
+##cat ../Library/manufacture/DOMBuilder.js >> www/js/BibleApp.js
 
 cat ../Library/model/meta/BibleCache.js >> www/js/BibleApp.js
 cat ../Library/model/meta/Canon.js >> www/js/BibleApp.js

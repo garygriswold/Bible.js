@@ -270,13 +270,16 @@ button.historyTabBtn {
 	margin: 0;
 }
 /* Container for one question and answer */
-div.oneQuestion {
-	margin: 4px;
-	border-style: solid;
-	border-width: thin;
-	border-color: #777777;
-	border-radius: 5px;
-	padding: 10px;
+div.oneQuestion {	
+	width:97%;
+	font-family: sans-serif;
+	font-size:1.0rem;
+	background: #fff;
+	padding: 6px 6px 6px 8px;
+	border: solid 1px #bcbbbb;
+	outline: none;
+	border-radius: 0.5em;
+	box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
 }
 /* First line of Question, contains reference and date */
 div.queTop {
@@ -285,6 +288,7 @@ div.queTop {
 p.queRef {
 	margin: 0;
 	float: left;
+	font-weight:'bold';
 }
 /* Question Date */
 p.queDate {
@@ -293,8 +297,9 @@ p.queDate {
 }
 /* Question Text */
 p.queText {
-	margin: 0;
+	margin: 3px;
 	clear: both;
+	font-family: serif;
 }
 /* Line between question and answer */
 hr.ansLine {
@@ -308,6 +313,7 @@ div.ansTop {
 p.ansInstructor {
 	margin: 0;
 	float: left;
+	font-weight:'bold';
 }
 /* Answer Date */
 p.ansDate {
@@ -318,45 +324,64 @@ p.ansDate {
 p.ansText {
 	margin: 0;
 	clear: both;
-}
-/* Div containing question input fields */
-#quesInput {
-	border-style: solid;
-	border-width: thin;
-	border-color: #777777;
-	border-radius: 5px;
-}
-/* Reference input field */
-#inputRef {
-	width: 90%;
-	margin-top: 5%;
-	margin-left: 5%;
-	margin-right: 5%;
-	margin-bottom: 2.5%;
-}
-/* Question input field */
-#inputText {
-	width: 90%;
-	margin-top: 2.5%;
-	margin-left: 5%;
-	margin-right: 5%;
-	margin-bottom: 5%;
+	font-family: serif;
 }
 /* Question submit button */
 #inputBtn {
-	float: right;
-	margin-top: 2.5%;
-	margin-left: 5%;
+	margin-top: 1%;
+	margin-left: 80%;
 	margin-right: 5%;
 	margin-bottom: 5%;
+	background-color: #3684D6;
+	border-radius: 1em;
+}
+.questionBorder {
+	width:100%;
+	margin-top:5px;
+	margin-bottom:5px;
+	border: solid 1px #d2d2d2;
+	padding: 3px 5px;
+	border-radius: 1.0em;
+	box-shadow: 0 1px 0px rgba(0,0,0,.1);
+	background: #f1f1f1;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
+}
+.questionField {
+	width:100%;
+	font-family: sans-serif;
+	font-size:1.7rem;
+	background: #fff;
+	padding: 6px 6px 6px 8px;
+	border: solid 1px #bcbbbb;
+	outline: none;
+	border-radius: 0.5em;
+	box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
 }
 /**
 * This css files pertains to the SearchView
 */
-
 #searchRoot {
 	margin: 10%;
 	z-index: 30;
+}
+.searchBorder {
+	width:100%;
+	border: solid 1px #d2d2d2;
+	padding: 3px 5px;
+	border-radius: 2em;
+	box-shadow: 0 1px 0px rgba(0,0,0,.1);
+	background: #f1f1f1;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
+}
+.searchField {
+	font-family: sans-serif;
+	font-size:1.7rem;
+	background: #fff;
+	padding: 6px 6px 6px 8px;
+	border: solid 1px #bcbbbb;
+	outline: none;
+	border-radius: 2em;
+	box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
 }
 /* Search Results Book Name */
 span.conBook {
@@ -387,19 +412,28 @@ span.conWord {
 * This css file pertains to the StatusBar
 */
 
+body {
+	width:100%;
+}
+
 #statusRoot {
 	margin: 0;
 	position: fixed;
 	left: 0;
 	top: 0;
-	width: auto;
+	width:100%;
 	z-index: 1000;
 }
-/* Search input field */
-input.searchField {
-	font-family: sans-serif;
-	font-size: 1.2em;
+#statusRow td {
+	border:none;
 }
+#labelCell {
+	width:70%;
+	text-align: center;
+}
+
+
+
 /**
 * This css file pertains to the TableContentsView
 */
@@ -440,4 +474,148 @@ td.tocChap { /* non-std */
 	border-width: 1px;
 	border-style: solid;
 	border-color: #777777;
+}
+body {
+    margin:0;
+}
+#settingRoot {
+    /*backgroundColor is set in SettingsView.showView */
+    padding-left:3%;
+    padding-right:3%;
+    padding-top:0px;
+    padding-bottom:20px;
+    margin:0;
+}
+td {
+	border:none;
+}
+#settingsTable {
+	width:100%;
+}
+#sampleText {
+	background-color: white;
+	color:black;
+	padding: 10px;
+}
+td.rowSpace {
+	padding: 7px;
+}
+
+/* Font Size Control */
+#fontSizeControl {
+	padding-top:25px;
+	padding-bottom:10px;
+}
+#fontSizeSlider {
+	margin-left:auto;
+	margin-right:auto;
+	border-radius: 7px;
+	background-color:#00008B;
+	width:70%;
+	height:7px;
+}
+#fontSizeThumb {
+	height: 40px;
+	width: 40px;
+	z-index:100;
+	margin-top: -30px;
+	background: #eee;
+	border: solid 4px #bcbbbb;
+	outline: none;
+	border-radius: 2em;
+	box-shadow: 4px 4px 5px #777;
+}
+
+/* Font Color Control */
+td.tableLeftCol {
+    width:40%;
+    vertical-align:middle;
+    text-align:center;
+}
+td.tableCtrlCol {
+    width:20%;
+    vertical-align:middle;
+    text-align:center;
+    margin:auto;
+}
+td.tableRightCol {
+    width:40%;
+    vertical-align:middle;
+    text-align: center;
+}
+#blackBackground {
+	background-color:white;
+	color:black;
+	border-radius: 14px;
+}
+#whiteBackground {
+	background-color:black;
+	color:white;
+	border-radius: 14px;
+}
+#fontColorSlider {
+	background-color:#EEEEEE;
+	height:44px;
+	width:88px;
+	border-radius: 22px;
+	box-shadow: inset 0 0 5px #888;
+	border: solid;
+	border-width:1px;
+	margin:auto;
+}
+#fontColorThumb {
+	height: 34px;
+	width: 34px;
+	z-index:100;
+	background: #eee;
+	border: solid 4px #bcbbbb;
+	border-radius: 2em;
+	box-shadow: 4px 4px 5px #777;
+}
+
+/* VersionsView CSS */
+div.ctry {
+    background-color: white;
+	border-radius: 48px;
+	margin-bottom: 20px;
+	font-family: sans-serif;
+	font-size: 48px;
+	font-weight: bold;
+	box-shadow: 7px 7px 7px #777;
+}
+div.ctry img {
+	vertical-align: middle;
+	margin-left: 24px;
+	padding-right: 7px;
+}
+div.ctry span {
+	vertical-align: middle;
+}
+table.vers {
+	width:85%;
+    background-color: #EEEEEE;
+	border-radius: 12px;
+	margin-bottom: 20px;
+	margin-left: 10%;
+	box-shadow: 4px 4px 5px #777;
+	padding-top: 1%;
+	padding-bottom: 1%;
+	padding-left: 4%;
+	padding-right:4%;
+}
+td.versLeft {
+	width:90%;
+}
+td.versRight {
+	text-align:right;
+}
+p.langName {
+	font-size: 24px;
+	margin-bottom:10px;			
+}
+span.versName {
+	font-size: 18px;
+}
+span.copy {
+	font-size: 12px;
 }

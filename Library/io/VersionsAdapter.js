@@ -12,7 +12,7 @@ function VersionsAdapter() {
         this.database = window.openDatabase("Versions", "1.0", "Versions", size);
     } else {
         console.log('opening SQLitePlugin Versions Database, stores in Documents with no cloud');
-        this.database = window.sqlitePlugin.openDatabase({name:"Versions", location:2, createFromLocation:1});
+        this.database = window.sqlitePlugin.openDatabase({name:'Versions.db', location:2, createFromLocation:1});
     }
 	Object.seal(this);
 }
