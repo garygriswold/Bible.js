@@ -1959,7 +1959,7 @@ HistoryAdapter.prototype.selectPassages = function(callback) {
 	});
 };
 HistoryAdapter.prototype.lastItem = function(callback) {
-	var statement = 'select reference from history where reference timestamp = (select max(timestamp) from history);';
+	var statement = 'select reference from history order by rowid desc limit 1';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.lastItem Error', JSON.stringify(results));
