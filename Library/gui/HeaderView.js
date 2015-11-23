@@ -8,7 +8,7 @@ var STATUS_BAR_HEIGHT = 14;
 
 function HeaderView(tableContents) {
 	this.statusBarInHeader = (deviceSettings.platform() === 'ios') ? true : false;
-	this.statusBarInHeader = false;
+	//this.statusBarInHeader = false;
 
 	this.hite = HEADER_BUTTON_HEIGHT;
 	this.barHite = (this.statusBarInHeader) ? HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT : HEADER_BAR_HEIGHT;
@@ -29,23 +29,19 @@ HeaderView.prototype.showView = function() {
 	paintBackground(this.backgroundCanvas, this.hite);
 	this.rootNode.appendChild(this.backgroundCanvas);
 
-//	origSetupIconButton('tocCell', drawTOCIcon, this.hite, BIBLE.SHOW_TOC);
-//	origSetupIconButton('searchCell', drawSearchIcon, this.hite, BIBLE.SHOW_SEARCH);
-//	origSetupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
-//	origSetupIconButton('settingsCell', drawSettingsIcon, this.hite, BIBLE.SHOW_SETTINGS);
-	setupIconButton('tocCell', 'licensed/sebastiano/check-list.png', this.hite, BIBLE.SHOW_TOC);
-	setupIconButton('searchCell', 'licensed/sebastiano/lens.png', this.hite, BIBLE.SHOW_SEARCH);
-	setupIconButton('questionsCell', 'licensed/sebastiano/chat.png', this.hite, BIBLE.SHOW_QUESTIONS);
-	setupIconButton('settingsCell', 'licensed/sebastiano/settings.png', this.hite, BIBLE.SHOW_SETTINGS);
-	
+	var menuWidth = setupIconButton('tocCell', drawTOCIcon, this.hite, BIBLE.SHOW_TOC);
+	var serhWidth = setupIconButton('searchCell', drawSearchIcon, this.hite, BIBLE.SHOW_SEARCH);
+	var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
+	var settWidth = setupIconButton('settingsCell', drawSettingsIcon, this.hite, BIBLE.SHOW_SETTINGS);
+	var avalWidth = window.innerWidth - (menuWidth + serhWidth + quesWidth + settWidth + (6 * 4));// six is fudge factor
 
 	this.titleCanvas = document.createElement('canvas');
-	drawTitleField(this.titleCanvas, this.hite);
+	drawTitleField(this.titleCanvas, this.hite, avalWidth);
 	this.labelCell.appendChild(this.titleCanvas);
 
 	window.addEventListener('resize', function(event) {
 		paintBackground(that.backgroundCanvas, that.hite);
-		drawTitleField(that.titleCanvas, that.hite);
+		drawTitleField(that.titleCanvas, that.hite, avalWidth);
 	});
 
 	function paintBackground(canvas, hite) {
@@ -66,16 +62,16 @@ HeaderView.prototype.showView = function() {
       	graphics.fillStyle = gradient;
       	graphics.fill();
 	}
-	function drawTitleField(canvas, hite) {
+	function drawTitleField(canvas, hite, avalWidth) {
 		canvas.setAttribute('id', 'titleCanvas');
 		canvas.setAttribute('height', hite);
+		canvas.setAttribute('width', avalWidth);
 		canvas.setAttribute('style', that.cellTopPadding);
 		that.titleGraphics = canvas.getContext('2d');
 		that.titleGraphics.fillStyle = '#000000';
 		that.titleGraphics.font = '24pt sans-serif';
 		that.titleGraphics.textAlign = 'center';
 		that.titleGraphics.textBaseline = 'middle';
-		that.titleGraphics.borderStyle = 'solid';
 		that.drawTitle();
 
 		that.titleCanvas.addEventListener('click', function(event) {
@@ -84,21 +80,7 @@ HeaderView.prototype.showView = function() {
 			}
 		});
 	}
-	function setupIconButton(parentCell, iconFile, hite, eventType) {
-		var canvas = document.createElement('img');
-		canvas.setAttribute('src', iconFile);
-		canvas.setAttribute('style', that.cellTopPadding);
-		canvas.setAttribute('width', hite);
-		canvas.setAttribute('height', hite);
-		var parent = document.getElementById(parentCell);
-		parent.appendChild(canvas);
-		canvas.addEventListener('click', function(event) {
-			event.stopImmediatePropagation();
-			console.log('clicked', parentCell);
-			document.body.dispatchEvent(new CustomEvent(eventType));
-		});
-	}
-	function origSetupIconButton(parentCell, canvasFunction, hite, eventType) {
+	function setupIconButton(parentCell, canvasFunction, hite, eventType) {
 		var canvas = canvasFunction(hite, '#F7F7BB');
 		canvas.setAttribute('style', that.cellTopPadding);
 		var parent = document.getElementById(parentCell);
@@ -108,6 +90,7 @@ HeaderView.prototype.showView = function() {
 			console.log('clicked', parentCell);
 			document.body.dispatchEvent(new CustomEvent(eventType));
 		});
+		return(canvas.width);
 	}
 };
 HeaderView.prototype.setTitle = function(reference) {
