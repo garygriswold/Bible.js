@@ -90,6 +90,7 @@ AppViewController.prototype.begin = function(develop) {
 				}
 			});
 		}
+		/* Turn off user selection, and selection popup */
 		document.documentElement.style.webkitTouchCallout = 'none';
         document.documentElement.style.webkitUserSelect = 'none';
         
