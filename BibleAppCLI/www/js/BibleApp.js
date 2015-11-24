@@ -90,6 +90,9 @@ AppViewController.prototype.begin = function(develop) {
 				}
 			});
 		}
+		document.documentElement.style.webkitTouchCallout = 'none';
+        document.documentElement.style.webkitUserSelect = 'none';
+        
 		document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
 		document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
