@@ -602,8 +602,6 @@ QuestionsView.prototype.displayAnswer = function(parent) {
 * This class provides the User Interface part of the concordance and search capabilities of the app.
 * It does a lazy create of all of the objects needed.
 * Each presentation of a searchView presents its last state and last found results.
-*
-* Hammer should not be used here to improve event listening.  It has a memory leak.
 */
 function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	this.toc = toc;
@@ -900,8 +898,8 @@ HeaderView.prototype.showView = function() {
 		that.titleGraphics.textBaseline = 'middle';
 		that.drawTitle();
 
-		var touchTitle = new Hammer(that.titleCanvas);
-		touchTitle.on('tap', function(event) {
+		that.titleCanvas.addEventListener('click', function(event) {
+			event.stopImmediatePropagation();
 			if (that.currentReference) {
 				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference.nodeId }}));
 			}
@@ -912,9 +910,9 @@ HeaderView.prototype.showView = function() {
 		canvas.setAttribute('style', that.cellTopPadding);
 		var parent = document.getElementById(parentCell);
 		parent.appendChild(canvas);
-		var hammer = new Hammer(canvas);
-		hammer.on('tap', function(event) {
-			console.log('tapped', parentCell);
+		canvas.addEventListener('click', function(event) {
+			console.log('clicked', parentCell);
+			event.stopImmediatePropagation();
 			document.body.dispatchEvent(new CustomEvent(eventType));
 		});
 		return(canvas.width);
@@ -974,9 +972,8 @@ TableContentsView.prototype.buildTocBookList = function() {
 		bookNode.textContent = book.name;
 		div.appendChild(bookNode);
 		var that = this;
-		var bookNodeTouch = new Hammer(bookNode);
-		bookNodeTouch.on('tap', function(event) {
-			var bookCode = event.target.id.substring(3);
+		bookNode.addEventListener('click', function(event) {
+			var bookCode = this.id.substring(3);
 			that.showTocChapterList(bookCode);
 		});
 	}
@@ -1003,9 +1000,8 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 				row.appendChild(cell);
 				chaptNum++;
 				var that = this;
-				var cellTouch = new Hammer(cell);
-				cellTouch.on('tap', function(event) {
-					var nodeId = event.target.id.substring(3);
+				cell.addEventListener('click', function(event) {
+					var nodeId = this.id.substring(3);
 					that.openChapter(nodeId);
 				});
 			}

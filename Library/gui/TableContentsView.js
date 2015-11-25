@@ -39,9 +39,8 @@ TableContentsView.prototype.buildTocBookList = function() {
 		bookNode.textContent = book.name;
 		div.appendChild(bookNode);
 		var that = this;
-		var bookNodeTouch = new Hammer(bookNode);
-		bookNodeTouch.on('tap', function(event) {
-			var bookCode = event.target.id.substring(3);
+		bookNode.addEventListener('click', function(event) {
+			var bookCode = this.id.substring(3);
 			that.showTocChapterList(bookCode);
 		});
 	}
@@ -68,9 +67,8 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 				row.appendChild(cell);
 				chaptNum++;
 				var that = this;
-				var cellTouch = new Hammer(cell);
-				cellTouch.on('tap', function(event) {
-					var nodeId = event.target.id.substring(3);
+				cell.addEventListener('click', function(event) {
+					var nodeId = this.id.substring(3);
 					that.openChapter(nodeId);
 				});
 			}
