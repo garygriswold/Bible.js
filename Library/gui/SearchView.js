@@ -2,6 +2,8 @@
 * This class provides the User Interface part of the concordance and search capabilities of the app.
 * It does a lazy create of all of the objects needed.
 * Each presentation of a searchView presents its last state and last found results.
+*
+* Hammer should not be used here to improve event listening.  It has a memory leak.
 */
 function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	this.toc = toc;

@@ -74,7 +74,8 @@ HeaderView.prototype.showView = function() {
 		that.titleGraphics.textBaseline = 'middle';
 		that.drawTitle();
 
-		that.titleCanvas.addEventListener('click', function(event) {
+		var touchTitle = new Hammer(that.titleCanvas);
+		touchTitle.on('tap', function(event) {
 			if (that.currentReference) {
 				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference.nodeId }}));
 			}
@@ -85,9 +86,9 @@ HeaderView.prototype.showView = function() {
 		canvas.setAttribute('style', that.cellTopPadding);
 		var parent = document.getElementById(parentCell);
 		parent.appendChild(canvas);
-		canvas.addEventListener('click', function(event) {
-			event.stopImmediatePropagation();
-			console.log('clicked', parentCell);
+		var hammer = new Hammer(canvas);
+		hammer.on('tap', function(event) {
+			console.log('tapped', parentCell);
 			document.body.dispatchEvent(new CustomEvent(eventType));
 		});
 		return(canvas.width);
