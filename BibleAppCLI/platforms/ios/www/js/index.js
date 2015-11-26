@@ -33,6 +33,7 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         console.log('DEVICE IS READY **');
+        FastClick.attach(document.body);
         var appView = new AppViewController('WEB.db1');
         //appView.begin('TableContentsView');
         //appView.begin('SearchView');

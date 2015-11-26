@@ -911,8 +911,8 @@ HeaderView.prototype.showView = function() {
 		var parent = document.getElementById(parentCell);
 		parent.appendChild(canvas);
 		canvas.addEventListener('click', function(event) {
-			console.log('clicked', parentCell);
 			event.stopImmediatePropagation();
+			console.log('clicked', parentCell);
 			document.body.dispatchEvent(new CustomEvent(eventType));
 		});
 		return(canvas.width);

@@ -8,12 +8,14 @@
 	<link rel="stylesheet" href="css/BibleApp.css"/>
 	<script type="text/javascript" src="js/BibleApp.js"></script>
 	<script type="text/javascript" src="js/hammer.min.js"></script>
+	<script type="text/javascript" src="js/fastclick.js"></script>
 	<script type="text/javascript" src="licensed/greensock/TweenMax.js"></script>
 	<script type="text/javascript" src="licensed/greensock/Draggable.js"></script>
 	<script type="text/javascript" src="licensed/greensock/ThrowPropsPlugin.js"></script>
 	<script type="text/javascript">
 		function onBodyLoad() {
 			console.log('DEVICE IS READY **');
+			FastClick.attach(document.body);
 			app = new AppViewController('WEB'); // Global root of the application
 			//app.begin('TableContentsView');
 			//app.begin('SearchView');

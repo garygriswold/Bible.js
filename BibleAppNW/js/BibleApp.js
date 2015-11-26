@@ -899,6 +899,7 @@ HeaderView.prototype.showView = function() {
 		that.drawTitle();
 
 		that.titleCanvas.addEventListener('click', function(event) {
+			event.stopImmediatePropagation();
 			if (that.currentReference) {
 				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference.nodeId }}));
 			}
@@ -910,6 +911,7 @@ HeaderView.prototype.showView = function() {
 		var parent = document.getElementById(parentCell);
 		parent.appendChild(canvas);
 		canvas.addEventListener('click', function(event) {
+			event.stopImmediatePropagation();
 			console.log('clicked', parentCell);
 			document.body.dispatchEvent(new CustomEvent(eventType));
 		});
