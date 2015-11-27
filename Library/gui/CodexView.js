@@ -31,9 +31,8 @@ CodexView.prototype.showView = function(nodeId) {
 	var chapterQueue = [];
 	var firstChapter = new Reference(nodeId);
 	firstChapter = this.tableContents.ensureChapter(firstChapter);
-	document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
 	var chapter = firstChapter;
-	for (var i=0; i<3 && chapter; i++) {
+	for (var i=0; i<1 && chapter; i++) {
 		chapter = this.tableContents.priorChapter(chapter);
 		if (chapter) {
 			chapterQueue.unshift(chapter);
@@ -41,7 +40,7 @@ CodexView.prototype.showView = function(nodeId) {
 	}
 	chapterQueue.push(firstChapter);
 	chapter = firstChapter;
-	for (i=0; i<3 && chapter; i++) {
+	for (i=0; i<1 && chapter; i++) {
 		chapter = this.tableContents.nextChapter(chapter);
 		if (chapter) {
 			chapterQueue.push(chapter);
@@ -52,14 +51,9 @@ CodexView.prototype.showView = function(nodeId) {
 		that.scrollTo(firstChapter);
 		that.currentNodeId = firstChapter.nodeId;
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
 	});
-
 	function onScrollHandler(event) {
-		var ref = identifyCurrentChapter();//expensive solution
-		if (ref && ref.nodeId !== that.currentNodeId) {
-			that.currentNodeId = ref.nodeId;
-			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));
-		}
 		//console.log('windowHeight=', window.innerHeight, '  scrollHeight=', document.body.scrollHeight, '  scrollY=', window.scrollY);
 		//console.log('left', (document.body.scrollHeight - window.scrollY));
 		if (document.body.scrollHeight - window.scrollY <= 2 * window.innerHeight) {
@@ -89,6 +83,11 @@ CodexView.prototype.showView = function(nodeId) {
 			}
 		} else {
 			that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+		}
+		var ref = identifyCurrentChapter();//expensive solution
+		if (ref && ref.nodeId !== that.currentNodeId) {
+			that.currentNodeId = ref.nodeId;
+			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));
 		}
 	}
 	function identifyCurrentChapter() {
