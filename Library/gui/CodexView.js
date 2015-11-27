@@ -28,26 +28,10 @@ CodexView.prototype.hideView = function() {
 };
 CodexView.prototype.showView = function(nodeId) {
 	document.body.style.backgroundColor = '#FFF';
-	var chapterQueue = [];
 	var firstChapter = new Reference(nodeId);
-	firstChapter = this.tableContents.ensureChapter(firstChapter);
-	var chapter = firstChapter;
-	for (var i=0; i<1 && chapter; i++) {
-		chapter = this.tableContents.priorChapter(chapter);
-		if (chapter) {
-			chapterQueue.unshift(chapter);
-		}
-	}
-	chapterQueue.push(firstChapter);
-	chapter = firstChapter;
-	for (i=0; i<1 && chapter; i++) {
-		chapter = this.tableContents.nextChapter(chapter);
-		if (chapter) {
-			chapterQueue.push(chapter);
-		}
-	}
+	var rowId = this.tableContents.rowId(firstChapter);
 	var that = this;
-	this.showChapters(chapterQueue, true, function(results) {
+	this.showChapters([rowId - 1, rowId + 1], true, function(err) {
 		that.scrollTo(firstChapter);
 		that.currentNodeId = firstChapter.nodeId;
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
@@ -59,7 +43,7 @@ CodexView.prototype.showView = function(nodeId) {
 		if (document.body.scrollHeight - window.scrollY <= 2 * window.innerHeight) {
 			var lastNode = that.viewport.lastChild;
 			var lastChapter = new Reference(lastNode.id.substr(3));
-			var nextChapter = that.tableContents.nextChapter(lastChapter);
+			var nextChapter = that.tableContents.rowId(lastChapter) + 1;
 			if (nextChapter) {
 				that.showChapters([nextChapter], true, function() {
 					that.checkChapterQueueSize('top');
@@ -72,7 +56,7 @@ CodexView.prototype.showView = function(nodeId) {
 		else if (window.scrollY <= window.innerHeight) {
 			var firstNode = that.viewport.firstChild;
 			var firstChapter = new Reference(firstNode.id.substr(3));
-			var beforeChapter = that.tableContents.priorChapter(firstChapter);
+			var beforeChapter = that.tableContents.rowId(firstChapter) - 1;
 			if (beforeChapter) {
 				that.showChapters([beforeChapter], false, function() {
 					that.checkChapterQueueSize('bottom');
@@ -104,16 +88,12 @@ CodexView.prototype.showView = function(nodeId) {
 };
 CodexView.prototype.showChapters = function(chapters, append, callback) {
 	var that = this;
-	var selectList = [];
-	for (var i=0; i<chapters.length; i++) {
-		selectList.push(chapters[i].chapterId);
-	}
-	this.chaptersAdapter.getChapters(selectList, function(results) {
+	this.chaptersAdapter.getChapters(chapters, function(results) {
 		if (results instanceof IOError) {
 			console.log((JSON.stringify(results)));
 			callback(results);
 		} else {
-			for (i=0; i<results.rows.length; i++) {
+			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
 				var reference = new Reference(row.reference);
 				reference.rootNode.innerHTML = row.html;

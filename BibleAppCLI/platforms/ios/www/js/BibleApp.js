@@ -215,26 +215,28 @@ CodexView.prototype.hideView = function() {
 };
 CodexView.prototype.showView = function(nodeId) {
 	document.body.style.backgroundColor = '#FFF';
-	var chapterQueue = [];
+//	var chapterQueue = [];
 	var firstChapter = new Reference(nodeId);
-	firstChapter = this.tableContents.ensureChapter(firstChapter);
-	var chapter = firstChapter;
-	for (var i=0; i<1 && chapter; i++) {
-		chapter = this.tableContents.priorChapter(chapter);
-		if (chapter) {
-			chapterQueue.unshift(chapter);
-		}
-	}
-	chapterQueue.push(firstChapter);
-	chapter = firstChapter;
-	for (i=0; i<1 && chapter; i++) {
-		chapter = this.tableContents.nextChapter(chapter);
-		if (chapter) {
-			chapterQueue.push(chapter);
-		}
-	}
+//	firstChapter = this.tableContents.ensureChapter(firstChapter); /////////// ENSURE
+//	var chapter = firstChapter;
+//	for (var i=0; i<1 && chapter; i++) {
+//		chapter = this.tableContents.priorChapter(chapter); /////// PRIOR
+//		if (chapter) {
+//			chapterQueue.unshift(chapter);
+//		}
+//	}
+//	chapterQueue.push(firstChapter);
+//	chapter = firstChapter;
+//	for (i=0; i<1 && chapter; i++) {
+//		chapter = this.tableContents.nextChapter(chapter); ////// NEXT
+//		if (chapter) {
+//			chapterQueue.push(chapter);
+//		}
+//	}
+	var rowId = this.tableContents.rowId(firstChapter);
 	var that = this;
-	this.showChapters(chapterQueue, true, function(results) {
+	this.showChapters([rowId - 1, rowId + 1], true, function(err) {
+	///this.showChapters(chapterQueue, true, function(results) {
 		that.scrollTo(firstChapter);
 		that.currentNodeId = firstChapter.nodeId;
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
@@ -246,7 +248,8 @@ CodexView.prototype.showView = function(nodeId) {
 		if (document.body.scrollHeight - window.scrollY <= 2 * window.innerHeight) {
 			var lastNode = that.viewport.lastChild;
 			var lastChapter = new Reference(lastNode.id.substr(3));
-			var nextChapter = that.tableContents.nextChapter(lastChapter);
+			//var nextChapter = that.tableContents.nextChapter(lastChapter); //// NEXT
+			var nextChapter = that.tableContents.rowId(lastChapter) + 1;
 			if (nextChapter) {
 				that.showChapters([nextChapter], true, function() {
 					that.checkChapterQueueSize('top');
@@ -259,7 +262,8 @@ CodexView.prototype.showView = function(nodeId) {
 		else if (window.scrollY <= window.innerHeight) {
 			var firstNode = that.viewport.firstChild;
 			var firstChapter = new Reference(firstNode.id.substr(3));
-			var beforeChapter = that.tableContents.priorChapter(firstChapter);
+			//var beforeChapter = that.tableContents.priorChapter(firstChapter); //// PRIOR
+			var beforeChapter = that.tableContents.rowId(firstChapter) - 1;
 			if (beforeChapter) {
 				that.showChapters([beforeChapter], false, function() {
 					that.checkChapterQueueSize('bottom');
@@ -291,16 +295,17 @@ CodexView.prototype.showView = function(nodeId) {
 };
 CodexView.prototype.showChapters = function(chapters, append, callback) {
 	var that = this;
-	var selectList = [];
-	for (var i=0; i<chapters.length; i++) {
-		selectList.push(chapters[i].chapterId);
-	}
-	this.chaptersAdapter.getChapters(selectList, function(results) {
+	//var selectList = [];
+	//for (var i=0; i<chapters.length; i++) {
+	//	selectList.push(chapters[i].chapterId);
+	//}
+	//this.chaptersAdapter.getChapters(selectList, function(results) {
+	this.chaptersAdapter.getChapters(chapters, function(results) {
 		if (results instanceof IOError) {
 			console.log((JSON.stringify(results)));
 			callback(results);
 		} else {
-			for (i=0; i<results.rows.length; i++) {
+			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
 				var reference = new Reference(row.reference);
 				reference.rootNode.innerHTML = row.html;
@@ -1612,13 +1617,19 @@ ChaptersAdapter.prototype.load = function(array, callback) {
 	});
 };
 ChaptersAdapter.prototype.getChapters = function(values, callback) {
-	var that = this;
-	var numValues = values.length || 0;
-	var array = [numValues];
-	for (var i=0; i<numValues; i++) {
-		array[i] = '?';
+	var statement = 'select reference, html from chapters where';
+	if (values.length === 1) {
+		statement += ' rowid = ?';
+	} else {
+		statement += ' rowid >= ? and rowid <= ? order by rowid';
 	}
-	var statement = 'select reference, html from chapters where reference in (' + array.join(',') + ') order by rowid';
+	//var that = this;
+	//var numValues = values.length || 0;
+	//var array = [numValues];
+	//for (var i=0; i<numValues; i++) {
+	//	array[i] = '?';
+	//}
+	//var statement = 'select rowid, reference, html from chapters where reference in (' + array.join(',') + ') order by rowid';
 	this.database.select(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
@@ -1783,7 +1794,8 @@ TableContentsAdapter.prototype.create = function(callback) {
     	'abbrev text not null, ' +
 		'lastChapter integer not null, ' +
 		'priorBook text null, ' +
-		'nextBook text null)';
+		'nextBook text null, ' +
+		'chapterRowId integer null)';
 	this.database.executeDDL(statement, function(err) {
 		if (err instanceof IOError) {
 			callback(err);
@@ -1806,7 +1818,7 @@ TableContentsAdapter.prototype.load = function(array, callback) {
 	});
 };
 TableContentsAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select code, heading, title, name, abbrev, lastChapter, priorBook, nextBook ' +
+	var statement = 'select code, heading, title, name, abbrev, lastChapter, priorBook, nextBook, chapterRowId ' +
 		'from tableContents order by rowid';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
@@ -1816,7 +1828,7 @@ TableContentsAdapter.prototype.selectAll = function(callback) {
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
 				var tocBook = new TOCBook(row.code, row.heading, row.title, row.name, row.abbrev, 
-					row.lastChapter, row.priorBook, row.nextBook);
+					row.lastChapter, row.priorBook, row.nextBook, row.chapterRowId);
 				array.push(tocBook);
 			}
 			callback(array);
@@ -2689,32 +2701,37 @@ TOC.prototype.addBook = function(book) {
 TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
 };
-TOC.prototype.ensureChapter = function(reference) {
+//TOC.prototype.ensureChapter = function(reference) {
+//	var current = this.bookMap[reference.book];
+//	if (reference.chapter > current.lastChapter) {
+//		return(new Reference(reference.book, current.lastChapter, 1));
+//	}
+//	if (reference.chapter < 1) {
+//		return(new Reference(reference.book, 1, 1));
+//	}
+//	return(reference);
+//};
+//TOC.prototype.nextChapter = function(reference) {
+//	var current = this.bookMap[reference.book];
+//	if (reference.chapter < current.lastChapter) {
+//		return(new Reference(reference.book, reference.chapter + 1));
+//	} else {
+//		return((current.nextBook) ? new Reference(current.nextBook, 0) : null);
+//	}
+//};
+//TOC.prototype.priorChapter = function(reference) {
+//	var current = this.bookMap[reference.book];
+//	if (reference.chapter > 0) {
+//		return(new Reference(reference.book, reference.chapter -1));
+//	} else {
+//		var priorBook = this.bookMap[current.priorBook];
+//		return((priorBook) ? new Reference(current.priorBook, priorBook.lastChapter) : null);
+//	}
+//};
+TOC.prototype.rowId = function(reference) {
 	var current = this.bookMap[reference.book];
-	if (reference.chapter > current.lastChapter) {
-		return(new Reference(reference.book, current.lastChapter, 1));
-	}
-	if (reference.chapter < 1) {
-		return(new Reference(reference.book, 1, 1));
-	}
-	return(reference);
-};
-TOC.prototype.nextChapter = function(reference) {
-	var current = this.bookMap[reference.book];
-	if (reference.chapter < current.lastChapter) {
-		return(new Reference(reference.book, reference.chapter + 1));
-	} else {
-		return((current.nextBook) ? new Reference(current.nextBook, 0) : null);
-	}
-};
-TOC.prototype.priorChapter = function(reference) {
-	var current = this.bookMap[reference.book];
-	if (reference.chapter > 0) {
-		return(new Reference(reference.book, reference.chapter -1));
-	} else {
-		var priorBook = this.bookMap[current.priorBook];
-		return((priorBook) ? new Reference(current.priorBook, priorBook.lastChapter) : null);
-	}
+	var rowid = current.chapterRowId + reference.chapter;
+	return(rowid);	
 };
 TOC.prototype.size = function() {
 	return(this.bookList.length);
@@ -2727,7 +2744,7 @@ TOC.prototype.toJSON = function() {
 };/**
 * This class holds the table of contents data each book of the Bible, or whatever books were loaded.
 */
-function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook) {
+function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook, chapterRowId) {
 	this.code = code || null;
 	this.heading = heading || null;
 	this.title = title || null;
@@ -2736,6 +2753,7 @@ function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nex
 	this.lastChapter = lastChapter || null;
 	this.priorBook = priorBook || null;
 	this.nextBook = nextBook || null; // do not want undefined in database
+	this.chapterRowId = chapterRowId || null;
 	if (lastChapter) {
 		Object.freeze(this);
 	} else {
