@@ -1,7 +1,7 @@
 /**
 * This class contains user interface features for the display of the Bible text
 */
-var CODEX_VIEW = { MAX: 10, SCROLL_TIMEOUT: 100, USE_DRAGGABLE: false };
+var CODEX_VIEW = {BEFORE: 0, AFTER: 1, MAX: 10, SCROLL_TIMEOUT: 100};
 
 function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.chaptersAdapter = chaptersAdapter;
@@ -9,10 +9,6 @@ function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.headerHeight = headerHeight;
 	this.rootNode = document.getElementById('codexRoot');
 	this.viewport = this.rootNode;
-	if (CODEX_VIEW.USE_DRAGGABLE) {
-		Draggable.create(this.rootNode, {type:'scrollTop', throwProps: true});
-		this.viewport = this.rootNode.firstChild; // Draggable adds a div wrapper		
-	}
 	this.currentNodeId = null;
 	this.checkScrollID = null;
 	Object.seal(this);
@@ -31,11 +27,13 @@ CodexView.prototype.showView = function(nodeId) {
 	var firstChapter = new Reference(nodeId);
 	var rowId = this.tableContents.rowId(firstChapter);
 	var that = this;
-	this.showChapters([rowId - 1, rowId + 1], true, function(err) {
-		that.scrollTo(firstChapter);
+	this.showChapters([rowId, rowId + CODEX_VIEW.AFTER], true, function(err) {
+		if (firstChapter.verse) {
+			that.scrollTo(firstChapter);
+		}
 		that.currentNodeId = firstChapter.nodeId;
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
+		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));			
 	});
 	function onScrollHandler(event) {
 		//console.log('windowHeight=', window.innerHeight, '  scrollHeight=', document.body.scrollHeight, '  scrollY=', window.scrollY);
@@ -100,9 +98,9 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 				if (append) {
 					that.viewport.appendChild(reference.rootNode);
 				} else {
+					var scrollHeight = that.viewport.scrollHeight;
 					that.viewport.insertBefore(reference.rootNode, that.viewport.firstChild);
-					// Scroll by the offset of the element added at the top to stay in the same place
-					window.scrollBy(0, reference.rootNode.offsetHeight);
+					window.scrollBy(0, that.viewport.scrollHeight - scrollHeight);
 				}
 				console.log('added chapter', reference.nodeId);
 			}
@@ -114,11 +112,10 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 	if (this.viewport.children.length > CODEX_VIEW.MAX) {
 		switch(whichEnd) {
 			case 'top':
+				var scrollHeight = this.viewport.scrollHeight;
 				var discard = this.viewport.firstChild;
-				var offsetHeight = discard.offsetHeight;
 				this.viewport.removeChild(discard);
-				// Scroll the offset of the removed element to stay in the same place.
-				window.scrollBy(0, - offsetHeight);
+				window.scrollBy(0, this.viewport.scrollHeight - scrollHeight);
 				break;
 			case 'bottom':
 				discard = this.viewport.lastChild;
@@ -133,14 +130,9 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 CodexView.prototype.scrollTo = function(reference) {
 	console.log('scrollTo', reference.nodeId);
 	var verse = document.getElementById(reference.nodeId);
-	if (verse === null) {
-		// when null it is probably because verse num was out of range.
-		var nextChap = this.tableContents.nextChapter(reference);
-		verse = document.getElementById(nextChap.nodeId);
-	}
 	if (verse) {
 		var rect = verse.getBoundingClientRect();
-		window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.headerHeight);
+		window.scrollTo(0, rect.top + window.scrollY - this.headerHeight);
 	}
 };
 CodexView.prototype.showFootnote = function(noteId) {
