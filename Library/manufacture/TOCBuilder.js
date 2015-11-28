@@ -6,6 +6,7 @@ function TOCBuilder(adapter) {
 	this.adapter = adapter;
 	this.toc = new TOC(adapter);
 	this.tocBook = null;
+	this.chapterRowSum = 1; // Initial value for first Book
 	Object.seal(this);
 }
 TOCBuilder.prototype.readBook = function(usxRoot) {
@@ -21,10 +22,13 @@ TOCBuilder.prototype.readRecursively = function(node) {
 			}
 			this.tocBook = new TOCBook(node.code);
 			this.tocBook.priorBook = priorBook;
+			this.tocBook.chapterRowId = this.chapterRowSum;
+			this.chapterRowSum++; // add 1 for chapter 0.
 			this.toc.addBook(this.tocBook);
 			break;
 		case 'chapter':
 			this.tocBook.lastChapter = node.number;
+			this.chapterRowSum++;
 			break;
 		case 'para':
 			switch(node.style) {
@@ -57,7 +61,8 @@ TOCBuilder.prototype.loadDB = function(callback) {
 	var len = this.size();
 	for (var i=0; i<len; i++) {
 		var toc = this.toc.bookList[i];
-		var values = [ toc.code, toc.heading, toc.title, toc.name, toc.abbrev, toc.lastChapter, toc.priorBook, toc.nextBook ];
+		var values = [ toc.code, toc.heading, toc.title, toc.name, toc.abbrev, toc.lastChapter, 
+			toc.priorBook, toc.nextBook, toc.chapterRowId ];
 		array.push(values);
 	}
 	this.adapter.load(array, function(err) {

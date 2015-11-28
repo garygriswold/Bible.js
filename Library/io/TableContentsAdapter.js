@@ -26,7 +26,7 @@ TableContentsAdapter.prototype.create = function(callback) {
 		'lastChapter integer not null, ' +
 		'priorBook text null, ' +
 		'nextBook text null, ' +
-		'chapterRowId integer null)';
+		'chapterRowId integer not null)';
 	this.database.executeDDL(statement, function(err) {
 		if (err instanceof IOError) {
 			callback(err);
@@ -37,8 +37,8 @@ TableContentsAdapter.prototype.create = function(callback) {
 	});
 };
 TableContentsAdapter.prototype.load = function(array, callback) {
-	var statement = 'insert into tableContents(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook) ' +
-		'values (?,?,?,?,?,?,?,?)';
+	var statement = 'insert into tableContents(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook, chapterRowId) ' +
+		'values (?,?,?,?,?,?,?,?,?)';
 	this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
 			callback(count);
