@@ -320,7 +320,10 @@ CodexView.prototype.scrollTo = function(reference) {
 	var verse = document.getElementById(reference.nodeId);
 	if (verse) {
 		var rect = verse.getBoundingClientRect();
-		window.scrollTo(0, rect.top + window.scrollY - this.headerHeight);
+		var rectTop = verse.offsetTop;
+		console.log('SCROLL', rect.top, rectTop);
+		//window.scrollTo(0, rect.top + window.scrollY - this.headerHeight);
+		window.scrollTo(0, rectTop + window.scrollY);
 	}
 };
 CodexView.prototype.showFootnote = function(noteId) {
@@ -873,6 +876,7 @@ HeaderView.prototype.showView = function() {
 		that.titleCanvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
 			if (that.currentReference) {
+				console.log('clicked title for', that.currentReference.nodeId);
 				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference.nodeId }}));
 			}
 		});
