@@ -6,7 +6,9 @@ body {
 	background-color: '#FF0000'; /* here to help debug flashes */
 }
 #codexRoot {
-	margin: 7%;
+	position: absolute; /* Needed because codexRoot.style.y is set in CodexView */
+	margin-left: 7%;
+	margin-right: 7%;
 	font-family: serif;
 	font-size: 14pt;
 	color: #000000;

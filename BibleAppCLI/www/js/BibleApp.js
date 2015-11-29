@@ -188,7 +188,7 @@ AppViewController.prototype.begin = function(develop) {
 /**
 * This class contains user interface features for the display of the Bible text
 */
-var CODEX_VIEW = {BEFORE: 0, AFTER: 1, MAX: 10, SCROLL_TIMEOUT: 100};
+var CODEX_VIEW = {BEFORE: 0, AFTER: 1, MAX: 10, SCROLL_TIMEOUT: 3000};
 
 function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.chaptersAdapter = chaptersAdapter;
@@ -196,6 +196,7 @@ function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.headerHeight = headerHeight;
 	this.rootNode = document.getElementById('codexRoot');
 	this.viewport = this.rootNode;
+	this.viewport.style.y = headerHeight; // Start view at bottom of header.
 	this.currentNodeId = null;
 	this.checkScrollID = null;
 	Object.seal(this);
