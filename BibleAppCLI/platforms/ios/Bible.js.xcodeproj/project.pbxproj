@@ -54,6 +54,15 @@
 		3C23A6C10776472FA41C712F /* SQLitePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 22D353709AE745BAA26AD0F3 /* SQLitePlugin.m */; };
 		DB7AFFA7CD5D49A7AE605397 /* sqlite3.c in Resources */ = {isa = PBXBuildFile; fileRef = 3AF41AD8BE784D2DA2D0BC71 /* sqlite3.c */; };
 		66C9876C29064E6882D71181 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 337E79B64FE64FF0A6FC8D9E /* CDVStatusBar.m */; };
+		D743475333BC4BE9B37603A5 /* GCDWebServer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F60577E704140C79BCF1752 /* GCDWebServer.framework */; };
+		4454BB749FEA4C30ADD94554 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 368CE766C33E4C72BA43151E /* libz.dylib */; };
+		9609BC4861524B169E8E7B86 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D770C3C894443F9A41A04CF /* CFNetwork.framework */; };
+		31D77F464CFB4E429D3DE773 /* MyMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2B26BEA5534F239C06DD3D /* MyMainViewController.m */; };
+		B8B15C5938FA46A08E5549FA /* AppDelegate+WKWebViewPolyfill.m in Sources */ = {isa = PBXBuildFile; fileRef = AF1A30F1C26D415CA20ED38D /* AppDelegate+WKWebViewPolyfill.m */; };
+		206428BCE1F84995AF73AA3F /* ReroutingUIWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 246DBBE12445456BA66E45E9 /* ReroutingUIWebView.m */; };
+		2AE60331C37C42E295BB8841 /* CDVWebViewOperationsDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 17E250A0DBD048BB8A5902E9 /* CDVWebViewOperationsDelegate.m */; };
+		9034C2569118431D994E5A61 /* CDVWebViewUIDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 865D96AFBB064808A98F8F5B /* CDVWebViewUIDelegate.m */; };
+		B6D94ABF254845FFB7A080C6 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A1CE625191D4F36AE67F8DA /* WebKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -148,6 +157,20 @@
 		005201C3C1524792802823F1 /* sqlite3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "sqlite3.h"; path = "io.litehelpers.cordova.sqlite/sqlite3.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		337E79B64FE64FF0A6FC8D9E /* CDVStatusBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVStatusBar.m"; path = "cordova-plugin-statusbar/CDVStatusBar.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		75F0B47EA5A24756BA1E73A5 /* CDVStatusBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVStatusBar.h"; path = "cordova-plugin-statusbar/CDVStatusBar.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		0F60577E704140C79BCF1752 /* GCDWebServer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "GCDWebServer.framework"; path = "Bible.js/Plugins/cordova-plugin-webserver/GCDWebServer.framework"; sourceTree = "<group>"; };
+		368CE766C33E4C72BA43151E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libz.dylib"; path = "usr/lib/libz.dylib"; sourceTree = SDKROOT; fileEncoding = 4; };
+		9D770C3C894443F9A41A04CF /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "CFNetwork.framework"; path = "System/Library/Frameworks/CFNetwork.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
+		6F2B26BEA5534F239C06DD3D /* MyMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "MyMainViewController.m"; path = "com.telerik.plugins.wkwebview/MyMainViewController.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		AF1A30F1C26D415CA20ED38D /* AppDelegate+WKWebViewPolyfill.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate+WKWebViewPolyfill.m"; path = "com.telerik.plugins.wkwebview/AppDelegate+WKWebViewPolyfill.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		246DBBE12445456BA66E45E9 /* ReroutingUIWebView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "ReroutingUIWebView.m"; path = "com.telerik.plugins.wkwebview/ReroutingUIWebView.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		17E250A0DBD048BB8A5902E9 /* CDVWebViewOperationsDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVWebViewOperationsDelegate.m"; path = "com.telerik.plugins.wkwebview/CDVWebViewOperationsDelegate.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		865D96AFBB064808A98F8F5B /* CDVWebViewUIDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVWebViewUIDelegate.m"; path = "com.telerik.plugins.wkwebview/CDVWebViewUIDelegate.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		BDC9E53002E34637BBAED96F /* MyMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MyMainViewController.h"; path = "com.telerik.plugins.wkwebview/MyMainViewController.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		DA6FC61FAC96440999E60EB5 /* AppDelegate+WKWebViewPolyfill.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AppDelegate+WKWebViewPolyfill.h"; path = "com.telerik.plugins.wkwebview/AppDelegate+WKWebViewPolyfill.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		B50AF3BCCA394468AC5AD5C9 /* ReroutingUIWebView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "ReroutingUIWebView.h"; path = "com.telerik.plugins.wkwebview/ReroutingUIWebView.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		E35AAC3B8EA7435F965000F7 /* CDVWebViewOperationsDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVWebViewOperationsDelegate.h"; path = "com.telerik.plugins.wkwebview/CDVWebViewOperationsDelegate.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		2D28E72AED33420C86C013EA /* CDVWebViewUIDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVWebViewUIDelegate.h"; path = "com.telerik.plugins.wkwebview/CDVWebViewUIDelegate.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		3A1CE625191D4F36AE67F8DA /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "WebKit.framework"; path = "System/Library/Frameworks/WebKit.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +183,10 @@
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
 				305D5FD1115AB8F900A74A75 /* MobileCoreServices.framework in Frameworks */,
 				374F427DF5034C84A2E85408 /* SystemConfiguration.framework in Frameworks */,
+				D743475333BC4BE9B37603A5 /* GCDWebServer.framework in Frameworks */,
+				4454BB749FEA4C30ADD94554 /* libz.dylib in Frameworks */,
+				9609BC4861524B169E8E7B86 /* CFNetwork.framework in Frameworks */,
+				B6D94ABF254845FFB7A080C6 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,6 +260,10 @@
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
 				305D5FD0115AB8F900A74A75 /* MobileCoreServices.framework */,
 				A6255223C44D45F99FB8495C /* SystemConfiguration.framework */,
+				0F60577E704140C79BCF1752 /* GCDWebServer.framework */,
+				368CE766C33E4C72BA43151E /* libz.dylib */,
+				9D770C3C894443F9A41A04CF /* CFNetwork.framework */,
+				3A1CE625191D4F36AE67F8DA /* WebKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -276,6 +307,16 @@
 				005201C3C1524792802823F1 /* sqlite3.h */,
 				337E79B64FE64FF0A6FC8D9E /* CDVStatusBar.m */,
 				75F0B47EA5A24756BA1E73A5 /* CDVStatusBar.h */,
+				6F2B26BEA5534F239C06DD3D /* MyMainViewController.m */,
+				AF1A30F1C26D415CA20ED38D /* AppDelegate+WKWebViewPolyfill.m */,
+				246DBBE12445456BA66E45E9 /* ReroutingUIWebView.m */,
+				17E250A0DBD048BB8A5902E9 /* CDVWebViewOperationsDelegate.m */,
+				865D96AFBB064808A98F8F5B /* CDVWebViewUIDelegate.m */,
+				BDC9E53002E34637BBAED96F /* MyMainViewController.h */,
+				DA6FC61FAC96440999E60EB5 /* AppDelegate+WKWebViewPolyfill.h */,
+				B50AF3BCCA394468AC5AD5C9 /* ReroutingUIWebView.h */,
+				E35AAC3B8EA7435F965000F7 /* CDVWebViewOperationsDelegate.h */,
+				2D28E72AED33420C86C013EA /* CDVWebViewUIDelegate.h */,
 			);
 			name = Plugins;
 			path = "Bible.js/Plugins";
@@ -474,6 +515,11 @@
 				3C23A6C10776472FA41C712F /* SQLitePlugin.m in Sources */,
 				DB7AFFA7CD5D49A7AE605397 /* sqlite3.c in Resources */,
 				66C9876C29064E6882D71181 /* CDVStatusBar.m in Sources */,
+				31D77F464CFB4E429D3DE773 /* MyMainViewController.m in Sources */,
+				B8B15C5938FA46A08E5549FA /* AppDelegate+WKWebViewPolyfill.m in Sources */,
+				206428BCE1F84995AF73AA3F /* ReroutingUIWebView.m in Sources */,
+				2AE60331C37C42E295BB8841 /* CDVWebViewOperationsDelegate.m in Sources */,
+				9034C2569118431D994E5A61 /* CDVWebViewUIDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,6 +562,10 @@
 				);
 				PRODUCT_NAME = "Bible.js";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"Bible.js/Plugins/cordova-plugin-webserver\"",
+				);
 			};
 			name = Debug;
 		};
@@ -545,6 +595,10 @@
 				);
 				PRODUCT_NAME = "Bible.js";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"Bible.js/Plugins/cordova-plugin-webserver\"",
+				);
 			};
 			name = Release;
 		};

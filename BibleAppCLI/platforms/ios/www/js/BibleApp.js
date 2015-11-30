@@ -873,7 +873,6 @@ HeaderView.prototype.showView = function() {
 		that.titleCanvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
 			if (that.currentReference) {
-				console.log('clicked title for', that.currentReference.nodeId);
 				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference.nodeId }}));
 			}
 		});

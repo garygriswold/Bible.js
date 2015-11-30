@@ -284,7 +284,8 @@ module.exports.metadata =
     "cordova-plugin-splashscreen": "2.1.0",
     "cordova-plugin-whitelist": "1.0.0",
     "io.litehelpers.cordova.sqlite": "0.7.10-pre",
-    "cordova-plugin-statusbar": "1.0.1"
+    "cordova-plugin-statusbar": "1.0.1",
+    "com.telerik.plugins.wkwebview": "0.6.7"
 }
 // BOTTOM OF METADATA
 });

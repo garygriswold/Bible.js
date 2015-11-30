@@ -230,6 +230,13 @@ module.exports = [
         "clobbers": [
             "window.StatusBar"
         ]
+    },
+    {
+        "file": "plugins/com.telerik.plugins.wkwebview/www/wkwebview.js",
+        "id": "com.telerik.plugins.wkwebview.wkwebview",
+        "clobbers": [
+            "wkwebview"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -244,7 +251,9 @@ module.exports.metadata =
     "cordova-plugin-network-information": "1.0.1",
     "cordova-plugin-splashscreen": "2.1.0",
     "io.litehelpers.cordova.sqlite": "0.7.10-pre",
-    "cordova-plugin-statusbar": "1.0.1"
+    "cordova-plugin-statusbar": "1.0.1",
+    "com.telerik.plugins.wkwebview": "0.6.7",
+    "cordova-plugin-webserver": "1.0.3"
 }
 // BOTTOM OF METADATA
 });
