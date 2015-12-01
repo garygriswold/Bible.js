@@ -84,10 +84,12 @@ SettingsView.prototype.buildSettingsView = function() {
 	}
 };
 SettingsView.prototype.startControls = function() {
-	startFontSizeControl(16, 12, 48);
+	var docFontSize = document.documentElement.style.fontSize;
+	startFontSizeControl(docFontSize, 10, 36);
 	startFontColorControl(false);
 	
-	function startFontSizeControl(fontSize, ptMin, ptMax) {
+	function startFontSizeControl(fontSizePt, ptMin, ptMax) {
+		var fontSize = parseFloat(fontSizePt);
 	    var sampleNode = document.getElementById('sampleText');
 	    var ptRange = ptMax - ptMin;
     	var draggable = Draggable.create('#fontSizeThumb', {type:'x', bounds:'#fontSizeSlider', onDrag:function() {
@@ -100,7 +102,8 @@ SettingsView.prototype.startControls = function() {
 
 		function resizeText(x, min, max) {
 	    	var size = (x - min) / (max - min) * ptRange + ptMin;
-			sampleNode.style.fontSize = size + 'px';		    
+			sampleNode.style.fontSize = size + 'pt';
+			document.documentElement.style.fontSize = size + 'pt';		    
     	}
     }
 	function startFontColorControl(state) {

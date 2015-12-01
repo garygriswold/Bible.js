@@ -10,7 +10,7 @@ body {
 	margin-left: 7%;
 	margin-right: 7%;
 	font-family: serif;
-	font-size: 14pt;
+	font-size: 1.0rem; /* 14pt std */
 	color: #000000;
 	line-height: 1.3; /* non-std */
 	text-align: justify; /* non-std */
@@ -38,7 +38,7 @@ article { /* non-std */
 /* Book Title Main */
 p.mt {
 	font-weight: bold;
-	font-size: 1.66em;
+	font-size: 1.66rem;
 	text-align: center;
 	margin-bottom: 4pt;
 	margin-top: 8pt;
@@ -47,7 +47,7 @@ p.mt {
 /* Book Main Title, Level 1 */
 p.mt1 {
 	font-weight: bold;
-	font-size: 1.66em;
+	font-size: 1.66rem;
 	text-align: center;
 	margin-bottom: 4pt;
 	margin-top: 2pt;
@@ -55,7 +55,7 @@ p.mt1 {
 }
 /* Book Title Above Main TitleSmaller */
 p.mt2 {
-	font-size: 1.33em;
+	font-size: 1.33rem;
 	font-style: italic;
 	text-align: center;
 	margin-bottom: 2pt;
@@ -64,7 +64,7 @@ p.mt2 {
 /* Book Title Smallest */
 p.mt3 {
 	font-weight: bold;
-	font-size: 1.33em;
+	font-size: 1.33rem;
 	text-align: center;
 	margin-bottom: 2pt;
 	margin-top: 2pt;
@@ -73,7 +73,7 @@ p.mt3 {
 /* Section Heading */
 p.ms {
 	font-weight: bold;
-	font-size: 1.16em;
+	font-size: 1.16rem;
 	text-align: center;
 	margin-bottom: 4pt;
 	margin-top: 16pt;
@@ -82,7 +82,7 @@ p.ms {
 /* Section Heading Level 1 */
 p.ms1 {
 	font-weight: bold;
-    font-size: 1.16em;
+    font-size: 1.16rem;
     text-align: center;
     margin-bottom: 4pt;
 	margin-top: 16pt;
@@ -98,7 +98,7 @@ p.d {
 }
 /* Chapter Number Format */
 p.c {
-	font-size: 1.5em;
+	font-size: 1.5rem;
 	color: #005AB3; /* non-std */
 	text-align: start;
 	margin-top: 8pt;
@@ -111,7 +111,7 @@ Supporting this is a TBD */
 /* Verse Number Format */
 span.v {
 	font-family: sans-serif; /* non-std */
-	font-size: 0.66em;
+	font-size: 0.66rem;
 	color: #777777; /* non-std */
 	text-align: start;
 	vertical-align: text-top;
@@ -130,7 +130,7 @@ p.m {
 /* p.b is blank line */
 p.b {
 	text-indent: start;
-	font-size: 0.83em;
+	font-size: 0.83rem;
 }
 /* Start of Blockquote */
 p.mi {
@@ -235,7 +235,6 @@ span.x, span.xt {
 
 #historyRoot {
   position: fixed;
-  top: 70px; /* Will need to vary with device size */
   left: -150px; /* Will need to vary with device size */
 	margin: 0;
   padding: 0;
@@ -258,7 +257,7 @@ button.historyTabBtn {
   padding: 10px;
   border: 1px solid #ccc;
   font-family: sans-serif;
-  font-size: 1.0em;
+  font-size: 1.0rem;
 }/**
 * This css file pertains to the QuestionView
 */
@@ -347,7 +346,7 @@ p.ansText {
 	margin-bottom:5px;
 	border: solid 1px #d2d2d2;
 	padding: 3px 5px;
-	border-radius: 1.0em;
+	border-radius: 1.0rem;
 	box-shadow: 0 1px 0px rgba(0,0,0,.1);
 	background: #f1f1f1;
 	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
@@ -355,12 +354,12 @@ p.ansText {
 .questionField {
 	width:100%;
 	font-family: sans-serif;
-	font-size:1.7rem;
+	font-size:1.3rem;
 	background: #fff;
 	padding: 6px 6px 6px 8px;
 	border: solid 1px #bcbbbb;
 	outline: none;
-	border-radius: 0.5em;
+	border-radius: 0.5rem;
 	box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
 }
 /**
@@ -396,7 +395,7 @@ p.ansText {
 /* Search Results Book Name */
 span.conBook {
 	font-family: sans-serif;
-	font-size: 1.3em;
+	font-size: 1.3rem;
 	text-align: start;
 	/*margin-top: 8pt;*/
 	margin-bottom: 0;
@@ -406,13 +405,13 @@ hr {
 }
 span.conRef {
 	font-family: sans-serif;
-	font-size: 1.0em;
+	font-size: 1.0rem;
 	text-align: start;
 	font-weight: bold;
 }
 span.conVerse {
 	font-family: serif;
-	font-size: 1.0em;
+	font-size: 1.0rem;
 	text-align: start;	
 }
 span.conWord {
@@ -421,9 +420,9 @@ span.conWord {
 /**
 * This css file pertains to the StatusBar
 */
-
 body {
 	width:100%;
+	/*font-size: 16px;*/
 }
 
 #statusRoot {
@@ -443,6 +442,7 @@ body {
 	width:50%;
 	text-align: center;
 }
+
 
 
 
@@ -466,7 +466,7 @@ div.tocPage { /* non-std */
 /* Table of Contents Book Name Format */
 p.tocBook { /* non-std */
 	font-family: sans-serif;
-	font-size: 1.5em;
+	font-size: 1.5rem;
 	color: #777777;
 	text-align: start;
 }
@@ -475,7 +475,7 @@ table.tocChap { /* non-std */
 	table-layout: fixed;
 	border-collapse: collapse;
 	font-family: sans-serif;
-	font-size: 1.0em;
+	font-size: 1.0rem;
 	color: #777777;
 	width: 100%;
 	text-align: center;
@@ -592,7 +592,7 @@ div.ctry {
 	border-radius: 48px;
 	margin-bottom: 20px;
 	font-family: sans-serif;
-	font-size: 48px;
+	font-size: 1.5rem;
 	font-weight: bold;
 	box-shadow: 7px 7px 7px #777;
 }
@@ -623,12 +623,12 @@ td.versRight {
 	text-align:right;
 }
 p.langName {
-	font-size: 24px;
+	font-size: 1.2rem;
 	margin-bottom:10px;			
 }
 span.versName {
-	font-size: 18px;
+	font-size: 1.0rem;
 }
 span.copy {
-	font-size: 12px;
+	font-size: 0.8rem;
 }

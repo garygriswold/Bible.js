@@ -10,7 +10,7 @@ body {
 	margin-left: 7%;
 	margin-right: 7%;
 	font-family: serif;
-	font-size: 14pt;
+	font-size: 1.0rem; /* 14pt std */
 	color: #000000;
 	line-height: 1.3; /* non-std */
 	text-align: justify; /* non-std */
@@ -38,7 +38,7 @@ article { /* non-std */
 /* Book Title Main */
 p.mt {
 	font-weight: bold;
-	font-size: 1.66em;
+	font-size: 1.66rem;
 	text-align: center;
 	margin-bottom: 4pt;
 	margin-top: 8pt;
@@ -47,7 +47,7 @@ p.mt {
 /* Book Main Title, Level 1 */
 p.mt1 {
 	font-weight: bold;
-	font-size: 1.66em;
+	font-size: 1.66rem;
 	text-align: center;
 	margin-bottom: 4pt;
 	margin-top: 2pt;
@@ -55,7 +55,7 @@ p.mt1 {
 }
 /* Book Title Above Main TitleSmaller */
 p.mt2 {
-	font-size: 1.33em;
+	font-size: 1.33rem;
 	font-style: italic;
 	text-align: center;
 	margin-bottom: 2pt;
@@ -64,7 +64,7 @@ p.mt2 {
 /* Book Title Smallest */
 p.mt3 {
 	font-weight: bold;
-	font-size: 1.33em;
+	font-size: 1.33rem;
 	text-align: center;
 	margin-bottom: 2pt;
 	margin-top: 2pt;
@@ -73,7 +73,7 @@ p.mt3 {
 /* Section Heading */
 p.ms {
 	font-weight: bold;
-	font-size: 1.16em;
+	font-size: 1.16rem;
 	text-align: center;
 	margin-bottom: 4pt;
 	margin-top: 16pt;
@@ -82,7 +82,7 @@ p.ms {
 /* Section Heading Level 1 */
 p.ms1 {
 	font-weight: bold;
-    font-size: 1.16em;
+    font-size: 1.16rem;
     text-align: center;
     margin-bottom: 4pt;
 	margin-top: 16pt;
@@ -98,7 +98,7 @@ p.d {
 }
 /* Chapter Number Format */
 p.c {
-	font-size: 1.5em;
+	font-size: 1.5rem;
 	color: #005AB3; /* non-std */
 	text-align: start;
 	margin-top: 8pt;
@@ -111,7 +111,7 @@ Supporting this is a TBD */
 /* Verse Number Format */
 span.v {
 	font-family: sans-serif; /* non-std */
-	font-size: 0.66em;
+	font-size: 0.66rem;
 	color: #777777; /* non-std */
 	text-align: start;
 	vertical-align: text-top;
@@ -130,7 +130,7 @@ p.m {
 /* p.b is blank line */
 p.b {
 	text-indent: start;
-	font-size: 0.83em;
+	font-size: 0.83rem;
 }
 /* Start of Blockquote */
 p.mi {

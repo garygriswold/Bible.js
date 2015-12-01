@@ -69,7 +69,7 @@ HeaderView.prototype.showView = function() {
 		canvas.setAttribute('style', that.cellTopPadding);
 		that.titleGraphics = canvas.getContext('2d');
 		that.titleGraphics.fillStyle = '#000000';
-		that.titleGraphics.font = '24pt sans-serif';
+		that.titleGraphics.font = '2.0rem sans-serif';
 		that.titleGraphics.textAlign = 'center';
 		that.titleGraphics.textBaseline = 'middle';
 		that.drawTitle();

@@ -49,6 +49,7 @@ AppViewController.prototype.begin = function(develop) {
 	this.tableContents.fill(function() {
 
 		console.log('loaded toc', that.tableContents.size());
+		setInitialFontSize();
 		
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.header = new HeaderView(that.tableContents);
@@ -58,6 +59,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.searchView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.header.barHite);
 		that.historyView = new HistoryView(that.database.history, that.tableContents);
+		that.historyView.rootNode.style.top = that.header.barHite + 'px';
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.database.verses);
@@ -132,6 +134,9 @@ AppViewController.prototype.begin = function(develop) {
 		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
 		that.header.setTitle(event.detail.reference);
 	});
+	function setInitialFontSize() {
+		document.documentElement.style.fontSize = 14 + 'pt';
+	}
 	function showTocHandler(event) {
 		disableHandlers();
 		clearViews();		
@@ -868,7 +873,7 @@ HeaderView.prototype.showView = function() {
 		canvas.setAttribute('style', that.cellTopPadding);
 		that.titleGraphics = canvas.getContext('2d');
 		that.titleGraphics.fillStyle = '#000000';
-		that.titleGraphics.font = '24pt sans-serif';
+		that.titleGraphics.font = '2.0rem sans-serif';
 		that.titleGraphics.textAlign = 'center';
 		that.titleGraphics.textBaseline = 'middle';
 		that.drawTitle();
@@ -1096,10 +1101,14 @@ SettingsView.prototype.buildSettingsView = function() {
 	}
 };
 SettingsView.prototype.startControls = function() {
-	startFontSizeControl(16, 12, 48);
+	var docFontSize = document.documentElement.style.fontSize;
+	console.log('STARTED SIZE CONTROL', docFontSize);
+	startFontSizeControl(docFontSize, 10, 36);
 	startFontColorControl(false);
 	
-	function startFontSizeControl(fontSize, ptMin, ptMax) {
+	function startFontSizeControl(fontSizePt, ptMin, ptMax) {
+		var fontSize = parseFloat(fontSizePt);
+		console.log('START FONTSIZE', fontSize, ptMin, ptMax)
 	    var sampleNode = document.getElementById('sampleText');
 	    var ptRange = ptMax - ptMin;
     	var draggable = Draggable.create('#fontSizeThumb', {type:'x', bounds:'#fontSizeSlider', onDrag:function() {
@@ -1112,7 +1121,8 @@ SettingsView.prototype.startControls = function() {
 
 		function resizeText(x, min, max) {
 	    	var size = (x - min) / (max - min) * ptRange + ptMin;
-			sampleNode.style.fontSize = size + 'px';		    
+			sampleNode.style.fontSize = size + 'pt';
+			document.documentElement.style.fontSize = size + 'pt';		    
     	}
     }
 	function startFontColorControl(state) {

@@ -48,6 +48,7 @@ AppViewController.prototype.begin = function(develop) {
 	this.tableContents.fill(function() {
 
 		console.log('loaded toc', that.tableContents.size());
+		setInitialFontSize();
 		
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.header = new HeaderView(that.tableContents);
@@ -57,6 +58,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.searchView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.header.barHite);
 		that.historyView = new HistoryView(that.database.history, that.tableContents);
+		that.historyView.rootNode.style.top = that.header.barHite + 'px';
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.database.verses);
@@ -131,6 +133,9 @@ AppViewController.prototype.begin = function(develop) {
 		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
 		that.header.setTitle(event.detail.reference);
 	});
+	function setInitialFontSize() {
+		document.documentElement.style.fontSize = 14 + 'pt';
+	}
 	function showTocHandler(event) {
 		disableHandlers();
 		clearViews();		
