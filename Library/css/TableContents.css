@@ -3,7 +3,7 @@
 */
 
 #tocRoot {
-	position: absolute; /* Needed because tocRoot.style.y is set in TableContentsView */
+	position: absolute; /* Needed because tocRoot.style.y is set in AppControllerView */
 	left: 0;
 	top: 0;
 	margin-top: 1%;

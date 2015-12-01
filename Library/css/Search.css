@@ -2,7 +2,11 @@
 * This css files pertains to the SearchView
 */
 #searchRoot {
-	margin: 10%;
+	position: absolute; /* Needed because searchRoot.style.y is set in AppControllerView */
+	margin-top: 3%;
+	margin-left: 10%;
+	margin-right: 10%;
+	margin-bottom: 10%;
 	z-index: 30;
 }
 .searchBorder {
