@@ -443,10 +443,10 @@ body {
 */
 
 #tocRoot {
-	position: absolute; /* I wonder if fixed would give better animation results? */
+	position: absolute; /* Needed because tocRoot.style.y is set in TableContentsView */
 	left: 0;
 	top: 0;
-	margin-top: 7%;
+	margin-top: 1%;
 	margin-bottom: 0%; /* this doesn't seem to work */
 	margin-left: 10%;
 	margin-right: 10%;

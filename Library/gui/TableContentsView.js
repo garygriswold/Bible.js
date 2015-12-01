@@ -6,7 +6,6 @@ function TableContentsView(toc) {
 	this.root = null;
 	this.rootNode = document.getElementById('tocRoot');
 	this.scrollPosition = 0;
-	var that = this;
 	Object.seal(this);
 }
 TableContentsView.prototype.showView = function() {
