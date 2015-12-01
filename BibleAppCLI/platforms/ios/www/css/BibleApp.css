@@ -264,7 +264,11 @@ button.historyTabBtn {
 */
 /* Static container for questionsView */
 #questionsRoot {
-	margin: 10%;
+	position: absolute; /* Needed because questionsRoot.style.y is set in AppControllerView */
+	margin-top: 3%;
+	margin-left: 10%;
+	margin-right: 10%;
+	margin-bottom: 10%;
 	z-index: 20;
 }
 /* Generated container for all questions and answers */
@@ -488,9 +492,10 @@ body {
 }
 #settingRoot {
     /*backgroundColor is set in SettingsView.showView */
+    position: absolute; /* Needed because settingRoot.style.y is set in AppControllerView */
     padding-left:3%;
     padding-right:3%;
-    padding-top:0px;
+    padding-top:1%;
     padding-bottom:20px;
     margin:0;
 }

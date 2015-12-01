@@ -58,8 +58,9 @@ AppViewController.prototype.begin = function(develop) {
 		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.header.barHite);
 		that.historyView = new HistoryView(that.database.history, that.tableContents);
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
+		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.database.verses);
-		//that.versionsView = new VersionsView();
+		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		Object.freeze(that);
 
 		switch(develop) {

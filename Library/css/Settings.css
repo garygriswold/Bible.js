@@ -3,9 +3,10 @@ body {
 }
 #settingRoot {
     /*backgroundColor is set in SettingsView.showView */
+    position: absolute; /* Needed because settingRoot.style.y is set in AppControllerView */
     padding-left:3%;
     padding-right:3%;
-    padding-top:0px;
+    padding-top:1%;
     padding-bottom:20px;
     margin:0;
 }
