@@ -135,7 +135,10 @@ AppViewController.prototype.begin = function(develop) {
 		that.header.setTitle(event.detail.reference);
 	});
 	function setInitialFontSize() {
-		document.documentElement.style.fontSize = 14 + 'pt';
+		var minDim = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
+		var minDimIn = minDim * window.devicePixelRatio / 320;
+		var fontSize = Math.sqrt(minDimIn) * 10;
+		document.documentElement.style.fontSize = fontSize + 'pt';
 	}
 	function showTocHandler(event) {
 		disableHandlers();
@@ -1102,13 +1105,11 @@ SettingsView.prototype.buildSettingsView = function() {
 };
 SettingsView.prototype.startControls = function() {
 	var docFontSize = document.documentElement.style.fontSize;
-	console.log('STARTED SIZE CONTROL', docFontSize);
 	startFontSizeControl(docFontSize, 10, 36);
 	startFontColorControl(false);
 	
 	function startFontSizeControl(fontSizePt, ptMin, ptMax) {
 		var fontSize = parseFloat(fontSizePt);
-		console.log('START FONTSIZE', fontSize, ptMin, ptMax)
 	    var sampleNode = document.getElementById('sampleText');
 	    var ptRange = ptMax - ptMin;
     	var draggable = Draggable.create('#fontSizeThumb', {type:'x', bounds:'#fontSizeSlider', onDrag:function() {
