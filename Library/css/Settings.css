@@ -23,6 +23,7 @@ td {
 }
 td.rowSpace {
 	padding: 7px;
+	width:100%;
 }
 
 /* Font Size Control */
@@ -51,6 +52,8 @@ td.rowSpace {
 }
 
 /* Font Color Control */
+/* Keep as example of toggle control */
+/*
 td.tableLeftCol {
     width:40%;
     vertical-align:middle;
@@ -96,7 +99,7 @@ td.tableRightCol {
 	border-radius: 2em;
 	box-shadow: 4px 4px 5px #777;
 }
-
+*/
 /* VersionsView CSS */
 div.ctry {
     background-color: white;

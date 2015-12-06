@@ -1055,17 +1055,20 @@ SettingsView.prototype.buildSettingsView = function() {
 	table.id = 'settingsTable';
 	
 	addRowSpace(table);
-	var textRow = this.dom.addNode(table, 'tr');
-	var textCell = this.dom.addNode(textRow, 'td', null, null, 'sampleText');
-	textCell.setAttribute('colspan', 3);
-	
-	addRowSpace(table);
 	var sizeRow = this.dom.addNode(table, 'tr');
 	var sizeCell = this.dom.addNode(sizeRow, 'td', null, null, 'fontSizeControl');
-	sizeCell.setAttribute('colspan', 3);
 	var sizeSlider = this.dom.addNode(sizeCell, 'div', null, null, 'fontSizeSlider');
 	var sizeThumb = this.dom.addNode(sizeCell, 'div', null, null, 'fontSizeThumb');
 	
+	addRowSpace(table);
+	var textRow = this.dom.addNode(table, 'tr');
+	var textCell = this.dom.addNode(textRow, 'td', null, null, 'sampleText');
+	
+	/**
+	* This is not used because it had a negative impact on codex performance, but keep as an
+	* example toggle switch.*/
+	/* This is kept in as a hack, because the thumb on fontSizeControl does not start in the correct
+	* position, unless this code is here. */
 	addRowSpace(table);
 	var colorRow = this.dom.addNode(table, 'tr');
 	var blackCell = this.dom.addNode(colorRow, 'td', 'tableLeftCol', null, 'blackBackground');
@@ -1075,17 +1078,15 @@ SettingsView.prototype.buildSettingsView = function() {
 	var whiteCell = this.dom.addNode(colorRow, 'td', 'tableRightCol', null, 'whiteBackground');
 	
 	addRowSpace(table);
-	addRowSpace(table);
-	addJohn316(textCell, blackCell, whiteCell);
+	addJohn316(textCell);
 	return(table);
 	
 	function addRowSpace(table) {
 		var row = table.insertRow();
 		var cell = row.insertCell();
 		cell.setAttribute('class', 'rowSpace');
-		cell.setAttribute('colspan', 3);
 	}
-	function addJohn316(verseNode, fragment1Node, fragment2Node) {
+	function addJohn316(verseNode) {
 		that.versesAdapter.getVerses(['JHN:3:16'], function(results) {
 			if (results instanceof IOError) {
 				console.log('Error while getting JHN:3:16');
@@ -1093,10 +1094,6 @@ SettingsView.prototype.buildSettingsView = function() {
 				if (results.rows.length > 0) {
 					var row = results.rows.item(0);
 					verseNode.textContent = row.html;
-					var words = row.html.split(/\s+/);
-					var fragment = words[0] + ' ' + words[1] + ' ' + words[2] + ' ' + words[3];
-					fragment1Node.textContent = fragment;
-					fragment2Node.textContent = fragment;
 				}	
 			}
 		});
@@ -1106,7 +1103,6 @@ SettingsView.prototype.buildSettingsView = function() {
 SettingsView.prototype.startControls = function() {
 	var docFontSize = document.documentElement.style.fontSize;
 	startFontSizeControl(docFontSize, 10, 36);
-	startFontColorControl(false);
 	
 	function startFontSizeControl(fontSizePt, ptMin, ptMax) {
 		var fontSize = parseFloat(fontSizePt);
@@ -1126,6 +1122,7 @@ SettingsView.prototype.startControls = function() {
 			document.documentElement.style.fontSize = size + 'pt';		    
     	}
     }
+    /* This is not used, changing colors had a negative impact on codexView performance. Keep as a toggle switch example.
 	function startFontColorControl(state) {
 	    var onOffState = state;
 	    var sliderNode = document.getElementById('fontColorSlider');
@@ -1150,7 +1147,7 @@ SettingsView.prototype.startControls = function() {
 			sampleNode.style.backgroundColor = (onOffState) ? '#000000' : '#FFFFFF';
 			sampleNode.style.color = (onOffState) ? '#FFFFFF' : '#000000';
     	}
-    }
+    }*/
 };
 
 /**
