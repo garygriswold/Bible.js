@@ -34,7 +34,6 @@ VersionsView.prototype.buildCountriesList = function() {
 				
 				var flagNode = that.dom.addNode(countryNode, 'img');
 				flagNode.setAttribute('src', FLAG_PATH + row.countryCode + '.png');
-				flagNode.setAttribute('alt', 'Flag');
 				that.dom.addNode(countryNode, 'span', null, row.localName);
 			}
 		}
