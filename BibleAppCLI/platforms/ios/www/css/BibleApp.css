@@ -626,7 +626,8 @@ td.versRight {
 }
 p.langName {
 	font-size: 1.2rem;
-	margin-bottom:10px;			
+	margin-top:0px;
+	margin-bottom:10px;	
 }
 span.versName {
 	font-size: 1.0rem;

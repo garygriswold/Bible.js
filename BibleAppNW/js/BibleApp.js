@@ -1185,8 +1185,7 @@ VersionsView.prototype.buildCountriesList = function() {
 				countryNode.addEventListener('click', countryClickHandler);
 				
 				var flagNode = that.dom.addNode(countryNode, 'img');
-				flagNode.setAttribute('src', FLAG_PATH + row.countryCode + '.png');
-				flagNode.setAttribute('alt', 'Flag');
+				flagNode.setAttribute('src', FLAG_PATH + row.countryCode.toLowerCase() + '.png');
 				that.dom.addNode(countryNode, 'span', null, row.localName);
 			}
 		}
@@ -1233,10 +1232,10 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		if (row.copyrightYear === 'PUBLIC') {
 			return(row.ownerName + ' Public Domain');
 		} else {
-			var result = [String.fromCharCode('0xA9')];
-			if (row.copyrightYear) result.push(row.copyrightYear + ',');
-			if (row.ownerName) result.push(row.ownerName);
-			return(result.join(' '));
+			var result = String.fromCharCode('0xA9');
+			if (row.copyrightYear) result += String.fromCharCode('0xA0') + row.copyrightYear;
+			if (row.ownerName) result += ', ' + row.ownerName;
+			return(result);
 		}
 	}
 };/**

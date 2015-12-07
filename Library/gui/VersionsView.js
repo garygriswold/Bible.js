@@ -80,10 +80,10 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		if (row.copyrightYear === 'PUBLIC') {
 			return(row.ownerName + ' Public Domain');
 		} else {
-			var result = [String.fromCharCode('0xA9')];
-			if (row.copyrightYear) result.push(row.copyrightYear + ',');
-			if (row.ownerName) result.push(row.ownerName);
-			return(result.join(' '));
+			var result = String.fromCharCode('0xA9');
+			if (row.copyrightYear) result += String.fromCharCode('0xA0') + row.copyrightYear;
+			if (row.ownerName) result += ', ' + row.ownerName;
+			return(result);
 		}
 	}
 };
