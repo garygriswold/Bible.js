@@ -33,7 +33,7 @@ VersionsView.prototype.buildCountriesList = function() {
 				countryNode.addEventListener('click', countryClickHandler);
 				
 				var flagNode = that.dom.addNode(countryNode, 'img');
-				flagNode.setAttribute('src', FLAG_PATH + row.countryCode + '.png');
+				flagNode.setAttribute('src', FLAG_PATH + row.countryCode.toLowerCase() + '.png');
 				that.dom.addNode(countryNode, 'span', null, row.localName);
 			}
 		}
