@@ -81,6 +81,7 @@ SettingsView.prototype.buildSettingsView = function() {
 	}
 };
 SettingsView.prototype.startControls = function() {
+	var that = this;
 	var docFontSize = document.documentElement.style.fontSize;
 	startFontSizeControl(docFontSize, 10, 36);
 	
@@ -99,7 +100,8 @@ SettingsView.prototype.startControls = function() {
 		function resizeText(x, min, max) {
 	    	var size = (x - min) / (max - min) * ptRange + ptMin;
 			sampleNode.style.fontSize = size + 'pt';
-			document.documentElement.style.fontSize = size + 'pt';		    
+			document.documentElement.style.fontSize = size + 'pt';
+			that.setFontSize(size);	    
     	}
     }
     /* This is not used, changing colors had a negative impact on codexView performance. Keep as a toggle switch example.
@@ -128,5 +130,12 @@ SettingsView.prototype.startControls = function() {
 			sampleNode.style.color = (onOffState) ? '#FFFFFF' : '#000000';
     	}
     }*/
+};
+SettingsView.prototype.getFontSize = function() {
+	var fontSize = localStorage.getItem('fontSize');
+	return(fontSize);
+};
+SettingsView.prototype.setFontSize = function(fontSize) {
+	localStorage.setItem('fontSize', fontSize);
 };
 

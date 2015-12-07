@@ -49,7 +49,6 @@ AppViewController.prototype.begin = function(develop) {
 	this.tableContents.fill(function() {
 
 		console.log('loaded toc', that.tableContents.size());
-		setInitialFontSize();
 		
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.header = new HeaderView(that.tableContents);
@@ -64,6 +63,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.database.verses);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
+		setInitialFontSize();
 		Object.freeze(that);
 
 		switch(develop) {
@@ -135,9 +135,13 @@ AppViewController.prototype.begin = function(develop) {
 		that.header.setTitle(event.detail.reference);
 	});
 	function setInitialFontSize() {
-		var minDim = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
-		var minDimIn = minDim * window.devicePixelRatio / 320;
-		var fontSize = Math.sqrt(minDimIn) * 10;
+		var fontSize = that.settingsView.getFontSize();
+		console.log('*******fontSize', fontSize);
+		if (fontSize == null) {
+			var minDim = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
+			var minDimIn = minDim * window.devicePixelRatio / 320;
+			var fontSize = Math.sqrt(minDimIn) * 10;
+		}
 		document.documentElement.style.fontSize = fontSize + 'pt';
 	}
 	function showTocHandler(event) {
@@ -1101,6 +1105,7 @@ SettingsView.prototype.buildSettingsView = function() {
 	}
 };
 SettingsView.prototype.startControls = function() {
+	var that = this;
 	var docFontSize = document.documentElement.style.fontSize;
 	startFontSizeControl(docFontSize, 10, 36);
 	
@@ -1119,7 +1124,8 @@ SettingsView.prototype.startControls = function() {
 		function resizeText(x, min, max) {
 	    	var size = (x - min) / (max - min) * ptRange + ptMin;
 			sampleNode.style.fontSize = size + 'pt';
-			document.documentElement.style.fontSize = size + 'pt';		    
+			document.documentElement.style.fontSize = size + 'pt';
+			that.setFontSize(size);	    
     	}
     }
     /* This is not used, changing colors had a negative impact on codexView performance. Keep as a toggle switch example.
@@ -1148,6 +1154,13 @@ SettingsView.prototype.startControls = function() {
 			sampleNode.style.color = (onOffState) ? '#FFFFFF' : '#000000';
     	}
     }*/
+};
+SettingsView.prototype.getFontSize = function() {
+	var fontSize = localStorage.getItem('fontSize');
+	return(fontSize);
+};
+SettingsView.prototype.setFontSize = function(fontSize) {
+	localStorage.setItem('fontSize', fontSize);
 };
 
 /**

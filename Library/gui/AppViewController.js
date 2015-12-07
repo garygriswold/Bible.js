@@ -48,7 +48,6 @@ AppViewController.prototype.begin = function(develop) {
 	this.tableContents.fill(function() {
 
 		console.log('loaded toc', that.tableContents.size());
-		setInitialFontSize();
 		
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.header = new HeaderView(that.tableContents);
@@ -63,6 +62,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.database.verses);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
+		setInitialFontSize();
 		Object.freeze(that);
 
 		switch(develop) {
@@ -134,9 +134,12 @@ AppViewController.prototype.begin = function(develop) {
 		that.header.setTitle(event.detail.reference);
 	});
 	function setInitialFontSize() {
-		var minDim = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
-		var minDimIn = minDim * window.devicePixelRatio / 320;
-		var fontSize = Math.sqrt(minDimIn) * 10;
+		var fontSize = that.settingsView.getFontSize();
+		if (fontSize == null) {
+			var minDim = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
+			var minDimIn = minDim * window.devicePixelRatio / 320;
+			var fontSize = Math.sqrt(minDimIn) * 10;
+		}
 		document.documentElement.style.fontSize = fontSize + 'pt';
 	}
 	function showTocHandler(event) {
