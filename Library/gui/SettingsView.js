@@ -138,6 +138,8 @@ SettingsView.prototype.startControls = function() {
 };
 SettingsView.prototype.getFontSize = function() {
 	var fontSize = localStorage.getItem('fontSize');
+	if (fontSize > 36) fontSize = 36;
+	if (fontSize < 10) fontSize = 10;
 	return(fontSize);
 };
 SettingsView.prototype.setFontSize = function(fontSize) {

@@ -525,11 +525,10 @@ td.rowSpace {
 #fontSizeSlider {
 	margin-left:auto;
 	margin-right:auto;
-	border-radius: 24px;
-	background-color:#49A7E5;
+	border-radius: 24px; /* was 7px */
+	background-color:#49A7E5; /* was #00008B */
 	width:80%;
-	/*height:7px;*/
-	height:48px;
+	height:48px; /* was 7px */
 }
 #fontSizeThumb {
 	height: 40px;
@@ -538,7 +537,6 @@ td.rowSpace {
 	margin-top: -30px;
 	background: #eee;
 	border: solid 4px #bcbbbb;
-	/*outline: none;*/
 	border-radius: 2em;
 	box-shadow: 4px 4px 5px #777;
 }

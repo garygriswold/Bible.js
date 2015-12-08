@@ -1128,7 +1128,7 @@ SettingsView.prototype.startControls = function() {
 	function startFontSizeControl(fontSizePt, ptMin, ptMax) {
 		var fontSize = parseFloat(fontSizePt);
 	    var sampleNode = document.getElementById('sampleText');
-    	var draggable = Draggable.create('#fontSizeThumb', {type:'x', bounds:'#fontSizeSlider', minimumMovement:0,
+    	var draggable = Draggable.create('#fontSizeThumb', {bounds:'#fontSizeSlider', minimumMovement:0,
 	    	lockAxis:true, 
 	    	onDrag:function() { resizeText(this.x); },
 	    	onDragEnd:function() { finishResize(this.x); }
@@ -1178,6 +1178,8 @@ SettingsView.prototype.startControls = function() {
 };
 SettingsView.prototype.getFontSize = function() {
 	var fontSize = localStorage.getItem('fontSize');
+	if (fontSize > 36) fontSize = 36;
+	if (fontSize < 10) fontSize = 10;
 	return(fontSize);
 };
 SettingsView.prototype.setFontSize = function(fontSize) {
