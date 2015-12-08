@@ -88,20 +88,25 @@ SettingsView.prototype.startControls = function() {
 	function startFontSizeControl(fontSizePt, ptMin, ptMax) {
 		var fontSize = parseFloat(fontSizePt);
 	    var sampleNode = document.getElementById('sampleText');
-	    var ptRange = ptMax - ptMin;
-    	var draggable = Draggable.create('#fontSizeThumb', {type:'x', bounds:'#fontSizeSlider', onDrag:function() {
-			resizeText(this.x, this.minX, this.maxX);
-    	}});
+    	var draggable = Draggable.create('#fontSizeThumb', {type:'x', bounds:'#fontSizeSlider', minimumMovement:0,
+	    	lockAxis:true, 
+	    	onDrag:function() { resizeText(this.x); },
+	    	onDragEnd:function() { finishResize(this.x); }
+	    });
     	var drag0 = draggable[0];
-    	var startX = (fontSize - ptMin) / ptRange * (drag0.maxX - drag0.minX) + drag0.minX;
+    	var ratio = (ptMax - ptMin) / (drag0.maxX - drag0.minX);
+    	var startX = (fontSize - ptMin) / ratio + drag0.minX;
     	TweenMax.set('#fontSizeThumb', {x:startX});
-    	resizeText(startX, drag0.minX, drag0.maxX);
+    	resizeText(startX);
 
-		function resizeText(x, min, max) {
-	    	var size = (x - min) / (max - min) * ptRange + ptMin;
+		function resizeText(x) {
+	    	var size = (x - drag0.minX) * ratio + ptMin;
 			sampleNode.style.fontSize = size + 'pt';
-			document.documentElement.style.fontSize = size + 'pt';
-			that.setFontSize(size);	    
+    	}
+    	function finishResize(x) {
+	    	var size = (x - drag0.minX) * ratio + ptMin;
+	    	document.documentElement.style.fontSize = size + 'pt';
+			that.setFontSize(size);
     	}
     }
     /* This is not used, changing colors had a negative impact on codexView performance. Keep as a toggle switch example.

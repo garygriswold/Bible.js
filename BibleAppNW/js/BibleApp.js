@@ -514,7 +514,13 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		var item = that.questions.find(i);
 
 		var questionBorder = that.dom.addNode(parent, 'div', 'questionBorder');
+		var wid = window.innerWidth * 0.74;
+		questionBorder.setAttribute('style', 'width:' + wid + 'px');
+		questionBorder.setAttribute('style', 'padding: 3px 3px');
+		
 		var aQuestion = that.dom.addNode(questionBorder, 'div', 'oneQuestion', null, 'que' + i);
+		aQuestion.setAttribute('style', 'width:' + (wid - 6) + 'px');
+		
 		var line1 = that.dom.addNode(aQuestion, 'div', 'queTop');
 		that.dom.addNode(line1, 'p', 'queRef', item.reference);
 		that.dom.addNode(line1, 'p', 'queDate', that.formatter.localDatetime(item.askedDateTime));
@@ -533,13 +539,13 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	}
 	function includeInputBlock(parentNode) {
 		var refTop = that.dom.addNode(parentNode, 'div', 'questionBorder', null, 'quesInput');
-		var wid = window.innerWidth * 0.8;
+		var wid = window.innerWidth * 0.74;
 		refTop.setAttribute('style', 'width:' + wid + 'px');
 		refTop.setAttribute('style', 'padding: 5px 5px');
 
 		that.referenceInput = that.dom.addNode(refTop, 'input', 'questionField', null, 'inputRef');
 		that.referenceInput.setAttribute('type', 'text');
-		that.referenceInput.setAttribute('style', 'width:' + (wid) + 'px');
+		that.referenceInput.setAttribute('style', 'width:' + (wid - 10) + 'px');
 		that.referenceInput.setAttribute('placeholder', 'Reference');
 
 		var inputTop = that.dom.addNode(parentNode, 'div', 'questionBorder');
@@ -547,7 +553,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		inputTop.setAttribute('style', 'padding: 5px 5px');		
 		
 		that.questionInput = that.dom.addNode(inputTop, 'textarea', 'questionField', null, 'inputText');
-		that.questionInput.setAttribute('style', 'width:' + (wid) + 'px');
+		that.questionInput.setAttribute('style', 'width:' + (wid - 10) + 'px');
 		that.questionInput.setAttribute('rows', 10);
 
 		var quesBtn = that.dom.addNode(parentNode, 'button', null, null, 'inputBtn');
@@ -1122,20 +1128,25 @@ SettingsView.prototype.startControls = function() {
 	function startFontSizeControl(fontSizePt, ptMin, ptMax) {
 		var fontSize = parseFloat(fontSizePt);
 	    var sampleNode = document.getElementById('sampleText');
-	    var ptRange = ptMax - ptMin;
-    	var draggable = Draggable.create('#fontSizeThumb', {type:'x', bounds:'#fontSizeSlider', onDrag:function() {
-			resizeText(this.x, this.minX, this.maxX);
-    	}});
+    	var draggable = Draggable.create('#fontSizeThumb', {type:'x', bounds:'#fontSizeSlider', minimumMovement:0,
+	    	lockAxis:true, 
+	    	onDrag:function() { resizeText(this.x); },
+	    	onDragEnd:function() { finishResize(this.x); }
+	    });
     	var drag0 = draggable[0];
-    	var startX = (fontSize - ptMin) / ptRange * (drag0.maxX - drag0.minX) + drag0.minX;
+    	var ratio = (ptMax - ptMin) / (drag0.maxX - drag0.minX);
+    	var startX = (fontSize - ptMin) / ratio + drag0.minX;
     	TweenMax.set('#fontSizeThumb', {x:startX});
-    	resizeText(startX, drag0.minX, drag0.maxX);
+    	resizeText(startX);
 
-		function resizeText(x, min, max) {
-	    	var size = (x - min) / (max - min) * ptRange + ptMin;
+		function resizeText(x) {
+	    	var size = (x - drag0.minX) * ratio + ptMin;
 			sampleNode.style.fontSize = size + 'pt';
-			document.documentElement.style.fontSize = size + 'pt';
-			that.setFontSize(size);	    
+    	}
+    	function finishResize(x) {
+	    	var size = (x - drag0.minX) * ratio + ptMin;
+	    	document.documentElement.style.fontSize = size + 'pt';
+			that.setFontSize(size);
     	}
     }
     /* This is not used, changing colors had a negative impact on codexView performance. Keep as a toggle switch example.
@@ -2465,7 +2476,7 @@ Lookup.prototype.find = function(search) {
 			if (verse) {
 				nodeId += ':' + verse;
 			}
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source:search }}));
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 			return(true);
 		} else {
 			return(false);
