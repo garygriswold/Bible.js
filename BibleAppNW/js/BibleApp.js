@@ -533,13 +533,21 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	}
 	function includeInputBlock(parentNode) {
 		var refTop = that.dom.addNode(parentNode, 'div', 'questionBorder', null, 'quesInput');
+		var wid = window.innerWidth * 0.8;
+		refTop.setAttribute('style', 'width:' + wid + 'px');
+		refTop.setAttribute('style', 'padding: 5px 5px');
 
 		that.referenceInput = that.dom.addNode(refTop, 'input', 'questionField', null, 'inputRef');
 		that.referenceInput.setAttribute('type', 'text');
+		that.referenceInput.setAttribute('style', 'width:' + (wid) + 'px');
 		that.referenceInput.setAttribute('placeholder', 'Reference');
 
 		var inputTop = that.dom.addNode(parentNode, 'div', 'questionBorder');
+		inputTop.setAttribute('style', 'width:' + wid + 'px');
+		inputTop.setAttribute('style', 'padding: 5px 5px');		
+		
 		that.questionInput = that.dom.addNode(inputTop, 'textarea', 'questionField', null, 'inputText');
+		that.questionInput.setAttribute('style', 'width:' + (wid) + 'px');
 		that.questionInput.setAttribute('rows', 10);
 
 		var quesBtn = that.dom.addNode(parentNode, 'button', null, null, 'inputBtn');
@@ -649,13 +657,16 @@ SearchView.prototype.startSearch = function(query) {
 SearchView.prototype.showSearchField = function() {
 	var searchField = document.createElement('div');
 	searchField.setAttribute('class', 'searchBorder');
+	var wid = window.innerWidth * 0.75;
+	searchField.setAttribute('style', 'width:' + wid + 'px');
+	searchField.setAttribute('style', 'padding:3px 5px');
+	
 	var inputField = document.createElement('input');
 	inputField.setAttribute('type', 'text');
 	inputField.setAttribute('class', 'searchField');
-	//inputField.setAttribute('style', 'width:100%');
+	inputField.setAttribute('style', 'width:' + (wid - 10) + 'px');
 	
 	searchField.appendChild(inputField);
-	this.rootNode.appendChild(searchField);
 	var that = this;
 	inputField.addEventListener('keyup', function(event) {
 		if (event.keyCode === 13) {

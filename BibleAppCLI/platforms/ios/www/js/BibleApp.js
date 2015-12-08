@@ -514,7 +514,13 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		var item = that.questions.find(i);
 
 		var questionBorder = that.dom.addNode(parent, 'div', 'questionBorder');
+		var wid = window.innerWidth * 0.74;
+		questionBorder.setAttribute('style', 'width:' + wid + 'px');
+		questionBorder.setAttribute('style', 'padding: 3px 3px');
+		
 		var aQuestion = that.dom.addNode(questionBorder, 'div', 'oneQuestion', null, 'que' + i);
+		aQuestion.setAttribute('style', 'width:' + (wid - 6) + 'px');
+		
 		var line1 = that.dom.addNode(aQuestion, 'div', 'queTop');
 		that.dom.addNode(line1, 'p', 'queRef', item.reference);
 		that.dom.addNode(line1, 'p', 'queDate', that.formatter.localDatetime(item.askedDateTime));
@@ -533,13 +539,21 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	}
 	function includeInputBlock(parentNode) {
 		var refTop = that.dom.addNode(parentNode, 'div', 'questionBorder', null, 'quesInput');
+		var wid = window.innerWidth * 0.74;
+		refTop.setAttribute('style', 'width:' + wid + 'px');
+		refTop.setAttribute('style', 'padding: 5px 5px');
 
 		that.referenceInput = that.dom.addNode(refTop, 'input', 'questionField', null, 'inputRef');
 		that.referenceInput.setAttribute('type', 'text');
+		that.referenceInput.setAttribute('style', 'width:' + (wid - 10) + 'px');
 		that.referenceInput.setAttribute('placeholder', 'Reference');
 
 		var inputTop = that.dom.addNode(parentNode, 'div', 'questionBorder');
+		inputTop.setAttribute('style', 'width:' + wid + 'px');
+		inputTop.setAttribute('style', 'padding: 5px 5px');		
+		
 		that.questionInput = that.dom.addNode(inputTop, 'textarea', 'questionField', null, 'inputText');
+		that.questionInput.setAttribute('style', 'width:' + (wid - 10) + 'px');
 		that.questionInput.setAttribute('rows', 10);
 
 		var quesBtn = that.dom.addNode(parentNode, 'button', null, null, 'inputBtn');
