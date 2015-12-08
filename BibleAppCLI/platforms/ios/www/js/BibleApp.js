@@ -2471,7 +2471,7 @@ Lookup.prototype.find = function(search) {
 			if (verse) {
 				nodeId += ':' + verse;
 			}
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source:search }}));
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 			return(true);
 		} else {
 			return(false);
