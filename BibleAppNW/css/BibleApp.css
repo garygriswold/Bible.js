@@ -537,7 +537,7 @@ td.rowSpace {
 	margin-top: -30px;
 	background: #eee;
 	border: solid 4px #bcbbbb;
-	outline: none;
+	/*outline: none;*/
 	border-radius: 2em;
 	box-shadow: 4px 4px 5px #777;
 }
