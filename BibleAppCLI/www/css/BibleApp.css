@@ -367,6 +367,7 @@ p.ansText {
 */
 #searchRoot {
 	position: absolute; /* Needed because searchRoot.style.y is set in AppControllerView */
+	width:80%;
 	margin-top: 3%;
 	margin-left: 10%;
 	margin-right: 10%;
@@ -374,22 +375,22 @@ p.ansText {
 	z-index: 30;
 }
 .searchBorder {
-	width:100%;
+	display: inline-block;
+	position: static;
 	border: solid 1px #d2d2d2;
-	padding: 3px 5px;
-	border-radius: 2em;
+	border-radius: 2.0em;
 	box-shadow: 0 1px 0px rgba(0,0,0,.1);
 	background: #f1f1f1;
 	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
 }
 .searchField {
 	font-family: sans-serif;
-	font-size:1.7rem;
+	font-size:1.3rem;
 	background: #fff;
 	padding: 6px 6px 6px 8px;
 	border: solid 1px #bcbbbb;
-	outline: none;
-	border-radius: 2em;
+	/*outline: none;*/
+	border-radius: 1.0em;
 	box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
 }
 /* Search Results Book Name */

@@ -649,13 +649,16 @@ SearchView.prototype.startSearch = function(query) {
 SearchView.prototype.showSearchField = function() {
 	var searchField = document.createElement('div');
 	searchField.setAttribute('class', 'searchBorder');
+	var wid = window.innerWidth * 0.75;
+	searchField.setAttribute('style', 'width:' + wid + 'px');
+	searchField.setAttribute('style', 'padding:3px 5px');
+	
 	var inputField = document.createElement('input');
 	inputField.setAttribute('type', 'text');
 	inputField.setAttribute('class', 'searchField');
-	inputField.setAttribute('style', 'width:100%');
+	inputField.setAttribute('style', 'width:' + (wid - 10) + 'px');
 	
 	searchField.appendChild(inputField);
-	this.rootNode.appendChild(searchField);
 	var that = this;
 	inputField.addEventListener('keyup', function(event) {
 		if (event.keyCode === 13) {

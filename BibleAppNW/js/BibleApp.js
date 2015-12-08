@@ -136,7 +136,6 @@ AppViewController.prototype.begin = function(develop) {
 	});
 	function setInitialFontSize() {
 		var fontSize = that.settingsView.getFontSize();
-		console.log('*******fontSize', fontSize);
 		if (fontSize == null) {
 			var minDim = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
 			var minDimIn = minDim * window.devicePixelRatio / 320;
@@ -653,7 +652,7 @@ SearchView.prototype.showSearchField = function() {
 	var inputField = document.createElement('input');
 	inputField.setAttribute('type', 'text');
 	inputField.setAttribute('class', 'searchField');
-	inputField.setAttribute('style', 'width:100%');
+	//inputField.setAttribute('style', 'width:100%');
 	
 	searchField.appendChild(inputField);
 	this.rootNode.appendChild(searchField);
