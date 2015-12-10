@@ -36,7 +36,7 @@ cat ../Library/io/StyleUseAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/HistoryAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/QuestionsAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/VersionsAdapter.js >> www/js/BibleApp.js
-##cat ../Library/io/FileDownloader.js >> www/js/BibleApp.js
+cat ../Library/io/FileDownloader.js >> www/js/BibleApp.js
 cat ../Library/io/HttpClient.js >> www/js/BibleApp.js
 
 ##cat ../Library/manufacture/DOMBuilder.js >> www/js/BibleApp.js

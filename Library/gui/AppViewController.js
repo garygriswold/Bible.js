@@ -2,7 +2,8 @@
 * BibleApp is a global object that contains pointers to all of the key elements of
 * a user's session with the App.
 */
-var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
+var BIBLE = { CHG_VERSION: 'bible-chg-version', 
+		SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
 		SHOW_QUESTIONS: 'bible-show-questions', // present questions page, create first
 		SHOW_HISTORY: 'bible-show-history', // present history tabs
@@ -37,7 +38,7 @@ function bibleHideNoteClick(nodeId) {
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
-	this.touch = new Hammer(document.getElementById('codexRoot'));
+	this.touch = new Hammer(document.getElementById('codexRoot'));// can this be moved to index to avoid leak
 	this.database = new DeviceDatabase(versionCode);
 }
 AppViewController.prototype.begin = function(develop) {

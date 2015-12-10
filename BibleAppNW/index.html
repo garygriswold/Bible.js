@@ -16,14 +16,32 @@
 		function onBodyLoad() {
 			console.log('DEVICE IS READY **');
 			FastClick.attach(document.body);
-			app = new AppViewController('WEB'); // Global root of the application
+			//app = new AppViewController('WEB'); // Global root of the application
 			//app.begin('TableContentsView');
 			//app.begin('SearchView');
 			//app.begin('QuestionsView')
 			//app.begin('HistoryView');
 			//app.begin('VersionsView');
 			//app.begin('SettingsView');
-			app.begin();
+			//app.begin();
+			var versionsView = new VersionsView();
+			var version = versionsView.getCurrentVersion();
+			changeVersionHandler(version);
+			
+			document.body.addEventListener(BIBLE.CHG_VERSION, function(event) {
+				// find the version in the event
+				changeVersionHandler(version);
+			});
+			function changeVersionHandler(version) {
+				app = new AppViewController('WEB.db1');
+				app.begin();
+				//app.begin('TableContentsView');
+				//app.begin('SearchView');
+				//app.begin('QuestionsView')
+				//app.begin('HistoryView');
+				//app.begin('VersionsView');
+				//app.begin('SettingsView');
+			}
 		};
 	</script>
   </head>

@@ -9,10 +9,10 @@ function DeviceDatabase(code) {
     this.className = 'DeviceDatabaseWebSQL';
 	var size = 30 * 1024 * 1024;
     if (window.sqlitePlugin === undefined) {
-        console.log('opening WEB SQL Database, stores in Cache');
+        console.log('opening WEB SQL Database, stores in Cache', this.code);
         this.database = window.openDatabase(this.code, "1.0", this.code, size);
     } else {
-        console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
+        console.log('opening SQLitePlugin Database, stores in Documents with no cloud', this.code);
         this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
     }
 	this.chapters = new ChaptersAdapter(this);

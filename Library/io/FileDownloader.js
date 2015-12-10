@@ -8,17 +8,13 @@
 */
 function FileDownloader(host, port) {
 	this.fileTransfer = new FileTransfer();
-	this.uri = encodeURI('http://' + host + ':' + port + '/down/');
+	this.uri = encodeURI('http://' + host + ':' + port + '/book/');
 	this.basePath = 'cdvfile://localhost/persistent/';
 }
 FileDownloader.prototype.download = function(bibleVersion, callback) {
 	var remotePath = this.uri + bibleVersion;
-	//if (device === 'ios') {
-		var filePath = this.basePath + '../LocalDatabase/' + bibleVersion;
-	//} else {
-	//	filePath = this.basePath + bibleVersion;
-	//}
-	console.log('download to', filePath);
+	var filePath = this.basePath + '../LocalDatabase/' + bibleVersion;
+	console.log('download from', remotePath, ' to', filePath);
     this.fileTransfer.download(remotePath, filePath, onDownSuccess, onDownError, true, {});
 
     function onDownSuccess(entry) {

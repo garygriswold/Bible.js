@@ -9,7 +9,7 @@ function VersionsAdapter() {
 	var size = 2 * 1024 * 1024;
     if (window.sqlitePlugin === undefined) {
         console.log('opening Versions SQL Database, stores in Cache');
-        this.database = window.openDatabase("Versions", "1.0", "Versions", size);
+        this.database = window.openDatabase("Versions.db", "1.0", "Versions.db", size);
     } else {
         console.log('opening SQLitePlugin Versions Database, stores in Documents with no cloud');
         this.database = window.sqlitePlugin.openDatabase({name:'Versions.db', location:2, createFromLocation:1});
@@ -32,7 +32,7 @@ VersionsAdapter.prototype.selectCountries = function(callback) {
 	});
 };
 VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, callback) {
-	var statement = 'SELECT cv.localLanguageName, cv.localVersionName, t1.translated as scope, o.ownerName, v.copyrightYear' +
+	var statement = 'SELECT cv.versionCode, cv.localLanguageName, cv.localVersionName, t1.translated as scope, v.filename, o.ownerName, v.copyrightYear' +
 		' FROM CountryVersion cv' +
 		' JOIN Version v ON cv.versionCode=v.versionCode' +
 		' JOIN Language l ON v.silCode=l.silCode' +

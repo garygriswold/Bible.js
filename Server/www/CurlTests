@@ -1,7 +1,7 @@
 
 # staticServer
-curl -i http://localhost:8080/bible/WEB.db1 > out
+curl -i http://localhost:8080/book/WEB.db1 > out
 
-curl -i http://localhost:8080/bible/xxx.db1 > out
+curl -i http://localhost:8080/book/xxx.db1 > out
 
 

@@ -3,7 +3,8 @@
 * BibleApp is a global object that contains pointers to all of the key elements of
 * a user's session with the App.
 */
-var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
+var BIBLE = { CHG_VERSION: 'bible-chg-version', 
+		SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
 		SHOW_QUESTIONS: 'bible-show-questions', // present questions page, create first
 		SHOW_HISTORY: 'bible-show-history', // present history tabs
@@ -38,7 +39,7 @@ function bibleHideNoteClick(nodeId) {
 
 function AppViewController(versionCode) {
 	this.versionCode = versionCode;
-	this.touch = new Hammer(document.getElementById('codexRoot'));
+	this.touch = new Hammer(document.getElementById('codexRoot'));// can this be moved to index to avoid lead
 	this.database = new DeviceDatabase(versionCode);
 }
 AppViewController.prototype.begin = function(develop) {
@@ -1231,7 +1232,6 @@ VersionsView.prototype.buildCountriesList = function() {
 	
 	function countryClickHandler(event) {
 		this.removeEventListener('click', countryClickHandler);
-		console.log('user clicked in', this.id);
 		that.buildVersionList(this);
 	}
 };
@@ -1240,6 +1240,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	var parent = countryNode.parentElement;
 	var countryCode = countryNode.id.substr(3);
 	var primLanguage = countryNode.getAttribute('data-lang');
+	var currentVersion = this.getCurrentVersion();
 	this.database.selectVersions(countryCode, primLanguage, function(results) {
 		if (! (results instanceof IOError)) {
 			for (var i=0; i<results.length; i++) {
@@ -1253,20 +1254,46 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 				that.dom.addNode(leftNode, 'span', 'copy', copyright(row));
 				
 				var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
+				
 				var iconNode = that.dom.addNode(rightNode, 'img');
-				iconNode.setAttribute('src', 'licensed/sebastiano/cloud-download.png');
-				iconNode.addEventListener('click', versionClickHandler);
+				iconNode.setAttribute('id', 'ver' + row.filename);
+				if (row.versionCode === currentVersion) {
+					iconNode.setAttribute('src', 'licensed/sebastiano/check.png');
+				} else if (that.hasVersion(row.versionCode)) {
+					iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
+					iconNode.addEventListener('click',  selectVersionHandler);
+				} else {
+					iconNode.setAttribute('src', 'licensed/sebastiano/cloud-download.png');
+					iconNode.addEventListener('click', downloadVersionHandler);
+				}
 			}
 		}
 	});
 	
-	function versionClickHandler(event) {
-		this.removeEventListener('click', versionClickHandler);
+	function selectVersionHandler(event) {
+		// dispatch an event BIBLE.CHG_VERSION communicating the selected version
+	}
+	function downloadVersionHandler(event) {
 		console.log('click on version');
+		this.removeEventListener('click', downloadVersionHandler);
+		console.log('event id', this.id);
+		var versionFile = this.id.substr(3);
+		console.log('event filename', versionFile);
+		
+		var downloader = new FileDownloader('localhost','8080');
+		console.log('new downloader');
+		downloader.download(versionFile, function(results) {
+			if (results instanceof IOError) {
+				// download did not succeed.  What error do I show?
+			} else {
+				that.setVersion(results.name);
+				// dispatch an event BIBLE.CHG_VERSION communicating the selected version
+			}
+		});
 	}
 	function copyright(row) {
 		if (row.copyrightYear === 'PUBLIC') {
-			return(row.ownerName + ' Public Domain');
+			return(row.ownerName + ', Public Domain');
 		} else {
 			var result = String.fromCharCode('0xA9');
 			if (row.copyrightYear) result += String.fromCharCode('0xA0') + row.copyrightYear;
@@ -1274,6 +1301,28 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 			return(result);
 		}
 	}
+};
+VersionsView.prototype.hasVersion = function(version) {
+	var found = localStorage.getItem(version);
+	if (found) {
+		return(found.indexOf('.db') > 0);
+	} else {
+		return(false);
+	}
+};
+VersionsView.prototype.setVersion = function(filename) {
+	var dot = filename.indexOf('.');
+	var version = (dot > 0) ? filename.substr(0,dot) : filename;
+	console.log('store in local store', version, filename);
+	localStorage.setItem(version, filename);	
+};
+VersionsView.prototype.getCurrentVersion = function() {
+	var version = localStorage.getItem('version');
+	if (version == null) version = 'WEB';// where should the default be stored?
+	return(version);	
+};
+VersionsView.prototype.setCurrentVersion = function(version) {
+	localStorage.setItem('version', version);	
 };/**
 * This is a helper class to remove the repetitive operations needed
 * to dynamically create DOM objects.
@@ -1486,10 +1535,10 @@ function DeviceDatabase(code) {
     this.className = 'DeviceDatabaseWebSQL';
 	var size = 30 * 1024 * 1024;
     if (window.sqlitePlugin === undefined) {
-        console.log('opening WEB SQL Database, stores in Cache');
+        console.log('opening WEB SQL Database, stores in Cache', this.code);
         this.database = window.openDatabase(this.code, "1.0", this.code, size);
     } else {
-        console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
+        console.log('opening SQLitePlugin Database, stores in Documents with no cloud', this.code);
         this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
     }
 	this.chapters = new ChaptersAdapter(this);
@@ -2134,7 +2183,7 @@ function VersionsAdapter() {
 	var size = 2 * 1024 * 1024;
     if (window.sqlitePlugin === undefined) {
         console.log('opening Versions SQL Database, stores in Cache');
-        this.database = window.openDatabase("Versions", "1.0", "Versions", size);
+        this.database = window.openDatabase("Versions.db", "1.0", "Versions.db", size);
     } else {
         console.log('opening SQLitePlugin Versions Database, stores in Documents with no cloud');
         this.database = window.sqlitePlugin.openDatabase({name:'Versions.db', location:2, createFromLocation:1});
@@ -2157,7 +2206,7 @@ VersionsAdapter.prototype.selectCountries = function(callback) {
 	});
 };
 VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, callback) {
-	var statement = 'SELECT cv.localLanguageName, cv.localVersionName, t1.translated as scope, o.ownerName, v.copyrightYear' +
+	var statement = 'SELECT cv.versionCode, cv.localLanguageName, cv.localVersionName, t1.translated as scope, v.filename, o.ownerName, v.copyrightYear' +
 		' FROM CountryVersion cv' +
 		' JOIN Version v ON cv.versionCode=v.versionCode' +
 		' JOIN Language l ON v.silCode=l.silCode' +
@@ -2258,8 +2307,110 @@ HttpClient.prototype.request = function(method, path, postData, callback) {
     	return(request);
 	}
 };
+HttpClient.prototype.download = function(path, filepath, callback) {
+	console.log('GET', path, filepath);	
+	var request = createRequest();
+	if (request) {
+		request.onreadystatechange = progressEvents;
+		request.open(method, this.authority + path, true);
+		//var data = (postData) ? JSON.stringify(postData) : null;
+		//if (data) {
+		//	request.setRequestHeader('Content-Type', 'application/json');
+		//}
+		//request.send(data);
+		request.send();	
+	} else {
+		callback(-2, new Error('XMLHttpRequest was not created.'));
+	}
+
+	function progressEvents() {
+		try {
+			switch(request.readyState) {
+				case 0:
+					console.log('http request download: has not been sent');
+					break;
+				case 1:
+					console.log('http request download: has been sent');
+					break;
+				case 2:
+					console.log('http request download: headers received');
+					break;
+				case 3:
+					console.log('http request download: loading data');
+					break;
+				case 4:
+					console.log('http request download: data received');
+					console.log('status', request.status, request.statusText);
+					if (request.status === 200) {
+						// Store the downloaded file.  How do I do this without using the file API.
+						// Ideally, it would be streamed to the file.
+					}
+					break;
+			}
+	    	if (request.readyState === 4) {
+		    	if (request.status === 0) {
+			    	callback(request.status, new Error('Could not reach the server, please try again when you have a better connection.'));
+		    	} else {
+		    		callback(request.status, JSON.parse(request.responseText));
+		    	}
+	    	}
+	    } catch(error) {
+		    callback(-1, error);
+	    }
+  	}
+
+	function createRequest() {
+		var request;
+		if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+			request = new XMLHttpRequest();
+    	} else if (window.ActiveXObject) { // IE
+			try {
+				request = new ActiveXObject("Msxml2.XMLHTTP");
+      		} 
+	  		catch (e) {
+	  			try {
+	  				request = new ActiveXObject("Microsoft.XMLHTTP");
+        		} 
+				catch (e) {}
+      		}
+    	}
+    	return(request);
+	}
+};
+
 
 /**
+* This class encapsulates the Cordova FileTransfer plugin for file download
+* It is a simple plugin, but encapsulated here in order to make it easy to change
+* the implementation.
+*
+* 'persistent' will store the file in 'Documents' in Android and 'Library' in iOS
+* 'LocalDatabase' is the file under Library where the database is expected.
+*/
+function FileDownloader(host, port) {
+	console.log('start filedownloader');
+	this.fileTransfer = new FileTransfer();
+	console.log('new FileTransfer');
+	this.uri = encodeURI('http://' + host + ':' + port + '/book/');
+	this.basePath = 'cdvfile://localhost/persistent/';
+}
+FileDownloader.prototype.download = function(bibleVersion, callback) {
+	var remotePath = this.uri + bibleVersion;
+	var filePath = this.basePath + '../LocalDatabase/' + bibleVersion;
+	console.log('download from', remotePath, ' to', filePath);
+    this.fileTransfer.download(remotePath, filePath, onDownSuccess, onDownError, true, {});
+
+    function onDownSuccess(entry) {
+    	console.log("download complete: ", JSON.stringify(entry));
+       	callback(entry);   	
+    }
+    function onDownError(error) {
+    	console.log("download error source " + error.source);
+      	console.log("download error target " + error.target);
+       	console.log("download error code" + error.code);
+       	callback(new IOError({ code: error.code, message: error.source}));   	
+    }
+};/**
 * This class handles all request to deliver scripture.  It handles all passage display requests to display passages of text,
 * and it also handles all requests from concordance search requests to display individual verses.
 * It will deliver the content from cache if it is present.  Or, it will find the content in persistent storage if it is

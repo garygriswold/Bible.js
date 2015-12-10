@@ -31,8 +31,8 @@ server.pre(restify.pre.userAgentConnection()); // if UA is curl, close connectio
 * This pre-step is to authorize transactions.
 */
 server.pre(function(request, response, next) {
-	var path = request.getPath().substr(1,5);
-	if (path === 'bible' || path === 'quest' || path === 'respo' || path === 'login') return(next());
+	var path = request.getPath().substr(1,4);
+	if (path === 'book' || path === 'ques' || path === 'resp' || path === 'logi') return(next());
 	authController.authenticate(request, function(err) {
 		return(next(err));
 	});
@@ -67,8 +67,8 @@ server.get('/beginTest', function beginTest(request, response, next) {
 	});
 });
 
-server.get(/\/bible\/?.*/, restify.serveStatic({
-	directory: '../../StaticRoot'
+server.get(/\/book\/?.*/, restify.serveStatic({
+	directory: '../StaticRoot'
 }));
 
 server.get('/login', function loginTeacher(request, response, next) {
