@@ -43,7 +43,7 @@ function AuthController(database) {
 	this.sqlite3 = require('sqlite3');
 	this.CryptoJS = require('./lib/aes.js');
 	var fs = require('fs');
-	this.biblePath = fs.realpathSync(__dirname + '/../../StaticRoot/bible/');
+	this.biblePath = fs.realpathSync(__dirname + '/../../StaticRoot/book/');
 }
 AuthController.prototype.authenticate = function(request, callback) {
 	var that = this;

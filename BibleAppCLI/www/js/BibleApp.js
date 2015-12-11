@@ -1178,13 +1178,13 @@ SettingsView.prototype.startControls = function() {
     }*/
 };
 SettingsView.prototype.getFontSize = function() {
-	var fontSize = localStorage.getItem('fontSize');
+	var fontSize = window.localStorage.getItem('fontSize');
 	if (fontSize > 36) fontSize = 36;
 	if (fontSize < 10) fontSize = 10;
 	return(fontSize);
 };
 SettingsView.prototype.setFontSize = function(fontSize) {
-	localStorage.setItem('fontSize', fontSize);
+	window.localStorage.setItem('fontSize', fontSize);
 };
 
 /**
@@ -1301,15 +1301,17 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	}
 };
 VersionsView.prototype.dump = function() {
-	var len = localStorage.length;
-	for (var i=0; i<2; i++) {
-		var key = localStorage.key(i);
-		var value = localStorage.getItem(key);
+	var len = window.localStorage.length;
+	for (var i=0; i<len; i++) {
+		var key = window.localStorage.key(i);
+		var value = window.localStorage.getItem(key);
 		console.log('KEY, VALUE', key, value);
-	}	
+	}
+	var amu = window.localStorage.getItem('AMU');
+	console.log('Found AMU', amu);
 };
 VersionsView.prototype.hasVersion = function(version) {
-	var found = localStorage.getItem(version.toUpperCase());
+	var found = window.localStorage.getItem(version.toUpperCase());
 	if (found) {
 		return(found.indexOf('.db') > 0);
 	} else {
@@ -1320,15 +1322,16 @@ VersionsView.prototype.setVersion = function(filename) {
 	var dot = filename.indexOf('.');
 	var version = (dot > 0) ? filename.substr(0,dot) : filename;
 	console.log('store in local store', version, filename);
-	localStorage.setItem(version, filename);	
+	window.localStorage.setItem(version, filename);
+	this.dump();
 };
 VersionsView.prototype.getCurrentVersion = function() {
-	var version = localStorage.getItem('version');
+	var version = window.localStorage.getItem('version');
 	if (version == null) version = 'WEB';// where should the default be stored?
 	return(version);	
 };
 VersionsView.prototype.setCurrentVersion = function(version) {
-	localStorage.setItem('version', version);	
+	window.localStorage.setItem('version', version);	
 };/**
 * This is a helper class to remove the repetitive operations needed
 * to dynamically create DOM objects.

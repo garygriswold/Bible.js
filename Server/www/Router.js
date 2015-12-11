@@ -68,7 +68,7 @@ server.get('/beginTest', function beginTest(request, response, next) {
 });
 
 server.get(/\/book\/?.*/, restify.serveStatic({
-	directory: '../StaticRoot'
+	directory: '../../StaticRoot'
 }));
 
 server.get('/login', function loginTeacher(request, response, next) {
