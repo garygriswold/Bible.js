@@ -36,8 +36,9 @@ function bibleHideNoteClick(nodeId) {
 	}
 }
 
-function AppViewController(versionCode) {
+function AppViewController(versionCode, settingStorage) {
 	this.versionCode = versionCode;
+	this.settingStorage = settingStorage;
 	this.touch = new Hammer(document.getElementById('codexRoot'));// can this be moved to index to avoid leak
 	this.database = new DeviceDatabase(versionCode);
 }
@@ -61,7 +62,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.historyView.rootNode.style.top = that.header.barHite + 'px';
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
-		that.settingsView = new SettingsView(that.database.verses);
+		that.settingsView = new SettingsView(that.settingStorage, that.database.verses);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		setInitialFontSize();
 		Object.freeze(that);
@@ -135,13 +136,14 @@ AppViewController.prototype.begin = function(develop) {
 		that.header.setTitle(event.detail.reference);
 	});
 	function setInitialFontSize() {
-		var fontSize = that.settingsView.getFontSize();
-		if (fontSize == null) {
-			var minDim = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
-			var minDimIn = minDim * window.devicePixelRatio / 320;
-			var fontSize = Math.sqrt(minDimIn) * 10;
-		}
-		document.documentElement.style.fontSize = fontSize + 'pt';
+		that.settingStorage.getFontSize(function(fontSize) {
+			if (fontSize == null) {
+				var minDim = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
+				var minDimIn = minDim * window.devicePixelRatio / 320;
+				var fontSize = Math.sqrt(minDimIn) * 10;
+			}
+			document.documentElement.style.fontSize = fontSize + 'pt';			
+		});
 	}
 	function showTocHandler(event) {
 		disableHandlers();

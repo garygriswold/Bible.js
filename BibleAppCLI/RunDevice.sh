@@ -26,6 +26,7 @@ cat ../Library/gui/icons/drawSettingsIcon.js >> www/js/BibleApp.js
 cat ../Library/gui/icons/drawTOCIcon.js >> www/js/BibleApp.js
 
 cat ../Library/io/IOError.js >> www/js/BibleApp.js
+cat ../Library/io/SettingStorage.js >> www/js/BibleApp.js
 cat ../Library/io/DeviceDatabaseWebSQL.js >> www/js/BibleApp.js
 cat ../Library/io/ChaptersAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/VersesAdapter.js >> www/js/BibleApp.js
@@ -38,8 +39,6 @@ cat ../Library/io/QuestionsAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/VersionsAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/FileDownloader.js >> www/js/BibleApp.js
 cat ../Library/io/HttpClient.js >> www/js/BibleApp.js
-
-##cat ../Library/manufacture/DOMBuilder.js >> www/js/BibleApp.js
 
 cat ../Library/model/meta/BibleCache.js >> www/js/BibleApp.js
 cat ../Library/model/meta/Canon.js >> www/js/BibleApp.js

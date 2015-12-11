@@ -24,16 +24,21 @@
 			//app.begin('VersionsView');
 			//app.begin('SettingsView');
 			//app.begin();
-			var versionsView = new VersionsView();
-			var version = versionsView.getCurrentVersion();
-			changeVersionHandler(version);
+			var settingStorage = new SettingStorage();
+			settingStorage.getCurrentVersion(function(version) {
+				if (version == null) {
+					version = 'WEB.db1'; // Where does the defalt come from.  There should be one for each major language.
+					settingStorage.setCurrentVersion(version);
+				}
+				changeVersionHandler(version);
+			});
 			
 			document.body.addEventListener(BIBLE.CHG_VERSION, function(event) {
 				// find the version in the event
 				changeVersionHandler(version);
 			});
 			function changeVersionHandler(version) {
-				app = new AppViewController('WEB.db1');
+				app = new AppViewController(version, settingStorage);
 				app.begin();
 				//app.begin('TableContentsView');
 				//app.begin('SearchView');

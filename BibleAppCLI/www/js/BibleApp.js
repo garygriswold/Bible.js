@@ -37,8 +37,9 @@ function bibleHideNoteClick(nodeId) {
 	}
 }
 
-function AppViewController(versionCode) {
+function AppViewController(versionCode, settingStorage) {
 	this.versionCode = versionCode;
+	this.settingStorage = settingStorage;
 	this.touch = new Hammer(document.getElementById('codexRoot'));// can this be moved to index to avoid leak
 	this.database = new DeviceDatabase(versionCode);
 }
@@ -62,7 +63,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.historyView.rootNode.style.top = that.header.barHite + 'px';
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
-		that.settingsView = new SettingsView(that.database.verses);
+		that.settingsView = new SettingsView(that.settingStorage, that.database.verses);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		setInitialFontSize();
 		Object.freeze(that);
@@ -136,13 +137,14 @@ AppViewController.prototype.begin = function(develop) {
 		that.header.setTitle(event.detail.reference);
 	});
 	function setInitialFontSize() {
-		var fontSize = that.settingsView.getFontSize();
-		if (fontSize == null) {
-			var minDim = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
-			var minDimIn = minDim * window.devicePixelRatio / 320;
-			var fontSize = Math.sqrt(minDimIn) * 10;
-		}
-		document.documentElement.style.fontSize = fontSize + 'pt';
+		that.settingStorage.getFontSize(function(fontSize) {
+			if (fontSize == null) {
+				var minDim = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
+				var minDimIn = minDim * window.devicePixelRatio / 320;
+				var fontSize = Math.sqrt(minDimIn) * 10;
+			}
+			document.documentElement.style.fontSize = fontSize + 'pt';			
+		});
 	}
 	function showTocHandler(event) {
 		disableHandlers();
@@ -1043,12 +1045,13 @@ TableContentsView.prototype.openChapter = function(nodeId) {
 * This class is the UI for the controls in the settings page.
 * It also uses the VersionsView to display versions on the settings page.
 */
-function SettingsView(versesAdapter) {
+function SettingsView(settingStorage, versesAdapter) {
 	this.root = null;
+	this.settingStorage = settingStorage
 	this.versesAdapter = versesAdapter;
 	this.rootNode = document.getElementById('settingRoot');
 	this.dom = new DOMBuilder();
-	this.versionsView = new VersionsView();
+	this.versionsView = new VersionsView(this.settingStorage);
 	Object.seal(this);
 }
 SettingsView.prototype.showView = function() {
@@ -1147,7 +1150,7 @@ SettingsView.prototype.startControls = function() {
     	function finishResize(x) {
 	    	var size = (x - drag0.minX) * ratio + ptMin;
 	    	document.documentElement.style.fontSize = size + 'pt';
-			that.setFontSize(size);
+			that.settingStorage.setFontSize(size);
     	}
     }
     /* This is not used, changing colors had a negative impact on codexView performance. Keep as a toggle switch example.
@@ -1177,22 +1180,15 @@ SettingsView.prototype.startControls = function() {
     	}
     }*/
 };
-SettingsView.prototype.getFontSize = function() {
-	var fontSize = window.localStorage.getItem('fontSize');
-	if (fontSize > 36) fontSize = 36;
-	if (fontSize < 10) fontSize = 10;
-	return(fontSize);
-};
-SettingsView.prototype.setFontSize = function(fontSize) {
-	window.localStorage.setItem('fontSize', fontSize);
-};
+
 
 /**
 * This class presents the list of available versions to download
 */
 var FLAG_PATH = 'licensed/icondrawer/flags/64/';
 
-function VersionsView() {
+function VersionsView(settingStorage) {
+	this.settingStorage = settingStorage;
 	this.database = new VersionsAdapter()
 	this.root = null;
 	this.rootNode = document.getElementById('settingRoot');
@@ -1240,51 +1236,57 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	var parent = countryNode.parentElement;
 	var countryCode = countryNode.id.substr(3);
 	var primLanguage = countryNode.getAttribute('data-lang');
-	var currentVersion = this.getCurrentVersion();
-	this.dump();
-	this.database.selectVersions(countryCode, primLanguage, function(results) {
-		if (! (results instanceof IOError)) {
-			for (var i=0; i<results.length; i++) {
-				var row = results[i];
-				var versionNode = that.dom.addNode(parent, 'table', 'vers');
-				var rowNode = that.dom.addNode(versionNode, 'tr');
-				var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
-				that.dom.addNode(leftNode, 'p', 'langName', row.localLanguageName);
-				var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
-				that.dom.addNode(leftNode, 'span', 'versName', versionName + ',  ');
-				that.dom.addNode(leftNode, 'span', 'copy', copyright(row));
-				
-				var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
-				
-				var iconNode = that.dom.addNode(rightNode, 'img');
-				iconNode.setAttribute('id', 'ver' + row.filename);
-				if (row.versionCode === currentVersion) {
-					iconNode.setAttribute('src', 'licensed/sebastiano/check.png');
-				} else if (that.hasVersion(row.versionCode)) {
-					iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
-					iconNode.addEventListener('click',  selectVersionHandler);
-				} else {
-					iconNode.setAttribute('src', 'licensed/sebastiano/cloud-download.png');
-					iconNode.addEventListener('click', downloadVersionHandler);
+	this.settingStorage.getVersions();
+	this.settingStorage.getCurrentVersion(function(currentVersion) {
+		that.database.selectVersions(countryCode, primLanguage, function(results) {
+			if (! (results instanceof IOError)) {
+				for (var i=0; i<results.length; i++) {
+					var row = results[i];
+					var versionNode = that.dom.addNode(parent, 'table', 'vers');
+					var rowNode = that.dom.addNode(versionNode, 'tr');
+					var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
+					that.dom.addNode(leftNode, 'p', 'langName', row.localLanguageName);
+					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
+					that.dom.addNode(leftNode, 'span', 'versName', versionName + ',  ');
+					that.dom.addNode(leftNode, 'span', 'copy', copyright(row));
+					
+					var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
+					
+					var iconNode = that.dom.addNode(rightNode, 'img');
+					iconNode.setAttribute('id', 'ver' + row.versionCode);
+					iconNode.setAttribute('data-id', 'fil' + row.filename);
+					if (row.filename === currentVersion) {
+						iconNode.setAttribute('src', 'licensed/sebastiano/check.png');
+					} else if (that.settingStorage.hasVersion(row.versionCode)) {
+						iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
+						iconNode.addEventListener('click',  selectVersionHandler);
+					} else {
+						iconNode.setAttribute('src', 'licensed/sebastiano/cloud-download.png');
+						iconNode.addEventListener('click', downloadVersionHandler);
+					}
 				}
 			}
-		}
+		});
 	});
 	
 	function selectVersionHandler(event) {
+		//that.settingStorage.setCurrentVersion(version);
 		// dispatch an event BIBLE.CHG_VERSION communicating the selected version
 	}
 	function downloadVersionHandler(event) {
 		this.removeEventListener('click', downloadVersionHandler);
-		var versionFile = this.id.substr(3);
-		console.log('event filename', versionFile);
+		var iconNode = this;
+		var versionCode = iconNode.id.substr(3);
+		var versionFile = iconNode.getAttribute('data-id').substr(3);
+		console.log('**** event filename', versionCode, versionFile);
 		
 		var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT);
 		downloader.download(versionFile, function(results) {
 			if (results instanceof IOError) {
 				// download did not succeed.  What error do I show?
 			} else {
-				that.setVersion(results.name);
+				that.settingStorage.setVersion(versionCode, versionFile);
+				iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
 				// dispatch an event BIBLE.CHG_VERSION communicating the selected version
 			}
 		});
@@ -1300,39 +1302,8 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		}
 	}
 };
-VersionsView.prototype.dump = function() {
-	var len = window.localStorage.length;
-	for (var i=0; i<len; i++) {
-		var key = window.localStorage.key(i);
-		var value = window.localStorage.getItem(key);
-		console.log('KEY, VALUE', key, value);
-	}
-	var amu = window.localStorage.getItem('AMU');
-	console.log('Found AMU', amu);
-};
-VersionsView.prototype.hasVersion = function(version) {
-	var found = window.localStorage.getItem(version.toUpperCase());
-	if (found) {
-		return(found.indexOf('.db') > 0);
-	} else {
-		return(false);
-	}
-};
-VersionsView.prototype.setVersion = function(filename) {
-	var dot = filename.indexOf('.');
-	var version = (dot > 0) ? filename.substr(0,dot) : filename;
-	console.log('store in local store', version, filename);
-	window.localStorage.setItem(version, filename);
-	this.dump();
-};
-VersionsView.prototype.getCurrentVersion = function() {
-	var version = window.localStorage.getItem('version');
-	if (version == null) version = 'WEB';// where should the default be stored?
-	return(version);	
-};
-VersionsView.prototype.setCurrentVersion = function(version) {
-	window.localStorage.setItem('version', version);	
-};/**
+
+/**
 * This is a helper class to remove the repetitive operations needed
 * to dynamically create DOM objects.
 */
@@ -1533,6 +1504,108 @@ function IOError(err) {
 		this.message = JSON.stringify(err);
 	}
 }
+/**
+* This class replaces window.localStorage, because I had reliability problems with LocalStorage
+* on ios Simulator.  I am guessing the problems were caused by the WKWebView plugin, but I don't really know.
+*/
+function SettingStorage() {
+    this.className = 'SettingStorage';
+    if (window.sqlitePlugin === undefined) {
+        console.log('opening SettingsStorage Database, stores in Cache');
+        this.database = window.openDatabase('Settings.db', '1.0', 'Settings.db', 1024 * 1024);
+    } else {
+        console.log('opening SQLitePlugin SettingsStorage Database, stores in Documents with no cloud');
+        this.database = window.sqlitePlugin.openDatabase({name: 'Settings.db', location: 2, createFromLocation: 1});
+    }
+    this.loadedVersions = null;
+	Object.seal(this);
+}
+/**
+* Settings
+*/
+SettingStorage.prototype.getFontSize = function(callback) {
+	this.getItem('fontSize', function(fontSize) {
+		if (fontSize < 10 || fontSize > 36) fontSize = null; // Null will force calc of fontSize.
+		callback(fontSize);
+	});
+};
+SettingStorage.prototype.setFontSize = function(fontSize) {
+	this.setItem('fontSize', fontSize);
+};
+SettingStorage.prototype.getCurrentVersion = function(callback) {
+	this.getItem('version', function(filename) {
+		callback(filename);
+	});
+};
+SettingStorage.prototype.setCurrentVersion = function(version) {
+	this.setItem('version', version);
+};
+SettingStorage.prototype.getItem = function(name, callback) {
+    this.database.readTransaction(function(tx) {
+        tx.executeSql('SELECT value FROM Settings WHERE name=?', [name],
+        function(tx, results) {
+        	//console.log('GetItem, rowCount=', results.rows.length);
+        	var value = (results.rows.length > 0) ? results.rows.item(0).value : null;
+        	console.log('GetItem', name, value);
+			callback(value);
+        },
+        function(tx, err) {
+        	console.log('GetItem', name, JSON.stringify(err));
+			callback();        
+        });
+    });
+};
+SettingStorage.prototype.setItem = function(name, value) {
+    this.database.transaction(function(tx) {
+        tx.executeSql('REPLACE INTO Settings(name, value) VALUES (?,?)', [name, value], 
+        function(tx, results) {
+	        console.log('SetItem', name, value);
+	  	},
+	  	function(tx, err) {
+		  	console.log('SetItem', name, value, JSON.stringify(err));
+	  	});
+    });
+};
+/**
+* Versions
+*/
+/** Before calling hasVersion one must call getVersions, which creates a map of available versions
+* And getVersions must be called a few ms before any call to hasVersion to make sure result is available.
+*/
+SettingStorage.prototype.hasVersion = function(version) {
+	return(this.loadedVersions[version]);
+};
+SettingStorage.prototype.getVersions = function() {
+	var that = this;
+	console.log('GetVersions');
+    this.database.readTransaction(function(tx) {
+        tx.executeSql('SELECT version, filename FROM Installed', [],
+        function(tx, results) {
+        	console.log('GetVersions, rowCount=', results.rows.length);
+        	that.loadedVersions = {};
+        	for (var i=0; i<results.rows.length; i++) {
+	        	var row = results.rows.item(i);
+	        	that.loadedVersions[row.version] = row.filename;
+        	}
+        },
+        function(tx, err) {
+        	console.log('select error', JSON.stringify(err));     
+        });
+    });
+};
+SettingStorage.prototype.setVersion = function(version, filename) {
+	console.log('SetVersion', version, filename);
+	var now = new Date();
+    this.database.transaction(function(tx) {
+        tx.executeSql('REPLACE INTO Installed(version, filename, timestamp) VALUES (?,?,?)', [version, filename, now.toISOString()], 
+        function(tx, results) {
+	        console.log('SetVersion success', results.rowsAffected);
+	  	},
+	  	function(tx, err) {
+		  	console.log('SetVersion error', JSON.stringify(err));
+	  	});
+    });
+};
 /**
 * This class is a facade over the database that is used to store bible text, concordance,
 * table of contents, history and questions.

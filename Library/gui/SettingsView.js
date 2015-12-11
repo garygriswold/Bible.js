@@ -2,12 +2,13 @@
 * This class is the UI for the controls in the settings page.
 * It also uses the VersionsView to display versions on the settings page.
 */
-function SettingsView(versesAdapter) {
+function SettingsView(settingStorage, versesAdapter) {
 	this.root = null;
+	this.settingStorage = settingStorage
 	this.versesAdapter = versesAdapter;
 	this.rootNode = document.getElementById('settingRoot');
 	this.dom = new DOMBuilder();
-	this.versionsView = new VersionsView();
+	this.versionsView = new VersionsView(this.settingStorage);
 	Object.seal(this);
 }
 SettingsView.prototype.showView = function() {
@@ -106,7 +107,7 @@ SettingsView.prototype.startControls = function() {
     	function finishResize(x) {
 	    	var size = (x - drag0.minX) * ratio + ptMin;
 	    	document.documentElement.style.fontSize = size + 'pt';
-			that.setFontSize(size);
+			that.settingStorage.setFontSize(size);
     	}
     }
     /* This is not used, changing colors had a negative impact on codexView performance. Keep as a toggle switch example.
@@ -136,13 +137,5 @@ SettingsView.prototype.startControls = function() {
     	}
     }*/
 };
-SettingsView.prototype.getFontSize = function() {
-	var fontSize = localStorage.getItem('fontSize');
-	if (fontSize > 36) fontSize = 36;
-	if (fontSize < 10) fontSize = 10;
-	return(fontSize);
-};
-SettingsView.prototype.setFontSize = function(fontSize) {
-	localStorage.setItem('fontSize', fontSize);
-};
+
 
