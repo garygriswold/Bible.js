@@ -3,26 +3,30 @@ Server Deployment
 
 1) Selected a Server on Joyent with Node installed.
 
-2) Create Directories on the server
+2) Customize it a bit
+
+	svcadm disable mongodb
+
+3) Create Directories on the server
 
 	mkdir Server
 	mkdir Server/www
 	mkdir StaticRoot
 	mkdir StaticRoot/book
 	
-3) Copy files to the server
+4) Copy files to the server
 
 	scp Discourse.db root@host:/root/StaticRoot
 	scp *.db* root@host:/root/StaticRoot/book
 	
-4) Install all needed node modules
+5) Install all needed node modules
 
 	npm install -g node-gyp   # needed for sqlite and must be -g
 	npm install sqlite3
 	npm install node-uuid
 	npm install restify
 	
-5) Run script to deploy code and start server
+6) Run script to deploy code and start server
 
 	cd Server
 	./deploy.sh
@@ -31,5 +35,5 @@ Server Deployment
 	scp's it to the remote server.  Un-tars it, and starts
 	the server.
 	
-6) Login into remote server and tail the log.
+7) Login into remote server and tail the log.
 
