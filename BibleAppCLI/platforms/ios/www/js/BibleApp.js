@@ -15,7 +15,7 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
 	};
-var SERVER_HOST = 'localhost'; // 72.2.112.243
+var SERVER_HOST = '165.225.166.55';//'localhost';
 var SERVER_PORT = '8080';
 
 function bibleShowNoteClick(nodeId) {
@@ -1278,7 +1278,6 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		var iconNode = this;
 		var versionCode = iconNode.id.substr(3);
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
-		console.log('**** event filename', versionCode, versionFile);
 		
 		var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT);
 		downloader.download(versionFile, function(results) {
@@ -1544,7 +1543,6 @@ SettingStorage.prototype.getItem = function(name, callback) {
     this.database.readTransaction(function(tx) {
         tx.executeSql('SELECT value FROM Settings WHERE name=?', [name],
         function(tx, results) {
-        	//console.log('GetItem, rowCount=', results.rows.length);
         	var value = (results.rows.length > 0) ? results.rows.item(0).value : null;
         	console.log('GetItem', name, value);
 			callback(value);
@@ -1589,7 +1587,7 @@ SettingStorage.prototype.getVersions = function() {
         	}
         },
         function(tx, err) {
-        	console.log('select error', JSON.stringify(err));     
+        	console.log('GetVersions error', JSON.stringify(err));     
         });
     });
 };

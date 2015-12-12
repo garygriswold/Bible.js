@@ -38,7 +38,6 @@ SettingStorage.prototype.getItem = function(name, callback) {
     this.database.readTransaction(function(tx) {
         tx.executeSql('SELECT value FROM Settings WHERE name=?', [name],
         function(tx, results) {
-        	//console.log('GetItem, rowCount=', results.rows.length);
         	var value = (results.rows.length > 0) ? results.rows.item(0).value : null;
         	console.log('GetItem', name, value);
 			callback(value);
@@ -83,7 +82,7 @@ SettingStorage.prototype.getVersions = function() {
         	}
         },
         function(tx, err) {
-        	console.log('select error', JSON.stringify(err));     
+        	console.log('GetVersions error', JSON.stringify(err));     
         });
     });
 };

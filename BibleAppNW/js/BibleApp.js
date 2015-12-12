@@ -15,7 +15,7 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
 	};
-var SERVER_HOST = 'localhost'; // 72.2.112.243
+var SERVER_HOST = '165.225.166.55';//'localhost';
 var SERVER_PORT = '8080';
 
 function bibleShowNoteClick(nodeId) {
@@ -1182,17 +1182,6 @@ SettingsView.prototype.startControls = function() {
 };
 
 
-
-//SettingsView.prototype.getFontSize = function() {
-//	var fontSize = localStorage.getItem('fontSize');
-//	if (fontSize > 36) fontSize = 36;
-//	if (fontSize < 10) fontSize = 10;
-//	return(fontSize);
-//};
-//SettingsView.prototype.setFontSize = function(fontSize) {
-//	localStorage.setItem('fontSize', fontSize);
-//};
-
 /**
 * This class presents the list of available versions to download
 */
@@ -1264,8 +1253,8 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
 					
 					var iconNode = that.dom.addNode(rightNode, 'img');
-					iconNode.setAttribute('id', 'ver' + row.filename);
-					console.log('currentVersion', currentVersion, 'row.filename', row.filename);
+					iconNode.setAttribute('id', 'ver' + row.versionCode);
+					iconNode.setAttribute('data-id', 'fil' + row.filename);
 					if (row.filename === currentVersion) {
 						iconNode.setAttribute('src', 'licensed/sebastiano/check.png');
 					} else if (that.settingStorage.hasVersion(row.versionCode)) {
@@ -1286,15 +1275,17 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	}
 	function downloadVersionHandler(event) {
 		this.removeEventListener('click', downloadVersionHandler);
-		var versionFile = this.id.substr(3);
-		console.log('event filename', versionFile);
+		var iconNode = this;
+		var versionCode = iconNode.id.substr(3);
+		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		
 		var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT);
 		downloader.download(versionFile, function(results) {
 			if (results instanceof IOError) {
 				// download did not succeed.  What error do I show?
 			} else {
-				that.settingStorage.setVersion(results.name, results.filename);
+				that.settingStorage.setVersion(versionCode, versionFile);
+				iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
 				// dispatch an event BIBLE.CHG_VERSION communicating the selected version
 			}
 		});
@@ -1310,36 +1301,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		}
 	}
 };
-//VersionsView.prototype.dump = function() {
-//	var len = localStorage.length;
-//	for (var i=0; i<len; i++) {
-//		var key = localStorage.key(i);
-//		var value = localStorage.getItem(key);
-//		console.log('KEY, VALUE', key, value);
-//	}	
-//};
-//VersionsView.prototype.hasVersion = function(version) {
-//	var found = localStorage.getItem(version.toUpperCase());
-//	if (found) {
-//		return(found.indexOf('.db') > 0);
-//	} else {
-//		return(false);
-//	}
-//};
-//VersionsView.prototype.setVersion = function(filename) {
-//	var dot = filename.indexOf('.');
-//	var version = (dot > 0) ? filename.substr(0,dot) : filename;
-//	console.log('store in local store', version, filename);
-//	localStorage.setItem(version, filename);	
-//};
-//VersionsView.prototype.getCurrentVersion = function() {
-//	var version = localStorage.getItem('version');
-//	if (version == null) version = 'WEB';// where should the default be stored?
-//	return(version);	
-//};
-//VersionsView.prototype.setCurrentVersion = function(version) {
-//	localStorage.setItem('version', version);	
-//};
+
 /**
 * This is a helper class to remove the repetitive operations needed
 * to dynamically create DOM objects.
@@ -1546,13 +1508,13 @@ function IOError(err) {
 * on ios Simulator.  I am guessing the problems were caused by the WKWebView plugin, but I don't really know.
 */
 function SettingStorage() {
-    this.className = 'SettingsStorage';
+    this.className = 'SettingStorage';
     if (window.sqlitePlugin === undefined) {
         console.log('opening SettingsStorage Database, stores in Cache');
         this.database = window.openDatabase('Settings.db', '1.0', 'Settings.db', 1024 * 1024);
     } else {
         console.log('opening SQLitePlugin SettingsStorage Database, stores in Documents with no cloud');
-        this.database = window.sqlitePlugin.openDatabase({name: 'Settings.db', location: 2});
+        this.database = window.sqlitePlugin.openDatabase({name: 'Settings.db', location: 2, createFromLocation: 1});
     }
     this.loadedVersions = null;
 	Object.seal(this);
@@ -1581,7 +1543,6 @@ SettingStorage.prototype.getItem = function(name, callback) {
     this.database.readTransaction(function(tx) {
         tx.executeSql('SELECT value FROM Settings WHERE name=?', [name],
         function(tx, results) {
-        	//console.log('GetItem, rowCount=', results.rows.length);
         	var value = (results.rows.length > 0) ? results.rows.item(0).value : null;
         	console.log('GetItem', name, value);
 			callback(value);
@@ -1626,15 +1587,15 @@ SettingStorage.prototype.getVersions = function() {
         	}
         },
         function(tx, err) {
-        	console.log('select error', JSON.stringify(err));     
+        	console.log('GetVersions error', JSON.stringify(err));     
         });
     });
 };
 SettingStorage.prototype.setVersion = function(version, filename) {
 	console.log('SetVersion', version, filename);
+	var now = new Date();
     this.database.transaction(function(tx) {
-	    var now = new Date();
-        tx.executeSql('REPLACE INTO Installed(version, filename, timestamp) VALUES (?,?,?)', [name, value, now.toISOString()], 
+        tx.executeSql('REPLACE INTO Installed(version, filename, timestamp) VALUES (?,?,?)', [version, filename, now.toISOString()], 
         function(tx, results) {
 	        console.log('SetVersion success', results.rowsAffected);
 	  	},

@@ -4,7 +4,7 @@
 */
 "use strict";
 var DatabaseAdapter = require('./DatabaseAdapter');
-var database = new DatabaseAdapter({filename: './TestDatabase.db', verbose: false});
+var database = new DatabaseAdapter({filename: '../../StaticRoot/Discourse.db', verbose: false});
 
 var AuthController = require('./AuthController');
 var authController = new AuthController(database);
