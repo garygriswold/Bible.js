@@ -1,6 +1,7 @@
 *.log
 *.xcuserstate
 temp.js
+newrelic.js
 GitIgnore/
 licensed/
 ThrowPropsPlugin.js

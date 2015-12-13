@@ -37,3 +37,21 @@ Server Deployment
 	
 7) Login into remote server and tail the log.
 
+New Relic Monitoring
+====================
+
+1) Install new relic npm on server
+
+	npm install newrelic
+	
+2) Copy newrelic.js from node_modules to server root
+
+	cp /root/node_modules/newrelic/newrelic.js /root/Server/www
+	
+3) Edit copy of newrelic.js
+
+	set app_name to 'ShortSands'
+	set license_key to key provided by New Relic
+	
+4) Make certain require('newrelic'); is first line of server.
+

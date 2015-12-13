@@ -857,5 +857,5 @@ var tests = [
 ]
 
 
-var runTest = new ServerMethodTest('localhost', 8080);
+var runTest = new ServerMethodTest('165.225.166.55', 8080);
 runTest.runTests();
