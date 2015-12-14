@@ -48,6 +48,7 @@
     <feature name="WKWebViewPolyfill">
         <param name="ios-package" value="WKWebViewPolyfill" />
     </feature>
+    <preference name="Orientation" value="all" />
     <name>Bible.js</name>
     <description>
         A Bible App designed for the free distribution of the Bible in any language.
