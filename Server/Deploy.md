@@ -32,8 +32,14 @@ Server Deployment
 	./deploy.sh
 	
 	The above script packages the server in server.tar, 
-	scp's it to the remote server.  Un-tars it, and starts
-	the server.
+	scp's it to the remote server.  Un-tars it.
+	
+7) Login and set up service on remote server and start it
+
+	cp /root/Server/www/ServerProd.sh /root
+	svccfg import /root/Server/www/shortsands.xml
+	svcadm restart shortsands
+	svcs | grep shortsands
 	
 7) Login into remote server and tail the log.
 
@@ -54,4 +60,10 @@ New Relic Monitoring
 	set license_key to key provided by New Relic
 	
 4) Make certain require('newrelic'); is first line of server.
+
+Creating shortsands.xml
+=======================
+
+The shortsands.xml manifest file was created on the remote host using manifold
+https://docs.joyent.com/public-cloud/instances/infrastructure/images/smartos/managing-a-smartos-instance/using-the-service-management-facility/building-manifests/building-manifests-with-manifold
 

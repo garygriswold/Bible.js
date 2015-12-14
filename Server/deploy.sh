@@ -8,7 +8,6 @@ scp server.tar root@165.225.166.55:/root/Server
 
 ssh root@165.225.166.55 "cd /root/Server; tar -xvf server.tar"
 
-ssh root@165.225.166.55 "cd /root/Server/www; ./ServerProd.sh"
 
 echo "Login to server and tail /root/Server/www/server.log"
 

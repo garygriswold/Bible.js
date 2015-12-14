@@ -1,2 +1,4 @@
 #!/bin/sh
-node Router.js > server.log &
+
+cd /root/Server/www
+/opt/local/bin/node /root/Server/www/Router.js > /root/Server/www/server.log &
