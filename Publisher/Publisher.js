@@ -69,7 +69,7 @@ AssetBuilder.prototype.build = function(callback) {
 		if (file) {
 			that.reader.readTextFile(that.types.getUSXPath(file), function(data) {
 				if (data.errno) {
-					console.log('file read err ', JSON.stringify(data));
+					//console.log('file read err ', JSON.stringify(data));
 					callback(data);
 				} else {
 					var rootNode = that.parser.readBook(data);
@@ -1581,10 +1581,6 @@ Concordance.prototype.search = function(words, callback) {
 	}
 };
 /**
-* This file contains IO constants and functions which are common to all file methods, which might include node.js, cordova, javascript, etc.
-*/
-var FILE_ROOTS = { 'application': '?', 'document': '../../dbl/current/', 'temporary': '?', 'test2dbl': '../../../dbl/current/' };
-/**
 * This class is a wrapper for SQL Error so that we can always distinguish an error
 * from valid results.  Any method that calls an IO routine, which can expect valid results
 * or an error should test "if (results instanceof IOError)".
@@ -1608,8 +1604,8 @@ function FileReader(location) {
 	Object.freeze(this);
 }
 FileReader.prototype.fileExists = function(filepath, callback) {
-	var fullPath = FILE_ROOTS[this.location] + filepath;
-	//console.log('checking fullpath', fullPath);
+	var fullPath = this.location + filepath;
+	console.log('checking fullpath', fullPath);
 	this.fs.stat(fullPath, function(err, stat) {
 		if (err) {
 			err.filepath = filepath;
@@ -1620,8 +1616,8 @@ FileReader.prototype.fileExists = function(filepath, callback) {
 	});
 };
 FileReader.prototype.readDirectory = function(filepath, callback) {
-	var fullPath = FILE_ROOTS[this.location] + filepath;
-	//console.log('read directory ', fullPath);
+	var fullPath = this.location + filepath;
+	console.log('read directory ', fullPath);
 	this.fs.readdir(fullPath, function(err, data) {
 		if (err) {
 			err.filepath = filepath;
@@ -1632,8 +1628,8 @@ FileReader.prototype.readDirectory = function(filepath, callback) {
 	});
 };
 FileReader.prototype.readTextFile = function(filepath, callback) {
-	var fullPath = FILE_ROOTS[this.location] + filepath;
-	//console.log('read file ', fullPath);
+	var fullPath = this.location + filepath;
+	console.log('read file ', fullPath);
 	this.fs.readFile(fullPath, { encoding: 'utf8'}, function(err, data) {
 		if (err) {
 			err.filepath = filepath;
@@ -2293,20 +2289,60 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 /**
 * Unit Test Harness for AssetController
 */
-var types = new AssetType('document', 'WEB');
-types.chapterFiles = true;
-types.tableContents = true;
-types.concordance = true;
-types.styleIndex = true;
-types.history = true;
-types.questions = true;
-var database = new DeviceDatabase(types.versionCode + '.word1');
+var FILE_PATH = process.env.HOME + '/DBL/current/';
 
-var builder = new AssetBuilder(types, database);
-builder.build(function(err) {
-	if (err instanceof IOError) {
-		window.alert('AssetController.build error=' + JSON.stringify(err));
-	} else {
-		console.log('AssetControllerTest.build', err);
-	}
+//var readline = require('readline');
+
+//var read = readline.createInterface({
+//	input: process.stdin,
+//	output: process.stdout
+//});
+var versionNode = document.getElementById('versionNode');
+var responseNode = document.getElementById('responseNode');
+var submitBtn = document.getElementById('submitBtn');
+submitBtn.addEventListener('click', function(event) {
+	
+//});
+	responseNode.textContent = '';
+
+
+//function processNextVersion() {
+	//read.close();
+	//process.exit();
+	var versionCode = versionNode.value;
+
+	//read.question('Enter a version code to process, or EXIT -> ', function(versionCode) {
+	console.log('received', versionCode);
+	if (versionCode.toUpperCase() === 'EXIT') {
+		read.close();
+		process.exit();
+	} else if (versionCode && versionCode.length > 2) {
+		var types = new AssetType(FILE_PATH, versionCode);
+		types.chapterFiles = true;
+		types.tableContents = true;
+		types.concordance = true;
+		types.styleIndex = true;
+		types.history = true;
+		types.questions = true;
+		//var database = new DeviceDatabase(types.versionCode + '.word1');
+		var database = new DeviceDatabase(versionCode + '.db1');
+		
+		var builder = new AssetBuilder(types, database);
+		builder.build(function(err) {
+			if (err instanceof IOError) {
+				console.log('FAILED', JSON.stringify(err));
+				//read.close();
+				process.exit();
+			} else {
+				responseNode.textContent = 'Success, Database created';
+				//read.write('\n\nSuccess, database created');
+				//processNextVersion();
+				
+			}
+		});	
+	} //else {
+		
+	//}	
+	//});
+
 });

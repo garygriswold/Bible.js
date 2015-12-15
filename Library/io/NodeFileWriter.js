@@ -8,7 +8,7 @@ function FileWriter(location) {
 	Object.freeze(this);
 }
 FileWriter.prototype.createDirectory = function(filepath, callback) {
-	var fullPath = FILE_ROOTS[this.location] + filepath;
+	var fullPath = this.location + filepath;
 	this.fs.mkdir(fullPath, function(err) {
 		if (err) {
 			err.filepath = filepath;
@@ -19,7 +19,7 @@ FileWriter.prototype.createDirectory = function(filepath, callback) {
 	});
 };
 FileWriter.prototype.writeTextFile = function(filepath, data, callback) {
-	var fullPath = FILE_ROOTS[this.location] + filepath;
+	var fullPath = this.location + filepath;
 	this.fs.writeFile(fullPath, data, { encoding: 'utf8'}, function(err) {
 		if (err) {
 			err.filepath = filepath;

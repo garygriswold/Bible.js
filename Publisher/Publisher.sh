@@ -26,7 +26,6 @@ cat ../Library/model/meta/Canon.js >> Publisher.js
 cat ../Library/model/meta/TOC.js >> Publisher.js
 cat ../Library/model/meta/TOCBook.js >> Publisher.js
 cat ../Library/model/meta/Concordance.js >> Publisher.js
-cat ../Library/io/CommonIO.js >> Publisher.js
 cat ../Library/io/IOError.js >> Publisher.js
 cat ../Library/io/NodeFileReader.js >> Publisher.js
 cat ../Library/io/DeviceDatabaseWebSQL.js >> Publisher.js
@@ -38,6 +37,6 @@ cat ../Library/io/StyleIndexAdapter.js >> Publisher.js
 cat ../Library/io/StyleUseAdapter.js >> Publisher.js
 cat ../Library/io/HistoryAdapter.js >> Publisher.js
 cat ../Library/io/QuestionsAdapter.js >> Publisher.js
-cat ../Library/manufacture/AssetControllerTest.js >> Publisher.js
+cat ../Library/manufacture/AssetController.js >> Publisher.js
 #node Publisher.js
 npm start
