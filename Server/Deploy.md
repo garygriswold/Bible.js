@@ -43,8 +43,9 @@ Server Deployment
 	
 7) Login into remote server and tail the log.
 
-New Relic Monitoring
-====================
+
+New Relic Application Monitoring
+================================
 
 1) Install new relic npm on server
 
@@ -60,6 +61,26 @@ New Relic Monitoring
 	set license_key to key provided by New Relic
 	
 4) Make certain require('newrelic'); is first line of server.
+
+
+New Relic Server Monitoring
+===========================
+
+1) Install nrsysmond
+
+	pkgin update
+	pkgin install nrsysmond
+	vi /opt/local/etc/nrsysmond.cfg
+		set license key, everything else is default 
+		
+2) Start monitoring
+
+	svcadm enable pkgsrc/nrsysmond
+	
+3) If needed, logging is as follows:
+
+	/var/log/newrelic/nrsysmond.log
+	
 
 Creating shortsands.xml
 =======================
