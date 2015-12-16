@@ -24,6 +24,7 @@ cat ../Library/gui/icons/drawSearchIcon.js >> www/js/BibleApp.js
 cat ../Library/gui/icons/drawSendIcon.js >> www/js/BibleApp.js
 cat ../Library/gui/icons/drawSettingsIcon.js >> www/js/BibleApp.js
 cat ../Library/gui/icons/drawTOCIcon.js >> www/js/BibleApp.js
+cat ../Library/gui/icons/GSPreloader.js >> www/js/BibleApp.js
 
 cat ../Library/io/IOError.js >> www/js/BibleApp.js
 cat ../Library/io/SettingStorage.js >> www/js/BibleApp.js

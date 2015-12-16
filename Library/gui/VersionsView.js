@@ -91,12 +91,15 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	}
 	function downloadVersionHandler(event) {
 		this.removeEventListener('click', downloadVersionHandler);
+		var gsPreloader = new GSPreloader(gsPreloaderOptions);
+		gsPreloader.active(true);
 		var iconNode = this;
 		var versionCode = iconNode.id.substr(3);
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		
 		var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT);
 		downloader.download(versionFile, function(results) {
+			gsPreloader.active(false);
 			if (results instanceof IOError) {
 				// download did not succeed.  What error do I show?
 			} else {
