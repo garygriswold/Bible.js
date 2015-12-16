@@ -39,6 +39,8 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
 		' LEFT OUTER JOIN TextTranslation t1 ON t1.silCode=? AND t1.word=v.scope' +
 		' WHERE cv.countryCode = ?' +
+		' AND v.filename is NOT NULL' +
+		' AND length(v.filename) > 3' +
 		' ORDER BY cv.localLanguageName, cv.localVersionName';
 	this.select(statement, [primLanguage, countryCode], function(results) {
 		if (results instanceof IOError) {

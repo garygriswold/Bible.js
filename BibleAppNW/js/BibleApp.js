@@ -1659,6 +1659,24 @@ DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
         callback(new IOError(err));
     }
 };
+DeviceDatabase.prototype.manyExecuteDML = function(statement, array, callback) {
+	var that = this;
+	executeOne(0);
+	
+	function executeOne(index) {
+		if (index < array.length) {
+			that.executeDML(statement, array[index], function(results) {
+				if (results instanceof IOError) {
+					callback(results);
+				} else {
+					executeOne(index + 1);
+				}
+			});
+		} else {
+			callback(array.length);
+		}
+	}	
+};
 DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
     var rowCount = 0;
 	this.database.transaction(onTranStart, onTranError, onTranSuccess);
@@ -1943,6 +1961,7 @@ TableContentsAdapter.prototype.create = function(callback) {
 TableContentsAdapter.prototype.load = function(array, callback) {
 	var statement = 'insert into tableContents(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook, chapterRowId) ' +
 		'values (?,?,?,?,?,?,?,?,?)';
+	//this.database.manyExecuteDML(statement, array, function(count) {
 	this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
 			callback(count);
@@ -2293,6 +2312,8 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
 		' LEFT OUTER JOIN TextTranslation t1 ON t1.silCode=? AND t1.word=v.scope' +
 		' WHERE cv.countryCode = ?' +
+		' AND v.filename is NOT NULL' +
+		' AND length(v.filename) > 3' +
 		' ORDER BY cv.localLanguageName, cv.localVersionName';
 	this.select(statement, [primLanguage, countryCode], function(results) {
 		if (results instanceof IOError) {
@@ -2303,6 +2324,7 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 				var row = results.rows.item(i);
 				array.push(row);
 			}
+			console.log('VERSIONS', array);
 			callback(array);
 		}
 	});
