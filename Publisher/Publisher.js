@@ -15,7 +15,7 @@ function AssetType(location, versionCode) {
 	Object.seal(this);
 }
 AssetType.prototype.getUSXPath = function(filename) {
-	return(this.versionCode + '/USX/' + filename);
+	return(this.versionCode + '/USX_1/' + filename);
 };
 
 /**
@@ -69,8 +69,12 @@ AssetBuilder.prototype.build = function(callback) {
 		if (file) {
 			that.reader.readTextFile(that.types.getUSXPath(file), function(data) {
 				if (data.errno) {
-					//console.log('file read err ', JSON.stringify(data));
-					callback(data);
+					if (data.errno === -2) { // file not found
+						processReadFile(that.filesToProcess.shift());
+					} else {
+						console.log('file read err ', JSON.stringify(data));
+						callback(data);
+					}
 				} else {
 					var rootNode = that.parser.readBook(data);
 					for (var i=0; i<that.builders.length; i++) {
@@ -320,7 +324,8 @@ TOCBuilder.prototype.loadDB = function(callback) {
 	var len = this.size();
 	for (var i=0; i<len; i++) {
 		var toc = this.toc.bookList[i];
-		var values = [ toc.code, toc.heading, toc.title, toc.name, toc.abbrev, toc.lastChapter, 
+		var abbrev = ensureAbbrev(toc);
+		var values = [ toc.code, toc.heading, toc.title, toc.name, abbrev, toc.lastChapter, 
 			toc.priorBook, toc.nextBook, toc.chapterRowId ];
 		array.push(values);
 	}
@@ -333,6 +338,12 @@ TOCBuilder.prototype.loadDB = function(callback) {
 			callback();
 		}
 	});
+	
+	function ensureAbbrev(toc) {
+		if (toc.abbrev) return(toc.abbrev);
+		if (toc.heading.lenght <= 4) return(toc.heading);
+		return(toc.heading.substr(0,3) + '.');
+	}
 };
 TOCBuilder.prototype.toJSON = function() {
 	return(this.toc.toJSON());
@@ -1693,6 +1704,24 @@ DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
         callback(new IOError(err));
     }
 };
+DeviceDatabase.prototype.manyExecuteDML = function(statement, array, callback) {
+	var that = this;
+	executeOne(0);
+	
+	function executeOne(index) {
+		if (index < array.length) {
+			that.executeDML(statement, array[index], function(results) {
+				if (results instanceof IOError) {
+					callback(results);
+				} else {
+					executeOne(index + 1);
+				}
+			});
+		} else {
+			callback(array.length);
+		}
+	}	
+};
 DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
     var rowCount = 0;
 	this.database.transaction(onTranStart, onTranError, onTranSuccess);
@@ -1977,7 +2006,8 @@ TableContentsAdapter.prototype.create = function(callback) {
 TableContentsAdapter.prototype.load = function(array, callback) {
 	var statement = 'insert into tableContents(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook, chapterRowId) ' +
 		'values (?,?,?,?,?,?,?,?,?)';
-	this.database.bulkExecuteDML(statement, array, function(count) {
+	this.database.manyExecuteDML(statement, array, function(count) {
+	//this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
 			callback(count);
 		} else {
@@ -2291,27 +2321,14 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 */
 var FILE_PATH = process.env.HOME + '/DBL/current/';
 
-//var readline = require('readline');
-
-//var read = readline.createInterface({
-//	input: process.stdin,
-//	output: process.stdout
-//});
 var versionNode = document.getElementById('versionNode');
 var responseNode = document.getElementById('responseNode');
 var submitBtn = document.getElementById('submitBtn');
 submitBtn.addEventListener('click', function(event) {
 	
-//});
 	responseNode.textContent = '';
+	var versionCode = versionNode.value.toUpperCase();
 
-
-//function processNextVersion() {
-	//read.close();
-	//process.exit();
-	var versionCode = versionNode.value;
-
-	//read.question('Enter a version code to process, or EXIT -> ', function(versionCode) {
 	console.log('received', versionCode);
 	if (versionCode.toUpperCase() === 'EXIT') {
 		read.close();
@@ -2324,25 +2341,16 @@ submitBtn.addEventListener('click', function(event) {
 		types.styleIndex = true;
 		types.history = true;
 		types.questions = true;
-		//var database = new DeviceDatabase(types.versionCode + '.word1');
 		var database = new DeviceDatabase(versionCode + '.db1');
 		
 		var builder = new AssetBuilder(types, database);
 		builder.build(function(err) {
 			if (err instanceof IOError) {
 				console.log('FAILED', JSON.stringify(err));
-				//read.close();
 				process.exit();
 			} else {
 				responseNode.textContent = 'Success, Database created';
-				//read.write('\n\nSuccess, database created');
-				//processNextVersion();
-				
 			}
 		});	
-	} //else {
-		
-	//}	
-	//});
-
+	}
 });

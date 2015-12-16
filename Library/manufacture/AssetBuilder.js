@@ -49,8 +49,12 @@ AssetBuilder.prototype.build = function(callback) {
 		if (file) {
 			that.reader.readTextFile(that.types.getUSXPath(file), function(data) {
 				if (data.errno) {
-					console.log('file read err ', JSON.stringify(data));
-					callback(data);
+					if (data.errno === -2) { // file not found
+						processReadFile(that.filesToProcess.shift());
+					} else {
+						console.log('file read err ', JSON.stringify(data));
+						callback(data);
+					}
 				} else {
 					var rootNode = that.parser.readBook(data);
 					for (var i=0; i<that.builders.length; i++) {

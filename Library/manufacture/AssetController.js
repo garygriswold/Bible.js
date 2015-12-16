@@ -9,7 +9,7 @@ var submitBtn = document.getElementById('submitBtn');
 submitBtn.addEventListener('click', function(event) {
 	
 	responseNode.textContent = '';
-	var versionCode = versionNode.value;
+	var versionCode = versionNode.value.toUpperCase();
 
 	console.log('received', versionCode);
 	if (versionCode.toUpperCase() === 'EXIT') {
@@ -31,7 +31,7 @@ submitBtn.addEventListener('click', function(event) {
 				console.log('FAILED', JSON.stringify(err));
 				process.exit();
 			} else {
-				responseNode.textContent = 'Success, Database created');
+				responseNode.textContent = 'Success, Database created';
 			}
 		});	
 	}

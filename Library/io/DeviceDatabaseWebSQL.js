@@ -53,6 +53,24 @@ DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
         callback(new IOError(err));
     }
 };
+DeviceDatabase.prototype.manyExecuteDML = function(statement, array, callback) {
+	var that = this;
+	executeOne(0);
+	
+	function executeOne(index) {
+		if (index < array.length) {
+			that.executeDML(statement, array[index], function(results) {
+				if (results instanceof IOError) {
+					callback(results);
+				} else {
+					executeOne(index + 1);
+				}
+			});
+		} else {
+			callback(array.length);
+		}
+	}	
+};
 DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
     var rowCount = 0;
 	this.database.transaction(onTranStart, onTranError, onTranSuccess);

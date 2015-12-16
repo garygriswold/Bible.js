@@ -39,6 +39,7 @@ TableContentsAdapter.prototype.create = function(callback) {
 TableContentsAdapter.prototype.load = function(array, callback) {
 	var statement = 'insert into tableContents(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook, chapterRowId) ' +
 		'values (?,?,?,?,?,?,?,?,?)';
+	//this.database.manyExecuteDML(statement, array, function(count) {
 	this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
 			callback(count);

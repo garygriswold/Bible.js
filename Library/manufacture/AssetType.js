@@ -14,6 +14,6 @@ function AssetType(location, versionCode) {
 	Object.seal(this);
 }
 AssetType.prototype.getUSXPath = function(filename) {
-	return(this.versionCode + '/USX/' + filename);
+	return(this.versionCode + '/USX_1/' + filename);
 };
 
