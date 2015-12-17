@@ -34,8 +34,14 @@ var app = {
     onDeviceReady: function() {
         console.log('DEVICE IS READY **');
         FastClick.attach(document.body);
-
         var settingStorage = new SettingStorage();
+        
+        document.body.addEventListener(BIBLE.CHG_VERSION, function(event) {
+			console.log('CHANGE VERSION', event.detail.version);
+			settingStorage.setCurrentVersion(event.detail.version);
+			changeVersionHandler(event.detail.version);
+		});
+
 		settingStorage.getCurrentVersion(function(version) {
 			if (version == null) {
 				version = 'WEB.db1'; // Where does the defalt come from.  There should be one for each major language.
@@ -44,13 +50,9 @@ var app = {
 			changeVersionHandler(version);
 		});
 			
-		document.body.addEventListener(BIBLE.CHG_VERSION, function(event) {
-			// find the version in the event
-			changeVersionHandler(version);
-		});
 		function changeVersionHandler(version) {
-			app = new AppViewController(version, settingStorage);
-			app.begin();
+			var controller = new AppViewController(version, settingStorage);
+			controller.begin();
 		}
     }
 }

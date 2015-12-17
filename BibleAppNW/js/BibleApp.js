@@ -15,7 +15,7 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
 	};
-var SERVER_HOST = '165.225.166.55';//'localhost';
+var SERVER_HOST = 'qa.shortsands.com';//'localhost';
 var SERVER_PORT = '8080';
 
 function bibleShowNoteClick(nodeId) {
@@ -1270,8 +1270,8 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	});
 	
 	function selectVersionHandler(event) {
-		//that.settingStorage.setCurrentVersion(version);
-		// dispatch an event BIBLE.CHG_VERSION communicating the selected version
+		var filename = this.getAttribute('data-id').substr(3);
+		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: filename }}));
 	}
 	function downloadVersionHandler(event) {
 		this.removeEventListener('click', downloadVersionHandler);
@@ -1289,7 +1289,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 			} else {
 				that.settingStorage.setVersion(versionCode, versionFile);
 				iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
-				// dispatch an event BIBLE.CHG_VERSION communicating the selected version
+				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
 			}
 		});
 	}
@@ -1494,7 +1494,7 @@ function drawTOCIcon(hite, color) {
 	return(canvas);
 }//Pure JS, completely customizable preloader from GreenSock.
 //Once you create an instance like var preloader = new GSPreloader(), call preloader.active(true) to open it, preloader.active(false) to close it, and preloader.active() to get the current status. Only requires TweenLite and CSSPlugin (http://www.greensock.com/gsap/)
-//var gsPreloader = new GSPreloader({
+// Modified so that it must be instantiated preloader = new GSPreloader(gsPreloaderOptions);
 var gsPreloaderOptions = {
   radius:42, 
   dotSize:15, 
@@ -1504,15 +1504,6 @@ var gsPreloaderOptions = {
   boxBorder:"1px solid #AAA",
   animationOffset: 1.8, //jump 1.8 seconds into the animation for a more active part of the spinning initially (just looks a bit better in my opinion)
 }
-//});
-
-//open the preloader
-//preloader.active(true);
-
-//for testing: click the window to toggle open/close the preloader
-//document.onclick = document.ontouchstart = function() {
-//  preloader.active( !preloader.active() );
-//};
 
 //this is the whole preloader class/function
 function GSPreloader(options) {

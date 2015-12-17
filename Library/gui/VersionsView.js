@@ -86,8 +86,8 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	});
 	
 	function selectVersionHandler(event) {
-		//that.settingStorage.setCurrentVersion(version);
-		// dispatch an event BIBLE.CHG_VERSION communicating the selected version
+		var filename = this.getAttribute('data-id').substr(3);
+		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: filename }}));
 	}
 	function downloadVersionHandler(event) {
 		this.removeEventListener('click', downloadVersionHandler);
@@ -105,7 +105,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 			} else {
 				that.settingStorage.setVersion(versionCode, versionFile);
 				iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
-				// dispatch an event BIBLE.CHG_VERSION communicating the selected version
+				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
 			}
 		});
 	}
