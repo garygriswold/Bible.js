@@ -8,6 +8,7 @@ cat ../Library/css/TableContents.css >> www/css/BibleApp.css
 cat ../Library/css/Settings.css >> www/css/BibleApp.css
 
 echo \"use strict\"\; > www/js/BibleApp.js
+cat ../Library/gui/AppInitializer.js >> www/js/BibleApp.js
 cat ../Library/gui/AppViewController.js >> www/js/BibleApp.js
 cat ../Library/gui/CodexView.js >> www/js/BibleApp.js
 cat ../Library/gui/HistoryView.js >> www/js/BibleApp.js
