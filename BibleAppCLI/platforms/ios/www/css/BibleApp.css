@@ -637,3 +637,7 @@ span.versName {
 span.copy {
 	font-size: 0.8rem;
 }
+button.versIcon {
+	border: none; 
+	background-color: #EEEEEE; /* same as table.vers */
+}

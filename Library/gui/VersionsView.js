@@ -67,8 +67,9 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					that.dom.addNode(leftNode, 'span', 'copy', copyright(row));
 					
 					var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
+					var btnNode = that.dom.addNode(rightNode, 'button', 'versIcon');
 					
-					var iconNode = that.dom.addNode(rightNode, 'img');
+					var iconNode = that.dom.addNode(btnNode, 'img');
 					iconNode.setAttribute('id', 'ver' + row.versionCode);
 					iconNode.setAttribute('data-id', 'fil' + row.filename);
 					if (row.filename === currentVersion) {
