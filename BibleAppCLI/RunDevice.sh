@@ -42,7 +42,6 @@ cat ../Library/io/VersionsAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/FileDownloader.js >> www/js/BibleApp.js
 cat ../Library/io/HttpClient.js >> www/js/BibleApp.js
 
-cat ../Library/model/meta/BibleCache.js >> www/js/BibleApp.js
 cat ../Library/model/meta/Canon.js >> www/js/BibleApp.js
 cat ../Library/model/meta/Concordance.js >> www/js/BibleApp.js
 cat ../Library/model/meta/Lookup.js >> www/js/BibleApp.js

@@ -69,10 +69,13 @@ function AppViewController(versionCode, settingStorage) {
 	this.versionCode = versionCode;
 	this.settingStorage = settingStorage;
 	this.database = new DeviceDatabase(versionCode);
+	for (var i=document.body.children.length -1; i>=0; i--) {
+		document.body.removeChild(document.body.children[i]);
+	}
 }
 AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.database.tableContents);
-	this.bibleCache = new BibleCache(this.database.codex); // I don't think this is used.
+	//this.bibleCache = new BibleCache(this.database.codex); // I don't think this is used.
 	this.concordance = new Concordance(this.database.concordance);
 	var that = this;
 	this.tableContents.fill(function() {
@@ -92,8 +95,6 @@ AppViewController.prototype.begin = function(develop) {
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.settingStorage, that.database.verses);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
-		var rrr = document.getElementById('codexRoot');
-		console.log('CODEX ROOT', (rrr != null));
 		that.touch = new Hammer(document.getElementById('codexRoot'));
 		setInitialFontSize();
 		Object.freeze(that);
@@ -886,7 +887,7 @@ function HeaderView(tableContents) {
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.currentReference = null;
-	this.rootNode = document.createElement('div');
+	this.rootNode = document.createElement('table');
 	this.rootNode.id = 'statusRoot';
 	document.body.appendChild(this.rootNode);
 	this.labelCell = document.createElement('td');
@@ -958,7 +959,6 @@ HeaderView.prototype.showView = function() {
 		canvas.setAttribute('style', that.cellTopPadding);
 		var parent = document.createElement('td');
 		parent.id = parentCell;
-		parent.style.border = 'solid';
 		that.rootNode.appendChild(parent);
 		parent.appendChild(canvas);
 		canvas.addEventListener('click', function(event) {
@@ -2581,60 +2581,6 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
        	callback(new IOError({ code: error.code, message: error.source}));   	
     }
 };/**
-* This class handles all request to deliver scripture.  It handles all passage display requests to display passages of text,
-* and it also handles all requests from concordance search requests to display individual verses.
-* It will deliver the content from cache if it is present.  Or, it will find the content in persistent storage if it is
-* not present in cache.  All content retrieved from persistent storage is added to the cache.
-*
-* On May 3, 2015 some performance checks were done.  The time measurements where from a sample of 4, the memory from a sample of 1.
-* 1) Read Chapter 11.2ms, 49K heap increase
-* 2) Parse USX 6.0ms, 306K heap increase
-* 3) Generate Dom 2.16ms, 85K heap increase
-* These tests were done when IO was file.
-*
-* On Jul 21, 2015 some performance checks were done using SQLite as the datastore.
-* 1) Read Chapter 4.4 ms, 4K heap increase
-* 2) Parse USX 1.8 ms, still large heap increase
-* 3) Generate Dom  1ms, still large heap increase
-*
-* On Jul 22, 2015 stored HTML in DB and changed to use that so there is less App processing
-* 1) Read Chapter 2.0 ms
-* 2) Assign using innerHTML 0.5 ms
-* 3) Append 0.13 ms
-*
-* This class does not yet have a means to remove old entries from cache.  
-* It is possible that DB access is fast enough, and this is not needed.
-* GNG July 5, 2015
-*/
-function BibleCache(adapter) {
-	this.adapter = adapter;
-	this.chapterMap = {};
-	this.parser = new USXParser();
-	Object.freeze(this);
-}
-/** deprecated */
-BibleCache.prototype.getChapterHTML = function(reference, callback) {
-	var that = this;
-	var chapter = this.chapterMap[reference.nodeId];
-	if (chapter !== undefined) {
-		callback(chapter);
-	} else {
-		this.adapter.getChapterHTML(reference, function(chapter) {
-			if (chapter instanceof IOError) {
-				console.log('Bible Cache found Error', chapter);
-				callback(chapter);
-			} else {
-				that.chapterMap[reference.nodeId] = chapter;
-				callback(chapter);
-			}
-		});
-	}
-};
-
-// Before deleting be sure to move performance nots to CodexView
-
-
-/**
 * This class contains the Canon of Scripture as 66 books.  It is used to control
 * which books are published using this App.  The codes are used to identify the
 * books of the Bible, while the names, which are in English are only used to document

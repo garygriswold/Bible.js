@@ -46,7 +46,6 @@ function AppViewController(versionCode, settingStorage) {
 }
 AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.database.tableContents);
-	this.bibleCache = new BibleCache(this.database.codex); // I don't think this is used.
 	this.concordance = new Concordance(this.database.concordance);
 	var that = this;
 	this.tableContents.fill(function() {
