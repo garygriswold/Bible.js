@@ -13,7 +13,9 @@ function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	this.words = [];
 	this.bookList = {};
 	this.viewRoot = null;
-	this.rootNode = document.getElementById('searchRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'searchRoot';
+	document.body.appendChild(this.rootNode);
 	this.scrollPosition = 0;
 	this.searchField = null;
 	Object.seal(this);

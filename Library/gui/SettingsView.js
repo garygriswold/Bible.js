@@ -6,7 +6,9 @@ function SettingsView(settingStorage, versesAdapter) {
 	this.root = null;
 	this.settingStorage = settingStorage
 	this.versesAdapter = versesAdapter;
-	this.rootNode = document.getElementById('settingRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'settingRoot';
+	document.body.appendChild(this.rootNode);
 	this.dom = new DOMBuilder();
 	this.versionsView = new VersionsView(this.settingStorage);
 	Object.seal(this);

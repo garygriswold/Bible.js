@@ -4,7 +4,9 @@
 function TableContentsView(toc) {
 	this.toc = toc;
 	this.root = null;
-	this.rootNode = document.getElementById('tocRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'tocRoot';
+	document.body.appendChild(this.rootNode);
 	this.scrollPosition = 0;
 	Object.seal(this);
 }

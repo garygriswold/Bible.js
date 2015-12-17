@@ -18,8 +18,11 @@ function HeaderView(tableContents) {
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.currentReference = null;
-	this.rootNode = document.getElementById('statusRoot');
-	this.labelCell = document.getElementById('labelCell');
+	this.rootNode = document.createElement('table');
+	this.rootNode.id = 'statusRoot';
+	document.body.appendChild(this.rootNode);
+	this.labelCell = document.createElement('td');
+	this.labelCell.id = 'labelCell'
 	Object.seal(this);
 }
 HeaderView.prototype.showView = function() {
@@ -31,6 +34,7 @@ HeaderView.prototype.showView = function() {
 
 	var menuWidth = setupIconButton('tocCell', drawTOCIcon, this.hite, BIBLE.SHOW_TOC);
 	var serhWidth = setupIconButton('searchCell', drawSearchIcon, this.hite, BIBLE.SHOW_SEARCH);
+	this.rootNode.appendChild(this.labelCell);
 	var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
 	var settWidth = setupIconButton('settingsCell', drawSettingsIcon, this.hite, BIBLE.SHOW_SETTINGS);
 	var avalWidth = window.innerWidth - (menuWidth + serhWidth + quesWidth + settWidth + (6 * 4));// six is fudge factor
@@ -84,7 +88,9 @@ HeaderView.prototype.showView = function() {
 	function setupIconButton(parentCell, canvasFunction, hite, eventType) {
 		var canvas = canvasFunction(hite, '#F7F7BB');
 		canvas.setAttribute('style', that.cellTopPadding);
-		var parent = document.getElementById(parentCell);
+		var parent = document.createElement('td');
+		parent.id = parentCell;
+		that.rootNode.appendChild(parent);
 		parent.appendChild(canvas);
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();

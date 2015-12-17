@@ -68,21 +68,23 @@ function bibleHideNoteClick(nodeId) {
 function AppViewController(versionCode, settingStorage) {
 	this.versionCode = versionCode;
 	this.settingStorage = settingStorage;
-	this.touch = new Hammer(document.getElementById('codexRoot'));// can this be moved to index to avoid leak
 	this.database = new DeviceDatabase(versionCode);
+	for (var i=document.body.children.length -1; i>=0; i--) {
+		document.body.removeChild(document.body.children[i]);
+	}
 }
 AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.database.tableContents);
-	this.bibleCache = new BibleCache(this.database.codex);
+	this.bibleCache = new BibleCache(this.database.codex); // I don't think this is used.
 	this.concordance = new Concordance(this.database.concordance);
 	var that = this;
 	this.tableContents.fill(function() {
 
 		console.log('loaded toc', that.tableContents.size());
 		
-		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.header = new HeaderView(that.tableContents);
 		that.header.showView();
+		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.database.history);
 		that.searchView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
@@ -93,6 +95,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.settingStorage, that.database.verses);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
+		that.touch = new Hammer(document.getElementById('codexRoot'));
 		setInitialFontSize();
 		Object.freeze(that);
 
@@ -239,7 +242,9 @@ function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.chaptersAdapter = chaptersAdapter;
 	this.tableContents = tableContents;
 	this.headerHeight = headerHeight;
-	this.rootNode = document.getElementById('codexRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'codexRoot';
+	document.body.appendChild(this.rootNode);
 	this.viewport = this.rootNode;
 	this.viewport.style.top = headerHeight + 'px'; // Start view at bottom of header.
 	this.currentNodeId = null;
@@ -395,7 +400,9 @@ function HistoryView(historyAdapter, tableContents) {
 	this.historyAdapter = historyAdapter;
 	this.tableContents = tableContents;
 	this.viewRoot = null;
-	this.rootNode = document.getElementById('historyRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'historyRoot';
+	document.body.appendChild(this.rootNode);
 	Object.seal(this);
 }
 HistoryView.prototype.showView = function(callback) {
@@ -483,7 +490,9 @@ function QuestionsView(questionsAdapter, versesAdapter, tableContents) {
 	this.formatter = new DateTimeFormatter();
 	this.dom = new DOMBuilder();
 	this.viewRoot = null;
-	this.rootNode = document.getElementById('questionsRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'questionsRoot';
+	document.body.appendChild(this.rootNode);
 	this.referenceInput = null;
 	this.questionInput = null;
 	Object.seal(this);
@@ -644,7 +653,9 @@ function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	this.words = [];
 	this.bookList = {};
 	this.viewRoot = null;
-	this.rootNode = document.getElementById('searchRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'searchRoot';
+	document.body.appendChild(this.rootNode);
 	this.scrollPosition = 0;
 	this.searchField = null;
 	Object.seal(this);
@@ -876,8 +887,11 @@ function HeaderView(tableContents) {
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.currentReference = null;
-	this.rootNode = document.getElementById('statusRoot');
-	this.labelCell = document.getElementById('labelCell');
+	this.rootNode = document.createElement('table');
+	this.rootNode.id = 'statusRoot';
+	document.body.appendChild(this.rootNode);
+	this.labelCell = document.createElement('td');
+	this.labelCell.id = 'labelCell'
 	Object.seal(this);
 }
 HeaderView.prototype.showView = function() {
@@ -889,6 +903,7 @@ HeaderView.prototype.showView = function() {
 
 	var menuWidth = setupIconButton('tocCell', drawTOCIcon, this.hite, BIBLE.SHOW_TOC);
 	var serhWidth = setupIconButton('searchCell', drawSearchIcon, this.hite, BIBLE.SHOW_SEARCH);
+	this.rootNode.appendChild(this.labelCell);
 	var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
 	var settWidth = setupIconButton('settingsCell', drawSettingsIcon, this.hite, BIBLE.SHOW_SETTINGS);
 	var avalWidth = window.innerWidth - (menuWidth + serhWidth + quesWidth + settWidth + (6 * 4));// six is fudge factor
@@ -942,7 +957,9 @@ HeaderView.prototype.showView = function() {
 	function setupIconButton(parentCell, canvasFunction, hite, eventType) {
 		var canvas = canvasFunction(hite, '#F7F7BB');
 		canvas.setAttribute('style', that.cellTopPadding);
-		var parent = document.getElementById(parentCell);
+		var parent = document.createElement('td');
+		parent.id = parentCell;
+		that.rootNode.appendChild(parent);
 		parent.appendChild(canvas);
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
@@ -971,7 +988,9 @@ HeaderView.prototype.drawTitle = function() {
 function TableContentsView(toc) {
 	this.toc = toc;
 	this.root = null;
-	this.rootNode = document.getElementById('tocRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'tocRoot';
+	document.body.appendChild(this.rootNode);
 	this.scrollPosition = 0;
 	Object.seal(this);
 }
@@ -1077,7 +1096,9 @@ function SettingsView(settingStorage, versesAdapter) {
 	this.root = null;
 	this.settingStorage = settingStorage
 	this.versesAdapter = versesAdapter;
-	this.rootNode = document.getElementById('settingRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'settingRoot';
+	document.body.appendChild(this.rootNode);
 	this.dom = new DOMBuilder();
 	this.versionsView = new VersionsView(this.settingStorage);
 	Object.seal(this);

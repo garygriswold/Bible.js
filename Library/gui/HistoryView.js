@@ -7,7 +7,9 @@ function HistoryView(historyAdapter, tableContents) {
 	this.historyAdapter = historyAdapter;
 	this.tableContents = tableContents;
 	this.viewRoot = null;
-	this.rootNode = document.getElementById('historyRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'historyRoot';
+	document.body.appendChild(this.rootNode);
 	Object.seal(this);
 }
 HistoryView.prototype.showView = function(callback) {

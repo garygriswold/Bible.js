@@ -39,21 +39,23 @@ function bibleHideNoteClick(nodeId) {
 function AppViewController(versionCode, settingStorage) {
 	this.versionCode = versionCode;
 	this.settingStorage = settingStorage;
-	this.touch = new Hammer(document.getElementById('codexRoot'));// can this be moved to index to avoid leak
 	this.database = new DeviceDatabase(versionCode);
+	for (var i=document.body.children.length -1; i>=0; i--) {
+		document.body.removeChild(document.body.children[i]);
+	}
 }
 AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.database.tableContents);
-	this.bibleCache = new BibleCache(this.database.codex);
+	this.bibleCache = new BibleCache(this.database.codex); // I don't think this is used.
 	this.concordance = new Concordance(this.database.concordance);
 	var that = this;
 	this.tableContents.fill(function() {
 
 		console.log('loaded toc', that.tableContents.size());
 		
-		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.header = new HeaderView(that.tableContents);
 		that.header.showView();
+		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.database.history);
 		that.searchView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
@@ -64,6 +66,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.settingStorage, that.database.verses);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
+		that.touch = new Hammer(document.getElementById('codexRoot'));
 		setInitialFontSize();
 		Object.freeze(that);
 

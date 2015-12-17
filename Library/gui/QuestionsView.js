@@ -12,7 +12,9 @@ function QuestionsView(questionsAdapter, versesAdapter, tableContents) {
 	this.formatter = new DateTimeFormatter();
 	this.dom = new DOMBuilder();
 	this.viewRoot = null;
-	this.rootNode = document.getElementById('questionsRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'questionsRoot';
+	document.body.appendChild(this.rootNode);
 	this.referenceInput = null;
 	this.questionInput = null;
 	Object.seal(this);

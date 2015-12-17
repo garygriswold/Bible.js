@@ -7,7 +7,9 @@ function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.chaptersAdapter = chaptersAdapter;
 	this.tableContents = tableContents;
 	this.headerHeight = headerHeight;
-	this.rootNode = document.getElementById('codexRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'codexRoot';
+	document.body.appendChild(this.rootNode);
 	this.viewport = this.rootNode;
 	this.viewport.style.top = headerHeight + 'px'; // Start view at bottom of header.
 	this.currentNodeId = null;
