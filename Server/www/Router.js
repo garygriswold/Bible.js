@@ -19,6 +19,12 @@ var server = restify.createServer({
 	version: "1.0.0"
 });
 
+server.use(restify.CORS({
+	origins: ['http://localhost:12344'],// must list each valid origin   // defaults to ['*']
+    	credentials: true,                 // defaults to false
+    	headers: ['x-time']                // sets expose-headers
+}));
+
 server.use(restify.bodyParser({
 	maxBodySize: 10000,
 	mapParams: true
