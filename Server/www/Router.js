@@ -3,7 +3,7 @@
 * to individual controllers.
 */
 "use strict";
-require('newrelic');
+#require('newrelic');
 var DatabaseAdapter = require('./DatabaseAdapter');
 var database = new DatabaseAdapter({filename: '../../StaticRoot/Discourse.db', verbose: false});
 
