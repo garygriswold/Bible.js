@@ -3,6 +3,7 @@
 * to individual controllers.
 */
 "use strict";
+require('newrelic');
 var DatabaseAdapter = require('./DatabaseAdapter');
 var database = new DatabaseAdapter({filename: '../../StaticRoot/Discourse.db', verbose: false});
 
@@ -53,7 +54,7 @@ server.on('after', function(request, response, route, error) {
 /**
 * This route should be commented out of a production server.
 */
-server.get('/beginTest', function beginTest(request, response, next) {
+server.get('/beginTest', function(request, response, next) {
 	authController.authorizeTester(request.headers.authId, function(err) {
 		if (err) {
 			respond(err, results, 200, response, next);
@@ -67,24 +68,24 @@ server.get('/beginTest', function beginTest(request, response, next) {
 	});
 });
 
-server.get(/\/book\/?.*/, restify.serveStatic({
+server.get('/\/book\/?.*/', restify.serveStatic({
 	directory: '../../StaticRoot'
 }));
 
-server.get('/login', function loginTeacher(request, response, next) {
+server.get('/login', function(request, response, next) {
 	authController.login(request, function(err, results) {
 		respond(err, results, 200, response, next);
 	});
 });
 
-server.get('/user', function selectTeachers(request, response, next) {
+server.get('/user', function(request, response, next) {
 	request.params.authorizerId = request.headers.authId;
 	database.selectTeachers(request.params, function(err, results) {
 		respond(err, results, 200, response, next);
 	});
 });
 
-server.put('/user', function registerTeacher(request, response, next) {
+server.put('/user', function(request, response, next) {
 	authController.authorizePosition(request.headers.authId, request.params.position, request.params.versionId, function(err) {
 		if (err) {
 			return(next(err));
@@ -98,7 +99,7 @@ server.put('/user', function registerTeacher(request, response, next) {
 
 });
 
-server.post('/user', function updateTeacher(request, response, next) {
+server.post('/user', function(request, response, next) {
 	authController.authorizeUser(request.headers.authId, function(err) {
 		if (err) {
 			return(next(err));
@@ -110,7 +111,7 @@ server.post('/user', function updateTeacher(request, response, next) {
 	});
 });
 
-server.del('/user', function deleteTeacher(request, response, next) {
+server.del('/user', function(request, response, next) {
 	authController.authorizeUser(request.headers.authId, function(err) {
 		if (err) {
 			return(next(err));
@@ -122,7 +123,7 @@ server.del('/user', function deleteTeacher(request, response, next) {
 	});
 });
 
-server.post('/auth', function updateAuthorizer(request, response, next) {
+server.post('/auth', function(request, response, next) {
 	authController.authorizeUser(request.headers.authId, function(err) {
 		if (err) {
 			return(next(err));
@@ -134,7 +135,7 @@ server.post('/auth', function updateAuthorizer(request, response, next) {
 	});	
 });
 
-server.get('/phrase/:teacherId/:versionId', function newPassPhrase(request, response, next) {
+server.get('/phrase/:teacherId/:versionId', function(request, response, next) {
 	authController.authorizeUser(request.headers.authId, function(err) {
 		if (err) {
 			return(next(err));
@@ -146,7 +147,7 @@ server.get('/phrase/:teacherId/:versionId', function newPassPhrase(request, resp
 	});
 });
 
-server.put('/position', function insertPosition(request, response, next) {
+server.put('/position', function(request, response, next) {
 	authController.authorizePosition(request.headers.authId, request.params.position, request.params.versionId, function(err) {
 		if (err) {
 			return(next(err));
@@ -159,7 +160,7 @@ server.put('/position', function insertPosition(request, response, next) {
 	});
 });
 
-server.del('/position', function deletePosition(request, response, next) {
+server.del('/position', function(request, response, next) {
 	authController.authorizePosition(request.headers.authId, request.params.position, request.params.versionId, function(err) {
 		if (err) {
 			return(next(err));
@@ -171,25 +172,25 @@ server.del('/position', function deletePosition(request, response, next) {
 	});	
 });
 
-server.put('/question', function insertQuestion(request, response, next) {
+server.put('/question', function(request, response, next) {
 	database.insertQuestion(request.params, function(err, results) {
 		respond(err, results, 201, response, next);
 	});
 });
 
-server.post('/question', function updateQuestion(request, response, next) {
+server.post('/question', function(request, response, next) {
 	database.updateQuestion(request.params, function(err, results) {
 		respond(err, results, 200, response, next);
 	});
 });
 
-server.del('/question', function deleteQuestion(request, response, next) {
+server.del('/question', function(request, response, next) {
 	database.deleteQuestion(request.params, function(err, results) {
 		respond(err, results, 200, response, next);
 	});
 });
 
-server.get('/open', function openQuestionCount(request, response, next) {
+server.get('/open', function(request, response, next) {
 	request.params.teacherId = request.headers.authId;
 	var finalResults = {};
 	database.selectPositions(request.params, function(err, results) {
@@ -219,7 +220,7 @@ server.get('/open', function openQuestionCount(request, response, next) {
 });
 
 /** versionId, optional timestamp */
-server.post('/assign', function assignQuestion(request, response, next) {
+server.post('/assign', function(request, response, next) {
 	authController.authorizeVersion(request.headers.authId, request.params.versionId, function(err) {
 		if (err) {
 			return(next(err));
@@ -238,7 +239,7 @@ server.post('/assign', function assignQuestion(request, response, next) {
 	});
 });
 /** discourseId */
-server.post('/return', function returnQuestion(request, response, next) {
+server.post('/return', function(request, response, next) {
 		authController.authorizeDiscourse(request.headers.authId, request.params.discourseId, function(err) {
 		if (err) {
 			return(next(err));
@@ -257,7 +258,7 @@ server.post('/return', function returnQuestion(request, response, next) {
 	});
 });
 /** versionId, discourseId */
-server.post('/another', function anotherQuestion(request, response, next) {
+server.post('/another', function(request, response, next) {
 	authController.authorizeVersion(request.headers.authId, request.params.versionId, function(err) {
 		if (err) {
 			return(next(err));
@@ -277,7 +278,7 @@ server.post('/another', function anotherQuestion(request, response, next) {
 	});
 });
 
-server.post('/answer', function sendAnswer(request, response, next) {
+server.post('/answer', function(request, response, next) {
 	authController.authorizeDiscourse(request.headers.authId, request.params.discourseId, function(err) {
 		if (err) {
 			return(next(err));
@@ -297,7 +298,7 @@ server.post('/answer', function sendAnswer(request, response, next) {
 	});
 });
 
-server.del('/answer', function deleteAnswer(request, response, next) {
+server.del('/answer', function(request, response, next) {
 	authController.authorizeDiscourse(request.headers.authId, request.params.discourseId, function(err) {
 		if (err) {
 			return(next(err));
@@ -310,13 +311,13 @@ server.del('/answer', function deleteAnswer(request, response, next) {
 	});
 });
 
-server.get('/\/response\/.+/', function getAnswers(request, response, next) {
+server.get('/\/response\/.+/', function(request, response, next) {
 	database.selectAnswers(request.url, function(err, results) {
 		respond(err, results, 200, response, next);
 	});
 });
 
-server.post('/draft', function saveDraft(request, response, next) {
+server.post('/draft', function(request, response, next) {
 	authController.authorizeDiscourse(request.headers.authId, request.params.discourseId, function(err) {
 		if (err) {
 			return(next(err));
@@ -329,7 +330,7 @@ server.post('/draft', function saveDraft(request, response, next) {
 	});
 });
 
-server.del('/draft', function deleteDraft(request, response, next) {
+server.del('/draft', function(request, response, next) {
 	authController.authorizeDiscourse(request.headers.authId, request.params.discourseId, function(err) {
 		if (err) {
 			return(next(err));
@@ -342,7 +343,7 @@ server.del('/draft', function deleteDraft(request, response, next) {
 	});			
 });
 
-server.get('/draft/:discourseId/:timestamp', function getDraft(request, response, next) {
+server.get('/draft/:discourseId/:timestamp', function(request, response, next) {
 	authController.authorizeDiscourse(request.headers.authId, request.params.discourseId, function(err) {
 		if (err) {
 			return(next(err));
