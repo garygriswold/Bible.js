@@ -1,4 +1,5 @@
 #!/bin/sh
+
 cat ../Library/css/Codex.css > www/css/BibleApp.css
 cat ../Library/css/History.css >> www/css/BibleApp.css
 cat ../Library/css/Questions.css >> www/css/BibleApp.css
@@ -39,12 +40,9 @@ cat ../Library/io/StyleUseAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/HistoryAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/QuestionsAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/VersionsAdapter.js >> www/js/BibleApp.js
-cat ../Library/io/FileDownloader.js >> www/js/BibleApp.js
 cat ../Library/io/HttpClient.js >> www/js/BibleApp.js
+cat ../Library/io/FileDownloader.js >> www/js/BibleApp.js
 
-##cat ../Library/manufacture/DOMBuilder.js >> www/js/BibleApp.js
-
-cat ../Library/model/meta/Canon.js >> www/js/BibleApp.js
 cat ../Library/model/meta/Concordance.js >> www/js/BibleApp.js
 cat ../Library/model/meta/Lookup.js >> www/js/BibleApp.js
 cat ../Library/model/meta/QuestionItem.js >> www/js/BibleApp.js
@@ -53,19 +51,7 @@ cat ../Library/model/meta/Reference.js >> www/js/BibleApp.js
 cat ../Library/model/meta/TOC.js >> www/js/BibleApp.js
 cat ../Library/model/meta/TOCBook.js >> www/js/BibleApp.js
 
-cat ../Library/model/usx/Book.js >> www/js/BibleApp.js
-cat ../Library/model/usx/Chapter.js >> www/js/BibleApp.js
-cat ../Library/model/usx/Char.js >> www/js/BibleApp.js
-cat ../Library/model/usx/Note.js >> www/js/BibleApp.js
-cat ../Library/model/usx/Para.js >> www/js/BibleApp.js
-cat ../Library/model/usx/Text.js >> www/js/BibleApp.js
-cat ../Library/model/usx/USX.js >> www/js/BibleApp.js
-cat ../Library/model/usx/Verse.js >> www/js/BibleApp.js
-
 cat ../Library/util/DateTimeFormatter.js >> www/js/BibleApp.js
 cat ../Library/util/cordovaDeviceSettings.js >> www/js/BibleApp.js
-
-cat ../Library/xml/USXParser.js >> www/js/BibleApp.js
-cat ../Library/xml/XMLTokenizer.js >> www/js/BibleApp.js
 
 cordova emulate ios
