@@ -75,7 +75,6 @@ function AppViewController(versionCode, settingStorage) {
 }
 AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.database.tableContents);
-	//this.bibleCache = new BibleCache(this.database.codex); // I don't think this is used.
 	this.concordance = new Concordance(this.database.concordance);
 	var that = this;
 	this.tableContents.fill(function() {
@@ -545,14 +544,13 @@ QuestionsView.prototype.buildQuestionsView = function() {
 	root.setAttribute('id', 'questionsView');
 	var numQuestions = this.questions.size();
 	for (var i=0; i<numQuestions; i++) {
-		buildOneQuestion(root, i);
+		var item = this.questions.find(i);
+		buildOneQuestion(root, item);
 	}
 	includeInputBlock(root);
 	return(root);
 
-	function buildOneQuestion(parent, i) {
-		var item = that.questions.find(i);
-
+	function buildOneQuestion(parent, item) {
 		var questionBorder = that.dom.addNode(parent, 'div', 'questionBorder');
 		var wid = window.innerWidth * 0.74;
 		questionBorder.setAttribute('style', 'width:' + wid + 'px');
@@ -611,8 +609,10 @@ QuestionsView.prototype.buildQuestionsView = function() {
 					console.error('error at server', error);
 				} else {
 					console.log('file is written to disk and server');
-					that.viewRoot = that.buildQuestionsView();
-					that.rootNode.appendChild(that.viewRoot);
+					parentNode.removeChild(refTop);
+					parentNode.removeChild(inputTop);
+					parentNode.removeChild(quesBtn);
+					buildOneQuestion(parentNode, item);
 				}
 			});
 		});
