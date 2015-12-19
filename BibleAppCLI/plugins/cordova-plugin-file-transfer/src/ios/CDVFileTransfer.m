@@ -143,8 +143,8 @@ static CFIndex WriteDataToStream(NSData* data, CFWriteStreamRef stream)
     NSString* target = [command argumentAtIndex:0];
     NSString* server = [command argumentAtIndex:1];
     NSString* fileKey = [command argumentAtIndex:2 withDefault:@"file"];
-    NSString* fileName = [command argumentAtIndex:3 withDefault:@"no-filename"];
-    NSString* mimeType = [command argumentAtIndex:4 withDefault:nil];
+    NSString* fileName = [command argumentAtIndex:3 withDefault:@"image.jpg"];
+    NSString* mimeType = [command argumentAtIndex:4 withDefault:@"image/jpeg"];
     NSDictionary* options = [command argumentAtIndex:5 withDefault:nil];
     //    BOOL trustAllHosts = [[command argumentAtIndex:6 withDefault:[NSNumber numberWithBool:YES]] boolValue]; // allow self-signed certs
     BOOL chunkedMode = [[command argumentAtIndex:7 withDefault:[NSNumber numberWithBool:YES]] boolValue];
@@ -592,7 +592,9 @@ static CFIndex WriteDataToStream(NSData* data, CFWriteStreamRef stream)
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[self.filePlugin makeEntryForURL:self.targetURL]];
         } else {
             downloadResponse = [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:[command createFileTransferError:CONNECTION_ERR AndSource:source AndTarget:target AndHttpStatus:self.responseCode AndBody:downloadResponse]];
+            CDVFileTransferError errorCode = self.responseCode == 404 ? FILE_NOT_FOUND_ERR
+                : (self.responseCode == 304 ? NOT_MODIFIED : CONNECTION_ERR);
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:[command createFileTransferError:errorCode AndSource:source AndTarget:target AndHttpStatus:self.responseCode AndBody:downloadResponse]];
         }
     }
 

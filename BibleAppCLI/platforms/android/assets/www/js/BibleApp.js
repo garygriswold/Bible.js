@@ -1,21 +1,49 @@
 "use strict";
 /**
+* This class initializes the App with the correct Bible versions
+* and starts.
+*/
+function AppInitializer() {	
+}
+AppInitializer.prototype.begin = function() {
+    FastClick.attach(document.body);
+    var settingStorage = new SettingStorage();
+    
+    document.body.addEventListener(BIBLE.CHG_VERSION, function(event) {
+		console.log('CHANGE VERSION TO', event.detail.version);
+		settingStorage.setCurrentVersion(event.detail.version);
+		changeVersionHandler(event.detail.version);
+	});
+
+	settingStorage.getCurrentVersion(function(version) {
+		if (version == null) {
+			version = 'WEB.db1'; // Where does the defalt come from.  There should be one for each major language.
+			settingStorage.setCurrentVersion(version);
+		}
+		changeVersionHandler(version);
+	});
+		
+	function changeVersionHandler(version) {
+		var controller = new AppViewController(version, settingStorage);
+		controller.begin();
+	}
+};/**
 * BibleApp is a global object that contains pointers to all of the key elements of
 * a user's session with the App.
 */
-var BIBLE = { SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
+var BIBLE = { CHG_VERSION: 'bible-chg-version', 
+		SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
 		SHOW_QUESTIONS: 'bible-show-questions', // present questions page, create first
 		SHOW_HISTORY: 'bible-show-history', // present history tabs
 		HIDE_HISTORY: 'bible-hide-history', // hide history tabs
 		SHOW_PASSAGE: 'bible-show-passage', // show passage in codex view
-		LOOKUP: 'TBD-bible-lookup', // TBD
-		SEARCH_START: 'bible-search-start', // process user entered search string
+		SHOW_SETTINGS: 'bible-show-settings', // show settings view
 		CHG_HEADING: 'bible-chg-heading', // change title at top of page as result of user scrolling
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
 	};
-var SERVER_HOST = 'localhost'; // 72.2.112.243
+var SERVER_HOST = 'qa.shortsands.com';//'localhost';
 var SERVER_PORT = '8080';
 
 function bibleShowNoteClick(nodeId) {
@@ -37,28 +65,37 @@ function bibleHideNoteClick(nodeId) {
 	}
 }
 
-function AppViewController(versionCode) {
+function AppViewController(versionCode, settingStorage) {
 	this.versionCode = versionCode;
-	this.touch = new Hammer(document.getElementById('codexRoot'));
+	this.settingStorage = settingStorage;
 	this.database = new DeviceDatabase(versionCode);
+	for (var i=document.body.children.length -1; i>=0; i--) {
+		document.body.removeChild(document.body.children[i]);
+	}
 }
 AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.database.tableContents);
-	this.bibleCache = new BibleCache(this.database.codex);
 	this.concordance = new Concordance(this.database.concordance);
 	var that = this;
-	fillFromDatabase(function() {
+	this.tableContents.fill(function() {
 
 		console.log('loaded toc', that.tableContents.size());
 		
-		that.tableContentsView = new TableContentsView(that.tableContents);
-		that.lookup = new Lookup(that.tableContents);
 		that.header = new HeaderView(that.tableContents);
 		that.header.showView();
+		that.tableContentsView = new TableContentsView(that.tableContents);
+		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.database.history);
+		that.searchView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.header.barHite);
 		that.historyView = new HistoryView(that.database.history, that.tableContents);
+		that.historyView.rootNode.style.top = that.header.barHite + 'px';
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
+		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
+		that.settingsView = new SettingsView(that.settingStorage, that.database.verses);
+		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
+		that.touch = new Hammer(document.getElementById('codexRoot'));
+		setInitialFontSize();
 		Object.freeze(that);
 
 		switch(develop) {
@@ -74,6 +111,12 @@ AppViewController.prototype.begin = function(develop) {
 		case 'QuestionsView':
 			that.questionsView.showView();
 			break;
+		case 'SettingsView':
+			that.settingsView.showView();
+			break;
+		case 'VersionsView':
+			that.versionsView.showView();
+			break;
 		default:
 			that.database.history.lastItem(function(lastItem) {
 				if (lastItem instanceof IOError || lastItem === null || lastItem === undefined) {
@@ -84,29 +127,21 @@ AppViewController.prototype.begin = function(develop) {
 				}
 			});
 		}
-		document.body.addEventListener(BIBLE.SHOW_TOC, function(event) {
-			that.tableContentsView.showView();
-			that.header.showTitleField();
-			that.searchView.hideView();
-			that.historyView.hideView(function() {});
-			that.questionsView.hideView();
-			that.codexView.hideView();
+		/* Turn off user selection, and selection popup */
+		document.documentElement.style.webkitTouchCallout = 'none';
+        document.documentElement.style.webkitUserSelect = 'none';
+        
+		document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
+		document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+		document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
+
+		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
+			that.codexView.showFootnote(event.detail.id);
 		});
-		document.body.addEventListener(BIBLE.SHOW_SEARCH, function(event) {
-			that.searchView.showView();
-			that.header.showSearchField();
-			that.tableContentsView.hideView();
-			that.historyView.hideView(function() {});
-			that.questionsView.hideView();
-			that.codexView.hideView();
-		});
-		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, function(event) {
-			that.questionsView.showView();
-			that.header.showTitleField();
-			that.tableContentsView.hideView();
-			that.searchView.hideView();
-			that.historyView.hideView(function() {});
-			that.codexView.hideView();			
+		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
+			that.codexView.hideFootnote(event.detail.id);
 		});
 		var panRightEnabled = true;
 		that.touch.on("panright", function(event) {
@@ -126,104 +161,124 @@ AppViewController.prototype.begin = function(develop) {
 				});
 			}
 		});
-		document.body.addEventListener(BIBLE.SEARCH_START, function(event) {
-			console.log('SEARCH_START', event.detail);
-			if (! that.lookup.find(event.detail.search)) {
-				that.searchView.showView(event.detail.search);
-				that.header.showSearchField(event.detail.search);
-			}
-		});
-		document.body.addEventListener(BIBLE.SHOW_PASSAGE, function(event) {
-			console.log(JSON.stringify(event.detail));
-			that.codexView.showView(event.detail.id);
-			that.header.showTitleField();
-			that.tableContentsView.hideView();
-			that.searchView.hideView();
-			var historyItem = { timestamp: new Date(), reference: event.detail.id, 
-				source: event.type, search: event.detail.source };
-			that.database.history.replace(historyItem, function(count) {});
-		});
-		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
-			that.codexView.showFootnote(event.detail.id);
-		});
-		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
-			that.codexView.hideFootnote(event.detail.id);
-		});
 	});
 	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
 		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
 		that.header.setTitle(event.detail.reference);
 	});
-	function fillFromDatabase(callback) {
-		that.tableContents.fill(function() {
-			callback();
+	function setInitialFontSize() {
+		that.settingStorage.getFontSize(function(fontSize) {
+			if (fontSize == null) {
+				var minDim = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
+				var minDimIn = minDim * window.devicePixelRatio / 320;
+				var fontSize = Math.sqrt(minDimIn) * 10;
+			}
+			document.documentElement.style.fontSize = fontSize + 'pt';			
 		});
+	}
+	function showTocHandler(event) {
+		disableHandlers();
+		clearViews();		
+		that.tableContentsView.showView();
+		enableHandlersExcept(BIBLE.SHOW_TOC);
+	}
+	function showSearchHandler(event) {
+		disableHandlers();
+		clearViews();	
+		that.searchView.showView();
+		enableHandlersExcept(BIBLE.SHOW_SEARCH);
+	}		
+	function showPassageHandler(event) {
+		console.log('SHOW PASSAGE', event.detail.id, event.detail.search);
+		disableHandlers();
+		clearViews();
+		that.codexView.showView(event.detail.id);
+		enableHandlersExcept('NONE');
+		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
+			source: 'P', search: event.detail.source };
+		that.database.history.replace(historyItem, function(count) {});
+	}
+	function showQuestionsHandler(event) {
+		disableHandlers();
+		clearViews();	
+		that.questionsView.showView();
+		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
+	}	
+	function showSettingsHandler(event) {
+		disableHandlers();
+		clearViews();
+		that.settingsView.showView();
+		enableHandlersExcept(BIBLE.SHOW_SETTINGS);
+	}		
+	function clearViews() {
+		that.tableContentsView.hideView();
+		that.searchView.hideView();
+		that.codexView.hideView();
+		that.questionsView.hideView();
+		that.settingsView.hideView();
+	}
+	function disableHandlers() {
+		document.body.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);
+		document.body.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+		document.body.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
+	}
+	function enableHandlersExcept(name) {
+		if (name !== BIBLE.SHOW_TOC) document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
+		if (name !== BIBLE.SHOW_SEARCH) document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
 };
 /**
 * This class contains user interface features for the display of the Bible text
 */
-var CODEX_VIEW = { MAX: 10, SCROLL_TIMEOUT: 100, USE_DRAGGABLE: false };
+var CODEX_VIEW = {BEFORE: 0, AFTER: 1, MAX: 10, SCROLL_TIMEOUT: 100};
 
 function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.chaptersAdapter = chaptersAdapter;
 	this.tableContents = tableContents;
 	this.headerHeight = headerHeight;
-	this.rootNode = document.getElementById('codexRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'codexRoot';
+	document.body.appendChild(this.rootNode);
 	this.viewport = this.rootNode;
-	if (CODEX_VIEW.USE_DRAGGABLE) {
-		Draggable.create(this.rootNode, {type:'scrollTop', throwProps: true});
-		this.viewport = this.rootNode.firstChild; // Draggable adds a div wrapper		
-	}
+	this.viewport.style.top = headerHeight + 'px'; // Start view at bottom of header.
 	this.currentNodeId = null;
 	this.checkScrollID = null;
 	Object.seal(this);
 }
 CodexView.prototype.hideView = function() {
 	window.clearTimeout(this.checkScrollID);
-	for (var i=this.viewport.children.length -1; i>=0; i--) {
-		this.viewport.removeChild(this.viewport.children[i]);
+	if (this.viewport.children.length > 0) {
+		///this.scrollPosition = window.scrollY; // ISN'T THIS NEEDED?
+		for (var i=this.viewport.children.length -1; i>=0; i--) {
+			this.viewport.removeChild(this.viewport.children[i]);
+		}
 	}
 };
 CodexView.prototype.showView = function(nodeId) {
-	var chapterQueue = [];
+	document.body.style.backgroundColor = '#FFF';
 	var firstChapter = new Reference(nodeId);
-	firstChapter = this.tableContents.ensureChapter(firstChapter);
-	document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
-	var chapter = firstChapter;
-	for (var i=0; i<3 && chapter; i++) {
-		chapter = this.tableContents.priorChapter(chapter);
-		if (chapter) {
-			chapterQueue.unshift(chapter);
-		}
-	}
-	chapterQueue.push(firstChapter);
-	chapter = firstChapter;
-	for (i=0; i<3 && chapter; i++) {
-		chapter = this.tableContents.nextChapter(chapter);
-		if (chapter) {
-			chapterQueue.push(chapter);
-		}
-	}
+	var rowId = this.tableContents.rowId(firstChapter);
 	var that = this;
-	this.showChapters(chapterQueue, true, function(results) {
-		that.scrollTo(firstChapter);
+	this.showChapters([rowId, rowId + CODEX_VIEW.AFTER], true, function(err) {
+		if (firstChapter.verse) {
+			that.scrollTo(firstChapter);
+		}
 		that.currentNodeId = firstChapter.nodeId;
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));			
 	});
-
 	function onScrollHandler(event) {
-		var ref = identifyCurrentChapter();//expensive solution
-		if (ref && ref.nodeId !== that.currentNodeId) {
-			that.currentNodeId = ref.nodeId;
-			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));
-		}
 		//console.log('windowHeight=', window.innerHeight, '  scrollHeight=', document.body.scrollHeight, '  scrollY=', window.scrollY);
 		//console.log('left', (document.body.scrollHeight - window.scrollY));
 		if (document.body.scrollHeight - window.scrollY <= 2 * window.innerHeight) {
 			var lastNode = that.viewport.lastChild;
 			var lastChapter = new Reference(lastNode.id.substr(3));
-			var nextChapter = that.tableContents.nextChapter(lastChapter);
+			var nextChapter = that.tableContents.rowId(lastChapter) + 1;
 			if (nextChapter) {
 				that.showChapters([nextChapter], true, function() {
 					that.checkChapterQueueSize('top');
@@ -236,7 +291,7 @@ CodexView.prototype.showView = function(nodeId) {
 		else if (window.scrollY <= window.innerHeight) {
 			var firstNode = that.viewport.firstChild;
 			var firstChapter = new Reference(firstNode.id.substr(3));
-			var beforeChapter = that.tableContents.priorChapter(firstChapter);
+			var beforeChapter = that.tableContents.rowId(firstChapter) - 1;
 			if (beforeChapter) {
 				that.showChapters([beforeChapter], false, function() {
 					that.checkChapterQueueSize('bottom');
@@ -247,6 +302,11 @@ CodexView.prototype.showView = function(nodeId) {
 			}
 		} else {
 			that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+		}
+		var ref = identifyCurrentChapter();//expensive solution
+		if (ref && ref.nodeId !== that.currentNodeId) {
+			that.currentNodeId = ref.nodeId;
+			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));
 		}
 	}
 	function identifyCurrentChapter() {
@@ -263,25 +323,21 @@ CodexView.prototype.showView = function(nodeId) {
 };
 CodexView.prototype.showChapters = function(chapters, append, callback) {
 	var that = this;
-	var selectList = [];
-	for (var i=0; i<chapters.length; i++) {
-		selectList.push(chapters[i].nodeId);
-	}
-	this.chaptersAdapter.getChapters(selectList, function(results) {
+	this.chaptersAdapter.getChapters(chapters, function(results) {
 		if (results instanceof IOError) {
 			console.log((JSON.stringify(results)));
 			callback(results);
 		} else {
-			for (i=0; i<results.rows.length; i++) {
+			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
 				var reference = new Reference(row.reference);
 				reference.rootNode.innerHTML = row.html;
 				if (append) {
 					that.viewport.appendChild(reference.rootNode);
 				} else {
+					var scrollHeight = that.viewport.scrollHeight;
 					that.viewport.insertBefore(reference.rootNode, that.viewport.firstChild);
-					// Scroll by the offset of the element added at the top to stay in the same place
-					window.scrollBy(0, reference.rootNode.offsetHeight);
+					window.scrollBy(0, that.viewport.scrollHeight - scrollHeight);
 				}
 				console.log('added chapter', reference.nodeId);
 			}
@@ -293,11 +349,10 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 	if (this.viewport.children.length > CODEX_VIEW.MAX) {
 		switch(whichEnd) {
 			case 'top':
+				var scrollHeight = this.viewport.scrollHeight;
 				var discard = this.viewport.firstChild;
-				var offsetHeight = discard.offsetHeight;
 				this.viewport.removeChild(discard);
-				// Scroll the offset of the removed element to stay in the same place.
-				window.scrollBy(0, - offsetHeight);
+				window.scrollBy(0, this.viewport.scrollHeight - scrollHeight);
 				break;
 			case 'bottom':
 				discard = this.viewport.lastChild;
@@ -312,14 +367,9 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 CodexView.prototype.scrollTo = function(reference) {
 	console.log('scrollTo', reference.nodeId);
 	var verse = document.getElementById(reference.nodeId);
-	if (verse === null) {
-		// when null it is probably because verse num was out of range.
-		var nextChap = this.tableContents.nextChapter(reference);
-		verse = document.getElementById(nextChap.nodeId);
-	}
 	if (verse) {
 		var rect = verse.getBoundingClientRect();
-		window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - this.headerHeight);
+		window.scrollTo(0, rect.top + window.scrollY - this.headerHeight);
 	}
 };
 CodexView.prototype.showFootnote = function(noteId) {
@@ -349,7 +399,9 @@ function HistoryView(historyAdapter, tableContents) {
 	this.historyAdapter = historyAdapter;
 	this.tableContents = tableContents;
 	this.viewRoot = null;
-	this.rootNode = document.getElementById('historyRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'historyRoot';
+	document.body.appendChild(this.rootNode);
 	Object.seal(this);
 }
 HistoryView.prototype.showView = function(callback) {
@@ -386,7 +438,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 	var that = this;
 	var root = document.createElement('ul');
 	root.setAttribute('id', 'historyTabBar');
-	this.historyAdapter.selectAll(function(results) {
+	this.historyAdapter.selectPassages(function(results) {
 		if (results instanceof IOError) {
 			callback(root);
 		} else {
@@ -402,7 +454,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 				btn.textContent = generateReference(historyNodeId);
 				tab.appendChild(btn);
 				btn.addEventListener('click', function(event) {
-					console.log('btn is clicked ', btn.innerHTML);
+					console.log('btn clicked', this.id);
 					var nodeId = this.id.substr(3);
 					document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 					that.hideView();
@@ -432,25 +484,29 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 */
 function QuestionsView(questionsAdapter, versesAdapter, tableContents) {
 	this.tableContents = tableContents;
+	this.versesAdapter = versesAdapter;
 	this.questions = new Questions(questionsAdapter, versesAdapter, tableContents);
+	this.formatter = new DateTimeFormatter();
+	this.dom = new DOMBuilder();
 	this.viewRoot = null;
-	this.rootNode = document.getElementById('questionsRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'questionsRoot';
+	document.body.appendChild(this.rootNode);
 	this.referenceInput = null;
 	this.questionInput = null;
 	Object.seal(this);
 }
 QuestionsView.prototype.showView = function() {
 	var that = this;
-	this.hideView();
+	document.body.style.backgroundColor = '#FFF';
 	this.questions.fill(function(results) {
 		if (results instanceof IOError) {
-			console.log('QuestionView.showView');
+			console.log('Error: QuestionView.showView.fill');
 		} else {
 			if (results.length === 0) {
 				that.questions.createActs8Question(function(item) {
-					that.questions.items.push(item);
-					that.questions.insert(item, function(err) {
-						that.questions.update(item, function(err) {
+					that.questions.addQuestionLocal(item, function(error) {
+						that.questions.addAnswerLocal(item, function(error) {
 							presentView();
 						});
 					});
@@ -465,134 +521,124 @@ QuestionsView.prototype.showView = function() {
 		that.rootNode.appendChild(that.viewRoot);
 
 		that.questions.checkServer(function(results) {
-			//that.appendToQuestionView();
-			// when a question comes back from the server
-			// we are able to display input block.
+			for (var i=0; i<results.length; i++) {
+				var itemId = results[i];
+				var questionNode = document.getElementById('que' + itemId);
+				that.displayAnswer(questionNode);
+			}
 		});		
 	}
 };
 QuestionsView.prototype.hideView = function() {
-	for (var i=this.rootNode.children.length -1; i>=0; i--) {
-		this.rootNode.removeChild(this.rootNode.children[i]);
+	if (this.rootNode.children.length > 0) {
+		// why not save scroll position
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
+		this.viewRoot = null;
 	}
-	this.viewRoot = null;
 };
 QuestionsView.prototype.buildQuestionsView = function() {
 	var that = this;
-	var formatter = new DateTimeFormatter();
 	var root = document.createElement('div');
 	root.setAttribute('id', 'questionsView');
 	var numQuestions = this.questions.size();
 	for (var i=0; i<numQuestions; i++) {
-		buildOneQuestion(root, i);
+		var item = this.questions.find(i);
+		buildOneQuestion(root, item);
 	}
 	includeInputBlock(root);
 	return(root);
 
-	function buildOneQuestion(parent, i) {
-		var item = that.questions.find(i);
-
-		var aQuestion = document.createElement('div');
-		aQuestion.setAttribute('id', 'que' + i);
-		aQuestion.setAttribute('class', 'oneQuestion');
-		parent.appendChild(aQuestion);
-
-		var line1 = document.createElement('div');
-		line1.setAttribute('class', 'queTop');
-		aQuestion.appendChild(line1);
-
-		var reference = document.createElement('p');
-		reference.setAttribute('class', 'queRef');
-		reference.textContent = item.displayRef;
-		line1.appendChild(reference);
-
-		var questDate = document.createElement('p');
-		questDate.setAttribute('class', 'queDate');
-		questDate.textContent = formatter.localDatetime(item.askedDateTime);
-		line1.appendChild(questDate);
-
-		var question = document.createElement('p');
-		question.setAttribute('class', 'queText');
-		question.textContent = item.question;
-		aQuestion.appendChild(question);
+	function buildOneQuestion(parent, item) {
+		var questionBorder = that.dom.addNode(parent, 'div', 'questionBorder');
+		var wid = window.innerWidth * 0.74;
+		questionBorder.setAttribute('style', 'width:' + wid + 'px');
+		questionBorder.setAttribute('style', 'padding: 3px 3px');
+		
+		var aQuestion = that.dom.addNode(questionBorder, 'div', 'oneQuestion', null, 'que' + i);
+		aQuestion.setAttribute('style', 'width:' + (wid - 6) + 'px');
+		
+		var line1 = that.dom.addNode(aQuestion, 'div', 'queTop');
+		that.dom.addNode(line1, 'p', 'queRef', item.reference);
+		that.dom.addNode(line1, 'p', 'queDate', that.formatter.localDatetime(item.askedDateTime));
+		that.dom.addNode(aQuestion, 'p', 'queText', item.question);
 
 		if (i === numQuestions -1) {
-			displayAnswer(aQuestion);
+			that.displayAnswer(aQuestion);
 		} else {
 			aQuestion.addEventListener('click', displayAnswerOnRequest);	
 		}
 	}
-
 	function displayAnswerOnRequest(event) {
 		var selected = document.getElementById(this.id);
 		selected.removeEventListener('click', displayAnswerOnRequest);
-		displayAnswer(selected);
+		that.displayAnswer(selected);
 	}
-
-	function displayAnswer(selected) {
-		var idNum = selected.id.substr(3);
-		var item = that.questions.find(idNum);
-
-		var line = document.createElement('hr');
-		line.setAttribute('class', 'ansLine');
-		selected.appendChild(line);
-
-		var answerTop = document.createElement('div');
-		answerTop.setAttribute('class', 'ansTop');
-		selected.appendChild(answerTop);
-
-		var instructor = document.createElement('p');
-		instructor.setAttribute('class', 'ansInstructor');
-		instructor.textContent = item.instructor;
-		answerTop.appendChild(instructor);
-
-		var ansDate = document.createElement('p');
-		ansDate.setAttribute('class', 'ansDate');
-		ansDate.textContent = formatter.localDatetime(item.answerDateTime);
-		answerTop.appendChild(ansDate);
-
-		var answer = document.createElement('p');
-		answer.setAttribute('class', 'ansText');
-		answer.textContent = item.answer;
-		selected.appendChild(answer);
-	}
-
 	function includeInputBlock(parentNode) {
-		var inputTop = document.createElement('div');
-		inputTop.setAttribute('id', 'quesInput');
-		parentNode.appendChild(inputTop);
+		var refTop = that.dom.addNode(parentNode, 'div', 'questionBorder', null, 'quesInput');
+		var wid = window.innerWidth * 0.74;
+		refTop.setAttribute('style', 'width:' + wid + 'px');
+		refTop.setAttribute('style', 'padding: 5px 5px');
 
-		that.referenceInput = document.createElement('input');
-		that.referenceInput.setAttribute('id', 'inputRef');
+		that.referenceInput = that.dom.addNode(refTop, 'input', 'questionField', null, 'inputRef');
 		that.referenceInput.setAttribute('type', 'text');
-		that.referenceInput.setAttribute('value', 'reference goes here');// How does reference get here
-		inputTop.appendChild(that.referenceInput);
+		that.referenceInput.setAttribute('style', 'width:' + (wid - 10) + 'px');
+		that.referenceInput.setAttribute('placeholder', 'Reference');
 
-		that.questionInput = document.createElement('textarea');
-		that.questionInput.setAttribute('id', 'inputText');
-		that.questionInput.textContent = 'Matt 7:7 goes here';//Matt 7:7 text goes here
+		var inputTop = that.dom.addNode(parentNode, 'div', 'questionBorder');
+		inputTop.setAttribute('style', 'width:' + wid + 'px');
+		inputTop.setAttribute('style', 'padding: 5px 5px');		
+		
+		that.questionInput = that.dom.addNode(inputTop, 'textarea', 'questionField', null, 'inputText');
+		that.questionInput.setAttribute('style', 'width:' + (wid - 10) + 'px');
 		that.questionInput.setAttribute('rows', 10);
-		inputTop.appendChild(that.questionInput);
 
-		var quesBtn = document.createElement('button');
-		quesBtn.setAttribute('id', 'inputBtn');
-		inputTop.appendChild(quesBtn);
-		quesBtn.appendChild(drawSendIcon(50, '#777777'));
+		var quesBtn = that.dom.addNode(parentNode, 'button', null, null, 'inputBtn');
+		quesBtn.appendChild(drawSendIcon(50, '#F7F7BB'));
 
 		quesBtn.addEventListener('click', function(event) {
 			console.log('submit button clicked');
 
 			var item = new QuestionItem();
-			// set book, chapter, verse by position of page
-			item.displayRef = that.referenceInput.textContent;
-			item.question = that.questionInput.text;
+			item.reference = that.referenceInput.value;
+			item.question = that.questionInput.value;
 
-			that.questions.addItem(item, function(result) {
-				console.log('file is written to disk and server');
+			that.questions.addQuestion(item, function(error) {
+				if (error) {
+					console.error('error at server', error);
+				} else {
+					console.log('file is written to disk and server');
+					parentNode.removeChild(refTop);
+					parentNode.removeChild(inputTop);
+					parentNode.removeChild(quesBtn);
+					buildOneQuestion(parentNode, item);
+				}
 			});
 		});
+		that.versesAdapter.getVerses(['MAT:7:7'], function(results) {
+			if (results instanceof IOError) {
+				console.log('Error while getting MAT:7:7');
+			} else {
+				if (results.rows.length > 0) {
+					var row = results.rows.item(0);
+					that.questionInput.setAttribute('placeholder', row.html);
+				}	
+			}
+		});
 	}
-};/**
+};
+QuestionsView.prototype.displayAnswer = function(parent) {
+	var idNum = parent.id.substr(3);
+	var item = this.questions.find(idNum);
+
+	this.dom.addNode(parent, 'hr', 'ansLine');
+	var answerTop = this.dom.addNode(parent, 'div', 'ansTop');
+	this.dom.addNode(answerTop, 'p', 'ansInstructor', item.instructor);
+	this.dom.addNode(answerTop, 'p', 'ansDate', this.formatter.localDatetime(item.answerDateTime));
+	this.dom.addNode(parent, 'p', 'ansText', item.answer);
+};
+/**
 * This class provides the User Interface part of the concordance and search capabilities of the app.
 * It does a lazy create of all of the objects needed.
 * Each presentation of a searchView presents its last state and last found results.
@@ -602,23 +648,26 @@ function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	this.concordance = concordance;
 	this.versesAdapter = versesAdapter;
 	this.historyAdapter = historyAdapter;
-	this.query = '';
+	this.query = null;
+	this.lookup = new Lookup(toc);
 	this.words = [];
 	this.bookList = {};
 	this.viewRoot = null;
-	this.rootNode = document.getElementById('searchRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'searchRoot';
+	document.body.appendChild(this.rootNode);
 	this.scrollPosition = 0;
+	this.searchField = null;
 	Object.seal(this);
 }
-SearchView.prototype.showView = function(query) {
-	this.hideView();
-	if (query) {
-		console.log('Create new search page');
-		this.showSearch(query);
-		this.rootNode.appendChild(this.viewRoot);
-		window.scrollTo(10, 0);
-	} else if (this.viewRoot) {
-		console.log('Reattach existing search page');
+SearchView.prototype.showView = function() {
+	document.body.style.backgroundColor = '#FFF';
+	if (this.searchField === null) {
+		this.searchField = this.showSearchField();
+	}
+	this.rootNode.appendChild(this.searchField);
+	 
+	if (this.viewRoot) {
 		this.rootNode.appendChild(this.viewRoot);
 		window.scrollTo(10, this.scrollPosition);
 	} else {
@@ -626,11 +675,9 @@ SearchView.prototype.showView = function(query) {
 		this.historyAdapter.lastConcordanceSearch(function(lastSearch) {
 			if (lastSearch instanceof IOError || lastSearch === null) {
 				console.log('Nothing to search for, display blank page');
-				that.showSearch('');
-				that.rootNode.appendChild(that.viewRoot);
-				window.scrollTo(10, 0);	
 			} else {
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: lastSearch }}));	
+				that.searchField.children[0].value = lastSearch;
+				that.startSearch(lastSearch);
 			}
 		});
 	}
@@ -638,13 +685,47 @@ SearchView.prototype.showView = function(query) {
 SearchView.prototype.hideView = function() {
 	if (this.rootNode.children.length > 0) {
 		this.scrollPosition = window.scrollY;
-		this.rootNode.removeChild(this.viewRoot);
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
 	}
+};
+SearchView.prototype.startSearch = function(query) {
+	this.query = query;
+	console.log('Create new search page');
+	if (! this.lookup.find(query)) {
+		this.showSearch(query);
+		for (var i=this.rootNode.children.length -1; i>=1; i--) { // remove viewRoot if present
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
+		this.rootNode.appendChild(this.viewRoot);
+		window.scrollTo(10, 0);
+	}
+};
+SearchView.prototype.showSearchField = function() {
+	var searchField = document.createElement('div');
+	searchField.setAttribute('class', 'searchBorder');
+	var wid = window.innerWidth * 0.75;
+	searchField.setAttribute('style', 'width:' + wid + 'px');
+	searchField.setAttribute('style', 'padding:3px 5px');
+	
+	var inputField = document.createElement('input');
+	inputField.setAttribute('type', 'text');
+	inputField.setAttribute('class', 'searchField');
+	inputField.setAttribute('style', 'width:' + (wid - 10) + 'px');
+	
+	searchField.appendChild(inputField);
+	var that = this;
+	inputField.addEventListener('keyup', function(event) {
+		if (event.keyCode === 13) {
+			that.startSearch(this.value);
+		}
+	});
+	return(searchField);
 };
 SearchView.prototype.showSearch = function(query) {
 	var that = this;
 	this.viewRoot = document.createElement('div');
-	this.query = query;
 	this.words = query.split(' ');
 	this.concordance.search(this.words, function(refList) {
 		if (refList instanceof IOError) {
@@ -722,6 +803,7 @@ SearchView.prototype.appendBook = function(bookCode) {
 SearchView.prototype.appendReference = function(bookNode, reference, verseText) {
 	var that = this;
 	var entryNode = document.createElement('p');
+	entryNode.setAttribute('id', 'con' + reference.nodeId);
 	bookNode.appendChild(entryNode);
 	var refNode = document.createElement('span');
 	refNode.setAttribute('class', 'conRef');
@@ -730,14 +812,12 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText) 
 	entryNode.appendChild(document.createElement('br'));
 
 	var verseNode = document.createElement('span');
-	verseNode.setAttribute('id', 'con' + reference.nodeId);
 	verseNode.setAttribute('class', 'conVerse');
 	verseNode.innerHTML = styleSearchWords(verseText);
 	entryNode.appendChild(verseNode);
-	verseNode.addEventListener('click', function(event) {
+	entryNode.addEventListener('click', function(event) {
 		var nodeId = this.id.substr(3);
 		console.log('open chapter', nodeId);
-		that.hideView();
 		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
 	});
 
@@ -797,17 +877,21 @@ var STATUS_BAR_HEIGHT = 14;
 
 function HeaderView(tableContents) {
 	this.statusBarInHeader = (deviceSettings.platform() === 'ios') ? true : false;
+	//this.statusBarInHeader = false;
 
 	this.hite = HEADER_BUTTON_HEIGHT;
 	this.barHite = (this.statusBarInHeader) ? HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT : HEADER_BAR_HEIGHT;
+	this.cellTopPadding = (this.statusBarInHeader) ? 'padding-top:' + STATUS_BAR_HEIGHT + 'px' : 'padding-top:0px';
 	this.tableContents = tableContents;
 	this.backgroundCanvas = null;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.currentReference = null;
-	this.searchField = null;
-	this.rootNode = document.getElementById('statusRoot');
-	this.labelCell = document.getElementById('labelCell');
+	this.rootNode = document.createElement('table');
+	this.rootNode.id = 'statusRoot';
+	document.body.appendChild(this.rootNode);
+	this.labelCell = document.createElement('td');
+	this.labelCell.id = 'labelCell'
 	Object.seal(this);
 }
 HeaderView.prototype.showView = function() {
@@ -817,23 +901,26 @@ HeaderView.prototype.showView = function() {
 	paintBackground(this.backgroundCanvas, this.hite);
 	this.rootNode.appendChild(this.backgroundCanvas);
 
-	setupTocButton(this.hite, '#F7F7BB');
-	setupQuestionsButton(this.hite, '#F7F7BB');
-	setupSearchButton(this.hite, '#F7F7BB');
+	var menuWidth = setupIconButton('tocCell', drawTOCIcon, this.hite, BIBLE.SHOW_TOC);
+	var serhWidth = setupIconButton('searchCell', drawSearchIcon, this.hite, BIBLE.SHOW_SEARCH);
+	this.rootNode.appendChild(this.labelCell);
+	var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
+	var settWidth = setupIconButton('settingsCell', drawSettingsIcon, this.hite, BIBLE.SHOW_SETTINGS);
+	var avalWidth = window.innerWidth - (menuWidth + serhWidth + quesWidth + settWidth + (6 * 4));// six is fudge factor
 
 	this.titleCanvas = document.createElement('canvas');
-	drawTitleField(this.titleCanvas, this.hite);
+	drawTitleField(this.titleCanvas, this.hite, avalWidth);
 	this.labelCell.appendChild(this.titleCanvas);
 
 	window.addEventListener('resize', function(event) {
 		paintBackground(that.backgroundCanvas, that.hite);
-		drawTitleField(that.titleCanvas, that.hite);
+		drawTitleField(that.titleCanvas, that.hite, avalWidth);
 	});
 
 	function paintBackground(canvas, hite) {
     	canvas.setAttribute('height', that.barHite);
     	canvas.setAttribute('width', window.innerWidth);// outerWidth is zero on iOS
-    	canvas.setAttribute('style', 'position: absolute; top: 0; z-index: -1');
+    	canvas.setAttribute('style', 'position: absolute; top:0; left:0; z-index: -1');
       	var graphics = canvas.getContext('2d');
       	graphics.rect(0, 0, canvas.width, canvas.height);
 
@@ -848,74 +935,38 @@ HeaderView.prototype.showView = function() {
       	graphics.fillStyle = gradient;
       	graphics.fill();
 	}
-	function setupTocButton(hite, color) {
-		var canvas = drawTOCIcon(hite, color);
-		if (that.statusBarInHeader) {
-			canvas.setAttribute('style', 'position: fixed; top: 16px; left: 0');
-		} else {
-			canvas.setAttribute('style', 'position: fixed; top: 4px; left: 0');
-		}
-		document.getElementById('tocCell').appendChild(canvas);
-
-		canvas.addEventListener('click', function(event) {
-			event.stopImmediatePropagation();
-			console.log('toc button is clicked');
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_TOC));
-		});
-	}
-	function drawTitleField(canvas, hite) {
+	function drawTitleField(canvas, hite, avalWidth) {
 		canvas.setAttribute('id', 'titleCanvas');
 		canvas.setAttribute('height', hite);
-		var titleWidth = window.innerWidth - hite * 3.5;
-		canvas.setAttribute('width', titleWidth);
-		if (that.statusBarInHeader) {
-			canvas.setAttribute('style', 'position: fixed; top: 16px; left:' + hite * 1.1 + 'px');			
-		} else {
-			canvas.setAttribute('style', 'position: fixed; top: 4px; left:' + hite * 1.1 + 'px');
-		}
+		canvas.setAttribute('width', avalWidth);
+		canvas.setAttribute('style', that.cellTopPadding);
 		that.titleGraphics = canvas.getContext('2d');
 		that.titleGraphics.fillStyle = '#000000';
-		that.titleGraphics.font = '24pt sans-serif';
+		that.titleGraphics.font = '2.0rem sans-serif';
 		that.titleGraphics.textAlign = 'center';
 		that.titleGraphics.textBaseline = 'middle';
-		that.titleGraphics.borderStyle = 'solid';
 		that.drawTitle();
 
 		that.titleCanvas.addEventListener('click', function(event) {
+			event.stopImmediatePropagation();
 			if (that.currentReference) {
 				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference.nodeId }}));
 			}
 		});
 	}
-	function setupSearchButton(hite, color) {
-		var canvas = drawSearchIcon(hite, color);
-		if (that.statusBarInHeader) {
-			canvas.setAttribute('style', 'position: fixed; top: 16px; right: 0; border: none');			
-		} else {
-			canvas.setAttribute('style', 'position: fixed; top: 4px; right: 0; border: none');
-		}
-		document.getElementById('searchCell').appendChild(canvas);
-
+	function setupIconButton(parentCell, canvasFunction, hite, eventType) {
+		var canvas = canvasFunction(hite, '#F7F7BB');
+		canvas.setAttribute('style', that.cellTopPadding);
+		var parent = document.createElement('td');
+		parent.id = parentCell;
+		that.rootNode.appendChild(parent);
+		parent.appendChild(canvas);
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
-			console.log('search button is clicked');
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_SEARCH));
+			console.log('clicked', parentCell);
+			document.body.dispatchEvent(new CustomEvent(eventType));
 		});
-	}
-	function setupQuestionsButton(hite, color) {
-		var canvas = drawQuestionsIcon(hite, color);
-		if (that.statusBarInHeader) {
-			canvas.setAttribute('style', 'position: fixed; top: 16px; border: none; right: ' + hite * 1.14 + 'px');
-		} else {
-			canvas.setAttribute('style', 'position: fixed; top: 4px; border: none; right: ' + hite * 1.14 + 'px');
-		}
-		document.getElementById('questionsCell').appendChild(canvas);
-
-		canvas.addEventListener('click', function(event) {
-			event.stopImmediatePropagation();
-			console.log('questions button is clicked');
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_QUESTIONS));
-		});
+		return(canvas.width);
 	}
 };
 HeaderView.prototype.setTitle = function(reference) {
@@ -930,55 +981,21 @@ HeaderView.prototype.drawTitle = function() {
 		this.titleGraphics.fillText(text, this.titleCanvas.width / 2, this.hite / 2, this.titleCanvas.width);
 	}
 };
-HeaderView.prototype.showSearchField = function(query) {
-	if (! this.searchField) {
-		this.searchField = document.createElement('input');
-		this.searchField.setAttribute('type', 'text');
-		this.searchField.setAttribute('class', 'searchField');
-		this.searchField.setAttribute('value', query || '');
-		var style = [ 'position:fixed;' ];
-		style.push('left:' + (this.hite * 1.1) + 'px');
-		style.push('width:' + (window.innerWidth - this.hite * 4.0) + 'px');
-		if (this.statusBarInHeader) {
-			style.push('height:' + (HEADER_BAR_HEIGHT * 0.5) + 'px');
-			style.push('top:' + (HEADER_BAR_HEIGHT * 0.15 + STATUS_BAR_HEIGHT) + 'px');
-		} else {
-			style.push('height:' + (HEADER_BAR_HEIGHT * 0.65) + 'px');
-			style.push('top:' + (HEADER_BAR_HEIGHT * 0.15) + 'px');
-		}
-		this.searchField.setAttribute('style', style.join(';'));
 
-		var that = this;
-		this.searchField.addEventListener('keyup', function(event) {
-			if (event.keyCode === 13) {
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SEARCH_START, { detail: { search: that.searchField.value }}));
-
-			}
-		});
-	}
-	this.changeLabelCell(this.searchField);
-};
-HeaderView.prototype.showTitleField = function() {
-	this.changeLabelCell(this.titleCanvas);
-};
-HeaderView.prototype.changeLabelCell = function(node) {
-	for (var i=this.labelCell.children.length -1; i>=0; i--) {
-		this.labelCell.removeChild(this.labelCell.children[i]);
-	}
-	this.labelCell.appendChild(node);
-};
 /**
 * This class presents the table of contents, and responds to user actions.
 */
 function TableContentsView(toc) {
 	this.toc = toc;
 	this.root = null;
-	this.rootNode = document.getElementById('tocRoot');
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'tocRoot';
+	document.body.appendChild(this.rootNode);
 	this.scrollPosition = 0;
-	var that = this;
 	Object.seal(this);
 }
 TableContentsView.prototype.showView = function() {
+	document.body.style.backgroundColor = '#FFF';
 	if (! this.root) {
 		this.root = this.buildTocBookList();
 	}
@@ -990,7 +1007,9 @@ TableContentsView.prototype.showView = function() {
 TableContentsView.prototype.hideView = function() {
 	if (this.rootNode.children.length > 0) {
 		this.scrollPosition = window.scrollY; // save scroll position till next use.
-		this.rootNode.removeChild(this.root);
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
 	}
 };
 TableContentsView.prototype.buildTocBookList = function() {
@@ -1065,11 +1084,292 @@ TableContentsView.prototype.removeAllChapters = function() {
 };
 TableContentsView.prototype.openChapter = function(nodeId) {
 	console.log('open chapter', nodeId);
-	this.hideView();
 	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 };
 
 
+/**
+* This class is the UI for the controls in the settings page.
+* It also uses the VersionsView to display versions on the settings page.
+*/
+function SettingsView(settingStorage, versesAdapter) {
+	this.root = null;
+	this.settingStorage = settingStorage
+	this.versesAdapter = versesAdapter;
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'settingRoot';
+	document.body.appendChild(this.rootNode);
+	this.dom = new DOMBuilder();
+	this.versionsView = new VersionsView(this.settingStorage);
+	Object.seal(this);
+}
+SettingsView.prototype.showView = function() {
+	document.body.style.backgroundColor = '#ABC';
+	if (! this.root) {
+		this.root = this.buildSettingsView();
+	}
+	if (this.rootNode.children.length < 1) {
+		this.rootNode.appendChild(this.root);
+	}
+	this.startControls();
+	this.versionsView.showView();
+};
+SettingsView.prototype.hideView = function() {
+	if (this.rootNode.children.length > 0) {
+		// should I save scroll position here
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
+	}	
+};
+SettingsView.prototype.buildSettingsView = function() {
+	var that = this;
+	var table = document.createElement('table');
+	table.id = 'settingsTable';
+	
+	addRowSpace(table);
+	var sizeRow = this.dom.addNode(table, 'tr');
+	var sizeCell = this.dom.addNode(sizeRow, 'td', null, null, 'fontSizeControl');
+	var sizeSlider = this.dom.addNode(sizeCell, 'div', null, null, 'fontSizeSlider');
+	var sizeThumb = this.dom.addNode(sizeCell, 'div', null, null, 'fontSizeThumb');
+	
+	addRowSpace(table);
+	var textRow = this.dom.addNode(table, 'tr');
+	var textCell = this.dom.addNode(textRow, 'td', null, null, 'sampleText');
+	
+	/**
+	* This is not used because it had a negative impact on codex performance, but keep as an
+	* example toggle switch.*/
+	/* This is kept in as a hack, because the thumb on fontSizeControl does not start in the correct
+	* position, unless this code is here. */
+	addRowSpace(table);
+	var colorRow = this.dom.addNode(table, 'tr');
+	var blackCell = this.dom.addNode(colorRow, 'td', 'tableLeftCol', null, 'blackBackground');
+	var colorCtrlCell = this.dom.addNode(colorRow, 'td', 'tableCtrlCol');
+	var colorSlider = this.dom.addNode(colorCtrlCell, 'div', null, null, 'fontColorSlider');
+	var colorThumb = this.dom.addNode(colorSlider, 'div', null, null, 'fontColorThumb');
+	var whiteCell = this.dom.addNode(colorRow, 'td', 'tableRightCol', null, 'whiteBackground');
+	
+	addRowSpace(table);
+	addJohn316(textCell);
+	return(table);
+	
+	function addRowSpace(table) {
+		var row = table.insertRow();
+		var cell = row.insertCell();
+		cell.setAttribute('class', 'rowSpace');
+	}
+	function addJohn316(verseNode) {
+		that.versesAdapter.getVerses(['JHN:3:16'], function(results) {
+			if (results instanceof IOError) {
+				console.log('Error while getting JHN:3:16');
+			} else {
+				if (results.rows.length > 0) {
+					var row = results.rows.item(0);
+					verseNode.textContent = row.html;
+				}	
+			}
+		});
+
+	}
+};
+SettingsView.prototype.startControls = function() {
+	var that = this;
+	var docFontSize = document.documentElement.style.fontSize;
+	startFontSizeControl(docFontSize, 10, 36);
+	
+	function startFontSizeControl(fontSizePt, ptMin, ptMax) {
+		var fontSize = parseFloat(fontSizePt);
+	    var sampleNode = document.getElementById('sampleText');
+    	var draggable = Draggable.create('#fontSizeThumb', {bounds:'#fontSizeSlider', minimumMovement:0,
+	    	lockAxis:true, 
+	    	onDrag:function() { resizeText(this.x); },
+	    	onDragEnd:function() { finishResize(this.x); }
+	    });
+    	var drag0 = draggable[0];
+    	var ratio = (ptMax - ptMin) / (drag0.maxX - drag0.minX);
+    	var startX = (fontSize - ptMin) / ratio + drag0.minX;
+    	TweenMax.set('#fontSizeThumb', {x:startX});
+    	resizeText(startX);
+
+		function resizeText(x) {
+	    	var size = (x - drag0.minX) * ratio + ptMin;
+			sampleNode.style.fontSize = size + 'pt';
+    	}
+    	function finishResize(x) {
+	    	var size = (x - drag0.minX) * ratio + ptMin;
+	    	document.documentElement.style.fontSize = size + 'pt';
+			that.settingStorage.setFontSize(size);
+    	}
+    }
+    /* This is not used, changing colors had a negative impact on codexView performance. Keep as a toggle switch example.
+	function startFontColorControl(state) {
+	    var onOffState = state;
+	    var sliderNode = document.getElementById('fontColorSlider');
+	    var sampleNode = document.getElementById('sampleText');
+    	var draggable = Draggable.create('#fontColorThumb', {type:'x', bounds:sliderNode, throwProps:true, snap:function(v) {
+	    		var snap = (v - this.minX < (this.maxX - this.minX) / 2) ? this.minX : this.maxX;
+	    		var newState = (snap > this.minX);
+	    		if (newState != onOffState) {
+		    		onOffState = newState;
+		    		setColors(onOffState);
+	    		}
+	    		return(snap);
+    		}
+    	});
+    	var startX = (onOffState) ? draggable[0].maxX : draggable[0].minX;
+    	TweenMax.set('#fontColorThumb', {x:startX});
+    	setColors(onOffState);
+    	
+    	function setColors(onOffState) {
+	    	var color = (onOffState) ? '#00FF00' : '#FFFFFF';
+			TweenMax.to(sliderNode, 0.4, {backgroundColor: color});
+			sampleNode.style.backgroundColor = (onOffState) ? '#000000' : '#FFFFFF';
+			sampleNode.style.color = (onOffState) ? '#FFFFFF' : '#000000';
+    	}
+    }*/
+};
+
+
+/**
+* This class presents the list of available versions to download
+*/
+var FLAG_PATH = 'licensed/icondrawer/flags/64/';
+
+function VersionsView(settingStorage) {
+	this.settingStorage = settingStorage;
+	this.database = new VersionsAdapter()
+	this.root = null;
+	this.rootNode = document.getElementById('settingRoot');
+	this.dom = new DOMBuilder();
+	this.scrollPosition = 0;
+	Object.seal(this);
+}
+VersionsView.prototype.showView = function() {
+	if (! this.root) {
+		this.buildCountriesList();
+	} 
+	else if (this.rootNode.children.length < 4) {
+		this.rootNode.appendChild(this.root);
+		window.scrollTo(10, this.scrollPosition);// move to settings view?
+	}
+};
+VersionsView.prototype.buildCountriesList = function() {
+	var that = this;
+	var root = document.createElement('div');
+	this.database.selectCountries(function(results) {
+		if (! (results instanceof IOError)) {
+			for (var i=0; i<results.length; i++) {
+				var row = results[i];
+				var groupNode = that.dom.addNode(root, 'div');
+				var countryNode = that.dom.addNode(groupNode, 'div', 'ctry', null, 'cty' + row.countryCode);
+				countryNode.setAttribute('data-lang', row.primLanguage);
+				countryNode.addEventListener('click', countryClickHandler);
+				
+				var flagNode = that.dom.addNode(countryNode, 'img');
+				flagNode.setAttribute('src', FLAG_PATH + row.countryCode.toLowerCase() + '.png');
+				that.dom.addNode(countryNode, 'span', null, row.localName);
+			}
+		}
+		that.rootNode.appendChild(root);
+		that.root = root;
+	});
+	
+	function countryClickHandler(event) {
+		this.removeEventListener('click', countryClickHandler);
+		that.buildVersionList(this);
+	}
+};
+VersionsView.prototype.buildVersionList = function(countryNode) {
+	var that = this;
+	var parent = countryNode.parentElement;
+	var countryCode = countryNode.id.substr(3);
+	var primLanguage = countryNode.getAttribute('data-lang');
+	this.settingStorage.getVersions();
+	this.settingStorage.getCurrentVersion(function(currentVersion) {
+		that.database.selectVersions(countryCode, primLanguage, function(results) {
+			if (! (results instanceof IOError)) {
+				for (var i=0; i<results.length; i++) {
+					var row = results[i];
+					var versionNode = that.dom.addNode(parent, 'table', 'vers');
+					var rowNode = that.dom.addNode(versionNode, 'tr');
+					var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
+					that.dom.addNode(leftNode, 'p', 'langName', row.localLanguageName);
+					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
+					that.dom.addNode(leftNode, 'span', 'versName', versionName + ',  ');
+					that.dom.addNode(leftNode, 'span', 'copy', copyright(row));
+					
+					var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
+					var btnNode = that.dom.addNode(rightNode, 'button', 'versIcon');
+					
+					var iconNode = that.dom.addNode(btnNode, 'img');
+					iconNode.setAttribute('id', 'ver' + row.versionCode);
+					iconNode.setAttribute('data-id', 'fil' + row.filename);
+					if (row.filename === currentVersion) {
+						iconNode.setAttribute('src', 'licensed/sebastiano/check.png');
+					} else if (that.settingStorage.hasVersion(row.versionCode)) {
+						iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
+						iconNode.addEventListener('click',  selectVersionHandler);
+					} else {
+						iconNode.setAttribute('src', 'licensed/sebastiano/cloud-download.png');
+						iconNode.addEventListener('click', downloadVersionHandler);
+					}
+				}
+			}
+		});
+	});
+	
+	function selectVersionHandler(event) {
+		var filename = this.getAttribute('data-id').substr(3);
+		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: filename }}));
+	}
+	function downloadVersionHandler(event) {
+		this.removeEventListener('click', downloadVersionHandler);
+		var gsPreloader = new GSPreloader(gsPreloaderOptions);
+		gsPreloader.active(true);
+		var iconNode = this;
+		var versionCode = iconNode.id.substr(3);
+		var versionFile = iconNode.getAttribute('data-id').substr(3);
+		
+		var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT);
+		downloader.download(versionFile, function(results) {
+			gsPreloader.active(false);
+			if (results instanceof IOError) {
+				// download did not succeed.  What error do I show?
+			} else {
+				that.settingStorage.setVersion(versionCode, versionFile);
+				iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
+				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
+			}
+		});
+	}
+	function copyright(row) {
+		if (row.copyrightYear === 'PUBLIC') {
+			return(row.ownerName + ', Public Domain');
+		} else {
+			var result = String.fromCharCode('0xA9');
+			if (row.copyrightYear) result += String.fromCharCode('0xA0') + row.copyrightYear;
+			if (row.ownerName) result += ', ' + row.ownerName;
+			return(result);
+		}
+	}
+};
+
+/**
+* This is a helper class to remove the repetitive operations needed
+* to dynamically create DOM objects.
+*/
+function DOMBuilder() {
+	//this.rootNode = root;
+}
+DOMBuilder.prototype.addNode = function(parent, type, clas, content, id) {
+	var node = document.createElement(type);
+	if (id) node.setAttribute('id', id);
+	if (clas) node.setAttribute('class', clas);
+	if (content) node.textContent = content;
+	parent.appendChild(node);
+	return(node);
+};
 /**
 * This function draws and icon that is used as a questions button
 * on the StatusBar.
@@ -1242,28 +1542,225 @@ function drawTOCIcon(hite, color) {
 	graphics.stroke();
 
 	return(canvas);
-}/**
+}//Pure JS, completely customizable preloader from GreenSock.
+//Once you create an instance like var preloader = new GSPreloader(), call preloader.active(true) to open it, preloader.active(false) to close it, and preloader.active() to get the current status. Only requires TweenLite and CSSPlugin (http://www.greensock.com/gsap/)
+// Modified so that it must be instantiated preloader = new GSPreloader(gsPreloaderOptions);
+var gsPreloaderOptions = {
+  radius:42, 
+  dotSize:15, 
+  dotCount:10, 
+  colors:["#61AC27","#555","purple","#FF6600"], //have as many or as few colors as you want.
+  boxOpacity:0.2,
+  boxBorder:"1px solid #AAA",
+  animationOffset: 1.8, //jump 1.8 seconds into the animation for a more active part of the spinning initially (just looks a bit better in my opinion)
+}
+
+//this is the whole preloader class/function
+function GSPreloader(options) {
+  options = options || {};
+  var parent = options.parent || document.body,
+      element = this.element = document.createElement("div"),
+      radius = options.radius || 42,
+      dotSize = options.dotSize || 15,
+      animationOffset = options.animationOffset || 1.8, //jumps to a more active part of the animation initially (just looks cooler especially when the preloader isn't displayed for very long)
+      createDot = function(rotation) {
+          var dot = document.createElement("div");
+        element.appendChild(dot);
+        TweenLite.set(dot, {width:dotSize, height:dotSize, transformOrigin:(-radius + "px 0px"), x: radius, backgroundColor:colors[colors.length-1], borderRadius:"50%", force3D:true, position:"absolute", rotation:rotation});
+        dot.className = options.dotClass || "preloader-dot";
+        return dot; 
+      }, 
+      i = options.dotCount || 10,
+      rotationIncrement = 360 / i,
+      colors = options.colors || ["#61AC27","black"],
+      animation = new TimelineLite({paused:true}),
+      dots = [],
+      isActive = false,
+      box = document.createElement("div"),
+      tl, dot, closingAnimation, j;
+  colors.push(colors.shift());
+  
+  //setup background box
+  TweenLite.set(box, {width: radius * 2 + 70, height: radius * 2 + 70, borderRadius:"14px", backgroundColor:options.boxColor || "white", border: options.boxBorder || "1px solid #AAA", position:"absolute", xPercent:-50, yPercent:-50, opacity:((options.boxOpacity != null) ? options.boxOpacity : 0.3)});
+  box.className = options.boxClass || "preloader-box";
+  element.appendChild(box);
+  
+  parent.appendChild(element);
+  TweenLite.set(element, {position:"fixed", top:"45%", left:"50%", perspective:600, overflow:"visible", zIndex:2000});
+  animation.from(box, 0.1, {opacity:0, scale:0.1, ease:Power1.easeOut}, animationOffset);
+  while (--i > -1) {
+    dot = createDot(i * rotationIncrement);
+    dots.unshift(dot);
+    animation.from(dot, 0.1, {scale:0.01, opacity:0, ease:Power1.easeOut}, animationOffset);
+    //tuck the repeating parts of the animation into a nested TimelineMax (the intro shouldn't be repeated)
+    tl = new TimelineMax({repeat:-1, repeatDelay:0.25});
+    for (j = 0; j < colors.length; j++) {
+      tl.to(dot, 2.5, {rotation:"-=360", ease:Power2.easeInOut}, j * 2.9)
+        .to(dot, 1.2, {skewX:"+=360", backgroundColor:colors[j], ease:Power2.easeInOut}, 1.6 + 2.9 * j);
+    }
+    //stagger its placement into the master timeline
+    animation.add(tl, i * 0.07);
+  }
+  if (TweenLite.render) {
+    TweenLite.render(); //trigger the from() tweens' lazy-rendering (otherwise it'd take one tick to render everything in the beginning state, thus things may flash on the screen for a moment initially). There are other ways around this, but TweenLite.render() is probably the simplest in this case.
+  }
+  
+  //call preloader.active(true) to open the preloader, preloader.active(false) to close it, or preloader.active() to get the current state.
+  this.active = function(show) {
+    if (!arguments.length) {
+      return isActive;
+    }
+    if (isActive != show) {
+      isActive = show;
+      if (closingAnimation) {
+        closingAnimation.kill(); //in case the preloader is made active/inactive/active/inactive really fast and there's still a closing animation running, kill it.
+      }
+      if (isActive) {
+        element.style.visibility = "visible";
+        TweenLite.set([element, box], {rotation:0});
+        animation.play(animationOffset);
+      } else {
+        closingAnimation = new TimelineLite();
+        if (animation.time() < animationOffset + 0.3) {
+          animation.pause();
+          closingAnimation.to(element, 1, {rotation:-360, ease:Power1.easeInOut}).to(box, 1, {rotation:360, ease:Power1.easeInOut}, 0);
+        }
+        closingAnimation.staggerTo(dots, 0.3, {scale:0.01, opacity:0, ease:Power1.easeIn, overwrite:false}, 0.05, 0).to(box, 0.4, {opacity:0, scale:0.2, ease:Power2.easeIn, overwrite:false}, 0).call(function() { animation.pause(); closingAnimation = null; }).set(element, {visibility:"hidden"});
+      }
+    }
+    return this;
+  };
+}
+/**
 * This class is a wrapper for SQL Error so that we can always distinguish an error
 * from valid results.  Any method that calls an IO routine, which can expect valid results
 * or an error should test "if (results instanceof IOError)".
 */
 function IOError(err) {
-	this.code = err.code;
-	this.message = err.message;
+	if (err.code && err.message) {
+		this.code = err.code;
+		this.message = err.message;
+	} else {
+		this.code = 0;
+		this.message = JSON.stringify(err);
+	}
 }
+/**
+* This class replaces window.localStorage, because I had reliability problems with LocalStorage
+* on ios Simulator.  I am guessing the problems were caused by the WKWebView plugin, but I don't really know.
+*/
+function SettingStorage() {
+    this.className = 'SettingStorage';
+    if (window.sqlitePlugin === undefined) {
+        console.log('opening SettingsStorage Database, stores in Cache');
+        this.database = window.openDatabase('Settings.db', '1.0', 'Settings.db', 1024 * 1024);
+    } else {
+        console.log('opening SQLitePlugin SettingsStorage Database, stores in Documents with no cloud');
+        this.database = window.sqlitePlugin.openDatabase({name: 'Settings.db', location: 2, createFromLocation: 1});
+    }
+    this.loadedVersions = null;
+	Object.seal(this);
+}
+/**
+* Settings
+*/
+SettingStorage.prototype.getFontSize = function(callback) {
+	this.getItem('fontSize', function(fontSize) {
+		if (fontSize < 10 || fontSize > 36) fontSize = null; // Null will force calc of fontSize.
+		callback(fontSize);
+	});
+};
+SettingStorage.prototype.setFontSize = function(fontSize) {
+	this.setItem('fontSize', fontSize);
+};
+SettingStorage.prototype.getCurrentVersion = function(callback) {
+	this.getItem('version', function(filename) {
+		callback(filename);
+	});
+};
+SettingStorage.prototype.setCurrentVersion = function(version) {
+	this.setItem('version', version);
+};
+SettingStorage.prototype.getItem = function(name, callback) {
+    this.database.readTransaction(function(tx) {
+        tx.executeSql('SELECT value FROM Settings WHERE name=?', [name],
+        function(tx, results) {
+        	var value = (results.rows.length > 0) ? results.rows.item(0).value : null;
+        	console.log('GetItem', name, value);
+			callback(value);
+        },
+        function(tx, err) {
+        	console.log('GetItem', name, JSON.stringify(err));
+			callback();        
+        });
+    });
+};
+SettingStorage.prototype.setItem = function(name, value) {
+    this.database.transaction(function(tx) {
+        tx.executeSql('REPLACE INTO Settings(name, value) VALUES (?,?)', [name, value], 
+        function(tx, results) {
+	        console.log('SetItem', name, value);
+	  	},
+	  	function(tx, err) {
+		  	console.log('SetItem', name, value, JSON.stringify(err));
+	  	});
+    });
+};
+/**
+* Versions
+*/
+/** Before calling hasVersion one must call getVersions, which creates a map of available versions
+* And getVersions must be called a few ms before any call to hasVersion to make sure result is available.
+*/
+SettingStorage.prototype.hasVersion = function(version) {
+	return(this.loadedVersions[version]);
+};
+SettingStorage.prototype.getVersions = function() {
+	var that = this;
+	console.log('GetVersions');
+    this.database.readTransaction(function(tx) {
+        tx.executeSql('SELECT version, filename FROM Installed', [],
+        function(tx, results) {
+        	console.log('GetVersions, rowCount=', results.rows.length);
+        	that.loadedVersions = {};
+        	for (var i=0; i<results.rows.length; i++) {
+	        	var row = results.rows.item(i);
+	        	that.loadedVersions[row.version] = row.filename;
+        	}
+        },
+        function(tx, err) {
+        	console.log('GetVersions error', JSON.stringify(err));     
+        });
+    });
+};
+SettingStorage.prototype.setVersion = function(version, filename) {
+	console.log('SetVersion', version, filename);
+	var now = new Date();
+    this.database.transaction(function(tx) {
+        tx.executeSql('REPLACE INTO Installed(version, filename, timestamp) VALUES (?,?,?)', [version, filename, now.toISOString()], 
+        function(tx, results) {
+	        console.log('SetVersion success', results.rowsAffected);
+	  	},
+	  	function(tx, err) {
+		  	console.log('SetVersion error', JSON.stringify(err));
+	  	});
+    });
+};
 /**
 * This class is a facade over the database that is used to store bible text, concordance,
 * table of contents, history and questions.
+*
+* This file is DeviceDatabaseWebSQL, which implements the WebSQL interface.
 */
 function DeviceDatabase(code) {
 	this.code = code;
-    this.className = 'DeviceDatabase';
+    this.className = 'DeviceDatabaseWebSQL';
 	var size = 30 * 1024 * 1024;
     if (window.sqlitePlugin === undefined) {
-        console.log('opening WEB SQL Database, stores in Cache');
+        console.log('opening WEB SQL Database, stores in Cache', this.code);
         this.database = window.openDatabase(this.code, "1.0", this.code, size);
     } else {
-        console.log('opening SQLitePlugin Database, stores in Documents with no cloud');
+        console.log('opening SQLitePlugin Database, stores in Documents with no cloud', this.code);
         this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
     }
 	this.chapters = new ChaptersAdapter(this);
@@ -1291,20 +1788,36 @@ DeviceDatabase.prototype.select = function(statement, values, callback) {
     }
 };
 DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
-    this.database.transaction(onTranStart, onTranError);
-
-    function onTranStart(tx) {
-        console.log('exec tran start', statement, values);
-        tx.executeSql(statement, values, onExecSuccess);
-    }
-    function onTranError(err) {
-        console.log('execute tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
+    this.database.transaction(function(tx) {
+	    console.log('exec tran start', statement, values);
+        tx.executeSql(statement, values, onExecSuccess, onExecError);
+    });
     function onExecSuccess(tx, results) {
     	console.log('excute sql success', results.rowsAffected);
     	callback(results.rowsAffected);
     }
+    function onExecError(tx, err) {
+        console.log('execute tran error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+};
+DeviceDatabase.prototype.manyExecuteDML = function(statement, array, callback) {
+	var that = this;
+	executeOne(0);
+	
+	function executeOne(index) {
+		if (index < array.length) {
+			that.executeDML(statement, array[index], function(results) {
+				if (results instanceof IOError) {
+					callback(results);
+				} else {
+					executeOne(index + 1);
+				}
+			});
+		} else {
+			callback(array.length);
+		}
+	}	
 };
 DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
     var rowCount = 0;
@@ -1363,6 +1876,8 @@ DeviceDatabase.prototype.smokeTest = function(callback) {
 /**
 * This class is the database adapter for the codex table
 */
+//var IOError = require('./IOError'); What needs this, Publisher does not
+
 function ChaptersAdapter(database) {
 	this.database = database;
 	this.className = 'ChaptersAdapter';
@@ -1404,13 +1919,12 @@ ChaptersAdapter.prototype.load = function(array, callback) {
 	});
 };
 ChaptersAdapter.prototype.getChapters = function(values, callback) {
-	var that = this;
-	var numValues = values.length || 0;
-	var array = [numValues];
-	for (var i=0; i<numValues; i++) {
-		array[i] = '?';
+	var statement = 'select reference, html from chapters where';
+	if (values.length === 1) {
+		statement += ' rowid = ?';
+	} else {
+		statement += ' rowid >= ? and rowid <= ? order by rowid';
 	}
-	var statement = 'select reference, html from chapters where reference in (' + array.join(',') + ') order by rowid';
 	this.database.select(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
@@ -1419,7 +1933,8 @@ ChaptersAdapter.prototype.getChapters = function(values, callback) {
 			callback(results);
         }
 	});
-};/**
+};
+/**
 * This class is the database adapter for the verses table
 */
 function VersesAdapter(database) {
@@ -1574,7 +2089,8 @@ TableContentsAdapter.prototype.create = function(callback) {
     	'abbrev text not null, ' +
 		'lastChapter integer not null, ' +
 		'priorBook text null, ' +
-		'nextBook text null)';
+		'nextBook text null, ' +
+		'chapterRowId integer not null)';
 	this.database.executeDDL(statement, function(err) {
 		if (err instanceof IOError) {
 			callback(err);
@@ -1585,8 +2101,9 @@ TableContentsAdapter.prototype.create = function(callback) {
 	});
 };
 TableContentsAdapter.prototype.load = function(array, callback) {
-	var statement = 'insert into tableContents(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook) ' +
-		'values (?,?,?,?,?,?,?,?)';
+	var statement = 'insert into tableContents(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook, chapterRowId) ' +
+		'values (?,?,?,?,?,?,?,?,?)';
+	//this.database.manyExecuteDML(statement, array, function(count) {
 	this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
 			callback(count);
@@ -1597,7 +2114,7 @@ TableContentsAdapter.prototype.load = function(array, callback) {
 	});
 };
 TableContentsAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select code, heading, title, name, abbrev, lastChapter, priorBook, nextBook ' +
+	var statement = 'select code, heading, title, name, abbrev, lastChapter, priorBook, nextBook, chapterRowId ' +
 		'from tableContents order by rowid';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
@@ -1607,7 +2124,7 @@ TableContentsAdapter.prototype.selectAll = function(callback) {
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
 				var tocBook = new TOCBook(row.code, row.heading, row.title, row.name, row.abbrev, 
-					row.lastChapter, row.priorBook, row.nextBook);
+					row.lastChapter, row.priorBook, row.nextBook, row.chapterRowId);
 				array.push(tocBook);
 			}
 			callback(array);
@@ -1735,7 +2252,7 @@ HistoryAdapter.prototype.create = function(callback) {
 		}
 	});
 };
-HistoryAdapter.prototype.selectAll = function(callback) {
+HistoryAdapter.prototype.selectPassages = function(callback) {
 	var that = this;
 	var statement = 'select reference from history order by timestamp desc limit ?';
 	this.database.select(statement, [ MAX_HISTORY ], function(results) {
@@ -1754,7 +2271,7 @@ HistoryAdapter.prototype.selectAll = function(callback) {
 	});
 };
 HistoryAdapter.prototype.lastItem = function(callback) {
-	var statement = 'select reference from history where timestamp = (select max(timestamp) from history);';
+	var statement = 'select reference from history order by rowid desc limit 1';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.lastItem Error', JSON.stringify(results));
@@ -1770,17 +2287,17 @@ HistoryAdapter.prototype.lastItem = function(callback) {
 	});
 };
 HistoryAdapter.prototype.lastConcordanceSearch = function(callback) {
-	var statement = 'select reference from history where search is not null order by timestamp desc limit 1';
-	this.database.select(statement, [ MAX_HISTORY ], function(results) {
+	var statement = 'select search from history where search is not null order by timestamp desc limit 1';
+	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.lastConcordance Error', JSON.stringify(results));
 			callback(results);
 		} else {
 			if (results.rows.length > 0) {
 				var row = results.rows.item(0);
-				callback(row.reference);
+				callback(row.search);
 			} else {
-				callback(null);
+				callback(new IOError('No rows found'));
 			}
 		}
 	});
@@ -1833,10 +2350,8 @@ QuestionsAdapter.prototype.drop = function(callback) {
 QuestionsAdapter.prototype.create = function(callback) {
 	var statement = 'create table if not exists questions(' +
 		'askedDateTime text not null primary key, ' +
-		'book text not null, ' +
-		'chapter integer not null, ' +
-		'verse integer null, ' +
-		'displayRef text null, ' +
+		'discourseId text not null, ' +
+		'reference text null, ' + // possibly should be not null
 		'question text not null, ' +
 		'instructor text null, ' +
 		'answerDateTime text null, ' +
@@ -1851,7 +2366,7 @@ QuestionsAdapter.prototype.create = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select book, chapter, verse, displayRef, question, askedDateTime, instructor, answerDateTime, answer ' +
+	var statement = 'select discourseId, reference, question, askedDateTime, instructor, answerDateTime, answer ' +
 		'from questions order by askedDateTime';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
@@ -1860,9 +2375,12 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 		} else {
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);
-				var ques = new QuestionItem(row.book, row.chapter, row.verse, row.displayRef, row.question, 
-					row.askedDt, row.instructor, row.answerDt, row.answer);
+				var row = results.rows.item(i);	
+				var askedDateTime = (row.askedDateTime) ? new Date(row.askedDateTime) : null;
+				var answerDateTime = (row.answerDateTime) ? new Date(row.answerDateTime) : null;
+				var ques = new QuestionItem(row.reference, row.question, 
+					askedDateTime, row.instructor, answerDateTime, row.answer);
+				ques.discourseId = row.discourseId;
 				array.push(ques);
 			}
 			callback(array);
@@ -1870,9 +2388,9 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.replace = function(item, callback) {
-	var statement = 'replace into questions(book, chapter, verse, displayRef, question, askedDateTime) ' +
-		'values (?,?,?,?,?,?)';
-	var values = [ item.book, item.chapter, item.verse, item.displayRef, item.question, item.askedDateTime.toISOString() ];
+	var statement = 'replace into questions(discourseId, reference, question, askedDateTime) ' +
+		'values (?,?,?,?)';
+	var values = [ item.discourseId, item.reference, item.question, item.askedDateTime.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('Error on Insert');
@@ -1896,6 +2414,144 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 	});
 };
 /**
+* This database adapter is different from the others in this package.  It accesses
+* not the Bible, but a different database, which contains a catalog of versions of the Bible.
+*
+* The App selects from, but never modifies this data.
+*/
+function VersionsAdapter() {
+    this.className = 'VersionsAdapter';
+	var size = 2 * 1024 * 1024;
+    if (window.sqlitePlugin === undefined) {
+        console.log('opening Versions SQL Database, stores in Cache');
+        this.database = window.openDatabase("Versions.db", "1.0", "Versions.db", size);
+    } else {
+        console.log('opening SQLitePlugin Versions Database, stores in Documents with no cloud');
+        this.database = window.sqlitePlugin.openDatabase({name:'Versions.db', location:2, createFromLocation:1});
+    }
+	Object.seal(this);
+}
+VersionsAdapter.prototype.selectCountries = function(callback) {
+	var statement = 'SELECT countryCode, localName, primLanguage, flagIcon FROM Country ORDER BY localName';
+	this.select(statement, null, function(results) {
+		if (results instanceof IOError) {
+			callback(results)
+		} else {
+			var array = [];
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				array.push(row);
+			}
+			callback(array);
+		}
+	});
+};
+VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, callback) {
+	var statement = 'SELECT cv.versionCode, cv.localLanguageName, cv.localVersionName, t1.translated as scope, v.filename, o.ownerName, v.copyrightYear' +
+		' FROM CountryVersion cv' +
+		' JOIN Version v ON cv.versionCode=v.versionCode' +
+		' JOIN Language l ON v.silCode=l.silCode' +
+		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
+		' LEFT OUTER JOIN TextTranslation t1 ON t1.silCode=? AND t1.word=v.scope' +
+		' WHERE cv.countryCode = ?' +
+		' AND v.filename is NOT NULL' +
+		' AND length(v.filename) > 3' +
+		' ORDER BY cv.localLanguageName, cv.localVersionName';
+	this.select(statement, [primLanguage, countryCode], function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else {
+			var array = [];
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				array.push(row);
+			}
+			callback(array);
+		}
+	});
+};
+VersionsAdapter.prototype.select = function(statement, values, callback) {
+    this.database.readTransaction(function(tx) {
+        console.log(statement, values);
+        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
+    });
+    function onSelectSuccess(tx, results) {
+        console.log('select success results, rowCount=', results.rows.length);
+        callback(results);
+    }
+    function onSelectError(tx, err) {
+        console.log('select error', JSON.stringify(err));
+        callback(new IOError(err));
+    }
+};
+
+/**
+* This class encapsulates the get and post to the BibleApp Server
+* from the BibleApp
+*/
+function HttpClient(server, port) {
+	this.server = server;
+	this.port = port;
+	this.authority = 'http://' + this.server + ':' + this.port;
+}
+HttpClient.prototype.get = function(path, callback) {
+	this.request('GET', path, null, callback);
+};
+HttpClient.prototype.put = function(path, postData, callback) {
+	this.request('PUT', path, postData, callback);
+};
+HttpClient.prototype.post = function(path, postData, callback) {
+	this.request('POST', path, postData, callback);
+};
+HttpClient.prototype.request = function(method, path, postData, callback) {
+	console.log(method, path, postData);	
+	var request = createRequest();
+	if (request) {
+		request.onreadystatechange = progressEvents;
+		request.open(method, this.authority + path, true);
+		var data = (postData) ? JSON.stringify(postData) : null;
+		if (data) {
+			request.setRequestHeader('Content-Type', 'application/json');
+		}
+		request.send(data);		
+	} else {
+		callback(-2, new Error('XMLHttpRequest was not created.'));
+	}
+
+	function progressEvents() {
+		try {
+	    	if (request.readyState === 4) {
+		    	if (request.status === 0) {
+			    	callback(request.status, new Error('Could not reach the server, please try again when you have a better connection.'));
+		    	} else {
+		    		callback(request.status, JSON.parse(request.responseText));
+		    	}
+	    	}
+	    } catch(error) {
+		    callback(-1, error);
+	    }
+  	}
+
+	function createRequest() {
+		var request;
+		if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+			request = new XMLHttpRequest();
+    	} else if (window.ActiveXObject) { // IE
+			try {
+				request = new ActiveXObject("Msxml2.XMLHTTP");
+      		} 
+	  		catch (e) {
+	  			try {
+	  				request = new ActiveXObject("Microsoft.XMLHTTP");
+        		} 
+				catch (e) {}
+      		}
+    	}
+    	return(request);
+	}
+};
+
+/**
 * This class encapsulates the Cordova FileTransfer plugin for file download
 * It is a simple plugin, but encapsulated here in order to make it easy to change
 * the implementation.
@@ -1905,17 +2561,13 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 */
 function FileDownloader(host, port) {
 	this.fileTransfer = new FileTransfer();
-	this.uri = encodeURI('http://' + host + ':' + port + '/down/');
+	this.uri = encodeURI('http://' + host + ':' + port + '/book/');
 	this.basePath = 'cdvfile://localhost/persistent/';
 }
 FileDownloader.prototype.download = function(bibleVersion, callback) {
 	var remotePath = this.uri + bibleVersion;
-	//if (device === 'ios') {
-		var filePath = this.basePath + '../LocalDatabase/' + bibleVersion;
-	//} else {
-	//	filePath = this.basePath + bibleVersion;
-	//}
-	console.log('download to', filePath);
+	var filePath = this.basePath + '../LocalDatabase/' + bibleVersion;
+	console.log('download from', remotePath, ' to', filePath);
     this.fileTransfer.download(remotePath, filePath, onDownSuccess, onDownError, true, {});
 
     function onDownSuccess(entry) {
@@ -1929,203 +2581,6 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
        	callback(new IOError({ code: error.code, message: error.source}));   	
     }
 };/**
-* This class iterates over the USX data model, and translates the contents to DOM.
-*
-* This method generates a DOM tree that has exactly the same parentage as the USX model.
-* This is probably a problem.  The easy insertion and deletion of nodes probably requires
-* having a hierarchy of books and chapters. GNG April 13, 2015
-*
-* NOTE: This class must be instantiated once for an entire book are all books, not just one chapter,
-* because the bookCode is only present in chapter 0, but is needed by all chapters.
-*/
-function DOMBuilder() {
-	this.bookCode = '';
-	this.chapter = 0;
-	this.verse = 0;
-	this.noteNum = 0;
-	this.treeRoot = null;
-	Object.seal(this);
-}
-DOMBuilder.prototype.toDOM = function(usxRoot) {
-	this.chapter = 0;
-	this.verse = 0;
-	this.noteNum = 0;
-	this.treeRoot = document.createDocumentFragment();
-	this.readRecursively(this.treeRoot, usxRoot);
-	return(this.treeRoot);
-};
-DOMBuilder.prototype.readRecursively = function(domParent, node) {
-	var domNode;
-	//console.log('dom-parent: ', domParent.nodeName, domParent.nodeType, '  node: ', node.tagName);
-	switch(node.tagName) {
-		case 'usx':
-			domNode = domParent;
-			break;
-		case 'book':
-			this.bookCode = node.code;
-			domNode = node.toDOM(domParent);
-			break;
-		case 'chapter':
-			this.chapter = node.number;
-			this.noteNum = 0;
-			domNode = node.toDOM(domParent, this.bookCode);
-			break;
-		case 'para':
-			domNode = node.toDOM(domParent);
-			break;
-		case 'verse':
-			this.verse = node.number;
-			domNode = node.toDOM(domParent, this.bookCode, this.chapter);
-			break;
-		case 'text':
-			node.toDOM(domParent, this.bookCode, this.chapter, this.noteNum);
-			domNode = domParent;
-			break;
-		case 'char':
-			domNode = node.toDOM(domParent);
-			break;
-		case 'note':
-			domNode = node.toDOM(domParent, this.bookCode, this.chapter, ++this.noteNum);
-			break;
-		default:
-			throw new Error('Unknown tagname ' + node.tagName + ' in DOMBuilder.readBook');
-	}
-	if ('children' in node) {
-		for (var i=0; i<node.children.length; i++) {
-			this.readRecursively(domNode, node.children[i]);
-		}
-	}
-};
-/**
-* This class handles all request to deliver scripture.  It handles all passage display requests to display passages of text,
-* and it also handles all requests from concordance search requests to display individual verses.
-* It will deliver the content from cache if it is present.  Or, it will find the content in persistent storage if it is
-* not present in cache.  All content retrieved from persistent storage is added to the cache.
-*
-* On May 3, 2015 some performance checks were done.  The time measurements where from a sample of 4, the memory from a sample of 1.
-* 1) Read Chapter 11.2ms, 49K heap increase
-* 2) Parse USX 6.0ms, 306K heap increase
-* 3) Generate Dom 2.16ms, 85K heap increase
-* These tests were done when IO was file.
-*
-* On Jul 21, 2015 some performance checks were done using SQLite as the datastore.
-* 1) Read Chapter 4.4 ms, 4K heap increase
-* 2) Parse USX 1.8 ms, still large heap increase
-* 3) Generate Dom  1ms, still large heap increase
-*
-* On Jul 22, 2015 stored HTML in DB and changed to use that so there is less App processing
-* 1) Read Chapter 2.0 ms
-* 2) Assign using innerHTML 0.5 ms
-* 3) Append 0.13 ms
-*
-* This class does not yet have a means to remove old entries from cache.  
-* It is possible that DB access is fast enough, and this is not needed.
-* GNG July 5, 2015
-*/
-function BibleCache(adapter) {
-	this.adapter = adapter;
-	this.chapterMap = {};
-	this.parser = new USXParser();
-	Object.freeze(this);
-}
-/** deprecated */
-BibleCache.prototype.getChapterHTML = function(reference, callback) {
-	var that = this;
-	var chapter = this.chapterMap[reference.nodeId];
-	if (chapter !== undefined) {
-		callback(chapter);
-	} else {
-		this.adapter.getChapterHTML(reference, function(chapter) {
-			if (chapter instanceof IOError) {
-				console.log('Bible Cache found Error', chapter);
-				callback(chapter);
-			} else {
-				that.chapterMap[reference.nodeId] = chapter;
-				callback(chapter);
-			}
-		});
-	}
-};
-
-// Before deleting be sure to move performance nots to CodexView
-
-
-/**
-* This class contains the Canon of Scripture as 66 books.  It is used to control
-* which books are published using this App.  The codes are used to identify the
-* books of the Bible, while the names, which are in English are only used to document
-* the meaning of each code.  These names are not used for display in the App.
-*/
-function Canon() {
-	this.books = [
-    	{ code: 'GEN', name: 'Genesis' },
-    	{ code: 'EXO', name: 'Exodus' },
-    	{ code: 'LEV', name: 'Leviticus' },
-    	{ code: 'NUM', name: 'Numbers' },
-    	{ code: 'DEU', name: 'Deuteronomy' },
-    	{ code: 'JOS', name: 'Joshua' },
-    	{ code: 'JDG', name: 'Judges' },
-    	{ code: 'RUT', name: 'Ruth' },
-    	{ code: '1SA', name: '1 Samuel' },
-    	{ code: '2SA', name: '2 Samuel' },
-    	{ code: '1KI', name: '1 Kings' },
-    	{ code: '2KI', name: '2 Kings' },
-    	{ code: '1CH', name: '1 Chronicles' },
-    	{ code: '2CH', name: '2 Chronicles' },
-    	{ code: 'EZR', name: 'Ezra' },
-    	{ code: 'NEH', name: 'Nehemiah' },
-    	{ code: 'EST', name: 'Esther' },
-    	{ code: 'JOB', name: 'Job' },
-    	{ code: 'PSA', name: 'Psalms' },
-    	{ code: 'PRO', name: 'Proverbs' },
-    	{ code: 'ECC', name: 'Ecclesiastes' },
-    	{ code: 'SNG', name: 'Song of Solomon' },
-    	{ code: 'ISA', name: 'Isaiah' },
-    	{ code: 'JER', name: 'Jeremiah' },
-    	{ code: 'LAM', name: 'Lamentations' },
-    	{ code: 'EZK', name: 'Ezekiel' },
-    	{ code: 'DAN', name: 'Daniel' },
-    	{ code: 'HOS', name: 'Hosea' },
-    	{ code: 'JOL', name: 'Joel' },
-    	{ code: 'AMO', name: 'Amos' },
-    	{ code: 'OBA', name: 'Obadiah' },
-    	{ code: 'JON', name: 'Jonah' },
-    	{ code: 'MIC', name: 'Micah' },
-    	{ code: 'NAM', name: 'Nahum' },
-    	{ code: 'HAB', name: 'Habakkuk' },
-    	{ code: 'ZEP', name: 'Zephaniah' },
-    	{ code: 'HAG', name: 'Haggai' },
-    	{ code: 'ZEC', name: 'Zechariah' },
-    	{ code: 'MAL', name: 'Malachi' },
-    	{ code: 'MAT', name: 'Matthew' },
-    	{ code: 'MRK', name: 'Mark' },
-    	{ code: 'LUK', name: 'Luke' },
-    	{ code: 'JHN', name: 'John' },
-    	{ code: 'ACT', name: 'Acts' },
-    	{ code: 'ROM', name: 'Romans' },
-    	{ code: '1CO', name: '1 Corinthians' },
-    	{ code: '2CO', name: '2 Corinthians' },
-    	{ code: 'GAL', name: 'Galatians' },
-    	{ code: 'EPH', name: 'Ephesians' },
-    	{ code: 'PHP', name: 'Philippians' },
-    	{ code: 'COL', name: 'Colossians' },
-    	{ code: '1TH', name: '1 Thessalonians' },
-    	{ code: '2TH', name: '2 Thessalonians' },
-    	{ code: '1TI', name: '1 Timothy' },
-    	{ code: '2TI', name: '2 Timothy' },
-    	{ code: 'TIT', name: 'Titus' },
-    	{ code: 'PHM', name: 'Philemon' },
-    	{ code: 'HEB', name: 'Hebrews' },
-    	{ code: 'JAS', name: 'James' },
-    	{ code: '1PE', name: '1 Peter' },
-    	{ code: '2PE', name: '2 Peter' },
-    	{ code: '1JN', name: '1 John' },
-    	{ code: '2JN', name: '2 John' },
-    	{ code: '3JN', name: '3 John' },
-    	{ code: 'JUD', name: 'Jude' },
-    	{ code: 'REV', name: 'Revelation' } ];
-}
-/**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
 function Concordance(adapter) {
@@ -2225,15 +2680,13 @@ Lookup.prototype.find = function(search) {
 /**
 * This class contains the contents of one user question and one instructor response.
 */
-function QuestionItem(book, chapter, verse, displayRef, question, askedDt, instructor, answerDt, answer) {
-	this.book = book;
-	this.chapter = chapter;
-	this.verse = verse;
-	this.displayRef = displayRef;
+function QuestionItem(reference, question, askedDt, instructor, answerDt, answer) {
+	this.discourseId = null;
+	this.reference = reference;
 	this.question = question;
-	this.askedDateTime = (askedDt) ? new Date(askedDt) : new Date();
+	this.askedDateTime = askedDt;
 	this.instructor = instructor;
-	this.answerDateTime = (answerDt) ? new Date(answerDt) : null;
+	this.answerDateTime = answerDt;
 	this.answer = answer;
 	Object.seal(this);
 }/**
@@ -2244,6 +2697,7 @@ function Questions(questionsAdapter, versesAdapter, tableContents) {
 	this.questionsAdapter = questionsAdapter;
 	this.versesAdapter = versesAdapter;
 	this.tableContents = tableContents;
+	this.httpClient = new HttpClient(SERVER_HOST, SERVER_PORT);
 	this.items = [];
 	Object.seal(this);
 }
@@ -2253,12 +2707,39 @@ Questions.prototype.size = function() {
 Questions.prototype.find = function(index) {
 	return((index >= 0 && index < this.items.length) ? this.items[index] : null);
 };
-Questions.prototype.addItem = function(questionItem, callback) {
-	this.items.push(questionItem);
-	// This method must add to the database, as well as add to the server
-	// callback when the addQuestion, either succeeds or fails.
-	this.insert(questionItem, function(result) {
-		callback(result);
+Questions.prototype.addQuestion = function(item, callback) {
+	var that = this;
+	var versionId = this.questionsAdapter.database.code;
+	var postData = {versionId:versionId, reference:item.reference, message:item.question};
+	this.httpClient.put('/question', postData, function(status, results) {
+		if (status !== 200 && status !== 201) {
+			callback(results);
+		} else {
+			item.discourseId = results.discourseId;
+			item.askedDateTime = new Date(results.timestamp);
+			that.addQuestionLocal(item, callback);
+		}
+	});
+};
+Questions.prototype.addQuestionLocal = function(item, callback) {
+	var that = this;
+	this.questionsAdapter.replace(item, function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else {
+			that.items.push(item);
+			callback();
+		}
+	});
+};
+Questions.prototype.addAnswerLocal = function(item, callback) {
+	this.questionsAdapter.update(item, function(results) {
+		if (results instanceof IOError) {
+			console.log('Error on update', results);
+			callback(results);
+		} else {
+			callback();
+		}
 	});
 };
 Questions.prototype.fill = function(callback) {
@@ -2275,12 +2756,9 @@ Questions.prototype.fill = function(callback) {
 };
 Questions.prototype.createActs8Question = function(callback) {
 	var acts8 = new QuestionItem();
-	acts8.book = 'ACT';
-	acts8.chapter = 8;
-	acts8.verse = 30;
 	acts8.askedDateTime = new Date();
 	var refActs830 = new Reference('ACT:8:30');
-	acts8.displayRef = this.tableContents.toString(refActs830);
+	acts8.reference = this.tableContents.toString(refActs830);
 	var verseList = [ 'ACT:8:30', 'ACT:8:31', 'ACT:8:35' ];
 	this.versesAdapter.getVerses(verseList, function(results) {
 		if (results instanceof IOError) {
@@ -2289,9 +2767,10 @@ Questions.prototype.createActs8Question = function(callback) {
 			var acts830 = results.rows.item(0);
 			var acts831 = results.rows.item(1);
 			var acts835 = results.rows.item(2);
+			acts8.discourseId = 'NONE';
 			acts8.question = acts830.html + ' ' + acts831.html;
 			acts8.answer = acts835.html;
-			acts8.instructor = '';
+			acts8.instructor = 'Philip';
 			acts8.answerDateTime = new Date();
 			callback(acts8);
 		}
@@ -2299,42 +2778,54 @@ Questions.prototype.createActs8Question = function(callback) {
 };
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
-	var lastItem = this.items[this.items.length -1];
-	if (lastItem.answeredDateTime === null) {
-		// send request to the server.
-
-		
-		if (lastItem.answeredDateTime) { // if updated by server
-			that.update(lastItem, function(err) {
-				callback();
-			});
-		} else {
-			callback();
-		}
+	var unanswered = findUnansweredQuestions();
+	var discourseIds = Object.keys(unanswered);
+	if (discourseIds.length > 0) {
+		var path = '/response/' + discourseIds.join('/');
+		this.httpClient.get(path, function(status, results) {
+			if (status === 200) {
+				var indexes = updateAnsweredQuestions(unanswered, results);
+				callback(indexes);
+			} else {
+				callback([]);
+			}
+		});
+	} else {
+		callback([]);
 	}
-	else {
-		callback();
+	function findUnansweredQuestions() {
+		var indexes = {};
+		for (var i=0; i<that.items.length; i++) {
+			var item = that.items[i];
+			if (item.answerDateTime === null || item.answerDateTime === undefined) {
+				indexes[item.discourseId] = i;
+			}
+		}
+		return(indexes);
 	}
-};
-Questions.prototype.insert = function(item, callback) {
-	this.questionsAdapter.replace(item, function(results) {
-		if (results instanceof IOError) {
-			console.log('Error on Insert');
-			callback(results);
-		} else {
-			callback();
+	function updateAnsweredQuestions(unanswered, results) {
+		var indexes = [];
+		for (var i=0; i<results.length; i++) {
+			var row = results[i];
+			var itemId = unanswered[row.discourseId];
+			var item = that.items[itemId];
+			if (item.discourseId !== row.discourseId) {
+				console.log('Attempt to update wrong item in Questions.checkServer');
+			} else {
+				item.instructor = row.pseudonym;
+				item.answerDateTime = new Date(row.timestamp);
+				item.answer = row.message;
+				indexes.push(itemId);
+				
+				that.addAnswerLocal(item, function(error) {
+					if (error) {
+						console.log('Error occurred adding answer to local store ' + error);
+					}
+				});
+			}
 		}
-	});
-};
-Questions.prototype.update = function(item, callback) {
-	this.questionsAdapter.update(item, function(results) {
-		if (results instanceof IOError) {
-			console.log('Error on update', results);
-			callback(results);
-		} else {
-			callback(results);
-		}
-	});
+		return(indexes);
+	}
 };
 Questions.prototype.toJSON = function() {
 	return(JSON.stringify(this.items, null, ' '));
@@ -2362,6 +2853,7 @@ function Reference(book, chapter, verse) {
 		this.verse = (parts.length > 1) ? +parts[2] : NaN;
 		this.nodeId = book;
 	}
+	this.chapterId = this.book + ':' + this.chapter;
 	this.rootNode = document.createElement('div');
 	this.rootNode.setAttribute('id', 'top' + this.nodeId);
 	Object.freeze(this);
@@ -2407,32 +2899,10 @@ TOC.prototype.addBook = function(book) {
 TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
 };
-TOC.prototype.ensureChapter = function(reference) {
+TOC.prototype.rowId = function(reference) {
 	var current = this.bookMap[reference.book];
-	if (reference.chapter > current.lastChapter) {
-		return(new Reference(reference.book, current.lastChapter, 1));
-	}
-	if (reference.chapter < 1) {
-		return(new Reference(reference.book, 1, 1));
-	}
-	return(reference);
-};
-TOC.prototype.nextChapter = function(reference) {
-	var current = this.bookMap[reference.book];
-	if (reference.chapter < current.lastChapter) {
-		return(new Reference(reference.book, reference.chapter + 1));
-	} else {
-		return((current.nextBook) ? new Reference(current.nextBook, 0) : null);
-	}
-};
-TOC.prototype.priorChapter = function(reference) {
-	var current = this.bookMap[reference.book];
-	if (reference.chapter > 0) {
-		return(new Reference(reference.book, reference.chapter -1));
-	} else {
-		var priorBook = this.bookMap[current.priorBook];
-		return((priorBook) ? new Reference(current.priorBook, priorBook.lastChapter) : null);
-	}
+	var rowid = current.chapterRowId + reference.chapter;
+	return(rowid);	
 };
 TOC.prototype.size = function() {
 	return(this.bookList.length);
@@ -2445,7 +2915,7 @@ TOC.prototype.toJSON = function() {
 };/**
 * This class holds the table of contents data each book of the Bible, or whatever books were loaded.
 */
-function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook) {
+function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nextBook, chapterRowId) {
 	this.code = code || null;
 	this.heading = heading || null;
 	this.title = title || null;
@@ -2454,440 +2924,13 @@ function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nex
 	this.lastChapter = lastChapter || null;
 	this.priorBook = priorBook || null;
 	this.nextBook = nextBook || null; // do not want undefined in database
+	this.chapterRowId = chapterRowId || null;
 	if (lastChapter) {
 		Object.freeze(this);
 	} else {
 		Object.seal(this);
 	}
 }/**
-* This class contains a book of the Bible
-*/
-function Book(node) {
-	this.code = node.code;
-	this.style = node.style;
-	this.whiteSpace = node.whiteSpace;
-	this.emptyElement = node.emptyElement;
-	this.children = []; // contains text
-	Object.freeze(this);
-}
-Book.prototype.tagName = 'book';
-Book.prototype.addChild = function(node) {
-	this.children.push(node);
-};
-Book.prototype.openElement = function() {
-	var elementEnd = (this.emptyElement) ? '" />' : '">';
-	return('<book code="' + this.code + '" style="' + this.style + elementEnd);
-};
-Book.prototype.closeElement = function() {
-	return(this.emptyElement ? '' : '</book>');
-};
-Book.prototype.buildUSX = function(result) {
-	result.push(this.whiteSpace, this.openElement());
-	for (var i=0; i<this.children.length; i++) {
-		this.children[i].buildUSX(result);
-	}
-	result.push(this.closeElement());
-};
-Book.prototype.toDOM = function(parentNode) {
-	var article = document.createElement('article');
-	article.setAttribute('id', this.code);
-	article.setAttribute('class', this.style);
-	parentNode.appendChild(article);
-	return(article);
-};
-/** deprecated, might redo when writing tests */
-Book.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Book.prototype.buildHTML = function(result) {
-};/**
-* This object contains information about a chapter of the Bible from a parsed USX Bible document.
-*/
-function Chapter(node) {
-	this.number = node.number;
-	this.style = node.style;
-	this.whiteSpace = node.whiteSpace;
-	this.emptyElement = node.emptyElement;
-	Object.freeze(this);
-}
-Chapter.prototype.tagName = 'chapter';
-Chapter.prototype.openElement = function() {
-	var elementEnd = (this.emptyElement) ? '" />' : '">';
-	return('<chapter number="' + this.number + '" style="' + this.style + elementEnd);
-};
-Chapter.prototype.closeElement = function() {
-	return(this.emptyElement ? '' : '</chapter>');
-};
-Chapter.prototype.buildUSX = function(result) {
-	result.push(this.whiteSpace, this.openElement());
-	result.push(this.closeElement());
-};
-Chapter.prototype.toDOM = function(parentNode, bookCode) {
-	var reference = bookCode + ':' + this.number;
-	var section = document.createElement('section');
-	section.setAttribute('id', reference);
-	parentNode.appendChild(section);
-
-	var child = document.createElement('p');
-	child.setAttribute('class', this.style);
-	child.textContent = this.number;
-	section.appendChild(child);
-	return(section);
-};
-/** deprecated, might redo when writing tests */
-Chapter.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Chapter.prototype.buildHTML = function(result) {
-	result.push('\n<p id="' + this.number + '" class="' + this.style + '">', this.number, '</p>');
-};/**
-* This class contains a character style as parsed from a USX Bible file.
-*/
-function Char(node) {
-	this.style = node.style;
-	this.closed = node.closed;
-	this.whiteSpace = node.whiteSpace;
-	this.emptyElement = node.emptyElement;
-	this.children = [];
-	Object.freeze(this);
-}
-Char.prototype.tagName = 'char';
-Char.prototype.addChild = function(node) {
-	this.children.push(node);
-};
-Char.prototype.openElement = function() {
-	var elementEnd = (this.emptyElement) ? '" />' : '">';
-	if (this.closed) {
-		return('<char style="' + this.style + '" closed="' + this.closed + elementEnd);
-	} else {
-		return('<char style="' + this.style + elementEnd);
-	}
-};
-Char.prototype.closeElement = function() {
-	return(this.emptyElement ? '' : '</char>');
-};
-Char.prototype.buildUSX = function(result) {
-	result.push(this.whiteSpace, this.openElement());
-	for (var i=0; i<this.children.length; i++) {
-		this.children[i].buildUSX(result);
-	}
-	result.push(this.closeElement());
-};
-Char.prototype.toDOM = function(parentNode) {
-	if (this.style === 'fr' || this.style === 'xo') {
-		return(null);// this drop these styles from presentation
-	}
-	else {
-		var child = document.createElement('span');
-		child.setAttribute('class', this.style);
-		parentNode.appendChild(child);
-		return(child);
-	}
-};
-/** deprecated, might redo when writing tests */
-Char.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Char.prototype.buildHTML = function(result) {
-	result.push('<span class="' + this.style + '">');
-	for (var i=0; i<this.children.length; i++) {
-		this.children[i].buildHTML(result);
-	}
-	result.push('</span>');
-};/**
-* This class contains a Note from a USX parsed Bible
-*/
-function Note(node) {
-	this.caller = node.caller.charAt(0);
-	if (this.caller !== '+') {
-		console.log(JSON.stringify(node));
-		throw new Error('Note caller with no +');
-	}
-	this.style = node.style;
-	this.whiteSpace = node.whiteSpace;
-	this.emptyElement = node.emptyElement;
-	this.children = [];
-	Object.freeze(this);
-}
-Note.prototype.tagName = 'note';
-Note.prototype.addChild = function(node) {
-	this.children.push(node);
-};
-Note.prototype.openElement = function() {
-	var elementEnd = (this.emptyElement) ? '" />' : '">';
-	if (this.style === 'x') {
-		return('<note caller="' + this.caller + ' ' + this.note + '" style="' + this.style + elementEnd);
-	} else {
-		return('<note style="' + this.style + '" caller="' + this.caller + ' ' + this.note + elementEnd);
-	}
-};
-Note.prototype.closeElement = function() {
-	return(this.emptyElement ? '' : '</note>');
-};
-Note.prototype.buildUSX = function(result) {
-	result.push(this.whiteSpace, this.openElement());
-	for (var i=0; i<this.children.length; i++) {
-		this.children[i].buildUSX(result);
-	}
-	result.push(this.closeElement());
-};
-Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
-	var nodeId = bookCode + chapterNum + '-' + noteNum;
-	var refChild = document.createElement('span');
-	refChild.setAttribute('id', nodeId);
-	refChild.setAttribute('class', 'top' + this.style);
-	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
-	switch(this.style) {
-		case 'f':
-			refChild.textContent = '\u261E ';
-			break;
-		case 'x':
-			refChild.textContent = '\u261B ';
-			break;
-		default:
-			refChild.textContent = '* ';
-	}
-	parentNode.appendChild(refChild);
-//	refChild.addEventListener('click', function() {
-//		event.stopImmediatePropagation();
-//		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: this.id }}));
-//	});
-	return(refChild);
-};
-/** deprecated, might redo when writing tests */
-Note.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Note.prototype.buildHTML = function(result) {
-	result.push('<span class="' + this.style + '">');
-	result.push(this.caller);
-	for (var i=0; i<this.children.length; i++) {
-		this.children[i].buildHTML(result);
-	}
-	result.push('</span>');
-};/**
-* This object contains a paragraph of the Bible text as parsed from a USX version of the Bible.
-*/
-function Para(node) {
-	this.style = node.style;
-	this.whiteSpace = node.whiteSpace;
-	this.emptyElement = node.emptyElement;
-	this.children = []; // contains verse | note | char | text
-	Object.freeze(this);
-}
-Para.prototype.tagName = 'para';
-Para.prototype.addChild = function(node) {
-	this.children.push(node);
-};
-Para.prototype.openElement = function() {
-	var elementEnd = (this.emptyElement) ? '" />' : '">';
-	return('<para style="' + this.style + elementEnd);
-};
-Para.prototype.closeElement = function() {
-	return(this.emptyElement ? '' : '</para>');
-};
-Para.prototype.buildUSX = function(result) {
-	result.push(this.whiteSpace, this.openElement());
-	for (var i=0; i<this.children.length; i++) {
-		this.children[i].buildUSX(result);
-	}
-	result.push(this.closeElement());
-};
-Para.prototype.toDOM = function(parentNode) {
-	var identStyles = [ 'ide', 'sts', 'rem', 'h', 'toc1', 'toc2', 'toc3', 'cl' ];
-	var child = document.createElement('p');
-	child.setAttribute('class', this.style);
-	if (identStyles.indexOf(this.style) === -1) {
-		parentNode.appendChild(child);
-	}
-	return(child);
-};
-/** deprecated, might redo when writing tests */
-Para.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Para.prototype.buildHTML = function(result) {
-	var identStyles = [ 'ide', 'sts', 'rem', 'h', 'toc1', 'toc2', 'toc3', 'cl' ];
-	if (identStyles.indexOf(this.style) === -1) {
-		result.push('\n<p class="' + this.style + '">');
-		for (var i=0; i<this.children.length; i++) {
-			this.children[i].buildHTML(result);
-		}
-		result.push('</p>');
-	}
-};
-/**
-* This class contains a text string as parsed from a USX Bible file.
-*/
-function Text(text) {
-	this.text = text;
-	Object.freeze(this);
-}
-Text.prototype.tagName = 'text';
-Text.prototype.buildUSX = function(result) {
-	result.push(this.text);
-};
-Text.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
-	if (parentNode === null || parentNode.tagName === 'ARTICLE') {
-		// discard text node
-	} else {
-		var nodeId = bookCode + chapterNum + '-' + noteNum;
-		var parentClass = parentNode.getAttribute('class');
-		if (parentClass.substr(0, 3) === 'top') {
-			var textNode = document.createElement('span');
-			textNode.setAttribute('class', parentClass.substr(3));
-			textNode.setAttribute('note', this.text);
-			parentNode.appendChild(textNode);
-			//textNode.addEventListener('click', function() {
-			//	event.stopImmediatePropagation();
-			//	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
-			//});
-		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
-			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of parent.
-			//parentNode.addEventListener('click', function() {
-			//	event.stopImmediatePropagation();
-			//	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
-			//});
-		}
-		else {
-			var child = document.createTextNode(this.text);
-			parentNode.appendChild(child);
-		}
-	}
-};
-/** deprecated, might redo when writing tests */
-Text.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Text.prototype.buildHTML = function(result) {
-	result.push(this.text);
-};
-/**
-* This class is the root object of a parsed USX document
-*/
-function USX(node) {
-	this.version = node.version;
-	this.whiteSpace = node.whiteSpace;
-	this.emptyElement = node.emptyElement;
-	this.children = []; // includes books, chapters, and paragraphs
-	Object.freeze(this);
-}
-USX.prototype.tagName = 'usx';
-USX.prototype.addChild = function(node) {
-	this.children.push(node);
-};
-USX.prototype.openElement = function() {
-	var elementEnd = (this.emptyElement) ? '" />' : '">';
-	return('<usx version="' + this.version + elementEnd);
-};
-USX.prototype.closeElement = function() {
-	return(this.emptyElement ? '' : '\n</usx>');
-};
-USX.prototype.toUSX = function() {
-	var result = [];
-	this.buildUSX(result);
-	return(result.join(''));
-};
-USX.prototype.toDOM = function() {
-};
-USX.prototype.buildUSX = function(result) {
-	result.push('\uFEFF<?xml version="1.0" encoding="utf-8"?>');
-	result.push(this.whiteSpace, this.openElement());
-	for (var i=0; i<this.children.length; i++) {
-		this.children[i].buildUSX(result);
-	}
-	result.push(this.closeElement());
-};
-/** deprecated, might redo when writing tests */
-USX.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-USX.prototype.buildHTML = function(result) {
-	result.push('\uFEFF<?xml version="1.0" encoding="utf-8"?>\n');
-	result.push('<html><head>\n');
-	result.push('\t<meta charset="utf-8" />\n');
-	result.push('\t<meta name="format-detection" content="telephone=no" />\n');
-	result.push('\t<meta name="msapplication-tap-highlight" content="no" />\n');
-    result.push('\t<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />\n');
-	result.push('\t<link rel="stylesheet" href="../css/prototype.css"/>\n');
-	result.push('\t<script type="text/javascript" src="cordova.js"></script>\n');
-	result.push('\t<script type="text/javascript">\n');
-	result.push('\t\tfunction onBodyLoad() {\n');
-	result.push('\t\t\tdocument.addEventListener("deviceready", onDeviceReady, false);\n');
-	result.push('\t\t}\n');
-	result.push('\t\tfunction onDeviceReady() {\n');
-	result.push('\t\t\t// app = new BibleApp();\n');
-	result.push('\t\t\t// app.something();\n');
-	result.push('\t\t}\n');
-	result.push('\t</script>\n');
-	result.push('</head><body onload="onBodyLoad()">');
-	for (var i=0; i<this.children.length; i++) {
-		this.children[i].buildHTML(result);
-	}
-	result.push('\n</body></html>');
-};
-/**
-* This chapter contains the verse of a Bible text as parsed from a USX Bible file.
-*/
-function Verse(node) {
-	this.number = node.number;
-	this.style = node.style;
-	this.whiteSpace = node.whiteSpace;
-	this.emptyElement = node.emptyElement;
-	Object.freeze(this);
-}
-Verse.prototype.tagName = 'verse';
-Verse.prototype.openElement = function() {
-	var elementEnd = (this.emptyElement) ? '" />' : '">';
-	return('<verse number="' + this.number + '" style="' + this.style + elementEnd);
-};
-Verse.prototype.closeElement = function() {
-	return(this.emptyElement ? '' : '</verse>');
-};
-Verse.prototype.buildUSX = function(result) {
-	result.push(this.whiteSpace, this.openElement());
-	result.push(this.closeElement());
-};
-Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
-	var reference = bookCode + ':' + chapterNum + ':' + this.number;
-	var child = document.createElement('span');
-	child.setAttribute('id', reference);
-	child.setAttribute('class', this.style);
-	child.textContent = ' ' + this.number + ' ';
-	parentNode.appendChild(child);
-	return(child);
-};
-/** deprecated, might redo when writing tests */
-Verse.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Verse.prototype.buildHTML = function(result) {
-	result.push('<span id="' + this.number + '" class="' + this.style + '">', this.number, ' </span>');
-};/**
 * This class performs localized date and time formatting.
 * It is written as a distinct class, because the way this is done
 * using Cordova is different than how it is done using WebKit/Node.js
@@ -2960,263 +3003,4 @@ var deviceSettings = {
         var type = navigator.connection.type;
         return(type !== 'none' && type !== 'unknown'); // not sure of correct value for UNKNOWN
     }
-};/**
-* This class reads USX files and creates an equivalent object tree
-* elements = [usx, book, chapter, para, verse, note, char];
-* paraStyle = [b, d, cl, cp, h, li, p, pc, q, q2, mt, mt2, mt3, mte, toc1, toc2, toc3, ide, ip, ili, ili2, is, m, mi, ms, nb, pi, s, sp];
-* charStyle = [add, bk, it, k, fr, fq, fqa, ft, wj, qs, xo, xt];
-*/
-function USXParser() {
-}
-USXParser.prototype.readBook = function(data) {
-	var reader = new XMLTokenizer(data);
-	var nodeStack = [];
-	var node;
-	var tempNode = {};
-	var count = 0;
-	while (tokenType !== XMLNodeType.END && count < 300000) {
-
-		var tokenType = reader.nextToken();
-
-		var tokenValue = reader.tokenValue();
-		//console.log('type=|' + type + '|  value=|' + value + '|');
-		count++;
-
-		switch(tokenType) {
-			case XMLNodeType.ELE_OPEN:
-				tempNode = { tagName: tokenValue };
-				tempNode.whiteSpace = (priorType === XMLNodeType.WHITESP) ? priorValue : '';
-				//console.log(tokenValue, priorType, '|' + priorValue + '|');
-				break;
-			case XMLNodeType.ATTR_NAME:
-				tempNode[tokenValue] = '';
-				break;
-			case XMLNodeType.ATTR_VALUE:
-				tempNode[priorValue] = tokenValue;
-				break;
-			case XMLNodeType.ELE_END:
-				tempNode.emptyElement = false;
-				node = this.createUSXObject(tempNode);
-				//console.log(node.openElement());
-				if (nodeStack.length > 0) {
-					nodeStack[nodeStack.length -1].addChild(node);
-				}
-				nodeStack.push(node);
-				break;
-			case XMLNodeType.TEXT:
-				node = new Text(tokenValue);
-				//console.log(node.text);
-				nodeStack[nodeStack.length -1].addChild(node);
-				break;
-			case XMLNodeType.ELE_EMPTY:
-				tempNode.emptyElement = true;
-				node = this.createUSXObject(tempNode);
-				//console.log(node.openElement());
-				nodeStack[nodeStack.length -1].addChild(node);
-				break;
-			case XMLNodeType.ELE_CLOSE:
-				node = nodeStack.pop();
-				//console.log(node.closeElement());
-				if (node.tagName !== tokenValue) {
-					throw new Error('closing element mismatch ' + node.openElement() + ' and ' + tokenValue);
-				}
-				break;
-			case XMLNodeType.WHITESP:
-				// do nothing
-				break;
-			case XMLNodeType.PROG_INST:
-				// do nothing
-				break;
-			case XMLNodeType.END:
-				// do nothing
-				break;
-			default:
-				throw new Error('The XMLNodeType ' + tokenType + ' is unknown in USXParser.');
-		}
-		var priorType = tokenType;
-		var priorValue = tokenValue;
-	}
-	return(node);
-};
-USXParser.prototype.createUSXObject = function(tempNode) {
-	switch(tempNode.tagName) {
-		case 'char':
-			return(new Char(tempNode));
-		case 'note':
-			return(new Note(tempNode));
-		case 'verse':
-			return(new Verse(tempNode));
-		case 'para':
-			return(new Para(tempNode));
-		case 'chapter':
-			return(new Chapter(tempNode));
-		case 'book':
-			return(new Book(tempNode));
-		case 'usx':
-			return(new USX(tempNode));
-		default:
-			throw new Error('USX element name ' + tempNode.tagName + ' is not known to USXParser.');
-	}
-};
-/**
-* This class does a stream read of an XML string to return XML tokens and their token type.
-*/
-var XMLNodeType = Object.freeze({ELE_OPEN:'ele-open', ATTR_NAME:'attr-name', ATTR_VALUE:'attr-value', ELE_END:'ele-end', 
-			WHITESP:'whitesp', TEXT:'text', ELE_EMPTY:'ele-empty', ELE_CLOSE:'ele-close', PROG_INST:'prog-inst', END:'end'});
-
-function XMLTokenizer(data) {
-	this.data = data;
-	this.position = 0;
-
-	this.tokenStart = 0;
-	this.tokenEnd = 0;
-
-	this.state = Object.freeze({ BEGIN:'begin', START:'start', WHITESP:'whitesp', TEXT:'text', ELE_START:'ele-start', ELE_OPEN:'ele-open', 
-		EXPECT_EMPTY_ELE:'expect-empty-ele', ELE_CLOSE:'ele-close', 
-		EXPECT_ATTR_NAME:'expect-attr-name', ATTR_NAME:'attr-name', EXPECT_ATTR_VALUE:'expect-attr-value1', ATTR_VALUE:'attr-value', 
-		PROG_INST:'prog-inst', END:'end' });
-	this.current = this.state.BEGIN;
-
-	Object.seal(this);
-}
-XMLTokenizer.prototype.tokenValue = function() {
-	return(this.data.substring(this.tokenStart, this.tokenEnd));
-};
-XMLTokenizer.prototype.nextToken = function() {
-	this.tokenStart = this.position;
-	while(this.position < this.data.length) {
-		var chr = this.data[this.position++];
-		//console.log(this.current, chr, chr.charCodeAt(0));
-		switch(this.current) {
-			case this.state.BEGIN:
-				if (chr === '<') {
-					this.current = this.state.ELE_START;
-					this.tokenStart = this.position;
-				}
-				break;
-			case this.state.START:
-				if (chr === '<') {
-					this.current = this.state.ELE_START;
-					this.tokenStart = this.position;
-				}
-				else if (chr === ' ' || chr === '\t' || chr === '\n' || chr === '\r') {
-					this.current = this.state.WHITESP;
-					this.tokenStart = this.position -1;
-				}
-				else {
-					this.current = this.state.TEXT;
-					this.tokenStart = this.position -1;
-				}
-				break;
-			case this.state.WHITESP:
-				if (chr === '<') {
-					this.current = this.state.START;
-					this.position--;
-					this.tokenEnd = this.position;
-					return(XMLNodeType.WHITESP);
-				}
-				else if (chr !== ' ' && chr !== '\t' && chr !== '\n' && chr !== '\r') {
-					this.current = this.state.TEXT;
-				}
-				break;
-			case this.state.TEXT:
-				if (chr === '<') {
-					this.current = this.state.START;
-					this.position--;
-					this.tokenEnd = this.position;
-					return(XMLNodeType.TEXT);
-				}
-				break;
-			case this.state.ELE_START:
-				if (chr === '/') {
-					this.current = this.state.ELE_CLOSE;
-					this.tokenStart = this.position;
-				} 
-				else if (chr === '?') {
-					this.current = this.state.PROG_INST;
-					this.tokenStart = this.position;
-				} 
-				else {
-					this.current = this.state.ELE_OPEN;
-				}
-				break;
-			case this.state.ELE_OPEN:
-				if (chr === ' ') {
-					this.current = this.state.EXPECT_ATTR_NAME;
-					this.tokenEnd = this.position -1;
-					return(XMLNodeType.ELE_OPEN);
-				} 
-				else if (chr === '>') {
-					this.current = this.state.START;
-					return(XMLNodeType.ELE_END);
-				}
-				else if (chr === '/') {
-					this.current = this.state.EXPECT_EMPTY_ELE;
-					this.tokenEnd = this.position -1;
-					return(XMLNodeType.ELE_OPEN);
-				}
-				break;
-			case this.state.ELE_CLOSE:
-				if (chr === '>') {
-					this.current = this.state.START;
-					this.tokenEnd = this.position -1;
-					return(XMLNodeType.ELE_CLOSE);
-				}
-				break;
-			case this.state.EXPECT_ATTR_NAME:
-				if (chr === '>') {
-					this.current = this.state.START;
-					this.tokenEnd = this.tokenStart;
-					return(XMLNodeType.ELE_END);
-				}
-				else if (chr === '/') {
-					this.current = this.state.EXPECT_EMPTY_ELE;
-				}
-				else if (chr !== ' ') {
-					this.current = this.state.ATTR_NAME;
-					this.tokenStart = this.position -1;		
-				}
-				break;
-			case this.state.EXPECT_EMPTY_ELE:
-				if (chr === '>') {
-					this.current = this.state.START;
-					this.tokenEnd = this.tokenStart;
-					return(XMLNodeType.ELE_EMPTY);
-				}
-				break;
-			case this.state.ATTR_NAME:
-				if (chr === '=') {
-					this.current = this.state.EXPECT_ATTR_VALUE;
-					this.tokenEnd = this.position -1;
-					return(XMLNodeType.ATTR_NAME);
-				}
-				break;
-			case this.state.EXPECT_ATTR_VALUE:
-				if (chr === '"') {
-					this.current = this.state.ATTR_VALUE;
-					this.tokenStart = this.position;
-				} else if (chr !== ' ') {
-					throw new Error();
-				}
-				break;
-			case this.state.ATTR_VALUE:
-				if (chr === '"') {
-					this.current = this.state.EXPECT_ATTR_NAME;
-					this.tokenEnd = this.position -1;
-					return(XMLNodeType.ATTR_VALUE);
-				}
-				break;
-			case this.state.PROG_INST:
-				if (chr === '>') {
-					this.current = this.state.START;
-					this.tokenStart -= 2;
-					this.tokenEnd = this.position;
-					return(XMLNodeType.PROG_INST);
-				}
-				break;
-			default:
-				throw new Error('Unknown state ' + this.current);
-		}
-	}
-	return(XMLNodeType.END);
 };

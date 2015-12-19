@@ -40,15 +40,11 @@ var isWindows = /Windows /.test(navigator.userAgent); // Windows (8.1)
 var isIE = isWindows || isWP8;
 var isWebKit = !isIE; // TBD [Android or iOS]
 
-var scenarioList = [ isAndroid ? 'Plugin-sqlite-connector' : 'Plugin', 'HTML5', 'Plugin-android.database' ];
+var scenarioList = [ isAndroid ? 'Plugin-sqlite4java' : 'Plugin', 'HTML5', 'Plugin-android.database' ];
 
-//var scenarioCount = isAndroid ? 3 : (isIE ? 1 : 2);
-//var scenarioCount = (!!window.hasWebKitBrowser) ? 2 : 1;
-var hasAndroidWebKitBrowser = isAndroid && (!!window.hasWebKitBrowser);
-var scenarioCount = hasAndroidWebKitBrowser ? 3 : ((!!window.hasWebKitBrowser) ? 2 : 1);
+var scenarioCount = isAndroid ? 3 : (isIE ? 1 : 2);
 
-// legacy tests:
-var mytests = function() {
+describe('legacy tests', function() {
 
   for (var i=0; i<scenarioCount; ++i) {
 
@@ -98,7 +94,6 @@ var mytests = function() {
         test_it(suiteName + ' string encoding test with UNICODE \\u0000', function () {
           if (isWindows) pending('BROKEN for Windows'); // XXX
           if (isWP8) pending('BROKEN for WP(8)'); // [BUG #202] UNICODE characters not working with WP(8)
-          if (isAndroid && !(isWebSql || isOldAndroidImpl)) pending('BROKEN for Android (sqlite-connector version)'); // XXX
 
           stop();
 
@@ -541,10 +536,11 @@ var mytests = function() {
           });
         });
 
-        // NOTE: conclusion reached with @aarononeal and @nolanlawson in litehelpers/Cordova-sqlite-storage#232
-        // that the according to the spec at http://www.w3.org/TR/webdatabase/ the transaction should be
-        // recovered *only* if the sql error handler returns false.
-        test_it(suiteName + "error handler returning false lets transaction continue", function() {
+        test_it(suiteName + "error handler returning false [non-true] lets transaction continue", function() {
+          // XXX TODO TEST [PLUGIN BROKEN]:
+          // - return undefined 
+          // - return "true" string
+          // etc.
           withTestTable(function(db) {
             stop(2);
             db.transaction(function(tx) {
@@ -902,7 +898,7 @@ var mytests = function() {
 
           db.transaction(function(tx) {
             ok(!blocked, 'callback to the transaction shouldn\'t block (1)');
-            tx.executeSql('SELECT 1', [], function () {
+            tx.executeSql('SELECT 1 from sqlite_master', [], function () {
               ok(!blocked, 'callback to the transaction shouldn\'t block (2)');
             });
           }, function(err) { ok(false, err.message) }, function() {
@@ -966,9 +962,12 @@ var mytests = function() {
 
         });
 
-        // NOTE [BUG #230]: this is now working if we do not depend on a valid sqlite_master table
-        // XXX TODO: test with and without transaction callbacks, also with empty db.readTransaction()
+        // XXX [BUG #230] BROKEN for iOS, Windows, and WP(8) versions of the plugin
         test_it(suiteName + 'empty transaction (no sql statements) and then SELECT transaction', function () {
+          if (isWindows) pending('BROKEN for Windows');
+          if (isWP8) pending('BROKEN for WP(8)');
+          if (!(isWebSql || isAndroid || isIE)) pending('BROKEN for iOS version of plugin');
+          if ((!isWebSql) && isAndroid && (!isOldAndroidImpl)) pending('BROKEN for Android version of plugin [with sqlite4java]');
 
           stop(2);
 
@@ -983,10 +982,10 @@ var mytests = function() {
 
           // verify we can still continue
           db.transaction(function (tx) {
-            tx.executeSql('SELECT 1', [], function (tx, res) {
-              equal(res.rows.item(0)['1'], 1);
-
+            tx.executeSql('SELECT 1 FROM sqlite_master', [], function (tx, res) {
+              // same order as was found in test-www
               start();
+              equal(res.rows.item(0)['1'], 1);
             });
           }, function (error) {
             // XXX [BUG #230] iOS, Windows, and WP(8) versions of the plugin fail here:
@@ -1059,7 +1058,6 @@ var mytests = function() {
         test_it(suiteName + ' stores [Unicode] string with \\u0000 correctly', function () {
           if (isWindows) pending('BROKEN on Windows'); // XXX
           if (isWP8) pending('BROKEN for WP(8)'); // [BUG #202] UNICODE characters not working with WP(8)
-          if (isAndroid && !(isWebSql /*|| isOldAndroidImpl*/)) pending('BROKEN for Android (sqlite-connector version)'); // XXX
 
           stop();
 
@@ -1087,7 +1085,7 @@ var mytests = function() {
 
                     // ensure this matches our expectation of that database's
                     // default encoding
-                    tx.executeSql('SELECT hex("foob") AS `hex`', [], function (tx, res) {
+                    tx.executeSql('SELECT hex("foob") AS `hex` FROM sqlite_master', [], function (tx, res) {
                       var otherHex = res.rows.item(0).hex;
                       equal(hex.length, otherHex.length,
                           'expect same length, i.e. same global db encoding');
@@ -1504,7 +1502,7 @@ var mytests = function() {
 
     //var suiteName = "plugin: ";
 
-    var scenarioList = [ isAndroid ? 'plugin-sqlite-connector' : 'Plugin', 'plugin-android.database' ];
+    var scenarioList = [ isAndroid ? 'plugin-sqlite4java' : 'Plugin', 'plugin-android.database' ];
 
     var scenarioCount = isAndroid ? 2 : 1;
 
@@ -1996,9 +1994,6 @@ var mytests = function() {
           });
         });
 
-      // skip these in CI testing (for now):
-      if (!!window.hasWebKitBrowser) {
-
         test_it(suiteName + ' repeatedly open and close database (4x)', function () {
           if (isWindows) pending('NOT IMPLEMENTED for Windows'); // XXX TODO
 
@@ -2238,17 +2233,11 @@ var mytests = function() {
             start(1);
           });
         });
-
-      }
-
       });
     }
 
   });
 
-}
-
-if (window.hasBrowser) mytests();
-else exports.defineAutoTests = mytests;
+});
 
 /* vim: set expandtab : */

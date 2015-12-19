@@ -1,42 +1,21 @@
 {
-  "name": "cordova-sqlite-storage",
-  "version": "0.7.10-dev",
-  "description": "Native interface to SQLite for PhoneGap/Cordova",
-  "cordova": {
-    "id": "cordova-sqlite-storage",
+    "version": "0.7.7",
+    "name": "io.litehelpers.cordova.sqlite",
+    "cordova_name": "Cordova sqlite storage plugin",
+    "description": "Native interface to SQLite for PhoneGap/Cordova. Allows you to use more storage and provides more flexibility than the standard Web SQL database (window.openDatabase).",
+    "license": "MIT",
     "platforms": [
-      "android",
-      "ios",
-      "windows",
-      "wp8",
-      "wp7",
-      "amazon-fireos"
+        "android",
+        "ios",
+        "windows",
+        "wp8",
+        "wp7",
+        "amazon-fireos"
+    ],
+    "engines": [
+        {
+            "name": "cordova",
+            "version": ">=3.3.0"
+        }
     ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/litehelpers/Cordova-sqlite-storage.git"
-  },
-  "keywords": [
-    "sqlite",
-    "ecosystem:cordova",
-    "cordova-android",
-    "cordova-ios",
-    "cordova-windows",
-    "cordova-wp8",
-    "cordova-wp7",
-    "cordova-amazon-fireos"
-  ],
-  "engines": [
-    {
-      "name": "cordova",
-      "version": ">=3.3.0"
-    }
-  ],
-  "author": "various",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/litehelpers/Cordova-sqlite-storage/issues"
-  },
-  "homepage": "https://github.com/litehelpers/Cordova-sqlite-storage"
 }
