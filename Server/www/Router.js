@@ -35,11 +35,13 @@ server.use(restify.bodyParser({
 server.pre(restify.pre.userAgentConnection()); // if UA is curl, close connection.
 
 /**
-* This pre-step is to authorize transactions.
+* This pre-step is to authenticate users.
 */
 server.pre(function(request, response, next) {
-	var path = request.getPath().substr(1,4);
-	if (path === 'book' || path === 'ques' || path === 'resp' || path === 'logi') return(next());
+	var path = request.getPath();
+	if (path === '/') return(next());
+	path = path.substr(1,4);
+	if (path === 'book' || path === 'ques' || path === 'resp' || path === 'logi' || path === 'qapp') return(next());
 	authController.authenticate(request, function(err) {
 		return(next(err));
 	});
@@ -74,7 +76,16 @@ server.get('/beginTest', function(request, response, next) {
 	});
 });
 
-server.get('/\/book\/?.*/', restify.serveStatic({
+server.get(/\/book\/?.*/, restify.serveStatic({
+	directory: '../../StaticRoot'
+}));
+
+server.get('/', restify.serveStatic({
+	directory: '../../StaticRoot',
+	default: 'index.html'
+}));
+
+server.get(/\/qapp\/?.*/, restify.serveStatic({
 	directory: '../../StaticRoot'
 }));
 

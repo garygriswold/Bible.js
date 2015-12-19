@@ -22,10 +22,13 @@
 * We want to fix HeaderView once it is added, and never delete it.
 * We also do not want to include it in the transition.
 */
+var SERVER_HOST = 'qa.shortsands.com';//'localhost'
+var SERVER_PORT = '8080';
+
 "use strict";
 function ViewNavigator() {
 	this.currentState = new CurrentState();
-	this.httpClient = new HttpClient('localhost', '8080');
+	this.httpClient = new HttpClient(SERVER_HOST, SERVER_PORT);
 	this.queueModel = new QueueViewModel(this);
 	this.answerModel = new AnswerViewModel(this);
 	this.rolesModel = new RolesViewModel(this);
