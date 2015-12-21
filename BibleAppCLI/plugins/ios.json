@@ -161,6 +161,9 @@
         "com.telerik.plugins.wkwebview": {
             "WKWEBVIEW_SERVER_PORT": "12344",
             "PACKAGE_NAME": "com.shortsands.bibleapp"
+        },
+        "cordova-plugin-zip": {
+            "PACKAGE_NAME": "com.shortsands.bibleapp"
         }
     },
     "dependent_plugins": {

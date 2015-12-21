@@ -63,6 +63,12 @@
 		701BD8EC87FD4A3BA01D448E /* CDVWebViewOperationsDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AF3EC52875B40EE949475B0 /* CDVWebViewOperationsDelegate.m */; };
 		82EC8A6D628D402B921F92E5 /* CDVWebViewUIDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 73410C5CC2834089B4052D7E /* CDVWebViewUIDelegate.m */; };
 		A77C5E58847E438AB440CA76 /* GCDWebServer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF70A1B4A788454CBEFE96A5 /* GCDWebServer.framework */; };
+		8429F75D002749F4B6D4A7DE /* ZipPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEDF273938E4341A70C02A7 /* ZipPlugin.m */; };
+		D2E5334E58AD4892B2EE05C6 /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 0291FA279CB541A098A495D8 /* SSZipArchive.m */; };
+		2D6DEDFBFD9C414A805F927A /* zip.c in Resources */ = {isa = PBXBuildFile; fileRef = 94E26A50098D445DA6536512 /* zip.c */; };
+		8A0CD6ADBD244FA496656315 /* unzip.c in Resources */ = {isa = PBXBuildFile; fileRef = D62DA862D36945049AE3F79D /* unzip.c */; };
+		B224EF57CD2049DBBF8D9B96 /* mztools.c in Resources */ = {isa = PBXBuildFile; fileRef = 167313C83ABD473886928A8F /* mztools.c */; };
+		7CECD4F123E0412B911DBE57 /* ioapi.c in Resources */ = {isa = PBXBuildFile; fileRef = 7B4CF18FA0BF4839ABAB6EC9 /* ioapi.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -171,6 +177,19 @@
 		882A6356C6F849408CEF7B90 /* CDVWebViewOperationsDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVWebViewOperationsDelegate.h"; path = "com.telerik.plugins.wkwebview/CDVWebViewOperationsDelegate.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		E0D64BC9538B47B2A0154E64 /* CDVWebViewUIDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVWebViewUIDelegate.h"; path = "com.telerik.plugins.wkwebview/CDVWebViewUIDelegate.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		EF70A1B4A788454CBEFE96A5 /* GCDWebServer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "GCDWebServer.framework"; path = "Bible.js/Plugins/cordova-plugin-webserver/GCDWebServer.framework"; sourceTree = "<group>"; };
+		7AEDF273938E4341A70C02A7 /* ZipPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "ZipPlugin.m"; path = "cordova-plugin-zip/ZipPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		0291FA279CB541A098A495D8 /* SSZipArchive.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "SSZipArchive.m"; path = "cordova-plugin-zip/Plugins/minizip/SSZipArchive.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		94E26A50098D445DA6536512 /* zip.c */ = {isa = PBXFileReference; lastKnownFileType = unknown; name = "zip.c"; path = "cordova-plugin-zip/Plugins/minizip/zip.c"; sourceTree = "<group>"; fileEncoding = 4; };
+		D62DA862D36945049AE3F79D /* unzip.c */ = {isa = PBXFileReference; lastKnownFileType = unknown; name = "unzip.c"; path = "cordova-plugin-zip/Plugins/minizip/unzip.c"; sourceTree = "<group>"; fileEncoding = 4; };
+		167313C83ABD473886928A8F /* mztools.c */ = {isa = PBXFileReference; lastKnownFileType = unknown; name = "mztools.c"; path = "cordova-plugin-zip/Plugins/minizip/mztools.c"; sourceTree = "<group>"; fileEncoding = 4; };
+		7B4CF18FA0BF4839ABAB6EC9 /* ioapi.c */ = {isa = PBXFileReference; lastKnownFileType = unknown; name = "ioapi.c"; path = "cordova-plugin-zip/Plugins/minizip/ioapi.c"; sourceTree = "<group>"; fileEncoding = 4; };
+		EDCBC83ACE7F419390F3A059 /* ZipPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "ZipPlugin.h"; path = "cordova-plugin-zip/ZipPlugin.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		8C83EA1BCBD740E6B8DAB067 /* SSZipArchive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SSZipArchive.h"; path = "cordova-plugin-zip/Plugins/minizip/SSZipArchive.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		EB0E9F33418E463C8DA5A60E /* zip.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "zip.h"; path = "cordova-plugin-zip/Plugins/minizip/zip.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		0B231A2580F94943BA43A118 /* unzip.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "unzip.h"; path = "cordova-plugin-zip/Plugins/minizip/unzip.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		A0C80CDE7F3A46C3AEE61FC5 /* mztools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "mztools.h"; path = "cordova-plugin-zip/Plugins/minizip/mztools.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		F4BFA5C8856B4067BAF72330 /* ioapi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "ioapi.h"; path = "cordova-plugin-zip/Plugins/minizip/ioapi.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		54A408FAA5564C8CA5FE563D /* crypt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "crypt.h"; path = "cordova-plugin-zip/Plugins/minizip/crypt.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -317,6 +336,19 @@
 				FB2A8F8E902B4071B52DD907 /* ReroutingUIWebView.h */,
 				882A6356C6F849408CEF7B90 /* CDVWebViewOperationsDelegate.h */,
 				E0D64BC9538B47B2A0154E64 /* CDVWebViewUIDelegate.h */,
+				7AEDF273938E4341A70C02A7 /* ZipPlugin.m */,
+				0291FA279CB541A098A495D8 /* SSZipArchive.m */,
+				94E26A50098D445DA6536512 /* zip.c */,
+				D62DA862D36945049AE3F79D /* unzip.c */,
+				167313C83ABD473886928A8F /* mztools.c */,
+				7B4CF18FA0BF4839ABAB6EC9 /* ioapi.c */,
+				EDCBC83ACE7F419390F3A059 /* ZipPlugin.h */,
+				8C83EA1BCBD740E6B8DAB067 /* SSZipArchive.h */,
+				EB0E9F33418E463C8DA5A60E /* zip.h */,
+				0B231A2580F94943BA43A118 /* unzip.h */,
+				A0C80CDE7F3A46C3AEE61FC5 /* mztools.h */,
+				F4BFA5C8856B4067BAF72330 /* ioapi.h */,
+				54A408FAA5564C8CA5FE563D /* crypt.h */,
 			);
 			name = Plugins;
 			path = "Bible.js/Plugins";
@@ -520,6 +552,12 @@
 				4D7B9E5273AB47A59615C838 /* ReroutingUIWebView.m in Sources */,
 				701BD8EC87FD4A3BA01D448E /* CDVWebViewOperationsDelegate.m in Sources */,
 				82EC8A6D628D402B921F92E5 /* CDVWebViewUIDelegate.m in Sources */,
+				8429F75D002749F4B6D4A7DE /* ZipPlugin.m in Sources */,
+				D2E5334E58AD4892B2EE05C6 /* SSZipArchive.m in Sources */,
+				2D6DEDFBFD9C414A805F927A /* zip.c in Resources */,
+				8A0CD6ADBD244FA496656315 /* unzip.c in Resources */,
+				B224EF57CD2049DBBF8D9B96 /* mztools.c in Resources */,
+				7CECD4F123E0412B911DBE57 /* ioapi.c in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -96,5 +96,21 @@
         },
         "is_top_level": false,
         "variables": {}
+    },
+    "cordova-plugin-zip": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-zip"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-fastrde-md5": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-fastrde-md5"
+        },
+        "is_top_level": false,
+        "variables": {}
     }
 }

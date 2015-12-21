@@ -48,6 +48,9 @@
     <feature name="WKWebViewPolyfill">
         <param name="ios-package" value="WKWebViewPolyfill" />
     </feature>
+    <feature name="Zip">
+        <param name="ios-package" value="ZipPlugin" />
+    </feature>
     <preference name="Orientation" value="all" />
     <name>Bible.js</name>
     <description>

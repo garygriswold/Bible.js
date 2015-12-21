@@ -9,22 +9,29 @@
 function FileDownloader(host, port) {
 	this.fileTransfer = new FileTransfer();
 	this.uri = encodeURI('http://' + host + ':' + port + '/book/');
-	this.basePath = 'cdvfile://localhost/persistent/';
+	this.downloadPath = 'cdvfile://localhost/temporary/';
+	this.finalPath = 'cdvfile://localhost/persistent/../LocalDatabase/';
 }
 FileDownloader.prototype.download = function(bibleVersion, callback) {
-	var remotePath = this.uri + bibleVersion;
-	var filePath = this.basePath + '../LocalDatabase/' + bibleVersion;
-	console.log('download from', remotePath, ' to', filePath);
-    this.fileTransfer.download(remotePath, filePath, onDownSuccess, onDownError, true, {});
+	var that = this;
+	var bibleVersionZip = bibleVersion + '.zip';
+	var remotePath = this.uri + bibleVersionZip;
+	var tempPath = this.downloadPath + bibleVersionZip;
+	console.log('download from', remotePath, ' to', tempPath);
+    this.fileTransfer.download(remotePath, tempPath, onDownSuccess, onDownError, true, {});
 
     function onDownSuccess(entry) {
     	console.log("download complete: ", JSON.stringify(entry));
-       	callback(entry);   	
+    	zip.unzip(tempPath, that.finalPath, function(resultCode) {
+	    	if (resultCode == 0) {
+	    		console.log('ZIP done', resultCode);
+	    		callback();		    	
+	    	} else {
+		    	callback(new IOError({code: 'unzip failed', message: entry.nativeURL}));
+	    	}
+		});
     }
     function onDownError(error) {
-    	console.log("download error source " + error.source);
-      	console.log("download error target " + error.target);
-       	console.log("download error code" + error.code);
        	callback(new IOError({ code: error.code, message: error.source}));   	
     }
 };

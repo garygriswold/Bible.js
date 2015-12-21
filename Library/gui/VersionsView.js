@@ -99,10 +99,10 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		
 		var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT);
-		downloader.download(versionFile, function(results) {
+		downloader.download(versionFile, function(error) {
 			gsPreloader.active(false);
-			if (results instanceof IOError) {
-				// download did not succeed.  What error do I show?
+			if (error) {
+				console.log(JSON.stringify(error));
 			} else {
 				that.settingStorage.setVersion(versionCode, versionFile);
 				iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');

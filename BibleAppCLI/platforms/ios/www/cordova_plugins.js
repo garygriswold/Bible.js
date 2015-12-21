@@ -271,6 +271,14 @@ module.exports = [
         "clobbers": [
             "wkwebview"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-zip/zip.js",
+        "id": "cordova-plugin-zip.Zip",
+        "pluginId": "cordova-plugin-zip",
+        "clobbers": [
+            "zip"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -287,7 +295,8 @@ module.exports.metadata =
     "io.litehelpers.cordova.sqlite": "0.7.10-pre",
     "cordova-plugin-statusbar": "1.0.1",
     "com.telerik.plugins.wkwebview": "0.6.7",
-    "cordova-plugin-webserver": "1.0.3"
+    "cordova-plugin-webserver": "1.0.3",
+    "cordova-plugin-zip": "3.0.0"
 }
 // BOTTOM OF METADATA
 });

@@ -2560,26 +2560,91 @@ HttpClient.prototype.request = function(method, path, postData, callback) {
 * 'LocalDatabase' is the file under Library where the database is expected.
 */
 function FileDownloader(host, port) {
-	this.fileTransfer = new FileTransfer();
+	//this.fileTransfer = new FileTransfer();
 	this.uri = encodeURI('http://' + host + ':' + port + '/book/');
-	this.basePath = 'cdvfile://localhost/persistent/';
+	this.basePath = 'cdvfile://localhost/persistent/../LocalDatabase';
+	
+	downloader.init({folder: this.basePath, unzip: true});
 }
 FileDownloader.prototype.download = function(bibleVersion, callback) {
-	var remotePath = this.uri + bibleVersion;
-	var filePath = this.basePath + '../LocalDatabase/' + bibleVersion;
+	var remotePath = this.uri + bibleVersion + '.zip';
+	//var filePath = this.basePath + '../LocalDatabase/' + bibleVersion;
 	console.log('download from', remotePath, ' to', filePath);
-    this.fileTransfer.download(remotePath, filePath, onDownSuccess, onDownError, true, {});
+    //this.fileTransfer.download(remotePath, filePath, onDownSuccess, onDownError, true, {});
+    
+    document.addEventListener(DOWNLOADER_initialized, initialized);
+    document.addEventListener(DOWNLOADER_gotFileSystem, gotFilesystem);
+    document.addEventListener(DOWNLOADER_gotFolder, gotFolder);
+    document.addEventListener(DOWNLOADER_error, gotError);
+    document.addEventListener(DOWNLOADER_noWifeConnection, noWifiConnection);
+    document.addEventListener(DOWNLOADER_downloadSuccess, downloadSuccess);
+    document.addEventListener(DOWNLOADER_downloadError, downloadError);
+    document.addEventListener(DOWNLOADER_downloadProgress, downloadProgress);
+    document.addEventListener(DOWNLOADER_unzipSuccess, unzipSuccess);
+    document.addEventListener(DOWNLOADER_unzipError, unzipError);
+    document.addEventListener(DOWNLOADER_unzipProgress, unzipProgress);
+    document.addEventListener(DOWNLOADER_fileRemoved, fileRemoved);
+    document.addEventListener(DOWNLOADER_fileRemoveError, fileRemoveError);
+    document.addEventListener(DOWNLOADER_getFileError, gotFileError);
+    //document.addEventListener(DOWNLOADER_fileCheckSuccess, fileCheckSuccess);
+    //document.addEventListener(DOWNLOADER_fileCheckFailed, fileCheckFailed);
+    //document.addEventListener(DOWNLOADER_fileCheckError, fileCheckError);
+    
+    download.get(remotePath);
+    
+    function initialized(event) {
+	    console.log('DOWNLOADER INITIALIZED', event);
+    }
+    function gotFilesystem(event) {
+	    console.log('DOWNLOADER GOT FILESYSTEM', event);	    
+    }
+    function gotFolder(event) {
+	    console.log('DOWNLOADER GOT FOLDER', event);		    
+    }
+    function gotError(event) {
+	    console.log('DOWNLOADER GOT ERROR', event);	    
+    }
+    function noWifiConnection(event) {
+	    console.log('DOWNLOADER NO WIFI', event);
+    }
+    function downloadSuccess(event) {
+	 	console.log('DOWNLOADER DOWNLOAD SUCCESS', event);	    
+    }
+    function downloadError(event) {
+	 	console.log('DOWNLOADER DOWNLOAD ERROR', event);	   
+    }
+    function downloadProgress(event) {
+	    console.log('DOWNLOADER DOWNLOAD PROGRESS', event);	    
+    }
+    function unzipSuccess(event) {
+	    console.log('DOWNLOADER UNZIP SUCCESS', event);	    
+    }
+    function unzipError(event) {
+	    console.log('DOWNLOADER UNZIP ERROR', event);
+    }
+    function unzipProgress(event) {
+	    console.log('DOWNLOADER UNZIP PROGRESS', event);
+    }
+    function fileRemoved(event) {
+	    console.log('DOWNLOADER FILE REMOVED', event);
+    }
+    function fileRemoveError(event) {
+	    console.log('DOWNLOADER FILE REMOVED ERROR', event);
+    }
+    function gotFileError(event) {
+	    console.log('DOWNLOADER FILE ERROR', event);
+    }
 
-    function onDownSuccess(entry) {
-    	console.log("download complete: ", JSON.stringify(entry));
-       	callback(entry);   	
-    }
-    function onDownError(error) {
-    	console.log("download error source " + error.source);
-      	console.log("download error target " + error.target);
-       	console.log("download error code" + error.code);
-       	callback(new IOError({ code: error.code, message: error.source}));   	
-    }
+    //function onDownSuccess(entry) {
+    //	console.log("download complete: ", JSON.stringify(entry));
+    //   	callback(entry);   	
+    //}
+    //function onDownError(error) {
+    //	console.log("download error source " + error.source);
+    //  	console.log("download error target " + error.target);
+    //   	console.log("download error code" + error.code);
+    //   	callback(new IOError({ code: error.code, message: error.source}));   	
+    //}
 };/**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
