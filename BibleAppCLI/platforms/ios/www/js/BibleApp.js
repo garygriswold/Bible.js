@@ -235,7 +235,7 @@ AppViewController.prototype.begin = function(develop) {
 /**
 * This class contains user interface features for the display of the Bible text
 */
-var CODEX_VIEW = {BEFORE: 0, AFTER: 1, MAX: 10, SCROLL_TIMEOUT: 100};
+var CODEX_VIEW = {BEFORE: 0, AFTER: 2, MAX: 100000, SCROLL_TIMEOUT: 200};
 
 function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.chaptersAdapter = chaptersAdapter;
@@ -248,14 +248,20 @@ function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.viewport.style.top = headerHeight + 'px'; // Start view at bottom of header.
 	this.currentNodeId = null;
 	this.checkScrollID = null;
-	this.scrollYPct = 0;
+	this.userIsScrolling = false;
+	//this.scrollYPct = 0;
 	Object.seal(this);
 	var that = this;
-	this.viewport.addEventListener('orientationchange', function(event) {
-		if (that.viewport.children.length > 0) {
-			window.scrollTo(0, that.scrollYPct * document.body.scrollHeight);
-		}
-	});
+	if (deviceSettings.platform() == 'ios') {
+		window.addEventListener('scroll', function(event) {
+			that.userIsScrolling = true;
+		});
+	}
+	//this.viewport.addEventListener('orientationchange', function(event) {
+	//	if (that.viewport.children.length > 0) {
+	//		window.scrollTo(0, that.scrollYPct * document.body.scrollHeight);
+	//	}
+	//});
 }
 CodexView.prototype.hideView = function() {
 	window.clearTimeout(this.checkScrollID);
@@ -290,14 +296,14 @@ CodexView.prototype.showView = function(nodeId) {
 				that.showChapters([nextChapter], true, function() {
 					that.checkChapterQueueSize('top');
 					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-					onScrollFinish();
+					//onScrollFinish();
 				});
 			} else {
 				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-				onScrollFinish();
+				//onScrollFinish();
 			}
 		}
-		else if (window.scrollY <= window.innerHeight) {
+		else if (window.scrollY <= window.innerHeight && ! that.userIsScrolling) {
 			var firstNode = that.viewport.firstChild;
 			var firstChapter = new Reference(firstNode.id.substr(3));
 			var beforeChapter = that.tableContents.rowId(firstChapter) - 1;
@@ -305,25 +311,26 @@ CodexView.prototype.showView = function(nodeId) {
 				that.showChapters([beforeChapter], false, function() {
 					that.checkChapterQueueSize('bottom');
 					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-					onScrollFinish();
+					//onScrollFinish();
 				});
 			} else {
 				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-				onScrollFinish();
+				//onScrollFinish();
 			}
 		} else {
 			that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-			onScrollFinish();
+			//onScrollFinish();
 		}
 		var ref = identifyCurrentChapter();//expensive solution
 		if (ref && ref.nodeId !== that.currentNodeId) {
 			that.currentNodeId = ref.nodeId;
 			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));
 		}
+		that.userIsScrolling = false;
 	}
-	function onScrollFinish() {
-		that.scrollYPct = window.scrollY / document.body.scrollHeight;
-	}
+	//function onScrollFinish() {
+	//	that.scrollYPct = window.scrollY / document.body.scrollHeight;
+	//}
 	function identifyCurrentChapter() {
 		var half = window.innerHeight / 2;
 		for (var i=that.viewport.children.length -1; i>=0; i--) {
@@ -350,9 +357,10 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 				if (append) {
 					that.viewport.appendChild(reference.rootNode);
 				} else {
-					var scrollHeight = that.viewport.scrollHeight;
+					var scrollHeight1 = that.viewport.scrollHeight;
+					var scrollY1 = window.scrollY;
 					that.viewport.insertBefore(reference.rootNode, that.viewport.firstChild);
-					window.scrollBy(0, that.viewport.scrollHeight - scrollHeight);
+					window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
 				}
 				console.log('added chapter', reference.nodeId);
 			}
@@ -360,6 +368,11 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 		}
 	});
 };
+/**
+* This was written to incrementally eliminate chapters as chapters were added,
+* but tests showed that it is possible to have the entire Bible in one scroll
+* without a problem.  GNG 12/29/2015, ergo deprecated by setting MAX at 100000.
+*/
 CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 	if (this.viewport.children.length > CODEX_VIEW.MAX) {
 		switch(whichEnd) {
