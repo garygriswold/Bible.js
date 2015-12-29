@@ -235,7 +235,7 @@ AppViewController.prototype.begin = function(develop) {
 /**
 * This class contains user interface features for the display of the Bible text
 */
-var CODEX_VIEW = {BEFORE: 0, AFTER: 1, MAX: 10, SCROLL_TIMEOUT: 100};
+var CODEX_VIEW = {BEFORE: 0, AFTER: 1, MAX: 10, SCROLL_TIMEOUT: 300};
 
 function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.chaptersAdapter = chaptersAdapter;
@@ -248,7 +248,11 @@ function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.viewport.style.top = headerHeight + 'px'; // Start view at bottom of header.
 	this.currentNodeId = null;
 	this.checkScrollID = null;
+	this.scrollYPct = 0;
 	Object.seal(this);
+	this.viewport.addEventListener('orientationchange', function(event) {
+		console.log('orientation change', window.orientation, window.innerWidth, window.innerHeight);
+	});
 }
 CodexView.prototype.hideView = function() {
 	window.clearTimeout(this.checkScrollID);
@@ -283,9 +287,11 @@ CodexView.prototype.showView = function(nodeId) {
 				that.showChapters([nextChapter], true, function() {
 					that.checkChapterQueueSize('top');
 					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+					onScrollFinish();
 				});
 			} else {
 				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+				onScrollFinish();
 			}
 		}
 		else if (window.scrollY <= window.innerHeight) {
@@ -296,18 +302,24 @@ CodexView.prototype.showView = function(nodeId) {
 				that.showChapters([beforeChapter], false, function() {
 					that.checkChapterQueueSize('bottom');
 					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+					onScrollFinish();
 				});
 			} else {
 				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+				onScrollFinish();
 			}
 		} else {
 			that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+			onScrollFinish();
 		}
 		var ref = identifyCurrentChapter();//expensive solution
 		if (ref && ref.nodeId !== that.currentNodeId) {
 			that.currentNodeId = ref.nodeId;
 			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));
 		}
+	}
+	function onScrollFinish() {
+		that.scrollYPct = window.scrollY / document.body.scrollHeight;
 	}
 	function identifyCurrentChapter() {
 		var half = window.innerHeight / 2;

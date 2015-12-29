@@ -235,7 +235,7 @@ AppViewController.prototype.begin = function(develop) {
 /**
 * This class contains user interface features for the display of the Bible text
 */
-var CODEX_VIEW = {BEFORE: 0, AFTER: 1, MAX: 10, SCROLL_TIMEOUT: 100};
+var CODEX_VIEW = {BEFORE: 0, AFTER: 1, MAX: 10, SCROLL_TIMEOUT: 300};
 
 function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.chaptersAdapter = chaptersAdapter;
@@ -248,6 +248,7 @@ function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.viewport.style.top = headerHeight + 'px'; // Start view at bottom of header.
 	this.currentNodeId = null;
 	this.checkScrollID = null;
+	this.scrollYPct = 0;
 	Object.seal(this);
 }
 CodexView.prototype.hideView = function() {
@@ -283,9 +284,11 @@ CodexView.prototype.showView = function(nodeId) {
 				that.showChapters([nextChapter], true, function() {
 					that.checkChapterQueueSize('top');
 					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+					onScrollFinish();
 				});
 			} else {
 				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+				onScrollFinish();
 			}
 		}
 		else if (window.scrollY <= window.innerHeight) {
@@ -296,18 +299,25 @@ CodexView.prototype.showView = function(nodeId) {
 				that.showChapters([beforeChapter], false, function() {
 					that.checkChapterQueueSize('bottom');
 					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+					onScrollFinish();
 				});
 			} else {
 				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+				onScrollFinish();
 			}
 		} else {
 			that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+			onScrollFinish();
 		}
 		var ref = identifyCurrentChapter();//expensive solution
 		if (ref && ref.nodeId !== that.currentNodeId) {
 			that.currentNodeId = ref.nodeId;
 			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));
 		}
+	}
+	function onScrollFinish() {
+		that.scrollYPct = window.scrollY / document.body.scrollHeight;
+		console.log('Found Pct', that.scrollYPct);
 	}
 	function identifyCurrentChapter() {
 		var half = window.innerHeight / 2;
@@ -1332,10 +1342,10 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		
 		var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT);
-		downloader.download(versionFile, function(results) {
+		downloader.download(versionFile, function(error) {
 			gsPreloader.active(false);
-			if (results instanceof IOError) {
-				// download did not succeed.  What error do I show?
+			if (error) {
+				console.log(JSON.stringify(error));
 			} else {
 				that.settingStorage.setVersion(versionCode, versionFile);
 				iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
@@ -2560,91 +2570,33 @@ HttpClient.prototype.request = function(method, path, postData, callback) {
 * 'LocalDatabase' is the file under Library where the database is expected.
 */
 function FileDownloader(host, port) {
-	//this.fileTransfer = new FileTransfer();
+	this.fileTransfer = new FileTransfer();
 	this.uri = encodeURI('http://' + host + ':' + port + '/book/');
-	this.basePath = 'cdvfile://localhost/persistent/../LocalDatabase';
-	
-	downloader.init({folder: this.basePath, unzip: true});
+	this.downloadPath = 'cdvfile://localhost/temporary/';
+	this.finalPath = 'cdvfile://localhost/persistent/../LocalDatabase/';
 }
 FileDownloader.prototype.download = function(bibleVersion, callback) {
-	var remotePath = this.uri + bibleVersion + '.zip';
-	//var filePath = this.basePath + '../LocalDatabase/' + bibleVersion;
-	console.log('download from', remotePath, ' to', filePath);
-    //this.fileTransfer.download(remotePath, filePath, onDownSuccess, onDownError, true, {});
-    
-    document.addEventListener(DOWNLOADER_initialized, initialized);
-    document.addEventListener(DOWNLOADER_gotFileSystem, gotFilesystem);
-    document.addEventListener(DOWNLOADER_gotFolder, gotFolder);
-    document.addEventListener(DOWNLOADER_error, gotError);
-    document.addEventListener(DOWNLOADER_noWifeConnection, noWifiConnection);
-    document.addEventListener(DOWNLOADER_downloadSuccess, downloadSuccess);
-    document.addEventListener(DOWNLOADER_downloadError, downloadError);
-    document.addEventListener(DOWNLOADER_downloadProgress, downloadProgress);
-    document.addEventListener(DOWNLOADER_unzipSuccess, unzipSuccess);
-    document.addEventListener(DOWNLOADER_unzipError, unzipError);
-    document.addEventListener(DOWNLOADER_unzipProgress, unzipProgress);
-    document.addEventListener(DOWNLOADER_fileRemoved, fileRemoved);
-    document.addEventListener(DOWNLOADER_fileRemoveError, fileRemoveError);
-    document.addEventListener(DOWNLOADER_getFileError, gotFileError);
-    //document.addEventListener(DOWNLOADER_fileCheckSuccess, fileCheckSuccess);
-    //document.addEventListener(DOWNLOADER_fileCheckFailed, fileCheckFailed);
-    //document.addEventListener(DOWNLOADER_fileCheckError, fileCheckError);
-    
-    download.get(remotePath);
-    
-    function initialized(event) {
-	    console.log('DOWNLOADER INITIALIZED', event);
-    }
-    function gotFilesystem(event) {
-	    console.log('DOWNLOADER GOT FILESYSTEM', event);	    
-    }
-    function gotFolder(event) {
-	    console.log('DOWNLOADER GOT FOLDER', event);		    
-    }
-    function gotError(event) {
-	    console.log('DOWNLOADER GOT ERROR', event);	    
-    }
-    function noWifiConnection(event) {
-	    console.log('DOWNLOADER NO WIFI', event);
-    }
-    function downloadSuccess(event) {
-	 	console.log('DOWNLOADER DOWNLOAD SUCCESS', event);	    
-    }
-    function downloadError(event) {
-	 	console.log('DOWNLOADER DOWNLOAD ERROR', event);	   
-    }
-    function downloadProgress(event) {
-	    console.log('DOWNLOADER DOWNLOAD PROGRESS', event);	    
-    }
-    function unzipSuccess(event) {
-	    console.log('DOWNLOADER UNZIP SUCCESS', event);	    
-    }
-    function unzipError(event) {
-	    console.log('DOWNLOADER UNZIP ERROR', event);
-    }
-    function unzipProgress(event) {
-	    console.log('DOWNLOADER UNZIP PROGRESS', event);
-    }
-    function fileRemoved(event) {
-	    console.log('DOWNLOADER FILE REMOVED', event);
-    }
-    function fileRemoveError(event) {
-	    console.log('DOWNLOADER FILE REMOVED ERROR', event);
-    }
-    function gotFileError(event) {
-	    console.log('DOWNLOADER FILE ERROR', event);
-    }
+	var that = this;
+	var bibleVersionZip = bibleVersion + '.zip';
+	var remotePath = this.uri + bibleVersionZip;
+	var tempPath = this.downloadPath + bibleVersionZip;
+	console.log('download from', remotePath, ' to', tempPath);
+    this.fileTransfer.download(remotePath, tempPath, onDownSuccess, onDownError, true, {});
 
-    //function onDownSuccess(entry) {
-    //	console.log("download complete: ", JSON.stringify(entry));
-    //   	callback(entry);   	
-    //}
-    //function onDownError(error) {
-    //	console.log("download error source " + error.source);
-    //  	console.log("download error target " + error.target);
-    //   	console.log("download error code" + error.code);
-    //   	callback(new IOError({ code: error.code, message: error.source}));   	
-    //}
+    function onDownSuccess(entry) {
+    	console.log("download complete: ", JSON.stringify(entry));
+    	zip.unzip(tempPath, that.finalPath, function(resultCode) {
+	    	if (resultCode == 0) {
+	    		console.log('ZIP done', resultCode);
+	    		callback();		    	
+	    	} else {
+		    	callback(new IOError({code: 'unzip failed', message: entry.nativeURL}));
+	    	}
+		});
+    }
+    function onDownError(error) {
+       	callback(new IOError({ code: error.code, message: error.source}));   	
+    }
 };/**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
