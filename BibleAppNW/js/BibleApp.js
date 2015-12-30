@@ -249,7 +249,6 @@ function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.currentNodeId = null;
 	this.checkScrollID = null;
 	this.userIsScrolling = false;
-	//this.scrollYPct = 0;
 	Object.seal(this);
 	var that = this;
 	if (deviceSettings.platform() == 'ios') {
@@ -257,16 +256,10 @@ function CodexView(chaptersAdapter, tableContents, headerHeight) {
 			that.userIsScrolling = true;
 		});
 	}
-	//this.viewport.addEventListener('orientationchange', function(event) {
-	//	if (that.viewport.children.length > 0) {
-	//		window.scrollTo(0, that.scrollYPct * document.body.scrollHeight);
-	//	}
-	//});
 }
 CodexView.prototype.hideView = function() {
 	window.clearTimeout(this.checkScrollID);
 	if (this.viewport.children.length > 0) {
-		///this.scrollPosition = window.scrollY; // ISN'T THIS NEEDED?
 		for (var i=this.viewport.children.length -1; i>=0; i--) {
 			this.viewport.removeChild(this.viewport.children[i]);
 		}
@@ -296,11 +289,9 @@ CodexView.prototype.showView = function(nodeId) {
 				that.showChapters([nextChapter], true, function() {
 					that.checkChapterQueueSize('top');
 					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-					//onScrollFinish();
 				});
 			} else {
 				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-				//onScrollFinish();
 			}
 		}
 		else if (window.scrollY <= window.innerHeight && ! that.userIsScrolling) {
@@ -311,15 +302,12 @@ CodexView.prototype.showView = function(nodeId) {
 				that.showChapters([beforeChapter], false, function() {
 					that.checkChapterQueueSize('bottom');
 					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-					//onScrollFinish();
 				});
 			} else {
 				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-				//onScrollFinish();
 			}
 		} else {
 			that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-			//onScrollFinish();
 		}
 		var ref = identifyCurrentChapter();//expensive solution
 		if (ref && ref.nodeId !== that.currentNodeId) {
@@ -328,9 +316,6 @@ CodexView.prototype.showView = function(nodeId) {
 		}
 		that.userIsScrolling = false;
 	}
-	//function onScrollFinish() {
-	//	that.scrollYPct = window.scrollY / document.body.scrollHeight;
-	//}
 	function identifyCurrentChapter() {
 		var half = window.innerHeight / 2;
 		for (var i=that.viewport.children.length -1; i>=0; i--) {
@@ -360,10 +345,7 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 					var scrollHeight1 = that.viewport.scrollHeight;
 					var scrollY1 = window.scrollY;
 					that.viewport.insertBefore(reference.rootNode, that.viewport.firstChild);
-					var scrollHeight2 = that.viewport.scrollHeight;
-					var scrollY2 = scrollY1 + scrollHeight2 - scrollHeight1;
-					window.scrollTo(0, scrollY2);
-					console.log('height1', scrollHeight1, ' height2', scrollHeight2, ' scrollY1', scrollY1, ' scrollY2', scrollY2);
+					window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
 				}
 				console.log('added chapter', reference.nodeId);
 			}

@@ -16,9 +16,7 @@
     <preference name="StatusBarStyle" value="lightcontent" /> <!-- is default on ios, when status bar is installed -->
     <!-- ios -->
     <preference name="SuppressesIncrementalRendering" value="true" />
-    <platform name="ios">
-    	<preference name="Orientation" value="all" />
-    </platform>
+    <preference name="Orientation" value="portrait" />
     <!-- whitelist -->
     <plugin name="cordova-plugin-whitelist" version="1" />
     <!-- The following are all associated with whitelist plugin -->
