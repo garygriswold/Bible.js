@@ -238,7 +238,7 @@ span.x, span.xt {
   left: -150px; /* Will need to vary with device size */
 	margin: 0;
   padding: 0;
-  z-index: 10;
+  z-index: 200;
   /*border-style: solid; for testing */
 }
 #historyTabBar {
@@ -508,6 +508,7 @@ td {
 	width:100%;
 }
 #sampleText {
+	font-family: serif;
 	background-color: white;
 	color:black;
 	padding: 10px;
