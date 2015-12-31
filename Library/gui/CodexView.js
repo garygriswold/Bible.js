@@ -47,26 +47,25 @@ CodexView.prototype.showView = function(nodeId) {
 	function onScrollHandler(event) {
 		//console.log('windowHeight=', window.innerHeight, '  scrollHeight=', document.body.scrollHeight, '  scrollY=', window.scrollY);
 		//console.log('left', (document.body.scrollHeight - window.scrollY));
-		if (document.body.scrollHeight - window.scrollY <= 2 * window.innerHeight) {
-			var lastNode = that.viewport.lastChild;
-			var lastChapter = new Reference(lastNode.id.substr(3));
-			var nextChapter = that.tableContents.rowId(lastChapter) + 1;
-			if (nextChapter) {
-				that.showChapters([nextChapter], true, function() {
-					that.checkChapterQueueSize('top');
-					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-				});
-			} else {
-				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-			}
-		}
-		else if (window.scrollY <= window.innerHeight && ! that.userIsScrolling) {
+		if (window.scrollY <= window.innerHeight && ! that.userIsScrolling) {
 			var firstNode = that.viewport.firstChild;
 			var firstChapter = new Reference(firstNode.id.substr(3));
 			var beforeChapter = that.tableContents.rowId(firstChapter) - 1;
 			if (beforeChapter) {
 				that.showChapters([beforeChapter], false, function() {
 					that.checkChapterQueueSize('bottom');
+					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+				});
+			} else {
+				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+			}
+		} else if (document.body.scrollHeight - window.scrollY <= 2 * window.innerHeight) {
+			var lastNode = that.viewport.lastChild;
+			var lastChapter = new Reference(lastNode.id.substr(3));
+			var nextChapter = that.tableContents.rowId(lastChapter) + 1;
+			if (nextChapter) {
+				that.showChapters([nextChapter], true, function() {
+					that.checkChapterQueueSize('top');
 					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
 				});
 			} else {
