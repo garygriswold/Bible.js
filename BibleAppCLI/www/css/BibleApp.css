@@ -456,14 +456,17 @@ body {
 	position: absolute; /* Needed because tocRoot.style.y is set in AppControllerView */
 	left: 0;
 	top: 0;
-	margin-top: 1%;
+	margin-top: 0;
 	margin-bottom: 0%; /* this doesn't seem to work */
-	margin-left: 10%;
-	margin-right: 10%;
+	margin-left: 0;
+	margin-right: 0;
 	z-index: 100;
+	width: 100%;
 }
 /* Table of Contents Page Format */
 div.tocPage { /* non-std */
+	padding-left: 10%;
+	padding-right: 5%;
 }
 /* Table of Contents Book Name Format */
 p.tocBook { /* non-std */
@@ -471,6 +474,8 @@ p.tocBook { /* non-std */
 	font-size: 1.5rem;
 	color: #777777;
 	text-align: start;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
 }
 /* Table of Contents Chapter Number Format */
 table.tocChap { /* non-std */

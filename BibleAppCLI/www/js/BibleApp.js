@@ -1014,7 +1014,7 @@ TableContentsView.prototype.showView = function() {
 	}
 	if (this.rootNode.children.length < 1) {
 		this.rootNode.appendChild(this.root);
-		window.scrollTo(10, this.scrollPosition);
+		window.scrollTo(0, this.scrollPosition);
 	}
 };
 TableContentsView.prototype.hideView = function() {
@@ -1051,7 +1051,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 		var table = document.createElement('table');
 		table.setAttribute('class', 'tocChap');
 		root.appendChild(table);
-		var numCellPerRow = this.cellsPerRow();
+		var numCellPerRow = cellsPerRow();
 		var numRows = Math.ceil(book.lastChapter / numCellPerRow);
 		var chaptNum = 1;
 		for (var r=0; r<numRows; r++) {
@@ -1067,39 +1067,46 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 				var that = this;
 				cell.addEventListener('click', function(event) {
 					var nodeId = this.id.substring(3);
-					that.openChapter(nodeId);
+					console.log('open chapter', nodeId);
+					document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 				});
 			}
 		}
 		var bookNode = document.getElementById('toc' + book.code);
 		if (bookNode) {
 			var saveYPosition = bookNode.getBoundingClientRect().top;
-			this.removeAllChapters();
+			removeAllChapters();
 			bookNode.appendChild(root);
-			window.scrollBy(0, bookNode.getBoundingClientRect().top - saveYPosition); // keeps toc from scrolling
+			scrollTOC(bookNode, saveYPosition);
 		}
 	}
-};
-TableContentsView.prototype.cellsPerRow = function() {
-	return(5); // some calculation based upon the width of the screen
-};
-TableContentsView.prototype.removeAllChapters = function() {
-	var div = document.getElementById('toc');
-	if (div) {
-		for (var i=div.children.length -1; i>=0; i--) {
-			var bookNode = div.children[i];
-			for (var j=bookNode.children.length -1; j>=0; j--) {
-				var chaptTable = bookNode.children[j];
-				bookNode.removeChild(chaptTable);
+	
+	function cellsPerRow() {
+		return(5); // some calculation based upon the width of the screen		
+	}
+	function removeAllChapters() {
+		var div = document.getElementById('toc');
+		if (div) {
+			for (var i=div.children.length -1; i>=0; i--) {
+				var bookNode = div.children[i];
+				for (var j=bookNode.children.length -1; j>=0; j--) {
+					var chaptTable = bookNode.children[j];
+					bookNode.removeChild(chaptTable);
+				}
 			}
 		}
 	}
+	function scrollTOC(bookNode, saveYPosition) {
+		window.scrollBy(0, bookNode.getBoundingClientRect().top - saveYPosition); // Keeps bookNode in same position when node above is collapsed.
+		
+		var bookRect = bookNode.getBoundingClientRect();
+		if (window.innerHeight < bookRect.top + bookRect.height) {
+			// Scrolls booknode up when chapters are not in view.
+			// limits scroll to bookRect.top -80 so that book name remains in view.
+			window.scrollBy(0, Math.min(bookRect.top - 80, bookRect.top + bookRect.height - window.innerHeight));	
+		}
+	}
 };
-TableContentsView.prototype.openChapter = function(nodeId) {
-	console.log('open chapter', nodeId);
-	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
-};
-
 
 /**
 * This class is the UI for the controls in the settings page.

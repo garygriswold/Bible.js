@@ -1067,7 +1067,6 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 				var that = this;
 				cell.addEventListener('click', function(event) {
 					var nodeId = this.id.substring(3);
-					//that.openChapter(nodeId);
 					console.log('open chapter', nodeId);
 					document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 				});
