@@ -16,7 +16,7 @@
 /* Table of Contents Page Format */
 div.tocPage { /* non-std */
 	padding-left: 10%;
-	padding-right: 5%;
+	padding-right: 10%;
 }
 /* Table of Contents Book Name Format */
 p.tocBook { /* non-std */

@@ -1082,6 +1082,16 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 	}
 	
 	function cellsPerRow() {
+		var node = document.createElement('span');
+		node.textContent = '0123456789';
+		var fontSize = '36pt';
+		node.setAttribute('style', "position: absolute; float: left; white-space: nowrap; visibility: hidden;");// font-family: sans-serif; font-size: " + fontSize);
+		document.body.appendChild(node);
+		var width = node.getBoundingClientRect().width;
+		console.log('node dim', node.getBoundingClientRect());
+		document.body.removeChild(node);
+		var numberWidth = width / 10;
+		console.log('Number Width', numberWidth);
 		return(5); // some calculation based upon the width of the screen		
 	}
 	function removeAllChapters() {
@@ -1105,6 +1115,16 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 			// limits scroll to bookRect.top -80 so that book name remains in view.
 			window.scrollBy(0, Math.min(bookRect.top - 80, bookRect.top + bookRect.height - window.innerHeight));	
 		}
+	}
+	function numberWidth() {
+		var node = document.createElement('div');
+		//node.textContent = '0123456789';
+		//var fontSize = 36;
+		//node.css({'position': 'absolute', 'float': 'left', 'white-space': 'nowrap', 'visibility': 'hidden', 'font-family': 'sans-serif', 'font-size': fontSize});
+		document.body.appendChild(node);
+		var width = node.getBoundingClientRect().width;
+		document.body.removeChild(node);
+		return(width / 10);
 	}
 };
 
