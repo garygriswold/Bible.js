@@ -1204,7 +1204,9 @@ SettingsView.prototype.buildSettingsView = function() {
 SettingsView.prototype.startControls = function() {
 	var that = this;
 	var docFontSize = document.documentElement.style.fontSize;
-	startFontSizeControl(docFontSize, 10, 36);
+	findMaxFontSize(function(maxFontSize) {
+		startFontSizeControl(docFontSize, 10, maxFontSize);
+	});
 	
 	function startFontSizeControl(fontSizePt, ptMin, ptMax) {
 		var fontSize = parseFloat(fontSizePt);
@@ -1229,6 +1231,27 @@ SettingsView.prototype.startControls = function() {
 	    	document.documentElement.style.fontSize = size + 'pt';
 			that.settingStorage.setFontSize(size);
     	}
+    }
+    function findMaxFontSize(callback) {
+	    that.settingStorage.getMaxFontSize(function(maxFontSize) {
+		    if (maxFontSize == null) {
+				var node = document.createElement('span');
+				node.textContent = 'Thessalonians';
+				node.setAttribute('style', "position: absolute; float: left; white-space: nowrap; visibility: hidden; font-family: sans-serif;");
+				document.body.appendChild(node);
+				var fontSize = 18 * 1.66; // Title is style mt1, which is 1.66rem
+				do {
+					fontSize++;
+					node.style.fontSize = fontSize + 'pt';
+					var width = node.getBoundingClientRect().right;
+				} while(width < window.innerWidth);
+				document.body.removeChild(node);
+				maxFontSize = (fontSize - 1.0) / 1.66;
+				console.log('computed maxFontSize', maxFontSize);
+				that.settingStorage.setMaxFontSize(maxFontSize);
+			}
+			callback(maxFontSize);
+		});
     }
     /* This is not used, changing colors had a negative impact on codexView performance. Keep as a toggle switch example.
 	function startFontColorControl(state) {
@@ -1257,6 +1280,7 @@ SettingsView.prototype.startControls = function() {
     	}
     }*/
 };
+
 
 
 /**
@@ -1700,6 +1724,14 @@ SettingStorage.prototype.getFontSize = function(callback) {
 };
 SettingStorage.prototype.setFontSize = function(fontSize) {
 	this.setItem('fontSize', fontSize);
+};
+SettingStorage.prototype.getMaxFontSize = function(callback) {
+	this.getItem('maxFontSize', function(maxFontSize) {
+		callback(maxFontSize);
+	});
+};
+SettingStorage.prototype.setMaxFontSize = function(maxFontSize) {
+	this.setItem('maxFontSize', maxFontSize);	
 };
 SettingStorage.prototype.getCurrentVersion = function(callback) {
 	this.getItem('version', function(filename) {

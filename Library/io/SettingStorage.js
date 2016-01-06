@@ -26,6 +26,14 @@ SettingStorage.prototype.getFontSize = function(callback) {
 SettingStorage.prototype.setFontSize = function(fontSize) {
 	this.setItem('fontSize', fontSize);
 };
+SettingStorage.prototype.getMaxFontSize = function(callback) {
+	this.getItem('maxFontSize', function(maxFontSize) {
+		callback(maxFontSize);
+	});
+};
+SettingStorage.prototype.setMaxFontSize = function(maxFontSize) {
+	this.setItem('maxFontSize', maxFontSize);	
+};
 SettingStorage.prototype.getCurrentVersion = function(callback) {
 	this.getItem('version', function(filename) {
 		callback(filename);

@@ -1005,6 +1005,10 @@ function TableContentsView(toc) {
 	this.rootNode.id = 'tocRoot';
 	document.body.appendChild(this.rootNode);
 	this.scrollPosition = 0;
+	this.numberNode = document.createElement('span');
+	this.numberNode.textContent = '0123456789';
+	this.numberNode.setAttribute('style', "position: absolute; float: left; white-space: nowrap; visibility: hidden; font-family: sans-serif; font-size: 1.0rem");
+	document.body.appendChild(this.numberNode);
 	Object.seal(this);
 }
 TableContentsView.prototype.showView = function() {
@@ -1045,6 +1049,7 @@ TableContentsView.prototype.buildTocBookList = function() {
 	return(div);
 };
 TableContentsView.prototype.showTocChapterList = function(bookCode) {
+	var that = this;
 	var book = this.toc.find(bookCode);
 	if (book) {
 		var root = document.createDocumentFragment();
@@ -1082,17 +1087,10 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 	}
 	
 	function cellsPerRow() {
-		var node = document.createElement('span');
-		node.textContent = '0123456789';
-		var fontSize = '36pt';
-		node.setAttribute('style', "position: absolute; float: left; white-space: nowrap; visibility: hidden;");// font-family: sans-serif; font-size: " + fontSize);
-		document.body.appendChild(node);
-		var width = node.getBoundingClientRect().width;
-		console.log('node dim', node.getBoundingClientRect());
-		document.body.removeChild(node);
-		var numberWidth = width / 10;
-		console.log('Number Width', numberWidth);
-		return(5); // some calculation based upon the width of the screen		
+		var width = that.numberNode.getBoundingClientRect().width;
+		var cellWidth = Math.max(50, width * 0.3); // width of 3 chars or at least 50px
+		var numCells = window.innerWidth * 0.8 / cellWidth;
+		return(Math.floor(numCells));		
 	}
 	function removeAllChapters() {
 		var div = document.getElementById('toc');
@@ -1115,16 +1113,6 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 			// limits scroll to bookRect.top -80 so that book name remains in view.
 			window.scrollBy(0, Math.min(bookRect.top - 80, bookRect.top + bookRect.height - window.innerHeight));	
 		}
-	}
-	function numberWidth() {
-		var node = document.createElement('div');
-		//node.textContent = '0123456789';
-		//var fontSize = 36;
-		//node.css({'position': 'absolute', 'float': 'left', 'white-space': 'nowrap', 'visibility': 'hidden', 'font-family': 'sans-serif', 'font-size': fontSize});
-		document.body.appendChild(node);
-		var width = node.getBoundingClientRect().width;
-		document.body.removeChild(node);
-		return(width / 10);
 	}
 };
 
@@ -1216,9 +1204,13 @@ SettingsView.prototype.buildSettingsView = function() {
 SettingsView.prototype.startControls = function() {
 	var that = this;
 	var docFontSize = document.documentElement.style.fontSize;
-	startFontSizeControl(docFontSize, 10, 36);
+	findMaxFontSize(function(maxFontSize) {
+		console.log('received max size', maxFontSize);
+		startFontSizeControl(docFontSize, 10, maxFontSize);
+	});
 	
 	function startFontSizeControl(fontSizePt, ptMin, ptMax) {
+		console.log('start controls', fontSizePt, ptMin, ptMax);
 		var fontSize = parseFloat(fontSizePt);
 	    var sampleNode = document.getElementById('sampleText');
     	var draggable = Draggable.create('#fontSizeThumb', {bounds:'#fontSizeSlider', minimumMovement:0,
@@ -1241,6 +1233,28 @@ SettingsView.prototype.startControls = function() {
 	    	document.documentElement.style.fontSize = size + 'pt';
 			that.settingStorage.setFontSize(size);
     	}
+    }
+    function findMaxFontSize(callback) {
+	    that.settingStorage.getMaxFontSize(function(maxFontSize) {
+		    if (maxFontSize == null) {
+				var node = document.createElement('span');
+				node.textContent = 'Thessalonians';
+				node.setAttribute('style', "position: absolute; float: left; white-space: nowrap; visibility: hidden; font-family: sans-serif;");
+				document.body.appendChild(node);
+				var fontSize = 18 * 1.66; // Title is style mt1, which is 1.66rem
+				do {
+					fontSize++;
+					node.style.fontSize = fontSize + 'pt';
+					var width = node.getBoundingClientRect().right;
+					console.log('size', fontSize, width);
+				} while(width < window.innerWidth);
+				document.body.removeChild(node);
+				maxFontSize = (fontSize - 1.0) / 1.66;
+				console.log('computed size', maxFontSize);
+				that.settingStorage.setMaxFontSize(maxFontSize);
+			}
+			callback(maxFontSize);
+		});
     }
     /* This is not used, changing colors had a negative impact on codexView performance. Keep as a toggle switch example.
 	function startFontColorControl(state) {
@@ -1269,6 +1283,7 @@ SettingsView.prototype.startControls = function() {
     	}
     }*/
 };
+
 
 
 /**
@@ -1712,6 +1727,14 @@ SettingStorage.prototype.getFontSize = function(callback) {
 };
 SettingStorage.prototype.setFontSize = function(fontSize) {
 	this.setItem('fontSize', fontSize);
+};
+SettingStorage.prototype.getMaxFontSize = function(callback) {
+	this.getItem('maxFontSize', function(maxFontSize) {
+		callback(maxFontSize);
+	});
+};
+SettingStorage.prototype.setMaxFontSize = function(maxFontSize) {
+	this.setItem('maxFontSize', maxFontSize);	
 };
 SettingStorage.prototype.getCurrentVersion = function(callback) {
 	this.getItem('version', function(filename) {
