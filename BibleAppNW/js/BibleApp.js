@@ -1205,12 +1205,10 @@ SettingsView.prototype.startControls = function() {
 	var that = this;
 	var docFontSize = document.documentElement.style.fontSize;
 	findMaxFontSize(function(maxFontSize) {
-		console.log('received max size', maxFontSize);
 		startFontSizeControl(docFontSize, 10, maxFontSize);
 	});
 	
 	function startFontSizeControl(fontSizePt, ptMin, ptMax) {
-		console.log('start controls', fontSizePt, ptMin, ptMax);
 		var fontSize = parseFloat(fontSizePt);
 	    var sampleNode = document.getElementById('sampleText');
     	var draggable = Draggable.create('#fontSizeThumb', {bounds:'#fontSizeSlider', minimumMovement:0,
@@ -1246,11 +1244,10 @@ SettingsView.prototype.startControls = function() {
 					fontSize++;
 					node.style.fontSize = fontSize + 'pt';
 					var width = node.getBoundingClientRect().right;
-					console.log('size', fontSize, width);
 				} while(width < window.innerWidth);
 				document.body.removeChild(node);
 				maxFontSize = (fontSize - 1.0) / 1.66;
-				console.log('computed size', maxFontSize);
+				console.log('computed maxFontSize', maxFontSize);
 				that.settingStorage.setMaxFontSize(maxFontSize);
 			}
 			callback(maxFontSize);
@@ -1317,13 +1314,17 @@ VersionsView.prototype.buildCountriesList = function() {
 			for (var i=0; i<results.length; i++) {
 				var row = results[i];
 				var groupNode = that.dom.addNode(root, 'div');
-				var countryNode = that.dom.addNode(groupNode, 'div', 'ctry', null, 'cty' + row.countryCode);
+
+				var countryNode = that.dom.addNode(groupNode, 'table', 'ctry', null, 'cty' + row.countryCode);
 				countryNode.setAttribute('data-lang', row.primLanguage);
 				countryNode.addEventListener('click', countryClickHandler);
 				
-				var flagNode = that.dom.addNode(countryNode, 'img');
+				var rowNode = that.dom.addNode(countryNode, 'tr');
+				var flagCell = that.dom.addNode(rowNode, 'td', 'ctryFlag');
+				var flagNode = that.dom.addNode(flagCell, 'img');
 				flagNode.setAttribute('src', FLAG_PATH + row.countryCode.toLowerCase() + '.png');
-				that.dom.addNode(countryNode, 'span', null, row.localName);
+				
+				that.dom.addNode(rowNode, 'td', 'ctryName', row.localName);
 			}
 		}
 		that.rootNode.appendChild(root);

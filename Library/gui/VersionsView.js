@@ -29,13 +29,17 @@ VersionsView.prototype.buildCountriesList = function() {
 			for (var i=0; i<results.length; i++) {
 				var row = results[i];
 				var groupNode = that.dom.addNode(root, 'div');
-				var countryNode = that.dom.addNode(groupNode, 'div', 'ctry', null, 'cty' + row.countryCode);
+
+				var countryNode = that.dom.addNode(groupNode, 'table', 'ctry', null, 'cty' + row.countryCode);
 				countryNode.setAttribute('data-lang', row.primLanguage);
 				countryNode.addEventListener('click', countryClickHandler);
 				
-				var flagNode = that.dom.addNode(countryNode, 'img');
+				var rowNode = that.dom.addNode(countryNode, 'tr');
+				var flagCell = that.dom.addNode(rowNode, 'td', 'ctryFlag');
+				var flagNode = that.dom.addNode(flagCell, 'img');
 				flagNode.setAttribute('src', FLAG_PATH + row.countryCode.toLowerCase() + '.png');
-				that.dom.addNode(countryNode, 'span', null, row.localName);
+				
+				that.dom.addNode(rowNode, 'td', 'ctryName', row.localName);
 			}
 		}
 		that.rootNode.appendChild(root);

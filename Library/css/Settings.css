@@ -101,7 +101,7 @@ td.tableRightCol {
 }
 */
 /* VersionsView CSS */
-div.ctry {
+table.ctry {
     background-color: white;
 	border-radius: 48px;
 	margin-bottom: 20px;
@@ -109,17 +109,23 @@ div.ctry {
 	font-size: 1.5rem;
 	font-weight: bold;
 	box-shadow: 7px 7px 7px #777;
+	width: 100%;
 }
-div.ctry img {
+td.ctryFlag {
 	vertical-align: middle;
-	margin-left: 24px;
-	padding-right: 7px;
+	padding-left: 24px;
+	padding-right: 24px;
+	width: 10%;
 }
-div.ctry span {
+td.ctryFlag img {
 	vertical-align: middle;
+}
+td.ctryName {
+	vertical-align: middle;
+	width: auto;
 }
 table.vers {
-	width:85%;
+	width: 85%;
     background-color: #EEEEEE;
 	border-radius: 12px;
 	margin-bottom: 20px;
