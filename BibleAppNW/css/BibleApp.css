@@ -235,8 +235,8 @@ span.x, span.xt {
 
 #historyRoot {
   position: fixed;
-  left: -150px; /* Will need to vary with device size */
-	margin: 0;
+  /*left: -150px; *//* Will need to vary with device size */
+  margin: 0;
   padding: 0;
   z-index: 200;
   /*border-style: solid; for testing */
@@ -257,7 +257,7 @@ button.historyTabBtn {
   padding: 10px;
   border: 1px solid #ccc;
   font-family: sans-serif;
-  font-size: 1.0rem;
+  font-size: 0.8rem;
 }/**
 * This css file pertains to the QuestionView
 */

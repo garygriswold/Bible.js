@@ -216,7 +216,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.codexView.hideView();
 		that.questionsView.hideView();
 		that.settingsView.hideView();
-		that.historyView.hideView(function() {});
+		that.historyView.hideView();
 	}
 	function disableHandlers() {
 		document.body.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);
@@ -415,12 +415,14 @@ function HistoryView(historyAdapter, tableContents) {
 	this.rootNode = document.createElement('div');
 	this.rootNode.id = 'historyRoot';
 	document.body.appendChild(this.rootNode);
+	this.historyTabStart = '';
 	Object.seal(this);
 }
 HistoryView.prototype.showView = function(callback) {
+	var that = this;
 	if (this.viewRoot) {
 	 	if (this.historyAdapter.lastSelectCurrent) {
-	 		TweenMax.to(this.rootNode, 0.7, { left: "0px", onComplete: callback });
+	 		animateShow();
 	 	} else {
 			this.rootNode.removeChild(this.viewRoot);
 			this.buildHistoryView(function(result) {
@@ -432,19 +434,30 @@ HistoryView.prototype.showView = function(callback) {
 			installView(result);
 		});
 	}
-	var that = this;
+
 	function installView(root) {
 		that.viewRoot = root;
 		that.rootNode.appendChild(that.viewRoot);
-		TweenMax.to(that.rootNode, 0.7, { left: "0px", onComplete: callback });
+		that.historyTabStart = '-' + String(Math.ceil(root.getBoundingClientRect().width)) + 'px';
+		console.log('width', that.historyTabWidth);
+		animateShow();
+	}
+	function animateShow() {
+		TweenMax.set(that.rootNode, { left: that.historyTabStart });
+		TweenMax.to(that.rootNode, 0.7, { left: "0px", onComplete: callback });		
 	}
 };
 HistoryView.prototype.hideView = function(callback) {
+	var that = this;
 	var rect = this.rootNode.getBoundingClientRect();
 	if (rect.left > -150) {
-		TweenMax.to(this.rootNode, 0.7, { left: "-150px", onComplete: callback });
+		TweenMax.to(this.rootNode, 0.7, { left: this.historyTabStart, onComplete: moveTabsAway });
 	} else {
-		callback();
+		if (callback) callback();
+	}
+	function moveTabsAway() {
+		TweenMax.set(that.rootNode, { left: '-1000px' });
+		if (callback) callback();
 	}
 };
 HistoryView.prototype.buildHistoryView = function(callback) {
