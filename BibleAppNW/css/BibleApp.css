@@ -235,7 +235,6 @@ span.x, span.xt {
 
 #historyRoot {
   position: fixed;
-  /*left: -150px; *//* Will need to vary with device size */
   margin: 0;
   padding: 0;
   z-index: 200;

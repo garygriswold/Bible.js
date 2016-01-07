@@ -18,7 +18,8 @@ AppInitializer.prototype.begin = function() {
 	settingStorage.getCurrentVersion(function(version) {
 		if (version == null) {
 			version = 'WEB.db1'; // Where does the defalt come from.  There should be one for each major language.
-			settingStorage.setCurrentVersion(version);
+			settingStorage.setVersion('WEB', version);//records version is on device.
+			settingStorage.setCurrentVersion(version);//records this is current version.
 		}
 		changeVersionHandler(version);
 	});
@@ -439,7 +440,6 @@ HistoryView.prototype.showView = function(callback) {
 		that.viewRoot = root;
 		that.rootNode.appendChild(that.viewRoot);
 		that.historyTabStart = '-' + String(Math.ceil(root.getBoundingClientRect().width)) + 'px';
-		console.log('width', that.historyTabWidth);
 		animateShow();
 	}
 	function animateShow() {
