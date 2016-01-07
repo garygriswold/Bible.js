@@ -55,6 +55,19 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 		}
 	});
 };
+VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
+	var statement = 'SELECT versionCode, silCode FROM Version WHERE filename = ?';
+	this.select(statement, [versionFile], function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else if (results.rows.length == 0) {
+			callback(new IOError('No version found'));
+		} else {
+			var row = results.rows.item(0);
+			callback(row);
+		}
+	});
+};
 VersionsAdapter.prototype.select = function(statement, values, callback) {
     this.database.readTransaction(function(tx) {
         console.log(statement, values);

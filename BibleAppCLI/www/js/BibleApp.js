@@ -2547,6 +2547,20 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 		}
 	});
 };
+VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
+	console.log('SELECT VERSION BY FILENAME', versionFile);
+	var statement = 'SELECT versionCode, silCode FROM Version WHERE filename = ?';
+	this.select(statement, [versionFile], function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else if (results.rows.length == 0) {
+			callback(new IOError('No version found'));
+		} else {
+			var row = results.rows.item(0);
+			callback(row);
+		}
+	});
+};
 VersionsAdapter.prototype.select = function(statement, values, callback) {
     this.database.readTransaction(function(tx) {
         console.log(statement, values);
@@ -2793,16 +2807,19 @@ Questions.prototype.find = function(index) {
 };
 Questions.prototype.addQuestion = function(item, callback) {
 	var that = this;
-	var versionId = this.questionsAdapter.database.code;
-	var postData = {versionId:versionId, reference:item.reference, message:item.question};
-	this.httpClient.put('/question', postData, function(status, results) {
-		if (status !== 200 && status !== 201) {
-			callback(results);
-		} else {
-			item.discourseId = results.discourseId;
-			item.askedDateTime = new Date(results.timestamp);
-			that.addQuestionLocal(item, callback);
-		}
+	//var versionId = this.questionsAdapter.database.code;
+	var versionsAdapter = new VersionsAdapter();
+	versionsAdapter.selectVersionByFilename(this.questionsAdapter.database.code, function(versionObj) {
+		var postData = {versionId:versionObj.versionCode, reference:item.reference, message:item.question};
+		that.httpClient.put('/question', postData, function(status, results) {
+			if (status !== 200 && status !== 201) {
+				callback(results);
+			} else {
+				item.discourseId = results.discourseId;
+				item.askedDateTime = new Date(results.timestamp);
+				that.addQuestionLocal(item, callback);
+			}
+		});
 	});
 };
 Questions.prototype.addQuestionLocal = function(item, callback) {

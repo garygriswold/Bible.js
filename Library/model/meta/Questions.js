@@ -18,16 +18,18 @@ Questions.prototype.find = function(index) {
 };
 Questions.prototype.addQuestion = function(item, callback) {
 	var that = this;
-	var versionId = this.questionsAdapter.database.code;
-	var postData = {versionId:versionId, reference:item.reference, message:item.question};
-	this.httpClient.put('/question', postData, function(status, results) {
-		if (status !== 200 && status !== 201) {
-			callback(results);
-		} else {
-			item.discourseId = results.discourseId;
-			item.askedDateTime = new Date(results.timestamp);
-			that.addQuestionLocal(item, callback);
-		}
+	var versionsAdapter = new VersionsAdapter();
+	versionsAdapter.selectVersionByFilename(this.questionsAdapter.database.code, function(versionObj) {
+		var postData = {versionId:versionObj.versionCode, reference:item.reference, message:item.question};
+		that.httpClient.put('/question', postData, function(status, results) {
+			if (status !== 200 && status !== 201) {
+				callback(results);
+			} else {
+				item.discourseId = results.discourseId;
+				item.askedDateTime = new Date(results.timestamp);
+				that.addQuestionLocal(item, callback);
+			}
+		});
 	});
 };
 Questions.prototype.addQuestionLocal = function(item, callback) {
