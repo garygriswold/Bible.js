@@ -64,7 +64,7 @@ DatabaseAdapter.prototype.create = function(callback) {
 			
 		'CREATE INDEX versionLanguageIdx ON Version(silCode)',
 		'CREATE INDEX versionOwnerIdx ON Version(ownerCode)',
-		'CREATE INDEX versionFilenameIdx ON Version(filename)',
+		'CREATE UNIQUE INDEX versionFilenameIdx ON Version(filename)',
 		
 		'CREATE TABLE CountryVersion(' +
 			' countryCode text REFERENCES Country(countryCode) NOT NULL,' +
