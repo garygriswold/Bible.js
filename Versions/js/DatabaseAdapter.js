@@ -59,6 +59,7 @@ DatabaseAdapter.prototype.create = function(callback) {
 			' copyrightYear text NULL,' + // should be not null
 			' scope text CHECK(scope IN("BIBLE","NT","PNT")) NULL,' + // should be not null
 			' filename text NULL,' +
+			' isQaActive boolean NULL,' + // values are T, F, null
 			' comment text NULL)',
 			
 		'CREATE INDEX versionLanguageIdx ON Version(silCode)',
@@ -103,7 +104,8 @@ DatabaseAdapter.prototype.loadAll = function(directory) {
 				console.log('Country count', rowCount);
 				
 				file = '/Version-Table 1.csv';
-				statement = 'INSERT INTO Version(versionCode, silCode, dblName, ownerCode, copyrightYear, scope, filename, comment) values (?,?,?,?,?,?,?,?)';
+				statement = 'INSERT INTO Version(versionCode, silCode, dblName, ownerCode, copyrightYear, scope, filename, isQaActive, comment) values ' +
+						' (?,?,?,?,?,?,?,?,?)';
 				that.loadFile(file, statement, function(rowCount) {
 					console.log('Version count', rowCount);
 					

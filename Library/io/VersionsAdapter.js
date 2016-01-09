@@ -56,7 +56,7 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 	});
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
-	var statement = 'SELECT versionCode, silCode FROM Version WHERE filename = ?';
+	var statement = 'SELECT versionCode, silCode, isQaActive FROM Version WHERE filename = ?';
 	this.select(statement, [versionFile], function(results) {
 		if (results instanceof IOError) {
 			callback(results);
