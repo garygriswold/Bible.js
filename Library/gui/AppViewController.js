@@ -36,10 +36,10 @@ function bibleHideNoteClick(nodeId) {
 	}
 }
 
-function AppViewController(versionCode, settingStorage) {
-	this.versionCode = versionCode;
+function AppViewController(version, settingStorage) {
+	this.version = version;
 	this.settingStorage = settingStorage;
-	this.database = new DeviceDatabase(versionCode);
+	this.database = new DeviceDatabase(version.filename);
 	for (var i=document.body.children.length -1; i>=0; i--) {
 		document.body.removeChild(document.body.children[i]);
 	}
@@ -52,7 +52,7 @@ AppViewController.prototype.begin = function(develop) {
 
 		console.log('loaded toc', that.tableContents.size());
 		
-		that.header = new HeaderView(that.tableContents);
+		that.header = new HeaderView(that.tableContents, that.version);
 		that.header.showView();
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.

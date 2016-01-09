@@ -14,17 +14,20 @@ AppInitializer.prototype.begin = function() {
 		changeVersionHandler(event.detail.version);
 	});
 
-	settingStorage.getCurrentVersion(function(version) {
-		if (version == null) {
-			version = 'WEB.db1'; // Where does the defalt come from.  There should be one for each major language.
-			settingStorage.setVersion('WEB', version);//records version is on device.
-			settingStorage.setCurrentVersion(version);//records this is current version.
+	settingStorage.getCurrentVersion(function(versionFilename) {
+		if (versionFilename == null) {
+			versionFilename = 'WEB.db1'; // Where does the defalt come from.  There should be one for each major language.
+			settingStorage.setVersion('WEB', versionFilename);//records version is on device.
+			settingStorage.setCurrentVersion(versionFilename);//records this is current version.
 		}
-		changeVersionHandler(version);
+		changeVersionHandler(versionFilename);
 	});
 		
-	function changeVersionHandler(version) {
-		var controller = new AppViewController(version, settingStorage);
-		controller.begin();
+	function changeVersionHandler(versionFilename) {
+		var bibleVersion = new BibleVersion();
+		bibleVersion.fill(versionFilename, function() {
+			var controller = new AppViewController(bibleVersion, settingStorage);
+			controller.begin();			
+		});
 	}
 };

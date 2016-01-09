@@ -43,6 +43,7 @@ cat ../Library/io/VersionsAdapter.js >> js/BibleApp.js
 cat ../Library/io/HttpClient.js >> js/BibleApp.js
 cat ../Library/io/FileDownloader.js >> js/BibleApp.js
 
+cat ../Library/model/meta/BibleVersion.js >> js/BibleApp.js
 cat ../Library/model/meta/Concordance.js >> js/BibleApp.js
 cat ../Library/model/meta/Lookup.js >> js/BibleApp.js
 cat ../Library/model/meta/QuestionItem.js >> js/BibleApp.js

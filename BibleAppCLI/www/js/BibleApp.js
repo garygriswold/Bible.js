@@ -15,18 +15,21 @@ AppInitializer.prototype.begin = function() {
 		changeVersionHandler(event.detail.version);
 	});
 
-	settingStorage.getCurrentVersion(function(version) {
-		if (version == null) {
-			version = 'WEB.db1'; // Where does the defalt come from.  There should be one for each major language.
-			settingStorage.setVersion('WEB', version);//records version is on device.
-			settingStorage.setCurrentVersion(version);//records this is current version.
+	settingStorage.getCurrentVersion(function(versionFilename) {
+		if (versionFilename == null) {
+			versionFilename = 'WEB.db1'; // Where does the defalt come from.  There should be one for each major language.
+			settingStorage.setVersion('WEB', versionFilename);//records version is on device.
+			settingStorage.setCurrentVersion(versionFilename);//records this is current version.
 		}
-		changeVersionHandler(version);
+		changeVersionHandler(versionFilename);
 	});
 		
-	function changeVersionHandler(version) {
-		var controller = new AppViewController(version, settingStorage);
-		controller.begin();
+	function changeVersionHandler(versionFilename) {
+		var bibleVersion = new BibleVersion();
+		bibleVersion.fill(versionFilename, function() {
+			var controller = new AppViewController(bibleVersion, settingStorage);
+			controller.begin();			
+		});
 	}
 };/**
 * BibleApp is a global object that contains pointers to all of the key elements of
@@ -66,10 +69,10 @@ function bibleHideNoteClick(nodeId) {
 	}
 }
 
-function AppViewController(versionCode, settingStorage) {
-	this.versionCode = versionCode;
+function AppViewController(version, settingStorage) {
+	this.version = version;
 	this.settingStorage = settingStorage;
-	this.database = new DeviceDatabase(versionCode);
+	this.database = new DeviceDatabase(version.filename);
 	for (var i=document.body.children.length -1; i>=0; i--) {
 		document.body.removeChild(document.body.children[i]);
 	}
@@ -82,7 +85,7 @@ AppViewController.prototype.begin = function(develop) {
 
 		console.log('loaded toc', that.tableContents.size());
 		
-		that.header = new HeaderView(that.tableContents);
+		that.header = new HeaderView(that.tableContents, that.version);
 		that.header.showView();
 		that.tableContentsView = new TableContentsView(that.tableContents);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
@@ -901,7 +904,7 @@ var HEADER_BUTTON_HEIGHT = 44;
 var HEADER_BAR_HEIGHT = 52;
 var STATUS_BAR_HEIGHT = 14;
 
-function HeaderView(tableContents) {
+function HeaderView(tableContents, version) {
 	this.statusBarInHeader = (deviceSettings.platform() === 'ios') ? true : false;
 	//this.statusBarInHeader = false;
 
@@ -909,6 +912,7 @@ function HeaderView(tableContents) {
 	this.barHite = (this.statusBarInHeader) ? HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT : HEADER_BAR_HEIGHT;
 	this.cellTopPadding = (this.statusBarInHeader) ? 'padding-top:' + STATUS_BAR_HEIGHT + 'px' : 'padding-top:0px';
 	this.tableContents = tableContents;
+	this.version = version;
 	this.backgroundCanvas = null;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
@@ -922,7 +926,6 @@ function HeaderView(tableContents) {
 }
 HeaderView.prototype.showView = function() {
 	var that = this;
-
 	this.backgroundCanvas = document.createElement('canvas');
 	paintBackground(this.backgroundCanvas, this.hite);
 	this.rootNode.appendChild(this.backgroundCanvas);
@@ -930,7 +933,11 @@ HeaderView.prototype.showView = function() {
 	var menuWidth = setupIconButton('tocCell', drawTOCIcon, this.hite, BIBLE.SHOW_TOC);
 	var serhWidth = setupIconButton('searchCell', drawSearchIcon, this.hite, BIBLE.SHOW_SEARCH);
 	this.rootNode.appendChild(this.labelCell);
-	var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
+	if (that.version.isQaActive == 'T') {
+		var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
+	} else {
+		quesWidth = 0;
+	}
 	var settWidth = setupIconButton('settingsCell', drawSettingsIcon, this.hite, BIBLE.SHOW_SETTINGS);
 	var avalWidth = window.innerWidth - (menuWidth + serhWidth + quesWidth + settWidth + (6 * 4));// six is fudge factor
 
@@ -2548,8 +2555,7 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 	});
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
-	console.log('SELECT VERSION BY FILENAME', versionFile);
-	var statement = 'SELECT versionCode, silCode FROM Version WHERE filename = ?';
+	var statement = 'SELECT versionCode, silCode, isQaActive FROM Version WHERE filename = ?';
 	this.select(statement, [versionFile], function(results) {
 		if (results instanceof IOError) {
 			callback(results);
@@ -2679,6 +2685,40 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
        	callback(new IOError({ code: error.code, message: error.source}));   	
     }
 };/**
+* This class is used to contain the fields about a version of the Bible
+* as needed.
+*/
+function BibleVersion() {
+	console.log('start version cons');
+	this.code = null;
+	this.filename = null;
+	this.silCode = null;
+	this.isQaActive = null;
+	console.log('end version cons');
+	Object.seal(this);
+	console.log('end version seal');
+}
+BibleVersion.prototype.fill = function(filename, callback) {
+	console.log('start fill', filename);
+	var that = this;
+	var versionsAdapter = new VersionsAdapter();
+	versionsAdapter.selectVersionByFilename(filename, function(versionObj) {
+		console.log('found', versionObj);
+		if (versionObj instanceof IOError) {
+			that.code = 'WEB';
+			that.filename = 'WEB.db1';
+			that.silCode = 'eng';
+			that.isQaActive = 'F';
+		} else {
+			that.code = versionObj.versionCode;
+			that.filename = filename;
+			that.silCode = versionObj.silCode;
+			that.isQaActive = versionObj.isQaActive;
+		}
+		console.log('this', this);
+		callback();
+	});
+};/**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
 function Concordance(adapter) {
@@ -2807,7 +2847,6 @@ Questions.prototype.find = function(index) {
 };
 Questions.prototype.addQuestion = function(item, callback) {
 	var that = this;
-	//var versionId = this.questionsAdapter.database.code;
 	var versionsAdapter = new VersionsAdapter();
 	versionsAdapter.selectVersionByFilename(this.questionsAdapter.database.code, function(versionObj) {
 		var postData = {versionId:versionObj.versionCode, reference:item.reference, message:item.question};

@@ -6,7 +6,7 @@ var HEADER_BUTTON_HEIGHT = 44;
 var HEADER_BAR_HEIGHT = 52;
 var STATUS_BAR_HEIGHT = 14;
 
-function HeaderView(tableContents) {
+function HeaderView(tableContents, version) {
 	this.statusBarInHeader = (deviceSettings.platform() === 'ios') ? true : false;
 	//this.statusBarInHeader = false;
 
@@ -14,6 +14,7 @@ function HeaderView(tableContents) {
 	this.barHite = (this.statusBarInHeader) ? HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT : HEADER_BAR_HEIGHT;
 	this.cellTopPadding = (this.statusBarInHeader) ? 'padding-top:' + STATUS_BAR_HEIGHT + 'px' : 'padding-top:0px';
 	this.tableContents = tableContents;
+	this.version = version;
 	this.backgroundCanvas = null;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
@@ -27,7 +28,6 @@ function HeaderView(tableContents) {
 }
 HeaderView.prototype.showView = function() {
 	var that = this;
-
 	this.backgroundCanvas = document.createElement('canvas');
 	paintBackground(this.backgroundCanvas, this.hite);
 	this.rootNode.appendChild(this.backgroundCanvas);
@@ -35,7 +35,11 @@ HeaderView.prototype.showView = function() {
 	var menuWidth = setupIconButton('tocCell', drawTOCIcon, this.hite, BIBLE.SHOW_TOC);
 	var serhWidth = setupIconButton('searchCell', drawSearchIcon, this.hite, BIBLE.SHOW_SEARCH);
 	this.rootNode.appendChild(this.labelCell);
-	var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
+	if (that.version.isQaActive == 'T') {
+		var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
+	} else {
+		quesWidth = 0;
+	}
 	var settWidth = setupIconButton('settingsCell', drawSettingsIcon, this.hite, BIBLE.SHOW_SETTINGS);
 	var avalWidth = window.innerWidth - (menuWidth + serhWidth + quesWidth + settWidth + (6 * 4));// six is fudge factor
 
