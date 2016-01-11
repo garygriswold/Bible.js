@@ -115,9 +115,13 @@ Install Application Server
 	vi ServerMethodTest.js   # change IP address at end of file
 	./ServerMethodTest.sh
 	
-4)  
-	
-5) Login into remote server and tail the log.
+4) Log into remote server and tail log
+
+5) Restart Server because running test attached it to AutoDatabase.db
+
+	svcadm disable shortsands
+	svcadm enable shortsands
+	svcs
 
 Install QAApp
 =============

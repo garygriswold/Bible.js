@@ -22,7 +22,7 @@
 * We want to fix HeaderView once it is added, and never delete it.
 * We also do not want to include it in the transition.
 */
-var SERVER_HOST = 'qa.shortsands.com';//'localhost'
+var SERVER_HOST = 'qa.your-bible.org';//'localhost'
 var SERVER_PORT = '8080';
 
 "use strict";
