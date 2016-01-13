@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.shortsands.bibleapp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" 
+<widget id="com.shortsands.yourbible" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" 
     xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Bible.js</name>
     <description>
         A Bible App designed for the free distribution of the Bible in any language.
     </description>
-    <author email="gary@shortsands.com" href="http://shortsands.com">
+    <author email="gary@shortsands.com" href="http://your-bible.org">
         Gary N Griswold, Short Sands
     </author>
     <content src="index.html" />
