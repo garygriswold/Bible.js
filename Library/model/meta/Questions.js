@@ -65,28 +65,29 @@ Questions.prototype.fill = function(callback) {
 		}
 	});
 };
-Questions.prototype.createActs8Question = function(callback) {
-	var acts8 = new QuestionItem();
-	acts8.askedDateTime = new Date();
-	var refActs830 = new Reference('ACT:8:30');
-	acts8.reference = this.tableContents.toString(refActs830);
-	var verseList = [ 'ACT:8:30', 'ACT:8:31', 'ACT:8:35' ];
-	this.versesAdapter.getVerses(verseList, function(results) {
-		if (results instanceof IOError) {
-			callback(results);
-		} else {
-			var acts830 = results.rows.item(0);
-			var acts831 = results.rows.item(1);
-			var acts835 = results.rows.item(2);
-			acts8.discourseId = 'NONE';
-			acts8.question = acts830.html + ' ' + acts831.html;
-			acts8.answer = acts835.html;
-			acts8.instructor = 'Philip';
-			acts8.answerDateTime = new Date();
-			callback(acts8);
-		}
-	});
-};
+// Removed GNG 1/18/16
+//Questions.prototype.createActs8Question = function(callback) {
+//	var acts8 = new QuestionItem();
+//	acts8.askedDateTime = new Date();
+//	var refActs830 = new Reference('ACT:8:30');
+//	acts8.reference = this.tableContents.toString(refActs830);
+//	var verseList = [ 'ACT:8:30', 'ACT:8:31', 'ACT:8:35' ];
+//	this.versesAdapter.getVerses(verseList, function(results) {
+//		if (results instanceof IOError) {
+//			callback(results);
+//		} else {
+//			var acts830 = results.rows.item(0);
+//			var acts831 = results.rows.item(1);
+//			var acts835 = results.rows.item(2);
+//			acts8.discourseId = 'NONE';
+//			acts8.question = acts830.html + ' ' + acts831.html;
+//			acts8.answer = acts835.html;
+//			acts8.instructor = 'Philip';
+//			acts8.answerDateTime = new Date();
+//			callback(acts8);
+//		}
+//	});
+//};
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
 	var unanswered = findUnansweredQuestions();

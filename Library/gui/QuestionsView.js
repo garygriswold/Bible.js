@@ -26,17 +26,7 @@ QuestionsView.prototype.showView = function() {
 		if (results instanceof IOError) {
 			console.log('Error: QuestionView.showView.fill');
 		} else {
-			if (results.length === 0) {
-				that.questions.createActs8Question(function(item) {
-					that.questions.addQuestionLocal(item, function(error) {
-						that.questions.addAnswerLocal(item, function(error) {
-							presentView();
-						});
-					});
-				});
-			} else {
-				presentView();
-			}
+			presentView();
 		}
 	});
 	function presentView() {
@@ -99,15 +89,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		that.displayAnswer(selected);
 	}
 	function includeInputBlock(parentNode) {
-		var refTop = that.dom.addNode(parentNode, 'div', 'questionBorder', null, 'quesInput');
 		var wid = window.innerWidth * 0.74;
-		refTop.setAttribute('style', 'width:' + wid + 'px');
-		refTop.setAttribute('style', 'padding: 5px 5px');
-
-		that.referenceInput = that.dom.addNode(refTop, 'input', 'questionField', null, 'inputRef');
-		that.referenceInput.setAttribute('type', 'text');
-		that.referenceInput.setAttribute('style', 'width:' + (wid - 10) + 'px');
-		that.referenceInput.setAttribute('placeholder', 'Reference');
 
 		var inputTop = that.dom.addNode(parentNode, 'div', 'questionBorder');
 		inputTop.setAttribute('style', 'width:' + wid + 'px');
@@ -124,7 +106,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 			console.log('submit button clicked');
 
 			var item = new QuestionItem();
-			item.reference = that.referenceInput.value;
+			item.reference = ''; // should be set by program based on user's position.
 			item.question = that.questionInput.value;
 
 			that.questions.addQuestion(item, function(error) {

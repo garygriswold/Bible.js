@@ -532,17 +532,7 @@ QuestionsView.prototype.showView = function() {
 		if (results instanceof IOError) {
 			console.log('Error: QuestionView.showView.fill');
 		} else {
-			if (results.length === 0) {
-				that.questions.createActs8Question(function(item) {
-					that.questions.addQuestionLocal(item, function(error) {
-						that.questions.addAnswerLocal(item, function(error) {
-							presentView();
-						});
-					});
-				});
-			} else {
-				presentView();
-			}
+			presentView();
 		}
 	});
 	function presentView() {
@@ -605,15 +595,10 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		that.displayAnswer(selected);
 	}
 	function includeInputBlock(parentNode) {
-		var refTop = that.dom.addNode(parentNode, 'div', 'questionBorder', null, 'quesInput');
+		//var refTop = that.dom.addNode(parentNode, 'div', 'questionBorder', null, 'quesInput');
 		var wid = window.innerWidth * 0.74;
-		refTop.setAttribute('style', 'width:' + wid + 'px');
-		refTop.setAttribute('style', 'padding: 5px 5px');
-
-		that.referenceInput = that.dom.addNode(refTop, 'input', 'questionField', null, 'inputRef');
-		that.referenceInput.setAttribute('type', 'text');
-		that.referenceInput.setAttribute('style', 'width:' + (wid - 10) + 'px');
-		that.referenceInput.setAttribute('placeholder', 'Reference');
+		//refTop.setAttribute('style', 'width:' + wid + 'px');
+		//refTop.setAttribute('style', 'padding: 5px 5px');
 
 		var inputTop = that.dom.addNode(parentNode, 'div', 'questionBorder');
 		inputTop.setAttribute('style', 'width:' + wid + 'px');
@@ -630,7 +615,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 			console.log('submit button clicked');
 
 			var item = new QuestionItem();
-			item.reference = that.referenceInput.value;
+			item.reference = ''; // should be set by program based on user's position.
 			item.question = that.questionInput.value;
 
 			that.questions.addQuestion(item, function(error) {
@@ -2894,28 +2879,29 @@ Questions.prototype.fill = function(callback) {
 		}
 	});
 };
-Questions.prototype.createActs8Question = function(callback) {
-	var acts8 = new QuestionItem();
-	acts8.askedDateTime = new Date();
-	var refActs830 = new Reference('ACT:8:30');
-	acts8.reference = this.tableContents.toString(refActs830);
-	var verseList = [ 'ACT:8:30', 'ACT:8:31', 'ACT:8:35' ];
-	this.versesAdapter.getVerses(verseList, function(results) {
-		if (results instanceof IOError) {
-			callback(results);
-		} else {
-			var acts830 = results.rows.item(0);
-			var acts831 = results.rows.item(1);
-			var acts835 = results.rows.item(2);
-			acts8.discourseId = 'NONE';
-			acts8.question = acts830.html + ' ' + acts831.html;
-			acts8.answer = acts835.html;
-			acts8.instructor = 'Philip';
-			acts8.answerDateTime = new Date();
-			callback(acts8);
-		}
-	});
-};
+// Removed GNG 1/18/16
+//Questions.prototype.createActs8Question = function(callback) {
+//	var acts8 = new QuestionItem();
+//	acts8.askedDateTime = new Date();
+//	var refActs830 = new Reference('ACT:8:30');
+//	acts8.reference = this.tableContents.toString(refActs830);
+//	var verseList = [ 'ACT:8:30', 'ACT:8:31', 'ACT:8:35' ];
+//	this.versesAdapter.getVerses(verseList, function(results) {
+//		if (results instanceof IOError) {
+//			callback(results);
+//		} else {
+//			var acts830 = results.rows.item(0);
+//			var acts831 = results.rows.item(1);
+//			var acts835 = results.rows.item(2);
+//			acts8.discourseId = 'NONE';
+//			acts8.question = acts830.html + ' ' + acts831.html;
+//			acts8.answer = acts835.html;
+//			acts8.instructor = 'Philip';
+//			acts8.answerDateTime = new Date();
+//			callback(acts8);
+//		}
+//	});
+//};
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
 	var unanswered = findUnansweredQuestions();
