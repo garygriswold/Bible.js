@@ -870,7 +870,7 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 	var entryNode = document.createElement('p');
 	entryNode.setAttribute('id', 'mor' + bookCode);
 	entryNode.setAttribute('class', 'conMore');
-	entryNode.textContent = '...';
+	entryNode.textContent = String.fromCharCode(183) + String.fromCharCode(183) + String.fromCharCode(183);
 	bookNode.appendChild(entryNode);
 	entryNode.addEventListener('click', function(event) {
 		var moreNode = document.getElementById(this.id);
