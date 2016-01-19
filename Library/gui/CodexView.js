@@ -155,7 +155,7 @@ CodexView.prototype.showFootnote = function(noteId) {
 	for (var i=0; i<note.children.length; i++) {
 		var child = note.children[i];
 		if (child.nodeName === 'SPAN') {
-			child.innerHTML = child.getAttribute('note') + ' ';
+			child.textContent = child.getAttribute('note') + ' ';
 		}
 	} 
 };
@@ -164,7 +164,7 @@ CodexView.prototype.hideFootnote = function(noteId) {
 	for (var i=0; i<note.children.length; i++) {
 		var child = note.children[i];
 		if (child.nodeName === 'SPAN') {
-			child.innerHTML = '';
+			child.textContent = '';
 		}
 	}
 };

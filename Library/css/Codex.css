@@ -13,7 +13,7 @@ body {
 	font-size: 1.0rem; /* 14pt std */
 	color: #000000;
 	line-height: 1.3; /* non-std */
-	text-align: justify; /* non-std */
+	text-align: start;
 	direction: ltr;
 	z-index: 0;
 }
@@ -124,7 +124,7 @@ p.p {
 }
 /* Normal Paragraph w/o Indentation */
 p.m {
-	text-align:left;
+	text-align: start;
 	text-indent: 0;
 }
 /* p.b is blank line */
