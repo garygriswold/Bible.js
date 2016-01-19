@@ -595,10 +595,7 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		that.displayAnswer(selected);
 	}
 	function includeInputBlock(parentNode) {
-		//var refTop = that.dom.addNode(parentNode, 'div', 'questionBorder', null, 'quesInput');
 		var wid = window.innerWidth * 0.74;
-		//refTop.setAttribute('style', 'width:' + wid + 'px');
-		//refTop.setAttribute('style', 'padding: 5px 5px');
 
 		var inputTop = that.dom.addNode(parentNode, 'div', 'questionBorder');
 		inputTop.setAttribute('style', 'width:' + wid + 'px');
@@ -617,18 +614,19 @@ QuestionsView.prototype.buildQuestionsView = function() {
 			var item = new QuestionItem();
 			item.reference = ''; // should be set by program based on user's position.
 			item.question = that.questionInput.value;
+			if (item.question && item.question.length > 5) {
 
-			that.questions.addQuestion(item, function(error) {
-				if (error) {
-					console.error('error at server', error);
-				} else {
-					console.log('file is written to disk and server');
-					parentNode.removeChild(refTop);
-					parentNode.removeChild(inputTop);
-					parentNode.removeChild(quesBtn);
-					buildOneQuestion(parentNode, item);
-				}
-			});
+				that.questions.addQuestion(item, function(error) {
+					if (error) {
+						console.error('error at server', error);
+					} else {
+						console.log('file is written to disk and server');
+						parentNode.removeChild(inputTop);
+						parentNode.removeChild(quesBtn);
+						buildOneQuestion(parentNode, item);
+					}
+				});
+			}
 		});
 		that.versesAdapter.getVerses(['MAT:7:7'], function(results) {
 			if (results instanceof IOError) {
