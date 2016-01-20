@@ -76,10 +76,12 @@ HeaderView.prototype.showView = function() {
 		canvas.setAttribute('width', avalWidth);
 		canvas.setAttribute('style', that.cellTopPadding);
 		that.titleGraphics = canvas.getContext('2d');
-		that.titleGraphics.fillStyle = '#000000';
+		that.titleGraphics.fillStyle = '#27139b';//'#000000';
 		that.titleGraphics.font = '2.0rem sans-serif';
 		that.titleGraphics.textAlign = 'center';
 		that.titleGraphics.textBaseline = 'middle';
+		that.titleGraphics.strokeStyle = '#27139b';
+		that.titleGraphics.lineWidth = 1;
 		that.drawTitle();
 
 		that.titleCanvas.addEventListener('click', function(event) {
@@ -114,6 +116,8 @@ HeaderView.prototype.drawTitle = function() {
 		var text = book.name + ' ' + ((this.currentReference.chapter > 0) ? this.currentReference.chapter : 1);
 		this.titleGraphics.clearRect(0, 0, this.titleCanvas.width, this.hite);
 		this.titleGraphics.fillText(text, this.titleCanvas.width / 2, this.hite / 2, this.titleCanvas.width);
+		
+		this.titleGraphics.strokeRect(0, 0, this.titleCanvas.width, this.hite);
 	}
 };
 
