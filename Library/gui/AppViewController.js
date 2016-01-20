@@ -77,7 +77,7 @@ AppViewController.prototype.begin = function(develop) {
 			that.searchView.showView('risen');
 			break;
 		case 'HistoryView':
-			that.historyView.showView(function() {});
+			that.historyView.showView();
 			break;
 		case 'QuestionsView':
 			that.questionsView.showView();
@@ -114,22 +114,14 @@ AppViewController.prototype.begin = function(develop) {
 		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
-		var panRightEnabled = true;
 		that.touch.on("panright", function(event) {
-			if (panRightEnabled && event.deltaX > 4 * Math.abs(event.deltaY)) {
-				panRightEnabled = false;
-				that.historyView.showView(function() {
-					panRightEnabled = true;
-				});
+			if (event.deltaX > 4 * Math.abs(event.deltaY)) {
+				that.historyView.showView();
 			}
 		});
-		var panLeftEnabled = true;
 		that.touch.on("panleft", function(event) {
-			if (panLeftEnabled && -event.deltaX > 4 * Math.abs(event.deltaY)) {
-				panLeftEnabled = false;
-				that.historyView.hideView(function() {
-					panLeftEnabled = true;		
-				});
+			if (-event.deltaX > 4 * Math.abs(event.deltaY)) {
+				that.historyView.hideView();
 			}
 		});
 	});

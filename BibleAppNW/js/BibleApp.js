@@ -110,7 +110,7 @@ AppViewController.prototype.begin = function(develop) {
 			that.searchView.showView('risen');
 			break;
 		case 'HistoryView':
-			that.historyView.showView(function() {});
+			that.historyView.showView();
 			break;
 		case 'QuestionsView':
 			that.questionsView.showView();
@@ -147,22 +147,14 @@ AppViewController.prototype.begin = function(develop) {
 		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
-		var panRightEnabled = true;
 		that.touch.on("panright", function(event) {
-			if (panRightEnabled && event.deltaX > 4 * Math.abs(event.deltaY)) {
-				panRightEnabled = false;
-				that.historyView.showView(function() {
-					panRightEnabled = true;
-				});
+			if (event.deltaX > 4 * Math.abs(event.deltaY)) {
+				that.historyView.showView();
 			}
 		});
-		var panLeftEnabled = true;
 		that.touch.on("panleft", function(event) {
-			if (panLeftEnabled && -event.deltaX > 4 * Math.abs(event.deltaY)) {
-				panLeftEnabled = false;
-				that.historyView.hideView(function() {
-					panLeftEnabled = true;		
-				});
+			if (-event.deltaX > 4 * Math.abs(event.deltaY)) {
+				that.historyView.hideView();
 			}
 		});
 	});
@@ -411,10 +403,12 @@ CodexView.prototype.hideFootnote = function(noteId) {
 * This class provides the user interface to display history as tabs,
 * and to respond to user interaction with those tabs.
 */
+var TAB_STATE = { HIDDEN:0, SHOW:1, VISIBLE:2, HIDE:3 };
 
 function HistoryView(historyAdapter, tableContents) {
 	this.historyAdapter = historyAdapter;
 	this.tableContents = tableContents;
+	this.tabState = TAB_STATE.HIDDEN;
 	this.viewRoot = null;
 	this.rootNode = document.createElement('div');
 	this.rootNode.id = 'historyRoot';
@@ -423,20 +417,26 @@ function HistoryView(historyAdapter, tableContents) {
 	Object.seal(this);
 }
 HistoryView.prototype.showView = function(callback) {
-	var that = this;
-	if (this.viewRoot) {
-	 	if (this.historyAdapter.lastSelectCurrent) {
-	 		animateShow();
-	 	} else {
-			this.rootNode.removeChild(this.viewRoot);
+	if (this.tabState === TAB_STATE.HIDE) {
+		TweenMax.killTweensOf(this.rootNode);
+	}
+	if (this.tabState === TAB_STATE.HIDDEN || this.tabState === TAB_STATE.HIDE) {
+		this.tabState = TAB_STATE.SHOW;
+		var that = this;
+		if (this.viewRoot) {
+		 	if (this.historyAdapter.lastSelectCurrent) {
+		 		animateShow();
+		 	} else {
+				this.rootNode.removeChild(this.viewRoot);
+				this.buildHistoryView(function(result) {
+					installView(result);
+				});
+			}
+		} else {
 			this.buildHistoryView(function(result) {
 				installView(result);
 			});
 		}
-	} else {
-		this.buildHistoryView(function(result) {
-			installView(result);
-		});
 	}
 
 	function installView(root) {
@@ -447,20 +447,25 @@ HistoryView.prototype.showView = function(callback) {
 	}
 	function animateShow() {
 		TweenMax.set(that.rootNode, { left: that.historyTabStart });
-		TweenMax.to(that.rootNode, 0.7, { left: "0px", onComplete: callback });		
+		TweenMax.to(that.rootNode, 0.7, { left: "0px", onComplete: animateComplete });		
+	}
+	function animateComplete() {
+		that.tabState = TAB_STATE.VISIBLE;
 	}
 };
-HistoryView.prototype.hideView = function(callback) {
-	var that = this;
-	var rect = this.rootNode.getBoundingClientRect();
-	if (rect.left > -150) {
-		TweenMax.to(this.rootNode, 0.7, { left: this.historyTabStart, onComplete: moveTabsAway });
-	} else {
-		if (callback) callback();
+HistoryView.prototype.hideView = function() {
+	if (this.tabState === TAB_STATE.SHOW) {
+		TweenMax.killTweensOf(this.rootNode);
 	}
-	function moveTabsAway() {
+	if (this.tabState === TAB_STATE.VISIBLE || this.tabState === TAB_STATE.SHOW) {
+		this.tabState = TAB_STATE.HIDE;
+		var that = this;
+		TweenMax.to(this.rootNode, 0.7, { left: this.historyTabStart, onComplete: animateComplete });
+	}
+	
+	function animateComplete() {
 		TweenMax.set(that.rootNode, { left: '-1000px' });
-		if (callback) callback();
+		that.tabState = TAB_STATE.HIDDEN;
 	}
 };
 HistoryView.prototype.buildHistoryView = function(callback) {
