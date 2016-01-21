@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.shortsands.yourbible" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" 
     xmlns:cdv="http://cordova.apache.org/ns/1.0">
+	    <!-- Library/io/FileDownloader contains copy of id, which must be changed if this is changed. -->
     <name>Your Bible</name>
     <description>
         A free Bible App designed to protect your privacy.

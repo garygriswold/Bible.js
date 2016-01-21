@@ -10,7 +10,11 @@ function FileDownloader(host, port) {
 	this.fileTransfer = new FileTransfer();
 	this.uri = encodeURI('http://' + host + ':' + port + '/book/');
 	this.downloadPath = 'cdvfile://localhost/temporary/';
-	this.finalPath = 'cdvfile://localhost/persistent/../LocalDatabase/';
+	if (deviceSettings.platform() === 'ios') {
+		this.finalPath = 'cdvfile://localhost/persistent/../LocalDatabase/';
+	} else {
+		this.finalPath = '/data/data/com.shortsands.yourbible/databases/';
+	}
 }
 FileDownloader.prototype.download = function(bibleVersion, callback) {
 	var that = this;
