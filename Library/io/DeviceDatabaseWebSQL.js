@@ -13,7 +13,7 @@ function DeviceDatabase(code) {
         this.database = window.openDatabase(this.code, "1.0", this.code, size);
     } else {
         console.log('opening SQLitePlugin Database, stores in Documents with no cloud', this.code);
-        this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
+        this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});//, androidDatabaseImplementation: 2});
     }
 	this.chapters = new ChaptersAdapter(this);
     this.verses = new VersesAdapter(this);
