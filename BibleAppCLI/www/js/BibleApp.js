@@ -232,7 +232,7 @@ AppViewController.prototype.begin = function(develop) {
 /**
 * This class contains user interface features for the display of the Bible text
 */
-var CODEX_VIEW = {BEFORE: 0, AFTER: 2, MAX: 100000, SCROLL_TIMEOUT: 200};
+var CODEX_VIEW = {BEFORE: 0, AFTER: 0, MAX: 100000, SCROLL_TIMEOUT: 200};
 
 function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.chaptersAdapter = chaptersAdapter;
@@ -1837,7 +1837,7 @@ function DeviceDatabase(code) {
         this.database = window.openDatabase(this.code, "1.0", this.code, size);
     } else {
         console.log('opening SQLitePlugin Database, stores in Documents with no cloud', this.code);
-        this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});
+        this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});//, androidDatabaseImplementation: 2});
     }
 	this.chapters = new ChaptersAdapter(this);
     this.verses = new VersesAdapter(this);

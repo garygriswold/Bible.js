@@ -1,7 +1,7 @@
 /**
 * This class contains user interface features for the display of the Bible text
 */
-var CODEX_VIEW = {BEFORE: 0, AFTER: 2, MAX: 100000, SCROLL_TIMEOUT: 200};
+var CODEX_VIEW = {BEFORE: 0, AFTER: 0, MAX: 100000, SCROLL_TIMEOUT: 200};
 
 function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.chaptersAdapter = chaptersAdapter;
