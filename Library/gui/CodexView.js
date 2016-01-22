@@ -1,7 +1,7 @@
 /**
 * This class contains user interface features for the display of the Bible text
 */
-var CODEX_VIEW = {BEFORE: 0, AFTER: 0, MAX: 100000, SCROLL_TIMEOUT: 200};
+var CODEX_VIEW = {BEFORE: 0, AFTER: 1, MAX: 100000, SCROLL_TIMEOUT: 200};
 
 function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.chaptersAdapter = chaptersAdapter;
@@ -110,7 +110,8 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 					var scrollHeight1 = that.viewport.scrollHeight;
 					var scrollY1 = window.scrollY;
 					that.viewport.insertBefore(reference.rootNode, that.viewport.firstChild);
-					window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
+					//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
+					TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
 				}
 				console.log('added chapter', reference.nodeId);
 			}
@@ -147,7 +148,8 @@ CodexView.prototype.scrollTo = function(reference) {
 	var verse = document.getElementById(reference.nodeId);
 	if (verse) {
 		var rect = verse.getBoundingClientRect();
-		window.scrollTo(0, rect.top + window.scrollY - this.headerHeight);
+		//window.scrollTo(0, rect.top + window.scrollY - this.headerHeight);
+		TweenMax.set(window, {scrollTo: { y: rect.top + window.scrollY - this.headerHeight}});
 	}
 };
 CodexView.prototype.showFootnote = function(noteId) {

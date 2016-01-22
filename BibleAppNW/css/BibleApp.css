@@ -28,9 +28,10 @@ body {
 }*/
 /* remove scrollbars, ideally only for #codexRoot
 but, I have only been able to do it for all. */
-::-webkit-scrollbar { 
+/* scrollbars are absent without this 1/21/2016 */
+/*::-webkit-scrollbar { 
     display: none;
-}
+}*/
 /* article element is at beginning of each book */
 article { /* non-std */
 	margin-bottom: 1.0in;

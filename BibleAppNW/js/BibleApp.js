@@ -245,7 +245,7 @@ function CodexView(chaptersAdapter, tableContents, headerHeight) {
 	this.viewport.style.top = headerHeight + 'px'; // Start view at bottom of header.
 	this.currentNodeId = null;
 	this.checkScrollID = null;
-	this.userIsScrolling = false;
+	this.userIsScrolling = false; // I really need to check if user is touching the screen, not just scrolling.
 	Object.seal(this);
 	var that = this;
 	if (deviceSettings.platform() == 'ios') {
@@ -341,9 +341,13 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 					var scrollHeight1 = that.viewport.scrollHeight;
 					var scrollY1 = window.scrollY;
 					that.viewport.insertBefore(reference.rootNode, that.viewport.firstChild);
-					window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
+					console.log('REFE', reference.verse);
+					if (! reference.verse) {
+						console.log('inside tweenmax set');
+						TweenMax.set(window, {scrollTo:{ y: scrollY1 + that.viewport.scrollHeight - scrollHeight1 }});					
+					}
 				}
-				console.log('added chapter', reference.nodeId);
+				console.log('added chapter', reference.nodeId, reference.verse);
 			}
 			callback();
 		}
@@ -379,6 +383,7 @@ CodexView.prototype.scrollTo = function(reference) {
 	if (verse) {
 		var rect = verse.getBoundingClientRect();
 		window.scrollTo(0, rect.top + window.scrollY - this.headerHeight);
+		//TweenMax.set(window, {scrollTo:{ y: rect.top + window.scrollY - this.headerHeight }});
 	}
 };
 CodexView.prototype.showFootnote = function(noteId) {
@@ -2652,7 +2657,11 @@ function FileDownloader(host, port) {
 	this.fileTransfer = new FileTransfer();
 	this.uri = encodeURI('http://' + host + ':' + port + '/book/');
 	this.downloadPath = 'cdvfile://localhost/temporary/';
-	this.finalPath = 'cdvfile://localhost/persistent/../LocalDatabase/';
+	if (deviceSettings.platform() === 'ios') {
+		this.finalPath = 'cdvfile://localhost/persistent/../LocalDatabase/';
+	} else {
+		this.finalPath = '/data/data/com.shortsands.yourbible/databases/';
+	}
 }
 FileDownloader.prototype.download = function(bibleVersion, callback) {
 	var that = this;
