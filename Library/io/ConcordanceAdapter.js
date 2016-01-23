@@ -20,8 +20,9 @@ ConcordanceAdapter.prototype.create = function(callback) {
 	var statement = 'create table if not exists concordance(' +
 		'word text primary key not null, ' +
     	'refCount integer not null, ' +
-    	'refList text not null)';
-	this.database.executeDDL(statement, function(err) {
+    	'refList text not null, ' + // comma delimited list of references where word occurs
+    	'refPosition text not null)';  // comma delimited list of references with position in verse.
+   	this.database.executeDDL(statement, function(err) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
@@ -31,7 +32,7 @@ ConcordanceAdapter.prototype.create = function(callback) {
 	});
 };
 ConcordanceAdapter.prototype.load = function(array, callback) {
-	var statement = 'insert into concordance(word, refCount, refList) values (?,?,?)';
+	var statement = 'insert into concordance(word, refCount, refList, refPosition) values (?,?,?,?)';
 	this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
 			callback(count);

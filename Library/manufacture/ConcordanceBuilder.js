@@ -6,10 +6,11 @@
 */
 function ConcordanceBuilder(adapter) {
 	this.adapter = adapter;
-	this.index = {};
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
+	this.refList = {};
+	this.refPositions = {};
 	Object.seal(this);
 }
 ConcordanceBuilder.prototype.readBook = function(usxRoot) {
@@ -37,7 +38,7 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 				var word = words[i].replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]/g, '');
 				if (word.length > 0 && this.chapter > 0 && this.verse > 0) {
 					var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-					this.addEntry(word.toLocaleLowerCase(), reference);
+					this.addEntry(word.toLocaleLowerCase(), reference, i);
 				}
 			}
 			break;
@@ -50,31 +51,30 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 
 	}
 };
-ConcordanceBuilder.prototype.addEntry = function(word, reference) {
-	if (this.index[word] === undefined) {
-		this.index[word] = [];
-		this.index[word].push(reference);
+ConcordanceBuilder.prototype.addEntry = function(word, reference, index) {
+	if (this.refList[word] === undefined) {
+		this.refList[word] = [];
+		this.refPositions[word] = [];
 	}
-	else {
-		var refList = this.index[word];
-		if (reference !== refList[refList.length -1]) { /* ignore duplicate reference */
-			refList.push(reference);
-		}
+	var list = this.refList[word];
+	var pos = this.refPositions[word];
+	if (reference !== list[list.length -1]) { /* ignore duplicate reference */
+		list.push(reference);
+		pos.push(reference + ':' + index);
+	} else {
+		pos[pos.length -1] = pos[pos.length -1] + ':' + index;
 	}
 };
 ConcordanceBuilder.prototype.size = function() {
-	return(Object.keys(this.index).length); 
+	return(Object.keys(this.refList).length); 
 };
 ConcordanceBuilder.prototype.loadDB = function(callback) {
 	console.log('Concordance loadDB records count', this.size());
-	var words = Object.keys(this.index);
+	var words = Object.keys(this.refList);
 	var array = [];
 	for (var i=0; i<words.length; i++) {
 		var word = words[i];
-		var refList = this.index[word];
-		var refCount = refList.length;
-		var item = [ words[i], refCount, refList ];
-		array.push(item);
+		array.push([ word, this.refList[word].length, this.refList[word], this.refPositions[word] ]);
 	}
 	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {
@@ -87,5 +87,5 @@ ConcordanceBuilder.prototype.loadDB = function(callback) {
 	});
 };
 ConcordanceBuilder.prototype.toJSON = function() {
-	return(JSON.stringify(this.index, null, ' '));
+	return(JSON.stringify(this.refList, null, ' '));
 };
