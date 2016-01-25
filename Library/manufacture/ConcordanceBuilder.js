@@ -9,6 +9,7 @@ function ConcordanceBuilder(adapter) {
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
+	this.position = 0;
 	this.refList = {};
 	this.refPositions = {};
 	Object.seal(this);
@@ -29,6 +30,7 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 			break;
 		case 'verse':
 			this.verse = node.number;
+			this.position = 0;
 			break;
 		case 'note':
 			break; // Do not index notes
@@ -38,7 +40,8 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 				var word = words[i].replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]/g, '');
 				if (word.length > 0 && this.chapter > 0 && this.verse > 0) {
 					var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-					this.addEntry(word.toLocaleLowerCase(), reference, i);
+					this.position++;
+					this.addEntry(word.toLocaleLowerCase(), reference, this.position);
 				}
 			}
 			break;

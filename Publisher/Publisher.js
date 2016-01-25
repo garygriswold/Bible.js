@@ -358,6 +358,7 @@ function ConcordanceBuilder(adapter) {
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
+	this.position = 0;
 	this.refList = {};
 	this.refPositions = {};
 	Object.seal(this);
@@ -378,6 +379,7 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 			break;
 		case 'verse':
 			this.verse = node.number;
+			this.position = 0;
 			break;
 		case 'note':
 			break; // Do not index notes
@@ -387,7 +389,8 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 				var word = words[i].replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]/g, '');
 				if (word.length > 0 && this.chapter > 0 && this.verse > 0) {
 					var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
-					this.addEntry(word.toLocaleLowerCase(), reference, i);
+					this.position++;
+					this.addEntry(word.toLocaleLowerCase(), reference, this.position);
 				}
 			}
 			break;
@@ -1470,6 +1473,14 @@ function Canon() {
     	{ code: 'JUD', name: 'Jude' },
     	{ code: 'REV', name: 'Revelation' } ];
 }
+Canon.prototype.sequenceMap = function() {
+	var result = {};
+	for (var i=0; i<this.books.length; i++) {
+		var item = this.books[i];
+		result[item.code] = i;
+	}
+	return(result);
+};
 /**
 * This class holds data for the table of contents of the entire Bible, or whatever part of the Bible was loaded.
 */
@@ -1921,7 +1932,7 @@ ConcordanceAdapter.prototype.create = function(callback) {
 		'word text primary key not null, ' +
     	'refCount integer not null, ' +
     	'refList text not null, ' + // comma delimited list of references where word occurs
-    	'refPosition text not null)';  // comma delimited list of references with position in verse.
+    	'refPosition text null)';  // comma delimited list of references with position in verse.
    	this.database.executeDDL(statement, function(err) {
 		if (err instanceof IOError) {
 			callback(err);
@@ -2321,6 +2332,7 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 * Unit Test Harness for AssetController
 */
 var FILE_PATH = process.env.HOME + '/DBL/current/';
+
 var versionNode = document.getElementById('versionNode');
 var responseNode = document.getElementById('responseNode');
 var submitBtn = document.getElementById('submitBtn');
@@ -2335,12 +2347,12 @@ submitBtn.addEventListener('click', function(event) {
 		process.exit();
 	} else if (versionCode && versionCode.length > 2) {
 		var types = new AssetType(FILE_PATH, versionCode);
-		types.chapterFiles = false;
-		types.tableContents = false;
+		types.chapterFiles = true;
+		types.tableContents = true;
 		types.concordance = true;
-		types.styleIndex = false;
-		types.history = false;
-		types.questions = false;
+		types.styleIndex = true;
+		types.history = true;
+		types.questions = true;
 		var database = new DeviceDatabase(versionCode + '.db1');
 		
 		var builder = new AssetBuilder(types, database);

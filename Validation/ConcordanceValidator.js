@@ -12,32 +12,38 @@
 function ConcordanceValidator(versionPath) {
 	this.versionPath = versionPath;
 	this.db = null;
+	var canon = new Canon();
+	this.bookMap = canon.sequenceMap();
 }
 ConcordanceValidator.prototype.open = function(callback) {
+	var that = this;
 	var sqlite3 = require('sqlite3');
 	this.db = new sqlite3.Database(this.versionPath, sqlite3.OPEN_READWRITE, function(err) {
-		if (err) fatalError(err, 'openDatabase');
-		//db.on('trace', function(sql) { console.log('DO ', sql); });
-		//db.on('profile', function(sql, ms) { console.log(ms, 'DONE', sql); });
+		if (err) that.fatalError(err, 'openDatabase');
+		//that.db.on('trace', function(sql) { console.log('DO ', sql); });
+		//that.db.on('profile', function(sql, ms) { console.log(ms, 'DONE', sql); });
 		callback();
 	});
 };
 
-ConcordanceValidator.prototype.normalize = function() {
+ConcordanceValidator.prototype.normalize = function(callback) {
 	var that = this;
 	this.db.serialize(function() {
-		createValConcordance(function(err) { if (err) fatalError(err, 'createValConcordance'); });
+		//createValConcordance(function(err) { if (err) that.fatalError(err, 'createValConcordance'); });
 		normalizeConcordance(function(err, result) {
-			if (err) fatalError(err, 'normalizeConcordance')
-			populateValConcordance(result, function(err) {
-				if (err) fatalError(err, 'populateValConcordance');
-				else completed();
+			if (err) that.fatalError(err, 'normalizeConcordance')
+			var generatedText = that.generate(result);
+			that.compare(generatedText, function(err) {
+				if (err) that.fatalError(err, 'compare');
+				callback();
 			});
+			//populateValConcordance(result, function(err) {
+			//	if (err) that.fatalError(err, 'populateValConcordance');
+			//	callback();
+			//});
 		});	
 	});	
 
-	// 6. Sort this datatable by book ordinal, verse, position
-	// 7. Using one string per verse, recreate each verse.
 	// 8. Read that verse from verses table, and compare with generated verse by verse.
 	// 9. Each character in the original that is not found in the generated is stored in a table of book, verse, position, character
 	// 10. Optionally, the generated Bible is written to an output file line by line.
@@ -84,11 +90,10 @@ ConcordanceValidator.prototype.normalize = function() {
 				for (var j=0; j<refList.length; j++) {
 					var reference = refList[j];
 					var parts = reference.split(':');
-					var ordinal = 0;
+					var ordinal = that.bookMap[parts[0]];
 					for (var k=3; k<parts.length; k++) {
-						var position = parts[k];
 						array.push({book:parts[0], ordinal:ordinal, chapter:parts[1], verse:parts[2], position:parts[k], word:row.word });
-					}
+					}	
 				}
 			}
 			console.log('RESULT size ', array.length);
@@ -113,19 +118,87 @@ ConcordanceValidator.prototype.normalize = function() {
 			}
 		}
 	}
-	function fatalError(err, source) {
-		console.log('FATAL ERROR ', err, ' AT ', source);
-		process.exit(1);
+};
+ConcordanceValidator.prototype.generate = function(concordance) {
+	concordance.sort(function(a, b) {
+		var bookDiff = a.ordinal - b.ordinal;
+		if (bookDiff !== 0) return(bookDiff);
+		var chapDiff = a.chapter - b.chapter;
+		if (chapDiff !== 0) return(chapDiff);
+		var versDiff = a.verse - b.verse;
+		if (versDiff !== 0) return(versDiff);
+		return(a.position - b.position);
+	});
+	var result = [];
+	var priorBook = '';
+	var priorChap = '';
+	var priorVers = '';
+	var generated = null;
+	for (var i=0; i<concordance.length; i++) {
+		var row = concordance[i];
+		if (row.book != priorBook || row.chapter != priorChap || row.verse != priorVers) {
+			if (generated != null) {
+				result.push({ book:priorBook, chapter:priorChap, verse:priorVers, text:generated.join(' ') });
+			}
+			priorBook = row.book;
+			priorChap = row.chapter;
+			priorVers = row.verse;
+			generated = [];
+		}
+		generated.push(row.word);
 	}
-	function completed() {
-		console.log('COMPLETED');
-		that.db.close();
-		process.exit(0);
+	return(result);
+};
+ConcordanceValidator.prototype.displayText = function(generatedText) {
+	for (var i=0; i<generatedText.length; i++) {
+		var row = generatedText[i];
+		console.log(row.book, row.chapter, row.verse, row.text);
+	}	
+};
+ConcordanceValidator.prototype.compare = function(generatedText, callback) {
+	var that = this;
+	var selectStmt = 'SELECT html FROM verses WHERE reference=?';
+	iterateEach(0);
+
+	function iterateEach(index) {
+		if (index < generatedText.length) {
+			var line = generatedText[index];
+			var reference = line.book + ':' + line.chapter + ':' + line.verse;
+			that.db.get(selectStmt, reference, function(err, row) {
+				if (err) callback(err);
+				console.log(line.book, line.chapter, line.verse, row.html);
+				compareOne(generated, verseText);
+				iterateEach(index + 1);
+			});
+		} else {
+			callback();
+		}
 	}
+	function compareOne(generated, verseText) {
+		
+	}
+};
+	
+//	function compare(book, chapter, verse, text) {
+//		var reference = book + ':' + chapter + ':' + verse;
+//		
+//		
+//	}
+//};
+ConcordanceValidator.prototype.fatalError = function(err, source) {
+	console.log('FATAL ERROR ', err, ' AT ', source);
+	process.exit(1);
+};
+ConcordanceValidator.prototype.completed = function() {
+	console.log('COMPLETED');
+	this.db.close();
+	process.exit(0);
 };
 
 var val = new ConcordanceValidator('WEB.db1');
 val.open(function() {
-	val.normalize();
+	val.normalize(function() {
+		val.completed();
+	});
 });
 

@@ -73,3 +73,11 @@ function Canon() {
     	{ code: 'JUD', name: 'Jude' },
     	{ code: 'REV', name: 'Revelation' } ];
 }
+Canon.prototype.sequenceMap = function() {
+	var result = {};
+	for (var i=0; i<this.books.length; i++) {
+		var item = this.books[i];
+		result[item.code] = i;
+	}
+	return(result);
+};
