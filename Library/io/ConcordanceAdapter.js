@@ -21,7 +21,7 @@ ConcordanceAdapter.prototype.create = function(callback) {
 		'word text primary key not null, ' +
     	'refCount integer not null, ' +
     	'refList text not null, ' + // comma delimited list of references where word occurs
-    	'refPosition text not null)';  // comma delimited list of references with position in verse.
+    	'refPosition text null)';  // comma delimited list of references with position in verse.
    	this.database.executeDDL(statement, function(err) {
 		if (err instanceof IOError) {
 			callback(err);
