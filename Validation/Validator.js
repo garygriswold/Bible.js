@@ -14,19 +14,28 @@ function ConcordanceValidator(versionPath) {
 	this.versionPath = versionPath;
 	this.db = null;
 }
-ConcordanceValidator.prototype.validate = function() {
-	var that = this;
-	openDatabase(function(err, db) {
+ConcordanceValidator.prototype.open = function(callback) {
+	var sqlite3 = require('sqlite3');
+	this.db = new sqlite3.Database(this.versionPath, sqlite3.OPEN_READWRITE, function(err) {
 		if (err) fatalError(err, 'openDatabase');
-		that.db = db;
-		that.db.serialize(function() {
-			createTables(function(err) { if (err) fatalError(err); });
-			populateValConcordance(function(err) { 
-				if (err) fatalError(err);
-				else completed();
-			});	
-		});	
+		//db.on('trace', function(sql) { console.log('DO ', sql); });
+		//db.on('profile', function(sql, ms) { console.log(ms, 'DONE', sql); });
+		callback();
 	});
+};
+
+ConcordanceValidator.prototype.normalize = function() {
+	var that = this;
+	this.db.serialize(function() {
+		createValConcordance(function(err) { if (err) fatalError(err, 'createValConcordance'); });
+		normalizeConcordance(function(err, result) {
+			if (err) fatalError(err, 'normalizeConcordance')
+			populateValConcordance(result, function(err) {
+				if (err) fatalError(err, 'populateValConcordance');
+				else completed();
+			});
+		});	
+	});	
 
 	// 6. Sort this datatable by book ordinal, verse, position
 	// 7. Using one string per verse, recreate each verse.
@@ -37,23 +46,7 @@ ConcordanceValidator.prototype.validate = function() {
 	// 12. It is up to the developer to go look at the table of missing characters.
 	// 13. It is essential that this process produces an error if there is an extra character in the generated that is not in the verses.
 	// This would probably indicate a problem in the verses table.
-	function openDatabase(callback) {
-		var sqlite3 = require('sqlite3');
-		var db = new sqlite3.Database(that.versionPath, sqlite3.OPEN_READWRITE, function(err) {
-			if (err) callback(err);
-			/*
-			db.on('trace', function(sql) {
-				console.log('DO ', sql);
-			});
-			db.on('profile', function(sql, ms) {
-				console.log(ms, 'DONE', sql);
-			});
-			*/
-			//db.run("PRAGMA foreign_keys = ON");
-			callback(null, db);
-		});
-	}
-	function createTables(callback) {
+	function createValConcordance(callback) {
 		console.log('drop valConcordance');
 		that.db.run('drop table if exists valConcordance', [], function(err) { if (err) callback(err); });
 		console.log('drop valPunct');
@@ -81,9 +74,8 @@ ConcordanceValidator.prototype.validate = function() {
 		console.log('done create tables');
 		callback();
 	}
-	function populateValConcordance(callback) {
-		var insertStmt = 'INSERT INTO valConcordance(book, ordinal, chapter, verse, position, word) VALUES (?,?,?,?,?,?)';
-		var insertVal = that.db.prepare(insertStmt, [], function(err) { if (err) callback(err) });
+	function normalizeConcordance(callback) {
+		var array = [];
 		that.db.all('SELECT rowid, word, refPosition FROM concordance', [], function(err, results) {
 			if (err) callback(err);
 			for (var i=0; i<results.length; i++) {
@@ -93,22 +85,41 @@ ConcordanceValidator.prototype.validate = function() {
 				for (var j=0; j<refList.length; j++) {
 					var reference = refList[j];
 					var parts = reference.split(':');
-					var book = parts[0];
+					//var book = parts[0];
 					var ordinal = 0;
-					var chapter = parts[1];
-					var verse = parts[2];
+					//var chapter = parts[1];
+					//var verse = parts[2];
 					for (var k=3; k<parts.length; k++) {
 						var position = parts[k];
-						if (row.word == 'illuminate') {
-							console.log(book, ordinal, chapter, verse, position, row.word, i, j, k, row.rowid);
-						}
-						insertVal.run(book, ordinal, chapter, verse, position, row.word, function(err) { if (err) callback(err); });
-						//console.log('inserted');
+						array.push({book:parts[0], ordinal:ordinal, chapter:parts[1], verse:parts[2], position:parts[k], word:row.word });
+						//insertVal.run(book, ordinal, chapter, verse, position, row.word, function(err) { 
+						//	if (err) callback(err);
+						//	 
+						//});
 					}
 				}
 			}
-			callback();
+			console.log('RESULT size ', array.length);
+			callback(null, array);
 		});
+	}
+	function populateValConcordance(array, callback) {
+		var insertStmt = 'INSERT INTO valConcordance(book, ordinal, chapter, verse, position, word) VALUES (?,?,?,?,?,?)';
+		var insertVal = that.db.prepare(insertStmt, [], function(err) { if (err) callback(err) });
+		insertValConcordanceRow(0, array, callback);
+
+		function insertValConcordanceRow(index, array, callback) {
+			if (index < array.length) {
+				var row = array[index];
+				console.log(index);
+				insertVal.run(row.book, row.ordinal, row.chapter, row.verse, row.position, row.word, function(err) { 
+					if (err) callback(err);
+					insertValConcordanceRow(index + 1, array, callback);
+				});
+			} else {
+				callback();
+			}
+		}
 	}
 	function fatalError(err, source) {
 		console.log('FATAL ERROR ', err, ' AT ', source);
@@ -122,7 +133,10 @@ ConcordanceValidator.prototype.validate = function() {
 };
 
 var val = new ConcordanceValidator('WEB.db1');
-val.validate();
+val.open(function() {
+	val.normalize();
+});
+
 /**
 * This class contains the Canon of Scripture as 66 books.  It is used to control
 * which books are published using this App.  The codes are used to identify the
