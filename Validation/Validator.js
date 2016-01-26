@@ -113,51 +113,40 @@ ConcordanceValidator.prototype.open = function(callback) {
 ConcordanceValidator.prototype.normalize = function(callback) {
 	var that = this;
 	this.db.serialize(function() {
-		//createValConcordance(function(err) { if (err) that.fatalError(err, 'createValConcordance'); });
+		createValPunctuation(function(err) { if (err) that.fatalError(err, 'createValPunctuation'); });
 		normalizeConcordance(function(err, result) {
 			if (err) that.fatalError(err, 'normalizeConcordance')
 			var generatedText = that.generate(result);
 			that.compare(generatedText, function(err) {
 				if (err) that.fatalError(err, 'compare');
-				callback();
+				that.summary(function(err) {
+					if (err) that.fatalError(err, 'summary');
+					callback();
+				});
 			});
-			//populateValConcordance(result, function(err) {
-			//	if (err) that.fatalError(err, 'populateValConcordance');
-			//	callback();
-			//});
 		});	
-	});	
-
-	// 8. Read that verse from verses table, and compare with generated verse by verse.
-	// 9. Each character in the original that is not found in the generated is stored in a table of book, verse, position, character
-	// 10. Optionally, the generated Bible is written to an output file line by line.
-	// 11. At the end of the process a frequence count is displayed of the different characters.
-	// 12. It is up to the developer to go look at the table of missing characters.
-	// 13. It is essential that this process produces an error if there is an extra character in the generated that is not in the verses.
-	// This would probably indicate a problem in the verses table.
-	function createValConcordance(callback) {
-		console.log('drop valConcordance');
-		that.db.run('drop table if exists valConcordance', [], function(err) { if (err) callback(err); });
+	});
+	function createValPunctuation(callback) {
+		//console.log('drop valConcordance');
+		//that.db.run('drop table if exists valConcordance', [], function(err) { if (err) callback(err); });
 		console.log('drop valPunct');
 		that.db.run('drop table if exists valPunctuation', [], function(err) { if (err) callback(err); });
-		var createValConcordance = 
-			'CREATE TABLE valConcordance(' +
-			'book text not null, ' +
-			'ordinal int not null, ' +
-			'chapter int not null, ' +
-			'verse int not null, ' +
-			'position int not null, ' +
-			'word text not null)';
-		console.log('create valConcordance');
-		that.db.run(createValConcordance, [], function(err) { if (err) callback(err);	});
+		//var createValConcordance = 
+		//	'CREATE TABLE valConcordance(' +
+		//	'book text not null, ' +
+		//	'ordinal int not null, ' +
+		//	'chapter int not null, ' +
+		//	'verse int not null, ' +
+		//	'position int not null, ' +
+		//	'word text not null)';
+		//console.log('create valConcordance');
+		//that.db.run(createValConcordance, [], function(err) { if (err) callback(err);	});
 		var createValPunctuation =
 			'CREATE TABLE valPunctuation(' +
 			'book text not null, ' +
-			'book_ordinal int not null, ' +
 			'chapter int not null, ' +
 			'verse int not null, ' +
-			'position int not null, ' +
-			'character text not null)';
+			'char text not null)';
 		console.log('create valPunct');
 		that.db.run(createValPunctuation, [], function(err) { if (err) callback(err); });
 		console.log('done create tables');
@@ -180,7 +169,7 @@ ConcordanceValidator.prototype.normalize = function(callback) {
 					}	
 				}
 			}
-			console.log('RESULT size ', array.length);
+			console.log(array.length, 'Normalized Concordance Records');
 			callback(null, array);
 		});
 	}
@@ -231,6 +220,7 @@ ConcordanceValidator.prototype.generate = function(concordance) {
 		}
 		generated.push(row.word);
 	}
+	console.log(result.length, 'Generated Verses');
 	return(result);
 };
 ConcordanceValidator.prototype.displayText = function(generatedText) {
@@ -241,6 +231,7 @@ ConcordanceValidator.prototype.displayText = function(generatedText) {
 };
 ConcordanceValidator.prototype.compare = function(generatedText, callback) {
 	var that = this;
+	var insertStmt = this.db.prepare('INSERT INTO valPunctuation (book, chapter, verse, char) VALUES (?,?,?,?)');
 	var selectStmt = 'SELECT html FROM verses WHERE reference=?';
 	iterateEach(0);
 
@@ -248,24 +239,49 @@ ConcordanceValidator.prototype.compare = function(generatedText, callback) {
 		if (index < generatedText.length) {
 			var line = generatedText[index];
 			var reference = line.book + ':' + line.chapter + ':' + line.verse;
-			console.log('KEY', reference);
 			that.db.get(selectStmt, reference, function(err, row) {
 				if (err) callback(err);
-				console.log(line.book, line.chapter, line.verse, row.html);
+				//console.log(line.book, line.chapter, line.verse, row.html);
+				compareOne(line.book, line.chapter, line.verse, line.text, ((row) ? row.html : ''));
 				iterateEach(index + 1);
 			});
 		} else {
 			callback();
 		}
 	}
+	/*
+	* This compare assumes that one string is complete, and the other a substring.
+	* So it does all of its lookaheads on the whole string.  If this assumption turns
+	* out to be false, and the substring contains characters that are not in the whole
+	* string, this will result in many errors found in that compare, which is OK because
+	* it is a serious and unexpected.
+	*/
+	function compareOne(book, chapter, verse, generated, original) {
+		//console.log('compare', book, chapter, verse);
+		var gi = 0;
+		for (var oi=0; oi < original.length; oi++) {
+			if (generated.charAt(gi) === original.charAt(oi).toLowerCase()) {
+				gi++;
+			} else if (generated.charAt(gi) === ' ') {
+				gi++;
+				oi--;
+			} else {
+				insertStmt.run(book, chapter, verse, original.charAt(oi), function(err) { if (err) callback(err); });
+			}
+		}
+	}
 };
-	
-//	function compare(book, chapter, verse, text) {
-//		var reference = book + ':' + chapter + ':' + verse;
-//		
-//		
-//	}
-//};
+ConcordanceValidator.prototype.summary = function(callback) {
+	var stmt = 'SELECT char, count(*) as count FROM valPunctuation GROUP BY char';
+	this.db.all(stmt, [], function(err, results) {
+		if (err) callback(err);
+		for (var i=0; i<results.length; i++) {
+			var row = results[i];
+			console.log(row.char, row.count);
+		}
+		callback();
+	});
+};
 ConcordanceValidator.prototype.fatalError = function(err, source) {
 	console.log('FATAL ERROR ', err, ' AT ', source);
 	process.exit(1);
