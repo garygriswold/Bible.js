@@ -11,6 +11,7 @@ function AssetType(location, versionCode) {
 	this.history = false;
 	this.questions = false;
 	this.styleIndex = false;
+	this.statistics = false;
 	Object.seal(this);
 }
 AssetType.prototype.getUSXPath = function(filename) {

@@ -28,6 +28,9 @@ function AssetBuilder(types, database) {
 	if (types.questions) {
 		this.builders.push(new QuestionsBuilder(this.database.questions));
 	}
+	if (types.statistics) {
+		this.builders.push(new VersionStatistics());
+	}
 	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
 	this.filesToProcess = [];

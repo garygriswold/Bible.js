@@ -12,6 +12,7 @@ function AssetType(location, versionCode) {
 	this.history = false;
 	this.questions = false;
 	this.styleIndex = false;
+	this.statistics = false;
 	Object.seal(this);
 }
 AssetType.prototype.getUSXPath = function(filename) {
@@ -47,6 +48,9 @@ function AssetBuilder(types, database) {
 	}
 	if (types.questions) {
 		this.builders.push(new QuestionsBuilder(this.database.questions));
+	}
+	if (types.statistics) {
+		this.builders.push(new VersionStatistics());
 	}
 	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
@@ -117,6 +121,69 @@ AssetBuilder.prototype.build = function(callback) {
 	}
 };
 /**
+* This program reads a version of the Bible and generates statistics about what is found there.
+*/
+function VersionStatistics() {
+	this.adapter = new FauxAdapter();
+	this.charCounts = {};
+	Object.seal(this);
+}
+VersionStatistics.prototype.readBook = function(usxRoot) {
+	var that = this;
+	this.charCounts = {};
+	readRecursively(usxRoot);
+
+	function readRecursively(node) {
+		switch(node.tagName) {
+			case 'book':
+				break;
+			case 'chapter':
+				break;
+			case 'verse':
+				break;
+			case 'note':
+				parse(node.text);
+				break;
+			case 'text':
+				parse(node.text);
+				break;
+			default:
+				if ('children' in node) {
+					for (var i=0; i<node.children.length; i++) {
+						readRecursively(node.children[i]);
+					}
+				}
+		}
+	}
+	function parse(text) {
+		if (text) {
+			for (var i=0; i<text.length; i++) {
+				var charCode = text[i].charCodeAt();
+				var counts = that.charCounts[charCode];
+				if (counts) {
+					that.charCounts[charCode] = counts + 1;
+				} else {
+					that.charCounts[charCode] = 1
+				}
+			}
+		}	
+	}
+};
+VersionStatistics.prototype.loadDB = function(callback) {
+	var result = [];
+	var codes = Object.keys(this.charCounts);
+	codes.sort(function(a, b) {
+		return(a - b);
+	});
+	for (var i=0; i<codes.length; i++) {
+		var charCode = codes[i];
+		var count = this.charCounts[charCode];
+		var char = String.fromCharCode(charCode);
+		var hex = charCode.toString(16);
+		console.log(hex, char, count);
+	}
+	callback();
+};/**
 * This class iterates over the USX data model, and breaks it into files one for each chapter.
 *
 */
@@ -2333,6 +2400,19 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 	});
 };
 /**
+* This class is a false adapter.  Since the AssetBuilder class excepts all Builders to have an
+* adapter this can be used whenever there is no adapter.
+*/
+function FauxAdapter() {
+	this.className = 'FauxAdapter';
+	Object.freeze(this);
+}
+FauxAdapter.prototype.drop = function(callback) {
+	callback();
+};
+FauxAdapter.prototype.create = function(callback) {
+	callback();
+};/**
 * Unit Test Harness for AssetController
 */
 var FILE_PATH = process.env.HOME + '/DBL/current/';
@@ -2357,6 +2437,7 @@ submitBtn.addEventListener('click', function(event) {
 		types.styleIndex = true;
 		types.history = true;
 		types.questions = true;
+		types.statistics = true;
 		var database = new DeviceDatabase(versionCode + '.db1');
 		
 		var builder = new AssetBuilder(types, database);

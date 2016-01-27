@@ -2,6 +2,7 @@
 echo \"use strict\"\; > Publisher.js
 cat ../Library/manufacture/AssetType.js >> Publisher.js
 cat ../Library/manufacture/AssetBuilder.js >> Publisher.js
+cat ../Library/manufacture/VersionStatistics.js >> Publisher.js
 cat ../Library/manufacture/ChapterBuilder.js >> Publisher.js
 cat ../Library/manufacture/VerseBuilder.js >> Publisher.js
 cat ../Library/manufacture/TOCBuilder.js >> Publisher.js
@@ -37,6 +38,7 @@ cat ../Library/io/StyleIndexAdapter.js >> Publisher.js
 cat ../Library/io/StyleUseAdapter.js >> Publisher.js
 cat ../Library/io/HistoryAdapter.js >> Publisher.js
 cat ../Library/io/QuestionsAdapter.js >> Publisher.js
+cat ../Library/io/FauxAdapter.js >> Publisher.js
 cat ../Library/manufacture/AssetController.js >> Publisher.js
 #node Publisher.js
 npm start

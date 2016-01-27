@@ -23,6 +23,7 @@ submitBtn.addEventListener('click', function(event) {
 		types.styleIndex = true;
 		types.history = true;
 		types.questions = true;
+		types.statistics = true;
 		var database = new DeviceDatabase(versionCode + '.db1');
 		
 		var builder = new AssetBuilder(types, database);
