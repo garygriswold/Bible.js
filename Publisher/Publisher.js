@@ -50,7 +50,7 @@ function AssetBuilder(types, database) {
 		this.builders.push(new QuestionsBuilder(this.database.questions));
 	}
 	if (types.statistics) {
-		this.builders.push(new VersionStatistics());
+		this.builders.push(new VersionStatistics(this.database));
 	}
 	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
@@ -123,8 +123,8 @@ AssetBuilder.prototype.build = function(callback) {
 /**
 * This program reads a version of the Bible and generates statistics about what is found there.
 */
-function VersionStatistics() {
-	this.adapter = new FauxAdapter();
+function VersionStatistics(database) {
+	this.adapter = new CharsetAdapter(database);
 	this.charCounts = {};
 	Object.seal(this);
 }
@@ -170,7 +170,7 @@ VersionStatistics.prototype.readBook = function(usxRoot) {
 	}
 };
 VersionStatistics.prototype.loadDB = function(callback) {
-	var result = [];
+	var array = [];
 	var codes = Object.keys(this.charCounts);
 	codes.sort(function(a, b) {
 		return(a - b);
@@ -179,10 +179,21 @@ VersionStatistics.prototype.loadDB = function(callback) {
 		var charCode = codes[i];
 		var count = this.charCounts[charCode];
 		var char = String.fromCharCode(charCode);
-		var hex = charCode.toString(16);
+		var hex = Number(charCode).toString(16).toUpperCase();
+		if (hex.length === 3) hex = '0' + hex;
+		if (hex.length === 2) hex = '00' + hex;
 		console.log(hex, char, count);
+		array.push([ hex, char, count ]);
 	}
-	callback();
+	this.adapter.load(array, function(err) {
+		if (err instanceof IOError) {
+			console.log('Charset Load Failed', JSON.stringify(err));
+			callback(err);
+		} else {
+			console.log('Charset loaded in database');
+			callback();
+		}
+	});
 };/**
 * This class iterates over the USX data model, and breaks it into files one for each chapter.
 *
@@ -2400,18 +2411,47 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 	});
 };
 /**
-* This class is a false adapter.  Since the AssetBuilder class excepts all Builders to have an
-* adapter this can be used whenever there is no adapter.
+* This class is the database adapter for the charset table
 */
-function FauxAdapter() {
-	this.className = 'FauxAdapter';
+function CharsetAdapter(database) {
+	this.database = database;
+	this.className = 'CharsetAdapter';
 	Object.freeze(this);
 }
-FauxAdapter.prototype.drop = function(callback) {
-	callback();
+CharsetAdapter.prototype.drop = function(callback) {
+	this.database.executeDDL('drop table if exists charset', function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('drop charset success');
+			callback();
+		}
+	});
 };
-FauxAdapter.prototype.create = function(callback) {
-	callback();
+CharsetAdapter.prototype.create = function(callback) {
+	var statement = 'create table if not exists charset(' +
+		'hex text not null, ' +
+		'char text not null, ' +
+		'count int not null)';
+	this.database.executeDDL(statement, function(err) {
+		if (err instanceof IOError) {
+			callback(err);
+		} else {
+			console.log('create charset success');
+			callback();
+		}
+	});
+};
+CharsetAdapter.prototype.load = function(array, callback) {
+	var statement = 'insert into charset(hex, char, count) values (?,?,?)';
+	this.database.bulkExecuteDML(statement, array, function(count) {
+		if (count instanceof IOError) {
+			callback(count);
+		} else {
+			console.log('load charset success', count);
+			callback();
+		}
+	});
 };/**
 * Unit Test Harness for AssetController
 */

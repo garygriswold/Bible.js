@@ -38,7 +38,7 @@ cat ../Library/io/StyleIndexAdapter.js >> Publisher.js
 cat ../Library/io/StyleUseAdapter.js >> Publisher.js
 cat ../Library/io/HistoryAdapter.js >> Publisher.js
 cat ../Library/io/QuestionsAdapter.js >> Publisher.js
-cat ../Library/io/FauxAdapter.js >> Publisher.js
+cat ../Library/io/CharsetAdapter.js >> Publisher.js
 cat ../Library/manufacture/AssetController.js >> Publisher.js
 #node Publisher.js
 npm start

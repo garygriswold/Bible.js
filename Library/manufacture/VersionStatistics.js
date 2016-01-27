@@ -1,8 +1,8 @@
 /**
 * This program reads a version of the Bible and generates statistics about what is found there.
 */
-function VersionStatistics() {
-	this.adapter = new FauxAdapter();
+function VersionStatistics(database) {
+	this.adapter = new CharsetAdapter(database);
 	this.charCounts = {};
 	Object.seal(this);
 }
@@ -48,7 +48,7 @@ VersionStatistics.prototype.readBook = function(usxRoot) {
 	}
 };
 VersionStatistics.prototype.loadDB = function(callback) {
-	var result = [];
+	var array = [];
 	var codes = Object.keys(this.charCounts);
 	codes.sort(function(a, b) {
 		return(a - b);
@@ -57,8 +57,19 @@ VersionStatistics.prototype.loadDB = function(callback) {
 		var charCode = codes[i];
 		var count = this.charCounts[charCode];
 		var char = String.fromCharCode(charCode);
-		var hex = charCode.toString(16);
+		var hex = Number(charCode).toString(16).toUpperCase();
+		if (hex.length === 3) hex = '0' + hex;
+		if (hex.length === 2) hex = '00' + hex;
 		console.log(hex, char, count);
+		array.push([ hex, char, count ]);
 	}
-	callback();
+	this.adapter.load(array, function(err) {
+		if (err instanceof IOError) {
+			console.log('Charset Load Failed', JSON.stringify(err));
+			callback(err);
+		} else {
+			console.log('Charset loaded in database');
+			callback();
+		}
+	});
 };

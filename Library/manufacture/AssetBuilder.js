@@ -29,7 +29,7 @@ function AssetBuilder(types, database) {
 		this.builders.push(new QuestionsBuilder(this.database.questions));
 	}
 	if (types.statistics) {
-		this.builders.push(new VersionStatistics());
+		this.builders.push(new VersionStatistics(this.database));
 	}
 	this.reader = new FileReader(types.location);
 	this.parser = new USXParser();
