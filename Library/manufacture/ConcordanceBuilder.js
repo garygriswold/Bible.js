@@ -35,12 +35,13 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 		case 'note':
 			break; // Do not index notes
 		case 'text':
-			var words = node.text.split(/[\s\-\u00AD\u2010-\u2015\u2043\u058A\u1400\u1806]+/);
-			//var words = node.text.split(/\s+/);
+			var words = node.text.split(/[\s\-\u2010-\u2015\u2043\u058A]+/);
 			for (var i=0; i<words.length; i++) {
 				var word2 = words[i];
-				var word1 = word2.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]+$/g, '');
-				var word = word1.replace(/^[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]+/g, '');
+				//var word1 = word2.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]+$/g, '');
+				var word1 = word2.replace(/[\u0000-\u0040\u005B-\u0060\u007B-\u00B1\u00BF\u2010-\u206F]+$/g, '');
+				var word = word1.replace(/^[\u0000-\u0040\u005B-\u0060\u007B-\u00B1\u00BF\u2010-\u206F]+/g, '');
+				//var word = word1.replace(/^[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]+/g, '');
 				//var word = words[i].replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]$/g, '');
 				if (word.length > 0 && this.chapter > 0 && this.verse > 0) {
 					var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
