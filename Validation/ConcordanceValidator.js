@@ -11,6 +11,7 @@
 */
 function ConcordanceValidator(versionPath) {
 	this.versionPath = versionPath;
+	this.fs = require('fs');
 	this.db = null;
 	var canon = new Canon();
 	this.bookMap = canon.sequenceMap();
@@ -33,6 +34,7 @@ ConcordanceValidator.prototype.normalize = function(callback) {
 		normalizeConcordance(function(err, result) {
 			if (err) that.fatalError(err, 'normalizeConcordance')
 			var generatedText = that.generate(result);
+			that.outputFile(generatedText);
 			that.compare(generatedText, function(err) {
 				if (err) that.fatalError(err, 'compare');
 				that.summary(function(err) {
@@ -139,11 +141,16 @@ ConcordanceValidator.prototype.generate = function(concordance) {
 	console.log(result.length, 'Generated Verses');
 	return(result);
 };
-ConcordanceValidator.prototype.displayText = function(generatedText) {
+ConcordanceValidator.prototype.outputFile = function(generatedText) {
+	var output = [];
 	for (var i=0; i<generatedText.length; i++) {
 		var row = generatedText[i];
-		console.log(row.book, row.chapter, row.verse, row.text);
-	}	
+		//console.log(row.book, row.chapter, row.verse, row.text);
+		output.push([row.book, row.chapter, row.verse, row.text].join(':'));
+	}
+	this.fs.writeFile('generated.txt', output.join('\n'), { encoding: 'utf8'}, function(err) {
+		if (err) fatalError(err, 'write generated');
+	});
 };
 ConcordanceValidator.prototype.compare = function(generatedText, callback) {
 	var that = this;
@@ -208,10 +215,23 @@ ConcordanceValidator.prototype.completed = function() {
 	process.exit(0);
 };
 
-var val = new ConcordanceValidator('WEB.db1');
-val.open(function() {
-	val.normalize(function() {
-		val.completed();
+
+var readline = require('readline');
+
+var io = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+io.question('Enter Version Filename: ', function (filename) {
+	var val = new ConcordanceValidator(filename);
+	val.open(function() {
+		val.normalize(function() {
+			val.completed();
+			io.close();
+		});
 	});
 });
+
+
 

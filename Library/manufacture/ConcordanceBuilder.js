@@ -52,8 +52,8 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 			break;
 		default:
 			if ('children' in node) {
-				for (i=0; i<node.children.length; i++) {
-					this.readRecursively(node.children[i]);
+				for (var child=0; child<node.children.length; child++) {
+					this.readRecursively(node.children[child]);
 				}
 			}
 
