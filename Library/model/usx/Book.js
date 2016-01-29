@@ -28,18 +28,9 @@ Book.prototype.buildUSX = function(result) {
 	result.push(this.closeElement());
 };
 Book.prototype.toDOM = function(parentNode) {
-	var article = document.createElement('article');
+	var article = new DOMNode('article');
 	article.setAttribute('id', this.code);
 	article.setAttribute('class', this.style);
 	parentNode.appendChild(article);
 	return(article);
-};
-/** deprecated, might redo when writing tests */
-Book.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Book.prototype.buildHTML = function(result) {
 };

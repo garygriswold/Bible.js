@@ -20,7 +20,7 @@ DOMBuilder.prototype.toDOM = function(usxRoot) {
 	this.chapter = 0;
 	this.verse = 0;
 	this.noteNum = 0;
-	this.treeRoot = document.createDocumentFragment();
+	this.treeRoot = new DOMNode('root');
 	this.readRecursively(this.treeRoot, usxRoot);
 	return(this.treeRoot);
 };

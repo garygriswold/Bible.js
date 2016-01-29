@@ -22,20 +22,10 @@ Verse.prototype.buildUSX = function(result) {
 };
 Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 	var reference = bookCode + ':' + chapterNum + ':' + this.number;
-	var child = document.createElement('span');
+	var child = new DOMNode('span');
 	child.setAttribute('id', reference);
 	child.setAttribute('class', this.style);
 	child.textContent = ' ' + this.number + ' ';
 	parentNode.appendChild(child);
 	return(child);
-};
-/** deprecated, might redo when writing tests */
-Verse.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Verse.prototype.buildHTML = function(result) {
-	result.push('<span id="' + this.number + '" class="' + this.style + '">', this.number, ' </span>');
 };

@@ -22,23 +22,13 @@ Chapter.prototype.buildUSX = function(result) {
 };
 Chapter.prototype.toDOM = function(parentNode, bookCode) {
 	var reference = bookCode + ':' + this.number;
-	var section = document.createElement('section');
+	var section = new DOMNode('section');
 	section.setAttribute('id', reference);
 	parentNode.appendChild(section);
 
-	var child = document.createElement('p');
+	var child = new DOMNode('p');
 	child.setAttribute('class', this.style);
 	child.textContent = this.number;
 	section.appendChild(child);
 	return(section);
-};
-/** deprecated, might redo when writing tests */
-Chapter.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Chapter.prototype.buildHTML = function(result) {
-	result.push('\n<p id="' + this.number + '" class="' + this.style + '">', this.number, '</p>');
 };

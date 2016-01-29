@@ -15,25 +15,27 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 		case 11: // fragment
 			break;
 		case 1: // element
-			this.result.push('\n<', node.tagName.toLowerCase());
-			for (var i=0; i<node.attributes.length; i++) {
-				this.result.push(' ', node.attributes[i].nodeName, '="', node.attributes[i].value, '"');
+			this.result.push('\n<', node.nodeName.toLowerCase());
+			var attrs = node.attrNames();
+			for (var i=0; i<attrs.length; i++) {
+				this.result.push(' ', attrs[i], '="', node.getAttribute(attrs[i]), '"');
 			}
 			this.result.push('>');
+			if (node.textContent) {
+				this.result.push(node.textContent);
+			}
 			break;
 		case 3: // text
-			this.result.push(node.wholeText);
+			this.result.push(node.textContent);
 			break;
 		default:
 			throw new Error('Unexpected nodeType ' + node.nodeType + ' in HTMLBuilder.toHTML().');
 	}
-	if ('childNodes' in node) {
-		for (i=0; i<node.childNodes.length; i++) {
-			this.readRecursively(node.childNodes[i]);
-		}
+	for (var child=0; child<node.childNodes.length; child++) {
+		this.readRecursively(node.childNodes[child]);
 	}
 	if (node.nodeType === 1) {
-		this.result.push('</', node.tagName.toLowerCase(), '>\n');
+		this.result.push('</', node.nodeName.toLowerCase(), '>\n');
 	}
 };
 HTMLBuilder.prototype.toJSON = function() {

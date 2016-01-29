@@ -27,9 +27,10 @@ cat ../Library/model/meta/Canon.js >> Publisher.js
 cat ../Library/model/meta/TOC.js >> Publisher.js
 cat ../Library/model/meta/TOCBook.js >> Publisher.js
 cat ../Library/model/meta/Concordance.js >> Publisher.js
+cat ../Library/model/meta/DOMNode.js >> Publisher.js
 cat ../Library/io/IOError.js >> Publisher.js
 cat ../Library/io/NodeFileReader.js >> Publisher.js
-cat ../Library/io/DeviceDatabaseWebSQL.js >> Publisher.js
+cat ../Library/io/DeviceDatabaseNode.js >> Publisher.js
 cat ../Library/io/ChaptersAdapter.js >> Publisher.js
 cat ../Library/io/VersesAdapter.js >> Publisher.js
 cat ../Library/io/ConcordanceAdapter.js >> Publisher.js
@@ -40,5 +41,4 @@ cat ../Library/io/HistoryAdapter.js >> Publisher.js
 cat ../Library/io/QuestionsAdapter.js >> Publisher.js
 cat ../Library/io/CharsetAdapter.js >> Publisher.js
 cat ../Library/manufacture/AssetController.js >> Publisher.js
-#node Publisher.js
-npm start
+node Publisher.js

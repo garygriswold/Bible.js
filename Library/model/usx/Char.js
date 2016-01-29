@@ -36,23 +36,9 @@ Char.prototype.toDOM = function(parentNode) {
 		return(null);// this drop these styles from presentation
 	}
 	else {
-		var child = document.createElement('span');
+		var child = new DOMNode('span');
 		child.setAttribute('class', this.style);
 		parentNode.appendChild(child);
 		return(child);
 	}
-};
-/** deprecated, might redo when writing tests */
-Char.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Char.prototype.buildHTML = function(result) {
-	result.push('<span class="' + this.style + '">');
-	for (var i=0; i<this.children.length; i++) {
-		this.children[i].buildHTML(result);
-	}
-	result.push('</span>');
 };

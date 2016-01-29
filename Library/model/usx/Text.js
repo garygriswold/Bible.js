@@ -10,40 +10,24 @@ Text.prototype.buildUSX = function(result) {
 	result.push(this.text);
 };
 Text.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
-	if (parentNode === null || parentNode.tagName === 'ARTICLE') {
+	if (parentNode === null || parentNode.nodeName === 'article') {
 		// discard text node
 	} else {
 		var nodeId = bookCode + chapterNum + '-' + noteNum;
 		var parentClass = parentNode.getAttribute('class');
 		if (parentClass.substr(0, 3) === 'top') {
-			var textNode = document.createElement('span');
+			var textNode = new DOMNode('span');
 			textNode.setAttribute('class', parentClass.substr(3));
 			textNode.setAttribute('note', this.text);
 			parentNode.appendChild(textNode);
-			//textNode.addEventListener('click', function() {
-			//	event.stopImmediatePropagation();
-			//	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
-			//});
 		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of parent.
-			//parentNode.addEventListener('click', function() {
-			//	event.stopImmediatePropagation();
-			//	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
-			//});
 		}
 		else {
-			var child = document.createTextNode(this.text);
+			var child = new DOMNode('text');
+			child.textContent = this.text;
 			parentNode.appendChild(child);
 		}
 	}
 };
-/** deprecated, might redo when writing tests */
-Text.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Text.prototype.buildHTML = function(result) {
-	result.push(this.text);
-};
+

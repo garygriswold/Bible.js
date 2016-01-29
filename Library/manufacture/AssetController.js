@@ -2,37 +2,39 @@
 * Unit Test Harness for AssetController
 */
 var FILE_PATH = process.env.HOME + '/DBL/current/';
-
-var versionNode = document.getElementById('versionNode');
-var responseNode = document.getElementById('responseNode');
-var submitBtn = document.getElementById('submitBtn');
-submitBtn.addEventListener('click', function(event) {
+//var DB_PATH = process.env.HOME + '/DBL/
 	
-	responseNode.textContent = '';
-	var versionCode = versionNode.value.toUpperCase();
+var readline = require('readline');
+var io = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
-	console.log('received', versionCode);
-	if (versionCode.toUpperCase() === 'EXIT') {
-		read.close();
-		process.exit();
-	} else if (versionCode && versionCode.length > 2) {
-		var types = new AssetType(FILE_PATH, versionCode);
+io.question('Enter Version Code: ', function (version) {
+	console.log('received', version);
+	if (version.toUpperCase() === 'EXIT') {
+		io.close();
+		process.exit(-1);
+	} else if (version && version.length > 2) {
+		var types = new AssetType(FILE_PATH, version.toUpperCase());
 		types.chapterFiles = true;
 		types.tableContents = true;
-		types.concordance = true;
+		types.concordance = false;
 		types.styleIndex = true;
 		types.history = true;
 		types.questions = true;
 		types.statistics = true;
-		var database = new DeviceDatabase(versionCode + '.db1');
+		var database = new DeviceDatabase(version.toUpperCase() + '.db1');
 		
 		var builder = new AssetBuilder(types, database);
 		builder.build(function(err) {
 			if (err instanceof IOError) {
 				console.log('FAILED', JSON.stringify(err));
+				io.close();
 				process.exit();
 			} else {
-				responseNode.textContent = 'Success, Database created';
+				console.log('Success, Database created');
+				io.close();
 			}
 		});	
 	}

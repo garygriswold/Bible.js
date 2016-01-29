@@ -28,27 +28,11 @@ Para.prototype.buildUSX = function(result) {
 };
 Para.prototype.toDOM = function(parentNode) {
 	var identStyles = [ 'ide', 'sts', 'rem', 'h', 'toc1', 'toc2', 'toc3', 'cl' ];
-	var child = document.createElement('p');
+	var child = new DOMNode('p');
 	child.setAttribute('class', this.style);
 	if (identStyles.indexOf(this.style) === -1) {
 		parentNode.appendChild(child);
 	}
 	return(child);
 };
-/** deprecated, might redo when writing tests */
-Para.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Para.prototype.buildHTML = function(result) {
-	var identStyles = [ 'ide', 'sts', 'rem', 'h', 'toc1', 'toc2', 'toc3', 'cl' ];
-	if (identStyles.indexOf(this.style) === -1) {
-		result.push('\n<p class="' + this.style + '">');
-		for (var i=0; i<this.children.length; i++) {
-			this.children[i].buildHTML(result);
-		}
-		result.push('</p>');
-	}
-};
+

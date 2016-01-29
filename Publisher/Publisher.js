@@ -163,7 +163,7 @@ VersionStatistics.prototype.readBook = function(usxRoot) {
 				if (counts) {
 					that.charCounts[charCode] = counts + 1;
 				} else {
-					that.charCounts[charCode] = 1
+					that.charCounts[charCode] = 1;
 				}
 			}
 		}	
@@ -704,7 +704,7 @@ DOMBuilder.prototype.toDOM = function(usxRoot) {
 	this.chapter = 0;
 	this.verse = 0;
 	this.noteNum = 0;
-	this.treeRoot = document.createDocumentFragment();
+	this.treeRoot = new DOMNode('root');
 	this.readRecursively(this.treeRoot, usxRoot);
 	return(this.treeRoot);
 };
@@ -767,25 +767,27 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 		case 11: // fragment
 			break;
 		case 1: // element
-			this.result.push('\n<', node.tagName.toLowerCase());
-			for (var i=0; i<node.attributes.length; i++) {
-				this.result.push(' ', node.attributes[i].nodeName, '="', node.attributes[i].value, '"');
+			this.result.push('\n<', node.nodeName.toLowerCase());
+			var attrs = node.attrNames();
+			for (var i=0; i<attrs.length; i++) {
+				this.result.push(' ', attrs[i], '="', node.getAttribute(attrs[i]), '"');
 			}
 			this.result.push('>');
+			if (node.textContent) {
+				this.result.push(node.textContent);
+			}
 			break;
 		case 3: // text
-			this.result.push(node.wholeText);
+			this.result.push(node.textContent);
 			break;
 		default:
 			throw new Error('Unexpected nodeType ' + node.nodeType + ' in HTMLBuilder.toHTML().');
 	}
-	if ('childNodes' in node) {
-		for (i=0; i<node.childNodes.length; i++) {
-			this.readRecursively(node.childNodes[i]);
-		}
+	for (var child=0; child<node.childNodes.length; child++) {
+		this.readRecursively(node.childNodes[child]);
 	}
 	if (node.nodeType === 1) {
-		this.result.push('</', node.tagName.toLowerCase(), '>\n');
+		this.result.push('</', node.nodeName.toLowerCase(), '>\n');
 	}
 };
 HTMLBuilder.prototype.toJSON = function() {
@@ -822,44 +824,14 @@ USX.prototype.toUSX = function() {
 USX.prototype.toDOM = function() {
 };
 USX.prototype.buildUSX = function(result) {
-	result.push('\uFEFF<?xml version="1.0" encoding="utf-8"?>');
+	result.push('<?xml version="1.0" encoding="utf-8"?>');
 	result.push(this.whiteSpace, this.openElement());
 	for (var i=0; i<this.children.length; i++) {
 		this.children[i].buildUSX(result);
 	}
 	result.push(this.closeElement());
 };
-/** deprecated, might redo when writing tests */
-USX.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-USX.prototype.buildHTML = function(result) {
-	result.push('\uFEFF<?xml version="1.0" encoding="utf-8"?>\n');
-	result.push('<html><head>\n');
-	result.push('\t<meta charset="utf-8" />\n');
-	result.push('\t<meta name="format-detection" content="telephone=no" />\n');
-	result.push('\t<meta name="msapplication-tap-highlight" content="no" />\n');
-    result.push('\t<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />\n');
-	result.push('\t<link rel="stylesheet" href="../css/prototype.css"/>\n');
-	result.push('\t<script type="text/javascript" src="cordova.js"></script>\n');
-	result.push('\t<script type="text/javascript">\n');
-	result.push('\t\tfunction onBodyLoad() {\n');
-	result.push('\t\t\tdocument.addEventListener("deviceready", onDeviceReady, false);\n');
-	result.push('\t\t}\n');
-	result.push('\t\tfunction onDeviceReady() {\n');
-	result.push('\t\t\t// app = new BibleApp();\n');
-	result.push('\t\t\t// app.something();\n');
-	result.push('\t\t}\n');
-	result.push('\t</script>\n');
-	result.push('</head><body onload="onBodyLoad()">');
-	for (var i=0; i<this.children.length; i++) {
-		this.children[i].buildHTML(result);
-	}
-	result.push('\n</body></html>');
-};
+
 /**
 * This class contains a book of the Bible
 */
@@ -890,21 +862,13 @@ Book.prototype.buildUSX = function(result) {
 	result.push(this.closeElement());
 };
 Book.prototype.toDOM = function(parentNode) {
-	var article = document.createElement('article');
+	var article = new DOMNode('article');
 	article.setAttribute('id', this.code);
 	article.setAttribute('class', this.style);
 	parentNode.appendChild(article);
 	return(article);
 };
-/** deprecated, might redo when writing tests */
-Book.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Book.prototype.buildHTML = function(result) {
-};/**
+/**
 * This object contains information about a chapter of the Bible from a parsed USX Bible document.
 */
 function Chapter(node) {
@@ -928,26 +892,17 @@ Chapter.prototype.buildUSX = function(result) {
 };
 Chapter.prototype.toDOM = function(parentNode, bookCode) {
 	var reference = bookCode + ':' + this.number;
-	var section = document.createElement('section');
+	var section = new DOMNode('section');
 	section.setAttribute('id', reference);
 	parentNode.appendChild(section);
 
-	var child = document.createElement('p');
+	var child = new DOMNode('p');
 	child.setAttribute('class', this.style);
 	child.textContent = this.number;
 	section.appendChild(child);
 	return(section);
 };
-/** deprecated, might redo when writing tests */
-Chapter.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Chapter.prototype.buildHTML = function(result) {
-	result.push('\n<p id="' + this.number + '" class="' + this.style + '">', this.number, '</p>');
-};/**
+/**
 * This object contains a paragraph of the Bible text as parsed from a USX version of the Bible.
 */
 function Para(node) {
@@ -977,30 +932,14 @@ Para.prototype.buildUSX = function(result) {
 };
 Para.prototype.toDOM = function(parentNode) {
 	var identStyles = [ 'ide', 'sts', 'rem', 'h', 'toc1', 'toc2', 'toc3', 'cl' ];
-	var child = document.createElement('p');
+	var child = new DOMNode('p');
 	child.setAttribute('class', this.style);
 	if (identStyles.indexOf(this.style) === -1) {
 		parentNode.appendChild(child);
 	}
 	return(child);
 };
-/** deprecated, might redo when writing tests */
-Para.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Para.prototype.buildHTML = function(result) {
-	var identStyles = [ 'ide', 'sts', 'rem', 'h', 'toc1', 'toc2', 'toc3', 'cl' ];
-	if (identStyles.indexOf(this.style) === -1) {
-		result.push('\n<p class="' + this.style + '">');
-		for (var i=0; i<this.children.length; i++) {
-			this.children[i].buildHTML(result);
-		}
-		result.push('</p>');
-	}
-};
+
 /**
 * This chapter contains the verse of a Bible text as parsed from a USX Bible file.
 */
@@ -1025,23 +964,14 @@ Verse.prototype.buildUSX = function(result) {
 };
 Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 	var reference = bookCode + ':' + chapterNum + ':' + this.number;
-	var child = document.createElement('span');
+	var child = new DOMNode('span');
 	child.setAttribute('id', reference);
 	child.setAttribute('class', this.style);
 	child.textContent = ' ' + this.number + ' ';
 	parentNode.appendChild(child);
 	return(child);
 };
-/** deprecated, might redo when writing tests */
-Verse.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Verse.prototype.buildHTML = function(result) {
-	result.push('<span id="' + this.number + '" class="' + this.style + '">', this.number, ' </span>');
-};/**
+/**
 * This class contains a Note from a USX parsed Bible
 */
 function Note(node) {
@@ -1080,7 +1010,7 @@ Note.prototype.buildUSX = function(result) {
 };
 Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	var nodeId = bookCode + chapterNum + '-' + noteNum;
-	var refChild = document.createElement('span');
+	var refChild = new DOMNode('span');
 	refChild.setAttribute('id', nodeId);
 	refChild.setAttribute('class', 'top' + this.style);
 	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
@@ -1095,27 +1025,9 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 			refChild.textContent = '* ';
 	}
 	parentNode.appendChild(refChild);
-//	refChild.addEventListener('click', function() {
-//		event.stopImmediatePropagation();
-//		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: this.id }}));
-//	});
 	return(refChild);
 };
-/** deprecated, might redo when writing tests */
-Note.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Note.prototype.buildHTML = function(result) {
-	result.push('<span class="' + this.style + '">');
-	result.push(this.caller);
-	for (var i=0; i<this.children.length; i++) {
-		this.children[i].buildHTML(result);
-	}
-	result.push('</span>');
-};/**
+/**
 * This class contains a character style as parsed from a USX Bible file.
 */
 function Char(node) {
@@ -1153,26 +1065,13 @@ Char.prototype.toDOM = function(parentNode) {
 		return(null);// this drop these styles from presentation
 	}
 	else {
-		var child = document.createElement('span');
+		var child = new DOMNode('span');
 		child.setAttribute('class', this.style);
 		parentNode.appendChild(child);
 		return(child);
 	}
 };
-/** deprecated, might redo when writing tests */
-Char.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Char.prototype.buildHTML = function(result) {
-	result.push('<span class="' + this.style + '">');
-	for (var i=0; i<this.children.length; i++) {
-		this.children[i].buildHTML(result);
-	}
-	result.push('</span>');
-};/**
+/**
 * This class contains a text string as parsed from a USX Bible file.
 */
 function Text(text) {
@@ -1184,43 +1083,27 @@ Text.prototype.buildUSX = function(result) {
 	result.push(this.text);
 };
 Text.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
-	if (parentNode === null || parentNode.tagName === 'ARTICLE') {
+	if (parentNode === null || parentNode.nodeName === 'article') {
 		// discard text node
 	} else {
 		var nodeId = bookCode + chapterNum + '-' + noteNum;
 		var parentClass = parentNode.getAttribute('class');
 		if (parentClass.substr(0, 3) === 'top') {
-			var textNode = document.createElement('span');
+			var textNode = new DOMNode('span');
 			textNode.setAttribute('class', parentClass.substr(3));
 			textNode.setAttribute('note', this.text);
 			parentNode.appendChild(textNode);
-			//textNode.addEventListener('click', function() {
-			//	event.stopImmediatePropagation();
-			//	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
-			//});
 		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of parent.
-			//parentNode.addEventListener('click', function() {
-			//	event.stopImmediatePropagation();
-			//	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
-			//});
 		}
 		else {
-			var child = document.createTextNode(this.text);
+			var child = new DOMNode('text');
+			child.textContent = this.text;
 			parentNode.appendChild(child);
 		}
 	}
 };
-/** deprecated, might redo when writing tests */
-Text.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Text.prototype.buildHTML = function(result) {
-	result.push(this.text);
-};
+
 /**
 * This class does a stream read of an XML string to return XML tokens and their token type.
 */
@@ -1686,6 +1569,33 @@ Concordance.prototype.search = function(words, callback) {
 	}
 };
 /**
+* This class is a Faux DOM node.  The USX classes create a DOM equivalent of themselves for presentation,
+* which is then converted to HTML by HTMLBuilder.  But this is now done using this Faux Dom Node class
+* so that the processing can run in Node.js without any window object.
+*/
+function DOMNode(nodeName) {
+	this.nodeName = nodeName;
+	this.nodeType = 1; // Element Node
+	if (nodeName == 'root') this.nodeType = 11; // Fragment Node
+	if (nodeName == 'text') this.nodeType = 3; // Text Node
+	this.attributes = {};
+	this.textContent = null;
+	this.childNodes = [];
+	Object.seal(this);
+}
+DOMNode.prototype.getAttribute = function(name) {
+	return(this.attributes[name]);
+};
+DOMNode.prototype.setAttribute = function(name, value) {
+	this.attributes[name] = value;
+};
+DOMNode.prototype.attrNames = function() {
+	return(Object.keys(this.attributes));	
+};
+DOMNode.prototype.appendChild = function(node) {
+	this.childNodes.push(node);	
+};
+/**
 * This class is a wrapper for SQL Error so that we can always distinguish an error
 * from valid results.  Any method that calls an IO routine, which can expect valid results
 * or an error should test "if (results instanceof IOError)".
@@ -1744,22 +1654,20 @@ FileReader.prototype.readTextFile = function(filepath, callback) {
 		}
 	});
 };/**
-* This class is a facade over the database that is used to store bible text, concordance,
+* This class is a facade over a node compatible sqlite adapterdatabase that is used to store bible text, concordance,
 * table of contents, history and questions.
 *
-* This file is DeviceDatabaseWebSQL, which implements the WebSQL interface.
+* This file is DeviceDatabaseNode, which implements a much simpler interface than the WebSQL interface.
 */
-function DeviceDatabase(code) {
-	this.code = code;
-    this.className = 'DeviceDatabaseWebSQL';
-	var size = 30 * 1024 * 1024;
-    if (window.sqlitePlugin === undefined) {
-        console.log('opening WEB SQL Database, stores in Cache', this.code);
-        this.database = window.openDatabase(this.code, "1.0", this.code, size);
-    } else {
-        console.log('opening SQLitePlugin Database, stores in Documents with no cloud', this.code);
-        this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});//, androidDatabaseImplementation: 2});
-    }
+function DeviceDatabase(versionFile) {
+	this.code = versionFile;
+    this.className = 'DeviceDatabaseNode';
+    var sqlite3 = require('sqlite3'); //.verbose();
+	this.database = new sqlite3.Database(versionFile);
+	//this.database.on('trace', function(sql) { console.log('DO ', sql); });
+	//this.database.on('profile', function(sql, ms) { console.log(ms, 'DONE', sql); });
+	this.database.exec("PRAGMA foreign_keys = ON");
+
 	this.chapters = new ChaptersAdapter(this);
     this.verses = new VersesAdapter(this);
 	this.tableContents = new TableContentsAdapter(this);
@@ -1771,32 +1679,16 @@ function DeviceDatabase(code) {
 	Object.seal(this);
 }
 DeviceDatabase.prototype.select = function(statement, values, callback) {
-    this.database.readTransaction(function(tx) {
-        console.log(statement, values);
-        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
-    });
-    function onSelectSuccess(tx, results) {
-        console.log('select success results, rowCount=', results.rows.length);
-        callback(results);
-    }
-    function onSelectError(tx, err) {
-        console.log('select error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
+	this.database.all(statement, values, function(err, results) {
+		if (err) callback(new IOError(err));
+		callback(results);
+	});
 };
 DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
-    this.database.transaction(function(tx) {
-	    console.log('exec tran start', statement, values);
-        tx.executeSql(statement, values, onExecSuccess, onExecError);
-    });
-    function onExecSuccess(tx, results) {
-    	console.log('excute sql success', results.rowsAffected);
-    	callback(results.rowsAffected);
-    }
-    function onExecError(tx, err) {
-        console.log('execute tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
+	this.database.run(statement, values, function(err) {
+		if (err) callback(err);
+		callback(1); // See if this causes a problem.  If not, can I eliminate the rowsAffected?
+	});
 };
 DeviceDatabase.prototype.manyExecuteDML = function(statement, array, callback) {
 	var that = this;
@@ -1817,58 +1709,30 @@ DeviceDatabase.prototype.manyExecuteDML = function(statement, array, callback) {
 	}	
 };
 DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
-    var rowCount = 0;
-	this.database.transaction(onTranStart, onTranError, onTranSuccess);
-
-    function onTranStart(tx) {
-  		console.log('bulk tran start', statement);
-  		for (var i=0; i<array.length; i++) {
-        	tx.executeSql(statement, array[i], onExecSuccess);
-        }
-    }
-    function onTranError(err) {
-        console.log('bulk tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
-    function onTranSuccess() {
-        console.log('bulk tran completed');
-        callback(rowCount);
-    }
-    function onExecSuccess(tx, results) {
-        rowCount += results.rowsAffected;
-    }
+    var that = this;
+    this.database.serialize(function() {
+    	that.database.exec('BEGIN TRANSACTION', function(err) {
+	    	if (err) callback(new IOError(err));
+    	});
+    	var stmt = that.database.prepare(statement, function(err) {
+	    	if (err) callback(new IOError(err));
+    	});
+    	for (var i=0; i<array.length; i++) {
+	    	stmt.run(array[i]);
+    	}
+    	that.database.exec('END TRANSACTION', function(err) {
+	    	if (err) callback(new IOError(err));
+	    	callback(array.length);
+    	});
+    });
 };
 DeviceDatabase.prototype.executeDDL = function(statement, callback) {
-    this.database.transaction(function(tx) {
-        console.log('exec tran start', statement);
-        tx.executeSql(statement, [], onExecSuccess, onExecError);
-    });
-    function onExecSuccess(tx, results) {
-        callback();
-    }
-    function onExecError(tx, err) {
-        callback(new IOError(err));
-    }
+	this.database.exec(statement, function(err) {
+		if (err) callback(new IOError(err));
+		callback();
+	});
 };
-/** A smoke test is needed before a database is opened. */
-/** A second more though test is needed after a database is opened.*/
-DeviceDatabase.prototype.smokeTest = function(callback) {
-    var statement = 'select count(*) from tableContents';
-    this.select(statement, [], function(results) {
-        if (results instanceof IOError) {
-            console.log('found Error', JSON.stringify(results));
-            callback(false);
-        } else if (results.rows.length === 0) {
-            callback(false);
-        } else {
-            var row = results.rows.item(0);
-            console.log('found', JSON.stringify(row));
-            var count = row['count(*)'];
-            console.log('count=', count);
-            callback(count > 0);
-        }
-    });
-};
+
 
 /**
 * This class is the database adapter for the codex table
@@ -2457,37 +2321,39 @@ CharsetAdapter.prototype.load = function(array, callback) {
 * Unit Test Harness for AssetController
 */
 var FILE_PATH = process.env.HOME + '/DBL/current/';
-
-var versionNode = document.getElementById('versionNode');
-var responseNode = document.getElementById('responseNode');
-var submitBtn = document.getElementById('submitBtn');
-submitBtn.addEventListener('click', function(event) {
+//var DB_PATH = process.env.HOME + '/DBL/
 	
-	responseNode.textContent = '';
-	var versionCode = versionNode.value.toUpperCase();
+var readline = require('readline');
+var io = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
-	console.log('received', versionCode);
-	if (versionCode.toUpperCase() === 'EXIT') {
-		read.close();
-		process.exit();
-	} else if (versionCode && versionCode.length > 2) {
-		var types = new AssetType(FILE_PATH, versionCode);
+io.question('Enter Version Code: ', function (version) {
+	console.log('received', version);
+	if (version.toUpperCase() === 'EXIT') {
+		io.close();
+		process.exit(-1);
+	} else if (version && version.length > 2) {
+		var types = new AssetType(FILE_PATH, version.toUpperCase());
 		types.chapterFiles = true;
 		types.tableContents = true;
-		types.concordance = true;
+		types.concordance = false;
 		types.styleIndex = true;
 		types.history = true;
 		types.questions = true;
 		types.statistics = true;
-		var database = new DeviceDatabase(versionCode + '.db1');
+		var database = new DeviceDatabase(version.toUpperCase() + '.db1');
 		
 		var builder = new AssetBuilder(types, database);
 		builder.build(function(err) {
 			if (err instanceof IOError) {
 				console.log('FAILED', JSON.stringify(err));
+				io.close();
 				process.exit();
 			} else {
-				responseNode.textContent = 'Success, Database created';
+				console.log('Success, Database created');
+				io.close();
 			}
 		});	
 	}

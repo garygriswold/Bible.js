@@ -37,7 +37,7 @@ Note.prototype.buildUSX = function(result) {
 };
 Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	var nodeId = bookCode + chapterNum + '-' + noteNum;
-	var refChild = document.createElement('span');
+	var refChild = new DOMNode('span');
 	refChild.setAttribute('id', nodeId);
 	refChild.setAttribute('class', 'top' + this.style);
 	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
@@ -52,24 +52,5 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 			refChild.textContent = '* ';
 	}
 	parentNode.appendChild(refChild);
-//	refChild.addEventListener('click', function() {
-//		event.stopImmediatePropagation();
-//		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: this.id }}));
-//	});
 	return(refChild);
-};
-/** deprecated, might redo when writing tests */
-Note.prototype.toHTML = function() {
-	var result = [];
-	this.buildHTML(result);
-	return(result.join(''));
-};
-/** deprecated */
-Note.prototype.buildHTML = function(result) {
-	result.push('<span class="' + this.style + '">');
-	result.push(this.caller);
-	for (var i=0; i<this.children.length; i++) {
-		this.children[i].buildHTML(result);
-	}
-	result.push('</span>');
 };

@@ -2,7 +2,8 @@
 * This class is a facade over the database that is used to store bible text, concordance,
 * table of contents, history and questions.
 *
-* This file is DeviceDatabaseWebSQL, which implements the WebSQL interface.
+* This file is DeviceDatabaseWebSQL, which implements the WebSQL interface.  It is used
+* by the App in Cordova using the window.sqlitePlugin and by the BibleAppNW using the window.sqlitePlugin
 */
 function DeviceDatabase(code) {
 	this.code = code;
