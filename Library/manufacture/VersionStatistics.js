@@ -41,7 +41,7 @@ VersionStatistics.prototype.readBook = function(usxRoot) {
 				if (counts) {
 					that.charCounts[charCode] = counts + 1;
 				} else {
-					that.charCounts[charCode] = 1
+					that.charCounts[charCode] = 1;
 				}
 			}
 		}	
