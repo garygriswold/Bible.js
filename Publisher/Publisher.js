@@ -509,7 +509,7 @@ ConcordanceBuilder.prototype.loadDB = function(callback) {
 	var array = [];
 	for (var i=0; i<words.length; i++) {
 		var word = words[i];
-		array.push([ word, this.refList[word].length, this.refList[word], this.refPositions[word] ]);
+		array.push([ word, this.refList[word].length, this.refList[word].join(','), this.refPositions[word].join(',') ]);
 	}
 	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {
@@ -1718,7 +1718,9 @@ DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
 	    	if (err) callback(new IOError(err));
     	});
     	for (var i=0; i<array.length; i++) {
-	    	stmt.run(array[i]);
+	    	stmt.run(array[i], function(err) {
+		    	if (err) callback(new IOError(err));
+	    	});
     	}
     	that.database.exec('END TRANSACTION', function(err) {
 	    	if (err) callback(new IOError(err));
@@ -2338,7 +2340,7 @@ io.question('Enter Version Code: ', function (version) {
 		var types = new AssetType(FILE_PATH, version.toUpperCase());
 		types.chapterFiles = true;
 		types.tableContents = true;
-		types.concordance = false;
+		types.concordance = true;
 		types.styleIndex = true;
 		types.history = true;
 		types.questions = true;

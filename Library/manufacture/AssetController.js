@@ -19,7 +19,7 @@ io.question('Enter Version Code: ', function (version) {
 		var types = new AssetType(FILE_PATH, version.toUpperCase());
 		types.chapterFiles = true;
 		types.tableContents = true;
-		types.concordance = false;
+		types.concordance = true;
 		types.styleIndex = true;
 		types.history = true;
 		types.questions = true;

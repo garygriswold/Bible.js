@@ -63,7 +63,9 @@ DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
 	    	if (err) callback(new IOError(err));
     	});
     	for (var i=0; i<array.length; i++) {
-	    	stmt.run(array[i]);
+	    	stmt.run(array[i], function(err) {
+		    	if (err) callback(new IOError(err));
+	    	});
     	}
     	that.database.exec('END TRANSACTION', function(err) {
 	    	if (err) callback(new IOError(err));
