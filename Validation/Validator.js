@@ -175,6 +175,7 @@ ConcordanceValidator.prototype.normalize = function(callback) {
 			callback(null, array);
 		});
 	}
+	/** deprecated, not used becuase it takes many minutes to run */
 	function populateValConcordance(array, callback) {
 		var insertStmt = 'INSERT INTO valConcordance(book, ordinal, chapter, verse, position, word) VALUES (?,?,?,?,?,?)';
 		var insertVal = that.db.prepare(insertStmt, [], function(err) { if (err) callback(err) });

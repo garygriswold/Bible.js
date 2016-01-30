@@ -18,6 +18,7 @@ ConcordanceBuilder.prototype.readBook = function(usxRoot) {
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
+	this.position = 0;
 	this.readRecursively(usxRoot);
 };
 ConcordanceBuilder.prototype.readRecursively = function(node) {
