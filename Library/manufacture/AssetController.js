@@ -1,21 +1,16 @@
 /**
 * Unit Test Harness for AssetController
 */
-var FILE_PATH = process.env.HOME + '/DBL/current/';
-//var DB_PATH = process.env.HOME + '/DBL/
+var FILE_PATH = process.env.HOME + '/DBL/2current/';
+var DB_PATH = process.env.HOME + '/DBL/3prepared/';
 	
-var readline = require('readline');
-var io = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-io.question('Enter Version Code: ', function (version) {
+if (process.argv.length < 3) {
+	console.log('Usage: ./Publisher.sh VERSION');
+	process.exit(1);
+} else {
+	var version = process.argv[2];
 	console.log('received', version);
-	if (version.toUpperCase() === 'EXIT') {
-		io.close();
-		process.exit(-1);
-	} else if (version && version.length > 2) {
+	if (version && version.length > 2) {
 		var types = new AssetType(FILE_PATH, version.toUpperCase());
 		types.chapterFiles = true;
 		types.tableContents = true;
@@ -24,18 +19,17 @@ io.question('Enter Version Code: ', function (version) {
 		types.history = true;
 		types.questions = true;
 		types.statistics = true;
-		var database = new DeviceDatabase(version.toUpperCase() + '.db1');
+		var database = new DeviceDatabase(DB_PATH + version.toUpperCase() + '.db1');
 		
 		var builder = new AssetBuilder(types, database);
 		builder.build(function(err) {
 			if (err instanceof IOError) {
 				console.log('FAILED', JSON.stringify(err));
-				io.close();
 				process.exit();
 			} else {
 				console.log('Success, Database created');
-				io.close();
 			}
 		});	
 	}
-});
+}
+
