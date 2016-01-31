@@ -217,22 +217,25 @@ ConcordanceValidator.prototype.completed = function() {
 };
 
 
-var readline = require('readline');
-
-var io = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-io.question('Enter Version Filename: ', function (filename) {
+var DB_PATH = process.env.HOME + '/DBL/3prepared/';
+var VALID_PATH = process.env.HOME + '/DBL/4validated/';
+	
+if (process.argv.length < 3) {
+	console.log('Usage: ./Validator.sh VERSION');
+	process.exit(1);
+} else {
+	var fs = require('fs');
+	var contents = fs.readFileSync(DB_PATH + process.argv[2] + '.db1');
+	fs.writeFileSync(VALID_PATH + process.argv[2] + '.db1', contents);
+	var filename = VALID_PATH + process.argv[2] + '.db1';
+	console.log('Process ' + filename);
 	var val = new ConcordanceValidator(filename);
 	val.open(function() {
 		val.normalize(function() {
 			val.completed();
-			io.close();
 		});
 	});
-});
+}
 
 
 
