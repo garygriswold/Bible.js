@@ -25,7 +25,7 @@ if (process.argv.length < 3) {
 		builder.build(function(err) {
 			if (err instanceof IOError) {
 				console.log('FAILED', JSON.stringify(err));
-				process.exit();
+				process.exit(1);
 			} else {
 				console.log('Success, Database created');
 			}
