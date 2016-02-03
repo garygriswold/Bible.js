@@ -78,6 +78,7 @@ function AppViewController(version, settingStorage) {
 	}
 }
 AppViewController.prototype.begin = function(develop) {
+	disableHandlers();
 	this.tableContents = new TOC(this.database.tableContents);
 	this.concordance = new Concordance(this.database.concordance);
 	var that = this;
@@ -158,10 +159,6 @@ AppViewController.prototype.begin = function(develop) {
 			}
 		});
 	});
-	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
-		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
-		that.header.setTitle(event.detail.reference);
-	});
 	function setInitialFontSize() {
 		that.settingStorage.getFontSize(function(fontSize) {
 			if (fontSize == null) {
@@ -185,9 +182,9 @@ AppViewController.prototype.begin = function(develop) {
 		enableHandlersExcept(BIBLE.SHOW_SEARCH);
 	}		
 	function showPassageHandler(event) {
-		console.log('SHOW PASSAGE', event.detail.id, event.detail.search);
 		disableHandlers();
 		clearViews();
+		console.log('SHOW PASSAGE', event.detail.id, event.detail.search);
 		that.codexView.showView(event.detail.id);
 		enableHandlersExcept('NONE');
 		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
@@ -263,6 +260,7 @@ CodexView.prototype.hideView = function() {
 	}
 };
 CodexView.prototype.showView = function(nodeId) {
+	window.clearTimeout(this.checkScrollID);
 	document.body.style.backgroundColor = '#FFF';
 	var firstChapter = new Reference(nodeId);
 	var rowId = this.tableContents.rowId(firstChapter);
@@ -272,8 +270,8 @@ CodexView.prototype.showView = function(nodeId) {
 			that.scrollTo(firstChapter);
 		}
 		that.currentNodeId = firstChapter.nodeId;
-		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));			
+		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
+		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do		
 	});
 	function onScrollHandler(event) {
 		//console.log('windowHeight=', window.innerHeight, '  scrollHeight=', document.body.scrollHeight, '  scrollY=', window.scrollY);
@@ -285,10 +283,10 @@ CodexView.prototype.showView = function(nodeId) {
 			if (beforeChapter) {
 				that.showChapters([beforeChapter], false, function() {
 					that.checkChapterQueueSize('bottom');
-					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+					onScrollLastStep();
 				});
 			} else {
-				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+				onScrollLastStep();
 			}
 		} else if (document.body.scrollHeight - window.scrollY <= 2 * window.innerHeight) {
 			var lastNode = that.viewport.lastChild;
@@ -297,20 +295,23 @@ CodexView.prototype.showView = function(nodeId) {
 			if (nextChapter) {
 				that.showChapters([nextChapter], true, function() {
 					that.checkChapterQueueSize('top');
-					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+					onScrollLastStep();
 				});
 			} else {
-				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+				onScrollLastStep();
 			}
 		} else {
-			that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+			onScrollLastStep();
 		}
+	}
+	function onScrollLastStep() {
 		var ref = identifyCurrentChapter();//expensive solution
 		if (ref && ref.nodeId !== that.currentNodeId) {
 			that.currentNodeId = ref.nodeId;
 			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));
 		}
 		that.userIsScrolling = false;
+		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT); // should be last thing to do
 	}
 	function identifyCurrentChapter() {
 		var half = window.innerHeight / 2;
@@ -912,8 +913,26 @@ function HeaderView(tableContents, version) {
 	document.body.appendChild(this.rootNode);
 	this.labelCell = document.createElement('td');
 	this.labelCell.id = 'labelCell'
+	document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	Object.seal(this);
-}
+	var that = this;
+	
+	function drawTitleHandler(event) {
+		document.body.removeEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
+		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
+		that.currentReference = event.detail.reference;
+		
+		if (that.currentReference) {
+			var book = that.tableContents.find(that.currentReference.book);
+			var text = book.name + ' ' + ((that.currentReference.chapter > 0) ? that.currentReference.chapter : 1);
+			that.titleGraphics.clearRect(0, 0, that.titleCanvas.width, that.hite);
+			that.titleGraphics.fillText(text, that.titleCanvas.width / 2, that.hite / 2, that.titleCanvas.width);
+			
+			that.titleGraphics.strokeRect(0, 0, that.titleCanvas.width, that.hite);
+		}
+		document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
+	}
+};
 HeaderView.prototype.showView = function() {
 	var that = this;
 	this.backgroundCanvas = document.createElement('canvas');
@@ -935,12 +954,8 @@ HeaderView.prototype.showView = function() {
 	drawTitleField(this.titleCanvas, this.hite, avalWidth);
 	this.labelCell.appendChild(this.titleCanvas);
 
-	window.addEventListener('resize', function(event) {
-		paintBackground(that.backgroundCanvas, that.hite);
-		drawTitleField(that.titleCanvas, that.hite, avalWidth);
-	});
-
 	function paintBackground(canvas, hite) {
+		console.log('**** repaint background ****');
     	canvas.setAttribute('height', that.barHite);
     	canvas.setAttribute('width', window.innerWidth);// outerWidth is zero on iOS
     	canvas.setAttribute('style', 'position: absolute; top:0; left:0; z-index: -1');
@@ -970,7 +985,6 @@ HeaderView.prototype.showView = function() {
 		that.titleGraphics.textBaseline = 'middle';
 		that.titleGraphics.strokeStyle = '#27139b';
 		that.titleGraphics.lineWidth = 1;
-		that.drawTitle();
 
 		that.titleCanvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
@@ -992,20 +1006,6 @@ HeaderView.prototype.showView = function() {
 			document.body.dispatchEvent(new CustomEvent(eventType));
 		});
 		return(canvas.width);
-	}
-};
-HeaderView.prototype.setTitle = function(reference) {
-	this.currentReference = reference;
-	this.drawTitle();
-};
-HeaderView.prototype.drawTitle = function() {
-	if (this.currentReference) {
-		var book = this.tableContents.find(this.currentReference.book);
-		var text = book.name + ' ' + ((this.currentReference.chapter > 0) ? this.currentReference.chapter : 1);
-		this.titleGraphics.clearRect(0, 0, this.titleCanvas.width, this.hite);
-		this.titleGraphics.fillText(text, this.titleCanvas.width / 2, this.hite / 2, this.titleCanvas.width);
-		
-		this.titleGraphics.strokeRect(0, 0, this.titleCanvas.width, this.hite);
 	}
 };
 
@@ -1828,7 +1828,8 @@ SettingStorage.prototype.setVersion = function(version, filename) {
 * This class is a facade over the database that is used to store bible text, concordance,
 * table of contents, history and questions.
 *
-* This file is DeviceDatabaseWebSQL, which implements the WebSQL interface.
+* This file is DeviceDatabaseWebSQL, which implements the WebSQL interface.  It is used
+* by the App in Cordova using the window.sqlitePlugin and by the BibleAppNW using the window.sqlitePlugin
 */
 function DeviceDatabase(code) {
 	this.code = code;
@@ -2095,8 +2096,9 @@ ConcordanceAdapter.prototype.create = function(callback) {
 	var statement = 'create table if not exists concordance(' +
 		'word text primary key not null, ' +
     	'refCount integer not null, ' +
-    	'refList text not null)';
-	this.database.executeDDL(statement, function(err) {
+    	'refList text not null, ' + // comma delimited list of references where word occurs
+    	'refPosition text null)';  // comma delimited list of references with position in verse.
+   	this.database.executeDDL(statement, function(err) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
@@ -2106,7 +2108,7 @@ ConcordanceAdapter.prototype.create = function(callback) {
 	});
 };
 ConcordanceAdapter.prototype.load = function(array, callback) {
-	var statement = 'insert into concordance(word, refCount, refList) values (?,?,?)';
+	var statement = 'insert into concordance(word, refCount, refList, refPosition) values (?,?,?,?)';
 	this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
 			callback(count);

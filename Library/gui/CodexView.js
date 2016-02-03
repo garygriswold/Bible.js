@@ -32,6 +32,7 @@ CodexView.prototype.hideView = function() {
 	}
 };
 CodexView.prototype.showView = function(nodeId) {
+	window.clearTimeout(this.checkScrollID);
 	document.body.style.backgroundColor = '#FFF';
 	var firstChapter = new Reference(nodeId);
 	var rowId = this.tableContents.rowId(firstChapter);
@@ -41,8 +42,8 @@ CodexView.prototype.showView = function(nodeId) {
 			that.scrollTo(firstChapter);
 		}
 		that.currentNodeId = firstChapter.nodeId;
-		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
-		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));			
+		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
+		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do		
 	});
 	function onScrollHandler(event) {
 		//console.log('windowHeight=', window.innerHeight, '  scrollHeight=', document.body.scrollHeight, '  scrollY=', window.scrollY);
@@ -54,10 +55,10 @@ CodexView.prototype.showView = function(nodeId) {
 			if (beforeChapter) {
 				that.showChapters([beforeChapter], false, function() {
 					that.checkChapterQueueSize('bottom');
-					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+					onScrollLastStep();
 				});
 			} else {
-				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+				onScrollLastStep();
 			}
 		} else if (document.body.scrollHeight - window.scrollY <= 2 * window.innerHeight) {
 			var lastNode = that.viewport.lastChild;
@@ -66,20 +67,23 @@ CodexView.prototype.showView = function(nodeId) {
 			if (nextChapter) {
 				that.showChapters([nextChapter], true, function() {
 					that.checkChapterQueueSize('top');
-					that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+					onScrollLastStep();
 				});
 			} else {
-				that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+				onScrollLastStep();
 			}
 		} else {
-			that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);
+			onScrollLastStep();
 		}
+	}
+	function onScrollLastStep() {
 		var ref = identifyCurrentChapter();//expensive solution
 		if (ref && ref.nodeId !== that.currentNodeId) {
 			that.currentNodeId = ref.nodeId;
 			document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: ref }}));
 		}
 		that.userIsScrolling = false;
+		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT); // should be last thing to do
 	}
 	function identifyCurrentChapter() {
 		var half = window.innerHeight / 2;

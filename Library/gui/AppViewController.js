@@ -126,10 +126,6 @@ AppViewController.prototype.begin = function(develop) {
 			}
 		});
 	});
-	document.body.addEventListener(BIBLE.CHG_HEADING, function(event) {
-		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
-		that.header.setTitle(event.detail.reference);
-	});
 	function setInitialFontSize() {
 		that.settingStorage.getFontSize(function(fontSize) {
 			if (fontSize == null) {

@@ -24,8 +24,26 @@ function HeaderView(tableContents, version) {
 	document.body.appendChild(this.rootNode);
 	this.labelCell = document.createElement('td');
 	this.labelCell.id = 'labelCell'
+	document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	Object.seal(this);
-}
+	var that = this;
+	
+	function drawTitleHandler(event) {
+		document.body.removeEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
+		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
+		that.currentReference = event.detail.reference;
+		
+		if (that.currentReference) {
+			var book = that.tableContents.find(that.currentReference.book);
+			var text = book.name + ' ' + ((that.currentReference.chapter > 0) ? that.currentReference.chapter : 1);
+			that.titleGraphics.clearRect(0, 0, that.titleCanvas.width, that.hite);
+			that.titleGraphics.fillText(text, that.titleCanvas.width / 2, that.hite / 2, that.titleCanvas.width);
+			
+			that.titleGraphics.strokeRect(0, 0, that.titleCanvas.width, that.hite);
+		}
+		document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
+	}
+};
 HeaderView.prototype.showView = function() {
 	var that = this;
 	this.backgroundCanvas = document.createElement('canvas');
@@ -47,12 +65,8 @@ HeaderView.prototype.showView = function() {
 	drawTitleField(this.titleCanvas, this.hite, avalWidth);
 	this.labelCell.appendChild(this.titleCanvas);
 
-	window.addEventListener('resize', function(event) {
-		paintBackground(that.backgroundCanvas, that.hite);
-		drawTitleField(that.titleCanvas, that.hite, avalWidth);
-	});
-
 	function paintBackground(canvas, hite) {
+		console.log('**** repaint background ****');
     	canvas.setAttribute('height', that.barHite);
     	canvas.setAttribute('width', window.innerWidth);// outerWidth is zero on iOS
     	canvas.setAttribute('style', 'position: absolute; top:0; left:0; z-index: -1');
@@ -82,7 +96,6 @@ HeaderView.prototype.showView = function() {
 		that.titleGraphics.textBaseline = 'middle';
 		that.titleGraphics.strokeStyle = '#27139b';
 		that.titleGraphics.lineWidth = 1;
-		that.drawTitle();
 
 		that.titleCanvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
@@ -104,20 +117,6 @@ HeaderView.prototype.showView = function() {
 			document.body.dispatchEvent(new CustomEvent(eventType));
 		});
 		return(canvas.width);
-	}
-};
-HeaderView.prototype.setTitle = function(reference) {
-	this.currentReference = reference;
-	this.drawTitle();
-};
-HeaderView.prototype.drawTitle = function() {
-	if (this.currentReference) {
-		var book = this.tableContents.find(this.currentReference.book);
-		var text = book.name + ' ' + ((this.currentReference.chapter > 0) ? this.currentReference.chapter : 1);
-		this.titleGraphics.clearRect(0, 0, this.titleCanvas.width, this.hite);
-		this.titleGraphics.fillText(text, this.titleCanvas.width / 2, this.hite / 2, this.titleCanvas.width);
-		
-		this.titleGraphics.strokeRect(0, 0, this.titleCanvas.width, this.hite);
 	}
 };
 
