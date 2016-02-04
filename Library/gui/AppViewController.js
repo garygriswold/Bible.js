@@ -103,11 +103,7 @@ AppViewController.prototype.begin = function(develop) {
 		document.documentElement.style.webkitTouchCallout = 'none';
         document.documentElement.style.webkitUserSelect = 'none';
         
-		document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
-		document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
-		document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
-		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
-		document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
+		enableHandlersExcept('NONE');
 
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);
@@ -151,7 +147,6 @@ AppViewController.prototype.begin = function(develop) {
 	function showPassageHandler(event) {
 		disableHandlers();
 		clearViews();
-		console.log('SHOW PASSAGE', event.detail.id, event.detail.search);
 		that.codexView.showView(event.detail.id);
 		enableHandlersExcept('NONE');
 		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
@@ -171,6 +166,7 @@ AppViewController.prototype.begin = function(develop) {
 		enableHandlersExcept(BIBLE.SHOW_SETTINGS);
 	}		
 	function clearViews() {
+		// There is some redundancy here, I could just delete all grandchildren of body in one step
 		that.tableContentsView.hideView();
 		that.searchView.hideView();
 		that.codexView.hideView();

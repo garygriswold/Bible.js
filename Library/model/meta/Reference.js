@@ -22,8 +22,6 @@ function Reference(book, chapter, verse) {
 		this.nodeId = book;
 	}
 	this.chapterId = this.book + ':' + this.chapter;
-	this.rootNode = document.createElement('div');
-	this.rootNode.setAttribute('id', 'top' + this.nodeId);
 	Object.freeze(this);
 }
 Reference.prototype.path = function() {
@@ -31,4 +29,16 @@ Reference.prototype.path = function() {
 };
 Reference.prototype.chapterVerse = function() {
 	return((this.verse) ? this.chapter + ':' + this.verse : this.chapter);
+};
+Reference.prototype.append = function(parent, html) {
+	var rootNode = document.createElement('div');
+	rootNode.setAttribute('id', 'top' + this.nodeId);
+	rootNode.innerHTML = html;
+	parent.appendChild(rootNode);
+};
+Reference.prototype.prepend = function(parent, html) {
+	var rootNode = document.createElement('div');
+	rootNode.setAttribute('id', 'top' + this.nodeId);
+	rootNode.innerHTML = html;
+	parent.insertBefore(rootNode, parent.firstChild);
 };

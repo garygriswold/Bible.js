@@ -39,7 +39,7 @@ CodexView.prototype.showView = function(nodeId) {
 	var that = this;
 	this.showChapters([rowId, rowId + CODEX_VIEW.AFTER], true, function(err) {
 		if (firstChapter.verse) {
-			that.scrollTo(firstChapter);
+			that.scrollTo(firstChapter.nodeId);
 		}
 		that.currentNodeId = firstChapter.nodeId;
 		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
@@ -107,13 +107,12 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
 				var reference = new Reference(row.reference);
-				reference.rootNode.innerHTML = row.html;
 				if (append) {
-					that.viewport.appendChild(reference.rootNode);
+					reference.append(that.viewport, row.html);
 				} else {
 					var scrollHeight1 = that.viewport.scrollHeight;
 					var scrollY1 = window.scrollY;
-					that.viewport.insertBefore(reference.rootNode, that.viewport.firstChild);
+					reference.prepend(that.viewport, row.html);
 					//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
 					TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
 				}
@@ -147,9 +146,9 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 		console.log('discarded chapter ', discard.id.substr(3), 'at', whichEnd);
 	}
 };
-CodexView.prototype.scrollTo = function(reference) {
-	console.log('scrollTo', reference.nodeId);
-	var verse = document.getElementById(reference.nodeId);
+CodexView.prototype.scrollTo = function(nodeId) {
+	console.log('scrollTo', nodeId);
+	var verse = document.getElementById(nodeId);
 	if (verse) {
 		var rect = verse.getBoundingClientRect();
 		//window.scrollTo(0, rect.top + window.scrollY - this.headerHeight);

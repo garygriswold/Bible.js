@@ -136,11 +136,7 @@ AppViewController.prototype.begin = function(develop) {
 		document.documentElement.style.webkitTouchCallout = 'none';
         document.documentElement.style.webkitUserSelect = 'none';
         
-		document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
-		document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
-		document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
-		document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
-		document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
+		enableHandlersExcept('NONE');
 
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);
@@ -184,7 +180,6 @@ AppViewController.prototype.begin = function(develop) {
 	function showPassageHandler(event) {
 		disableHandlers();
 		clearViews();
-		console.log('SHOW PASSAGE', event.detail.id, event.detail.search);
 		that.codexView.showView(event.detail.id);
 		enableHandlersExcept('NONE');
 		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
@@ -204,6 +199,7 @@ AppViewController.prototype.begin = function(develop) {
 		enableHandlersExcept(BIBLE.SHOW_SETTINGS);
 	}		
 	function clearViews() {
+		// There is some redundancy here, I could just delete all grandchildren of body in one step
 		that.tableContentsView.hideView();
 		that.searchView.hideView();
 		that.codexView.hideView();
@@ -267,7 +263,7 @@ CodexView.prototype.showView = function(nodeId) {
 	var that = this;
 	this.showChapters([rowId, rowId + CODEX_VIEW.AFTER], true, function(err) {
 		if (firstChapter.verse) {
-			that.scrollTo(firstChapter);
+			that.scrollTo(firstChapter.nodeId);
 		}
 		that.currentNodeId = firstChapter.nodeId;
 		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
@@ -335,13 +331,12 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
 				var reference = new Reference(row.reference);
-				reference.rootNode.innerHTML = row.html;
 				if (append) {
-					that.viewport.appendChild(reference.rootNode);
+					reference.append(that.viewport, row.html);
 				} else {
 					var scrollHeight1 = that.viewport.scrollHeight;
 					var scrollY1 = window.scrollY;
-					that.viewport.insertBefore(reference.rootNode, that.viewport.firstChild);
+					reference.prepend(that.viewport, row.html);
 					//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
 					TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
 				}
@@ -375,9 +370,9 @@ CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
 		console.log('discarded chapter ', discard.id.substr(3), 'at', whichEnd);
 	}
 };
-CodexView.prototype.scrollTo = function(reference) {
-	console.log('scrollTo', reference.nodeId);
-	var verse = document.getElementById(reference.nodeId);
+CodexView.prototype.scrollTo = function(nodeId) {
+	console.log('scrollTo', nodeId);
+	var verse = document.getElementById(nodeId);
 	if (verse) {
 		var rect = verse.getBoundingClientRect();
 		//window.scrollTo(0, rect.top + window.scrollY - this.headerHeight);
@@ -2996,8 +2991,6 @@ function Reference(book, chapter, verse) {
 		this.nodeId = book;
 	}
 	this.chapterId = this.book + ':' + this.chapter;
-	this.rootNode = document.createElement('div');
-	this.rootNode.setAttribute('id', 'top' + this.nodeId);
 	Object.freeze(this);
 }
 Reference.prototype.path = function() {
@@ -3005,6 +2998,18 @@ Reference.prototype.path = function() {
 };
 Reference.prototype.chapterVerse = function() {
 	return((this.verse) ? this.chapter + ':' + this.verse : this.chapter);
+};
+Reference.prototype.append = function(parent, html) {
+	var rootNode = document.createElement('div');
+	rootNode.setAttribute('id', 'top' + this.nodeId);
+	rootNode.innerHTML = html;
+	parent.appendChild(rootNode);
+};
+Reference.prototype.prepend = function(parent, html) {
+	var rootNode = document.createElement('div');
+	rootNode.setAttribute('id', 'top' + this.nodeId);
+	rootNode.innerHTML = html;
+	parent.insertBefore(rootNode, parent.firstChild);
 };
 /**
 * This class holds data for the table of contents of the entire Bible, or whatever part of the Bible was loaded.
