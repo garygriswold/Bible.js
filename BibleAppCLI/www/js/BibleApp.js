@@ -607,7 +607,19 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		that.questionInput = that.dom.addNode(inputTop, 'textarea', 'questionField', null, 'inputText');
 		that.questionInput.setAttribute('style', 'width:' + (wid - 10) + 'px');
 		that.questionInput.setAttribute('rows', 10);
-
+		//var displ = that.questionInput.style.display;
+		that.versesAdapter.getVerses(['MAT:7:7'], function(results) {
+			if (results instanceof IOError) {
+				console.log('Error while getting MAT:7:7');
+			} else {
+				if (results.rows.length > 0) {
+					var row = results.rows.item(0);
+					that.questionInput.setAttribute('placeholder', row.html);
+					that.questionInput.style.display = 'none';
+					that.questionInput.style.display = 'block';
+				}	
+			}
+		});
 		var quesBtn = that.dom.addNode(parentNode, 'button', null, null, 'inputBtn');
 		quesBtn.appendChild(drawSendIcon(50, '#F7F7BB'));
 
@@ -629,16 +641,6 @@ QuestionsView.prototype.buildQuestionsView = function() {
 						buildOneQuestion(parentNode, item);
 					}
 				});
-			}
-		});
-		that.versesAdapter.getVerses(['MAT:7:7'], function(results) {
-			if (results instanceof IOError) {
-				console.log('Error while getting MAT:7:7');
-			} else {
-				if (results.rows.length > 0) {
-					var row = results.rows.item(0);
-					that.questionInput.setAttribute('placeholder', row.html);
-				}	
 			}
 		});
 	}
