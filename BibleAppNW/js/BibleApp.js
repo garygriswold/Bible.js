@@ -180,7 +180,6 @@ AppViewController.prototype.begin = function(develop) {
 	function showPassageHandler(event) {
 		disableHandlers();
 		clearViews();
-		//console.log('SHOW PASSAGE', event.detail.id, event.detail.search);
 		that.codexView.showView(event.detail.id);
 		enableHandlersExcept('NONE');
 		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
@@ -256,19 +255,18 @@ CodexView.prototype.hideView = function() {
 		}
 	}
 };
-CodexView.prototype.showView = function(reference) {
+CodexView.prototype.showView = function(nodeId) {
 	window.clearTimeout(this.checkScrollID);
 	document.body.style.backgroundColor = '#FFF';
-	//var firstChapter = new Reference(nodeId);
-	//var rowId = this.tableContents.rowId(firstChapter);
-	var rowId = this.tableContents.rowId(reference);
+	var firstChapter = new Reference(nodeId);
+	var rowId = this.tableContents.rowId(firstChapter);
 	var that = this;
 	this.showChapters([rowId, rowId + CODEX_VIEW.AFTER], true, function(err) {
-		if (reference.verse) {
-			that.scrollTo(reference.nodeId);
+		if (firstChapter.verse) {
+			that.scrollTo(firstChapter.nodeId);
 		}
-		that.currentNodeId = reference.nodeId;
-		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: reference }}));
+		that.currentNodeId = firstChapter.nodeId;
+		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do		
 	});
 	function onScrollHandler(event) {
@@ -333,14 +331,11 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
 				var reference = new Reference(row.reference);
-				//reference.rootNode.innerHTML = row.html;
 				if (append) {
-					//that.viewport.appendChild(reference.rootNode);
 					reference.append(that.viewport, row.html);
 				} else {
 					var scrollHeight1 = that.viewport.scrollHeight;
 					var scrollY1 = window.scrollY;
-					//that.viewport.insertBefore(reference.rootNode, that.viewport.firstChild);
 					reference.prepend(that.viewport, row.html);
 					//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
 					TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
@@ -491,10 +486,9 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 				btn.textContent = generateReference(historyNodeId);
 				tab.appendChild(btn);
 				btn.addEventListener('click', function(event) {
-					console.log('history btn clicked', this.id);
-					//var nodeId = this.id.substr(3);
-					var reference = new Reference(this.id.substr(3));
-					document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: reference }}));
+					console.log('btn clicked', this.id);
+					var nodeId = this.id.substr(3);
+					document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 					that.hideView();
 				});
 			}
@@ -613,7 +607,19 @@ QuestionsView.prototype.buildQuestionsView = function() {
 		that.questionInput = that.dom.addNode(inputTop, 'textarea', 'questionField', null, 'inputText');
 		that.questionInput.setAttribute('style', 'width:' + (wid - 10) + 'px');
 		that.questionInput.setAttribute('rows', 10);
-
+		that.versesAdapter.getVerses(['MAT:7:7'], function(results) {
+			if (results instanceof IOError) {
+				console.log('Error while getting MAT:7:7');
+			} else {
+				if (results.rows.length > 0) {
+					var row = results.rows.item(0);
+					that.questionInput.setAttribute('placeholder', row.html);
+					// Hack to force display of placeholder when loaded.
+					that.questionInput.style.display = 'none';
+					that.questionInput.style.display = 'block';
+				}	
+			}
+		});
 		var quesBtn = that.dom.addNode(parentNode, 'button', null, null, 'inputBtn');
 		quesBtn.appendChild(drawSendIcon(50, '#F7F7BB'));
 
@@ -635,16 +641,6 @@ QuestionsView.prototype.buildQuestionsView = function() {
 						buildOneQuestion(parentNode, item);
 					}
 				});
-			}
-		});
-		that.versesAdapter.getVerses(['MAT:7:7'], function(results) {
-			if (results instanceof IOError) {
-				console.log('Error while getting MAT:7:7');
-			} else {
-				if (results.rows.length > 0) {
-					var row = results.rows.item(0);
-					that.questionInput.setAttribute('placeholder', row.html);
-				}	
 			}
 		});
 	}
@@ -837,10 +833,9 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText) 
 	verseNode.innerHTML = styleSearchWords(verseText);
 	entryNode.appendChild(verseNode);
 	entryNode.addEventListener('click', function(event) {
-		//var nodeId = this.id.substr(3);
-		var reference = new Reference(this.id.substr(3));
-		console.log('open chapter', reference.nodeId);
-		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: reference, source: that.query }}));
+		var nodeId = this.id.substr(3);
+		console.log('open chapter', nodeId);
+		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
 	});
 
 	function styleSearchWords(verseText) {
@@ -991,7 +986,7 @@ HeaderView.prototype.showView = function() {
 		that.titleCanvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
 			if (that.currentReference) {
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference }}));
+				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference.nodeId }}));
 			}
 		});
 	}
@@ -1087,10 +1082,9 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 				chaptNum++;
 				var that = this;
 				cell.addEventListener('click', function(event) {
-					//var nodeId = this.id.substring(3);
-					var reference = new Reference(this.id.substr(3));
+					var nodeId = this.id.substring(3);
 					console.log('open chapter', nodeId);
-					document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: reference }}));
+					document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 				});
 			}
 		}
@@ -2999,11 +2993,7 @@ function Reference(book, chapter, verse) {
 		this.nodeId = book;
 	}
 	this.chapterId = this.book + ':' + this.chapter;
-	this.rootNode = null;
-	Object.seal(this);
-	//this.rootNode = document.createElement('div');
-	//this.rootNode.setAttribute('id', 'top' + this.nodeId);
-	//Object.freeze(this);
+	Object.freeze(this);
 }
 Reference.prototype.path = function() {
 	return(this.book + '/' + this.chapter + '.usx');
@@ -3012,16 +3002,16 @@ Reference.prototype.chapterVerse = function() {
 	return((this.verse) ? this.chapter + ':' + this.verse : this.chapter);
 };
 Reference.prototype.append = function(parent, html) {
-	this.rootNode = document.createElement('div');
-	this.rootNode.setAttribute('id', 'top' + this.nodeId);
-	this.rootNode.innerHTML = html;
-	parent.appendChild(this.rootNode);
+	var rootNode = document.createElement('div');
+	rootNode.setAttribute('id', 'top' + this.nodeId);
+	rootNode.innerHTML = html;
+	parent.appendChild(rootNode);
 };
 Reference.prototype.prepend = function(parent, html) {
-	this.rootNode = document.createElement('div');
-	this.rootNode.setAttribute('id', 'top' + this.nodeId);
-	this.rootNode.innerHTML = html;
-	parent.insertBefore(this.rootNode, parent.firstChild);
+	var rootNode = document.createElement('div');
+	rootNode.setAttribute('id', 'top' + this.nodeId);
+	rootNode.innerHTML = html;
+	parent.insertBefore(rootNode, parent.firstChild);
 };
 /**
 * This class holds data for the table of contents of the entire Bible, or whatever part of the Bible was loaded.
