@@ -1,5 +1,5 @@
 # Bible.js
-The BibleApp is currently under development.  The first deployments in the Apple, Google and Microsoft stores is expected later this year.
+The BibleApp is currently under development.  The first deployments in the Apple, Google and Microsoft stores is expected early 2016.
 
 Objectives
 ----------
@@ -9,8 +9,6 @@ One key objective is to build an App that does not require localization for any 
 The App is designed to be extremely easy to use, so that it is useful to the very young, the very old, and people who only recently learned to read.  This objective is partly accomplished by limiting the features of the App to those that are essential.
 
 In order to provide Bible readers with an experience similar to the Ethiopian official in Acts 8, the App will provide a way for readers to ask questions that will be answered by a person.  This is an experimental feature that can be turned on or off for each language depending upon the availability of qualified volunteer instructors.
-
-This App will provide the ability for peer to peer installation using NFC, and for operating systems that will not permit this, in the future there will be an ePub3 (ebook) version of the App.  This will be done so that it is possible for people to share the Bible in locations of the world where governments are hostile to Christianity.
 
 The App will use Ethnologic information to present each user with a limited number of languages that are used in their geographic area.
 
