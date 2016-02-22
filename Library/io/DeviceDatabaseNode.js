@@ -79,5 +79,8 @@ DeviceDatabase.prototype.executeDDL = function(statement, callback) {
 		callback();
 	});
 };
+DeviceDatabase.prototype.close = function() {
+	this.database.close();
+};
 
 

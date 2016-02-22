@@ -40,12 +40,8 @@ function AppViewController(version, settingStorage) {
 	this.version = version;
 	this.settingStorage = settingStorage;
 	this.database = new DeviceDatabase(version.filename);
-	for (var i=document.body.children.length -1; i>=0; i--) {
-		document.body.removeChild(document.body.children[i]);
-	}
 }
 AppViewController.prototype.begin = function(develop) {
-	disableHandlers();
 	this.tableContents = new TOC(this.database.tableContents);
 	this.concordance = new Concordance(this.database.concordance);
 	var that = this;
@@ -68,7 +64,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.touch = new Hammer(document.getElementById('codexRoot'));
 		setInitialFontSize();
-		Object.freeze(that);
+		Object.seal(that);
 
 		switch(develop) {
 		case 'TableContentsView':
@@ -188,4 +184,28 @@ AppViewController.prototype.begin = function(develop) {
 		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
 		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
+};
+AppViewController.prototype.close = function() {
+	console.log('CLOSE ', this.version);
+	this.touch = null;
+	// remove dom
+	for (var i=document.body.children.length -1; i>=0; i--) {
+		document.body.removeChild(document.body.children[i]);
+	}
+	// close database
+	if (this.database) {
+		this.database.close();
+		this.database = null;
+	}
+	// views
+	this.header = null;
+	this.tableContentsView = null;
+	this.searchView = null;
+	this.codexView = null;
+	this.historyView = null;
+	this.questionsView = null;
+	this.settingsView = null;
+	// model
+	this.tableContents = null;
+	this.concordance = null;
 };

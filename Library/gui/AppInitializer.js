@@ -2,11 +2,14 @@
 * This class initializes the App with the correct Bible versions
 * and starts.
 */
-function AppInitializer() {	
+function AppInitializer() {
+	this.appViewController = null;
+	Object.seal(this);
 }
 AppInitializer.prototype.begin = function() {
     FastClick.attach(document.body);
     var settingStorage = new SettingStorage();
+    var that = this;
     
     document.body.addEventListener(BIBLE.CHG_VERSION, function(event) {
 		console.log('CHANGE VERSION TO', event.detail.version);
@@ -26,8 +29,11 @@ AppInitializer.prototype.begin = function() {
 	function changeVersionHandler(versionFilename) {
 		var bibleVersion = new BibleVersion();
 		bibleVersion.fill(versionFilename, function() {
-			var controller = new AppViewController(bibleVersion, settingStorage);
-			controller.begin();			
+			if (that.appViewController) {
+				that.appViewController.close();
+			}
+			that.appViewController = new AppViewController(bibleVersion, settingStorage);
+			that.appViewController.begin();			
 		});
 	}
 };

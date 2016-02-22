@@ -106,6 +106,9 @@ DeviceDatabase.prototype.executeDDL = function(statement, callback) {
         callback(new IOError(err));
     }
 };
+DeviceDatabase.prototype.close = function() {
+	this.database.close();
+};
 /** A smoke test is needed before a database is opened. */
 /** A second more though test is needed after a database is opened.*/
 DeviceDatabase.prototype.smokeTest = function(callback) {
