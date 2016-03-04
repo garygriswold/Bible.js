@@ -930,6 +930,8 @@ function HeaderView(tableContents, version) {
 	this.backgroundCanvas = null;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
+	this.titleStartX = null;
+	this.titleWidth = null;
 	this.currentReference = null;
 	this.rootNode = document.createElement('table');
 	this.rootNode.id = 'statusRoot';
@@ -950,10 +952,24 @@ function HeaderView(tableContents, version) {
 			var text = book.name + ' ' + ((that.currentReference.chapter > 0) ? that.currentReference.chapter : 1);
 			that.titleGraphics.clearRect(0, 0, that.titleCanvas.width, that.hite);
 			that.titleGraphics.fillText(text, that.titleCanvas.width / 2, that.hite / 2, that.titleCanvas.width);
-			
-			that.titleGraphics.strokeRect(0, 0, that.titleCanvas.width, that.hite);
+			that.titleWidth = that.titleGraphics.measureText(text).width + 10;
+			that.titleStartX = (that.titleCanvas.width - that.titleWidth) / 2;
+			roundedRect(that.titleGraphics, that.titleStartX, 0, that.titleWidth, that.hite, 7);
 		}
 		document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
+	}
+	function roundedRect(ctx, x, y, width, height, radius) {
+	  ctx.beginPath();
+	  ctx.moveTo(x,y+radius);
+	  ctx.lineTo(x,y+height-radius);
+	  ctx.arcTo(x,y+height,x+radius,y+height,radius);
+	  ctx.lineTo(x+width-radius,y+height);
+	  ctx.arcTo(x+width,y+height,x+width,y+height-radius,radius);
+	  ctx.lineTo(x+width,y+radius);
+	  ctx.arcTo(x+width,y,x+width-radius,y,radius);
+	  ctx.lineTo(x+radius,y);
+	  ctx.arcTo(x,y,x,y+radius,radius);
+	  ctx.stroke();
 	}
 };
 HeaderView.prototype.showView = function() {
@@ -1007,11 +1023,11 @@ HeaderView.prototype.showView = function() {
 		that.titleGraphics.textAlign = 'center';
 		that.titleGraphics.textBaseline = 'middle';
 		that.titleGraphics.strokeStyle = '#27139b';
-		that.titleGraphics.lineWidth = 1;
+		that.titleGraphics.lineWidth = 0.5;
 
 		that.titleCanvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
-			if (that.currentReference) {
+			if (that.currentReference && event.offsetX > that.titleStartX && event.offsetX < (that.titleStartX + that.titleWidth)) {
 				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference.nodeId }}));
 			}
 		});
