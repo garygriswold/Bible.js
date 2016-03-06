@@ -16,6 +16,7 @@ function SearchView(toc, concordance, versesAdapter, historyAdapter) {
 	this.rootNode = document.createElement('div');
 	this.rootNode.id = 'searchRoot';
 	document.body.appendChild(this.rootNode);
+	this.stopIcon = new StopIcon('#FF0000');
 	this.scrollPosition = 0;
 	this.searchField = null;
 	Object.seal(this);
@@ -49,6 +50,7 @@ SearchView.prototype.hideView = function() {
 			this.rootNode.removeChild(this.rootNode.children[i]);
 		}
 	}
+	this.stopIcon.hideIcon();
 };
 SearchView.prototype.startSearch = function(query) {
 	this.query = query;
@@ -90,7 +92,10 @@ SearchView.prototype.showSearch = function(query) {
 	this.concordance.search(this.words, function(refList) {
 		if (refList instanceof IOError) {
 			// Error should display some kind of icon to represent error.
+		} else if (refList.length === 0) {
+			that.stopIcon.showIcon();
 		} else {
+			that.stopIcon.hideIcon();
 			that.bookList = refListsByBook(refList);
 			var selectList = selectListWithLimit(that.bookList);
 			that.versesAdapter.getVerses(selectList, function(results) {
