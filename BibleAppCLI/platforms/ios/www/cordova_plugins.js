@@ -279,6 +279,15 @@ module.exports = [
         "clobbers": [
             "zip"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+        "id": "cordova-plugin-inappbrowser.inappbrowser",
+        "pluginId": "cordova-plugin-inappbrowser",
+        "clobbers": [
+            "cordova.InAppBrowser.open",
+            "window.open"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -296,7 +305,8 @@ module.exports.metadata =
     "cordova-plugin-statusbar": "1.0.1",
     "com.telerik.plugins.wkwebview": "0.6.7",
     "cordova-plugin-webserver": "1.0.3",
-    "cordova-plugin-zip": "3.0.0"
+    "cordova-plugin-zip": "3.0.0",
+    "cordova-plugin-inappbrowser": "1.3.0"
 }
 // BOTTOM OF METADATA
 });

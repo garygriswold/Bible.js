@@ -65,10 +65,25 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					var versionNode = that.dom.addNode(parent, 'table', 'vers');
 					var rowNode = that.dom.addNode(versionNode, 'tr');
 					var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
+					
 					that.dom.addNode(leftNode, 'p', 'langName', row.localLanguageName);
 					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
 					that.dom.addNode(leftNode, 'span', 'versName', versionName + ',  ');
-					that.dom.addNode(leftNode, 'span', 'copy', copyright(row));
+					
+					if (row.copyrightYear === 'PUBLIC') {
+						that.dom.addNode(leftNode, 'span', 'copy', 'Public Domain');
+					} else {
+						var copy = String.fromCharCode('0xA9') + String.fromCharCode('0xA0');
+						var copyright = (row.copyrightYear) ?  copy + row.copyrightYear + ', ' : copy;
+						var copyNode = that.dom.addNode(leftNode, 'span', 'copy', copyright);
+						var ownerNode = that.dom.addNode(leftNode, 'span', 'copy', row.ownerName);
+						if (row.ownerURL) {
+							ownerNode.setAttribute('style', 'color: #0000FF; text-decoration: underline');
+							ownerNode.addEventListener('click', function(event) {
+								cordova.InAppBrowser.open('http://' + row.ownerURL, '_blank', 'location=yes');
+							});
+						}
+					}
 					
 					var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
 					var btnNode = that.dom.addNode(rightNode, 'button', 'versIcon');
@@ -113,16 +128,6 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
 			}
 		});
-	}
-	function copyright(row) {
-		if (row.copyrightYear === 'PUBLIC') {
-			return(row.ownerName + ', Public Domain');
-		} else {
-			var result = String.fromCharCode('0xA9');
-			if (row.copyrightYear) result += String.fromCharCode('0xA0') + row.copyrightYear;
-			if (row.ownerName) result += ', ' + row.ownerName;
-			return(result);
-		}
 	}
 };
 

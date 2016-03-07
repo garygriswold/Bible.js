@@ -49,6 +49,7 @@ DatabaseAdapter.prototype.create = function(callback) {
 		'CREATE TABLE Owner(' +
 			' ownerCode text PRIMARY KEY NOT NULL,' +
 			' ownerName text NOT NULL,' +
+			' ownerURL text NULL,' +
 			' comment text NULL)',
 			
 		'CREATE TABLE Version(' +
@@ -89,7 +90,7 @@ DatabaseAdapter.prototype.loadAll = function(directory) {
 	var that = this;
 	this.directory = directory;
 	var file = '/Owner-Table 1.csv';
-	var statement = 'INSERT INTO Owner(ownerCode, ownerName, comment) values (?,?,?)';
+	var statement = 'INSERT INTO Owner(ownerCode, ownerName, ownerURL, comment) values (?,?,?,?)';
 	this.loadFile(file, statement, function(rowCount) {
 		console.log('Owner count', rowCount);
 		

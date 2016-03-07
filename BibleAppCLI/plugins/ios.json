@@ -164,6 +164,9 @@
         },
         "cordova-plugin-zip": {
             "PACKAGE_NAME": "com.shortsands.bibleapp"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.shortsands.bibleapp"
         }
     },
     "dependent_plugins": {
