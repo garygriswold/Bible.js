@@ -51,7 +51,7 @@ AppViewController.prototype.begin = function(develop) {
 		
 		that.header = new HeaderView(that.tableContents, that.version);
 		that.header.showView();
-		that.tableContentsView = new TableContentsView(that.tableContents);
+		that.tableContentsView = new TableContentsView(that.tableContents, that.version);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.database.history);
 		that.searchView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.

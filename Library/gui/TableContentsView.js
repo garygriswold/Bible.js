@@ -1,12 +1,12 @@
 /**
 * This class presents the table of contents, and responds to user actions.
 */
-function TableContentsView(toc) {
+function TableContentsView(toc, version) {
 	this.toc = toc;
+	this.version = version;
 	this.root = null;
-	this.rootNode = document.createElement('div');
-	this.rootNode.id = 'tocRoot';
-	document.body.appendChild(this.rootNode);
+	this.dom = new DOMBuilder();
+	this.rootNode = this.dom.addNode(document.body, 'div', null, null, 'tocRoot');
 	this.scrollPosition = 0;
 	this.numberNode = document.createElement('span');
 	this.numberNode.textContent = '0123456789';
@@ -33,16 +33,15 @@ TableContentsView.prototype.hideView = function() {
 	}
 };
 TableContentsView.prototype.buildTocBookList = function() {
+	var that = this;
 	var div = document.createElement('div');
 	div.setAttribute('id', 'toc');
 	div.setAttribute('class', 'tocPage');
+	appendVersionAttribution(div);
 	for (var i=0; i<this.toc.bookList.length; i++) {
 		var book = this.toc.bookList[i];
-		var bookNode = document.createElement('p');
-		bookNode.setAttribute('id', 'toc' + book.code);
-		bookNode.setAttribute('class', 'tocBook');
-		bookNode.textContent = book.name;
-		div.appendChild(bookNode);
+		var bookNode = that.dom.addNode(div, 'p', 'tocBook', book.name, 'toc' + book.code);
+		
 		var that = this;
 		bookNode.addEventListener('click', function(event) {
 			var bookCode = this.id.substring(3);
@@ -50,15 +49,35 @@ TableContentsView.prototype.buildTocBookList = function() {
 		});
 	}
 	return(div);
+	
+	function appendVersionAttribution(parent) {
+		var versionName = (that.version.localVersionName) ? that.version.localVersionName : that.version.localLanguageName;
+		that.dom.addNode(parent, 'p', 'versionName', versionName);
+		var copyNode = that.dom.addNode(parent, 'p', 'copyright');
+		
+		if (that.version.copyrightYear === 'PUBLIC') {
+			that.dom.addNode(copyNode, 'span', 'copyright', 'Public Domain');
+			//copyNode.textContent = 'Public Domain';
+		} else {
+			var copy = String.fromCharCode('0xA9') + String.fromCharCode('0xA0');
+			var copyright = (that.version.copyrightYear) ?  copy + that.version.copyrightYear + ', ' : copy;
+			that.dom.addNode(copyNode, 'span', 'copyright', copyright);
+			var ownerNode = that.dom.addNode(copyNode, 'span', 'copyright', that.version.ownerName);
+			if (that.version.ownerURL) {
+				ownerNode.setAttribute('style', 'color: #0000FF; text-decoration: underline');
+				ownerNode.addEventListener('click', function(event) {
+					cordova.InAppBrowser.open('http://' + that.version.ownerURL, '_blank', 'location=yes');
+				});
+			}
+		}
+	}
 };
 TableContentsView.prototype.showTocChapterList = function(bookCode) {
 	var that = this;
 	var book = this.toc.find(bookCode);
 	if (book) {
 		var root = document.createDocumentFragment();
-		var table = document.createElement('table');
-		table.setAttribute('class', 'tocChap');
-		root.appendChild(table);
+		var table = that.dom.addNode(root, 'table', 'tocChap');
 		var numCellPerRow = cellsPerRow();
 		var numRows = Math.ceil(book.lastChapter / numCellPerRow);
 		var chaptNum = 1;
@@ -66,11 +85,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 			var row = document.createElement('tr');
 			table.appendChild(row);
 			for (var c=0; c<numCellPerRow && chaptNum <= book.lastChapter; c++) {
-				var cell = document.createElement('td');
-				cell.setAttribute('id', 'toc' + bookCode + ':' + chaptNum);
-				cell.setAttribute('class', 'tocChap');
-				cell.textContent = chaptNum;
-				row.appendChild(cell);
+				var cell = that.dom.addNode(row, 'td', 'tocChap', chaptNum, 'toc' + bookCode + ':' + chaptNum);
 				chaptNum++;
 				var that = this;
 				cell.addEventListener('click', function(event) {

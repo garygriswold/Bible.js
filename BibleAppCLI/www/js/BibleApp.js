@@ -90,7 +90,7 @@ AppViewController.prototype.begin = function(develop) {
 		
 		that.header = new HeaderView(that.tableContents, that.version);
 		that.header.showView();
-		that.tableContentsView = new TableContentsView(that.tableContents);
+		that.tableContentsView = new TableContentsView(that.tableContents, that.version);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.database.history);
 		that.searchView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
@@ -1056,12 +1056,12 @@ HeaderView.prototype.showView = function() {
 /**
 * This class presents the table of contents, and responds to user actions.
 */
-function TableContentsView(toc) {
+function TableContentsView(toc, version) {
 	this.toc = toc;
+	this.version = version;
 	this.root = null;
-	this.rootNode = document.createElement('div');
-	this.rootNode.id = 'tocRoot';
-	document.body.appendChild(this.rootNode);
+	this.dom = new DOMBuilder();
+	this.rootNode = this.dom.addNode(document.body, 'div', null, null, 'tocRoot');
 	this.scrollPosition = 0;
 	this.numberNode = document.createElement('span');
 	this.numberNode.textContent = '0123456789';
@@ -1088,16 +1088,15 @@ TableContentsView.prototype.hideView = function() {
 	}
 };
 TableContentsView.prototype.buildTocBookList = function() {
+	var that = this;
 	var div = document.createElement('div');
 	div.setAttribute('id', 'toc');
 	div.setAttribute('class', 'tocPage');
+	appendVersionAttribution(div);
 	for (var i=0; i<this.toc.bookList.length; i++) {
 		var book = this.toc.bookList[i];
-		var bookNode = document.createElement('p');
-		bookNode.setAttribute('id', 'toc' + book.code);
-		bookNode.setAttribute('class', 'tocBook');
-		bookNode.textContent = book.name;
-		div.appendChild(bookNode);
+		var bookNode = that.dom.addNode(div, 'p', 'tocBook', book.name, 'toc' + book.code);
+		
 		var that = this;
 		bookNode.addEventListener('click', function(event) {
 			var bookCode = this.id.substring(3);
@@ -1105,15 +1104,35 @@ TableContentsView.prototype.buildTocBookList = function() {
 		});
 	}
 	return(div);
+	
+	function appendVersionAttribution(parent) {
+		var versionName = (that.version.localVersionName) ? that.version.localVersionName : that.version.localLanguageName;
+		that.dom.addNode(parent, 'p', 'versionName', versionName);
+		var copyNode = that.dom.addNode(parent, 'p', 'copyright');
+		
+		if (that.version.copyrightYear === 'PUBLIC') {
+			that.dom.addNode(copyNode, 'span', 'copyright', 'Public Domain');
+			//copyNode.textContent = 'Public Domain';
+		} else {
+			var copy = String.fromCharCode('0xA9') + String.fromCharCode('0xA0');
+			var copyright = (that.version.copyrightYear) ?  copy + that.version.copyrightYear + ', ' : copy;
+			that.dom.addNode(copyNode, 'span', 'copyright', copyright);
+			var ownerNode = that.dom.addNode(copyNode, 'span', 'copyright', that.version.ownerName);
+			if (that.version.ownerURL) {
+				ownerNode.setAttribute('style', 'color: #0000FF; text-decoration: underline');
+				ownerNode.addEventListener('click', function(event) {
+					cordova.InAppBrowser.open('http://' + that.version.ownerURL, '_blank', 'location=yes');
+				});
+			}
+		}
+	}
 };
 TableContentsView.prototype.showTocChapterList = function(bookCode) {
 	var that = this;
 	var book = this.toc.find(bookCode);
 	if (book) {
 		var root = document.createDocumentFragment();
-		var table = document.createElement('table');
-		table.setAttribute('class', 'tocChap');
-		root.appendChild(table);
+		var table = that.dom.addNode(root, 'table', 'tocChap');
 		var numCellPerRow = cellsPerRow();
 		var numRows = Math.ceil(book.lastChapter / numCellPerRow);
 		var chaptNum = 1;
@@ -1121,11 +1140,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 			var row = document.createElement('tr');
 			table.appendChild(row);
 			for (var c=0; c<numCellPerRow && chaptNum <= book.lastChapter; c++) {
-				var cell = document.createElement('td');
-				cell.setAttribute('id', 'toc' + bookCode + ':' + chaptNum);
-				cell.setAttribute('class', 'tocChap');
-				cell.textContent = chaptNum;
-				row.appendChild(cell);
+				var cell = that.dom.addNode(row, 'td', 'tocChap', chaptNum, 'toc' + bookCode + ':' + chaptNum);
 				chaptNum++;
 				var that = this;
 				cell.addEventListener('click', function(event) {
@@ -1472,21 +1487,6 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 			}
 		});
 	}
-//	function copyright(row) {
-//		if (row.copyrightYear === 'PUBLIC') {
-//			return(row.ownerName + ', Public Domain');
-//		} else {
-//			var result = [];
-//			result.push(String.fromCharCode('0xA9'));
-//			if (row.copyrightYear) result.push(row.copyrightYear) + ',  ';
-//			if (row.ownerURL) {
-//				result.push('<a href="http://' + row.ownerURL + '">' +  row.ownerName)
-//			} else {
-//				result.push(row.ownerName);
-//			}
-//			return(result.join(''));
-//		}
-//	}
 };
 
 /**
@@ -2058,7 +2058,9 @@ DeviceDatabase.prototype.executeDDL = function(statement, callback) {
     }
 };
 DeviceDatabase.prototype.close = function() {
-	this.database.close();
+	if (window.sqlitePlugin) {
+		this.database.close();
+	}
 };
 /** A smoke test is needed before a database is opened. */
 /** A second more though test is needed after a database is opened.*/
@@ -2659,7 +2661,6 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 		' o.ownerURL, v.copyrightYear' +
 		' FROM CountryVersion cv' +
 		' JOIN Version v ON cv.versionCode=v.versionCode' +
-		' JOIN Language l ON v.silCode=l.silCode' +
 		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
 		' LEFT OUTER JOIN TextTranslation t1 ON t1.silCode=? AND t1.word=v.scope' +
 		' WHERE cv.countryCode = ?' +
@@ -2680,15 +2681,19 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 	});
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
-	var statement = 'SELECT versionCode, silCode, isQaActive FROM Version WHERE filename = ?';
+	var statement = 'SELECT v.versionCode, v.silCode, v.isQaActive, v.copyrightYear,' +
+		' cv.localLanguageName, cv.localVersionName, o.ownerName, o.ownerURL' +
+		' FROM CountryVersion cv' +
+		' JOIN Version v ON cv.versionCode=v.versionCode' +
+		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
+		' WHERE v.filename = ?';
 	this.select(statement, [versionFile], function(results) {
 		if (results instanceof IOError) {
 			callback(results);
-		} else if (results.rows.length == 0) {
+		} if (results.rows.length === 0) {
 			callback(new IOError('No version found'));
 		} else {
-			var row = results.rows.item(0);
-			callback(row);
+			callback(results.rows.item(0));
 		}
 	});
 };
@@ -2705,6 +2710,9 @@ VersionsAdapter.prototype.select = function(statement, values, callback) {
         console.log('select error', JSON.stringify(err));
         callback(new IOError(err));
     }
+};
+VersionsAdapter.prototype.close = function() {
+	this.database.close();		
 };
 
 /**
@@ -2819,33 +2827,41 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 * as needed.
 */
 function BibleVersion() {
-	console.log('start version cons');
 	this.code = null;
 	this.filename = null;
 	this.silCode = null;
 	this.isQaActive = null;
-	console.log('end version cons');
+	this.copyrightYear = null;
+	this.localLanguageName = null;
+	this.localVersionName = null;
+	this.ownerName = null;
+	this.ownerURL = null;
 	Object.seal(this);
-	console.log('end version seal');
 }
 BibleVersion.prototype.fill = function(filename, callback) {
-	console.log('start fill', filename);
 	var that = this;
 	var versionsAdapter = new VersionsAdapter();
-	versionsAdapter.selectVersionByFilename(filename, function(versionObj) {
-		console.log('found', versionObj);
-		if (versionObj instanceof IOError) {
+	versionsAdapter.selectVersionByFilename(filename, function(row) {
+		if (row instanceof IOError) {
 			that.code = 'WEB';
 			that.filename = 'WEB.db1';
 			that.silCode = 'eng';
 			that.isQaActive = 'F';
+			that.copyrightYear = 'PUBLIC';
+			that.localVersionName = 'World English Bible';
+			that.ownerName = 'eBible';
+			that.ownerURL = 'eBible.org';
 		} else {
-			that.code = versionObj.versionCode;
+			that.code = row.versionCode;
 			that.filename = filename;
-			that.silCode = versionObj.silCode;
-			that.isQaActive = versionObj.isQaActive;
+			that.silCode = row.silCode;
+			that.isQaActive = row.isQaActive;
+			that.copyrightYear = row.copyrightYear;
+			that.localLanguageName = row.localLanguageName;
+			that.localVersionName = row.loadVersionName;
+			that.ownerName = row.ownerName;
+			that.ownerURL = row.ownerURL;
 		}
-		console.log('this', this);
 		callback();
 	});
 };/**

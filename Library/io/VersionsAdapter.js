@@ -36,7 +36,6 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 		' o.ownerURL, v.copyrightYear' +
 		' FROM CountryVersion cv' +
 		' JOIN Version v ON cv.versionCode=v.versionCode' +
-		' JOIN Language l ON v.silCode=l.silCode' +
 		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
 		' LEFT OUTER JOIN TextTranslation t1 ON t1.silCode=? AND t1.word=v.scope' +
 		' WHERE cv.countryCode = ?' +
@@ -57,15 +56,19 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 	});
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
-	var statement = 'SELECT versionCode, silCode, isQaActive FROM Version WHERE filename = ?';
+	var statement = 'SELECT v.versionCode, v.silCode, v.isQaActive, v.copyrightYear,' +
+		' cv.localLanguageName, cv.localVersionName, o.ownerName, o.ownerURL' +
+		' FROM CountryVersion cv' +
+		' JOIN Version v ON cv.versionCode=v.versionCode' +
+		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
+		' WHERE v.filename = ?';
 	this.select(statement, [versionFile], function(results) {
 		if (results instanceof IOError) {
 			callback(results);
-		} else if (results.rows.length == 0) {
+		} if (results.rows.length === 0) {
 			callback(new IOError('No version found'));
 		} else {
-			var row = results.rows.item(0);
-			callback(row);
+			callback(results.rows.item(0));
 		}
 	});
 };
@@ -82,5 +85,8 @@ VersionsAdapter.prototype.select = function(statement, values, callback) {
         console.log('select error', JSON.stringify(err));
         callback(new IOError(err));
     }
+};
+VersionsAdapter.prototype.close = function() {
+	this.database.close();		
 };
 
