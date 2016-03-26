@@ -2805,8 +2805,20 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 	var bibleVersionZip = bibleVersion + '.zip';
 	var remotePath = this.uri + bibleVersionZip;
 	var tempPath = this.downloadPath + bibleVersionZip;
-	console.log('download from', remotePath, ' to', tempPath);
-    this.fileTransfer.download(remotePath, tempPath, onDownSuccess, onDownError, true, {});
+	console.log('download from', remotePath, ' to ', tempPath);
+	var datetime = new Date().now;
+	console.log('datetime ', datetime);
+	var appBuildId = '1234567'; // must lookup somewhere, must be set during App build, must be communicated to server.
+	var appBuildKey = '456788'; // ditto
+	var encrypted = CryptoJS.AES.encrypt(datetime, appBuildKey);
+	console.log('encrypted ', encrypted);
+	var options = { 
+		headers: {
+			'x-time': datetime,
+			'Authorization': 'Signature  ' + appBuildId + '  ' + encrypted
+		}
+	}
+    this.fileTransfer.download(remotePath, tempPath, onDownSuccess, onDownError, true, options);
 
     function onDownSuccess(entry) {
     	console.log("download complete: ", JSON.stringify(entry));
@@ -2822,7 +2834,8 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
     function onDownError(error) {
        	callback(new IOError({ code: error.code, message: error.source}));   	
     }
-};/**
+};
+/**
 * This class is used to contain the fields about a version of the Bible
 * as needed.
 */

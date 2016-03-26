@@ -857,5 +857,5 @@ var tests = [
 ]
 
 
-var runTest = new ServerMethodTest('165.225.175.252', 8080);
+var runTest = new ServerMethodTest('cloud.shortsands.com', 8080);
 runTest.runTests();
