@@ -75,6 +75,7 @@ recreating everything and then moving the current project into a new project.
 	Zip 				3.0.0	3.1.0
 	Sqlite 				0.7.7	0.8.5	
 	
+	cordova plugin save (updates config.xml with versions)
 	
 The file plugin produced the following message:
 The Android Persistent storage location now defaults to "Internal". Please check this plugins README to see if you application needs any changes in its config.xml.
@@ -97,4 +98,13 @@ Problems with sqlite connector
 The standard cordova-sqlite-storage plugin did not have the correct
 	cordova plugin remove cordova-sqlite-storage
 	cordova plugin add cordova-sqlite-ext
+
+Setup Android Development Environment
+-------------------------------------
+
+	download JAVA JDK 8u77
+	Set JAVA_HOME to Home directory beneath SDK (it was done by .dmg)
+	download android SDK tools
+	Set export ANDROID_HOME=$HOME/Android_SDKS/android-sdk-macosx
+	
 
