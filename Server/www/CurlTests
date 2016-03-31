@@ -1,6 +1,6 @@
 
 # staticServer
-curl -i http://localhost:8080/book/WEB.db1 > out
+curl --output out --dump-header out2 http://localhost:8080/book/WEB.db1
 
 curl -i http://localhost:8080/book/xxx.db1 > out
 

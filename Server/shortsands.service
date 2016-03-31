@@ -1,0 +1,21 @@
+#
+# This file should be copied to /etc/systemd/system
+# It is the config file for systemctl
+#
+[Unit]
+Description=shortsands
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/Server/www
+ExecStart=/usr/bin/node /root/Server/www/Router.js > /root/Server/www/server.log &
+Restart=always
+User=root
+Group=root
+LimitNOFILE=10240
+LimitFSIZE=infinity
+
+[Install]
+WantedBy=multi-user.target
+
