@@ -5,6 +5,9 @@
 function HttpClient(server, port) {
 	this.server = server;
 	this.port = port;
+	// This should be changed to simply use /, becuase the 
+	// requests are coming from a webpage and should be relative
+	// to the request.
 	this.authority = 'http://' + this.server + ':' + this.port;
 	this.authClient = new AuthClient(this);
 }

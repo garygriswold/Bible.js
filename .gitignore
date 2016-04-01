@@ -2,6 +2,8 @@
 *.xcuserstate
 temp.js
 newrelic.js
+Credentials.js
+Credentials.db
 GitIgnore/
 licensed/
 ThrowPropsPlugin.js

@@ -2806,16 +2806,14 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 	var remotePath = this.uri + bibleVersionZip;
 	var tempPath = this.downloadPath + bibleVersionZip;
 	console.log('download from', remotePath, ' to ', tempPath);
-	var datetime = new Date().now;
+	var datetime = new Date().toISOString();
 	console.log('datetime ', datetime);
-	var appBuildId = '1234567'; // must lookup somewhere, must be set during App build, must be communicated to server.
-	var appBuildKey = '456788'; // ditto
-	var encrypted = CryptoJS.AES.encrypt(datetime, appBuildKey);
+	var encrypted = CryptoJS.AES.encrypt(datetime, CREDENTIAL.key);
 	console.log('encrypted ', encrypted);
 	var options = { 
 		headers: {
-			'x-time': datetime,
-			'Authorization': 'Signature  ' + appBuildId + '  ' + encrypted
+			'Authorization': 'Signature  ' + CREDENTIAL.id + '  ' + CREDENTIAL.version + '  ' + encrypted,
+			'x-time': datetime
 		}
 	}
     this.fileTransfer.download(remotePath, tempPath, onDownSuccess, onDownError, true, options);

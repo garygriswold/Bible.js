@@ -64,18 +64,18 @@ AuthController.prototype.authenticate = function(request, callback) {
 					var decrypted = that.CryptoJS.AES.decrypt(encrypted, row.passPhrase);
 					var fullyDecrypted = decrypted.toString(that.CryptoJS.enc.Latin1);
 					if (fullyDecrypted !== datetime) {
-						authorizationError('Verification Failure');
+						authorizationError('User Verification Failure');
 					} else {
 						request.headers.authId = authId;
 						callback();
 					}
 				} catch(err) {
-					authorizationError('Error While Decrypting');
+					authorizationError('Error While Decrypting User Signature');
 				}
 			}
 		});
 	} else {
-		authorizationError('Authorization Data Incomplete');
+		authorizationError('User Authorization Data Incomplete');
 	}
 	
 	function authorizationError(message) {

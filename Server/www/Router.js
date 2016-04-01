@@ -10,12 +10,16 @@ var database = new DatabaseAdapter({filename: '../../StaticRoot/Discourse.db', v
 var AuthController = require('./AuthController');
 var authController = new AuthController(database);
 
+var AppAuthController = require('./AppAuthController');
+var appAuthController = new AppAuthController();
+
+
 var log = require('./Logger');
 //log.init('BibleApp.log');
 
 var restify = require('restify');
 var server = restify.createServer({
-	name: 'BibleJS',
+	name: 'ShortSands',
 	version: "1.0.0"
 });
 
@@ -41,10 +45,19 @@ server.pre(function(request, response, next) {
 	var path = request.getPath();
 	if (path === '/') return(next());
 	path = path.substr(1,4);
-	if (path === 'book' || path === 'ques' || path === 'resp' || path === 'logi' || path === 'qapp') return(next());
-	authController.authenticate(request, function(err) {
-		return(next(err));
-	});
+	if (path === 'ques' || path === 'resp' || path === 'logi' || path === 'qapp') {
+		return(next());
+	}
+	else if (path === 'book') {
+		appAuthController.authenticate(request, function(err) {
+			return(next(err));
+		});
+	}
+	else {
+		authController.authenticate(request, function(err) {
+			return(next(err));
+		});
+	}
 });
 
 server.on('after', function(request, response, route, error) {
