@@ -8,7 +8,6 @@ function AppInitializer() {
 	Object.seal(this);
 }
 AppInitializer.prototype.begin = function() {
-    FastClick.attach(document.body);
     var settingStorage = new SettingStorage();
     var that = this;
     
