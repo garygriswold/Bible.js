@@ -116,17 +116,18 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		var iconNode = this;
 		var versionCode = iconNode.id.substr(3);
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
-		
-		var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT);
-		downloader.download(versionFile, function(error) {
-			gsPreloader.active(false);
-			if (error) {
-				console.log(JSON.stringify(error));
-			} else {
-				that.settingStorage.setVersion(versionCode, versionFile);
-				iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
-				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
-			}
+		that.settingStorage.getCurrentVersion(function(currVersion) {
+			var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT, currVersion);
+			downloader.download(versionFile, function(error) {
+				gsPreloader.active(false);
+				if (error) {
+					console.log(JSON.stringify(error));
+				} else {
+					that.settingStorage.setVersion(versionCode, versionFile);
+					iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
+					document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
+				}
+			});
 		});
 	}
 };

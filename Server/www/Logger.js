@@ -13,21 +13,22 @@ var log = {
 		log.filepath = path;
 		log.useConsole = (path == 'stdout');
 	},
-	error: function(msg) {
+	error: function(msg, source) {
 		msg.level = 'error';
-		log._log(msg);
+		log._log(msg, source);
 	},
-	warn: function(msg) {
+	warn: function(msg, source) {
 		msg.level = 'warn';
-		log._log(msg);
+		log._log(msg, source);
 	},
-	info: function(msg) {
+	info: function(msg, source) {
     	msg.level = 'info';
-    	log._log(msg);
+    	log._log(msg, source);
   	},
-  	_log: function(msg) {
+  	_log: function(msg, source) {
 		if (log.useConsole) {
-			console.log(msg);
+			if (source) console.log(msg, 'AT', source);
+			else console.log(msg);
 		} else {
 			if (msg.error) {
 				error = msg.error;
@@ -35,7 +36,9 @@ var log = {
 				// this step is needed to recover it, so it will be in JSON.
 				msg.error = error.message;
 			}
-			var str = JSON.stringify(msg) + '\n';
+			var str = JSON.stringify(msg);
+			if (source) str += ' AT ' + source;
+			str += '\n';
 		  	FS.appendFile(log.filepath, str, function(err) {
 		  		if (err) {
 			  		console.log(message);

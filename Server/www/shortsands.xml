@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
 <!DOCTYPE service_bundle SYSTEM "/usr/share/lib/xml/dtd/service_bundle.dtd.1">
 <!--
+		Used by Services Admin on OpenSolari, SmartOS
         Created by Manifold
---><service_bundle type="manifest" name="shortsands">
+-->
+<service_bundle type="manifest" name="shortsands">
 
     <service name="site/shortsands" type="service" version="1">
 

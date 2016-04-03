@@ -39,8 +39,8 @@ SettingStorage.prototype.getCurrentVersion = function(callback) {
 		callback(filename);
 	});
 };
-SettingStorage.prototype.setCurrentVersion = function(version) {
-	this.setItem('version', version);
+SettingStorage.prototype.setCurrentVersion = function(filename) {
+	this.setItem('version', filename);
 };
 SettingStorage.prototype.getItem = function(name, callback) {
     this.database.readTransaction(function(tx) {

@@ -4,8 +4,14 @@
 */
 "use strict";
 //require('newrelic');
+
+var log = require('./Logger');
+//log.init('server.log');
+
+global.DATABASE_ROOT = '../../StaticRoot/';
+
 var DatabaseAdapter = require('./DatabaseAdapter');
-var database = new DatabaseAdapter({filename: '../../StaticRoot/Discourse.db', verbose: false});
+var database = new DatabaseAdapter({filename: DATABASE_ROOT + 'Discourse.db', verbose: false});
 
 var AuthController = require('./AuthController');
 var authController = new AuthController(database);
@@ -13,9 +19,8 @@ var authController = new AuthController(database);
 var AppAuthController = require('./AppAuthController');
 var appAuthController = new AppAuthController();
 
-
-var log = require('./Logger');
-//log.init('BibleApp.log');
+var Statistics = require('./Statistics');
+var statistics = new Statistics();
 
 var restify = require('restify');
 var server = restify.createServer({
@@ -24,9 +29,9 @@ var server = restify.createServer({
 });
 
 server.use(restify.CORS({
-	origins: ['http://localhost:12344'],// must list each valid origin   // defaults to ['*']
-    	credentials: true,                 // defaults to false
-    	headers: ['x-time']                // sets expose-headers
+	origins: ['http://localhost:12344'], 					// must list each valid origin   // defaults to ['*']
+    credentials: true,                   					// defaults to false
+    headers: ['x-time', 'x-locale', 'x-referer-version']    // sets expose-headers
 }));
 
 server.use(restify.bodyParser({
@@ -50,6 +55,7 @@ server.pre(function(request, response, next) {
 	}
 	else if (path === 'book') {
 		appAuthController.authenticate(request, function(err) {
+			statistics.insertDownload(request);
 			return(next(err));
 		});
 	}
