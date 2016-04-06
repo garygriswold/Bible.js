@@ -2893,7 +2893,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.isQaActive = row.isQaActive;
 			that.copyrightYear = row.copyrightYear;
 			that.localLanguageName = row.localLanguageName;
-			that.localVersionName = row.loadVersionName;
+			that.localVersionName = row.localVersionName;
 			that.ownerName = row.ownerName;
 			that.ownerURL = row.ownerURL;
 		}
