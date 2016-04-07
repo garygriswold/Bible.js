@@ -1009,11 +1009,11 @@ HeaderView.prototype.showView = function() {
       	var vMidpoint = hite / 2;
       	var gradient = graphics.createRadialGradient(238, vMidpoint, 10, 238, vMidpoint, window.innerHeight - hite);
       	// light blue
-      	gradient.addColorStop(0, '#8ED6FF');
+      	gradient.addColorStop(0, '#2E9EC9');//'#8ED6FF');
       	// dark blue
-      	gradient.addColorStop(1, '#004CB3');
+      	gradient.addColorStop(1, '#2E9EC9');//'#004CB3');
 
-      	graphics.fillStyle = gradient;
+      	graphics.fillStyle = '#2E9EC9';//gradient; THE GRADIENT IS NOT BEING USED.
       	graphics.fill();
 	}
 	function drawTitleField(canvas, hite, avalWidth) {
@@ -1022,11 +1022,12 @@ HeaderView.prototype.showView = function() {
 		canvas.setAttribute('width', avalWidth);
 		canvas.setAttribute('style', that.cellTopPadding);
 		that.titleGraphics = canvas.getContext('2d');
-		that.titleGraphics.fillStyle = '#27139b';//'#000000';
+		
+		that.titleGraphics.fillStyle = '#1b2f76';
 		that.titleGraphics.font = '2.0rem sans-serif';
 		that.titleGraphics.textAlign = 'center';
 		that.titleGraphics.textBaseline = 'middle';
-		that.titleGraphics.strokeStyle = '#27139b';
+		that.titleGraphics.strokeStyle = '#1b2f76';
 		that.titleGraphics.lineWidth = 0.5;
 
 		that.titleCanvas.addEventListener('click', function(event) {
@@ -1038,6 +1039,7 @@ HeaderView.prototype.showView = function() {
 	}
 	function setupIconButton(parentCell, canvasFunction, hite, eventType) {
 		var canvas = canvasFunction(hite, '#F7F7BB');
+		canvas.setAttribute('style', 'imageRendering: -webkit-optimize-contrast'); // unsure of effectiveness
 		canvas.setAttribute('style', that.cellTopPadding);
 		var parent = document.createElement('td');
 		parent.id = parentCell;
@@ -1111,7 +1113,6 @@ TableContentsView.prototype.buildTocBookList = function() {
 		
 		if (that.version.copyrightYear === 'PUBLIC') {
 			that.dom.addNode(copyNode, 'span', 'copyright', 'Public Domain');
-			//copyNode.textContent = 'Public Domain';
 		} else {
 			var copy = String.fromCharCode('0xA9') + String.fromCharCode('0xA0');
 			var copyright = (that.version.copyrightYear) ?  copy + that.version.copyrightYear + ', ' : copy;
@@ -1169,9 +1170,11 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 		if (div) {
 			for (var i=div.children.length -1; i>=0; i--) {
 				var bookNode = div.children[i];
-				for (var j=bookNode.children.length -1; j>=0; j--) {
-					var chaptTable = bookNode.children[j];
-					bookNode.removeChild(chaptTable);
+				if (bookNode.className === 'tocBook') {
+					for (var j=bookNode.children.length -1; j>=0; j--) {
+						var chaptTable = bookNode.children[j];
+						bookNode.removeChild(chaptTable);
+					}
 				}
 			}
 		}
@@ -1204,7 +1207,7 @@ function SettingsView(settingStorage, versesAdapter) {
 	Object.seal(this);
 }
 SettingsView.prototype.showView = function() {
-	document.body.style.backgroundColor = '#ABC';
+	document.body.style.backgroundColor = '#FFF';
 	if (! this.root) {
 		this.root = this.buildSettingsView();
 	}
@@ -1233,7 +1236,6 @@ SettingsView.prototype.buildSettingsView = function() {
 	var sizeSlider = this.dom.addNode(sizeCell, 'div', null, null, 'fontSizeSlider');
 	var sizeThumb = this.dom.addNode(sizeCell, 'div', null, null, 'fontSizeThumb');
 	
-	addRowSpace(table);
 	var textRow = this.dom.addNode(table, 'tr');
 	var textCell = this.dom.addNode(textRow, 'td', null, null, 'sampleText');
 	
@@ -1435,7 +1437,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 						var copyNode = that.dom.addNode(leftNode, 'span', 'copy', copyright);
 						var ownerNode = that.dom.addNode(leftNode, 'span', 'copy', row.ownerName);
 						if (row.ownerURL) {
-							ownerNode.setAttribute('style', 'color: #0000FF; text-decoration: underline');
+							ownerNode.setAttribute('style', 'color: #2A48B4; text-decoration: underline');
 							ownerNode.addEventListener('click', function(event) {
 								cordova.InAppBrowser.open('http://' + row.ownerURL, '_blank', 'location=yes');
 							});

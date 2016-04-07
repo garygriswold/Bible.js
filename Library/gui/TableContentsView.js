@@ -57,7 +57,6 @@ TableContentsView.prototype.buildTocBookList = function() {
 		
 		if (that.version.copyrightYear === 'PUBLIC') {
 			that.dom.addNode(copyNode, 'span', 'copyright', 'Public Domain');
-			//copyNode.textContent = 'Public Domain';
 		} else {
 			var copy = String.fromCharCode('0xA9') + String.fromCharCode('0xA0');
 			var copyright = (that.version.copyrightYear) ?  copy + that.version.copyrightYear + ', ' : copy;
@@ -115,9 +114,11 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 		if (div) {
 			for (var i=div.children.length -1; i>=0; i--) {
 				var bookNode = div.children[i];
-				for (var j=bookNode.children.length -1; j>=0; j--) {
-					var chaptTable = bookNode.children[j];
-					bookNode.removeChild(chaptTable);
+				if (bookNode.className === 'tocBook') {
+					for (var j=bookNode.children.length -1; j>=0; j--) {
+						var chaptTable = bookNode.children[j];
+						bookNode.removeChild(chaptTable);
+					}
 				}
 			}
 		}

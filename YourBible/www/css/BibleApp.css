@@ -43,7 +43,7 @@ p.mt {
 	text-align: center;
 	margin-bottom: 4pt;
 	margin-top: 8pt;
-	color: #0943B2; /* non-std */
+	color: #2A48B4; /* non-std */
 }
 /* Book Main Title, Level 1 */
 p.mt1 {
@@ -52,7 +52,7 @@ p.mt1 {
 	text-align: center;
 	margin-bottom: 4pt;
 	margin-top: 2pt;
-	color: #0943B2; /* non-std */
+	color: #2A48B4; /* non-std */
 }
 /* Book Title Above Main TitleSmaller */
 p.mt2 {
@@ -60,7 +60,7 @@ p.mt2 {
 	font-style: italic;
 	text-align: center;
 	margin-bottom: 2pt;
-	color: #0943B2; /* non-std */
+	color: #2A48B4; /* non-std */
 }
 /* Book Title Smallest */
 p.mt3 {
@@ -69,7 +69,7 @@ p.mt3 {
 	text-align: center;
 	margin-bottom: 2pt;
 	margin-top: 2pt;
-	color: #0943B2; /* non-std */
+	color: #2A48B4; /* non-std */
 }
 /* Section Heading */
 p.ms {
@@ -78,7 +78,7 @@ p.ms {
 	text-align: center;
 	margin-bottom: 4pt;
 	margin-top: 16pt;
-	color: #0943B2; /* non-std */
+	color: #2A48B4; /* non-std */
 }
 /* Section Heading Level 1 */
 p.ms1 {
@@ -87,7 +87,7 @@ p.ms1 {
     text-align: center;
     margin-bottom: 4pt;
 	margin-top: 16pt;
-	color: #0943B2; /* non-std */
+	color: #2A48B4; /* non-std */
 }
 /* Descriptive Title */
 p.d {
@@ -95,12 +95,12 @@ p.d {
 	text-align: center;
 	margin-bottom: 4pt;
 	margin-top: 4pt;
-	color: #0943B2;
+	color: #2A48B4; /* non-std */
 }
 /* Chapter Number Format */
 p.c {
 	font-size: 1.5rem;
-	color: #005AB3; /* non-std */
+	color: #2A48B4; /* non-std */
 	text-align: start;
 	margin-top: 8pt;
 	margin-bottom: 4pt;
@@ -338,7 +338,7 @@ p.ansText {
 	margin-left: 70%;
 	margin-right: 5%;
 	margin-bottom: 5%;
-	background-color: #3684D6;
+	background-color: #2E9EC9;
 	border-radius: 1em;
 }
 .questionBorder {
@@ -426,7 +426,7 @@ p.conMore {
 	font-size: 4.0rem;
 	font-weight: 900;
 	line-height: 2.0rem;
-	color: #27139b;
+	color: #2A48B4;
 	border: solid;
 	border-width: thin;
 	border-color: grey;
@@ -506,13 +506,13 @@ p.versionName {
 	margin-bottom: 0px;
 	font-family: sans-serif;
 	font-size: 1.5rem;
-	color: #9BCDE0;
+	color: #2E9EC9;
 }
 p.copyright {
 	margin-top: 0px;
 	font-family: sans-serif;
 	font-size: 1.0rem;
-	color: #9BCDE0;
+	color: #2E9EC9;
 }
 body {
     margin:0;
@@ -523,7 +523,7 @@ body {
     padding-left:3%;
     padding-right:3%;
     padding-top:1%;
-    padding-bottom:20px;
+    padding-bottom:10px;
     margin:0;
 }
 td {
@@ -534,7 +534,7 @@ td {
 }
 #sampleText {
 	font-family: serif;
-	background-color: white;
+	background-color: #EEEEEE;
 	color:black;
 	padding: 10px;
 }
@@ -551,8 +551,9 @@ td.rowSpace {
 #fontSizeSlider {
 	margin-left:auto;
 	margin-right:auto;
+	margin-bottom: 0px;
 	border-radius: 24px; /* was 7px */
-	background-color:#49A7E5; /* was #00008B */
+	background-color: #3EA9D2;
 	width:80%;
 	height:48px; /* was 7px */
 }
@@ -618,7 +619,7 @@ td.tableRightCol {
 */
 /* VersionsView CSS */
 table.ctry {
-    background-color: white;
+    background-color: #EEEEEE;
 	border-radius: 48px;
 	margin-bottom: 20px;
 	font-family: sans-serif;
@@ -641,11 +642,10 @@ td.ctryName {
 	width: auto;
 }
 table.vers {
-	width: 85%;
+	width: 100%;
     background-color: #EEEEEE;
 	border-radius: 12px;
 	margin-bottom: 20px;
-	margin-left: 10%;
 	box-shadow: 4px 4px 5px #777;
 	padding-top: 1%;
 	padding-bottom: 1%;

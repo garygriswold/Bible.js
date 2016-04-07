@@ -14,7 +14,7 @@ function SettingsView(settingStorage, versesAdapter) {
 	Object.seal(this);
 }
 SettingsView.prototype.showView = function() {
-	document.body.style.backgroundColor = '#ABC';
+	document.body.style.backgroundColor = '#FFF';
 	if (! this.root) {
 		this.root = this.buildSettingsView();
 	}
@@ -43,7 +43,6 @@ SettingsView.prototype.buildSettingsView = function() {
 	var sizeSlider = this.dom.addNode(sizeCell, 'div', null, null, 'fontSizeSlider');
 	var sizeThumb = this.dom.addNode(sizeCell, 'div', null, null, 'fontSizeThumb');
 	
-	addRowSpace(table);
 	var textRow = this.dom.addNode(table, 'tr');
 	var textCell = this.dom.addNode(textRow, 'td', null, null, 'sampleText');
 	

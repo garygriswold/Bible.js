@@ -93,11 +93,11 @@ HeaderView.prototype.showView = function() {
       	var vMidpoint = hite / 2;
       	var gradient = graphics.createRadialGradient(238, vMidpoint, 10, 238, vMidpoint, window.innerHeight - hite);
       	// light blue
-      	gradient.addColorStop(0, '#8ED6FF');
+      	gradient.addColorStop(0, '#2E9EC9');//'#8ED6FF');
       	// dark blue
-      	gradient.addColorStop(1, '#004CB3');
+      	gradient.addColorStop(1, '#2E9EC9');//'#004CB3');
 
-      	graphics.fillStyle = gradient;
+      	graphics.fillStyle = '#2E9EC9';//gradient; THE GRADIENT IS NOT BEING USED.
       	graphics.fill();
 	}
 	function drawTitleField(canvas, hite, avalWidth) {
@@ -106,11 +106,12 @@ HeaderView.prototype.showView = function() {
 		canvas.setAttribute('width', avalWidth);
 		canvas.setAttribute('style', that.cellTopPadding);
 		that.titleGraphics = canvas.getContext('2d');
-		that.titleGraphics.fillStyle = '#27139b';//'#000000';
+		
+		that.titleGraphics.fillStyle = '#1b2f76';
 		that.titleGraphics.font = '2.0rem sans-serif';
 		that.titleGraphics.textAlign = 'center';
 		that.titleGraphics.textBaseline = 'middle';
-		that.titleGraphics.strokeStyle = '#27139b';
+		that.titleGraphics.strokeStyle = '#1b2f76';
 		that.titleGraphics.lineWidth = 0.5;
 
 		that.titleCanvas.addEventListener('click', function(event) {
