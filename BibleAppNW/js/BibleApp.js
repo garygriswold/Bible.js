@@ -1039,7 +1039,6 @@ HeaderView.prototype.showView = function() {
 	}
 	function setupIconButton(parentCell, canvasFunction, hite, eventType) {
 		var canvas = canvasFunction(hite, '#F7F7BB');
-		canvas.setAttribute('style', 'imageRendering: -webkit-optimize-contrast'); // unsure of effectiveness
 		canvas.setAttribute('style', that.cellTopPadding);
 		var parent = document.createElement('td');
 		parent.id = parentCell;
@@ -1406,8 +1405,16 @@ VersionsView.prototype.buildCountriesList = function() {
 	});
 	
 	function countryClickHandler(event) {
-		this.removeEventListener('click', countryClickHandler);
-		that.buildVersionList(this);
+		if (this.parentElement.children.length === 1) {
+			that.buildVersionList(this);		
+		} else {
+			var parent = this.parentElement;
+			for (var i=parent.children.length -1; i>0; i--) {
+				parent.removeChild(parent.children[i]);
+			}
+		}
+		//this.removeEventListener('click', countryClickHandler);
+
 	}
 };
 VersionsView.prototype.buildVersionList = function(countryNode) {

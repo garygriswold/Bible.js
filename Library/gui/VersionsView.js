@@ -47,8 +47,14 @@ VersionsView.prototype.buildCountriesList = function() {
 	});
 	
 	function countryClickHandler(event) {
-		this.removeEventListener('click', countryClickHandler);
-		that.buildVersionList(this);
+		if (this.parentElement.children.length === 1) {
+			that.buildVersionList(this);		
+		} else {
+			var parent = this.parentElement;
+			for (var i=parent.children.length -1; i>0; i--) {
+				parent.removeChild(parent.children[i]);
+			}
+		}
 	}
 };
 VersionsView.prototype.buildVersionList = function(countryNode) {
