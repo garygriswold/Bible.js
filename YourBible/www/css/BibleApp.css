@@ -566,6 +566,7 @@ td.rowSpace {
 	border: solid 4px #bcbbbb;
 	border-radius: 2em;
 	box-shadow: 4px 4px 5px #777;
+	-webkit-box-shadow: 4px 4px 5px #777;
 }
 
 /* Font Color Control */
@@ -626,6 +627,7 @@ table.ctry {
 	font-size: 1.5rem;
 	font-weight: bold;
 	box-shadow: 7px 7px 7px #777;
+	-webkit-box-shadow: 7px 7px 7px #777;
 	width: 100%;
 }
 td.ctryFlag {
@@ -647,6 +649,7 @@ table.vers {
 	border-radius: 12px;
 	margin-bottom: 20px;
 	box-shadow: 4px 4px 5px #777;
+	-webkit-box-shadow: 4px 4px 5px #777;
 	padding-top: 1%;
 	padding-bottom: 1%;
 	padding-left: 4%;
