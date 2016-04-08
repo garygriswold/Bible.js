@@ -140,5 +140,6 @@ states that the plugin is not compatible with ios 4.x, but use ios 3.x instead.
 	cordova platform add ios@^3.9.2 --save
 	
 
+
 	
 
