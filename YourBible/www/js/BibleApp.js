@@ -52,7 +52,7 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
 	};
-var SERVER_HOST = '10.0.1.18';//'qa.your-bible.org';//'localhost';
+var SERVER_HOST = 'cloud.shortsands.com';//'10.0.1.18';
 var SERVER_PORT = '8080';
 
 function bibleShowNoteClick(nodeId) {

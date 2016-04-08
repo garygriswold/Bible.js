@@ -139,6 +139,26 @@ states that the plugin is not compatible with ios 4.x, but use ios 3.x instead.
 	cordova platform remove ios --save
 	cordova platform add ios@^3.9.2 --save
 	
+Weinre
+======
+
+Install Weinre
+--------------
+
+	sudo npm -g install weinre
+	
+Run Weinre
+----------
+
+	weinre —-httpPort=3000 —-boundHost=-all-
+
+	add the following to index.html temporarily
+	<script src="http://10.0.1.18:3000/target/target-script-min.js"></script>
+
+	cordova run platform —-device
+
+	http://10.0.1.18:3000/
+	
 
 
 	

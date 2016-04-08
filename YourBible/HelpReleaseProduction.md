@@ -1,3 +1,25 @@
+Preparation for Release
+=======================
+
+Encryption keys to be used for DigitalSignature of requests must be
+updated for the new version.
+	
+	cd BibleApp/YourBible
+	vi config.xml 
+	update version to the correct number
+	
+	cd $HOME/BibleCred/AppAuth
+	vi GenCredentials.sh
+	insert new key for the new version
+	./GenCredentials.sh
+	./DeployCredentials.sh
+	
+Verify that the addition of a key was the only change, and checkin the changes
+
+	git status
+	git difftool
+	git commit -am"comment"
+
 	
 Deploy iOS Production Version
 =============================
@@ -6,7 +28,8 @@ Deploy iOS Production Version
 	be created on the Apple Developer website, and then installed
 	on the keychain on one's Mac.  Then these will be installed
 	automatically during the compilation of the production
-	version of the App.
+	version of the App.  The section "Signing The App Manually"
+	only needs to be done when certificates are expired.
 	
 Signing The App Manually
 ------------------------
