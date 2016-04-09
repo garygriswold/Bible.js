@@ -64,6 +64,8 @@ Generate and download an iOS Distribution Profile
 Compile and Sign App
 --------------------
 
+Verify that IOS-Deployment-Target is 8.0 in xCode
+
 Make Certain that App is hitting a production server
 
 	BibleApp/Library/gui/AppViewController
