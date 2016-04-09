@@ -2,13 +2,7 @@
 * This class encapsulates the get and post to the BibleApp Server
 */
 "use strict";
-function HttpClient(server, port) {
-	this.server = server;
-	this.port = port;
-	// This should be changed to simply use /, becuase the 
-	// requests are coming from a webpage and should be relative
-	// to the request.
-	this.authority = 'http://' + this.server + ':' + this.port;
+function HttpClient() {
 	this.authClient = new AuthClient(this);
 }
 HttpClient.prototype.get = function(path, callback) {
@@ -32,7 +26,7 @@ HttpClient.prototype.request = function(method, path, postData, callback) {
 	var request = createRequest();
 	if (request) {
 		request.onreadystatechange = progressEvents;
-		request.open(method, this.authority + path, true);
+		request.open(method, path, true);
 		if (path === '/login') {
 			this.authClient.signLogin(request, postData.passPhrase);
 			postData = null;
