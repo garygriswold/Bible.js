@@ -1,5 +1,9 @@
 *.log
 *.xcuserstate
+*.db1
+*.db2
+*.db3
+*.db4
 temp.js
 newrelic.js
 Credentials.js
