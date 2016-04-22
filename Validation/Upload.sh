@@ -8,7 +8,7 @@ fi
 VERSION=$1;
 
 SOURCE=$HOME/DBL/5ready/
-HOST=root@qa.your-bible.org
+HOST=root@cloud.shortsands.com
 TARGET=/root/StaticRoot/book/
 
 echo "Upload $VERSION";

@@ -116,7 +116,7 @@ span.v {
 	color: #777777; /* non-std */
 	text-align: start;
 	vertical-align: text-top;
-	white-space: nowrap;
+	/* white-space: nowrap; std, but meaningless, use &nbsp; */
 }
 /* Normal Paragraph Text */
 p.p {

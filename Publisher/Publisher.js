@@ -764,16 +764,18 @@ HTMLBuilder.prototype.toHTML = function(fragment) {
 	return(this.result.join(''));
 };
 HTMLBuilder.prototype.readRecursively = function(node) {
+	var nodeName = node.nodeName.toLowerCase();
 	switch(node.nodeType) {
 		case 11: // fragment
 			break;
 		case 1: // element
-			this.result.push('\n<', node.nodeName.toLowerCase());
+			this.result.push('<', nodeName);
 			var attrs = node.attrNames();
 			for (var i=0; i<attrs.length; i++) {
 				this.result.push(' ', attrs[i], '="', node.getAttribute(attrs[i]), '"');
 			}
 			this.result.push('>');
+			if (nodeName !== 'span') this.result.push('\n');
 			if (node.textContent) {
 				this.result.push(node.textContent);
 			}
@@ -788,7 +790,8 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 		this.readRecursively(node.childNodes[child]);
 	}
 	if (node.nodeType === 1) {
-		this.result.push('</', node.nodeName.toLowerCase(), '>\n');
+		this.result.push('</', nodeName, '>');
+		if (nodeName !== 'span') this.result.push('\n');
 	}
 };
 HTMLBuilder.prototype.toJSON = function() {
@@ -968,7 +971,7 @@ Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 	var child = new DOMNode('span');
 	child.setAttribute('id', reference);
 	child.setAttribute('class', this.style);
-	child.textContent = ' ' + this.number + ' ';
+	child.textContent = ' ' + this.number + '&nbsp;';
 	parentNode.appendChild(child);
 	return(child);
 };
@@ -1735,6 +1738,9 @@ DeviceDatabase.prototype.executeDDL = function(statement, callback) {
 		callback();
 	});
 };
+DeviceDatabase.prototype.close = function() {
+	this.database.close();
+};
 
 
 /**
@@ -2347,7 +2353,7 @@ if (process.argv.length < 3) {
 		builder.build(function(err) {
 			if (err instanceof IOError) {
 				console.log('FAILED', JSON.stringify(err));
-				process.exit();
+				process.exit(1);
 			} else {
 				console.log('Success, Database created');
 			}
