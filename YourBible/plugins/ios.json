@@ -38,9 +38,6 @@
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
         "cordova-plugin-zip": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
