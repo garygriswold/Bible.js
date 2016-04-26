@@ -3,10 +3,11 @@
 */
 var CODEX_VIEW = {BEFORE: 0, AFTER: 1, MAX: 100000, SCROLL_TIMEOUT: 200};
 
-function CodexView(chaptersAdapter, tableContents, headerHeight) {
+function CodexView(chaptersAdapter, tableContents, headerHeight, copyrightView) {
 	this.chaptersAdapter = chaptersAdapter;
 	this.tableContents = tableContents;
 	this.headerHeight = headerHeight;
+	this.copyrightView = copyrightView;
 	this.rootNode = document.createElement('div');
 	this.rootNode.id = 'codexRoot';
 	document.body.appendChild(this.rootNode);
@@ -107,12 +108,13 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
 				var reference = new Reference(row.reference);
+				var html = (reference.chapter > 0) ? row.html + that.copyrightView.copyrightNotice : row.html;
 				if (append) {
-					reference.append(that.viewport, row.html);
+					reference.append(that.viewport, html);
 				} else {
 					var scrollHeight1 = that.viewport.scrollHeight;
 					var scrollY1 = window.scrollY;
-					reference.prepend(that.viewport, row.html);
+					reference.prepend(that.viewport, html);
 					//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
 					TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
 				}

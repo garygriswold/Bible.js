@@ -10,6 +10,7 @@ function BibleVersion() {
 	this.copyrightYear = null;
 	this.localLanguageName = null;
 	this.localVersionName = null;
+	this.ownerCode = null;
 	this.ownerName = null;
 	this.ownerURL = null;
 	Object.seal(this);
@@ -25,6 +26,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.isQaActive = 'F';
 			that.copyrightYear = 'PUBLIC';
 			that.localVersionName = 'World English Bible';
+			this.ownerCode = 'EB';
 			that.ownerName = 'eBible';
 			that.ownerURL = 'eBible.org';
 		} else {
@@ -35,9 +37,11 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.copyrightYear = row.copyrightYear;
 			that.localLanguageName = row.localLanguageName;
 			that.localVersionName = row.localVersionName;
+			that.ownerCode = row.ownerCode;
 			that.ownerName = row.ownerName;
 			that.ownerURL = row.ownerURL;
 		}
 		callback();
 	});
 };
+

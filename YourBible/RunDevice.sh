@@ -1,6 +1,7 @@
 #!/bin/sh
 
 cat ../Library/css/Codex.css > www/css/BibleApp.css
+cat ../Library/css/Copyright.css >> www/css/BibleApp.css
 cat ../Library/css/History.css >> www/css/BibleApp.css
 cat ../Library/css/Questions.css >> www/css/BibleApp.css
 cat ../Library/css/Search.css >> www/css/BibleApp.css
@@ -12,6 +13,7 @@ echo \"use strict\"\; > www/js/BibleApp.js
 cat ../Library/gui/AppInitializer.js >> www/js/BibleApp.js
 cat ../Library/gui/AppViewController.js >> www/js/BibleApp.js
 cat ../Library/gui/CodexView.js >> www/js/BibleApp.js
+cat ../Library/gui/CopyrightView.js >> www/js/BibleApp.js
 cat ../Library/gui/HistoryView.js >> www/js/BibleApp.js
 cat ../Library/gui/QuestionsView.js >> www/js/BibleApp.js
 cat ../Library/gui/SearchView.js >> www/js/BibleApp.js

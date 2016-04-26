@@ -5,6 +5,9 @@
 function DOMBuilder() {
 	//this.rootNode = root;
 }
+DOMBuilder.prototype.createRoot = function() {
+	return(document.createDocumentFragment());
+};
 DOMBuilder.prototype.addNode = function(parent, type, clas, content, id) {
 	var node = document.createElement(type);
 	if (id) node.setAttribute('id', id);

@@ -57,7 +57,7 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
 	var statement = 'SELECT v.versionCode, v.silCode, v.isQaActive, v.copyrightYear,' +
-		' cv.localLanguageName, cv.localVersionName, o.ownerName, o.ownerURL' +
+		' cv.localLanguageName, cv.localVersionName, o.ownerCode, o.ownerName, o.ownerURL' +
 		' FROM CountryVersion cv' +
 		' JOIN Version v ON cv.versionCode=v.versionCode' +
 		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
