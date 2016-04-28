@@ -21,7 +21,6 @@ cat ../Library/gui/HeaderView.js >> www/js/BibleApp.js
 cat ../Library/gui/TableContentsView.js >> www/js/BibleApp.js
 cat ../Library/gui/SettingsView.js >> www/js/BibleApp.js
 cat ../Library/gui/VersionsView.js >> www/js/BibleApp.js
-cat ../Library/gui/DOMBuilder.js >> www/js/BibleApp.js
 
 cat ../Library/gui/icons/drawCloseIcon.js >> www/js/BibleApp.js
 cat ../Library/gui/icons/drawQuestionsIcon.js >> www/js/BibleApp.js
@@ -58,5 +57,6 @@ cat ../Library/model/meta/TOCBook.js >> www/js/BibleApp.js
 
 cat ../Library/util/DateTimeFormatter.js >> www/js/BibleApp.js
 cat ../Library/util/cordovaDeviceSettings.js >> www/js/BibleApp.js
+cat ../Library/util/DOMBuilder.js >> www/js/BibleApp.js
 
 cordova run ios --device

@@ -21,7 +21,6 @@ cat ../Library/gui/HeaderView.js >> js/BibleApp.js
 cat ../Library/gui/TableContentsView.js >> js/BibleApp.js
 cat ../Library/gui/SettingsView.js >> js/BibleApp.js
 cat ../Library/gui/VersionsView.js >> js/BibleApp.js
-cat ../Library/gui/DOMBuilder.js >> js/BibleApp.js
 
 cat ../Library/gui/icons/drawCloseIcon.js >> js/BibleApp.js
 cat ../Library/gui/icons/drawQuestionsIcon.js >> js/BibleApp.js
@@ -59,6 +58,7 @@ cat ../Library/model/meta/TOCBook.js >> js/BibleApp.js
 cat ../Library/util/DateTimeFormatter.js >> js/BibleApp.js
 cat ../Library/util/nodeDeviceSettings.js >> js/BibleApp.js
 cat ../Library/util/Performance.js >> js/BibleApp.js
+cat ../Library/util/DOMBuilder.js >> js/BibleApp.js
 
 cd ../BibleAppNW
 npm start

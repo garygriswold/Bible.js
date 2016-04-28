@@ -1607,21 +1607,6 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 };
 
 /**
-* This is a helper class to remove the repetitive operations needed
-* to dynamically create DOM objects.
-*/
-function DOMBuilder() {
-	//this.rootNode = root;
-}
-DOMBuilder.prototype.addNode = function(parent, type, clas, content, id) {
-	var node = document.createElement(type);
-	if (id) node.setAttribute('id', id);
-	if (clas) node.setAttribute('class', clas);
-	if (content) node.textContent = content;
-	parent.appendChild(node);
-	return(node);
-};
-/**
 * This function draws the 'X' that is used as a close
 * button on any popup window.
 */
@@ -3473,4 +3458,19 @@ Performance.prototype.duration = function(message) {
 	console.log(message, duration + 'ms', memChanged/1024 + 'KB');
 	this.startTime = now;
 	this.heapUsed = heap;
+};
+/**
+* This is a helper class to remove the repetitive operations needed
+* to dynamically create DOM objects.
+*/
+function DOMBuilder() {
+	//this.rootNode = root;
+}
+DOMBuilder.prototype.addNode = function(parent, type, clas, content, id) {
+	var node = document.createElement(type);
+	if (id) node.setAttribute('id', id);
+	if (clas) node.setAttribute('class', clas);
+	if (content) node.textContent = content;
+	parent.appendChild(node);
+	return(node);
 };

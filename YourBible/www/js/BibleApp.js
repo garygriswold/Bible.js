@@ -88,12 +88,9 @@ AppViewController.prototype.begin = function(develop) {
 	this.tableContents.fill(function() {
 
 		console.log('loaded toc', that.tableContents.size());
-		
+		that.copyrightView = new CopyrightView(that.version);
 		that.header = new HeaderView(that.tableContents, that.version);
 		that.header.showView();
-		var contentTop = that.header.barHite + 'px';
-		that.copyrightView = new CopyrightView(that.version);
-		that.copyrightView.rootNode.style.top = contentTop;		
 		that.tableContentsView = new TableContentsView(that.tableContents, that.version);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.database.history);
@@ -1609,24 +1606,6 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	}
 };
 
-/**
-* This is a helper class to remove the repetitive operations needed
-* to dynamically create DOM objects.
-*/
-function DOMBuilder() {
-	//this.rootNode = root;
-}
-//DOMBuilder.prototype.createRoot = function() {
-//	return(document.createDocumentFragment());
-//};
-DOMBuilder.prototype.addNode = function(parent, type, clas, content, id) {
-	var node = document.createElement(type);
-	if (id) node.setAttribute('id', id);
-	if (clas) node.setAttribute('class', clas);
-	if (content) node.textContent = content;
-	parent.appendChild(node);
-	return(node);
-};
 /**
 * This function draws the 'X' that is used as a close
 * button on any popup window.
@@ -3487,4 +3466,18 @@ var deviceSettings = {
         var type = navigator.connection.type;
         return(type !== 'none' && type !== 'unknown'); // not sure of correct value for UNKNOWN
     }
+};/**
+* This is a helper class to remove the repetitive operations needed
+* to dynamically create DOM objects.
+*/
+function DOMBuilder() {
+	//this.rootNode = root;
+}
+DOMBuilder.prototype.addNode = function(parent, type, clas, content, id) {
+	var node = document.createElement(type);
+	if (id) node.setAttribute('id', id);
+	if (clas) node.setAttribute('class', clas);
+	if (content) node.textContent = content;
+	parent.appendChild(node);
+	return(node);
 };
