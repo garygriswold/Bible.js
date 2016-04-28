@@ -1550,12 +1550,6 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 						var copyright = (row.copyrightYear) ?  copy + row.copyrightYear + ', ' : copy;
 						var copyNode = that.dom.addNode(leftNode, 'span', 'copy', copyright);
 						var ownerNode = that.dom.addNode(leftNode, 'span', 'copy', row.ownerName);
-						if (row.ownerURL) {
-							ownerNode.setAttribute('style', 'color: #2A48B4; text-decoration: underline');
-							ownerNode.addEventListener('click', function(event) {
-								cordova.InAppBrowser.open('http://' + row.ownerURL, '_blank', 'location=yes');
-							});
-						}
 					}
 					
 					var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
