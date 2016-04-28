@@ -1,9 +1,9 @@
 /**
 * This class presents the table of contents, and responds to user actions.
 */
-function TableContentsView(toc, version) {
+function TableContentsView(toc, copyrightView) {
 	this.toc = toc;
-	this.version = version;
+	this.copyrightView = copyrightView;
 	this.root = null;
 	this.dom = new DOMBuilder();
 	this.rootNode = this.dom.addNode(document.body, 'div', null, null, 'tocRoot');
@@ -37,7 +37,7 @@ TableContentsView.prototype.buildTocBookList = function() {
 	var div = document.createElement('div');
 	div.setAttribute('id', 'toc');
 	div.setAttribute('class', 'tocPage');
-	appendVersionAttribution(div);
+	div.appendChild(this.copyrightView.createTOCTitleDOM());
 	for (var i=0; i<this.toc.bookList.length; i++) {
 		var book = this.toc.bookList[i];
 		var bookNode = that.dom.addNode(div, 'p', 'tocBook', book.name, 'toc' + book.code);
@@ -48,28 +48,8 @@ TableContentsView.prototype.buildTocBookList = function() {
 			that.showTocChapterList(bookCode);
 		});
 	}
+	div.appendChild(this.copyrightView.createCopyrightNoticeDOM());
 	return(div);
-	
-	function appendVersionAttribution(parent) {
-		var versionName = (that.version.localVersionName) ? that.version.localVersionName : that.version.localLanguageName;
-		that.dom.addNode(parent, 'p', 'versionName', versionName);
-		var copyNode = that.dom.addNode(parent, 'p', 'copyright');
-		
-		if (that.version.copyrightYear === 'PUBLIC') {
-			that.dom.addNode(copyNode, 'span', 'copyright', 'Public Domain');
-		} else {
-			var copy = String.fromCharCode('0xA9') + String.fromCharCode('0xA0');
-			var copyright = (that.version.copyrightYear) ?  copy + that.version.copyrightYear + ', ' : copy;
-			that.dom.addNode(copyNode, 'span', 'copyright', copyright);
-			var ownerNode = that.dom.addNode(copyNode, 'span', 'copyright', that.version.ownerName);
-			if (that.version.ownerURL) {
-				ownerNode.setAttribute('style', 'color: #0000FF; text-decoration: underline');
-				ownerNode.addEventListener('click', function(event) {
-					cordova.InAppBrowser.open('http://' + that.version.ownerURL, '_blank', 'location=yes');
-				});
-			}
-		}
-	}
 };
 TableContentsView.prototype.showTocChapterList = function(bookCode) {
 	var that = this;

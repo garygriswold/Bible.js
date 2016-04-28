@@ -91,7 +91,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.copyrightView = new CopyrightView(that.version);
 		that.header = new HeaderView(that.tableContents, that.version);
 		that.header.showView();
-		that.tableContentsView = new TableContentsView(that.tableContents, that.version);
+		that.tableContentsView = new TableContentsView(that.tableContents, that.copyrightView);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.database.history);
 		that.searchView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
@@ -469,6 +469,25 @@ CopyrightView.prototype.createCopyrightNotice = function() {
 	html.push(this.plainCopyrightNotice(), '</span>');
 	html.push('<span class="copylink" onclick="copyrightViewNotice(event)"> \u261E </span>', '</p>');
 	return(html.join(''));
+};
+CopyrightView.prototype.createCopyrightNoticeDOM = function() {
+	var root = document.createElement('p');
+	var dom = new DOMBuilder();
+	dom.addNode(root, 'span', 'copyright', this.plainCopyrightNotice());
+	var link = dom.addNode(root, 'span', 'copyLink', ' \u261E ');
+	link.setAttribute('onclick', 'copyrightViewNotice(event)');
+	return(root);
+};
+CopyrightView.prototype.createTOCTitleDOM = function() {
+	if (this.version.ownerCode === 'WBT') {
+		var title = this.version.localLanguageName + ' (' + this.version.silCode + ')';
+	} else {
+		title = this.version.localVersionName + ' (' + this.version.code + ')';
+	}
+	var root = document.createElement('p');
+	var dom = new DOMBuilder();
+	dom.addNode(root, 'span', 'copyTitle', title);
+	return(root);
 };
 /**
 * Translation Name (trans code) | Language Name (lang code),
@@ -1166,9 +1185,9 @@ HeaderView.prototype.showView = function() {
 /**
 * This class presents the table of contents, and responds to user actions.
 */
-function TableContentsView(toc, version) {
+function TableContentsView(toc, copyrightView) {
 	this.toc = toc;
-	this.version = version;
+	this.copyrightView = copyrightView;
 	this.root = null;
 	this.dom = new DOMBuilder();
 	this.rootNode = this.dom.addNode(document.body, 'div', null, null, 'tocRoot');
@@ -1202,7 +1221,7 @@ TableContentsView.prototype.buildTocBookList = function() {
 	var div = document.createElement('div');
 	div.setAttribute('id', 'toc');
 	div.setAttribute('class', 'tocPage');
-	appendVersionAttribution(div);
+	div.appendChild(this.copyrightView.createTOCTitleDOM());
 	for (var i=0; i<this.toc.bookList.length; i++) {
 		var book = this.toc.bookList[i];
 		var bookNode = that.dom.addNode(div, 'p', 'tocBook', book.name, 'toc' + book.code);
@@ -1213,28 +1232,8 @@ TableContentsView.prototype.buildTocBookList = function() {
 			that.showTocChapterList(bookCode);
 		});
 	}
+	div.appendChild(this.copyrightView.createCopyrightNoticeDOM());
 	return(div);
-	
-	function appendVersionAttribution(parent) {
-		var versionName = (that.version.localVersionName) ? that.version.localVersionName : that.version.localLanguageName;
-		that.dom.addNode(parent, 'p', 'versionName', versionName);
-		var copyNode = that.dom.addNode(parent, 'p', 'copyright');
-		
-		if (that.version.copyrightYear === 'PUBLIC') {
-			that.dom.addNode(copyNode, 'span', 'copyright', 'Public Domain');
-		} else {
-			var copy = String.fromCharCode('0xA9') + String.fromCharCode('0xA0');
-			var copyright = (that.version.copyrightYear) ?  copy + that.version.copyrightYear + ', ' : copy;
-			that.dom.addNode(copyNode, 'span', 'copyright', copyright);
-			var ownerNode = that.dom.addNode(copyNode, 'span', 'copyright', that.version.ownerName);
-			if (that.version.ownerURL) {
-				ownerNode.setAttribute('style', 'color: #0000FF; text-decoration: underline');
-				ownerNode.addEventListener('click', function(event) {
-					cordova.InAppBrowser.open('http://' + that.version.ownerURL, '_blank', 'location=yes');
-				});
-			}
-		}
-	}
 };
 TableContentsView.prototype.showTocChapterList = function(bookCode) {
 	var that = this;

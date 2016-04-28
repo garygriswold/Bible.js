@@ -276,7 +276,15 @@ p.attribLink {
 	left: 10px;
 	top: 10px;
 	color: red;
-}/**
+}
+span.copyTitle {
+	margin-bottom: 0px;
+	font-family: sans-serif;
+	font-size: 1.5rem;
+	color: #2E9EC9;
+}
+
+/**
 * This css files pertains to the HistoryView
 */
 
@@ -547,18 +555,6 @@ td.tocChap { /* non-std */
 	border-width: 1px;
 	border-style: solid;
 	border-color: #777777;
-}
-p.versionName {
-	margin-bottom: 0px;
-	font-family: sans-serif;
-	font-size: 1.5rem;
-	color: #2E9EC9;
-}
-p.copyright {
-	margin-top: 0px;
-	font-family: sans-serif;
-	font-size: 1.0rem;
-	color: #2E9EC9;
 }
 body {
     margin:0;

@@ -41,6 +41,25 @@ CopyrightView.prototype.createCopyrightNotice = function() {
 	html.push('<span class="copylink" onclick="copyrightViewNotice(event)"> \u261E </span>', '</p>');
 	return(html.join(''));
 };
+CopyrightView.prototype.createCopyrightNoticeDOM = function() {
+	var root = document.createElement('p');
+	var dom = new DOMBuilder();
+	dom.addNode(root, 'span', 'copyright', this.plainCopyrightNotice());
+	var link = dom.addNode(root, 'span', 'copyLink', ' \u261E ');
+	link.setAttribute('onclick', 'copyrightViewNotice(event)');
+	return(root);
+};
+CopyrightView.prototype.createTOCTitleDOM = function() {
+	if (this.version.ownerCode === 'WBT') {
+		var title = this.version.localLanguageName + ' (' + this.version.silCode + ')';
+	} else {
+		title = this.version.localVersionName + ' (' + this.version.code + ')';
+	}
+	var root = document.createElement('p');
+	var dom = new DOMBuilder();
+	dom.addNode(root, 'span', 'copyTitle', title);
+	return(root);
+};
 /**
 * Translation Name (trans code) | Language Name (lang code),
 * Copyright C year, Organization hand-link
