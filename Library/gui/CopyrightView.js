@@ -1,18 +1,44 @@
 /**
+* NOTE: This is a global method, not a class method, because it
+* is called by the event handler created in createCopyrightNotice.
+*/
+function copyrightViewNotice(event) {
+	event.stopImmediatePropagation();
+	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_ATTRIB, { detail: { x: event.x, y: event.y }}));
+}
+/**
 * This class is used to create the copyright notice that is put 
 * at the bottom of each chapter, and the learn more page that appears
 * when that is clicked.
 */
 function CopyrightView(version) {
 	this.version = version;
+	this.rootNode = document.createElement('div');
+	document.body.appendChild(this.rootNode);
 	this.copyrightNotice = this.createCopyrightNotice();
-	Object.freeze(this);
+	this.viewRoot = null;
+	var that = this;
+	document.body.addEventListener(BIBLE.SHOW_ATTRIB, function(event) {
+		if (that.viewRoot == null) {
+			that.viewRoot = that.createAttributionView();
+		}
+		var clickPos = String(event.detail.x) + 'px ' + String(event.detail.y) + 'px';
+		that.rootNode.appendChild(that.viewRoot);
+		TweenMax.set(that.viewRoot, { scale: 0 });
+		TweenMax.to(that.viewRoot, 0.7, { scale: 1, transformOrigin: clickPos });
+	});
+	Object.seal(this);
 }
+CopyrightView.prototype.hideView = function() {
+	for (var i=this.rootNode.children.length -1; i>=0; i--) {
+		this.rootNode.removeChild(this.rootNode.children[i]);
+	}
+};
 CopyrightView.prototype.createCopyrightNotice = function() {
 	var html = [];
 	html.push('<p><span class="copyright">');
 	html.push(this.plainCopyrightNotice(), '</span>');
-	html.push('<span class="copylink" onclick="copyrightViewNotice()"> \u261E </span>', '</p>');
+	html.push('<span class="copylink" onclick="copyrightViewNotice(event)"> \u261E </span>', '</p>');
 	return(html.join(''));
 };
 /**
@@ -36,32 +62,44 @@ CopyrightView.prototype.plainCopyrightNotice = function() {
 	return(notice.join(''));
 };
 /**
-* NOTE: This is a global method, not class method
 * Language (lang code), Translation Name (trans code),
 * Copyright C year, Organization,
 * Organization URL, link image
 */
-function copyrightViewNotice() {
-	console.log('Copyright notice is clicked');
-}
+CopyrightView.prototype.createAttributionView = function() {
+	console.log('inside show Attribution View');
+	var dom = new DOMBuilder();
+	var root = document.createElement('div');
+	root.setAttribute('id', 'attribution');
+	
+	var closeIcon = drawCloseIcon(24, '#F70000');
+	closeIcon.setAttribute('id', 'closeIcon');
+	root.appendChild(closeIcon);
+	var that = this;
+	closeIcon.addEventListener('click', function(event) {
+		for (var i=that.rootNode.children.length -1; i>=0; i--) {
+			that.rootNode.removeChild(that.rootNode.children[i]);
+		}
+	});
+	
+	var nameNode = dom.addNode(root, 'p', 'attribVers');
+	dom.addNode(nameNode, 'span', null, addAbbrev(this.version.localVersionName, this.version.code) + ', ');
+	dom.addNode(nameNode, 'span', null, addAbbrev(this.version.localLanguageName, this.version.silCode));
+	var copyNode = dom.addNode(root, 'p', 'attribCopy');
+	if (this.version.copyrightYear === 'PUBLIC') {
+		dom.addNode(copyNode, 'span', null, 'Public Domain');
+	} else {
+		dom.addNode(copyNode, 'span', null, String.fromCharCode('0xA9') + String.fromCharCode('0xA0') + this.version.copyrightYear);
+	}
+	dom.addNode(copyNode, 'span', null, ', ' + this.version.ownerName);
+	var link = dom.addNode(root, 'p', 'attribLink', 'http://www.' + this.version.ownerURL + '/');
+	link.addEventListener('click', function(event) {
+		cordova.InAppBrowser.open('http://' + this.version.ownerURL, '_blank', 'location=yes');
+	});
+	return(root);
+	
+	function addAbbrev(name, abbrev) {
+		return(name + String.fromCharCode('0xA0') + '(' + abbrev + ')');
+	}
+};
 
-/**
-					that.dom.addNode(leftNode, 'p', 'langName', row.localLanguageName);
-					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
-					that.dom.addNode(leftNode, 'span', 'versName', versionName + ',  ');
-					
-					if (row.copyrightYear === 'PUBLIC') {
-						that.dom.addNode(leftNode, 'span', 'copy', 'Public Domain');
-					} else {
-						var copy = String.fromCharCode('0xA9') + String.fromCharCode('0xA0');
-						var copyright = (row.copyrightYear) ?  copy + row.copyrightYear + ', ' : copy;
-						var copyNode = that.dom.addNode(leftNode, 'span', 'copy', copyright);
-						var ownerNode = that.dom.addNode(leftNode, 'span', 'copy', row.ownerName);
-						if (row.ownerURL) {
-							ownerNode.setAttribute('style', 'color: #2A48B4; text-decoration: underline');
-							ownerNode.addEventListener('click', function(event) {
-								cordova.InAppBrowser.open('http://' + row.ownerURL, '_blank', 'location=yes');
-							});
-						}
-					}
-**/

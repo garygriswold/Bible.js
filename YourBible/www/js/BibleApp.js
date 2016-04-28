@@ -50,7 +50,9 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_SETTINGS: 'bible-show-settings', // show settings view
 		CHG_HEADING: 'bible-chg-heading', // change title at top of page as result of user scrolling
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
-		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
+		HIDE_NOTE: 'bible-hide-note', // Hide footnote as a result of user action
+		SHOW_ATTRIB: 'bible-show-attrib', // Show attributionView as a result of user action
+		HIDE_ATTRIB: 'bible-hide-attrib'  // Hide attributionView as a result of user action
 	};
 var SERVER_HOST = 'cloud.shortsands.com';//'10.0.1.18';
 var SERVER_PORT = '8080';
@@ -89,11 +91,14 @@ AppViewController.prototype.begin = function(develop) {
 		
 		that.header = new HeaderView(that.tableContents, that.version);
 		that.header.showView();
+		var contentTop = that.header.barHite + 'px';
+		that.copyrightView = new CopyrightView(that.version);
+		that.copyrightView.rootNode.style.top = contentTop;		
 		that.tableContentsView = new TableContentsView(that.tableContents, that.version);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.database.history);
 		that.searchView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
-		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.header.barHite);
+		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.header.barHite, that.copyrightView);
 		that.historyView = new HistoryView(that.database.history, that.tableContents);
 		that.historyView.rootNode.style.top = that.header.barHite + 'px';
 		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
@@ -207,6 +212,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.questionsView.hideView();
 		that.settingsView.hideView();
 		that.historyView.hideView();
+		that.copyrightView.hideView();
 	}
 	function disableHandlers() {
 		document.body.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);
@@ -252,10 +258,11 @@ AppViewController.prototype.close = function() {
 */
 var CODEX_VIEW = {BEFORE: 0, AFTER: 1, MAX: 100000, SCROLL_TIMEOUT: 200};
 
-function CodexView(chaptersAdapter, tableContents, headerHeight) {
+function CodexView(chaptersAdapter, tableContents, headerHeight, copyrightView) {
 	this.chaptersAdapter = chaptersAdapter;
 	this.tableContents = tableContents;
 	this.headerHeight = headerHeight;
+	this.copyrightView = copyrightView;
 	this.rootNode = document.createElement('div');
 	this.rootNode.id = 'codexRoot';
 	document.body.appendChild(this.rootNode);
@@ -356,12 +363,13 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
 				var reference = new Reference(row.reference);
+				var html = (reference.chapter > 0) ? row.html + that.copyrightView.copyrightNotice : row.html;
 				if (append) {
-					reference.append(that.viewport, row.html);
+					reference.append(that.viewport, html);
 				} else {
 					var scrollHeight1 = that.viewport.scrollHeight;
 					var scrollY1 = window.scrollY;
-					reference.prepend(that.viewport, row.html);
+					reference.prepend(that.viewport, html);
 					//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
 					TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
 				}
@@ -422,6 +430,111 @@ CodexView.prototype.hideFootnote = function(noteId) {
 		}
 	}
 };
+/**
+* NOTE: This is a global method, not a class method, because it
+* is called by the event handler created in createCopyrightNotice.
+*/
+function copyrightViewNotice(event) {
+	event.stopImmediatePropagation();
+	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_ATTRIB, { detail: { x: event.x, y: event.y }}));
+}
+/**
+* This class is used to create the copyright notice that is put 
+* at the bottom of each chapter, and the learn more page that appears
+* when that is clicked.
+*/
+function CopyrightView(version) {
+	this.version = version;
+	this.rootNode = document.createElement('div');
+	document.body.appendChild(this.rootNode);
+	this.copyrightNotice = this.createCopyrightNotice();
+	this.viewRoot = null;
+	var that = this;
+	document.body.addEventListener(BIBLE.SHOW_ATTRIB, function(event) {
+		if (that.viewRoot == null) {
+			that.viewRoot = that.createAttributionView();
+		}
+		var clickPos = String(event.detail.x) + 'px ' + String(event.detail.y) + 'px';
+		that.rootNode.appendChild(that.viewRoot);
+		TweenMax.set(that.viewRoot, { scale: 0 });
+		TweenMax.to(that.viewRoot, 0.7, { scale: 1, transformOrigin: clickPos });
+	});
+	Object.seal(this);
+}
+CopyrightView.prototype.hideView = function() {
+	for (var i=this.rootNode.children.length -1; i>=0; i--) {
+		this.rootNode.removeChild(this.rootNode.children[i]);
+	}
+};
+CopyrightView.prototype.createCopyrightNotice = function() {
+	var html = [];
+	html.push('<p><span class="copyright">');
+	html.push(this.plainCopyrightNotice(), '</span>');
+	html.push('<span class="copylink" onclick="copyrightViewNotice(event)"> \u261E </span>', '</p>');
+	return(html.join(''));
+};
+/**
+* Translation Name (trans code) | Language Name (lang code),
+* Copyright C year, Organization hand-link
+*/
+CopyrightView.prototype.plainCopyrightNotice = function() {
+	var notice = [];
+	if (this.version.ownerCode === 'WBT') {
+		notice.push(this.version.localLanguageName, ' (', this.version.silCode);
+	} else {
+		notice.push(this.version.localVersionName, ' (', this.version.code);
+	}
+	notice.push('), ');
+	if (this.version.copyrightYear === 'PUBLIC') {
+		notice.push('Public Domain');
+	} else {
+		notice.push(String.fromCharCode('0xA9'), String.fromCharCode('0xA0'), this.version.copyrightYear);
+	}
+	notice.push(', ', this.version.ownerName, '.');
+	return(notice.join(''));
+};
+/**
+* Language (lang code), Translation Name (trans code),
+* Copyright C year, Organization,
+* Organization URL, link image
+*/
+CopyrightView.prototype.createAttributionView = function() {
+	console.log('inside show Attribution View');
+	var dom = new DOMBuilder();
+	var root = document.createElement('div');
+	root.setAttribute('id', 'attribution');
+	
+	var closeIcon = drawCloseIcon(24, '#F70000');
+	closeIcon.setAttribute('id', 'closeIcon');
+	root.appendChild(closeIcon);
+	var that = this;
+	closeIcon.addEventListener('click', function(event) {
+		for (var i=that.rootNode.children.length -1; i>=0; i--) {
+			that.rootNode.removeChild(that.rootNode.children[i]);
+		}
+	});
+	
+	var nameNode = dom.addNode(root, 'p', 'attribVers');
+	dom.addNode(nameNode, 'span', null, addAbbrev(this.version.localVersionName, this.version.code) + ', ');
+	dom.addNode(nameNode, 'span', null, addAbbrev(this.version.localLanguageName, this.version.silCode));
+	var copyNode = dom.addNode(root, 'p', 'attribCopy');
+	if (this.version.copyrightYear === 'PUBLIC') {
+		dom.addNode(copyNode, 'span', null, 'Public Domain');
+	} else {
+		dom.addNode(copyNode, 'span', null, String.fromCharCode('0xA9') + String.fromCharCode('0xA0') + this.version.copyrightYear);
+	}
+	dom.addNode(copyNode, 'span', null, ', ' + this.version.ownerName);
+	var link = dom.addNode(root, 'p', 'attribLink', 'http://www.' + this.version.ownerURL + '/');
+	link.addEventListener('click', function(event) {
+		cordova.InAppBrowser.open('http://' + this.version.ownerURL, '_blank', 'location=yes');
+	});
+	return(root);
+	
+	function addAbbrev(name, abbrev) {
+		return(name + String.fromCharCode('0xA0') + '(' + abbrev + ')');
+	}
+};
+
 /**
 * This class provides the user interface to display history as tabs,
 * and to respond to user interaction with those tabs.
@@ -1503,6 +1616,9 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 function DOMBuilder() {
 	//this.rootNode = root;
 }
+//DOMBuilder.prototype.createRoot = function() {
+//	return(document.createDocumentFragment());
+//};
 DOMBuilder.prototype.addNode = function(parent, type, clas, content, id) {
 	var node = document.createElement(type);
 	if (id) node.setAttribute('id', id);
@@ -1512,6 +1628,30 @@ DOMBuilder.prototype.addNode = function(parent, type, clas, content, id) {
 	return(node);
 };
 /**
+* This function draws the 'X' that is used as a close
+* button on any popup window.
+*/
+function drawCloseIcon(hite, color) {
+	var lineThick = hite / 7.0;
+	var spacer = lineThick / 2;
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('height', hite);
+	canvas.setAttribute('width', hite);
+	var graphics = canvas.getContext('2d');
+
+	graphics.beginPath();
+	graphics.moveTo(spacer, spacer);
+	graphics.lineTo(hite - spacer, hite - spacer);
+	graphics.moveTo(hite - spacer, spacer);
+	graphics.lineTo(spacer, hite - spacer);
+	graphics.closePath();
+
+	graphics.lineWidth = hite / 5.0;
+	graphics.strokeStyle = color;
+	graphics.stroke();
+	return(canvas);
+}/**
 * This function draws and icon that is used as a questions button
 * on the StatusBar.
 */
@@ -2689,7 +2829,7 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
 	var statement = 'SELECT v.versionCode, v.silCode, v.isQaActive, v.copyrightYear,' +
-		' cv.localLanguageName, cv.localVersionName, o.ownerName, o.ownerURL' +
+		' cv.localLanguageName, cv.localVersionName, o.ownerCode, o.ownerName, o.ownerURL' +
 		' FROM CountryVersion cv' +
 		' JOIN Version v ON cv.versionCode=v.versionCode' +
 		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
@@ -2876,6 +3016,7 @@ function BibleVersion() {
 	this.copyrightYear = null;
 	this.localLanguageName = null;
 	this.localVersionName = null;
+	this.ownerCode = null;
 	this.ownerName = null;
 	this.ownerURL = null;
 	Object.seal(this);
@@ -2891,6 +3032,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.isQaActive = 'F';
 			that.copyrightYear = 'PUBLIC';
 			that.localVersionName = 'World English Bible';
+			this.ownerCode = 'EB';
 			that.ownerName = 'eBible';
 			that.ownerURL = 'eBible.org';
 		} else {
@@ -2901,12 +3043,15 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.copyrightYear = row.copyrightYear;
 			that.localLanguageName = row.localLanguageName;
 			that.localVersionName = row.localVersionName;
+			that.ownerCode = row.ownerCode;
 			that.ownerName = row.ownerName;
 			that.ownerURL = row.ownerURL;
 		}
 		callback();
 	});
-};/**
+};
+
+/**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
 function Concordance(adapter) {

@@ -12,7 +12,9 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_SETTINGS: 'bible-show-settings', // show settings view
 		CHG_HEADING: 'bible-chg-heading', // change title at top of page as result of user scrolling
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
-		HIDE_NOTE: 'bible-hide-note' // Hide footnote as a result of user action
+		HIDE_NOTE: 'bible-hide-note', // Hide footnote as a result of user action
+		SHOW_ATTRIB: 'bible-show-attrib', // Show attributionView as a result of user action
+		HIDE_ATTRIB: 'bible-hide-attrib'  // Hide attributionView as a result of user action
 	};
 var SERVER_HOST = 'cloud.shortsands.com';//'10.0.1.18';
 var SERVER_PORT = '8080';
@@ -48,7 +50,6 @@ AppViewController.prototype.begin = function(develop) {
 	this.tableContents.fill(function() {
 
 		console.log('loaded toc', that.tableContents.size());
-		
 		that.copyrightView = new CopyrightView(that.version);
 		that.header = new HeaderView(that.tableContents, that.version);
 		that.header.showView();
@@ -170,6 +171,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.questionsView.hideView();
 		that.settingsView.hideView();
 		that.historyView.hideView();
+		that.copyrightView.hideView();
 	}
 	function disableHandlers() {
 		document.body.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);

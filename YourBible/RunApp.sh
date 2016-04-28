@@ -23,6 +23,7 @@ cat ../Library/gui/SettingsView.js >> www/js/BibleApp.js
 cat ../Library/gui/VersionsView.js >> www/js/BibleApp.js
 cat ../Library/gui/DOMBuilder.js >> www/js/BibleApp.js
 
+cat ../Library/gui/icons/drawCloseIcon.js >> www/js/BibleApp.js
 cat ../Library/gui/icons/drawQuestionsIcon.js >> www/js/BibleApp.js
 cat ../Library/gui/icons/drawSearchIcon.js >> www/js/BibleApp.js
 cat ../Library/gui/icons/drawSendIcon.js >> www/js/BibleApp.js

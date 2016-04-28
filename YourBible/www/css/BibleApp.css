@@ -230,6 +230,52 @@ span.x, span.xt {
 	text-align: start;
 	color: #555555; /* non-std */
 	background-color: #CEE7FF; /* non-std */
+}/*
+* Copyright.css
+*/
+span.copyright {
+	font-family: sans-serif;
+	font-size: 0.5rem;
+	color: #AAAAAA;
+	vertical-align: text-middle; /* to vertically align text to hand in copylink */
+}
+span.copylink {
+	font-size: 1.0rem;
+	vertical-align: text-top;
+	color: blue;
+}
+#attribution {
+  position: fixed;
+  width: 80%;
+  top: 10%;
+  margin-top: 7%; /* What should it really be. */
+  margin-left: 7%;
+  margin-right: 7%;
+  padding: 3%;
+  text-align: center;
+  z-index: 200;
+  background-color: rgba(255, 246, 233, 0.9);
+  border-radius: 25px;
+  border: solid;
+  border-width: thin;
+  box-shadow: 4px 4px 4px #777;
+  -webkit-box-shadow: 4px 4px 4px #777;
+}
+p.attribVers {
+	
+}
+p.attribCopy {
+	
+}
+p.attribLink {
+	color: blue;
+	text-decoration: underline;
+}
+#closeIcon {
+	position: fixed;
+	left: 10px;
+	top: 10px;
+	color: red;
 }/**
 * This css files pertains to the HistoryView
 */
