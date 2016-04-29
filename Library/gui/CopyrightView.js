@@ -25,7 +25,7 @@ function CopyrightView(version) {
 		var clickPos = String(event.detail.x) + 'px ' + String(event.detail.y) + 'px';
 		that.rootNode.appendChild(that.viewRoot);
 		TweenMax.set(that.viewRoot, { scale: 0 });
-		TweenMax.to(that.viewRoot, 0.7, { scale: 1, transformOrigin: clickPos });
+		TweenMax.to(that.viewRoot, 0.7, { scale: 1, transformOrigin: clickPos, immediateRender: true });
 	});
 	Object.seal(this);
 }
@@ -46,7 +46,9 @@ CopyrightView.prototype.createCopyrightNoticeDOM = function() {
 	var dom = new DOMBuilder();
 	dom.addNode(root, 'span', 'copyright', this.plainCopyrightNotice());
 	var link = dom.addNode(root, 'span', 'copyLink', ' \u261E ');
-	link.setAttribute('onclick', 'copyrightViewNotice(event)');
+	link.addEventListener('click', function(event) {
+		copyrightViewNotice(event);
+	});
 	return(root);
 };
 CopyrightView.prototype.createTOCTitleDOM = function() {
@@ -111,9 +113,10 @@ CopyrightView.prototype.createAttributionView = function() {
 		dom.addNode(copyNode, 'span', null, String.fromCharCode('0xA9') + String.fromCharCode('0xA0') + this.version.copyrightYear);
 	}
 	dom.addNode(copyNode, 'span', null, ', ' + this.version.ownerName);
-	var link = dom.addNode(root, 'p', 'attribLink', 'http://www.' + this.version.ownerURL + '/');
+	var webAddress = 'http://' + this.version.ownerURL + '/';
+	var link = dom.addNode(root, 'p', 'attribLink', webAddress);
 	link.addEventListener('click', function(event) {
-		cordova.InAppBrowser.open('http://' + this.version.ownerURL, '_blank', 'location=yes');
+		cordova.InAppBrowser.open(webAddress, '_blank', 'location=yes');
 	});
 	return(root);
 	
