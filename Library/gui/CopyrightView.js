@@ -24,8 +24,7 @@ function CopyrightView(version) {
 		}
 		var clickPos = String(event.detail.x) + 'px ' + String(event.detail.y) + 'px';
 		that.rootNode.appendChild(that.viewRoot);
-		TweenMax.set(that.viewRoot, { scale: 0 });
-		TweenMax.to(that.viewRoot, 0.7, { scale: 1, transformOrigin: clickPos, immediateRender: true });
+		TweenMax.fromTo(that.viewRoot, 0.7, { scale: 0 }, { scale: 1, transformOrigin: clickPos });
 	});
 	Object.seal(this);
 }
@@ -45,7 +44,7 @@ CopyrightView.prototype.createCopyrightNoticeDOM = function() {
 	var root = document.createElement('p');
 	var dom = new DOMBuilder();
 	dom.addNode(root, 'span', 'copyright', this.plainCopyrightNotice());
-	var link = dom.addNode(root, 'span', 'copyLink', ' \u261E ');
+	var link = dom.addNode(root, 'span', 'copylink', ' \u261E ');
 	link.addEventListener('click', function(event) {
 		copyrightViewNotice(event);
 	});
