@@ -171,7 +171,6 @@ AppViewController.prototype.begin = function(develop) {
 		that.questionsView.hideView();
 		that.settingsView.hideView();
 		that.historyView.hideView();
-		that.copyrightView.hideView();
 	}
 	function disableHandlers() {
 		document.body.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);

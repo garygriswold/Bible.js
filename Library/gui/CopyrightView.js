@@ -2,9 +2,9 @@
 * NOTE: This is a global method, not a class method, because it
 * is called by the event handler created in createCopyrightNotice.
 */
-function copyrightViewNotice(event) {
+function addCopyrightViewNotice(event) {
 	event.stopImmediatePropagation();
-	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_ATTRIB, { detail: { x: event.x, y: event.y }}));
+	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_ATTRIB, { detail: event }));
 }
 /**
 * This class is used to create the copyright notice that is put 
@@ -13,8 +13,6 @@ function copyrightViewNotice(event) {
 */
 function CopyrightView(version) {
 	this.version = version;
-	this.rootNode = document.createElement('div');
-	document.body.appendChild(this.rootNode);
 	this.copyrightNotice = this.createCopyrightNotice();
 	this.viewRoot = null;
 	var that = this;
@@ -22,22 +20,23 @@ function CopyrightView(version) {
 		if (that.viewRoot == null) {
 			that.viewRoot = that.createAttributionView();
 		}
-		var clickPos = String(event.detail.x) + 'px ' + String(event.detail.y) + 'px';
-		that.rootNode.appendChild(that.viewRoot);
-		TweenMax.fromTo(that.viewRoot, 0.7, { scale: 0 }, { scale: 1, transformOrigin: clickPos });
+		var target = event.detail.target.parentNode;
+		target.appendChild(that.viewRoot);
+		
+		var rect = target.getBoundingClientRect();
+		if (window.innerHeight < rect.top + rect.height) {
+			// Scrolls notice up when text is not in view.
+			// limits scroll to rect.top so that top remains in view.
+			window.scrollBy(0, Math.min(rect.top, rect.top + rect.height - window.innerHeight));	
+		}
 	});
 	Object.seal(this);
 }
-CopyrightView.prototype.hideView = function() {
-	for (var i=this.rootNode.children.length -1; i>=0; i--) {
-		this.rootNode.removeChild(this.rootNode.children[i]);
-	}
-};
 CopyrightView.prototype.createCopyrightNotice = function() {
 	var html = [];
 	html.push('<p><span class="copyright">');
 	html.push(this.plainCopyrightNotice(), '</span>');
-	html.push('<span class="copylink" onclick="copyrightViewNotice(event)"> \u261E </span>', '</p>');
+	html.push('<span class="copylink" onclick="addCopyrightViewNotice(event)"> \u261E </span>', '</p>');
 	return(html.join(''));
 };
 CopyrightView.prototype.createCopyrightNoticeDOM = function() {
@@ -45,9 +44,7 @@ CopyrightView.prototype.createCopyrightNoticeDOM = function() {
 	var dom = new DOMBuilder();
 	dom.addNode(root, 'span', 'copyright', this.plainCopyrightNotice());
 	var link = dom.addNode(root, 'span', 'copylink', ' \u261E ');
-	link.addEventListener('click', function(event) {
-		copyrightViewNotice(event);
-	});
+	link.addEventListener('click',  addCopyrightViewNotice);	
 	return(root);
 };
 CopyrightView.prototype.createTOCTitleDOM = function() {
@@ -92,13 +89,12 @@ CopyrightView.prototype.createAttributionView = function() {
 	var root = document.createElement('div');
 	root.setAttribute('id', 'attribution');
 	
-	var closeIcon = drawCloseIcon(24, '#F70000');
+	var closeIcon = drawCloseIcon(24, '#777777');
 	closeIcon.setAttribute('id', 'closeIcon');
 	root.appendChild(closeIcon);
-	var that = this;
 	closeIcon.addEventListener('click', function(event) {
-		for (var i=that.rootNode.children.length -1; i>=0; i--) {
-			that.rootNode.removeChild(that.rootNode.children[i]);
+		if (root && root.parentNode) {
+			root.parentNode.removeChild(root);
 		}
 	});
 	
