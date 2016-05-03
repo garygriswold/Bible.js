@@ -61,6 +61,7 @@ DatabaseAdapter.prototype.create = function(callback) {
 			' scope text CHECK(scope IN("BIBLE","NT","PNT")) NULL,' + // should be not null
 			' filename text NULL,' +
 			' isQaActive boolean NULL,' + // values are T, F, null
+			' introduction text NULL,' +
 			' comment text NULL)',
 			
 		'CREATE INDEX versionLanguageIdx ON Version(silCode)',
@@ -86,7 +87,7 @@ DatabaseAdapter.prototype.create = function(callback) {
 	];
 	this.executeDDL(statements, callback);
 };
-DatabaseAdapter.prototype.loadAll = function(directory) {
+DatabaseAdapter.prototype.loadAll = function(directory, callback) {
 	var that = this;
 	this.directory = directory;
 	var file = '/Owner-Table 1.csv';
@@ -119,7 +120,9 @@ DatabaseAdapter.prototype.loadAll = function(directory) {
 						statement = 'INSERT INTO TextTranslation(silCode, word, translated) values (?,?,?)';
 						that.loadFile(file, statement, function(rowCount) {
 							console.log('TextTranslation count', rowCount);
-						})
+							
+							callback();
+						});
 					});
 				});
 			});
@@ -141,6 +144,35 @@ DatabaseAdapter.prototype.loadFile = function(file, statement, callback) {
 			});
 		}
 	});	
+};
+DatabaseAdapter.prototype.loadIntroductions = function(directory, callback) {
+	var fs = require('fs');
+	var list = fs.readdirSync(directory);
+	var dstore = list.indexOf('.DS_Store');
+	if (dstore > -1) list.splice(dstore, 1);
+	var values = [];
+	for (var i=0; i<list.length; i++) {
+		var filename = list[i];
+		var parts = filename.split('.');
+		if (parts.length != 2) {
+			console.log('CANNOT PROCESS', filename);
+		} else if (parts[1] != 'html') {
+			console.log('WRONG FILE TYPE', filename);
+		} else {
+			var data = fs.readFileSync(directory + '/' + filename, { encoding: 'utf8'});
+			values.push([data, parts[0]]);
+		}
+	}
+	var updateStmt = 'UPDATE Version SET introduction = ? WHERE versionCode = ?';
+	this.executeSQL(updateStmt, values, function(rowCount) {
+		if (rowCount != list.length) {
+			console.log('DID NOT UPDATE ALL RECORDS, rowCount=' + rowCount, ' list.length=' + list.length);
+			process.exit(1);
+		} else {
+			console.log('Introductions Updated', rowCount);
+			callback();
+		}
+	});
 };
 DatabaseAdapter.prototype.safeCSVSplit = function(results) {
 	var array = results.split('\r\n');
@@ -209,15 +241,25 @@ DatabaseAdapter.prototype.executeSQL = function(statement, values, callback) {
 				if (err) {
 					console.log('Has error ', err);
 					process.exit(1);
+				} else if (this.changes === 0) {
+					console.log('SQL did not update', statement, values[index]);
 				} else {
 					rowCount += this.changes;
-					executeStatement(index + 1);
 				}
+				executeStatement(index + 1);
 			});
 		} else {
 			callback(rowCount);
 		}
 	}
+};
+DatabaseAdapter.prototype.close = function() {
+	this.db.close(function(err) {
+		if (err) {
+			console.log('Error on close', err);
+			process.exit(1);
+		}
+	});	
 };
 
 module.exports = DatabaseAdapter;

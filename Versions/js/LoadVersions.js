@@ -8,7 +8,12 @@ LoadVersions.prototype.create = function() {
 	var that = this;
 	this.database.create(function() {
 		console.log('DONE CREATE');
-		that.database.loadAll('data/Versions');
+		that.database.loadAll('data/Versions', function() {
+			that.database.loadIntroductions('data/VersionIntro', function() {
+				that.database.close();
+				console.log('SUCCESSFULLY CREATED Versions.db');
+			});
+		});
 	});
 };
 
