@@ -55,8 +55,8 @@ ValidationCleanup.prototype.fatalError = function(err, source) {
 	process.exit(1);
 };
 
-var VALID_PATH = process.env.HOME + '/DBL/4validated/';
-var READY_PATH = process.env.HOME + '/DBL/5ready/';
+var VALID_PATH = process.env.HOME + '/ShortSands/DBL/4validated/';
+var READY_PATH = process.env.HOME + '/ShortSands/DBL/5ready/';
 	
 if (process.argv.length < 3) {
 	console.log('Usage: ./Cleanup.sh VERSION');

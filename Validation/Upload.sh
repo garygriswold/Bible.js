@@ -7,7 +7,7 @@ fi
 
 VERSION=$1;
 
-SOURCE=$HOME/DBL/5ready/
+SOURCE=$HOME/ShortSands/DBL/5ready/
 HOST=root@cloud.shortsands.com
 TARGET=/root/StaticRoot/book/
 

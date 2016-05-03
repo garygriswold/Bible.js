@@ -2329,8 +2329,8 @@ CharsetAdapter.prototype.load = function(array, callback) {
 };/**
 * Unit Test Harness for AssetController
 */
-var FILE_PATH = process.env.HOME + '/DBL/2current/';
-var DB_PATH = process.env.HOME + '/DBL/3prepared/';
+var FILE_PATH = process.env.HOME + '/ShortSands/DBL/2current/';
+var DB_PATH = process.env.HOME + 'Short/DBL/3prepared/';
 	
 if (process.argv.length < 3) {
 	console.log('Usage: ./Publisher.sh VERSION');
