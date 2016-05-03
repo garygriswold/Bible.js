@@ -536,6 +536,12 @@ CopyrightView.prototype.createAttributionView = function() {
 		dom.addNode(copyNode, 'span', null, String.fromCharCode('0xA9') + String.fromCharCode('0xA0') + this.version.copyrightYear);
 	}
 	dom.addNode(copyNode, 'span', null, ', ' + this.version.ownerName);
+	
+	if (this.version.introduction) {
+		var intro = dom.addNode(root, 'div', 'introduction');
+		intro.innerHTML = this.version.introduction;
+	}
+	
 	var webAddress = 'http://' + this.version.ownerURL + '/';
 	var link = dom.addNode(root, 'p', 'attribLink', webAddress);
 	link.addEventListener('click', function(event) {
@@ -2797,7 +2803,7 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 	});
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
-	var statement = 'SELECT v.versionCode, v.silCode, v.isQaActive, v.copyrightYear,' +
+	var statement = 'SELECT v.versionCode, v.silCode, v.isQaActive, v.copyrightYear, v.introduction,' +
 		' cv.localLanguageName, cv.localVersionName, o.ownerCode, o.ownerName, o.ownerURL' +
 		' FROM CountryVersion cv' +
 		' JOIN Version v ON cv.versionCode=v.versionCode' +
@@ -2988,6 +2994,7 @@ function BibleVersion() {
 	this.ownerCode = null;
 	this.ownerName = null;
 	this.ownerURL = null;
+	this.introduction = null;
 	Object.seal(this);
 }
 BibleVersion.prototype.fill = function(filename, callback) {
@@ -3004,6 +3011,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			this.ownerCode = 'EB';
 			that.ownerName = 'eBible';
 			that.ownerURL = 'eBible.org';
+			that.introduction = null;
 		} else {
 			that.code = row.versionCode;
 			that.filename = filename;
@@ -3015,6 +3023,8 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.ownerCode = row.ownerCode;
 			that.ownerName = row.ownerName;
 			that.ownerURL = row.ownerURL;
+			that.introduction = row.introduction;
+			console.log('READ INTRODUCTION', that.introduction);
 		}
 		callback();
 	});

@@ -17,6 +17,11 @@ body {
 	direction: ltr;
 	z-index: 0;
 }
+/* Introduction Paragraph - Do same as p */
+p.ip {
+	text-align: start;
+	text-indent: 0.125in;
+}
 /* Paged Layout */
 /*body {// not working
 	page: auto;
@@ -254,12 +259,12 @@ span.copylink {
   text-align: right; /* Needed to right align X */
 }
 p.attribVers {
-	font-size: 1.2rem;
+	font-size: 1.33rem;
 	text-align: center;
 	margin-bottom: 0px;
 }
 p.attribCopy {
-	font-size: 1.1rem;
+	font-size: 1.2rem;
 	text-align: center;
 	margin-top: 0px;
 }

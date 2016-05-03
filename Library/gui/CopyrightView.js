@@ -108,6 +108,12 @@ CopyrightView.prototype.createAttributionView = function() {
 		dom.addNode(copyNode, 'span', null, String.fromCharCode('0xA9') + String.fromCharCode('0xA0') + this.version.copyrightYear);
 	}
 	dom.addNode(copyNode, 'span', null, ', ' + this.version.ownerName);
+	
+	if (this.version.introduction) {
+		var intro = dom.addNode(root, 'div', 'introduction');
+		intro.innerHTML = this.version.introduction;
+	}
+	
 	var webAddress = 'http://' + this.version.ownerURL + '/';
 	var link = dom.addNode(root, 'p', 'attribLink', webAddress);
 	link.addEventListener('click', function(event) {

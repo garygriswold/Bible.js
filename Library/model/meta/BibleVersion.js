@@ -13,6 +13,7 @@ function BibleVersion() {
 	this.ownerCode = null;
 	this.ownerName = null;
 	this.ownerURL = null;
+	this.introduction = null;
 	Object.seal(this);
 }
 BibleVersion.prototype.fill = function(filename, callback) {
@@ -29,6 +30,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			this.ownerCode = 'EB';
 			that.ownerName = 'eBible';
 			that.ownerURL = 'eBible.org';
+			that.introduction = null;
 		} else {
 			that.code = row.versionCode;
 			that.filename = filename;
@@ -40,6 +42,8 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.ownerCode = row.ownerCode;
 			that.ownerName = row.ownerName;
 			that.ownerURL = row.ownerURL;
+			that.introduction = row.introduction;
+			console.log('READ INTRODUCTION', that.introduction);
 		}
 		callback();
 	});

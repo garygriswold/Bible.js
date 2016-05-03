@@ -17,6 +17,11 @@ body {
 	direction: ltr;
 	z-index: 0;
 }
+/* Introduction Paragraph - Do same as p */
+p.ip {
+	text-align: start;
+	text-indent: 0.125in;
+}
 /* Paged Layout */
 /*body {// not working
 	page: auto;
