@@ -5,8 +5,6 @@
 function DatabaseHelper(dbname, isCopyDatabase) {
 	this.dbname = dbname;
 	this.isCopyDatabase = isCopyDatabase;
-	//this.code = code;
-    //this.className = 'DeviceDatabaseWebSQL';
 	var size = 30 * 1024 * 1024;
     if (window.sqlitePlugin === undefined) {
         console.log('opening WEB SQL Database, stores in Cache', this.dbname);
@@ -15,17 +13,8 @@ function DatabaseHelper(dbname, isCopyDatabase) {
         console.log('opening SQLitePlugin Database, stores in Documents with no cloud', this.dbname);
         var options = { name: this.dbname, location: 2 };
         if (this.isCopyDatabase) options.createFromLocation = 1;
-        this.database = window.sqlitePlugin.openDatabase({name: this.dbname, location: 2, createFromLocation: 1});
-        this.userDatabase = window.sqlitePlugin.openDatabase();
+        this.database = window.sqlitePlugin.openDatabase(options);
     }
-	this.chapters = new ChaptersAdapter(this);
-    this.verses = new VersesAdapter(this);
-	this.tableContents = new TableContentsAdapter(this);
-	this.concordance = new ConcordanceAdapter(this);
-	this.styleIndex = new StyleIndexAdapter(this);
-	this.styleUse = new StyleUseAdapter(this);
-	this.history = new HistoryAdapter(this);
-	this.questions = new QuestionsAdapter(this);
 	Object.seal(this);
 }
 DatabaseHelper.prototype.select = function(statement, values, callback) {

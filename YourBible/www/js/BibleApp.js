@@ -9,22 +9,24 @@ function AppInitializer() {
 }
 AppInitializer.prototype.begin = function() {
     var settingStorage = new SettingStorage();
-    var that = this;
     
     document.body.addEventListener(BIBLE.CHG_VERSION, function(event) {
 		console.log('CHANGE VERSION TO', event.detail.version);
 		settingStorage.setCurrentVersion(event.detail.version);
 		changeVersionHandler(event.detail.version);
 	});
-
-	settingStorage.getCurrentVersion(function(versionFilename) {
-		if (versionFilename == null) {
-			versionFilename = 'WEB.db1'; // Where does the defalt come from.  There should be one for each major language.
-			settingStorage.setVersion('WEB', versionFilename);//records version is on device.
-			settingStorage.setCurrentVersion(versionFilename);//records this is current version.
-		}
-		changeVersionHandler(versionFilename);
-	});
+    
+    var that = this;
+    settingStorage.create(function() {
+	    settingStorage.getCurrentVersion(function(versionFilename) {
+			if (versionFilename == null) {
+				versionFilename = 'WEB.db1'; // Where does the defalt come from.  There should be one for each major language.
+				settingStorage.setVersion('WEB', versionFilename);//records version is on device.
+				settingStorage.setCurrentVersion(versionFilename);//records this is current version.
+			}
+			changeVersionHandler(versionFilename);
+		});
+    });
 		
 	function changeVersionHandler(versionFilename) {
 		var bibleVersion = new BibleVersion();
@@ -79,11 +81,24 @@ function bibleHideNoteClick(nodeId) {
 function AppViewController(version, settingStorage) {
 	this.version = version;
 	this.settingStorage = settingStorage;
-	this.database = new DeviceDatabase(version.filename);
+	
+	this.database = new DatabaseHelper(version.filename, true);
+	this.chapters = new ChaptersAdapter(this.database);
+    this.verses = new VersesAdapter(this.database);
+	this.tableAdapter = new TableContentsAdapter(this.database);
+	this.concordance = new ConcordanceAdapter(this.database);
+	this.styleIndex = new StyleIndexAdapter(this.database);
+	this.styleUse = new StyleUseAdapter(this.database);
+
+	this.userDatabase = new DatabaseHelper(version.userFilename, false);
+	this.history = new HistoryAdapter(this.userDatabase);
+	this.history.create(function(){});
+	this.questions = new QuestionsAdapter(this.userDatabase);
+	this.questions.create(function(){});
 }
 AppViewController.prototype.begin = function(develop) {
-	this.tableContents = new TOC(this.database.tableContents);
-	this.concordance = new Concordance(this.database.concordance);
+	this.tableContents = new TOC(this.tableAdapter);
+	this.concordance = new Concordance(this.concordance);
 	var that = this;
 	this.tableContents.fill(function() {
 
@@ -93,14 +108,14 @@ AppViewController.prototype.begin = function(develop) {
 		that.header.showView();
 		that.tableContentsView = new TableContentsView(that.tableContents, that.copyrightView);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
-		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.database.history);
+		that.searchView = new SearchView(that.tableContents, that.concordance, that.verses, that.history);
 		that.searchView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
-		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.header.barHite, that.copyrightView);
-		that.historyView = new HistoryView(that.database.history, that.tableContents);
+		that.codexView = new CodexView(that.chapters, that.tableContents, that.header.barHite, that.copyrightView);
+		that.historyView = new HistoryView(that.history, that.tableContents);
 		that.historyView.rootNode.style.top = that.header.barHite + 'px';
-		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
+		that.questionsView = new QuestionsView(that.questions, that.verses, that.tableContents, that.version);
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
-		that.settingsView = new SettingsView(that.settingStorage, that.database.verses);
+		that.settingsView = new SettingsView(that.settingStorage, that.verses);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.touch = new Hammer(document.getElementById('codexRoot'));
 		setInitialFontSize();
@@ -126,7 +141,7 @@ AppViewController.prototype.begin = function(develop) {
 			that.versionsView.showView();
 			break;
 		default:
-			that.database.history.lastItem(function(lastItem) {
+			that.history.lastItem(function(lastItem) {
 				if (lastItem instanceof IOError || lastItem === null || lastItem === undefined) {
 					that.codexView.showView('JHN:1');
 				} else {
@@ -187,7 +202,7 @@ AppViewController.prototype.begin = function(develop) {
 		enableHandlersExcept('NONE');
 		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
 			source: 'P', search: event.detail.source };
-		that.database.history.replace(historyItem, function(count) {});
+		that.history.replace(historyItem, function(count) {});
 	}
 	function showQuestionsHandler(event) {
 		disableHandlers();
@@ -236,6 +251,10 @@ AppViewController.prototype.close = function() {
 	if (this.database) {
 		this.database.close();
 		this.database = null;
+	}
+	if (this.userDatabase) {
+		this.userDatabase.close();
+		this.userDatabase = null;
 	}
 	// views
 	this.header = null;
@@ -671,10 +690,10 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 * needed.  Because the question.json file could become large, this approach
 * is essential.
 */
-function QuestionsView(questionsAdapter, versesAdapter, tableContents) {
+function QuestionsView(questionsAdapter, versesAdapter, tableContents, version) {
 	this.tableContents = tableContents;
 	this.versesAdapter = versesAdapter;
-	this.questions = new Questions(questionsAdapter, versesAdapter, tableContents);
+	this.questions = new Questions(questionsAdapter, versesAdapter, tableContents, version);
 	this.formatter = new DateTimeFormatter();
 	this.dom = new DOMBuilder();
 	this.viewRoot = null;
@@ -1894,9 +1913,7 @@ function GSPreloader(options) {
 function StopIcon(color) {
 	this.hite = window.innerHeight / 7;
 	
-	console.log('STOP', window.innerHeight, this.hite);
 	this.centerIcon = (window.innerHeight - this.hite) / 2;
-	console.log('SHOW', window.innerHeight, this.hite, this.centerIcon);
 	this.color = color;
 	this.iconDiv = document.createElement('div');
 	this.iconDiv.setAttribute('style', 'text-align: center;');
@@ -1968,16 +1985,26 @@ function IOError(err) {
 */
 function SettingStorage() {
     this.className = 'SettingStorage';
-    if (window.sqlitePlugin === undefined) {
-        console.log('opening SettingsStorage Database, stores in Cache');
-        this.database = window.openDatabase('Settings.db', '1.0', 'Settings.db', 1024 * 1024);
-    } else {
-        console.log('opening SQLitePlugin SettingsStorage Database, stores in Documents with no cloud');
-        this.database = window.sqlitePlugin.openDatabase({name: 'Settings.db', location: 2, createFromLocation: 1});
-    }
+    this.database = new DatabaseHelper('Settings.db', false);
     this.loadedVersions = null;
 	Object.seal(this);
 }
+SettingStorage.prototype.create = function(callback) {
+	var that = this;
+	this.database.executeDDL('CREATE TABLE IF NOT EXISTS Settings(name TEXT PRIMARY KEY NOT NULL, value TEXT NULL)', function(err) {
+		if (err instanceof IOError) {
+			console.log('Error creating Settings', err);
+		} else {
+			that.database.executeDDL('CREATE TABLE IF NOT EXISTS Installed(version TEXT PRIMARY KEY NOT NULL, filename TEXT NOT NULL, timestamp TEXT NOT NULL)', function(err) {
+				if (err instanceof IOError) {
+					console.log('Error creating Installed', err);
+				} else {
+					callback();
+				}
+			});
+		}
+	});
+};
 /**
 * Settings
 */
@@ -2007,28 +2034,24 @@ SettingStorage.prototype.setCurrentVersion = function(filename) {
 	this.setItem('version', filename);
 };
 SettingStorage.prototype.getItem = function(name, callback) {
-    this.database.readTransaction(function(tx) {
-        tx.executeSql('SELECT value FROM Settings WHERE name=?', [name],
-        function(tx, results) {
-        	var value = (results.rows.length > 0) ? results.rows.item(0).value : null;
+	this.database.select('SELECT value FROM Settings WHERE name=?', [name], function(results) {
+		if (results instanceof IOError) {
+			console.log('GetItem', name, JSON.stringify(results));
+			callback();
+		} else {
+			var value = (results.rows.length > 0) ? results.rows.item(0).value : null;
         	console.log('GetItem', name, value);
 			callback(value);
-        },
-        function(tx, err) {
-        	console.log('GetItem', name, JSON.stringify(err));
-			callback();        
-        });
-    });
+		}
+	});
 };
 SettingStorage.prototype.setItem = function(name, value) {
-    this.database.transaction(function(tx) {
-        tx.executeSql('REPLACE INTO Settings(name, value) VALUES (?,?)', [name, value], 
-        function(tx, results) {
-	        console.log('SetItem', name, value);
-	  	},
-	  	function(tx, err) {
-		  	console.log('SetItem', name, value, JSON.stringify(err));
-	  	});
+    this.database.executeDML('REPLACE INTO Settings(name, value) VALUES (?,?)', [name, value], function(results) {
+	   if (results instanceof IOError) {
+		   console.log('SetItem', name, value, JSON.stringify(results));
+	   } else {
+		   console.log('SetItem', name, value);
+	   }
     });
 };
 /**
@@ -2043,63 +2066,50 @@ SettingStorage.prototype.hasVersion = function(version) {
 SettingStorage.prototype.getVersions = function() {
 	var that = this;
 	console.log('GetVersions');
-    this.database.readTransaction(function(tx) {
-        tx.executeSql('SELECT version, filename FROM Installed', [],
-        function(tx, results) {
-        	console.log('GetVersions, rowCount=', results.rows.length);
+	this.database.select('SELECT version, filename FROM Installed', [], function(results) {
+		if (results instanceof IOError) {
+			console.log('GetVersions error', JSON.stringify(results));
+		} else {
+			console.log('GetVersions, rowCount=', results.rows.length);
         	that.loadedVersions = {};
         	for (var i=0; i<results.rows.length; i++) {
 	        	var row = results.rows.item(i);
 	        	that.loadedVersions[row.version] = row.filename;
         	}
-        },
-        function(tx, err) {
-        	console.log('GetVersions error', JSON.stringify(err));     
-        });
-    });
+		}
+	});
 };
 SettingStorage.prototype.setVersion = function(version, filename) {
 	console.log('SetVersion', version, filename);
 	var now = new Date();
-    this.database.transaction(function(tx) {
-        tx.executeSql('REPLACE INTO Installed(version, filename, timestamp) VALUES (?,?,?)', [version, filename, now.toISOString()], 
-        function(tx, results) {
-	        console.log('SetVersion success', results.rowsAffected);
-	  	},
-	  	function(tx, err) {
-		  	console.log('SetVersion error', JSON.stringify(err));
-	  	});
-    });
+	this.database.executeDML('REPLACE INTO Installed(version, filename, timestamp) VALUES (?,?,?)', [version, filename, now.toISOString()], function(results) {
+		if (results instanceof IOError) {
+			console.log('SetVersion error', JSON.stringify(results));
+		} else {
+			console.log('SetVersion success', results.rowsAffected);
+		}
+	});
 };
 /**
-* This class is a facade over the database that is used to store bible text, concordance,
-* table of contents, history and questions.
-*
-* This file is DeviceDatabaseWebSQL, which implements the WebSQL interface.  It is used
-* by the App in Cordova using the window.sqlitePlugin and by the BibleAppNW using the window.sqlitePlugin
+* This class encapsulates the WebSQL function calls, and exposes a rather generic SQL
+* interface so that WebSQL could be easily replaced if necessary.
 */
-function DeviceDatabase(code) {
-	this.code = code;
-    this.className = 'DeviceDatabaseWebSQL';
+function DatabaseHelper(dbname, isCopyDatabase) {
+	this.dbname = dbname;
+	this.isCopyDatabase = isCopyDatabase;
 	var size = 30 * 1024 * 1024;
     if (window.sqlitePlugin === undefined) {
-        console.log('opening WEB SQL Database, stores in Cache', this.code);
-        this.database = window.openDatabase(this.code, "1.0", this.code, size);
+        console.log('opening WEB SQL Database, stores in Cache', this.dbname);
+        this.database = window.openDatabase(this.dbname, "1.0", this.dbname, size);
     } else {
-        console.log('opening SQLitePlugin Database, stores in Documents with no cloud', this.code);
-        this.database = window.sqlitePlugin.openDatabase({name: this.code, location: 2, createFromLocation: 1});//, androidDatabaseImplementation: 2});
+        console.log('opening SQLitePlugin Database, stores in Documents with no cloud', this.dbname);
+        var options = { name: this.dbname, location: 2 };
+        if (this.isCopyDatabase) options.createFromLocation = 1;
+        this.database = window.sqlitePlugin.openDatabase(options);
     }
-	this.chapters = new ChaptersAdapter(this);
-    this.verses = new VersesAdapter(this);
-	this.tableContents = new TableContentsAdapter(this);
-	this.concordance = new ConcordanceAdapter(this);
-	this.styleIndex = new StyleIndexAdapter(this);
-	this.styleUse = new StyleUseAdapter(this);
-	this.history = new HistoryAdapter(this);
-	this.questions = new QuestionsAdapter(this);
 	Object.seal(this);
 }
-DeviceDatabase.prototype.select = function(statement, values, callback) {
+DatabaseHelper.prototype.select = function(statement, values, callback) {
     this.database.readTransaction(function(tx) {
         console.log(statement, values);
         tx.executeSql(statement, values, onSelectSuccess, onSelectError);
@@ -2113,7 +2123,7 @@ DeviceDatabase.prototype.select = function(statement, values, callback) {
         callback(new IOError(err));
     }
 };
-DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
+DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
     this.database.transaction(function(tx) {
 	    console.log('exec tran start', statement, values);
         tx.executeSql(statement, values, onExecSuccess, onExecError);
@@ -2127,7 +2137,7 @@ DeviceDatabase.prototype.executeDML = function(statement, values, callback) {
         callback(new IOError(err));
     }
 };
-DeviceDatabase.prototype.manyExecuteDML = function(statement, array, callback) {
+DatabaseHelper.prototype.manyExecuteDML = function(statement, array, callback) {
 	var that = this;
 	executeOne(0);
 	
@@ -2145,7 +2155,7 @@ DeviceDatabase.prototype.manyExecuteDML = function(statement, array, callback) {
 		}
 	}	
 };
-DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
+DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
     var rowCount = 0;
 	this.database.transaction(onTranStart, onTranError, onTranSuccess);
 
@@ -2167,7 +2177,7 @@ DeviceDatabase.prototype.bulkExecuteDML = function(statement, array, callback) {
         rowCount += results.rowsAffected;
     }
 };
-DeviceDatabase.prototype.executeDDL = function(statement, callback) {
+DatabaseHelper.prototype.executeDDL = function(statement, callback) {
     this.database.transaction(function(tx) {
         console.log('exec tran start', statement);
         tx.executeSql(statement, [], onExecSuccess, onExecError);
@@ -2179,14 +2189,14 @@ DeviceDatabase.prototype.executeDDL = function(statement, callback) {
         callback(new IOError(err));
     }
 };
-DeviceDatabase.prototype.close = function() {
+DatabaseHelper.prototype.close = function() {
 	if (window.sqlitePlugin) {
 		this.database.close();
 	}
 };
 /** A smoke test is needed before a database is opened. */
 /** A second more though test is needed after a database is opened.*/
-DeviceDatabase.prototype.smokeTest = function(callback) {
+DatabaseHelper.prototype.smokeTest = function(callback) {
     var statement = 'select count(*) from tableContents';
     this.select(statement, [], function(results) {
         if (results instanceof IOError) {
@@ -2203,7 +2213,6 @@ DeviceDatabase.prototype.smokeTest = function(callback) {
         }
     });
 };
-
 /**
 * This class is the database adapter for the codex table
 */
@@ -2753,19 +2762,12 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 */
 function VersionsAdapter() {
     this.className = 'VersionsAdapter';
-	var size = 2 * 1024 * 1024;
-    if (window.sqlitePlugin === undefined) {
-        console.log('opening Versions SQL Database, stores in Cache');
-        this.database = window.openDatabase("Versions.db", "1.0", "Versions.db", size);
-    } else {
-        console.log('opening SQLitePlugin Versions Database, stores in Documents with no cloud');
-        this.database = window.sqlitePlugin.openDatabase({name:'Versions.db', location:2, createFromLocation:1});
-    }
+	this.database = new DatabaseHelper('Versions.db', true);
 	Object.seal(this);
 }
 VersionsAdapter.prototype.selectCountries = function(callback) {
 	var statement = 'SELECT countryCode, localName, primLanguage, flagIcon FROM Country ORDER BY localName';
-	this.select(statement, null, function(results) {
+	this.database.select(statement, null, function(results) {
 		if (results instanceof IOError) {
 			callback(results)
 		} else {
@@ -2789,7 +2791,7 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 		' AND v.filename is NOT NULL' +
 		' AND length(v.filename) > 3' +
 		' ORDER BY cv.localLanguageName, cv.localVersionName';
-	this.select(statement, [primLanguage, countryCode], function(results) {
+	this.database.select(statement, [primLanguage, countryCode], function(results) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else {
@@ -2809,7 +2811,7 @@ VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callba
 		' JOIN Version v ON cv.versionCode=v.versionCode' +
 		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
 		' WHERE v.filename = ?';
-	this.select(statement, [versionFile], function(results) {
+	this.database.select(statement, [versionFile], function(results) {
 		if (results instanceof IOError) {
 			callback(results);
 		} if (results.rows.length === 0) {
@@ -2818,20 +2820,6 @@ VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callba
 			callback(results.rows.item(0));
 		}
 	});
-};
-VersionsAdapter.prototype.select = function(statement, values, callback) {
-    this.database.readTransaction(function(tx) {
-        console.log(statement, values);
-        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
-    });
-    function onSelectSuccess(tx, results) {
-        console.log('select success results, rowCount=', results.rows.length);
-        callback(results);
-    }
-    function onSelectError(tx, err) {
-        console.log('select error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
 };
 VersionsAdapter.prototype.close = function() {
 	this.database.close();		
@@ -2986,6 +2974,7 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 function BibleVersion() {
 	this.code = null;
 	this.filename = null;
+	this.userFilename = null;
 	this.silCode = null;
 	this.isQaActive = null;
 	this.copyrightYear = null;
@@ -3004,6 +2993,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 		if (row instanceof IOError) {
 			that.code = 'WEB';
 			that.filename = 'WEB.db1';
+			that.userFilename = 'WEBUser.db';
 			that.silCode = 'eng';
 			that.isQaActive = 'F';
 			that.copyrightYear = 'PUBLIC';
@@ -3015,6 +3005,8 @@ BibleVersion.prototype.fill = function(filename, callback) {
 		} else {
 			that.code = row.versionCode;
 			that.filename = filename;
+			var parts = filename.split('.');
+			that.userFilename = parts[0] + 'User.db';
 			that.silCode = row.silCode;
 			that.isQaActive = row.isQaActive;
 			that.copyrightYear = row.copyrightYear;
@@ -3024,7 +3016,6 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.ownerName = row.ownerName;
 			that.ownerURL = row.ownerURL;
 			that.introduction = row.introduction;
-			console.log('READ INTRODUCTION', that.introduction);
 		}
 		callback();
 	});
@@ -3143,10 +3134,11 @@ function QuestionItem(reference, question, askedDt, instructor, answerDt, answer
 * This class contains the list of questions and answers for this student
 * or device.
 */
-function Questions(questionsAdapter, versesAdapter, tableContents) {
+function Questions(questionsAdapter, versesAdapter, tableContents, version) {
 	this.questionsAdapter = questionsAdapter;
 	this.versesAdapter = versesAdapter;
 	this.tableContents = tableContents;
+	this.version = version;
 	this.httpClient = new HttpClient(SERVER_HOST, SERVER_PORT);
 	this.items = [];
 	Object.seal(this);
@@ -3159,18 +3151,15 @@ Questions.prototype.find = function(index) {
 };
 Questions.prototype.addQuestion = function(item, callback) {
 	var that = this;
-	var versionsAdapter = new VersionsAdapter();
-	versionsAdapter.selectVersionByFilename(this.questionsAdapter.database.code, function(versionObj) {
-		var postData = {versionId:versionObj.versionCode, reference:item.reference, message:item.question};
-		that.httpClient.put('/question', postData, function(status, results) {
-			if (status !== 200 && status !== 201) {
-				callback(results);
-			} else {
-				item.discourseId = results.discourseId;
-				item.askedDateTime = new Date(results.timestamp);
-				that.addQuestionLocal(item, callback);
-			}
-		});
+	var postData = {versionId:this.version.code, reference:item.reference, message:item.question};
+	this.httpClient.put('/question', postData, function(status, results) {
+		if (status !== 200 && status !== 201) {
+			callback(results);
+		} else {
+			item.discourseId = results.discourseId;
+			item.askedDateTime = new Date(results.timestamp);
+			that.addQuestionLocal(item, callback);
+		}
 	});
 };
 Questions.prototype.addQuestionLocal = function(item, callback) {
@@ -3206,29 +3195,6 @@ Questions.prototype.fill = function(callback) {
 		}
 	});
 };
-// Removed GNG 1/18/16
-//Questions.prototype.createActs8Question = function(callback) {
-//	var acts8 = new QuestionItem();
-//	acts8.askedDateTime = new Date();
-//	var refActs830 = new Reference('ACT:8:30');
-//	acts8.reference = this.tableContents.toString(refActs830);
-//	var verseList = [ 'ACT:8:30', 'ACT:8:31', 'ACT:8:35' ];
-//	this.versesAdapter.getVerses(verseList, function(results) {
-//		if (results instanceof IOError) {
-//			callback(results);
-//		} else {
-//			var acts830 = results.rows.item(0);
-//			var acts831 = results.rows.item(1);
-//			var acts835 = results.rows.item(2);
-//			acts8.discourseId = 'NONE';
-//			acts8.question = acts830.html + ' ' + acts831.html;
-//			acts8.answer = acts835.html;
-//			acts8.instructor = 'Philip';
-//			acts8.answerDateTime = new Date();
-//			callback(acts8);
-//		}
-//	});
-//};
 Questions.prototype.checkServer = function(callback) {
 	var that = this;
 	var unanswered = findUnansweredQuestions();

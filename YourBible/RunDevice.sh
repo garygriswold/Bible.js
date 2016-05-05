@@ -33,7 +33,7 @@ cat ../Library/gui/icons/StopIcon.js >> www/js/BibleApp.js
 
 cat ../Library/io/IOError.js >> www/js/BibleApp.js
 cat ../Library/io/SettingStorage.js >> www/js/BibleApp.js
-cat ../Library/io/DeviceDatabaseWebSQL.js >> www/js/BibleApp.js
+cat ../Library/io/DatabaseHelper.js >> www/js/BibleApp.js
 cat ../Library/io/ChaptersAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/VersesAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/ConcordanceAdapter.js >> www/js/BibleApp.js

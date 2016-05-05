@@ -5,10 +5,10 @@
 * needed.  Because the question.json file could become large, this approach
 * is essential.
 */
-function QuestionsView(questionsAdapter, versesAdapter, tableContents) {
+function QuestionsView(questionsAdapter, versesAdapter, tableContents, version) {
 	this.tableContents = tableContents;
 	this.versesAdapter = versesAdapter;
-	this.questions = new Questions(questionsAdapter, versesAdapter, tableContents);
+	this.questions = new Questions(questionsAdapter, versesAdapter, tableContents, version);
 	this.formatter = new DateTimeFormatter();
 	this.dom = new DOMBuilder();
 	this.viewRoot = null;

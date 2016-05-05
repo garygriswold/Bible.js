@@ -5,6 +5,7 @@
 function BibleVersion() {
 	this.code = null;
 	this.filename = null;
+	this.userFilename = null;
 	this.silCode = null;
 	this.isQaActive = null;
 	this.copyrightYear = null;
@@ -23,6 +24,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 		if (row instanceof IOError) {
 			that.code = 'WEB';
 			that.filename = 'WEB.db1';
+			that.userFilename = 'WEBUser.db';
 			that.silCode = 'eng';
 			that.isQaActive = 'F';
 			that.copyrightYear = 'PUBLIC';
@@ -34,6 +36,8 @@ BibleVersion.prototype.fill = function(filename, callback) {
 		} else {
 			that.code = row.versionCode;
 			that.filename = filename;
+			var parts = filename.split('.');
+			that.userFilename = parts[0] + 'User.db';
 			that.silCode = row.silCode;
 			that.isQaActive = row.isQaActive;
 			that.copyrightYear = row.copyrightYear;
@@ -43,7 +47,6 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.ownerName = row.ownerName;
 			that.ownerURL = row.ownerURL;
 			that.introduction = row.introduction;
-			console.log('READ INTRODUCTION', that.introduction);
 		}
 		callback();
 	});

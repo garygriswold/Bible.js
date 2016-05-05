@@ -5,9 +5,7 @@
 function StopIcon(color) {
 	this.hite = window.innerHeight / 7;
 	
-	console.log('STOP', window.innerHeight, this.hite);
 	this.centerIcon = (window.innerHeight - this.hite) / 2;
-	console.log('SHOW', window.innerHeight, this.hite, this.centerIcon);
 	this.color = color;
 	this.iconDiv = document.createElement('div');
 	this.iconDiv.setAttribute('style', 'text-align: center;');

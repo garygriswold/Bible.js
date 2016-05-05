@@ -19,8 +19,6 @@ function DeviceDatabase(versionFile) {
 	this.concordance = new ConcordanceAdapter(this);
 	this.styleIndex = new StyleIndexAdapter(this);
 	this.styleUse = new StyleUseAdapter(this);
-	this.history = new HistoryAdapter(this);
-	this.questions = new QuestionsAdapter(this);
 	Object.seal(this);
 }
 DeviceDatabase.prototype.select = function(statement, values, callback) {

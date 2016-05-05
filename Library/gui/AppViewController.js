@@ -41,11 +41,24 @@ function bibleHideNoteClick(nodeId) {
 function AppViewController(version, settingStorage) {
 	this.version = version;
 	this.settingStorage = settingStorage;
-	this.database = new DeviceDatabase(version.filename);
+	
+	this.database = new DatabaseHelper(version.filename, true);
+	this.chapters = new ChaptersAdapter(this.database);
+    this.verses = new VersesAdapter(this.database);
+	this.tableAdapter = new TableContentsAdapter(this.database);
+	this.concordance = new ConcordanceAdapter(this.database);
+	this.styleIndex = new StyleIndexAdapter(this.database);
+	this.styleUse = new StyleUseAdapter(this.database);
+
+	this.userDatabase = new DatabaseHelper(version.userFilename, false);
+	this.history = new HistoryAdapter(this.userDatabase);
+	this.history.create(function(){});
+	this.questions = new QuestionsAdapter(this.userDatabase);
+	this.questions.create(function(){});
 }
 AppViewController.prototype.begin = function(develop) {
-	this.tableContents = new TOC(this.database.tableContents);
-	this.concordance = new Concordance(this.database.concordance);
+	this.tableContents = new TOC(this.tableAdapter);
+	this.concordance = new Concordance(this.concordance);
 	var that = this;
 	this.tableContents.fill(function() {
 
@@ -55,14 +68,14 @@ AppViewController.prototype.begin = function(develop) {
 		that.header.showView();
 		that.tableContentsView = new TableContentsView(that.tableContents, that.copyrightView);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
-		that.searchView = new SearchView(that.tableContents, that.concordance, that.database.verses, that.database.history);
+		that.searchView = new SearchView(that.tableContents, that.concordance, that.verses, that.history);
 		that.searchView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
-		that.codexView = new CodexView(that.database.chapters, that.tableContents, that.header.barHite, that.copyrightView);
-		that.historyView = new HistoryView(that.database.history, that.tableContents);
+		that.codexView = new CodexView(that.chapters, that.tableContents, that.header.barHite, that.copyrightView);
+		that.historyView = new HistoryView(that.history, that.tableContents);
 		that.historyView.rootNode.style.top = that.header.barHite + 'px';
-		that.questionsView = new QuestionsView(that.database.questions, that.database.verses, that.tableContents);
+		that.questionsView = new QuestionsView(that.questions, that.verses, that.tableContents, that.version);
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
-		that.settingsView = new SettingsView(that.settingStorage, that.database.verses);
+		that.settingsView = new SettingsView(that.settingStorage, that.verses);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.touch = new Hammer(document.getElementById('codexRoot'));
 		setInitialFontSize();
@@ -88,7 +101,7 @@ AppViewController.prototype.begin = function(develop) {
 			that.versionsView.showView();
 			break;
 		default:
-			that.database.history.lastItem(function(lastItem) {
+			that.history.lastItem(function(lastItem) {
 				if (lastItem instanceof IOError || lastItem === null || lastItem === undefined) {
 					that.codexView.showView('JHN:1');
 				} else {
@@ -149,7 +162,7 @@ AppViewController.prototype.begin = function(develop) {
 		enableHandlersExcept('NONE');
 		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
 			source: 'P', search: event.detail.source };
-		that.database.history.replace(historyItem, function(count) {});
+		that.history.replace(historyItem, function(count) {});
 	}
 	function showQuestionsHandler(event) {
 		disableHandlers();
@@ -198,6 +211,10 @@ AppViewController.prototype.close = function() {
 	if (this.database) {
 		this.database.close();
 		this.database = null;
+	}
+	if (this.userDatabase) {
+		this.userDatabase.close();
+		this.userDatabase = null;
 	}
 	// views
 	this.header = null;

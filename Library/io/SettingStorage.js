@@ -4,16 +4,26 @@
 */
 function SettingStorage() {
     this.className = 'SettingStorage';
-    if (window.sqlitePlugin === undefined) {
-        console.log('opening SettingsStorage Database, stores in Cache');
-        this.database = window.openDatabase('Settings.db', '1.0', 'Settings.db', 1024 * 1024);
-    } else {
-        console.log('opening SQLitePlugin SettingsStorage Database, stores in Documents with no cloud');
-        this.database = window.sqlitePlugin.openDatabase({name: 'Settings.db', location: 2, createFromLocation: 1});
-    }
+    this.database = new DatabaseHelper('Settings.db', false);
     this.loadedVersions = null;
 	Object.seal(this);
 }
+SettingStorage.prototype.create = function(callback) {
+	var that = this;
+	this.database.executeDDL('CREATE TABLE IF NOT EXISTS Settings(name TEXT PRIMARY KEY NOT NULL, value TEXT NULL)', function(err) {
+		if (err instanceof IOError) {
+			console.log('Error creating Settings', err);
+		} else {
+			that.database.executeDDL('CREATE TABLE IF NOT EXISTS Installed(version TEXT PRIMARY KEY NOT NULL, filename TEXT NOT NULL, timestamp TEXT NOT NULL)', function(err) {
+				if (err instanceof IOError) {
+					console.log('Error creating Installed', err);
+				} else {
+					callback();
+				}
+			});
+		}
+	});
+};
 /**
 * Settings
 */
@@ -43,28 +53,24 @@ SettingStorage.prototype.setCurrentVersion = function(filename) {
 	this.setItem('version', filename);
 };
 SettingStorage.prototype.getItem = function(name, callback) {
-    this.database.readTransaction(function(tx) {
-        tx.executeSql('SELECT value FROM Settings WHERE name=?', [name],
-        function(tx, results) {
-        	var value = (results.rows.length > 0) ? results.rows.item(0).value : null;
+	this.database.select('SELECT value FROM Settings WHERE name=?', [name], function(results) {
+		if (results instanceof IOError) {
+			console.log('GetItem', name, JSON.stringify(results));
+			callback();
+		} else {
+			var value = (results.rows.length > 0) ? results.rows.item(0).value : null;
         	console.log('GetItem', name, value);
 			callback(value);
-        },
-        function(tx, err) {
-        	console.log('GetItem', name, JSON.stringify(err));
-			callback();        
-        });
-    });
+		}
+	});
 };
 SettingStorage.prototype.setItem = function(name, value) {
-    this.database.transaction(function(tx) {
-        tx.executeSql('REPLACE INTO Settings(name, value) VALUES (?,?)', [name, value], 
-        function(tx, results) {
-	        console.log('SetItem', name, value);
-	  	},
-	  	function(tx, err) {
-		  	console.log('SetItem', name, value, JSON.stringify(err));
-	  	});
+    this.database.executeDML('REPLACE INTO Settings(name, value) VALUES (?,?)', [name, value], function(results) {
+	   if (results instanceof IOError) {
+		   console.log('SetItem', name, value, JSON.stringify(results));
+	   } else {
+		   console.log('SetItem', name, value);
+	   }
     });
 };
 /**
@@ -79,31 +85,27 @@ SettingStorage.prototype.hasVersion = function(version) {
 SettingStorage.prototype.getVersions = function() {
 	var that = this;
 	console.log('GetVersions');
-    this.database.readTransaction(function(tx) {
-        tx.executeSql('SELECT version, filename FROM Installed', [],
-        function(tx, results) {
-        	console.log('GetVersions, rowCount=', results.rows.length);
+	this.database.select('SELECT version, filename FROM Installed', [], function(results) {
+		if (results instanceof IOError) {
+			console.log('GetVersions error', JSON.stringify(results));
+		} else {
+			console.log('GetVersions, rowCount=', results.rows.length);
         	that.loadedVersions = {};
         	for (var i=0; i<results.rows.length; i++) {
 	        	var row = results.rows.item(i);
 	        	that.loadedVersions[row.version] = row.filename;
         	}
-        },
-        function(tx, err) {
-        	console.log('GetVersions error', JSON.stringify(err));     
-        });
-    });
+		}
+	});
 };
 SettingStorage.prototype.setVersion = function(version, filename) {
 	console.log('SetVersion', version, filename);
 	var now = new Date();
-    this.database.transaction(function(tx) {
-        tx.executeSql('REPLACE INTO Installed(version, filename, timestamp) VALUES (?,?,?)', [version, filename, now.toISOString()], 
-        function(tx, results) {
-	        console.log('SetVersion success', results.rowsAffected);
-	  	},
-	  	function(tx, err) {
-		  	console.log('SetVersion error', JSON.stringify(err));
-	  	});
-    });
+	this.database.executeDML('REPLACE INTO Installed(version, filename, timestamp) VALUES (?,?,?)', [version, filename, now.toISOString()], function(results) {
+		if (results instanceof IOError) {
+			console.log('SetVersion error', JSON.stringify(results));
+		} else {
+			console.log('SetVersion success', results.rowsAffected);
+		}
+	});
 };
