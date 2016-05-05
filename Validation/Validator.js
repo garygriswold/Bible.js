@@ -301,8 +301,8 @@ ConcordanceValidator.prototype.completed = function() {
 };
 
 
-var DB_PATH = process.env.HOME + '/DBL/3prepared/';
-var VALID_PATH = process.env.HOME + '/DBL/4validated/';
+var DB_PATH = process.env.HOME + '/ShortSands/DBL/3prepared/';
+var VALID_PATH = process.env.HOME + '/ShortSands/DBL/4validated/';
 	
 if (process.argv.length < 3) {
 	console.log('Usage: ./Validator.sh VERSION');

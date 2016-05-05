@@ -9,8 +9,6 @@ function AssetType(location, versionCode) {
 	this.chapterFiles = false;
 	this.tableContents = false;
 	this.concordance = false;
-	this.history = false;
-	this.questions = false;
 	this.styleIndex = false;
 	this.statistics = false;
 	Object.seal(this);
@@ -42,12 +40,6 @@ function AssetBuilder(types, database) {
 	if (types.styleIndex) {
 		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));
 		this.builders.push(new StyleUseBuilder(this.database.styleUse));
-	}
-	if (types.history) {
-		this.builders.push(new HistoryBuilder(this.database.history));
-	}
-	if (types.questions) {
-		this.builders.push(new QuestionsBuilder(this.database.questions));
 	}
 	if (types.statistics) {
 		this.builders.push(new VersionStatistics(this.database));
@@ -525,33 +517,6 @@ ConcordanceBuilder.prototype.loadDB = function(callback) {
 ConcordanceBuilder.prototype.toJSON = function() {
 	return(JSON.stringify(this.refList, null, ' '));
 };/**
-* This class creates an empty History table.  The table is filled
-* by user action.
-*/
-function HistoryBuilder(adapter) {
-	this.adapter = adapter;
-	Object.freeze(this);
-}
-HistoryBuilder.prototype.readBook = function(usxRoot) {
-	// This class does not process the Bible
-};
-HistoryBuilder.prototype.loadDB = function(callback) {
-	callback();  // This class does not load history
-};/**
-* This class creates an initial Questions table.  The table is filled
-* by user and instructor input.
-*/
-function QuestionsBuilder(adapter) {
-	this.adapter = adapter;
-	Object.freeze(this);
-}
-QuestionsBuilder.prototype.readBook = function(usxRoot) {
-	// This class does not process the Bible
-};
-QuestionsBuilder.prototype.loadDB = function(callback) {
-	callback();  // This class does not load history
-};
-/**
 * This class traverses the USX data model in order to find each style, and 
 * reference to that style.  It builds an index to each style showing
 * all of the references where each style is used.
@@ -1678,8 +1643,8 @@ function DeviceDatabase(versionFile) {
 	this.concordance = new ConcordanceAdapter(this);
 	this.styleIndex = new StyleIndexAdapter(this);
 	this.styleUse = new StyleUseAdapter(this);
-	this.history = new HistoryAdapter(this);
-	this.questions = new QuestionsAdapter(this);
+	//this.history = new HistoryAdapter(this);
+	//this.questions = new QuestionsAdapter(this);
 	Object.seal(this);
 }
 DeviceDatabase.prototype.select = function(statement, values, callback) {
@@ -2088,203 +2053,6 @@ StyleUseAdapter.prototype.load = function(array, callback) {
 		}
 	});
 };/**
-* This class is the database adapter for the history table
-*/
-var MAX_HISTORY = 20;
-
-function HistoryAdapter(database) {
-	this.database = database;
-	this.className = 'HistoryAdapter';
-	this.lastSelectCurrent = false;
-	Object.seal(this);
-}
-HistoryAdapter.prototype.drop = function(callback) {
-	this.database.executeDDL('drop table if exists history', function(err) {
-		if (err instanceof IOError) {
-			callback(err);
-		} else {
-			console.log('drop history success');
-			callback();
-		}
-	});
-};
-HistoryAdapter.prototype.create = function(callback) {
-	var statement = 'create table if not exists history(' +
-		'timestamp text not null primary key, ' +
-		'reference text not null unique, ' +
-		'source text not null, ' +
-		'search text null)';
-	this.database.executeDDL(statement, function(err) {
-		if (err instanceof IOError) {
-			callback(err);
-		} else {
-			console.log('create history success');
-			callback();
-		}
-	});
-};
-HistoryAdapter.prototype.selectPassages = function(callback) {
-	var that = this;
-	var statement = 'select reference from history order by timestamp desc limit ?';
-	this.database.select(statement, [ MAX_HISTORY ], function(results) {
-		if (results instanceof IOError) {
-			console.log('HistoryAdapter.selectAll Error', JSON.stringify(results));
-			callback(results);
-		} else {
-			var array = [];
-			for (var i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);
-				array.push(row.reference);
-			}
-			that.lastSelectCurrent = true;
-			callback(array);
-		}
-	});
-};
-HistoryAdapter.prototype.lastItem = function(callback) {
-	var statement = 'select reference from history order by rowid desc limit 1';
-	this.database.select(statement, [], function(results) {
-		if (results instanceof IOError) {
-			console.log('HistoryAdapter.lastItem Error', JSON.stringify(results));
-			callback(results);
-		} else {
-			if (results.rows.length > 0) {
-				var row = results.rows.item(0);
-				callback(row.reference);
-			} else {
-				callback(null);
-			}
-		}
-	});
-};
-HistoryAdapter.prototype.lastConcordanceSearch = function(callback) {
-	var statement = 'select search from history where search is not null order by timestamp desc limit 1';
-	this.database.select(statement, [], function(results) {
-		if (results instanceof IOError) {
-			console.log('HistoryAdapter.lastConcordance Error', JSON.stringify(results));
-			callback(results);
-		} else {
-			if (results.rows.length > 0) {
-				var row = results.rows.item(0);
-				callback(row.search);
-			} else {
-				callback(new IOError('No rows found'));
-			}
-		}
-	});
-};
-HistoryAdapter.prototype.replace = function(item, callback) {
-	var timestampStr = item.timestamp.toISOString();
-	var values = [ timestampStr, item.reference, item.source, item.search || null ];
-	var statement = 'replace into history(timestamp, reference, source, search) values (?,?,?,?)';
-	var that = this;
-	this.lastSelectCurrent = false;
-	this.database.executeDML(statement, values, function(count) {
-		if (count instanceof IOError) {
-			console.log('replace error', JSON.stringify(count));
-			callback(count);
-		} else {
-			that.cleanup(function(count) {
-				callback(count);
-			});
-		}
-	});
-};
-HistoryAdapter.prototype.cleanup = function(callback) {
-	var statement = ' delete from history where ? < (select count(*) from history) and timestamp = (select min(timestamp) from history)';
-	this.database.executeDML(statement, [ MAX_HISTORY ], function(count) {
-		if (count instanceof IOError) {
-			console.log('delete error', JSON.stringify(count));
-			callback(count);
-		} else {
-			callback(count);
-		}
-	});
-};/**
-* This class is the database adapter for the questions table
-*/
-function QuestionsAdapter(database) {
-	this.database = database;
-	this.className = 'QuestionsAdapter';
-	Object.freeze(this);
-}
-QuestionsAdapter.prototype.drop = function(callback) {
-	this.database.executeDDL('drop table if exists questions', function(err) {
-		if (err instanceof IOError) {
-			callback(err);
-		} else {
-			console.log('drop questions success');
-			callback();
-		}
-	});
-};
-QuestionsAdapter.prototype.create = function(callback) {
-	var statement = 'create table if not exists questions(' +
-		'askedDateTime text not null primary key, ' +
-		'discourseId text not null, ' +
-		'reference text null, ' + // possibly should be not null
-		'question text not null, ' +
-		'instructor text null, ' +
-		'answerDateTime text null, ' +
-		'answer text null)';
-	this.database.executeDDL(statement, function(err) {
-		if (err instanceof IOError) {
-			callback(err);
-		} else {
-			console.log('create questions success');
-			callback();
-		}
-	});
-};
-QuestionsAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select discourseId, reference, question, askedDateTime, instructor, answerDateTime, answer ' +
-		'from questions order by askedDateTime';
-	this.database.select(statement, [], function(results) {
-		if (results instanceof IOError) {
-			console.log('select questions failure ' + JSON.stringify(results));
-			callback(results);
-		} else {
-			var array = [];
-			for (var i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);	
-				var askedDateTime = (row.askedDateTime) ? new Date(row.askedDateTime) : null;
-				var answerDateTime = (row.answerDateTime) ? new Date(row.answerDateTime) : null;
-				var ques = new QuestionItem(row.reference, row.question, 
-					askedDateTime, row.instructor, answerDateTime, row.answer);
-				ques.discourseId = row.discourseId;
-				array.push(ques);
-			}
-			callback(array);
-		}
-	});
-};
-QuestionsAdapter.prototype.replace = function(item, callback) {
-	var statement = 'replace into questions(discourseId, reference, question, askedDateTime) ' +
-		'values (?,?,?,?)';
-	var values = [ item.discourseId, item.reference, item.question, item.askedDateTime.toISOString() ];
-	this.database.executeDML(statement, values, function(results) {
-		if (results instanceof IOError) {
-			console.log('Error on Insert');
-			callback(results);
-		} else {
-			callback(results.rowsAffected);
-		}
-	});
-};
-QuestionsAdapter.prototype.update = function(item, callback) {
-	var statement = 'update questions set instructor = ?, answerDateTime = ?, answer = ?' +
-		'where askedDateTime = ?';
-	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answer, item.askedDateTime.toISOString() ];
-	this.database.executeDML(statement, values, function(results) {
-		if (results instanceof IOError) {
-			console.log('Error on update');
-			callback(results);
-		} else {
-			callback(results.rowsAffected);
-		}
-	});
-};
-/**
 * This class is the database adapter for the charset table
 */
 function CharsetAdapter(database) {
@@ -2330,7 +2098,7 @@ CharsetAdapter.prototype.load = function(array, callback) {
 * Unit Test Harness for AssetController
 */
 var FILE_PATH = process.env.HOME + '/ShortSands/DBL/2current/';
-var DB_PATH = process.env.HOME + 'Short/DBL/3prepared/';
+var DB_PATH = process.env.HOME + '/ShortSands/DBL/3prepared/';
 	
 if (process.argv.length < 3) {
 	console.log('Usage: ./Publisher.sh VERSION');
@@ -2344,8 +2112,6 @@ if (process.argv.length < 3) {
 		types.tableContents = true;
 		types.concordance = true;
 		types.styleIndex = true;
-		types.history = true;
-		types.questions = true;
 		types.statistics = true;
 		var database = new DeviceDatabase(DB_PATH + version.toUpperCase() + '.db1');
 		

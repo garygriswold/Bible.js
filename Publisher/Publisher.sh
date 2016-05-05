@@ -7,8 +7,6 @@ cat ../Library/manufacture/ChapterBuilder.js >> Publisher.js
 cat ../Library/manufacture/VerseBuilder.js >> Publisher.js
 cat ../Library/manufacture/TOCBuilder.js >> Publisher.js
 cat ../Library/manufacture/ConcordanceBuilder.js >> Publisher.js
-cat ../Library/manufacture/HistoryBuilder.js >> Publisher.js
-cat ../Library/manufacture/QuestionsBuilder.js >> Publisher.js
 cat ../Library/manufacture/StyleIndexBuilder.js >> Publisher.js
 cat ../Library/manufacture/StyleUseBuilder.js >> Publisher.js
 cat ../Library/manufacture/DOMBuilder.js >> Publisher.js
@@ -37,8 +35,6 @@ cat ../Library/io/ConcordanceAdapter.js >> Publisher.js
 cat ../Library/io/TableContentsAdapter.js >> Publisher.js
 cat ../Library/io/StyleIndexAdapter.js >> Publisher.js
 cat ../Library/io/StyleUseAdapter.js >> Publisher.js
-cat ../Library/io/HistoryAdapter.js >> Publisher.js
-cat ../Library/io/QuestionsAdapter.js >> Publisher.js
 cat ../Library/io/CharsetAdapter.js >> Publisher.js
 cat ../Library/manufacture/AssetController.js >> Publisher.js
 node Publisher.js $*

@@ -22,12 +22,6 @@ function AssetBuilder(types, database) {
 		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));
 		this.builders.push(new StyleUseBuilder(this.database.styleUse));
 	}
-	if (types.history) {
-		this.builders.push(new HistoryBuilder(this.database.history));
-	}
-	if (types.questions) {
-		this.builders.push(new QuestionsBuilder(this.database.questions));
-	}
 	if (types.statistics) {
 		this.builders.push(new VersionStatistics(this.database));
 	}

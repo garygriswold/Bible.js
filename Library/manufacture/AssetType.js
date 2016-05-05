@@ -8,8 +8,6 @@ function AssetType(location, versionCode) {
 	this.chapterFiles = false;
 	this.tableContents = false;
 	this.concordance = false;
-	this.history = false;
-	this.questions = false;
 	this.styleIndex = false;
 	this.statistics = false;
 	Object.seal(this);

@@ -16,8 +16,6 @@ if (process.argv.length < 3) {
 		types.tableContents = true;
 		types.concordance = true;
 		types.styleIndex = true;
-		types.history = true;
-		types.questions = true;
 		types.statistics = true;
 		var database = new DeviceDatabase(DB_PATH + version.toUpperCase() + '.db1');
 		
