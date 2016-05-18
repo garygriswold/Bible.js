@@ -3,6 +3,9 @@
  * Cordova plugins.
  */
 var deviceSettings = {
+	prefLanguage: function(callback) {
+		callback('es-ES');
+    },
     platform: function() {
         return('node');
     }

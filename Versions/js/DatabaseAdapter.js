@@ -1,4 +1,8 @@
 /**
+* This class is no longer, used and has been replaced by raw SQL input.
+* It is included here just in case, I later want to use this program which
+* loads data from CSV files.
+*
 * This class provides a convenient JS interface to a the Version.db database.
 * The interface is intended to be useful for any kind of database,
 * but this implementation is for SQLite3.

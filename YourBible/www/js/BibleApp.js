@@ -20,7 +20,7 @@ AppInitializer.prototype.begin = function() {
     settingStorage.create(function() {
 	    settingStorage.getCurrentVersion(function(versionFilename) {
 			if (versionFilename == null) {
-				versionFilename = 'WEB.db1'; // Where does the defalt come from.  There should be one for each major language.
+				versionFilename = 'WEB.db'; // Where does the defalt come from.  There should be one for each major language.
 				settingStorage.setVersion('WEB', versionFilename);//records version is on device.
 				settingStorage.setCurrentVersion(versionFilename);//records this is current version.
 			}
@@ -514,7 +514,7 @@ CopyrightView.prototype.plainCopyrightNotice = function() {
 	if (this.version.ownerCode === 'WBT') {
 		notice.push(this.version.localLanguageName, ' (', this.version.silCode);
 	} else {
-		notice.push(this.version.localVersionName, ' (', this.version.code);
+		notice.push(this.version.localVersionName, ' (', this.version.versionAbbr);
 	}
 	notice.push('), ');
 	if (this.version.copyrightYear === 'PUBLIC') {
@@ -1494,7 +1494,14 @@ var FLAG_PATH = 'licensed/icondrawer/flags/64/';
 
 function VersionsView(settingStorage) {
 	this.settingStorage = settingStorage;
-	this.database = new VersionsAdapter()
+	this.database = new VersionsAdapter();
+	var that = this;
+	that.translation = null;
+	deviceSettings.prefLanguage(function(locale) {
+		that.database.buildTranslateMap('es', function(results) {
+			that.translation = results;
+		});		
+	});
 	this.root = null;
 	this.rootNode = document.getElementById('settingRoot');
 	this.dom = new DOMBuilder();
@@ -1520,15 +1527,21 @@ VersionsView.prototype.buildCountriesList = function() {
 				var groupNode = that.dom.addNode(root, 'div');
 
 				var countryNode = that.dom.addNode(groupNode, 'table', 'ctry', null, 'cty' + row.countryCode);
-				countryNode.setAttribute('data-lang', row.primLanguage);
 				countryNode.addEventListener('click', countryClickHandler);
 				
 				var rowNode = that.dom.addNode(countryNode, 'tr');
 				var flagCell = that.dom.addNode(rowNode, 'td', 'ctryFlag');
+				
 				var flagNode = that.dom.addNode(flagCell, 'img');
 				flagNode.setAttribute('src', FLAG_PATH + row.countryCode.toLowerCase() + '.png');
 				
-				that.dom.addNode(rowNode, 'td', 'ctryName', row.localName);
+				that.dom.addNode(rowNode, 'td', 'localCtryName', row.localCountryName);
+				var prefLangName = that.translation[row.countryCode];
+				if (prefLangName !== row.localCountryName) {
+					flagCell.setAttribute('rowspan', 2);
+					var row2Node = that.dom.addNode(countryNode, 'tr');
+					that.dom.addNode(row2Node, 'td', 'ctryName', prefLangName);
+				}
 			}
 		}
 		that.rootNode.appendChild(root);
@@ -1550,10 +1563,9 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	var that = this;
 	var parent = countryNode.parentElement;
 	var countryCode = countryNode.id.substr(3);
-	var primLanguage = countryNode.getAttribute('data-lang');
 	this.settingStorage.getVersions();
 	this.settingStorage.getCurrentVersion(function(currentVersion) {
-		that.database.selectVersions(countryCode, primLanguage, function(results) {
+		that.database.selectVersions(countryCode, function(results) {
 			if (! (results instanceof IOError)) {
 				for (var i=0; i<results.length; i++) {
 					var row = results[i];
@@ -1561,7 +1573,9 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					var rowNode = that.dom.addNode(versionNode, 'tr');
 					var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
 					
-					that.dom.addNode(leftNode, 'p', 'langName', row.localLanguageName);
+					var prefLangName = that.translation[row.langCode];
+					var languageName = (prefLangName === row.localLanguageName) ? prefLangName : row.localLanguageName + ' (' + prefLangName + ')';
+					that.dom.addNode(leftNode, 'p', 'langName', languageName);
 					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
 					that.dom.addNode(leftNode, 'span', 'versName', versionName + ',  ');
 					
@@ -1569,7 +1583,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 						that.dom.addNode(leftNode, 'span', 'copy', 'Public Domain');
 					} else {
 						var copy = String.fromCharCode('0xA9') + String.fromCharCode('0xA0');
-						var copyright = (row.copyrightYear) ?  copy + row.copyrightYear + ', ' : copy;
+						var copyright = (row.copyright) ?  copy + row.copyright + ', ' : copy;
 						var copyNode = that.dom.addNode(leftNode, 'span', 'copy', copyright);
 						var ownerNode = that.dom.addNode(leftNode, 'span', 'copy', row.ownerName);
 					}
@@ -2763,10 +2777,51 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 function VersionsAdapter() {
     this.className = 'VersionsAdapter';
 	this.database = new DatabaseHelper('Versions.db', true);
+	this.translation = null;
 	Object.seal(this);
 }
+VersionsAdapter.prototype.buildTranslateMap = function(locale, callback) {
+	if (this.translation == null) {
+		this.translation = {};
+		var that = this;
+		var locales = findLocales(locale);
+		selectLocale(locales.pop());
+	}
+	
+	function selectLocale(oneLocale) {
+		if (oneLocale == null) {
+			callback(that.translation);
+		} else {
+			var statement = 'SELECT source, translated FROM Translation WHERE target = ?';
+			that.database.select(statement, [oneLocale], function(results) {
+				if (results instanceof IOError) {
+					console.log('VersionsAdapter.BuildTranslationMap', results);
+					callback(results);
+				} else {
+					for (var i=0; i<results.rows.length; i++) {
+						var row = results.rows.item(i);
+						that.translation[row.source] = row.translated;
+					}
+					selectLocale(locales.pop());
+				}
+			});
+		}
+	}
+	
+	function findLocales(locale) {
+		var locales = [locale];
+		var parts = locale.split('-');
+		if (parts.length > 0) {
+			locales.push(parts[0]);
+		}
+		if (locale !== 'en' && parts[0] !== 'en') {
+			locales.push('en');
+		}
+		return(locales);
+	}
+};
 VersionsAdapter.prototype.selectCountries = function(callback) {
-	var statement = 'SELECT countryCode, localName, primLanguage, flagIcon FROM Country ORDER BY localName';
+	var statement = 'SELECT countryCode, primLanguage, localCountryName FROM Country ORDER BY localCountryName';
 	this.database.select(statement, null, function(results) {
 		if (results instanceof IOError) {
 			callback(results)
@@ -2774,24 +2829,25 @@ VersionsAdapter.prototype.selectCountries = function(callback) {
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
-				array.push(row);
+				if (row.countryCode === 'WORLD') {
+					array.unshift(row);
+				} else {
+					array.push(row);
+				}
 			}
 			callback(array);
 		}
 	});
 };
-VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, callback) {
-	var statement = 'SELECT cv.versionCode, cv.localLanguageName, cv.localVersionName, t1.translated as scope, v.filename, o.ownerName,' +
-		' o.ownerURL, v.copyrightYear' +
-		' FROM CountryVersion cv' +
-		' JOIN Version v ON cv.versionCode=v.versionCode' +
-		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
-		' LEFT OUTER JOIN TextTranslation t1 ON t1.silCode=? AND t1.word=v.scope' +
-		' WHERE cv.countryCode = ?' +
-		' AND v.filename is NOT NULL' +
-		' AND length(v.filename) > 3' +
-		' ORDER BY cv.localLanguageName, cv.localVersionName';
-	this.database.select(statement, [primLanguage, countryCode], function(results) {
+VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
+	var statement =	'SELECT v.versionCode, l.localLanguageName, l.langCode, v.localVersionName, v.versionAbbr,' +
+		' v.copyright, v.filename, o.ownerName, o.ownerURL' +
+		' FROM Version v' + 
+		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
+		' JOIN Language l ON v.silCode = l.silCode' +
+		' JOIN CountryVersion cv ON v.versionCode = cv.versionCode' +
+		' WHERE cv.countryCode = ?'
+	this.database.select(statement, [countryCode], function(results) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else {
@@ -2805,11 +2861,11 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 	});
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
-	var statement = 'SELECT v.versionCode, v.silCode, v.isQaActive, v.copyrightYear, v.introduction,' +
-		' cv.localLanguageName, cv.localVersionName, o.ownerCode, o.ownerName, o.ownerURL' +
-		' FROM CountryVersion cv' +
-		' JOIN Version v ON cv.versionCode=v.versionCode' +
-		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
+	var statement = 'SELECT v.versionCode, v.silCode, v.isQaActive, v.copyright, v.introduction,' +
+		' l.localLanguageName, l.langCode, v.localVersionName, v.versionAbbr, o.ownerCode, o.ownerName, o.ownerURL' +
+		' FROM Version v' +
+		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
+		' JOIN Language l ON v.silCode = l.silCode' +
 		' WHERE v.filename = ?';
 	this.database.select(statement, [versionFile], function(results) {
 		if (results instanceof IOError) {
@@ -2976,8 +3032,10 @@ function BibleVersion() {
 	this.filename = null;
 	this.userFilename = null;
 	this.silCode = null;
+	this.langCode = null;
 	this.isQaActive = null;
 	this.copyrightYear = null;
+	this.versionAbbr = null;
 	this.localLanguageName = null;
 	this.localVersionName = null;
 	this.ownerCode = null;
@@ -2992,15 +3050,18 @@ BibleVersion.prototype.fill = function(filename, callback) {
 	versionsAdapter.selectVersionByFilename(filename, function(row) {
 		if (row instanceof IOError) {
 			that.code = 'WEB';
-			that.filename = 'WEB.db1';
+			that.filename = 'WEB.db';
 			that.userFilename = 'WEBUser.db';
 			that.silCode = 'eng';
+			that.langCode = 'en';
 			that.isQaActive = 'F';
 			that.copyrightYear = 'PUBLIC';
+			that.versionAbbr = 'WEB';
+			that.localLanguageName = 'English';
 			that.localVersionName = 'World English Bible';
-			this.ownerCode = 'EB';
+			that.ownerCode = 'EB';
 			that.ownerName = 'eBible';
-			that.ownerURL = 'eBible.org';
+			that.ownerURL = 'www.eBible.org';
 			that.introduction = null;
 		} else {
 			that.code = row.versionCode;
@@ -3008,8 +3069,10 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			var parts = filename.split('.');
 			that.userFilename = parts[0] + 'User.db';
 			that.silCode = row.silCode;
+			that.langCode = row.langCode;
 			that.isQaActive = row.isQaActive;
-			that.copyrightYear = row.copyrightYear;
+			that.copyrightYear = row.copyright;
+			that.versionAbbr = row.versionAbbr;
 			that.localLanguageName = row.localLanguageName;
 			that.localVersionName = row.localVersionName;
 			that.ownerCode = row.ownerCode;
@@ -3407,7 +3470,7 @@ var deviceSettings = {
             callback(pref.value);
         }
         function onError() {
-            callback('en-XX');
+            callback('en-US');
         }
     },
     platform: function() {

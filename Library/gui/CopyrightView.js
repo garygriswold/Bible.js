@@ -67,7 +67,7 @@ CopyrightView.prototype.plainCopyrightNotice = function() {
 	if (this.version.ownerCode === 'WBT') {
 		notice.push(this.version.localLanguageName, ' (', this.version.silCode);
 	} else {
-		notice.push(this.version.localVersionName, ' (', this.version.code);
+		notice.push(this.version.localVersionName, ' (', this.version.versionAbbr);
 	}
 	notice.push('), ');
 	if (this.version.copyrightYear === 'PUBLIC') {

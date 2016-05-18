@@ -1,5 +1,8 @@
-
-
+/*
+* This class is no longer, used and has been replaced by raw SQL input.
+* It is included here just in case, I later want to use this program which
+* loads data from CSV files.
+*/
 function LoadVersions() {
 	var DatabaseAdapter = require('./DatabaseAdapter');
 	this.database = new DatabaseAdapter({filename: './Versions.db', verbose: false});

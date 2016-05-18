@@ -7,10 +7,51 @@
 function VersionsAdapter() {
     this.className = 'VersionsAdapter';
 	this.database = new DatabaseHelper('Versions.db', true);
+	this.translation = null;
 	Object.seal(this);
 }
+VersionsAdapter.prototype.buildTranslateMap = function(locale, callback) {
+	if (this.translation == null) {
+		this.translation = {};
+		var that = this;
+		var locales = findLocales(locale);
+		selectLocale(locales.pop());
+	}
+	
+	function selectLocale(oneLocale) {
+		if (oneLocale == null) {
+			callback(that.translation);
+		} else {
+			var statement = 'SELECT source, translated FROM Translation WHERE target = ?';
+			that.database.select(statement, [oneLocale], function(results) {
+				if (results instanceof IOError) {
+					console.log('VersionsAdapter.BuildTranslationMap', results);
+					callback(results);
+				} else {
+					for (var i=0; i<results.rows.length; i++) {
+						var row = results.rows.item(i);
+						that.translation[row.source] = row.translated;
+					}
+					selectLocale(locales.pop());
+				}
+			});
+		}
+	}
+	
+	function findLocales(locale) {
+		var locales = [locale];
+		var parts = locale.split('-');
+		if (parts.length > 0) {
+			locales.push(parts[0]);
+		}
+		if (locale !== 'en' && parts[0] !== 'en') {
+			locales.push('en');
+		}
+		return(locales);
+	}
+};
 VersionsAdapter.prototype.selectCountries = function(callback) {
-	var statement = 'SELECT countryCode, localName, primLanguage, flagIcon FROM Country ORDER BY localName';
+	var statement = 'SELECT countryCode, primLanguage, localCountryName FROM Country ORDER BY localCountryName';
 	this.database.select(statement, null, function(results) {
 		if (results instanceof IOError) {
 			callback(results)
@@ -18,24 +59,25 @@ VersionsAdapter.prototype.selectCountries = function(callback) {
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
-				array.push(row);
+				if (row.countryCode === 'WORLD') {
+					array.unshift(row);
+				} else {
+					array.push(row);
+				}
 			}
 			callback(array);
 		}
 	});
 };
-VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, callback) {
-	var statement = 'SELECT cv.versionCode, cv.localLanguageName, cv.localVersionName, t1.translated as scope, v.filename, o.ownerName,' +
-		' o.ownerURL, v.copyrightYear' +
-		' FROM CountryVersion cv' +
-		' JOIN Version v ON cv.versionCode=v.versionCode' +
-		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
-		' LEFT OUTER JOIN TextTranslation t1 ON t1.silCode=? AND t1.word=v.scope' +
-		' WHERE cv.countryCode = ?' +
-		' AND v.filename is NOT NULL' +
-		' AND length(v.filename) > 3' +
-		' ORDER BY cv.localLanguageName, cv.localVersionName';
-	this.database.select(statement, [primLanguage, countryCode], function(results) {
+VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
+	var statement =	'SELECT v.versionCode, l.localLanguageName, l.langCode, v.localVersionName, v.versionAbbr,' +
+		' v.copyright, v.filename, o.ownerName, o.ownerURL' +
+		' FROM Version v' + 
+		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
+		' JOIN Language l ON v.silCode = l.silCode' +
+		' JOIN CountryVersion cv ON v.versionCode = cv.versionCode' +
+		' WHERE cv.countryCode = ?'
+	this.database.select(statement, [countryCode], function(results) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else {
@@ -49,11 +91,11 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, primLanguage, c
 	});
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
-	var statement = 'SELECT v.versionCode, v.silCode, v.isQaActive, v.copyrightYear, v.introduction,' +
-		' cv.localLanguageName, cv.localVersionName, o.ownerCode, o.ownerName, o.ownerURL' +
-		' FROM CountryVersion cv' +
-		' JOIN Version v ON cv.versionCode=v.versionCode' +
-		' JOIN Owner o ON v.ownerCode=o.ownerCode' +
+	var statement = 'SELECT v.versionCode, v.silCode, v.isQaActive, v.copyright, v.introduction,' +
+		' l.localLanguageName, l.langCode, v.localVersionName, v.versionAbbr, o.ownerCode, o.ownerName, o.ownerURL' +
+		' FROM Version v' +
+		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
+		' JOIN Language l ON v.silCode = l.silCode' +
 		' WHERE v.filename = ?';
 	this.database.select(statement, [versionFile], function(results) {
 		if (results instanceof IOError) {

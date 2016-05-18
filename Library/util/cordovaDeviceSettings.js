@@ -10,7 +10,7 @@ var deviceSettings = {
             callback(pref.value);
         }
         function onError() {
-            callback('en-XX');
+            callback('en-US');
         }
     },
     platform: function() {

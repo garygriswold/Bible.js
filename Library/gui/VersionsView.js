@@ -5,7 +5,14 @@ var FLAG_PATH = 'licensed/icondrawer/flags/64/';
 
 function VersionsView(settingStorage) {
 	this.settingStorage = settingStorage;
-	this.database = new VersionsAdapter()
+	this.database = new VersionsAdapter();
+	var that = this;
+	that.translation = null;
+	deviceSettings.prefLanguage(function(locale) {
+		that.database.buildTranslateMap('es', function(results) {
+			that.translation = results;
+		});		
+	});
 	this.root = null;
 	this.rootNode = document.getElementById('settingRoot');
 	this.dom = new DOMBuilder();
@@ -31,15 +38,21 @@ VersionsView.prototype.buildCountriesList = function() {
 				var groupNode = that.dom.addNode(root, 'div');
 
 				var countryNode = that.dom.addNode(groupNode, 'table', 'ctry', null, 'cty' + row.countryCode);
-				countryNode.setAttribute('data-lang', row.primLanguage);
 				countryNode.addEventListener('click', countryClickHandler);
 				
 				var rowNode = that.dom.addNode(countryNode, 'tr');
 				var flagCell = that.dom.addNode(rowNode, 'td', 'ctryFlag');
+				
 				var flagNode = that.dom.addNode(flagCell, 'img');
 				flagNode.setAttribute('src', FLAG_PATH + row.countryCode.toLowerCase() + '.png');
 				
-				that.dom.addNode(rowNode, 'td', 'ctryName', row.localName);
+				that.dom.addNode(rowNode, 'td', 'localCtryName', row.localCountryName);
+				var prefLangName = that.translation[row.countryCode];
+				if (prefLangName !== row.localCountryName) {
+					flagCell.setAttribute('rowspan', 2);
+					var row2Node = that.dom.addNode(countryNode, 'tr');
+					that.dom.addNode(row2Node, 'td', 'ctryName', prefLangName);
+				}
 			}
 		}
 		that.rootNode.appendChild(root);
@@ -61,10 +74,9 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	var that = this;
 	var parent = countryNode.parentElement;
 	var countryCode = countryNode.id.substr(3);
-	var primLanguage = countryNode.getAttribute('data-lang');
 	this.settingStorage.getVersions();
 	this.settingStorage.getCurrentVersion(function(currentVersion) {
-		that.database.selectVersions(countryCode, primLanguage, function(results) {
+		that.database.selectVersions(countryCode, function(results) {
 			if (! (results instanceof IOError)) {
 				for (var i=0; i<results.length; i++) {
 					var row = results[i];
@@ -72,7 +84,9 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					var rowNode = that.dom.addNode(versionNode, 'tr');
 					var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
 					
-					that.dom.addNode(leftNode, 'p', 'langName', row.localLanguageName);
+					var prefLangName = that.translation[row.langCode];
+					var languageName = (prefLangName === row.localLanguageName) ? prefLangName : row.localLanguageName + ' (' + prefLangName + ')';
+					that.dom.addNode(leftNode, 'p', 'langName', languageName);
 					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
 					that.dom.addNode(leftNode, 'span', 'versName', versionName + ',  ');
 					
@@ -80,7 +94,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 						that.dom.addNode(leftNode, 'span', 'copy', 'Public Domain');
 					} else {
 						var copy = String.fromCharCode('0xA9') + String.fromCharCode('0xA0');
-						var copyright = (row.copyrightYear) ?  copy + row.copyrightYear + ', ' : copy;
+						var copyright = (row.copyright) ?  copy + row.copyright + ', ' : copy;
 						var copyNode = that.dom.addNode(leftNode, 'span', 'copy', copyright);
 						var ownerNode = that.dom.addNode(leftNode, 'span', 'copy', row.ownerName);
 					}
