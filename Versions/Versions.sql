@@ -119,17 +119,17 @@ translated TEXT NOT NULL,
 PRIMARY KEY(source, target)
 );
 -- copyright and all rights should be replaced by a complete message
-INSERT INTO Translation VALUES ('BIBLE', 'en', 'Bible');
-INSERT INTO Translation VALUES ('BIBLE_NT', 'en', 'New Testament');
-INSERT INTO Translation VALUES ('BIBLE_PNT', 'en', 'Partial New Testament');
-INSERT INTO Translation VALUES ('COPYRIGHT', 'en', 'Copyright');
-INSERT INTO Translation VALUES ('ALL_RIGHTS', 'en', 'All Rights Reserved');
+-- INSERT INTO Translation VALUES ('BIBLE', 'en', 'Bible');
+-- INSERT INTO Translation VALUES ('BIBLE_NT', 'en', 'New Testament');
+-- INSERT INTO Translation VALUES ('BIBLE_PNT', 'en', 'Partial New Testament');
+-- INSERT INTO Translation VALUES ('COPYRIGHT', 'en', 'Copyright');
+-- INSERT INTO Translation VALUES ('ALL_RIGHTS', 'en', 'All Rights Reserved');
 
-INSERT INTO Translation VALUES ('BIBLE', 'es', 'Biblia');
-INSERT INTO Translation VALUES ('BIBLE_NT', 'es', 'Nuevo Testamento');
-INSERT INTO Translation VALUES ('BIBLE_PNT', 'es', 'Parcial Nuevo Testamento');
-INSERT INTO Translation VALUES ('COPYRIGHT', 'es', 'Derechos de autor');
-INSERT INTO Translation VALUES ('ALL_RIGHTS', 'es', 'Reservados todos los derechos');
+-- INSERT INTO Translation VALUES ('BIBLE', 'es', 'Biblia');
+-- INSERT INTO Translation VALUES ('BIBLE_NT', 'es', 'Nuevo Testamento');
+-- INSERT INTO Translation VALUES ('BIBLE_PNT', 'es', 'Parcial Nuevo Testamento');
+-- INSERT INTO Translation VALUES ('COPYRIGHT', 'es', 'Derechos de autor');
+-- INSERT INTO Translation VALUES ('ALL_RIGHTS', 'es', 'Reservados todos los derechos');
 
 INSERT INTO Translation VALUES ('en', 'en', 'English');
 INSERT INTO Translation VALUES ('en', 'es', 'Inglés');
@@ -140,10 +140,6 @@ INSERT INTO Translation VALUES ('es', 'en', 'Spanish');
 INSERT INTO Translation VALUES ('es', 'zh', '西班牙语');
 INSERT INTO Translation VALUES ('es', 'es', 'Español');
 INSERT INTO Translation VALUES ('es', 'ar', 'الأسبانية');
-
-INSERT INTO Translation VALUES ('ar', 'en', 'what1');
-INSERT INTO Translation VALUES ('ar', 'es', 'what2');
-INSERT INTO Translation VALUES ('zh', 'ar', 'what3');
 
 INSERT INTO Translation VALUES ('WORLD', 'en', 'World');
 INSERT INTO Translation VALUES ('WORLD', 'es', 'Mundo');

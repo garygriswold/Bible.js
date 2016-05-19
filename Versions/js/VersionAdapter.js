@@ -48,6 +48,33 @@ VersionAdapter.prototype.loadIntroductions = function(directory, callback) {
 		}
 	});
 };
+/**
+* This method validates that the translation table is complete for all languages in use,
+* and that the same items have been translated for all languages.
+*/
+VersionAdapter.prototype.validateTranslation = function(callback) {
+	var statement = 'SELECT target, count(*) AS count FROM Translation GROUP BY target';
+	this.db.all(statement, [], function(err, results) {
+		if (err) {
+			console.log('SQL Error in VersionAdapter.validateTranslation');
+			callback(err);
+		} else {
+			var sum = 0;
+			for (var i=0; i<results.length; i++) {
+				sum += results[i].count;
+			}
+			var avg = Math.round(sum / results.length);
+			var errorCount = 0;
+			for (i=0; i<results.length; i++) {
+				if (results[i].count != avg) {
+					errorCount++;
+					console.log('Translation Average=' + avg + ' ' + results[i].target + '=' + results[i].count);
+				}
+			}
+			callback(errorCount);
+		}
+	});
+};
 VersionAdapter.prototype.executeSQL = function(statement, values, callback) {
 	var that = this;
 	var rowCount = 0;
@@ -82,8 +109,14 @@ VersionAdapter.prototype.close = function() {
 
 var database = new VersionAdapter({filename: './Versions.db', verbose: false});
 database.loadIntroductions('data/VersionIntro', function() {
-	database.close();
-	console.log('SUCCESSFULLY CREATED Versions.db');
+	database.validateTranslation(function(errCount) {
+		database.close();
+		if (errCount == 0) {
+			console.log('SUCCESSFULLY CREATED Versions.db');
+		} else {
+			console.log('COMPLETED WITH ERRORS');
+		}
+	});
 });
 
 module.exports = VersionAdapter;
