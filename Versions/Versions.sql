@@ -30,6 +30,8 @@ INSERT INTO Language VALUES ('eng', 'en', 'English', 'English');
 INSERT INTO Language VALUES ('spa', 'es', 'Spanish', 'Español');
 INSERT INTO Language VALUES ('arb', 'ar', 'Arabic', 'اللغة العربية');
 INSERT INTO Language VALUES ('cnm', 'zh', 'Chinese', '汉语, 漢語');
+INSERT INTO Language VALUES ('amu', 'es', 'Amuzgo, Guerrero', 'Amuzgo, Guerrero');
+INSERT INTO Language VALUES ('azg', 'es', 'Amuzgo, San Pedro Amuzgos', 'Amuzgo, San Pedro Amuzgos');
 
 
 CREATE TABLE Owner (
@@ -76,6 +78,11 @@ INSERT INTO Version VALUES ('BLPH', 'spa', 'SPN', 'BLPH', 'La Palabra (versión 
 UPDATE Version SET copyright = 'La Palabra (BLP) versión española Copyright © Sociedad Bíblica de España, 2010 Utilizada con permiso' WHERE versionCode = 'BLP';
 UPDATE Version SET copyright = 'La Palabra (BLPH) versión hispanoamericana Copyright © Sociedad Bíblica de España, 2010 Utilizada con permiso' WHERE versionCode = 'BLPH';
 
+INSERT INTO Version Values ('amu', 'amu', 'WBT', 'AMU', 'Amuzgo, Guerrero', 'BIBLE_NT', 'AMU.db', 'F', NULL, NULL);
+INSERT INTO Version Values ('azg', 'azg', 'WBT', 'AZG', 'Amuzgo, San Pedro Amuzgos', 'BIBLE_NT', 'AZG.db', 'F', NULL, NULL);
+UPDATE Version SET copyright = 'Amuzgo, Guerrero, © 1999 by Wycliffe Bible Translators' WHERE versionCode = 'amu';
+UPDATE Version SET copyright = 'Amuzgo, San Pedro Amuzgos, © 1992 by Wycliffe Bible Translators' WHERE versionCode = 'azg';
+
 
 CREATE TABLE CountryVersion (
 countryCode TEXT REFERENCES Country(countryCode),
@@ -90,6 +97,8 @@ INSERT INTO CountryVersion VALUES ('US', 'CEVUS06');
 INSERT INTO CountryVersion VALUES ('US', 'KJVA');
 INSERT INTO CountryVersion VALUES ('MX', 'BLPH');
 INSERT INTO CountryVersion VALUES ('MX', 'BLP');
+INSERT INTO CountryVersion VALUES ('MX', 'amu');
+INSERT INTO CountryVersion VALUES ('MX', 'azg');
 
 
 CREATE TABLE StoreVersion (
