@@ -9,13 +9,13 @@ function BibleVersion() {
 	this.silCode = null;
 	this.langCode = null;
 	this.isQaActive = null;
-	this.copyrightYear = null;
 	this.versionAbbr = null;
 	this.localLanguageName = null;
 	this.localVersionName = null;
 	this.ownerCode = null;
 	this.ownerName = null;
 	this.ownerURL = null;
+	this.copyright = null;
 	this.introduction = null;
 	Object.seal(this);
 }
@@ -30,13 +30,13 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.silCode = 'eng';
 			that.langCode = 'en';
 			that.isQaActive = 'F';
-			that.copyrightYear = 'PUBLIC';
 			that.versionAbbr = 'WEB';
 			that.localLanguageName = 'English';
 			that.localVersionName = 'World English Bible';
 			that.ownerCode = 'EB';
 			that.ownerName = 'eBible';
 			that.ownerURL = 'www.eBible.org';
+			that.copyright = 'World English Bible (WEB), Public Domain, eBible.';
 			that.introduction = null;
 		} else {
 			that.code = row.versionCode;
@@ -46,13 +46,13 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.silCode = row.silCode;
 			that.langCode = row.langCode;
 			that.isQaActive = row.isQaActive;
-			that.copyrightYear = row.copyright;
 			that.versionAbbr = row.versionAbbr;
 			that.localLanguageName = row.localLanguageName;
 			that.localVersionName = row.localVersionName;
 			that.ownerCode = row.ownerCode;
-			that.ownerName = row.ownerName;
+			that.ownerName = row.localOwnerName;
 			that.ownerURL = row.ownerURL;
+			that.copyright = row.copyright;
 			that.introduction = row.introduction;
 		}
 		callback();

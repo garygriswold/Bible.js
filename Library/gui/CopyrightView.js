@@ -35,14 +35,14 @@ function CopyrightView(version) {
 CopyrightView.prototype.createCopyrightNotice = function() {
 	var html = [];
 	html.push('<p><span class="copyright">');
-	html.push(this.plainCopyrightNotice(), '</span>');
+	html.push(this.version.copyright, '</span>');
 	html.push('<span class="copylink" onclick="addCopyrightViewNotice(event)"> \u261E </span>', '</p>');
 	return(html.join(''));
 };
 CopyrightView.prototype.createCopyrightNoticeDOM = function() {
 	var root = document.createElement('p');
 	var dom = new DOMBuilder();
-	dom.addNode(root, 'span', 'copyright', this.plainCopyrightNotice());
+	dom.addNode(root, 'span', 'copyright', this.version.copyright);
 	var link = dom.addNode(root, 'span', 'copylink', ' \u261E ');
 	link.addEventListener('click',  addCopyrightViewNotice);	
 	return(root);
@@ -59,32 +59,11 @@ CopyrightView.prototype.createTOCTitleDOM = function() {
 	return(root);
 };
 /**
-* Translation Name (trans code) | Language Name (lang code),
-* Copyright C year, Organization hand-link
-*/
-CopyrightView.prototype.plainCopyrightNotice = function() {
-	var notice = [];
-	if (this.version.ownerCode === 'WBT') {
-		notice.push(this.version.localLanguageName, ' (', this.version.silCode);
-	} else {
-		notice.push(this.version.localVersionName, ' (', this.version.versionAbbr);
-	}
-	notice.push('), ');
-	if (this.version.copyrightYear === 'PUBLIC') {
-		notice.push('Public Domain');
-	} else {
-		notice.push(String.fromCharCode('0xA9'), String.fromCharCode('0xA0'), this.version.copyrightYear);
-	}
-	notice.push(', ', this.version.ownerName, '.');
-	return(notice.join(''));
-};
-/**
 * Language (lang code), Translation Name (trans code),
 * Copyright C year, Organization,
 * Organization URL, link image
 */
 CopyrightView.prototype.createAttributionView = function() {
-	console.log('inside show Attribution View');
 	var dom = new DOMBuilder();
 	var root = document.createElement('div');
 	root.setAttribute('id', 'attribution');
@@ -98,16 +77,8 @@ CopyrightView.prototype.createAttributionView = function() {
 		}
 	});
 	
-	var nameNode = dom.addNode(root, 'p', 'attribVers');
-	dom.addNode(nameNode, 'span', null, addAbbrev(this.version.localVersionName, this.version.code) + ', ');
-	dom.addNode(nameNode, 'span', null, addAbbrev(this.version.localLanguageName, this.version.silCode));
-	var copyNode = dom.addNode(root, 'p', 'attribCopy');
-	if (this.version.copyrightYear === 'PUBLIC') {
-		dom.addNode(copyNode, 'span', null, 'Public Domain');
-	} else {
-		dom.addNode(copyNode, 'span', null, String.fromCharCode('0xA9') + String.fromCharCode('0xA0') + this.version.copyrightYear);
-	}
-	dom.addNode(copyNode, 'span', null, ', ' + this.version.ownerName);
+	var copyNode = dom.addNode(root, 'p', 'attribVers');
+	dom.addNode(copyNode, 'span', null, this.version.copyright);
 	
 	if (this.version.introduction) {
 		var intro = dom.addNode(root, 'div', 'introduction');
@@ -120,9 +91,5 @@ CopyrightView.prototype.createAttributionView = function() {
 		cordova.InAppBrowser.open(webAddress, '_blank', 'location=yes');
 	});
 	return(root);
-	
-	function addAbbrev(name, abbrev) {
-		return(name + String.fromCharCode('0xA0') + '(' + abbrev + ')');
-	}
 };
 

@@ -90,14 +90,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
 					that.dom.addNode(leftNode, 'span', 'versName', versionName + ',  ');
 					
-					if (row.copyrightYear === 'PUBLIC') {
-						that.dom.addNode(leftNode, 'span', 'copy', 'Public Domain');
-					} else {
-						var copy = String.fromCharCode('0xA9') + String.fromCharCode('0xA0');
-						var copyright = (row.copyright) ?  copy + row.copyright + ', ' : copy;
-						var copyNode = that.dom.addNode(leftNode, 'span', 'copy', copyright);
-						var ownerNode = that.dom.addNode(leftNode, 'span', 'copy', row.ownerName);
-					}
+					var ownerNode = that.dom.addNode(leftNode, 'span', 'versName', row.localOwnerName);
 					
 					var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
 					var btnNode = that.dom.addNode(rightNode, 'button', 'versIcon');

@@ -34,14 +34,15 @@ INSERT INTO Language VALUES ('cnm', 'zh', 'Chinese', '汉语, 漢語');
 
 CREATE TABLE Owner (
 ownerCode TEXT PRIMARY KEY NOT NULL,
-ownerName TEXT NOT NULL,
+englishName TEXT NOT NULL,
+localOwnerName TEXT NOT NULL,
 ownerURL TEXT NOT NULL
 );
-INSERT INTO Owner VALUES ('WBT', 'Wycliffe Bible Translators', 'www.wycliffe.org');
-INSERT INTO Owner VALUES ('SPN', 'Bible Society of Spain', 'www.unitedbiblesocieties.org/society/bible-society-of-spain/');
-INSERT INTO Owner VALUES ('EBIBLE', 'eBible.org', 'www.ebible.org');
-INSERT INTO Owner VALUES ('CRSWY', 'Crossway', 'www.crossway.org');
-INSERT INTO Owner VALUES ('ABS', 'American Bible Society', 'www.americanbible.org/');
+INSERT INTO Owner VALUES ('WBT', 'Wycliffe Bible Translators', 'Wycliffe Bible Translators', 'www.wycliffe.org');
+INSERT INTO Owner VALUES ('SPN', 'Bible Society of Spain', 'Sociedad Bíblica de España', 'www.unitedbiblesocieties.org/society/bible-society-of-spain/');
+INSERT INTO Owner VALUES ('EBIBLE', 'eBible.org', 'eBible.org', 'www.ebible.org');
+INSERT INTO Owner VALUES ('CRSWY', 'Crossway', 'Crossway', 'www.crossway.org');
+INSERT INTO Owner VALUES ('ABS', 'American Bible Society', 'American Bible Society', 'www.americanbible.org/');
 
 
 CREATE TABLE Version (
@@ -50,20 +51,30 @@ silCode TEXT NOT NULL REFERENCES Language(silCode),
 ownerCode TEXT NOT NULL REFERENCES Owner(ownerCode),
 versionAbbr TEXT NOT NULL,
 localVersionName TEXT NOT NULL,
-copyright TEXT NOT NULL,
 scope TEXT NOT NULL CHECK (scope in('BIBLE','BIBLE_NT','BIBLE_PNT')),
 filename TEXT UNIQUE,
 isQaActive TEXT CHECK (isQaActive IN('T','F')),
+copyright TEXT NULL,
 introduction TEXT
 );
-INSERT INTO Version VALUES ('WEB', 'eng', 'EBIBLE', 'WEB', 'World English Bible', 'PUBLIC', 'BIBLE', 'WEB.db', 'F', NULL);
-INSERT INTO Version VALUES ('KJVPD', 'eng', 'EBIBLE', 'KJV', 'King James Version', 'PUBLIC', 'BIBLE', 'KJVPD.db', 'F', NULL);
-INSERT INTO Version VALUES ('GNTD', 'eng', 'ABS', 'GN', 'Good News', '1992', 'BIBLE', 'GNTD.db', 'F', NULL);
-INSERT INTO Version VALUES ('ESV', 'eng', 'CRSWY', 'ESV', 'English Standard Version', '2001', 'BIBLE', 'ESV.db', 'F', NULL);
-INSERT INTO Version VALUES ('CEVUS06', 'eng', 'ABS', 'CEV', 'Contemporary English Version', '1995', 'BIBLE', 'CEVUS06.db', 'F', NULL);
-INSERT INTO Version VALUES ('KJVA', 'eng', 'ABS', 'KJV', 'King James Version', '2010', 'BIBLE', 'KJVA.db', 'F', NULL);
-INSERT INTO Version VALUES ('BLPH', 'spa', 'SPN', 'BLPH', 'La Palabra versión hispanoamericana', '2010', 'BIBLE', 'BLPH.db', 'F', NULL);
-INSERT INTO Version VALUES ('BLP', 'spa', 'SPN', 'BLP', 'La Palabra', '2010', 'BIBLE', 'BLP.db', 'F', NULL);
+INSERT INTO Version VALUES ('CEVUS06', 'eng', 'ABS', 'CEV', 'Contemporary English Version', 'BIBLE', 'CEVUS06.db', 'F', NULL, NULL);
+INSERT INTO Version VALUES ('ESV', 'eng', 'CRSWY', 'ESV', 'English Standard Version', 'BIBLE', 'ESV.db', 'F', NULL, NULL);
+INSERT INTO Version VALUES ('GNTD', 'eng', 'ABS', 'GN', 'Good News', 'BIBLE', 'GNTD.db', 'F', NULL, NULL);
+INSERT INTO Version VALUES ('KJVA', 'eng', 'ABS', 'KJV', 'King James Version, American Edition', 'BIBLE', 'KJVA.db', 'F', NULL, NULL);
+INSERT INTO Version VALUES ('KJVPD', 'eng', 'EBIBLE', 'KJV', 'King James Version', 'BIBLE', 'KJVPD.db', 'F', NULL, NULL);
+INSERT INTO Version VALUES ('WEB', 'eng', 'EBIBLE', 'WEB', 'World English Bible', 'BIBLE', 'WEB.db', 'F', NULL, NULL);
+
+UPDATE Version SET copyright = 'Contemporary English Version® © 1995 American Bible Society. All rights reserved.' WHERE versionCode = 'CEVUS06';
+UPDATE Version SET copyright = 'English Standard Version®, copyright © 2001 by Crossway Bibles, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.' WHERE versionCode = 'ESV';
+UPDATE Version SET copyright = 'Good News Translation® (Today’s English Version, Second Edition) © 1992 American Bible Society. All rights reserved.  Bible text from the Good News Translation (GNT) is not to be reproduced in copies or otherwise by any means except as permitted in writing by American Bible Society, 1865 Broadway, New York, NY 10023.' WHERE versionCode = 'GNTD';
+UPDATE Version SET copyright = 'King James Version 1611, spelling, punctuation and text formatting modernized by ABS in 1962; typesetting © 2010 American Bible Society.' WHERE versionCode = 'KJVA';
+UPDATE Version SET copyright = 'King James Version 1611 (KJV), Public Domain, eBible.org.' WHERE versionCode = 'KJVPD';
+UPDATE Version SET copyright = 'World English Bible (WEB), Public Domain, eBible.org.' WHERE versionCode = 'WEB';
+
+INSERT INTO Version VALUES ('BLP', 'spa', 'SPN', 'BLP', 'La Palabra (versión española)', 'BIBLE', 'BLP.db', 'F', NULL, NULL);
+INSERT INTO Version VALUES ('BLPH', 'spa', 'SPN', 'BLPH', 'La Palabra (versión hispanoamericana)','BIBLE', 'BLPH.db', 'F', NULL, NULL);
+UPDATE Version SET copyright = 'La Palabra (BLP) versión española Copyright © Sociedad Bíblica de España, 2010 Utilizada con permiso' WHERE versionCode = 'BLP';
+UPDATE Version SET copyright = 'La Palabra (BLPH) versión hispanoamericana Copyright © Sociedad Bíblica de España, 2010 Utilizada con permiso' WHERE versionCode = 'BLPH';
 
 
 CREATE TABLE CountryVersion (

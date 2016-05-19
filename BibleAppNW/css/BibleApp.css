@@ -711,15 +711,12 @@ td.versRight {
 	text-align:right;
 }
 p.langName {
-	font-size: 1.2rem;
+	font-size: 1.0rem;
 	margin-top:0px;
 	margin-bottom:10px;	
 }
 span.versName {
-	font-size: 1.0rem;
-}
-span.copy {
-	font-size: 0.8rem;
+	font-size: 1.2rem;
 }
 button.versIcon {
 	border: none; 
