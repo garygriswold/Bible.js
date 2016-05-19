@@ -19,7 +19,8 @@ VersionsAdapter.prototype.buildTranslateMap = function(locale, callback) {
 	}
 	
 	function selectLocale(oneLocale) {
-		if (oneLocale == null) {
+		// terminate once there are translation items, or there no more locales to process.
+		if (that.translation.length > 10 || oneLocale == null) {
 			callback(that.translation);
 		} else {
 			var statement = 'SELECT source, translated FROM Translation WHERE target = ?';
@@ -39,14 +40,10 @@ VersionsAdapter.prototype.buildTranslateMap = function(locale, callback) {
 	}
 	
 	function findLocales(locale) {
-		var locales = [locale];
+		var locales = [];
 		var parts = locale.split('-');
-		if (parts.length > 0) {
-			locales.push(parts[0]);
-		}
-		if (locale !== 'en' && parts[0] !== 'en') {
-			locales.push('en');
-		}
+		locales.push(parts[0]);
+		locales.push('en');
 		return(locales);
 	}
 };
