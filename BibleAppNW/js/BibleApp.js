@@ -20,9 +20,11 @@ AppInitializer.prototype.begin = function() {
     settingStorage.create(function() {
 	    settingStorage.getCurrentVersion(function(versionFilename) {
 			if (versionFilename == null) {
-				versionFilename = 'WEB.db'; // Where does the defalt come from.  There should be one for each major language.
-				settingStorage.setVersion('WEB', versionFilename);//records version is on device.
-				settingStorage.setCurrentVersion(versionFilename);//records this is current version.
+				//versionFilename = 'WEB.db'; // Where does the defalt come from.  There should be one for each major language.
+				//settingStorage.setVersion('WEB', versionFilename);//records version is on device.
+				//settingStorage.setCurrentVersion(versionFilename);//records this is current version.
+				
+				versionFilename = settingStorage.initSettings();
 			}
 			changeVersionHandler(versionFilename);
 		});
