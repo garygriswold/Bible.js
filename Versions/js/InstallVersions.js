@@ -21,7 +21,8 @@ function InstallVersions(options) {
 }
 InstallVersions.prototype.install = function(locale, callback) {
 	var that = this;
-	var statement = 'SELECT v.versionCode, v.silCode, v.ownerCode, v.versionAbbr, v.localVersionName, v.filename' +
+	var hasDefaultVersion = false;
+	var statement = 'SELECT v.versionCode, v.silCode, v.versionAbbr, v.localVersionName, v.filename, s.defaultVersion' +
 			' FROM Version v JOIN StoreVersion s ON s.versionCode = v.versionCode' +
 			' WHERE s.storeLocale = ? AND s.endDate IS NULL';
 	this.db.all(statement, [locale], function(err, results) {
@@ -38,14 +39,19 @@ InstallVersions.prototype.install = function(locale, callback) {
 		if (index < results.length) {
 			var row = results[index];
 			console.log(row);
+			if (row.defaultVersion === 'T') {
+				hasDefaultVersion = true;
+				that.initSettingsJS.push('\tthis.setCurrentVersion("' + row.filename + '");');
+			}
 			that.initSettingsJS.push('\tthis.setVersion("' + row.versionCode + '", "' + row.filename + '");');
 			that.copyFile('../../DBL/5ready/' + row.filename, '../YourBible/www/', function() {
 				console.log('Finished copy', row.filename);
 				processRow(results, index + 1);
 			});
 		} else {
-			row = results[results.length - 1];// must somehow set this explicitly
-			that.initSettingsJS.push('\tthis.setCurrentVersion("' + row.filename + '");');
+			if (! hasDefaultVersion) {
+				that.error('InstallVersions.processRow', 'No defaultVersion');
+			}
 			that.initSettingsJS.push('};\n');
 			that.fs.writeFile('../YourBible/www/js/SettingStorageInitSettings.js', that.initSettingsJS.join('\n'), {encoding: 'utf8'}, function(err) {
 				if (err) {

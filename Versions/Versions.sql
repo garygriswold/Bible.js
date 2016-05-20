@@ -104,12 +104,13 @@ INSERT INTO CountryVersion VALUES ('MX', 'azg');
 CREATE TABLE StoreVersion (
 storeLocale TEXT NOT NULL,	
 versionCode NOT NULL REFERENCES Version(versionCode),
+defaultVersion NOT NULL CHECK(defaultVersion IN('T', 'F')),
 startDate NOT NULL,
 endDate NULL,
 PRIMARY KEY (storeLocale, versionCode)
 );
-INSERT INTO StoreVersion VALUES ('en', 'WEB', '2016-05-16', null);
-INSERT INTO StoreVersion VALUES ('en', 'KJVPD', '2016-05-16', null);
+INSERT INTO StoreVersion VALUES ('en', 'WEB', 'T', '2016-05-16', null);
+INSERT INTO StoreVersion VALUES ('en', 'KJVPD', 'F', '2016-05-16', null);
 
 
 CREATE TABLE Translation (
@@ -118,18 +119,6 @@ target TEXT NOT NULL,
 translated TEXT NOT NULL,
 PRIMARY KEY(source, target)
 );
--- copyright and all rights should be replaced by a complete message
--- INSERT INTO Translation VALUES ('BIBLE', 'en', 'Bible');
--- INSERT INTO Translation VALUES ('BIBLE_NT', 'en', 'New Testament');
--- INSERT INTO Translation VALUES ('BIBLE_PNT', 'en', 'Partial New Testament');
--- INSERT INTO Translation VALUES ('COPYRIGHT', 'en', 'Copyright');
--- INSERT INTO Translation VALUES ('ALL_RIGHTS', 'en', 'All Rights Reserved');
-
--- INSERT INTO Translation VALUES ('BIBLE', 'es', 'Biblia');
--- INSERT INTO Translation VALUES ('BIBLE_NT', 'es', 'Nuevo Testamento');
--- INSERT INTO Translation VALUES ('BIBLE_PNT', 'es', 'Parcial Nuevo Testamento');
--- INSERT INTO Translation VALUES ('COPYRIGHT', 'es', 'Derechos de autor');
--- INSERT INTO Translation VALUES ('ALL_RIGHTS', 'es', 'Reservados todos los derechos');
 
 INSERT INTO Translation VALUES ('en', 'en', 'English');
 INSERT INTO Translation VALUES ('en', 'es', 'Inglés');
