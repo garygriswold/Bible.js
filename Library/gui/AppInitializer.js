@@ -22,6 +22,8 @@ AppInitializer.prototype.begin = function() {
 				versionFilename = 'WEB.db'; // Where does the defalt come from.  There should be one for each major language.
 				settingStorage.setVersion('WEB', versionFilename);//records version is on device.
 				settingStorage.setCurrentVersion(versionFilename);//records this is current version.
+				
+				//versionFilename = settingStorage.initSettings();  This should replace the above 3 lines
 			}
 			changeVersionHandler(versionFilename);
 		});

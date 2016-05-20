@@ -16,7 +16,6 @@ function VersionAdapter(options) {
 	}
 	this.db.run("PRAGMA foreign_keys = ON");
 	this.fs = require('fs');
-	//this.directory = null;
 	Object.seal(this);
 }
 VersionAdapter.prototype.loadIntroductions = function(directory, callback) {
