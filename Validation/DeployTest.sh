@@ -5,7 +5,7 @@ if [ -z "$1" ]; then
         exit 1;
 fi
 
-SOURCE=$HOME/ShortSands/DBL/5ready/$1.db1
+SOURCE=$HOME/ShortSands/DBL/5ready/$1.db
 
 cp $SOURCE "$HOME/Library/Application Support/BibleAppNW/databases/file__0/1"
 cp $SOURCE $HOME/ShortSands/BibleApp/YourBible/www

@@ -14,10 +14,10 @@ TARGET=/root/StaticRoot/book/
 echo "Upload $VERSION";
 
 cd ${SOURCE}
-rm ${VERSION}.db1.zip
+rm ${VERSION}.db.zip
 
-zip ${VERSION}.db1.zip ${VERSION}.db1
+zip ${VERSION}.db.zip ${VERSION}.db
 
-scp ${SOURCE}${VERSION}.db1.zip ${HOST}:${TARGET}
+scp ${SOURCE}${VERSION}.db.zip ${HOST}:${TARGET}
 
-ssh ${HOST} unzip -d ${TARGET} ${TARGET}${VERSION}.db1.zip
+ssh ${HOST} unzip -d ${TARGET} ${TARGET}${VERSION}.db.zip

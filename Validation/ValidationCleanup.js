@@ -63,8 +63,8 @@ if (process.argv.length < 3) {
 	process.exit(1);
 } else {
 	var fs = require('fs');
-	var contents = fs.readFileSync(VALID_PATH + process.argv[2] + '.db1');
-	var filename = READY_PATH + process.argv[2] + '.db1';
+	var contents = fs.readFileSync(VALID_PATH + process.argv[2] + '.db');
+	var filename = READY_PATH + process.argv[2] + '.db';
 	fs.writeFileSync(filename, contents);
 	console.log('Process ' + filename);
 	var val = new ValidationCleanup(filename);

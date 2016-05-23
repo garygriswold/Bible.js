@@ -225,9 +225,9 @@ if (process.argv.length < 3) {
 	process.exit(1);
 } else {
 	var fs = require('fs');
-	var contents = fs.readFileSync(DB_PATH + process.argv[2] + '.db1');
-	fs.writeFileSync(VALID_PATH + process.argv[2] + '.db1', contents);
-	var filename = VALID_PATH + process.argv[2] + '.db1';
+	var contents = fs.readFileSync(DB_PATH + process.argv[2] + '.db');
+	fs.writeFileSync(VALID_PATH + process.argv[2] + '.db', contents);
+	var filename = VALID_PATH + process.argv[2] + '.db';
 	console.log('Process ' + filename);
 	var val = new ConcordanceValidator(filename);
 	val.open(function() {
