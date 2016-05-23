@@ -1101,7 +1101,7 @@ XMLTokenizer.prototype.nextToken = function() {
 	this.tokenStart = this.position;
 	while(this.position < this.data.length) {
 		var chr = this.data[this.position++];
-		console.log(this.current, chr, chr.charCodeAt(0));
+		//console.log(this.current, chr, chr.charCodeAt(0));
 		switch(this.current) {
 			case this.state.BEGIN:
 				if (chr === '<') {
