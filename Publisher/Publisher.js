@@ -1101,7 +1101,7 @@ XMLTokenizer.prototype.nextToken = function() {
 	this.tokenStart = this.position;
 	while(this.position < this.data.length) {
 		var chr = this.data[this.position++];
-		//console.log(this.current, chr, chr.charCodeAt(0));
+		console.log(this.current, chr, chr.charCodeAt(0));
 		switch(this.current) {
 			case this.state.BEGIN:
 				if (chr === '<') {
@@ -1643,8 +1643,6 @@ function DeviceDatabase(versionFile) {
 	this.concordance = new ConcordanceAdapter(this);
 	this.styleIndex = new StyleIndexAdapter(this);
 	this.styleUse = new StyleUseAdapter(this);
-	//this.history = new HistoryAdapter(this);
-	//this.questions = new QuestionsAdapter(this);
 	Object.seal(this);
 }
 DeviceDatabase.prototype.select = function(statement, values, callback) {
@@ -2113,7 +2111,7 @@ if (process.argv.length < 3) {
 		types.concordance = true;
 		types.styleIndex = true;
 		types.statistics = true;
-		var database = new DeviceDatabase(DB_PATH + version.toUpperCase() + '.db1');
+		var database = new DeviceDatabase(DB_PATH + version.toUpperCase() + '.db');
 		
 		var builder = new AssetBuilder(types, database);
 		builder.build(function(err) {

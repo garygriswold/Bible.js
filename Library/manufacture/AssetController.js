@@ -17,7 +17,7 @@ if (process.argv.length < 3) {
 		types.concordance = true;
 		types.styleIndex = true;
 		types.statistics = true;
-		var database = new DeviceDatabase(DB_PATH + version.toUpperCase() + '.db1');
+		var database = new DeviceDatabase(DB_PATH + version.toUpperCase() + '.db');
 		
 		var builder = new AssetBuilder(types, database);
 		builder.build(function(err) {
