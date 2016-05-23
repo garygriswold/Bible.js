@@ -16,8 +16,8 @@ englishName TEXT NOT NULL,
 localCountryName TEXT NOT NULL
 );
 INSERT INTO Country VALUES ('WORLD', 'en', 'World', 'World');
-INSERT INTO Country VALUES ('US', 'en', 'United States', 'United States');
-INSERT INTO Country VALUES ('MX', 'es', 'Mexico', 'Méjico');
+-- INSERT INTO Country VALUES ('US', 'en', 'United States', 'United States');
+-- INSERT INTO Country VALUES ('MX', 'es', 'Mexico', 'Méjico');
 
 
 CREATE TABLE Language (
@@ -91,14 +91,14 @@ PRIMARY KEY(countryCode, versionCode)
 );
 INSERT INTO CountryVersion VALUES ('WORLD', 'WEB');
 INSERT INTO CountryVersion VALUES ('WORLD', 'KJVPD');
-INSERT INTO CountryVersion VALUES ('WORLD', 'GNTD');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ESV');
-INSERT INTO CountryVersion VALUES ('US', 'CEVUS06');
-INSERT INTO CountryVersion VALUES ('US', 'KJVA');
-INSERT INTO CountryVersion VALUES ('MX', 'BLPH');
-INSERT INTO CountryVersion VALUES ('MX', 'BLP');
-INSERT INTO CountryVersion VALUES ('MX', 'amu');
-INSERT INTO CountryVersion VALUES ('MX', 'azg');
+-- INSERT INTO CountryVersion VALUES ('WORLD', 'GNTD');
+-- INSERT INTO CountryVersion VALUES ('WORLD', 'ESV');
+-- INSERT INTO CountryVersion VALUES ('US', 'CEVUS06');
+-- INSERT INTO CountryVersion VALUES ('US', 'KJVA');
+-- INSERT INTO CountryVersion VALUES ('MX', 'BLPH');
+-- INSERT INTO CountryVersion VALUES ('MX', 'BLP');
+-- INSERT INTO CountryVersion VALUES ('MX', 'amu');
+-- INSERT INTO CountryVersion VALUES ('MX', 'azg');
 
 
 CREATE TABLE StoreVersion (
