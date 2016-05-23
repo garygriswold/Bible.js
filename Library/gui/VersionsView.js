@@ -9,7 +9,7 @@ function VersionsView(settingStorage) {
 	var that = this;
 	that.translation = null;
 	deviceSettings.prefLanguage(function(locale) {
-		that.database.buildTranslateMap('es', function(results) {
+		that.database.buildTranslateMap(locale, function(results) {
 			that.translation = results;
 		});		
 	});
