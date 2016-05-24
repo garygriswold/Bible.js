@@ -16,12 +16,12 @@ function InstallVersions(options) {
 	}
 	this.db.run("PRAGMA foreign_keys = ON");
 	this.fs = require('fs');
-	this.initSettingsJS = ['SettingStorage.prototype.initSettings = function() {'];
+	this.initSettingsJS = [];
 	Object.freeze(this);
 }
 InstallVersions.prototype.install = function(locale, callback) {
 	var that = this;
-	var hasDefaultVersion = false;
+	var hasDefaultVersion = null;
 	var statement = 'SELECT v.versionCode, v.silCode, v.versionAbbr, v.localVersionName, v.filename, s.defaultVersion' +
 			' FROM Version v JOIN StoreVersion s ON s.versionCode = v.versionCode' +
 			' WHERE s.storeLocale = ? AND s.endDate IS NULL';
@@ -40,8 +40,8 @@ InstallVersions.prototype.install = function(locale, callback) {
 			var row = results[index];
 			console.log(row);
 			if (row.defaultVersion === 'T') {
-				hasDefaultVersion = true;
-				that.initSettingsJS.push('\tthis.setCurrentVersion("' + row.filename + '");');
+				hasDefaultVersion = row.filename;
+				that.initSettingsJS.unshift('\tthis.setCurrentVersion("' + row.filename + '");');
 			}
 			that.initSettingsJS.push('\tthis.setVersion("' + row.versionCode + '", "' + row.filename + '");');
 			that.copyFile('../../DBL/5ready/' + row.filename, '../YourBible/www/', function() {
@@ -49,9 +49,11 @@ InstallVersions.prototype.install = function(locale, callback) {
 				processRow(results, index + 1);
 			});
 		} else {
-			if (! hasDefaultVersion) {
+			if (hasDefaultVersion == null) {
 				that.error('InstallVersions.processRow', 'No defaultVersion');
 			}
+			that.initSettingsJS.unshift('SettingStorage.prototype.initSettings = function() {');
+			that.initSettingsJS.push('\treturn("' + hasDefaultVersion + '");');
 			that.initSettingsJS.push('};\n');
 			that.fs.writeFile('../YourBible/www/js/SettingStorageInitSettings.js', that.initSettingsJS.join('\n'), {encoding: 'utf8'}, function(err) {
 				if (err) {
@@ -70,7 +72,7 @@ InstallVersions.prototype.copyFile = function(source, target, callback) {
 		if (error != null) {
 			that.error('Copy File Error', error);
 		}
-		if (stderr != null && stderr.lenght > 0) {
+		if (stderr != null && stderr.length > 0) {
 			that.error('Copy File StdError', stderr);
 		}
     	callback();

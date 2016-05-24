@@ -24,6 +24,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 	var versionsAdapter = new VersionsAdapter();
 	versionsAdapter.selectVersionByFilename(filename, function(row) {
 		if (row instanceof IOError) {
+			console.log('IOError selectVersionByFilename', JSON.stringify(row));
 			that.code = 'WEB';
 			that.filename = 'WEB.db';
 			that.userFilename = 'WEBUser.db';
