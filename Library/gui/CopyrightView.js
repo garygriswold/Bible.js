@@ -2,9 +2,19 @@
 * NOTE: This is a global method, not a class method, because it
 * is called by the event handler created in createCopyrightNotice.
 */
+var COPYRIGHT_VIEW = null;
+
 function addCopyrightViewNotice(event) {
 	event.stopImmediatePropagation();
-	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_ATTRIB, { detail: event }));
+	var target = event.target.parentNode;
+	target.appendChild(COPYRIGHT_VIEW);
+	
+	var rect = target.getBoundingClientRect();
+	if (window.innerHeight < rect.top + rect.height) {
+		// Scrolls notice up when text is not in view.
+		// limits scroll to rect.top so that top remains in view.
+		window.scrollBy(0, Math.min(rect.top, rect.top + rect.height - window.innerHeight));	
+	}
 }
 /**
 * This class is used to create the copyright notice that is put 
@@ -14,22 +24,7 @@ function addCopyrightViewNotice(event) {
 function CopyrightView(version) {
 	this.version = version;
 	this.copyrightNotice = this.createCopyrightNotice();
-	this.viewRoot = null;
-	var that = this;
-	document.body.addEventListener(BIBLE.SHOW_ATTRIB, function(event) {
-		if (that.viewRoot == null) {
-			that.viewRoot = that.createAttributionView();
-		}
-		var target = event.detail.target.parentNode;
-		target.appendChild(that.viewRoot);
-		
-		var rect = target.getBoundingClientRect();
-		if (window.innerHeight < rect.top + rect.height) {
-			// Scrolls notice up when text is not in view.
-			// limits scroll to rect.top so that top remains in view.
-			window.scrollBy(0, Math.min(rect.top, rect.top + rect.height - window.innerHeight));	
-		}
-	});
+	COPYRIGHT_VIEW = this.createAttributionView();
 	Object.seal(this);
 }
 CopyrightView.prototype.createCopyrightNotice = function() {

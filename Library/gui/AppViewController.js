@@ -13,8 +13,6 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		CHG_HEADING: 'bible-chg-heading', // change title at top of page as result of user scrolling
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note', // Hide footnote as a result of user action
-		SHOW_ATTRIB: 'bible-show-attrib', // Show attributionView as a result of user action
-		HIDE_ATTRIB: 'bible-hide-attrib'  // Hide attributionView as a result of user action
 	};
 var SERVER_HOST = 'cloud.shortsands.com';//'10.0.1.18';
 var SERVER_PORT = '8080';
@@ -175,7 +173,7 @@ AppViewController.prototype.begin = function(develop) {
 		clearViews();
 		that.settingsView.showView();
 		enableHandlersExcept(BIBLE.SHOW_SETTINGS);
-	}		
+	}	
 	function clearViews() {
 		// There is some redundancy here, I could just delete all grandchildren of body in one step
 		that.tableContentsView.hideView();
@@ -224,6 +222,7 @@ AppViewController.prototype.close = function() {
 	this.historyView = null;
 	this.questionsView = null;
 	this.settingsView = null;
+	this.copyrightView = null;
 	// model
 	this.tableContents = null;
 	this.concordance = null;

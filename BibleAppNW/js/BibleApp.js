@@ -20,10 +20,6 @@ AppInitializer.prototype.begin = function() {
     settingStorage.create(function() {
 	    settingStorage.getCurrentVersion(function(versionFilename) {
 			if (versionFilename == null) {
-				//versionFilename = 'WEB.db'; // Where does the defalt come from.  There should be one for each major language.
-				//settingStorage.setVersion('WEB', versionFilename);//records version is on device.
-				//settingStorage.setCurrentVersion(versionFilename);//records this is current version.
-				
 				versionFilename = settingStorage.initSettings();
 			}
 			changeVersionHandler(versionFilename);
@@ -55,8 +51,7 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		CHG_HEADING: 'bible-chg-heading', // change title at top of page as result of user scrolling
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note', // Hide footnote as a result of user action
-		SHOW_ATTRIB: 'bible-show-attrib', // Show attributionView as a result of user action
-		HIDE_ATTRIB: 'bible-hide-attrib'  // Hide attributionView as a result of user action
+		//SHOW_ATTRIB: 'bible-show-attrib', // Show attributionView as a result of user action
 	};
 var SERVER_HOST = 'cloud.shortsands.com';//'10.0.1.18';
 var SERVER_PORT = '8080';
@@ -217,7 +212,7 @@ AppViewController.prototype.begin = function(develop) {
 		clearViews();
 		that.settingsView.showView();
 		enableHandlersExcept(BIBLE.SHOW_SETTINGS);
-	}		
+	}	
 	function clearViews() {
 		// There is some redundancy here, I could just delete all grandchildren of body in one step
 		that.tableContentsView.hideView();
@@ -266,6 +261,7 @@ AppViewController.prototype.close = function() {
 	this.historyView = null;
 	this.questionsView = null;
 	this.settingsView = null;
+	this.copyrightView = null;
 	// model
 	this.tableContents = null;
 	this.concordance = null;
@@ -451,9 +447,19 @@ CodexView.prototype.hideFootnote = function(noteId) {
 * NOTE: This is a global method, not a class method, because it
 * is called by the event handler created in createCopyrightNotice.
 */
+var COPYRIGHT_VIEW = null;
+
 function addCopyrightViewNotice(event) {
 	event.stopImmediatePropagation();
-	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_ATTRIB, { detail: event }));
+	var target = event.target.parentNode;
+	target.appendChild(COPYRIGHT_VIEW);
+	
+	var rect = target.getBoundingClientRect();
+	if (window.innerHeight < rect.top + rect.height) {
+		// Scrolls notice up when text is not in view.
+		// limits scroll to rect.top so that top remains in view.
+		window.scrollBy(0, Math.min(rect.top, rect.top + rect.height - window.innerHeight));	
+	}
 }
 /**
 * This class is used to create the copyright notice that is put 
@@ -463,22 +469,7 @@ function addCopyrightViewNotice(event) {
 function CopyrightView(version) {
 	this.version = version;
 	this.copyrightNotice = this.createCopyrightNotice();
-	this.viewRoot = null;
-	var that = this;
-	document.body.addEventListener(BIBLE.SHOW_ATTRIB, function(event) {
-		if (that.viewRoot == null) {
-			that.viewRoot = that.createAttributionView();
-		}
-		var target = event.detail.target.parentNode;
-		target.appendChild(that.viewRoot);
-		
-		var rect = target.getBoundingClientRect();
-		if (window.innerHeight < rect.top + rect.height) {
-			// Scrolls notice up when text is not in view.
-			// limits scroll to rect.top so that top remains in view.
-			window.scrollBy(0, Math.min(rect.top, rect.top + rect.height - window.innerHeight));	
-		}
-	});
+	COPYRIGHT_VIEW = this.createAttributionView();
 	Object.seal(this);
 }
 CopyrightView.prototype.createCopyrightNotice = function() {
@@ -1467,7 +1458,7 @@ function VersionsView(settingStorage) {
 	var that = this;
 	that.translation = null;
 	deviceSettings.prefLanguage(function(locale) {
-		that.database.buildTranslateMap('es', function(results) {
+		that.database.buildTranslateMap(locale, function(results) {
 			that.translation = results;
 		});		
 	});
