@@ -1463,6 +1463,7 @@ function VersionsView(settingStorage) {
 	});
 	this.root = null;
 	this.rootNode = document.getElementById('settingRoot');
+	this.defaultCountryNode = null;
 	this.dom = new DOMBuilder();
 	this.scrollPosition = 0;
 	Object.seal(this);
@@ -1487,6 +1488,9 @@ VersionsView.prototype.buildCountriesList = function() {
 
 				var countryNode = that.dom.addNode(groupNode, 'table', 'ctry', null, 'cty' + row.countryCode);
 				countryNode.addEventListener('click', countryClickHandler);
+				if (row.countryCode === 'WORLD') {
+					that.defaultCountryNode = countryNode;
+				}
 				
 				var rowNode = that.dom.addNode(countryNode, 'tr');
 				var flagCell = that.dom.addNode(rowNode, 'td', 'ctryFlag');
@@ -1504,6 +1508,7 @@ VersionsView.prototype.buildCountriesList = function() {
 			}
 		}
 		that.rootNode.appendChild(root);
+		that.buildVersionList(that.defaultCountryNode);
 		that.root = root;
 	});
 	
