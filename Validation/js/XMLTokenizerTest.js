@@ -2,8 +2,8 @@
 * This file is the unit test of XMLTokenizer
 */
 var fs = require("fs");
-var WEB_BIBLE_PATH = "/Users/garygriswold/Desktop/BibleApp Project/Bibles/USX/WEB World English Bible";
-var OUT_BIBLE_PATH = "/Users/garygriswold/Desktop/BibleApp Project/Bibles/USX/WEB_XML_OUT";
+var WEB_BIBLE_PATH = "../../DBL/2current/";
+var OUT_BIBLE_PATH = "output/";
 
 function XMLSerializer() {
 	this.result = [];
@@ -48,8 +48,18 @@ XMLSerializer.prototype.close = function() {
 	return(this.result.join(''));
 };
 
-function symmetricTest(filename) {
-	var inFile = WEB_BIBLE_PATH + "/" + filename;
+function testOne(fullPath, files, index, callback) {
+	if (index >= files.length) {
+		callback();
+	} else {
+		var file = files[index];
+		symmetricTest(fullPath, file);
+		testOne(fullPath, files, index + 1, callback);
+	}
+}
+
+function symmetricTest(fullPath, filename) {
+	var inFile = fullPath + filename;
 	var data = fs.readFileSync(inFile, "utf8");
 	var reader = new XMLTokenizer(data);
 	var writer = new XMLSerializer();
@@ -65,10 +75,16 @@ function symmetricTest(filename) {
 	var result = writer.close();
 	var outFile = OUT_BIBLE_PATH + "/" + filename;
 	fs.writeFileSync(outFile, result, "utf8");
+	console.log('COMPARE ', filename);
+	const proc = require('child_process');
+	var output = proc.execSync('diff ' + inFile + ' ' + outFile, { stdio: 'inherit', encoding: 'utf8' });
 }
-var files = fs.readdirSync(WEB_BIBLE_PATH);
-var len = files.length;
-for (var i=0; i<len; i++) {
-	var file = files[i];
-	symmetricTest(file);
-};
+if (process.argv.length < 3) {
+	console.log('Usage: XMLTokenizerTest.sh  version');
+	process.exit(1);
+}
+var fullPath = WEB_BIBLE_PATH + process.argv[2] + '/USX_1/';
+var files = fs.readdirSync(fullPath);
+testOne(fullPath, files, 0, function() {
+	console.log('XMLTokenizerTest DONE');
+});

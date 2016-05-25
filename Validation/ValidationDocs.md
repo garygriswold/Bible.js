@@ -1,7 +1,19 @@
-Validation Design
-=================
+Validation Documentation
+========================
 
-The Validation Module must be able to validate each part of the Bible.  However, for simplicity’s sake, it does not need to be one monolithic program, but many smaller programs that test individual parts.  Also, specific problems might arise with some languages, that require a special program for that language.
+The Validation Module is a series of program that must be run individually and their results inspected to insure there is no error.
+There is much redundancy.  For example, if the ConcordanceValidation is successful is seems unlikely that the Bible Text contains an error,
+but the other test will help to identify the location of the error should one occur.
+
+XMLTokenizerTest
+----------------
+
+The XMLTokenizer is the lexical processor that processes Bible input.  If an error occurs here many other modules will have errors as well.
+This program generates USX text files from input USX files and then does a diff to be certain the generated are identical to the starting ones.
+
+	./TokenizerTest.sh
+	
+	Any differences between input and generated will be displayed.
 
 Concordance
 -----------
