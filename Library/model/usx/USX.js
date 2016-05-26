@@ -27,6 +27,7 @@ USX.prototype.toUSX = function() {
 USX.prototype.toDOM = function() {
 };
 USX.prototype.buildUSX = function(result) {
+	result.push(String.fromCharCode('0xFEFF'));
 	result.push('<?xml version="1.0" encoding="utf-8"?>');
 	result.push(this.whiteSpace, this.openElement());
 	for (var i=0; i<this.children.length; i++) {

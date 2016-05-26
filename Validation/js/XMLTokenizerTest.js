@@ -57,7 +57,6 @@ function testOne(fullPath, files, index, callback) {
 		testOne(fullPath, files, index + 1, callback);
 	}
 }
-
 function symmetricTest(fullPath, filename) {
 	var inFile = fullPath + filename;
 	var data = fs.readFileSync(inFile, "utf8");
@@ -73,7 +72,7 @@ function symmetricTest(fullPath, filename) {
 		count++;
 	};
 	var result = writer.close();
-	var outFile = OUT_BIBLE_PATH + "/" + filename;
+	var outFile = OUT_BIBLE_PATH + filename;
 	fs.writeFileSync(outFile, result, "utf8");
 	console.log('COMPARE ', filename);
 	const proc = require('child_process');

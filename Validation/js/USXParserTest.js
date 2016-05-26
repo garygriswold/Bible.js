@@ -1,28 +1,44 @@
 
-var WEB_BIBLE_PATH = "/Users/garygriswold/Desktop/BibleApp Project/Bibles/USX/WEB World English Bible";
-var OUT_BIBLE_PATH = "/Users/garygriswold/Desktop/BibleApp Project/Bibles/USX/WEB_USX_OUT";
+var WEB_BIBLE_PATH = "../../DBL/2current/";
+var OUT_BIBLE_PATH = "output/";
 
 var fs = require("fs");
 
-function symmetricTest(filename) {
-	var bookCode = filename.substring(3, 3);
-	console.log(bookCode);
-	var data = fs.readFileSync(WEB_BIBLE_PATH + '/' + filename, "utf8");
-	var rootNode = parser.readBook(data);
-
-	var data = rootNode.toUSX();
-	fs.writeFileSync(OUT_BIBLE_PATH + '/' + filename, data, "utf8");
+function testOne(fullPath, files, index, callback) {
+	if (index >= files.length) {
+		callback();
+	} else {
+		var file = files[index];
+		symmetricTest(fullPath, file);
+		testOne(fullPath, files, index + 1, callback);
+	}
+}
+function symmetricTest(fullPath, filename) {
+	var bookCode = filename.substring(0, 3);
+	console.log(bookCode, filename);
+	try {
+		var inFile = fullPath + filename;
+		var data = fs.readFileSync(inFile, "utf8");
+		var rootNode = parser.readBook(data);
+	
+		var data = rootNode.toUSX();
+		var outFile = OUT_BIBLE_PATH + filename;
+		fs.writeFileSync(outFile, data, "utf8");
+		
+		const proc = require('child_process');
+		var output = proc.execSync('diff -w ' + inFile + ' ' + outFile, { stdio: 'inherit', encoding: 'utf8' });
+	} catch(err) {
+		console.log('ERROR', JSON.stringify(err));
+	}
 }
 
+if (process.argv.length < 3) {
+	console.log('Usage: USXParserTest.sh  version');
+	process.exit(1);
+}
 var parser = new USXParser();
-var files = fs.readdirSync(WEB_BIBLE_PATH);
-console.log(files);
-var len = files.length;
-len = 66;
-for (var i=0; i<len; i++) {
-	var file = files[i];
-	symmetricTest(file);
-};
-
-//symmetricTest('049EPH.usx');
-//symmetricTest('043JHN.usx');
+var fullPath = WEB_BIBLE_PATH + process.argv[2] + '/USX_1/';
+var files = fs.readdirSync(fullPath);
+testOne(fullPath, files, 0, function() {
+	console.log('USXParserTest DONE');
+});

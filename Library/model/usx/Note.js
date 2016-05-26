@@ -19,11 +19,7 @@ Note.prototype.addChild = function(node) {
 };
 Note.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
-	if (this.style === 'x') {
-		return('<note caller="' + this.caller + ' ' + this.note + '" style="' + this.style + elementEnd);
-	} else {
-		return('<note style="' + this.style + '" caller="' + this.caller + ' ' + this.note + elementEnd);
-	}
+	return('<note caller="' + this.caller + '" style="' + this.style + elementEnd);
 };
 Note.prototype.closeElement = function() {
 	return(this.emptyElement ? '' : '</note>');

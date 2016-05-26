@@ -13,7 +13,18 @@ This program generates USX text files from input USX files and then does a diff 
 
 	./TokenizerTest.sh
 	
-	Any differences between input and generated will be displayed.
+	Any difference between input and generated will be displayed.
+	
+USXParser
+---------
+
+The USXParser is the xml parser processor that processes Bible input.  It was custom written, because other JS parsers that I found did not work
+perfectly.  This program parses the USX into internal object that model USX and then converts them back to text files.  A perfect result will
+show only the filename of each book.  When errors do occur verify whether they are occurring a book that is part of the canon or scripture.
+
+	./USXParserTest.sh
+	
+	Any difference between input and generated USX files will be displayed.
 
 Concordance
 -----------
