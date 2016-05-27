@@ -793,6 +793,7 @@ USX.prototype.toUSX = function() {
 USX.prototype.toDOM = function() {
 };
 USX.prototype.buildUSX = function(result) {
+	result.push(String.fromCharCode('0xFEFF'));
 	result.push('<?xml version="1.0" encoding="utf-8"?>');
 	result.push(this.whiteSpace, this.openElement());
 	for (var i=0; i<this.children.length; i++) {
@@ -961,11 +962,7 @@ Note.prototype.addChild = function(node) {
 };
 Note.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
-	if (this.style === 'x') {
-		return('<note caller="' + this.caller + ' ' + this.note + '" style="' + this.style + elementEnd);
-	} else {
-		return('<note style="' + this.style + '" caller="' + this.caller + ' ' + this.note + elementEnd);
-	}
+	return('<note caller="' + this.caller + '" style="' + this.style + elementEnd);
 };
 Note.prototype.closeElement = function() {
 	return(this.emptyElement ? '' : '</note>');

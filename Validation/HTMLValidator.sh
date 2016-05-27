@@ -22,4 +22,4 @@ cat js/HTMLValidator.js >> temp.js
 
 node temp.js $1
 
-diff output/chapters.txt output/verses.txt
+diff -w output/chapters.txt output/verses.txt
