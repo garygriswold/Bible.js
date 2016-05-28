@@ -8,6 +8,7 @@ function DOMNode(nodeName) {
 	this.nodeType = 1; // Element Node
 	if (nodeName == 'root') this.nodeType = 11; // Fragment Node
 	if (nodeName == 'text') this.nodeType = 3; // Text Node
+	this.parentNode = null;
 	this.attributes = {};
 	this.textContent = null;
 	this.childNodes = [];
@@ -24,4 +25,5 @@ DOMNode.prototype.attrNames = function() {
 };
 DOMNode.prototype.appendChild = function(node) {
 	this.childNodes.push(node);	
+	node.parentNode = this;
 };

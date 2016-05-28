@@ -655,6 +655,9 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 * This is probably a problem.  The easy insertion and deletion of nodes probably requires
 * having a hierarchy of books and chapters. GNG April 13, 2015
 *
+* The DOMNode class this uses is not a standard class, but one defined for this project
+* at Library/util/DOMNode.js
+*
 * NOTE: This class must be instantiated once for an entire book are all books, not just one chapter,
 * because the bookCode is only present in chapter 0, but is needed by all chapters.
 */
@@ -698,7 +701,7 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 			domNode = node.toDOM(domParent, this.bookCode, this.chapter);
 			break;
 		case 'text':
-			node.toDOM(domParent, this.bookCode, this.chapter, this.noteNum);
+			node.toDOM(domParent, this.bookCode, this.chapter);
 			domNode = domParent;
 			break;
 		case 'char':
@@ -1048,12 +1051,13 @@ Text.prototype.tagName = 'text';
 Text.prototype.buildUSX = function(result) {
 	result.push(this.text);
 };
-Text.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
+Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 	if (parentNode === null || parentNode.nodeName === 'article') {
 		// discard text node
 	} else {
-		var nodeId = bookCode + chapterNum + '-' + noteNum;
 		var parentClass = parentNode.getAttribute('class');
+		var grParentNode = parentNode.parentNode;
+		var grParentClass = (grParentNode) ? grParentNode.getAttribute('class') : null;
 		if (parentClass.substr(0, 3) === 'top') {
 			var textNode = new DOMNode('span');
 			textNode.setAttribute('class', parentClass.substr(3));
@@ -1061,6 +1065,8 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 			parentNode.appendChild(textNode);
 		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of parent.
+		} else if (grParentClass != null && (grParentClass[0] === 'f' || grParentClass[0] === 'x')) {
+			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of grand parent.
 		}
 		else {
 			var child = new DOMNode('text');
@@ -1544,6 +1550,7 @@ function DOMNode(nodeName) {
 	this.nodeType = 1; // Element Node
 	if (nodeName == 'root') this.nodeType = 11; // Fragment Node
 	if (nodeName == 'text') this.nodeType = 3; // Text Node
+	this.parentNode = null;
 	this.attributes = {};
 	this.textContent = null;
 	this.childNodes = [];
@@ -1560,6 +1567,7 @@ DOMNode.prototype.attrNames = function() {
 };
 DOMNode.prototype.appendChild = function(node) {
 	this.childNodes.push(node);	
+	node.parentNode = this;
 };
 /**
 * This class is a wrapper for SQL Error so that we can always distinguish an error

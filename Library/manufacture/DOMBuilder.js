@@ -5,6 +5,9 @@
 * This is probably a problem.  The easy insertion and deletion of nodes probably requires
 * having a hierarchy of books and chapters. GNG April 13, 2015
 *
+* The DOMNode class this uses is not a standard class, but one defined for this project
+* at Library/util/DOMNode.js
+*
 * NOTE: This class must be instantiated once for an entire book are all books, not just one chapter,
 * because the bookCode is only present in chapter 0, but is needed by all chapters.
 */
@@ -48,7 +51,7 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 			domNode = node.toDOM(domParent, this.bookCode, this.chapter);
 			break;
 		case 'text':
-			node.toDOM(domParent, this.bookCode, this.chapter, this.noteNum);
+			node.toDOM(domParent, this.bookCode, this.chapter);
 			domNode = domParent;
 			break;
 		case 'char':
