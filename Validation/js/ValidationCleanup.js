@@ -23,8 +23,8 @@ ValidationCleanup.prototype.cleanup = function(callback) {
 	this.db.serialize(function() {
 		execute('drop table if exists valPunctuation');
 		execute('update concordance set refPosition = null');
-		execute('update chapters set xml = ""'); // change table to allow nulls
-		execute('update verses set xml = ""'); // change table to allow nulls
+		execute('update chapters set xml = ""');
+		execute('update verses set xml = ""');
 		
 		that.close(function() {
 			callback();
@@ -55,11 +55,11 @@ ValidationCleanup.prototype.fatalError = function(err, source) {
 	process.exit(1);
 };
 
-var VALID_PATH = process.env.HOME + '/ShortSands/DBL/4validated/';
-var READY_PATH = process.env.HOME + '/ShortSands/DBL/5ready/';
+var VALID_PATH = '../../DBL/3prepared/';
+var READY_PATH = '../../DBL/4validated/';
 	
 if (process.argv.length < 3) {
-	console.log('Usage: ./Cleanup.sh VERSION');
+	console.log('Usage: ./ValidationCleanup.sh VERSION');
 	process.exit(1);
 } else {
 	var fs = require('fs');

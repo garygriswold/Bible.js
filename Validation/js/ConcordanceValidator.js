@@ -149,7 +149,7 @@ ConcordanceValidator.prototype.outputFile = function(generatedText) {
 		//console.log(row.book, row.chapter, row.verse, row.text);
 		output.push([row.book, row.chapter, row.verse, row.text].join(':'));
 	}
-	this.fs.writeFile('generated.txt', output.join('\n'), { encoding: 'utf8'}, function(err) {
+	this.fs.writeFile('output/generated.txt', output.join('\n'), { encoding: 'utf8'}, function(err) {
 		if (err) fatalError(err, 'write generated');
 	});
 };
@@ -217,17 +217,14 @@ ConcordanceValidator.prototype.completed = function() {
 };
 
 
-var DB_PATH = process.env.HOME + '/ShortSands/DBL/3prepared/';
-var VALID_PATH = process.env.HOME + '/ShortSands/DBL/4validated/';
+var DB_PATH = '../../DBL/3prepared/';
 	
 if (process.argv.length < 3) {
 	console.log('Usage: ./Validator.sh VERSION');
 	process.exit(1);
 } else {
 	var fs = require('fs');
-	var contents = fs.readFileSync(DB_PATH + process.argv[2] + '.db');
-	fs.writeFileSync(VALID_PATH + process.argv[2] + '.db', contents);
-	var filename = VALID_PATH + process.argv[2] + '.db';
+	var filename = DB_PATH + process.argv[2] + '.db';
 	console.log('Process ' + filename);
 	var val = new ConcordanceValidator(filename);
 	val.open(function() {

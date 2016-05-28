@@ -32,7 +32,7 @@ StyleUseValidator
 The StyleUseValidator compares the styles found in the version with those which have been written for in Codex.css and elsewhere.
 It displays the styles, references or use, and counts for any styles that are not yet developed.
 
-	./StyleUseValidator VERSION
+	./StyleUseValidator.sh VERSION
 	
 	Error results are displayed in stdout, and output/StyleUseUnfinished.txt
 	
@@ -43,29 +43,34 @@ The HTMLValidator first extracts all of the verse.html into a single text.  This
 it is generated directly off the USX model objects that were created by the USXParser.  Next, this program reads chapters.html and extracts
 the text from the HTML, and generates a single text file.
 
-	./HTMLValidator VERSION
+	./HTMLValidator.sh VERSION
 	
 	Differences are displayed on the console.  The verses.html output is found at output/verses.txt, and the chapters.html output is found at
 	output/chapters.txt.  They are compared using diff -w
 	
 
-Concordance
------------
+ConcordanceValidator
+--------------------
 
-Each Bible database includes a concordance table.  This table contains the following columns:
+When the concordance was generated the refList column was populated with a list of all of the verse references for each word.  But a nearly duplicate column
+was created called refPosition, which contains the references for each word including the position of each word in each verse.  
+This program uses the refPosition information to create a text file version of the entire Bible.  This output is stored in output/generated.txt.  
+The program then uses the text version of each verse stored in verses.html to compare with generated.txt character by character.  It outputs every 
+character that is missing in generated.txt into the table valPunctuation.  At the end of the process, it displays a frequency count
+of these characters in valPunctuation.  If all of the characters displayed are punctuation characters then the validation has passed.
 
-	word text primary key not null, 
-	refCount integer not null, 
-	refList text not null,
-	positions text not null (to be added)
+	./ConcordanceValidator.sh VERSION
 	
-	Example: yielding|5|GEN:1:11,GEN:1:12,GEN:1:29,JER:17:8,REV:22:2|3,5,7,4,12
+	Uses concordance.refPosition to create the output file output/generated.txt
+	Compares generated.txt to table verses.txt and puts differences into the table valPunctuation.
+	Displays a frequency count of the data in valPunctuation at end.
 	
-This not a properly normalized table per normal database design considerations, but it is specifically designed to perform well for its normal use.  Since the normal use is to search on individual words or sets of words and find all uses.
+ValidationCleanup
+-----------------
 
-The validation program is a command line node program, which takes the concordance table as input, and loads the entire concordance into memory.  Then using the words, refList and positions, it output a file which contains each verse of the Bible.  This output can be manually compared to the original Bible to verify that the only thing missing is the punctuation, and extra-Biblical headings and notes.
+This program copies the database file from DBL/3prepared to DBL/4validated and removes most of the data that was only needed for validation.  This includes
+the xml columns in the tables chapters and verses and the concordance.refPositions column.  It also drops the table valPunctuation.
 
-A second program should compare the original USX file with the concordance generated file.  This program, should parse USX, read only the verse text, drop punctuation, and compare to the concordance generate file, and produce a line of output for each difference or verse that is different.
-
+	./ValidationCleanup.sh VERSION
 
 

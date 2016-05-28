@@ -1,3 +1,3 @@
 #!/bin/sh
 
-node ValidationCleanup.js $*
+node js/ValidationCleanup.js $1
