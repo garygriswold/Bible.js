@@ -72,5 +72,14 @@ This program copies the database file from DBL/3prepared to DBL/4validated and r
 the xml columns in the tables chapters and verses and the concordance.refPositions column.  It also drops the table valPunctuation.
 
 	./ValidationCleanup.sh VERSION
+	
+ProductionUpload
+----------------
+
+The Publish.sh program stores Bible files in DBL/3prepared.  These validation programs operate on that copy of the database.  The ValidationCleanup script
+copies the file to the DBL/4validated directory.  This script copies the databases into production by copying the files to DBL/5ready and to the static root
+of the server.
+
+	./ProductionUpload.sh VERSION
 
 
