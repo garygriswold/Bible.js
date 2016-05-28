@@ -76,7 +76,7 @@ p.mt3 {
 	margin-top: 2pt;
 	color: #2A48B4; /* non-std */
 }
-/* Section Heading */
+/* Major Section Heading */
 p.ms {
 	font-weight: bold;
 	font-size: 1.16rem;
@@ -85,13 +85,21 @@ p.ms {
 	margin-top: 16pt;
 	color: #2A48B4; /* non-std */
 }
-/* Section Heading Level 1 */
+/* Major Section Heading Level 1 */
 p.ms1 {
 	font-weight: bold;
     font-size: 1.16rem;
     text-align: center;
     margin-bottom: 4pt;
 	margin-top: 16pt;
+	color: #2A48B4; /* non-std */
+}
+/* Heading - Section Level 1 */
+p.s1 {
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 4pt;
+	margin-top: 8pt;
 	color: #2A48B4; /* non-std */
 }
 /* Descriptive Title */
@@ -209,6 +217,23 @@ span.qs {
 /* Words of Jesus */
 span.wj {
 	color: #FF3333; /* std is #FF0000 */
+	text-align: start;
+}
+/* Translator's Addition */
+span.add {
+	font-weight: bold;
+	font-style: italic;
+	text-align: start;
+}
+/* Name of Diety */
+span.nd {
+	text-align: start;
+	/* text-decoration: underline; std */
+	text-transform: uppercase; /* non-std */
+}
+/* Transliterated Word */
+span.tl {
+	font-style: italic;
 	text-align: start;
 }
 /* footnote references */
@@ -674,6 +699,8 @@ td.ctryFlag {
 	vertical-align: middle;
 	padding-left: 24px;
 	padding-right: 24px;
+	padding-top: 10px; /* Added for World may be incorrect for other flags. */
+	padding-bottom: 10px; /* Added for World may be incorrect for other flags. */
 	width: 10%;
 }
 td.ctryFlag img {

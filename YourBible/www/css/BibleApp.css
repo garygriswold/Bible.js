@@ -699,6 +699,8 @@ td.ctryFlag {
 	vertical-align: middle;
 	padding-left: 24px;
 	padding-right: 24px;
+	padding-top: 10px; /* Added for World may be incorrect for other flags. */
+	padding-bottom: 10px; /* Added for World may be incorrect for other flags. */
 	width: 10%;
 }
 td.ctryFlag img {
