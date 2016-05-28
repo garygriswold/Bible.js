@@ -1,5 +1,15 @@
+Publishing Documentation
+========================
+
+Directory: ShortSands/BibleApp/Publisher
+
+This program
+
+
 Validation Documentation
 ========================
+
+Directory: ShortSands/BibleApp/Validation
 
 The Validation Module is a series of program that must be run individually and their results inspected to insure there is no error.
 There is much redundancy.  For example, if the ConcordanceValidation is successful is seems unlikely that the Bible Text contains an error,
