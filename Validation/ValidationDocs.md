@@ -25,6 +25,17 @@ show only the filename of each book.  When errors do occur verify whether they a
 	./USXParserTest.sh
 	
 	Any difference between input and generated USX files will be displayed.
+	
+StyleUseValidator
+-----------------
+
+The StyleUseValidator compares the styles found in the version with those which have been written for in Codex.css and elsewhere.
+It displays the styles, references or use, and counts for any styles that are not yet developed.
+
+	./StyleUseValidator
+	
+	Error results are displayed in stdout, and output/StyleUseUnfinished.txt
+	
 
 Concordance
 -----------
