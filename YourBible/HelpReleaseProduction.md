@@ -73,7 +73,7 @@ Make Certain that App is hitting a production server
 
 Update the version code
 
-	vi $HOME/BibleApp/YourBible/config.xml
+	vi $HOME/ShortSands/BibleApp/YourBible/config.xml
 	
 TEMP: Change id to com.shortsands.yourbible
 
@@ -81,9 +81,9 @@ TEMP: Change id to com.shortsands.yourbible
 	
 Compile your app in release mode to obtain a signed IPA.
 
-	cd $HOME/BibleApp/YourBible
+	cd $HOME/ShortSands/BibleApp/YourBible
 	cordova build ios --release --device
-	Note location of IPA, currently: /Users/garygriswold/BibleApp/YourBible/platforms/ios/build/device/Your Bible.ipa
+	Note location of IPA, currently: /Users/garygriswold/ShortSands/BibleApp/YourBible/platforms/ios/build/device/Your Bible.ipa
 	
 Upload IPA
 
@@ -116,15 +116,15 @@ Update id to com.shortsands.bibleapp  # until the store is changed to .yourbible
 
 Compile your app in release mode to obtain an unsigned APK.
 
-	cd $HOME/BibleApp/YourBible
+	cd $HOME/ShortSands/BibleApp/YourBible
 	cordova build android --release
 	output:
-	/Users/garygriswold/BibleApp/YourBible/platforms/android/build/outputs/apk/android-release-unsigned.apk
+	/Users/garygriswold/ShortSands/BibleApp/YourBible/platforms/android/build/outputs/apk/android-release-unsigned.apk
 
 Sign your app with your private key using jarsigner. This example prompts you for passwords for the keystore and key. It then modifies the APK in-place to sign it. Note that you can sign an APK multiple times with different keys.
 
-	cd $HOME/BibleApp/YourBible/certificates/android
-	cp $HOME/BibleApp/YourBible/platforms/android/build/outputs/apk/android-release-unsigned.apk .
+	cd $HOME/ShortSands/BibleApp/YourBible/certificates/android
+	cp $HOME/ShortSands/BibleApp/YourBible/platforms/android/build/outputs/apk/android-release-unsigned.apk .
 	jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore your-bible.keystore android-release-unsigned.apk YourBible
 
 Verify that your APK is signed. For example:
