@@ -93,6 +93,9 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					var languageName = (prefLangName === row.localLanguageName) ? prefLangName : row.localLanguageName + ' (' + prefLangName + ')';
 					that.dom.addNode(leftNode, 'p', 'langName', languageName);
 					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
+					if (row.versionAbbr && row.versionAbbr.length > 0) {
+						versionName += ' (' + row.versionAbbr + ')';
+					}
 					that.dom.addNode(leftNode, 'span', 'versName', versionName + ',  ');
 					
 					var ownerNode = that.dom.addNode(leftNode, 'span', 'versName', row.localOwnerName);

@@ -46,7 +46,7 @@ CopyrightView.prototype.createTOCTitleDOM = function() {
 	if (this.version.ownerCode === 'WBT') {
 		var title = this.version.localLanguageName + ' (' + this.version.silCode + ')';
 	} else {
-		title = this.version.localVersionName + ' (' + this.version.code + ')';
+		title = this.version.localVersionName + ' (' + this.version.versionAbbr + ')';
 	}
 	var root = document.createElement('p');
 	var dom = new DOMBuilder();

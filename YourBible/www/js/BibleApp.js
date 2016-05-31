@@ -490,7 +490,7 @@ CopyrightView.prototype.createTOCTitleDOM = function() {
 	if (this.version.ownerCode === 'WBT') {
 		var title = this.version.localLanguageName + ' (' + this.version.silCode + ')';
 	} else {
-		title = this.version.localVersionName + ' (' + this.version.code + ')';
+		title = this.version.localVersionName + ' (' + this.version.versionAbbr + ')';
 	}
 	var root = document.createElement('p');
 	var dom = new DOMBuilder();
@@ -1541,6 +1541,9 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					var languageName = (prefLangName === row.localLanguageName) ? prefLangName : row.localLanguageName + ' (' + prefLangName + ')';
 					that.dom.addNode(leftNode, 'p', 'langName', languageName);
 					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
+					if (row.versionAbbr && row.versionAbbr.length > 0) {
+						versionName += ' (' + row.versionAbbr + ')';
+					}
 					that.dom.addNode(leftNode, 'span', 'versName', versionName + ',  ');
 					
 					var ownerNode = that.dom.addNode(leftNode, 'span', 'versName', row.localOwnerName);
