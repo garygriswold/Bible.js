@@ -93,6 +93,18 @@ of these characters in valPunctuation.  If all of the characters displayed are p
 	Compares generated.txt to table verses.txt and puts differences into the table valPunctuation.
 	Displays a frequency count of the data in valPunctuation at end.
 	
+TableContentsValidator
+----------------------
+
+As an optimization, the tableContents table contains chapterRowId column that contains the integral
+position of the first chapter of the book in the sequence of all chapters in the Bible.  The way it
+is computed, the value could be incorrect if there were missing chapters.
+
+	./TableContentsValidator.sh VERSION
+	
+	Displays the total number of computed chapters and the expected number.  It is an error if these
+	numbers are different.
+	
 ValidationCleanup
 -----------------
 
