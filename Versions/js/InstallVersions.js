@@ -85,7 +85,7 @@ InstallVersions.prototype.error = function(message, err) {
 
 
 if (process.argv.length < 3) {
-	console.log('Usage: InstallVersions.sh  locale (e.g. en or es, etc)');
+	console.log('Usage: InstallVersions.sh  LOCALE (e.g. en or es, etc)');
 	process.exit(1);
 }
 var database = new InstallVersions({filename: './Versions.db', verbose: true});

@@ -2920,8 +2920,7 @@ function FileDownloader(host, port, currVersion) {
 	if (deviceSettings.platform() === 'ios') {
 		this.finalPath = 'cdvfile://localhost/persistent/../LocalDatabase/';
 	} else {
-		//this.finalPath = '/data/data/com.shortsands.yourbible/databases/';
-		this.finalPath = '/data/data/com.shortsands.bibleapp/databases/';
+		this.finalPath = '/data/data/com.shortsands.yourbible/databases/';
 	}
 	Object.seal(this);
 }

@@ -59,29 +59,30 @@ isQaActive TEXT CHECK (isQaActive IN('T','F')),
 copyright TEXT NULL,
 introduction TEXT
 );
-INSERT INTO Version VALUES ('CEVUS06', 'eng', 'ABS', 'CEV', 'Contemporary English Version', 'BIBLE', 'CEVUS06.db', 'F', NULL, NULL);
-INSERT INTO Version VALUES ('ESV', 'eng', 'CRSWY', 'ESV', 'English Standard Version', 'BIBLE', 'ESV.db', 'F', NULL, NULL);
-INSERT INTO Version VALUES ('GNTD', 'eng', 'ABS', 'GN', 'Good News', 'BIBLE', 'GNTD.db', 'F', NULL, NULL);
-INSERT INTO Version VALUES ('KJVA', 'eng', 'ABS', 'KJV', 'King James Version, American Edition', 'BIBLE', 'KJVA.db', 'F', NULL, NULL);
-INSERT INTO Version VALUES ('KJVPD', 'eng', 'EBIBLE', 'KJV', 'King James Version', 'BIBLE', 'KJVPD.db', 'F', NULL, NULL);
-INSERT INTO Version VALUES ('WEB', 'eng', 'EBIBLE', 'WEB', 'World English Bible', 'BIBLE', 'WEB.db', 'F', NULL, NULL);
+INSERT INTO Version VALUES ('CEVUS06', 'eng', 'ABS', 'CEV', 'Contemporary English Version', 'BIBLE', 'CEVUS06.db', 'F', 
+'Contemporary English Version® © 1995 American Bible Society. All rights reserved.', NULL);
+INSERT INTO Version VALUES ('ESV', 'eng', 'CRSWY', 'ESV', 'English Standard Version', 'BIBLE', 'ESV.db', 'F', 
+'English Standard Version®, copyright © 2001 by Crossway Bibles, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.', NULL);
+INSERT INTO Version VALUES ('GNTD', 'eng', 'ABS', 'GN', 'Good News', 'BIBLE', 'GNTD.db', 'F', 
+'Good News Translation® (Today’s English Version, Second Edition) © 1992 American Bible Society. All rights reserved.  Bible text from the Good News Translation (GNT) is not to be reproduced in copies or otherwise by any means except as permitted in writing by American Bible Society, 1865 Broadway, New York, NY 10023.', NULL);
+INSERT INTO Version VALUES ('KJVA', 'eng', 'ABS', 'KJV', 'King James Version, American Edition', 'BIBLE', 'KJVA.db', 'F', 
+'King James Version 1611, spelling, punctuation and text formatting modernized by ABS in 1962; typesetting © 2010 American Bible Society.', NULL);
+INSERT INTO Version VALUES ('KJVPD', 'eng', 'EBIBLE', 'KJV', 'King James Version', 'BIBLE', 'KJVPD.db', 'F', 
+'King James Version 1611 (KJV), Public Domain, eBible.org.', NULL);
+INSERT INTO Version VALUES ('WEB', 'eng', 'EBIBLE', 'WEB', 'World English Bible', 'BIBLE', 'WEB.db', 'F', 
+'World English Bible (WEB), Public Domain, eBible.org.', NULL);
 
-UPDATE Version SET copyright = 'Contemporary English Version® © 1995 American Bible Society. All rights reserved.' WHERE versionCode = 'CEVUS06';
-UPDATE Version SET copyright = 'English Standard Version®, copyright © 2001 by Crossway Bibles, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.' WHERE versionCode = 'ESV';
-UPDATE Version SET copyright = 'Good News Translation® (Today’s English Version, Second Edition) © 1992 American Bible Society. All rights reserved.  Bible text from the Good News Translation (GNT) is not to be reproduced in copies or otherwise by any means except as permitted in writing by American Bible Society, 1865 Broadway, New York, NY 10023.' WHERE versionCode = 'GNTD';
-UPDATE Version SET copyright = 'King James Version 1611, spelling, punctuation and text formatting modernized by ABS in 1962; typesetting © 2010 American Bible Society.' WHERE versionCode = 'KJVA';
-UPDATE Version SET copyright = 'King James Version 1611 (KJV), Public Domain, eBible.org.' WHERE versionCode = 'KJVPD';
-UPDATE Version SET copyright = 'World English Bible (WEB), Public Domain, eBible.org.' WHERE versionCode = 'WEB';
+INSERT INTO Version VALUES ('RVR09PD', 'spa', 'EBIBLE', 'RVR1909', 'Santa Biblia — Reina Valera 1909', 'BIBLE', 'RVR09PD.db', 'F', 
+'Santa Biblia — Reina Valera 1909 (RVR1909), Public Domain, eBible.org', NULL);
+INSERT INTO Version VALUES ('BLP', 'spa', 'SPN', 'BLP', 'La Palabra (versión española)', 'BIBLE', 'BLP.db', 'F', 
+'La Palabra (BLP) versión española Copyright © Sociedad Bíblica de España, 2010 Utilizada con permiso', NULL);
+INSERT INTO Version VALUES ('BLPH', 'spa', 'SPN', 'BLPH', 'La Palabra (versión hispanoamericana)','BIBLE', 'BLPH.db', 'F', 
+'La Palabra (BLPH) versión hispanoamericana Copyright © Sociedad Bíblica de España, 2010 Utilizada con permiso', NULL);
 
-INSERT INTO Version VALUES ('BLP', 'spa', 'SPN', 'BLP', 'La Palabra (versión española)', 'BIBLE', 'BLP.db', 'F', NULL, NULL);
-INSERT INTO Version VALUES ('BLPH', 'spa', 'SPN', 'BLPH', 'La Palabra (versión hispanoamericana)','BIBLE', 'BLPH.db', 'F', NULL, NULL);
-UPDATE Version SET copyright = 'La Palabra (BLP) versión española Copyright © Sociedad Bíblica de España, 2010 Utilizada con permiso' WHERE versionCode = 'BLP';
-UPDATE Version SET copyright = 'La Palabra (BLPH) versión hispanoamericana Copyright © Sociedad Bíblica de España, 2010 Utilizada con permiso' WHERE versionCode = 'BLPH';
-
-INSERT INTO Version Values ('amu', 'amu', 'WBT', 'AMU', 'Amuzgo, Guerrero', 'BIBLE_NT', 'AMU.db', 'F', NULL, NULL);
-INSERT INTO Version Values ('azg', 'azg', 'WBT', 'AZG', 'Amuzgo, San Pedro Amuzgos', 'BIBLE_NT', 'AZG.db', 'F', NULL, NULL);
-UPDATE Version SET copyright = 'Amuzgo, Guerrero, © 1999 by Wycliffe Bible Translators' WHERE versionCode = 'amu';
-UPDATE Version SET copyright = 'Amuzgo, San Pedro Amuzgos, © 1992 by Wycliffe Bible Translators' WHERE versionCode = 'azg';
+INSERT INTO Version Values ('amu', 'amu', 'WBT', 'AMU', 'Amuzgo, Guerrero', 'BIBLE_NT', 'AMU.db', 'F', 
+'Amuzgo, Guerrero, © 1999 by Wycliffe Bible Translators', NULL);
+INSERT INTO Version Values ('azg', 'azg', 'WBT', 'AZG', 'Amuzgo, San Pedro Amuzgos', 'BIBLE_NT', 'AZG.db', 'F', 
+'Amuzgo, San Pedro Amuzgos, © 1992 by Wycliffe Bible Translators', NULL);
 
 
 CREATE TABLE CountryVersion (
@@ -91,6 +92,7 @@ PRIMARY KEY(countryCode, versionCode)
 );
 INSERT INTO CountryVersion VALUES ('WORLD', 'WEB');
 INSERT INTO CountryVersion VALUES ('WORLD', 'KJVPD');
+INSERT INTO CountryVersion VALUES ('WORLD', 'RVR09PD');
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'GNTD');
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'ESV');
 -- INSERT INTO CountryVersion VALUES ('US', 'CEVUS06');
@@ -111,6 +113,8 @@ PRIMARY KEY (storeLocale, versionCode)
 );
 INSERT INTO StoreVersion VALUES ('en', 'WEB', 'T', '2016-05-16', null);
 INSERT INTO StoreVersion VALUES ('en', 'KJVPD', 'F', '2016-05-16', null);
+INSERT INTO StoreVersion VALUES ('es', 'RVR09PD', 'T', '2016-05-31', null);
+INSERT INTO StoreVersion VALUES ('es', 'WEB', 'F', '2016-05-31', null);
 
 
 CREATE TABLE Translation (

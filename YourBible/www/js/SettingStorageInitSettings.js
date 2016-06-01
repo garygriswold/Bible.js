@@ -1,6 +1,6 @@
 SettingStorage.prototype.initSettings = function() {
-	this.setCurrentVersion("WEB.db");
-	this.setVersion("KJVPD", "KJVPD.db");
+	this.setCurrentVersion("RVR09PD.db");
+	this.setVersion("RVR09PD", "RVR09PD.db");
 	this.setVersion("WEB", "WEB.db");
-	return("WEB.db");
+	return("RVR09PD.db");
 };
