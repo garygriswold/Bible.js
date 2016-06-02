@@ -111,6 +111,7 @@ table.ctry {
 	box-shadow: 7px 7px 7px #777;
 	-webkit-box-shadow: 7px 7px 7px #777;
 	width: 100%;
+	direction: ltr;
 }
 td.ctryFlag {
 	vertical-align: middle;
@@ -147,6 +148,7 @@ table.vers {
 	padding-bottom: 1%;
 	padding-left: 4%;
 	padding-right:4%;
+	direction: ltr;
 }
 td.versLeft {
 	width:90%;

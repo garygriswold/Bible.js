@@ -23,15 +23,16 @@ INSERT INTO Country VALUES ('WORLD', 'en', 'World', 'World');
 CREATE TABLE Language (
 silCode TEXT PRIMARY KEY NOT NULL,
 langCode TEXT NOT NULL,
+direction TEXT NOT NULL CHECK(direction IN('ltr', 'rtl')),
 englishName TEXT NOT NULL,
 localLanguageName TEXT NOT NULL
 );
-INSERT INTO Language VALUES ('eng', 'en', 'English', 'English');
-INSERT INTO Language VALUES ('spa', 'es', 'Spanish', 'Español');
-INSERT INTO Language VALUES ('arb', 'ar', 'Arabic', 'العربية');
-INSERT INTO Language VALUES ('cnm', 'zh', 'Chinese', '汉语, 漢語');
-INSERT INTO Language VALUES ('amu', 'es', 'Amuzgo, Guerrero', 'Amuzgo, Guerrero');
-INSERT INTO Language VALUES ('azg', 'es', 'Amuzgo, San Pedro Amuzgos', 'Amuzgo, San Pedro Amuzgos');
+INSERT INTO Language VALUES ('eng', 'en', 'ltr', 'English', 'English');
+INSERT INTO Language VALUES ('spa', 'es', 'ltr', 'Spanish', 'Español');
+INSERT INTO Language VALUES ('arb', 'ar', 'rtl', 'Arabic', 'العربية');
+INSERT INTO Language VALUES ('cnm', 'zh', 'ltr', 'Chinese', '汉语, 漢語');
+INSERT INTO Language VALUES ('amu', 'es', 'ltr', 'Amuzgo, Guerrero', 'Amuzgo, Guerrero');
+INSERT INTO Language VALUES ('azg', 'es', 'ltr', 'Amuzgo, San Pedro Amuzgos', 'Amuzgo, San Pedro Amuzgos');
 
 
 CREATE TABLE Owner (
@@ -53,7 +54,7 @@ silCode TEXT NOT NULL REFERENCES Language(silCode),
 ownerCode TEXT NOT NULL REFERENCES Owner(ownerCode),
 versionAbbr TEXT NOT NULL,
 localVersionName TEXT NOT NULL,
-scope TEXT NOT NULL CHECK (scope in('BIBLE','BIBLE_NT','BIBLE_PNT')),
+scope TEXT NOT NULL CHECK (scope IN('BIBLE','BIBLE_NT','BIBLE_PNT')),
 filename TEXT UNIQUE,
 isQaActive TEXT CHECK (isQaActive IN('T','F')),
 copyright TEXT NULL,

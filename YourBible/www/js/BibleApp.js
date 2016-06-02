@@ -76,6 +76,7 @@ function bibleHideNoteClick(nodeId) {
 
 function AppViewController(version, settingStorage) {
 	this.version = version;
+	document.body.setAttribute('style', 'direction: ' + this.version.direction);
 	this.settingStorage = settingStorage;
 	
 	this.database = new DatabaseHelper(version.filename, true);
@@ -2819,7 +2820,7 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
 	var statement = 'SELECT v.versionCode, v.silCode, v.isQaActive, v.copyright, v.introduction,' +
-		' l.localLanguageName, l.langCode, v.localVersionName, v.versionAbbr, o.ownerCode, o.localOwnerName, o.ownerURL' +
+		' l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr, o.ownerCode, o.localOwnerName, o.ownerURL' +
 		' FROM Version v' +
 		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
 		' JOIN Language l ON v.silCode = l.silCode' +
@@ -2989,6 +2990,7 @@ function BibleVersion() {
 	this.userFilename = null;
 	this.silCode = null;
 	this.langCode = null;
+	this.direction = null;
 	this.isQaActive = null;
 	this.versionAbbr = null;
 	this.localLanguageName = null;
@@ -3011,6 +3013,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.userFilename = 'WEBUser.db';
 			that.silCode = 'eng';
 			that.langCode = 'en';
+			that.direction = 'ltr';
 			that.isQaActive = 'F';
 			that.versionAbbr = 'WEB';
 			that.localLanguageName = 'English';
@@ -3027,6 +3030,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.userFilename = parts[0] + 'User.db';
 			that.silCode = row.silCode;
 			that.langCode = row.langCode;
+			that.direction = row.direction;
 			that.isQaActive = row.isQaActive;
 			that.versionAbbr = row.versionAbbr;
 			that.localLanguageName = row.localLanguageName;

@@ -89,7 +89,7 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
 	var statement = 'SELECT v.versionCode, v.silCode, v.isQaActive, v.copyright, v.introduction,' +
-		' l.localLanguageName, l.langCode, v.localVersionName, v.versionAbbr, o.ownerCode, o.localOwnerName, o.ownerURL' +
+		' l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr, o.ownerCode, o.localOwnerName, o.ownerURL' +
 		' FROM Version v' +
 		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
 		' JOIN Language l ON v.silCode = l.silCode' +

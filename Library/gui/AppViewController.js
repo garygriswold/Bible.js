@@ -38,6 +38,7 @@ function bibleHideNoteClick(nodeId) {
 
 function AppViewController(version, settingStorage) {
 	this.version = version;
+	document.body.setAttribute('style', 'direction: ' + this.version.direction);
 	this.settingStorage = settingStorage;
 	
 	this.database = new DatabaseHelper(version.filename, true);
