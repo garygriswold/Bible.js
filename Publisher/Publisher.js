@@ -629,7 +629,7 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.ms1', 'para.s1', 'para.d',
 		'chapter.c', 'verse.v',
 		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 'para.li1', 'para.nb',
-		'para.sp', 'para.q', 'para.q1', 'para.q2',
+		'para.sp', 'para.q', 'para.q1', 'para.q2', 'para.qc', 'para.qa',
 		'char.wj', 'char.qs', 'char.add', 'char.nd', 'char.tl',
 		'note.f', 'note.x', 'char.fr', 'char.ft', 'char.fqa', 'char.xo' ];
 	var array = [];

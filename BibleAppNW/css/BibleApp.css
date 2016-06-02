@@ -202,6 +202,15 @@ p.q2 {
 	margin-top: 0; /* non-std */
 	margin-bottom: 0; /* non-std */
 }
+/* Poetry Centered */
+p.qc {
+	text-align: center;
+}
+/* Poetry, Acrostic Heading|Marker */
+p.qa {
+	font-style: italic;
+	text-align: start;
+}
 /* Continuation Paragraph as start of Chapter */
 p.nb {
 	text-align: start;

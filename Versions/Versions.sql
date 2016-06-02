@@ -28,7 +28,7 @@ localLanguageName TEXT NOT NULL
 );
 INSERT INTO Language VALUES ('eng', 'en', 'English', 'English');
 INSERT INTO Language VALUES ('spa', 'es', 'Spanish', 'Español');
-INSERT INTO Language VALUES ('arb', 'ar', 'Arabic', 'اللغة العربية');
+INSERT INTO Language VALUES ('arb', 'ar', 'Arabic', 'العربية');
 INSERT INTO Language VALUES ('cnm', 'zh', 'Chinese', '汉语, 漢語');
 INSERT INTO Language VALUES ('amu', 'es', 'Amuzgo, Guerrero', 'Amuzgo, Guerrero');
 INSERT INTO Language VALUES ('azg', 'es', 'Amuzgo, San Pedro Amuzgos', 'Amuzgo, San Pedro Amuzgos');
@@ -59,6 +59,7 @@ isQaActive TEXT CHECK (isQaActive IN('T','F')),
 copyright TEXT NULL,
 introduction TEXT
 );
+-- English
 INSERT INTO Version VALUES ('CEVUS06', 'eng', 'ABS', 'CEV', 'Contemporary English Version', 'BIBLE', 'CEVUS06.db', 'F', 
 'Contemporary English Version® © 1995 American Bible Society. All rights reserved.', NULL);
 INSERT INTO Version VALUES ('ESV', 'eng', 'CRSWY', 'ESV', 'English Standard Version', 'BIBLE', 'ESV.db', 'F', 
@@ -72,6 +73,7 @@ INSERT INTO Version VALUES ('KJVPD', 'eng', 'EBIBLE', 'KJV', 'King James Version
 INSERT INTO Version VALUES ('WEB', 'eng', 'EBIBLE', 'WEB', 'World English Bible', 'BIBLE', 'WEB.db', 'F', 
 'World English Bible (WEB), Public Domain, eBible.org.', NULL);
 
+-- Spanish
 INSERT INTO Version VALUES ('RVR09PD', 'spa', 'EBIBLE', 'RVR1909', 'Santa Biblia — Reina Valera 1909', 'BIBLE', 'RVR09PD.db', 'F', 
 'Santa Biblia — Reina Valera 1909 (RVR1909), Public Domain, eBible.org', NULL);
 INSERT INTO Version VALUES ('BLP', 'spa', 'SPN', 'BLP', 'La Palabra (versión española)', 'BIBLE', 'BLP.db', 'F', 
@@ -79,10 +81,15 @@ INSERT INTO Version VALUES ('BLP', 'spa', 'SPN', 'BLP', 'La Palabra (versión es
 INSERT INTO Version VALUES ('BLPH', 'spa', 'SPN', 'BLPH', 'La Palabra (versión hispanoamericana)','BIBLE', 'BLPH.db', 'F', 
 'La Palabra (BLPH) versión hispanoamericana Copyright © Sociedad Bíblica de España, 2010 Utilizada con permiso', NULL);
 
+-- Arabic
+INSERT INTO Version VALUES ('ARVDVPD', 'arb', 'EBIBLE', 'ARVDV', 'فان دايك الكتاب المقدس باللغة العربية', 'BIBLE', 'ARVDVPD.db', 'F',
+'Van Dyck Arabic Version (ARVDV), Public Domain, eBible.org.', NULL);
+
 INSERT INTO Version Values ('amu', 'amu', 'WBT', 'AMU', 'Amuzgo, Guerrero', 'BIBLE_NT', 'AMU.db', 'F', 
 'Amuzgo, Guerrero, © 1999 by Wycliffe Bible Translators', NULL);
 INSERT INTO Version Values ('azg', 'azg', 'WBT', 'AZG', 'Amuzgo, San Pedro Amuzgos', 'BIBLE_NT', 'AZG.db', 'F', 
 'Amuzgo, San Pedro Amuzgos, © 1992 by Wycliffe Bible Translators', NULL);
+
 
 
 CREATE TABLE CountryVersion (
@@ -93,6 +100,7 @@ PRIMARY KEY(countryCode, versionCode)
 INSERT INTO CountryVersion VALUES ('WORLD', 'WEB');
 INSERT INTO CountryVersion VALUES ('WORLD', 'KJVPD');
 INSERT INTO CountryVersion VALUES ('WORLD', 'RVR09PD');
+INSERT INTO CountryVersion VALUES ('WORLD', 'ARVDVPD');
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'GNTD');
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'ESV');
 -- INSERT INTO CountryVersion VALUES ('US', 'CEVUS06');
@@ -115,6 +123,7 @@ INSERT INTO StoreVersion VALUES ('en', 'WEB', 'T', '2016-05-16', null);
 INSERT INTO StoreVersion VALUES ('en', 'KJVPD', 'F', '2016-05-16', null);
 INSERT INTO StoreVersion VALUES ('es', 'RVR09PD', 'T', '2016-05-31', null);
 INSERT INTO StoreVersion VALUES ('es', 'WEB', 'F', '2016-05-31', null);
+INSERT INTO StoreVersion VALUES ('ar', 'ARVDVPD', 'T', '2016-06-01', null);
 
 
 CREATE TABLE Translation (
@@ -130,9 +139,14 @@ INSERT INTO Translation VALUES ('en', 'zh', '英语');
 INSERT INTO Translation VALUES ('en', 'ar', 'الإنجليزية');
 
 INSERT INTO Translation VALUES ('es', 'en', 'Spanish');
-INSERT INTO Translation VALUES ('es', 'zh', '西班牙语');
 INSERT INTO Translation VALUES ('es', 'es', 'Español');
+INSERT INTO Translation VALUES ('es', 'zh', '西班牙语');
 INSERT INTO Translation VALUES ('es', 'ar', 'الأسبانية');
+
+INSERT INTO Translation VALUES ('ar', 'en', 'Arabic');
+INSERT INTO Translation VALUES ('ar', 'es', 'Arábica');
+INSERT INTO Translation VALUES ('ar', 'zh', '阿拉伯');
+INSERT INTO Translation VALUES ('ar', 'ar', 'العربية');
 
 INSERT INTO Translation VALUES ('WORLD', 'en', 'World');
 INSERT INTO Translation VALUES ('WORLD', 'es', 'Mundo');
