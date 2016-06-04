@@ -949,9 +949,9 @@ Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 */
 function Note(node) {
 	this.caller = node.caller.charAt(0);
-	if (this.caller !== '+') {
+	if (this.caller !== '+' && this.caller !== '-') {
 		console.log(JSON.stringify(node));
-		throw new Error('Note caller with no +');
+		throw new Error('Note caller with no + or -');
 	}
 	this.style = node.style;
 	this.whiteSpace = node.whiteSpace;
