@@ -16,21 +16,24 @@ function InstallVersions(options) {
 	}
 	this.db.run("PRAGMA foreign_keys = ON");
 	this.fs = require('fs');
-	this.initSettingsJS = [];
 	Object.freeze(this);
 }
-InstallVersions.prototype.install = function(locale, callback) {
+InstallVersions.prototype.install = function(callback) {
 	var that = this;
-	var hasDefaultVersion = null;
-	var statement = 'SELECT v.versionCode, v.silCode, v.versionAbbr, v.localVersionName, v.filename, s.defaultVersion' +
-			' FROM Version v JOIN StoreVersion s ON s.versionCode = v.versionCode' +
-			' WHERE s.storeLocale = ? AND s.endDate IS NULL';
-	this.db.all(statement, [locale], function(err, results) {
+	var defaultVersion = null;
+	var initSettingsJS = ['SettingStorage.prototype.initSettings = function() {\n'];
+	var defaultSettingsJS = ['SettingStorage.prototype.defaultVersion = function(lang) {\n'];
+	defaultSettingsJS.push('\tswitch(lang) {\n');
+	
+	var statement = 'SELECT v.versionCode, v.filename, s.localeDefault' +
+			' FROM Version v JOIN InstalledVersion s ON s.versionCode = v.versionCode' +
+			' WHERE s.endDate IS NULL';
+	this.db.all(statement, [], function(err, results) {
 		if (err) {
-			that.error('Error in select join StoreVersion, Version', err);
+			that.error('Error in select join InstalledVersion, Version', err);
 		}
 		if (results.length === 0) {
-			that.error('There are no versions for locale', locale);
+			that.error('There are no installed versions', locale);
 		}
 		processRow(results, 0);
 	});
@@ -39,23 +42,27 @@ InstallVersions.prototype.install = function(locale, callback) {
 		if (index < results.length) {
 			var row = results[index];
 			console.log(row);
-			if (row.defaultVersion === 'T') {
-				hasDefaultVersion = row.filename;
-				that.initSettingsJS.unshift('\tthis.setCurrentVersion("' + row.filename + '");');
+			if (row.localeDefault) {
+				defaultSettingsJS.push('\t\tcase "', row.localeDefault, '": return("', row.filename, '");\n');
+				if (row.localeDefault === 'en') {
+					defaultVersion = row.filename;
+				}
 			}
-			that.initSettingsJS.push('\tthis.setVersion("' + row.versionCode + '", "' + row.filename + '");');
+			initSettingsJS.push('\tthis.setVersion("' + row.versionCode + '", "' + row.filename + '");\n');
 			that.copyFile('../../DBL/5ready/' + row.filename, '../YourBible/www/', function() {
 				console.log('Finished copy', row.filename);
 				processRow(results, index + 1);
 			});
 		} else {
-			if (hasDefaultVersion == null) {
-				that.error('InstallVersions.processRow', 'No defaultVersion');
+			initSettingsJS.push('};\n');
+			if (defaultVersion == null) {
+				this.error('There is no default version for English');
 			}
-			that.initSettingsJS.unshift('SettingStorage.prototype.initSettings = function() {');
-			that.initSettingsJS.push('\treturn("' + hasDefaultVersion + '");');
-			that.initSettingsJS.push('};\n');
-			that.fs.writeFile('../YourBible/www/js/SettingStorageInitSettings.js', that.initSettingsJS.join('\n'), {encoding: 'utf8'}, function(err) {
+			defaultSettingsJS.push('\t\tdefault: return("', defaultVersion, '");\n');
+			defaultSettingsJS.push('\t}\n');
+			defaultSettingsJS.push('};\n');
+			var generatedJS = initSettingsJS.join('') + defaultSettingsJS.join('');
+			that.fs.writeFile('../YourBible/www/js/SettingStorageInitSettings.js', generatedJS, {encoding: 'utf8'}, function(err) {
 				if (err) {
 					that.error('InstallVersion.writeFile', err);
 				} else {
@@ -84,12 +91,8 @@ InstallVersions.prototype.error = function(message, err) {
 };
 
 
-if (process.argv.length < 3) {
-	console.log('Usage: InstallVersions.sh  LOCALE (e.g. en or es, etc)');
-	process.exit(1);
-}
 var database = new InstallVersions({filename: './Versions.db', verbose: true});
-database.install(process.argv[2], function() {
+database.install(function() {
 	console.log('INSTALL VERSIONS COMPLETED SUCESSFULLY');
 });
 

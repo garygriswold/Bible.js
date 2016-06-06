@@ -34,6 +34,17 @@ TableContentsView
 	5. When clicking on a book, it displays the chapters and all should be visible.
 	6. The chapter boxes should be well centered in the page.
 	7. When clicking on the chapter, it should display properly positioned.
+	
+App Startup
+-----------
+
+	1. Do a fresh install of the App.  It should load the default version for the language
+	2. Restart the App, it should now remember the version from the Settings DB.
+	3. Change the preferred language in the App, it should still start with the same language.
+	4. With preferred language changed, do a fresh install, it should start with default version for selected language.
+	5. Restart the app, it should start with same version as last start.
+	6. Verify that all of the versions that are listed as defaults in settingStorage.defaultVersion are in www.
+	7. Somehow test condition that Version is listed, but not actually available.  App should not fail, but just fail to load version.
 
 CodexView
 ---------
@@ -125,11 +136,5 @@ VersionsView
 	6. Clicking on an already download book should make it active.
 	7. Clicking on a to be downloaded icon should download it and make it active.
 
-Orientation Change (not implemented)
-------------------
 
-	1. After orientation change, Icon buttons must be correctly spaced.
-	2. Repeat orientation change multiple times to view correctness of button position.
-	3. Start app from portrait and then change orientation after start, and view button positions.
-	4. Start app from landscape and then change orientation after start, and view button positions.
-	5. Switch between portrait and landscape while in each view, and make sure scrolling stays in place.
+

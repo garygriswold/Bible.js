@@ -4,7 +4,8 @@
  */
 var deviceSettings = {
 	prefLanguage: function(callback) {
-		callback('es-ES');
+		//callback('es-ES');
+		callback('en-US');
     },
     platform: function() {
         return('node');

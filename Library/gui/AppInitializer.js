@@ -19,9 +19,16 @@ AppInitializer.prototype.begin = function() {
     settingStorage.create(function() {
 	    settingStorage.getCurrentVersion(function(versionFilename) {
 			if (versionFilename == null) {
-				versionFilename = settingStorage.initSettings();
+				deviceSettings.prefLanguage(function(locale) {
+					var parts = locale.split('-');
+					versionFilename = settingStorage.defaultVersion(parts[0]);
+					settingStorage.setCurrentVersion(versionFilename);
+					settingStorage.initSettings();
+					changeVersionHandler(versionFilename);
+				});
+			} else {
+				changeVersionHandler(versionFilename);
 			}
-			changeVersionHandler(versionFilename);
 		});
     });
 		

@@ -1,7 +1,7 @@
 PRAGMA foreign_keys = ON;
 
 DROP TABLE IF EXISTS Translation;
-DROP TABLE IF EXISTS StoreVersion;
+DROP TABLE IF EXISTS InstalledVersion;
 DROP TABLE IF EXISTS CountryVersion;
 DROP TABLE IF EXISTS Version;
 DROP TABLE IF EXISTS Owner;
@@ -112,19 +112,16 @@ INSERT INTO CountryVersion VALUES ('WORLD', 'ARVDVPD');
 -- INSERT INTO CountryVersion VALUES ('MX', 'azg');
 
 
-CREATE TABLE StoreVersion (
-storeLocale TEXT NOT NULL,	
-versionCode NOT NULL REFERENCES Version(versionCode),
-defaultVersion NOT NULL CHECK(defaultVersion IN('T', 'F')),
+CREATE TABLE InstalledVersion (
+versionCode NOT NULL PRIMARY KEY REFERENCES Version(versionCode),
+localeDefault NULL UNIQUE,
 startDate NOT NULL,
-endDate NULL,
-PRIMARY KEY (storeLocale, versionCode)
+endDate NULL
 );
-INSERT INTO StoreVersion VALUES ('en', 'WEB', 'T', '2016-05-16', null);
-INSERT INTO StoreVersion VALUES ('en', 'KJVPD', 'F', '2016-05-16', null);
-INSERT INTO StoreVersion VALUES ('es', 'RVR09PD', 'T', '2016-05-31', null);
-INSERT INTO StoreVersion VALUES ('es', 'WEB', 'F', '2016-05-31', null);
-INSERT INTO StoreVersion VALUES ('ar', 'ARVDVPD', 'T', '2016-06-01', null);
+INSERT INTO InstalledVersion VALUES ('WEB', 'en', '2016-05-16', null);
+INSERT INTO InstalledVersion VALUES ('KJVPD', null, '2016-05-16', null);
+INSERT INTO InstalledVersion VALUES ('RVR09PD', 'es', '2016-05-31', null);
+INSERT INTO InstalledVersion VALUES ('ARVDVPD', 'ar', '2016-06-01', null);
 
 
 CREATE TABLE Translation (
