@@ -4,7 +4,7 @@
 */
 function SettingsView(settingStorage, versesAdapter) {
 	this.root = null;
-	this.settingStorage = settingStorage
+	this.settingStorage = settingStorage;
 	this.versesAdapter = versesAdapter;
 	this.rootNode = document.createElement('div');
 	this.rootNode.id = 'settingRoot';

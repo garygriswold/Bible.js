@@ -25,7 +25,7 @@ function HeaderView(tableContents, version) {
 	this.rootNode.id = 'statusRoot';
 	document.body.appendChild(this.rootNode);
 	this.labelCell = document.createElement('td');
-	this.labelCell.id = 'labelCell'
+	this.labelCell.id = 'labelCell';
 	document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	Object.seal(this);
 	var that = this;
@@ -59,7 +59,7 @@ function HeaderView(tableContents, version) {
 	  ctx.arcTo(x,y,x,y+radius,radius);
 	  ctx.stroke();
 	}
-};
+}
 HeaderView.prototype.showView = function() {
 	var that = this;
 	this.backgroundCanvas = document.createElement('canvas');

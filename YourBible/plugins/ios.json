@@ -43,6 +43,9 @@
         },
         "cordova-sqlite-ext": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
+        },
+        "cordova-plugin-buildinfo": {
+            "PACKAGE_NAME": "com.shortsands.yourbible"
         }
     },
     "dependent_plugins": {

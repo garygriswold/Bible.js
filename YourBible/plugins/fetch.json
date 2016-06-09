@@ -104,5 +104,13 @@
         },
         "is_top_level": false,
         "variables": {}
+    },
+    "cordova-plugin-buildinfo": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-buildinfo"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

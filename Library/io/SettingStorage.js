@@ -52,6 +52,14 @@ SettingStorage.prototype.getCurrentVersion = function(callback) {
 SettingStorage.prototype.setCurrentVersion = function(filename) {
 	this.setItem('version', filename);
 };
+SettingStorage.prototype.getAppVersion = function(callback) {
+	this.getItem('appVersion', function(version) {
+		callback(version);
+	});
+};
+SettingStorage.prototype.setAppVersion = function(appVersion) {
+	this.setItem('appVersion', appVersion);
+};
 SettingStorage.prototype.getItem = function(name, callback) {
 	this.database.select('SELECT value FROM Settings WHERE name=?', [name], function(results) {
 		if (results instanceof IOError) {

@@ -66,7 +66,6 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 			for (var c=0; c<numCellPerRow && chaptNum <= book.lastChapter; c++) {
 				var cell = that.dom.addNode(row, 'td', 'tocChap', chaptNum, 'toc' + bookCode + ':' + chaptNum);
 				chaptNum++;
-				var that = this;
 				cell.addEventListener('click', function(event) {
 					var nodeId = this.id.substring(3);
 					console.log('open chapter', nodeId);

@@ -9,7 +9,7 @@ var gsPreloaderOptions = {
   boxOpacity:0.2,
   boxBorder:"1px solid #AAA",
   animationOffset: 1.8, //jump 1.8 seconds into the animation for a more active part of the spinning initially (just looks a bit better in my opinion)
-}
+};
 
 //this is the whole preloader class/function
 function GSPreloader(options) {

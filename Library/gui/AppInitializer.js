@@ -7,32 +7,36 @@ function AppInitializer() {
 	Object.seal(this);
 }
 AppInitializer.prototype.begin = function() {
+	var that = this;
     var settingStorage = new SettingStorage();
+    settingStorage.create(function() {
+    	var fileMover = new FileMover(settingStorage);
+    	console.log('START MOVE FILES');
+		fileMover.copyFiles(function() {
+			console.log('DONE WITH MOVE FILES');    
+		    settingStorage.getCurrentVersion(function(versionFilename) {
+				if (versionFilename == null) {
+					deviceSettings.prefLanguage(function(locale) {
+						var parts = locale.split('-');
+						versionFilename = settingStorage.defaultVersion(parts[0]);
+						settingStorage.setCurrentVersion(versionFilename);
+						settingStorage.initSettings();
+						changeVersionHandler(versionFilename);
+					});
+				} else {
+					changeVersionHandler(versionFilename);
+				}
+			});
+    	});
+    });
     
     document.body.addEventListener(BIBLE.CHG_VERSION, function(event) {
-		console.log('CHANGE VERSION TO', event.detail.version);
 		settingStorage.setCurrentVersion(event.detail.version);
 		changeVersionHandler(event.detail.version);
 	});
-    
-    var that = this;
-    settingStorage.create(function() {
-	    settingStorage.getCurrentVersion(function(versionFilename) {
-			if (versionFilename == null) {
-				deviceSettings.prefLanguage(function(locale) {
-					var parts = locale.split('-');
-					versionFilename = settingStorage.defaultVersion(parts[0]);
-					settingStorage.setCurrentVersion(versionFilename);
-					settingStorage.initSettings();
-					changeVersionHandler(versionFilename);
-				});
-			} else {
-				changeVersionHandler(versionFilename);
-			}
-		});
-    });
 		
 	function changeVersionHandler(versionFilename) {
+		console.log('CHANGE VERSION TO', versionFilename);
 		var bibleVersion = new BibleVersion();
 		bibleVersion.fill(versionFilename, function() {
 			if (that.appViewController) {

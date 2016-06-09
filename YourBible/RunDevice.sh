@@ -44,6 +44,7 @@ cat ../Library/io/HistoryAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/QuestionsAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/VersionsAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/HttpClient.js >> www/js/BibleApp.js
+cat ../Library/io/FileMover.js >> www/js/BibleApp.js
 cat ../Library/io/FileDownloader.js >> www/js/BibleApp.js
 
 cat ../Library/model/meta/BibleVersion.js >> www/js/BibleApp.js
@@ -59,4 +60,9 @@ cat ../Library/util/DateTimeFormatter.js >> www/js/BibleApp.js
 cat ../Library/util/cordovaDeviceSettings.js >> www/js/BibleApp.js
 cat ../Library/util/DOMBuilder.js >> www/js/BibleApp.js
 
-cordova run ios --device
+if [ -z "$1" ]; then
+	cordova run ios --device
+else
+	cordova run $1 --device
+fi
+

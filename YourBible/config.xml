@@ -77,4 +77,5 @@
     <plugin name="com.telerik.plugins.wkwebview" spec="~0.6.9">
         <variable name="WKWEBVIEW_SERVER_PORT" value="12344" />
     </plugin>
+    <plugin name="cordova-plugin-buildinfo" spec="~1.1.0" />
 </widget>

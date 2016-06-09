@@ -45,6 +45,18 @@ App Startup
 	5. Restart the app, it should start with same version as last start.
 	6. Verify that all of the versions that are listed as defaults in settingStorage.defaultVersion are in www.
 	7. Somehow test condition that Version is listed, but not actually available.  App should not fail, but just fail to load version.
+	
+App Update
+----------
+
+	1. Do a fresh install of the App. Log should show all www/ databases checked for remove from databases/
+	2. Verify that databases will open
+	3. Stop the App, and restart.  Log should show version check, but no databases checked for remove from databases/
+	4. Verify that databases will open
+	5. Temporarily update the version number.  Log should show each previously opened database being deleted
+	6. Verify databases will open
+	7. Repeat the above tests on Android
+	8. Temp change the directories and filenames and verify crash resistence.
 
 CodexView
 ---------

@@ -4,7 +4,6 @@
 */
 function DatabaseHelper(dbname, isCopyDatabase) {
 	this.dbname = dbname;
-	this.isCopyDatabase = isCopyDatabase;
 	var size = 30 * 1024 * 1024;
     if (window.sqlitePlugin === undefined) {
         console.log('opening WEB SQL Database, stores in Cache', this.dbname);
@@ -12,7 +11,7 @@ function DatabaseHelper(dbname, isCopyDatabase) {
     } else {
         console.log('opening SQLitePlugin Database, stores in Documents with no cloud', this.dbname);
         var options = { name: this.dbname, location: 2 };
-        if (this.isCopyDatabase) options.createFromLocation = 1;
+        if (isCopyDatabase) options.createFromLocation = 1;
         this.database = window.sqlitePlugin.openDatabase(options);
     }
 	Object.seal(this);
