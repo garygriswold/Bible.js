@@ -3,7 +3,7 @@
 * is a significant amount of the time to do this, this class reads over the entire Bible text and creates
 * all of the required assets.
 */
-function AssetBuilder(types, database) {
+function AssetBuilder(types, database, silCode) {
 	this.types = types;
 	this.database = database;
 	this.builders = [];
@@ -16,7 +16,7 @@ function AssetBuilder(types, database) {
 		this.builders.push(new TOCBuilder(this.database.tableContents));
 	}
 	if (types.concordance) {
-		this.builders.push(new ConcordanceBuilder(this.database.concordance));
+		this.builders.push(new ConcordanceBuilder(this.database.concordance, silCode));
 	}
 	if (types.styleIndex) {
 		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));

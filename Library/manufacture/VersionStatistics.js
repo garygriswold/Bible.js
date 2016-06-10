@@ -8,7 +8,6 @@ function VersionStatistics(database) {
 }
 VersionStatistics.prototype.readBook = function(usxRoot) {
 	var that = this;
-	this.charCounts = {};
 	readRecursively(usxRoot);
 
 	function readRecursively(node) {

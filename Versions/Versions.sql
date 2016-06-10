@@ -60,6 +60,10 @@ isQaActive TEXT CHECK (isQaActive IN('T','F')),
 copyright TEXT NULL,
 introduction TEXT
 );
+-- Chinese
+INSERT INTO Version VALUES ('CUVSPD', 'cnm', 'EBIBLE', 'CUVS', 'Chinese Union Version (simplified)', 'BIBLE', 'CUVSPD.db', 'F', '', NULL);
+INSERT INTO Version VALUES ('CUVTPD', 'cnm', 'EBIBLE', 'CUVT', 'Chinese Union Version (traditional)', 'BIBLE', 'CUVTPD.db', 'F', '', NULL);
+
 -- English
 INSERT INTO Version VALUES ('CEVUS06', 'eng', 'ABS', 'CEV', 'Contemporary English Version', 'BIBLE', 'CEVUS06.db', 'F', 
 'Contemporary English Version® © 1995 American Bible Society. All rights reserved.', NULL);

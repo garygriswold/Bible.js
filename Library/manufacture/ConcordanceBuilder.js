@@ -4,8 +4,9 @@
 *
 * This solution might not be unicode safe. GNG Apr 2, 2015
 */
-function ConcordanceBuilder(adapter) {
+function ConcordanceBuilder(adapter, silCode) {
 	this.adapter = adapter;
+	this.silCode = silCode;
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
@@ -36,7 +37,12 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 		case 'note':
 			break; // Do not index notes
 		case 'text':
-			var words = node.text.split(/[\s\-\u2010-\u2015\u2043\u058A]+/);
+			var words = null;
+			if (this.silCode === 'cnm') {
+				words = node.text.split('');
+			} else {
+				words = node.text.split(/[\s\-\u2010-\u2015\u2043\u058A]+/);
+			}
 			for (var i=0; i<words.length; i++) {
 				var word2 = words[i];
 				//var word1 = word2.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]+$/g, '');

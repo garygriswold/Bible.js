@@ -61,10 +61,11 @@ ConcordanceValidator.prototype.normalize = function(callback) {
 		//that.db.run(createValConcordance, [], function(err) { if (err) callback(err);	});
 		var createValPunctuation =
 			'CREATE TABLE valPunctuation(' +
-			'book text not null, ' +
-			'chapter int not null, ' +
-			'verse int not null, ' +
-			'char text not null)';
+			' book text not null,' +
+			' chapter int not null,' +
+			' verse int not null,' +
+			' position int not null,' +
+			' char text not null)';
 		console.log('create valPunct');
 		that.db.run(createValPunctuation, [], function(err) { if (err) callback(err); });
 		console.log('done create tables');
@@ -130,7 +131,7 @@ ConcordanceValidator.prototype.generate = function(concordance) {
 		var row = concordance[i];
 		if (row.book != priorBook || row.chapter != priorChap || row.verse != priorVers) {
 			if (generated != null) {
-				result.push({ book:priorBook, chapter:priorChap, verse:priorVers, text:generated.join(' ') });
+				result.push({ book:priorBook, chapter:priorChap, verse:priorVers, text:generated.join('') });
 			}
 			priorBook = row.book;
 			priorChap = row.chapter;
@@ -155,7 +156,7 @@ ConcordanceValidator.prototype.outputFile = function(generatedText) {
 };
 ConcordanceValidator.prototype.compare = function(generatedText, callback) {
 	var that = this;
-	var insertStmt = this.db.prepare('INSERT INTO valPunctuation (book, chapter, verse, char) VALUES (?,?,?,?)');
+	var insertStmt = this.db.prepare('INSERT INTO valPunctuation (book, chapter, verse, position, char) VALUES (?,?,?,?,?)');
 	var selectStmt = 'SELECT html FROM verses WHERE reference=?';
 	iterateEach(0);
 
@@ -190,7 +191,7 @@ ConcordanceValidator.prototype.compare = function(generatedText, callback) {
 				gi++;
 				oi--;
 			} else {
-				insertStmt.run(book, chapter, verse, original.charAt(oi), function(err) { if (err) callback(err); });
+				insertStmt.run(book, chapter, verse, oi, original.charAt(oi), function(err) { if (err) callback(err); });
 			}
 		}
 	}

@@ -36,5 +36,6 @@ cat ../Library/io/TableContentsAdapter.js >> Publisher.js
 cat ../Library/io/StyleIndexAdapter.js >> Publisher.js
 cat ../Library/io/StyleUseAdapter.js >> Publisher.js
 cat ../Library/io/CharsetAdapter.js >> Publisher.js
+cat ../Library/io/VersionsReadAdapter.js >> Publisher.js
 cat ../Library/manufacture/AssetController.js >> Publisher.js
 node Publisher.js $*

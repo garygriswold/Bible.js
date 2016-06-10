@@ -18,16 +18,24 @@ if (process.argv.length < 3) {
 		types.styleIndex = true;
 		types.statistics = true;
 		var database = new DeviceDatabase(DB_PATH + version.toUpperCase() + '.db');
-		
-		var builder = new AssetBuilder(types, database);
-		builder.build(function(err) {
-			if (err instanceof IOError) {
-				console.log('FAILED', JSON.stringify(err));
-				process.exit(1);
-			} else {
-				console.log('Success, Database created');
+		var versionAdapter = new VersionsReadAdapter();
+		versionAdapter.readVersion(version.toUpperCase(), function(row) {
+			if (row) {
+				var builder = new AssetBuilder(types, database, row.silCode);
+				builder.build(function(err) {
+					if (err instanceof IOError) {
+						console.log('FAILED', JSON.stringify(err));
+						process.exit(1);
+					} else {
+						console.log('Success, Database created');
+					}
+				});		
 			}
-		});	
+			else {
+				console.log('FAILED TO GET LANGUAGE');
+				process.exit(1);
+			}
+		});
 	}
 }
 

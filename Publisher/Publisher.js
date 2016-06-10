@@ -22,7 +22,7 @@ AssetType.prototype.getUSXPath = function(filename) {
 * is a significant amount of the time to do this, this class reads over the entire Bible text and creates
 * all of the required assets.
 */
-function AssetBuilder(types, database) {
+function AssetBuilder(types, database, silCode) {
 	this.types = types;
 	this.database = database;
 	this.builders = [];
@@ -35,7 +35,7 @@ function AssetBuilder(types, database) {
 		this.builders.push(new TOCBuilder(this.database.tableContents));
 	}
 	if (types.concordance) {
-		this.builders.push(new ConcordanceBuilder(this.database.concordance));
+		this.builders.push(new ConcordanceBuilder(this.database.concordance, silCode));
 	}
 	if (types.styleIndex) {
 		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));
@@ -122,7 +122,7 @@ function VersionStatistics(database) {
 }
 VersionStatistics.prototype.readBook = function(usxRoot) {
 	var that = this;
-	this.charCounts = {};
+	//this.charCounts = {};
 	readRecursively(usxRoot);
 
 	function readRecursively(node) {
@@ -423,8 +423,9 @@ TOCBuilder.prototype.toJSON = function() {
 *
 * This solution might not be unicode safe. GNG Apr 2, 2015
 */
-function ConcordanceBuilder(adapter) {
+function ConcordanceBuilder(adapter, silCode) {
 	this.adapter = adapter;
+	this.silCode = silCode;
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
@@ -441,6 +442,7 @@ ConcordanceBuilder.prototype.readBook = function(usxRoot) {
 	this.readRecursively(usxRoot);
 };
 ConcordanceBuilder.prototype.readRecursively = function(node) {
+	var words = null;
 	switch(node.tagName) {
 		case 'book':
 			this.bookCode = node.code;
@@ -455,7 +457,11 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 		case 'note':
 			break; // Do not index notes
 		case 'text':
-			var words = node.text.split(/[\s\-\u2010-\u2015\u2043\u058A]+/);
+			if (this.silCode === 'cnm') {
+				words = node.text.split('');
+			} else {
+				words = node.text.split(/[\s\-\u2010-\u2015\u2043\u058A]+/);
+			}
 			for (var i=0; i<words.length; i++) {
 				var word2 = words[i];
 				//var word1 = word2.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]+$/g, '');
@@ -2098,6 +2104,29 @@ CharsetAdapter.prototype.load = function(array, callback) {
 		}
 	});
 };/**
+* This class is the database adapter that is used to read the Versions.db 
+* In the publishing process.  It expects to use a node sqlite interface
+* not a WebSQL interface used by the App
+*/
+function VersionsReadAdapter() {
+    var sqlite3 = require('sqlite3'); //.verbose();
+	this.database = new sqlite3.Database('../Versions/Versions.db');
+	this.database.exec("PRAGMA foreign_keys = ON");
+	Object.freeze(this);
+}
+VersionsReadAdapter.prototype.readVersion = function(versionCode, callback) {
+	var statement = 'SELECT silcode FROM Version WHERE versionCode=?';
+	this.database.get(statement, [versionCode], function(err, row) {
+		if (err) {
+			console.log('SELECT ERROR IN VERSION', JSON.stringify(err));
+			callback();
+		} else {
+			callback(row);
+		}
+	});
+};
+
+/**
 * Unit Test Harness for AssetController
 */
 var FILE_PATH = process.env.HOME + '/ShortSands/DBL/2current/';
@@ -2117,16 +2146,24 @@ if (process.argv.length < 3) {
 		types.styleIndex = true;
 		types.statistics = true;
 		var database = new DeviceDatabase(DB_PATH + version.toUpperCase() + '.db');
-		
-		var builder = new AssetBuilder(types, database);
-		builder.build(function(err) {
-			if (err instanceof IOError) {
-				console.log('FAILED', JSON.stringify(err));
-				process.exit(1);
-			} else {
-				console.log('Success, Database created');
+		var versionAdapter = new VersionsReadAdapter();
+		versionAdapter.readVersion(version.toUpperCase(), function(row) {
+			if (row) {
+				var builder = new AssetBuilder(types, database, row.silCode);
+				builder.build(function(err) {
+					if (err instanceof IOError) {
+						console.log('FAILED', JSON.stringify(err));
+						process.exit(1);
+					} else {
+						console.log('Success, Database created');
+					}
+				});		
 			}
-		});	
+			else {
+				console.log('FAILED TO GET LANGUAGE');
+				process.exit(1);
+			}
+		});
 	}
 }
 
