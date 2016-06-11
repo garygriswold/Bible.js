@@ -13,6 +13,7 @@ function ConcordanceValidator(versionPath) {
 	this.versionPath = versionPath;
 	this.fs = require('fs');
 	this.db = null;
+	this.doValConcordance = false; // Change to try to generate ValConcordance takes 20 min.
 	var canon = new Canon();
 	this.bookMap = canon.sequenceMap();
 }
@@ -32,7 +33,7 @@ ConcordanceValidator.prototype.normalize = function(callback) {
 	this.db.serialize(function() {
 		createValPunctuation(function(err) { if (err) that.fatalError(err, 'createValPunctuation'); });
 		normalizeConcordance(function(err, result) {
-			if (err) that.fatalError(err, 'normalizeConcordance')
+			if (err) that.fatalError(err, 'normalizeConcordance');
 			var generatedText = that.generate(result);
 			that.outputFile(generatedText);
 			that.compare(generatedText, function(err) {
@@ -45,20 +46,20 @@ ConcordanceValidator.prototype.normalize = function(callback) {
 		});	
 	});
 	function createValPunctuation(callback) {
-		//console.log('drop valConcordance');
-		//that.db.run('drop table if exists valConcordance', [], function(err) { if (err) callback(err); });
+		console.log('drop valConcordance');
+		that.db.run('drop table if exists valConcordance', [], function(err) { if (err) callback(err); });
 		console.log('drop valPunct');
 		that.db.run('drop table if exists valPunctuation', [], function(err) { if (err) callback(err); });
-		//var createValConcordance = 
-		//	'CREATE TABLE valConcordance(' +
-		//	'book text not null, ' +
-		//	'ordinal int not null, ' +
-		//	'chapter int not null, ' +
-		//	'verse int not null, ' +
-		//	'position int not null, ' +
-		//	'word text not null)';
-		//console.log('create valConcordance');
-		//that.db.run(createValConcordance, [], function(err) { if (err) callback(err);	});
+		var createValConcordance = 
+			'CREATE TABLE valConcordance(' +
+			' book text not null,' +
+			' ordinal int not null,' +
+			' chapter int not null,' +
+			' verse int not null,' +
+			' position int not null,' +
+			' word text not null)';
+		console.log('create valConcordance');
+		that.db.run(createValConcordance, [], function(err) { if (err) callback(err);	});
 		var createValPunctuation =
 			'CREATE TABLE valPunctuation(' +
 			' book text not null,' +
@@ -89,10 +90,16 @@ ConcordanceValidator.prototype.normalize = function(callback) {
 				}
 			}
 			console.log(array.length, 'Normalized Concordance Records');
-			callback(null, array);
+			if (that.doValConcordance) {
+				populateValConcordance(array, function() {
+					callback(null, array);
+				});
+			} else {
+				callback(null, array);
+			}
 		});
 	}
-	/** deprecated, not used becuase it takes many minutes to run */
+	/** optional by this.doValConcordance, becuase it takes many minutes to run */
 	function populateValConcordance(array, callback) {
 		var insertStmt = 'INSERT INTO valConcordance(book, ordinal, chapter, verse, position, word) VALUES (?,?,?,?,?,?)';
 		var insertVal = that.db.prepare(insertStmt, [], function(err) { if (err) callback(err) });

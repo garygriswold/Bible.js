@@ -122,7 +122,6 @@ function VersionStatistics(database) {
 }
 VersionStatistics.prototype.readBook = function(usxRoot) {
 	var that = this;
-	//this.charCounts = {};
 	readRecursively(usxRoot);
 
 	function readRecursively(node) {
@@ -442,7 +441,6 @@ ConcordanceBuilder.prototype.readBook = function(usxRoot) {
 	this.readRecursively(usxRoot);
 };
 ConcordanceBuilder.prototype.readRecursively = function(node) {
-	var words = null;
 	switch(node.tagName) {
 		case 'book':
 			this.bookCode = node.code;
@@ -457,6 +455,7 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 		case 'note':
 			break; // Do not index notes
 		case 'text':
+			var words = null;
 			if (this.silCode === 'cnm') {
 				words = node.text.split('');
 			} else {

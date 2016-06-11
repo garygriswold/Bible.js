@@ -22,6 +22,7 @@ ValidationCleanup.prototype.cleanup = function(callback) {
 	var that = this;
 	this.db.serialize(function() {
 		execute('drop table if exists valPunctuation');
+		execute('drop table if exists valConcordance');
 		execute('update concordance set refPosition = null');
 		execute('update chapters set xml = ""');
 		execute('update verses set xml = ""');
