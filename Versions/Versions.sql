@@ -87,8 +87,8 @@ INSERT INTO Version VALUES ('BLPH', 'spa', 'SPN', 'BLPH', 'La Palabra (versión 
 'La Palabra (BLPH) versión hispanoamericana Copyright © Sociedad Bíblica de España, 2010 Utilizada con permiso', NULL);
 
 -- Arabic
-INSERT INTO Version VALUES ('ARVDVPD', 'arb', 'EBIBLE', 'ARVDV', 'فان دايك الكتاب المقدس باللغة العربية', 'BIBLE', 'ARVDVPD.db', 'F',
-'Van Dyck Arabic Version (ARVDV), Public Domain, eBible.org.', NULL);
+INSERT INTO Version VALUES ('ARBVDPD', 'arb', 'EBIBLE', 'ARBVD', 'فان دايك الكتاب المقدس باللغة العربية', 'BIBLE', 'ARBVDPD.db', 'F',
+'Van Dyck Arabic Version (ARBVD), Public Domain, eBible.org.', NULL);
 
 INSERT INTO Version Values ('amu', 'amu', 'WBT', 'AMU', 'Amuzgo, Guerrero', 'BIBLE_NT', 'AMU.db', 'F', 
 'Amuzgo, Guerrero, © 1999 by Wycliffe Bible Translators', NULL);
@@ -104,8 +104,8 @@ PRIMARY KEY(countryCode, versionCode)
 );
 INSERT INTO CountryVersion VALUES ('WORLD', 'WEB');
 INSERT INTO CountryVersion VALUES ('WORLD', 'KJVPD');
-INSERT INTO CountryVersion VALUES ('WORLD', 'RVR09PD');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ARVDVPD');
+-- INSERT INTO CountryVersion VALUES ('WORLD', 'RVR09PD');
+INSERT INTO CountryVersion VALUES ('WORLD', 'ARBVDPD');
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'GNTD');
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'ESV');
 -- INSERT INTO CountryVersion VALUES ('US', 'CEVUS06');
@@ -124,8 +124,8 @@ endDate NULL
 );
 INSERT INTO InstalledVersion VALUES ('WEB', 'en', '2016-05-16', null);
 INSERT INTO InstalledVersion VALUES ('KJVPD', null, '2016-05-16', null);
-INSERT INTO InstalledVersion VALUES ('RVR09PD', 'es', '2016-05-31', null);
-INSERT INTO InstalledVersion VALUES ('ARVDVPD', 'ar', '2016-06-01', null);
+-- INSERT INTO InstalledVersion VALUES ('RVR09PD', 'es', '2016-05-31', null);
+INSERT INTO InstalledVersion VALUES ('ARBVDPD', 'ar', '2016-06-01', null);
 
 
 CREATE TABLE Translation (
