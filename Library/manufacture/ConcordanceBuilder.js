@@ -26,9 +26,14 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 	switch(node.tagName) {
 		case 'book':
 			this.bookCode = node.code;
+			this.chapter = 0;
+			this.verse = 0;
+			this.position = 0;
 			break;
 		case 'chapter':
 			this.chapter = node.number;
+			this.verse = 0;
+			this.position = 0;
 			break;
 		case 'verse':
 			this.verse = node.number;
