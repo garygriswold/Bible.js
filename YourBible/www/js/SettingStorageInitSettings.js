@@ -1,14 +1,14 @@
 SettingStorage.prototype.initSettings = function() {
-	this.setVersion("WEB", "WEB.db");
+	this.setVersion("ARBVDPD", "ARBVDPD.db");
+	this.setVersion("CUVSPD", "CUVSPD.db");
 	this.setVersion("KJVPD", "KJVPD.db");
-	this.setVersion("RVR09PD", "RVR09PD.db");
-	this.setVersion("ARVDVPD", "ARVDVPD.db");
+	this.setVersion("WEB", "WEB.db");
 };
 SettingStorage.prototype.defaultVersion = function(lang) {
 	switch(lang) {
+		case "ar": return("ARBVDPD.db");
+		case "zh": return("CUVSPD.db");
 		case "en": return("WEB.db");
-		case "es": return("RVR09PD.db");
-		case "ar": return("ARVDVPD.db");
 		default: return("WEB.db");
 	}
 };
