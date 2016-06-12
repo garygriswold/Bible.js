@@ -61,8 +61,10 @@ copyright TEXT NULL,
 introduction TEXT
 );
 -- Chinese
-INSERT INTO Version VALUES ('CUVSPD', 'cnm', 'EBIBLE', 'CUVS', 'Chinese Union Version (simplified)', 'BIBLE', 'CUVSPD.db', 'F', '', NULL);
-INSERT INTO Version VALUES ('CUVTPD', 'cnm', 'EBIBLE', 'CUVT', 'Chinese Union Version (traditional)', 'BIBLE', 'CUVTPD.db', 'F', '', NULL);
+INSERT INTO Version VALUES ('CUVSPD', 'cnm', 'EBIBLE', 'CUVS', 'Chinese Union Version (Simplified)', 'BIBLE', 'CUVSPD.db', 'F',
+'Chinese Union Version (Simplified), Public Domain, eBible.org.', NULL);
+INSERT INTO Version VALUES ('CUVTPD', 'cnm', 'EBIBLE', 'CUVT', 'Chinese Union Version (Traditional)', 'BIBLE', 'CUVTPD.db', 'F',
+'Chinese Union Version (Traditional), Public Domain, eBible.org.', NULL);
 
 -- English
 INSERT INTO Version VALUES ('CEVUS06', 'eng', 'ABS', 'CEV', 'Contemporary English Version', 'BIBLE', 'CEVUS06.db', 'F', 
@@ -154,6 +156,11 @@ INSERT INTO Translation VALUES ('ar', 'en', 'Arabic');
 INSERT INTO Translation VALUES ('ar', 'es', 'Arábica');
 INSERT INTO Translation VALUES ('ar', 'zh', '阿拉伯');
 INSERT INTO Translation VALUES ('ar', 'ar', 'العربية');
+
+INSERT INTO Translation VALUES ('zh', 'en', 'Chinese');
+INSERT INTO Translation VALUES ('zh', 'es', 'Chino');
+INSERT INTO Translation VALUES ('zh', 'zh', '中文');
+INSERT INTO Translation VALUES ('zh', 'ar', 'الصينية');
 
 INSERT INTO Translation VALUES ('WORLD', 'en', 'World');
 INSERT INTO Translation VALUES ('WORLD', 'es', 'Mundo');

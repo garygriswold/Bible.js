@@ -22,7 +22,6 @@ AppInitializer.prototype.begin = function() {
 						var parts = locale.split('-');
 						versionFilename = settingStorage.defaultVersion(parts[0]);
 						settingStorage.setCurrentVersion(versionFilename);
-						//settingStorage.initSettings();
 						changeVersionHandler(versionFilename);
 					});
 				} else {
