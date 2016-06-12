@@ -13,14 +13,14 @@ AppInitializer.prototype.begin = function() {
     	var fileMover = new FileMover(settingStorage);
     	console.log('START MOVE FILES');
 		fileMover.copyFiles(function() {
-			console.log('DONE WITH MOVE FILES');    
+			console.log('DONE WITH MOVE FILES');
+			settingStorage.initSettings();   
 		    settingStorage.getCurrentVersion(function(versionFilename) {
 				if (versionFilename == null) {
 					deviceSettings.prefLanguage(function(locale) {
 						var parts = locale.split('-');
 						versionFilename = settingStorage.defaultVersion(parts[0]);
 						settingStorage.setCurrentVersion(versionFilename);
-						settingStorage.initSettings();
 						changeVersionHandler(versionFilename);
 					});
 				} else {
