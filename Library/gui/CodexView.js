@@ -157,21 +157,45 @@ CodexView.prototype.scrollTo = function(nodeId) {
 		TweenMax.set(window, {scrollTo: { y: rect.top + window.scrollY - this.headerHeight}});
 	}
 };
-CodexView.prototype.showFootnote = function(noteId) {
-	var note = document.getElementById(noteId);
-	for (var i=0; i<note.children.length; i++) {
-		var child = note.children[i];
-		if (child.nodeName === 'SPAN') {
-			child.textContent = child.getAttribute('note') + ' ';
-		}
-	} 
-};
-CodexView.prototype.hideFootnote = function(noteId) {
-	var note = document.getElementById(noteId);
-	for (var i=0; i<note.children.length; i++) {
-		var child = note.children[i];
-		if (child.nodeName === 'SPAN') {
-			child.textContent = '';
+/**
+* This method displays the footnote by taking text contained in the 'note' attribute
+* and adding it as a text node.
+*/
+CodexView.prototype.showFootnote = function(note) {
+	recurseChildren(note);
+	
+	function recurseChildren(node) {
+		for (var i=node.children.length -1; i>=0; i--) {
+			var child = node.children[i];
+			//console.log('show child', node.children.length, i, child.nodeName, child.getAttribute('class'));
+			if ('children' in child) {
+				recurseChildren(child);
+			}
+			if (child.nodeName === 'SPAN' && child.hasAttribute('note')) {
+				child.appendChild(document.createTextNode(child.getAttribute('note')));
+			}
 		}
 	}
 };
+/**
+* This method removes the footnote by removing all of the text nodes under a note
+* except the one that displays the link.
+*/
+CodexView.prototype.hideFootnote = function(note) {
+	recurseChildren(note);
+	
+	function recurseChildren(node) {
+		var nodeClass = (node.nodeType === 1) ? node.getAttribute('class') : null;
+		for (var i=node.childNodes.length -1; i>=0; i--) {
+			var child = node.childNodes[i];
+			//console.log('FOUND ', node.childNodes.length, i, child.nodeName);
+			if ('childNodes' in child) {
+				recurseChildren(child);
+			}
+			if (child.nodeName === '#text' && nodeClass !== 'topf' && nodeClass !== 'topx') {
+				node.removeChild(child);	
+			}
+		}
+	}
+};
+

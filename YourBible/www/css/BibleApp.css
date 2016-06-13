@@ -244,7 +244,7 @@ span.wj {
 }
 /* Translator's Addition */
 span.add {
-	font-weight: bold;
+	/* font-weight: bold; std */
 	font-style: italic;
 	text-align: start;
 }

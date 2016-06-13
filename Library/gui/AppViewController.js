@@ -20,18 +20,18 @@ var SERVER_PORT = '8080';
 function bibleShowNoteClick(nodeId) {
 	console.log('show note clicked', nodeId);
 	event.stopImmediatePropagation();
-	document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: nodeId }}));
 	var node = document.getElementById(nodeId);
 	if (node) {
+		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: node }}));
 		node.setAttribute('onclick', "bibleHideNoteClick('" + nodeId + "');");
 	}
 }
 function bibleHideNoteClick(nodeId) {
 	console.log('hide note clicked', nodeId);
 	event.stopImmediatePropagation();
-	document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: nodeId }}));
 	var node = document.getElementById(nodeId);
 	if (node) {
+		document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: node }}));
 		node.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	}
 }

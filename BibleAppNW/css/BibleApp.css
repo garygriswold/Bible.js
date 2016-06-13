@@ -101,6 +101,21 @@ p.s1 {
 	margin-top: 8pt;
 	color: #2A48B4; /* non-std */
 }
+/* Heading - Section Level 2 */
+p.s2 {
+	font-style: italic;
+	text-align: center;
+	margin-bottom: 4pt;
+	margin-top: 8pt;
+	color: #2A48B4; /* non-std */
+}
+/* Heading - Parallel References */
+p.r {
+	font-style: italic;
+	text-align: center;
+	margin-bottom: 4pt;
+	color: #2A48B4; /* non-std */
+}
 /* Descriptive Title */
 p.d {
 	font-style: italic;
@@ -229,7 +244,7 @@ span.wj {
 }
 /* Translator's Addition */
 span.add {
-	font-weight: bold;
+	/* font-weight: bold; std */
 	font-style: italic;
 	text-align: start;
 }
@@ -238,6 +253,12 @@ span.nd {
 	text-align: start;
 	/* text-decoration: underline; std */
 	text-transform: uppercase; /* non-std */
+}
+/* Proper Name */
+span.pn {
+	text-align: start;
+	font-weight: bold;
+	text-decoration: underline;
 }
 /* Transliterated Word */
 span.tl {
@@ -255,6 +276,12 @@ span.f, span.ft {
 	color: #555555; /* non-std */
 	background-color: #FFFFB4; /* non-std */
 	/* font-style: italic; */
+}
+/* verse number embedded in footnote */
+span.fv {
+	text-align: start;
+	vertical-align: text-top;
+	font-size: 0.66rem;
 }
 /* footnote alternate translation */
 span.fqa {
