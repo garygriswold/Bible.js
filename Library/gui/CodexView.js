@@ -165,7 +165,7 @@ CodexView.prototype.showFootnote = function(note) {
 	recurseChildren(note);
 	
 	function recurseChildren(node) {
-		for (var i=node.children.length -1; i>=0; i--) {
+		for (var i=0; i<node.children.length; i++) {
 			var child = node.children[i];
 			//console.log('show child', node.children.length, i, child.nodeName, child.getAttribute('class'));
 			if ('children' in child) {
