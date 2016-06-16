@@ -45,7 +45,6 @@ INSERT INTO Owner VALUES ('WBT', 'Wycliffe Bible Translators', 'Wycliffe Bible T
 INSERT INTO Owner VALUES ('SPN', 'Bible Society of Spain', 'Sociedad Bíblica de España', 'www.unitedbiblesocieties.org/society/bible-society-of-spain/');
 INSERT INTO Owner VALUES ('EBIBLE', 'eBible.org', 'eBible.org', 'www.ebible.org');
 INSERT INTO Owner VALUES ('CRSWY', 'Crossway', 'Crossway', 'www.crossway.org');
-INSERT INTO Owner VALUES ('ABS', 'American Bible Society', 'American Bible Society', 'www.americanbible.org/');
 
 
 CREATE TABLE Version (
@@ -67,14 +66,9 @@ INSERT INTO Version VALUES ('CUVTPD', 'cnm', 'EBIBLE', 'CUVT', 'Chinese Union Ve
 'Chinese Union Version (Traditional), Public Domain, eBible.org.', NULL);
 
 -- English
-INSERT INTO Version VALUES ('CEVUS06', 'eng', 'ABS', 'CEV', 'Contemporary English Version', 'BIBLE', 'CEVUS06.db', 'F', 
-'Contemporary English Version® © 1995 American Bible Society. All rights reserved.', NULL);
+INSERT INTO Version VALUES ('WEB_SHORT', 'eng', 'EBIBLE', 'WEB', 'WEB Genesis and Titus for testing', 'BIBLE_PNT', 'WEB_SHORT.db', 'F', '', NULL);
 INSERT INTO Version VALUES ('ESV', 'eng', 'CRSWY', 'ESV', 'English Standard Version', 'BIBLE', 'ESV.db', 'F', 
 'English Standard Version®, copyright © 2001 by Crossway Bibles, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.', NULL);
-INSERT INTO Version VALUES ('GNTD', 'eng', 'ABS', 'GN', 'Good News', 'BIBLE', 'GNTD.db', 'F', 
-'Good News Translation® (Today’s English Version, Second Edition) © 1992 American Bible Society. All rights reserved.  Bible text from the Good News Translation (GNT) is not to be reproduced in copies or otherwise by any means except as permitted in writing by American Bible Society, 1865 Broadway, New York, NY 10023.', NULL);
-INSERT INTO Version VALUES ('KJVA', 'eng', 'ABS', 'KJV', 'King James Version, American Edition', 'BIBLE', 'KJVA.db', 'F', 
-'King James Version 1611, spelling, punctuation and text formatting modernized by ABS in 1962; typesetting © 2010 American Bible Society.', NULL);
 INSERT INTO Version VALUES ('KJVPD', 'eng', 'EBIBLE', 'KJV', 'King James Version', 'BIBLE', 'KJVPD.db', 'F', 
 'King James Version 1611 (KJV), Public Domain, eBible.org.', NULL);
 INSERT INTO Version VALUES ('WEB', 'eng', 'EBIBLE', 'WEB', 'World English Bible', 'BIBLE', 'WEB.db', 'F', 
@@ -110,10 +104,7 @@ INSERT INTO CountryVersion VALUES ('WORLD', 'KJVPD');
 INSERT INTO CountryVersion VALUES ('WORLD', 'WEB');
 
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'RVR09PD');
--- INSERT INTO CountryVersion VALUES ('WORLD', 'GNTD');
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'ESV');
--- INSERT INTO CountryVersion VALUES ('US', 'CEVUS06');
--- INSERT INTO CountryVersion VALUES ('US', 'KJVA');
 -- INSERT INTO CountryVersion VALUES ('MX', 'BLPH');
 -- INSERT INTO CountryVersion VALUES ('MX', 'BLP');
 -- INSERT INTO CountryVersion VALUES ('MX', 'amu');
@@ -130,7 +121,6 @@ INSERT INTO InstalledVersion VALUES ('ARBVDPD', 'ar', '2016-06-01', null);
 INSERT INTO InstalledVersion VALUES ('CUVSPD', 'zh', '2016-06-11', null);
 INSERT INTO InstalledVersion VALUES ('KJVPD', null, '2016-05-16', null);
 INSERT INTO InstalledVersion VALUES ('WEB', 'en', '2016-05-16', null);
-
 -- INSERT INTO InstalledVersion VALUES ('RVR09PD', 'es', '2016-05-31', null);
 
 
