@@ -10,3 +10,5 @@
     	"start": "nodewebkit"
   	}
 }
+// index.html calls runUnitTest()
+// So, any test can use this package by implementing that method

@@ -1,7 +1,7 @@
 /**
 * This is a test harness for unit testing the drawing of icons
 */
-function iconsTest() {
+function runUnitTest() {
 	var size = 200;
 	var color = '#777777';
 	var layoutStyle = 'display: inline-block; border: solid';
