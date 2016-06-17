@@ -13,6 +13,7 @@ function ConcordanceBuilder(adapter, silCode) {
 	this.position = 0;
 	this.refList = {};
 	this.refPositions = {};
+	this.refList2 = {};
 	Object.seal(this);
 }
 ConcordanceBuilder.prototype.readBook = function(usxRoot) {
@@ -75,14 +76,18 @@ ConcordanceBuilder.prototype.addEntry = function(word, reference, index) {
 	if (this.refList[word] === undefined) {
 		this.refList[word] = [];
 		this.refPositions[word] = [];
+		this.refList2[word] = [];
 	}
 	var list = this.refList[word];
 	var pos = this.refPositions[word];
+	var list2 = this.refList2[word];
 	if (reference !== list[list.length -1]) { /* ignore duplicate reference */
 		list.push(reference);
 		pos.push(reference + ':' + index);
+		list2.push(reference + ';' + index);
 	} else {
 		pos[pos.length -1] = pos[pos.length -1] + ':' + index;
+		list2.push(reference + ';' + index);
 	}
 };
 ConcordanceBuilder.prototype.size = function() {
@@ -94,7 +99,7 @@ ConcordanceBuilder.prototype.loadDB = function(callback) {
 	var array = [];
 	for (var i=0; i<words.length; i++) {
 		var word = words[i];
-		array.push([ word, this.refList[word].length, this.refList[word].join(','), this.refPositions[word].join(',') ]);
+		array.push([ word, this.refList[word].length, this.refList[word].join(','), this.refPositions[word].join(','), this.refList2[word].join(',') ]);
 	}
 	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {

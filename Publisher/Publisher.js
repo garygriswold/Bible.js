@@ -431,6 +431,7 @@ function ConcordanceBuilder(adapter, silCode) {
 	this.position = 0;
 	this.refList = {};
 	this.refPositions = {};
+	this.refList2 = {};
 	Object.seal(this);
 }
 ConcordanceBuilder.prototype.readBook = function(usxRoot) {
@@ -493,14 +494,18 @@ ConcordanceBuilder.prototype.addEntry = function(word, reference, index) {
 	if (this.refList[word] === undefined) {
 		this.refList[word] = [];
 		this.refPositions[word] = [];
+		this.refList2[word] = [];
 	}
 	var list = this.refList[word];
 	var pos = this.refPositions[word];
+	var list2 = this.refList2[word];
 	if (reference !== list[list.length -1]) { /* ignore duplicate reference */
 		list.push(reference);
 		pos.push(reference + ':' + index);
+		list2.push(reference + ';' + index);
 	} else {
 		pos[pos.length -1] = pos[pos.length -1] + ':' + index;
+		list2.push(reference + ';' + index);
 	}
 };
 ConcordanceBuilder.prototype.size = function() {
@@ -512,7 +517,7 @@ ConcordanceBuilder.prototype.loadDB = function(callback) {
 	var array = [];
 	for (var i=0; i<words.length; i++) {
 		var word = words[i];
-		array.push([ word, this.refList[word].length, this.refList[word].join(','), this.refPositions[word].join(',') ]);
+		array.push([ word, this.refList[word].length, this.refList[word].join(','), this.refPositions[word].join(','), this.refList2[word].join(',') ]);
 	}
 	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {
@@ -1500,6 +1505,7 @@ function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nex
 */
 function Concordance(adapter) {
 	this.adapter = adapter;
+	this.wordsLookahead = 1;
 	Object.freeze(this);
 }
 Concordance.prototype.search = function(words, callback) {
@@ -1548,6 +1554,83 @@ Concordance.prototype.search = function(words, callback) {
 			}
 		}
 		return(true);
+	}
+};
+Concordance.prototype.search2 = function(words, callback) {
+	var that = this;
+	console.log('SEARCH', words);
+	this.adapter.select2(words, function(refLists) {
+		if (refLists instanceof IOError) {
+			callback(refLists);
+		} else if (refLists.length !== words.length) {
+			callback([]);
+		} else {
+			console.log('RAW', refLists);
+			var resultList = intersection(refLists);
+			callback(resultList);
+		}
+	});
+	function intersection(refLists) {
+		if (refLists.length === 0) {
+			return([]);
+		}
+		var resultList = [];
+		if (refLists.length === 1) {
+			for (var ii=0; ii<refLists[0].length; ii++) {
+				resultList.push([refLists[0][ii]]);
+			}
+			return(resultList);
+		}
+		var mapList = [];
+		for (var i=1; i<refLists.length; i++) {
+			var map = arrayToMap(refLists[i]);
+			mapList.push(map);
+		}
+		var firstList = refLists[0];
+		for (var j=0; j<firstList.length; j++) {
+			var reference = firstList[j];
+			var resultItem = matchEachWord(mapList, reference);
+			if (resultItem) {
+				resultList.push(resultItem);
+			}
+		}
+		return(resultList);
+	}
+	function arrayToMap(array) {
+		var map = {};
+		for (var i=0; i<array.length; i++) {
+			map[array[i]] = true;
+		}
+		return(map);
+	}
+	function matchEachWord(mapList, reference) {
+		var resultItem = [ reference ];
+		for (var i=0; i<mapList.length; i++) {
+			reference = matchWordWithLookahead(mapList[i], reference);
+			if (reference == null) {
+				return(null);
+			}
+			console.log('MATCH FOR WORD', i, reference);
+			resultItem.push(reference);
+		}
+		return(resultItem);
+	}
+	function matchWordWithLookahead(mapRef, reference) {
+		for (var look=1; look<=that.wordsLookahead + 1; look++) {
+			var next = nextPosition(reference, look);
+			if (mapRef[next]) {
+				console.log('MATCH WITH LOOKAHEAD');
+				return(next);
+			}
+		}
+		return(null);
+	}
+	function nextPosition(reference, position) {
+		//console.log('NEXT', reference, position);
+		var parts = reference.split(';');
+		var next = parseInt(parts[1]) + position;
+		//console.log('RET', parts[0] + ';' + next.toString());
+		return(parts[0] + ';' + next.toString());
 	}
 };
 /**
@@ -1866,7 +1949,8 @@ ConcordanceAdapter.prototype.create = function(callback) {
 		'word text primary key not null, ' +
     	'refCount integer not null, ' +
     	'refList text not null, ' + // comma delimited list of references where word occurs
-    	'refPosition text null)';  // comma delimited list of references with position in verse.
+    	'refPosition text null, ' + // comma delimited list of references with position in verse.
+    	'refList2 text null)';
    	this.database.executeDDL(statement, function(err) {
 		if (err instanceof IOError) {
 			callback(err);
@@ -1877,7 +1961,7 @@ ConcordanceAdapter.prototype.create = function(callback) {
 	});
 };
 ConcordanceAdapter.prototype.load = function(array, callback) {
-	var statement = 'insert into concordance(word, refCount, refList, refPosition) values (?,?,?,?)';
+	var statement = 'insert into concordance(word, refCount, refList, refPosition, refList2) values (?,?,?,?,?)';
 	this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
 			callback(count);
@@ -1895,6 +1979,33 @@ ConcordanceAdapter.prototype.select = function(words, callback) {
 		questMarks[i] = '?';
 	}
 	var statement = 'select refList from concordance where word in(' + questMarks.join(',') + ')';
+	this.database.select(statement, values, function(results) {
+		if (results instanceof IOError) {
+			console.log('found Error', results);
+			callback(results);
+		} else {
+			var refLists = [];
+			for (i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				if (row && row.refList) { // ignore words that have no ref list
+					var array = row.refList.split(',');
+					refLists.push(array);
+				}
+			}
+            callback(refLists);
+        }
+	});
+};
+/**
+* This is identical to select, except that it returns the refList2 field, but named refList. */
+ConcordanceAdapter.prototype.select2 = function(words, callback) {
+	var values = [ words.length ];
+	var questMarks = [ words.length ];
+	for (var i=0; i<words.length; i++) {
+		values[i] = words[i].toLocaleLowerCase();
+		questMarks[i] = '?';
+	}
+	var statement = 'select refList2 as refList from concordance where word in(' + questMarks.join(',') + ')';
 	this.database.select(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);

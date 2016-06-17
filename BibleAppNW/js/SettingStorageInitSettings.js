@@ -3,6 +3,7 @@ SettingStorage.prototype.initSettings = function() {
 	this.setVersion("KJVPD", "KJVPD.db");
 	this.setVersion("RVR09PD", "RVR09PD.db");
 	this.setVersion("ARVDVPD", "ARVDVPD.db");
+	this.setVersion("WEB_SHORT", "WEB_SHORT.db");
 };
 SettingStorage.prototype.defaultVersion = function(lang) {
 	switch(lang) {
