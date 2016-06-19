@@ -24,6 +24,7 @@ ValidationCleanup.prototype.cleanup = function(callback) {
 		execute('drop table if exists valPunctuation');
 		execute('drop table if exists valConcordance');
 		execute('update concordance set refPosition = null');
+		execute('update concordance set refList = ""');
 		execute('update chapters set xml = ""');
 		execute('update verses set xml = ""');
 		

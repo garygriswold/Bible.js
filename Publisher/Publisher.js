@@ -641,12 +641,12 @@ StyleUseBuilder.prototype.readBook = function(usxRoot) {
 };
 StyleUseBuilder.prototype.loadDB = function(callback) {
 	var styles = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl', 'para.rem',
-		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.ms1', 'para.s1', 'para.d',
+		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.ms1', 'para.s1', 'para.s2', 'para.d', 'para.r',
 		'chapter.c', 'verse.v',
 		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 'para.li1', 'para.nb',
 		'para.sp', 'para.q', 'para.q1', 'para.q2', 'para.qc', 'para.qa',
-		'char.wj', 'char.qs', 'char.add', 'char.nd', 'char.tl',
-		'note.f', 'note.x', 'char.fr', 'char.ft', 'char.fqa', 'char.xo' ];
+		'char.pn', 'char.wj', 'char.qs', 'char.add', 'char.nd', 'char.tl',
+		'note.f', 'note.x', 'char.fr', 'char.ft', 'char.fv', 'char.fqa', 'char.xo' ];
 	var array = [];
 	for (var i=0; i<styles.length; i++) {
 		var style = styles[i];
@@ -1503,9 +1503,9 @@ function TOCBook(code, heading, title, name, abbrev, lastChapter, priorBook, nex
 }/**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
-function Concordance(adapter) {
+function Concordance(adapter, wordsLookAhead) {
 	this.adapter = adapter;
-	this.wordsLookahead = 1;
+	this.wordsLookAhead = (wordsLookAhead) ? wordsLookAhead : 0;
 	Object.freeze(this);
 }
 Concordance.prototype.search = function(words, callback) {
@@ -1558,14 +1558,12 @@ Concordance.prototype.search = function(words, callback) {
 };
 Concordance.prototype.search2 = function(words, callback) {
 	var that = this;
-	console.log('SEARCH', words);
 	this.adapter.select2(words, function(refLists) {
 		if (refLists instanceof IOError) {
 			callback(refLists);
 		} else if (refLists.length !== words.length) {
 			callback([]);
 		} else {
-			console.log('RAW', refLists);
 			var resultList = intersection(refLists);
 			callback(resultList);
 		}
@@ -1610,26 +1608,22 @@ Concordance.prototype.search2 = function(words, callback) {
 			if (reference == null) {
 				return(null);
 			}
-			console.log('MATCH FOR WORD', i, reference);
 			resultItem.push(reference);
 		}
 		return(resultItem);
 	}
 	function matchWordWithLookahead(mapRef, reference) {
-		for (var look=1; look<=that.wordsLookahead + 1; look++) {
+		for (var look=1; look<=that.wordsLookAhead + 1; look++) {
 			var next = nextPosition(reference, look);
 			if (mapRef[next]) {
-				console.log('MATCH WITH LOOKAHEAD');
 				return(next);
 			}
 		}
 		return(null);
 	}
 	function nextPosition(reference, position) {
-		//console.log('NEXT', reference, position);
 		var parts = reference.split(';');
 		var next = parseInt(parts[1]) + position;
-		//console.log('RET', parts[0] + ';' + next.toString());
 		return(parts[0] + ';' + next.toString());
 	}
 };
@@ -1997,7 +1991,9 @@ ConcordanceAdapter.prototype.select = function(words, callback) {
 	});
 };
 /**
-* This is identical to select, except that it returns the refList2 field, but named refList. */
+* This is similar to select, except that it returns the refList2 field, 
+* and resequences the results into the order the words were entered.
+*/
 ConcordanceAdapter.prototype.select2 = function(words, callback) {
 	var values = [ words.length ];
 	var questMarks = [ words.length ];
@@ -2005,18 +2001,24 @@ ConcordanceAdapter.prototype.select2 = function(words, callback) {
 		values[i] = words[i].toLocaleLowerCase();
 		questMarks[i] = '?';
 	}
-	var statement = 'select refList2 as refList from concordance where word in(' + questMarks.join(',') + ')';
+	var statement = 'select word, refList2 from concordance where word in(' + questMarks.join(',') + ')';
 	this.database.select(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
 			callback(results);
 		} else {
-			var refLists = [];
+			var resultMap = {};
 			for (i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
-				if (row && row.refList) { // ignore words that have no ref list
-					var array = row.refList.split(',');
-					refLists.push(array);
+				if (row && row.refList2) { // ignore words that have no ref list
+					resultMap[row.word] = row.refList2;
+				}
+			}
+			var refLists = []; // sequence refList by order search words were entered
+			for (i=0; i<values.length; i++) {
+				var ref = resultMap[values[i]];
+				if (ref) {
+					refLists.push(ref.split(','));
 				}
 			}
             callback(refLists);

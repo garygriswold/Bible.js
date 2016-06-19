@@ -74,19 +74,17 @@ ConcordanceValidator.prototype.normalize = function(callback) {
 	}
 	function normalizeConcordance(callback) {
 		var array = [];
-		that.db.all('SELECT rowid, word, refPosition FROM concordance', [], function(err, results) {
+		that.db.all('SELECT rowid, word, refList2 FROM concordance', [], function(err, results) {
 			if (err) callback(err);
 			for (var i=0; i<results.length; i++) {
 				var row = results[i];
 				console.log(i, row.word);
-				var refList = row.refPosition.split(',');
+				var refList = row.refList2.split(',');
 				for (var j=0; j<refList.length; j++) {
-					var reference = refList[j];
-					var parts = reference.split(':');
-					var ordinal = that.bookMap[parts[0]];
-					for (var k=3; k<parts.length; k++) {
-						array.push({book:parts[0], ordinal:ordinal, chapter:parts[1], verse:parts[2], position:parts[k], word:row.word });
-					}	
+					var parts = refList[j].split(';');
+					var pieces = parts[0].split(':');
+					var ordinal = that.bookMap[pieces[0]];
+					array.push({book:pieces[0], ordinal:ordinal, chapter:pieces[1], verse:pieces[2], position:parts[1], word:row.word });
 				}
 			}
 			console.log(array.length, 'Normalized Concordance Records');
