@@ -444,7 +444,6 @@ CodexView.prototype.showFootnote = function(note) {
 	recurseChildren(note);
 	
 	function recurseChildren(node) {
-		//for (var i=node.children.length -1; i>=0; i--) {
 		for (var i=0; i<node.children.length; i++) {
 			var child = node.children[i];
 			//console.log('show child', node.children.length, i, child.nodeName, child.getAttribute('class'));
@@ -918,18 +917,20 @@ SearchView.prototype.showSearch = function(query) {
 	var that = this;
 	this.viewRoot = document.createElement('div');
 	this.words = query.split(' ');
-	this.concordance.search(this.words, function(refList) {
+	this.concordance.search2(this.words, function(refList) {
 		if (refList instanceof IOError) {
-			// Error should display some kind of icon to represent error.
+			console.log('SEARCH RETURNED ERROR', JSON.stringify(refList));
+			that.stopIcon.showIcon();
 		} else if (refList.length === 0) {
 			that.stopIcon.showIcon();
 		} else {
 			that.stopIcon.hideIcon();
 			that.bookList = refListsByBook(refList);
 			var selectList = selectListWithLimit(that.bookList);
-			that.versesAdapter.getVerses(selectList, function(results) {
+			var selectMap = that.prepareSelect(selectList);
+			that.versesAdapter.getVerses(Object.keys(selectMap), function(results) {
 				if (results instanceof IOError) {
-					// Error should display some kind of error icon
+					that.stopIcon.showIcon();
 				} else {
 					var priorBook = null;
 					var bookNode = null;
@@ -949,7 +950,7 @@ SearchView.prototype.showSearch = function(query) {
 							bookNode = that.appendBook(bookCode);
 							priorBook = bookCode;
 						}
-						that.appendReference(bookNode, reference, verseText);
+						that.appendReference(bookNode, reference, verseText, selectMap[nodeId]);
 					}
 				}
 			});
@@ -958,7 +959,7 @@ SearchView.prototype.showSearch = function(query) {
 	function refListsByBook(refList) {
 		var bookList = {};
 		for (var i=0; i<refList.length; i++) {
-			var bookCode = refList[i].substr(0, 3);
+			var bookCode = refList[i][0].substr(0, 3);
 			if (bookList[bookCode] === undefined) {
 				bookList[bookCode] = [ refList[i] ];
 			} else {
@@ -994,7 +995,7 @@ SearchView.prototype.appendBook = function(bookCode) {
 	bookNode.appendChild(document.createElement('hr'));
 	return(bookNode);
 };
-SearchView.prototype.appendReference = function(bookNode, reference, verseText) {
+SearchView.prototype.appendReference = function(bookNode, reference, verseText, refList) {
 	var that = this;
 	var entryNode = document.createElement('p');
 	entryNode.setAttribute('id', 'con' + reference.nodeId);
@@ -1007,7 +1008,7 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText) 
 
 	var verseNode = document.createElement('span');
 	verseNode.setAttribute('class', 'conVerse');
-	verseNode.innerHTML = styleSearchWords(verseText);
+	verseNode.innerHTML = styleSearchWords(verseText, refList);
 	entryNode.appendChild(verseNode);
 	entryNode.addEventListener('click', function(event) {
 		var nodeId = this.id.substr(3);
@@ -1015,16 +1016,22 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText) 
 		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
 	});
 
-	function styleSearchWords(verseText) {
+	function styleSearchWords(verseText, refList) {
+		var parts = refList[0].split(';');
+		var wordPosition = parseInt(parts[1]) * 2 - 2;
+		
 		var verseWords = verseText.split(/\b/); // Non-destructive, preserves all characters
+
 		var searchWords = verseWords.map(function(wrd) {
 			return(wrd.toLocaleLowerCase());
 		});
+		
 		for (var i=0; i<that.words.length; i++) {
 			var word = that.words[i];
-			var wordNum = searchWords.indexOf(word.toLocaleLowerCase());
+			var wordNum = searchWords.indexOf(word.toLocaleLowerCase(), wordPosition);
 			if (wordNum >= 0) {
 				verseWords[wordNum] = '<span class="conWord">' + verseWords[wordNum] + '</span>';
+				wordPosition = wordNum;
 			}
 		}
 		return(verseWords.join(''));
@@ -1045,8 +1052,9 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 		var bookCode = this.id.substr(3);
 		var bookNode = document.getElementById('con' + bookCode);
 		var refList = that.bookList[bookCode];
+		var selectMap = that.prepareSelect(refList);
 
-		that.versesAdapter.getVerses(refList, function(results) {
+		that.versesAdapter.getVerses(Object.keys(selectMap), function(results) {
 			if (results instanceof IOError) {
 				// display some error graphic?
 			} else {
@@ -1055,11 +1063,25 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 					var nodeId = row.reference;
 					var verseText = row.html;
 					var reference = new Reference(nodeId);
-					that.appendReference(bookNode, reference, verseText);
+					that.appendReference(bookNode, reference, verseText, selectMap[nodeId]);
 				}
 			}
 		});
 	});
+};
+/**
+* This is a private method which takes a list of search results and returns a
+* list of verses to be selected.  This method is declare public only because it is
+* used by two other methods.
+*/
+SearchView.prototype.prepareSelect = function(refList) {
+	var searchMap = {};
+	for (var i=0; i<refList.length; i++) {
+		var first = refList[i][0];
+		var parts = first.split(';');
+		searchMap[parts[0]] = refList[i];
+	}
+	return(searchMap);
 };
 /**
 * This class presents the status bar user interface, and responds to all
@@ -2375,7 +2397,8 @@ ConcordanceAdapter.prototype.create = function(callback) {
 		'word text primary key not null, ' +
     	'refCount integer not null, ' +
     	'refList text not null, ' + // comma delimited list of references where word occurs
-    	'refPosition text null)';  // comma delimited list of references with position in verse.
+    	'refPosition text null, ' + // comma delimited list of references with position in verse.
+    	'refList2 text null)';
    	this.database.executeDDL(statement, function(err) {
 		if (err instanceof IOError) {
 			callback(err);
@@ -2386,7 +2409,7 @@ ConcordanceAdapter.prototype.create = function(callback) {
 	});
 };
 ConcordanceAdapter.prototype.load = function(array, callback) {
-	var statement = 'insert into concordance(word, refCount, refList, refPosition) values (?,?,?,?)';
+	var statement = 'insert into concordance(word, refCount, refList, refPosition, refList2) values (?,?,?,?,?)';
 	this.database.bulkExecuteDML(statement, array, function(count) {
 		if (count instanceof IOError) {
 			callback(count);
@@ -2415,6 +2438,41 @@ ConcordanceAdapter.prototype.select = function(words, callback) {
 				if (row && row.refList) { // ignore words that have no ref list
 					var array = row.refList.split(',');
 					refLists.push(array);
+				}
+			}
+            callback(refLists);
+        }
+	});
+};
+/**
+* This is similar to select, except that it returns the refList2 field, 
+* and resequences the results into the order the words were entered.
+*/
+ConcordanceAdapter.prototype.select2 = function(words, callback) {
+	var values = [ words.length ];
+	var questMarks = [ words.length ];
+	for (var i=0; i<words.length; i++) {
+		values[i] = words[i].toLocaleLowerCase();
+		questMarks[i] = '?';
+	}
+	var statement = 'select word, refList2 from concordance where word in(' + questMarks.join(',') + ')';
+	this.database.select(statement, values, function(results) {
+		if (results instanceof IOError) {
+			console.log('found Error', results);
+			callback(results);
+		} else {
+			var resultMap = {};
+			for (i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				if (row && row.refList2) { // ignore words that have no ref list
+					resultMap[row.word] = row.refList2;
+				}
+			}
+			var refLists = []; // sequence refList by order search words were entered
+			for (i=0; i<values.length; i++) {
+				var ref = resultMap[values[i]];
+				if (ref) {
+					refLists.push(ref.split(','));
 				}
 			}
             callback(refLists);
@@ -3206,8 +3264,9 @@ BibleVersion.prototype.fill = function(filename, callback) {
 /**
 * This class holds the concordance of the entire Bible, or whatever part of the Bible was available.
 */
-function Concordance(adapter) {
+function Concordance(adapter, wordsLookAhead) {
 	this.adapter = adapter;
+	this.wordsLookAhead = (wordsLookAhead) ? wordsLookAhead : 0;
 	Object.freeze(this);
 }
 Concordance.prototype.search = function(words, callback) {
@@ -3256,6 +3315,77 @@ Concordance.prototype.search = function(words, callback) {
 			}
 		}
 		return(true);
+	}
+};
+Concordance.prototype.search2 = function(words, callback) {
+	var that = this;
+	this.adapter.select2(words, function(refLists) {
+		if (refLists instanceof IOError) {
+			callback(refLists);
+		} else if (refLists.length !== words.length) {
+			callback([]);
+		} else {
+			var resultList = intersection(refLists);
+			callback(resultList);
+		}
+	});
+	function intersection(refLists) {
+		if (refLists.length === 0) {
+			return([]);
+		}
+		var resultList = [];
+		if (refLists.length === 1) {
+			for (var ii=0; ii<refLists[0].length; ii++) {
+				resultList.push([refLists[0][ii]]);
+			}
+			return(resultList);
+		}
+		var mapList = [];
+		for (var i=1; i<refLists.length; i++) {
+			var map = arrayToMap(refLists[i]);
+			mapList.push(map);
+		}
+		var firstList = refLists[0];
+		for (var j=0; j<firstList.length; j++) {
+			var reference = firstList[j];
+			var resultItem = matchEachWord(mapList, reference);
+			if (resultItem) {
+				resultList.push(resultItem);
+			}
+		}
+		return(resultList);
+	}
+	function arrayToMap(array) {
+		var map = {};
+		for (var i=0; i<array.length; i++) {
+			map[array[i]] = true;
+		}
+		return(map);
+	}
+	function matchEachWord(mapList, reference) {
+		var resultItem = [ reference ];
+		for (var i=0; i<mapList.length; i++) {
+			reference = matchWordWithLookahead(mapList[i], reference);
+			if (reference == null) {
+				return(null);
+			}
+			resultItem.push(reference);
+		}
+		return(resultItem);
+	}
+	function matchWordWithLookahead(mapRef, reference) {
+		for (var look=1; look<=that.wordsLookAhead + 1; look++) {
+			var next = nextPosition(reference, look);
+			if (mapRef[next]) {
+				return(next);
+			}
+		}
+		return(null);
+	}
+	function nextPosition(reference, position) {
+		var parts = reference.split(';');
+		var next = parseInt(parts[1]) + position;
+		return(parts[0] + ';' + next.toString());
 	}
 };
 /**

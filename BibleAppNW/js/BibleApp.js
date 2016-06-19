@@ -315,9 +315,7 @@ CodexView.prototype.showView = function(nodeId) {
 	window.clearTimeout(this.checkScrollID);
 	document.body.style.backgroundColor = '#FFF';
 	var firstChapter = new Reference(nodeId);
-	console.log('GETTING ROWID');
 	var rowId = this.tableContents.rowId(firstChapter);
-	console.log('GOT ROWID', rowId);
 	var that = this;
 	this.showChapters([rowId, rowId + CODEX_VIEW.AFTER], true, function(err) {
 		if (firstChapter.verse) {
@@ -333,9 +331,7 @@ CodexView.prototype.showView = function(nodeId) {
 		if (window.scrollY <= window.innerHeight && ! that.userIsScrolling) {
 			var firstNode = that.viewport.firstChild;
 			var firstChapter = new Reference(firstNode.id.substr(3));
-			console.log('GETTING ROWID BEFORE');
 			var beforeChapter = that.tableContents.rowId(firstChapter) - 1;
-			console.log('GOT ROWID', beforeChapter);
 			if (beforeChapter) {
 				that.showChapters([beforeChapter], false, function() {
 					that.checkChapterQueueSize('bottom');
@@ -347,9 +343,7 @@ CodexView.prototype.showView = function(nodeId) {
 		} else if (document.body.scrollHeight - window.scrollY <= 2 * window.innerHeight) {
 			var lastNode = that.viewport.lastChild;
 			var lastChapter = new Reference(lastNode.id.substr(3));
-			console.log('GETTING ROWID NEXT');
 			var nextChapter = that.tableContents.rowId(lastChapter) + 1;
-			console.log('GOT ROWID', nextChapter);
 			if (nextChapter) {
 				that.showChapters([nextChapter], true, function() {
 					that.checkChapterQueueSize('top');
@@ -925,21 +919,18 @@ SearchView.prototype.showSearch = function(query) {
 	this.words = query.split(' ');
 	this.concordance.search2(this.words, function(refList) {
 		if (refList instanceof IOError) {
-			// Error should display some kind of icon to represent error.
+			console.log('SEARCH RETURNED ERROR', JSON.stringify(refList));
+			that.stopIcon.showIcon();
 		} else if (refList.length === 0) {
 			that.stopIcon.showIcon();
 		} else {
 			that.stopIcon.hideIcon();
-			console.log('SERCH RESULT REFLIST', refList);
 			that.bookList = refListsByBook(refList);
-			console.log('BOOKLIST', that.bookList);
 			var selectList = selectListWithLimit(that.bookList);
-			var selectList2 = that.prepareSelectList(selectList);
-			var rowId = -1;
-			that.versesAdapter.getVerses(selectList2, function(results) {
-				rowId++;
+			var selectMap = that.prepareSelect(selectList);
+			that.versesAdapter.getVerses(Object.keys(selectMap), function(results) {
 				if (results instanceof IOError) {
-					// Error should display some kind of error icon
+					that.stopIcon.showIcon();
 				} else {
 					var priorBook = null;
 					var bookNode = null;
@@ -959,7 +950,7 @@ SearchView.prototype.showSearch = function(query) {
 							bookNode = that.appendBook(bookCode);
 							priorBook = bookCode;
 						}
-						that.appendReference(bookNode, reference, verseText, selectList[rowId]);
+						that.appendReference(bookNode, reference, verseText, selectMap[nodeId]);
 					}
 				}
 			});
@@ -978,7 +969,6 @@ SearchView.prototype.showSearch = function(query) {
 		Object.freeze(bookList);
 		return(bookList);
 	}
-	// This needs to be changed to get just a list of verses to be input to select.
 	function selectListWithLimit(bookList) {
 		var selectList = [];
 		var books = Object.keys(bookList);
@@ -1027,24 +1017,21 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText, 
 	});
 
 	function styleSearchWords(verseText, refList) {
-		console.log('STYLE WORDS', verseText, refList);
+		var parts = refList[0].split(';');
+		var wordPosition = parseInt(parts[1]) * 2 - 2;
+		
 		var verseWords = verseText.split(/\b/); // Non-destructive, preserves all characters
-//		console.log('SPLIT WORDS', verseWords);
-//		for (var i=0; i<refList.length; i++) {
-//			var parts = refList[i].split(';');
-//			var position = parseInt(parts[1]);
-//			verseWords[position] = '<span class="conWord">' + verseWords[position] + '</span>';
-//			console.log('STYLED ', position, verseWords[position]);
-//		}
 
 		var searchWords = verseWords.map(function(wrd) {
 			return(wrd.toLocaleLowerCase());
 		});
+		
 		for (var i=0; i<that.words.length; i++) {
 			var word = that.words[i];
-			var wordNum = searchWords.indexOf(word.toLocaleLowerCase());
+			var wordNum = searchWords.indexOf(word.toLocaleLowerCase(), wordPosition);
 			if (wordNum >= 0) {
 				verseWords[wordNum] = '<span class="conWord">' + verseWords[wordNum] + '</span>';
+				wordPosition = wordNum;
 			}
 		}
 		return(verseWords.join(''));
@@ -1064,10 +1051,10 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 
 		var bookCode = this.id.substr(3);
 		var bookNode = document.getElementById('con' + bookCode);
-		var refList = that.bookList[bookCode]; ///// This needs to be changed to get just a list of verses.
-		var selectList = that.prepareSelectList(refList);
+		var refList = that.bookList[bookCode];
+		var selectMap = that.prepareSelect(refList);
 
-		that.versesAdapter.getVerses(refList, function(results) {
+		that.versesAdapter.getVerses(Object.keys(selectMap), function(results) {
 			if (results instanceof IOError) {
 				// display some error graphic?
 			} else {
@@ -1076,7 +1063,7 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 					var nodeId = row.reference;
 					var verseText = row.html;
 					var reference = new Reference(nodeId);
-					that.appendReference(bookNode, reference, verseText, refList);
+					that.appendReference(bookNode, reference, verseText, selectMap[nodeId]);
 				}
 			}
 		});
@@ -1087,15 +1074,14 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 * list of verses to be selected.  This method is declare public only because it is
 * used by two other methods.
 */
-SearchView.prototype.prepareSelectList = function(refList) {
-	var searchList = [];
-	console.log('PREPARE SELECT LIST', refList);
+SearchView.prototype.prepareSelect = function(refList) {
+	var searchMap = {};
 	for (var i=0; i<refList.length; i++) {
 		var first = refList[i][0];
 		var parts = first.split(';');
-		searchList.push(parts[0]);
+		searchMap[parts[0]] = refList[i];
 	}
-	return(searchList);
+	return(searchMap);
 };
 /**
 * This class presents the status bar user interface, and responds to all
@@ -2459,7 +2445,9 @@ ConcordanceAdapter.prototype.select = function(words, callback) {
 	});
 };
 /**
-* This is identical to select, except that it returns the refList2 field, but named refList. */
+* This is similar to select, except that it returns the refList2 field, 
+* and resequences the results into the order the words were entered.
+*/
 ConcordanceAdapter.prototype.select2 = function(words, callback) {
 	var values = [ words.length ];
 	var questMarks = [ words.length ];
@@ -2477,7 +2465,6 @@ ConcordanceAdapter.prototype.select2 = function(words, callback) {
 			for (i=0; i<results.rows.length; i++) {
 				var row = results.rows.item(i);
 				if (row && row.refList2) { // ignore words that have no ref list
-					console.log('SQL', row.word, row.refList2);
 					resultMap[row.word] = row.refList2;
 				}
 			}
@@ -3279,7 +3266,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 */
 function Concordance(adapter, wordsLookAhead) {
 	this.adapter = adapter;
-	this.wordsLookAhead = wordsLookAhead;
+	this.wordsLookAhead = (wordsLookAhead) ? wordsLookAhead : 0;
 	Object.freeze(this);
 }
 Concordance.prototype.search = function(words, callback) {
@@ -3332,14 +3319,12 @@ Concordance.prototype.search = function(words, callback) {
 };
 Concordance.prototype.search2 = function(words, callback) {
 	var that = this;
-	console.log('SEARCH', words);
 	this.adapter.select2(words, function(refLists) {
 		if (refLists instanceof IOError) {
 			callback(refLists);
 		} else if (refLists.length !== words.length) {
 			callback([]);
 		} else {
-			console.log('RAW', refLists);
 			var resultList = intersection(refLists);
 			callback(resultList);
 		}
@@ -3378,14 +3363,12 @@ Concordance.prototype.search2 = function(words, callback) {
 		return(map);
 	}
 	function matchEachWord(mapList, reference) {
-		console.log('MATCH ', reference);
 		var resultItem = [ reference ];
 		for (var i=0; i<mapList.length; i++) {
 			reference = matchWordWithLookahead(mapList[i], reference);
 			if (reference == null) {
 				return(null);
 			}
-			console.log('MATCH FOR WORD', i, reference);
 			resultItem.push(reference);
 		}
 		return(resultItem);
@@ -3394,17 +3377,14 @@ Concordance.prototype.search2 = function(words, callback) {
 		for (var look=1; look<=that.wordsLookAhead + 1; look++) {
 			var next = nextPosition(reference, look);
 			if (mapRef[next]) {
-				console.log('MATCH WITH LOOKAHEAD');
 				return(next);
 			}
 		}
 		return(null);
 	}
 	function nextPosition(reference, position) {
-		console.log('NEXT', reference, position);
 		var parts = reference.split(';');
 		var next = parseInt(parts[1]) + position;
-		console.log('RET', parts[0] + ';' + next.toString());
 		return(parts[0] + ';' + next.toString());
 	}
 };
@@ -3661,9 +3641,7 @@ TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
 };
 TOC.prototype.rowId = function(reference) {
-	//console.log('GETTING rowId');
 	var current = this.bookMap[reference.book];
-	//console.log('GOT CURRENT', current);
 	var rowid = current.chapterRowId + reference.chapter;
 	return(rowid);	
 };

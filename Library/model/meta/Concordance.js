@@ -3,7 +3,7 @@
 */
 function Concordance(adapter, wordsLookAhead) {
 	this.adapter = adapter;
-	this.wordsLookAhead = wordsLookAhead;
+	this.wordsLookAhead = (wordsLookAhead) ? wordsLookAhead : 0;
 	Object.freeze(this);
 }
 Concordance.prototype.search = function(words, callback) {

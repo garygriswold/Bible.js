@@ -89,18 +89,20 @@ SearchView.prototype.showSearch = function(query) {
 	var that = this;
 	this.viewRoot = document.createElement('div');
 	this.words = query.split(' ');
-	this.concordance.search(this.words, function(refList) {
+	this.concordance.search2(this.words, function(refList) {
 		if (refList instanceof IOError) {
-			// Error should display some kind of icon to represent error.
+			console.log('SEARCH RETURNED ERROR', JSON.stringify(refList));
+			that.stopIcon.showIcon();
 		} else if (refList.length === 0) {
 			that.stopIcon.showIcon();
 		} else {
 			that.stopIcon.hideIcon();
 			that.bookList = refListsByBook(refList);
 			var selectList = selectListWithLimit(that.bookList);
-			that.versesAdapter.getVerses(selectList, function(results) {
+			var selectMap = that.prepareSelect(selectList);
+			that.versesAdapter.getVerses(Object.keys(selectMap), function(results) {
 				if (results instanceof IOError) {
-					// Error should display some kind of error icon
+					that.stopIcon.showIcon();
 				} else {
 					var priorBook = null;
 					var bookNode = null;
@@ -120,7 +122,7 @@ SearchView.prototype.showSearch = function(query) {
 							bookNode = that.appendBook(bookCode);
 							priorBook = bookCode;
 						}
-						that.appendReference(bookNode, reference, verseText);
+						that.appendReference(bookNode, reference, verseText, selectMap[nodeId]);
 					}
 				}
 			});
@@ -129,7 +131,7 @@ SearchView.prototype.showSearch = function(query) {
 	function refListsByBook(refList) {
 		var bookList = {};
 		for (var i=0; i<refList.length; i++) {
-			var bookCode = refList[i].substr(0, 3);
+			var bookCode = refList[i][0].substr(0, 3);
 			if (bookList[bookCode] === undefined) {
 				bookList[bookCode] = [ refList[i] ];
 			} else {
@@ -165,7 +167,7 @@ SearchView.prototype.appendBook = function(bookCode) {
 	bookNode.appendChild(document.createElement('hr'));
 	return(bookNode);
 };
-SearchView.prototype.appendReference = function(bookNode, reference, verseText) {
+SearchView.prototype.appendReference = function(bookNode, reference, verseText, refList) {
 	var that = this;
 	var entryNode = document.createElement('p');
 	entryNode.setAttribute('id', 'con' + reference.nodeId);
@@ -178,7 +180,7 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText) 
 
 	var verseNode = document.createElement('span');
 	verseNode.setAttribute('class', 'conVerse');
-	verseNode.innerHTML = styleSearchWords(verseText);
+	verseNode.innerHTML = styleSearchWords(verseText, refList);
 	entryNode.appendChild(verseNode);
 	entryNode.addEventListener('click', function(event) {
 		var nodeId = this.id.substr(3);
@@ -186,16 +188,22 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText) 
 		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
 	});
 
-	function styleSearchWords(verseText) {
+	function styleSearchWords(verseText, refList) {
+		var parts = refList[0].split(';');
+		var wordPosition = parseInt(parts[1]) * 2 - 2;
+		
 		var verseWords = verseText.split(/\b/); // Non-destructive, preserves all characters
+
 		var searchWords = verseWords.map(function(wrd) {
 			return(wrd.toLocaleLowerCase());
 		});
+		
 		for (var i=0; i<that.words.length; i++) {
 			var word = that.words[i];
-			var wordNum = searchWords.indexOf(word.toLocaleLowerCase());
+			var wordNum = searchWords.indexOf(word.toLocaleLowerCase(), wordPosition);
 			if (wordNum >= 0) {
 				verseWords[wordNum] = '<span class="conWord">' + verseWords[wordNum] + '</span>';
+				wordPosition = wordNum;
 			}
 		}
 		return(verseWords.join(''));
@@ -216,8 +224,9 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 		var bookCode = this.id.substr(3);
 		var bookNode = document.getElementById('con' + bookCode);
 		var refList = that.bookList[bookCode];
+		var selectMap = that.prepareSelect(refList);
 
-		that.versesAdapter.getVerses(refList, function(results) {
+		that.versesAdapter.getVerses(Object.keys(selectMap), function(results) {
 			if (results instanceof IOError) {
 				// display some error graphic?
 			} else {
@@ -226,9 +235,23 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 					var nodeId = row.reference;
 					var verseText = row.html;
 					var reference = new Reference(nodeId);
-					that.appendReference(bookNode, reference, verseText);
+					that.appendReference(bookNode, reference, verseText, selectMap[nodeId]);
 				}
 			}
 		});
 	});
+};
+/**
+* This is a private method which takes a list of search results and returns a
+* list of verses to be selected.  This method is declare public only because it is
+* used by two other methods.
+*/
+SearchView.prototype.prepareSelect = function(refList) {
+	var searchMap = {};
+	for (var i=0; i<refList.length; i++) {
+		var first = refList[i][0];
+		var parts = first.split(';');
+		searchMap[parts[0]] = refList[i];
+	}
+	return(searchMap);
 };
