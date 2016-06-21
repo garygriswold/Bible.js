@@ -60,6 +60,11 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 		case 'note':
 			domNode = node.toDOM(domParent, this.bookCode, this.chapter, ++this.noteNum);
 			break;
+		case 'ref':
+			domNode = node.toDOM(domParent);
+			break;
+		case 'optbreak':
+			break;
 		default:
 			throw new Error('Unknown tagname ' + node.tagName + ' in DOMBuilder.readBook');
 	}

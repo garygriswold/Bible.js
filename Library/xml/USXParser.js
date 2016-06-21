@@ -90,6 +90,10 @@ USXParser.prototype.createUSXObject = function(tempNode) {
 			return(new Chapter(tempNode));
 		case 'book':
 			return(new Book(tempNode));
+		case 'ref':
+			return(new Ref(tempNode));
+		case 'optbreak':
+			return(new OptBreak(tempNode));
 		case 'usx':
 			return(new USX(tempNode));
 		default:

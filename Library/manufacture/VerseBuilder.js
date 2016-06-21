@@ -51,6 +51,8 @@ VerseBuilder.prototype.loadDB = function(callback) {
 			case 'book':
 			case 'chapter':
 			case 'note':
+			case 'ref':
+			case 'optbreak':
 				break;
 			case 'usx':
 			case 'para':

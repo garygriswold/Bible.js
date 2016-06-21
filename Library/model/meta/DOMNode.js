@@ -20,6 +20,10 @@ DOMNode.prototype.getAttribute = function(name) {
 DOMNode.prototype.setAttribute = function(name, value) {
 	this.attributes[name] = value;
 };
+DOMNode.prototype.hasAttribute = function(name) {
+	var attr = this.attributes[name];
+	return(attr !== null && attr !== undefined);	
+};
 DOMNode.prototype.attrNames = function() {
 	return(Object.keys(this.attributes));	
 };
