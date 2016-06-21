@@ -8,6 +8,7 @@ function DOMNode(nodeName) {
 	this.nodeType = 1; // Element Node
 	if (nodeName == 'root') this.nodeType = 11; // Fragment Node
 	if (nodeName == 'text') this.nodeType = 3; // Text Node
+	if (nodeName == 'wbr') this.nodeType = 13; // Empty Element Node
 	this.parentNode = null;
 	this.attributes = {};
 	this.textContent = null;

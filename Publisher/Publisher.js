@@ -731,6 +731,7 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 			domNode = node.toDOM(domParent);
 			break;
 		case 'optbreak':
+			domNode = node.toDOM(domParent);
 			break;
 		default:
 			throw new Error('Unknown tagname ' + node.tagName + ' in DOMBuilder.readBook');
@@ -772,6 +773,9 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 			break;
 		case 3: // text
 			this.result.push(node.textContent);
+			break;
+		case 13: // empty element
+			this.result.push('<', nodeName, '>');
 			break;
 		default:
 			throw new Error('Unexpected nodeType ' + node.nodeType + ' in HTMLBuilder.toHTML().');
@@ -1093,15 +1097,9 @@ Ref.prototype.buildUSX = function(result) {
 	result.push(this.closeElement());
 };
 Ref.prototype.toDOM = function(parentNode) {
-	//if (this.style === 'fr' || this.style === 'xo') {
-	//	return(null);// this drop these styles from presentation
-	//}
-	//else {
 	var child = new DOMNode('span');
-	//child.setAttribute('class', this.style);
 	parentNode.appendChild(child);
 	return(child);
-	//}
 };
 /**
 * This class contains a optbreak element as parsed from a USX Bible file.
@@ -1114,9 +1112,6 @@ function OptBreak(node) {
 	Object.freeze(this);
 }
 OptBreak.prototype.tagName = 'optbreak';
-//OptBreak.prototype.addChild = function(node) {
-//	this.children.push(node);
-//};
 OptBreak.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
 	return('<optbreak' + elementEnd);
@@ -1126,22 +1121,13 @@ OptBreak.prototype.closeElement = function() {
 };
 OptBreak.prototype.buildUSX = function(result) {
 	result.push(this.whiteSpace, this.openElement());
-	//for (var i=0; i<this.children.length; i++) {
-	//	this.children[i].buildUSX(result);
-	//}
 	result.push(this.closeElement());
 };
 OptBreak.prototype.toDOM = function(parentNode) {
-	return(parentNode);
-	//if (this.style === 'fr' || this.style === 'xo') {
-	//	return(null);// this drop these styles from presentation
-	//}
-	//else {
-	//var child = new DOMNode('span');
-	//child.setAttribute('class', this.style);
-	//parentNode.appendChild(child);
-	//return(child);
-	//}
+	var child = new DOMNode('wbr');
+	parentNode.appendChild(child);
+	//return(parentNode);
+	return(child);
 };
 /**
 * This class contains a text string as parsed from a USX Bible file.
@@ -1163,7 +1149,7 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 		var parentClass = parentNode.getAttribute('class');
 		var grParentNode = parentNode.parentNode;
 		var grParentClass = (grParentNode) ? grParentNode.getAttribute('class') : null;
-		if (parentClass && parentClass.substr(0, 3) === 'top') {
+		if (parentClass.substr(0, 3) === 'top') {
 			var textNode = new DOMNode('span');
 			textNode.setAttribute('class', parentClass.substr(3));
 			textNode.setAttribute('note', this.text);
@@ -1731,6 +1717,7 @@ function DOMNode(nodeName) {
 	this.nodeType = 1; // Element Node
 	if (nodeName == 'root') this.nodeType = 11; // Fragment Node
 	if (nodeName == 'text') this.nodeType = 3; // Text Node
+	if (nodeName == 'wbr') this.nodeType = 13; // Empty Element Node
 	this.parentNode = null;
 	this.attributes = {};
 	this.textContent = null;

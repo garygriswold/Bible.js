@@ -30,6 +30,9 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 		case 3: // text
 			this.result.push(node.textContent);
 			break;
+		case 13: // empty element
+			this.result.push('<', nodeName, '>');
+			break;
 		default:
 			throw new Error('Unexpected nodeType ' + node.nodeType + ' in HTMLBuilder.toHTML().');
 	}

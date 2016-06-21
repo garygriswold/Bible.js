@@ -64,6 +64,7 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 			domNode = node.toDOM(domParent);
 			break;
 		case 'optbreak':
+			domNode = node.toDOM(domParent);
 			break;
 		default:
 			throw new Error('Unknown tagname ' + node.tagName + ' in DOMBuilder.readBook');
