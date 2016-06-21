@@ -7,7 +7,7 @@ fi
 
 SOURCE=$HOME/ShortSands/DBL/3prepared/$1.db
 
-cp $SOURCE "$HOME/Library/Application Support/BibleAppNW/databases/file__0/1"
+cp $SOURCE "$HOME/Library/Application Support/BibleAppNW/databases/file__0/20"
 #cp $SOURCE $HOME/ShortSands/BibleApp/YourBible/www
 
 

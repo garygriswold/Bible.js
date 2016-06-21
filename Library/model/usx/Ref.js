@@ -5,7 +5,6 @@
 */
 function Ref(node) {
 	this.loc = node.loc;
-	this.class = '';
 	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
 	this.children = [];
@@ -30,13 +29,7 @@ Ref.prototype.buildUSX = function(result) {
 	result.push(this.closeElement());
 };
 Ref.prototype.toDOM = function(parentNode) {
-	//if (this.style === 'fr' || this.style === 'xo') {
-	//	return(null);// this drop these styles from presentation
-	//}
-	//else {
 	var child = new DOMNode('span');
-	//child.setAttribute('class', this.style);
 	parentNode.appendChild(child);
 	return(child);
-	//}
 };

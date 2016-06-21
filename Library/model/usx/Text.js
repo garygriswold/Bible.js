@@ -12,11 +12,8 @@ Text.prototype.buildUSX = function(result) {
 Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 	if (parentNode === null || parentNode.nodeName === 'article') {
 		// discard text node
-	} else if (! parentNode.hasAttribute('class')) {
-		//console.log('MISSING CLASS', parentNode);
-		var textNode  = new DOMNode('span');
-		textNode.setAttribute('note', this.text);
-		parentNode.appendChild(textNode);
+	} else if (! parentNode.hasAttribute('class')) { // Ref nodes have no class
+		parentNode.setAttribute('note', this.text); 
 	} else {
 		var parentClass = parentNode.getAttribute('class');
 		var grParentNode = parentNode.parentNode;
