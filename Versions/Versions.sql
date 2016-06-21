@@ -27,12 +27,15 @@ direction TEXT NOT NULL CHECK(direction IN('ltr', 'rtl')),
 englishName TEXT NOT NULL,
 localLanguageName TEXT NOT NULL
 );
-INSERT INTO Language VALUES ('eng', 'en', 'ltr', 'English', 'English');
-INSERT INTO Language VALUES ('spa', 'es', 'ltr', 'Spanish', 'Español');
+-- World Languages
 INSERT INTO Language VALUES ('arb', 'ar', 'rtl', 'Arabic', 'العربية');
 INSERT INTO Language VALUES ('cnm', 'zh', 'ltr', 'Chinese', '汉语, 漢語');
-INSERT INTO Language VALUES ('amu', 'es', 'ltr', 'Amuzgo, Guerrero', 'Amuzgo, Guerrero');
+INSERT INTO Language VALUES ('eng', 'en', 'ltr', 'English', 'English');
+INSERT INTO Language VALUES ('pes', 'fa', 'rtl', 'Persian', 'فارسی');
+INSERT INTO Language VALUES ('spa', 'es', 'ltr', 'Spanish', 'Español');
+-- Wycliffe Languages
 INSERT INTO Language VALUES ('azg', 'es', 'ltr', 'Amuzgo, San Pedro Amuzgos', 'Amuzgo, San Pedro Amuzgos');
+INSERT INTO Language VALUES ('amu', 'es', 'ltr', 'Amuzgo, Guerrero', 'Amuzgo, Guerrero');
 
 
 CREATE TABLE Owner (
@@ -41,10 +44,11 @@ englishName TEXT NOT NULL,
 localOwnerName TEXT NOT NULL,
 ownerURL TEXT NOT NULL
 );
-INSERT INTO Owner VALUES ('WBT', 'Wycliffe Bible Translators', 'Wycliffe Bible Translators', 'www.wycliffe.org');
-INSERT INTO Owner VALUES ('SPN', 'Bible Society of Spain', 'Sociedad Bíblica de España', 'www.unitedbiblesocieties.org/society/bible-society-of-spain/');
-INSERT INTO Owner VALUES ('EBIBLE', 'eBible.org', 'eBible.org', 'www.ebible.org');
 INSERT INTO Owner VALUES ('CRSWY', 'Crossway', 'Crossway', 'www.crossway.org');
+INSERT INTO Owner VALUES ('EBIBLE', 'eBible.org', 'eBible.org', 'www.ebible.org');
+INSERT INTO Owner VALUES ('ELAM', 'Elam Ministries', 'Elam Ministries', ''); -- update this 
+INSERT INTO Owner VALUES ('SPN', 'Bible Society of Spain', 'Sociedad Bíblica de España', 'www.unitedbiblesocieties.org/society/bible-society-of-spain/');
+INSERT INTO Owner VALUES ('WBT', 'Wycliffe Bible Translators', 'Wycliffe Bible Translators', 'www.wycliffe.org');
 
 
 CREATE TABLE Version (
@@ -82,9 +86,11 @@ INSERT INTO Version VALUES ('BLP', 'spa', 'SPN', 'BLP', 'La Palabra (versión es
 INSERT INTO Version VALUES ('BLPH', 'spa', 'SPN', 'BLPH', 'La Palabra (versión hispanoamericana)','BIBLE', 'BLPH.db', 'F', 
 'La Palabra (BLPH) versión hispanoamericana Copyright © Sociedad Bíblica de España, 2010 Utilizada con permiso', NULL);
 
--- Arabic
+-- Arabic Languages
 INSERT INTO Version VALUES ('ARBVDPD', 'arb', 'EBIBLE', 'ARBVD', 'فان دايك الكتاب المقدس باللغة العربية', 'BIBLE', 'ARBVDPD.db', 'F',
 'Van Dyck Arabic Version (ARBVD), Public Domain, eBible.org.', NULL);
+INSERT INTO Version VALUES('NMV', 'pes', 'ELAM', 'NMV', 'New Millenium Version', 'BIBLE', 'NMV.db', 'F',
+null, null);
 
 INSERT INTO Version Values ('amu', 'amu', 'WBT', 'AMU', 'Amuzgo, Guerrero', 'BIBLE_NT', 'AMU.db', 'F', 
 'Amuzgo, Guerrero, © 1999 by Wycliffe Bible Translators', NULL);
@@ -102,6 +108,7 @@ INSERT INTO CountryVersion VALUES ('WORLD', 'ARBVDPD');
 INSERT INTO CountryVersion VALUES ('WORLD', 'CUVSPD');
 INSERT INTO CountryVersion VALUES ('WORLD', 'CUVTPD');
 INSERT INTO CountryVersion VALUES ('WORLD', 'KJVPD');
+INSERT INTO CountryVersion VALUES ('WORLD', 'NMV');
 INSERT INTO CountryVersion VALUES ('WORLD', 'WEB');
 
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'RVR09PD');
@@ -122,6 +129,7 @@ INSERT INTO InstalledVersion VALUES ('ARBVDPD', 'ar', '2016-06-01', null);
 INSERT INTO InstalledVersion VALUES ('CUVSPD', null, '2016-06-11', null);
 INSERT INTO InstalledVersion VALUES ('CUVTPD', 'zh', '2016-06-18', null);
 INSERT INTO InstalledVersion VALUES ('KJVPD', null, '2016-05-16', null);
+INSERT INTO InstalledVersion VALUES ('NMV', 'fa', '2016-06-20', null);
 INSERT INTO InstalledVersion VALUES ('WEB', 'en', '2016-05-16', null);
 -- INSERT INTO InstalledVersion VALUES ('RVR09PD', 'es', '2016-05-31', null);
 
@@ -138,26 +146,37 @@ INSERT INTO Translation VALUES ('en', 'en', 'English');
 INSERT INTO Translation VALUES ('en', 'es', 'Inglés');
 INSERT INTO Translation VALUES ('en', 'zh', '英语');
 INSERT INTO Translation VALUES ('en', 'ar', 'الإنجليزية');
+INSERT INTO Translation VALUES ('en', 'fa', ''); -- TBD
 
 INSERT INTO Translation VALUES ('es', 'en', 'Spanish');
 INSERT INTO Translation VALUES ('es', 'es', 'Español');
 INSERT INTO Translation VALUES ('es', 'zh', '西班牙语');
 INSERT INTO Translation VALUES ('es', 'ar', 'الأسبانية');
+INSERT INTO Translation VALUES ('es', 'fa', ''); -- TBD
 
 INSERT INTO Translation VALUES ('ar', 'en', 'Arabic');
 INSERT INTO Translation VALUES ('ar', 'es', 'Arábica');
 INSERT INTO Translation VALUES ('ar', 'zh', '阿拉伯');
 INSERT INTO Translation VALUES ('ar', 'ar', 'العربية');
+INSERT INTO Translation VALUES ('ar', 'fa', ''); -- TBD
 
 INSERT INTO Translation VALUES ('zh', 'en', 'Chinese');
 INSERT INTO Translation VALUES ('zh', 'es', 'Chino');
 INSERT INTO Translation VALUES ('zh', 'zh', '中文');
 INSERT INTO Translation VALUES ('zh', 'ar', 'الصينية');
+INSERT INTO Translation VALUES ('zh', 'fa', ''); -- TBD
+
+INSERT INTO Translation VALUES ('fa', 'en', ''); --TBD
+INSERT INTO Translation VALUES ('fa', 'es', ''); --TBD
+INSERT INTO Translation VALUES ('fa', 'zh', ''); --TBD
+INSERT INTO Translation VALUES ('fa', 'ar', ''); -- TBD
+INSERT INTO Translation VALUES ('fa', 'fa', ''); -- TBD
 
 INSERT INTO Translation VALUES ('WORLD', 'en', 'World');
 INSERT INTO Translation VALUES ('WORLD', 'es', 'Mundo');
 INSERT INTO Translation VALUES ('WORLD', 'zh', '世界');
 INSERT INTO Translation VALUES ('WORLD', 'ar', 'العالم');
+INSERT INTO Translation VALUES ('en', 'fa', ''); -- TBD
 
 INSERT INTO Translation VALUES ('US', 'en', 'United States');
 INSERT INTO Translation VALUES ('US', 'es', 'Estados Unidos');

@@ -290,6 +290,8 @@ VerseBuilder.prototype.loadDB = function(callback) {
 			case 'book':
 			case 'chapter':
 			case 'note':
+			case 'ref':
+			case 'optbreak':
 				break;
 			case 'usx':
 			case 'para':
@@ -725,6 +727,11 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 		case 'note':
 			domNode = node.toDOM(domParent, this.bookCode, this.chapter, ++this.noteNum);
 			break;
+		case 'ref':
+			domNode = node.toDOM(domParent);
+			break;
+		case 'optbreak':
+			break;
 		default:
 			throw new Error('Unknown tagname ' + node.tagName + ' in DOMBuilder.readBook');
 	}
@@ -1056,6 +1063,88 @@ Char.prototype.toDOM = function(parentNode) {
 	}
 };
 /**
+* This class contains a ref element as parsed from a USX Bible file.
+* This contains one attribute loc, which contain a bible reference
+* And a text node, which contains the Bible reference in text form.
+*/
+function Ref(node) {
+	this.loc = node.loc;
+	this.class = '';
+	this.whiteSpace = node.whiteSpace;
+	this.emptyElement = node.emptyElement;
+	this.children = [];
+	Object.freeze(this);
+}
+Ref.prototype.tagName = 'ref';
+Ref.prototype.addChild = function(node) {
+	this.children.push(node);
+};
+Ref.prototype.openElement = function() {
+	var elementEnd = (this.emptyElement) ? '" />' : '">';
+	return('<ref loc="' + this.loc + elementEnd);
+};
+Ref.prototype.closeElement = function() {
+	return(this.emptyElement ? '' : '</ref>');
+};
+Ref.prototype.buildUSX = function(result) {
+	result.push(this.whiteSpace, this.openElement());
+	for (var i=0; i<this.children.length; i++) {
+		this.children[i].buildUSX(result);
+	}
+	result.push(this.closeElement());
+};
+Ref.prototype.toDOM = function(parentNode) {
+	//if (this.style === 'fr' || this.style === 'xo') {
+	//	return(null);// this drop these styles from presentation
+	//}
+	//else {
+	var child = new DOMNode('span');
+	//child.setAttribute('class', this.style);
+	parentNode.appendChild(child);
+	return(child);
+	//}
+};
+/**
+* This class contains a optbreak element as parsed from a USX Bible file.
+* This is an empty element, which defines an optional location for a line
+* break
+*/
+function OptBreak(node) {
+	this.whiteSpace = node.whiteSpace;
+	this.emptyElement = node.emptyElement;
+	Object.freeze(this);
+}
+OptBreak.prototype.tagName = 'optbreak';
+//OptBreak.prototype.addChild = function(node) {
+//	this.children.push(node);
+//};
+OptBreak.prototype.openElement = function() {
+	var elementEnd = (this.emptyElement) ? '" />' : '">';
+	return('<optbreak' + elementEnd);
+};
+OptBreak.prototype.closeElement = function() {
+	return(this.emptyElement ? '' : '</optbreak>');
+};
+OptBreak.prototype.buildUSX = function(result) {
+	result.push(this.whiteSpace, this.openElement());
+	//for (var i=0; i<this.children.length; i++) {
+	//	this.children[i].buildUSX(result);
+	//}
+	result.push(this.closeElement());
+};
+OptBreak.prototype.toDOM = function(parentNode) {
+	return(parentNode);
+	//if (this.style === 'fr' || this.style === 'xo') {
+	//	return(null);// this drop these styles from presentation
+	//}
+	//else {
+	//var child = new DOMNode('span');
+	//child.setAttribute('class', this.style);
+	//parentNode.appendChild(child);
+	//return(child);
+	//}
+};
+/**
 * This class contains a text string as parsed from a USX Bible file.
 */
 function Text(text) {
@@ -1069,6 +1158,11 @@ Text.prototype.buildUSX = function(result) {
 Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 	if (parentNode === null || parentNode.nodeName === 'article') {
 		// discard text node
+	} else if (! parentNode.hasAttribute('class')) {
+		//console.log('MISSING CLASS', parentNode);
+		var textNode  = new DOMNode('span');
+		textNode.setAttribute('note', this.text);
+		parentNode.appendChild(textNode);
 	} else {
 		var parentClass = parentNode.getAttribute('class');
 		var grParentNode = parentNode.parentNode;
@@ -1345,6 +1439,10 @@ USXParser.prototype.createUSXObject = function(tempNode) {
 			return(new Chapter(tempNode));
 		case 'book':
 			return(new Book(tempNode));
+		case 'ref':
+			return(new Ref(tempNode));
+		case 'optbreak':
+			return(new OptBreak(tempNode));
 		case 'usx':
 			return(new USX(tempNode));
 		default:
@@ -1648,6 +1746,10 @@ DOMNode.prototype.getAttribute = function(name) {
 };
 DOMNode.prototype.setAttribute = function(name, value) {
 	this.attributes[name] = value;
+};
+DOMNode.prototype.hasAttribute = function(name) {
+	var attr = this.attributes[name];
+	return(attr !== null && attr !== undefined);	
 };
 DOMNode.prototype.attrNames = function() {
 	return(Object.keys(this.attributes));	

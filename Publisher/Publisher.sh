@@ -18,6 +18,8 @@ cat ../Library/model/usx/Para.js >> Publisher.js
 cat ../Library/model/usx/Verse.js >> Publisher.js
 cat ../Library/model/usx/Note.js >> Publisher.js
 cat ../Library/model/usx/Char.js >> Publisher.js
+cat ../Library/model/usx/Ref.js >> Publisher.js
+cat ../Library/model/usx/OptBreak.js >> Publisher.js
 cat ../Library/model/usx/Text.js >> Publisher.js
 cat ../Library/xml/XMLTokenizer.js >> Publisher.js
 cat ../Library/xml/USXParser.js >> Publisher.js
