@@ -1,5 +1,6 @@
 *.log
 *.xcuserstate
+*.db
 *.db1
 *.db2
 *.db3
