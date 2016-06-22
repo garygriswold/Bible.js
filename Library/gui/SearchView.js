@@ -3,11 +3,12 @@
 * It does a lazy create of all of the objects needed.
 * Each presentation of a searchView presents its last state and last found results.
 */
-function SearchView(toc, concordance, versesAdapter, historyAdapter) {
+function SearchView(toc, concordance, versesAdapter, historyAdapter, version) {
 	this.toc = toc;
 	this.concordance = concordance;
 	this.versesAdapter = versesAdapter;
 	this.historyAdapter = historyAdapter;
+	this.version = version;
 	this.query = null;
 	this.lookup = new Lookup(toc);
 	this.words = [];
@@ -88,7 +89,11 @@ SearchView.prototype.showSearchField = function() {
 SearchView.prototype.showSearch = function(query) {
 	var that = this;
 	this.viewRoot = document.createElement('div');
-	this.words = query.split(' ');
+	if (this.version.silCode === 'cnm') {
+		this.words = query.split('');
+	} else {
+		this.words = query.split(' ');
+	}
 	this.concordance.search2(this.words, function(refList) {
 		if (refList instanceof IOError) {
 			console.log('SEARCH RETURNED ERROR', JSON.stringify(refList));
@@ -190,10 +195,15 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText, 
 
 	function styleSearchWords(verseText, refList) {
 		var parts = refList[0].split(';');
-		var wordPosition = parseInt(parts[1]) * 2 - 2;
+		if (that.version.silCode === 'cnm') {
+			var wordPosition = parseInt(parts[1] - 2);
+			var verseWords = verseText.split('');
+		} else {
+			wordPosition = parseInt(parts[1]) * 2 - 3;
+			verseWords = verseText.split(/\b/); // Non-destructive, preserves all characters
+		}
+		if (wordPosition < 0) wordPosition = 0;
 		
-		var verseWords = verseText.split(/\b/); // Non-destructive, preserves all characters
-
 		var searchWords = verseWords.map(function(wrd) {
 			return(wrd.toLocaleLowerCase());
 		});

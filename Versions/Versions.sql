@@ -106,9 +106,9 @@ PRIMARY KEY(countryCode, versionCode)
 );
 INSERT INTO CountryVersion VALUES ('WORLD', 'ARBVDPD');
 INSERT INTO CountryVersion VALUES ('WORLD', 'CUVSPD');
-INSERT INTO CountryVersion VALUES ('WORLD', 'CUVTPD');
+--INSERT INTO CountryVersion VALUES ('WORLD', 'CUVTPD');
 INSERT INTO CountryVersion VALUES ('WORLD', 'KJVPD');
-INSERT INTO CountryVersion VALUES ('WORLD', 'NMV');
+--INSERT INTO CountryVersion VALUES ('WORLD', 'NMV');
 INSERT INTO CountryVersion VALUES ('WORLD', 'WEB');
 
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'RVR09PD');
@@ -126,10 +126,10 @@ startDate NOT NULL,
 endDate NULL
 );
 INSERT INTO InstalledVersion VALUES ('ARBVDPD', 'ar', '2016-06-01', null);
-INSERT INTO InstalledVersion VALUES ('CUVSPD', null, '2016-06-11', null);
-INSERT INTO InstalledVersion VALUES ('CUVTPD', 'zh', '2016-06-18', null);
+INSERT INTO InstalledVersion VALUES ('CUVSPD', 'zh', '2016-06-11', null);
+--INSERT INTO InstalledVersion VALUES ('CUVTPD', null, '2016-06-18', null);
 INSERT INTO InstalledVersion VALUES ('KJVPD', null, '2016-05-16', null);
-INSERT INTO InstalledVersion VALUES ('NMV', 'fa', '2016-06-20', null);
+-- INSERT INTO InstalledVersion VALUES ('NMV', 'fa', '2016-06-20', null);
 INSERT INTO InstalledVersion VALUES ('WEB', 'en', '2016-05-16', null);
 -- INSERT INTO InstalledVersion VALUES ('RVR09PD', 'es', '2016-05-31', null);
 
@@ -176,7 +176,7 @@ INSERT INTO Translation VALUES ('WORLD', 'en', 'World');
 INSERT INTO Translation VALUES ('WORLD', 'es', 'Mundo');
 INSERT INTO Translation VALUES ('WORLD', 'zh', '世界');
 INSERT INTO Translation VALUES ('WORLD', 'ar', 'العالم');
-INSERT INTO Translation VALUES ('en', 'fa', ''); -- TBD
+INSERT INTO Translation VALUES ('WORLD', 'fa', ''); -- TBD
 
 INSERT INTO Translation VALUES ('US', 'en', 'United States');
 INSERT INTO Translation VALUES ('US', 'es', 'Estados Unidos');
