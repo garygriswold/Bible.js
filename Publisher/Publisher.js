@@ -1126,7 +1126,6 @@ OptBreak.prototype.buildUSX = function(result) {
 OptBreak.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('wbr');
 	parentNode.appendChild(child);
-	//return(parentNode);
 	return(child);
 };
 /**

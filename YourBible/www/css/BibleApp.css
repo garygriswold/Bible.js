@@ -280,10 +280,9 @@ span.f, span.ft {
 /* verse number embedded in footnote */
 span.fv {
 	text-align: start;
-	/* vertical-align: text-top;
-	font-size: 0.66rem; std
-	CUVSPD and CUVTPD contain 11 \+fv without \fv*.
-	So, including these would cause the entire footnote text to be 0.66rem */
+	vertical-align: text-top;
+	font-size: 0.66rem; 
+	font-family: sans-serif; /* non-std? */
 }
 /* footnote alternate translation */
 span.fqa {
