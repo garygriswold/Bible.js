@@ -1,5 +1,5 @@
 # Bible.js
-The BibleApp is currently under development.  The first deployments in the Apple, Google and Microsoft stores is expected early 2016.
+The BibleApp is currently under development.  The first deployments in the Apple, Google, Amazon and Microsoft stores is expected early 2016.
 
 Objectives
 ----------
@@ -20,13 +20,15 @@ Public domain license using the MIT template.
 Repository Structure
 --------------------
 
+Docs - This directory contains critical how-to instructions.
+
 Library - This is the common javascript library.  Many projects contain a shell script that copies all of the files that they need from this Library.
 
 Publisher - This project prepares copies of the Bible for publication.  It takes as input a USX package from the Digital Bible Library and produces a SQLite database of the content, concordance, and table of contents in the form needed by the App.
 
 BibleAppNW - This is a Node/WebKit App, which will run as a local (not browser) application on desktop computers.  This is where the original development is being done, because of the ease of development in this environment.
 
-BibleAppCLI - This is a mobile Cordova version of the App.  This version of the App runs on mobile devices. It currently runs well on Android, but awkwardly on iOS.
+YourBible - This is a mobile Cordova version of the App.  This version of the App runs on mobile devices. It currently runs well on Android and iOS.
 
 QAApp - This is a web App that is used by instructors to answer questions of students.  It is written in a single-page architecture so that it could be rewritten as a mobile App.
 
