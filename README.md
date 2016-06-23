@@ -26,6 +26,8 @@ Library - This is the common javascript library.  Many projects contain a shell 
 
 Publisher - This project prepares copies of the Bible for publication.  It takes as input a USX package from the Digital Bible Library and produces a SQLite database of the content, concordance, and table of contents in the form needed by the App.
 
+Validation - This directory contains a number of scripts that test the correctness of the Bible database as produced by Publisher.
+
 BibleAppNW - This is a Node/WebKit App, which will run as a local (not browser) application on desktop computers.  This is where the original development is being done, because of the ease of development in this environment.
 
 YourBible - This is a mobile Cordova version of the App.  This version of the App runs on mobile devices. It currently runs well on Android and iOS.
