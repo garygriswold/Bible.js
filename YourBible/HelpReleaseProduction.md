@@ -75,10 +75,6 @@ Update the version code
 
 	vi $HOME/ShortSands/BibleApp/YourBible/config.xml
 	
-TEMP: Change id to com.shortsands.yourbible
-
-	vi $HOME/BibleApp/YourBible/config.xml
-	
 Compile your app in release mode to obtain a signed IPA.
 
 	cd $HOME/ShortSands/BibleApp/YourBible
@@ -87,7 +83,6 @@ Compile your app in release mode to obtain a signed IPA.
 	
 Upload IPA
 
-	Log into App Store, and verify App Bundle Id is "com.shortsands.yourbible"
 	Use Spotlight to locate Application Loader, use this program to upload the App.ipa file.
 	
 
