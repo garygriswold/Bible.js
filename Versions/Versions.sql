@@ -146,47 +146,49 @@ INSERT INTO Translation VALUES ('en', 'en', 'English');
 INSERT INTO Translation VALUES ('en', 'es', 'Inglés');
 INSERT INTO Translation VALUES ('en', 'zh', '英语');
 INSERT INTO Translation VALUES ('en', 'ar', 'الإنجليزية');
-INSERT INTO Translation VALUES ('en', 'fa', ''); -- TBD
+INSERT INTO Translation VALUES ('en', 'fa', 'انگلیسی');
 
 INSERT INTO Translation VALUES ('es', 'en', 'Spanish');
 INSERT INTO Translation VALUES ('es', 'es', 'Español');
 INSERT INTO Translation VALUES ('es', 'zh', '西班牙语');
 INSERT INTO Translation VALUES ('es', 'ar', 'الأسبانية');
-INSERT INTO Translation VALUES ('es', 'fa', ''); -- TBD
+INSERT INTO Translation VALUES ('es', 'fa', 'اسپانیایی');
 
 INSERT INTO Translation VALUES ('ar', 'en', 'Arabic');
 INSERT INTO Translation VALUES ('ar', 'es', 'Arábica');
 INSERT INTO Translation VALUES ('ar', 'zh', '阿拉伯');
 INSERT INTO Translation VALUES ('ar', 'ar', 'العربية');
-INSERT INTO Translation VALUES ('ar', 'fa', ''); -- TBD
+INSERT INTO Translation VALUES ('ar', 'fa', 'عربی');
 
 INSERT INTO Translation VALUES ('zh', 'en', 'Chinese');
 INSERT INTO Translation VALUES ('zh', 'es', 'Chino');
 INSERT INTO Translation VALUES ('zh', 'zh', '中文');
 INSERT INTO Translation VALUES ('zh', 'ar', 'الصينية');
-INSERT INTO Translation VALUES ('zh', 'fa', ''); -- TBD
+INSERT INTO Translation VALUES ('zh', 'fa', 'چینی ها');
 
-INSERT INTO Translation VALUES ('fa', 'en', ''); --TBD
-INSERT INTO Translation VALUES ('fa', 'es', ''); --TBD
-INSERT INTO Translation VALUES ('fa', 'zh', ''); --TBD
-INSERT INTO Translation VALUES ('fa', 'ar', ''); -- TBD
-INSERT INTO Translation VALUES ('fa', 'fa', ''); -- TBD
+INSERT INTO Translation VALUES ('fa', 'en', 'Persian');
+INSERT INTO Translation VALUES ('fa', 'es', 'persa');
+INSERT INTO Translation VALUES ('fa', 'zh', '波斯语');
+INSERT INTO Translation VALUES ('fa', 'ar', 'اللغة الفارسية');
+INSERT INTO Translation VALUES ('fa', 'fa', 'فارسی');
 
 INSERT INTO Translation VALUES ('WORLD', 'en', 'World');
 INSERT INTO Translation VALUES ('WORLD', 'es', 'Mundo');
 INSERT INTO Translation VALUES ('WORLD', 'zh', '世界');
 INSERT INTO Translation VALUES ('WORLD', 'ar', 'العالم');
-INSERT INTO Translation VALUES ('WORLD', 'fa', ''); -- TBD
+INSERT INTO Translation VALUES ('WORLD', 'fa', 'جهان');
 
 INSERT INTO Translation VALUES ('US', 'en', 'United States');
 INSERT INTO Translation VALUES ('US', 'es', 'Estados Unidos');
 INSERT INTO Translation VALUES ('US', 'zh', '美国');
 INSERT INTO Translation VALUES ('US', 'ar', 'الولايات المتحدة');
+INSERT INTO Translation VALUES ('US', 'fa', 'ایالات متحده');
 
 INSERT INTO Translation VALUES ('MX', 'en', 'Mexico');
 INSERT INTO Translation VALUES ('MX', 'es', 'Méjico');
 INSERT INTO Translation VALUES ('MX', 'zh', '墨西哥');
 INSERT INTO Translation VALUES ('MX', 'ar', 'المكسيك');
+INSERT INTO Translation VALUES ('MX', 'fa', 'مکزیک');
 
 
 
