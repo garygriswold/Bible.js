@@ -46,7 +46,7 @@ ownerURL TEXT NOT NULL
 );
 INSERT INTO Owner VALUES ('CRSWY', 'Crossway', 'Crossway', 'www.crossway.org');
 INSERT INTO Owner VALUES ('EBIBLE', 'eBible.org', 'eBible.org', 'www.ebible.org');
-INSERT INTO Owner VALUES ('ELAM', 'Elam Ministries', 'Elam Ministries', ''); -- update this 
+INSERT INTO Owner VALUES ('ELAM', 'Elam Ministries', 'Elam Ministries', 'www.kalameh.com/shop');
 INSERT INTO Owner VALUES ('SPN', 'Bible Society of Spain', 'Sociedad Bíblica de España', 'www.unitedbiblesocieties.org/society/bible-society-of-spain/');
 INSERT INTO Owner VALUES ('WBT', 'Wycliffe Bible Translators', 'Wycliffe Bible Translators', 'www.wycliffe.org');
 
@@ -90,7 +90,7 @@ INSERT INTO Version VALUES ('BLPH', 'spa', 'SPN', 'BLPH', 'La Palabra (versión 
 INSERT INTO Version VALUES ('ARBVDPD', 'arb', 'EBIBLE', 'ARBVD', 'فان دايك الكتاب المقدس باللغة العربية', 'BIBLE', 'ARBVDPD.db', 'F',
 'Van Dyck Arabic Version (ARBVD), Public Domain, eBible.org.', NULL);
 INSERT INTO Version VALUES('NMV', 'pes', 'ELAM', 'NMV', 'New Millenium Version', 'BIBLE', 'NMV.db', 'F',
-null, null);
+'The Persian New Millennium Version © 2014, is a production of Elam Ministries. All rights reserved', null);
 
 INSERT INTO Version Values ('amu', 'amu', 'WBT', 'AMU', 'Amuzgo, Guerrero', 'BIBLE_NT', 'AMU.db', 'F', 
 'Amuzgo, Guerrero, © 1999 by Wycliffe Bible Translators', NULL);
@@ -108,7 +108,7 @@ INSERT INTO CountryVersion VALUES ('WORLD', 'ARBVDPD');
 INSERT INTO CountryVersion VALUES ('WORLD', 'CUVSPD');
 --INSERT INTO CountryVersion VALUES ('WORLD', 'CUVTPD');
 INSERT INTO CountryVersion VALUES ('WORLD', 'KJVPD');
---INSERT INTO CountryVersion VALUES ('WORLD', 'NMV');
+INSERT INTO CountryVersion VALUES ('WORLD', 'NMV');
 INSERT INTO CountryVersion VALUES ('WORLD', 'WEB');
 
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'RVR09PD');
@@ -129,7 +129,7 @@ INSERT INTO InstalledVersion VALUES ('ARBVDPD', 'ar', '2016-06-01', null);
 INSERT INTO InstalledVersion VALUES ('CUVSPD', 'zh', '2016-06-11', null);
 --INSERT INTO InstalledVersion VALUES ('CUVTPD', null, '2016-06-18', null);
 INSERT INTO InstalledVersion VALUES ('KJVPD', null, '2016-05-16', null);
--- INSERT INTO InstalledVersion VALUES ('NMV', 'fa', '2016-06-20', null);
+INSERT INTO InstalledVersion VALUES ('NMV', 'fa', '2016-06-20', null);
 INSERT INTO InstalledVersion VALUES ('WEB', 'en', '2016-05-16', null);
 -- INSERT INTO InstalledVersion VALUES ('RVR09PD', 'es', '2016-05-31', null);
 

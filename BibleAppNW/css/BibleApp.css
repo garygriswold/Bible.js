@@ -204,13 +204,6 @@ p.mi {
 	margin-left: 0.25in;
 	margin-right: 0.25in;
 }
-/* Continuation of Blockquote */
-p.pi {
-	text-align: start;
-	text-indent: 0.125in;
-	margin-left: 0.25in;
-	margin-right: 0.25in;
-}
 /* Paragraph Indented Level 1 */
 p.pi, p.pi1 {
 	text-align: start;
