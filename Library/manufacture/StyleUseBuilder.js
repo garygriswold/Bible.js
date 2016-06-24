@@ -10,12 +10,13 @@ StyleUseBuilder.prototype.readBook = function(usxRoot) {
 };
 StyleUseBuilder.prototype.loadDB = function(callback) {
 	var styles = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.cl', 'para.rem',
-		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.ms1', 'para.s1', 'para.s2', 'para.d', 'para.r',
+		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.ms', 'para.ms1', 'para.s', 'para.s1', 'para.s2', 'para.d', 'para.r',
+		'para.imt', 'para.io', 'para.io1', 'para.io2', 'para.ip', 'para.is',
 		'chapter.c', 'verse.v',
-		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.li', 'para.li1', 'para.nb',
+		'para.p', 'para.m', 'para.b', 'para.mi', 'para.pi', 'para.pi1', 'para.li', 'para.li1', 'para.nb',
 		'para.sp', 'para.q', 'para.q1', 'para.q2', 'para.qc', 'para.qa',
 		'char.pn', 'char.wj', 'char.qs', 'char.add', 'char.nd', 'char.tl',
-		'note.f', 'note.x', 'char.fr', 'char.ft', 'char.fv', 'char.fqa', 'char.xo' ];
+		'note.f', 'note.x', 'char.xt', 'char.fr', 'char.ft', 'char.fv', 'char.fqa', 'char.xo' ];
 	var array = [];
 	for (var i=0; i<styles.length; i++) {
 		var style = styles[i];

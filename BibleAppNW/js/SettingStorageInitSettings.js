@@ -8,8 +8,8 @@ SettingStorage.prototype.initSettings = function() {
 };
 SettingStorage.prototype.defaultVersion = function(lang) {
 	switch(lang) {
-		case "en": return("WEB.db");
-		//case "en": return("NMV.db");
+		//case "en": return("WEB.db");
+		case "en": return("NMV.db");
 		case "es": return("RVR09PD.db");
 		case "ar": return("ARVDVPD.db");
 		default: return("WEB.db");
