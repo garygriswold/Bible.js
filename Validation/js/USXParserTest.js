@@ -9,27 +9,34 @@ function testOne(fullPath, files, index, callback) {
 		callback();
 	} else {
 		var file = files[index];
-		symmetricTest(fullPath, file);
-		testOne(fullPath, files, index + 1, callback);
+		symmetricTest(fullPath, file, function() {
+			testOne(fullPath, files, index + 1, callback);			
+		});
 	}
 }
-function symmetricTest(fullPath, filename) {
+function symmetricTest(fullPath, filename, callback) {
 	var bookCode = filename.substring(0, 3);
 	console.log(bookCode, filename);
-	try {
-		var inFile = fullPath + filename;
-		var data = fs.readFileSync(inFile, "utf8");
+	var inFile = fullPath + filename;
+	fs.readFile(inFile, { encoding: 'utf8'}, function(err, data) {
+		if (err) {
+			console.log('READ ERROR', JSON.stringify(err));
+			process.exit(1);
+		}
 		var rootNode = parser.readBook(data);
-	
 		var data = rootNode.toUSX();
 		var outFile = OUT_BIBLE_PATH + filename;
-		fs.writeFileSync(outFile, data, "utf8");
-		
-		const proc = require('child_process');
-		var output = proc.execSync('diff -w ' + inFile + ' ' + outFile, { stdio: 'inherit', encoding: 'utf8' });
-	} catch(err) {
-		console.log('ERROR', JSON.stringify(err));
-	}
+		fs.writeFile(outFile, data, { encoding: 'utf8'}, function(err) {
+			var proc = require('child_process');
+			proc.exec('diff -w ' + inFile + ' ' + outFile, { encoding: 'utf8' }, function(err, stdout, stderr) {
+				//if (err) {
+				//	console.log('Diff Error', JSON.stringify(err));
+				//}
+				console.log('DIFF', stdout);
+				callback();
+			});
+		});
+	});
 }
 
 if (process.argv.length < 3) {

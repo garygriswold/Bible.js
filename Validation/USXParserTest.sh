@@ -8,6 +8,8 @@ cat ../Library/model/usx/Verse.js >> temp.js
 cat ../Library/model/usx/Note.js >> temp.js
 cat ../Library/model/usx/Char.js >> temp.js
 cat ../Library/model/usx/Text.js >> temp.js
+cat ../Library/model/usx/Ref.js >> temp.js
+cat ../Library/model/usx/OptBreak.js >> temp.js
 cat ../Library/xml/XMLTokenizer.js >> temp.js
 cat ../Library/xml/USXParser.js >> temp.js
 cat js/USXParserTest.js >> temp.js

@@ -10,7 +10,7 @@ function OptBreak(node) {
 }
 OptBreak.prototype.tagName = 'optbreak';
 OptBreak.prototype.openElement = function() {
-	var elementEnd = (this.emptyElement) ? '" />' : '">';
+	var elementEnd = (this.emptyElement) ? '/>' : '>';
 	return('<optbreak' + elementEnd);
 };
 OptBreak.prototype.closeElement = function() {
