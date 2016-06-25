@@ -27,6 +27,10 @@ function symmetricTest(fullPath, filename, callback) {
 		var data = rootNode.toUSX();
 		var outFile = OUT_BIBLE_PATH + filename;
 		fs.writeFile(outFile, data, { encoding: 'utf8'}, function(err) {
+			if (err) {
+				console.log('WRITE ERROR', JSON.stringify(err));
+				process.exit(1);
+			}
 			var proc = require('child_process');
 			proc.exec('diff -w ' + inFile + ' ' + outFile, { encoding: 'utf8' }, function(err, stdout, stderr) {
 				//if (err) {
