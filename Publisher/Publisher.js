@@ -901,7 +901,6 @@ Chapter.prototype.toDOM = function(parentNode, bookCode, localizeNumber) {
 
 	var child = new DOMNode('p');
 	child.setAttribute('class', this.style);
-	//child.textContent = this.number;
 	child.textContent = localizeNumber.toLocal(this.number);
 	section.appendChild(child);
 	return(section);
@@ -971,7 +970,6 @@ Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum, localizeNumbe
 	var child = new DOMNode('span');
 	child.setAttribute('id', reference);
 	child.setAttribute('class', this.style);
-	//child.textContent = ' ' + this.number + '&nbsp;';
 	child.textContent = ' ' + localizeNumber.toLocal(this.number) + '&nbsp;';
 	parentNode.appendChild(child);
 	return(child);
@@ -2341,10 +2339,10 @@ VersionsReadAdapter.prototype.readVersion = function(versionCode, callback) {
 function LocalizeNumber(silCode) {
 	this.silCode = silCode;
 	switch(silCode) {
-		case 'arb_off': // Arabic
+		case 'arb': // Arabic
 			this.numberOffset = 0x0660 - 0x0030;
 			break;
-		case 'pes_off': // Persian
+		case 'pes': // Persian
 			this.numberOffset = 0x06F0 - 0x0030;
 			break;
 		default:
@@ -2360,19 +2358,11 @@ LocalizeNumber.prototype.toAscii = function(number) {
 	return(this.convert(number, - this.numberOffset));
 };
 LocalizeNumber.prototype.convert = function(number, offset) {
-	//console.log('DO', number, offset);
 	if (offset === 0) return(number);
 	var result = [];
 	for (var i=0; i<number.length; i++) {
-		//var char = number.charCodeAt(i);
-		//console.log('char', i, char);
-		//var local = parseInt(char + offset, 16);
-		//var local = char + offset;
-		//console.log('local', local);
 		result.push(String.fromCharCode(number.charCodeAt(i) + offset));
-		//console.log('result', String.fromCharCode(local));
 	}
-	//console.log('result', result.join(''));
 	return(result.join(''));
 };/**
 * Unit Test Harness for AssetController
