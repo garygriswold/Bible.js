@@ -20,7 +20,7 @@ Chapter.prototype.buildUSX = function(result) {
 	result.push(this.whiteSpace, this.openElement());
 	result.push(this.closeElement());
 };
-Chapter.prototype.toDOM = function(parentNode, bookCode) {
+Chapter.prototype.toDOM = function(parentNode, bookCode, localizeNumber) {
 	var reference = bookCode + ':' + this.number;
 	var section = new DOMNode('section');
 	section.setAttribute('id', reference);
@@ -28,7 +28,7 @@ Chapter.prototype.toDOM = function(parentNode, bookCode) {
 
 	var child = new DOMNode('p');
 	child.setAttribute('class', this.style);
-	child.textContent = this.number;
+	child.textContent = localizeNumber.toLocal(this.number);
 	section.appendChild(child);
 	return(section);
 };

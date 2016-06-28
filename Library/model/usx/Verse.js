@@ -20,12 +20,12 @@ Verse.prototype.buildUSX = function(result) {
 	result.push(this.whiteSpace, this.openElement());
 	result.push(this.closeElement());
 };
-Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
+Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum, localizeNumber) {
 	var reference = bookCode + ':' + chapterNum + ':' + this.number;
 	var child = new DOMNode('span');
 	child.setAttribute('id', reference);
 	child.setAttribute('class', this.style);
-	child.textContent = ' ' + this.number + '&nbsp;';
+	child.textContent = ' ' + localizeNumber.toLocal(this.number) + '&nbsp;';
 	parentNode.appendChild(child);
 	return(child);
 };

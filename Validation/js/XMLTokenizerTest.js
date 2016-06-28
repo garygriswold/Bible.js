@@ -59,41 +59,45 @@ function testOne(fullPath, files, index, callback) {
 	}
 }
 function symmetricTest(fullPath, filename, callback) {
-	var inFile = fullPath + filename;
-	fs.readFile(inFile, { encoding: 'utf8'}, function(err, data) {
-		if (err) {
-			console.log('READ ERROR', JSON.stringify(err));
-			process.exit(1);
-		}
-		var reader = new XMLTokenizer(data);
-		var writer = new XMLSerializer();
-		var count = 0;
-		var type;
-		while (type !== XMLNodeType.END && count < 770000) {
-			type = reader.nextToken();
-			var value = reader.tokenValue();
-			writer.write(type, value);
-			count++;
-		};
-		var result = writer.close();
-		var outFile = OUT_BIBLE_PATH + filename;
-		fs.writeFile(outFile, data, { encoding: 'utf8'}, function(err) {
+	if (filename.substr(0, 1) === '.') {
+		callback();
+	} else {
+		var inFile = fullPath + filename;
+		fs.readFile(inFile, { encoding: 'utf8'}, function(err, data) {
 			if (err) {
-				console.log('WRITE ERROR', JSON.stringify(err));
+				console.log('READ ERROR', JSON.stringify(err));
 				process.exit(1);
 			}
-			console.log('COMPARE ', filename);
-			var proc = require('child_process');
-			proc.exec('diff ' + inFile + ' ' + outFile, { encoding: 'utf8' }, function(err, stdout, stderr) {
+			var reader = new XMLTokenizer(data);
+			var writer = new XMLSerializer();
+			var count = 0;
+			var type;
+			while (type !== XMLNodeType.END && count < 770000) {
+				type = reader.nextToken();
+				var value = reader.tokenValue();
+				writer.write(type, value);
+				count++;
+			};
+			var result = writer.close();
+			var outFile = OUT_BIBLE_PATH + filename;
+			fs.writeFile(outFile, data, { encoding: 'utf8'}, function(err) {
 				if (err) {
-					console.log('Diff Error', JSON.stringify(err));
+					console.log('WRITE ERROR', JSON.stringify(err));
+					process.exit(1);
 				}
-				console.log('DIFF', stdout);
-				console.log('ERR', stderr);
-				callback();
+				console.log('COMPARE ', filename);
+				var proc = require('child_process');
+				proc.exec('diff ' + inFile + ' ' + outFile, { encoding: 'utf8' }, function(err, stdout, stderr) {
+					if (err) {
+						console.log('Diff Error', JSON.stringify(err));
+					}
+					console.log('DIFF', stdout);
+					console.log('ERR', stderr);
+					callback();
+				});
 			});
 		});
-	});
+	}
 }
 if (process.argv.length < 3) {
 	console.log('Usage: XMLTokenizerTest.sh  version');

@@ -11,7 +11,8 @@
 * NOTE: This class must be instantiated once for an entire book are all books, not just one chapter,
 * because the bookCode is only present in chapter 0, but is needed by all chapters.
 */
-function DOMBuilder() {
+function DOMBuilder(silCode) {
+	this.localizeNumber = new LocalizeNumber(silCode);
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
@@ -41,14 +42,14 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 		case 'chapter':
 			this.chapter = node.number;
 			this.noteNum = 0;
-			domNode = node.toDOM(domParent, this.bookCode);
+			domNode = node.toDOM(domParent, this.bookCode, this.localizeNumber);
 			break;
 		case 'para':
 			domNode = node.toDOM(domParent);
 			break;
 		case 'verse':
 			this.verse = node.number;
-			domNode = node.toDOM(domParent, this.bookCode, this.chapter);
+			domNode = node.toDOM(domParent, this.bookCode, this.chapter, this.localizeNumber);
 			break;
 		case 'text':
 			node.toDOM(domParent, this.bookCode, this.chapter);

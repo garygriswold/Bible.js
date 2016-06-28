@@ -3,21 +3,22 @@
 * This is used primarily for converting chapter and verse numbers, since USFM and USX
 * always represent those numbers in ASCII.
 */
-function LocalizeNumber(locale) {
-	this.locale = locale;
-	switch(local) {
-		case 'ar':
+function LocalizeNumber(silCode) {
+	this.silCode = silCode;
+	switch(silCode) {
+		case 'arb': // Arabic
 			this.numberOffset = 0x0660 - 0x0030;
 			break;
-		case 'fa':
+		case 'pes': // Persian
 			this.numberOffset = 0x06F0 - 0x0030;
 			break;
 		default:
-			this.offset = 0;
+			this.numberOffset = 0;
 			break;
 	}
+	Object.freeze(this);
 }
-LocalizeNumber.prototype.toLocale = function(number) {
+LocalizeNumber.prototype.toLocal = function(number) {
 	return(this.convert(number, this.numberOffset));
 };
 LocalizeNumber.prototype.toAscii = function(number) {
@@ -27,9 +28,7 @@ LocalizeNumber.prototype.convert = function(number, offset) {
 	if (offset === 0) return(number);
 	var result = [];
 	for (var i=0; i<number.length; i++) {
-		var char = number.charCodeAt(i);
-		var local = parseInt(char + offset, 16);
-		result.push(String.fromCharCode(local));
+		result.push(String.fromCharCode(number.charCodeAt(i) + offset));
 	}
 	return(result.join(''));
 };

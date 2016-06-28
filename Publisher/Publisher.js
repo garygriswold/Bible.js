@@ -27,7 +27,7 @@ function AssetBuilder(types, database, silCode) {
 	this.database = database;
 	this.builders = [];
 	if (types.chapterFiles) {
-		var chapterBuilder = new ChapterBuilder(this.database.chapters);
+		var chapterBuilder = new ChapterBuilder(this.database.chapters, silCode);
 		this.builders.push(chapterBuilder);
 		this.builders.push(new VerseBuilder(this.database.verses, chapterBuilder));
 	}
@@ -66,6 +66,7 @@ AssetBuilder.prototype.build = function(callback) {
 			that.reader.readTextFile(that.types.getUSXPath(file), function(data) {
 				if (data.errno) {
 					if (data.errno === -2) { // file not found
+						console.log('File Not Found', file);
 						processReadFile(that.filesToProcess.shift());
 					} else {
 						console.log('file read err ', JSON.stringify(data));
@@ -189,8 +190,9 @@ VersionStatistics.prototype.loadDB = function(callback) {
 * This class iterates over the USX data model, and breaks it into files one for each chapter.
 *
 */
-function ChapterBuilder(adapter) {
+function ChapterBuilder(adapter, silCode) {
 	this.adapter = adapter;
+	this.silCode = silCode;
 	this.chapters = [];
 	Object.seal(this);
 }
@@ -217,7 +219,7 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 };
 ChapterBuilder.prototype.loadDB = function(callback) {
 	var array = [];
-	var domBuilder = new DOMBuilder();
+	var domBuilder = new DOMBuilder(this.silCode);
 	var htmlBuilder = new HTMLBuilder();
 	for (var i=0; i<this.chapters.length; i++) {
 		var chapObj = this.chapters[i];
@@ -679,7 +681,8 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 * NOTE: This class must be instantiated once for an entire book are all books, not just one chapter,
 * because the bookCode is only present in chapter 0, but is needed by all chapters.
 */
-function DOMBuilder() {
+function DOMBuilder(silCode) {
+	this.localizeNumber = new LocalizeNumber(silCode);
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
@@ -709,14 +712,14 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 		case 'chapter':
 			this.chapter = node.number;
 			this.noteNum = 0;
-			domNode = node.toDOM(domParent, this.bookCode);
+			domNode = node.toDOM(domParent, this.bookCode, this.localizeNumber);
 			break;
 		case 'para':
 			domNode = node.toDOM(domParent);
 			break;
 		case 'verse':
 			this.verse = node.number;
-			domNode = node.toDOM(domParent, this.bookCode, this.chapter);
+			domNode = node.toDOM(domParent, this.bookCode, this.chapter, this.localizeNumber);
 			break;
 		case 'text':
 			node.toDOM(domParent, this.bookCode, this.chapter);
@@ -890,7 +893,7 @@ Chapter.prototype.buildUSX = function(result) {
 	result.push(this.whiteSpace, this.openElement());
 	result.push(this.closeElement());
 };
-Chapter.prototype.toDOM = function(parentNode, bookCode) {
+Chapter.prototype.toDOM = function(parentNode, bookCode, localizeNumber) {
 	var reference = bookCode + ':' + this.number;
 	var section = new DOMNode('section');
 	section.setAttribute('id', reference);
@@ -898,7 +901,8 @@ Chapter.prototype.toDOM = function(parentNode, bookCode) {
 
 	var child = new DOMNode('p');
 	child.setAttribute('class', this.style);
-	child.textContent = this.number;
+	//child.textContent = this.number;
+	child.textContent = localizeNumber.toLocal(this.number);
 	section.appendChild(child);
 	return(section);
 };
@@ -962,12 +966,13 @@ Verse.prototype.buildUSX = function(result) {
 	result.push(this.whiteSpace, this.openElement());
 	result.push(this.closeElement());
 };
-Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
+Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum, localizeNumber) {
 	var reference = bookCode + ':' + chapterNum + ':' + this.number;
 	var child = new DOMNode('span');
 	child.setAttribute('id', reference);
 	child.setAttribute('class', this.style);
-	child.textContent = ' ' + this.number + '&nbsp;';
+	//child.textContent = ' ' + this.number + '&nbsp;';
+	child.textContent = ' ' + localizeNumber.toLocal(this.number) + '&nbsp;';
 	parentNode.appendChild(child);
 	return(child);
 };
@@ -1114,7 +1119,7 @@ function OptBreak(node) {
 }
 OptBreak.prototype.tagName = 'optbreak';
 OptBreak.prototype.openElement = function() {
-	var elementEnd = (this.emptyElement) ? '" />' : '">';
+	var elementEnd = (this.emptyElement) ? '/>' : '>';
 	return('<optbreak' + elementEnd);
 };
 OptBreak.prototype.closeElement = function() {
@@ -2329,6 +2334,47 @@ VersionsReadAdapter.prototype.readVersion = function(versionCode, callback) {
 };
 
 /**
+* This class will convert a number to a localized representation of the same number.
+* This is used primarily for converting chapter and verse numbers, since USFM and USX
+* always represent those numbers in ASCII.
+*/
+function LocalizeNumber(silCode) {
+	this.silCode = silCode;
+	switch(silCode) {
+		case 'arb_off': // Arabic
+			this.numberOffset = 0x0660 - 0x0030;
+			break;
+		case 'pes_off': // Persian
+			this.numberOffset = 0x06F0 - 0x0030;
+			break;
+		default:
+			this.numberOffset = 0;
+			break;
+	}
+	Object.freeze(this);
+}
+LocalizeNumber.prototype.toLocal = function(number) {
+	return(this.convert(number, this.numberOffset));
+};
+LocalizeNumber.prototype.toAscii = function(number) {
+	return(this.convert(number, - this.numberOffset));
+};
+LocalizeNumber.prototype.convert = function(number, offset) {
+	//console.log('DO', number, offset);
+	if (offset === 0) return(number);
+	var result = [];
+	for (var i=0; i<number.length; i++) {
+		//var char = number.charCodeAt(i);
+		//console.log('char', i, char);
+		//var local = parseInt(char + offset, 16);
+		//var local = char + offset;
+		//console.log('local', local);
+		result.push(String.fromCharCode(number.charCodeAt(i) + offset));
+		//console.log('result', String.fromCharCode(local));
+	}
+	//console.log('result', result.join(''));
+	return(result.join(''));
+};/**
 * Unit Test Harness for AssetController
 */
 var FILE_PATH = process.env.HOME + '/ShortSands/DBL/2current/';

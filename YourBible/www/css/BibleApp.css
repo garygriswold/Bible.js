@@ -94,7 +94,7 @@ p.ms1 {
 	color: #2A48B4; /* non-std */
 }
 /* Heading - Section Level 1 */
-p.s1 {
+p.s, p.s1 {
 	font-weight: bold;
 	text-align: center;
 	margin-bottom: 4pt;
@@ -122,6 +122,44 @@ p.d {
 	text-align: center;
 	margin-bottom: 4pt;
 	margin-top: 4pt;
+	color: #2A48B4; /* non-std */
+}
+/* Introduction Major Title */
+p.imt, p.imt1 {
+	font-weight: bold;
+	font-size: 1.16rem;
+	text-align: center;
+	margin-bottom: 4pt;
+	margin-top: 8pt;
+	color: #2A48B4; /* non-std */
+}
+/* Introduction Outline Text Level 1 */
+p.io, p.io1 {
+	text-align: start;
+	margin-left: 0.5in;
+	margin-right: 0.5in; /* non-std included for RTL */
+	color: #555555; /* non-std */
+}
+/* Introduction Outline Text Level 2 */
+p.io2 {
+	text-align: start;
+	margin-left: 0.75in;
+	margin-right: 0.75in; /* non-std included for RTL */
+	color: #555555; /* non-std */
+}
+/* Introduction Prose Paragraph (basic) */
+p.ip {
+	text-align: start;
+	text-indent: 0.125in;
+	color: #555555; /* non-std */
+}
+/* Introduction Section heading, Level 1 */
+p.is, p.is1 {
+	font-weight: bold;
+	font-size: 1.16rem;
+	text-align: center;
+	margin-bottom: 4pt;
+	margin-top: 8pt;
 	color: #2A48B4; /* non-std */
 }
 /* Chapter Number Format */
@@ -166,8 +204,8 @@ p.mi {
 	margin-left: 0.25in;
 	margin-right: 0.25in;
 }
-/* Continuation of Blockquote */
-p.pi {
+/* Paragraph Indented Level 1 */
+p.pi, p.pi1 {
 	text-align: start;
 	text-indent: 0.125in;
 	margin-left: 0.25in;
@@ -193,18 +231,11 @@ p.sp {
 	margin-top: 8pt;
 }
 /* Poetry First Line */
-p.q {
+p.q, p.q1 {
 	text-align: start;
 	text-indent: -1.0in;
 	margin-left: 1.25in;
-	margin-top: 0; /* non-std */
-	margin-bottom: 0; /* non-std */
-}
-/* Poetry First Line */
-p.q1 {
-	text-align: start;
-	text-indent: -1.0in;
-	margin-left: 1.25in;
+	margin-right: 1.25in; /* non-std for RTL */
 	margin-top: 0; /* non-std */
 	margin-bottom: 0; /* non-std */
 }
@@ -213,6 +244,7 @@ p.q2 {
 	text-align: start;
 	text-indent: -0.75in;
 	margin-left: 1.25in;
+	margin-right: 1.25in; /* non-std for RTL */
 	margin-top: 0; /* non-std */
 	margin-bottom: 0; /* non-std */
 }
