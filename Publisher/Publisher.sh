@@ -28,6 +28,7 @@ cat ../Library/model/meta/TOC.js >> Publisher.js
 cat ../Library/model/meta/TOCBook.js >> Publisher.js
 cat ../Library/model/meta/Concordance.js >> Publisher.js
 cat ../Library/model/meta/DOMNode.js >> Publisher.js
+cat ../Library/model/meta/PubVersion.js >> Publisher.js
 cat ../Library/io/IOError.js >> Publisher.js
 cat ../Library/io/NodeFileReader.js >> Publisher.js
 cat ../Library/io/DeviceDatabaseNode.js >> Publisher.js

@@ -19,9 +19,9 @@ if (process.argv.length < 3) {
 		types.statistics = true;
 		var database = new DeviceDatabase(DB_PATH + version.toUpperCase() + '.db');
 		var versionAdapter = new VersionsReadAdapter();
-		versionAdapter.readVersion(version.toUpperCase(), function(row) {
-			if (row) {
-				var builder = new AssetBuilder(types, database, row.silCode);
+		versionAdapter.readVersion(version.toUpperCase(), function(pubVersion) {
+			if (pubVersion) {
+				var builder = new AssetBuilder(types, database, pubVersion);
 				builder.build(function(err) {
 					if (err instanceof IOError) {
 						console.log('FAILED', JSON.stringify(err));

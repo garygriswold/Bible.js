@@ -2,9 +2,9 @@
 * This class iterates over the USX data model, and breaks it into files one for each chapter.
 *
 */
-function ChapterBuilder(adapter, silCode) {
+function ChapterBuilder(adapter, pubVersion) {
 	this.adapter = adapter;
-	this.silCode = silCode;
+	this.pubVersion = pubVersion;
 	this.chapters = [];
 	Object.seal(this);
 }
@@ -31,7 +31,7 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 };
 ChapterBuilder.prototype.loadDB = function(callback) {
 	var array = [];
-	var domBuilder = new DOMBuilder(this.silCode);
+	var domBuilder = new DOMBuilder(this.pubVersion);
 	var htmlBuilder = new HTMLBuilder();
 	for (var i=0; i<this.chapters.length; i++) {
 		var chapObj = this.chapters[i];

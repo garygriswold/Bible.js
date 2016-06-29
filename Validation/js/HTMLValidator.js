@@ -87,8 +87,10 @@ HTMLValidator.prototype.generateChaptersFile = function(callback) {
 					if (state !== VERSE_ELE) {
 						var line = reader.tokenValue();
 						line = line.replace('\n', ' ');
-						line = line.replace('\u261E', '');
+						line = line.replace('\u261A', '');
 						line = line.replace('\u261B', '');
+						line = line.replace('\u261C', '');												
+						line = line.replace('\u261E', '');
 						verse.push(line);
 					}
 					break;

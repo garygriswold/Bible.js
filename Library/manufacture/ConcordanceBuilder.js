@@ -4,9 +4,9 @@
 *
 * This solution might not be unicode safe. GNG Apr 2, 2015
 */
-function ConcordanceBuilder(adapter, silCode) {
+function ConcordanceBuilder(adapter, pubVersion) {
 	this.adapter = adapter;
-	this.silCode = silCode;
+	this.silCode = pubVersion.silCode;
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;

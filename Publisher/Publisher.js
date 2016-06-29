@@ -22,12 +22,12 @@ AssetType.prototype.getUSXPath = function(filename) {
 * is a significant amount of the time to do this, this class reads over the entire Bible text and creates
 * all of the required assets.
 */
-function AssetBuilder(types, database, silCode) {
+function AssetBuilder(types, database, pubVersion) {
 	this.types = types;
 	this.database = database;
 	this.builders = [];
 	if (types.chapterFiles) {
-		var chapterBuilder = new ChapterBuilder(this.database.chapters, silCode);
+		var chapterBuilder = new ChapterBuilder(this.database.chapters, pubVersion);
 		this.builders.push(chapterBuilder);
 		this.builders.push(new VerseBuilder(this.database.verses, chapterBuilder));
 	}
@@ -35,7 +35,7 @@ function AssetBuilder(types, database, silCode) {
 		this.builders.push(new TOCBuilder(this.database.tableContents));
 	}
 	if (types.concordance) {
-		this.builders.push(new ConcordanceBuilder(this.database.concordance, silCode));
+		this.builders.push(new ConcordanceBuilder(this.database.concordance, pubVersion));
 	}
 	if (types.styleIndex) {
 		this.builders.push(new StyleIndexBuilder(this.database.styleIndex));
@@ -190,9 +190,9 @@ VersionStatistics.prototype.loadDB = function(callback) {
 * This class iterates over the USX data model, and breaks it into files one for each chapter.
 *
 */
-function ChapterBuilder(adapter, silCode) {
+function ChapterBuilder(adapter, pubVersion) {
 	this.adapter = adapter;
-	this.silCode = silCode;
+	this.pubVersion = pubVersion;
 	this.chapters = [];
 	Object.seal(this);
 }
@@ -219,7 +219,7 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 };
 ChapterBuilder.prototype.loadDB = function(callback) {
 	var array = [];
-	var domBuilder = new DOMBuilder(this.silCode);
+	var domBuilder = new DOMBuilder(this.pubVersion);
 	var htmlBuilder = new HTMLBuilder();
 	for (var i=0; i<this.chapters.length; i++) {
 		var chapObj = this.chapters[i];
@@ -426,9 +426,9 @@ TOCBuilder.prototype.toJSON = function() {
 *
 * This solution might not be unicode safe. GNG Apr 2, 2015
 */
-function ConcordanceBuilder(adapter, silCode) {
+function ConcordanceBuilder(adapter, pubVersion) {
 	this.adapter = adapter;
-	this.silCode = silCode;
+	this.silCode = pubVersion.silCode;
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
@@ -681,8 +681,9 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 * NOTE: This class must be instantiated once for an entire book are all books, not just one chapter,
 * because the bookCode is only present in chapter 0, but is needed by all chapters.
 */
-function DOMBuilder(silCode) {
-	this.localizeNumber = new LocalizeNumber(silCode);
+function DOMBuilder(pubVersion) {
+	this.localizeNumber = new LocalizeNumber(pubVersion.silCode);
+	this.direction = pubVersion.direction;
 	this.bookCode = '';
 	this.chapter = 0;
 	this.verse = 0;
@@ -729,7 +730,7 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 			domNode = node.toDOM(domParent);
 			break;
 		case 'note':
-			domNode = node.toDOM(domParent, this.bookCode, this.chapter, ++this.noteNum);
+			domNode = node.toDOM(domParent, this.bookCode, this.chapter, ++this.noteNum, this.direction);
 			break;
 		case 'ref':
 			domNode = node.toDOM(domParent);
@@ -1007,7 +1008,7 @@ Note.prototype.buildUSX = function(result) {
 	}
 	result.push(this.closeElement());
 };
-Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
+Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direction) {
 	var nodeId = bookCode + chapterNum + '-' + noteNum;
 	var refChild = new DOMNode('span');
 	refChild.setAttribute('id', nodeId);
@@ -1015,10 +1016,10 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	switch(this.style) {
 		case 'f':
-			refChild.textContent = '\u261E ';
+			refChild.textContent = (direction === 'rtl') ? '\u261C ' : '\u261E '; //261C points left, 261E points right
 			break;
 		case 'x':
-			refChild.textContent = '\u261B ';
+			refChild.textContent = (direction === 'rtl') ? '\u261A ' : '\u261B '; //261A points left, 261B points right
 			break;
 		default:
 			refChild.textContent = '* ';
@@ -1745,6 +1746,14 @@ DOMNode.prototype.appendChild = function(node) {
 	node.parentNode = this;
 };
 /**
+* This class is used to carry information about the language and version
+* for the publish program.
+*/
+function PubVersion(row) {
+	this.silCode = row.silCode;
+	this.direction = row.direction;
+	Object.freeze(this);
+}/**
 * This class is a wrapper for SQL Error so that we can always distinguish an error
 * from valid results.  Any method that calls an IO routine, which can expect valid results
 * or an error should test "if (results instanceof IOError)".
@@ -2320,13 +2329,14 @@ function VersionsReadAdapter() {
 	Object.freeze(this);
 }
 VersionsReadAdapter.prototype.readVersion = function(versionCode, callback) {
-	var statement = 'SELECT silcode FROM Version WHERE versionCode=?';
+	var statement = 'SELECT l.silCode, l.direction FROM language l JOIN version v ON v.silCode=l.silCode WHERE versionCode=?';
 	this.database.get(statement, [versionCode], function(err, row) {
 		if (err) {
 			console.log('SELECT ERROR IN VERSION', JSON.stringify(err));
 			callback();
 		} else {
-			callback(row);
+			var pubVersion = new PubVersion(row);
+			callback(pubVersion);
 		}
 	});
 };
@@ -2352,7 +2362,11 @@ function LocalizeNumber(silCode) {
 	Object.freeze(this);
 }
 LocalizeNumber.prototype.toLocal = function(number) {
-	return(this.convert(number, this.numberOffset));
+	if ((typeof number) === 'number') {
+		return(this.convert(String(number), this.numberOffset));
+	} else {
+		return(this.convert(number, this.numberOffset));		
+	}
 };
 LocalizeNumber.prototype.toAscii = function(number) {
 	return(this.convert(number, - this.numberOffset));
@@ -2361,7 +2375,12 @@ LocalizeNumber.prototype.convert = function(number, offset) {
 	if (offset === 0) return(number);
 	var result = [];
 	for (var i=0; i<number.length; i++) {
-		result.push(String.fromCharCode(number.charCodeAt(i) + offset));
+		var char = number.charCodeAt(i);
+		if (char > 47 && char < 58) { // if between 0 and 9
+			result.push(String.fromCharCode(char + offset));
+		} else {
+			result.push(number.charAt(i));
+		}
 	}
 	return(result.join(''));
 };/**
@@ -2385,9 +2404,9 @@ if (process.argv.length < 3) {
 		types.statistics = true;
 		var database = new DeviceDatabase(DB_PATH + version.toUpperCase() + '.db');
 		var versionAdapter = new VersionsReadAdapter();
-		versionAdapter.readVersion(version.toUpperCase(), function(row) {
-			if (row) {
-				var builder = new AssetBuilder(types, database, row.silCode);
+		versionAdapter.readVersion(version.toUpperCase(), function(pubVersion) {
+			if (pubVersion) {
+				var builder = new AssetBuilder(types, database, pubVersion);
 				builder.build(function(err) {
 					if (err instanceof IOError) {
 						console.log('FAILED', JSON.stringify(err));

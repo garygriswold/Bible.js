@@ -31,7 +31,7 @@ Note.prototype.buildUSX = function(result) {
 	}
 	result.push(this.closeElement());
 };
-Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
+Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direction) {
 	var nodeId = bookCode + chapterNum + '-' + noteNum;
 	var refChild = new DOMNode('span');
 	refChild.setAttribute('id', nodeId);
@@ -39,10 +39,10 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum) {
 	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	switch(this.style) {
 		case 'f':
-			refChild.textContent = '\u261E ';
+			refChild.textContent = (direction === 'rtl') ? '\u261C ' : '\u261E '; //261C points left, 261E points right
 			break;
 		case 'x':
-			refChild.textContent = '\u261B ';
+			refChild.textContent = (direction === 'rtl') ? '\u261A ' : '\u261B '; //261A points left, 261B points right
 			break;
 		default:
 			refChild.textContent = '* ';
