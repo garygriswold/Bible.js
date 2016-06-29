@@ -1,9 +1,10 @@
 /**
 * This class presents the table of contents, and responds to user actions.
 */
-function TableContentsView(toc, copyrightView) {
+function TableContentsView(toc, copyrightView, localizeNumber) {
 	this.toc = toc;
 	this.copyrightView = copyrightView;
+	this.localizeNumber = localizeNumber;
 	this.root = null;
 	this.dom = new DOMBuilder();
 	this.rootNode = this.dom.addNode(document.body, 'div', null, null, 'tocRoot');
@@ -64,7 +65,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 			var row = document.createElement('tr');
 			table.appendChild(row);
 			for (var c=0; c<numCellPerRow && chaptNum <= book.lastChapter; c++) {
-				var cell = that.dom.addNode(row, 'td', 'tocChap', chaptNum, 'toc' + bookCode + ':' + chaptNum);
+				var cell = that.dom.addNode(row, 'td', 'tocChap', that.localizeNumber.toLocal(chaptNum), 'toc' + bookCode + ':' + chaptNum);
 				chaptNum++;
 				cell.addEventListener('click', function(event) {
 					var nodeId = this.id.substring(3);

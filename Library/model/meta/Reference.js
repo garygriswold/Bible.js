@@ -28,7 +28,7 @@ Reference.prototype.path = function() {
 	return(this.book + '/' + this.chapter + '.usx');
 };
 Reference.prototype.chapterVerse = function() {
-	return((this.verse) ? this.chapter + ':' + this.verse : this.chapter);
+	return((this.verse) ? this.chapter + ':' + this.verse : String(this.chapter));
 };
 Reference.prototype.append = function(parent, html) {
 	var rootNode = document.createElement('div');

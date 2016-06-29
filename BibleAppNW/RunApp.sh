@@ -57,6 +57,7 @@ cat ../Library/model/meta/TOC.js >> js/BibleApp.js
 cat ../Library/model/meta/TOCBook.js >> js/BibleApp.js
 
 cat ../Library/util/DateTimeFormatter.js >> js/BibleApp.js
+cat ../Library/util/LocalizeNumber.js >> js/BibleApp.js
 cat ../Library/util/nodeDeviceSettings.js >> js/BibleApp.js
 cat ../Library/util/Performance.js >> js/BibleApp.js
 cat ../Library/util/DOMBuilder.js >> js/BibleApp.js

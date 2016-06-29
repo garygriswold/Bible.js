@@ -63,14 +63,15 @@ AppViewController.prototype.begin = function(develop) {
 
 		console.log('loaded toc', that.tableContents.size());
 		that.copyrightView = new CopyrightView(that.version);
-		that.header = new HeaderView(that.tableContents, that.version);
+		that.localizeNumber = new LocalizeNumber(that.version.silCode);
+		that.header = new HeaderView(that.tableContents, that.version, that.localizeNumber);
 		that.header.showView();
-		that.tableContentsView = new TableContentsView(that.tableContents, that.copyrightView);
+		that.tableContentsView = new TableContentsView(that.tableContents, that.copyrightView, that.localizeNumber);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
-		that.searchView = new SearchView(that.tableContents, that.concordance, that.verses, that.history, that.version);
+		that.searchView = new SearchView(that.tableContents, that.concordance, that.verses, that.history, that.version, that.localizeNumber);
 		that.searchView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.codexView = new CodexView(that.chapters, that.tableContents, that.header.barHite, that.copyrightView);
-		that.historyView = new HistoryView(that.history, that.tableContents);
+		that.historyView = new HistoryView(that.history, that.tableContents, that.localizeNumber);
 		that.historyView.rootNode.style.top = that.header.barHite + 'px';
 		that.questionsView = new QuestionsView(that.questions, that.verses, that.tableContents, that.version);
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.

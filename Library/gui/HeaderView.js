@@ -6,7 +6,7 @@ var HEADER_BUTTON_HEIGHT = 44;
 var HEADER_BAR_HEIGHT = 52;
 var STATUS_BAR_HEIGHT = 14;
 
-function HeaderView(tableContents, version) {
+function HeaderView(tableContents, version, localizeNumber) {
 	this.statusBarInHeader = (deviceSettings.platform() === 'ios') ? true : false;
 	//this.statusBarInHeader = false;
 
@@ -15,6 +15,7 @@ function HeaderView(tableContents, version) {
 	this.cellTopPadding = (this.statusBarInHeader) ? 'padding-top:' + STATUS_BAR_HEIGHT + 'px' : 'padding-top:0px';
 	this.tableContents = tableContents;
 	this.version = version;
+	this.localizeNumber = localizeNumber;
 	this.backgroundCanvas = null;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
@@ -37,7 +38,8 @@ function HeaderView(tableContents, version) {
 		
 		if (that.currentReference) {
 			var book = that.tableContents.find(that.currentReference.book);
-			var text = book.name + ' ' + ((that.currentReference.chapter > 0) ? that.currentReference.chapter : 1);
+			var chapter = (that.currentReference.chapter > 0) ? that.currentReference.chapter : 1;
+			var text = book.name + ' ' + that.localizeNumber.toLocal(chapter);
 			that.titleGraphics.clearRect(0, 0, that.titleCanvas.width, that.hite);
 			that.titleGraphics.fillText(text, that.titleCanvas.width / 2, that.hite / 2, that.titleCanvas.width);
 			that.titleWidth = that.titleGraphics.measureText(text).width + 10;

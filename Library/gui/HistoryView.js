@@ -4,9 +4,10 @@
 */
 var TAB_STATE = { HIDDEN:0, SHOW:1, VISIBLE:2, HIDE:3 };
 
-function HistoryView(historyAdapter, tableContents) {
+function HistoryView(historyAdapter, tableContents, localizeNumber) {
 	this.historyAdapter = historyAdapter;
 	this.tableContents = tableContents;
+	this.localizeNumber = localizeNumber;
 	this.tabState = TAB_STATE.HIDDEN;
 	this.viewRoot = null;
 	this.rootNode = document.createElement('div');
@@ -100,11 +101,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 	function generateReference(nodeId) {
 		var ref = new Reference(nodeId);
 		var book = that.tableContents.find(ref.book);
-		if (ref.verse) {
-			return(book.abbrev + ' ' + ref.chapter + ':' + ref.verse);
-		} else {
-			return(book.abbrev + ' ' + ref.chapter);
-		}
+		return(book.abbrev + ' ' + that.localizeNumber.toLocal(ref.chapterVerse()));
 	}
 };
 

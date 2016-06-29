@@ -19,7 +19,11 @@ function LocalizeNumber(silCode) {
 	Object.freeze(this);
 }
 LocalizeNumber.prototype.toLocal = function(number) {
-	return(this.convert(number, this.numberOffset));
+	if ((typeof number) === 'number') {
+		return(this.convert(String(number), this.numberOffset));
+	} else {
+		return(this.convert(number, this.numberOffset));		
+	}
 };
 LocalizeNumber.prototype.toAscii = function(number) {
 	return(this.convert(number, - this.numberOffset));
@@ -28,7 +32,12 @@ LocalizeNumber.prototype.convert = function(number, offset) {
 	if (offset === 0) return(number);
 	var result = [];
 	for (var i=0; i<number.length; i++) {
-		result.push(String.fromCharCode(number.charCodeAt(i) + offset));
+		var char = number.charCodeAt(i);
+		if (char > 47 && char < 58) { // if between 0 and 9
+			result.push(String.fromCharCode(char + offset));
+		} else {
+			result.push(number.charAt(i));
+		}
 	}
 	return(result.join(''));
 };

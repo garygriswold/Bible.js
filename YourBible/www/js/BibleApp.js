@@ -112,14 +112,15 @@ AppViewController.prototype.begin = function(develop) {
 
 		console.log('loaded toc', that.tableContents.size());
 		that.copyrightView = new CopyrightView(that.version);
-		that.header = new HeaderView(that.tableContents, that.version);
+		that.localizeNumber = new LocalizeNumber(that.version.silCode);
+		that.header = new HeaderView(that.tableContents, that.version, that.localizeNumber);
 		that.header.showView();
-		that.tableContentsView = new TableContentsView(that.tableContents, that.copyrightView);
+		that.tableContentsView = new TableContentsView(that.tableContents, that.copyrightView, that.localizeNumber);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
-		that.searchView = new SearchView(that.tableContents, that.concordance, that.verses, that.history, that.version);
+		that.searchView = new SearchView(that.tableContents, that.concordance, that.verses, that.history, that.version, that.localizeNumber);
 		that.searchView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.codexView = new CodexView(that.chapters, that.tableContents, that.header.barHite, that.copyrightView);
-		that.historyView = new HistoryView(that.history, that.tableContents);
+		that.historyView = new HistoryView(that.history, that.tableContents, that.localizeNumber);
 		that.historyView.rootNode.style.top = that.header.barHite + 'px';
 		that.questionsView = new QuestionsView(that.questions, that.verses, that.tableContents, that.version);
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
@@ -574,9 +575,10 @@ CopyrightView.prototype.createAttributionView = function() {
 */
 var TAB_STATE = { HIDDEN:0, SHOW:1, VISIBLE:2, HIDE:3 };
 
-function HistoryView(historyAdapter, tableContents) {
+function HistoryView(historyAdapter, tableContents, localizeNumber) {
 	this.historyAdapter = historyAdapter;
 	this.tableContents = tableContents;
+	this.localizeNumber = localizeNumber;
 	this.tabState = TAB_STATE.HIDDEN;
 	this.viewRoot = null;
 	this.rootNode = document.createElement('div');
@@ -670,11 +672,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 	function generateReference(nodeId) {
 		var ref = new Reference(nodeId);
 		var book = that.tableContents.find(ref.book);
-		if (ref.verse) {
-			return(book.abbrev + ' ' + ref.chapter + ':' + ref.verse);
-		} else {
-			return(book.abbrev + ' ' + ref.chapter);
-		}
+		return(book.abbrev + ' ' + that.localizeNumber.toLocal(ref.chapterVerse()));
 	}
 };
 
@@ -831,12 +829,13 @@ QuestionsView.prototype.displayAnswer = function(parent) {
 * It does a lazy create of all of the objects needed.
 * Each presentation of a searchView presents its last state and last found results.
 */
-function SearchView(toc, concordance, versesAdapter, historyAdapter, version) {
+function SearchView(toc, concordance, versesAdapter, historyAdapter, version, localizeNumber) {
 	this.toc = toc;
 	this.concordance = concordance;
 	this.versesAdapter = versesAdapter;
 	this.historyAdapter = historyAdapter;
 	this.version = version;
+	this.localizeNumber = localizeNumber;
 	this.query = null;
 	this.lookup = new Lookup(toc);
 	this.words = [];
@@ -1007,7 +1006,7 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText, 
 	bookNode.appendChild(entryNode);
 	var refNode = document.createElement('span');
 	refNode.setAttribute('class', 'conRef');
-	refNode.textContent = reference.chapterVerse();
+	refNode.textContent = this.localizeNumber.toLocal(reference.chapterVerse());
 	entryNode.appendChild(refNode);
 	entryNode.appendChild(document.createElement('br'));
 
@@ -1101,7 +1100,7 @@ var HEADER_BUTTON_HEIGHT = 44;
 var HEADER_BAR_HEIGHT = 52;
 var STATUS_BAR_HEIGHT = 14;
 
-function HeaderView(tableContents, version) {
+function HeaderView(tableContents, version, localizeNumber) {
 	this.statusBarInHeader = (deviceSettings.platform() === 'ios') ? true : false;
 	//this.statusBarInHeader = false;
 
@@ -1110,6 +1109,7 @@ function HeaderView(tableContents, version) {
 	this.cellTopPadding = (this.statusBarInHeader) ? 'padding-top:' + STATUS_BAR_HEIGHT + 'px' : 'padding-top:0px';
 	this.tableContents = tableContents;
 	this.version = version;
+	this.localizeNumber = localizeNumber;
 	this.backgroundCanvas = null;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
@@ -1132,7 +1132,8 @@ function HeaderView(tableContents, version) {
 		
 		if (that.currentReference) {
 			var book = that.tableContents.find(that.currentReference.book);
-			var text = book.name + ' ' + ((that.currentReference.chapter > 0) ? that.currentReference.chapter : 1);
+			var chapter = (that.currentReference.chapter > 0) ? that.currentReference.chapter : 1;
+			var text = book.name + ' ' + that.localizeNumber.toLocal(chapter);
 			that.titleGraphics.clearRect(0, 0, that.titleCanvas.width, that.hite);
 			that.titleGraphics.fillText(text, that.titleCanvas.width / 2, that.hite / 2, that.titleCanvas.width);
 			that.titleWidth = that.titleGraphics.measureText(text).width + 10;
@@ -1235,9 +1236,10 @@ HeaderView.prototype.showView = function() {
 /**
 * This class presents the table of contents, and responds to user actions.
 */
-function TableContentsView(toc, copyrightView) {
+function TableContentsView(toc, copyrightView, localizeNumber) {
 	this.toc = toc;
 	this.copyrightView = copyrightView;
+	this.localizeNumber = localizeNumber;
 	this.root = null;
 	this.dom = new DOMBuilder();
 	this.rootNode = this.dom.addNode(document.body, 'div', null, null, 'tocRoot');
@@ -1298,7 +1300,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 			var row = document.createElement('tr');
 			table.appendChild(row);
 			for (var c=0; c<numCellPerRow && chaptNum <= book.lastChapter; c++) {
-				var cell = that.dom.addNode(row, 'td', 'tocChap', chaptNum, 'toc' + bookCode + ':' + chaptNum);
+				var cell = that.dom.addNode(row, 'td', 'tocChap', that.localizeNumber.toLocal(chaptNum), 'toc' + bookCode + ':' + chaptNum);
 				chaptNum++;
 				cell.addEventListener('click', function(event) {
 					var nodeId = this.id.substring(3);
@@ -3601,7 +3603,7 @@ Reference.prototype.path = function() {
 	return(this.book + '/' + this.chapter + '.usx');
 };
 Reference.prototype.chapterVerse = function() {
-	return((this.verse) ? this.chapter + ':' + this.verse : this.chapter);
+	return((this.verse) ? this.chapter + ':' + this.verse : String(this.chapter));
 };
 Reference.prototype.append = function(parent, html) {
 	var rootNode = document.createElement('div');
@@ -3718,6 +3720,48 @@ DateTimeFormatter.prototype.localDatetime = function(date) {
 	}
 };
 /**
+* This class will convert a number to a localized representation of the same number.
+* This is used primarily for converting chapter and verse numbers, since USFM and USX
+* always represent those numbers in ASCII.
+*/
+function LocalizeNumber(silCode) {
+	this.silCode = silCode;
+	switch(silCode) {
+		case 'arb': // Arabic
+			this.numberOffset = 0x0660 - 0x0030;
+			break;
+		case 'pes': // Persian
+			this.numberOffset = 0x06F0 - 0x0030;
+			break;
+		default:
+			this.numberOffset = 0;
+			break;
+	}
+	Object.freeze(this);
+}
+LocalizeNumber.prototype.toLocal = function(number) {
+	if ((typeof number) === 'number') {
+		return(this.convert(String(number), this.numberOffset));
+	} else {
+		return(this.convert(number, this.numberOffset));		
+	}
+};
+LocalizeNumber.prototype.toAscii = function(number) {
+	return(this.convert(number, - this.numberOffset));
+};
+LocalizeNumber.prototype.convert = function(number, offset) {
+	if (offset === 0) return(number);
+	var result = [];
+	for (var i=0; i<number.length; i++) {
+		var char = number.charCodeAt(i);
+		if (char > 47 && char < 58) { // if between 0 and 9
+			result.push(String.fromCharCode(char + offset));
+		} else {
+			result.push(number.charAt(i));
+		}
+	}
+	return(result.join(''));
+};/**
  * This class accesses the device locale and language information using the globalization plugin
  * and the versions, platform and model of the device plugin, and the network status.
  */

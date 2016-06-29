@@ -3,12 +3,13 @@
 * It does a lazy create of all of the objects needed.
 * Each presentation of a searchView presents its last state and last found results.
 */
-function SearchView(toc, concordance, versesAdapter, historyAdapter, version) {
+function SearchView(toc, concordance, versesAdapter, historyAdapter, version, localizeNumber) {
 	this.toc = toc;
 	this.concordance = concordance;
 	this.versesAdapter = versesAdapter;
 	this.historyAdapter = historyAdapter;
 	this.version = version;
+	this.localizeNumber = localizeNumber;
 	this.query = null;
 	this.lookup = new Lookup(toc);
 	this.words = [];
@@ -179,7 +180,7 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText, 
 	bookNode.appendChild(entryNode);
 	var refNode = document.createElement('span');
 	refNode.setAttribute('class', 'conRef');
-	refNode.textContent = reference.chapterVerse();
+	refNode.textContent = this.localizeNumber.toLocal(reference.chapterVerse());
 	entryNode.appendChild(refNode);
 	entryNode.appendChild(document.createElement('br'));
 
