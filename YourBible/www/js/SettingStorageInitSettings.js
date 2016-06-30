@@ -10,7 +10,7 @@ SettingStorage.prototype.defaultVersion = function(lang) {
 		case "ar": return("ARBVDPD.db");
 		case "zh": return("CUVSPD.db");
 		case "fa": return("NMV.db");
-		case "en": return("WEB.db");
+		//case "en": return("WEB.db");
 		default: return("NMV.db");
 	}
 };
