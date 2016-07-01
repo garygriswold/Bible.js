@@ -61,4 +61,8 @@ cat ../Library/util/LocalizeNumber.js >> www/js/BibleApp.js
 cat ../Library/util/cordovaDeviceSettings.js >> www/js/BibleApp.js
 cat ../Library/util/DOMBuilder.js >> www/js/BibleApp.js
 
-cordova emulate ios
+if [ -z "$1" ]; then
+	cordova emulate ios --device
+else
+	cordova emulate $1 --device
+fi

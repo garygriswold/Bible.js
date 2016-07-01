@@ -185,9 +185,7 @@ AppViewController.prototype.begin = function(develop) {
 	function setInitialFontSize() {
 		that.settingStorage.getFontSize(function(fontSize) {
 			if (fontSize == null) {
-				var minDim = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
-				var minDimIn = minDim * window.devicePixelRatio / 320;
-				var fontSize = Math.sqrt(minDimIn) * 10;
+				fontSize = '16';
 			}
 			document.documentElement.style.fontSize = fontSize + 'pt';			
 		});

@@ -379,9 +379,9 @@ span.copyTitle {
 span.copyAbbr {
 	margin-bottom: 0px;
 	font-family: sans-serif;
-	font-size: 1.5rem;
+	font-size: 1.4rem;
 	color: #2E9EC9;
-	/*direction: 'ltr';*/
+	direction: 'ltr';
 }
 
 /**
