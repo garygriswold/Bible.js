@@ -105,7 +105,6 @@ Compile and Sign App
 --------------------
 
 Update version code in config.xml
-Update id to com.shortsands.bibleapp  # until the store is changed to .yourbible
 
 	vi $HOME/BibleApp/YourBible/config.xml
 
@@ -131,6 +130,7 @@ Align the final APK package using zipalign.  zipalign ensures that all uncompres
 
 	rm android-release.apk
 	$HOME/Library/Android/sdk/build-tools/22.0.1/zipalign -v 4 android-release-signed.apk android-release.apk
+	ls -lt
 
 
 	
