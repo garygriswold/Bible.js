@@ -91,6 +91,8 @@ SettingsView.prototype.startControls = function() {
 	
 	function startFontSizeControl(fontSizePt, ptMin, ptMax) {
 		var fontSize = parseFloat(fontSizePt);
+		if (fontSize < ptMin) fontSize = ptMin;
+		if (fontSize > ptMax) fontSize = ptMax;
 	    var sampleNode = document.getElementById('sampleText');
     	var draggable = Draggable.create('#fontSizeThumb', {bounds:'#fontSizeSlider', minimumMovement:0,
 	    	lockAxis:true, 
