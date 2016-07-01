@@ -137,6 +137,12 @@ td.ctryName {
 	vertical-align: middle;
 	width: auto;
 }
+p.shortsands {
+	font-family: sans-serif;
+	font-size: 0.66rem;
+	color: #777777;
+	direction: ltr;
+}
 table.vers {
 	width: 100%;
     background-color: #EEEEEE;

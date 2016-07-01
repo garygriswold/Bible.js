@@ -10,6 +10,8 @@ cat ../Library/css/TableContents.css >> css/BibleApp.css
 cat ../Library/css/Settings.css >> css/BibleApp.css
 
 echo \"use strict\"\; > js/BibleApp.js
+# BuildInfo is a cordova plugin
+echo var BuildInfo={version:\"unknown\"}\; >> js/BibleApp.js
 cat ../Library/gui/AppInitializer.js >> js/BibleApp.js
 cat ../Library/gui/AppViewController.js >> js/BibleApp.js
 cat ../Library/gui/CodexView.js >> js/BibleApp.js

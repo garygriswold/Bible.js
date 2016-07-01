@@ -1,4 +1,5 @@
 "use strict";
+var BuildInfo={version:"unknown"};
 /**
 * This class initializes the App with the correct Bible versions
 * and starts.
@@ -1578,6 +1579,7 @@ VersionsView.prototype.buildCountriesList = function() {
 				}
 			}
 		}
+		that.dom.addNode(root, 'p', 'shortsands', 'Your Bible by Short Sands, LLC. version: ' + BuildInfo.version);
 		that.rootNode.appendChild(root);
 		that.buildVersionList(that.defaultCountryNode);
 		that.root = root;
