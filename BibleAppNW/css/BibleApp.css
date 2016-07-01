@@ -376,6 +376,13 @@ span.copyTitle {
 	font-size: 1.5rem;
 	color: #2E9EC9;
 }
+span.copyAbbr {
+	margin-bottom: 0px;
+	font-family: sans-serif;
+	font-size: 1.5rem;
+	color: #2E9EC9;
+	/*direction: 'ltr';*/
+}
 
 /**
 * This css files pertains to the HistoryView

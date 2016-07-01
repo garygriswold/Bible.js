@@ -89,9 +89,10 @@ INSERT INTO Version VALUES ('BLPH', 'spa', 'SPN', 'BLPH', 'La Palabra (versión 
 -- Arabic Languages
 INSERT INTO Version VALUES ('ARBVDPD', 'arb', 'EBIBLE', 'ARBVD', 'فان دايك الكتاب المقدس باللغة العربية', 'BIBLE', 'ARBVDPD.db', 'F',
 'Van Dyck Arabic Version (ARBVD), Public Domain, eBible.org.', NULL);
-INSERT INTO Version VALUES('NMV', 'pes', 'ELAM', 'NMV', 'New Millenium Version', 'BIBLE', 'NMV.db', 'F',
+INSERT INTO Version VALUES('NMV', 'pes', 'ELAM', 'NMV', 'ترجمۀ هزارۀ نو', 'BIBLE', 'NMV.db', 'F',
 'The Persian New Millennium Version © 2014, is a production of Elam Ministries. All rights reserved', null);
 
+-- Wycliffe
 INSERT INTO Version Values ('amu', 'amu', 'WBT', 'AMU', 'Amuzgo, Guerrero', 'BIBLE_NT', 'AMU.db', 'F', 
 'Amuzgo, Guerrero, © 1999 by Wycliffe Bible Translators', NULL);
 INSERT INTO Version Values ('azg', 'azg', 'WBT', 'AZG', 'Amuzgo, San Pedro Amuzgos', 'BIBLE_NT', 'AZG.db', 'F', 

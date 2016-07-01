@@ -44,13 +44,16 @@ CopyrightView.prototype.createCopyrightNoticeDOM = function() {
 };
 CopyrightView.prototype.createTOCTitleDOM = function() {
 	if (this.version.ownerCode === 'WBT') {
-		var title = this.version.localLanguageName + ' (' + this.version.silCode + ')';
+		var title = this.version.localLanguageName;
+		var abbrev = ' (' + this.version.silCode + ')';
 	} else {
-		title = this.version.localVersionName + ' (' + this.version.versionAbbr + ')';
+		title = this.version.localVersionName;
+		abbrev = ' (' + this.version.versionAbbr + ')';
 	}
 	var root = document.createElement('p');
 	var dom = new DOMBuilder();
 	dom.addNode(root, 'span', 'copyTitle', title);
+	dom.addNode(root, 'span', 'copyAbbr', abbrev);
 	return(root);
 };
 /**

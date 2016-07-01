@@ -525,13 +525,16 @@ CopyrightView.prototype.createCopyrightNoticeDOM = function() {
 };
 CopyrightView.prototype.createTOCTitleDOM = function() {
 	if (this.version.ownerCode === 'WBT') {
-		var title = this.version.localLanguageName + ' (' + this.version.silCode + ')';
+		var title = this.version.localLanguageName;
+		var abbrev = ' (' + this.version.silCode + ')';
 	} else {
-		title = this.version.localVersionName + ' (' + this.version.versionAbbr + ')';
+		title = this.version.localVersionName;
+		abbrev = ' (' + this.version.versionAbbr + ')';
 	}
 	var root = document.createElement('p');
 	var dom = new DOMBuilder();
 	dom.addNode(root, 'span', 'copyTitle', title);
+	dom.addNode(root, 'span', 'copyAbbr', abbrev);
 	return(root);
 };
 /**
@@ -1088,7 +1091,7 @@ SearchView.prototype.prepareSelect = function(refList) {
 	for (var i=0; i<refList.length; i++) {
 		var first = refList[i][0];
 		var parts = first.split(';');
-		searchMap[parts[0]] = refList[i];
+		searchMap[parts[0]] = refList[i]; // When a search find multiple words in the same verse, this discards all but the last.
 	}
 	return(searchMap);
 };
