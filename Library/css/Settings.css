@@ -1,6 +1,3 @@
-body {
-    margin:0;
-}
 #settingRoot {
     /*backgroundColor is set in SettingsView.showView */
     position: absolute; /* Needed because settingRoot.style.y is set in AppControllerView */

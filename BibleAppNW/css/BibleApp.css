@@ -1,12 +1,9 @@
 /**
 * This css files pertains to the CodexView
 */
-body {
-	margin: 0;
-	background-color: '#FF0000'; /* here to help debug flashes */
-}
 #codexRoot {
 	position: absolute; /* Needed because codexRoot.style.y is set in CodexView */
+	width: 86%;
 	margin-left: 7%;
 	margin-right: 7%;
 	font-family: serif;
@@ -589,9 +586,9 @@ p.conMore {
 * This css file pertains to the StatusBar
 */
 body {
-	width:100%;
+	margin: 0;
+	width: 100%;
 }
-
 #statusRoot {
 	margin: 0;
 	position: fixed;
@@ -655,9 +652,6 @@ td.tocChap { /* non-std */
 	border-width: 1px;
 	border-style: solid;
 	border-color: #777777;
-}
-body {
-    margin:0;
 }
 #settingRoot {
     /*backgroundColor is set in SettingsView.showView */

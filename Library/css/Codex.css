@@ -1,12 +1,9 @@
 /**
 * This css files pertains to the CodexView
 */
-body {
-	margin: 0;
-	background-color: '#FF0000'; /* here to help debug flashes */
-}
 #codexRoot {
 	position: absolute; /* Needed because codexRoot.style.y is set in CodexView */
+	width: 86%;
 	margin-left: 7%;
 	margin-right: 7%;
 	font-family: serif;

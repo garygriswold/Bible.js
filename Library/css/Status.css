@@ -2,9 +2,9 @@
 * This css file pertains to the StatusBar
 */
 body {
-	width:100%;
+	margin: 0;
+	width: 100%;
 }
-
 #statusRoot {
 	margin: 0;
 	position: fixed;
