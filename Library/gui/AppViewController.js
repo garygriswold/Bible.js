@@ -38,7 +38,9 @@ function bibleHideNoteClick(nodeId) {
 
 function AppViewController(version, settingStorage) {
 	this.version = version;
-	document.body.setAttribute('style', 'direction: ' + this.version.direction);
+	var dynamicCSS = new DynamicCSS();
+	dynamicCSS.setDirection(this.version.direction);
+	
 	this.settingStorage = settingStorage;
 	
 	this.database = new DatabaseHelper(version.filename, true);

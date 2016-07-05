@@ -60,6 +60,7 @@ cat ../Library/util/DateTimeFormatter.js >> www/js/BibleApp.js
 cat ../Library/util/LocalizeNumber.js >> www/js/BibleApp.js
 cat ../Library/util/cordovaDeviceSettings.js >> www/js/BibleApp.js
 cat ../Library/util/DOMBuilder.js >> www/js/BibleApp.js
+cat ../Library/util/DynamicCSS.js >> www/js/BibleApp.js
 
 if [ -z "$1" ]; then
 	cordova run ios --device

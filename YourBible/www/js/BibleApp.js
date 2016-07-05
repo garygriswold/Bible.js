@@ -87,7 +87,10 @@ function bibleHideNoteClick(nodeId) {
 
 function AppViewController(version, settingStorage) {
 	this.version = version;
-	document.body.setAttribute('style', 'direction: ' + this.version.direction);
+	//document.body.setAttribute('style', 'direction: ' + this.version.direction);
+	var dynamicCSS = new DynamicCSS();
+	dynamicCSS.setDirection(this.version.direction);
+	
 	this.settingStorage = settingStorage;
 	
 	this.database = new DatabaseHelper(version.filename, true);
@@ -3817,3 +3820,35 @@ DOMBuilder.prototype.addNode = function(parent, type, clas, content, id) {
 	parent.appendChild(node);
 	return(node);
 };
+/**
+* At this time, CSS has margin-left and margin-right capabilities, but it does not 
+* have margin-right and margin-left capabilities.  That is, it does not have the 
+* ability to vary the margin per direction of the text.
+* https://www.w3.org/wiki/Dynamic_style_-_manipulating_CSS_with_JavaScript
+*/
+function DynamicCSS() {
+}
+DynamicCSS.prototype.setDirection = function(direction) {
+	document.body.setAttribute('style', 'direction: ' + direction);
+	var sheet = document.styleSheets[0];
+	if (direction === 'ltr') {
+		console.log('*************** setting ltr margins');
+		sheet.addRule("#codexRoot", 	"margin-left: 8%; 		margin-right: 6%;");
+		sheet.addRule("p.io, p.io1", 	"margin-left: 0.5in; 	margin-right: 0;");
+		sheet.addRule("p.io2", 			"margin-left: 0.75in; 	margin-right: 0;");
+		sheet.addRule("p.pi, p.pi1", 	"margin-left: 0.25in; 	margin-right: 0;");
+		sheet.addRule("p.li, p.li1", 	"margin-left: 0.5in;	margin-right: 0;");
+		sheet.addRule("p.q, p.q1",  	"margin-left: 1.25in; 	margin-right: 0;");
+		sheet.addRule("p.q2", 			"margin-left: 1.25in; 	margin-right: 0;");
+	} else {
+		console.log('**************** setting rtl margins');
+		sheet.addRule("#codexRoot", 	"margin-right: 8%; 		margin-left: 6%;");
+		sheet.addRule("p.io, p.io1",	"margin-right: 0.5in;	margin-left: 0;");
+		sheet.addRule("p.io2",			"margin-right: 0.75in;	margin-left: 0;");
+		sheet.addRule("p.pi, p.pi1",	"margin-right: 0.25in; 	margin-left: 0;");
+		sheet.addRule("p.li, p.li1",	"margin-right: 0.5in;	margin-left: 0;");
+		sheet.addRule("p.q, p.q1",  	"margin-right: 1.25in; 	margin-left: 0;");
+		sheet.addRule("p.q2", 			"margin-right: 1.25in; 	margin-left: 0;");
+	}	
+};
+

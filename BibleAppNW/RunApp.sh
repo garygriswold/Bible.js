@@ -63,6 +63,7 @@ cat ../Library/util/LocalizeNumber.js >> js/BibleApp.js
 cat ../Library/util/nodeDeviceSettings.js >> js/BibleApp.js
 cat ../Library/util/Performance.js >> js/BibleApp.js
 cat ../Library/util/DOMBuilder.js >> js/BibleApp.js
+cat ../Library/util/DynamicCSS.js >> js/BibleApp.js
 
 cd ../BibleAppNW
 npm start
