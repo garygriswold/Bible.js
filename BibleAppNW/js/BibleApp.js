@@ -2150,6 +2150,15 @@ SettingStorage.prototype.setVersion = function(version, filename) {
 		}
 	});
 };
+SettingStorage.prototype.removeVersion = function(version) {
+	this.database.executeDML('DELETE FROM Installed WHERE version=?', [version], function(results) {
+		if (results instanceof IOError) {
+			console.log('RemoveVersion', version, JSON.stringify(results));
+		} else {
+			console.log('RemoveVersion', version);
+		}
+	});
+};
 /**
 * This class encapsulates the WebSQL function calls, and exposes a rather generic SQL
 * interface so that WebSQL could be easily replaced if necessary.

@@ -3,6 +3,8 @@ SettingStorage.prototype.initSettings = function() {
 	this.setVersion("KJVPD", "KJVPD.db");
 	this.setVersion("NMV", "NMV.db");
 	this.setVersion("WEB", "WEB.db");
+	this.removeVersion("CUVSPD");
+	this.removeVersion("CUVTPD");
 };
 SettingStorage.prototype.defaultVersion = function(lang) {
 	switch(lang) {
