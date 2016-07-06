@@ -131,6 +131,10 @@ Align the final APK package using zipalign.  zipalign ensures that all uncompres
 	rm android-release.apk
 	$HOME/Library/Android/sdk/build-tools/22.0.1/zipalign -v 4 android-release-signed.apk android-release.apk
 	ls -lt
+	
+Upload APK
+
+
 
 
 	
