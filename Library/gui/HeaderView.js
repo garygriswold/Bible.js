@@ -110,7 +110,7 @@ HeaderView.prototype.showView = function() {
 		that.titleGraphics = canvas.getContext('2d');
 		
 		that.titleGraphics.fillStyle = '#1b2f76';
-		that.titleGraphics.font = '2.0rem sans-serif';
+		that.titleGraphics.font = '24pt sans-serif';
 		that.titleGraphics.textAlign = 'center';
 		that.titleGraphics.textBaseline = 'middle';
 		that.titleGraphics.strokeStyle = '#1b2f76';

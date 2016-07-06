@@ -87,7 +87,6 @@ function bibleHideNoteClick(nodeId) {
 
 function AppViewController(version, settingStorage) {
 	this.version = version;
-	//document.body.setAttribute('style', 'direction: ' + this.version.direction);
 	var dynamicCSS = new DynamicCSS();
 	dynamicCSS.setDirection(this.version.direction);
 	
@@ -1208,7 +1207,7 @@ HeaderView.prototype.showView = function() {
 		that.titleGraphics = canvas.getContext('2d');
 		
 		that.titleGraphics.fillStyle = '#1b2f76';
-		that.titleGraphics.font = '2.0rem sans-serif';
+		that.titleGraphics.font = '24pt sans-serif';
 		that.titleGraphics.textAlign = 'center';
 		that.titleGraphics.textBaseline = 'middle';
 		that.titleGraphics.strokeStyle = '#1b2f76';
@@ -1583,7 +1582,8 @@ VersionsView.prototype.buildCountriesList = function() {
 				}
 			}
 		}
-		that.dom.addNode(root, 'p', 'shortsands', 'Your Bible by Short Sands, LLC. version: ' + BuildInfo.version);
+		that.dom.addNode(root, 'p', 'shortsands', 'Your Bible by Short Sands, LLC. support@shortsands.com, version: ' + 
+					BuildInfo.version);
 		that.rootNode.appendChild(root);
 		that.buildVersionList(that.defaultCountryNode);
 		that.root = root;
@@ -3834,21 +3834,19 @@ DynamicCSS.prototype.setDirection = function(direction) {
 	if (direction === 'ltr') {
 		console.log('*************** setting ltr margins');
 		sheet.addRule("#codexRoot", 	"margin-left: 8%; 		margin-right: 6%;");
-		sheet.addRule("p.io, p.io1", 	"margin-left: 0.5in; 	margin-right: 0;");
-		sheet.addRule("p.io2", 			"margin-left: 0.75in; 	margin-right: 0;");
-		sheet.addRule("p.pi, p.pi1", 	"margin-left: 0.25in; 	margin-right: 0;");
-		sheet.addRule("p.li, p.li1", 	"margin-left: 0.5in;	margin-right: 0;");
-		sheet.addRule("p.q, p.q1",  	"margin-left: 1.25in; 	margin-right: 0;");
-		sheet.addRule("p.q2", 			"margin-left: 1.25in; 	margin-right: 0;");
+		sheet.addRule("p.io, p.io1", 	"margin-left: 1.0rem; 	margin-right: 0;");
+		sheet.addRule("p.io2", 			"margin-left: 2.0rem; 	margin-right: 0;");
+		sheet.addRule("p.li, p.li1", 	"margin-left: 2.0rem;	margin-right: 0;");
+		sheet.addRule("p.q, p.q1",  	"margin-left: 3.0rem; 	margin-right: 0;");
+		sheet.addRule("p.q2", 			"margin-left: 3.0rem; 	margin-right: 0;");
 	} else {
 		console.log('**************** setting rtl margins');
 		sheet.addRule("#codexRoot", 	"margin-right: 8%; 		margin-left: 6%;");
-		sheet.addRule("p.io, p.io1",	"margin-right: 0.5in;	margin-left: 0;");
-		sheet.addRule("p.io2",			"margin-right: 0.75in;	margin-left: 0;");
-		sheet.addRule("p.pi, p.pi1",	"margin-right: 0.25in; 	margin-left: 0;");
-		sheet.addRule("p.li, p.li1",	"margin-right: 0.5in;	margin-left: 0;");
-		sheet.addRule("p.q, p.q1",  	"margin-right: 1.25in; 	margin-left: 0;");
-		sheet.addRule("p.q2", 			"margin-right: 1.25in; 	margin-left: 0;");
+		sheet.addRule("p.io, p.io1",	"margin-right: 1.0rem;	margin-left: 0;");
+		sheet.addRule("p.io2",			"margin-right: 2.0rem;	margin-left: 0;");
+		sheet.addRule("p.li, p.li1",	"margin-right: 2.0rem;	margin-left: 0;");
+		sheet.addRule("p.q, p.q1",  	"margin-right: 3.0rem;	margin-left: 0;");
+		sheet.addRule("p.q2", 			"margin-right: 3.0rem; 	margin-left: 0;");
 	}	
 };
 
