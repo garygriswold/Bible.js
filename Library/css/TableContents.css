@@ -24,8 +24,7 @@ p.tocBook { /* non-std */
 	font-size: 1.5rem;
 	color: #777777;
 	text-align: start;
-	overflow-x: hidden;
-	text-overflow: ellipsis;
+	overflow-x: visible;
 }
 /* Table of Contents Chapter Number Format */
 table.tocChap { /* non-std */
