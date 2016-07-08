@@ -95,12 +95,13 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					var languageName = (prefLangName === row.localLanguageName) ? prefLangName : row.localLanguageName + ' (' + prefLangName + ')';
 					that.dom.addNode(leftNode, 'p', 'langName', languageName);
 					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
-					if (row.versionAbbr && row.versionAbbr.length > 0) {
-						versionName += ' (' + row.versionAbbr + ')';
-					}
-					that.dom.addNode(leftNode, 'span', 'versName', versionName + ',  ');
+					var versionAbbr = (row.versionAbbr && row.versionAbbr.length > 0) ? row.versionAbbr : '';
 					
-					var ownerNode = that.dom.addNode(leftNode, 'span', 'versName', row.localOwnerName);
+					var versNode = that.dom.addNode(leftNode, 'p', 'versDesc');
+					versNode.setAttribute('dir', row.direction);
+					that.dom.addNode(versNode, 'span', 'versName', '\u2000' + versionName + '\u2000');
+					that.dom.addNode(versNode, 'bdi', 'versAbbr', '\u2000' + versionAbbr + '\u2000');
+					that.dom.addNode(versNode, 'bdi', 'versOwner', '\u2000' + row.localOwnerName + '\u2000');
 					
 					var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
 					var btnNode = that.dom.addNode(rightNode, 'button', 'versIcon');

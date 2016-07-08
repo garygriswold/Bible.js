@@ -67,7 +67,7 @@ VersionsAdapter.prototype.selectCountries = function(callback) {
 	});
 };
 VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
-	var statement =	'SELECT v.versionCode, l.localLanguageName, l.langCode, v.localVersionName, v.versionAbbr,' +
+	var statement =	'SELECT v.versionCode, l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr,' +
 		' v.copyright, v.filename, o.localOwnerName, o.ownerURL' +
 		' FROM Version v' + 
 		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
