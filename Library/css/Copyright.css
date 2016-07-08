@@ -35,6 +35,7 @@ p.attribLink {
 	color: blue;
 	text-decoration: underline;
 	text-align: center;
+	direction: ltr;
 }
 #closeIcon {
 	margin-top: 7px;
