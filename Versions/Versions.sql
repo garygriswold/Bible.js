@@ -88,7 +88,7 @@ INSERT INTO Version VALUES ('BLPH', 'spa', 'SPN', 'BLPH', 'La Palabra (versión 
 
 -- Arabic Languages
 INSERT INTO Version VALUES ('ARBVDPD', 'arb', 'EBIBLE', 'ARBVD', 'الكتاب المقدس ترجمة فان دايك', 'BIBLE', 'ARBVDPD.db', 'F',
-'Arabic Bible: Van Dyck Version (ARBVD), Public Domain, eBible.org', NULL);
+'Arabic Bible: Van Dyck Translation (ARBVD), Public Domain, eBible.org', NULL);
 INSERT INTO Version VALUES('NMV', 'pes', 'ELAM', 'NMV', 'ترجمۀ هزارۀ نو', 'BIBLE', 'NMV.db', 'F',
 'The Persian New Millennium Version © 2014, is a production of Elam Ministries. All rights reserved', null);
 
