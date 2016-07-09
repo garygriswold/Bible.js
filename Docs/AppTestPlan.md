@@ -56,7 +56,7 @@ App Update
 	5. Temporarily update the version number.  Log should show each previously opened database being deleted
 	6. Verify databases will open
 	7. Repeat the above tests on Android
-	8. Temp change the directories and filenames and verify crash resistence.
+	8. Temp change the directories and filenames and verify crash resistance.
 
 CodexView
 ---------
