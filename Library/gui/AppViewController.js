@@ -125,7 +125,7 @@ AppViewController.prototype.begin = function(develop) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
 		that.touch.on("panright", function(event) {
-			if (event.deltaX > 4 * Math.abs(event.deltaY)) {
+			if (that.version.hasHistory && event.deltaX > 4 * Math.abs(event.deltaY)) {
 				that.historyView.showView();
 			}
 		});

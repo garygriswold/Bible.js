@@ -174,7 +174,7 @@ AppViewController.prototype.begin = function(develop) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
 		that.touch.on("panright", function(event) {
-			if (event.deltaX > 4 * Math.abs(event.deltaY)) {
+			if (that.version.hasHistory && event.deltaX > 4 * Math.abs(event.deltaY)) {
 				that.historyView.showView();
 			}
 		});
@@ -2948,7 +2948,7 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
 	});
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
-	var statement = 'SELECT v.versionCode, v.silCode, v.isQaActive, v.copyright, v.introduction,' +
+	var statement = 'SELECT v.versionCode, v.silCode, v.hasHistory, v.isQaActive, v.copyright, v.introduction,' +
 		' l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr, o.ownerCode, o.localOwnerName, o.ownerURL' +
 		' FROM Version v' +
 		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
@@ -3236,6 +3236,7 @@ function BibleVersion() {
 	this.silCode = null;
 	this.langCode = null;
 	this.direction = null;
+	this.hasHistory = null;
 	this.isQaActive = null;
 	this.versionAbbr = null;
 	this.localLanguageName = null;
@@ -3259,6 +3260,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.silCode = 'eng';
 			that.langCode = 'en';
 			that.direction = 'ltr';
+			that.hasHistory = true;
 			that.isQaActive = 'F';
 			that.versionAbbr = 'WEB';
 			that.localLanguageName = 'English';
@@ -3276,6 +3278,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.silCode = row.silCode;
 			that.langCode = row.langCode;
 			that.direction = row.direction;
+			that.hasHistory = (row.hasHistory === 'T');
 			that.isQaActive = row.isQaActive;
 			that.versionAbbr = row.versionAbbr;
 			that.localLanguageName = row.localLanguageName;

@@ -9,6 +9,7 @@ function BibleVersion() {
 	this.silCode = null;
 	this.langCode = null;
 	this.direction = null;
+	this.hasHistory = null;
 	this.isQaActive = null;
 	this.versionAbbr = null;
 	this.localLanguageName = null;
@@ -32,6 +33,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.silCode = 'eng';
 			that.langCode = 'en';
 			that.direction = 'ltr';
+			that.hasHistory = true;
 			that.isQaActive = 'F';
 			that.versionAbbr = 'WEB';
 			that.localLanguageName = 'English';
@@ -49,6 +51,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.silCode = row.silCode;
 			that.langCode = row.langCode;
 			that.direction = row.direction;
+			that.hasHistory = (row.hasHistory === 'T');
 			that.isQaActive = row.isQaActive;
 			that.versionAbbr = row.versionAbbr;
 			that.localLanguageName = row.localLanguageName;
