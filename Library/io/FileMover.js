@@ -51,7 +51,10 @@ FileMover.prototype.copyFiles = function(callback) {
 				getDirEntry(targetDir, function(dirEntry) {
 					targetDirEntry = dirEntry;
 					getFiles(dirEntry, function(targetDirMap, targetDirArray) {
-						doRemoves(0, sourceDirArray, targetDirMap, callback);
+						doRemoves(0, sourceDirArray, targetDirMap, function() {
+							updateSettings(Object.keys(sourceDirMap), Object.keys(targetDirMap));
+							callback();
+						});
 					});
 				});
 			});
@@ -91,7 +94,7 @@ FileMover.prototype.copyFiles = function(callback) {
 	}
 	
 	function doRemoves(index, sourceFiles, targetFiles, callback) {
-		if (index >= Object.keys(sourceFiles).length) {
+		if (index >= sourceFiles.length) {
 			that.settingStorage.setAppVersion(BuildInfo.version);
 			callback();
 		} else {
@@ -111,6 +114,33 @@ FileMover.prototype.copyFiles = function(callback) {
 				doRemoves(index + 1, sourceFiles, targetFiles, callback);
 			}
 		}
+	}
+	
+	function updateSettings(sourceFiles, targetFiles) {
+		var files = sourceFiles.concat(targetFiles);
+		var replace = {};
+		var now = new Date().toISOString();
+		for (var i=0; i<files.length; i++) {
+			var filename = files[i];
+			var version = filename.split('.')[0];
+			var nameEnd = (filename.length > 7) ? filename.substr(filename.length - 7) : '';
+			if (version !== 'Settings' && version !== 'Versions' && nameEnd !== 'User.db') {
+				replace[version] = [version, filename, now];
+				console.log('SET INSTALLED', version, filename);
+			}			
+		}
+		var values = objectValues(replace);
+		that.settingStorage.bulkReplaceVersions(values, now);
+	}
+	
+	function objectValues(map) {
+		var values = [];
+		var keys = Object.keys(map);
+		for (var i=0; i<keys.length; i++) {
+			var key = keys[i];
+			values.push(map[key]);
+		}
+		return(values);
 	}
 };
 

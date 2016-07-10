@@ -14,7 +14,6 @@ AppInitializer.prototype.begin = function() {
     	console.log('START MOVE FILES');
 		fileMover.copyFiles(function() {
 			console.log('DONE WITH MOVE FILES');
-			settingStorage.initSettings();   
 		    settingStorage.getCurrentVersion(function(versionFilename) {
 				if (versionFilename == null) {
 					deviceSettings.prefLanguage(function(locale) {

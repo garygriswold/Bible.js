@@ -16,7 +16,6 @@ AppInitializer.prototype.begin = function() {
     	console.log('START MOVE FILES');
 		fileMover.copyFiles(function() {
 			console.log('DONE WITH MOVE FILES');
-			settingStorage.initSettings();   
 		    settingStorage.getCurrentVersion(function(versionFilename) {
 				if (versionFilename == null) {
 					deviceSettings.prefLanguage(function(locale) {
@@ -1644,6 +1643,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					}
 				}
 			}
+			debugLogVersions();
 		});
 	});
 	
@@ -1670,6 +1670,17 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
 				}
 			});
+		});
+	}
+	function debugLogVersions() {
+		var versionNames = Object.keys(that.settingStorage.loadedVersions);
+		for (var i=0; i<versionNames.length; i++) {
+			var version = versionNames[i];
+			var filename = that.settingStorage.loadedVersions[version];
+			console.log('INSTALLED VERSION', version, filename);
+		}
+		that.settingStorage.selectSettings(function(results) {
+			console.log('SETTINGS', JSON.stringify(results));
 		});
 	}
 };
@@ -2115,6 +2126,20 @@ SettingStorage.prototype.setItem = function(name, value) {
 	   }
     });
 };
+SettingStorage.prototype.selectSettings = function(callback) {
+	this.database.select('SELECT name, value FROM Settings', [], function(results) {
+		if (results instanceof IOError) {
+			console.log('Select Settings', JSON.stringify(results));
+		} else {
+			var map = {};
+			for (var i=0; i<results.rows.length; i++) {
+	        	var row = results.rows.item(i);
+	   			map[row.name] = row.value;     	
+        	}
+        	callback(map);
+		}
+	})	
+};
 /**
 * Versions
 */
@@ -2151,15 +2176,24 @@ SettingStorage.prototype.setVersion = function(version, filename) {
 		}
 	});
 };
-SettingStorage.prototype.removeVersion = function(version) {
-	this.database.executeDML('DELETE FROM Installed WHERE version=?', [version], function(results) {
+SettingStorage.prototype.bulkReplaceVersions = function(versions, now) {
+	var that = this;
+	this.database.bulkExecuteDML('REPLACE INTO Installed(version, filename, timestamp) VALUES (?,?,?)', versions, function(results) {
 		if (results instanceof IOError) {
-			console.log('RemoveVersion', version, JSON.stringify(results));
+			console.log('Replace All Installed', JSON.stringify(results));
 		} else {
-			console.log('RemoveVersion', version);
+			var insertCount = results;
+			that.database.executeDML('DELETE FROM Installed WHERE timestamp != ?', [now], function(results) {
+				if (results instanceof IOError) {
+					console.log('Delete from Installed', JSON.stringify(results));
+				} else {
+					console.log('Replace All Installed Inserts=', insertCount, ' Deletes=', results);
+				}
+			});
 		}
 	});
 };
+
 /**
 * This class encapsulates the WebSQL function calls, and exposes a rather generic SQL
 * interface so that WebSQL could be easily replaced if necessary.
@@ -3088,7 +3122,10 @@ FileMover.prototype.copyFiles = function(callback) {
 				getDirEntry(targetDir, function(dirEntry) {
 					targetDirEntry = dirEntry;
 					getFiles(dirEntry, function(targetDirMap, targetDirArray) {
-						doRemoves(0, sourceDirArray, targetDirMap, callback);
+						doRemoves(0, sourceDirArray, targetDirMap, function() {
+							updateSettings(Object.keys(sourceDirMap), Object.keys(targetDirMap));
+							callback();
+						});
 					});
 				});
 			});
@@ -3128,7 +3165,7 @@ FileMover.prototype.copyFiles = function(callback) {
 	}
 	
 	function doRemoves(index, sourceFiles, targetFiles, callback) {
-		if (index >= Object.keys(sourceFiles).length) {
+		if (index >= sourceFiles.length) {
 			that.settingStorage.setAppVersion(BuildInfo.version);
 			callback();
 		} else {
@@ -3148,6 +3185,33 @@ FileMover.prototype.copyFiles = function(callback) {
 				doRemoves(index + 1, sourceFiles, targetFiles, callback);
 			}
 		}
+	}
+	
+	function updateSettings(sourceFiles, targetFiles) {
+		var files = sourceFiles.concat(targetFiles);
+		var replace = {};
+		var now = new Date().toISOString();
+		for (var i=0; i<files.length; i++) {
+			var filename = files[i];
+			var version = filename.split('.')[0];
+			var nameEnd = (filename.length > 7) ? filename.substr(filename.length - 7) : '';
+			if (version !== 'Settings' && version !== 'Versions' && nameEnd !== 'User.db') {
+				replace[version] = [version, filename, now];
+				console.log('SET INSTALLED', version, filename);
+			}			
+		}
+		var values = objectValues(replace);
+		that.settingStorage.bulkReplaceVersions(values, now);
+	}
+	
+	function objectValues(map) {
+		var values = [];
+		var keys = Object.keys(map);
+		for (var i=0; i<keys.length; i++) {
+			var key = keys[i];
+			values.push(map[key]);
+		}
+		return(values);
 	}
 };
 

@@ -21,7 +21,6 @@ function InstallVersions(options) {
 InstallVersions.prototype.install = function(callback) {
 	var that = this;
 	var defaultVersion = null;
-	var initSettingsJS = ['SettingStorage.prototype.initSettings = function() {\n'];
 	var defaultSettingsJS = ['SettingStorage.prototype.defaultVersion = function(lang) {\n'];
 	defaultSettingsJS.push('\tswitch(lang) {\n');
 	
@@ -48,20 +47,18 @@ InstallVersions.prototype.install = function(callback) {
 					defaultVersion = row.filename;
 				}
 			}
-			initSettingsJS.push('\tthis.setVersion("' + row.versionCode + '", "' + row.filename + '");\n');
 			that.copyFile('../../DBL/5ready/' + row.filename, '../YourBible/www/', function() {
 				console.log('Finished copy', row.filename);
 				processRow(results, index + 1);
 			});
 		} else {
-			initSettingsJS.push('};\n');
 			if (defaultVersion == null) {
 				this.error('There is no default version for English');
 			}
 			defaultSettingsJS.push('\t\tdefault: return("', defaultVersion, '");\n');
 			defaultSettingsJS.push('\t}\n');
 			defaultSettingsJS.push('};\n');
-			var generatedJS = initSettingsJS.join('') + defaultSettingsJS.join('');
+			var generatedJS = defaultSettingsJS.join('');
 			that.fs.writeFile('../YourBible/www/js/SettingStorageInitSettings.js', generatedJS, {encoding: 'utf8'}, function(err) {
 				if (err) {
 					that.error('InstallVersion.writeFile', err);

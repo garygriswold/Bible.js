@@ -81,6 +81,20 @@ SettingStorage.prototype.setItem = function(name, value) {
 	   }
     });
 };
+SettingStorage.prototype.selectSettings = function(callback) {
+	this.database.select('SELECT name, value FROM Settings', [], function(results) {
+		if (results instanceof IOError) {
+			console.log('Select Settings', JSON.stringify(results));
+		} else {
+			var map = {};
+			for (var i=0; i<results.rows.length; i++) {
+	        	var row = results.rows.item(i);
+	   			map[row.name] = row.value;     	
+        	}
+        	callback(map);
+		}
+	})	
+};
 /**
 * Versions
 */
@@ -117,12 +131,21 @@ SettingStorage.prototype.setVersion = function(version, filename) {
 		}
 	});
 };
-SettingStorage.prototype.removeVersion = function(version) {
-	this.database.executeDML('DELETE FROM Installed WHERE version=?', [version], function(results) {
+SettingStorage.prototype.bulkReplaceVersions = function(versions, now) {
+	var that = this;
+	this.database.bulkExecuteDML('REPLACE INTO Installed(version, filename, timestamp) VALUES (?,?,?)', versions, function(results) {
 		if (results instanceof IOError) {
-			console.log('RemoveVersion', version, JSON.stringify(results));
+			console.log('Replace All Installed', JSON.stringify(results));
 		} else {
-			console.log('RemoveVersion', version);
+			var insertCount = results;
+			that.database.executeDML('DELETE FROM Installed WHERE timestamp != ?', [now], function(results) {
+				if (results instanceof IOError) {
+					console.log('Delete from Installed', JSON.stringify(results));
+				} else {
+					console.log('Replace All Installed Inserts=', insertCount, ' Deletes=', results);
+				}
+			});
 		}
 	});
 };
+

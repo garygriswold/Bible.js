@@ -120,6 +120,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					}
 				}
 			}
+			debugLogVersions();
 		});
 	});
 	
@@ -146,6 +147,17 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
 				}
 			});
+		});
+	}
+	function debugLogVersions() {
+		var versionNames = Object.keys(that.settingStorage.loadedVersions);
+		for (var i=0; i<versionNames.length; i++) {
+			var version = versionNames[i];
+			var filename = that.settingStorage.loadedVersions[version];
+			console.log('INSTALLED VERSION', version, filename);
+		}
+		that.settingStorage.selectSettings(function(results) {
+			console.log('SETTINGS', JSON.stringify(results));
 		});
 	}
 };
