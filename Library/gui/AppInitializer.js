@@ -10,9 +10,9 @@ AppInitializer.prototype.begin = function() {
 	var that = this;
     var settingStorage = new SettingStorage();
     settingStorage.create(function() {
-    	var fileMover = new FileMover(settingStorage);
+    	var appUpdater = new AppUpdater(settingStorage);
     	console.log('START MOVE FILES');
-		fileMover.copyFiles(function() {
+		appUpdater.copyFiles(function() {
 			console.log('DONE WITH MOVE FILES');
 		    settingStorage.getCurrentVersion(function(versionFilename) {
 				changeVersionHandler(versionFilename);

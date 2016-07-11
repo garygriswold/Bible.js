@@ -11,9 +11,9 @@ AppInitializer.prototype.begin = function() {
 	var that = this;
     var settingStorage = new SettingStorage();
     settingStorage.create(function() {
-    	var fileMover = new FileMover(settingStorage);
+    	var appUpdater = new AppUpdater(settingStorage);
     	console.log('START MOVE FILES');
-		fileMover.copyFiles(function() {
+		appUpdater.copyFiles(function() {
 			console.log('DONE WITH MOVE FILES');
 		    settingStorage.getCurrentVersion(function(versionFilename) {
 				changeVersionHandler(versionFilename);
@@ -3089,11 +3089,11 @@ HttpClient.prototype.request = function(method, path, postData, callback) {
 * of those deleted databases is opened, the DatabaseHelper class will first copy
 * the database from the www directory to the databases directory.
 */
-function FileMover(settingStorage) {
+function AppUpdater(settingStorage) {
 	this.settingStorage = settingStorage;
 	Object.seal(this);
 }
-FileMover.prototype.copyFiles = function(callback) {
+AppUpdater.prototype.copyFiles = function(callback) {
 	var that = this;
 	var sourceDir = null;
 	var targetDir = null;
@@ -3325,7 +3325,6 @@ BibleVersion.prototype.fill = function(filename, callback) {
 		populateVersion(filename);
 	} else {
 		deviceSettings.prefLanguage(function(locale) {
-			locale = 'xx-XX';
 			var parts = locale.split('-');
 			versionsAdapter.defaultVersion(parts[0], function(filename) {
 				populateVersion(filename);

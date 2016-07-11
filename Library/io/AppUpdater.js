@@ -13,11 +13,11 @@
 * of those deleted databases is opened, the DatabaseHelper class will first copy
 * the database from the www directory to the databases directory.
 */
-function FileMover(settingStorage) {
+function AppUpdater(settingStorage) {
 	this.settingStorage = settingStorage;
 	Object.seal(this);
 }
-FileMover.prototype.copyFiles = function(callback) {
+AppUpdater.prototype.copyFiles = function(callback) {
 	var that = this;
 	var sourceDir = null;
 	var targetDir = null;

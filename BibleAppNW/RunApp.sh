@@ -46,7 +46,7 @@ cat ../Library/io/HistoryAdapter.js >> js/BibleApp.js
 cat ../Library/io/QuestionsAdapter.js >> js/BibleApp.js
 cat ../Library/io/VersionsAdapter.js >> js/BibleApp.js
 cat ../Library/io/HttpClient.js >> js/BibleApp.js
-cat ../Library/io/FileMover.js >> js/BibleApp.js
+cat ../Library/io/AppUpdater.js >> js/BibleApp.js
 cat ../Library/io/FileDownloader.js >> js/BibleApp.js
 
 cat ../Library/model/meta/BibleVersion.js >> js/BibleApp.js
