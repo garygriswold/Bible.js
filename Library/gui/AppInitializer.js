@@ -15,22 +15,12 @@ AppInitializer.prototype.begin = function() {
 		fileMover.copyFiles(function() {
 			console.log('DONE WITH MOVE FILES');
 		    settingStorage.getCurrentVersion(function(versionFilename) {
-				if (versionFilename == null) {
-					deviceSettings.prefLanguage(function(locale) {
-						var parts = locale.split('-');
-						versionFilename = settingStorage.defaultVersion(parts[0]);
-						settingStorage.setCurrentVersion(versionFilename);
-						changeVersionHandler(versionFilename);
-					});
-				} else {
-					changeVersionHandler(versionFilename);
-				}
+				changeVersionHandler(versionFilename);
 			});
     	});
     });
     
     document.body.addEventListener(BIBLE.CHG_VERSION, function(event) {
-		settingStorage.setCurrentVersion(event.detail.version);
 		changeVersionHandler(event.detail.version);
 	});
 		
@@ -41,6 +31,7 @@ AppInitializer.prototype.begin = function() {
 			if (that.appViewController) {
 				that.appViewController.close();
 			}
+			settingStorage.setCurrentVersion(bibleVersion.filename);
 			that.appViewController = new AppViewController(bibleVersion, settingStorage);
 			that.appViewController.begin();			
 		});

@@ -104,6 +104,21 @@ VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callba
 		}
 	});
 };
+VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
+	var statement = 'SELECT v.filename' +
+			' FROM Version v JOIN InstalledVersion s ON s.versionCode = v.versionCode' +
+			' WHERE s.endDate IS NULL' +
+			' AND s.localeDefault = ?';
+	this.database.select(statement, [lang], function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else if (results.rows.length === 0) {
+			callback('WEB.db');
+		} else {
+			callback(results.rows.item(0).filename);
+		}
+	});
+};
 VersionsAdapter.prototype.close = function() {
 	this.database.close();		
 };

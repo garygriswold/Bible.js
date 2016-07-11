@@ -16,22 +16,12 @@ AppInitializer.prototype.begin = function() {
 		fileMover.copyFiles(function() {
 			console.log('DONE WITH MOVE FILES');
 		    settingStorage.getCurrentVersion(function(versionFilename) {
-				if (versionFilename == null) {
-					deviceSettings.prefLanguage(function(locale) {
-						var parts = locale.split('-');
-						versionFilename = settingStorage.defaultVersion(parts[0]);
-						settingStorage.setCurrentVersion(versionFilename);
-						changeVersionHandler(versionFilename);
-					});
-				} else {
-					changeVersionHandler(versionFilename);
-				}
+				changeVersionHandler(versionFilename);
 			});
     	});
     });
     
     document.body.addEventListener(BIBLE.CHG_VERSION, function(event) {
-		settingStorage.setCurrentVersion(event.detail.version);
 		changeVersionHandler(event.detail.version);
 	});
 		
@@ -42,6 +32,7 @@ AppInitializer.prototype.begin = function() {
 			if (that.appViewController) {
 				that.appViewController.close();
 			}
+			settingStorage.setCurrentVersion(bibleVersion.filename);
 			that.appViewController = new AppViewController(bibleVersion, settingStorage);
 			that.appViewController.begin();			
 		});
@@ -2998,6 +2989,21 @@ VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callba
 		}
 	});
 };
+VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
+	var statement = 'SELECT v.filename' +
+			' FROM Version v JOIN InstalledVersion s ON s.versionCode = v.versionCode' +
+			' WHERE s.endDate IS NULL' +
+			' AND s.localeDefault = ?';
+	this.database.select(statement, [lang], function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else if (results.rows.length === 0) {
+			callback('WEB.db');
+		} else {
+			callback(results.rows.item(0).filename);
+		}
+	});
+};
 VersionsAdapter.prototype.close = function() {
 	this.database.close();		
 };
@@ -3315,46 +3321,60 @@ function BibleVersion() {
 BibleVersion.prototype.fill = function(filename, callback) {
 	var that = this;
 	var versionsAdapter = new VersionsAdapter();
-	versionsAdapter.selectVersionByFilename(filename, function(row) {
-		if (row instanceof IOError) {
-			console.log('IOError selectVersionByFilename', JSON.stringify(row));
-			that.code = 'WEB';
-			that.filename = 'WEB.db';
-			that.userFilename = 'WEBUser.db';
-			that.silCode = 'eng';
-			that.langCode = 'en';
-			that.direction = 'ltr';
-			that.hasHistory = true;
-			that.isQaActive = 'F';
-			that.versionAbbr = 'WEB';
-			that.localLanguageName = 'English';
-			that.localVersionName = 'World English Bible';
-			that.ownerCode = 'EB';
-			that.ownerName = 'eBible';
-			that.ownerURL = 'www.eBible.org';
-			that.copyright = 'World English Bible (WEB), Public Domain, eBible.';
-			that.introduction = null;
-		} else {
-			that.code = row.versionCode;
-			that.filename = filename;
-			var parts = filename.split('.');
-			that.userFilename = parts[0] + 'User.db';
-			that.silCode = row.silCode;
-			that.langCode = row.langCode;
-			that.direction = row.direction;
-			that.hasHistory = (row.hasHistory === 'T');
-			that.isQaActive = row.isQaActive;
-			that.versionAbbr = row.versionAbbr;
-			that.localLanguageName = row.localLanguageName;
-			that.localVersionName = row.localVersionName;
-			that.ownerCode = row.ownerCode;
-			that.ownerName = row.localOwnerName;
-			that.ownerURL = row.ownerURL;
-			that.copyright = row.copyright;
-			that.introduction = row.introduction;
-		}
-		callback();
-	});
+	if (filename) {
+		populateVersion(filename);
+	} else {
+		deviceSettings.prefLanguage(function(locale) {
+			locale = 'xx-XX';
+			var parts = locale.split('-');
+			versionsAdapter.defaultVersion(parts[0], function(filename) {
+				populateVersion(filename);
+			});
+		});		
+	}
+	
+	function populateVersion(filename) {
+		versionsAdapter.selectVersionByFilename(filename, function(row) {
+			if (row instanceof IOError) {
+				console.log('IOError selectVersionByFilename', JSON.stringify(row));
+				that.code = 'WEB';
+				that.filename = 'WEB.db';
+				that.userFilename = 'WEBUser.db';
+				that.silCode = 'eng';
+				that.langCode = 'en';
+				that.direction = 'ltr';
+				that.hasHistory = true;
+				that.isQaActive = 'F';
+				that.versionAbbr = 'WEB';
+				that.localLanguageName = 'English';
+				that.localVersionName = 'World English Bible';
+				that.ownerCode = 'EBIBLE';
+				that.ownerName = 'eBible.org';
+				that.ownerURL = 'www.eBible.org';
+				that.copyright = 'World English Bible (WEB), Public Domain, eBible.';
+				that.introduction = null;
+			} else {
+				that.code = row.versionCode;
+				that.filename = filename;
+				var parts = filename.split('.');
+				that.userFilename = parts[0] + 'User.db';
+				that.silCode = row.silCode;
+				that.langCode = row.langCode;
+				that.direction = row.direction;
+				that.hasHistory = (row.hasHistory === 'T');
+				that.isQaActive = row.isQaActive;
+				that.versionAbbr = row.versionAbbr;
+				that.localLanguageName = row.localLanguageName;
+				that.localVersionName = row.localVersionName;
+				that.ownerCode = row.ownerCode;
+				that.ownerName = row.localOwnerName;
+				that.ownerURL = row.ownerURL;
+				that.copyright = row.copyright;
+				that.introduction = row.introduction;
+			}
+			callback();
+		});
+	}
 };
 
 /**

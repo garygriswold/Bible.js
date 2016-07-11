@@ -1,7 +1,6 @@
 /**
 * InstallVersions prepares the App for a specific store, placing in the
-* App those versions that are intended for that store.  And updating
-* the Settings table with those installed versions.
+* App those versions that are intended for that store.
 */
 function InstallVersions(options) {
 	var sqlite3 = (options.verbose) ? require('sqlite3').verbose() : require('sqlite3');
@@ -20,10 +19,6 @@ function InstallVersions(options) {
 }
 InstallVersions.prototype.install = function(callback) {
 	var that = this;
-	var defaultVersion = null;
-	var defaultSettingsJS = ['SettingStorage.prototype.defaultVersion = function(lang) {\n'];
-	defaultSettingsJS.push('\tswitch(lang) {\n');
-	
 	var statement = 'SELECT v.versionCode, v.filename, s.localeDefault' +
 			' FROM Version v JOIN InstalledVersion s ON s.versionCode = v.versionCode' +
 			' WHERE s.endDate IS NULL';
@@ -41,31 +36,12 @@ InstallVersions.prototype.install = function(callback) {
 		if (index < results.length) {
 			var row = results[index];
 			console.log(row);
-			if (row.localeDefault) {
-				defaultSettingsJS.push('\t\tcase "', row.localeDefault, '": return("', row.filename, '");\n');
-				if (row.localeDefault === 'en') {
-					defaultVersion = row.filename;
-				}
-			}
 			that.copyFile('../../DBL/5ready/' + row.filename, '../YourBible/www/', function() {
 				console.log('Finished copy', row.filename);
 				processRow(results, index + 1);
 			});
 		} else {
-			if (defaultVersion == null) {
-				this.error('There is no default version for English');
-			}
-			defaultSettingsJS.push('\t\tdefault: return("', defaultVersion, '");\n');
-			defaultSettingsJS.push('\t}\n');
-			defaultSettingsJS.push('};\n');
-			var generatedJS = defaultSettingsJS.join('');
-			that.fs.writeFile('../YourBible/www/js/SettingStorageInitSettings.js', generatedJS, {encoding: 'utf8'}, function(err) {
-				if (err) {
-					that.error('InstallVersion.writeFile', err);
-				} else {
-					callback();
-				}
-			});
+			callback();
 		}
 	}
 };
