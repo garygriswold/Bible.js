@@ -91,11 +91,10 @@ function AppViewController(version, settingStorage) {
 	this.styleIndex = new StyleIndexAdapter(this.database);
 	this.styleUse = new StyleUseAdapter(this.database);
 
-	this.userDatabase = new DatabaseHelper(version.userFilename, false);
-	this.history = new HistoryAdapter(this.userDatabase);
-	this.history.create(function(){});
-	this.questions = new QuestionsAdapter(this.userDatabase);
-	this.questions.create(function(){});
+	this.history = new HistoryAdapter(this.settingStorage.database);
+	this.history.create(function(){});// should be moved to app install??
+	this.questions = new QuestionsAdapter(this.settingStorage.database);
+	this.questions.create(function(){});// should be moved to app install??
 }
 AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.tableAdapter);
@@ -251,10 +250,6 @@ AppViewController.prototype.close = function() {
 	if (this.database) {
 		this.database.close();
 		this.database = null;
-	}
-	if (this.userDatabase) {
-		this.userDatabase.close();
-		this.userDatabase = null;
 	}
 	// views
 	this.header = null;
@@ -2699,17 +2694,17 @@ function HistoryAdapter(database) {
 	Object.seal(this);
 }
 HistoryAdapter.prototype.drop = function(callback) {
-	this.database.executeDDL('drop table if exists history', function(err) {
+	this.database.executeDDL('drop table if exists History', function(err) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop history success');
+			console.log('drop History success');
 			callback();
 		}
 	});
 };
 HistoryAdapter.prototype.create = function(callback) {
-	var statement = 'create table if not exists history(' +
+	var statement = 'create table if not exists History(' +
 		'timestamp text not null primary key, ' +
 		'reference text not null unique, ' +
 		'source text not null, ' +
@@ -2718,14 +2713,14 @@ HistoryAdapter.prototype.create = function(callback) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('create history success');
+			console.log('create History success');
 			callback();
 		}
 	});
 };
 HistoryAdapter.prototype.selectPassages = function(callback) {
 	var that = this;
-	var statement = 'select reference from history order by timestamp desc limit ?';
+	var statement = 'select reference from History order by timestamp desc limit ?';
 	this.database.select(statement, [ MAX_HISTORY ], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.selectAll Error', JSON.stringify(results));
@@ -2742,7 +2737,7 @@ HistoryAdapter.prototype.selectPassages = function(callback) {
 	});
 };
 HistoryAdapter.prototype.lastItem = function(callback) {
-	var statement = 'select reference from history order by rowid desc limit 1';
+	var statement = 'select reference from History order by rowid desc limit 1';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.lastItem Error', JSON.stringify(results));
@@ -2758,7 +2753,7 @@ HistoryAdapter.prototype.lastItem = function(callback) {
 	});
 };
 HistoryAdapter.prototype.lastConcordanceSearch = function(callback) {
-	var statement = 'select search from history where search is not null order by timestamp desc limit 1';
+	var statement = 'select search from History where search is not null order by timestamp desc limit 1';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			console.log('HistoryAdapter.lastConcordance Error', JSON.stringify(results));
@@ -2776,7 +2771,7 @@ HistoryAdapter.prototype.lastConcordanceSearch = function(callback) {
 HistoryAdapter.prototype.replace = function(item, callback) {
 	var timestampStr = item.timestamp.toISOString();
 	var values = [ timestampStr, item.reference, item.source, item.search || null ];
-	var statement = 'replace into history(timestamp, reference, source, search) values (?,?,?,?)';
+	var statement = 'replace into History(timestamp, reference, source, search) values (?,?,?,?)';
 	var that = this;
 	this.lastSelectCurrent = false;
 	this.database.executeDML(statement, values, function(count) {
@@ -2791,7 +2786,7 @@ HistoryAdapter.prototype.replace = function(item, callback) {
 	});
 };
 HistoryAdapter.prototype.cleanup = function(callback) {
-	var statement = ' delete from history where ? < (select count(*) from history) and timestamp = (select min(timestamp) from history)';
+	var statement = ' delete from History where ? < (select count(*) from History) and timestamp = (select min(timestamp) from History)';
 	this.database.executeDML(statement, [ MAX_HISTORY ], function(count) {
 		if (count instanceof IOError) {
 			console.log('delete error', JSON.stringify(count));
@@ -2809,17 +2804,17 @@ function QuestionsAdapter(database) {
 	Object.freeze(this);
 }
 QuestionsAdapter.prototype.drop = function(callback) {
-	this.database.executeDDL('drop table if exists questions', function(err) {
+	this.database.executeDDL('drop table if exists Questions', function(err) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('drop questions success');
+			console.log('drop Questions success');
 			callback();
 		}
 	});
 };
 QuestionsAdapter.prototype.create = function(callback) {
-	var statement = 'create table if not exists questions(' +
+	var statement = 'create table if not exists Questions(' +
 		'askedDateTime text not null primary key, ' +
 		'discourseId text not null, ' +
 		'reference text null, ' + // possibly should be not null
@@ -2831,17 +2826,17 @@ QuestionsAdapter.prototype.create = function(callback) {
 		if (err instanceof IOError) {
 			callback(err);
 		} else {
-			console.log('create questions success');
+			console.log('create Questions success');
 			callback();
 		}
 	});
 };
 QuestionsAdapter.prototype.selectAll = function(callback) {
 	var statement = 'select discourseId, reference, question, askedDateTime, instructor, answerDateTime, answer ' +
-		'from questions order by askedDateTime';
+		'from Questions order by askedDateTime';
 	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
-			console.log('select questions failure ' + JSON.stringify(results));
+			console.log('select Questions failure ' + JSON.stringify(results));
 			callback(results);
 		} else {
 			var array = [];
@@ -2859,7 +2854,7 @@ QuestionsAdapter.prototype.selectAll = function(callback) {
 	});
 };
 QuestionsAdapter.prototype.replace = function(item, callback) {
-	var statement = 'replace into questions(discourseId, reference, question, askedDateTime) ' +
+	var statement = 'replace into Questions(discourseId, reference, question, askedDateTime) ' +
 		'values (?,?,?,?)';
 	var values = [ item.discourseId, item.reference, item.question, item.askedDateTime.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
@@ -2872,7 +2867,7 @@ QuestionsAdapter.prototype.replace = function(item, callback) {
 	});
 };
 QuestionsAdapter.prototype.update = function(item, callback) {
-	var statement = 'update questions set instructor = ?, answerDateTime = ?, answer = ?' +
+	var statement = 'update Questions set instructor = ?, answerDateTime = ?, answer = ?' +
 		'where askedDateTime = ?';
 	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answer, item.askedDateTime.toISOString() ];
 	this.database.executeDML(statement, values, function(results) {
@@ -3303,7 +3298,6 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 function BibleVersion() {
 	this.code = null;
 	this.filename = null;
-	this.userFilename = null;
 	this.silCode = null;
 	this.langCode = null;
 	this.direction = null;
@@ -3339,7 +3333,6 @@ BibleVersion.prototype.fill = function(filename, callback) {
 				console.log('IOError selectVersionByFilename', JSON.stringify(row));
 				that.code = 'WEB';
 				that.filename = 'WEB.db';
-				that.userFilename = 'WEBUser.db';
 				that.silCode = 'eng';
 				that.langCode = 'en';
 				that.direction = 'ltr';
@@ -3356,8 +3349,6 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			} else {
 				that.code = row.versionCode;
 				that.filename = filename;
-				var parts = filename.split('.');
-				that.userFilename = parts[0] + 'User.db';
 				that.silCode = row.silCode;
 				that.langCode = row.langCode;
 				that.direction = row.direction;

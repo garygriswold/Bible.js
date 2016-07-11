@@ -5,7 +5,6 @@
 function BibleVersion() {
 	this.code = null;
 	this.filename = null;
-	this.userFilename = null;
 	this.silCode = null;
 	this.langCode = null;
 	this.direction = null;
@@ -41,7 +40,6 @@ BibleVersion.prototype.fill = function(filename, callback) {
 				console.log('IOError selectVersionByFilename', JSON.stringify(row));
 				that.code = 'WEB';
 				that.filename = 'WEB.db';
-				that.userFilename = 'WEBUser.db';
 				that.silCode = 'eng';
 				that.langCode = 'en';
 				that.direction = 'ltr';
@@ -58,8 +56,6 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			} else {
 				that.code = row.versionCode;
 				that.filename = filename;
-				var parts = filename.split('.');
-				that.userFilename = parts[0] + 'User.db';
 				that.silCode = row.silCode;
 				that.langCode = row.langCode;
 				that.direction = row.direction;

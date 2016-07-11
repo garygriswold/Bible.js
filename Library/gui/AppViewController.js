@@ -51,11 +51,10 @@ function AppViewController(version, settingStorage) {
 	this.styleIndex = new StyleIndexAdapter(this.database);
 	this.styleUse = new StyleUseAdapter(this.database);
 
-	this.userDatabase = new DatabaseHelper(version.userFilename, false);
-	this.history = new HistoryAdapter(this.userDatabase);
-	this.history.create(function(){});
-	this.questions = new QuestionsAdapter(this.userDatabase);
-	this.questions.create(function(){});
+	this.history = new HistoryAdapter(this.settingStorage.database);
+	this.history.create(function(){});// should be moved to app install??
+	this.questions = new QuestionsAdapter(this.settingStorage.database);
+	this.questions.create(function(){});// should be moved to app install??
 }
 AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.tableAdapter);
@@ -211,10 +210,6 @@ AppViewController.prototype.close = function() {
 	if (this.database) {
 		this.database.close();
 		this.database = null;
-	}
-	if (this.userDatabase) {
-		this.userDatabase.close();
-		this.userDatabase = null;
 	}
 	// views
 	this.header = null;
