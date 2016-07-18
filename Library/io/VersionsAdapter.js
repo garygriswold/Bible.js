@@ -51,7 +51,7 @@ VersionsAdapter.prototype.selectCountries = function(callback) {
 	var statement = 'SELECT countryCode, primLanguage, localCountryName FROM Country ORDER BY localCountryName';
 	this.database.select(statement, null, function(results) {
 		if (results instanceof IOError) {
-			callback(results)
+			callback(results);
 		} else {
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
@@ -73,7 +73,7 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
 		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
 		' JOIN Language l ON v.silCode = l.silCode' +
 		' JOIN CountryVersion cv ON v.versionCode = cv.versionCode' +
-		' WHERE cv.countryCode = ?'
+		' WHERE cv.countryCode = ?';
 	this.database.select(statement, [countryCode], function(results) {
 		if (results instanceof IOError) {
 			callback(results);

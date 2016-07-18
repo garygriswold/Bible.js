@@ -11,16 +11,15 @@ function AppInitializer() {
 AppInitializer.prototype.begin = function() {
 	var that = this;
     var settingStorage = new SettingStorage();
-    settingStorage.create(function() {
-    	var appUpdater = new AppUpdater(settingStorage);
-    	console.log('START MOVE FILES');
-		appUpdater.copyFiles(function() {
-			console.log('DONE WITH MOVE FILES');
-		    settingStorage.getCurrentVersion(function(versionFilename) {
-				changeVersionHandler(versionFilename);
-			});
-    	});
-    });
+	var appUpdater = new AppUpdater(settingStorage);
+	console.log('START APP UPDATER');
+	appUpdater.doUpdate(function() {
+		console.log('DONE APP UPDATER');
+	    settingStorage.getCurrentVersion(function(versionFilename) {
+			changeVersionHandler(versionFilename);
+		});
+	});
+    //});
     
     document.body.addEventListener(BIBLE.CHG_VERSION, function(event) {
 		changeVersionHandler(event.detail.version);
@@ -92,9 +91,7 @@ function AppViewController(version, settingStorage) {
 	this.styleUse = new StyleUseAdapter(this.database);
 
 	this.history = new HistoryAdapter(this.settingStorage.database);
-	this.history.create(function(){});// should be moved to app install??
 	this.questions = new QuestionsAdapter(this.settingStorage.database);
-	this.questions.create(function(){});// should be moved to app install??
 }
 AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.tableAdapter);
@@ -2932,7 +2929,7 @@ VersionsAdapter.prototype.selectCountries = function(callback) {
 	var statement = 'SELECT countryCode, primLanguage, localCountryName FROM Country ORDER BY localCountryName';
 	this.database.select(statement, null, function(results) {
 		if (results instanceof IOError) {
-			callback(results)
+			callback(results);
 		} else {
 			var array = [];
 			for (var i=0; i<results.rows.length; i++) {
@@ -2954,7 +2951,7 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
 		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
 		' JOIN Language l ON v.silCode = l.silCode' +
 		' JOIN CountryVersion cv ON v.versionCode = cv.versionCode' +
-		' WHERE cv.countryCode = ?'
+		' WHERE cv.countryCode = ?';
 	this.database.select(statement, [countryCode], function(results) {
 		if (results instanceof IOError) {
 			callback(results);
@@ -3089,33 +3086,87 @@ function AppUpdater(settingStorage) {
 	this.settingStorage = settingStorage;
 	Object.seal(this);
 }
-AppUpdater.prototype.copyFiles = function(callback) {
+AppUpdater.prototype.doUpdate = function(callback) {
+	var that = this;
+	this.checkIfInstall(function(isInstall) {
+		console.log('Check if Install', isInstall);
+		if (isInstall) {
+			that.createTables(function() {
+				that.moveFiles(function() {
+					callback();
+				});
+			});
+		} else {
+			that.checkIfUpdate(function(isUpdate) {
+				console.log('Check if Update', isUpdate);
+				if (isUpdate) {
+					that.moveFiles(function() {
+						callback();
+					});
+				} else {
+					callback();
+				}
+			});
+		}
+	});
+};
+AppUpdater.prototype.checkIfInstall = function(callback) {
+	var that = this;
+	var doFullInstall = false;
+	var statement = 'SELECT count(*) AS count FROM sqlite_master WHERE type="table" AND name IN ("Settings", "Installed", "History", "Questions")';
+	var db = this.settingStorage.database;
+	db.select(statement, [], function(results) {
+		if (results instanceof IOError) {
+			console.log('SELECT sqlite_master ERROR', JSON.stringify(results));
+			callback(true);
+		} else {
+			var num = results.rows.item(0).count;
+			console.log('found tables', num);
+			callback(num !== 4);
+		}
+	});
+};
+AppUpdater.prototype.checkIfUpdate = function(callback) {
+	this.settingStorage.getAppVersion(function(appVersion) {
+		callback(BuildInfo.version !== appVersion);
+	});
+};
+AppUpdater.prototype.createTables = function(callback) {
+	var that = this;
+	console.log('create setting storage');
+	this.settingStorage.create(function() {
+		console.log('create history');
+		var history = new HistoryAdapter(that.settingStorage.database);
+		history.create(function(){});
+		console.log('create questions');
+		var questions = new QuestionsAdapter(that.settingStorage.database);
+		questions.create(function(){});
+		console.log('before callback');
+		callback();
+	});
+};
+AppUpdater.prototype.moveFiles = function(callback) {
 	var that = this;
 	var sourceDir = null;
 	var targetDir = null;
 	var sourceDirEntry = null;
 	var targetDirEntry = null;
-	this.settingStorage.getAppVersion(function(appVersion) {
-		try {
-			if (BuildInfo.version === appVersion) {
-				callback();
-			} else {
-				sourceDir = cordova.file.applicationDirectory + 'www/';
-				if (deviceSettings.platform() === 'ios') {
-					targetDir = cordova.file.applicationStorageDirectory + 'Library/LocalDatabase/';
-				} else {
-					targetDir = cordova.file.applicationStorageDirectory + 'databases/';
-				}
-				readDirectories(sourceDir, targetDir, callback);
-			}
-		} catch(err) {
-			sourceDir = 'www/';
-			targetDir = '../../../Library/Application Support/BibleAppNW/databases/file__0/';
-			//readDirectories(sourceDir, targetDir, callback); window.resolve... does not work for node-webkit
-			callback();
+	try {
+		sourceDir = cordova.file.applicationDirectory + 'www/';
+		if (deviceSettings.platform() === 'ios') {
+			targetDir = cordova.file.applicationStorageDirectory + 'Library/LocalDatabase/';
+		} else {
+			targetDir = cordova.file.applicationStorageDirectory + 'databases/';
 		}
-	});
-	
+		readDirectories(sourceDir, targetDir, callback);
+	} catch(err) {
+		sourceDir = 'www/';
+		targetDir = '../../../Library/Application Support/BibleAppNW/databases/file__0/';
+		console.log('Unable to AppUpdater.moveFiles in BibleAppNW');
+		//readDirectories(sourceDir, targetDir, callback); window.resolve... does not work for node-webkit
+		callback();
+	}
+
 	function readDirectories(sourceDir, targetDir, callback) {
 		getDirEntry(sourceDir, function(dirEntry) {
 			sourceDirEntry = dirEntry;
@@ -3167,7 +3218,7 @@ AppUpdater.prototype.copyFiles = function(callback) {
 	
 	function doRemoves(index, sourceFiles, targetFiles, callback) {
 		if (index >= sourceFiles.length) {
-			that.settingStorage.setAppVersion(BuildInfo.version);
+			that.updateVersion();
 			callback();
 		} else {
 			var source = sourceFiles[index];
@@ -3215,6 +3266,9 @@ AppUpdater.prototype.copyFiles = function(callback) {
 		return(values);
 	}
 };
+AppUpdater.prototype.updateVersion = function() {
+//	this.settingStorage.setAppVersion(BuildInfo.version);
+};
 
 /**
 * This class encapsulates the Cordova FileTransfer plugin for file download
@@ -3252,7 +3306,7 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 				'x-locale': locale,
 				'x-referer-version': that.currVersion
 			}
-		}
+		};
 	    that.fileTransfer.download(remotePath, tempPath, onDownSuccess, onDownError, true, options);
 	});
     

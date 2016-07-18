@@ -9,16 +9,15 @@ function AppInitializer() {
 AppInitializer.prototype.begin = function() {
 	var that = this;
     var settingStorage = new SettingStorage();
-    settingStorage.create(function() {
-    	var appUpdater = new AppUpdater(settingStorage);
-    	console.log('START MOVE FILES');
-		appUpdater.copyFiles(function() {
-			console.log('DONE WITH MOVE FILES');
-		    settingStorage.getCurrentVersion(function(versionFilename) {
-				changeVersionHandler(versionFilename);
-			});
-    	});
-    });
+	var appUpdater = new AppUpdater(settingStorage);
+	console.log('START APP UPDATER');
+	appUpdater.doUpdate(function() {
+		console.log('DONE APP UPDATER');
+	    settingStorage.getCurrentVersion(function(versionFilename) {
+			changeVersionHandler(versionFilename);
+		});
+	});
+    //});
     
     document.body.addEventListener(BIBLE.CHG_VERSION, function(event) {
 		changeVersionHandler(event.detail.version);

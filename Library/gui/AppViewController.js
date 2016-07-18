@@ -52,9 +52,7 @@ function AppViewController(version, settingStorage) {
 	this.styleUse = new StyleUseAdapter(this.database);
 
 	this.history = new HistoryAdapter(this.settingStorage.database);
-	this.history.create(function(){});// should be moved to app install??
 	this.questions = new QuestionsAdapter(this.settingStorage.database);
-	this.questions.create(function(){});// should be moved to app install??
 }
 AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.tableAdapter);

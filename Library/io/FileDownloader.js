@@ -34,7 +34,7 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 				'x-locale': locale,
 				'x-referer-version': that.currVersion
 			}
-		}
+		};
 	    that.fileTransfer.download(remotePath, tempPath, onDownSuccess, onDownError, true, options);
 	});
     

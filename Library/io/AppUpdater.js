@@ -17,33 +17,83 @@ function AppUpdater(settingStorage) {
 	this.settingStorage = settingStorage;
 	Object.seal(this);
 }
-AppUpdater.prototype.copyFiles = function(callback) {
+AppUpdater.prototype.doUpdate = function(callback) {
+	var that = this;
+	this.checkIfInstall(function(isInstall) {
+		console.log('Check if Install', isInstall);
+		if (isInstall) {
+			that.createTables(function() {
+				that.moveFiles(function() {
+					callback();
+				});
+			});
+		} else {
+			that.checkIfUpdate(function(isUpdate) {
+				console.log('Check if Update', isUpdate);
+				if (isUpdate) {
+					that.moveFiles(function() {
+						callback();
+					});
+				} else {
+					callback();
+				}
+			});
+		}
+	});
+};
+AppUpdater.prototype.checkIfInstall = function(callback) {
+	var that = this;
+	var doFullInstall = false;
+	var statement = 'SELECT count(*) AS count FROM sqlite_master WHERE type="table" AND name IN ("Settings", "Installed", "History", "Questions")';
+	var db = this.settingStorage.database;
+	db.select(statement, [], function(results) {
+		if (results instanceof IOError) {
+			console.log('SELECT sqlite_master ERROR', JSON.stringify(results));
+			callback(true);
+		} else {
+			var num = results.rows.item(0).count;
+			console.log('found tables', num);
+			callback(num !== 4);
+		}
+	});
+};
+AppUpdater.prototype.checkIfUpdate = function(callback) {
+	this.settingStorage.getAppVersion(function(appVersion) {
+		callback(BuildInfo.version !== appVersion);
+	});
+};
+AppUpdater.prototype.createTables = function(callback) {
+	var that = this;
+	this.settingStorage.create(function() {
+		var history = new HistoryAdapter(that.settingStorage.database);
+		history.create(function(){});
+		var questions = new QuestionsAdapter(that.settingStorage.database);
+		questions.create(function(){});
+		callback();
+	});
+};
+AppUpdater.prototype.moveFiles = function(callback) {
 	var that = this;
 	var sourceDir = null;
 	var targetDir = null;
 	var sourceDirEntry = null;
 	var targetDirEntry = null;
-	this.settingStorage.getAppVersion(function(appVersion) {
-		try {
-			if (BuildInfo.version === appVersion) {
-				callback();
-			} else {
-				sourceDir = cordova.file.applicationDirectory + 'www/';
-				if (deviceSettings.platform() === 'ios') {
-					targetDir = cordova.file.applicationStorageDirectory + 'Library/LocalDatabase/';
-				} else {
-					targetDir = cordova.file.applicationStorageDirectory + 'databases/';
-				}
-				readDirectories(sourceDir, targetDir, callback);
-			}
-		} catch(err) {
-			sourceDir = 'www/';
-			targetDir = '../../../Library/Application Support/BibleAppNW/databases/file__0/';
-			//readDirectories(sourceDir, targetDir, callback); window.resolve... does not work for node-webkit
-			callback();
+	try {
+		sourceDir = cordova.file.applicationDirectory + 'www/';
+		if (deviceSettings.platform() === 'ios') {
+			targetDir = cordova.file.applicationStorageDirectory + 'Library/LocalDatabase/';
+		} else {
+			targetDir = cordova.file.applicationStorageDirectory + 'databases/';
 		}
-	});
-	
+		readDirectories(sourceDir, targetDir, callback);
+	} catch(err) {
+		sourceDir = 'www/';
+		targetDir = '../../../Library/Application Support/BibleAppNW/databases/file__0/';
+		console.log('Unable to AppUpdater.moveFiles in BibleAppNW');
+		//readDirectories(sourceDir, targetDir, callback); window.resolve... does not work for node-webkit
+		callback();
+	}
+
 	function readDirectories(sourceDir, targetDir, callback) {
 		getDirEntry(sourceDir, function(dirEntry) {
 			sourceDirEntry = dirEntry;
@@ -95,7 +145,7 @@ AppUpdater.prototype.copyFiles = function(callback) {
 	
 	function doRemoves(index, sourceFiles, targetFiles, callback) {
 		if (index >= sourceFiles.length) {
-			that.settingStorage.setAppVersion(BuildInfo.version);
+			that.updateVersion();
 			callback();
 		} else {
 			var source = sourceFiles[index];
@@ -142,5 +192,8 @@ AppUpdater.prototype.copyFiles = function(callback) {
 		}
 		return(values);
 	}
+};
+AppUpdater.prototype.updateVersion = function() {
+	this.settingStorage.setAppVersion(BuildInfo.version);
 };
 
