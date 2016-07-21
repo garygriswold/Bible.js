@@ -44,6 +44,42 @@ Amazon Cloudfront has a cost of $0.85/GB to $0.17/GB depending upon location, bu
 are any minimum charges.  But, I am not sure about log services, except that it does provide a raw
 log and it does also provide some other data with download without a raw log.
 
+Amazon AWS
+==========
+
+S3
+--
+
+	Using existing username and password, logged into AWS Console.
+	Created a bucket named shortsands
+	Uploaded existing production Bibles in .db.zip form
+	The default permission is that only I can access,
+	But, temporarily change to public and it can be downloaded.
+	Default content-type is application/zip, which is correct
+	
+Cloudfront
+----------
+
+	Establish cloudfront with connection the above S3
+	Have AWS create new user and setup permissions
+	Have SSL required and use a shared SSL .cloudfront.net
+	URL:  d1obplp0ybf6eo.cloudfront.net
+	
+Secure URL
+----------
+
+	Turn on Trusted Signers
+	Create Cloudfront key pair in Console
+	Download and store in Credentials
+	Unfortunately, there are no examples for signing it in JS.
+	
+URL Signing in Node
+	
+	npm install aws-cloudfront-sign
+		aws-cloudfront-sign@2.1.2 node_modules/aws-cloudfront-sign
+		└── lodash@3.10.1
+
+
 KeyCDN
 ======
 
