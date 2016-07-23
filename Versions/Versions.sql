@@ -62,42 +62,44 @@ filename TEXT UNIQUE,
 hasHistory TEXT CHECK (hasHistory IN('T','F')),
 isQaActive TEXT CHECK (isQaActive IN('T','F')),
 copyright TEXT NULL,
-introduction TEXT
+URLSignature TEXT NULL,
+introduction TEXT NULL
 );
 -- Chinese
 INSERT INTO Version VALUES ('CUVSPD', 'cnm', 'EBIBLE', 'CUVS', 'Chinese Union Version (Simplified)', 'BIBLE', 'CUVSPD.db', 'T', 'F',
-'Chinese Union Version (Simplified), Public Domain, eBible.org.', NULL);
+'Chinese Union Version (Simplified), Public Domain, eBible.org.', NULL, NULL);
 INSERT INTO Version VALUES ('CUVTPD', 'cnm', 'EBIBLE', 'CUVT', 'Chinese Union Version (Traditional)', 'BIBLE', 'CUVTPD.db', 'T', 'F',
-'Chinese Union Version (Traditional), Public Domain, eBible.org.', NULL);
+'Chinese Union Version (Traditional), Public Domain, eBible.org.', NULL, NULL);
 
 -- English
-INSERT INTO Version VALUES ('WEB_SHORT', 'eng', 'EBIBLE', 'WEB', 'WEB Genesis and Titus for testing', 'BIBLE_PNT', 'WEB_SHORT.db', 'T', 'F', '', NULL);
+INSERT INTO Version VALUES ('WEB_SHORT', 'eng', 'EBIBLE', 'WEB', 'WEB Genesis and Titus for testing', 'BIBLE_PNT', 'WEB_SHORT.db', 'T', 'F', 
+'', NULL, NULL);
 INSERT INTO Version VALUES ('ESV', 'eng', 'CRSWY', 'ESV', 'English Standard Version', 'BIBLE', 'ESV.db', 'T', 'F', 
-'English Standard Version®, copyright © 2001 by Crossway Bibles, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.', NULL);
+'English Standard Version®, copyright © 2001 by Crossway Bibles, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.', NULL, NULL);
 INSERT INTO Version VALUES ('KJVPD', 'eng', 'EBIBLE', 'KJV', 'King James Version', 'BIBLE', 'KJVPD.db', 'T', 'F', 
-'King James Version 1611 (KJV), Public Domain, eBible.org.', NULL);
+'King James Version 1611 (KJV), Public Domain, eBible.org.', NULL, NULL);
 INSERT INTO Version VALUES ('WEB', 'eng', 'EBIBLE', 'WEB', 'World English Bible', 'BIBLE', 'WEB.db', 'T', 'F', 
-'World English Bible (WEB), Public Domain, eBible.org.', NULL);
+'World English Bible (WEB), Public Domain, eBible.org.', NULL, NULL);
 
 -- Spanish
 INSERT INTO Version VALUES ('RVR09PD', 'spa', 'EBIBLE', 'RVR1909', 'Santa Biblia — Reina Valera 1909', 'BIBLE', 'RVR09PD.db', 'T', 'F', 
-'Santa Biblia — Reina Valera 1909 (RVR1909), Public Domain, eBible.org', NULL);
+'Santa Biblia — Reina Valera 1909 (RVR1909), Public Domain, eBible.org', NULL, NULL);
 INSERT INTO Version VALUES ('BLP', 'spa', 'SPN', 'BLP', 'La Palabra (versión española)', 'BIBLE', 'BLP.db', 'T', 'F', 
-'La Palabra (BLP) versión española Copyright © Sociedad Bíblica de España, 2010 Utilizada con permiso', NULL);
+'La Palabra (BLP) versión española Copyright © Sociedad Bíblica de España, 2010 Utilizada con permiso', NULL, NULL);
 INSERT INTO Version VALUES ('BLPH', 'spa', 'SPN', 'BLPH', 'La Palabra (versión hispanoamericana)','BIBLE', 'BLPH.db', 'T', 'F', 
-'La Palabra (BLPH) versión hispanoamericana Copyright © Sociedad Bíblica de España, 2010 Utilizada con permiso', NULL);
+'La Palabra (BLPH) versión hispanoamericana Copyright © Sociedad Bíblica de España, 2010 Utilizada con permiso', NULL, NULL);
 
 -- Arabic Languages
 INSERT INTO Version VALUES ('ARBVDPD', 'arb', 'EBIBLE', 'ARBVD', 'الكتاب المقدس ترجمة فان دايك', 'BIBLE', 'ARBVDPD.db', 'F', 'F',
-'Arabic Bible: Van Dyck Translation (ARBVD), Public Domain, eBible.org', NULL);
+'Arabic Bible: Van Dyck Translation (ARBVD), Public Domain, eBible.org', NULL, NULL);
 INSERT INTO Version VALUES('NMV', 'pes', 'ELAM', 'NMV', 'ترجمۀ هزارۀ نو', 'BIBLE', 'NMV.db', 'F', 'F',
-'The Persian New Millennium Version © 2014, is a production of Elam Ministries. All rights reserved', null);
+'The Persian New Millennium Version © 2014, is a production of Elam Ministries. All rights reserved', NULL, NULL);
 
 -- Wycliffe
 INSERT INTO Version Values ('amu', 'amu', 'WBT', 'AMU', 'Amuzgo, Guerrero', 'BIBLE_NT', 'AMU.db', 'T', 'F', 
-'Amuzgo, Guerrero, © 1999 by Wycliffe Bible Translators', NULL);
+'Amuzgo, Guerrero, © 1999 by Wycliffe Bible Translators', NULL, NULL);
 INSERT INTO Version Values ('azg', 'azg', 'WBT', 'AZG', 'Amuzgo, San Pedro Amuzgos', 'BIBLE_NT', 'AZG.db', 'T', 'F', 
-'Amuzgo, San Pedro Amuzgos, © 1992 by Wycliffe Bible Translators', NULL);
+'Amuzgo, San Pedro Amuzgos, © 1992 by Wycliffe Bible Translators', NULL, NULL);
 
 
 

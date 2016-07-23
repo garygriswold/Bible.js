@@ -48,6 +48,34 @@ VersionAdapter.prototype.loadIntroductions = function(directory, callback) {
 	});
 };
 /**
+* This method computes URL signatures for AWS cloudfront, and adds this information to the Version table	
+*/
+VersionAdapter.prototype.addURLSignatures = function(callback) {
+	var that = this;
+	var signer = require('aws-cloudfront-sign');
+	var pkeyPath = '../../Credentials/AWSCloudfront/pk-APKAJ7UXJKWYASMHCDEA.pem.txt';
+	var expireTime = new Date(2038, 0, 1); // This is maximum unix Date.
+	var options = {keypairId: 'APKAJ7UXJKWYASMHCDEA', privateKeyPath: pkeyPath, expireTime: expireTime};
+	this.db.all('SELECT versionCode, filename FROM Version', [], function(err, results) {
+		if (err) {
+			console.log('SQL Error in VersionAdapter.addURLSignatures');
+			callback(err);
+		} else {
+			var signed = [];
+			for (var i=0; i<results.length; i++) {
+				var row = results[i];
+				var url = 'https://d1obplp0ybf6eo.cloudfront.net/' + row.filename + '.zip';
+				var signedURL = signer.getSignedUrl(url, options);
+				console.log(row.code, 'Signed URL', signedURL);
+				signed.push([signedURL, row.versionCode]);
+			}
+			that.executeSQL('UPDATE Version SET URLSignature=? WHERE versionCode=?', signed, function(rowCount) {
+				console.log(rowCount, 'Rows of the version table updated');
+			});
+		}
+	});
+};
+/**
 * This method validates that the translation table is complete for all languages in use,
 * and that the same items have been translated for all languages.
 */
@@ -108,13 +136,15 @@ VersionAdapter.prototype.close = function() {
 
 var database = new VersionAdapter({filename: './Versions.db', verbose: false});
 database.loadIntroductions('data/VersionIntro', function() {
-	database.validateTranslation(function(errCount) {
-		database.close();
-		if (errCount == 0) {
-			console.log('SUCCESSFULLY CREATED Versions.db');
-		} else {
-			console.log('COMPLETED WITH ERRORS');
-		}
+	database.addURLSignatures(function() {
+		database.validateTranslation(function(errCount) {
+			database.close();
+			if (errCount == 0) {
+				console.log('SUCCESSFULLY CREATED Versions.db');
+			} else {
+				console.log('COMPLETED WITH ERRORS');
+			}
+		});
 	});
 });
 
