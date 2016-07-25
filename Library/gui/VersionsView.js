@@ -136,7 +136,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		var versionCode = iconNode.id.substr(3);
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		that.settingStorage.getCurrentVersion(function(currVersion) {
-			var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT, currVersion);
+			var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT, that.database, currVersion);
 			downloader.download(versionFile, function(error) {
 				gsPreloader.active(false);
 				if (error) {

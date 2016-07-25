@@ -119,6 +119,18 @@ VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
 		}
 	});
 };
+VersionsAdapter.prototype.selectURL = function(versionFile, callback) {
+	var statement = 'SELECT URLSignature FROM Version WHERE filename=?';
+	this.database.select(statement, [versionFile], function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else if (results.rows.length === 0) {
+			callback();
+		} else {
+			callback(results.rows.item(0).URLSignature);
+		}
+	});
+};
 VersionsAdapter.prototype.close = function() {
 	this.database.close();		
 };

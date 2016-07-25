@@ -52,8 +52,8 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note', // Hide footnote as a result of user action
 	};
-var SERVER_HOST = 'cloud.shortsands.com';//'10.0.1.18';
-var SERVER_PORT = '8080';
+var SERVER_HOST = 'cloudfront.net';//'cloud.shortsands.com';//'10.0.1.18';
+var SERVER_PORT = '80';//'8080';
 
 function bibleShowNoteClick(nodeId) {
 	console.log('show note clicked', nodeId);
@@ -1641,7 +1641,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		var versionCode = iconNode.id.substr(3);
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		that.settingStorage.getCurrentVersion(function(currVersion) {
-			var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT, currVersion);
+			var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT, that.database, currVersion);
 			downloader.download(versionFile, function(error) {
 				gsPreloader.active(false);
 				if (error) {
@@ -2996,6 +2996,18 @@ VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
 		}
 	});
 };
+VersionsAdapter.prototype.selectURL = function(versionFile, callback) {
+	var statement = 'SELECT URLSignature FROM Version WHERE filename=?';
+	this.database.select(statement, [versionFile], function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else if (results.rows.length === 0) {
+			callback();
+		} else {
+			callback(results.rows.item(0).URLSignature);
+		}
+	});
+};
 VersionsAdapter.prototype.close = function() {
 	this.database.close();		
 };
@@ -3273,9 +3285,11 @@ AppUpdater.prototype.updateVersion = function() {
 * 'persistent' will store the file in 'Documents' in Android and 'Library' in iOS
 * 'LocalDatabase' is the file under Library where the database is expected.
 */
-function FileDownloader(host, port, currVersion) {
-	this.fileTransfer = new FileTransfer();
-	this.uri = encodeURI('http://' + host + ':' + port + '/book/');
+function FileDownloader(host, port, database, currVersion) {
+	//this.fileTransfer = new FileTransfer();
+	this.host = host;
+	this.port = port;
+	this.database = database;
 	this.currVersion = currVersion;
 	this.downloadPath = 'cdvfile://localhost/temporary/';
 	if (deviceSettings.platform() === 'ios') {
@@ -3286,14 +3300,25 @@ function FileDownloader(host, port, currVersion) {
 	Object.seal(this);
 }
 FileDownloader.prototype.download = function(bibleVersion, callback) {
+	if (this.host.indexOf('shortsands') > -1) {
+		this._downloadShortSands(bibleVersion, callback);
+	} else if (this.host.indexOf('cloudfront') > -1) {
+		this._downloadCloudfront(bibleVersion, callback);
+	} else {
+		console.log('ERROR: cannot download from host=', this.host);
+		callback();
+	}
+};
+FileDownloader.prototype._downloadShortSands = function(bibleVersion, callback) {
 	var that = this;
 	var bibleVersionZip = bibleVersion + '.zip';
-	var remotePath = this.uri + bibleVersionZip;
 	var tempPath = this.downloadPath + bibleVersionZip;
+	var uri = encodeURI('http://' + this.host + ':' + this.port + '/book/');
+	var remotePath = uri + bibleVersionZip;
 	console.log('download from', remotePath, ' to ', tempPath);
 	var datetime = new Date().toISOString();
 	var encrypted = CryptoJS.AES.encrypt(datetime, CREDENTIAL.key);
-	getLocale(function(locale) {
+	this._getLocale(function(locale) {
 		var options = { 
 			headers: {
 				'Authorization': 'Signature  ' + CREDENTIAL.id + '  ' + CREDENTIAL.version + '  ' + encrypted,
@@ -3302,16 +3327,33 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 				'x-referer-version': that.currVersion
 			}
 		};
-	    that.fileTransfer.download(remotePath, tempPath, onDownSuccess, onDownError, true, options);
+		that._performDownload(remotePath, tempPath, true, options, callback);
 	});
-    
-    function getLocale(callback) {
-		preferredLanguage(function(pLocale) {
-			localeName(function(locale) {
-				callback(pLocale + ',' + locale);
-			});
+};
+FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) {
+	var that = this;
+	var bibleVersionZip = bibleVersion + '.zip';
+	var tempPath = this.downloadPath + bibleVersionZip;
+	this.database.selectURL(bibleVersion, function(remotePath) {
+		console.log('download from', remotePath, ' to ', tempPath);
+		that._getLocale(function(locale) {
+			var options = { 
+				headers: {
+					'x-locale': locale,
+					'x-referer-version': that.currVersion,
+					'Connection': 'close'
+				}
+			};
+			that._performDownload(remotePath, tempPath, true, options, callback);
 		});
-	}
+	});
+};
+FileDownloader.prototype._getLocale = function(callback) {
+	preferredLanguage(function(pLocale) {
+		localeName(function(locale) {
+			callback(pLocale + ',' + locale);
+		});
+	});
 	function preferredLanguage(callback) {
 		navigator.globalization.getPreferredLanguage(
 	    	function(locale) { callback(locale.value); },
@@ -3324,10 +3366,15 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 			function() { callback(''); }
 		);
 	}
+};
+FileDownloader.prototype._performDownload = function(remotePath, tempPath, trustAllHosts, options, callback) {
+	var that = this;
+	var fileTransfer = new FileTransfer();
+	fileTransfer.download(remotePath, tempPath, onDownSuccess, onDownError, trustAllHosts, options);
 
-    function onDownSuccess(entry) {
-    	console.log("download complete: ", JSON.stringify(entry));
-    	zip.unzip(tempPath, that.finalPath, function(resultCode) {
+	function onDownSuccess(entry) {
+		console.log("download complete: ", JSON.stringify(entry));
+		zip.unzip(tempPath, that.finalPath, function(resultCode) {
 	    	if (resultCode == 0) {
 	    		console.log('ZIP done', resultCode);
 	    		callback();		    	
@@ -3335,10 +3382,10 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 		    	callback(new IOError({code: 'unzip failed', message: entry.nativeURL}));
 	    	}
 		});
-    }
-    function onDownError(error) {
-       	callback(new IOError({ code: error.code, message: error.source}));   	
-    }
+	}
+	function onDownError(error) {
+		callback(new IOError({ code: error.code, message: error.source}));
+	}
 };
 /**
 * This class is used to contain the fields about a version of the Bible
