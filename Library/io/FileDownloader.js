@@ -59,8 +59,7 @@ FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) 
 		that._getLocale(function(locale) {
 			var options = { 
 				headers: {
-					'x-locale': locale,
-					'x-referer-version': that.currVersion,
+					'Cookie': locale + ';' + that.currVersion,
 					'Connection': 'close'
 				}
 			};

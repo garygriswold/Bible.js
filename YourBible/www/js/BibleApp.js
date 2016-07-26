@@ -3286,7 +3286,6 @@ AppUpdater.prototype.updateVersion = function() {
 * 'LocalDatabase' is the file under Library where the database is expected.
 */
 function FileDownloader(host, port, database, currVersion) {
-	//this.fileTransfer = new FileTransfer();
 	this.host = host;
 	this.port = port;
 	this.database = database;
@@ -3339,8 +3338,8 @@ FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) 
 		that._getLocale(function(locale) {
 			var options = { 
 				headers: {
-					'x-locale': locale,
-					'x-referer-version': that.currVersion,
+					'Cookie': locale + ';' + that.currVersion,
+					//'x-referer-version': that.currVersion,
 					'Connection': 'close'
 				}
 			};
