@@ -3339,7 +3339,6 @@ FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) 
 			var options = { 
 				headers: {
 					'Cookie': locale + ';' + that.currVersion,
-					//'x-referer-version': that.currVersion,
 					'Connection': 'close'
 				}
 			};
