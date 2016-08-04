@@ -1,6 +1,7 @@
 #!/bin/sh
 
-export SOURCE_IMG=Bible_blue_512.png
+#export SOURCE_IMG=Bible_blue_512.png
+export SOURCE_IMG=splash.png
 export IOS_TARGET=../ios/splash
 export AND_TARGET=../android/splash
 
