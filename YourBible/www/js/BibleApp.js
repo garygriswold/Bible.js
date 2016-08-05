@@ -140,7 +140,7 @@ AppViewController.prototype.begin = function(develop) {
 		default:
 			that.history.lastItem(function(lastItem) {
 				if (lastItem instanceof IOError || lastItem === null || lastItem === undefined) {
-					that.codexView.showView('JHN:1');
+					that.codexView.showView('JHN:3');
 				} else {
 					console.log('LastItem' + JSON.stringify(lastItem));
 					that.codexView.showView(lastItem);

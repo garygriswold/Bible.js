@@ -40,23 +40,37 @@ App Startup
 
 	1. Do a fresh install of the App.  It should load the default version for the language
 	2. Restart the App, it should now remember the version from the Settings DB.
-	3. Change the preferred language in the App, it should still start with the same language.
-	4. With preferred language changed, do a fresh install, it should start with default version for selected language.
-	5. Restart the app, it should start with same version as last start.
-	6. Verify that all of the versions that are listed as defaults in settingStorage.defaultVersion are in www.
+	3. Verify in log that Settings database is created with Settings, Installed, History and Questions
+	4. Verify in log that each version installed in www was removed from databases
+	5. Change version, and observe the delay caused by copying the Bible database
+	6. Change version to one that has already been started, and observe the quick change.
 	7. Somehow test condition that Version is listed, but not actually available.  App should not fail, but just fail to load version.
 	
 App Update
 ----------
 
-	1. Do a fresh install of the App. Log should show all www/ databases checked for remove from databases/
-	2. Verify that databases will open
+	1. Install the App with a new version number and many Bible versions.
+	2. Verify that databases are NOT created, but verify that each database file in www is deleted in databases.
+	2. Verify that databases will open with delay the first time and non later
 	3. Stop the App, and restart.  Log should show version check, but no databases checked for remove from databases/
-	4. Verify that databases will open
-	5. Temporarily update the version number.  Log should show each previously opened database being deleted
-	6. Verify databases will open
-	7. Repeat the above tests on Android
-	8. Temp change the directories and filenames and verify crash resistance.
+	4. Verify that databases will open with delay the first time and 
+	5. Temp change the directories and filenames and verify crash resistance.
+	
+Download
+--------
+
+	1. Do a fresh install with only the default version.
+	2. Verify that a file can be downloaded when version is selected.
+	3. Restart the App with a version change.
+	4. Verify that a file can be downloaded when version is selected.
+	5. Restart the App with no version change.
+	6. Verify that a file can be downloaded when version is selected.
+	
+AWS Server
+----------
+
+	1. Check that shortlog contains no logs.
+	2. Verify that cloudlog contains a log entry for each download.
 
 CodexView
 ---------
