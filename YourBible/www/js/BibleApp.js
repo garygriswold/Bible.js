@@ -1618,6 +1618,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					iconNode.setAttribute('data-id', 'fil' + row.filename);
 					if (row.filename === currentVersion) {
 						iconNode.setAttribute('src', 'licensed/sebastiano/check.png');
+						iconNode.addEventListener('click', selectVersionHandler);
 					} else if (that.settingStorage.hasVersion(row.versionCode)) {
 						iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
 						iconNode.addEventListener('click',  selectVersionHandler);
@@ -3351,7 +3352,6 @@ FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) 
 FileDownloader.prototype._getLocale = function(callback) {
 	preferredLanguage(function(pLocale) {
 		localeName(function(locale) {
-			console.log('getLocale', pLocale, locale);
 			callback(pLocale + ',' + locale);
 		});
 	});
