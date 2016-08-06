@@ -159,6 +159,14 @@ Run Weinre
 
 	http://10.0.1.18:3000/
 	
+	
+Re Add WhiteList
+----------------
+
+File download is not working for Android, and I think it is the absence of whitelist
+
+	cordova plugin add cordova-plugin-whitelist --save
+	
 
 
 	

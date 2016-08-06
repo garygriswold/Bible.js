@@ -11,11 +11,12 @@ function FileDownloader(host, port, database, currVersion) {
 	this.port = port;
 	this.database = database;
 	this.currVersion = currVersion;
-	this.downloadPath = 'cdvfile://localhost/temporary/';
 	if (deviceSettings.platform() === 'ios') {
-		this.finalPath = 'cdvfile://localhost/persistent/../LocalDatabase/';
+		this.downloadPath = cordova.file.tempDirectory;
+		this.finalPath = cordova.file.applicationStorageDirectory + 'Library/LocalDatabase/';
 	} else {
-		this.finalPath = '/data/data/com.shortsands.yourbible/databases/';
+		this.downloadPath = cordova.file.cacheDirectory;
+		this.finalPath = cordova.file.applicationStorageDirectory + 'databases/';
 	}
 	Object.seal(this);
 }
@@ -52,8 +53,7 @@ FileDownloader.prototype._downloadShortSands = function(bibleVersion, callback) 
 };
 FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) {
 	var that = this;
-	var bibleVersionZip = bibleVersion + '.zip';
-	var tempPath = this.downloadPath + bibleVersionZip;
+	var tempPath = this.downloadPath + bibleVersion + '.zip';
 	this.database.selectURL(bibleVersion, function(remotePath) {
 		console.log('download from', remotePath, ' to ', tempPath);
 		that._getLocale(function(locale) {
@@ -63,7 +63,7 @@ FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) 
 					'Connection': 'close'
 				}
 			};
-			that._performDownload(remotePath, tempPath, true, options, callback);
+			that._performDownload(remotePath, tempPath, false, options, callback);
 		});
 	});
 };
@@ -103,6 +103,7 @@ FileDownloader.prototype._performDownload = function(remotePath, tempPath, trust
 		});
 	}
 	function onDownError(error) {
+		console.log('ERROR File Download', JSON.stringify(error));
 		callback(new IOError({ code: error.code, message: error.source}));
 	}
 };

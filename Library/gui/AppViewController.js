@@ -14,8 +14,10 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note', // Hide footnote as a result of user action
 	};
-var SERVER_HOST = 'cloudfront.net';//'cloud.shortsands.com';//'10.0.1.18';
-var SERVER_PORT = '80';//'8080';
+var SERVER_HOST = 'cloudfront.net';
+var SERVER_PORT = '80';
+//var SERVER_HOST = 'cloud.shortsands.com';
+//var SERVER_PORT = '8080';
 
 function bibleShowNoteClick(nodeId) {
 	console.log('show note clicked', nodeId);
