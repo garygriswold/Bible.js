@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.shortsands.yourbible" version="1.3.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.shortsands.yourbible" version="1.3.12" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Your Bible</name>
     <description>
         A free Bible App designed to protect your privacy.
@@ -18,7 +18,7 @@
     <preference name="StatusBarStyle" value="lightcontent" />
     <preference name="SuppressesIncrementalRendering" value="false" />
     <preference name="iosExtraFilesystems" value="bundle,library,cache" />
-    <preference name="AndroidExtraFilesystems" value="files,cache" />
+    <preference name="AndroidExtraFilesystems" value="files,cache,root" />
     <!-- <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" /> -->
 	<!-- <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,root" /> -->
     <access origin="*" />

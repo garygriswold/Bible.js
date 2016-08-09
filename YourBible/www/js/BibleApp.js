@@ -3244,6 +3244,7 @@ AppUpdater.prototype.moveFiles = function(callback) {
 					doRemoves(index + 1, sourceFiles, targetFiles, callback);
 				});
 			} else {
+				console.log('REMOVE SKIPPED nothing to remove', source.name);
 				doRemoves(index + 1, sourceFiles, targetFiles, callback);
 			}
 		}
