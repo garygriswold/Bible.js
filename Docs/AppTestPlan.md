@@ -3,6 +3,7 @@ Bible App Test Plan
 
 This documents manual procedures for testing the user interface of the BibleApp.
 Gary Griswold, January 1, 2016
+Revised Aug 9, 2016
 
 App Icon
 --------
@@ -38,13 +39,16 @@ TableContentsView
 App Startup
 -----------
 
-	1. Do a fresh install of the App.  It should load the default version for the language
-	2. Restart the App, it should now remember the version from the Settings DB.
-	3. Verify in log that Settings database is created with Settings, Installed, History and Questions
-	4. Verify in log that each version installed in www was removed from databases
-	5. Change version, and observe the delay caused by copying the Bible database
-	6. Change version to one that has already been started, and observe the quick change.
-	7. Somehow test condition that Version is listed, but not actually available.  App should not fail, but just fail to load version.
+	1. First install the production version on the device.
+	2. Download or install a few versions.
+	3. Change version to something other than default version.
+	4. Install the App over the wire with a higher version number.
+	5. It should start with the prior selected version, not the default version.
+	6. Verify in log that Settings database is created with Settings, Installed, History and Questions
+	7. Verify in log that each version installed in www was removed from databases
+	8. Change version, and observe the delay caused by copying the Bible database
+	9. Change version to one that has already been started, and observe the quick change.
+	10. Somehow test condition that Version is listed, but not actually available.  App should not fail, but just fail to load version.
 	
 App Update
 ----------
