@@ -80,7 +80,7 @@ function symmetricTest(fullPath, filename, callback) {
 			};
 			var result = writer.close();
 			var outFile = OUT_BIBLE_PATH + filename;
-			fs.writeFile(outFile, data, { encoding: 'utf8'}, function(err) {
+			fs.writeFile(outFile, result, { encoding: 'utf8'}, function(err) {
 				if (err) {
 					console.log('WRITE ERROR', JSON.stringify(err));
 					process.exit(1);
@@ -91,8 +91,8 @@ function symmetricTest(fullPath, filename, callback) {
 					if (err) {
 						console.log('Diff Error', JSON.stringify(err));
 					}
-					console.log('DIFF', stdout);
-					console.log('ERR', stderr);
+					console.log('STDOUT', stdout);
+					console.log('STDERR', stderr);
 					callback();
 				});
 			});
