@@ -2,9 +2,11 @@
 /**
 * This class initializes the App with the correct Bible versions
 * and starts.
+* It also contains all of the custom event handler.  This is so they are
+* guaranteed to only be created once, even when there are multiple
 */
 function AppInitializer() {
-	this.appViewController = null;
+	this.controller = null;
 	Object.seal(this);
 }
 AppInitializer.prototype.begin = function() {
@@ -18,7 +20,6 @@ AppInitializer.prototype.begin = function() {
 			changeVersionHandler(versionFilename);
 		});
 	});
-    //});
     
     document.body.addEventListener(BIBLE.CHG_VERSION, function(event) {
 		changeVersionHandler(event.detail.version);
@@ -28,13 +29,62 @@ AppInitializer.prototype.begin = function() {
 		console.log('CHANGE VERSION TO', versionFilename);
 		var bibleVersion = new BibleVersion();
 		bibleVersion.fill(versionFilename, function() {
-			if (that.appViewController) {
-				that.appViewController.close();
+			if (that.controller) {
+				that.controller.close();
 			}
 			settingStorage.setCurrentVersion(bibleVersion.filename);
-			that.appViewController = new AppViewController(bibleVersion, settingStorage);
-			that.appViewController.begin();			
+			that.controller = new AppViewController(bibleVersion, settingStorage);
+			that.controller.begin();
+			console.log('*** DID enable handlers ALL');
+			enableHandlersExcept('NONE');		
 		});
+	}
+	function showTocHandler(event) {
+		disableHandlers();
+		that.controller.clearViews();		
+		that.controller.tableContentsView.showView();
+		enableHandlersExcept(BIBLE.SHOW_TOC);
+	}
+	function showSearchHandler(event) {
+		disableHandlers();
+		that.controller.clearViews();	
+		that.controller.searchView.showView();
+		enableHandlersExcept(BIBLE.SHOW_SEARCH);
+	}		
+	function showPassageHandler(event) {
+		disableHandlers();
+		that.controller.clearViews();
+		that.controller.codexView.showView(event.detail.id);
+		enableHandlersExcept('NONE');
+		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
+			source: 'P', search: event.detail.source };
+		that.controller.history.replace(historyItem, function(count) {});
+	}
+	function showQuestionsHandler(event) {
+		disableHandlers();
+		that.controller.clearViews();	
+		that.controller.questionsView.showView();
+		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
+	}	
+	function showSettingsHandler(event) {
+		disableHandlers();
+		that.controller.clearViews();
+		that.controller.settingsView.showView();
+		enableHandlersExcept(BIBLE.SHOW_SETTINGS);
+	}	
+	function disableHandlers() {
+		document.body.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);
+		document.body.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+		document.body.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
+	}
+	function enableHandlersExcept(name) {
+		if (name !== BIBLE.SHOW_TOC) document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
+		if (name !== BIBLE.SHOW_SEARCH) document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
 };/**
 * BibleApp is a global object that contains pointers to all of the key elements of
@@ -98,13 +148,13 @@ AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.tableAdapter);
 	this.concordance = new Concordance(this.concordance);
 	var that = this;
-	this.tableContents.fill(function() {
+	this.tableContents.fill(function() { // Try timings with and without this wait.
 
 		console.log('loaded toc', that.tableContents.size());
 		that.copyrightView = new CopyrightView(that.version);
 		that.localizeNumber = new LocalizeNumber(that.version.silCode);
 		that.header = new HeaderView(that.tableContents, that.version, that.localizeNumber);
-		that.header.showView();
+		that.header.showView(); ////// try timings with showView moved
 		that.tableContentsView = new TableContentsView(that.tableContents, that.copyrightView, that.localizeNumber);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.verses, that.history, that.version, that.localizeNumber);
@@ -152,8 +202,6 @@ AppViewController.prototype.begin = function(develop) {
 		/* Turn off user selection, and selection popup */
 		document.documentElement.style.webkitTouchCallout = 'none';
         document.documentElement.style.webkitUserSelect = 'none';
-        
-		enableHandlersExcept('NONE');
 
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);
@@ -180,62 +228,14 @@ AppViewController.prototype.begin = function(develop) {
 			document.documentElement.style.fontSize = fontSize + 'pt';			
 		});
 	}
-	function showTocHandler(event) {
-		disableHandlers();
-		clearViews();		
-		that.tableContentsView.showView();
-		enableHandlersExcept(BIBLE.SHOW_TOC);
-	}
-	function showSearchHandler(event) {
-		disableHandlers();
-		clearViews();	
-		that.searchView.showView();
-		enableHandlersExcept(BIBLE.SHOW_SEARCH);
-	}		
-	function showPassageHandler(event) {
-		disableHandlers();
-		clearViews();
-		that.codexView.showView(event.detail.id);
-		enableHandlersExcept('NONE');
-		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
-			source: 'P', search: event.detail.source };
-		that.history.replace(historyItem, function(count) {});
-	}
-	function showQuestionsHandler(event) {
-		disableHandlers();
-		clearViews();	
-		that.questionsView.showView();
-		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
-	}	
-	function showSettingsHandler(event) {
-		disableHandlers();
-		clearViews();
-		that.settingsView.showView();
-		enableHandlersExcept(BIBLE.SHOW_SETTINGS);
-	}	
-	function clearViews() {
-		// There is some redundancy here, I could just delete all grandchildren of body in one step
-		that.tableContentsView.hideView();
-		that.searchView.hideView();
-		that.codexView.hideView();
-		that.questionsView.hideView();
-		that.settingsView.hideView();
-		that.historyView.hideView();
-	}
-	function disableHandlers() {
-		document.body.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);
-		document.body.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
-		document.body.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
-		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
-		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
-	}
-	function enableHandlersExcept(name) {
-		if (name !== BIBLE.SHOW_TOC) document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
-		if (name !== BIBLE.SHOW_SEARCH) document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
-		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
-		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
-		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
-	}
+};
+AppViewController.prototype.clearViews = function() {
+	this.tableContentsView.hideView();
+	this.searchView.hideView();
+	this.codexView.hideView();
+	this.questionsView.hideView();
+	this.settingsView.hideView();
+	this.historyView.hideView();
 };
 AppViewController.prototype.close = function() {
 	console.log('CLOSE ', this.version);

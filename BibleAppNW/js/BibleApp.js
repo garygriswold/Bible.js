@@ -3,9 +3,11 @@ var BuildInfo={version:"unknown"};
 /**
 * This class initializes the App with the correct Bible versions
 * and starts.
+* It also contains all of the custom event handler.  This is so they are
+* guaranteed to only be created once, even when there are multiple
 */
 function AppInitializer() {
-	this.appViewController = null;
+	this.controller = null;
 	Object.seal(this);
 }
 AppInitializer.prototype.begin = function() {
@@ -19,7 +21,6 @@ AppInitializer.prototype.begin = function() {
 			changeVersionHandler(versionFilename);
 		});
 	});
-    //});
     
     document.body.addEventListener(BIBLE.CHG_VERSION, function(event) {
 		changeVersionHandler(event.detail.version);
@@ -29,13 +30,62 @@ AppInitializer.prototype.begin = function() {
 		console.log('CHANGE VERSION TO', versionFilename);
 		var bibleVersion = new BibleVersion();
 		bibleVersion.fill(versionFilename, function() {
-			if (that.appViewController) {
-				that.appViewController.close();
+			if (that.controller) {
+				that.controller.close();
 			}
 			settingStorage.setCurrentVersion(bibleVersion.filename);
-			that.appViewController = new AppViewController(bibleVersion, settingStorage);
-			that.appViewController.begin();			
+			that.controller = new AppViewController(bibleVersion, settingStorage);
+			that.controller.begin();
+			console.log('*** DID enable handlers ALL');
+			enableHandlersExcept('NONE');		
 		});
+	}
+	function showTocHandler(event) {
+		disableHandlers();
+		that.controller.clearViews();		
+		that.controller.tableContentsView.showView();
+		enableHandlersExcept(BIBLE.SHOW_TOC);
+	}
+	function showSearchHandler(event) {
+		disableHandlers();
+		that.controller.clearViews();	
+		that.controller.searchView.showView();
+		enableHandlersExcept(BIBLE.SHOW_SEARCH);
+	}		
+	function showPassageHandler(event) {
+		disableHandlers();
+		that.controller.clearViews();
+		that.controller.codexView.showView(event.detail.id);
+		enableHandlersExcept('NONE');
+		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
+			source: 'P', search: event.detail.source };
+		that.controller.history.replace(historyItem, function(count) {});
+	}
+	function showQuestionsHandler(event) {
+		disableHandlers();
+		that.controller.clearViews();	
+		that.controller.questionsView.showView();
+		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
+	}	
+	function showSettingsHandler(event) {
+		disableHandlers();
+		that.controller.clearViews();
+		that.controller.settingsView.showView();
+		enableHandlersExcept(BIBLE.SHOW_SETTINGS);
+	}	
+	function disableHandlers() {
+		document.body.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);
+		document.body.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+		document.body.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
+	}
+	function enableHandlersExcept(name) {
+		if (name !== BIBLE.SHOW_TOC) document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
+		if (name !== BIBLE.SHOW_SEARCH) document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
 };/**
 * BibleApp is a global object that contains pointers to all of the key elements of
@@ -53,8 +103,10 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note', // Hide footnote as a result of user action
 	};
-var SERVER_HOST = 'cloud.shortsands.com';//'10.0.1.18';
-var SERVER_PORT = '8080';
+var SERVER_HOST = 'cloudfront.net';
+var SERVER_PORT = '80';
+//var SERVER_HOST = 'cloud.shortsands.com';
+//var SERVER_PORT = '8080';
 
 function bibleShowNoteClick(nodeId) {
 	console.log('show note clicked', nodeId);
@@ -97,13 +149,13 @@ AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.tableAdapter);
 	this.concordance = new Concordance(this.concordance);
 	var that = this;
-	this.tableContents.fill(function() {
+	this.tableContents.fill(function() { // Try timings with and without this wait.
 
 		console.log('loaded toc', that.tableContents.size());
 		that.copyrightView = new CopyrightView(that.version);
 		that.localizeNumber = new LocalizeNumber(that.version.silCode);
 		that.header = new HeaderView(that.tableContents, that.version, that.localizeNumber);
-		that.header.showView();
+		that.header.showView(); ////// try timings with showView moved
 		that.tableContentsView = new TableContentsView(that.tableContents, that.copyrightView, that.localizeNumber);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.verses, that.history, that.version, that.localizeNumber);
@@ -141,7 +193,7 @@ AppViewController.prototype.begin = function(develop) {
 		default:
 			that.history.lastItem(function(lastItem) {
 				if (lastItem instanceof IOError || lastItem === null || lastItem === undefined) {
-					that.codexView.showView('JHN:1');
+					that.codexView.showView('JHN:3');
 				} else {
 					console.log('LastItem' + JSON.stringify(lastItem));
 					that.codexView.showView(lastItem);
@@ -152,7 +204,7 @@ AppViewController.prototype.begin = function(develop) {
 		document.documentElement.style.webkitTouchCallout = 'none';
         document.documentElement.style.webkitUserSelect = 'none';
         
-		enableHandlersExcept('NONE');
+//		enableHandlersExcept('NONE');
 
 		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);
@@ -179,62 +231,63 @@ AppViewController.prototype.begin = function(develop) {
 			document.documentElement.style.fontSize = fontSize + 'pt';			
 		});
 	}
-	function showTocHandler(event) {
-		disableHandlers();
-		clearViews();		
-		that.tableContentsView.showView();
-		enableHandlersExcept(BIBLE.SHOW_TOC);
-	}
-	function showSearchHandler(event) {
-		disableHandlers();
-		clearViews();	
-		that.searchView.showView();
-		enableHandlersExcept(BIBLE.SHOW_SEARCH);
-	}		
-	function showPassageHandler(event) {
-		disableHandlers();
-		clearViews();
-		that.codexView.showView(event.detail.id);
-		enableHandlersExcept('NONE');
-		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
-			source: 'P', search: event.detail.source };
-		that.history.replace(historyItem, function(count) {});
-	}
-	function showQuestionsHandler(event) {
-		disableHandlers();
-		clearViews();	
-		that.questionsView.showView();
-		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
-	}	
-	function showSettingsHandler(event) {
-		disableHandlers();
-		clearViews();
-		that.settingsView.showView();
-		enableHandlersExcept(BIBLE.SHOW_SETTINGS);
-	}	
-	function clearViews() {
-		// There is some redundancy here, I could just delete all grandchildren of body in one step
+//	function showTocHandler(event) {
+//		disableHandlers();
+//		clearViews();		
+//		that.tableContentsView.showView();
+//		enableHandlersExcept(BIBLE.SHOW_TOC);
+//	}
+//	function showSearchHandler(event) {
+//		disableHandlers();
+//		clearViews();	
+//		that.searchView.showView();
+//		enableHandlersExcept(BIBLE.SHOW_SEARCH);
+//	}		
+//	function showPassageHandler(event) {
+//		disableHandlers();
+//		clearViews();
+//		that.codexView.showView(event.detail.id);
+//		enableHandlersExcept('NONE');
+//		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
+//			source: 'P', search: event.detail.source };
+//		that.history.replace(historyItem, function(count) {});
+//	}
+//	function showQuestionsHandler(event) {
+//		disableHandlers();
+//		clearViews();	
+//		that.questionsView.showView();
+//		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
+//	}	
+//	function showSettingsHandler(event) {
+//		disableHandlers();
+//		clearViews();
+//		that.settingsView.showView();
+//		enableHandlersExcept(BIBLE.SHOW_SETTINGS);
+//	}
+AppViewController.prototype.clearViews = function() {
+//	function clearViews() {
 		that.tableContentsView.hideView();
 		that.searchView.hideView();
 		that.codexView.hideView();
 		that.questionsView.hideView();
 		that.settingsView.hideView();
 		that.historyView.hideView();
-	}
-	function disableHandlers() {
-		document.body.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);
-		document.body.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
-		document.body.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
-		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
-		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
-	}
-	function enableHandlersExcept(name) {
-		if (name !== BIBLE.SHOW_TOC) document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
-		if (name !== BIBLE.SHOW_SEARCH) document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
-		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
-		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
-		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
-	}
+//	}
+};
+//	function disableHandlers() {
+//		document.body.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);
+//		document.body.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+//		document.body.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+//		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+//		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
+//	}
+//	function enableHandlersExcept(name) {
+//		if (name !== BIBLE.SHOW_TOC) document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
+//		if (name !== BIBLE.SHOW_SEARCH) document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+//		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+//		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+//		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
+//	}
 };
 AppViewController.prototype.close = function() {
 	console.log('CLOSE ', this.version);
@@ -1617,6 +1670,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					iconNode.setAttribute('data-id', 'fil' + row.filename);
 					if (row.filename === currentVersion) {
 						iconNode.setAttribute('src', 'licensed/sebastiano/check.png');
+						iconNode.addEventListener('click', selectVersionHandler);
 					} else if (that.settingStorage.hasVersion(row.versionCode)) {
 						iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
 						iconNode.addEventListener('click',  selectVersionHandler);
@@ -1642,7 +1696,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		var versionCode = iconNode.id.substr(3);
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		that.settingStorage.getCurrentVersion(function(currVersion) {
-			var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT, currVersion);
+			var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT, that.database, currVersion);
 			downloader.download(versionFile, function(error) {
 				gsPreloader.active(false);
 				if (error) {
@@ -2997,6 +3051,18 @@ VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
 		}
 	});
 };
+VersionsAdapter.prototype.selectURL = function(versionFile, callback) {
+	var statement = 'SELECT URLSignature FROM Version WHERE filename=?';
+	this.database.select(statement, [versionFile], function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else if (results.rows.length === 0) {
+			callback();
+		} else {
+			callback(results.rows.item(0).URLSignature);
+		}
+	});
+};
 VersionsAdapter.prototype.close = function() {
 	this.database.close();		
 };
@@ -3133,15 +3199,11 @@ AppUpdater.prototype.checkIfUpdate = function(callback) {
 };
 AppUpdater.prototype.createTables = function(callback) {
 	var that = this;
-	console.log('create setting storage');
 	this.settingStorage.create(function() {
-		console.log('create history');
 		var history = new HistoryAdapter(that.settingStorage.database);
 		history.create(function(){});
-		console.log('create questions');
 		var questions = new QuestionsAdapter(that.settingStorage.database);
 		questions.create(function(){});
-		console.log('before callback');
 		callback();
 	});
 };
@@ -3234,6 +3296,7 @@ AppUpdater.prototype.moveFiles = function(callback) {
 					doRemoves(index + 1, sourceFiles, targetFiles, callback);
 				});
 			} else {
+				console.log('REMOVE SKIPPED nothing to remove', source.name);
 				doRemoves(index + 1, sourceFiles, targetFiles, callback);
 			}
 		}
@@ -3267,7 +3330,7 @@ AppUpdater.prototype.moveFiles = function(callback) {
 	}
 };
 AppUpdater.prototype.updateVersion = function() {
-//	this.settingStorage.setAppVersion(BuildInfo.version);
+	this.settingStorage.setAppVersion(BuildInfo.version);
 };
 
 /**
@@ -3278,27 +3341,40 @@ AppUpdater.prototype.updateVersion = function() {
 * 'persistent' will store the file in 'Documents' in Android and 'Library' in iOS
 * 'LocalDatabase' is the file under Library where the database is expected.
 */
-function FileDownloader(host, port, currVersion) {
-	this.fileTransfer = new FileTransfer();
-	this.uri = encodeURI('http://' + host + ':' + port + '/book/');
+function FileDownloader(host, port, database, currVersion) {
+	this.host = host;
+	this.port = port;
+	this.database = database;
 	this.currVersion = currVersion;
-	this.downloadPath = 'cdvfile://localhost/temporary/';
 	if (deviceSettings.platform() === 'ios') {
-		this.finalPath = 'cdvfile://localhost/persistent/../LocalDatabase/';
+		this.downloadPath = cordova.file.tempDirectory;
+		this.finalPath = cordova.file.applicationStorageDirectory + 'Library/LocalDatabase/';
 	} else {
-		this.finalPath = '/data/data/com.shortsands.yourbible/databases/';
+		this.downloadPath = cordova.file.cacheDirectory;
+		this.finalPath = cordova.file.applicationStorageDirectory + 'databases/';
 	}
 	Object.seal(this);
 }
 FileDownloader.prototype.download = function(bibleVersion, callback) {
+	if (this.host.indexOf('shortsands') > -1) {
+		this._downloadShortSands(bibleVersion, callback);
+	} else if (this.host.indexOf('cloudfront') > -1) {
+		this._downloadCloudfront(bibleVersion, callback);
+	} else {
+		console.log('ERROR: cannot download from host=', this.host);
+		callback();
+	}
+};
+FileDownloader.prototype._downloadShortSands = function(bibleVersion, callback) {
 	var that = this;
 	var bibleVersionZip = bibleVersion + '.zip';
-	var remotePath = this.uri + bibleVersionZip;
 	var tempPath = this.downloadPath + bibleVersionZip;
+	var uri = encodeURI('http://' + this.host + ':' + this.port + '/book/');
+	var remotePath = uri + bibleVersionZip;
 	console.log('download from', remotePath, ' to ', tempPath);
 	var datetime = new Date().toISOString();
 	var encrypted = CryptoJS.AES.encrypt(datetime, CREDENTIAL.key);
-	getLocale(function(locale) {
+	this._getLocale(function(locale) {
 		var options = { 
 			headers: {
 				'Authorization': 'Signature  ' + CREDENTIAL.id + '  ' + CREDENTIAL.version + '  ' + encrypted,
@@ -3307,16 +3383,31 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 				'x-referer-version': that.currVersion
 			}
 		};
-	    that.fileTransfer.download(remotePath, tempPath, onDownSuccess, onDownError, true, options);
+		that._performDownload(remotePath, tempPath, true, options, callback);
 	});
-    
-    function getLocale(callback) {
-		preferredLanguage(function(pLocale) {
-			localeName(function(locale) {
-				callback(pLocale + ',' + locale);
-			});
+};
+FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) {
+	var that = this;
+	var tempPath = this.downloadPath + bibleVersion + '.zip';
+	this.database.selectURL(bibleVersion, function(remotePath) {
+		console.log('download from', remotePath, ' to ', tempPath);
+		that._getLocale(function(locale) {
+			var options = { 
+				headers: {
+					'Cookie': locale + ';' + that.currVersion,
+					'Connection': 'close'
+				}
+			};
+			that._performDownload(remotePath, tempPath, false, options, callback);
 		});
-	}
+	});
+};
+FileDownloader.prototype._getLocale = function(callback) {
+	preferredLanguage(function(pLocale) {
+		localeName(function(locale) {
+			callback(pLocale + ',' + locale);
+		});
+	});
 	function preferredLanguage(callback) {
 		navigator.globalization.getPreferredLanguage(
 	    	function(locale) { callback(locale.value); },
@@ -3329,10 +3420,15 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 			function() { callback(''); }
 		);
 	}
+};
+FileDownloader.prototype._performDownload = function(remotePath, tempPath, trustAllHosts, options, callback) {
+	var that = this;
+	var fileTransfer = new FileTransfer();
+	fileTransfer.download(remotePath, tempPath, onDownSuccess, onDownError, trustAllHosts, options);
 
-    function onDownSuccess(entry) {
-    	console.log("download complete: ", JSON.stringify(entry));
-    	zip.unzip(tempPath, that.finalPath, function(resultCode) {
+	function onDownSuccess(entry) {
+		console.log("download complete: ", JSON.stringify(entry));
+		zip.unzip(tempPath, that.finalPath, function(resultCode) {
 	    	if (resultCode == 0) {
 	    		console.log('ZIP done', resultCode);
 	    		callback();		    	
@@ -3340,10 +3436,11 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 		    	callback(new IOError({code: 'unzip failed', message: entry.nativeURL}));
 	    	}
 		});
-    }
-    function onDownError(error) {
-       	callback(new IOError({ code: error.code, message: error.source}));   	
-    }
+	}
+	function onDownError(error) {
+		console.log('ERROR File Download', JSON.stringify(error));
+		callback(new IOError({ code: error.code, message: error.source}));
+	}
 };
 /**
 * This class is used to contain the fields about a version of the Bible
