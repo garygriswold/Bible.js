@@ -148,13 +148,11 @@ AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.tableAdapter);
 	this.concordance = new Concordance(this.concordance);
 	var that = this;
-	this.tableContents.fill(function() { // Try timings with and without this wait.
-
+	this.tableContents.fill(function() { // must complete before codexView.showView()
 		console.log('loaded toc', that.tableContents.size());
 		that.copyrightView = new CopyrightView(that.version);
 		that.localizeNumber = new LocalizeNumber(that.version.silCode);
 		that.header = new HeaderView(that.tableContents, that.version, that.localizeNumber);
-		that.header.showView(); ////// try timings with showView moved
 		that.tableContentsView = new TableContentsView(that.tableContents, that.copyrightView, that.localizeNumber);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.verses, that.history, that.version, that.localizeNumber);
@@ -169,6 +167,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.touch = new Hammer(document.getElementById('codexRoot'));
 		setInitialFontSize();
 		Object.seal(that);
+		that.header.showView();
 
 		switch(develop) {
 		case 'TableContentsView':
