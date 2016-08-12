@@ -3,7 +3,7 @@
 */
 var fs = require("fs");
 var WEB_BIBLE_PATH = "../../DBL/2current/";
-var OUT_BIBLE_PATH = "output/";
+var OUT_BIBLE_PATH = "output/xml/";
 
 function XMLSerializer() {
 	this.result = [];
@@ -103,8 +103,14 @@ if (process.argv.length < 3) {
 	console.log('Usage: XMLTokenizerTest.sh  version');
 	process.exit(1);
 }
-var fullPath = WEB_BIBLE_PATH + process.argv[2] + '/USX_1/';
-var files = fs.readdirSync(fullPath);
-testOne(fullPath, files, 0, function() {
-	console.log('XMLTokenizerTest DONE');
+fs.lstat(OUT_BIBLE_PATH, function(err, stat) {
+	if (err) {
+		fs.mkdirSync(OUT_BIBLE_PATH);
+	}
+	var fullPath = WEB_BIBLE_PATH + process.argv[2] + '/USX_1/';
+	var files = fs.readdirSync(fullPath);
+	testOne(fullPath, files, 0, function() {
+		console.log('XMLTokenizerTest DONE');
+	});
 });
+

@@ -58,7 +58,7 @@ XMLTokenizerTest
 The XMLTokenizer is the lexical processor that processes Bible input.  If an error occurs here many other modules will have errors as well.
 This program generates USX text files from input USX files and then does a diff to be certain the generated are identical to the starting ones.
 
-	./TokenizerTest.sh VERSION
+	./XMLTokenizerTest.sh VERSION
 	
 	Any difference between input and generated will be displayed.
 	

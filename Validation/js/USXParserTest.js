@@ -1,6 +1,6 @@
 
 var WEB_BIBLE_PATH = "../../DBL/2current/";
-var OUT_BIBLE_PATH = "output/";
+var OUT_BIBLE_PATH = "output/usx/";
 
 var fs = require("fs");
 
@@ -27,19 +27,19 @@ function symmetricTest(fullPath, filename, callback) {
 				process.exit(1);
 			}
 			var rootNode = parser.readBook(data);
-			var data = rootNode.toUSX();
 			var outFile = OUT_BIBLE_PATH + filename;
-			fs.writeFile(outFile, data, { encoding: 'utf8'}, function(err) {
+			fs.writeFile(outFile, rootNode.toUSX(), { encoding: 'utf8'}, function(err) {
 				if (err) {
 					console.log('WRITE ERROR', JSON.stringify(err));
 					process.exit(1);
 				}
 				var proc = require('child_process');
-				proc.exec('diff -w ' + inFile + ' ' + outFile, { encoding: 'utf8' }, function(err, stdout, stderr) {
+				proc.exec('diff -b ' + inFile + ' ' + outFile, { encoding: 'utf8' }, function(err, stdout, stderr) {
 					//if (err) {
 					//	console.log('Diff Error', JSON.stringify(err));
 					//}
 					console.log('DIFF', stdout);
+					console.log('ERR', stderr);
 					callback();
 				});
 			});
@@ -52,8 +52,13 @@ if (process.argv.length < 3) {
 	process.exit(1);
 }
 var parser = new USXParser();
-var fullPath = WEB_BIBLE_PATH + process.argv[2] + '/USX_1/';
-var files = fs.readdirSync(fullPath);
-testOne(fullPath, files, 0, function() {
-	console.log('USXParserTest DONE');
+fs.lstat(OUT_BIBLE_PATH, function(err, stat) {
+	if (err) {
+		fs.mkdirSync(OUT_BIBLE_PATH);
+	}
+	var fullPath = WEB_BIBLE_PATH + process.argv[2] + '/USX_1/';
+	var files = fs.readdirSync(fullPath);
+	testOne(fullPath, files, 0, function() {
+		console.log('USXParserTest DONE');
+	});
 });

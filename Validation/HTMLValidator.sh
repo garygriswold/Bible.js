@@ -23,3 +23,6 @@ cat js/HTMLValidator.js >> temp.js
 node temp.js $1
 
 diff -w output/chapters.txt output/verses.txt
+
+# -b displays errors of extra space in the verse text
+# no option shows even more errors
