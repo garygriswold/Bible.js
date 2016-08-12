@@ -34,7 +34,7 @@ function symmetricTest(fullPath, filename, callback) {
 					process.exit(1);
 				}
 				var proc = require('child_process');
-				proc.exec('diff -b ' + inFile + ' ' + outFile, { encoding: 'utf8' }, function(err, stdout, stderr) {
+				proc.exec('diff ' + inFile + ' ' + outFile, { encoding: 'utf8' }, function(err, stdout, stderr) {
 					//if (err) {
 					//	console.log('Diff Error', JSON.stringify(err));
 					//}
