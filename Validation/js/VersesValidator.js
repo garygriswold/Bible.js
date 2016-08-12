@@ -7,7 +7,7 @@
 * line comparison using diff.  
 * In order to be able to do line by line comparison it outputs each verse as a line.
 */
-function HTMLValidator(versionPath) {
+function VersesValidator(versionPath) {
 	this.versionPath = versionPath;
 	this.fs = require('fs');
 	this.db = null;
@@ -15,7 +15,7 @@ function HTMLValidator(versionPath) {
 	this.bookMap = canon.sequenceMap();
 	Object.seal(this);
 }
-HTMLValidator.prototype.open = function(callback) {
+VersesValidator.prototype.open = function(callback) {
 	var that = this;
 	var sqlite3 = require('sqlite3');
 	this.db = new sqlite3.Database(this.versionPath, sqlite3.OPEN_READWRITE, function(err) {
@@ -25,7 +25,7 @@ HTMLValidator.prototype.open = function(callback) {
 		callback();
 	});
 };
-HTMLValidator.prototype.generateChaptersFile = function(callback) {
+VersesValidator.prototype.generateChaptersFile = function(callback) {
 	var that = this;
 	var bible = [];
 	var chapter = [];
@@ -118,11 +118,11 @@ HTMLValidator.prototype.generateChaptersFile = function(callback) {
 		chapter = [];
 	}	
 };
-HTMLValidator.prototype.fatalError = function(err, source) {
+VersesValidator.prototype.fatalError = function(err, source) {
 	console.log('FATAL ERROR ', err, ' AT ', source);
 	process.exit(1);
 };
-HTMLValidator.prototype.completed = function() {
+VersesValidator.prototype.completed = function() {
 	console.log('HTML VALIDATOR COMPLETED');
 	this.db.close();
 	process.exit(0);
@@ -137,7 +137,7 @@ if (process.argv.length < 3) {
 } else {
 	var dbFilename = DB_PATH + process.argv[2] + '.db';
 	console.log('Process ' + dbFilename);
-	var val = new HTMLValidator(dbFilename);
+	var val = new VersesValidator(dbFilename);
 	val.open(function() {
 		val.generateChaptersFile(function() {
 			val.completed();
