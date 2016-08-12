@@ -16,6 +16,7 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 		case 11: // fragment
 			break;
 		case 1: // element
+			this.result.push(node.preWhiteSpace);
 			this.result.push('<', nodeName);
 			var attrs = node.attrNames();
 			for (var i=0; i<attrs.length; i++) {

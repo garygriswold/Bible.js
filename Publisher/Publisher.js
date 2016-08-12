@@ -765,6 +765,7 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 		case 11: // fragment
 			break;
 		case 1: // element
+			this.result.push(node.preWhiteSpace);
 			this.result.push('<', nodeName);
 			var attrs = node.attrNames();
 			for (var i=0; i<attrs.length; i++) {
@@ -817,7 +818,7 @@ USX.prototype.openElement = function() {
 	return('<usx version="' + this.version + elementEnd);
 };
 USX.prototype.closeElement = function() {
-	return(this.emptyElement ? '' : '\n</usx>');
+	return(this.emptyElement ? '' : '\r\n</usx>');
 };
 USX.prototype.toUSX = function() {
 	var result = [];
@@ -1066,6 +1067,7 @@ Char.prototype.toDOM = function(parentNode) {
 	}
 	else {
 		var child = new DOMNode('span');
+		child.preWhiteSpace = (this.whiteSpace === ' ') ? ' ' : '';
 		child.setAttribute('class', this.style);
 		parentNode.appendChild(child);
 		return(child);
@@ -1726,6 +1728,7 @@ function DOMNode(nodeName) {
 	this.attributes = {};
 	this.textContent = null;
 	this.childNodes = [];
+	this.preWhiteSpace = ''; // when present, this is whitespace that preceds the node
 	Object.seal(this);
 }
 DOMNode.prototype.getAttribute = function(name) {
@@ -1745,6 +1748,7 @@ DOMNode.prototype.appendChild = function(node) {
 	this.childNodes.push(node);	
 	node.parentNode = this;
 };
+
 /**
 * This class is used to carry information about the language and version
 * for the publish program.

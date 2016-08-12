@@ -13,6 +13,7 @@ function DOMNode(nodeName) {
 	this.attributes = {};
 	this.textContent = null;
 	this.childNodes = [];
+	this.preWhiteSpace = ''; // when present, this is whitespace that preceds the node
 	Object.seal(this);
 }
 DOMNode.prototype.getAttribute = function(name) {
@@ -32,3 +33,4 @@ DOMNode.prototype.appendChild = function(node) {
 	this.childNodes.push(node);	
 	node.parentNode = this;
 };
+

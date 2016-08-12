@@ -37,6 +37,7 @@ Char.prototype.toDOM = function(parentNode) {
 	}
 	else {
 		var child = new DOMNode('span');
+		child.preWhiteSpace = (this.whiteSpace === ' ') ? ' ' : '';
 		child.setAttribute('class', this.style);
 		parentNode.appendChild(child);
 		return(child);
