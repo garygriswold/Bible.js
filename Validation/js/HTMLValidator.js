@@ -39,7 +39,6 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 			for (var i=0; i<2; i++) {
 				//console.log(results[i].html);
 				var node = that.parser.readBook(results[i].html);
-				console.log('-------------');
 				console.log(node.toHTML());
 				//usx.push(chapter);
 			}
@@ -90,7 +89,6 @@ HTMLParser.prototype.readBook = function(data) {
 	var rootNode = new HTMLRoot();
 	var nodeStack = [rootNode];
 	var node = null;
-	var tempNode = {};
 	var count = 0;
 	while (tokenType !== XMLNodeType.END && count < 300000) {
 
@@ -102,49 +100,32 @@ HTMLParser.prototype.readBook = function(data) {
 
 		switch(tokenType) {
 			case XMLNodeType.ELE_OPEN:
-				tempNode = { tagName: tokenValue };
-				tempNode.whiteSpace = (priorType === XMLNodeType.WHITESP) ? priorValue : '';
-				//console.log(tokenValue, priorType, '|' + priorValue + '|');
+				node = new HTMLElement(tokenValue);
+				node.whiteSpace = (priorType === XMLNodeType.WHITESP) ? priorValue : '';
 				break;
 			case XMLNodeType.ATTR_NAME:
-				//node[tokenValue] = '';
+				// do nothing
 				break;
 			case XMLNodeType.ATTR_VALUE:
-				//if (priorValue !== 'onclick') {
-				tempNode[priorValue] = tokenValue;
-				//}
+				if (priorValue !== 'onclick') {
+					node[priorValue] = tokenValue;
+				}
 				break;
 			case XMLNodeType.ELE_END:
-				tempNode.emptyElement = false;
-				node = new HTMLElement(tempNode);
-				//node = this.createUSXObject(tempNode);
-				//console.log(node.openElement());
-				if (nodeStack.length > 0) {
-					nodeStack[nodeStack.length -1].addChild(node);
-				}
+				node.emptyElement = false;
+				nodeStack[nodeStack.length -1].addChild(node);
 				nodeStack.push(node);
-				console.log('PUSH', node.toString());
 				break;
 			case XMLNodeType.TEXT:
-				//node = new Text(tokenValue);
 				node = new HTMLTextNode(tokenValue);
-				//node.text = tokenValue;
-				//console.log(node.text);
 				nodeStack[nodeStack.length -1].addChild(node);
-				console.log('ADD', node.toString());
 				break;
 			case XMLNodeType.ELE_EMPTY:
-				tempNode.emptyElement = true;
-				node = new HTMLElement(tempNode);
-				//node = this.createUSXObject(tempNode);
-				//console.log(node.openElement());
+				node.emptyElement = true;
 				nodeStack[nodeStack.length -1].addChild(node);
-				console.log('ADD', node.toString());
 				break;
 			case XMLNodeType.ELE_CLOSE:
 				node = nodeStack.pop();
-				console.log('POP', node.toString());
-				//console.log(node.closeElement());
 				if (node.tagName !== tokenValue) {
 					throw new Error('closing element mismatch ' + node.openElement() + ' and ' + tokenValue);
 				}
@@ -164,18 +145,16 @@ HTMLParser.prototype.readBook = function(data) {
 		var priorType = tokenType;
 		var priorValue = tokenValue;
 	}
-	console.log('node stack length', nodeStack.length);
 	return(rootNode);
 };
 
-function HTMLElement(node) {
-	this.tagName = node.tagName;
-	console.log('Onject tagname', this.tagName);
-	this.id = node.id || null;
-	this['class'] = node['class'] || null;
-	this.note = node.note || null;
-	this.emptyElement = node.emptyElement || false;
-	this.whiteSpace = node.whiteSpace || '';
+function HTMLElement(tagName) {
+	this.tagName = tagName;
+	this.id = null;
+	this['class'] = null;
+	this.note = null;
+	this.emptyElement = false;
+	this.whiteSpace = '';
 	this.children = [];
 	Object.seal(this);
 }
@@ -214,7 +193,6 @@ function HTMLTextNode(text) {
 	this.tagName = 'TEXT';
 	this.text = text;
 	Object.seal(this);
-	console.log('Object text', this.text);
 }
 HTMLTextNode.prototype.toString = function() {
 	return(this.text);
@@ -253,7 +231,7 @@ fs.lstat(OUT_BIBLE_PATH, function(err, stat) {
 		var canon = new Canon();
 		htmlValidator.validateBook(0, canon.books, function() {
 			htmlValidator.completed();
-			//console.log('HTMLValidator DONE');
+			console.log('HTMLValidator DONE');
 		});
 	});
 });
