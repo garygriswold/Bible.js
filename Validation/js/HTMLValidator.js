@@ -30,9 +30,7 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 	if (index >= books.length) {
 		callback();
 	} else {
-		//var usx = [];
-		//usx.push('<?xml version="1.0" encoding="utf-8"?>', os.EOL);
-		//usx.push('<usx version="2.0">', os.EOL);
+		var chapters = [];
 		console.log('doing ', books[index]);
 		this.db.all("SELECT html FROM chapters WHERE reference LIKE ?", books[index].code + '%', function(err, results) {
 			if (err) that.fatalError(err, 'select html');
@@ -40,8 +38,11 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				//console.log(results[i].html);
 				var node = that.parser.readBook(results[i].html);
 				console.log(node.toHTML());
-				//usx.push(chapter);
+				chapters.push(node);
 			}
+			var usx = convertHTML2USX(chapters);
+			console.log('-------');
+			console.log(usx);
 			//usx.push('</usx>', os.EOL);
 			//console.log(usx.join(''));
 			// compareUSXFile(usx.join(''), function() {
@@ -51,6 +52,108 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 			that.validateBook(index + 10000, books, callback);
 		});
 	}
+	
+	function convertHTML2USX(chapters) {
+		var usx = [];
+		usx.push('<?xml version="1.0" encoding="utf-8"?>', os.EOL);
+		usx.push('<usx version="2.0">', os.EOL);
+		for (var i=0; i<chapters.length; i++) {
+			recurseOverHTML(usx, chapters[i]);
+		}
+		usx.push('</usx>');
+		return(usx.join(''));
+	}
+	
+	function recurseOverHTML(usx, node) {
+		convertOpenElement(usx, node);
+		if (node.children) {
+			for (var i=0; i<node.children.length; i++) {
+				recurseOverHTML(usx, node.children[i]);		
+			}
+		}
+		convertCloseElement(usx, node);
+	}
+	
+	function convertOpenElement(usx, node) {
+		console.log(node.tagName);
+		switch(node.tagName) {
+			case 'ROOT':
+				// do nothing
+				break;
+			case 'article':
+				usx.push('<book code="' + node.id + '" style="' + node['class'] + '"></book>', os.EOL); 
+				break;
+			case 'section':
+				var parts = node.id.split(':');
+				usx.push('<chapter number="' + parts[1] + '" style="c" />', os.EOL);
+				node.children = [];
+				break;
+			case 'p':
+				if (node['class'] !== 'c') {
+					usx.push('<para style="' + node['class'] + '">', os.EOL);
+				}
+				break;
+			case 'span':
+				if (node['class'] === 'v') {
+					var parts = node.id.split(':');
+					usx.push('<verse id="' + parts[2] + '" style="' + node['class'] + '" />');
+					node.children = [];
+				} else if (node['class'] === 'topf' || node['class'] === 'topx') {
+					// output nothing
+					clearTextChildren(node);
+				} else if (node.note) {
+					usx.push('<note caller="+" style="f"><char style="' + node['class'] + '">');
+				} else {
+					usx.push('<char style="' + node['class'] + '">');
+				}
+				break;
+			case 'TEXT':
+				usx.push(node.text);
+				break;
+			default:
+				throw new Error('unexpected HTML element ' + node.tagName + '.');		
+		}
+	}
+	
+	function clearTextChildren(node) {
+		for (var i=0; i<node.children.length; i++) {
+			var child = node.children[i];
+			if (child.tagName === 'TEXT') {
+				child.text = '';
+			}
+		}
+	}
+	
+	function convertCloseElement(usx, node) {
+		switch(node.tagName) {
+			case 'ROOT':
+			case 'article':
+			case 'section':
+			case 'TEXT':
+				// do nothing
+				break;
+			case 'p':
+				if (node['class'] !== 'c') {
+					usx.push('</para>', os.EOL);
+				}
+				break;
+			case 'span':
+				if (node['class'] === 'v') {
+					// do nothing
+				} else if (node['class'] === 'topf' || node['class'] === 'topx') {
+					// do nothing
+				} else if (node.note) {
+					usx.push(node.note, '</char></note>');
+				} else {
+					usx.push('</span>');
+				}
+				break;
+			default:
+				throw new Error('unexpected HTML element ' + node.tagName + '.');
+				
+		}
+	}
+	
 	
 	function compareUSXFile(data, callback) {
 		var outFile = OUT_BIBLE_PATH + filename;
