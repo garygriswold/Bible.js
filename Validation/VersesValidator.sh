@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ -z "$1" ]; then
-	echo "Usage: HTMLValidator.sh VERSION";
+	echo "Usage: VersesValidator.sh VERSION";
 	exit 1;
 fi
 
