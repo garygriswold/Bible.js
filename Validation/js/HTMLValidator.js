@@ -4,10 +4,11 @@
 * parses it, and generates USX files
 */
 var fs = require("fs");
-var os = require("os");
+//var os = require("os");
 var HTML_BIBLE_PATH = "../../DBL/3prepared/";
 var OUT_BIBLE_PATH = "output/html/";
 var USX_BIBLE_PATH = "../../DBL/2current/";
+var EOL = '\r\n';
 
 function HTMLValidator(version) {
 	this.version = version;
@@ -32,31 +33,29 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 	} else {
 		var chapters = [];
 		console.log('doing ', books[index]);
-		this.db.all("SELECT html FROM chapters WHERE reference LIKE ?", books[index].code + '%', function(err, results) {
+		var book = books[index].code;
+		this.db.all("SELECT html FROM chapters WHERE reference LIKE ?", book + '%', function(err, results) {
 			if (err) that.fatalError(err, 'select html');
-			for (var i=0; i<2; i++) {
+			for (var i=0; i<results.length; i++) {
 				//console.log(results[i].html);
 				var node = that.parser.readBook(results[i].html);
-				console.log(node.toHTML());
+				//console.log(node.toHTML());
 				chapters.push(node);
 			}
 			var usx = convertHTML2USX(chapters);
-			console.log('-------');
-			console.log(usx);
-			//usx.push('</usx>', os.EOL);
-			//console.log(usx.join(''));
-			// compareUSXFile(usx.join(''), function() {
-					
-			// });
-			
-			that.validateBook(index + 10000, books, callback);
+			//console.log('-------');
+			//console.log(usx);
+			compareUSXFile(book, usx, function() {
+				that.validateBook(index + 10000, books, callback);
+			});
 		});
 	}
 	
 	function convertHTML2USX(chapters) {
 		var usx = [];
-		usx.push('<?xml version="1.0" encoding="utf-8"?>', os.EOL);
-		usx.push('<usx version="2.0">', os.EOL);
+		usx.push(String.fromCharCode('0xFEFF'));
+		usx.push('<?xml version="1.0" encoding="utf-8"?>', EOL);
+		usx.push('<usx version="2.0">', EOL);
 		for (var i=0; i<chapters.length; i++) {
 			recurseOverHTML(usx, chapters[i]);
 		}
@@ -75,28 +74,28 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 	}
 	
 	function convertOpenElement(usx, node) {
-		console.log(node.tagName);
+		//console.log(node.tagName);
 		switch(node.tagName) {
 			case 'ROOT':
 				// do nothing
 				break;
 			case 'article':
-				usx.push('<book code="' + node.id + '" style="' + node['class'] + '"></book>', os.EOL); 
+				usx.push('<book code="' + node.id + '" style="' + node['class'] + '"></book>', EOL); 
 				break;
 			case 'section':
 				var parts = node.id.split(':');
-				usx.push('<chapter number="' + parts[1] + '" style="c" />', os.EOL);
+				usx.push('<chapter number="' + parts[1] + '" style="c" />', EOL);
 				node.children = [];
 				break;
 			case 'p':
 				if (node['class'] !== 'c') {
-					usx.push('<para style="' + node['class'] + '">', os.EOL);
+					usx.push('<para style="' + node['class'] + '">', EOL);
 				}
 				break;
 			case 'span':
 				if (node['class'] === 'v') {
 					var parts = node.id.split(':');
-					usx.push('<verse id="' + parts[2] + '" style="' + node['class'] + '" />');
+					usx.push('<verse number="' + parts[2] + '" style="' + node['class'] + '" />');
 					node.children = [];
 				} else if (node['class'] === 'topf' || node['class'] === 'topx') {
 					// output nothing
@@ -134,7 +133,7 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				break;
 			case 'p':
 				if (node['class'] !== 'c') {
-					usx.push('</para>', os.EOL);
+					usx.push('</para>', EOL);
 				}
 				break;
 			case 'span':
@@ -155,14 +154,18 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 	}
 	
 	
-	function compareUSXFile(data, callback) {
-		var outFile = OUT_BIBLE_PATH + filename;
+	function compareUSXFile(book, data, callback) {
+		var inFile = USX_BIBLE_PATH + that.version + '/USX_1/' + book + '.usx';
+		console.log('INFILE', inFile);
+		var outFile = OUT_BIBLE_PATH + book + '.usx';
+		console.log('OUTFILE', outFile);
 		fs.writeFile(outFile, data, { encoding: 'utf8'}, function(err) {
 			if (err) {
-				console.log('WRITE ERROR', JSON.stringify(err));
-				process.exit(1);
+				//console.log('WRITE ERROR', JSON.stringify(err));
+				//process.exit(1);
+				that.fatalError(err, 'Write USX File');
 			}
-			console.log('COMPARE ', filename);
+			console.log('COMPARE ', book);
 			var proc = require('child_process');
 			proc.exec('diff ' + inFile + ' ' + outFile, { encoding: 'utf8' }, function(err, stdout, stderr) {
 				if (err) {
@@ -275,7 +278,7 @@ HTMLElement.prototype.toHTML = function() {
 	return(array.join(''));	
 };
 HTMLElement.prototype.buildHTML = function(array, includeChildren) {
-	array.push(os.EOL, '<', this.tagName);
+	array.push(EOL, '<', this.tagName);
 	if (this.id) array.push(' id="', this.id, '"');
 	if (this['class']) array.push(' class="', this['class'], '"');
 	if (this.note) array.push(' note="', this.note, '"');
