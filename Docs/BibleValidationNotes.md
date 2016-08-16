@@ -33,13 +33,24 @@ NMV
 
 	Last performed Aug 15, 2016
 	XMLTokenizer - perfect, but when space in empty node is removed <name/> and utf-8 preamble is removed
-	USXParser - perfect diff no options
-	HTML - needs work, TOC fields not done, there must be some missing elements
+	USXParser - space must be removed in empty nodes book, chapter, verse, and para.  Also, it uses \n CR and 
+		before and after </usx>
+	HTML - needs work
 	StyleUse - perfect
 	Verses - errors diff no options, perfect diff -w
-	Concordance - perfect, 11 punctuation marks + space
+	Concordance - perfect, 12 punctuation marks + space
 	TableOfContents - perfect
 
 WEB
 ---
 
+	Last performed Aug 15, 2016
+	XMLTokenizer - perfect, diff no options
+	USXParser - </name>whitespace</name> problems. Whitespace not recognized. 
+		Error occurs in 1MA, ESG, SIR, WIS,
+		Error occurs in MRK 3:29 in way that drops space between note and following text.
+	HTML - needs work
+	StyleUse - perfect
+	Verses - errors diff no options, perfect diff -w
+	Concordance - perfect, 14 punctuation marks + space
+	TableOfContents - perfect

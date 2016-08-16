@@ -33,6 +33,10 @@ XMLTokenizer.prototype.nextToken = function() {
 					this.current = this.state.ELE_START;
 					this.tokenStart = this.position;
 				}
+				else if (chr === ' ' || chr === '\t' || chr === '\n' || chr === '\r') {
+					this.current = this.state.WHITESP;
+					this.tokenStart = this.position -1;
+				}
 				break;
 			case this.state.START:
 				if (chr === '<') {
