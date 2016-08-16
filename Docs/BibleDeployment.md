@@ -83,14 +83,14 @@ It displays the styles, references or use, and counts for any styles that are no
 	
 	Error results are displayed in stdout, and output/StyleUseUnfinished.txt
 	
-HTMLValidator
--------------
+VersesValidator
+---------------
 
-The HTMLValidator first extracts all of the verse.html into a single text.  This is used as a baseline of text for the Bible, because
-it is generated directly off the USX model objects that were created by the USXParser.  Next, this program reads chapters.html and extracts
+The VersesValidator first extracts all of the verse.html into a single text.  This is used as a baseline of 
+text for the Bible, because it is generated directly off the USX model objects that were created by the USXParser.  Next, this program reads chapters.html and extracts
 the text from the HTML, and generates a single text file.
 
-	./HTMLValidator.sh VERSION
+	./VersesValidator.sh VERSION
 	
 	Differences are displayed on the console.  The verses.html output is found at output/verses.txt, and the chapters.html output is found at
 	output/chapters.txt.  They are compared using diff -w

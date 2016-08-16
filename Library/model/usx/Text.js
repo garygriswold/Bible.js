@@ -23,6 +23,8 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 			textNode.setAttribute('class', parentClass.substr(3));
 			textNode.setAttribute('note', this.text);
 			parentNode.appendChild(textNode);
+		} else if (parentClass === 'fr' || parentClass === 'xo') {
+			parentNode.setAttribute('hidden', this.text); // permanently hide note.
 		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of parent.
 		} else if (grParentClass != null && (grParentClass[0] === 'f' || grParentClass[0] === 'x')) {

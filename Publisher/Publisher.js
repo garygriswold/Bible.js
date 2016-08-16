@@ -765,23 +765,21 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 		case 11: // fragment
 			break;
 		case 1: // element
-			this.result.push(node.preWhiteSpace);
-			this.result.push('<', nodeName);
+			this.result.push(node.preWhiteSpace, '<', nodeName);
 			var attrs = node.attrNames();
 			for (var i=0; i<attrs.length; i++) {
 				this.result.push(' ', attrs[i], '="', node.getAttribute(attrs[i]), '"');
 			}
 			this.result.push('>');
-			if (nodeName !== 'span') this.result.push('\n');
 			if (node.textContent) {
 				this.result.push(node.textContent);
 			}
 			break;
 		case 3: // text
-			this.result.push(node.textContent);
+			this.result.push(node.preWhiteSpace, node.textContent);
 			break;
 		case 13: // empty element
-			this.result.push('<', nodeName, '>');
+			this.result.push(node.preWhiteSpace, '<', nodeName, '>');
 			break;
 		default:
 			throw new Error('Unexpected nodeType ' + node.nodeType + ' in HTMLBuilder.toHTML().');
@@ -791,7 +789,6 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 	}
 	if (node.nodeType === 1) {
 		this.result.push('</', nodeName, '>');
-		if (nodeName !== 'span') this.result.push('\n');
 	}
 };
 HTMLBuilder.prototype.toJSON = function() {
@@ -870,6 +867,7 @@ Book.prototype.toDOM = function(parentNode) {
 	var article = new DOMNode('article');
 	article.setAttribute('id', this.code);
 	article.setAttribute('class', this.style);
+	article.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(article);
 	return(article);
 };
@@ -899,6 +897,7 @@ Chapter.prototype.toDOM = function(parentNode, bookCode, localizeNumber) {
 	var reference = bookCode + ':' + this.number;
 	var section = new DOMNode('section');
 	section.setAttribute('id', reference);
+	section.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(section);
 
 	var child = new DOMNode('p');
@@ -940,6 +939,7 @@ Para.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('p');
 	child.setAttribute('class', this.style);
 	if (identStyles.indexOf(this.style) === -1) {
+		child.preWhiteSpace = this.whiteSpace;
 		parentNode.appendChild(child);
 	}
 	return(child);
@@ -973,6 +973,7 @@ Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum, localizeNumbe
 	child.setAttribute('id', reference);
 	child.setAttribute('class', this.style);
 	child.textContent = ' ' + localizeNumber.toLocal(this.number) + '&nbsp;';
+	child.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(child);
 	return(child);
 };
@@ -1025,6 +1026,7 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direc
 		default:
 			refChild.textContent = '* ';
 	}
+	refChild.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(refChild);
 	return(refChild);
 };
@@ -1062,16 +1064,11 @@ Char.prototype.buildUSX = function(result) {
 	result.push(this.closeElement());
 };
 Char.prototype.toDOM = function(parentNode) {
-	if (this.style === 'fr' || this.style === 'xo') {
-		return(null);// this drop these styles from presentation
-	}
-	else {
-		var child = new DOMNode('span');
-		child.preWhiteSpace = (this.whiteSpace === ' ') ? ' ' : '';
-		child.setAttribute('class', this.style);
-		parentNode.appendChild(child);
-		return(child);
-	}
+	var child = new DOMNode('span');
+	child.setAttribute('class', this.style);
+	child.preWhiteSpace = this.whiteSpace;
+	parentNode.appendChild(child);
+	return(child);
 };
 /**
 * This class contains a ref element as parsed from a USX Bible file.
@@ -1105,6 +1102,7 @@ Ref.prototype.buildUSX = function(result) {
 };
 Ref.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('span');
+	child.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(child);
 	return(child);
 };
@@ -1132,6 +1130,7 @@ OptBreak.prototype.buildUSX = function(result) {
 };
 OptBreak.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('wbr');
+	child.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(child);
 	return(child);
 };
@@ -1160,6 +1159,8 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 			textNode.setAttribute('class', parentClass.substr(3));
 			textNode.setAttribute('note', this.text);
 			parentNode.appendChild(textNode);
+		} else if (parentClass === 'fr' || parentClass === 'xo') {
+			parentNode.setAttribute('hidden', this.text); // permanently hide note.
 		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of parent.
 		} else if (grParentClass != null && (grParentClass[0] === 'f' || grParentClass[0] === 'x')) {

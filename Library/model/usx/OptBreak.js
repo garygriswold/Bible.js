@@ -22,6 +22,7 @@ OptBreak.prototype.buildUSX = function(result) {
 };
 OptBreak.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('wbr');
+	child.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(child);
 	return(child);
 };

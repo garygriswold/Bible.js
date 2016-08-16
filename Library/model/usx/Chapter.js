@@ -24,6 +24,7 @@ Chapter.prototype.toDOM = function(parentNode, bookCode, localizeNumber) {
 	var reference = bookCode + ':' + this.number;
 	var section = new DOMNode('section');
 	section.setAttribute('id', reference);
+	section.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(section);
 
 	var child = new DOMNode('p');

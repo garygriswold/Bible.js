@@ -26,6 +26,7 @@ Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum, localizeNumbe
 	child.setAttribute('id', reference);
 	child.setAttribute('class', this.style);
 	child.textContent = ' ' + localizeNumber.toLocal(this.number) + '&nbsp;';
+	child.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(child);
 	return(child);
 };

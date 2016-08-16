@@ -37,16 +37,12 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 		this.db.all("SELECT html FROM chapters WHERE reference LIKE ?", book + '%', function(err, results) {
 			if (err) that.fatalError(err, 'select html');
 			for (var i=0; i<results.length; i++) {
-				//console.log(results[i].html);
 				var node = that.parser.readBook(results[i].html);
-				//console.log(node.toHTML());
 				chapters.push(node);
 			}
 			var usx = convertHTML2USX(chapters);
-			//console.log('-------');
-			//console.log(usx);
 			compareUSXFile(book, usx, function() {
-				that.validateBook(index + 10000, books, callback);
+				that.validateBook(index + 1, books, callback);
 			});
 		});
 	}
@@ -59,7 +55,7 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 		for (var i=0; i<chapters.length; i++) {
 			recurseOverHTML(usx, chapters[i]);
 		}
-		usx.push('</usx>');
+		usx.push(EOL, '</usx>');
 		return(usx.join(''));
 	}
 	
@@ -80,30 +76,36 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				// do nothing
 				break;
 			case 'article':
-				usx.push('<book code="' + node.id + '" style="' + node['class'] + '"></book>', EOL); 
+				usx.push(node.whiteSpace, '<book code="', node.id, '" style="', node['class'], '"></book>'); 
 				break;
 			case 'section':
 				var parts = node.id.split(':');
-				usx.push('<chapter number="' + parts[1] + '" style="c" />', EOL);
+				node.whiteSpace = '\r\n  '; // Necessary hack. I think XMLTokenizer discards leading whitespace
+				usx.push(node.whiteSpace, '<chapter number="', parts[1], '" style="c" />');
 				node.children = [];
 				break;
 			case 'p':
 				if (node['class'] !== 'c') {
-					usx.push('<para style="' + node['class'] + '">', EOL);
+					usx.push(node.whiteSpace, '<para style="', node['class'], '">');
 				}
 				break;
 			case 'span':
 				if (node['class'] === 'v') {
 					var parts = node.id.split(':');
-					usx.push('<verse number="' + parts[2] + '" style="' + node['class'] + '" />');
+					usx.push(node.whiteSpace, '<verse number="', parts[2], '" style="', node['class'], '" />');
 					node.children = [];
-				} else if (node['class'] === 'topf' || node['class'] === 'topx') {
-					// output nothing
-					clearTextChildren(node);
+				} else if (node['class'] === 'topf') {
+					usx.push(node.whiteSpace, '<note caller="+" style="f">');
+					clearTextChildren(node); // clear note button
+				} else if (node['class'] === 'topx') {
+					usx.push(node.whiteSpace, '<note caller="+" style="x">');
+					clearTextChildren(node); // clear note button
+				} else if (node.hidden) {
+					usx.push(node.whiteSpace, '<char style="', node['class'], '" closed="false">');
 				} else if (node.note) {
-					usx.push('<note caller="+" style="f"><char style="' + node['class'] + '">');
+					usx.push(node.whiteSpace, '<char style="', node['class'], '" closed="false">');
 				} else {
-					usx.push('<char style="' + node['class'] + '">');
+					usx.push(node.whiteSpace, '<char style="', node['class'], '">');
 				}
 				break;
 			case 'TEXT':
@@ -133,18 +135,20 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				break;
 			case 'p':
 				if (node['class'] !== 'c') {
-					usx.push('</para>', EOL);
+					usx.push('</para>');
 				}
 				break;
 			case 'span':
 				if (node['class'] === 'v') {
 					// do nothing
 				} else if (node['class'] === 'topf' || node['class'] === 'topx') {
-					// do nothing
+					usx.push('</note>');
+				} else if (node.hidden) {
+					usx.push(node.hidden, '</char>');
 				} else if (node.note) {
-					usx.push(node.note, '</char></note>');
+					usx.push(node.note, '</char>');
 				} else {
-					usx.push('</span>');
+					usx.push('</char>');
 				}
 				break;
 			default:
@@ -259,6 +263,7 @@ function HTMLElement(tagName) {
 	this.id = null;
 	this['class'] = null;
 	this.note = null;
+	this.hidden = null;
 	this.emptyElement = false;
 	this.whiteSpace = '';
 	this.children = [];
@@ -282,6 +287,7 @@ HTMLElement.prototype.buildHTML = function(array, includeChildren) {
 	if (this.id) array.push(' id="', this.id, '"');
 	if (this['class']) array.push(' class="', this['class'], '"');
 	if (this.note) array.push(' note="', this.note, '"');
+	if (this.hidden) array.push(' hidden="', this.hidden, '"');
 	if (this.emptyElement) {
 		array.push(' />');
 	} else {
@@ -310,6 +316,7 @@ HTMLTextNode.prototype.buildHTML = function(array) {
 function HTMLRoot() {
 	this.tagName = 'ROOT';
 	this.children = [];
+	Object.seal(this);
 }
 HTMLRoot.prototype.addChild = function(node) {
 	this.children.push(node);

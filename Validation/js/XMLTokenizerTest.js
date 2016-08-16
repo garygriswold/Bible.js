@@ -31,6 +31,7 @@ XMLSerializer.prototype.write = function(nodeType, nodeValue) {
 			break;
 		case XMLNodeType.ELE_EMPTY:
 			this.result.push(' />');
+			//this.result.push('/>');
 			break;
 		case XMLNodeType.ELE_CLOSE:
 			this.result.push('</', nodeValue, '>');

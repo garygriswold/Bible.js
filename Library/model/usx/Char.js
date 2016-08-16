@@ -32,14 +32,9 @@ Char.prototype.buildUSX = function(result) {
 	result.push(this.closeElement());
 };
 Char.prototype.toDOM = function(parentNode) {
-	if (this.style === 'fr' || this.style === 'xo') {
-		return(null);// this drop these styles from presentation
-	}
-	else {
-		var child = new DOMNode('span');
-		child.preWhiteSpace = (this.whiteSpace === ' ') ? ' ' : '';
-		child.setAttribute('class', this.style);
-		parentNode.appendChild(child);
-		return(child);
-	}
+	var child = new DOMNode('span');
+	child.setAttribute('class', this.style);
+	child.preWhiteSpace = this.whiteSpace;
+	parentNode.appendChild(child);
+	return(child);
 };

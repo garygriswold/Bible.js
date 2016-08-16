@@ -31,6 +31,7 @@ Para.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('p');
 	child.setAttribute('class', this.style);
 	if (identStyles.indexOf(this.style) === -1) {
+		child.preWhiteSpace = this.whiteSpace;
 		parentNode.appendChild(child);
 	}
 	return(child);

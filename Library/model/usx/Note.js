@@ -3,9 +3,9 @@
 */
 function Note(node) {
 	this.caller = node.caller.charAt(0);
-	if (this.caller !== '+' && this.caller !== '-') {
+	if (this.caller !== '+' && this.caller !== '-' && this.caller !== '*') {
 		console.log(JSON.stringify(node));
-		throw new Error('Note caller with no + or -');
+		throw new Error('Note caller with no + or - or *');
 	}
 	this.style = node.style;
 	this.whiteSpace = node.whiteSpace;
@@ -47,6 +47,7 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direc
 		default:
 			refChild.textContent = '* ';
 	}
+	refChild.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(refChild);
 	return(refChild);
 };
