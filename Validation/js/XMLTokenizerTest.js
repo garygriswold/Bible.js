@@ -5,8 +5,9 @@ var fs = require("fs");
 var WEB_BIBLE_PATH = "../../DBL/2current/";
 var OUT_BIBLE_PATH = "output/xml/";
 
-function XMLSerializer() {
+function XMLSerializer(spaceOption) {
 	this.result = [];
+	this.emptyElementSpace = (spaceOption !== 'nospace');
 	Object.seal(this);
 }
 XMLSerializer.prototype.write = function(nodeType, nodeValue) {
@@ -30,8 +31,8 @@ XMLSerializer.prototype.write = function(nodeType, nodeValue) {
 			this.result.push(nodeValue);
 			break;
 		case XMLNodeType.ELE_EMPTY:
-			this.result.push(' />');
-			//this.result.push('/>');
+			if (this.emptyElementSpace) this.result.push(' />');
+			else this.result.push('/>');
 			break;
 		case XMLNodeType.ELE_CLOSE:
 			this.result.push('</', nodeValue, '>');
@@ -49,17 +50,17 @@ XMLSerializer.prototype.close = function() {
 	return(this.result.join(''));
 };
 
-function testOne(fullPath, files, index, callback) {
+function testOne(fullPath, files, index, spaceOption, callback) {
 	if (index >= files.length) {
 		callback();
 	} else {
 		var file = files[index];
-		symmetricTest(fullPath, file, function() {
-			testOne(fullPath, files, index + 1, callback);			
+		symmetricTest(fullPath, file, spaceOption, function() {
+			testOne(fullPath, files, index + 1, spaceOption, callback);			
 		});
 	}
 }
-function symmetricTest(fullPath, filename, callback) {
+function symmetricTest(fullPath, filename, spaceOption, callback) {
 	if (filename.substr(0, 1) === '.') {
 		callback();
 	} else {
@@ -70,7 +71,7 @@ function symmetricTest(fullPath, filename, callback) {
 				process.exit(1);
 			}
 			var reader = new XMLTokenizer(data);
-			var writer = new XMLSerializer();
+			var writer = new XMLSerializer(spaceOption);
 			var count = 0;
 			var type;
 			while (type !== XMLNodeType.END && count < 770000) {
@@ -101,8 +102,18 @@ function symmetricTest(fullPath, filename, callback) {
 	}
 }
 if (process.argv.length < 3) {
-	console.log('Usage: XMLTokenizerTest.sh  version');
+	// when optional parameter nospace is used empty elements have no space.
+	console.log('Usage: XMLTokenizerTest.sh  version  [nospace]');
 	process.exit(1);
+}
+var spaceOption = null;
+if (process.argv.length > 3) {
+	if (process.argv[3] === 'nospace') {
+		spaceOption = process.argv[3];
+	} else {
+		console.log('Usage: XMLTokenizerTest.sh  version  [nospace]');
+		process.exit(1);
+	}
 }
 fs.lstat(OUT_BIBLE_PATH, function(err, stat) {
 	if (err) {
@@ -110,7 +121,7 @@ fs.lstat(OUT_BIBLE_PATH, function(err, stat) {
 	}
 	var fullPath = WEB_BIBLE_PATH + process.argv[2] + '/USX_1/';
 	var files = fs.readdirSync(fullPath);
-	testOne(fullPath, files, 0, function() {
+	testOne(fullPath, files, 0, spaceOption, function() {
 		console.log('XMLTokenizerTest DONE');
 	});
 });

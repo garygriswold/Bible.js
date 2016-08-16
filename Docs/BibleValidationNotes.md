@@ -32,7 +32,7 @@ NMV
 ---
 
 	Last performed Aug 15, 2016
-	XMLTokenizer - perfect, but when space in empty node is removed <name/> and utf-8 preamble is removed
+	XMLTokenizer NMV  nospace - perfect utf-8 preamble is removed
 	USXParser - space must be removed in empty nodes book, chapter, verse, and para.  Also, it uses \n CR and 
 		before and after </usx>
 	HTML - needs work
