@@ -8,8 +8,8 @@ ARBVDPD
 -------
 
 	Last performed Aug 15, 2016
-	XMLTokenizer - perfect diff no options
-	USXParser - perfect diff no options
+	XMLTokenizer - perfect diff no options (8/16/2016)
+	USXParser - perfect diff no options (8/16/2016)
 	HTML - needs work, TOC fields not done, many errors in PSA
 	StyleUse - perfect
 	Verses - errors diff no options, perfect diff -w
@@ -20,8 +20,8 @@ KJVPD
 -----
 
 	Last performed Aug 15, 2016
-	XMLTokenizer - perfect diff no options
-	USXParser - perfect diff no options
+	XMLTokenizer - perfect diff no options (8/16/2016)
+	USXParser - perfect diff no options (8/16/2016)
 	HTML - needs work, TOC fields not done, there must be some missing elements
 	StyleUse - perfect
 	Verses - errors diff no options, perfect diff -w
@@ -32,9 +32,9 @@ NMV
 ---
 
 	Last performed Aug 15, 2016
-	XMLTokenizer NMV  nospace - perfect utf-8 preamble is removed
+	XMLTokenizer NMV  nospace - perfect utf-8 preamble is removed (8/16/2016)
 	USXParser - space must be removed in empty nodes book, chapter, verse, and para.  Also, it uses \n CR and 
-		before and after </usx>
+		before and after </usx> (8/16/2016)
 	HTML - needs work
 	StyleUse - perfect
 	Verses - errors diff no options, perfect diff -w
@@ -45,10 +45,8 @@ WEB
 ---
 
 	Last performed Aug 15, 2016
-	XMLTokenizer - perfect, diff no options
-	USXParser - </name>whitespace</name> problems. Whitespace not recognized. 
-		Error occurs in 1MA, ESG, SIR, WIS,
-		Error occurs in MRK 3:29 in way that drops space between note and following text.
+	XMLTokenizer - perfect, diff no options (8/16/2016)
+	USXParser - perfect, diff no options (8/16/2016)
 	HTML - needs work
 	StyleUse - perfect
 	Verses - errors diff no options, perfect diff -w

@@ -23,7 +23,6 @@ USXParser.prototype.readBook = function(data) {
 		switch(tokenType) {
 			case XMLNodeType.ELE_OPEN:
 				tempNode = { tagName: tokenValue };
-				tempNode.whiteSpace = (priorType === XMLNodeType.WHITESP) ? priorValue : '';
 				//console.log(tokenValue, priorType, '|' + priorValue + '|');
 				break;
 			case XMLNodeType.ATTR_NAME:
@@ -42,9 +41,12 @@ USXParser.prototype.readBook = function(data) {
 				nodeStack.push(node);
 				break;
 			case XMLNodeType.TEXT:
+			case XMLNodeType.WHITESP:
 				node = new Text(tokenValue);
 				//console.log(node.text);
-				nodeStack[nodeStack.length -1].addChild(node);
+				if (nodeStack.length > 0) {
+					nodeStack[nodeStack.length -1].addChild(node);
+				}
 				break;
 			case XMLNodeType.ELE_EMPTY:
 				tempNode.emptyElement = true;
@@ -59,9 +61,6 @@ USXParser.prototype.readBook = function(data) {
 					throw new Error('closing element mismatch ' + node.openElement() + ' and ' + tokenValue);
 				}
 				break;
-			case XMLNodeType.WHITESP:
-				// do nothing
-				break;
 			case XMLNodeType.PROG_INST:
 				// do nothing
 				break;
@@ -71,7 +70,6 @@ USXParser.prototype.readBook = function(data) {
 			default:
 				throw new Error('The XMLNodeType ' + tokenType + ' is unknown in USXParser.');
 		}
-		var priorType = tokenType;
 		var priorValue = tokenValue;
 	}
 	return(node);

@@ -17,7 +17,7 @@ USX.prototype.openElement = function() {
 	return('<usx version="' + this.version + elementEnd);
 };
 USX.prototype.closeElement = function() {
-	return(this.emptyElement ? '' : '\r\n</usx>');
+	return(this.emptyElement ? '' : '</usx>');
 };
 USX.prototype.toUSX = function() {
 	var result = [];
@@ -27,8 +27,7 @@ USX.prototype.toUSX = function() {
 USX.prototype.toDOM = function() {
 };
 USX.prototype.buildUSX = function(result) {
-	result.push(String.fromCharCode('0xFEFF'));
-	result.push('<?xml version="1.0" encoding="utf-8"?>');
+	result.push(String.fromCharCode('0xFEFF'), '<?xml version="1.0" encoding="utf-8"?>', '\r\n');
 	result.push(this.whiteSpace, this.openElement());
 	for (var i=0; i<this.children.length; i++) {
 		this.children[i].buildUSX(result);
