@@ -23,6 +23,7 @@ USXParser.prototype.readBook = function(data) {
 		switch(tokenType) {
 			case XMLNodeType.ELE_OPEN:
 				tempNode = { tagName: tokenValue };
+				tempNode.whiteSpace = '';
 				//console.log(tokenValue, priorType, '|' + priorValue + '|');
 				break;
 			case XMLNodeType.ATTR_NAME:

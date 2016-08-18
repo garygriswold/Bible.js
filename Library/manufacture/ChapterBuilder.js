@@ -10,9 +10,10 @@ function ChapterBuilder(adapter, pubVersion) {
 }
 ChapterBuilder.prototype.readBook = function(usxRoot) {
 	var that = this;
+	var priorChildNode = null;
 	var bookCode = null;
 	var chapterNum = 0;
-	var oneChapter = new USX({ version: 2.0 });
+	var oneChapter = new USX({ version: usxRoot.version });
 	for (var i=0; i<usxRoot.children.length; i++) {
 		var childNode = usxRoot.children[i];
 		switch(childNode.tagName) {
@@ -21,12 +22,14 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 				break;
 			case 'chapter':
 				this.chapters.push({bookCode: bookCode, chapterNum: chapterNum, usxTree: oneChapter});
-				oneChapter = new USX({ version: 2.0 });
+				oneChapter = new USX({ version: usxRoot.version });
 				chapterNum = childNode.number;
 				break;
 		}
-		oneChapter.addChild(childNode);
+		if (priorChildNode) oneChapter.addChild(priorChildNode);
+		priorChildNode = childNode;
 	}
+	oneChapter.addChild(priorChildNode);
 	this.chapters.push({bookCode: bookCode, chapterNum: chapterNum, usxTree: oneChapter});
 };
 ChapterBuilder.prototype.loadDB = function(callback) {

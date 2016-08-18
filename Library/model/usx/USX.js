@@ -14,10 +14,10 @@ USX.prototype.addChild = function(node) {
 };
 USX.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
-	return('<usx version="' + this.version + elementEnd);
+	return('\r\n<usx version="' + this.version + elementEnd);
 };
 USX.prototype.closeElement = function() {
-	return(this.emptyElement ? '' : '</usx>');
+	return(this.emptyElement ? '' : '\r\n</usx>');
 };
 USX.prototype.toUSX = function() {
 	var result = [];
@@ -27,7 +27,7 @@ USX.prototype.toUSX = function() {
 USX.prototype.toDOM = function() {
 };
 USX.prototype.buildUSX = function(result) {
-	result.push(String.fromCharCode('0xFEFF'), '<?xml version="1.0" encoding="utf-8"?>', '\r\n');
+	result.push(String.fromCharCode('0xFEFF'), '<?xml version="1.0" encoding="utf-8"?>');
 	result.push(this.whiteSpace, this.openElement());
 	for (var i=0; i<this.children.length; i++) {
 		this.children[i].buildUSX(result);

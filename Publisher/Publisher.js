@@ -198,9 +198,10 @@ function ChapterBuilder(adapter, pubVersion) {
 }
 ChapterBuilder.prototype.readBook = function(usxRoot) {
 	var that = this;
+	var priorChildNode = null;
 	var bookCode = null;
 	var chapterNum = 0;
-	var oneChapter = new USX({ version: 2.0 });
+	var oneChapter = new USX({ version: usxRoot.version });
 	for (var i=0; i<usxRoot.children.length; i++) {
 		var childNode = usxRoot.children[i];
 		switch(childNode.tagName) {
@@ -209,12 +210,14 @@ ChapterBuilder.prototype.readBook = function(usxRoot) {
 				break;
 			case 'chapter':
 				this.chapters.push({bookCode: bookCode, chapterNum: chapterNum, usxTree: oneChapter});
-				oneChapter = new USX({ version: 2.0 });
+				oneChapter = new USX({ version: usxRoot.version });
 				chapterNum = childNode.number;
 				break;
 		}
-		oneChapter.addChild(childNode);
+		if (priorChildNode) oneChapter.addChild(priorChildNode);
+		priorChildNode = childNode;
 	}
+	oneChapter.addChild(priorChildNode);
 	this.chapters.push({bookCode: bookCode, chapterNum: chapterNum, usxTree: oneChapter});
 };
 ChapterBuilder.prototype.loadDB = function(callback) {
@@ -812,7 +815,7 @@ USX.prototype.addChild = function(node) {
 };
 USX.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
-	return('<usx version="' + this.version + elementEnd);
+	return('\r\n<usx version="' + this.version + elementEnd);
 };
 USX.prototype.closeElement = function() {
 	return(this.emptyElement ? '' : '\r\n</usx>');
@@ -825,8 +828,7 @@ USX.prototype.toUSX = function() {
 USX.prototype.toDOM = function() {
 };
 USX.prototype.buildUSX = function(result) {
-	result.push(String.fromCharCode('0xFEFF'));
-	result.push('<?xml version="1.0" encoding="utf-8"?>');
+	result.push(String.fromCharCode('0xFEFF'), '<?xml version="1.0" encoding="utf-8"?>');
 	result.push(this.whiteSpace, this.openElement());
 	for (var i=0; i<this.children.length; i++) {
 		this.children[i].buildUSX(result);
@@ -982,9 +984,9 @@ Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum, localizeNumbe
 */
 function Note(node) {
 	this.caller = node.caller.charAt(0);
-	if (this.caller !== '+' && this.caller !== '-') {
+	if (this.caller !== '+' && this.caller !== '-' && this.caller !== '*') {
 		console.log(JSON.stringify(node));
-		throw new Error('Note caller with no + or -');
+		throw new Error('Note caller with no + or - or *');
 	}
 	this.style = node.style;
 	this.whiteSpace = node.whiteSpace;
@@ -1209,6 +1211,10 @@ XMLTokenizer.prototype.nextToken = function() {
 					this.current = this.state.ELE_START;
 					this.tokenStart = this.position;
 				}
+				else if (chr === ' ' || chr === '\t' || chr === '\n' || chr === '\r') {
+					this.current = this.state.WHITESP;
+					this.tokenStart = this.position -1;
+				}
 				break;
 			case this.state.START:
 				if (chr === '<') {
@@ -1361,7 +1367,7 @@ USXParser.prototype.readBook = function(data) {
 		switch(tokenType) {
 			case XMLNodeType.ELE_OPEN:
 				tempNode = { tagName: tokenValue };
-				tempNode.whiteSpace = (priorType === XMLNodeType.WHITESP) ? priorValue : '';
+				tempNode.whiteSpace = '';
 				//console.log(tokenValue, priorType, '|' + priorValue + '|');
 				break;
 			case XMLNodeType.ATTR_NAME:
@@ -1380,9 +1386,12 @@ USXParser.prototype.readBook = function(data) {
 				nodeStack.push(node);
 				break;
 			case XMLNodeType.TEXT:
+			case XMLNodeType.WHITESP:
 				node = new Text(tokenValue);
 				//console.log(node.text);
-				nodeStack[nodeStack.length -1].addChild(node);
+				if (nodeStack.length > 0) {
+					nodeStack[nodeStack.length -1].addChild(node);
+				}
 				break;
 			case XMLNodeType.ELE_EMPTY:
 				tempNode.emptyElement = true;
@@ -1397,9 +1406,6 @@ USXParser.prototype.readBook = function(data) {
 					throw new Error('closing element mismatch ' + node.openElement() + ' and ' + tokenValue);
 				}
 				break;
-			case XMLNodeType.WHITESP:
-				// do nothing
-				break;
 			case XMLNodeType.PROG_INST:
 				// do nothing
 				break;
@@ -1409,7 +1415,6 @@ USXParser.prototype.readBook = function(data) {
 			default:
 				throw new Error('The XMLNodeType ' + tokenType + ' is unknown in USXParser.');
 		}
-		var priorType = tokenType;
 		var priorValue = tokenValue;
 	}
 	return(node);
