@@ -30,10 +30,11 @@ Para.prototype.toDOM = function(parentNode) {
 	var identStyles = [ 'ide', 'sts', 'rem', 'h', 'toc1', 'toc2', 'toc3', 'cl' ];
 	var child = new DOMNode('p');
 	child.setAttribute('class', this.style);
-	if (identStyles.indexOf(this.style) === -1) {
-		child.preWhiteSpace = this.whiteSpace;
-		parentNode.appendChild(child);
+	if (identStyles.indexOf(this.style) >= 0) {
+		child.setAttribute('hidden', '');	
 	}
+	child.preWhiteSpace = this.whiteSpace;
+	parentNode.appendChild(child);
 	return(child);
 };
 

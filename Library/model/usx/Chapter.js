@@ -21,15 +21,9 @@ Chapter.prototype.buildUSX = function(result) {
 	result.push(this.closeElement());
 };
 Chapter.prototype.toDOM = function(parentNode, bookCode, localizeNumber) {
-	var reference = bookCode + ':' + this.number;
-	var section = new DOMNode('section');
-	section.setAttribute('id', reference);
-	section.preWhiteSpace = this.whiteSpace;
-	parentNode.appendChild(section);
-
 	var child = new DOMNode('p');
 	child.setAttribute('class', this.style);
 	child.textContent = localizeNumber.toLocal(this.number);
-	section.appendChild(child);
-	return(section);
+	parentNode.appendChild(child);
+	return(child);
 };

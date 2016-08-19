@@ -707,14 +707,16 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 	//console.log('dom-parent: ', domParent.nodeName, domParent.nodeType, '  node: ', node.tagName);
 	switch(node.tagName) {
 		case 'usx':
-			domNode = domParent;
+			domNode = node.toDOM(domParent);
 			break;
 		case 'book':
 			this.bookCode = node.code;
+			domParent.setAttribute('id', this.bookCode + ':0');
 			domNode = node.toDOM(domParent);
 			break;
 		case 'chapter':
 			this.chapter = node.number;
+			domParent.setAttribute('id', this.bookCode + ':' + this.chapter);
 			this.noteNum = 0;
 			domNode = node.toDOM(domParent, this.bookCode, this.localizeNumber);
 			break;
@@ -825,7 +827,10 @@ USX.prototype.toUSX = function() {
 	this.buildUSX(result);
 	return(result.join(''));
 };
-USX.prototype.toDOM = function() {
+USX.prototype.toDOM = function(parentNode) {
+	var child = new DOMNode('section');
+	parentNode.appendChild(child);
+	return(child);
 };
 USX.prototype.buildUSX = function(result) {
 	result.push(String.fromCharCode('0xFEFF'), '<?xml version="1.0" encoding="utf-8"?>');
@@ -896,17 +901,12 @@ Chapter.prototype.buildUSX = function(result) {
 	result.push(this.closeElement());
 };
 Chapter.prototype.toDOM = function(parentNode, bookCode, localizeNumber) {
-	var reference = bookCode + ':' + this.number;
-	var section = new DOMNode('section');
-	section.setAttribute('id', reference);
-	section.preWhiteSpace = this.whiteSpace;
-	parentNode.appendChild(section);
-
 	var child = new DOMNode('p');
+	//child.setAttribute('id', bookCode + ':' + this.number);
 	child.setAttribute('class', this.style);
 	child.textContent = localizeNumber.toLocal(this.number);
-	section.appendChild(child);
-	return(section);
+	parentNode.appendChild(child);
+	return(child);
 };
 /**
 * This object contains a paragraph of the Bible text as parsed from a USX version of the Bible.
@@ -940,10 +940,12 @@ Para.prototype.toDOM = function(parentNode) {
 	var identStyles = [ 'ide', 'sts', 'rem', 'h', 'toc1', 'toc2', 'toc3', 'cl' ];
 	var child = new DOMNode('p');
 	child.setAttribute('class', this.style);
-	if (identStyles.indexOf(this.style) === -1) {
-		child.preWhiteSpace = this.whiteSpace;
-		parentNode.appendChild(child);
+	if (identStyles.indexOf(this.style) >= 0) {
+		child.setAttribute('hidden', '');	
 	}
+	child.preWhiteSpace = this.whiteSpace;
+	parentNode.appendChild(child);
+	//}
 	return(child);
 };
 
@@ -1148,8 +1150,12 @@ Text.prototype.buildUSX = function(result) {
 	result.push(this.text);
 };
 Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
-	if (parentNode === null || parentNode.nodeName === 'article') {
+	var that = this;
+	//if (parentNode === null || parentNode.nodeName === 'article') {
 		// discard text node
+	//} else 
+	if (parentNode.nodeName === 'section') {
+		appendTextNode(parentNode);
 	} else if (! parentNode.hasAttribute('class')) { // Ref nodes have no class
 		parentNode.setAttribute('note', this.text); 
 	} else {
@@ -1161,6 +1167,8 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 			textNode.setAttribute('class', parentClass.substr(3));
 			textNode.setAttribute('note', this.text);
 			parentNode.appendChild(textNode);
+		} else if (parentNode.hasAttribute('hidden')) {
+			parentNode.setAttribute('hidden', this.text);
 		} else if (parentClass === 'fr' || parentClass === 'xo') {
 			parentNode.setAttribute('hidden', this.text); // permanently hide note.
 		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
@@ -1169,10 +1177,14 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of grand parent.
 		}
 		else {
-			var child = new DOMNode('text');
-			child.textContent = this.text;
-			parentNode.appendChild(child);
+			appendTextNode(parentNode);
 		}
+	}
+	
+	function appendTextNode(parentNode) {
+		var child = new DOMNode('text');
+		child.textContent = that.text;
+		parentNode.appendChild(child);
 	}
 };
 

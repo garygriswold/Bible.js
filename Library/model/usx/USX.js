@@ -24,7 +24,10 @@ USX.prototype.toUSX = function() {
 	this.buildUSX(result);
 	return(result.join(''));
 };
-USX.prototype.toDOM = function() {
+USX.prototype.toDOM = function(parentNode) {
+	var child = new DOMNode('section');
+	parentNode.appendChild(child);
+	return(child);
 };
 USX.prototype.buildUSX = function(result) {
 	result.push(String.fromCharCode('0xFEFF'), '<?xml version="1.0" encoding="utf-8"?>');

@@ -10,8 +10,12 @@ Text.prototype.buildUSX = function(result) {
 	result.push(this.text);
 };
 Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
-	if (parentNode === null || parentNode.nodeName === 'article') {
+	var that = this;
+	//if (parentNode === null || parentNode.nodeName === 'article') {
 		// discard text node
+	//} else 
+	if (parentNode.nodeName === 'section') {
+		appendTextNode(parentNode);
 	} else if (! parentNode.hasAttribute('class')) { // Ref nodes have no class
 		parentNode.setAttribute('note', this.text); 
 	} else {
@@ -23,6 +27,8 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 			textNode.setAttribute('class', parentClass.substr(3));
 			textNode.setAttribute('note', this.text);
 			parentNode.appendChild(textNode);
+		} else if (parentNode.hasAttribute('hidden')) {
+			parentNode.setAttribute('hidden', this.text);
 		} else if (parentClass === 'fr' || parentClass === 'xo') {
 			parentNode.setAttribute('hidden', this.text); // permanently hide note.
 		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
@@ -31,10 +37,14 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of grand parent.
 		}
 		else {
-			var child = new DOMNode('text');
-			child.textContent = this.text;
-			parentNode.appendChild(child);
+			appendTextNode(parentNode);
 		}
+	}
+	
+	function appendTextNode(parentNode) {
+		var child = new DOMNode('text');
+		child.textContent = that.text;
+		parentNode.appendChild(child);
 	}
 };
 

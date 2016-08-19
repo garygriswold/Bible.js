@@ -34,14 +34,16 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 	//console.log('dom-parent: ', domParent.nodeName, domParent.nodeType, '  node: ', node.tagName);
 	switch(node.tagName) {
 		case 'usx':
-			domNode = domParent;
+			domNode = node.toDOM(domParent);
 			break;
 		case 'book':
 			this.bookCode = node.code;
+			domParent.setAttribute('id', this.bookCode + ':0');
 			domNode = node.toDOM(domParent);
 			break;
 		case 'chapter':
 			this.chapter = node.number;
+			domParent.setAttribute('id', this.bookCode + ':' + this.chapter);
 			this.noteNum = 0;
 			domNode = node.toDOM(domParent, this.bookCode, this.localizeNumber);
 			break;
