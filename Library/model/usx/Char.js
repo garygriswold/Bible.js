@@ -34,6 +34,7 @@ Char.prototype.buildUSX = function(result) {
 Char.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('span');
 	child.setAttribute('class', this.style);
+	child.emptyElement = this.emptyElement;
 	child.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(child);
 	return(child);

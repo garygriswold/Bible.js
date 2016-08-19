@@ -31,6 +31,7 @@ Book.prototype.toDOM = function(parentNode) {
 	var article = new DOMNode('article');
 	article.setAttribute('id', this.code);
 	article.setAttribute('class', this.style);
+	article.emptyElement = this.emptyElement;
 	article.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(article);
 	return(article);

@@ -25,6 +25,7 @@ Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum, localizeNumbe
 	var child = new DOMNode('span');
 	child.setAttribute('id', reference);
 	child.setAttribute('class', this.style);
+	child.emptyElement = this.emptyElement;
 	child.textContent = ' ' + localizeNumber.toLocal(this.number) + '&nbsp;';
 	child.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(child);

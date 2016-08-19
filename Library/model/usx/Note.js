@@ -47,6 +47,7 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direc
 		default:
 			refChild.textContent = '* ';
 	}
+	refChild.emptyElement = this.emptyElement;
 	refChild.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(refChild);
 	return(refChild);

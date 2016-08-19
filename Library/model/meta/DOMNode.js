@@ -11,6 +11,7 @@ function DOMNode(nodeName) {
 	if (nodeName == 'wbr') this.nodeType = 13; // Empty Element Node
 	this.parentNode = null;
 	this.attributes = {};
+	this.emptyElement = false;
 	this.textContent = null;
 	this.childNodes = [];
 	this.preWhiteSpace = ''; // when present, this is whitespace that preceds the node

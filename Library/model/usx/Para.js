@@ -34,6 +34,7 @@ Para.prototype.toDOM = function(parentNode) {
 		child.setAttribute('hidden', '');	
 	}
 	child.preWhiteSpace = this.whiteSpace;
+	child.emptyElement = this.emptyElement;
 	parentNode.appendChild(child);
 	return(child);
 };

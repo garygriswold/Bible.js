@@ -31,6 +31,7 @@ Ref.prototype.buildUSX = function(result) {
 Ref.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('span');
 	child.preWhiteSpace = this.whiteSpace;
+	child.emptyElement = this.emptyElement;
 	parentNode.appendChild(child);
 	return(child);
 };

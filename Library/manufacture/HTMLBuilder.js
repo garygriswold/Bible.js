@@ -21,9 +21,13 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 			for (var i=0; i<attrs.length; i++) {
 				this.result.push(' ', attrs[i], '="', node.getAttribute(attrs[i]), '"');
 			}
-			this.result.push('>');
-			if (node.textContent) {
-				this.result.push(node.textContent);
+			if (node.emptyElement) {
+				this.result.push(' />');
+			} else {
+				this.result.push('>');
+				if (node.textContent) {
+					this.result.push(node.textContent);
+				}
 			}
 			break;
 		case 3: // text
@@ -38,7 +42,7 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 	for (var child=0; child<node.childNodes.length; child++) {
 		this.readRecursively(node.childNodes[child]);
 	}
-	if (node.nodeType === 1) {
+	if (node.nodeType === 1 && ! node.emptyElement) {
 		this.result.push('</', nodeName, '>');
 	}
 };

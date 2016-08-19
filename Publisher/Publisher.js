@@ -775,9 +775,13 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 			for (var i=0; i<attrs.length; i++) {
 				this.result.push(' ', attrs[i], '="', node.getAttribute(attrs[i]), '"');
 			}
-			this.result.push('>');
-			if (node.textContent) {
-				this.result.push(node.textContent);
+			if (node.emptyElement) {
+				this.result.push(' />');
+			} else {
+				this.result.push('>');
+				if (node.textContent) {
+					this.result.push(node.textContent);
+				}
 			}
 			break;
 		case 3: // text
@@ -792,7 +796,7 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 	for (var child=0; child<node.childNodes.length; child++) {
 		this.readRecursively(node.childNodes[child]);
 	}
-	if (node.nodeType === 1) {
+	if (node.nodeType === 1 && ! node.emptyElement) {
 		this.result.push('</', nodeName, '>');
 	}
 };
@@ -829,6 +833,7 @@ USX.prototype.toUSX = function() {
 };
 USX.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('section');
+	child.emptyElement = this.emptyElement;
 	parentNode.appendChild(child);
 	return(child);
 };
@@ -874,6 +879,7 @@ Book.prototype.toDOM = function(parentNode) {
 	var article = new DOMNode('article');
 	article.setAttribute('id', this.code);
 	article.setAttribute('class', this.style);
+	article.emptyElement = this.emptyElement;
 	article.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(article);
 	return(article);
@@ -902,8 +908,8 @@ Chapter.prototype.buildUSX = function(result) {
 };
 Chapter.prototype.toDOM = function(parentNode, bookCode, localizeNumber) {
 	var child = new DOMNode('p');
-	//child.setAttribute('id', bookCode + ':' + this.number);
 	child.setAttribute('class', this.style);
+	child.emptyElement = this.emptyElement;
 	child.textContent = localizeNumber.toLocal(this.number);
 	parentNode.appendChild(child);
 	return(child);
@@ -944,8 +950,8 @@ Para.prototype.toDOM = function(parentNode) {
 		child.setAttribute('hidden', '');	
 	}
 	child.preWhiteSpace = this.whiteSpace;
+	child.emptyElement = this.emptyElement;
 	parentNode.appendChild(child);
-	//}
 	return(child);
 };
 
@@ -976,6 +982,7 @@ Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum, localizeNumbe
 	var child = new DOMNode('span');
 	child.setAttribute('id', reference);
 	child.setAttribute('class', this.style);
+	child.emptyElement = this.emptyElement;
 	child.textContent = ' ' + localizeNumber.toLocal(this.number) + '&nbsp;';
 	child.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(child);
@@ -1030,6 +1037,7 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direc
 		default:
 			refChild.textContent = '* ';
 	}
+	refChild.emptyElement = this.emptyElement;
 	refChild.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(refChild);
 	return(refChild);
@@ -1070,6 +1078,7 @@ Char.prototype.buildUSX = function(result) {
 Char.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('span');
 	child.setAttribute('class', this.style);
+	child.emptyElement = this.emptyElement;
 	child.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(child);
 	return(child);
@@ -1107,6 +1116,7 @@ Ref.prototype.buildUSX = function(result) {
 Ref.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('span');
 	child.preWhiteSpace = this.whiteSpace;
+	child.emptyElement = this.emptyElement;
 	parentNode.appendChild(child);
 	return(child);
 };
@@ -1135,6 +1145,7 @@ OptBreak.prototype.buildUSX = function(result) {
 OptBreak.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('wbr');
 	child.preWhiteSpace = this.whiteSpace;
+	child.emptyElement = this.emptyElement;
 	parentNode.appendChild(child);
 	return(child);
 };
@@ -1744,6 +1755,7 @@ function DOMNode(nodeName) {
 	if (nodeName == 'wbr') this.nodeType = 13; // Empty Element Node
 	this.parentNode = null;
 	this.attributes = {};
+	this.emptyElement = false;
 	this.textContent = null;
 	this.childNodes = [];
 	this.preWhiteSpace = ''; // when present, this is whitespace that preceds the node

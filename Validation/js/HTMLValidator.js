@@ -90,7 +90,7 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				if (node['class'] === 'c') {
 					node.children = [];
 				} else if (node.emptyElement) {
-					usx.push('<para style="', node['class'], '" />');
+					usx.push(node.whiteSpace, '<para style="', node['class'], '" />');
 				} else {
 					usx.push(node.whiteSpace, '<para style="', node['class'], '">');
 				}
