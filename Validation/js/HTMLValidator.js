@@ -76,13 +76,13 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				// do nothing
 				break;
 			case 'article':
-				usx.push(node.whiteSpace, '<book code="', node.id, '" style="', node['class'], '">'); 
+				usx.push('<book code="', node.id, '" style="', node['class'], '">'); 
 				break;
 			case 'section':
 				var parts = node.id.split(':');
-				node.whiteSpace = '\r\n  '; // Necessary hack. I think XMLTokenizer discards leading whitespace
+				//\r\n  Necessary hack. I think XMLTokenizer discards leading whitespace
 				if (parts[1] !== '0') {
-					usx.push(node.whiteSpace, '<chapter number="', parts[1], '" style="c" />');
+					usx.push('\r\n  ', '<chapter number="', parts[1], '" style="c" />');
 				}
 				//node.children = [];
 				break;
@@ -90,9 +90,9 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				if (node['class'] === 'c') {
 					node.children = [];
 				} else if (node.emptyElement) {
-					usx.push(node.whiteSpace, '<para style="', node['class'], '" />');
+					usx.push('<para style="', node['class'], '" />');
 				} else {
-					usx.push(node.whiteSpace, '<para style="', node['class'], '">');
+					usx.push('<para style="', node['class'], '">');
 				}
 				if (node.hidden) {
 					usx.push(node.hidden);
@@ -101,31 +101,31 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 			case 'span':
 				if (node['class'] === 'v') {
 					var parts = node.id.split(':');
-					usx.push(node.whiteSpace, '<verse number="', parts[2], '" style="', node['class'], '" />');
+					usx.push('<verse number="', parts[2], '" style="', node['class'], '" />');
 					node.children = [];
 				} else if (node['class'] === 'topf') {
-					usx.push(node.whiteSpace, '<note caller="+" style="f">');
+					usx.push('<note caller="+" style="f">');
 					clearTextChildren(node); // clear note button
 				} else if (node['class'] === 'topx') {
-					usx.push(node.whiteSpace, '<note caller="+" style="x">');
+					usx.push('<note caller="+" style="x">');
 					clearTextChildren(node); // clear note button
 				} else if (node.hidden) {
 					if (node.closed) {
-						usx.push(node.whiteSpace, '<char style="', node['class'], '" closed="', node.closed, '">');
+						usx.push('<char style="', node['class'], '" closed="', node.closed, '">');
 					} else {
-						usx.push(node.whiteSpace, '<char style="', node['class'], '">');
+						usx.push('<char style="', node['class'], '">');
 					}
 				} else if (node.note) {
 					if (node['class'] !== 'f' && node['class'] !== 'x') {
 						if (node.closed) {
-							usx.push(node.whiteSpace, '<char style="', node['class'], '" closed="', node.closed, '">');
+							usx.push('<char style="', node['class'], '" closed="', node.closed, '">');
 						} else {
-							usx.push(node.whiteSpace, '<char style="', node['class'], '">');
+							usx.push('<char style="', node['class'], '">');
 						}
 					}
 					usx.push(node.note);
 				} else {
-					usx.push(node.whiteSpace, '<char style="', node['class'], '">');
+					usx.push('<char style="', node['class'], '">');
 				}
 				break;
 			case 'TEXT':
@@ -236,7 +236,6 @@ HTMLParser.prototype.readBook = function(data) {
 		switch(tokenType) {
 			case XMLNodeType.ELE_OPEN:
 				node = new HTMLElement(tokenValue);
-				node.whiteSpace = (priorType === XMLNodeType.WHITESP) ? priorValue : '';
 				break;
 			case XMLNodeType.ATTR_NAME:
 				// do nothing
@@ -251,6 +250,7 @@ HTMLParser.prototype.readBook = function(data) {
 				nodeStack[nodeStack.length -1].addChild(node);
 				nodeStack.push(node);
 				break;
+			case XMLNodeType.WHITESP:
 			case XMLNodeType.TEXT:
 				node = new HTMLTextNode(tokenValue);
 				nodeStack[nodeStack.length -1].addChild(node);
@@ -265,9 +265,6 @@ HTMLParser.prototype.readBook = function(data) {
 					throw new Error('closing element mismatch ' + node.openElement() + ' and ' + tokenValue);
 				}
 				break;
-			case XMLNodeType.WHITESP:
-				// do nothing
-				break;
 			case XMLNodeType.PROG_INST:
 				// do nothing
 				break;
@@ -277,7 +274,6 @@ HTMLParser.prototype.readBook = function(data) {
 			default:
 				throw new Error('The XMLNodeType ' + tokenType + ' is unknown in HTMLParser.');
 		}
-		var priorType = tokenType;
 		var priorValue = tokenValue;
 	}
 	return(rootNode);
@@ -291,7 +287,6 @@ function HTMLElement(tagName) {
 	this.hidden = null;
 	this.closed = null;
 	this.emptyElement = false;
-	this.whiteSpace = '';
 	this.children = [];
 	Object.seal(this);
 }
