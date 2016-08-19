@@ -51,7 +51,7 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 		var usx = [];
 		usx.push(String.fromCharCode('0xFEFF'));
 		usx.push('<?xml version="1.0" encoding="utf-8"?>', EOL);
-		usx.push('<usx version="2.0">', EOL);
+		usx.push('<usx version="2.*">', EOL);
 		for (var i=0; i<chapters.length; i++) {
 			recurseOverHTML(usx, chapters[i]);
 		}
@@ -76,17 +76,26 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				// do nothing
 				break;
 			case 'article':
-				usx.push(node.whiteSpace, '<book code="', node.id, '" style="', node['class'], '"></book>'); 
+				usx.push(node.whiteSpace, '<book code="', node.id, '" style="', node['class'], '">'); 
 				break;
 			case 'section':
 				var parts = node.id.split(':');
 				node.whiteSpace = '\r\n  '; // Necessary hack. I think XMLTokenizer discards leading whitespace
-				usx.push(node.whiteSpace, '<chapter number="', parts[1], '" style="c" />');
-				node.children = [];
+				if (parts[1] !== '0') {
+					usx.push(node.whiteSpace, '<chapter number="', parts[1], '" style="c" />');
+				}
+				//node.children = [];
 				break;
 			case 'p':
-				if (node['class'] !== 'c') {
+				if (node['class'] === 'c') {
+					node.children = [];
+				} else if (node.emptyElement) {
+					usx.push('<para style="', node['class'], '" />');
+				} else {
 					usx.push(node.whiteSpace, '<para style="', node['class'], '">');
+				}
+				if (node.hidden) {
+					usx.push(node.hidden);
 				}
 				break;
 			case 'span':
@@ -103,7 +112,8 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				} else if (node.hidden) {
 					usx.push(node.whiteSpace, '<char style="', node['class'], '" closed="false">');
 				} else if (node.note) {
-					usx.push(node.whiteSpace, '<char style="', node['class'], '" closed="false">');
+					//usx.push(node.whiteSpace, '<char style="', node['class'], '" closed="false">');
+					usx.push(node.note);
 				} else {
 					usx.push(node.whiteSpace, '<char style="', node['class'], '">');
 				}
@@ -128,13 +138,16 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 	function convertCloseElement(usx, node) {
 		switch(node.tagName) {
 			case 'ROOT':
-			case 'article':
 			case 'section':
+				break;
+			case 'article':
+				usx.push('</book>');
+				break;
 			case 'TEXT':
 				// do nothing
 				break;
 			case 'p':
-				if (node['class'] !== 'c') {
+				if (node['class'] !== 'c' && ! node.emptyElement) {
 					usx.push('</para>');
 				}
 				break;
@@ -146,7 +159,7 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				} else if (node.hidden) {
 					usx.push(node.hidden, '</char>');
 				} else if (node.note) {
-					usx.push(node.note, '</char>');
+					//usx.push(node.note, '</char>');
 				} else {
 					usx.push('</char>');
 				}
