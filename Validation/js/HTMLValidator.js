@@ -112,7 +112,9 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				} else if (node.hidden) {
 					usx.push(node.whiteSpace, '<char style="', node['class'], '" closed="false">');
 				} else if (node.note) {
-					//usx.push(node.whiteSpace, '<char style="', node['class'], '" closed="false">');
+					if (node['class'] !== 'f' && node['class'] !== 'x') {
+						usx.push(node.whiteSpace, '<char style="', node['class'], '" closed="false">');
+					}
 					usx.push(node.note);
 				} else {
 					usx.push(node.whiteSpace, '<char style="', node['class'], '">');
@@ -159,7 +161,9 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				} else if (node.hidden) {
 					usx.push(node.hidden, '</char>');
 				} else if (node.note) {
-					//usx.push(node.note, '</char>');
+					if (node['class'] !== 'f' && node['class'] !== 'x') {
+						usx.push('</char>');
+					}
 				} else {
 					usx.push('</char>');
 				}
