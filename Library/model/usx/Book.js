@@ -4,7 +4,6 @@
 function Book(node) {
 	this.code = node.code;
 	this.style = node.style;
-	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
 	this.children = []; // contains text
 	Object.freeze(this);
@@ -21,7 +20,7 @@ Book.prototype.closeElement = function() {
 	return(this.emptyElement ? '' : '</book>');
 };
 Book.prototype.buildUSX = function(result) {
-	result.push(this.whiteSpace, this.openElement());
+	result.push(this.openElement());
 	for (var i=0; i<this.children.length; i++) {
 		this.children[i].buildUSX(result);
 	}
@@ -32,7 +31,6 @@ Book.prototype.toDOM = function(parentNode) {
 	article.setAttribute('id', this.code);
 	article.setAttribute('class', this.style);
 	article.emptyElement = this.emptyElement;
-	article.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(article);
 	return(article);
 };

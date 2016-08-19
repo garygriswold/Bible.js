@@ -3,7 +3,6 @@
 */
 function USX(node) {
 	this.version = node.version;
-	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
 	this.children = []; // includes books, chapters, and paragraphs
 	Object.freeze(this);
@@ -32,7 +31,7 @@ USX.prototype.toDOM = function(parentNode) {
 };
 USX.prototype.buildUSX = function(result) {
 	result.push(String.fromCharCode('0xFEFF'), '<?xml version="1.0" encoding="utf-8"?>');
-	result.push(this.whiteSpace, this.openElement());
+	result.push(this.openElement());
 	for (var i=0; i<this.children.length; i++) {
 		this.children[i].buildUSX(result);
 	}

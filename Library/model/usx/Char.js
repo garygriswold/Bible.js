@@ -4,7 +4,6 @@
 function Char(node) {
 	this.style = node.style;
 	this.closed = node.closed;
-	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
 	this.children = [];
 	Object.freeze(this);
@@ -25,7 +24,7 @@ Char.prototype.closeElement = function() {
 	return(this.emptyElement ? '' : '</char>');
 };
 Char.prototype.buildUSX = function(result) {
-	result.push(this.whiteSpace, this.openElement());
+	result.push(this.openElement());
 	for (var i=0; i<this.children.length; i++) {
 		this.children[i].buildUSX(result);
 	}
@@ -36,7 +35,6 @@ Char.prototype.toDOM = function(parentNode) {
 	child.setAttribute('class', this.style);
 	if (this.closed) child.setAttribute('closed', this.closed);
 	child.emptyElement = this.emptyElement;
-	child.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(child);
 	return(child);
 };

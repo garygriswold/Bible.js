@@ -8,7 +8,6 @@ function Note(node) {
 		throw new Error('Note caller with no + or - or *');
 	}
 	this.style = node.style;
-	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
 	this.children = [];
 	Object.freeze(this);
@@ -25,7 +24,7 @@ Note.prototype.closeElement = function() {
 	return(this.emptyElement ? '' : '</note>');
 };
 Note.prototype.buildUSX = function(result) {
-	result.push(this.whiteSpace, this.openElement());
+	result.push(this.openElement());
 	for (var i=0; i<this.children.length; i++) {
 		this.children[i].buildUSX(result);
 	}
@@ -48,7 +47,6 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direc
 			refChild.textContent = '* ';
 	}
 	refChild.emptyElement = this.emptyElement;
-	refChild.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(refChild);
 	return(refChild);
 };

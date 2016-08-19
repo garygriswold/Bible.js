@@ -4,7 +4,6 @@
 * break
 */
 function OptBreak(node) {
-	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
 	Object.freeze(this);
 }
@@ -17,12 +16,11 @@ OptBreak.prototype.closeElement = function() {
 	return(this.emptyElement ? '' : '</optbreak>');
 };
 OptBreak.prototype.buildUSX = function(result) {
-	result.push(this.whiteSpace, this.openElement());
+	result.push(this.openElement());
 	result.push(this.closeElement());
 };
 OptBreak.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('wbr');
-	child.preWhiteSpace = this.whiteSpace;
 	child.emptyElement = this.emptyElement;
 	parentNode.appendChild(child);
 	return(child);

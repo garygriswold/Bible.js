@@ -4,7 +4,6 @@
 function Verse(node) {
 	this.number = node.number;
 	this.style = node.style;
-	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
 	Object.freeze(this);
 }
@@ -17,7 +16,7 @@ Verse.prototype.closeElement = function() {
 	return(this.emptyElement ? '' : '</verse>');
 };
 Verse.prototype.buildUSX = function(result) {
-	result.push(this.whiteSpace, this.openElement());
+	result.push(this.openElement());
 	result.push(this.closeElement());
 };
 Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum, localizeNumber) {
@@ -27,7 +26,6 @@ Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum, localizeNumbe
 	child.setAttribute('class', this.style);
 	child.emptyElement = this.emptyElement;
 	child.textContent = ' ' + localizeNumber.toLocal(this.number) + '&nbsp;';
-	child.preWhiteSpace = this.whiteSpace;
 	parentNode.appendChild(child);
 	return(child);
 };

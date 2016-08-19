@@ -3,7 +3,6 @@
 */
 function Para(node) {
 	this.style = node.style;
-	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
 	this.children = []; // contains verse | note | char | text
 	Object.freeze(this);
@@ -20,7 +19,7 @@ Para.prototype.closeElement = function() {
 	return(this.emptyElement ? '' : '</para>');
 };
 Para.prototype.buildUSX = function(result) {
-	result.push(this.whiteSpace, this.openElement());
+	result.push(this.openElement());
 	for (var i=0; i<this.children.length; i++) {
 		this.children[i].buildUSX(result);
 	}
@@ -33,7 +32,6 @@ Para.prototype.toDOM = function(parentNode) {
 	if (identStyles.indexOf(this.style) >= 0) {
 		child.setAttribute('hidden', '');	
 	}
-	child.preWhiteSpace = this.whiteSpace;
 	child.emptyElement = this.emptyElement;
 	parentNode.appendChild(child);
 	return(child);

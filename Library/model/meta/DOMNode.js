@@ -14,7 +14,6 @@ function DOMNode(nodeName) {
 	this.emptyElement = false;
 	this.textContent = null;
 	this.childNodes = [];
-	this.preWhiteSpace = ''; // when present, this is whitespace that preceds the node
 	Object.seal(this);
 }
 DOMNode.prototype.getAttribute = function(name) {

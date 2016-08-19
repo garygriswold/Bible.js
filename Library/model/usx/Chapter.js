@@ -4,7 +4,6 @@
 function Chapter(node) {
 	this.number = node.number;
 	this.style = node.style;
-	this.whiteSpace = node.whiteSpace;
 	this.emptyElement = node.emptyElement;
 	Object.freeze(this);
 }
@@ -17,7 +16,7 @@ Chapter.prototype.closeElement = function() {
 	return(this.emptyElement ? '' : '</chapter>');
 };
 Chapter.prototype.buildUSX = function(result) {
-	result.push(this.whiteSpace, this.openElement());
+	result.push(this.openElement());
 	result.push(this.closeElement());
 };
 Chapter.prototype.toDOM = function(parentNode, bookCode, localizeNumber) {
