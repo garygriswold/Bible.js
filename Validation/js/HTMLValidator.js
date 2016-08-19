@@ -21,8 +21,8 @@ HTMLValidator.prototype.open = function(callback) {
 	var sqlite3 = require('sqlite3');
 	this.db = new sqlite3.Database(this.versionPath, sqlite3.OPEN_READWRITE, function(err) {
 		if (err) that.fatalError(err, 'openDatabase');
-		that.db.on('trace', function(sql) { console.log('DO ', sql); });
-		that.db.on('profile', function(sql, ms) { console.log(ms, 'DONE', sql); });
+		//that.db.on('trace', function(sql) { console.log('DO ', sql); });
+		//that.db.on('profile', function(sql, ms) { console.log(ms, 'DONE', sql); });
 		callback();
 	});
 };
@@ -32,6 +32,7 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 		callback();
 	} else {
 		var chapters = [];
+		var chapterNum = null;
 		console.log('doing ', books[index]);
 		var book = books[index].code;
 		this.db.all("SELECT html FROM chapters WHERE reference LIKE ?", book + '%', function(err, results) {
@@ -51,11 +52,11 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 		var usx = [];
 		usx.push(String.fromCharCode('0xFEFF'));
 		usx.push('<?xml version="1.0" encoding="utf-8"?>', EOL);
-		usx.push('<usx version="2.*">', EOL);
+		usx.push('<usx version="2.5">');
 		for (var i=0; i<chapters.length; i++) {
 			recurseOverHTML(usx, chapters[i]);
 		}
-		usx.push(EOL, '</usx>');
+		usx.push('</usx>');
 		return(usx.join(''));
 	}
 	
@@ -79,15 +80,11 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				usx.push('<book code="', node.id, '" style="', node['class'], '">'); 
 				break;
 			case 'section':
-				var parts = node.id.split(':');
-				//\r\n  Necessary hack. I think XMLTokenizer discards leading whitespace
-				if (parts[1] !== '0') {
-					usx.push('\r\n  ', '<chapter number="', parts[1], '" style="c" />');
-				}
-				//node.children = [];
+				chapterNum = node.id.split(':')[1];
 				break;
 			case 'p':
 				if (node['class'] === 'c') {
+					usx.push('<chapter number="', chapterNum, '" style="c" />');
 					node.children = [];
 				} else if (node.emptyElement) {
 					usx.push('<para style="', node['class'], '" />');
@@ -185,16 +182,13 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 	
 	function compareUSXFile(book, data, callback) {
 		var inFile = USX_BIBLE_PATH + that.version + '/USX_1/' + book + '.usx';
-		console.log('INFILE', inFile);
 		var outFile = OUT_BIBLE_PATH + book + '.usx';
-		console.log('OUTFILE', outFile);
 		fs.writeFile(outFile, data, { encoding: 'utf8'}, function(err) {
 			if (err) {
 				//console.log('WRITE ERROR', JSON.stringify(err));
 				//process.exit(1);
 				that.fatalError(err, 'Write USX File');
 			}
-			console.log('COMPARE ', book);
 			var proc = require('child_process');
 			proc.exec('diff ' + inFile + ' ' + outFile, { encoding: 'utf8' }, function(err, stdout, stderr) {
 				if (err) {
