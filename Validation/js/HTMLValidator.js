@@ -110,10 +110,18 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 					usx.push(node.whiteSpace, '<note caller="+" style="x">');
 					clearTextChildren(node); // clear note button
 				} else if (node.hidden) {
-					usx.push(node.whiteSpace, '<char style="', node['class'], '" closed="false">');
+					if (node.closed) {
+						usx.push(node.whiteSpace, '<char style="', node['class'], '" closed="', node.closed, '">');
+					} else {
+						usx.push(node.whiteSpace, '<char style="', node['class'], '">');
+					}
 				} else if (node.note) {
 					if (node['class'] !== 'f' && node['class'] !== 'x') {
-						usx.push(node.whiteSpace, '<char style="', node['class'], '" closed="false">');
+						if (node.closed) {
+							usx.push(node.whiteSpace, '<char style="', node['class'], '" closed="', node.closed, '">');
+						} else {
+							usx.push(node.whiteSpace, '<char style="', node['class'], '">');
+						}
 					}
 					usx.push(node.note);
 				} else {
@@ -281,6 +289,7 @@ function HTMLElement(tagName) {
 	this['class'] = null;
 	this.note = null;
 	this.hidden = null;
+	this.closed = null;
 	this.emptyElement = false;
 	this.whiteSpace = '';
 	this.children = [];
@@ -305,6 +314,7 @@ HTMLElement.prototype.buildHTML = function(array, includeChildren) {
 	if (this['class']) array.push(' class="', this['class'], '"');
 	if (this.note) array.push(' note="', this.note, '"');
 	if (this.hidden) array.push(' hidden="', this.hidden, '"');
+	if (this.closed) array.push(' closed"', this.closed, '"');
 	if (this.emptyElement) {
 		array.push(' />');
 	} else {
