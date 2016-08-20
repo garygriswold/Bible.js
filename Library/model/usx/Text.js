@@ -15,7 +15,7 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 		// discard text node
 	//} else 
 	if (parentNode.nodeName === 'section') {
-		appendTextNode(parentNode);
+		parentNode.appendText(this.text);
 	} else if (! parentNode.hasAttribute('class')) { // Ref nodes have no class
 		parentNode.setAttribute('note', this.text); 
 	} else {
@@ -37,14 +37,8 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of grand parent.
 		}
 		else {
-			appendTextNode(parentNode);
+			parentNode.appendText(this.text);
 		}
-	}
-	
-	function appendTextNode(parentNode) {
-		var child = new DOMNode('text');
-		child.textContent = that.text;
-		parentNode.appendChild(child);
 	}
 };
 

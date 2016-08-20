@@ -7,12 +7,10 @@ function DOMNode(nodeName) {
 	this.nodeName = nodeName;
 	this.nodeType = 1; // Element Node
 	if (nodeName == 'root') this.nodeType = 11; // Fragment Node
-	if (nodeName == 'text') this.nodeType = 3; // Text Node
 	if (nodeName == 'wbr') this.nodeType = 13; // Empty Element Node
 	this.parentNode = null;
 	this.attributes = {};
 	this.emptyElement = false;
-	this.textContent = null;
 	this.childNodes = [];
 	Object.seal(this);
 }
@@ -33,4 +31,20 @@ DOMNode.prototype.appendChild = function(node) {
 	this.childNodes.push(node);	
 	node.parentNode = this;
 };
+DOMNode.prototype.appendText = function(text) {
+	var node = new DOMText(text);
+	this.appendChild(node);
+};
+
+/**
+* This is an inner class of DOMNode, which contains only 
+* text and whitespace.  It is presented as a separate class
+* so that DOMText nodes can be children of DOMNode.
+*/
+function DOMText(text) {
+	this.nodeName = 'text';
+	this.nodeType = 3; // Text Node
+	this.text = text;
+	this.parentNode = null;
+}
 

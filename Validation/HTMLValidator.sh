@@ -14,6 +14,4 @@ cat js/HTMLValidator.js >> temp.js
 
 node temp.js $VERSION
 
-# temp for development
-diff ../../DBL/2current/$VERSION/USX_1/GEN.usx output/html/GEN.usx > out2.txt
 

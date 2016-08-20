@@ -770,7 +770,7 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 		case 11: // fragment
 			break;
 		case 1: // element
-			this.result.push(node.preWhiteSpace, '<', nodeName);
+			this.result.push('<', nodeName);
 			var attrs = node.attrNames();
 			for (var i=0; i<attrs.length; i++) {
 				this.result.push(' ', attrs[i], '="', node.getAttribute(attrs[i]), '"');
@@ -779,22 +779,21 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 				this.result.push(' />');
 			} else {
 				this.result.push('>');
-				if (node.textContent) {
-					this.result.push(node.textContent);
-				}
 			}
 			break;
 		case 3: // text
-			this.result.push(node.preWhiteSpace, node.textContent);
+			this.result.push(node.text);
 			break;
 		case 13: // empty element
-			this.result.push(node.preWhiteSpace, '<', nodeName, '>');
+			this.result.push('<', nodeName, '>'); /// This should be empty node attribute set
 			break;
 		default:
 			throw new Error('Unexpected nodeType ' + node.nodeType + ' in HTMLBuilder.toHTML().');
 	}
-	for (var child=0; child<node.childNodes.length; child++) {
-		this.readRecursively(node.childNodes[child]);
+	if (node.childNodes) {
+		for (var child=0; child<node.childNodes.length; child++) {
+			this.readRecursively(node.childNodes[child]);
+		}
 	}
 	if (node.nodeType === 1 && ! node.emptyElement) {
 		this.result.push('</', nodeName, '>');
@@ -905,8 +904,8 @@ Chapter.prototype.buildUSX = function(result) {
 Chapter.prototype.toDOM = function(parentNode, bookCode, localizeNumber) {
 	var child = new DOMNode('p');
 	child.setAttribute('class', this.style);
-	child.emptyElement = this.emptyElement;
-	child.textContent = localizeNumber.toLocal(this.number);
+	child.emptyElement = false;
+	child.appendText(localizeNumber.toLocal(this.number));
 	parentNode.appendChild(child);
 	return(child);
 };
@@ -975,8 +974,8 @@ Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum, localizeNumbe
 	var child = new DOMNode('span');
 	child.setAttribute('id', reference);
 	child.setAttribute('class', this.style);
-	child.emptyElement = this.emptyElement;
-	child.textContent = ' ' + localizeNumber.toLocal(this.number) + '&nbsp;';
+	child.emptyElement = false;
+	child.appendText(localizeNumber.toLocal(this.number) + '&nbsp;');
 	parentNode.appendChild(child);
 	return(child);
 };
@@ -1020,13 +1019,13 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direc
 	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	switch(this.style) {
 		case 'f':
-			refChild.textContent = (direction === 'rtl') ? '\u261C ' : '\u261E '; //261C points left, 261E points right
+			refChild.appendText((direction === 'rtl') ? '\u261C ' : '\u261E '); //261C points left, 261E points right
 			break;
 		case 'x':
-			refChild.textContent = (direction === 'rtl') ? '\u261A ' : '\u261B '; //261A points left, 261B points right
+			refChild.appendText((direction === 'rtl') ? '\u261A ' : '\u261B '); //261A points left, 261B points right
 			break;
 		default:
-			refChild.textContent = '* ';
+			refChild.appendText('* ');
 	}
 	refChild.emptyElement = this.emptyElement;
 	parentNode.appendChild(refChild);
@@ -1151,7 +1150,7 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 		// discard text node
 	//} else 
 	if (parentNode.nodeName === 'section') {
-		appendTextNode(parentNode);
+		parentNode.appendText(this.text);
 	} else if (! parentNode.hasAttribute('class')) { // Ref nodes have no class
 		parentNode.setAttribute('note', this.text); 
 	} else {
@@ -1173,14 +1172,8 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of grand parent.
 		}
 		else {
-			appendTextNode(parentNode);
+			parentNode.appendText(this.text);
 		}
-	}
-	
-	function appendTextNode(parentNode) {
-		var child = new DOMNode('text');
-		child.textContent = that.text;
-		parentNode.appendChild(child);
 	}
 };
 
@@ -1736,12 +1729,10 @@ function DOMNode(nodeName) {
 	this.nodeName = nodeName;
 	this.nodeType = 1; // Element Node
 	if (nodeName == 'root') this.nodeType = 11; // Fragment Node
-	if (nodeName == 'text') this.nodeType = 3; // Text Node
 	if (nodeName == 'wbr') this.nodeType = 13; // Empty Element Node
 	this.parentNode = null;
 	this.attributes = {};
 	this.emptyElement = false;
-	this.textContent = null;
 	this.childNodes = [];
 	Object.seal(this);
 }
@@ -1762,6 +1753,22 @@ DOMNode.prototype.appendChild = function(node) {
 	this.childNodes.push(node);	
 	node.parentNode = this;
 };
+DOMNode.prototype.appendText = function(text) {
+	var node = new DOMText(text);
+	this.appendChild(node);
+};
+
+/**
+* This is an inner class of DOMNode, which contains only 
+* text and whitespace.  It is presented as a separate class
+* so that DOMText nodes can be children of DOMNode.
+*/
+function DOMText(text) {
+	this.nodeName = 'text';
+	this.nodeType = 3; // Text Node
+	this.text = text;
+	this.parentNode = null;
+}
 
 /**
 * This class is used to carry information about the language and version

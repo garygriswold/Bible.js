@@ -16,7 +16,7 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 		case 11: // fragment
 			break;
 		case 1: // element
-			this.result.push(node.preWhiteSpace, '<', nodeName);
+			this.result.push('<', nodeName);
 			var attrs = node.attrNames();
 			for (var i=0; i<attrs.length; i++) {
 				this.result.push(' ', attrs[i], '="', node.getAttribute(attrs[i]), '"');
@@ -25,22 +25,21 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 				this.result.push(' />');
 			} else {
 				this.result.push('>');
-				if (node.textContent) {
-					this.result.push(node.textContent);
-				}
 			}
 			break;
 		case 3: // text
-			this.result.push(node.preWhiteSpace, node.textContent);
+			this.result.push(node.text);
 			break;
 		case 13: // empty element
-			this.result.push(node.preWhiteSpace, '<', nodeName, '>');
+			this.result.push('<', nodeName, '>');
 			break;
 		default:
 			throw new Error('Unexpected nodeType ' + node.nodeType + ' in HTMLBuilder.toHTML().');
 	}
-	for (var child=0; child<node.childNodes.length; child++) {
-		this.readRecursively(node.childNodes[child]);
+	if (node.childNodes) {
+		for (var child=0; child<node.childNodes.length; child++) {
+			this.readRecursively(node.childNodes[child]);
+		}
 	}
 	if (node.nodeType === 1 && ! node.emptyElement) {
 		this.result.push('</', nodeName, '>');

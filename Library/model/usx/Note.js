@@ -38,13 +38,13 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direc
 	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	switch(this.style) {
 		case 'f':
-			refChild.textContent = (direction === 'rtl') ? '\u261C ' : '\u261E '; //261C points left, 261E points right
+			refChild.appendText((direction === 'rtl') ? '\u261C ' : '\u261E '); //261C points left, 261E points right
 			break;
 		case 'x':
-			refChild.textContent = (direction === 'rtl') ? '\u261A ' : '\u261B '; //261A points left, 261B points right
+			refChild.appendText((direction === 'rtl') ? '\u261A ' : '\u261B '); //261A points left, 261B points right
 			break;
 		default:
-			refChild.textContent = '* ';
+			refChild.appendText('* ');
 	}
 	refChild.emptyElement = this.emptyElement;
 	parentNode.appendChild(refChild);

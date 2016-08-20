@@ -22,8 +22,8 @@ Chapter.prototype.buildUSX = function(result) {
 Chapter.prototype.toDOM = function(parentNode, bookCode, localizeNumber) {
 	var child = new DOMNode('p');
 	child.setAttribute('class', this.style);
-	child.emptyElement = this.emptyElement;
-	child.textContent = localizeNumber.toLocal(this.number);
+	child.emptyElement = false;
+	child.appendText(localizeNumber.toLocal(this.number));
 	parentNode.appendChild(child);
 	return(child);
 };

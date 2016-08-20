@@ -24,8 +24,8 @@ Verse.prototype.toDOM = function(parentNode, bookCode, chapterNum, localizeNumbe
 	var child = new DOMNode('span');
 	child.setAttribute('id', reference);
 	child.setAttribute('class', this.style);
-	child.emptyElement = this.emptyElement;
-	child.textContent = ' ' + localizeNumber.toLocal(this.number) + '&nbsp;';
+	child.emptyElement = false;
+	child.appendText(localizeNumber.toLocal(this.number) + '&nbsp;');
 	parentNode.appendChild(child);
 	return(child);
 };
