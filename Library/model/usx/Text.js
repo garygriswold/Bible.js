@@ -11,7 +11,9 @@ Text.prototype.buildUSX = function(result) {
 };
 Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 	var that = this;
-	if (parentNode.nodeName === 'section') {
+	if (parentNode.nodeName === 'article') {
+		parentNode.setAttribute('hidden', this.text);
+	} else if (parentNode.nodeName === 'section') {
 		parentNode.appendText(this.text);
 	} else if (! parentNode.hasAttribute('class')) { // Ref nodes have no class
 		parentNode.setAttribute('note', this.text); 

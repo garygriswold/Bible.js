@@ -82,6 +82,9 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 					usx.push(' />');
 				} else {
 					usx.push('>');
+					if (node.hidden) {
+						usx.push(node.hidden);
+					}
 				}
 				break;
 			case 'section':
