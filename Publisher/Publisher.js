@@ -785,7 +785,7 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 			this.result.push(node.text);
 			break;
 		case 13: // empty element
-			this.result.push('<', nodeName, '>'); /// This should be empty node attribute set
+			this.result.push('<', nodeName, '>');
 			break;
 		default:
 			throw new Error('Unexpected nodeType ' + node.nodeType + ' in HTMLBuilder.toHTML().');
@@ -1027,7 +1027,7 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direc
 		default:
 			refChild.appendText('* ');
 	}
-	refChild.emptyElement = this.emptyElement;
+	refChild.emptyElement = false;
 	parentNode.appendChild(refChild);
 	return(refChild);
 };
@@ -1155,21 +1155,23 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 		parentNode.setAttribute('note', this.text); 
 	} else {
 		var parentClass = parentNode.getAttribute('class');
-		var grParentNode = parentNode.parentNode;
-		var grParentClass = (grParentNode) ? grParentNode.getAttribute('class') : null;
+		//var grParentNode = parentNode.parentNode; /// We might not need grParentNode and Class
+		//var grParentClass = (grParentNode) ? grParentNode.getAttribute('class') : null;
 		if (parentClass.substr(0, 3) === 'top') {
 			var textNode = new DOMNode('span');
 			textNode.setAttribute('class', parentClass.substr(3));
-			textNode.setAttribute('note', this.text);
+			textNode.appendText(this.text);
+			textNode.setAttribute('style', 'display:none');
 			parentNode.appendChild(textNode);
 		} else if (parentNode.hasAttribute('hidden')) {
 			parentNode.setAttribute('hidden', this.text);
 		} else if (parentClass === 'fr' || parentClass === 'xo') {
 			parentNode.setAttribute('hidden', this.text); // permanently hide note.
 		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
-			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of parent.
-		} else if (grParentClass != null && (grParentClass[0] === 'f' || grParentClass[0] === 'x')) {
-			parentNode.setAttribute('note', this.text); // hide footnote text in note attribute of grand parent.
+			parentNode.appendText(this.text);
+			parentNode.setAttribute('style', 'display:none');			
+		//} else if (grParentClass != null && (grParentClass[0] === 'f' || grParentClass[0] === 'x')) {
+		//	parentNode.appendText(this.text);
 		}
 		else {
 			parentNode.appendText(this.text);

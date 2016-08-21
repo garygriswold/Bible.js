@@ -52,7 +52,7 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 		var usx = [];
 		usx.push(String.fromCharCode('0xFEFF'));
 		usx.push('<?xml version="1.0" encoding="utf-8"?>', EOL);
-		usx.push('<usx version="2.5">');
+		usx.push('<usx version="2.0">');
 		for (var i=0; i<chapters.length; i++) {
 			recurseOverHTML(usx, chapters[i]);
 		}
@@ -112,17 +112,13 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 					} else {
 						usx.push('<char style="', node['class'], '">');
 					}
-				} else if (node.note) {
-					if (node['class'] !== 'f' && node['class'] !== 'x') {
-						if (node.closed) {
-							usx.push('<char style="', node['class'], '" closed="', node.closed, '">');
-						} else {
-							usx.push('<char style="', node['class'], '">');
-						}
+					usx.push(node.hidden);
+				} else if (node['class'] !== 'f' && node['class'] !== 'x') {
+					if (node.closed) {
+						usx.push('<char style="', node['class'], '" closed="', node.closed, '">');
+					} else {
+						usx.push('<char style="', node['class'], '">');
 					}
-					usx.push(node.note);
-				} else {
-					usx.push('<char style="', node['class'], '">');
 				}
 				break;
 			case 'TEXT':
@@ -164,12 +160,8 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				} else if (node['class'] === 'topf' || node['class'] === 'topx') {
 					usx.push('</note>');
 				} else if (node.hidden) {
-					usx.push(node.hidden, '</char>');
-				} else if (node.note) {
-					if (node['class'] !== 'f' && node['class'] !== 'x') {
-						usx.push('</char>');
-					}
-				} else {
+					usx.push('</char>');
+				} else if (node['class'] !== 'f' && node['class'] !== 'x') {
 					usx.push('</char>');
 				}
 				break;
@@ -235,7 +227,7 @@ HTMLParser.prototype.readBook = function(data) {
 				// do nothing
 				break;
 			case XMLNodeType.ATTR_VALUE:
-				if (priorValue !== 'onclick') {
+				if (priorValue !== 'onclick' && priorValue !== 'style') {
 					node[priorValue] = tokenValue;
 				}
 				break;

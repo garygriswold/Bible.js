@@ -46,7 +46,7 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direc
 		default:
 			refChild.appendText('* ');
 	}
-	refChild.emptyElement = this.emptyElement;
+	refChild.emptyElement = false;
 	parentNode.appendChild(refChild);
 	return(refChild);
 };
