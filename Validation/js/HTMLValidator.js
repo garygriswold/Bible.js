@@ -77,7 +77,12 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				// do nothing
 				break;
 			case 'article':
-				usx.push('<book code="', node.id, '" style="', node['class'], '">'); 
+				usx.push('<book code="', node.id, '" style="', node['class'], '"');
+				if (node.emptyElement) {
+					usx.push(' />');
+				} else {
+					usx.push('>');
+				}
 				break;
 			case 'section':
 				chapterNum = node.id.split(':')[1];
@@ -144,7 +149,9 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 			case 'section':
 				break;
 			case 'article':
-				usx.push('</book>');
+				if (! node.emptyElement) {
+					usx.push('</book>');
+				}
 				break;
 			case 'TEXT':
 				// do nothing

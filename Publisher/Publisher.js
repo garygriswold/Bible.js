@@ -1146,17 +1146,12 @@ Text.prototype.buildUSX = function(result) {
 };
 Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 	var that = this;
-	//if (parentNode === null || parentNode.nodeName === 'article') {
-		// discard text node
-	//} else 
 	if (parentNode.nodeName === 'section') {
 		parentNode.appendText(this.text);
 	} else if (! parentNode.hasAttribute('class')) { // Ref nodes have no class
 		parentNode.setAttribute('note', this.text); 
 	} else {
 		var parentClass = parentNode.getAttribute('class');
-		//var grParentNode = parentNode.parentNode; /// We might not need grParentNode and Class
-		//var grParentClass = (grParentNode) ? grParentNode.getAttribute('class') : null;
 		if (parentClass.substr(0, 3) === 'top') {
 			var textNode = new DOMNode('span');
 			textNode.setAttribute('class', parentClass.substr(3));
@@ -1169,9 +1164,7 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 			parentNode.setAttribute('hidden', this.text); // permanently hide note.
 		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
 			parentNode.appendText(this.text);
-			parentNode.setAttribute('style', 'display:none');			
-		//} else if (grParentClass != null && (grParentClass[0] === 'f' || grParentClass[0] === 'x')) {
-		//	parentNode.appendText(this.text);
+			parentNode.setAttribute('style', 'display:none');
 		}
 		else {
 			parentNode.appendText(this.text);
