@@ -784,9 +784,9 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 		case 3: // text
 			this.result.push(node.text);
 			break;
-		case 13: // empty element
-			this.result.push('<', nodeName, '>');
-			break;
+		//case 13: // empty element
+		//	this.result.push('<', nodeName, '>');
+		//	break;
 		default:
 			throw new Error('Unexpected nodeType ' + node.nodeType + ' in HTMLBuilder.toHTML().');
 	}
@@ -1153,7 +1153,6 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 	} else if (parentNode.nodeName === 'section') {
 		parentNode.appendText(this.text);
 	} else if (! parentNode.hasAttribute('class')) { // Ref nodes have no class
-		///parentNode.setAttribute('note', this.text); 
 		parentNode.appendText(this.text);
 	} else {
 		var parentClass = parentNode.getAttribute('class');
@@ -1729,7 +1728,7 @@ function DOMNode(nodeName) {
 	this.nodeName = nodeName;
 	this.nodeType = 1; // Element Node
 	if (nodeName == 'root') this.nodeType = 11; // Fragment Node
-	if (nodeName == 'wbr') this.nodeType = 13; // Empty Element Node
+	//if (nodeName == 'wbr') this.nodeType = 13; // Empty Element Node
 	this.parentNode = null;
 	this.attributes = {};
 	this.emptyElement = false;

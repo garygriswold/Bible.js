@@ -132,6 +132,9 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 					}
 				}
 				break;
+			case 'wbr':
+				usx.push('<optbreak', END_EMPTY);
+				break;
 			case 'TEXT':
 				usx.push(node.text);
 				break;
@@ -179,6 +182,8 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				} else if (node['class'] !== 'f' && node['class'] !== 'x') {
 					usx.push('</char>');
 				}
+				break;
+			case 'wbr':
 				break;
 			default:
 				throw new Error('unexpected HTML element ' + node.tagName + '.');

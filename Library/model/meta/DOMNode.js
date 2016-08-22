@@ -7,7 +7,6 @@ function DOMNode(nodeName) {
 	this.nodeName = nodeName;
 	this.nodeType = 1; // Element Node
 	if (nodeName == 'root') this.nodeType = 11; // Fragment Node
-	if (nodeName == 'wbr') this.nodeType = 13; // Empty Element Node
 	this.parentNode = null;
 	this.attributes = {};
 	this.emptyElement = false;
