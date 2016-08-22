@@ -35,6 +35,7 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direc
 	var refChild = new DOMNode('span');
 	refChild.setAttribute('id', nodeId);
 	refChild.setAttribute('class', 'top' + this.style);
+	refChild.setAttribute('caller', this.caller);
 	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	switch(this.style) {
 		case 'f':

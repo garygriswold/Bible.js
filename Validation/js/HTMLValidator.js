@@ -110,10 +110,10 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 					usx.push('<verse number="', parts[2], '" style="', node['class'], '"', END_EMPTY);
 					node.children = [];
 				} else if (node['class'] === 'topf') {
-					usx.push('<note caller="+" style="f">');
+					usx.push('<note caller="', node.caller, '" style="f">');
 					clearTextChildren(node); // clear note button
 				} else if (node['class'] === 'topx') {
-					usx.push('<note caller="+" style="x">');
+					usx.push('<note caller="', node.caller, '" style="x">');
 					clearTextChildren(node); // clear note button
 				} else if (node.hidden) {
 					if (node.closed) {
@@ -280,6 +280,7 @@ function HTMLElement(tagName) {
 	this.tagName = tagName;
 	this.id = null;
 	this['class'] = null;
+	this.caller = null;
 	this.note = null;
 	this.hidden = null;
 	this.closed = null;
@@ -304,6 +305,7 @@ HTMLElement.prototype.buildHTML = function(array, includeChildren) {
 	array.push(EOL, '<', this.tagName);
 	if (this.id) array.push(' id="', this.id, '"');
 	if (this['class']) array.push(' class="', this['class'], '"');
+	if (this.caller) array.push(' caller="', this.caller, '"');
 	if (this.note) array.push(' note="', this.note, '"');
 	if (this.hidden) array.push(' hidden="', this.hidden, '"');
 	if (this.closed) array.push(' closed"', this.closed, '"');
