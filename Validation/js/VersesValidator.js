@@ -30,15 +30,12 @@ VersesValidator.prototype.generateChaptersFile = function(callback) {
 	var bible = [];
 	var chapter = [];
 	var verse = [];
-	var verseId = '';
-	var priorId = '';
-	var elementStyle = '';
-	var statement = 'SELECT reference, html FROM Chapters';
+	var statement = 'SELECT reference, html FROM chapters';
 	this.db.all(statement, [], function(err, results) {
 		if (err) {
 			that.fatalError(err, 'generateChaptersFile');
 		} else {
-			for (var i=0; i<results.length; i++) {
+			for (var i=1; i<results.length; i++) {
 				var row = results[i];
 				parseChapter(row.reference, row.html);
 			}
@@ -46,78 +43,78 @@ VersesValidator.prototype.generateChaptersFile = function(callback) {
 		}
 	});
 	
-	function parseChapter(reference, chapter) {
-		//console.log('PARSE HTML', reference);
-		const BEGIN = 'begin';
-		const SPAN = 'span';
-		const ID_ATTR = 'id_attr';
-		const CLASS_ATTR = 'class_attr';
-		const STYLE_ATTR = 'style_attr';
-		const VERSE_ELE = 'verse_ele';
-		var state = BEGIN;
-		var reader = new XMLTokenizer(chapter);
+	function parseChapter(reference, html) {
+		var reader = new XMLTokenizer(html);
+		var elementStack = [];
+		var element = null;
+		var attrName = null;
+		var verseId = null;
 		while (tokenType !== XMLNodeType.END) {
 			var tokenType = reader.nextToken();
+			var tokenValue = reader.tokenValue();
 			
 			switch(tokenType) {
 				case XMLNodeType.ELE_OPEN:
-					if (state === BEGIN && reader.tokenValue() === 'span') {
-						state = SPAN;
-					}
+					element = { tagName: tokenValue };
 					break;
 				case XMLNodeType.ATTR_NAME:
-					if (state === SPAN && reader.tokenValue() === 'id') {
-						state = ID_ATTR;
-					}
-					else if (state === ID_ATTR && reader.tokenValue() === 'class') {
-						state = CLASS_ATTR;
-					}
-					else if (state === SPAN || state === CLASS_ATTR && reader.tokenValue() === 'class') {
-						state = STYLE_ATTR;
-					}
+					attrName = tokenValue;
 					break;
 				case XMLNodeType.ATTR_VALUE:
-					if (state === ID_ATTR) {
-						verseId = reader.tokenValue();
-					}
-					else if (state === CLASS_ATTR && reader.tokenValue() === 'v') {
-						state = VERSE_ELE;
-						outputVerse(reference);
-					}
-					if (state === STYLE_ATTR) {
-						elementStyle = reader.tokenValue();
+					element[attrName] = tokenValue;
+					if (attrName === 'class' && tokenValue === 'v') {
+						outputVerse(verseId);
+						verseId = element['id'];
 					}
 					break;
 				case XMLNodeType.ELE_END:
-					// do nothing
+					elementStack.push(element);
+					break;
+				case XMLNodeType.ELE_EMPTY:
+					// do nothing,
 					break;
 				case XMLNodeType.WHITESP:
 				case XMLNodeType.TEXT:
-					if (state !== VERSE_ELE && elementStyle !== 'display:none') {
-						var line = reader.tokenValue();
-						line = line.replace('\u261A ', '');
-						line = line.replace('\u261B ', '');
-						line = line.replace('\u261C ', '');												
-						line = line.replace('\u261E ', '');
-						verse.push(line);
+					var currElement = elementStack[elementStack.length -1];
+					switch(currElement.tagName) {
+						case 'section':
+							verse.push(tokenValue);
+							break;
+						case 'p':
+							verse.push(tokenValue);
+							break;
+						case 'span':
+							var clas = currElement['class'];
+							var clasType = (clas.length > 3) ? clas.substr(3, 1) : clas.substr(0, 1);
+							if (clasType !== 'v' && clasType !== 'f' && clasType !== 'x') {
+								verse.push(tokenValue);
+							}
+							break;
 					}
-					elementStyle = '';
+					break;
+				case XMLNodeType.ELE_CLOSE:
+					element = elementStack.pop();
+					break;
+				case XMLNodeType.PROG_INST:
+					// do nothing
+					break;
+				case XMLNodeType.END:
+					outputVerse(verseId);
 					break;
 				default:
-					state = BEGIN;
+					//state = BEGIN;
+					throw new Error('The XMLNodeType ' + tokenType + ' is unknown in VersesValidator.');
 			}
 		}
 		outputVerse(reference);
 		outputChapter();
 	}
-	function outputVerse(reference) {
+	function outputVerse(verseId) {
 		//console.log('OUTPUT VERSE ***', verse.join(''));
-		if (verse.length > 0 && priorId.indexOf(':') > 0) {
-			chapter.push(priorId, '|', verse.join('').trim(), '\n');
+		if (verse.length > 0 && verseId) {
+			chapter.push(verseId, '|', verse.join('').trim(), '\n');
 		}
 		verse = [];
-		priorId = verseId;
-		verseId = '';
 	}
 	function outputChapter() {
 		//console.log('OUTPUT CHAPTER ****', chapter.join(''));
