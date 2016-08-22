@@ -32,6 +32,7 @@ VersesValidator.prototype.generateChaptersFile = function(callback) {
 	var verse = [];
 	var verseId = '';
 	var priorId = '';
+	var elementStyle = '';
 	var statement = 'SELECT reference, html FROM Chapters';
 	this.db.all(statement, [], function(err, results) {
 		if (err) {
@@ -46,11 +47,12 @@ VersesValidator.prototype.generateChaptersFile = function(callback) {
 	});
 	
 	function parseChapter(reference, chapter) {
-		console.log('PARSE HTML', reference);
+		//console.log('PARSE HTML', reference);
 		const BEGIN = 'begin';
 		const SPAN = 'span';
 		const ID_ATTR = 'id_attr';
 		const CLASS_ATTR = 'class_attr';
+		const STYLE_ATTR = 'style_attr';
 		const VERSE_ELE = 'verse_ele';
 		var state = BEGIN;
 		var reader = new XMLTokenizer(chapter);
@@ -70,6 +72,9 @@ VersesValidator.prototype.generateChaptersFile = function(callback) {
 					else if (state === ID_ATTR && reader.tokenValue() === 'class') {
 						state = CLASS_ATTR;
 					}
+					else if (state === SPAN || state === CLASS_ATTR && reader.tokenValue() === 'class') {
+						state = STYLE_ATTR;
+					}
 					break;
 				case XMLNodeType.ATTR_VALUE:
 					if (state === ID_ATTR) {
@@ -79,20 +84,24 @@ VersesValidator.prototype.generateChaptersFile = function(callback) {
 						state = VERSE_ELE;
 						outputVerse(reference);
 					}
+					if (state === STYLE_ATTR) {
+						elementStyle = reader.tokenValue();
+					}
 					break;
 				case XMLNodeType.ELE_END:
 					// do nothing
 					break;
+				case XMLNodeType.WHITESP:
 				case XMLNodeType.TEXT:
-					if (state !== VERSE_ELE) {
+					if (state !== VERSE_ELE && elementStyle !== 'display:none') {
 						var line = reader.tokenValue();
-						line = line.replace('\n', ' ');
-						line = line.replace('\u261A', '');
-						line = line.replace('\u261B', '');
-						line = line.replace('\u261C', '');												
-						line = line.replace('\u261E', '');
+						line = line.replace('\u261A ', '');
+						line = line.replace('\u261B ', '');
+						line = line.replace('\u261C ', '');												
+						line = line.replace('\u261E ', '');
 						verse.push(line);
 					}
+					elementStyle = '';
 					break;
 				default:
 					state = BEGIN;
@@ -104,7 +113,7 @@ VersesValidator.prototype.generateChaptersFile = function(callback) {
 	function outputVerse(reference) {
 		//console.log('OUTPUT VERSE ***', verse.join(''));
 		if (verse.length > 0 && priorId.indexOf(':') > 0) {
-			chapter.push(priorId, '|', verse.join(''), '\n');
+			chapter.push(priorId, '|', verse.join('').trim(), '\n');
 		}
 		verse = [];
 		priorId = verseId;

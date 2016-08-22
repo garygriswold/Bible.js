@@ -80,7 +80,7 @@ VerseBuilder.prototype.loadDB = function(callback) {
 	function extractVerseText(verseUSX) {
 		that.scanResult = [];
 		scanRecursively(verseUSX);
-		return(that.scanResult.join(' '));
+		return(that.scanResult.join('').trim());
 	}
 	function scanRecursively(node) {
 		if (node.tagName === 'text') {

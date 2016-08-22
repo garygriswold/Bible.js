@@ -324,7 +324,7 @@ VerseBuilder.prototype.loadDB = function(callback) {
 	function extractVerseText(verseUSX) {
 		that.scanResult = [];
 		scanRecursively(verseUSX);
-		return(that.scanResult.join(' '));
+		return(that.scanResult.join('').trim());
 	}
 	function scanRecursively(node) {
 		if (node.tagName === 'text') {
@@ -784,9 +784,6 @@ HTMLBuilder.prototype.readRecursively = function(node) {
 		case 3: // text
 			this.result.push(node.text);
 			break;
-		//case 13: // empty element
-		//	this.result.push('<', nodeName, '>');
-		//	break;
 		default:
 			throw new Error('Unexpected nodeType ' + node.nodeType + ' in HTMLBuilder.toHTML().');
 	}
@@ -1728,7 +1725,6 @@ function DOMNode(nodeName) {
 	this.nodeName = nodeName;
 	this.nodeType = 1; // Element Node
 	if (nodeName == 'root') this.nodeType = 11; // Fragment Node
-	//if (nodeName == 'wbr') this.nodeType = 13; // Empty Element Node
 	this.parentNode = null;
 	this.attributes = {};
 	this.emptyElement = false;
