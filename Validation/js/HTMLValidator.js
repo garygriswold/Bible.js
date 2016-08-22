@@ -9,7 +9,7 @@ var HTML_BIBLE_PATH = "../../DBL/3prepared/";
 var OUT_BIBLE_PATH = "output/html/";
 var USX_BIBLE_PATH = "../../DBL/2current/";
 var EOL = '\r\n';
-var END_EMPTY = '/>';
+var END_EMPTY = ' />';
 
 function HTMLValidator(version) {
 	this.version = version;
@@ -53,7 +53,7 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 		var usx = [];
 		usx.push(String.fromCharCode('0xFEFF'));
 		usx.push('<?xml version="1.0" encoding="utf-8"?>', EOL);
-		usx.push('<usx version="2.5">');
+		usx.push('<usx version="2.0">');
 		for (var i=0; i<chapters.length; i++) {
 			recurseOverHTML(usx, chapters[i]);
 		}
@@ -122,6 +122,8 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 						usx.push('<char style="', node['class'], '">');
 					}
 					usx.push(node.hidden);
+				} else if (node.loc) {
+					usx.push('<ref loc="', node.loc, '">');
 				} else if (node['class'] !== 'f' && node['class'] !== 'x') {
 					if (node.closed) {
 						usx.push('<char style="', node['class'], '" closed="', node.closed, '">');
@@ -172,6 +174,8 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 					usx.push('</note>');
 				} else if (node.hidden) {
 					usx.push('</char>');
+				} else if (node.loc) {
+					usx.push('</ref>');
 				} else if (node['class'] !== 'f' && node['class'] !== 'x') {
 					usx.push('</char>');
 				}
@@ -281,6 +285,7 @@ function HTMLElement(tagName) {
 	this.id = null;
 	this['class'] = null;
 	this.caller = null;
+	this.loc = null;
 	this.note = null;
 	this.hidden = null;
 	this.closed = null;
@@ -306,6 +311,7 @@ HTMLElement.prototype.buildHTML = function(array, includeChildren) {
 	if (this.id) array.push(' id="', this.id, '"');
 	if (this['class']) array.push(' class="', this['class'], '"');
 	if (this.caller) array.push(' caller="', this.caller, '"');
+	if (this.loc) array.push(' loc="', this.loc, '"');
 	if (this.note) array.push(' note="', this.note, '"');
 	if (this.hidden) array.push(' hidden="', this.hidden, '"');
 	if (this.closed) array.push(' closed"', this.closed, '"');

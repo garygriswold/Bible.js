@@ -1103,6 +1103,7 @@ Ref.prototype.buildUSX = function(result) {
 };
 Ref.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('span');
+	child.setAttribute('loc', this.loc);
 	child.emptyElement = this.emptyElement;
 	parentNode.appendChild(child);
 	return(child);
@@ -1152,7 +1153,8 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 	} else if (parentNode.nodeName === 'section') {
 		parentNode.appendText(this.text);
 	} else if (! parentNode.hasAttribute('class')) { // Ref nodes have no class
-		parentNode.setAttribute('note', this.text); 
+		///parentNode.setAttribute('note', this.text); 
+		parentNode.appendText(this.text);
 	} else {
 		var parentClass = parentNode.getAttribute('class');
 		if (parentClass.substr(0, 3) === 'top') {

@@ -29,6 +29,7 @@ Ref.prototype.buildUSX = function(result) {
 };
 Ref.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('span');
+	child.setAttribute('loc', this.loc);
 	child.emptyElement = this.emptyElement;
 	parentNode.appendChild(child);
 	return(child);
