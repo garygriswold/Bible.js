@@ -9,6 +9,7 @@ var HTML_BIBLE_PATH = "../../DBL/3prepared/";
 var OUT_BIBLE_PATH = "output/html/";
 var USX_BIBLE_PATH = "../../DBL/2current/";
 var EOL = '\r\n';
+var END_EMPTY = '/>';
 
 function HTMLValidator(version) {
 	this.version = version;
@@ -52,7 +53,7 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 		var usx = [];
 		usx.push(String.fromCharCode('0xFEFF'));
 		usx.push('<?xml version="1.0" encoding="utf-8"?>', EOL);
-		usx.push('<usx version="2.0">');
+		usx.push('<usx version="2.5">');
 		for (var i=0; i<chapters.length; i++) {
 			recurseOverHTML(usx, chapters[i]);
 		}
@@ -79,7 +80,7 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 			case 'article':
 				usx.push('<book code="', node.id, '" style="', node['class'], '"');
 				if (node.emptyElement) {
-					usx.push(' />');
+					usx.push(END_EMPTY);
 				} else {
 					usx.push('>');
 					if (node.hidden) {
@@ -92,10 +93,10 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				break;
 			case 'p':
 				if (node['class'] === 'c') {
-					usx.push('<chapter number="', chapterNum, '" style="c" />');
+					usx.push('<chapter number="', chapterNum, '" style="c"', END_EMPTY);
 					node.children = [];
 				} else if (node.emptyElement) {
-					usx.push('<para style="', node['class'], '" />');
+					usx.push('<para style="', node['class'], '"', END_EMPTY);
 				} else {
 					usx.push('<para style="', node['class'], '">');
 				}
@@ -106,7 +107,7 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 			case 'span':
 				if (node['class'] === 'v') {
 					var parts = node.id.split(':');
-					usx.push('<verse number="', parts[2], '" style="', node['class'], '" />');
+					usx.push('<verse number="', parts[2], '" style="', node['class'], '"', END_EMPTY);
 					node.children = [];
 				} else if (node['class'] === 'topf') {
 					usx.push('<note caller="+" style="f">');
