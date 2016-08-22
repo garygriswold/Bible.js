@@ -85,8 +85,7 @@ VersesValidator.prototype.generateChaptersFile = function(callback) {
 							break;
 						case 'span':
 							var clas = currElement['class'];
-							var clasType = (clas.length > 3) ? clas.substr(3, 1) : clas.substr(0, 1);
-							if (clasType !== 'v' && clasType !== 'f' && clasType !== 'x') {
+							if (clas !== 'v' && ! isAncestorFootnote(elementStack)) {
 								verse.push(tokenValue);
 							}
 							break;
@@ -102,12 +101,20 @@ VersesValidator.prototype.generateChaptersFile = function(callback) {
 					outputVerse(verseId);
 					break;
 				default:
-					//state = BEGIN;
 					throw new Error('The XMLNodeType ' + tokenType + ' is unknown in VersesValidator.');
 			}
 		}
 		outputVerse(reference);
 		outputChapter();
+	}
+	function isAncestorFootnote(stack) {
+		for (var i=0; i<stack.length; i++) {
+			var clas = stack[i]['class'];
+			if (clas === 'topf' || clas === 'topx') {
+				return(true);
+			}
+		}
+		return(false);
 	}
 	function outputVerse(verseId) {
 		//console.log('OUTPUT VERSE ***', verse.join(''));
