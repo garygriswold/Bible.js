@@ -7,53 +7,69 @@ publication.  This document is where specific notes about specific versions must
 ARBVDPD
 -------
  
-	Last performed Aug 15, 2016
-	Publisher ??
-	XMLTokenizer - perfect diff no options 8/16
-	USXParser - perfect diff no options 8/16
-	HTML - needs work, TOC fields not done, many errors in PSA
-	StyleUse - perfect
-	Verses - errors diff no options, perfect diff -w
+	Last performed Aug 22, 2016
+	Publisher
+	XMLTokenizer - perfect diff no options
+	USXParser - perfect diff, 2 whitespace chars diff
+	HTML - perfect
+	Verses - perfect
 	Concordance - perfect, 6 punctuation marks + space
+	StyleUse - perfect
 	TableOfContents - perfect
+	ValidationCleanup
+	ProductionUpload
 
 KJVPD
 -----
 
-	
-	Last performed Aug 15, 2016
-	Publisher 8/16
-	XMLTokenizer - perfect diff no options 8/16
-	USXParser - perfect diff no options 8/16
-	HTML - needs work, TOC fields not done, there must be some missing elements
-	StyleUse - perfect
-	Verses - errors diff no options, perfect diff -w
+	Last performed Aug 22, 2016
+	Publisher
+	XMLTokenizer - perfect diff no options
+	USXParser - perfect diff double \r\n before </usx>
+	HTML - perfect
+	Verses - perfect
 	Concordance - perfect, 11 punctuation marks + space
+	StyleUse - perfect
 	TableOfContents - perfect
+	ValidationCleanup
+	ProductionUpload
 
 NMV
 ---
 
-	Last performed Aug 15, 2016
-	Publisher ??
-	XMLTokenizer NMV  nospace - perfect utf-8 preamble is removed 8/16
-	USXParser - space must be removed in empty nodes book, chapter, verse, and para.  Also, it uses \n CR and 
-		before and after </usx> 8/16
-	HTML - needs work
-	StyleUse - perfect
-	Verses - errors diff no options, perfect diff -w
+	Last performed Aug 22, 2016
+	Publisher
+	XMLTokenizer NMV  nospace - whitespace diffs on preamble and </usx> 
+	USXParser - space must be removed in empty nodes: book, chapter, verse, and para.  Also, it uses \n CR and 
+		before and after </usx>	
+	HTML - change END_EMPTY to '/>' and then errors are the same as above.
+	Verses - perfect
 	Concordance - perfect, 12 punctuation marks + space
+	StyleUse - perfect
 	TableOfContents - perfect
+	ValidationCleanup
+	ProductionUpload
 
 WEB
 ---
 
-	Last performed Aug 15, 2016
-	Publisher 8/16	
-	XMLTokenizer - perfect, diff no options 8/16
-	USXParser - perfect, diff no options 8/16
-	HTML - needs work
-	StyleUse - perfect
-	Verses - errors diff no options, perfect diff -w
+	Last performed Aug 22, 2016
+	Publisher	
+	XMLTokenizer - perfect, diff no options
+	USXParser - perfect, diff no options, double \r\n before </usx>
+	HTML - change END_EMPTY to '/>', then perfect
+	Verses - perfect
 	Concordance - perfect, 14 punctuation marks + space
+	StyleUse - perfect
 	TableOfContents - perfect
+	ValidationCleanup
+	ProductionUpload
+	
+Production
+----------
+
+	Last performed Aug 22, 2016
+	cd ../Versions
+	./RunVersions.sh
+	Log into aws.amazon.com
+	Upload ARBVDPD, KJVPD, NMV, WEB

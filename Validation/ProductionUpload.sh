@@ -22,7 +22,7 @@ rm ${VERSION}.db.zip
 
 zip ${VERSION}.db.zip ${VERSION}.db
 
-scp -P7022 ${VERSION}.db.zip ${HOST}:${DIRECTORY}
+##scp -P7022 ${VERSION}.db.zip ${HOST}:${DIRECTORY}
 
 ##scp -P7022 ${VERSION}.db ${HOST}:${DIRECTORY}
 

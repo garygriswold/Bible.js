@@ -136,8 +136,8 @@ ProductionUpload
 ----------------
 
 The Publish.sh program stores Bible files in DBL/3prepared.  These validation programs operate on that copy of the database.  The ValidationCleanup script
-copies the file to the DBL/4validated directory.  This script copies the databases into production by copying the files to DBL/5ready and to the static root
-of the server.
+copies the file to the DBL/4validated directory.  This script copies the databases into production by copying the files to DBL/5ready.
+NOTE: This file does not perform the upload to AWS at this time.
 
 	./ProductionUpload.sh VERSION
 	
