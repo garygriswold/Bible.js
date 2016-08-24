@@ -1082,6 +1082,8 @@ function HeaderView(tableContents, version, localizeNumber) {
 	this.rootNode = document.createElement('table');
 	this.rootNode.id = 'statusRoot';
 	document.body.appendChild(this.rootNode);
+	this.rootRow = document.createElement('tr');
+	this.rootNode.appendChild(this.rootRow);
 	this.labelCell = document.createElement('td');
 	this.labelCell.id = 'labelCell';
 	document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
@@ -1123,11 +1125,11 @@ HeaderView.prototype.showView = function() {
 	var that = this;
 	this.backgroundCanvas = document.createElement('canvas');
 	paintBackground(this.backgroundCanvas, this.hite);
-	this.rootNode.appendChild(this.backgroundCanvas);
+	this.rootRow.appendChild(this.backgroundCanvas);
 
 	var menuWidth = setupIconButton('tocCell', drawTOCIcon, this.hite, BIBLE.SHOW_TOC);
 	var serhWidth = setupIconButton('searchCell', drawSearchIcon, this.hite, BIBLE.SHOW_SEARCH);
-	this.rootNode.appendChild(this.labelCell);
+	this.rootRow.appendChild(this.labelCell);
 	if (that.version.isQaActive == 'T') {
 		var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
 	} else {
@@ -1185,7 +1187,7 @@ HeaderView.prototype.showView = function() {
 		canvas.setAttribute('style', that.cellTopPadding);
 		var parent = document.createElement('td');
 		parent.id = parentCell;
-		that.rootNode.appendChild(parent);
+		that.rootRow.appendChild(parent);
 		parent.appendChild(canvas);
 		canvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();

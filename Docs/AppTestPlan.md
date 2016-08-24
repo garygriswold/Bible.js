@@ -88,6 +88,17 @@ CodexView
 	3. Scroll forward should work continuously with little or no stopping.
 	4. Scroll backward will sometimes stop at the beginning of a chapter, and then continue.
 	
+FootNotes
+---------
+
+	Compare the following complex footnotes in KJVPD to insure that they are complete
+	1. EXO 17:15
+	2. EXO 32:11
+	3. EXO 32:29
+	4. DEU 32:27
+	5. JOS 23:9
+	6. JUD 6:24
+	
 SearchView
 ----------
 

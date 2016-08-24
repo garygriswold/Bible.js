@@ -21,6 +21,10 @@
     <preference name="AndroidExtraFilesystems" value="files,cache,root" />
     <!-- <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" /> -->
 	<!-- <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,root" /> -->
+	<preference name="SplashScreenDelay" value="3000" />
+	<preference name="FadeSplashScreen" value="true" />
+	<preference name="FadeSplashScreenDuration" value="1000" />
+	<preference name="ShowSplashScreenSpinner" value="true" />
     <access origin="*" />
     <allow-intent href="http://cloud.shortsands.com:8080/*" />
     <allow-intent href="https://d1obplp0ybf6eo.cloudfront.net/*" />
