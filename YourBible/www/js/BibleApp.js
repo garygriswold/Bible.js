@@ -17,7 +17,42 @@ AppInitializer.prototype.begin = function() {
 	appUpdater.doUpdate(function() {
 		console.log('DONE APP UPDATER');
 	    settingStorage.getCurrentVersion(function(versionFilename) {
-			changeVersionHandler(versionFilename);
+		    if (versionFilename) {
+			    // Process with User's Version
+		    	changeVersionHandler(versionFilename);
+		    } else {
+			    deviceSettings.prefLanguage(function(locale) {
+				    console.log('user locale ', locale);
+					var parts = locale.split('-');
+					var versionsAdapter = new VersionsAdapter();
+					versionsAdapter.defaultVersion(parts[0], function(filename) {
+						console.log('default version determined ', filename);
+						var parts = filename.split('.');
+						var versionCode = parts[0]; // This hack requires version code to be part of filename.
+						if (appUpdater.installedVersions[versionCode]) {
+							// Process locale's default version installed
+							changeVersionHandler(filename);
+						} else {
+							var gsPreloader = new GSPreloader(gsPreloaderOptions);
+							gsPreloader.active(true);
+							var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT, versionsAdapter, 'none');
+							downloader.download(filename, function(error) {
+								//console.log('Download error', JSON.stringify(error));
+								gsPreloader.active(false);
+								if (error) {
+									console.log(JSON.stringify(error));
+									// Process all default version on error
+									changeVersionHandler(DEFAULT_VERSION);
+								} else {
+									settingStorage.setVersion(versionCode, filename);
+									// Process locale's default version downloaded
+									changeVersionHandler(filename);
+								}
+							});
+						}
+					});
+				});
+			}
 		});
 	});
     
@@ -106,6 +141,7 @@ var SERVER_HOST = 'cloudfront.net';
 var SERVER_PORT = '80';
 //var SERVER_HOST = 'cloud.shortsands.com';
 //var SERVER_PORT = '8080';
+var DEFAULT_VERSION = 'WEB.db'; // This version must be preinstalled in the App.
 
 function bibleShowNoteClick(nodeId) {
 	console.log('show note clicked', nodeId);
@@ -2971,7 +3007,7 @@ VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else if (results.rows.length === 0) {
-			callback('WEB.db');
+			callback(DEFAULT_VERSION);
 		} else {
 			callback(results.rows.item(0).filename);
 		}
@@ -3076,6 +3112,7 @@ HttpClient.prototype.request = function(method, path, postData, callback) {
 */
 function AppUpdater(settingStorage) {
 	this.settingStorage = settingStorage;
+	this.installedVersions = {};
 	Object.seal(this);
 }
 AppUpdater.prototype.doUpdate = function(callback) {
@@ -3230,18 +3267,18 @@ AppUpdater.prototype.moveFiles = function(callback) {
 	
 	function updateSettings(sourceFiles, targetFiles) {
 		var files = sourceFiles.concat(targetFiles);
-		var replace = {};
+		that.installedVersions = {};
 		var now = new Date().toISOString();
 		for (var i=0; i<files.length; i++) {
 			var filename = files[i];
 			var version = filename.split('.')[0];
 			var nameEnd = (filename.length > 7) ? filename.substr(filename.length - 7) : '';
 			if (version !== 'Settings' && version !== 'Versions' && nameEnd !== 'User.db') {
-				replace[version] = [version, filename, now];
+				that.installedVersions[version] = [version, filename, now];
 				console.log('SET INSTALLED', version, filename);
 			}			
 		}
-		var values = objectValues(replace);
+		var values = objectValues(that.installedVersions);
 		that.settingStorage.bulkReplaceVersions(values, now);
 	}
 	
@@ -3393,56 +3430,43 @@ function BibleVersion() {
 BibleVersion.prototype.fill = function(filename, callback) {
 	var that = this;
 	var versionsAdapter = new VersionsAdapter();
-	if (filename) {
-		populateVersion(filename);
-	} else {
-		deviceSettings.prefLanguage(function(locale) {
-			var parts = locale.split('-');
-			versionsAdapter.defaultVersion(parts[0], function(filename) {
-				populateVersion(filename);
-			});
-		});		
-	}
-	
-	function populateVersion(filename) {
-		versionsAdapter.selectVersionByFilename(filename, function(row) {
-			if (row instanceof IOError) {
-				console.log('IOError selectVersionByFilename', JSON.stringify(row));
-				that.code = 'WEB';
-				that.filename = 'WEB.db';
-				that.silCode = 'eng';
-				that.langCode = 'en';
-				that.direction = 'ltr';
-				that.hasHistory = true;
-				that.isQaActive = 'F';
-				that.versionAbbr = 'WEB';
-				that.localLanguageName = 'English';
-				that.localVersionName = 'World English Bible';
-				that.ownerCode = 'EBIBLE';
-				that.ownerName = 'eBible.org';
-				that.ownerURL = 'www.eBible.org';
-				that.copyright = 'World English Bible (WEB), Public Domain, eBible.';
-				that.introduction = null;
-			} else {
-				that.code = row.versionCode;
-				that.filename = filename;
-				that.silCode = row.silCode;
-				that.langCode = row.langCode;
-				that.direction = row.direction;
-				that.hasHistory = (row.hasHistory === 'T');
-				that.isQaActive = row.isQaActive;
-				that.versionAbbr = row.versionAbbr;
-				that.localLanguageName = row.localLanguageName;
-				that.localVersionName = row.localVersionName;
-				that.ownerCode = row.ownerCode;
-				that.ownerName = row.localOwnerName;
-				that.ownerURL = row.ownerURL;
-				that.copyright = row.copyright;
-				that.introduction = row.introduction;
-			}
-			callback();
-		});
-	}
+	versionsAdapter.selectVersionByFilename(filename, function(row) {
+		if (row instanceof IOError) {
+			console.log('IOError selectVersionByFilename', JSON.stringify(row));
+			that.code = 'WEB';
+			that.filename = 'WEB.db';
+			that.silCode = 'eng';
+			that.langCode = 'en';
+			that.direction = 'ltr';
+			that.hasHistory = true;
+			that.isQaActive = 'F';
+			that.versionAbbr = 'WEB';
+			that.localLanguageName = 'English';
+			that.localVersionName = 'World English Bible';
+			that.ownerCode = 'EBIBLE';
+			that.ownerName = 'eBible.org';
+			that.ownerURL = 'www.eBible.org';
+			that.copyright = 'World English Bible (WEB), Public Domain, eBible.';
+			that.introduction = null;
+		} else {
+			that.code = row.versionCode;
+			that.filename = filename;
+			that.silCode = row.silCode;
+			that.langCode = row.langCode;
+			that.direction = row.direction;
+			that.hasHistory = (row.hasHistory === 'T');
+			that.isQaActive = row.isQaActive;
+			that.versionAbbr = row.versionAbbr;
+			that.localLanguageName = row.localLanguageName;
+			that.localVersionName = row.localVersionName;
+			that.ownerCode = row.ownerCode;
+			that.ownerName = row.localOwnerName;
+			that.ownerURL = row.ownerURL;
+			that.copyright = row.copyright;
+			that.introduction = row.introduction;
+		}
+		callback();
+	});
 };
 
 /**

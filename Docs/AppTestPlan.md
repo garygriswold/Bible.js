@@ -60,8 +60,19 @@ App Update
 	4. Verify that databases will open with delay the first time and 
 	5. Temp change the directories and filenames and verify crash resistance.
 	
-Download
---------
+Startup Download
+----------------
+
+	1. Test that already used version bypasses all download logic.
+	2. Test that locale is determined for user
+	3. Test that default language for versions is found.
+	4. Test that WEB.db is used when no default is found.
+	5. Test that download is bypassed if version is already present on device
+	6. Test that download succeeds if version is not already present on device
+	7. Test that WEB.db is used if there is a failure in download.
+	
+User Download
+-------------
 
 	1. Do a fresh install with only the default version.
 	2. Verify that a file can be downloaded when version is selected.

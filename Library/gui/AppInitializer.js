@@ -16,7 +16,42 @@ AppInitializer.prototype.begin = function() {
 	appUpdater.doUpdate(function() {
 		console.log('DONE APP UPDATER');
 	    settingStorage.getCurrentVersion(function(versionFilename) {
-			changeVersionHandler(versionFilename);
+		    if (versionFilename) {
+			    // Process with User's Version
+		    	changeVersionHandler(versionFilename);
+		    } else {
+			    deviceSettings.prefLanguage(function(locale) {
+				    console.log('user locale ', locale);
+					var parts = locale.split('-');
+					var versionsAdapter = new VersionsAdapter();
+					versionsAdapter.defaultVersion(parts[0], function(filename) {
+						console.log('default version determined ', filename);
+						var parts = filename.split('.');
+						var versionCode = parts[0]; // This hack requires version code to be part of filename.
+						if (appUpdater.installedVersions[versionCode]) {
+							// Process locale's default version installed
+							changeVersionHandler(filename);
+						} else {
+							var gsPreloader = new GSPreloader(gsPreloaderOptions);
+							gsPreloader.active(true);
+							var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT, versionsAdapter, 'none');
+							downloader.download(filename, function(error) {
+								//console.log('Download error', JSON.stringify(error));
+								gsPreloader.active(false);
+								if (error) {
+									console.log(JSON.stringify(error));
+									// Process all default version on error
+									changeVersionHandler(DEFAULT_VERSION);
+								} else {
+									settingStorage.setVersion(versionCode, filename);
+									// Process locale's default version downloaded
+									changeVersionHandler(filename);
+								}
+							});
+						}
+					});
+				});
+			}
 		});
 	});
     

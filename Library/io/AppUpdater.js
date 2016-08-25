@@ -15,6 +15,7 @@
 */
 function AppUpdater(settingStorage) {
 	this.settingStorage = settingStorage;
+	this.installedVersions = {};
 	Object.seal(this);
 }
 AppUpdater.prototype.doUpdate = function(callback) {
@@ -169,18 +170,18 @@ AppUpdater.prototype.moveFiles = function(callback) {
 	
 	function updateSettings(sourceFiles, targetFiles) {
 		var files = sourceFiles.concat(targetFiles);
-		var replace = {};
+		that.installedVersions = {};
 		var now = new Date().toISOString();
 		for (var i=0; i<files.length; i++) {
 			var filename = files[i];
 			var version = filename.split('.')[0];
 			var nameEnd = (filename.length > 7) ? filename.substr(filename.length - 7) : '';
 			if (version !== 'Settings' && version !== 'Versions' && nameEnd !== 'User.db') {
-				replace[version] = [version, filename, now];
+				that.installedVersions[version] = [version, filename, now];
 				console.log('SET INSTALLED', version, filename);
 			}			
 		}
-		var values = objectValues(replace);
+		var values = objectValues(that.installedVersions);
 		that.settingStorage.bulkReplaceVersions(values, now);
 	}
 	

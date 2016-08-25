@@ -113,7 +113,7 @@ VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else if (results.rows.length === 0) {
-			callback('WEB.db');
+			callback(DEFAULT_VERSION);
 		} else {
 			callback(results.rows.item(0).filename);
 		}
