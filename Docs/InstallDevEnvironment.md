@@ -166,8 +166,12 @@ Re Add WhiteList
 File download is not working for Android, and I think it is the absence of whitelist
 
 	cordova plugin add cordova-plugin-whitelist --save
-	
 
+	
+Add Keyboard
+------------
+	
+	cordova plugin add ionic-plugin-keyboard --save
 
 	
 

@@ -907,6 +907,7 @@ SearchView.prototype.showSearchField = function() {
 	var that = this;
 	inputField.addEventListener('keyup', function(event) {
 		if (event.keyCode === 13) {
+			if (typeof(cordova) !== 'undefined') cordova.plugins.Keyboard.close();
 			that.startSearch(this.value);
 		}
 	});
