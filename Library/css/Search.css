@@ -22,7 +22,7 @@
 }
 .searchField {
 	font-family: sans-serif;
-	font-size:1.3rem;
+	font-size:1.0rem;
 	/* width is set dynamically in SearchView */
 	background: #fff;
 	padding: 6px 6px 6px 8px;
