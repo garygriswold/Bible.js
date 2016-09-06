@@ -9,6 +9,7 @@ temp.js
 newrelic.js
 Credentials.js
 Credentials.db
+Versions.db
 GitIgnore/
 licensed/
 platforms/
