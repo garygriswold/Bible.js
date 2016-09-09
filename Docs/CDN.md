@@ -80,44 +80,6 @@ URL Signing in Node
 		└── lodash@3.10.1
 
 
-KeyCDN
-======
-
-Account
--------
-
-	The username of the account is garygriswold and the password is Br1...
-
-Create Zone
------------
-
-	A push zone was created 7/18/2016 with the name short1.  The full URL is http://short1-4930.kxcdn.com
-	
-Upload Files
-------------
-
-	Files could be easily uploaded with Panic using a drag and drop ftp.
-	
-Access Files
-------------
-
-	curl http://short1-4930.kxcdn.com/WEB.db.zip > it.zip
-	
-SSL
----
-
-	Turned on Shared SSL, it still works
-	curl https://short1-4930.kxcdn.com/WEB.db.zip > it.zip
-	
-Secret Token
-------------
-
-	Using program: Certificates/keycdnToken.js
-	cd ShortSands/Credentials
-	node keycdnToken.js -> generates a URL such as the following.  It has a life of 120 seconds.
-	curl -v https://short1-4930.kxcdn.com/NMV.db.zip?token=W8n9q3FZj0A2iKAUzhej5Q&expire=1468941954 > nmv.db.zip
-	curl -v http://short1-4930.kxcdn.com/NMV.db.zip?token=W8n9q3FZj0A2iKAUzhej5Q&expire=1468941954 > nmv.db.zip
-	
 	
 
 

@@ -115,14 +115,15 @@ SearchView
 
 	1. Enter and invalid word presents a blank page.
 	2. Enter a valid word presents up to 3 uses per book and an ellipsis if there are more.
-	3. The verses contain the search words in bold.
-	4. Selecting a word, presents that passage, scrolled to that word.
-	5. Clicking back on the spyglass takes one back to the search box, and place where one left off.
-	6. Clicking on the ellipsis, presents all of the verses in that chapter.
-	7. Doing a search on the word 'a' does not crash the App.
-	8. Typing in a reference takes one directly there.
-	9. Typing in multiple words does a logical and in the search.
-	10. Including a term that is not in the Bible, does not affect search (is this OK)
+	3. Enter a valid word or series of words with leading and trailing spaces.
+	4. The verses contain the search words in bold.
+	5. Selecting a word, presents that passage, scrolled to that word.
+	6. Clicking back on the spyglass takes one back to the search box, and place where one left off.
+	7. Clicking on the ellipsis, presents all of the verses in that chapter.
+	8. Doing a search on the word 'a' does not crash the App.
+	9. Typing in a reference takes one directly there.
+	10. Typing in multiple words does a logical and in the search.
+	11. Including a term that is not in the Bible, does not affect search (is this OK)
 
 HistoryView
 -----------
