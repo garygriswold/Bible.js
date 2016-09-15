@@ -85,6 +85,11 @@ Upload IPA
 
 	Use Spotlight to locate Application Loader, use this program to upload the App.ipa file.
 	
+Checkin Final changes
+
+	git commit -am"ddd"
+	git branch x.x.x
+	
 
 Deploy Android Production Version
 =================================
