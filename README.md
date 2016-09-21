@@ -36,6 +36,8 @@ YourBible - This is a mobile Cordova version of the App.  This version of the Ap
 QAApp - This is a web App that is used by instructors to answer questions of students.  It is written in a single-page architecture so that it could be rewritten as a mobile App.  This feature has not been deployed in production
 
 Server - This is a project for the server, which will deliver copies of the Bible and handle the delivery of student questions and Instructor answers.  The Bible delivery capability of this has been moved to cloudfront.net.  The student question and instructor answer feature has not been put into production.
+	aws/lambda - Contains the Amazon Web Services Lambda functions that are currently in production.
+	www - Contains a node application server which was in production in the past, but has been retired.
 
 UnitTest - This is a repository of UnitTests for various parts of the system.
 
