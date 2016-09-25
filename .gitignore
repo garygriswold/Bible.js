@@ -16,3 +16,4 @@ platforms/
 StaticRoot/
 certificates/
 Validation/output/
+node_modules/
