@@ -1,5 +1,5 @@
 {
-  "name": "web-serving-html-test",
+  "name": "web-proxy",
   "description": "An example of how to customise HTTP response codes and content types",
   "private": true,
   "files": [

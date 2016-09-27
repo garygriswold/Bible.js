@@ -1,42 +1,58 @@
-/*global require, module*/
-var ApiBuilder = require('claudia-api-builder'),
-	api = module.exports = new ApiBuilder(),
-	superb = require('superb'),
-	renderPage = function (body) {
-		'use strict';
-		return '<html> ' +
-					'<body>' +
-					'<h1>Hello from Claudia.js</h1>' +
-					body +
-					'</body>' +
-			'</html>';
+
+var PROXY = 'https://fgko66i9b3.execute-api.us-west-2.amazonaws.com/latest/web?url=';
+
+var ApiBuilder = require('claudia-api-builder');
+var api = module.exports = new ApiBuilder();
+var superb = require('superb');
+	
+/**
+ * This handler parses the href of a request, and makes an http GET request for the page.
+ * It rewrites the page to change all href command to ones that will access the web through
+ * the proxy.
+ */
+api.get('/web', function(event) {
+	"use strict";
+	var parser = require('url');
+	var webURL = parser.parse(event.queryString.url);
+	var options = {
+	    hostname: webURL.hostname,
+	    port: webURL.port || 80,
+	    path: webURL.pathname,
+	    method: 'GET'
 	};
-
-// this should show up as a normal web page in the browser, the response type is text/html
-api.get('/start.html', function () {
-	'use strict';
-	return renderPage(
-			'<ul>' +
-				'<li><a href="search?name=mike">Valid search</a></li>' +
-				'<li><a href="search">Invalid search (will return 403)</a></li>' +
-				'<li><a href="redirect">Redirect to GitHub</a></li>' +
-			'</ul>'
-		);
-}, { success: { contentType: 'text/html'}});
-
-// because the success code is 3xx, the content will be used as the redirect location
-api.get('/redirect', function () {
-	'use strict';
-	return 'https://github.com/claudiajs/claudia';
-}, { success: 302 });
-
-// both the success and the error show as web pages, but the error is 403, not the default 500
-api.get('/search', function (request) {
-	'use strict';
-	if (request.queryString.name) {
-		return renderPage('<h2>' + request.queryString.name + ' is ' + superb() + '</h2>');
-	} else {
-		throw renderPage('<div style="color: red">Please provide a name</a>');
-	}
-}, {error: {code: 403, contentType: 'text/html'}, success: {contentType: 'text/html'}});
-
+	return new Promise(function(resolve, reject) {
+		var http = require('http');
+	    var request = http.request(options, function(response) {
+	        var body = [];
+	        response.setEncoding('utf8');
+	        response.on('data', function(chunk) {
+		       body.push(chunk);
+	        });
+		    response.on('end', function() {
+	            var webPage = body.join('');
+	            var rewritten = webPage.replace(/href="(.*)"/g, 'href="' + PROXY + '$1' + '"');
+	            resolve(rewritten);
+	        });
+	    });
+	    request.on('error', function(error) {  
+			errorResponse(error);
+	    });
+	    request.write(JSON.stringify(event));
+	    request.end();
+	
+	    function errorResponse(error) {
+	        console.log(JSON.stringify(error));
+	        switch(error.code) {
+	            case 'ENOTFOUND':
+	                returnError(404, 'Server Not Found');
+	                break;
+	            default:
+	                returnError(500, 'Unknown Error');      
+	        }
+	    }
+	    function returnError(code, message) {
+	        var text = '<html><body><h1>' + message + '</h1></body></html>';
+	        reject(text);
+	    }
+	});
+}, {error: {code: 404, contentType: 'text/html'}, success: {contentType: 'text/html'}});
