@@ -1,9 +1,10 @@
 
-var PROXY = 'https://fgko66i9b3.execute-api.us-west-2.amazonaws.com/latest/web?url=';
+//var PROXY = 'https://fgko66i9b3.execute-api.us-west-2.amazonaws.com/latest/web?url=';
 
 var ApiBuilder = require('claudia-api-builder');
 var api = module.exports = new ApiBuilder();
 var superb = require('superb');
+var pageRewriter = require('./pageRewriter');
 	
 /**
  * This handler parses the href of a request, and makes an http GET request for the page.
@@ -24,13 +25,15 @@ api.get('/web', function(event) {
 		var http = require('http');
 	    var request = http.request(options, function(response) {
 	        var body = [];
-	        response.setEncoding('utf8');
+	        if (webURL.pathname.indexOf('.png') < 0) {
+	        	response.setEncoding('utf8');
+	        }
 	        response.on('data', function(chunk) {
 		       body.push(chunk);
 	        });
 		    response.on('end', function() {
 	            var webPage = body.join('');
-	            var rewritten = webPage.replace(/href="(.*)"/g, 'href="' + PROXY + '$1' + '"');
+	            var rewritten = pageRewriter(webPage, webURL.protocol + '//' + webURL.hostname, webURL.path);
 	            resolve(rewritten);
 	        });
 	    });
