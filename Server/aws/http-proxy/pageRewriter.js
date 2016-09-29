@@ -8,7 +8,7 @@
 * 6. recognize path only URLs and regularize to full URLs
 */
 "use strict";
-const PROXY = 'https://fgko66i9b3.execute-api.us-west-2.amazonaws.com/latest/web?url=';
+const PROXY = 'https://mrf2p6k5ud.execute-api.us-west-2.amazonaws.com/latest/web?url=';
 const regExp = /(<a|<link|<img|<script)( .*?)(href|src)(=")(.*?)(".*?>)/g;
 
 var pageRewriter = function(page, hostname, path) {

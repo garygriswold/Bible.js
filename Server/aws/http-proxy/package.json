@@ -1,0 +1,20 @@
+{
+  "name": "http-proxy",
+  "description": "A proxy server to be used by BibleApp for rightholder website access.",
+  "private": true,
+  "files": [
+    "http-proxy.js",
+    "pageRewriter.js"
+  ],
+  "scripts": {
+    "start": "claudia create --name http-proxy --region us-west-2 --api-module http-proxy",
+    "deploy": "claudia update"
+  },
+  "devDependencies": {
+    "claudia": "^2.x"
+  },
+  "dependencies": {
+    "claudia-api-builder": "^2.x",
+    "request": "^2.75.0"
+  }
+}

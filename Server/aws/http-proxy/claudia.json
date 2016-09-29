@@ -1,0 +1,11 @@
+{
+  "lambda": {
+    "role": "http-proxy-executor",
+    "name": "http-proxy",
+    "region": "us-west-2"
+  },
+  "api": {
+    "id": "mrf2p6k5ud",
+    "module": "http-proxy"
+  }
+}
