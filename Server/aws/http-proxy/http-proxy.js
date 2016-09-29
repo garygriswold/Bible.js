@@ -3,10 +3,8 @@
 var path = require('path');
 var request = require('request');
 var ApiBuilder = require('claudia-api-builder');
-//var api = module.exports = new ApiBuilder('AWS_PROXY');
 var api = new ApiBuilder('AWS_PROXY');
 module.exports = api;
-//var superb = require('superb');
 var pageRewriter = require('./pageRewriter');
 	
 /**
@@ -26,6 +24,7 @@ api.get('/web', function(event, context) {
 		case '.png':
 		case '.jpg':
 		case '.jpeg':
+		case '.gif':
 			options.encoding = null;
 			break;
 		default:
@@ -34,16 +33,27 @@ api.get('/web', function(event, context) {
 	return new Promise(function(resolve, reject) {
 		request(options, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
-				if (options.encoding) {
+				var headers = forwardHeaders(response.headers);
+				console.log(JSON.stringify(response.headers));
+				if (headers['content-type'].indexOf('html') > 0) {
 					body = pageRewriter(body, options.url, '');/// path needs to be here
-					resolve(new api.ApiResponse(body, {'Content-Type': 'text/html'}, 200));
-				} else {
-					resolve(new api.ApiResponse(body, {'Content-Type': 'image/png'}, 200));
 				}
+				resolve(new api.ApiResponse(body, headers, response.statusCode));
 			} else {
 				var text = '<html><body><h2>' + JSON.stringify(error) + '</h2></body></html>';
-				resolve(new api.ApiResponse(text, {'Content-Type': 'text/html'}, 404));
+				resolve(new api.ApiResponse(text, {'content-type': 'text/html'}, 404));
 			}
 		});
 	});
+	function forwardHeaders(origHeaders) {
+		var types = ['content-type', 'content-length', 'cache-control', 'pragma', 'expires'];
+		var headers = {};
+		for (var i=0; i<types.length; i++) {
+			var type = types[i];
+			if (origHeaders[type]) {
+				headers[type] = origHeaders[type];
+			}
+		}
+		return(headers);
+	}
 });
