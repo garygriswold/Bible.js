@@ -4,6 +4,7 @@
   "private": true,
   "files": [
     "http-proxy.js",
+    "httpClient.js",
     "pageRewriter.js"
   ],
   "scripts": {

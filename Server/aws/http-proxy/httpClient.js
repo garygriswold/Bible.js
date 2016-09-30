@@ -1,79 +1,76 @@
 /**
-* This class is passed a web URL and returns the content of the page or object
-* It follows redirects, and encodes content according to type.
-*/
+ * This object makes an http GET request for any web page element.
+ * It follows redirects, and returns the correct content-type headers
+ */
 "use strict";
-var http = require('http');
+var path = require('path');
+var request = require('request');
 var pageRewriter = require('./pageRewriter');
 
-var httpClient = function(url, callback) {
-	var parser = require('url');
-	var webURL = parser.parse(url);
-	var options = {
-	    hostname: webURL.hostname,
-	    port: webURL.port || 80,
-	    path: webURL.pathname,
-	    method: 'GET'
-	};
-    var request = http.request(options, function(response) {
-        var body = [];
-        
-        //response.setEncoding('binary');
-        //if (webURL.pathname.indexOf('.png') < 0) {
-        response.setEncoding('utf8');
-        //}
-        response.on('data', function(chunk) {
-	       body.push(chunk);
-        });
-	    response.on('end', function() {
-		    //var binary = Buffer.concat(body);
-		    //callback(200, binary);
-		    //resolve(binary);
-		    callback(200, body.join(''));
-		    //resolve(body);
-            //var webPage = body.join('');
-            //var rewritten = pageRewriter(webPage, webURL.protocol + '//' + webURL.hostname, webURL.path);
-            //resolve(rewritten);
-        });
-    });
-    request.on('error', function(error) {  
-		errorResponse(error);
-    });
-    //request.write(JSON.stringify(event));
-    request.end();
-
-    function errorResponse(error) {
-        console.log(JSON.stringify(error));
-        switch(error.code) {
-            case 'ENOTFOUND':
-                returnError(404, 'Server Not Found');
-                break;
-            default:
-                returnError(500, 'Unknown Error');      
-        }
-    }
-    function returnError(code, message) {
-        var text = '<html><body><h1>' + message + '</h1></body></html>';
-        //reject(text);
-        callback(code, text);
-    }
-	//});
+var httpClient = function(url, callback) { // callback(status, body, headers);
+	var options = getOptions(url);
+	console.log('GET', JSON.stringify(options));
+	request(options, function(error, response, body) {
+		if (!error && response.statusCode >= 200 && response.statusCode <= 299) {
+			var headers = forwardHeaders(response.headers);
+			if (headers['content-type'].indexOf('html') > 0) {
+				body = pageRewriter(body, options.url, '');/// path needs to be here
+			}
+			callback(response.statusCode, body, headers);
+		} else {
+			var status = (response) ? response.statusCode : null;
+			var text = '<html><body><h1>Status: ' + status + '</h1><h2>Error: ' + JSON.stringify(error) + '</h2></body></html>';
+			callback(404, text, {'content-type': 'text/html'});
+		}
+	});
+	
+	function getOptions(url) {
+		var options = {
+		    url: url,
+		    method: 'GET'
+		};
+		var ext = path.extname(url).toLowerCase();
+		switch(ext) {
+			case '.png':
+			case '.jpg':
+			case '.jpeg':
+			case '.gif':
+				options.encoding = null;
+				break;
+			default:
+				options.encoding = 'utf8';
+		}
+		return(options);		
+	}
+	
+	function forwardHeaders(origHeaders) {
+		var types = ['content-type', 'content-length', 'cache-control', 'pragma', 'expires'];
+		var headers = {};
+		for (var i=0; i<types.length; i++) {
+			var type = types[i];
+			if (origHeaders[type]) {
+				headers[type] = origHeaders[type];
+			}
+		}
+		return(headers);
+	}
 }
 
+module.exports = httpClient;
+
 /**
-* unit test of httpClient
+Unit Test
 */
+/*
+//var url = 'http://shortsands.com';
+var url = 'http://shortsands.com/wp-content/uploads/2016/04/shortSandsLogo04.png';
 var fs = require('fs');
-var page = 'http://www.google.com';
-//var page = 'http://www.google.com/images/nav_logo242.png';
-httpClient(page, function(code, body) {
-	console.log('code', code);
-	fs.writeFile('testPageOut.html', body, function(error) {
-		console.log('file written', error);
-	});	
+httpClient(url, function(status, body, headers) {
+	fs.writeFile('testFileOut.png', body, function(error) {
+		if (error) {
+			console.log('File Write Error ', error);
+		}
+	});
+	console.log(status, JSON.stringify(headers));	
 });
-
-//for (var prop in page) {console.log(prop, page[prop]);}
-//fs.writeFile('testPageOut.png', page, {encoding:'binary'}, function(error) {
-
-//console.log(page);
+*/

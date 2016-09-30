@@ -9,7 +9,7 @@
 */
 "use strict";
 const PROXY = 'https://mrf2p6k5ud.execute-api.us-west-2.amazonaws.com/latest/web?url=';
-const regExp = /(<a|<link|<img|<script)( .*?)(href|src)(=")(.*?)(".*?>)/g;
+const regExp = /(<a|<link|<img|<script)( .*?)(href|src)(=["'])(.*?)(["'].*?>)/g;
 
 var pageRewriter = function(page, hostname, path) {
 	page = page.replace(regExp, replaceMatch);
@@ -19,15 +19,15 @@ var pageRewriter = function(page, hostname, path) {
 		if (p5.length > 5 && p5.substr(0,4) === 'http') {
 			var result = p1 + p2 + p3 + p4 + PROXY + p5 + p6;
 		} else if (p5.length > 2 && p5[0] === '/' && p5[1] === '#') {
-			result = match;
+			result = p1 + p2 + p3 + p4 + hostname + p5 + p6;
 		} else if (p5.length > 0 && p5[0] === '#') {
-			result = match;
+			result = p1 + p2 + p3 + p4 + hostname + path + p5 + p6;
 		} else if (p5.length > 1 && p5[0] === '/') {
 			result = p1 + p2 + p3 + p4 + PROXY + hostname + p5 + p6;
 		} else {
 			result = p1 + p2 + p3 + p4 + PROXY + hostname + path + p5 + p6;
 		}
-		console.log(match, '  ', result);
+		//console.log(match, '  ', result);
 		return(result);
 	}
 }
@@ -41,6 +41,6 @@ module.exports = pageRewriter;
 /*
 const fs = require('fs');
 var pageIn = fs.readFileSync('testPageIn.html', {encoding:'UTF-8'});
-var pageOut = pageRewriter(pageIn, 'http://www.google.com', '');
+var pageOut = pageRewriter(pageIn, 'http://www.google.com', '/');
 fs.writeFileSync('testPageOut.html', pageOut, {encoding: 'UTF-8'});
 */
