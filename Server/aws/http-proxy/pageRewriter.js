@@ -19,9 +19,9 @@ var pageRewriter = function(page, hostname, path) {
 		if (p5.length > 5 && p5.substr(0,4) === 'http') {
 			var result = p1 + p2 + p3 + p4 + PROXY + p5 + p6;
 		} else if (p5.length > 2 && p5[0] === '/' && p5[1] === '#') {
-			result = p1 + p2 + p3 + p4 + hostname + p5 + p6;
+			result = p1 + p2 + p3 + p4 + p5.substr(1) + p6;
 		} else if (p5.length > 0 && p5[0] === '#') {
-			result = p1 + p2 + p3 + p4 + hostname + path + p5 + p6;
+			result = match;
 		} else if (p5.length > 1 && p5[0] === '/') {
 			result = p1 + p2 + p3 + p4 + PROXY + hostname + p5 + p6;
 		} else {

@@ -8,21 +8,26 @@ var request = require('request');
 var pageRewriter = require('./pageRewriter');
 
 var httpClient = function(url, callback) { // callback(status, body, headers);
-	var options = getOptions(url);
-	console.log('GET', JSON.stringify(options));
-	request(options, function(error, response, body) {
-		if (!error && response.statusCode >= 200 && response.statusCode <= 299) {
-			var headers = forwardHeaders(response.headers);
-			if (headers['content-type'].indexOf('html') > 0) {
-				body = pageRewriter(body, options.url, '');/// path needs to be here
+	try {
+		var options = getOptions(url);
+		console.log('GET', JSON.stringify(options));
+		request(options, function(error, response, body) {
+			if (!error && response.statusCode >= 200 && response.statusCode <= 299) {
+				var headers = forwardHeaders(response.headers);
+				if (headers['content-type'].indexOf('html') > 0) {
+					body = pageRewriter(body, options.url, '');/// path needs to be here
+				}
+				callback(response.statusCode, body, headers);
+			} else {
+				var status = (response) ? response.statusCode : null;
+				var text = '<html><body><h1>Status: ' + status + '</h1><h2>Error: ' + JSON.stringify(error) + '</h2></body></html>';
+				callback(404, text, {'content-type': 'text/html'});
 			}
-			callback(response.statusCode, body, headers);
-		} else {
-			var status = (response) ? response.statusCode : null;
-			var text = '<html><body><h1>Status: ' + status + '</h1><h2>Error: ' + JSON.stringify(error) + '</h2></body></html>';
-			callback(404, text, {'content-type': 'text/html'});
-		}
-	});
+		});
+	} catch(err) {
+		var text = '<html><body><h1>Status: 500</h1><h2>Error: ' + JSON.stringify(err) + '</h2></body></html>';
+		callback(500, text, {'content-type': 'text/html'});
+	}
 	
 	function getOptions(url) {
 		var options = {
