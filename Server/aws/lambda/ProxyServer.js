@@ -1,4 +1,9 @@
 'use strict';
+/**
+* Gary N Griswold Oct 1, 2016
+* This ProxyServer does not work yet.  A more finished one can be found at
+* ../aws/http-proxy, but that one is also unfinished.
+*/
 
 console.log('Loading Proxy function');
 const http = require('http');
