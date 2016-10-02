@@ -1,9 +1,23 @@
-An example demonstrating how to customise success/error response codes and content types in a Web API connected to a Lambda function with Node.js and Claudia.js. This example will serve HTML pages instead of the default application/json response type, and it changes error code to 403, instead of the default 500. Finally, the search box redirects to Github using a 302 response code.
+This project is a web proxy server that was built using claudia.js, and is deployed on Amazon API Gateway and Amazon Lambda.
 
-To try it out, first set up the credentials, then:
+API Gateway is typically used to develop API's that send and receive JSON, but claudia.js provides a simply way to use this
+for web.
 
-run npm install to grab the dependencies
-run npm start to set up the lambda project under the default name on AWS
-Check out the API ID in claudia.json (the previous step creates the file)
-Open https://API_ID.execute-api.us-east-1.amazonaws.com/latest/start.html in a browser (replace API_ID with the API ID from claudia.json)
-Check out web.js to see how the paths are set up. For more information, see the Claudia Api Builder documentation.
+If this codes is modified, the modification can be deployed using the command: claudia update
+
+The proxy server is called as follows:
+
+https://mrf2p6k5ud.execute-api.us-west-2.amazonaws.com/latest/web?url={full url and path including http}
+
+
+
+NOTE:::::::::: Gary Griswold Oct 1, 2016
+
+This server has not been finished and put into production.  It kind of works, but not well enough to use.
+1. It occasionally returns JSON messages of Internal Server Error, or Forbidden.  It is not clear why this occurs, or why it is JSON message. Consider putting a try catch around the entire api call to see if that corrects the problem.
+
+2. The rewriting of relative URL's is not working correctly.  It appears that the hostname and pathname of the original request are getting to the pageRewriter module.
+
+3. Some gets, especially True Type Font gets are being rejected because they are http to a different server, when the original request to the proxy was https.  I think it would be OK to make these requests outside the proxy.  So, the pageRewriter could be changed so that requests to a different server are not rewritten.
+
+4. Maybe rewriting the page inside the server is not the best approach.  Maybe the correct solution is to add the rewriting logic to the InAppBrowser.  This would require modifying the plugin in both Apple and Android.
