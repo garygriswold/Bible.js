@@ -44,6 +44,7 @@ englishName TEXT NOT NULL,
 localOwnerName TEXT NOT NULL,
 ownerURL TEXT NOT NULL
 );
+INSERT INTO Owner VALUES ('BLI', 'Bible League International', 'Bible League International', 'www.bibleleague.org');
 INSERT INTO Owner VALUES ('CRSWY', 'Crossway', 'Crossway', 'www.crossway.org');
 INSERT INTO Owner VALUES ('EBIBLE', 'eBible.org', 'eBible.org', 'www.ebible.org');
 INSERT INTO Owner VALUES ('ELAM', 'Elam Ministries', 'Elam Ministries', 'www.kalameh.com/shop');
@@ -77,6 +78,8 @@ INSERT INTO Version VALUES ('WEB_SHORT', 'eng', 'EBIBLE', 'WEB', 'WEB Genesis an
 '', NULL, NULL);
 INSERT INTO Version VALUES ('ESV', 'eng', 'CRSWY', 'ESV', 'English Standard Version', 'BIBLE', 'ESV.db', 'T', 'F', '2020-01-01',
 'English Standard Version®, copyright © 2001 by Crossway Bibles, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-ENG', 'eng', 'BLI', 'ERV-ENG', 'English - Easy-to-Read Version', 'BIBLE', 'ERV-ENG.db', 'T', 'F', '2016-10-01', 
+'International English: Easy-to-Read Version (ERV). © 2013, 2016 Bible League International.', NULL, NULL);
 INSERT INTO Version VALUES ('KJVPD', 'eng', 'EBIBLE', 'KJV', 'King James Version', 'BIBLE', 'KJVPD.db', 'T', 'F', '2016-09-06', 
 'King James Version 1611 (KJV), Public Domain, eBible.org.', NULL, NULL);
 INSERT INTO Version VALUES ('WEB', 'eng', 'EBIBLE', 'WEB', 'World English Bible', 'BIBLE', 'WEB.db', 'T', 'F', '2016-09-06', 
@@ -112,6 +115,7 @@ PRIMARY KEY(countryCode, versionCode)
 INSERT INTO CountryVersion VALUES ('WORLD', 'ARBVDPD');
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'CUVSPD');
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'CUVTPD');
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-ENG');
 INSERT INTO CountryVersion VALUES ('WORLD', 'KJVPD');
 INSERT INTO CountryVersion VALUES ('WORLD', 'NMV');
 INSERT INTO CountryVersion VALUES ('WORLD', 'WEB');
@@ -133,6 +137,7 @@ endDate NULL
 INSERT INTO InstalledVersion VALUES ('ARBVDPD', 'ar', '2016-06-01', null);
 -- INSERT INTO InstalledVersion VALUES ('CUVSPD', 'zh', '2016-06-11', null);
 -- INSERT INTO InstalledVersion VALUES ('CUVTPD', null, '2016-06-18', null);
+INSERT INTO InstalledVersion VALUES ('ERV-ENG', null, '2016-10-01', null);
 INSERT INTO InstalledVersion VALUES ('KJVPD', null, '2016-05-16', null);
 INSERT INTO InstalledVersion VALUES ('NMV', 'fa', '2016-06-27', null);
 INSERT INTO InstalledVersion VALUES ('WEB', 'en', '2016-05-16', null);
