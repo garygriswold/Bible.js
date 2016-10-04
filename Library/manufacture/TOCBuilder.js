@@ -62,6 +62,7 @@ TOCBuilder.prototype.loadDB = function(callback) {
 	for (var i=0; i<len; i++) {
 		var toc = this.toc.bookList[i];
 		var abbrev = ensureAbbrev(toc);
+		if (toc.title == null) toc.title = toc.heading; // ERV is missing toc1
 		var values = [ toc.code, toc.heading, toc.title, toc.name, abbrev, toc.lastChapter, 
 			toc.priorBook, toc.nextBook, toc.chapterRowId ];
 		array.push(values);
