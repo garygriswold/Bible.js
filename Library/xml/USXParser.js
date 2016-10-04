@@ -21,6 +21,12 @@ USXParser.prototype.readBook = function(data) {
 		count++;
 
 		switch(tokenType) {
+			case XMLNodeType.ELE:
+				node = this.createUSXObject({ tagName: tokenValue, emptyElement: false });
+				if (nodeStack.length > 0) {
+					nodeStack[nodeStack.length -1].addChild(node);
+				}
+				nodeStack.push(node);
 			case XMLNodeType.ELE_OPEN:
 				tempNode = { tagName: tokenValue };
 				tempNode.whiteSpace = '';
@@ -93,6 +99,12 @@ USXParser.prototype.createUSXObject = function(tempNode) {
 			return(new Ref(tempNode));
 		case 'optbreak':
 			return(new OptBreak(tempNode));
+		case 'table':
+			return(new Table(tempNode));
+		case 'row':
+			return(new Row(tempNode));
+		case 'cell':
+			return(new Cell(tempNode));
 		case 'usx':
 			return(new USX(tempNode));
 		default:

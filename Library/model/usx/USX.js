@@ -16,7 +16,7 @@ USX.prototype.openElement = function() {
 	return('\r\n<usx version="' + this.version + elementEnd);
 };
 USX.prototype.closeElement = function() {
-	return(this.emptyElement ? '' : '\r\n</usx>');
+	return(this.emptyElement ? '' : '</usx>');
 };
 USX.prototype.toUSX = function() {
 	var result = [];
