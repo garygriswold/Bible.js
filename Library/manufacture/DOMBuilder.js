@@ -70,6 +70,15 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 		case 'optbreak':
 			domNode = node.toDOM(domParent);
 			break;
+		case 'table':
+			domNode = node.toDOM(domParent);
+			break;
+		case 'row':
+			domNode = node.toDOM(domParent);
+			break;
+		case 'cell':
+			domNode = node.toDOM(domParent);
+			break;
 		default:
 			throw new Error('Unknown tagname ' + node.tagName + ' in DOMBuilder.readBook');
 	}

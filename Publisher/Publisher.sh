@@ -13,8 +13,11 @@ cat ../Library/manufacture/DOMBuilder.js >> Publisher.js
 cat ../Library/manufacture/HTMLBuilder.js >> Publisher.js
 cat ../Library/model/usx/USX.js >> Publisher.js
 cat ../Library/model/usx/Book.js >> Publisher.js
+cat ../Library/model/usx/Cell.js >> Publisher.js
 cat ../Library/model/usx/Chapter.js >> Publisher.js
 cat ../Library/model/usx/Para.js >> Publisher.js
+cat ../Library/model/usx/Row.js >> Publisher.js
+cat ../Library/model/usx/Table.js >> Publisher.js
 cat ../Library/model/usx/Verse.js >> Publisher.js
 cat ../Library/model/usx/Note.js >> Publisher.js
 cat ../Library/model/usx/Char.js >> Publisher.js

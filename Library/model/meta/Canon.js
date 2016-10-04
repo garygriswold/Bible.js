@@ -6,6 +6,7 @@
 */
 function Canon() {
 	this.books = [
+		{ code: 'FRT', name: 'Preface' },
     	{ code: 'GEN', name: 'Genesis' },
     	{ code: 'EXO', name: 'Exodus' },
     	{ code: 'LEV', name: 'Leviticus' },
@@ -71,7 +72,8 @@ function Canon() {
     	{ code: '2JN', name: '2 John' },
     	{ code: '3JN', name: '3 John' },
     	{ code: 'JUD', name: 'Jude' },
-    	{ code: 'REV', name: 'Revelation' } ];
+    	{ code: 'REV', name: 'Revelation' },
+    	{ code: 'GLO', name: 'Glossary' } ];
 }
 Canon.prototype.sequenceMap = function() {
 	var result = {};

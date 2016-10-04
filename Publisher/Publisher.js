@@ -402,6 +402,7 @@ TOCBuilder.prototype.loadDB = function(callback) {
 		var toc = this.toc.bookList[i];
 		var abbrev = ensureAbbrev(toc);
 		if (toc.title == null) toc.title = toc.heading; // ERV is missing toc1
+		if (toc.lastChapter == null) toc.lastChapter = 0; // ERV does not have chapters in FRT and GLO
 		var values = [ toc.code, toc.heading, toc.title, toc.name, abbrev, toc.lastChapter, 
 			toc.priorBook, toc.nextBook, toc.chapterRowId ];
 		array.push(values);
@@ -744,6 +745,15 @@ DOMBuilder.prototype.readRecursively = function(domParent, node) {
 		case 'optbreak':
 			domNode = node.toDOM(domParent);
 			break;
+		case 'table':
+			domNode = node.toDOM(domParent);
+			break;
+		case 'row':
+			domNode = node.toDOM(domParent);
+			break;
+		case 'cell':
+			domNode = node.toDOM(domParent);
+			break;
 		default:
 			throw new Error('Unknown tagname ' + node.tagName + ' in DOMBuilder.readBook');
 	}
@@ -820,7 +830,7 @@ USX.prototype.openElement = function() {
 	return('\r\n<usx version="' + this.version + elementEnd);
 };
 USX.prototype.closeElement = function() {
-	return(this.emptyElement ? '' : '\r\n</usx>');
+	return(this.emptyElement ? '' : '</usx>');
 };
 USX.prototype.toUSX = function() {
 	var result = [];
@@ -877,6 +887,46 @@ Book.prototype.toDOM = function(parentNode) {
 	article.emptyElement = this.emptyElement;
 	parentNode.appendChild(article);
 	return(article);
+};
+/**
+* This class contains a cell (th or td) element as parsed from a USX Bible file.
+* This maps perfectly to the th or td element of a table.
+*/
+function Cell(node) {
+	this.style = node.style;
+	if (this.style !== 'tc1' && this.style !== 'tc2') {
+		throw new Error('Row style must be tc1, tc2.');
+	}
+	this.align = node.align;
+	if (this.align !== 'start') {
+		throw new Error('Cell align must be start.');
+	}
+	this.children = [];
+	Object.freeze(this);
+}
+Cell.prototype.tagName = 'cell';
+Cell.prototype.addChild = function(node) {
+	this.children.push(node);
+};
+Cell.prototype.openElement = function() {
+	return('<cell style="' + this.style + '" align="' + this.align + '">');
+};
+Cell.prototype.closeElement = function() {
+	return('</cell>');
+};
+Cell.prototype.buildUSX = function(result) {
+	result.push(this.openElement());
+	for (var i=0; i<this.children.length; i++) {
+		this.children[i].buildUSX(result);
+	}
+	result.push(this.closeElement());
+};
+Cell.prototype.toDOM = function(parentNode) {
+	var child = new DOMNode('cell');
+	child.setAttribute('class', this.style);
+	// align is not processed here.
+	parentNode.appendChild(child);
+	return(child);
 };
 /**
 * This object contains information about a chapter of the Bible from a parsed USX Bible document.
@@ -946,6 +996,71 @@ Para.prototype.toDOM = function(parentNode) {
 	return(child);
 };
 
+/**
+* This class contains a row (tr) element as parsed from a USX Bible file.
+* This maps perfectly to the tr element of a table.
+*/
+function Row(node) {
+	this.style = node.style;
+	if (this.style !== 'tr') {
+		throw new Error('Row style must be tr.');
+	}
+	this.children = [];
+	Object.freeze(this);
+}
+Row.prototype.tagName = 'row';
+Row.prototype.addChild = function(node) {
+	this.children.push(node);
+};
+Row.prototype.openElement = function() {
+	return('<row style="' + this.style + '">');
+};
+Row.prototype.closeElement = function() {
+	return('</row>');
+};
+Row.prototype.buildUSX = function(result) {
+	result.push(this.openElement());
+	for (var i=0; i<this.children.length; i++) {
+		this.children[i].buildUSX(result);
+	}
+	result.push(this.closeElement());
+};
+Row.prototype.toDOM = function(parentNode) {
+	var child = new DOMNode('row');
+	parentNode.appendChild(child);
+	return(child);
+};
+/**
+* This class contains a table element as parsed from a USX Bible file.
+* This contains no attributes.  In fact it is not an explicit node in
+* usfm, but is created at the point of the first row.
+*/
+function Table(node) {
+	this.children = [];
+	Object.freeze(this);
+}
+Table.prototype.tagName = 'table';
+Table.prototype.addChild = function(node) {
+	this.children.push(node);
+};
+Table.prototype.openElement = function() {
+	return('<table>');
+};
+Table.prototype.closeElement = function() {
+	return('</table>');
+};
+Table.prototype.buildUSX = function(result) {
+	result.push(this.openElement());
+	for (var i=0; i<this.children.length; i++) {
+		this.children[i].buildUSX(result);
+	}
+	result.push(this.closeElement());
+};
+Table.prototype.toDOM = function(parentNode) {
+	var child = new DOMNode('table');
+	parentNode.appendChild(child);
+	return(child);
+};
 /**
 * This chapter contains the verse of a Bible text as parsed from a USX Bible file.
 */
@@ -1364,6 +1479,12 @@ USXParser.prototype.readBook = function(data) {
 		count++;
 
 		switch(tokenType) {
+			case XMLNodeType.ELE:
+				node = this.createUSXObject({ tagName: tokenValue, emptyElement: false });
+				if (nodeStack.length > 0) {
+					nodeStack[nodeStack.length -1].addChild(node);
+				}
+				nodeStack.push(node);
 			case XMLNodeType.ELE_OPEN:
 				tempNode = { tagName: tokenValue };
 				tempNode.whiteSpace = '';
@@ -1436,6 +1557,12 @@ USXParser.prototype.createUSXObject = function(tempNode) {
 			return(new Ref(tempNode));
 		case 'optbreak':
 			return(new OptBreak(tempNode));
+		case 'table':
+			return(new Table(tempNode));
+		case 'row':
+			return(new Row(tempNode));
+		case 'cell':
+			return(new Cell(tempNode));
 		case 'usx':
 			return(new USX(tempNode));
 		default:
@@ -1450,6 +1577,7 @@ USXParser.prototype.createUSXObject = function(tempNode) {
 */
 function Canon() {
 	this.books = [
+		{ code: 'FRT', name: 'Preface' },
     	{ code: 'GEN', name: 'Genesis' },
     	{ code: 'EXO', name: 'Exodus' },
     	{ code: 'LEV', name: 'Leviticus' },
@@ -1515,7 +1643,8 @@ function Canon() {
     	{ code: '2JN', name: '2 John' },
     	{ code: '3JN', name: '3 John' },
     	{ code: 'JUD', name: 'Jude' },
-    	{ code: 'REV', name: 'Revelation' } ];
+    	{ code: 'REV', name: 'Revelation' },
+    	{ code: 'GLO', name: 'Glossary' } ];
 }
 Canon.prototype.sequenceMap = function() {
 	var result = {};

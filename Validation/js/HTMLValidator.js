@@ -132,6 +132,15 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 					}
 				}
 				break;
+			case 'table':
+				usx.push('<table>');
+				break;
+			case 'row':
+				usx.push('<row style="tr">');
+				break;
+			case 'cell':
+				usx.push('<cell style="', node['class'], '" align="start">');
+				break;
 			case 'wbr':
 				usx.push('<optbreak', END_EMPTY);
 				break;
@@ -182,6 +191,15 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				} else if (node['class'] !== 'f' && node['class'] !== 'x') {
 					usx.push('</char>');
 				}
+				break;
+			case 'table':
+				usx.push('</table>');
+				break;
+			case 'row':
+				usx.push('</row>');
+				break;
+			case 'cell':
+				usx.push('</cell>');
 				break;
 			case 'wbr':
 				break;
@@ -240,6 +258,12 @@ HTMLParser.prototype.readBook = function(data) {
 		count++;
 
 		switch(tokenType) {
+			case XMLNodeType.ELE:
+				node = new HTMLElement(tokenValue);
+				//node.emptyNode = false;
+				nodeStack[nodeStack.length -1].addChild(node);
+				nodeStack.push(node);
+				break;
 			case XMLNodeType.ELE_OPEN:
 				node = new HTMLElement(tokenValue);
 				break;

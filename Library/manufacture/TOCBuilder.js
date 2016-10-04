@@ -63,6 +63,7 @@ TOCBuilder.prototype.loadDB = function(callback) {
 		var toc = this.toc.bookList[i];
 		var abbrev = ensureAbbrev(toc);
 		if (toc.title == null) toc.title = toc.heading; // ERV is missing toc1
+		if (toc.lastChapter == null) toc.lastChapter = 0; // ERV does not have chapters in FRT and GLO
 		var values = [ toc.code, toc.heading, toc.title, toc.name, abbrev, toc.lastChapter, 
 			toc.priorBook, toc.nextBook, toc.chapterRowId ];
 		array.push(values);
