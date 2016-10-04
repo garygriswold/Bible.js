@@ -401,6 +401,7 @@ TOCBuilder.prototype.loadDB = function(callback) {
 	for (var i=0; i<len; i++) {
 		var toc = this.toc.bookList[i];
 		var abbrev = ensureAbbrev(toc);
+		if (toc.title == null) toc.title = toc.heading; // ERV is missing toc1
 		var values = [ toc.code, toc.heading, toc.title, toc.name, abbrev, toc.lastChapter, 
 			toc.priorBook, toc.nextBook, toc.chapterRowId ];
 		array.push(values);
@@ -1176,7 +1177,7 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 /**
 * This class does a stream read of an XML string to return XML tokens and their token type.
 */
-var XMLNodeType = Object.freeze({ELE_OPEN:'ele-open', ATTR_NAME:'attr-name', ATTR_VALUE:'attr-value', ELE_END:'ele-end', 
+var XMLNodeType = Object.freeze({ELE:'ele', ELE_OPEN:'ele-open', ATTR_NAME:'attr-name', ATTR_VALUE:'attr-value', ELE_END:'ele-end', 
 			WHITESP:'whitesp', TEXT:'text', ELE_EMPTY:'ele-empty', ELE_CLOSE:'ele-close', PROG_INST:'prog-inst', END:'end'});
 
 function XMLTokenizer(data) {
@@ -1267,7 +1268,8 @@ XMLTokenizer.prototype.nextToken = function() {
 				} 
 				else if (chr === '>') {
 					this.current = this.state.START;
-					return(XMLNodeType.ELE_END);
+					this.tokenEnd = this.position -1;
+					return(XMLNodeType.ELE);
 				}
 				else if (chr === '/') {
 					this.current = this.state.EXPECT_EMPTY_ELE;

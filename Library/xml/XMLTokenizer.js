@@ -1,7 +1,7 @@
 /**
 * This class does a stream read of an XML string to return XML tokens and their token type.
 */
-var XMLNodeType = Object.freeze({ELE_OPEN:'ele-open', ATTR_NAME:'attr-name', ATTR_VALUE:'attr-value', ELE_END:'ele-end', 
+var XMLNodeType = Object.freeze({ELE:'ele', ELE_OPEN:'ele-open', ATTR_NAME:'attr-name', ATTR_VALUE:'attr-value', ELE_END:'ele-end', 
 			WHITESP:'whitesp', TEXT:'text', ELE_EMPTY:'ele-empty', ELE_CLOSE:'ele-close', PROG_INST:'prog-inst', END:'end'});
 
 function XMLTokenizer(data) {
@@ -92,7 +92,8 @@ XMLTokenizer.prototype.nextToken = function() {
 				} 
 				else if (chr === '>') {
 					this.current = this.state.START;
-					return(XMLNodeType.ELE_END);
+					this.tokenEnd = this.position -1;
+					return(XMLNodeType.ELE);
 				}
 				else if (chr === '/') {
 					this.current = this.state.EXPECT_EMPTY_ELE;

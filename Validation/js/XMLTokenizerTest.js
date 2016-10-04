@@ -12,6 +12,9 @@ function XMLSerializer(spaceOption) {
 }
 XMLSerializer.prototype.write = function(nodeType, nodeValue) {
 	switch(nodeType) {
+		case XMLNodeType.ELE:
+			this.result.push('<', nodeValue, '>');
+			break;
 		case XMLNodeType.ELE_OPEN:
 			this.result.push('<', nodeValue);
 			break;
