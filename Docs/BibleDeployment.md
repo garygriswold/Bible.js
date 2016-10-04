@@ -10,12 +10,12 @@ USFM Processing
 The Bible in USFM format should be put into the directory 0othersources.  ParaText is used to convert the files to USX.
 	
 	Start ParaText
-	File Menu -> Start New Project -> Edit Form
+	File Menu -> New Project -> Edit Form
 	Import Books -> Use File Menu to find directory
 	Select all books of the Bible
 	Create Version folder under DBL/1original
 	Create USX_1 folder under DBL/1original/version
-	Tools -> Advanced -> Export to USX
+	Tools -> Advanced -> Export Project to USX
 
 Directory: ShortSands/BibleApp/Publisher
 
@@ -26,12 +26,17 @@ The Publisher program was written to process files downloaded from the DBL.  Whe
 some post processing must be done on that data before it can be processed in Publisher.
 
 	./ParaTextPostProcessor.sh VERSION
+	
 
 Publisher
 ---------
 
+Put the original USX_1 directory under source code control
+
 The original USX file should be put into the DBL/1original directory, and then copied to the DBL/2current directory.  This extra step is provided
 in case there is a need for some revision of the source files before processing.
+
+Remove the executable privilege if needed.
 
 This program reads the USX files in DBL/2current/VERSION/USX_1, and uses this to generate the Bible in the correct format for presentation in the
 YourBible app.  It creates and populates the following tables.
@@ -72,6 +77,13 @@ show only the filename of each book.  When errors do occur verify whether they a
 	./USXParserTest.sh VERSION
 	
 	Any difference between input and generated USX files will be displayed.
+	
+HTMLValidator
+-------------
+
+The HTMLValidator reads the HTML that has been generated and uses it to generate USX code, which is compares with the starting USX.
+
+	./HTMLValidator.sh VERSION
 	
 StyleUseValidator
 -----------------
