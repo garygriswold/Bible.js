@@ -32,6 +32,132 @@ but, I have only been able to do it for all. */
 article { /* non-std */
 	margin-bottom: 1.0in;
 }
+/* Introduction Major Title */
+p.imt, p.imt1 {
+	font-weight: bold;
+	font-size: 1.16rem;
+	text-align: center;
+	margin-bottom: 4pt;
+	margin-top: 8pt;
+	color: #2A48B4; /* non-std */
+}
+/* Introduction Section heading, Level 1 */
+p.is, p.is1 {
+	font-weight: bold;
+	font-size: 1.16rem;
+	text-align: center;
+	margin-bottom: 4pt;
+	margin-top: 8pt;
+	color: #2A48B4; /* non-std */
+}
+/* Introduction Outline Text Level 1 */
+p.io, p.io1 {
+	text-align: start;
+	margin-left: 1.0rem; /* std 0.5in */
+	margin-right: 0;
+	color: #555555; /* non-std */
+}
+/* Introduction Outline Text Level 2 */
+p.io2 {
+	text-align: start;
+	margin-left: 2.0rem; /* std 0.75in */
+	margin-right: 0;
+	color: #555555; /* non-std */
+}
+/* Introduction Prose Paragraph (basic) */
+p.ip {
+	text-align: start;
+	text-indent: 1.0rem; /* std 0.125in */
+	color: #555555; /* non-std */
+}
+/* Chapter Number Format */
+p.c {
+	font-size: 1.5rem;
+	color: #2A48B4; /* non-std */
+	text-align: start;
+	margin-top: 8pt;
+	margin-bottom: 4pt;
+}
+/* p.cl Chapter Label is not yet supported
+the p.cl appears once at the beginning of Psalms
+and needs to be repeated with each chapter.
+Supporting this is a TBD */
+/* Verse Number Format */
+span.v {
+	font-family: sans-serif; /* non-std */
+	font-size: 0.66rem;
+	color: #777777; /* non-std */
+	text-align: start;
+	vertical-align: text-top;
+	/* white-space: nowrap; std, but meaningless, use &nbsp; */
+}
+/* Normal Paragraph Text */
+p.p {
+	text-align: start;
+	text-indent: 1.0rem; /* std 0.125 */
+}
+/* Paragraph Indented Level 1 */
+p.pi, p.pi1 {
+	text-align: start;
+	text-indent: 1.0rem; /* std 0.125in */
+	margin-left: 1.0rem; /* std 0.25in */
+	margin-right: 1.0rem; /* std 0.25in */
+}
+/* Normal Paragraph w/o Indentation */
+p.m {
+	text-align: start;
+	text-indent: 0;
+}
+/* Start of Blockquote */
+p.mi {
+	text-align: start;
+	margin-left: 1.0rem; /* std 0.25in */
+	margin-right: 1.0rem; /* std 0.25in */
+}
+/* Continuation Paragraph as start of Chapter */
+p.nb {
+	text-align: start;
+	text-indent: 0;
+}
+/* Poetry First Line */
+p.q, p.q1 {
+	text-align: start;
+	text-indent: -2.5rem; /* std -1.0in */
+	margin-left: 3.0rem; /* std 1.25in */
+	margin-right: 0;
+	margin-top: 0; /* non-std */
+	margin-bottom: 0; /* non-std */
+}
+/* Poetry Second Line */
+p.q2 {
+	text-align: start;
+	text-indent: -1.5rem; /* std -0.75in */
+	margin-left: 3.0rem; /* std 1.25in */
+	margin-right: 0;
+	margin-top: 0; /* non-std */
+	margin-bottom: 0; /* non-std */
+}
+/* Poetry Centered */
+p.qc {
+	text-align: center;
+}
+/* Selah */
+span.qs {
+	display: block; /* non-std */
+	text-align: right; /* non-std left is std */
+	/* This needs to right align with the poetry, not the width of the page. */
+	font-style: italic;
+}
+/* Poetry, Acrostic Heading|Marker */
+p.qa {
+	font-style: italic;
+	text-align: start;
+}
+/* p.b is blank line */
+p.b {
+	text-indent: start;
+	font-size: 0.83rem;
+}
 /* Book Title Main */
 p.mt {
 	font-weight: bold;
@@ -108,6 +234,13 @@ p.r {
 	margin-bottom: 4pt;
 	color: #2A48B4; /* non-std */
 }
+/* Speaker Name */
+p.sp {
+	font-style: italic;
+	text-align: start;
+	margin-bottom: 4pt;
+	margin-top: 8pt;
+}
 /* Descriptive Title */
 p.d {
 	font-style: italic;
@@ -116,173 +249,12 @@ p.d {
 	margin-top: 4pt;
 	color: #2A48B4; /* non-std */
 }
-/* Introduction Major Title */
-p.imt, p.imt1 {
-	font-weight: bold;
-	font-size: 1.16rem;
-	text-align: center;
-	margin-bottom: 4pt;
-	margin-top: 8pt;
-	color: #2A48B4; /* non-std */
-}
-/* Introduction Outline Text Level 1 */
-p.io, p.io1 {
-	text-align: start;
-	margin-left: 1.0rem; /* std 0.5in */
-	margin-right: 0;
-	color: #555555; /* non-std */
-}
-/* Introduction Outline Text Level 2 */
-p.io2 {
-	text-align: start;
-	margin-left: 2.0rem; /* std 0.75in */
-	margin-right: 0;
-	color: #555555; /* non-std */
-}
-/* Introduction Prose Paragraph (basic) */
-p.ip {
-	text-align: start;
-	text-indent: 1.0rem; /* std 0.125in */
-	color: #555555; /* non-std */
-}
-/* Introduction Section heading, Level 1 */
-p.is, p.is1 {
-	font-weight: bold;
-	font-size: 1.16rem;
-	text-align: center;
-	margin-bottom: 4pt;
-	margin-top: 8pt;
-	color: #2A48B4; /* non-std */
-}
-/* Chapter Number Format */
-p.c {
-	font-size: 1.5rem;
-	color: #2A48B4; /* non-std */
-	text-align: start;
-	margin-top: 8pt;
-	margin-bottom: 4pt;
-}
-/* p.cl Chapter Label is not yet supported
-the p.cl appears once at the beginning of Psalms
-and needs to be repeated with each chapter.
-Supporting this is a TBD */
-/* Verse Number Format */
-span.v {
-	font-family: sans-serif; /* non-std */
-	font-size: 0.66rem;
-	color: #777777; /* non-std */
-	text-align: start;
-	vertical-align: text-top;
-	/* white-space: nowrap; std, but meaningless, use &nbsp; */
-}
-/* Normal Paragraph Text */
-p.p {
-	text-align: start;
-	text-indent: 1.0rem; /* std 0.125 */
-}
-/* Normal Paragraph w/o Indentation */
-p.m {
-	text-align: start;
-	text-indent: 0;
-}
-/* p.b is blank line */
-p.b {
-	text-indent: start;
-	font-size: 0.83rem;
-}
-/* Start of Blockquote */
-p.mi {
-	text-align: start;
-	margin-left: 1.0rem; /* std 0.25in */
-	margin-right: 1.0rem; /* std 0.25in */
-}
-/* Paragraph Indented Level 1 */
-p.pi, p.pi1 {
-	text-align: start;
-	text-indent: 1.0rem; /* std 0.125in */
-	margin-left: 1.0rem; /* std 0.25in */
-	margin-right: 1.0rem; /* std 0.25in */
-}
 /* Out indented list item level 1 */
 p.li, p.li1 {
 	text-align: start;
 	text-indent: -1.5rem; /* std -0.375in */
 	margin-left: 2.0rem; /* std 0.5in */
 	margin-right: 0;
-}
-/* Speaker Name */
-p.sp {
-	font-style: italic;
-	text-align: start;
-	margin-bottom: 4pt;
-	margin-top: 8pt;
-}
-/* Poetry First Line */
-p.q, p.q1 {
-	text-align: start;
-	text-indent: -2.5rem; /* std -1.0in */
-	margin-left: 3.0rem; /* std 1.25in */
-	margin-right: 0;
-	margin-top: 0; /* non-std */
-	margin-bottom: 0; /* non-std */
-}
-/* Poetry Second Line */
-p.q2 {
-	text-align: start;
-	text-indent: -1.5rem; /* std -0.75in */
-	margin-left: 3.0rem; /* std 1.25in */
-	margin-right: 0;
-	margin-top: 0; /* non-std */
-	margin-bottom: 0; /* non-std */
-}
-/* Poetry Centered */
-p.qc {
-	text-align: center;
-}
-/* Poetry, Acrostic Heading|Marker */
-p.qa {
-	font-style: italic;
-	text-align: start;
-}
-/* Continuation Paragraph as start of Chapter */
-p.nb {
-	text-align: start;
-	text-indent: 0;
-}
-/* Selah */
-span.qs {
-	display: block; /* non-std */
-	text-align: right; /* non-std left is std */
-	/* This needs to right align with the poetry, not the width of the page. */
-	font-style: italic;
-}
-/* Words of Jesus */
-span.wj {
-	color: #FF3333; /* std is #FF0000 */
-	text-align: start;
-}
-/* Translator's Addition */
-span.add {
-	/* font-weight: bold; std */
-	font-style: italic;
-	text-align: start;
-}
-/* Name of Diety */
-span.nd {
-	text-align: start;
-	/* text-decoration: underline; std */
-	text-transform: uppercase; /* non-std */
-}
-/* Proper Name */
-span.pn {
-	text-align: start;
-	font-weight: bold;
-	text-decoration: underline;
-}
-/* Transliterated Word */
-span.tl {
-	font-style: italic;
-	text-align: start;
 }
 /* footnote references */
 span.topf, span.topx {
@@ -296,13 +268,6 @@ span.f, span.ft {
 	background-color: #FFFFB4; /* non-std */
 	/* font-style: italic; */
 }
-/* verse number embedded in footnote */
-span.fv {
-	text-align: start;
-	vertical-align: text-top;
-	font-size: 0.66rem; 
-	font-family: sans-serif; /* non-std? */
-}
 /* footnote alternate translation */
 span.fqa {
 	text-align: start;
@@ -310,9 +275,44 @@ span.fqa {
 	color: #999999 ; /* non-std */
 	background-color: #FFFFB4; /* non-std */
 }
+/* verse number embedded in footnote */
+span.fv {
+	text-align: start;
+	vertical-align: text-top;
+	font-size: 0.66rem; 
+	font-family: sans-serif; /* non-std? */
+}
 /* cross references */
 span.x, span.xt {
 	text-align: start;
 	color: #555555; /* non-std */
 	background-color: #CEE7FF; /* non-std */
+}
+/* Name of Diety */
+span.nd {
+	text-align: start;
+	/* text-decoration: underline; std */
+	text-transform: uppercase; /* non-std */
+}
+/* Transliterated Word */
+span.tl {
+	font-style: italic;
+	text-align: start;
+}
+/* Proper Name */
+span.pn {
+	text-align: start;
+	font-weight: bold;
+	text-decoration: underline;
+}
+/* Words of Jesus */
+span.wj {
+	color: #FF3333; /* std is #FF0000 */
+	text-align: start;
+}
+/* Translator's Addition */
+span.add {
+	/* font-weight: bold; std */
+	font-style: italic;
+	text-align: start;
 }
