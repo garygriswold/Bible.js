@@ -406,11 +406,15 @@ span.sc {
 /* line 1238, Break - Page Break */
 p.pb {
   text-align: start;
+  margin-bottom: 1.0in;
   /* What should I do here to simulate a page break */
 }
 /* line 1254, Peripheral Ref - Wordlist Entry */
 span.w {
   text-align: start;
+  font-weight: bold; /* non std */
+  color: #555555; /* non std */
+  background-color: #FFFFB4; /* non std */
 }
 /* line 1274, Peripherals - Content Division Marker */
 p.periph {

@@ -659,7 +659,8 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		'char.qs', 'para.qa', 'para.b', 
 		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 
 		'para.ms', 'para.ms1', 'para.mr',
-		'para.s', 'para.s1', 'para.s2', 'para.r', 'para.sp', 'para.d', 
+		'para.s', 'para.s1', 'para.s2', 'para.r', 'para.sp', 'para.d',
+		'row.tr', 'cell.tc1', 'cell.tc2', 'cell.tc3', 'cell.tc4', 
 		'para.li', 'para.li1',
 		'note.f', 'char.ft', 'char.fk', 'char.fr', 
 		'char.fqa', 'char.fv', 
@@ -1038,7 +1039,7 @@ Row.prototype.buildUSX = function(result) {
 };
 Row.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('tr');
-	child.setAttribute('class', 'usx');//this.style);
+	child.setAttribute('class', 'usx');
 	parentNode.appendChild(child);
 	return(child);
 };
@@ -1290,6 +1291,10 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 			parentNode.appendChild(textNode);
 		} else if (parentNode.hasAttribute('hidden')) {
 			parentNode.setAttribute('hidden', this.text);
+		} else if (parentClass === 'fm') {
+			/* This is a hack, because ERV-ENG has an fm in FRT that must remain visible
+				Do not add char.fm to StyleUseBuilder until better solution is found. */
+			parentNode.appendText(this.text);
 		} else if (parentClass === 'fr' || parentClass === 'xo') {
 			parentNode.setAttribute('hidden', this.text); // permanently hide note.
 		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {

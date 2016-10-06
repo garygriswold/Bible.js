@@ -33,6 +33,9 @@ correct Bible Files.  The tasks described here could be automated.
 	Insert into Settings.db and new version.
 	sqlite3 8
 	insert into Installed (version, filename, timestamp) values ('ERV-ENG', 'ERV-ENG.db', '2016-10-05T16:45:00');
+	
+	For repeated uploads of the same file use the following:
+	cp $HOME/ShortSands/DBL/3prepared/ERV-ENG.db "$HOME/Library/Application Support/BibleAppNW/databases/file__0/24"
 
 
 

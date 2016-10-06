@@ -27,7 +27,7 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		'note.x', 'char.xt', 'char.xo',
 		'char.nd', 'char.tl','char.bk', 'char.pn', 'char.wj', 'char.k', 'char.add',
 		'char.it', 'char.bd', 'char.sc', 
-		'p.periph', 'p.toc'
+		'para.pb', 'para.periph', 'para.toc'
 		];
 	var array = [];
 	for (var i=0; i<styles.length; i++) {

@@ -27,6 +27,10 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 			parentNode.appendChild(textNode);
 		} else if (parentNode.hasAttribute('hidden')) {
 			parentNode.setAttribute('hidden', this.text);
+		} else if (parentClass === 'fm') {
+			/* This is a hack, because ERV-ENG has an fm in FRT that must remain visible
+				Do not add char.fm to StyleUseBuilder until better solution is found. */
+			parentNode.appendText(this.text);
 		} else if (parentClass === 'fr' || parentClass === 'xo') {
 			parentNode.setAttribute('hidden', this.text); // permanently hide note.
 		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
