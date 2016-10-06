@@ -32,91 +32,7 @@ but, I have only been able to do it for all. */
 article { /* non-std */
 	margin-bottom: 1.0in;
 }
-/* Book Title Main */
-p.mt {
-	font-weight: bold;
-	font-size: 1.66rem;
-	text-align: center;
-	margin-bottom: 4pt;
-	margin-top: 8pt;
-	color: #2A48B4; /* non-std */
-}
-/* Book Main Title, Level 1 */
-p.mt1 {
-	font-weight: bold;
-	font-size: 1.66rem;
-	text-align: center;
-	margin-bottom: 4pt;
-	margin-top: 2pt;
-	color: #2A48B4; /* non-std */
-}
-/* Book Title Above Main TitleSmaller */
-p.mt2 {
-	font-size: 1.33rem;
-	font-style: italic;
-	text-align: center;
-	margin-bottom: 2pt;
-	color: #2A48B4; /* non-std */
-}
-/* Book Title Smallest */
-p.mt3 {
-	font-weight: bold;
-	font-size: 1.33rem;
-	text-align: center;
-	margin-bottom: 2pt;
-	margin-top: 2pt;
-	color: #2A48B4; /* non-std */
-}
-/* Major Section Heading */
-p.ms {
-	font-weight: bold;
-	font-size: 1.16rem;
-	text-align: center;
-	margin-bottom: 4pt;
-	margin-top: 16pt;
-	color: #2A48B4; /* non-std */
-}
-/* Major Section Heading Level 1 */
-p.ms1 {
-	font-weight: bold;
-    font-size: 1.16rem;
-    text-align: center;
-    margin-bottom: 4pt;
-	margin-top: 16pt;
-	color: #2A48B4; /* non-std */
-}
-/* Heading - Section Level 1 */
-p.s, p.s1 {
-	font-weight: bold;
-	text-align: center;
-	margin-bottom: 4pt;
-	margin-top: 8pt;
-	color: #2A48B4; /* non-std */
-}
-/* Heading - Section Level 2 */
-p.s2 {
-	font-style: italic;
-	text-align: center;
-	margin-bottom: 4pt;
-	margin-top: 8pt;
-	color: #2A48B4; /* non-std */
-}
-/* Heading - Parallel References */
-p.r {
-	font-style: italic;
-	text-align: center;
-	margin-bottom: 4pt;
-	color: #2A48B4; /* non-std */
-}
-/* Descriptive Title */
-p.d {
-	font-style: italic;
-	text-align: center;
-	margin-bottom: 4pt;
-	margin-top: 4pt;
-	color: #2A48B4; /* non-std */
-}
-/* Introduction Major Title */
+/* line 76, Introduction Major Title */
 p.imt, p.imt1 {
 	font-weight: bold;
 	font-size: 1.16rem;
@@ -125,27 +41,7 @@ p.imt, p.imt1 {
 	margin-top: 8pt;
 	color: #2A48B4; /* non-std */
 }
-/* Introduction Outline Text Level 1 */
-p.io, p.io1 {
-	text-align: start;
-	margin-left: 1.0rem; /* std 0.5in */
-	margin-right: 0;
-	color: #555555; /* non-std */
-}
-/* Introduction Outline Text Level 2 */
-p.io2 {
-	text-align: start;
-	margin-left: 2.0rem; /* std 0.75in */
-	margin-right: 0;
-	color: #555555; /* non-std */
-}
-/* Introduction Prose Paragraph (basic) */
-p.ip {
-	text-align: start;
-	text-indent: 1.0rem; /* std 0.125in */
-	color: #555555; /* non-std */
-}
-/* Introduction Section heading, Level 1 */
+/* line 145, Introduction Section heading, Level 1 */
 p.is, p.is1 {
 	font-weight: bold;
 	font-size: 1.16rem;
@@ -154,7 +50,43 @@ p.is, p.is1 {
 	margin-top: 8pt;
 	color: #2A48B4; /* non-std */
 }
-/* Chapter Number Format */
+/* line 171, Introduction - Outline Title */
+p.iot {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 4pt;
+  margin-top: 8pt;
+  color: #555555; /* non-std */
+}
+/* line 179, Introduction Outline Text Level 1 */
+p.io, p.io1 {
+	text-align: start;
+	margin-left: 1.0rem; /* std 0.5in */
+	margin-right: 0;
+	color: #555555; /* non-std */
+}
+/* line 191, Introduction Outline Text Level 2 */
+p.io2 {
+	text-align: start;
+	margin-left: 2.0rem; /* std 0.75in */
+	margin-right: 0;
+	color: #555555; /* non-std */
+}
+/* line 214, Introduction Prose Paragraph (basic) */
+p.ip {
+	text-align: start;
+	text-indent: 1.0rem; /* std 0.125in */
+	color: #555555; /* non-std */
+}
+/* line 225, Introduction - Indented Para - first line indent */
+p.ipi {
+  text-indent: 1.0rem; /* std 0.125in */
+  text-align: start;
+  margin-left: 1.0rem; /* std 0.25in */
+  margin-right: 0; /* std 0.25in */
+  color: #555555; /* non std */
+}
+/* line 344, Chapter Number Format */
 p.c {
 	font-size: 1.5rem;
 	color: #2A48B4; /* non-std */
@@ -166,7 +98,7 @@ p.c {
 the p.cl appears once at the beginning of Psalms
 and needs to be repeated with each chapter.
 Supporting this is a TBD */
-/* Verse Number Format */
+/* line 388, Verse Number Format */
 span.v {
 	font-family: sans-serif; /* non-std */
 	font-size: 0.66rem;
@@ -175,49 +107,41 @@ span.v {
 	vertical-align: text-top;
 	/* white-space: nowrap; std, but meaningless, use &nbsp; */
 }
-/* Normal Paragraph Text */
+/* line 412, Normal Paragraph Text */
 p.p {
 	text-align: start;
 	text-indent: 1.0rem; /* std 0.125 */
 }
-/* Normal Paragraph w/o Indentation */
+/* line 418, Normal Paragraph w/o Indentation */
 p.m {
 	text-align: start;
 	text-indent: 0;
 }
-/* p.b is blank line */
-p.b {
-	text-indent: start;
-	font-size: 0.83rem;
-}
-/* Start of Blockquote */
-p.mi {
-	text-align: start;
-	margin-left: 1.0rem; /* std 0.25in */
-	margin-right: 1.0rem; /* std 0.25in */
-}
-/* Paragraph Indented Level 1 */
+/* line 452, Paragraph Indented Level 1 */
 p.pi, p.pi1 {
 	text-align: start;
 	text-indent: 1.0rem; /* std 0.125in */
 	margin-left: 1.0rem; /* std 0.25in */
 	margin-right: 1.0rem; /* std 0.25in */
 }
-/* Out indented list item level 1 */
-p.li, p.li1 {
-	text-align: start;
-	text-indent: -1.5rem; /* std -0.375in */
-	margin-left: 2.0rem; /* std 0.5in */
-	margin-right: 0;
+/* line 484, Paragraph - Centered (for Inscription) */
+p.pc {
+  text-align: center;
+  margin-top: 0; /* non std */
+  margin-bottom: 0; /* non std */
 }
-/* Speaker Name */
-p.sp {
-	font-style: italic;
+/* line 489, Start of Blockquote */
+p.mi {
 	text-align: start;
-	margin-bottom: 4pt;
-	margin-top: 8pt;
+	margin-left: 1.0rem; /* std 0.25in */
+	margin-right: 1.0rem; /* std 0.25in */
 }
-/* Poetry First Line */
+/* line 496, Continuation Paragraph as start of Chapter */
+p.nb {
+	text-align: start;
+	text-indent: 0;
+}
+/* line 506, Poetry First Line */
 p.q, p.q1 {
 	text-align: start;
 	text-indent: -2.5rem; /* std -1.0in */
@@ -226,7 +150,7 @@ p.q, p.q1 {
 	margin-top: 0; /* non-std */
 	margin-bottom: 0; /* non-std */
 }
-/* Poetry Second Line */
+/* line 520, Poetry Second Line */
 p.q2 {
 	text-align: start;
 	text-indent: -1.5rem; /* std -0.75in */
@@ -235,86 +159,267 @@ p.q2 {
 	margin-top: 0; /* non-std */
 	margin-bottom: 0; /* non-std */
 }
-/* Poetry Centered */
+/* line 541, Poetry Centered */
 p.qc {
 	text-align: center;
 }
-/* Poetry, Acrostic Heading|Marker */
-p.qa {
-	font-style: italic;
-	text-align: start;
-}
-/* Continuation Paragraph as start of Chapter */
-p.nb {
-	text-align: start;
-	text-indent: 0;
-}
-/* Selah */
+/* line 551, Poetry Text - Selah */
 span.qs {
 	display: block; /* non-std */
 	text-align: right; /* non-std left is std */
 	/* This needs to right align with the poetry, not the width of the page. */
 	font-style: italic;
 }
-/* Words of Jesus */
-span.wj {
-	color: #FF3333; /* std is #FF0000 */
-	text-align: start;
-}
-/* Translator's Addition */
-span.add {
-	/* font-weight: bold; std */
+/* line 557, Poetry, Acrostic Heading|Marker */
+p.qa {
 	font-style: italic;
 	text-align: start;
 }
-/* Name of Diety */
-span.nd {
-	text-align: start;
-	/* text-decoration: underline; std */
-	text-transform: uppercase; /* non-std */
+/* line 597, p.b is blank line */
+p.b {
+	text-indent: start;
+	font-size: 0.83rem;
 }
-/* Proper Name */
-span.pn {
-	text-align: start;
+/* line 603, Book Title Main */
+p.mt {
 	font-weight: bold;
-	text-decoration: underline;
+	font-size: 1.66rem;
+	text-align: center;
+	margin-bottom: 4pt;
+	margin-top: 8pt;
+	color: #2A48B4; /* non-std */
 }
-/* Transliterated Word */
-span.tl {
+/* line 612, Book Main Title, Level 1 */
+p.mt1 {
+	font-weight: bold;
+	font-size: 1.66rem;
+	text-align: center;
+	margin-bottom: 4pt;
+	margin-top: 2pt;
+	color: #2A48B4; /* non-std */
+}
+/* line 621, Book Title Above Main TitleSmaller */
+p.mt2 {
+	font-size: 1.33rem;
+	font-style: italic;
+	text-align: center;
+	margin-bottom: 2pt;
+	color: #2A48B4; /* non-std */
+}
+/* line 629, Book Title Smallest */
+p.mt3 {
+	font-weight: bold;
+	font-size: 1.33rem;
+	text-align: center;
+	margin-bottom: 2pt;
+	margin-top: 2pt;
+	color: #2A48B4; /* non-std */
+}
+/* line 671, Major Section Heading */
+p.ms {
+	font-weight: bold;
+	font-size: 1.16rem;
+	text-align: center;
+	margin-bottom: 4pt;
+	margin-top: 16pt;
+	color: #2A48B4; /* non-std */
+}
+/* line 680, Major Section Heading Level 1 */
+p.ms1 {
+	font-weight: bold;
+    font-size: 1.16rem;
+    text-align: center;
+    margin-bottom: 4pt;
+	margin-top: 16pt;
+	color: #2A48B4; /* non-std */
+}
+/* line 707, Heading - Major Section Range References */
+p.mr {
+  font-style: italic;
+  text-align: center;
+  margin-bottom: 4pt;
+  margin-top: 4pt; /* non std */
+  color: #2A48B4; /* non-std */
+}
+/* line 714, Heading - Section Level 1 */
+p.s, p.s1 {
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 4pt;
+	margin-top: 8pt;
+	color: #2A48B4; /* non-std */
+}
+/* line 730, Heading - Section Level 2 */
+p.s2 {
+	font-style: italic;
+	text-align: center;
+	margin-bottom: 4pt;
+	margin-top: 8pt;
+	color: #2A48B4; /* non-std */
+}
+/* line 761, Heading - Parallel References */
+p.r {
+	font-style: italic;
+	text-align: center;
+	margin-bottom: 4pt;
+	color: #2A48B4; /* non-std */
+}
+/* line 768, Speaker Name */
+p.sp {
 	font-style: italic;
 	text-align: start;
+	margin-bottom: 4pt;
+	margin-top: 8pt;
+}
+/* line 776, Descriptive Title */
+p.d {
+	font-style: italic;
+	text-align: center;
+	margin-bottom: 4pt;
+	margin-top: 4pt;
+	color: #2A48B4; /* non-std */
+}
+table {
+	width: 100%;
+	border: solid;
+}
+/* line 784, Table - Row */
+row {
+  display: table-row;
+  text-index: -1.0rem; /* std -0.25in */
+  text-align: start;
+  margin-left: 2.0rem; /* std 0.50in */
+}
+/* line 821, Table - Cell */
+/*p.tc1, p.tc2, p.tc3, p.tc4, p.tc5 {*/
+cell {
+  display: table-cell;
+  text-align: start;
+}
+/* line 956, Out indented list item level 1 */
+p.li, p.li1 {
+	text-align: start;
+	text-indent: -1.5rem; /* std -0.375in */
+	margin-left: 2.0rem; /* std 0.5in */
+	margin-right: 0;
 }
 /* footnote references */
 span.topf, span.topx {
 	text-align: start;
 	color: #FFB4B5; /* non-std */
 }
-/* footnotes */
+/* line 991, footnotes */
 span.f, span.ft {
 	text-indent: start;
 	color: #555555; /* non-std */
 	background-color: #FFFFB4; /* non-std */
 	/* font-style: italic; */
 }
-/* verse number embedded in footnote */
-span.fv {
-	text-align: start;
-	vertical-align: text-top;
-	font-size: 0.66rem; 
-	font-family: sans-serif; /* non-std? */
+/* line 1012, Footnote - Keyword i.e. word that footnote explains */
+span.fk {
+  font-weight: bold;
+  font-style: italic;
+  text-align: start;
+  color: #555555; /* non std */
+  background-color: #FFFFB4; /* non std */
 }
-/* footnote alternate translation */
+/* line 1025, footnote alternate translation */
 span.fqa {
 	text-align: start;
 	font-style: italic;
 	color: #999999 ; /* non-std */
 	background-color: #FFFFB4; /* non-std */
 }
-/* cross references */
+/* line 1043, verse number embedded in footnote */
+span.fv {
+	text-align: start;
+	vertical-align: text-top;
+	font-size: 0.66rem; 
+	font-family: sans-serif; /* non-std? */
+}
+/* line 1055, Footnote - Additional Caller to Previous Note */
+span.fm {
+  text-align: start;
+  vertical-align: text-top;
+  font-size; 0.66rem;
+}
+/* line 1062, cross references */
 span.x, span.xt {
 	text-align: start;
 	color: #555555; /* non-std */
 	background-color: #CEE7FF; /* non-std */
+}
+/* line 1118, Name of Diety */
+span.nd {
+	text-align: start;
+	/* text-decoration: underline; std */
+	text-transform: uppercase; /* non-std */
+}
+/* line 1124, Transliterated Word */
+span.tl {
+	font-style: italic;
+	text-align: start;
+}
+/* line 1136, Special Text - Quoted book title */
+span.bk {
+  font-style: italic;
+  text-align: start;
+}
+/* line 1148, Proper Name */
+span.pn {
+	text-align: start;
+	font-weight: bold;
+	text-decoration: underline;
+}
+/* line 1163, Words of Jesus */
+span.wj {
+	color: #FF3333; /* std is #FF0000 */
+	text-align: start;
+}
+/* line 1169, Special Text - Keyword */
+span.k {
+  font-weight: bold;
+  font-style: italic;
+  text-align: start;
+}
+/* line 1189, Translator's Addition */
+span.add {
+	/* font-weight: bold; std */
+	font-style: italic;
+	text-align: start;
+}
+/* line 1207, Character - Italic Text */
+span.it {
+  font-style: italic;
+  text-align: start;
+}
+/* line 1213, Character - Bold Text */
+span.bd {
+  font-weight: bold;
+  text-align: start;
+}
+/* line 1232, Character - Small Caps */
+span.sc {
+  font-variant: small-caps;
+  text-align: start;
+}
+/* line 1238, Break - Page Break */
+p.pb {
+  text-align: start;
+  /* What should I do here to simulate a page break */
+}
+/* line 1254, Peripheral Ref - Wordlist Entry */
+span.w {
+  text-align: start;
+}
+/* line 1274, Peripherals - Content Division Marker */
+p.periph {
+   display: none;
+   /*margin-bottom: 100pt;*/
+}
+/* line 1406, OBSOLETE toc Peripherals - Front Matter Table of Contents */
+p.toc {
+	display: none;
 }/*
 * Copyright.css
 */

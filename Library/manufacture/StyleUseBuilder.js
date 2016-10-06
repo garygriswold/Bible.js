@@ -11,21 +11,23 @@ StyleUseBuilder.prototype.readBook = function(usxRoot) {
 StyleUseBuilder.prototype.loadDB = function(callback) {
 	var styles = [ 'book.id', 'para.ide', 'para.h', 'para.toc1', 'para.toc2', 'para.toc3', 'para.rem',
 		'para.imt', 'para.is',
-		'para.io', 'para.io1', 'para.io2',
-		'para.ip',
+		'para.iot', 'para.io', 'para.io1', 'para.io2',
+		'para.ip', 'para.ipi',
 		'chapter.c', 'para.cl', 'verse.v',
-		'para.p', 'para.m', 'para.pi', 'para.pi1', 'para.mi',
+		'para.p', 'para.m', 'para.pi', 'para.pi1', 'para.pc', 'para.mi',
 		'para.nb', 'para.q', 'para.q1', 'para.q2', 'para.qc',
 		'char.qs', 'para.qa', 'para.b', 
 		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 
-		'para.ms', 'para.ms1', 
+		'para.ms', 'para.ms1', 'para.mr',
 		'para.s', 'para.s1', 'para.s2', 'para.r', 'para.sp', 'para.d', 
 		'para.li', 'para.li1',
 		'char.qs',  
-		'note.f', 'char.ft', 'char.fr', 
+		'note.f', 'char.ft', 'char.fk', 'char.fr', 
 		'char.fqa', 'char.fv', 
 		'note.x', 'char.xt', 'char.xo'
-		'char.nd', 'char.tl','char.pn', 'char.wj', 'char.add' 
+		'char.nd', 'char.tl','char.bk', 'char.pn', 'char.wj', 'char.k', 'char.add'.
+		'char.it', 'char.bd', 'char.sc', 
+		'p.periph', 'p.toc'
 		];
 	var array = [];
 	for (var i=0; i<styles.length; i++) {

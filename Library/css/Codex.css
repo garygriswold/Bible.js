@@ -56,6 +56,7 @@ p.iot {
   text-align: center;
   margin-bottom: 4pt;
   margin-top: 8pt;
+  color: #555555; /* non-std */
 }
 /* line 179, Introduction Outline Text Level 1 */
 p.io, p.io1 {
@@ -81,8 +82,9 @@ p.ip {
 p.ipi {
   text-indent: 1.0rem; /* std 0.125in */
   text-align: start;
-  margin-left: 2.0rem; /* std 0.25in */
-  margin-right: 2.0rem; /* std 0.25in */
+  margin-left: 1.0rem; /* std 0.25in */
+  margin-right: 0; /* std 0.25in */
+  color: #555555; /* non std */
 }
 /* line 344, Chapter Number Format */
 p.c {
@@ -125,6 +127,8 @@ p.pi, p.pi1 {
 /* line 484, Paragraph - Centered (for Inscription) */
 p.pc {
   text-align: center;
+  margin-top: 0; /* non std */
+  margin-bottom: 0; /* non std */
 }
 /* line 489, Start of Blockquote */
 p.mi {
@@ -234,6 +238,8 @@ p.mr {
   font-style: italic;
   text-align: center;
   margin-bottom: 4pt;
+  margin-top: 4pt; /* non std */
+  color: #2A48B4; /* non-std */
 }
 /* line 714, Heading - Section Level 1 */
 p.s, p.s1 {
@@ -273,14 +279,21 @@ p.d {
 	margin-top: 4pt;
 	color: #2A48B4; /* non-std */
 }
+table {
+	width: 100%;
+	border: solid;
+}
 /* line 784, Table - Row */
-p.tr {
+row {
+  display: table-row;
   text-index: -1.0rem; /* std -0.25in */
   text-align: start;
   margin-left: 2.0rem; /* std 0.50in */
 }
 /* line 821, Table - Cell */
-p.tc1, p.tc2, p.tc3, p.tc4, p.tc5 {
+/*p.tc1, p.tc2, p.tc3, p.tc4, p.tc5 {*/
+cell {
+  display: table-cell;
   text-align: start;
 }
 /* line 956, Out indented list item level 1 */
@@ -307,6 +320,8 @@ span.fk {
   font-weight: bold;
   font-style: italic;
   text-align: start;
+  color: #555555; /* non std */
+  background-color: #FFFFB4; /* non std */
 }
 /* line 1025, footnote alternate translation */
 span.fqa {
@@ -389,25 +404,19 @@ span.sc {
   text-align: start;
 }
 /* line 1238, Break - Page Break */
-para.pb {
+p.pb {
   text-align: start;
   /* What should I do here to simulate a page break */
 }
 /* line 1254, Peripheral Ref - Wordlist Entry */
 span.w {
   text-align: start;
-  margin:bottom: 32pt; /* non-std to simulate pg break */
 }
 /* line 1274, Peripherals - Content Division Marker */
-para.periph {
-  font-weight: bold;
-  font-size: 1.16rem;
-  text-align: start;
-  margin-bottom: 4pt;
-  margin-top: 16pt;
+p.periph {
+   display: none;
 }
 /* line 1406, OBSOLETE toc Peripherals - Front Matter Table of Contents */
 p.toc {
-  font-size: 0.83rem;
-  text-align: start;
+	display: none;
 }
