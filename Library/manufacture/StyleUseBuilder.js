@@ -19,13 +19,13 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		'char.qs', 'para.qa', 'para.b', 
 		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 
 		'para.ms', 'para.ms1', 'para.mr',
-		'para.s', 'para.s1', 'para.s2', 'para.r', 'para.sp', 'para.d', 
+		'para.s', 'para.s1', 'para.s2', 'para.r', 'para.sp', 'para.d',
+		'row.tr', 'cell.tc1', 'cell.tc2', 'cell.tc3', 'cell.tc4', 
 		'para.li', 'para.li1',
-		'char.qs',  
 		'note.f', 'char.ft', 'char.fk', 'char.fr', 
 		'char.fqa', 'char.fv', 
-		'note.x', 'char.xt', 'char.xo'
-		'char.nd', 'char.tl','char.bk', 'char.pn', 'char.wj', 'char.k', 'char.add'.
+		'note.x', 'char.xt', 'char.xo',
+		'char.nd', 'char.tl','char.bk', 'char.pn', 'char.wj', 'char.k', 'char.add',
 		'char.it', 'char.bd', 'char.sc', 
 		'p.periph', 'p.toc'
 		];

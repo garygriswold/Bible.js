@@ -279,22 +279,22 @@ p.d {
 	margin-top: 4pt;
 	color: #2A48B4; /* non-std */
 }
-table {
-	width: 100%;
-	border: solid;
+table.usx {
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+	border-collapse: collapse;
 }
 /* line 784, Table - Row */
-row {
-  display: table-row;
-  text-index: -1.0rem; /* std -0.25in */
-  text-align: start;
-  margin-left: 2.0rem; /* std 0.50in */
+tr.usx {
+  width: 100%;
 }
 /* line 821, Table - Cell */
-/*p.tc1, p.tc2, p.tc3, p.tc4, p.tc5 {*/
-cell {
-  display: table-cell;
+td.tc1, td.tc2, td.tc3, td.tc4, td.tc5 {
   text-align: start;
+  padding-left: 5%;
+  border-bottom-style: dotted;
+  border-width: thin;
 }
 /* line 956, Out indented list item level 1 */
 p.li, p.li1 {

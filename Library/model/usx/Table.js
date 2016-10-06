@@ -26,6 +26,7 @@ Table.prototype.buildUSX = function(result) {
 };
 Table.prototype.toDOM = function(parentNode) {
 	var child = new DOMNode('table');
+	child.setAttribute('class', 'usx');
 	parentNode.appendChild(child);
 	return(child);
 };

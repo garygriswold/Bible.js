@@ -135,10 +135,10 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 			case 'table':
 				usx.push('<table>');
 				break;
-			case 'row':
+			case 'tr':
 				usx.push('<row style="tr">');
 				break;
-			case 'cell':
+			case 'td':
 				usx.push('<cell style="', node['class'], '" align="start">');
 				break;
 			case 'wbr':
@@ -195,10 +195,10 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 			case 'table':
 				usx.push('</table>');
 				break;
-			case 'row':
+			case 'tr':
 				usx.push('</row>');
 				break;
-			case 'cell':
+			case 'td':
 				usx.push('</cell>');
 				break;
 			case 'wbr':

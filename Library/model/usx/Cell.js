@@ -32,7 +32,7 @@ Cell.prototype.buildUSX = function(result) {
 	result.push(this.closeElement());
 };
 Cell.prototype.toDOM = function(parentNode) {
-	var child = new DOMNode('cell');
+	var child = new DOMNode('td');
 	child.setAttribute('class', this.style);
 	// align is not processed here.
 	parentNode.appendChild(child);

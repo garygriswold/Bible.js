@@ -8,7 +8,7 @@ For many functions, including the presentation of text, it is faster to debug th
 However, to do this it is essential to have the current Versions.db files there and the current and
 correct Bible Files.  The tasks described here could be automated.
 
-	cd /Users/garygriswold/Library/Application Support/BibleAppNW/databases
+	cd $HOME/Library/Application Support/BibleAppNW/databases
 	sqlite3 Databases.db
 	select * from Databases
 	

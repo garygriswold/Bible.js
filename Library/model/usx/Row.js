@@ -28,7 +28,8 @@ Row.prototype.buildUSX = function(result) {
 	result.push(this.closeElement());
 };
 Row.prototype.toDOM = function(parentNode) {
-	var child = new DOMNode('row');
+	var child = new DOMNode('tr');
+	child.setAttribute('class', 'usx');
 	parentNode.appendChild(child);
 	return(child);
 };
