@@ -667,7 +667,7 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		'note.x', 'char.xt', 'char.xo',
 		'char.nd', 'char.tl','char.bk', 'char.pn', 'char.wj', 'char.k', 'char.add',
 		'char.it', 'char.bd', 'char.sc', 
-		'p.periph', 'p.toc'
+		'para.pb', 'para.periph', 'para.toc'
 		];
 	var array = [];
 	for (var i=0; i<styles.length; i++) {
@@ -1147,10 +1147,10 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direc
 	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	switch(this.style) {
 		case 'f':
-			refChild.appendText((direction === 'rtl') ? '\u261C ' : '\u261E '); //261C points left, 261E points right
+			refChild.appendText((direction === 'rtl') ? ' \u261C ' : ' \u261E '); //261C points left, 261E points right
 			break;
 		case 'x':
-			refChild.appendText((direction === 'rtl') ? '\u261A ' : '\u261B '); //261A points left, 261B points right
+			refChild.appendText((direction === 'rtl') ? ' \u261A ' : ' \u261B '); //261A points left, 261B points right
 			break;
 		default:
 			refChild.appendText('* ');
