@@ -25,6 +25,13 @@ LocalizeNumber.prototype.toLocal = function(number) {
 		return(this.convert(number, this.numberOffset));		
 	}
 };
+LocalizeNumber.prototype.toTOCLocal = function(number) {
+	if (number == 0) {
+		return('\u2744');
+	} else {
+		return(this.toLocal(number));
+	}
+};
 LocalizeNumber.prototype.toAscii = function(number) {
 	return(this.convert(number, - this.numberOffset));
 };

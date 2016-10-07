@@ -60,13 +60,13 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 			var root = document.createDocumentFragment();
 			var table = that.dom.addNode(root, 'table', 'tocChap');
 			var numCellPerRow = cellsPerRow();
-			var numRows = Math.ceil(book.lastChapter / numCellPerRow);
-			var chaptNum = 1;
+			var numRows = Math.ceil((book.lastChapter + 1) / numCellPerRow);
+			var chaptNum = 0;
 			for (var r=0; r<numRows; r++) {
 				var row = document.createElement('tr');
 				table.appendChild(row);
 				for (var c=0; c<numCellPerRow && chaptNum <= book.lastChapter; c++) {
-					var cell = that.dom.addNode(row, 'td', 'tocChap', that.localizeNumber.toLocal(chaptNum), 'toc' + bookCode + ':' + chaptNum);
+					var cell = that.dom.addNode(row, 'td', 'tocChap', that.localizeNumber.toTOCLocal(chaptNum), 'toc' + bookCode + ':' + chaptNum);
 					chaptNum++;
 					cell.addEventListener('click', function(event) {
 						var nodeId = this.id.substring(3);
