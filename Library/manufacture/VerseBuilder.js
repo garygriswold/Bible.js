@@ -19,7 +19,7 @@ VerseBuilder.prototype.loadDB = function(callback) {
 	var chapters = this.chapterBuilder.chapters;
 	for (var i=0; i<chapters.length; i++) {
 		var chapObj = chapters[i];
-		if (chapObj.chapterNum > 0) {
+		if (chapObj.chapterNum > 0) { // excludes FRT, GLO and chapter introductions
 			var verseList = breakChapterIntoVerses(chapObj.usxTree);
 			for (var j=0; j<verseList.length; j++) {
 				var verseUSX = verseList[j];
