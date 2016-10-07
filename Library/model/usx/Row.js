@@ -7,12 +7,14 @@ function Row(node) {
 	if (this.style !== 'tr') {
 		throw new Error('Row style must be tr.');
 	}
+	this.usxParent = null;
 	this.children = [];
-	Object.freeze(this);
+	Object.seal(this);
 }
 Row.prototype.tagName = 'row';
 Row.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Row.prototype.openElement = function() {
 	return('<row style="' + this.style + '">');

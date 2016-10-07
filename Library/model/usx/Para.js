@@ -4,12 +4,14 @@
 function Para(node) {
 	this.style = node.style;
 	this.emptyElement = node.emptyElement;
+	this.usxParent = null;
 	this.children = []; // contains verse | note | char | text
-	Object.freeze(this);
+	Object.seal(this);
 }
 Para.prototype.tagName = 'para';
 Para.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Para.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';

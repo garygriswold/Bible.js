@@ -3,7 +3,8 @@
 */
 function Text(text) {
 	this.text = text;
-	Object.freeze(this);
+	this.usxParent = null;
+	Object.seal(this);
 }
 Text.prototype.tagName = 'text';
 Text.prototype.buildUSX = function(result) {
@@ -15,31 +16,55 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 		parentNode.setAttribute('hidden', this.text);
 	} else if (parentNode.nodeName === 'section') {
 		parentNode.appendText(this.text);
-	} else if (! parentNode.hasAttribute('class')) { // Ref nodes have no class
-		parentNode.appendText(this.text);
+	} else if (parentNode.hasAttribute('hidden')) {
+		parentNode.setAttribute('hidden', this.text);
 	} else {
 		var parentClass = parentNode.getAttribute('class');
-		if (parentClass.substr(0, 3) === 'top') {
-			var textNode = new DOMNode('span');
-			textNode.setAttribute('class', parentClass.substr(3));
-			textNode.appendText(this.text);
-			textNode.setAttribute('style', 'display:none');
-			parentNode.appendChild(textNode);
-		} else if (parentNode.hasAttribute('hidden')) {
-			parentNode.setAttribute('hidden', this.text);
-		} else if (parentClass === 'fm') {
-			/* This is a hack, because ERV-ENG has an fm in FRT that must remain visible
-				Do not add char.fm to StyleUseBuilder until better solution is found. */
-			parentNode.appendText(this.text);
-		} else if (parentClass === 'fr' || parentClass === 'xo') {
+		if (parentClass === 'fr' || parentClass === 'xo') {
 			parentNode.setAttribute('hidden', this.text); // permanently hide note.
-		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
-			parentNode.appendText(this.text);
-			parentNode.setAttribute('style', 'display:none');
-		}
-		else {
-			parentNode.appendText(this.text);
+		} else {
+			var count = isInsideNote(this);
+			var parents = ancestors(this);
+			//console.log(count, parents.join(', '));
+			if (count === 0) {
+				parentNode.appendText(this.text);
+			} else if (count === 1) {
+				var textNode = new DOMNode('span');
+				textNode.setAttribute('class', parentClass.substr(3));
+				textNode.appendText(this.text);
+				textNode.setAttribute('style', 'display:none');
+				parentNode.appendChild(textNode);
+			} else if (count === 2) {
+				parentNode.setAttribute('style', 'display:none');
+				parentNode.appendText(this.text);
+			} else {
+				parentNode.appendText(this.text);
+			}
 		}
 	}
+
+	function isInsideNote(curr) {
+		var count = 0;
+		while (curr) {
+			if (curr.tagName === 'note') {
+				return(count);
+			} else {
+				count++;
+				curr = curr.usxParent;
+			}
+		}
+		return(0);
+	}
+	
+	function ancestors(curr) {
+		var parents = [curr.tagName];
+		while (curr && curr.usxParent) {
+			parents.push(curr.usxParent.tagName);
+			curr = curr.usxParent;
+		}
+		return(parents);
+	}
+	
 };
+
 

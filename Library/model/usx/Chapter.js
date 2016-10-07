@@ -5,7 +5,8 @@ function Chapter(node) {
 	this.number = node.number;
 	this.style = node.style;
 	this.emptyElement = node.emptyElement;
-	Object.freeze(this);
+	this.usxParent = null;
+	Object.seal(this);
 }
 Chapter.prototype.tagName = 'chapter';
 Chapter.prototype.openElement = function() {

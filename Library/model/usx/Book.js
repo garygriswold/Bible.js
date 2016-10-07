@@ -5,12 +5,14 @@ function Book(node) {
 	this.code = node.code;
 	this.style = node.style;
 	this.emptyElement = node.emptyElement;
+	this.usxParent = null;
 	this.children = []; // contains text
-	Object.freeze(this);
+	Object.seal(this);
 }
 Book.prototype.tagName = 'book';
 Book.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Book.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';

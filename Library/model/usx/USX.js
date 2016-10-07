@@ -4,12 +4,14 @@
 function USX(node) {
 	this.version = node.version;
 	this.emptyElement = node.emptyElement;
+	this.usxParent = null;
 	this.children = []; // includes books, chapters, and paragraphs
-	Object.freeze(this);
+	Object.seal(this);
 }
 USX.prototype.tagName = 'usx';
 USX.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 USX.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';

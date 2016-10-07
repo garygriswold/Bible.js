@@ -830,12 +830,14 @@ HTMLBuilder.prototype.toJSON = function() {
 function USX(node) {
 	this.version = node.version;
 	this.emptyElement = node.emptyElement;
+	this.usxParent = null;
 	this.children = []; // includes books, chapters, and paragraphs
-	Object.freeze(this);
+	Object.seal(this);
 }
 USX.prototype.tagName = 'usx';
 USX.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 USX.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
@@ -871,12 +873,14 @@ function Book(node) {
 	this.code = node.code;
 	this.style = node.style;
 	this.emptyElement = node.emptyElement;
+	this.usxParent = null;
 	this.children = []; // contains text
-	Object.freeze(this);
+	Object.seal(this);
 }
 Book.prototype.tagName = 'book';
 Book.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Book.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
@@ -913,12 +917,14 @@ function Cell(node) {
 	if (this.align !== 'start') {
 		throw new Error('Cell align must be start.');
 	}
+	this.usxParent = null;
 	this.children = [];
-	Object.freeze(this);
+	Object.seal(this);
 }
 Cell.prototype.tagName = 'cell';
 Cell.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Cell.prototype.openElement = function() {
 	return('<cell style="' + this.style + '" align="' + this.align + '">');
@@ -947,7 +953,8 @@ function Chapter(node) {
 	this.number = node.number;
 	this.style = node.style;
 	this.emptyElement = node.emptyElement;
-	Object.freeze(this);
+	this.usxParent = null;
+	Object.seal(this);
 }
 Chapter.prototype.tagName = 'chapter';
 Chapter.prototype.openElement = function() {
@@ -975,12 +982,14 @@ Chapter.prototype.toDOM = function(parentNode, bookCode, localizeNumber) {
 function Para(node) {
 	this.style = node.style;
 	this.emptyElement = node.emptyElement;
+	this.usxParent = null;
 	this.children = []; // contains verse | note | char | text
-	Object.freeze(this);
+	Object.seal(this);
 }
 Para.prototype.tagName = 'para';
 Para.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Para.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
@@ -1017,12 +1026,14 @@ function Row(node) {
 	if (this.style !== 'tr') {
 		throw new Error('Row style must be tr.');
 	}
+	this.usxParent = null;
 	this.children = [];
-	Object.freeze(this);
+	Object.seal(this);
 }
 Row.prototype.tagName = 'row';
 Row.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Row.prototype.openElement = function() {
 	return('<row style="' + this.style + '">');
@@ -1049,12 +1060,14 @@ Row.prototype.toDOM = function(parentNode) {
 * usfm, but is created at the point of the first row.
 */
 function Table(node) {
+	this.usxParent = null;
 	this.children = [];
-	Object.freeze(this);
+	Object.seal(this);
 }
 Table.prototype.tagName = 'table';
 Table.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Table.prototype.openElement = function() {
 	return('<table>');
@@ -1082,7 +1095,8 @@ function Verse(node) {
 	this.number = node.number;
 	this.style = node.style;
 	this.emptyElement = node.emptyElement;
-	Object.freeze(this);
+	this.usxParent = null;
+	Object.seal(this);
 }
 Verse.prototype.tagName = 'verse';
 Verse.prototype.openElement = function() {
@@ -1117,12 +1131,14 @@ function Note(node) {
 	}
 	this.style = node.style;
 	this.emptyElement = node.emptyElement;
+	this.usxParent = null;
 	this.children = [];
-	Object.freeze(this);
+	Object.seal(this);
 }
 Note.prototype.tagName = 'note';
 Note.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Note.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
@@ -1147,10 +1163,10 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direc
 	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	switch(this.style) {
 		case 'f':
-			refChild.appendText((direction === 'rtl') ? ' \u261C ' : ' \u261E '); //261C points left, 261E points right
+			refChild.appendText((direction === 'rtl') ? '\u261C ' : '\u261E '); //261C points left, 261E points right
 			break;
 		case 'x':
-			refChild.appendText((direction === 'rtl') ? ' \u261A ' : ' \u261B '); //261A points left, 261B points right
+			refChild.appendText((direction === 'rtl') ? '\u261A ' : '\u261B '); //261A points left, 261B points right
 			break;
 		default:
 			refChild.appendText('* ');
@@ -1166,12 +1182,14 @@ function Char(node) {
 	this.style = node.style;
 	this.closed = node.closed;
 	this.emptyElement = node.emptyElement;
+	this.usxParent = null;
 	this.children = [];
-	Object.freeze(this);
+	Object.seal(this);
 }
 Char.prototype.tagName = 'char';
 Char.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Char.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
@@ -1207,12 +1225,14 @@ Char.prototype.toDOM = function(parentNode) {
 function Ref(node) {
 	this.loc = node.loc;
 	this.emptyElement = node.emptyElement;
+	this.usxParent = null;
 	this.children = [];
-	Object.freeze(this);
+	Object.seal(this);
 }
 Ref.prototype.tagName = 'ref';
 Ref.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Ref.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
@@ -1242,7 +1262,8 @@ Ref.prototype.toDOM = function(parentNode) {
 */
 function OptBreak(node) {
 	this.emptyElement = node.emptyElement;
-	Object.freeze(this);
+	this.usxParent = null;
+	Object.seal(this);
 }
 OptBreak.prototype.tagName = 'optbreak';
 OptBreak.prototype.openElement = function() {
@@ -1267,7 +1288,8 @@ OptBreak.prototype.toDOM = function(parentNode) {
 */
 function Text(text) {
 	this.text = text;
-	Object.freeze(this);
+	this.usxParent = null;
+	Object.seal(this);
 }
 Text.prototype.tagName = 'text';
 Text.prototype.buildUSX = function(result) {
@@ -1279,33 +1301,57 @@ Text.prototype.toDOM = function(parentNode, bookCode, chapterNum) {
 		parentNode.setAttribute('hidden', this.text);
 	} else if (parentNode.nodeName === 'section') {
 		parentNode.appendText(this.text);
-	} else if (! parentNode.hasAttribute('class')) { // Ref nodes have no class
-		parentNode.appendText(this.text);
+	} else if (parentNode.hasAttribute('hidden')) {
+		parentNode.setAttribute('hidden', this.text);
 	} else {
 		var parentClass = parentNode.getAttribute('class');
-		if (parentClass.substr(0, 3) === 'top') {
-			var textNode = new DOMNode('span');
-			textNode.setAttribute('class', parentClass.substr(3));
-			textNode.appendText(this.text);
-			textNode.setAttribute('style', 'display:none');
-			parentNode.appendChild(textNode);
-		} else if (parentNode.hasAttribute('hidden')) {
-			parentNode.setAttribute('hidden', this.text);
-		} else if (parentClass === 'fm') {
-			/* This is a hack, because ERV-ENG has an fm in FRT that must remain visible
-				Do not add char.fm to StyleUseBuilder until better solution is found. */
-			parentNode.appendText(this.text);
-		} else if (parentClass === 'fr' || parentClass === 'xo') {
+		if (parentClass === 'fr' || parentClass === 'xo') {
 			parentNode.setAttribute('hidden', this.text); // permanently hide note.
-		} else if (parentClass[0] === 'f' || parentClass[0] === 'x') {
-			parentNode.appendText(this.text);
-			parentNode.setAttribute('style', 'display:none');
-		}
-		else {
-			parentNode.appendText(this.text);
+		} else {
+			var count = isInsideNote(this);
+			var parents = ancestors(this);
+			//console.log(count, parents.join(', '));
+			if (count === 0) {
+				parentNode.appendText(this.text);
+			} else if (count === 1) {
+				var textNode = new DOMNode('span');
+				textNode.setAttribute('class', parentClass.substr(3));
+				textNode.appendText(this.text);
+				textNode.setAttribute('style', 'display:none');
+				parentNode.appendChild(textNode);
+			} else if (count === 2) {
+				parentNode.setAttribute('style', 'display:none');
+				parentNode.appendText(this.text);
+			} else {
+				parentNode.appendText(this.text);
+			}
 		}
 	}
+
+	function isInsideNote(curr) {
+		var count = 0;
+		while (curr) {
+			if (curr.tagName === 'note') {
+				return(count);
+			} else {
+				count++;
+				curr = curr.usxParent;
+			}
+		}
+		return(0);
+	}
+	
+	function ancestors(curr) {
+		var parents = [curr.tagName];
+		while (curr && curr.usxParent) {
+			parents.push(curr.usxParent.tagName);
+			curr = curr.usxParent;
+		}
+		return(parents);
+	}
+	
 };
+
 
 /**
 * This class does a stream read of an XML string to return XML tokens and their token type.

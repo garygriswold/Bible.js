@@ -11,12 +11,14 @@ function Cell(node) {
 	if (this.align !== 'start') {
 		throw new Error('Cell align must be start.');
 	}
+	this.usxParent = null;
 	this.children = [];
-	Object.freeze(this);
+	Object.seal(this);
 }
 Cell.prototype.tagName = 'cell';
 Cell.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Cell.prototype.openElement = function() {
 	return('<cell style="' + this.style + '" align="' + this.align + '">');

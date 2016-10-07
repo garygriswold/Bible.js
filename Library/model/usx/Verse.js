@@ -5,7 +5,8 @@ function Verse(node) {
 	this.number = node.number;
 	this.style = node.style;
 	this.emptyElement = node.emptyElement;
-	Object.freeze(this);
+	this.usxParent = null;
+	Object.seal(this);
 }
 Verse.prototype.tagName = 'verse';
 Verse.prototype.openElement = function() {

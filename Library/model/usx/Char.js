@@ -5,12 +5,14 @@ function Char(node) {
 	this.style = node.style;
 	this.closed = node.closed;
 	this.emptyElement = node.emptyElement;
+	this.usxParent = null;
 	this.children = [];
-	Object.freeze(this);
+	Object.seal(this);
 }
 Char.prototype.tagName = 'char';
 Char.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Char.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';

@@ -5,7 +5,8 @@
 */
 function OptBreak(node) {
 	this.emptyElement = node.emptyElement;
-	Object.freeze(this);
+	this.usxParent = null;
+	Object.seal(this);
 }
 OptBreak.prototype.tagName = 'optbreak';
 OptBreak.prototype.openElement = function() {

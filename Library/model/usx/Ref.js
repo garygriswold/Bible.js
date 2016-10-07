@@ -6,12 +6,14 @@
 function Ref(node) {
 	this.loc = node.loc;
 	this.emptyElement = node.emptyElement;
+	this.usxParent = null;
 	this.children = [];
-	Object.freeze(this);
+	Object.seal(this);
 }
 Ref.prototype.tagName = 'ref';
 Ref.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Ref.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';

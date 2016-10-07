@@ -9,12 +9,14 @@ function Note(node) {
 	}
 	this.style = node.style;
 	this.emptyElement = node.emptyElement;
+	this.usxParent = null;
 	this.children = [];
-	Object.freeze(this);
+	Object.seal(this);
 }
 Note.prototype.tagName = 'note';
 Note.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Note.prototype.openElement = function() {
 	var elementEnd = (this.emptyElement) ? '" />' : '">';
@@ -39,10 +41,10 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direc
 	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	switch(this.style) {
 		case 'f':
-			refChild.appendText((direction === 'rtl') ? ' \u261C ' : ' \u261E '); //261C points left, 261E points right
+			refChild.appendText((direction === 'rtl') ? '\u261C ' : '\u261E '); //261C points left, 261E points right
 			break;
 		case 'x':
-			refChild.appendText((direction === 'rtl') ? ' \u261A ' : ' \u261B '); //261A points left, 261B points right
+			refChild.appendText((direction === 'rtl') ? '\u261A ' : '\u261B '); //261A points left, 261B points right
 			break;
 		default:
 			refChild.appendText('* ');

@@ -4,12 +4,14 @@
 * usfm, but is created at the point of the first row.
 */
 function Table(node) {
+	this.usxParent = null;
 	this.children = [];
-	Object.freeze(this);
+	Object.seal(this);
 }
 Table.prototype.tagName = 'table';
 Table.prototype.addChild = function(node) {
 	this.children.push(node);
+	node.usxParent = this;
 };
 Table.prototype.openElement = function() {
 	return('<table>');
