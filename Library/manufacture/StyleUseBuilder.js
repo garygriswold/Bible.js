@@ -23,11 +23,11 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		'row.tr', 'cell.tc1', 'cell.tc2', 'cell.tc3', 'cell.tc4', 
 		'para.li', 'para.li1',
 		'note.f', 'char.ft', 'char.fk', 'char.fr', 
-		'char.fqa', 'char.fv', 
+		'char.fqa', 'char.fv', 'char.fm',
 		'note.x', 'char.xt', 'char.xo',
 		'char.nd', 'char.tl','char.bk', 'char.pn', 'char.wj', 'char.k', 'char.add',
 		'char.it', 'char.bd', 'char.sc', 
-		'para.pb', 'para.periph', 'para.toc'
+		'para.pb', 'char.w', 'para.periph', 'para.toc'
 		];
 	var array = [];
 	for (var i=0; i<styles.length; i++) {
