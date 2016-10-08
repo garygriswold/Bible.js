@@ -36,10 +36,15 @@ correct Bible Files.  The tasks described here could be automated.
 	
 	For repeated uploads of the same file use the following:
 	cp $HOME/ShortSands/DBL/3prepared/ERV-ENG.db "$HOME/Library/Application Support/BibleAppNW/databases/file__0/24"
+	cp $HOME/ShortSands/DBL/3prepared/ERV-SPA.db "$HOME/Library/Application Support/BibleAppNW/databases/file__0/25"
 	
 	For repeated uploads of the Versions.db
 	cp $HOME/ShortSands/BibleApp/Versions/Versions.db "$HOME/Library/Application Support/BibleAppNW/databases/file__0/9"
-
+	
+	Actions to perform in program:
+	1. Install a new Bible and update Versions
+	2. Update a new Bible and update Versions
+	3. Update Versions
 
 
 The document named BibleDeploymentNotes.md contains the specific instructions for preparing Bibles for
