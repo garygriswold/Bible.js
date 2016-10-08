@@ -1293,30 +1293,36 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 	var that = this;
 	var book = this.toc.find(bookCode);
 	if (book) {
-		var root = document.createDocumentFragment();
-		var table = that.dom.addNode(root, 'table', 'tocChap');
-		var numCellPerRow = cellsPerRow();
-		var numRows = Math.ceil(book.lastChapter / numCellPerRow);
-		var chaptNum = 1;
-		for (var r=0; r<numRows; r++) {
-			var row = document.createElement('tr');
-			table.appendChild(row);
-			for (var c=0; c<numCellPerRow && chaptNum <= book.lastChapter; c++) {
-				var cell = that.dom.addNode(row, 'td', 'tocChap', that.localizeNumber.toLocal(chaptNum), 'toc' + bookCode + ':' + chaptNum);
-				chaptNum++;
-				cell.addEventListener('click', function(event) {
-					var nodeId = this.id.substring(3);
-					console.log('open chapter', nodeId);
-					document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
-				});
+		if (book.lastChapter && book.lastChapter > 0) {
+			var root = document.createDocumentFragment();
+			var table = that.dom.addNode(root, 'table', 'tocChap');
+			var numCellPerRow = cellsPerRow();
+			var numRows = Math.ceil((book.lastChapter + 1) / numCellPerRow);
+			var chaptNum = 0;
+			for (var r=0; r<numRows; r++) {
+				var row = document.createElement('tr');
+				table.appendChild(row);
+				for (var c=0; c<numCellPerRow && chaptNum <= book.lastChapter; c++) {
+					var cell = that.dom.addNode(row, 'td', 'tocChap', that.localizeNumber.toTOCLocal(chaptNum), 'toc' + bookCode + ':' + chaptNum);
+					chaptNum++;
+					cell.addEventListener('click', function(event) {
+						var nodeId = this.id.substring(3);
+						console.log('open chapter', nodeId);
+						document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
+					});
+				}
 			}
-		}
-		var bookNode = document.getElementById('toc' + book.code);
-		if (bookNode) {
-			var saveYPosition = bookNode.getBoundingClientRect().top;
-			removeAllChapters();
-			bookNode.appendChild(root);
-			scrollTOC(bookNode, saveYPosition);
+			var bookNode = document.getElementById('toc' + book.code);
+			if (bookNode) {
+				var saveYPosition = bookNode.getBoundingClientRect().top;
+				removeAllChapters();
+				bookNode.appendChild(root);
+				scrollTOC(bookNode, saveYPosition);
+			}
+		} else {
+			var nodeId = book.code + ':0';
+			console.log('open chapter', nodeId);
+			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 		}
 	}
 	
@@ -3941,6 +3947,13 @@ LocalizeNumber.prototype.toLocal = function(number) {
 		return(this.convert(String(number), this.numberOffset));
 	} else {
 		return(this.convert(number, this.numberOffset));		
+	}
+};
+LocalizeNumber.prototype.toTOCLocal = function(number) {
+	if (number == 0) {
+		return('\u2744');
+	} else {
+		return(this.toLocal(number));
 	}
 };
 LocalizeNumber.prototype.toAscii = function(number) {
