@@ -12,8 +12,11 @@ function ConcordanceBuilder(adapter, pubVersion) {
 	this.verse = 0;
 	this.position = 0;
 	this.refList = {};
+	this.refList.constructor = undefined;
 	this.refPositions = {};
+	this.refPositions.constructor = undefined;
 	this.refList2 = {};
+	this.refList2.constructor = undefined;
 	Object.seal(this);
 }
 ConcordanceBuilder.prototype.readBook = function(usxRoot) {
