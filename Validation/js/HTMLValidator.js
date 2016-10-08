@@ -126,9 +126,14 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 					usx.push('<ref loc="', node.loc, '">');
 				} else if (node['class'] !== 'f' && node['class'] !== 'x') {
 					if (node.closed) {
-						usx.push('<char style="', node['class'], '" closed="', node.closed, '">');
+						usx.push('<char style="', node['class'], '" closed="', node.closed, '"');
 					} else {
-						usx.push('<char style="', node['class'], '">');
+						usx.push('<char style="', node['class'], '"');
+					}
+					if (node.emptyElement) {
+						usx.push(END_EMPTY)
+					} else {
+						usx.push('>');
 					}
 				}
 				break;
@@ -162,50 +167,50 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 	}
 	
 	function convertCloseElement(usx, node) {
-		switch(node.tagName) {
-			case 'ROOT':
-			case 'section':
-				break;
-			case 'article':
-				if (! node.emptyElement) {
+		if (! node.emptyElement) {
+			switch(node.tagName) {
+				case 'ROOT':
+				case 'section':
+					break;
+				case 'article':
 					usx.push('</book>');
-				}
-				break;
-			case 'TEXT':
-				// do nothing
-				break;
-			case 'p':
-				if (node['class'] !== 'c' && ! node.emptyElement) {
-					usx.push('</para>');
-				}
-				break;
-			case 'span':
-				if (node['class'] === 'v') {
+					break;
+				case 'TEXT':
 					// do nothing
-				} else if (node['class'] === 'topf' || node['class'] === 'topx') {
-					usx.push('</note>');
-				} else if (node.hidden) {
-					usx.push('</char>');
-				} else if (node.loc) {
-					usx.push('</ref>');
-				} else if (node['class'] !== 'f' && node['class'] !== 'x') {
-					usx.push('</char>');
-				}
-				break;
-			case 'table':
-				usx.push('</table>');
-				break;
-			case 'tr':
-				usx.push('</row>');
-				break;
-			case 'td':
-				usx.push('</cell>');
-				break;
-			case 'wbr':
-				break;
-			default:
-				throw new Error('unexpected HTML element ' + node.tagName + '.');
-				
+					break;
+				case 'p':
+					if (node['class'] !== 'c' && ! node.emptyElement) {
+						usx.push('</para>');
+					}
+					break;
+				case 'span':
+					if (node['class'] === 'v') {
+						// do nothing
+					} else if (node['class'] === 'topf' || node['class'] === 'topx') {
+						usx.push('</note>');
+					} else if (node.hidden) {
+						usx.push('</char>');
+					} else if (node.loc) {
+						usx.push('</ref>');
+					} else if (node['class'] !== 'f' && node['class'] !== 'x') {
+						usx.push('</char>');
+					}
+					break;
+				case 'table':
+					usx.push('</table>');
+					break;
+				case 'tr':
+					usx.push('</row>');
+					break;
+				case 'td':
+					usx.push('</cell>');
+					break;
+				case 'wbr':
+					break;
+				default:
+					throw new Error('unexpected HTML element ' + node.tagName + '.');
+					
+			}
 		}
 	}
 	
