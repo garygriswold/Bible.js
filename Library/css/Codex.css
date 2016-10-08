@@ -296,6 +296,13 @@ td.tc1, td.tc2, td.tc3, td.tc4, td.tc5 {
   border-bottom-style: dotted;
   border-width: thin;
 }
+/* line 821, Table - Cell */
+td.tcr1, td.tcr2, td.tcr3, td.tcr4, td.tcr5 {
+  text-align: end;
+  padding-left: 5%;
+  border-bottom-style: dotted;
+  border-width: thin;
+}
 /* line 956, Out indented list item level 1 */
 p.li, p.li1 {
 	text-align: start;
