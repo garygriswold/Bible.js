@@ -73,7 +73,8 @@ function Canon() {
     	{ code: '3JN', name: '3 John' },
     	{ code: 'JUD', name: 'Jude' },
     	{ code: 'REV', name: 'Revelation' },
-    	{ code: 'GLO', name: 'Glossary' } ];
+    	{ code: 'GLO', name: 'Glossary' },
+    	{ code: 'BAK', name: 'Appendix' } ];
 }
 Canon.prototype.sequenceMap = function() {
 	var result = {};
