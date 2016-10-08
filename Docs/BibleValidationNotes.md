@@ -36,6 +36,9 @@ correct Bible Files.  The tasks described here could be automated.
 	
 	For repeated uploads of the same file use the following:
 	cp $HOME/ShortSands/DBL/3prepared/ERV-ENG.db "$HOME/Library/Application Support/BibleAppNW/databases/file__0/24"
+	
+	For repeated uploads of the Versions.db
+	cp $HOME/ShortSands/BibleApp/Versions/Versions.db "$HOME/Library/Application Support/BibleAppNW/databases/file__0/9"
 
 
 
@@ -102,6 +105,25 @@ WEB
 	TableOfContents - perfect
 	ValidationCleanup
 	ProductionUpload
+	
+ERV-ENG
+-------
+
+	Last performed Oct 7, 2016
+	Publisher
+	XMLTokenizer - perfect
+	USXParser - perfect
+	HTMLValidator - perfect
+	VersesValidator - perfect
+	ConcordanceValidator - perfect
+	StyleUseValidator - perfect
+	TableOfContents - perfect
+	ValidationCleanup
+	ProductionUpload
+	
+	modify Versions to include ERV-ENG, but not installed.
+	RunVersions.sh
+	Upload to aws
 	
 Production
 ----------

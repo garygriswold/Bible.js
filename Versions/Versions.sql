@@ -137,7 +137,7 @@ endDate NULL
 INSERT INTO InstalledVersion VALUES ('ARBVDPD', 'ar', '2016-06-01', null);
 -- INSERT INTO InstalledVersion VALUES ('CUVSPD', 'zh', '2016-06-11', null);
 -- INSERT INTO InstalledVersion VALUES ('CUVTPD', null, '2016-06-18', null);
-INSERT INTO InstalledVersion VALUES ('ERV-ENG', null, '2016-10-01', null);
+-- INSERT INTO InstalledVersion VALUES ('ERV-ENG', null, '2016-10-01', null);
 INSERT INTO InstalledVersion VALUES ('KJVPD', null, '2016-05-16', null);
 INSERT INTO InstalledVersion VALUES ('NMV', 'fa', '2016-06-27', null);
 INSERT INTO InstalledVersion VALUES ('WEB', 'en', '2016-05-16', null);

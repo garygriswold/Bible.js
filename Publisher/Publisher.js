@@ -263,7 +263,7 @@ VerseBuilder.prototype.loadDB = function(callback) {
 	var chapters = this.chapterBuilder.chapters;
 	for (var i=0; i<chapters.length; i++) {
 		var chapObj = chapters[i];
-		if (chapObj.chapterNum > 0) {
+		if (chapObj.chapterNum > 0) { // excludes FRT, GLO and chapter introductions
 			var verseList = breakChapterIntoVerses(chapObj.usxTree);
 			for (var j=0; j<verseList.length; j++) {
 				var verseUSX = verseList[j];
@@ -483,7 +483,7 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 				var word = word1.replace(/^[\u0000-\u0040\u005B-\u0060\u007B-\u00B1\u00BF\u2010-\u206F]+/g, '');
 				//var word = word1.replace(/^[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]+/g, '');
 				//var word = words[i].replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]$/g, '');
-				if (word.length > 0 && this.chapter > 0 && this.verse > 0) {
+				if (word.length > 0 && this.chapter > 0 && this.verse > 0) { // excludes FRT, GLO and chapter introductions
 					var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
 					this.position++;
 					this.addEntry(word.toLocaleLowerCase(), reference, this.position);
@@ -663,11 +663,11 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		'row.tr', 'cell.tc1', 'cell.tc2', 'cell.tc3', 'cell.tc4', 
 		'para.li', 'para.li1',
 		'note.f', 'char.ft', 'char.fk', 'char.fr', 
-		'char.fqa', 'char.fv', 
+		'char.fqa', 'char.fv', 'char.fm',
 		'note.x', 'char.xt', 'char.xo',
 		'char.nd', 'char.tl','char.bk', 'char.pn', 'char.wj', 'char.k', 'char.add',
 		'char.it', 'char.bd', 'char.sc', 
-		'para.pb', 'para.periph', 'para.toc'
+		'para.pb', 'char.w', 'para.periph', 'para.toc'
 		];
 	var array = [];
 	for (var i=0; i<styles.length; i++) {
@@ -1163,10 +1163,10 @@ Note.prototype.toDOM = function(parentNode, bookCode, chapterNum, noteNum, direc
 	refChild.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	switch(this.style) {
 		case 'f':
-			refChild.appendText((direction === 'rtl') ? '\u261C ' : '\u261E '); //261C points left, 261E points right
+			refChild.appendText((direction === 'rtl') ? ' \u261C ' : ' \u261E '); //261C points left, 261E points right
 			break;
 		case 'x':
-			refChild.appendText((direction === 'rtl') ? '\u261A ' : '\u261B '); //261A points left, 261B points right
+			refChild.appendText((direction === 'rtl') ? ' \u261A ' : ' \u261B '); //261A points left, 261B points right
 			break;
 		default:
 			refChild.appendText('* ');
@@ -2581,6 +2581,13 @@ LocalizeNumber.prototype.toLocal = function(number) {
 		return(this.convert(String(number), this.numberOffset));
 	} else {
 		return(this.convert(number, this.numberOffset));		
+	}
+};
+LocalizeNumber.prototype.toTOCLocal = function(number) {
+	if (number == 0) {
+		return('\u2744');
+	} else {
+		return(this.toLocal(number));
 	}
 };
 LocalizeNumber.prototype.toAscii = function(number) {
