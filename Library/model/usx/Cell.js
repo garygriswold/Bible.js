@@ -4,12 +4,12 @@
 */
 function Cell(node) {
 	this.style = node.style;
-	if (this.style !== 'tc1' && this.style !== 'tc2') {
-		throw new Error('Row style must be tc1, tc2.');
+	if (this.style !== 'tc1' && this.style !== 'tc2' && this.style !== 'tcr1' && this.style !== 'tcr2') {
+		throw new Error('Row style must be tc1, tc2.  It is |' + this.style + '|');
 	}
 	this.align = node.align;
-	if (this.align !== 'start') {
-		throw new Error('Cell align must be start.');
+	if (this.align !== 'start' && this.align !== 'end') {
+		throw new Error('Cell align must be start. It is |' + this.align + '|');
 	}
 	this.usxParent = null;
 	this.children = [];

@@ -5,7 +5,7 @@
 function Row(node) {
 	this.style = node.style;
 	if (this.style !== 'tr') {
-		throw new Error('Row style must be tr.');
+		throw new Error('Row style must be tr. It is ', this.style);
 	}
 	this.usxParent = null;
 	this.children = [];
