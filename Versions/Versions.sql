@@ -78,16 +78,16 @@ INSERT INTO Version VALUES ('WEB_SHORT', 'eng', 'EBIBLE', 'WEB', 'WEB Genesis an
 '', NULL, NULL);
 INSERT INTO Version VALUES ('ESV', 'eng', 'CRSWY', 'ESV', 'English Standard Version', 'BIBLE', 'ESV.db', 'T', 'F', '2020-01-01',
 'English Standard Version®, copyright © 2001 by Crossway Bibles, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-ENG', 'eng', 'BLI', 'ERV-ENG', 'English - Easy-to-Read Version', 'BIBLE', 'ERV-ENG.db', 'T', 'F', '2016-10-01', 
-'International English: Easy-to-Read Version (ERV). © 2013, 2016 Bible League International.', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-ENG', 'eng', 'BLI', 'ERV-ENG', 'Holy Bible: Easy-to-Read Version (ERV), International Edition', 'BIBLE', 'ERV-ENG.db', 'T', 'F', '2016-10-01', 
+'Holy Bible: Easy-to-Read Version (ERV), International Edition © 2013, 2016 Bible League International', NULL, NULL);
 INSERT INTO Version VALUES ('KJVPD', 'eng', 'EBIBLE', 'KJV', 'King James Version', 'BIBLE', 'KJVPD.db', 'T', 'F', '2016-09-06', 
 'King James Version 1611 (KJV), Public Domain, eBible.org.', NULL, NULL);
 INSERT INTO Version VALUES ('WEB', 'eng', 'EBIBLE', 'WEB', 'World English Bible', 'BIBLE', 'WEB.db', 'T', 'F', '2016-09-06', 
 'World English Bible (WEB), Public Domain, eBible.org.', NULL, NULL);
 
 -- Spanish
-INSERT INTO Version VALUES ('ERV-SPA', 'spa', 'BLI', 'ERV-SPA', 'La Biblia: La Palabra de Dios para todos (PDT)', 'BIBLE', 'ERV-SPA.db', 'T', 'F', '2016-10-08',
-'Copyright', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-SPA', 'spa', 'BLI', 'ERV-SPA', 'La Biblia: La Palabra de Dios para todos', 'BIBLE', 'ERV-SPA.db', 'T', 'F', '2016-10-08',
+'La Biblia: La Palabra de Dios para todos (PDT) © 2005, 2015 Bible League International', NULL, NULL);
 -- INSERT INTO Version VALUES ('RVR09PD', 'spa', 'EBIBLE', 'RVR1909', 'Santa Biblia — Reina Valera 1909', 'BIBLE', 'RVR09PD.db', 'T', 'F', '2016-09-06',
 -- 'Santa Biblia — Reina Valera 1909 (RVR1909), Public Domain, eBible.org', NULL, NULL);
 -- INSERT INTO Version VALUES ('BLP', 'spa', 'SPN', 'BLP', 'La Palabra (versión española)', 'BIBLE', 'BLP.db', 'T', 'F', '2016-09-06',
@@ -141,7 +141,7 @@ INSERT INTO InstalledVersion VALUES ('ARBVDPD', 'ar', '2016-06-01', null);
 -- INSERT INTO InstalledVersion VALUES ('CUVSPD', 'zh', '2016-06-11', null);
 -- INSERT INTO InstalledVersion VALUES ('CUVTPD', null, '2016-06-18', null);
 -- INSERT INTO InstalledVersion VALUES ('ERV-ENG', null, '2016-10-01', null);
-INSERT INTO InstalledVersion VALUES ('ERV-SPA', 'es', '2016-10-08', null);
+-- INSERT INTO InstalledVersion VALUES ('ERV-SPA', 'es', '2016-10-08', null);
 INSERT INTO InstalledVersion VALUES ('KJVPD', null, '2016-05-16', null);
 INSERT INTO InstalledVersion VALUES ('NMV', 'fa', '2016-06-27', null);
 INSERT INTO InstalledVersion VALUES ('WEB', 'en', '2016-05-16', null);

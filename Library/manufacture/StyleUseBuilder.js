@@ -20,7 +20,7 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 
 		'para.ms', 'para.ms1', 'para.mr',
 		'para.s', 'para.s1', 'para.s2', 'para.r', 'para.sp', 'para.d',
-		'row.tr', 'cell.tc1', 'cell.tc2', 'cell.tc3', 'cell.tc4', 
+		'row.tr', 'cell.tc1', 'cell.tc2', 'cell.tcr1', 'cell.tcr2', 
 		'para.li', 'para.li1',
 		'note.f', 'char.ft', 'char.fk', 'char.fr', 
 		'char.fqa', 'char.fv', 'char.fm',

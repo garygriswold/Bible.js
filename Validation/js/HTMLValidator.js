@@ -144,7 +144,12 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				usx.push('<row style="tr">');
 				break;
 			case 'td':
-				usx.push('<cell style="', node['class'], '" align="start">');
+				var nodeClass = node['class'];
+				if (nodeClass.length === 3) {
+					usx.push('<cell style="', node['class'], '" align="start">');
+				} else {
+					usx.push('<cell style="', node['class'], '" align="end">');
+				}
 				break;
 			case 'wbr':
 				usx.push('<optbreak', END_EMPTY);

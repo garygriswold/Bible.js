@@ -400,8 +400,10 @@ TOCBuilder.prototype.loadDB = function(callback) {
 	var len = this.size();
 	for (var i=0; i<len; i++) {
 		var toc = this.toc.bookList[i];
-		var abbrev = ensureAbbrev(toc);
+		var abbrev = (toc.abbrev) ? toc.abbrev : ' '; // ERV BAK does not have an abbrev
 		if (toc.title == null) toc.title = toc.heading; // ERV is missing toc1
+		if (toc.title == null) toc.title = toc.name; // ERV is missing 
+		if (toc.heading == null) toc.heading = toc.name;
 		if (toc.lastChapter == null) toc.lastChapter = 0; // ERV does not have chapters in FRT and GLO
 		var values = [ toc.code, toc.heading, toc.title, toc.name, abbrev, toc.lastChapter, 
 			toc.priorBook, toc.nextBook, toc.chapterRowId ];
@@ -417,11 +419,11 @@ TOCBuilder.prototype.loadDB = function(callback) {
 		}
 	});
 	
-	function ensureAbbrev(toc) {
-		if (toc.abbrev) return(toc.abbrev);
-		if (toc.heading.lenght <= 4) return(toc.heading);
-		return(toc.heading.substr(0,3) + '.');
-	}
+	//function ensureAbbrev(toc) {
+	//	if (toc.abbrev) return(toc.abbrev);
+	//	if (toc.heading && toc.heading.length <= 4) return(toc.heading);
+	//	return(toc.heading.substr(0,3) + '.');
+	//}
 };
 TOCBuilder.prototype.toJSON = function() {
 	return(this.toc.toJSON());
@@ -482,8 +484,8 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 			for (var i=0; i<words.length; i++) {
 				var word2 = words[i];
 				//var word1 = word2.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]+$/g, '');
-				var word1 = word2.replace(/[\u0000-\u0040\u005B-\u0060\u007B-\u00B1\u00BF\u2010-\u206F]+$/g, '');
-				var word = word1.replace(/^[\u0000-\u0040\u005B-\u0060\u007B-\u00B1\u00BF\u2010-\u206F]+/g, '');
+				var word1 = word2.replace(/[\u0000-\u0040\u005B-\u0060\u007B-\u00BF\u2010-\u206F]+$/g, '');
+				var word = word1.replace(/^[\u0000-\u0040\u005B-\u0060\u007B-\u00BF\u2010-\u206F]+/g, '');
 				//var word = word1.replace(/^[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]+/g, '');
 				//var word = words[i].replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]$/g, '');
 				if (word.length > 0 && this.chapter > 0 && this.verse > 0) { // excludes FRT, GLO and chapter introductions
@@ -529,7 +531,9 @@ ConcordanceBuilder.prototype.loadDB = function(callback) {
 	var array = [];
 	for (var i=0; i<words.length; i++) {
 		var word = words[i];
-		array.push([ word, this.refList[word].length, this.refList[word].join(','), this.refPositions[word].join(','), this.refList2[word].join(',') ]);
+		if (this.refList[word]) {
+			array.push([ word, this.refList[word].length, this.refList[word].join(','), this.refPositions[word].join(','), this.refList2[word].join(',') ]);
+		}
 	}
 	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {
@@ -663,7 +667,7 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 
 		'para.ms', 'para.ms1', 'para.mr',
 		'para.s', 'para.s1', 'para.s2', 'para.r', 'para.sp', 'para.d',
-		'row.tr', 'cell.tc1', 'cell.tc2', 'cell.tc3', 'cell.tc4', 
+		'row.tr', 'cell.tc1', 'cell.tc2', 'cell.tcr1', 'cell.tcr2', 
 		'para.li', 'para.li1',
 		'note.f', 'char.ft', 'char.fk', 'char.fr', 
 		'char.fqa', 'char.fv', 'char.fm',
@@ -1711,7 +1715,8 @@ function Canon() {
     	{ code: '3JN', name: '3 John' },
     	{ code: 'JUD', name: 'Jude' },
     	{ code: 'REV', name: 'Revelation' },
-    	{ code: 'GLO', name: 'Glossary' } ];
+    	{ code: 'GLO', name: 'Glossary' },
+    	{ code: 'BAK', name: 'Appendix' } ];
 }
 Canon.prototype.sequenceMap = function() {
 	var result = {};

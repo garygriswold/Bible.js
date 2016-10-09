@@ -114,7 +114,7 @@ WEB
 ERV-ENG
 -------
 
-	Last performed Oct 7, 2016
+	Last performed Oct 8, 2016
 	Publisher
 	XMLTokenizer - perfect
 	USXParser - perfect
@@ -128,7 +128,28 @@ ERV-ENG
 	
 	modify Versions to include ERV-ENG, but not installed.
 	RunVersions.sh
-	Upload to aws
+		Upload to aws
+	
+ENG-SPA
+-------
+
+	Last performed Oct 8, 2016
+	Publisher
+	XMLTokenizer - perfect
+	USXParser - perfect
+	HTMLValidator - perfect
+	VersesValidator - perfect
+	ConcordanceValidator - perfect
+	StyleUseValidator - perfect
+	TableOfContents - perfect
+	ValidationCleanup
+	ProductionUpload
+	
+	modify Versions to include ERV-SPA, but not installed.
+	RunVersions.sh
+		Upload to aws
+	
+	
 	
 Production
 ----------

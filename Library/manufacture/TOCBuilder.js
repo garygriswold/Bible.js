@@ -61,8 +61,10 @@ TOCBuilder.prototype.loadDB = function(callback) {
 	var len = this.size();
 	for (var i=0; i<len; i++) {
 		var toc = this.toc.bookList[i];
-		var abbrev = ensureAbbrev(toc);
+		var abbrev = (toc.abbrev) ? toc.abbrev : ' '; // ERV BAK does not have an abbrev
 		if (toc.title == null) toc.title = toc.heading; // ERV is missing toc1
+		if (toc.title == null) toc.title = toc.name; // ERV is missing 
+		if (toc.heading == null) toc.heading = toc.name;
 		if (toc.lastChapter == null) toc.lastChapter = 0; // ERV does not have chapters in FRT and GLO
 		var values = [ toc.code, toc.heading, toc.title, toc.name, abbrev, toc.lastChapter, 
 			toc.priorBook, toc.nextBook, toc.chapterRowId ];
@@ -78,11 +80,11 @@ TOCBuilder.prototype.loadDB = function(callback) {
 		}
 	});
 	
-	function ensureAbbrev(toc) {
-		if (toc.abbrev) return(toc.abbrev);
-		if (toc.heading.lenght <= 4) return(toc.heading);
-		return(toc.heading.substr(0,3) + '.');
-	}
+	//function ensureAbbrev(toc) {
+	//	if (toc.abbrev) return(toc.abbrev);
+	//	if (toc.heading && toc.heading.length <= 4) return(toc.heading);
+	//	return(toc.heading.substr(0,3) + '.');
+	//}
 };
 TOCBuilder.prototype.toJSON = function() {
 	return(this.toc.toJSON());

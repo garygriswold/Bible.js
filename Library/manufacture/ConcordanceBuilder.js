@@ -102,7 +102,9 @@ ConcordanceBuilder.prototype.loadDB = function(callback) {
 	var array = [];
 	for (var i=0; i<words.length; i++) {
 		var word = words[i];
-		array.push([ word, this.refList[word].length, this.refList[word].join(','), this.refPositions[word].join(','), this.refList2[word].join(',') ]);
+		if (this.refList[word]) {
+			array.push([ word, this.refList[word].length, this.refList[word].join(','), this.refPositions[word].join(','), this.refList2[word].join(',') ]);
+		}
 	}
 	this.adapter.load(array, function(err) {
 		if (err instanceof IOError) {

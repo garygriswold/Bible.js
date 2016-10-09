@@ -553,12 +553,12 @@ CopyrightView.prototype.createAttributionView = function() {
 		}
 	});
 	
-	var copyNode = dom.addNode(root, 'p', 'attribVers');
-	dom.addNode(copyNode, 'span', null, this.version.copyright);
-	
 	if (this.version.introduction) {
 		var intro = dom.addNode(root, 'div', 'introduction');
 		intro.innerHTML = this.version.introduction;
+	} else {
+		var copyNode = dom.addNode(root, 'div', 'introduction');
+		dom.addNode(copyNode, 'span', null, this.version.copyright);
 	}
 	
 	var webAddress = 'http://' + this.version.ownerURL + '/';
