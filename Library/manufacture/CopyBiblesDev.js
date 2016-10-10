@@ -17,15 +17,14 @@ var copyBiblesDev = function(version) {
 		copyFile(VERSION_SRC, VERSIONS_DEST);
 	} else {
 		var database = openDatabase(MASTER);
-		console.log(JSON.stringify(database));
 		selectVersion(database, filename, function(row) {
 			if (row == null) {
 				insertVersion(database, filename, function(id) {
 					insertInstalled(version, filename);
-					copyFiles(filename, id);
+					copyFile(BIBLES_SRC + filename, DATABASES + id);
 				});
 			} else {
-				copyFiles(filename, row.id);
+				copyFile(BIBLES_SRC + filename, DATABASES + row.id);
 			}
 		});
 	}
@@ -59,10 +58,6 @@ var copyBiblesDev = function(version) {
 			db.close();
 			ifErrorMessage('insertInstalled ' + version, error)
 		});
-	}
-	function copyFiles(filename, id) {
-		copyFile(BIBLES_SRC + filename, DATABASES + id);
-		copyFile(VERSION_SRC, VERSIONS_DEST);		
 	}
 	function copyFile(source, target) {
 		const fs = require('fs');

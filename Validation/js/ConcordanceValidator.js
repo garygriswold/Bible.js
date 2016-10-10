@@ -162,7 +162,7 @@ ConcordanceValidator.prototype.outputFile = function(generatedText) {
 ConcordanceValidator.prototype.compare = function(generatedText, callback) {
 	var that = this;
 	var insertStmt = this.db.prepare('INSERT INTO valPunctuation (book, chapter, verse, position, char) VALUES (?,?,?,?,?)');
-	var selectStmt = 'SELECT html FROM verses WHERE reference=?';
+	var selectStmt = 'SELECT html FROM verses WHERE reference=?'; // BUG: this will skip a verse if absent from concordance.
 	iterateEach(0);
 
 	function iterateEach(index) {

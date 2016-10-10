@@ -8,8 +8,8 @@ function ConcordanceBuilder(adapter, pubVersion) {
 	this.adapter = adapter;
 	this.silCode = pubVersion.silCode;
 	this.bookCode = '';
-	this.chapter = 0;
-	this.verse = 0;
+	this.chapter = '0';
+	this.verse = '0';
 	this.position = 0;
 	this.refList = {};
 	this.refList.constructor = undefined;
@@ -21,8 +21,8 @@ function ConcordanceBuilder(adapter, pubVersion) {
 }
 ConcordanceBuilder.prototype.readBook = function(usxRoot) {
 	this.bookCode = '';
-	this.chapter = 0;
-	this.verse = 0;
+	this.chapter = '0';
+	this.verse = '0';
 	this.position = 0;
 	this.readRecursively(usxRoot);
 };
@@ -30,13 +30,13 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 	switch(node.tagName) {
 		case 'book':
 			this.bookCode = node.code;
-			this.chapter = 0;
-			this.verse = 0;
+			this.chapter = '0';
+			this.verse = '0';
 			this.position = 0;
 			break;
 		case 'chapter':
 			this.chapter = node.number;
-			this.verse = 0;
+			this.verse = '0';
 			this.position = 0;
 			break;
 		case 'verse':
@@ -59,7 +59,7 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 				var word = word1.replace(/^[\u0000-\u0040\u005B-\u0060\u007B-\u00BF\u2010-\u206F]+/g, '');
 				//var word = word1.replace(/^[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]+/g, '');
 				//var word = words[i].replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~\s0-9]$/g, '');
-				if (word.length > 0 && this.chapter > 0 && this.verse > 0) { // excludes FRT, GLO and chapter introductions
+				if (word.length > 0 && this.chapter !== '0' && this.verse !== '0') { // excludes FRT, GLO and chapter introductions
 					var reference = this.bookCode + ':' + this.chapter + ':' + this.verse;
 					this.position++;
 					this.addEntry(word.toLocaleLowerCase(), reference, this.position);
