@@ -16,3 +16,5 @@ console.log('should be book:chapter ', test4);
 var test5 = new Reference('GEN');
 console.log('should be book ', test5);
 
+var test6 = new Reference('ROM', '3', '25-26');
+console.log('should be complete ROM:3:25-26', test6);
