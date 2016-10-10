@@ -313,13 +313,11 @@ p.li, p.li1 {
 /* footnote references */
 span.topf, span.topx {
 	text-align: start;
-	color: #FFB4B5; /* non-std */
+	color: #FFB4B5;/* non-std */
 }
 /* line 991, footnotes */
 span.f, span.ft {
 	text-indent: start;
-	color: #555555; /* non-std */
-	background-color: #FFFFB4; /* non-std */
 	/* font-style: italic; */
 }
 /* line 1012, Footnote - Keyword i.e. word that footnote explains */
@@ -327,15 +325,11 @@ span.fk {
   font-weight: bold;
   font-style: italic;
   text-align: start;
-  color: #555555; /* non std */
-  background-color: #FFFFB4; /* non std */
 }
 /* line 1025, footnote alternate translation */
 span.fqa {
 	text-align: start;
 	font-style: italic;
-	color: #999999 ; /* non-std */
-	background-color: #FFFFB4; /* non-std */
 }
 /* line 1043, verse number embedded in footnote */
 span.fv {
@@ -353,8 +347,6 @@ span.fm {
 /* line 1062, cross references */
 span.x, span.xt {
 	text-align: start;
-	color: #555555; /* non-std */
-	background-color: #CEE7FF; /* non-std */
 }
 /* line 1118, Name of Diety */
 span.nd {
@@ -420,8 +412,6 @@ p.pb {
 span.w {
   text-align: start;
   font-weight: bold; /* non std */
-  color: #555555; /* non std */
-  background-color: #FFFFB4; /* non std */
 }
 /* line 1274, Peripherals - Content Division Marker */
 p.periph {

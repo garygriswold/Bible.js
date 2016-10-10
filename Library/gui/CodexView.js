@@ -162,6 +162,12 @@ CodexView.prototype.scrollTo = function(nodeId) {
 * and adding it as a text node.
 */
 CodexView.prototype.showFootnote = function(node) {
+	var handChar = node.innerText.trim();
+	if (handChar === '\u261C' || handChar === '\u261E') {
+		node.setAttribute('style', 'color: #555555; background-color: #FFFFB4;');
+	} else {
+		node.setAttribute('style', 'color: #555555; background-color: #CEE7FF;');
+	}
 	for (var i=0; i<node.children.length; i++) {
 		node.children[i].setAttribute('style', 'display:inline');
 	}
@@ -171,6 +177,7 @@ CodexView.prototype.showFootnote = function(node) {
 * except the one that displays the link.
 */
 CodexView.prototype.hideFootnote = function(node) {
+	node.setAttribute('style', 'color: ##FFB4B5; background-color: #FFFFFF;');
 	for (var i=0; i<node.children.length; i++) {
 		node.children[i].setAttribute('style', 'display:none');
 	}
