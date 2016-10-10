@@ -56,35 +56,35 @@ p.iot {
   text-align: center;
   margin-bottom: 4pt;
   margin-top: 8pt;
-  color: #555555; /* non-std */
+  color: #777777; /* non-std */
 }
 /* line 179, Introduction Outline Text Level 1 */
 p.io, p.io1 {
 	text-align: start;
 	margin-left: 1.0rem; /* std 0.5in */
 	margin-right: 0;
-	color: #555555; /* non-std */
+	color: #777777; /* non-std */
 }
 /* line 191, Introduction Outline Text Level 2 */
 p.io2 {
 	text-align: start;
 	margin-left: 2.0rem; /* std 0.75in */
 	margin-right: 0;
-	color: #555555; /* non-std */
+	color: #777777; /* non-std */
 }
 /* line 214, Introduction Prose Paragraph (basic) */
 p.ip {
 	text-align: start;
 	text-indent: 1.0rem; /* std 0.125in */
-	color: #555555; /* non-std */
+	color: #777777; /* non-std */
 }
 /* line 225, Introduction - Indented Para - first line indent */
 p.ipi {
   text-indent: 1.0rem; /* std 0.125in */
   text-align: start;
-  margin-left: 1.0rem; /* std 0.25in */
-  margin-right: 0; /* std 0.25in */
-  color: #555555; /* non std */
+  /*margin-left: 0.25in; std */
+  /*margin-right: 0.25in; std */
+  color: #777777; /* non std */
 }
 /* line 344, Chapter Number Format */
 p.c {
