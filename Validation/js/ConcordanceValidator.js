@@ -84,7 +84,12 @@ ConcordanceValidator.prototype.normalize = function(callback) {
 					var parts = refList[j].split(';');
 					var pieces = parts[0].split(':');
 					var ordinal = that.bookMap[pieces[0]];
-					array.push({book:pieces[0], ordinal:ordinal, chapter:pieces[1], verse:pieces[2], position:parts[1], word:row.word });
+					var verseSeq = pieces[2];
+					var verseDash = verseSeq.indexOf('-');
+					if (verseDash > 0) {
+						verseSeq = verseSeq.substr(0, verseDash);
+					}
+					array.push({book:pieces[0], ordinal:ordinal, chapter:pieces[1], verse:pieces[2], verseSeq:verseSeq, position:parts[1], word:row.word });
 				}
 			}
 			console.log(array.length, 'Normalized Concordance Records');
@@ -123,7 +128,7 @@ ConcordanceValidator.prototype.generate = function(concordance) {
 		if (bookDiff !== 0) return(bookDiff);
 		var chapDiff = a.chapter - b.chapter;
 		if (chapDiff !== 0) return(chapDiff);
-		var versDiff = a.verse - b.verse;
+		var versDiff = a.verseSeq - b.verseSeq;
 		if (versDiff !== 0) return(versDiff);
 		return(a.position - b.position);
 	});
