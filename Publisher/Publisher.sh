@@ -46,3 +46,5 @@ cat ../Library/io/VersionsReadAdapter.js >> Publisher.js
 cat ../Library/util/LocalizeNumber.js >> Publisher.js
 cat ../Library/manufacture/AssetController.js >> Publisher.js
 node Publisher.js $*
+
+node ../Library/manufacture/CopyBiblesDev.js $*

@@ -13,18 +13,22 @@ const VERSIONS_DEST = DATABASES + "9";
 
 var copyBiblesDev = function(version) {
 	var filename = version + '.db';
-	var database = openDatabase(MASTER);
-	console.log(JSON.stringify(database));
-	selectVersion(database, filename, function(row) {
-		if (row == null) {
-			insertVersion(database, filename, function(id) {
-				insertInstalled(version, filename);
-				copyFiles(filename, id);
-			});
-		} else {
-			copyFiles(filename, row.id);
-		}
-	});
+	if (version.toLowerCase() === 'versions') {
+		copyFile(VERSION_SRC, VERSIONS_DEST);
+	} else {
+		var database = openDatabase(MASTER);
+		console.log(JSON.stringify(database));
+		selectVersion(database, filename, function(row) {
+			if (row == null) {
+				insertVersion(database, filename, function(id) {
+					insertInstalled(version, filename);
+					copyFiles(filename, id);
+				});
+			} else {
+				copyFiles(filename, row.id);
+			}
+		});
+	}
 
 	function openDatabase(filename) {
 		const sqlite3 = require('sqlite3').verbose();
