@@ -74,15 +74,15 @@ ERV-ENG
 	USXParser - perfect
 	HTMLValidator - perfect
 	VersesValidator - perfect
-ConcordanceValidator - failed
-StyleUseValidator - perfect
-TableOfContents - perfect
-ValidationCleanup
-ProductionUpload
+	ConcordanceValidator - perfect
+	StyleUseValidator - perfect
+	TableOfContents - perfect
+	ValidationCleanup
+	ProductionUpload
 	
-modify Versions to include ERV-ENG, but not installed.
-RunVersions.sh
-Upload to aws
+	modify Versions to include ERV-ENG, but not installed.
+	RunVersions.sh
+	Upload to aws
 	
 ENG-SPA
 -------
@@ -94,14 +94,14 @@ ENG-SPA
 	HTMLValidator - perfect
 	VersesValidator - perfect
 	ConcordanceValidator - perfect
-StyleUseValidator - perfect
-TableOfContents - perfect
-ValidationCleanup
-ProductionUpload
+	StyleUseValidator - perfect
+	TableOfContents - perfect
+	ValidationCleanup
+	ProductionUpload
 	
-modify Versions to include ERV-SPA, but not installed.
-RunVersions.sh
-Upload to aws
+	modify Versions to include ERV-SPA, but not installed.
+	RunVersions.sh
+	Upload to aws
 	
 	
 	

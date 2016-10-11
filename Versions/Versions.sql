@@ -32,6 +32,7 @@ INSERT INTO Language VALUES ('arb', 'ar', 'rtl', 'Arabic', 'العربية');
 INSERT INTO Language VALUES ('cnm', 'zh', 'ltr', 'Chinese', '汉语, 漢語');
 INSERT INTO Language VALUES ('eng', 'en', 'ltr', 'English', 'English');
 INSERT INTO Language VALUES ('pes', 'fa', 'rtl', 'Persian', 'فارسی');
+INSERT INTO Language VALUES ('por', 'pt', 'ltr', 'Portuguese', 'Português');
 INSERT INTO Language VALUES ('spa', 'es', 'ltr', 'Spanish', 'Español');
 -- Wycliffe Languages
 INSERT INTO Language VALUES ('azg', 'es', 'ltr', 'Amuzgo, San Pedro Amuzgos', 'Amuzgo, San Pedro Amuzgos');
@@ -88,6 +89,8 @@ INSERT INTO Version VALUES ('WEB', 'eng', 'EBIBLE', 'WEB', 'World English Bible'
 -- Spanish
 INSERT INTO Version VALUES ('ERV-SPA', 'spa', 'BLI', 'ERV-SPA', 'La Biblia: La Palabra de Dios para todos', 'BIBLE', 'ERV-SPA.db', 'T', 'F', '2016-10-08',
 'La Biblia: La Palabra de Dios para todos (PDT) © 2005, 2015 Bible League International', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-POR', 'por', 'BLI', 'ERV-POR', 'Novo Testamento: Versão Fácil de Ler', 'BIBLE_NT', 'ERV-POR.db', 'T', 'F', '2016-10-10',
+'Novo Testamento: Versão Fácil de Ler (VFL) © 1999, 2014 Bible League International', NULL, NULL);
 -- INSERT INTO Version VALUES ('RVR09PD', 'spa', 'EBIBLE', 'RVR1909', 'Santa Biblia — Reina Valera 1909', 'BIBLE', 'RVR09PD.db', 'T', 'F', '2016-09-06',
 -- 'Santa Biblia — Reina Valera 1909 (RVR1909), Public Domain, eBible.org', NULL, NULL);
 -- INSERT INTO Version VALUES ('BLP', 'spa', 'SPN', 'BLP', 'La Palabra (versión española)', 'BIBLE', 'BLP.db', 'T', 'F', '2016-09-06',
@@ -119,6 +122,7 @@ INSERT INTO CountryVersion VALUES ('WORLD', 'ARBVDPD');
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'CUVTPD');
 INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-ENG');
 INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-SPA');
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-POR');
 INSERT INTO CountryVersion VALUES ('WORLD', 'KJVPD');
 INSERT INTO CountryVersion VALUES ('WORLD', 'NMV');
 INSERT INTO CountryVersion VALUES ('WORLD', 'WEB');

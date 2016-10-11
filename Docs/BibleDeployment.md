@@ -16,6 +16,8 @@ The Bible in USFM format should be put into the directory 0othersources.  ParaTe
 	Create Version folder under DBL/1original
 	Create USX_1 folder under DBL/1original/version
 	Tools -> Advanced -> Export Project to USX
+	Select correct USX_1 directory
+	Click Export Button
 
 Directory: ShortSands/BibleApp/Publisher
 
