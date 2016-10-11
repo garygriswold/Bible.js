@@ -3,7 +3,6 @@
 */
 var fs = require("fs");
 var WEB_BIBLE_PATH = "../../DBL/2current/";
-var OUT_BIBLE_PATH = "output/xml/";
 
 function XMLSerializer(spaceOption) {
 	this.result = [];
@@ -53,17 +52,17 @@ XMLSerializer.prototype.close = function() {
 	return(this.result.join(''));
 };
 
-function testOne(fullPath, files, index, spaceOption, callback) {
+function testOne(fullPath, outPath, files, index, spaceOption, callback) {
 	if (index >= files.length) {
 		callback();
 	} else {
 		var file = files[index];
-		symmetricTest(fullPath, file, spaceOption, function() {
-			testOne(fullPath, files, index + 1, spaceOption, callback);			
+		symmetricTest(fullPath, outPath, file, spaceOption, function() {
+			testOne(fullPath, outPath, files, index + 1, spaceOption, callback);			
 		});
 	}
 }
-function symmetricTest(fullPath, filename, spaceOption, callback) {
+function symmetricTest(fullPath, outPath, filename, spaceOption, callback) {
 	if (filename.substr(0, 1) === '.') {
 		callback();
 	} else {
@@ -84,7 +83,7 @@ function symmetricTest(fullPath, filename, spaceOption, callback) {
 				count++;
 			};
 			var result = writer.close();
-			var outFile = OUT_BIBLE_PATH + filename;
+			var outFile = outPath + '/' + filename;
 			fs.writeFile(outFile, result, { encoding: 'utf8'}, function(err) {
 				if (err) {
 					console.log('WRITE ERROR', JSON.stringify(err));
@@ -118,14 +117,14 @@ if (process.argv.length > 3) {
 		process.exit(1);
 	}
 }
-fs.lstat(OUT_BIBLE_PATH, function(err, stat) {
-	if (err) {
-		fs.mkdirSync(OUT_BIBLE_PATH);
-	}
+
+const outPath = 'output/' + process.argv[2] + '/xml';
+ensureDirectory(outPath, function() {
 	var fullPath = WEB_BIBLE_PATH + process.argv[2] + '/USX_1/';
 	var files = fs.readdirSync(fullPath);
-	testOne(fullPath, files, 0, spaceOption, function() {
+	testOne(fullPath, outPath, files, 0, spaceOption, function() {
 		console.log('XMLTokenizerTest DONE');
 	});
 });
+
 
