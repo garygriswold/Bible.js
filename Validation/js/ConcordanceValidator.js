@@ -25,7 +25,7 @@ ConcordanceValidator.prototype.open = function(callback) {
 		if (err) that.fatalError(err, 'openDatabase');
 		//that.db.on('trace', function(sql) { console.log('DO ', sql); });
 		//that.db.on('profile', function(sql, ms) { console.log(ms, 'DONE', sql); });
-		callback();
+		callback(that.db);
 	});
 };
 
@@ -39,10 +39,7 @@ ConcordanceValidator.prototype.normalize = function(callback) {
 			that.outputFile(generatedText);
 			that.compare(generatedText, function(err) {
 				if (err) that.fatalError(err, 'compare');
-				that.summary(function(err) {
-					if (err) that.fatalError(err, 'summary');
-					callback();
-				});
+				callback();
 			});
 		});	
 	});
@@ -67,6 +64,7 @@ ConcordanceValidator.prototype.normalize = function(callback) {
 			' chapter int not null,' +
 			' verse int not null,' +
 			' position int not null,' +
+			' charCode int not null,' +
 			' char text not null)';
 		console.log('create valPunct');
 		that.db.run(createValPunctuation, [], function(err) { if (err) callback(err); });
@@ -158,7 +156,6 @@ ConcordanceValidator.prototype.outputFile = function(generatedText) {
 	var output = [];
 	for (var i=0; i<generatedText.length; i++) {
 		var row = generatedText[i];
-		//console.log(row.book, row.chapter, row.verse, row.text);
 		output.push([row.book, row.chapter, row.verse, row.text].join(':'));
 	}
 	this.fs.writeFile('output/' + this.version + '/generated.txt', output.join('\n'), { encoding: 'utf8'}, function(err) {
@@ -167,8 +164,8 @@ ConcordanceValidator.prototype.outputFile = function(generatedText) {
 };
 ConcordanceValidator.prototype.compare = function(generatedText, callback) {
 	var that = this;
-	var insertStmt = this.db.prepare('INSERT INTO valPunctuation (book, chapter, verse, position, char) VALUES (?,?,?,?,?)');
 	var selectStmt = 'SELECT html FROM verses WHERE reference=?'; // BUG: this will skip a verse if absent from concordance.
+	var insertStmt = that.db.prepare('INSERT INTO valPunctuation (book, chapter, verse, position, charCode, char) VALUES (?,?,?,?,?,?)');
 	iterateEach(0);
 
 	function iterateEach(index) {
@@ -177,7 +174,6 @@ ConcordanceValidator.prototype.compare = function(generatedText, callback) {
 			var reference = line.book + ':' + line.chapter + ':' + line.verse;
 			that.db.get(selectStmt, reference, function(err, row) {
 				if (err) callback(err);
-				//console.log(line.book, line.chapter, line.verse, row.html);
 				compareOne(line.book, line.chapter, line.verse, line.text, ((row) ? row.html : ''));
 				iterateEach(index + 1);
 			});
@@ -193,16 +189,12 @@ ConcordanceValidator.prototype.compare = function(generatedText, callback) {
 	* it is a serious and unexpected.
 	*/
 	function compareOne(book, chapter, verse, generated, original) {
-		//console.log('compare', book, chapter, verse);
 		var gi = 0;
 		for (var oi=0; oi < original.length; oi++) {
 			if (generated.charAt(gi) === original.charAt(oi).toLowerCase()) {
 				gi++;
-			} else if (generated.charAt(gi) === ' ') {
-				gi++;
-				oi--;
-			} else {
-				insertStmt.run(book, chapter, verse, oi, original.charAt(oi), function(err) { if (err) callback(err); });
+			} else if (original.charCodeAt(oi) !== 32) {
+				insertStmt.run(book, chapter, verse, oi, original.charCodeAt(oi), original.charAt(oi), function(err) { if (err) that.fatalError(err, 'compareOne'); });
 			}
 		}
 	}
@@ -222,12 +214,6 @@ ConcordanceValidator.prototype.fatalError = function(err, source) {
 	console.log('FATAL ERROR ', err, ' AT ', source);
 	process.exit(1);
 };
-ConcordanceValidator.prototype.completed = function() {
-	console.log('COMPLETED');
-	this.db.close();
-	process.exit(0);
-};
-
 
 var DB_PATH = '../../DBL/3prepared/';
 	
@@ -239,9 +225,15 @@ if (process.argv.length < 3) {
 	var filename = DB_PATH + process.argv[2] + '.db';
 	console.log('Process ' + filename);
 	var val = new ConcordanceValidator(process.argv[2], filename);
-	val.open(function() {
+	val.open(function(db) {
 		val.normalize(function() {
-			val.completed();
+			db.close(function() {
+				val.open(function(db) {
+					val.summary(function() {
+						db.close();
+					});
+				});
+			});
 		});
 	});
 }
