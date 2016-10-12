@@ -1,5 +1,5 @@
 
-
+var fs = require('fs');
 var ensureDirectory = function(fullpath, callback) {
 	var path = fullpath.split('/');
 	var dir = path.shift();
@@ -8,6 +8,7 @@ var ensureDirectory = function(fullpath, callback) {
 	function ensureDirPart(dir, path) {
 		fs.lstat(dir, function(err, stat) {
 			if (err) {
+				console.log('mkdir', dir);
 				fs.mkdirSync(dir);
 			}
 			var next = path.shift();
