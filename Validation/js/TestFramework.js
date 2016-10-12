@@ -8,11 +8,14 @@
 
 const programs = ['XMLTokenizerTest', 'USXParserTest', 'HTMLValidator', 'StyleUseValidator', 'VersesValidator', 'TableContentsValidator', 
 				'ConcordanceValidator', 'ValidationCleanup'];
-const versions = ['ERV-POR'];
+var versions = ['ERV-POR'];
 
 const fs = require('fs')
 const child = require('child_process');
 
+if (process.argv[2] !== 'ALL') {
+	versions = [process.argv[2]];
+}
 executeNext(-1, 0);
 
 function executeNext(programIndex, versionIndex) {
