@@ -6,7 +6,8 @@
 * it stops and reports the difference.  Otherwise, it prints the 
 */
 
-const programs = ['XMLTokenizerTest', 'USXParserTest'];
+const programs = ['XMLTokenizerTest', 'USXParserTest', 'HTMLValidator', 'StyleUseValidator', 'VersesValidator', 'TableContentsValidator', 
+				'ConcordanceValidator', 'ValidationCleanup'];
 const versions = ['ERV-POR'];
 
 const fs = require('fs')

@@ -9,7 +9,8 @@
 * a frequency table is produced of how many times each punctuation character is used.  It must be
 * manually verified that each of these is a punctuation character in that language.
 */
-function ConcordanceValidator(versionPath) {
+function ConcordanceValidator(version, versionPath) {
+	this.version = version;
 	this.versionPath = versionPath;
 	this.fs = require('fs');
 	this.db = null;
@@ -160,7 +161,7 @@ ConcordanceValidator.prototype.outputFile = function(generatedText) {
 		//console.log(row.book, row.chapter, row.verse, row.text);
 		output.push([row.book, row.chapter, row.verse, row.text].join(':'));
 	}
-	this.fs.writeFile('output/generated.txt', output.join('\n'), { encoding: 'utf8'}, function(err) {
+	this.fs.writeFile('output/' + this.version + '/generated.txt', output.join('\n'), { encoding: 'utf8'}, function(err) {
 		if (err) fatalError(err, 'write generated');
 	});
 };
@@ -237,7 +238,7 @@ if (process.argv.length < 3) {
 	var fs = require('fs');
 	var filename = DB_PATH + process.argv[2] + '.db';
 	console.log('Process ' + filename);
-	var val = new ConcordanceValidator(filename);
+	var val = new ConcordanceValidator(process.argv[2], filename);
 	val.open(function() {
 		val.normalize(function() {
 			val.completed();

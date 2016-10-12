@@ -6,7 +6,6 @@
 var fs = require("fs");
 //var os = require("os");
 var HTML_BIBLE_PATH = "../../DBL/3prepared/";
-var OUT_BIBLE_PATH = "output/html/";
 var USX_BIBLE_PATH = "../../DBL/2current/";
 var EOL = '\r\n';
 var END_EMPTY = ' />';
@@ -27,7 +26,7 @@ HTMLValidator.prototype.open = function(callback) {
 		callback();
 	});
 };
-HTMLValidator.prototype.validateBook = function(index, books, callback) {
+HTMLValidator.prototype.validateBook = function(outPath, index, books, callback) {
 	var that = this;
 	if (index >= books.length) {
 		callback();
@@ -43,8 +42,8 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 				chapters.push(node);
 			}
 			var usx = convertHTML2USX(chapters);
-			compareUSXFile(book, usx, function() {
-				that.validateBook(index + 1, books, callback);
+			compareUSXFile(book, outPath, usx, function() {
+				that.validateBook(outPath, index + 1, books, callback);
 			});
 		});
 	}
@@ -220,9 +219,10 @@ HTMLValidator.prototype.validateBook = function(index, books, callback) {
 	}
 	
 	
-	function compareUSXFile(book, data, callback) {
+	function compareUSXFile(book, outPath, data, callback) {
 		var inFile = USX_BIBLE_PATH + that.version + '/USX_1/' + book + '.usx';
-		var outFile = OUT_BIBLE_PATH + book + '.usx';
+		//var outFile = OUT_BIBLE_PATH + book + '.usx';
+		var outFile = outPath + '/' + book + '.usx';
 		fs.writeFile(outFile, data, { encoding: 'utf8'}, function(err) {
 			if (err) {
 				//console.log('WRITE ERROR', JSON.stringify(err));
@@ -400,15 +400,14 @@ if (process.argv.length < 3) {
 	console.log('Usage: HTMLValidator.sh  version');
 	process.exit(1);
 }
-fs.lstat(OUT_BIBLE_PATH, function(err, stat) {
-	if (err) {
-		fs.mkdirSync(OUT_BIBLE_PATH);
-	}
+
+const outPath = 'output/' + process.argv[2] + '/html';
+ensureDirectory(outPath, function() {
 	var version = process.argv[2];
 	var htmlValidator = new HTMLValidator(version);
 	htmlValidator.open(function() {
 		var canon = new Canon();
-		htmlValidator.validateBook(0, canon.books, function() {
+		htmlValidator.validateBook(outPath, 0, canon.books, function() {
 			htmlValidator.completed();
 			console.log('HTMLValidator DONE');
 		});

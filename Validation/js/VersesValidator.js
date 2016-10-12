@@ -7,7 +7,8 @@
 * line comparison using diff.  
 * In order to be able to do line by line comparison it outputs each verse as a line.
 */
-function VersesValidator(versionPath) {
+function VersesValidator(version, versionPath) {
+	this.version = version;
 	this.versionPath = versionPath;
 	this.fs = require('fs');
 	this.db = null;
@@ -39,7 +40,7 @@ VersesValidator.prototype.generateChaptersFile = function(callback) {
 				var row = results[i];
 				parseChapter(row.reference, row.html);
 			}
-			that.fs.writeFileSync('output/chapters.txt', bible.join(''), "utf8");
+			that.fs.writeFileSync('output/' + that.version + '/chapters.txt', bible.join(''), "utf8");
 		}
 	});
 	
@@ -150,7 +151,7 @@ if (process.argv.length < 3) {
 } else {
 	var dbFilename = DB_PATH + process.argv[2] + '.db';
 	console.log('Process ' + dbFilename);
-	var val = new VersesValidator(dbFilename);
+	var val = new VersesValidator(process.argv[2], dbFilename);
 	val.open(function() {
 		val.generateChaptersFile(function() {
 			val.completed();

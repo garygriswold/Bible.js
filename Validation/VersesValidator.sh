@@ -11,7 +11,7 @@ DB_PATH=../../DBL/3prepared/${VERSION}.db;
 echo ${DB_PATH}
 
 sqlite3 ${DB_PATH} <<END_SQL
-.output output/verses.txt
+.output output/$1/verses.txt
 select reference, html from verses;
 END_SQL
 
@@ -22,5 +22,5 @@ cat js/VersesValidator.js >> temp.js
 
 node temp.js $1
 
-diff output/chapters.txt output/verses.txt
+diff output/$1/chapters.txt output/$1/verses.txt
 
