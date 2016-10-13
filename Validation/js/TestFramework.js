@@ -8,7 +8,7 @@
 
 const programs = ['XMLTokenizerTest', 'USXParserTest', 'HTMLValidator', 'StyleUseValidator', 'VersesValidator', 'TableContentsValidator', 
 				'ConcordanceValidator', 'ValidationCleanup'];
-var versions = ['ERV-POR', 'ERV-CMN', 'ERV-IND', 'ERV-THA', 'ERV-VIE'];
+var versions = ['ERV-CMN', 'ERV-IND', 'ERV-POR', 'ERV-SPA', 'ERV-THA', 'ERV-VIE'];
 
 const fs = require('fs')
 const child = require('child_process');
@@ -34,7 +34,8 @@ function executeOne(programIndex, versionIndex) {
 	var program = programs[programIndex];
 	var command = './' + program + '.sh ' + version;
 	console.log(command);
-	child.exec(command, function(error, stdout, stderr) {
+	var options = {maxBuffer:1024*1024}; // process killed with no error code if buffer size exceeded
+	child.exec(command, options, function(error, stdout, stderr) {
 		if (error) {
 			errorMessage(command, error);
 		}
