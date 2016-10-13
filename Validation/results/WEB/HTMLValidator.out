@@ -1,0 +1,545 @@
+TEST-STDERR: 
+TEST-STDOUT: doing  { code: 'FRT', name: 'Preface' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/FRT.usx output/WEB/html/FRT.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/WEB/USX_1/FRT.usx: No such file or directory
+
+doing  { code: 'GEN', name: 'Genesis' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/GEN.usx output/WEB/html/GEN.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'EXO', name: 'Exodus' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/EXO.usx output/WEB/html/EXO.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'LEV', name: 'Leviticus' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/LEV.usx output/WEB/html/LEV.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'NUM', name: 'Numbers' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/NUM.usx output/WEB/html/NUM.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'DEU', name: 'Deuteronomy' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/DEU.usx output/WEB/html/DEU.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'JOS', name: 'Joshua' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/JOS.usx output/WEB/html/JOS.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'JDG', name: 'Judges' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/JDG.usx output/WEB/html/JDG.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'RUT', name: 'Ruth' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/RUT.usx output/WEB/html/RUT.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '1SA', name: '1 Samuel' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/1SA.usx output/WEB/html/1SA.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '2SA', name: '2 Samuel' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/2SA.usx output/WEB/html/2SA.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '1KI', name: '1 Kings' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/1KI.usx output/WEB/html/1KI.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '2KI', name: '2 Kings' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/2KI.usx output/WEB/html/2KI.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '1CH', name: '1 Chronicles' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/1CH.usx output/WEB/html/1CH.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '2CH', name: '2 Chronicles' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/2CH.usx output/WEB/html/2CH.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'EZR', name: 'Ezra' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/EZR.usx output/WEB/html/EZR.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'NEH', name: 'Nehemiah' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/NEH.usx output/WEB/html/NEH.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'EST', name: 'Esther' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/EST.usx output/WEB/html/EST.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'JOB', name: 'Job' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/JOB.usx output/WEB/html/JOB.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'PSA', name: 'Psalms' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/PSA.usx output/WEB/html/PSA.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'PRO', name: 'Proverbs' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/PRO.usx output/WEB/html/PRO.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'ECC', name: 'Ecclesiastes' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/ECC.usx output/WEB/html/ECC.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'SNG', name: 'Song of Solomon' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/SNG.usx output/WEB/html/SNG.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'ISA', name: 'Isaiah' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/ISA.usx output/WEB/html/ISA.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'JER', name: 'Jeremiah' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/JER.usx output/WEB/html/JER.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'LAM', name: 'Lamentations' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/LAM.usx output/WEB/html/LAM.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'EZK', name: 'Ezekiel' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/EZK.usx output/WEB/html/EZK.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'DAN', name: 'Daniel' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/DAN.usx output/WEB/html/DAN.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'HOS', name: 'Hosea' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/HOS.usx output/WEB/html/HOS.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'JOL', name: 'Joel' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/JOL.usx output/WEB/html/JOL.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'AMO', name: 'Amos' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/AMO.usx output/WEB/html/AMO.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'OBA', name: 'Obadiah' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/OBA.usx output/WEB/html/OBA.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'JON', name: 'Jonah' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/JON.usx output/WEB/html/JON.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'MIC', name: 'Micah' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/MIC.usx output/WEB/html/MIC.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'NAM', name: 'Nahum' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/NAM.usx output/WEB/html/NAM.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'HAB', name: 'Habakkuk' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/HAB.usx output/WEB/html/HAB.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'ZEP', name: 'Zephaniah' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/ZEP.usx output/WEB/html/ZEP.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'HAG', name: 'Haggai' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/HAG.usx output/WEB/html/HAG.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'ZEC', name: 'Zechariah' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/ZEC.usx output/WEB/html/ZEC.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'MAL', name: 'Malachi' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/MAL.usx output/WEB/html/MAL.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'MAT', name: 'Matthew' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/MAT.usx output/WEB/html/MAT.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'MRK', name: 'Mark' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/MRK.usx output/WEB/html/MRK.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'LUK', name: 'Luke' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/LUK.usx output/WEB/html/LUK.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'JHN', name: 'John' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/JHN.usx output/WEB/html/JHN.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'ACT', name: 'Acts' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/ACT.usx output/WEB/html/ACT.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'ROM', name: 'Romans' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/ROM.usx output/WEB/html/ROM.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '1CO', name: '1 Corinthians' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/1CO.usx output/WEB/html/1CO.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '2CO', name: '2 Corinthians' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/2CO.usx output/WEB/html/2CO.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'GAL', name: 'Galatians' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/GAL.usx output/WEB/html/GAL.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'EPH', name: 'Ephesians' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/EPH.usx output/WEB/html/EPH.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'PHP', name: 'Philippians' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/PHP.usx output/WEB/html/PHP.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'COL', name: 'Colossians' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/COL.usx output/WEB/html/COL.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '1TH', name: '1 Thessalonians' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/1TH.usx output/WEB/html/1TH.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '2TH', name: '2 Thessalonians' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/2TH.usx output/WEB/html/2TH.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '1TI', name: '1 Timothy' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/1TI.usx output/WEB/html/1TI.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '2TI', name: '2 Timothy' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/2TI.usx output/WEB/html/2TI.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'TIT', name: 'Titus' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/TIT.usx output/WEB/html/TIT.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'PHM', name: 'Philemon' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/PHM.usx output/WEB/html/PHM.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'HEB', name: 'Hebrews' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/HEB.usx output/WEB/html/HEB.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'JAS', name: 'James' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/JAS.usx output/WEB/html/JAS.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '1PE', name: '1 Peter' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/1PE.usx output/WEB/html/1PE.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '2PE', name: '2 Peter' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/2PE.usx output/WEB/html/2PE.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '1JN', name: '1 John' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/1JN.usx output/WEB/html/1JN.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '2JN', name: '2 John' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/2JN.usx output/WEB/html/2JN.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: '3JN', name: '3 John' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/3JN.usx output/WEB/html/3JN.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'JUD', name: 'Jude' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/JUD.usx output/WEB/html/JUD.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'REV', name: 'Revelation' }
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/REV.usx output/WEB/html/REV.usx"}
+STDOUT 2c2
+< <usx version="2.5">
+---
+> <usx version="2.0">
+
+STDERR 
+doing  { code: 'GLO', name: 'Glossary' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/GLO.usx output/WEB/html/GLO.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/WEB/USX_1/GLO.usx: No such file or directory
+
+doing  { code: 'BAK', name: 'Appendix' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/WEB/USX_1/BAK.usx output/WEB/html/BAK.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/WEB/USX_1/BAK.usx: No such file or directory
+
+HTMLValidator COMPLETED
