@@ -428,7 +428,7 @@ TOCBuilder.prototype.toJSON = function() {
 */
 function ConcordanceBuilder(adapter, pubVersion) {
 	this.adapter = adapter;
-	this.silCode = pubVersion.silCode;
+	this.langCode = pubVersion.langCode;
 	this.bookCode = '';
 	this.chapter = '0';
 	this.verse = '0';
@@ -469,7 +469,7 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 			break; // Do not index notes
 		case 'text':
 			var words = null;
-			if (this.silCode === 'cnm') {
+			if (this.langCode === 'zh') {
 				words = node.text.split('');
 			} else {
 				words = node.text.split(/[\s\-\u2010-\u2015\u2043\u058A]+/);
@@ -1967,6 +1967,7 @@ function DOMText(text) {
 */
 function PubVersion(row) {
 	this.silCode = row.silCode;
+	this.langCode = row.langCode;
 	this.direction = row.direction;
 	Object.freeze(this);
 }/**
@@ -2545,7 +2546,7 @@ function VersionsReadAdapter() {
 	Object.freeze(this);
 }
 VersionsReadAdapter.prototype.readVersion = function(versionCode, callback) {
-	var statement = 'SELECT l.silCode, l.direction FROM language l JOIN version v ON v.silCode=l.silCode WHERE versionCode=?';
+	var statement = 'SELECT l.silCode, l.langCode, l.direction FROM language l JOIN version v ON v.silCode=l.silCode WHERE versionCode=?';
 	this.database.get(statement, [versionCode], function(err, row) {
 		if (err) {
 			console.log('SELECT ERROR IN VERSION', JSON.stringify(err));

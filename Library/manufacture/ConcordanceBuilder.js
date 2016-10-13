@@ -6,7 +6,7 @@
 */
 function ConcordanceBuilder(adapter, pubVersion) {
 	this.adapter = adapter;
-	this.silCode = pubVersion.silCode;
+	this.langCode = pubVersion.langCode;
 	this.bookCode = '';
 	this.chapter = '0';
 	this.verse = '0';
@@ -47,7 +47,7 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 			break; // Do not index notes
 		case 'text':
 			var words = null;
-			if (this.silCode === 'cnm') {
+			if (this.langCode === 'zh') {
 				words = node.text.split('');
 			} else {
 				words = node.text.split(/[\s\-\u2010-\u2015\u2043\u058A]+/);

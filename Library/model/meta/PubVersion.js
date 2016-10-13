@@ -4,6 +4,7 @@
 */
 function PubVersion(row) {
 	this.silCode = row.silCode;
+	this.langCode = row.langCode;
 	this.direction = row.direction;
 	Object.freeze(this);
 }
