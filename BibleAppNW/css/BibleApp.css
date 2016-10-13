@@ -289,6 +289,11 @@ table.usx {
 tr.usx {
   width: 100%;
 }
+/* line 792, Table - Column 1 Heading */
+td.th1, td.th2, td.th3, td.th4, td.th5 {
+	font-style: italic;
+	text-align: start;
+}
 /* line 821, Table - Cell */
 td.tc1, td.tc2, td.tc3, td.tc4, td.tc5 {
   text-align: start;

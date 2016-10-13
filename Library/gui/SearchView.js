@@ -91,7 +91,8 @@ SearchView.prototype.showSearchField = function() {
 SearchView.prototype.showSearch = function(query) {
 	var that = this;
 	this.viewRoot = document.createElement('div');
-	if (this.version.silCode === 'cnm') {
+	//if (this.version.silCode === 'cnm') {
+	if (this.version.langCode === 'zh' || this.version.langCode === 'th') {
 		this.words = query.split('');
 	} else {
 		this.words = query.split(' ');

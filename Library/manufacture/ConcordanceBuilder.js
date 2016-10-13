@@ -47,7 +47,7 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 			break; // Do not index notes
 		case 'text':
 			var words = null;
-			if (this.langCode === 'zh') {
+			if (this.langCode === 'zh' || this.langCode === 'th') {
 				words = node.text.split('');
 			} else {
 				words = node.text.split(/[\s\-\u2010-\u2015\u2043\u058A]+/);

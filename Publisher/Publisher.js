@@ -469,7 +469,7 @@ ConcordanceBuilder.prototype.readRecursively = function(node) {
 			break; // Do not index notes
 		case 'text':
 			var words = null;
-			if (this.langCode === 'zh') {
+			if (this.langCode === 'zh' || this.langCode === 'th') {
 				words = node.text.split('');
 			} else {
 				words = node.text.split(/[\s\-\u2010-\u2015\u2043\u058A]+/);
@@ -660,7 +660,7 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 
 		'para.ms', 'para.ms1', 'para.mr',
 		'para.s', 'para.s1', 'para.s2', 'para.r', 'para.sp', 'para.d',
-		'row.tr', 'cell.tc1', 'cell.tc2', 'cell.tcr1', 'cell.tcr2', 
+		'row.tr', 'cell.th1', 'cell.th2', 'cell.tc1', 'cell.tc2', 'cell.tcr1', 'cell.tcr2', 
 		'para.li', 'para.li1',
 		'note.f', 'char.ft', 'char.fk', 'char.fr', 
 		'char.fqa', 'char.fv', 'char.fm',
@@ -910,8 +910,8 @@ Book.prototype.toDOM = function(parentNode) {
 */
 function Cell(node) {
 	this.style = node.style;
-	if (this.style !== 'tc1' && this.style !== 'tc2' && this.style !== 'tcr1' && this.style !== 'tcr2') {
-		throw new Error('Row style must be tc1, tc2.  It is |' + this.style + '|');
+	if (this.style !== 'tc1' && this.style !== 'tc2' && this.style !== 'tcr1' && this.style !== 'tcr2'  && this.style !== 'th1' && this.style !== 'th2') {
+		throw new Error('Cell style must be tc1, tc2, tcr1, tcr2, th1, th2.  It is |' + this.style + '|');
 	}
 	this.align = node.align;
 	if (this.align !== 'start' && this.align !== 'end') {
