@@ -29,11 +29,14 @@ localLanguageName TEXT NOT NULL
 );
 -- World Languages
 INSERT INTO Language VALUES ('arb', 'ar', 'rtl', 'Arabic', 'العربية');
-INSERT INTO Language VALUES ('cnm', 'zh', 'ltr', 'Chinese', '汉语, 漢語');
+INSERT INTO Language VALUES ('cmn', 'zh', 'ltr', 'Chinese', '汉语, 漢語');
 INSERT INTO Language VALUES ('eng', 'en', 'ltr', 'English', 'English');
+INSERT INTO Language VALUES ('ind', 'id', 'ltr', 'Indonesian', 'Bahasa Indonesia');
 INSERT INTO Language VALUES ('pes', 'fa', 'rtl', 'Persian', 'فارسی');
 INSERT INTO Language VALUES ('por', 'pt', 'ltr', 'Portuguese', 'Português');
 INSERT INTO Language VALUES ('spa', 'es', 'ltr', 'Spanish', 'Español');
+INSERT INTO Language VALUES ('tha', 'th', 'ltr', 'Thai', 'ภาษาไทย');
+INSERT INTO Language VALUES ('vie', 'vi', 'ltr', 'Vietnamese', 'Tiếng Việt');
 -- Wycliffe Languages
 INSERT INTO Language VALUES ('azg', 'es', 'ltr', 'Amuzgo, San Pedro Amuzgos', 'Amuzgo, San Pedro Amuzgos');
 INSERT INTO Language VALUES ('amu', 'es', 'ltr', 'Amuzgo, Guerrero', 'Amuzgo, Guerrero');
@@ -101,9 +104,21 @@ INSERT INTO Version VALUES ('ERV-POR', 'por', 'BLI', 'ERV-POR', 'Novo Testamento
 -- Arabic Languages
 INSERT INTO Version VALUES ('ARBVDPD', 'arb', 'EBIBLE', 'ARBVD', 'الكتاب المقدس ترجمة فان دايك', 'BIBLE', 'ARBVDPD.db', 'F', 'F', '2016-09-06',
 'Arabic Bible: Van Dyck Translation (ARBVD), Public Domain, eBible.org', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-ARB', 'arb', 'BLI', 'ERV-ARB', 'name', 'BIBLE', 'ERV-ARB.db', 'F', 'T', '2016-10',
+'الكِتاب المُقَدَّس: التَّرْجَمَةُ العَرَبِيَّةُ المُبَسَّطَةُ (ت ع م) © 2009, 2016 رَابِطَةُ الكِتَابِ المُقَدَّسِ الدَّوْلِيَّة (Bible League International)',
+NULL, NULL);
 INSERT INTO Version VALUES('NMV', 'pes', 'ELAM', 'NMV', 'ترجمۀ هزارۀ نو', 'BIBLE', 'NMV.db', 'F', 'F', '2016-09-06',
 'The Persian New Millennium Version © 2014, is a production of Elam Ministries. All rights reserved', NULL, NULL);
 
+-- Far East
+INSERT INTO Version VALUES ('ERV-CMN', 'cmn', 'BLI', 'ERV-CMN', '圣经–普通话本', 'BIBLE', 'ERV-CMN.db', 'T', 'F', '2016-10-12',
+'圣经–普通话本（普通话）© 1999，2015 Bible League International', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-IND', 'ind', 'BLI', 'ERV-IND', 'Perjanjian Baru: Versi Mudah Dibaca', 'BIBLE_NT', 'ERV-IND.db', 'T', 'F', '2016-10-12',
+'Perjanjian Baru: Versi Mudah Dibaca (VMD) © 2003 Bible League International', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-THA', 'tha', 'BLI', 'ERV-THA', 'พระ​คริสต​ธรรม​คัมภีร์ ฉบับ​อ่าน​เข้า​ใจ​ง่าย', 'BIBLE', 'ERV-THA.db', 'T', 'F', '2016-10-12',
+'พระคริสต​ธรรม​คัมภีร์: ฉบับ​อ่าน​เข้า​ใจ​ง่าย (ขจง) © 2015 Bible League International', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-VIE', 'vie', 'BLI', 'ERV-VIE', 'Thánh Kinh: Bản Phổ thông', 'BIBLE', 'ERV-VIE.db', 'T', 'F', '2016-10-12',
+'Thánh Kinh: Bản Phổ thông (BPT) © 2010 Bible League International', NULL, NULL);
 -- Wycliffe
 -- INSERT INTO Version Values ('amu', 'amu', 'WBT', 'AMU', 'Amuzgo, Guerrero', 'BIBLE_NT', 'AMU.db', 'T', 'F', '2016-09-06',
 -- 'Amuzgo, Guerrero, © 1999 by Wycliffe Bible Translators', NULL, NULL);

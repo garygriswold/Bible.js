@@ -8,7 +8,7 @@
 
 const programs = ['XMLTokenizerTest', 'USXParserTest', 'HTMLValidator', 'StyleUseValidator', 'VersesValidator', 'TableContentsValidator', 
 				'ConcordanceValidator', 'ValidationCleanup'];
-var versions = ['ERV-POR'];
+var versions = ['ERV-POR', 'ERV-CMN'];
 
 const fs = require('fs')
 const child = require('child_process');
@@ -30,8 +30,6 @@ function executeNext(programIndex, versionIndex) {
 }
 
 function executeOne(programIndex, versionIndex) {
-	console.log('execute prog', programIndex, ' version=', versionIndex);
-	
 	var version = versions[versionIndex];
 	var program = programs[programIndex];
 	var command = './' + program + '.sh ' + version;
