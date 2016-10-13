@@ -1,6 +1,5 @@
 TEST-STDERR: 
 TEST-STDOUT: Process ../../DBL/3prepared/ERV-SPA.db
-opened db
 drop valConcordance
 drop valPunct
 create valConcordance
@@ -24137,9 +24136,6 @@ done create tables
 24128 'nombran'
 743357 'Normalized Concordance Records'
 31069 'Generated Verses'
-POINT sorted words, generated bible, and performed diff
-POINT close db
-POINT open db
 
  23220
  23220
@@ -24172,5 +24168,4 @@ POINT open db
 “ 1261
 ” 1274
 … 2
-POINT produced summary
-POINT DONE
+DONE

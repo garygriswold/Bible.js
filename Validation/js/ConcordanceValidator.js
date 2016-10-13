@@ -230,7 +230,9 @@ if (process.argv.length < 3) {
 			db.close(function() {
 				val.open(function(db) {
 					val.summary(function() {
-						db.close();
+						db.close(function() {
+							console.log('DONE');
+						});
 					});
 				});
 			});
