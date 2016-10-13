@@ -348,6 +348,13 @@ span.fm {
 span.x, span.xt {
 	text-align: start;
 }
+/* line 1105, Cross Reference - Inline Quotation References */
+span.rq {
+	display: block; /* inconsistent with DBL, but consistent with usfm spec */
+	font-size: 0.83rem;
+	font-style: italic;
+	text-align: end; /* inconsistent with DBL, but consistent with usfm spec */
+}
 /* line 1118, Name of Diety */
 span.nd {
 	text-align: start;

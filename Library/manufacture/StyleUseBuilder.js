@@ -24,7 +24,7 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		'para.li', 'para.li1',
 		'note.f', 'char.ft', 'char.fk', 'char.fr', 
 		'char.fqa', 'char.fv', 'char.fm',
-		'note.x', 'char.xt', 'char.xo',
+		'note.x', 'char.xt', 'char.xo', 'char.rq',
 		'char.nd', 'char.tl','char.bk', 'char.pn', 'char.wj', 'char.k', 'char.add',
 		'char.it', 'char.bd', 'char.sc', 
 		'para.pb', 'char.w', 'para.periph', 'para.toc'

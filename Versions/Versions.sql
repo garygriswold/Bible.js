@@ -135,9 +135,14 @@ PRIMARY KEY(countryCode, versionCode)
 INSERT INTO CountryVersion VALUES ('WORLD', 'ARBVDPD');
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'CUVSPD');
 -- INSERT INTO CountryVersion VALUES ('WORLD', 'CUVTPD');
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-ARB');
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-CMN');
 INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-ENG');
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-IND');
 INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-SPA');
 INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-POR');
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-THA');
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-VIE');
 INSERT INTO CountryVersion VALUES ('WORLD', 'KJVPD');
 INSERT INTO CountryVersion VALUES ('WORLD', 'NMV');
 INSERT INTO CountryVersion VALUES ('WORLD', 'WEB');

@@ -8,7 +8,7 @@
 
 const programs = ['XMLTokenizerTest', 'USXParserTest', 'HTMLValidator', 'StyleUseValidator', 'VersesValidator', 'TableContentsValidator', 
 				'ConcordanceValidator', 'ValidationCleanup'];
-var versions = ['ERV-POR', 'ERV-CMN'];
+var versions = ['ERV-POR', 'ERV-CMN', 'ERV-IND'];
 
 const fs = require('fs')
 const child = require('child_process');
@@ -48,10 +48,10 @@ function executeOne(programIndex, versionIndex) {
 			var command = 'diff ' + testFile + ' ' + outFile;
 			child.exec(command, function(error, stdout, stderr) {
 				if (stdout && stdout.length > 0) {
-					errorOutput('TEST-DIFF STDOUT:', stdout);
+					errorOutput('TEST-DIFF STDOUT:', stdout, output);
 				}
 				if (stderr && stderr.length > 0) {
-					errorOutput('TEST-DIFF STDERR:', stderr);
+					errorOutput('TEST-DIFF STDERR:', stderr, output);
 				}
 				if (error) {
 					errorMessage('TEST-DIFF ERROR', error);
@@ -66,7 +66,9 @@ function errorMessage(description, error) {
 	console.log('ERROR:', description, JSON.stringify(error));
 	process.exit(1);
 }
-function errorOutput(description, output) {
-	console.log(description, output);
+function errorOutput(description, diffOut, execOut) {
+	console.log(execOut);
+	console.log('********************************');
+	console.log(description, diffOut);
 	process.exit(1);
 }
