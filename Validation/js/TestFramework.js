@@ -8,7 +8,7 @@
 
 const programs = ['XMLTokenizerTest', 'USXParserTest', 'HTMLValidator', 'StyleUseValidator', 'VersesValidator', 'TableContentsValidator', 
 				'ConcordanceValidator', 'ValidationCleanup'];
-var versions = ['ERV-POR', 'ERV-CMN', 'ERV-IND'];
+var versions = ['ERV-POR', 'ERV-CMN', 'ERV-IND', 'ERV-VIE'];
 
 const fs = require('fs')
 const child = require('child_process');
