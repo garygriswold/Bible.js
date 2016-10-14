@@ -35,7 +35,7 @@ article { /* non-std */
 /* line 76, Introduction Major Title */
 p.imt, p.imt1 {
 	font-weight: bold;
-	font-size: 1.16rem;
+	font-size: 1.24rem;
 	text-align: center;
 	margin-bottom: 4pt;
 	margin-top: 8pt;
@@ -172,6 +172,7 @@ span.qs {
 }
 /* line 557, Poetry, Acrostic Heading|Marker */
 p.qa {
+	font-size: 1.16rem;
 	font-style: italic;
 	text-align: start;
 }
@@ -181,16 +182,7 @@ p.b {
 	font-size: 0.83rem;
 }
 /* line 603, Book Title Main */
-p.mt {
-	font-weight: bold;
-	font-size: 1.66rem;
-	text-align: center;
-	margin-bottom: 4pt;
-	margin-top: 8pt;
-	color: #2A48B4; /* non-std */
-}
-/* line 612, Book Main Title, Level 1 */
-p.mt1 {
+p.mt, p.mt1 {
 	font-weight: bold;
 	font-size: 1.66rem;
 	text-align: center;
@@ -216,20 +208,11 @@ p.mt3 {
 	color: #2A48B4; /* non-std */
 }
 /* line 671, Major Section Heading */
-p.ms {
+p.ms, p.ms1 {
 	font-weight: bold;
 	font-size: 1.16rem;
 	text-align: center;
 	margin-bottom: 4pt;
-	margin-top: 16pt;
-	color: #2A48B4; /* non-std */
-}
-/* line 680, Major Section Heading Level 1 */
-p.ms1 {
-	font-weight: bold;
-    font-size: 1.16rem;
-    text-align: center;
-    margin-bottom: 4pt;
 	margin-top: 16pt;
 	color: #2A48B4; /* non-std */
 }
@@ -293,20 +276,26 @@ tr.usx {
 td.th1, td.th2, td.th3, td.th4, td.th5 {
 	font-style: italic;
 	text-align: start;
+	padding-left: 5%; /* non std */
+	padding-right: 5%; /* non std */
+	border-bottom-style: dotted; /* non std */
+	border-width: thin; /* non std */
 }
 /* line 821, Table - Cell */
 td.tc1, td.tc2, td.tc3, td.tc4, td.tc5 {
-  text-align: start;
-  padding-left: 5%;
-  border-bottom-style: dotted;
-  border-width: thin;
+	text-align: start;
+	padding-left: 5%; /* non std */
+	padding-right: 5%; /* non std */
+	border-bottom-style: dotted; /* non std */
+	border-width: thin; /* non std */
 }
 /* line 821, Table - Cell */
 td.tcr1, td.tcr2, td.tcr3, td.tcr4, td.tcr5 {
-  text-align: end;
-  padding-left: 5%;
-  border-bottom-style: dotted;
-  border-width: thin;
+	text-align: end;
+	padding-left: 5%; /* non std */
+	padding-right: 5%; /* non std */
+	border-bottom-style: dotted; /* non std */
+	border-width: thin; /* non std */
 }
 /* line 956, Out indented list item level 1 */
 p.li, p.li1 {
@@ -363,8 +352,7 @@ span.rq {
 /* line 1118, Name of Diety */
 span.nd {
 	text-align: start;
-	/* text-decoration: underline; std */
-	text-transform: uppercase; /* non-std */
+	font-variant: small-caps;
 }
 /* line 1124, Transliterated Word */
 span.tl {

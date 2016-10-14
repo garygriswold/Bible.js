@@ -561,18 +561,21 @@ CopyrightView.prototype.createAttributionView = function() {
 	});
 	
 	if (this.version.introduction) {
-		var intro = dom.addNode(root, 'div', 'introduction');
+		var intro = dom.addNode(root, 'div', 'attribCopy');
 		intro.innerHTML = this.version.introduction;
 	} else {
-		var copyNode = dom.addNode(root, 'div', 'introduction');
+		var copyNode = dom.addNode(root, 'div', 'attribCopy');
 		dom.addNode(copyNode, 'span', null, this.version.copyright);
 	}
 	
+	/*
+	* Temporarily remove until, I can provide secure way to use link
 	var webAddress = 'http://' + this.version.ownerURL + '/';
 	var link = dom.addNode(root, 'p', 'attribLink', webAddress);
 	link.addEventListener('click', function(event) {
 		cordova.InAppBrowser.open(webAddress, '_blank', 'location=yes');
 	});
+	*/
 	return(root);
 };
 
@@ -924,7 +927,8 @@ SearchView.prototype.showSearchField = function() {
 SearchView.prototype.showSearch = function(query) {
 	var that = this;
 	this.viewRoot = document.createElement('div');
-	if (this.version.silCode === 'cnm') {
+	//if (this.version.silCode === 'cnm') {
+	if (this.version.langCode === 'zh' || this.version.langCode === 'th') {
 		this.words = query.split('');
 	} else {
 		this.words = query.split(' ');

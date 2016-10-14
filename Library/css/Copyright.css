@@ -26,10 +26,10 @@ p.attribVers {
 	text-align: center;
 	margin-bottom: 0px;
 }
-p.attribCopy {
-	font-size: 1.2rem;
-	text-align: center;
-	margin-top: 0px;
+div.attribCopy {
+	font-size: 1.0rem;
+	text-align: start;
+	/*margin-top: 0px;*/
 }
 p.attribLink {
 	color: blue;
@@ -52,6 +52,6 @@ span.copyAbbr {
 	font-family: sans-serif;
 	font-size: 1.4rem;
 	color: #2E9EC9;
-	direction: 'ltr';
+	direction: ltr;
 }
 
