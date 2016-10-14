@@ -6,9 +6,20 @@
 * it stops and reports the difference.  Otherwise, it prints the 
 */
 
+/*
+* NMV Notes:
+* USXParser to get good results, the following manual changes must be done.
+* 1. space in empty node sp/> must be removed in Book, Chapter, Para, Verse
+* 2. remove 2 chars before usx node, change utf-8 to UTF-8
+* HTMLValidator to get good results, the following manual changes must be done
+* 1. remove 2 chars before usx node, change utf-8 to UTF-8
+* 2. change usx version to 2.5
+* 3. change diff to diff -w to accommodate leading spaces in book, chapter, para and verse empty nodes
+*/
+
 const programs = ['XMLTokenizerTest', 'USXParserTest', 'HTMLValidator', 'StyleUseValidator', 'VersesValidator', 'TableContentsValidator', 
 				'ConcordanceValidator', 'ValidationCleanup'];
-var versions = ['ERV-CMN', 'ERV-ENG', 'ERV-IND', 'ERV-POR', 'ERV-SPA', 'ERV-THA', 'ERV-VIE', 'KJVPD', 'WEB'];
+var versions = ['ERV-CMN', 'ERV-ENG', 'ERV-IND', 'ERV-POR', 'ERV-SPA', 'ERV-THA', 'ERV-VIE', 'KJVPD', 'NMV', 'WEB'];
 
 const fs = require('fs')
 const child = require('child_process');
@@ -32,9 +43,13 @@ function executeNext(programIndex, versionIndex) {
 function executeOne(programIndex, versionIndex) {
 	var version = versions[versionIndex];
 	var program = programs[programIndex];
-	var command = './' + program + '.sh ' + version;
+	if (version === 'NMV' && program === 'XMLTokenizerTest') {
+		var command = './' + program + '.sh ' + version + ' nospace';
+	} else {
+		command = './' + program + '.sh ' + version;
+	}
 	console.log(command);
-	var options = {maxBuffer:1024*1024}; // process killed with no error code if buffer size exceeded
+	var options = {maxBuffer:1024*1024*8}; // process killed with no error code if buffer size exceeded
 	child.exec(command, options, function(error, stdout, stderr) {
 		if (error) {
 			errorMessage(command, error);
@@ -63,6 +78,7 @@ function executeOne(programIndex, versionIndex) {
 		});		
 	});
 }
+
 function errorMessage(description, error) {
 	console.log('ERROR:', description, JSON.stringify(error));
 	process.exit(1);

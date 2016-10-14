@@ -40,7 +40,8 @@ XMLSerializer.prototype.write = function(nodeType, nodeValue) {
 			this.result.push('</', nodeValue, '>');
 			break;
 		case XMLNodeType.PROG_INST:
-			this.result.push('\uFEFF', nodeValue);
+			if (! this.emptyElementSpace) this.result.push(nodeValue);
+			else this.result.push('\uFEFF', nodeValue);
 			break;
 		case XMLNodeType.END:
 			break;

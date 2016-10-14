@@ -1,0 +1,596 @@
+TEST-STDERR: 
+TEST-STDOUT: COMPARE  1CH.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/1CH.usx output/NMV/xml/1CH.usx"}
+STDOUT 711c711
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  1CO.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/1CO.usx output/NMV/xml/1CO.usx"}
+STDOUT 302c302
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  1JN.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/1JN.usx output/NMV/xml/1JN.usx"}
+STDOUT 112c112
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  1KI.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/1KI.usx output/NMV/xml/1KI.usx"}
+STDOUT 517c517
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  1PE.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/1PE.usx output/NMV/xml/1PE.usx"}
+STDOUT 127c127
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  1SA.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/1SA.usx output/NMV/xml/1SA.usx"}
+STDOUT 518c518
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  1TH.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/1TH.usx output/NMV/xml/1TH.usx"}
+STDOUT 81c81
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  1TI.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/1TI.usx output/NMV/xml/1TI.usx"}
+STDOUT 105c105
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  2CH.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/2CH.usx output/NMV/xml/2CH.usx"}
+STDOUT 505c505
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  2CO.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/2CO.usx output/NMV/xml/2CO.usx"}
+STDOUT 196c196
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  2JN.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/2JN.usx output/NMV/xml/2JN.usx"}
+STDOUT 30c30
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  2KI.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/2KI.usx output/NMV/xml/2KI.usx"}
+STDOUT 469c469
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  2PE.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/2PE.usx output/NMV/xml/2PE.usx"}
+STDOUT 63c63
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  2SA.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/2SA.usx output/NMV/xml/2SA.usx"}
+STDOUT 618c618
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  2TH.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/2TH.usx output/NMV/xml/2TH.usx"}
+STDOUT 58c58
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  2TI.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/2TI.usx output/NMV/xml/2TI.usx"}
+STDOUT 88c88
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  3JN.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/3JN.usx output/NMV/xml/3JN.usx"}
+STDOUT 34c34
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  ACT.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/ACT.usx output/NMV/xml/ACT.usx"}
+STDOUT 896c896
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  AMO.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/AMO.usx output/NMV/xml/AMO.usx"}
+STDOUT 676c676
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  COL.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/COL.usx output/NMV/xml/COL.usx"}
+STDOUT 83c83
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  DAN.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/DAN.usx output/NMV/xml/DAN.usx"}
+STDOUT 286c286
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  DEU.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/DEU.usx output/NMV/xml/DEU.usx"}
+STDOUT 867c867
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  ECC.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/ECC.usx output/NMV/xml/ECC.usx"}
+STDOUT 439c439
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  EPH.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/EPH.usx output/NMV/xml/EPH.usx"}
+STDOUT 115c115
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  EST.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/EST.usx output/NMV/xml/EST.usx"}
+STDOUT 147c147
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  EXO.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/EXO.usx output/NMV/xml/EXO.usx"}
+STDOUT 786c786
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  EZK.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/EZK.usx output/NMV/xml/EZK.usx"}
+STDOUT 1261c1261
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  EZR.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/EZR.usx output/NMV/xml/EZR.usx"}
+STDOUT 174c174
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  GAL.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/GAL.usx output/NMV/xml/GAL.usx"}
+STDOUT 128c128
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  GEN.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/GEN.usx output/NMV/xml/GEN.usx"}
+STDOUT 945c945
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  HAB.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/HAB.usx output/NMV/xml/HAB.usx"}
+STDOUT 291c291
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  HAG.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/HAG.usx output/NMV/xml/HAG.usx"}
+STDOUT 51c51
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  HEB.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/HEB.usx output/NMV/xml/HEB.usx"}
+STDOUT 386c386
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  HOS.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/HOS.usx output/NMV/xml/HOS.usx"}
+STDOUT 916c916
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  ISA.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/ISA.usx output/NMV/xml/ISA.usx"}
+STDOUT 5618c5618
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  JAS.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/JAS.usx output/NMV/xml/JAS.usx"}
+STDOUT 112c112
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  JDG.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/JDG.usx output/NMV/xml/JDG.usx"}
+STDOUT 518c518
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  JER.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/JER.usx output/NMV/xml/JER.usx"}
+STDOUT 3505c3505
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  JHN.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/JHN.usx output/NMV/xml/JHN.usx"}
+STDOUT 471c471
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  JOB.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/JOB.usx output/NMV/xml/JOB.usx"}
+STDOUT 3409c3409
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  JOL.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/JOL.usx output/NMV/xml/JOL.usx"}
+STDOUT 332c332
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  JON.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/JON.usx output/NMV/xml/JON.usx"}
+STDOUT 86c86
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  JOS.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/JOS.usx output/NMV/xml/JOS.usx"}
+STDOUT 440c440
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  JUD.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/JUD.usx output/NMV/xml/JUD.usx"}
+STDOUT 42c42
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  LAM.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/LAM.usx output/NMV/xml/LAM.usx"}
+STDOUT 780c780
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  LEV.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/LEV.usx output/NMV/xml/LEV.usx"}
+STDOUT 472c472
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  LUK.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/LUK.usx output/NMV/xml/LUK.usx"}
+STDOUT 836c836
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  MAL.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/MAL.usx output/NMV/xml/MAL.usx"}
+STDOUT 62c62
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  MAT.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/MAT.usx output/NMV/xml/MAT.usx"}
+STDOUT 933c933
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  MIC.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/MIC.usx output/NMV/xml/MIC.usx"}
+STDOUT 558c558
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  MRK.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/MRK.usx output/NMV/xml/MRK.usx"}
+STDOUT 488c488
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  NAM.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/NAM.usx output/NMV/xml/NAM.usx"}
+STDOUT 255c255
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  NEH.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/NEH.usx output/NMV/xml/NEH.usx"}
+STDOUT 240c240
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  NUM.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/NUM.usx output/NMV/xml/NUM.usx"}
+STDOUT 975c975
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  OBA.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/OBA.usx output/NMV/xml/OBA.usx"}
+STDOUT 129c129
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  PHM.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/PHM.usx output/NMV/xml/PHM.usx"}
+STDOUT 38c38
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  PHP.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/PHP.usx output/NMV/xml/PHP.usx"}
+STDOUT 109c109
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  PRO.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/PRO.usx output/NMV/xml/PRO.usx"}
+STDOUT 3461c3461
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  PSA.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/PSA.usx output/NMV/xml/PSA.usx"}
+STDOUT 9362c9362
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  REV.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/REV.usx output/NMV/xml/REV.usx"}
+STDOUT 594c594
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  ROM.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/ROM.usx output/NMV/xml/ROM.usx"}
+STDOUT 405c405
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  RUT.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/RUT.usx output/NMV/xml/RUT.usx"}
+STDOUT 60c60
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  SNG.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/SNG.usx output/NMV/xml/SNG.usx"}
+STDOUT 603c603
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  TIT.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/TIT.usx output/NMV/xml/TIT.usx"}
+STDOUT 58c58
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  ZEC.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/ZEC.usx output/NMV/xml/ZEC.usx"}
+STDOUT 318c318
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+COMPARE  ZEP.usx
+Diff Error {"killed":false,"code":1,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/NMV/USX_1/ZEP.usx output/NMV/xml/ZEP.usx"}
+STDOUT 300c300
+< </usx>
+---
+> </usx>
+\ No newline at end of file
+
+STDERR 
+XMLTokenizerTest DONE
