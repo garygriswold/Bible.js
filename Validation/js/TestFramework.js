@@ -19,7 +19,7 @@
 
 const programs = ['XMLTokenizerTest', 'USXParserTest', 'HTMLValidator', 'StyleUseValidator', 'VersesValidator', 'TableContentsValidator', 
 				'ConcordanceValidator', 'ValidationCleanup'];
-var versions = ['ERV-CMN', 'ERV-ENG', 'ERV-IND', 'ERV-POR', 'ERV-SPA', 'ERV-THA', 'ERV-VIE', 'KJVPD', 'NMV', 'WEB'];
+var versions = ['ARBVDPD', 'ERV-CMN', 'ERV-ENG', 'ERV-IND', 'ERV-POR', 'ERV-SPA', 'ERV-THA', 'ERV-VIE', 'KJVPD', 'NMV', 'WEB'];
 
 const fs = require('fs')
 const child = require('child_process');
