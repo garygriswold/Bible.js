@@ -230,8 +230,13 @@ AppViewController.prototype.begin = function(develop) {
 				if (lastItem instanceof IOError || lastItem === null || lastItem === undefined) {
 					that.codexView.showView('JHN:3');
 				} else {
-					console.log('LastItem' + JSON.stringify(lastItem));
-					that.codexView.showView(lastItem);
+					var book = lastItem.split(':')[0];
+					if (that.tableContents.find(book)) {
+						console.log('LastItem' + JSON.stringify(lastItem));
+						that.codexView.showView(lastItem);
+					} else {
+						that.codexView.showView('JHN:3');
+					}
 				}
 			});
 		}
