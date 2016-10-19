@@ -1,0 +1,211 @@
+TEST-STDERR: 
+TEST-STDOUT: doing  { code: 'FRT', name: 'Preface' }
+STDOUT 
+STDERR 
+doing  { code: 'GEN', name: 'Genesis' }
+STDOUT 
+STDERR 
+doing  { code: 'EXO', name: 'Exodus' }
+STDOUT 
+STDERR 
+doing  { code: 'LEV', name: 'Leviticus' }
+STDOUT 
+STDERR 
+doing  { code: 'NUM', name: 'Numbers' }
+STDOUT 
+STDERR 
+doing  { code: 'DEU', name: 'Deuteronomy' }
+STDOUT 
+STDERR 
+doing  { code: 'JOS', name: 'Joshua' }
+STDOUT 
+STDERR 
+doing  { code: 'JDG', name: 'Judges' }
+STDOUT 
+STDERR 
+doing  { code: 'RUT', name: 'Ruth' }
+STDOUT 
+STDERR 
+doing  { code: '1SA', name: '1 Samuel' }
+STDOUT 
+STDERR 
+doing  { code: '2SA', name: '2 Samuel' }
+STDOUT 
+STDERR 
+doing  { code: '1KI', name: '1 Kings' }
+STDOUT 
+STDERR 
+doing  { code: '2KI', name: '2 Kings' }
+STDOUT 
+STDERR 
+doing  { code: '1CH', name: '1 Chronicles' }
+STDOUT 
+STDERR 
+doing  { code: '2CH', name: '2 Chronicles' }
+STDOUT 
+STDERR 
+doing  { code: 'EZR', name: 'Ezra' }
+STDOUT 
+STDERR 
+doing  { code: 'NEH', name: 'Nehemiah' }
+STDOUT 
+STDERR 
+doing  { code: 'EST', name: 'Esther' }
+STDOUT 
+STDERR 
+doing  { code: 'JOB', name: 'Job' }
+STDOUT 
+STDERR 
+doing  { code: 'PSA', name: 'Psalms' }
+STDOUT 
+STDERR 
+doing  { code: 'PRO', name: 'Proverbs' }
+STDOUT 
+STDERR 
+doing  { code: 'ECC', name: 'Ecclesiastes' }
+STDOUT 
+STDERR 
+doing  { code: 'SNG', name: 'Song of Solomon' }
+STDOUT 
+STDERR 
+doing  { code: 'ISA', name: 'Isaiah' }
+STDOUT 
+STDERR 
+doing  { code: 'JER', name: 'Jeremiah' }
+STDOUT 
+STDERR 
+doing  { code: 'LAM', name: 'Lamentations' }
+STDOUT 
+STDERR 
+doing  { code: 'EZK', name: 'Ezekiel' }
+STDOUT 
+STDERR 
+doing  { code: 'DAN', name: 'Daniel' }
+STDOUT 
+STDERR 
+doing  { code: 'HOS', name: 'Hosea' }
+STDOUT 
+STDERR 
+doing  { code: 'JOL', name: 'Joel' }
+STDOUT 
+STDERR 
+doing  { code: 'AMO', name: 'Amos' }
+STDOUT 
+STDERR 
+doing  { code: 'OBA', name: 'Obadiah' }
+STDOUT 
+STDERR 
+doing  { code: 'JON', name: 'Jonah' }
+STDOUT 
+STDERR 
+doing  { code: 'MIC', name: 'Micah' }
+STDOUT 
+STDERR 
+doing  { code: 'NAM', name: 'Nahum' }
+STDOUT 
+STDERR 
+doing  { code: 'HAB', name: 'Habakkuk' }
+STDOUT 
+STDERR 
+doing  { code: 'ZEP', name: 'Zephaniah' }
+STDOUT 
+STDERR 
+doing  { code: 'HAG', name: 'Haggai' }
+STDOUT 
+STDERR 
+doing  { code: 'ZEC', name: 'Zechariah' }
+STDOUT 
+STDERR 
+doing  { code: 'MAL', name: 'Malachi' }
+STDOUT 
+STDERR 
+doing  { code: 'MAT', name: 'Matthew' }
+STDOUT 
+STDERR 
+doing  { code: 'MRK', name: 'Mark' }
+STDOUT 
+STDERR 
+doing  { code: 'LUK', name: 'Luke' }
+STDOUT 
+STDERR 
+doing  { code: 'JHN', name: 'John' }
+STDOUT 
+STDERR 
+doing  { code: 'ACT', name: 'Acts' }
+STDOUT 
+STDERR 
+doing  { code: 'ROM', name: 'Romans' }
+STDOUT 
+STDERR 
+doing  { code: '1CO', name: '1 Corinthians' }
+STDOUT 
+STDERR 
+doing  { code: '2CO', name: '2 Corinthians' }
+STDOUT 
+STDERR 
+doing  { code: 'GAL', name: 'Galatians' }
+STDOUT 
+STDERR 
+doing  { code: 'EPH', name: 'Ephesians' }
+STDOUT 
+STDERR 
+doing  { code: 'PHP', name: 'Philippians' }
+STDOUT 
+STDERR 
+doing  { code: 'COL', name: 'Colossians' }
+STDOUT 
+STDERR 
+doing  { code: '1TH', name: '1 Thessalonians' }
+STDOUT 
+STDERR 
+doing  { code: '2TH', name: '2 Thessalonians' }
+STDOUT 
+STDERR 
+doing  { code: '1TI', name: '1 Timothy' }
+STDOUT 
+STDERR 
+doing  { code: '2TI', name: '2 Timothy' }
+STDOUT 
+STDERR 
+doing  { code: 'TIT', name: 'Titus' }
+STDOUT 
+STDERR 
+doing  { code: 'PHM', name: 'Philemon' }
+STDOUT 
+STDERR 
+doing  { code: 'HEB', name: 'Hebrews' }
+STDOUT 
+STDERR 
+doing  { code: 'JAS', name: 'James' }
+STDOUT 
+STDERR 
+doing  { code: '1PE', name: '1 Peter' }
+STDOUT 
+STDERR 
+doing  { code: '2PE', name: '2 Peter' }
+STDOUT 
+STDERR 
+doing  { code: '1JN', name: '1 John' }
+STDOUT 
+STDERR 
+doing  { code: '2JN', name: '2 John' }
+STDOUT 
+STDERR 
+doing  { code: '3JN', name: '3 John' }
+STDOUT 
+STDERR 
+doing  { code: 'JUD', name: 'Jude' }
+STDOUT 
+STDERR 
+doing  { code: 'REV', name: 'Revelation' }
+STDOUT 
+STDERR 
+doing  { code: 'GLO', name: 'Glossary' }
+STDOUT 
+STDERR 
+doing  { code: 'BAK', name: 'Appendix' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-NEP/USX_1/BAK.usx output/ERV-NEP/html/BAK.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-NEP/USX_1/BAK.usx: No such file or directory
+
+HTMLValidator COMPLETED

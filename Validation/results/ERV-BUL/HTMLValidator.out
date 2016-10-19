@@ -1,0 +1,289 @@
+TEST-STDERR: 
+TEST-STDOUT: doing  { code: 'FRT', name: 'Preface' }
+STDOUT 
+STDERR 
+doing  { code: 'GEN', name: 'Genesis' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/GEN.usx output/ERV-BUL/html/GEN.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/GEN.usx: No such file or directory
+
+doing  { code: 'EXO', name: 'Exodus' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/EXO.usx output/ERV-BUL/html/EXO.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/EXO.usx: No such file or directory
+
+doing  { code: 'LEV', name: 'Leviticus' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/LEV.usx output/ERV-BUL/html/LEV.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/LEV.usx: No such file or directory
+
+doing  { code: 'NUM', name: 'Numbers' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/NUM.usx output/ERV-BUL/html/NUM.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/NUM.usx: No such file or directory
+
+doing  { code: 'DEU', name: 'Deuteronomy' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/DEU.usx output/ERV-BUL/html/DEU.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/DEU.usx: No such file or directory
+
+doing  { code: 'JOS', name: 'Joshua' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/JOS.usx output/ERV-BUL/html/JOS.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/JOS.usx: No such file or directory
+
+doing  { code: 'JDG', name: 'Judges' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/JDG.usx output/ERV-BUL/html/JDG.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/JDG.usx: No such file or directory
+
+doing  { code: 'RUT', name: 'Ruth' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/RUT.usx output/ERV-BUL/html/RUT.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/RUT.usx: No such file or directory
+
+doing  { code: '1SA', name: '1 Samuel' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/1SA.usx output/ERV-BUL/html/1SA.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/1SA.usx: No such file or directory
+
+doing  { code: '2SA', name: '2 Samuel' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/2SA.usx output/ERV-BUL/html/2SA.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/2SA.usx: No such file or directory
+
+doing  { code: '1KI', name: '1 Kings' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/1KI.usx output/ERV-BUL/html/1KI.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/1KI.usx: No such file or directory
+
+doing  { code: '2KI', name: '2 Kings' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/2KI.usx output/ERV-BUL/html/2KI.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/2KI.usx: No such file or directory
+
+doing  { code: '1CH', name: '1 Chronicles' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/1CH.usx output/ERV-BUL/html/1CH.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/1CH.usx: No such file or directory
+
+doing  { code: '2CH', name: '2 Chronicles' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/2CH.usx output/ERV-BUL/html/2CH.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/2CH.usx: No such file or directory
+
+doing  { code: 'EZR', name: 'Ezra' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/EZR.usx output/ERV-BUL/html/EZR.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/EZR.usx: No such file or directory
+
+doing  { code: 'NEH', name: 'Nehemiah' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/NEH.usx output/ERV-BUL/html/NEH.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/NEH.usx: No such file or directory
+
+doing  { code: 'EST', name: 'Esther' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/EST.usx output/ERV-BUL/html/EST.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/EST.usx: No such file or directory
+
+doing  { code: 'JOB', name: 'Job' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/JOB.usx output/ERV-BUL/html/JOB.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/JOB.usx: No such file or directory
+
+doing  { code: 'PSA', name: 'Psalms' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/PSA.usx output/ERV-BUL/html/PSA.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/PSA.usx: No such file or directory
+
+doing  { code: 'PRO', name: 'Proverbs' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/PRO.usx output/ERV-BUL/html/PRO.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/PRO.usx: No such file or directory
+
+doing  { code: 'ECC', name: 'Ecclesiastes' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/ECC.usx output/ERV-BUL/html/ECC.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/ECC.usx: No such file or directory
+
+doing  { code: 'SNG', name: 'Song of Solomon' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/SNG.usx output/ERV-BUL/html/SNG.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/SNG.usx: No such file or directory
+
+doing  { code: 'ISA', name: 'Isaiah' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/ISA.usx output/ERV-BUL/html/ISA.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/ISA.usx: No such file or directory
+
+doing  { code: 'JER', name: 'Jeremiah' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/JER.usx output/ERV-BUL/html/JER.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/JER.usx: No such file or directory
+
+doing  { code: 'LAM', name: 'Lamentations' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/LAM.usx output/ERV-BUL/html/LAM.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/LAM.usx: No such file or directory
+
+doing  { code: 'EZK', name: 'Ezekiel' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/EZK.usx output/ERV-BUL/html/EZK.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/EZK.usx: No such file or directory
+
+doing  { code: 'DAN', name: 'Daniel' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/DAN.usx output/ERV-BUL/html/DAN.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/DAN.usx: No such file or directory
+
+doing  { code: 'HOS', name: 'Hosea' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/HOS.usx output/ERV-BUL/html/HOS.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/HOS.usx: No such file or directory
+
+doing  { code: 'JOL', name: 'Joel' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/JOL.usx output/ERV-BUL/html/JOL.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/JOL.usx: No such file or directory
+
+doing  { code: 'AMO', name: 'Amos' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/AMO.usx output/ERV-BUL/html/AMO.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/AMO.usx: No such file or directory
+
+doing  { code: 'OBA', name: 'Obadiah' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/OBA.usx output/ERV-BUL/html/OBA.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/OBA.usx: No such file or directory
+
+doing  { code: 'JON', name: 'Jonah' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/JON.usx output/ERV-BUL/html/JON.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/JON.usx: No such file or directory
+
+doing  { code: 'MIC', name: 'Micah' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/MIC.usx output/ERV-BUL/html/MIC.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/MIC.usx: No such file or directory
+
+doing  { code: 'NAM', name: 'Nahum' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/NAM.usx output/ERV-BUL/html/NAM.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/NAM.usx: No such file or directory
+
+doing  { code: 'HAB', name: 'Habakkuk' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/HAB.usx output/ERV-BUL/html/HAB.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/HAB.usx: No such file or directory
+
+doing  { code: 'ZEP', name: 'Zephaniah' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/ZEP.usx output/ERV-BUL/html/ZEP.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/ZEP.usx: No such file or directory
+
+doing  { code: 'HAG', name: 'Haggai' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/HAG.usx output/ERV-BUL/html/HAG.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/HAG.usx: No such file or directory
+
+doing  { code: 'ZEC', name: 'Zechariah' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/ZEC.usx output/ERV-BUL/html/ZEC.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/ZEC.usx: No such file or directory
+
+doing  { code: 'MAL', name: 'Malachi' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/MAL.usx output/ERV-BUL/html/MAL.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/MAL.usx: No such file or directory
+
+doing  { code: 'MAT', name: 'Matthew' }
+STDOUT 
+STDERR 
+doing  { code: 'MRK', name: 'Mark' }
+STDOUT 
+STDERR 
+doing  { code: 'LUK', name: 'Luke' }
+STDOUT 
+STDERR 
+doing  { code: 'JHN', name: 'John' }
+STDOUT 
+STDERR 
+doing  { code: 'ACT', name: 'Acts' }
+STDOUT 
+STDERR 
+doing  { code: 'ROM', name: 'Romans' }
+STDOUT 
+STDERR 
+doing  { code: '1CO', name: '1 Corinthians' }
+STDOUT 
+STDERR 
+doing  { code: '2CO', name: '2 Corinthians' }
+STDOUT 
+STDERR 
+doing  { code: 'GAL', name: 'Galatians' }
+STDOUT 
+STDERR 
+doing  { code: 'EPH', name: 'Ephesians' }
+STDOUT 
+STDERR 
+doing  { code: 'PHP', name: 'Philippians' }
+STDOUT 
+STDERR 
+doing  { code: 'COL', name: 'Colossians' }
+STDOUT 
+STDERR 
+doing  { code: '1TH', name: '1 Thessalonians' }
+STDOUT 
+STDERR 
+doing  { code: '2TH', name: '2 Thessalonians' }
+STDOUT 
+STDERR 
+doing  { code: '1TI', name: '1 Timothy' }
+STDOUT 
+STDERR 
+doing  { code: '2TI', name: '2 Timothy' }
+STDOUT 
+STDERR 
+doing  { code: 'TIT', name: 'Titus' }
+STDOUT 
+STDERR 
+doing  { code: 'PHM', name: 'Philemon' }
+STDOUT 
+STDERR 
+doing  { code: 'HEB', name: 'Hebrews' }
+STDOUT 
+STDERR 
+doing  { code: 'JAS', name: 'James' }
+STDOUT 
+STDERR 
+doing  { code: '1PE', name: '1 Peter' }
+STDOUT 
+STDERR 
+doing  { code: '2PE', name: '2 Peter' }
+STDOUT 
+STDERR 
+doing  { code: '1JN', name: '1 John' }
+STDOUT 
+STDERR 
+doing  { code: '2JN', name: '2 John' }
+STDOUT 
+STDERR 
+doing  { code: '3JN', name: '3 John' }
+STDOUT 
+STDERR 
+doing  { code: 'JUD', name: 'Jude' }
+STDOUT 
+STDERR 
+doing  { code: 'REV', name: 'Revelation' }
+STDOUT 
+STDERR 
+doing  { code: 'GLO', name: 'Glossary' }
+STDOUT 
+STDERR 
+doing  { code: 'BAK', name: 'Appendix' }
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-BUL/USX_1/BAK.usx output/ERV-BUL/html/BAK.usx"}
+STDOUT 
+STDERR diff: ../../DBL/2current/ERV-BUL/USX_1/BAK.usx: No such file or directory
+
+HTMLValidator COMPLETED
