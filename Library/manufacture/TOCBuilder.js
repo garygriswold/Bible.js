@@ -62,10 +62,11 @@ TOCBuilder.prototype.loadDB = function(callback) {
 	for (var i=0; i<len; i++) {
 		var toc = this.toc.bookList[i];
 		var heading = toc.heading || toc.name;
-		var title = toc.title || toc.name;
-		var abbrev = toc.abbrev || toc.name;
+		var title = toc.title || toc.name || toc.heading;
+		var name = toc.name || toc.heading;
+		var abbrev = toc.abbrev || toc.name || toc.heading;
 		if (toc.lastChapter == null) toc.lastChapter = 0; // ERV does not have chapters in FRT and GLO
-		var values = [ toc.code, heading, title, toc.name, abbrev, toc.lastChapter, 
+		var values = [ toc.code, heading, title, name, abbrev, toc.lastChapter, 
 			toc.priorBook, toc.nextBook, toc.chapterRowId ];
 		array.push(values);
 	}
