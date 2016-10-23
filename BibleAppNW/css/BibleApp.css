@@ -201,10 +201,17 @@ p.mt2 {
 /* line 629, Book Title Smallest */
 p.mt3 {
 	font-weight: bold;
-	font-size: 1.33rem;
+	font-size: 1.16rem;
 	text-align: center;
-	margin-bottom: 2pt;
 	margin-top: 2pt;
+	margin-bottom: 2pt;
+	color: #2A48B4; /* non-std */
+}
+/* line 638, Book title level 4 */
+p.mt4 {
+	text-align: center;
+	margin-top: 2pt;
+	margin-bottom: 2pt;
 	color: #2A48B4; /* non-std */
 }
 /* line 671, Major Section Heading */
