@@ -77,17 +77,13 @@ ConcordanceValidator.prototype.normalize = function(callback) {
 			if (err) callback(err);
 			for (var i=0; i<results.length; i++) {
 				var row = results[i];
-				console.log(i, row.word);
+				//console.log(i, row.word);
 				var refList = row.refList2.split(',');
 				for (var j=0; j<refList.length; j++) {
 					var parts = refList[j].split(';');
 					var pieces = parts[0].split(':');
 					var ordinal = that.bookMap[pieces[0]];
-					var verseSeq = pieces[2];
-					var verseDash = verseSeq.indexOf('-');
-					if (verseDash > 0) {
-						verseSeq = verseSeq.substr(0, verseDash);
-					}
+					var verseSeq = parseInt(pieces[2]);
 					array.push({book:pieces[0], ordinal:ordinal, chapter:pieces[1], verse:pieces[2], verseSeq:verseSeq, position:parts[1], word:row.word });
 				}
 			}
@@ -122,6 +118,7 @@ ConcordanceValidator.prototype.normalize = function(callback) {
 	}
 };
 ConcordanceValidator.prototype.generate = function(concordance) {
+	console.log('Generate Bible Text from Concordance');
 	concordance.sort(function(a, b) {
 		var bookDiff = a.ordinal - b.ordinal;
 		if (bookDiff !== 0) return(bookDiff);
@@ -153,16 +150,19 @@ ConcordanceValidator.prototype.generate = function(concordance) {
 	return(result);
 };
 ConcordanceValidator.prototype.outputFile = function(generatedText) {
+	var that = this;
 	var output = [];
 	for (var i=0; i<generatedText.length; i++) {
 		var row = generatedText[i];
 		output.push([row.book, row.chapter, row.verse, row.text].join(':'));
 	}
 	this.fs.writeFile('output/' + this.version + '/generated.txt', output.join('\n'), { encoding: 'utf8'}, function(err) {
-		if (err) fatalError(err, 'write generated');
+		if (err) that.fatalError(err, 'write generated');
+		console.log('Generated Stored');
 	});
 };
 ConcordanceValidator.prototype.compare = function(generatedText, callback) {
+	console.log('Compare Generated to Verses');
 	var that = this;
 	var selectStmt = 'SELECT html FROM verses WHERE reference=?'; // BUG: this will skip a verse if absent from concordance.
 	var insertStmt = that.db.prepare('INSERT INTO valPunctuation (book, chapter, verse, position, charCode, char) VALUES (?,?,?,?,?,?)');
@@ -194,18 +194,20 @@ ConcordanceValidator.prototype.compare = function(generatedText, callback) {
 			if (generated.charAt(gi) === original.charAt(oi).toLowerCase()) {
 				gi++;
 			} else if (original.charCodeAt(oi) !== 32) {
-				insertStmt.run(book, chapter, verse, oi, original.charCodeAt(oi), original.charAt(oi), function(err) { if (err) that.fatalError(err, 'compareOne'); });
+				var code = original.charCodeAt(oi).toString(16).toUpperCase();
+				insertStmt.run(book, chapter, verse, oi, code, original.charAt(oi), function(err) { if (err) that.fatalError(err, 'compareOne'); });
 			}
 		}
 	}
 };
 ConcordanceValidator.prototype.summary = function(callback) {
-	var stmt = 'SELECT char, count(*) as count FROM valPunctuation GROUP BY char';
+	console.log('Compute Summary of valPunctuation');
+	var stmt = 'SELECT char, charCode, count(*) as count FROM valPunctuation GROUP BY char';
 	this.db.all(stmt, [], function(err, results) {
 		if (err) callback(err);
 		for (var i=0; i<results.length; i++) {
 			var row = results[i];
-			console.log(row.char, row.count);
+			console.log(row.char, row.charCode, row.count);
 		}
 		callback();
 	});
