@@ -1,0 +1,40 @@
+TEST-STDERR: 
+TEST-STDOUT: Process ../../DBL/3prepared/ERV-URD.db
+drop valConcordance
+drop valPunct
+create valConcordance
+create valPunct
+done create tables
+1039860 'Normalized Concordance Records'
+Generate Bible Text from Concordance
+30747 'Generated Verses'
+Compare Generated to Verses
+Generated Stored
+Compute Summary of valPunctuation
+
+ A 15102
+ D 15102
+! 21 3128
+" 22 2
+' 27 116
+( 28 1086
+) 29 1138
+* 2A 6
+, 2C 70
+- 2D 596
+/ 2F 13
+0 30 1
+1 31 5
+2 32 1
+4 34 1
+5 35 1
+6 36 2
+9 39 1
+: 3A 1192
+– 2013 7
+‘ 2018 388
+’ 2019 500
+“ 201C 7790
+” 201D 5952
+․ 2024 6
+DONE
