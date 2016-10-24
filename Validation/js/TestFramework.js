@@ -20,7 +20,7 @@
 const programs = ['XMLTokenizerTest', 'USXParserTest', 'HTMLValidator', 'StyleUseValidator', 'VersesValidator', 'TableContentsValidator', 
 				'ConcordanceValidator', 'ValidationCleanup'];
 var versions = ['ARBVDPD', 
-	'ERV-AWA', 'ERV-BEN', 'ERV-BUL', 'ERV-CMN', 'ERV-ENG', 'ERV-HIN', 'ERV-HRV', 'ERV-HUN', 'ERV-IND', 'ERV-KAN', 'ERV-MAR', 'ERV-NEP','ERV-PAN', 'ERV-POR', 
+	'ERV-AWA', 'ERV-BEN', 'ERV-BUL', 'ERV-ARB', 'ERV-CMN', 'ERV-ENG', 'ERV-HIN', 'ERV-HRV', 'ERV-HUN', 'ERV-IND', 'ERV-KAN', 'ERV-MAR', 'ERV-NEP','ERV-PAN', 'ERV-POR', 
 	'ERV-RUS', 'ERV-SPA', 'ERV-SRP', 
 	'ERV-TAM', 'ERV-THA', 'ERV-UKR', 'ERV-VIE', 
 	'KJVPD', 'NMV', 'WEB'];
