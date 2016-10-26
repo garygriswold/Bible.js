@@ -83,8 +83,9 @@ ConcordanceValidator.prototype.normalize = function(callback) {
 					var parts = refList[j].split(';');
 					var pieces = parts[0].split(':');
 					var ordinal = that.bookMap[pieces[0]];
-					var verseSeq = parseInt(pieces[2]);
-					array.push({book:pieces[0], ordinal:ordinal, chapter:pieces[1], verse:pieces[2], verseSeq:verseSeq, position:parts[1], word:row.word });
+					var verse = pieces[2];
+					var verseSeq = (verse.charAt(0) === '[') ? parseInt(verse.substr(1)) : parseInt(verse);
+					array.push({book:pieces[0], ordinal:ordinal, chapter:pieces[1], verse:verse, verseSeq:verseSeq, position:parts[1], word:row.word });
 				}
 			}
 			console.log(array.length, 'Normalized Concordance Records');
