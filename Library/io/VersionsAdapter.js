@@ -105,10 +105,7 @@ VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callba
 	});
 };
 VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
-	var statement = 'SELECT v.filename' +
-			' FROM Version v JOIN InstalledVersion s ON s.versionCode = v.versionCode' +
-			' WHERE s.endDate IS NULL' +
-			' AND s.localeDefault = ?';
+	var statement = 'SELECT filename FROM DefaultVersion WHERE langCode = ?';
 	this.database.select(statement, [lang], function(results) {
 		if (results instanceof IOError) {
 			callback(results);

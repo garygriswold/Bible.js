@@ -30,6 +30,7 @@ AppInitializer.prototype.begin = function() {
 						console.log('default version determined ', filename);
 						var parts = filename.split('.');
 						var versionCode = parts[0]; // This hack requires version code to be part of filename.
+						console.log('TEST', versionCode, JSON.stringify(appUpdater.installedVersions));
 						if (appUpdater.installedVersions[versionCode]) {
 							// Process locale's default version installed
 							changeVersionHandler(filename);
@@ -3023,10 +3024,7 @@ VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callba
 	});
 };
 VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
-	var statement = 'SELECT v.filename' +
-			' FROM Version v JOIN InstalledVersion s ON s.versionCode = v.versionCode' +
-			' WHERE s.endDate IS NULL' +
-			' AND s.localeDefault = ?';
+	var statement = 'SELECT filename FROM DefaultVersion WHERE langCode = ?';
 	this.database.select(statement, [lang], function(results) {
 		if (results instanceof IOError) {
 			callback(results);
@@ -3212,6 +3210,10 @@ AppUpdater.prototype.moveFiles = function(callback) {
 		sourceDir = 'www/';
 		targetDir = '../../../Library/Application Support/BibleAppNW/databases/file__0/';
 		console.log('Unable to AppUpdater.moveFiles in BibleAppNW');
+		var now = new Date().toISOString();
+		that.installedVersions['WEB'] = ['WEB', 'WEB.db', now];
+		that.installedVersions['ERV-ENG'] = ['ERV-ENG', 'ERV-ENG.db', now];
+		that.installedVersions['ERV-ARB'] = ['ERV-ARB', 'ERV-ARB.db', now];
 		//readDirectories(sourceDir, targetDir, callback); window.resolve... does not work for node-webkit
 		callback();
 	}

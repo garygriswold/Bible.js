@@ -19,7 +19,7 @@ function InstallVersions(options) {
 }
 InstallVersions.prototype.install = function(callback) {
 	var that = this;
-	var statement = 'SELECT v.versionCode, v.filename, s.localeDefault' +
+	var statement = 'SELECT v.versionCode, v.filename' +
 			' FROM Version v JOIN InstalledVersion s ON s.versionCode = v.versionCode' +
 			' WHERE s.endDate IS NULL';
 	this.db.all(statement, [], function(err, results) {

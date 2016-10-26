@@ -91,6 +91,10 @@ AppUpdater.prototype.moveFiles = function(callback) {
 		sourceDir = 'www/';
 		targetDir = '../../../Library/Application Support/BibleAppNW/databases/file__0/';
 		console.log('Unable to AppUpdater.moveFiles in BibleAppNW');
+		var now = new Date().toISOString();
+		that.installedVersions['WEB'] = ['WEB', 'WEB.db', now];
+		that.installedVersions['ERV-ENG'] = ['ERV-ENG', 'ERV-ENG.db', now];
+		that.installedVersions['ERV-ARB'] = ['ERV-ARB', 'ERV-ARB.db', now];
 		//readDirectories(sourceDir, targetDir, callback); window.resolve... does not work for node-webkit
 		callback();
 	}

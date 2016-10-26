@@ -29,6 +29,7 @@ AppInitializer.prototype.begin = function() {
 						console.log('default version determined ', filename);
 						var parts = filename.split('.');
 						var versionCode = parts[0]; // This hack requires version code to be part of filename.
+						console.log('TEST', versionCode, JSON.stringify(appUpdater.installedVersions));
 						if (appUpdater.installedVersions[versionCode]) {
 							// Process locale's default version installed
 							changeVersionHandler(filename);
@@ -229,8 +230,13 @@ AppViewController.prototype.begin = function(develop) {
 				if (lastItem instanceof IOError || lastItem === null || lastItem === undefined) {
 					that.codexView.showView('JHN:3');
 				} else {
-					console.log('LastItem' + JSON.stringify(lastItem));
-					that.codexView.showView(lastItem);
+					var book = lastItem.split(':')[0];
+					if (that.tableContents.find(book)) {
+						console.log('LastItem' + JSON.stringify(lastItem));
+						that.codexView.showView(lastItem);
+					} else {
+						that.codexView.showView('JHN:3');
+					}
 				}
 			});
 		}
@@ -461,6 +467,12 @@ CodexView.prototype.scrollTo = function(nodeId) {
 * and adding it as a text node.
 */
 CodexView.prototype.showFootnote = function(node) {
+	var handChar = node.innerText.trim();
+	if (handChar === '\u261C' || handChar === '\u261E') {
+		node.setAttribute('style', 'color: #555555; background-color: #FFFFB4;');
+	} else {
+		node.setAttribute('style', 'color: #555555; background-color: #CEE7FF;');
+	}
 	for (var i=0; i<node.children.length; i++) {
 		node.children[i].setAttribute('style', 'display:inline');
 	}
@@ -470,6 +482,7 @@ CodexView.prototype.showFootnote = function(node) {
 * except the one that displays the link.
 */
 CodexView.prototype.hideFootnote = function(node) {
+	node.setAttribute('style', 'color: ##FFB4B5; background-color: #FFFFFF;');
 	for (var i=0; i<node.children.length; i++) {
 		node.children[i].setAttribute('style', 'display:none');
 	}
@@ -552,19 +565,22 @@ CopyrightView.prototype.createAttributionView = function() {
 		}
 	});
 	
-	var copyNode = dom.addNode(root, 'p', 'attribVers');
-	dom.addNode(copyNode, 'span', null, this.version.copyright);
-	
 	if (this.version.introduction) {
-		var intro = dom.addNode(root, 'div', 'introduction');
+		var intro = dom.addNode(root, 'div', 'attribCopy');
 		intro.innerHTML = this.version.introduction;
+	} else {
+		var copyNode = dom.addNode(root, 'div', 'attribCopy');
+		dom.addNode(copyNode, 'span', null, this.version.copyright);
 	}
 	
+	/*
+	* Temporarily remove until, I can provide secure way to use link
 	var webAddress = 'http://' + this.version.ownerURL + '/';
 	var link = dom.addNode(root, 'p', 'attribLink', webAddress);
 	link.addEventListener('click', function(event) {
 		cordova.InAppBrowser.open(webAddress, '_blank', 'location=yes');
 	});
+	*/
 	return(root);
 };
 
@@ -916,7 +932,8 @@ SearchView.prototype.showSearchField = function() {
 SearchView.prototype.showSearch = function(query) {
 	var that = this;
 	this.viewRoot = document.createElement('div');
-	if (this.version.silCode === 'cnm') {
+	//if (this.version.silCode === 'cnm') {
+	if (this.version.langCode === 'zh' || this.version.langCode === 'th') {
 		this.words = query.split('');
 	} else {
 		this.words = query.split(' ');
@@ -3006,10 +3023,7 @@ VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callba
 	});
 };
 VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
-	var statement = 'SELECT v.filename' +
-			' FROM Version v JOIN InstalledVersion s ON s.versionCode = v.versionCode' +
-			' WHERE s.endDate IS NULL' +
-			' AND s.localeDefault = ?';
+	var statement = 'SELECT filename FROM DefaultVersion WHERE langCode = ?';
 	this.database.select(statement, [lang], function(results) {
 		if (results instanceof IOError) {
 			callback(results);
@@ -3195,6 +3209,10 @@ AppUpdater.prototype.moveFiles = function(callback) {
 		sourceDir = 'www/';
 		targetDir = '../../../Library/Application Support/BibleAppNW/databases/file__0/';
 		console.log('Unable to AppUpdater.moveFiles in BibleAppNW');
+		var now = new Date().toISOString();
+		that.installedVersions['WEB'] = ['WEB', 'WEB.db', now];
+		that.installedVersions['ERV-ENG'] = ['ERV-ENG', 'ERV-ENG.db', now];
+		that.installedVersions['ERV-ARB'] = ['ERV-ARB', 'ERV-ARB.db', now];
 		//readDirectories(sourceDir, targetDir, callback); window.resolve... does not work for node-webkit
 		callback();
 	}
@@ -3781,12 +3799,15 @@ Questions.prototype.toJSON = function() {
 * simplify the transition from the "GEN:1:1" format to the format
 * of distinct parts { book: GEN, chapter: 1, verse: 1 }
 * This class leaves unset members as undefined.
+*
+* It is important that chapter is stored as a number, because it is incremented to find next and prior chapters.
+* It is also important that verse is stored as a string, because 3:25-26 is a valid verse.
 */
 function Reference(book, chapter, verse) {
 	if (arguments.length > 1) {
 		this.book = book;
 		this.chapter = +chapter;
-		this.verse = +verse;
+		this.verse = String(verse);
 		if (verse) {
 			this.nodeId = book + ':' + chapter + ':' + verse;
 		} else {
@@ -3796,7 +3817,7 @@ function Reference(book, chapter, verse) {
 		var parts = book.split(':');
 		this.book = parts[0];
 		this.chapter = (parts.length > 0) ? +parts[1] : NaN;
-		this.verse = (parts.length > 1) ? +parts[2] : NaN;
+		this.verse = (parts.length > 1) ? parts[2] : undefined;
 		this.nodeId = book;
 	}
 	this.chapterId = this.book + ':' + this.chapter;
@@ -3806,7 +3827,7 @@ Reference.prototype.path = function() {
 	return(this.book + '/' + this.chapter + '.usx');
 };
 Reference.prototype.chapterVerse = function() {
-	return((this.verse) ? this.chapter + ':' + this.verse : String(this.chapter));
+	return((this.verse) ? String(this.chapter) + ':' + this.verse : String(this.chapter));
 };
 Reference.prototype.append = function(parent, html) {
 	var rootNode = document.createElement('div');

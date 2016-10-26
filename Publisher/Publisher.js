@@ -658,7 +658,7 @@ StyleUseBuilder.prototype.loadDB = function(callback) {
 		'para.p', 'para.m', 'para.pi', 'para.pi1', 'para.pc', 'para.mi',
 		'para.nb', 'para.q', 'para.q1', 'para.q2', 'para.qc',
 		'char.qs', 'para.qa', 'para.b', 
-		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 
+		'para.mt', 'para.mt1', 'para.mt2', 'para.mt3', 'para.mt4',
 		'para.ms', 'para.ms1', 'para.mr',
 		'para.s', 'para.s1', 'para.s2', 'para.r', 'para.sp', 'para.d',
 		'row.tr', 'cell.th1', 'cell.th2', 'cell.tc1', 'cell.tc2', 'cell.tcr1', 'cell.tcr2', 

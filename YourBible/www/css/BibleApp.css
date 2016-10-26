@@ -35,7 +35,7 @@ article { /* non-std */
 /* line 76, Introduction Major Title */
 p.imt, p.imt1 {
 	font-weight: bold;
-	font-size: 1.16rem;
+	font-size: 1.24rem;
 	text-align: center;
 	margin-bottom: 4pt;
 	margin-top: 8pt;
@@ -56,35 +56,35 @@ p.iot {
   text-align: center;
   margin-bottom: 4pt;
   margin-top: 8pt;
-  color: #555555; /* non-std */
+  color: #777777; /* non-std */
 }
 /* line 179, Introduction Outline Text Level 1 */
 p.io, p.io1 {
 	text-align: start;
 	margin-left: 1.0rem; /* std 0.5in */
 	margin-right: 0;
-	color: #555555; /* non-std */
+	color: #777777; /* non-std */
 }
 /* line 191, Introduction Outline Text Level 2 */
 p.io2 {
 	text-align: start;
 	margin-left: 2.0rem; /* std 0.75in */
 	margin-right: 0;
-	color: #555555; /* non-std */
+	color: #777777; /* non-std */
 }
 /* line 214, Introduction Prose Paragraph (basic) */
 p.ip {
 	text-align: start;
 	text-indent: 1.0rem; /* std 0.125in */
-	color: #555555; /* non-std */
+	color: #777777; /* non-std */
 }
 /* line 225, Introduction - Indented Para - first line indent */
 p.ipi {
   text-indent: 1.0rem; /* std 0.125in */
   text-align: start;
-  margin-left: 1.0rem; /* std 0.25in */
-  margin-right: 0; /* std 0.25in */
-  color: #555555; /* non std */
+  /*margin-left: 0.25in; std */
+  /*margin-right: 0.25in; std */
+  color: #777777; /* non std */
 }
 /* line 344, Chapter Number Format */
 p.c {
@@ -172,6 +172,7 @@ span.qs {
 }
 /* line 557, Poetry, Acrostic Heading|Marker */
 p.qa {
+	font-size: 1.16rem;
 	font-style: italic;
 	text-align: start;
 }
@@ -181,16 +182,7 @@ p.b {
 	font-size: 0.83rem;
 }
 /* line 603, Book Title Main */
-p.mt {
-	font-weight: bold;
-	font-size: 1.66rem;
-	text-align: center;
-	margin-bottom: 4pt;
-	margin-top: 8pt;
-	color: #2A48B4; /* non-std */
-}
-/* line 612, Book Main Title, Level 1 */
-p.mt1 {
+p.mt, p.mt1 {
 	font-weight: bold;
 	font-size: 1.66rem;
 	text-align: center;
@@ -209,27 +201,25 @@ p.mt2 {
 /* line 629, Book Title Smallest */
 p.mt3 {
 	font-weight: bold;
-	font-size: 1.33rem;
+	font-size: 1.16rem;
 	text-align: center;
-	margin-bottom: 2pt;
 	margin-top: 2pt;
+	margin-bottom: 2pt;
+	color: #2A48B4; /* non-std */
+}
+/* line 638, Book title level 4 */
+p.mt4 {
+	text-align: center;
+	margin-top: 2pt;
+	margin-bottom: 2pt;
 	color: #2A48B4; /* non-std */
 }
 /* line 671, Major Section Heading */
-p.ms {
+p.ms, p.ms1 {
 	font-weight: bold;
 	font-size: 1.16rem;
 	text-align: center;
 	margin-bottom: 4pt;
-	margin-top: 16pt;
-	color: #2A48B4; /* non-std */
-}
-/* line 680, Major Section Heading Level 1 */
-p.ms1 {
-	font-weight: bold;
-    font-size: 1.16rem;
-    text-align: center;
-    margin-bottom: 4pt;
 	margin-top: 16pt;
 	color: #2A48B4; /* non-std */
 }
@@ -289,12 +279,30 @@ table.usx {
 tr.usx {
   width: 100%;
 }
+/* line 792, Table - Column 1 Heading */
+td.th1, td.th2, td.th3, td.th4, td.th5 {
+	font-style: italic;
+	text-align: start;
+	padding-left: 5%; /* non std */
+	padding-right: 5%; /* non std */
+	border-bottom-style: dotted; /* non std */
+	border-width: thin; /* non std */
+}
 /* line 821, Table - Cell */
 td.tc1, td.tc2, td.tc3, td.tc4, td.tc5 {
-  text-align: start;
-  padding-left: 5%;
-  border-bottom-style: dotted;
-  border-width: thin;
+	text-align: start;
+	padding-left: 5%; /* non std */
+	padding-right: 5%; /* non std */
+	border-bottom-style: dotted; /* non std */
+	border-width: thin; /* non std */
+}
+/* line 821, Table - Cell */
+td.tcr1, td.tcr2, td.tcr3, td.tcr4, td.tcr5 {
+	text-align: end;
+	padding-left: 5%; /* non std */
+	padding-right: 5%; /* non std */
+	border-bottom-style: dotted; /* non std */
+	border-width: thin; /* non std */
 }
 /* line 956, Out indented list item level 1 */
 p.li, p.li1 {
@@ -306,13 +314,11 @@ p.li, p.li1 {
 /* footnote references */
 span.topf, span.topx {
 	text-align: start;
-	color: #FFB4B5; /* non-std */
+	color: #FFB4B5;/* non-std */
 }
 /* line 991, footnotes */
 span.f, span.ft {
 	text-indent: start;
-	color: #555555; /* non-std */
-	background-color: #FFFFB4; /* non-std */
 	/* font-style: italic; */
 }
 /* line 1012, Footnote - Keyword i.e. word that footnote explains */
@@ -320,15 +326,11 @@ span.fk {
   font-weight: bold;
   font-style: italic;
   text-align: start;
-  color: #555555; /* non std */
-  background-color: #FFFFB4; /* non std */
 }
 /* line 1025, footnote alternate translation */
 span.fqa {
 	text-align: start;
 	font-style: italic;
-	color: #999999 ; /* non-std */
-	background-color: #FFFFB4; /* non-std */
 }
 /* line 1043, verse number embedded in footnote */
 span.fv {
@@ -346,14 +348,18 @@ span.fm {
 /* line 1062, cross references */
 span.x, span.xt {
 	text-align: start;
-	color: #555555; /* non-std */
-	background-color: #CEE7FF; /* non-std */
+}
+/* line 1105, Cross Reference - Inline Quotation References */
+span.rq {
+	display: block; /* inconsistent with DBL, but consistent with usfm spec */
+	font-size: 0.83rem;
+	font-style: italic;
+	text-align: end; /* inconsistent with DBL, but consistent with usfm spec */
 }
 /* line 1118, Name of Diety */
 span.nd {
 	text-align: start;
-	/* text-decoration: underline; std */
-	text-transform: uppercase; /* non-std */
+	font-variant: small-caps;
 }
 /* line 1124, Transliterated Word */
 span.tl {
@@ -413,8 +419,6 @@ p.pb {
 span.w {
   text-align: start;
   font-weight: bold; /* non std */
-  color: #555555; /* non std */
-  background-color: #FFFFB4; /* non std */
 }
 /* line 1274, Peripherals - Content Division Marker */
 p.periph {
@@ -451,10 +455,10 @@ p.attribVers {
 	text-align: center;
 	margin-bottom: 0px;
 }
-p.attribCopy {
-	font-size: 1.2rem;
-	text-align: center;
-	margin-top: 0px;
+div.attribCopy {
+	font-size: 1.0rem;
+	text-align: start;
+	/*margin-top: 0px;*/
 }
 p.attribLink {
 	color: blue;
@@ -477,7 +481,7 @@ span.copyAbbr {
 	font-family: sans-serif;
 	font-size: 1.4rem;
 	color: #2E9EC9;
-	direction: 'ltr';
+	direction: ltr;
 }
 
 /**
