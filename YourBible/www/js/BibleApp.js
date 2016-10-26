@@ -29,7 +29,6 @@ AppInitializer.prototype.begin = function() {
 						console.log('default version determined ', filename);
 						var parts = filename.split('.');
 						var versionCode = parts[0]; // This hack requires version code to be part of filename.
-						console.log('TEST', versionCode, JSON.stringify(appUpdater.installedVersions));
 						if (appUpdater.installedVersions[versionCode]) {
 							// Process locale's default version installed
 							changeVersionHandler(filename);
