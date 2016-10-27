@@ -1,8 +1,6 @@
 #!/bin/sh
 
-#export SOURCE_SM=Bible_blue_128.png
-#export SOURCE_LG=Bible_blue_512.png
-export SOURCE=icon2.png
+export SOURCE=Logo1024.png
 export IOS_TARGET=../ios/icons
 export AND_TARGET=../android/icons
 

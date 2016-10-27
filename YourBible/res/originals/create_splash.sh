@@ -1,6 +1,5 @@
 #!/bin/sh
 
-#export SOURCE_IMG=Bible_blue_512.png
 export SOURCE_PORT=splash-port.png
 export SOURCE_LAND=splash-land.png
 export IOS_TARGET=../ios/splash

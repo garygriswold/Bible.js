@@ -107,8 +107,6 @@ INSERT INTO Version VALUES ('ERV-IND', 'ind', 'BLI', 'ERV-IND', 'Perjanjian Baru
 'Perjanjian Baru: Versi Mudah Dibaca (VMD) © 2003 Bible League International', NULL, NULL);
 INSERT INTO Version VALUES ('ERV-NEP', 'nep', 'BLI', 'ERV-NEP', 'TBD', 'BIBLE', 'ERV-NEP.db', 'T', 'F', '2016-10-17',
 'copyright', NULL, NULL);
-
-
 INSERT INTO Version VALUES ('ERV-THA', 'tha', 'BLI', 'ERV-THA', 'พระ​คริสต​ธรรม​คัมภีร์ ฉบับ​อ่าน​เข้า​ใจ​ง่าย', 'BIBLE', 'ERV-THA.db', 'T', 'F', '2016-10-12',
 'พระคริสต​ธรรม​คัมภีร์: ฉบับ​อ่าน​เข้า​ใจ​ง่าย (ขจง) © 2015 Bible League International', NULL, NULL);
 INSERT INTO Version VALUES ('ERV-VIE', 'vie', 'BLI', 'ERV-VIE', 'Thánh Kinh: Bản Phổ thông', 'BIBLE', 'ERV-VIE.db', 'T', 'F', '2016-10-12',
@@ -117,45 +115,45 @@ INSERT INTO Version VALUES ('ERV-VIE', 'vie', 'BLI', 'ERV-VIE', 'Thánh Kinh: B�
 -- Middle East
 INSERT INTO Version VALUES ('ARBVDPD', 'arb', 'EBIBLE', 'ARBVD', 'الكتاب المقدس ترجمة فان دايك', 'BIBLE', 'ARBVDPD.db', 'F', 'F', '2016-09-06',
 'Arabic Bible: Van Dyck Translation (ARBVD), Public Domain, eBible.org', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-ARB', 'arb', 'BLI', 'ERV-ARB', 'name', 'BIBLE', 'ERV-ARB.db', 'F', 'T', '2016-10',
+INSERT INTO Version VALUES ('ERV-ARB', 'arb', 'BLI', 'ERV-ARB', 'بِعَهْدَيْهِ القَدِيمِ وَالجَدِيد الكِتَابُ المُقَدَّسُ', 'BIBLE', 'ERV-ARB.db', 'F', 'T', '2016-10',
 'الكِتاب المُقَدَّس: التَّرْجَمَةُ العَرَبِيَّةُ المُبَسَّطَةُ (ت ع م) © 2009, 2016 رَابِطَةُ الكِتَابِ المُقَدَّسِ الدَّوْلِيَّة (Bible League International)',
 NULL, NULL);
 INSERT INTO Version VALUES('NMV', 'pes', 'ELAM', 'NMV', 'ترجمۀ هزارۀ نو', 'BIBLE', 'NMV.db', 'F', 'F', '2016-09-06',
 'The Persian New Millennium Version © 2014, is a production of Elam Ministries. All rights reserved', NULL, NULL);
 
 -- India
-INSERT INTO Version VALUES ('ERV-AWA', 'awa', 'BLI', 'ERV-AWA', 'TBD', 'BIBLE', 'ERV-AWA.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-BEN', 'ben', 'BLI', 'ERV-BEN', 'TBD', 'BIBLE', 'ERV-BEN.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-HIN', 'hin', 'BLI', 'ERV-HIN', 'TBD', 'BIBLE', 'ERV-HIN.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-KAN', 'kan', 'BLI', 'ERV-KAN', 'TBD', 'BIBLE', 'ERV-KAN.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-MAR', 'mar', 'BLI', 'ERV-MAR', 'TBD', 'BIBLE', 'ERV-MAR.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-ORI', 'ori', 'BLI', 'ERV-ORI', 'TBD', 'BIBLE', 'ERV-ORI.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-PAN', 'pan', 'BLI', 'ERV-PAN', 'TBD', 'BIBLE', 'ERV-PAN.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-TAM', 'tam', 'BLI', 'ERV-TAM', 'TBD', 'BIBLE', 'ERV-TAM.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-URD', 'urd', 'BLI', 'ERV-URD', 'TBD', 'BIBLE', 'ERV-URD.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-AWA', 'awa', 'BLI', 'ERV-AWA', 'पवित्तर बाइबिल, Easy-to-Read Version', 'BIBLE', 'ERV-AWA.db', 'T', 'F', '2016-10-17',
+'Awadhi Holy Bible: Easy-to-Read Version (ERV) © 2005 Bible League International', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-BEN', 'ben', 'BLI', 'ERV-BEN', 'পবিত্র বাইবেল, Easy-to-Read Version', 'BIBLE', 'ERV-BEN.db', 'T', 'F', '2016-10-17',
+'Bengali Holy Bible: Easy-to-Read Version (ERV) © 2001, 2016 Bible League International', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-HIN', 'hin', 'BLI', 'ERV-HIN', 'पवित्र बाइबल, Easy-to-Read Version', 'BIBLE', 'ERV-HIN.db', 'T', 'F', '2016-10-17',
+'Hindi Holy Bible: Easy-to-Read Version (ERV) © 1995 Bible League International', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-KAN', 'kan', 'BLI', 'ERV-KAN', 'Kannada: Easy-to-Read Version', 'BIBLE', 'ERV-KAN.db', 'T', 'F', '2016-10-17',
+'Kannada: Easy-to-Read Version (ERV). © 1997 Bible League International.', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-MAR', 'mar', 'BLI', 'ERV-MAR', 'Marathi: Easy-to-Read Version', 'BIBLE', 'ERV-MAR.db', 'T', 'F', '2016-10-17',
+'Marathi: Easy-to-Read Version (ERV). © 1998 Bible League International.', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-ORI', 'ori', 'BLI', 'ERV-ORI', 'ପବିତ୍ର ବାଇବଲ, Easy-to-Read Version', 'BIBLE', 'ERV-ORI.db', 'T', 'F', '2016-10-17',
+'Oriya Holy Bible: Easy-to-Read Version (ERV) © 2004 Bible League International', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-PAN', 'pan', 'BLI', 'ERV-PAN', 'Punjabi: Easy-to-Read Version', 'BIBLE', 'ERV-PAN.db', 'T', 'F', '2016-10-17',
+'Punjabi: Easy-to-Read Version (ERV). © 2002 Bible League International.', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-TAM', 'tam', 'BLI', 'ERV-TAM', 'பரிசுத்த பைபிள், Easy-to-Read Version', 'BIBLE', 'ERV-TAM.db', 'T', 'F', '2016-10-17',
+'Tamil Holy Bible: Easy-to-Read Version (ERV) © 1998 Bible League International', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-URD', 'urd', 'BLI', 'ERV-URD', 'Urdu: Easy-to-Read Version', 'BIBLE', 'ERV-URD.db', 'T', 'F', '2016-10-17',
+'Urdu: Easy-to-Read Version (ERV). © 2003 Bible League International.', NULL, NULL);
 
 -- Eastern Europe
-INSERT INTO Version VALUES ('ERV-BUL', 'bul', 'BLI', 'ERV-BUL', 'TBD', 'BIBLE_NT', 'ERV-BUL.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-HRV', 'hrv', 'BLI', 'ERV-HRV', 'TBD', 'BIBLE_NT', 'ERV-HRV.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-HUN', 'hun', 'BLI', 'ERV-HUN', 'TBD', 'BIBLE', 'ERV-HUN.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-RUS', 'rus', 'BLI', 'ERV-RUS', 'TBD', 'BIBLE', 'ERV-RUS.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-SRP', 'srp', 'BLI', 'ERV-SRP', 'TBD', 'BIBLE', 'ERV-SRP.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-UKR', 'ukr', 'BLI', 'ERV-UKR', 'TBD', 'BIBLE_NT', 'ERV-UKR.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-BUL', 'bul', 'BLI', 'ERV-BUL', 'Новият завет, съвременен превод', 'BIBLE_NT', 'ERV-BUL.db', 'T', 'F', '2016-10-17',
+'Новият завет: съвременен превод (СПБ) © 2000 Bible League International', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-HRV', 'hrv', 'BLI', 'ERV-HRV', 'Novi zavjet, Suvremeni prijevod', 'BIBLE_NT', 'ERV-HRV.db', 'T', 'F', '2016-10-17',
+'Novi zavjet: Suvremeni prijevod (SHP) © 2002 Bible League International', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-HUN', 'hun', 'BLI', 'ERV-HUN', 'Biblia Egyszerű fordítás', 'BIBLE', 'ERV-HUN.db', 'T', 'F', '2016-10-17',
+'BIBLIA: Egyszerű fordítás (EFO) © 2012 Bible League International', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-RUS', 'rus', 'BLI', 'ERV-RUS', 'Святая Библия Современный перевод', 'BIBLE', 'ERV-RUS.db', 'T', 'F', '2016-10-17',
+'Библия: Современный перевод (РСП) © Bible League International, 1993, 2014', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-SRP', 'srp', 'BLI', 'ERV-SRP', 'Библија Савремени српски превод', 'BIBLE', 'ERV-SRP.db', 'T', 'F', '2016-10-17',
+'Библија: Савремени српски превод (ССП) © 2015 Bible League International', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-UKR', 'ukr', 'BLI', 'ERV-UKR', 'Новий Заповіт Сучасною Мовою', 'BIBLE_NT', 'ERV-UKR.db', 'T', 'F', '2016-10-17',
+'Новий Заповіт: Сучасною мовою (УСП) © Bible League International, 1996', NULL, NULL);
 
 
 
@@ -237,7 +235,7 @@ INSERT INTO InstalledVersion VALUES ('ERV-ENG', '2016-10-14', null);
 -- INSERT INTO InstalledVersion VALUES ('CUVTPD', '2016-06-18', null);
 INSERT INTO InstalledVersion VALUES ('ERV-SPA', '2016-10-08', null);
 -- INSERT INTO InstalledVersion VALUES ('KJVPD', '2016-05-16', null);
--- INSERT INTO InstalledVersion VALUES ('NMV', '2016-06-27', null);
+INSERT INTO InstalledVersion VALUES ('NMV', '2016-06-27', null);
 -- INSERT INTO InstalledVersion VALUES ('WEB', '2016-05-16', null);
 -- INSERT INTO InstalledVersion VALUES ('RVR09PD', '2016-05-31', null);
 
