@@ -105,8 +105,8 @@ INSERT INTO Version VALUES ('ERV-CMN', 'cmn', 'BLI', 'ERV-CMN', '圣经–普通
 '圣经–普通话本（普通话）© 1999，2015 Bible League International', NULL, NULL);
 INSERT INTO Version VALUES ('ERV-IND', 'ind', 'BLI', 'ERV-IND', 'Perjanjian Baru: Versi Mudah Dibaca', 'BIBLE_NT', 'ERV-IND.db', 'T', 'F', '2016-10-12',
 'Perjanjian Baru: Versi Mudah Dibaca (VMD) © 2003 Bible League International', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-NEP', 'nep', 'BLI', 'ERV-NEP', 'TBD', 'BIBLE', 'ERV-NEP.db', 'T', 'F', '2016-10-17',
-'copyright', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-NEP', 'nep', 'BLI', 'ERV-NEP', 'Nepali Holy Bible: Easy-to-Read Version', 'BIBLE', 'ERV-NEP.db', 'T', 'F', '2016-10-17',
+'Nepali Holy Bible: Easy-to-Read Version (ERV) © 2004 Bible League International', NULL, NULL);
 INSERT INTO Version VALUES ('ERV-THA', 'tha', 'BLI', 'ERV-THA', 'พระ​คริสต​ธรรม​คัมภีร์ ฉบับ​อ่าน​เข้า​ใจ​ง่าย', 'BIBLE', 'ERV-THA.db', 'T', 'F', '2016-10-12',
 'พระคริสต​ธรรม​คัมภีร์: ฉบับ​อ่าน​เข้า​ใจ​ง่าย (ขจง) © 2015 Bible League International', NULL, NULL);
 INSERT INTO Version VALUES ('ERV-VIE', 'vie', 'BLI', 'ERV-VIE', 'Thánh Kinh: Bản Phổ thông', 'BIBLE', 'ERV-VIE.db', 'T', 'F', '2016-10-12',
