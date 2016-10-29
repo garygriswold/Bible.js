@@ -12,7 +12,7 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Orientation" value="portrait" />
     <preference name="EnableViewportScale" value="true" />
-    <preference name="BackupWebStorage" value="local" />
+    <preference name="BackupWebStorage" value="none" />
     <preference name="iosPersistentFileLocation" value="Library" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="StatusBarStyle" value="lightcontent" />
