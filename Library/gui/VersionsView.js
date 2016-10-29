@@ -50,13 +50,11 @@ VersionsView.prototype.buildCountriesList = function() {
 				var flagNode = that.dom.addNode(flagCell, 'img');
 				flagNode.setAttribute('src', FLAG_PATH + row.countryCode.toLowerCase() + '.png');
 				
-				that.dom.addNode(rowNode, 'td', 'localCtryName', row.localCountryName);
-				var prefLangName = that.translation[row.countryCode];
-				if (prefLangName !== row.localCountryName) {
-					flagCell.setAttribute('rowspan', 2);
-					var row2Node = that.dom.addNode(countryNode, 'tr');
-					that.dom.addNode(row2Node, 'td', 'ctryName', prefLangName);
+				var prefCtryName = that.translation[row.countryCode];
+				if (prefCtryName == null) {
+					prefCtryName = that.translation['en'];
 				}
+				that.dom.addNode(rowNode, 'td', 'localCtryName', prefCtryName);
 			}
 		}
 		that.dom.addNode(root, 'p', 'shortsands', 'Your Bible by Short Sands, LLC. support@shortsands.com, version: ' + 

@@ -122,17 +122,9 @@ td.ctryFlag img {
 	vertical-align: middle;
 }
 td.localCtryName {
-	font-size: 1.5rem;
-	font-weight: bold;
+	font-size: 1.6rem;
 	vertical-align: middle;
 	width: auto;	
-}
-td.ctryName {
-	font-size: 1.0rem;
-	font-weight: bold;
-	padding-left: 4px;
-	vertical-align: middle;
-	width: auto;
 }
 p.shortsands {
 	font-family: sans-serif;

@@ -1554,6 +1554,7 @@ function VersionsView(settingStorage) {
 	var that = this;
 	that.translation = null;
 	deviceSettings.prefLanguage(function(locale) {
+		locale = 'xx';
 		that.database.buildTranslateMap(locale, function(results) {
 			that.translation = results;
 		});		
@@ -1595,13 +1596,12 @@ VersionsView.prototype.buildCountriesList = function() {
 				var flagNode = that.dom.addNode(flagCell, 'img');
 				flagNode.setAttribute('src', FLAG_PATH + row.countryCode.toLowerCase() + '.png');
 				
-				that.dom.addNode(rowNode, 'td', 'localCtryName', row.localCountryName);
-				var prefLangName = that.translation[row.countryCode];
-				if (prefLangName !== row.localCountryName) {
-					flagCell.setAttribute('rowspan', 2);
-					var row2Node = that.dom.addNode(countryNode, 'tr');
-					that.dom.addNode(row2Node, 'td', 'ctryName', prefLangName);
+				var prefCtryName = that.translation[row.countryCode];
+				if (prefCtryName == null) {
+					
+					prefCtryName = that.translation['en'];
 				}
+				that.dom.addNode(rowNode, 'td', 'localCtryName', prefCtryName);
 			}
 		}
 		that.dom.addNode(root, 'p', 'shortsands', 'Your Bible by Short Sands, LLC. support@shortsands.com, version: ' + 
@@ -1636,7 +1636,6 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					var rowNode = that.dom.addNode(versionNode, 'tr');
 					var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
 					
-					//var prefLangName = that.translation[row.langCode];
 					var languageName = (row.englishName === row.localLanguageName) ? row.englishName : row.localLanguageName + ' (' + row.englishName + ')';
 					that.dom.addNode(leftNode, 'p', 'langName', languageName);
 					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
