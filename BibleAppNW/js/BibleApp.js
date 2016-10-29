@@ -30,7 +30,6 @@ AppInitializer.prototype.begin = function() {
 						console.log('default version determined ', filename);
 						var parts = filename.split('.');
 						var versionCode = parts[0]; // This hack requires version code to be part of filename.
-						console.log('TEST', versionCode, JSON.stringify(appUpdater.installedVersions));
 						if (appUpdater.installedVersions[versionCode]) {
 							// Process locale's default version installed
 							changeVersionHandler(filename);
@@ -1637,8 +1636,8 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					var rowNode = that.dom.addNode(versionNode, 'tr');
 					var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
 					
-					var prefLangName = that.translation[row.langCode];
-					var languageName = (prefLangName === row.localLanguageName) ? prefLangName : row.localLanguageName + ' (' + prefLangName + ')';
+					//var prefLangName = that.translation[row.langCode];
+					var languageName = (row.englishName === row.localLanguageName) ? row.englishName : row.localLanguageName + ' (' + row.englishName + ')';
 					that.dom.addNode(leftNode, 'p', 'langName', languageName);
 					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
 					var versionAbbr = (row.versionAbbr && row.versionAbbr.length > 0) ? row.versionAbbr : '';
@@ -2986,7 +2985,7 @@ VersionsAdapter.prototype.selectCountries = function(callback) {
 	});
 };
 VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
-	var statement =	'SELECT v.versionCode, l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr,' +
+	var statement =	'SELECT v.versionCode, l.englishName, l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr,' +
 		' v.copyright, v.filename, o.localOwnerName, o.ownerURL' +
 		' FROM Version v' + 
 		' JOIN Owner o ON v.ownerCode = o.ownerCode' +

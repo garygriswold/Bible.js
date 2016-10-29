@@ -29,7 +29,6 @@ englishName TEXT NOT NULL,
 localLanguageName TEXT NOT NULL
 );
 -- World Languages
-INSERT INTO Language VALUES ('arb', 'ar', 'rtl', 'Arabic', 'العربية');
 INSERT INTO Language VALUES ('awa', 'awa', 'ltr', 'Awadhi', ''); -- no tranlation
 INSERT INTO Language VALUES ('ben', 'bn', 'ltr', 'Bengali', 'বাঙালি');
 INSERT INTO Language VALUES ('bul', 'bg', 'ltr', 'Bulgarian', 'български език');
@@ -44,7 +43,6 @@ INSERT INTO Language VALUES ('mar', 'mr', 'ltr', 'Marathi', 'मराठी');
 INSERT INTO Language VALUES ('nep', 'ne', 'ltr', 'Nepali', 'नेपाली');
 INSERT INTO Language VALUES ('ori', 'or', 'ltr', 'Oriya', ''); -- no translation
 INSERT INTO Language VALUES ('pan', 'pa', 'ltr', 'Punjabi', 'ਪੰਜਾਬੀ ਦੇ');
-INSERT INTO Language VALUES ('pes', 'fa', 'rtl', 'Persian', 'فارسی');
 INSERT INTO Language VALUES ('por', 'pt', 'ltr', 'Portuguese', 'Português');
 INSERT INTO Language VALUES ('rus', 'ru', 'ltr', 'Russian', 'русский');
 INSERT INTO Language VALUES ('srp', 'sr', 'ltr', 'Serbian', 'Српски');
@@ -52,8 +50,11 @@ INSERT INTO Language VALUES ('spa', 'es', 'ltr', 'Spanish', 'Español');
 INSERT INTO Language VALUES ('tam', 'ta', 'ltr', 'Tamil', 'தமிழ் மொழி');
 INSERT INTO Language VALUES ('tha', 'th', 'ltr', 'Thai', 'ภาษาไทย');
 INSERT INTO Language VALUES ('ukr', 'uk', 'ltr', 'Ukrainian', 'українська мова');
-INSERT INTO Language VALUES ('urd', 'ur', 'rtl', 'Urdu', 'اردو زبان');
 INSERT INTO Language VALUES ('vie', 'vi', 'ltr', 'Vietnamese', 'Tiếng Việt');
+-- Right to Left Languages
+INSERT INTO Language VALUES ('arb', 'ar', 'rtl', 'Arabic', 'العربية');
+INSERT INTO Language VALUES ('pes', 'fa', 'rtl', 'Persian', 'فارسی');
+INSERT INTO Language VALUES ('urd', 'ur', 'rtl', 'Urdu', 'اردو زبان');
 
 
 CREATE TABLE Owner (
@@ -115,7 +116,7 @@ INSERT INTO Version VALUES ('ERV-VIE', 'vie', 'BLI', 'ERV-VIE', 'Thánh Kinh: B�
 -- Middle East
 INSERT INTO Version VALUES ('ARBVDPD', 'arb', 'EBIBLE', 'ARBVD', 'الكتاب المقدس ترجمة فان دايك', 'BIBLE', 'ARBVDPD.db', 'F', 'F', '2016-09-06',
 'Arabic Bible: Van Dyck Translation (ARBVD), Public Domain, eBible.org', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-ARB', 'arb', 'BLI', 'ERV-ARB', 'بِعَهْدَيْهِ القَدِيمِ وَالجَدِيد الكِتَابُ المُقَدَّسُ', 'BIBLE', 'ERV-ARB.db', 'F', 'T', '2016-10',
+INSERT INTO Version VALUES ('ERV-ARB', 'arb', 'BLI', 'ERV-ARB', 'بِعَهْدَيْهِ القَدِيمِ وَالجَدِيد الكِتَابُ المُقَدَّسُ', 'BIBLE', 'ERV-ARB.db', 'F', 'F', '2016-10',
 'الكِتاب المُقَدَّس: التَّرْجَمَةُ العَرَبِيَّةُ المُبَسَّطَةُ (ت ع م) © 2009, 2016 رَابِطَةُ الكِتَابِ المُقَدَّسِ الدَّوْلِيَّة (Bible League International)',
 NULL, NULL);
 INSERT INTO Version VALUES('NMV', 'pes', 'ELAM', 'NMV', 'ترجمۀ هزارۀ نو', 'BIBLE', 'NMV.db', 'F', 'F', '2016-09-06',
@@ -154,7 +155,6 @@ INSERT INTO Version VALUES ('ERV-SRP', 'srp', 'BLI', 'ERV-SRP', 'Библија 
 'Библија: Савремени српски превод (ССП) © 2015 Bible League International', NULL, NULL);
 INSERT INTO Version VALUES ('ERV-UKR', 'ukr', 'BLI', 'ERV-UKR', 'Новий Заповіт Сучасною Мовою', 'BIBLE_NT', 'ERV-UKR.db', 'T', 'F', '2016-10-17',
 'Новий Заповіт: Сучасною мовою (УСП) © Bible League International, 1996', NULL, NULL);
-
 
 
 
@@ -203,7 +203,7 @@ INSERT INTO DefaultVersion VALUES ('bn', 'ERV-BEN.db'); -- Bengali
 INSERT INTO DefaultVersion VALUES ('bg', 'ERV-BUL.db'); -- bulgarian
 INSERT INTO DefaultVersion VALUES ('en', 'ERV-ENG.db'); -- English
 INSERT INTO DefaultVersion VALUES ('es', 'ERV-SPA.db'); -- Spanish
-INSERT INTO DefaultVersion VALUES ('fa', 'NMV.db'); -- Persian
+INSERT INTO DefaultVersion VALUES ('fa', 'NMV.db');     -- Persian
 INSERT INTO DefaultVersion VALUES ('hi', 'ERV-HIN.db'); -- Hindi
 INSERT INTO DefaultVersion VALUES ('hr', 'ERV-HRV.db'); -- Croatia
 INSERT INTO DefaultVersion VALUES ('hu', 'ERV-HUN.db'); -- Hungarian
@@ -231,13 +231,12 @@ endDate NULL
 );
 INSERT INTO InstalledVersion VALUES ('ARBVDPD', '2016-06-01', null);
 INSERT INTO InstalledVersion VALUES ('ERV-ENG', '2016-10-14', null);
--- INSERT INTO InstalledVersion VALUES ('CUVSPD', '2016-06-11', null);
--- INSERT INTO InstalledVersion VALUES ('CUVTPD', '2016-06-18', null);
-INSERT INTO InstalledVersion VALUES ('ERV-SPA', '2016-10-08', null);
+-- INSERT INTO InstalledVersion VALUES ('ERV-SPA', '2016-10-08', null);
 -- INSERT INTO InstalledVersion VALUES ('KJVPD', '2016-05-16', null);
-INSERT INTO InstalledVersion VALUES ('NMV', '2016-06-27', null);
--- INSERT INTO InstalledVersion VALUES ('WEB', '2016-05-16', null);
--- INSERT INTO InstalledVersion VALUES ('RVR09PD', '2016-05-31', null);
+-- INSERT INTO InstalledVersion VALUES ('NMV', '2016-06-27', null);
+INSERT INTO InstalledVersion VALUES ('WEB', '2016-05-16', null);
+-- INSERT INTO InstalledVersion VALUES ('ERV-PAN', '2016-10-28', null);
+-- INSERT INTO InstalledVersion VALUES ('ERV-ORI', '2016-10-28', null);
 
 
 
@@ -247,36 +246,35 @@ target TEXT NOT NULL,
 translated TEXT NOT NULL,
 PRIMARY KEY(source, target)
 );
+-- INSERT INTO Translation VALUES ('en', 'en', 'English');
+-- INSERT INTO Translation VALUES ('en', 'es', 'Inglés');
+-- INSERT INTO Translation VALUES ('en', 'zh', '英语');
+-- INSERT INTO Translation VALUES ('en', 'ar', 'الإنجليزية');
+-- INSERT INTO Translation VALUES ('en', 'fa', 'انگلیسی');
 
-INSERT INTO Translation VALUES ('en', 'en', 'English');
-INSERT INTO Translation VALUES ('en', 'es', 'Inglés');
-INSERT INTO Translation VALUES ('en', 'zh', '英语');
-INSERT INTO Translation VALUES ('en', 'ar', 'الإنجليزية');
-INSERT INTO Translation VALUES ('en', 'fa', 'انگلیسی');
+-- INSERT INTO Translation VALUES ('es', 'en', 'Spanish');
+-- INSERT INTO Translation VALUES ('es', 'es', 'Español');
+-- INSERT INTO Translation VALUES ('es', 'zh', '西班牙语');
+-- INSERT INTO Translation VALUES ('es', 'ar', 'الأسبانية');
+-- INSERT INTO Translation VALUES ('es', 'fa', 'اسپانیایی');
 
-INSERT INTO Translation VALUES ('es', 'en', 'Spanish');
-INSERT INTO Translation VALUES ('es', 'es', 'Español');
-INSERT INTO Translation VALUES ('es', 'zh', '西班牙语');
-INSERT INTO Translation VALUES ('es', 'ar', 'الأسبانية');
-INSERT INTO Translation VALUES ('es', 'fa', 'اسپانیایی');
+-- INSERT INTO Translation VALUES ('ar', 'en', 'Arabic');
+-- INSERT INTO Translation VALUES ('ar', 'es', 'Arábica');
+-- INSERT INTO Translation VALUES ('ar', 'zh', '阿拉伯');
+-- INSERT INTO Translation VALUES ('ar', 'ar', 'العربية');
+-- INSERT INTO Translation VALUES ('ar', 'fa', 'عربی');
 
-INSERT INTO Translation VALUES ('ar', 'en', 'Arabic');
-INSERT INTO Translation VALUES ('ar', 'es', 'Arábica');
-INSERT INTO Translation VALUES ('ar', 'zh', '阿拉伯');
-INSERT INTO Translation VALUES ('ar', 'ar', 'العربية');
-INSERT INTO Translation VALUES ('ar', 'fa', 'عربی');
+-- INSERT INTO Translation VALUES ('zh', 'en', 'Chinese');
+-- INSERT INTO Translation VALUES ('zh', 'es', 'Chino');
+-- INSERT INTO Translation VALUES ('zh', 'zh', '中文');
+-- INSERT INTO Translation VALUES ('zh', 'ar', 'الصينية');
+-- INSERT INTO Translation VALUES ('zh', 'fa', 'چینی ها');
 
-INSERT INTO Translation VALUES ('zh', 'en', 'Chinese');
-INSERT INTO Translation VALUES ('zh', 'es', 'Chino');
-INSERT INTO Translation VALUES ('zh', 'zh', '中文');
-INSERT INTO Translation VALUES ('zh', 'ar', 'الصينية');
-INSERT INTO Translation VALUES ('zh', 'fa', 'چینی ها');
-
-INSERT INTO Translation VALUES ('fa', 'en', 'Persian');
-INSERT INTO Translation VALUES ('fa', 'es', 'persa');
-INSERT INTO Translation VALUES ('fa', 'zh', '波斯语');
-INSERT INTO Translation VALUES ('fa', 'ar', 'اللغة الفارسية');
-INSERT INTO Translation VALUES ('fa', 'fa', 'فارسی');
+-- INSERT INTO Translation VALUES ('fa', 'en', 'Persian');
+-- INSERT INTO Translation VALUES ('fa', 'es', 'persa');
+-- INSERT INTO Translation VALUES ('fa', 'zh', '波斯语');
+-- INSERT INTO Translation VALUES ('fa', 'ar', 'اللغة الفارسية');
+-- INSERT INTO Translation VALUES ('fa', 'fa', 'فارسی');
 
 INSERT INTO Translation VALUES ('WORLD', 'en', 'World');
 INSERT INTO Translation VALUES ('WORLD', 'es', 'Mundo');
@@ -284,17 +282,17 @@ INSERT INTO Translation VALUES ('WORLD', 'zh', '世界');
 INSERT INTO Translation VALUES ('WORLD', 'ar', 'العالم');
 INSERT INTO Translation VALUES ('WORLD', 'fa', 'جهان');
 
-INSERT INTO Translation VALUES ('US', 'en', 'United States');
-INSERT INTO Translation VALUES ('US', 'es', 'Estados Unidos');
-INSERT INTO Translation VALUES ('US', 'zh', '美国');
-INSERT INTO Translation VALUES ('US', 'ar', 'الولايات المتحدة');
-INSERT INTO Translation VALUES ('US', 'fa', 'ایالات متحده');
+-- INSERT INTO Translation VALUES ('US', 'en', 'United States');
+-- INSERT INTO Translation VALUES ('US', 'es', 'Estados Unidos');
+-- INSERT INTO Translation VALUES ('US', 'zh', '美国');
+-- INSERT INTO Translation VALUES ('US', 'ar', 'الولايات المتحدة');
+-- INSERT INTO Translation VALUES ('US', 'fa', 'ایالات متحده');
 
-INSERT INTO Translation VALUES ('MX', 'en', 'Mexico');
-INSERT INTO Translation VALUES ('MX', 'es', 'Méjico');
-INSERT INTO Translation VALUES ('MX', 'zh', '墨西哥');
-INSERT INTO Translation VALUES ('MX', 'ar', 'المكسيك');
-INSERT INTO Translation VALUES ('MX', 'fa', 'مکزیک');
+-- INSERT INTO Translation VALUES ('MX', 'en', 'Mexico');
+-- INSERT INTO Translation VALUES ('MX', 'es', 'Méjico');
+-- INSERT INTO Translation VALUES ('MX', 'zh', '墨西哥');
+-- INSERT INTO Translation VALUES ('MX', 'ar', 'المكسيك');
+-- INSERT INTO Translation VALUES ('MX', 'fa', 'مکزیک');
 
 
 

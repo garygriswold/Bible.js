@@ -91,8 +91,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					var rowNode = that.dom.addNode(versionNode, 'tr');
 					var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
 					
-					var prefLangName = that.translation[row.langCode];
-					var languageName = (prefLangName === row.localLanguageName) ? prefLangName : row.localLanguageName + ' (' + prefLangName + ')';
+					var languageName = (row.englishName === row.localLanguageName) ? row.englishName : row.localLanguageName + ' (' + row.englishName + ')';
 					that.dom.addNode(leftNode, 'p', 'langName', languageName);
 					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
 					var versionAbbr = (row.versionAbbr && row.versionAbbr.length > 0) ? row.versionAbbr : '';
