@@ -664,21 +664,24 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 		} else {
 			for (var i=0; i<results.length; i++) {
 				var historyNodeId = results[i];
-				var tab = document.createElement('li');
-				tab.setAttribute('class', 'historyTab');
-				root.appendChild(tab);
-
-				var btn = document.createElement('button');
-				btn.setAttribute('id', 'his' + historyNodeId);
-				btn.setAttribute('class', 'historyTabBtn');
-				btn.textContent = generateReference(historyNodeId);
-				tab.appendChild(btn);
-				btn.addEventListener('click', function(event) {
-					console.log('btn clicked', this.id);
-					var nodeId = this.id.substr(3);
-					document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
-					that.hideView();
-				});
+				var content = generateReference(historyNodeId);
+				if (content) {
+					var tab = document.createElement('li');
+					tab.setAttribute('class', 'historyTab');
+					root.appendChild(tab);
+	
+					var btn = document.createElement('button');
+					btn.setAttribute('id', 'his' + historyNodeId);
+					btn.setAttribute('class', 'historyTabBtn');
+					btn.textContent = content;
+					tab.appendChild(btn);
+					btn.addEventListener('click', function(event) {
+						console.log('btn clicked', this.id);
+						var nodeId = this.id.substr(3);
+						document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
+						that.hideView();
+					});
+				}
 			}
 			callback(root);
 		}
@@ -687,7 +690,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 	function generateReference(nodeId) {
 		var ref = new Reference(nodeId);
 		var book = that.tableContents.find(ref.book);
-		return(book.abbrev + ' ' + that.localizeNumber.toLocal(ref.chapterVerse()));
+		return((book) ? book.abbrev + ' ' + that.localizeNumber.toLocal(ref.chapterVerse()) : null);
 	}
 };
 
@@ -1554,7 +1557,6 @@ function VersionsView(settingStorage) {
 	var that = this;
 	that.translation = null;
 	deviceSettings.prefLanguage(function(locale) {
-		locale = 'z';
 		that.database.buildTranslateMap(locale, function(results) {
 			that.translation = results;
 		});		

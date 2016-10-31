@@ -1594,13 +1594,11 @@ VersionsView.prototype.buildCountriesList = function() {
 				var flagNode = that.dom.addNode(flagCell, 'img');
 				flagNode.setAttribute('src', FLAG_PATH + row.countryCode.toLowerCase() + '.png');
 				
-				that.dom.addNode(rowNode, 'td', 'localCtryName', row.localCountryName);
-				var prefLangName = that.translation[row.countryCode];
-				if (prefLangName !== row.localCountryName) {
-					flagCell.setAttribute('rowspan', 2);
-					var row2Node = that.dom.addNode(countryNode, 'tr');
-					that.dom.addNode(row2Node, 'td', 'ctryName', prefLangName);
+				var prefCtryName = that.translation[row.countryCode];
+				if (prefCtryName == null) {
+					prefCtryName = that.translation['en'];
 				}
+				that.dom.addNode(rowNode, 'td', 'localCtryName', prefCtryName);
 			}
 		}
 		that.dom.addNode(root, 'p', 'shortsands', 'Your Bible by Short Sands, LLC. support@shortsands.com, version: ' + 
@@ -1635,8 +1633,10 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					var rowNode = that.dom.addNode(versionNode, 'tr');
 					var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
 					
-					var prefLangName = that.translation[row.langCode];
-					var languageName = (prefLangName === row.localLanguageName) ? prefLangName : row.localLanguageName + ' (' + prefLangName + ')';
+					var preferredName = that.translation[row.langCode];
+					var languageName = (preferredName == null || preferredName === row.localLanguageName) 
+						? row.localLanguageName 
+						: row.localLanguageName + ' (' + preferredName + ')';
 					that.dom.addNode(leftNode, 'p', 'langName', languageName);
 					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
 					var versionAbbr = (row.versionAbbr && row.versionAbbr.length > 0) ? row.versionAbbr : '';
@@ -2984,7 +2984,7 @@ VersionsAdapter.prototype.selectCountries = function(callback) {
 	});
 };
 VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
-	var statement =	'SELECT v.versionCode, l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr,' +
+	var statement =	'SELECT v.versionCode, l.englishName, l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr,' +
 		' v.copyright, v.filename, o.localOwnerName, o.ownerURL' +
 		' FROM Version v' + 
 		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
