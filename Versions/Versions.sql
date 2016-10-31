@@ -29,7 +29,7 @@ englishName TEXT NOT NULL,
 localLanguageName TEXT NOT NULL
 );
 -- World Languages
-INSERT INTO Language VALUES ('awa', 'awa', 'ltr', 'Awadhi', ''); -- no tranlation
+INSERT INTO Language VALUES ('awa', 'awa', 'ltr', 'Awadhi', 'Awadhi'); -- no translation
 INSERT INTO Language VALUES ('ben', 'bn', 'ltr', 'Bengali', 'বাঙালি');
 INSERT INTO Language VALUES ('bul', 'bg', 'ltr', 'Bulgarian', 'български език');
 INSERT INTO Language VALUES ('cmn', 'zh', 'ltr', 'Chinese', '汉语, 漢語');
@@ -41,7 +41,7 @@ INSERT INTO Language VALUES ('ind', 'id', 'ltr', 'Indonesian', 'Bahasa Indonesia
 INSERT INTO Language VALUES ('kan', 'kn', 'ltr', 'Kannada', 'ಕನ್ನಡ');
 INSERT INTO Language VALUES ('mar', 'mr', 'ltr', 'Marathi', 'मराठी');
 INSERT INTO Language VALUES ('nep', 'ne', 'ltr', 'Nepali', 'नेपाली');
-INSERT INTO Language VALUES ('ori', 'or', 'ltr', 'Oriya', ''); -- no translation
+INSERT INTO Language VALUES ('ori', 'or', 'ltr', 'Oriya', 'Oriya'); -- no translation
 INSERT INTO Language VALUES ('pan', 'pa', 'ltr', 'Punjabi', 'ਪੰਜਾਬੀ ਦੇ');
 INSERT INTO Language VALUES ('por', 'pt', 'ltr', 'Portuguese', 'Português');
 INSERT INTO Language VALUES ('rus', 'ru', 'ltr', 'Russian', 'русский');

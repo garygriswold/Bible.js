@@ -66,7 +66,7 @@ VersionAdapter.prototype.addURLSignatures = function(callback) {
 				var row = results[i];
 				var url = 'https://d1obplp0ybf6eo.cloudfront.net/' + row.filename + '.zip';
 				var signedURL = signer.getSignedUrl(url, options);
-				console.log(row.code, 'Signed URL', signedURL);
+				//console.log(row.versionCode, 'Signed URL', signedURL);
 				signed.push([signedURL, row.versionCode]);
 			}
 			that.executeSQL('UPDATE Version SET URLSignature=? WHERE versionCode=?', signed, function(rowCount) {

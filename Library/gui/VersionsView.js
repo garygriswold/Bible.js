@@ -90,10 +90,9 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
 					
 					var preferredName = that.translation[row.langCode];
-					if (preferredName == null) {
-						preferredName = that.translation['en'];
-					}
-					var languageName = (preferredName === row.localLanguageName) ? preferredName : row.localLanguageName + ' (' + preferredName + ')';
+					var languageName = (preferredName == null || preferredName === row.localLanguageName) 
+						? row.localLanguageName 
+						: row.localLanguageName + ' (' + preferredName + ')';
 					that.dom.addNode(leftNode, 'p', 'langName', languageName);
 					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
 					var versionAbbr = (row.versionAbbr && row.versionAbbr.length > 0) ? row.versionAbbr : '';
