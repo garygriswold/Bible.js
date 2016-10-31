@@ -104,7 +104,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 	function generateReference(nodeId) {
 		var ref = new Reference(nodeId);
 		var book = that.tableContents.find(ref.book);
-		return((book) ? book.abbrev + ' ' + that.localizeNumber.toLocal(ref.chapterVerse()) : null);
+		return((book) ? book.abbrev + ' ' + that.localizeNumber.toHistLocal(ref.chapterVerse()) : null);
 	}
 };
 

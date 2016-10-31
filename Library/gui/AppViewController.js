@@ -155,7 +155,7 @@ AppViewController.prototype.clearViews = function() {
 	this.historyView.hideView();
 };
 AppViewController.prototype.close = function() {
-	console.log('CLOSE ', this.version);
+	console.log('CLOSE ', (this.version) ? this.version.code : 'none');
 	this.touch = null;
 	// remove dom
 	for (var i=document.body.children.length -1; i>=0; i--) {

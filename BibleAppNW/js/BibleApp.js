@@ -279,7 +279,7 @@ AppViewController.prototype.clearViews = function() {
 	this.historyView.hideView();
 };
 AppViewController.prototype.close = function() {
-	console.log('CLOSE ', this.version);
+	console.log('CLOSE ', (this.version) ? this.version.code : 'none');
 	this.touch = null;
 	// remove dom
 	for (var i=document.body.children.length -1; i>=0; i--) {
@@ -690,7 +690,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 	function generateReference(nodeId) {
 		var ref = new Reference(nodeId);
 		var book = that.tableContents.find(ref.book);
-		return((book) ? book.abbrev + ' ' + that.localizeNumber.toLocal(ref.chapterVerse()) : null);
+		return((book) ? book.abbrev + ' ' + that.localizeNumber.toHistLocal(ref.chapterVerse()) : null);
 	}
 };
 
@@ -3976,6 +3976,13 @@ LocalizeNumber.prototype.toLocal = function(number) {
 LocalizeNumber.prototype.toTOCLocal = function(number) {
 	if (number == 0) {
 		return('\u2744');
+	} else {
+		return(this.toLocal(number));
+	}
+};
+LocalizeNumber.prototype.toHistLocal = function(number) {
+	if (number == 0) {
+		return('');
 	} else {
 		return(this.toLocal(number));
 	}

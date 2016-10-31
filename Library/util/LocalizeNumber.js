@@ -32,6 +32,13 @@ LocalizeNumber.prototype.toTOCLocal = function(number) {
 		return(this.toLocal(number));
 	}
 };
+LocalizeNumber.prototype.toHistLocal = function(number) {
+	if (number == 0) {
+		return('');
+	} else {
+		return(this.toLocal(number));
+	}
+};
 LocalizeNumber.prototype.toAscii = function(number) {
 	return(this.convert(number, - this.numberOffset));
 };
