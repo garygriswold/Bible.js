@@ -278,7 +278,7 @@ AppViewController.prototype.clearViews = function() {
 	this.historyView.hideView();
 };
 AppViewController.prototype.close = function() {
-	console.log('CLOSE ', this.version);
+	console.log('CLOSE ', (this.version) ? this.version.code : 'none');
 	this.touch = null;
 	// remove dom
 	for (var i=document.body.children.length -1; i>=0; i--) {
@@ -663,21 +663,24 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 		} else {
 			for (var i=0; i<results.length; i++) {
 				var historyNodeId = results[i];
-				var tab = document.createElement('li');
-				tab.setAttribute('class', 'historyTab');
-				root.appendChild(tab);
-
-				var btn = document.createElement('button');
-				btn.setAttribute('id', 'his' + historyNodeId);
-				btn.setAttribute('class', 'historyTabBtn');
-				btn.textContent = generateReference(historyNodeId);
-				tab.appendChild(btn);
-				btn.addEventListener('click', function(event) {
-					console.log('btn clicked', this.id);
-					var nodeId = this.id.substr(3);
-					document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
-					that.hideView();
-				});
+				var content = generateReference(historyNodeId);
+				if (content) {
+					var tab = document.createElement('li');
+					tab.setAttribute('class', 'historyTab');
+					root.appendChild(tab);
+	
+					var btn = document.createElement('button');
+					btn.setAttribute('id', 'his' + historyNodeId);
+					btn.setAttribute('class', 'historyTabBtn');
+					btn.textContent = content;
+					tab.appendChild(btn);
+					btn.addEventListener('click', function(event) {
+						console.log('btn clicked', this.id);
+						var nodeId = this.id.substr(3);
+						document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
+						that.hideView();
+					});
+				}
 			}
 			callback(root);
 		}
@@ -686,7 +689,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 	function generateReference(nodeId) {
 		var ref = new Reference(nodeId);
 		var book = that.tableContents.find(ref.book);
-		return(book.abbrev + ' ' + that.localizeNumber.toLocal(ref.chapterVerse()));
+		return((book) ? book.abbrev + ' ' + that.localizeNumber.toHistLocal(ref.chapterVerse()) : null);
 	}
 };
 
@@ -1150,13 +1153,15 @@ function HeaderView(tableContents, version, localizeNumber) {
 		
 		if (that.currentReference) {
 			var book = that.tableContents.find(that.currentReference.book);
-			var chapter = (that.currentReference.chapter > 0) ? that.currentReference.chapter : 1;
-			var text = book.name + ' ' + that.localizeNumber.toLocal(chapter);
-			that.titleGraphics.clearRect(0, 0, that.titleCanvas.width, that.hite);
-			that.titleGraphics.fillText(text, that.titleCanvas.width / 2, that.hite / 2, that.titleCanvas.width);
-			that.titleWidth = that.titleGraphics.measureText(text).width + 10;
-			that.titleStartX = (that.titleCanvas.width - that.titleWidth) / 2;
-			roundedRect(that.titleGraphics, that.titleStartX, 0, that.titleWidth, that.hite, 7);
+			if (book) {
+				var chapter = (that.currentReference.chapter > 0) ? that.currentReference.chapter : 1;
+				var text = book.name + ' ' + that.localizeNumber.toLocal(chapter);
+				that.titleGraphics.clearRect(0, 0, that.titleCanvas.width, that.hite);
+				that.titleGraphics.fillText(text, that.titleCanvas.width / 2, that.hite / 2, that.titleCanvas.width);
+				that.titleWidth = that.titleGraphics.measureText(text).width + 10;
+				that.titleStartX = (that.titleCanvas.width - that.titleWidth) / 2;
+				roundedRect(that.titleGraphics, that.titleStartX, 0, that.titleWidth, that.hite, 7);
+			}
 		}
 		document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	}
@@ -3972,6 +3977,13 @@ LocalizeNumber.prototype.toLocal = function(number) {
 LocalizeNumber.prototype.toTOCLocal = function(number) {
 	if (number == 0) {
 		return('\u2744');
+	} else {
+		return(this.toLocal(number));
+	}
+};
+LocalizeNumber.prototype.toHistLocal = function(number) {
+	if (number == 0) {
+		return('');
 	} else {
 		return(this.toLocal(number));
 	}

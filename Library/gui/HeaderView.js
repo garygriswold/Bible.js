@@ -40,13 +40,15 @@ function HeaderView(tableContents, version, localizeNumber) {
 		
 		if (that.currentReference) {
 			var book = that.tableContents.find(that.currentReference.book);
-			var chapter = (that.currentReference.chapter > 0) ? that.currentReference.chapter : 1;
-			var text = book.name + ' ' + that.localizeNumber.toLocal(chapter);
-			that.titleGraphics.clearRect(0, 0, that.titleCanvas.width, that.hite);
-			that.titleGraphics.fillText(text, that.titleCanvas.width / 2, that.hite / 2, that.titleCanvas.width);
-			that.titleWidth = that.titleGraphics.measureText(text).width + 10;
-			that.titleStartX = (that.titleCanvas.width - that.titleWidth) / 2;
-			roundedRect(that.titleGraphics, that.titleStartX, 0, that.titleWidth, that.hite, 7);
+			if (book) {
+				var chapter = (that.currentReference.chapter > 0) ? that.currentReference.chapter : 1;
+				var text = book.name + ' ' + that.localizeNumber.toLocal(chapter);
+				that.titleGraphics.clearRect(0, 0, that.titleCanvas.width, that.hite);
+				that.titleGraphics.fillText(text, that.titleCanvas.width / 2, that.hite / 2, that.titleCanvas.width);
+				that.titleWidth = that.titleGraphics.measureText(text).width + 10;
+				that.titleStartX = (that.titleCanvas.width - that.titleWidth) / 2;
+				roundedRect(that.titleGraphics, that.titleStartX, 0, that.titleWidth, that.hite, 7);
+			}
 		}
 		document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	}

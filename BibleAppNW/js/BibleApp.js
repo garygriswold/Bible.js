@@ -90,11 +90,13 @@ AppInitializer.prototype.begin = function() {
 	function showPassageHandler(event) {
 		disableHandlers();
 		that.controller.clearViews();
-		that.controller.codexView.showView(event.detail.id);
-		enableHandlersExcept('NONE');
-		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
-			source: 'P', search: event.detail.source };
-		that.controller.history.replace(historyItem, function(count) {});
+		setTimeout(function() {
+			that.controller.codexView.showView(event.detail.id);
+			enableHandlersExcept('NONE');
+			var historyItem = { timestamp: new Date(), reference: event.detail.id, 
+				source: 'P', search: event.detail.source };
+			that.controller.history.replace(historyItem, function(count) {});
+		}, 5); 
 	}
 	function showQuestionsHandler(event) {
 		disableHandlers();
@@ -331,10 +333,13 @@ function CodexView(chaptersAdapter, tableContents, headerHeight, copyrightView) 
 }
 CodexView.prototype.hideView = function() {
 	window.clearTimeout(this.checkScrollID);
-	if (this.viewport.children.length > 0) {
-		for (var i=this.viewport.children.length -1; i>=0; i--) {
-			this.viewport.removeChild(this.viewport.children[i]);
-		}
+	//if (this.viewport.children.length > 0) {
+	//	for (var i=this.viewport.children.length -1; i>=0; i--) {
+	//		this.viewport.removeChild(this.viewport.children[i]);
+	//	}
+	//}
+	while (this.viewport.firstChild) {
+		this.viewport.removeChild(this.viewport.firstChild);
 	}
 };
 CodexView.prototype.showView = function(nodeId) {
@@ -1154,13 +1159,15 @@ function HeaderView(tableContents, version, localizeNumber) {
 		
 		if (that.currentReference) {
 			var book = that.tableContents.find(that.currentReference.book);
-			var chapter = (that.currentReference.chapter > 0) ? that.currentReference.chapter : 1;
-			var text = book.name + ' ' + that.localizeNumber.toLocal(chapter);
-			that.titleGraphics.clearRect(0, 0, that.titleCanvas.width, that.hite);
-			that.titleGraphics.fillText(text, that.titleCanvas.width / 2, that.hite / 2, that.titleCanvas.width);
-			that.titleWidth = that.titleGraphics.measureText(text).width + 10;
-			that.titleStartX = (that.titleCanvas.width - that.titleWidth) / 2;
-			roundedRect(that.titleGraphics, that.titleStartX, 0, that.titleWidth, that.hite, 7);
+			if (book) {
+				var chapter = (that.currentReference.chapter > 0) ? that.currentReference.chapter : 1;
+				var text = book.name + ' ' + that.localizeNumber.toLocal(chapter);
+				that.titleGraphics.clearRect(0, 0, that.titleCanvas.width, that.hite);
+				that.titleGraphics.fillText(text, that.titleCanvas.width / 2, that.hite / 2, that.titleCanvas.width);
+				that.titleWidth = that.titleGraphics.measureText(text).width + 10;
+				that.titleStartX = (that.titleCanvas.width - that.titleWidth) / 2;
+				roundedRect(that.titleGraphics, that.titleStartX, 0, that.titleWidth, that.hite, 7);
+			}
 		}
 		document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	}

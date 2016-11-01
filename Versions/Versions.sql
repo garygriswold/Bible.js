@@ -116,7 +116,7 @@ INSERT INTO Version VALUES ('ERV-VIE', 'vie', 'BLI', 'ERV-VIE', 'Thánh Kinh: B�
 -- Middle East
 INSERT INTO Version VALUES ('ARBVDPD', 'arb', 'EBIBLE', 'ARBVD', 'الكتاب المقدس ترجمة فان دايك', 'BIBLE', 'ARBVDPD.db', 'F', 'F', '2016-09-06',
 'Arabic Bible: Van Dyck Translation (ARBVD), Public Domain, eBible.org', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-ARB', 'arb', 'BLI', 'ERV-ARB', 'بِعَهْدَيْهِ القَدِيمِ وَالجَدِيد الكِتَابُ المُقَدَّسُ', 'BIBLE', 'ERV-ARB.db', 'F', 'F', '2016-10',
+INSERT INTO Version VALUES ('ERV-ARB', 'arb', 'BLI', 'ERV-ARB', 'بِعَهْدَيْهِ القَدِيمِ وَالجَدِيد الكِتَابُ المُقَدَّسُ', 'BIBLE', 'ERV-ARB.db', 'T', 'F', '2016-10',
 'الكِتاب المُقَدَّس: التَّرْجَمَةُ العَرَبِيَّةُ المُبَسَّطَةُ (ت ع م) © 2009, 2016 رَابِطَةُ الكِتَابِ المُقَدَّسِ الدَّوْلِيَّة (Bible League International)',
 NULL, NULL);
 INSERT INTO Version VALUES('NMV', 'pes', 'ELAM', 'NMV', 'ترجمۀ هزارۀ نو', 'BIBLE', 'NMV.db', 'F', 'F', '2016-09-06',
@@ -133,9 +133,9 @@ INSERT INTO Version VALUES ('ERV-KAN', 'kan', 'BLI', 'ERV-KAN', 'Kannada: Easy-t
 'Kannada: Easy-to-Read Version (ERV). © 1997 Bible League International.', NULL, NULL);
 INSERT INTO Version VALUES ('ERV-MAR', 'mar', 'BLI', 'ERV-MAR', 'Marathi: Easy-to-Read Version', 'BIBLE', 'ERV-MAR.db', 'T', 'F', '2016-10-17',
 'Marathi: Easy-to-Read Version (ERV). © 1998 Bible League International.', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-ORI', 'ori', 'BLI', 'ERV-ORI', 'ପବିତ୍ର ବାଇବଲ, Easy-to-Read Version', 'BIBLE', 'ERV-ORI.db', 'T', 'F', '2016-10-17',
+INSERT INTO Version VALUES ('ERV-ORI', 'ori', 'BLI', 'ERV-ORI', 'ପବିତ୍ର ବାଇବଲ, Easy-to-Read Version', 'BIBLE', 'ERV-ORI.db', 'F', 'F', '2016-10-17',
 'Oriya Holy Bible: Easy-to-Read Version (ERV) © 2004 Bible League International', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-PAN', 'pan', 'BLI', 'ERV-PAN', 'Punjabi: Easy-to-Read Version', 'BIBLE', 'ERV-PAN.db', 'T', 'F', '2016-10-17',
+INSERT INTO Version VALUES ('ERV-PAN', 'pan', 'BLI', 'ERV-PAN', 'Punjabi: Easy-to-Read Version', 'BIBLE', 'ERV-PAN.db', 'F', 'F', '2016-10-17',
 'Punjabi: Easy-to-Read Version (ERV). © 2002 Bible League International.', NULL, NULL);
 INSERT INTO Version VALUES ('ERV-TAM', 'tam', 'BLI', 'ERV-TAM', 'பரிசுத்த பைபிள், Easy-to-Read Version', 'BIBLE', 'ERV-TAM.db', 'T', 'F', '2016-10-17',
 'Tamil Holy Bible: Easy-to-Read Version (ERV) © 1998 Bible League International', NULL, NULL);

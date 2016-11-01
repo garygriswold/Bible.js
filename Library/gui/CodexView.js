@@ -26,10 +26,8 @@ function CodexView(chaptersAdapter, tableContents, headerHeight, copyrightView) 
 }
 CodexView.prototype.hideView = function() {
 	window.clearTimeout(this.checkScrollID);
-	if (this.viewport.children.length > 0) {
-		for (var i=this.viewport.children.length -1; i>=0; i--) {
-			this.viewport.removeChild(this.viewport.children[i]);
-		}
+	while (this.viewport.firstChild) {
+		this.viewport.removeChild(this.viewport.firstChild);
 	}
 };
 CodexView.prototype.showView = function(nodeId) {

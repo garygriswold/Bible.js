@@ -88,11 +88,13 @@ AppInitializer.prototype.begin = function() {
 	function showPassageHandler(event) {
 		disableHandlers();
 		that.controller.clearViews();
-		that.controller.codexView.showView(event.detail.id);
-		enableHandlersExcept('NONE');
-		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
-			source: 'P', search: event.detail.source };
-		that.controller.history.replace(historyItem, function(count) {});
+		setTimeout(function() { // delay is needed because with changes from History prior pages can interfere. Consider animation
+			that.controller.codexView.showView(event.detail.id);
+			enableHandlersExcept('NONE');
+			var historyItem = { timestamp: new Date(), reference: event.detail.id, 
+				source: 'P', search: event.detail.source };
+			that.controller.history.replace(historyItem, function(count) {});
+		}, 5); 
 	}
 	function showQuestionsHandler(event) {
 		disableHandlers();
