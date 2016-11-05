@@ -89,11 +89,13 @@ AppInitializer.prototype.begin = function() {
 	function showPassageHandler(event) {
 		disableHandlers();
 		that.controller.clearViews();
-		that.controller.codexView.showView(event.detail.id);
-		enableHandlersExcept('NONE');
-		var historyItem = { timestamp: new Date(), reference: event.detail.id, 
-			source: 'P', search: event.detail.source };
-		that.controller.history.replace(historyItem, function(count) {});
+		setTimeout(function() { // delay is needed because with changes from History prior pages can interfere. Consider animation
+			that.controller.codexView.showView(event.detail.id);
+			enableHandlersExcept('NONE');
+			var historyItem = { timestamp: new Date(), reference: event.detail.id, 
+				source: 'P', search: event.detail.source };
+			that.controller.history.replace(historyItem, function(count) {});
+		}, 5); 
 	}
 	function showQuestionsHandler(event) {
 		disableHandlers();
@@ -330,10 +332,8 @@ function CodexView(chaptersAdapter, tableContents, headerHeight, copyrightView) 
 }
 CodexView.prototype.hideView = function() {
 	window.clearTimeout(this.checkScrollID);
-	if (this.viewport.children.length > 0) {
-		for (var i=this.viewport.children.length -1; i>=0; i--) {
-			this.viewport.removeChild(this.viewport.children[i]);
-		}
+	while (this.viewport.firstChild) {
+		this.viewport.removeChild(this.viewport.firstChild);
 	}
 };
 CodexView.prototype.showView = function(nodeId) {
@@ -1551,6 +1551,11 @@ SettingsView.prototype.startControls = function() {
 * This class presents the list of available versions to download
 */
 var FLAG_PATH = 'licensed/icondrawer/flags/64/';
+var CURRENT_VERS = 'licensed/sebastiano/check.png';
+var INSTALLED_VERS = 'licensed/sebastiano/contacts.png';
+var DOWNLOAD_VERS = 'licensed/sebastiano/cloud-download.png';
+var DOWNLOAD_FAIL = 'licensed/melissa/cloud-lightning.png';
+var DOWNLOAD_ERROR_CLASS = 'download_error';
 
 function VersionsView(settingStorage) {
 	this.settingStorage = settingStorage;
@@ -1567,6 +1572,7 @@ function VersionsView(settingStorage) {
 	this.defaultCountryNode = null;
 	this.dom = new DOMBuilder();
 	this.scrollPosition = 0;
+	this.downloadErrors = [];
 	Object.seal(this);
 }
 VersionsView.prototype.showView = function() {
@@ -1576,6 +1582,11 @@ VersionsView.prototype.showView = function() {
 	else if (this.rootNode.children.length < 4) {
 		this.rootNode.appendChild(this.root);
 		window.scrollTo(10, this.scrollPosition);// move to settings view?
+		
+		while(this.downloadErrors.length > 0) {
+			var node = this.downloadErrors.pop();
+			node.setAttribute('src', DOWNLOAD_VERS);
+		}
 	}
 };
 VersionsView.prototype.buildCountriesList = function() {
@@ -1659,13 +1670,13 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					iconNode.setAttribute('id', 'ver' + row.versionCode);
 					iconNode.setAttribute('data-id', 'fil' + row.filename);
 					if (row.filename === currentVersion) {
-						iconNode.setAttribute('src', 'licensed/sebastiano/check.png');
+						iconNode.setAttribute('src', CURRENT_VERS);
 						iconNode.addEventListener('click', selectVersionHandler);
 					} else if (that.settingStorage.hasVersion(row.versionCode)) {
-						iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
+						iconNode.setAttribute('src', INSTALLED_VERS);
 						iconNode.addEventListener('click',  selectVersionHandler);
 					} else {
-						iconNode.setAttribute('src', 'licensed/sebastiano/cloud-download.png');
+						iconNode.setAttribute('src', DOWNLOAD_VERS);
 						iconNode.addEventListener('click', downloadVersionHandler);
 					}
 				}
@@ -1691,9 +1702,13 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 				gsPreloader.active(false);
 				if (error) {
 					console.log(JSON.stringify(error));
+					iconNode.setAttribute('src', DOWNLOAD_FAIL);
+					iconNode.addEventListener('click', downloadVersionHandler);
+					that.downloadErrors.push(iconNode);
 				} else {
 					that.settingStorage.setVersion(versionCode, versionFile);
-					iconNode.setAttribute('src', 'licensed/sebastiano/contacts.png');
+					iconNode.setAttribute('src', INSTALLED_VERS);
+					iconNode.addEventListener('click',  selectVersionHandler);
 					document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
 				}
 			});
