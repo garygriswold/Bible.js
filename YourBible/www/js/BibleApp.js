@@ -1155,7 +1155,7 @@ function HeaderView(tableContents, version, localizeNumber) {
 			var book = that.tableContents.find(that.currentReference.book);
 			if (book) {
 				var chapter = (that.currentReference.chapter > 0) ? that.currentReference.chapter : 1;
-				var text = book.name + ' ' + that.localizeNumber.toLocal(chapter);
+				var text = book.heading + ' ' + that.localizeNumber.toLocal(chapter);
 				that.titleGraphics.clearRect(0, 0, that.titleCanvas.width, that.hite);
 				that.titleGraphics.fillText(text, that.titleCanvas.width / 2, that.hite / 2, that.titleCanvas.width);
 				that.titleWidth = that.titleGraphics.measureText(text).width + 10;
@@ -1555,7 +1555,6 @@ var CURRENT_VERS = 'licensed/sebastiano/check.png';
 var INSTALLED_VERS = 'licensed/sebastiano/contacts.png';
 var DOWNLOAD_VERS = 'licensed/sebastiano/cloud-download.png';
 var DOWNLOAD_FAIL = 'licensed/melissa/cloud-lightning.png';
-var DOWNLOAD_ERROR_CLASS = 'download_error';
 
 function VersionsView(settingStorage) {
 	this.settingStorage = settingStorage;
