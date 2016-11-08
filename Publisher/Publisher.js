@@ -2570,10 +2570,14 @@ function LocalizeNumber(silCode) {
 		case 'arb': // Arabic
 			this.numberOffset = 0x0660 - 0x0030;
 			break;
+		case 'nep': // Nepali
+			this.numberOffset = 0x0966 - 0x0030;
+			break;
 		case 'pes': // Persian
 		case 'urd': // Urdu
 			this.numberOffset = 0x06F0 - 0x0030;
 			break;
+
 		default:
 			this.numberOffset = 0;
 			break;
