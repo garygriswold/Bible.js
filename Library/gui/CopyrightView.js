@@ -48,12 +48,12 @@ CopyrightView.prototype.createTOCTitleDOM = function() {
 		var abbrev = ' (' + this.version.silCode + ')';
 	} else {
 		title = this.version.localVersionName;
-		abbrev = ' (' + this.version.versionAbbr + ')';
+		//abbrev = this.version.versionAbbr;
 	}
 	var root = document.createElement('p');
 	var dom = new DOMBuilder();
 	dom.addNode(root, 'span', 'copyTitle', title);
-	dom.addNode(root, 'span', 'copyAbbr', abbrev);
+	//dom.addNode(root, 'span', 'copyAbbr', abbrev);
 	return(root);
 };
 /**
