@@ -2571,6 +2571,7 @@ function LocalizeNumber(silCode) {
 			this.numberOffset = 0x0660 - 0x0030;
 			break;
 		case 'pes': // Persian
+		case 'urd': // Urdu
 			this.numberOffset = 0x06F0 - 0x0030;
 			break;
 		default:
@@ -2589,6 +2590,13 @@ LocalizeNumber.prototype.toLocal = function(number) {
 LocalizeNumber.prototype.toTOCLocal = function(number) {
 	if (number == 0) {
 		return('\u2744');
+	} else {
+		return(this.toLocal(number));
+	}
+};
+LocalizeNumber.prototype.toHistLocal = function(number) {
+	if (number == 0) {
+		return('');
 	} else {
 		return(this.toLocal(number));
 	}

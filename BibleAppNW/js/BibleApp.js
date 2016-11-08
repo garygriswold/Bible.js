@@ -1156,7 +1156,7 @@ function HeaderView(tableContents, version, localizeNumber) {
 			var book = that.tableContents.find(that.currentReference.book);
 			if (book) {
 				var chapter = (that.currentReference.chapter > 0) ? that.currentReference.chapter : 1;
-				var text = book.name + ' ' + that.localizeNumber.toLocal(chapter);
+				var text = book.heading + ' ' + that.localizeNumber.toLocal(chapter);
 				that.titleGraphics.clearRect(0, 0, that.titleCanvas.width, that.hite);
 				that.titleGraphics.fillText(text, that.titleCanvas.width / 2, that.hite / 2, that.titleCanvas.width);
 				that.titleWidth = that.titleGraphics.measureText(text).width + 10;
@@ -1556,7 +1556,6 @@ var CURRENT_VERS = 'licensed/sebastiano/check.png';
 var INSTALLED_VERS = 'licensed/sebastiano/contacts.png';
 var DOWNLOAD_VERS = 'licensed/sebastiano/cloud-download.png';
 var DOWNLOAD_FAIL = 'licensed/melissa/cloud-lightning.png';
-var DOWNLOAD_ERROR_CLASS = 'download_error';
 
 function VersionsView(settingStorage) {
 	this.settingStorage = settingStorage;
@@ -1691,6 +1690,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: filename }}));
 	}
 	function downloadVersionHandler(event) {
+		this.removeEventListener('click', downloadVersionHandler);
 		var gsPreloader = new GSPreloader(gsPreloaderOptions);
 		gsPreloader.active(true);
 		var iconNode = this;
@@ -1703,11 +1703,11 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 				if (error) {
 					console.log(JSON.stringify(error));
 					iconNode.setAttribute('src', DOWNLOAD_FAIL);
+					iconNode.addEventListener('click', downloadVersionHandler);
 					that.downloadErrors.push(iconNode);
 				} else {
 					that.settingStorage.setVersion(versionCode, versionFile);
 					iconNode.setAttribute('src', INSTALLED_VERS);
-					iconNode.removeEventListener('click', downloadVersionHandler);
 					iconNode.addEventListener('click',  selectVersionHandler);
 					document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
 				}
@@ -3974,6 +3974,7 @@ function LocalizeNumber(silCode) {
 			this.numberOffset = 0x0660 - 0x0030;
 			break;
 		case 'pes': // Persian
+		case 'urd': // Urdu
 			this.numberOffset = 0x06F0 - 0x0030;
 			break;
 		default:
