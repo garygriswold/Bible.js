@@ -73,7 +73,8 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
 		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
 		' JOIN Language l ON v.silCode = l.silCode' +
 		' JOIN CountryVersion cv ON v.versionCode = cv.versionCode' +
-		' WHERE cv.countryCode = ?';
+		' WHERE cv.countryCode = ?' +
+		' ORDER BY cv.rowid';
 	this.database.select(statement, [countryCode], function(results) {
 		if (results instanceof IOError) {
 			callback(results);

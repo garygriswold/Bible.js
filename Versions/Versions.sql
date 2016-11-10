@@ -163,35 +163,34 @@ countryCode TEXT REFERENCES Country(countryCode),
 versionCode TEXT REFERENCES Version(versionCode),
 PRIMARY KEY(countryCode, versionCode)
 );
-INSERT INTO CountryVersion VALUES ('WORLD', 'ARBVDPD');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-AWA');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-ARB');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-BEN');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-BUL');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-CMN');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-ENG');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-HIN');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-HRV');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-HUN');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-IND');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-KAN');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-MAR');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-NEP');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-ORI');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-PAN');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-POR');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-RUS');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-SPA');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-SRP');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-TAM');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-THA');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-UKR');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-URD');
-INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-VIE');
-INSERT INTO CountryVersion VALUES ('WORLD', 'KJVPD');
-INSERT INTO CountryVersion VALUES ('WORLD', 'NMV');
-INSERT INTO CountryVersion VALUES ('WORLD', 'WEB');
-
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-ARB'); -- Arabic
+INSERT INTO CountryVersion VALUES ('WORLD', 'ARBVDPD'); -- Arabic
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-AWA'); -- Awadi
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-BEN'); -- Bengali
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-BUL'); -- Bulgarian
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-CMN'); -- Chinese
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-HRV'); -- Croatian
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-ENG'); -- English
+INSERT INTO CountryVersion VALUES ('WORLD', 'KJVPD'); -- English
+INSERT INTO CountryVersion VALUES ('WORLD', 'WEB'); -- English
+INSERT INTO CountryVersion VALUES ('WORLD', 'NMV'); -- Farsi/Persian
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-HIN'); -- Hindi
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-HUN'); -- Hungarian
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-IND'); -- Indonesian
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-KAN'); -- Kannada
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-MAR'); -- Marathi
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-NEP'); -- Nepali
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-ORI'); -- Oriya
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-POR'); -- Portuguese
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-PAN'); -- Punjabi
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-RUS'); -- Russian
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-SPA'); -- Spanish
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-SRP'); -- Serbian
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-TAM'); -- Tamil
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-THA'); -- Thai
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-UKR'); -- Ukrainian
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-URD'); -- Urdu
+INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-VIE'); -- Vietnamese
 
 
 CREATE TABLE DefaultVersion (
@@ -199,25 +198,44 @@ langCode TEXT NOT NULL PRIMARY KEY,
 filename TEXT NOT NULL REFERENCES Version(filename)
 );
 INSERT INTO DefaultVersion VALUES ('ar', 'ARBVDPD.db'); -- Arabic
+INSERT INTO DefaultVersion VALUES ('bg', 'ERV-BUL.db'); -- Bulgarian
 INSERT INTO DefaultVersion VALUES ('bn', 'ERV-BEN.db'); -- Bengali
-INSERT INTO DefaultVersion VALUES ('bg', 'ERV-BUL.db'); -- bulgarian
+INSERT INTO DefaultVersion VALUES ('ca', 'ERV-SPA.db'); -- Catalan (Spanish)
+INSERT INTO DefaultVersion VALUES ('cs', 'ERV-ENG.db'); -- Czech (English)
+INSERT INTO DefaultVersion VALUES ('da', 'ERV-ENG.db'); -- Danish (English)
+INSERT INTO DefaultVersion VALUES ('de', 'ERV-ENG.db'); -- German (English)
+INSERT INTO DefaultVersion VALUES ('el', 'ERV-ENG.db'); -- Greek (English)
 INSERT INTO DefaultVersion VALUES ('en', 'ERV-ENG.db'); -- English
 INSERT INTO DefaultVersion VALUES ('es', 'ERV-SPA.db'); -- Spanish
 INSERT INTO DefaultVersion VALUES ('fa', 'NMV.db');     -- Persian
+INSERT INTO DefaultVersion VALUES ('fi', 'ERV-RUS.db'); -- Finnish (Russian)
+INSERT INTO DefaultVersion VALUES ('fr', 'ERV-ENG.db'); -- French (English)
+INSERT INTO DefaultVersion VALUES ('he', 'ERV-ENG.db'); -- Hebrew (English)
 INSERT INTO DefaultVersion VALUES ('hi', 'ERV-HIN.db'); -- Hindi
 INSERT INTO DefaultVersion VALUES ('hr', 'ERV-HRV.db'); -- Croatia
 INSERT INTO DefaultVersion VALUES ('hu', 'ERV-HUN.db'); -- Hungarian
 INSERT INTO DefaultVersion VALUES ('id', 'ERV-IND.db'); -- Indonesian
-INSERT INTO DefaultVersion VALUES ('kn', 'ERV-KAN.db'); -- Kannada 
+INSERT INTO DefaultVersion VALUES ('it', 'ERV-SPA.db'); -- Italian (Spanish)
+INSERT INTO DefaultVersion VALUES ('ja', 'ERV-ENG.db'); -- Japanese (English)
+INSERT INTO DefaultVersion VALUES ('kn', 'ERV-KAN.db'); -- Kannada
+INSERT INTO DefaultVersion VALUES ('ko', 'ERV-CMN.db'); -- Korean (Chinese)
 INSERT INTO DefaultVersion VALUES ('mr', 'ERV-MAR.db'); -- Marathi
+INSERT INTO DefaultVersion VALUES ('ms', 'ERV-CMN.db'); -- Malay (Chinese)
+INSERT INTO DefaultVersion VALUES ('nb', 'ERV-ENG.db'); -- Norwegian bokmal (English)
 INSERT INTO DefaultVersion VALUES ('ne', 'ERV-NEP.db'); -- Nepali
+INSERT INTO DefaultVersion VALUES ('nl', 'ERV-ENG.db'); -- Dutch (English)
 INSERT INTO DefaultVersion VALUES ('or', 'ERV-ORI.db'); -- Oriya
-INSERT INTO DefaultVersion VALUES ('pt', 'ERV-POR.db'); -- Portuguese
 INSERT INTO DefaultVersion VALUES ('pa', 'ERV-PAN.db'); -- Punjabi
+INSERT INTO DefaultVersion VALUES ('pl', 'ERV-RUS.db'); -- Polish (Russian)
+INSERT INTO DefaultVersion VALUES ('pt', 'ERV-POR.db'); -- Portuguese
+INSERT INTO DefaultVersion VALUES ('ro', 'ERV-ENG.db'); -- Romainian (English)
 INSERT INTO DefaultVersion VALUES ('ru', 'ERV-RUS.db'); -- Russia
+INSERT INTO DefaultVersion VALUES ('sk', 'ERV-HUN.db'); -- Slovak (Hungarian)
 INSERT INTO DefaultVersion VALUES ('sr', 'ERV-SRP.db'); -- Serbia
+INSERT INTO DefaultVersion VALUES ('sv', 'ERV-ENG.db'); -- Swedish (English)
 INSERT INTO DefaultVersion VALUES ('ta', 'ERV-TAM.db'); -- Tamil
 INSERT INTO DefaultVersion VALUES ('th', 'ERV-THA.db'); -- Thai
+INSERT INTO DefaultVersion VALUES ('tr', 'ERV-ARB.db'); -- Turkish (Arabic)
 INSERT INTO DefaultVersion VALUES ('uk', 'ERV-UKR.db'); -- Ukraine
 INSERT INTO DefaultVersion VALUES ('ur', 'ERV-URD.db'); -- Urdu
 INSERT INTO DefaultVersion VALUES ('vi', 'ERV-VIE.db'); -- Vietnamese

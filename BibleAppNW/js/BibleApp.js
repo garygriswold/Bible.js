@@ -2214,7 +2214,7 @@ SettingStorage.prototype.setVersion = function(version, filename) {
 		if (results instanceof IOError) {
 			console.log('SetVersion error', JSON.stringify(results));
 		} else {
-			console.log('SetVersion success', results.rowsAffected);
+			console.log('SetVersion success, rows=', results);
 		}
 	});
 };
@@ -2918,7 +2918,7 @@ QuestionsAdapter.prototype.replace = function(item, callback) {
 			console.log('Error on Insert');
 			callback(results);
 		} else {
-			callback(results.rowsAffected);
+			callback(results);
 		}
 	});
 };
@@ -2931,7 +2931,7 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 			console.log('Error on update');
 			callback(results);
 		} else {
-			callback(results.rowsAffected);
+			callback(results);
 		}
 	});
 };
@@ -3010,7 +3010,8 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
 		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
 		' JOIN Language l ON v.silCode = l.silCode' +
 		' JOIN CountryVersion cv ON v.versionCode = cv.versionCode' +
-		' WHERE cv.countryCode = ?';
+		' WHERE cv.countryCode = ?' +
+		' ORDER BY cv.rowid';
 	this.database.select(statement, [countryCode], function(results) {
 		if (results instanceof IOError) {
 			callback(results);
@@ -3360,11 +3361,9 @@ function FileDownloader(host, port, database, currVersion) {
 		this.downloadPath = cordova.file.cacheDirectory;
 		this.finalPath = cordova.file.applicationStorageDirectory + 'databases/';
 	}
-	this.downloadFile = null;
 	Object.seal(this);
 }
 FileDownloader.prototype.download = function(bibleVersion, callback) {
-	this.downloadFile = bibleVersion + '.zip';
 	if (this.host.indexOf('shortsands') > -1) {
 		this._downloadShortSands(bibleVersion, callback);
 	} else if (this.host.indexOf('cloudfront') > -1) {
@@ -3376,9 +3375,10 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 };
 FileDownloader.prototype._downloadShortSands = function(bibleVersion, callback) {
 	var that = this;
-	var tempPath = this.downloadPath + this.downloadFile;
+	var bibleVersionZip = bibleVersion + '.zip';
+	var tempPath = this.downloadPath + bibleVersionZip;
 	var uri = encodeURI('http://' + this.host + ':' + this.port + '/book/');
-	var remotePath = uri + this.downloadFile;
+	var remotePath = uri + bibleVersionZip;
 	console.log('download from', remotePath, ' to ', tempPath);
 	var datetime = new Date().toISOString();
 	var encrypted = CryptoJS.AES.encrypt(datetime, CREDENTIAL.key);
@@ -3396,7 +3396,7 @@ FileDownloader.prototype._downloadShortSands = function(bibleVersion, callback) 
 };
 FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) {
 	var that = this;
-	var tempPath = this.downloadPath + this.downloadFile;
+	var tempPath = this.downloadPath + bibleVersion + '.zip';
 	this.database.selectURL(bibleVersion, function(remotePath) {
 		console.log('download from', remotePath, ' to ', tempPath);
 		that._getLocale(function(locale) {
@@ -3452,31 +3452,25 @@ FileDownloader.prototype._performDownload = function(remotePath, tempPath, trust
 	}
 };
 FileDownloader.prototype.clearTempDir = function() {
-//	console.log('*** BEFORE clearTemp', new Date().getTime());
-//	window.resolveLocalFileSystemURL(this.downloadPath, function(dirEntry) {
-//		console.log('*** after resolve', new Date().getTime());
-//		var dirReader = dirEntry.createReader();
-//		console.log('*** create reader', new Date().getTime());
-//		dirReader.readEntries(function(files) {
-//			console.log('*** read entries', new Date().getTime());
-//			removeFiles(files);
-//		});
-//	});
-//	function removeFiles(files) {
-//	var file = files.pop();
-//	if (file) {
-	var download = this.downloadPath + this.downloadFile + 'x';
-	console.log('found file', file.name, new Date().getTime());
-	file.remove(function() {
-		console.log('Deleted', file.name, new Date().getTime());
-//		removeFiles(files);
-	},
-	function(error) {
-		console.log('Error Deleting', file.name, JSON.stringify(error), new Date().getTime());
-//		removeFiles(files);
+	window.resolveLocalFileSystemURL(this.downloadPath, function(dirEntry) {
+		var dirReader = dirEntry.createReader();
+		dirReader.readEntries(function(files) {
+			removeFiles(files);
+		});
 	});
-//	}
-//	}
+	function removeFiles(files) {
+		var file = files.pop();
+		if (file) {
+			file.remove(function() {
+				console.log('Deleted temp file', file.name);
+				removeFiles(files);
+			},
+			function(error) {
+				console.log('Error Deleting temp file', file.name, JSON.stringify(error));
+				removeFiles(files);
+			});
+		}
+	}
 };
 /**
 * This class is used to contain the fields about a version of the Bible
