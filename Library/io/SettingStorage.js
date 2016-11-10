@@ -127,7 +127,7 @@ SettingStorage.prototype.setVersion = function(version, filename) {
 		if (results instanceof IOError) {
 			console.log('SetVersion error', JSON.stringify(results));
 		} else {
-			console.log('SetVersion success', results.rowsAffected);
+			console.log('SetVersion success, rows=', results);
 		}
 	});
 };

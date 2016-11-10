@@ -65,7 +65,7 @@ QuestionsAdapter.prototype.replace = function(item, callback) {
 			console.log('Error on Insert');
 			callback(results);
 		} else {
-			callback(results.rowsAffected);
+			callback(results);
 		}
 	});
 };
@@ -78,7 +78,7 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 			console.log('Error on update');
 			callback(results);
 		} else {
-			callback(results.rowsAffected);
+			callback(results);
 		}
 	});
 };

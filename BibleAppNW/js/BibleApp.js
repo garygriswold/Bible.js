@@ -3360,9 +3360,11 @@ function FileDownloader(host, port, database, currVersion) {
 		this.downloadPath = cordova.file.cacheDirectory;
 		this.finalPath = cordova.file.applicationStorageDirectory + 'databases/';
 	}
+	this.downloadFile = null;
 	Object.seal(this);
 }
 FileDownloader.prototype.download = function(bibleVersion, callback) {
+	this.downloadFile = bibleVersion + '.zip';
 	if (this.host.indexOf('shortsands') > -1) {
 		this._downloadShortSands(bibleVersion, callback);
 	} else if (this.host.indexOf('cloudfront') > -1) {
@@ -3374,10 +3376,9 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 };
 FileDownloader.prototype._downloadShortSands = function(bibleVersion, callback) {
 	var that = this;
-	var bibleVersionZip = bibleVersion + '.zip';
-	var tempPath = this.downloadPath + bibleVersionZip;
+	var tempPath = this.downloadPath + this.downloadFile;
 	var uri = encodeURI('http://' + this.host + ':' + this.port + '/book/');
-	var remotePath = uri + bibleVersionZip;
+	var remotePath = uri + this.downloadFile;
 	console.log('download from', remotePath, ' to ', tempPath);
 	var datetime = new Date().toISOString();
 	var encrypted = CryptoJS.AES.encrypt(datetime, CREDENTIAL.key);
@@ -3395,7 +3396,7 @@ FileDownloader.prototype._downloadShortSands = function(bibleVersion, callback) 
 };
 FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) {
 	var that = this;
-	var tempPath = this.downloadPath + bibleVersion + '.zip';
+	var tempPath = this.downloadPath + this.downloadFile;
 	this.database.selectURL(bibleVersion, function(remotePath) {
 		console.log('download from', remotePath, ' to ', tempPath);
 		that._getLocale(function(locale) {
@@ -3442,12 +3443,40 @@ FileDownloader.prototype._performDownload = function(remotePath, tempPath, trust
 	    	} else {
 		    	callback(new IOError({code: 'unzip failed', message: entry.nativeURL}));
 	    	}
+	    	that.clearTempDir();
 		});
 	}
 	function onDownError(error) {
 		console.log('ERROR File Download', JSON.stringify(error));
 		callback(new IOError({ code: error.code, message: error.source}));
 	}
+};
+FileDownloader.prototype.clearTempDir = function() {
+//	console.log('*** BEFORE clearTemp', new Date().getTime());
+//	window.resolveLocalFileSystemURL(this.downloadPath, function(dirEntry) {
+//		console.log('*** after resolve', new Date().getTime());
+//		var dirReader = dirEntry.createReader();
+//		console.log('*** create reader', new Date().getTime());
+//		dirReader.readEntries(function(files) {
+//			console.log('*** read entries', new Date().getTime());
+//			removeFiles(files);
+//		});
+//	});
+//	function removeFiles(files) {
+//	var file = files.pop();
+//	if (file) {
+	var download = this.downloadPath + this.downloadFile + 'x';
+	console.log('found file', file.name, new Date().getTime());
+	file.remove(function() {
+		console.log('Deleted', file.name, new Date().getTime());
+//		removeFiles(files);
+	},
+	function(error) {
+		console.log('Error Deleting', file.name, JSON.stringify(error), new Date().getTime());
+//		removeFiles(files);
+	});
+//	}
+//	}
 };
 /**
 * This class is used to contain the fields about a version of the Bible

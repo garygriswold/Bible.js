@@ -537,12 +537,12 @@ CopyrightView.prototype.createTOCTitleDOM = function() {
 		var abbrev = ' (' + this.version.silCode + ')';
 	} else {
 		title = this.version.localVersionName;
-		abbrev = ' (' + this.version.versionAbbr + ')';
+		//abbrev = this.version.versionAbbr;
 	}
 	var root = document.createElement('p');
 	var dom = new DOMBuilder();
 	dom.addNode(root, 'span', 'copyTitle', title);
-	dom.addNode(root, 'span', 'copyAbbr', abbrev);
+	//dom.addNode(root, 'span', 'copyAbbr', abbrev);
 	return(root);
 };
 /**
@@ -2213,7 +2213,7 @@ SettingStorage.prototype.setVersion = function(version, filename) {
 		if (results instanceof IOError) {
 			console.log('SetVersion error', JSON.stringify(results));
 		} else {
-			console.log('SetVersion success', results.rowsAffected);
+			console.log('SetVersion success, rows=', results);
 		}
 	});
 };
@@ -2917,7 +2917,7 @@ QuestionsAdapter.prototype.replace = function(item, callback) {
 			console.log('Error on Insert');
 			callback(results);
 		} else {
-			callback(results.rowsAffected);
+			callback(results);
 		}
 	});
 };
@@ -2930,7 +2930,7 @@ QuestionsAdapter.prototype.update = function(item, callback) {
 			console.log('Error on update');
 			callback(results);
 		} else {
-			callback(results.rowsAffected);
+			callback(results);
 		}
 	});
 };
@@ -3441,11 +3441,33 @@ FileDownloader.prototype._performDownload = function(remotePath, tempPath, trust
 	    	} else {
 		    	callback(new IOError({code: 'unzip failed', message: entry.nativeURL}));
 	    	}
+	    	that.clearTempDir();
 		});
 	}
 	function onDownError(error) {
 		console.log('ERROR File Download', JSON.stringify(error));
 		callback(new IOError({ code: error.code, message: error.source}));
+	}
+};
+FileDownloader.prototype.clearTempDir = function() {
+	window.resolveLocalFileSystemURL(this.downloadPath, function(dirEntry) {
+		var dirReader = dirEntry.createReader();
+		dirReader.readEntries(function(files) {
+			removeFiles(files);
+		});
+	});
+	function removeFiles(files) {
+		var file = files.pop();
+		if (file) {
+			file.remove(function() {
+				console.log('Deleted temp file', file.name);
+				removeFiles(files);
+			},
+			function(error) {
+				console.log('Error Deleting temp file', file.name, JSON.stringify(error));
+				removeFiles(files);
+			});
+		}
 	}
 };
 /**
@@ -3972,9 +3994,14 @@ function LocalizeNumber(silCode) {
 		case 'arb': // Arabic
 			this.numberOffset = 0x0660 - 0x0030;
 			break;
+		case 'nep': // Nepali
+			this.numberOffset = 0x0966 - 0x0030;
+			break;
 		case 'pes': // Persian
+		case 'urd': // Urdu
 			this.numberOffset = 0x06F0 - 0x0030;
 			break;
+
 		default:
 			this.numberOffset = 0;
 			break;

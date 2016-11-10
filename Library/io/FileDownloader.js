@@ -100,10 +100,32 @@ FileDownloader.prototype._performDownload = function(remotePath, tempPath, trust
 	    	} else {
 		    	callback(new IOError({code: 'unzip failed', message: entry.nativeURL}));
 	    	}
+	    	that.clearTempDir();
 		});
 	}
 	function onDownError(error) {
 		console.log('ERROR File Download', JSON.stringify(error));
 		callback(new IOError({ code: error.code, message: error.source}));
+	}
+};
+FileDownloader.prototype.clearTempDir = function() {
+	window.resolveLocalFileSystemURL(this.downloadPath, function(dirEntry) {
+		var dirReader = dirEntry.createReader();
+		dirReader.readEntries(function(files) {
+			removeFiles(files);
+		});
+	});
+	function removeFiles(files) {
+		var file = files.pop();
+		if (file) {
+			file.remove(function() {
+				console.log('Deleted temp file', file.name);
+				removeFiles(files);
+			},
+			function(error) {
+				console.log('Error Deleting temp file', file.name, JSON.stringify(error));
+				removeFiles(files);
+			});
+		}
 	}
 };
