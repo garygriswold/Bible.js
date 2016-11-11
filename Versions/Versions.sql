@@ -197,7 +197,7 @@ CREATE TABLE DefaultVersion (
 langCode TEXT NOT NULL PRIMARY KEY,
 filename TEXT NOT NULL REFERENCES Version(filename)
 );
-INSERT INTO DefaultVersion VALUES ('ar', 'ARBVDPD.db'); -- Arabic
+INSERT INTO DefaultVersion VALUES ('ar', 'ERV-ARB.db'); -- Arabic
 INSERT INTO DefaultVersion VALUES ('bg', 'ERV-BUL.db'); -- Bulgarian
 INSERT INTO DefaultVersion VALUES ('bn', 'ERV-BEN.db'); -- Bengali
 INSERT INTO DefaultVersion VALUES ('ca', 'ERV-SPA.db'); -- Catalan (Spanish)
@@ -247,12 +247,13 @@ versionCode NOT NULL PRIMARY KEY REFERENCES Version(versionCode),
 startDate NOT NULL,
 endDate NULL
 );
-INSERT INTO InstalledVersion VALUES ('ARBVDPD', '2016-06-01', null);
+INSERT INTO InstalledVersion VALUES ('ERV-ARB', '2016-11-11', null);
+-- INSERT INTO InstalledVersion VALUES ('ARBVDPD', '2016-06-01', null);
 INSERT INTO InstalledVersion VALUES ('ERV-ENG', '2016-10-14', null);
 -- INSERT INTO InstalledVersion VALUES ('ERV-SPA', '2016-10-08', null);
 -- INSERT INTO InstalledVersion VALUES ('KJVPD', '2016-05-16', null);
--- INSERT INTO InstalledVersion VALUES ('NMV', '2016-06-27', null);
-INSERT INTO InstalledVersion VALUES ('WEB', '2016-05-16', null);
+INSERT INTO InstalledVersion VALUES ('NMV', '2016-06-27', null);
+-- INSERT INTO InstalledVersion VALUES ('WEB', '2016-05-16', null);
 -- INSERT INTO InstalledVersion VALUES ('ERV-PAN', '2016-10-28', null);
 -- INSERT INTO InstalledVersion VALUES ('ERV-ORI', '2016-10-28', null);
 

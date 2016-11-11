@@ -143,7 +143,7 @@ var SERVER_HOST = 'cloudfront.net';
 var SERVER_PORT = '80';
 //var SERVER_HOST = 'cloud.shortsands.com';
 //var SERVER_PORT = '8080';
-var DEFAULT_VERSION = 'WEB.db'; // This version must be preinstalled in the App.
+var DEFAULT_VERSION = 'ERV-ENG.db'; // This version must be preinstalled in the App.
 
 function bibleShowNoteClick(nodeId) {
 	console.log('show note clicked', nodeId);
@@ -1680,7 +1680,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					}
 				}
 			}
-			debugLogVersions();
+			//debugLogVersions();
 		});
 	});
 	

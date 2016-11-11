@@ -131,7 +131,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					}
 				}
 			}
-			debugLogVersions();
+			//debugLogVersions();
 		});
 	});
 	
