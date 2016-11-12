@@ -4,6 +4,7 @@ Bible App Test Plan
 This documents manual procedures for testing the user interface of the BibleApp.
 Gary Griswold, January 1, 2016
 Revised Aug 9, 2016
+Revised Nov 11, 2016
 
 App Icon
 --------
@@ -66,10 +67,11 @@ Startup Download
 	1. Test that already used version bypasses all download logic.
 	2. Test that locale is determined for user
 	3. Test that default language for versions is found.
-	4. Test that WEB.db is used when no default is found.
+	4. Test that ERV-ENG.db is used when no default is found.
 	5. Test that download is bypassed if version is already present on device
 	6. Test that download succeeds if version is not already present on device
-	7. Test that WEB.db is used if there is a failure in download.
+	7. Test that lightening cloud is used if there is a failure in download.
+	8. Test that download cloud reappears after leaving and returning to VersionView
 	
 User Download
 -------------
@@ -80,6 +82,7 @@ User Download
 	4. Verify that a file can be downloaded when version is selected.
 	5. Restart the App with no version change.
 	6. Verify that a file can be downloaded when version is selected.
+	7. Test Download of Each Version, or each new Version
 	
 AWS Server
 ----------
@@ -122,8 +125,7 @@ SearchView
 	7. Clicking on the ellipsis, presents all of the verses in that chapter.
 	8. Doing a search on the word 'a' does not crash the App.
 	9. Typing in a reference takes one directly there.
-	10. Typing in multiple words does a logical and in the search.
-	11. Including a term that is not in the Bible, does not affect search (is this OK)
+	10. Typing in multiple words does search for the exact phrase.
 
 HistoryView
 -----------

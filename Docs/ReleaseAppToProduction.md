@@ -101,7 +101,7 @@ The Release version of the App has been signed using the following tools.  It co
 
 Generate a private key using keytool. This example prompts you for passwords for the keystore and key, and to provide the Distinguished Name fields for your key. It then generates the keystore as a file called your-bible.keystore. The keystore contains a single key, valid for 10000 days. The alias is a name that you will use later when signing your app.
 
-	cd $HOME/BibleApp/YourBible/certificates/android
+	cd $HOME/ShortSands/BibleApp/YourBible/certificates/android
 	keytool -genkey -v -keystore your-bible.keystore -alias YourBible -keyalg RSA -keysize 2048 -validity 10000
 	use password: Jabberw0kky
 	enter: CN=Gary Griswold, OU=ShortSands, O=ShortSands, L=Cincinnati, ST=OH, C=US
