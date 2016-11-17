@@ -402,7 +402,9 @@ log does appear in the Xcode GUI, but I have not been able to find it on disk.
 
 Where does Xcode put the console log?
 
-Could the RVM problem be the cause?
+The build is showing an error that I am not using the system copy of Ruby.
+I have now fixed this by removing an older version of ruby that I was using,
+and it does not fix this problem.
 
 
 	
