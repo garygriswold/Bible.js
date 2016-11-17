@@ -394,6 +394,16 @@ and if it causes other problems.
 	
 This is working very well.
 
+Console Logging
+---------------
+
+Console logging is not working on ios for simulator or device.  Although, for xcode simulator, the console
+log does appear in the Xcode GUI, but I have not been able to find it on disk.
+
+Where does Xcode put the console log?
+
+Could the RVM problem be the cause?
+
 
 	
 
