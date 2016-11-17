@@ -1154,8 +1154,7 @@ function HeaderView(tableContents, version, localizeNumber) {
 		if (that.currentReference) {
 			var book = that.tableContents.find(that.currentReference.book);
 			if (book) {
-				var chapter = (that.currentReference.chapter > 0) ? that.currentReference.chapter : 1;
-				var text = book.heading + ' ' + that.localizeNumber.toLocal(chapter);
+				var text = book.heading + ' ' + that.localizeNumber.toHistLocal(that.currentReference.chapter);
 				that.titleGraphics.clearRect(0, 0, that.titleCanvas.width, that.hite);
 				that.titleGraphics.fillText(text, that.titleCanvas.width / 2, that.hite / 2, that.titleCanvas.width);
 				that.titleWidth = that.titleGraphics.measureText(text).width + 10;

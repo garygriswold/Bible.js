@@ -13,11 +13,16 @@
 // REGEXP:
 #include <regex.h>
 
-// NOTE: This is now broken by cordova-ios 4.0, see:
-// https://issues.apache.org/jira/browse/CB-9638
-// Solution is to use NSJSONSerialization instead.
-#ifdef READ_BLOB_AS_BASE64
-#import <Cordova/NSData+Base64.h>
+#define READ_BLOB_AS_BASE64
+
+// FUTURE TBD (XXX TBD subjet to change):
+//#define INCLUDE_SQL_BLOB_BINDING
+
+// Defines Macro to only log lines when in DEBUG mode
+#ifdef DEBUG
+#   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#   define DLog(...)
 #endif
 
 static void
@@ -58,7 +63,7 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
 
 -(void)pluginInitialize
 {
-    NSLog(@"Initializing SQLitePlugin");
+    DLog(@"Initializing SQLitePlugin");
 
     {
         openDBs = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -69,18 +74,18 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
 #endif
 
         NSString *docs = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex: 0];
-        NSLog(@"Detected docs path: %@", docs);
+        DLog(@"Detected docs path: %@", docs);
         [appDBPaths setObject: docs forKey:@"docs"];
 
         NSString *libs = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex: 0];
-        NSLog(@"Detected Library path: %@", libs);
+        DLog(@"Detected Library path: %@", libs);
         [appDBPaths setObject: libs forKey:@"libs"];
 
         NSString *nosync = [libs stringByAppendingPathComponent:@"LocalDatabase"];
         NSError *err;
         if ([[NSFileManager defaultManager] fileExistsAtPath: nosync])
         {
-            NSLog(@"no cloud sync at path: %@", nosync);
+            DLog(@"no cloud sync at path: %@", nosync);
             [appDBPaths setObject: nosync forKey:@"nosync"];
         }
         else
@@ -90,15 +95,15 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
                 NSURL *nosyncURL = [ NSURL fileURLWithPath: nosync];
                 if (![nosyncURL setResourceValue: [NSNumber numberWithBool: YES] forKey: NSURLIsExcludedFromBackupKey error: &err])
                 {
-                    NSLog(@"IGNORED: error setting nobackup flag in LocalDatabase directory: %@", err);
+                    DLog(@"IGNORED: error setting nobackup flag in LocalDatabase directory: %@", err);
                 }
-                NSLog(@"no cloud sync at path: %@", nosync);
+                DLog(@"no cloud sync at path: %@", nosync);
                 [appDBPaths setObject: nosync forKey:@"nosync"];
             }
             else
             {
                 // fallback:
-                NSLog(@"WARNING: error adding LocalDatabase directory: %@", err);
+                DLog(@"WARNING: error adding LocalDatabase directory: %@", err);
                 [appDBPaths setObject: libs forKey:@"nosync"];
             }
         }
@@ -122,7 +127,7 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
 
     NSString * string_value = [options objectForKey:@"value"];
 
-    NSLog(@"echo string value: %@", string_value);
+    DLog(@"echo string value: %@", string_value);
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:string_value];
     [self.commandDelegate sendPluginResult:pluginResult callbackId: command.callbackId];
@@ -144,25 +149,25 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
 
     NSString *dblocation = [options objectForKey:@"dblocation"];
     if (dblocation == NULL) dblocation = @"docs";
-    //NSLog(@"using db location: %@", dblocation);
+    // DLog(@"using db location: %@", dblocation);
 
     NSString *dbname = [self getDBPath:dbfilename at:dblocation];
 
     if (dbname == NULL) {
-        NSLog(@"No db name specified for open");
+        DLog(@"No db name specified for open");
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"You must specify database name"];
     }
     else {
         NSValue *dbPointer = [openDBs objectForKey:dbfilename];
 
         if (dbPointer != NULL) {
-            NSLog(@"Reusing existing database connection for db name %@", dbfilename);
+            DLog(@"Reusing existing database connection for db name %@", dbfilename);
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Database opened"];
         } else {
             const char *name = [dbname UTF8String];
             sqlite3 *db;
 
-            NSLog(@"open full db path: %@", dbname);
+            DLog(@"open full db path: %@", dbname);
 
             /* Option to create database from resource (pre-populated) if it does not exist: */
             if (![[NSFileManager defaultManager] fileExistsAtPath: dbname]) {
@@ -197,17 +202,16 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
     }
 
     if (sqlite3_threadsafe()) {
-        NSLog(@"Good news: SQLite is thread safe!");
+        DLog(@"Good news: SQLite is thread safe!");
     }
     else {
-        NSLog(@"Warning: SQLite is not thread safe.");
+        DLog(@"Warning: SQLite is not thread safe.");
     }
 
     [self.commandDelegate sendPluginResult:pluginResult callbackId: command.callbackId];
 
-    // NSLog(@"open cb finished ok");
+    // DLog(@"open cb finished ok");
 }
-
 
 -(void) createFromResource: (NSString *)dbfile withDbname:(NSString *)dbname {
     NSString * bundleRoot = [[NSBundle mainBundle] resourcePath];
@@ -243,7 +247,7 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
 
     if (dbFileName == NULL) {
         // Should not happen:
-        NSLog(@"No db name specified for close");
+        DLog(@"No db name specified for close");
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"You must specify database path"];
     } else {
         NSValue *val = [openDBs objectForKey:dbFileName];
@@ -251,11 +255,11 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
 
         if (db == NULL) {
             // Should not happen:
-            NSLog(@"close: db name was not open: %@", dbFileName);
+            DLog(@"close: db name was not open: %@", dbFileName);
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Specified db was not open"];
         }
         else {
-            NSLog(@"close db name: %@", dbFileName);
+            DLog(@"close db name: %@", dbFileName);
             sqlite3_close (db);
             [openDBs removeObjectForKey:dbFileName];
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"DB closed"];
@@ -284,18 +288,18 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
 
     if (dbFileName==NULL) {
         // Should not happen:
-        NSLog(@"No db name specified for delete");
+        DLog(@"No db name specified for delete");
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"You must specify database path"];
     } else {
         NSString *dbPath = [self getDBPath:dbFileName at:dblocation];
 
         if ([[NSFileManager defaultManager]fileExistsAtPath:dbPath]) {
-            NSLog(@"delete full db path: %@", dbPath);
+            DLog(@"delete full db path: %@", dbPath);
             [[NSFileManager defaultManager]removeItemAtPath:dbPath error:nil];
             [openDBs removeObjectForKey:dbFileName];
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"DB deleted"];
         } else {
-            NSLog(@"delete: db was not found: %@", dbPath);
+            DLog(@"delete: db was not found: %@", dbPath);
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"The database does not exist on that path"];
         }
     }
@@ -325,7 +329,6 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
             if ([result.status intValue] == CDVCommandStatus_ERROR) {
                 /* add error with result.message: */
                 NSMutableDictionary *r = [NSMutableDictionary dictionaryWithCapacity:0];
-                [r setObject:[dict objectForKey:@"qid"] forKey:@"qid"];
                 [r setObject:@"error" forKey:@"type"];
                 [r setObject:result.message forKey:@"error"];
                 [r setObject:result.message forKey:@"result"];
@@ -333,7 +336,6 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
             } else {
                 /* add result with result.message: */
                 NSMutableDictionary *r = [NSMutableDictionary dictionaryWithCapacity:0];
-                [r setObject:[dict objectForKey:@"qid"] forKey:@"qid"];
                 [r setObject:@"success" forKey:@"type"];
                 [r setObject:result.message forKey:@"result"];
                 [results addObject: r];
@@ -411,7 +413,12 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
         keepGoing = NO;
     } else if (params != NULL) {
         for (int b = 0; b < params.count; b++) {
-            [self bindStatement:statement withArg:[params objectAtIndex:b] atIndex:(b+1)];
+            result = [self bindStatement:statement withArg:[params objectAtIndex:b] atIndex:(b+1)];
+            if (result != SQLITE_OK) {
+                error = [SQLitePlugin captureSQLiteErrorFromDb:db];
+                keepGoing = NO;
+                break;
+            }
         }
     }
 
@@ -501,20 +508,22 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
     return [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:resultSet];
 }
 
--(void)bindStatement:(sqlite3_stmt *)statement withArg:(NSObject *)arg atIndex:(int)argIndex
+-(int)bindStatement:(sqlite3_stmt *)statement withArg:(NSObject *)arg atIndex:(int)argIndex
 {
+    int bindResult = SQLITE_ERROR;
+
     if ([arg isEqual:[NSNull null]]) {
-        sqlite3_bind_null(statement, argIndex);
+        bindResult = sqlite3_bind_null(statement, argIndex);
     } else if ([arg isKindOfClass:[NSNumber class]]) {
         NSNumber *numberArg = (NSNumber *)arg;
         const char *numberType = [numberArg objCType];
+
+        // Bind each number as INTEGER (long long int) or REAL (double):
         if (strcmp(numberType, @encode(int)) == 0 ||
             strcmp(numberType, @encode(long long int)) == 0) {
-            sqlite3_bind_int64(statement, argIndex, [numberArg longLongValue]);
-        } else if (strcmp(numberType, @encode(double)) == 0) {
-            sqlite3_bind_double(statement, argIndex, [numberArg doubleValue]);
+            bindResult = sqlite3_bind_int64(statement, argIndex, [numberArg longLongValue]);
         } else {
-            sqlite3_bind_text(statement, argIndex, [[arg description] UTF8String], -1, SQLITE_TRANSIENT);
+            bindResult = sqlite3_bind_double(statement, argIndex, [numberArg doubleValue]);
         }
     } else { // NSString
         NSString *stringArg;
@@ -538,15 +547,17 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
             // convert to data URI, decode, store as blob
             stringArg = [stringArg stringByReplacingCharactersInRange:NSMakeRange(0,7) withString:@"data"];
             NSData *data = [NSData dataWithContentsOfURL: [NSURL URLWithString:stringArg]];
-            sqlite3_bind_blob(statement, argIndex, data.bytes, data.length, SQLITE_TRANSIENT);
+            bindResult = sqlite3_bind_blob(statement, argIndex, data.bytes, data.length, SQLITE_TRANSIENT);
         }
         else
 #endif
         {
             NSData *data = [stringArg dataUsingEncoding:NSUTF8StringEncoding];
-            sqlite3_bind_text(statement, argIndex, data.bytes, (int)data.length, SQLITE_TRANSIENT);
+            bindResult = sqlite3_bind_text(statement, argIndex, data.bytes, (int)data.length, SQLITE_TRANSIENT);
         }
     }
+
+    return bindResult;
 }
 
 -(void)dealloc
@@ -615,18 +626,12 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
 +(NSString*)getBlobAsBase64String:(const char*)blob_chars
                        withLength:(int)blob_length
 {
-    size_t outputLength = 0;
-    char* outputBuffer = CDVNewBase64Encode(blob_chars, blob_length, true, &outputLength);
+    // THANKS for guidance: http://stackoverflow.com/a/8354941/1283667
+    NSData * data = [NSData dataWithBytes: (const void *)blob_chars length: blob_length];
 
-    NSString* result = [[NSString alloc] initWithBytesNoCopy:outputBuffer
-                                                      length:outputLength
-                                                    encoding:NSASCIIStringEncoding
-                                                freeWhenDone:YES];
-#if !__has_feature(objc_arc)
-    [result autorelease];
-#endif
-
-    return result;
+    // THANKS for guidance:
+    // https://github.com/apache/cordova-ios/blob/master/guides/API%20changes%20in%204.0.md#nsdatabase64h-removed
+    return [data base64EncodedStringWithOptions:0];
 }
 #endif
 

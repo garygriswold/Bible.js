@@ -7,6 +7,9 @@
         "files": {}
     },
     "installed_plugins": {
+        "cordova-plugin-buildinfo": {
+            "PACKAGE_NAME": "com.shortsands.yourbible"
+        },
         "cordova-plugin-console": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
@@ -34,25 +37,28 @@
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.shortsands.yourbible"
+        },
         "cordova-plugin-zip": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
         "cordova-sqlite-ext": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
-        "cordova-plugin-buildinfo": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "com.telerik.plugins.wkwebview": {
-            "WKWEBVIEW_SERVER_PORT": "12344",
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
         "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.shortsands.yourbible"
+        },
+        "cordova-plugin-wkwebview-engine": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.shortsands.yourbible"
+        },
+        "cordova-plugin-webserver": {
+            "PACKAGE_NAME": "com.shortsands.yourbible"
+        }
+    }
 }
