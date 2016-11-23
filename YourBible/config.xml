@@ -26,7 +26,7 @@
     <access origin="*" />
     <allow-intent href="http://cloud.shortsands.com:8080/*" />
     <allow-intent href="https://d1obplp0ybf6eo.cloudfront.net/*" />
-    <engine name="android" spec="~6.0.0" />
+    <engine name="android" spec="~6.1.0" />
     <engine name="browser" spec="~4.1.0" />
     <engine name="ios" spec="~4.3.0" />
     <platform name="android">

@@ -472,6 +472,19 @@ Now, try it in cordova
 	
 Both of these work well, and chrome://inspect works with each of them.
 
+Update Platform Android
+-----------------------
+Nov 23, 2016
+Bug was found in the handling of Android icons and splashscreens.
+A note in jira said this was fixed in 6.1.0
+
+	cordova platform rm android
+	cordova platform add android@latest
+	cordova platform list
+	update config.xml with correct version
+	
+This corrected the bug
+
 
 
 
