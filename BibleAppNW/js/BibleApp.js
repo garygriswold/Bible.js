@@ -144,7 +144,7 @@ var SERVER_HOST = 'cloudfront.net';
 var SERVER_PORT = '80';
 //var SERVER_HOST = 'cloud.shortsands.com';
 //var SERVER_PORT = '8080';
-var DEFAULT_VERSION = 'WEB.db'; // This version must be preinstalled in the App.
+var DEFAULT_VERSION = 'ERV-ENG.db'; // This version must be preinstalled in the App.
 
 function bibleShowNoteClick(nodeId) {
 	console.log('show note clicked', nodeId);
@@ -201,7 +201,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.historyView.rootNode.style.top = that.header.barHite + 'px';
 		that.questionsView = new QuestionsView(that.questions, that.verses, that.tableContents, that.version);
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
-		that.settingsView = new SettingsView(that.settingStorage, that.verses);
+		that.settingsView = new SettingsView(that.settingStorage, that.verses, that.version);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.touch = new Hammer(document.getElementById('codexRoot'));
 		setInitialFontSize();
@@ -1155,8 +1155,7 @@ function HeaderView(tableContents, version, localizeNumber) {
 		if (that.currentReference) {
 			var book = that.tableContents.find(that.currentReference.book);
 			if (book) {
-				var chapter = (that.currentReference.chapter > 0) ? that.currentReference.chapter : 1;
-				var text = book.heading + ' ' + that.localizeNumber.toLocal(chapter);
+				var text = book.heading + ' ' + that.localizeNumber.toHistLocal(that.currentReference.chapter);
 				that.titleGraphics.clearRect(0, 0, that.titleCanvas.width, that.hite);
 				that.titleGraphics.fillText(text, that.titleCanvas.width / 2, that.hite / 2, that.titleCanvas.width);
 				that.titleWidth = that.titleGraphics.measureText(text).width + 10;
@@ -1384,7 +1383,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 * This class is the UI for the controls in the settings page.
 * It also uses the VersionsView to display versions on the settings page.
 */
-function SettingsView(settingStorage, versesAdapter) {
+function SettingsView(settingStorage, versesAdapter, version) {
 	this.root = null;
 	this.settingStorage = settingStorage;
 	this.versesAdapter = versesAdapter;
@@ -1393,6 +1392,7 @@ function SettingsView(settingStorage, versesAdapter) {
 	document.body.appendChild(this.rootNode);
 	this.dom = new DOMBuilder();
 	this.versionsView = new VersionsView(this.settingStorage);
+	this.rateMeView = new RateMeView(version);
 	Object.seal(this);
 }
 SettingsView.prototype.showView = function() {
@@ -1404,6 +1404,7 @@ SettingsView.prototype.showView = function() {
 		this.rootNode.appendChild(this.root);
 	}
 	this.startControls();
+	this.rateMeView.showView();
 	this.versionsView.showView();
 };
 SettingsView.prototype.hideView = function() {
@@ -1433,7 +1434,8 @@ SettingsView.prototype.buildSettingsView = function() {
 	* example toggle switch.*/
 	/* This is kept in as a hack, because the thumb on fontSizeControl does not start in the correct
 	* position, unless this code is here. */
-	addRowSpace(table);
+	
+	//addRowSpace(table);
 	var colorRow = this.dom.addNode(table, 'tr');
 	var blackCell = this.dom.addNode(colorRow, 'td', 'tableLeftCol', null, 'blackBackground');
 	var colorCtrlCell = this.dom.addNode(colorRow, 'td', 'tableCtrlCol');
@@ -1441,7 +1443,7 @@ SettingsView.prototype.buildSettingsView = function() {
 	var colorThumb = this.dom.addNode(colorSlider, 'div', null, null, 'fontColorThumb');
 	var whiteCell = this.dom.addNode(colorRow, 'td', 'tableRightCol', null, 'whiteBackground');
 	
-	addRowSpace(table);
+	//addRowSpace(table);
 	addJohn316(textCell);
 	return(table);
 	
@@ -1681,7 +1683,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					}
 				}
 			}
-			debugLogVersions();
+			//debugLogVersions();
 		});
 	});
 	
@@ -1728,6 +1730,93 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 };
 
 /**
+* This class presents a Rate Me button and responds to clicks to that button.
+*
+*/
+function RateMeView(version) {
+	this.version = version;
+	this.appName = 'Your Bible';
+	this.appIdIos = "1073396349";
+	this.appIdAndroid = "com.shortsands.yourbible";
+	this.dom = new DOMBuilder();
+	Object.seal(this);
+}
+RateMeView.prototype.showView = function() {
+	var rateBtn = document.getElementById('ratebtn');
+	if (rateBtn == null) {
+		this._buildView();
+	}
+};
+RateMeView.prototype._buildView = function() {
+	var that = this;
+	var table = document.getElementById('settingsTable');
+	var row = this.dom.addNode(table, 'tr');
+	var cell = this.dom.addNode(row, 'td');
+	cell.setAttribute('style', 'text-align: center');
+	var buttonText = this._getButtonText(this.version.langCode);
+	var button = this.dom.addNode(cell, 'button', null, buttonText, 'ratebtn');
+	button.addEventListener('click', function(event) {
+		switch(deviceSettings.platform()) {
+			case 'android':
+				window.open("https://play.google.com/store/apps/details?id=" + that.appIdAndroid, '_blank', 'location=yes');
+			    break;
+			case 'ios':
+			    window.open("itms-apps://itunes.apple.com/app/id" + that.appIdIos, '_blank', 'location=yes');
+			    break;
+			case 'node':
+				window.open("https://play.google.com/store/apps/details?id=" + that.appIdAndroid, '_system');
+			    break;
+			default:
+			    break;
+		}
+	});
+};
+RateMeView.prototype._getButtonText = function(langCode) {
+	var buttonText = {
+		'ar': "قيِّم %@",
+		'bn': "রেট %@",
+		'ca': "Ressenya %@",
+		'cs': "Ohodnotit %@",
+		'da': "Vurdér %@",
+		'de': "Bewerte %@",
+		'de-AT': "Bewerte %@",
+		'el': "Αξιολόγησε %@",
+		'en': "Rate %@",
+		'es': "Reseña %@",
+		'fa': "نرخ %@",
+		'fi': "Arvostele %@",
+		'fr': "Notez %@",
+		'he': "דרג את %@",
+		'hi': "दर %@",
+		'id': "Beri Nilai %@",
+		'it': "Valuta %@",
+		'ja': "%@の評価",
+		'ko': "%@ 평가하기",
+		'nl': "Beoordeel %@",
+		'no': "Vurder %@",
+		'pa': "ਦਰ %@",
+		'pl': "Oceń %@",
+		'pt': "Avaliar %@",
+		'ru': "Оцените %@",
+		'sk': "Ohodnotiť %@",
+		'sl': "Oceni %@",
+		'sv': "Betygsätt %@",
+		'th': "อัตรา %@",
+		'tr': "Oy %@",
+		'uk': "Оцінити %@",
+		'ur': "شرح %@",
+		'ur-IN': "کو ریٹ کیجیے %@",
+		'ur-PK': "کو ریٹ کیجیے %@",
+		'vi': "Đánh giá %@",
+		'zh': "为“%@”评分",
+		'zh-TW': "評分 %@",
+		'zh-Hans': "为“%@”评分",
+		'zh-Hant': "評分 %@" };
+	var message = buttonText[langCode];
+	if (message == null) message = buttonText['en'];
+	message = message.replace('%@', this.appName);
+	return(message);
+};/**
 * This function draws the 'X' that is used as a close
 * button on any popup window.
 */

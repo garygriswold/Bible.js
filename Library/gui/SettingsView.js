@@ -2,7 +2,7 @@
 * This class is the UI for the controls in the settings page.
 * It also uses the VersionsView to display versions on the settings page.
 */
-function SettingsView(settingStorage, versesAdapter) {
+function SettingsView(settingStorage, versesAdapter, version) {
 	this.root = null;
 	this.settingStorage = settingStorage;
 	this.versesAdapter = versesAdapter;
@@ -11,6 +11,7 @@ function SettingsView(settingStorage, versesAdapter) {
 	document.body.appendChild(this.rootNode);
 	this.dom = new DOMBuilder();
 	this.versionsView = new VersionsView(this.settingStorage);
+	this.rateMeView = new RateMeView(version);
 	Object.seal(this);
 }
 SettingsView.prototype.showView = function() {
@@ -22,6 +23,7 @@ SettingsView.prototype.showView = function() {
 		this.rootNode.appendChild(this.root);
 	}
 	this.startControls();
+	this.rateMeView.showView();
 	this.versionsView.showView();
 };
 SettingsView.prototype.hideView = function() {
@@ -51,7 +53,8 @@ SettingsView.prototype.buildSettingsView = function() {
 	* example toggle switch.*/
 	/* This is kept in as a hack, because the thumb on fontSizeControl does not start in the correct
 	* position, unless this code is here. */
-	addRowSpace(table);
+	
+	//addRowSpace(table);
 	var colorRow = this.dom.addNode(table, 'tr');
 	var blackCell = this.dom.addNode(colorRow, 'td', 'tableLeftCol', null, 'blackBackground');
 	var colorCtrlCell = this.dom.addNode(colorRow, 'td', 'tableCtrlCol');
@@ -59,7 +62,7 @@ SettingsView.prototype.buildSettingsView = function() {
 	var colorThumb = this.dom.addNode(colorSlider, 'div', null, null, 'fontColorThumb');
 	var whiteCell = this.dom.addNode(colorRow, 'td', 'tableRightCol', null, 'whiteBackground');
 	
-	addRowSpace(table);
+	//addRowSpace(table);
 	addJohn316(textCell);
 	return(table);
 	

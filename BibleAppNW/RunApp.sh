@@ -23,6 +23,7 @@ cat ../Library/gui/HeaderView.js >> js/BibleApp.js
 cat ../Library/gui/TableContentsView.js >> js/BibleApp.js
 cat ../Library/gui/SettingsView.js >> js/BibleApp.js
 cat ../Library/gui/VersionsView.js >> js/BibleApp.js
+cat ../Library/gui/RateMeView.js >> js/BibleApp.js
 
 cat ../Library/gui/icons/drawCloseIcon.js >> js/BibleApp.js
 cat ../Library/gui/icons/drawQuestionsIcon.js >> js/BibleApp.js
