@@ -485,6 +485,20 @@ A note in jira said this was fixed in 6.1.0
 	
 This corrected the bug
 
+Update Node sqlite3
+-------------------
+Nov 27, 2016
+
+Received an error that following file was missing:
+/Users/garygriswold/node_modules/sqlite3/lib/binding/node-v48-darwin-x64/node_sqlite3.node
+
+On inspection I did have the 'node-v46-darwin-x64'.
+So, I updated sqlite3 as follows
+
+	npm update sqlite3
+	
+	
+
 
 
 

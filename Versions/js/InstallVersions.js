@@ -67,6 +67,7 @@ InstallVersions.prototype.error = function(message, err) {
 var database = new InstallVersions({filename: './Versions.db', verbose: true});
 database.install(function() {
 	console.log('INSTALL VERSIONS COMPLETED SUCESSFULLY');
+	process.exit(0);
 });
 
 module.exports = InstallVersions;

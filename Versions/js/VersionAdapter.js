@@ -71,6 +71,7 @@ VersionAdapter.prototype.addURLSignatures = function(callback) {
 			}
 			that.executeSQL('UPDATE Version SET URLSignature=? WHERE versionCode=?', signed, function(rowCount) {
 				console.log(rowCount, 'Rows of the version table updated');
+				callback();
 			});
 		}
 	});
@@ -135,14 +136,19 @@ VersionAdapter.prototype.close = function() {
 };
 
 var database = new VersionAdapter({filename: './Versions.db', verbose: false});
+console.log('Start Version Adapter');
 database.loadIntroductions('data/VersionIntro', function() {
+	console.log('Loaded Introductions');
 	database.addURLSignatures(function() {
+		console.log('Added URL Signatures');
 		database.validateTranslation(function(errCount) {
+			console.log('Validated Translation');
 			database.close();
+			console.log('Database Closed');
 			if (errCount == 0) {
 				console.log('SUCCESSFULLY CREATED Versions.db');
 			} else {
-				console.log('COMPLETED WITH ERRORS');
+				console.log('COMPLETED WITH ERRORS', errCount);
 			}
 		});
 	});

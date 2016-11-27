@@ -44,8 +44,8 @@ Amazon Cloudfront has a cost of $0.85/GB to $0.17/GB depending upon location, bu
 are any minimum charges.  But, I am not sure about log services, except that it does provide a raw
 log and it does also provide some other data with download without a raw log.
 
-Amazon AWS
-==========
+Amazon AWS Cloudfront
+=====================
 
 S3
 --
@@ -80,7 +80,75 @@ URL Signing in Node
 		└── lodash@3.10.1
 
 
+Amazon AWS S3 Hosting
+=====================
+
+Cloudfront has a hostname that specifically belongs to this account, and this is a security hole.
+S3 does not have the same problem.  Instead, the bucket name can be part of the path of the URL.
+So, it is fully encrypted over the Internet.
+
+1. Create bucket for Bibles, shortsands-cdn copy all Bibles from shortsands.
+2. Create bucket for writing logs, shortsands-drop
+3. Create bucket for reprocessed logs, shortsands-log
+4. Install the node aws (https://github.com/aws/aws-sdk-js)
+
+	cd
+	npm install aws-sdk
 	
+5. Write new method in VersionAdapter to generate URLs, if possible
+
+	http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide
+	var S3 = require('aws-sdk/clients/s3');
+	
+6. Or, write test node program to make requests of the shortsands-cdn
+
+	? Is the program making secure requests over SSL YES
+	? Is the program using Digital Signature YES
+	? How would this code interact with cordova.file?
+	? How do I write to a file as chucks are received?
+	
+6aa. Create an IAM account, which only has the privilege to getObject from shortsands-cdn
+
+	create IAM user BibleApp
+	create keys for the user BibleApp
+	add keys to program
+	verify that access fails
+	assign to BibleApp an S3 readonly policy
+	verify that access succeeds
+
+6a. Attempt to reduce the sdk to only have the required classes
+
+	http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/building-sdk-for-browsers.html
+
+7. Install cordova aws plugin
+
+	cordova plugin add https://github.com/Telerik-Verified-Plugins/Amazon-AWS --variable ACCESS_KEY=<your Access Key> --variable SECRET_KEY=<your Secret Key> --save
+	
+	check its size to verify that it is needed.
+	
+	If it is too large is there a way to isolate and use the required classes from aws-sdk. 
+	
+8. Write new download method in download class for s3
+
+
+9. Turn on logging of shortsands-cdn to shortsands-drop
+
+	must include a cookie in the log
+
+
+Config doc
+
+http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Config.html
+
+S3 doc
+
+http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html
+
+S3 Performance talk
+https://www.youtube.com/watch?v=2DpOS0zu8O0
+
+
+
 
 
 	
