@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -v
 
 sqlite3 Versions.db < Versions.sql
 

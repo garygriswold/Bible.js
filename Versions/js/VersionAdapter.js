@@ -50,7 +50,7 @@ VersionAdapter.prototype.loadIntroductions = function(directory, callback) {
 /**
 * This method computes URL signatures for AWS cloudfront, and adds this information to the Version table	
 */
-VersionAdapter.prototype.addURLSignatures = function(callback) {
+VersionAdapter.prototype.addCloudfrontSignatures = function(callback) {
 	var that = this;
 	var signer = require('aws-cloudfront-sign');
 	var pkeyPath = '../../Credentials/AWSCloudfront/pk-APKAJ7UXJKWYASMHCDEA.pem.txt';
@@ -58,7 +58,7 @@ VersionAdapter.prototype.addURLSignatures = function(callback) {
 	var options = {keypairId: 'APKAJ7UXJKWYASMHCDEA', privateKeyPath: pkeyPath, expireTime: expireTime};
 	this.db.all('SELECT versionCode, filename FROM Version', [], function(err, results) {
 		if (err) {
-			console.log('SQL Error in VersionAdapter.addURLSignatures');
+			console.log('SQL Error in VersionAdapter.addCloudfrontSignatures');
 			callback(err);
 		} else {
 			var signed = [];
@@ -66,6 +66,44 @@ VersionAdapter.prototype.addURLSignatures = function(callback) {
 				var row = results[i];
 				var url = 'https://d1obplp0ybf6eo.cloudfront.net/' + row.filename + '.zip';
 				var signedURL = signer.getSignedUrl(url, options);
+				//console.log(row.versionCode, 'Signed URL', signedURL);
+				signed.push([signedURL, row.versionCode]);
+			}
+			that.executeSQL('UPDATE Version SET URLSignature=? WHERE versionCode=?', signed, function(rowCount) {
+				console.log(rowCount, 'Rows of the version table updated');
+				callback();
+			});
+		}
+	});
+};
+/**
+* This method computes URL signatures for AWS cloudfront, and adds this information to the Version table	
+*/
+VersionAdapter.prototype.addS3URLSignatures = function(callback) {
+	var that = this;
+	var cred = require('../../../Credentials/UsersGroups/BibleApp.js');
+	var S3 = require('aws-sdk/clients/s3');
+	var awsOptions = {
+		useDualstack: true,
+		accessKeyId: cred.BIBLE_APP_KEY_ID,
+		secretAccessKey: cred.BIBLE_APP_SECRET_KEY,
+		region: 'us-west-2',
+		sslEnabled: true,
+		s3ForcePathStyle: true
+	};
+	var s3 = new S3(awsOptions);
+	var expireTime = 60 * 60 * 24 * 365 * 20;
+	console.log('expireTime = ', expireTime);
+	this.db.all('SELECT versionCode, filename FROM Version', [], function(err, results) {
+		if (err) {
+			console.log('SQL Error in VersionAdapter.addS3URLSignatures');
+			callback(err);
+		} else {
+			var signed = [];
+			for (var i=0; i<results.length; i++) {
+				var row = results[i];
+				var params = {Bucket: 'shortsands-cdn', Key: row.filename + '.zip', Expires: expireTime};
+				var signedURL = s3.getSignedUrl('getObject', params);
 				//console.log(row.versionCode, 'Signed URL', signedURL);
 				signed.push([signedURL, row.versionCode]);
 			}
@@ -138,8 +176,9 @@ VersionAdapter.prototype.close = function() {
 var database = new VersionAdapter({filename: './Versions.db', verbose: false});
 console.log('Start Version Adapter');
 database.loadIntroductions('data/VersionIntro', function() {
-	console.log('Loaded Introductions');
-	database.addURLSignatures(function() {
+	console.log('Loaded Introductions');	
+	database.addCloudfrontSignatures(function() { // Use for Cloudfront
+	//database.addS3URLSignatures(function() {		// Use for S3
 		console.log('Added URL Signatures');
 		database.validateTranslation(function(errCount) {
 			console.log('Validated Translation');

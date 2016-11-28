@@ -112,9 +112,19 @@ So, it is fully encrypted over the Internet.
 	create IAM user BibleApp
 	create keys for the user BibleApp
 	add keys to program
-	verify that access fails
-	assign to BibleApp an S3 readonly policy
+	assign to BibleApp an S3 read-only policy
 	verify that access succeeds
+	store the keys in a file that will not be put into source code control
+	
+7. Write new download method in download class for s3
+	
+8 Need to verify that 2110947880 is unix time 20 years into the future.
+
+9. Turn on logging of shortsands-cdn to shortsands-drop
+
+	must include a cookie in the log
+	
+??????
 
 6a. Attempt to reduce the sdk to only have the required classes
 
@@ -131,9 +141,7 @@ So, it is fully encrypted over the Internet.
 8. Write new download method in download class for s3
 
 
-9. Turn on logging of shortsands-cdn to shortsands-drop
 
-	must include a cookie in the log
 
 
 Config doc
@@ -146,6 +154,9 @@ http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html
 
 S3 Performance talk
 https://www.youtube.com/watch?v=2DpOS0zu8O0
+
+
+
 
 
 
