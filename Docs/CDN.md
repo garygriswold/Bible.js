@@ -83,65 +83,82 @@ URL Signing in Node
 Amazon AWS S3 Hosting
 =====================
 
-Cloudfront has a hostname that specifically belongs to this account, and this is a security hole.
-S3 does not have the same problem.  Instead, the bucket name can be part of the path of the URL.
-So, it is fully encrypted over the Internet.
+Cloudfront has a hostname that specifically belongs to this account, and this is a security hole,
+because an initial DNS request for the service includes the hostname.  If the App were reverse
+engineered this hostname could be associated with the BibleApp. However, they would not be able
+to detect what was being delivered without producing or finding SignedURLs.
 
-1. Create bucket for Bibles, shortsands-cdn copy all Bibles from shortsands.
-2. Create bucket for writing logs, shortsands-drop
-3. Create bucket for reprocessed logs, shortsands-log
-4. Install the node aws (https://github.com/aws/aws-sdk-js)
+S3 does not have the same problem.  Instead, the bucket name can be part of the path of the URL,
+and so the entire hostname refers only to a location of the S3 service, and not the BibleApp.
+So, there is no leakage of identity information when using S3.
+
+Three buckers were created in S3 for this service using the AWS Console.
+
+	Create bucket shortsands-cdn to hold Bibles.
+	Create bucket shortsands-drop for initial log files created by S3.
+	Create bucket shortsands-log for filtered log files	
+
+Create an IAM user, which only has the privilege to getObject from shortsands-cdn
+These were created using the AWS Console.
+
+	create IAM user BibleApp.
+	assign to user BibleApp read-only access to S3.
+	create keys for the user BibleApp
+	store these keys in ShortSands/Credentials/UsersGroups/BibleApp.js
+	(the above location is not in source code control)
+	
+The Amazon AWS SDK was installed (https://github.com/aws/aws-sdk-js)
 
 	cd
 	npm install aws-sdk
 	
-5. Write new method in VersionAdapter to generate URLs, if possible
+Write new method in VersionAdapter to generate SignedURLs for S3 bucket shortsands-cdn
+Because these signed URLs are stored in a database for later use, they were given an
+expiration of 20 years.  While this means they could be replayed at anytime if found,
+it also means that the BibleApp does not contain any keys.
 
+	VersionAdapter.prototype.addS3URLSignatures
+	
 	http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide
-	var S3 = require('aws-sdk/clients/s3');
+	http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html
 	
-6. Or, write test node program to make requests of the shortsands-cdn
-
-	? Is the program making secure requests over SSL YES
-	? Is the program using Digital Signature YES
-	? How would this code interact with cordova.file?
-	? How do I write to a file as chucks are received?
+I also attempted to write a test program that used the SDK to perform a download,
+but this resulted in a binary file that was in memory as a Buffer after download,
+and it still needed to be unzipped and then stored as a file in the correct location.
+These two steps were not completed.
 	
-6aa. Create an IAM account, which only has the privilege to getObject from shortsands-cdn
+In FileDownloader, write a new download method to download from S3.  In order to 
+be able to get locale in the the log, a parameter X-locale is put at the beginning
+of the query string.
 
-	create IAM user BibleApp
-	create keys for the user BibleApp
-	add keys to program
-	assign to BibleApp an S3 read-only policy
-	verify that access succeeds
-	store the keys in a file that will not be put into source code control
+	FileDownloader.prototype._downloadAWSS3
+	http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html
 	
-7. Write new download method in download class for s3
+In AWS Console turn-on logging for shortsands-cdn with the repository being shortsands-drop
+
+In Lambda create a new lambda method
+
+	name: AWS_S3_Log_Filter
+	handler: index.logHandler
+	role: service-role/LogSummarizer
+	trigger: object create in shortsands-drop
 	
-8 Need to verify that 2110947880 is unix time 20 years into the future.
-
-9. Turn on logging of shortsands-cdn to shortsands-drop
-
-	must include a cookie in the log
+	Write a Lambda that will read log file in shortsands-drop as it is created
+	Parse the log, and generate a json file of all the data that we wish to keep
+	Store the json file in shortsands-log
+	Delete the shortsands-drop file
 	
-??????
-
-6a. Attempt to reduce the sdk to only have the required classes
-
-	http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/building-sdk-for-browsers.html
-
-7. Install cordova aws plugin
-
-	cordova plugin add https://github.com/Telerik-Verified-Plugins/Amazon-AWS --variable ACCESS_KEY=<your Access Key> --variable SECRET_KEY=<your Secret Key> --save
-	
-	check its size to verify that it is needed.
-	
-	If it is too large is there a way to isolate and use the required classes from aws-sdk. 
-	
-8. Write new download method in download class for s3
+In ShortSands project, create a new node program in the Server directory, which will
+extract all of the data in the shortsands-log directory, and load it into a sqlite
+database, and delete the shortsands-log files once they are added.
 
 
 
+
+Essential Documentation:
+
+AWS SDK
+http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide
 
 S3 doc
 http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html
@@ -151,6 +168,14 @@ http://docs.aws.amazon.com/AmazonS3/latest/dev/LogFormat.html
 
 S3 Performance talk
 https://www.youtube.com/watch?v=2DpOS0zu8O0
+
+Other documentation and things that might be of interest:
+
+cordova plugin
+cordova plugin add https://github.com/Telerik-Verified-Plugins/Amazon-AWS --variable ACCESS_KEY=<your Access Key> --variable SECRET_KEY=<your Secret Key> --save
+
+instructions on scaling down the aws sdk
+http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/building-sdk-for-browsers.html
 
 
 
