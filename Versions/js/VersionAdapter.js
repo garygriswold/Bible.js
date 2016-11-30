@@ -177,8 +177,8 @@ var database = new VersionAdapter({filename: './Versions.db', verbose: false});
 console.log('Start Version Adapter');
 database.loadIntroductions('data/VersionIntro', function() {
 	console.log('Loaded Introductions');	
-	database.addCloudfrontSignatures(function() { // Use for Cloudfront
-	//database.addS3URLSignatures(function() {		// Use for S3
+	//database.addCloudfrontSignatures(function() { // Use for Cloudfront
+	database.addS3URLSignatures(function() {		// Use for S3
 		console.log('Added URL Signatures');
 		database.validateTranslation(function(errCount) {
 			console.log('Validated Translation');

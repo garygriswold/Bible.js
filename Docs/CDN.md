@@ -143,14 +143,11 @@ So, it is fully encrypted over the Internet.
 
 
 
-
-Config doc
-
-http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Config.html
-
 S3 doc
-
 http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html
+
+S3 Log doc
+http://docs.aws.amazon.com/AmazonS3/latest/dev/LogFormat.html
 
 S3 Performance talk
 https://www.youtube.com/watch?v=2DpOS0zu8O0

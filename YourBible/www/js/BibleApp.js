@@ -35,7 +35,7 @@ AppInitializer.prototype.begin = function() {
 						} else {
 							var gsPreloader = new GSPreloader(gsPreloaderOptions);
 							gsPreloader.active(true);
-							var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT, versionsAdapter, 'none');
+							var downloader = new FileDownloader(versionsAdapter, 'none');
 							downloader.download(filename, function(error) {
 								//console.log('Download error', JSON.stringify(error));
 								gsPreloader.active(false);
@@ -139,10 +139,8 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note', // Hide footnote as a result of user action
 	};
-var SERVER_HOST = 'cloudfront.net';
-var SERVER_PORT = '80';
-//var SERVER_HOST = 'cloud.shortsands.com';
-//var SERVER_PORT = '8080';
+var SERVER_HOST = 'cloud.shortsands.com'; // For unused QuestionsView
+var SERVER_PORT = '8080';
 var DEFAULT_VERSION = 'ERV-ENG.db'; // This version must be preinstalled in the App.
 
 function bibleShowNoteClick(nodeId) {
@@ -1698,7 +1696,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		var versionCode = iconNode.id.substr(3);
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		that.settingStorage.getCurrentVersion(function(currVersion) {
-			var downloader = new FileDownloader(SERVER_HOST, SERVER_PORT, that.database, currVersion);
+			var downloader = new FileDownloader(that.database, currVersion);
 			downloader.download(versionFile, function(error) {
 				gsPreloader.active(false);
 				if (error) {
@@ -3437,9 +3435,10 @@ AppUpdater.prototype.updateVersion = function() {
 * 'persistent' will store the file in 'Documents' in Android and 'Library' in iOS
 * 'LocalDatabase' is the file under Library where the database is expected.
 */
-function FileDownloader(host, port, database, currVersion) {
-	this.host = host;
-	this.port = port;
+function FileDownloader(database, currVersion) {
+	//this.host = 'shortsands.com';
+	//this.host = 'cloudfront.net';
+	this.host = 's3.amazonaws.com';
 	this.database = database;
 	this.currVersion = currVersion;
 	if (deviceSettings.platform() === 'ios') {
@@ -3456,6 +3455,8 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 		this._downloadShortSands(bibleVersion, callback);
 	} else if (this.host.indexOf('cloudfront') > -1) {
 		this._downloadCloudfront(bibleVersion, callback);
+	} else if (this.host.indexOf('amazonaws.com') > -1) {
+		this._downloadAWSS3(bibleVersion, callback);
 	} else {
 		console.log('ERROR: cannot download from host=', this.host);
 		callback();
@@ -3465,9 +3466,9 @@ FileDownloader.prototype._downloadShortSands = function(bibleVersion, callback) 
 	var that = this;
 	var bibleVersionZip = bibleVersion + '.zip';
 	var tempPath = this.downloadPath + bibleVersionZip;
-	var uri = encodeURI('http://' + this.host + ':' + this.port + '/book/');
+	var uri = encodeURI('http://' + this.host + ':8080/book/');
 	var remotePath = uri + bibleVersionZip;
-	console.log('download from', remotePath, ' to ', tempPath);
+	console.log('shortsands download from', remotePath, ' to ', tempPath);
 	var datetime = new Date().toISOString();
 	var encrypted = CryptoJS.AES.encrypt(datetime, CREDENTIAL.key);
 	this._getLocale(function(locale) {
@@ -3486,7 +3487,7 @@ FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) 
 	var that = this;
 	var tempPath = this.downloadPath + bibleVersion + '.zip';
 	this.database.selectURL(bibleVersion, function(remotePath) {
-		console.log('download from', remotePath, ' to ', tempPath);
+		console.log('cloudfront download from', remotePath, ' to ', tempPath);
 		that._getLocale(function(locale) {
 			var options = { 
 				headers: {
@@ -3494,6 +3495,22 @@ FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) 
 					'Connection': 'close'
 				}
 			};
+			that._performDownload(remotePath, tempPath, false, options, callback);
+		});
+	});
+};
+FileDownloader.prototype._downloadAWSS3 = function(bibleVersion, callback) {
+	var that = this;
+	var tempPath = this.downloadPath + bibleVersion + '.zip';
+	this.database.selectURL(bibleVersion, function(remotePath) {
+		console.log('aws s3 download from', remotePath, ' to ', tempPath);
+		that._getLocale(function(locale) {
+			var options = { 
+				headers: {
+					'Connection': 'close'
+				}
+			};
+			remotePath = remotePath.replace('?', '?X-Locale=' + locale + '&');
 			that._performDownload(remotePath, tempPath, false, options, callback);
 		});
 	});

@@ -6,9 +6,10 @@
 * 'persistent' will store the file in 'Documents' in Android and 'Library' in iOS
 * 'LocalDatabase' is the file under Library where the database is expected.
 */
-function FileDownloader(host, port, database, currVersion) {
-	this.host = host;
-	this.port = port;
+function FileDownloader(database, currVersion) {
+	//this.host = 'shortsands.com';
+	//this.host = 'cloudfront.net';
+	this.host = 's3.amazonaws.com';
 	this.database = database;
 	this.currVersion = currVersion;
 	if (deviceSettings.platform() === 'ios') {
@@ -25,6 +26,8 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 		this._downloadShortSands(bibleVersion, callback);
 	} else if (this.host.indexOf('cloudfront') > -1) {
 		this._downloadCloudfront(bibleVersion, callback);
+	} else if (this.host.indexOf('amazonaws.com') > -1) {
+		this._downloadAWSS3(bibleVersion, callback);
 	} else {
 		console.log('ERROR: cannot download from host=', this.host);
 		callback();
@@ -34,9 +37,9 @@ FileDownloader.prototype._downloadShortSands = function(bibleVersion, callback) 
 	var that = this;
 	var bibleVersionZip = bibleVersion + '.zip';
 	var tempPath = this.downloadPath + bibleVersionZip;
-	var uri = encodeURI('http://' + this.host + ':' + this.port + '/book/');
+	var uri = encodeURI('http://' + this.host + ':8080/book/');
 	var remotePath = uri + bibleVersionZip;
-	console.log('download from', remotePath, ' to ', tempPath);
+	console.log('shortsands download from', remotePath, ' to ', tempPath);
 	var datetime = new Date().toISOString();
 	var encrypted = CryptoJS.AES.encrypt(datetime, CREDENTIAL.key);
 	this._getLocale(function(locale) {
@@ -55,7 +58,7 @@ FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) 
 	var that = this;
 	var tempPath = this.downloadPath + bibleVersion + '.zip';
 	this.database.selectURL(bibleVersion, function(remotePath) {
-		console.log('download from', remotePath, ' to ', tempPath);
+		console.log('cloudfront download from', remotePath, ' to ', tempPath);
 		that._getLocale(function(locale) {
 			var options = { 
 				headers: {
@@ -63,6 +66,22 @@ FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) 
 					'Connection': 'close'
 				}
 			};
+			that._performDownload(remotePath, tempPath, false, options, callback);
+		});
+	});
+};
+FileDownloader.prototype._downloadAWSS3 = function(bibleVersion, callback) {
+	var that = this;
+	var tempPath = this.downloadPath + bibleVersion + '.zip';
+	this.database.selectURL(bibleVersion, function(remotePath) {
+		console.log('aws s3 download from', remotePath, ' to ', tempPath);
+		that._getLocale(function(locale) {
+			var options = { 
+				headers: {
+					'Connection': 'close'
+				}
+			};
+			remotePath = remotePath.replace('?', '?X-Locale=' + locale + '&');
 			that._performDownload(remotePath, tempPath, false, options, callback);
 		});
 	});

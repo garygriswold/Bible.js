@@ -83,6 +83,7 @@ User Download
 	5. Restart the App with no version change.
 	6. Verify that a file can be downloaded when version is selected.
 	7. Test Download of Each Version, or each new Version
+	8. Do clean install, but change locale to verify that it will do install at point of install.
 	
 AWS Server
 ----------
