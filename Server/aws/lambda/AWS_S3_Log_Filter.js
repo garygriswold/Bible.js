@@ -23,30 +23,30 @@ exports.logHandler = function(event, context) {
                 var line = parseLogLine(log[i]);
                 var values = [];
                 // line[0] user id of bucket owner
-                values.push('bucket:"' + line[1] + '"');
-                values.push('datetime:"' + line[2] + '"');
+                values.push('"bucket":"' + line[1] + '"');
+                values.push('"datetime":"' + line[2] + '"');
                 // line[3] remote IP
-                values.push('userid:"' + line[4] + '"');
-                values.push('requestid:"' + line[5] + '"');
-                values.push('operation:"' + line[6] + '"');
-                values.push('filename:"' + line[7] + '"');
+                values.push('"userid":"' + line[4] + '"');
+                values.push('"requestid":"' + line[5] + '"');
+                values.push('"operation":"' + line[6] + '"');
+                values.push('"filename":"' + line[7] + '"');
                 var lang = parseLocale(line[8]);
                 if (lang) {
                     var langParts = lang.split(',');
-                    values.push('prefLang:"' + langParts[0] + '"');
+                    values.push('"prefLocale":"' + langParts[0] + '"');
                     if (langParts.length > 1) {
-                        values.push('locale:"' + langParts[1] + '"');
+                        values.push('"locale":"' + langParts[1] + '"');
                     }
                 }
-                values.push('httpStatus:"' + line[9] + '"');
-                values.push('error:"' + line[10] + '"');
-                values.push('tranSize:"' + line[11] + '"');
-                values.push('fileSize:"' + line[12] + '"');
-                values.push('totalms:"' + line[13] + '"');
-                values.push('s3ms:"' + line[14] + '"');
+                values.push('"httpStatus":"' + line[9] + '"');
+                values.push('"error":"' + line[10] + '"');
+                values.push('"tranSize":"' + line[11] + '"');
+                values.push('"fileSize":"' + line[12] + '"');
+                values.push('"totalms":"' + line[13] + '"');
+                values.push('"s3ms":"' + line[14] + '"');
                 // line[15] referrer
-                values.push('userAgent:"' + line[16] + '"');
-                output.push('{ ' + values.join(', ') + ' };');
+                values.push('"userAgent":"' + line[16] + '"');
+                output.push('{ ' + values.join(', ') + ' }');
             }
             console.log(output.join('\n'));
             var params = { 
