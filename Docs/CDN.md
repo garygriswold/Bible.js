@@ -148,9 +148,13 @@ In Lambda create a new lambda method
 	Store the json file in shortsands-log
 	Delete the shortsands-drop file
 	
-In ShortSands project, create a new node program in the Server directory, which will
-extract all of the data in the shortsands-log directory, and load it into a sqlite
-database, and delete the shortsands-log files once they are added.
+In ShortSands project, I created a new node program in the Server directory, which
+extracts all of the data in the shortsands-log directory, loads it into a sqlite
+database, and deletes the shortsands-log files once they are added.
+
+S3 Accelerated Transfer was attempted, but it does not seem to work with a bucket
+name in the path position, but requires the bucket name to be in the host.  This
+is a severe leak, and consequently, I will not be using Accelerated Transfer
 
 
 
