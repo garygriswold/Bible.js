@@ -3,6 +3,7 @@
 * the Version table.
 */
 "use strict";
+const REGIONS = require('../../Library/cdn/Regions.js').REGIONS;
 function VersionAdapter(options) {
 	var sqlite3 = (options.verbose) ? require('sqlite3').verbose() : require('sqlite3');
 	this.db = new sqlite3.Database(options.filename);
@@ -83,33 +84,44 @@ VersionAdapter.prototype.addS3URLSignatures = function(callback) {
 	var that = this;
 	var cred = require('../../../Credentials/UsersGroups/BibleApp.js');
 	var S3 = require('aws-sdk/clients/s3');
-	var awsOptions = {
-		useDualstack: true,
-		accessKeyId: cred.BIBLE_APP_KEY_ID,
-		secretAccessKey: cred.BIBLE_APP_SECRET_KEY,
-		region: 'us-west-2',
-		sslEnabled: true,
-		s3ForcePathStyle: true
-	};
-	var s3 = new S3(awsOptions);
 	var expireTime = 60 * 60 * 24 * 365 * 20;
 	console.log('expireTime = ', expireTime);
-	this.db.all('SELECT versionCode, filename FROM Version', [], function(err, results) {
+	this.db.all('SELECT versionCode, filename FROM Version', [], function(err, versions) {
 		if (err) {
 			console.log('SQL Error in VersionAdapter.addS3URLSignatures');
 			callback(err);
 		} else {
-			var signed = [];
-			for (var i=0; i<results.length; i++) {
-				var row = results[i];
-				var params = {Bucket: 'shortsands-cdn', Key: row.filename + '.zip', Expires: expireTime};
-				var signedURL = s3.getSignedUrl('getObject', params);
-				//console.log(row.versionCode, 'Signed URL', signedURL);
-				signed.push([signedURL, row.versionCode]);
-			}
-			that.executeSQL('UPDATE Version SET URLSignature=? WHERE versionCode=?', signed, function(rowCount) {
-				console.log(rowCount, 'Rows of the version table updated');
-				callback();
+			that.db.all('SELECT distinct awsRegion FROM Region', [], function(err, regions) {
+				if (err) {
+					console.log('SQL Error in VersionAdapter.select Region.awsRegion');
+					callback(err);
+				} else {
+					var signed = [];
+					for (var i=0; i< regions.length; i++) {
+						var reg = regions[i];
+						console.log('DOING REGION', reg.awsRegion, REGIONS[reg.awsRegion]);
+						var awsOptions = {
+								useDualstack: true,
+								accessKeyId: cred.BIBLE_APP_KEY_ID,
+								secretAccessKey: cred.BIBLE_APP_SECRET_KEY,
+								region: REGIONS[reg.awsRegion],
+								sslEnabled: true,
+								s3ForcePathStyle: true
+						};
+						var s3 = new S3(awsOptions);
+						for (var j=0; j<versions.length; j++) {
+							var ver = versions[j];
+							var params = {Bucket: reg.awsRegion, Key: ver.filename + '.zip', Expires: expireTime};
+							var signedURL = s3.getSignedUrl('getObject', params);
+							console.log(reg.awsRegion, ver.versionCode, 'Signed URL', signedURL);
+							signed.push([ver.filename, reg.awsRegion, signedURL]);
+						}
+					}
+					that.executeSQL('INSERT INTO DownloadURL (filename, awsRegion, signedURL) VALUES (?,?,?)', signed, function(rowCount) {
+						console.log('INSERTED INTO DownloadURL', rowCount);
+						callback();
+					});
+				}
 			});
 		}
 	});

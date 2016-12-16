@@ -3,22 +3,24 @@ const aws = require('aws-sdk');
 const s3 = new aws.S3();
 
 exports.logHandler = function(event, context) {
-    console.log('Received event:', JSON.stringify(event, null, 2));
+    //console.log('Received event:', JSON.stringify(event, null, 2));
     var output = [];
+    // Uncomment 2 lines for unit test
+    //const dropBucket = 'shortsands-na-va-drop';
+    //const key = '2016-12-13-18-23-49-06FC4E8571FCDD00';
+    // Comment 3 lines for unit test
     const record = event.Records[0];
-    const bucket = record.s3.bucket.name;
+    const dropBucket = record.s3.bucket.name;
     const key = decodeURIComponent(record.s3.object.key.replace(/\+/g, ' '));
-    // Uncomment for unit test
-    //const bucket = 'shortsands-drop';
-    //const key = '2016-11-29-05-28-51-8DEF77A9EC4E1725';
-    const rawLog = { Bucket: bucket, Key: key };
-    console.log('Processing: Bucket', bucket, 'Key', key);
+    const logBucket = dropBucket.replace('drop', 'log');
+    const rawLog = { Bucket: dropBucket, Key: key };
+    console.log('Processing: Bucket', dropBucket, 'Key', key, ' To Bucket', logBucket);
     s3.getObject(rawLog, function(as3Error, as3Data) {
         if (as3Error) {
             console.log('ERROR s3.getObject', as3Error);
         } else {
             const log = String(as3Data.Body).trim().split('\n');
-            console.log('LOG', log);
+            //console.log('LOG', log);
             for (var i=0; i<log.length; i++) {
                 var line = parseLogLine(log[i]);
                 var values = [];
@@ -48,9 +50,9 @@ exports.logHandler = function(event, context) {
                 values.push('"userAgent":"' + line[16] + '"');
                 output.push('{ ' + values.join(', ') + ' }');
             }
-            console.log(output.join('\n'));
+            //console.log(output.join('\n'));
             var params = { 
-                Bucket: 'shortsands-log', 
+                Bucket: logBucket, 
                 Key: key + '.json',
                 ContentType: 'application/json',
                 Body: output.join('\n')
@@ -60,12 +62,12 @@ exports.logHandler = function(event, context) {
                     console.log('ERROR in S3.putObject', putError);
                 }
                 else {
-                    console.log("Successfully wrote Summary to shortsands-log");
+                    console.log("Successfully wrote Summary to " + logBucket);
                     s3.deleteObject(rawLog, function(delError, data) {
                         if (delError) {
                             console.log('ERROR in S3.deleteObject', delError);
                         } else {
-                            console.log('Successfully deleted log from shortsands-drop');
+                            console.log("Successfully deleted log from " + dropBucket);
                         }
                     });
                 }
@@ -105,7 +107,7 @@ exports.logHandler = function(event, context) {
         if (field.length > 0) {
             lineOut.push(field.join(''));
         }
-        console.log('END', lineOut);
+        //console.log('END', lineOut);
         return(lineOut);
     }
     

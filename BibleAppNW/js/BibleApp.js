@@ -36,7 +36,7 @@ AppInitializer.prototype.begin = function() {
 						} else {
 							var gsPreloader = new GSPreloader(gsPreloaderOptions);
 							gsPreloader.active(true);
-							var downloader = new FileDownloader(versionsAdapter, 'none');
+							var downloader = new FileDownloader(versionsAdapter, locale, 'none');
 							downloader.download(filename, function(error) {
 								//console.log('Download error', JSON.stringify(error));
 								gsPreloader.active(false);
@@ -1561,8 +1561,10 @@ function VersionsView(settingStorage) {
 	this.settingStorage = settingStorage;
 	this.database = new VersionsAdapter();
 	var that = this;
-	that.translation = null;
+	this.locale = null;
+	this.translation = null;
 	deviceSettings.prefLanguage(function(locale) {
+		that.locale = locale;
 		that.database.buildTranslateMap(locale, function(results) {
 			that.translation = results;
 		});		
@@ -1697,7 +1699,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		var versionCode = iconNode.id.substr(3);
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		that.settingStorage.getCurrentVersion(function(currVersion) {
-			var downloader = new FileDownloader(that.database, currVersion);
+			var downloader = new FileDownloader(that.database, that.locale, currVersion);
 			downloader.download(versionFile, function(error) {
 				gsPreloader.active(false);
 				if (error) {
@@ -3141,7 +3143,10 @@ VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
 		}
 	});
 };
-VersionsAdapter.prototype.selectURL = function(versionFile, callback) {
+/**
+* deprecated, the URL Signature is not present in Version table (Dec 16, 2016)
+*/
+VersionsAdapter.prototype.selectURLCloudfront = function(versionFile, callback) {
 	var statement = 'SELECT URLSignature FROM Version WHERE filename=?';
 	this.database.select(statement, [versionFile], function(results) {
 		if (results instanceof IOError) {
@@ -3150,6 +3155,25 @@ VersionsAdapter.prototype.selectURL = function(versionFile, callback) {
 			callback();
 		} else {
 			callback(results.rows.item(0).URLSignature);
+		}
+	});
+};
+VersionsAdapter.prototype.selectURLS3 = function(versionFile, countryCode, callback) {
+	var that = this;
+	var statement = 'SELECT signedURL FROM DownloadURL d JOIN Region r ON r.awsRegion=d.awsRegion WHERE d.filename=? AND r.countryCode=?';
+	this.database.select(statement, [versionFile, countryCode], function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else if (results.rows.length === 0) {
+			that.database.select(statement, [versionFile, 'US'], function(results) {
+				if (results instanceof IOError) {
+					callback(results);
+				} else {
+					callback(results.rows.item(0).signedURL)
+				}
+			});
+		} else {
+			callback(results.rows.item(0).signedURL);
 		}
 	});
 };
@@ -3436,11 +3460,14 @@ AppUpdater.prototype.updateVersion = function() {
 * 'persistent' will store the file in 'Documents' in Android and 'Library' in iOS
 * 'LocalDatabase' is the file under Library where the database is expected.
 */
-function FileDownloader(database, currVersion) {
+function FileDownloader(database, locale, currVersion) {
 	//this.host = 'shortsands.com';
 	//this.host = 'cloudfront.net';
 	this.host = 's3.amazonaws.com';
 	this.database = database;
+	var parts = locale.split('-');
+	this.countryCode = parts.pop();
+	console.log('Country Code', this.countryCode);
 	this.currVersion = currVersion;
 	if (deviceSettings.platform() === 'ios') {
 		this.downloadPath = cordova.file.tempDirectory;
@@ -3487,7 +3514,7 @@ FileDownloader.prototype._downloadShortSands = function(bibleVersion, callback) 
 FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) {
 	var that = this;
 	var tempPath = this.downloadPath + bibleVersion + '.zip';
-	this.database.selectURL(bibleVersion, function(remotePath) {
+	this.database.selectURLCloudfront(bibleVersion, function(remotePath) {
 		console.log('cloudfront download from', remotePath, ' to ', tempPath);
 		that._getLocale(function(locale) {
 			var options = { 
@@ -3503,7 +3530,7 @@ FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) 
 FileDownloader.prototype._downloadAWSS3 = function(bibleVersion, callback) {
 	var that = this;
 	var tempPath = this.downloadPath + bibleVersion + '.zip';
-	this.database.selectURL(bibleVersion, function(remotePath) {
+	this.database.selectURLS3(bibleVersion, this.countryCode, function(remotePath) {
 		console.log('aws s3 download from', remotePath, ' to ', tempPath);
 		that._getLocale(function(locale) {
 			var options = { 

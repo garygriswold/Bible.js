@@ -6,11 +6,14 @@
 * 'persistent' will store the file in 'Documents' in Android and 'Library' in iOS
 * 'LocalDatabase' is the file under Library where the database is expected.
 */
-function FileDownloader(database, currVersion) {
+function FileDownloader(database, locale, currVersion) {
 	//this.host = 'shortsands.com';
 	//this.host = 'cloudfront.net';
 	this.host = 's3.amazonaws.com';
 	this.database = database;
+	var parts = locale.split('-');
+	this.countryCode = parts.pop();
+	console.log('Country Code', this.countryCode);
 	this.currVersion = currVersion;
 	if (deviceSettings.platform() === 'ios') {
 		this.downloadPath = cordova.file.tempDirectory;
@@ -57,7 +60,7 @@ FileDownloader.prototype._downloadShortSands = function(bibleVersion, callback) 
 FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) {
 	var that = this;
 	var tempPath = this.downloadPath + bibleVersion + '.zip';
-	this.database.selectURL(bibleVersion, function(remotePath) {
+	this.database.selectURLCloudfront(bibleVersion, function(remotePath) {
 		console.log('cloudfront download from', remotePath, ' to ', tempPath);
 		that._getLocale(function(locale) {
 			var options = { 
@@ -73,7 +76,7 @@ FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) 
 FileDownloader.prototype._downloadAWSS3 = function(bibleVersion, callback) {
 	var that = this;
 	var tempPath = this.downloadPath + bibleVersion + '.zip';
-	this.database.selectURL(bibleVersion, function(remotePath) {
+	this.database.selectURLS3(bibleVersion, this.countryCode, function(remotePath) {
 		console.log('aws s3 download from', remotePath, ' to ', tempPath);
 		that._getLocale(function(locale) {
 			var options = { 

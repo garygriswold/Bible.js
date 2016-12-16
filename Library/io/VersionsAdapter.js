@@ -117,7 +117,10 @@ VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
 		}
 	});
 };
-VersionsAdapter.prototype.selectURL = function(versionFile, callback) {
+/**
+* deprecated, the URL Signature is not present in Version table (Dec 16, 2016)
+*/
+VersionsAdapter.prototype.selectURLCloudfront = function(versionFile, callback) {
 	var statement = 'SELECT URLSignature FROM Version WHERE filename=?';
 	this.database.select(statement, [versionFile], function(results) {
 		if (results instanceof IOError) {
@@ -126,6 +129,25 @@ VersionsAdapter.prototype.selectURL = function(versionFile, callback) {
 			callback();
 		} else {
 			callback(results.rows.item(0).URLSignature);
+		}
+	});
+};
+VersionsAdapter.prototype.selectURLS3 = function(versionFile, countryCode, callback) {
+	var that = this;
+	var statement = 'SELECT signedURL FROM DownloadURL d JOIN Region r ON r.awsRegion=d.awsRegion WHERE d.filename=? AND r.countryCode=?';
+	this.database.select(statement, [versionFile, countryCode], function(results) {
+		if (results instanceof IOError) {
+			callback(results);
+		} else if (results.rows.length === 0) {
+			that.database.select(statement, [versionFile, 'US'], function(results) {
+				if (results instanceof IOError) {
+					callback(results);
+				} else {
+					callback(results.rows.item(0).signedURL)
+				}
+			});
+		} else {
+			callback(results.rows.item(0).signedURL);
 		}
 	});
 };

@@ -4,6 +4,8 @@ DROP TABLE IF EXISTS Translation;
 DROP TABLE IF EXISTS InstalledVersion;
 DROP TABLE IF EXISTS DefaultVersion;
 DROP TABLE IF EXISTS CountryVersion;
+DROP TABLE IF EXISTS DownloadURL;
+DROP TABLE IF EXISTS Region;
 DROP TABLE IF EXISTS Version;
 DROP TABLE IF EXISTS Owner;
 DROP TABLE IF EXISTS Language;
@@ -83,79 +85,159 @@ hasHistory TEXT CHECK (hasHistory IN('T','F')),
 isQaActive TEXT CHECK (isQaActive IN('T','F')),
 versionDate TEXT NOT NULL,
 copyright TEXT NULL,
-URLSignature TEXT NULL,
 introduction TEXT NULL
 );
 -- America
-INSERT INTO Version VALUES ('ERV-ENG', 'eng', 'BLI', 'ERV-ENG', 'Holy Bible: Easy-to-Read Version (ERV), International Edition', 'BIBLE', 'ERV-ENG.db', 'T', 'F', '2016-10-01', 'Holy Bible: Easy-to-Read Version (ERV), International Edition © 2013, 2016 Bible League International', NULL, NULL);
+INSERT INTO Version VALUES ('ERV-ENG', 'eng', 'BLI', 'ERV-ENG', 'Holy Bible: Easy-to-Read Version (ERV), International Edition', 'BIBLE', 'ERV-ENG.db', 'T', 'F', '2016-10-01', 'Holy Bible: Easy-to-Read Version (ERV), International Edition © 2013, 2016 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-POR', 'por', 'BLI', 'ERV-POR', 'Novo Testamento: Versão Fácil de Ler', 'BIBLE_NT', 'ERV-POR.db', 'T', 'F', '2016-10-10',
-'Novo Testamento: Versão Fácil de Ler (VFL) © 1999, 2014 Bible League International', NULL, NULL);
+'Novo Testamento: Versão Fácil de Ler (VFL) © 1999, 2014 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-SPA', 'spa', 'BLI', 'ERV-SPA', 'La Biblia: La Palabra de Dios para todos', 'BIBLE', 'ERV-SPA.db', 'T', 'F', '2016-10-08',
-'La Biblia: La Palabra de Dios para todos (PDT) © 2005, 2015 Bible League International', NULL, NULL);
+'La Biblia: La Palabra de Dios para todos (PDT) © 2005, 2015 Bible League International', NULL);
 INSERT INTO Version VALUES ('ESV', 'eng', 'CRSWY', 'ESV', 'English Standard Version', 'BIBLE', 'ESV.db', 'T', 'F', '2020-01-01',
-'English Standard Version®, copyright © 2001 by Crossway Bibles, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.', NULL, NULL);
+'English Standard Version®, copyright © 2001 by Crossway Bibles, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.', NULL);
 INSERT INTO Version VALUES ('KJVPD', 'eng', 'EBIBLE', 'KJV', 'King James Version', 'BIBLE', 'KJVPD.db', 'T', 'F', '2016-09-06', 
-'King James Version 1611 (KJV), Public Domain, eBible.org.', NULL, NULL);
+'King James Version 1611 (KJV), Public Domain, eBible.org.', NULL);
 INSERT INTO Version VALUES ('WEB', 'eng', 'EBIBLE', 'WEB', 'World English Bible', 'BIBLE', 'WEB.db', 'T', 'F', '2016-09-06', 
-'World English Bible (WEB), Public Domain, eBible.org.', NULL, NULL);
+'World English Bible (WEB), Public Domain, eBible.org.', NULL);
 INSERT INTO Version VALUES ('WEB_SHORT', 'eng', 'EBIBLE', 'WEB', 'WEB Genesis and Titus for testing', 'BIBLE_PNT', 'WEB_SHORT.db', 'T', 'F', '2016-09-06',
-'', NULL, NULL);
+'', NULL);
 
 -- East Asia
 INSERT INTO Version VALUES ('ERV-CMN', 'cmn', 'BLI', 'ERV-CMN', '圣经–普通话本', 'BIBLE', 'ERV-CMN.db', 'T', 'F', '2016-10-12',
-'圣经–普通话本（普通话）© 1999，2015 Bible League International', NULL, NULL);
+'圣经–普通话本（普通话）© 1999，2015 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-IND', 'ind', 'BLI', 'ERV-IND', 'Perjanjian Baru: Versi Mudah Dibaca', 'BIBLE_NT', 'ERV-IND.db', 'T', 'F', '2016-10-12',
-'Perjanjian Baru: Versi Mudah Dibaca (VMD) © 2003 Bible League International', NULL, NULL);
+'Perjanjian Baru: Versi Mudah Dibaca (VMD) © 2003 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-NEP', 'nep', 'BLI', 'ERV-NEP', 'Nepali Holy Bible: Easy-to-Read Version', 'BIBLE', 'ERV-NEP.db', 'T', 'F', '2016-10-17',
-'Nepali Holy Bible: Easy-to-Read Version (ERV) © 2004 Bible League International', NULL, NULL);
+'Nepali Holy Bible: Easy-to-Read Version (ERV) © 2004 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-THA', 'tha', 'BLI', 'ERV-THA', 'พระ​คริสต​ธรรม​คัมภีร์ ฉบับ​อ่าน​เข้า​ใจ​ง่าย', 'BIBLE', 'ERV-THA.db', 'T', 'F', '2016-10-12',
-'พระคริสต​ธรรม​คัมภีร์: ฉบับ​อ่าน​เข้า​ใจ​ง่าย (ขจง) © 2015 Bible League International', NULL, NULL);
+'พระคริสต​ธรรม​คัมภีร์: ฉบับ​อ่าน​เข้า​ใจ​ง่าย (ขจง) © 2015 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-VIE', 'vie', 'BLI', 'ERV-VIE', 'Thánh Kinh: Bản Phổ thông', 'BIBLE', 'ERV-VIE.db', 'T', 'F', '2016-10-12',
-'Thánh Kinh: Bản Phổ thông (BPT) © 2010 Bible League International', NULL, NULL);
+'Thánh Kinh: Bản Phổ thông (BPT) © 2010 Bible League International', NULL);
 
 -- Middle East
 INSERT INTO Version VALUES ('ARBVDPD', 'arb', 'EBIBLE', 'ARBVD', 'الكتاب المقدس ترجمة فان دايك', 'BIBLE', 'ARBVDPD.db', 'F', 'F', '2016-09-06',
-'Arabic Bible: Van Dyck Translation (ARBVD), Public Domain, eBible.org', NULL, NULL);
-INSERT INTO Version VALUES ('ERV-ARB', 'arb', 'BLI', 'ERV-ARB', 'بِعَهْدَيْهِ القَدِيمِ وَالجَدِيد الكِتَابُ المُقَدَّسُ', 'BIBLE', 'ERV-ARB.db', 'T', 'F', '2016-10',
-'الكِتاب المُقَدَّس: التَّرْجَمَةُ العَرَبِيَّةُ المُبَسَّطَةُ (ت ع م) © 2009, 2016 رَابِطَةُ الكِتَابِ المُقَدَّسِ الدَّوْلِيَّة (Bible League International)',
-NULL, NULL);
+'Arabic Bible: Van Dyck Translation (ARBVD), Public Domain, eBible.org', NULL);
+INSERT INTO Version VALUES ('ERV-ARB', 'arb', 'BLI', 'ERV-ARB', 'بِعَهْدَيْهِ القَدِيمِ وَالجَدِيد الكِتَابُ المُقَدَّسُ', 'BIBLE', 'ERV-ARB.db', 'T', 'F', '2016-10'
+,'الكِتاب المُقَدَّس: التَّرْجَمَةُ العَرَبِيَّةُ المُبَسَّطَةُ (ت ع م) © 2009, 2016 رَابِطَةُ الكِتَابِ المُقَدَّسِ الدَّوْلِيَّة (Bible League International)',
+NULL);
 INSERT INTO Version VALUES('NMV', 'pes', 'ELAM', 'NMV', 'ترجمۀ هزارۀ نو', 'BIBLE', 'NMV.db', 'F', 'F', '2016-09-06',
-'The Persian New Millennium Version © 2014, is a production of Elam Ministries. All rights reserved', NULL, NULL);
+'The Persian New Millennium Version © 2014, is a production of Elam Ministries. All rights reserved', NULL);
 
 -- India
 INSERT INTO Version VALUES ('ERV-AWA', 'awa', 'BLI', 'ERV-AWA', 'पवित्तर बाइबिल, Easy-to-Read Version', 'BIBLE', 'ERV-AWA.db', 'T', 'F', '2016-10-17',
-'Awadhi Holy Bible: Easy-to-Read Version (ERV) © 2005 Bible League International', NULL, NULL);
+'Awadhi Holy Bible: Easy-to-Read Version (ERV) © 2005 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-BEN', 'ben', 'BLI', 'ERV-BEN', 'পবিত্র বাইবেল, Easy-to-Read Version', 'BIBLE', 'ERV-BEN.db', 'T', 'F', '2016-10-17',
-'Bengali Holy Bible: Easy-to-Read Version (ERV) © 2001, 2016 Bible League International', NULL, NULL);
+'Bengali Holy Bible: Easy-to-Read Version (ERV) © 2001, 2016 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-HIN', 'hin', 'BLI', 'ERV-HIN', 'पवित्र बाइबल, Easy-to-Read Version', 'BIBLE', 'ERV-HIN.db', 'T', 'F', '2016-10-17',
-'Hindi Holy Bible: Easy-to-Read Version (ERV) © 1995 Bible League International', NULL, NULL);
+'Hindi Holy Bible: Easy-to-Read Version (ERV) © 1995 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-KAN', 'kan', 'BLI', 'ERV-KAN', 'Kannada: Easy-to-Read Version', 'BIBLE', 'ERV-KAN.db', 'T', 'F', '2016-10-17',
-'Kannada: Easy-to-Read Version (ERV). © 1997 Bible League International.', NULL, NULL);
+'Kannada: Easy-to-Read Version (ERV). © 1997 Bible League International.', NULL);
 INSERT INTO Version VALUES ('ERV-MAR', 'mar', 'BLI', 'ERV-MAR', 'Marathi: Easy-to-Read Version', 'BIBLE', 'ERV-MAR.db', 'T', 'F', '2016-10-17',
-'Marathi: Easy-to-Read Version (ERV). © 1998 Bible League International.', NULL, NULL);
+'Marathi: Easy-to-Read Version (ERV). © 1998 Bible League International.', NULL);
 INSERT INTO Version VALUES ('ERV-ORI', 'ori', 'BLI', 'ERV-ORI', 'ପବିତ୍ର ବାଇବଲ, Easy-to-Read Version', 'BIBLE', 'ERV-ORI.db', 'F', 'F', '2016-10-17',
-'Oriya Holy Bible: Easy-to-Read Version (ERV) © 2004 Bible League International', NULL, NULL);
+'Oriya Holy Bible: Easy-to-Read Version (ERV) © 2004 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-PAN', 'pan', 'BLI', 'ERV-PAN', 'Punjabi: Easy-to-Read Version', 'BIBLE', 'ERV-PAN.db', 'F', 'F', '2016-10-17',
-'Punjabi: Easy-to-Read Version (ERV). © 2002 Bible League International.', NULL, NULL);
+'Punjabi: Easy-to-Read Version (ERV). © 2002 Bible League International.', NULL);
 INSERT INTO Version VALUES ('ERV-TAM', 'tam', 'BLI', 'ERV-TAM', 'பரிசுத்த பைபிள், Easy-to-Read Version', 'BIBLE', 'ERV-TAM.db', 'T', 'F', '2016-10-17',
-'Tamil Holy Bible: Easy-to-Read Version (ERV) © 1998 Bible League International', NULL, NULL);
+'Tamil Holy Bible: Easy-to-Read Version (ERV) © 1998 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-URD', 'urd', 'BLI', 'ERV-URD', 'Urdu: Easy-to-Read Version', 'BIBLE', 'ERV-URD.db', 'T', 'F', '2016-10-17',
-'Urdu: Easy-to-Read Version (ERV). © 2003 Bible League International.', NULL, NULL);
+'Urdu: Easy-to-Read Version (ERV). © 2003 Bible League International.', NULL);
 
 -- Eastern Europe
 INSERT INTO Version VALUES ('ERV-BUL', 'bul', 'BLI', 'ERV-BUL', 'Новият завет, съвременен превод', 'BIBLE_NT', 'ERV-BUL.db', 'T', 'F', '2016-10-17',
-'Новият завет: съвременен превод (СПБ) © 2000 Bible League International', NULL, NULL);
+'Новият завет: съвременен превод (СПБ) © 2000 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-HRV', 'hrv', 'BLI', 'ERV-HRV', 'Novi zavjet, Suvremeni prijevod', 'BIBLE_NT', 'ERV-HRV.db', 'T', 'F', '2016-10-17',
-'Novi zavjet: Suvremeni prijevod (SHP) © 2002 Bible League International', NULL, NULL);
+'Novi zavjet: Suvremeni prijevod (SHP) © 2002 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-HUN', 'hun', 'BLI', 'ERV-HUN', 'Biblia Egyszerű fordítás', 'BIBLE', 'ERV-HUN.db', 'T', 'F', '2016-10-17',
-'BIBLIA: Egyszerű fordítás (EFO) © 2012 Bible League International', NULL, NULL);
+'BIBLIA: Egyszerű fordítás (EFO) © 2012 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-RUS', 'rus', 'BLI', 'ERV-RUS', 'Святая Библия Современный перевод', 'BIBLE', 'ERV-RUS.db', 'T', 'F', '2016-10-17',
-'Библия: Современный перевод (РСП) © Bible League International, 1993, 2014', NULL, NULL);
+'Библия: Современный перевод (РСП) © Bible League International, 1993, 2014', NULL);
 INSERT INTO Version VALUES ('ERV-SRP', 'srp', 'BLI', 'ERV-SRP', 'Библија Савремени српски превод', 'BIBLE', 'ERV-SRP.db', 'T', 'F', '2016-10-17',
-'Библија: Савремени српски превод (ССП) © 2015 Bible League International', NULL, NULL);
+'Библија: Савремени српски превод (ССП) © 2015 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-UKR', 'ukr', 'BLI', 'ERV-UKR', 'Новий Заповіт Сучасною Мовою', 'BIBLE_NT', 'ERV-UKR.db', 'T', 'F', '2016-10-17',
-'Новий Заповіт: Сучасною мовою (УСП) © Bible League International, 1996', NULL, NULL);
+'Новий Заповіт: Сучасною мовою (УСП) © Bible League International, 1996', NULL);
 
+
+CREATE TABLE Region (
+countryCode TEXT NOT NULL PRIMARY KEY,
+continentCode TEXT NOT NULL CHECK (continentCode IN('AF','EU','AS','NA','SA','OC','AN')),
+geoschemeCode TEXT NOT NULL CHECK (geoschemeCode IN(
+		'AF-EAS','AF-MID','AF-NOR','AF-SOU','AF-WES',
+		'SA-CAR','SA-CEN','SA-SOU','NA-NOR',
+		'AS-CEN','AS-EAS','AS-SOU','AS-SEA','AS-WES',
+		'EU-EAS','EU-NOR','EU-SOU','EU-WES',
+		'OC-AUS','OC-MEL','OC-MIC','OC-POL','AN-ANT')),
+awsRegion TEXT NOT NULL CHECK (awsRegion IN(
+		'shortsands-as-jp',
+		'shortsands-as-sg',
+		'shortsands-eu-ie',
+		'shortsands-na-va',
+		'shortsands-oc-au')),
+countryName TEXT NOT NULL	
+);
+-- Continent Code
+-- AF|Africa
+-- EU|Europe
+-- AS|Asia
+-- NA|North America
+-- SA|South America
+-- OC|Oceana
+-- AN|Antartica
+
+-- United Nations geoschema
+-- AF-EAS|Eastern Africa
+-- AF-MID|Middle Africa
+-- AF-NOR|Northern Africa
+-- AF-SOU|Southern Africa
+-- AF-WES|Western Africa
+-- SA-CAR|Caribbean
+-- SA-CEN|Central America
+-- SA-SOU|South America
+-- NA-NOR|North America
+-- AS-CEN|Central Asia
+-- AS-EAS|Eastern Asia
+-- AS-SOU|Southern Asia
+-- AS-SEA|South-Eastern Asia
+-- AS-WES|Western Asia
+-- EU-EAS|Eastern Europe
+-- EU-NOR|Northern Europe
+-- EU-SOU|Southern Europe
+-- EU-WES|Western Europe
+-- OC-AUS|Australia and New Zealeand
+-- OC-MEL|Melanesia
+-- OC-MIC|Micronesia
+-- OC-POL|Polynesia
+
+-- AWS Regions
+-- shortsands-as-jp|Tokoyo
+-- shortsands-as-sg|Singapore
+-- shortsands-eu-ie|Ireland
+-- shortsands-na-va|Virginia
+-- shortsands-oc-au|Sidney
+
+-- Rules for bucket assignment:
+-- 1) AF -> shortsands-eu-ie
+-- 2) EU -> shortsands-eu-ie
+-- 3) OC -> shortsands-oc-au
+-- 4) AN -> shortsands-oc-au
+-- 5) NA -> shortsands-na-va
+-- 6) SA -> shortsands-na-va
+-- 7) AS-WES -> shortsands-eu-ie
+-- 8) AS-SOU -> shortsands-as-sg
+-- 9) AS-SEA -> shortsands-as-sg
+-- 10) AS-CEN -> shortsands-as-jp
+-- 11) AS-EAS -> shortsands-as-jp
+.separator '|'
+.import data/Region.txt Region
+
+
+-- This table is populate by 
+CREATE TABLE DownloadURL(
+	filename TEXT NOT NULL,
+	awsRegion TEXT NOT NULL,
+	signedURL TEXT NOT NULL,
+	PRIMARY KEY(filename, awsRegion)
+);
 
 
 CREATE TABLE CountryVersion (

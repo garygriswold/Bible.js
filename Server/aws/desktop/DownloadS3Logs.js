@@ -4,10 +4,18 @@
 * of Bibles by the App.
 */
 "use strict";
-const S3_REGION = 'us-west-2';
-const BUCKET = 'shortsands-log';
+const cdnBuckets = require('../../../Library/cdn/Regions.js').REGIONS;
+var bucketList = Object.keys(cdnBuckets);
+var REGIONS = {};
+for (var i=0; i<bucketList.length; i++) {
+	var bkt = bucketList[i];
+	REGIONS[bkt + '-log'] = cdnBuckets[bkt];
+}
+REGIONS['shortsands-log'] = 'us-west-2';
+console.log('REGIONS', REGIONS);
+
 const DATABASE = './BibleDownloadLog.db';
-const DB_VERBOSE = true;
+const DB_VERBOSE = false;
 const MONTHS = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 
 var S3 = require('aws-sdk/clients/s3');
@@ -15,20 +23,32 @@ var S3 = require('aws-sdk/clients/s3');
 var downloadS3Logs = function() {
 	var awsOptions = {
 		useDualstack: true,
-		region: S3_REGION,
 		sslEnabled: true,
-		s3ForcePathStyle: true
+		s3ForcePathStyle: true,
+		signatureVersion: 'v4'
 	};
 	var s3 = new S3(awsOptions);
 	openDatabase(function(database) {
-		readBucketList(s3, function(logEntries) {
-			iterateList(s3, database, logEntries.Contents, function() {
-				closeDatabase(database, function() {
-					console.log('FINISHED');
+		var regions = Object.keys(REGIONS);
+		doRegions(regions, database, function() {
+			console.log('FINISHED');
+		});
+	});		
+	
+	function doRegions(regions, database, callback) {
+		var bucket = regions.shift();
+		if (bucket) {
+			readBucketList(s3, bucket, function(logEntries) {
+				iterateList(s3, bucket, database, logEntries.Contents, function() {
+					doRegions(regions, database, callback);
 				});
+			});				
+		} else {
+			closeDatabase(database, function() {
+				callback();
 			});
-		});		
-	});
+		}	
+	}
 
 	function openDatabase(callback) {
 		var sqlite3 = (DB_VERBOSE) ? require('sqlite3').verbose() : require('sqlite3');
@@ -54,8 +74,8 @@ var downloadS3Logs = function() {
 			}
 		});
 	};
-	function readBucketList(s3, callback) {
-		s3.listObjects({Bucket: BUCKET}, function(err, data) {
+	function readBucketList(s3, bucket, callback) {
+		s3.listObjects({Bucket: bucket}, function(err, data) {
 			if (err) {
 				errorMessage(err, "DownloadS3Logs.readBucketList");
 			} else {
@@ -64,13 +84,13 @@ var downloadS3Logs = function() {
 			}
 		});
 	};
-	function iterateList(s3, database, list, callback) {
+	function iterateList(s3, bucket, database, list, callback) {
 		var item = list.shift();
 		if (item) {
-			getLogFromS3(s3, item, function(logFile) {
+			getLogFromS3(s3, bucket, item, function(logFile) {
 				insertIntoDatabase(database, logFile, function() {
-					deleteFromS3(s3, item, function() {
-						iterateList(s3, database, list, callback);
+					deleteFromS3(s3, bucket, item, function() {
+						iterateList(s3, bucket, database, list, callback);
 					});
 				});				
 			});
@@ -78,9 +98,9 @@ var downloadS3Logs = function() {
 			callback();
 		}
 	};
-	function getLogFromS3(s3, item, callback) {
+	function getLogFromS3(s3, bucket, item, callback) {
 		console.log('GET OBJECT ', item.Key);
-		s3.getObject({Bucket: BUCKET, Key: item.Key}, function(err, data) {
+		s3.getObject({Bucket: bucket, Key: item.Key}, function(err, data) {
 			if (err) {
 				errorMessage(err, "DownloadS3Logs.getLogFromS3");
 			} else {
@@ -159,9 +179,9 @@ var downloadS3Logs = function() {
 		console.log('DATE CONVERSION ', datetime, ' TO ', result);
 		return(result);
 	};
-	function deleteFromS3(s3, item, callback) {
+	function deleteFromS3(s3, bucket, item, callback) {
 		console.log('DELETE OBJECT ', item.Key);
-		s3.deleteObject({Bucket: BUCKET, Key: item.Key}, function(err, data) {
+		s3.deleteObject({Bucket: bucket, Key: item.Key}, function(err, data) {
 			if (err) {
 				errorMessage(err, "DownloadS3Logs.deleteFromS3");
 			} else {

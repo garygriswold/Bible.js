@@ -11,8 +11,10 @@ function VersionsView(settingStorage) {
 	this.settingStorage = settingStorage;
 	this.database = new VersionsAdapter();
 	var that = this;
-	that.translation = null;
+	this.locale = null;
+	this.translation = null;
 	deviceSettings.prefLanguage(function(locale) {
+		that.locale = locale;
 		that.database.buildTranslateMap(locale, function(results) {
 			that.translation = results;
 		});		
@@ -147,7 +149,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		var versionCode = iconNode.id.substr(3);
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		that.settingStorage.getCurrentVersion(function(currVersion) {
-			var downloader = new FileDownloader(that.database, currVersion);
+			var downloader = new FileDownloader(that.database, that.locale, currVersion);
 			downloader.download(versionFile, function(error) {
 				gsPreloader.active(false);
 				if (error) {
