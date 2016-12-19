@@ -191,6 +191,12 @@ VersionsView
 	5. Each language bar should contain an icon for status, cloud for to be downloaded, book for has been downloaded, and checkmark for download finished.
 	6. Clicking on an already download book should make it active.
 	7. Clicking on a to be downloaded icon should download it and make it active.
+	
+Server Test
+-----------
+
+	1. Run a test script that downloads each version of the Bible from each region.
+	2. Run log download and verify that each request has been recorded in the log.
 
 
 

@@ -18,7 +18,7 @@
 */
 
 const programs = ['XMLTokenizerTest', 'USXParserTest', 'HTMLValidator', 'StyleUseValidator', 'VersesValidator', 'TableContentsValidator', 
-				'ConcordanceValidator', 'ValidationCleanup'];
+				'ConcordanceValidator', 'ValidationCleanup', 'VersionDiff'];
 var versions = ['ARBVDPD', 
 	'ERV-ARB', 'ERV-AWA', 'ERV-BEN', 'ERV-BUL', 'ERV-CMN', 'ERV-ENG', 'ERV-HIN', 'ERV-HRV', 'ERV-HUN', 'ERV-IND', 'ERV-KAN', 'ERV-MAR', 'ERV-ORI', 
 	'ERV-NEP','ERV-PAN', 'ERV-POR', 
@@ -65,21 +65,25 @@ function executeOne(programIndex, versionIndex) {
 			if (error) {
 				errorMessage(outFile, error);
 			}
-			const testFile = 'results/' + version + '/' + program + '.out';
-			var command = 'diff ' + testFile + ' ' + outFile;
-			child.exec(command, function(error, stdout, stderr) {
-				if (stdout && stdout.length > 0) {
-					errorOutput('TEST-DIFF STDOUT:', stdout, output);
-				}
-				if (stderr && stderr.length > 0) {
-					errorOutput('TEST-DIFF STDERR:', stderr, output);
-				}
-				if (error) {
-					errorMessage('TEST-DIFF ERROR', error);
-				}
-				console.log('OK');
-				executeNext(programIndex, versionIndex);
-			});
+			if (program === 'VersionDiff') {
+				console.log(stdout);
+			} else {
+				const testFile = 'results/' + version + '/' + program + '.out';
+				var command = 'diff ' + testFile + ' ' + outFile;
+				child.exec(command, function(error, stdout, stderr) {
+					if (stdout && stdout.length > 0) {
+						errorOutput('TEST-DIFF STDOUT:', stdout, output);
+					}
+					if (stderr && stderr.length > 0) {
+						errorOutput('TEST-DIFF STDERR:', stderr, output);
+					}
+					if (error) {
+						errorMessage('TEST-DIFF ERROR', error);
+					}
+					console.log('OK');
+					executeNext(programIndex, versionIndex);
+				});
+			}
 		});		
 	});
 }

@@ -204,7 +204,7 @@ doing  { code: 'GLO', name: 'Glossary' }
 STDOUT 
 STDERR 
 doing  { code: 'BAK', name: 'Appendix' }
-Diff Error {"killed":false,"code":2,"signal":null,"cmd":"/bin/sh -c diff ../../DBL/2current/ERV-ENG/USX_1/BAK.usx output/ERV-ENG/html/BAK.usx"}
+Diff Error {"killed":false,"code":2,"signal":null,"cmd":"diff ../../DBL/2current/ERV-ENG/USX_1/BAK.usx output/ERV-ENG/html/BAK.usx"}
 STDOUT 
 STDERR diff: ../../DBL/2current/ERV-ENG/USX_1/BAK.usx: No such file or directory
 
