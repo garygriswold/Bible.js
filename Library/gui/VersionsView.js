@@ -91,49 +91,50 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	var that = this;
 	var parent = countryNode.parentElement;
 	var countryCode = countryNode.id.substr(3);
-	this.settingStorage.getVersions();
-	this.settingStorage.getCurrentVersion(function(currentVersion) {
-		that.database.selectVersions(countryCode, function(results) {
-			if (! (results instanceof IOError)) {
-				for (var i=0; i<results.length; i++) {
-					var row = results[i];
-					var versionNode = that.dom.addNode(parent, 'table', 'vers');
-					var rowNode = that.dom.addNode(versionNode, 'tr');
-					var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
-					
-					var preferredName = that.translation[row.langCode];
-					var languageName = (preferredName == null || preferredName === row.localLanguageName) 
-						? row.localLanguageName 
-						: row.localLanguageName + ' (' + preferredName + ')';
-					that.dom.addNode(leftNode, 'p', 'langName', languageName);
-					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
-					var versionAbbr = (row.versionAbbr && row.versionAbbr.length > 0) ? row.versionAbbr : '';
-					
-					var versNode = that.dom.addNode(leftNode, 'p', 'versDesc');
-					versNode.setAttribute('dir', row.direction);
-					that.dom.addNode(versNode, 'span', 'versName', '\u2000' + versionName + '\u2000');
-					that.dom.addNode(versNode, 'bdi', 'versAbbr', '\u2000' + versionAbbr + '\u2000');
-					that.dom.addNode(versNode, 'bdi', 'versOwner', '\u2000' + row.localOwnerName + '\u2000');
-					
-					var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
-					var btnNode = that.dom.addNode(rightNode, 'button', 'versIcon');
-					
-					var iconNode = that.dom.addNode(btnNode, 'img');
-					iconNode.setAttribute('id', 'ver' + row.versionCode);
-					iconNode.setAttribute('data-id', 'fil' + row.filename);
-					if (row.filename === currentVersion) {
-						iconNode.setAttribute('src', CURRENT_VERS);
-						iconNode.addEventListener('click', selectVersionHandler);
-					} else if (that.settingStorage.hasVersion(row.versionCode)) {
-						iconNode.setAttribute('src', INSTALLED_VERS);
-						iconNode.addEventListener('click',  selectVersionHandler);
-					} else {
-						iconNode.setAttribute('src', DOWNLOAD_VERS);
-						iconNode.addEventListener('click', downloadVersionHandler);
+	this.settingStorage.getInstalledVersions(function(installedMap) {
+		that.settingStorage.getCurrentVersion(function(currentVersion) {
+			that.database.selectVersions(countryCode, function(results) {
+				if (! (results instanceof IOError)) {
+					for (var i=0; i<results.length; i++) {
+						var row = results[i];
+						var versionNode = that.dom.addNode(parent, 'table', 'vers');
+						var rowNode = that.dom.addNode(versionNode, 'tr');
+						var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
+						
+						var preferredName = that.translation[row.langCode];
+						var languageName = (preferredName == null || preferredName === row.localLanguageName) 
+							? row.localLanguageName 
+							: row.localLanguageName + ' (' + preferredName + ')';
+						that.dom.addNode(leftNode, 'p', 'langName', languageName);
+						var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
+						var versionAbbr = (row.versionAbbr && row.versionAbbr.length > 0) ? row.versionAbbr : '';
+						
+						var versNode = that.dom.addNode(leftNode, 'p', 'versDesc');
+						versNode.setAttribute('dir', row.direction);
+						that.dom.addNode(versNode, 'span', 'versName', '\u2000' + versionName + '\u2000');
+						that.dom.addNode(versNode, 'bdi', 'versAbbr', '\u2000' + versionAbbr + '\u2000');
+						that.dom.addNode(versNode, 'bdi', 'versOwner', '\u2000' + row.localOwnerName + '\u2000');
+						
+						var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
+						var btnNode = that.dom.addNode(rightNode, 'button', 'versIcon');
+						
+						var iconNode = that.dom.addNode(btnNode, 'img');
+						iconNode.setAttribute('id', 'ver' + row.versionCode);
+						iconNode.setAttribute('data-id', 'fil' + row.filename);
+						if (row.filename === currentVersion) {
+							iconNode.setAttribute('src', CURRENT_VERS);
+							iconNode.addEventListener('click', selectVersionHandler);
+						} else if (installedMap[row.versionCode]) {
+							iconNode.setAttribute('src', INSTALLED_VERS);
+							iconNode.addEventListener('click',  selectVersionHandler);
+						} else {
+							iconNode.setAttribute('src', DOWNLOAD_VERS);
+							iconNode.addEventListener('click', downloadVersionHandler);
+						}
 					}
 				}
-			}
-			//debugLogVersions();
+				//debugLogVersions(installedMap);
+			});
 		});
 	});
 	
@@ -158,7 +159,6 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					iconNode.addEventListener('click', downloadVersionHandler);
 					that.downloadErrors.push(iconNode);
 				} else {
-					that.settingStorage.setVersion(versionCode, versionFile);
 					iconNode.setAttribute('src', INSTALLED_VERS);
 					iconNode.addEventListener('click',  selectVersionHandler);
 					document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
@@ -166,11 +166,11 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 			});
 		});
 	}
-	function debugLogVersions() {
-		var versionNames = Object.keys(that.settingStorage.loadedVersions);
+	function debugLogVersions(loadedVersions) {
+		var versionNames = Object.keys(loadedVersions);
 		for (var i=0; i<versionNames.length; i++) {
 			var version = versionNames[i];
-			var filename = that.settingStorage.loadedVersions[version];
+			var filename = loadedVersions[version].filename;
 			console.log('INSTALLED VERSION', version, filename);
 		}
 		that.settingStorage.selectSettings(function(results) {

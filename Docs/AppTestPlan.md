@@ -197,6 +197,96 @@ Server Test
 
 	1. Run a test script that downloads each version of the Bible from each region.
 	2. Run log download and verify that each request has been recorded in the log.
+	
+
+AppUpdater Unit Test Plan
+=========================
+AppUpdater is complex, and needs a significant unit test.  This plan covers the following cases:
+
+	1. Bible in www, not used, version 1.1 				(Test 1 NMV)
+	2. Bible in www, not used, version new 				(Test 1 ERV-ENG)
+	3. Bible in www, used, not current, version 1.1 	(Test 2 ERV-ARB)
+	4. Bible in www, used, not current, version new 	(Test 3 ERV-HUN)
+	5. Bible in www, used and current, version 1.1		(Test 2 NMV)
+	6. Bible in www, used and current, version new		(Test 3 ERV-ENG)
+	7. Bible not downloaded, version 1.1				(Test 1 KJVPD)
+	8. Bible not downloaded, version new				(Test 1 ERV-SPA)
+	9. Bible downloaded, not current, version 1.1		(Test 2 WEB)
+	10. Bible downloaded, not current, version new		(Test 3 ERV-AWA)
+	11. Bible downloaded and current, version 1.1		(Test 4 KJVPD)
+	12. Bible downloaded and current, version new		(Test 3 ERV-AWA)
+	
+Setup For Test
+--------------
+
+	1. www contains: ERV-ENG, ERV-ARB, NMV.
+	2. make certain version is 1.1 in Versions.Identity table for all Bibles.
+	3. update Identity set bibleVersion = '1.1';
+	4. set version in config.xml to a starting value.
+	5. delete the App off the device.
+	6. do a fresh install of the App
+	
+	Expect Installed: ERV-ARB 1.1, ERV-ENG 1.1, NMV 1.1
+	Expect in Storage: Settings.db, Versions.db
+	Expect in View: ERV-ARB, ERV-ENG checked, NMV
+	
+Test 1
+------
+
+	1. download ERV-BEN
+	2. make current ERV-ARB
+	3. increment config.xml version
+	4. change ERV-* versions to 1.2 in Versions.db
+	5. update Identity set bibleVersion = '1.2' where versionCode like 'ERV-%';
+	6. install update of App
+	
+	Expect Installed: ERV-ARB 1.2, ERV-ENG 1.2, NMV 1.1
+	Expect in Storage: Settings.db, Versions.db, ERV-BEN
+	Expect in View: ERV-ARB checked, ERV-ENG, NMV
+	
+Test 2
+------
+
+	1. download ERV-HUN
+	2. download WEB
+	3. make current NMV
+	4. increment config.xml version
+	5. change ERV-* versions to 1.3 in Versions.db
+	6. update Identity set bibleVersion = '1.3' where versionCode like 'ERV-%';
+	7. install update of App
+	
+	Expect Installed: ERV-ARB 1.3, ERV-ENG 1.3, NMV 1.1, WEB 1.1
+	Expect in Storage: Settings.db, Versions.db, ERV-BEN, ERV-HUN, NMV, WEB
+	Expect in View: ERV-ARB, ERV-ENG, NMV checked, WEB
+	
+Test 3
+------
+
+	1. download ERV-AWA
+	2. leave current
+	3. increment config.xml version
+	4. change ERV-* versions to 1.4 in Versions.db
+	5. update Identity set bibleVersion = '1.4' where versionCode like 'ERV-%';
+	6. install update of App
+	
+	Expect Installed: ERV-ARB 1.4, ERV-ENG 1.4, NMV 1.1, WEB 1.1
+	Expect in Storage: Settings.db, Versions.db, ERV-AWA, ERV-BEN, ERV-HUN, NMV, WEB
+	Expect in View: ERV-ARB, ERV-AWA checked, ERV-ENG, NMV, WEB
+	
+Test 4
+------
+
+	1. download KJVPD
+	2. leave current
+	3. increment config.xml version
+	4. change ERV-* versions to 1.5 in Versions.db
+	5. update Identity set bibleVersion = '1.5' where versionCode like 'ERV-%';
+	6. install update of App
+	
+	Expect Installed: ERV-ARB 1.5, ERV-ENG 1.5, KJVPD 1.1, NMV 1.1, WEB 1.1
+	Expect in Storage: Settings.db, Versions.db, ERV-AWA, ERV-BEN, ERV-HUN, KJVPD, NMV, WEB
+	Expect in View: ERV-ARB, ERV-ENG, KJVPD checked, NMV, WEB
+
 
 
 

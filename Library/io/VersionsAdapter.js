@@ -68,11 +68,12 @@ VersionsAdapter.prototype.selectCountries = function(callback) {
 };
 VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
 	var statement =	'SELECT v.versionCode, l.englishName, l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr,' +
-		' v.copyright, v.filename, o.localOwnerName, o.ownerURL' +
+		' v.copyright, v.filename, o.localOwnerName, o.ownerURL, i.bibleVersion' +
 		' FROM Version v' + 
 		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
 		' JOIN Language l ON v.silCode = l.silCode' +
 		' JOIN CountryVersion cv ON v.versionCode = cv.versionCode' +
+		' JOIN Identity i ON v.versionCode = i.versionCode' +
 		' WHERE cv.countryCode = ?' +
 		' ORDER BY cv.rowid';
 	this.database.select(statement, [countryCode], function(results) {
@@ -90,10 +91,11 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
 	var statement = 'SELECT v.versionCode, v.silCode, v.hasHistory, v.isQaActive, v.copyright, v.introduction,' +
-		' l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr, o.ownerCode, o.localOwnerName, o.ownerURL' +
+		' l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr, o.ownerCode, o.localOwnerName, o.ownerURL, i.bibleVersion' +
 		' FROM Version v' +
 		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
 		' JOIN Language l ON v.silCode = l.silCode' +
+		' JOIN Identity i ON v.versionCode = i.versionCode' +
 		' WHERE v.filename = ?';
 	this.database.select(statement, [versionFile], function(results) {
 		if (results instanceof IOError) {
@@ -149,6 +151,38 @@ VersionsAdapter.prototype.selectURLS3 = function(versionFile, countryCode, callb
 		} else {
 			callback(results.rows.item(0).signedURL);
 		}
+	});
+};
+VersionsAdapter.prototype.selectInstalledBibleVersions = function(callback) {
+	var versList = [];
+	var now = new Date().toISOString();
+	var statement = 'SELECT versionCode, filename, bibleVersion FROM Identity WHERE versionCode IN (SELECT versionCode FROM InstalledVersion)';
+	this.database.select(statement, [], function(results) {
+		if (results instanceof IOError) {
+			//
+		} else {
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				versList.push([row.versionCode, row.filename, now, row.bibleVersion]);
+			}
+		}
+		callback(versList);
+	});
+};
+VersionsAdapter.prototype.selectAllBibleVersions = function(callback) {
+	var versMap = {};
+	var statement = 'SELECT i.versionCode, i.filename, i.bibleVersion, v.startDate AS installed FROM Identity i' +
+		' LEFT OUTER JOIN InstalledVersion v ON v.versionCode = i.versionCode';
+	this.database.select(statement, [], function(results) {
+		if (results instanceof IOError) {
+			//
+		} else {
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				versMap[row.versionCode] = {versionCode: row.versionCode, filename: row.filename, bibleVersion: row.bibleVersion, installed: row.installed};
+			}
+		}
+		callback(versMap);
 	});
 };
 VersionsAdapter.prototype.close = function() {

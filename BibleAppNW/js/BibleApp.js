@@ -30,27 +30,29 @@ AppInitializer.prototype.begin = function() {
 						console.log('default version determined ', filename);
 						var parts = filename.split('.');
 						var versionCode = parts[0]; // This hack requires version code to be part of filename.
-						if (appUpdater.installedVersions[versionCode]) {
-							// Process locale's default version installed
-							changeVersionHandler(filename);
-						} else {
-							var gsPreloader = new GSPreloader(gsPreloaderOptions);
-							gsPreloader.active(true);
-							var downloader = new FileDownloader(versionsAdapter, locale, 'none');
-							downloader.download(filename, function(error) {
-								//console.log('Download error', JSON.stringify(error));
-								gsPreloader.active(false);
-								if (error) {
-									console.log(JSON.stringify(error));
-									// Process all default version on error
-									changeVersionHandler(DEFAULT_VERSION);
-								} else {
-									settingStorage.setVersion(versionCode, filename);
-									// Process locale's default version downloaded
-									changeVersionHandler(filename);
-								}
-							});
-						}
+						settingStorage.getInstalledVersion(versionCode, function(installedVersion) {
+							if (installedVersion) {
+								// Process locale's default version installed
+								changeVersionHandler(installedVersion.filename);
+							} else {
+								var gsPreloader = new GSPreloader(gsPreloaderOptions);
+								gsPreloader.active(true);
+								var downloader = new FileDownloader(versionsAdapter, locale, 'none');
+								downloader.download(installedVersion.filename, function(error) {
+									//console.log('Download error', JSON.stringify(error));
+									gsPreloader.active(false);
+									if (error) {
+										console.log(JSON.stringify(error));
+										// Process all default version on error
+										changeVersionHandler(DEFAULT_VERSION);
+									} else {
+										//settingStorage.setVersion(versionCode, filename, bibleVersion); see inside changeVersionHandler
+										// Process locale's default version downloaded
+										changeVersionHandler(installedVersion.filename);
+									}
+								});
+							}
+						});
 					});
 				});
 			}
@@ -63,13 +65,15 @@ AppInitializer.prototype.begin = function() {
 		
 	function changeVersionHandler(versionFilename) {
 		console.log('CHANGE VERSION TO', versionFilename);
-		var bibleVersion = new BibleVersion();
-		bibleVersion.fill(versionFilename, function() {
+		var currBible = new BibleVersion();
+		currBible.fill(versionFilename, function() {
 			if (that.controller) {
 				that.controller.close();
 			}
-			settingStorage.setCurrentVersion(bibleVersion.filename);
-			that.controller = new AppViewController(bibleVersion, settingStorage);
+			console.log('******', currBible.code, currBible.bibleVersion);
+			settingStorage.setCurrentVersion(versionFilename);
+			settingStorage.setInstalledVersion(currBible.code, versionFilename, currBible.bibleVersion);
+			that.controller = new AppViewController(currBible, settingStorage);
 			that.controller.begin();
 			console.log('*** DID enable handlers ALL');
 			enableHandlersExcept('NONE');		
@@ -1641,49 +1645,51 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	var that = this;
 	var parent = countryNode.parentElement;
 	var countryCode = countryNode.id.substr(3);
-	this.settingStorage.getVersions();
-	this.settingStorage.getCurrentVersion(function(currentVersion) {
-		that.database.selectVersions(countryCode, function(results) {
-			if (! (results instanceof IOError)) {
-				for (var i=0; i<results.length; i++) {
-					var row = results[i];
-					var versionNode = that.dom.addNode(parent, 'table', 'vers');
-					var rowNode = that.dom.addNode(versionNode, 'tr');
-					var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
-					
-					var preferredName = that.translation[row.langCode];
-					var languageName = (preferredName == null || preferredName === row.localLanguageName) 
-						? row.localLanguageName 
-						: row.localLanguageName + ' (' + preferredName + ')';
-					that.dom.addNode(leftNode, 'p', 'langName', languageName);
-					var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
-					var versionAbbr = (row.versionAbbr && row.versionAbbr.length > 0) ? row.versionAbbr : '';
-					
-					var versNode = that.dom.addNode(leftNode, 'p', 'versDesc');
-					versNode.setAttribute('dir', row.direction);
-					that.dom.addNode(versNode, 'span', 'versName', '\u2000' + versionName + '\u2000');
-					that.dom.addNode(versNode, 'bdi', 'versAbbr', '\u2000' + versionAbbr + '\u2000');
-					that.dom.addNode(versNode, 'bdi', 'versOwner', '\u2000' + row.localOwnerName + '\u2000');
-					
-					var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
-					var btnNode = that.dom.addNode(rightNode, 'button', 'versIcon');
-					
-					var iconNode = that.dom.addNode(btnNode, 'img');
-					iconNode.setAttribute('id', 'ver' + row.versionCode);
-					iconNode.setAttribute('data-id', 'fil' + row.filename);
-					if (row.filename === currentVersion) {
-						iconNode.setAttribute('src', CURRENT_VERS);
-						iconNode.addEventListener('click', selectVersionHandler);
-					} else if (that.settingStorage.hasVersion(row.versionCode)) {
-						iconNode.setAttribute('src', INSTALLED_VERS);
-						iconNode.addEventListener('click',  selectVersionHandler);
-					} else {
-						iconNode.setAttribute('src', DOWNLOAD_VERS);
-						iconNode.addEventListener('click', downloadVersionHandler);
+	this.settingStorage.getInstalledVersions(function(installedMap) {
+		that.settingStorage.getCurrentVersion(function(currentVersion) {
+			that.database.selectVersions(countryCode, function(results) {
+				if (! (results instanceof IOError)) {
+					for (var i=0; i<results.length; i++) {
+						var row = results[i];
+						var versionNode = that.dom.addNode(parent, 'table', 'vers');
+						var rowNode = that.dom.addNode(versionNode, 'tr');
+						var leftNode = that.dom.addNode(rowNode, 'td', 'versLeft');
+						
+						var preferredName = that.translation[row.langCode];
+						var languageName = (preferredName == null || preferredName === row.localLanguageName) 
+							? row.localLanguageName 
+							: row.localLanguageName + ' (' + preferredName + ')';
+						that.dom.addNode(leftNode, 'p', 'langName', languageName);
+						var versionName = (row.localVersionName) ? row.localVersionName : row.scope;
+						var versionAbbr = (row.versionAbbr && row.versionAbbr.length > 0) ? row.versionAbbr : '';
+						
+						var versNode = that.dom.addNode(leftNode, 'p', 'versDesc');
+						versNode.setAttribute('dir', row.direction);
+						that.dom.addNode(versNode, 'span', 'versName', '\u2000' + versionName + '\u2000');
+						that.dom.addNode(versNode, 'bdi', 'versAbbr', '\u2000' + versionAbbr + '\u2000');
+						that.dom.addNode(versNode, 'bdi', 'versOwner', '\u2000' + row.localOwnerName + '\u2000');
+						
+						var rightNode = that.dom.addNode(rowNode, 'td', 'versRight');
+						var btnNode = that.dom.addNode(rightNode, 'button', 'versIcon');
+						
+						var iconNode = that.dom.addNode(btnNode, 'img');
+						iconNode.setAttribute('id', 'ver' + row.versionCode);
+						iconNode.setAttribute('data-id', 'fil' + row.filename);
+						if (row.filename === currentVersion) {
+							iconNode.setAttribute('src', CURRENT_VERS);
+							iconNode.addEventListener('click', selectVersionHandler);
+						//} else if (that.settingStorage.hasVersion(row.versionCode)) {
+						} else if (installedMap[row.versionCode]) {
+							iconNode.setAttribute('src', INSTALLED_VERS);
+							iconNode.addEventListener('click',  selectVersionHandler);
+						} else {
+							iconNode.setAttribute('src', DOWNLOAD_VERS);
+							iconNode.addEventListener('click', downloadVersionHandler);
+						}
 					}
 				}
-			}
-			//debugLogVersions();
+				debugLogVersions(installedMap);
+			});
 		});
 	});
 	
@@ -1708,7 +1714,8 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					iconNode.addEventListener('click', downloadVersionHandler);
 					that.downloadErrors.push(iconNode);
 				} else {
-					that.settingStorage.setVersion(versionCode, versionFile);
+					//var bibleVersion = that.settingStorage.getBibleVersion(versionCode); ///
+					//that.settingStorage.setVersion(versionCode, versionFile, bibleVersion); /// move these to AppInitializer
 					iconNode.setAttribute('src', INSTALLED_VERS);
 					iconNode.addEventListener('click',  selectVersionHandler);
 					document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
@@ -1716,11 +1723,13 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 			});
 		});
 	}
-	function debugLogVersions() {
-		var versionNames = Object.keys(that.settingStorage.loadedVersions);
+	function debugLogVersions(loadedVersions) {
+		//var versionNames = Object.keys(that.settingStorage.loadedVersions);
+		var versionNames = Object.keys(loadedVersions);
 		for (var i=0; i<versionNames.length; i++) {
 			var version = versionNames[i];
-			var filename = that.settingStorage.loadedVersions[version];
+			//var filename = that.settingStorage.loadedVersions[version].filename;
+			var filename = loadedVersions[version].filename;
 			console.log('INSTALLED VERSION', version, filename);
 		}
 		that.settingStorage.selectSettings(function(results) {
@@ -2181,7 +2190,7 @@ function IOError(err) {
 function SettingStorage() {
     this.className = 'SettingStorage';
     this.database = new DatabaseHelper('Settings.db', false);
-    this.loadedVersions = null;
+    //this.loadedVersions = null;
 	Object.seal(this);
 }
 SettingStorage.prototype.create = function(callback) {
@@ -2190,7 +2199,12 @@ SettingStorage.prototype.create = function(callback) {
 		if (err instanceof IOError) {
 			console.log('Error creating Settings', err);
 		} else {
-			that.database.executeDDL('CREATE TABLE IF NOT EXISTS Installed(version TEXT PRIMARY KEY NOT NULL, filename TEXT NOT NULL, timestamp TEXT NOT NULL)', function(err) {
+			var statement = 'CREATE TABLE IF NOT EXISTS Installed(' +
+					' version TEXT PRIMARY KEY NOT NULL,' +
+					' filename TEXT NOT NULL,' +
+					' timestamp TEXT NOT NULL,' +
+					' bibleVersion TEXT NOT NULL)';
+			that.database.executeDDL(statement, function(err) {
 				if (err instanceof IOError) {
 					console.log('Error creating Installed', err);
 				} else {
@@ -2274,32 +2288,53 @@ SettingStorage.prototype.selectSettings = function(callback) {
 /**
 * Versions
 */
-/** Before calling hasVersion one must call getVersions, which creates a map of available versions
-* And getVersions must be called a few ms before any call to hasVersion to make sure result is available.
-*/
-SettingStorage.prototype.hasVersion = function(version) {
-	return(this.loadedVersions[version]);
-};
-SettingStorage.prototype.getVersions = function() {
+///** Before calling hasVersion one must call getVersions, which creates a map of available versions
+//* And getVersions must be called a few ms before any call to hasVersion to make sure result is available.
+//*/
+//SettingStorage.prototype.hasVersion = function(version) {
+//	return(this.loadedVersions[version]);
+//};
+//SettingStorage.prototype.getBibleVersion = function(version) {
+//	var vers = this.loadedVersions[version];
+//	return((vers) ? vers.bibleVersion : null);	
+//};
+SettingStorage.prototype.getInstalledVersions = function(callback) {
 	var that = this;
+	var loadedVersions = {};
 	console.log('GetVersions');
-	this.database.select('SELECT version, filename FROM Installed', [], function(results) {
+	this.database.select('SELECT version, filename, bibleVersion FROM Installed', [], function(results) {
 		if (results instanceof IOError) {
-			console.log('GetVersions error', JSON.stringify(results));
+			console.log('GetInstalledVersions error', JSON.stringify(results));
 		} else {
 			console.log('GetVersions, rowCount=', results.rows.length);
-        	that.loadedVersions = {};
         	for (var i=0; i<results.rows.length; i++) {
 	        	var row = results.rows.item(i);
-	        	that.loadedVersions[row.version] = row.filename;
+	        	//that.loadedVersions[row.version] = row.filename;
+	        	loadedVersions[row.version] = {versionCode: row.version, filename: row.filename, bibleVersion: row.bibleVersion };
         	}
+		}
+		callback(loadedVersions);
+	});
+};
+SettingStorage.prototype.getInstalledVersion = function(versionCode, callback) {
+	console.log('GetVersion', versionCode);
+	this.database.select('SELECT version, filename, bibleVersion FROM Installed WHERE version=?', [versionCode], function(results) {
+		if (results instanceof IOError) {
+			console.log('GetInstalledVersion error', JSON.stringify(results));
+			callback();
+		} else if (results.rows.length === 0) {
+			callback();
+		} else {
+			var row = results.rows.item(0);
+			callback({versionCode: row.version, filename: row.filename, bibleVersion: row.bibleVersion});
 		}
 	});
 };
-SettingStorage.prototype.setVersion = function(version, filename) {
-	console.log('SetVersion', version, filename);
+SettingStorage.prototype.setInstalledVersion = function(version, filename, bibleVersion) {
+	console.log('SetInstalledVersion', version, filename);
 	var now = new Date();
-	this.database.executeDML('REPLACE INTO Installed(version, filename, timestamp) VALUES (?,?,?)', [version, filename, now.toISOString()], function(results) {
+	this.database.executeDML('REPLACE INTO Installed(version, filename, timestamp, bibleVersion) VALUES (?,?,?,?)', 
+							[version, filename, now.toISOString(), bibleVersion], function(results) {
 		if (results instanceof IOError) {
 			console.log('SetVersion error', JSON.stringify(results));
 		} else {
@@ -2307,9 +2342,18 @@ SettingStorage.prototype.setVersion = function(version, filename) {
 		}
 	});
 };
-SettingStorage.prototype.bulkReplaceVersions = function(versions, now) {
+SettingStorage.prototype.removeInstalledVersion = function(version, callback) {
+	console.log('REMOVE INSTALLED VERSION', version);
+	this.database.executeDML('DELETE FROM Installed WHERE version=?', [version], function(results) {
+		if (results instanceof IOError) {
+			console.log('RemoveInstalledVersion Error', JSON.stringify(results));
+		}
+		callback();
+	});
+};
+SettingStorage.prototype.bulkReplaceInstalledVersions = function(versions, now) {
 	var that = this;
-	this.database.bulkExecuteDML('REPLACE INTO Installed(version, filename, timestamp) VALUES (?,?,?)', versions, function(results) {
+	this.database.bulkExecuteDML('REPLACE INTO Installed(version, filename, timestamp, bibleVersion) VALUES (?,?,?)', versions, function(results) {
 		if (results instanceof IOError) {
 			console.log('Replace All Installed', JSON.stringify(results));
 		} else {
@@ -3094,11 +3138,12 @@ VersionsAdapter.prototype.selectCountries = function(callback) {
 };
 VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
 	var statement =	'SELECT v.versionCode, l.englishName, l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr,' +
-		' v.copyright, v.filename, o.localOwnerName, o.ownerURL' +
+		' v.copyright, v.filename, o.localOwnerName, o.ownerURL, i.bibleVersion' +
 		' FROM Version v' + 
 		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
 		' JOIN Language l ON v.silCode = l.silCode' +
 		' JOIN CountryVersion cv ON v.versionCode = cv.versionCode' +
+		' JOIN Identity i ON v.versionCode = i.versionCode' +
 		' WHERE cv.countryCode = ?' +
 		' ORDER BY cv.rowid';
 	this.database.select(statement, [countryCode], function(results) {
@@ -3116,10 +3161,11 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
 	var statement = 'SELECT v.versionCode, v.silCode, v.hasHistory, v.isQaActive, v.copyright, v.introduction,' +
-		' l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr, o.ownerCode, o.localOwnerName, o.ownerURL' +
+		' l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr, o.ownerCode, o.localOwnerName, o.ownerURL, i.bibleVersion' +
 		' FROM Version v' +
 		' JOIN Owner o ON v.ownerCode = o.ownerCode' +
 		' JOIN Language l ON v.silCode = l.silCode' +
+		' JOIN Identity i ON v.versionCode = i.versionCode' +
 		' WHERE v.filename = ?';
 	this.database.select(statement, [versionFile], function(results) {
 		if (results instanceof IOError) {
@@ -3174,6 +3220,22 @@ VersionsAdapter.prototype.selectURLS3 = function(versionFile, countryCode, callb
 			});
 		} else {
 			callback(results.rows.item(0).signedURL);
+		}
+	});
+};
+VersionsAdapter.prototype.selectBibleVersions = function(callback) {
+	var that = this;
+	var versMap = {};
+	var statement = 'SELECT versionCode, filename, bibleVersion FROM Identity';
+	this.database.select(statement, [], function(results) {
+		if (results instanceof IOError) {
+			callback(versMap);
+		} else {
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				versMap[versionCode] = row.bibleVersion;
+			}
+			callback(versMap);
 		}
 	});
 };
@@ -3253,10 +3315,9 @@ HttpClient.prototype.request = function(method, path, postData, callback) {
 * App version number stored in the Settings database.  If the versions are
 * the same, it is not an update and nothing further needs to be done by this class.
 *
-* Next this class gets a list of all the database (.db) files in the www
-* directory and a map of all the database files in the databases directory.
-* For every database present in the www directory, it deletes the corresponding
-* file in the databases directory.
+* When it is an update, it compares the version number of each installed Bible
+* with the current version number for that Bible per the Versions.Identity table.
+* When there is a new version, it deletes the current one so that it will be downloaded again.
 *
 * By deleting the files from the databases directory, it ensures that when one
 * of those deleted databases is opened, the DatabaseHelper class will first copy
@@ -3264,65 +3325,317 @@ HttpClient.prototype.request = function(method, path, postData, callback) {
 */
 function AppUpdater(settingStorage) {
 	this.settingStorage = settingStorage;
-	this.installedVersions = {};
+	//this.installedVersions = {};
 	Object.seal(this);
 }
 AppUpdater.prototype.doUpdate = function(callback) {
 	var that = this;
-	this.checkIfInstall(function(isInstall) {
-		console.log('Check if Install', isInstall);
-		if (isInstall) {
-			that.createTables(function() {
-				that.moveFiles(function() {
+	if (typeof(cordova) !== 'undefined') { // Can only process in cordova
+		checkIfInstall(function(isInstall) {
+			console.log('Check if Install', isInstall);
+			if (isInstall) {
+				createTables(function() {
+					var path = cordova.file.applicationDirectory + 'www/';
+					getFiles(path, function(fileMap) {
+						var database = new VersionsAdapter();
+						database.selectBibleVersions(function(bibleVersionMap) {
+							insertInstalled(Object.keys(fileMap), bibleVersionMap);
+							updateVersion();
+							callback();
+						});
+					});
+				});
+			} else {
+				checkIfUpdate(function(isUpdate) {
+					console.log('Check if Update', isUpdate);
+					if (isUpdate) {
+						removeVersionsDB(function() {
+							version16xTableUpdate(function() {
+								var versDatabase = new VersionsAdapter();
+								versDatabase.selectBibleVersions(function(bibleVersionMap) {
+									identifyObsolete(bibleVersionMap, function(obsoleteVersions) {
+										updateInstalled(obsoleteVersions, function() {
+											//updateVersion();
+											callback();									
+										});
+									});
+								});
+							});
+						});
+					}	
+				});
+			}
+		});
+	} else {
+		checkIfInstall(function(isInstall) {
+			if (isInstall) {
+				createTables(function() {
 					callback();
 				});
-			});
+			} else {
+				callback();
+			}			
+		});
+		//version16xTableUpdate(function() {
+		//	var versDatabase = new VersionsAdapter();
+		//	versDatabase.selectBibleVersions(function(bibleVersionMap) {
+		//		identifyObsolete(bibleVersionMap, function(obsoleteVersions) {
+		//			updateInstalled(obsoleteVersions, function() {
+		//				//updateVersion();
+		//				callback();									
+		//			});
+		//		});
+		//	});
+		//});
+	}
+	
+	function checkIfInstall(callback) {
+		var doFullInstall = false;
+		var statement = 'SELECT count(*) AS count FROM sqlite_master WHERE type="table" AND name IN ("Settings", "Installed", "History", "Questions")';
+		that.settingStorage.database.select(statement, [], function(results) {
+			if (results instanceof IOError) {
+				console.log('SELECT sqlite_master ERROR', JSON.stringify(results));
+				callback(true);
+			} else {
+				var num = results.rows.item(0).count;
+				console.log('found tables', num);
+				callback(num !== 4);
+			}
+		});
+	}
+	
+	function checkIfUpdate(callback) {
+		that.settingStorage.getAppVersion(function(appVersion) {
+			callback(BuildInfo.version !== appVersion);
+		});
+	}
+	
+	function createTables(callback) {
+		that.settingStorage.create(function() {
+			var history = new HistoryAdapter(that.settingStorage.database);
+			history.create(function(){});
+			var questions = new QuestionsAdapter(that.settingStorage.database);
+			questions.create(function(){});
+			callback();
+		});
+	}
+	
+	function getFiles(filePath, callback) {
+		console.log('START getFILES', new Date().getTime());
+		var dirMap = {};
+		window.resolveLocalFileSystemURL(filePath, function(dirEntry) {
+			console.log('*** DIR ENTRY', dirEntry);
+			if (dirEntry) {
+				var dirReader = dirEntry.createReader();
+				dirReader.readEntries(function(results) {
+					for (var i=0; i<results.length; i++) {
+						var file = results[i];
+						var filename = file.name;
+						var fileType = filename.substr(filename.length -3, 3);
+						if (fileType === '.db') {
+							dirMap[filename] = file;
+						}
+					}
+					console.log('FINISH getFiles', new Date().getTime());
+					callback(dirMap);
+				});
+			} else {
+				callback(dirMap);
+			}
+		},
+		function(fileError) {
+			console.log('RESOLVE ERROR', filePath, JSON.stringify(fileError));
+			callback(dirMap);
+		});
+	}
+	
+	function insertInstalled(files, versionMap) {
+		var installedVersions = {};
+		var now = new Date().toISOString();
+		for (var i=0; i<files.length; i++) {
+			var filename = files[i];
+			var versionCode = filename.split('.')[0];
+			var nameEnd = (filename.length > 7) ? filename.substr(filename.length - 7) : '';
+			if (versionCode !== 'Settings' && versionCode !== 'Versions' && nameEnd !== 'User.db') {
+				var bibleVersion = versionMap[versionCode];
+				installedVersions[versionCode] = [versionCode, filename, now, bibleVersion];
+				console.log('SET INSTALLED', versionCode, filename, bibleVersion);
+			}			
+		}
+		var values = objectValues(installedVersions);
+		that.settingStorage.bulkReplaceInstalledVersions(values, now);
+	}
+	
+	function objectValues(map) {
+		var values = [];
+		var keys = Object.keys(map);
+		for (var i=0; i<keys.length; i++) {
+			var key = keys[i];
+			values.push(map[key]);
+		}
+		return(values);
+	}
+	
+	function removeVersionsDB(callback) {
+		if (deviceSettings.platform() === 'ios') {
+			var dbPath = cordova.file.applicationStorageDirectory + 'Library/LocalDatabase/';
 		} else {
-			that.checkIfUpdate(function(isUpdate) {
-				console.log('Check if Update', isUpdate);
-				if (isUpdate) {
-					that.moveFiles(function() {
-						callback();
+			dbPath = cordova.file.applicationStorageDirectory + 'databases/';
+		}
+		getFiles(path, function(fileMap) {
+			var versionsDB = fileMap['Versions.db'];
+			removeFile(versionsDB, function() {
+				callback();
+			});
+		});	
+	}
+	
+	function version16xTableUpdate(callback) {
+		// This code was added for version 1.6.x
+		that.settingStorage.database.select('PRAGMA table_info(Installed)', [], function(results) {
+			if (results instanceof IOError) {
+				console.log('ERROR', JSON.stringify(results), 'AppUpdater.table_info');
+				callback();/// do what
+			} else {
+				var numCol = results.rows.length;
+				console.log('num columns found', numCol);
+				if (numCol < 3) {
+					that.settingStorage.database.executeDML('ALTER TABLE Installed ADD COLUMN bibleVersion TEXT', [], function(results) {
+						if (results instanceof IOError) {
+							console.log('ERROR', JSON.stringify(results), 'AppUpdater.alterTable');
+							callback();
+						} else {
+							that.settingStorage.database.executeDML('UPDATE Installed SET bibleVersion=?', [1.1], function(results) {
+								if (results instanceof IOError) {
+									console.log('ERROR', JSON.stringify(results), 'AppUpdater.updateInstalled');
+								}
+								callback();
+							});
+						}
 					});
-				} else {
-					callback();
 				}
+			}
+		});		
+	}
+	
+	function identifyObsolete(bibleVersionMap, callback) {
+		var obsoleteVersions = []
+		that.settingStorage.getInstalledVersions(function(installedVersions) {
+			var installedList = Object.keys(installedVersions);
+			for (var i=0; i<installedList.length; i++) {
+				var versionCode = installedList(i);
+				var installedBibleVersion = installedVersions[versionCode].bibleVersion;
+				var currBibleVersion = bibleVersionMap[versionCode];
+				if (installedBibleVersion != currBibleVersion) {
+					obsoleteVersions.push(versionCode);
+				}
+			}
+			callback(obsoleteVersions);
+		});
+	}
+	
+	function updateInstalled(obsoleteVersions, callback) {
+		var versionCode = obsoleteVersions.shift();
+		if (versionCode) {
+			that.settingStorage.removeInstalledVersion(versionCode, function(results) {
+				//if (results instanceof IOError) {
+				//	console.log('ERROR', JSON.stringify(results), 'AppUpdater.updateInstalled');
+				//}
+				updateInstalled(obsoleteVersions, callback);
 			});
-		}
-	});
-};
-AppUpdater.prototype.checkIfInstall = function(callback) {
-	var that = this;
-	var doFullInstall = false;
-	var statement = 'SELECT count(*) AS count FROM sqlite_master WHERE type="table" AND name IN ("Settings", "Installed", "History", "Questions")';
-	var db = this.settingStorage.database;
-	db.select(statement, [], function(results) {
-		if (results instanceof IOError) {
-			console.log('SELECT sqlite_master ERROR', JSON.stringify(results));
-			callback(true);
 		} else {
-			var num = results.rows.item(0).count;
-			console.log('found tables', num);
-			callback(num !== 4);
+			callback();
 		}
-	});
+	}
+	
+//	function selectVersionIdentity(versionEntry, callback) {
+//		removeFile(versionEntry, function() {
+//			selectIdentity(versionEntry, true, function(fileMap) {
+//				callback(fileMap);
+//			});
+//		});
+//	}
+//	
+//	function removeOldVersions(files, fileMap, identityMap, callback) {
+//		var filename = files.shift();
+//		if (filename) {
+//			var fileEntity = fileMap[filename];
+//			console.log('REMOVE PROCESSING', fileEntity);
+//			if (identityMap[filename]) {
+//				selectIdentity(fileEntity, false, function(fileIdentity) {
+//					console.log('**** read in bible identity', filename, fileEntity, fileIdentity[filename]);
+//					var currentVersionDT = identityMap[filename];
+//					var installVersionDT = fileIdentity[filename];
+//					if (currentVersionDT > installVersionDT) {
+//						//removeFile(fileEntity);
+//					}
+//					removeOldVersions(files, fileMap, identityMap, callback);
+//				});
+//			} else {
+//				removeOldVersions(files, fileMap, identityMap, callback);
+//			}
+//		} else {
+//			callback();
+//		}
+//	}
+//	
+//	function selectIdentity(entry, doCopy, callback) {
+//		console.log('Start SELECT', new Date().getTime())
+//		var fileMap = {};
+//		 var options = { name: entry.name, location: 2 };
+//        if (doCopy) options.createFromLocation = 1;
+//        var database = window.sqlitePlugin.openDatabase(options);
+//		database.transaction(function(tx) {
+//			tx.executeSql('SELECT versionCode, filename, datetime FROM Identity', [], function(tx, results) {
+//				for (var i=0; i<results.rows.length; i++) {
+//					var row = results.rows.item(i);
+//					fileMap[row.filename] = row.datetime;
+//				}
+//  			});
+//		}, function(error) {
+//			closeDatabase(database, function() {
+//				callback(fileMap);
+//			});
+//		}, function() {
+//			closeDatabase(database, function() {
+//				callback(fileMap);
+//			});
+//		});
+//	}
+//	
+//	function closeDatabase(database, callback) {
+//		database.close(function() {
+//			console.log('**** database is closed ok ****', new Date().getTime());
+//			callback();
+//		}, function(error) {
+//			console.log('**** ERROR closing database ****', new Date().getTime());
+//			callback();
+//		});
+//	}
+//	
+	function removeFile(file, callback) {
+		file.remove(function() {
+			console.log('REMOVE FROM /databases SUCCESS', file.name);
+			if (callback) callback();
+		}, 
+		function(fileError) {
+			console.log('REMOVE ERROR', file.name, JSON.stringify(fileError));
+			if (callback) callback();
+		});
+	}
+	
+	function updateVersion() {
+		that.settingStorage.setAppVersion(BuildInfo.version);
+	}
 };
-AppUpdater.prototype.checkIfUpdate = function(callback) {
-	this.settingStorage.getAppVersion(function(appVersion) {
-		callback(BuildInfo.version !== appVersion);
-	});
-};
-AppUpdater.prototype.createTables = function(callback) {
-	var that = this;
-	this.settingStorage.create(function() {
-		var history = new HistoryAdapter(that.settingStorage.database);
-		history.create(function(){});
-		var questions = new QuestionsAdapter(that.settingStorage.database);
-		questions.create(function(){});
-		callback();
-	});
-};
+
+/*
 AppUpdater.prototype.moveFiles = function(callback) {
+	// Get a list of databases in the application support dir
+	// Remove versionDb to force opening of new one.
+	// Open versionDB
+	// select Identity from VersionDB
+	
 	var that = this;
 	var sourceDir = null;
 	var targetDir = null;
@@ -3347,7 +3660,6 @@ AppUpdater.prototype.moveFiles = function(callback) {
 		//readDirectories(sourceDir, targetDir, callback); window.resolve... does not work for node-webkit
 		callback();
 	}
-
 	function readDirectories(sourceDir, targetDir, callback) {
 		getDirEntry(sourceDir, function(dirEntry) {
 			sourceDirEntry = dirEntry;
@@ -3364,7 +3676,6 @@ AppUpdater.prototype.moveFiles = function(callback) {
 			});
 		});
 	}
-	
 	function getDirEntry(filePath, callback) {
 		window.resolveLocalFileSystemURL(filePath, function(dirEntry) {
 			callback(dirEntry);
@@ -3396,7 +3707,6 @@ AppUpdater.prototype.moveFiles = function(callback) {
 			callback(dirMap, dirArray);
 		}	
 	}
-	
 	function doRemoves(index, sourceFiles, targetFiles, callback) {
 		if (index >= sourceFiles.length) {
 			that.updateVersion();
@@ -3420,7 +3730,6 @@ AppUpdater.prototype.moveFiles = function(callback) {
 			}
 		}
 	}
-	
 	function updateSettings(sourceFiles, targetFiles) {
 		var files = sourceFiles.concat(targetFiles);
 		that.installedVersions = {};
@@ -3437,7 +3746,6 @@ AppUpdater.prototype.moveFiles = function(callback) {
 		var values = objectValues(that.installedVersions);
 		that.settingStorage.bulkReplaceVersions(values, now);
 	}
-	
 	function objectValues(map) {
 		var values = [];
 		var keys = Object.keys(map);
@@ -3448,9 +3756,11 @@ AppUpdater.prototype.moveFiles = function(callback) {
 		return(values);
 	}
 };
+
 AppUpdater.prototype.updateVersion = function() {
 	this.settingStorage.setAppVersion(BuildInfo.version);
 };
+*/
 
 /**
 * This class encapsulates the Cordova FileTransfer plugin for file download
@@ -3624,6 +3934,7 @@ function BibleVersion() {
 	this.ownerName = null;
 	this.ownerURL = null;
 	this.copyright = null;
+	this.bibleVersion = null;
 	this.introduction = null;
 	Object.seal(this);
 }
@@ -3647,6 +3958,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.ownerName = 'eBible.org';
 			that.ownerURL = 'www.eBible.org';
 			that.copyright = 'World English Bible (WEB), Public Domain, eBible.';
+			that.bibleVersion = null;
 			that.introduction = null;
 		} else {
 			that.code = row.versionCode;
@@ -3663,6 +3975,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.ownerName = row.localOwnerName;
 			that.ownerURL = row.ownerURL;
 			that.copyright = row.copyright;
+			that.bibleVersion = row.bibleVersion;
 			that.introduction = row.introduction;
 		}
 		callback();

@@ -17,6 +17,7 @@ function BibleVersion() {
 	this.ownerName = null;
 	this.ownerURL = null;
 	this.copyright = null;
+	this.bibleVersion = null;
 	this.introduction = null;
 	Object.seal(this);
 }
@@ -40,6 +41,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.ownerName = 'eBible.org';
 			that.ownerURL = 'www.eBible.org';
 			that.copyright = 'World English Bible (WEB), Public Domain, eBible.';
+			that.bibleVersion = null;
 			that.introduction = null;
 		} else {
 			that.code = row.versionCode;
@@ -56,6 +58,7 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.ownerName = row.localOwnerName;
 			that.ownerURL = row.ownerURL;
 			that.copyright = row.copyright;
+			that.bibleVersion = row.bibleVersion;
 			that.introduction = row.introduction;
 		}
 		callback();

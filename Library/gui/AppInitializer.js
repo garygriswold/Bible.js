@@ -28,27 +28,28 @@ AppInitializer.prototype.begin = function() {
 						console.log('default version determined ', filename);
 						var parts = filename.split('.');
 						var versionCode = parts[0]; // This hack requires version code to be part of filename.
-						if (appUpdater.installedVersions[versionCode]) {
-							// Process locale's default version installed
-							changeVersionHandler(filename);
-						} else {
-							var gsPreloader = new GSPreloader(gsPreloaderOptions);
-							gsPreloader.active(true);
-							var downloader = new FileDownloader(versionsAdapter, locale, 'none');
-							downloader.download(filename, function(error) {
-								//console.log('Download error', JSON.stringify(error));
-								gsPreloader.active(false);
-								if (error) {
-									console.log(JSON.stringify(error));
-									// Process all default version on error
-									changeVersionHandler(DEFAULT_VERSION);
-								} else {
-									settingStorage.setVersion(versionCode, filename);
-									// Process locale's default version downloaded
-									changeVersionHandler(filename);
-								}
-							});
-						}
+						settingStorage.getInstalledVersion(versionCode, function(installedVersion) {
+							if (installedVersion) {
+								// Process locale's default version installed
+								changeVersionHandler(filename);
+							} else {
+								var gsPreloader = new GSPreloader(gsPreloaderOptions);
+								gsPreloader.active(true);
+								var downloader = new FileDownloader(versionsAdapter, locale, 'none');
+								downloader.download(filename, function(error) {
+									//console.log('Download error', JSON.stringify(error));
+									gsPreloader.active(false);
+									if (error) {
+										console.log(JSON.stringify(error));
+										// Process all default version on error
+										changeVersionHandler(DEFAULT_VERSION);
+									} else {
+										// Process locale's default version downloaded
+										changeVersionHandler(filename);
+									}
+								});
+							}
+						});
 					});
 				});
 			}
@@ -61,13 +62,14 @@ AppInitializer.prototype.begin = function() {
 		
 	function changeVersionHandler(versionFilename) {
 		console.log('CHANGE VERSION TO', versionFilename);
-		var bibleVersion = new BibleVersion();
-		bibleVersion.fill(versionFilename, function() {
+		var currBible = new BibleVersion();
+		currBible.fill(versionFilename, function() {
 			if (that.controller) {
 				that.controller.close();
 			}
-			settingStorage.setCurrentVersion(bibleVersion.filename);
-			that.controller = new AppViewController(bibleVersion, settingStorage);
+			settingStorage.setCurrentVersion(versionFilename);
+			settingStorage.setInstalledVersion(currBible.code, versionFilename, currBible.bibleVersion);
+			that.controller = new AppViewController(currBible, settingStorage);
 			that.controller.begin();
 			console.log('*** DID enable handlers ALL');
 			enableHandlersExcept('NONE');		

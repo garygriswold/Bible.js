@@ -5,7 +5,6 @@
 function SettingStorage() {
     this.className = 'SettingStorage';
     this.database = new DatabaseHelper('Settings.db', false);
-    this.loadedVersions = null;
 	Object.seal(this);
 }
 SettingStorage.prototype.create = function(callback) {
@@ -14,7 +13,12 @@ SettingStorage.prototype.create = function(callback) {
 		if (err instanceof IOError) {
 			console.log('Error creating Settings', err);
 		} else {
-			that.database.executeDDL('CREATE TABLE IF NOT EXISTS Installed(version TEXT PRIMARY KEY NOT NULL, filename TEXT NOT NULL, timestamp TEXT NOT NULL)', function(err) {
+			var statement = 'CREATE TABLE IF NOT EXISTS Installed(' +
+					' version TEXT PRIMARY KEY NOT NULL,' +
+					' filename TEXT NOT NULL,' +
+					' timestamp TEXT NOT NULL,' +
+					' bibleVersion TEXT NOT NULL)';
+			that.database.executeDDL(statement, function(err) {
 				if (err instanceof IOError) {
 					console.log('Error creating Installed', err);
 				} else {
@@ -95,35 +99,41 @@ SettingStorage.prototype.selectSettings = function(callback) {
 		}
 	})	
 };
-/**
-* Versions
-*/
-/** Before calling hasVersion one must call getVersions, which creates a map of available versions
-* And getVersions must be called a few ms before any call to hasVersion to make sure result is available.
-*/
-SettingStorage.prototype.hasVersion = function(version) {
-	return(this.loadedVersions[version]);
-};
-SettingStorage.prototype.getVersions = function() {
-	var that = this;
+SettingStorage.prototype.getInstalledVersions = function(callback) {
+	var loadedVersions = {};
 	console.log('GetVersions');
-	this.database.select('SELECT version, filename FROM Installed', [], function(results) {
+	this.database.select('SELECT version, filename, bibleVersion FROM Installed', [], function(results) {
 		if (results instanceof IOError) {
-			console.log('GetVersions error', JSON.stringify(results));
+			console.log('GetInstalledVersions error', JSON.stringify(results));
 		} else {
 			console.log('GetVersions, rowCount=', results.rows.length);
-        	that.loadedVersions = {};
         	for (var i=0; i<results.rows.length; i++) {
 	        	var row = results.rows.item(i);
-	        	that.loadedVersions[row.version] = row.filename;
+	        	loadedVersions[row.version] = {versionCode: row.version, filename: row.filename, bibleVersion: row.bibleVersion };
         	}
+		}
+		callback(loadedVersions);
+	});
+};
+SettingStorage.prototype.getInstalledVersion = function(versionCode, callback) {
+	console.log('GetVersion', versionCode);
+	this.database.select('SELECT version, filename, bibleVersion FROM Installed WHERE version=?', [versionCode], function(results) {
+		if (results instanceof IOError) {
+			console.log('GetInstalledVersion error', JSON.stringify(results));
+			callback();
+		} else if (results.rows.length === 0) {
+			callback();
+		} else {
+			var row = results.rows.item(0);
+			callback({versionCode: row.version, filename: row.filename, bibleVersion: row.bibleVersion});
 		}
 	});
 };
-SettingStorage.prototype.setVersion = function(version, filename) {
-	console.log('SetVersion', version, filename);
+SettingStorage.prototype.setInstalledVersion = function(version, filename, bibleVersion) {
+	console.log('SetInstalledVersion', version, filename);
 	var now = new Date();
-	this.database.executeDML('REPLACE INTO Installed(version, filename, timestamp) VALUES (?,?,?)', [version, filename, now.toISOString()], function(results) {
+	this.database.executeDML('REPLACE INTO Installed(version, filename, timestamp, bibleVersion) VALUES (?,?,?,?)', 
+							[version, filename, now.toISOString(), bibleVersion], function(results) {
 		if (results instanceof IOError) {
 			console.log('SetVersion error', JSON.stringify(results));
 		} else {
@@ -131,21 +141,24 @@ SettingStorage.prototype.setVersion = function(version, filename) {
 		}
 	});
 };
-SettingStorage.prototype.bulkReplaceVersions = function(versions, now) {
-	var that = this;
-	this.database.bulkExecuteDML('REPLACE INTO Installed(version, filename, timestamp) VALUES (?,?,?)', versions, function(results) {
+SettingStorage.prototype.removeInstalledVersion = function(version, callback) {
+	console.log('REMOVE INSTALLED VERSION', version);
+	this.database.executeDML('DELETE FROM Installed WHERE version=?', [version], function(results) {
 		if (results instanceof IOError) {
-			console.log('Replace All Installed', JSON.stringify(results));
-		} else {
-			var insertCount = results;
-			that.database.executeDML('DELETE FROM Installed WHERE timestamp != ?', [now], function(results) {
-				if (results instanceof IOError) {
-					console.log('Delete from Installed', JSON.stringify(results));
-				} else {
-					console.log('Replace All Installed Inserts=', insertCount, ' Deletes=', results);
-				}
-			});
+			console.log('RemoveInstalledVersion Error', JSON.stringify(results));
 		}
+		callback();
+	});
+};
+SettingStorage.prototype.bulkReplaceInstalledVersions = function(versions, callback) {
+	var that = this;
+	this.database.bulkExecuteDML('REPLACE INTO Installed(version, filename, timestamp, bibleVersion) VALUES (?,?,?,?)', versions, function(results) {
+		if (results instanceof IOError) {
+			console.log('ERROR: Replace All Installed', JSON.stringify(results));
+		} else {
+			console.log('Replace All Installed', results);
+		}
+		callback();
 	});
 };
 
