@@ -67,15 +67,15 @@ Compile and Sign App
 Make certain it has a fresh copy of Versions.db and the correct versions installed:
 ERV-ENG, ERV-ARB, NMV
 
-	cd $HOME/ShortSands/Versions
+	cd $HOME/ShortSands/BibleApp/Versions
 	./RunVersions.sh
 
 Verify that IOS-Deployment-Target is 8.0 in xCode
 
 Make Certain that App is hitting a production server
 
-	BibleApp/Library/gui/AppViewController
-	SERVER_HOST = cloudfront.net
+	BibleApp/Library/io/FileDownloader.js
+	this.host = 's3.amazonaws.com';
 
 Update the version code
 
