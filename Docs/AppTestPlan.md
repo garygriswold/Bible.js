@@ -5,6 +5,7 @@ This documents manual procedures for testing the user interface of the BibleApp.
 Gary Griswold, January 1, 2016
 Revised Aug 9, 2016
 Revised Nov 11, 2016
+Revised Dec 30, 2016
 
 App Icon
 --------
@@ -51,16 +52,6 @@ App Startup
 	9. Change version to one that has already been started, and observe the quick change.
 	10. Somehow test condition that Version is listed, but not actually available.  App should not fail, but just fail to load version.
 	
-App Update
-----------
-
-	1. Install the App with a new version number and many Bible versions.
-	2. Verify that databases are NOT created, but verify that each database file in www is deleted in databases.
-	2. Verify that databases will open with delay the first time and non later
-	3. Stop the App, and restart.  Log should show version check, but no databases checked for remove from databases/
-	4. Verify that databases will open with delay the first time and 
-	5. Temp change the directories and filenames and verify crash resistance.
-	
 Startup Download
 ----------------
 
@@ -88,8 +79,8 @@ User Download
 AWS Server
 ----------
 
-	1. Check that shortlog contains no logs.
-	2. Verify that cloudlog contains a log entry for each download.
+	1. Check that shortlog and shortsands-xx-drop contain no logs.
+	2. Verify that cloudlog and shortsands-xx-log contains a log entry for each download.
 
 CodexView
 ---------

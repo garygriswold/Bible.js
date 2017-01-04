@@ -23,7 +23,6 @@ AppInitializer.prototype.begin = function() {
 		    } else {
 			    deviceSettings.prefLanguage(function(locale) {
 				    console.log('user locale ', locale);
-	locale = 'xx-US';
 					var parts = locale.split('-');
 					var versionsAdapter = new VersionsAdapter();
 					versionsAdapter.defaultVersion(parts[0], function(filename) {
@@ -69,7 +68,6 @@ AppInitializer.prototype.begin = function() {
 			if (that.controller) {
 				that.controller.close();
 			}
-			console.log('******', currBible.code, currBible.bibleVersion);
 			settingStorage.setCurrentVersion(versionFilename);
 			settingStorage.setInstalledVersion(currBible.code, versionFilename, currBible.bibleVersion);
 			that.controller = new AppViewController(currBible, settingStorage);
@@ -1677,7 +1675,6 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 						if (row.filename === currentVersion) {
 							iconNode.setAttribute('src', CURRENT_VERS);
 							iconNode.addEventListener('click', selectVersionHandler);
-						//} else if (that.settingStorage.hasVersion(row.versionCode)) {
 						} else if (installedMap[row.versionCode]) {
 							iconNode.setAttribute('src', INSTALLED_VERS);
 							iconNode.addEventListener('click',  selectVersionHandler);
@@ -1687,7 +1684,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 						}
 					}
 				}
-				debugLogVersions(installedMap);
+				//debugLogVersions(installedMap);
 			});
 		});
 	});
@@ -1713,8 +1710,6 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 					iconNode.addEventListener('click', downloadVersionHandler);
 					that.downloadErrors.push(iconNode);
 				} else {
-					//var bibleVersion = that.settingStorage.getBibleVersion(versionCode); ///
-					//that.settingStorage.setVersion(versionCode, versionFile, bibleVersion); /// move these to AppInitializer
 					iconNode.setAttribute('src', INSTALLED_VERS);
 					iconNode.addEventListener('click',  selectVersionHandler);
 					document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
@@ -1723,11 +1718,9 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		});
 	}
 	function debugLogVersions(loadedVersions) {
-		//var versionNames = Object.keys(that.settingStorage.loadedVersions);
 		var versionNames = Object.keys(loadedVersions);
 		for (var i=0; i<versionNames.length; i++) {
 			var version = versionNames[i];
-			//var filename = that.settingStorage.loadedVersions[version].filename;
 			var filename = loadedVersions[version].filename;
 			console.log('INSTALLED VERSION', version, filename);
 		}
@@ -2189,7 +2182,6 @@ function IOError(err) {
 function SettingStorage() {
     this.className = 'SettingStorage';
     this.database = new DatabaseHelper('Settings.db', false);
-    //this.loadedVersions = null;
 	Object.seal(this);
 }
 SettingStorage.prototype.create = function(callback) {
@@ -2284,21 +2276,7 @@ SettingStorage.prototype.selectSettings = function(callback) {
 		}
 	})	
 };
-/**
-* Versions
-*/
-///** Before calling hasVersion one must call getVersions, which creates a map of available versions
-//* And getVersions must be called a few ms before any call to hasVersion to make sure result is available.
-//*/
-//SettingStorage.prototype.hasVersion = function(version) {
-//	return(this.loadedVersions[version]);
-//};
-//SettingStorage.prototype.getBibleVersion = function(version) {
-//	var vers = this.loadedVersions[version];
-//	return((vers) ? vers.bibleVersion : null);	
-//};
 SettingStorage.prototype.getInstalledVersions = function(callback) {
-	//var that = this;
 	var loadedVersions = {};
 	console.log('GetVersions');
 	this.database.select('SELECT version, filename, bibleVersion FROM Installed', [], function(results) {
@@ -2308,7 +2286,6 @@ SettingStorage.prototype.getInstalledVersions = function(callback) {
 			console.log('GetVersions, rowCount=', results.rows.length);
         	for (var i=0; i<results.rows.length; i++) {
 	        	var row = results.rows.item(i);
-	        	//that.loadedVersions[row.version] = row.filename;
 	        	loadedVersions[row.version] = {versionCode: row.version, filename: row.filename, bibleVersion: row.bibleVersion };
         	}
 		}
@@ -3217,7 +3194,6 @@ VersionsAdapter.prototype.selectURLS3 = function(versionFile, countryCode, callb
 	});
 };
 VersionsAdapter.prototype.selectInstalledBibleVersions = function(callback) {
-	//var that = this;
 	var versList = [];
 	var now = new Date().toISOString();
 	var statement = 'SELECT versionCode, filename, bibleVersion FROM Identity WHERE versionCode IN (SELECT versionCode FROM InstalledVersion)';
@@ -3234,7 +3210,6 @@ VersionsAdapter.prototype.selectInstalledBibleVersions = function(callback) {
 	});
 };
 VersionsAdapter.prototype.selectAllBibleVersions = function(callback) {
-	//var that = this;
 	var versMap = {};
 	var statement = 'SELECT i.versionCode, i.filename, i.bibleVersion, v.startDate AS installed FROM Identity i' +
 		' LEFT OUTER JOIN InstalledVersion v ON v.versionCode = i.versionCode';
