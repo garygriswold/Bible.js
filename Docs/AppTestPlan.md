@@ -31,56 +31,32 @@ TableContentsView
 -----------------
 
 	1. Present properly when button is pushed.
-	2. First display should be at top with Genesis.
+	2. First display should be at top with Genesis. [List as BUG]
 	3. Subsequent displays should display last position with chapters open.
 	4. Chapter names, such as 1 Thessalonians, should not wrap.
 	5. When clicking on a book, it displays the chapters and all should be visible.
 	6. The chapter boxes should be well centered in the page.
 	7. When clicking on the chapter, it should display properly positioned.
-	
-App Startup
------------
-
-	1. First install the production version on the device.
-	2. Download or install a few versions.
-	3. Change version to something other than default version.
-	4. Install the App over the wire with a higher version number.
-	5. It should start with the prior selected version, not the default version.
-	6. Verify in log that Settings database is created with Settings, Installed, History and Questions
-	7. Verify in log that each version installed in www was removed from databases
-	8. Change version, and observe the delay caused by copying the Bible database
-	9. Change version to one that has already been started, and observe the quick change.
-	10. Somehow test condition that Version is listed, but not actually available.  App should not fail, but just fail to load version.
-	
+	8. When clicking on Introduction or Glossary, they should present immediately.
+		
 Startup Download
 ----------------
 
 	1. Test that already used version bypasses all download logic.
 	2. Test that locale is determined for user
-	3. Test that default language for versions is found.
+	3. Test that default language for versions is found if locale is unknown.
 	4. Test that ERV-ENG.db is used when no default is found.
-	5. Test that download is bypassed if version is already present on device
-	6. Test that download succeeds if version is not already present on device
+	5. Test that startup download is bypassed if version is already present on device
+	6. Test that startup download succeeds if version is not already present on device
 	7. Test that lightening cloud is used if there is a failure in download.
 	8. Test that download cloud reappears after leaving and returning to VersionView
-	
-User Download
--------------
-
-	1. Do a fresh install with only the default version.
-	2. Verify that a file can be downloaded when version is selected.
-	3. Restart the App with a version change.
-	4. Verify that a file can be downloaded when version is selected.
-	5. Restart the App with no version change.
-	6. Verify that a file can be downloaded when version is selected.
-	7. Test Download of Each Version, or each new Version
-	8. Do clean install, but change locale to verify that it will do install at point of install.
 	
 AWS Server
 ----------
 
 	1. Check that shortlog and shortsands-xx-drop contain no logs.
 	2. Verify that cloudlog and shortsands-xx-log contains a log entry for each download.
+	3. Run Server/aws/Verify3S.js
 
 CodexView
 ---------
@@ -123,7 +99,7 @@ HistoryView
 -----------
 
 *LastItem*
-	1. Startup with an empty history table, the App should start at John 1.
+	1. Startup with an empty history table, the App should start at John 3.
 	2. Startup with one item in the history table, the App should start with it.
 	3. Startup with more than one item in the history table, the App should start with the most recent.
 
@@ -140,6 +116,7 @@ HistoryView
 	4. Add two from search, they should each display in the correct sequence.
 	5. Make multiple requests without adding to history, it should not do select.
 	6. Restart program, history should be identical.
+	7. Select and ERV version, and go to Introduction, change to a version without one and verify that Introduction is dropped from History.
 
 *update history*
 	1. Click on history tab, and see that it becomes the top tag.
@@ -148,19 +125,6 @@ HistoryView
 *cleanup*
 	1. Temporarily change MAX_HISTORY to 5.  Exceed 5 and verify that delete is occurring.
 	2. Change MAX_HISTORY back to original value.
-
-
-QuestionsView
--------------
-
-	1. On first start, Acts 8 should be presented question and answer.
-	2. On first present, Reference and Question box should present.
-	3. Entry of Question should transmit to server, and be presented as Question.
-	4. Entry of Question should be stored in database on server.
-	5. Questions should appear on the Q&A App.
-	6. Answers should appear in App once answered.
-	7. Only most recent answer appears.
-	8. Other answers appear when the question is clicked.
 	
 SettingsView
 ------------
@@ -277,6 +241,10 @@ Test 4
 	Expect Installed: ERV-ARB 1.5, ERV-ENG 1.5, KJVPD 1.1, NMV 1.1, WEB 1.1
 	Expect in Storage: Settings.db, Versions.db, ERV-AWA, ERV-BEN, ERV-HUN, KJVPD, NMV, WEB
 	Expect in View: ERV-ARB, ERV-ENG, KJVPD checked, NMV, WEB
+	
+*****
+***** After Testing be sure to rerun ./RunVersions.sh to reset version numbers to correct values
+*****
 
 
 
