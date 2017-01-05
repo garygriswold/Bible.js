@@ -115,6 +115,16 @@ Generate a private key using keytool. This example prompts you for passwords for
 Compile and Sign App
 --------------------
 
+NOTE: Jan 4, 2017 platforms/android/gradle.build had to be revised
+lines 203 - 218 were commented out.  This change prevented += 8 being added to the
+android version, which made the version number too small for an upload.
+Also changed line 215 to: defaultConfig.versionCode = defaultConfig.versionCode * 10 + 8
+
+If one needs to find the android version use the following:
+	
+	cd $HOME/Library/Android/sdk/build-tools/25.0.0
+	./aapt dump badging android-release.apk
+
 Update version code in config.xml
 
 	vi $HOME/BibleApp/YourBible/config.xml
@@ -129,6 +139,7 @@ Compile your app in release mode to obtain an unsigned APK.
 Sign your app with your private key using jarsigner. This example prompts you for passwords for the keystore and key. It then modifies the APK in-place to sign it. Note that you can sign an APK multiple times with different keys.
 
 	cd $HOME/ShortSands/BibleApp/YourBible/certificates/android
+	rm -i *.apk
 	cp $HOME/ShortSands/BibleApp/YourBible/platforms/android/build/outputs/apk/android-release-unsigned.apk .
 	jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore your-bible.keystore android-release-unsigned.apk YourBible
 
@@ -139,7 +150,6 @@ Verify that your APK is signed. For example:
 	
 Align the final APK package using zipalign.  zipalign ensures that all uncompressed data starts with a particular byte alignment relative to the start of the file, which reduces the amount of RAM consumed by an app.
 
-	rm android-release.apk
 	$HOME/Library/Android/sdk/build-tools/22.0.1/zipalign -v 4 android-release-signed.apk android-release.apk
 	ls -lt
 	
