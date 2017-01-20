@@ -14,8 +14,8 @@ class ViewController : UIViewController {
     
     override func loadView() {
         super.loadView()
-        let videoUrl: String = "https://s3.amazonaws.com/video-proto-out/andhls_0740.mp4.m3u8"
-        //let videoUrl: String = "https://arc.gt/jy7bi?apiSessionId=5880542ea3ec81.60338491"
+        //let videoUrl: String = "https://s3.amazonaws.com/video-proto-out/andhls_0740.mp4.m3u8"
+        let videoUrl: String = "https://arc.gt/jy7bi?apiSessionId=5880542ea3ec81.60338491"
         let seek: Int64 = 0
         self.player = VideoPlayer(videoUrl: videoUrl, seekTime: seek)
     }
