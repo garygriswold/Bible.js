@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E46CBFAA1E32AB08005A2F45 /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46CBFA91E32AB08005A2F45 /* VideoPlayer.swift */; };
+		E46CBFAC1E32AB70005A2F45 /* AVPlayerViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46CBFAB1E32AB70005A2F45 /* AVPlayerViewControllerExtension.swift */; };
 		E4B3112D1E32A94700AC315D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B3112C1E32A94700AC315D /* AppDelegate.swift */; };
 		E4B3112F1E32A94700AC315D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B3112E1E32A94700AC315D /* ViewController.swift */; };
 		E4B311321E32A94700AC315D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4B311301E32A94700AC315D /* Main.storyboard */; };
@@ -15,6 +17,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E46CBFA91E32AB08005A2F45 /* VideoPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayer.swift; sourceTree = "<group>"; };
+		E46CBFAB1E32AB70005A2F45 /* AVPlayerViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVPlayerViewControllerExtension.swift; sourceTree = "<group>"; };
 		E4B311291E32A94700AC315D /* VideoPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B3112C1E32A94700AC315D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4B3112E1E32A94700AC315D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -60,6 +64,8 @@
 				E4B311331E32A94700AC315D /* Assets.xcassets */,
 				E4B311351E32A94700AC315D /* LaunchScreen.storyboard */,
 				E4B311381E32A94700AC315D /* Info.plist */,
+				E46CBFA91E32AB08005A2F45 /* VideoPlayer.swift */,
+				E46CBFAB1E32AB70005A2F45 /* AVPlayerViewControllerExtension.swift */,
 			);
 			path = VideoPlayer;
 			sourceTree = "<group>";
@@ -137,8 +143,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E46CBFAC1E32AB70005A2F45 /* AVPlayerViewControllerExtension.swift in Sources */,
 				E4B3112F1E32A94700AC315D /* ViewController.swift in Sources */,
 				E4B3112D1E32A94700AC315D /* AppDelegate.swift in Sources */,
+				E46CBFAA1E32AB08005A2F45 /* VideoPlayer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +310,7 @@
 				E4B3113D1E32A94700AC315D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
