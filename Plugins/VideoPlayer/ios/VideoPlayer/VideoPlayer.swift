@@ -5,40 +5,34 @@
 //  Created by Gary Griswold on 1/16/17.
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
-import UIKit // needed?
-import Foundation // needed?
 import AVFoundation
 import AVKit
 
 class VideoPlayer : NSObject {
-    let url: URL
-    let asset: AVAsset
-    let playerItem: AVPlayerItem
-    let player: AVPlayer
     let controller: AVPlayerViewController
     var timeObserverToken: Any?
     
     init(videoUrl: String, seekTime: Int64) {
-        self.url = URL(string: videoUrl)!
-        self.asset = AVAsset(url: self.url)
-        self.playerItem = AVPlayerItem(asset: self.asset)
+        let url = URL(string: videoUrl)!
+        let asset = AVAsset(url: url)
+        let playerItem = AVPlayerItem(asset: asset)
         if (seekTime > 0) {
             let time = CMTime(value: seekTime, timescale: 1)
-            self.playerItem.seek(to: time)
+            playerItem.seek(to: time)
         }
-        self.player = AVPlayer(playerItem: self.playerItem)
+        let player = AVPlayer(playerItem: playerItem)
         self.controller = AVPlayerViewController()
         self.controller.showsPlaybackControls = true
         self.controller.allowsPictureInPicturePlayback = false
         
         self.controller.initNotification()
-        self.controller.player = self.player
+        self.controller.player = player
         print("CONSTRUCTED")
     }
     deinit {
         // If a time observer exists, remove it
         if let token = self.timeObserverToken {
-            self.player.removeTimeObserver(token)
+            self.controller.player?.removeTimeObserver(token)
             self.timeObserverToken = nil
         }
     }
@@ -48,12 +42,12 @@ class VideoPlayer : NSObject {
                                          target: self, action: nil)//self.doneButtonClicked)
         self.controller.setToolbarItems([ doneButton ], animated: false)
         addPeriodicTimeObserver()
-        self.player.play()
-        //dumpAssetProperties()
-        //dumpPlayerItemProperties()
-        //dumpPlayerProperties()
-        //dumpControllerProperties()
-        dumpUIControllerProperties()
+        self.controller.player?.play()
+        dumpAssetProperties(asset: (self.controller.player?.currentItem?.asset)!)
+        dumpPlayerItemProperties(playerItem: (self.controller.player?.currentItem)!)
+        dumpPlayerProperties(player: (self.controller.player)!)
+        dumpControllerProperties(controller: self.controller)
+        dumpUIControllerProperties(controller: self.controller)
     }
     func addPeriodicTimeObserver() {
         let interval = CMTime(seconds: 5.0, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
@@ -61,7 +55,7 @@ class VideoPlayer : NSObject {
         let mainQueue = DispatchQueue.main
         // Add time observer
         self.timeObserverToken =
-            self.player.addPeriodicTimeObserver(forInterval: interval, queue: mainQueue) {
+            self.controller.player?.addPeriodicTimeObserver(forInterval: interval, queue: mainQueue) {
                 //[weak self] time in // needed if I reference self
                 time in
                 //print("TIME OBSERVER \(time)")
@@ -73,7 +67,7 @@ class VideoPlayer : NSObject {
     func doneButtonClicked() {
         
     }
-    func dumpAssetProperties() {
+    func dumpAssetProperties(asset: AVAsset) {
         print("duration=\(asset.duration)")
         print("preciseTiming=\(asset.providesPreciseDurationAndTiming)")
         print("create date=\(asset.creationDate)")
@@ -96,7 +90,7 @@ class VideoPlayer : NSObject {
         print("containsFragments=\(asset.containsFragments)")
         //print("overallDurationHint=\(asset.overallDurationHint)")
     }
-    func dumpPlayerItemProperties() {
+    func dumpPlayerItemProperties(playerItem: AVPlayerItem) {
         switch playerItem.status {
         case .unknown:
             print("playerItemStatus=.unknown")
@@ -134,7 +128,7 @@ class VideoPlayer : NSObject {
         //print("isApplicationAuthorizedForPlayback=\(playerItem.isApplicationAuthorizedForPlayback)")
         //print("isContentAuthorizedForPlayback=\(playerItem.isContentAuthorizedForPlayback)")
     }
-    func dumpPlayerProperties() {
+    func dumpPlayerProperties(player: AVPlayer) {
         print("rate=\(player.rate)")
         switch player.actionAtItemEnd {
         case .advance:
@@ -180,7 +174,7 @@ class VideoPlayer : NSObject {
         //        player.addPeriodicTimeObserver(forInterval: timeInterval, queue: timeQueue, using: @escaping())
         //        player.addBoundaryTimeObserver(forTimes: timeInterval, queue, timeQueue, using: @escaping())
     }
-    func dumpControllerProperties() {
+    func dumpControllerProperties(controller: AVPlayerViewController) {
         print("showsPlaybackControls=\(controller.showsPlaybackControls)")
         print("allowsPictureInPicturePlayback=\(controller.allowsPictureInPicturePlayback)")
         print("contentOverlayView=\(controller.contentOverlayView)")
@@ -188,7 +182,7 @@ class VideoPlayer : NSObject {
         print("videoBounds=\(controller.videoBounds)")
         print("videoGravity=\(controller.videoGravity)")
     }
-    func dumpUIControllerProperties() {
+    func dumpUIControllerProperties(controller: AVPlayerViewController) {
         print("prefersStatusBarHidden=\(controller.prefersStatusBarHidden)")
         print("modalPresentationCapturesStatusBarAppearance=\(controller.modalPresentationCapturesStatusBarAppearance)")
         print("toolBarItems=\(controller.toolbarItems)")
