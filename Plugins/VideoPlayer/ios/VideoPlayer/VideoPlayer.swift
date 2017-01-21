@@ -24,8 +24,7 @@ class VideoPlayer : NSObject {
         self.controller = AVPlayerViewController()
         self.controller.showsPlaybackControls = true
         self.controller.allowsPictureInPicturePlayback = false
-        
-        self.controller.initNotification()
+        self.controller.initNotifications()
         self.controller.player = player
         print("CONSTRUCTED")
     }
@@ -35,6 +34,7 @@ class VideoPlayer : NSObject {
             self.controller.player?.removeTimeObserver(token)
             self.timeObserverToken = nil
         }
+        self.controller.removeNotifications()
     }
     func begin() {
         print("START")
@@ -43,11 +43,12 @@ class VideoPlayer : NSObject {
         self.controller.setToolbarItems([ doneButton ], animated: false)
         addPeriodicTimeObserver()
         self.controller.player?.play()
-        dumpAssetProperties(asset: (self.controller.player?.currentItem?.asset)!)
-        dumpPlayerItemProperties(playerItem: (self.controller.player?.currentItem)!)
-        dumpPlayerProperties(player: (self.controller.player)!)
-        dumpControllerProperties(controller: self.controller)
-        dumpUIControllerProperties(controller: self.controller)
+        
+        //dumpAssetProperties(asset: (self.controller.player?.currentItem?.asset)!)
+        //dumpPlayerItemProperties(playerItem: (self.controller.player?.currentItem)!)
+        //dumpPlayerProperties(player: (self.controller.player)!)
+        //dumpControllerProperties(controller: self.controller)
+        //dumpUIControllerProperties(controller: self.controller)
     }
     func addPeriodicTimeObserver() {
         let interval = CMTime(seconds: 5.0, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
@@ -63,9 +64,6 @@ class VideoPlayer : NSObject {
                 print("TIME VALUE \(time.value) \(time.timescale)  \(time.value / Int64(time.timescale))")
                 // dispatch event to JS somehow
         }
-    }
-    func doneButtonClicked() {
-        
     }
     func dumpAssetProperties(asset: AVAsset) {
         print("duration=\(asset.duration)")

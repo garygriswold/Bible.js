@@ -14,6 +14,7 @@ class ViewController : UIViewController {
     
     override func loadView() {
         super.loadView()
+        print("\n****** loadView in ViewController")
         //let videoUrl: String = "https://s3.amazonaws.com/video-proto-out/andhls_0740.mp4.m3u8"
         let videoUrl: String = "https://arc.gt/jy7bi?apiSessionId=5880542ea3ec81.60338491"
         let seekSec: Int64 = 0
@@ -37,7 +38,12 @@ class ViewController : UIViewController {
         print("\n****** DidReceiveMemoryWarning in ViewController")
         // Dispose of any resources that can be recreated.
     }
-}
+    func releaseVideoPlayer() {
+        print("\n****** releaseViewController in ViewController")
+        self.videoPlayer?.controller.dismiss(animated: false)
+        self.videoPlayer = nil
+    }
+ }
 
 
 
