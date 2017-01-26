@@ -1,25 +1,22 @@
 package com.shortsands.videoplayer;
 
 import android.app.Activity;
-        import android.content.res.Configuration;
-        import android.graphics.Color;
-        import android.graphics.Point;
-        import android.media.MediaPlayer;
-        import android.widget.MediaController;
-        import android.content.Intent;
-        import android.content.pm.ActivityInfo;
-        import android.view.MotionEvent;
-        import android.net.Uri;
-        import android.os.Bundle;
-        import android.util.Log;
-        import android.view.Display;
-        import android.view.View;
-        import android.view.Window;
-        import android.view.WindowManager;
-        import android.widget.MediaController;
-        import android.widget.ProgressBar;
-        import android.widget.RelativeLayout;
-        import android.widget.VideoView;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.MediaController;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.VideoView;
 /**
  * Created by garygriswold on 1/26/17.
  * This is based up the following plugin:
@@ -29,12 +26,11 @@ public class VideoPlayer extends Activity implements
         MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener,
         MediaPlayer.OnErrorListener, MediaPlayer.OnBufferingUpdateListener {
     private String TAG = getClass().getSimpleName();
-    private VideoView mVideoView = null;
-    private MediaPlayer mMediaPlayer = null;
-    private MediaController mMediaController = null;
-    private ProgressBar mProgressBar = null;
-    private String mVideoUrl;
-    private Boolean mShouldAutoClose = true;
+    private VideoView videoView = null;
+    private MediaController mediaController = null;
+    private ProgressBar progressBar = null;
+    private String videoUrl;
+    private Boolean shouldAutoClose = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,27 +41,27 @@ public class VideoPlayer extends Activity implements
         //Bundle b = getIntent().getExtras();
         //mVideoUrl = b.getString("mediaUrl");
         //mShouldAutoClose = b.getBoolean("shouldAutoClose");
-        mVideoUrl = "https://arc.gt/1e62h?apiSessionId=587858aea460f2.62190595";
-        mShouldAutoClose = mShouldAutoClose == null ? true : mShouldAutoClose;
+        this.videoUrl = "https://arc.gt/1e62h?apiSessionId=587858aea460f2.62190595";
+        this.shouldAutoClose = this.shouldAutoClose == null ? true : this.shouldAutoClose;
 
         RelativeLayout relLayout = new RelativeLayout(this);
         relLayout.setBackgroundColor(Color.BLACK);
         RelativeLayout.LayoutParams relLayoutParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         relLayoutParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        mVideoView = new VideoView(this);
-        mVideoView.setLayoutParams(relLayoutParam);
-        relLayout.addView(mVideoView);
+        this.videoView = new VideoView(this);
+        this.videoView.setLayoutParams(relLayoutParam);
+        relLayout.addView(this.videoView);
 
         // Create progress throbber
-        mProgressBar = new ProgressBar(this);
-        mProgressBar.setIndeterminate(true);
+        this.progressBar = new ProgressBar(this);
+        this.progressBar.setIndeterminate(true);
         // Center the progress bar
         RelativeLayout.LayoutParams pblp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         pblp.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        mProgressBar.setLayoutParams(pblp);
+        this.progressBar.setLayoutParams(pblp);
         // Add progress throbber to view
-        relLayout.addView(mProgressBar);
-        mProgressBar.bringToFront();
+        relLayout.addView(this.progressBar);
+        this.progressBar.bringToFront();
 
         //setOrientation(b.getString("orientation"));
         setOrientation("landscape");
@@ -76,17 +72,17 @@ public class VideoPlayer extends Activity implements
     }
 
     private void play() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        Uri videoUri = Uri.parse(mVideoUrl);
+        this.progressBar.setVisibility(View.VISIBLE);
+        Uri videoUri = Uri.parse(this.videoUrl);
         try {
-            mVideoView.setOnCompletionListener(this);
-            mVideoView.setOnPreparedListener(this);
-            mVideoView.setOnErrorListener(this);
-            mVideoView.setVideoURI(videoUri);
-            mMediaController = new MediaController(this);
-            mMediaController.setAnchorView(mVideoView);
-            mMediaController.setMediaPlayer(mVideoView);
-            mVideoView.setMediaController(mMediaController);
+            this.videoView.setOnCompletionListener(this);
+            this.videoView.setOnPreparedListener(this);
+            this.videoView.setOnErrorListener(this);
+            this.videoView.setVideoURI(videoUri);
+            this.mediaController = new MediaController(this);
+            this.mediaController.setAnchorView(this.videoView);
+            this.mediaController.setMediaPlayer(this.videoView);
+            this.videoView.setMediaController(this.mediaController);
         } catch (Throwable t) {
             Log.d(TAG, t.toString());
         }
@@ -103,36 +99,35 @@ public class VideoPlayer extends Activity implements
     private Runnable checkIfPlaying = new Runnable() {
         @Override
         public void run() {
-            if (mVideoView.getCurrentPosition() > 0) {
+            if (videoView.getCurrentPosition() > 0) {
                 // Video is not at the very beginning anymore.
                 // Hide the progress bar.
-                mProgressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
             } else {
                 // Video is still at the very beginning.
                 // Check again after a small amount of time.
-                mVideoView.postDelayed(checkIfPlaying, 100);
+                videoView.postDelayed(checkIfPlaying, 100);
             }
         }
     };
 
     @Override
-    public void onPrepared(MediaPlayer mp) {
+    public void onPrepared(MediaPlayer mediaPlayer) {
         Log.d(TAG, "Stream is prepared");
-        mMediaPlayer = mp;
-        mMediaPlayer.setOnBufferingUpdateListener(this);
-        mVideoView.requestFocus();
-        mVideoView.start();
-        mVideoView.postDelayed(checkIfPlaying, 0);
+        mediaPlayer.setOnBufferingUpdateListener(this);
+        this.videoView.requestFocus();
+        this.videoView.start();
+        this.videoView.postDelayed(checkIfPlaying, 0);
     }
 
     private void pause() {
         Log.d(TAG, "Pausing video.");
-        mVideoView.pause();
+        this.videoView.pause();
     }
 
     private void stop() {
         Log.d(TAG, "Stopping video.");
-        mVideoView.stopPlayback();
+        this.videoView.stopPlayback();
     }
 
     @Override
@@ -148,14 +143,14 @@ public class VideoPlayer extends Activity implements
         finish();
     }
 
-    public void onCompletion(MediaPlayer mp) {
+    public void onCompletion(MediaPlayer mediaPlayer) {
         stop();
         if (mShouldAutoClose) {
             wrapItUp(RESULT_OK, null);
         }
     }
 
-    public boolean onError(MediaPlayer mp, int what, int extra) {
+    public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
         StringBuilder sb = new StringBuilder();
         sb.append("MediaPlayer Error: ");
         switch (what) {
@@ -181,7 +176,7 @@ public class VideoPlayer extends Activity implements
         return true;
     }
 
-    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+    public void onBufferingUpdate(MediaPlayer mediaPlayer, int percent) {
         Log.d(TAG, "onBufferingUpdate : " + percent + "%");
     }
 
@@ -199,8 +194,8 @@ public class VideoPlayer extends Activity implements
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (mMediaController != null)
-            mMediaController.show();
+        if (this.mediaController != null)
+            this.mediaController.show();
         return false;
     }
 }
