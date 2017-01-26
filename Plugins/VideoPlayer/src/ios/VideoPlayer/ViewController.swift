@@ -15,8 +15,9 @@ class ViewController : UIViewController {
     override func loadView() {
         super.loadView()
         print("\n****** loadView in ViewController")
-        //let videoUrl: String = "https://s3.amazonaws.com/video-proto-out/andhls_0740.mp4.m3u8"
-        let videoUrl: String = "https://arc.gt/jy7bi?apiSessionId=5880542ea3ec81.60338491"
+        //let videoUrl: String = "https://s3.amazonaws.com/video-proto-out/andhls_0740.mp4.m3u8" // Emmy
+        //let videoUrl: String = "https://arc.gt/jy7bi?apiSessionId=5880542ea3ec81.60338491" // Jesus for Children
+        let videoUrl: String = "https://arc.gt/n8pwj?apiSessionId=58866003a32df1.69855658" // Jesus Film
         let seekSec: Int64 = 0
         self.videoPlayer = VideoPlayer(videoUrl: videoUrl, seekTime: seekSec)
     }
