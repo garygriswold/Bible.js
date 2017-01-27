@@ -2,8 +2,6 @@ package com.shortsands.videoplayer;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -25,17 +23,17 @@ import android.widget.VideoView;
 public class VideoPlayer extends Activity implements
         MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener,
         MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener,
-        MediaPlayer.OnBufferingUpdateListener {
+        MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnBufferingUpdateListener {
     private String TAG = getClass().getSimpleName();
     private VideoView videoView = null;
     private MediaController mediaController = null;
     private ProgressBar progressBar = null;
+    private int currentPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate CALLED " + System.currentTimeMillis());
-        Log.d(TAG, "STATE " + savedInstanceState);
 
         //Bundle b = getIntent().getExtras();
         //mVideoUrl = b.getString("mediaUrl");
@@ -55,7 +53,7 @@ public class VideoPlayer extends Activity implements
         this.videoView.setLayoutParams(layoutParams);
         relativeLayout.addView(this.videoView);
 
-        // Create startup progress animation // Is there something simpler use to replace this?
+        // Create startup progress animation
         this.progressBar = new ProgressBar(this);
         this.progressBar.setIndeterminate(true);
         RelativeLayout.LayoutParams progLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -64,18 +62,25 @@ public class VideoPlayer extends Activity implements
         relativeLayout.addView(this.progressBar);
         this.progressBar.bringToFront();
 
-
-        //setContentView(relativeLayout, layoutParams);  // layoutParams seems redundant
         setContentView(relativeLayout);
-
-        //play();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart CALLED " + System.currentTimeMillis());
+        this.videoView.setOnPreparedListener(this);
+        this.videoView.setOnCompletionListener(this);
+        this.videoView.setOnInfoListener(this);
+        this.videoView.setOnErrorListener(this);
 
+        String url = "https://arc.gt/1e62h?apiSessionId=587858aea460f2.62190595";
+        Uri videoUri = Uri.parse(url);
+        this.videoView.setVideoURI(videoUri);
+        this.mediaController = new MediaController(this);
+        this.mediaController.setAnchorView(this.videoView);
+        this.mediaController.setMediaPlayer(this.videoView);
+        this.videoView.setMediaController(this.mediaController);
     }
 
     @Override
@@ -89,17 +94,17 @@ public class VideoPlayer extends Activity implements
         super.onResume();
         Log.d(TAG, "onResume CALLED " + System.currentTimeMillis());
         this.progressBar.setVisibility(View.VISIBLE);
-        play(); // where does this go in lifetime, it used to be after onCreate
+        if (this.currentPosition > 0) {
+            this.videoView.seekTo(this.currentPosition);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause CALLED " + System.currentTimeMillis());
-        // Should save state here, like current position
-        if (this.videoView != null) {
-            this.videoView.stopPlayback(); // is this really needed here?  When does onDestroy get called
-        }
+        this.currentPosition = this.videoView.getCurrentPosition();
+        this.videoView.stopPlayback();
     }
 
     @Override
@@ -112,41 +117,8 @@ public class VideoPlayer extends Activity implements
     protected void onDestroy() {
         Log.d(TAG, "onDestroy CALLED " + System.currentTimeMillis());
         super.onDestroy();
-        Exception ex = new Exception();
-        //Log.d(TAG, ex.getStackTrace().toString());
-        ex.printStackTrace();
-
-        Log.d(TAG, "onDestroy isFinishing " + this.isFinishing());
-        Log.d(TAG, "onDestroy isDestroyed " + this.isDestroyed());
     }
-
-    private void play() {
-        Log.d(TAG, "play CALLED");
-        //this.progressBar.setVisibility(View.VISIBLE);
-        String url = "https://arc.gt/1e62h?apiSessionId=587858aea460f2.62190595";
-        Uri videoUri = Uri.parse(url);
-        try {
-            Log.d(TAG, "set Callbacks");
-            this.videoView.setOnPreparedListener(this);
-            this.videoView.setOnCompletionListener(this);
-            this.videoView.setOnInfoListener(this);
-            this.videoView.setOnErrorListener(this);
-            Log.d(TAG, "setVideoURI");
-            this.videoView.setVideoURI(videoUri);
-            this.mediaController = new MediaController(this);
-            Log.d(TAG, "new MediaController");
-            this.mediaController.setAnchorView(this.videoView);
-            Log.d(TAG, "setAnchorView");
-            this.mediaController.setMediaPlayer(this.videoView);
-            Log.d(TAG, "setMediaPlayer");
-            this.videoView.setMediaController(this.mediaController);
-            Log.d(TAG, "setMediaController");
-        } catch (Throwable t) {
-            Log.d(TAG, "caught error");
-            Log.d(TAG, t.toString());
-        }
-    }
-
+/*
     private Runnable checkIfPlaying = new Runnable() {
         @Override
         public void run() {
@@ -161,22 +133,15 @@ public class VideoPlayer extends Activity implements
             }
         }
     };
-
-    @Override // why is this marked override?
+*/
     public void onPrepared(MediaPlayer mediaPlayer) {
-        Log.d(TAG, "Stream is prepared");
+        Log.d(TAG, "onPrepared CALLED " + System.currentTimeMillis());
         mediaPlayer.setOnBufferingUpdateListener(this);
+        mediaPlayer.setOnSeekCompleteListener(this);
         this.videoView.requestFocus();
         this.videoView.start();
-        this.videoView.postDelayed(checkIfPlaying, 0);
-    }
-
-    public void onCompletion(MediaPlayer mediaPlayer) {
-        Log.d(TAG, "onCompletion CALLED");
-        this.videoView.stopPlayback();
-        //if (this.shouldAutoClose) {
-        wrapItUp(RESULT_OK, null);
-        //}
+        //this.videoView.postDelayed(checkIfPlaying, 0);
+        this.progressBar.setVisibility(View.GONE);
     }
 
     public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
@@ -260,19 +225,21 @@ public class VideoPlayer extends Activity implements
         Log.d(TAG, "onBufferingUpdate : " + percent + "%");
     }
 
-    @Override // WHAT IS THIS
+    public void onSeekComplete(MediaPlayer mediaPlayer) {
+        Log.d(TAG, "onSeekComplete CALLED");
+    }
+
+    public void onCompletion(MediaPlayer mediaPlayer) {
+        Log.d(TAG, "onCompletion CALLED");
+        this.videoView.stopPlayback();
+        wrapItUp(RESULT_OK, null);
+    }
+
+    @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed CALLED");
         // If we're leaving, let's finish the activity
         wrapItUp(RESULT_OK, null);
-    }
-
-    private void wrapItUp(int resultCode, String message) {
-        Log.d(TAG, "wrapItUp CALLED");
-        Intent intent = new Intent();
-        intent.putExtra("message", message);
-        setResult(resultCode, intent);
-        finish();
     }
 
     @Override
@@ -281,5 +248,13 @@ public class VideoPlayer extends Activity implements
         if (this.mediaController != null)
             this.mediaController.show();
         return false;
+    }
+
+    private void wrapItUp(int resultCode, String message) {
+        Log.d(TAG, "wrapItUp CALLED");
+        Intent intent = new Intent();
+        intent.putExtra("message", message);
+        setResult(resultCode, intent);
+        finish(); // Calls OnDestroy
     }
 }
