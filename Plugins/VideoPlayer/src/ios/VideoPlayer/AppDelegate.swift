@@ -1,17 +1,17 @@
-//
-//  AppDelegate.swift
-//  VideoPlayer
-//
-//  Created by Gary Griswold on 1/16/17.
-//  Copyright © 2017 ShortSands. All rights reserved.
-//
+/**
+ *  AppDelegate.swift
+ *  VideoPlayer
+ *
+ *  Created by Gary Griswold on 1/16/17.
+ *  Copyright © 2017 ShortSands. All rights reserved.
+ */
 import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    var viewController: ViewController = ViewController()
+    var viewController: VideoViewController = VideoViewController()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         self.window = self.window ?? UIWindow()

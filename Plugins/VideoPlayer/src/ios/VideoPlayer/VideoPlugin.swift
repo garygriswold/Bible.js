@@ -7,7 +7,7 @@
 @objc(VideoPlugin) class VideoPlugin : CDVPlugin {
 	
 	var window: UIWindow?
-    var viewController: ViewController = ViewController()
+    var videoViewController: VideoViewController = VideoViewController()
 	
 	@objc(present:) func present(command: CDVInvokedUrlCommand) {
 		
@@ -21,7 +21,7 @@
 		//self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
 		
         self.window = self.window ?? UIWindow()
-        self.window!.rootViewController = viewController
+        self.window!.rootViewController = videoViewController
         self.window!.makeKeyAndVisible()
 	}
 }

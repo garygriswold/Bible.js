@@ -1,10 +1,13 @@
-//
-//  VideoPlayer.swift
-//  VideoPlayer
-//
-//  Created by Gary Griswold on 1/16/17.
-//  Copyright © 2017 ShortSands. All rights reserved.
-//
+/**
+ *  VideoPlayer.swift
+ *  VideoPlayer
+ *
+ *  Created by Gary Griswold on 1/16/17.
+ *  Copyright © 2017 ShortSands. All rights reserved.
+ *  Created by garygriswold on 1/26/17.
+ *  This is based up the following plugin:
+ *  https://github.com/nchutchind/cordova-plugin-streaming-media
+ */
 import AVFoundation
 import AVKit
 

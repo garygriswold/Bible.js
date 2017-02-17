@@ -10,7 +10,7 @@
     	<engine name="cordova" version=">=6.0.0"/>
 	</engines>
 
-	<js-module src="www/VideoPlayer.js" name="VideoPlayer">
+	<js-module name="VideoPlayer" src="www/VideoPlayer.js">
     	<clobbers target="window.VideoPlayer" />
 	</js-module>
 
@@ -28,7 +28,7 @@
 		<source-file src="src/ios/VideoPlayer/VideoPlugin.swift" target-dir="src/videoplayer" />
 		<source-file src="src/ios/VideoPlayer/AVPlayerViewControllerExtension.swift" target-dir="src/videoplayer" />
 		<source-file src="src/ios/VideoPlayer/VideoPlayer.swift" target-dir="src/videoplayer" />
-		<source-file src="src/ios/VideoPlayer/ViewController.swift" target-dir="src/videoplayer" />
+		<source-file src="src/ios/VideoPlayer/VideoViewController.swift" target-dir="src/videoplayer" />
 		<config-file target="config.xml" parent="/*">
 	    	<feature name="VideoPlayer">
 				<param name="ios-package" value="VideoPlayer" />

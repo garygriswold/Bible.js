@@ -1,10 +1,10 @@
-//
-//  AVPlayerViewControllerExtension.swift
-//  VideoPlayer
-//
-//  Created by Gary Griswold on 1/27/17.
-//  Copyright © 2017 ShortSands. All rights reserved.
-//
+/**
+ *  AVPlayerViewControllerExtension.swift
+ *  VideoPlayer
+ *
+ *  Created by Gary Griswold on 1/27/17.
+ *  Copyright © 2017 ShortSands. All rights reserved.
+ */
 import AVKit
 
 extension AVPlayerViewController {
@@ -17,7 +17,7 @@ extension AVPlayerViewController {
     override open func viewWillDisappear(_ animated: Bool) {
         print("\n********** VIEW WILL DISAPPEAR ***** in AVPlayerViewController")
         super.viewWillDisappear(animated)
-        (self.presentingViewController as! ViewController).releaseVideoPlayer()
+        (self.presentingViewController as! VideoViewController).releaseVideoPlayer()
     }
     func initNotifications() {
         NotificationCenter.default.addObserver(self,

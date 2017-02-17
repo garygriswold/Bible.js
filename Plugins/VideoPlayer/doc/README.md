@@ -24,4 +24,10 @@ Getting it to run
 	#import <AVKit/AVKit.h>
 	#import <UIKit/UIKit.h>
 	
+	Removed unused functions that require ios 9 or 10.
+	
+	Renamed ViewController to VideoViewController
+	
+	?? console logging is not working ??
+	
 	
