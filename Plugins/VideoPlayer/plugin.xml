@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="com-shortsands-videoplayer"
+    version="0.0.1">
+	<name>VideoPlayer</name>
+	<description>Plugin to Access Native Video Player</description>
+	<author>Gary Griswold</author>
+	<engines>
+    	<engine name="cordova" version=">=6.0.0"/>
+	</engines>
+
+	<js-module src="www/VideoPlayer.js" name="VideoPlayer">
+    	<clobbers target="window.VideoPlayer" />
+	</js-module>
+
+	<platform name="android">
+		<source-file src="src/android/VideoPlayer/app/src/main/java/com/shortsands/videoplayer/VideoPlugin.java" target-dir="src/com/shortsands/videoplayer" />
+		<source-file src="src/android/VideoPlayer/app/src/main/java/com/shortsands/videoplayer/VideoPlayer.java" target-dir="src/com/shortsands/videoplayer" />
+    	<config-file target="res/xml/config.xml" parent="/*">
+			<feature name="VideoPlayer">
+				<param name="android-package" value="com.shortsands.videoplayer.VideoPlayer"/>
+			</feature>
+		</config-file>
+	</platform>
+  
+	<platform name="ios">
+		<source-file src="src/ios/VideoPlayer/VideoPlugin.swift" target-dir="src/videoplayer" />
+		<source-file src="src/ios/VideoPlayer/AVPlayerViewControllerExtension.swift" target-dir="src/videoplayer" />
+		<source-file src="src/ios/VideoPlayer/VideoPlayer.swift" target-dir="src/videoplayer" />
+		<source-file src="src/ios/VideoPlayer/ViewController.swift" target-dir="src/videoplayer" />
+		<config-file target="config.xml" parent="/*">
+	    	<feature name="VideoPlayer">
+				<param name="ios-package" value="VideoPlayer" />
+			</feature>
+		</config-file>
+		<config-file target="*-Info.plist" parent="CFBundleURLTypes">
+		    <dict>
+				<key>NSAppTransportSecurity</key>
+				<dict>
+					<key>NSExceptionDomains</key>
+					<dict>
+						<key>brightcove.com</key>
+						<dict>
+							<key>NSIncludesSubdomains</key>
+							<true/>
+							<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+							<true/>
+						</dict>
+						<key>akamaihd.net</key>
+						<dict>
+							<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+							<true/>
+							<key>NSIncludesSubdomains</key>
+							<true/>
+						</dict>
+					</dict>
+					<key>NSAllowsArbitraryLoadsInWebContent</key>
+					<false/>
+				</dict>
+		    </dict>
+		</config-file>
+	</platform>
+
+</plugin>

@@ -23,7 +23,6 @@ class VideoPlayer : NSObject {
         let player = AVPlayer(playerItem: playerItem)
         self.controller = AVPlayerViewController()
         self.controller.showsPlaybackControls = true
-        self.controller.allowsPictureInPicturePlayback = false
         self.controller.initNotifications()
         self.controller.player = player
         print("CONSTRUCTED")
@@ -77,16 +76,12 @@ class VideoPlayer : NSObject {
         print("isReadable=\(asset.isReadable)")
         print("isComposable=\(asset.isComposable)")
         print("hasProtectedContent=\(asset.hasProtectedContent)")
-        print("isCompatibleWithAirPlay=\(asset.isCompatibleWithAirPlayVideo)")
         for track in asset.tracks {
             print("track=\(track)")
         }
         print("metaData=\(asset.metadata)")
         print("availableMediaChar=\(asset.availableMediaCharacteristicsWithMediaSelectionOptions)")
         print("referenceRestrictions=\(asset.referenceRestrictions)")
-        print("canContainFragments=\(asset.canContainFragments)")
-        print("containsFragments=\(asset.containsFragments)")
-        //print("overallDurationHint=\(asset.overallDurationHint)")
     }
     func dumpPlayerItemProperties(playerItem: AVPlayerItem) {
         switch playerItem.status {
@@ -97,7 +92,6 @@ class VideoPlayer : NSObject {
         case .failed:
             print("playerItemStatus=.failed")
         }
-        //print("status=\(playerItem.status)")
         print("duration=\(playerItem.duration)")
         print("timebase=\(playerItem.timebase)")
         print("presentationSize=\(playerItem.presentationSize)")
@@ -117,14 +111,9 @@ class VideoPlayer : NSObject {
         print("forwardPlaybackEndTime=\(playerItem.forwardPlaybackEndTime)")
         print("reversePlaybackEndTime=\(playerItem.reversePlaybackEndTime)")
         print("preferredPeakBitRate=\(playerItem.preferredPeakBitRate)")
-        print("preferredForwardBufferDuration=\(playerItem.preferredForwardBufferDuration)")
-        print("canUseNetworkResourcesForLiveStreamingWhilePaused=" +
-            "\(playerItem.canUseNetworkResourcesForLiveStreamingWhilePaused)")
         print("videoComposition=\(playerItem.videoComposition)")
         print("accessLog=\(playerItem.accessLog())")
         print("errorLog=\(playerItem.errorLog())")
-        //print("isApplicationAuthorizedForPlayback=\(playerItem.isApplicationAuthorizedForPlayback)")
-        //print("isContentAuthorizedForPlayback=\(playerItem.isContentAuthorizedForPlayback)")
     }
     func dumpPlayerProperties(player: AVPlayer) {
         print("rate=\(player.rate)")
@@ -135,20 +124,7 @@ class VideoPlayer : NSObject {
             print("actionAtItemEnd=.pause")
         case .none:
             print("actionAtItemEnd=.none")
-            //default:
-            //    print("actionAtItemEnd=unknown(invalid)")
         }
-        print("automaticallyWaitsToMinimizeStalling=\(player.automaticallyWaitsToMinimizeStalling)")
-        print("reasonForWaitingToPlay=\(player.reasonForWaitingToPlay)")
-        switch player.timeControlStatus {
-        case .paused:
-            print("timeControlStatus=.paused")
-        case .playing:
-            print("timeControlStatus=.playing")
-        case .waitingToPlayAtSpecifiedRate:
-            print("timeControlStatus=.waitingToPlayAtSpecifiedRate")
-        }
-        //print("timeControlStatus=\(player.timeControlStatus)")
         print("currentTime=\(player.currentTime())")
         print("isClosedCaptionDisplayEnabled=\(player.isClosedCaptionDisplayEnabled)")
         print("allowsExternalPlayback=\(player.allowsExternalPlayback)")
@@ -165,16 +141,11 @@ class VideoPlayer : NSObject {
         case .failed:
             print("playerStatus=.failed")
         }
-        //print("status=\(player.status)")
         print("error=\(player.error)")
         print("currentItem=\(player.currentItem)")
-        //        let timeInterval = CTTime(10)
-        //        player.addPeriodicTimeObserver(forInterval: timeInterval, queue: timeQueue, using: @escaping())
-        //        player.addBoundaryTimeObserver(forTimes: timeInterval, queue, timeQueue, using: @escaping())
     }
     func dumpControllerProperties(controller: AVPlayerViewController) {
         print("showsPlaybackControls=\(controller.showsPlaybackControls)")
-        print("allowsPictureInPicturePlayback=\(controller.allowsPictureInPicturePlayback)")
         print("contentOverlayView=\(controller.contentOverlayView)")
         print("isReadyForDisplay=\(controller.isReadyForDisplay)")
         print("videoBounds=\(controller.videoBounds)")
