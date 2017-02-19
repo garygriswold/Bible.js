@@ -1,260 +1,88 @@
+/**
+* This class is the cordova native interface code that calls the VideoPlayer.
+* It deliberately contains as little logic as possible so that the VideoPlayer
+* can be unit tested as an Android Studio project.
+*/
 package com.shortsands.videoplayer;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.MediaPlayer;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.MediaController;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.VideoView;
-/**
- * Created by garygriswold on 1/26/17.
- * This is based up the following plugin:
- * https://github.com/nchutchind/cordova-plugin-streaming-media
- */
-public class VideoPlayer extends Activity implements
-        MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener,
-        MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener,
-        MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnBufferingUpdateListener {
-    private String TAG = getClass().getSimpleName();
-    private VideoView videoView = null;
-    private MediaController mediaController = null;
-    private ProgressBar progressBar = null;
-    private int currentPosition = 0;
+import java.lang.reflect.Method;
+import java.util.Iterator;
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.PluginResult;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate CALLED " + System.currentTimeMillis());
+public class VideoPlayer extends CordovaPlugin {
 
-        //Bundle b = getIntent().getExtras();
-        //mVideoUrl = b.getString("mediaUrl");
-        //mShouldAutoClose = b.getBoolean("shouldAutoClose");
-        //this.videoUrl = "https://arc.gt/1e62h?apiSessionId=587858aea460f2.62190595";
-        //this.shouldAutoClose = this.shouldAutoClose == null ? true : this.shouldAutoClose;
+	private static final int ACTIVITY_CODE_PLAY_MEDIA = 7;
 
-        Window window = this.getWindow();
-        window.requestFeature(Window.FEATURE_NO_TITLE);
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+	private CallbackContext callbackContext;
 
-        RelativeLayout relativeLayout = new RelativeLayout(this);
-        relativeLayout.setBackgroundColor(Color.BLACK);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        this.videoView = new VideoView(this);
-        this.videoView.setLayoutParams(layoutParams);
-        relativeLayout.addView(this.videoView);
+	private static final String TAG = "VideoPlayer";
+	
+	@Override
+	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+    	super.initialize(cordova, webView);
+		// your init code here
+	}
 
-        // Create startup progress animation
-        this.progressBar = new ProgressBar(this);
-        this.progressBar.setIndeterminate(true);
-        RelativeLayout.LayoutParams progLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        progLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        this.progressBar.setLayoutParams(progLayout);
-        relativeLayout.addView(this.progressBar);
-        this.progressBar.bringToFront();
+	@Override
+	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+		Log.d(TAG, "*** INSIDE VIDEO PLUGIN PRESENT");
+		this.callbackContext = callbackContext;
+		JSONObject options = null;
 
-        setContentView(relativeLayout);
-    }
+		if (action.equals("present")) {
+			return present(VideoActivity.class, args.getString(0));
+		} else {
+			callbackContext.error("VideoPlayer." + action + " is not a supported method.");
+			return false;			
+		}
+	}
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart CALLED " + System.currentTimeMillis());
-        this.videoView.setOnPreparedListener(this);
-        this.videoView.setOnCompletionListener(this);
-        this.videoView.setOnInfoListener(this);
-        this.videoView.setOnErrorListener(this);
+	private boolean present(final Class activityClass, final String url) {
+		final CordovaInterface cordovaObj = cordova;
+		final CordovaPlugin plugin = this;
+		
+		Method[] array = activityClass.getMethods();
 
-        String url = "https://arc.gt/1e62h?apiSessionId=587858aea460f2.62190595";
-        Uri videoUri = Uri.parse(url);
-        this.videoView.setVideoURI(videoUri);
-        this.mediaController = new MediaController(this);
-        this.mediaController.setAnchorView(this.videoView);
-        this.mediaController.setMediaPlayer(this.videoView);
-        this.videoView.setMediaController(this.mediaController);
-    }
+		cordova.getActivity().runOnUiThread(new Runnable() {
+			public void run() {
+				final Intent videoIntent = new Intent(cordovaObj.getActivity().getApplicationContext(), activityClass);
+				Bundle extras = new Bundle();
+				extras.putString("videoUrl", url);
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d(TAG, "onRestart CALLED " + System.currentTimeMillis());
-    }
+				cordovaObj.startActivityForResult(plugin, videoIntent, ACTIVITY_CODE_PLAY_MEDIA);
+			}
+		});
+		return true;
+	}
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume CALLED " + System.currentTimeMillis());
-        this.progressBar.setVisibility(View.VISIBLE);
-        if (this.currentPosition > 0) {
-            this.videoView.seekTo(this.currentPosition);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause CALLED " + System.currentTimeMillis());
-        this.currentPosition = this.videoView.getCurrentPosition();
-        this.videoView.stopPlayback();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop CALLED " + System.currentTimeMillis());
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG, "onDestroy CALLED " + System.currentTimeMillis());
-        super.onDestroy();
-    }
-/*
-    private Runnable checkIfPlaying = new Runnable() {
-        @Override
-        public void run() {
-            if (videoView.getCurrentPosition() > 0) {
-                // Video is not at the very beginning anymore.
-                // Hide the progress bar.
-                progressBar.setVisibility(View.GONE);
-            } else {
-                // Video is still at the very beginning.
-                // Check again after a small amount of time.
-                videoView.postDelayed(checkIfPlaying, 100);
-            }
-        }
-    };
-*/
-    public void onPrepared(MediaPlayer mediaPlayer) {
-        Log.d(TAG, "onPrepared CALLED " + System.currentTimeMillis());
-        mediaPlayer.setOnBufferingUpdateListener(this);
-        mediaPlayer.setOnSeekCompleteListener(this);
-        this.videoView.requestFocus();
-        this.videoView.start();
-        //this.videoView.postDelayed(checkIfPlaying, 0);
-        this.progressBar.setVisibility(View.GONE);
-    }
-
-    public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
-        String message = "";
-        switch (what) {
-            case MediaPlayer.MEDIA_ERROR_IO:
-                message = "MEDIA ERROR IO";
-                break;
-            case MediaPlayer.MEDIA_ERROR_MALFORMED:
-                message = "MEDIA ERROR MALFORMED";
-                break;
-            case MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK:
-                message = "MEDIA ERROR NOT VALID FOR PROGRESSIVE PLAYBACK";
-                break;
-            case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
-                message = "MEDIA ERROR SERVER DIED";
-                break;
-            case MediaPlayer.MEDIA_ERROR_TIMED_OUT:
-                message = "MEDIA ERROR TIMED OUT";
-                break;
-            case MediaPlayer.MEDIA_ERROR_UNKNOWN:
-                message = "MEDIA ERROR UNKNOWN";
-                break;
-            case MediaPlayer.MEDIA_ERROR_UNSUPPORTED:
-                message = "MEDIA ERROR UNKNOWN";
-                break;
-            default:
-                message = "Unknown Error " + what;
-        }
-        Log.e(TAG, "onError " + message + " " + extra);
-
-        wrapItUp(RESULT_CANCELED, message);
-        return true;
-    }
-
-    public boolean onInfo(MediaPlayer mediaPlayer, int what, int extra) {
-        String message = "";
-        switch(what) {
-            case MediaPlayer.MEDIA_INFO_UNKNOWN:
-                message = "MEDIA INFO UNKNOWN";
-                break;
-            case MediaPlayer.MEDIA_INFO_VIDEO_TRACK_LAGGING:
-                message = "MEDIA INFO VIDEO TRACK LAGGING";
-                break;
-            case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
-                message = "MEDIA INFO VIDEO RENDERING START";
-                break;
-            case MediaPlayer.MEDIA_INFO_BUFFERING_START:
-                message = "MEDIA INFO BUFFERING START";
-                break;
-            case MediaPlayer.MEDIA_INFO_BUFFERING_END:
-                message = "MEDIA INFO BUFFERING END";
-                break;
-            //case MediaPlayer.MEDIA_INFO_NETWORK_BANDWIDTH:
-            //    //(703) - bandwidth information is available (as extra kbps)
-            //    break;
-            case MediaPlayer.MEDIA_INFO_BAD_INTERLEAVING:
-                message = "MEDIA INFO BAD INTERLEAVING";
-                break;
-            case MediaPlayer.MEDIA_INFO_NOT_SEEKABLE:
-                message = "MEDIA INFO NOT SEEKABLE";
-                break;
-            case MediaPlayer.MEDIA_INFO_METADATA_UPDATE:
-                message = "MEDIA INFO METADATA UPDATE";
-                break;
-            case MediaPlayer.MEDIA_INFO_UNSUPPORTED_SUBTITLE:
-                message = "MEDIA INFO UNSUPPORTED SUBTITLE";
-                break;
-            case MediaPlayer.MEDIA_INFO_SUBTITLE_TIMED_OUT:
-                message = "MEDIA INFO SUBTITLE TIMED OUT";
-                break;
-            default:
-                message = "Unknown Info " + what;
-                break;
-        }
-        Log.d(TAG, "onInfo " + message + " " + extra);
-        return(true);
-    }
-
-    public void onBufferingUpdate(MediaPlayer mediaPlayer, int percent) {
-        Log.d(TAG, "onBufferingUpdate : " + percent + "%");
-    }
-
-    public void onSeekComplete(MediaPlayer mediaPlayer) {
-        Log.d(TAG, "onSeekComplete CALLED");
-    }
-
-    public void onCompletion(MediaPlayer mediaPlayer) {
-        Log.d(TAG, "onCompletion CALLED");
-        this.videoView.stopPlayback();
-        wrapItUp(RESULT_OK, null);
-    }
-
-    @Override
-    public void onBackPressed() {
-        Log.d(TAG, "onBackPressed CALLED");
-        // If we're leaving, let's finish the activity
-        wrapItUp(RESULT_OK, null);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        Log.d(TAG, "onTouchEvent CALLED");
-        if (this.mediaController != null)
-            this.mediaController.show();
-        return false;
-    }
-
-    private void wrapItUp(int resultCode, String message) {
-        Log.d(TAG, "wrapItUp CALLED");
-        Intent intent = new Intent();
-        intent.putExtra("message", message);
-        setResult(resultCode, intent);
-        finish(); // Calls OnDestroy
-    }
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		Log.v(TAG, "onActivityResult: " + requestCode + " " + resultCode);
+		super.onActivityResult(requestCode, resultCode, intent);
+		if (ACTIVITY_CODE_PLAY_MEDIA == requestCode) {
+			if (Activity.RESULT_OK == resultCode) {
+				this.callbackContext.success();
+			} else if (Activity.RESULT_CANCELED == resultCode) {
+				String errMsg = "Error";
+				if (intent != null && intent.hasExtra("message")) {
+					errMsg = intent.getStringExtra("message");
+				}
+				this.callbackContext.error(errMsg);
+			}
+		}
+	}
 }
+
