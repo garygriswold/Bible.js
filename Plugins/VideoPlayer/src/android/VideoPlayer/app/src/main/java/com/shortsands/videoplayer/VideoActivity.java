@@ -35,10 +35,6 @@ public class VideoActivity extends Activity implements
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate CALLED " + System.currentTimeMillis());
 
-        //Bundle b = getIntent().getExtras();
-        //mVideoUrl = b.getString("mediaUrl");
-        //mShouldAutoClose = b.getBoolean("shouldAutoClose");
-        //this.videoUrl = "https://arc.gt/1e62h?apiSessionId=587858aea460f2.62190595";
         //this.shouldAutoClose = this.shouldAutoClose == null ? true : this.shouldAutoClose;
 
         Window window = this.getWindow();
@@ -74,8 +70,12 @@ public class VideoActivity extends Activity implements
         //this.videoView.setOnInfoListener(this); requires SDK 17
         this.videoView.setOnErrorListener(this);
 
-        String url = "https://arc.gt/1e62h?apiSessionId=587858aea460f2.62190595";
-        Uri videoUri = Uri.parse(url);
+        Bundle bundle = getIntent().getExtras();
+        String videoUrl = bundle.getString("videoUrl");
+        int seekSec = bundle.getInt("seekSec");
+        this.currentPosition = seekSec * 1000;
+        
+        Uri videoUri = Uri.parse(videoUrl);
         this.videoView.setVideoURI(videoUri);
         this.mediaController = new MediaController(this);
         this.mediaController.setAnchorView(this.videoView);
@@ -94,9 +94,9 @@ public class VideoActivity extends Activity implements
         super.onResume();
         Log.d(TAG, "onResume CALLED " + System.currentTimeMillis());
         this.progressBar.setVisibility(View.VISIBLE);
-        if (this.currentPosition > 0) {
-            this.videoView.seekTo(this.currentPosition);
-        }
+        //if (this.currentPosition > 0) {
+            //this.videoView.seekTo(this.currentPosition);  This prevents class from working, where does it go?
+        //}
     }
 
     @Override
@@ -118,34 +118,32 @@ public class VideoActivity extends Activity implements
         Log.d(TAG, "onDestroy CALLED " + System.currentTimeMillis());
         super.onDestroy();
     }
-/*
-    private Runnable checkIfPlaying = new Runnable() {
-        @Override
-        public void run() {
-            if (videoView.getCurrentPosition() > 0) {
-                // Video is not at the very beginning anymore.
-                // Hide the progress bar.
-                progressBar.setVisibility(View.GONE);
-            } else {
-                // Video is still at the very beginning.
-                // Check again after a small amount of time.
-                videoView.postDelayed(checkIfPlaying, 100);
-            }
-        }
-    };
-*/
+
     public void onPrepared(MediaPlayer mediaPlayer) {
         Log.d(TAG, "onPrepared CALLED " + System.currentTimeMillis());
         mediaPlayer.setOnBufferingUpdateListener(this);
-        mediaPlayer.setOnSeekCompleteListener(this);
-        this.videoView.requestFocus();
-        this.videoView.start();
-        //this.videoView.postDelayed(checkIfPlaying, 0);
-        this.progressBar.setVisibility(View.GONE);
+        if (this.currentPosition > 0) {
+	        mediaPlayer.setOnSeekCompleteListener(this);
+	        this.videoView.seekTo(this.currentPosition);
+        } else {
+	        this.actualStartVideo();
+        }
+    }
+    
+    public void onSeekComplete(MediaPlayer mediaPlayer) {
+        Log.d(TAG, "onSeekComplete CALLED " + System.currentTimeMillis());
+        this.actualStartVideo();
+    }
+    
+    private void actualStartVideo() {
+	    Log.d(TAG, "actualStartVideo " + System.currentTimeMillis());
+	    this.videoView.requestFocus();
+	    this.videoView.start();
+	    this.progressBar.setVisibility(View.GONE);
     }
 
     public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
-        String message = "";
+        String message;
         switch (what) {
             case MediaPlayer.MEDIA_ERROR_IO:
                 message = "MEDIA ERROR IO";
@@ -178,7 +176,7 @@ public class VideoActivity extends Activity implements
     }
 
     public boolean onInfo(MediaPlayer mediaPlayer, int what, int extra) {
-        String message = "";
+        String message;
         switch(what) {
             case MediaPlayer.MEDIA_INFO_UNKNOWN:
                 message = "MEDIA INFO UNKNOWN";
@@ -223,10 +221,6 @@ public class VideoActivity extends Activity implements
 
     public void onBufferingUpdate(MediaPlayer mediaPlayer, int percent) {
         Log.d(TAG, "onBufferingUpdate : " + percent + "%");
-    }
-
-    public void onSeekComplete(MediaPlayer mediaPlayer) {
-        Log.d(TAG, "onSeekComplete CALLED");
     }
 
     public void onCompletion(MediaPlayer mediaPlayer) {

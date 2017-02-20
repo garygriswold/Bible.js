@@ -6,14 +6,9 @@
 package com.shortsands.videoplayer;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import java.lang.reflect.Method;
-import java.util.Iterator;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
@@ -41,32 +36,30 @@ public class VideoPlayer extends CordovaPlugin {
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 		Log.d(TAG, "*** INSIDE VIDEO PLUGIN PRESENT");
 		this.callbackContext = callbackContext;
-		JSONObject options = null;
 
 		if (action.equals("present")) {
-			return present(VideoActivity.class, args.getString(0));
+			present(args.getString(0), args.getInt(1));
+			return true;
 		} else {
 			callbackContext.error("VideoPlayer." + action + " is not a supported method.");
 			return false;			
 		}
 	}
 
-	private boolean present(final Class activityClass, final String url) {
-		final CordovaInterface cordovaObj = cordova;
+	private void present(final String url, final int seekSec) {
+		//final CordovaInterface cordovaObj = cordova;
 		final CordovaPlugin plugin = this;
-		
-		Method[] array = activityClass.getMethods();
 
 		cordova.getActivity().runOnUiThread(new Runnable() {
 			public void run() {
-				final Intent videoIntent = new Intent(cordovaObj.getActivity().getApplicationContext(), activityClass);
+				final Intent videoIntent = new Intent(cordova.getActivity().getApplicationContext(), VideoActivity.class);
 				Bundle extras = new Bundle();
 				extras.putString("videoUrl", url);
-
-				cordovaObj.startActivityForResult(plugin, videoIntent, ACTIVITY_CODE_PLAY_MEDIA);
+				extras.putInt("seekSec", seekSec);
+                videoIntent.putExtras(extras);
+				cordova.startActivityForResult(plugin, videoIntent, ACTIVITY_CODE_PLAY_MEDIA);
 			}
 		});
-		return true;
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
