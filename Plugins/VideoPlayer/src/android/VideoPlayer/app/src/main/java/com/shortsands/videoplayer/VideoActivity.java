@@ -24,10 +24,13 @@ public class VideoActivity extends Activity implements
         MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener,
         MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener,
         MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnBufferingUpdateListener {
-    private String TAG = getClass().getSimpleName();
-    private VideoView videoView = null;
-    private MediaController mediaController = null;
-    private ProgressBar progressBar = null;
+    private final static String TAG = "VideoActivity";
+    private VideoView videoView;
+    private MediaController mediaController;
+    private MediaPlayer mediaPlayer;
+    private ProgressBar progressBar;
+    private String videoUrl;
+    private Uri videoUri;
     private int currentPosition = 0;
 
     @Override
@@ -45,6 +48,7 @@ public class VideoActivity extends Activity implements
         relativeLayout.setBackgroundColor(Color.BLACK);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+
         this.videoView = new VideoView(this);
         this.videoView.setLayoutParams(layoutParams);
         relativeLayout.addView(this.videoView);
@@ -59,24 +63,19 @@ public class VideoActivity extends Activity implements
         this.progressBar.bringToFront();
 
         setContentView(relativeLayout);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart CALLED " + System.currentTimeMillis());
+        
+        Bundle bundle = getIntent().getExtras();
+        this.videoUrl = bundle.getString("videoUrl");
+        this.videoUri = Uri.parse(videoUrl);
+        int seekSec = bundle.getInt("seekSec");
+        this.currentPosition = seekSec * 1000;
+        
         this.videoView.setOnPreparedListener(this);
         this.videoView.setOnCompletionListener(this);
         //this.videoView.setOnInfoListener(this); requires SDK 17
         this.videoView.setOnErrorListener(this);
-
-        Bundle bundle = getIntent().getExtras();
-        String videoUrl = bundle.getString("videoUrl");
-        int seekSec = bundle.getInt("seekSec");
-        this.currentPosition = seekSec * 1000;
         
-        Uri videoUri = Uri.parse(videoUrl);
-        this.videoView.setVideoURI(videoUri);
+        //this.videoView.setVideoURI(videoUri);
         this.mediaController = new MediaController(this);
         this.mediaController.setAnchorView(this.videoView);
         this.mediaController.setMediaPlayer(this.videoView);
@@ -88,15 +87,19 @@ public class VideoActivity extends Activity implements
         super.onRestart();
         Log.d(TAG, "onRestart CALLED " + System.currentTimeMillis());
     }
+    
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart CALLED " + System.currentTimeMillis());
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume CALLED " + System.currentTimeMillis());
         this.progressBar.setVisibility(View.VISIBLE);
-        //if (this.currentPosition > 0) {
-            //this.videoView.seekTo(this.currentPosition);  This prevents class from working, where does it go?
-        //}
+        this.videoView.setVideoURI(this.videoUri);
     }
 
     @Override
@@ -105,6 +108,10 @@ public class VideoActivity extends Activity implements
         Log.d(TAG, "onPause CALLED " + System.currentTimeMillis());
         this.currentPosition = this.videoView.getCurrentPosition();
         this.videoView.stopPlayback();
+        if (this.mediaPlayer != null) {
+        	this.mediaPlayer.release();
+        	this.mediaPlayer = null;
+        }
     }
 
     @Override
@@ -115,22 +122,25 @@ public class VideoActivity extends Activity implements
 
     @Override
     protected void onDestroy() {
+	   	super.onDestroy();
         Log.d(TAG, "onDestroy CALLED " + System.currentTimeMillis());
-        super.onDestroy();
     }
 
-    public void onPrepared(MediaPlayer mediaPlayer) {
+	@Override
+    public void onPrepared(MediaPlayer mp) {
         Log.d(TAG, "onPrepared CALLED " + System.currentTimeMillis());
-        mediaPlayer.setOnBufferingUpdateListener(this);
+        this.mediaPlayer = mp;
+        this.mediaPlayer.setOnBufferingUpdateListener(this);
+	    this.videoView.start();
         if (this.currentPosition > 0) {
-	        mediaPlayer.setOnSeekCompleteListener(this);
+	       	this.mediaPlayer.setOnSeekCompleteListener(this);
 	        this.videoView.seekTo(this.currentPosition);
         } else {
-	        this.actualStartVideo();
+			this.actualStartVideo();
         }
     }
     
-    public void onSeekComplete(MediaPlayer mediaPlayer) {
+    public void onSeekComplete(MediaPlayer mp) {
         Log.d(TAG, "onSeekComplete CALLED " + System.currentTimeMillis());
         this.actualStartVideo();
     }
@@ -138,7 +148,7 @@ public class VideoActivity extends Activity implements
     private void actualStartVideo() {
 	    Log.d(TAG, "actualStartVideo " + System.currentTimeMillis());
 	    this.videoView.requestFocus();
-	    this.videoView.start();
+	    //this.videoView.start();
 	    this.progressBar.setVisibility(View.GONE);
     }
 
@@ -171,7 +181,7 @@ public class VideoActivity extends Activity implements
         }
         Log.e(TAG, "onError " + message + " " + extra);
 
-        wrapItUp(RESULT_CANCELED, message);
+        this.wrapItUp(Activity.RESULT_CANCELED, message);
         return true;
     }
 
@@ -224,31 +234,37 @@ public class VideoActivity extends Activity implements
     }
 
     public void onCompletion(MediaPlayer mediaPlayer) {
-        Log.d(TAG, "onCompletion CALLED");
-        this.videoView.stopPlayback();
-        wrapItUp(RESULT_OK, null);
+        Log.d(TAG, "onCompletion CALLED " + System.currentTimeMillis());
+        this.wrapItUp(Activity.RESULT_OK, null);
     }
 
+	/**
+	* Do not call super.onBackPressed, it will call setResult
+	*/
     @Override
     public void onBackPressed() {
-        Log.d(TAG, "onBackPressed CALLED");
+        Log.d(TAG, "onBackPressed CALLED " + System.currentTimeMillis());
         // If we're leaving, let's finish the activity
-        wrapItUp(RESULT_OK, null);
+        this.wrapItUp(Activity.RESULT_OK, null);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.d(TAG, "onTouchEvent CALLED");
+        Log.d(TAG, "onTouchEvent CALLED " + System.currentTimeMillis());
         if (this.mediaController != null)
             this.mediaController.show();
         return false;
     }
 
     private void wrapItUp(int resultCode, String message) {
-        Log.d(TAG, "wrapItUp CALLED");
+        Log.d(TAG, "wrapItUp CALLED " + System.currentTimeMillis());
+        Bundle bundle = new Bundle();
+		bundle.putString("videoUrl", this.videoUrl);
+		bundle.putInt("seekSec", this.videoView.getCurrentPosition() / 1000);
+		bundle.putString("message", message);
         Intent intent = new Intent();
-        intent.putExtra("message", message);
+        intent.putExtras(bundle);
         setResult(resultCode, intent);
-        finish(); // Calls OnDestroy
+        finish(); // Calls onPause
     }
 }
