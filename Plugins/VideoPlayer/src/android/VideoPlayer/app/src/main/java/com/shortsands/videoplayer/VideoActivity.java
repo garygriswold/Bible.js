@@ -64,23 +64,34 @@ public class VideoActivity extends Activity implements
 
         setContentView(relativeLayout);
         
-        Bundle bundle = getIntent().getExtras();
-        this.videoUrl = bundle.getString("videoUrl");
-        this.videoUri = Uri.parse(videoUrl);
-        int seekSec = bundle.getInt("seekSec");
-        this.currentPosition = seekSec * 1000;
+        if (savedInstanceState != null) {
+	        this.initializeVideo(savedInstanceState);
+        } else {
+	        this.initializeVideo(getIntent().getExtras());
+        }
         
         this.videoView.setOnPreparedListener(this);
         this.videoView.setOnCompletionListener(this);
         //this.videoView.setOnInfoListener(this); requires SDK 17
         this.videoView.setOnErrorListener(this);
         
-        //this.videoView.setVideoURI(videoUri);
         this.mediaController = new MediaController(this);
         this.mediaController.setAnchorView(this.videoView);
         this.mediaController.setMediaPlayer(this.videoView);
         this.videoView.setMediaController(this.mediaController);
     }
+    
+    @Override public void onRestoreInstanceState(Bundle savedInstanceState) {
+    	super.onRestoreInstanceState(savedInstanceState);
+		this.initializeVideo(savedInstanceState);
+	}
+	
+	private void initializeVideo(Bundle bundle) {
+		this.videoUrl = bundle.getString("videoUrl");
+        this.videoUri = Uri.parse(videoUrl);
+        int seekSec = bundle.getInt("seekSec");
+        this.currentPosition = seekSec * 1000;
+	}
 
     @Override
     protected void onRestart() {
