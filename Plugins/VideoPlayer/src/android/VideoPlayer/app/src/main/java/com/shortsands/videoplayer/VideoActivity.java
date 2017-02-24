@@ -81,7 +81,9 @@ public class VideoActivity extends Activity implements
         this.videoView.setMediaController(this.mediaController);
     }
     
-    @Override public void onRestoreInstanceState(Bundle savedInstanceState) {
+    @Override 
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+	    Log.d(TAG, "onRestoreInstanceState CALLED");
     	super.onRestoreInstanceState(savedInstanceState);
 		this.initializeVideo(savedInstanceState);
 	}
@@ -92,6 +94,14 @@ public class VideoActivity extends Activity implements
         int seekSec = bundle.getInt("seekSec");
         this.currentPosition = seekSec * 1000;
 	}
+	
+	@Override
+    protected void onSaveInstanceState(Bundle bundle) {
+	    Log.d(TAG, "onSaveInstanceState CALLED ");
+	    super.onSaveInstanceState(bundle);
+		bundle.putString("videoUrl", this.videoUrl);
+		bundle.putInt("seekSec", this.videoView.getCurrentPosition() / 1000);   
+     }
 
     @Override
     protected void onRestart() {
@@ -113,17 +123,34 @@ public class VideoActivity extends Activity implements
         this.videoView.setVideoURI(this.videoUri);
     }
 
+	/**
+	* Activity docs recommend that this method be used for persistent storage.
+	* Possibly, I should store data in a sqlite database here, instead of 
+	* returning values to the plugin.
+	*/
     @Override
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause CALLED " + System.currentTimeMillis());
         this.currentPosition = this.videoView.getCurrentPosition();
+        
         this.videoView.stopPlayback();
         if (this.mediaPlayer != null) {
         	this.mediaPlayer.release();
         	this.mediaPlayer = null;
         }
     }
+    
+    /*
+	 * Possible persistence solution to be used here in onPause
+	 * SharedPreferences prefs = getSharedPreferences(videoId);
+	 * this.videoUrl = prefs.getString(“videoUrl”, defaultUrl);
+	 * this.seekSec = prefs.getInt(“seekSec”, default)
+	 * Where videoId is a language independent identifier of the video
+	 * Used this way the original start of the video would only need
+	 * [videoId, videoUrl].
+	 * Note change the calling program as well.
+	 */
 
     @Override
     protected void onStop() {

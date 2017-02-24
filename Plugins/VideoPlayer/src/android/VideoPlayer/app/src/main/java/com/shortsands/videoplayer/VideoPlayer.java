@@ -19,7 +19,7 @@ import org.json.JSONException;
 
 public class VideoPlayer extends CordovaPlugin {
 
-	private static final int ACTIVITY_CODE_PLAY_MEDIA = 7; // Is this a specific name and number or anything
+	private static final int ACTIVITY_CODE_PLAY_VIDEO = 7;
 	private static final String TAG = "VideoPlayer";
 	private CallbackContext callbackContext;
 	
@@ -54,7 +54,7 @@ public class VideoPlayer extends CordovaPlugin {
 				extras.putString("videoUrl", url);
 				extras.putInt("seekSec", seekSec);
                 videoIntent.putExtras(extras);
-				cordova.startActivityForResult(plugin, videoIntent, ACTIVITY_CODE_PLAY_MEDIA);
+				cordova.startActivityForResult(plugin, videoIntent, ACTIVITY_CODE_PLAY_VIDEO);
 			}
 		});
 	}
@@ -173,7 +173,7 @@ public class VideoPlayer extends CordovaPlugin {
 		Log.d(TAG, "videoUrl=" + videoUrl);
 		Log.d(TAG, "seekSec=" + seekSec);
 		
-		if (ACTIVITY_CODE_PLAY_MEDIA == requestCode) {
+		if (ACTIVITY_CODE_PLAY_VIDEO == requestCode) {
 			if (Activity.RESULT_OK == resultCode) {
 				this.callbackContext.success();  // Try rewrting and PluginResponse
 			} else if (Activity.RESULT_CANCELED == resultCode) {
