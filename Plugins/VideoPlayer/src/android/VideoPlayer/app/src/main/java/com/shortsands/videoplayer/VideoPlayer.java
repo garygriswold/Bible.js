@@ -13,7 +13,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
-import org.apache.cordova.PluginResult;
+//import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -35,7 +35,7 @@ public class VideoPlayer extends CordovaPlugin {
 		this.callbackContext = callbackContext;
 
 		if (action.equals("present")) {
-			present(args.getString(0), args.getInt(1));
+			present(args.getString(0), args.getString(1));
 			return true;
 		} else {
 			callbackContext.error("VideoPlayer." + action + " is not a supported method.");
@@ -43,16 +43,15 @@ public class VideoPlayer extends CordovaPlugin {
 		}
 	}
 
-	private void present(final String url, final int seekSec) {
-		//final CordovaInterface cordovaObj = cordova;
+	private void present(final String videoId, final String videoUrl) {
 		final CordovaPlugin plugin = this;
 
 		cordova.getActivity().runOnUiThread(new Runnable() {
 			public void run() {
 				final Intent videoIntent = new Intent(cordova.getActivity().getApplicationContext(), VideoActivity.class);
 				Bundle extras = new Bundle();
-				extras.putString("videoUrl", url);
-				extras.putInt("seekSec", seekSec);
+				extras.putString("videoId", videoId);
+				extras.putString("videoUrl", videoUrl);
                 videoIntent.putExtras(extras);
 				cordova.startActivityForResult(plugin, videoIntent, ACTIVITY_CODE_PLAY_VIDEO);
 			}
@@ -165,17 +164,10 @@ public class VideoPlayer extends CordovaPlugin {
     @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		Log.d(TAG, "onActivityResult: " + requestCode + " " + resultCode + " " + System.currentTimeMillis());
-		Log.d(TAG, "requestCode=" + requestCode);
-		Log.d(TAG, "resultCode=" + resultCode);
-		Bundle bundle = intent.getExtras();
-		String videoUrl = bundle.getString("videoUrl");
-		int seekSec = bundle.getInt("seekSec");
-		Log.d(TAG, "videoUrl=" + videoUrl);
-		Log.d(TAG, "seekSec=" + seekSec);
 		
 		if (ACTIVITY_CODE_PLAY_VIDEO == requestCode) {
 			if (Activity.RESULT_OK == resultCode) {
-				this.callbackContext.success();  // Try rewrting and PluginResponse
+				this.callbackContext.success();
 			} else if (Activity.RESULT_CANCELED == resultCode) {
 				String errMsg = "Error";
 				if (intent != null && intent.hasExtra("message")) {

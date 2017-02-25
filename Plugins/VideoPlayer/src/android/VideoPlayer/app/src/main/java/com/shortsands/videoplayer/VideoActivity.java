@@ -25,13 +25,33 @@ public class VideoActivity extends Activity implements
         MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener,
         MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnBufferingUpdateListener {
     private final static String TAG = "VideoActivity";
+    private VideoPersistence videoPersistence = new VideoPersistence(this);
     private VideoView videoView;
     private MediaController mediaController;
     private MediaPlayer mediaPlayer;
     private ProgressBar progressBar;
+    private String videoId;
     private String videoUrl;
-    private Uri videoUri;
     private int currentPosition = 0;
+    
+    public String getVideoId() {
+	    return(this.videoId);
+    }
+    public void setVideoId(String id) {
+	    this.videoId = id;
+    }
+    public String getVideoUrl() {
+	    return(this.videoUrl);
+    }
+    public void setVideoUrl(String url) {
+	    this.videoUrl = url;
+    }
+    public int getCurrentPosition() {
+	    return((this.videoView != null) ? this.videoView.getCurrentPosition() : 0);
+    }
+    public void setCurrentPosition(int pos) {
+	    this.currentPosition = pos;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +84,6 @@ public class VideoActivity extends Activity implements
 
         setContentView(relativeLayout);
         
-        if (savedInstanceState != null) {
-	        this.initializeVideo(savedInstanceState);
-        } else {
-	        this.initializeVideo(getIntent().getExtras());
-        }
-        
         this.videoView.setOnPreparedListener(this);
         this.videoView.setOnCompletionListener(this);
         //this.videoView.setOnInfoListener(this); requires SDK 17
@@ -85,22 +99,12 @@ public class VideoActivity extends Activity implements
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
 	    Log.d(TAG, "onRestoreInstanceState CALLED");
     	super.onRestoreInstanceState(savedInstanceState);
-		this.initializeVideo(savedInstanceState);
-	}
-	
-	private void initializeVideo(Bundle bundle) {
-		this.videoUrl = bundle.getString("videoUrl");
-        this.videoUri = Uri.parse(videoUrl);
-        int seekSec = bundle.getInt("seekSec");
-        this.currentPosition = seekSec * 1000;
 	}
 	
 	@Override
     protected void onSaveInstanceState(Bundle bundle) {
 	    Log.d(TAG, "onSaveInstanceState CALLED ");
-	    super.onSaveInstanceState(bundle);
-		bundle.putString("videoUrl", this.videoUrl);
-		bundle.putInt("seekSec", this.videoView.getCurrentPosition() / 1000);   
+	    super.onSaveInstanceState(bundle);  
      }
 
     @Override
@@ -120,19 +124,20 @@ public class VideoActivity extends Activity implements
         super.onResume();
         Log.d(TAG, "onResume CALLED " + System.currentTimeMillis());
         this.progressBar.setVisibility(View.VISIBLE);
-        this.videoView.setVideoURI(this.videoUri);
+        this.videoPersistence.recoverState();
+        Uri videoUri = Uri.parse(this.videoUrl);
+        this.videoView.setVideoURI(videoUri);
     }
 
 	/**
 	* Activity docs recommend that this method be used for persistent storage.
-	* Possibly, I should store data in a sqlite database here, instead of 
-	* returning values to the plugin.
+	* SharedPreferences is used to save the current location in the current video
 	*/
     @Override
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause CALLED " + System.currentTimeMillis());
-        this.currentPosition = this.videoView.getCurrentPosition();
+        this.videoPersistence.saveState();
         
         this.videoView.stopPlayback();
         if (this.mediaPlayer != null) {
@@ -140,17 +145,6 @@ public class VideoActivity extends Activity implements
         	this.mediaPlayer = null;
         }
     }
-    
-    /*
-	 * Possible persistence solution to be used here in onPause
-	 * SharedPreferences prefs = getSharedPreferences(videoId);
-	 * this.videoUrl = prefs.getString(“videoUrl”, defaultUrl);
-	 * this.seekSec = prefs.getInt(“seekSec”, default)
-	 * Where videoId is a language independent identifier of the video
-	 * Used this way the original start of the video would only need
-	 * [videoId, videoUrl].
-	 * Note change the calling program as well.
-	 */
 
     @Override
     protected void onStop() {
@@ -186,7 +180,6 @@ public class VideoActivity extends Activity implements
     private void actualStartVideo() {
 	    Log.d(TAG, "actualStartVideo " + System.currentTimeMillis());
 	    this.videoView.requestFocus();
-	    //this.videoView.start();
 	    this.progressBar.setVisibility(View.GONE);
     }
 
@@ -273,7 +266,8 @@ public class VideoActivity extends Activity implements
 
     public void onCompletion(MediaPlayer mediaPlayer) {
         Log.d(TAG, "onCompletion CALLED " + System.currentTimeMillis());
-        this.wrapItUp(Activity.RESULT_OK, null);
+		this.videoPersistence.clearState();
+		this.wrapItUp(Activity.RESULT_OK, null);
     }
 
 	/**
@@ -282,7 +276,6 @@ public class VideoActivity extends Activity implements
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed CALLED " + System.currentTimeMillis());
-        // If we're leaving, let's finish the activity
         this.wrapItUp(Activity.RESULT_OK, null);
     }
 
@@ -296,13 +289,13 @@ public class VideoActivity extends Activity implements
 
     private void wrapItUp(int resultCode, String message) {
         Log.d(TAG, "wrapItUp CALLED " + System.currentTimeMillis());
-        Bundle bundle = new Bundle();
-		bundle.putString("videoUrl", this.videoUrl);
-		bundle.putInt("seekSec", this.videoView.getCurrentPosition() / 1000);
-		bundle.putString("message", message);
-        Intent intent = new Intent();
-        intent.putExtras(bundle);
-        setResult(resultCode, intent);
+        if (message != null) {
+	        Intent intent = new Intent();
+	        intent.putExtra("message", message);
+			setResult(resultCode, intent);
+        } else {
+        	setResult(resultCode);
+        }
         finish(); // Calls onPause
     }
 }

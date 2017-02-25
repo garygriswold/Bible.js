@@ -28,6 +28,7 @@
 		</config-file>
 		<source-file src="src/android/VideoPlayer/app/src/main/java/com/shortsands/videoplayer/VideoPlayer.java" target-dir="src/com/shortsands/videoplayer" />
 		<source-file src="src/android/VideoPlayer/app/src/main/java/com/shortsands/videoplayer/VideoActivity.java" target-dir="src/com/shortsands/videoplayer" />
+		<source-file src="src/android/VideoPlayer/app/src/main/java/com/shortsands/videoplayer/VideoPersistence.java" target-dir="src/com/shortsands/videoplayer" />
 	</platform>
   
 	<platform name="ios">

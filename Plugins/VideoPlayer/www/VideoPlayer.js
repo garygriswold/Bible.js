@@ -1,8 +1,8 @@
 "use strict";
 
 module.exports = {
-    present: function (videoUrl, seekSec, successCallback, errorCallback) {
-	    console.log('**** INSIDE module.exports begin: ' + videoUrl + ' ' + seekSec);
-        cordova.exec(successCallback, errorCallback, "VideoPlayer", "present", [videoUrl, seekSec]);
+    present: function (videoId, videoUrl, successCallback, errorCallback) {
+	    console.log('**** INSIDE module.exports begin: ' + videoId + ' ' + videoUrl);
+        cordova.exec(successCallback, errorCallback, "VideoPlayer", "present", [videoId, videoUrl]);
     }
 };
