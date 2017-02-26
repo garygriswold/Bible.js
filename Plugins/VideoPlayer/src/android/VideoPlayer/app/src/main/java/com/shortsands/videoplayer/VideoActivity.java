@@ -33,6 +33,7 @@ public class VideoActivity extends Activity implements
     private String videoId;
     private String videoUrl;
     private int currentPosition = 0;
+    private boolean videoPlaybackComplete = false;
     
     public String getVideoId() {
 	    return(this.videoId);
@@ -57,8 +58,6 @@ public class VideoActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate CALLED " + System.currentTimeMillis());
-
-        //this.shouldAutoClose = this.shouldAutoClose == null ? true : this.shouldAutoClose;
 
         Window window = this.getWindow();
         window.requestFeature(Window.FEATURE_NO_TITLE);
@@ -137,8 +136,11 @@ public class VideoActivity extends Activity implements
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause CALLED " + System.currentTimeMillis());
-        this.videoPersistence.saveState();
-        
+        if (this.videoPlaybackComplete) {
+	    	this.videoPersistence.clearState();
+        } else {
+        	this.videoPersistence.saveState();
+        }
         this.videoView.stopPlayback();
         if (this.mediaPlayer != null) {
         	this.mediaPlayer.release();
@@ -205,7 +207,7 @@ public class VideoActivity extends Activity implements
                 message = "MEDIA ERROR UNKNOWN";
                 break;
             case MediaPlayer.MEDIA_ERROR_UNSUPPORTED:
-                message = "MEDIA ERROR UNKNOWN";
+                message = "MEDIA ERROR UNSUPPORTED";
                 break;
             default:
                 message = "Unknown Error " + what;
@@ -266,7 +268,7 @@ public class VideoActivity extends Activity implements
 
     public void onCompletion(MediaPlayer mediaPlayer) {
         Log.d(TAG, "onCompletion CALLED " + System.currentTimeMillis());
-		this.videoPersistence.clearState();
+        this.videoPlaybackComplete = true;
 		this.wrapItUp(Activity.RESULT_OK, null);
     }
 

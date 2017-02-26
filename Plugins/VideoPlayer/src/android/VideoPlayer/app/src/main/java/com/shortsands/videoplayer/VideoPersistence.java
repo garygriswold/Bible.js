@@ -30,7 +30,7 @@ class VideoPersistence {
 	}
 	
 	void saveState() {
-        if (activity.getVideoId() != null && activity.getVideoUrl() != null) {
+        if (activity.getVideoId() != null && activity.getVideoUrl() != null && activity.getCurrentPosition() > 0) {
 	        SharedPreferences savedState = activity.getSharedPreferences(activity.getVideoId(), Context.MODE_PRIVATE);
 			SharedPreferences.Editor editor = savedState.edit();
 			editor.putString(VIDEO_URL, activity.getVideoUrl());
@@ -42,12 +42,11 @@ class VideoPersistence {
 	void recoverState() {
 		Bundle bundle = activity.getIntent().getExtras();
 		activity.setVideoId(bundle.getString(VIDEO_ID));
+		activity.setVideoUrl(bundle.getString(VIDEO_URL)); // always take requested URL in case language changed.
 		SharedPreferences savedState = activity.getSharedPreferences(activity.getVideoId(), Context.MODE_PRIVATE);
 		if (savedState != null && savedState.contains(VIDEO_URL)) {
-			activity.setVideoUrl(savedState.getString(VIDEO_URL, null));
 			activity.setCurrentPosition(savedState.getInt(CURRENT_POSITION, 0));
 		} else {
-			activity.setVideoUrl(bundle.getString(VIDEO_URL));
 			activity.setCurrentPosition(0);
 		}
 	}
