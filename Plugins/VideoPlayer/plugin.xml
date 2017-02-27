@@ -11,7 +11,7 @@
 	</engines>
 
 	<js-module name="VideoPlayer" src="www/VideoPlayer.js">
-    	<clobbers target="window.VideoPlayer" />
+    	<clobbers target="VideoPlayer" />
 	</js-module>
 
 	<platform name="android">
@@ -67,6 +67,7 @@
 				</dict>
 		    </dict>
 		</config-file>
+		<!-- <framework elements might be needed here <framework src="MediaPlayer.framework" /> -->
 	</platform>
 
 </plugin>

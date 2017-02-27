@@ -147,7 +147,7 @@ public class VideoPlayer extends CordovaPlugin {
      */
     @Override
     public Object onMessage(String id, Object data) {
-	    Log.d(TAG, "onMessage " + System.currentTimeMillis());
+	    Log.d(TAG, "onMessage " + data.toString() + "  " + System.currentTimeMillis());
         return null;
     }
 	

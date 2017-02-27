@@ -1,11 +1,32 @@
 
 
+
+Development Process
+-------------------
+
+	develop at: ShortSands/BibleApp/Plugins/VideoPlayer
+	
+	create app: ShortSands/VideoProto
+	
+	script to install plugin
+	./TestVideoPlugin.sh
+	
 Testing Android Native VideoPlayer
 ----------------------------------
 
 	open Android Studio
-	select ShortSands/Plugins/android/VideoPlayer
+	select ShortSands/VideoProto/platforms/android
 	run
+	
+Profiling on Android
+--------------------
+
+	disable Instant Run: Preferences -> Build -> Instant Run
+	
+	Trying to use Systrace, but need to install pip the python manager
+	
+	
+	
 
 Testing iOS Native VideoPlayer
 ------------------------------

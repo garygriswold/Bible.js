@@ -145,7 +145,6 @@ public class VideoActivity extends Activity implements
     }
     
     private void actualStartVideo() {
-	    Log.d(TAG, "actualStartVideo " + System.currentTimeMillis());
 	    this.videoView.requestFocus();
 	    this.progressBar.setVisibility(View.GONE);
     }
