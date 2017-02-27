@@ -93,30 +93,6 @@ public class VideoActivity extends Activity implements
         this.mediaController.setMediaPlayer(this.videoView);
         this.videoView.setMediaController(this.mediaController);
     }
-    
-    @Override 
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-	    Log.d(TAG, "onRestoreInstanceState CALLED");
-    	super.onRestoreInstanceState(savedInstanceState);
-	}
-	
-	@Override
-    protected void onSaveInstanceState(Bundle bundle) {
-	    Log.d(TAG, "onSaveInstanceState CALLED ");
-	    super.onSaveInstanceState(bundle);  
-     }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d(TAG, "onRestart CALLED " + System.currentTimeMillis());
-    }
-    
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart CALLED " + System.currentTimeMillis());
-    }
 
     @Override
     protected void onResume() {
@@ -148,24 +124,12 @@ public class VideoActivity extends Activity implements
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop CALLED " + System.currentTimeMillis());
-    }
-
-    @Override
-    protected void onDestroy() {
-	   	super.onDestroy();
-        Log.d(TAG, "onDestroy CALLED " + System.currentTimeMillis());
-    }
-
 	@Override
     public void onPrepared(MediaPlayer mp) {
         Log.d(TAG, "onPrepared CALLED " + System.currentTimeMillis());
         this.mediaPlayer = mp;
         this.mediaPlayer.setScreenOnWhilePlaying(true);
-        this.mediaPlayer.setOnBufferingUpdateListener(this);
+        //this.mediaPlayer.setOnBufferingUpdateListener(this); // enable for debugging
 	    this.videoView.start();
         if (this.currentPosition > 0) {
 	       	this.mediaPlayer.setOnSeekCompleteListener(this);
