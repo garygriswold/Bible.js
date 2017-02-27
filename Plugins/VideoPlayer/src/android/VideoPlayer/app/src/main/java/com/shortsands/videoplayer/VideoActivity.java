@@ -164,6 +164,7 @@ public class VideoActivity extends Activity implements
     public void onPrepared(MediaPlayer mp) {
         Log.d(TAG, "onPrepared CALLED " + System.currentTimeMillis());
         this.mediaPlayer = mp;
+        this.mediaPlayer.setScreenOnWhilePlaying(true);
         this.mediaPlayer.setOnBufferingUpdateListener(this);
 	    this.videoView.start();
         if (this.currentPosition > 0) {
