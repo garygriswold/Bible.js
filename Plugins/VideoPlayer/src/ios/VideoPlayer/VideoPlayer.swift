@@ -10,7 +10,7 @@
     //var videoViewController: VideoViewController = VideoViewController()
     var videoViewPlayer: VideoViewPlayer?
 	
-	@objc(present:) func present(command: CDVInvokedUrlCommand) {
+	@objc(showVideo:) func showVideo(command: CDVInvokedUrlCommand) {
 		
     	var pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR)
 

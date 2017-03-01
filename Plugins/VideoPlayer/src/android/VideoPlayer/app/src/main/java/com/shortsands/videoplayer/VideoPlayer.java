@@ -34,7 +34,7 @@ public class VideoPlayer extends CordovaPlugin {
 		Log.d(TAG, "*** INSIDE VIDEO PLUGIN PRESENT " + System.currentTimeMillis());
 		this.callbackContext = callbackContext;
 
-		if (action.equals("present")) {
+		if (action.equals("showVideo")) {
 			present(args.getString(0), args.getString(1));
 			return true;
 		} else {
