@@ -42,9 +42,6 @@ class VideoViewPlayer : NSObject {
     }
     func begin() {
         print("VideoViewPlayer.BEGIN")
-        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain,
-                                         target: self, action: nil)//self.doneButtonClicked)
-        self.controller.setToolbarItems([ doneButton ], animated: false)
         addPeriodicTimeObserver()
         self.controller.player?.play()
         
