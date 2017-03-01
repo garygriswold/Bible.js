@@ -11,16 +11,11 @@
 	@objc(showVideo:) func showVideo(command: CDVInvokedUrlCommand) {
 		
     	//var pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR)
-
-		//let msg = command.arguments[0] as? String ?? "Nothing Entered"
 		
 		let videoId: String = command.arguments[0] as? String ?? ""
 		let videoUrl: String = command.arguments[1] as? String ?? ""
 
-        
-//        let videoUrl: String = "https://arc.gt/n8pwj?apiSessionId=58866003a32df1.69855658" // Jesus Film
-        let seekSec: Int64 = 0
-        self.videoViewPlayer = VideoViewPlayer(videoUrl: videoUrl, seekTime: seekSec)
+        self.videoViewPlayer = VideoViewPlayer(videoId: videoId, videoUrl: videoUrl)
         
         self.viewController.present(self.videoViewPlayer!.controller, animated: true)
         self.videoViewPlayer!.begin()

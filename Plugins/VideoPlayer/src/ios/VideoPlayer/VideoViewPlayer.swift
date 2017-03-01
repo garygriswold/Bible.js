@@ -15,11 +15,12 @@ class VideoViewPlayer : NSObject {
     let controller: AVPlayerViewController
     var timeObserverToken: Any?
     
-    init(videoUrl: String, seekTime: Int64) {
+    init(videoId: String, videoUrl: String) {
 	    print("INSIDE VideoViewPlayer ")
         let url = URL(string: videoUrl)!
         let asset = AVAsset(url: url)
         let playerItem = AVPlayerItem(asset: asset)
+        let seekTime: Int64 = 0 // should be recovered
         if (seekTime > 0) {
             let time = CMTime(value: seekTime, timescale: 1)
             playerItem.seek(to: time)
