@@ -14,7 +14,10 @@ Example Use of Plugin
 	},
 	function(error) {
 		console.log("ERROR FROM VideoPlayer " + error);
-	});	
+	});
+	
+Android Development
+===================	
 	
 Development Process
 -------------------
@@ -28,6 +31,8 @@ Development Process
 	
 Testing Android Native VideoPlayer
 ----------------------------------
+
+Test the Plugin inside a simple Cordova App, executing the App and plugin.
 
 	open Android Studio
 	select ShortSands/VideoProto/platforms/android
@@ -79,13 +84,17 @@ Except if I kill the App entirely, and then it appears to drop to zero.  But, I 
 verify that MediaPlayer had been released and was null, and setting VideoView and VideoController
 to null did not reduce memory noticably.
 	
-	
+
+Apple iOS Development
+=====================	
 
 Testing iOS Native VideoPlayer
 ------------------------------
 
-	open Finder
-	open VideoPlayer/src/ios/VideoPlayer.xcodeproj
+//	open Finder
+//	open VideoPlayer/src/ios/VideoPlayer.xcodeproj
+	open Xcode
+	select ShortSands/VideoProto/platforms/ios
 	run
 	
 Getting iOS to run

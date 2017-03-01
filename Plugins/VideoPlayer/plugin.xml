@@ -32,10 +32,6 @@
 	</platform>
   
 	<platform name="ios">
-		<source-file src="src/ios/VideoPlayer/VideoPlugin.swift" target-dir="src/videoplayer" />
-		<source-file src="src/ios/VideoPlayer/AVPlayerViewControllerExtension.swift" target-dir="src/videoplayer" />
-		<source-file src="src/ios/VideoPlayer/VideoPlayer.swift" target-dir="src/videoplayer" />
-		<source-file src="src/ios/VideoPlayer/VideoViewController.swift" target-dir="src/videoplayer" />
 		<config-file target="config.xml" parent="/*">
 	    	<feature name="VideoPlayer">
 				<param name="ios-package" value="VideoPlayer" />
@@ -67,7 +63,11 @@
 				</dict>
 		    </dict>
 		</config-file>
-		<!-- <framework elements might be needed here <framework src="MediaPlayer.framework" /> -->
+		<source-file src="src/ios/VideoPlayer/VideoPlayer.swift" target-dir="src/videoplayer" />
+		<source-file src="src/ios/VideoPlayer/AVPlayerViewControllerExtension.swift" target-dir="src/videoplayer" />
+		<source-file src="src/ios/VideoPlayer/VideoViewPlayer.swift" target-dir="src/videoplayer" />
+		<source-file src="src/ios/VideoPlayer/VideoViewController.swift" target-dir="src/videoplayer" />
+		<framework src="MediaPlayer.framework" />
 	</platform>
 
 </plugin>
