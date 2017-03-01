@@ -17,7 +17,8 @@ extension AVPlayerViewController {
     override open func viewWillDisappear(_ animated: Bool) {
         print("\n********** VIEW WILL DISAPPEAR ***** in AVPlayerViewController")
         super.viewWillDisappear(animated)
-        (self.presentingViewController as! VideoViewController).releaseVideoPlayer()
+        //(self.presentingViewController as! VideoViewController).releaseVideoPlayer()
+        /// Can I somehow call VideoPlayer here in order to do this release?
     }
     func initNotifications() {
         NotificationCenter.default.addObserver(self,
