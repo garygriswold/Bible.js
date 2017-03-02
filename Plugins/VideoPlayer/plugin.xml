@@ -66,6 +66,7 @@
 		<source-file src="src/ios/VideoPlayer/VideoPlayer.swift" target-dir="src/videoplayer" />
 		<source-file src="src/ios/VideoPlayer/AVPlayerViewControllerExtension.swift" target-dir="src/videoplayer" />
 		<source-file src="src/ios/VideoPlayer/VideoViewPlayer.swift" target-dir="src/videoplayer" />
+		<source-file src="src/ios/VideoPlayer/VideoViewState.swift" target-dir="src/videoplayer" />
 		<framework src="MediaPlayer.framework" />
 	</platform>
 
