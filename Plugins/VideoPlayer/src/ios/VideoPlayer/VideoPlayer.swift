@@ -16,9 +16,10 @@
 		let videoUrl: String = command.arguments[1] as? String ?? ""
 
         self.videoViewPlayer = VideoViewPlayer(videoId: videoId, videoUrl: videoUrl)
-        
+        self.videoViewPlayer!.begin() 
+               
         self.viewController.present(self.videoViewPlayer!.controller, animated: true)
-        self.videoViewPlayer!.begin()
+
 	}
 	
 	func releaseVideoPlayer() {

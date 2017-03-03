@@ -14,24 +14,17 @@ import CoreMedia
 class VideoViewPlayer : NSObject {
 	
     let controller = AVPlayerViewController()
+    var videoUrl: String
+    var position: CMTime
     
     init(videoId: String, videoUrl: String) {
 	    print("INSIDE VideoViewPlayer ")
 	    let viewState = VideoViewState.retrieve(videoId: videoId)
-	    viewState.videoUrl = videoUrl
-        let url = URL(string: videoUrl)!
-        let asset = AVAsset(url: url)
-        let playerItem = AVPlayerItem(asset: asset)
-        let seekTime: CMTime = viewState.position
-        if (CMTimeGetSeconds(seekTime) > 0.1) {
-            playerItem.seek(to: seekTime)
-        }
-        let player = AVPlayer(playerItem: playerItem)
-        //self.controller = AVPlayerViewController()
-        self.controller.showsPlaybackControls = true
+	    VideoViewState.currentState.videoUrl = videoUrl
+	    self.videoUrl = videoUrl
+	    self.position = viewState.position
         self.controller.initNotifications()
         //self.controller.initDebugNotifications()
-        self.controller.player = player
         print("CONSTRUCTED")
     }
     deinit {
@@ -40,6 +33,16 @@ class VideoViewPlayer : NSObject {
     }
     func begin() {
         print("VideoViewPlayer.BEGIN")
+        
+        let url = URL(string: self.videoUrl)!
+        let asset = AVAsset(url: url)
+        let playerItem = AVPlayerItem(asset: asset)
+        if (CMTimeGetSeconds(self.position) > 0.1) {
+            playerItem.seek(to: self.position)
+        }
+        let player = AVPlayer(playerItem: playerItem)
+        self.controller.showsPlaybackControls = true
+        self.controller.player = player
         self.controller.player?.play()
     }
 }
