@@ -6,6 +6,8 @@
  *  Copyright © 2017 ShortSands. All rights reserved.
  */
 import AVKit
+import UIKit
+import CoreMedia
 
 extension AVPlayerViewController {
     override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
@@ -19,6 +21,8 @@ extension AVPlayerViewController {
         super.viewWillDisappear(animated)
         //(self.presentingViewController as! VideoViewController).releaseVideoPlayer()
         /// Can I somehow call VideoPlayer here in order to do this release?
+        
+        VideoViewState.update(time: self.player?.currentTime())
     }
     func initNotifications() {
         NotificationCenter.default.addObserver(self,
@@ -38,21 +42,30 @@ extension AVPlayerViewController {
                                                name: .AVPlayerItemPlaybackStalled,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(playerItemNewAccessLogEntry(note:)),
-                                               name: .AVPlayerItemNewAccessLogEntry,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
                                                selector: #selector(playerItemNewErrorLogEntry(note:)),
                                                name: .AVPlayerItemNewErrorLogEntry,
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+        										selector: #selector(applicationWillResignActive(note:)),
+												name: .UIApplicationWillResignActive,
+												object: nil)
+    }
+    func initDebugNotifications() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(playerItemNewAccessLogEntry(note:)),
+                                               name: .AVPlayerItemNewAccessLogEntry,
+                                               object: nil)	    
     }
     func removeNotifications() {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemFailedToPlayToEndTime, object: nil)
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemTimeJumped, object: nil)
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemPlaybackStalled, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewAccessLogEntry, object: nil)
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewErrorLogEntry, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .UIApplicationWillResignActive, object: nil)
+    }
+    func removeDebugNotifications() {
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewAccessLogEntry, object: nil)	    
     }
     func playerItemDidPlayToEndTime(note:Notification) {
         print("\n** DID PLAY TO END \(note.object)")
@@ -76,39 +89,10 @@ extension AVPlayerViewController {
     func playerItemNewErrorLogEntry(note:Notification) {
         print("\n****** ERROR LOG ENTRY \(note.object)\n\(self.player?.currentItem?.errorLog())")
     }
-    /*
-     override open func observeValue(forKeyPath keyPath: String?,
-     of object: Any?,
-     change: [NSKeyValueChangeKey : Any]?,
-     context: UnsafeMutableRawPointer?) {
-     //super.observeValue(forKeyPath keyPath: keyPath, of: object, change: change, context: context)
-     //        print("Inside KO observer, \(keyPath)  \(change?[.oldKey])  \(change?[.newKey])")
-     guard context == &playerItemContext else {
-     super.observeValue(forKeyPath: keyPath,
-     of: object,
-     change: change,
-     context: context)
-     return
-     }
-     if keyPath == #keyPath(AVPlayerItem.status) {
-     let status: AVPlayerItemStatus
-     if let statusNumber = change?[.newKey] as? NSNumber {
-     status = AVPlayerItemStatus(rawValue: statusNumber.intValue)!
-     } else {
-     status = .unknown
-     }
-     print("STATUS SET \(status)")
-     switch status {
-     case .readyToPlay:
-     print("ITEM STATUS is readyToPlay")
-     case .failed:
-     print("ITEM STATUS is failed")
-     case .unknown:
-     print("ITEM STATUS is unknown")
-     }
-     }
-     }
-     */
+    func applicationWillResignActive(note:Notification) {
+	    print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
+	    VideoViewState.update(time: self.player?.currentTime())
+    }
 }
 
 
