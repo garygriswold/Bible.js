@@ -8,32 +8,23 @@ class VideoViewState : NSObject, NSCoding {
 	static let documentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
 	static var currentState = VideoViewState(videoId: "jesusFilm")
 	
-	static func clear(videoId: String) -> Bool {
-		currentState = VideoViewState(videoId: videoId)
-		let archiveURL = documentsDirectory.appendingPathComponent(videoId)	
-		let isSuccess = NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)
-		return isSuccess		
-	}
-	
-	static func save(videoId: String, videoUrl: String, position: CMTime) -> Bool {
-		currentState = VideoViewState(videoId: videoId, videoUrl: videoUrl, position: position)
-		let archiveURL = documentsDirectory.appendingPathComponent(videoId)
-		let isSuccess = NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)
-		return isSuccess	
-	}
-	
-	static func update(time: CMTime?) -> Bool {
-		currentState.position = ((time != nil) ? time : kCMTimeZero)!
-		let archiveURL = documentsDirectory.appendingPathComponent(currentState.videoId)
-		let isSuccess = NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)
-		return isSuccess		
-	}
-	
 	static func retrieve(videoId: String) -> VideoViewState {
 		let archiveURL = documentsDirectory.appendingPathComponent(videoId)
 		let state = NSKeyedUnarchiver.unarchiveObject(withFile: archiveURL.path) as? VideoViewState
 		currentState = (state != nil) ? state! : VideoViewState(videoId: videoId)
 		return currentState
+	}
+	
+	static func clear(videoId: String) {
+		currentState = VideoViewState(videoId: videoId)
+		let archiveURL = documentsDirectory.appendingPathComponent(videoId)
+		NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)		
+	}
+	
+	static func update(time: CMTime?) {
+		currentState.position = ((time != nil) ? time : kCMTimeZero)!
+		let archiveURL = documentsDirectory.appendingPathComponent(currentState.videoId)
+		NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)	
 	}
 	
 	var videoId: String

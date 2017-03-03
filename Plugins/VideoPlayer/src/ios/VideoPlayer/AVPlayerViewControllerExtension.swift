@@ -61,6 +61,7 @@ extension AVPlayerViewController {
                                                object: nil)   
     }
     func removeNotifications() {
+	    print("\n ***** INSIDE REMOVE NOTIFICATIONS")
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemFailedToPlayToEndTime, object: nil)
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemPlaybackStalled, object: nil)
