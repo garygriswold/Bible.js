@@ -20,13 +20,16 @@ extension AVPlayerViewController {
     * This method is called when the Done button on the video player is clicked.
     * Video State is saved in this method.
     */
-    override open func viewWillDisappear(_ animated: Bool) {
-        print("\n********** VIEW WILL DISAPPEAR ***** in AVPlayerViewController")
-        super.viewWillDisappear(animated)
-        //(self.presentingViewController as! VideoViewController).releaseVideoPlayer()
-        /// Can I somehow call VideoPlayer here in order to do this release?
+    override open func viewDidDisappear(_ animated: Bool) {
+        print("\n********** VIEW DID DISAPPEAR ***** in AVPlayerViewController")
+        super.viewDidDisappear(animated)
         
         VideoViewState.update(time: self.player?.currentTime())
+		releaseVideoPlayer()
+    }
+    override open func didReceiveMemoryWarning() {
+	    super.didReceiveMemoryWarning()
+	    print("\n*********** DID RECEIVE MEMORY WARNING **** in AVPlayerViewController")
     }
     func initNotifications() {
         NotificationCenter.default.addObserver(self,
@@ -74,8 +77,9 @@ extension AVPlayerViewController {
     }
     func playerItemDidPlayToEndTime(note:Notification) {
         print("\n** DID PLAY TO END \(note.object)")
-        // .name, object.AVPlayerItem, object.asset.AVURLAsset, object.asset.URL
         self.dismiss(animated: false)
+        
+        VideoViewState.clear()
     }
     func playerItemFailedToPlayToEndTime(note:Notification) {
         print("\n********* FAILED TO PLAY TO END *********\(note.object)")
@@ -85,7 +89,6 @@ extension AVPlayerViewController {
     }
     func playerItemPlaybackStalled(note:Notification) {
         print("\n****** PLAYBACK STALLED \(note.object)")
-        // .name, object.AVPlayerItem, object.asset.AVURLAsset, object.asset.URL
     }
     func playerItemNewAccessLogEntry(note:Notification) {
         // did not start is not reported here
@@ -101,6 +104,13 @@ extension AVPlayerViewController {
     func applicationWillResignActive(note:Notification) {
 	    print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
 	    VideoViewState.update(time: self.player?.currentTime())
+    }
+    private func releaseVideoPlayer() {
+        removeNotifications()
+        removeDebugNotifications()	
+        
+        //print("SELF CONTROLLER \(String(describing: type(of: self))")        
+        //print("PARENT CONTROLLER \(String(describing: type(of: self.presentingViewController))")    
     }
 }
 

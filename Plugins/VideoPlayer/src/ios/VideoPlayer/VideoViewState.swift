@@ -15,16 +15,23 @@ class VideoViewState : NSObject, NSCoding {
 		return currentState
 	}
 	
-	static func clear(videoId: String) {
-		currentState = VideoViewState(videoId: videoId)
-		let archiveURL = documentsDirectory.appendingPathComponent(videoId)
+	static func clear() {
+		currentState.videoUrl = nil
+		currentState.position = kCMTimeZero
+		let archiveURL = documentsDirectory.appendingPathComponent(currentState.videoId)
 		NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)		
 	}
 	
+	/**
+	* Clear sets videoUrl to nil, and update must not store the state after videoUrl has been set to null
+	* This is needed because the update is called after the clear when a video completes.
+	*/
 	static func update(time: CMTime?) {
-		currentState.position = ((time != nil) ? time : kCMTimeZero)!
-		let archiveURL = documentsDirectory.appendingPathComponent(currentState.videoId)
-		NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)	
+		if (currentState.videoUrl != nil) {
+			currentState.position = ((time != nil) ? time : kCMTimeZero)!
+			let archiveURL = documentsDirectory.appendingPathComponent(currentState.videoId)
+			NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)
+		}
 	}
 	
 	var videoId: String

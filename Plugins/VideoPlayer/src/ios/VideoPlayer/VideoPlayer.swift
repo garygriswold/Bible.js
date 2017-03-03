@@ -6,8 +6,6 @@
 
 @objc(VideoPlayer) class VideoPlayer : CDVPlugin {
 	
-    var videoViewPlayer: VideoViewPlayer?
-	
 	@objc(showVideo:) func showVideo(command: CDVInvokedUrlCommand) {
 		
     	//var pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR)
@@ -15,20 +13,20 @@
 		let videoId: String = command.arguments[0] as? String ?? ""
 		let videoUrl: String = command.arguments[1] as? String ?? ""
 
-        self.videoViewPlayer = VideoViewPlayer(videoId: videoId, videoUrl: videoUrl)
-        self.videoViewPlayer!.begin() 
+        let videoViewPlayer = VideoViewPlayer(videoId: videoId, videoUrl: videoUrl)
+        videoViewPlayer.begin() 
                
-        self.viewController.present(self.videoViewPlayer!.controller, animated: true)
+        self.viewController.present(videoViewPlayer.controller, animated: true)
 
 	}
 	
-	func releaseVideoPlayer() {
-        print("\n****** releaseViewController in VideoViewController")
-        	if (self.videoViewPlayer != nil) {
-			self.videoViewPlayer?.controller.dismiss(animated: false)
-			self.videoViewPlayer = nil
-        }
-    }
+//	func releaseVideoPlayer() {
+//        print("\n****** releaseViewController in VideoViewController")
+//        	if (self.videoViewPlayer != nil) {
+//			self.videoViewPlayer?.controller.dismiss(animated: false)
+//			self.videoViewPlayer = nil
+//        }
+//    }
 }
 
 

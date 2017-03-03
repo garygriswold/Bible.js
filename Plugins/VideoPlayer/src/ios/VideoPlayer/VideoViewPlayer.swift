@@ -27,10 +27,7 @@ class VideoViewPlayer : NSObject {
         //self.controller.initDebugNotifications()
         print("CONSTRUCTED")
     }
-    deinit {
-        self.controller.removeNotifications()
-        //self.controller.removeDebugNotifications()
-    }
+
     func begin() {
         print("VideoViewPlayer.BEGIN")
         
