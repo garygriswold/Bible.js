@@ -1,27 +1,30 @@
 import CoreMedia
-
+/**
+* This class persists the videoId, videoUrl and position (time) so that any video
+* can be restarted from the last place that it was viewed.
+*/
 class VideoViewState : NSObject, NSCoding {
 	
 	static let documentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
 	static var currentState = VideoViewState(videoId: "jesusFilm")
 	
 	static func clear(videoId: String) -> Bool {
-		let archiveURL = documentsDirectory.appendingPathComponent(videoId)	
 		currentState = VideoViewState(videoId: videoId)
+		let archiveURL = documentsDirectory.appendingPathComponent(videoId)	
 		let isSuccess = NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)
 		return isSuccess		
 	}
 	
 	static func save(videoId: String, videoUrl: String, position: CMTime) -> Bool {
-		let archiveURL = documentsDirectory.appendingPathComponent(videoId)
 		currentState = VideoViewState(videoId: videoId, videoUrl: videoUrl, position: position)
+		let archiveURL = documentsDirectory.appendingPathComponent(videoId)
 		let isSuccess = NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)
 		return isSuccess	
 	}
 	
 	static func update(time: CMTime?) -> Bool {
-		let archiveURL = documentsDirectory.appendingPathComponent(currentState.videoId)
 		currentState.position = ((time != nil) ? time : kCMTimeZero)!
+		let archiveURL = documentsDirectory.appendingPathComponent(currentState.videoId)
 		let isSuccess = NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)
 		return isSuccess		
 	}
@@ -37,7 +40,7 @@ class VideoViewState : NSObject, NSCoding {
 	var videoUrl: String?
 	var position: CMTime
 	
-	init(videoId: String, videoUrl: String, position: CMTime) {
+	init(videoId: String, videoUrl: String?, position: CMTime) {
 		self.videoId = videoId
 		self.videoUrl = videoUrl
 		self.position = position
@@ -50,11 +53,11 @@ class VideoViewState : NSObject, NSCoding {
 	}
 
 	required convenience init?(coder decoder: NSCoder) {
-		guard let videoId = decoder.decodeObject(forKey: "videoId") as? String,
-			let videoUrl = decoder.decodeObject(forKey: "videoUrl") as? String
+		guard let videoId = decoder.decodeObject(forKey: "videoId") as? String
 		else {
 			return nil
 		}
+		let videoUrl = decoder.decodeObject(forKey: "videoUrl") as? String
 		let position = decoder.decodeTime(forKey: "position") as CMTime
 		self.init(videoId: videoId, videoUrl: videoUrl, position: position)
 	}
@@ -70,7 +73,3 @@ class VideoViewState : NSObject, NSCoding {
 		return result
 	}
 }
-
-
-
-

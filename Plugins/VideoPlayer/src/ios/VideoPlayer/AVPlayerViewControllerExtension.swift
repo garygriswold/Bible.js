@@ -16,6 +16,10 @@ extension AVPlayerViewController {
     override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.landscape
     }
+    /**
+    * This method is called when the Done button on the video player is clicked.
+    * Video State is saved in this method.
+    */
     override open func viewWillDisappear(_ animated: Bool) {
         print("\n********** VIEW WILL DISAPPEAR ***** in AVPlayerViewController")
         super.viewWillDisappear(animated)
@@ -34,10 +38,6 @@ extension AVPlayerViewController {
                                                name: .AVPlayerItemFailedToPlayToEndTime,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(playerItemTimeJumped(note:)),
-                                               name: .AVPlayerItemTimeJumped,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
                                                selector: #selector(playerItemPlaybackStalled(note:)),
                                                name: .AVPlayerItemPlaybackStalled,
                                                object: nil)
@@ -54,18 +54,22 @@ extension AVPlayerViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(playerItemNewAccessLogEntry(note:)),
                                                name: .AVPlayerItemNewAccessLogEntry,
-                                               object: nil)	    
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(playerItemTimeJumped(note:)),
+                                               name: .AVPlayerItemTimeJumped,
+                                               object: nil)   
     }
     func removeNotifications() {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemFailedToPlayToEndTime, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemTimeJumped, object: nil)
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemPlaybackStalled, object: nil)
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewErrorLogEntry, object: nil)
         NotificationCenter.default.removeObserver(self, name: .UIApplicationWillResignActive, object: nil)
     }
     func removeDebugNotifications() {
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewAccessLogEntry, object: nil)	    
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewAccessLogEntry, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemTimeJumped, object: nil)    
     }
     func playerItemDidPlayToEndTime(note:Notification) {
         print("\n** DID PLAY TO END \(note.object)")
@@ -89,6 +93,10 @@ extension AVPlayerViewController {
     func playerItemNewErrorLogEntry(note:Notification) {
         print("\n****** ERROR LOG ENTRY \(note.object)\n\(self.player?.currentItem?.errorLog())")
     }
+    /**
+    * This method is called when the Home button is clicked or double clicked.
+    * VideoState is saved in this method
+    */
     func applicationWillResignActive(note:Notification) {
 	    print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
 	    VideoViewState.update(time: self.player?.currentTime())
