@@ -108,9 +108,7 @@ extension AVPlayerViewController {
     private func releaseVideoPlayer() {
         removeNotifications()
         removeDebugNotifications()	
-        
-        //print("SELF CONTROLLER \(String(describing: type(of: self))")        
-        //print("PARENT CONTROLLER \(String(describing: type(of: self.presentingViewController))")    
+        VideoPlayer.releaseVideoPlayer(message: nil)
     }
 }
 

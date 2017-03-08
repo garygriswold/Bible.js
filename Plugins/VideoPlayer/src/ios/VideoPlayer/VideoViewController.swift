@@ -4,6 +4,10 @@
  *
  *  Created by Gary Griswold on 1/16/17.
  *  Copyright © 2017 ShortSands. All rights reserved.
+ *
+ * *** This class is deprecated.  It was needed to write a
+ * standalone video player application, but it is not part of the
+ * videoplayer plugin.
  */
 import UIKit
 

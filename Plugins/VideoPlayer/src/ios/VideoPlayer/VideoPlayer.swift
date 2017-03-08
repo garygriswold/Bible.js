@@ -6,9 +6,13 @@
 
 @objc(VideoPlayer) class VideoPlayer : CDVPlugin {
 	
+	static var instance: VideoPlayer?
+	static var command: CDVInvokedUrlCommand?
+	
 	@objc(showVideo:) func showVideo(command: CDVInvokedUrlCommand) {
 		
-    	//var pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR)
+		VideoPlayer.instance = self
+		VideoPlayer.command = command
 		
 		let videoId: String = command.arguments[0] as? String ?? ""
 		let videoUrl: String = command.arguments[1] as? String ?? ""
@@ -17,7 +21,17 @@
         videoViewPlayer.begin() 
                
         self.viewController.present(videoViewPlayer.controller, animated: true)
-
+	}
+	
+	static func releaseVideoPlayer(message: String?) {
+		print("\n\nCALLED RELEASE VIDEO PLAYER")
+		var pluginResult: CDVPluginResult
+		if (message != nil) {
+			pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: message)
+		} else {
+			pluginResult = CDVPluginResult(status: CDVCommandStatus_OK)
+		}
+		instance?.commandDelegate!.send(pluginResult, callbackId: command?.callbackId)
 	}
 	
 //	func releaseVideoPlayer() {
@@ -29,5 +43,3 @@
 //    }
 }
 
-
-//// There is no callback yet, and I don't this release is ever called.
