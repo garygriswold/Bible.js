@@ -21,9 +21,9 @@ extension AVPlayerViewController {
     * Video State is saved in this method.
     */
     override open func viewDidDisappear(_ animated: Bool) {
-        print("\n********** VIEW DID DISAPPEAR ***** in AVPlayerViewController")
-        super.viewDidDisappear(animated)
-        
+	    super.viewDidDisappear(animated)
+        print("\n********** VIEW DID DISAPPEAR ***** in AVPlayerViewController \(animated)")
+
         VideoViewState.update(time: self.player?.currentTime())
 		releaseVideoPlayer()
     }
