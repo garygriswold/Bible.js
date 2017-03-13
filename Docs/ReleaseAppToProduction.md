@@ -150,7 +150,7 @@ Verify that your APK is signed. For example:
 	
 Align the final APK package using zipalign.  zipalign ensures that all uncompressed data starts with a particular byte alignment relative to the start of the file, which reduces the amount of RAM consumed by an app.
 
-	$HOME/Library/Android/sdk/build-tools/22.0.1/zipalign -v 4 android-release-signed.apk android-release.apk
+	$HOME/Library/Android/sdk/build-tools/25.0.2/zipalign -v 4 android-release-signed.apk android-release.apk
 	ls -lt
 	
 Upload APK
