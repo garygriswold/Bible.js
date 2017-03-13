@@ -24,7 +24,7 @@ Development Process
 
 	develop at: ShortSands/BibleApp/Plugins/VideoPlayer
 	
-	create app: ShortSands/VideoProto
+	create app: ShortSands/VideoModule
 	
 	script to install plugin
 	./TestVideoPlugin.sh
@@ -33,9 +33,12 @@ Testing Android Native VideoPlayer
 ----------------------------------
 
 Test the Plugin inside a simple Cordova App, executing the App and plugin.
+After changing the App, I must run cordova emulate android before using
+Android Studio.  After changing the plugin, I must run ./TestVideoPlugin.sh
+before using Android Studio.
 
 	open Android Studio
-	select ShortSands/VideoProto/platforms/android
+	select ShortSands/VideoModule/platforms/android
 	run
 	
 Method Profiling on Android
@@ -91,10 +94,8 @@ Apple iOS Development
 Testing iOS Native VideoPlayer
 ------------------------------
 
-//	open Finder
-//	open VideoPlayer/src/ios/VideoPlayer.xcodeproj
 	open Xcode
-	select ShortSands/VideoProto/platforms/ios
+	select ShortSands/VideoModule/platforms/ios
 	run
 	
 Getting iOS to run
@@ -111,5 +112,7 @@ Getting iOS to run
 	
 	Renamed ViewController to VideoViewController
 	
-	?? console logging is not working ??
+After installing cordova-plugin-console, the JS console.log messages do get
+into the XCode console.log, but they do not get into a file in the cordova directory
+that can be accessed when running cordova and not xCode.
 	

@@ -18,6 +18,7 @@ class VideoViewState : NSObject, NSCoding {
 	static func clear() {
 		currentState.videoUrl = nil
 		currentState.position = kCMTimeZero
+		currentState.timestamp = Date()
 		let archiveURL = documentsDirectory.appendingPathComponent(currentState.videoId)
 		NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)		
 	}
@@ -29,6 +30,7 @@ class VideoViewState : NSObject, NSCoding {
 	static func update(time: CMTime?) {
 		if (currentState.videoUrl != nil) {
 			currentState.position = ((time != nil) ? time : kCMTimeZero)!
+			currentState.timestamp = Date()
 			let archiveURL = documentsDirectory.appendingPathComponent(currentState.videoId)
 			NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)
 		}
@@ -37,17 +39,20 @@ class VideoViewState : NSObject, NSCoding {
 	var videoId: String
 	var videoUrl: String?
 	var position: CMTime
+	var timestamp: Date
 	
-	init(videoId: String, videoUrl: String?, position: CMTime) {
+	init(videoId: String, videoUrl: String?, position: CMTime, timestamp: Date) {
 		self.videoId = videoId
 		self.videoUrl = videoUrl
 		self.position = position
+		self.timestamp = timestamp
 	}
 	
 	init(videoId: String) {
 		self.videoId = videoId
 		self.videoUrl = nil
 		self.position = kCMTimeZero
+		self.timestamp = Date()
 	}
 
 	required convenience init?(coder decoder: NSCoder) {
@@ -57,17 +62,22 @@ class VideoViewState : NSObject, NSCoding {
 		}
 		let videoUrl = decoder.decodeObject(forKey: "videoUrl") as? String
 		let position = decoder.decodeTime(forKey: "position") as CMTime
-		self.init(videoId: videoId, videoUrl: videoUrl, position: position)
+		var timestamp = decoder.decodeObject(forKey: "timestamp") as? Date
+		if (timestamp == nil) {
+			timestamp = Date()
+		}
+		self.init(videoId: videoId, videoUrl: videoUrl, position: position, timestamp: timestamp!)
 	}
 	
 	func encode(with coder: NSCoder) {
     	coder.encode(self.videoId, forKey: "videoId")
 		coder.encode(self.videoUrl, forKey: "videoUrl")
 		coder.encode(self.position, forKey: "position")
+		coder.encode(self.timestamp, forKey: "timestamp")
 	}
 	
 	func toString() -> String {
-		let result = "VideoId: \(self.videoId), VideoUrl: \(self.videoUrl), Position: \(self.position)"
+		let result = "VideoId: \(self.videoId), VideoUrl: \(self.videoUrl), Position: \(self.position), Timestamp: \(self.timestamp)"
 		return result
 	}
 }
