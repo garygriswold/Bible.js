@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import java.util.Date;
 
 class VideoPersistence {
 	
@@ -16,6 +17,7 @@ class VideoPersistence {
 	private static final String VIDEO_ID = "videoId";
 	private static final String VIDEO_URL = "videoUrl";
 	private static final String CURRENT_POSITION = "currentPosition";
+	private static final String TIMESTAMP = "timestamp";
 	private VideoActivity activity;
 	
 	VideoPersistence(VideoActivity videoActivity) {
@@ -35,6 +37,7 @@ class VideoPersistence {
 			SharedPreferences.Editor editor = savedState.edit();
 			editor.putString(VIDEO_URL, activity.getVideoUrl());
 			editor.putInt(CURRENT_POSITION, activity.getCurrentPosition());
+			editor.putLong(TIMESTAMP, new Date().getTime());
 			editor.apply();
 		}		
 	}
@@ -46,8 +49,10 @@ class VideoPersistence {
 		SharedPreferences savedState = activity.getSharedPreferences(activity.getVideoId(), Context.MODE_PRIVATE);
 		if (savedState != null && savedState.contains(VIDEO_URL)) {
 			activity.setCurrentPosition(savedState.getInt(CURRENT_POSITION, 0));
+			activity.setTimestamp(new Date(savedState.getLong(TIMESTAMP, new Date().getTime())));
 		} else {
 			activity.setCurrentPosition(0);
+			activity.setTimestamp(new Date());
 		}
 	}
 }

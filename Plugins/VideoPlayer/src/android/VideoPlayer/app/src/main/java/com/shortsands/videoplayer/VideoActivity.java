@@ -15,6 +15,7 @@ import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
+import java.util.Date;
 /**
  * Created by garygriswold on 1/26/17.
  * This is based up the following plugin:
@@ -34,6 +35,7 @@ public class VideoActivity extends Activity implements
     private String videoUrl;
     private int currentPosition = 0;
     private boolean videoPlaybackComplete = false;
+    private Date timestamp = new Date();
     
     public String getVideoId() {
 	    return(this.videoId);
@@ -53,6 +55,9 @@ public class VideoActivity extends Activity implements
     public void setCurrentPosition(int pos) {
 	    this.currentPosition = pos;
     }
+    public void setTimestamp(Date dt) {
+	    this.timestamp = dt;
+    } 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,13 +136,21 @@ public class VideoActivity extends Activity implements
         this.mediaPlayer.setScreenOnWhilePlaying(true);
         //this.mediaPlayer.setOnBufferingUpdateListener(this); // enable for debugging
 	    this.videoView.start();
-        if (this.currentPosition > 0) {
+	    int seekTime = backupSeek();
+	    if (seekTime > 1) {
 	       	this.mediaPlayer.setOnSeekCompleteListener(this);
-	        this.videoView.seekTo(this.currentPosition);
+	        this.videoView.seekTo(seekTime);
         } else {
 			this.actualStartVideo();
         }
     }
+    
+    private int backupSeek() {
+		long duration = new Date().getTime() - this.timestamp.getTime();
+		int backupMs = Long.toString(duration).length() * 1000; // could multiply by a factor here
+		int seekTime = this.currentPosition - backupMs;
+		return(seekTime);
+	}
     
     public void onSeekComplete(MediaPlayer mp) {
         Log.d(TAG, "onSeekComplete CALLED " + System.currentTimeMillis());
