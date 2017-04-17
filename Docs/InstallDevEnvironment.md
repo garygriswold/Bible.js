@@ -497,6 +497,94 @@ So, I updated sqlite3 as follows
 
 	npm update sqlite3
 	
+Reinstall Cordova and All of Android
+====================================
+April 13, 2017
+
+Nothing is working with Android. Builds don't work on Hello World even for cordova.
+Chrome crashes, and Emulator crashes.  Android Studio seems to keep asking for the
+same updates.
+
+The solution is to delete and reinstall everything that is cordova and android,
+and then use it to build a HelloWorld app before going back to my Apps.
+
+First step is to uninstall and reinstall cordova	
+	
+	Tried to install and got this error
+	# deprecated node-uuid@1.4.8, use uuid instead
+	sudo npm -g uninstall node-uuid
+	sudo npm -g uninstall cordova
+	sudo npm -g install cordova
+	cordova -v 6.5.0
+	
+Delete Android Studio and sdk
+
+	cd /Applications/Android Studio.app
+	rm -rf *
+	cd ..
+	rmdir "Android Studio.app"
+	cd
+	cd Library/Android/sdk
+	rm -rf *
+	
+Install Android Studio
+
+	Download from the web and follow instructions
+	
+Create a new empty project with android and ios platforms
+
+	cd Desktop
+	cordova create Hello3 com.shortsands.hello3 Hello3
+	cd Hello3
+	cordova platform add android
+	cordova platform update android@6.2.1
+	cordova platform add ios
+	
+Run the App on ios
+
+	cordova emulate ios
+	# it works
+
+	cordova run ios --device
+	Error 65 (No Team)
+	Open XCode on Hello3/platforms/ios
+	Set Team
+	# It works
+
+	xCode run App both in emulator and Device
+	
+Run the App on android
+
+	cordova emulate android
+	# Error: android: Command failed with exit code 2
+	
+	Android Studio with connected device
+	# it works after device reboot.
+	
+	Android Studio with emulated device
+	# it works after creating a new device
+	
+	chrome://inspect is working.
+	
+Try VideoModule project
+
+	cordova platform update android@6.2.1
+	
+	cordova emulate android
+	# Error: android: Command failed with exit code 2
+	
+	But, cordova run android --device works
+	And Android Studio works both device and emulator
+	And Chrome works.
+	
+
+	
+
+	
+	
+	
+	
+
 	
 
 
