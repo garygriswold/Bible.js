@@ -34,6 +34,8 @@ public class VideoActivity extends Activity implements
     private String videoId;
     private String videoUrl;
     private int currentPosition = 0;
+    private int positionBackup = 0; // used in onError recovery
+    private boolean onErrorRecovery = false;
     private boolean videoPlaybackComplete = false;
     private Date timestamp = new Date();
     
@@ -134,21 +136,23 @@ public class VideoActivity extends Activity implements
         Log.d(TAG, "onPrepared CALLED " + System.currentTimeMillis());
         this.mediaPlayer = mp;
         this.mediaPlayer.setScreenOnWhilePlaying(true);
-        //this.mediaPlayer.setOnBufferingUpdateListener(this); // enable for debugging
+        this.mediaPlayer.setOnBufferingUpdateListener(this); // enable for debugging
 	    this.videoView.start();
-	    int seekTime = backupSeek();
+	    int seekTime = (this.onErrorRecovery) ? this.currentPosition : backupSeek();
 	    if (seekTime > 1) {
 	       	this.mediaPlayer.setOnSeekCompleteListener(this);
 	        this.videoView.seekTo(seekTime);
         } else {
 			this.actualStartVideo();
         }
+        this.onErrorRecovery = false; // reset to default
     }
     
     private int backupSeek() {
 		long duration = new Date().getTime() - this.timestamp.getTime();
 		int backupMs = Long.toString(duration).length() * 1000; // could multiply by a factor here
 		int seekTime = this.currentPosition - backupMs;
+		Log.d(TAG, "current and seekTime " + this.currentPosition + " " + seekTime);
 		return(seekTime);
 	}
     
@@ -190,8 +194,15 @@ public class VideoActivity extends Activity implements
                 message = "Unknown Error " + what;
         }
         Log.e(TAG, "onError " + message + " " + extra);
-
-        this.wrapItUp(Activity.RESULT_CANCELED, message);
+        
+        Log.d(TAG, "position backup " + this.positionBackup);
+        mediaPlayer.reset();
+        this.onErrorRecovery = true;
+        this.setCurrentPosition(this.positionBackup);
+        this.progressBar.setVisibility(View.VISIBLE);
+        Uri videoUri = Uri.parse(this.videoUrl);
+        this.videoView.setVideoURI(videoUri);
+        
         return true;
     }
 
@@ -240,7 +251,8 @@ public class VideoActivity extends Activity implements
     }
 
     public void onBufferingUpdate(MediaPlayer mediaPlayer, int percent) {
-        Log.d(TAG, "onBufferingUpdate : " + percent + "%");
+	    this.positionBackup = this.getCurrentPosition();
+        Log.d(TAG, "onBufferingUpdate : " + percent + "%  " + this.positionBackup);
     }
 
     public void onCompletion(MediaPlayer mediaPlayer) {

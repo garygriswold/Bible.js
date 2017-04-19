@@ -38,7 +38,7 @@ class VideoPersistence {
 			editor.putString(VIDEO_URL, activity.getVideoUrl());
 			editor.putInt(CURRENT_POSITION, activity.getCurrentPosition());
 			editor.putLong(TIMESTAMP, new Date().getTime());
-			editor.apply();
+			editor.commit();
 		}		
 	}
 	
