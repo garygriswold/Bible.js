@@ -1,5 +1,5 @@
 /**
-* This function draws and icon that is used as a send button
+* This function draws and icon that is used as a send arrow button
 * on the QuestionsView input block.
 */
 function drawSendIcon(hite, color) {

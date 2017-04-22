@@ -1188,13 +1188,14 @@ HeaderView.prototype.showView = function() {
 	var menuWidth = setupIconButton('tocCell', drawTOCIcon, this.hite, BIBLE.SHOW_TOC);
 	var serhWidth = setupIconButton('searchCell', drawSearchIcon, this.hite, BIBLE.SHOW_SEARCH);
 	this.rootRow.appendChild(this.labelCell);
+	var videoWidth = setupIconButton('videoCell', drawVideoIcon, this.hite, BIBLE.SHOW_TOC);
 	if (that.version.isQaActive == 'T') {
 		var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
 	} else {
 		quesWidth = 0;
 	}
 	var settWidth = setupIconButton('settingsCell', drawSettingsIcon, this.hite, BIBLE.SHOW_SETTINGS);
-	var avalWidth = window.innerWidth - (menuWidth + serhWidth + quesWidth + settWidth + (6 * 4));// six is fudge factor
+	var avalWidth = window.innerWidth - (menuWidth + serhWidth + videoWidth + quesWidth + settWidth + (6 * 4));// six is fudge factor
 
 	this.titleCanvas = document.createElement('canvas');
 	drawTitleField(this.titleCanvas, this.hite, avalWidth);
@@ -1912,7 +1913,7 @@ function drawSearchIcon(hite, color) {
 	graphics.stroke();
 	return(canvas);
 }/**
-* This function draws and icon that is used as a send button
+* This function draws and icon that is used as a send arrow button
 * on the QuestionsView input block.
 */
 function drawSendIcon(hite, color) {
@@ -1956,7 +1957,6 @@ function drawSendIcon(hite, color) {
 }/**
 * This function draws the gear that is used as the settings
 * button on the status bar.
-* This is not yet being used.
 */
 function drawSettingsIcon(hite, color) {
 	var lineThick = hite / 7.0;
@@ -2163,6 +2163,39 @@ StopIcon.prototype.drawIcon = function() {
 // stop = new StopIcon(200, '#FF0000');
 //stop.showIcon();
 /**
+* This function draws the rectangle icon that is used as the video
+* button on the status bar.
+*/
+function drawVideoIcon(hite, color) {
+	var lineThick = hite / 8.0;
+	var lineYBeg = lineThick * 2.0;
+	var lineXBeg = lineThick;
+	var lineXEnd = hite - lineThick;
+	var lineYEnd = hite - lineThick * 2.0;
+
+	var canvas = document.createElement('canvas');
+	canvas.setAttribute('height', hite);
+	canvas.setAttribute('width', hite);
+	canvas.setAttribute('style', 'border: solid; color: black; backgroundColor: red');
+	var graphics = canvas.getContext('2d');
+	
+	graphics.fillStyle = "#9ea7b8";
+    graphics.fillRect(0,0,hite,hite);	
+
+	graphics.beginPath();
+	graphics.moveTo(lineXBeg, lineYBeg);
+	graphics.lineTo(lineXEnd, lineYBeg);
+	graphics.lineTo(lineXEnd, lineYEnd);
+	graphics.lineTo(lineXBeg, lineYEnd);
+	graphics.lineTo(lineXBeg, lineYBeg);
+	graphics.closePath();
+
+	graphics.lineWidth = lineThick;
+	graphics.strokeStyle = color;
+	graphics.lineJoin = 'round';
+	graphics.stroke();
+	return(canvas);
+}/**
 * This class is a wrapper for SQL Error so that we can always distinguish an error
 * from valid results.  Any method that calls an IO routine, which can expect valid results
 * or an error should test "if (results instanceof IOError)".

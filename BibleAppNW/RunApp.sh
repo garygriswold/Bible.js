@@ -33,6 +33,7 @@ cat ../Library/gui/icons/drawSettingsIcon.js >> js/BibleApp.js
 cat ../Library/gui/icons/drawTOCIcon.js >> js/BibleApp.js
 cat ../Library/gui/icons/GSPreloader.js >> js/BibleApp.js
 cat ../Library/gui/icons/StopIcon.js >> js/BibleApp.js
+cat ../Library/gui/icons/drawVideoIcon.js >> js/BibleApp.js
 
 cat ../Library/io/IOError.js >> js/BibleApp.js
 cat ../Library/io/SettingStorage.js >> js/BibleApp.js

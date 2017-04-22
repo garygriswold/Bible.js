@@ -74,13 +74,14 @@ HeaderView.prototype.showView = function() {
 	var menuWidth = setupIconButton('tocCell', drawTOCIcon, this.hite, BIBLE.SHOW_TOC);
 	var serhWidth = setupIconButton('searchCell', drawSearchIcon, this.hite, BIBLE.SHOW_SEARCH);
 	this.rootRow.appendChild(this.labelCell);
+	var videoWidth = setupIconButton('videoCell', drawVideoIcon, this.hite, BIBLE.SHOW_TOC);
 	if (that.version.isQaActive == 'T') {
 		var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
 	} else {
 		quesWidth = 0;
 	}
 	var settWidth = setupIconButton('settingsCell', drawSettingsIcon, this.hite, BIBLE.SHOW_SETTINGS);
-	var avalWidth = window.innerWidth - (menuWidth + serhWidth + quesWidth + settWidth + (6 * 4));// six is fudge factor
+	var avalWidth = window.innerWidth - (menuWidth + serhWidth + videoWidth + quesWidth + settWidth + (6 * 4));// six is fudge factor
 
 	this.titleCanvas = document.createElement('canvas');
 	drawTitleField(this.titleCanvas, this.hite, avalWidth);
