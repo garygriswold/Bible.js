@@ -1116,8 +1116,8 @@ SearchView.prototype.prepareSelect = function(refList) {
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
-var HEADER_BUTTON_HEIGHT = 44;
-var HEADER_BAR_HEIGHT = 52;
+var HEADER_BUTTON_HEIGHT = 32;//44;
+var HEADER_BAR_HEIGHT = 40;//52;
 var STATUS_BAR_HEIGHT = 14;
 
 function HeaderView(tableContents, version, localizeNumber) {
@@ -1228,7 +1228,7 @@ HeaderView.prototype.showView = function() {
 		that.titleGraphics = canvas.getContext('2d');
 		
 		that.titleGraphics.fillStyle = '#1b2f76';
-		that.titleGraphics.font = '24pt sans-serif';
+		that.titleGraphics.font = '18pt sans-serif';
 		that.titleGraphics.textAlign = 'center';
 		that.titleGraphics.textBaseline = 'middle';
 		that.titleGraphics.strokeStyle = '#1b2f76';
@@ -1890,8 +1890,8 @@ function drawQuestionsIcon(hite, color) {
 * button on the status bar.
 */
 function drawSearchIcon(hite, color) {
-	var lineThick = hite / 7.0;
-	var radius = (hite / 2) - (lineThick * 1.5);
+	var lineThick = hite / 8.0;
+	var radius = (hite / 2) - (lineThick * 2.0);
 	var coordX = radius + (lineThick * 1.5);
 	var coordY = radius + lineThick * 1.25;
 	var edgeX = coordX + radius / 2 + 2;
@@ -1901,6 +1901,9 @@ function drawSearchIcon(hite, color) {
 	canvas.setAttribute('height', hite);
 	canvas.setAttribute('width', hite + lineThick);
 	var graphics = canvas.getContext('2d');
+	
+	//graphics.fillStyle = '#AAA';
+    //graphics.fillRect(0,0,hite,hite);
 
 	graphics.beginPath();
 	graphics.arc(coordX, coordY, radius, 0, Math.PI*2, true);
@@ -1959,8 +1962,8 @@ function drawSendIcon(hite, color) {
 * button on the status bar.
 */
 function drawSettingsIcon(hite, color) {
-	var lineThick = hite / 7.0;
-	var radius = (hite / 2) - (lineThick * 1.75);
+	var lineThick = hite / 8.0;
+	var radius = (hite / 2) - (lineThick * 2.0);
 	var coord = hite / 2;
 	var circle = Math.PI * 2;
 	var increment = Math.PI / 4;
@@ -1970,6 +1973,9 @@ function drawSettingsIcon(hite, color) {
 	canvas.setAttribute('height', hite);
 	canvas.setAttribute('width', hite);
 	var graphics = canvas.getContext('2d');
+	
+	//graphics.fillStyle = '#AAA';
+    //graphics.fillRect(0,0,hite,hite);
 
 	graphics.beginPath();
 	graphics.arc(coord, coord, radius, 0, Math.PI*2, true);
@@ -1988,24 +1994,27 @@ function drawSettingsIcon(hite, color) {
 * on the StatusBar.
 */
 function drawTOCIcon(hite, color) {
-	var lineThick = hite / 7.0;
+	var lineThick = hite / 8.0;
 	var line1Y = lineThick * 1.5;
-	var lineXSrt = line1Y;
+	var lineXBeg = lineThick;
 	var lineXEnd = hite - lineThick;
-	var line2Y = lineThick * 2 + line1Y;
-	var line3Y = lineThick * 2 + line2Y;
+	var line2Y = lineThick * 2.5 + line1Y;
+	var line3Y = lineThick * 2.5 + line2Y;
 
 	var canvas = document.createElement('canvas');
 	canvas.setAttribute('height', hite);
-	canvas.setAttribute('width', hite + lineXSrt * 0.5);
+	canvas.setAttribute('width', hite);// + lineXBeg * 0.5);
 	var graphics = canvas.getContext('2d');
+	
+	//graphics.fillStyle = '#AAA';
+    //graphics.fillRect(0,0,hite,hite);
 
 	graphics.beginPath();
-	graphics.moveTo(lineXSrt, line1Y);
+	graphics.moveTo(lineXBeg, line1Y);
 	graphics.lineTo(lineXEnd, line1Y);
-	graphics.moveTo(lineXSrt, line2Y);
+	graphics.moveTo(lineXBeg, line2Y);
 	graphics.lineTo(lineXEnd, line2Y);
-	graphics.moveTo(lineXSrt, line3Y);
+	graphics.moveTo(lineXBeg, line3Y);
 	graphics.lineTo(lineXEnd, line3Y);
 
 	graphics.lineWidth = lineThick;
@@ -2176,11 +2185,10 @@ function drawVideoIcon(hite, color) {
 	var canvas = document.createElement('canvas');
 	canvas.setAttribute('height', hite);
 	canvas.setAttribute('width', hite);
-	canvas.setAttribute('style', 'border: solid; color: black; backgroundColor: red');
 	var graphics = canvas.getContext('2d');
 	
-	graphics.fillStyle = "#9ea7b8";
-    graphics.fillRect(0,0,hite,hite);	
+	//graphics.fillStyle = '#AAA';
+    //graphics.fillRect(0,0,hite,hite);	
 
 	graphics.beginPath();
 	graphics.moveTo(lineXBeg, lineYBeg);

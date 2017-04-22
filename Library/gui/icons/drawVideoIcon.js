@@ -12,11 +12,10 @@ function drawVideoIcon(hite, color) {
 	var canvas = document.createElement('canvas');
 	canvas.setAttribute('height', hite);
 	canvas.setAttribute('width', hite);
-	canvas.setAttribute('style', 'border: solid; color: black; backgroundColor: red');
 	var graphics = canvas.getContext('2d');
 	
-	graphics.fillStyle = "#9ea7b8";
-    graphics.fillRect(0,0,hite,hite);	
+	//graphics.fillStyle = '#AAA';
+    //graphics.fillRect(0,0,hite,hite);	
 
 	graphics.beginPath();
 	graphics.moveTo(lineXBeg, lineYBeg);

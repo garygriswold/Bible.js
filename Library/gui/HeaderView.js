@@ -2,8 +2,8 @@
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
-var HEADER_BUTTON_HEIGHT = 44;
-var HEADER_BAR_HEIGHT = 52;
+var HEADER_BUTTON_HEIGHT = 32;//44;
+var HEADER_BAR_HEIGHT = 40;//52;
 var STATUS_BAR_HEIGHT = 14;
 
 function HeaderView(tableContents, version, localizeNumber) {
@@ -114,7 +114,7 @@ HeaderView.prototype.showView = function() {
 		that.titleGraphics = canvas.getContext('2d');
 		
 		that.titleGraphics.fillStyle = '#1b2f76';
-		that.titleGraphics.font = '24pt sans-serif';
+		that.titleGraphics.font = '18pt sans-serif';
 		that.titleGraphics.textAlign = 'center';
 		that.titleGraphics.textBaseline = 'middle';
 		that.titleGraphics.strokeStyle = '#1b2f76';

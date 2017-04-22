@@ -3,8 +3,8 @@
 * button on the status bar.
 */
 function drawSearchIcon(hite, color) {
-	var lineThick = hite / 7.0;
-	var radius = (hite / 2) - (lineThick * 1.5);
+	var lineThick = hite / 8.0;
+	var radius = (hite / 2) - (lineThick * 2.0);
 	var coordX = radius + (lineThick * 1.5);
 	var coordY = radius + lineThick * 1.25;
 	var edgeX = coordX + radius / 2 + 2;
@@ -14,6 +14,9 @@ function drawSearchIcon(hite, color) {
 	canvas.setAttribute('height', hite);
 	canvas.setAttribute('width', hite + lineThick);
 	var graphics = canvas.getContext('2d');
+	
+	//graphics.fillStyle = '#AAA';
+    //graphics.fillRect(0,0,hite,hite);
 
 	graphics.beginPath();
 	graphics.arc(coordX, coordY, radius, 0, Math.PI*2, true);

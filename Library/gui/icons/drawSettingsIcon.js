@@ -3,8 +3,8 @@
 * button on the status bar.
 */
 function drawSettingsIcon(hite, color) {
-	var lineThick = hite / 7.0;
-	var radius = (hite / 2) - (lineThick * 1.75);
+	var lineThick = hite / 8.0;
+	var radius = (hite / 2) - (lineThick * 2.0);
 	var coord = hite / 2;
 	var circle = Math.PI * 2;
 	var increment = Math.PI / 4;
@@ -14,6 +14,9 @@ function drawSettingsIcon(hite, color) {
 	canvas.setAttribute('height', hite);
 	canvas.setAttribute('width', hite);
 	var graphics = canvas.getContext('2d');
+	
+	//graphics.fillStyle = '#AAA';
+    //graphics.fillRect(0,0,hite,hite);
 
 	graphics.beginPath();
 	graphics.arc(coord, coord, radius, 0, Math.PI*2, true);
