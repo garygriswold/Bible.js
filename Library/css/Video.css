@@ -1,0 +1,65 @@
+html {
+	font-size: 12pt; /* temporary for VideoModule */
+}
+body {
+	background-color: white;
+	width: 100%;
+}
+table.videoList {
+    border-spacing: 20px;
+	background-color: white;
+	width: 100%;
+}
+tr.videoList {
+
+}
+td.videoList {
+	background-color: #F2F2F2;
+	box-shadow: 4px 4px 5px #BBB;
+}
+img.videoList {
+	width: 100%;
+}
+div.videoList {
+	
+}
+p.videoListTitle {
+	font-family: sans-serif;
+	font-size: 1.5rem;
+	text-transform: none;
+	text-align: center;
+	margin-top: 15px;
+	margin-bottom: 0px;
+	margin-left: 5px;
+	margin-right: 4px;
+}
+img.videoListPlay {
+	margin-top: -18px;
+    float: left;
+    height: 88px;
+    width: 88px;
+}
+img.videoListInfo {
+	margin-top: -18px;
+	float: right;
+	height: 88px;
+	width: 88px;
+}
+p.videoListDur {
+	font-family: sans-serif;
+	font-size: 0.8rem;
+	text-transform: none;
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+p.videoListDesc {
+	clear: both;
+	font-family: serif;
+	font-size: 1.0rem;
+	text-transform: none;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;	
+}
