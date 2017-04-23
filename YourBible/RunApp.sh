@@ -8,6 +8,7 @@ cat ../Library/css/Search.css >> www/css/BibleApp.css
 cat ../Library/css/Status.css >> www/css/BibleApp.css
 cat ../Library/css/TableContents.css >> www/css/BibleApp.css
 cat ../Library/css/Settings.css >> www/css/BibleApp.css
+cat ../Library/css/Video.css >> www/css/BibleApp.css
 
 echo \"use strict\"\; > www/js/BibleApp.js
 cat ../Library/gui/AppInitializer.js >> www/js/BibleApp.js
@@ -63,6 +64,10 @@ cat ../Library/util/LocalizeNumber.js >> www/js/BibleApp.js
 cat ../Library/util/cordovaDeviceSettings.js >> www/js/BibleApp.js
 cat ../Library/util/DOMBuilder.js >> www/js/BibleApp.js
 cat ../Library/util/DynamicCSS.js >> www/js/BibleApp.js
+
+cat ../Library/video/VideoListView.js >> www/js/BibleApp.js
+cat ../Library/video/VideoMetaData.js >> www/js/BibleApp.js
+cat ../Library/video/VideoTableAdapter.js >> www/js/BibleApp.js
 
 if [ -z "$1" ]; then
 	cordova emulate ios --device

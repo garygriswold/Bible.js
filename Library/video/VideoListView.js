@@ -1,42 +1,60 @@
 /**
 * This class presents a list of available video with thumbnails,
-* and when a thumbnail is clicked it display more detail.
+* and when a info btn is clicked it display more detail.
 * and when the play button is clicked, it starts the video.
 */
 "use strict";
-function VideoListView() {
-	this.countryCode = null;
-	this.silCode = null;
-	this.rootNode = null;
+function VideoListView(countryCd, silCd, device) {
+	this.videoIdList = [ 'KOG_OT', 'KOG_NT', '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
+	this.countryCode = countryCd;
+	this.silCode = silCd;
+	this.deviceType = device;
+	this.rootNode = document.createElement('div');
+	this.rootNode.id = 'videoRoot';
+	document.body.appendChild(this.rootNode);
+	this.viewNode = null;
 	Object.seal(this);
 }
-VideoListView.prototype.showView = function(countryCd, silCd) {
-	console.log('INSIDE SHOW VIEW');
+VideoListView.prototype.showView = function() {
+	console.log('INSIDE SHOW VIDEO LIST VIEW');
 	var that = this;
-	this.clearView();
-	if (this.rootNode != null && this.rootNode.children.length > 0 && this.countryCode === countryCd && this.silCode === silCd) {
+	if (this.viewNode != null && this.viewNode.children.length > 0) {
 		this.reActivateView();
-		return(true);
 	} else {
-		this.countryCode = countryCd;
-		this.silCode = silCd;
-		this.rootNode = this.addNode(document.body, 'table', 'videoList');
-		return(false);
+		this.viewNode = this.addNode(this.rootNode, 'table', 'videoList');
+		getVideoTable(this.countryCode, this.silCode, this.deviceType);
+	}
+	
+	function getVideoTable(countryCode, silCode, deviceType) {
+		var databaseHelper = new DatabaseHelper('Versions.db', true);
+		var videoAdapter = new VideoTableAdapter(databaseHelper);
+		videoAdapter.selectJesusFilmLanguage(countryCode, silCode, function(lang) {
+		
+			videoAdapter.selectVideos(lang.languageId, silCode, deviceType, function(videoMap) {
+				for (var i=0; i<that.videoIdList.length; i++) {
+					var id = that.videoIdList[i];
+					var metaData = videoMap[id];
+					if (metaData) {
+						that.showVideoItem(metaData);
+					}
+				}
+			});
+		});
 	}
 };
 VideoListView.prototype.reActivateView = function() {
-	document.body.appendChild(this.rootNode);
+	this.rootNode.appendChild(this.viewNode);
 	var nodeList = document.getElementsByClassName('videoListDesc');
 	for (var i=0; i<nodeList.length; i++) {
 		nodeList[i].setAttribute('hidden', 'hidden');
 	}
 };
 VideoListView.prototype.showVideoItem = function(videoItem) {	
-	console.log('INSIDE BUILD ITEM');
+	console.log('INSIDE BUILD ITEM', videoItem.mediaId);
 	var that = this;
-	var row = this.addNode(this.rootNode, 'tr', 'videoList');
+	var row = this.addNode(this.viewNode, 'tr', 'videoList');
 	var cell = this.addNode(row, 'td', 'videoList');
-
+	
 	var image = this.addNode(cell, 'img', 'videoList');
 	image.src = 'img/' + videoItem.mediaId + '.jpg';
 	image.alt = videoItem.title;
@@ -48,7 +66,7 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 	play.setAttribute('src', 'img/play.svg');
 	play.setAttribute('mediaId', videoItem.mediaId);
 	play.setAttribute('mediaURL', videoItem.mediaURL);
-	play.addEventListener('click', playVideo);	
+	play.addEventListener('click', playVideo);
 	
 	var info = this.addNode(div, 'img', 'videoListInfo');
 	info.setAttribute('src', 'img/info.svg');
@@ -62,7 +80,7 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 	} else {
 		info.setAttribute('style', 'opacity: 0');
 	}
-
+	
 	function buildVideoDescription(event) {
 		var descNode = this.nextSibling.nextSibling;
 		if (descNode.hasAttribute('hidden')) {
@@ -71,6 +89,7 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 			descNode.setAttribute('hidden', 'hidden');
 		}
 	}
+	
 	function playVideo(event) {
 		var videoId = this.getAttribute('mediaId');
 		var videoUrl = this.getAttribute('mediaURL');
@@ -85,13 +104,13 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 		});
 	}
 };
-VideoListView.prototype.clearView = function() {
-	while (document.body.lastChild) {
-		document.body.removeChild(document.body.lastChild);
-	}	
-};
 VideoListView.prototype.hideView = function() {
-	document.body.removeChild(this.rootNode);
+	if (this.rootNode.children.length > 0) {
+		//this.scrollPosition = window.scrollY;
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
+	}
 };
 VideoListView.prototype.addNode = function(parent, type, clas, content, id) {
 	var node = document.createElement(type);

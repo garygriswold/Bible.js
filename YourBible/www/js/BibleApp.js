@@ -104,7 +104,13 @@ AppInitializer.prototype.begin = function() {
 		that.controller.clearViews();	
 		that.controller.questionsView.showView();
 		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
-	}	
+	}
+	function showVideoListHandler(event) {
+		disableHandlers();
+		that.controller.clearViews();
+		that.controller.videoListView.showView();
+		enableHandlersExcept(BIBLE.SHOW_VIDEO);
+	}
 	function showSettingsHandler(event) {
 		disableHandlers();
 		that.controller.clearViews();
@@ -116,6 +122,7 @@ AppInitializer.prototype.begin = function() {
 		document.body.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		document.body.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
 		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		document.body.removeEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
 	function enableHandlersExcept(name) {
@@ -123,6 +130,7 @@ AppInitializer.prototype.begin = function() {
 		if (name !== BIBLE.SHOW_SEARCH) document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
 		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		if (name !== BIBLE.SHOW_VIDEO) document.body.addEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
 };/**
@@ -140,6 +148,7 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		CHG_HEADING: 'bible-chg-heading', // change title at top of page as result of user scrolling
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note', // Hide footnote as a result of user action
+		SHOW_VIDEO: 'bible-show-video' // Show Video List view as a result of user action
 	};
 var SERVER_HOST = 'cloud.shortsands.com'; // For unused QuestionsView
 var SERVER_PORT = '8080';
@@ -202,6 +211,10 @@ AppViewController.prototype.begin = function(develop) {
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.settingStorage, that.verses, that.version);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
+		var countryCode = 'US';
+		var deviceType = 'ios';
+		that.videoListView = new VideoListView(countryCode, that.version.silCode, deviceType);
+		that.videoListView.rootNode.style.top = that.header.barHite + 'px';
 		that.touch = new Hammer(document.getElementById('codexRoot'));
 		setInitialFontSize();
 		Object.seal(that);
@@ -276,6 +289,7 @@ AppViewController.prototype.clearViews = function() {
 	this.searchView.hideView();
 	this.codexView.hideView();
 	this.questionsView.hideView();
+	this.videoListView.hideView();
 	this.settingsView.hideView();
 	this.historyView.hideView();
 };
@@ -299,6 +313,7 @@ AppViewController.prototype.close = function() {
 	this.historyView = null;
 	this.questionsView = null;
 	this.settingsView = null;
+	this.videoListView = null;
 	this.copyrightView = null;
 	// model
 	this.tableContents = null;
@@ -1187,7 +1202,7 @@ HeaderView.prototype.showView = function() {
 	var menuWidth = setupIconButton('tocCell', drawTOCIcon, this.hite, BIBLE.SHOW_TOC);
 	var serhWidth = setupIconButton('searchCell', drawSearchIcon, this.hite, BIBLE.SHOW_SEARCH);
 	this.rootRow.appendChild(this.labelCell);
-	var videoWidth = setupIconButton('videoCell', drawVideoIcon, this.hite, BIBLE.SHOW_TOC);
+	var videoWidth = setupIconButton('videoCell', drawVideoIcon, this.hite, BIBLE.SHOW_VIDEO);
 	if (that.version.isQaActive == 'T') {
 		var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
 	} else {
@@ -1901,8 +1916,8 @@ function drawSearchIcon(hite, color) {
 	canvas.setAttribute('width', hite + lineThick);
 	var graphics = canvas.getContext('2d');
 	
-	graphics.fillStyle = '#AAA';
-    graphics.fillRect(0,0,hite,hite);
+	//graphics.fillStyle = '#AAA';
+    //graphics.fillRect(0,0,hite,hite);
 
 	graphics.beginPath();
 	graphics.arc(coordX, coordY, radius, 0, Math.PI*2, true);
@@ -1963,10 +1978,6 @@ function drawSendIcon(hite, color) {
 function drawSettingsIcon(hite, color) {
 	var lineThick = hite / 8.0;
 	var radius = (hite / 2) - (lineThick * 2.0);
-	//hite == 88
-	//hite/2 == 44
-	//line == 12.5 
-	//line == 11
 	var coord = hite / 2;
 	var circle = Math.PI * 2;
 	var increment = Math.PI / 4;
@@ -1977,8 +1988,8 @@ function drawSettingsIcon(hite, color) {
 	canvas.setAttribute('width', hite);
 	var graphics = canvas.getContext('2d');
 	
-	graphics.fillStyle = '#AAA';
-    graphics.fillRect(0,0,hite,hite);
+	//graphics.fillStyle = '#AAA';
+    //graphics.fillRect(0,0,hite,hite);
 
 	graphics.beginPath();
 	graphics.arc(coord, coord, radius, 0, Math.PI*2, true);
@@ -2009,8 +2020,8 @@ function drawTOCIcon(hite, color) {
 	canvas.setAttribute('width', hite);// + lineXBeg * 0.5);
 	var graphics = canvas.getContext('2d');
 	
-	graphics.fillStyle = '#AAA';
-    graphics.fillRect(0,0,hite,hite);
+	//graphics.fillStyle = '#AAA';
+    //graphics.fillRect(0,0,hite,hite);
 
 	graphics.beginPath();
 	graphics.moveTo(lineXBeg, line1Y);
@@ -2190,8 +2201,8 @@ function drawVideoIcon(hite, color) {
 	canvas.setAttribute('width', hite);
 	var graphics = canvas.getContext('2d');
 	
-	graphics.fillStyle = '#AAA';
-    graphics.fillRect(0,0,hite,hite);	
+	//graphics.fillStyle = '#AAA';
+    //graphics.fillRect(0,0,hite,hite);	
 
 	graphics.beginPath();
 	graphics.moveTo(lineXBeg, lineYBeg);
@@ -4433,5 +4444,250 @@ DynamicCSS.prototype.setDirection = function(direction) {
 		sheet.addRule("p.q, p.q1",  	"margin-right: 3.0rem;	margin-left: 0;");
 		sheet.addRule("p.q2", 			"margin-right: 3.0rem; 	margin-left: 0;");
 	}	
+};
+
+/**
+* This class presents a list of available video with thumbnails,
+* and when a thumbnail is clicked it display more detail.
+* and when the play button is clicked, it starts the video.
+*/
+"use strict";
+function VideoListView(countryCd, silCd, device) {
+	this.videoIdList = [ 'KOG_OT', 'KOG_NT', '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
+	this.countryCode = countryCd;
+	this.silCode = silCd;
+	this.deviceType = device;
+	this.rootNode = document.createElement('div');
+	document.body.appendChild(this.rootNode);
+	this.viewNode = null;
+	Object.seal(this);
+}
+VideoListView.prototype.showView = function() {
+	console.log('INSIDE SHOW VIDEO LIST VIEW');
+	var that = this;
+	//this.clearView();
+	if (this.viewNode != null && this.viewNode.children.length > 0) {// && this.countryCode === countryCd && this.silCode === silCd) {
+		this.reActivateView();
+		//return(true);
+	} else {
+		//this.countryCode = countryCd;
+		//this.silCode = silCd;
+		this.viewNode = this.addNode(this.rootNode, 'table', 'videoList');
+		//return(false);
+		getVideoTable(this.countryCode, this.silCode, this.deviceType);//, function(count) {
+	}
+	
+	function getVideoTable(countryCode, silCode, deviceType) {//, callback) {
+		var databaseHelper = new DatabaseHelper('Versions.db', true);
+		var videoAdapter = new VideoTableAdapter(databaseHelper);
+		videoAdapter.selectJesusFilmLanguage(countryCode, silCode, function(lang) {
+		
+			videoAdapter.selectVideos(lang.languageId, silCode, deviceType, function(videoMap) {
+				for (var i=0; i<that.videoIdList.length; i++) {
+					var id = that.videoIdList[i];
+					var metaData = videoMap[id];
+					if (metaData) {
+						that.showVideoItem(metaData);
+					}
+				}
+				//callback(Object.keys(videoMap).length);
+			});
+		});
+	}
+};
+VideoListView.prototype.reActivateView = function() {
+	//document.body.appendChild(this.rootNode);
+	this.rootNode.appendChild(this.viewNode);
+	var nodeList = document.getElementsByClassName('videoListDesc');
+	for (var i=0; i<nodeList.length; i++) {
+		nodeList[i].setAttribute('hidden', 'hidden');
+	}
+};
+VideoListView.prototype.showVideoItem = function(videoItem) {	
+	console.log('INSIDE BUILD ITEM');
+	var that = this;
+	var row = this.addNode(this.viewNode, 'tr', 'videoList');
+	var cell = this.addNode(row, 'td', 'videoList');
+	
+	var image = this.addNode(cell, 'img', 'videoList');
+	image.src = 'img/' + videoItem.mediaId + '.jpg';
+	image.alt = videoItem.title;
+	
+	var div = this.addNode(cell, 'div', 'videList');
+	this.addNode(div, 'p', 'videoListTitle', videoItem.title);
+	
+	var play = this.addNode(div, 'img', 'videoListPlay');
+	play.setAttribute('src', 'img/play.svg');
+	play.setAttribute('mediaId', videoItem.mediaId);
+	play.setAttribute('mediaURL', videoItem.mediaURL);
+	play.addEventListener('click', playVideo);
+	
+	var info = this.addNode(div, 'img', 'videoListInfo');
+	info.setAttribute('src', 'img/info.svg');
+
+	this.addNode(div, 'p', 'videoListDur', videoItem.duration());
+	
+	if (videoItem.longDescription) {
+		info.addEventListener('click', buildVideoDescription);
+		var desc = this.addNode(div, 'p', 'videoListDesc', videoItem.longDescription);
+		desc.setAttribute('hidden', 'hidden');
+	} else {
+		info.setAttribute('style', 'opacity: 0');
+	}
+	
+	function buildVideoDescription(event) {
+		var descNode = this.nextSibling.nextSibling;
+		if (descNode.hasAttribute('hidden')) {
+			descNode.removeAttribute('hidden');
+		} else {
+			descNode.setAttribute('hidden', 'hidden');
+		}
+	}
+	
+	function playVideo(event) {
+		var videoId = this.getAttribute('mediaId');
+		var videoUrl = this.getAttribute('mediaURL');
+		
+        console.log("\n\BEFORE VideoPlayer " + videoId + " : " + videoUrl);
+		window.VideoPlayer.showVideo(videoId, videoUrl,
+		function() {
+			console.log("SUCCESS FROM VideoPlayer " + videoUrl);
+		},
+		function(error) {
+			console.log("ERROR FROM VideoPlayer " + error);
+		});
+	}
+};
+//VideoListView.prototype.clearView = function() {
+//	while (document.body.lastChild) {
+//		document.body.removeChild(document.body.lastChild);
+//	}	
+//};
+VideoListView.prototype.hideView = function() {
+	if (this.rootNode.children.length > 0) {
+		//this.scrollPosition = window.scrollY;
+		for (var i=this.rootNode.children.length -1; i>=0; i--) {
+			this.rootNode.removeChild(this.rootNode.children[i]);
+		}
+	}
+};
+VideoListView.prototype.addNode = function(parent, type, clas, content, id) {
+	var node = document.createElement(type);
+	if (id) node.setAttribute('id', id);
+	if (clas) node.setAttribute('class', clas);
+	if (content) node.innerHTML = content;
+	parent.appendChild(node);
+	return(node);
+};
+
+
+"use strict";
+function VideoMetaData() {
+	this.languageId = null;
+	this.silCode = null;
+	this.langCode = null;
+	this.mediaId = null;
+	this.title = null;
+	this.shortDescription = null;
+	this.longDescription = null;
+	this.lengthInMilliseconds = null;
+	this.imageHighRes = null;
+	this.imageMedRes = null;
+	this.mediaURL = null;
+	Object.seal(this);
+}
+VideoMetaData.prototype.duration = function() {
+	var totalSeconds = this.lengthInMilliseconds / 1000;
+	var hours = totalSeconds / 3600;
+	var minutes = (hours - Math.floor(hours)) * 60;
+	var seconds = (minutes - Math.floor(minutes)) * 60;
+	return(Math.floor(hours) + ':' + Math.floor(minutes) + ':' + Math.floor(seconds)); 
+};
+VideoMetaData.prototype.toJSON = function() {
+	return('videoMetaData: { languageId: ' + this.languageId +
+			', silCode: ' + this.silCode +
+			', langCode: ' + this.langCode +
+			', mediaId: ' + this.mediaId + 
+			', title: ' + this.title +
+			', shortDescription: ' + this.shortDescription +
+			', longDescription: ' + this.longDescription +
+			', lengthInMilliseconds: ' + this.lengthInMilliseconds +
+			', imageHighRes: ' + this.imageHighRes +
+			', imageMedRes: ' + this.imageMedRes +
+			', mediaURL: ' + this.mediaURL + ' }');
+};/**
+* This class opens the 
+* This is a test and demonstration program that reads in locale information
+* and uses it to access Jesus Film Meta Data, and parses out data that is 
+* needed for processing.
+*/
+"use strict";
+
+function VideoTableAdapter(database) {
+	this.database = database;
+	this.className = 'VideoTableAdapter';
+}
+
+VideoTableAdapter.prototype.selectJesusFilmLanguage = function(countryCode, silCode, callback) {
+	var that = this;
+	var statement = 'SELECT languageId FROM JesusFilm WHERE countryCode=? AND silCode=? ORDER BY population DESC';
+	this.database.select(statement, [ countryCode, silCode ], function(results) {
+		if (results instanceof IOError) {
+			console.log('SQL Error in selectJesusFilmLanguage, query 1', results);
+			callback({});
+		} else if (results.rows.length > 0) {
+			callback(results.rows.item(0));
+		} else {
+			statement = 'SELECT languageId FROM JesusFilm WHERE silCode=? ORDER BY population DESC';
+			that.database.select(statement, [ silCode ], function(results) {
+				if (results instanceof IOError) {
+					console.log('SQL Error in selectJesusFilmLanguage, query 2', results);
+					callback({});	
+				} else if (results.rows.length > 0) {
+					callback(results.rows.item(0));
+				} else {
+					callback({});
+				}
+			});
+		}
+	});
+};
+
+VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, deviceType, callback) {
+	var values = [ languageId, silCode ];
+	var statement = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL, MP4_1080, MP4_720, MP4_540, MP4_360,' +
+			' longDescription FROM Video WHERE languageId IN (?,?)';
+	this.database.select(statement, values, function(results) {
+		if (results instanceof IOError) {
+			console.log('found Error', results);
+			callback({});
+		} else {
+			var videoMap = {};
+			for (var i=0; i<results.rows.length; i++) {
+				var row = results.rows.item(i);
+				var meta = new VideoMetaData();
+				meta.languageId = languageId;
+				meta.silCode = silCode;
+				meta.langCode = row.langCode;
+				meta.mediaId = row.mediaId;
+				meta.title = row.title;
+				meta.lengthInMilliseconds = row.lengthMS;
+				meta.longDescription = row.longDescription;
+				switch(deviceType) {
+					case 'ios':
+						meta.mediaURL = row.HLS_URL;
+						break;
+					case 'android':
+						meta.mediaURL = row.MP4_540;
+						if (meta.mediaURL == null) meta.mediaURL = row.MP4_360;
+						if (meta.mediaURL == null) meta.mediaURL = row.MP4_720;
+						break;
+					default:
+				}
+				videoMap[row.mediaId] = meta;
+			}
+            callback(videoMap);
+        }
+	});
 };
 

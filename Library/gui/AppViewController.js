@@ -13,6 +13,7 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		CHG_HEADING: 'bible-chg-heading', // change title at top of page as result of user scrolling
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note', // Hide footnote as a result of user action
+		SHOW_VIDEO: 'bible-show-video' // Show Video List view as a result of user action
 	};
 var SERVER_HOST = 'cloud.shortsands.com'; // For unused QuestionsView
 var SERVER_PORT = '8080';
@@ -75,6 +76,10 @@ AppViewController.prototype.begin = function(develop) {
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.settingStorage, that.verses, that.version);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
+		var countryCode = 'US';
+		var deviceType = 'ios';
+		that.videoListView = new VideoListView(countryCode, that.version.silCode, deviceType);
+		that.videoListView.rootNode.style.top = that.header.barHite + 'px';
 		that.touch = new Hammer(document.getElementById('codexRoot'));
 		setInitialFontSize();
 		Object.seal(that);
@@ -149,6 +154,7 @@ AppViewController.prototype.clearViews = function() {
 	this.searchView.hideView();
 	this.codexView.hideView();
 	this.questionsView.hideView();
+	this.videoListView.hideView();
 	this.settingsView.hideView();
 	this.historyView.hideView();
 };
@@ -172,6 +178,7 @@ AppViewController.prototype.close = function() {
 	this.historyView = null;
 	this.questionsView = null;
 	this.settingsView = null;
+	this.videoListView = null;
 	this.copyrightView = null;
 	// model
 	this.tableContents = null;

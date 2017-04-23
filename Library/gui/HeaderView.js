@@ -74,7 +74,7 @@ HeaderView.prototype.showView = function() {
 	var menuWidth = setupIconButton('tocCell', drawTOCIcon, this.hite, BIBLE.SHOW_TOC);
 	var serhWidth = setupIconButton('searchCell', drawSearchIcon, this.hite, BIBLE.SHOW_SEARCH);
 	this.rootRow.appendChild(this.labelCell);
-	var videoWidth = setupIconButton('videoCell', drawVideoIcon, this.hite, BIBLE.SHOW_TOC);
+	var videoWidth = setupIconButton('videoCell', drawVideoIcon, this.hite, BIBLE.SHOW_VIDEO);
 	if (that.version.isQaActive == 'T') {
 		var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
 	} else {

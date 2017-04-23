@@ -8,6 +8,7 @@ cat ../Library/css/Search.css >> css/BibleApp.css
 cat ../Library/css/Status.css >> css/BibleApp.css
 cat ../Library/css/TableContents.css >> css/BibleApp.css
 cat ../Library/css/Settings.css >> css/BibleApp.css
+cat ../Library/css/Video.css >> css/BibleApp.css
 
 echo \"use strict\"\; > js/BibleApp.js
 # BuildInfo is a cordova plugin
@@ -66,6 +67,10 @@ cat ../Library/util/nodeDeviceSettings.js >> js/BibleApp.js
 cat ../Library/util/Performance.js >> js/BibleApp.js
 cat ../Library/util/DOMBuilder.js >> js/BibleApp.js
 cat ../Library/util/DynamicCSS.js >> js/BibleApp.js
+
+cat ../Library/video/VideoListView.js >> js/BibleApp.js
+cat ../Library/video/VideoMetaData.js >> js/BibleApp.js
+cat ../Library/video/VideoTableAdapter.js >> js/BibleApp.js
 
 cd ../BibleAppNW
 npm start

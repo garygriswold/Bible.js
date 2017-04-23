@@ -103,7 +103,13 @@ AppInitializer.prototype.begin = function() {
 		that.controller.clearViews();	
 		that.controller.questionsView.showView();
 		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
-	}	
+	}
+	function showVideoListHandler(event) {
+		disableHandlers();
+		that.controller.clearViews();
+		that.controller.videoListView.showView();
+		enableHandlersExcept(BIBLE.SHOW_VIDEO);
+	}
 	function showSettingsHandler(event) {
 		disableHandlers();
 		that.controller.clearViews();
@@ -115,6 +121,7 @@ AppInitializer.prototype.begin = function() {
 		document.body.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		document.body.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
 		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		document.body.removeEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
 	function enableHandlersExcept(name) {
@@ -122,6 +129,7 @@ AppInitializer.prototype.begin = function() {
 		if (name !== BIBLE.SHOW_SEARCH) document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
 		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		if (name !== BIBLE.SHOW_VIDEO) document.body.addEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
 };
