@@ -51,6 +51,9 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
+        },
+        "com-shortsands-videoplayer": {
+            "PACKAGE_NAME": "com.shortsands.yourbible"
         }
     },
     "dependent_plugins": {

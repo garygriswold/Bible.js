@@ -83,4 +83,5 @@
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
     <plugin name="cordova-plugin-console" spec="~1.0.4" />
     <plugin name="cordova-plugin-wkwebview-engine" spec="~1.1.0" />
+    <plugin name="com-shortsands-videoplayer" spec="/Users/garygriswold/ShortSands/BibleApp/Plugins/VideoPlayer" />
 </widget>
