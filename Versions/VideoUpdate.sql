@@ -121,22 +121,22 @@ INSERT INTO Video VALUES ('kir', 'KOG_NT', 'kir', 'ky', 'Даңк Падышас
 null
 );
 -- Lebanese
-INSERT INTO Video VALUES ('', 'KOG_OT', '', 'ar', 'مَلِكُ المـَجْد &#1777;', 6435000,
-'https://player.vimeo.com/external/206292268.m3u8?s=0b9e2e0811c4ddd57d69de30d7505eda27885f11',
-'https://player.vimeo.com/external/206292268.hd.mp4?s=830e9e569ae3e0f707e4fba4b72c909cb405be88&profile_id=119',
-'https://player.vimeo.com/external/206292268.hd.mp4?s=830e9e569ae3e0f707e4fba4b72c909cb405be88&profile_id=174',
-'https://player.vimeo.com/external/206292268.sd.mp4?s=8cb1afddd634ea1c3a62fb9a11f2ace64abe9db9&profile_id=165',
-'https://player.vimeo.com/external/206292268.sd.mp4?s=8cb1afddd634ea1c3a62fb9a11f2ace64abe9db9&profile_id=164',
-null
-);
-INSERT INTO Video VALUES ('', 'KOG_NT', '', 'ar', 'مَلِكُ المـَجْد &#1778;', 6898000,
-'https://player.vimeo.com/external/206304236.m3u8?s=63cdbcd17d8fd354fa28e6681ca41beb38702ce9',
-'https://player.vimeo.com/external/206304236.hd.mp4?s=6eae974bee77e74ea6e8b9cf3b4ecfec29b6a2e4&profile_id=119',
-'https://player.vimeo.com/external/206304236.hd.mp4?s=6eae974bee77e74ea6e8b9cf3b4ecfec29b6a2e4&profile_id=174',
-'https://player.vimeo.com/external/206304236.sd.mp4?s=e9e1d0fdc89059ab3cba47665f80bb06361202ee&profile_id=165',
-'https://player.vimeo.com/external/206304236.sd.mp4?s=e9e1d0fdc89059ab3cba47665f80bb06361202ee&profile_id=164',
-null
-);
+-- INSERT INTO Video VALUES ('???', 'KOG_OT', '', 'ar', 'مَلِكُ المـَجْد &#1777;', 6435000,
+-- 'https://player.vimeo.com/external/206292268.m3u8?s=0b9e2e0811c4ddd57d69de30d7505eda27885f11',
+-- 'https://player.vimeo.com/external/206292268.hd.mp4?s=830e9e569ae3e0f707e4fba4b72c909cb405be88&profile_id=119',
+-- 'https://player.vimeo.com/external/206292268.hd.mp4?s=830e9e569ae3e0f707e4fba4b72c909cb405be88&profile_id=174',
+-- 'https://player.vimeo.com/external/206292268.sd.mp4?s=8cb1afddd634ea1c3a62fb9a11f2ace64abe9db9&profile_id=165',
+-- 'https://player.vimeo.com/external/206292268.sd.mp4?s=8cb1afddd634ea1c3a62fb9a11f2ace64abe9db9&profile_id=164',
+-- null
+-- );
+-- INSERT INTO Video VALUES ('???', 'KOG_NT', '', 'ar', 'مَلِكُ المـَجْد &#1778;', 6898000,
+-- 'https://player.vimeo.com/external/206304236.m3u8?s=63cdbcd17d8fd354fa28e6681ca41beb38702ce9',
+-- 'https://player.vimeo.com/external/206304236.hd.mp4?s=6eae974bee77e74ea6e8b9cf3b4ecfec29b6a2e4&profile_id=119',
+-- 'https://player.vimeo.com/external/206304236.hd.mp4?s=6eae974bee77e74ea6e8b9cf3b4ecfec29b6a2e4&profile_id=174',
+-- 'https://player.vimeo.com/external/206304236.sd.mp4?s=e9e1d0fdc89059ab3cba47665f80bb06361202ee&profile_id=165',
+-- 'https://player.vimeo.com/external/206304236.sd.mp4?s=e9e1d0fdc89059ab3cba47665f80bb06361202ee&profile_id=164',
+-- null
+-- );
 -- Somali
 INSERT INTO Video VALUES ('som', 'KOG_OT', 'som', 'so', 'BOQORKA AMMAANTA •&nbsp;1', 6435000,
 'https://player.vimeo.com/external/173984346.m3u8?s=b63ff54af12439d33d8988c5ff973c16bd96025b',
