@@ -6,8 +6,7 @@
 "use strict";
 function VideoListView(version, videoAdapter) {
 	this.videoIdList = [ 'KOG_OT', 'KOG_NT', '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
-	this.countryCode = version.countryCode;
-	this.silCode = version.silCode;
+	this.version = version;
 	this.deviceType = deviceSettings.platform();
 	this.videoAdapter = videoAdapter;
 	console.log('IN VIDEO VIEW ', 'ctry', this.countryCode, 'sil', this.silCode, 'device', this.deviceType);
@@ -24,13 +23,13 @@ VideoListView.prototype.showView = function() {
 		this.reActivateView();
 	} else {
 		this.viewNode = this.addNode(this.rootNode, 'table', 'videoList');
-		getVideoTable(this.countryCode, this.silCode, this.deviceType);
+		getVideoTable(this.version, this.deviceType);
 	}
 	
-	function getVideoTable(countryCode, silCode, deviceType) {
-		that.videoAdapter.selectJesusFilmLanguage(countryCode, silCode, function(lang) {
+	function getVideoTable(vers, deviceType) {
+		that.videoAdapter.selectJesusFilmLanguage(vers.countryCode, vers.silCode, function(lang) {
 		
-			that.videoAdapter.selectVideos(lang.languageId, silCode, deviceType, function(videoMap) {
+			that.videoAdapter.selectVideos(lang.languageId, vers.silCode, vers.langCode, vers.langPrefCode, deviceType, function(videoMap) {
 				for (var i=0; i<that.videoIdList.length; i++) {
 					var id = that.videoIdList[i];
 					var metaData = videoMap[id];

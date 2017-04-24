@@ -4468,8 +4468,7 @@ DynamicCSS.prototype.setDirection = function(direction) {
 "use strict";
 function VideoListView(version, videoAdapter) {
 	this.videoIdList = [ 'KOG_OT', 'KOG_NT', '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
-	this.countryCode = version.countryCode;
-	this.silCode = version.silCode;
+	this.version = version;
 	this.deviceType = deviceSettings.platform();
 	this.videoAdapter = videoAdapter;
 	console.log('IN VIDEO VIEW ', 'ctry', this.countryCode, 'sil', this.silCode, 'device', this.deviceType);
@@ -4486,13 +4485,13 @@ VideoListView.prototype.showView = function() {
 		this.reActivateView();
 	} else {
 		this.viewNode = this.addNode(this.rootNode, 'table', 'videoList');
-		getVideoTable(this.countryCode, this.silCode, this.deviceType);
+		getVideoTable(this.version, this.deviceType);
 	}
 	
-	function getVideoTable(countryCode, silCode, deviceType) {
-		that.videoAdapter.selectJesusFilmLanguage(countryCode, silCode, function(lang) {
+	function getVideoTable(vers, deviceType) {
+		that.videoAdapter.selectJesusFilmLanguage(vers.countryCode, vers.silCode, function(lang) {
 		
-			that.videoAdapter.selectVideos(lang.languageId, silCode, deviceType, function(videoMap) {
+			that.videoAdapter.selectVideos(lang.languageId, vers.silCode, vers.langCode, vers.langPrefCode, deviceType, function(videoMap) {
 				for (var i=0; i<that.videoIdList.length; i++) {
 					var id = that.videoIdList[i];
 					var metaData = videoMap[id];
@@ -4668,41 +4667,56 @@ VideoTableAdapter.prototype.selectJesusFilmLanguage = function(countryCode, silC
 	});
 };
 
-VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, deviceType, callback) {
-	var values = [ languageId, silCode ];
+VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCode, langPrefCode, deviceType, callback) {
 	var statement = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL, MP4_1080, MP4_720, MP4_540, MP4_360,' +
 			' longDescription FROM Video WHERE languageId IN (?,?)';
-	this.database.select(statement, values, function(results) {
+	this.database.select(statement, [ languageId, silCode ], function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
 			callback({});
 		} else {
-			var videoMap = {};
-			for (var i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);
-				var meta = new VideoMetaData();
-				meta.languageId = languageId;
-				meta.silCode = silCode;
-				meta.langCode = row.langCode;
-				meta.mediaId = row.mediaId;
-				meta.title = row.title;
-				meta.lengthInMilliseconds = row.lengthMS;
-				meta.longDescription = row.longDescription;
-				switch(deviceType) {
-					case 'ios':
-						meta.mediaURL = row.HLS_URL;
-						break;
-					case 'android':
-						meta.mediaURL = row.MP4_540;
-						if (meta.mediaURL == null) meta.mediaURL = row.MP4_360;
-						if (meta.mediaURL == null) meta.mediaURL = row.MP4_720;
-						break;
-					default:
-				}
-				videoMap[row.mediaId] = meta;
+			if (results.rows.length > 0) {
+				returnVideoMap(languageId, silCode, results, callback);
+			} else {
+				statement = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL, MP4_1080, MP4_720, MP4_540, MP4_360,' +
+					' longDescription FROM Video WHERE langCode IN (?,?)';
+				that.database.select(statement, [langCode, langPrefCode], function(results) {
+					if (results instanceof IOError) {
+						callback({});
+					} else {
+						returnVideoMap(languageId, silCode, results, callback);
+					}
+				});
 			}
-            callback(videoMap);
         }
 	});
+	
+	function returnVideoMap(languageId, silCode, results, callback) {
+		var videoMap = {};
+		for (var i=0; i<results.rows.length; i++) {
+			var row = results.rows.item(i);
+			var meta = new VideoMetaData();
+			meta.languageId = languageId;
+			meta.silCode = silCode;
+			meta.langCode = row.langCode;
+			meta.mediaId = row.mediaId;
+			meta.title = row.title;
+			meta.lengthInMilliseconds = row.lengthMS;
+			meta.longDescription = row.longDescription;
+			switch(deviceType) {
+				case 'ios':
+					meta.mediaURL = row.HLS_URL;
+					break;
+				case 'android':
+					meta.mediaURL = row.MP4_540;
+					if (meta.mediaURL == null) meta.mediaURL = row.MP4_360;
+					if (meta.mediaURL == null) meta.mediaURL = row.MP4_720;
+					break;
+				default:
+			}
+			videoMap[row.mediaId] = meta;
+		}
+        callback(videoMap);		
+	}
 };
 
