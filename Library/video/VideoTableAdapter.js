@@ -11,6 +11,9 @@ function VideoTableAdapter(database) {
 	this.className = 'VideoTableAdapter';
 }
 
+VideoTableAdapter.prototype.hasVideos = function(silCode, langPrefCode, callback) {
+	// TBD	
+};
 VideoTableAdapter.prototype.selectJesusFilmLanguage = function(countryCode, silCode, callback) {
 	var that = this;
 	var statement = 'SELECT languageId FROM JesusFilm WHERE countryCode=? AND silCode=? ORDER BY population DESC';

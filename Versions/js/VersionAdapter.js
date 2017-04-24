@@ -222,19 +222,20 @@ VersionAdapter.prototype.close = function() {
 var database = new VersionAdapter({filename: './Versions.db', verbose: false});
 console.log('Start Version Adapter');
 database.loadIntroductions('data/VersionIntro', function() {
-	console.log('Loaded Introductions');	
-	//database.addCloudfrontSignatures(function() { // Use for Cloudfront
-	database.addS3URLSignatures(function() {		// Use for S3
-		console.log('Added URL Signatures');
-		database.validateTranslation(function(errCount) {
-			console.log('Validated Translation');
-			database.close();
-			console.log('Database Closed');
-			if (errCount == 0) {
-				console.log('SUCCESSFULLY CREATED Versions.db');
-			} else {
-				console.log('COMPLETED WITH ERRORS', errCount);
-			}
+	console.log('Loaded Introductions');
+	database.loadVideoIntroductions('data/VideoIntro', function() {
+		database.addS3URLSignatures(function() {		// Use for S3
+			console.log('Added URL Signatures');
+			database.validateTranslation(function(errCount) {
+				console.log('Validated Translation');
+				database.close();
+				console.log('Database Closed');
+				if (errCount == 0) {
+					console.log('SUCCESSFULLY CREATED Versions.db');
+				} else {
+					console.log('COMPLETED WITH ERRORS', errCount);
+				}
+			});
 		});
 	});
 });
