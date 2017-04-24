@@ -4,11 +4,12 @@
 * and when the play button is clicked, it starts the video.
 */
 "use strict";
-function VideoListView(countryCd, silCd, device) {
+function VideoListView(version) {
 	this.videoIdList = [ 'KOG_OT', 'KOG_NT', '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
-	this.countryCode = countryCd;
-	this.silCode = silCd;
-	this.deviceType = device;
+	this.countryCode = version.countryCode;
+	this.silCode = version.silCode;
+	this.deviceType = deviceSettings.platform();
+	console.log('IN VIDEO VIEW ', 'ctry', this.countryCode, 'sil', this.silCode, 'device', this.deviceType);
 	this.rootNode = document.createElement('div');
 	this.rootNode.id = 'videoRoot';
 	document.body.appendChild(this.rootNode);

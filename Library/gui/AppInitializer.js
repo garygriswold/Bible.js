@@ -6,25 +6,26 @@
 */
 function AppInitializer() {
 	this.controller = null;
+	this.countryCode = null;
 	Object.seal(this);
 }
 AppInitializer.prototype.begin = function() {
 	var that = this;
-    var settingStorage = new SettingStorage();
-	var appUpdater = new AppUpdater(settingStorage);
-	console.log('START APP UPDATER');
-	appUpdater.doUpdate(function() {
-		console.log('DONE APP UPDATER');
-	    settingStorage.getCurrentVersion(function(versionFilename) {
-		    if (versionFilename) {
-			    // Process with User's Version
-		    	changeVersionHandler(versionFilename);
-		    } else {
-			    deviceSettings.prefLanguage(function(locale) {
-				    console.log('user locale ', locale);
-					var parts = locale.split('-');
+	var settingStorage = new SettingStorage();
+	deviceSettings.locale(function(locale, langCode, scriptCode, countryCode) {
+		console.log('user locale ', locale, langCode, countryCode);
+		that.countryCode = countryCode;
+		var appUpdater = new AppUpdater(settingStorage);
+		console.log('START APP UPDATER');
+		appUpdater.doUpdate(function() {
+			console.log('DONE APP UPDATER');
+		    settingStorage.getCurrentVersion(function(versionFilename) {
+			    if (versionFilename) {
+				    // Process with User's Version
+			    	changeVersionHandler(versionFilename);
+			    } else {
 					var versionsAdapter = new VersionsAdapter();
-					versionsAdapter.defaultVersion(parts[0], function(filename) {
+					versionsAdapter.defaultVersion(langCode, function(filename) {
 						console.log('default version determined ', filename);
 						var parts = filename.split('.');
 						var versionCode = parts[0]; // This hack requires version code to be part of filename.
@@ -51,8 +52,8 @@ AppInitializer.prototype.begin = function() {
 							}
 						});
 					});
-				});
-			}
+				}
+			});
 		});
 	});
     
@@ -62,7 +63,7 @@ AppInitializer.prototype.begin = function() {
 		
 	function changeVersionHandler(versionFilename) {
 		console.log('CHANGE VERSION TO', versionFilename);
-		var currBible = new BibleVersion();
+		var currBible = new BibleVersion(that.countryCode);
 		currBible.fill(versionFilename, function() {
 			if (that.controller) {
 				that.controller.close();

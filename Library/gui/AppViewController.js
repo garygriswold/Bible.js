@@ -76,9 +76,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.settingStorage, that.verses, that.version);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
-		var countryCode = 'US';
-		var deviceType = 'ios';
-		that.videoListView = new VideoListView(countryCode, that.version.silCode, deviceType);
+		that.videoListView = new VideoListView(that.version);
 		that.videoListView.rootNode.style.top = that.header.barHite + 'px';
 		that.touch = new Hammer(document.getElementById('codexRoot'));
 		setInitialFontSize();

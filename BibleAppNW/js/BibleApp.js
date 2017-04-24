@@ -8,25 +8,26 @@ var BuildInfo={version:"unknown"};
 */
 function AppInitializer() {
 	this.controller = null;
+	this.countryCode = null;
 	Object.seal(this);
 }
 AppInitializer.prototype.begin = function() {
 	var that = this;
-    var settingStorage = new SettingStorage();
-	var appUpdater = new AppUpdater(settingStorage);
-	console.log('START APP UPDATER');
-	appUpdater.doUpdate(function() {
-		console.log('DONE APP UPDATER');
-	    settingStorage.getCurrentVersion(function(versionFilename) {
-		    if (versionFilename) {
-			    // Process with User's Version
-		    	changeVersionHandler(versionFilename);
-		    } else {
-			    deviceSettings.prefLanguage(function(locale) {
-				    console.log('user locale ', locale);
-					var parts = locale.split('-');
+	var settingStorage = new SettingStorage();
+	deviceSettings.locale(function(locale, langCode, scriptCode, countryCode) {
+		console.log('user locale ', locale, langCode, countryCode);
+		that.countryCode = countryCode;
+		var appUpdater = new AppUpdater(settingStorage);
+		console.log('START APP UPDATER');
+		appUpdater.doUpdate(function() {
+			console.log('DONE APP UPDATER');
+		    settingStorage.getCurrentVersion(function(versionFilename) {
+			    if (versionFilename) {
+				    // Process with User's Version
+			    	changeVersionHandler(versionFilename);
+			    } else {
 					var versionsAdapter = new VersionsAdapter();
-					versionsAdapter.defaultVersion(parts[0], function(filename) {
+					versionsAdapter.defaultVersion(langCode, function(filename) {
 						console.log('default version determined ', filename);
 						var parts = filename.split('.');
 						var versionCode = parts[0]; // This hack requires version code to be part of filename.
@@ -53,8 +54,8 @@ AppInitializer.prototype.begin = function() {
 							}
 						});
 					});
-				});
-			}
+				}
+			});
 		});
 	});
     
@@ -64,7 +65,7 @@ AppInitializer.prototype.begin = function() {
 		
 	function changeVersionHandler(versionFilename) {
 		console.log('CHANGE VERSION TO', versionFilename);
-		var currBible = new BibleVersion();
+		var currBible = new BibleVersion(that.countryCode);
 		currBible.fill(versionFilename, function() {
 			if (that.controller) {
 				that.controller.close();
@@ -212,9 +213,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.settingStorage, that.verses, that.version);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
-		var countryCode = 'US';
-		var deviceType = 'ios';
-		that.videoListView = new VideoListView(countryCode, that.version.silCode, deviceType);
+		that.videoListView = new VideoListView(that.version);
 		that.videoListView.rootNode.style.top = that.header.barHite + 'px';
 		that.touch = new Hammer(document.getElementById('codexRoot'));
 		setInitialFontSize();
@@ -3792,7 +3791,8 @@ FileDownloader.prototype.clearTempDir = function() {
 * This class is used to contain the fields about a version of the Bible
 * as needed.
 */
-function BibleVersion() {
+function BibleVersion(countryCode) {
+	this.countryCode = countryCode;
 	this.code = null;
 	this.filename = null;
 	this.silCode = null;
@@ -4374,6 +4374,9 @@ var deviceSettings = {
 		//callback('es-ES');
 		callback('en-US');
     },
+    locale: function(callback) {
+	  	callback('en-US', 'en', null, 'US');  
+    },
     platform: function() {
         return('node');
     }
@@ -4446,38 +4449,33 @@ DynamicCSS.prototype.setDirection = function(direction) {
 
 /**
 * This class presents a list of available video with thumbnails,
-* and when a thumbnail is clicked it display more detail.
+* and when a info btn is clicked it display more detail.
 * and when the play button is clicked, it starts the video.
 */
 "use strict";
-function VideoListView(countryCd, silCd, device) {
+function VideoListView(version) {
 	this.videoIdList = [ 'KOG_OT', 'KOG_NT', '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
-	this.countryCode = countryCd;
-	this.silCode = silCd;
-	this.deviceType = device;
+	this.countryCode = version.countryCode;
+	this.silCode = version.silCode;
+	this.deviceType = deviceSettings.platform();
+	console.log('IN VIDEO VIEW ', 'ctry', this.countryCode, 'sil', this.silCode, 'device', this.deviceType);
 	this.rootNode = document.createElement('div');
 	this.rootNode.id = 'videoRoot';
 	document.body.appendChild(this.rootNode);
-
 	this.viewNode = null;
 	Object.seal(this);
 }
 VideoListView.prototype.showView = function() {
 	console.log('INSIDE SHOW VIDEO LIST VIEW');
 	var that = this;
-	//this.clearView();
-	if (this.viewNode != null && this.viewNode.children.length > 0) {// && this.countryCode === countryCd && this.silCode === silCd) {
+	if (this.viewNode != null && this.viewNode.children.length > 0) {
 		this.reActivateView();
-		//return(true);
 	} else {
-		//this.countryCode = countryCd;
-		//this.silCode = silCd;
 		this.viewNode = this.addNode(this.rootNode, 'table', 'videoList');
-		//return(false);
-		getVideoTable(this.countryCode, this.silCode, this.deviceType);//, function(count) {
+		getVideoTable(this.countryCode, this.silCode, this.deviceType);
 	}
 	
-	function getVideoTable(countryCode, silCode, deviceType) {//, callback) {
+	function getVideoTable(countryCode, silCode, deviceType) {
 		var databaseHelper = new DatabaseHelper('Versions.db', true);
 		var videoAdapter = new VideoTableAdapter(databaseHelper);
 		videoAdapter.selectJesusFilmLanguage(countryCode, silCode, function(lang) {
@@ -4490,13 +4488,11 @@ VideoListView.prototype.showView = function() {
 						that.showVideoItem(metaData);
 					}
 				}
-				//callback(Object.keys(videoMap).length);
 			});
 		});
 	}
 };
 VideoListView.prototype.reActivateView = function() {
-	//document.body.appendChild(this.rootNode);
 	this.rootNode.appendChild(this.viewNode);
 	var nodeList = document.getElementsByClassName('videoListDesc');
 	for (var i=0; i<nodeList.length; i++) {
@@ -4504,7 +4500,7 @@ VideoListView.prototype.reActivateView = function() {
 	}
 };
 VideoListView.prototype.showVideoItem = function(videoItem) {	
-	console.log('INSIDE BUILD ITEM');
+	console.log('INSIDE BUILD ITEM', videoItem.mediaId);
 	var that = this;
 	var row = this.addNode(this.viewNode, 'tr', 'videoList');
 	var cell = this.addNode(row, 'td', 'videoList');
@@ -4558,11 +4554,6 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 		});
 	}
 };
-//VideoListView.prototype.clearView = function() {
-//	while (document.body.lastChild) {
-//		document.body.removeChild(document.body.lastChild);
-//	}	
-//};
 VideoListView.prototype.hideView = function() {
 	if (this.rootNode.children.length > 0) {
 		//this.scrollPosition = window.scrollY;
