@@ -4,11 +4,12 @@
 * and when the play button is clicked, it starts the video.
 */
 "use strict";
-function VideoListView(version) {
+function VideoListView(version, videoAdapter) {
 	this.videoIdList = [ 'KOG_OT', 'KOG_NT', '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
 	this.countryCode = version.countryCode;
 	this.silCode = version.silCode;
 	this.deviceType = deviceSettings.platform();
+	this.videoAdapter = videoAdapter;
 	console.log('IN VIDEO VIEW ', 'ctry', this.countryCode, 'sil', this.silCode, 'device', this.deviceType);
 	this.rootNode = document.createElement('div');
 	this.rootNode.id = 'videoRoot';
@@ -27,11 +28,9 @@ VideoListView.prototype.showView = function() {
 	}
 	
 	function getVideoTable(countryCode, silCode, deviceType) {
-		var databaseHelper = new DatabaseHelper('Versions.db', true);
-		var videoAdapter = new VideoTableAdapter(databaseHelper);
-		videoAdapter.selectJesusFilmLanguage(countryCode, silCode, function(lang) {
+		that.videoAdapter.selectJesusFilmLanguage(countryCode, silCode, function(lang) {
 		
-			videoAdapter.selectVideos(lang.languageId, silCode, deviceType, function(videoMap) {
+			that.videoAdapter.selectVideos(lang.languageId, silCode, deviceType, function(videoMap) {
 				for (var i=0; i<that.videoIdList.length; i++) {
 					var id = that.videoIdList[i];
 					var metaData = videoMap[id];

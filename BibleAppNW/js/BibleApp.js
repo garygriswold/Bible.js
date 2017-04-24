@@ -8,6 +8,7 @@ var BuildInfo={version:"unknown"};
 */
 function AppInitializer() {
 	this.controller = null;
+	this.langPrefCode = null;
 	this.countryCode = null;
 	Object.seal(this);
 }
@@ -16,6 +17,7 @@ AppInitializer.prototype.begin = function() {
 	var settingStorage = new SettingStorage();
 	deviceSettings.locale(function(locale, langCode, scriptCode, countryCode) {
 		console.log('user locale ', locale, langCode, countryCode);
+		that.langPrefCode = langCode;
 		that.countryCode = countryCode;
 		var appUpdater = new AppUpdater(settingStorage);
 		console.log('START APP UPDATER');
@@ -65,7 +67,7 @@ AppInitializer.prototype.begin = function() {
 		
 	function changeVersionHandler(versionFilename) {
 		console.log('CHANGE VERSION TO', versionFilename);
-		var currBible = new BibleVersion(that.countryCode);
+		var currBible = new BibleVersion(that.langPrefCode, that.countryCode);
 		currBible.fill(versionFilename, function() {
 			if (that.controller) {
 				that.controller.close();
@@ -192,6 +194,8 @@ function AppViewController(version, settingStorage) {
 
 	this.history = new HistoryAdapter(this.settingStorage.database);
 	this.questions = new QuestionsAdapter(this.settingStorage.database);
+	
+	this.videoAdapter = new VideoTableAdapter();
 }
 AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.tableAdapter);
@@ -213,7 +217,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.settingStorage, that.verses, that.version);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
-		that.videoListView = new VideoListView(that.version);
+		that.videoListView = new VideoListView(that.version, that.videoAdapter);
 		that.videoListView.rootNode.style.top = that.header.barHite + 'px';
 		that.touch = new Hammer(document.getElementById('codexRoot'));
 		setInitialFontSize();
@@ -3791,7 +3795,8 @@ FileDownloader.prototype.clearTempDir = function() {
 * This class is used to contain the fields about a version of the Bible
 * as needed.
 */
-function BibleVersion(countryCode) {
+function BibleVersion(langPrefCode, countryCode) {
+	this.langPrefCode = langPrefCode;
 	this.countryCode = countryCode;
 	this.code = null;
 	this.filename = null;
@@ -4453,11 +4458,12 @@ DynamicCSS.prototype.setDirection = function(direction) {
 * and when the play button is clicked, it starts the video.
 */
 "use strict";
-function VideoListView(version) {
+function VideoListView(version, videoAdapter) {
 	this.videoIdList = [ 'KOG_OT', 'KOG_NT', '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
 	this.countryCode = version.countryCode;
 	this.silCode = version.silCode;
 	this.deviceType = deviceSettings.platform();
+	this.videoAdapter = videoAdapter;
 	console.log('IN VIDEO VIEW ', 'ctry', this.countryCode, 'sil', this.silCode, 'device', this.deviceType);
 	this.rootNode = document.createElement('div');
 	this.rootNode.id = 'videoRoot';
@@ -4476,11 +4482,12 @@ VideoListView.prototype.showView = function() {
 	}
 	
 	function getVideoTable(countryCode, silCode, deviceType) {
-		var databaseHelper = new DatabaseHelper('Versions.db', true);
-		var videoAdapter = new VideoTableAdapter(databaseHelper);
-		videoAdapter.selectJesusFilmLanguage(countryCode, silCode, function(lang) {
+		//var databaseHelper = new DatabaseHelper('Versions.db', true);
+		//var videoAdapter = new VideoTableAdapter(databaseHelper);
+		//var videoAdapter = new VideoTableAdapter();
+		that.videoAdapter.selectJesusFilmLanguage(countryCode, silCode, function(lang) {
 		
-			videoAdapter.selectVideos(lang.languageId, silCode, deviceType, function(videoMap) {
+			that.videoAdapter.selectVideos(lang.languageId, silCode, deviceType, function(videoMap) {
 				for (var i=0; i<that.videoIdList.length; i++) {
 					var id = that.videoIdList[i];
 					var metaData = videoMap[id];
@@ -4614,11 +4621,23 @@ VideoMetaData.prototype.toJSON = function() {
 */
 "use strict";
 
-function VideoTableAdapter(database) {
-	this.database = database;
+function VideoTableAdapter() {
+	this.database = new DatabaseHelper('Versions.db', true);
 	this.className = 'VideoTableAdapter';
 }
 
+VideoTableAdapter.prototype.hasVideos = function(langCode, langPrefCode, callback) {
+	var that = this;
+	var statement = 'SELECT count(*) AS count FROM Video WHERE langCode IN (?,?)';
+	this.database.select(statement, [langCode, langPrefCode], function(results) {
+		if (results instanceof IOError) {
+			console.log('SQL Error in VideoTableAdapter.hasVideos', results);
+			callback(0);
+		} else {
+			callback(results.rows.item(0).count)
+		}
+	});
+};
 VideoTableAdapter.prototype.selectJesusFilmLanguage = function(countryCode, silCode, callback) {
 	var that = this;
 	var statement = 'SELECT languageId FROM JesusFilm WHERE countryCode=? AND silCode=? ORDER BY population DESC';

@@ -6,6 +6,7 @@
 */
 function AppInitializer() {
 	this.controller = null;
+	this.langPrefCode = null;
 	this.countryCode = null;
 	Object.seal(this);
 }
@@ -14,6 +15,7 @@ AppInitializer.prototype.begin = function() {
 	var settingStorage = new SettingStorage();
 	deviceSettings.locale(function(locale, langCode, scriptCode, countryCode) {
 		console.log('user locale ', locale, langCode, countryCode);
+		that.langPrefCode = langCode;
 		that.countryCode = countryCode;
 		var appUpdater = new AppUpdater(settingStorage);
 		console.log('START APP UPDATER');
@@ -63,7 +65,7 @@ AppInitializer.prototype.begin = function() {
 		
 	function changeVersionHandler(versionFilename) {
 		console.log('CHANGE VERSION TO', versionFilename);
-		var currBible = new BibleVersion(that.countryCode);
+		var currBible = new BibleVersion(that.langPrefCode, that.countryCode);
 		currBible.fill(versionFilename, function() {
 			if (that.controller) {
 				that.controller.close();

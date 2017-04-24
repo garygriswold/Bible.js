@@ -55,6 +55,8 @@ function AppViewController(version, settingStorage) {
 
 	this.history = new HistoryAdapter(this.settingStorage.database);
 	this.questions = new QuestionsAdapter(this.settingStorage.database);
+	
+	this.videoAdapter = new VideoTableAdapter();
 }
 AppViewController.prototype.begin = function(develop) {
 	this.tableContents = new TOC(this.tableAdapter);
@@ -76,7 +78,7 @@ AppViewController.prototype.begin = function(develop) {
 		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.settingStorage, that.verses, that.version);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
-		that.videoListView = new VideoListView(that.version);
+		that.videoListView = new VideoListView(that.version, that.videoAdapter);
 		that.videoListView.rootNode.style.top = that.header.barHite + 'px';
 		that.touch = new Hammer(document.getElementById('codexRoot'));
 		setInitialFontSize();

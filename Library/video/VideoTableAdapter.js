@@ -6,13 +6,22 @@
 */
 "use strict";
 
-function VideoTableAdapter(database) {
-	this.database = database;
+function VideoTableAdapter() {
+	this.database = new DatabaseHelper('Versions.db', true);
 	this.className = 'VideoTableAdapter';
 }
 
-VideoTableAdapter.prototype.hasVideos = function(silCode, langPrefCode, callback) {
-	// TBD	
+VideoTableAdapter.prototype.hasVideos = function(langCode, langPrefCode, callback) {
+	var that = this;
+	var statement = 'SELECT count(*) AS count FROM Video WHERE langCode IN (?,?)';
+	this.database.select(statement, [langCode, langPrefCode], function(results) {
+		if (results instanceof IOError) {
+			console.log('SQL Error in VideoTableAdapter.hasVideos', results);
+			callback(0);
+		} else {
+			callback(results.rows.item(0).count)
+		}
+	});
 };
 VideoTableAdapter.prototype.selectJesusFilmLanguage = function(countryCode, silCode, callback) {
 	var that = this;

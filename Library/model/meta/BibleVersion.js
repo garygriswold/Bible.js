@@ -2,7 +2,8 @@
 * This class is used to contain the fields about a version of the Bible
 * as needed.
 */
-function BibleVersion(countryCode) {
+function BibleVersion(langPrefCode, countryCode) {
+	this.langPrefCode = langPrefCode;
 	this.countryCode = countryCode;
 	this.code = null;
 	this.filename = null;
