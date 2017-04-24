@@ -48,6 +48,40 @@ VersionAdapter.prototype.loadIntroductions = function(directory, callback) {
 		}
 	});
 };
+/*
+* This method adds video introductions to the Video table.
+*/
+VersionAdapter.prototype.loadVideoIntroductions = function(directory, callback) {
+	var fs = require('fs');
+	var list = fs.readdirSync(directory);
+	var dstore = list.indexOf('.DS_Store');
+	if (dstore > -1) list.splice(dstore, 1);
+	var values = [];
+	for (var i=0; i<list.length; i++) {
+		var filename = list[i];
+		var parts = filename.split('.');
+		if (parts.length != 2) {
+			console.log('CANNOT PROCESS', filename);
+		} else if (parts[1] != 'html') {
+			console.log('WRONG FILE TYPE', filename);
+		} else {
+			var data = fs.readFileSync(directory + '/' + filename, { encoding: 'utf8'});
+			var pieces = parts[0].split('-');
+			values.push([data, pieces[0].toUpperCase(), pieces[1].toLowerCase()]);
+		}
+	}
+	var updateStmt = 'UPDATE Video SET longDescription = ? WHERE mediaId = ? AND silCode = ?';
+	this.executeSQL(updateStmt, values, function(rowCount) {
+		if (rowCount != list.length) {
+			console.log('DID NOT UPDATE ALL RECORDS, rowCount=' + rowCount, ' list.length=' + list.length);
+			process.exit(1);
+		} else {
+			console.log('VideoIntroductions Updated', rowCount);
+			callback();
+		}
+	});
+};
+
 /**
 * This method computes URL signatures for AWS cloudfront, and adds this information to the Version table	
 */
