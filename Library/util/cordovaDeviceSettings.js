@@ -3,6 +3,7 @@
  * and the versions, platform and model of the device plugin, and the network status.
  */
 var deviceSettings = {
+	/* Deprecated, use locale is Used in AppInitializer and VersionsView */
     prefLanguage: function(callback) {
         navigator.globalization.getPreferredLanguage(onSuccess, onError);
 
@@ -12,6 +13,21 @@ var deviceSettings = {
         function onError() {
             callback('en-US');
         }
+    },
+    locale: function(callback) {
+        navigator.globalization.getPreferredLanguage(onSuccess, onError);
+
+        function onSuccess(pref) {
+	        var parts = pref.value.split('-');
+	        var lang = parts[0];
+	     	var script = (parts.length > 2) ? parts[1] : null;
+	        var cnty = (parts.length > 1) ? parts.pop() : 'US';
+
+            callback(pref.value, lang, script, cnty);
+        }
+        function onError() {
+            callback('en-US', 'en', null, 'US');
+        }	    
     },
     platform: function() {
         return((device.platform) ? device.platform.toLowerCase() : null);

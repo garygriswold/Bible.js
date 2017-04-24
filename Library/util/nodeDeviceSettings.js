@@ -7,6 +7,9 @@ var deviceSettings = {
 		//callback('es-ES');
 		callback('en-US');
     },
+    locale: function(callback) {
+	  	callback('en-US', 'en', null, 'US');  
+    },
     platform: function() {
         return('node');
     }
