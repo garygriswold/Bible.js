@@ -66,7 +66,7 @@ AppViewController.prototype.begin = function(develop) {
 		console.log('loaded toc', that.tableContents.size());
 		that.copyrightView = new CopyrightView(that.version);
 		that.localizeNumber = new LocalizeNumber(that.version.silCode);
-		that.header = new HeaderView(that.tableContents, that.version, that.localizeNumber);
+		that.header = new HeaderView(that.tableContents, that.version, that.localizeNumber, that.videoAdapter);
 		that.tableContentsView = new TableContentsView(that.tableContents, that.copyrightView, that.localizeNumber);
 		that.tableContentsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.searchView = new SearchView(that.tableContents, that.concordance, that.verses, that.history, that.version, that.localizeNumber);

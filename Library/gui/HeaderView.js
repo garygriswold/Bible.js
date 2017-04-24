@@ -6,7 +6,7 @@ var HEADER_BUTTON_HEIGHT = 32;//44;
 var HEADER_BAR_HEIGHT = 40;//52;
 var STATUS_BAR_HEIGHT = 14;
 
-function HeaderView(tableContents, version, localizeNumber) {
+function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	this.statusBarInHeader = (deviceSettings.platform() === 'ios') ? true : false;
 	//this.statusBarInHeader = false;
 
@@ -16,6 +16,7 @@ function HeaderView(tableContents, version, localizeNumber) {
 	this.tableContents = tableContents;
 	this.version = version;
 	this.localizeNumber = localizeNumber;
+	this.videoAdapter = videoAdapter;
 	this.backgroundCanvas = null;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
@@ -34,6 +35,7 @@ function HeaderView(tableContents, version, localizeNumber) {
 	var that = this;
 	
 	function drawTitleHandler(event) {
+		if (that.titleGraphics == null) return;
 		document.body.removeEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
 		that.currentReference = event.detail.reference;
@@ -71,21 +73,27 @@ HeaderView.prototype.showView = function() {
 	paintBackground(this.backgroundCanvas, this.hite);
 	this.rootRow.appendChild(this.backgroundCanvas);
 
-	var menuWidth = setupIconButton('tocCell', drawTOCIcon, this.hite, BIBLE.SHOW_TOC);
-	var serhWidth = setupIconButton('searchCell', drawSearchIcon, this.hite, BIBLE.SHOW_SEARCH);
-	this.rootRow.appendChild(this.labelCell);
-	var videoWidth = setupIconButton('videoCell', drawVideoIcon, this.hite, BIBLE.SHOW_VIDEO);
-	if (that.version.isQaActive == 'T') {
-		var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, this.hite, BIBLE.SHOW_QUESTIONS);
-	} else {
-		quesWidth = 0;
-	}
-	var settWidth = setupIconButton('settingsCell', drawSettingsIcon, this.hite, BIBLE.SHOW_SETTINGS);
-	var avalWidth = window.innerWidth - (menuWidth + serhWidth + videoWidth + quesWidth + settWidth + (6 * 4));// six is fudge factor
-
-	this.titleCanvas = document.createElement('canvas');
-	drawTitleField(this.titleCanvas, this.hite, avalWidth);
-	this.labelCell.appendChild(this.titleCanvas);
+	this.videoAdapter.hasVideos(this.version.langCode, this.version.langPrefCode, function(videoCount) {
+		var menuWidth = setupIconButton('tocCell', drawTOCIcon, that.hite, BIBLE.SHOW_TOC);
+		var serhWidth = setupIconButton('searchCell', drawSearchIcon, that.hite, BIBLE.SHOW_SEARCH);
+		that.rootRow.appendChild(that.labelCell);
+		if (videoCount > 0) {
+			var videoWidth = setupIconButton('videoCell', drawVideoIcon, that.hite, BIBLE.SHOW_VIDEO);
+		} else {
+			videoWidth = 0;
+		}
+		if (that.version.isQaActive == 'T') {
+			var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, that.hite, BIBLE.SHOW_QUESTIONS);
+		} else {
+			quesWidth = 0;
+		}
+		var settWidth = setupIconButton('settingsCell', drawSettingsIcon, that.hite, BIBLE.SHOW_SETTINGS);
+		var avalWidth = window.innerWidth - (menuWidth + serhWidth + videoWidth + quesWidth + settWidth + (6 * 4));// six is fudge factor
+	
+		that.titleCanvas = document.createElement('canvas');
+		drawTitleField(that.titleCanvas, that.hite, avalWidth);
+		that.labelCell.appendChild(that.titleCanvas);
+	});
 
 	function paintBackground(canvas, hite) {
 		console.log('**** repaint background ****');
