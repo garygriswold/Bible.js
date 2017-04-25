@@ -4467,7 +4467,7 @@ DynamicCSS.prototype.setDirection = function(direction) {
 */
 "use strict";
 function VideoListView(version, videoAdapter) {
-	this.videoIdList = [ 'KOG_OT', 'KOG_NT', '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
+	this.videoIdList = [ 'KOG_OT', 'KOG_NT' ];//, '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
 	this.version = version;
 	this.deviceType = deviceSettings.platform();
 	this.videoAdapter = videoAdapter;
@@ -4629,10 +4629,12 @@ function VideoTableAdapter() {
 	this.database = new DatabaseHelper('Versions.db', true);
 	this.className = 'VideoTableAdapter';
 }
-
+/**
+* NOTE: This method is only counting KOG videos.  This must be changed when the Jesus Film is released.
+*/
 VideoTableAdapter.prototype.hasVideos = function(langCode, langPrefCode, callback) {
 	var that = this;
-	var statement = 'SELECT count(*) AS count FROM Video WHERE langCode IN (?,?)';
+	var statement = 'SELECT count(*) AS count FROM Video WHERE langCode IN (?,?) AND mediaId like "KOG%"';
 	this.database.select(statement, [langCode, langPrefCode], function(results) {
 		if (results instanceof IOError) {
 			console.log('SQL Error in VideoTableAdapter.hasVideos', results);
@@ -4642,6 +4644,7 @@ VideoTableAdapter.prototype.hasVideos = function(langCode, langPrefCode, callbac
 		}
 	});
 };
+
 VideoTableAdapter.prototype.selectJesusFilmLanguage = function(countryCode, silCode, callback) {
 	var that = this;
 	var statement = 'SELECT languageId FROM JesusFilm WHERE countryCode=? AND silCode=? ORDER BY population DESC';
@@ -4666,21 +4669,25 @@ VideoTableAdapter.prototype.selectJesusFilmLanguage = function(countryCode, silC
 		}
 	});
 };
-
+/**
+* NOTE: This method must be prevented from returning Jesus videos.  This must be changed when the Jesus Film is released.
+*/
 VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCode, langPrefCode, deviceType, callback) {
 	var statement = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL, MP4_1080, MP4_720, MP4_540, MP4_360,' +
-			' longDescription FROM Video WHERE languageId IN (?,?)';
+			' longDescription FROM Video WHERE languageId IN (?,?) AND mediaId like "KOG%"';
 	this.database.select(statement, [ languageId, silCode ], function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
 			callback({});
 		} else {
+			console.log("Return rows1", results.rows.length);
 			if (results.rows.length > 0) {
 				returnVideoMap(languageId, silCode, results, callback);
 			} else {
 				statement = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL, MP4_1080, MP4_720, MP4_540, MP4_360,' +
-					' longDescription FROM Video WHERE langCode IN (?,?)';
+					' longDescription FROM Video WHERE langCode IN (?,?) AND mediaId like "KOG%"';
 				that.database.select(statement, [langCode, langPrefCode], function(results) {
+					console.log("Return rows2", results.rows.length);
 					if (results instanceof IOError) {
 						callback({});
 					} else {

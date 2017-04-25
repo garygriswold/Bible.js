@@ -1136,6 +1136,7 @@ SearchView.prototype.prepareSelect = function(refList) {
 var HEADER_BUTTON_HEIGHT = 32;//44;
 var HEADER_BAR_HEIGHT = 40;//52;
 var STATUS_BAR_HEIGHT = 14;
+var CELL_SPACING = 5;
 
 function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	this.statusBarInHeader = (deviceSettings.platform() === 'ios') ? true : false;
@@ -1156,6 +1157,7 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	this.currentReference = null;
 	this.rootNode = document.createElement('table');
 	this.rootNode.id = 'statusRoot';
+	this.rootNode.setAttribute('cellspacing', CELL_SPACING);
 	document.body.appendChild(this.rootNode);
 	this.rootRow = document.createElement('tr');
 	this.rootNode.appendChild(this.rootRow);
@@ -1204,27 +1206,23 @@ HeaderView.prototype.showView = function() {
 	paintBackground(this.backgroundCanvas, this.hite);
 	this.rootRow.appendChild(this.backgroundCanvas);
 
-	this.videoAdapter.hasVideos(this.version.langCode, this.version.langPrefCode, function(videoCount) {
-		var menuWidth = setupIconButton('tocCell', drawTOCIcon, that.hite, BIBLE.SHOW_TOC);
-		var serhWidth = setupIconButton('searchCell', drawSearchIcon, that.hite, BIBLE.SHOW_SEARCH);
-		that.rootRow.appendChild(that.labelCell);
-		if (videoCount > 0) {
-			var videoWidth = setupIconButton('videoCell', drawVideoIcon, that.hite, BIBLE.SHOW_VIDEO);
-		} else {
-			videoWidth = 0;
-		}
-		if (that.version.isQaActive == 'T') {
-			var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, that.hite, BIBLE.SHOW_QUESTIONS);
-		} else {
-			quesWidth = 0;
-		}
-		var settWidth = setupIconButton('settingsCell', drawSettingsIcon, that.hite, BIBLE.SHOW_SETTINGS);
-		var avalWidth = window.innerWidth - (menuWidth + serhWidth + videoWidth + quesWidth + settWidth + (6 * 4));// six is fudge factor
-	
-		that.titleCanvas = document.createElement('canvas');
-		drawTitleField(that.titleCanvas, that.hite, avalWidth);
-		that.labelCell.appendChild(that.titleCanvas);
-	});
+	//this.videoAdapter.hasVideos(this.version.langCode, this.version.langPrefCode, function(videoCount) {
+	var menuWidth = setupIconButton('tocCell', drawTOCIcon, that.hite, BIBLE.SHOW_TOC);
+	var serhWidth = setupIconButton('searchCell', drawSearchIcon, that.hite, BIBLE.SHOW_SEARCH);
+	that.rootRow.appendChild(that.labelCell);
+	var videoWidth = setupIconButton('videoCell', drawVideoIcon, that.hite, BIBLE.SHOW_VIDEO);
+	if (that.version.isQaActive == 'T') {
+		var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, that.hite, BIBLE.SHOW_QUESTIONS);
+	} else {
+		quesWidth = 0;
+	}
+	var settWidth = setupIconButton('settingsCell', drawSettingsIcon, that.hite, BIBLE.SHOW_SETTINGS);
+	var avalWidth = window.innerWidth - (menuWidth + serhWidth + videoWidth + quesWidth + settWidth + (6 * (4 + CELL_SPACING)));// six is fudge factor
+
+	that.titleCanvas = document.createElement('canvas');
+	drawTitleField(that.titleCanvas, that.hite, avalWidth);
+	that.labelCell.appendChild(that.titleCanvas);
+	//});
 
 	function paintBackground(canvas, hite) {
 		console.log('**** repaint background ****');
@@ -4482,7 +4480,7 @@ DynamicCSS.prototype.setDirection = function(direction) {
 */
 "use strict";
 function VideoListView(version, videoAdapter) {
-	this.videoIdList = [ 'KOG_OT', 'KOG_NT', '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
+	this.videoIdList = [ 'KOG_OT', 'KOG_NT' ];//, '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
 	this.version = version;
 	this.deviceType = deviceSettings.platform();
 	this.videoAdapter = videoAdapter;
@@ -4644,10 +4642,13 @@ function VideoTableAdapter() {
 	this.database = new DatabaseHelper('Versions.db', true);
 	this.className = 'VideoTableAdapter';
 }
-
+/**
+* NOTE: This method is only counting KOG videos.  This must be changed when the Jesus Film is released.
+* Deprecated and not currently used.
+*/
 VideoTableAdapter.prototype.hasVideos = function(langCode, langPrefCode, callback) {
 	var that = this;
-	var statement = 'SELECT count(*) AS count FROM Video WHERE langCode IN (?,?)';
+	var statement = 'SELECT count(*) AS count FROM Video WHERE langCode IN (?,?) AND mediaId like "KOG%"';
 	this.database.select(statement, [langCode, langPrefCode], function(results) {
 		if (results instanceof IOError) {
 			console.log('SQL Error in VideoTableAdapter.hasVideos', results);
@@ -4657,6 +4658,7 @@ VideoTableAdapter.prototype.hasVideos = function(langCode, langPrefCode, callbac
 		}
 	});
 };
+
 VideoTableAdapter.prototype.selectJesusFilmLanguage = function(countryCode, silCode, callback) {
 	var that = this;
 	var statement = 'SELECT languageId FROM JesusFilm WHERE countryCode=? AND silCode=? ORDER BY population DESC';
@@ -4681,10 +4683,14 @@ VideoTableAdapter.prototype.selectJesusFilmLanguage = function(countryCode, silC
 		}
 	});
 };
-
+/**
+* NOTE: This method must be prevented from returning Jesus videos.  This must be changed when the Jesus Film is released.
+*/
 VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCode, langPrefCode, deviceType, callback) {
-	var statement = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL, MP4_1080, MP4_720, MP4_540, MP4_360,' +
-			' longDescription FROM Video WHERE languageId IN (?,?)';
+	var that = this;
+	var selectList = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL, MP4_1080, MP4_720, MP4_540, MP4_360,' +
+			' longDescription FROM Video';
+	var statement = selectList + ' WHERE languageId IN (?,?) AND mediaId like "KOG%"';
 	this.database.select(statement, [ languageId, silCode ], function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
@@ -4693,13 +4699,23 @@ VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCod
 			if (results.rows.length > 0) {
 				returnVideoMap(languageId, silCode, results, callback);
 			} else {
-				statement = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL, MP4_1080, MP4_720, MP4_540, MP4_360,' +
-					' longDescription FROM Video WHERE langCode IN (?,?)';
+				statement = selectList + ' WHERE langCode IN (?,?) AND mediaId like "KOG%"';
 				that.database.select(statement, [langCode, langPrefCode], function(results) {
 					if (results instanceof IOError) {
 						callback({});
 					} else {
-						returnVideoMap(languageId, silCode, results, callback);
+						if (results.rows.length > 0) {
+							returnVideoMap(languageId, silCode, results, callback);
+						} else {
+							statement = selectList + ' WHERE langCode = "en" AND mediaId like "KOG%"';
+							that.database.select(statement, [], function(results) {
+								if (results instanceof IOError) {
+									callback({});
+								} else {
+									returnVideoMap(languageId, silCode, results, callback);
+								}
+							});
+						}
 					}
 				});
 			}
