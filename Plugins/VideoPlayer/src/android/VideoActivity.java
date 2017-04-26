@@ -21,49 +21,55 @@ import java.util.Date;
  * This is based up the following plugin:
  * https://github.com/nchutchind/cordova-plugin-streaming-media
  */
-public class VideoActivity extends Activity implements
-        MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener,
-        MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener,
-        MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnBufferingUpdateListener {
+public class VideoActivity extends Activity implements ExoPlayer.Listener,
+		ChunkSampleSource.EventListener,
+		HlsSampleSource.EventListener,
+		DefaultBandwidthMeter.EventListener,
+		MediaCodecVideoTrackRenderer.EventListener,
+		MediaCodecAudioTrackRenderer.EventListener {
     private final static String TAG = "VideoActivity";
-    private VideoPersistence videoPersistence = new VideoPersistence(this);
-    private VideoView videoView;
-    private MediaController mediaController;
-    private MediaPlayer mediaPlayer;
-    private ProgressBar progressBar;
+//    private VideoPersistence videoPersistence = new VideoPersistence(this);
+//    private VideoView videoView;
+//    private MediaController mediaController;
+//    private MediaPlayer mediaPlayer;
+//    private ProgressBar progressBar;
+
+
+    private ExoPlayer player;
+    private PlayerControl playerControl;
     private String videoId;
     private String videoUrl;
-    private int currentPosition = 0;
-    private boolean videoPlaybackComplete = false;
-    private Date timestamp = new Date();
+//    private int currentPosition = 0;
+//    private boolean videoPlaybackComplete = false;
+//    private Date timestamp = new Date();
         
     // Error recovery
-    private boolean onErrorRecovery = false;
-    private int backupPosition = 0;
-    private long backupTime = 0L;
-    private long errorTime = 0L;
+//    private boolean onErrorRecovery = false;
+//    private int backupPosition = 0;
+//    private long backupTime = 0L;
+//    private long errorTime = 0L;
     
-    public String getVideoId() {
-	    return(this.videoId);
-    }
-    public void setVideoId(String id) {
-	    this.videoId = id;
-    }
-    public String getVideoUrl() {
-	    return(this.videoUrl);
-    }
-    public void setVideoUrl(String url) {
-	    this.videoUrl = url;
-    }
-    public int getCurrentPosition() {
-	    return((this.videoView != null) ? this.videoView.getCurrentPosition() : 0);
-    }
-    public void setCurrentPosition(int pos) {
-	    this.currentPosition = pos;
-    }
-    public void setTimestamp(Date dt) {
-	    this.timestamp = dt;
-    } 
+//    public String getVideoId() {
+//	    return(this.videoId);
+//    }
+//    public void setVideoId(String id) {
+//	    this.videoId = id;
+//    }
+//    public String getVideoUrl() {
+//	    return(this.videoUrl);
+//    }
+//    public void setVideoUrl(String url) {
+//	    this.videoUrl = url;
+//    }
+//    public int getCurrentPosition() {
+//	    return((this.videoView != null) ? this.videoView.getCurrentPosition() : 0);
+//    }
+//    public void setCurrentPosition(int pos) {
+//	    this.currentPosition = pos;
+//    }
+//    public void setTimestamp(Date dt) {
+//	    this.timestamp = dt;
+//    } 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +85,9 @@ public class VideoActivity extends Activity implements
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 
-        this.videoView = new VideoView(this);
-        this.videoView.setLayoutParams(layoutParams);
-        relativeLayout.addView(this.videoView);
+//        this.videoView = new VideoView(this);
+//        this.videoView.setLayoutParams(layoutParams);
+//        relativeLayout.addView(this.videoView);
 
         // Create startup progress animation
         this.progressBar = new ProgressBar(this);
@@ -94,15 +100,57 @@ public class VideoActivity extends Activity implements
 
         setContentView(relativeLayout);
         
-        this.videoView.setOnPreparedListener(this);
-        this.videoView.setOnCompletionListener(this);
-        this.videoView.setOnInfoListener(this); //requires SDK 17
-        this.videoView.setOnErrorListener(this);
+//        this.videoView.setOnPreparedListener(this);
+//        this.videoView.setOnCompletionListener(this);
+//        this.videoView.setOnInfoListener(this); //requires SDK 17
+//        this.videoView.setOnErrorListener(this);
         
-        this.mediaController = new MediaController(this);
-        this.mediaController.setAnchorView(this.videoView);
-        this.mediaController.setMediaPlayer(this.videoView);
-        this.videoView.setMediaController(this.mediaController);
+//        this.mediaController = new MediaController(this);
+//        this.mediaController.setAnchorView(this.videoView);
+//        this.mediaController.setMediaPlayer(this.videoView);
+//        this.videoView.setMediaController(this.mediaController);
+
+		player = ExoPlayer.Factory.newInstance(PlayerConstants.RENDERER_COUNT, MIN_BUFFER_MS, MIN_REBUFFER_MS);
+
+		playerControl = new PlayerControl(player);
+		player.addListener(this);  /// Must this be repeated for each listener
+    }
+    
+    @Override
+    protected void onStart() {
+	    super.onStart();
+	    Log.d(TAG, "onStart CALLED " + System.currentTimeMillis());
+	    
+		Allocator allocator = new DefaultAllocator(BUFFER_SEGMENT_SIZE);
+		Handler mainHandler = this.player.getMainHandler();
+
+		DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter(mainHandler, null);
+		DataSource dataSource = new DefaultUriDataSource(context, bandwidthMeter, 
+										Util.getUserAgent(mContext, Constants.UDEMY_NAME));
+										
+		ExtractorSampleSource sampleSource = new ExtractorSampleSource(uri, dataSource, allocator,
+			BUFFER_SEGMENT_COUNT * BUFFER_SEGMENT_SIZE, mainHandler, this.player, 0);
+			
+		MediaCodecVideoTrackRenderer videoRenderer = new MediaCodecVideoTrackRenderer(context,
+			sampleSource, MediaCodecSelector.DEFAULT, MediaCodec.VIDEO_SCALING_MODE_SCALE_TO_FIT, 5000,
+			mainHandler, this.player, 50);
+			
+		MediaCodecAudioTrackRenderer audioRenderer = new MediaCodecAudioTrackRenderer(sampleSource,
+			MediaCodecSelector.DEFAULT, null, true, mainHandler, this.player,
+			AudioCapabilities.getCapabilities(context), AudioManager.STREAM_MUSIC);
+
+		TrackRenderer[] renderers = new TrackRenderer[PlayerConstants.RENDERER_COUNT];
+		renderers[PlayerConstants.TYPE_VIDEO] = videoRenderer;
+		renderers[PlayerConstants.TYPE_AUDIO] = audioRenderer;
+		this.player.onRenderers(renderers, bandwidthMeter);
+		
+		player.prepare(renderers);   
+    }
+    
+    @Override
+    protected void onRestart() {
+	    super.onRestart();
+	    Log.d(TAG, "onRestart CALLED " + System.currentTimeMillis());
     }
 
     @Override
@@ -110,9 +158,9 @@ public class VideoActivity extends Activity implements
         super.onResume();
         Log.d(TAG, "onResume CALLED " + System.currentTimeMillis());
         this.progressBar.setVisibility(View.VISIBLE);
-        this.videoPersistence.recoverState();
-        Uri videoUri = Uri.parse(this.videoUrl);
-        this.videoView.setVideoURI(videoUri);
+//        this.videoPersistence.recoverState();
+//        Uri videoUri = Uri.parse(this.videoUrl);
+//        this.videoView.setVideoURI(videoUri);
     }
 
 	/**
@@ -123,152 +171,166 @@ public class VideoActivity extends Activity implements
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause CALLED " + System.currentTimeMillis());
-        if (this.videoPlaybackComplete) {
-	    	this.videoPersistence.clearState();
-        } else {
-        	this.videoPersistence.saveState();
-        }
-        this.videoView.stopPlayback();
-        if (this.mediaPlayer != null) {
-        	this.mediaPlayer.release();
-        	this.mediaPlayer = null;
-        }
-    }
-
-	@Override
-    public void onPrepared(MediaPlayer mp) {
-        Log.d(TAG, "onPrepared CALLED " + System.currentTimeMillis());
-        this.mediaPlayer = mp;
-        this.mediaPlayer.setScreenOnWhilePlaying(true);
-        this.mediaPlayer.setOnBufferingUpdateListener(this);
-	    this.videoView.start();
-	    int seekTime = backupSeek();
-	    if (seekTime > 1) {
-	       	this.mediaPlayer.setOnSeekCompleteListener(this);
-	        this.videoView.seekTo(seekTime);
-        } else {
-			this.actualStartVideo();
-        }
+//        if (this.videoPlaybackComplete) {
+//	    	this.videoPersistence.clearState();
+//        } else {
+//        	this.videoPersistence.saveState();
+//        }
+//        this.videoView.stopPlayback();
+//        if (this.mediaPlayer != null) {
+//        	this.mediaPlayer.release();
+//        	this.mediaPlayer = null;
+//        }
     }
     
-    private int backupSeek() {
-	    if (this.onErrorRecovery) {
-		    this.onErrorRecovery = false;
-		    int recovTime = this.backupPosition + (int)(this.errorTime - this.backupTime);
-			return(recovTime);
-	    } else {
-			long duration = new Date().getTime() - this.timestamp.getTime();
-			int backupMs = Long.toString(duration).length() * 1000; // could multiply by a factor here
-			int seekTime = this.currentPosition - backupMs;
-			Log.d(TAG, "current and seekTime " + this.currentPosition + " " + seekTime);
-			return(seekTime);
-		}
-	}
-    
-    public void onSeekComplete(MediaPlayer mp) {
-        Log.d(TAG, "onSeekComplete CALLED " + System.currentTimeMillis());
-        this.actualStartVideo();
+    @Override
+    protected void onStop() {
+	    super.onStop();
+	    Log.d(TAG, "onStop CALLED " + System.currentTimeMillis());
     }
     
-    private void actualStartVideo() {
-	    this.videoView.requestFocus();
-	    this.progressBar.setVisibility(View.GONE);
+    @Override
+    protected void onDestroy() {
+	    super.onDestroy();
+	    Log.d(TAG, "onDestroy CALLED " + System.currentTimeMillis());
     }
+    
+    
 
-    public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
-	    this.errorTime = System.currentTimeMillis();
-        String message;
-        switch (what) {
-            case MediaPlayer.MEDIA_ERROR_IO:
-                message = "MEDIA ERROR IO";
-                break;
-            case MediaPlayer.MEDIA_ERROR_MALFORMED:
-                message = "MEDIA ERROR MALFORMED";
-                break;
-            case MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK:
-                message = "MEDIA ERROR NOT VALID FOR PROGRESSIVE PLAYBACK";
-                break;
-            case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
-                message = "MEDIA ERROR SERVER DIED";
-                break;
-            case MediaPlayer.MEDIA_ERROR_TIMED_OUT:
-                message = "MEDIA ERROR TIMED OUT";
-                break;
-            case MediaPlayer.MEDIA_ERROR_UNKNOWN:
-                message = "MEDIA ERROR UNKNOWN";
-                break;
-            case MediaPlayer.MEDIA_ERROR_UNSUPPORTED:
-                message = "MEDIA ERROR UNSUPPORTED";
-                break;
-            default:
-                message = "Unknown Error " + what;
-        }
-        Log.e(TAG, "onError " + message + " " + extra);
+//	@Override
+//    public void onPrepared(MediaPlayer mp) {
+//        Log.d(TAG, "onPrepared CALLED " + System.currentTimeMillis());
+//        this.mediaPlayer = mp;
+//        this.mediaPlayer.setScreenOnWhilePlaying(true);
+//        this.mediaPlayer.setOnBufferingUpdateListener(this);
+//	    this.videoView.start();
+//	    int seekTime = backupSeek();
+//	    if (seekTime > 1) {
+//	       	this.mediaPlayer.setOnSeekCompleteListener(this);
+//	        this.videoView.seekTo(seekTime);
+//        } else {
+//			this.actualStartVideo();
+//        }
+//    }
+    
+//    private int backupSeek() {
+//	    if (this.onErrorRecovery) {
+//		    this.onErrorRecovery = false;
+//		    int recovTime = this.backupPosition + (int)(this.errorTime - this.backupTime);
+//			return(recovTime);
+//	    } else {
+//			long duration = new Date().getTime() - this.timestamp.getTime();
+//			int backupMs = Long.toString(duration).length() * 1000; // could multiply by a factor here
+//			int seekTime = this.currentPosition - backupMs;
+//			Log.d(TAG, "current and seekTime " + this.currentPosition + " " + seekTime);
+//			return(seekTime);
+//		}
+//	}
+    
+//    public void onSeekComplete(MediaPlayer mp) {
+//        Log.d(TAG, "onSeekComplete CALLED " + System.currentTimeMillis());
+//        this.actualStartVideo();
+//    }
+    
+//    private void actualStartVideo() {
+//	    this.videoView.requestFocus();
+//	    this.progressBar.setVisibility(View.GONE);
+//    }
 
-        mediaPlayer.reset();
-        this.onErrorRecovery = true;
-        this.progressBar.setVisibility(View.VISIBLE);
-        Uri videoUri = Uri.parse(this.videoUrl);
-        this.videoView.setVideoURI(videoUri);
-        
-        return true;
-    }
+//    public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
+//	    this.errorTime = System.currentTimeMillis();
+//        String message;
+//        switch (what) {
+//            case MediaPlayer.MEDIA_ERROR_IO:
+//                message = "MEDIA ERROR IO";
+//                break;
+//            case MediaPlayer.MEDIA_ERROR_MALFORMED:
+//                message = "MEDIA ERROR MALFORMED";
+//                break;
+//            case MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK:
+//                message = "MEDIA ERROR NOT VALID FOR PROGRESSIVE PLAYBACK";
+//                break;
+//            case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
+//                message = "MEDIA ERROR SERVER DIED";
+//                break;
+//            case MediaPlayer.MEDIA_ERROR_TIMED_OUT:
+//                message = "MEDIA ERROR TIMED OUT";
+//                break;
+//            case MediaPlayer.MEDIA_ERROR_UNKNOWN:
+//                message = "MEDIA ERROR UNKNOWN";
+//                break;
+//            case MediaPlayer.MEDIA_ERROR_UNSUPPORTED:
+//                message = "MEDIA ERROR UNSUPPORTED";
+//                break;
+//            default:
+//                message = "Unknown Error " + what;
+//        }
+//        Log.e(TAG, "onError " + message + " " + extra);
+//
+//        mediaPlayer.reset();
+//        this.onErrorRecovery = true;
+//        this.progressBar.setVisibility(View.VISIBLE);
+//        Uri videoUri = Uri.parse(this.videoUrl);
+//        this.videoView.setVideoURI(videoUri);
+//        
+//        return true;
+//    }
 
-    public boolean onInfo(MediaPlayer mediaPlayer, int what, int extra) {
-        String message;
-        switch(what) {
-            case MediaPlayer.MEDIA_INFO_UNKNOWN:
-                message = "MEDIA INFO UNKNOWN";
-                break;
-            case MediaPlayer.MEDIA_INFO_VIDEO_TRACK_LAGGING:
-                message = "MEDIA INFO VIDEO TRACK LAGGING";
-                break;
-            case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
-                message = "MEDIA INFO VIDEO RENDERING START";
-                break;
-            case MediaPlayer.MEDIA_INFO_BUFFERING_START:
-                message = "MEDIA INFO BUFFERING START";
-                break;
-            case MediaPlayer.MEDIA_INFO_BUFFERING_END:
-                message = "MEDIA INFO BUFFERING END";
-                break;
-            //case MediaPlayer.MEDIA_INFO_NETWORK_BANDWIDTH:
-            //    //(703) - bandwidth information is available (as extra kbps)
-            //    break;
-            case MediaPlayer.MEDIA_INFO_BAD_INTERLEAVING:
-                message = "MEDIA INFO BAD INTERLEAVING";
-                break;
-            case MediaPlayer.MEDIA_INFO_NOT_SEEKABLE:
-                message = "MEDIA INFO NOT SEEKABLE";
-                break;
-            case MediaPlayer.MEDIA_INFO_METADATA_UPDATE:
-                message = "MEDIA INFO METADATA UPDATE";
-                break;
-            case MediaPlayer.MEDIA_INFO_UNSUPPORTED_SUBTITLE:
-                message = "MEDIA INFO UNSUPPORTED SUBTITLE";
-                break;
-            case MediaPlayer.MEDIA_INFO_SUBTITLE_TIMED_OUT:
-                message = "MEDIA INFO SUBTITLE TIMED OUT";
-                break;
-            default:
-                message = "Unknown Info " + what;
-                break;
-        }
-        Log.d(TAG, "onInfo " + message + " " + extra);
-        return(true);
-    }
+//    public boolean onInfo(MediaPlayer mediaPlayer, int what, int extra) {
+//        String message;
+//        switch(what) {
+//            case MediaPlayer.MEDIA_INFO_UNKNOWN:
+//                message = "MEDIA INFO UNKNOWN";
+//                break;
+//            case MediaPlayer.MEDIA_INFO_VIDEO_TRACK_LAGGING:
+//                message = "MEDIA INFO VIDEO TRACK LAGGING";
+//                break;
+//            case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
+//                message = "MEDIA INFO VIDEO RENDERING START";
+//                break;
+//            case MediaPlayer.MEDIA_INFO_BUFFERING_START:
+//                message = "MEDIA INFO BUFFERING START";
+//                break;
+//            case MediaPlayer.MEDIA_INFO_BUFFERING_END:
+//                message = "MEDIA INFO BUFFERING END";
+//                break;
+//            //case MediaPlayer.MEDIA_INFO_NETWORK_BANDWIDTH:
+//            //    //(703) - bandwidth information is available (as extra kbps)
+//            //    break;
+//            case MediaPlayer.MEDIA_INFO_BAD_INTERLEAVING:
+//                message = "MEDIA INFO BAD INTERLEAVING";
+//                break;
+//            case MediaPlayer.MEDIA_INFO_NOT_SEEKABLE:
+//                message = "MEDIA INFO NOT SEEKABLE";
+//                break;
+//            case MediaPlayer.MEDIA_INFO_METADATA_UPDATE:
+//                message = "MEDIA INFO METADATA UPDATE";
+//                break;
+//            case MediaPlayer.MEDIA_INFO_UNSUPPORTED_SUBTITLE:
+//                message = "MEDIA INFO UNSUPPORTED SUBTITLE";
+//                break;
+//            case MediaPlayer.MEDIA_INFO_SUBTITLE_TIMED_OUT:
+//                message = "MEDIA INFO SUBTITLE TIMED OUT";
+//                break;
+//            default:
+//                message = "Unknown Info " + what;
+//                break;
+//        }
+//        Log.d(TAG, "onInfo " + message + " " + extra);
+//        return(true);
+//    }
 
-    public void onBufferingUpdate(MediaPlayer mediaPlayer, int percent) {
-	    this.backupPosition = this.getCurrentPosition();
-	    this.backupTime = System.currentTimeMillis();
-        Log.d(TAG, "onBufferingUpdate : " + percent + "%  " + this.backupPosition);
-    }
+//    public void onBufferingUpdate(MediaPlayer mediaPlayer, int percent) {
+//	    this.backupPosition = this.getCurrentPosition();
+//	    this.backupTime = System.currentTimeMillis();
+//        Log.d(TAG, "onBufferingUpdate : " + percent + "%  " + this.backupPosition);
+//    }
 
-    public void onCompletion(MediaPlayer mediaPlayer) {
-        Log.d(TAG, "onCompletion CALLED " + System.currentTimeMillis());
-        this.videoPlaybackComplete = true;
-		this.wrapItUp(Activity.RESULT_OK, null);
-    }
+//    public void onCompletion(MediaPlayer mediaPlayer) {
+//        Log.d(TAG, "onCompletion CALLED " + System.currentTimeMillis());
+//        this.videoPlaybackComplete = true;
+//		this.wrapItUp(Activity.RESULT_OK, null);
+//    }
 
 	/**
 	* Do not call super.onBackPressed, it will call setResult
