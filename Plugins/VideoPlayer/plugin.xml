@@ -26,9 +26,10 @@
 		<config-file target="AndroidManifest.xml" parent="/manifest/application">
 			<activity android:name="com.shortsands.videoplayer.VideoActivity" android:label="VideoActivity" android:screenOrientation="landscape"></activity>
 		</config-file>
-		<source-file src="src/com/shortsands/videoplayer/VideoPlayer.java" target-dir="src/com/shortsands/videoplayer" />
-		<source-file src="src/com/shortsands/videoplayer/VideoActivity.java" target-dir="src/com/shortsands/videoplayer" />
-		<source-file src="src/com/shortsands/videoplayer/VideoPersistence.java" target-dir="src/com/shortsands/videoplayer" />
+		<source-file src="src/android/com/shortsands/videoplayer/VideoPlayer.java" target-dir="src/com/shortsands/videoplayer" />
+		<source-file src="src/android/com/shortsands/videoplayer/VideoActivity.java" target-dir="src/com/shortsands/videoplayer" />
+		<source-file src="src/android/com/shortsands/videoplayer/VideoPersistence.java" target-dir="src/com/shortsands/videoplayer" />
+		<!-- change library to a more limited one when done. -->
 		<framework src="src/android/plugin.gradle" custom="true" type="gradleReference"/>
 	</platform>
   

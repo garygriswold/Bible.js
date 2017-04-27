@@ -16,6 +16,65 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
 import java.util.Date;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.drm.DefaultDrmSessionManager;
+import com.google.android.exoplayer2.drm.DrmSessionManager;
+import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
+import com.google.android.exoplayer2.drm.FrameworkMediaDrm;
+import com.google.android.exoplayer2.drm.HttpMediaDrmCallback;
+import com.google.android.exoplayer2.drm.UnsupportedDrmException;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer.DecoderInitializationException;
+import com.google.android.exoplayer2.mediacodec.MediaCodecUtil.DecoderQueryException;
+import com.google.android.exoplayer2.source.BehindLiveWindowException;
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.source.dash.DashMediaSource;
+import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
+import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.ui.DebugTextViewHelper;
+import com.google.android.exoplayer2.ui.PlaybackControlView;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.util.Util;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.util.UUID;
 /**
  * Created by garygriswold on 1/26/17.
  * This is based up the following plugin:
@@ -32,11 +91,13 @@ public class VideoActivity extends Activity implements ExoPlayer.Listener,
 //    private VideoView videoView;
 //    private MediaController mediaController;
 //    private MediaPlayer mediaPlayer;
-//    private ProgressBar progressBar;
-
-
-    private ExoPlayer player;
-    private PlayerControl playerControl;
+    private ProgressBar progressBar;
+	private Handler mainHandler;
+	private SimpleExoPlayer player;
+	private SimpleExoPlayerView playerView;
+	private EventLogger eventLogger;
+    //private ExoPlayer player;
+    //private PlayerControl playerControl;
     private String videoId;
     private String videoUrl;
 //    private int currentPosition = 0;
@@ -82,17 +143,22 @@ public class VideoActivity extends Activity implements ExoPlayer.Listener,
 
         RelativeLayout relativeLayout = new RelativeLayout(this);
         relativeLayout.setBackgroundColor(Color.BLACK);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 
+        		RelativeLayout.LayoutParams.MATCH_PARENT);
         layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 
 //        this.videoView = new VideoView(this);
 //        this.videoView.setLayoutParams(layoutParams);
 //        relativeLayout.addView(this.videoView);
+		this.playerView = new SimpleExoPlayerView(this);
+		this.playerView.setLayout(layoutParams);
+		relativeLayout.addView(this.playerView);
 
         // Create startup progress animation
         this.progressBar = new ProgressBar(this);
         this.progressBar.setIndeterminate(true);
-        RelativeLayout.LayoutParams progLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams progLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+        		RelativeLayout.LayoutParams.WRAP_CONTENT);
         progLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         this.progressBar.setLayoutParams(progLayout);
         relativeLayout.addView(this.progressBar);
@@ -110,41 +176,67 @@ public class VideoActivity extends Activity implements ExoPlayer.Listener,
 //        this.mediaController.setMediaPlayer(this.videoView);
 //        this.videoView.setMediaController(this.mediaController);
 
-		player = ExoPlayer.Factory.newInstance(PlayerConstants.RENDERER_COUNT, MIN_BUFFER_MS, MIN_REBUFFER_MS);
+//		player = ExoPlayer.Factory.newInstance(PlayerConstants.RENDERER_COUNT, MIN_BUFFER_MS, MIN_REBUFFER_MS);
 
-		playerControl = new PlayerControl(player);
-		player.addListener(this);  /// Must this be repeated for each listener
+//		playerControl = new PlayerControl(player);
+//		player.addListener(this);  /// Must this be repeated for each listener
+
+		this.createPlayer();
+		this.preparePlayer();
+    }
+    
+    private void createPlayer(context) {
+	    // 1. Create a default TrackSelector
+		this.mainHandler = new Handler();
+		BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+		TrackSelection.Factory videoTrackSelectionFactory = 
+				new AdaptiveTrackSelection.Factory(bandwidthMeter);
+		TrackSelector trackSelector = 
+				new DefaultTrackSelector(videoTrackSelectionFactory);
+
+		// 2. Create the player
+		this.player = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
+		
+		// 3. Create Logger
+		this.eventLogger = new EventLogger(trackSelector);
+		this.player.addListener(this.eventLogger);
+		this.player.setAudioDebugListener(this.eventLogger);
+		this.player.setVideoDebugListener(this.eventLogger);
+		this.player.setMetadataOutput(this.eventLogger);
+				
+		// 4. Create the view
+		//this.playerView = (SimpleExoPlayerView) findViewById(R.id.player_view);
+		this.playerView.setControllerVisibilityListener(this);
+		this.playerView.requestFocus();
+		
+		// Bind the player to the view.
+		this.playerView.setPlayer(this.player);
+    }
+    
+    private void preparePlayer(context) {
+		// Measures bandwidth during playback. Can be null if not required.
+		DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+		
+		// Produces DataSource instances through which media data is loaded.
+		DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
+			Util.getUserAgent(context, "ShortSands"), bandwidthMeter);
+			
+		// Produces Extractor instances for parsing the media data.
+		ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+		
+		String mp4VideoUri = "https://player.vimeo.com/external/157373759.sd.mp4?s=788c497c7c25002898dad7d0f2187cadfb6787e6&profile_id=165";
+		// This is the MediaSource representing the media to be played.
+		MediaSource videoSource = new ExtractorMediaSource(mp4VideoUri,
+				dataSourceFactory, extractorsFactory, null, null);
+
+		// Prepare the player with the source.
+		this.player.prepare(videoSource);	    
     }
     
     @Override
     protected void onStart() {
 	    super.onStart();
-	    Log.d(TAG, "onStart CALLED " + System.currentTimeMillis());
-	    
-		Allocator allocator = new DefaultAllocator(BUFFER_SEGMENT_SIZE);
-		Handler mainHandler = this.player.getMainHandler();
-
-		DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter(mainHandler, null);
-		DataSource dataSource = new DefaultUriDataSource(context, bandwidthMeter, 
-										Util.getUserAgent(mContext, Constants.UDEMY_NAME));
-										
-		ExtractorSampleSource sampleSource = new ExtractorSampleSource(uri, dataSource, allocator,
-			BUFFER_SEGMENT_COUNT * BUFFER_SEGMENT_SIZE, mainHandler, this.player, 0);
-			
-		MediaCodecVideoTrackRenderer videoRenderer = new MediaCodecVideoTrackRenderer(context,
-			sampleSource, MediaCodecSelector.DEFAULT, MediaCodec.VIDEO_SCALING_MODE_SCALE_TO_FIT, 5000,
-			mainHandler, this.player, 50);
-			
-		MediaCodecAudioTrackRenderer audioRenderer = new MediaCodecAudioTrackRenderer(sampleSource,
-			MediaCodecSelector.DEFAULT, null, true, mainHandler, this.player,
-			AudioCapabilities.getCapabilities(context), AudioManager.STREAM_MUSIC);
-
-		TrackRenderer[] renderers = new TrackRenderer[PlayerConstants.RENDERER_COUNT];
-		renderers[PlayerConstants.TYPE_VIDEO] = videoRenderer;
-		renderers[PlayerConstants.TYPE_AUDIO] = audioRenderer;
-		this.player.onRenderers(renderers, bandwidthMeter);
-		
-		player.prepare(renderers);   
+	    Log.d(TAG, "onStart CALLED " + System.currentTimeMillis()); 
     }
     
     @Override
