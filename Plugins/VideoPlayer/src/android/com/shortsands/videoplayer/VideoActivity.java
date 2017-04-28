@@ -194,16 +194,17 @@ public class VideoActivity extends Activity implements OnClickListener {//,
     
     private void createPlayer() {
 	    // 1. Create a default TrackSelector
-		this.mainHandler = new Handler();
+		this.mainHandler = new Handler(); // Not currently used, but needed for new MediaSource
 		BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
 		TrackSelection.Factory videoTrackSelectionFactory = 
 				new AdaptiveTrackSelection.Factory(bandwidthMeter);
 		TrackSelector trackSelector = 
 				new DefaultTrackSelector(videoTrackSelectionFactory);
-		LoadControl loadControl = new DefaultLoadControl();
 		
 		// 2. Create the player
+		LoadControl loadControl = new DefaultLoadControl();
 		this.player = ExoPlayerFactory.newSimpleInstance(getApplicationContext(), trackSelector, loadControl);
+		this.player.setPlayWhenReady(true);
 		
 		// 3. Create Logger
 		this.eventLogger = new EventLogger();
@@ -211,6 +212,7 @@ public class VideoActivity extends Activity implements OnClickListener {//,
 		this.player.setAudioDebugListener(this.eventLogger);
 		this.player.setVideoDebugListener(this.eventLogger);
 		this.player.setMetadataOutput(this.eventLogger);
+		//this.player.setVideoListener(this.eventLogger);
 				
 		// 4. Create the view
 		//this.playerView = (SimpleExoPlayerView) findViewById(R.id.player_view);
@@ -219,6 +221,7 @@ public class VideoActivity extends Activity implements OnClickListener {//,
 		
 		// Bind the player to the view.
 		this.playerView.setPlayer(this.player);
+		// there is also a this.player.setVideoSurfaceView(this.playerView);
     }
     
     private void preparePlayer() {
