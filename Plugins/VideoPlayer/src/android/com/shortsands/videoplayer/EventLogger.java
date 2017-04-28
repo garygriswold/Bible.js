@@ -88,18 +88,18 @@ import java.util.Locale;
 
   @Override
   public void onLoadingChanged(boolean isLoading) {
-    Log.d(TAG, "loading [" + isLoading + "]");
+    Log.d(TAG, "onLoadingChanged [" + isLoading + "]");
   }
 
   @Override
   public void onPlayerStateChanged(boolean playWhenReady, int state) {
-    Log.d(TAG, "state [" + getSessionTimeString() + ", " + playWhenReady + ", "
+    Log.d(TAG, "onPlayerStateChanged [" + getSessionTimeString() + ", " + playWhenReady + ", "
         + getStateString(state) + "]");
   }
 
   @Override
   public void onPositionDiscontinuity() {
-    Log.d(TAG, "positionDiscontinuity");
+    Log.d(TAG, "onPositionDiscontinuity");
   }
 
   //@Override
@@ -112,7 +112,7 @@ import java.util.Locale;
   public void onTimelineChanged(Timeline timeline, Object manifest) {
     int periodCount = timeline.getPeriodCount();
     int windowCount = timeline.getWindowCount();
-    Log.d(TAG, "sourceInfo [periodCount=" + periodCount + ", windowCount=" + windowCount);
+    Log.d(TAG, "onTimelineChanged [periodCount=" + periodCount + ", windowCount=" + windowCount);
     for (int i = 0; i < Math.min(periodCount, MAX_TIMELINE_ITEM_LINES); i++) {
       timeline.getPeriod(i, period);
       Log.d(TAG, "  " +  "period [" + getTimeString(period.getDurationMs()) + "]");
@@ -133,7 +133,7 @@ import java.util.Locale;
 
   @Override
   public void onPlayerError(ExoPlaybackException e) {
-    Log.e(TAG, "playerFailed [" + getSessionTimeString() + "]", e);
+    Log.e(TAG, "onPlayerError [" + getSessionTimeString() + "]", e);
   }
 
   @Override
@@ -218,34 +218,34 @@ import java.util.Locale;
 
   @Override
   public void onAudioEnabled(DecoderCounters counters) {
-    Log.d(TAG, "audioEnabled [" + getSessionTimeString() + "]");
+    Log.d(TAG, "onAudioEnabled [" + getSessionTimeString() + "]");
   }
 
   @Override
   public void onAudioSessionId(int audioSessionId) {
-    Log.d(TAG, "audioSessionId [" + audioSessionId + "]");
+    Log.d(TAG, "onAudioSessionId [" + audioSessionId + "]");
   }
 
   @Override
   public void onAudioDecoderInitialized(String decoderName, long elapsedRealtimeMs,
       long initializationDurationMs) {
-    Log.d(TAG, "audioDecoderInitialized [" + getSessionTimeString() + ", " + decoderName + "]");
+    Log.d(TAG, "onAudioDecoderInitialized [" + getSessionTimeString() + ", " + decoderName + "]");
   }
 
   @Override
   public void onAudioInputFormatChanged(Format format) {
-    Log.d(TAG, "audioFormatChanged [" + getSessionTimeString() + ", " + Format.toLogString(format)
+    Log.d(TAG, "onAudioInputFormatChanged [" + getSessionTimeString() + ", " + Format.toLogString(format)
         + "]");
   }
 
   @Override
   public void onAudioDisabled(DecoderCounters counters) {
-    Log.d(TAG, "audioDisabled [" + getSessionTimeString() + "]");
+    Log.d(TAG, "onAudioDisabled [" + getSessionTimeString() + "]");
   }
 
   @Override
   public void onAudioTrackUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
-    printInternalError("audioTrackUnderrun [" + bufferSize + ", " + bufferSizeMs + ", "
+    printInternalError("onAudioTrackUnderrun [" + bufferSize + ", " + bufferSizeMs + ", "
         + elapsedSinceLastFeedMs + "]", null);
   }
 
@@ -253,69 +253,70 @@ import java.util.Locale;
 
   @Override
   public void onVideoEnabled(DecoderCounters counters) {
-    Log.d(TAG, "videoEnabled [" + getSessionTimeString() + "]");
+    Log.d(TAG, "onVideoEnabled [" + getSessionTimeString() + "]");
   }
 
   @Override
   public void onVideoDecoderInitialized(String decoderName, long elapsedRealtimeMs,
       long initializationDurationMs) {
-    Log.d(TAG, "videoDecoderInitialized [" + getSessionTimeString() + ", " + decoderName + "]");
+    Log.d(TAG, "onVideoDecoderInitialized [" + getSessionTimeString() + ", " + decoderName + "]");
   }
 
   @Override
   public void onVideoInputFormatChanged(Format format) {
-    Log.d(TAG, "videoFormatChanged [" + getSessionTimeString() + ", " + Format.toLogString(format)
+    Log.d(TAG, "onVideoInputFormatChanged [" + getSessionTimeString() + ", " + Format.toLogString(format)
         + "]");
   }
 
   @Override
   public void onVideoDisabled(DecoderCounters counters) {
-    Log.d(TAG, "videoDisabled [" + getSessionTimeString() + "]");
+    Log.d(TAG, "onVideoDisabled [" + getSessionTimeString() + "]");
   }
 
   @Override
   public void onDroppedFrames(int count, long elapsed) {
-    Log.d(TAG, "droppedFrames [" + getSessionTimeString() + ", " + count + "]");
+    Log.d(TAG, "onDroppedFrames [" + getSessionTimeString() + ", " + count + "]");
   }
 
   @Override
   public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees,
       float pixelWidthHeightRatio) {
+	Log.d(TAG, "onVideoSizeChanged");
     // Do nothing.
   }
 
   @Override
   public void onRenderedFirstFrame(Surface surface) {
-    Log.d(TAG, "renderedFirstFrame [" + surface + "]");
+    Log.d(TAG, "onRenderedFirstFrame [" + surface + "]");
   }
 
   // DefaultDrmSessionManager.EventListener
 
   @Override
   public void onDrmSessionManagerError(Exception e) {
-    printInternalError("drmSessionManagerError", e);
+    printInternalError("onDrmSessionManagerError", e);
   }
 
   @Override
   public void onDrmKeysRestored() {
-    Log.d(TAG, "drmKeysRestored [" + getSessionTimeString() + "]");
+    Log.d(TAG, "onDrmKeysRestored [" + getSessionTimeString() + "]");
   }
 
   @Override
   public void onDrmKeysRemoved() {
-    Log.d(TAG, "drmKeysRemoved [" + getSessionTimeString() + "]");
+    Log.d(TAG, "onDrmKeysRemoved [" + getSessionTimeString() + "]");
   }
 
   @Override
   public void onDrmKeysLoaded() {
-    Log.d(TAG, "drmKeysLoaded [" + getSessionTimeString() + "]");
+    Log.d(TAG, "onDrmKeysLoaded [" + getSessionTimeString() + "]");
   }
 
   // ExtractorMediaSource.EventListener
 
   @Override
   public void onLoadError(IOException error) {
-    printInternalError("loadError", error);
+    printInternalError("onLoadError", error);
   }
 
   // AdaptiveMediaSourceEventListener
@@ -324,6 +325,7 @@ import java.util.Locale;
   public void onLoadStarted(DataSpec dataSpec, int dataType, int trackType, Format trackFormat,
       int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs,
       long mediaEndTimeMs, long elapsedRealtimeMs) {
+	Log.d(TAG, "onLoadStarted");
     // Do nothing.
   }
 
@@ -332,7 +334,7 @@ import java.util.Locale;
       int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs,
       long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded,
       IOException error, boolean wasCanceled) {
-    printInternalError("loadError", error);
+    printInternalError("onLoadError", error);
   }
 
   @Override
@@ -340,6 +342,7 @@ import java.util.Locale;
       int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs,
       long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
     // Do nothing.
+    Log.d(TAG, "onLoadCanceled");
   }
 
   @Override
@@ -347,17 +350,20 @@ import java.util.Locale;
       int trackSelectionReason, Object trackSelectionData, long mediaStartTimeMs,
       long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs, long bytesLoaded) {
     // Do nothing.
+    Log.d(TAG, "onLoadCompleted");
   }
 
   @Override
   public void onUpstreamDiscarded(int trackType, long mediaStartTimeMs, long mediaEndTimeMs) {
     // Do nothing.
+    Log.d(TAG, "onUpstreamDiscarded");
   }
 
   @Override
   public void onDownstreamFormatChanged(int trackType, Format trackFormat, int trackSelectionReason,
       Object trackSelectionData, long mediaTimeMs) {
     // Do nothing.
+    Log.d(TAG, "onDownstreamFormatChanged");
   }
 
   // Internal methods
@@ -413,15 +419,15 @@ import java.util.Locale;
   private static String getStateString(int state) {
     switch (state) {
       case ExoPlayer.STATE_BUFFERING:
-        return "B";
+        return "Buffering";
       case ExoPlayer.STATE_ENDED:
-        return "E";
+        return "Ended";
       case ExoPlayer.STATE_IDLE:
-        return "I";
+        return "Idle";
       case ExoPlayer.STATE_READY:
-        return "R";
+        return "Ready";
       default:
-        return "?";
+        return "State ?";
     }
   }
 

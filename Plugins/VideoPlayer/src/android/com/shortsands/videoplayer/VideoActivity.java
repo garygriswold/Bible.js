@@ -86,8 +86,8 @@ import java.util.UUID;
  * This is based up the following plugin:
  * https://github.com/nchutchind/cordova-plugin-streaming-media
  */
-public class VideoActivity extends Activity implements OnClickListener {//, 
-		//	ExoPlayer.EventListener, PlaybackControlView.VisibilityListener {
+public class VideoActivity extends Activity implements ExoPlayer.EventListener {
+		//, PlaybackControlView.VisibilityListener {
 		//ChunkSampleSource.EventListener,
 		//HlsSampleSource.EventListener,
 		//DefaultBandwidthMeter.EventListener,
@@ -205,10 +205,10 @@ public class VideoActivity extends Activity implements OnClickListener {//,
 		LoadControl loadControl = new DefaultLoadControl();
 		this.player = ExoPlayerFactory.newSimpleInstance(getApplicationContext(), trackSelector, loadControl);
 		this.player.setPlayWhenReady(true);
+		this.player.addListener(this);
 		
 		// 3. Create Logger
 		this.eventLogger = new EventLogger();
-		this.player.addListener(this.eventLogger);
 		this.player.setAudioDebugListener(this.eventLogger);
 		this.player.setVideoDebugListener(this.eventLogger);
 		this.player.setMetadataOutput(this.eventLogger);
@@ -233,13 +233,15 @@ public class VideoActivity extends Activity implements OnClickListener {//,
 			Util.getUserAgent(this, "ShortSands"), bandwidthMeter);
 			
 		// Produces Extractor instances for parsing the media data.
-		ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+//		ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
 		
 		// This is the MediaSource representing the media to be played.
-		String mp4VideoUrl = "https://player.vimeo.com/external/157373759.sd.mp4?s=788c497c7c25002898dad7d0f2187cadfb6787e6&profile_id=165";
-        Uri mp4VideoUri = Uri.parse(mp4VideoUrl);
-		MediaSource videoSource = new ExtractorMediaSource(mp4VideoUri,
-				dataSourceFactory, extractorsFactory, null, null);
+		//String videoUrl = "https://player.vimeo.com/external/157373759.sd.mp4?s=788c497c7c25002898dad7d0f2187cadfb6787e6&profile_id=165";
+		String videoUrl = "https://player.vimeo.com/external/157336122.m3u8?s=861d8aca0bddff67874ef38116d3bf5027474858";
+        Uri videoUri = Uri.parse(videoUrl);
+		//MediaSource videoSource = new ExtractorMediaSource(mp4VideoUri,
+		//		dataSourceFactory, extractorsFactory, null, null);
+		MediaSource videoSource = new HlsMediaSource(videoUri, dataSourceFactory, this.mainHandler, this.eventLogger);
 
 		// Prepare the player with the source.
 		this.player.prepare(videoSource);	    
@@ -445,13 +447,13 @@ public class VideoActivity extends Activity implements OnClickListener {//,
         this.wrapItUp(Activity.RESULT_OK, null);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        Log.d(TAG, "onTouchEvent CALLED " + System.currentTimeMillis());
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        Log.d(TAG, "onTouchEvent CALLED " + System.currentTimeMillis());
 //        if (this.mediaController != null)
 //            this.mediaController.show();
-        return false;
-    }
+//        return false;
+//    }
 
     private void wrapItUp(int resultCode, String message) {
         Log.d(TAG, "wrapItUp CALLED " + System.currentTimeMillis());
@@ -465,8 +467,54 @@ public class VideoActivity extends Activity implements OnClickListener {//,
         finish(); // Calls onPause
     }
     
-    @Override
-    public void onClick(View view) {
-        Log.d(TAG, "onClick CALLED " + System.currentTimeMillis());
-    }
+ //   @Override
+ //   public void onClick(View view) {
+ //       Log.d(TAG, "onClick CALLED " + System.currentTimeMillis());
+ //   }
+ 	/**
+	* Handler methods for ExoPlayer.Listener
+	*/
+	@Override
+	public void onLoadingChanged(boolean isLoading) {
+    	Log.d(TAG, "onLoadingChanged [" + isLoading + "]");
+	}
+	@Override
+	public void onPlayerError(ExoPlaybackException e) {
+		Log.e(TAG, "************** onPlayerError ", e);
+	}
+	@Override
+	public void onPlayerStateChanged(boolean playWhenReady, int state) {
+		String message;
+		switch (state) {
+			case ExoPlayer.STATE_BUFFERING:
+				message = "Buffering";
+				break;
+			case ExoPlayer.STATE_ENDED:
+				message = "Ended";
+				break;
+			case ExoPlayer.STATE_IDLE:
+				message = "Idle";
+				break;
+			case ExoPlayer.STATE_READY:
+				message = "Ready";
+				this.progressBar.setVisibility(View.GONE);
+				break;
+			default:
+				message = "Unknown";
+		}
+		Log.d(TAG, "onPlayerStateChanged [ " + playWhenReady + ", " + state + ", " + message + " ]");
+	}
+
+ 	@Override
+ 	public void onPositionDiscontinuity() {
+ 		Log.d(TAG, "onPositionDiscontinuity CALLED");
+	}
+	@Override
+	public void onTimelineChanged(Timeline timeline, Object manifest) {
+		Log.d(TAG, "onTimelineChanged CALLED");
+	}
+	@Override
+	public void onTracksChanged(TrackGroupArray ignored, TrackSelectionArray trackSelections) {
+		Log.d(TAG, "onTracksChanged CALLED");
+	}
 }
