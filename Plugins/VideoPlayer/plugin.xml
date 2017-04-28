@@ -23,9 +23,9 @@
 		<config-file target="AndroidManifest.xml" parent="/manifest">
 			<uses-permission android:name="android.permission.INTERNET" />
 		</config-file>
-		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+		<!-- <config-file target="AndroidManifest.xml" parent="/manifest/application">
 			<activity android:name="com.shortsands.videoplayer.VideoActivity" android:label="VideoActivity" android:screenOrientation="landscape"></activity>
-		</config-file>
+		</config-file> -->
 		<source-file src="src/android/com/shortsands/videoplayer/VideoPlayer.java" target-dir="src/com/shortsands/videoplayer" />
 		<source-file src="src/android/com/shortsands/videoplayer/VideoActivity.java" target-dir="src/com/shortsands/videoplayer" />
 		<source-file src="src/android/com/shortsands/videoplayer/VideoPersistence.java" target-dir="src/com/shortsands/videoplayer" />
