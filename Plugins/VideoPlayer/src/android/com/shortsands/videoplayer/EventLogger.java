@@ -23,7 +23,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.PlaybackParameters;
+//import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.RendererCapabilities;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
@@ -71,13 +71,14 @@ import java.util.Locale;
     TIME_FORMAT.setGroupingUsed(false);
   }
 
-  private final MappingTrackSelector trackSelector;
+//  private final MappingTrackSelector trackSelector;
   private final Timeline.Window window;
   private final Timeline.Period period;
   private final long startTimeMs;
 
-  public EventLogger(MappingTrackSelector trackSelector) {
-    this.trackSelector = trackSelector;
+//  public EventLogger(MappingTrackSelector trackSelector) {
+  public EventLogger() {
+    //this.trackSelector = trackSelector;
     window = new Timeline.Window();
     period = new Timeline.Period();
     startTimeMs = SystemClock.elapsedRealtime();
@@ -101,11 +102,11 @@ import java.util.Locale;
     Log.d(TAG, "positionDiscontinuity");
   }
 
-  @Override
-  public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-    Log.d(TAG, "playbackParameters " + String.format(
-        "[speed=%.2f, pitch=%.2f]", playbackParameters.speed, playbackParameters.pitch));
-  }
+  //@Override
+  //public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+  //  Log.d(TAG, "playbackParameters " + String.format(
+  //      "[speed=%.2f, pitch=%.2f]", playbackParameters.speed, playbackParameters.pitch));
+  //}
 
   @Override
   public void onTimelineChanged(Timeline timeline, Object manifest) {
@@ -137,6 +138,8 @@ import java.util.Locale;
 
   @Override
   public void onTracksChanged(TrackGroupArray ignored, TrackSelectionArray trackSelections) {
+	  Log.d(TAG, "onTracksChanged CALLED");
+	/*
     MappedTrackInfo mappedTrackInfo = trackSelector.getCurrentMappedTrackInfo();
     if (mappedTrackInfo == null) {
       Log.d(TAG, "Tracks []");
@@ -199,6 +202,7 @@ import java.util.Locale;
       Log.d(TAG, "  ]");
     }
     Log.d(TAG, "]");
+    */
   }
 
   // MetadataRenderer.Output

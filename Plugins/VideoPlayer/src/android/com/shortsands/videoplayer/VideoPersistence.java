@@ -5,6 +5,7 @@
 */
 package com.shortsands.videoplayer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,41 +19,58 @@ class VideoPersistence {
 	private static final String VIDEO_URL = "videoUrl";
 	private static final String CURRENT_POSITION = "currentPosition";
 	private static final String TIMESTAMP = "timestamp";
-	private VideoActivity activity;
+
+	static VideoPersistence currentState = new VideoPersistence("jesusFilm");
+	static Activity activity; // this was added to get this to compile, class must be rewritten.
 	
-	VideoPersistence(VideoActivity videoActivity) {
-		this.activity = videoActivity;
-	}
-	
-	void clearState() {
-		SharedPreferences savedState = activity.getSharedPreferences(activity.getVideoId(), Context.MODE_PRIVATE);
+	static void clearState() {
+		SharedPreferences savedState = activity.getSharedPreferences(currentState.videoId, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = savedState.edit();
 		editor.clear();
 		editor.apply();
 	}
 	
-	void saveState() {
-        if (activity.getVideoId() != null && activity.getVideoUrl() != null && activity.getCurrentPosition() > 0) {
-	        SharedPreferences savedState = activity.getSharedPreferences(activity.getVideoId(), Context.MODE_PRIVATE);
+	static void saveState() {
+        if (currentState.videoId != null && currentState.videoUrl != null && currentState.currentPosition > 0) {
+	        SharedPreferences savedState = activity.getSharedPreferences(currentState.videoId, Context.MODE_PRIVATE);
 			SharedPreferences.Editor editor = savedState.edit();
-			editor.putString(VIDEO_URL, activity.getVideoUrl());
-			editor.putInt(CURRENT_POSITION, activity.getCurrentPosition());
+			editor.putString(VIDEO_URL, currentState.videoUrl);
+			editor.putInt(CURRENT_POSITION, currentState.currentPosition);
 			editor.putLong(TIMESTAMP, new Date().getTime());
 			editor.commit();
 		}		
 	}
 	
-	void recoverState() {
+	static void recoverState() {
 		Bundle bundle = activity.getIntent().getExtras();
-		activity.setVideoId(bundle.getString(VIDEO_ID));
-		activity.setVideoUrl(bundle.getString(VIDEO_URL)); // always take requested URL in case language changed.
-		SharedPreferences savedState = activity.getSharedPreferences(activity.getVideoId(), Context.MODE_PRIVATE);
+		currentState.videoId = bundle.getString(VIDEO_ID);
+		currentState.videoUrl = bundle.getString(VIDEO_URL); // always take requested URL in case language changed.
+		SharedPreferences savedState = activity.getSharedPreferences(currentState.videoId, Context.MODE_PRIVATE);
 		if (savedState != null && savedState.contains(VIDEO_URL)) {
-			activity.setCurrentPosition(savedState.getInt(CURRENT_POSITION, 0));
-			activity.setTimestamp(new Date(savedState.getLong(TIMESTAMP, new Date().getTime())));
+			currentState.currentPosition = savedState.getInt(CURRENT_POSITION, 0);
+			currentState.timestamp = new Date(savedState.getLong(TIMESTAMP, new Date().getTime()));
 		} else {
-			activity.setCurrentPosition(0);
-			activity.setTimestamp(new Date());
+			currentState.currentPosition = 0;
+			currentState.timestamp = new Date();
 		}
+	}
+	
+	public String videoId;
+	public String videoUrl;
+	public int currentPosition; // maybe long
+	public Date timestamp; // maybe currentTimeMillis
+	
+	VideoPersistence(String videoId, String videoUrl, int currentPosition) {
+		this.videoId = videoId;
+		this.videoUrl = videoUrl;
+		this.currentPosition = currentPosition;
+		this.timestamp = new Date();
+	}
+
+	VideoPersistence(String videoId) {
+		this.videoId = videoId;
+		this.videoUrl = null;
+		this.currentPosition = 0;
+		this.timestamp = new Date();
 	}
 }
