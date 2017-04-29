@@ -15,8 +15,8 @@ import java.util.Date;
 class VideoPersistence {
 	
 	private static final String TAG = "VideoPersistence";
-	private static final String VIDEO_ID = "videoId";
-	private static final String VIDEO_URL = "videoUrl";
+	public static final String VIDEO_ID = "videoId";
+	public static final String VIDEO_URL = "videoUrl";
 	private static final String CURRENT_POSITION = "currentPosition";
 	private static final String TIMESTAMP = "timestamp";
 

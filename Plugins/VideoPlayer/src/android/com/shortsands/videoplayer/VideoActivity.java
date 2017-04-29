@@ -139,6 +139,8 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume CALLED " + System.currentTimeMillis());
+        Bundle bundle = getIntent().getExtras();
+		this.videoUrl = bundle.getString(VideoPersistence.VIDEO_URL);
 	    this.createPlayer();
 	    this.preparePlayer();
 
@@ -190,8 +192,8 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
 		
 		// This is the MediaSource representing the media to be played.
 		//String videoUrl = "https://player.vimeo.com/external/157373759.sd.mp4?s=788c497c7c25002898dad7d0f2187cadfb6787e6&profile_id=165";
-		String videoUrl = "https://player.vimeo.com/external/157336122.m3u8?s=861d8aca0bddff67874ef38116d3bf5027474858";
-        Uri videoUri = Uri.parse(videoUrl);
+		//String videoUrl = "https://player.vimeo.com/external/157336122.m3u8?s=861d8aca0bddff67874ef38116d3bf5027474858";
+        Uri videoUri = Uri.parse(this.videoUrl);
 		MediaSource videoSource = new HlsMediaSource(videoUri, dataSourceFactory, this.mainHandler, this.eventLogger);
 
 		// Prepare the player with the source.
