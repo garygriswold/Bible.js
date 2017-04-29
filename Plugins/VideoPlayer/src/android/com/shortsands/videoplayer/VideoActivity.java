@@ -141,15 +141,16 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
         Log.d(TAG, "onResume CALLED " + System.currentTimeMillis());
         Bundle bundle = getIntent().getExtras();
 		this.videoUrl = bundle.getString(VideoPersistence.VIDEO_URL);
-	    this.createPlayer();
-	    this.preparePlayer();
+	    this.initPlayer();
 
 //        this.videoPersistence.recoverState();
 //        Uri videoUri = Uri.parse(this.videoUrl);
 //        this.videoView.setVideoURI(videoUri);
     }
     
-    private void createPlayer() {
+    private void initPlayer() {
+	    this.progressBar.setVisibility(View.VISIBLE);
+	    	    
 	    // 1. Create a default TrackSelector
 		this.mainHandler = new Handler(); // Not currently used, but needed for new MediaSource
 		BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -170,34 +171,29 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
 		this.player.setVideoDebugListener(this.eventLogger);
 		this.player.setMetadataOutput(this.eventLogger);
 				
-		// 4. Create the view
+		// 4. Bind the player to the view
 		this.playerView.requestFocus();
-		
-		// Bind the player to the view.
 		this.playerView.setPlayer(this.player);
-    }
-    
-    private void preparePlayer() {
-	    this.progressBar.setVisibility(View.VISIBLE);
-	    
+
 		// Measures bandwidth during playback. Can be null if not required.
-		DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+		DefaultBandwidthMeter bandwidthMeter2 = new DefaultBandwidthMeter();
 		
 		// Produces DataSource instances through which media data is loaded.
 		DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
-			Util.getUserAgent(this, "ShortSands"), bandwidthMeter);
+			Util.getUserAgent(this, "ShortSands"), bandwidthMeter2);
 			
-		// Produces Extractor instances for parsing the media data.
-//		ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-		
 		// This is the MediaSource representing the media to be played.
-		//String videoUrl = "https://player.vimeo.com/external/157373759.sd.mp4?s=788c497c7c25002898dad7d0f2187cadfb6787e6&profile_id=165";
-		//String videoUrl = "https://player.vimeo.com/external/157336122.m3u8?s=861d8aca0bddff67874ef38116d3bf5027474858";
         Uri videoUri = Uri.parse(this.videoUrl);
 		MediaSource videoSource = new HlsMediaSource(videoUri, dataSourceFactory, this.mainHandler, this.eventLogger);
 
 		// Prepare the player with the source.
-		this.player.prepare(videoSource);	    
+		long seekTime = 1000000;
+		if (seekTime > 0) {
+			this.player.seekTo(seekTime);
+			this.player.prepare(videoSource, false, false);
+		} else {
+			this.player.prepare(videoSource);
+		}	    
     }
     
 	/**
