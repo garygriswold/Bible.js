@@ -223,7 +223,8 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
 				break;
 			case ExoPlayer.STATE_ENDED:
 				message = "Ended";
-				//this.videoPlaybackComplete = true;
+				this.videoPlaybackComplete = true;
+				this.wrapItUp(Activity.RESULT_OK, null);
 				break;
 			case ExoPlayer.STATE_IDLE:
 				message = "Idle";
