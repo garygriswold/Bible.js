@@ -15,62 +15,68 @@ import java.util.Date;
 class VideoPersistence {
 	
 	private static final String TAG = "VideoPersistence";
-	public static final String VIDEO_ID = "videoId";
-	public static final String VIDEO_URL = "videoUrl";
+	private static final String VIDEO_ID = "videoId";
+	private static final String VIDEO_URL = "videoUrl";
 	private static final String CURRENT_POSITION = "currentPosition";
 	private static final String TIMESTAMP = "timestamp";
 
 	static VideoPersistence currentState = new VideoPersistence("jesusFilm");
-	static Activity activity; // this was added to get this to compile, class must be rewritten.
 	
-	static void clearState() {
+	static VideoPersistence retrieve(Activity activity, String videoId, String videoUrl) {
+		currentState.videoId = videoId;
+		currentState.videoUrl = videoUrl;
+		SharedPreferences savedState = activity.getSharedPreferences(videoId, Context.MODE_PRIVATE);
+		if (savedState != null && savedState.contains(VIDEO_URL)) {
+			currentState.currentPosition = savedState.getLong(CURRENT_POSITION, 0L);
+			currentState.timestamp = savedState.getLong(TIMESTAMP, System.currentTimeMillis());
+		} else {
+			currentState.currentPosition = 0L;
+			currentState.timestamp = System.currentTimeMillis();
+		}
+		return(currentState);
+	}
+	
+	static void clear(Activity activity) {
 		SharedPreferences savedState = activity.getSharedPreferences(currentState.videoId, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = savedState.edit();
 		editor.clear();
 		editor.apply();
+		currentState = new VideoPersistence(currentState.videoId);
 	}
 	
-	static void saveState() {
-        if (currentState.videoId != null && currentState.videoUrl != null && currentState.currentPosition > 0) {
+	static void update(Activity activity, long time) {
+		if (currentState.videoUrl != null) {
+			currentState.currentPosition = time;
+			currentState.timestamp = System.currentTimeMillis();
 	        SharedPreferences savedState = activity.getSharedPreferences(currentState.videoId, Context.MODE_PRIVATE);
 			SharedPreferences.Editor editor = savedState.edit();
 			editor.putString(VIDEO_URL, currentState.videoUrl);
-			editor.putInt(CURRENT_POSITION, currentState.currentPosition);
-			editor.putLong(TIMESTAMP, new Date().getTime());
+			editor.putLong(CURRENT_POSITION, currentState.currentPosition);
+			editor.putLong(TIMESTAMP, currentState.timestamp);
 			editor.commit();
 		}		
 	}
 	
-	static void recoverState() {
-		Bundle bundle = activity.getIntent().getExtras();
-		currentState.videoId = bundle.getString(VIDEO_ID);
-		currentState.videoUrl = bundle.getString(VIDEO_URL); // always take requested URL in case language changed.
-		SharedPreferences savedState = activity.getSharedPreferences(currentState.videoId, Context.MODE_PRIVATE);
-		if (savedState != null && savedState.contains(VIDEO_URL)) {
-			currentState.currentPosition = savedState.getInt(CURRENT_POSITION, 0);
-			currentState.timestamp = new Date(savedState.getLong(TIMESTAMP, new Date().getTime()));
-		} else {
-			currentState.currentPosition = 0;
-			currentState.timestamp = new Date();
-		}
-	}
-	
+
 	public String videoId;
 	public String videoUrl;
-	public int currentPosition; // maybe long
-	public Date timestamp; // maybe currentTimeMillis
+	public long currentPosition;
+	public long timestamp;
 	
-	VideoPersistence(String videoId, String videoUrl, int currentPosition) {
+	VideoPersistence(String videoId, String videoUrl, long currentPosition) {
 		this.videoId = videoId;
 		this.videoUrl = videoUrl;
 		this.currentPosition = currentPosition;
-		this.timestamp = new Date();
+		this.timestamp = System.currentTimeMillis();
 	}
 
 	VideoPersistence(String videoId) {
 		this.videoId = videoId;
 		this.videoUrl = null;
-		this.currentPosition = 0;
-		this.timestamp = new Date();
+		this.currentPosition = 0L;
+		this.timestamp = System.currentTimeMillis();
 	}
+	public String toString() {
+		return("videoId:" + this.videoId + ", videoUrl:" + this.videoUrl + ", position:" + this.currentPosition + ", timestamp:" + this.timestamp);	
+	};
 }
