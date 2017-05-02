@@ -8,10 +8,10 @@ CREATE TABLE Video (
 	title TEXT NOT NULL,
 	lengthMS INT NOT NULL,
 	HLS_URL TEXT NOT NULL,
-	MP4_1080 TEXT NULL,
-	MP4_720 TEXT NULL,
-	MP4_540 TEXT NULL,
-	MP4_360 TEXT NULL,
+	MP4_1080 TEXT NULL, -- deprecated remove at next revision
+	MP4_720 TEXT NULL, -- deprecated  remove at next revision
+	MP4_540 TEXT NULL, -- deprecated remove at next revision
+	MP4_360 TEXT NULL, -- deprecated remove at next revision
 	longDescription TEXT NULL,
 	PRIMARY KEY (languageId, mediaId)
 );

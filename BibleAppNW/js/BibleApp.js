@@ -1137,6 +1137,7 @@ SearchView.prototype.prepareSelect = function(refList) {
 var HEADER_BUTTON_HEIGHT = 32;//44;
 var HEADER_BAR_HEIGHT = 40;//52;
 var STATUS_BAR_HEIGHT = 14;
+var CELL_SPACING = 5;
 
 function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	this.statusBarInHeader = (deviceSettings.platform() === 'ios') ? true : false;
@@ -1157,6 +1158,7 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	this.currentReference = null;
 	this.rootNode = document.createElement('table');
 	this.rootNode.id = 'statusRoot';
+	this.rootNode.setAttribute('cellspacing', CELL_SPACING);
 	document.body.appendChild(this.rootNode);
 	this.rootRow = document.createElement('tr');
 	this.rootNode.appendChild(this.rootRow);
@@ -1205,27 +1207,23 @@ HeaderView.prototype.showView = function() {
 	paintBackground(this.backgroundCanvas, this.hite);
 	this.rootRow.appendChild(this.backgroundCanvas);
 
-	this.videoAdapter.hasVideos(this.version.langCode, this.version.langPrefCode, function(videoCount) {
-		var menuWidth = setupIconButton('tocCell', drawTOCIcon, that.hite, BIBLE.SHOW_TOC);
-		var serhWidth = setupIconButton('searchCell', drawSearchIcon, that.hite, BIBLE.SHOW_SEARCH);
-		that.rootRow.appendChild(that.labelCell);
-		if (videoCount > 0) {
-			var videoWidth = setupIconButton('videoCell', drawVideoIcon, that.hite, BIBLE.SHOW_VIDEO);
-		} else {
-			videoWidth = 0;
-		}
-		if (that.version.isQaActive == 'T') {
-			var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, that.hite, BIBLE.SHOW_QUESTIONS);
-		} else {
-			quesWidth = 0;
-		}
-		var settWidth = setupIconButton('settingsCell', drawSettingsIcon, that.hite, BIBLE.SHOW_SETTINGS);
-		var avalWidth = window.innerWidth - (menuWidth + serhWidth + videoWidth + quesWidth + settWidth + (6 * 4));// six is fudge factor
-	
-		that.titleCanvas = document.createElement('canvas');
-		drawTitleField(that.titleCanvas, that.hite, avalWidth);
-		that.labelCell.appendChild(that.titleCanvas);
-	});
+	//this.videoAdapter.hasVideos(this.version.langCode, this.version.langPrefCode, function(videoCount) {
+	var menuWidth = setupIconButton('tocCell', drawTOCIcon, that.hite, BIBLE.SHOW_TOC);
+	var serhWidth = setupIconButton('searchCell', drawSearchIcon, that.hite, BIBLE.SHOW_SEARCH);
+	that.rootRow.appendChild(that.labelCell);
+	var videoWidth = setupIconButton('videoCell', drawVideoIcon, that.hite, BIBLE.SHOW_VIDEO);
+	if (that.version.isQaActive == 'T') {
+		var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, that.hite, BIBLE.SHOW_QUESTIONS);
+	} else {
+		quesWidth = 0;
+	}
+	var settWidth = setupIconButton('settingsCell', drawSettingsIcon, that.hite, BIBLE.SHOW_SETTINGS);
+	var avalWidth = window.innerWidth - (menuWidth + serhWidth + videoWidth + quesWidth + settWidth + (6 * (4 + CELL_SPACING)));// six is fudge factor
+
+	that.titleCanvas = document.createElement('canvas');
+	drawTitleField(that.titleCanvas, that.hite, avalWidth);
+	that.labelCell.appendChild(that.titleCanvas);
+	//});
 
 	function paintBackground(canvas, hite) {
 		console.log('**** repaint background ****');
@@ -4491,7 +4489,7 @@ VideoListView.prototype.showView = function() {
 	function getVideoTable(vers, deviceType) {
 		that.videoAdapter.selectJesusFilmLanguage(vers.countryCode, vers.silCode, function(lang) {
 		
-			that.videoAdapter.selectVideos(lang.languageId, vers.silCode, vers.langCode, vers.langPrefCode, deviceType, function(videoMap) {
+			that.videoAdapter.selectVideos(lang.languageId, vers.silCode, vers.langCode, vers.langPrefCode, function(videoMap) {
 				for (var i=0; i<that.videoIdList.length; i++) {
 					var id = that.videoIdList[i];
 					var metaData = videoMap[id];
@@ -4631,6 +4629,7 @@ function VideoTableAdapter() {
 }
 /**
 * NOTE: This method is only counting KOG videos.  This must be changed when the Jesus Film is released.
+* Deprecated and not currently used.
 */
 VideoTableAdapter.prototype.hasVideos = function(langCode, langPrefCode, callback) {
 	var that = this;
@@ -4672,26 +4671,36 @@ VideoTableAdapter.prototype.selectJesusFilmLanguage = function(countryCode, silC
 /**
 * NOTE: This method must be prevented from returning Jesus videos.  This must be changed when the Jesus Film is released.
 */
-VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCode, langPrefCode, deviceType, callback) {
-	var statement = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL, MP4_1080, MP4_720, MP4_540, MP4_360,' +
-			' longDescription FROM Video WHERE languageId IN (?,?) AND mediaId like "KOG%"';
+VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCode, langPrefCode, callback) {
+	var that = this;
+	var selectList = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL, MP4_1080, MP4_720, MP4_540, MP4_360,' +
+			' longDescription FROM Video';
+	var statement = selectList + ' WHERE languageId IN (?,?) AND mediaId like "KOG%"';
 	this.database.select(statement, [ languageId, silCode ], function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
 			callback({});
 		} else {
-			console.log("Return rows1", results.rows.length);
 			if (results.rows.length > 0) {
 				returnVideoMap(languageId, silCode, results, callback);
 			} else {
-				statement = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL, MP4_1080, MP4_720, MP4_540, MP4_360,' +
-					' longDescription FROM Video WHERE langCode IN (?,?) AND mediaId like "KOG%"';
+				statement = selectList + ' WHERE langCode IN (?,?) AND mediaId like "KOG%"';
 				that.database.select(statement, [langCode, langPrefCode], function(results) {
-					console.log("Return rows2", results.rows.length);
 					if (results instanceof IOError) {
 						callback({});
 					} else {
-						returnVideoMap(languageId, silCode, results, callback);
+						if (results.rows.length > 0) {
+							returnVideoMap(languageId, silCode, results, callback);
+						} else {
+							statement = selectList + ' WHERE langCode = "en" AND mediaId like "KOG%"';
+							that.database.select(statement, [], function(results) {
+								if (results instanceof IOError) {
+									callback({});
+								} else {
+									returnVideoMap(languageId, silCode, results, callback);
+								}
+							});
+						}
 					}
 				});
 			}
@@ -4710,17 +4719,7 @@ VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCod
 			meta.title = row.title;
 			meta.lengthInMilliseconds = row.lengthMS;
 			meta.longDescription = row.longDescription;
-			switch(deviceType) {
-				case 'ios':
-					meta.mediaURL = row.HLS_URL;
-					break;
-				case 'android':
-					meta.mediaURL = row.MP4_540;
-					if (meta.mediaURL == null) meta.mediaURL = row.MP4_360;
-					if (meta.mediaURL == null) meta.mediaURL = row.MP4_720;
-					break;
-				default:
-			}
+			meta.mediaURL = row.HLS_URL;
 			videoMap[row.mediaId] = meta;
 		}
         callback(videoMap);		

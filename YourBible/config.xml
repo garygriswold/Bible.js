@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.shortsands.yourbible" version="1.7.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.shortsands.yourbible" version="1.7.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Your Bible</name>
     <description>A free Bible App designed to protect your privacy.</description>
     <author email="gary@shortsands.com" href="http://your-bible.org">Short Sands, LLC</author>

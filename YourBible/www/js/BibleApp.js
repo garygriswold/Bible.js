@@ -4504,7 +4504,7 @@ VideoListView.prototype.showView = function() {
 	function getVideoTable(vers, deviceType) {
 		that.videoAdapter.selectJesusFilmLanguage(vers.countryCode, vers.silCode, function(lang) {
 		
-			that.videoAdapter.selectVideos(lang.languageId, vers.silCode, vers.langCode, vers.langPrefCode, deviceType, function(videoMap) {
+			that.videoAdapter.selectVideos(lang.languageId, vers.silCode, vers.langCode, vers.langPrefCode, function(videoMap) {
 				for (var i=0; i<that.videoIdList.length; i++) {
 					var id = that.videoIdList[i];
 					var metaData = videoMap[id];
@@ -4686,7 +4686,7 @@ VideoTableAdapter.prototype.selectJesusFilmLanguage = function(countryCode, silC
 /**
 * NOTE: This method must be prevented from returning Jesus videos.  This must be changed when the Jesus Film is released.
 */
-VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCode, langPrefCode, deviceType, callback) {
+VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCode, langPrefCode, callback) {
 	var that = this;
 	var selectList = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL, MP4_1080, MP4_720, MP4_540, MP4_360,' +
 			' longDescription FROM Video';
@@ -4734,17 +4734,7 @@ VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCod
 			meta.title = row.title;
 			meta.lengthInMilliseconds = row.lengthMS;
 			meta.longDescription = row.longDescription;
-			switch(deviceType) {
-				case 'ios':
-					meta.mediaURL = row.HLS_URL;
-					break;
-				case 'android':
-					meta.mediaURL = row.MP4_540;
-					if (meta.mediaURL == null) meta.mediaURL = row.MP4_360;
-					if (meta.mediaURL == null) meta.mediaURL = row.MP4_720;
-					break;
-				default:
-			}
+			meta.mediaURL = row.HLS_URL;
 			videoMap[row.mediaId] = meta;
 		}
         callback(videoMap);		

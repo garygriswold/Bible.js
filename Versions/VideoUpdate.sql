@@ -1,4 +1,4 @@
-
+-- each MP4 URL is deprecated, remove at the next revision of this file (5/2/2017)
 DELETE FROM Video WHERE mediaId like 'KOG%';
 
 -- Arabic
