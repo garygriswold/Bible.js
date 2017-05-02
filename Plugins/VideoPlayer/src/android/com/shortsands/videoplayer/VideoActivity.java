@@ -42,6 +42,7 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
     private final static String TAG = "VideoActivity";
     private final static boolean DEBUG = false;
     private ProgressBar progressBar;
+    private VideoPersistence videoState;
 	private SimpleExoPlayer player;
 	private SimpleExoPlayerView playerView;
 	private EventLogger eventLogger;
@@ -88,7 +89,7 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
         Bundle bundle = getIntent().getExtras();
         String videoId = bundle.getString("videoId");
         String videoUrl = bundle.getString("videoUrl");
-        VideoPersistence videoState = VideoPersistence.retrieve(this, videoId, videoUrl);
+        this.videoState = VideoPersistence.retrieve(this, videoId, videoUrl);
 	    	    
 	    // 2. Create a default TrackSelector
 		Handler mainHandler = new Handler();
@@ -124,17 +125,25 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
 			Util.getUserAgent(this, "ShortSands"), bandwidthMeter2);
 			
 		// 6. This is the MediaSource representing the media to be played.
-        Uri videoUri = Uri.parse(videoState.videoUrl);
+        Uri videoUri = Uri.parse(this.videoState.videoUrl);
 		MediaSource videoSource = new HlsMediaSource(videoUri, dataSourceFactory, mainHandler, this.eventLogger);
 
 		// 7. Prepare the player with the source.
-		long seekTime = videoState.currentPosition;
+		long seekTime = backupSeek();
 		if (seekTime > 100) {
 			this.player.seekTo(seekTime);
 			this.player.prepare(videoSource, false, false);
 		} else {
 			this.player.prepare(videoSource);
 		}	    
+    }
+    
+    private long backupSeek() {
+	    long duration = System.currentTimeMillis() - this.videoState.timestamp;
+	    int backupMs = Long.toString(duration).length() * 1000; // could multiply by a factor here
+	    long seekTime = this.videoState.currentPosition - backupMs;
+	    Log.d(TAG, "current and seekTime " + this.videoState.currentPosition + " " + seekTime);
+	    return(seekTime);
     }
     
 	/**
@@ -165,22 +174,6 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
 	    Log.d(TAG, "onDestroy CALLED " + System.currentTimeMillis());
 		this.playerView = null;
     }
-    
-
-    
-//    private int backupSeek() {
-//	    if (this.onErrorRecovery) {
-//		    this.onErrorRecovery = false;
-//		    int recovTime = this.backupPosition + (int)(this.errorTime - this.backupTime);
-//			return(recovTime);
-//	    } else {
-//			long duration = new Date().getTime() - this.timestamp.getTime();
-//			int backupMs = Long.toString(duration).length() * 1000; // could multiply by a factor here
-//			int seekTime = this.currentPosition - backupMs;
-//			Log.d(TAG, "current and seekTime " + this.currentPosition + " " + seekTime);
-//			return(seekTime);
-//		}
-//	}
 
 	/**
 	* Do not call super.onBackPressed, it will call setResult
