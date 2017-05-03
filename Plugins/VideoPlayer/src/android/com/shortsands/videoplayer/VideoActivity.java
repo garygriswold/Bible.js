@@ -56,6 +56,7 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
         Window window = this.getWindow();
         window.requestFeature(Window.FEATURE_NO_TITLE);
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         RelativeLayout relativeLayout = new RelativeLayout(this);
         relativeLayout.setBackgroundColor(Color.BLACK);
@@ -80,9 +81,24 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
     }
 
     @Override
+	protected void onStart() {
+		super.onStart();
+		Log.d(TAG, "onStart CALLED " + System.currentTimeMillis());
+		if (Util.SDK_INT > 23) {
+			this.initPlayer();
+		}
+	}
+	
+    @Override	
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume CALLED " + System.currentTimeMillis());
+        if (Util.SDK_INT <= 23 || this.player == null) {
+	        this.initPlayer();
+        }
+    }
+    
+    private void initPlayer() {
     	this.progressBar.setVisibility(View.VISIBLE);    
         
         // 1. Get Id and Url
@@ -145,16 +161,26 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
 	    Log.d(TAG, "current and seekTime " + this.videoState.currentPosition + " " + seekTime);
 	    return(seekTime);
     }
-    
-	/**
-	* Activity docs recommend that this method be used for persistent storage.
-	* SharedPreferences is used to save the current location in the current video
-	*/
-    @Override
+
+	@Override    
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause CALLED " + System.currentTimeMillis());
-
+        if (Util.SDK_INT <= 23) {
+	        this.releasePlayer();
+        }
+    }
+    
+    @Override
+    protected void onStop() {
+	    super.onStop();
+        Log.d(TAG, "onStop CALLED " + System.currentTimeMillis());
+        if (Util.SDK_INT > 23) {
+	        this.releasePlayer();
+        }
+	}
+	
+	private void releasePlayer() {
         if (this.videoPlaybackComplete) {
 	        VideoPersistence.clear(this);
         } else {
