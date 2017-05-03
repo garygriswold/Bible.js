@@ -1,12 +1,12 @@
 #videoRoot {
     position: absolute; /* Needed because settingRoot.style.y is set in AppControllerView */
 	background-color: white;
-	width: 100%;	
+	/*width: 100%; must be set explicity in VideoListView */
 }
 table.videoList {
     border-spacing: 20px;
 	background-color: white;
-	width: 100%;
+	/*width: 100%; must be set explicity in VideoListView */
 }
 tr.videoList {
 

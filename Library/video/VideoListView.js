@@ -22,6 +22,8 @@ VideoListView.prototype.showView = function() {
 		this.reActivateView();
 	} else {
 		this.viewNode = this.addNode(this.rootNode, 'table', 'videoList');
+		var portWidth = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
+		this.viewNode.setAttribute('width', portWidth);
 		getVideoTable(this.version);
 	}
 	
