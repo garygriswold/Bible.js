@@ -37,12 +37,12 @@ import com.google.android.exoplayer2.util.Util;
 /**
  * Created by garygriswold on 4/28/2016
  */
-public class VideoActivity extends Activity implements ExoPlayer.EventListener {
+public class AudioService extends Service implements ExoPlayer.EventListener {
 
-    private final static String TAG = "VideoActivity";
+    private final static String TAG = "AudioService";
     private final static boolean DEBUG = false;
     private ProgressBar progressBar;
-    private VideoPersistence videoState;
+    private AudioPersistence videoState;
 	private SimpleExoPlayer player;
 	private SimpleExoPlayerView playerView;
 	private EventLogger eventLogger;

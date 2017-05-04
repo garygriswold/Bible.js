@@ -1,19 +1,19 @@
-VideoPlayer
+AudioPlayer
 ===========
 
-Native VideoPlayers for Android and iOS, which "bookmark" the position of play
+Native AudioPlayers for Android and iOS, which "bookmark" the position of play
 for multiple videos.
 
 Example Use of Plugin
 ---------------------
 
-    var videoUrl = "https://arc.gt/1e62h?apiSessionId=587858aea460f2.62190595";
-	window.VideoPlayer.present("jesusFilm", videoUrl,
+    var audioUrl = "https://arc.gt/1e62h?apiSessionId=587858aea460f2.62190595";
+	window.AudioPlayer.present("jesusFilm", videoUrl,
 	function() {
-		console.log("SUCCESS FROM VideoPlayer");
+		console.log("SUCCESS FROM AudioPlayer");
 	},
 	function(error) {
-		console.log("ERROR FROM VideoPlayer " + error);
+		console.log("ERROR FROM AudioPlayer " + error);
 	});
 	
 Android Development
@@ -22,14 +22,14 @@ Android Development
 Development Process
 -------------------
 
-	develop at: ShortSands/BibleApp/Plugins/VideoPlayer
+	develop at: ShortSands/BibleApp/Plugins/AudioPlayer
 	
-	create app: ShortSands/VideoModule
+	create app: ShortSands/AudioModule
 	
 	script to install plugin
-	./TestVideoPlugin.sh
+	./TestAudioPlugin.sh
 	
-Testing Android Native VideoPlayer
+Testing Android Native AudioPlayer
 ----------------------------------
 
 Test the Plugin inside a simple Cordova App, executing the App and plugin.
@@ -38,7 +38,7 @@ Android Studio.  After changing the plugin, I must run ./TestVideoPlugin.sh
 before using Android Studio.
 
 	open Android Studio
-	select ShortSands/VideoModule/platforms/android
+	select ShortSands/AudioModule/platforms/android
 	run
 	
 Method Profiling on Android
@@ -75,27 +75,27 @@ Memory & CPU Profiling on Android
 	When started: View -> Tools -> Android Monitor
 	Select com.shortsands.<whatever>
 	
-Memory is usually at 7.4Meg, cpu near zero, and network near zero
-If I stop the application with Back button, home button, or kill button and restart with icon,
-the memory use stays about the same, but the CPU use spikes to 40% for couple seconds
-which looks like the prepare and seek, and then it stays high 10-20% for a few more seconds
-while it does more buffering in of content.  After that cpu use drops to near zero with just 
-and occasional jump.
+//Memory is usually at 7.4Meg, cpu near zero, and network near zero
+//If I stop the application with Back button, home button, or kill button and restart with icon,
+//the memory use stays about the same, but the CPU use spikes to 40% for couple seconds
+//which looks like the prepare and seek, and then it stays high 10-20% for a few more seconds
+//while it does more buffering in of content.  After that cpu use drops to near zero with just 
+//and occasional jump.
 
-The one finding of concern is that the memory use never drops below 6.9Meg while the App is not running.
-Except if I kill the App entirely, and then it appears to drop to zero.  But, I used onDestroy to
-verify that MediaPlayer had been released and was null, and setting VideoView and VideoController
-to null did not reduce memory noticably.
+//The one finding of concern is that the memory use never drops below 6.9Meg while the App is not running.
+//Except if I kill the App entirely, and then it appears to drop to zero.  But, I used onDestroy to
+//verify that MediaPlayer had been released and was null, and setting VideoView and VideoController
+//to null did not reduce memory noticably.
 	
 
 Apple iOS Development
 =====================	
 
-Testing iOS Native VideoPlayer
+Testing iOS Native AudioPlayer
 ------------------------------
 
 	open Xcode
-	select ShortSands/VideoModule/platforms/ios
+	select ShortSands/AudioModule/platforms/ios
 	run
 	
 Getting iOS to run
@@ -110,9 +110,7 @@ Getting iOS to run
 	
 	Removed unused functions that require ios 9 or 10.
 	
-	Renamed ViewController to VideoViewController
-	
-After installing cordova-plugin-console, the JS console.log messages do get
-into the XCode console.log, but they do not get into a file in the cordova directory
-that can be accessed when running cordova and not xCode.
+//After installing cordova-plugin-console, the JS console.log messages do get
+//into the XCode console.log, but they do not get into a file in the cordova directory
+//that can be accessed when running cordova and not xCode.
 	

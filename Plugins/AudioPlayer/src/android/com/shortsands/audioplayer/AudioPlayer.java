@@ -3,7 +3,7 @@
 * It deliberately contains as little logic as possible so that the VideoPlayer
 * can be unit tested as an Android Studio project.
 */
-package com.shortsands.videoplayer;
+package com.shortsands.audioplayer;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,9 +17,9 @@ import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class VideoPlayer extends CordovaPlugin {
+public class AudioPlayer extends CordovaPlugin {
 
-	private static final int ACTIVITY_CODE_PLAY_VIDEO = 7;
+	private static final int ACTIVITY_CODE_PLAY_AUDIO = 7;
 	private static final String TAG = "VideoPlayer";
 	private CallbackContext callbackContext;
 	
@@ -34,11 +34,11 @@ public class VideoPlayer extends CordovaPlugin {
 		Log.d(TAG, "*** INSIDE VIDEO PLUGIN PRESENT " + System.currentTimeMillis());
 		this.callbackContext = callbackContext;
 
-		if (action.equals("showVideo")) {
+		if (action.equals("playAudio")) {
 			present(args.getString(0), args.getString(1));
 			return true;
 		} else {
-			callbackContext.error("VideoPlayer." + action + " is not a supported method.");
+			callbackContext.error("AudioPlayer." + action + " is not a supported method.");
 			return false;			
 		}
 	}
@@ -48,12 +48,12 @@ public class VideoPlayer extends CordovaPlugin {
 
 		cordova.getActivity().runOnUiThread(new Runnable() {
 			public void run() {
-				final Intent videoIntent = new Intent(cordova.getActivity().getApplicationContext(), VideoActivity.class);
+				final Intent videoIntent = new Intent(cordova.getActivity().getApplicationContext(), AudioService.class);
 				Bundle extras = new Bundle();
-				extras.putString("videoId", videoId);
-				extras.putString("videoUrl", videoUrl);
+				extras.putString("audioId", audioId);
+				extras.putString("audioUrl", audioUrl);
                 videoIntent.putExtras(extras);
-				cordova.startActivityForResult(plugin, videoIntent, ACTIVITY_CODE_PLAY_VIDEO);
+				cordova.startActivityForResult(plugin, videoIntent, ACTIVITY_CODE_PLAY_AUDIO);
 			}
 		});
 	}
@@ -165,7 +165,7 @@ public class VideoPlayer extends CordovaPlugin {
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		Log.d(TAG, "onActivityResult: " + requestCode + " " + resultCode + " " + System.currentTimeMillis());
 		
-		if (ACTIVITY_CODE_PLAY_VIDEO == requestCode) {
+		if (ACTIVITY_CODE_PLAY_AUDIO == requestCode) {
 			if (Activity.RESULT_OK == resultCode) {
 				this.callbackContext.success();
 			} else if (Activity.RESULT_CANCELED == resultCode) {
