@@ -1,4 +1,4 @@
-package com.shortsands.videoplayer;
+package com.shortsands.audioplayer;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,15 +19,18 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+//import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+//import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
@@ -37,14 +40,14 @@ import com.google.android.exoplayer2.util.Util;
 /**
  * Created by garygriswold on 4/28/2016
  */
-public class AudioService extends Service implements ExoPlayer.EventListener {
+public class AudioService extends Activity implements ExoPlayer.EventListener {
 
     private final static String TAG = "AudioService";
-    private final static boolean DEBUG = false;
-    private ProgressBar progressBar;
-    private AudioPersistence videoState;
+    private final static boolean DEBUG = true;
+//    private ProgressBar progressBar;
+    private AudioPersistence audioState;
 	private SimpleExoPlayer player;
-	private SimpleExoPlayerView playerView;
+//	private SimpleExoPlayerView playerView;
 	private EventLogger eventLogger;
 	private boolean videoPlaybackComplete = false;
         
@@ -64,18 +67,18 @@ public class AudioService extends Service implements ExoPlayer.EventListener {
         		RelativeLayout.LayoutParams.MATCH_PARENT);
         layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 
-		this.playerView = new SimpleExoPlayerView(this);
-		relativeLayout.addView(this.playerView);
+//		this.playerView = new SimpleExoPlayerView(this);
+//		relativeLayout.addView(this.playerView);
 
         // Create startup progress animation
-        this.progressBar = new ProgressBar(this);
-        this.progressBar.setIndeterminate(true);
-        RelativeLayout.LayoutParams progLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-        		RelativeLayout.LayoutParams.WRAP_CONTENT);
-        progLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        this.progressBar.setLayoutParams(progLayout);
-        relativeLayout.addView(this.progressBar);
-        this.progressBar.bringToFront();
+//        this.progressBar = new ProgressBar(this);
+//        this.progressBar.setIndeterminate(true);
+//        RelativeLayout.LayoutParams progLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+//        		RelativeLayout.LayoutParams.WRAP_CONTENT);
+//        progLayout.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+//        this.progressBar.setLayoutParams(progLayout);
+//        relativeLayout.addView(this.progressBar);
+//        this.progressBar.bringToFront();
 
         setContentView(relativeLayout);
     }
@@ -99,13 +102,13 @@ public class AudioService extends Service implements ExoPlayer.EventListener {
     }
     
     private void initPlayer() {
-    	this.progressBar.setVisibility(View.VISIBLE);    
+//    	this.progressBar.setVisibility(View.VISIBLE);    
         
         // 1. Get Id and Url
         Bundle bundle = getIntent().getExtras();
-        String videoId = bundle.getString("videoId");
-        String videoUrl = bundle.getString("videoUrl");
-        this.videoState = VideoPersistence.retrieve(this, videoId, videoUrl);
+        String audioId = bundle.getString("audioId");
+        String audioUrl = bundle.getString("audioUrl");
+        this.audioState = AudioPersistence.retrieve(this, audioId, audioUrl);
 	    	    
 	    // 2. Create a default TrackSelector
 		Handler mainHandler = new Handler();
@@ -117,6 +120,7 @@ public class AudioService extends Service implements ExoPlayer.EventListener {
 		
 		// 3. Create the player
 		LoadControl loadControl = new DefaultLoadControl();
+		//this.player = ExoPlayerFactory.newInstance(renderers, trackSelector, loadControl);
 		this.player = ExoPlayerFactory.newSimpleInstance(getApplicationContext(), trackSelector, loadControl);
 		this.player.setPlayWhenReady(true);
 		this.player.addListener(this);
@@ -125,13 +129,12 @@ public class AudioService extends Service implements ExoPlayer.EventListener {
 		if (DEBUG) {
 			this.eventLogger = new EventLogger();
 			this.player.setAudioDebugListener(this.eventLogger);
-			this.player.setVideoDebugListener(this.eventLogger);
 			this.player.setMetadataOutput(this.eventLogger);
 		}
 				
 		// 5. Bind the player to the view
-		this.playerView.requestFocus();
-		this.playerView.setPlayer(this.player);
+//		this.playerView.requestFocus();
+//		this.playerView.setPlayer(this.player);
 
 		// Measures bandwidth during playback. Can be null if not required.
 		DefaultBandwidthMeter bandwidthMeter2 = new DefaultBandwidthMeter();
@@ -140,25 +143,27 @@ public class AudioService extends Service implements ExoPlayer.EventListener {
 		DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
 			Util.getUserAgent(this, "ShortSands"), bandwidthMeter2);
 			
+		ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+			
 		// 6. This is the MediaSource representing the media to be played.
-        Uri videoUri = Uri.parse(this.videoState.videoUrl);
-		MediaSource videoSource = new HlsMediaSource(videoUri, dataSourceFactory, mainHandler, this.eventLogger);
+        Uri audioUri = Uri.parse(this.audioState.audioUrl);
+		MediaSource audioSource = new ExtractorMediaSource(audioUri, dataSourceFactory, extractorsFactory, mainHandler, this.eventLogger);
 
 		// 7. Prepare the player with the source.
 		long seekTime = backupSeek();
 		if (seekTime > 100) {
 			this.player.seekTo(seekTime);
-			this.player.prepare(videoSource, false, false);
+			this.player.prepare(audioSource, false, false);
 		} else {
-			this.player.prepare(videoSource);
+			this.player.prepare(audioSource);
 		}	    
     }
     
     private long backupSeek() {
-	    long duration = System.currentTimeMillis() - this.videoState.timestamp;
+	    long duration = System.currentTimeMillis() - this.audioState.timestamp;
 	    int backupMs = Long.toString(duration).length() * 1000; // could multiply by a factor here
-	    long seekTime = this.videoState.currentPosition - backupMs;
-	    Log.d(TAG, "current and seekTime " + this.videoState.currentPosition + " " + seekTime);
+	    long seekTime = this.audioState.currentPosition - backupMs;
+	    Log.d(TAG, "current and seekTime " + this.audioState.currentPosition + " " + seekTime);
 	    return(seekTime);
     }
 
@@ -182,9 +187,9 @@ public class AudioService extends Service implements ExoPlayer.EventListener {
 	
 	private void releasePlayer() {
         if (this.videoPlaybackComplete) {
-	        VideoPersistence.clear(this);
+	        AudioPersistence.clear(this);
         } else {
-	        VideoPersistence.update(this, this.player.getCurrentPosition());
+	        AudioPersistence.update(this, this.player.getCurrentPosition());
         }
         
 		if (this.player != null) {
@@ -198,7 +203,7 @@ public class AudioService extends Service implements ExoPlayer.EventListener {
     protected void onDestroy() {
 	    super.onDestroy();
 	    Log.d(TAG, "onDestroy CALLED " + System.currentTimeMillis());
-		this.playerView = null;
+//		this.playerView = null;
     }
 
 	/**
@@ -250,7 +255,7 @@ public class AudioService extends Service implements ExoPlayer.EventListener {
 				break;
 			case ExoPlayer.STATE_READY:
 				message = "Ready";
-				this.progressBar.setVisibility(View.GONE);
+				//this.progressBar.setVisibility(View.GONE);
 				break;
 			default:
 				message = "Unknown";

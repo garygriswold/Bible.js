@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 //package com.google.android.exoplayer2.demo;
-package com.shortsands.videoplayer;
+package com.shortsands.audioplayer;
 
 import android.os.SystemClock;
 import android.util.Log;

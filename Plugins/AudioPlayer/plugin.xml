@@ -23,12 +23,12 @@
 		<config-file target="AndroidManifest.xml" parent="/manifest">
 			<uses-permission android:name="android.permission.INTERNET" />
 		</config-file>
-		<config-file target="AndroidManifest.xml" parent="/manifest/application">
-			<activity android:name="com.shortsands.videoplayer.VideoActivity" android:label="VideoActivity" android:screenOrientation="landscape"></activity>
-		</config-file>
-		<source-file src="src/android/com/shortsands/audioplayer/VideoPlayer.java" target-dir="src/com/shortsands/audioplayer" />
-		<source-file src="src/android/com/shortsands/audioplayer/VideoActivity.java" target-dir="src/com/shortsands/audioplayer" />
-		<source-file src="src/android/com/shortsands/audioplayer/VideoPersistence.java" target-dir="src/com/shortsands/audioplayer" />
+		<!-- <config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<activity android:name="com.shortsands.videoplayer.AudioPlayer" android:label="AudioPlayer" android:screenOrientation="landscape"></activity>
+		</config-file> -->
+		<source-file src="src/android/com/shortsands/audioplayer/AudioPlayer.java" target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/com/shortsands/audioplayer/AudioService.java" target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/com/shortsands/audioplayer/AudioPersistence.java" target-dir="src/com/shortsands/audioplayer" />
 		<source-file src="src/android/com/shortsands/audioplayer/EventLogger.java" target-dir="src/com/shortsands/audioplayer" />
 	</platform>
   

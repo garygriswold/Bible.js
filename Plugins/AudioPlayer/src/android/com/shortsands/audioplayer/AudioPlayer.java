@@ -20,7 +20,7 @@ import org.json.JSONException;
 public class AudioPlayer extends CordovaPlugin {
 
 	private static final int ACTIVITY_CODE_PLAY_AUDIO = 7;
-	private static final String TAG = "VideoPlayer";
+	private static final String TAG = "AudioPlayer";
 	private CallbackContext callbackContext;
 	
 	@Override
@@ -43,17 +43,17 @@ public class AudioPlayer extends CordovaPlugin {
 		}
 	}
 
-	private void present(final String videoId, final String videoUrl) {
+	private void present(final String audioId, final String audioUrl) {
 		final CordovaPlugin plugin = this;
 
 		cordova.getActivity().runOnUiThread(new Runnable() {
 			public void run() {
-				final Intent videoIntent = new Intent(cordova.getActivity().getApplicationContext(), AudioService.class);
+				final Intent intent = new Intent(cordova.getActivity().getApplicationContext(), AudioService.class);
 				Bundle extras = new Bundle();
 				extras.putString("audioId", audioId);
 				extras.putString("audioUrl", audioUrl);
-                videoIntent.putExtras(extras);
-				cordova.startActivityForResult(plugin, videoIntent, ACTIVITY_CODE_PLAY_AUDIO);
+                intent.putExtras(extras);
+				cordova.startActivityForResult(plugin, intent, ACTIVITY_CODE_PLAY_AUDIO);
 			}
 		});
 	}
