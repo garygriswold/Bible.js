@@ -4467,9 +4467,8 @@ DynamicCSS.prototype.setDirection = function(direction) {
 function VideoListView(version, videoAdapter) {
 	this.videoIdList = [ 'KOG_OT', 'KOG_NT' ];//, '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
 	this.version = version;
-	this.deviceType = deviceSettings.platform();
 	this.videoAdapter = videoAdapter;
-	console.log('IN VIDEO VIEW ', 'ctry', this.countryCode, 'sil', this.silCode, 'device', this.deviceType);
+	console.log('IN VIDEO VIEW ', 'ctry', this.countryCode, 'sil', this.silCode);
 	this.rootNode = document.createElement('div');
 	this.rootNode.id = 'videoRoot';
 	document.body.appendChild(this.rootNode);
@@ -4483,10 +4482,12 @@ VideoListView.prototype.showView = function() {
 		this.reActivateView();
 	} else {
 		this.viewNode = this.addNode(this.rootNode, 'table', 'videoList');
-		getVideoTable(this.version, this.deviceType);
+		var portWidth = (window.innerWidth < window.innerHeight) ? window.innerWidth : window.innerHeight;
+		this.viewNode.setAttribute('width', portWidth);
+		getVideoTable(this.version);
 	}
 	
-	function getVideoTable(vers, deviceType) {
+	function getVideoTable(vers) {
 		that.videoAdapter.selectJesusFilmLanguage(vers.countryCode, vers.silCode, function(lang) {
 		
 			that.videoAdapter.selectVideos(lang.languageId, vers.silCode, vers.langCode, vers.langPrefCode, function(videoMap) {
