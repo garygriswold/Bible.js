@@ -10,9 +10,6 @@
         "cordova-plugin-buildinfo": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
-        "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
@@ -50,6 +47,9 @@
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
         "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.shortsands.yourbible"
+        },
+        "cordova-plugin-console": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
         "com-shortsands-videoplayer": {

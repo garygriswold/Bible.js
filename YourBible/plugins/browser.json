@@ -46,10 +46,10 @@
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
-        "cordova-plugin-console": {
+        "cordova-plugin-wkwebview-engine": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
-        "cordova-plugin-wkwebview-engine": {
+        "cordova-plugin-console": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
         "com-shortsands-videoplayer": {
