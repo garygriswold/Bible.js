@@ -74,7 +74,7 @@ public class AwsS3 {
         try {
             File tempFile = File.createTempFile("downloadText", null);
             Log.d(TAG, "temp file created " + tempFile.getAbsolutePath());
-            listener.setTempFile(tempFile);
+            listener.setFile(tempFile);
             TransferObserver observer = this.transferUtility.download(s3Bucket, s3Key, tempFile);
             observer.setTransferListener(listener);
         } catch(Exception err) {
@@ -88,7 +88,7 @@ public class AwsS3 {
         File tempFile = null;
         try {
             tempFile = File.createTempFile("downloadData", null);
-            listener.setTempFile(tempFile);
+            listener.setFile(tempFile);
             TransferObserver observer = this.transferUtility.download(s3Bucket, s3Key, tempFile);
             observer.setTransferListener(listener);
         } catch(Exception err) {
@@ -98,8 +98,7 @@ public class AwsS3 {
     /**
      * Download File.  This works for binary and text files.
      */
-    public void downloadFile(String s3Bucket, String s3Key, DownloadFileListener listener) {
-        File file = listener.getFile();
+    public void downloadFile(String s3Bucket, String s3Key, File file, DownloadFileListener listener) {
         TransferObserver observer = this.transferUtility.download(s3Bucket, s3Key, file);
         observer.setTransferListener(listener);
     }
@@ -108,9 +107,10 @@ public class AwsS3 {
      * If there is ever a need to download and unzip an archive a separate method should be written
      * rather than modify this one.
      */
-    public void downloadZipFile(String s3Bucket, String s3Key, DownloadZipFileListener listener) {
+    public void downloadZipFile(String s3Bucket, String s3Key, File file, DownloadZipFileListener listener) {
         File zipFile = null;
         try {
+	        listener.setFile(file);
             zipFile = File.createTempFile("downloadZip", "");
             listener.setZipFile(zipFile);
             TransferObserver observer = this.transferUtility.download(s3Bucket, s3Key, zipFile);
@@ -136,7 +136,7 @@ public class AwsS3 {
         File tempFile = null;
         try {
             tempFile = File.createTempFile("uploadText", "");
-            listener.setTempFile(tempFile);
+            listener.setFile(tempFile);
             FileManager.writeTextFully(tempFile, data);
             TransferObserver observer = this.transferUtility.upload(s3Bucket, s3Key, tempFile);
             observer.setTransferListener(listener);
@@ -152,7 +152,7 @@ public class AwsS3 {
         File tempFile = null;
         try {
             tempFile = File.createTempFile("uploadData", "");
-            listener.setTempFile(tempFile);
+            listener.setFile(tempFile);
             FileManager.writeBinaryFully(tempFile, data);
             TransferObserver observer = this.transferUtility.upload(s3Bucket, s3Key, tempFile);
             observer.setTransferListener(listener);
@@ -163,8 +163,7 @@ public class AwsS3 {
     /**
      * Upload file to bucket, this works for text or binary files
      */
-    public void uploadFile(String s3Bucket, String s3Key, UploadFileListener listener) {
-        File file = listener.getFile();
+    public void uploadFile(String s3Bucket, String s3Key, File file, UploadFileListener listener) {
         if (file.exists() && file.isFile()) {
             TransferObserver observer = this.transferUtility.upload(s3Bucket, s3Key, file);
             observer.setTransferListener(listener);

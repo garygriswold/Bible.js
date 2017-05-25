@@ -135,6 +135,7 @@ public class AwsS3 {
     * TransferUtility.fileDownload, because it is unable to provide accurate errors
     * when the file IO fails.
     */
+ // change filePath to URL
     func downloadFile(s3Bucket: String, s3Key: String, filePath: String,
                       complete: @escaping (_ error:Error?) -> Void) {
         let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) -> Void in

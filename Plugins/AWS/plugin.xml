@@ -1,40 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    id="com-shortsands-videoplayer"
+    id="com-shortsands-aws"
     version="0.0.1">
-	<name>VideoPlayer</name>
-	<description>Plugin to Access Native Video Player</description>
+	<name>AWS</name>
+	<description>Plugin to AWS Services</description>
 	<author>Gary Griswold</author>
 	<engines>
     	<engine name="cordova" version=">=6.0.0"/>
 	</engines>
 
-	<js-module name="VideoPlayer" src="www/VideoPlayer.js">
-    	<clobbers target="VideoPlayer" />
+	<js-module name="AWS" src="www/AWS.js">
+    	<clobbers target="AWS" />
 	</js-module>
 
 	<platform name="android">
     	<config-file target="config.xml" parent="/*">
-			<feature name="VideoPlayer">
-				<param name="android-package" value="com.shortsands.videoplayer.VideoPlayer"/>
+			<feature name="AWS">
+				<param name="android-package" value="com.shortsands.aws.s3.AwsS3"/>
 			</feature>
 		</config-file>
 		<config-file target="AndroidManifest.xml" parent="/manifest">
 			<uses-permission android:name="android.permission.INTERNET" />
 		</config-file>
-		<config-file target="AndroidManifest.xml" parent="/manifest/application">
-			<activity android:name="com.shortsands.videoplayer.VideoActivity" android:label="VideoActivity" android:screenOrientation="landscape"></activity>
-		</config-file>
-		<source-file src="src/android/com/shortsands/videoplayer/VideoPlayer.java" target-dir="src/com/shortsands/videoplayer" />
-		<source-file src="src/android/com/shortsands/videoplayer/VideoActivity.java" target-dir="src/com/shortsands/videoplayer" />
-		<source-file src="src/android/com/shortsands/videoplayer/VideoPersistence.java" target-dir="src/com/shortsands/videoplayer" />
-		<source-file src="src/android/com/shortsands/videoplayer/EventLogger.java" target-dir="src/com/shortsands/videoplayer" />
+		<source-file src="src/android/com/shortsands/io/FileManager.java" />
+		<source-file src="src/android/com/shortsands/io/Zip.java" />
+		<source-file src="src/android/com/shortsands/aws/s3/AwsS3.java" />
+		<source-file src="src/android/com/shortsands/aws/s3/AwsS3AbstractListener.java" />
+		<source-file src="src/android/com/shortsands/aws/s3/Credentials.java" />
+		<source-file src="src/android/com/shortsands/aws/s3/DownloadDataListener.java" />
+		<source-file src="src/android/com/shortsands/aws/s3/DownloadFileListener.java" />
+		<source-file src="src/android/com/shortsands/aws/s3/DownloadTextListener.java" />
+		<source-file src="src/android/com/shortsands/aws/s3/DownloadZipFileListener.java" />
+		<source-file src="src/android/com/shortsands/aws/s3/UploadDataListener.java" />
+		<source-file src="src/android/com/shortsands/aws/s3/UploadFileListener.java" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/AwsS3Plugin.java" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/AwsSSPluginListener.java" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginDataListener.java" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginFileListener.java" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginTextListener.java" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginZipFileListener.java" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/UploadPluginDataListener.java" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/UploadPluginFileListener.java" />
 		<!-- change library to a more limited one when done. -->
 		<!-- <framework src="src/android/plugin.gradle" custom="true" type="gradleReference"/> -->
 		<!-- Need something to copy build-extras.gradle to proper location. -->
 	</platform>
-  
+  <!--
 	<platform name="ios">
 		<config-file target="config.xml" parent="/*">
 	    	<feature name="VideoPlayer">
@@ -47,5 +59,5 @@
 		<source-file src="src/ios/VideoPlayer/VideoViewState.swift" target-dir="src/videoplayer" />
 		<framework src="MediaPlayer.framework" />
 	</platform>
-
+-->
 </plugin>

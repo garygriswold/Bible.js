@@ -10,13 +10,10 @@ public class UploadFileListener extends AwsS3AbstractListener {
 
     private static String TAG = "UploadFileListener";
 
-    public UploadFileListener(File file) {
+    public UploadFileListener() {
         super();
-        this.file = file;
     }
-    public File getFile() {
-        return this.file;
-    }
+    
     @Override
     protected void onComplete(int id) {
         super.onComplete(id);

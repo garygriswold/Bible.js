@@ -1,4 +1,4 @@
-package com.shortsands.aws.s3;
+package com.shortsands.aws.s3Plugin;
 
 import android.util.Log;
 import java.io.File;
@@ -6,17 +6,15 @@ import java.io.File;
  * Created by garygriswold on 5/22/17.
  */
 
-public class DownloadZipFileListener extends AwsS3AbstractListener {
+public class DownloadPluginZipFileListener extends AwsS3PluginListener {
 
-    private static String TAG = "DownloadZipFileListener";
+    private static String TAG = "DownloadPluginZipFileListener";
 
-    public File results = null;
     private File unzipped = null;
 
 
-    public DownloadZipFileListener(File file) {
+    public DownloadPluginZipFileListener() {
         super();
-        this.file = file;
     }
 
     public void setZipFile(File zipFile) {
@@ -40,13 +38,15 @@ public class DownloadZipFileListener extends AwsS3AbstractListener {
             } else {
                 tmpUnzipped.renameTo(this.unzipped);
             }
-            this.results = this.unzipped;
+            //this.results = this.unzipped;
             Log.d(TAG, "Success: " + this.results.length() + "  " + this.results.getAbsolutePath());
         } catch (Exception err) {
             Log.e(TAG, "Error in DownloadZipFileListener " + err.toString());
+            this.callbackContext.error(err.toString());
         } finally {
             if (this.file != null) try { this.file.delete(); } catch(Exception e) {}
             if (tmpUnzipped != null) try { tmpUnzipped.delete(); } catch(Exception e) {}
+            this.callbackContext.success();
         }
     }
 }

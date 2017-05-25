@@ -17,7 +17,7 @@ public class AwsS3AbstractListener implements TransferListener {
 
     public AwsS3AbstractListener() {
     }
-    public void setTempFile(File file) {
+    public void setFile(File file) {
         this.file = file;
     }
     public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
