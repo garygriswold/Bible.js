@@ -24,12 +24,15 @@ public class AwsS3Plugin extends CordovaPlugin {
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
     	super.initialize(cordova, webView);
-		this.awsS3 = new AwsS3(cordova.getActivity());
 	}
 
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-	    if (action.equals("preSignedUrlGET")) {
+		if (action.equals("initialize")) {
+			this.awsS3 = new AwsS3(this.cordova.getActivity());
+			callbackContext.success();
+		}
+	    else if (action.equals("preSignedUrlGET")) {
 	        String s3Bucket = args.getString(0);
 	        String s3Key = args.getString(1);
 	        int expires = args.getInt(2);
