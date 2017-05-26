@@ -12,9 +12,8 @@ public class DownloadFileListener extends AwsS3AbstractListener {
 
     public File results = null;
 
-    public DownloadFileListener(File file) {
+    public DownloadFileListener() {
         super();
-        super.file = file;
     }
     public File getFile() {
         return this.file;

@@ -16,9 +16,8 @@ public class DownloadZipFileListener extends AwsS3AbstractListener {
     private File unzipped = null;
 
 
-    public DownloadZipFileListener(File file) {
+    public DownloadZipFileListener() {
         super();
-        this.file = file;
     }
 
     public void setZipFile(File zipFile) {
@@ -46,6 +45,7 @@ public class DownloadZipFileListener extends AwsS3AbstractListener {
             Log.d(TAG, "Success: " + this.results.length() + "  " + this.results.getAbsolutePath());
         } catch (Exception err) {
             Log.e(TAG, "Error in DownloadZipFileListener " + err.toString());
+            onError(id, err);
         } finally {
             if (this.file != null) try { this.file.delete(); } catch(Exception e) {}
             if (tmpUnzipped != null) try { tmpUnzipped.delete(); } catch(Exception e) {}

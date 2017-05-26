@@ -1,24 +1,34 @@
 package com.shortsands.aws.s3Plugin;
 
 import android.util.Log;
+import com.shortsands.aws.s3.DownloadDataListener;
+import org.apache.cordova.CallbackContext;
 /**
  * Created by garygriswold on 5/22/17.
  */
 
-public class DownloadPluginDataListener extends AwsS3PluginListener {
+public class DownloadPluginDataListener extends DownloadDataListener {
 
     private static String TAG = "DownloadPluginDataListener";
+    protected CallbackContext callbackContext;
 
-    public DownloadPluginDataListener() {
+    public DownloadPluginDataListener(CallbackContext callbackContext) {
         super();
+		this.callbackContext = callbackContext;
     }
 
     @Override
     protected void onComplete(int id) {
         super.onComplete(id);
-        byte[] results = FileManager.readBinaryFully(this.file);
-        try { this.file.delete(); } catch(Exception e) {}
-        Log.d(TAG, "Received: " + results);
+        //byte[] results = FileManager.readBinaryFully(this.file);
+        //try { this.file.delete(); } catch(Exception e) {}
+        //Log.d(TAG, "Received: " + results);
         this.callbackContext.success(results);
+    }
+    
+    @Override
+    public void onError(int id, Exception error) {
+	    super.onError(id, error);
+        this.callbackContext.error(error.toString() + " on " + this.file.getAbsolutePath());
     }
 }

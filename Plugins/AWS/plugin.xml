@@ -38,7 +38,6 @@
 		<source-file src="src/android/com/shortsands/aws/s3/UploadDataListener.java" target-dir="src/com/shortsands/aws/s3" />
 		<source-file src="src/android/com/shortsands/aws/s3/UploadFileListener.java" target-dir="src/com/shortsands/aws/s3" />
 		<source-file src="src/android/com/shortsands/aws/s3Plugin/AwsS3Plugin.java" target-dir="src/com/shortsands/aws/s3Plugin" />
-		<source-file src="src/android/com/shortsands/aws/s3Plugin/AwsS3PluginListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
 		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginDataListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
 		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginFileListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
 		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginTextListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />

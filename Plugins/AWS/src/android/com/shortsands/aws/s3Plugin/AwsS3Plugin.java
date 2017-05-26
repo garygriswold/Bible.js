@@ -1,6 +1,6 @@
 package com.shortsands.aws.s3Plugin;
 
-import com.shortsands.io.FileManger;
+import com.shortsands.io.Zip;
 import com.shortsands.aws.s3.AwsS3;
 
 import java.io.File;
@@ -13,7 +13,6 @@ import org.apache.cordova.CordovaWebView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
 * This class echoes a string called from JavaScript.
@@ -25,7 +24,7 @@ public class AwsS3Plugin extends CordovaPlugin {
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
     	super.initialize(cordova, webView);
-		this.awsS3 = new AwsS3();
+		this.awsS3 = new AwsS3(cordova.getActivity());
 	}
 
 	@Override
@@ -35,7 +34,7 @@ public class AwsS3Plugin extends CordovaPlugin {
 	        String s3Key = args.getString(1);
 	        int expires = args.getInt(2);
 	        URL url = this.awsS3.preSignedUrlGET(s3Bucket, s3Key, expires);
-	        callbackContext.success(url);
+	        callbackContext.success(url.toExternalForm());
 	        return true;
 	    }
 	    else if (action.equals("preSignedUrlPUT")) {
@@ -44,27 +43,41 @@ public class AwsS3Plugin extends CordovaPlugin {
 	        int expires = args.getInt(2);
 	        String contentType = args.getString(3);
 	        URL url = this.awsS3.preSignedUrlPUT(s3Bucket, s3Key, expires, contentType);
-			callbackContext.success(url);
+			callbackContext.success(url.toExternalForm());
 	        return true;
 		}
 		else if (action.equals("zip")) {
-			String sourceFile = args.getString(0);
+			String sourcePath = args.getString(0);
 			String targetDir = args.getString(1);
+			final File source = new File(cordova.getActivity().getFilesDir(), sourcePath);
+			final File target = new File(cordova.getActivity().getFilesDir(), targetDir);
+			final CallbackContext ctx = callbackContext;
 			cordova.getThreadPool().execute(new Runnable() {
             	public void run() {
-	            	this.awsS3.zip(sourceFile, targetDir);
-	            	callbackContext.success();
+	            	try {
+	            		Zip.zip(source, target);
+						ctx.success();
+					} catch(Exception error) {
+						ctx.error("Error in AWS.zip " + error.toString());
+					}
             	}
         	});
 			return true;
 		}
 		else if (action.equals("unzip")) {
-			String sourceFile = args.getString(0);
+			String sourcePath = args.getString(0);
 			String targetDir = args.getString(1);
+			final File source = new File(cordova.getActivity().getFilesDir(), sourcePath);
+			final File target = new File(cordova.getActivity().getFilesDir(), targetDir);
+			final CallbackContext ctx = callbackContext;
 			cordova.getThreadPool().execute(new Runnable() {
             	public void run() {
-	            	this.awsS3.unzip(sourceFile, targetDir);
-	            	callbackContext.success();
+	            	try {
+	            		Zip.unzip(source, target);
+						ctx.success();
+					} catch(Exception error) {
+						ctx.error("Error in AWS.unzip " + error.toString());
+					}
             	}
         	});
 			return true;
@@ -73,39 +86,40 @@ public class AwsS3Plugin extends CordovaPlugin {
 			String s3Bucket = args.getString(0);
 			String s3Key = args.getString(1);
 			DownloadPluginTextListener listener = new DownloadPluginTextListener(callbackContext);
-			this.downloadText(s3Bucket, s3Key, listener);
+			this.awsS3.downloadText(s3Bucket, s3Key, listener);
 			return true;
 		}
 		else if (action.equals("downloadData")) {
 			String s3Bucket = args.getString(0);
 			String s3Key = args.getString(1);
 			DownloadPluginDataListener listener = new DownloadPluginDataListener(callbackContext);
-			this.downloadData(s3Bucket, s3Key, listener);
+			this.awsS3.downloadData(s3Bucket, s3Key, listener);
 			return true;			
 		}
 		else if (action.equals("downloadFile")) {
 			String s3Bucket = args.getString(0);
 			String s3Key = args.getString(1);
 			String filePath = args.getString(2);
-			File file = new File(cordova.getActivity().getFilesDir, filePath);
+			File file = new File(cordova.getActivity().getFilesDir(), filePath);
 			DownloadPluginFileListener listener = new DownloadPluginFileListener(callbackContext);
-			this.downloadFile(s3Bucket, s3Key, file, listener);
+			this.awsS3.downloadFile(s3Bucket, s3Key, file, listener);
 			return true;			
 		}
 		else if (action.equals("downloadZipFile")) {
 			String s3Bucket = args.getString(0);
 			String s3Key = args.getString(1);
 			String filePath = args.getString(2);
-			File file = new File(cordova.getActivity().getFilesDir, filePath);
+			File file = new File(cordova.getActivity().getFilesDir(), filePath);
 			DownloadPluginZipFileListener listener = new DownloadPluginZipFileListener(callbackContext);
-			this.downloadZipFile(s3Bucket, s3Key, file, listener);
+			this.awsS3.downloadZipFile(s3Bucket, s3Key, file, listener);
 			return true;			
 		}
-		else if (action.equals("uploadAnalytics")) {
+		else if (action.equals("uploadVideoAnalytics")) {
 			String sessionId = args.getString(0);
 			String timestamp = args.getString(1);
+			String data = args.getString(2);
 			UploadPluginDataListener listener = new UploadPluginDataListener(callbackContext);
-			this.uploadAnalytics(sessionId, timestamp, listener);
+			this.awsS3.uploadVideoAnalytics(sessionId, timestamp, data, listener);
 			return true;
 		}
 		else if (action.equals("uploadText")) {
@@ -113,24 +127,25 @@ public class AwsS3Plugin extends CordovaPlugin {
 			String s3Key = args.getString(1);
 			String data = args.getString(2);
 			UploadPluginDataListener listener = new UploadPluginDataListener(callbackContext);
-			this.uploadText(s3Bucket, s3Key, data, listener);
+			this.awsS3.uploadText(s3Bucket, s3Key, data, listener);
 			return true;			
 		}
 		else if (action.equals("uploadData")) {
 			String s3Bucket = args.getString(0);
 			String s3Key = args.getString(1);
-			String data = args.getString(2); //// get what????
+			//String data = args.getString(2); //// get what????
+			byte[] data = new byte[0];
 			UploadPluginDataListener listener = new UploadPluginDataListener(callbackContext);
-			this.uploadData(s3Bucket, s3Key, data, listener);
+			this.awsS3.uploadData(s3Bucket, s3Key, data, listener);
 			return true;			
 		}
 		else if (action.equals("uploadFile")) {
 			String s3Bucket = args.getString(0);
 			String s3Key = args.getString(1);
 			String filePath = args.getString(2);
-			File file = new File(cordova.getActivity().getFilesDir, filePath);
+			File file = new File(cordova.getActivity().getFilesDir(), filePath);
 			UploadPluginFileListener listener = new UploadPluginFileListener(callbackContext);
-			this.uploadFile(s3Bucket, s3Key, file, receiver);
+			this.awsS3.uploadFile(s3Bucket, s3Key, file, listener);
 			return true;			
 		}
 	    return false;
