@@ -2,6 +2,8 @@ package com.shortsands.aws.s3;
 
 import android.util.Log;
 import java.io.File;
+import com.shortsands.io.FileManager;
+import com.shortsands.io.Zip;
 /**
  * Created by garygriswold on 5/22/17.
  */

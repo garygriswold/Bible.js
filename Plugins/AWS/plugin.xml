@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="com-shortsands-aws"
-    version="0.0.1">
+    version="1.0.0">
 	<name>AWS</name>
 	<description>Plugin to AWS Services</description>
 	<author>Gary Griswold</author>
@@ -23,25 +23,30 @@
 		<config-file target="AndroidManifest.xml" parent="/manifest">
 			<uses-permission android:name="android.permission.INTERNET" />
 		</config-file>
-		<source-file src="src/android/com/shortsands/io/FileManager.java" />
-		<source-file src="src/android/com/shortsands/io/Zip.java" />
-		<source-file src="src/android/com/shortsands/aws/s3/AwsS3.java" />
-		<source-file src="src/android/com/shortsands/aws/s3/AwsS3AbstractListener.java" />
-		<source-file src="src/android/com/shortsands/aws/s3/Credentials.java" />
-		<source-file src="src/android/com/shortsands/aws/s3/DownloadDataListener.java" />
-		<source-file src="src/android/com/shortsands/aws/s3/DownloadFileListener.java" />
-		<source-file src="src/android/com/shortsands/aws/s3/DownloadTextListener.java" />
-		<source-file src="src/android/com/shortsands/aws/s3/DownloadZipFileListener.java" />
-		<source-file src="src/android/com/shortsands/aws/s3/UploadDataListener.java" />
-		<source-file src="src/android/com/shortsands/aws/s3/UploadFileListener.java" />
-		<source-file src="src/android/com/shortsands/aws/s3Plugin/AwsS3Plugin.java" />
-		<source-file src="src/android/com/shortsands/aws/s3Plugin/AwsSSPluginListener.java" />
-		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginDataListener.java" />
-		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginFileListener.java" />
-		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginTextListener.java" />
-		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginZipFileListener.java" />
-		<source-file src="src/android/com/shortsands/aws/s3Plugin/UploadPluginDataListener.java" />
-		<source-file src="src/android/com/shortsands/aws/s3Plugin/UploadPluginFileListener.java" />
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			 <service android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService" android:enabled="true" />
+		</config-file>
+		<source-file src="src/android/com/shortsands/io/FileManager.java" target-dir="src/com/shortsands/io" />
+		<source-file src="src/android/com/shortsands/io/Zip.java" target-dir="src/com/shortsands/io" />
+		<source-file src="src/android/com/shortsands/aws/s3/AwsS3.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/AwsS3AbstractListener.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/Credentials.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/DownloadDataListener.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/DownloadFileListener.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/DownloadTextListener.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/DownloadZipFileListener.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/UploadDataListener.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/UploadFileListener.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/AwsS3Plugin.java" target-dir="src/com/shortsands/aws/s3Plugin" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/AwsS3PluginListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginDataListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginFileListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginTextListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginZipFileListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/UploadPluginDataListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/UploadPluginFileListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
+		<source-file src="src/android/libs/aws-android-sdk-core-2.4.2.jar" target-dir="libs" />
+		<source-file src="src/android/libs/aws-android-sdk-s3-2.4.2.jar" target-dir="libs" />
 		<!-- change library to a more limited one when done. -->
 		<!-- <framework src="src/android/plugin.gradle" custom="true" type="gradleReference"/> -->
 		<!-- Need something to copy build-extras.gradle to proper location. -->

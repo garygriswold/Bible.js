@@ -2,8 +2,10 @@ package com.shortsands.aws.s3Plugin;
 
 import android.util.Log;
 
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+//import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+//import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+
+import com.shortsands.aws.s3.AwsS3AbstractListener;
 
 import java.io.File;
 
@@ -16,7 +18,7 @@ import org.apache.cordova.CallbackContext;
 public class AwsS3PluginListener extends AwsS3AbstractListener {
 
     static String TAG = "AwsS3PluginListener";
-    protected CallbackContent callbackContext;
+    protected CallbackContext callbackContext;
 
     public AwsS3PluginListener(CallbackContext callbackContext) {
 	    super();

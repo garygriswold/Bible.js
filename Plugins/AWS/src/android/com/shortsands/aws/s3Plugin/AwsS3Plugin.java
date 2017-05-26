@@ -1,8 +1,15 @@
 package com.shortsands.aws.s3Plugin;
 
-import org.apache.cordova.CordovaPlugin;
+import com.shortsands.io.FileManger;
+import com.shortsands.aws.s3.AwsS3;
+
+import java.io.File;
+import java.net.URL;
+
 import org.apache.cordova.CallbackContext;
-import org.apache.cordova.PluginResult;
+import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
 
 import org.json.JSONArray;
 import org.json.JSONException;

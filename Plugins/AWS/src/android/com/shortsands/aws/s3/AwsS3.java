@@ -14,6 +14,9 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 
+import com.shortsands.io.FileManager;
+import com.shortsands.io.Zip;
+
 import java.io.File;
 import java.net.URL;
 import java.util.Date;
