@@ -11,13 +11,13 @@ import Foundation
 public class AwsS3UnitTest {
 	
 	func testDriver() {
-        //s3.testPresignedGET()
-        s3.testUploadData()
-        //s3.testDownloadData()
-        //s3.testDownloadFile()
-        //s3.testDownloadZipFile()
-        //s3.testZipUnzip()
-        //s3.testUploadFile()
+        //testPresignedGET()
+        //testUploadData()
+        //testDownloadData()
+        //testDownloadFile()
+        //testDownloadZipFile()
+        //testZipUnzip()
+        //testUploadFile()
     }
     
     func testPresignedGET() {

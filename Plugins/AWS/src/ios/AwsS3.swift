@@ -77,9 +77,10 @@ public class AwsS3 {
     * NOTE: This is NOT working for files that were zipped using MacOs version of PKzip
     * and so it should be be used in the App.!!!!! May 19, 2017 GNG
     */
-        /*
     func downloadZipFile(s3Bucket: String, s3Key: String, filePath: String,
                          complete: @escaping (_ error:Error?) -> Void) {
+	    downloadFile(s3Bucket: s3Bucket, s3Key: s3Key, filePath: filePath, complete: complete)
+	    /*                     
         let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) -> Void in
             DispatchQueue.main.async(execute: {
                 if let err = error {
@@ -110,8 +111,8 @@ public class AwsS3 {
             })
         }
         download(s3Bucket: s3Bucket, s3Key: s3Key, completionHandler: completionHandler)
+        */
     }
- */
     /**
      * Zip Utility for use on files.
      */

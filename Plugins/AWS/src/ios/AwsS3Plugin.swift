@@ -14,28 +14,34 @@
 	
 	let awsS3: AwsS3 = AwsS3()
 	
+	@objc(echo2:) func echo2(command:  CDVInvokedUrlCommand) {
+		let message = command.arguments[0] as? String ?? ""
+		let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: message)
+		self.commandDelegate!.send(result, callbackId: command.callbackId)
+	}
+	
 	@objc(preSignedUrlGET:) func preSignedUrlGET(command: CDVInvokedUrlCommand) {
-		
+		let expires = command.arguments[2] as? String ?? "3600"
 		awsS3.preSignedUrlGET(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
-			expires: command.arguments[2] as int ?? 0,
+			expires: Int(expires)!,
 			complete: { url in 
-				let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: url.toString())
+				let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: url?.absoluteString)
 				self.commandDelegate!.send(result, callbackId: command.callbackId)
 			}
 		)
 	}
 	
 	@objc(preSignedUrlPUT:) func preSignedUrlPUT(command: CDVInvokedUrlCommand) {
-		
+		let expires = command.arguments[2] as? String ?? "3600"
 		awsS3.preSignedUrlPUT(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
-			expires: command.arguments[2] as? int ?? 0,
+			expires: Int(expires)!,
 			contentType: command.arguments[3] as? String ?? "",
 			complete: { url in 
-				let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: url.toString())
+				let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: url?.absoluteString)
 				self.commandDelegate!.send(result, callbackId: command.callbackId)
 			}
 		)
@@ -47,11 +53,11 @@
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
             complete: { error, data in
-            	var result = null;
-            	if (error != null) {
-	            	result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: url.toString())
+            	var result: CDVPluginResult
+            	if (error != nil) {
+	            	result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
             	} else {
-	            	result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: data);
+	            	result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: data)
             	}
             	self.commandDelegate!.send(result, callbackId: command.callbackId)
             }
@@ -64,9 +70,14 @@
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
             complete: { error, data in
-            	// data becomes ArrayBuffer in JS, I think
-            	self.commandDelegate!.send(result, callbackId: command.callbackId)
-            }
+	            var result: CDVPluginResult
+	            if (error != nil) {
+		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
+	            } else {
+		            result = CDVPluginResult(status: CDVCommandStatus_OK, messageAsArrayBuffer: data)
+	            }
+	            self.commandDelegate!.send(result, callbackId: command.callbackId)
+	        }
         )
     }
     
@@ -79,8 +90,14 @@
 			s3Key: command.arguments[1] as? String ?? "",
 			filePath: filePath,
             complete: { error in
-            	self.commandDelegate!.send(result, callbackId: command.callbackId)
-            }		    
+	            var result: CDVPluginResult
+	            if (error != nil) {
+		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
+	            } else {
+		            result = CDVPluginResult(status: CDVCommandStatus_OK)
+	            }
+	            self.commandDelegate!.send(result, callbackId: command.callbackId)
+	        }	    
 	    )
     }
     
@@ -93,8 +110,14 @@
 			s3Key: command.arguments[1] as? String ?? "",
 			filePath: filePath,
             complete: { error in
-            	self.commandDelegate!.send(result, callbackId: command.callbackId)
-            }		    
+	            var result: CDVPluginResult
+	            if (error != nil) {
+		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
+	            } else {
+		            result = CDVPluginResult(status: CDVCommandStatus_OK)
+	            }
+	            self.commandDelegate!.send(result, callbackId: command.callbackId)
+	        }	    
 	    )
     }
     
@@ -105,8 +128,14 @@
 		    timestamp: command.arguments[1] as? String ?? "", 
 		    data: command.arguments[2] as? String ?? "",
             complete: { error in
-            	self.commandDelegate!.send(result, callbackId: command.callbackId)
-            }		    
+	            var result: CDVPluginResult
+	            if (error != nil) {
+		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
+	            } else {
+		            result = CDVPluginResult(status: CDVCommandStatus_OK)
+	            }
+	            self.commandDelegate!.send(result, callbackId: command.callbackId)
+	        }		    
 	    )
     }
     
@@ -117,24 +146,37 @@
 			s3Key: command.arguments[1] as? String ?? "",
 		    data: command.arguments[2] as? String ?? "",
             complete: { error in
-            	self.commandDelegate!.send(result, callbackId: command.callbackId)
-            }		    
+	            var result: CDVPluginResult
+	            if (error != nil) {
+		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
+	            } else {
+		            result = CDVPluginResult(status: CDVCommandStatus_OK)
+	            }
+	            self.commandDelegate!.send(result, callbackId: command.callbackId)
+	        }	    
 	    )
     }
     
     @objc(uploadData:) func uploadData(command: CDVInvokedUrlCommand) {
 	    
-	    let bytes: NSData = command.arguments[2] as? NSData ?? nil
-	    let data = Data(bytes)
+	    //let bytes: NSData? = command.arguments[2] as? NSData ?? nil
+	    let bytes: Data = command.arguments[2] as? Data ?? Data()
+	    //let data = Data(bytes)
 	    
 	    awsS3.uploadData(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
-		    data: data,
-		    contentType: command.arguments[3] as? String ?? ""
+		    data: bytes,
+		    contentType: command.arguments[3] as? String ?? "",
             complete: { error in
-            	self.commandDelegate!.send(result, callbackId: command.callbackId)
-            }		    
+	            var result: CDVPluginResult
+	            if (error != nil) {
+		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
+	            } else {
+		            result = CDVPluginResult(status: CDVCommandStatus_OK)
+	            }
+	            self.commandDelegate!.send(result, callbackId: command.callbackId)
+	        }		    
 	    )
     }
     
@@ -146,10 +188,16 @@
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 			filePath: filePath,
-			contentType: command.arguments[3] as? String ?? ""
+			contentType: command.arguments[3] as? String ?? "",
             complete: { error in
-            	self.commandDelegate!.send(result, callbackId: command.callbackId)
-            }		    
+            	var result: CDVPluginResult
+				if (error != nil) {
+	            	result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
+				} else {
+	            	result = CDVPluginResult(status: CDVCommandStatus_OK)
+				}
+				self.commandDelegate!.send(result, callbackId: command.callbackId)
+			}
 	    )
     }			
 }		

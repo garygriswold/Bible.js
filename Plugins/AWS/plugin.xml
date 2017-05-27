@@ -50,18 +50,20 @@
 		<!-- <framework src="src/android/plugin.gradle" custom="true" type="gradleReference"/> -->
 		<!-- Need something to copy build-extras.gradle to proper location. -->
 	</platform>
-  <!--
+  
 	<platform name="ios">
 		<config-file target="config.xml" parent="/*">
-	    	<feature name="VideoPlayer">
-				<param name="ios-package" value="VideoPlayer" />
+	    	<feature name="AWS">
+				<param name="ios-package" value="AWS" />
 			</feature>
 		</config-file>
-		<source-file src="src/ios/VideoPlayer/VideoPlayer.swift" target-dir="src/videoplayer" />
-		<source-file src="src/ios/VideoPlayer/AVPlayerViewControllerExtension.swift" target-dir="src/videoplayer" />
-		<source-file src="src/ios/VideoPlayer/VideoViewPlayer.swift" target-dir="src/videoplayer" />
-		<source-file src="src/ios/VideoPlayer/VideoViewState.swift" target-dir="src/videoplayer" />
-		<framework src="MediaPlayer.framework" />
+		<source-file src="src/ios/AwsS3.swift" />
+		<source-file src="src/ios/AwsS3Plugin.swift" />
+		<source-file src="src/ios/AwsS3UnitTest.swift" />
+		<source-file src="src/ios/Credentials.swift" />
+		<!-- These frameworks need to be added to the project as Embedded Binaries
+		<framework src="src/ios/libs/AWSCore.framework" />
+		<framework src="src/ios/libs/AWSS3.framework" /> -->
 	</platform>
--->
+
 </plugin>

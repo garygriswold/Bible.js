@@ -10,18 +10,25 @@
 */
 //module.exports = {
 var AWS = {
-	echo0: function(message, callback) {
-		console.log("INSIDE echo0");
+	echo1: function(message, callback) {
+		console.log("INSIDE echo1");
 		callback(message);	
 	},
-	initialize: function(callback) {
-		cordova.exec(function() {
-			callback(true);
-		}, function(error) {
-			console.log("ERROR: AWS.initialize " + error);
-			callback(false);
-		}, "AwsS3Plugin", "initialize", []);
+	echo2: function(message, callback) {
+		console.log("INSIDE echo2");
+		cordova.exec(callback, function(error) {
+			console.log("ERROR in echo2 " + error);
+			callback(error);
+		}, "AwsS3Plugin", "echo", [message]);	
 	},
+//	initialize: function(callback) {
+//		cordova.exec(function() {
+//			callback(true);
+//		}, function(error) {
+//			console.log("ERROR: AWS.initialize " + error);
+//			callback(false);
+//		}, "AwsS3Plugin", "initialize", []);
+//	},
     preSignedUrlGET: function(s3Bucket, s3Key, expires, callback) {
 	    cordova.exec(callback, function(error) {
 		    console.log("ERROR: AWS.preSignedUrlGET " + error);
