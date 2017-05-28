@@ -61,6 +61,8 @@
 		<source-file src="src/ios/AwsS3.swift" />
 		<source-file src="src/ios/AwsS3UnitTest.swift" />
 		<source-file src="src/ios/Credentials.swift" />
+		<header-file src="src/ios/SS_AWS/SS_AWSS3PreSignedURL.h" />
+		<source-file src="src/ios/SS_AWS/SS_AWSS3PreSignedURL.m" />
 		<!-- These frameworks need to be added to the project as Embedded Binaries
 		<framework src="src/ios/libs/AWSCore.framework" />
 		<framework src="src/ios/libs/AWSS3.framework" /> -->
