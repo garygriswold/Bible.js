@@ -9,6 +9,22 @@
 * will return true here and false if there was an error.
 */
 //module.exports = {
+var exec = require('cordova/exec');
+
+exports.echo1 = function(message, callback) {
+	console.log("INSIDE echo1");
+	callback(message);	
+};
+
+exports.echo2 = function(message, callback) {
+	console.log("INSIDE echo2");
+	exec(callback, function(error) {
+		console.log("ERROR in echo2 " + error);
+		callback(error);
+	}, "AWS", "echo2", [message]);	
+};
+
+/*
 var AWS = {
 	echo1: function(message, callback) {
 		console.log("INSIDE echo1");
@@ -16,10 +32,10 @@ var AWS = {
 	},
 	echo2: function(message, callback) {
 		console.log("INSIDE echo2");
-		cordova.exec(callback, function(error) {
+		exec(callback, function(error) {
 			console.log("ERROR in echo2 " + error);
 			callback(error);
-		}, "AwsS3Plugin", "echo", [message]);	
+		}, "AwsS3Plugin", "echo2", [message]);	
 	},
 //	initialize: function(callback) {
 //		cordova.exec(function() {
@@ -120,3 +136,5 @@ var AWS = {
 };
 
 module.exports = AWS;
+
+*/

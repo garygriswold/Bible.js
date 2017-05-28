@@ -1,5 +1,5 @@
 //
-//  AwsS3Plugin.swift
+//  AWS.swift
 //  AWS
 //
 //  Created by Gary Griswold on 5/15/17.
@@ -10,11 +10,14 @@
 * It is a thin wrapper around the AwsS3 class that AwsS3 can also 
 * be used directly by other .swift classes.
 */
-@objc(AwsS3Plugin) class AwsS3Plugin : CDVPlugin {
+@objc(AWS) class AWS : CDVPlugin {
 	
 	let awsS3: AwsS3 = AwsS3()
 	
-	@objc(echo2:) func echo2(command:  CDVInvokedUrlCommand) {
+	static func awake() -> Void {}
+	
+	@objc(echo2:) 
+	func echo2(command:  CDVInvokedUrlCommand) {
 		let message = command.arguments[0] as? String ?? ""
 		let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: message)
 		self.commandDelegate!.send(result, callbackId: command.callbackId)

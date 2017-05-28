@@ -57,8 +57,8 @@
 				<param name="ios-package" value="AWS" />
 			</feature>
 		</config-file>
+		<source-file src="src/ios/AWS.swift" />
 		<source-file src="src/ios/AwsS3.swift" />
-		<source-file src="src/ios/AwsS3Plugin.swift" />
 		<source-file src="src/ios/AwsS3UnitTest.swift" />
 		<source-file src="src/ios/Credentials.swift" />
 		<!-- These frameworks need to be added to the project as Embedded Binaries
