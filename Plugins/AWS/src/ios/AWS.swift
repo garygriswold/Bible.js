@@ -12,9 +12,12 @@
 */
 @objc(AWS) class AWS : CDVPlugin {
 	
-	let awsS3: AwsS3 = AwsS3()
+	var awsS3: AwsS3 = AwsS3()  // I don't see this constructor is ever executed
 	
-	static func awake() -> Void {}
+    override func pluginInitialize() {
+        super.pluginInitialize()
+        awsS3 = AwsS3()
+    }
 	
 	@objc(echo2:) 
 	func echo2(command:  CDVInvokedUrlCommand) {
@@ -23,7 +26,16 @@
 		self.commandDelegate!.send(result, callbackId: command.callbackId)
 	}
 	
-	@objc(preSignedUrlGET:) func preSignedUrlGET(command: CDVInvokedUrlCommand) {
+	@objc(echo3:)
+	func echo3(command: CDVInvokedUrlCommand) {
+		let message = command.arguments[0] as? String ?? ""
+		let response = self.awsS3.echo3(message: message);
+		let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: response)
+		self.commandDelegate!.send(result, callbackId: command.callbackId)		
+	}
+	
+	@objc(preSignedUrlGET:) 
+	func preSignedUrlGET(command: CDVInvokedUrlCommand) {
 		let expires = command.arguments[2] as? String ?? "3600"
 		awsS3.preSignedUrlGET(
 			s3Bucket: command.arguments[0] as? String ?? "",

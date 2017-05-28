@@ -22,6 +22,12 @@ public class AwsS3 {
         //AWSS3TransferUtility.interceptApplication was not set, because we do not need it.
         self.transfer = AWSS3TransferUtility.default()
     }
+    /**
+    * A Unit Test Method
+    */
+    func echo3(message: String) -> String {
+	    return message;
+    }
     /////////////////////////////////////////////////////////////////////////
     // URL signing Functions
     /////////////////////////////////////////////////////////////////////////
