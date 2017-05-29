@@ -123,20 +123,20 @@ exports.uploadText = function(s3Bucket, s3Key, data, callback) {
 	}, "AWS", "uploadText", [s3Bucket, s3Key, data]);
 };
 
-exports.uploadData = function(s3Bucket, s3Key, data, callback) {
+exports.uploadData = function(s3Bucket, s3Key, data, contentType, callback) {
     exec(function() {
 	    callback(true);
 	}, function(error) {
 	    console.log("ERROR: AWS.uploadData " + error);
 	    callback(false);			
-	}, "AWS", "uploadData", [s3Bucket, s3Key, data]);
+	}, "AWS", "uploadData", [s3Bucket, s3Key, data, contentType]);
 };
 
-exports.uploadFile = function(s3Bucket, s3Key, filePath, callback) {
+exports.uploadFile = function(s3Bucket, s3Key, filePath, contentType, callback) {
     exec(function() {
 	    callback(true);
     }, function(error) {
 	    console.log("ERROR: AWS.uploadFile " + error);
 	    callback(false);		    
-    }, "AWS", "uploadFile", [s3Bucket, s3Key, filePath]);
+    }, "AWS", "uploadFile", [s3Bucket, s3Key, filePath, contentType]);
 };

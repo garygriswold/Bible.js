@@ -73,33 +73,39 @@ public class AwsS3UnitTest {
         s3.downloadText(s3Bucket: "shortsands", s3Key: "hello1",
                         complete: {error, data in print("DOWNLOADED err \(String(describing: error))  data \(data)")})
     }
-    
+     
     func testDownloadFile() {
         let s3 = AwsS3()
-        s3.downloadFile(s3Bucket: "shortsands", s3Key: "WEB.db.zip", filePath: "/Documents/WEB.db.zip",
+        let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db.zip")
+        s3.downloadFile(s3Bucket: "shortsands", s3Key: "WEB.db.zip", filePath: filePath1,
                         complete: { err in print("I RECEIVED testDownloadFile CALLBACK \(String(describing: err))")})
         
-        s3.downloadFile(s3Bucket: "shortsands", s3Key: "hello2", filePath: "/Documents/hello2.txt",
+        let filePath2 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/hello2.txt")
+        s3.downloadFile(s3Bucket: "shortsands", s3Key: "hello2", filePath: filePath2,
                         complete: { err in print("I RECEIVED testDownloadFile CALLBACK \(String(describing: err))")})
     }
     
     func testDownloadZipFile() {
         let s3 = AwsS3()
-//        s3.downloadZipFile(s3Bucket: "shortsands", s3Key: "WEB.db.zip", filePath: "/Documents/WEB.db",
-//                           complete: { err in print("I RECEIVED testDownloadZipFile CALLBACK \(String(describing: err))")})
+        let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db")
+        s3.downloadZipFile(s3Bucket: "shortsands", s3Key: "WEB.db.zip", filePath: filePath1,
+                           complete: { err in print("I RECEIVED testDownloadZipFile CALLBACK \(String(describing: err))")})
     }
     
     func testUploadFile() {
         let s3 = AwsS3()
-        s3.uploadFile(s3Bucket: "shortsands", s3Key: "uploadFile1", filePath: "/Documents/MichaelMark.jpg",
+        let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/MichaelMark.jpg")
+        s3.uploadFile(s3Bucket: "shortsands", s3Key: "uploadFile1", filePath: filePath1,
                       contentType: "image/jpg",
                       complete: { err in print("RESULT testUploadFile CALLBACK Error: \(String(describing: err))")})
         
-        s3.uploadFile(s3Bucket: "shortsands", s3Key: "uploadFile2", filePath: "/Documents/WEB.db.zip",
+        let filePath2 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db.zip")
+        s3.uploadFile(s3Bucket: "shortsands", s3Key: "uploadFile2", filePath: filePath2,
                       contentType: "application/zip",
                       complete: { err in print("RESULT testUploadFile CALLBACK Error: \(String(describing: err))")})
         
-        s3.uploadFile(s3Bucket: "shortsands", s3Key: "uploadFile3", filePath: "/Documents/hello2.txt",
+        let filePath3 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/hello2.txt")
+        s3.uploadFile(s3Bucket: "shortsands", s3Key: "uploadFile3", filePath: filePath3,
                       contentType: "plain/text",
                       complete: { err in print("RESULT testUploadFile CALLBACK Error: \(String(describing: err))")})
     }
@@ -109,7 +115,7 @@ public class AwsS3UnitTest {
 //        s3.zip(sourceFile: "/Documents/ZIPTEST.db", targetFile: "/Documents/ZIPTEST.db.zip")
 //        s3.unzip(sourceFile: "/Documents/ZIPTEST.db.zip", targetFile: "/Documents/ZIPTEST_OUT.db")
         
-        let done = s3.unzip(sourceFile: "/Documents/ZIPTEST2.db.zip", targetDir: "/tmp/")
-        print("UNZIP /Documents/ZIPTEST2.db.zip is successful? \(done)")
+//        let done = s3.unzip(sourceFile: "/Documents/ZIPTEST2.db.zip", targetDir: "/tmp/")
+//        print("UNZIP /Documents/ZIPTEST2.db.zip is successful? \(done)")
     }
 }

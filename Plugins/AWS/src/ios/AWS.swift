@@ -47,7 +47,8 @@
 		)
 	}
 	
-	@objc(preSignedUrlPUT:) func preSignedUrlPUT(command: CDVInvokedUrlCommand) {
+	@objc(preSignedUrlPUT:) 
+	func preSignedUrlPUT(command: CDVInvokedUrlCommand) {
 		awsS3.preSignedUrlPUT(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
@@ -59,9 +60,19 @@
 			}
 		)
 	}
-
-	@objc(downloadText:) func downloadText(command: CDVInvokedUrlCommand) {
+	
+	@objc(zip:)
+	func zip(command: CDVInvokedUrlCommand) {
 		
+	}
+	
+	@objc(unzip:)
+	func unzip(command: CDVInvokedUrlCommand) {
+		
+	}
+
+	@objc(downloadText:) 
+	func downloadText(command: CDVInvokedUrlCommand) {
 		awsS3.downloadText(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
@@ -77,8 +88,8 @@
         )
     }
     
-    @objc(downloadData:) func downloadData(command: CDVInvokedUrlCommand) {
-		
+    @objc(downloadData:) 
+    func downloadData(command: CDVInvokedUrlCommand) {	
 		awsS3.downloadData(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
@@ -94,14 +105,13 @@
         )
     }
     
-    @objc(downloadFile:) func downloadFile(command: CDVInvokedUrlCommand) {
-	    
+    @objc(downloadFile:) 
+    func downloadFile(command: CDVInvokedUrlCommand) {
 	    let filePath: String = command.arguments[2] as? String ?? ""
-	    
 	    awsS3.downloadFile(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
-			filePath: filePath,
+			filePath: URL(fileURLWithPath: NSHomeDirectory() + filePath),
             complete: { error in
 	            var result: CDVPluginResult
 	            if (error != nil) {
@@ -114,14 +124,13 @@
 	    )
     }
     
-    @objc(downloadZipFile:) func downloadZipFile(command: CDVInvokedUrlCommand) {
-	    
+    @objc(downloadZipFile:) 
+    func downloadZipFile(command: CDVInvokedUrlCommand) {    
 	    let filePath: String = command.arguments[2] as? String ?? ""
-	    
 	    awsS3.downloadZipFile(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
-			filePath: filePath,
+			filePath: URL(fileURLWithPath: NSHomeDirectory() + filePath),
             complete: { error in
 	            var result: CDVPluginResult
 	            if (error != nil) {
@@ -134,8 +143,8 @@
 	    )
     }
     
-    @objc(uploadVideoAnalytics:) func uploadVideoAnalytics(command: CDVInvokedUrlCommand) {
-	    
+    @objc(uploadVideoAnalytics:) 
+    func uploadVideoAnalytics(command: CDVInvokedUrlCommand) {    
 	    awsS3.uploadVideoAnalytics(
 		    sessionId: command.arguments[0] as? String ?? "", 
 		    timestamp: command.arguments[1] as? String ?? "", 
@@ -152,8 +161,8 @@
 	    )
     }
     
-    @objc(uploadText:) func uploadText(command: CDVInvokedUrlCommand) {
-	    
+    @objc(uploadText:) 
+    func uploadText(command: CDVInvokedUrlCommand) {    
 	    awsS3.uploadText(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
@@ -170,16 +179,12 @@
 	    )
     }
     
-    @objc(uploadData:) func uploadData(command: CDVInvokedUrlCommand) {
-	    
-	    //let bytes: NSData? = command.arguments[2] as? NSData ?? nil
-	    let bytes: Data = command.arguments[2] as? Data ?? Data()
-	    //let data = Data(bytes)
-	    
+    @objc(uploadData:) 
+    func uploadData(command: CDVInvokedUrlCommand) {
 	    awsS3.uploadData(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
-		    data: bytes,
+		    data: command.arguments[2] as? Data ?? Data(),
 		    contentType: command.arguments[3] as? String ?? "",
             complete: { error in
 	            var result: CDVPluginResult
@@ -193,14 +198,13 @@
 	    )
     }
     
-    @objc(uploadFile:) func uploadFile(command: CDVInvokedUrlCommand) {
-	    
-	    let filePath: String = command.arguments[2] as? String ?? ""
-	    
+    @objc(uploadFile:) 
+    func uploadFile(command: CDVInvokedUrlCommand) {
+	    let filePath = command.arguments[2] as? String ?? ""
 	    awsS3.uploadFile(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
-			filePath: filePath,
+			filePath: URL(fileURLWithPath: NSHomeDirectory() + filePath),
 			contentType: command.arguments[3] as? String ?? "",
             complete: { error in
             	var result: CDVPluginResult
