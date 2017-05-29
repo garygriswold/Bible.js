@@ -74,27 +74,6 @@ public class AwsS3 {
         }
     }
     /////////////////////////////////////////////////////////////////////////
-    // Zip Functions
-    /////////////////////////////////////////////////////////////////////////
-    /**
-     * Zip Utility for use on files.
-     */
-    func zip(sourceFile: String, targetDir: String) -> Bool {
-        //let done = SSZipArchive.createZipFile(atPath: sourceFile, withContentsOfDirectory: targetDir)
-        //(BOOL)createZipFileAtPath:(NSString *)path withContentsOfDirectory:(NSString *)directoryPath;
-        let done = false
-        return done
-    }
-    /**
-     * UnZip Utility for use on files.
-     */
-    func unzip(sourceFile: String, targetDir: String) -> Bool {
-        //let done = SSZipArchive.unzipFile(atPath: sourceFile, toDestination: targetDir)
-        //print("DID unzip \(done)")
-        let done = false
-        return done
-    }
-    /////////////////////////////////////////////////////////////////////////
     // Download Functions
     /////////////////////////////////////////////////////////////////////////
     /**
@@ -273,5 +252,26 @@ public class AwsS3 {
             print("ERROR in s3.uploadFile, while reading file \(s3Bucket) \(s3Key)")
             complete(nil)
         }
+    }
+    /////////////////////////////////////////////////////////////////////////
+    // Zip Functions
+    /////////////////////////////////////////////////////////////////////////
+    /**
+     * Zip Utility for use on files.
+     */
+    func zip(sourceFile: String, targetDir: String) -> Bool {
+        //let done = SSZipArchive.createZipFile(atPath: sourceFile, withContentsOfDirectory: targetDir)
+        //(BOOL)createZipFileAtPath:(NSString *)path withContentsOfDirectory:(NSString *)directoryPath;
+        let done = false
+        return done
+    }
+    /**
+     * UnZip Utility for use on files.
+     */
+    func unzip(sourceFile: String, targetDir: String) -> Bool {
+        //let done = SSZipArchive.unzipFile(atPath: sourceFile, toDestination: targetDir)
+        //print("DID unzip \(done)")
+        let done = false
+        return done
     }
 }

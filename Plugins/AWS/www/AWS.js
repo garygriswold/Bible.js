@@ -55,24 +55,6 @@ exports.preSignedUrlPUT = function(s3Bucket, s3Key, expires, contentType, callba
     }, "AWS", "preSignedUrlPUT", [s3Bucket, s3Key, expires, contentType]);
 };
 
-exports.zip = function(sourceFile, targetDir, callback) {
-    exec(function() { 
-	    callback(true); 
-	}, function(error) {
-	    console.log("ERROR: AWS.zip " + error);
-	    callback(false);
-    }, "AWS", "zip", [sourceFile, targetDir]);
-};
-
-exports.unzip = function(sourceFile, targetDir, callback) {
-    exec(function() {
-	    callback(true);
-	}, function(error) {
-	    console.log("ERROR: AWS.unzip " + error);
-	    callback(false);		    
-    }, "AWS", "unzip", [sourceFile, targetDir]);
-};
-
 exports.downloadText = function(s3Bucket, s3Key, callback) {
     exec(callback, function(error) {
 	    console.log("ERROR: AWS.downloadText " + error);
@@ -139,4 +121,22 @@ exports.uploadFile = function(s3Bucket, s3Key, filePath, contentType, callback) 
 	    console.log("ERROR: AWS.uploadFile " + error);
 	    callback(false);		    
     }, "AWS", "uploadFile", [s3Bucket, s3Key, filePath, contentType]);
+};
+
+exports.zip = function(sourceFile, targetDir, callback) {
+    exec(function() { 
+	    callback(true); 
+	}, function(error) {
+	    console.log("ERROR: AWS.zip " + error);
+	    callback(false);
+    }, "AWS", "zip", [sourceFile, targetDir]);
+};
+
+exports.unzip = function(sourceFile, targetDir, callback) {
+    exec(function() {
+	    callback(true);
+	}, function(error) {
+	    console.log("ERROR: AWS.unzip " + error);
+	    callback(false);		    
+    }, "AWS", "unzip", [sourceFile, targetDir]);
 };

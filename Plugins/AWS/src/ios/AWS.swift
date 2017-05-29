@@ -60,16 +60,6 @@
 			}
 		)
 	}
-	
-	@objc(zip:)
-	func zip(command: CDVInvokedUrlCommand) {
-		
-	}
-	
-	@objc(unzip:)
-	func unzip(command: CDVInvokedUrlCommand) {
-		
-	}
 
 	@objc(downloadText:) 
 	func downloadText(command: CDVInvokedUrlCommand) {
@@ -216,5 +206,15 @@
 				self.commandDelegate!.send(result, callbackId: command.callbackId)
 			}
 	    )
-    }			
+    }
+    
+	@objc(zip:)
+	func zip(command: CDVInvokedUrlCommand) {
+		
+	}
+	
+	@objc(unzip:)
+	func unzip(command: CDVInvokedUrlCommand) {
+		
+	}			
 }		
