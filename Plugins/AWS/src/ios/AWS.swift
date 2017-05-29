@@ -36,11 +36,10 @@
 	
 	@objc(preSignedUrlGET:) 
 	func preSignedUrlGET(command: CDVInvokedUrlCommand) {
-		let expires = command.arguments[2] as? String ?? "3600"
 		awsS3.preSignedUrlGET(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
-			expires: Int(expires)!,
+			expires: command.arguments[2] as? Int ?? 3600,
 			complete: { url in 
 				let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: url?.absoluteString)
 				self.commandDelegate!.send(result, callbackId: command.callbackId)
@@ -49,11 +48,10 @@
 	}
 	
 	@objc(preSignedUrlPUT:) func preSignedUrlPUT(command: CDVInvokedUrlCommand) {
-		let expires = command.arguments[2] as? String ?? "3600"
 		awsS3.preSignedUrlPUT(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
-			expires: Int(expires)!,
+			expires: command.arguments[2] as? Int ?? 3600,
 			contentType: command.arguments[3] as? String ?? "",
 			complete: { url in 
 				let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: url?.absoluteString)
