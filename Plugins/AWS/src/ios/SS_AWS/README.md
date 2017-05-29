@@ -28,3 +28,23 @@ SS_AWSPresignedURL.m
 Bridging-Header.h
 
 	#import "SS_AWSS3PreSignedURL.h"
+	#import "SS_AWSS3TransferUtility.m"
+	
+SS_AWSS3TransferUtility
+-----------------------
+
+These files were modified in order to get the TransferUtility to use the PresignedURL code in the prior step
+
+May 28, 2017, GNG
+
+SS_AWSS3TransferUtility.h
+
+	This file is unchanged from AWSS3TransferUtility.h
+	
+AWSS3TransferUtility.m
+	
+	Lines 16 to 19 were changed
+	#import "SS_AWSS3TransferUtility.h" was changed from #import "AWSS3TransferUtility.h"
+	#import "SS_AWSS3PreSignedURL.h" was changed from #import "AWSS3PreSignedURL.h"
+	//#import "AWSSynchronizedMutableDictionary.h" was removed
+	#import <AWSCore/AWSCore.h> was added to replace the above line
