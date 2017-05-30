@@ -140,45 +140,51 @@ public class AwsS3 {
     /**
     * Download zip file and unzip it.  Like Download File this does not use 
     * TransferUtility.fileDownload because its error reporting is poor.
-    *
-    * NOTE: This is NOT working for files that were zipped using MacOs version of PKzip
-    * and so it should be be used in the App.!!!!! May 19, 2017 GNG
     */
     func downloadZipFile(s3Bucket: String, s3Key: String, filePath: URL,
                          complete: @escaping (_ error:Error?) -> Void) {
-	    downloadFile(s3Bucket: s3Bucket, s3Key: s3Key, filePath: filePath, complete: complete)
-	    /*                     
+	    downloadFile(s3Bucket: s3Bucket, s3Key: s3Key, filePath: filePath, complete: complete)                    
         let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) -> Void in
             DispatchQueue.main.async(execute: {
                 if let err = error {
                     print("ERROR in s3.downloadZipFile \(s3Bucket) \(s3Key) Error: \(err)")
-                    complete(error)
-                } else if (data != nil) {
-                    let tempURL = URL(fileURLWithPath: NSTemporaryDirectory() + "/" + NSUUID().uuidString)
+                    complete(err)
+                } else {
                     do {
-                        try data!.write(to: tempURL, options: Data.WritingOptions.atomic)
-                        let unzipped = self.unzip(sourceFile: tempURL.absoluteString,
-                                                  targetDir: tempURL.absoluteString)
-                        print("Unzip succeeded? \(unzipped)")
-                        // locate file in the tempURL directory
-                        // move the file to filePath
-                        let destUrl = URL(fileURLWithPath: NSHomeDirectory() + filePath)
-                        let fileManager = FileManager.default
-                        try fileManager.moveItem(at: tempURL, to: destUrl)
+	                    // save the zipped data to a file
+	                    let tempZipURL = URL(fileURLWithPath: NSTemporaryDirectory() + NSUUID().uuidString + ".zip")
+						print("temp URL to store file \(tempZipURL)")
+                        try data?.write(to: tempZipURL, options: Data.WritingOptions.atomic)
+                        
+                        // unzip zip file
+                        let tempDirURL = URL(fileURLWithPath: NSTemporaryDirectory())
+                        try self.unzip(sourceFile: tempZipURL, targetDir: tempDirURL)
+                        
+                        // identify the unzipped file
+						let filename = filePath.lastPathComponent
+						let unzippedURL = URL(fileURLWithPath: NSTemporaryDirectory() + filename)
+						print("location of unzipped file \(unzippedURL)")
+						
+						// remove unzipped file if it already exists
+						let fileManager = FileManager.default
+						if (try filePath.checkPromisedItemIsReachable()) {
+							try fileManager.removeItem(at: filePath)
+						}
+			
+						// move unzipped file to destination
+						print("Before move item")
+                        try fileManager.moveItem(at: unzippedURL, to: filePath)
                         print("SUCCESS in s3.downloadZipFile \(s3Bucket) \(s3Key)")
                         complete(nil)
-                    } catch {
-                        print("File IO Error in s3.downloadZipFile \(s3Bucket) \(s3Key)")
-                        complete(nil) // pass error here, if I knew how to catch or create one.
+                    } catch let error {
+	                    print("Error \(error)")
+                        print("File IO Error in s3.downloadZipFile \(s3Bucket) \(s3Key)  \(error.localizedDescription)")
+                        complete(error)
                     }
-                } else {
-                    print("NO ERROR in s3.downloadZipFile and NO DATA \(s3Bucket) \(s3Key)") // add error if poss
-                    complete(nil)
                 }
             })
         }
         download(s3Bucket: s3Bucket, s3Key: s3Key, completionHandler: completionHandler)
-        */
     }
     /**
     * Internal getObject method
