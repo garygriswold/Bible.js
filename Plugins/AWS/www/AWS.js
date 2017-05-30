@@ -123,13 +123,13 @@ exports.uploadFile = function(s3Bucket, s3Key, filePath, contentType, callback) 
     }, "AWS", "uploadFile", [s3Bucket, s3Key, filePath, contentType]);
 };
 
-exports.zip = function(sourceFile, targetDir, callback) {
+exports.zip = function(sourceFile, targetFile, callback) {
     exec(function() { 
 	    callback(true); 
 	}, function(error) {
 	    console.log("ERROR: AWS.zip " + error);
 	    callback(false);
-    }, "AWS", "zip", [sourceFile, targetDir]);
+    }, "AWS", "zip", [sourceFile, targetFile]);
 };
 
 exports.unzip = function(sourceFile, targetDir, callback) {

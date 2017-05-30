@@ -97,6 +97,7 @@
     
     @objc(downloadFile:) 
     func downloadFile(command: CDVInvokedUrlCommand) {
+	    print("Documents \(NSHomeDirectory())") 
 	    let filePath: String = command.arguments[2] as? String ?? ""
 	    awsS3.downloadFile(
 			s3Bucket: command.arguments[0] as? String ?? "",
@@ -115,7 +116,7 @@
     }
     
     @objc(downloadZipFile:) 
-    func downloadZipFile(command: CDVInvokedUrlCommand) {    
+    func downloadZipFile(command: CDVInvokedUrlCommand) { 
 	    let filePath: String = command.arguments[2] as? String ?? ""
 	    awsS3.downloadZipFile(
 			s3Bucket: command.arguments[0] as? String ?? "",
@@ -210,11 +211,41 @@
     
 	@objc(zip:)
 	func zip(command: CDVInvokedUrlCommand) {
-		
+		print("Documents \(NSHomeDirectory())")
+		var result: CDVPluginResult
+		let sourceFile = command.arguments[0] as? String ?? ""
+		let targetFile = command.arguments[1] as? String ?? ""
+		do {
+			try awsS3.zip(
+				sourceFile: URL(fileURLWithPath: NSHomeDirectory() + sourceFile),
+				targetFile: URL(fileURLWithPath: NSHomeDirectory() + targetFile)
+			)
+			result = CDVPluginResult(status: CDVCommandStatus_OK)
+		} catch let error as ZipError {
+	        result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.description + " " + sourceFile)
+		} catch let error {
+			result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.localizedDescription + " " + sourceFile)
+		}
+		self.commandDelegate!.send(result, callbackId: command.callbackId)
 	}
 	
 	@objc(unzip:)
 	func unzip(command: CDVInvokedUrlCommand) {
-		
+		print("Documents \(NSHomeDirectory())")
+		var result: CDVPluginResult
+		let sourceFile = command.arguments[0] as? String ?? ""
+		let targetDir = command.arguments[1] as? String ?? ""
+		do {
+			try awsS3.unzip(
+				sourceFile: URL(fileURLWithPath: NSHomeDirectory() + sourceFile),
+				targetDir: URL(fileURLWithPath: NSHomeDirectory() + targetDir)
+			)
+			result = CDVPluginResult(status: CDVCommandStatus_OK)
+		} catch let error as ZipError {
+			result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.description + " " + sourceFile)
+        } catch let error as Error {
+            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.localizedDescription + " " + sourceFile)
+        }
+		self.commandDelegate!.send(result, callbackId: command.callbackId)
 	}			
 }		

@@ -65,9 +65,17 @@
 		<source-file src="src/ios/SS_AWS/SS_AWSS3PreSignedURL.m" />
 		<header-file src="src/ios/SS_AWS/SS_AWSS3TransferUtility.h" />
 		<source-file src="src/ios/SS_AWS/SS_AWSS3TransferUtility.m" />
+		<source-file src="src/ios/Zip/Zip.swift" />
+		<source-file src="src/ios/Zip/ZipUtilities.swift" />
+		<header-file src="src/ios/Zip/minizip/crypt.h" target-dir="minizip" />
+		<header-file src="src/ios/Zip/minizip/ioapi.h" target-dir="minizip" />
+		<header-file src="src/ios/Zip/minizip/unzip.h" target-dir="minizip" />
+		<header-file src="src/ios/Zip/minizip/zip.h" target-dir="minizip" />
+		<source-file src="src/ios/Zip/minizip/ioapi.c" target-dir="minizip" />
+		<source-file src="src/ios/Zip/minizip/unzip.c" target-dir="minizip" />
+		<source-file src="src/ios/Zip/minizip/zip.c" target-dir="minizip" />			
 		<!-- These frameworks need to be added to the project as Embedded Binaries
-		<framework src="src/ios/libs/AWSCore.framework" />
-		<framework src="src/ios/libs/AWSS3.framework" /> -->
+		<framework src="src/ios/libs/AWSCore.framework" /> -->
 	</platform>
 
 </plugin>

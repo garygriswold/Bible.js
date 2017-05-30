@@ -257,21 +257,18 @@ public class AwsS3 {
     // Zip Functions
     /////////////////////////////////////////////////////////////////////////
     /**
-     * Zip Utility for use on files.
+     * Zip Utility for zipping a single file. Notice that the Zip.zipFiles func
+     * used does have the ability to handle multiple input files.
      */
-    func zip(sourceFile: String, targetDir: String) -> Bool {
-        //let done = SSZipArchive.createZipFile(atPath: sourceFile, withContentsOfDirectory: targetDir)
-        //(BOOL)createZipFileAtPath:(NSString *)path withContentsOfDirectory:(NSString *)directoryPath;
-        let done = false
-        return done
+    func zip(sourceFile: URL, targetFile: URL) throws -> Void {
+			try Zip.zipFiles(paths: [sourceFile], zipFilePath: targetFile,
+			                 password: nil, progress: nil)
     }
     /**
      * UnZip Utility for use on files.
      */
-    func unzip(sourceFile: String, targetDir: String) -> Bool {
-        //let done = SSZipArchive.unzipFile(atPath: sourceFile, toDestination: targetDir)
-        //print("DID unzip \(done)")
-        let done = false
-        return done
+    func unzip(sourceFile: URL, targetDir: URL) throws -> Void {
+	    try Zip.unzipFile(sourceFile, destination: targetDir, overwrite: true,
+	    	              password: nil, progress: nil)
     }
 }
