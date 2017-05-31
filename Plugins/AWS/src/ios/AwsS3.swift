@@ -242,7 +242,6 @@ public class AwsS3 {
     func uploadFile(s3Bucket: String, s3Key: String, filePath: URL, contentType: String,
                     complete: @escaping (_ error: Error?) -> Void) {
         do {
-            // Uncertain what .uncached means and if entry is best choice.
             let data = try Data(contentsOf: filePath, options: Data.ReadingOptions.uncached)
             uploadData(s3Bucket: s3Bucket, s3Key: s3Key, data: data, contentType: contentType,
                        complete: complete)
