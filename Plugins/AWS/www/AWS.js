@@ -11,14 +11,14 @@
 var exec = require('cordova/exec');
 
 exports.echo1 = function(message, callback) {
-	console.log("INSIDE echo1");
+	console.log("AWS.echo1 " + message);
 	callback(message);	
 };
 
 exports.echo2 = function(message, callback) {
 	console.log("INSIDE echo2");
 	exec(callback, function(error) {
-		console.log("ERROR in echo2 " + error);
+		AWS.logError("echo2", error, message, null, null);
 		callback(error);
 	}, "AWS", "echo2", [message]);	
 };
@@ -26,7 +26,7 @@ exports.echo2 = function(message, callback) {
 exports.echo3 = function(message, callback) {
 	console.log("INSIDE echo3");
 	exec(callback, function(error) {
-		console.log("ERROR in echo3 " + error);
+		AWS.logError("echo3", error, message, null, null);
 		callback(error);
 	}, "AWS", "echo3", [message]);	
 };
@@ -43,28 +43,28 @@ exports.initialize = function(callback) {
 
 exports.preSignedUrlGET = function(s3Bucket, s3Key, expires, callback) {
     exec(callback, function(error) {
-	    console.log("ERROR: AWS.preSignedUrlGET " + error);
+	    AWS.logError("preSignedUrlGET", error, s3Bucket, s3Key, null);
 	    callback(null);
     }, "AWS", "preSignedUrlGET", [s3Bucket, s3Key, expires]);
 };
 
 exports.preSignedUrlPUT = function(s3Bucket, s3Key, expires, contentType, callback) {
     exec(callback, function(error) {
-	    console.log("ERROR: AWS.preSignedUrlPUT " + error);
+	    AWS.logError("preSignedUrlPUT", error, s3Bucket, s3Key, null);
 	    callback(null);		    
     }, "AWS", "preSignedUrlPUT", [s3Bucket, s3Key, expires, contentType]);
 };
 
 exports.downloadText = function(s3Bucket, s3Key, callback) {
     exec(callback, function(error) {
-	    console.log("ERROR: AWS.downloadText " + error);
+		AWS.logError("downloadText", error, s3Bucket, s3Key, null);
 	    callback(null);			    
     }, "AWS", "downloadText", [s3Bucket, s3Key]);
 };
 
 exports.downloadData = function(s3Bucket, s3Key, callback) {
     exec(callback, function(error) {
-	    console.log("ERROR: AWS.downloadData " + error);
+	    AWS.logError("downloadData", error, s3Bucket, s3Key, null);
 	    callback(null);			    
     }, "AWS", "downloadData", [s3Bucket, s3Key]);
 };
@@ -73,7 +73,7 @@ exports.downloadFile = function(s3Bucket, s3Key, filePath, callback) {
     exec(function() {
 	    callback(true);
 	}, function(error) {
-	    console.log("ERROR: AWS.downloadFile " + error);
+		AWS.logError("downloadFile", error, s3Bucket, s3Key, filePath);
 	    callback(false);			    
     }, "AWS", "downloadFile", [s3Bucket, s3Key, filePath]);
 };
@@ -82,7 +82,7 @@ exports.downloadZipFile = function(s3Bucket, s3Key, filePath, callback) {
     exec(function() {
 	    callback(true);
 	},  function(error) {
-	    console.log("ERROR: AWS.downloadZipFile " + error);
+		AWS.logError("downloadZipFile", error, s3Bucket, s3Key, filePath);
 	    callback(false);			    
     }, "AWS", "downloadZipFile", [s3Bucket, s3Key, filePath]);
 };
@@ -91,7 +91,7 @@ exports.uploadVideoAnalytics = function(sessionId, timestamp, data, callback) {
     exec(function() {
 	    callback(true);
 	}, function(error) {
-	    console.log("ERROR: AWS.uploadVideoAnalytics " + error);
+		AWS.logError("uploadVideoAnalytics", error, sessionId, timestamp, null);
 	    callback(false);				
 	}, "AWS", "uploadVideoAnalytics", [sessionId, timestamp, data]);
 };
@@ -100,7 +100,7 @@ exports.uploadText = function(s3Bucket, s3Key, data, callback) {
     exec(function() {
 	    callback(true);
 	}, function(error) {
-	    console.log("ERROR: AWS.uploadText " + error);
+		AWS.logError("uploadText", error, s3Bucket, s3Key, null);
 	    callback(false);		
 	}, "AWS", "uploadText", [s3Bucket, s3Key, data]);
 };
@@ -109,7 +109,7 @@ exports.uploadData = function(s3Bucket, s3Key, data, contentType, callback) {
     exec(function() {
 	    callback(true);
 	}, function(error) {
-	    console.log("ERROR: AWS.uploadData " + error);
+		AWS.logError("uploadData", error, s3Bucket, s3Key, null);
 	    callback(false);			
 	}, "AWS", "uploadData", [s3Bucket, s3Key, data, contentType]);
 };
@@ -118,7 +118,7 @@ exports.uploadFile = function(s3Bucket, s3Key, filePath, contentType, callback) 
     exec(function() {
 	    callback(true);
     }, function(error) {
-	    console.log("ERROR: AWS.uploadFile " + error);
+	    AWS.logError("uploadFile", error, s3Bucket, s3Key, filePath);
 	    callback(false);		    
     }, "AWS", "uploadFile", [s3Bucket, s3Key, filePath, contentType]);
 };
@@ -127,7 +127,7 @@ exports.zip = function(sourceFile, targetFile, callback) {
     exec(function() { 
 	    callback(true); 
 	}, function(error) {
-	    console.log("ERROR: AWS.zip " + error);
+	    console.log("ERROR: AWS.zip " + sourceFile + " " + error);
 	    callback(false);
     }, "AWS", "zip", [sourceFile, targetFile]);
 };
@@ -136,7 +136,17 @@ exports.unzip = function(sourceFile, targetDir, callback) {
     exec(function() {
 	    callback(true);
 	}, function(error) {
-	    console.log("ERROR: AWS.unzip " + error);
+	    console.log("ERROR: AWS.unzip " + sourceFile + " " + error);
 	    callback(false);		    
     }, "AWS", "unzip", [sourceFile, targetDir]);
+};
+
+exports.logError = function(method, error, s3Bucket, s3Key, filePath) {
+	var msg = ["\nERROR: AWS."];
+	msg.push(method);
+	if (s3Bucket) msg.push(" " + s3Bucket);
+	if (s3Key) msg.push("." + s3Key);
+	if (filePath) msg.push(" " + filePath);
+	msg.push(" -> " + error);
+	console.log(msg.join(""));	
 };

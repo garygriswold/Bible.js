@@ -7,7 +7,6 @@
 //
 
 import Foundation
-//import AWSS3
 
 public class AwsS3 {
     
@@ -128,9 +127,9 @@ public class AwsS3 {
                         try data?.write(to: filePath, options: Data.WritingOptions.atomic)
                         print("SUCCESS in s3.downloadFile \(s3Bucket) \(s3Key)")
                         complete(nil)
-                    } catch {
-                        print("File IO Error in s3.downloadFile \(s3Bucket) \(s3Key)")
-                        complete(nil) // pass error here, if I knew how to catch or create one.
+                    } catch let cotError {
+                        print("File IO Error in s3.downloadFile \(s3Bucket) \(s3Key) \(cotError)")
+                        complete(cotError) // pass error here, if I knew how to catch or create one.
                     }
                 }
             })
@@ -142,7 +141,7 @@ public class AwsS3 {
     * TransferUtility.fileDownload because its error reporting is poor.
     */
     func downloadZipFile(s3Bucket: String, s3Key: String, filePath: URL,
-                         complete: @escaping (_ error:Error?) -> Void) {
+                         complete: @escaping (_ error:Error?) -> Void) {               
 	    downloadFile(s3Bucket: s3Bucket, s3Key: s3Key, filePath: filePath, complete: complete)                    
         let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) -> Void in
             DispatchQueue.main.async(execute: {
@@ -150,9 +149,11 @@ public class AwsS3 {
                     print("ERROR in s3.downloadZipFile \(s3Bucket) \(s3Key) Error: \(err)")
                     complete(err)
                 } else {
+	               	let fileManager = FileManager.default  
+	               	var tempZipURL: URL
                     do {
 	                    // save the zipped data to a file
-	                    let tempZipURL = URL(fileURLWithPath: NSTemporaryDirectory() + NSUUID().uuidString + ".zip")
+	                    tempZipURL = URL(fileURLWithPath: NSTemporaryDirectory() + NSUUID().uuidString + ".zip")
 						print("temp URL to store file \(tempZipURL)")
                         try data?.write(to: tempZipURL, options: Data.WritingOptions.atomic)
                         
@@ -166,7 +167,6 @@ public class AwsS3 {
 						print("location of unzipped file \(unzippedURL)")
 						
 						// remove unzipped file if it already exists
-						let fileManager = FileManager.default
 						if (try filePath.checkPromisedItemIsReachable()) {
 							try fileManager.removeItem(at: filePath)
 						}
@@ -176,10 +176,14 @@ public class AwsS3 {
                         try fileManager.moveItem(at: unzippedURL, to: filePath)
                         print("SUCCESS in s3.downloadZipFile \(s3Bucket) \(s3Key)")
                         complete(nil)
-                    } catch let error {
-	                    print("Error \(error)")
-                        print("File IO Error in s3.downloadZipFile \(s3Bucket) \(s3Key)  \(error.localizedDescription)")
-                        complete(error)
+                    } catch let cotError {
+	                    print("ERROR in s3.downloadZipFile \(s3Bucket) \(s3Key) Error: \(cotError)")
+                        complete(cotError)
+                    }
+                    do {
+	                    try fileManager.removeItem(at: tempZipURL)
+                    } catch let cotError2 {
+	                    print("Deletion of tempZipFile Failed \(cotError2.localizedDescription)")
                     }
                 }
             })
@@ -253,10 +257,9 @@ public class AwsS3 {
             let data = try Data(contentsOf: filePath, options: Data.ReadingOptions.uncached)
             uploadData(s3Bucket: s3Bucket, s3Key: s3Key, data: data, contentType: contentType,
                        complete: complete)
-        } catch {
-            // Can I capture error here, and use it in message and complete
-            print("ERROR in s3.uploadFile, while reading file \(s3Bucket) \(s3Key)")
-            complete(nil)
+        } catch let cotError {
+            print("ERROR in s3.uploadFile, while reading file \(s3Bucket) \(s3Key) \(cotError.localizedDescription)")
+            complete(cotError)
         }
     }
     /////////////////////////////////////////////////////////////////////////
