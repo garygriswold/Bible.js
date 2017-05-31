@@ -91,7 +91,7 @@ public class AwsS3 {
                 complete(error, datastring)
             })
         }
-        download(s3Bucket: s3Bucket, s3Key: s3Key, completionHandler: completionHandler)
+		self.transfer.downloadData(fromBucket: s3Bucket, key: s3Key, expression: nil, completionHandler: completionHandler)
     }
     /**
     * Download Binary object to Data, receiving code might need to convert it needed form
@@ -108,7 +108,7 @@ public class AwsS3 {
                 complete(error, data)
             })
         }
-        download(s3Bucket: s3Bucket, s3Key: s3Key, completionHandler: completionHandler)
+		self.transfer.downloadData(fromBucket: s3Bucket, key: s3Key, expression: nil, completionHandler: completionHandler)
     } 
     /**
     * Download File.  This works for binary and text files. This method does not use
@@ -128,21 +128,21 @@ public class AwsS3 {
                         print("SUCCESS in s3.downloadFile \(s3Bucket) \(s3Key)")
                         complete(nil)
                     } catch let cotError {
-                        print("File IO Error in s3.downloadFile \(s3Bucket) \(s3Key) \(cotError)")
+                        print("Error in s3.downloadFile \(s3Bucket) \(s3Key) \(cotError)")
                         complete(cotError) // pass error here, if I knew how to catch or create one.
                     }
                 }
             })
         }
-        download(s3Bucket: s3Bucket, s3Key: s3Key, completionHandler: completionHandler)
+        self.transfer.downloadData(fromBucket: s3Bucket, key: s3Key, expression: nil, completionHandler: completionHandler)
+        //.continueWith has been dropped, because it did not report errors
     }   
     /**
     * Download zip file and unzip it.  Like Download File this does not use 
     * TransferUtility.fileDownload because its error reporting is poor.
     */
     func downloadZipFile(s3Bucket: String, s3Key: String, filePath: URL,
-                         complete: @escaping (_ error:Error?) -> Void) {               
-	    downloadFile(s3Bucket: s3Bucket, s3Key: s3Key, filePath: filePath, complete: complete)                    
+                         complete: @escaping (_ error:Error?) -> Void) {                   
         let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) -> Void in
             DispatchQueue.main.async(execute: {
                 if let err = error {
@@ -188,19 +188,8 @@ public class AwsS3 {
                 }
             })
         }
-        download(s3Bucket: s3Bucket, s3Key: s3Key, completionHandler: completionHandler)
-    }
-    /**
-    * Internal getObject method
-    */
-    private func download(s3Bucket: String, s3Key: String,
-                          completionHandler: @escaping AWSS3TransferUtilityDownloadCompletionHandlerBlock) {
-        self.transfer.downloadData(
-            fromBucket: s3Bucket,
-            key: s3Key,
-            expression: nil,
-            completionHandler: completionHandler)
-        //.continueWith has been dropped, because it did not report errors
+        self.transfer.downloadData(fromBucket: s3Bucket, key: s3Key, expression: nil, completionHandler: completionHandler)
+        //.continueWith has been dropped, because it did not report errors        
     }
     /////////////////////////////////////////////////////////////////////////
     // Upload Functions
