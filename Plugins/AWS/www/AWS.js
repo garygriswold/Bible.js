@@ -31,14 +31,13 @@ exports.echo3 = function(message, callback) {
 	}, "AWS", "echo3", [message]);	
 };
 
-//// This is not used yet
-exports.initialize = function(callback) {
+exports.initialize = function(regionName, callback) {
 	exec(function() {
 		callback(true);
 	}, function(error) {
 		console.log("ERROR: AWS.initialize " + error);
 		callback(false);
-	}, "AWS", "initialize", []);
+	}, "AWS", "initialize", [regionName]);
 };
 
 exports.preSignedUrlGET = function(s3Bucket, s3Key, expires, callback) {

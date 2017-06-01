@@ -12,11 +12,24 @@
 */
 @objc(AWS) class AWS : CDVPlugin {
 	
-	var awsS3: AwsS3 = AwsS3()  // I don't see this constructor is ever executed
+	static var regionType: AWSRegionType = AWSRegionType.USEast1
 	
-    override func pluginInitialize() {
-        super.pluginInitialize()
-        awsS3 = AwsS3()
+	var awsS3: AwsS3 = AwsS3(region: regionType)  // I don't see this constructor is ever executed
+								// but if it does get executed, will it crash AwsS3?
+    
+    @objc(initialize:)
+    func initialize(command:  CDVInvokedUrlCommand) {
+        let regionName = command.arguments[0] as? String ?? ""
+        let type = regionName.aws_regionTypeValue()
+        var result: CDVPluginResult
+        if (type != AWSRegionType.Unknown) {
+            AWS.regionType = type
+            result = CDVPluginResult(status: CDVCommandStatus_OK)
+        } else {
+            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Unknown Region: " + regionName)
+        }
+        self.awsS3 = AwsS3(region: AWS.regionType)
+        self.commandDelegate!.send(result, callbackId: command.callbackId)
     }
 	
 	@objc(echo2:) 
@@ -243,7 +256,7 @@
 			result = CDVPluginResult(status: CDVCommandStatus_OK)
 		} catch let error as ZipError {
 			result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.description + " " + sourceFile)
-        } catch let error as Error {
+        } catch let error {
             result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.localizedDescription + " " + sourceFile)
         }
 		self.commandDelegate!.send(result, callbackId: command.callbackId)

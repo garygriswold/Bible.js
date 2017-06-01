@@ -21,7 +21,7 @@ public class AwsS3UnitTest {
     }
     
     func testPresignedGET() {
-        let s3 = AwsS3()
+        let s3 = AwsS3(region: AWSRegionType.USWest2)
         s3.preSignedUrlGET(s3Bucket: "shortsands", s3Key: "KJVPD.db.zip", expires: 3600,
                            complete: {
                             url in print("computed GET URL \(String(describing: url))")
@@ -45,7 +45,7 @@ public class AwsS3UnitTest {
     }
     
     func testUploadData() {
-        let s3 = AwsS3()
+        let s3 = AwsS3(region: AWSRegionType.USWest2)
         let message = "Hello World"
         let data = message.data(using: String.Encoding.utf8)
         s3.uploadData(s3Bucket: "shortsands", s3Key: "hello1", data: data!, contentType: "text/plain",
@@ -69,13 +69,13 @@ public class AwsS3UnitTest {
     }
     
     func testDownloadData() {
-        let s3 = AwsS3()
+        let s3 = AwsS3(region: AWSRegionType.USWest2)
         s3.downloadText(s3Bucket: "shortsands", s3Key: "hello1",
                         complete: {error, data in print("DOWNLOADED err \(String(describing: error))  data \(data)")})
     }
      
     func testDownloadFile() {
-        let s3 = AwsS3()
+        let s3 = AwsS3(region: AWSRegionType.USWest2)
         let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db.zip")
         s3.downloadFile(s3Bucket: "shortsands", s3Key: "WEB.db.zip", filePath: filePath1,
                         complete: { err in print("I RECEIVED testDownloadFile CALLBACK \(String(describing: err))")})
@@ -86,14 +86,14 @@ public class AwsS3UnitTest {
     }
     
     func testDownloadZipFile() {
-        let s3 = AwsS3()
+        let s3 = AwsS3(region: AWSRegionType.USWest2)
         let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db")
         s3.downloadZipFile(s3Bucket: "shortsands", s3Key: "WEB.db.zip", filePath: filePath1,
                            complete: { err in print("I RECEIVED testDownloadZipFile CALLBACK \(String(describing: err))")})
     }
     
     func testUploadFile() {
-        let s3 = AwsS3()
+        let s3 = AwsS3(region: AWSRegionType.USWest2)
         let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/MichaelMark.jpg")
         s3.uploadFile(s3Bucket: "shortsands", s3Key: "uploadFile1", filePath: filePath1,
                       contentType: "image/jpg",
@@ -111,7 +111,7 @@ public class AwsS3UnitTest {
     }
     
     func testZipUnzip() {
-        let s3 = AwsS3()
+        let s3 = AwsS3(region: AWSRegionType.USWest2)
 //        s3.zip(sourceFile: "/Documents/ZIPTEST.db", targetFile: "/Documents/ZIPTEST.db.zip")
 //        s3.unzip(sourceFile: "/Documents/ZIPTEST.db.zip", targetFile: "/Documents/ZIPTEST_OUT.db")
         
