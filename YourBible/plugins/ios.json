@@ -7,9 +7,6 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-buildinfo": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },

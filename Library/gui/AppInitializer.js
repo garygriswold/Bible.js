@@ -12,6 +12,7 @@ function AppInitializer() {
 }
 AppInitializer.prototype.begin = function() {
 	var that = this;
+	console.log("AppInitializer.begin BibleAppConfig.versionCode = ", BibleAppConfig.versionCode);
 	var settingStorage = new SettingStorage();
 	deviceSettings.locale(function(locale, langCode, scriptCode, countryCode) {
 		console.log('user locale ', locale, langCode, countryCode);
@@ -72,9 +73,10 @@ AppInitializer.prototype.begin = function() {
 			}
 			settingStorage.setCurrentVersion(versionFilename);
 			settingStorage.setInstalledVersion(currBible.code, versionFilename, currBible.bibleVersion);
+			console.log("Begin AppViewController");
 			that.controller = new AppViewController(currBible, settingStorage);
 			that.controller.begin();
-			console.log('*** DID enable handlers ALL');
+			console.log('End AppViewController.begin');
 			enableHandlersExcept('NONE');		
 		});
 	}

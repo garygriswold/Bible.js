@@ -5,6 +5,7 @@
 * It also contains all of the custom event handler.  This is so they are
 * guaranteed to only be created once, even when there are multiple
 */
+
 function AppInitializer() {
 	this.controller = null;
 	this.langPrefCode = null;
@@ -13,15 +14,16 @@ function AppInitializer() {
 }
 AppInitializer.prototype.begin = function() {
 	var that = this;
+	console.log("AppInitializer.begin BibleAppConfig.versionCode = ", BibleAppConfig.versionCode);
 	var settingStorage = new SettingStorage();
 	deviceSettings.locale(function(locale, langCode, scriptCode, countryCode) {
 		console.log('user locale ', locale, langCode, countryCode);
 		that.langPrefCode = langCode;
 		that.countryCode = countryCode;
 		var appUpdater = new AppUpdater(settingStorage);
-		console.log('START APP UPDATER');
+		console.log('START APP UPDATER ', new Date().getTime());
 		appUpdater.doUpdate(function() {
-			console.log('DONE APP UPDATER');
+			console.log('DONE APP UPDATER ', new Date().getTime());
 		    settingStorage.getCurrentVersion(function(versionFilename) {
 			    if (versionFilename) {
 				    // Process with User's Version
@@ -65,7 +67,7 @@ AppInitializer.prototype.begin = function() {
 	});
 		
 	function changeVersionHandler(versionFilename) {
-		console.log('CHANGE VERSION TO', versionFilename);
+		console.log('CHANGE VERSION TO', versionFilename, new Date().getTime());
 		var currBible = new BibleVersion(that.langPrefCode, that.countryCode);
 		currBible.fill(versionFilename, function() {
 			if (that.controller) {
@@ -73,9 +75,10 @@ AppInitializer.prototype.begin = function() {
 			}
 			settingStorage.setCurrentVersion(versionFilename);
 			settingStorage.setInstalledVersion(currBible.code, versionFilename, currBible.bibleVersion);
+			console.log("Begin AppViewController", new Date().getTime());
 			that.controller = new AppViewController(currBible, settingStorage);
 			that.controller.begin();
-			console.log('*** DID enable handlers ALL');
+			console.log('*** DID enable handlers ALL', new Date().getTime());
 			enableHandlersExcept('NONE');		
 		});
 	}
@@ -1646,7 +1649,7 @@ VersionsView.prototype.buildCountriesList = function() {
 			}
 		}
 		that.dom.addNode(root, 'p', 'shortsands', 'Your Bible by Short Sands, LLC. support@shortsands.com, version: ' + 
-					BuildInfo.version);
+					BibleAppConfig.versionCode);
 		that.rootNode.appendChild(root);
 		that.buildVersionList(that.defaultCountryNode);
 		that.root = root;
@@ -3474,7 +3477,7 @@ AppUpdater.prototype.doUpdate = function(callback) {
 	
 	function checkIfUpdate(callback) {
 		that.settingStorage.getAppVersion(function(appVersion) {
-			callback(BuildInfo.version !== appVersion);
+			callback(BibleAppConfig.versionCode !== appVersion);
 		});
 	}
 	
@@ -3640,7 +3643,7 @@ AppUpdater.prototype.doUpdate = function(callback) {
 	}
 	
 	function updateVersion() {
-		that.settingStorage.setAppVersion(BuildInfo.version);
+		that.settingStorage.setAppVersion(BibleAppConfig.versionCode);
 	}
 };
 /**

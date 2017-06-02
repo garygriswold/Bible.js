@@ -72,5 +72,7 @@ cat ../Library/video/VideoListView.js >> js/BibleApp.js
 cat ../Library/video/VideoMetaData.js >> js/BibleApp.js
 cat ../Library/video/VideoTableAdapter.js >> js/BibleApp.js
 
+node ../Library/util/BibleAppConfigWriter.js js/BibleAppConfig.js
+
 cd ../BibleAppNW
 npm start

@@ -69,6 +69,8 @@ cat ../Library/video/VideoListView.js >> www/js/BibleApp.js
 cat ../Library/video/VideoMetaData.js >> www/js/BibleApp.js
 cat ../Library/video/VideoTableAdapter.js >> www/js/BibleApp.js
 
+node ../Library/util/BibleAppConfigWriter.js www/js/BibleAppConfig.js
+
 if [ -z "$1" ]; then
 	cordova run ios --device
 else

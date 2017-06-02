@@ -112,7 +112,7 @@ AppUpdater.prototype.doUpdate = function(callback) {
 	
 	function checkIfUpdate(callback) {
 		that.settingStorage.getAppVersion(function(appVersion) {
-			callback(BuildInfo.version !== appVersion);
+			callback(BibleAppConfig.versionCode !== appVersion);
 		});
 	}
 	
@@ -278,6 +278,6 @@ AppUpdater.prototype.doUpdate = function(callback) {
 	}
 	
 	function updateVersion() {
-		that.settingStorage.setAppVersion(BuildInfo.version);
+		that.settingStorage.setAppVersion(BibleAppConfig.versionCode);
 	}
 };

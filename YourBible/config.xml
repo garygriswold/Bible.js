@@ -67,7 +67,6 @@
     <engine name="browser" spec="~4.1.0" />
     <engine name="ios" spec="~4.3.0" />
     <plugin name="com-shortsands-videoplayer" spec="/Users/garygriswold/ShortSands/BibleApp/Plugins/VideoPlayer" />
-    <plugin name="cordova-plugin-buildinfo" spec="~1.1.0" />
     <plugin name="cordova-plugin-console" spec="~1.0.4" />
     <plugin name="cordova-plugin-device" spec="~1.1.3" />
     <plugin name="cordova-plugin-file" spec="~4.3.0" />

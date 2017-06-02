@@ -70,7 +70,7 @@ VersionsView.prototype.buildCountriesList = function() {
 			}
 		}
 		that.dom.addNode(root, 'p', 'shortsands', 'Your Bible by Short Sands, LLC. support@shortsands.com, version: ' + 
-					BuildInfo.version);
+					BibleAppConfig.versionCode);
 		that.rootNode.appendChild(root);
 		that.buildVersionList(that.defaultCountryNode);
 		that.root = root;

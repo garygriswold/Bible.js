@@ -6,6 +6,7 @@ var BuildInfo={version:"unknown"};
 * It also contains all of the custom event handler.  This is so they are
 * guaranteed to only be created once, even when there are multiple
 */
+
 function AppInitializer() {
 	this.controller = null;
 	this.langPrefCode = null;
@@ -14,15 +15,16 @@ function AppInitializer() {
 }
 AppInitializer.prototype.begin = function() {
 	var that = this;
+	console.log("AppInitializer.begin BibleAppConfig.versionCode = ", BibleAppConfig.versionCode);
 	var settingStorage = new SettingStorage();
 	deviceSettings.locale(function(locale, langCode, scriptCode, countryCode) {
 		console.log('user locale ', locale, langCode, countryCode);
 		that.langPrefCode = langCode;
 		that.countryCode = countryCode;
 		var appUpdater = new AppUpdater(settingStorage);
-		console.log('START APP UPDATER');
+		console.log('START APP UPDATER ', new Date().getTime());
 		appUpdater.doUpdate(function() {
-			console.log('DONE APP UPDATER');
+			console.log('DONE APP UPDATER ', new Date().getTime());
 		    settingStorage.getCurrentVersion(function(versionFilename) {
 			    if (versionFilename) {
 				    // Process with User's Version
@@ -66,7 +68,7 @@ AppInitializer.prototype.begin = function() {
 	});
 		
 	function changeVersionHandler(versionFilename) {
-		console.log('CHANGE VERSION TO', versionFilename);
+		console.log('CHANGE VERSION TO', versionFilename, new Date().getTime());
 		var currBible = new BibleVersion(that.langPrefCode, that.countryCode);
 		currBible.fill(versionFilename, function() {
 			if (that.controller) {
@@ -74,9 +76,10 @@ AppInitializer.prototype.begin = function() {
 			}
 			settingStorage.setCurrentVersion(versionFilename);
 			settingStorage.setInstalledVersion(currBible.code, versionFilename, currBible.bibleVersion);
+			console.log("Begin AppViewController", new Date().getTime());
 			that.controller = new AppViewController(currBible, settingStorage);
 			that.controller.begin();
-			console.log('*** DID enable handlers ALL');
+			console.log('*** DID enable handlers ALL', new Date().getTime());
 			enableHandlersExcept('NONE');		
 		});
 	}
@@ -1647,7 +1650,7 @@ VersionsView.prototype.buildCountriesList = function() {
 			}
 		}
 		that.dom.addNode(root, 'p', 'shortsands', 'Your Bible by Short Sands, LLC. support@shortsands.com, version: ' + 
-					BuildInfo.version);
+					BibleAppConfig.versionCode);
 		that.rootNode.appendChild(root);
 		that.buildVersionList(that.defaultCountryNode);
 		that.root = root;
@@ -3475,7 +3478,7 @@ AppUpdater.prototype.doUpdate = function(callback) {
 	
 	function checkIfUpdate(callback) {
 		that.settingStorage.getAppVersion(function(appVersion) {
-			callback(BuildInfo.version !== appVersion);
+			callback(BibleAppConfig.versionCode !== appVersion);
 		});
 	}
 	
@@ -3641,7 +3644,7 @@ AppUpdater.prototype.doUpdate = function(callback) {
 	}
 	
 	function updateVersion() {
-		that.settingStorage.setAppVersion(BuildInfo.version);
+		that.settingStorage.setAppVersion(BibleAppConfig.versionCode);
 	}
 };
 /**
@@ -4465,7 +4468,7 @@ DynamicCSS.prototype.setDirection = function(direction) {
 */
 "use strict";
 function VideoListView(version, videoAdapter) {
-	this.videoIdList = [ 'KOG_OT', 'KOG_NT' ];//, '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
+	this.videoIdList = [ 'KOG_OT', 'KOG_NT', '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
 	this.version = version;
 	this.videoAdapter = videoAdapter;
 	console.log('IN VIDEO VIEW ', 'ctry', this.countryCode, 'sil', this.silCode);
@@ -4629,12 +4632,11 @@ function VideoTableAdapter() {
 	this.className = 'VideoTableAdapter';
 }
 /**
-* NOTE: This method is only counting KOG videos.  This must be changed when the Jesus Film is released.
-* Deprecated and not currently used.
+* Method is not used, because we always show en if nothing else is available.
 */
 VideoTableAdapter.prototype.hasVideos = function(langCode, langPrefCode, callback) {
 	var that = this;
-	var statement = 'SELECT count(*) AS count FROM Video WHERE langCode IN (?,?) AND mediaId like "KOG%"';
+	var statement = 'SELECT count(*) AS count FROM Video WHERE langCode IN (?,?)';
 	this.database.select(statement, [langCode, langPrefCode], function(results) {
 		if (results instanceof IOError) {
 			console.log('SQL Error in VideoTableAdapter.hasVideos', results);
@@ -4670,13 +4672,12 @@ VideoTableAdapter.prototype.selectJesusFilmLanguage = function(countryCode, silC
 	});
 };
 /**
-* NOTE: This method must be prevented from returning Jesus videos.  This must be changed when the Jesus Film is released.
+* 
 */
 VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCode, langPrefCode, callback) {
 	var that = this;
-	var selectList = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL, MP4_1080, MP4_720, MP4_540, MP4_360,' +
-			' longDescription FROM Video';
-	var statement = selectList + ' WHERE languageId IN (?,?) AND mediaId like "KOG%"';
+	var selectList = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL, longDescription FROM Video';
+	var statement = selectList + ' WHERE languageId IN (?,?)';
 	this.database.select(statement, [ languageId, silCode ], function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
@@ -4685,7 +4686,7 @@ VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCod
 			if (results.rows.length > 0) {
 				returnVideoMap(languageId, silCode, results, callback);
 			} else {
-				statement = selectList + ' WHERE langCode IN (?,?) AND mediaId like "KOG%"';
+				statement = selectList + ' WHERE langCode IN (?,?)';
 				that.database.select(statement, [langCode, langPrefCode], function(results) {
 					if (results instanceof IOError) {
 						callback({});
@@ -4693,7 +4694,7 @@ VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCod
 						if (results.rows.length > 0) {
 							returnVideoMap(languageId, silCode, results, callback);
 						} else {
-							statement = selectList + ' WHERE langCode = "en" AND mediaId like "KOG%"';
+							statement = selectList + ' WHERE langCode = "en"';
 							that.database.select(statement, [], function(results) {
 								if (results instanceof IOError) {
 									callback({});
