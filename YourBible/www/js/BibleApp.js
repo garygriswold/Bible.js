@@ -5,7 +5,6 @@
 * It also contains all of the custom event handler.  This is so they are
 * guaranteed to only be created once, even when there are multiple
 */
-
 function AppInitializer() {
 	this.controller = null;
 	this.langPrefCode = null;
@@ -21,9 +20,9 @@ AppInitializer.prototype.begin = function() {
 		that.langPrefCode = langCode;
 		that.countryCode = countryCode;
 		var appUpdater = new AppUpdater(settingStorage);
-		console.log('START APP UPDATER ', new Date().getTime());
+		console.log('START APP UPDATER');
 		appUpdater.doUpdate(function() {
-			console.log('DONE APP UPDATER ', new Date().getTime());
+			console.log('DONE APP UPDATER');
 		    settingStorage.getCurrentVersion(function(versionFilename) {
 			    if (versionFilename) {
 				    // Process with User's Version
@@ -67,7 +66,7 @@ AppInitializer.prototype.begin = function() {
 	});
 		
 	function changeVersionHandler(versionFilename) {
-		console.log('CHANGE VERSION TO', versionFilename, new Date().getTime());
+		console.log('CHANGE VERSION TO', versionFilename);
 		var currBible = new BibleVersion(that.langPrefCode, that.countryCode);
 		currBible.fill(versionFilename, function() {
 			if (that.controller) {
@@ -75,10 +74,10 @@ AppInitializer.prototype.begin = function() {
 			}
 			settingStorage.setCurrentVersion(versionFilename);
 			settingStorage.setInstalledVersion(currBible.code, versionFilename, currBible.bibleVersion);
-			console.log("Begin AppViewController", new Date().getTime());
+			console.log("Begin AppViewController");
 			that.controller = new AppViewController(currBible, settingStorage);
 			that.controller.begin();
-			console.log('*** DID enable handlers ALL', new Date().getTime());
+			console.log('End AppViewController.begin');
 			enableHandlersExcept('NONE');		
 		});
 	}
