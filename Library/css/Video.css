@@ -1,6 +1,7 @@
 #videoRoot {
     position: absolute; /* Needed because settingRoot.style.y is set in AppControllerView */
 	background-color: white;
+	z-index: 20;
 	/*width: 100%; must be set explicity in VideoListView */
 }
 table.videoList {
