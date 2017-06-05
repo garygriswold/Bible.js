@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.amazonaws.services.s3.S3ClientOptions;
 
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
@@ -31,8 +32,14 @@ public class AwsS3 {
     public AwsS3(Context context) {
         super();
         AmazonS3 s3 = new AmazonS3Client(Credentials.AWS_BIBLE_APP);
+        S3ClientOptions options = new S3ClientOptions();
+        options.withPathStyleAccess(true);
+		s3.setS3ClientOptions(options);
         this.transferUtility = new TransferUtility(s3, context);
         // Region is not used here, why is it required in iOS can it be left out
+    }
+    public String echo3(String msg) {
+	    return(msg);
     }
     /////////////////////////////////////////////////////////////////////////
     // URL signing Functions

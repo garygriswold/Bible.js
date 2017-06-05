@@ -17,7 +17,7 @@ import org.json.JSONException;
 /**
 * This class echoes a string called from JavaScript.
 */
-public class AwsS3Plugin extends CordovaPlugin {
+public class AWS extends CordovaPlugin {
 	
 	private AwsS3 awsS3;
 	
@@ -28,10 +28,20 @@ public class AwsS3Plugin extends CordovaPlugin {
 
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-		if (action.equals("initialize")) {
+		if (action.equals("initializeRegion")) {
 			this.awsS3 = new AwsS3(this.cordova.getActivity());
 			callbackContext.success();
+			return true;
 		}
+		else if (action.equals("echo2")) {
+			String msg = args.getString(0);
+			callbackContext.success(msg);
+		}
+		else if (action.equals("echo3")) {
+			String msg = args.getString(0);
+			String response = this.awsS3.echo3(msg);
+			callbackContext.success(response);
+		}	
 	    else if (action.equals("preSignedUrlGET")) {
 	        String s3Bucket = args.getString(0);
 	        String s3Key = args.getString(1);
@@ -48,42 +58,6 @@ public class AwsS3Plugin extends CordovaPlugin {
 	        URL url = this.awsS3.preSignedUrlPUT(s3Bucket, s3Key, expires, contentType);
 			callbackContext.success(url.toExternalForm());
 	        return true;
-		}
-		else if (action.equals("zip")) {
-			String sourcePath = args.getString(0);
-			String targetDir = args.getString(1);
-			final File source = new File(cordova.getActivity().getFilesDir(), sourcePath);
-			final File target = new File(cordova.getActivity().getFilesDir(), targetDir);
-			final CallbackContext ctx = callbackContext;
-			cordova.getThreadPool().execute(new Runnable() {
-            	public void run() {
-	            	try {
-	            		Zip.zip(source, target);
-						ctx.success();
-					} catch(Exception error) {
-						ctx.error("Error in AWS.zip " + error.toString());
-					}
-            	}
-        	});
-			return true;
-		}
-		else if (action.equals("unzip")) {
-			String sourcePath = args.getString(0);
-			String targetDir = args.getString(1);
-			final File source = new File(cordova.getActivity().getFilesDir(), sourcePath);
-			final File target = new File(cordova.getActivity().getFilesDir(), targetDir);
-			final CallbackContext ctx = callbackContext;
-			cordova.getThreadPool().execute(new Runnable() {
-            	public void run() {
-	            	try {
-	            		Zip.unzip(source, target);
-						ctx.success();
-					} catch(Exception error) {
-						ctx.error("Error in AWS.unzip " + error.toString());
-					}
-            	}
-        	});
-			return true;
 		}
 		else if (action.equals("downloadText")) {
 			String s3Bucket = args.getString(0);
@@ -150,6 +124,42 @@ public class AwsS3Plugin extends CordovaPlugin {
 			UploadPluginFileListener listener = new UploadPluginFileListener(callbackContext);
 			this.awsS3.uploadFile(s3Bucket, s3Key, file, listener);
 			return true;			
+		}
+		else if (action.equals("zip")) {
+			String sourcePath = args.getString(0);
+			String targetDir = args.getString(1);
+			final File source = new File(cordova.getActivity().getFilesDir(), sourcePath);
+			final File target = new File(cordova.getActivity().getFilesDir(), targetDir);
+			final CallbackContext ctx = callbackContext;
+			cordova.getThreadPool().execute(new Runnable() {
+            	public void run() {
+	            	try {
+	            		Zip.zip(source, target);
+						ctx.success();
+					} catch(Exception error) {
+						ctx.error("Error in AWS.zip " + error.toString());
+					}
+            	}
+        	});
+			return true;
+		}
+		else if (action.equals("unzip")) {
+			String sourcePath = args.getString(0);
+			String targetDir = args.getString(1);
+			final File source = new File(cordova.getActivity().getFilesDir(), sourcePath);
+			final File target = new File(cordova.getActivity().getFilesDir(), targetDir);
+			final CallbackContext ctx = callbackContext;
+			cordova.getThreadPool().execute(new Runnable() {
+            	public void run() {
+	            	try {
+	            		Zip.unzip(source, target);
+						ctx.success();
+					} catch(Exception error) {
+						ctx.error("Error in AWS.unzip " + error.toString());
+					}
+            	}
+        	});
+			return true;
 		}
 	    return false;
 	}

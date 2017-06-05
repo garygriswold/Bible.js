@@ -14,7 +14,7 @@ exports.initializeRegion = function(regionName, callback) {
 	exec(function() {
 		callback(true);
 	}, function(error) {
-		console.log("ERROR: AWS.initialize " + error);
+		console.log("ERROR: AWS.initializeRegion " + error);
 		callback(false);
 	}, "AWS", "initializeRegion", [regionName]);
 };
