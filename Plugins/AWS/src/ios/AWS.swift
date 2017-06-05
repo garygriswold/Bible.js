@@ -17,8 +17,8 @@
 	var awsS3: AwsS3 = AwsS3(region: regionType)  // I don't see this constructor is ever executed
 								// but if it does get executed, will it crash AwsS3?
     
-    @objc(initialize:)
-    func initialize(command:  CDVInvokedUrlCommand) {
+    @objc(initializeRegion:)
+    func initializeRegion(command:  CDVInvokedUrlCommand) {
         let regionName = command.arguments[0] as? String ?? ""
         let type = regionName.aws_regionTypeValue()
         var result: CDVPluginResult

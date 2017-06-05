@@ -70,5 +70,15 @@ Getting iOS to run
 	Modify Bridging-Header.h to include required things.
 	<appname>/platforms/ios/VideoProto/Bridging-Header.h
 	
+	#import <Cordova/CDV.h>
+
+	#import "SS_AWSS3PreSignedURL.h"
+	#import "SS_AWSS3TransferUtility.h"
+
+	#import "ioapi.h"
+	#import "crypt.h"
+	#import "zip.h"
+	#import "unzip.h"
+	
 
 	

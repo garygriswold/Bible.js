@@ -28,7 +28,7 @@ SS_AWSPresignedURL.m
 Bridging-Header.h
 
 	#import "SS_AWSS3PreSignedURL.h"
-	#import "SS_AWSS3TransferUtility.m"
+	#import "SS_AWSS3TransferUtility.h"
 	
 SS_AWSS3TransferUtility
 -----------------------

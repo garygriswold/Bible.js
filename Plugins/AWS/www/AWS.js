@@ -10,6 +10,15 @@
 "use strict";
 var exec = require('cordova/exec');
 
+exports.initializeRegion = function(regionName, callback) {
+	exec(function() {
+		callback(true);
+	}, function(error) {
+		console.log("ERROR: AWS.initialize " + error);
+		callback(false);
+	}, "AWS", "initializeRegion", [regionName]);
+};
+
 exports.echo1 = function(message, callback) {
 	console.log("AWS.echo1 " + message);
 	callback(message);	
@@ -29,15 +38,6 @@ exports.echo3 = function(message, callback) {
 		AWS.logError("echo3", error, message, null, null);
 		callback(error);
 	}, "AWS", "echo3", [message]);	
-};
-
-exports.initialize = function(regionName, callback) {
-	exec(function() {
-		callback(true);
-	}, function(error) {
-		console.log("ERROR: AWS.initialize " + error);
-		callback(false);
-	}, "AWS", "initialize", [regionName]);
 };
 
 exports.preSignedUrlGET = function(s3Bucket, s3Key, expires, callback) {
