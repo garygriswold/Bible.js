@@ -7,6 +7,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.amazonaws.HttpMethod;
+import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 
@@ -29,10 +30,10 @@ public class AwsS3 {
 	AmazonS3 amazonS3;
     TransferUtility transferUtility;
 
-    public AwsS3(Context context, String endPoint) {
+    public AwsS3(Context context, Region region) {
         super();
         this.amazonS3 = new AmazonS3Client(Credentials.AWS_BIBLE_APP);
-        this.amazonS3.setEndpoint(endPoint);
+        this.amazonS3.setRegion(region);
         S3ClientOptions options = new S3ClientOptions();
         options.withPathStyleAccess(true);
 		this.amazonS3.setS3ClientOptions(options);

@@ -20,7 +20,7 @@
     @objc(initializeRegion:)
     func initializeRegion(command:  CDVInvokedUrlCommand) {
         let regionName = command.arguments[0] as? String ?? ""
-        let type = regionName.aws_regionTypeValue()
+        let type: AWSRegionType = regionName.aws_regionTypeValue()
         var result: CDVPluginResult
         if (type != AWSRegionType.Unknown) {
             AWS.regionType = type

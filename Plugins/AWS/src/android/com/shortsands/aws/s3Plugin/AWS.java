@@ -2,6 +2,10 @@ package com.shortsands.aws.s3Plugin;
 
 import android.util.Log;
 
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.regions.RegionUtils;
+
 import com.shortsands.io.Zip;
 import com.shortsands.aws.s3.AwsS3;
 
@@ -33,10 +37,16 @@ public class AWS extends CordovaPlugin {
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 		if (action.equals("initializeRegion")) {
-			String endPoint = args.getString(0);
-			Log.d(TAG, "endPoint input = " + endPoint);
-	        this.awsS3 = new AwsS3(this.cordova.getActivity(), endPoint);
-	        callbackContext.success();
+			String regionName = args.getString(0);
+			Log.d(TAG, "regionName input = " + regionName);
+			Region region = RegionUtils.getRegion(regionName);
+			if (region == null) {
+				this.awsS3 = new AwsS3(this.cordova.getActivity(), Region.getRegion(Regions.US_EAST_1));
+				callbackContext.error("Unknown region: " + regionName);
+			} else {
+				this.awsS3 = new AwsS3(this.cordova.getActivity(), region);
+				callbackContext.success();
+			}
 	        return true;
 		}
 		else if (action.equals("echo2")) {

@@ -15,7 +15,8 @@ public class AwsS3 {
     private var transfer: AWSS3TransferUtility
     
     init(region: AWSRegionType) {
-        let configuration = AWSServiceConfiguration(region: region,
+	    let endpoint = AWSEndpoint(region: region, service: AWSServiceType.S3, useUnsafeURL: false)!
+        let configuration = AWSServiceConfiguration(region: region, endpoint: endpoint,
                                                     credentialsProvider: Credentials.AWS_BIBLE_APP)
         AWSServiceManager.default().defaultServiceConfiguration = configuration
         //AWSS3TransferUtility.interceptApplication was not set, because we do not need it.
