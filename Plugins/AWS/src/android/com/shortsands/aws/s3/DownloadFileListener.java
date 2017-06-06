@@ -15,9 +15,6 @@ public class DownloadFileListener extends AwsS3AbstractListener {
     public DownloadFileListener() {
         super();
     }
-    public File getFile() {
-        return this.file;
-    }
 
     @Override
     protected void onComplete(int id) {

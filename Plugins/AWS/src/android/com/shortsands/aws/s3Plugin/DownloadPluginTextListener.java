@@ -21,10 +21,7 @@ public class DownloadPluginTextListener extends DownloadTextListener {
     @Override
     protected void onComplete(int id) {
         super.onComplete(id);
-        //String results = FileManager.readTextFully(this.file);
-        //try { this.file.delete(); } catch(Exception e) {}
-        //Log.d(TAG, "Received: " + results);
-        this.callbackContext.success(results);
+        this.callbackContext.success(this.results);
     }
     
     @Override

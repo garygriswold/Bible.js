@@ -107,6 +107,7 @@ public class AwsS3 {
      * Download File.  This works for binary and text files.
      */
     public void downloadFile(String s3Bucket, String s3Key, File file, DownloadFileListener listener) {
+	    listener.setFile(file);
         TransferObserver observer = this.transferUtility.download(s3Bucket, s3Key, file);
         observer.setTransferListener(listener);
     }
@@ -173,6 +174,7 @@ public class AwsS3 {
      */
     public void uploadFile(String s3Bucket, String s3Key, File file, UploadFileListener listener) {
         if (file.exists() && file.isFile()) {
+	        listener.setFile(file);
             TransferObserver observer = this.transferUtility.upload(s3Bucket, s3Key, file);
             observer.setTransferListener(listener);
         } else {

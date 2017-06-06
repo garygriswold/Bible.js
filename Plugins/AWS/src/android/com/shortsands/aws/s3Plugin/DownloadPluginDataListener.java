@@ -20,9 +20,6 @@ public class DownloadPluginDataListener extends DownloadDataListener {
     @Override
     protected void onComplete(int id) {
         super.onComplete(id);
-        //byte[] results = FileManager.readBinaryFully(this.file);
-        //try { this.file.delete(); } catch(Exception e) {}
-        //Log.d(TAG, "Received: " + results);
         this.callbackContext.success(results);
     }
     

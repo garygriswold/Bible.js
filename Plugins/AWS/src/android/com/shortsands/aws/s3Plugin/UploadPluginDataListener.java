@@ -21,7 +21,6 @@ public class UploadPluginDataListener extends UploadDataListener {
     @Override
     protected void onComplete(int id) {
         super.onComplete(id);
-        //if (this.file != null) try { this.file.delete(); } catch(Exception e) {}
         this.callbackContext.success();
     }
     
