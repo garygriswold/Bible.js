@@ -1,5 +1,7 @@
 package com.shortsands.aws.s3Plugin;
 
+import android.util.Log;
+
 import com.shortsands.io.Zip;
 import com.shortsands.aws.s3.AwsS3;
 
@@ -19,6 +21,8 @@ import org.json.JSONException;
 */
 public class AWS extends CordovaPlugin {
 	
+	private static String TAG = "AWS";
+	
 	private AwsS3 awsS3;
 	
 	@Override
@@ -29,9 +33,11 @@ public class AWS extends CordovaPlugin {
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 		if (action.equals("initializeRegion")) {
-			this.awsS3 = new AwsS3(this.cordova.getActivity());
-			callbackContext.success();
-			return true;
+			String endPoint = args.getString(0);
+			Log.d(TAG, "endPoint input = " + endPoint);
+	        this.awsS3 = new AwsS3(this.cordova.getActivity(), endPoint);
+	        callbackContext.success();
+	        return true;
 		}
 		else if (action.equals("echo2")) {
 			String msg = args.getString(0);

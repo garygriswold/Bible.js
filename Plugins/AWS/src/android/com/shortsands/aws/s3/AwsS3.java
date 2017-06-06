@@ -7,8 +7,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.amazonaws.HttpMethod;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.S3ClientOptions;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
@@ -16,7 +16,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 
 import com.shortsands.io.FileManager;
-import com.shortsands.io.Zip;
 
 import java.io.File;
 import java.net.URL;
@@ -27,16 +26,17 @@ public class AwsS3 {
     static String TAG = "AwsS3";
     static String VIDEO_ANALYTICS_BUCKET = "video.analytics.shortsands";
 
+	AmazonS3 amazonS3;
     TransferUtility transferUtility;
 
-    public AwsS3(Context context) {
+    public AwsS3(Context context, String endPoint) {
         super();
-        AmazonS3 s3 = new AmazonS3Client(Credentials.AWS_BIBLE_APP);
+        this.amazonS3 = new AmazonS3Client(Credentials.AWS_BIBLE_APP);
+        this.amazonS3.setEndpoint(endPoint);
         S3ClientOptions options = new S3ClientOptions();
         options.withPathStyleAccess(true);
-		s3.setS3ClientOptions(options);
-        this.transferUtility = new TransferUtility(s3, context);
-        // Region is not used here, why is it required in iOS can it be left out
+		this.amazonS3.setS3ClientOptions(options);
+        this.transferUtility = new TransferUtility(this.amazonS3, context);
     }
     public String echo3(String msg) {
 	    return(msg);
@@ -53,8 +53,7 @@ public class AwsS3 {
         Date expiration = new Date(new Date().getTime() + expires);
         request.withExpiration(expiration);
 
-        AmazonS3 s3client = new AmazonS3Client(Credentials.AWS_BIBLE_APP);
-        URL url = s3client.generatePresignedUrl(request);
+        URL url = this.amazonS3.generatePresignedUrl(request);
         Log.d(TAG, url.toExternalForm());
         return url;
     }
@@ -68,8 +67,7 @@ public class AwsS3 {
         request.withExpiration(expiration);
         request.withContentType(contentType);
 
-        AmazonS3 s3client = new AmazonS3Client(Credentials.AWS_BIBLE_APP);
-        URL url = s3client.generatePresignedUrl(request);
+        URL url = this.amazonS3.generatePresignedUrl(request);
         Log.d(TAG, url.toExternalForm());
         return url;
     }
