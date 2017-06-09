@@ -83,6 +83,7 @@ S3Download.prototype.errorMessage = function(error, message) {
 	process.exit(1);	
 };
 
+/*
 // Unit Test
 var REGIONS = {
 //	"shortsands-as-jp-log": "ap-northeast-1", 	// Tokoyo
@@ -91,6 +92,7 @@ var REGIONS = {
 //	"shortsands-na-va-log": "us-east-1",		// Virginia
 //	"shortsands-oc-au-log": "ap-southeast-2"	// Sydney
 };
+
 
 var download = new S3Download(REGIONS);
 download.begin(function(count) {
@@ -113,3 +115,5 @@ download.begin(function(count) {
 		});
 	}
 });
+
+*/
