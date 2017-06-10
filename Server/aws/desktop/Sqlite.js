@@ -1,4 +1,10 @@
-
+/**
+* This is a general purpose sqlite interface for doing updates to a sqlite database.
+* 1. The constructor opens the database.
+* 2. The execute statement takes an array or arrays.  The outer array is an array of records to
+* be inserted or updated.  The inner array is an array of column values.
+* 3. The close method has an optional callback.
+*/
 "use strict";
 function Sqlite(databaseName, verbose) {
 	this.databaseName = databaseName;

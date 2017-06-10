@@ -1,5 +1,9 @@
-
-
+/**
+* This class handles the task of downloading all Bible download logs, video analytics
+* and audio analytics.  It updates the correct tables with this data, and deletes
+* the S3 objects downloaded once the update is complete.
+* Any error in processing will stop the process immediately.
+*/
 "use strict";
 var downloadController = function(callback) {
 

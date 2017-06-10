@@ -1,4 +1,8 @@
+/**
+* This class processes Bible download log entries and inserts them into the BibleDownload table.
+*/
 
+"use strict";
 const MONTHS = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 
 function InsertDownloadLogs(database) {
