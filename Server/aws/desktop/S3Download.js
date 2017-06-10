@@ -32,10 +32,10 @@ S3Download.prototype.begin = function(callback) { // callback returns length of 
 				if (err) {
 					that.errorMessage(err, "S3DownloadS3.readBucketList");
 				} else {
-					console.log('ENTRIES 1', data);
 					var entries = data.Contents;
 					for (var i=0; i<entries.length; i++) {
 						var item = entries[i];
+						console.log('ENTRY', bucket, item.Key);
 						that.itemList.push({Bucket: bucket, Key: item.Key});
 					}
 					doBuckets(bucketList, callback);
@@ -82,6 +82,8 @@ S3Download.prototype.errorMessage = function(error, message) {
 	console.log('ERROR', message, JSON.stringify(error));
 	process.exit(1);	
 };
+
+module.exports = S3Download;
 
 /*
 // Unit Test

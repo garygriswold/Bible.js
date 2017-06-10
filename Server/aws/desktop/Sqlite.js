@@ -1,7 +1,5 @@
 
-const DATABASE = './TestAnalytics.db';
-const DB_VERBOSE = true;
-
+"use strict";
 function Sqlite(databaseName, verbose) {
 	this.databaseName = databaseName;
 	this.verbose = verbose;
@@ -76,6 +74,8 @@ Sqlite.prototype.errorMessage = function(message, error) {
 	console.log('ERROR', message, JSON.stringify(error));
 	process.exit(1);
 };
+
+module.exports = Sqlite;
 
 /*
 // Unit Test
