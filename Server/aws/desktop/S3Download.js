@@ -69,13 +69,13 @@ S3Download.prototype.deleteObject = function(callback) {
 	var that = this;
 	var item = this.itemList[this.itemListIndex];
 	console.log('DELETE OBJECT ', item.Bucket, item.Key);
-	//this.s3.deleteObject(item, function(err, data) {
-	//	if (err) {
-	//		that.errorMessage(err, "S3Download.delete");
-	//	} else {
+	this.s3.deleteObject(item, function(err, data) {
+		if (err) {
+			that.errorMessage(err, "S3Download.delete");
+		} else {
 			callback();
-	//	}
-	//});	
+		}
+	});	
 };
 
 S3Download.prototype.errorMessage = function(error, message) {

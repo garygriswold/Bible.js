@@ -11,7 +11,7 @@ var downloadController = function(callback) {
 	var InsertDownloadLogs = require('./InsertDownloadLogs.js');
 	var S3Download = require('./S3Download.js');
 	
-	var database = new Sqlite('TestAnalyticsNew.db', true);
+	var database = new Sqlite('Analytics.db', true);
 	var insertLogs = new InsertDownloadLogs(database);
 	
 	const cdnBuckets = require('../../../Library/cdn/Regions.js').REGIONS;
@@ -67,5 +67,5 @@ var downloadController = function(callback) {
 };
 
 downloadController(function() {
-	console.log('DOWN WITH DOWNLOAD');
+	console.log('DONE WITH DOWNLOAD');
 });
