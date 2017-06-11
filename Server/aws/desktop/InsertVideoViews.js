@@ -29,8 +29,9 @@ InsertVideoViews.prototype.insert = function(row, callback) {
 		' appVersion,' +
 		' mediaViewStartingPosition' +
 		' ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+	var isStreaming = (row.isStreaming == "true") ? "1" : "0";
 	var record = [ row.sessionId, row.timeStarted, row.mediaSource, row.mediaId, row.languageId, row.silLang,
-				row.isStreaming, row.language, row.country, row.locale, row.deviceType, row.deviceFamily, row.deviceName,
+				isStreaming, row.language, row.country, row.locale, row.deviceType, row.deviceFamily, row.deviceName,
 				row.deviceOS, row.osVersion, row.appName, row.appVersion, row.mediaViewStartingPosition ];
 	this.database.execute(statement, [record], function() {
 		callback();
@@ -45,7 +46,8 @@ InsertVideoViews.prototype.update = function(row, callback) {
 		' mediaTimeViewInSeconds = ?,' +
 		' mediaViewCompleted = ?' + // Boolean 0 or 1
 		' WHERE sessionId = ? AND timeStarted = ?';
-	var record = [ row.timeCompleted, row.elapsedTime, row.mediaTimeViewInSeconds, row.mediaViewCompleted, 
+	var mediaViewCompleted = (row.mediaViewCompleted == "true") ? "1" : "0";
+	var record = [ row.timeCompleted, row.elapsedTime, row.mediaTimeViewInSeconds, mediaViewCompleted, 
 					row.sessionId, row.timeStarted ];
 	this.database.execute(statement, [record], function() {
 		callback();
