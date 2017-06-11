@@ -14,7 +14,7 @@ for (var i=0; i<bucketList.length; i++) {
 REGIONS['shortsands-log'] = 'us-west-2';
 console.log('REGIONS', REGIONS);
 
-const DATABASE = './Analytics.db';
+const DATABASE = './TestAnalyticsBaseline.db';
 const DB_VERBOSE = false;
 const MONTHS = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 
@@ -180,14 +180,14 @@ var downloadS3Logs = function() {
 		return(result);
 	};
 	function deleteFromS3(s3, bucket, item, callback) {
-		console.log('DELETE OBJECT ', item.Key);
-		s3.deleteObject({Bucket: bucket, Key: item.Key}, function(err, data) {
-			if (err) {
-				errorMessage(err, "DownloadS3Logs.deleteFromS3");
-			} else {
+		console.log('DO NOT DELETE OBJECT IN TEST', item.Key);
+		//s3.deleteObject({Bucket: bucket, Key: item.Key}, function(err, data) {
+		//	if (err) {
+		//		errorMessage(err, "DownloadS3Logs.deleteFromS3");
+		//	} else {
 				callback();
-			}
-		});
+		//	}
+		//});
 	}
 	function errorMessage(error, message) {
 		console.log('ERROR', message, JSON.stringify(error));
