@@ -1,5 +1,7 @@
 /**
 * This class processes Bible download log entries and inserts them into the BibleDownload table.
+* NOTE: the download log is not fully correct JSON. It can contain multiple objects without
+* delimiting commas or wrapping brackets.  So, the log records are parsed here as well.
 */
 
 "use strict";
