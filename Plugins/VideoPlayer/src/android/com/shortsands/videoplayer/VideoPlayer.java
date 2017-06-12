@@ -136,6 +136,7 @@ public class VideoPlayer extends CordovaPlugin {
     @Override
     public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext) {
 	    Log.d(TAG, "onRestoreStateForActivityResult " + System.currentTimeMillis());
+	    this.callbackContext = callbackContext;
     }
     
     /**

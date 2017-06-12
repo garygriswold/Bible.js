@@ -9,7 +9,6 @@
             "ios"
         ],
         "plugins": {
-            "com-shortsands-videoplayer": {},
             "cordova-plugin-console": {},
             "cordova-plugin-device": {},
             "cordova-plugin-file": {},
@@ -23,11 +22,12 @@
             "cordova-plugin-wkwebview-engine": {},
             "cordova-plugin-zip": {},
             "cordova-sqlite-ext": {},
-            "ionic-plugin-keyboard": {}
+            "ionic-plugin-keyboard": {},
+            "com-shortsands-videoplayer": {}
         }
     },
     "dependencies": {
-        "com-shortsands-videoplayer": "/Users/garygriswold/ShortSands/BibleApp/Plugins/VideoPlayer",
+        "com-shortsands-videoplayer": "file:///Users/garygriswold/ShortSands/BibleApp/Plugins/VideoPlayer",
         "cordova-android": "~6.1.0",
         "cordova-browser": "~4.1.0",
         "cordova-ios": "~4.3.0",
