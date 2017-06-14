@@ -16,10 +16,13 @@ Java classes for reading and writing Zip content are PKZIP.
 	and gzip is slightly better than pkzip.  But they all amount to
 	0.201 compression when rounded.
 
-	zlib solution is just a little C code, but it is not compatible with PK zip.
+	a zlib solution requires just a little C code.  The zlib site offers an excellent
+	sample program zpipe.c  but zlib is not compatible with PK zip.
 	 
 	The mini zip solution is compatible with PKZIP, but I am having difficulty building 
-	a mixed language framework (c/swift)
+	a mixed language framework (c/swift)  There were many implementations on github.
+	I chose the one that I did because it was written is swift, had a clean interface,
+	and threw exceptions.
 	
 	AWS has a builtin gzip, but it works on data, not files. This is not appropriate 
 	for the Bible files 
