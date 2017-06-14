@@ -8,7 +8,7 @@
 
 import Foundation
 import AWSCore
-import ZipArchive
+import Zip
 
 
 public class AwsS3 {
@@ -163,7 +163,13 @@ public class AwsS3 {
                         
                         // unzip zip file
                         let tempDirURL = URL(fileURLWithPath: NSTemporaryDirectory())
-                        try self.unzip(sourceFile: tempZipURL, targetDir: tempDirURL)
+                        //try self.unzip(sourceFile: tempZipURL, targetDir: tempDirURL)
+                        try Zip.unzipFile(tempZipURL,
+                            destination: tempDirURL,
+                            overwrite: true,
+                            password: nil,
+                            progress: nil
+                        )
                         
                         // identify the unzipped file
 						let filename = filePath.lastPathComponent
@@ -253,29 +259,5 @@ public class AwsS3 {
             print("ERROR in s3.uploadFile, while reading file \(s3Bucket) \(s3Key) \(cotError.localizedDescription)")
             complete(cotError)
         }
-    }
-    /////////////////////////////////////////////////////////////////////////
-    // Zip Functions
-    /////////////////////////////////////////////////////////////////////////
-    /**
-     * Zip Utility for zipping a single file. Notice that the Zip.zipFiles func
-     * used does have the ability to handle multiple input files.
-     */
-    func zip(sourceFile: URL, targetFile: URL) throws -> Void {
-        let done = SSZipArchive.createZipFile(atPath: sourceFile.absoluteString,
-                                              withContentsOfDirectory: targetFile.absoluteString)
-        print("Zip success \(done)")
-		//	try Zip.zipFiles(paths: [sourceFile], zipFilePath: targetFile,
-		//	                 password: nil, progress: nil)
-    }
-    /**
-     * UnZip Utility for use on files.
-     */
-    func unzip(sourceFile: URL, targetDir: URL) throws -> Void {
-        let done = SSZipArchive.unzipFile(atPath: sourceFile.absoluteString,
-                                          toDestination: targetDir.absoluteString)
-        print("UnZip success \(done)")
-	    //try Zip.unzipFile(sourceFile, destination: targetDir, overwrite: true,
-	    //	              password: nil, progress: nil)
     }
 }
