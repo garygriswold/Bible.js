@@ -265,8 +265,7 @@ public class AwsS3 {
         let done = SSZipArchive.createZipFile(atPath: sourceFile.absoluteString,
                                               withContentsOfDirectory: targetFile.absoluteString)
         print("Zip success \(done)")
-        //SSZipArchive.createZipFile(atPath: <#T##String#>, withContentsOfDirectory: <#T##String#>)
-		//	try SSZipArchive.zipFiles(paths: [sourceFile], zipFilePath: targetFile,
+		//	try Zip.zipFiles(paths: [sourceFile], zipFilePath: targetFile,
 		//	                 password: nil, progress: nil)
     }
     /**
@@ -276,7 +275,7 @@ public class AwsS3 {
         let done = SSZipArchive.unzipFile(atPath: sourceFile.absoluteString,
                                           toDestination: targetDir.absoluteString)
         print("UnZip success \(done)")
-	    //try SSZipArchive.unzipFile(sourceFile, destination: targetDir, overwrite: true,
+	    //try Zip.unzipFile(sourceFile, destination: targetDir, overwrite: true,
 	    //	              password: nil, progress: nil)
     }
 }

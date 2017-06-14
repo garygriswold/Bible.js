@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="com-shortsands-pkzip"
+    version="1.0.0">
+	<name>PKZip</name>
+	<description>Plugin to ZipArchive Services</description>
+	<author>Gary Griswold</author>
+	<engines>
+    	<engine name="cordova" version=">=6.0.0"/>
+	</engines>
+
+	<js-module name="PKZip" src="www/PKZip.js">
+    	<clobbers target="PKZip" />
+	</js-module>
+	<!--
+	<platform name="android">
+    	<config-file target="config.xml" parent="/*">
+			<feature name="AWS">
+				<param name="android-package" value="com.shortsands.aws.s3Plugin.AWS"/>
+			</feature>
+		</config-file>
+		<config-file target="AndroidManifest.xml" parent="/manifest">
+			<uses-permission android:name="android.permission.INTERNET" />
+			<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+		</config-file>
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			 <service android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService" android:enabled="true" />
+		</config-file>
+		<source-file src="src/android/com/shortsands/io/FileManager.java" target-dir="src/com/shortsands/io" />
+		<source-file src="src/android/com/shortsands/io/Zip.java" target-dir="src/com/shortsands/io" />
+		<source-file src="src/android/com/shortsands/aws/s3/AwsS3.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/AwsS3AbstractListener.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/Credentials.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/DownloadDataListener.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/DownloadFileListener.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/DownloadTextListener.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/DownloadZipFileListener.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/UploadDataListener.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3/UploadFileListener.java" target-dir="src/com/shortsands/aws/s3" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/AWS.java" target-dir="src/com/shortsands/aws/s3Plugin" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginDataListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginFileListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginTextListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/DownloadPluginZipFileListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/UploadPluginDataListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
+		<source-file src="src/android/com/shortsands/aws/s3Plugin/UploadPluginFileListener.java" target-dir="src/com/shortsands/aws/s3Plugin" />
+		<source-file src="src/android/libs/aws-android-sdk-core-2.4.2.jar" target-dir="libs" />
+		<source-file src="src/android/libs/aws-android-sdk-s3-2.4.2.jar" target-dir="libs" />
+		<!-- change library to a more limited one when done. -->
+		<!-- <framework src="src/android/plugin.gradle" custom="true" type="gradleReference"/> -->
+		<!-- Need something to copy build-extras.gradle to proper location. -->
+	</platform>
+	-->
+	<platform name="ios">
+		<config-file target="config.xml" parent="/*">
+	    	<feature name="PKZip">
+				<param name="ios-package" value="PKZip" />
+			</feature>
+		</config-file>
+		<source-file src="src/ios/PKZip.swift" />
+		<source-file src="src/ios/AwsS3.swift" />
+		<header-file src="src/ios/SSZipArchive/SSZipCommon.h" />
+		<header-file src="src/ios/SSZipArchive/ZipArchive.h" />
+		<header-file src="src/ios/SSZipArchive/SSZipArchive.h" />
+		<source-file src-"src/ios/SSZipArchive/SSZipArchive.m" />
+		<header-file src="src/ios/SSZipArchive/minizip/crypt.h" target-dir="minizip" />
+		<header-file src="src/ios/SSZipArchive/minizip/ioapi.h" target-dir="minizip" />
+		<header-file src="src/ios/SSZipArchive/minizip/unzip.h" target-dir="minizip" />
+		<header-file src="src/ios/SSZipArchive/minizip/zip.h" target-dir="minizip" />
+		<header-file src="src/ios/SSZipArchive/minizip/mztools.h" target-dir="minizip" />
+		<source-file src="src/ios/SSZipArchive/minizip/ioapi.c" target-dir="minizip" />
+		<source-file src="src/ios/SSZipArchive/minizip/unzip.c" target-dir="minizip" />
+		<source-file src="src/ios/SSZipArchive/minizip/zip.c" target-dir="minizip" />
+		<source-file src="src/ios/SSZipArchive/minizip/mztools.c" target-dir="minizip" />		
+		<!-- These frameworks need to be added to the project as Embedded Binaries
+		<framework src="src/ios/libs/AWSCore.framework" /> -->
+	</platform>
+
+</plugin>

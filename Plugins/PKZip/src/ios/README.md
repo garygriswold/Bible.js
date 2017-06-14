@@ -1,61 +1,81 @@
+![Zip - Zip and unzip files in Swift](https://cloud.githubusercontent.com/assets/889949/12374908/252373d0-bcac-11e5-8ece-6933aeae8222.png)
 
-[![Build Status](https://travis-ci.org/ZipArchive/ZipArchive.svg?branch=master)](https://travis-ci.org/ZipArchive/ZipArchive)
+[![Build Status](https://travis-ci.org/marmelroy/Zip.svg?branch=master)](https://travis-ci.org/marmelroy/Zip) [![Version](http://img.shields.io/cocoapods/v/Zip.svg)](http://cocoapods.org/?q=Zip)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
-# SSZipArchive
-
-ZipArchive is a simple utility class for zipping and unzipping files on iOS and Mac.
-
-- Unzip zip files;
-- Unzip password protected zip files;
-- Create new zip files;
-- Append to existing zip files;
-- Zip files;
-- Zip-up NSData instances. (with a filename)
-
-## Installation and Setup
-
-*The main release branch is configured to support Objective C and Swift 3. There is a 'swift23' branch which is the latest branch but marked to compile for Swift 2.3.* 
-
-### CocoaPods
-
-`pod install SSZipArchive`
-
-### Carthage
-`github "ZipArchive/ZipArchive"`
-
-### Manual
-
-1. Add the `SSZipArchive` and `minizip` folders to your project.
-2. Add the `libz` library to your target
-
-SSZipArchive requires ARC.
+# Zip
+A Swift 3.0 framework for zipping and unzipping files. Simple and quick to use. Built on top of [minizip](https://github.com/nmoinvaz/minizip).
 
 ## Usage
 
-### Objective-C
-
-```objective-c
-// Create
-[SSZipArchive createZipFileAtPath: zipPath withContentsOfDirectory: sampleDataPath];
-
-// Unzip
-[SSZipArchive unzipFileAtPath:zipPath toDestination: unzipPath];
-```
-
-### Swift
+Import Zip at the top of the Swift file.
 
 ```swift
-// Create
-SSZipArchive.createZipFileAtPath(zipPath, withContentsOfDirectory: sampleDataPath)
-
-// Unzip
-SSZipArchive.unzipFileAtPath(zipPath, toDestination: unzipPath)
+import Zip
 ```
 
-## License
+## Quick functions
 
-SSZipArchive is protected under the [MIT license](https://github.com/samsoffes/ssziparchive/raw/master/LICENSE) and our slightly modified version of [Minizip](http://www.winimage.com/zLibDll/minizip.html) 1.1 is licensed under the [Zlib license](http://www.zlib.net/zlib_license.html).
+The easiest way to use Zip is through quick functions. Both take local file paths as NSURLs, throw if an error is encountered and return an NSURL to the destination if successful.
+```swift
+do {
+    let filePath = Bundle.main.url(forResource: "file", withExtension: "zip")!
+    let unzipDirectory = try Zip.quickUnzipFile(filePath) // Unzip
+    let zipFilePath = try Zip.quickZipFiles([filePath], fileName: "archive") // Zip
+}
+catch {
+  print("Something went wrong")
+}
+```
 
-## Acknowledgments
+## Advanced Zip
 
-Big thanks to [aish](http://code.google.com/p/ziparchive) for creating [ZipArchive](http://code.google.com/p/ziparchive). The project that inspired SSZipArchive. Thank you [@randomsequence](https://github.com/randomsequence) for implementing the creation support tech and to [@johnezang](https://github.com/johnezang) for all his amazing help along the way.
+For more advanced usage, Zip has functions that let you set custom  destination paths, work with password protected zips and use a progress handling closure. These functions throw if there is an error but don't return.
+```swift
+do {
+    let filePath = Bundle.main.url(forResource: "file", withExtension: "zip")!
+    let documentsDirectory = FileManager.default.urls(for:.documentDirectory, in: .userDomainMask)[0]
+    try Zip.unzipFile(filePath, destination: documentsDirectory, overwrite: true, password: "password", progress: { (progress) -> () in
+        print(progress)
+    }) // Unzip
+
+    let zipFilePath = documentsFolder.appendingPathComponent("archive.zip")
+    try Zip.zipFiles([filePath], zipFilePath: zipFilePath, password: "password", progress: { (progress) -> () in
+        print(progress)
+    }) //Zip
+
+}
+catch {
+  print("Something went wrong")
+}
+```
+
+## Custom File Extensions
+
+Zip supports '.zip' and '.cbz' files out of the box. To support additional zip-derivative file extensions:
+```
+Zip.addCustomFileExtension("file-extension-here")
+```
+
+### Setting up with [CocoaPods](http://cocoapods.org/?q=Zip)
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+pod 'Zip', '~> 0.7'
+```
+
+### Setting up with Carthage
+
+[Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that automates the process of adding frameworks to your Cocoa application.
+
+You can install Carthage with [Homebrew](http://brew.sh/) using the following command:
+
+```bash
+$ brew update
+$ brew install carthage
+```
+
+To integrate Zip into your Xcode project using Carthage, specify it in your `Cartfile`:
+
+```ogdl
+github "marmelroy/Zip"
+```
