@@ -36,7 +36,13 @@ class VideoViewController : UIViewController {
         if (!self.hasLoaded) {
             self.hasLoaded = true
             self.present(self.videoViewPlayer!.controller, animated: true)
-            self.videoViewPlayer!.begin()
+            self.videoViewPlayer!.begin(complete: { error in
+                if let err = error {
+                    print("Error in VideoPlayer \(String(describing: err))")
+                } else {
+                    print("Success in VideoPlayer")
+                }
+            })
         }
     }
     override func didReceiveMemoryWarning() {

@@ -160,7 +160,7 @@ SWIFT_CLASS("_TtC11VideoPlayer15VideoViewPlayer")
 @interface VideoViewPlayer : NSObject
 @property (nonatomic, readonly, strong) AVPlayerViewController * _Nonnull controller;
 - (nonnull instancetype)initWithVideoId:(NSString * _Nonnull)videoId videoUrl:(NSString * _Nonnull)videoUrl OBJC_DESIGNATED_INITIALIZER;
-- (void)begin;
+- (void)beginWithComplete:(void (^ _Nonnull)(NSError * _Nullable))complete;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 @end
 

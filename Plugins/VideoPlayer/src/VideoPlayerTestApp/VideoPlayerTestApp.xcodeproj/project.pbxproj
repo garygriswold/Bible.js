@@ -7,13 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E41B24671EF46D3D004492A5 /* VideoPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E41B24641EF46CEC004492A5 /* VideoPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E43041781EF433DC002FC73E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43041771EF433DC002FC73E /* AppDelegate.swift */; };
 		E430417D1EF433DC002FC73E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E430417B1EF433DC002FC73E /* Main.storyboard */; };
 		E430417F1EF433DC002FC73E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E430417E1EF433DC002FC73E /* Assets.xcassets */; };
 		E43041821EF433DC002FC73E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E43041801EF433DC002FC73E /* LaunchScreen.storyboard */; };
 		E430418A1EF43554002FC73E /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43041891EF43554002FC73E /* VideoViewController.swift */; };
-		E430418C1EF43591002FC73E /* VideoPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E430418B1EF43591002FC73E /* VideoPlayer.framework */; };
-		E430418D1EF43591002FC73E /* VideoPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E430418B1EF43591002FC73E /* VideoPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E43041911EF435A9002FC73E /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E43041901EF435A9002FC73E /* MediaPlayer.framework */; };
 /* End PBXBuildFile section */
 
@@ -24,7 +23,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E430418D1EF43591002FC73E /* VideoPlayer.framework in Embed Frameworks */,
+				E41B24671EF46D3D004492A5 /* VideoPlayer.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -32,6 +31,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E41B24641EF46CEC004492A5 /* VideoPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = VideoPlayer.framework; sourceTree = "<group>"; };
 		E43041741EF433DC002FC73E /* VideoPlayerTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoPlayerTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E43041771EF433DC002FC73E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E430417C1EF433DC002FC73E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -39,7 +39,6 @@
 		E43041811EF433DC002FC73E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E43041831EF433DC002FC73E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E43041891EF43554002FC73E /* VideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
-		E430418B1EF43591002FC73E /* VideoPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = VideoPlayer.framework; sourceTree = "<group>"; };
 		E43041901EF435A9002FC73E /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -49,7 +48,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E43041911EF435A9002FC73E /* MediaPlayer.framework in Frameworks */,
-				E430418C1EF43591002FC73E /* VideoPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,7 +57,6 @@
 		E430416B1EF433DC002FC73E = {
 			isa = PBXGroup;
 			children = (
-				E430418B1EF43591002FC73E /* VideoPlayer.framework */,
 				E43041761EF433DC002FC73E /* VideoPlayerTestApp */,
 				E43041751EF433DC002FC73E /* Products */,
 				E430418F1EF435A9002FC73E /* Frameworks */,
@@ -77,6 +74,7 @@
 		E43041761EF433DC002FC73E /* VideoPlayerTestApp */ = {
 			isa = PBXGroup;
 			children = (
+				E41B24641EF46CEC004492A5 /* VideoPlayer.framework */,
 				E43041771EF433DC002FC73E /* AppDelegate.swift */,
 				E43041891EF43554002FC73E /* VideoViewController.swift */,
 				E430417B1EF433DC002FC73E /* Main.storyboard */,
@@ -297,6 +295,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/VideoPlayerTestApp",
 				);
 				INFOPLIST_FILE = VideoPlayerTestApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -314,6 +313,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/VideoPlayerTestApp",
 				);
 				INFOPLIST_FILE = VideoPlayerTestApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -342,6 +342,7 @@
 				E43041881EF433DC002FC73E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
