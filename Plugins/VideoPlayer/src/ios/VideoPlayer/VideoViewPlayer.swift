@@ -24,7 +24,8 @@ public class VideoViewPlayer : NSObject {
         print("CONSTRUCTED")
     }
 
-    public func begin() {
+    //public func begin() {
+    public func begin(complete: @escaping (_ error:Error?) -> Void) {
         print("VideoViewPlayer.BEGIN")
         let url = URL(string: VideoViewState.currentState.videoUrl!)!
         let asset = AVAsset(url: url)
@@ -34,6 +35,10 @@ public class VideoViewPlayer : NSObject {
             playerItem.seek(to: seekTime)
         }
         let player = AVPlayer(playerItem: playerItem)
+        
+        let delegate = VideoViewControllerDelegate()
+        delegate.completionHandler = complete
+        self.controller.delegate = delegate
         self.controller.showsPlaybackControls = true
         self.controller.player = player
         self.controller.player?.play()

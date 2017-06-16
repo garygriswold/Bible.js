@@ -10,6 +10,7 @@ import UIKit
 import CoreMedia
 
 extension AVPlayerViewController {
+    
     override open var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return UIInterfaceOrientation.landscapeRight
     }
@@ -108,8 +109,10 @@ extension AVPlayerViewController {
     private func releaseVideoPlayer() {
         removeNotifications()
         removeDebugNotifications()
-        //This is a callback to the video player, can it be done by callback?
-        //VideoPlayer.releaseVideoPlayer(message: nil)
+        if (self.delegate != nil) {
+            let videoDelegate = self.delegate as? VideoViewControllerDelegate
+            videoDelegate?.completionHandler?(nil)
+        }
     }
 }
 
