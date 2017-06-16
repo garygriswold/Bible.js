@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		E4B0F7F11EF1BF4B00A7AB3D /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B0F7F01EF1BF4B00A7AB3D /* Zip.framework */; };
+		E4B0F80F1EF25B9900A7AB3D /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E996CF1EF0673000717F85 /* AWSCore.framework */; };
+		E4B0F8101EF25BA200A7AB3D /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B0F7F01EF1BF4B00A7AB3D /* Zip.framework */; };
 		E4E996AE1EF0604700717F85 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E996A41EF0604700717F85 /* AWS.framework */; };
 		E4E996B31EF0604700717F85 /* AWSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E996B21EF0604700717F85 /* AWSTests.swift */; };
 		E4E996B51EF0604700717F85 /* AWS.h in Headers */ = {isa = PBXBuildFile; fileRef = E4E996A71EF0604700717F85 /* AWS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -64,6 +66,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4E996AE1EF0604700717F85 /* AWS.framework in Frameworks */,
+				E4B0F8101EF25BA200A7AB3D /* Zip.framework in Frameworks */,
+				E4B0F80F1EF25B9900A7AB3D /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,6 +426,10 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = AWSTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AWSTests;
@@ -435,6 +443,10 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = AWSTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AWSTests;

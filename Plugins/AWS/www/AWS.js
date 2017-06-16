@@ -113,6 +113,10 @@ exports.uploadData = function(s3Bucket, s3Key, data, contentType, callback) {
 	}, "AWS", "uploadData", [s3Bucket, s3Key, data, contentType]);
 };
 
+/**
+* Warning: this does not use the uploadFile method of TransferUtility,
+* See note in AwsS3.uploadFile for more info.
+*/
 exports.uploadFile = function(s3Bucket, s3Key, filePath, contentType, callback) {
     exec(function() {
 	    callback(true);
@@ -120,24 +124,6 @@ exports.uploadFile = function(s3Bucket, s3Key, filePath, contentType, callback) 
 	    AWS.logError("uploadFile", error, s3Bucket, s3Key, filePath);
 	    callback(false);		    
     }, "AWS", "uploadFile", [s3Bucket, s3Key, filePath, contentType]);
-};
-
-exports.zip = function(sourceFile, targetFile, callback) {
-    exec(function() { 
-	    callback(true); 
-	}, function(error) {
-	    console.log("ERROR: AWS.zip " + sourceFile + " " + error);
-	    callback(false);
-    }, "AWS", "zip", [sourceFile, targetFile]);
-};
-
-exports.unzip = function(sourceFile, targetDir, callback) {
-    exec(function() {
-	    callback(true);
-	}, function(error) {
-	    console.log("ERROR: AWS.unzip " + sourceFile + " " + error);
-	    callback(false);		    
-    }, "AWS", "unzip", [sourceFile, targetDir]);
 };
 
 exports.logError = function(method, error, s3Bucket, s3Key, filePath) {

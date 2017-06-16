@@ -13,6 +13,8 @@
 	<js-module name="AWS" src="www/AWS.js">
     	<clobbers target="AWS" />
 	</js-module>
+	
+	<asset src="AWSUnitTest.js" target="js/AWSUnitTest.js" />
 
 	<platform name="android">
     	<config-file target="config.xml" parent="/*">
@@ -59,24 +61,9 @@
 			</feature>
 		</config-file>
 		<source-file src="src/ios/AWS.swift" />
-		<source-file src="src/ios/AwsS3.swift" />
-		<source-file src="src/ios/AwsS3UnitTest.swift" />
-		<source-file src="src/ios/Credentials.swift" />
-		<header-file src="src/ios/SS_AWS/SS_AWSS3PreSignedURL.h" />
-		<source-file src="src/ios/SS_AWS/SS_AWSS3PreSignedURL.m" />
-		<header-file src="src/ios/SS_AWS/SS_AWSS3TransferUtility.h" />
-		<source-file src="src/ios/SS_AWS/SS_AWSS3TransferUtility.m" />
-		<source-file src="src/ios/Zip/Zip.swift" />
-		<source-file src="src/ios/Zip/ZipUtilities.swift" />
-		<header-file src="src/ios/Zip/minizip/crypt.h" target-dir="minizip" />
-		<header-file src="src/ios/Zip/minizip/ioapi.h" target-dir="minizip" />
-		<header-file src="src/ios/Zip/minizip/unzip.h" target-dir="minizip" />
-		<header-file src="src/ios/Zip/minizip/zip.h" target-dir="minizip" />
-		<source-file src="src/ios/Zip/minizip/ioapi.c" target-dir="minizip" />
-		<source-file src="src/ios/Zip/minizip/unzip.c" target-dir="minizip" />
-		<source-file src="src/ios/Zip/minizip/zip.c" target-dir="minizip" />			
-		<!-- These frameworks need to be added to the project as Embedded Binaries
-		<framework src="src/ios/libs/AWSCore.framework" /> -->
+		<framework src="src/ios/build/AWS.framework" embed="true" custom="true" />
+		<framework src="src/ios/Zip.framework" embed="true" custom="true" />
+		<framework src="src/ios/AWSCore.framework" embed="true" custom="true"/>
 	</platform>
 
 </plugin>

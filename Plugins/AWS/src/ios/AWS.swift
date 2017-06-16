@@ -10,6 +10,8 @@
 * It is a thin wrapper around the AwsS3 class that AwsS3 can also 
 * be used directly by other .swift classes.
 */
+import AWS
+
 @objc(AWS) class AWS : CDVPlugin {
 	
 	static var regionType: AWSRegionType = AWSRegionType.USEast1
@@ -81,8 +83,8 @@
 			s3Key: command.arguments[1] as? String ?? "",
             complete: { error, data in
             	var result: CDVPluginResult
-            	if (error != nil) {
-	            	result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
+            	if let err = error {
+	            	result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: err.localizedDescription)
             	} else {
 	            	result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: data)
             	}
@@ -98,8 +100,8 @@
 			s3Key: command.arguments[1] as? String ?? "",
             complete: { error, data in
 	            var result: CDVPluginResult
-	            if (error != nil) {
-		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
+	            if let err = error {
+		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: err.localizedDescription)
 	            } else {
 		            result = CDVPluginResult(status: CDVCommandStatus_OK, messageAsArrayBuffer: data)
 	            }
@@ -118,8 +120,8 @@
 			filePath: URL(fileURLWithPath: NSHomeDirectory() + filePath),
             complete: { error in
 	            var result: CDVPluginResult
-	            if (error != nil) {
-		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
+		        if let err = error {
+		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: err.localizedDescription)
 	            } else {
 		            result = CDVPluginResult(status: CDVCommandStatus_OK)
 	            }
@@ -129,7 +131,8 @@
     }
     
     @objc(downloadZipFile:) 
-    func downloadZipFile(command: CDVInvokedUrlCommand) { 
+    func downloadZipFile(command: CDVInvokedUrlCommand) {
+	    print("Documents \(NSHomeDirectory())") 
 	    let filePath: String = command.arguments[2] as? String ?? ""
 	    awsS3.downloadZipFile(
 			s3Bucket: command.arguments[0] as? String ?? "",
@@ -137,8 +140,8 @@
 			filePath: URL(fileURLWithPath: NSHomeDirectory() + filePath),
             complete: { error in
 	            var result: CDVPluginResult
-	            if (error != nil) {
-		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
+	            if let err = error {
+		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: err.localizedDescription)
 	            } else {
 		            result = CDVPluginResult(status: CDVCommandStatus_OK)
 	            }
@@ -155,8 +158,8 @@
 		    data: command.arguments[2] as? String ?? "",
             complete: { error in
 	            var result: CDVPluginResult
-	            if (error != nil) {
-		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
+	            if let err = error {
+		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: err.localizedDescription)
 	            } else {
 		            result = CDVPluginResult(status: CDVCommandStatus_OK)
 	            }
@@ -173,8 +176,8 @@
 		    data: command.arguments[2] as? String ?? "",
             complete: { error in
 	            var result: CDVPluginResult
-	            if (error != nil) {
-		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
+	            if let err = error {
+		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: err.localizedDescription)
 	            } else {
 		            result = CDVPluginResult(status: CDVCommandStatus_OK)
 	            }
@@ -192,8 +195,8 @@
 		    contentType: command.arguments[3] as? String ?? "",
             complete: { error in
 	            var result: CDVPluginResult
-	            if (error != nil) {
-		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
+	            if let err = error {
+		            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: err.localizedDescription)
 	            } else {
 		            result = CDVPluginResult(status: CDVCommandStatus_OK)
 	            }
@@ -202,6 +205,10 @@
 	    )
     }
     
+    /**
+    * Warning: this does not use the uploadFile method of TransferUtility,
+	* See note in AwsS3.uploadFile for more info.
+    */
     @objc(uploadFile:) 
     func uploadFile(command: CDVInvokedUrlCommand) {
 	    let filePath = command.arguments[2] as? String ?? ""
@@ -212,8 +219,8 @@
 			contentType: command.arguments[3] as? String ?? "",
             complete: { error in
             	var result: CDVPluginResult
-				if (error != nil) {
-	            	result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error!.localizedDescription)
+				if let err = error {
+	            	result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: err.localizedDescription)
 				} else {
 	            	result = CDVPluginResult(status: CDVCommandStatus_OK)
 				}
@@ -221,44 +228,4 @@
 			}
 	    )
     }
-    
-	@objc(zip:)
-	func zip(command: CDVInvokedUrlCommand) {
-		print("Documents \(NSHomeDirectory())")
-		var result: CDVPluginResult
-		let sourceFile = command.arguments[0] as? String ?? ""
-		let targetFile = command.arguments[1] as? String ?? ""
-		do {
-			try awsS3.zip(
-				sourceFile: URL(fileURLWithPath: NSHomeDirectory() + sourceFile),
-				targetFile: URL(fileURLWithPath: NSHomeDirectory() + targetFile)
-			)
-			result = CDVPluginResult(status: CDVCommandStatus_OK)
-		} catch let error as ZipError {
-	        result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.description + " " + sourceFile)
-		} catch let error {
-			result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.localizedDescription + " " + sourceFile)
-		}
-		self.commandDelegate!.send(result, callbackId: command.callbackId)
-	}
-	
-	@objc(unzip:)
-	func unzip(command: CDVInvokedUrlCommand) {
-		print("Documents \(NSHomeDirectory())")
-		var result: CDVPluginResult
-		let sourceFile = command.arguments[0] as? String ?? ""
-		let targetDir = command.arguments[1] as? String ?? ""
-		do {
-			try awsS3.unzip(
-				sourceFile: URL(fileURLWithPath: NSHomeDirectory() + sourceFile),
-				targetDir: URL(fileURLWithPath: NSHomeDirectory() + targetDir)
-			)
-			result = CDVPluginResult(status: CDVCommandStatus_OK)
-		} catch let error as ZipError {
-			result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.description + " " + sourceFile)
-        } catch let error {
-            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.localizedDescription + " " + sourceFile)
-        }
-		self.commandDelegate!.send(result, callbackId: command.callbackId)
-	}			
 }		

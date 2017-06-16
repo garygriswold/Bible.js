@@ -10,15 +10,14 @@ import Foundation
 import AWSCore
 import Zip
 
-
 public class AwsS3 {
     
-    static let VIDEO_ANALYTICS_BUCKET = "video.analytics.shortsands"
+    private let endpoint: AWSEndpoint
+    private let transfer: AWSS3TransferUtility
     
-    private var transfer: AWSS3TransferUtility
-    
-    init(region: AWSRegionType) {
-	    let endpoint = AWSEndpoint(region: region, service: AWSServiceType.S3, useUnsafeURL: false)!
+    public init(region: AWSRegionType) {
+        
+	    self.endpoint = AWSEndpoint(region: region, service: AWSServiceType.S3, useUnsafeURL: false)!
         let configuration = AWSServiceConfiguration(region: region, endpoint: endpoint,
                                                     credentialsProvider: Credentials.AWS_BIBLE_APP)
         AWSServiceManager.default().defaultServiceConfiguration = configuration
@@ -28,7 +27,7 @@ public class AwsS3 {
     /**
     * A Unit Test Method
     */
-    func echo3(message: String) -> String {
+    public func echo3(message: String) -> String {
 	    return message;
     }
     /////////////////////////////////////////////////////////////////////////
@@ -37,7 +36,7 @@ public class AwsS3 {
     /**
     * This method produces a presigned URL for a GET from an AWS S3 bucket
     */
-    func preSignedUrlGET(s3Bucket: String, s3Key: String, expires: Int,
+    public func preSignedUrlGET(s3Bucket: String, s3Key: String, expires: Int,
                          complete: @escaping (_ url:URL?) -> Void) {
         let request = AWSS3GetPreSignedURLRequest()
         request.httpMethod = AWSHTTPMethod.GET
@@ -49,7 +48,7 @@ public class AwsS3 {
     /**
     * This method produces a presigned URL for a PUT to an AWS S3 bucket
     */
-    func preSignedUrlPUT(s3Bucket: String, s3Key: String, expires: Int, contentType: String,
+    public func preSignedUrlPUT(s3Bucket: String, s3Key: String, expires: Int, contentType: String,
                          complete: @escaping (_ url:URL?) -> Void) {
         let request = AWSS3GetPreSignedURLRequest()
         request.httpMethod = AWSHTTPMethod.PUT
@@ -82,7 +81,7 @@ public class AwsS3 {
     /**
     * Download Text to String object
     */
-    func downloadText(s3Bucket: String, s3Key: String,
+    public func downloadText(s3Bucket: String, s3Key: String,
                       complete: @escaping (_ error:Error?, _ data:String?) -> Void) {
         let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) -> Void in
             DispatchQueue.main.async(execute: {
@@ -100,7 +99,7 @@ public class AwsS3 {
     /**
     * Download Binary object to Data, receiving code might need to convert it needed form
     */
-    func downloadData(s3Bucket: String, s3Key: String,
+    public func downloadData(s3Bucket: String, s3Key: String,
                       complete: @escaping (_ error:Error?, _ data:Data?) -> Void) {
         let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) -> Void in
             DispatchQueue.main.async(execute: {
@@ -119,53 +118,47 @@ public class AwsS3 {
     * TransferUtility.fileDownload, because it is unable to provide accurate errors
     * when the file IO fails.
     */
-    func downloadFile(s3Bucket: String, s3Key: String, filePath: URL,
+    public func downloadFile(s3Bucket: String, s3Key: String, filePath: URL,
                       complete: @escaping (_ error:Error?) -> Void) {
-        let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) -> Void in
+        
+        let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) in
             DispatchQueue.main.async(execute: {
                 if let err = error {
                     print("ERROR in s3.downloadFile \(s3Bucket) \(s3Key) Error: \(err)")
-                    complete(error)
                 } else {
-                    do {
-                        try data?.write(to: filePath, options: Data.WritingOptions.atomic)
-                        print("SUCCESS in s3.downloadFile \(s3Bucket) \(s3Key)")
-                        complete(nil)
-                    } catch let cotError {
-                        print("Error in s3.downloadFile \(s3Bucket) \(s3Key) \(cotError)")
-                        complete(cotError) // pass error here, if I knew how to catch or create one.
-                    }
+                    print("SUCCESS in s3.downloadFile \(s3Bucket) \(s3Key)")
                 }
+                complete(error)
             })
         }
-        self.transfer.downloadData(fromBucket: s3Bucket, key: s3Key, expression: nil, completionHandler: completionHandler)
+        self.transfer.download(to: filePath, bucket: s3Bucket, key: s3Key, expression: nil,
+                                    completionHandler: completionHandler)
         //.continueWith has been dropped, because it did not report errors
     }   
     /**
     * Download zip file and unzip it.  Like Download File this does not use 
     * TransferUtility.fileDownload because its error reporting is poor.
     */
-    func downloadZipFile(s3Bucket: String, s3Key: String, filePath: URL,
-                         complete: @escaping (_ error:Error?) -> Void) {                   
+    public func downloadZipFile(s3Bucket: String, s3Key: String, filePath: URL,
+                         complete: @escaping (_ error:Error?) -> Void) {
+        
+        // Identify temp file for zip file download
+        let fileManager = FileManager.default
+        let tempZipURL = URL(fileURLWithPath: NSUUID().uuidString + ".zip",
+                             relativeTo: fileManager.temporaryDirectory)
+        print("temp URL to store file \(tempZipURL)")
+        
         let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) -> Void in
             DispatchQueue.main.async(execute: {
                 if let err = error {
                     print("ERROR in s3.downloadZipFile \(s3Bucket) \(s3Key) Error: \(err)")
                     complete(err)
                 } else {
-	               	let fileManager = FileManager.default  
-	               	var tempZipURL: URL
+                    print("Download SUCCESS in s3.downloadZipFile \(s3Bucket) \(s3Key)")
                     do {
-	                    // save the zipped data to a file
-	                    tempZipURL = URL(fileURLWithPath: NSTemporaryDirectory() + NSUUID().uuidString + ".zip")
-						print("temp URL to store file \(tempZipURL)")
-                        try data?.write(to: tempZipURL, options: Data.WritingOptions.atomic)
-                        
                         // unzip zip file
-                        let tempDirURL = URL(fileURLWithPath: NSTemporaryDirectory())
-                        //try self.unzip(sourceFile: tempZipURL, targetDir: tempDirURL)
                         try Zip.unzipFile(tempZipURL,
-                            destination: tempDirURL,
+                            destination: fileManager.temporaryDirectory,
                             overwrite: true,
                             password: nil,
                             progress: nil
@@ -173,7 +166,7 @@ public class AwsS3 {
                         
                         // identify the unzipped file
 						let filename = filePath.lastPathComponent
-						let unzippedURL = URL(fileURLWithPath: NSTemporaryDirectory() + filename)
+                        let unzippedURL = URL(fileURLWithPath: filename, relativeTo: fileManager.temporaryDirectory)
 						print("location of unzipped file \(unzippedURL)")
 						
 						// remove unzipped file if it already exists
@@ -198,8 +191,9 @@ public class AwsS3 {
                 }
             })
         }
-        self.transfer.downloadData(fromBucket: s3Bucket, key: s3Key, expression: nil, completionHandler: completionHandler)
-        //.continueWith has been dropped, because it did not report errors        
+        self.transfer.download(to: tempZipURL, bucket: s3Bucket, key: s3Key, expression: nil,
+                               completionHandler: completionHandler)
+        //.continueWith has been dropped, because it did not report errors
     }
     /////////////////////////////////////////////////////////////////////////
     // Upload Functions
@@ -207,17 +201,18 @@ public class AwsS3 {
     /**
     * Upload Analytics in Text form, such as JSON to analytics bucket
     */
-    func uploadVideoAnalytics(sessionId: String, timestamp: String, data: String,
+    public func uploadVideoAnalytics(sessionId: String, timestamp: String, data: String,
                          complete: @escaping (_ error: Error?) -> Void) {
-        let s3Key = sessionId + timestamp
+        let s3Bucket = "analytics-" + self.endpoint.regionName + "-shortsands"
+        let s3Key = sessionId + "-" + timestamp
         let textData = data.data(using: String.Encoding.utf8)
-        uploadData(s3Bucket: AwsS3.VIDEO_ANALYTICS_BUCKET, s3Key: s3Key, data: textData!, contentType: "text/plain",
+        uploadData(s3Bucket: s3Bucket, s3Key: s3Key, data: textData!, contentType: "text/plain",
                     complete: complete)
     }
     /**
     * Upload string object to bucket
     */
-    func uploadText(s3Bucket: String, s3Key: String, data: String,
+    public func uploadText(s3Bucket: String, s3Key: String, data: String,
                       complete: @escaping (_ error: Error?) -> Void) {
         let textData = data.data(using: String.Encoding.utf8)
         uploadData(s3Bucket: s3Bucket, s3Key: s3Key, data: textData!, contentType: "text/plain", complete: complete)
@@ -226,7 +221,7 @@ public class AwsS3 {
      * Upload object in Data form to bucket.  Data must be prepared to correct form
      * before calling this function.
      */
-    func uploadData(s3Bucket: String, s3Key: String, data: Data, contentType: String,
+    public func uploadData(s3Bucket: String, s3Key: String, data: Data, contentType: String,
                     complete: @escaping (_ error: Error?) -> Void) {
         let completionHandler: AWSS3TransferUtilityUploadCompletionHandlerBlock = {(task, error) -> Void in
             DispatchQueue.main.async(execute: {
@@ -248,8 +243,12 @@ public class AwsS3 {
     }
     /**
     * Upload file to bucket, this works for text or binary files
+    * Warning: This method is only included to permit symmetric testing of download/upload
+    * It does not use the uploadFile method of TransferUtility, but uploads data.
+    * So, it should not be used for large object unless it is fixed.  I was not
+    * able to get the uploadFile method of TransferUtility to work
     */
-    func uploadFile(s3Bucket: String, s3Key: String, filePath: URL, contentType: String,
+    public func uploadFile(s3Bucket: String, s3Key: String, filePath: URL, contentType: String,
                     complete: @escaping (_ error: Error?) -> Void) {
         do {
             let data = try Data(contentsOf: filePath, options: Data.ReadingOptions.uncached)
