@@ -77,7 +77,8 @@ class VideoViewState : NSObject, NSCoding {
 	}
 	
 	func toString() -> String {
-		let result = "VideoId: \(self.videoId), VideoUrl: \(self.videoUrl), Position: \(self.position), Timestamp: \(self.timestamp)"
+        let result = "VideoId: \(self.videoId), VideoUrl: \(String(describing: self.videoUrl))," +
+                " Position: \(self.position), Timestamp: \(self.timestamp)"
 		return result
 	}
 }

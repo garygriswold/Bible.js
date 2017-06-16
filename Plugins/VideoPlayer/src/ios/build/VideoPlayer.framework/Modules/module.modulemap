@@ -1,0 +1,10 @@
+framework module VideoPlayer {
+  umbrella header "VideoPlayer.h"
+
+  export *
+  module * { export * }
+}
+
+module VideoPlayer.Swift {
+    header "VideoPlayer-Swift.h"
+}

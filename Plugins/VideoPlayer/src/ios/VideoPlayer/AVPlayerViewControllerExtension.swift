@@ -76,26 +76,26 @@ extension AVPlayerViewController {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemTimeJumped, object: nil)    
     }
     func playerItemDidPlayToEndTime(note:Notification) {
-        print("\n** DID PLAY TO END \(note.object)")
+        print("\n** DID PLAY TO END \(String(describing: note.object))")
         self.dismiss(animated: false)
         
         VideoViewState.clear()
     }
     func playerItemFailedToPlayToEndTime(note:Notification) {
-        print("\n********* FAILED TO PLAY TO END *********\(note.object)")
+        print("\n********* FAILED TO PLAY TO END *********\(String(describing: note.object))")
     }
     func playerItemTimeJumped(note:Notification) {
-        print("\n****** TIME JUMPED \(note.object)")
+        print("\n****** TIME JUMPED \(String(describing: note.object))")
     }
     func playerItemPlaybackStalled(note:Notification) {
-        print("\n****** PLAYBACK STALLED \(note.object)")
+        print("\n****** PLAYBACK STALLED \(String(describing: note.object))")
     }
     func playerItemNewAccessLogEntry(note:Notification) {
         // did not start is not reported here
-        print("\n****** ACCESS LOG ENTRY \(note.object)\n\(self.player?.currentItem?.accessLog())")
+        print("\n****** ACCESS LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.accessLog()))")
     }
     func playerItemNewErrorLogEntry(note:Notification) {
-        print("\n****** ERROR LOG ENTRY \(note.object)\n\(self.player?.currentItem?.errorLog())")
+        print("\n****** ERROR LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.errorLog()))")
     }
     /**
     * This method is called when the Home button is clicked or double clicked.
@@ -107,8 +107,9 @@ extension AVPlayerViewController {
     }
     private func releaseVideoPlayer() {
         removeNotifications()
-        removeDebugNotifications()	
-        VideoPlayer.releaseVideoPlayer(message: nil)
+        removeDebugNotifications()
+        //This is a callback to the video player, can it be done by callback?
+        //VideoPlayer.releaseVideoPlayer(message: nil)
     }
 }
 

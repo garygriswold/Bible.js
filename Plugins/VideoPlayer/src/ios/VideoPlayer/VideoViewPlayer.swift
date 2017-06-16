@@ -1,5 +1,5 @@
 /**
- *  VideoPlayer.swift
+ *  VideoViewPlayer.swift
  *
  *  Created by Gary Griswold on 1/16/17.
  *  Copyright © 2017 ShortSands. All rights reserved.
@@ -11,11 +11,11 @@ import AVFoundation
 import AVKit
 import CoreMedia
 
-class VideoViewPlayer : NSObject {
+public class VideoViewPlayer : NSObject {
 	
-    let controller = AVPlayerViewController()
+    public let controller = AVPlayerViewController()
     
-    init(videoId: String, videoUrl: String) {
+    public init(videoId: String, videoUrl: String) {
 	    print("INSIDE VideoViewPlayer \(videoId)  \(videoUrl)")
 		VideoViewState.retrieve(videoId: videoId)
 		VideoViewState.currentState.videoUrl = videoUrl
@@ -24,7 +24,7 @@ class VideoViewPlayer : NSObject {
         print("CONSTRUCTED")
     }
 
-    func begin() {
+    public func begin() {
         print("VideoViewPlayer.BEGIN")
         let url = URL(string: VideoViewState.currentState.videoUrl!)!
         let asset = AVAsset(url: url)

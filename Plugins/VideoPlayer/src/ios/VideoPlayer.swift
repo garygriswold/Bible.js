@@ -3,6 +3,7 @@
 * It deliberately contains as little logic as possible so that the VideoPlayer
 * can be unit tested as an XCode project.
 */
+import VideoPlayer
 
 @objc(VideoPlayer) class VideoPlayer : CDVPlugin {
 	
