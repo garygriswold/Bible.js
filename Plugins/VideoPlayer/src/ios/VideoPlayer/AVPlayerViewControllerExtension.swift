@@ -25,8 +25,9 @@ extension AVPlayerViewController {
 	    super.viewDidDisappear(animated)
         print("\n********** VIEW DID DISAPPEAR ***** in AVPlayerViewController \(animated)")
 
+        saveVideoAnalytics(isDone: false)
         VideoViewState.update(time: self.player?.currentTime())
-		releaseVideoPlayer()
+        releaseVideoPlayer()
     }
     override open func didReceiveMemoryWarning() {
 	    super.didReceiveMemoryWarning()
@@ -78,8 +79,8 @@ extension AVPlayerViewController {
     }
     func playerItemDidPlayToEndTime(note:Notification) {
         print("\n** DID PLAY TO END \(String(describing: note.object))")
-        self.dismiss(animated: false)
-        
+        self.dismiss(animated: false) // move this till after??
+        saveVideoAnalytics(isDone: true)
         VideoViewState.clear()
     }
     func playerItemFailedToPlayToEndTime(note:Notification) {
@@ -104,14 +105,24 @@ extension AVPlayerViewController {
     */
     func applicationWillResignActive(note:Notification) {
 	    print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
+        saveVideoAnalytics(isDone: false)
 	    VideoViewState.update(time: self.player?.currentTime())
     }
     private func releaseVideoPlayer() {
+        print("\n******* INSIDE RELEASE PLAYER ")
         removeNotifications()
         removeDebugNotifications()
         if (self.delegate != nil) {
             let videoDelegate = self.delegate as? VideoViewControllerDelegate
             videoDelegate?.completionHandler?(nil)
+        }
+    }
+    private func saveVideoAnalytics(isDone: Bool) {
+        print("\n*********** INSIDE SAVE ANALYTICS \(isDone)")
+        let endTime = (self.player != nil) ? self.player!.currentTime() : kCMTimeZero
+        if (self.delegate != nil) {
+            let videoDelegate = self.delegate as? VideoViewControllerDelegate
+            videoDelegate?.videoAnalytics?.playEnd(position: endTime, completed: isDone)
         }
     }
 }

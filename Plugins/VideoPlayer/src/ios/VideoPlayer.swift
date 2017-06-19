@@ -8,11 +8,12 @@ import VideoPlayer
 @objc(VideoPlayer) class VideoPlayer : CDVPlugin {
 	
 	@objc(showVideo:) func showVideo(command: CDVInvokedUrlCommand) {
-		
-		let videoId: String = command.arguments[0] as? String ?? ""
-		let videoUrl: String = command.arguments[1] as? String ?? ""
-
-        let videoViewPlayer = VideoViewPlayer(videoId: videoId, videoUrl: videoUrl)
+        let videoViewPlayer = VideoViewPlayer(
+	        					mediaSource: command.arguments[0] as? String ?? "",
+	        					videoId: command.arguments[1] as? String ?? "",
+	        					languageId: command.arguments[2] as? String ?? "",
+	        					silLang: command.arguments[3] as? String ?? "",
+	        					videoUrl: command.arguments[4] as? String ?? "")
         videoViewPlayer.begin(complete: { error in
             var result: CDVPluginResult
             if let err = error {

@@ -24,7 +24,12 @@ class VideoViewController : UIViewController {
         //let videoUrl: String = "https://arc.gt/jy7bi?apiSessionId=5880542ea3ec81.60338491" // Jesus for Children
         let videoUrl: String = "https://arc.gt/1e62h?apiSessionId=587858aea460f2.62190595" // Jesus Film
         //let seekSec: Int64 = 0
-        self.videoViewPlayer = VideoViewPlayer(videoId: "Jesus", videoUrl: videoUrl)
+        //self.videoViewPlayer = VideoViewPlayer(videoId: "Jesus", videoUrl: videoUrl)
+        self.videoViewPlayer = VideoViewPlayer(mediaSource: "JFP",
+                                               videoId: "Jesus",
+                                               languageId: "528",
+                                               silLang: "eng",
+                                               videoUrl: videoUrl)
     }
     override func viewDidLoad() {
         super.viewDidLoad()

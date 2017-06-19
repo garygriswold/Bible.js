@@ -159,7 +159,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 SWIFT_CLASS("_TtC11VideoPlayer15VideoViewPlayer")
 @interface VideoViewPlayer : NSObject
 @property (nonatomic, readonly, strong) AVPlayerViewController * _Nonnull controller;
-- (nonnull instancetype)initWithVideoId:(NSString * _Nonnull)videoId videoUrl:(NSString * _Nonnull)videoUrl OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithMediaSource:(NSString * _Nonnull)mediaSource videoId:(NSString * _Nonnull)videoId languageId:(NSString * _Nonnull)languageId silLang:(NSString * _Nonnull)silLang videoUrl:(NSString * _Nonnull)videoUrl OBJC_DESIGNATED_INITIALIZER;
 - (void)beginWithComplete:(void (^ _Nonnull)(NSError * _Nullable))complete;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 @end

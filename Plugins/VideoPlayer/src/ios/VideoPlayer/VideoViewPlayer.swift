@@ -14,17 +14,25 @@ import CoreMedia
 public class VideoViewPlayer : NSObject {
 	
     public let controller = AVPlayerViewController()
+    let videoAnalytics: VideoAnalytics
     
-    public init(videoId: String, videoUrl: String) {
+    public init(mediaSource: String,
+                videoId: String,
+                languageId: String,
+                silLang: String,
+                videoUrl: String) {
 	    print("INSIDE VideoViewPlayer \(videoId)  \(videoUrl)")
 		VideoViewState.retrieve(videoId: videoId)
 		VideoViewState.currentState.videoUrl = videoUrl
+        videoAnalytics = VideoAnalytics(mediaSource: mediaSource,
+                                        mediaId: videoId,
+                                        languageId: languageId,
+                                        silLang: silLang)
         self.controller.initNotifications()
         //self.controller.initDebugNotifications()
         print("CONSTRUCTED")
     }
 
-    //public func begin() {
     public func begin(complete: @escaping (_ error:Error?) -> Void) {
         print("VideoViewPlayer.BEGIN")
         let url = URL(string: VideoViewState.currentState.videoUrl!)!
@@ -38,10 +46,13 @@ public class VideoViewPlayer : NSObject {
         
         let delegate = VideoViewControllerDelegate()
         delegate.completionHandler = complete
+        delegate.videoAnalytics = videoAnalytics
         self.controller.delegate = delegate
         self.controller.showsPlaybackControls = true
         self.controller.player = player
         self.controller.player?.play()
+        
+        self.videoAnalytics.playStarted(position: seekTime)
     }
     
     func backupSeek(state: VideoViewState) -> CMTime {

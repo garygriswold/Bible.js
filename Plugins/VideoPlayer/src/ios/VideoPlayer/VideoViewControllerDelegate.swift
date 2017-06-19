@@ -12,6 +12,7 @@ import AVKit
 class VideoViewControllerDelegate : NSObject, AVPlayerViewControllerDelegate {
     
     public var completionHandler: ((Error?)->Void)?
+    public var videoAnalytics: VideoAnalytics?
     
 }
 

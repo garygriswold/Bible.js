@@ -14,6 +14,11 @@
 		E40245C51EF3875F004FFD57 /* VideoViewPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40245C41EF3875F004FFD57 /* VideoViewPlayer.swift */; };
 		E40245C71EF3876F004FFD57 /* VideoViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40245C61EF3876F004FFD57 /* VideoViewState.swift */; };
 		E41B244D1EF45B34004492A5 /* VideoViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B244C1EF45B34004492A5 /* VideoViewControllerDelegate.swift */; };
+		E42D838E1EF62D730032EE44 /* VideoAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42D838D1EF62D730032EE44 /* VideoAnalytics.swift */; };
+		E42D83921EF62E9A0032EE44 /* AnalyticsSessionId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42D83911EF62E9A0032EE44 /* AnalyticsSessionId.swift */; };
+		E42D83A31EF63A6A0032EE44 /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E42D83A21EF63A6A0032EE44 /* Zip.framework */; };
+		E43231911EF859CE002B4C6B /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E432318F1EF859A1002B4C6B /* AWS.framework */; };
+		E4C915651EF78B1A003DD97F /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C915641EF78B1A003DD97F /* AWSCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +42,13 @@
 		E40245C41EF3875F004FFD57 /* VideoViewPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewPlayer.swift; sourceTree = "<group>"; };
 		E40245C61EF3876F004FFD57 /* VideoViewState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewState.swift; sourceTree = "<group>"; };
 		E41B244C1EF45B34004492A5 /* VideoViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewControllerDelegate.swift; sourceTree = "<group>"; };
+		E42D838D1EF62D730032EE44 /* VideoAnalytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoAnalytics.swift; sourceTree = "<group>"; };
+		E42D83911EF62E9A0032EE44 /* AnalyticsSessionId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsSessionId.swift; sourceTree = "<group>"; };
+		E42D83961EF637940032EE44 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = "../../../../../../AWS_SDK/aws-ios-sdk-2.5.8/frameworks/AWSCore.framework"; sourceTree = "<group>"; };
+		E42D839A1EF637F20032EE44 /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Zip.framework; path = ../../../PKZip/src/ios/build/Zip.framework; sourceTree = "<group>"; };
+		E42D83A21EF63A6A0032EE44 /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Zip.framework; sourceTree = "<group>"; };
+		E432318F1EF859A1002B4C6B /* AWS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWS.framework; sourceTree = "<group>"; };
+		E4C915641EF78B1A003DD97F /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +56,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E43231911EF859CE002B4C6B /* AWS.framework in Frameworks */,
+				E4C915651EF78B1A003DD97F /* AWSCore.framework in Frameworks */,
+				E42D83A31EF63A6A0032EE44 /* Zip.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,6 +79,7 @@
 				E40245AA1EF386FF004FFD57 /* VideoPlayer */,
 				E40245B51EF386FF004FFD57 /* VideoPlayerTests */,
 				E40245A91EF386FF004FFD57 /* Products */,
+				E42D83951EF637940032EE44 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -79,6 +95,11 @@
 		E40245AA1EF386FF004FFD57 /* VideoPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				E432318F1EF859A1002B4C6B /* AWS.framework */,
+				E4C915641EF78B1A003DD97F /* AWSCore.framework */,
+				E42D83A21EF63A6A0032EE44 /* Zip.framework */,
+				E42D838D1EF62D730032EE44 /* VideoAnalytics.swift */,
+				E42D83911EF62E9A0032EE44 /* AnalyticsSessionId.swift */,
 				E40245C61EF3876F004FFD57 /* VideoViewState.swift */,
 				E40245C41EF3875F004FFD57 /* VideoViewPlayer.swift */,
 				E40245C21EF38735004FFD57 /* AVPlayerViewControllerExtension.swift */,
@@ -96,6 +117,15 @@
 				E40245B81EF386FF004FFD57 /* Info.plist */,
 			);
 			path = VideoPlayerTests;
+			sourceTree = "<group>";
+		};
+		E42D83951EF637940032EE44 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E42D839A1EF637F20032EE44 /* Zip.framework */,
+				E42D83961EF637940032EE44 /* AWSCore.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -213,7 +243,9 @@
 			files = (
 				E40245C71EF3876F004FFD57 /* VideoViewState.swift in Sources */,
 				E40245C31EF38735004FFD57 /* AVPlayerViewControllerExtension.swift in Sources */,
+				E42D838E1EF62D730032EE44 /* VideoAnalytics.swift in Sources */,
 				E40245C51EF3875F004FFD57 /* VideoViewPlayer.swift in Sources */,
+				E42D83921EF62E9A0032EE44 /* AnalyticsSessionId.swift in Sources */,
 				E41B244D1EF45B34004492A5 /* VideoViewControllerDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -348,8 +380,14 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/VideoPlayer",
+				);
 				INFOPLIST_FILE = VideoPlayer/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.VideoPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -369,8 +407,14 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/VideoPlayer",
+				);
 				INFOPLIST_FILE = VideoPlayer/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.VideoPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";

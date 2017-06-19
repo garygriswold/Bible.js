@@ -1,8 +1,8 @@
 "use strict";
 
 module.exports = {
-    showVideo: function (videoId, videoUrl, successCallback, errorCallback) {
+	showVideo: function(mediaSource, videoId, languageId, silLang, videoUrl, successCallback, errorCallback) {
 	    console.log('**** INSIDE module.exports begin: ' + videoId + ' ' + videoUrl);
-        cordova.exec(successCallback, errorCallback, "VideoPlayer", "showVideo", [videoId, videoUrl]);
+        cordova.exec(successCallback, errorCallback, "VideoPlayer", "showVideo", [mediaSource, videoId, languageId, silLang, videoUrl]);
     }
 };
