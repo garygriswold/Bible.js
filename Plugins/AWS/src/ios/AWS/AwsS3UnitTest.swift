@@ -61,8 +61,9 @@ public class AwsS3UnitTest {
         
         s3.uploadText(s3Bucket: "shortsands", s3Key: "hello2", data: "Hello World Again",
                         complete: { err in print("I RECEIVED loadString CALLBACK \(String(describing: err))")})
-        
-        s3.uploadVideoAnalytics(sessionId: "12345", timestamp: "12345", data: "Hello World Third Time",
+        var dict = [String: String]()
+        dict["one"] = "two"
+        s3.uploadAnalytics(sessionId: "12345", timestamp: "12345", prefix: "HelloV1", dictionary: dict,
                            complete: { err in print("I RECEIVED loadAnalytics CALLBACK \(String(describing: err))")})
     }
     

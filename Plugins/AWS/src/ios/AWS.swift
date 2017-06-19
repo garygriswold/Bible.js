@@ -138,12 +138,14 @@ import AWS
 	    )
     }
     
-    @objc(uploadVideoAnalytics:) 
-    func uploadVideoAnalytics(command: CDVInvokedUrlCommand) {    
-	    AwsS3.shared.uploadVideoAnalytics(
+    @objc(uploadAnalytics:) 
+    func uploadVideoAnalytics(command: CDVInvokedUrlCommand) {
+	    let data = command.arguments[3] as? String ?? ""
+	    AwsS3.shared.uploadAnalytics(
 		    sessionId: command.arguments[0] as? String ?? "", 
-		    timestamp: command.arguments[1] as? String ?? "", 
-		    data: command.arguments[2] as? String ?? "",
+		    timestamp: command.arguments[1] as? String ?? "",
+		    prefix: command.arguments[2] as? String ?? "",
+		    json: data.data(using: String.Encoding.utf8)!,
             complete: { error in
 	            var result: CDVPluginResult
 	            if let err = error {

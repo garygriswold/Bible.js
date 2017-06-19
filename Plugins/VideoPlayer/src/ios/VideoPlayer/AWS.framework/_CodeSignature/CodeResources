@@ -22,7 +22,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		seLNQHC4yRyEE0whB/MeI5DcUQE=
+		FM+ml0rasbghFs1d4up5/5fYqhE=
 		</data>
 		<key>Modules/AWS.swiftmodule/x86_64.swiftdoc</key>
 		<data>
@@ -30,7 +30,7 @@
 		</data>
 		<key>Modules/AWS.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		F/tT3UeTejU0z6v+UI4G6u8RXt0=
+		JLf7Dmcuw6DCEGDX1DOh2YHj+iQ=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -98,11 +98,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			F/tT3UeTejU0z6v+UI4G6u8RXt0=
+			JLf7Dmcuw6DCEGDX1DOh2YHj+iQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			WhrUUxJEVZKFxHfsRgfA0H/clHsdO8r4l5wnOJScKoE=
+			/bygM9EacZcqinXOOf22yDgftyAE4hkN6oBkLOXSFQ8=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

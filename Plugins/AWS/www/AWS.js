@@ -86,13 +86,13 @@ exports.downloadZipFile = function(s3Bucket, s3Key, filePath, callback) {
     }, "AWS", "downloadZipFile", [s3Bucket, s3Key, filePath]);
 };
 
-exports.uploadVideoAnalytics = function(sessionId, timestamp, data, callback) {
+exports.uploadAnalytics = function(sessionId, timestamp, prefix, json, callback) {
     exec(function() {
 	    callback(true);
 	}, function(error) {
-		AWS.logError("uploadVideoAnalytics", error, sessionId, timestamp, null);
+		AWS.logError("uploadAnalytics", error, sessionId, timestamp, null);
 	    callback(false);				
-	}, "AWS", "uploadVideoAnalytics", [sessionId, timestamp, data]);
+	}, "AWS", "uploadAnalytics", [sessionId, timestamp, prefix, json]);
 };
 
 exports.uploadText = function(s3Bucket, s3Key, data, callback) {

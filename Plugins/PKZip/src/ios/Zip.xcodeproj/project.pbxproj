@@ -746,7 +746,7 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.roymarmelstein.Zip;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 				SWIFT_INCLUDE_PATHS = "${SRCROOT}/Zip/minizip/**";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -769,7 +769,8 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.roymarmelstein.Zip;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
+				"SKIP_INSTALL[sdk=*]" = NO;
 				SWIFT_INCLUDE_PATHS = "${SRCROOT}/Zip/minizip/**";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};

@@ -149,19 +149,10 @@ AWSUnitTest.prototype.testDownloadNonExistantZipFile = function() {
 	});	
 };
 
-AWSUnitTest.prototype.testDownloadZipFileXX = function() {
+AWSUnitTest.prototype.testUploadAnalytics = function() {
 
-	/*
-	AWS.downloadZipFile("shortsands", "XXXX.zip", "/Documents/WEB-ERR2.db", function(done) {
-		console.log("download non-existing item should fail. " + done);
+ 	let json = "{ \"Body\": \"Text of Message.\" }"
+	AWS.uploadAnalytics("session1", "2017-06-19T12:12", "HelloV1", json, function(done) {
+		console.log("Upload Should succeed. " + done)
 	});
-	*/
-	/*
-	AWS.downloadZipFile("shortsands", "WEB.db.zip", "/XXXX/WEB-ERR3.db", function(done) {
-		console.log("download zip to non-existing path " + done);
-	});
-	*/
-	/*
-
-	*/
 };

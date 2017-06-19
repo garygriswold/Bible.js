@@ -218,15 +218,38 @@ public class AwsS3 {
     // Upload Functions
     /////////////////////////////////////////////////////////////////////////
     /**
-    * Upload Analytics in Text form, such as JSON to analytics bucket
+    * Upload Analytics from a Dictionary, that is converted to JSON.
     */
-    public func uploadVideoAnalytics(sessionId: String, timestamp: String, data: String,
+    public func uploadAnalytics(sessionId: String, timestamp: String, prefix: String, dictionary: [String: String],
                          complete: @escaping (_ error: Error?) -> Void) {
+        var message: Data
+        do {
+            message = try JSONSerialization.data(withJSONObject: dictionary,
+                                                 options: JSONSerialization.WritingOptions.prettyPrinted)
+        } catch let jsonError {
+            print("ERROR while converting message to JSON \(jsonError)")
+            let errorMessage = "{\"Error\": \"AwsS3.uploadAnalytics \(jsonError.localizedDescription)\"}"
+            message = errorMessage.data(using: String.Encoding.utf8)!
+        }
+        // debug
+        print("message \(String(describing: String(data: message, encoding: String.Encoding.utf8)))")
+        uploadAnalytics(sessionId: sessionId, timestamp: timestamp, prefix: prefix, json: message,
+                   complete: complete)
+    }
+    /**
+    * Upload Analytics from a JSON text String in Data form.  This one is intended for the Cordova Plugin to use
+    */
+    public func uploadAnalytics(sessionId: String, timestamp: String, prefix: String, json: Data,
+                                complete: @escaping (_ error: Error?) -> Void) {
         let s3Bucket = "analytics-" + self.endpoint.regionName + "-shortsands"
         let s3Key = sessionId + "-" + timestamp
-        let textData = data.data(using: String.Encoding.utf8)
-        uploadData(s3Bucket: s3Bucket, s3Key: s3Key, data: textData!, contentType: "text/plain",
-                    complete: complete)
+        let jsonPrefix = "{\"" + prefix + "\": "
+        let jsonSuffix = "}"
+        var message: Data = jsonPrefix.data(using: String.Encoding.utf8)!
+        message.append(json)
+        message.append(jsonSuffix.data(using: String.Encoding.utf8)!)
+        uploadData(s3Bucket: s3Bucket, s3Key: s3Key, data: message,
+                   contentType: "application/json", complete: complete)
     }
     /**
     * Upload string object to bucket
