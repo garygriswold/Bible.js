@@ -12,13 +12,32 @@ import Zip
 
 public class AwsS3 {
     
+    // AwsS3.regionName should be set early in an App
+    public static var region: String = "us-east-1"
+    
+    // Do not instantiate AwsS3, use AwsS3.shared
+    private static var instance: AwsS3?
+    public static var shared: AwsS3 {
+        get {
+            if (AwsS3.instance == nil) {
+                AwsS3.instance = AwsS3(region: AwsS3.region)
+            }
+            return AwsS3.instance!
+        }
+    }
+    
+    private let region: AWSRegionType
     private let endpoint: AWSEndpoint
     private let transfer: AWSS3TransferUtility
     
-    public init(region: AWSRegionType) {
-        
-	    self.endpoint = AWSEndpoint(region: region, service: AWSServiceType.S3, useUnsafeURL: false)!
-        let configuration = AWSServiceConfiguration(region: region, endpoint: endpoint,
+    init(region: String) {
+        var regionType = region.aws_regionTypeValue()
+        if (regionType == AWSRegionType.Unknown) {
+            regionType = AWSRegionType.USEast1
+        }
+        self.region = regionType
+	    self.endpoint = AWSEndpoint(region: self.region, service: AWSServiceType.S3, useUnsafeURL: false)!
+        let configuration = AWSServiceConfiguration(region: self.region, endpoint: endpoint,
                                                     credentialsProvider: Credentials.AWS_BIBLE_APP)
         AWSServiceManager.default().defaultServiceConfiguration = configuration
         //AWSS3TransferUtility.interceptApplication was not set, because we do not need it.

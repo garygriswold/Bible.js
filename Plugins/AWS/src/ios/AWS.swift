@@ -13,24 +13,12 @@
 import AWS
 
 @objc(AWS) class AWS : CDVPlugin {
-	
-	static var regionType: AWSRegionType = AWSRegionType.USEast1
-	
-	var awsS3: AwsS3 = AwsS3(region: regionType)  // I don't see this constructor is ever executed
-								// but if it does get executed, will it crash AwsS3?
-    
+						    
     @objc(initializeRegion:)
     func initializeRegion(command:  CDVInvokedUrlCommand) {
         let regionName = command.arguments[0] as? String ?? ""
-        let type: AWSRegionType = regionName.aws_regionTypeValue()
-        var result: CDVPluginResult
-        if (type != AWSRegionType.Unknown) {
-            AWS.regionType = type
-            result = CDVPluginResult(status: CDVCommandStatus_OK)
-        } else {
-            result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Unknown Region: " + regionName)
-        }
-        self.awsS3 = AwsS3(region: AWS.regionType)
+        AwsS3.region = regionName
+        let result = CDVPluginResult(status: CDVCommandStatus_OK)
         self.commandDelegate!.send(result, callbackId: command.callbackId)
     }
 	
@@ -44,14 +32,14 @@ import AWS
 	@objc(echo3:)
 	func echo3(command: CDVInvokedUrlCommand) {
 		let message = command.arguments[0] as? String ?? ""
-		let response = self.awsS3.echo3(message: message);
+		let response = AwsS3.shared.echo3(message: message);
 		let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: response)
 		self.commandDelegate!.send(result, callbackId: command.callbackId)		
 	}
 	
 	@objc(preSignedUrlGET:) 
 	func preSignedUrlGET(command: CDVInvokedUrlCommand) {
-		awsS3.preSignedUrlGET(
+		AwsS3.shared.preSignedUrlGET(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 			expires: command.arguments[2] as? Int ?? 3600,
@@ -64,7 +52,7 @@ import AWS
 	
 	@objc(preSignedUrlPUT:) 
 	func preSignedUrlPUT(command: CDVInvokedUrlCommand) {
-		awsS3.preSignedUrlPUT(
+		AwsS3.shared.preSignedUrlPUT(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 			expires: command.arguments[2] as? Int ?? 3600,
@@ -78,7 +66,7 @@ import AWS
 
 	@objc(downloadText:) 
 	func downloadText(command: CDVInvokedUrlCommand) {
-		awsS3.downloadText(
+		AwsS3.shared.downloadText(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
             complete: { error, data in
@@ -95,7 +83,7 @@ import AWS
     
     @objc(downloadData:) 
     func downloadData(command: CDVInvokedUrlCommand) {	
-		awsS3.downloadData(
+		AwsS3.shared.downloadData(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
             complete: { error, data in
@@ -114,7 +102,7 @@ import AWS
     func downloadFile(command: CDVInvokedUrlCommand) {
 	    print("Documents \(NSHomeDirectory())") 
 	    let filePath: String = command.arguments[2] as? String ?? ""
-	    awsS3.downloadFile(
+	    AwsS3.shared.downloadFile(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 			filePath: URL(fileURLWithPath: NSHomeDirectory() + filePath),
@@ -134,7 +122,7 @@ import AWS
     func downloadZipFile(command: CDVInvokedUrlCommand) {
 	    print("Documents \(NSHomeDirectory())") 
 	    let filePath: String = command.arguments[2] as? String ?? ""
-	    awsS3.downloadZipFile(
+	    AwsS3.shared.downloadZipFile(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 			filePath: URL(fileURLWithPath: NSHomeDirectory() + filePath),
@@ -152,7 +140,7 @@ import AWS
     
     @objc(uploadVideoAnalytics:) 
     func uploadVideoAnalytics(command: CDVInvokedUrlCommand) {    
-	    awsS3.uploadVideoAnalytics(
+	    AwsS3.shared.uploadVideoAnalytics(
 		    sessionId: command.arguments[0] as? String ?? "", 
 		    timestamp: command.arguments[1] as? String ?? "", 
 		    data: command.arguments[2] as? String ?? "",
@@ -170,7 +158,7 @@ import AWS
     
     @objc(uploadText:) 
     func uploadText(command: CDVInvokedUrlCommand) {    
-	    awsS3.uploadText(
+	    AwsS3.shared.uploadText(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 		    data: command.arguments[2] as? String ?? "",
@@ -188,7 +176,7 @@ import AWS
     
     @objc(uploadData:) 
     func uploadData(command: CDVInvokedUrlCommand) {
-	    awsS3.uploadData(
+	    AwsS3.shared.uploadData(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 		    data: command.arguments[2] as? Data ?? Data(),
@@ -212,7 +200,7 @@ import AWS
     @objc(uploadFile:) 
     func uploadFile(command: CDVInvokedUrlCommand) {
 	    let filePath = command.arguments[2] as? String ?? ""
-	    awsS3.uploadFile(
+	    AwsS3.shared.uploadFile(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 			filePath: URL(fileURLWithPath: NSHomeDirectory() + filePath),
