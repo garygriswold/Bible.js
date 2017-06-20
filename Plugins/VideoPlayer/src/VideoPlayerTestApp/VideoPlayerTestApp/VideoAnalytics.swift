@@ -75,7 +75,7 @@ class VideoAnalytics {
 
         self.dictionary["isStreaming"] = "true" // should this be 1 instead
         self.mediaViewStartingPosition = CMTimeGetSeconds(position)
-        self.dictionary["mediaViewStartingPosition"] = String(self.mediaViewStartingPosition)
+        self.dictionary["mediaViewStartingPosition"] = String(round(self.mediaViewStartingPosition * 1000) / 1000)
         
         AwsS3.shared.uploadAnalytics(sessionId: self.sessionId,
                                      timestamp: self.dictionary["timeStarted"]! + "-B",
@@ -98,7 +98,7 @@ class VideoAnalytics {
         self.dictionary["elapsedTime"] = String(round(duration * 1000) / 1000)
         let secondsPlay = CMTimeGetSeconds(position)
         let mediaTimeViewInSeconds = secondsPlay - self.mediaViewStartingPosition
-        self.dictionary["mediaTimeViewInSeconds"] = String(mediaTimeViewInSeconds)
+        self.dictionary["mediaTimeViewInSeconds"] = String(round(mediaTimeViewInSeconds * 1000) / 1000)
         self.dictionary["mediaViewCompleted"] = String(completed)
         
         AwsS3.shared.uploadAnalytics(sessionId: self.sessionId,
