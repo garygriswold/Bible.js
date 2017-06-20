@@ -14,6 +14,8 @@ import CoreMedia
 public class VideoViewPlayer : NSObject {
 	
     public let controller = AVPlayerViewController()
+    private let delegate = VideoViewControllerDelegate() // Without this delegate is lost because weak to controller
+    
     let videoAnalytics: VideoAnalytics
     
     public init(mediaSource: String,
@@ -28,9 +30,6 @@ public class VideoViewPlayer : NSObject {
                                         mediaId: videoId,
                                         languageId: languageId,
                                         silLang: silLang)
-        self.controller.initNotifications()
-        //self.controller.initDebugNotifications()
-        print("CONSTRUCTED")
     }
 
     public func begin(complete: @escaping (_ error:Error?) -> Void) {
@@ -44,15 +43,12 @@ public class VideoViewPlayer : NSObject {
         }
         let player = AVPlayer(playerItem: playerItem)
         
-        let delegate = VideoViewControllerDelegate()
         delegate.completionHandler = complete
         delegate.videoAnalytics = self.videoAnalytics
         self.controller.delegate = delegate
         self.controller.showsPlaybackControls = true
         self.controller.player = player
         self.controller.player?.play()
-        
-        self.videoAnalytics.playStarted(position: seekTime)
     }
     
     func backupSeek(state: VideoViewState) -> CMTime {

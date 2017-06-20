@@ -9,6 +9,7 @@ class VideoViewState : NSObject, NSCoding {
 	static var currentState = VideoViewState(videoId: "jesusFilm")
 	
 	static func retrieve(videoId: String) -> VideoViewState {
+        print("INSIDE RETRIEVE \(documentsDirectory)")
 		let archiveURL = documentsDirectory.appendingPathComponent(videoId)
 		let state = NSKeyedUnarchiver.unarchiveObject(withFile: archiveURL.path) as? VideoViewState
 		currentState = (state != nil) ? state! : VideoViewState(videoId: videoId)
