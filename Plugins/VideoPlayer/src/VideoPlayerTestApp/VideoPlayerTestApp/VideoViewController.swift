@@ -10,7 +10,7 @@
  * videoplayer plugin.
  */
 import UIKit
-import VideoPlayer
+//import VideoPlayer
 
 class VideoViewController : UIViewController {
     

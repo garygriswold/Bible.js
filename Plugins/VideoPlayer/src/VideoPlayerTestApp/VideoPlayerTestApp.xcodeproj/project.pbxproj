@@ -7,22 +7,36 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E428E5051EF8A47100932ED6 /* AnalyticsSessionId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E428E5031EF8A47100932ED6 /* AnalyticsSessionId.swift */; };
+		E428E5061EF8A47100932ED6 /* AVPlayerViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E428E5041EF8A47100932ED6 /* AVPlayerViewControllerExtension.swift */; };
+		E428E5081EF8A48B00932ED6 /* VideoAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E428E5071EF8A48B00932ED6 /* VideoAnalytics.swift */; };
+		E428E50C1EF8A49C00932ED6 /* VideoViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E428E5091EF8A49C00932ED6 /* VideoViewControllerDelegate.swift */; };
+		E428E50D1EF8A49C00932ED6 /* VideoViewPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E428E50A1EF8A49C00932ED6 /* VideoViewPlayer.swift */; };
+		E428E50E1EF8A49C00932ED6 /* VideoViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E428E50B1EF8A49C00932ED6 /* VideoViewState.swift */; };
+		E428E5171EF8A4EB00932ED6 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E428E5111EF8A4C300932ED6 /* AWS.framework */; };
+		E428E5181EF8A4EB00932ED6 /* AWS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E428E5111EF8A4C300932ED6 /* AWS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E428E51A1EF8A4F100932ED6 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E428E5121EF8A4C300932ED6 /* AWSCore.framework */; };
+		E428E51B1EF8A4F100932ED6 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E428E5121EF8A4C300932ED6 /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E428E51C1EF8A4F600932ED6 /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E428E50F1EF8A4AE00932ED6 /* Zip.framework */; };
+		E428E51D1EF8A4F600932ED6 /* Zip.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E428E50F1EF8A4AE00932ED6 /* Zip.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E43041781EF433DC002FC73E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43041771EF433DC002FC73E /* AppDelegate.swift */; };
 		E430417D1EF433DC002FC73E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E430417B1EF433DC002FC73E /* Main.storyboard */; };
 		E430417F1EF433DC002FC73E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E430417E1EF433DC002FC73E /* Assets.xcassets */; };
 		E43041821EF433DC002FC73E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E43041801EF433DC002FC73E /* LaunchScreen.storyboard */; };
 		E430418A1EF43554002FC73E /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43041891EF43554002FC73E /* VideoViewController.swift */; };
 		E43041911EF435A9002FC73E /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E43041901EF435A9002FC73E /* MediaPlayer.framework */; };
-		E43231931EF85D87002B4C6B /* VideoPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E43231921EF85D87002B4C6B /* VideoPlayer.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		E430418E1EF43591002FC73E /* Embed Frameworks */ = {
+		E428E5191EF8A4EB00932ED6 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				E428E5181EF8A4EB00932ED6 /* AWS.framework in Embed Frameworks */,
+				E428E51D1EF8A4F600932ED6 /* Zip.framework in Embed Frameworks */,
+				E428E51B1EF8A4F100932ED6 /* AWSCore.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -30,6 +44,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E428E5031EF8A47100932ED6 /* AnalyticsSessionId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsSessionId.swift; sourceTree = "<group>"; };
+		E428E5041EF8A47100932ED6 /* AVPlayerViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVPlayerViewControllerExtension.swift; sourceTree = "<group>"; };
+		E428E5071EF8A48B00932ED6 /* VideoAnalytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoAnalytics.swift; sourceTree = "<group>"; };
+		E428E5091EF8A49C00932ED6 /* VideoViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewControllerDelegate.swift; sourceTree = "<group>"; };
+		E428E50A1EF8A49C00932ED6 /* VideoViewPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewPlayer.swift; sourceTree = "<group>"; };
+		E428E50B1EF8A49C00932ED6 /* VideoViewState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewState.swift; sourceTree = "<group>"; };
+		E428E50F1EF8A4AE00932ED6 /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Zip.framework; sourceTree = "<group>"; };
+		E428E5111EF8A4C300932ED6 /* AWS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWS.framework; sourceTree = "<group>"; };
+		E428E5121EF8A4C300932ED6 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
 		E43041741EF433DC002FC73E /* VideoPlayerTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoPlayerTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E43041771EF433DC002FC73E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E430417C1EF433DC002FC73E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -38,7 +61,6 @@
 		E43041831EF433DC002FC73E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E43041891EF43554002FC73E /* VideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		E43041901EF435A9002FC73E /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		E43231921EF85D87002B4C6B /* VideoPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = VideoPlayer.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,8 +68,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E428E51C1EF8A4F600932ED6 /* Zip.framework in Frameworks */,
+				E428E5171EF8A4EB00932ED6 /* AWS.framework in Frameworks */,
 				E43041911EF435A9002FC73E /* MediaPlayer.framework in Frameworks */,
-				E43231931EF85D87002B4C6B /* VideoPlayer.framework in Frameworks */,
+				E428E51A1EF8A4F100932ED6 /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,6 +81,9 @@
 		E430416B1EF433DC002FC73E = {
 			isa = PBXGroup;
 			children = (
+				E428E5111EF8A4C300932ED6 /* AWS.framework */,
+				E428E5121EF8A4C300932ED6 /* AWSCore.framework */,
+				E428E50F1EF8A4AE00932ED6 /* Zip.framework */,
 				E43041761EF433DC002FC73E /* VideoPlayerTestApp */,
 				E43041751EF433DC002FC73E /* Products */,
 				E430418F1EF435A9002FC73E /* Frameworks */,
@@ -74,7 +101,12 @@
 		E43041761EF433DC002FC73E /* VideoPlayerTestApp */ = {
 			isa = PBXGroup;
 			children = (
-				E43231921EF85D87002B4C6B /* VideoPlayer.framework */,
+				E428E5071EF8A48B00932ED6 /* VideoAnalytics.swift */,
+				E428E5091EF8A49C00932ED6 /* VideoViewControllerDelegate.swift */,
+				E428E50A1EF8A49C00932ED6 /* VideoViewPlayer.swift */,
+				E428E50B1EF8A49C00932ED6 /* VideoViewState.swift */,
+				E428E5031EF8A47100932ED6 /* AnalyticsSessionId.swift */,
+				E428E5041EF8A47100932ED6 /* AVPlayerViewControllerExtension.swift */,
 				E43041771EF433DC002FC73E /* AppDelegate.swift */,
 				E43041891EF43554002FC73E /* VideoViewController.swift */,
 				E430417B1EF433DC002FC73E /* Main.storyboard */,
@@ -103,7 +135,7 @@
 				E43041701EF433DC002FC73E /* Sources */,
 				E43041711EF433DC002FC73E /* Frameworks */,
 				E43041721EF433DC002FC73E /* Resources */,
-				E430418E1EF43591002FC73E /* Embed Frameworks */,
+				E428E5191EF8A4EB00932ED6 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -167,7 +199,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E428E50D1EF8A49C00932ED6 /* VideoViewPlayer.swift in Sources */,
+				E428E5061EF8A47100932ED6 /* AVPlayerViewControllerExtension.swift in Sources */,
+				E428E50E1EF8A49C00932ED6 /* VideoViewState.swift in Sources */,
 				E43041781EF433DC002FC73E /* AppDelegate.swift in Sources */,
+				E428E5081EF8A48B00932ED6 /* VideoAnalytics.swift in Sources */,
+				E428E50C1EF8A49C00932ED6 /* VideoViewControllerDelegate.swift in Sources */,
+				E428E5051EF8A47100932ED6 /* AnalyticsSessionId.swift in Sources */,
 				E430418A1EF43554002FC73E /* VideoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

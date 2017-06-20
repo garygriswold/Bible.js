@@ -24,7 +24,7 @@ public class VideoViewPlayer : NSObject {
 	    print("INSIDE VideoViewPlayer \(videoId)  \(videoUrl)")
 		VideoViewState.retrieve(videoId: videoId)
 		VideoViewState.currentState.videoUrl = videoUrl
-        videoAnalytics = VideoAnalytics(mediaSource: mediaSource,
+        self.videoAnalytics = VideoAnalytics(mediaSource: mediaSource,
                                         mediaId: videoId,
                                         languageId: languageId,
                                         silLang: silLang)
@@ -46,7 +46,7 @@ public class VideoViewPlayer : NSObject {
         
         let delegate = VideoViewControllerDelegate()
         delegate.completionHandler = complete
-        delegate.videoAnalytics = videoAnalytics
+        delegate.videoAnalytics = self.videoAnalytics
         self.controller.delegate = delegate
         self.controller.showsPlaybackControls = true
         self.controller.player = player

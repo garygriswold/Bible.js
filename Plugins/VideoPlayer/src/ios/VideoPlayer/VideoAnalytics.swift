@@ -88,7 +88,7 @@ class VideoAnalytics {
     }
     
     func playEnd(position: CMTime, completed: Bool) {
-        
+        print("INSIDE PLAY END \(position)  \(completed)")
         self.dictionary.removeAll()
         self.dictionary["sessionId"] = self.sessionId
         self.dictionary["timeStarted"] = dateFormatter.string(from: self.timeStarted)
