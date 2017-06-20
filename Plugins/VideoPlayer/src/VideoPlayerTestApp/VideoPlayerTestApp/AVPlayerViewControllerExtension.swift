@@ -90,6 +90,7 @@ extension AVPlayerViewController {
         print("\n** DID PLAY TO END \(String(describing: note.object))")
         self.dismiss(animated: false) // move this till after??
         sendVideoAnalytics(isStart: false, isDone: true)
+        
         VideoViewState.clear()
     }
     func playerItemFailedToPlayToEndTime(note:Notification) {
@@ -134,6 +135,7 @@ extension AVPlayerViewController {
                 videoDelegate?.videoAnalytics?.playStarted(position: currTime)
             } else {
                 videoDelegate?.videoAnalytics?.playEnded(position: currTime, completed: isDone)
+                videoDelegate?.videoAnalytics = nil // prevent sending duplicate messages
             }
         }
     }
