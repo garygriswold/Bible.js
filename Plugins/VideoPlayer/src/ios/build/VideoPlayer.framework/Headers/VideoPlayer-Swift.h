@@ -143,6 +143,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 @interface AVPlayerViewController (SWIFT_EXTENSION(VideoPlayer))
 @property (nonatomic, readonly) UIInterfaceOrientation preferredInterfaceOrientationForPresentation;
 @property (nonatomic, readonly) UIInterfaceOrientationMask supportedInterfaceOrientations;
+- (void)viewDidAppear:(BOOL)animated;
 /// <ul>
 ///   <li>
 ///     This method is called when the Done button on the video player is clicked.

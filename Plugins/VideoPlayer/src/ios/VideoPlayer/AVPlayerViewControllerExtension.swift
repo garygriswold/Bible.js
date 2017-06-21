@@ -17,6 +17,15 @@ extension AVPlayerViewController {
     override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.landscape
     }
+    override open func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("\n********** VIEW DID APPEAR ***** in AVPlayerViewController \(animated)")
+        sendVideoAnalytics(isStart: true, isDone: false)
+        
+        // Init notifications after analytics is started so that it does not get any false ends.
+        initNotifications()
+        //initDebugNotifications()
+    }
     /**
     * This method is called when the Done button on the video player is clicked.
     * Video State is saved in this method.
@@ -25,7 +34,7 @@ extension AVPlayerViewController {
 	    super.viewDidDisappear(animated)
         print("\n********** VIEW DID DISAPPEAR ***** in AVPlayerViewController \(animated)")
 
-        saveVideoAnalytics(isDone: false)
+        sendVideoAnalytics(isStart: false, isDone: false)
         VideoViewState.update(time: self.player?.currentTime())
         releaseVideoPlayer()
     }
@@ -80,7 +89,8 @@ extension AVPlayerViewController {
     func playerItemDidPlayToEndTime(note:Notification) {
         print("\n** DID PLAY TO END \(String(describing: note.object))")
         self.dismiss(animated: false) // move this till after??
-        saveVideoAnalytics(isDone: true)
+        sendVideoAnalytics(isStart: false, isDone: true)
+        
         VideoViewState.clear()
     }
     func playerItemFailedToPlayToEndTime(note:Notification) {
@@ -93,7 +103,6 @@ extension AVPlayerViewController {
         print("\n****** PLAYBACK STALLED \(String(describing: note.object))")
     }
     func playerItemNewAccessLogEntry(note:Notification) {
-        // did not start is not reported here
         print("\n****** ACCESS LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.accessLog()))")
     }
     func playerItemNewErrorLogEntry(note:Notification) {
@@ -105,7 +114,7 @@ extension AVPlayerViewController {
     */
     func applicationWillResignActive(note:Notification) {
 	    print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
-        saveVideoAnalytics(isDone: false)
+        sendVideoAnalytics(isStart: false, isDone: false)
 	    VideoViewState.update(time: self.player?.currentTime())
     }
     private func releaseVideoPlayer() {
@@ -117,12 +126,17 @@ extension AVPlayerViewController {
             videoDelegate?.completionHandler?(nil)
         }
     }
-    private func saveVideoAnalytics(isDone: Bool) {
+    private func sendVideoAnalytics(isStart: Bool, isDone: Bool) {
         print("\n*********** INSIDE SAVE ANALYTICS \(isDone)")
-        let endTime = (self.player != nil) ? self.player!.currentTime() : kCMTimeZero
+        let currTime = (self.player != nil) ? self.player!.currentTime() : kCMTimeZero
         if (self.delegate != nil) {
             let videoDelegate = self.delegate as? VideoViewControllerDelegate
-            videoDelegate?.videoAnalytics?.playEnd(position: endTime, completed: isDone)
+            if (isStart) {
+                videoDelegate?.videoAnalytics?.playStarted(position: currTime)
+            } else {
+                videoDelegate?.videoAnalytics?.playEnded(position: currTime, completed: isDone)
+                videoDelegate?.videoAnalytics = nil // prevent sending duplicate messages
+            }
         }
     }
 }

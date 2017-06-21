@@ -44,6 +44,10 @@ class VideoAnalytics {
         self.mediaViewStartingPosition = 0.0
     }
     
+    deinit {
+        print("VideoAnalytics is deallocated.")
+    }
+    
     func playStarted(position: CMTime) -> Void {
         self.dictionary.removeAll()
         self.dictionary["sessionId"] = self.sessionId
@@ -75,7 +79,7 @@ class VideoAnalytics {
 
         self.dictionary["isStreaming"] = "true" // should this be 1 instead
         self.mediaViewStartingPosition = CMTimeGetSeconds(position)
-        self.dictionary["mediaViewStartingPosition"] = String(self.mediaViewStartingPosition)
+        self.dictionary["mediaViewStartingPosition"] = String(round(self.mediaViewStartingPosition * 1000) / 1000)
         
         AwsS3.shared.uploadAnalytics(sessionId: self.sessionId,
                                      timestamp: self.dictionary["timeStarted"]! + "-B",
@@ -87,7 +91,7 @@ class VideoAnalytics {
         })
     }
     
-    func playEnd(position: CMTime, completed: Bool) {
+    func playEnded(position: CMTime, completed: Bool) {
         print("INSIDE PLAY END \(position)  \(completed)")
         self.dictionary.removeAll()
         self.dictionary["sessionId"] = self.sessionId
@@ -98,7 +102,7 @@ class VideoAnalytics {
         self.dictionary["elapsedTime"] = String(round(duration * 1000) / 1000)
         let secondsPlay = CMTimeGetSeconds(position)
         let mediaTimeViewInSeconds = secondsPlay - self.mediaViewStartingPosition
-        self.dictionary["mediaTimeViewInSeconds"] = String(mediaTimeViewInSeconds)
+        self.dictionary["mediaTimeViewInSeconds"] = String(round(mediaTimeViewInSeconds * 1000) / 1000)
         self.dictionary["mediaViewCompleted"] = String(completed)
         
         AwsS3.shared.uploadAnalytics(sessionId: self.sessionId,

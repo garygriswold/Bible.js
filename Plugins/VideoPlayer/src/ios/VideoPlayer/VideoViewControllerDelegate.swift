@@ -11,6 +11,10 @@ import AVKit
 
 class VideoViewControllerDelegate : NSObject, AVPlayerViewControllerDelegate {
     
+    deinit {
+        print("VideoViewControllerDelegate is deallocated.")
+    }
+    
     public var completionHandler: ((Error?)->Void)?
     public var videoAnalytics: VideoAnalytics?
     

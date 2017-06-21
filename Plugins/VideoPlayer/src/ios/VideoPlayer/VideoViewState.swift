@@ -5,11 +5,12 @@ import CoreMedia
 */
 class VideoViewState : NSObject, NSCoding {
 	
-	static let documentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
+	static let directory = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
 	static var currentState = VideoViewState(videoId: "jesusFilm")
 	
 	static func retrieve(videoId: String) -> VideoViewState {
-		let archiveURL = documentsDirectory.appendingPathComponent(videoId)
+        print("INSIDE RETRIEVE \(directory)")
+		let archiveURL = directory.appendingPathComponent(videoId)
 		let state = NSKeyedUnarchiver.unarchiveObject(withFile: archiveURL.path) as? VideoViewState
 		currentState = (state != nil) ? state! : VideoViewState(videoId: videoId)
 		return currentState
@@ -19,7 +20,7 @@ class VideoViewState : NSObject, NSCoding {
 		currentState.videoUrl = nil
 		currentState.position = kCMTimeZero
 		currentState.timestamp = Date()
-		let archiveURL = documentsDirectory.appendingPathComponent(currentState.videoId)
+		let archiveURL = directory.appendingPathComponent(currentState.videoId)
 		NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)		
 	}
 	
@@ -31,7 +32,7 @@ class VideoViewState : NSObject, NSCoding {
 		if (currentState.videoUrl != nil) {
 			currentState.position = ((time != nil) ? time : kCMTimeZero)!
 			currentState.timestamp = Date()
-			let archiveURL = documentsDirectory.appendingPathComponent(currentState.videoId)
+			let archiveURL = directory.appendingPathComponent(currentState.videoId)
 			NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)
 		}
 	}
@@ -54,6 +55,10 @@ class VideoViewState : NSObject, NSCoding {
 		self.position = kCMTimeZero
 		self.timestamp = Date()
 	}
+    
+    deinit {
+        print("VideoViewState is deallocated.")
+    }
 
 	required convenience init?(coder decoder: NSCoder) {
 		guard let videoId = decoder.decodeObject(forKey: "videoId") as? String

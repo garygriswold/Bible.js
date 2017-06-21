@@ -24,8 +24,12 @@ class AnalyticsSessionId {
     let archiveURL: URL
     
     init() {
-        let documentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
-        archiveURL = documentsDirectory.appendingPathComponent(AnalyticsSessionId.SESSION_KEY)
+        let directory = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
+        archiveURL = directory.appendingPathComponent(AnalyticsSessionId.SESSION_KEY)
+    }
+    
+    deinit {
+        print("AnalyticsSessionId is deallocated.")
     }
     
     func getSessionId() -> String {

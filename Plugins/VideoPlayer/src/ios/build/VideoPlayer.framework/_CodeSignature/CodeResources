@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/VideoPlayer-Swift.h</key>
 		<data>
-		oYNM3eyXOd8WwRhof4rvx6RzXAE=
+		j0HNi7a4FRv3Zhy+BwfCHKrNBk8=
 		</data>
 		<key>Headers/VideoPlayer.h</key>
 		<data>
@@ -22,7 +22,7 @@
 		</data>
 		<key>Modules/VideoPlayer.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		h88ll+YsmIu8eoICylWKevMvncw=
+		+esuSaHlG12ZgVKx5yIHRryoHuE=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -35,11 +35,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			oYNM3eyXOd8WwRhof4rvx6RzXAE=
+			j0HNi7a4FRv3Zhy+BwfCHKrNBk8=
 			</data>
 			<key>hash2</key>
 			<data>
-			P+2+w0kfCsoqMwlqi5Tc5Ny+l8F5CuD0t2a8tmehruA=
+			FUwwcXvJwgnneh7JgYESWvMPDQHw0o/ta9lDph4NB0g=
 			</data>
 		</dict>
 		<key>Headers/VideoPlayer.h</key>
@@ -68,11 +68,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			h88ll+YsmIu8eoICylWKevMvncw=
+			+esuSaHlG12ZgVKx5yIHRryoHuE=
 			</data>
 			<key>hash2</key>
 			<data>
-			tdTw6LxoI7vXsEVLNg0PQzl3qX2RruclN8OOCGDnhlM=
+			NaFGqu6MN+ZoxWJjqhhsBMuFGNzE7B8AcsWs8+h+EJM=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
