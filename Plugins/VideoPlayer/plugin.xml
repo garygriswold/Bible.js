@@ -43,6 +43,9 @@
 		</config-file>
 		<source-file src="src/ios/VideoPlayer.swift" />
 		<framework src="src/ios/build/VideoPlayer.framework" custom="true" embed="true" />
+		<framework src="src/ios/VideoPlayer/AWS.framework" custom="true" embed="true" />
+		<framework src="src/ios/VideoPlayer/AWSCore.framework" custom="true" embed="true" />
+		<framework src="src/ios/VideoPlayer/Zip.framework" custom="true" embed="true" />
 		<framework src="MediaPlayer.framework" />
 	</platform>
 

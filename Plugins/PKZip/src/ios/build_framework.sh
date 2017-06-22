@@ -20,5 +20,6 @@ xcodebuild -configuration Debug -sdk iphonesimulator SYMROOT="$FRAMEROOT" clean 
 
 # Copy Framework for Cordova PKZip Plugin
 ZIP=Zip.framework
+rm -rf $TARGET/../build/$ZIP
 cp -Rp $FRAMEROOT/Debug-iphonesimulator/$ZIP $TARGET/../build/
 

@@ -62,8 +62,8 @@
 		</config-file>
 		<source-file src="src/ios/AWS.swift" />
 		<framework src="src/ios/build/AWS.framework" embed="true" custom="true" />
-		<framework src="src/ios/Zip.framework" embed="true" custom="true" />
-		<framework src="src/ios/AWSCore.framework" embed="true" custom="true"/>
+		<framework src="src/ios/AWS/Zip.framework" embed="true" custom="true" />
+		<framework src="src/ios/AWS/AWSCore.framework" embed="true" custom="true"/>
 	</platform>
 
 </plugin>
