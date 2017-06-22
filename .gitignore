@@ -21,6 +21,7 @@ Validation/output/
 node_modules/
 xcdebugger/
 com-shortsands-videoplayer/
+*.framework
 ### Swift Xcode ###
 build/
 DerivedData/

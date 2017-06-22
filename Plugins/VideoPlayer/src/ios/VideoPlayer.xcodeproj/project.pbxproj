@@ -16,9 +16,10 @@
 		E41B244D1EF45B34004492A5 /* VideoViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B244C1EF45B34004492A5 /* VideoViewControllerDelegate.swift */; };
 		E42D838E1EF62D730032EE44 /* VideoAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42D838D1EF62D730032EE44 /* VideoAnalytics.swift */; };
 		E42D83921EF62E9A0032EE44 /* AnalyticsSessionId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42D83911EF62E9A0032EE44 /* AnalyticsSessionId.swift */; };
-		E42D83A31EF63A6A0032EE44 /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E42D83A21EF63A6A0032EE44 /* Zip.framework */; };
-		E43231911EF859CE002B4C6B /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E432318F1EF859A1002B4C6B /* AWS.framework */; };
-		E4C915651EF78B1A003DD97F /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C915641EF78B1A003DD97F /* AWSCore.framework */; };
+		E470CE711EFBF7EB001061CB /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E470CE701EFBF7EB001061CB /* AWS.framework */; };
+		E470CE731EFBF7F7001061CB /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E470CE721EFBF7F7001061CB /* Zip.framework */; };
+		E4C08DC31EFB7F4A0009BEB7 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C08DC21EFB7F4A0009BEB7 /* AWSCore.framework */; };
+		E4C08DC71EFB7F6E0009BEB7 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C08DC61EFB7F6E0009BEB7 /* MediaPlayer.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,11 +45,10 @@
 		E41B244C1EF45B34004492A5 /* VideoViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewControllerDelegate.swift; sourceTree = "<group>"; };
 		E42D838D1EF62D730032EE44 /* VideoAnalytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoAnalytics.swift; sourceTree = "<group>"; };
 		E42D83911EF62E9A0032EE44 /* AnalyticsSessionId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsSessionId.swift; sourceTree = "<group>"; };
-		E42D83961EF637940032EE44 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = "../../../../../../AWS_SDK/aws-ios-sdk-2.5.8/frameworks/AWSCore.framework"; sourceTree = "<group>"; };
-		E42D839A1EF637F20032EE44 /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Zip.framework; path = ../../../PKZip/src/ios/build/Zip.framework; sourceTree = "<group>"; };
-		E42D83A21EF63A6A0032EE44 /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Zip.framework; sourceTree = "<group>"; };
-		E432318F1EF859A1002B4C6B /* AWS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWS.framework; sourceTree = "<group>"; };
-		E4C915641EF78B1A003DD97F /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
+		E470CE701EFBF7EB001061CB /* AWS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWS.framework; sourceTree = "<group>"; };
+		E470CE721EFBF7F7001061CB /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Zip.framework; sourceTree = "<group>"; };
+		E4C08DC21EFB7F4A0009BEB7 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = VideoPlayer/AWSCore.framework; sourceTree = "<group>"; };
+		E4C08DC61EFB7F6E0009BEB7 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,9 +56,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E43231911EF859CE002B4C6B /* AWS.framework in Frameworks */,
-				E4C915651EF78B1A003DD97F /* AWSCore.framework in Frameworks */,
-				E42D83A31EF63A6A0032EE44 /* Zip.framework in Frameworks */,
+				E470CE731EFBF7F7001061CB /* Zip.framework in Frameworks */,
+				E470CE711EFBF7EB001061CB /* AWS.framework in Frameworks */,
+				E4C08DC71EFB7F6E0009BEB7 /* MediaPlayer.framework in Frameworks */,
+				E4C08DC31EFB7F4A0009BEB7 /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,9 +96,6 @@
 		E40245AA1EF386FF004FFD57 /* VideoPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				E432318F1EF859A1002B4C6B /* AWS.framework */,
-				E4C915641EF78B1A003DD97F /* AWSCore.framework */,
-				E42D83A21EF63A6A0032EE44 /* Zip.framework */,
 				E42D838D1EF62D730032EE44 /* VideoAnalytics.swift */,
 				E42D83911EF62E9A0032EE44 /* AnalyticsSessionId.swift */,
 				E40245C61EF3876F004FFD57 /* VideoViewState.swift */,
@@ -122,8 +120,10 @@
 		E42D83951EF637940032EE44 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E42D839A1EF637F20032EE44 /* Zip.framework */,
-				E42D83961EF637940032EE44 /* AWSCore.framework */,
+				E470CE721EFBF7F7001061CB /* Zip.framework */,
+				E470CE701EFBF7EB001061CB /* AWS.framework */,
+				E4C08DC61EFB7F6E0009BEB7 /* MediaPlayer.framework */,
+				E4C08DC21EFB7F4A0009BEB7 /* AWSCore.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

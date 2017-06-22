@@ -3,13 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E4B0F7F11EF1BF4B00A7AB3D /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B0F7F01EF1BF4B00A7AB3D /* Zip.framework */; };
-		E4B0F80F1EF25B9900A7AB3D /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E996CF1EF0673000717F85 /* AWSCore.framework */; };
-		E4B0F8101EF25BA200A7AB3D /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B0F7F01EF1BF4B00A7AB3D /* Zip.framework */; };
+		E470CE6F1EFBF515001061CB /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E470CE6E1EFBF515001061CB /* Zip.framework */; };
+		E4C08DBE1EFB7B600009BEB7 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C08DBA1EFB5DEB0009BEB7 /* AWSCore.framework */; };
 		E4E996AE1EF0604700717F85 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E996A41EF0604700717F85 /* AWS.framework */; };
 		E4E996B31EF0604700717F85 /* AWSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E996B21EF0604700717F85 /* AWSTests.swift */; };
 		E4E996B51EF0604700717F85 /* AWS.h in Headers */ = {isa = PBXBuildFile; fileRef = E4E996A71EF0604700717F85 /* AWS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -20,7 +19,6 @@
 		E4E996C91EF0609900717F85 /* SS_AWSS3PreSignedURL.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E996C51EF0609900717F85 /* SS_AWSS3PreSignedURL.m */; };
 		E4E996CA1EF0609900717F85 /* SS_AWSS3TransferUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = E4E996C61EF0609900717F85 /* SS_AWSS3TransferUtility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E4E996CB1EF0609900717F85 /* SS_AWSS3TransferUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E996C71EF0609900717F85 /* SS_AWSS3TransferUtility.m */; };
-		E4E996D01EF0673000717F85 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E996CF1EF0673000717F85 /* AWSCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,7 +32,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E4B0F7F01EF1BF4B00A7AB3D /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Zip.framework; sourceTree = "<group>"; };
+		E470CE6B1EFBF208001061CB /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Zip.framework; path = "../../../../../../Library/Frameworks/Debug-iphonesimulator/Zip.framework"; sourceTree = "<group>"; };
+		E470CE6E1EFBF515001061CB /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Zip.framework; path = AWS/Zip.framework; sourceTree = "<group>"; };
+		E4C08DBA1EFB5DEB0009BEB7 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = AWS/AWSCore.framework; sourceTree = "<group>"; };
 		E4E996A41EF0604700717F85 /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4E996A71EF0604700717F85 /* AWS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AWS.h; sourceTree = "<group>"; };
 		E4E996A81EF0604700717F85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -48,7 +48,6 @@
 		E4E996C51EF0609900717F85 /* SS_AWSS3PreSignedURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SS_AWSS3PreSignedURL.m; sourceTree = "<group>"; };
 		E4E996C61EF0609900717F85 /* SS_AWSS3TransferUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SS_AWSS3TransferUtility.h; sourceTree = "<group>"; };
 		E4E996C71EF0609900717F85 /* SS_AWSS3TransferUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SS_AWSS3TransferUtility.m; sourceTree = "<group>"; };
-		E4E996CF1EF0673000717F85 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,8 +55,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4B0F7F11EF1BF4B00A7AB3D /* Zip.framework in Frameworks */,
-				E4E996D01EF0673000717F85 /* AWSCore.framework in Frameworks */,
+				E470CE6F1EFBF515001061CB /* Zip.framework in Frameworks */,
+				E4C08DBE1EFB7B600009BEB7 /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,8 +65,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4E996AE1EF0604700717F85 /* AWS.framework in Frameworks */,
-				E4B0F8101EF25BA200A7AB3D /* Zip.framework in Frameworks */,
-				E4B0F80F1EF25B9900A7AB3D /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,7 +74,6 @@
 		E4E9969A1EF0604700717F85 = {
 			isa = PBXGroup;
 			children = (
-				E4B0F7F01EF1BF4B00A7AB3D /* Zip.framework */,
 				E4E996A61EF0604700717F85 /* AWS */,
 				E4E996B11EF0604700717F85 /* AWSTests */,
 				E4E996A51EF0604700717F85 /* Products */,
@@ -122,7 +118,9 @@
 		E4E996CC1EF060B800717F85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E4E996CF1EF0673000717F85 /* AWSCore.framework */,
+				E470CE6E1EFBF515001061CB /* Zip.framework */,
+				E470CE6B1EFBF208001061CB /* Zip.framework */,
+				E4C08DBA1EFB5DEB0009BEB7 /* AWSCore.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -203,7 +201,7 @@
 				};
 			};
 			buildConfigurationList = E4E9969E1EF0604700717F85 /* Build configuration list for PBXProject "AWS" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -384,6 +382,9 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/AWS",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					"$(USER_LIBRARY_DIR)/Frameworks/Debug-iphonesimulator",
 				);
 				INFOPLIST_FILE = AWS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -393,6 +394,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -410,6 +412,9 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/AWS",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					"$(USER_LIBRARY_DIR)/Frameworks/Debug-iphonesimulator",
 				);
 				INFOPLIST_FILE = AWS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -418,6 +423,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
