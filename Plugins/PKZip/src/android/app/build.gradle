@@ -16,10 +16,27 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    task hello (dependsOn: [assemble]) {
-        doLast {
-            print "Hello Now"
-        }
+
+    def LIBROOT = "/Users/garygriswold/Library/Frameworks/"
+    def DEBUG_ROOT = LIBROOT + "Debug-android/"
+    def RELSE_ROOT = LIBROOT + "Release-android/"
+
+    task deleteJars(type: Delete) {
+        delete DEBUG_ROOT + "Zip.jar"
+        delete RELSE_ROOT + "Zip.jar"
+    }
+    task copyDebug(type: Copy) {
+        from("build/intermediates/bundles/debug/")
+        into(DEBUG_ROOT)
+        include("classes.jar")
+        rename("classes.jar", "Zip.jar")
+
+    }
+    task copyRelse(type: Copy) {
+        from("build/intermediates/bundles/default/")
+        into(RELSE_ROOT)
+        include("classes.jar")
+        rename("classes.jar", "Zip.jar")
     }
 }
 
