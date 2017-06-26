@@ -577,6 +577,46 @@ Try VideoModule project
 	And Android Studio works both device and emulator
 	And Chrome works.
 	
+======= Reinstall Android Studio ========
+June 25, 2017
+
+Followed the following instructions to completely erase existing Android Studio
+
+Execute these commands from the terminal
+
+rm -Rf /Applications/Android\ Studio.app
+rm -Rf ~/Library/Preferences/AndroidStudio*
+rm -Rf ~/Library/Preferences/com.google.android.*
+rm -Rf ~/Library/Preferences/com.android.*
+rm -Rf ~/Library/Application\ Support/AndroidStudio*
+rm -Rf ~/Library/Logs/AndroidStudio*
+rm -Rf ~/Library/Caches/AndroidStudio*
+rm -Rf ~/.AndroidStudio*
+if you would like to delete all projects:
+
+rm -Rf ~/AndroidStudioProjects
+to remove gradle related files (caches & wrapper)
+
+rm -Rf ~/.gradle
+use the below command to delete all Android Virtual Devices(AVDs) and *.keystore. 
+
+rm -Rf ~/.android
+to delete Android SDK tools
+
+rm -Rf ~/Library/Android*
+
+Then installed Android Studio
+And set $ANDROID_HOME
+And added $ANDROID_HOME/tools, tools/bin, platform-tools to PATH
+
+But, when I ran cordova requirements, I still got an error that I did 
+not have the sdk.  Apparently, because the one I had was too advanced.
+So, I download the following:
+
+https://dl.google.com/android/repository/tools_r25.2.3-macosx.zip
+
+It contained a tools folder, which I used to in place of the one that I
+had, and changed the sequence in PATH so that tools came before platform-tools
 
 	
 
