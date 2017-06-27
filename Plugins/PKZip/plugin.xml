@@ -17,9 +17,11 @@
 	<platform name="android">
     	<config-file target="config.xml" parent="/*">
 			<feature name="PKZip">
-				<param name="android-package" value="com.shortsands.zip.PKZip.java"/>
+				<param name="android-package" value="plugin.PKZip"/>
 			</feature>
 		</config-file>
+		<source-file src="src/android/plugin/PKZip.java" target-dir="src/plugin"/>
+		<source-file src="src/android/app/libs/Zip.jar" target-dir="src/libs" />
 	</platform>
 	
 	<platform name="ios">

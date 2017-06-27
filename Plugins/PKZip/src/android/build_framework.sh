@@ -13,3 +13,5 @@ rm -f ${RELSE_ROOT}/${JAR}
 cp app/build/intermediates/bundles/debug/classes.jar ${DEBUG_ROOT}/${JAR}
 cp app/build/intermediates/bundles/default/classes.jar ${RELSE_ROOT}/${JAR}
 
+cp ${DEBUG_ROOT}/${JAR} app/libs
+
