@@ -17,7 +17,7 @@
 	<platform name="android">
     	<config-file target="config.xml" parent="/*">
 			<feature name="VideoPlayer">
-				<param name="android-package" value="com.shortsands.videoplayer.VideoPlayer"/>
+				<param name="android-package" value="plugin.VideoPlayer"/>
 			</feature>
 		</config-file>
 		<config-file target="AndroidManifest.xml" parent="/manifest">
@@ -26,13 +26,10 @@
 		<config-file target="AndroidManifest.xml" parent="/manifest/application">
 			<activity android:name="com.shortsands.videoplayer.VideoActivity" android:label="VideoActivity" android:screenOrientation="landscape"></activity>
 		</config-file>
-		<source-file src="src/android/com/shortsands/videoplayer/VideoPlayer.java" target-dir="src/com/shortsands/videoplayer" />
-		<source-file src="src/android/com/shortsands/videoplayer/VideoActivity.java" target-dir="src/com/shortsands/videoplayer" />
-		<source-file src="src/android/com/shortsands/videoplayer/VideoPersistence.java" target-dir="src/com/shortsands/videoplayer" />
-		<source-file src="src/android/com/shortsands/videoplayer/EventLogger.java" target-dir="src/com/shortsands/videoplayer" />
-		<!-- change library to a more limited one when done. -->
-		<!-- <framework src="src/android/plugin.gradle" custom="true" type="gradleReference"/> -->
-		<!-- Need something to copy build-extras.gradle to proper location. -->
+		<source-file src="src/android/plugin/VideoPlayer.java" target-dir="src/plugin" />
+		<lib-file src="src/android/plugin/VideoPlayer.jar" target-dir="src/libs" />
+		<framework src="src/android/plugin/plugin.gradle" custom="true" type="gradleReference"/>
+		<!-- <framework src="com.google.android.exoplayer:exoplayer:r2.3.1" /> -->
 	</platform>
   
 	<platform name="ios">
