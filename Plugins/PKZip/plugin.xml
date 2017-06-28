@@ -21,7 +21,7 @@
 			</feature>
 		</config-file>
 		<source-file src="src/android/plugin/PKZip.java" target-dir="src/plugin"/>
-		<source-file src="src/android/app/libs/Zip.jar" target-dir="src/libs" />
+		<source-file src="src/android/plugin/Zip.jar" target-dir="src/libs" />
 	</platform>
 	
 	<platform name="ios">
