@@ -1,5 +1,6 @@
 package com.shortsands.aws;
 
+import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
@@ -8,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.File;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
@@ -45,6 +47,16 @@ public class AWSInstrumentedTest {
         AwsS3 s3 = AwsS3.shared();
         URL result2 = s3.preSignedUrlPUT("shortsands", "abcd", 3600, "text/plain");
         assertEquals("Whoops getPresignedPutURL", "s3-us-west-2.amazonaws.com", result2.getHost());
+    }
+    @Test
+    public void downloadInvalidZipFile() throws Exception {
+        // invalid zip file, but zip did not fail, it returned itself.
+        Context context = InstrumentationRegistry.getTargetContext();
+        File file4 = new File(context.getExternalCacheDir(), "Whatever.mp3");
+        DownloadZipFileListener listener4 = new DownloadZipFileListener();
+        AwsS3.shared().downloadZipFile("shortsands", "hello1", file4, listener4);
+        Log.d(TAG, "Expect /storage/emulated/0/Android/data/com.shortsands.aws_s3_android/cache/Whatever.mp3.");
+        assertEquals("Whoops", "abc", "def");
     }
 }
 
