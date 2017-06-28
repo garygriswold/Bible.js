@@ -2,10 +2,6 @@ package plugin;
 
 import android.util.Log;
 
-//import com.amazonaws.regions.Region;
-//import com.amazonaws.regions.Regions;
-//import com.amazonaws.regions.RegionUtils;
-
 import com.shortsands.zip.Zip;
 import com.shortsands.aws.AwsS3;
 
@@ -26,13 +22,6 @@ import org.json.JSONException;
 public class AWS extends CordovaPlugin {
 	
 	private static String TAG = "AWS";
-	
-	//private AwsS3 awsS3;
-	
-	//@Override
-	//public void initialize(CordovaInterface cordova, CordovaWebView webView) {
-    //	super.initialize(cordova, webView);
-	//}
 
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {

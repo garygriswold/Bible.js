@@ -14,9 +14,9 @@ rm -f ${RELSE_ROOT}/${JAR}
 cp app/build/intermediates/bundles/debug/classes.jar ${DEBUG_ROOT}/${JAR}
 cp app/build/intermediates/bundles/default/classes.jar ${RELSE_ROOT}/${JAR}
 
-# Copy Debug Jar to this project libs
-cp ${DEBUG_ROOT}/${JAR} app/libs
+# Copy Debug Jar to this project plugin 
+cp ${DEBUG_ROOT}/${JAR} plugin 
 
 # Copy Debug Jar to VideoPlayer project libs
-#cp ${DEBUG_ROOT}/${JAR} ../../../AWS/src/android/app/libs/
+#cp ${DEBUG_ROOT}/${JAR} ../../../VideoPlayer/src/android/app/libs/
 
