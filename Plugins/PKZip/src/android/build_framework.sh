@@ -10,8 +10,13 @@ rm -f ${RELSE_ROOT}/${JAR}
 
 ./gradlew clean assemble check 
 
+# Copy Jars to Frameworks
 cp app/build/intermediates/bundles/debug/classes.jar ${DEBUG_ROOT}/${JAR}
 cp app/build/intermediates/bundles/default/classes.jar ${RELSE_ROOT}/${JAR}
 
+# Copy Debug Jar to this project libs
 cp ${DEBUG_ROOT}/${JAR} app/libs
+
+# Copy Debug Jar to AWS project libs
+cp ${DEBUG_ROOT}/${JAR} ../../../AWS/src/android/app/libs/
 
