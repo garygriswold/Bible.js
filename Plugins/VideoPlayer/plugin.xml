@@ -29,7 +29,6 @@
 		<source-file src="src/android/plugin/VideoPlayer.java" target-dir="src/plugin" />
 		<lib-file src="src/android/plugin/VideoPlayer.jar" target-dir="src/libs" />
 		<framework src="src/android/plugin/plugin.gradle" custom="true" type="gradleReference"/>
-		<!-- <framework src="com.google.android.exoplayer:exoplayer:r2.3.1" /> -->
 	</platform>
   
 	<platform name="ios">
