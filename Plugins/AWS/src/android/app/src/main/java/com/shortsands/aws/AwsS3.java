@@ -16,6 +16,7 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 
 import com.shortsands.io.FileManager;
 
@@ -160,25 +161,26 @@ public class AwsS3 {
      * The ios version also has a method to upload a Dictionary, which is converts to json
      */
     public void uploadAnalytics(String sessionId, String timestamp, String prefix, String data, UploadDataListener listener) {
-        String regionName = this.amazonS3.getRegion().name();
-        String s3Bucket = "analytics-" + regionName + "-shortsands";
+        String s3Bucket = "analytics-" + AwsS3.region + "-shortsands";
+        Log.d(TAG, "Bucket " + s3Bucket);
         String s3Key = sessionId + "-" + timestamp;
+        Log.d(TAG, "Key " + s3Key);
         String jsonPrefix = "{\"" + prefix + "\": ";
         String jsonSuffix = "}";
         String message = jsonPrefix + data + jsonSuffix;
-        uploadText(s3Bucket, s3Key, data, listener);
+        Log.d(TAG, "Message " + message);
+        uploadText(s3Bucket, s3Key, message, "application/json", listener);
     }
     /**
      * Upload string object to bucket
      */
-    public void uploadText(String s3Bucket, String s3Key, String data, UploadDataListener listener) {
+    public void uploadText(String s3Bucket, String s3Key, String data, String contentType, UploadDataListener listener) {
         File tempFile = null;
         try {
             tempFile = File.createTempFile("uploadText", "");
-            listener.setFile(tempFile);
+            Log.d(TAG, "File " + tempFile.toString());
             FileManager.writeTextFully(tempFile, data);
-            TransferObserver observer = this.transferUtility.upload(s3Bucket, s3Key, tempFile);
-            observer.setTransferListener(listener);
+            upload(s3Bucket, s3Key, tempFile, contentType, listener);
         } catch(Exception err) {
             Log.e(TAG, "Error in uploadText " + err.toString());
         }
@@ -187,14 +189,12 @@ public class AwsS3 {
      * Upload object in Data form to bucket.  Data must be prepared to correct form
      * before calling this function.
      */
-    public void uploadData(String s3Bucket, String s3Key, byte[] data, UploadDataListener listener) {
+    public void uploadData(String s3Bucket, String s3Key, byte[] data, String contentType, UploadDataListener listener) {
         File tempFile = null;
         try {
             tempFile = File.createTempFile("uploadData", "");
-            listener.setFile(tempFile);
             FileManager.writeBinaryFully(tempFile, data);
-            TransferObserver observer = this.transferUtility.upload(s3Bucket, s3Key, tempFile);
-            observer.setTransferListener(listener);
+            upload(s3Bucket, s3Key, tempFile, contentType, listener);
         } catch(Exception err) {
             Log.e(TAG, "Error in uploadData " + err.toString());
         }
@@ -202,13 +202,18 @@ public class AwsS3 {
     /**
      * Upload file to bucket, this works for text or binary files
      */
-    public void uploadFile(String s3Bucket, String s3Key, File file, UploadFileListener listener) {
+    public void uploadFile(String s3Bucket, String s3Key, File file, String contentType, UploadFileListener listener) {
         if (file.exists() && file.isFile()) {
-	        listener.setFile(file);
-            TransferObserver observer = this.transferUtility.upload(s3Bucket, s3Key, file);
-            observer.setTransferListener(listener);
+            upload(s3Bucket, s3Key, file, contentType, listener);
         } else {
             Log.e(TAG, "Error: File does not exist: " + file.getAbsolutePath());
         }
+    }
+    private void upload(String s3Bucket, String s3Key, File file, String contentType, AwsS3AbstractListener listener) {
+        listener.setFile(file);
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(contentType);
+        TransferObserver observer = this.transferUtility.upload(s3Bucket, s3Key, file, metadata);
+        observer.setTransferListener(listener);
     }
 }

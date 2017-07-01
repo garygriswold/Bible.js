@@ -72,7 +72,7 @@ AWSUnitTest.prototype.testTextDownUp = function() {
 	
 	AWS.downloadText("shortsands", "hello1", function(text) {
 		console.log("Downloaded " + text);
-		AWS.uploadText("shortsands", "hello1upload", text, function(done) {
+		AWS.uploadText("shortsands", "hello1upload", text, "text/plain", function(done) {
 			console.log("Uploaded " + done);
 			console.log("Compare uploaded file to original");
 		});
@@ -94,7 +94,7 @@ AWSUnitTest.prototype.testDownloadFile = function() {
 		console.log("This should succeed." + done);
 		if (done) {
 			console.log("download file OK");
-			AWS.uploadFile("shortsands", "hello_upload", "/Documents/hello.txt", "plain.txt", function(done2) {
+			AWS.uploadFile("shortsands", "hello_upload", "/Documents/hello.txt", "text/plain", function(done2) {
 				console.log("upload done " + done2);
 			});
 		}

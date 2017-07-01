@@ -21,6 +21,7 @@ public class AwsS3AbstractListener implements TransferListener {
         this.file = file;
     }
     public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+        Log.d(TAG, "onProgress " + Integer.toString(id));
         // Ignore
     }
     public void onStateChanged(int id, TransferState state) {

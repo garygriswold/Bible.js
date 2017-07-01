@@ -254,10 +254,10 @@ public class AwsS3 {
     /**
     * Upload string object to bucket
     */
-    public func uploadText(s3Bucket: String, s3Key: String, data: String,
+    public func uploadText(s3Bucket: String, s3Key: String, data: String, contentType: String,
                       complete: @escaping (_ error: Error?) -> Void) {
         let textData = data.data(using: String.Encoding.utf8)
-        uploadData(s3Bucket: s3Bucket, s3Key: s3Key, data: textData!, contentType: "text/plain", complete: complete)
+        uploadData(s3Bucket: s3Bucket, s3Key: s3Key, data: textData!, contentType: contentType, complete: complete)
     }
     /**
      * Upload object in Data form to bucket.  Data must be prepared to correct form

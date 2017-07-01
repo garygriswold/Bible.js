@@ -164,6 +164,7 @@ import AWS
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 		    data: command.arguments[2] as? String ?? "",
+		    contentType: command.arguments[3] as? String ?? "",
             complete: { error in
 	            var result: CDVPluginResult
 	            if let err = error {

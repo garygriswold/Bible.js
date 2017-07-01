@@ -111,8 +111,9 @@ public class AWS extends CordovaPlugin {
 			String s3Bucket = args.getString(0);
 			String s3Key = args.getString(1);
 			String data = args.getString(2);
+			String contentType = args.getString(3);
 			UploadPluginDataListener listener = new UploadPluginDataListener(callbackContext);
-			AwsS3.shared().uploadText(s3Bucket, s3Key, data, listener);
+			AwsS3.shared().uploadText(s3Bucket, s3Key, data, contentType, listener);
 			return true;			
 		}
 		else if (action.equals("uploadData")) {
@@ -120,17 +121,19 @@ public class AWS extends CordovaPlugin {
 			String s3Key = args.getString(1);
 			//String data = args.getString(2); //// get what????
 			byte[] data = new byte[0];
+			String contentType = args.getString(3);
 			UploadPluginDataListener listener = new UploadPluginDataListener(callbackContext);
-			AwsS3.shared().uploadData(s3Bucket, s3Key, data, listener);
+			AwsS3.shared().uploadData(s3Bucket, s3Key, data, contentType, listener);
 			return true;			
 		}
 		else if (action.equals("uploadFile")) {
 			String s3Bucket = args.getString(0);
 			String s3Key = args.getString(1);
 			String filePath = args.getString(2);
+			String contentType = args.getString(3);
 			File file = new File(cordova.getActivity().getFilesDir(), filePath);
 			UploadPluginFileListener listener = new UploadPluginFileListener(callbackContext);
-			AwsS3.shared().uploadFile(s3Bucket, s3Key, file, listener);
+			AwsS3.shared().uploadFile(s3Bucket, s3Key, file, contentType, listener);
 			return true;			
 		}
 	    return false;

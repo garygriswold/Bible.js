@@ -95,13 +95,13 @@ exports.uploadAnalytics = function(sessionId, timestamp, prefix, json, callback)
 	}, "AWS", "uploadAnalytics", [sessionId, timestamp, prefix, json]);
 };
 
-exports.uploadText = function(s3Bucket, s3Key, data, callback) {
+exports.uploadText = function(s3Bucket, s3Key, data, contentType, callback) {
     exec(function() {
 	    callback(true);
 	}, function(error) {
 		AWS.logError("uploadText", error, s3Bucket, s3Key, null);
 	    callback(false);		
-	}, "AWS", "uploadText", [s3Bucket, s3Key, data]);
+	}, "AWS", "uploadText", [s3Bucket, s3Key, data, contentType]);
 };
 
 exports.uploadData = function(s3Bucket, s3Key, data, contentType, callback) {
@@ -115,7 +115,7 @@ exports.uploadData = function(s3Bucket, s3Key, data, contentType, callback) {
 
 /**
 * Warning: this does not use the uploadFile method of TransferUtility,
-* See note in AwsS3.uploadFile for more info.
+* See note in iOS AwsS3.uploadFile for more info.
 */
 exports.uploadFile = function(s3Bucket, s3Key, filePath, contentType, callback) {
     exec(function() {

@@ -115,11 +115,11 @@ public class AwsS3UnitTest {
         AwsS3 s3 = AwsS3.shared();
 
         UploadDataListener listener1 = new UploadDataListener();
-        s3.uploadText("shortsands", "Hello_123", "{Hello World Message}", listener1);
+        s3.uploadText("shortsands", "Hello_123", "{Hello World Message}", "application/json", listener1);
         Log.d(TAG, "Expect: /data/user/0/com.shortsands.aws_s3_android/cache/uploadText1455592352");
 
         UploadDataListener listener2 = new UploadDataListener();
-        s3.uploadText("nowhere", "Hello_123", "{Bad Hello World Message}", listener2);
+        s3.uploadText("nowhere", "Hello_123", "{Bad Hello World Message}", "application/json", listener2);
         Log.d(TAG, "Expect: Access Denied (Service: Amazon S3; Status Code: 403; Error Code: AccessDenied;");
     }
 
@@ -131,17 +131,17 @@ public class AwsS3UnitTest {
 
 
         UploadDataListener listener1 = new UploadDataListener();
-        s3.uploadData("shortsands", "upload_emma_test.mp3", bytes, listener1);
+        s3.uploadData("shortsands", "upload_emma_test.mp3", bytes, "audio/mp3", listener1);
         Log.d(TAG, "Expect: /data/user/0/com.shortsands.aws_s3_android/cache/uploadData1019506572");
 
         // Test non-existing bucket
         UploadDataListener listener2 = new UploadDataListener();
-        s3.uploadData("nothere", "XXX_upload_emma_test.mp3", bytes, listener2);
+        s3.uploadData("nothere", "XXX_upload_emma_test.mp3", bytes, "audio/mp3", listener2);
         Log.d(TAG, "Expect: The specified bucket does not exist ");
 
         // test null bytes - result is a empty file uploaded
         UploadDataListener listener3 = new UploadDataListener();
-        s3.uploadData("shortsands", "YYY_upload_emma_test.mp3", null, listener3);
+        s3.uploadData("shortsands", "YYY_upload_emma_test.mp3", null, "audio/mp3", listener3);
         Log.d(TAG, "Expect: /data/user/0/com.shortsands.aws_s3_android/cache/uploadData2141525955");
     }
 
@@ -151,19 +151,19 @@ public class AwsS3UnitTest {
         // Valid file upload.  It was downloaded by testDownloadFile
         File file1 = new File(this.context.getFilesDir(), "EmmaLooseTooth.mp3");
         UploadFileListener listener1 = new UploadFileListener();
-        s3.uploadFile("shortsands", "upload_test_1", file1, listener1);
+        s3.uploadFile("shortsands", "upload_test_1", file1, "audio/mp3", listener1);
         Log.d(TAG, "Expect:  Success: /data/user/0/com.shortsands.aws_s3_android/files/EmmaLooseTooth.mp3");
 
         // Attempt to upload a non-existent file
         File file2 = new File(this.context.getFilesDir(), "Not_There.mp3");
         UploadFileListener listener2 = new UploadFileListener();
-        s3.uploadFile("shortsands", "XXX_upload_test_1", file2, listener2);
+        s3.uploadFile("shortsands", "XXX_upload_test_1", file2, "audio/mp3", listener2);
         Log.d(TAG, "Expect:  Success: /data/user/0/com.shortsands.aws_s3_android/files/EmmaLooseTooth.mp3");
 
         // Attempt to upload a non-existent bucket
         File file3 = new File(this.context.getFilesDir(), "EmmaLooseTooth.mp3");
         UploadFileListener listener3 = new UploadFileListener();
-        s3.uploadFile("notthere", "XXX_upload_test_1", file3, listener3);
+        s3.uploadFile("notthere", "XXX_upload_test_1", file3, "audio/mp3", listener3);
         Log.d(TAG, "Expect:  Access Denied (Service: Amazon S3; ");
     }
 }

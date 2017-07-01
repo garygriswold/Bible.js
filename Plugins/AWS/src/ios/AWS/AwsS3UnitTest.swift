@@ -59,7 +59,7 @@ public class AwsS3UnitTest {
         s3.uploadData(s3Bucket: "shortsands", s3Key: "hello1", data: data!, contentType: "text/plain",
                       complete: uploadDataHandler)
         
-        s3.uploadText(s3Bucket: "shortsands", s3Key: "hello2", data: "Hello World Again",
+        s3.uploadText(s3Bucket: "shortsands", s3Key: "hello2", data: "Hello World Again", contentType: "text/plain",
                         complete: { err in print("I RECEIVED loadString CALLBACK \(String(describing: err))")})
         var dict = [String: String]()
         dict["one"] = "two"
