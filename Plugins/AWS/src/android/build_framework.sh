@@ -18,5 +18,5 @@ cp app/build/intermediates/bundles/default/classes.jar ${RELSE_ROOT}/${JAR}
 cp ${DEBUG_ROOT}/${JAR} plugin 
 
 # Copy Debug Jar to VideoPlayer project libs
-#cp ${DEBUG_ROOT}/${JAR} ../../../VideoPlayer/src/android/app/libs/
+cp ${DEBUG_ROOT}/${JAR} ../../../VideoPlayer/src/android/app/libs/
 

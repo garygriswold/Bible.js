@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import com.shortsands.aws.AwsS3;
 import com.shortsands.videoplayer.VideoActivity;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
@@ -27,6 +28,7 @@ public class VideoPlayer extends CordovaPlugin {
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
     	super.initialize(cordova, webView);
 		// your init code here
+		AwsS3.initialize("us-east-1", cordova.getActivity());
 	}
 
 	@Override
@@ -35,7 +37,7 @@ public class VideoPlayer extends CordovaPlugin {
 		this.callbackContext = callbackContext;
 
 		if (action.equals("showVideo")) {
-			present(args.getString(0), args.getString(1));
+			present(args.getString(0), args.getString(1), args.getString(2), args.getString(3), args.getString(4));
 			return true;
 		} else {
 			callbackContext.error("VideoPlayer." + action + " is not a supported method.");
@@ -43,14 +45,17 @@ public class VideoPlayer extends CordovaPlugin {
 		}
 	}
 
-	private void present(final String videoId, final String videoUrl) {
+	private void present(final String mediaSource, final String videoId, final String languageId, final String silLang, final String videoUrl) {
 		final CordovaPlugin plugin = this;
 
 		cordova.getActivity().runOnUiThread(new Runnable() {
 			public void run() {
 				final Intent videoIntent = new Intent(cordova.getActivity().getApplicationContext(), VideoActivity.class);
 				Bundle extras = new Bundle();
+				extras.putString("mediaSource", mediaSource);
 				extras.putString("videoId", videoId);
+				extras.putString("languageId", languageId);
+				extras.putString("silLang", silLang);
 				extras.putString("videoUrl", videoUrl);
                 videoIntent.putExtras(extras);
 				cordova.startActivityForResult(plugin, videoIntent, ACTIVITY_CODE_PLAY_VIDEO);

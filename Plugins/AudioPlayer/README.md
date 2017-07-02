@@ -1,3 +1,6 @@
+**** This plugin is not finished ****
+
+
 AudioPlayer
 ===========
 

@@ -20,3 +20,6 @@ cp ${DEBUG_ROOT}/${JAR} plugin
 # Copy Debug Jar to AWS project libs
 cp ${DEBUG_ROOT}/${JAR} ../../../AWS/src/android/app/libs/
 
+# Copy Debug Jar to VideoPlayer project libs
+cp ${DEBUG_ROOT}/${JAR} ../../../VideoPlayer/src/android/app/libs/
+

@@ -45,6 +45,7 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
     private VideoPersistence videoState;
 	private SimpleExoPlayer player;
 	private SimpleExoPlayerView playerView;
+	private VideoAnalytics videoAnalytics;
 	private EventLogger eventLogger;
 	private boolean videoPlaybackComplete = false;
         
@@ -78,6 +79,13 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
         this.progressBar.bringToFront();
 
         setContentView(relativeLayout);
+
+		Bundle bundle = getIntent().getExtras();
+		String mediaSource = bundle.getString("mediaSource");
+		String videoId = bundle.getString("videoId");
+		String languageId = bundle.getString("languageId");
+		String silLang = bundle.getString("silLang");
+		this.videoAnalytics = new VideoAnalytics(this, mediaSource, videoId, languageId, silLang);
     }
 
     @Override
@@ -151,7 +159,10 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
 			this.player.prepare(videoSource, false, false);
 		} else {
 			this.player.prepare(videoSource);
-		}	    
+		}
+
+		// 8. Start Analytics
+		this.videoAnalytics.playStarted(seekTime);
     }
     
     private long backupSeek() {
@@ -181,10 +192,13 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
 	}
 	
 	private void releasePlayer() {
+		long currentPosition = this.player.getCurrentPosition();
         if (this.videoPlaybackComplete) {
+			this.videoAnalytics.playEnded(currentPosition, true);
 	        VideoPersistence.clear(this);
         } else {
-	        VideoPersistence.update(this, this.player.getCurrentPosition());
+			this.videoAnalytics.playEnded(currentPosition, false);
+	        VideoPersistence.update(this, currentPosition);
         }
         
 		if (this.player != null) {
