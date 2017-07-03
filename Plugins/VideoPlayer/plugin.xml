@@ -33,10 +33,6 @@
 		</config-file>
 		<source-file src="src/android/plugin/VideoPlayer.java" target-dir="src/plugin" />
 		<lib-file src="src/android/plugin/VideoPlayer.jar" target-dir="src/libs" />
-		<!-- <lib-file src="src/android/app/libs/AWS.jar" target-dir="src/libs" />
-		<lib-file src="src/android/app/libs/Zip.jar" target-dir="src/libs" />
-		<lib-file src="src/android/app/libs/aws-android-sdk-core-2.4.2.jar" target-dir="src/libs" />
-		<lib-file src="src/android/app/libs/aws-android-sdk-s3-2.4.2.jar" target-dir="src/libs" /> -->
 		<framework src="src/android/plugin/plugin.gradle" custom="true" type="gradleReference"/>
 	</platform>
   
@@ -48,9 +44,6 @@
 		</config-file>
 		<source-file src="src/ios/VideoPlayer.swift" />
 		<framework src="src/ios/build/VideoPlayer.framework" custom="true" embed="true" />
-		<!-- <framework src="src/ios/VideoPlayer/AWS.framework" custom="true" embed="true" />
-		<framework src="src/ios/VideoPlayer/AWSCore.framework" custom="true" embed="true" />
-		<framework src="src/ios/VideoPlayer/Zip.framework" custom="true" embed="true" /> -->
 		<framework src="MediaPlayer.framework" />
 	</platform>
 

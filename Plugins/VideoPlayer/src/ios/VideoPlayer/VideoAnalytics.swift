@@ -12,8 +12,6 @@ import AWS
 
 class VideoAnalytics {
     
-    static let APP_NAME = "ShortSandsBible"
-    
     var dictionary = [String: String]()
     let dateFormatter = ISO8601DateFormatter()
     
@@ -68,10 +66,10 @@ class VideoAnalytics {
         self.dictionary["deviceOS"] = "ios"
         print("system name \(device.systemName)")
         self.dictionary["osVersion"] = device.systemVersion
-        self.dictionary["appName"] = VideoAnalytics.APP_NAME
         
         let bundle = Bundle.main
         let info = bundle.infoDictionary
+        self.dictionary["appName"] = info?["CFBundleIdentifier"] as? String
         self.dictionary["appVersion"] = info?["CFBundleShortVersionString"] as? String
 
         self.timeStarted = Date()

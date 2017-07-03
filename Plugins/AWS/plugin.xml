@@ -39,7 +39,6 @@
 		<source-file src="src/android/plugin/UploadPluginDataListener.java" target-dir="src/plugin" />
 		<source-file src="src/android/plugin/UploadPluginFileListener.java" target-dir="src/plugin" />
 		<lib-file src="src/android/plugin/AWS.jar" target-dir="src/libs" />
-		<!-- <lib-file src="src/android/app/libs/Zip.jar" target-dir="src/libs" /> -->
 		<lib-file src="src/android/app/libs/aws-android-sdk-core-2.4.2.jar" target-dir="src/libs" />
 		<lib-file src="src/android/app/libs/aws-android-sdk-s3-2.4.2.jar" target-dir="src/libs" />
 	</platform>
@@ -52,7 +51,6 @@
 		</config-file>
 		<source-file src="src/ios/AWS.swift" />
 		<framework src="src/ios/build/AWS.framework" embed="true" custom="true" />
-		<!-- <framework src="src/ios/AWS/Zip.framework" embed="true" custom="true" /> -->
 		<framework src="src/ios/AWS/AWSCore.framework" embed="true" custom="true"/>
 	</platform>
 
