@@ -1,12 +1,13 @@
 package com.shortsands.videoplayer;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.util.Log;
 
 import com.shortsands.aws.AwsS3;
 import com.shortsands.aws.UploadDataListener;
-import com.shortsands.aws.BuildConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,10 +28,9 @@ import java.util.TimeZone;
 class VideoAnalytics {
 
     private static String TAG = "VideoAnalytics";
-    private static String APP_NAME = "ShortSandsBible";
-
     private static DateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
-    
+
+    private Context context;
     private String mediaSource;
     private String mediaId;
     private String languageId;
@@ -46,7 +46,7 @@ class VideoAnalytics {
                    String mediaId,
                    String languageId,
                    String silLang) {
-        
+        this.context = context;
         this.mediaSource = mediaSource;
         this.mediaId = mediaId;
         this.languageId = languageId;
@@ -54,8 +54,7 @@ class VideoAnalytics {
         
         AnalyticsSessionId analyticsSessionId = new AnalyticsSessionId(context);
         this.sessionId = analyticsSessionId.getSessionId();
-        
-        //this.timeStarted = new Date();
+
         this.mediaViewStartingPosition = 0L;
 
         TimeZone tz = TimeZone.getTimeZone("UTC");
@@ -82,22 +81,26 @@ class VideoAnalytics {
             dictionary.put("deviceName", Build.MODEL);
             dictionary.put("deviceOS", "android");
             dictionary.put("osVersion", Build.VERSION.RELEASE);
-            dictionary.put("appName", VideoAnalytics.APP_NAME);
-
-            dictionary.put("appVersion", BuildConfig.VERSION_CODE);
-
+            try {
+                PackageInfo pInfo = this.context.getPackageManager().getPackageInfo(this.context.getPackageName(), 0);
+                dictionary.put("appVersion", pInfo.versionName);
+                dictionary.put("appName", pInfo.packageName);
+            } catch(NameNotFoundException nnfe) {
+                dictionary.put("appVersion", nnfe.toString());
+                dictionary.put("appName", "");
+            }
             this.timeStarted = new Date();
             String timeStartedStr = isoFormat.format(this.timeStarted);
             dictionary.put("timeStarted", timeStartedStr);
 
             dictionary.put("isStreaming", "true");
-            this.mediaViewStartingPosition = position; /// Is this really seconds or ms
-            dictionary.put("mediaViewStartingPosition", Long.toString(this.mediaViewStartingPosition));
+            this.mediaViewStartingPosition = position;
+            dictionary.put("mediaViewStartingPosition", Double.toString(this.mediaViewStartingPosition / 1000.0));
 
             Log.d(TAG, "BEGIN " + dictionary.toString());
 
             UploadDataListener listener = new UploadDataListener();
-            AwsS3.shared().uploadAnalytics(this.sessionId, timeStartedStr + "-B", "VideoBegV1", dictionary.toString(), listener);
+            AwsS3.shared().uploadAnalytics(this.sessionId, timeStartedStr + "-B", "VideoBegV1", dictionary.toString(2), listener);
         } catch(JSONException ex) {
             Log.e(TAG, "Error building Analytics Begin " + ex.toString());
         }
@@ -112,19 +115,18 @@ class VideoAnalytics {
             Date timeCompleted = new Date();
             String timeCompletedStr = isoFormat.format(timeCompleted);
             dictionary.put("timeCompleted", timeCompletedStr);
-            long duration = (timeCompleted.getTime() - this.timeStarted.getTime()) / 1000L;
-            dictionary.put("elapsedTime", Long.toString(duration));
+            long duration = (timeCompleted.getTime() - this.timeStarted.getTime());
+            dictionary.put("elapsedTime", Double.toString(duration / 1000.0));
             long mediaTimeViewInSeconds = position - this.mediaViewStartingPosition;
-            dictionary.put("mediaTimeViewInSeconds", Long.toString(mediaTimeViewInSeconds));
+            dictionary.put("mediaTimeViewInSeconds", Double.toString(mediaTimeViewInSeconds / 1000.0));
             dictionary.put("mediaViewCompleted", Boolean.toString(completed));
 
             Log.d(TAG, "END " + dictionary.toString());
 
             UploadDataListener listener = new UploadDataListener();
-            AwsS3.shared().uploadAnalytics(this.sessionId, timeCompletedStr + "-E", "VideoEndV1", dictionary.toString(), listener);
+            AwsS3.shared().uploadAnalytics(this.sessionId, timeCompletedStr + "-E", "VideoEndV1", dictionary.toString(2), listener);
         } catch(JSONException ex) {
             Log.e(TAG, "Error building Analytics End " + ex.toString());
         }
     }
 }
-
