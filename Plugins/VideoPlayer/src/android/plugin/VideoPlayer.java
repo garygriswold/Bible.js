@@ -28,7 +28,6 @@ public class VideoPlayer extends CordovaPlugin {
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
     	super.initialize(cordova, webView);
 		// your init code here
-		AwsS3.initialize("us-east-1", cordova.getActivity());
 	}
 
 	@Override
