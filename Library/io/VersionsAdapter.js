@@ -134,6 +134,18 @@ VersionsAdapter.prototype.selectURLCloudfront = function(versionFile, callback) 
 		}
 	});
 };
+VersionsAdapter.prototype.selectAWSRegion = function(countryCode, callback) {
+	var that = this;
+	var statement = 'SELECT awsRegion FROM AWSRegion WHERE countryCode=?';
+	this.database.select(statement, [countryCode], function(results) {
+		if (results instanceof IOError || results.rows.length === 0) {
+			callback('us-east-1');
+		} else {
+			var row = results.rows.item(0);
+			callback(row.awsRegion);
+		}
+	});
+};
 VersionsAdapter.prototype.selectURLS3 = function(versionFile, countryCode, callback) {
 	var that = this;
 	var statement = 'SELECT signedURL FROM DownloadURL d JOIN Region r ON r.awsRegion=d.awsRegion WHERE d.filename=? AND r.countryCode=?';

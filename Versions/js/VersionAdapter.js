@@ -3,7 +3,6 @@
 * the Version table.
 */
 "use strict";
-const REGIONS = require('../../Library/cdn/Regions.js').REGIONS;
 function VersionAdapter(options) {
 	var sqlite3 = (options.verbose) ? require('sqlite3').verbose() : require('sqlite3');
 	this.db = new sqlite3.Database(options.filename);
@@ -125,27 +124,27 @@ VersionAdapter.prototype.addS3URLSignatures = function(callback) {
 			console.log('SQL Error in VersionAdapter.addS3URLSignatures');
 			callback(err);
 		} else {
-			that.db.all('SELECT distinct awsRegion FROM Region', [], function(err, regions) {
+			that.db.all('SELECT awsRegion, s3TextBucket FROM AWSRegion WHERE s3TextBucket IS NOT NULL', [], function(err, regions) {
 				if (err) {
-					console.log('SQL Error in VersionAdapter.select Region.awsRegion');
+					console.log('SQL Error in VersionAdapter.select AWSRegion.awsRegion');
 					callback(err);
 				} else {
 					var signed = [];
 					for (var i=0; i< regions.length; i++) {
 						var reg = regions[i];
-						console.log('DOING REGION', reg.awsRegion, REGIONS[reg.awsRegion]);
+						console.log('DOING REGION', reg.awsRegion, reg.s3TextBucket);
 						var awsOptions = {
 								useDualstack: true,
 								accessKeyId: cred.BIBLE_APP_KEY_ID,
 								secretAccessKey: cred.BIBLE_APP_SECRET_KEY,
-								region: REGIONS[reg.awsRegion],
+								region: reg.awsRegion,
 								sslEnabled: true,
 								s3ForcePathStyle: true
 						};
 						var s3 = new S3(awsOptions);
 						for (var j=0; j<versions.length; j++) {
 							var ver = versions[j];
-							var params = {Bucket: reg.awsRegion, Key: ver.filename + '.zip', Expires: expireTime};
+							var params = {Bucket: reg.s3TextBucket, Key: ver.filename + '.zip', Expires: expireTime};
 							var signedURL = s3.getSignedUrl('getObject', params);
 							console.log(reg.awsRegion, ver.versionCode, 'Signed URL', signedURL);
 							signed.push([ver.filename, reg.awsRegion, signedURL]);

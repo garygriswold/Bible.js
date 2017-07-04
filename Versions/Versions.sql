@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS DefaultVersion;
 DROP TABLE IF EXISTS CountryVersion;
 DROP TABLE IF EXISTS DownloadURL;
 DROP TABLE IF EXISTS Region;
+DROP TABLE IF EXISTS AWSRegion;
 DROP TABLE IF EXISTS Version;
 DROP TABLE IF EXISTS Owner;
 DROP TABLE IF EXISTS Language;
@@ -87,6 +88,9 @@ versionDate TEXT NOT NULL,
 copyright TEXT NULL,
 introduction TEXT NULL
 );
+CREATE INDEX Version_silCode_index ON Version(silCode);
+CREATE INDEX Version_ownerCode_index ON Version(ownerCode);
+
 -- America
 INSERT INTO Version VALUES ('ERV-ENG', 'eng', 'BLI', 'ERV-ENG', 'Holy Bible: Easy-to-Read Version (ERV), International Edition', 'BIBLE', 'ERV-ENG.db', 'T', 'F', '2016-10-01', 'Holy Bible: Easy-to-Read Version (ERV), International Edition © 2013, 2016 Bible League International', NULL);
 INSERT INTO Version VALUES ('ERV-POR', 'por', 'BLI', 'ERV-POR', 'Novo Testamento: Versão Fácil de Ler', 'BIBLE_NT', 'ERV-POR.db', 'T', 'F', '2016-10-10',
@@ -157,6 +161,25 @@ INSERT INTO Version VALUES ('ERV-SRP', 'srp', 'BLI', 'ERV-SRP', 'Библија 
 INSERT INTO Version VALUES ('ERV-UKR', 'ukr', 'BLI', 'ERV-UKR', 'Новий Заповіт Сучасною Мовою', 'BIBLE_NT', 'ERV-UKR.db', 'T', 'F', '2016-10-17',
 'Новий Заповіт: Сучасною мовою (УСП) © Bible League International, 1996', NULL);
 
+CREATE TABLE AWSRegion(
+awsRegion TEXT NOT NULL PRIMARY KEY,
+s3TextBucket TEXT NULL,
+regionName TEXT NOT NULL	
+);
+INSERT INTO AWSRegion VALUES ('us-east-1', 		'shortsands-na-va', 'US East (N. Virginia)');
+INSERT INTO AWSRegion VALUES ('us-east-2', 		NULL, 				'US East (Ohio)');
+INSERT INTO AWSRegion VALUES ('us-west-1', 		NULL, 				'US West (N. California)');
+INSERT INTO AWSRegion VALUES ('us-west-2', 		NULL, 				'US West (Oregon)');
+INSERT INTO AWSRegion VALUES ('ca-central-1', 	NULL, 				'Canada (Central)');
+INSERT INTO AWSRegion VALUES ('eu-west-1', 		'shortsands-eu-ie', 'EU (Ireland)');
+INSERT INTO AWSRegion VALUES ('eu-central-1', 	NULL, 				'EU (Frankfurt)');
+INSERT INTO AWSRegion VALUES ('eu-west-2', 		NULL, 				'EU (London)');
+INSERT INTO AWSRegion VALUES ('ap-northeast-1', 'shortsands-as-jp', 'Asia Pacific (Tokyo)');
+INSERT INTO AWSRegion VALUES ('ap-northeast-2', NULL, 				'Asia Pacific (Seoul)');
+INSERT INTO AWSRegion VALUES ('ap-southeast-1', 'shortsands-as-sg', 'Asia Pacific (Singapore)');
+INSERT INTO AWSRegion VALUES ('ap-southeast-2', 'shortsands-oc-au', 'Asia Pacific (Sydney)');
+INSERT INTO AWSRegion VALUES ('ap-south-1', 	NULL, 				'Asia Pacific (Mumbai)');
+INSERT INTO AWSRegion VALUES ('sa-east-1', 		NULL, 				'South America (São Paulo)');
 
 CREATE TABLE Region (
 countryCode TEXT NOT NULL PRIMARY KEY,
@@ -167,14 +190,11 @@ geoschemeCode TEXT NOT NULL CHECK (geoschemeCode IN(
 		'AS-CEN','AS-EAS','AS-SOU','AS-SEA','AS-WES',
 		'EU-EAS','EU-NOR','EU-SOU','EU-WES',
 		'OC-AUS','OC-MEL','OC-MIC','OC-POL','AN-ANT')),
-awsRegion TEXT NOT NULL CHECK (awsRegion IN(
-		'shortsands-as-jp',
-		'shortsands-as-sg',
-		'shortsands-eu-ie',
-		'shortsands-na-va',
-		'shortsands-oc-au')),
+awsRegion TEXT NOT NULL REFERENCES AWSRegion(awsRegion),
 countryName TEXT NOT NULL	
 );
+CREATE INDEX Region_awsRegion_index ON Region(awsRegion);
+
 -- Continent Code
 -- AF|Africa
 -- EU|Europe
@@ -208,43 +228,38 @@ countryName TEXT NOT NULL
 -- OC-MIC|Micronesia
 -- OC-POL|Polynesia
 
--- AWS Regions
--- shortsands-as-jp|Tokoyo
--- shortsands-as-sg|Singapore
--- shortsands-eu-ie|Ireland
--- shortsands-na-va|Virginia
--- shortsands-oc-au|Sidney
-
 -- Rules for bucket assignment:
--- 1) AF -> shortsands-eu-ie
--- 2) EU -> shortsands-eu-ie
--- 3) OC -> shortsands-oc-au
--- 4) AN -> shortsands-oc-au
--- 5) NA -> shortsands-na-va
--- 6) SA -> shortsands-na-va
--- 7) AS-WES -> shortsands-eu-ie
--- 8) AS-SOU -> shortsands-as-sg
--- 9) AS-SEA -> shortsands-as-sg
--- 10) AS-CEN -> shortsands-as-jp
--- 11) AS-EAS -> shortsands-as-jp
+-- 1) AF -> eu-west-1
+-- 2) EU -> eu-west-1
+-- 3) OC -> ap-southeast-2
+-- 4) AN -> ap-southeast-2
+-- 5) NA -> us-east-1
+-- 6) SA -> us-east-1
+-- 7) AS-WES -> eu-west-1
+-- 8) AS-SOU -> ap-southeast-1
+-- 9) AS-SEA -> ap-southeast-1
+-- 10) AS-CEN -> ap-northeast-1
+-- 11) AS-EAS -> ap-northeast-1
 .separator '|'
 .import data/Region.txt Region
 
 
--- This table is populate by 
+-- This table is populate by Versions/js/VersionAdapter
 CREATE TABLE DownloadURL(
 	filename TEXT NOT NULL,
-	awsRegion TEXT NOT NULL,
+	awsRegion TEXT NOT NULL REFERENCES AWSRegion(awsRegion),
 	signedURL TEXT NOT NULL,
 	PRIMARY KEY(filename, awsRegion)
 );
-
+CREATE INDEX DownloadURL_awsRegion_index ON DownloadURL(awsRegion);
 
 CREATE TABLE CountryVersion (
 countryCode TEXT REFERENCES Country(countryCode),
 versionCode TEXT REFERENCES Version(versionCode),
 PRIMARY KEY(countryCode, versionCode)
 );
+CREATE INDEX CountryVersion_versionCode_index ON CountryVersion(versionCode);
+
 INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-ARB'); -- Arabic
 INSERT INTO CountryVersion VALUES ('WORLD', 'ARBVDPD'); -- Arabic
 INSERT INTO CountryVersion VALUES ('WORLD', 'ERV-AWA'); -- Awadi
@@ -279,6 +294,8 @@ CREATE TABLE DefaultVersion (
 langCode TEXT NOT NULL PRIMARY KEY,
 filename TEXT NOT NULL REFERENCES Version(filename)
 );
+CREATE INDEX DefaultVersion_filename_index ON DefaultVersion(filename);
+
 INSERT INTO DefaultVersion VALUES ('ar', 'ERV-ARB.db'); -- Arabic
 INSERT INTO DefaultVersion VALUES ('bg', 'ERV-BUL.db'); -- Bulgarian
 INSERT INTO DefaultVersion VALUES ('bn', 'ERV-BEN.db'); -- Bengali

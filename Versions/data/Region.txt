@@ -1,249 +1,249 @@
-AF|AS|AS-SOU|shortsands-as-sg|Afghanistan
-AX|EU|EU-NOR|shortsands-eu-ie|Åland Islands
-AL|EU|EU-SOU|shortsands-eu-ie|Albania
-DZ|AF|AF-NOR|shortsands-eu-ie|Algeria
-AS|OC|OC-POL|shortsands-oc-au|American Samoa
-AD|EU|EU-SOU|shortsands-eu-ie|Andorra
-AO|AF|AF-MID|shortsands-eu-ie|Angola
-AI|SA|SA-CAR|shortsands-na-va|Anguilla
-AQ|AN|AN-ANT|shortsands-oc-au|Antarctica
-AG|SA|SA-CAR|shortsands-na-va|Antigua and Barbuda
-AR|SA|SA-SOU|shortsands-na-va|Argentina
-AM|AS|AS-WES|shortsands-eu-ie|Armenia
-AW|SA|SA-CAR|shortsands-na-va|Aruba
-AU|OC|OC-AUS|shortsands-oc-au|Australia
-AT|EU|EU-WES|shortsands-eu-ie|Austria
-AZ|AS|AS-WES|shortsands-eu-ie|Azerbaijan
-BS|SA|SA-CAR|shortsands-na-va|Bahamas
-BH|AS|AS-WES|shortsands-eu-ie|Bahrain
-BD|AS|AS-SOU|shortsands-as-sg|Bangladesh
-BB|SA|SA-CAR|shortsands-na-va|Barbados
-BY|EU|EU-EAS|shortsands-eu-ie|Belarus
-BZ|SA|SA-CEN|shortsands-na-va|Belize
-BE|EU|EU-WES|shortsands-eu-ie|Belgium
-BJ|AF|AF-WES|shortsands-eu-ie|Benin
-BM|NA|NA-NOR|shortsands-na-va|Bermuda
-BT|AS|AS-SOU|shortsands-as-sg|Bhutan
-BO|SA|SA-SOU|shortsands-na-va|Bolivia, Plurinational State of
-BQ|SA|SA-CAR|shortsands-na-va|Bonaire, Sint Eustatius and Saba
-BA|EU|EU-SOU|shortsands-eu-ie|Bosnia and Herzegovina
-BW|AF|AF-SOU|shortsands-eu-ie|Botswana
-BV|AN|AN-ANT|shortsands-oc-au|Bouvet Island
-BR|SA|SA-SOU|shortsands-na-va|Brazil
-IO|EU|EU-WES|shortsands-eu-ie|British Indian Ocean Territory
-BN|AS|AS-SEA|shortsands-as-sg|Brunei Darussalam
-BG|EU|EU-EAS|shortsands-eu-ie|Bulgaria
-BF|AF|AF-WES|shortsands-eu-ie|Burkina Faso
-BI|AF|AF-EAS|shortsands-eu-ie|Burundi
-CV|AF|AF-WES|shortsands-eu-ie|Cabo Verde
-KH|AS|AS-SEA|shortsands-as-sg|Cambodia
-CM|AF|AF-MID|shortsands-eu-ie|Cameroon
-CA|NA|NA-NOR|shortsands-na-va|Canada
-KY|SA|SA-CAR|shortsands-na-va|Cayman Islands
-CF|AF|AF-MID|shortsands-eu-ie|Central African Republic
-TD|AF|AF-MID|shortsands-eu-ie|Chad
-CL|SA|SA-SOU|shortsands-na-va|Chile
-CN|AS|AS-EAS|shortsands-as-jp|China
-CX|OC|OC-AUS|shortsands-oc-au|Christmas Island
-CC|OC|OC-AUS|shortsands-oc-au|Cocos (Keeling) Islands
-CO|SA|SA-SOU|shortsands-na-va|Colombia
-KM|AF|AF-EAS|shortsands-eu-ie|Comoros
-CG|AF|AF-MID|shortsands-eu-ie|Congo
-CD|AF|AF-MID|shortsands-eu-ie|Congo, the Democratic Republic of the
-CK|OC|OC-POL|shortsands-oc-au|Cook Islands
-CR|SA|SA-CEN|shortsands-na-va|Costa Rica
-CI|AF|AF-WES|shortsands-eu-ie|Côte d'Ivoire
-HR|EU|EU-SOU|shortsands-eu-ie|Croatia
-CU|SA|SA-CAR|shortsands-na-va|Cuba
-CW|SA|SA-CAR|shortsands-na-va|Curaçao
-CY|EU|AS-WES|shortsands-eu-ie|Cyprus
-CZ|EU|EU-EAS|shortsands-eu-ie|Czechia
-DK|EU|EU-NOR|shortsands-eu-ie|Denmark
-DJ|AF|AF-EAS|shortsands-eu-ie|Djibouti
-DM|SA|SA-CAR|shortsands-na-va|Dominica
-DO|SA|SA-CAR|shortsands-na-va|Dominican Republic
-EC|SA|SA-SOU|shortsands-na-va|Ecuador
-EG|AF|AF-NOR|shortsands-eu-ie|Egypt
-SV|SA|SA-CEN|shortsands-na-va|El Salvador
-GQ|AF|AF-MID|shortsands-eu-ie|Equatorial Guinea
-ER|AF|AF-EAS|shortsands-eu-ie|Eritrea
-EE|EU|EU-NOR|shortsands-eu-ie|Estonia
-ET|AF|AF-EAS|shortsands-eu-ie|Ethiopia
-FK|SA|SA-SOU|shortsands-na-va|Falkland Islands (Malvinas)
-FO|EU|EU-NOR|shortsands-eu-ie|Faroe Islands
-FJ|OC|OC-MEL|shortsands-oc-au|Fiji
-FI|EU|EU-NOR|shortsands-eu-ie|Finland
-FR|EU|EU-WES|shortsands-eu-ie|France
-GF|SA|SA-SOU|shortsands-na-va|French Guiana
-PF|OC|OC-POL|shortsands-oc-au|French Polynesia
-TF|AN|AN-ANT|shortsands-oc-au|French Southern Territories
-GA|AF|AF-MID|shortsands-eu-ie|Gabon
-GM|AF|AF-WES|shortsands-eu-ie|Gambia
-GE|AS|AS-WES|shortsands-eu-ie|Georgia
-DE|EU|EU-WES|shortsands-eu-ie|Germany
-GH|AF|AF-WES|shortsands-eu-ie|Ghana
-GI|EU|EU-SOU|shortsands-eu-ie|Gibraltar
-GR|EU|EU-SOU|shortsands-eu-ie|Greece
-GL|NA|NA-NOR|shortsands-na-va|Greenland
-GD|SA|SA-CAR|shortsands-na-va|Grenada
-GP|SA|SA-CAR|shortsands-na-va|Guadeloupe
-GU|OC|OC-MIC|shortsands-oc-au|Guam
-GT|SA|SA-CEN|shortsands-na-va|Guatemala
-GG|EU|EU-NOR|shortsands-eu-ie|Guernsey
-GN|AF|AF-WES|shortsands-eu-ie|Guinea
-GW|AF|AF-WES|shortsands-eu-ie|Guinea-Bissau
-GY|SA|SA-SOU|shortsands-na-va|Guyana
-HT|SA|SA-CAR|shortsands-na-va|Haiti
-HM|AN|AN-ANT|shortsands-oc-au|Heard Island and McDonald Islands
-VA|EU|EU-SOU|shortsands-eu-ie|Holy See
-HN|SA|SA-CEN|shortsands-na-va|Honduras
-HK|AS|AS-EAS|shortsands-as-jp|Hong Kong
-HU|EU|EU-EAS|shortsands-eu-ie|Hungary
-IS|EU|EU-NOR|shortsands-eu-ie|Iceland
-IN|AS|AS-SOU|shortsands-as-sg|India
-ID|AS|AS-SEA|shortsands-as-sg|Indonesia
-IR|AS|AS-SOU|shortsands-as-sg|Iran, Islamic Republic of
-IQ|AS|AS-WES|shortsands-eu-ie|Iraq
-IE|EU|EU-NOR|shortsands-eu-ie|Ireland
-IM|EU|EU-NOR|shortsands-eu-ie|Isle of Man
-IL|AS|AS-WES|shortsands-eu-ie|Israel
-IT|EU|EU-SOU|shortsands-eu-ie|Italy
-JM|SA|SA-CAR|shortsands-na-va|Jamaica
-JP|AS|AS-EAS|shortsands-as-jp|Japan
-JE|EU|EU-NOR|shortsands-eu-ie|Jersey
-JO|AS|AS-WES|shortsands-eu-ie|Jordan
-KZ|AS|AS-CEN|shortsands-as-jp|Kazakhstan
-KE|AF|AF-EAS|shortsands-eu-ie|Kenya
-KI|OC|OC-MIC|shortsands-oc-au|Kiribati
-KP|AS|AS-EAS|shortsands-as-jp|Korea, Democratic People's Republic of
-KR|AS|AS-EAS|shortsands-as-jp|Korea, Republic of
-KW|AS|AS-WES|shortsands-eu-ie|Kuwait
-KG|AS|AS-CEN|shortsands-as-jp|Kyrgyzstan
-LA|AS|AS-SEA|shortsands-as-sg|Lao People's Democratic Republic
-LV|EU|EU-NOR|shortsands-eu-ie|Latvia
-LB|AS|AS-WES|shortsands-eu-ie|Lebanon
-LS|AF|AF-SOU|shortsands-eu-ie|Lesotho
-LR|AF|AF-WES|shortsands-eu-ie|Liberia
-LY|AF|AF-NOR|shortsands-eu-ie|Libya
-LI|EU|EU-WES|shortsands-eu-ie|Liechtenstein
-LT|EU|EU-NOR|shortsands-eu-ie|Lithuania
-LU|EU|EU-WES|shortsands-eu-ie|Luxembourg
-MO|AS|AS-EAS|shortsands-as-jp|Macao
-MK|EU|EU-SOU|shortsands-eu-ie|Macedonia, the former Yugoslav Republic of
-MG|AF|AF-EAS|shortsands-eu-ie|Madagascar
-MW|AF|AF-EAS|shortsands-eu-ie|Malawi
-MY|AS|AS-SEA|shortsands-as-sg|Malaysia
-MV|AS|AS-SOU|shortsands-as-sg|Maldives
-ML|AF|AF-WES|shortsands-eu-ie|Mali
-MT|EU|EU-SOU|shortsands-eu-ie|Malta
-MH|OC|OC-MIC|shortsands-oc-au|Marshall Islands
-MQ|SA|SA-CAR|shortsands-na-va|Martinique
-MR|AF|AF-WES|shortsands-eu-ie|Mauritania
-MU|AF|AF-EAS|shortsands-eu-ie|Mauritius
-YT|AF|AF-EAS|shortsands-eu-ie|Mayotte
-MX|NA|SA-CEN|shortsands-na-va|Mexico
-FM|OC|OC-MIC|shortsands-oc-au|Micronesia, Federated States of
-MD|EU|EU-EAS|shortsands-eu-ie|Moldova, Republic of
-MC|EU|EU-WES|shortsands-eu-ie|Monaco
-MN|AS|AS-EAS|shortsands-as-jp|Mongolia
-ME|EU|EU-SOU|shortsands-eu-ie|Montenegro
-MS|SA|SA-CAR|shortsands-na-va|Montserrat
-MA|AF|AF-NOR|shortsands-eu-ie|Morocco
-MZ|AF|AF-EAS|shortsands-eu-ie|Mozambique
-MM|AS|AS-SEA|shortsands-as-sg|Myanmar
-NA|AF|AF-SOU|shortsands-eu-ie|Namibia
-NR|OC|OC-MIC|shortsands-oc-au|Nauru
-NP|AS|AS-SOU|shortsands-as-sg|Nepal
-NL|EU|EU-WES|shortsands-eu-ie|Netherlands
-NC|OC|OC-MEL|shortsands-oc-au|New Caledonia
-NZ|OC|OC-AUS|shortsands-oc-au|New Zealand
-NI|SA|SA-CEN|shortsands-na-va|Nicaragua
-NE|AF|AF-WES|shortsands-eu-ie|Niger
-NG|AF|AF-WES|shortsands-eu-ie|Nigeria
-NU|OC|OC-POL|shortsands-oc-au|Niue
-NF|OC|OC-AUS|shortsands-oc-au|Norfolk Island
-MP|OC|OC-MIC|shortsands-oc-au|Northern Mariana Islands
-NO|EU|EU-NOR|shortsands-eu-ie|Norway
-OM|AS|AS-WES|shortsands-eu-ie|Oman
-PK|AS|AS-SOU|shortsands-as-sg|Pakistan
-PW|OC|OC-MIC|shortsands-oc-au|Palau
-PS|AS|AS-WES|shortsands-eu-ie|Palestine, State of
-PA|SA|SA-CEN|shortsands-na-va|Panama
-PG|OC|OC-MEL|shortsands-oc-au|Papua New Guinea
-PY|SA|SA-SOU|shortsands-na-va|Paraguay
-PE|SA|SA-SOU|shortsands-na-va|Peru
-PH|AS|AS-SEA|shortsands-as-sg|Philippines
-PN|OC|OC-POL|shortsands-oc-au|Pitcairn
-PL|EU|EU-EAS|shortsands-eu-ie|Poland
-PT|EU|EU-SOU|shortsands-eu-ie|Portugal
-PR|SA|SA-CAR|shortsands-na-va|Puerto Rico
-QA|AS|AS-WES|shortsands-eu-ie|Qatar
-RE|AF|AF-EAS|shortsands-eu-ie|Réunion
-RO|EU|EU-EAS|shortsands-eu-ie|Romania
-RU|EU|EU-EAS|shortsands-eu-ie|Russian Federation
-RW|AF|AF-EAS|shortsands-eu-ie|Rwanda
-BL|SA|SA-CAR|shortsands-na-va|Saint Barthélemy
-SH|AF|AF-WES|shortsands-eu-ie|Saint Helena, Ascension and Tristan da Cunha
-KN|SA|SA-CAR|shortsands-na-va|Saint Kitts and Nevis
-LC|SA|SA-CAR|shortsands-na-va|Saint Lucia
-MF|SA|SA-CAR|shortsands-na-va|Saint Martin (French part)
-PM|NA|NA-NOR|shortsands-na-va|Saint Pierre and Miquelon
-VC|SA|SA-CAR|shortsands-na-va|Saint Vincent and the Grenadines
-WS|OC|OC-POL|shortsands-oc-au|Samoa
-SM|EU|EU-SOU|shortsands-eu-ie|San Marino
-ST|AF|AF-MID|shortsands-eu-ie|Sao Tome and Principe
-SA|AS|AS-WES|shortsands-eu-ie|Saudi Arabia
-SN|AF|AF-WES|shortsands-eu-ie|Senegal
-RS|EU|EU-SOU|shortsands-eu-ie|Serbia
-SC|AF|AF-EAS|shortsands-eu-ie|Seychelles
-SL|AF|AF-WES|shortsands-eu-ie|Sierra Leone
-SG|AS|AS-SEA|shortsands-as-sg|Singapore
-SX|SA|SA-CAR|shortsands-na-va|Sint Maarten (Dutch part)
-SK|EU|EU-EAS|shortsands-eu-ie|Slovakia
-SI|EU|EU-SOU|shortsands-eu-ie|Slovenia
-SB|OC|OC-MEL|shortsands-oc-au|Solomon Islands
-SO|AF|AF-EAS|shortsands-eu-ie|Somalia
-ZA|AF|AF-SOU|shortsands-eu-ie|South Africa
-GS|AN|AN-ANT|shortsands-oc-au|South Georgia and the South Sandwich Islands
-SS|AF|AF-EAS|shortsands-eu-ie|South Sudan
-ES|EU|EU-SOU|shortsands-eu-ie|Spain
-LK|AS|AS-SOU|shortsands-as-sg|Sri Lanka
-SD|AF|AF-NOR|shortsands-eu-ie|Sudan
-SR|SA|SA-SOU|shortsands-na-va|Suriname
-SJ|EU|EU-NOR|shortsands-eu-ie|Svalbard and Jan Mayen
-SZ|AF|AF-SOU|shortsands-eu-ie|Swaziland
-SE|EU|EU-NOR|shortsands-eu-ie|Sweden
-CH|EU|EU-WES|shortsands-eu-ie|Switzerland
-SY|AS|AS-WES|shortsands-eu-ie|Syrian Arab Republic
-TW|AS|AS-EAS|shortsands-as-jp|Taiwan, Province of China
-TJ|AS|AS-CEN|shortsands-as-jp|Tajikistan
-TZ|AF|AF-EAS|shortsands-eu-ie|Tanzania, United Republic of
-TH|AS|AS-SEA|shortsands-as-sg|Thailand
-TL|AS|AS-SEA|shortsands-as-sg|Timor-Leste
-TG|AF|AF-WES|shortsands-eu-ie|Togo
-TK|OC|OC-POL|shortsands-oc-au|Tokelau
-TO|OC|OC-POL|shortsands-oc-au|Tonga
-TT|SA|SA-CAR|shortsands-na-va|Trinidad and Tobago
-TN|AF|AF-NOR|shortsands-eu-ie|Tunisia
-TR|AS|AS-WES|shortsands-eu-ie|Turkey
-TM|AS|AS-CEN|shortsands-as-jp|Turkmenistan
-TC|SA|SA-CAR|shortsands-na-va|Turks and Caicos Islands
-TV|OC|OC-POL|shortsands-oc-au|Tuvalu
-UG|AF|AF-EAS|shortsands-eu-ie|Uganda
-UA|EU|EU-EAS|shortsands-eu-ie|Ukraine
-AE|AS|AS-WES|shortsands-eu-ie|United Arab Emirates
-GB|EU|EU-NOR|shortsands-eu-ie|United Kingdom of Great Britain and Northern Ireland
-UM|NA|NA-NOR|shortsands-na-va|United States Minor Outlying Islands
-US|NA|NA-NOR|shortsands-na-va|United States of America
-UY|SA|SA-SOU|shortsands-na-va|Uruguay
-UZ|AS|AS-CEN|shortsands-as-jp|Uzbekistan
-VU|OC|OC-MEL|shortsands-oc-au|Vanuatu
-VE|SA|SA-SOU|shortsands-na-va|Venezuela, Bolivarian Republic of
-VN|AS|AS-SEA|shortsands-as-sg|Viet Nam
-VG|SA|SA-CAR|shortsands-na-va|Virgin Islands, British
-VI|SA|SA-CAR|shortsands-na-va|Virgin Islands, U.S.
-WF|OC|OC-POL|shortsands-oc-au|Wallis and Futuna
-EH|AF|AF-NOR|shortsands-eu-ie|Western Sahara
-YE|AS|AS-WES|shortsands-eu-ie|Yemen
-ZM|AF|AF-EAS|shortsands-eu-ie|Zambia
-ZW|AF|AF-EAS|shortsands-eu-ie|Zimbabwe
+AF|AS|AS-SOU|ap-southeast-1|Afghanistan
+AX|EU|EU-NOR|eu-west-1|Åland Islands
+AL|EU|EU-SOU|eu-west-1|Albania
+DZ|AF|AF-NOR|eu-west-1|Algeria
+AS|OC|OC-POL|ap-southeast-2|American Samoa
+AD|EU|EU-SOU|eu-west-1|Andorra
+AO|AF|AF-MID|eu-west-1|Angola
+AI|SA|SA-CAR|us-east-1|Anguilla
+AQ|AN|AN-ANT|ap-southeast-2|Antarctica
+AG|SA|SA-CAR|us-east-1|Antigua and Barbuda
+AR|SA|SA-SOU|us-east-1|Argentina
+AM|AS|AS-WES|eu-west-1|Armenia
+AW|SA|SA-CAR|us-east-1|Aruba
+AU|OC|OC-AUS|ap-southeast-2|Australia
+AT|EU|EU-WES|eu-west-1|Austria
+AZ|AS|AS-WES|eu-west-1|Azerbaijan
+BS|SA|SA-CAR|us-east-1|Bahamas
+BH|AS|AS-WES|eu-west-1|Bahrain
+BD|AS|AS-SOU|ap-southeast-1|Bangladesh
+BB|SA|SA-CAR|us-east-1|Barbados
+BY|EU|EU-EAS|eu-west-1|Belarus
+BZ|SA|SA-CEN|us-east-1|Belize
+BE|EU|EU-WES|eu-west-1|Belgium
+BJ|AF|AF-WES|eu-west-1|Benin
+BM|NA|NA-NOR|us-east-1|Bermuda
+BT|AS|AS-SOU|ap-southeast-1|Bhutan
+BO|SA|SA-SOU|us-east-1|Bolivia, Plurinational State of
+BQ|SA|SA-CAR|us-east-1|Bonaire, Sint Eustatius and Saba
+BA|EU|EU-SOU|eu-west-1|Bosnia and Herzegovina
+BW|AF|AF-SOU|eu-west-1|Botswana
+BV|AN|AN-ANT|ap-southeast-2|Bouvet Island
+BR|SA|SA-SOU|us-east-1|Brazil
+IO|EU|EU-WES|eu-west-1|British Indian Ocean Territory
+BN|AS|AS-SEA|ap-southeast-1|Brunei Darussalam
+BG|EU|EU-EAS|eu-west-1|Bulgaria
+BF|AF|AF-WES|eu-west-1|Burkina Faso
+BI|AF|AF-EAS|eu-west-1|Burundi
+CV|AF|AF-WES|eu-west-1|Cabo Verde
+KH|AS|AS-SEA|ap-southeast-1|Cambodia
+CM|AF|AF-MID|eu-west-1|Cameroon
+CA|NA|NA-NOR|us-east-1|Canada
+KY|SA|SA-CAR|us-east-1|Cayman Islands
+CF|AF|AF-MID|eu-west-1|Central African Republic
+TD|AF|AF-MID|eu-west-1|Chad
+CL|SA|SA-SOU|us-east-1|Chile
+CN|AS|AS-EAS|ap-northeast-1|China
+CX|OC|OC-AUS|ap-southeast-2|Christmas Island
+CC|OC|OC-AUS|ap-southeast-2|Cocos (Keeling) Islands
+CO|SA|SA-SOU|us-east-1|Colombia
+KM|AF|AF-EAS|eu-west-1|Comoros
+CG|AF|AF-MID|eu-west-1|Congo
+CD|AF|AF-MID|eu-west-1|Congo, the Democratic Republic of the
+CK|OC|OC-POL|ap-southeast-2|Cook Islands
+CR|SA|SA-CEN|us-east-1|Costa Rica
+CI|AF|AF-WES|eu-west-1|Côte d'Ivoire
+HR|EU|EU-SOU|eu-west-1|Croatia
+CU|SA|SA-CAR|us-east-1|Cuba
+CW|SA|SA-CAR|us-east-1|Curaçao
+CY|EU|AS-WES|eu-west-1|Cyprus
+CZ|EU|EU-EAS|eu-west-1|Czechia
+DK|EU|EU-NOR|eu-west-1|Denmark
+DJ|AF|AF-EAS|eu-west-1|Djibouti
+DM|SA|SA-CAR|us-east-1|Dominica
+DO|SA|SA-CAR|us-east-1|Dominican Republic
+EC|SA|SA-SOU|us-east-1|Ecuador
+EG|AF|AF-NOR|eu-west-1|Egypt
+SV|SA|SA-CEN|us-east-1|El Salvador
+GQ|AF|AF-MID|eu-west-1|Equatorial Guinea
+ER|AF|AF-EAS|eu-west-1|Eritrea
+EE|EU|EU-NOR|eu-west-1|Estonia
+ET|AF|AF-EAS|eu-west-1|Ethiopia
+FK|SA|SA-SOU|us-east-1|Falkland Islands (Malvinas)
+FO|EU|EU-NOR|eu-west-1|Faroe Islands
+FJ|OC|OC-MEL|ap-southeast-2|Fiji
+FI|EU|EU-NOR|eu-west-1|Finland
+FR|EU|EU-WES|eu-west-1|France
+GF|SA|SA-SOU|us-east-1|French Guiana
+PF|OC|OC-POL|ap-southeast-2|French Polynesia
+TF|AN|AN-ANT|ap-southeast-2|French Southern Territories
+GA|AF|AF-MID|eu-west-1|Gabon
+GM|AF|AF-WES|eu-west-1|Gambia
+GE|AS|AS-WES|eu-west-1|Georgia
+DE|EU|EU-WES|eu-west-1|Germany
+GH|AF|AF-WES|eu-west-1|Ghana
+GI|EU|EU-SOU|eu-west-1|Gibraltar
+GR|EU|EU-SOU|eu-west-1|Greece
+GL|NA|NA-NOR|us-east-1|Greenland
+GD|SA|SA-CAR|us-east-1|Grenada
+GP|SA|SA-CAR|us-east-1|Guadeloupe
+GU|OC|OC-MIC|ap-southeast-2|Guam
+GT|SA|SA-CEN|us-east-1|Guatemala
+GG|EU|EU-NOR|eu-west-1|Guernsey
+GN|AF|AF-WES|eu-west-1|Guinea
+GW|AF|AF-WES|eu-west-1|Guinea-Bissau
+GY|SA|SA-SOU|us-east-1|Guyana
+HT|SA|SA-CAR|us-east-1|Haiti
+HM|AN|AN-ANT|ap-southeast-2|Heard Island and McDonald Islands
+VA|EU|EU-SOU|eu-west-1|Holy See
+HN|SA|SA-CEN|us-east-1|Honduras
+HK|AS|AS-EAS|ap-northeast-1|Hong Kong
+HU|EU|EU-EAS|eu-west-1|Hungary
+IS|EU|EU-NOR|eu-west-1|Iceland
+IN|AS|AS-SOU|ap-southeast-1|India
+ID|AS|AS-SEA|ap-southeast-1|Indonesia
+IR|AS|AS-SOU|ap-southeast-1|Iran, Islamic Republic of
+IQ|AS|AS-WES|eu-west-1|Iraq
+IE|EU|EU-NOR|eu-west-1|Ireland
+IM|EU|EU-NOR|eu-west-1|Isle of Man
+IL|AS|AS-WES|eu-west-1|Israel
+IT|EU|EU-SOU|eu-west-1|Italy
+JM|SA|SA-CAR|us-east-1|Jamaica
+JP|AS|AS-EAS|ap-northeast-1|Japan
+JE|EU|EU-NOR|eu-west-1|Jersey
+JO|AS|AS-WES|eu-west-1|Jordan
+KZ|AS|AS-CEN|ap-northeast-1|Kazakhstan
+KE|AF|AF-EAS|eu-west-1|Kenya
+KI|OC|OC-MIC|ap-southeast-2|Kiribati
+KP|AS|AS-EAS|ap-northeast-1|Korea, Democratic People's Republic of
+KR|AS|AS-EAS|ap-northeast-1|Korea, Republic of
+KW|AS|AS-WES|eu-west-1|Kuwait
+KG|AS|AS-CEN|ap-northeast-1|Kyrgyzstan
+LA|AS|AS-SEA|ap-southeast-1|Lao People's Democratic Republic
+LV|EU|EU-NOR|eu-west-1|Latvia
+LB|AS|AS-WES|eu-west-1|Lebanon
+LS|AF|AF-SOU|eu-west-1|Lesotho
+LR|AF|AF-WES|eu-west-1|Liberia
+LY|AF|AF-NOR|eu-west-1|Libya
+LI|EU|EU-WES|eu-west-1|Liechtenstein
+LT|EU|EU-NOR|eu-west-1|Lithuania
+LU|EU|EU-WES|eu-west-1|Luxembourg
+MO|AS|AS-EAS|ap-northeast-1|Macao
+MK|EU|EU-SOU|eu-west-1|Macedonia, the former Yugoslav Republic of
+MG|AF|AF-EAS|eu-west-1|Madagascar
+MW|AF|AF-EAS|eu-west-1|Malawi
+MY|AS|AS-SEA|ap-southeast-1|Malaysia
+MV|AS|AS-SOU|ap-southeast-1|Maldives
+ML|AF|AF-WES|eu-west-1|Mali
+MT|EU|EU-SOU|eu-west-1|Malta
+MH|OC|OC-MIC|ap-southeast-2|Marshall Islands
+MQ|SA|SA-CAR|us-east-1|Martinique
+MR|AF|AF-WES|eu-west-1|Mauritania
+MU|AF|AF-EAS|eu-west-1|Mauritius
+YT|AF|AF-EAS|eu-west-1|Mayotte
+MX|NA|SA-CEN|us-east-1|Mexico
+FM|OC|OC-MIC|ap-southeast-2|Micronesia, Federated States of
+MD|EU|EU-EAS|eu-west-1|Moldova, Republic of
+MC|EU|EU-WES|eu-west-1|Monaco
+MN|AS|AS-EAS|ap-northeast-1|Mongolia
+ME|EU|EU-SOU|eu-west-1|Montenegro
+MS|SA|SA-CAR|us-east-1|Montserrat
+MA|AF|AF-NOR|eu-west-1|Morocco
+MZ|AF|AF-EAS|eu-west-1|Mozambique
+MM|AS|AS-SEA|ap-southeast-1|Myanmar
+NA|AF|AF-SOU|eu-west-1|Namibia
+NR|OC|OC-MIC|ap-southeast-2|Nauru
+NP|AS|AS-SOU|ap-southeast-1|Nepal
+NL|EU|EU-WES|eu-west-1|Netherlands
+NC|OC|OC-MEL|ap-southeast-2|New Caledonia
+NZ|OC|OC-AUS|ap-southeast-2|New Zealand
+NI|SA|SA-CEN|us-east-1|Nicaragua
+NE|AF|AF-WES|eu-west-1|Niger
+NG|AF|AF-WES|eu-west-1|Nigeria
+NU|OC|OC-POL|ap-southeast-2|Niue
+NF|OC|OC-AUS|ap-southeast-2|Norfolk Island
+MP|OC|OC-MIC|ap-southeast-2|Northern Mariana Islands
+NO|EU|EU-NOR|eu-west-1|Norway
+OM|AS|AS-WES|eu-west-1|Oman
+PK|AS|AS-SOU|ap-southeast-1|Pakistan
+PW|OC|OC-MIC|ap-southeast-2|Palau
+PS|AS|AS-WES|eu-west-1|Palestine, State of
+PA|SA|SA-CEN|us-east-1|Panama
+PG|OC|OC-MEL|ap-southeast-2|Papua New Guinea
+PY|SA|SA-SOU|us-east-1|Paraguay
+PE|SA|SA-SOU|us-east-1|Peru
+PH|AS|AS-SEA|ap-southeast-1|Philippines
+PN|OC|OC-POL|ap-southeast-2|Pitcairn
+PL|EU|EU-EAS|eu-west-1|Poland
+PT|EU|EU-SOU|eu-west-1|Portugal
+PR|SA|SA-CAR|us-east-1|Puerto Rico
+QA|AS|AS-WES|eu-west-1|Qatar
+RE|AF|AF-EAS|eu-west-1|Réunion
+RO|EU|EU-EAS|eu-west-1|Romania
+RU|EU|EU-EAS|eu-west-1|Russian Federation
+RW|AF|AF-EAS|eu-west-1|Rwanda
+BL|SA|SA-CAR|us-east-1|Saint Barthélemy
+SH|AF|AF-WES|eu-west-1|Saint Helena, Ascension and Tristan da Cunha
+KN|SA|SA-CAR|us-east-1|Saint Kitts and Nevis
+LC|SA|SA-CAR|us-east-1|Saint Lucia
+MF|SA|SA-CAR|us-east-1|Saint Martin (French part)
+PM|NA|NA-NOR|us-east-1|Saint Pierre and Miquelon
+VC|SA|SA-CAR|us-east-1|Saint Vincent and the Grenadines
+WS|OC|OC-POL|ap-southeast-2|Samoa
+SM|EU|EU-SOU|eu-west-1|San Marino
+ST|AF|AF-MID|eu-west-1|Sao Tome and Principe
+SA|AS|AS-WES|eu-west-1|Saudi Arabia
+SN|AF|AF-WES|eu-west-1|Senegal
+RS|EU|EU-SOU|eu-west-1|Serbia
+SC|AF|AF-EAS|eu-west-1|Seychelles
+SL|AF|AF-WES|eu-west-1|Sierra Leone
+SG|AS|AS-SEA|ap-southeast-1|Singapore
+SX|SA|SA-CAR|us-east-1|Sint Maarten (Dutch part)
+SK|EU|EU-EAS|eu-west-1|Slovakia
+SI|EU|EU-SOU|eu-west-1|Slovenia
+SB|OC|OC-MEL|ap-southeast-2|Solomon Islands
+SO|AF|AF-EAS|eu-west-1|Somalia
+ZA|AF|AF-SOU|eu-west-1|South Africa
+GS|AN|AN-ANT|ap-southeast-2|South Georgia and the South Sandwich Islands
+SS|AF|AF-EAS|eu-west-1|South Sudan
+ES|EU|EU-SOU|eu-west-1|Spain
+LK|AS|AS-SOU|ap-southeast-1|Sri Lanka
+SD|AF|AF-NOR|eu-west-1|Sudan
+SR|SA|SA-SOU|us-east-1|Suriname
+SJ|EU|EU-NOR|eu-west-1|Svalbard and Jan Mayen
+SZ|AF|AF-SOU|eu-west-1|Swaziland
+SE|EU|EU-NOR|eu-west-1|Sweden
+CH|EU|EU-WES|eu-west-1|Switzerland
+SY|AS|AS-WES|eu-west-1|Syrian Arab Republic
+TW|AS|AS-EAS|ap-northeast-1|Taiwan, Province of China
+TJ|AS|AS-CEN|ap-northeast-1|Tajikistan
+TZ|AF|AF-EAS|eu-west-1|Tanzania, United Republic of
+TH|AS|AS-SEA|ap-southeast-1|Thailand
+TL|AS|AS-SEA|ap-southeast-1|Timor-Leste
+TG|AF|AF-WES|eu-west-1|Togo
+TK|OC|OC-POL|ap-southeast-2|Tokelau
+TO|OC|OC-POL|ap-southeast-2|Tonga
+TT|SA|SA-CAR|us-east-1|Trinidad and Tobago
+TN|AF|AF-NOR|eu-west-1|Tunisia
+TR|AS|AS-WES|eu-west-1|Turkey
+TM|AS|AS-CEN|ap-northeast-1|Turkmenistan
+TC|SA|SA-CAR|us-east-1|Turks and Caicos Islands
+TV|OC|OC-POL|ap-southeast-2|Tuvalu
+UG|AF|AF-EAS|eu-west-1|Uganda
+UA|EU|EU-EAS|eu-west-1|Ukraine
+AE|AS|AS-WES|eu-west-1|United Arab Emirates
+GB|EU|EU-NOR|eu-west-1|United Kingdom of Great Britain and Northern Ireland
+UM|NA|NA-NOR|us-east-1|United States Minor Outlying Islands
+US|NA|NA-NOR|us-east-1|United States of America
+UY|SA|SA-SOU|us-east-1|Uruguay
+UZ|AS|AS-CEN|ap-northeast-1|Uzbekistan
+VU|OC|OC-MEL|ap-southeast-2|Vanuatu
+VE|SA|SA-SOU|us-east-1|Venezuela, Bolivarian Republic of
+VN|AS|AS-SEA|ap-southeast-1|Viet Nam
+VG|SA|SA-CAR|us-east-1|Virgin Islands, British
+VI|SA|SA-CAR|us-east-1|Virgin Islands, U.S.
+WF|OC|OC-POL|ap-southeast-2|Wallis and Futuna
+EH|AF|AF-NOR|eu-west-1|Western Sahara
+YE|AS|AS-WES|eu-west-1|Yemen
+ZM|AF|AF-EAS|eu-west-1|Zambia
+ZW|AF|AF-EAS|eu-west-1|Zimbabwe
