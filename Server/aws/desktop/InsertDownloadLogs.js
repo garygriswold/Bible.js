@@ -50,8 +50,9 @@ InsertDownloadLogs.prototype.insert = function(logFile, callback) {
 		var pieces = parts[0].split(':');
 		var dateParts = pieces[0].split('/');
 		var month = MONTHS.indexOf(dateParts[1]) + 1;
-		if (month < 1) month = dateParts[1];
-		var result = dateParts[2] + '-' + month + '-' + dateParts[0] + 'T' + pieces[1] + ':' + pieces[2] + ':' + pieces[3];
+		//if (month < 1) month = dateParts[1];
+		var monthStr = (month < 10) ? "0" + month : String(month);
+		var result = dateParts[2] + '-' + monthStr + '-' + dateParts[0] + 'T' + pieces[1] + ':' + pieces[2] + ':' + pieces[3];
 		console.log('DATE CONVERSION ', datetime, ' TO ', result);
 		return(result);
 	}
