@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="com-shortsands-aws"
+    version="1.0.0">
+	<name>AWS</name>
+	<description>Plugin to AWS Services</description>
+	<author>Gary Griswold</author>
+	<engines>
+    	<engine name="cordova" version=">=6.0.0"/>
+	</engines>
+
+	<js-module name="AWS" src="www/AWS.js">
+    	<clobbers target="AWS" />
+	</js-module>
+	
+	<dependency id="com-shortsands-pkzip" url="file:////Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip" />
+	
+	<asset src="AWSUnitTest.js" target="js/AWSUnitTest.js" />
+
+	<platform name="android">
+    	<config-file target="config.xml" parent="/*">
+			<feature name="AWS">
+				<param name="android-package" value="plugin.AWS"/>
+			</feature>
+		</config-file>
+		<config-file target="AndroidManifest.xml" parent="/manifest">
+			<uses-permission android:name="android.permission.INTERNET" />
+			<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+		</config-file>
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			 <service android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService" android:enabled="true" />
+		</config-file>
+		<source-file src="src/android/plugin/AWS.java" target-dir="src/plugin" />
+		<source-file src="src/android/plugin/DownloadPluginDataListener.java" target-dir="src/plugin" />
+		<source-file src="src/android/plugin/DownloadPluginFileListener.java" target-dir="src/plugin" />
+		<source-file src="src/android/plugin/DownloadPluginTextListener.java" target-dir="src/plugin" />
+		<source-file src="src/android/plugin/DownloadPluginZipFileListener.java" target-dir="src/plugin" />
+		<source-file src="src/android/plugin/UploadPluginDataListener.java" target-dir="src/plugin" />
+		<source-file src="src/android/plugin/UploadPluginFileListener.java" target-dir="src/plugin" />
+		<lib-file src="src/android/plugin/AWS.jar" target-dir="src/libs" />
+		<lib-file src="src/android/app/libs/aws-android-sdk-core-2.4.2.jar" target-dir="src/libs" />
+		<lib-file src="src/android/app/libs/aws-android-sdk-s3-2.4.2.jar" target-dir="src/libs" />
+	</platform>
+  
+	<platform name="ios">
+		<config-file target="config.xml" parent="/*">
+	    	<feature name="AWS">
+				<param name="ios-package" value="AWS" />
+			</feature>
+		</config-file>
+		<source-file src="src/ios/AWS.swift" />
+		<framework src="src/ios/build/AWS.framework" embed="true" custom="true" />
+		<framework src="src/ios/AWS/AWSCore.framework" embed="true" custom="true"/>
+	</platform>
+
+</plugin>

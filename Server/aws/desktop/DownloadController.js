@@ -24,8 +24,7 @@ var downloadController = function(callback) {
 		var bkt = bucketList[i];
 		REGIONS[bkt + '-log'] = cdnBuckets[bkt];
 	}
-	REGIONS['shortsands-log'] = 'us-west-2';
-	REGIONS['analytics-us-east-1-shortsands'] = 'us-east-1';
+	//REGIONS['analytics-us-east-1-shortsands'] = 'us-east-1';
 	
 	var s3Download = new S3Download(REGIONS);
 

@@ -1,0 +1,47 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
+        "spec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
+        "type": "directory"
+      },
+      "/Users/garygriswold/ShortSands/BibleApp/YourBible/node_modules"
+    ]
+  ],
+  "_from": "../Plugins/AWS",
+  "_id": "com-shortsands-aws@1.0.0",
+  "_inCache": true,
+  "_location": "/com-shortsands-aws",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
+    "spec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
+    "type": "directory"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "file:../Plugins/AWS",
+  "_shasum": "09df0ad5bbc0e58efc45bef99a10b0b3bc50f706",
+  "_shrinkwrap": null,
+  "_spec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
+  "_where": "/Users/garygriswold/ShortSands/BibleApp/YourBible/node_modules",
+  "dependencies": {},
+  "description": "AWS ===",
+  "devDependencies": {},
+  "name": "com-shortsands-aws",
+  "optionalDependencies": {},
+  "readme": "AWS\n===\n\nThis plugin provides a cordova interface to S3 routines to upload, download\nand generate signed URLs.\n\nThe plugin is a thin wrapper around classes of the same function that could\nbe called by other native language code.\n\n\nExample Use of Plugin\n---------------------\n\n\n\t\nAndroid Development\n===================\t\n\t\nDevelopment Process\n-------------------\n\n\tdevelop at: ShortSands/BibleApp/Plugins/AWS\n\t\n\tcreate app: Desktop/AWS\n\t\n\tscript to install plugin\n\t./TestAWS.sh\n\t\nTesting Android Native VideoPlayer\n----------------------------------\n\nTest the Plugin inside a simple Cordova App, executing the App and plugin.\nAfter changing the App, I must run cordova emulate android before using\nAndroid Studio.  After changing the plugin, I must run ./TestAWS.sh\nbefore using Android Studio.\n\n\topen Android Studio\n\tselect Desktop/AWS/platforms/android\n\trun\n\t\nMethod Profiling on Android\n---------------------------\n\n\n\n\nMemory & CPU Profiling on Android\n---------------------------------\n\t\t\n\tTools -> Android -> Enable ADB integration (turn on)\n\tStart Process\t\n\tWhen started: View -> Tools -> Android Monitor\n\tSelect com.shortsands.<whatever>\n\n\t\n\nApple iOS Development\n=====================\t\n\nTesting iOS Native VideoPlayer\n------------------------------\n\n\topen Xcode\n\tselect Desktop/AWS/platforms/ios\n\trun\n\t\nGetting iOS to run\n-----------------\n\n\tModify Bridging-Header.h to include required things.\n\t<appname>/platforms/ios/VideoProto/Bridging-Header.h\n\t\n\t#import <Cordova/CDV.h>\n\n\t#import \"SS_AWSS3PreSignedURL.h\"\n\t#import \"SS_AWSS3TransferUtility.h\"\n\n\t#import \"ioapi.h\"\n\t#import \"crypt.h\"\n\t#import \"zip.h\"\n\t#import \"unzip.h\"\n\t\n\n\t",
+  "readmeFilename": "README.md",
+  "version": "1.0.0"
+}

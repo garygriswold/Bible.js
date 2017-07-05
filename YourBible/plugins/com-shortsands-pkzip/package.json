@@ -1,0 +1,47 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "/Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip",
+        "spec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip",
+        "type": "directory"
+      },
+      "/Users/garygriswold/ShortSands/BibleApp/YourBible/node_modules"
+    ]
+  ],
+  "_from": "../Plugins/PKZip",
+  "_id": "com-shortsands-pkzip@1.0.0",
+  "_inCache": true,
+  "_location": "/com-shortsands-pkzip",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip",
+    "spec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip",
+    "type": "directory"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "file:../Plugins/PKZip",
+  "_shasum": "9de989f6e5db514947751a48f13e8c45d97ebf26",
+  "_shrinkwrap": null,
+  "_spec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip",
+  "_where": "/Users/garygriswold/ShortSands/BibleApp/YourBible/node_modules",
+  "dependencies": {},
+  "description": "PKZip =====",
+  "devDependencies": {},
+  "name": "com-shortsands-pkzip",
+  "optionalDependencies": {},
+  "readme": "PKZip\n=====\n\nThis plugin has been the source of lots of problems that result from the large number of choices, \nand the not so obvious result of those choices.\n\nZip Alternatives\n----------------\n\nThere are multiple kinds of zip and they are not compatible with each other.  The Bibles\nare currently stored on the server using OSX zip, which is PKZIP.  And the very nice\nJava classes for reading and writing Zip content are PKZIP.\n\n\t* gzip is slightly faster than pkzip and zlib claims to be faster.\n\tAlso, zlib gets better compression than gzip by a few bytes,\n\tand gzip is slightly better than pkzip.  But they all amount to\n\t0.201 compression when rounded.\n\n\ta zlib solution requires just a little C code.  The zlib site offers an excellent\n\tsample program zpipe.c  but zlib is not compatible with PK zip.\n\t \n\tThe mini zip solution is compatible with PKZIP, but I am having difficulty building \n\ta mixed language framework (c/swift)  There were many implementations on github.\n\tI chose the one that I did because it was written is swift, had a clean interface,\n\tand threw exceptions.\n\t\n\tAWS has a builtin gzip, but it works on data, not files. This is not appropriate \n\tfor the Bible files \n\nTime Measurements\n-----------------\n\nZIP PK\nzip real0m5.055s\nunzip real0m0.611s\n0.201 compression\n\ngzip\ngzip zip 0m4.979s\nreal unzip0m0.470s\n0.201 compression (smaller)\n\nzlib\n0.201 compression (smaller by a few bytes)\n\n\n\n\n\n\n\t\n\n\t",
+  "readmeFilename": "README.md",
+  "version": "1.0.0"
+}
