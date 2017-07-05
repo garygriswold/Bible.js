@@ -24,6 +24,17 @@ function Sqlite(databaseName, verbose) {
 	Object.freeze(this);
 };
 
+Sqlite.prototype.selectAll = function(statement, values, callback) {
+	var that = this;
+	this.database.all(statement, values, function(error, results) {
+		if (error) {
+			that.errorMessage(error, statement);
+		} else {
+			callback(results);
+		}
+	});	
+};
+
 Sqlite.prototype.execute = function(statement, records, callback) {
 	var that = this;
 	this.database.run('BEGIN TRANSACTION', function(err) {

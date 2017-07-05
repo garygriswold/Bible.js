@@ -1,7 +1,7 @@
 -- This SQL Files is used to create the BibleDownload table
 -- This file is run manually as needed to create this table.
 
-DROP TABLE IF EXISTS BibleDownload;
+-- DROP TABLE IF EXISTS BibleDownload;
 
 CREATE TABLE BibleDownload(
 	requestid TEXT PRIMARY KEY,

@@ -1,0 +1,6 @@
+
+
+ALTER TABLE BibleDownload ADD COLUMN manufacturer TEXT NULL;
+ALTER TABLE BibleDownload ADD COLUMN model TEXT NULL;
+ALTER TABLE BibleDownload ADD COLUMN osType TEXT NULL;
+ALTER TABLE BibleDownload ADD COLUMN osVersion TEXT NULL;
