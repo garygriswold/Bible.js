@@ -36,8 +36,9 @@ InsertDownloadLogs.prototype.insert = function(logFile, callback) {
 		var logRec = logRecords[i];
 		var log = JSON.parse(logRec.trim());
 		var datetimeISO = parseDatetime(log.datetime);
+		var errorStr = (log.error == '-') ? null : log.error;
 		var row = [ log.requestid, log.bucket, datetimeISO, log.userid, log.operation, log.filename,
-				log.httpStatus, log.prefLocale, log.locale, log.error, log.tranSize, log.fileSize, log.totalms, 
+				log.httpStatus, log.prefLocale, log.locale, errorStr, log.tranSize, log.fileSize, log.totalms, 
 				log.s3ms, log.userAgent ];
 		records.push(row);
 	}
