@@ -37,8 +37,12 @@ END_SQL1
 
 node Pivot3.js DownloadERV.db VersionByMonth version period count
 
-node Pivot3.js DownloadERV.db VersionByCountry version countryName count
+node Pivot3.js DownloadERV.db VersionByCountry countryName version count
 
 node Pivot3.js DownloadERV.db VersionByLanguage englishName version count
 
 node Pivot3.js DownloadERV.db VersionByDeviceOS version osType count
+
+
+
+

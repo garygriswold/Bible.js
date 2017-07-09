@@ -24,8 +24,8 @@ BE|EU|EU-WES|eu-west-1|Belgium
 BJ|AF|AF-WES|eu-west-1|Benin
 BM|NA|NA-NOR|us-east-1|Bermuda
 BT|AS|AS-SOU|ap-southeast-1|Bhutan
-BO|SA|SA-SOU|us-east-1|Bolivia, Plurinational State of
-BQ|SA|SA-CAR|us-east-1|Bonaire, Sint Eustatius and Saba
+BO|SA|SA-SOU|us-east-1|Bolivia
+BQ|SA|SA-CAR|us-east-1|Bonaire
 BA|EU|EU-SOU|eu-west-1|Bosnia and Herzegovina
 BW|AF|AF-SOU|eu-west-1|Botswana
 BV|AN|AN-ANT|ap-southeast-2|Bouvet Island
@@ -45,11 +45,11 @@ TD|AF|AF-MID|eu-west-1|Chad
 CL|SA|SA-SOU|us-east-1|Chile
 CN|AS|AS-EAS|ap-northeast-1|China
 CX|OC|OC-AUS|ap-southeast-2|Christmas Island
-CC|OC|OC-AUS|ap-southeast-2|Cocos (Keeling) Islands
+CC|OC|OC-AUS|ap-southeast-2|Cocos Islands
 CO|SA|SA-SOU|us-east-1|Colombia
 KM|AF|AF-EAS|eu-west-1|Comoros
 CG|AF|AF-MID|eu-west-1|Congo
-CD|AF|AF-MID|eu-west-1|Congo, the Democratic Republic of the
+CD|AF|AF-MID|eu-west-1|Congo Democratic Republic
 CK|OC|OC-POL|ap-southeast-2|Cook Islands
 CR|SA|SA-CEN|us-east-1|Costa Rica
 CI|AF|AF-WES|eu-west-1|Côte d'Ivoire
@@ -69,7 +69,7 @@ GQ|AF|AF-MID|eu-west-1|Equatorial Guinea
 ER|AF|AF-EAS|eu-west-1|Eritrea
 EE|EU|EU-NOR|eu-west-1|Estonia
 ET|AF|AF-EAS|eu-west-1|Ethiopia
-FK|SA|SA-SOU|us-east-1|Falkland Islands (Malvinas)
+FK|SA|SA-SOU|us-east-1|Falkland Islands
 FO|EU|EU-NOR|eu-west-1|Faroe Islands
 FJ|OC|OC-MEL|ap-southeast-2|Fiji
 FI|EU|EU-NOR|eu-west-1|Finland
@@ -102,7 +102,7 @@ HU|EU|EU-EAS|eu-west-1|Hungary
 IS|EU|EU-NOR|eu-west-1|Iceland
 IN|AS|AS-SOU|ap-southeast-1|India
 ID|AS|AS-SEA|ap-southeast-1|Indonesia
-IR|AS|AS-SOU|ap-southeast-1|Iran, Islamic Republic of
+IR|AS|AS-SOU|ap-southeast-1|Iran
 IQ|AS|AS-WES|eu-west-1|Iraq
 IE|EU|EU-NOR|eu-west-1|Ireland
 IM|EU|EU-NOR|eu-west-1|Isle of Man
@@ -115,11 +115,11 @@ JO|AS|AS-WES|eu-west-1|Jordan
 KZ|AS|AS-CEN|ap-northeast-1|Kazakhstan
 KE|AF|AF-EAS|eu-west-1|Kenya
 KI|OC|OC-MIC|ap-southeast-2|Kiribati
-KP|AS|AS-EAS|ap-northeast-1|Korea, Democratic People's Republic of
-KR|AS|AS-EAS|ap-northeast-1|Korea, Republic of
+KP|AS|AS-EAS|ap-northeast-1|North Korea
+KR|AS|AS-EAS|ap-northeast-1|South Korea
 KW|AS|AS-WES|eu-west-1|Kuwait
 KG|AS|AS-CEN|ap-northeast-1|Kyrgyzstan
-LA|AS|AS-SEA|ap-southeast-1|Lao People's Democratic Republic
+LA|AS|AS-SEA|ap-southeast-1|Lao
 LV|EU|EU-NOR|eu-west-1|Latvia
 LB|AS|AS-WES|eu-west-1|Lebanon
 LS|AF|AF-SOU|eu-west-1|Lesotho
@@ -129,7 +129,7 @@ LI|EU|EU-WES|eu-west-1|Liechtenstein
 LT|EU|EU-NOR|eu-west-1|Lithuania
 LU|EU|EU-WES|eu-west-1|Luxembourg
 MO|AS|AS-EAS|ap-northeast-1|Macao
-MK|EU|EU-SOU|eu-west-1|Macedonia, the former Yugoslav Republic of
+MK|EU|EU-SOU|eu-west-1|Macedonia
 MG|AF|AF-EAS|eu-west-1|Madagascar
 MW|AF|AF-EAS|eu-west-1|Malawi
 MY|AS|AS-SEA|ap-southeast-1|Malaysia
@@ -142,8 +142,8 @@ MR|AF|AF-WES|eu-west-1|Mauritania
 MU|AF|AF-EAS|eu-west-1|Mauritius
 YT|AF|AF-EAS|eu-west-1|Mayotte
 MX|NA|SA-CEN|us-east-1|Mexico
-FM|OC|OC-MIC|ap-southeast-2|Micronesia, Federated States of
-MD|EU|EU-EAS|eu-west-1|Moldova, Republic of
+FM|OC|OC-MIC|ap-southeast-2|Micronesia
+MD|EU|EU-EAS|eu-west-1|Moldova
 MC|EU|EU-WES|eu-west-1|Monaco
 MN|AS|AS-EAS|ap-northeast-1|Mongolia
 ME|EU|EU-SOU|eu-west-1|Montenegro
@@ -167,7 +167,7 @@ NO|EU|EU-NOR|eu-west-1|Norway
 OM|AS|AS-WES|eu-west-1|Oman
 PK|AS|AS-SOU|ap-southeast-1|Pakistan
 PW|OC|OC-MIC|ap-southeast-2|Palau
-PS|AS|AS-WES|eu-west-1|Palestine, State of
+PS|AS|AS-WES|eu-west-1|Palestine
 PA|SA|SA-CEN|us-east-1|Panama
 PG|OC|OC-MEL|ap-southeast-2|Papua New Guinea
 PY|SA|SA-SOU|us-east-1|Paraguay
@@ -183,10 +183,10 @@ RO|EU|EU-EAS|eu-west-1|Romania
 RU|EU|EU-EAS|eu-west-1|Russian Federation
 RW|AF|AF-EAS|eu-west-1|Rwanda
 BL|SA|SA-CAR|us-east-1|Saint Barthélemy
-SH|AF|AF-WES|eu-west-1|Saint Helena, Ascension and Tristan da Cunha
+SH|AF|AF-WES|eu-west-1|Saint Helena
 KN|SA|SA-CAR|us-east-1|Saint Kitts and Nevis
 LC|SA|SA-CAR|us-east-1|Saint Lucia
-MF|SA|SA-CAR|us-east-1|Saint Martin (French part)
+MF|SA|SA-CAR|us-east-1|Saint Martin
 PM|NA|NA-NOR|us-east-1|Saint Pierre and Miquelon
 VC|SA|SA-CAR|us-east-1|Saint Vincent and the Grenadines
 WS|OC|OC-POL|ap-southeast-2|Samoa
@@ -198,13 +198,13 @@ RS|EU|EU-SOU|eu-west-1|Serbia
 SC|AF|AF-EAS|eu-west-1|Seychelles
 SL|AF|AF-WES|eu-west-1|Sierra Leone
 SG|AS|AS-SEA|ap-southeast-1|Singapore
-SX|SA|SA-CAR|us-east-1|Sint Maarten (Dutch part)
+SX|SA|SA-CAR|us-east-1|Sint Maarten
 SK|EU|EU-EAS|eu-west-1|Slovakia
 SI|EU|EU-SOU|eu-west-1|Slovenia
 SB|OC|OC-MEL|ap-southeast-2|Solomon Islands
 SO|AF|AF-EAS|eu-west-1|Somalia
 ZA|AF|AF-SOU|eu-west-1|South Africa
-GS|AN|AN-ANT|ap-southeast-2|South Georgia and the South Sandwich Islands
+GS|AN|AN-ANT|ap-southeast-2|South Georgia
 SS|AF|AF-EAS|eu-west-1|South Sudan
 ES|EU|EU-SOU|eu-west-1|Spain
 LK|AS|AS-SOU|ap-southeast-1|Sri Lanka
@@ -215,9 +215,9 @@ SZ|AF|AF-SOU|eu-west-1|Swaziland
 SE|EU|EU-NOR|eu-west-1|Sweden
 CH|EU|EU-WES|eu-west-1|Switzerland
 SY|AS|AS-WES|eu-west-1|Syrian Arab Republic
-TW|AS|AS-EAS|ap-northeast-1|Taiwan, Province of China
+TW|AS|AS-EAS|ap-northeast-1|Taiwan
 TJ|AS|AS-CEN|ap-northeast-1|Tajikistan
-TZ|AF|AF-EAS|eu-west-1|Tanzania, United Republic of
+TZ|AF|AF-EAS|eu-west-1|Tanzania
 TH|AS|AS-SEA|ap-southeast-1|Thailand
 TL|AS|AS-SEA|ap-southeast-1|Timor-Leste
 TG|AF|AF-WES|eu-west-1|Togo
@@ -232,16 +232,16 @@ TV|OC|OC-POL|ap-southeast-2|Tuvalu
 UG|AF|AF-EAS|eu-west-1|Uganda
 UA|EU|EU-EAS|eu-west-1|Ukraine
 AE|AS|AS-WES|eu-west-1|United Arab Emirates
-GB|EU|EU-NOR|eu-west-1|United Kingdom of Great Britain and Northern Ireland
-UM|NA|NA-NOR|us-east-1|United States Minor Outlying Islands
-US|NA|NA-NOR|us-east-1|United States of America
+GB|EU|EU-NOR|eu-west-1|United Kingdom
+UM|NA|NA-NOR|us-east-1|US Minor Outlying Islands
+US|NA|NA-NOR|us-east-1|United States
 UY|SA|SA-SOU|us-east-1|Uruguay
 UZ|AS|AS-CEN|ap-northeast-1|Uzbekistan
 VU|OC|OC-MEL|ap-southeast-2|Vanuatu
-VE|SA|SA-SOU|us-east-1|Venezuela, Bolivarian Republic of
+VE|SA|SA-SOU|us-east-1|Venezuela
 VN|AS|AS-SEA|ap-southeast-1|Viet Nam
-VG|SA|SA-CAR|us-east-1|Virgin Islands, British
-VI|SA|SA-CAR|us-east-1|Virgin Islands, U.S.
+VG|SA|SA-CAR|us-east-1|British Virgin Islands
+VI|SA|SA-CAR|us-east-1|US Virgin Islands
 WF|OC|OC-POL|ap-southeast-2|Wallis and Futuna
 EH|AF|AF-NOR|eu-west-1|Western Sahara
 YE|AS|AS-WES|eu-west-1|Yemen

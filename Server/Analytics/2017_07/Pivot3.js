@@ -1,7 +1,6 @@
 
 "use strict";
 
-
 var pivot3 = function() {
 	console.log('Hello World');	
 	
@@ -25,18 +24,16 @@ var pivot3 = function() {
 	
 	var statement = "SELECT distinct " + xAxisCol + " FROM " + tableName + " ORDER BY " + xAxisCol;
 	database.selectAll(statement, [], function(xAxisArray) {
-		//var xAxis = [];
 		for (var i=0; i<xAxisArray.length; i++) {
 			xAxis.push(xAxisArray[i][xAxisCol]);
 		}
-		console.log(xAxis);
+		//console.log(xAxis);
 		statement = "SELECT distinct " + yAxisCol + " FROM " + tableName + " ORDER BY " + yAxisCol;
 		database.selectAll(statement, [], function(yAxisArray) {
-			//var yAxis = [];
 			for (i=0; i<yAxisArray.length; i++) {
 				yAxis.push(yAxisArray[i][yAxisCol])
 			}
-			console.log(yAxis);
+			//console.log(yAxis);
 			matrix = new Array(xAxis.length);
 			for (var i=0; i<xAxis.length; i++) {
 				matrix[i] = new Array(yAxis.length);
@@ -44,7 +41,7 @@ var pivot3 = function() {
 					matrix[i][j] = 0;
 				}
 			}
-			console.log(matrix);
+			//console.log(matrix);
 			statement = "SELECT " + xAxisCol + ", " + yAxisCol + ", " + valCol + " FROM " + tableName;  
 			database.selectAll(statement, [], function(results) {
 				processResult(0, results);
@@ -55,7 +52,7 @@ var pivot3 = function() {
 	function processResult(index, results) {
 		if (index < results.length) {
 			var row = results[index];
-			console.log(row);
+			//console.log(row);
 			var xAxisItem = row[xAxisCol];
 			var yAxisItem = row[yAxisCol];
 			var valItem = row[valCol];
@@ -70,7 +67,7 @@ var pivot3 = function() {
 			processResult(index + 1, results);
 		} else {
 			database.close();
-			console.log(matrix);
+			//console.log(matrix);
 			var table = displayResultTable();
 			var fs = require('fs');
 			fs.writeFileSync(tableName + ".csv", table);
@@ -81,12 +78,12 @@ var pivot3 = function() {
 		var table = []
 		var line = yAxis;
 		line.unshift(xAxisCol);
-		console.log(line.join(","));
+		//console.log(line.join(","));
 		table.push(line.join(","));
 		for (var i=0; i<xAxis.length; i++) {
 			line = matrix[i];
 			line.unshift(xAxis[i]);
-			console.log(line.join(","));
+			//console.log(line.join(","));
 			table.push(line.join(","));
 		}
 		return(tableName, table.join("\n"));
