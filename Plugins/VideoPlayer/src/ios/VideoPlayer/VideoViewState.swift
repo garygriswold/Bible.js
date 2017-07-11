@@ -17,7 +17,7 @@ class VideoViewState : NSObject, NSCoding {
 	}
 	
 	static func clear() {
-		currentState.videoUrl = nil
+		currentState.videoUrl = ""
 		currentState.position = kCMTimeZero
 		currentState.timestamp = Date()
 		let archiveURL = directory.appendingPathComponent(currentState.videoId)
@@ -25,11 +25,11 @@ class VideoViewState : NSObject, NSCoding {
 	}
 	
 	/**
-	* Clear sets videoUrl to nil, and update must not store the state after videoUrl has been set to null
+	* Clear sets videoUrl to nil, and update must not store the state after videoUrl has been set to blank
 	* This is needed because the update is called after the clear when a video completes.
 	*/
 	static func update(time: CMTime?) {
-		if (currentState.videoUrl != nil) {
+		if (currentState.videoUrl != "") {
 			currentState.position = ((time != nil) ? time : kCMTimeZero)!
 			currentState.timestamp = Date()
 			let archiveURL = directory.appendingPathComponent(currentState.videoId)
@@ -38,11 +38,11 @@ class VideoViewState : NSObject, NSCoding {
 	}
 	
 	var videoId: String
-	var videoUrl: String?
+	var videoUrl: String
 	var position: CMTime
 	var timestamp: Date
 	
-	init(videoId: String, videoUrl: String?, position: CMTime, timestamp: Date) {
+	init(videoId: String, videoUrl: String, position: CMTime, timestamp: Date) {
 		self.videoId = videoId
 		self.videoUrl = videoUrl
 		self.position = position
@@ -51,7 +51,7 @@ class VideoViewState : NSObject, NSCoding {
 	
 	init(videoId: String) {
 		self.videoId = videoId
-		self.videoUrl = nil
+		self.videoUrl = ""
 		self.position = kCMTimeZero
 		self.timestamp = Date()
 	}
@@ -65,13 +65,10 @@ class VideoViewState : NSObject, NSCoding {
 		else {
 			return nil
 		}
-		let videoUrl = decoder.decodeObject(forKey: "videoUrl") as? String
+		let videoUrl = decoder.decodeObject(forKey: "videoUrl") as? String ?? ""
 		let position = decoder.decodeTime(forKey: "position") as CMTime
-		var timestamp = decoder.decodeObject(forKey: "timestamp") as? Date
-		if (timestamp == nil) {
-			timestamp = Date()
-		}
-		self.init(videoId: videoId, videoUrl: videoUrl, position: position, timestamp: timestamp!)
+		let timestamp = decoder.decodeObject(forKey: "timestamp") as? Date ?? Date()
+		self.init(videoId: videoId, videoUrl: videoUrl, position: position, timestamp: timestamp)
 	}
 	
 	func encode(with coder: NSCoder) {
@@ -82,7 +79,7 @@ class VideoViewState : NSObject, NSCoding {
 	}
 	
 	func toString() -> String {
-        let result = "VideoId: \(self.videoId), VideoUrl: \(String(describing: self.videoUrl))," +
+        let result = "VideoId: \(self.videoId), VideoUrl: \(self.videoUrl)," +
                 " Position: \(self.position), Timestamp: \(self.timestamp)"
 		return result
 	}

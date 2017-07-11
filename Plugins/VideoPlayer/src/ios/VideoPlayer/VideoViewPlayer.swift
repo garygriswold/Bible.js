@@ -39,21 +39,23 @@ public class VideoViewPlayer : NSObject {
 
     public func begin(complete: @escaping (_ error:Error?) -> Void) {
         print("VideoViewPlayer.BEGIN")
-        let url = URL(string: self.currentState.videoUrl!)!
-        let asset = AVAsset(url: url)
-        let playerItem = AVPlayerItem(asset: asset)
-        let seekTime = backupSeek(state: self.currentState)
-        if (CMTimeGetSeconds(seekTime) > 0.1) {
-            playerItem.seek(to: seekTime)
-        }
-        let player = AVPlayer(playerItem: playerItem)
+        let videoUrl: URL? = URL(string: self.currentState.videoUrl)
+        if let url: URL = videoUrl {
+            let asset = AVAsset(url: url)
+            let playerItem = AVPlayerItem(asset: asset)
+            let seekTime = backupSeek(state: self.currentState)
+            if (CMTimeGetSeconds(seekTime) > 0.1) {
+                playerItem.seek(to: seekTime)
+            }
+            let player = AVPlayer(playerItem: playerItem)
         
-        delegate.completionHandler = complete
-        delegate.videoAnalytics = self.videoAnalytics
-        self.controller.delegate = delegate
-        self.controller.showsPlaybackControls = true
-        self.controller.player = player
-        self.controller.player?.play()
+            delegate.completionHandler = complete
+            delegate.videoAnalytics = self.videoAnalytics
+            self.controller.delegate = delegate
+            self.controller.showsPlaybackControls = true
+            self.controller.player = player
+            self.controller.player?.play()
+        }
     }
     
     func backupSeek(state: VideoViewState) -> CMTime {
