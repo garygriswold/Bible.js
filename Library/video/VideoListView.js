@@ -64,7 +64,10 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 	
 	var play = this.addNode(div, 'img', 'videoListPlay');
 	play.setAttribute('src', 'img/play.svg');
+	play.setAttribute('mediaSource', videoItem.mediaSource);
 	play.setAttribute('mediaId', videoItem.mediaId);
+	play.setAttribute('languageId', videoItem.languageId);
+	play.setAttribute('silCode', videoItem.silCode);
 	play.setAttribute('mediaURL', videoItem.mediaURL);
 	play.addEventListener('click', playVideo);
 	
@@ -91,11 +94,14 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 	}
 	
 	function playVideo(event) {
+		var mediaSource = this.getAttribute('mediaSource');
 		var videoId = this.getAttribute('mediaId');
+		var languageId = this.getAttribute('languageId');
+		var silCode = this.getAttribute('silCode');
 		var videoUrl = this.getAttribute('mediaURL');
 		
         console.log("\n\BEFORE VideoPlayer " + videoId + " : " + videoUrl);
-		window.VideoPlayer.showVideo(videoId, videoUrl,
+		window.VideoPlayer.showVideo(mediaSource, videoId, languageId, silCode, videoUrl,
 		function() {
 			console.log("SUCCESS FROM VideoPlayer " + videoUrl);
 		},

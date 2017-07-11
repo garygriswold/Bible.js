@@ -93,6 +93,7 @@ VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCod
 		for (var i=0; i<results.rows.length; i++) {
 			var row = results.rows.item(i);
 			var meta = new VideoMetaData();
+			meta.mediaSource = (row.mediaId.indexOf("KOG") > -1) ? "Rock" : "JFP";
 			meta.languageId = languageId;
 			meta.silCode = silCode;
 			meta.langCode = row.langCode;

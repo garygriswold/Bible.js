@@ -55,6 +55,10 @@ class VideoViewState : NSObject, NSCoding {
 		self.position = kCMTimeZero
 		self.timestamp = Date()
 	}
+    
+    deinit {
+        print("VideoViewState is deallocated.")
+    }
 
 	required convenience init?(coder decoder: NSCoder) {
 		guard let videoId = decoder.decodeObject(forKey: "videoId") as? String

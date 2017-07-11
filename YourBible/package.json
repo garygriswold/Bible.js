@@ -23,14 +23,15 @@
             "cordova-plugin-zip": {},
             "cordova-sqlite-ext": {},
             "ionic-plugin-keyboard": {},
+            "com-shortsands-pkzip": {},
+            "com-shortsands-aws": {},
             "com-shortsands-videoplayer": {}
         }
     },
     "dependencies": {
-        "com-shortsands-videoplayer": "file:///Users/garygriswold/ShortSands/BibleApp/Plugins/VideoPlayer",
         "cordova-android": "~6.1.0",
         "cordova-browser": "~4.1.0",
-        "cordova-ios": "~4.3.0",
+        "cordova-ios": "^4.4.0",
         "cordova-plugin-console": "~1.0.4",
         "cordova-plugin-device": "~1.1.3",
         "cordova-plugin-file": "~4.3.0",
@@ -44,6 +45,9 @@
         "cordova-plugin-wkwebview-engine": "~1.1.0",
         "cordova-plugin-zip": "~3.1.0",
         "cordova-sqlite-ext": "~0.10.2",
-        "ionic-plugin-keyboard": "~2.2.1"
+        "ionic-plugin-keyboard": "~2.2.1",
+        "com-shortsands-aws": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
+        "com-shortsands-pkzip": "/Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip",
+        "com-shortsands-videoplayer": "/Users/garygriswold/ShortSands/BibleApp/Plugins/VideoPlayer"
     }
 }

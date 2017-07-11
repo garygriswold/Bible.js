@@ -22,12 +22,17 @@ AppInitializer.prototype.begin = function() {
 		console.log('START APP UPDATER');
 		appUpdater.doUpdate(function() {
 			console.log('DONE APP UPDATER');
+			var versionsAdapter = new VersionsAdapter();
+			versionsAdapter.selectAWSRegion(countryCode, function(awsRegion) {
+				AWS.initializeRegion(awsRegion, function(done) {
+					console.log('AWS Initialized ' + awsRegion + ' ' + done);
+				});
+			});			
 		    settingStorage.getCurrentVersion(function(versionFilename) {
 			    if (versionFilename) {
 				    // Process with User's Version
 			    	changeVersionHandler(versionFilename);
 			    } else {
-					var versionsAdapter = new VersionsAdapter();
 					versionsAdapter.defaultVersion(langCode, function(filename) {
 						console.log('default version determined ', filename);
 						var parts = filename.split('.');

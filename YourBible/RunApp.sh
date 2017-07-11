@@ -72,7 +72,7 @@ cat ../Library/video/VideoTableAdapter.js >> www/js/BibleApp.js
 node ../Library/util/BibleAppConfigWriter.js www/js/BibleAppConfig.js
 
 if [ -z "$1" ]; then
-	cordova emulate ios --device
+	cordova emulate ios 
 else
-	cordova emulate $1 --device
+	cordova emulate $1 
 fi

@@ -28,6 +28,10 @@ class AnalyticsSessionId {
         archiveURL = directory.appendingPathComponent(AnalyticsSessionId.SESSION_KEY)
     }
     
+    deinit {
+        print("AnalyticsSessionId is deallocated.")
+    }
+    
     func getSessionId() -> String {
         let sessionId: String? = retrieveSessionId()
         if (sessionId != nil) {

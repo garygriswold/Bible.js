@@ -3,6 +3,7 @@
 
 "use strict";
 function VideoMetaData() {
+	this.mediaSource = null;
 	this.languageId = null;
 	this.silCode = null;
 	this.langCode = null;

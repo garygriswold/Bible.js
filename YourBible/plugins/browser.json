@@ -49,6 +49,12 @@
         "cordova-plugin-console": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
+        "com-shortsands-pkzip": {
+            "PACKAGE_NAME": "com.shortsands.yourbible"
+        },
+        "com-shortsands-aws": {
+            "PACKAGE_NAME": "com.shortsands.yourbible"
+        },
         "com-shortsands-videoplayer": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         }

@@ -136,7 +136,7 @@ VersionsAdapter.prototype.selectURLCloudfront = function(versionFile, callback) 
 };
 VersionsAdapter.prototype.selectAWSRegion = function(countryCode, callback) {
 	var that = this;
-	var statement = 'SELECT awsRegion FROM AWSRegion WHERE countryCode=?';
+	var statement = 'SELECT awsRegion FROM Region WHERE countryCode=?';
 	this.database.select(statement, [countryCode], function(results) {
 		if (results instanceof IOError || results.rows.length === 0) {
 			callback('us-east-1');

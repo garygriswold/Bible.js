@@ -17,6 +17,8 @@ public class VideoViewPlayer : NSObject {
     private let delegate = VideoViewControllerDelegate() // Without this delegate is lost because weak to controller
     
     let videoAnalytics: VideoAnalytics
+    //let videoViewState: VideoViewState // Needed here to prevent GC
+    let currentState: VideoViewState
     
     public init(mediaSource: String,
                 videoId: String,
@@ -24,20 +26,25 @@ public class VideoViewPlayer : NSObject {
                 silLang: String,
                 videoUrl: String) {
 	    print("INSIDE VideoViewPlayer \(videoId)  \(videoUrl)")
-		VideoViewState.retrieve(videoId: videoId)
-		VideoViewState.currentState.videoUrl = videoUrl
+		self.currentState = VideoViewState.retrieve(videoId: videoId)
+        self.currentState.videoUrl = videoUrl
         self.videoAnalytics = VideoAnalytics(mediaSource: mediaSource,
                                         mediaId: videoId,
                                         languageId: languageId,
                                         silLang: silLang)
+        //self.videoViewState = VideoViewState
+    }
+    
+    deinit {
+        print("VideoViewPlayer is deallocated.")
     }
 
     public func begin(complete: @escaping (_ error:Error?) -> Void) {
         print("VideoViewPlayer.BEGIN")
-        let url = URL(string: VideoViewState.currentState.videoUrl!)!
+        let url: URL = URL(string: self.currentState.videoUrl!)!
         let asset = AVAsset(url: url)
         let playerItem = AVPlayerItem(asset: asset)
-        let seekTime = backupSeek(state: VideoViewState.currentState)
+        let seekTime = backupSeek(state: self.currentState)
         if (CMTimeGetSeconds(seekTime) > 0.1) {
             playerItem.seek(to: seekTime)
         }

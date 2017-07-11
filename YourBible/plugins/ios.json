@@ -7,6 +7,9 @@
         "files": {}
     },
     "installed_plugins": {
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.shortsands.yourbible"
+        },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
@@ -46,7 +49,10 @@
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
-        "cordova-plugin-console": {
+        "com-shortsands-pkzip": {
+            "PACKAGE_NAME": "com.shortsands.yourbible"
+        },
+        "com-shortsands-aws": {
             "PACKAGE_NAME": "com.shortsands.yourbible"
         },
         "com-shortsands-videoplayer": {

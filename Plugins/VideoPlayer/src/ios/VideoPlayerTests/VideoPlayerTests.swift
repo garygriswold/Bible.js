@@ -22,6 +22,19 @@ class VideoPlayerTests: XCTestCase {
     }
     
     func testExample() {
+        let player = VideoViewPlayer(
+            mediaSource: "JFP",
+            videoId: "Jesus",
+            languageId: "530",
+            silLang: "eng",
+            videoUrl: "https://arc.gt/6u3oe?apiSessionId=59323fee237b64.08763601")
+        player.begin(complete: { error in
+            if let err = error {
+                print("VideoPlayer ERROR \(err.localizedDescription)")
+            } else {
+                print("VideoPlayer SUCCESS")
+            }
+        })
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }

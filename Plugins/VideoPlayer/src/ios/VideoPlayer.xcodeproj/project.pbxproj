@@ -16,8 +16,8 @@
 		E41B244D1EF45B34004492A5 /* VideoViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B244C1EF45B34004492A5 /* VideoViewControllerDelegate.swift */; };
 		E42D838E1EF62D730032EE44 /* VideoAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42D838D1EF62D730032EE44 /* VideoAnalytics.swift */; };
 		E42D83921EF62E9A0032EE44 /* AnalyticsSessionId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42D83911EF62E9A0032EE44 /* AnalyticsSessionId.swift */; };
-		E470CE711EFBF7EB001061CB /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E470CE701EFBF7EB001061CB /* AWS.framework */; };
-		E470CE731EFBF7F7001061CB /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E470CE721EFBF7F7001061CB /* Zip.framework */; };
+		E44CB0A21F147C67001FEF01 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44CB0A11F147C67001FEF01 /* AWS.framework */; };
+		E44CB0A41F147C7A001FEF01 /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44CB0A31F147C7A001FEF01 /* Zip.framework */; };
 		E4C08DC31EFB7F4A0009BEB7 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C08DC21EFB7F4A0009BEB7 /* AWSCore.framework */; };
 		E4C08DC71EFB7F6E0009BEB7 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C08DC61EFB7F6E0009BEB7 /* MediaPlayer.framework */; };
 /* End PBXBuildFile section */
@@ -45,8 +45,8 @@
 		E41B244C1EF45B34004492A5 /* VideoViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewControllerDelegate.swift; sourceTree = "<group>"; };
 		E42D838D1EF62D730032EE44 /* VideoAnalytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoAnalytics.swift; sourceTree = "<group>"; };
 		E42D83911EF62E9A0032EE44 /* AnalyticsSessionId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsSessionId.swift; sourceTree = "<group>"; };
-		E470CE701EFBF7EB001061CB /* AWS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWS.framework; sourceTree = "<group>"; };
-		E470CE721EFBF7F7001061CB /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Zip.framework; sourceTree = "<group>"; };
+		E44CB0A11F147C67001FEF01 /* AWS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWS.framework; sourceTree = "<group>"; };
+		E44CB0A31F147C7A001FEF01 /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Zip.framework; sourceTree = "<group>"; };
 		E4C08DC21EFB7F4A0009BEB7 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = VideoPlayer/AWSCore.framework; sourceTree = "<group>"; };
 		E4C08DC61EFB7F6E0009BEB7 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -56,8 +56,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E470CE731EFBF7F7001061CB /* Zip.framework in Frameworks */,
-				E470CE711EFBF7EB001061CB /* AWS.framework in Frameworks */,
+				E44CB0A41F147C7A001FEF01 /* Zip.framework in Frameworks */,
+				E44CB0A21F147C67001FEF01 /* AWS.framework in Frameworks */,
 				E4C08DC71EFB7F6E0009BEB7 /* MediaPlayer.framework in Frameworks */,
 				E4C08DC31EFB7F4A0009BEB7 /* AWSCore.framework in Frameworks */,
 			);
@@ -120,8 +120,8 @@
 		E42D83951EF637940032EE44 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E470CE721EFBF7F7001061CB /* Zip.framework */,
-				E470CE701EFBF7EB001061CB /* AWS.framework */,
+				E44CB0A31F147C7A001FEF01 /* Zip.framework */,
+				E44CB0A11F147C67001FEF01 /* AWS.framework */,
 				E4C08DC61EFB7F6E0009BEB7 /* MediaPlayer.framework */,
 				E4C08DC21EFB7F4A0009BEB7 /* AWSCore.framework */,
 			);
