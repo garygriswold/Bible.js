@@ -169,6 +169,7 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
 	    long duration = System.currentTimeMillis() - this.videoState.timestamp;
 	    int backupMs = Long.toString(duration).length() * 1000; // could multiply by a factor here
 	    long seekTime = this.videoState.currentPosition - backupMs;
+		seekTime = (seekTime >= 0) ? seekTime : 0L;
 	    Log.d(TAG, "current and seekTime " + this.videoState.currentPosition + " " + seekTime);
 	    return(seekTime);
     }
