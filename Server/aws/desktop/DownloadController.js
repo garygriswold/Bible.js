@@ -19,12 +19,14 @@ var downloadController = function(callback) {
 	
 	const cdnBuckets = require('../../../Library/cdn/Regions.js').REGIONS;
 	var bucketList = Object.keys(cdnBuckets);
-	var REGIONS = {};
+	var REGIONS = [];
 	for (var i=0; i<bucketList.length; i++) {
-		var bkt = bucketList[i];
-		REGIONS[bkt + '-log'] = cdnBuckets[bkt];
+		var bucket = bucketList[i];
+		var region = cdnBuckets[bucket];
+		REGIONS.push(bucket + '-log');
+		REGIONS.push('analytics-' + region + '-shortsands');
 	}
-	//REGIONS['analytics-us-east-1-shortsands'] = 'us-east-1';
+	console.log(REGIONS);
 	
 	var s3Download = new S3Download(REGIONS);
 

@@ -6,8 +6,8 @@
 "use strict";
 var S3 = require('aws-sdk/clients/s3');
 
-function S3Download(bucketMap) {
-	this.bucketMap = bucketMap
+function S3Download(bucketList) {
+	this.toDoBucketList = bucketList;
 	var awsOptions = {
 		useDualstack: true,
 		sslEnabled: true,
@@ -22,8 +22,7 @@ function S3Download(bucketMap) {
 
 S3Download.prototype.begin = function(callback) { // callback returns length of itemList
 	var that = this;
-	var bucketList = Object.keys(this.bucketMap);
-	doBuckets(bucketList, callback);
+	doBuckets(this.toDoBucketList, callback);
 	
 	function doBuckets(bucketList, callback) {
 		var bucket = bucketList.shift();
