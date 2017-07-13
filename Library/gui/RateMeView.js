@@ -4,7 +4,7 @@
 */
 function RateMeView(version) {
 	this.version = version;
-	this.appName = 'Your Bible';
+	this.appName = 'Safe Bible';
 	this.appIdIos = "1073396349";
 	this.appIdAndroid = "com.shortsands.yourbible";
 	this.dom = new DOMBuilder();

@@ -69,7 +69,7 @@ VersionsView.prototype.buildCountriesList = function() {
 				that.dom.addNode(rowNode, 'td', 'localCtryName', prefCtryName);
 			}
 		}
-		that.dom.addNode(root, 'p', 'shortsands', 'Your Bible by Short Sands, LLC. support@shortsands.com, version: ' + 
+		that.dom.addNode(root, 'p', 'shortsands', 'SafeBible by Short Sands, LLC. support@shortsands.com, version: ' + 
 					BibleAppConfig.versionCode);
 		that.rootNode.appendChild(root);
 		that.buildVersionList(that.defaultCountryNode);
