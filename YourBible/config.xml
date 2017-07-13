@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.shortsands.yourbible" version="1.8.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Your Bible</name>
-    <description>A free Bible App designed to protect your privacy.</description>
+    <name>SafeBible</name>
+    <description>A Bible App that is safe to use in any country.</description>
     <author email="gary@shortsands.com" href="http://your-bible.org">Short Sands, LLC</author>
     <content src="index.html" />
     <preference name="android-minSdkVersion" value="19" />
@@ -64,7 +64,6 @@
         <splash height="1242" src="res/ios/splash/Default-Landscape-736h.png" width="2208" />
     </platform>
     <engine name="android" spec="~6.1.0" />
-    <engine name="browser" spec="~4.1.0" />
     <engine name="ios" spec="^4.4.0" />
     <plugin name="com-shortsands-aws" spec="/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS" />
     <plugin name="com-shortsands-pkzip" spec="/Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip" />
