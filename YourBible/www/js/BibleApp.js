@@ -1768,7 +1768,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 */
 function RateMeView(version) {
 	this.version = version;
-	this.appName = 'Safe Bible';
+	this.appName = 'SafeBible';
 	this.appIdIos = "1073396349";
 	this.appIdAndroid = "com.shortsands.yourbible";
 	this.dom = new DOMBuilder();

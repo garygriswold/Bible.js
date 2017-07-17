@@ -193,16 +193,15 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
 	}
 	
 	private void releasePlayer() {
-		long currentPosition = this.player.getCurrentPosition();
-        if (this.videoPlaybackComplete) {
-			this.videoAnalytics.playEnded(currentPosition, true);
-	        VideoPersistence.clear(this);
-        } else {
-			this.videoAnalytics.playEnded(currentPosition, false);
-	        VideoPersistence.update(this, currentPosition);
-        }
-        
 		if (this.player != null) {
+			long currentPosition = this.player.getCurrentPosition();
+			if (this.videoPlaybackComplete) {
+				this.videoAnalytics.playEnded(currentPosition, true);
+				VideoPersistence.clear(this);
+			} else {
+				this.videoAnalytics.playEnded(currentPosition, false);
+				VideoPersistence.update(this, currentPosition);
+			}
 		    this.player.release();
 		    this.player = null;
 			this.eventLogger = null;
