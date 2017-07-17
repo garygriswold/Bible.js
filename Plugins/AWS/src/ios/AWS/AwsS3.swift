@@ -160,12 +160,13 @@ public class AwsS3 {
     */
     public func downloadZipFile(s3Bucket: String, s3Key: String, filePath: URL,
                          complete: @escaping (_ error:Error?) -> Void) {
+ 
+        let temporaryDirectory: URL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        print("Temp Zip File Directory \(temporaryDirectory.absoluteString)")
         
         // Identify temp file for zip file download
-        let fileManager = FileManager.default
-        let tempZipURL = URL(fileURLWithPath: NSUUID().uuidString + ".zip",
-                             relativeTo: fileManager.temporaryDirectory)
-        print("temp URL to store file \(tempZipURL)")
+        let tempZipURL = temporaryDirectory.appendingPathComponent(NSUUID().uuidString + ".zip")
+        print("temp URL to store file \(tempZipURL.absoluteString)")
         
         let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) -> Void in
             DispatchQueue.main.async(execute: {
@@ -177,7 +178,7 @@ public class AwsS3 {
                     do {
                         // unzip zip file
                         try Zip.unzipFile(tempZipURL,
-                            destination: fileManager.temporaryDirectory,
+                            destination: temporaryDirectory,
                             overwrite: true,
                             password: nil,
                             progress: nil
@@ -185,34 +186,34 @@ public class AwsS3 {
                         
                         // identify the unzipped file
 						let filename = filePath.lastPathComponent
-                        let unzippedURL = URL(fileURLWithPath: filename, relativeTo: fileManager.temporaryDirectory)
+                        let unzippedURL = temporaryDirectory.appendingPathComponent(filename)
 						print("location of unzipped file \(unzippedURL)")
 						
 						// remove unzipped file if it already exists
-						if (try filePath.checkPromisedItemIsReachable()) {
-							try fileManager.removeItem(at: filePath)
-						}
+                        self.removeItemNoThrow(at: filePath)
 			
 						// move unzipped file to destination
-						print("Before move item")
-                        try fileManager.moveItem(at: unzippedURL, to: filePath)
+                        try FileManager.default.moveItem(at: unzippedURL, to: filePath)
                         print("SUCCESS in s3.downloadZipFile \(s3Bucket) \(s3Key)")
                         complete(nil)
                     } catch let cotError {
 	                    print("ERROR in s3.downloadZipFile \(s3Bucket) \(s3Key) Error: \(cotError)")
                         complete(cotError)
                     }
-                    do {
-	                    try fileManager.removeItem(at: tempZipURL)
-                    } catch let cotError2 {
-	                    print("Deletion of tempZipFile Failed \(cotError2.localizedDescription)")
-                    }
+                    self.removeItemNoThrow(at: tempZipURL)
                 }
             })
         }
         self.transfer.download(to: tempZipURL, bucket: s3Bucket, key: s3Key, expression: nil,
                                completionHandler: completionHandler)
         //.continueWith has been dropped, because it did not report errors
+    }
+    private func removeItemNoThrow(at: URL) -> Void {
+        do {
+            try FileManager.default.removeItem(at: at)
+        } catch let error {
+            print("Deleteion of \(at) Failed \(error.localizedDescription)")
+        }
     }
     /////////////////////////////////////////////////////////////////////////
     // Upload Functions
