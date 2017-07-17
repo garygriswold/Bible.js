@@ -13,7 +13,7 @@ import AWS
 class VideoAnalytics {
     
     var dictionary = [String: String]()
-    let dateFormatter = ISO8601DateFormatter()
+    let dateFormatter = DateFormatter()
     
     let mediaSource: String
     let mediaId: String
@@ -40,6 +40,11 @@ class VideoAnalytics {
         
         self.timeStarted = Date()
         self.mediaViewStartingPosition = 0.0
+        
+        // ISO8601 DateFormatter (ios 10.3 has a function for this)
+        self.dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        self.dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        self.dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
     }
     
     deinit {
