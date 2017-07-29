@@ -81,11 +81,17 @@ Update the version code
 
 	vi $HOME/ShortSands/BibleApp/YourBible/config.xml
 	
+Rebuild the Custom Plugins to iphone Release
+
+	1. Rebuild each of 3 plugins
+	2. build_ios_phone.sh Release
+	3. InstallVideoModule.sh
+	
 Compile your app in release mode to obtain a signed IPA.
 
 	cd $HOME/ShortSands/BibleApp/YourBible
 	cordova build ios --release --device
-	Note location of IPA, currently: /Users/garygriswold/ShortSands/BibleApp/YourBible/platforms/ios/build/device/Your Bible.ipa
+	Note location of IPA, currently: /Users/garygriswold/ShortSands/BibleApp/YourBible/platforms/ios/build/device/SafeBible.ipa
 	
 Upload IPA
 
@@ -150,7 +156,7 @@ Verify that your APK is signed. For example:
 	
 Align the final APK package using zipalign.  zipalign ensures that all uncompressed data starts with a particular byte alignment relative to the start of the file, which reduces the amount of RAM consumed by an app.
 
-	$HOME/Library/Android/sdk/build-tools/25.0.2/zipalign -v 4 android-release-signed.apk android-release.apk
+	$HOME/Library/Android/sdk/build-tools/25.0.0/zipalign -v 4 android-release-signed.apk android-release.apk
 	ls -lt
 	
 Upload APK
