@@ -141,6 +141,7 @@ Compile your app in release mode to obtain an unsigned APK.
 	cordova build android --release
 	output:
 	/Users/garygriswold/ShortSands/BibleApp/YourBible/platforms/android/build/outputs/apk/android-release-unsigned.apk
+	ls -l /Users/garygriswold/ShortSands/BibleApp/YourBible/platforms/android/build/outputs/apk/android-release-unsigned.apk
 
 Sign your app with your private key using jarsigner. This example prompts you for passwords for the keystore and key. It then modifies the APK in-place to sign it. Note that you can sign an APK multiple times with different keys.
 
