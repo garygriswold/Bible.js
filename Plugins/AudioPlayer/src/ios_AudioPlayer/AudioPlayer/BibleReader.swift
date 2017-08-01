@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 
-public class BibleReader {
+public class BibleReader : NSObject {
     
     var path: String?
     var player: AVPlayer?
@@ -26,10 +26,10 @@ public class BibleReader {
         if self.player != nil {
             self.player = nil
         }
+        self.removeNotifications()
         print("Deinit BibleReader")
     }
     
-    //public func begin(complete: @escaping (_ error:Error?) -> Void) {
     public func begin() {
         print("BibleReader.BEGIN")
         if (self.path != nil) {
@@ -37,12 +37,14 @@ public class BibleReader {
             if let url: URL = videoUrl {
                 let asset = AVAsset(url: url)
                 let playerItem = AVPlayerItem(asset: asset)
+                
                 //let seekTime = backupSeek(state: self.currentState)
                 //if (CMTimeGetSeconds(seekTime) > 0.1) {
                 //    playerItem.seek(to: seekTime)
                 //}
                 self.player = AVPlayer(playerItem: playerItem)
                 self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.pause // can be .advance
+                self.initNotifications()
             
                 //delegate.completionHandler = complete
                 //delegate.videoAnalytics = self.videoAnalytics
@@ -60,6 +62,63 @@ public class BibleReader {
     func pause() {
         self.player?.pause()
         print("Pause Status = \(String(describing: self.player?.status))")
+    }
+    
+    func initNotifications() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(playerItemDidPlayToEndTime(note:)),
+                                               name: .AVPlayerItemDidPlayToEndTime,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(playerItemFailedToPlayToEndTime(note:)),
+                                               name: .AVPlayerItemFailedToPlayToEndTime,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(playerItemPlaybackStalled(note:)),
+                                               name: .AVPlayerItemPlaybackStalled,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(playerItemNewErrorLogEntry(note:)),
+                                               name: .AVPlayerItemNewErrorLogEntry,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillResignActive(note:)),
+                                               name: .UIApplicationWillResignActive,
+                                               object: nil)
+    }
+
+    func removeNotifications() {
+        print("\n ***** INSIDE REMOVE NOTIFICATIONS")
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemFailedToPlayToEndTime, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemPlaybackStalled, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewErrorLogEntry, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .UIApplicationWillResignActive, object: nil)
+    }
+    
+    func playerItemDidPlayToEndTime(note:Notification) {
+        print("\n** DID PLAY TO END \(String(describing: note.object))")
+        //self.dismiss(animated: false) // move this till after??
+        //sendVideoAnalytics(isStart: false, isDone: true)
+        //VideoViewState.clear()
+    }
+    func playerItemFailedToPlayToEndTime(note:Notification) {
+        print("\n********* FAILED TO PLAY TO END *********\(String(describing: note.object))")
+    }
+    func playerItemPlaybackStalled(note:Notification) {
+        print("\n****** PLAYBACK STALLED \(String(describing: note.object))")
+    }
+    func playerItemNewErrorLogEntry(note:Notification) {
+        print("\n****** ERROR LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.errorLog()))")
+    }
+    /**
+     * This method is called when the Home button is clicked or double clicked.
+     * VideoState is saved in this method
+     */
+    func applicationWillResignActive(note:Notification) {
+        print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
+        //sendVideoAnalytics(isStart: false, isDone: false)
+        //VideoViewState.update(time: self.player?.currentTime())
     }
 }
 
