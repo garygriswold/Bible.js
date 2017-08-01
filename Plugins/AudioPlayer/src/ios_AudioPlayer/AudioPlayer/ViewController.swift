@@ -16,8 +16,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        self.reader = BibleReader()
-        self.reader?.start()
+        //self.reader = BibleReader(audioFile: "EmmaFirstLostTooth", fileType: "mp3")
+        self.reader = BibleReader(audioFile: "https://s3-us-west-2.amazonaws.com/shortsands/EmmaFirstLostTooth.mp3")
+        self.reader?.begin()
+        self.reader?.play()
     }
 
     override func didReceiveMemoryWarning() {
