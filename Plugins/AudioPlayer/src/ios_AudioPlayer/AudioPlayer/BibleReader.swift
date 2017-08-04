@@ -8,18 +8,18 @@
 
 import Foundation
 import AVFoundation
+import AWS
 
 public class BibleReader : NSObject {
     
-    var path: String?
+    //var path: String?
+    var s3Bucket: String
+    var s3Key: String
     var player: AVPlayer?
     
     init(audioFile: String) {
-        self.path = audioFile
-        if (self.path != nil) {
-        } else {
-            print("Unknown path \(audioFile)")
-        }
+        self.s3Bucket = "audio-us-east-1-shortsands"
+        self.s3Key = audioFile
     }
     
     deinit {
@@ -32,25 +32,30 @@ public class BibleReader : NSObject {
     
     public func begin() {
         print("BibleReader.BEGIN")
-        if (self.path != nil) {
-            let videoUrl: URL? = URL(string: self.path!)
-            if let url: URL = videoUrl {
-                let asset = AVAsset(url: url)
-                let playerItem = AVPlayerItem(asset: asset)
+        AwsS3.shared.preSignedUrlGET(
+            s3Bucket: self.s3Bucket,
+            s3Key: self.s3Key,
+            expires: 3600,
+            complete: { url in
+                print("computed GET URL \(String(describing: url))")
+                if let audioUrl = url {
+                    let asset = AVAsset(url: audioUrl)
+                    let playerItem = AVPlayerItem(asset: asset)
                 
-                //let seekTime = backupSeek(state: self.currentState)
-                //if (CMTimeGetSeconds(seekTime) > 0.1) {
-                //    playerItem.seek(to: seekTime)
-                //}
-                self.player = AVPlayer(playerItem: playerItem)
-                self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.pause // can be .advance
-                self.initNotifications()
+                    //let seekTime = backupSeek(state: self.currentState)
+                    //if (CMTimeGetSeconds(seekTime) > 0.1) {
+                    //    playerItem.seek(to: seekTime)
+                    //}
+                    self.player = AVPlayer(playerItem: playerItem)
+                    self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.pause // can be .advance
+                    self.initNotifications()
             
-                //delegate.completionHandler = complete
-                //delegate.videoAnalytics = self.videoAnalytics
-                //self.controller.delegate = delegate
+                    //delegate.completionHandler = complete
+                    //delegate.videoAnalytics = self.videoAnalytics
+                    //self.controller.delegate = delegate
+                }
             }
-        }
+        )
     }
 
     
