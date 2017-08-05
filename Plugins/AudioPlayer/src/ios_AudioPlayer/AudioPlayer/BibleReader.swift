@@ -12,14 +12,21 @@ import AWS
 
 public class BibleReader : NSObject {
     
-    //var path: String?
-    var s3Bucket: String
-    var s3Key: String
-    var player: AVPlayer?
+    let s3Bucket: String
+    let version: String
+    let book: String
+    let firstChapter: Int
+    let lastChapter: Int
+    let fileType: String
+    var player: AVQueuePlayer?
     
-    init(audioFile: String) {
+    init(version: String, book: String, firstChapter: Int, lastChapter: Int, fileType: String) {
         self.s3Bucket = "audio-us-east-1-shortsands"
-        self.s3Key = audioFile
+        self.version = version
+        self.book = book
+        self.firstChapter = firstChapter
+        self.lastChapter = lastChapter
+        self.fileType = fileType
     }
     
     deinit {
@@ -32,17 +39,35 @@ public class BibleReader : NSObject {
     
     public func beginStreaming() {
         print("BibleReader.BEGIN")
-        AwsS3.shared.preSignedUrlGET(
-            s3Bucket: self.s3Bucket,
-            s3Key: self.s3Key,
-            expires: 3600,
-            complete: { url in
-                print("computed GET URL \(String(describing: url))")
-                if let audioUrl = url {
-                    self.initAudio(url: audioUrl)
+        doStreaming(current: self.firstChapter, last: self.lastChapter)
+    }
+    
+    private func doStreaming(current: Int, last: Int) {
+        if (current <= last) {
+            let s3Key = self.getKey(chapter: current)
+            AwsS3.shared.preSignedUrlGET(
+                s3Bucket: self.s3Bucket,
+                s3Key: s3Key,
+                expires: 3600,
+                complete: { url in
+                    print("computed GET URL \(String(describing: url))")
+                    if let audioUrl = url {
+                        if (current == self.firstChapter) {
+                            print("Start First Item Playing")
+                            self.initAudio(url: audioUrl)
+                        } else {
+                            print("Queue chapter \(current)")
+                            let asset = AVAsset(url: audioUrl)
+                            let playerItem = AVPlayerItem(asset: asset)
+                            self.player?.insert(playerItem, after: nil)
+                        }
+                        self.doStreaming(current: current + 1, last: last)
+                    }
                 }
-            }
-        )
+            )
+        } else {
+            print("We have finished queueing.")
+        }
     }
     
     public func beginDownload() {
@@ -50,12 +75,13 @@ public class BibleReader : NSObject {
         var filePath: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
         filePath = filePath.appendingPathComponent("Library")
         filePath = filePath.appendingPathComponent("Caches")
-        filePath = filePath.appendingPathComponent(self.s3Key)
+        let s3Key = self.getKey(chapter: self.firstChapter)
+        filePath = filePath.appendingPathComponent(s3Key)
         print("FilePath \(filePath.absoluteString)")
         
         AwsS3.shared.downloadFile(
             s3Bucket: self.s3Bucket,
-            s3Key: self.s3Key,
+            s3Key: s3Key,
             filePath: filePath,
             complete: { err in
                 print("I RECEIVED DownloadFile CALLBACK \(String(describing: err))")
@@ -71,7 +97,8 @@ public class BibleReader : NSObject {
         var filePath: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
         filePath = filePath.appendingPathComponent("Library")
         filePath = filePath.appendingPathComponent("Caches")
-        filePath = filePath.appendingPathComponent(self.s3Key)
+        let s3Key = self.getKey(chapter: self.firstChapter)
+        filePath = filePath.appendingPathComponent(s3Key)
         print("FilePath \(filePath.absoluteString)")
         self.initAudio(url: filePath)
      }
@@ -79,14 +106,14 @@ public class BibleReader : NSObject {
     func initAudio(url: URL) {
         let asset = AVAsset(url: url)
         let playerItem = AVPlayerItem(asset: asset)
-        print("Player Item Status \(String(describing: playerItem.status.rawValue))")
-        print("Player Item Status \(playerItem.status.rawValue)")
+        print("Player Item Status \(playerItem.status)")
         
         //let seekTime = backupSeek(state: self.currentState)
         //if (CMTimeGetSeconds(seekTime) > 0.1) {
         //    playerItem.seek(to: seekTime)
         //}
-        self.player = AVPlayer(playerItem: playerItem)
+        //self.player = AVPlayer(playerItem: playerItem)
+        self.player = AVQueuePlayer(items: [playerItem])
         self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.pause // can be .advance
         self.initNotifications()
         
@@ -96,7 +123,10 @@ public class BibleReader : NSObject {
         
         self.play()
     }
-
+    
+    private func getKey(chapter: Int) -> String {
+        return(self.version + "-" + self.book + "-" + String(chapter) + "." + self.fileType)
+    }
     
     func play() {
         self.player?.play()

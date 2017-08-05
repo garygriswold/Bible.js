@@ -18,7 +18,8 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         AwsS3.region = "us-east-1"
-        self.reader = BibleReader(audioFile: "ENGWEBN2DA-John-1.mp3")
+        //self.reader = BibleReader(audioFile: "ENGWEBN2DA-John-1.mp3")
+        self.reader = BibleReader(version: "ENGWEBN2DA", book: "John", firstChapter: 1, lastChapter: 3, fileType: "mp3")
         self.reader?.beginStreaming()
         //self.reader?.beginDownload()
         //self.reader?.beginLocal()
