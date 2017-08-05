@@ -10,6 +10,7 @@ import Foundation
 import AVFoundation
 import AWS
 
+
 public class BibleReader : NSObject {
     
     let s3Bucket: String
@@ -35,6 +36,27 @@ public class BibleReader : NSObject {
         }
         self.removeNotifications()
         print("Deinit BibleReader")
+    }
+    
+    public func createAudioPlayerUI(view: UIView) {
+        let screenSize = UIScreen.main.bounds
+        let screenWidth = screenSize.width
+        
+        let playButton = UIButton(type: .custom)
+        playButton.frame = CGRect(x: screenWidth/3-25, y: 100, width: 50, height: 50)
+        playButton.layer.cornerRadius = 0.5 * playButton.bounds.size.width
+        playButton.backgroundColor = .green
+        playButton.setTitle("Play", for: .normal)
+        playButton.addTarget(self, action: #selector(play), for: .touchUpInside)
+        view.addSubview(playButton)
+ 
+        let pauseButton = UIButton(type: .custom)
+        pauseButton.frame = CGRect(x: screenWidth*2/3-25, y: 100, width: 50, height: 50)
+        pauseButton.layer.cornerRadius = 0.5 * pauseButton.bounds.size.width
+        pauseButton.backgroundColor = .red
+        pauseButton.setTitle("Pause", for: .normal)
+        pauseButton.addTarget(self, action: #selector(pause), for: .touchUpInside)
+        view.addSubview(pauseButton)
     }
     
     public func beginStreaming() {
@@ -112,7 +134,6 @@ public class BibleReader : NSObject {
         //if (CMTimeGetSeconds(seekTime) > 0.1) {
         //    playerItem.seek(to: seekTime)
         //}
-        //self.player = AVPlayer(playerItem: playerItem)
         self.player = AVQueuePlayer(items: [playerItem])
         self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.pause // can be .advance
         self.initNotifications()
