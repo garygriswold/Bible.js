@@ -30,7 +30,7 @@ public class BibleReader : NSObject {
         print("Deinit BibleReader")
     }
     
-    public func begin() {
+    public func beginStreaming() {
         print("BibleReader.BEGIN")
         AwsS3.shared.preSignedUrlGET(
             s3Bucket: self.s3Bucket,
@@ -39,29 +39,68 @@ public class BibleReader : NSObject {
             complete: { url in
                 print("computed GET URL \(String(describing: url))")
                 if let audioUrl = url {
-                    let asset = AVAsset(url: audioUrl)
-                    let playerItem = AVPlayerItem(asset: asset)
-                
-                    //let seekTime = backupSeek(state: self.currentState)
-                    //if (CMTimeGetSeconds(seekTime) > 0.1) {
-                    //    playerItem.seek(to: seekTime)
-                    //}
-                    self.player = AVPlayer(playerItem: playerItem)
-                    self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.pause // can be .advance
-                    self.initNotifications()
-            
-                    //delegate.completionHandler = complete
-                    //delegate.videoAnalytics = self.videoAnalytics
-                    //self.controller.delegate = delegate
+                    self.initAudio(url: audioUrl)
                 }
             }
         )
+    }
+    
+    public func beginDownload() {
+        print("BibleReader.BEGIN Download")
+        var filePath: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
+        filePath = filePath.appendingPathComponent("Library")
+        filePath = filePath.appendingPathComponent("Caches")
+        filePath = filePath.appendingPathComponent(self.s3Key)
+        print("FilePath \(filePath.absoluteString)")
+        
+        AwsS3.shared.downloadFile(
+            s3Bucket: self.s3Bucket,
+            s3Key: self.s3Key,
+            filePath: filePath,
+            complete: { err in
+                print("I RECEIVED DownloadFile CALLBACK \(String(describing: err))")
+                if (err == nil) {
+                    self.initAudio(url: filePath)
+                }
+            }
+        )
+    }
+    
+    public func beginLocal() {
+        print("BibleReader.BEGIN Download")
+        var filePath: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
+        filePath = filePath.appendingPathComponent("Library")
+        filePath = filePath.appendingPathComponent("Caches")
+        filePath = filePath.appendingPathComponent(self.s3Key)
+        print("FilePath \(filePath.absoluteString)")
+        self.initAudio(url: filePath)
+     }
+    
+    func initAudio(url: URL) {
+        let asset = AVAsset(url: url)
+        let playerItem = AVPlayerItem(asset: asset)
+        print("Player Item Status \(String(describing: playerItem.status.rawValue))")
+        print("Player Item Status \(playerItem.status.rawValue)")
+        
+        //let seekTime = backupSeek(state: self.currentState)
+        //if (CMTimeGetSeconds(seekTime) > 0.1) {
+        //    playerItem.seek(to: seekTime)
+        //}
+        self.player = AVPlayer(playerItem: playerItem)
+        self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.pause // can be .advance
+        self.initNotifications()
+        
+        //delegate.completionHandler = complete
+        //delegate.videoAnalytics = self.videoAnalytics
+        //self.controller.delegate = delegate
+        
+        self.play()
     }
 
     
     func play() {
         self.player?.play()
-        print("Play Status = \(String(describing: self.player?.status))")
+        print("Player Status = \(String(describing: self.player?.status))")
     }
     
     func pause() {
@@ -90,6 +129,14 @@ public class BibleReader : NSObject {
                                                selector: #selector(applicationWillResignActive(note:)),
                                                name: .UIApplicationWillResignActive,
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(playerItemNewAccessLogEntry(note:)),
+                                               name: .AVPlayerItemNewAccessLogEntry,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(playerItemTimeJumped(note:)),
+                                               name: .AVPlayerItemTimeJumped,
+                                               object: nil)
     }
 
     func removeNotifications() {
@@ -115,6 +162,12 @@ public class BibleReader : NSObject {
     }
     func playerItemNewErrorLogEntry(note:Notification) {
         print("\n****** ERROR LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.errorLog()))")
+    }
+    func playerItemNewAccessLogEntry(note:Notification) {
+        print("\n****** ACCESS LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.accessLog()))")
+    }
+    func playerItemTimeJumped(note:Notification) {
+        print("\n****** TIME JUMPED \(String(describing: note.object))")
     }
     /**
      * This method is called when the Home button is clicked or double clicked.
