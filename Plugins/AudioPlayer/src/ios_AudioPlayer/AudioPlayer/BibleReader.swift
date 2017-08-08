@@ -22,7 +22,7 @@ public class BibleReader : NSObject {
     var player: AVQueuePlayer?
     
     init(version: String, book: String, firstChapter: Int, lastChapter: Int, fileType: String) {
-        self.s3Bucket = "audio-us-east-1-shortsands"
+        self.s3Bucket = "audio-us-west-2-shortsands"
         self.version = version
         self.book = book
         self.firstChapter = firstChapter
@@ -37,28 +37,7 @@ public class BibleReader : NSObject {
         self.removeNotifications()
         print("Deinit BibleReader")
     }
-    
-    public func createAudioPlayerUI(view: UIView) {
-        let screenSize = UIScreen.main.bounds
-        let screenWidth = screenSize.width
-        
-        let playButton = UIButton(type: .custom)
-        playButton.frame = CGRect(x: screenWidth/3-25, y: 100, width: 50, height: 50)
-        playButton.layer.cornerRadius = 0.5 * playButton.bounds.size.width
-        playButton.backgroundColor = .green
-        playButton.setTitle("Play", for: .normal)
-        playButton.addTarget(self, action: #selector(play), for: .touchUpInside)
-        view.addSubview(playButton)
- 
-        let pauseButton = UIButton(type: .custom)
-        pauseButton.frame = CGRect(x: screenWidth*2/3-25, y: 100, width: 50, height: 50)
-        pauseButton.layer.cornerRadius = 0.5 * pauseButton.bounds.size.width
-        pauseButton.backgroundColor = .red
-        pauseButton.setTitle("Pause", for: .normal)
-        pauseButton.addTarget(self, action: #selector(pause), for: .touchUpInside)
-        view.addSubview(pauseButton)
-    }
-    
+
     public func beginStreaming() {
         print("BibleReader.BEGIN")
         doStreaming(current: self.firstChapter, last: self.lastChapter)
