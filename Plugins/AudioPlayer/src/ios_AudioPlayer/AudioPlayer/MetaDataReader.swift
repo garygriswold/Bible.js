@@ -24,7 +24,7 @@ class MetaDataReader {
     func read(readComplete: @escaping (_ metaData: Dictionary<String, MetaDataItem>) -> Void) {
         AwsS3.shared.downloadData(
             s3Bucket: "audio-us-west-2-shortsands",
-            s3Key: self.languageCode + "-" + self.mediaType + ".json",
+            s3Key: self.languageCode + "_" + self.mediaType + ".json",
             complete: { error, data in
                 print("DOWNLOADED err \(String(describing: error))  data \(String(describing: data))")
                 if let err = error {

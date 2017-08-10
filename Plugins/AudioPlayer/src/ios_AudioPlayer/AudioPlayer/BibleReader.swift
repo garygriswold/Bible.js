@@ -15,15 +15,17 @@ public class BibleReader : NSObject {
     
     let s3Bucket: String
     let version: String
+    let sequence: String
     let book: String
-    let firstChapter: Int
-    let lastChapter: Int
+    let firstChapter: String
+    let lastChapter: String
     let fileType: String
     var player: AVQueuePlayer?
     
-    init(version: String, book: String, firstChapter: Int, lastChapter: Int, fileType: String) {
+    init(version: String, sequence: String, book: String, firstChapter: String, lastChapter: String, fileType: String) {
         self.s3Bucket = "audio-us-west-2-shortsands"
         self.version = version
+        self.sequence = sequence
         self.book = book
         self.firstChapter = firstChapter
         self.lastChapter = lastChapter
@@ -43,7 +45,7 @@ public class BibleReader : NSObject {
         doStreaming(current: self.firstChapter, last: self.lastChapter)
     }
     
-    private func doStreaming(current: Int, last: Int) {
+    private func doStreaming(current: String, last: String) {
         if (current <= last) {
             let s3Key = self.getKey(chapter: current)
             AwsS3.shared.preSignedUrlGET(
@@ -62,7 +64,8 @@ public class BibleReader : NSObject {
                             let playerItem = AVPlayerItem(asset: asset)
                             self.player?.insert(playerItem, after: nil)
                         }
-                        self.doStreaming(current: current + 1, last: last)
+                        let nextChapter = self.incrementChapter(chapter: current)
+                        self.doStreaming(current: nextChapter, last: last)
                     }
                 }
             )
@@ -124,8 +127,18 @@ public class BibleReader : NSObject {
         self.play()
     }
     
-    private func getKey(chapter: Int) -> String {
-        return(self.version + "-" + self.book + "-" + String(chapter) + "." + self.fileType)
+    private func getKey(chapter: String) -> String {
+        return(self.version + "_" + self.sequence + "_" + self.book + "_" + String(chapter) + "." + self.fileType)
+    }
+    
+    private func incrementChapter(chapter: String) -> String {
+        let next = (Int(chapter) ?? 1) + 1
+        let nextStr = String(next)
+        switch(nextStr.characters.count) {
+            case 1: return "00" + nextStr
+            case 2: return "0" + nextStr
+            default: return nextStr
+        }
     }
     
     func play() {

@@ -20,17 +20,17 @@ class ViewController: UIViewController {
         
         AwsS3.region = "us-west-2"
         let metaData = MetaDataReader(languageCode: "ENG", mediaType: "audio")
-        metaData.read(readComplete: { metaData in
+        metaData.read(readComplete: { data in
             
-            let engWeb = metaData["ENGWEBN2DA"]
+            let engWeb = data["ENGWEBN2DA"]
             print("WEB: \(String(describing:(engWeb?.toString())))")
-            let book = engWeb?.books["John"]
+            let book = engWeb?.books["JHN"]
             print("BOOK: \(String(describing:(book?.toString())))")
             let lastChapter = book?.numberOfChapters
             print("CHAPTER: \(String(describing:(lastChapter)))")
             //self.reader = BibleReader(audioFile: "ENGWEBN2DA-John-1.mp3")
-            self.reader = BibleReader(version: "ENGWEBN2DA", book: "John", firstChapter: 1, lastChapter: 3,
-                                      fileType: "mp3")
+            self.reader = BibleReader(version: "ENGWEBN2DA", sequence: "04", book: "JHN",
+                                      firstChapter: "001", lastChapter: "003", fileType: "mp3")
             if let read = self.reader {
                 self.readerView = BibleReaderView(view: self.view, bibleReader: read)
                 self.readerView?.createAudioPlayerUI(view: self.view)
