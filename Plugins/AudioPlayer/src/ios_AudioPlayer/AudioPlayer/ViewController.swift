@@ -16,19 +16,12 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
         AwsS3.region = "us-west-2"
         let metaData = MetaDataReader(languageCode: "ENG", mediaType: "audio")
         metaData.read(readComplete: { data in
             
-            let engWeb = data["ENGWEBN2DA"]
-            print("WEB: \(String(describing:(engWeb?.toString())))")
-            let book = engWeb?.books["JHN"]
-            print("BOOK: \(String(describing:(book?.toString())))")
-            let lastChapter = book?.numberOfChapters
-            print("CHAPTER: \(String(describing:(lastChapter)))")
-            //self.reader = BibleReader(audioFile: "ENGWEBN2DA-John-1.mp3")
+            // It would be nice to get the information from meta data here, but it is wrong meta data
             self.reader = BibleReader(version: "ENGWEBN2DA", sequence: "04", book: "JHN",
                                       firstChapter: "001", lastChapter: "003", fileType: "mp3")
             if let read = self.reader {

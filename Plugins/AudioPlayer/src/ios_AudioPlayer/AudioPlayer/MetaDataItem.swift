@@ -32,9 +32,6 @@ class MetaDataItem {
             self.versionEnglish = item["version_english"] as? String ?? ""
             self.collectionCode = item["collection_code"] as? String ?? ""
             
-            //let mirror = Mirror(reflecting: item["books"])
-            //print("TYPE \(mirror.subjectType)")
-            
             let books = item["books"]
             if (books is Array<AnyObject>) {
                 let array = books as! Array<AnyObject>
@@ -58,10 +55,6 @@ class MetaDataItem {
             self.collectionCode = ""
         }
 
-    }
-    
-    func addBook() {
-        
     }
     
     func toString() -> String {
