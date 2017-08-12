@@ -13,6 +13,7 @@ class MetaDataReader {
     let languageCode: String
     let mediaType: String
     var metaData: Dictionary<String, MetaDataItem>
+    var metaDataVerse: MetaDataAudioVerse?
     
     init(languageCode: String, mediaType: String) {
         self.languageCode = languageCode
@@ -46,6 +47,34 @@ class MetaDataReader {
             }
             readComplete(self.metaData)
         })
+    }
+    
+    func readVerseAudio(damid: String, sequence: String, bookId: String, chapter: String,
+                        readComplete: @escaping (_ audioVerse: MetaDataAudioVerse?) -> Void) {
+        let cache = AWSS3Cache()
+        let s3Key = damid + "_" + sequence + "_" + bookId + "_" + chapter + "_verse.json"
+        cache.read(s3Bucket: "audio-us-west-2-shortsands",
+                   s3Key: s3Key,
+                   getComplete: { data in
+            let result = self.parseJson(data: data)
+            self.metaDataVerse = MetaDataAudioVerse(jsonObject: result)
+            readComplete(self.metaDataVerse)
+        })
+    }
+    
+    private func parseJson(data: Data?) -> Any? {
+        if let json = data {
+            do {
+                let result = try JSONSerialization.jsonObject(with: json, options: [])
+                return result
+            } catch let jsonError {
+                print("Error parsing Meta Data json \(jsonError)")
+                return nil
+            }
+        } else {
+            print("Download Meta Data Error")
+            return nil
+        }
     }
 }
 

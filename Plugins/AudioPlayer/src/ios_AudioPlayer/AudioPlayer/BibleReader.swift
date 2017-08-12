@@ -20,6 +20,7 @@ public class BibleReader : NSObject {
     let firstChapter: String
     let lastChapter: String
     let fileType: String
+    var audioVerse: MetaDataAudioVerse?
     var player: AVQueuePlayer?
     
     init(version: String, sequence: String, book: String, firstChapter: String, lastChapter: String, fileType: String) {
@@ -125,6 +126,17 @@ public class BibleReader : NSObject {
         //self.controller.delegate = delegate
         
         self.play()
+        
+        self.readVerseMetaData()
+    }
+    
+    private func readVerseMetaData() {
+        let reader = MetaDataReader(languageCode: "ENG", mediaType: "audio") // parameters should be moved to read
+        reader.readVerseAudio(damid: version, sequence: sequence, bookId: book, chapter: "001", readComplete: {
+            audioVerse in
+            self.audioVerse = audioVerse
+            print("PARSED DATA \(self.audioVerse?.toString())")
+        })
     }
     
     private func getKey(chapter: String) -> String {

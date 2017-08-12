@@ -21,15 +21,22 @@ class ViewController: UIViewController {
         let metaData = MetaDataReader(languageCode: "ENG", mediaType: "audio")
         metaData.read(readComplete: { data in
             
-            // It would be nice to get the information from meta data here, but it is wrong meta data
-            self.reader = BibleReader(version: "ENGWEBN2DA", sequence: "04", book: "JHN",
-                                      firstChapter: "001", lastChapter: "003", fileType: "mp3")
-            if let read = self.reader {
-                self.readerView = BibleReaderView(view: self.view, bibleReader: read)
-                self.readerView?.createAudioPlayerUI(view: self.view)
-                read.beginStreaming()
-                //read.beginDownload()
-                //read.beginLocal()
+            let metaData = data["ENGWEBN2DA"]
+            if let meta = metaData {
+                let metaBook = meta.books["JHN"]
+                if let book = metaBook {
+                    
+                    // It would be nice to get the information from meta data here, but it is wrong meta data
+                    self.reader = BibleReader(version: meta.damId, sequence: book.sequence, book: book.bookId,
+                                              firstChapter: "001", lastChapter: "003", fileType: "mp3")
+                    if let read = self.reader {
+                        self.readerView = BibleReaderView(view: self.view, bibleReader: read)
+                        self.readerView?.createAudioPlayerUI(view: self.view)
+                        read.beginStreaming()
+                        //read.beginDownload()
+                        //read.beginLocal()
+                    }
+                }
             }
         })
     }

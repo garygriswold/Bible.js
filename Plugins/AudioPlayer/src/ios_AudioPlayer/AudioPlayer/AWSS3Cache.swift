@@ -5,6 +5,10 @@
 //  Created by Gary Griswold on 8/9/17.
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
+// The read function will read cache and return it if present and unexpired, then it will access online
+// And return the result, saving it in cache after it is returned.
+//
+//
 
 import Foundation
 import AWS
@@ -85,8 +89,6 @@ class AWSS3Cache {
             if let creation = creationDate {
                 print("creationDate \(creation)")
                 let interval = abs(creation.timeIntervalSinceNow)
-                print("interval \(interval)")
-                print("result \(interval > self.expirationInterval)")
                 return interval > self.expirationInterval
             } else {
                 return true
