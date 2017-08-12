@@ -18,8 +18,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         AwsS3.region = "us-west-2"
-        let metaData = MetaDataReader(languageCode: "ENG", mediaType: "audio")
-        metaData.read(readComplete: { data in
+        let metaData = MetaDataReader()
+        metaData.read(languageCode: "ENG", mediaType: "audio", readComplete: { data in
             
             let metaData = data["ENGWEBN2DA"]
             if let meta = metaData {

@@ -131,7 +131,7 @@ public class BibleReader : NSObject {
     }
     
     private func readVerseMetaData() {
-        let reader = MetaDataReader(languageCode: "ENG", mediaType: "audio") // parameters should be moved to read
+        let reader = MetaDataReader()
         reader.readVerseAudio(damid: version, sequence: sequence, bookId: book, chapter: "001", readComplete: {
             audioVerse in
             self.audioVerse = audioVerse
