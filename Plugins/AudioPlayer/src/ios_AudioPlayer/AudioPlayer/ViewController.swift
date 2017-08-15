@@ -19,18 +19,17 @@ class ViewController: UIViewController {
         
         AwsS3.region = "us-west-2"
         let metaData = MetaDataReader()
-        metaData.read(languageCode: "ENG", mediaType: "audio", readComplete: { data in
+        metaData.read(languageCode: "ENG", mediaType: "audio", readComplete: { tocDictionary in
             
-            let metaData = data["ENGWEBN2DA"]
-            if let meta = metaData {
-                let metaBook = meta.books["JHN"]
+            //let tocAudioBible = tocDictionary["ENGWEBN2DA"]
+            let tocAudioBible = tocDictionary["DEMO"]
+            if let tocBible = tocAudioBible {
+                //let metaBook = tocBible.booksById["JHN"]
+                let metaBook = tocBible.booksById["TST"]
                 if let book = metaBook {
-                    
-                    // It would be nice to get the information from meta data here, but it is wrong meta data
-                    //self.reader = BibleReader(version: meta.damId, sequence: book.sequence, book: book.bookId,
-                    //                          firstChapter: "001", lastChapter: "003", fileType: "mp3")
-                    let reference = Reference(sequence: "01", book: "TST", chapter: "001")
-                    self.reader = BibleReader(version: "DEMO", reference: reference, fileType: "mp3")
+
+                    let reference = Reference(sequence: book.sequence, book: book.bookId, chapter: "001")
+                    self.reader = BibleReader(tocBible: tocBible, version: "DEMO", reference: reference, fileType: "mp3")
                     if let read = self.reader {
                         self.readerView = BibleReaderView(view: self.view, bibleReader: read)
                         self.readerView?.createAudioPlayerUI(view: self.view)

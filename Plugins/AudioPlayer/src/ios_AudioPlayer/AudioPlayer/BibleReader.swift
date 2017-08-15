@@ -12,6 +12,7 @@ import AWS
 
 public class BibleReader : NSObject {
     
+    let tocAudioBible: TOCAudioBible
     let s3Bucket: String
     let version: String
     let firstReference: Reference
@@ -19,7 +20,8 @@ public class BibleReader : NSObject {
     var audioVerse: TOCAudioChapter?
     var player: AVQueuePlayer?
     
-    init(version: String, reference: Reference, fileType: String) {
+    init(tocBible: TOCAudioBible, version: String, reference: Reference, fileType: String) {
+        self.tocAudioBible = tocBible
         self.s3Bucket = "audio-us-west-2-shortsands"
         self.version = version
         self.firstReference = reference
@@ -173,7 +175,7 @@ public class BibleReader : NSObject {
         let newReference = findBookChapter(noteObject: note.object)
         if let ref = newReference {
             readVerseMetaData(reference: ref)
-            let nextReference = self.incrementChapter(reference: ref)
+            let nextReference = self.tocAudioBible.nextChapter(reference: ref)
             if let next = nextReference {
                 self.addNextChapter(reference: next)
             }
@@ -212,21 +214,6 @@ public class BibleReader : NSObject {
             self.audioVerse = audioVerse
             print("PARSED DATA \(self.audioVerse?.toString())")
         })
-    }
-    
-    private func incrementChapter(reference: Reference) -> Reference? {
-        let ref = reference
-        let next = ref.chapterNum + 1
-        if (next < 4) {
-            let nextStr = String(next)
-            switch(nextStr.characters.count) {
-            case 1: return Reference(sequence: ref.sequence, book: ref.book, chapter: "00" + nextStr)
-            case 2: return Reference(sequence: ref.sequence, book: ref.book, chapter: "0" + nextStr)
-            default: return Reference(sequence: ref.sequence, book: ref.book, chapter: nextStr)
-            }
-        } else {
-            return nil
-        }
     }
     
     private func addNextChapter(reference: Reference) {
