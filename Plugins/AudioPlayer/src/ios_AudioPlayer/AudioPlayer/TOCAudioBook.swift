@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MetaDataItemBook {
+class TOCAudioBook {
     
     let bookId: String
     let sequence: String

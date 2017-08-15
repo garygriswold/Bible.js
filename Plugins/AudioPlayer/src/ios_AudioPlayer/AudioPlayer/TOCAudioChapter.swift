@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MetaDataAudioVerse {
+class TOCAudioChapter {
     
     var versePositions: [Int]
     

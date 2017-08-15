@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MetaDataItem {
+class TOCAudioBible {
     
     let damId: String
     let languageCode: String
@@ -17,10 +17,10 @@ class MetaDataItem {
     let versionName: String
     let versionEnglish: String
     let collectionCode: String
-    var books: Dictionary<String, MetaDataItemBook>
+    var books: Dictionary<String, TOCAudioBook>
 
     init(jsonObject: AnyObject) {
-        self.books = Dictionary<String, MetaDataItemBook>()
+        self.books = Dictionary<String, TOCAudioBook>()
         if jsonObject is Dictionary<String, AnyObject> {
             let item = jsonObject as! Dictionary<String, AnyObject>
             print("Inner Item \(item)")
@@ -37,7 +37,7 @@ class MetaDataItem {
                 let array = books as! Array<AnyObject>
                 print("is books array")
                 for jsonBook in array {
-                    let book = MetaDataItemBook(jsonBook: jsonBook)
+                    let book = TOCAudioBook(jsonBook: jsonBook)
                     print("BOOK \(book.toString())")
                     self.books[book.bookId] = book
                 }

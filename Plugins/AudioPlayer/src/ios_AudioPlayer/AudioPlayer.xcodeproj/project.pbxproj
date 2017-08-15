@@ -12,7 +12,7 @@
 		E40954C21F351E6700046DE7 /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E40954C11F351E6700046DE7 /* Zip.framework */; };
 		E40954C41F351E7100046DE7 /* Zip.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E40954C11F351E6700046DE7 /* Zip.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4148DC51F3BFC34007D5870 /* AWSS3Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC41F3BFC34007D5870 /* AWSS3Cache.swift */; };
-		E4148DC71F3E859B007D5870 /* MetaDataAudioVerse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC61F3E859B007D5870 /* MetaDataAudioVerse.swift */; };
+		E4148DC71F3E859B007D5870 /* TOCAudioChapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC61F3E859B007D5870 /* TOCAudioChapter.swift */; };
 		E41E5EC41F38FB8700B18D3F /* BibleReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E5EC31F38FB8700B18D3F /* BibleReaderView.swift */; };
 		E42B3F6F1F32426B00A51430 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E42B3F6E1F32426B00A51430 /* AWS.framework */; };
 		E42B3F711F32428000A51430 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E42B3F701F32428000A51430 /* AWSCore.framework */; };
@@ -25,8 +25,8 @@
 		E4A32CE31F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E4A32CE21F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 */; };
 		E4BD83A81F35BFE100EE57BA /* play.svg in Resources */ = {isa = PBXBuildFile; fileRef = E4BD83A71F35BFE100EE57BA /* play.svg */; };
 		E4F69CED1F39684800EE53AB /* MetaDataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */; };
-		E4F69CEF1F397CF200EE53AB /* MetaDataItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEE1F397CF200EE53AB /* MetaDataItem.swift */; };
-		E4F69CF11F397D0800EE53AB /* MetaDataItemBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CF01F397D0800EE53AB /* MetaDataItemBook.swift */; };
+		E4F69CEF1F397CF200EE53AB /* TOCAudioBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */; };
+		E4F69CF11F397D0800EE53AB /* TOCAudioBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,7 +48,7 @@
 /* Begin PBXFileReference section */
 		E40954C11F351E6700046DE7 /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Zip.framework; sourceTree = "<group>"; };
 		E4148DC41F3BFC34007D5870 /* AWSS3Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSS3Cache.swift; sourceTree = "<group>"; };
-		E4148DC61F3E859B007D5870 /* MetaDataAudioVerse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaDataAudioVerse.swift; sourceTree = "<group>"; };
+		E4148DC61F3E859B007D5870 /* TOCAudioChapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioChapter.swift; sourceTree = "<group>"; };
 		E41E5EC31F38FB8700B18D3F /* BibleReaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BibleReaderView.swift; sourceTree = "<group>"; };
 		E42B3F6E1F32426B00A51430 /* AWS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWS.framework; sourceTree = "<group>"; };
 		E42B3F701F32428000A51430 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
@@ -63,8 +63,8 @@
 		E4A32CE21F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = EmmaFirstLostTooth.mp3; sourceTree = "<group>"; };
 		E4BD83A71F35BFE100EE57BA /* play.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = play.svg; sourceTree = "<group>"; };
 		E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaDataReader.swift; sourceTree = "<group>"; };
-		E4F69CEE1F397CF200EE53AB /* MetaDataItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaDataItem.swift; sourceTree = "<group>"; };
-		E4F69CF01F397D0800EE53AB /* MetaDataItemBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaDataItemBook.swift; sourceTree = "<group>"; };
+		E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioBible.swift; sourceTree = "<group>"; };
+		E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioBook.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,9 +109,9 @@
 				E4A32CD01F2FB310009AECFB /* ViewController.swift */,
 				E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */,
 				E4148DC41F3BFC34007D5870 /* AWSS3Cache.swift */,
-				E4F69CEE1F397CF200EE53AB /* MetaDataItem.swift */,
-				E4F69CF01F397D0800EE53AB /* MetaDataItemBook.swift */,
-				E4148DC61F3E859B007D5870 /* MetaDataAudioVerse.swift */,
+				E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */,
+				E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */,
+				E4148DC61F3E859B007D5870 /* TOCAudioChapter.swift */,
 				E4A32CE01F2FB420009AECFB /* BibleReader.swift */,
 				E41E5EC31F38FB8700B18D3F /* BibleReaderView.swift */,
 				E4A32CD21F2FB310009AECFB /* Main.storyboard */,
@@ -200,13 +200,13 @@
 			files = (
 				E41E5EC41F38FB8700B18D3F /* BibleReaderView.swift in Sources */,
 				E4A32CD11F2FB310009AECFB /* ViewController.swift in Sources */,
-				E4148DC71F3E859B007D5870 /* MetaDataAudioVerse.swift in Sources */,
+				E4148DC71F3E859B007D5870 /* TOCAudioChapter.swift in Sources */,
 				E4A32CCF1F2FB310009AECFB /* AppDelegate.swift in Sources */,
-				E4F69CEF1F397CF200EE53AB /* MetaDataItem.swift in Sources */,
+				E4F69CEF1F397CF200EE53AB /* TOCAudioBible.swift in Sources */,
 				E4A32CE11F2FB420009AECFB /* BibleReader.swift in Sources */,
 				E4148DC51F3BFC34007D5870 /* AWSS3Cache.swift in Sources */,
 				E4F69CED1F39684800EE53AB /* MetaDataReader.swift in Sources */,
-				E4F69CF11F397D0800EE53AB /* MetaDataItemBook.swift in Sources */,
+				E4F69CF11F397D0800EE53AB /* TOCAudioBook.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

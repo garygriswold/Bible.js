@@ -10,20 +10,15 @@ import Foundation
 
 class MetaDataReader {
     
-    //let languageCode: String
-    //let mediaType: String
-    var metaData: Dictionary<String, MetaDataItem>
-    var metaDataVerse: MetaDataAudioVerse?
+    var metaData: Dictionary<String, TOCAudioBible>
+    var metaDataVerse: TOCAudioChapter?
     
-    //init(languageCode: String, mediaType: String) {
     init() {
-        //self.languageCode = languageCode
-        //self.mediaType = mediaType
-        self.metaData = Dictionary<String, MetaDataItem>()
+        self.metaData = Dictionary<String, TOCAudioBible>()
     }
     
     func read(languageCode: String, mediaType: String,
-              readComplete: @escaping (_ metaData: Dictionary<String, MetaDataItem>) -> Void) {
+              readComplete: @escaping (_ metaData: Dictionary<String, TOCAudioBible>) -> Void) {
         let cache = AWSS3Cache()
         cache.read(s3Bucket: "audio-us-west-2-shortsands",
                    s3Key: languageCode + "_" + mediaType + ".json",
@@ -32,7 +27,7 @@ class MetaDataReader {
             if (result is Array<AnyObject>) {
                 let array: Array<AnyObject> = result as! Array<AnyObject>
                 for item in array {
-                    let metaItem = MetaDataItem(jsonObject: item)
+                    let metaItem = TOCAudioBible(jsonObject: item)
                     print("\(metaItem.toString())")
                     self.metaData[metaItem.damId] = metaItem
                 }
@@ -44,14 +39,14 @@ class MetaDataReader {
     }
     
     func readVerseAudio(damid: String, sequence: String, bookId: String, chapter: String,
-                        readComplete: @escaping (_ audioVerse: MetaDataAudioVerse?) -> Void) {
+                        readComplete: @escaping (_ audioVerse: TOCAudioChapter?) -> Void) {
         let cache = AWSS3Cache()
         let s3Key = damid + "_" + sequence + "_" + bookId + "_" + chapter + "_verse.json"
         cache.read(s3Bucket: "audio-us-west-2-shortsands",
                    s3Key: s3Key,
                    getComplete: { data in
             let result = self.parseJson(data: data)
-            self.metaDataVerse = MetaDataAudioVerse(jsonObject: result)
+            self.metaDataVerse = TOCAudioChapter(jsonObject: result)
             readComplete(self.metaDataVerse)
         })
     }

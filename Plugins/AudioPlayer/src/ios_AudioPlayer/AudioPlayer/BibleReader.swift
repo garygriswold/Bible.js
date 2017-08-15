@@ -18,7 +18,7 @@ public class BibleReader : NSObject {
     let book: String
     let firstChapter: String
     let fileType: String
-    var audioVerse: MetaDataAudioVerse?
+    var audioVerse: TOCAudioChapter?
     var player: AVQueuePlayer?
     
     init(version: String, sequence: String, book: String, firstChapter: String, fileType: String) {
