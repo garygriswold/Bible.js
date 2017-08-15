@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AVFoundation
 import UIKit
 
 class BibleReaderView : NSObject {
@@ -15,10 +16,12 @@ class BibleReaderView : NSObject {
     let bibleReader: BibleReader
     
     var scrubSlider: UISlider?
+    var scrubSliderDuration: CMTime
     
     init(view: UIView, bibleReader: BibleReader) {
         self.view = view
         self.bibleReader = bibleReader
+        self.scrubSliderDuration = kCMTimeZero
     }
     
     deinit {
@@ -47,12 +50,10 @@ class BibleReaderView : NSObject {
         
         let scrubRect = CGRect(x: screenWidth * 0.05, y: 200, width: screenWidth * 0.9, height: 100)
         let scrub = UISlider(frame: scrubRect)
-        scrub.minimumValue = 1
-        scrub.maximumValue = 50
         scrub.isContinuous = false
-        scrub.minimumTrackTintColor = UIColor.blue
+        scrub.minimumTrackTintColor = UIColor.green
         scrub.maximumTrackTintColor = UIColor.purple
-        scrub.value = 1
+        scrub.value = 0
         scrub.addTarget(self, action: #selector(scrubSliderChanged),for: .valueChanged)
         self.view.addSubview(scrub)
         self.scrubSlider = scrub
@@ -64,6 +65,20 @@ class BibleReaderView : NSObject {
     
     func pause() {
         self.bibleReader.pause()
+    }
+    
+    public func updateProgress(displaylink: CADisplayLink) {
+        if let item = self.bibleReader.player?.currentItem {
+            if CMTIME_IS_NUMERIC(item.duration) {
+                if item.duration != self.scrubSliderDuration {
+                    self.scrubSliderDuration = item.duration
+                    let duration = CMTimeGetSeconds(item.duration)
+                    self.scrubSlider?.maximumValue = Float(duration)
+                }
+            }
+            let current = CMTimeGetSeconds(item.currentTime())
+            self.scrubSlider?.setValue(Float(current), animated: true)
+        }
     }
     
     func setVerse(verseNum: Int) {

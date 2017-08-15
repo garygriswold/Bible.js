@@ -18,6 +18,7 @@ public class BibleReader : NSObject {
     let firstReference: Reference
     let fileType: String
     var audioVerse: TOCAudioChapter?
+    var view: BibleReaderView?
     var player: AVQueuePlayer?
     
     init(tocBible: TOCAudioBible, version: String, reference: Reference, fileType: String) {
@@ -34,6 +35,10 @@ public class BibleReader : NSObject {
         }
         self.removeNotifications()
         print("Deinit BibleReader")
+    }
+    
+    func setView(view: BibleReaderView) {
+        self.view = view
     }
     
     public func beginStreaming() {
@@ -102,6 +107,12 @@ public class BibleReader : NSObject {
         //self.controller.delegate = delegate
         
         self.play()
+        
+        if let vue = self.view {
+            let progressLink = CADisplayLink(target: vue, selector: #selector(vue.updateProgress))
+            progressLink.add(to: .current, forMode: .defaultRunLoopMode)
+            progressLink.preferredFramesPerSecond = 15
+        }
     }
 
     func play() {
@@ -232,7 +243,6 @@ public class BibleReader : NSObject {
             }
         )
     }
-
 }
 
 /*

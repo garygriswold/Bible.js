@@ -32,10 +32,14 @@ class ViewController: UIViewController {
                     self.reader = BibleReader(tocBible: tocBible, version: "DEMO", reference: reference, fileType: "mp3")
                     if let read = self.reader {
                         self.readerView = BibleReaderView(view: self.view, bibleReader: read)
-                        self.readerView?.createAudioPlayerUI(view: self.view)
-                        read.beginStreaming()
-                        //read.beginDownload()
-                        //read.beginLocal()
+                        if let vue = self.readerView {
+                            vue.createAudioPlayerUI(view: self.view)
+                            read.setView(view: vue)
+                        
+                            read.beginStreaming()
+                            //read.beginDownload()
+                            //read.beginLocal()
+                        }
                     }
                 }
             }
