@@ -27,8 +27,10 @@ class ViewController: UIViewController {
                 if let book = metaBook {
                     
                     // It would be nice to get the information from meta data here, but it is wrong meta data
-                    self.reader = BibleReader(version: meta.damId, sequence: book.sequence, book: book.bookId,
-                                              firstChapter: "001", lastChapter: "003", fileType: "mp3")
+                    //self.reader = BibleReader(version: meta.damId, sequence: book.sequence, book: book.bookId,
+                    //                          firstChapter: "001", lastChapter: "003", fileType: "mp3")
+                    self.reader = BibleReader(version: "DEMO", sequence: "01", book: "TST",
+                                              firstChapter: "001", fileType: "mp3")
                     if let read = self.reader {
                         self.readerView = BibleReaderView(view: self.view, bibleReader: read)
                         self.readerView?.createAudioPlayerUI(view: self.view)
