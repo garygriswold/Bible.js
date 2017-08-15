@@ -14,19 +14,15 @@ public class BibleReader : NSObject {
     
     let s3Bucket: String
     let version: String
-    let sequence: String
-    let book: String
-    let firstChapter: String
+    let firstReference: Reference
     let fileType: String
     var audioVerse: TOCAudioChapter?
     var player: AVQueuePlayer?
     
-    init(version: String, sequence: String, book: String, firstChapter: String, fileType: String) {
+    init(version: String, reference: Reference, fileType: String) {
         self.s3Bucket = "audio-us-west-2-shortsands"
         self.version = version
-        self.sequence = sequence
-        self.book = book
-        self.firstChapter = firstChapter
+        self.firstReference = reference
         self.fileType = fileType
     }
     
@@ -39,7 +35,7 @@ public class BibleReader : NSObject {
     }
     
     public func beginStreaming() {
-        let s3Key = self.getKey(sequence: self.sequence, book: self.book, chapter: self.firstChapter)
+        let s3Key = self.firstReference.getS3Key(damId: self.version, fileType: self.fileType)
         AwsS3.shared.preSignedUrlGET(
             s3Bucket: self.s3Bucket,
             s3Key: s3Key,
@@ -58,7 +54,7 @@ public class BibleReader : NSObject {
         var filePath: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
         filePath = filePath.appendingPathComponent("Library")
         filePath = filePath.appendingPathComponent("Caches")
-        let s3Key = self.getKey(sequence: self.sequence, book: self.book, chapter: self.firstChapter)
+        let s3Key = self.firstReference.getS3Key(damId: self.version, fileType: self.fileType)
         filePath = filePath.appendingPathComponent(s3Key)
         print("FilePath \(filePath.absoluteString)")
         
@@ -80,7 +76,7 @@ public class BibleReader : NSObject {
         var filePath: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
         filePath = filePath.appendingPathComponent("Library")
         filePath = filePath.appendingPathComponent("Caches")
-        let s3Key = self.getKey(sequence: self.sequence, book: self.book, chapter: self.firstChapter)
+        let s3Key = self.firstReference.getS3Key(damId: self.version, fileType: self.fileType)
         filePath = filePath.appendingPathComponent(s3Key)
         print("FilePath \(filePath.absoluteString)")
         self.initAudio(url: filePath)
@@ -104,10 +100,6 @@ public class BibleReader : NSObject {
         //self.controller.delegate = delegate
         
         self.play()
-        
-        // Add one more chapter to the queue
-        let nextChapter = self.incrementChapter(chapter: firstChapter)
-        self.addNextChapter(sequence: self.sequence, book: self.book, chapter: nextChapter)
     }
 
     func play() {
@@ -178,11 +170,13 @@ public class BibleReader : NSObject {
     func playerItemNewAccessLogEntry(note:Notification) {
         print("\n****** ACCESS LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.accessLog()))")
         
-        let newMp3 = findBookChapter(noteObject: note.object)
-        if newMp3.count > 3 {
-            readVerseMetaData(sequence: newMp3[1], book: newMp3[2], chapter: newMp3[3])
-            let nextChapter = self.incrementChapter(chapter: newMp3[3])
-            self.addNextChapter(sequence: newMp3[1], book: newMp3[2], chapter: nextChapter)
+        let newReference = findBookChapter(noteObject: note.object)
+        if let ref = newReference {
+            readVerseMetaData(reference: ref)
+            let nextReference = self.incrementChapter(reference: ref)
+            if let next = nextReference {
+                self.addNextChapter(reference: next)
+            }
         }
     }
     func playerItemTimeJumped(note:Notification) {
@@ -198,11 +192,7 @@ public class BibleReader : NSObject {
         //VideoViewState.update(time: self.player?.currentTime())
     }
     
-    private func getKey(sequence: String, book: String, chapter: String) -> String {
-        return(self.version + "_" + sequence + "_" + book + "_" + chapter + "." + self.fileType)
-    }
-    
-    private func findBookChapter(noteObject: Any?) -> Array<String> {
+    private func findBookChapter(noteObject: Any?) -> Reference? {
         var items = [String]()
         if let item = noteObject as? AVPlayerItem {
             if let asset = item.asset as? AVURLAsset {
@@ -212,30 +202,35 @@ public class BibleReader : NSObject {
                 items = pieces.last?.components(separatedBy: ["_", "."]) ?? [String]()
             }
         }
-        return items
+        return (items.count > 3) ? Reference(sequence: items[1], book: items[2], chapter: items[3]) : nil
     }
     
-    private func readVerseMetaData(sequence: String, book: String, chapter: String) {
+    private func readVerseMetaData(reference: Reference) {
         let reader = MetaDataReader()
-        reader.readVerseAudio(damid: self.version, sequence: sequence, bookId: book, chapter: chapter, readComplete: {
+        reader.readVerseAudio(damid: self.version, sequence: reference.sequence, bookId: reference.book, chapter: reference.chapter, readComplete: {
             audioVerse in
             self.audioVerse = audioVerse
             print("PARSED DATA \(self.audioVerse?.toString())")
         })
     }
     
-    private func incrementChapter(chapter: String) -> String {
-        let next = (Int(chapter) ?? 1) + 1
-        let nextStr = String(next)
-        switch(nextStr.characters.count) {
-        case 1: return "00" + nextStr
-        case 2: return "0" + nextStr
-        default: return nextStr
+    private func incrementChapter(reference: Reference) -> Reference? {
+        let ref = reference
+        let next = ref.chapterNum + 1
+        if (next < 4) {
+            let nextStr = String(next)
+            switch(nextStr.characters.count) {
+            case 1: return Reference(sequence: ref.sequence, book: ref.book, chapter: "00" + nextStr)
+            case 2: return Reference(sequence: ref.sequence, book: ref.book, chapter: "0" + nextStr)
+            default: return Reference(sequence: ref.sequence, book: ref.book, chapter: nextStr)
+            }
+        } else {
+            return nil
         }
     }
     
-    private func addNextChapter(sequence: String, book: String, chapter: String) {
-        let s3Key = getKey(sequence: sequence, book: book, chapter: chapter)
+    private func addNextChapter(reference: Reference) {
+        let s3Key = reference.getS3Key(damId: self.version, fileType: self.fileType)
         AwsS3.shared.preSignedUrlGET(
             s3Bucket: self.s3Bucket,
             s3Key: s3Key,

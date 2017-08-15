@@ -18,6 +18,9 @@ class TOCAudioBible {
     let versionEnglish: String
     let collectionCode: String
     var books: Dictionary<String, TOCAudioBook>
+    // Transient Maintaining State
+    var currentBook: String?
+    var currentChapter: String?
 
     init(jsonObject: AnyObject) {
         self.books = Dictionary<String, TOCAudioBook>()
@@ -55,6 +58,11 @@ class TOCAudioBible {
             self.collectionCode = ""
         }
 
+    }
+    
+    func nextChapter(reference: Reference) -> Reference? {
+       
+        return nil
     }
     
     func toString() -> String {
