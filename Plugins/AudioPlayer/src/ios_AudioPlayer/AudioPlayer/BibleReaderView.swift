@@ -16,16 +16,20 @@ class BibleReaderView : NSObject {
     let bibleReader: BibleReader
     
     var scrubSlider: UISlider?
+    // Transient State Variable
     var scrubSliderDuration: CMTime
+    var scrubSliderDrag: Bool
     
     init(view: UIView, bibleReader: BibleReader) {
         self.view = view
         self.bibleReader = bibleReader
         self.scrubSliderDuration = kCMTimeZero
+        self.scrubSliderDrag = false
     }
     
     deinit {
         print("BibleReaderView is deallocated")
+        // Do I need to remove listeners from controls here
     }
     
     func createAudioPlayerUI(view: UIView) {
@@ -54,7 +58,10 @@ class BibleReaderView : NSObject {
         scrub.minimumTrackTintColor = UIColor.green
         scrub.maximumTrackTintColor = UIColor.purple
         scrub.value = 0
-        scrub.addTarget(self, action: #selector(scrubSliderChanged),for: .valueChanged)
+        scrub.addTarget(self, action: #selector(scrubSliderChanged), for: .valueChanged)
+        scrub.addTarget(self, action: #selector(touchDown), for: .touchDown)
+        scrub.addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
+        
         self.view.addSubview(scrub)
         self.scrubSlider = scrub
     }
@@ -67,7 +74,12 @@ class BibleReaderView : NSObject {
         self.bibleReader.pause()
     }
     
+    /**
+    * Scrub Slider Animation
+    */
     public func updateProgress(displaylink: CADisplayLink) {
+        if self.scrubSliderDrag { return }
+        
         if let item = self.bibleReader.player?.currentItem {
             if CMTIME_IS_NUMERIC(item.duration) {
                 if item.duration != self.scrubSliderDuration {
@@ -81,17 +93,28 @@ class BibleReaderView : NSObject {
         }
     }
     
-    func setVerse(verseNum: Int) {
-        self.scrubSlider?.value = Float(verseNum)
+    /**
+    * Scrub Slider Event Handler
+    */
+    func scrubSliderChanged(sender: UISlider, forEvent event: UIEvent) {
+        if let slider = self.scrubSlider {
+            print("scrub slider changed to \(slider.value)")
+            if let play = self.bibleReader.player {
+                if (slider.value < slider.maximumValue) {
+                    let time: CMTime = CMTime(seconds: Double(slider.value), preferredTimescale: CMTimeScale(1.0))
+                    play.seek(to: time)
+                } else {
+                    play.advanceToNextItem()
+                }
+            }
+        }
     }
-    
-    func setMaximumVerse(verseNum: Int) {
-        self.scrubSlider?.maximumValue = Float(verseNum)
+    func touchDown() {
+        print("**** touchDown ***")
+        self.scrubSliderDrag = true
     }
-    
-    func scrubSliderChanged() {
-        print("scrub slider changed to \(String(describing: self.scrubSlider?.value))")
-        // advance the audio player to the nearest verse.
-        //self.bibleReader.seekVerse(verseNum: Float)
+    func touchUpInside() {
+        print("**** touchUpInside ***")
+        self.scrubSliderDrag = false
     }
  }

@@ -181,7 +181,7 @@ public class BibleReader : NSObject {
         print("\n****** ERROR LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.errorLog()))")
     }
     func playerItemNewAccessLogEntry(note:Notification) {
-        print("\n****** ACCESS LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.accessLog()))")
+        //print("\n****** ACCESS LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.accessLog()))")
         
         let newReference = findBookChapter(noteObject: note.object)
         if let ref = newReference {
@@ -193,7 +193,7 @@ public class BibleReader : NSObject {
         }
     }
     func playerItemTimeJumped(note:Notification) {
-        print("\n****** TIME JUMPED \(String(describing: note.object))")
+        //print("\n****** TIME JUMPED \(String(describing: note.object))")
     }
     /**
      * This method is called when the Home button is clicked or double clicked.
