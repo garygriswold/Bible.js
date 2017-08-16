@@ -17,7 +17,7 @@ public class BibleReader : NSObject {
     let version: String
     let firstReference: Reference
     let fileType: String
-    var audioVerse: TOCAudioChapter?
+    var audioChapter: TOCAudioChapter?
     var view: BibleReaderView?
     var player: AVQueuePlayer?
     
@@ -221,9 +221,9 @@ public class BibleReader : NSObject {
     private func readVerseMetaData(reference: Reference) {
         let reader = MetaDataReader()
         reader.readVerseAudio(damid: self.version, sequence: reference.sequence, bookId: reference.book, chapter: reference.chapter, readComplete: {
-            audioVerse in
-            self.audioVerse = audioVerse
-            print("PARSED DATA \(self.audioVerse?.toString())")
+            audioChapter in
+            self.audioChapter = audioChapter
+            print("PARSED DATA \(self.audioChapter?.toString())")
         })
     }
     

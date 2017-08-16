@@ -7,13 +7,14 @@
 //
 
 import Foundation
+import CoreMedia
 
 class TOCAudioChapter {
     
-    var versePositions: [Int]
+    var versePositions: [Float]
     
     init(jsonObject: Any?) {
-        self.versePositions = [Int]()
+        self.versePositions = [Float]()
         
         if (jsonObject is Array<AnyObject>) {
             let array: Array<AnyObject> = jsonObject as! Array<AnyObject>
@@ -23,7 +24,7 @@ class TOCAudioChapter {
                 self.versePositions = Array(repeating: 0, count: lastVerse + 1)
                 for item in array {
                     let verseId = item["verse_id"] as? Int ?? 0
-                    let position = item["position"] as? Int ?? 0
+                    let position = item["position"] as? Float ?? 0.0
                     self.versePositions[verseId] = position
                 }
             } else {
@@ -34,6 +35,24 @@ class TOCAudioChapter {
         }
     }
     
+    func findVerseByPosition(time: CMTime) -> Float {
+        let seconds = Float(CMTimeGetSeconds(time))
+        return findVerseByPosition(seconds: seconds)
+    }
+    
+    func findVerseByPosition(seconds: Float) -> Float {
+        var index = 0
+        for versePos in self.versePositions {
+            if (seconds == versePos) {
+                return seconds
+            } else if (seconds < versePos) {
+                return (index > 0) ? self.versePositions[index - 1] : 0.0
+            }
+            index += 1
+        }
+        return self.versePositions.last!
+    }
+    
     func toString() -> String {
         var str = ""
         for (index, position) in self.versePositions.enumerated() {
@@ -42,3 +61,5 @@ class TOCAudioChapter {
         return(str)
     }
 }
+
+

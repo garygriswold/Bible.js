@@ -11,7 +11,6 @@ import Foundation
 
 class Reference {
     
-    //let damId: String
     let sequence: String
     let book: String
     let chapter: String
@@ -24,7 +23,7 @@ class Reference {
     }
     
     deinit {
-        print("Reference was deinitialized")
+        print("Reference was deinitialized \(self.toString())")
     }
     
     var sequenceNum: Int {
@@ -41,5 +40,9 @@ class Reference {
     
     func getS3Key(damId: String, fileType: String) -> String {
         return damId + "_" + self.sequence + "_" + self.book + "_" + self.chapter + "." + fileType
+    }
+    
+    func toString() -> String {
+        return(self.sequence + "_" + self.book + "_" + self.chapter)
     }
 }
