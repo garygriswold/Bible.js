@@ -20,6 +20,8 @@ public class BibleReader : NSObject {
     var audioChapter: TOCAudioChapter?
     var view: BibleReaderView?
     var player: AVQueuePlayer?
+    // Transient Variables
+    var currReference: Reference
     
     init(tocBible: TOCAudioBible, version: String, reference: Reference, fileType: String) {
         self.tocAudioBible = tocBible
@@ -27,6 +29,10 @@ public class BibleReader : NSObject {
         self.version = version
         self.firstReference = reference
         self.fileType = fileType
+        self.currReference = reference
+        
+        print("INSIDE BibleReader \(self.version)")
+        MediaPlayState.retrieve(mediaId: self.version)
     }
     
     deinit {
@@ -94,10 +100,10 @@ public class BibleReader : NSObject {
         let playerItem = AVPlayerItem(asset: asset)
         print("Player Item Status \(playerItem.status)")
         
-        //let seekTime = backupSeek(state: self.currentState)
-        //if (CMTimeGetSeconds(seekTime) > 0.1) {
-        //    playerItem.seek(to: seekTime)
-        //}
+        let seekTime = backupSeek(state: MediaPlayState.currentState)
+        if (CMTimeGetSeconds(seekTime) > 0.1) {
+            playerItem.seek(to: seekTime)
+        }
         self.player = AVQueuePlayer(items: [playerItem])
         self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.advance
         self.initNotifications()
@@ -108,12 +114,20 @@ public class BibleReader : NSObject {
         
         self.play()
         
-        if let vue = self.view {
-            let progressLink = CADisplayLink(target: vue, selector: #selector(vue.updateProgress))
-            progressLink.add(to: .current, forMode: .defaultRunLoopMode)
-            progressLink.preferredFramesPerSecond = 15
+        self.view?.startPlay()
+    }
+    
+    func backupSeek(state: MediaPlayState) -> CMTime {
+        if (state.mediaUrl == self.firstReference.toString()) {
+            // Do I need to backup to beginning of verse here
+            // Or, did I do that when it was saved.
+            return state.position
+        } else {
+            MediaPlayState.update(url: self.firstReference.toString())
+            return kCMTimeZero
         }
     }
+    
 
     func play() {
         self.player?.play()
@@ -123,6 +137,14 @@ public class BibleReader : NSObject {
     func pause() {
         self.player?.pause()
         print("Pause Status = \(String(describing: self.player?.status))")
+        
+        // This is here in lieu of a way to exit audio player, which is needed
+        MediaPlayState.update(time: self.player?.currentTime())
+    }
+    
+    func stop() {
+        // This is needed for an exit of the audio player. i.e. Done button
+        //self.view?.stopPlay()
     }
     
     func initNotifications() {
@@ -169,7 +191,18 @@ public class BibleReader : NSObject {
         print("\n** DID PLAY TO END \(String(describing: note.object))")
         //self.dismiss(animated: false) // move this till after??
         //sendVideoAnalytics(isStart: false, isDone: true)
-        //VideoViewState.clear()
+        
+        print("PLAYER ITEMS \(self.player?.items().count)")
+        for item in self.player!.items() {
+            let asset = item.asset
+            let urlAsset = asset as? AVURLAsset
+            print("ITEM \(urlAsset?.url)")
+        }
+        if self.player?.items().count == 0 {
+            MediaPlayState.clear()
+        } else {
+            MediaPlayState.update(url: self.currReference.toString())
+        }
     }
     func playerItemFailedToPlayToEndTime(note:Notification) {
         print("\n********* FAILED TO PLAY TO END *********\(String(describing: note.object))")
@@ -185,6 +218,7 @@ public class BibleReader : NSObject {
         
         let newReference = findBookChapter(noteObject: note.object)
         if let ref = newReference {
+            self.currReference = ref
             readVerseMetaData(reference: ref)
             let nextReference = self.tocAudioBible.nextChapter(reference: ref)
             if let next = nextReference {
@@ -197,12 +231,12 @@ public class BibleReader : NSObject {
     }
     /**
      * This method is called when the Home button is clicked or double clicked.
-     * VideoState is saved in this method
+     * MediaPlayState is saved in this method
      */
     func applicationWillResignActive(note:Notification) {
         print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
         //sendVideoAnalytics(isStart: false, isDone: false)
-        //VideoViewState.update(time: self.player?.currentTime())
+        MediaPlayState.update(time: self.player?.currentTime())
     }
     
     private func findBookChapter(noteObject: Any?) -> Reference? {
@@ -244,64 +278,4 @@ public class BibleReader : NSObject {
         )
     }
 }
-
-/*
- 
- public class VideoViewPlayer : NSObject {
-	
- public let controller = AVPlayerViewController()
- private let delegate = VideoViewControllerDelegate() // Without this delegate is lost because weak to controller
- 
- let videoAnalytics: VideoAnalytics
- let currentState: VideoViewState // To help prevent GC
- 
- public init(mediaSource: String,
-        videoId: String,
-        languageId: String,
-        silLang: String,
-        videoUrl: String) {
-    print("INSIDE VideoViewPlayer \(videoId)  \(videoUrl)")
-    self.currentState = VideoViewState.retrieve(videoId: videoId)
-    self.currentState.videoUrl = videoUrl
-    self.videoAnalytics = VideoAnalytics(mediaSource: mediaSource,
-    mediaId: videoId,
-    languageId: languageId,
-    silLang: silLang)
- }
- 
- deinit {
-    print("VideoViewPlayer is deallocated.")
- }
- 
- public func begin(complete: @escaping (_ error:Error?) -> Void) {
-    print("VideoViewPlayer.BEGIN")
-    let videoUrl: URL? = URL(string: self.currentState.videoUrl)
-    if let url: URL = videoUrl {
-        let asset = AVAsset(url: url)
-        let playerItem = AVPlayerItem(asset: asset)
-        let seekTime = backupSeek(state: self.currentState)
-        if (CMTimeGetSeconds(seekTime) > 0.1) {
-            playerItem.seek(to: seekTime)
-        }
-        let player = AVPlayer(playerItem: playerItem)
- 
-        delegate.completionHandler = complete
-        delegate.videoAnalytics = self.videoAnalytics
-        self.controller.delegate = delegate
-        self.controller.showsPlaybackControls = true
-        self.controller.player = player
-        self.controller.player?.play()
-    }
- }
- 
- func backupSeek(state: VideoViewState) -> CMTime {
-    let duration: Int64 = Int64(Date().timeIntervalSince(state.timestamp))
-    let backupSec: Int = String(duration).characters.count // could multiply by a factor here
-    let backupTime: CMTime = CMTimeMake(Int64(backupSec), 1)
-    return(CMTimeSubtract(state.position, backupTime))
- }
-}
-
- 
-*/
 

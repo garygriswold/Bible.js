@@ -14,7 +14,7 @@ class BibleReaderView : NSObject {
     
     let view: UIView
     let bibleReader: BibleReader
-    var scrubSlider: UISlider?
+    var scrubSlider: UISlider
     // Transient State Variable
     var scrubSliderDuration: CMTime
     var scrubSliderDrag: Bool
@@ -24,14 +24,7 @@ class BibleReaderView : NSObject {
         self.bibleReader = bibleReader
         self.scrubSliderDuration = kCMTimeZero
         self.scrubSliderDrag = false
-    }
-    
-    deinit {
-        print("BibleReaderView is deallocated")
-        // Do I need to remove listeners from controls here
-    }
-    
-    func createAudioPlayerUI(view: UIView) {
+
         let screenSize = UIScreen.main.bounds
         let screenWidth = screenSize.width
         
@@ -57,18 +50,30 @@ class BibleReaderView : NSObject {
         scrub.minimumTrackTintColor = UIColor.green
         scrub.maximumTrackTintColor = UIColor.purple
         scrub.value = 0
-        scrub.addTarget(self, action: #selector(scrubSliderChanged), for: .valueChanged)
-        scrub.addTarget(self, action: #selector(touchDown), for: .touchDown)
-        scrub.addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
-        
         self.view.addSubview(scrub)
         self.scrubSlider = scrub
+    }
+    
+    deinit {
+        print("BibleReaderView is deallocated")
+        // Do I need to remove listeners from controls here
+    }
+    
+    func startPlay() {
+        self.scrubSlider.value = 0
+        self.scrubSlider.addTarget(self, action: #selector(scrubSliderChanged), for: .valueChanged)
+        self.scrubSlider.addTarget(self, action: #selector(touchDown), for: .touchDown)
+        self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
+        
+        let progressLink = CADisplayLink(target: self, selector: #selector(updateProgress))
+        progressLink.add(to: .current, forMode: .defaultRunLoopMode)
+        progressLink.preferredFramesPerSecond = 15
     }
     
     /**
     * Scrub Slider Animation
     */
-    public func updateProgress(displaylink: CADisplayLink) {
+    func updateProgress(displaylink: CADisplayLink) {
         if self.scrubSliderDrag { return }
         
         if let item = self.bibleReader.player?.currentItem {
@@ -76,11 +81,11 @@ class BibleReaderView : NSObject {
                 if item.duration != self.scrubSliderDuration {
                     self.scrubSliderDuration = item.duration
                     let duration = CMTimeGetSeconds(item.duration)
-                    self.scrubSlider?.maximumValue = Float(duration)
+                    self.scrubSlider.maximumValue = Float(duration)
                 }
             }
             let current = CMTimeGetSeconds(item.currentTime())
-            self.scrubSlider?.setValue(Float(current), animated: true)
+            self.scrubSlider.setValue(Float(current), animated: true)
         }
     }
     
@@ -88,21 +93,20 @@ class BibleReaderView : NSObject {
     * Scrub Slider Event Handler
     */
     func scrubSliderChanged(sender: UISlider, forEvent event: UIEvent) {
-        if let slider = self.scrubSlider {
-            print("scrub slider changed to \(slider.value)")
-            if let play = self.bibleReader.player {
-                if (slider.value < slider.maximumValue) {
-                    var current: Float
-                    if let verse = self.bibleReader.audioChapter {
-                        current = verse.findVerseByPosition(seconds: slider.value)
-                    } else {
-                        current = slider.value
-                    }
-                    let time: CMTime = CMTime(seconds: Double(current), preferredTimescale: CMTimeScale(1.0))
-                    play.seek(to: time)
+        let slider = self.scrubSlider
+        print("scrub slider changed to \(slider.value)")
+        if let play = self.bibleReader.player {
+            if (slider.value < slider.maximumValue) {
+                var current: Float
+                if let verse = self.bibleReader.audioChapter {
+                    current = verse.findVerseByPosition(seconds: slider.value)
                 } else {
-                    play.advanceToNextItem()
+                    current = slider.value
                 }
+                let time: CMTime = CMTime(seconds: Double(current), preferredTimescale: CMTimeScale(1.0))
+                play.seek(to: time)
+            } else {
+                play.advanceToNextItem()
             }
         }
     }

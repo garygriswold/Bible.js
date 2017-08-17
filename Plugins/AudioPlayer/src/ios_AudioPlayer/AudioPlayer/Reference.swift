@@ -14,12 +14,18 @@ class Reference {
     let sequence: String
     let book: String
     let chapter: String
-    //? let verse: Int
     
     init(sequence: String, book: String, chapter: String) {
         self.sequence = sequence
         self.book = book
         self.chapter = chapter
+    }
+    
+    init(string: String) {
+        let parts = string.components(separatedBy: "_")
+        self.sequence = parts[0]
+        self.book = (parts.count > 1) ? parts[1] : ""
+        self.chapter = (parts.count > 1) ? parts[2] : ""
     }
     
     deinit {
@@ -40,6 +46,13 @@ class Reference {
     
     func getS3Key(damId: String, fileType: String) -> String {
         return damId + "_" + self.sequence + "_" + self.book + "_" + self.chapter + "." + fileType
+    }
+    
+    func isEqual(reference: Reference) -> Bool {
+        if (self.sequence != reference.sequence) { return false }
+        if (self.book != reference.book) { return false }
+        if (self.chapter != reference.chapter) { return false }
+        return true
     }
     
     func toString() -> String {

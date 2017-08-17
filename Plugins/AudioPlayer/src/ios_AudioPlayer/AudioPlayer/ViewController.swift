@@ -33,7 +33,7 @@ class ViewController: UIViewController {
                     if let read = self.reader {
                         self.readerView = BibleReaderView(view: self.view, bibleReader: read)
                         if let vue = self.readerView {
-                            vue.createAudioPlayerUI(view: self.view)
+                            //vue.createAudioPlayerUI(view: self.view)
                             read.setView(view: vue)
                         
                             read.beginStreaming()
