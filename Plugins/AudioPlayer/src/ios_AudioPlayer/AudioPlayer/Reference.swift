@@ -25,7 +25,7 @@ class Reference {
         let parts = string.components(separatedBy: "_")
         self.sequence = parts[0]
         self.book = (parts.count > 1) ? parts[1] : ""
-        self.chapter = (parts.count > 1) ? parts[2] : ""
+        self.chapter = (parts.count > 2) ? parts[2] : ""
     }
     
     deinit {
@@ -49,9 +49,9 @@ class Reference {
     }
     
     func isEqual(reference: Reference) -> Bool {
-        if (self.sequence != reference.sequence) { return false }
-        if (self.book != reference.book) { return false }
         if (self.chapter != reference.chapter) { return false }
+        if (self.book != reference.book) { return false }
+        if (self.sequence != reference.sequence) { return false }
         return true
     }
     

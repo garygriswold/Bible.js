@@ -15,19 +15,18 @@ public class BibleReader : NSObject {
     let tocAudioBible: TOCAudioBible
     let s3Bucket: String
     let version: String
-    let firstReference: Reference
     let fileType: String
     var audioChapter: TOCAudioChapter?
     var view: BibleReaderView?
     var player: AVQueuePlayer?
     // Transient Variables
     var currReference: Reference
+    var nextReference: Reference?
     
     init(tocBible: TOCAudioBible, version: String, reference: Reference, fileType: String) {
         self.tocAudioBible = tocBible
         self.s3Bucket = "audio-us-west-2-shortsands"
         self.version = version
-        self.firstReference = reference
         self.fileType = fileType
         self.currReference = reference
         
@@ -48,7 +47,7 @@ public class BibleReader : NSObject {
     }
     
     public func beginStreaming() {
-        let s3Key = self.firstReference.getS3Key(damId: self.version, fileType: self.fileType)
+        let s3Key = self.currReference.getS3Key(damId: self.version, fileType: self.fileType)
         AwsS3.shared.preSignedUrlGET(
             s3Bucket: self.s3Bucket,
             s3Key: s3Key,
@@ -67,7 +66,7 @@ public class BibleReader : NSObject {
         var filePath: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
         filePath = filePath.appendingPathComponent("Library")
         filePath = filePath.appendingPathComponent("Caches")
-        let s3Key = self.firstReference.getS3Key(damId: self.version, fileType: self.fileType)
+        let s3Key = self.currReference.getS3Key(damId: self.version, fileType: self.fileType)
         filePath = filePath.appendingPathComponent(s3Key)
         print("FilePath \(filePath.absoluteString)")
         
@@ -89,7 +88,7 @@ public class BibleReader : NSObject {
         var filePath: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
         filePath = filePath.appendingPathComponent("Library")
         filePath = filePath.appendingPathComponent("Caches")
-        let s3Key = self.firstReference.getS3Key(damId: self.version, fileType: self.fileType)
+        let s3Key = self.currReference.getS3Key(damId: self.version, fileType: self.fileType)
         filePath = filePath.appendingPathComponent(s3Key)
         print("FilePath \(filePath.absoluteString)")
         self.initAudio(url: filePath)
@@ -113,17 +112,18 @@ public class BibleReader : NSObject {
         //self.controller.delegate = delegate
         
         self.play()
+        self.nextReference = self.prepareQueue(reference: self.currReference)
         
         self.view?.startPlay()
     }
     
     func backupSeek(state: MediaPlayState) -> CMTime {
-        if (state.mediaUrl == self.firstReference.toString()) {
+        if (state.mediaUrl == self.currReference.toString()) {
             // Do I need to backup to beginning of verse here
             // Or, did I do that when it was saved.
             return state.position
         } else {
-            MediaPlayState.update(url: self.firstReference.toString())
+            MediaPlayState.update(url: self.currReference.toString())
             return kCMTimeZero
         }
     }
@@ -189,19 +189,14 @@ public class BibleReader : NSObject {
     
     func playerItemDidPlayToEndTime(note:Notification) {
         print("\n** DID PLAY TO END \(String(describing: note.object))")
-        //self.dismiss(animated: false) // move this till after??
         //sendVideoAnalytics(isStart: false, isDone: true)
         
-        print("PLAYER ITEMS \(self.player?.items().count)")
-        for item in self.player!.items() {
-            let asset = item.asset
-            let urlAsset = asset as? AVURLAsset
-            print("ITEM \(urlAsset?.url)")
-        }
-        if self.player?.items().count == 0 {
-            MediaPlayState.clear()
+        if let curr = self.nextReference {
+            self.currReference = curr
+            self.nextReference = self.prepareQueue(reference: curr)
         } else {
-            MediaPlayState.update(url: self.currReference.toString())
+            MediaPlayState.clear()
+            // I think we stop the audio player now
         }
     }
     func playerItemFailedToPlayToEndTime(note:Notification) {
@@ -215,16 +210,6 @@ public class BibleReader : NSObject {
     }
     func playerItemNewAccessLogEntry(note:Notification) {
         //print("\n****** ACCESS LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.accessLog()))")
-        
-        let newReference = findBookChapter(noteObject: note.object)
-        if let ref = newReference {
-            self.currReference = ref
-            readVerseMetaData(reference: ref)
-            let nextReference = self.tocAudioBible.nextChapter(reference: ref)
-            if let next = nextReference {
-                self.addNextChapter(reference: next)
-            }
-        }
     }
     func playerItemTimeJumped(note:Notification) {
         //print("\n****** TIME JUMPED \(String(describing: note.object))")
@@ -239,17 +224,15 @@ public class BibleReader : NSObject {
         MediaPlayState.update(time: self.player?.currentTime())
     }
     
-    private func findBookChapter(noteObject: Any?) -> Reference? {
-        var items = [String]()
-        if let item = noteObject as? AVPlayerItem {
-            if let asset = item.asset as? AVURLAsset {
-                let url = asset.url.path
-                let parts = url.components(separatedBy: "?")
-                let pieces = parts[0].components(separatedBy: "/")
-                items = pieces.last?.components(separatedBy: ["_", "."]) ?? [String]()
-            }
+    private func prepareQueue(reference: Reference) -> Reference? {
+        self.readVerseMetaData(reference: reference)
+        MediaPlayState.update(url: reference.toString())
+        if let next = self.tocAudioBible.nextChapter(reference: reference) {
+            self.addNextChapter(reference: next)
+            return next
+        } else {
+            return nil
         }
-        return (items.count > 3) ? Reference(sequence: items[1], book: items[2], chapter: items[3]) : nil
     }
     
     private func readVerseMetaData(reference: Reference) {

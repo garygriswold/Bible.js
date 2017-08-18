@@ -15,7 +15,7 @@ class BibleReaderView : NSObject {
     let view: UIView
     let bibleReader: BibleReader
     var scrubSlider: UISlider
-    // Transient State Variable
+    // Transient State Variables
     var scrubSliderDuration: CMTime
     var scrubSliderDrag: Bool
     
