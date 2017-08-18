@@ -119,8 +119,6 @@ public class BibleReader : NSObject {
     
     func backupSeek(state: MediaPlayState) -> CMTime {
         if (state.mediaUrl == self.currReference.toString()) {
-            // Do I need to backup to beginning of verse here
-            // Or, did I do that when it was saved.
             return state.position
         } else {
             MediaPlayState.update(url: self.currReference.toString())
@@ -139,12 +137,12 @@ public class BibleReader : NSObject {
         print("Pause Status = \(String(describing: self.player?.status))")
         
         // This is here in lieu of a way to exit audio player, which is needed
-        MediaPlayState.update(time: self.player?.currentTime())
+        self.updateMediaPlayStateTime()
     }
     
     func stop() {
         // This is needed for an exit of the audio player. i.e. Done button
-        //self.view?.stopPlay()
+        self.view?.stopPlay()
     }
     
     func initNotifications() {
@@ -168,14 +166,14 @@ public class BibleReader : NSObject {
                                                selector: #selector(applicationWillResignActive(note:)),
                                                name: .UIApplicationWillResignActive,
                                                object: nil)
-        NotificationCenter.default.addObserver(self,
+        /*NotificationCenter.default.addObserver(self,
                                                selector: #selector(playerItemNewAccessLogEntry(note:)),
                                                name: .AVPlayerItemNewAccessLogEntry,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
+                                               object: nil)*/
+        /*NotificationCenter.default.addObserver(self,
                                                selector: #selector(playerItemTimeJumped(note:)),
                                                name: .AVPlayerItemTimeJumped,
-                                               object: nil)
+                                               object: nil)*/
     }
 
     func removeNotifications() {
@@ -185,6 +183,8 @@ public class BibleReader : NSObject {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemPlaybackStalled, object: nil)
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewErrorLogEntry, object: nil)
         NotificationCenter.default.removeObserver(self, name: .UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewAccessLogEntry, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemTimeJumped, object: nil)
     }
     
     func playerItemDidPlayToEndTime(note:Notification) {
@@ -196,7 +196,7 @@ public class BibleReader : NSObject {
             self.nextReference = self.prepareQueue(reference: curr)
         } else {
             MediaPlayState.clear()
-            // I think we stop the audio player now
+            self.stop()
         }
     }
     func playerItemFailedToPlayToEndTime(note:Notification) {
@@ -209,10 +209,10 @@ public class BibleReader : NSObject {
         print("\n****** ERROR LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.errorLog()))")
     }
     func playerItemNewAccessLogEntry(note:Notification) {
-        //print("\n****** ACCESS LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.accessLog()))")
+        print("\n****** ACCESS LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.accessLog()))")
     }
     func playerItemTimeJumped(note:Notification) {
-        //print("\n****** TIME JUMPED \(String(describing: note.object))")
+        print("\n****** TIME JUMPED \(String(describing: note.object))")
     }
     /**
      * This method is called when the Home button is clicked or double clicked.
@@ -221,7 +221,17 @@ public class BibleReader : NSObject {
     func applicationWillResignActive(note:Notification) {
         print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
         //sendVideoAnalytics(isStart: false, isDone: false)
-        MediaPlayState.update(time: self.player?.currentTime())
+        self.updateMediaPlayStateTime()
+    }
+    
+    private func updateMediaPlayStateTime() {
+        var result: CMTime = kCMTimeZero
+        if let currentTime = self.player?.currentTime() {
+            if let time: CMTime = self.audioChapter?.findVerseByPosition(time: currentTime) {
+                result = time
+            }
+        }
+        MediaPlayState.update(time: result)
     }
     
     private func prepareQueue(reference: Reference) -> Reference? {

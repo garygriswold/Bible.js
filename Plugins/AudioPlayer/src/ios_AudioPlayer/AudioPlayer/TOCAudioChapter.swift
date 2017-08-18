@@ -35,9 +35,10 @@ class TOCAudioChapter {
         }
     }
     
-    func findVerseByPosition(time: CMTime) -> Float {
+    func findVerseByPosition(time: CMTime) -> CMTime {
         let seconds = Float(CMTimeGetSeconds(time))
-        return findVerseByPosition(seconds: seconds)
+        let priorVerseSec: Float = findVerseByPosition(seconds: seconds)
+        return CMTime(seconds: Double(priorVerseSec), preferredTimescale: CMTimeScale(1))
     }
     
     func findVerseByPosition(seconds: Float) -> Float {
@@ -50,7 +51,7 @@ class TOCAudioChapter {
             }
             index += 1
         }
-        return self.versePositions.last!
+        return (self.versePositions.count > 0) ? self.versePositions.last! : 0.0
     }
     
     func toString() -> String {

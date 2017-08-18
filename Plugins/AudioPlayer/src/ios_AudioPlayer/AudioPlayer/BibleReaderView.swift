@@ -49,7 +49,7 @@ class BibleReaderView : NSObject {
         scrub.isContinuous = false
         scrub.minimumTrackTintColor = UIColor.green
         scrub.maximumTrackTintColor = UIColor.purple
-        scrub.value = 0
+        scrub.setValue(0.0, animated: false)
         self.view.addSubview(scrub)
         self.scrubSlider = scrub
     }
@@ -60,7 +60,7 @@ class BibleReaderView : NSObject {
     }
     
     func startPlay() {
-        self.scrubSlider.value = 0
+        self.scrubSlider.setValue(0.0, animated: false)
         self.scrubSlider.addTarget(self, action: #selector(scrubSliderChanged), for: .valueChanged)
         self.scrubSlider.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
@@ -68,6 +68,12 @@ class BibleReaderView : NSObject {
         let progressLink = CADisplayLink(target: self, selector: #selector(updateProgress))
         progressLink.add(to: .current, forMode: .defaultRunLoopMode)
         progressLink.preferredFramesPerSecond = 15
+    }
+    
+    func stopPlay() {
+        // remove event handlers ?
+        // remove items from view
+        // or just remove view
     }
     
     /**
