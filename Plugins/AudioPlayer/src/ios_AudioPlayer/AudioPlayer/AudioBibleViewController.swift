@@ -64,7 +64,10 @@ class AudioBibleViewController : UIViewController {
     
     // This is not being called!
     public func stopAudioPlayer() {
-        self.view.removeFromSuperview()
+        if self.view != nil {
+            self.view.removeFromSuperview()
+            self.view = nil
+        }
         //self.controller.dismiss(animated: true, completion: { print("VIEW DISMISS IS COMPLETE")})
         //self.removeFromParentViewController()
         if self.readerView != nil {

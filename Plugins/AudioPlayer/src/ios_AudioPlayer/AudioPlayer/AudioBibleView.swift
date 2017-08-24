@@ -70,7 +70,7 @@ class AudioBibleView : NSObject {
     }
     
     func startPlay() {
-        self.scrubSlider.setValue(0.0, animated: false)
+        self.updateProgress()
         self.scrubSlider.addTarget(self, action: #selector(scrubSliderChanged), for: .valueChanged)
         self.scrubSlider.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
@@ -92,7 +92,7 @@ class AudioBibleView : NSObject {
     /**
     * Scrub Slider Animation
     */
-    func updateProgress(displaylink: CADisplayLink) {
+    func updateProgress() {
         if self.scrubSliderDrag { return }
         
         if let item = self.audioBible.player?.currentItem {
