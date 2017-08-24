@@ -12,15 +12,17 @@ import UIKit
 
 class BibleReaderView : NSObject {
     
-    let view: UIView
+    var controller: UIViewController
+    var view: UIView
     let bibleReader: BibleReader
     var scrubSlider: UISlider
     // Transient State Variables
     var scrubSliderDuration: CMTime
     var scrubSliderDrag: Bool
     
-    init(view: UIView, bibleReader: BibleReader) {
-        self.view = view
+    init(controller: UIViewController, bibleReader: BibleReader) {
+        self.controller = controller
+        self.view = controller.view
         self.bibleReader = bibleReader
         self.scrubSliderDuration = kCMTimeZero
         self.scrubSliderDrag = false
@@ -29,7 +31,7 @@ class BibleReaderView : NSObject {
         let screenWidth = screenSize.width
         
         let playButton = UIButton(type: .custom)
-        playButton.frame = CGRect(x: screenWidth/3-25, y: 100, width: 50, height: 50)
+        playButton.frame = CGRect(x: screenWidth/4-25, y: 100, width: 50, height: 50)
         playButton.layer.cornerRadius = 0.5 * playButton.bounds.size.width
         playButton.backgroundColor = .green
         playButton.setTitle("Play", for: .normal)
@@ -37,12 +39,20 @@ class BibleReaderView : NSObject {
         self.view.addSubview(playButton)
         
         let pauseButton = UIButton(type: .custom)
-        pauseButton.frame = CGRect(x: screenWidth*2/3-25, y: 100, width: 50, height: 50)
+        pauseButton.frame = CGRect(x: screenWidth*2/4-25, y: 100, width: 50, height: 50)
         pauseButton.layer.cornerRadius = 0.5 * pauseButton.bounds.size.width
-        pauseButton.backgroundColor = .red
+        pauseButton.backgroundColor = .orange
         pauseButton.setTitle("Pause", for: .normal)
         pauseButton.addTarget(self.bibleReader, action: #selector(self.bibleReader.pause), for: .touchUpInside)
         self.view.addSubview(pauseButton)
+        
+        let stopButton = UIButton(type: .custom)
+        stopButton.frame = CGRect(x: screenWidth*3/4-25, y: 100, width: 50, height: 50)
+        stopButton.layer.cornerRadius = 0.5 * pauseButton.bounds.size.width
+        stopButton.backgroundColor = .red
+        stopButton.setTitle("Stop", for: .normal)
+        stopButton.addTarget(self.bibleReader, action: #selector(self.bibleReader.stop), for: .touchUpInside)
+        self.view.addSubview(stopButton)
         
         let scrubRect = CGRect(x: screenWidth * 0.05, y: 200, width: screenWidth * 0.9, height: 100)
         let scrub = UISlider(frame: scrubRect)
@@ -71,6 +81,9 @@ class BibleReaderView : NSObject {
     }
     
     func stopPlay() {
+//       self.controller.stopAudioPlayer()
+       // self.view = nil
+       // self.controller = nil
         // remove event handlers ?
         // remove items from view
         // or just remove view

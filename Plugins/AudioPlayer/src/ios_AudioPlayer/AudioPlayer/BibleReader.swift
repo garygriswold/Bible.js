@@ -17,7 +17,7 @@ public class BibleReader : NSObject {
     let version: String
     let fileType: String
     var audioChapter: TOCAudioChapter?
-    var view: BibleReaderView?
+    weak var view: BibleReaderView?
     var player: AVQueuePlayer?
     // Transient Variables
     var currReference: Reference
@@ -141,7 +141,10 @@ public class BibleReader : NSObject {
     }
     
     func stop() {
-        // This is needed for an exit of the audio player. i.e. Done button
+        if self.player != nil {
+            self.updateMediaPlayStateTime()
+            self.player = nil
+        }
         self.view?.stopPlay()
     }
     
