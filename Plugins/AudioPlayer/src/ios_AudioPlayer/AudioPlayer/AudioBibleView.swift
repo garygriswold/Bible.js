@@ -12,7 +12,7 @@ import UIKit
 
 class AudioBibleView : NSObject {
     
-    var controller: UIViewController
+    var controller: AudioBibleViewController
     var view: UIView
     let audioBible: AudioBible
     var scrubSlider: UISlider
@@ -20,7 +20,7 @@ class AudioBibleView : NSObject {
     var scrubSliderDuration: CMTime
     var scrubSliderDrag: Bool
     
-    init(controller: UIViewController, audioBible: AudioBible) {
+    init(controller: AudioBibleViewController, audioBible: AudioBible) {
         self.controller = controller
         self.view = controller.view
         self.audioBible = audioBible
@@ -65,7 +65,7 @@ class AudioBibleView : NSObject {
     }
     
     deinit {
-        print("BibleReaderView is deallocated")
+        print("***** Deinit AudioBibleView *****")
         // Do I need to remove listeners from controls here
     }
     
@@ -81,7 +81,7 @@ class AudioBibleView : NSObject {
     }
     
     func stopPlay() {
-//       self.controller.stopAudioPlayer()
+       self.controller.stopAudioPlayer()
        // self.view = nil
        // self.controller = nil
         // remove event handlers ?

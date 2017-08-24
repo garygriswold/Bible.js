@@ -39,7 +39,7 @@ public class AudioBible : NSObject {
             self.player = nil
         }
         self.removeNotifications()
-        print("Deinit BibleReader")
+        print("***** Deinit AudioBible *****")
     }
     
     func setView(view: AudioBibleView) {
@@ -142,10 +142,11 @@ public class AudioBible : NSObject {
     
     func stop() {
         if self.player != nil {
-            self.updateMediaPlayStateTime()
             self.player = nil
+            self.updateMediaPlayStateTime()
         }
         self.view?.stopPlay()
+
     }
     
     func initNotifications() {
