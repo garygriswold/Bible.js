@@ -143,6 +143,7 @@ public class AudioBible : NSObject {
     func stop() {
         if self.player != nil {
             self.updateMediaPlayStateTime()
+            self.player!.removeAllItems()
             self.player = nil
         }
         self.view?.stopPlay()

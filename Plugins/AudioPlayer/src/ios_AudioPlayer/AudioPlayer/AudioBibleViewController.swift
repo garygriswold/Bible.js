@@ -12,8 +12,6 @@ import AWS
 
 class AudioBibleViewController : UIViewController {
     
-    //var controller = UIViewController()
-    //var myView = UIView()
     var reader: AudioBible?
     var readerView: AudioBibleView?
     
@@ -27,6 +25,7 @@ class AudioBibleViewController : UIViewController {
         // are formsheet dimensions required?
         //self.view.addSubview(self.controller.view)
         //self.view.addSubview(myView)
+        self.view.backgroundColor = .blue
         
         AwsS3.region = "us-west-2"
         let metaData = MetaDataReader()
@@ -62,19 +61,14 @@ class AudioBibleViewController : UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    // This is not being called!
+    // NOTE: I have never seen the Dismissed controller in output
     public func stopAudioPlayer() {
+        self.dismiss(animated: true, completion: { print("Dismissed controller")})
+        //self.removeFromParentViewController()
         if self.view != nil {
             self.view.removeFromSuperview()
             self.view = nil
         }
-        //self.controller.dismiss(animated: true, completion: { print("VIEW DISMISS IS COMPLETE")})
-        //self.removeFromParentViewController()
-        if self.readerView != nil {
-            self.readerView = nil
-        }
-        if self.reader != nil {
-            self.reader = nil
-        }
     }
 }
+
