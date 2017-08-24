@@ -10,20 +10,20 @@ import Foundation
 import AVFoundation
 import UIKit
 
-class BibleReaderView : NSObject {
+class AudioBibleView : NSObject {
     
     var controller: UIViewController
     var view: UIView
-    let bibleReader: BibleReader
+    let audioBible: AudioBible
     var scrubSlider: UISlider
     // Transient State Variables
     var scrubSliderDuration: CMTime
     var scrubSliderDrag: Bool
     
-    init(controller: UIViewController, bibleReader: BibleReader) {
+    init(controller: UIViewController, audioBible: AudioBible) {
         self.controller = controller
         self.view = controller.view
-        self.bibleReader = bibleReader
+        self.audioBible = audioBible
         self.scrubSliderDuration = kCMTimeZero
         self.scrubSliderDrag = false
 
@@ -35,7 +35,7 @@ class BibleReaderView : NSObject {
         playButton.layer.cornerRadius = 0.5 * playButton.bounds.size.width
         playButton.backgroundColor = .green
         playButton.setTitle("Play", for: .normal)
-        playButton.addTarget(self.bibleReader, action: #selector(self.bibleReader.play), for: .touchUpInside)
+        playButton.addTarget(self.audioBible, action: #selector(self.audioBible.play), for: .touchUpInside)
         self.view.addSubview(playButton)
         
         let pauseButton = UIButton(type: .custom)
@@ -43,7 +43,7 @@ class BibleReaderView : NSObject {
         pauseButton.layer.cornerRadius = 0.5 * pauseButton.bounds.size.width
         pauseButton.backgroundColor = .orange
         pauseButton.setTitle("Pause", for: .normal)
-        pauseButton.addTarget(self.bibleReader, action: #selector(self.bibleReader.pause), for: .touchUpInside)
+        pauseButton.addTarget(self.audioBible, action: #selector(self.audioBible.pause), for: .touchUpInside)
         self.view.addSubview(pauseButton)
         
         let stopButton = UIButton(type: .custom)
@@ -51,7 +51,7 @@ class BibleReaderView : NSObject {
         stopButton.layer.cornerRadius = 0.5 * pauseButton.bounds.size.width
         stopButton.backgroundColor = .red
         stopButton.setTitle("Stop", for: .normal)
-        stopButton.addTarget(self.bibleReader, action: #selector(self.bibleReader.stop), for: .touchUpInside)
+        stopButton.addTarget(self.audioBible, action: #selector(self.audioBible.stop), for: .touchUpInside)
         self.view.addSubview(stopButton)
         
         let scrubRect = CGRect(x: screenWidth * 0.05, y: 200, width: screenWidth * 0.9, height: 100)
@@ -95,7 +95,7 @@ class BibleReaderView : NSObject {
     func updateProgress(displaylink: CADisplayLink) {
         if self.scrubSliderDrag { return }
         
-        if let item = self.bibleReader.player?.currentItem {
+        if let item = self.audioBible.player?.currentItem {
             if CMTIME_IS_NUMERIC(item.duration) {
                 if item.duration != self.scrubSliderDuration {
                     self.scrubSliderDuration = item.duration
@@ -114,10 +114,10 @@ class BibleReaderView : NSObject {
     func scrubSliderChanged(sender: UISlider, forEvent event: UIEvent) {
         let slider = self.scrubSlider
         print("scrub slider changed to \(slider.value)")
-        if let play = self.bibleReader.player {
+        if let play = self.audioBible.player {
             if (slider.value < slider.maximumValue) {
                 var current: Float
-                if let verse = self.bibleReader.audioChapter {
+                if let verse = self.audioBible.audioChapter {
                     current = verse.findVerseByPosition(seconds: slider.value)
                 } else {
                     current = slider.value

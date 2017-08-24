@@ -13,8 +13,8 @@ class ViewController: UIViewController {
     
     //var controller = UIViewController()
     //var myView = UIView()
-    var reader: BibleReader?
-    var readerView: BibleReaderView?
+    var reader: AudioBible?
+    var readerView: AudioBibleView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,9 +39,9 @@ class ViewController: UIViewController {
                 if let book = metaBook {
 
                     let reference = Reference(sequence: book.sequence, book: book.bookId, chapter: "001")
-                    self.reader = BibleReader(tocBible: tocBible, version: "DEMO", reference: reference, fileType: "mp3")
+                    self.reader = AudioBible(tocBible: tocBible, version: "DEMO", reference: reference, fileType: "mp3")
                     if let read = self.reader {
-                        self.readerView = BibleReaderView(controller: self, bibleReader: read)
+                        self.readerView = AudioBibleView(controller: self, audioBible: read)
                         if let vue = self.readerView {
                             //vue.createAudioPlayerUI(view: self.view)
                             read.setView(view: vue)

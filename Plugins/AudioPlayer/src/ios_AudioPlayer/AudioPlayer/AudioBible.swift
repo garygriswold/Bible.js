@@ -10,14 +10,14 @@ import Foundation
 import AVFoundation
 import AWS
 
-public class BibleReader : NSObject {
+public class AudioBible : NSObject {
     
     let tocAudioBible: TOCAudioBible
     let s3Bucket: String
     let version: String
     let fileType: String
     var audioChapter: TOCAudioChapter?
-    weak var view: BibleReaderView?
+    weak var view: AudioBibleView?
     var player: AVQueuePlayer?
     // Transient Variables
     var currReference: Reference
@@ -42,7 +42,7 @@ public class BibleReader : NSObject {
         print("Deinit BibleReader")
     }
     
-    func setView(view: BibleReaderView) {
+    func setView(view: AudioBibleView) {
         self.view = view
     }
     
