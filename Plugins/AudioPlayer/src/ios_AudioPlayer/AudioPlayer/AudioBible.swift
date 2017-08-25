@@ -35,10 +35,6 @@ public class AudioBible : NSObject {
     }
     
     deinit {
-        if self.player != nil {
-            self.player = nil
-        }
-        self.removeNotifications()
         print("***** Deinit AudioBible *****")
     }
     
@@ -135,19 +131,16 @@ public class AudioBible : NSObject {
     func pause() {
         self.player?.pause()
         print("Pause Status = \(String(describing: self.player?.status))")
-        
-        // This is here in lieu of a way to exit audio player, which is needed
-        self.updateMediaPlayStateTime()
     }
     
     func stop() {
+        self.removeNotifications()
         if self.player != nil {
             self.updateMediaPlayStateTime()
             self.player!.removeAllItems()
             self.player = nil
         }
         self.view?.stopPlay()
-
     }
     
     func initNotifications() {

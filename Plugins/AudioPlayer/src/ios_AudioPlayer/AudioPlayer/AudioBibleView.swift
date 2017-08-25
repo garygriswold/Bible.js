@@ -15,7 +15,10 @@ class AudioBibleView : NSObject {
     var controller: AudioBibleViewController
     var view: UIView
     let audioBible: AudioBible
-    var scrubSlider: UISlider
+    let playButton: UIButton
+    let pauseButton: UIButton
+    let stopButton: UIButton
+    let scrubSlider: UISlider
     // Transient State Variables
     var scrubSliderDuration: CMTime
     var scrubSliderDrag: Bool
@@ -30,35 +33,42 @@ class AudioBibleView : NSObject {
         let screenSize = UIScreen.main.bounds
         let screenWidth = screenSize.width
         
-        let playButton = UIButton(type: .custom)
-        playButton.frame = CGRect(x: screenWidth/4-25, y: 100, width: 50, height: 50)
-        playButton.layer.cornerRadius = 0.5 * playButton.bounds.size.width
-        playButton.backgroundColor = .green
-        playButton.setTitle("Play", for: .normal)
-        playButton.addTarget(self.audioBible, action: #selector(self.audioBible.play), for: .touchUpInside)
-        self.view.addSubview(playButton)
+        let playBtn = UIButton(type: .custom)
+        playBtn.frame = CGRect(x: screenWidth/4-25, y: 100, width: 50, height: 50)
+        playBtn.layer.cornerRadius = 0.5 * playBtn.bounds.size.width
+        playBtn.backgroundColor = .green
+        playBtn.alpha = 0.6
+        playBtn.setTitle("Play", for: .normal)
+        playBtn.addTarget(self.audioBible, action: #selector(self.audioBible.play), for: .touchUpInside)
+        self.view.addSubview(playBtn)
+        self.playButton = playBtn
         
-        let pauseButton = UIButton(type: .custom)
-        pauseButton.frame = CGRect(x: screenWidth*2/4-25, y: 100, width: 50, height: 50)
-        pauseButton.layer.cornerRadius = 0.5 * pauseButton.bounds.size.width
-        pauseButton.backgroundColor = .orange
-        pauseButton.setTitle("Pause", for: .normal)
-        pauseButton.addTarget(self.audioBible, action: #selector(self.audioBible.pause), for: .touchUpInside)
-        self.view.addSubview(pauseButton)
+        let pauseBtn = UIButton(type: .custom)
+        pauseBtn.frame = CGRect(x: screenWidth*2/4-25, y: 100, width: 50, height: 50)
+        pauseBtn.layer.cornerRadius = 0.5 * pauseBtn.bounds.size.width
+        pauseBtn.backgroundColor = .orange
+        pauseBtn.alpha = 0.6
+        pauseBtn.setTitle("Pause", for: .normal)
+        pauseBtn.addTarget(self.audioBible, action: #selector(self.audioBible.pause), for: .touchUpInside)
+        self.view.addSubview(pauseBtn)
+        self.pauseButton = pauseBtn
         
-        let stopButton = UIButton(type: .custom)
-        stopButton.frame = CGRect(x: screenWidth*3/4-25, y: 100, width: 50, height: 50)
-        stopButton.layer.cornerRadius = 0.5 * pauseButton.bounds.size.width
-        stopButton.backgroundColor = .red
-        stopButton.setTitle("Stop", for: .normal)
-        stopButton.addTarget(self.audioBible, action: #selector(self.audioBible.stop), for: .touchUpInside)
-        self.view.addSubview(stopButton)
+        let stopBtn = UIButton(type: .custom)
+        stopBtn.frame = CGRect(x: screenWidth*3/4-25, y: 100, width: 50, height: 50)
+        stopBtn.layer.cornerRadius = 0.5 * stopBtn.bounds.size.width
+        stopBtn.backgroundColor = .red
+        stopBtn.alpha = 0.6
+        stopBtn.setTitle("Stop", for: .normal)
+        stopBtn.addTarget(self.audioBible, action: #selector(self.audioBible.stop), for: .touchUpInside)
+        self.view.addSubview(stopBtn)
+        self.stopButton = stopBtn
         
         let scrubRect = CGRect(x: screenWidth * 0.05, y: 200, width: screenWidth * 0.9, height: 100)
         let scrub = UISlider(frame: scrubRect)
         scrub.isContinuous = false
         scrub.minimumTrackTintColor = UIColor.green
         scrub.maximumTrackTintColor = UIColor.purple
+        scrub.alpha = 0.6
         scrub.setValue(0.0, animated: false)
         self.view.addSubview(scrub)
         self.scrubSlider = scrub
@@ -81,12 +91,10 @@ class AudioBibleView : NSObject {
     }
     
     func stopPlay() {
-       self.controller.stopAudioPlayer()
-       // self.view = nil
-       // self.controller = nil
-        // remove event handlers ?
-        // remove items from view
-        // or just remove view
+        self.playButton.removeFromSuperview()
+        self.pauseButton.removeFromSuperview()
+        self.stopButton.removeFromSuperview()
+        self.scrubSlider.removeFromSuperview()
     }
     
     /**

@@ -15,17 +15,16 @@ class AudioBibleViewController : UIViewController {
     var reader: AudioBible?
     var readerView: AudioBibleView?
     
+    /**
+    * This must be set to be the WKWebView
+    */
+    func setView(view: UIView) {
+        self.view = view
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        //self.controller.modalPresentationStyle = UIModalPresentationStyle.fullScreen // .formSheet
-        //self.definesPresentationContext = true
-        //self.modalTransitionStyle = UIModalTransitionStyle.coverVertical // this is redundant, which is needed
-        //self.controller.modalTransitionStyle = UIModalTransitionStyle.coverVertical // I think the parent is controlling
-        //self.present(self.controller, animated: true, completion: { print("VIEW COMPLETION")} ) // what else in completion
-        // are formsheet dimensions required?
-        //self.view.addSubview(self.controller.view)
-        //self.view.addSubview(myView)
-        self.view.backgroundColor = .blue
+        self.view.backgroundColor = .blue // This is for Testing
         
         AwsS3.region = "us-west-2"
         let metaData = MetaDataReader()
@@ -59,16 +58,6 @@ class AudioBibleViewController : UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    // NOTE: I have never seen the Dismissed controller in output
-    public func stopAudioPlayer() {
-        self.dismiss(animated: true, completion: { print("Dismissed controller")})
-        //self.removeFromParentViewController()
-        if self.view != nil {
-            self.view.removeFromSuperview()
-            self.view = nil
-        }
     }
 }
 
