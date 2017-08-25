@@ -87,11 +87,15 @@ class AudioBibleView : NSObject {
     }
     
     func stop() {
+        self.audioBible.updateMediaPlayStateTime()
         self.audioBible.stop()
     }
     
     func startPlay() {
-        //self.updateProgress()
+        
+        let progressLink = CADisplayLink(target: self, selector: #selector(updateProgress))
+        progressLink.add(to: .current, forMode: .defaultRunLoopMode)
+        progressLink.preferredFramesPerSecond = 15
         
         self.playButton.addTarget(self, action: #selector(self.play), for: .touchUpInside)
         self.pauseButton.addTarget(self, action: #selector(self.pause), for: .touchUpInside)
@@ -99,10 +103,6 @@ class AudioBibleView : NSObject {
         self.scrubSlider.addTarget(self, action: #selector(scrubSliderChanged), for: .valueChanged)
         self.scrubSlider.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
-        
-        let progressLink = CADisplayLink(target: self, selector: #selector(updateProgress))
-        progressLink.add(to: .current, forMode: .defaultRunLoopMode)
-        progressLink.preferredFramesPerSecond = 15
     }
     
     func stopPlay() {

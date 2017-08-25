@@ -134,7 +134,6 @@ public class AudioBible : NSObject {
     func stop() {
         self.removeNotifications()
         if self.player != nil {
-            self.updateMediaPlayStateTime()
             self.player!.removeAllItems()
             self.player = nil
         }
@@ -218,9 +217,10 @@ public class AudioBible : NSObject {
         print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
         //sendVideoAnalytics(isStart: false, isDone: false)
         self.updateMediaPlayStateTime()
+        self.stop()
     }
     
-    private func updateMediaPlayStateTime() {
+    func updateMediaPlayStateTime() {
         var result: CMTime = kCMTimeZero
         if let currentTime = self.player?.currentTime() {
             if let time: CMTime = self.audioChapter?.findVerseByPosition(time: currentTime) {
