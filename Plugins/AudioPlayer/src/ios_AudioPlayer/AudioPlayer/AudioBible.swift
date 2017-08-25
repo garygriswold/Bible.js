@@ -179,8 +179,8 @@ public class AudioBible : NSObject {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemPlaybackStalled, object: nil)
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewErrorLogEntry, object: nil)
         NotificationCenter.default.removeObserver(self, name: .UIApplicationWillResignActive, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewAccessLogEntry, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemTimeJumped, object: nil)
+        //NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewAccessLogEntry, object: nil)
+        //NotificationCenter.default.removeObserver(self, name: .AVPlayerItemTimeJumped, object: nil)
     }
     
     func playerItemDidPlayToEndTime(note:Notification) {

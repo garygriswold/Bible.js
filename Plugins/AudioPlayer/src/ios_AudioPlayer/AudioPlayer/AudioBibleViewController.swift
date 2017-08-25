@@ -10,21 +10,15 @@ import Foundation
 import UIKit
 import AWS
 
-class AudioBibleViewController : UIViewController {
+class AudioBibleViewController {
     
-    var reader: AudioBible?
     var readerView: AudioBibleView?
     
     /**
     * This must be set to be the WKWebView
     */
-    func setView(view: UIView) {
-        self.view = view
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = .blue // This is for Testing
+    func present(view: UIView) {
+        view.backgroundColor = .blue // This is for Testing
         
         AwsS3.region = "us-west-2"
         let metaData = MetaDataReader()
@@ -38,23 +32,16 @@ class AudioBibleViewController : UIViewController {
                 if let book = metaBook {
                     
                     let reference = Reference(sequence: book.sequence, book: book.bookId, chapter: "001")
-                    self.reader = AudioBible(controller: self, tocBible: tocBible,
+                    let reader = AudioBible(controller: self, tocBible: tocBible,
                                              version: "DEMO", reference: reference, fileType: "mp3")
-                    if let read = self.reader {
-                        self.readerView = AudioBibleView(controller: self, audioBible: read)
+                    self.readerView = AudioBibleView(view: view, audioBible: reader)
                             
-                        read.beginStreaming()
-                        //read.beginDownload()
-                        //read.beginLocal()
-                    }
+                    reader.beginStreaming()
+                    //reader.beginDownload()
+                    //reader.beginLocal()
                 }
             }
         })
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func playHasStarted() {

@@ -12,8 +12,7 @@ import UIKit
 
 class AudioBibleView : NSObject {
     
-    var controller: AudioBibleViewController
-    var view: UIView
+    let view: UIView
     let audioBible: AudioBible
     let playButton: UIButton
     let pauseButton: UIButton
@@ -23,9 +22,8 @@ class AudioBibleView : NSObject {
     var scrubSliderDuration: CMTime
     var scrubSliderDrag: Bool
     
-    init(controller: AudioBibleViewController, audioBible: AudioBible) {
-        self.controller = controller
-        self.view = controller.view
+    init(view: UIView, audioBible: AudioBible) {
+        self.view = view
         self.audioBible = audioBible
         self.scrubSliderDuration = kCMTimeZero
         self.scrubSliderDrag = false

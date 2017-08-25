@@ -10,9 +10,12 @@ import UIKit
 import AWS
 
 class ViewController: UIViewController {
+    
+    let audioController = AudioBibleViewController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.audioController.present(view: self.view)
     }
 
     override func didReceiveMemoryWarning() {
