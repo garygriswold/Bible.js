@@ -32,32 +32,29 @@ class AudioBibleView : NSObject {
         let screenWidth = screenSize.width
         
         let playBtn = UIButton(type: .custom)
-        playBtn.frame = CGRect(x: screenWidth/4-25, y: 100, width: 50, height: 50)
+        playBtn.frame = CGRect(x: screenWidth/3-25, y: 100, width: 50, height: 50)
         playBtn.layer.cornerRadius = 0.5 * playBtn.bounds.size.width
         playBtn.backgroundColor = .green
         playBtn.alpha = 0.6
         playBtn.setTitle("Play", for: .normal)
-        playBtn.addTarget(self.audioBible, action: #selector(self.audioBible.play), for: .touchUpInside)
-        self.view.addSubview(playBtn)
+        //self.view.addSubview(playBtn)
         self.playButton = playBtn
         
         let pauseBtn = UIButton(type: .custom)
-        pauseBtn.frame = CGRect(x: screenWidth*2/4-25, y: 100, width: 50, height: 50)
+        pauseBtn.frame = CGRect(x: screenWidth/3-25, y: 100, width: 50, height: 50)
         pauseBtn.layer.cornerRadius = 0.5 * pauseBtn.bounds.size.width
         pauseBtn.backgroundColor = .orange
         pauseBtn.alpha = 0.6
         pauseBtn.setTitle("Pause", for: .normal)
-        pauseBtn.addTarget(self.audioBible, action: #selector(self.audioBible.pause), for: .touchUpInside)
         self.view.addSubview(pauseBtn)
         self.pauseButton = pauseBtn
         
         let stopBtn = UIButton(type: .custom)
-        stopBtn.frame = CGRect(x: screenWidth*3/4-25, y: 100, width: 50, height: 50)
+        stopBtn.frame = CGRect(x: screenWidth*2/3-25, y: 100, width: 50, height: 50)
         stopBtn.layer.cornerRadius = 0.5 * stopBtn.bounds.size.width
         stopBtn.backgroundColor = .red
         stopBtn.alpha = 0.6
         stopBtn.setTitle("Stop", for: .normal)
-        stopBtn.addTarget(self.audioBible, action: #selector(self.audioBible.stop), for: .touchUpInside)
         self.view.addSubview(stopBtn)
         self.stopButton = stopBtn
         
@@ -77,8 +74,28 @@ class AudioBibleView : NSObject {
         // Do I need to remove listeners from controls here
     }
     
+    func play() {
+        self.audioBible.play()
+        self.playButton.removeFromSuperview()
+        self.view.addSubview(self.pauseButton)
+    }
+    
+    func pause() {
+        self.audioBible.pause()
+        self.pauseButton.removeFromSuperview()
+        self.view.addSubview(self.playButton)
+    }
+    
+    func stop() {
+        self.audioBible.stop()
+    }
+    
     func startPlay() {
-        self.updateProgress()
+        //self.updateProgress()
+        
+        self.playButton.addTarget(self, action: #selector(self.play), for: .touchUpInside)
+        self.pauseButton.addTarget(self, action: #selector(self.pause), for: .touchUpInside)
+        self.stopButton.addTarget(self, action: #selector(self.stop), for: .touchUpInside)
         self.scrubSlider.addTarget(self, action: #selector(scrubSliderChanged), for: .valueChanged)
         self.scrubSlider.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
