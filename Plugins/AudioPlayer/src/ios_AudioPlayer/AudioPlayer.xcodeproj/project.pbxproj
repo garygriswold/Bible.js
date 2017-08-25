@@ -18,7 +18,7 @@
 		E42B3F6F1F32426B00A51430 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E42B3F6E1F32426B00A51430 /* AWS.framework */; };
 		E42B3F711F32428000A51430 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E42B3F701F32428000A51430 /* AWSCore.framework */; };
 		E43D50BD1F44BA8F00B38A7C /* MediaPlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43D50BC1F44BA8F00B38A7C /* MediaPlayState.swift */; };
-		E4826D1A1F4F21140031FFE0 /* AudioBibleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4826D191F4F21140031FFE0 /* AudioBibleViewController.swift */; };
+		E4826D1A1F4F21140031FFE0 /* AudioBibleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4826D191F4F21140031FFE0 /* AudioBibleController.swift */; };
 		E4A32CCF1F2FB310009AECFB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A32CCE1F2FB310009AECFB /* AppDelegate.swift */; };
 		E4A32CD11F2FB310009AECFB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A32CD01F2FB310009AECFB /* ViewController.swift */; };
 		E4A32CD41F2FB310009AECFB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4A32CD21F2FB310009AECFB /* Main.storyboard */; };
@@ -56,7 +56,7 @@
 		E42B3F6E1F32426B00A51430 /* AWS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWS.framework; sourceTree = "<group>"; };
 		E42B3F701F32428000A51430 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
 		E43D50BC1F44BA8F00B38A7C /* MediaPlayState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPlayState.swift; sourceTree = "<group>"; };
-		E4826D191F4F21140031FFE0 /* AudioBibleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioBibleViewController.swift; sourceTree = "<group>"; };
+		E4826D191F4F21140031FFE0 /* AudioBibleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioBibleController.swift; sourceTree = "<group>"; };
 		E4A32CCB1F2FB310009AECFB /* AudioPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4A32CCE1F2FB310009AECFB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4A32CD01F2FB310009AECFB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -110,7 +110,7 @@
 				E4A32CE21F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 */,
 				E4148DC81F42828D007D5870 /* Reference.swift */,
 				E4A32CD01F2FB310009AECFB /* ViewController.swift */,
-				E4826D191F4F21140031FFE0 /* AudioBibleViewController.swift */,
+				E4826D191F4F21140031FFE0 /* AudioBibleController.swift */,
 				E4A32CE01F2FB420009AECFB /* AudioBible.swift */,
 				E41E5EC31F38FB8700B18D3F /* AudioBibleView.swift */,
 				E43D50BC1F44BA8F00B38A7C /* MediaPlayState.swift */,
@@ -203,7 +203,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4826D1A1F4F21140031FFE0 /* AudioBibleViewController.swift in Sources */,
+				E4826D1A1F4F21140031FFE0 /* AudioBibleController.swift in Sources */,
 				E41E5EC41F38FB8700B18D3F /* AudioBibleView.swift in Sources */,
 				E4A32CD11F2FB310009AECFB /* ViewController.swift in Sources */,
 				E4148DC71F3E859B007D5870 /* TOCAudioChapter.swift in Sources */,

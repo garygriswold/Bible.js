@@ -7,11 +7,10 @@
 //
 
 import UIKit
-import AWS
 
 class ViewController: UIViewController {
     
-    let audioController = AudioBibleViewController()
+    let audioController = AudioBibleController()
 
     override func viewDidLoad() {
         super.viewDidLoad()

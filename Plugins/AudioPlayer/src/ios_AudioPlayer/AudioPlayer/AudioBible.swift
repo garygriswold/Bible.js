@@ -12,7 +12,7 @@ import AWS
 
 public class AudioBible : NSObject {
     
-    let controller: AudioBibleViewController
+    let controller: AudioBibleController
     let tocAudioBible: TOCAudioBible
     let s3Bucket: String
     let version: String
@@ -23,7 +23,7 @@ public class AudioBible : NSObject {
     var currReference: Reference
     var nextReference: Reference?
     
-    init(controller: AudioBibleViewController, tocBible: TOCAudioBible,
+    init(controller: AudioBibleController, tocBible: TOCAudioBible,
          version: String, reference: Reference, fileType: String) {
         self.controller = controller
         self.tocAudioBible = tocBible

@@ -7,10 +7,9 @@
 //
 
 import Foundation
-import UIKit
 import AWS
 
-class AudioBibleViewController {
+class AudioBibleController {
     
     var readerView: AudioBibleView?
     
