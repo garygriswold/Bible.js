@@ -12,18 +12,20 @@ import AWS
 
 public class AudioBible : NSObject {
     
+    let controller: AudioBibleViewController
     let tocAudioBible: TOCAudioBible
     let s3Bucket: String
     let version: String
     let fileType: String
     var audioChapter: TOCAudioChapter?
-    weak var view: AudioBibleView?
     var player: AVQueuePlayer?
     // Transient Variables
     var currReference: Reference
     var nextReference: Reference?
     
-    init(tocBible: TOCAudioBible, version: String, reference: Reference, fileType: String) {
+    init(controller: AudioBibleViewController, tocBible: TOCAudioBible,
+         version: String, reference: Reference, fileType: String) {
+        self.controller = controller
         self.tocAudioBible = tocBible
         self.s3Bucket = "audio-us-west-2-shortsands"
         self.version = version
@@ -36,10 +38,6 @@ public class AudioBible : NSObject {
     
     deinit {
         print("***** Deinit AudioBible *****")
-    }
-    
-    func setView(view: AudioBibleView) {
-        self.view = view
     }
     
     public func beginStreaming() {
@@ -110,7 +108,7 @@ public class AudioBible : NSObject {
         self.play()
         self.nextReference = self.prepareQueue(reference: self.currReference)
         
-        self.view?.startPlay()
+        self.controller.playHasStarted()
     }
     
     func backupSeek(state: MediaPlayState) -> CMTime {
@@ -140,7 +138,7 @@ public class AudioBible : NSObject {
             self.player!.removeAllItems()
             self.player = nil
         }
-        self.view?.stopPlay()
+        self.controller.playHasStopped()
     }
     
     func initNotifications() {

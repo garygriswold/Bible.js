@@ -38,17 +38,14 @@ class AudioBibleViewController : UIViewController {
                 if let book = metaBook {
                     
                     let reference = Reference(sequence: book.sequence, book: book.bookId, chapter: "001")
-                    self.reader = AudioBible(tocBible: tocBible, version: "DEMO", reference: reference, fileType: "mp3")
+                    self.reader = AudioBible(controller: self, tocBible: tocBible,
+                                             version: "DEMO", reference: reference, fileType: "mp3")
                     if let read = self.reader {
                         self.readerView = AudioBibleView(controller: self, audioBible: read)
-                        if let vue = self.readerView {
-                            //vue.createAudioPlayerUI(view: self.view)
-                            read.setView(view: vue)
                             
-                            read.beginStreaming()
-                            //read.beginDownload()
-                            //read.beginLocal()
-                        }
+                        read.beginStreaming()
+                        //read.beginDownload()
+                        //read.beginLocal()
                     }
                 }
             }
@@ -58,6 +55,13 @@ class AudioBibleViewController : UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func playHasStarted() {
+        self.readerView?.startPlay()
+    }
+    func playHasStopped() {
+        self.readerView?.stopPlay()
     }
 }
 
