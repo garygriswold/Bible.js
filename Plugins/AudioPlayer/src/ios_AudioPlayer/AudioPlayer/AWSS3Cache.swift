@@ -24,7 +24,7 @@ class AWSS3Cache {
     }
     
     deinit {
-        print("De-initialized AWSS3Cache")
+        print("***** Deinit AWSS3Cache *****")
     }
     
     func read(s3Bucket: String, s3Key: String, expireInterval: TimeInterval,

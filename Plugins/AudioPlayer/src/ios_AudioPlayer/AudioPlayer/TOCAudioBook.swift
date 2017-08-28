@@ -35,6 +35,10 @@ class TOCAudioBook {
         }
     }
     
+    deinit {
+        print("***** Deinit TOCAudioBook *****")
+    }
+    
     func toString() -> String {
         let str = "bookId=" + self.bookId +
             ", bookName=" + self.bookName +

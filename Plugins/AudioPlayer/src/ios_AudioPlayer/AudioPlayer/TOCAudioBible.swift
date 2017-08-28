@@ -60,6 +60,10 @@ class TOCAudioBible {
 
     }
     
+    deinit {
+       print("***** Deinit TOCAudioBible *****") 
+    }
+    
     func nextChapter(reference: Reference) -> Reference? {
         let ref = reference
         if let book = self.booksById[ref.book] {

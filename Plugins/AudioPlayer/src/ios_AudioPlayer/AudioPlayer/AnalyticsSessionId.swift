@@ -33,7 +33,7 @@ class AnalyticsSessionId {
     }
     
     deinit {
-        print("AnalyticsSessionId is deallocated.")
+        print("***** Deinit AnalyticsSessionId *****")
     }
     
     func getSessionId() -> String {

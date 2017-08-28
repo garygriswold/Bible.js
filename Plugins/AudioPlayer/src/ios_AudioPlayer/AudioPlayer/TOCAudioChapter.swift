@@ -35,6 +35,10 @@ class TOCAudioChapter {
         }
     }
     
+    deinit {
+        print("***** Deinit TOCAudioChapter *****")
+    }
+    
     func findVerseByPosition(time: CMTime) -> CMTime {
         let seconds = Float(CMTimeGetSeconds(time))
         let priorVerseSec: Float = findVerseByPosition(seconds: seconds)

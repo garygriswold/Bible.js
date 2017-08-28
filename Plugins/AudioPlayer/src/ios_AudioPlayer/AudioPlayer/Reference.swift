@@ -29,7 +29,7 @@ class Reference {
     }
     
     deinit {
-        print("Reference was deinitialized \(self.toString())")
+        print("***** Deinit Reference ***** \(self.toString())")
     }
     
     var sequenceNum: Int {

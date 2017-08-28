@@ -13,6 +13,10 @@ class AudioBibleController {
     
     var readerView: AudioBibleView?
     
+    deinit {
+        print("***** Deinit AudioBibleController *****")
+    }
+    
     /**
     * This must be set to be the WKWebView
     */
@@ -48,6 +52,7 @@ class AudioBibleController {
     }
     func playHasStopped() {
         self.readerView?.stopPlay()
+        self.readerView = nil
     }
 }
 

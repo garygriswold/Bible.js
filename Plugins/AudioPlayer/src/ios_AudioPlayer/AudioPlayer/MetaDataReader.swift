@@ -17,6 +17,10 @@ class MetaDataReader {
         self.metaData = Dictionary<String, TOCAudioBible>()
     }
     
+    deinit {
+        print("***** Deinit MetaDataReader *****")
+    }
+    
     func read(languageCode: String, mediaType: String,
               readComplete: @escaping (_ metaData: Dictionary<String, TOCAudioBible>) -> Void) {
         let cache = AWSS3Cache()

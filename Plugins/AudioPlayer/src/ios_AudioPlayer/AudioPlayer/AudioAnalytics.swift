@@ -47,7 +47,7 @@ class AudioAnalytics {
     }
     
     deinit {
-        print("AudioAnalytics is deallocated.")
+        print("***** Deinit AudioAnalytics *****")
     }
     
     func playStarted(item: String, position: CMTime) -> Void {

@@ -18,6 +18,7 @@ class AudioBibleView : NSObject {
     let pauseButton: UIButton
     let stopButton: UIButton
     let scrubSlider: UISlider
+    var progressLink: CADisplayLink?
     // Transient State Variables
     var scrubSliderDuration: CMTime
     var scrubSliderDrag: Bool
@@ -71,7 +72,6 @@ class AudioBibleView : NSObject {
     
     deinit {
         print("***** Deinit AudioBibleView *****")
-        // Do I need to remove listeners from controls here
     }
     
     func play() {
@@ -93,10 +93,9 @@ class AudioBibleView : NSObject {
     }
     
     func startPlay() {
-        
-        let progressLink = CADisplayLink(target: self, selector: #selector(updateProgress))
-        progressLink.add(to: .current, forMode: .defaultRunLoopMode)
-        progressLink.preferredFramesPerSecond = 15
+        self.progressLink = CADisplayLink(target: self, selector: #selector(updateProgress))
+        self.progressLink!.add(to: .current, forMode: .defaultRunLoopMode)
+        self.progressLink!.preferredFramesPerSecond = 15
         
         self.playButton.addTarget(self, action: #selector(self.play), for: .touchUpInside)
         self.pauseButton.addTarget(self, action: #selector(self.pause), for: .touchUpInside)
@@ -111,6 +110,7 @@ class AudioBibleView : NSObject {
         self.pauseButton.removeFromSuperview()
         self.stopButton.removeFromSuperview()
         self.scrubSlider.removeFromSuperview()
+        self.progressLink?.invalidate()
     }
     
     /**
