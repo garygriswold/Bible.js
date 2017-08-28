@@ -16,23 +16,22 @@ import AWS
 class AWSS3Cache {
     
     let cacheDir: URL
-    let expirationInterval: TimeInterval
     
     init() {
         let homeDir: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
         let libDir: URL = homeDir.appendingPathComponent("Library")
         self.cacheDir = libDir.appendingPathComponent("Caches")
-        self.expirationInterval = 604800 // 1 week in seconds
     }
     
     deinit {
         print("De-initialized AWSS3Cache")
     }
     
-    func read(s3Bucket: String, s3Key: String, getComplete: @escaping (_ data: Data?) -> Void) {
+    func read(s3Bucket: String, s3Key: String, expireInterval: TimeInterval,
+              getComplete: @escaping (_ data: Data?) -> Void) {
         let localKey = self.getLocalKey(s3Bucket: s3Bucket, s3Key: s3Key)
         let path: URL = self.cacheDir.appendingPathComponent(localKey)
-        let data: Data? = self.readCache(path: path)
+        let data: Data? = self.readCache(path: path, expireInterval: expireInterval)
         if data != nil {
             getComplete(data)
         } else {
@@ -40,11 +39,11 @@ class AWSS3Cache {
         }
     }
     
-    private func readCache(path: URL) -> Data? {
+    private func readCache(path: URL, expireInterval: TimeInterval) -> Data? {
         print("Path to read \(path)")
         do {
             let data = try Data(contentsOf: path, options: [])
-            if (self.isFileExpired(filePath: path)) {
+            if (self.isFileExpired(filePath: path, expireInterval: expireInterval)) {
                 print("File has expired in AWSS3Cache.readCache")
                 return nil
             } else {
@@ -82,14 +81,14 @@ class AWSS3Cache {
         return(s3Bucket + "_" + s3Key)
     }
     
-    private func isFileExpired(filePath: URL) -> Bool {
+    private func isFileExpired(filePath: URL, expireInterval: TimeInterval) -> Bool {
         do {
             let dictionary = try FileManager.default.attributesOfItem(atPath: filePath.path)
             let creationDate = dictionary[FileAttributeKey.modificationDate] as? Date
             if let creation = creationDate {
                 print("creationDate \(creation)")
                 let interval = abs(creation.timeIntervalSinceNow)
-                return interval > self.expirationInterval
+                return interval > expireInterval
             } else {
                 return true
             }

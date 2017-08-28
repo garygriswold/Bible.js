@@ -22,6 +22,7 @@ class MetaDataReader {
         let cache = AWSS3Cache()
         cache.read(s3Bucket: "audio-us-west-2-shortsands",
                    s3Key: languageCode + "_" + mediaType + ".json",
+                   expireInterval: 604800, // 1 week in seconds
                    getComplete: { data in
             let result = self.parseJson(data: data)
             if (result is Array<AnyObject>) {
@@ -44,6 +45,7 @@ class MetaDataReader {
         let s3Key = damid + "_" + sequence + "_" + bookId + "_" + chapter + "_verse.json"
         cache.read(s3Bucket: "audio-us-west-2-shortsands",
                    s3Key: s3Key,
+                   expireInterval: 604800, // 1 week in seconds
                    getComplete: { data in
             let result = self.parseJson(data: data)
             self.metaDataVerse = TOCAudioChapter(jsonObject: result)
