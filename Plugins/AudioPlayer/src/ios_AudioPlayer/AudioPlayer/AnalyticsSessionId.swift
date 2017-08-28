@@ -15,7 +15,7 @@
  * sessionId serves, it will not cause much of a problem if identical sessionIds are created on
  * some rare occasion.  Gary Griswold June 7, 2017
  *
- * NOTE: An identical class exists in the Video Player
+ * NOTE: A nearly identical class exists in the Video Player.  This one has been updated to use Library/Caches
  */
 import Foundation
 
@@ -26,8 +26,10 @@ class AnalyticsSessionId {
     let archiveURL: URL
     
     init() {
-        let directory = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
-        archiveURL = directory.appendingPathComponent(AnalyticsSessionId.SESSION_KEY)
+        let homeDir: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
+        let libDir: URL = homeDir.appendingPathComponent("Library")
+        let cacheDir = libDir.appendingPathComponent("Caches")
+        archiveURL = cacheDir.appendingPathComponent(AnalyticsSessionId.SESSION_KEY)
     }
     
     deinit {
