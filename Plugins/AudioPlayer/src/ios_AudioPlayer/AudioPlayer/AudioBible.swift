@@ -17,6 +17,7 @@ public class AudioBible : NSObject {
     let s3Bucket: String
     let version: String
     let fileType: String
+    let audioAnalytics: AudioAnalytics
     var audioChapter: TOCAudioChapter?
     var player: AVQueuePlayer?
     // Transient Variables
@@ -31,6 +32,10 @@ public class AudioBible : NSObject {
         self.version = version
         self.fileType = fileType
         self.currReference = reference
+        self.audioAnalytics = AudioAnalytics(mediaSource: "FCBH",
+                                             mediaId: version,
+                                             languageId: tocBible.languageCode,
+                                             silLang: "User's text lang setting")
         
         print("INSIDE BibleReader \(self.version)")
         MediaPlayState.retrieve(mediaId: self.version)
@@ -101,14 +106,12 @@ public class AudioBible : NSObject {
         self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.advance
         self.initNotifications()
         
-        //delegate.completionHandler = complete
-        //delegate.videoAnalytics = self.videoAnalytics
-        //self.controller.delegate = delegate
-        
         self.play()
         self.nextReference = self.prepareQueue(reference: self.currReference)
         
         self.controller.playHasStarted()
+        
+        self.audioAnalytics.playStarted(item: self.currReference.toString(), position: seekTime)
     }
     
     func backupSeek(state: MediaPlayState) -> CMTime {
@@ -184,12 +187,11 @@ public class AudioBible : NSObject {
     
     func playerItemDidPlayToEndTime(note:Notification) {
         print("\n** DID PLAY TO END \(String(describing: note.object))")
-        //sendVideoAnalytics(isStart: false, isDone: true)
-        
         if let curr = self.nextReference {
             self.currReference = curr
             self.nextReference = self.prepareQueue(reference: curr)
         } else {
+            self.sendAudioAnalytics()
             MediaPlayState.clear()
             self.stop()
         }
@@ -215,7 +217,7 @@ public class AudioBible : NSObject {
      */
     func applicationWillResignActive(note:Notification) {
         print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
-        //sendVideoAnalytics(isStart: false, isDone: false)
+        self.sendAudioAnalytics()
         self.updateMediaPlayStateTime()
         self.stop()
     }
@@ -265,6 +267,12 @@ public class AudioBible : NSObject {
                 }
             }
         )
+    }
+    
+    func sendAudioAnalytics() {
+        print("\n*********** INSIDE SAVE ANALYTICS *************")
+        let currTime = (self.player != nil) ? self.player!.currentTime() : kCMTimeZero
+        self.audioAnalytics.playEnded(item: self.currReference.toString(), position: currTime)
     }
 }
 

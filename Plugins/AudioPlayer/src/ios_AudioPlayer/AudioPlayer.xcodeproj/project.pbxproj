@@ -29,6 +29,8 @@
 		E4F69CED1F39684800EE53AB /* MetaDataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */; };
 		E4F69CEF1F397CF200EE53AB /* TOCAudioBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */; };
 		E4F69CF11F397D0800EE53AB /* TOCAudioBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */; };
+		E4F932231F512028002A0A4D /* AudioAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F932221F512028002A0A4D /* AudioAnalytics.swift */; };
+		E4F932251F512095002A0A4D /* AnalyticsSessionId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F932241F512095002A0A4D /* AnalyticsSessionId.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -69,6 +71,8 @@
 		E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaDataReader.swift; sourceTree = "<group>"; };
 		E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioBible.swift; sourceTree = "<group>"; };
 		E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioBook.swift; sourceTree = "<group>"; };
+		E4F932221F512028002A0A4D /* AudioAnalytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioAnalytics.swift; sourceTree = "<group>"; };
+		E4F932241F512095002A0A4D /* AnalyticsSessionId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsSessionId.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +120,8 @@
 				E43D50BC1F44BA8F00B38A7C /* MediaPlayState.swift */,
 				E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */,
 				E4148DC41F3BFC34007D5870 /* AWSS3Cache.swift */,
+				E4F932221F512028002A0A4D /* AudioAnalytics.swift */,
+				E4F932241F512095002A0A4D /* AnalyticsSessionId.swift */,
 				E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */,
 				E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */,
 				E4148DC61F3E859B007D5870 /* TOCAudioChapter.swift */,
@@ -207,10 +213,12 @@
 				E41E5EC41F38FB8700B18D3F /* AudioBibleView.swift in Sources */,
 				E4A32CD11F2FB310009AECFB /* ViewController.swift in Sources */,
 				E4148DC71F3E859B007D5870 /* TOCAudioChapter.swift in Sources */,
+				E4F932251F512095002A0A4D /* AnalyticsSessionId.swift in Sources */,
 				E4A32CCF1F2FB310009AECFB /* AppDelegate.swift in Sources */,
 				E4F69CEF1F397CF200EE53AB /* TOCAudioBible.swift in Sources */,
 				E4148DC91F42828D007D5870 /* Reference.swift in Sources */,
 				E4A32CE11F2FB420009AECFB /* AudioBible.swift in Sources */,
+				E4F932231F512028002A0A4D /* AudioAnalytics.swift in Sources */,
 				E4148DC51F3BFC34007D5870 /* AWSS3Cache.swift in Sources */,
 				E4F69CED1F39684800EE53AB /* MetaDataReader.swift in Sources */,
 				E4F69CF11F397D0800EE53AB /* TOCAudioBook.swift in Sources */,
