@@ -11,6 +11,7 @@
 		E40954C01F351E1700046DE7 /* AWS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E42B3F6E1F32426B00A51430 /* AWS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E40954C21F351E6700046DE7 /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E40954C11F351E6700046DE7 /* Zip.framework */; };
 		E40954C41F351E7100046DE7 /* Zip.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E40954C11F351E6700046DE7 /* Zip.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E40F85631F55BD0400282299 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = E40F85621F55BD0400282299 /* Images */; };
 		E4148DC51F3BFC34007D5870 /* AWSS3Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC41F3BFC34007D5870 /* AWSS3Cache.swift */; };
 		E4148DC71F3E859B007D5870 /* TOCAudioChapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC61F3E859B007D5870 /* TOCAudioChapter.swift */; };
 		E4148DC91F42828D007D5870 /* Reference.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC81F42828D007D5870 /* Reference.swift */; };
@@ -51,6 +52,7 @@
 
 /* Begin PBXFileReference section */
 		E40954C11F351E6700046DE7 /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Zip.framework; sourceTree = "<group>"; };
+		E40F85621F55BD0400282299 /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Images; sourceTree = "<group>"; };
 		E4148DC41F3BFC34007D5870 /* AWSS3Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSS3Cache.swift; sourceTree = "<group>"; };
 		E4148DC61F3E859B007D5870 /* TOCAudioChapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioChapter.swift; sourceTree = "<group>"; };
 		E4148DC81F42828D007D5870 /* Reference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reference.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				E42B3F701F32428000A51430 /* AWSCore.framework */,
 				E42B3F6E1F32426B00A51430 /* AWS.framework */,
 				E4A32CE21F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 */,
+				E40F85621F55BD0400282299 /* Images */,
 				E4148DC81F42828D007D5870 /* Reference.swift */,
 				E4A32CD01F2FB310009AECFB /* ViewController.swift */,
 				E4826D191F4F21140031FFE0 /* AudioBibleController.swift */,
@@ -195,6 +198,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E40F85631F55BD0400282299 /* Images in Resources */,
 				E4A32CD91F2FB310009AECFB /* LaunchScreen.storyboard in Resources */,
 				E4A32CD61F2FB310009AECFB /* Assets.xcassets in Resources */,
 				E4A32CD41F2FB310009AECFB /* Main.storyboard in Resources */,

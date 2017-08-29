@@ -33,38 +33,51 @@ class AudioBibleView : NSObject {
         let screenWidth = screenSize.width
         
         let playBtn = UIButton(type: .custom)
-        playBtn.frame = CGRect(x: screenWidth/3-25, y: 100, width: 50, height: 50)
-        playBtn.layer.cornerRadius = 0.5 * playBtn.bounds.size.width
-        playBtn.backgroundColor = .green
-        playBtn.alpha = 0.6
-        playBtn.setTitle("Play", for: .normal)
-        //self.view.addSubview(playBtn)
+        playBtn.frame = CGRect(x: screenWidth/3-40, y: 100, width: 80, height: 80)
+        let playUpImg = UIImage(named: "Images/PlayUPButton.png")
+        playBtn.setImage(playUpImg, for: UIControlState.normal)
+        let playDnImg = UIImage(named: "Images/PlayDNButton.png")
+        playBtn.setImage(playDnImg, for: UIControlState.highlighted)
         self.playButton = playBtn
         
         let pauseBtn = UIButton(type: .custom)
-        pauseBtn.frame = CGRect(x: screenWidth/3-25, y: 100, width: 50, height: 50)
-        pauseBtn.layer.cornerRadius = 0.5 * pauseBtn.bounds.size.width
-        pauseBtn.backgroundColor = .orange
-        pauseBtn.alpha = 0.6
-        pauseBtn.setTitle("Pause", for: .normal)
+        pauseBtn.frame = CGRect(x: screenWidth/3-40, y: 100, width: 80, height: 80)
+        let pauseUpImg = UIImage(named: "Images/PauseUPButton.png")
+        pauseBtn.setImage(pauseUpImg, for: UIControlState.normal)
+        let pauseDnImg = UIImage(named: "Images/PauseDNButton.png")
+        pauseBtn.setImage(pauseDnImg, for: UIControlState.highlighted)
         self.view.addSubview(pauseBtn)
         self.pauseButton = pauseBtn
         
         let stopBtn = UIButton(type: .custom)
-        stopBtn.frame = CGRect(x: screenWidth*2/3-25, y: 100, width: 50, height: 50)
-        stopBtn.layer.cornerRadius = 0.5 * stopBtn.bounds.size.width
-        stopBtn.backgroundColor = .red
-        stopBtn.alpha = 0.6
-        stopBtn.setTitle("Stop", for: .normal)
+        stopBtn.frame = CGRect(x: screenWidth*2/3-40, y: 100, width: 80, height: 80)
+        let stopUpImg = UIImage(named: "Images/StopUPButton.png")
+        stopBtn.setImage(stopUpImg, for: UIControlState.normal)
+        let stopDnImg = UIImage(named: "Images/StopDNButton.png")
+        stopBtn.setImage(stopDnImg, for: UIControlState.highlighted)
         self.view.addSubview(stopBtn)
         self.stopButton = stopBtn
         
         let scrubRect = CGRect(x: screenWidth * 0.05, y: 200, width: screenWidth * 0.9, height: 100)
         let scrub = UISlider(frame: scrubRect)
         scrub.isContinuous = false
-        scrub.minimumTrackTintColor = UIColor.green
-        scrub.maximumTrackTintColor = UIColor.purple
-        scrub.alpha = 0.6
+        let thumbUpImg = UIImage(named: "Images/ThumbUP.png")
+        scrub.setThumbImage(thumbUpImg, for: UIControlState.normal)
+        let thumbDnImg = UIImage(named: "Images/ThumbDN.png")
+        scrub.setThumbImage(thumbDnImg, for: UIControlState.highlighted)
+        
+        let sliderMinImg = UIImage(named: "Images/SliderMin.png")
+        let sliderMinInsets = UIEdgeInsets(top: 0.0, left: 10.0, bottom: 0.0, right: 0.0)
+        let sliderMin = sliderMinImg?.resizableImage(withCapInsets: sliderMinInsets,
+                                                     resizingMode: UIImageResizingMode.stretch)
+        scrub.setMinimumTrackImage(sliderMin, for: UIControlState.normal)
+        
+        let sliderMaxImg = UIImage(named: "Images/SliderMax.png")
+        let sliderMaxInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 10.0)
+        let sliderMax = sliderMaxImg?.resizableImage(withCapInsets: sliderMaxInsets,
+                                                     resizingMode: UIImageResizingMode.stretch)
+        scrub.setMaximumTrackImage(sliderMax, for: UIControlState.normal)
+        
         scrub.setValue(0.0, animated: false)
         self.view.addSubview(scrub)
         self.scrubSlider = scrub
