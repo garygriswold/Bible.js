@@ -226,7 +226,7 @@ public class AudioBible : NSObject {
         reader.readVerseAudio(damid: reference.damId, sequence: reference.sequence, bookId: reference.book, chapter: reference.chapter, readComplete: {
             audioChapter in
             self.audioChapter = audioChapter
-            print("PARSED DATA \(self.audioChapter?.toString())")
+            //print("PARSED DATA \(self.audioChapter?.toString())")
         })
     }
     
