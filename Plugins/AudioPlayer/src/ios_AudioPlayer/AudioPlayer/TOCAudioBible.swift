@@ -18,11 +18,11 @@ class TOCAudioBible {
     let versionEnglish: String
     let collectionCode: String
     var booksById: Dictionary<String, TOCAudioBook>
-    var bookSeq: Array<String>
+    var booksBySeq: Dictionary<Int, TOCAudioBook>
 
     init(jsonObject: AnyObject) {
         self.booksById = Dictionary<String, TOCAudioBook>()
-        self.bookSeq = Array<String>()
+        self.booksBySeq = Dictionary<Int, TOCAudioBook>()
         if jsonObject is Dictionary<String, AnyObject> {
             let item = jsonObject as! Dictionary<String, AnyObject>
             print("Inner Item \(item)")
@@ -42,7 +42,7 @@ class TOCAudioBible {
                     let book = TOCAudioBook(jsonBook: jsonBook)
                     print("BOOK \(book.toString())")
                     self.booksById[book.bookId] = book
-                    self.bookSeq.append(book.bookId)
+                    self.booksBySeq[book.sequenceNum] = book
                 }
             } else {
                 print("Could not determine type of books array in MetaDataItem")
@@ -57,7 +57,6 @@ class TOCAudioBible {
             self.versionEnglish = ""
             self.collectionCode = ""
         }
-
     }
     
     deinit {
@@ -76,13 +75,8 @@ class TOCAudioBible {
                     default: return Reference(sequence: ref.sequence, book: ref.book, chapter: nextStr)
                 }
             } else {
-                let penultimate = self.bookSeq.count // stop 1 before last
-                for i in 0..<penultimate {
-                    if (self.bookSeq[i] == book.bookId) {
-                        if let nextBook = self.booksById[self.bookSeq[i+1]] {
-                            return Reference(sequence: nextBook.sequence, book: nextBook.bookId, chapter: "001")
-                        }
-                    }
+                if let nextBook = self.booksBySeq[reference.sequenceNum + 1] {
+                    return Reference(sequence: nextBook.sequence, book: nextBook.bookId, chapter: "001")
                 }
             }
         }
