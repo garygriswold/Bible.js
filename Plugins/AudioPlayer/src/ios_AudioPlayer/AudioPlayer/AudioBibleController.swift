@@ -34,9 +34,9 @@ class AudioBibleController {
                 let metaBook = tocBible.booksById["TST"]
                 if let book = metaBook {
                     
-                    let reference = Reference(sequence: book.sequence, book: book.bookId, chapter: "001")
-                    let reader = AudioBible(controller: self, tocBible: tocBible,
-                                             version: "DEMO", reference: reference, fileType: "mp3")
+                    let reference = Reference(damId: tocBible.damId, sequence: book.sequence, book: book.bookId,
+                                              chapter: "001", fileType: "mp3")
+                    let reader = AudioBible(controller: self, tocBible: tocBible, reference: reference)
                     self.readerView = AudioBibleView(view: view, audioBible: reader)
                             
                     reader.beginStreaming()

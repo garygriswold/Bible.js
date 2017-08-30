@@ -11,23 +11,20 @@ import Foundation
 
 class Reference {
     
+    let damId: String
     let sequence: String
     let book: String
     let chapter: String
+    let fileType: String
     
-    init(sequence: String, book: String, chapter: String) {
+    init(damId: String, sequence: String, book: String, chapter: String, fileType: String) {
+        self.damId = damId
         self.sequence = sequence
         self.book = book
         self.chapter = chapter
+        self.fileType = fileType
     }
-    
-    init(string: String) {
-        let parts = string.components(separatedBy: "_")
-        self.sequence = parts[0]
-        self.book = (parts.count > 1) ? parts[1] : ""
-        self.chapter = (parts.count > 2) ? parts[2] : ""
-    }
-    
+   
     deinit {
         print("***** Deinit Reference ***** \(self.toString())")
     }
@@ -44,18 +41,20 @@ class Reference {
         }
     }
     
-    func getS3Key(damId: String, fileType: String) -> String {
-        return damId + "_" + self.sequence + "_" + self.book + "_" + self.chapter + "." + fileType
+    func getS3Key() -> String {
+        return self.damId + "_" + self.sequence + "_" + self.book + "_" + self.chapter + "." + self.fileType
     }
     
     func isEqual(reference: Reference) -> Bool {
         if (self.chapter != reference.chapter) { return false }
         if (self.book != reference.book) { return false }
         if (self.sequence != reference.sequence) { return false }
+        if (self.damId != reference.damId) { return false }
+        if (self.fileType != reference.fileType) { return false }
         return true
     }
     
     func toString() -> String {
-        return(self.sequence + "_" + self.book + "_" + self.chapter)
+        return self.damId + "_" + self.sequence + "_" + self.book + "_" + self.chapter + "." + self.fileType
     }
 }

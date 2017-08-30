@@ -15,8 +15,6 @@ public class AudioBible : NSObject {
     let controller: AudioBibleController
     let tocAudioBible: TOCAudioBible
     let s3Bucket: String
-    let version: String
-    let fileType: String
     let audioAnalytics: AudioAnalytics
     var audioChapter: TOCAudioChapter?
     var player: AVPlayer?
@@ -24,21 +22,18 @@ public class AudioBible : NSObject {
     var currReference: Reference
     var nextReference: Reference?
     
-    init(controller: AudioBibleController, tocBible: TOCAudioBible,
-         version: String, reference: Reference, fileType: String) {
+    init(controller: AudioBibleController, tocBible: TOCAudioBible, reference: Reference) {
         self.controller = controller
         self.tocAudioBible = tocBible
         self.s3Bucket = "audio-us-west-2-shortsands"
-        self.version = version
-        self.fileType = fileType
         self.currReference = reference
         self.audioAnalytics = AudioAnalytics(mediaSource: "FCBH",
-                                             mediaId: version,
+                                             mediaId: self.currReference.damId,
                                              languageId: tocBible.languageCode,
                                              silLang: "User's text lang setting")
         
-        print("INSIDE BibleReader \(self.version)")
-        MediaPlayState.retrieve(mediaId: self.version)
+        print("INSIDE BibleReader \(self.currReference.damId)")
+        MediaPlayState.retrieve(mediaId: self.currReference.damId)
     }
     
     deinit {
@@ -46,7 +41,7 @@ public class AudioBible : NSObject {
     }
     
     public func beginStreaming() {
-        let s3Key = self.currReference.getS3Key(damId: self.version, fileType: self.fileType)
+        let s3Key = self.currReference.getS3Key()
         AwsS3.shared.preSignedUrlGET(
             s3Bucket: self.s3Bucket,
             s3Key: s3Key,
@@ -65,7 +60,7 @@ public class AudioBible : NSObject {
         var filePath: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
         filePath = filePath.appendingPathComponent("Library")
         filePath = filePath.appendingPathComponent("Caches")
-        let s3Key = self.currReference.getS3Key(damId: self.version, fileType: self.fileType)
+        let s3Key = self.currReference.getS3Key()
         filePath = filePath.appendingPathComponent(s3Key)
         print("FilePath \(filePath.absoluteString)")
         
@@ -87,7 +82,7 @@ public class AudioBible : NSObject {
         var filePath: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
         filePath = filePath.appendingPathComponent("Library")
         filePath = filePath.appendingPathComponent("Caches")
-        let s3Key = self.currReference.getS3Key(damId: self.version, fileType: self.fileType)
+        let s3Key = self.currReference.getS3Key()
         filePath = filePath.appendingPathComponent(s3Key)
         print("FilePath \(filePath.absoluteString)")
         self.initAudio(url: filePath)
@@ -239,7 +234,7 @@ public class AudioBible : NSObject {
     
     private func readVerseMetaData(reference: Reference) {
         let reader = MetaDataReader()
-        reader.readVerseAudio(damid: self.version, sequence: reference.sequence, bookId: reference.book, chapter: reference.chapter, readComplete: {
+        reader.readVerseAudio(damid: reference.damId, sequence: reference.sequence, bookId: reference.book, chapter: reference.chapter, readComplete: {
             audioChapter in
             self.audioChapter = audioChapter
             print("PARSED DATA \(self.audioChapter?.toString())")
@@ -247,7 +242,7 @@ public class AudioBible : NSObject {
     }
     
     private func addNextChapter(reference: Reference) {
-        let s3Key = reference.getS3Key(damId: self.version, fileType: self.fileType)
+        let s3Key = reference.getS3Key()
         AwsS3.shared.preSignedUrlGET(
             s3Bucket: self.s3Bucket,
             s3Key: s3Key,

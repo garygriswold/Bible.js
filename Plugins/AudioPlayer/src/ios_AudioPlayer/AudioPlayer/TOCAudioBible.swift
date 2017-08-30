@@ -70,13 +70,17 @@ class TOCAudioBible {
                 let next = ref.chapterNum + 1
                 let nextStr = String(next)
                 switch(nextStr.characters.count) {
-                    case 1: return Reference(sequence: ref.sequence, book: ref.book, chapter: "00" + nextStr)
-                    case 2: return Reference(sequence: ref.sequence, book: ref.book, chapter: "0" + nextStr)
-                    default: return Reference(sequence: ref.sequence, book: ref.book, chapter: nextStr)
+                    case 1: return Reference(damId: reference.damId, sequence: ref.sequence, book: ref.book,
+                                         chapter: "00" + nextStr, fileType: reference.fileType)
+                    case 2: return Reference(damId: reference.damId, sequence: ref.sequence, book: ref.book,
+                                             chapter: "0" + nextStr, fileType: reference.fileType)
+                    default: return Reference(damId: reference.damId, sequence: ref.sequence, book: ref.book,
+                                              chapter: nextStr, fileType: reference.fileType)
                 }
             } else {
                 if let nextBook = self.booksBySeq[reference.sequenceNum + 1] {
-                    return Reference(sequence: nextBook.sequence, book: nextBook.bookId, chapter: "001")
+                    return Reference(damId: reference.damId, sequence: nextBook.sequence, book: nextBook.bookId,
+                                     chapter: "001", fileType: reference.fileType)
                 }
             }
         }
