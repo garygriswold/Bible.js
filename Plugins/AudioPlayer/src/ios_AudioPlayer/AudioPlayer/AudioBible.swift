@@ -108,6 +108,7 @@ public class AudioBible : NSObject {
         
         self.play()
         self.nextReference = self.prepareQueue(reference: self.currReference)
+        self.readVerseMetaData(reference: self.currReference)
         
         self.controller.playHasStarted()
         
@@ -189,6 +190,7 @@ public class AudioBible : NSObject {
         if let curr = self.nextReference {
             self.currReference = curr
             self.nextReference = self.prepareQueue(reference: curr)
+            self.readVerseMetaData(reference: curr)
         } else {
             self.sendAudioAnalytics()
             MediaPlayState.clear()
@@ -232,7 +234,6 @@ public class AudioBible : NSObject {
     }
     
     private func prepareQueue(reference: Reference) -> Reference? {
-        self.readVerseMetaData(reference: reference)
         if let next = self.tocAudioBible.nextChapter(reference: reference) {
             self.addNextChapter(reference: next)
             return next
