@@ -162,7 +162,7 @@ class AudioBibleView : NSObject {
                 let time: CMTime = CMTime(seconds: Double(current), preferredTimescale: CMTimeScale(1.0))
                 play.seek(to: time)
             } else {
-                play.advanceToNextItem()
+                self.audioBible.advanceToNextItem()
             }
         }
     }

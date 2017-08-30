@@ -19,7 +19,7 @@ public class AudioBible : NSObject {
     let fileType: String
     let audioAnalytics: AudioAnalytics
     var audioChapter: TOCAudioChapter?
-    var player: AVQueuePlayer?
+    var player: AVPlayer?
     // Transient Variables
     var currReference: Reference
     var nextReference: Reference?
@@ -102,12 +102,12 @@ public class AudioBible : NSObject {
         if (CMTimeGetSeconds(seekTime) > 0.1) {
             playerItem.seek(to: seekTime)
         }
-        self.player = AVQueuePlayer(items: [playerItem])
-        self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.advance
+        self.player = AVPlayer(playerItem: playerItem)
+        self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.none
         self.initNotifications()
         
         self.play()
-        self.nextReference = self.prepareQueue(reference: self.currReference)
+        self.nextReference = self.tocAudioBible.nextChapter(reference: self.currReference)
         self.readVerseMetaData(reference: self.currReference)
         
         self.controller.playHasStarted()
@@ -137,7 +137,6 @@ public class AudioBible : NSObject {
     func stop() {
         self.removeNotifications()
         if self.player != nil {
-            self.player!.removeAllItems()
             self.player = nil
         }
         self.controller.playHasStopped()
@@ -187,15 +186,7 @@ public class AudioBible : NSObject {
     
     func playerItemDidPlayToEndTime(note:Notification) {
         print("\n** DID PLAY TO END \(String(describing: note.object))")
-        if let curr = self.nextReference {
-            self.currReference = curr
-            self.nextReference = self.prepareQueue(reference: curr)
-            self.readVerseMetaData(reference: curr)
-        } else {
-            self.sendAudioAnalytics()
-            MediaPlayState.clear()
-            self.stop()
-        }
+        self.advanceToNextItem()
     }
     func playerItemFailedToPlayToEndTime(note:Notification) {
         print("\n********* FAILED TO PLAY TO END *********\(String(describing: note.object))")
@@ -223,6 +214,19 @@ public class AudioBible : NSObject {
         self.stop()
     }
     
+    func advanceToNextItem() {
+        if let curr = self.nextReference {
+            self.currReference = curr
+            self.addNextChapter(reference: curr)
+            self.nextReference = self.tocAudioBible.nextChapter(reference: curr)
+            self.readVerseMetaData(reference: curr)
+        } else {
+            self.sendAudioAnalytics()
+            MediaPlayState.clear()
+            self.stop()
+        }
+    }
+    
     func updateMediaPlayStateTime() {
         var result: CMTime = kCMTimeZero
         if let currentTime = self.player?.currentTime() {
@@ -231,15 +235,6 @@ public class AudioBible : NSObject {
             }
         }
         MediaPlayState.update(url: self.currReference.toString(), time: result)
-    }
-    
-    private func prepareQueue(reference: Reference) -> Reference? {
-        if let next = self.tocAudioBible.nextChapter(reference: reference) {
-            self.addNextChapter(reference: next)
-            return next
-        } else {
-            return nil
-        }
     }
     
     private func readVerseMetaData(reference: Reference) {
@@ -262,7 +257,7 @@ public class AudioBible : NSObject {
                 if let audioUrl = url {
                     let asset = AVAsset(url: audioUrl)
                     let playerItem = AVPlayerItem(asset: asset)
-                    self.player?.insert(playerItem, after: nil)
+                    self.player?.replaceCurrentItem(with: playerItem)
                 }
             }
         )
