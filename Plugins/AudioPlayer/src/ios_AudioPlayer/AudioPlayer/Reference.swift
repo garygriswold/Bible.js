@@ -7,15 +7,18 @@
 //
 
 import Foundation
-
+import AWS
 
 class Reference {
+    
+    static let s3Bucket: String = "audio-" + AwsS3.region + "-shortsands"
     
     let damId: String
     let sequence: String
     let book: String
     let chapter: String
     let fileType: String
+    var url: URL?
     
     init(damId: String, sequence: String, book: String, chapter: String, fileType: String) {
         self.damId = damId
@@ -23,6 +26,15 @@ class Reference {
         self.book = book
         self.chapter = chapter
         self.fileType = fileType
+        AwsS3.shared.preSignedUrlGET(
+            s3Bucket: Reference.s3Bucket,
+            s3Key: getS3Key(),
+            expires: 3600,
+            complete: { url in
+                //print("computed GET URL \(String(describing: url))")
+                self.url = url
+            }
+        )
     }
    
     deinit {

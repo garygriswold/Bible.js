@@ -14,7 +14,6 @@ public class AudioBible : NSObject {
     
     let controller: AudioBibleController
     let tocAudioBible: TOCAudioBible
-    let s3Bucket: String
     let audioAnalytics: AudioAnalytics
     var audioChapter: TOCAudioChapter?
     var player: AVPlayer?
@@ -25,7 +24,6 @@ public class AudioBible : NSObject {
     init(controller: AudioBibleController, tocBible: TOCAudioBible, reference: Reference) {
         self.controller = controller
         self.tocAudioBible = tocBible
-        self.s3Bucket = "audio-us-west-2-shortsands"
         self.currReference = reference
         self.audioAnalytics = AudioAnalytics(mediaSource: "FCBH",
                                              mediaId: self.currReference.damId,
@@ -41,18 +39,9 @@ public class AudioBible : NSObject {
     }
     
     public func beginStreaming() {
-        let s3Key = self.currReference.getS3Key()
-        AwsS3.shared.preSignedUrlGET(
-            s3Bucket: self.s3Bucket,
-            s3Key: s3Key,
-            expires: 3600,
-            complete: { url in
-                print("computed GET URL \(String(describing: url))")
-                if let audioUrl = url {
-                    self.initAudio(url: audioUrl)
-                }
-            }
-        )
+        if let audioUrl = self.currReference.url {
+            self.initAudio(url: audioUrl)
+        }
     }
     
     public func beginDownload() {
@@ -65,7 +54,7 @@ public class AudioBible : NSObject {
         print("FilePath \(filePath.absoluteString)")
         
         AwsS3.shared.downloadFile(
-            s3Bucket: self.s3Bucket,
+            s3Bucket: Reference.s3Bucket,
             s3Key: s3Key,
             filePath: filePath,
             complete: { err in
@@ -242,20 +231,11 @@ public class AudioBible : NSObject {
     }
     
     private func addNextChapter(reference: Reference) {
-        let s3Key = reference.getS3Key()
-        AwsS3.shared.preSignedUrlGET(
-            s3Bucket: self.s3Bucket,
-            s3Key: s3Key,
-            expires: 3600,
-            complete: { url in
-                print("computed GET URL \(String(describing: url))")
-                if let audioUrl = url {
-                    let asset = AVAsset(url: audioUrl)
-                    let playerItem = AVPlayerItem(asset: asset)
-                    self.player?.replaceCurrentItem(with: playerItem)
-                }
-            }
-        )
+        if let audioUrl = reference.url {
+            let asset = AVAsset(url: audioUrl)
+            let playerItem = AVPlayerItem(asset: asset)
+            self.player?.replaceCurrentItem(with: playerItem)
+        }
     }
     
     func sendAudioAnalytics() {
