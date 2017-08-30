@@ -118,7 +118,6 @@ public class AudioBible : NSObject {
         if (state.mediaUrl == self.currReference.toString()) {
             return state.position
         } else {
-            MediaPlayState.update(url: self.currReference.toString())
             return kCMTimeZero
         }
     }
@@ -229,12 +228,11 @@ public class AudioBible : NSObject {
                 result = time
             }
         }
-        MediaPlayState.update(time: result)
+        MediaPlayState.update(url: self.currReference.toString(), time: result)
     }
     
     private func prepareQueue(reference: Reference) -> Reference? {
         self.readVerseMetaData(reference: reference)
-        MediaPlayState.update(url: reference.toString())
         if let next = self.tocAudioBible.nextChapter(reference: reference) {
             self.addNextChapter(reference: next)
             return next

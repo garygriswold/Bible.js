@@ -34,21 +34,9 @@ class MediaPlayState : NSObject, NSCoding {
         NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)
     }
     
-    /**
-     * Clear sets mediaUrl to nil, and update must not store the state after mediaUrl has been set to nil
-     * This is needed because the update is called after the clear when a media completes.
-     */
-    static func update(time: CMTime?) {
-        if (currentState.mediaUrl != nil) {
-            currentState.position = ((time != nil) ? time : kCMTimeZero)!
-            currentState.timestamp = Date()
-            let archiveURL = stateDirectory.appendingPathComponent(currentState.mediaId)
-            NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)
-        }
-    }
-    static func update(url: String) {
+    static func update(url: String, time: CMTime) {
         currentState.mediaUrl = url
-        currentState.position = kCMTimeZero
+        currentState.position = time
         currentState.timestamp = Date()
         let archiveURL = stateDirectory.appendingPathComponent(currentState.mediaId)
         NSKeyedArchiver.archiveRootObject(currentState, toFile: archiveURL.path)
