@@ -21,6 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
+import com.shortsands.aws.AwsS3;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
@@ -40,12 +42,14 @@ public class AudioBible implements MediaPlayer.OnPreparedListener, MediaPlayer.O
     }
 
     public void beginStreaming() {
-        String url = "https://s3-us-west-2.amazonaws.com/audio-us-west-2-shortsands/upload_emma_test.mp3";
+        String s3Bucket = "audio-" + this.controller.region + "-shortsands";
+        URL url = AwsS3.shared().preSignedUrlGET(s3Bucket, "upload_emma_test.mp3", 3600);
+        String urlStr = url.toString();
         this.mediaPlayer = new MediaPlayer();
         this.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC); // or STREAM_VOICE_CALL
 
         try {
-            this.mediaPlayer.setDataSource(url);
+            this.mediaPlayer.setDataSource(urlStr);
             this.mediaPlayer.setOnPreparedListener(this);
             //this.mediaPlayer.setWakeMode(this.controller.context, PowerManager.PARTIAL_WAKE_LOCK);
             this.mediaPlayer.prepareAsync(); // prepare async to not block main thread
