@@ -11,6 +11,7 @@ import android.app.IntentService;
 public class AudioBibleController {
 
     public Context context;
+    private AudioBibleView readerView;
 
     public AudioBibleController(Context context) {
         this.context = context;
@@ -22,10 +23,15 @@ public class AudioBibleController {
     }
 
     public void playHasStarted() {
-
+        if (this.readerView != null) {
+            this.readerView.startPlay();
+        }
     }
 
     public void playHasStopped() {
-
+        if (this.readerView != null) {
+            this.readerView.stopPlay();
+            this.readerView = null;
+        }
     }
 }

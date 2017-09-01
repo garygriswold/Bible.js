@@ -97,6 +97,7 @@ public class AudioBible implements MediaPlayer.OnPreparedListener, MediaPlayer.O
             this.mediaPlayer.release();
             this.mediaPlayer = null;
         }
+        this.controller.playHasStopped();
     }
 
     @Override

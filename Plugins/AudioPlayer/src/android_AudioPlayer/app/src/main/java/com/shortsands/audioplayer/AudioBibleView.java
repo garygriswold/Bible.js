@@ -22,12 +22,12 @@ public class AudioBibleView {
 
     }
 
-    private void startPlay() {
-
+    public void startPlay() {
+        // Add Buttons and Animations
     }
 
-    private void stopPlay() {
-
+    public void stopPlay() {
+        // Remove Buttons and Animations
     }
 
     private void updateProgress() {
