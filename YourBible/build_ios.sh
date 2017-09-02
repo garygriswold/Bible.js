@@ -9,7 +9,8 @@ AWS=AWS.framework
 ZIP=Zip.framework
 AWSCORE=AWSCore.framework
 
-PLUGINS=$HOME/ShortSands/BibleApp/Plugins
+#PLUGINS=$HOME/ShortSands/BibleApp/Plugins
+PLUGINS=$HOME/ShortSands/BibleApp/YourBible/platforms/ios/SafeBible/Plugins
 
 
 if [ "$1" == "Release" ]; then
@@ -26,54 +27,33 @@ else
 fi
 echo $SOURCE
 
-# Copy VideoPlayer.framework to it's own build
-TARGET=$PLUGINS/VideoPlayer/src/ios/build/$VIDEO
+# Copy VideoPlayer.framework to SafeBible
+TARGET=$PLUGINS/com-shortsands-videoplayer/$VIDEO
 echo $TARGET
 rm -rf $TARGET
 cp -Rf $SOURCE/$VIDEO $TARGET
 lipo -info $TARGET/VideoPlayer
 
-# Copy AWS.framework to VideoPlayer
-TARGET=$PLUGINS/VideoPlayer/src/ios/VideoPlayer/$AWS
+# Copy AWS.framework to SafeBible
+TARGET=$PLUGINS/com-shortsands-aws/$AWS
 echo $TARGET
 rm -rf $TARGET
 cp -Rf $SOURCE/$AWS $TARGET
 lipo -info $TARGET/AWS
 
-# Copy Zip.framework to VideoPlayer
-TARGET=$PLUGINS/VideoPlayer/src/ios/VideoPlayer/$ZIP
-echo $TARGET
-rm -rf $TARGET
-cp -Rf $SOURCE/$ZIP $TARGET
-lipo -info $TARGET/Zip
-
-# Copy AWS.framework to it's own build
-TARGET=$PLUGINS/AWS/src/ios/build/$AWS
-echo $TARGET
-rm -rf $TARGET
-cp -Rf $SOURCE/$AWS $TARGET
-lipo -info $TARGET/AWS
-
-# Copy Zip.framework to AWS
-TARGET=$PLUGINS/AWS/src/ios/AWS/$ZIP
-echo $TARGET
-rm -rf $TARGET
-cp -Rf $SOURCE/$ZIP $TARGET
-lipo -info $TARGET/Zip
-
-# Copy Zip.framework to it's own build
-TARGET=$PLUGINS/PKZip/src/ios/build/$ZIP
-echo $TARGET
-rm -rf $TARGET
-cp -Rf $SOURCE/$ZIP $TARGET
-lipo -info $TARGET/Zip
-
-# Copy AWSCore.framework to AWS
-TARGET=$PLUGINS/AWS/src/ios/AWS/$AWSCORE
+# Copy AWSCore.framework to SafeBible
+TARGET=$PLUGINS/com-shortsands-aws/$AWSCORE
 echo $TARGET
 rm -rf $TARGET
 cp -Rf $SOURCE/$AWSCORE $TARGET
 lipo -info $TARGET/AWSCore
+
+# Copy Zip.framework to SafeBible
+TARGET=$PLUGINS/com-shortsands-pkzip/$ZIP
+echo $TARGET
+rm -rf $TARGET
+cp -Rf $SOURCE/$ZIP $TARGET
+lipo -info $TARGET/Zip
 
 
 ## Special Note about AWSCore

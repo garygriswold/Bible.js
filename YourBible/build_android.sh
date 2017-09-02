@@ -1,5 +1,11 @@
 #!/bin/sh -ev
 
+exit 1
+
+# GNG 9/1/2017
+# OBSOLETE.  This script needs to be rewitten.  See the build_ios.sh and build_ios_obsolete.sh 
+# for more information
+
 # Usage build_android.sh [Release]
 
 LIBS=$HOME/Library/Frameworks

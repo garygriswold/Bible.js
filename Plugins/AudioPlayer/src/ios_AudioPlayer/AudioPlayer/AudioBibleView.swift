@@ -58,7 +58,7 @@ class AudioBibleView : NSObject {
         self.view.addSubview(stopBtn)
         self.stopButton = stopBtn
         
-        let scrubRect = CGRect(x: screenWidth * 0.05, y: 200, width: screenWidth * 0.9, height: 100)
+        let scrubRect = CGRect(x: screenWidth * 0.05, y: 200, width: screenWidth * 0.9, height: 60)
         let scrub = UISlider(frame: scrubRect)
         scrub.isContinuous = false
         let thumbUpImg = UIImage(named: "Images/ThumbUP.png")
@@ -67,13 +67,13 @@ class AudioBibleView : NSObject {
         scrub.setThumbImage(thumbDnImg, for: UIControlState.highlighted)
         
         let sliderMinImg = UIImage(named: "Images/SliderMin.png")
-        let sliderMinInsets = UIEdgeInsets(top: 0.0, left: 10.0, bottom: 0.0, right: 0.0)
+        let sliderMinInsets = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
         let sliderMin = sliderMinImg?.resizableImage(withCapInsets: sliderMinInsets,
                                                      resizingMode: UIImageResizingMode.stretch)
         scrub.setMinimumTrackImage(sliderMin, for: UIControlState.normal)
         
         let sliderMaxImg = UIImage(named: "Images/SliderMax.png")
-        let sliderMaxInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 10.0)
+        let sliderMaxInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 8.0)
         let sliderMax = sliderMaxImg?.resizableImage(withCapInsets: sliderMaxInsets,
                                                      resizingMode: UIImageResizingMode.stretch)
         scrub.setMaximumTrackImage(sliderMax, for: UIControlState.normal)
