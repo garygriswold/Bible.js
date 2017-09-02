@@ -1,4 +1,4 @@
-#!/bin/sh -v
+#!/bin/sh -ve
 
 sqlite3 Versions.db < Versions.sql
 sqlite Versions.db < VideoCreate.sql

@@ -8,7 +8,7 @@ CREATE TABLE Video (
 	title TEXT NOT NULL,
 	lengthMS INT NOT NULL,
 	HLS_URL TEXT NOT NULL,
-	MP4_1080 TEXT NULL, -- deprecated remove at next revision
+	MP4_1080 TEXT NULL, -- deprecated remove at next revision (GNG 6/2017)
 	MP4_720 TEXT NULL, -- deprecated  remove at next revision
 	MP4_540 TEXT NULL, -- deprecated remove at next revision
 	MP4_360 TEXT NULL, -- deprecated remove at next revision

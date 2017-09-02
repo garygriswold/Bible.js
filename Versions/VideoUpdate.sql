@@ -120,23 +120,23 @@ INSERT INTO Video VALUES ('kir', 'KOG_NT', 'kir', 'ky', 'Даңк Падышас
 'https://player.vimeo.com/external/183908993.sd.mp4?s=fb34c140d436860e968bd1af91c903dc5dfdeef9&profile_id=164',
 null
 );
--- Lebanese
--- INSERT INTO Video VALUES ('???', 'KOG_OT', '', 'ar', 'مَلِكُ المـَجْد &#1777;', 6435000,
--- 'https://player.vimeo.com/external/206292268.m3u8?s=0b9e2e0811c4ddd57d69de30d7505eda27885f11',
--- 'https://player.vimeo.com/external/206292268.hd.mp4?s=830e9e569ae3e0f707e4fba4b72c909cb405be88&profile_id=119',
--- 'https://player.vimeo.com/external/206292268.hd.mp4?s=830e9e569ae3e0f707e4fba4b72c909cb405be88&profile_id=174',
--- 'https://player.vimeo.com/external/206292268.sd.mp4?s=8cb1afddd634ea1c3a62fb9a11f2ace64abe9db9&profile_id=165',
--- 'https://player.vimeo.com/external/206292268.sd.mp4?s=8cb1afddd634ea1c3a62fb9a11f2ace64abe9db9&profile_id=164',
--- null
--- );
--- INSERT INTO Video VALUES ('???', 'KOG_NT', '', 'ar', 'مَلِكُ المـَجْد &#1778;', 6898000,
--- 'https://player.vimeo.com/external/206304236.m3u8?s=63cdbcd17d8fd354fa28e6681ca41beb38702ce9',
--- 'https://player.vimeo.com/external/206304236.hd.mp4?s=6eae974bee77e74ea6e8b9cf3b4ecfec29b6a2e4&profile_id=119',
--- 'https://player.vimeo.com/external/206304236.hd.mp4?s=6eae974bee77e74ea6e8b9cf3b4ecfec29b6a2e4&profile_id=174',
--- 'https://player.vimeo.com/external/206304236.sd.mp4?s=e9e1d0fdc89059ab3cba47665f80bb06361202ee&profile_id=165',
--- 'https://player.vimeo.com/external/206304236.sd.mp4?s=e9e1d0fdc89059ab3cba47665f80bb06361202ee&profile_id=164',
--- null
--- );
+-- Lebanese Arabic
+INSERT INTO Video VALUES ('apc', 'KOG_OT', 'apc', 'ar', 'مَلِكُ المـَجْد &#1777;', 6435000,
+'https://player.vimeo.com/external/206292268.m3u8?s=0b9e2e0811c4ddd57d69de30d7505eda27885f11',
+'https://player.vimeo.com/external/206292268.hd.mp4?s=830e9e569ae3e0f707e4fba4b72c909cb405be88&profile_id=119',
+'https://player.vimeo.com/external/206292268.hd.mp4?s=830e9e569ae3e0f707e4fba4b72c909cb405be88&profile_id=174',
+'https://player.vimeo.com/external/206292268.sd.mp4?s=8cb1afddd634ea1c3a62fb9a11f2ace64abe9db9&profile_id=165',
+'https://player.vimeo.com/external/206292268.sd.mp4?s=8cb1afddd634ea1c3a62fb9a11f2ace64abe9db9&profile_id=164',
+null
+);
+INSERT INTO Video VALUES ('apc', 'KOG_NT', 'apc', 'ar', 'مَلِكُ المـَجْد &#1778;', 6898000,
+'https://player.vimeo.com/external/206304236.m3u8?s=63cdbcd17d8fd354fa28e6681ca41beb38702ce9',
+'https://player.vimeo.com/external/206304236.hd.mp4?s=6eae974bee77e74ea6e8b9cf3b4ecfec29b6a2e4&profile_id=119',
+'https://player.vimeo.com/external/206304236.hd.mp4?s=6eae974bee77e74ea6e8b9cf3b4ecfec29b6a2e4&profile_id=174',
+'https://player.vimeo.com/external/206304236.sd.mp4?s=e9e1d0fdc89059ab3cba47665f80bb06361202ee&profile_id=165',
+'https://player.vimeo.com/external/206304236.sd.mp4?s=e9e1d0fdc89059ab3cba47665f80bb06361202ee&profile_id=164',
+null
+);
 -- Somali
 INSERT INTO Video VALUES ('som', 'KOG_OT', 'som', 'so', 'BOQORKA AMMAANTA •&nbsp;1', 6435000,
 'https://player.vimeo.com/external/173984346.m3u8?s=b63ff54af12439d33d8988c5ff973c16bd96025b',
@@ -186,6 +186,23 @@ INSERT INTO Video VALUES ('swh', 'KOG_NT', 'swh', 'sw', 'MFALME wa UTUKUFU •&n
 'https://player.vimeo.com/external/173967925.hd.mp4?s=cc1df76cc90943f038723667a1f141099e639b43&profile_id=174',
 'https://player.vimeo.com/external/173967925.sd.mp4?s=d285b7900ed0587d36ab3f9e1c5bf8f4e7e5a42b&profile_id=165',
 'https://player.vimeo.com/external/173967925.sd.mp4?s=d285b7900ed0587d36ab3f9e1c5bf8f4e7e5a42b&profile_id=164',
+null
+);
+-- Swedish
+INSERT INTO Video VALUES ('swe', 'KOG_OT', 'swe', 'sv', 'HARLIGHETENS KONUNG •&nbsp;1', 6435000,
+'https://player.vimeo.com/external/226936671.m3u8?s=7ae2f7ae91e147cc4a50178be17cd42d02f95b63',
+'https://player.vimeo.com/external/226936671.hd.mp4?s=6aa30cd1e04799ed8f509e1df2e3c19905f99821&profile_id=175',
+'https://player.vimeo.com/external/226936671.hd.mp4?s=6aa30cd1e04799ed8f509e1df2e3c19905f99821&profile_id=174',
+'https://player.vimeo.com/external/226936671.sd.mp4?s=6643e18203ded318ced0d65a3c010169a2f68029&profile_id=165',
+'https://player.vimeo.com/external/226936671.sd.mp4?s=6643e18203ded318ced0d65a3c010169a2f68029&profile_id=164',
+null
+);
+INSERT INTO Video VALUES ('swe', 'KOG_NT', 'swe', 'sv', 'HARLIGHETENS KONUNG •&nbsp;2', 6898000,
+'https://player.vimeo.com/external/226946845.m3u8?s=a3f885a198f7084bd052369e988a0030f18b1c00',
+'https://player.vimeo.com/external/226946845.hd.mp4?s=8e279f8deb9107c1a79f0b290d7075a39ffbed80&profile_id=175',
+'https://player.vimeo.com/external/226946845.hd.mp4?s=8e279f8deb9107c1a79f0b290d7075a39ffbed80&profile_id=174',
+'https://player.vimeo.com/external/226946845.sd.mp4?s=74779df2c5c8ea8301879d30a245558b3168b6e8&profile_id=165',
+'https://player.vimeo.com/external/226946845.sd.mp4?s=74779df2c5c8ea8301879d30a245558b3168b6e8&profile_id=164',
 null
 );
 -- Turkish

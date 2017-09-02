@@ -16,3 +16,11 @@ iOS Only
 
 This is identical to 1.9.4, except that some iOS framework build errors
 had to be corrected, i.e. nested frameworks, and removing x86 from AWSCore.
+
+1.9.6 - Sept 1, 2017
+-----------------------
+iOS Only
+
+This is identical to 1.9.5, except that two KOG films Lebanese and Swedish
+were added.  The purpose of the update was to add Arabic, Persian and
+Chinese stores.
