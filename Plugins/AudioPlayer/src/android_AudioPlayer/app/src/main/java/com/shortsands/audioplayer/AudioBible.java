@@ -89,11 +89,11 @@ public class AudioBible implements MediaPlayer.OnPreparedListener, MediaPlayer.O
     }
 
     public void play() {
-
+        this.mediaPlayer.start();
     }
 
     public void pause() {
-
+        this.mediaPlayer.pause();
     }
 
     public void stop() {

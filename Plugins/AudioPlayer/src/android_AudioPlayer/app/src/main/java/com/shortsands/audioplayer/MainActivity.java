@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        
+
         AudioBibleController controller = new AudioBibleController(this);
         controller.present();
     }

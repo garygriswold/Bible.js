@@ -3,17 +3,26 @@ package com.shortsands.audioplayer;
 /**
  * Created by garygriswold on 8/30/17.
  */
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.IntDef;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.design.widget.FloatingActionButton;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -23,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 //import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
+import android.widget.Toolbar;
 
 import java.io.File;
 
@@ -56,8 +66,8 @@ public class AudioBibleView {
         layout.setGravity(Gravity.CENTER);
         view.addView(layout);
 
-
         final ImageButton play = new ImageButton(this.activity);
+        //play.setSize(FloatingActionButton.SIZE_NORMAL);
         play.setImageResource(R.drawable.play_up_button);
         play.setBackgroundColor(Color.TRANSPARENT);
         play.setOnTouchListener(new View.OnTouchListener() {
