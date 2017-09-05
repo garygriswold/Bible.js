@@ -12,18 +12,19 @@ import com.shortsands.aws.AwsS3;
 
 public class AudioBibleController {
 
-    public Context context;
+    public Activity activity;
     public String region;
     private AudioBibleView readerView;
 
-    public AudioBibleController(Context context) {
-        this.context = context;
+    public AudioBibleController(Activity activity) {
+        this.activity = activity;
         this.region = "us-west-2";
-        AwsS3.initialize(this.region, context);
+        AwsS3.initialize(this.region, activity);
     }
 
     public void present() { // one parameter view
         AudioBible audioBible = new AudioBible(this, null, null);
+        this.readerView = new AudioBibleView(this, audioBible);
         audioBible.beginStreaming();
 
         /* iOS
