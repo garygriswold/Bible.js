@@ -22,8 +22,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View.OnClickListener;
@@ -39,10 +41,14 @@ import java.io.File;
 public class AudioBibleView {
 
     private static String TAG = "AudioBibleView";
+    private static int TOP_BAR_HEIGHT = 100;
 
     AudioBibleController controller;
     Activity activity;
     AudioBible audioBible;
+    private RelativeLayout layout;
+    private RelativeLayout.LayoutParams playParams;
+    private RelativeLayout.LayoutParams pauseParams;
     private ImageButton playButton;
     private ImageButton pauseButton;
     private ImageButton stopButton;
@@ -60,14 +66,16 @@ public class AudioBibleView {
         Window window = this.activity.getWindow();
         ViewGroup view = (ViewGroup)window.getDecorView();
 
-        LinearLayout layout = new LinearLayout(this.activity);
-        layout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 1200));//, 0f)); //?????
-        layout.setOrientation(LinearLayout.HORIZONTAL);
-        layout.setGravity(Gravity.CENTER);
+        RelativeLayout layout = new RelativeLayout(this.activity);
+        layout.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         view.addView(layout);
+        this.layout = layout;
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        this.activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int buttonTop = metrics.heightPixels / 10 + TOP_BAR_HEIGHT;
 
         final ImageButton play = new ImageButton(this.activity);
-        //play.setSize(FloatingActionButton.SIZE_NORMAL);
         play.setImageResource(R.drawable.play_up_button);
         play.setBackgroundColor(Color.TRANSPARENT);
         play.setOnTouchListener(new View.OnTouchListener() {
@@ -85,8 +93,10 @@ public class AudioBibleView {
                 return false;
             }
         });
+        this.playParams = new RelativeLayout.LayoutParams(84, 84);
+        this.playParams.leftMargin = (metrics.widthPixels / 3) - 44;
+        this.playParams.topMargin = buttonTop;
         this.playButton = play;
-        layout.addView(play);
 
         final ImageButton pause = new ImageButton(this.activity);
         pause.setImageResource(R.drawable.pause_up_button);
@@ -106,8 +116,11 @@ public class AudioBibleView {
                 return false;
             }
         });
+        this.pauseParams = new RelativeLayout.LayoutParams(84, 84);
+        this.pauseParams.leftMargin = (metrics.widthPixels / 3) - 44;
+        this.pauseParams.topMargin = buttonTop;
+        layout.addView(pause, this.pauseParams);
         this.pauseButton = pause;
-        layout.addView(pause);
 
         final ImageButton stop = new ImageButton(this.activity);
         stop.setImageResource(R.drawable.stop_up_button);
@@ -127,8 +140,12 @@ public class AudioBibleView {
                 return false;
             }
         });
+        RelativeLayout.LayoutParams stopParams = new RelativeLayout.LayoutParams(84, 84);
+        stopParams.leftMargin = (metrics.widthPixels * 2 / 3) - 44;
+        stopParams.topMargin = buttonTop;
+        layout.addView(stop, stopParams);
         this.stopButton = stop;
-        layout.addView(stop);
+
 
         // create play, pause, stop
         // create slider
@@ -136,14 +153,14 @@ public class AudioBibleView {
 
     public void play() {
         this.audioBible.play();
-        //this.playButton.removeFromSuperview()
-        //this.view.addSubview(self.pauseButton)
+        this.layout.removeView(this.playButton);
+        this.layout.addView(this.pauseButton, this.pauseParams);
     }
 
     public void pause() {
         this.audioBible.pause();
-        //this.pauseButton.removeFromSuperview()
-        //this.view.addSubview(self.playButton)
+        this.layout.removeView(this.pauseButton);
+        this.layout.addView(this.playButton, this.playParams);
     }
 
     public void stop() {
