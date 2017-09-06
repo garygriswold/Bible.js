@@ -6,8 +6,6 @@ package com.shortsands.audioplayer;
 import android.app.Activity;
 import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.widget.ImageButton;
 import android.widget.LinearLayout.LayoutParams;
@@ -15,14 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View.OnClickListener;
-import android.view.View.OnHoverListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AudioBibleView {
 
@@ -41,7 +34,7 @@ public class AudioBibleView {
     private SeekBar seekBar;
     // Transient State Variables
     //var scrubSliderDuration: CMTime
-    boolean scrubSliderDrag;
+    //boolean scrubSliderDrag;
     boolean isPlaying = false;
 
     public AudioBibleView(AudioBibleController controller, AudioBible audioBible) { // view is UIView equiv
@@ -132,24 +125,7 @@ public class AudioBibleView {
         layout.addView(stop, stopParams);
         this.stopButton = stop;
 
-
         this.seekBar = new SeekBar(this.activity);
-        this.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                Log.d(TAG, "progress changed");
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                Log.d(TAG, "SeekBar start touch");
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                Log.d(TAG, "SeekBar end touch");
-            }
-        });
         RelativeLayout.LayoutParams seekParams = new RelativeLayout.LayoutParams(metrics.widthPixels * 4 / 5, 84);
         seekParams.leftMargin = metrics.widthPixels / 10;
         seekParams.topMargin = buttonTop + 200;
@@ -177,6 +153,7 @@ public class AudioBibleView {
     public void startPlay() {
         this.isPlaying = true;
         final MediaPlayer player = this.audioBible.mediaPlayer;
+
         new Thread(new Runnable() {
             public void run() {
                 while(player != null && isPlaying) {
@@ -190,6 +167,41 @@ public class AudioBibleView {
                 }
             }
         }).start();
+
+        this.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int value, boolean isUser) {
+                Log.d(TAG, "progress changed");
+                if (isUser) {
+                    if (player != null) {
+                        if (value < seekBar.getMax()) {
+                            //var current: Float
+                            //if let verse = self.audioBible.audioChapter {
+                            //    current = verse.findVerseByPosition(seconds: slider.value)
+                            //} else {
+                            //    current = slider.value
+                            //}
+                            //let time: CMTime = CMTime(seconds: Double(current), preferredTimescale: CMTimeScale(1.0)
+                            player.seekTo(value);
+                        } else {
+                            audioBible.advanceToNextItem();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                Log.d(TAG, "**** touchDown ***");
+                //scrubSliderDrag = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.d(TAG, "**** touchUpInside ***");
+                //scrubSliderDrag = false;
+            }
+        });
     }
 
     public void stopPlay() {
@@ -203,36 +215,5 @@ public class AudioBibleView {
         self.scrubSlider.removeFromSuperview()
         self.progressLink?.invalidate()
         */
-    }
-
-    private void scrubSliderChanged(Object sender, Object event) { // UISlider, UIEvent
-        /*
-        let slider = self.scrubSlider
-        print("scrub slider changed to \(slider.value)")
-        if let play = self.audioBible.player {
-            if (slider.value < slider.maximumValue) {
-                var current: Float
-                if let verse = self.audioBible.audioChapter {
-                    current = verse.findVerseByPosition(seconds: slider.value)
-                } else {
-                    current = slider.value
-                }
-                let time: CMTime = CMTime(seconds: Double(current), preferredTimescale: CMTimeScale(1.0))
-                play.seek(to: time)
-            } else {
-                self.audioBible.advanceToNextItem()
-            }
-        }
-        */
-    }
-
-    private void touchDown() {
-        Log.d(TAG, "**** touchDown ***");
-        this.scrubSliderDrag = true;
-    }
-
-    private void touchUpInside() {
-        Log.d(TAG, "**** touchUpInside ***");
-        this.scrubSliderDrag = false;
     }
 }
