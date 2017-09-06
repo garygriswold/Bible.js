@@ -3,28 +3,16 @@ package com.shortsands.audioplayer;
 /**
  * Created by garygriswold on 8/30/17.
  */
-import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.IntDef;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.design.widget.FloatingActionButton;
 import android.view.Gravity;
 import android.view.MotionEvent;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
+import android.widget.SeekBar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -32,11 +20,9 @@ import android.view.View.OnClickListener;
 import android.view.View.OnHoverListener;
 import android.view.View;
 import android.view.ViewGroup;
-//import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
-import android.widget.Toolbar;
 
-import java.io.File;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AudioBibleView {
 
@@ -52,11 +38,11 @@ public class AudioBibleView {
     private ImageButton playButton;
     private ImageButton pauseButton;
     private ImageButton stopButton;
-    //let scrubSlider: UISlider
-    //var progressLink: CADisplayLink?
+    private SeekBar seekBar;
     // Transient State Variables
     //var scrubSliderDuration: CMTime
     boolean scrubSliderDrag;
+    boolean isPlaying = false;
 
     public AudioBibleView(AudioBibleController controller, AudioBible audioBible) { // view is UIView equiv
         this.controller = controller;
@@ -147,8 +133,27 @@ public class AudioBibleView {
         this.stopButton = stop;
 
 
-        // create play, pause, stop
-        // create slider
+        this.seekBar = new SeekBar(this.activity);
+        this.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                Log.d(TAG, "progress changed");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                Log.d(TAG, "SeekBar start touch");
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.d(TAG, "SeekBar end touch");
+            }
+        });
+        RelativeLayout.LayoutParams seekParams = new RelativeLayout.LayoutParams(metrics.widthPixels * 4 / 5, 84);
+        seekParams.leftMargin = metrics.widthPixels / 10;
+        seekParams.topMargin = buttonTop + 200;
+        layout.addView(this.seekBar, seekParams);
     }
 
     public void play() {
@@ -170,45 +175,33 @@ public class AudioBibleView {
     }
 
     public void startPlay() {
-        /*
-        self.progressLink = CADisplayLink(target: self, selector: #selector(updateProgress))
-        self.progressLink!.add(to: .current, forMode: .defaultRunLoopMode)
-        self.progressLink!.preferredFramesPerSecond = 15
-
-        self.playButton.addTarget(self, action: #selector(self.play), for: .touchUpInside)
-        self.pauseButton.addTarget(self, action: #selector(self.pause), for: .touchUpInside)
-        self.stopButton.addTarget(self, action: #selector(self.stop), for: .touchUpInside)
-        self.scrubSlider.addTarget(self, action: #selector(scrubSliderChanged), for: .valueChanged)
-        self.scrubSlider.addTarget(self, action: #selector(touchDown), for: .touchDown)
-        self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
-        */
+        this.isPlaying = true;
+        final MediaPlayer player = this.audioBible.mediaPlayer;
+        new Thread(new Runnable() {
+            public void run() {
+                while(player != null && isPlaying) {
+                    seekBar.setMax(player.getDuration());
+                    seekBar.setProgress(player.getCurrentPosition());
+                    try {
+                        Thread.sleep(200);
+                    } catch(InterruptedException ex) {
+                        Log.d(TAG, "Sleep Interrupted Exception");
+                    }
+                }
+            }
+        }).start();
     }
 
     public void stopPlay() {
+        // We reach this on clicking
+        // But we need to reach this on completing a file.
+        this.isPlaying = false;
         /*
         self.playButton.removeFromSuperview()
         self.pauseButton.removeFromSuperview()
         self.stopButton.removeFromSuperview()
         self.scrubSlider.removeFromSuperview()
         self.progressLink?.invalidate()
-        */
-    }
-
-    private void updateProgress() {
-        /*
-        if self.scrubSliderDrag { return }
-
-        if let item = self.audioBible.player?.currentItem {
-            if CMTIME_IS_NUMERIC(item.duration) {
-                if item.duration != self.scrubSliderDuration {
-                    self.scrubSliderDuration = item.duration
-                    let duration = CMTimeGetSeconds(item.duration)
-                    self.scrubSlider.maximumValue = Float(duration)
-                }
-            }
-            let current = CMTimeGetSeconds(item.currentTime())
-            self.scrubSlider.setValue(Float(current), animated: true)
-        }
         */
     }
 

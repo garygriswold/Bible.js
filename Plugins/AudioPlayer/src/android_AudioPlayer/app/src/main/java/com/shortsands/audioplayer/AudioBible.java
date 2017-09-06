@@ -35,7 +35,7 @@ public class AudioBible implements MediaPlayer.OnPreparedListener, MediaPlayer.O
     private static String TAG = "AudioBible";
 
     private AudioBibleController controller;
-    private MediaPlayer mediaPlayer = null;
+    public MediaPlayer mediaPlayer = null;
 
     public AudioBible(AudioBibleController controller, TOCAudioBible tocBible, Reference reference) {
         this.controller = controller;
@@ -77,6 +77,7 @@ public class AudioBible implements MediaPlayer.OnPreparedListener, MediaPlayer.O
 */
     public void onPrepared(MediaPlayer player) {
         player.start();
+        this.controller.playHasStarted();
     }
 
     public void initAudio(URL url) {
