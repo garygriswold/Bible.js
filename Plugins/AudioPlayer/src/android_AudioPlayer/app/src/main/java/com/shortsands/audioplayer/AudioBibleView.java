@@ -171,21 +171,18 @@ public class AudioBibleView {
         this.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int value, boolean isUser) {
-                Log.d(TAG, "progress changed");
-                if (isUser) {
-                    if (player != null) {
-                        if (value < seekBar.getMax()) {
-                            //var current: Float
-                            //if let verse = self.audioBible.audioChapter {
-                            //    current = verse.findVerseByPosition(seconds: slider.value)
-                            //} else {
-                            //    current = slider.value
-                            //}
-                            //let time: CMTime = CMTime(seconds: Double(current), preferredTimescale: CMTimeScale(1.0)
-                            player.seekTo(value);
-                        } else {
-                            audioBible.advanceToNextItem();
-                        }
+                if (isUser && player != null) {
+                    if (value < seekBar.getMax()) {
+                        //var current: Float
+                        //if let verse = self.audioBible.audioChapter {
+                        //    current = verse.findVerseByPosition(seconds: slider.value)
+                        //} else {
+                        //    current = slider.value
+                        //}
+                        //let time: CMTime = CMTime(seconds: Double(current), preferredTimescale: CMTimeScale(1.0)
+                        player.seekTo(value);
+                    } else {
+                        audioBible.advanceToNextItem();
                     }
                 }
             }

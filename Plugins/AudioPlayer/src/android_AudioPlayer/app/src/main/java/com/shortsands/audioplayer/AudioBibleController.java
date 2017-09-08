@@ -1,10 +1,6 @@
 package com.shortsands.audioplayer;
 
-import android.content.Context;
 import android.app.Activity;
-import android.app.Service;
-import android.app.IntentService;
-
 import com.shortsands.aws.AwsS3;
 /**
  * Created by garygriswold on 8/30/17.
@@ -22,18 +18,14 @@ public class AudioBibleController {
         AwsS3.initialize(this.region, activity);
     }
 
-    public void present() { // one parameter view
-        AudioBible audioBible = new AudioBible(this, null, null);
-        this.readerView = new AudioBibleView(this, audioBible);
-        audioBible.beginStreaming();
+    public void present() {
+//        AudioBible audioBible = new AudioBible(this, null, null);
+//        this.readerView = new AudioBibleView(this, audioBible);
+//        audioBible.beginStreaming();
 
-        /* iOS
-        view.backgroundColor = .blue // This is for Testing
-
-        AwsS3.region = "us-west-2"
-        let metaData = MetaDataReader()
-        metaData.read(languageCode: "ENG", mediaType: "audio", readComplete: { tocDictionary in
-
+        MetaDataReader metaData = new MetaDataReader(this.activity);
+        metaData.read("ENG", "audio");//, readComplete: { tocDictionary in
+/*
             //let tocAudioBible = tocDictionary["ENGWEBN2DA"]
             let tocAudioBible = tocDictionary["DEMO"]
             if let tocBible = tocAudioBible {
@@ -52,8 +44,8 @@ public class AudioBibleController {
                 }
             }
         })
+       */
 
-         */
     }
 
     public void playHasStarted() {
