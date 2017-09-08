@@ -32,8 +32,10 @@ public class FileManager {
             String line = reader.readLine();
 
             while (line != null) {
+                if (sb.length() > 0) {
+                    sb.append("\n");
+                }
                 sb.append(line);
-                sb.append("/");
                 line = reader.readLine();
             }
             output = sb.toString();

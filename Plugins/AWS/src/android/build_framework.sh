@@ -20,3 +20,6 @@ cp ${DEBUG_ROOT}/${JAR} plugin
 # Copy Debug Jar to VideoPlayer project libs
 cp ${DEBUG_ROOT}/${JAR} ../../../VideoPlayer/src/android/app/libs/
 
+# Copy Debug Jar to AudioPlayer project libs
+cp ${DEBUG_ROOT}/${JAR} ../../../AudioPlayer/src/android_AudioPlayer/app/libs/
+
