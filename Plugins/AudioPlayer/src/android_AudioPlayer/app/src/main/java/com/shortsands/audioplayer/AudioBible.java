@@ -35,16 +35,18 @@ public class AudioBible implements MediaPlayer.OnPreparedListener, MediaPlayer.O
     private static String TAG = "AudioBible";
 
     private AudioBibleController controller;
+    private TOCAudioBible tocBible;
+    private Reference reference;
     public MediaPlayer mediaPlayer = null;
 
     public AudioBible(AudioBibleController controller, TOCAudioBible tocBible, Reference reference) {
         this.controller = controller;
+        this.tocBible = tocBible;
+        this.reference = reference;
     }
 
     public void beginStreaming() {
-        String s3Bucket = "audio-" + this.controller.region + "-shortsands";
-        URL url = AwsS3.shared().preSignedUrlGET(s3Bucket, "upload_emma_test.mp3", 3600);
-        String urlStr = url.toString();
+        String urlStr = this.reference.url.toString();
         this.mediaPlayer = new MediaPlayer();
         this.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC); // or STREAM_VOICE_CALL
 

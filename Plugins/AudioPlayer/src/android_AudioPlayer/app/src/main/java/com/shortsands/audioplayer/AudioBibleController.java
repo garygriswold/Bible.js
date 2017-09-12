@@ -1,51 +1,54 @@
 package com.shortsands.audioplayer;
 
 import android.app.Activity;
+import android.util.Log;
 import com.shortsands.aws.AwsS3;
+import java.util.HashMap;
 /**
  * Created by garygriswold on 8/30/17.
  */
 
 public class AudioBibleController {
 
+    private static String TAG = "AudioBibleController";
+
     public Activity activity;
-    public String region;
     private AudioBibleView readerView;
+    private AudioBibleController that;
 
     public AudioBibleController(Activity activity) {
         this.activity = activity;
-        this.region = "us-west-2";
-        AwsS3.initialize(this.region, activity);
+        AwsS3.initialize("us-west-2", activity);
     }
 
     public void present() {
-//        AudioBible audioBible = new AudioBible(this, null, null);
-//        this.readerView = new AudioBibleView(this, audioBible);
-//        audioBible.beginStreaming();
+        this.that = this;
 
         MetaDataReader metaData = new MetaDataReader(this.activity);
-        metaData.read("ENG", "audio");//, readComplete: { tocDictionary in
-/*
-            //let tocAudioBible = tocDictionary["ENGWEBN2DA"]
-            let tocAudioBible = tocDictionary["DEMO"]
-            if let tocBible = tocAudioBible {
-                //let metaBook = tocBible.booksById["JHN"]
-                let metaBook = tocBible.booksById["TST"]
-                if let book = metaBook {
+        MetaDataReaderResponse response = new MetaDataReaderResponse();
+        metaData.read("ENG", "audio", response);
+    }
 
-                    let reference = Reference(damId: tocBible.damId, sequence: book.sequence, book: book.bookId,
-                                              chapter: "001", fileType: "mp3")
-                    let reader = AudioBible(controller: self, tocBible: tocBible, reference: reference)
-                    self.readerView = AudioBibleView(view: view, audioBible: reader)
+    class MetaDataReaderResponse implements CompletionHandler {
 
-                    reader.beginStreaming()
-                    //reader.beginDownload()
-                    //reader.beginLocal()
-                }
+        public void completed(Object result, Object attachment) {
+            if (result instanceof HashMap) {
+                HashMap<String, TOCAudioBible> metaData = (HashMap<String, TOCAudioBible>)result;
+                TOCAudioBible bible = metaData.get("DEMO");
+                TOCAudioBook book = bible.booksById.get("TST");
+
+                Reference reference = new Reference(bible.damId, book.sequence, book.bookId, "001", "mp3");
+                AudioBible audioBible = new AudioBible(that, bible, reference);
+                readerView = new AudioBibleView(that, audioBible);
+
+                audioBible.beginStreaming();
+                //reader.beginDownload()
+                // reader.beginLocal()
             }
-        })
-       */
-
+        }
+        public void failed(Throwable exception, Object attachment) {
+            Log.e(TAG, "MetaDataReader failed " + exception.toString());
+        }
     }
 
     public void playHasStarted() {
