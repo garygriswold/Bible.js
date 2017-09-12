@@ -29,7 +29,7 @@ public class AwsS3 {
     static String TAG = "AwsS3";
 
     // AwsS3.regionName and Context should be set early in an App
-    private static String region = "us-east-1";
+    public static String region = "us-east-1";
     private static Context context = null;
     public static void initialize(String regionName, Context ctx) {
         AwsS3.region = regionName;
