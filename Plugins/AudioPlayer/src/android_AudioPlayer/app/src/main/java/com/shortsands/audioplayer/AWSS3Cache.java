@@ -16,10 +16,6 @@ import java.util.Date;
 
 public class AWSS3Cache extends DownloadFileListener {
 
-    //private static String AWS_KEY_ID = "AKIAI5BBVXQGO2SHKIRQ";
-    //private static String AWS_SECRET = "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";
-    //public static BasicAWSCredentials AWS_BIBLE_APP = new BasicAWSCredentials(AWS_KEY_ID, AWS_SECRET);
-
     private static String TAG = "AWSS3Cache";
 
     private Context context;
