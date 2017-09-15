@@ -58,7 +58,6 @@ public class MetaDataReader {
                     }
                 }
                 readCompletion.completed(metaData, attachment);
-            //    this.completed(metaData, this); /// This is not RIGHT it is circular
             } else {
                 Log.d(TAG, "Not parsable JSON");
                 readCompletion.failed(new RuntimeException("Could not parse JSON"), attachment);
@@ -87,7 +86,6 @@ public class MetaDataReader {
             JSONArray json = parseJson(result);
             if (json != null) {
                 metaDataVerse = new TOCAudioChapter(json);
-            //    this.completed(metaDataVerse, this); /// This is not RIGHT it is circular
                 readVerseCompletion.completed(metaDataVerse, this);
             } else {
                 readVerseCompletion.failed(new RuntimeException("Failed to parse JSON"), this);

@@ -182,7 +182,7 @@ public class AudioBibleView {
                         //let time: CMTime = CMTime(seconds: Double(current), preferredTimescale: CMTimeScale(1.0)
                         player.seekTo(value);
                     } else {
-                        audioBible.advanceToNextItem();
+                        //audioBible.advanceToNextItem();
                     }
                 }
             }

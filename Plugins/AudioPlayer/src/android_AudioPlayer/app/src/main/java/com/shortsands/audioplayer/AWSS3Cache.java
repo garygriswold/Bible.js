@@ -5,14 +5,11 @@ package com.shortsands.audioplayer;
  */
 import android.content.Context;
 import android.util.Log;
-import com.amazonaws.mobileconnectors.s3.transferutility.*;
-import com.amazonaws.services.s3.AmazonS3;
 import com.shortsands.aws.AwsS3;
 import com.shortsands.aws.DownloadFileListener;
 import com.shortsands.io.FileManager;
 import java.io.File;
 import java.util.Date;
-
 
 public class AWSS3Cache extends DownloadFileListener {
 
@@ -46,22 +43,6 @@ public class AWSS3Cache extends DownloadFileListener {
         }
     }
 
-    /**
-     * Download File.  This really belongs in AWSS3.
-
-    private void downloadFile(String s3Bucket, String s3Key, File file, DownloadFileListener listener) {
-        listener.setFile(file);
-        AmazonS3 amazonS3 = new AmazonS3Client(AWSS3Cache.AWS_BIBLE_APP);
-        Region region = RegionUtils.getRegion("us-west-2");
-        amazonS3.setRegion(region);
-        S3ClientOptions options = new S3ClientOptions();
-        options.withPathStyleAccess(true);
-        amazonS3.setS3ClientOptions(options);
-        TransferUtility transferUtility = new TransferUtility(amazonS3, this.context);
-        TransferObserver observer = transferUtility.download(s3Bucket, s3Key, file);
-        observer.setTransferListener(listener);
-    }
-*/
     private String readCache(File path, int expireInterval) {
         Log.d(TAG, "Path to read " + path.toString());
         String data = FileManager.readTextFully(path); // does not throw

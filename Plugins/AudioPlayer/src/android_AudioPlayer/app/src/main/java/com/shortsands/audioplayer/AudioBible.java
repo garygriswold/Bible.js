@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
@@ -30,64 +31,76 @@ import java.util.Date;
  * Created by garygriswold on 8/30/17.
  */
 
-public class AudioBible implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
+public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
 
     private static String TAG = "AudioBible";
 
     private AudioBibleController controller;
     private TOCAudioBible tocBible;
-    private Reference reference;
-    public MediaPlayer mediaPlayer = null;
+    // Transient Variables
+    private Reference currReference;
+    private Reference nextReference;
+    public MediaPlayer mediaPlayer;
+    private MediaPlayer nextPlayer;
 
     public AudioBible(AudioBibleController controller, TOCAudioBible tocBible, Reference reference) {
         this.controller = controller;
         this.tocBible = tocBible;
-        this.reference = reference;
+        this.currReference = reference;
+        this.nextReference = null;
+        this.mediaPlayer = null;
+        this.nextPlayer = null;
     }
 
     public void beginStreaming() {
-        String urlStr = this.reference.url.toString();
-        this.mediaPlayer = new MediaPlayer();
-        this.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC); // or STREAM_VOICE_CALL
-
-        try {
-            this.mediaPlayer.setDataSource(urlStr);
-            this.mediaPlayer.setOnPreparedListener(this);
-            //this.mediaPlayer.setWakeMode(this.controller.context, PowerManager.PARTIAL_WAKE_LOCK);
-            this.mediaPlayer.prepareAsync(); // prepare async to not block main thread
-        } catch(Exception err) {
-            Log.d(TAG, "Error in AudioBible.beginStreaming " + err.toString());
-        }
+        this.initAudio(this.currReference.url.toString());
     }
 
     public void beginDownload() {
 
     }
-/*
+
     public void beginLocal() {
-        Uri myUri = new Uri(""); // initialize Uri here
-        MediaPlayer mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        try {
-            mediaPlayer.setDataSource(getApplicationContext(), myUri);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch(IOException err) {
-            Log.d(TAG, "Error in beginLocal " + err.toString());
+
+    }
+
+    private void initAudio(String url) {
+        if (url != null) {
+            this.mediaPlayer = this.initPlayer(url);
+            this.mediaPlayer.start();
+            this.advanceToNextItem(this.currReference);
+            this.controller.playHasStarted();
+            //let seekTime = backupSeek(state: MediaPlayState.currentState)
+            //if (CMTimeGetSeconds(seekTime) > 0.1) {
+            //    playerItem.seek(to: seekTime)
+            //}
+        } else {
+            Log.e(TAG, "URL is null");
         }
     }
-*/
-    public void onPrepared(MediaPlayer player) {
-        player.start();
-        this.controller.playHasStarted();
-    }
 
-    public void initAudio(URL url) {
-
+    private MediaPlayer initPlayer(String url) {
+        MediaPlayer player = new MediaPlayer();
+        player.setLooping(false);
+        player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL); // Replace with AudioAttributes in SDK 21
+        try {
+            player.setDataSource(url);
+            player.prepare();
+            player.setOnCompletionListener(this);
+            //player.setWakeMode(this.controller.context, PowerManager.PARTIAL_WAKE_LOCK);
+            return player;
+        } catch(IOException ioe) {
+            Log.e(TAG, "Error in AudioBible.initPlayer " + ioe.toString());
+            return null;
+        }
     }
 
     private double backupSeek(MediaPlayState state) { // is it double, float or int
-
+        //if (state.mediaUrl == self.currReference.toString()) {
+        //    return state.position
+        //} else {
+        //    return kCMTimeZero
+        //}
         return 0.0;
     }
 
@@ -104,7 +117,18 @@ public class AudioBible implements MediaPlayer.OnPreparedListener, MediaPlayer.O
             this.mediaPlayer.release();
             this.mediaPlayer = null;
         }
+        if (this.nextPlayer != null) {
+            this.nextPlayer.release();
+            this.nextPlayer = null;
+        }
         this.controller.playHasStopped();
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer player) {
+        this.mediaPlayer = this.nextPlayer;
+        //player.release(); // Is this needed?
+        this.advanceToNextItem(this.nextReference);
     }
 
     @Override
@@ -146,51 +170,50 @@ public class AudioBible implements MediaPlayer.OnPreparedListener, MediaPlayer.O
 
         return true;
     }
-    private void initNotifications() {
-
-    }
-
-    private void removeNotifications() {
-
-    }
-
-    private void playerItemDidPlayToEndTime() { // Notification in ios
-
-    }
-
-    private void playerItemFailedToPlayToEndTime() { // notification in ios
-
-    }
-
-    private void playerItemPlaybackStalled() { // notification in ios
-
-    }
-
-    private void playerItemNewErrorLogEntry() { // notification in ios
-
-    }
 
     private void applicationWillResignActive() { // notification in ios
-
+        //print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
+        //self.sendAudioAnalytics()
+        //self.updateMediaPlayStateTime()
+        //self.stop()
     }
 
-    public void advanceToNextItem() {
-
+    public void advanceToNextItem(Reference reference) {
+        if (reference != null) {
+            this.currReference = reference;
+            this.nextReference = this.tocBible.nextChapter(this.currReference);
+            this.nextPlayer = this.initPlayer(this.nextReference.url.toString());
+            this.mediaPlayer.setNextMediaPlayer(this.nextPlayer);
+            //this.readVerseMetaData(this.currReference);
+        } else {
+        //    self.sendAudioAnalytics()
+        //    MediaPlayState.clear()
+            this.stop();
+        }
     }
 
     public void updateMediaPlayStateTime() {
-
+        //var result: CMTime = kCMTimeZero
+        //if let currentTime = self.player?.currentTime() {
+        //    if let time: CMTime = self.audioChapter?.findVerseByPosition(time: currentTime) {
+        //        result = time
+        //    }
+        //}
+        //MediaPlayState.update(url: self.currReference.toString(), time: result)
     }
 
     private void readVerseMetaData(Reference reference) {
-
-    }
-
-    private void addNextChapter(Reference reference) {
-
+        //let reader = MetaDataReader()
+        //reader.readVerseAudio(damid: reference.damId, sequence: reference.sequence, bookId: reference.book, chapter: reference.chapter, readComplete: {
+        //    audioChapter in
+        //    self.audioChapter = audioChapter
+        //    //print("PARSED DATA \(self.audioChapter?.toString())")
+        //})
     }
 
     public void sendAudioAnalytics() {
-
+        //print("\n*********** INSIDE SAVE ANALYTICS *************")
+        //let currTime = (self.player != nil) ? self.player!.currentTime() : kCMTimeZero
+        //self.audioAnalytics.playEnded(item: self.currReference.toString(), position: currTime)
     }
 }
