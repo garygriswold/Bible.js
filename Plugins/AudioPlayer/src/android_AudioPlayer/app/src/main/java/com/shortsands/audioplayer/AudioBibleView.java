@@ -36,7 +36,6 @@ public class AudioBibleView {
     private MonitorSeekBar monitorSeekBar = null;
     //var scrubSliderDuration: CMTime
     //boolean scrubSliderDrag;
-    boolean isPlaying = false;
 
     public AudioBibleView(AudioBibleController controller, AudioBible audioBible) { // view is UIView equiv
         this.controller = controller;
@@ -176,8 +175,6 @@ public class AudioBibleView {
                         //}
                         //let time: CMTime = CMTime(seconds: Double(current), preferredTimescale: CMTimeScale(1.0)
                         player.seekTo(value);
-                    } else {
-                        //audioBible.advanceToNextItem();
                     }
                 }
             }
@@ -208,7 +205,6 @@ public class AudioBibleView {
             while(player != null && isPlaying) {
                 seekBar.setMax(player.getDuration());
                 seekBar.setProgress(player.getCurrentPosition());
-                Log.d(TAG, player.getDuration() + "   " + player.getCurrentPosition());
                 try {
                     Thread.sleep(200);
                 } catch(InterruptedException ex) {
@@ -222,7 +218,10 @@ public class AudioBibleView {
     public void stopPlay() {
         // We reach this on clicking
         // But we need to reach this on completing a file.
-        this.isPlaying = false;
+        if (this.monitorSeekBar != null) {
+            this.monitorSeekBar.isPlaying = false;
+            this.monitorSeekBar = null;
+        }
         /*
         self.playButton.removeFromSuperview()
         self.pauseButton.removeFromSuperview()
