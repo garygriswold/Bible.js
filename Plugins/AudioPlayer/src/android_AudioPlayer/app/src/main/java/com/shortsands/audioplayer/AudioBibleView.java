@@ -33,6 +33,7 @@ public class AudioBibleView {
     private ImageButton stopButton;
     private SeekBar seekBar;
     // Transient State Variables
+    private MonitorSeekBar monitorSeekBar = null;
     //var scrubSliderDuration: CMTime
     //boolean scrubSliderDrag;
     boolean isPlaying = false;
@@ -150,23 +151,17 @@ public class AudioBibleView {
         this.audioBible.stop();
     }
 
-    public void startPlay() {
-        this.isPlaying = true;
-        final MediaPlayer player = this.audioBible.mediaPlayer;
-
-        new Thread(new Runnable() {
-            public void run() {
-                while(player != null && isPlaying) {
-                    seekBar.setMax(player.getDuration());
-                    seekBar.setProgress(player.getCurrentPosition());
-                    try {
-                        Thread.sleep(200);
-                    } catch(InterruptedException ex) {
-                        Log.d(TAG, "Sleep Interrupted Exception");
-                    }
-                }
-            }
-        }).start();
+    /**
+     * Start the animation of the seek bar and the use of it to control audio position.
+     * @param player
+     */
+    public void startPlay(final MediaPlayer player) {
+        if (this.monitorSeekBar != null) {
+            this.monitorSeekBar.isPlaying = false;
+            this.monitorSeekBar = null;
+        }
+        this.monitorSeekBar = new MonitorSeekBar(player);
+        new Thread(this.monitorSeekBar).start();
 
         this.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -199,6 +194,29 @@ public class AudioBibleView {
                 //scrubSliderDrag = false;
             }
         });
+    }
+
+    class MonitorSeekBar implements Runnable {
+        private MediaPlayer player;
+        public boolean isPlaying;
+
+        MonitorSeekBar(MediaPlayer player) {
+            this.player = player;
+            this.isPlaying = true;
+        }
+        public void run() {
+            while(player != null && isPlaying) {
+                seekBar.setMax(player.getDuration());
+                seekBar.setProgress(player.getCurrentPosition());
+                Log.d(TAG, player.getDuration() + "   " + player.getCurrentPosition());
+                try {
+                    Thread.sleep(200);
+                } catch(InterruptedException ex) {
+                    Log.d(TAG, "Sleep Interrupted Exception");
+                }
+            }
+            Thread.interrupted();
+        }
     }
 
     public void stopPlay() {

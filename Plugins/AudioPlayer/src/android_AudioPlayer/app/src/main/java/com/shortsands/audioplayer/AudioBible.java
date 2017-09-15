@@ -68,8 +68,8 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         if (url != null) {
             this.mediaPlayer = this.initPlayer(url);
             this.mediaPlayer.start();
+            this.controller.playHasStarted(this.mediaPlayer);
             this.advanceToNextItem(this.currReference);
-            this.controller.playHasStarted();
             //let seekTime = backupSeek(state: MediaPlayState.currentState)
             //if (CMTimeGetSeconds(seekTime) > 0.1) {
             //    playerItem.seek(to: seekTime)
@@ -127,6 +127,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     @Override
     public void onCompletion(MediaPlayer player) {
         this.mediaPlayer = this.nextPlayer;
+        this.controller.playHasStarted(this.mediaPlayer);
         //player.release(); // Is this needed?
         this.advanceToNextItem(this.nextReference);
     }

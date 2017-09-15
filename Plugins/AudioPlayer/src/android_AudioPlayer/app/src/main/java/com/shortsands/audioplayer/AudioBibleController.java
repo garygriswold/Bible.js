@@ -1,6 +1,7 @@
 package com.shortsands.audioplayer;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
 import android.util.Log;
 import com.shortsands.aws.AwsS3;
 import java.util.HashMap;
@@ -51,9 +52,9 @@ public class AudioBibleController {
         }
     }
 
-    public void playHasStarted() {
+    public void playHasStarted(MediaPlayer player) {
         if (this.readerView != null) {
-            this.readerView.startPlay();
+            this.readerView.startPlay(player);
         }
     }
 
