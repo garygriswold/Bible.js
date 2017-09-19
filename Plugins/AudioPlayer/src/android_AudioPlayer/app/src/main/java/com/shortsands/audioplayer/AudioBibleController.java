@@ -14,8 +14,9 @@ public class AudioBibleController {
     private static String TAG = "AudioBibleController";
 
     public Activity activity;
-    private AudioBibleView readerView;
     private AudioBibleController that;
+    private AudioBible audioBible;
+    private AudioBibleView readerView;
 
     public AudioBibleController(Activity activity) {
         this.activity = activity;
@@ -39,7 +40,7 @@ public class AudioBibleController {
                 TOCAudioBook book = bible.booksById.get("TST");
 
                 Reference reference = new Reference(bible.damId, book.sequence, book.bookId, "001", "mp3");
-                AudioBible audioBible = new AudioBible(that, bible, reference);
+                audioBible = new AudioBible(that, bible, reference);
                 readerView = new AudioBibleView(that, audioBible);
 
                 audioBible.beginStreaming();
@@ -63,5 +64,9 @@ public class AudioBibleController {
             this.readerView.stopPlay();
             this.readerView = null;
         }
+    }
+
+    public void appHasExited() {
+        this.audioBible.stop();
     }
 }

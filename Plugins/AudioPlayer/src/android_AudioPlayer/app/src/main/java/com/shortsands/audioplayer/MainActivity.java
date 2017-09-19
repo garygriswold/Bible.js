@@ -67,5 +67,6 @@ public class MainActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         Log.d(TAG, "*** onPause is called.");
+        this.controller.appHasExited();
     }
 }
