@@ -1,16 +1,19 @@
 package com.shortsands.audioplayer;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static String TAG = "MainActivity";
+    AudioBibleController controller = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        AudioBibleController controller = new AudioBibleController(this);
-        controller.present();
+        this.controller = new AudioBibleController(this);
+        this.controller.present();
     }
 
     @Override
@@ -52,5 +55,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "*** onResume is called.");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "*** onPause is called.");
     }
 }

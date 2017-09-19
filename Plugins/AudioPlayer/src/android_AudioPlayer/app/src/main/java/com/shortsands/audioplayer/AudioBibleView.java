@@ -145,8 +145,6 @@ public class AudioBibleView {
     }
 
     public void stop() {
-        this.audioBible.updateMediaPlayStateTime();
-        this.audioBible.sendAudioAnalytics();
         this.audioBible.stop();
     }
 
@@ -217,7 +215,7 @@ public class AudioBibleView {
 
     public void stopPlay() {
         // We reach this on clicking
-        // But we need to reach this on completing a file.
+        // But we need to reach this on completing all files.
         if (this.monitorSeekBar != null) {
             this.monitorSeekBar.isPlaying = false;
             this.monitorSeekBar = null;

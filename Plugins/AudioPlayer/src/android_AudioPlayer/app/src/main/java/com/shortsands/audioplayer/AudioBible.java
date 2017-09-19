@@ -31,7 +31,8 @@ import java.util.Date;
  * Created by garygriswold on 8/30/17.
  */
 
-public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
+public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener,
+        MediaPlayer.OnSeekCompleteListener {
 
     private static String TAG = "AudioBible";
 
@@ -50,6 +51,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         this.nextReference = null;
         this.mediaPlayer = null;
         this.nextPlayer = null;
+        MediaPlayState.retrieve(this.controller.activity, reference.damId, reference.getS3Key());
     }
 
     public void beginStreaming() {
@@ -67,16 +69,33 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     private void initAudio(String url) {
         if (url != null) {
             this.mediaPlayer = this.initPlayer(url);
-            this.mediaPlayer.start();
-            this.controller.playHasStarted(this.mediaPlayer);
-            this.advanceToItem(this.currReference);
-            //let seekTime = backupSeek(state: MediaPlayState.currentState)
-            //if (CMTimeGetSeconds(seekTime) > 0.1) {
-            //    playerItem.seek(to: seekTime)
-            //}
+            long seekTime = backupSeek(MediaPlayState.currentState);
+            if (seekTime > 100L) {
+                this.mediaPlayer.setOnSeekCompleteListener(this);
+                this.mediaPlayer.seekTo((int)seekTime);
+            } else {
+                this.onSeekComplete(this.mediaPlayer);
+            }
         } else {
             Log.e(TAG, "URL is null");
         }
+    }
+
+    @Override
+    public void onSeekComplete(MediaPlayer player) {
+        this.mediaPlayer.setOnSeekCompleteListener(null);
+        this.mediaPlayer.start();
+        this.controller.playHasStarted(this.mediaPlayer);
+        this.advanceToItem(this.currReference);
+    }
+
+    private long backupSeek(MediaPlayState state) {
+        long duration = System.currentTimeMillis() - state.timestamp;
+        long backupMs = Long.toString(duration).length() * 1000L; // could multiply by a factor here
+        long seekTime = state.position - backupMs;
+        seekTime = (seekTime >= 0L) ? seekTime : 0L;
+        Log.d(TAG, "current and seekTime " + state.position + " " + seekTime);
+        return(seekTime);
     }
 
     private MediaPlayer initPlayer(String url) {
@@ -95,15 +114,6 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         }
     }
 
-    private double backupSeek(MediaPlayState state) { // is it double, float or int
-        //if (state.mediaUrl == self.currReference.toString()) {
-        //    return state.position
-        //} else {
-        //    return kCMTimeZero
-        //}
-        return 0.0;
-    }
-
     public void play() {
         this.mediaPlayer.start();
     }
@@ -113,15 +123,19 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     }
 
     public void stop() {
+        this.controller.playHasStopped();
+        this.updateMediaPlayStateTime();
+        //this.sendAudioAnalytics();
         if (this.mediaPlayer != null) {
+            this.mediaPlayer.reset();
             this.mediaPlayer.release();
             this.mediaPlayer = null;
         }
         if (this.nextPlayer != null) {
+            this.nextPlayer.reset();
             this.nextPlayer.release();
             this.nextPlayer = null;
         }
-        this.controller.playHasStopped();
     }
 
     @Override
@@ -188,19 +202,13 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
             //this.readVerseMetaData(this.currReference);
         } else {
         //    self.sendAudioAnalytics()
-        //    MediaPlayState.clear()
+            MediaPlayState.clear(this.controller.activity);
             this.stop();
         }
     }
 
-    public void updateMediaPlayStateTime() {
-        //var result: CMTime = kCMTimeZero
-        //if let currentTime = self.player?.currentTime() {
-        //    if let time: CMTime = self.audioChapter?.findVerseByPosition(time: currentTime) {
-        //        result = time
-        //    }
-        //}
-        //MediaPlayState.update(url: self.currReference.toString(), time: result)
+    private void updateMediaPlayStateTime() {
+        MediaPlayState.update(this.controller.activity, this.currReference.getS3Key(), this.mediaPlayer.getCurrentPosition());
     }
 
     private void readVerseMetaData(Reference reference) {
