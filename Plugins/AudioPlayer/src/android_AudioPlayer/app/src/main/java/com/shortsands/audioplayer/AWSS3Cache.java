@@ -11,15 +11,15 @@ import com.shortsands.io.FileManager;
 import java.io.File;
 import java.util.Date;
 
-public class AWSS3Cache extends DownloadFileListener {
+class AWSS3Cache extends DownloadFileListener {
 
-    private static String TAG = "AWSS3Cache";
+    private static final String TAG = "AWSS3Cache";
 
-    private Context context;
-    private CompletionHandler completionHandler;
-    private File cacheDir;
+    private final Context context;
+    private final CompletionHandler completionHandler;
+    private final File cacheDir;
 
-    public AWSS3Cache(Context context, CompletionHandler handler) {
+    AWSS3Cache(Context context, CompletionHandler handler) {
         super();
         this.context = context;
         this.completionHandler = handler;
@@ -30,7 +30,7 @@ public class AWSS3Cache extends DownloadFileListener {
     //    print("***** Deinit AWSS3Cache *****")
     //}
 
-    public void read(String s3Bucket, String s3Key, int expireInterval) {
+    void read(String s3Bucket, String s3Key, int expireInterval) {
         String localKey = this.getLocalKey(s3Bucket, s3Key);
         File filePath = new File(this.cacheDir, localKey);
         String data = this.readCache(filePath, expireInterval);

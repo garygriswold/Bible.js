@@ -17,27 +17,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-public class AudioBibleView {
+class AudioBibleView {
 
-    private static String TAG = "AudioBibleView";
-    private static int TOP_BAR_HEIGHT = 100;
+    private static final String TAG = "AudioBibleView";
+    private static final int TOP_BAR_HEIGHT = 100;
 
-    AudioBibleController controller;
-    Activity activity;
-    AudioBible audioBible;
-    private RelativeLayout layout;
-    private RelativeLayout.LayoutParams playParams;
-    private RelativeLayout.LayoutParams pauseParams;
-    private ImageButton playButton;
-    private ImageButton pauseButton;
-    private ImageButton stopButton;
-    private SeekBar seekBar;
+    private final AudioBibleController controller;
+    private final Activity activity;
+    private final AudioBible audioBible;
+    private final RelativeLayout layout;
+    private final RelativeLayout.LayoutParams playParams;
+    private final RelativeLayout.LayoutParams pauseParams;
+    private final ImageButton playButton;
+    private final ImageButton pauseButton;
+    private final ImageButton stopButton;
+    private final SeekBar seekBar;
     // Transient State Variables
     private MonitorSeekBar monitorSeekBar = null;
     //var scrubSliderDuration: CMTime
     //boolean scrubSliderDrag;
 
-    public AudioBibleView(AudioBibleController controller, AudioBible audioBible) { // view is UIView equiv
+    AudioBibleView(AudioBibleController controller, AudioBible audioBible) {
         this.controller = controller;
         this.activity = controller.activity;
         this.audioBible = audioBible;
@@ -132,19 +132,19 @@ public class AudioBibleView {
         layout.addView(this.seekBar, seekParams);
     }
 
-    public void play() {
+    void play() {
         this.audioBible.play();
         this.layout.removeView(this.playButton);
         this.layout.addView(this.pauseButton, this.pauseParams);
     }
 
-    public void pause() {
+    void pause() {
         this.audioBible.pause();
         this.layout.removeView(this.pauseButton);
         this.layout.addView(this.playButton, this.playParams);
     }
 
-    public void stop() {
+    void stop() {
         this.audioBible.stop();
     }
 
@@ -152,7 +152,7 @@ public class AudioBibleView {
      * Start the animation of the seek bar and the use of it to control audio position.
      * @param player
      */
-    public void startPlay(final MediaPlayer player) {
+    void startPlay(final MediaPlayer player) {
         if (this.monitorSeekBar != null) {
             this.monitorSeekBar.isPlaying = false;
             this.monitorSeekBar = null;
@@ -213,7 +213,7 @@ public class AudioBibleView {
         }
     }
 
-    public void stopPlay() {
+    void stopPlay() {
         // We reach this on clicking
         // But we need to reach this on completing all files.
         if (this.monitorSeekBar != null) {

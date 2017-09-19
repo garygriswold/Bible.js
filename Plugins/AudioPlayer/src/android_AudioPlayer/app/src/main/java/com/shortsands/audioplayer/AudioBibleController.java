@@ -11,21 +11,20 @@ import java.util.HashMap;
 
 public class AudioBibleController {
 
-    private static String TAG = "AudioBibleController";
+    private static final String TAG = "AudioBibleController";
 
-    public Activity activity;
-    private AudioBibleController that;
+    final Activity activity;
+    private final AudioBibleController that;
     private AudioBible audioBible;
     private AudioBibleView readerView;
 
     public AudioBibleController(Activity activity) {
         this.activity = activity;
         AwsS3.initialize("us-west-2", activity);
+        this.that = this;
     }
 
     public void present() {
-        this.that = this;
-
         MetaDataReader metaData = new MetaDataReader(this.activity);
         MetaDataReaderResponse response = new MetaDataReaderResponse();
         metaData.read("ENG", "audio", response);
@@ -53,20 +52,20 @@ public class AudioBibleController {
         }
     }
 
-    public void playHasStarted(MediaPlayer player) {
+    void playHasStarted(MediaPlayer player) {
         if (this.readerView != null) {
             this.readerView.startPlay(player);
         }
     }
 
-    public void playHasStopped() {
+    void playHasStopped() {
         if (this.readerView != null) {
             this.readerView.stopPlay();
             this.readerView = null;
         }
     }
 
-    public void appHasExited() {
+    void appHasExited() {
         this.audioBible.stop();
     }
 }

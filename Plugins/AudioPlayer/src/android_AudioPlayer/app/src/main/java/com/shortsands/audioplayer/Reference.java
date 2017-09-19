@@ -7,16 +7,16 @@ package com.shortsands.audioplayer;
 import com.shortsands.aws.AwsS3;
 import java.net.URL;
 
-public class Reference {
+class Reference {
 
-    public String damId;
-    public String sequence;
-    public String book;
-    public String chapter;
-    public String fileType;
-    public URL url;
+    final String damId;
+    final String sequence;
+    final String book;
+    final String chapter;
+    final String fileType;
+    final URL url;
 
-    public Reference(String damId, String sequence, String book, String chapter, String fileType) {
+    Reference(String damId, String sequence, String book, String chapter, String fileType) {
         this.damId = damId;
         this.sequence = sequence;
         this.book = book;
@@ -26,26 +26,26 @@ public class Reference {
     }
 
 
-    public int sequenceNum() {
+    int sequenceNum() {
         return(Integer.parseInt(this.sequence));
     }
 
-    public int chapterNum() {
+    int chapterNum() {
         return (Integer.parseInt(this.chapter));
     }
 
-    public String getS3Bucket() {
+    String getS3Bucket() {
         switch (this.fileType) {
             case "mp3": return "audio-" + AwsS3.region + "-shortsands";
             default: return "unknown";
         }
     }
 
-    public String getS3Key() {
+    String getS3Key() {
         return (this.damId + "_" + this.sequence + "_" + this.book + "_" + this.chapter + "." + this.fileType);
     }
 
-    public boolean isEqual(Reference reference) {
+    boolean isEqual(Reference reference) {
         if (this.chapter != reference.chapter) { return false; }
         if (this.book != reference.book) { return false; }
         if (this.sequence != reference.sequence) { return false; }

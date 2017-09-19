@@ -1,50 +1,28 @@
 package com.shortsands.audioplayer;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnPreparedListener;
-import android.net.Uri;
-import android.os.Bundle;
-
-import android.os.PowerManager;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.MediaController;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.VideoView;
-
-import com.shortsands.aws.AwsS3;
-
 import java.io.IOException;
-import java.net.URL;
-import java.util.Date;
+
 /**
  * Created by garygriswold on 8/30/17.
  */
 
-public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener,
+class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener,
         MediaPlayer.OnSeekCompleteListener {
 
-    private static String TAG = "AudioBible";
+    private static final String TAG = "AudioBible";
 
-    private AudioBibleController controller;
-    private TOCAudioBible tocBible;
+    private final AudioBibleController controller;
+    private final TOCAudioBible tocBible;
     // Transient Variables
     private Reference currReference;
     private Reference nextReference;
-    public MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
     private MediaPlayer nextPlayer;
 
-    public AudioBible(AudioBibleController controller, TOCAudioBible tocBible, Reference reference) {
+    AudioBible(AudioBibleController controller, TOCAudioBible tocBible, Reference reference) {
         this.controller = controller;
         this.tocBible = tocBible;
         this.currReference = reference;
@@ -54,15 +32,15 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         MediaPlayState.retrieve(this.controller.activity, reference.damId, reference.getS3Key());
     }
 
-    public void beginStreaming() {
+    void beginStreaming() {
         this.initAudio(this.currReference.url.toString());
     }
 
-    public void beginDownload() {
+    void beginDownload() {
 
     }
 
-    public void beginLocal() {
+    void beginLocal() {
 
     }
 
@@ -114,15 +92,15 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         }
     }
 
-    public void play() {
+    void play() {
         this.mediaPlayer.start();
     }
 
-    public void pause() {
+    void pause() {
         this.mediaPlayer.pause();
     }
 
-    public void stop() {
+    void stop() {
         this.controller.playHasStopped();
         this.updateMediaPlayStateTime();
         //this.sendAudioAnalytics();
@@ -220,7 +198,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         //})
     }
 
-    public void sendAudioAnalytics() {
+    void sendAudioAnalytics() {
         //print("\n*********** INSIDE SAVE ANALYTICS *************")
         //let currTime = (self.player != nil) ? self.player!.currentTime() : kCMTimeZero
         //self.audioAnalytics.playEnded(item: self.currReference.toString(), position: currTime)

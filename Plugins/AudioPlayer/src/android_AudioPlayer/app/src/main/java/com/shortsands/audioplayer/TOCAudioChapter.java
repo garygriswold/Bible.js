@@ -9,11 +9,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class TOCAudioChapter {
+class TOCAudioChapter {
 
-    private static String TAG = "TOCAudioChapter";
+    private static final String TAG = "TOCAudioChapter";
 
-    public ArrayList<Double> versePositions;
+    final ArrayList<Double> versePositions;
 
     TOCAudioChapter(JSONArray jsonArray) {
         this.versePositions = new ArrayList<Double>();
@@ -47,7 +47,7 @@ public class TOCAudioChapter {
     //    print("***** Deinit TOCAudioChapter *****")
     //}
 
-    public double findVerseByPosition(double seconds) {
+    double findVerseByPosition(double seconds) {
         for (int index=0; index<this.versePositions.size(); index++) {
             double versePos = this.versePositions.get(index);
             if (seconds == versePos) {

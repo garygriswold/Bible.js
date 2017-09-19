@@ -14,9 +14,9 @@ import java.util.UUID;
 
 class AnalyticsSessionId {
 
-    private static String SESSION_KEY = "ShortSandsSessionId";
+    private static final String SESSION_KEY = "ShortSandsSessionId";
 
-    Context context;
+    private final Context context;
 
     AnalyticsSessionId(Context context) {
         this.context = context;

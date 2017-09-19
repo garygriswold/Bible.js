@@ -9,24 +9,27 @@ import org.json.JSONObject;
  * Created by garygriswold on 8/30/17.
  */
 
-public class TOCAudioBook {
+class TOCAudioBook {
 
-    private static String TAG = "TOCAudioBook";
+    private static final String TAG = "TOCAudioBook";
 
-    public String bookId;
-    public String sequence;
-    public int sequenceNum;
-    public String bookName;
-    public int numberOfChapters;
+    final String bookId;
+    final String sequence;
+    final int sequenceNum;
+    final String bookName;
+    final int numberOfChapters;
 
-    public TOCAudioBook(JSONObject jsonBook) {
-        try { this.bookId = jsonBook.getString("book_id"); } catch (JSONException je) { this.bookId = ""; }
-        try { this.sequence = jsonBook.getString("sequence"); } catch (JSONException je) { this.sequence = "000"; }
+    TOCAudioBook(JSONObject jsonBook) {
+        String temp;
+        try { temp = jsonBook.getString("book_id"); } catch (JSONException je) { temp = ""; }
+        this.bookId = temp;
+        try { temp = jsonBook.getString("sequence"); } catch (JSONException je) { temp = "000"; }
+        this.sequence = temp;
         this.sequenceNum = Integer.parseInt(this.sequence);
-        try { this.bookName = jsonBook.getString("book_name"); } catch(JSONException je) { this.bookName = ""; }
-        String chapters;
-        try { chapters = jsonBook.getString("number_of_chapters"); } catch(JSONException je) { chapters = "0"; }
-        this.numberOfChapters = Integer.parseInt(chapters);
+        try { temp = jsonBook.getString("book_name"); } catch(JSONException je) { temp = ""; }
+        this.bookName = temp;
+        try { temp = jsonBook.getString("number_of_chapters"); } catch(JSONException je) { temp = "0"; }
+        this.numberOfChapters = Integer.parseInt(temp);
     }
 
     public String toString() {

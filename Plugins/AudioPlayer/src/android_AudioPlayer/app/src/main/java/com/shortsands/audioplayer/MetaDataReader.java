@@ -10,17 +10,17 @@ import org.json.JSONException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class MetaDataReader {
+class MetaDataReader {
 
-    private static String TAG = "MetaDataReader";
+    private static final String TAG = "MetaDataReader";
 
-    private Context context;
-    private HashMap<String, TOCAudioBible> metaData;
+    private final Context context;
+    private final HashMap<String, TOCAudioBible> metaData;
     private TOCAudioChapter metaDataVerse;
     private CompletionHandler readCompletion;
     private CompletionHandler readVerseCompletion;
 
-    public MetaDataReader(Context context) {
+    MetaDataReader(Context context) {
         this.context = context;
         this.metaData = new HashMap<String, TOCAudioBible>();
     }
@@ -29,7 +29,7 @@ public class MetaDataReader {
     //    print("***** Deinit MetaDataReader *****")
     //}
 
-    public void read(String languageCode, String mediaType, CompletionHandler completion) {
+    void read(String languageCode, String mediaType, CompletionHandler completion) {
         this.readCompletion = completion;
         ReadResponseHandler handler = new ReadResponseHandler();
         AWSS3Cache cache = new AWSS3Cache(this.context, handler);
@@ -69,7 +69,7 @@ public class MetaDataReader {
         }
     }
 
-    public void readVerseAudio(String damid, String sequence, String bookId, String chapter,
+    void readVerseAudio(String damid, String sequence, String bookId, String chapter,
                                CompletionHandler completion) {
         this.readVerseCompletion = completion;
         ReadVerseResponseHandler handler = new ReadVerseResponseHandler();

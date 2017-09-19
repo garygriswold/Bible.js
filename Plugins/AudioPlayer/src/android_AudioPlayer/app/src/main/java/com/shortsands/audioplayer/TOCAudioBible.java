@@ -4,37 +4,43 @@ package com.shortsands.audioplayer;
  * Created by garygriswold on 8/30/17.
  */
 import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 
-public class TOCAudioBible {
+class TOCAudioBible {
 
     private static String TAG = "TOCAudioBible";
 
-    public String damId;
-    public String languageCode;
-    public String mediaType;
-    public String versionCode;
-    public String versionName;
-    public String versionEnglish;
-    public String collectionCode;
-    public HashMap<String, TOCAudioBook> booksById;
-    public HashMap<Integer, TOCAudioBook> booksBySeq;
+    final String damId;
+    final String languageCode;
+    final String mediaType;
+    final String versionCode;
+    final String versionName;
+    final String versionEnglish;
+    final String collectionCode;
+    final HashMap<String, TOCAudioBook> booksById;
+    final HashMap<Integer, TOCAudioBook> booksBySeq;
 
-    public TOCAudioBible(JSONObject jsonObject) {
+    TOCAudioBible(JSONObject jsonObject) {
         this.booksById = new HashMap<String, TOCAudioBook>();
         this.booksBySeq = new HashMap<Integer, TOCAudioBook>();
-        try { this.damId = jsonObject.getString("dam_id"); } catch (JSONException je) { this.damId = ""; }
-        try { this.languageCode = jsonObject.getString("language_code"); } catch (JSONException je) { this.languageCode = ""; } // Not attr damid
-        try { this.mediaType = jsonObject.getString("media"); } catch (JSONException je) { this.mediaType = ""; }// Not an attr of damid
-        try { this.versionCode = jsonObject.getString("version_code"); } catch (JSONException je) { this.versionCode = ""; }
-        try { this.versionName = jsonObject.getString("version_name"); } catch (JSONException je) { this.versionName = ""; }
-        try { this.versionEnglish = jsonObject.getString("version_english"); } catch (JSONException je) { this.versionEnglish = ""; }
-        try { this.collectionCode = jsonObject.getString("collection_code"); } catch (JSONException je) { this.collectionCode = ""; }
+        String temp;
+        try { temp = jsonObject.getString("dam_id"); } catch (JSONException je) { temp = ""; }
+        this.damId = temp;
+        try { temp = jsonObject.getString("language_code"); } catch (JSONException je) { temp = ""; } // Not attr damid
+        this.languageCode = temp;
+        try { temp = jsonObject.getString("media"); } catch (JSONException je) { temp = ""; }// Not an attr of damid
+        this.mediaType = temp;
+        try { temp = jsonObject.getString("version_code"); } catch (JSONException je) { temp = ""; }
+        this.versionCode = temp;
+        try { temp = jsonObject.getString("version_name"); } catch (JSONException je) { temp = ""; }
+        this.versionName = temp;
+        try { temp = jsonObject.getString("version_english"); } catch (JSONException je) { temp = ""; }
+        this.versionEnglish = temp;
+        try { temp = jsonObject.getString("collection_code"); } catch (JSONException je) { temp = ""; }
+        this.collectionCode = temp;
         try {
             JSONArray books = jsonObject.getJSONArray("books");
                 for (int i=0; i<books.length(); i++) {
@@ -49,7 +55,7 @@ public class TOCAudioBible {
         }
     }
 
-    public Reference nextChapter(Reference ref) {
+    Reference nextChapter(Reference ref) {
         if (this.booksById.containsKey(ref.book)) {
             TOCAudioBook book = this.booksById.get(ref.book);
             if (ref.chapterNum() < book.numberOfChapters) {

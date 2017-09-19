@@ -62,10 +62,10 @@ class MediaPlayState {
     }
 
 
-    public String mediaId;
-    public String mediaUrl;
-    public long position;
-    public long timestamp;
+    String mediaId;
+    String mediaUrl;
+    long position;
+    long timestamp;
 
     MediaPlayState(String mediaId, String mediaUrl, long position) {
         this.mediaId = mediaId;
