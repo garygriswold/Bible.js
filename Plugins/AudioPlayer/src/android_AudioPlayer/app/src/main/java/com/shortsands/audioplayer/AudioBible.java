@@ -47,7 +47,7 @@ class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletio
     private void initAudio(String url) {
         if (url != null) {
             this.mediaPlayer = this.initPlayer(url);
-            long seekTime = backupSeek(MediaPlayState.currentState);
+            long seekTime = MediaPlayState.currentState.position;
             if (seekTime > 100L) {
                 this.mediaPlayer.setOnSeekCompleteListener(this);
                 this.mediaPlayer.seekTo((int)seekTime);
@@ -66,16 +66,7 @@ class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletio
         this.controller.playHasStarted(this.mediaPlayer);
         this.advanceToItem(this.currReference);
     }
-
-    private long backupSeek(MediaPlayState state) {
-        long duration = System.currentTimeMillis() - state.timestamp;
-        long backupMs = Long.toString(duration).length() * 1000L; // could multiply by a factor here
-        long seekTime = state.position - backupMs;
-        seekTime = (seekTime >= 0L) ? seekTime : 0L;
-        Log.d(TAG, "current and seekTime " + state.position + " " + seekTime);
-        return(seekTime);
-    }
-
+    
     private MediaPlayer initPlayer(String url) {
         MediaPlayer player = new MediaPlayer();
         player.setLooping(false);
@@ -164,20 +155,13 @@ class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletio
         return true;
     }
 
-    private void applicationWillResignActive() { // notification in ios
-        //print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
-        //self.sendAudioAnalytics()
-        //self.updateMediaPlayStateTime()
-        //self.stop()
-    }
-
     private void advanceToItem(Reference reference) {
         if (reference != null) {
             this.currReference = reference;
             this.nextReference = this.tocBible.nextChapter(this.currReference);
             this.nextPlayer = this.initPlayer(this.nextReference.url.toString());
             this.mediaPlayer.setNextMediaPlayer(this.nextPlayer);
-            //this.readVerseMetaData(this.currReference);
+            this.readVerseMetaData(this.currReference);
         } else {
         //    self.sendAudioAnalytics()
             MediaPlayState.clear(this.controller.activity);
@@ -186,16 +170,40 @@ class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletio
     }
 
     private void updateMediaPlayStateTime() {
-        MediaPlayState.update(this.controller.activity, this.currReference.getS3Key(), this.mediaPlayer.getCurrentPosition());
+        TOCAudioChapter chapter = this.currReference.audioChapter;
+        double position = this.mediaPlayer.getCurrentPosition() / 1000.0;
+        if (chapter != null) {
+            position = chapter.findVerseByPosition(position) * 1000.0;
+        } else {
+            position = position - 3.0;
+            position = (position >= 0.0) ? position * 1000.0 : 0.0;
+        }
+        MediaPlayState.update(this.controller.activity, this.currReference.getS3Key(), (int)position);
     }
 
     private void readVerseMetaData(Reference reference) {
-        //let reader = MetaDataReader()
-        //reader.readVerseAudio(damid: reference.damId, sequence: reference.sequence, bookId: reference.book, chapter: reference.chapter, readComplete: {
-        //    audioChapter in
-        //    self.audioChapter = audioChapter
-        //    //print("PARSED DATA \(self.audioChapter?.toString())")
-        //})
+        ReadVerseMetaDataHandler handler = new ReadVerseMetaDataHandler(reference);
+        MetaDataReader reader = new MetaDataReader(this.controller.activity);
+        reader.readVerseAudio(reference.damId, reference.sequence, reference.book, reference.chapter, handler);
+    }
+
+    class ReadVerseMetaDataHandler implements CompletionHandler {
+        private Reference reference;
+        ReadVerseMetaDataHandler(Reference ref) {
+            this.reference = ref;
+        }
+        public void completed(Object result, Object attachment) {
+            if (result instanceof TOCAudioChapter) {
+                TOCAudioChapter chapter = (TOCAudioChapter)result;
+                reference.audioChapter = chapter;
+                //Log.d(TAG, "************" + chapter.toString());
+            } else {
+                this.failed(new Exception("Could not cast to TOCAudioChapter"), attachment);
+            }
+        }
+        public void failed(Throwable exception, Object attachment) {
+            Log.e(TAG, "Exception in ReadVerseMetaDataHandler " + exception.toString());
+        }
     }
 
     void sendAudioAnalytics() {

@@ -15,6 +15,7 @@ class Reference {
     final String chapter;
     final String fileType;
     final URL url;
+    TOCAudioChapter audioChapter;
 
     Reference(String damId, String sequence, String book, String chapter, String fileType) {
         this.damId = damId;
@@ -23,8 +24,8 @@ class Reference {
         this.chapter = chapter;
         this.fileType = fileType;
         this.url = AwsS3.shared().preSignedUrlGET(getS3Bucket(), getS3Key(), 3600);
+        this.audioChapter = null;
     }
-
 
     int sequenceNum() {
         return(Integer.parseInt(this.sequence));
