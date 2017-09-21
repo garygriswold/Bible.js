@@ -32,6 +32,8 @@ class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletio
         MediaPlayState.retrieve(this.controller.activity, reference.damId, reference.getS3Key());
     }
 
+    Reference getCurrReference() { return(this.currReference); }
+
     void beginStreaming() {
         this.initAudio(this.currReference.url.toString());
     }
@@ -66,7 +68,7 @@ class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletio
         this.controller.playHasStarted(this.mediaPlayer);
         this.advanceToItem(this.currReference);
     }
-    
+
     private MediaPlayer initPlayer(String url) {
         MediaPlayer player = new MediaPlayer();
         player.setLooping(false);

@@ -165,14 +165,15 @@ class AudioBibleView {
             public void onProgressChanged(SeekBar seekBar, int value, boolean isUser) {
                 if (isUser && player != null) {
                     if (value < seekBar.getMax()) {
-                        //var current: Float
-                        //if let verse = self.audioBible.audioChapter {
-                        //    current = verse.findVerseByPosition(seconds: slider.value)
-                        //} else {
-                        //    current = slider.value
-                        //}
-                        //let time: CMTime = CMTime(seconds: Double(current), preferredTimescale: CMTimeScale(1.0)
-                        player.seekTo(value);
+                        int current;
+                        Reference curr = audioBible.getCurrReference();
+                        if (curr.audioChapter != null) {
+                            current = (int)curr.audioChapter.findVerseByPosition(value / 1000);
+                        } else {
+                            current = value / 1000;
+                        }
+                        Log.d(TAG, "***** Backup Verse: " + value + "  " + current);
+                        player.seekTo(current * 1000);
                     }
                 }
             }
