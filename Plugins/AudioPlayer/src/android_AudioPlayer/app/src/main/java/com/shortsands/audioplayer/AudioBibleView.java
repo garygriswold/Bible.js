@@ -215,18 +215,19 @@ class AudioBibleView {
     }
 
     void stopPlay() {
-        // We reach this on clicking
-        // But we need to reach this on completing all files.
         if (this.monitorSeekBar != null) {
             this.monitorSeekBar.isPlaying = false;
             this.monitorSeekBar = null;
         }
-        /*
-        self.playButton.removeFromSuperview()
-        self.pauseButton.removeFromSuperview()
-        self.stopButton.removeFromSuperview()
-        self.scrubSlider.removeFromSuperview()
-        self.progressLink?.invalidate()
-        */
+        this.layout.removeView(this.playButton);
+        this.layout.removeView(this.pauseButton);
+        this.layout.removeView(this.stopButton);
+        this.layout.removeView(this.seekBar);
+
+        Window window = this.activity.getWindow();
+        ViewGroup view = (ViewGroup)window.getDecorView();
+        if (view != null) {
+            view.removeView(this.layout);
+        }
     }
 }
