@@ -4,6 +4,7 @@ package com.shortsands.audioplayer;
  * Created by garygriswold on 8/30/17.
  */
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.view.MotionEvent;
@@ -34,8 +35,7 @@ class AudioBibleView {
     private final SeekBar seekBar;
     // Transient State Variables
     private MonitorSeekBar monitorSeekBar = null;
-    //var scrubSliderDuration: CMTime
-    //boolean scrubSliderDrag;
+    private boolean scrubSliderDrag = false;
 
     AudioBibleView(AudioBibleController controller, AudioBible audioBible) {
         this.controller = controller;
@@ -125,11 +125,15 @@ class AudioBibleView {
         layout.addView(stop, stopParams);
         this.stopButton = stop;
 
-        this.seekBar = new SeekBar(this.activity);
+        final SeekBar seek = new SeekBar(this.activity);
+        final Resources resources = this.controller.activity.getResources();
+        seek.setThumb(resources.getDrawable(R.drawable.thumb_up));
+        seek.setPadding(100, 100, 100, 100);
         RelativeLayout.LayoutParams seekParams = new RelativeLayout.LayoutParams(metrics.widthPixels * 4 / 5, 84);
         seekParams.leftMargin = metrics.widthPixels / 10;
         seekParams.topMargin = buttonTop + 200;
-        layout.addView(this.seekBar, seekParams);
+        layout.addView(seek, seekParams);
+        this.seekBar = seek;
     }
 
     void play() {
@@ -164,6 +168,7 @@ class AudioBibleView {
             @Override
             public void onProgressChanged(SeekBar seekBar, int value, boolean isUser) {
                 if (isUser && player != null) {
+                    Log.d(TAG, "value max " + value + "  " + seekBar.getMax());
                     if (value < seekBar.getMax()) {
                         int current;
                         Reference curr = audioBible.getCurrReference();
@@ -181,13 +186,17 @@ class AudioBibleView {
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 Log.d(TAG, "**** touchDown ***");
-                //scrubSliderDrag = true;
+                final Resources resources = controller.activity.getResources();
+                seekBar.setThumb(resources.getDrawable(R.drawable.thumb_dn));
+                scrubSliderDrag = true;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Log.d(TAG, "**** touchUpInside ***");
-                //scrubSliderDrag = false;
+                final Resources resources = controller.activity.getResources();
+                seekBar.setThumb(resources.getDrawable(R.drawable.thumb_up));
+                scrubSliderDrag = false;
             }
         });
     }
@@ -202,8 +211,10 @@ class AudioBibleView {
         }
         public void run() {
             while(player != null && isPlaying) {
-                seekBar.setMax(player.getDuration());
-                seekBar.setProgress(player.getCurrentPosition());
+                if (!scrubSliderDrag) {
+                    seekBar.setMax(player.getDuration());
+                    seekBar.setProgress(player.getCurrentPosition());
+                }
                 try {
                     Thread.sleep(200);
                 } catch(InterruptedException ex) {
