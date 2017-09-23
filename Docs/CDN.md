@@ -1,3 +1,8 @@
+WARNING: This document is very out-of-date and probably should be deleted.
+GNG Sep 22, 2017
+
+
+
 KeyCDN and CacheFly are services that could be used to deliver Bibles.
 As of July 20, 2016, this has not yet been put into production, because the
 cost of syslog forwarding is $3/day at KeyCDN and CacheFly has a minimum cost 
