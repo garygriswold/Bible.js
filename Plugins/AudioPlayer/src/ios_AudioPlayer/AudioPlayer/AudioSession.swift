@@ -37,23 +37,19 @@ class AudioSession {
         center.addObserver(self,
                            selector: #selector(audioSessionInterruption(note:)),
                            name: .AVAudioSessionInterruption,
-                           object: nil)
+                           object: self.session)
         center.addObserver(self,
                            selector: #selector(audioSessionRouteChange(note:)),
                            name: .AVAudioSessionRouteChange,
-                           object: nil)
+                           object: self.session)
         center.addObserver(self,
                            selector: #selector(audioSessionSilenceSecondaryAudioHint(note:)),
                            name: .AVAudioSessionSilenceSecondaryAudioHint,
-                           object: nil)
-        center.addObserver(self,
-                           selector: #selector(audioSessionMediaServicesWereLost(note:)),
-                           name: .AVAudioSessionMediaServicesWereLost,
-                           object: nil)
+                           object: self.session)
         center.addObserver(self,
                            selector: #selector(audioSessionMediaServicesWereReset(note:)),
                            name: .AVAudioSessionMediaServicesWereReset,
-                           object: nil)
+                           object: self.session)
     }
     
     deinit {
@@ -62,31 +58,19 @@ class AudioSession {
     }
     
     @objc func audioSessionInterruption(note: NSNotification) {
-        print("****** handleInterruption")
         if let value = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt {
             if let interruptionType =  AVAudioSessionInterruptionType(rawValue: value) {
-                switch interruptionType {
-                    case .began:
-                        print("**** Began")
-                        self.audioBibleView.pause()
-                       do {
-                            try self.session.setActive(false)
-                            print("**** AVAudioSession is inactive")
-                        } catch let error as NSError {
-                            print(error.localizedDescription)
+                if interruptionType == .began {
+                    print("\n****** Interruption Began, Pause in UI")
+                    self.audioBibleView.pause()
+                } else if interruptionType == .ended {
+                    print("\n****** Interruption Ended, Play in UI, try to resume")
+                    if let optionValue = note.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt {
+                        if AVAudioSessionInterruptionOptions(rawValue: optionValue) == .shouldResume {
+                            print("****** Should resume")
+                            self.audioBibleView.play()
                         }
-                    case .ended:
-                        print("**** Ended")
-                        if let optionValue = (note.userInfo?[AVAudioSessionInterruptionOptionKey] as? NSNumber)?.uintValue, AVAudioSessionInterruptionOptions(rawValue: optionValue) == .shouldResume {
-                            print("Should resume")
-                            do {
-                                try self.session.setActive(true)
-                                print("**** AVAudioSession is Active again")
-                                self.audioBibleView.play()
-                            } catch let error as NSError {
-                                print(error.localizedDescription)
-                            }
-                        }
+                    }
                 }
             }
         }
@@ -95,21 +79,15 @@ class AudioSession {
         print("\n****** Audio Session Route Change")
         if let userInfo = note.userInfo {
             if let value = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt {
-                print("** Route Change VALUE \(value))")
+                print("****** Route Change VALUE \(value))")
                 if let reason = AVAudioSessionRouteChangeReason(rawValue: value) {
-                    switch reason {
-                        case .newDeviceAvailable:
-                            print("New Device Available")
-                            //self.audioBibleView.pause()
-                            self.audioBibleView.audioBible.pause()
-                        case .oldDeviceUnavailable:
-                            print("Old Device Unavailable")
+                    if reason == .oldDeviceUnavailable {
+                        print("****** Old Device Unavailable, pause in UI")
+                        if Thread.current == Thread.main {
                             self.audioBibleView.pause()
-                        case .routeConfigurationChange:
-                            print("route configuration change")
-                            //self.audioBibleView.play()
-                            self.audioBibleView.audioBible.play()
-                    default: ()
+                        } else {
+                            self.audioBibleView.audioBible.pause()
+                        }
                     }
                 }
             }
@@ -117,9 +95,6 @@ class AudioSession {
     }
     @objc func audioSessionSilenceSecondaryAudioHint(note: Notification) {
         print("\n****** Audio Session Silence Secondary Audio \(String(describing: note.userInfo))")
-    }
-    @objc func audioSessionMediaServicesWereLost(note: Notification) {
-        print("\n****** Audio Session Services Were Lost \(String(describing: note.userInfo))")
     }
     @objc func audioSessionMediaServicesWereReset(note: Notification) {
         print("\n****** Audio Session Services Were Reset \(String(describing: note.userInfo))")
