@@ -189,13 +189,12 @@ public class AudioBible : NSObject {
     }
     /**
      * This method is called when the Home button is clicked or double clicked.
-     * MediaPlayState is saved in this method
+     * And when an interruption occurs, such as a phone call.
      */
     func applicationWillResignActive(note:Notification) {
         print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
         self.sendAudioAnalytics()
         self.updateMediaPlayStateTime()
-        self.stop()
     }
     
     func advanceToNextItem() {

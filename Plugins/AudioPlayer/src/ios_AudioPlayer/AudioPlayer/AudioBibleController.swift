@@ -11,6 +11,7 @@ import AWS
 
 class AudioBibleController {
     
+    var audioSession: AudioSession?
     var readerView: AudioBibleView?
     
     deinit {
@@ -38,7 +39,7 @@ class AudioBibleController {
                                               chapter: "001", fileType: "mp3")
                     let reader = AudioBible(controller: self, tocBible: tocBible, reference: reference)
                     self.readerView = AudioBibleView(view: view, audioBible: reader)
-                            
+                    self.audioSession = AudioSession(audioBibleView: self.readerView!)
                     reader.beginStreaming()
                     //reader.beginDownload()
                     //reader.beginLocal()
@@ -49,10 +50,12 @@ class AudioBibleController {
     
     func playHasStarted() {
         self.readerView?.startPlay()
+        UIApplication.shared.isIdleTimerDisabled = true
     }
     func playHasStopped() {
         self.readerView?.stopPlay()
         self.readerView = nil
+        UIApplication.shared.isIdleTimerDisabled = false
     }
 }
 

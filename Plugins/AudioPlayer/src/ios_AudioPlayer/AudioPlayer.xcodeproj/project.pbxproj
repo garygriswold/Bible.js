@@ -27,6 +27,7 @@
 		E4A32CD91F2FB310009AECFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4A32CD71F2FB310009AECFB /* LaunchScreen.storyboard */; };
 		E4A32CE11F2FB420009AECFB /* AudioBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A32CE01F2FB420009AECFB /* AudioBible.swift */; };
 		E4A32CE31F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E4A32CE21F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 */; };
+		E4A65BDB1F76B65E00C1725C /* AudioSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A65BDA1F76B65E00C1725C /* AudioSession.swift */; };
 		E4F69CED1F39684800EE53AB /* MetaDataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */; };
 		E4F69CEF1F397CF200EE53AB /* TOCAudioBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */; };
 		E4F69CF11F397D0800EE53AB /* TOCAudioBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */; };
@@ -70,6 +71,7 @@
 		E4A32CDA1F2FB310009AECFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4A32CE01F2FB420009AECFB /* AudioBible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioBible.swift; sourceTree = "<group>"; };
 		E4A32CE21F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = EmmaFirstLostTooth.mp3; sourceTree = "<group>"; };
+		E4A65BDA1F76B65E00C1725C /* AudioSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSession.swift; sourceTree = "<group>"; };
 		E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaDataReader.swift; sourceTree = "<group>"; };
 		E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioBible.swift; sourceTree = "<group>"; };
 		E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioBook.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				E4826D191F4F21140031FFE0 /* AudioBibleController.swift */,
 				E4A32CE01F2FB420009AECFB /* AudioBible.swift */,
 				E41E5EC31F38FB8700B18D3F /* AudioBibleView.swift */,
+				E4A65BDA1F76B65E00C1725C /* AudioSession.swift */,
 				E43D50BC1F44BA8F00B38A7C /* MediaPlayState.swift */,
 				E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */,
 				E4148DC41F3BFC34007D5870 /* AWSS3Cache.swift */,
@@ -226,6 +229,7 @@
 				E4148DC51F3BFC34007D5870 /* AWSS3Cache.swift in Sources */,
 				E4F69CED1F39684800EE53AB /* MetaDataReader.swift in Sources */,
 				E4F69CF11F397D0800EE53AB /* TOCAudioBook.swift in Sources */,
+				E4A65BDB1F76B65E00C1725C /* AudioSession.swift in Sources */,
 				E43D50BD1F44BA8F00B38A7C /* MediaPlayState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -83,7 +83,7 @@ class MediaPlayState : NSObject, NSCoding {
     }
     
     func toString() -> String {
-        let result = "MediaId: \(self.mediaId), VideoUrl: \(self.mediaUrl), Position: \(self.position), Timestamp: \(self.timestamp)"
+        let result = "MediaId: \(self.mediaId), VideoUrl: \(self.mediaUrl ?? ""), Position: \(self.position), Timestamp: \(self.timestamp)"
         return result
     }
 }
