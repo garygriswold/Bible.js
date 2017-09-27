@@ -22,6 +22,7 @@ class AudioBibleView : NSObject {
     // Transient State Variables
     var scrubSliderDuration: CMTime
     var scrubSliderDrag: Bool
+    var isAudioViewActive: Bool = false
     
     init(view: UIView, audioBible: AudioBible) {
         self.view = view
@@ -89,14 +90,18 @@ class AudioBibleView : NSObject {
     
     func play() {
         self.audioBible.play()
-        self.playButton.removeFromSuperview()
-        self.view.addSubview(self.pauseButton)
+        if (self.isAudioViewActive) {
+            self.playButton.removeFromSuperview()
+            self.view.addSubview(self.pauseButton)
+        }
     }
     
     func pause() {
         self.audioBible.pause()
-        self.pauseButton.removeFromSuperview()
-        self.view.addSubview(self.playButton)
+        if (self.isAudioViewActive) {
+            self.pauseButton.removeFromSuperview()
+            self.view.addSubview(self.playButton)
+        }
     }
     
     func stop() {
@@ -106,6 +111,7 @@ class AudioBibleView : NSObject {
     }
     
     func startPlay() {
+        self.isAudioViewActive = true
         self.progressLink = CADisplayLink(target: self, selector: #selector(updateProgress))
         self.progressLink!.add(to: .current, forMode: .defaultRunLoopMode)
         self.progressLink!.preferredFramesPerSecond = 15
@@ -119,6 +125,7 @@ class AudioBibleView : NSObject {
     }
     
     func stopPlay() {
+        self.isAudioViewActive = false
         self.playButton.removeFromSuperview()
         self.pauseButton.removeFromSuperview()
         self.stopButton.removeFromSuperview()

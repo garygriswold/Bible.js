@@ -18,13 +18,14 @@
 import Foundation
 import AVFoundation
 
-class AudioSession {
+class AudioSession: NSObject {
     
     let session: AVAudioSession = AVAudioSession.sharedInstance()
     let audioBibleView: AudioBibleView
     
     init(audioBibleView: AudioBibleView) {
         self.audioBibleView = audioBibleView
+        super.init()
         do {
             try self.session.setCategory(AVAudioSessionCategoryPlayback,
                                          mode: AVAudioSessionModeSpokenAudio,
@@ -83,15 +84,18 @@ class AudioSession {
                 if let reason = AVAudioSessionRouteChangeReason(rawValue: value) {
                     if reason == .oldDeviceUnavailable {
                         print("****** Old Device Unavailable, pause in UI")
-                        if Thread.current == Thread.main {
-                            self.audioBibleView.pause()
+                        if Thread.isMainThread {
+                            self.pausePlayer()
                         } else {
-                            self.audioBibleView.audioBible.pause()
+                            performSelector(onMainThread: #selector(pausePlayer), with: nil, waitUntilDone: false)
                         }
                     }
                 }
             }
         }
+    }
+    @objc private func pausePlayer() {
+        self.audioBibleView.pause()
     }
     @objc func audioSessionSilenceSecondaryAudioHint(note: Notification) {
         print("\n****** Audio Session Silence Secondary Audio \(String(describing: note.userInfo))")
