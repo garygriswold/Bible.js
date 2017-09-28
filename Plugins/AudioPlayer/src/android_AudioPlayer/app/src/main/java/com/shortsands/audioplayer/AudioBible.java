@@ -1,7 +1,11 @@
 package com.shortsands.audioplayer;
 
+import android.app.Service;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.IBinder;
+import android.os.PowerManager;
 import android.util.Log;
 import java.io.IOException;
 
@@ -9,7 +13,7 @@ import java.io.IOException;
  * Created by garygriswold on 8/30/17.
  */
 
-class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener,
+public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener,
         MediaPlayer.OnSeekCompleteListener {
 
     private static final String TAG = "AudioBible";
@@ -22,7 +26,8 @@ class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletio
     private MediaPlayer mediaPlayer;
     private MediaPlayer nextPlayer;
 
-    AudioBible(AudioBibleController controller, TOCAudioBible tocBible, Reference reference) {
+    public AudioBible(AudioBibleController controller, TOCAudioBible tocBible, Reference reference) {
+        super();
         this.controller = controller;
         this.tocBible = tocBible;
         this.currReference = reference;
@@ -31,6 +36,11 @@ class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletio
         this.nextPlayer = null;
         MediaPlayState.retrieve(this.controller.activity, reference.damId, reference.getS3Key());
     }
+
+    //@Override
+    //public IBinder onBind(Intent intent) {
+    //    return null;
+    //}
 
     Reference getCurrReference() { return(this.currReference); }
 
@@ -77,7 +87,7 @@ class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletio
             player.setDataSource(url);
             player.prepare();
             player.setOnCompletionListener(this);
-            //player.setWakeMode(this.controller.context, PowerManager.PARTIAL_WAKE_LOCK);
+            player.setWakeMode(this.controller.activity, PowerManager.PARTIAL_WAKE_LOCK);
             return player;
         } catch(IOException ioe) {
             Log.e(TAG, "Error in AudioBible.initPlayer " + ioe.toString());
