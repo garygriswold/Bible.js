@@ -15,6 +15,7 @@ public class AudioBibleController {
 
     final Activity activity;
     private final AudioBibleController that;
+    private final AudioSession audioSession;
     private AudioBible audioBible;
     private AudioBibleView readerView;
 
@@ -22,9 +23,11 @@ public class AudioBibleController {
         this.activity = activity;
         AwsS3.initialize("us-west-2", activity);
         this.that = this;
+        this.audioSession = new AudioSession(this.activity, null);
     }
 
     public void present() {
+        this.audioSession.startAudioSession();
         MetaDataReader metaData = new MetaDataReader(this.activity);
         MetaDataReaderResponse response = new MetaDataReaderResponse();
         metaData.read("ENG", "audio", response);
@@ -63,6 +66,7 @@ public class AudioBibleController {
             this.readerView.stopPlay();
             this.readerView = null;
         }
+        this.audioSession.stopAudioSession();
     }
 
     void appHasExited() {
