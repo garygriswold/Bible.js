@@ -37,23 +37,10 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         MediaPlayState.retrieve(this.controller.activity, reference.damId, reference.getS3Key());
     }
 
-    //@Override
-    //public IBinder onBind(Intent intent) {
-    //    return null;
-    //}
-
     Reference getCurrReference() { return(this.currReference); }
 
     void beginStreaming() {
         this.initAudio(this.currReference.url.toString());
-    }
-
-    void beginDownload() {
-
-    }
-
-    void beginLocal() {
-
     }
 
     private void initAudio(String url) {

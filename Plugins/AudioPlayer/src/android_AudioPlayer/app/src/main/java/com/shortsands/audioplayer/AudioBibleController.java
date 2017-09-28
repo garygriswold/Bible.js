@@ -23,14 +23,15 @@ public class AudioBibleController {
         this.activity = activity;
         AwsS3.initialize("us-west-2", activity);
         this.that = this;
-        this.audioSession = new AudioSession(this.activity, null);
+        this.audioSession = new AudioSession(this.activity);
     }
 
     public void present() {
-        this.audioSession.startAudioSession();
-        MetaDataReader metaData = new MetaDataReader(this.activity);
-        MetaDataReaderResponse response = new MetaDataReaderResponse();
-        metaData.read("ENG", "audio", response);
+        if (this.audioSession.startAudioSession()) {
+            MetaDataReader metaData = new MetaDataReader(this.activity);
+            MetaDataReaderResponse response = new MetaDataReaderResponse();
+            metaData.read("ENG", "audio", response);
+        }
     }
 
     class MetaDataReaderResponse implements CompletionHandler {
@@ -44,10 +45,9 @@ public class AudioBibleController {
                 Reference reference = new Reference(bible.damId, book.sequence, book.bookId, "001", "mp3");
                 audioBible = new AudioBible(that, bible, reference);
                 readerView = new AudioBibleView(that, audioBible);
+                audioSession.setAudioBibleView(readerView);
 
                 audioBible.beginStreaming();
-                //reader.beginDownload()
-                // reader.beginLocal()
             }
         }
         public void failed(Throwable exception, Object attachment) {
@@ -69,7 +69,10 @@ public class AudioBibleController {
         this.audioSession.stopAudioSession();
     }
 
-    void appHasExited() {
+    /**
+     * This method is called by an outside controller to indicate that App has stopped.
+     */
+    public void appHasExited() {
         this.audioBible.stop();
     }
 }

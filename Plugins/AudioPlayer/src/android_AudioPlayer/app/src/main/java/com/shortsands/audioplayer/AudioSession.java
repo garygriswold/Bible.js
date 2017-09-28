@@ -18,14 +18,17 @@ class AudioSession implements AudioManager.OnAudioFocusChangeListener {
 
     private static final String TAG = "AudioSession";
 
-    private Context context;
+    private final Context context;
+    private final AudioManager audioManager;
     private AudioBibleView audioBibleView;
-    private AudioManager audioManager;
 
-    AudioSession(Context context, AudioBibleView audioBibleView) {
+    AudioSession(Context context) {
         this.context = context;
-        this.audioBibleView = audioBibleView;
         this.audioManager = (AudioManager)this.context.getSystemService(Context.AUDIO_SERVICE);
+    }
+
+    void setAudioBibleView(AudioBibleView audioBibleView) {
+        this.audioBibleView = audioBibleView;
     }
 
     public void onAudioFocusChange(int focusChange) {
@@ -33,65 +36,51 @@ class AudioSession implements AudioManager.OnAudioFocusChangeListener {
         switch (focusChange) {
             case AudioManager.AUDIOFOCUS_GAIN: // Also AUDIOFOCUS_REQUEST_GRANTED
                 Log.d(TAG, "FOCUS GAIN");
-                //if (mPlaybackDelayed || mResumeOnFocusGain) {
-                //    synchronized(mFocusLock) {
-                //        mPlaybackDelayed = false;
-                //        mResumeOnFocusGain = false;
-                //    }
-                //    //playbackNow();
-                //}
+                this.audioBibleView.play();
                 break;
             case AudioManager.AUDIOFOCUS_GAIN_TRANSIENT:
                 Log.d(TAG, "FOCUS GAIN TRANSIENT");
+                this.audioBibleView.play();
                 break;
             case AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE:
                 Log.d(TAG, "FOCUS GAIN TRANSIENT EXCLUSIVE");
+                this.audioBibleView.play();
                 break;
             case AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK:
                 Log.d(TAG, "FOCUS GAIN TRANSIENT MAY DUCK");
+                this.audioBibleView.play();
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
                 Log.d(TAG, "FOCUS LOSS");
-                //synchronized(mFocusLock) {
-                //    mResumeOnFocusGain = false;
-                //    mPlaybackDelayed = false;
-                //}
-                //pausePlayback();
+                this.audioBibleView.pause();
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 Log.d(TAG, "FOCUS LOSS TRANSIENT");
-                //synchronized(mFocusLock) {
-                //    mResumeOnFocusGain = true;
-                //    mPlaybackDelayed = false;
-                //}
-                //pausePlayback();
+                this.audioBibleView.pause();
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                 Log.d(TAG, "FOCUS LOSS TRANSIENT");
-                // ... pausing or ducking depends on your app
-                //pausePlayback();
+                this.audioBibleView.pause();
                 break;
             case AudioManager.AUDIOFOCUS_REQUEST_FAILED:
                 Log.d(TAG, "FOCUS REQUEST FAILED");
+                this.audioBibleView.pause();
                 break;
             default:
                 Log.d(TAG, "AUDIO FOCUS CHANGE UNKNOWN " + focusChange);
         }
     }
 
-    void startAudioSession() {
-        int result = this.audioManager.requestAudioFocus(this,
-                AudioManager.STREAM_VOICE_CALL,
+    boolean startAudioSession() {
+        int result = this.audioManager.requestAudioFocus(this, AudioManager.STREAM_VOICE_CALL,
                 AudioManager.AUDIOFOCUS_GAIN);
         Log.d(TAG, "Audio focus request " + result);
-        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            // Start playback
-            Log.d(TAG, "INSIDE START SESSION REQUEST GRANTED");
-        }
+        return(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     }
 
     void stopAudioSession() {
-        this.audioManager.abandonAudioFocus(this);
+        int result = this.audioManager.abandonAudioFocus(this);
+        Log.d(TAG, "Audio focus abandon " + result);
     }
 }
 
