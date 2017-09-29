@@ -9,8 +9,8 @@ package com.shortsands.audioplayer;
  * When I upgrade to API 26 minimum, I should use AudioFocusRequest class
  *
  */
+import android.app.Activity;
 import android.content.Context;
-import android.os.Handler;
 import android.media.AudioManager;
 import android.util.Log;
 
@@ -18,13 +18,14 @@ class AudioSession implements AudioManager.OnAudioFocusChangeListener {
 
     private static final String TAG = "AudioSession";
 
-    private final Context context;
+    private final Activity activity;
     private final AudioManager audioManager;
     private AudioBibleView audioBibleView;
 
-    AudioSession(Context context) {
-        this.context = context;
-        this.audioManager = (AudioManager)this.context.getSystemService(Context.AUDIO_SERVICE);
+    AudioSession(Activity activity) {
+        this.activity = activity;
+        this.audioManager = (AudioManager)this.activity.getSystemService(Context.AUDIO_SERVICE);
+        this.activity.setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
     }
 
     void setAudioBibleView(AudioBibleView audioBibleView) {
@@ -83,97 +84,3 @@ class AudioSession implements AudioManager.OnAudioFocusChangeListener {
         Log.d(TAG, "Audio focus abandon " + result);
     }
 }
-
-/*
-import Foundation
-import AVFoundation
-
-class AudioSession: NSObject {
-
-    let session: AVAudioSession = AVAudioSession.sharedInstance()
-    let audioBibleView: AudioBibleView
-
-    init(audioBibleView: AudioBibleView) {
-        self.audioBibleView = audioBibleView
-        super.init()
-        do {
-            try self.session.setCategory(AVAudioSessionCategoryPlayback,
-                                         mode: AVAudioSessionModeSpokenAudio,
-                                         options: [])
-            try self.session.setActive(true)
-        } catch let err {
-            print("Could not initialize AVAudioSession \(err)")
-        }
-        let center = NotificationCenter.default
-        center.addObserver(self,
-                           selector: #selector(audioSessionInterruption(note:)),
-                           name: .AVAudioSessionInterruption,
-                           object: self.session)
-        center.addObserver(self,
-                           selector: #selector(audioSessionRouteChange(note:)),
-                           name: .AVAudioSessionRouteChange,
-                           object: self.session)
-        center.addObserver(self,
-                           selector: #selector(audioSessionSilenceSecondaryAudioHint(note:)),
-                           name: .AVAudioSessionSilenceSecondaryAudioHint,
-                           object: self.session)
-        center.addObserver(self,
-                           selector: #selector(audioSessionMediaServicesWereReset(note:)),
-                           name: .AVAudioSessionMediaServicesWereReset,
-                           object: self.session)
-    }
-
-    deinit {
-        print("***** Deinit AudioSessionDelegate *****")
-        // session does not need to be deactivated
-    }
-
-    @objc func audioSessionInterruption(note: NSNotification) {
-        if let value = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt {
-            if let interruptionType =  AVAudioSessionInterruptionType(rawValue: value) {
-                if interruptionType == .began {
-                    print("\n****** Interruption Began, Pause in UI")
-                    self.audioBibleView.pause()
-                } else if interruptionType == .ended {
-                    print("\n****** Interruption Ended, Play in UI, try to resume")
-                    if let optionValue = note.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt {
-                        if AVAudioSessionInterruptionOptions(rawValue: optionValue) == .shouldResume {
-                            print("****** Should resume")
-                            self.audioBibleView.play()
-                        }
-                    }
-                }
-            }
-        }
-    }
-    @objc func audioSessionRouteChange(note: Notification) {
-        print("\n****** Audio Session Route Change")
-        if let userInfo = note.userInfo {
-            if let value = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt {
-                print("****** Route Change VALUE \(value))")
-                if let reason = AVAudioSessionRouteChangeReason(rawValue: value) {
-                    if reason == .oldDeviceUnavailable {
-                        print("****** Old Device Unavailable, pause in UI")
-                        if Thread.isMainThread {
-                            self.pausePlayer()
-                        } else {
-                            performSelector(onMainThread: #selector(pausePlayer), with: nil, waitUntilDone: false)
-                        }
-                    }
-                }
-            }
-        }
-    }
-    @objc private func pausePlayer() {
-        self.audioBibleView.pause()
-    }
-    @objc func audioSessionSilenceSecondaryAudioHint(note: Notification) {
-        print("\n****** Audio Session Silence Secondary Audio \(String(describing: note.userInfo))")
-    }
-    @objc func audioSessionMediaServicesWereReset(note: Notification) {
-        print("\n****** Audio Session Services Were Reset \(String(describing: note.userInfo))")
-        // According to Apple docs, this should be handled, but its occurrance is rare.
-        // I do not know how to test, so it has not been done.
-    }
-}
- */
