@@ -1,10 +1,7 @@
 package com.shortsands.audioplayer;
 
-import android.app.Service;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 import java.io.IOException;
@@ -20,6 +17,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
 
     private final AudioBibleController controller;
     private final TOCAudioBible tocBible;
+    private final AudioAnalytics audioAnalytics;
     // Transient Variables
     private Reference currReference;
     private Reference nextReference;
@@ -30,6 +28,11 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         super();
         this.controller = controller;
         this.tocBible = tocBible;
+        this.audioAnalytics = new AudioAnalytics(controller.activity,
+                tocBible.mediaSource,
+                reference.damId,
+                tocBible.languageCode,
+                "User's text lang setting");
         this.currReference = reference;
         this.nextReference = null;
         this.mediaPlayer = null;
@@ -53,6 +56,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
             } else {
                 this.onSeekComplete(this.mediaPlayer);
             }
+            this.audioAnalytics.playStarted(this.currReference.toString(), seekTime);
         } else {
             Log.e(TAG, "URL is null");
         }
@@ -93,7 +97,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     void stop() {
         this.controller.playHasStopped();
         this.updateMediaPlayStateTime();
-        //this.sendAudioAnalytics();
+        this.sendAudioAnalytics();
         if (this.mediaPlayer != null) {
             this.mediaPlayer.reset();
             this.mediaPlayer.release();
@@ -162,7 +166,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
             this.mediaPlayer.setNextMediaPlayer(this.nextPlayer);
             this.readVerseMetaData(this.currReference);
         } else {
-        //    self.sendAudioAnalytics()
+            this.sendAudioAnalytics();
             MediaPlayState.clear(this.controller.activity);
             this.stop();
         }
@@ -206,8 +210,8 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     }
 
     void sendAudioAnalytics() {
-        //print("\n*********** INSIDE SAVE ANALYTICS *************")
-        //let currTime = (self.player != nil) ? self.player!.currentTime() : kCMTimeZero
-        //self.audioAnalytics.playEnded(item: self.currReference.toString(), position: currTime)
+        Log.d(TAG, "\n*********** INSIDE SAVE ANALYTICS *************");
+        long currTime = (this.mediaPlayer != null) ? this.mediaPlayer.getCurrentPosition() : 0;
+        this.audioAnalytics.playEnded(this.currReference.toString(), currTime);
     }
 }

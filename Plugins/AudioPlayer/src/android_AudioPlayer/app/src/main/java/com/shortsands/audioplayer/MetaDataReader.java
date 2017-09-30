@@ -49,7 +49,7 @@ class MetaDataReader {
                 for (int i=0; i<json.length(); i++) {
                     try {
                         JSONObject item = json.getJSONObject(i);
-                        TOCAudioBible metaItem = new TOCAudioBible(item);
+                        TOCAudioBible metaItem = new TOCAudioBible("FCBH", item);
                         Log.d(TAG, "TOCAudioBible item: " + metaItem.toString());
                         metaData.put(metaItem.damId, metaItem);
                     } catch(JSONException je) {

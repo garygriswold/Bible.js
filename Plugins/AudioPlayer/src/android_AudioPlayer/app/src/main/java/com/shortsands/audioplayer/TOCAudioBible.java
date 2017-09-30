@@ -13,6 +13,7 @@ class TOCAudioBible {
 
     private static String TAG = "TOCAudioBible";
 
+    final String mediaSource;
     final String damId;
     final String languageCode;
     final String mediaType;
@@ -23,7 +24,8 @@ class TOCAudioBible {
     final HashMap<String, TOCAudioBook> booksById;
     final HashMap<Integer, TOCAudioBook> booksBySeq;
 
-    TOCAudioBible(JSONObject jsonObject) {
+    TOCAudioBible(String source, JSONObject jsonObject) {
+        this.mediaSource = source;
         this.booksById = new HashMap<String, TOCAudioBook>();
         this.booksBySeq = new HashMap<Integer, TOCAudioBook>();
         String temp;
