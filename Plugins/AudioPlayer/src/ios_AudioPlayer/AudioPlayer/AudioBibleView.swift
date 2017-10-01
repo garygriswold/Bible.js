@@ -18,6 +18,7 @@ class AudioBibleView : NSObject {
     let pauseButton: UIButton
     let stopButton: UIButton
     let scrubSlider: UISlider
+    let verseLabel: UILabel
     var progressLink: CADisplayLink?
     // Transient State Variables
     var scrubSliderDuration: CMTime
@@ -59,7 +60,7 @@ class AudioBibleView : NSObject {
         self.view.addSubview(stopBtn)
         self.stopButton = stopBtn
         
-        let scrubRect = CGRect(x: screenWidth * 0.05, y: 200, width: screenWidth * 0.9, height: 60)
+        let scrubRect = CGRect(x: screenWidth * 0.05, y: 230, width: screenWidth * 0.9, height: 60)
         let scrub = UISlider(frame: scrubRect)
         scrub.isContinuous = false
         let thumbUpImg = UIImage(named: "Images/ThumbUP.png")
@@ -82,6 +83,25 @@ class AudioBibleView : NSObject {
         scrub.setValue(0.0, animated: false)
         self.view.addSubview(scrub)
         self.scrubSlider = scrub
+        
+        let verse = UILabel()
+        verse.frame = CGRect(x: screenWidth * 0.05, y: 195, width: 30, height: 30)
+        verse.text = "1"
+        verse.font = UIFont(name: "Helvetica Neue", size: 12)
+        verse.textColor = UIColor.black
+        verse.backgroundColor = UIColor.white
+        verse.textAlignment = NSTextAlignment.center
+        verse.isUserInteractionEnabled = false
+        verse.layer.borderColor = UIColor.black.cgColor
+        verse.layer.borderWidth = 1.0
+        // These 4 statements are supposted to produce a shadow
+        verse.layer.shadowOpacity = 1.0;
+        verse.layer.shadowRadius = 0.0;
+        verse.layer.shadowColor = UIColor.black.cgColor
+        verse.layer.shadowOffset = CGSize(width: 0.0, height: -1.0)
+        
+        self.view.addSubview(verse)
+        self.verseLabel = verse
     }
     
     deinit {
@@ -130,6 +150,7 @@ class AudioBibleView : NSObject {
         self.pauseButton.removeFromSuperview()
         self.stopButton.removeFromSuperview()
         self.scrubSlider.removeFromSuperview()
+        self.verseLabel.removeFromSuperview()
         self.progressLink?.invalidate()
     }
     
@@ -149,7 +170,20 @@ class AudioBibleView : NSObject {
             }
             let current = CMTimeGetSeconds(item.currentTime())
             self.scrubSlider.setValue(Float(current), animated: true)
+            
+            let xPixel = xPositionSeekBar()
+            self.verseLabel.center = CGPoint(x: xPixel, y: 210)
+            self.verseLabel.text = String(describing: Int(xPixel / 100) + 1)
+            
         }
+    }
+    private func xPositionSeekBar() -> CGFloat {
+        let slider = self.scrubSlider
+        let sliderRange: CGFloat = slider.frame.size.width - (slider.currentThumbImage?.size.width)! /// PRECOMPUTE
+        let sliderOrigin: CGFloat = slider.frame.origin.x + ((slider.currentThumbImage?.size.width)! / 2.0) /// PRECOMPUTE
+        let sliderPct: Float = (slider.value - slider.minimumValue) / (slider.maximumValue - slider.minimumValue)
+        let sliderValueToPixels: CGFloat = (CGFloat(sliderPct) * sliderRange) + sliderOrigin
+        return sliderValueToPixels;
     }
     
     /**
