@@ -23,6 +23,7 @@ class AudioBibleView : NSObject {
     // Transient State Variables
     var scrubSliderDuration: CMTime
     var scrubSliderDrag: Bool
+    var verseNum: Int = 1
     var isAudioViewActive: Bool = false
     
     init(view: UIView, audioBible: AudioBible) {
@@ -171,10 +172,13 @@ class AudioBibleView : NSObject {
             let current = CMTimeGetSeconds(item.currentTime())
             self.scrubSlider.setValue(Float(current), animated: true)
             
-            let xPixel = xPositionSeekBar()
-            self.verseLabel.center = CGPoint(x: xPixel, y: 210)
-            self.verseLabel.text = String(describing: Int(xPixel / 100) + 1)
-            
+            self.verseLabel.center = CGPoint(x: xPositionSeekBar(), y: 210)
+
+            if let verse = self.audioBible.audioChapter {
+                self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum,
+                                                          seconds: Double(self.scrubSlider.value))
+                self.verseLabel.text = String(describing: self.verseNum)
+            }
         }
     }
     private func xPositionSeekBar() -> CGFloat {
@@ -194,16 +198,18 @@ class AudioBibleView : NSObject {
         print("scrub slider changed to \(slider.value)")
         if let play = self.audioBible.player {
             if (slider.value < slider.maximumValue) {
-                var current: Float
+                var current: CMTime
                 if let verse = self.audioBible.audioChapter {
-                    current = verse.findVerseByPosition(seconds: slider.value)
+                    self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(slider.value))
+                    self.verseLabel.text = String(describing: self.verseNum)
+                    current = verse.findPositionOfVerse(verse: self.verseNum)
                 } else {
-                    current = slider.value
+                    current = CMTime(seconds: Double(slider.value), preferredTimescale: CMTimeScale(1.0))
                 }
-                let time: CMTime = CMTime(seconds: Double(current), preferredTimescale: CMTimeScale(1.0))
-                play.seek(to: time)
+                play.seek(to: current)
             } else {
                 self.audioBible.advanceToNextItem()
+                self.verseLabel.text = "1"
             }
         }
     }

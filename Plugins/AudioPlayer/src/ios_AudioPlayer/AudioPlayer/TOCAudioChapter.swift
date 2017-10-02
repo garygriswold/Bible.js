@@ -11,10 +11,10 @@ import CoreMedia
 
 class TOCAudioChapter {
     
-    var versePositions: [Float]
+    var versePositions: [Double]
     
     init(jsonObject: Any?) {
-        self.versePositions = [Float]()
+        self.versePositions = [Double]()
         
         if (jsonObject is Array<AnyObject>) {
             let array: Array<AnyObject> = jsonObject as! Array<AnyObject>
@@ -24,7 +24,7 @@ class TOCAudioChapter {
                 self.versePositions = Array(repeating: 0, count: lastVerse + 1)
                 for item in array {
                     let verseId = item["verse_id"] as? Int ?? 0
-                    let position = item["position"] as? Float ?? 0.0
+                    let position = item["position"] as? Double ?? 0.0
                     self.versePositions[verseId] = position
                 }
             } else {
@@ -39,23 +39,42 @@ class TOCAudioChapter {
         print("***** Deinit TOCAudioChapter *****")
     }
     
-    func findVerseByPosition(time: CMTime) -> CMTime {
-        let seconds = Float(CMTimeGetSeconds(time))
-        let priorVerseSec: Float = findVerseByPosition(seconds: seconds)
-        return CMTime(seconds: Double(priorVerseSec), preferredTimescale: CMTimeScale(1))
+    func findVerseByPosition(priorVerse: Int, time: CMTime) -> Int {
+         let seconds = Double(CMTimeGetSeconds(time))
+        return findVerseByPosition(priorVerse: priorVerse, seconds: seconds)
     }
     
-    func findVerseByPosition(seconds: Float) -> Float {
-        var index = 0
-        for versePos in self.versePositions {
-            if (seconds == versePos) {
-                return seconds
-            } else if (seconds < versePos) {
-                return (index > 0) ? self.versePositions[index - 1] : 0.0
+    func findVerseByPosition(priorVerse: Int, seconds: Double) -> Int {
+        var index = (priorVerse > 0 && priorVerse < self.versePositions.count) ? priorVerse : 1
+        let priorPosition = self.versePositions[index]
+        if (seconds > priorPosition) {
+            while(index < (self.versePositions.count - 1)) {
+                index += 1
+                let versePos = self.versePositions[index]
+                if (seconds < versePos) {
+                    return index - 1
+                }
             }
-            index += 1
+            return self.versePositions.count - 1
+            
+        } else if (seconds < priorPosition) {
+            while(index > 2) {
+                index -= 1
+                let versePos = self.versePositions[index]
+                if (seconds >= versePos) {
+                    return index
+                }
+            }
+            return 1
+            
+        } else { // seconds == priorPosition
+            return index
         }
-        return (self.versePositions.count > 0) ? self.versePositions.last! : 0.0
+    }
+    
+    func findPositionOfVerse(verse: Int) -> CMTime {
+        let seconds = (verse > 0 && verse < self.versePositions.count) ? self.versePositions[verse] : 0.0
+        return CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1))
     }
     
     func toString() -> String {

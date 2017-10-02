@@ -19,6 +19,13 @@
 		E42B3F6F1F32426B00A51430 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E42B3F6E1F32426B00A51430 /* AWS.framework */; };
 		E42B3F711F32428000A51430 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E42B3F701F32428000A51430 /* AWSCore.framework */; };
 		E43D50BD1F44BA8F00B38A7C /* MediaPlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43D50BC1F44BA8F00B38A7C /* MediaPlayState.swift */; };
+		E465430D1F82908400F9B340 /* MetaDataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */; };
+		E465430E1F82910200F9B340 /* TOCAudioChapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC61F3E859B007D5870 /* TOCAudioChapter.swift */; };
+		E465430F1F82926600F9B340 /* TOCAudioBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */; };
+		E46543101F8292BB00F9B340 /* TOCAudioBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */; };
+		E46543111F8292C700F9B340 /* AWSS3Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC41F3BFC34007D5870 /* AWSS3Cache.swift */; };
+		E46543121F8292DA00F9B340 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E42B3F6E1F32426B00A51430 /* AWS.framework */; };
+		E46543131F8292EC00F9B340 /* Reference.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC81F42828D007D5870 /* Reference.swift */; };
 		E4826D1A1F4F21140031FFE0 /* AudioBibleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4826D191F4F21140031FFE0 /* AudioBibleController.swift */; };
 		E4A32CCF1F2FB310009AECFB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A32CCE1F2FB310009AECFB /* AppDelegate.swift */; };
 		E4A32CD11F2FB310009AECFB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A32CD01F2FB310009AECFB /* ViewController.swift */; };
@@ -28,12 +35,23 @@
 		E4A32CE11F2FB420009AECFB /* AudioBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A32CE01F2FB420009AECFB /* AudioBible.swift */; };
 		E4A32CE31F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E4A32CE21F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 */; };
 		E4A65BDB1F76B65E00C1725C /* AudioSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A65BDA1F76B65E00C1725C /* AudioSession.swift */; };
+		E4AB2E331F82019500CCDD5C /* TOCAudioBibleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AB2E321F82019500CCDD5C /* TOCAudioBibleTest.swift */; };
 		E4F69CED1F39684800EE53AB /* MetaDataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */; };
 		E4F69CEF1F397CF200EE53AB /* TOCAudioBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */; };
 		E4F69CF11F397D0800EE53AB /* TOCAudioBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */; };
 		E4F932231F512028002A0A4D /* AudioAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F932221F512028002A0A4D /* AudioAnalytics.swift */; };
 		E4F932251F512095002A0A4D /* AnalyticsSessionId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F932241F512095002A0A4D /* AnalyticsSessionId.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E4AB2E2D1F82015800CCDD5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4A32CC31F2FB310009AECFB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4A32CCA1F2FB310009AECFB;
+			remoteInfo = AudioPlayer;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		E40954BE1F351E1100046DE7 /* Embed Frameworks */ = {
@@ -72,6 +90,9 @@
 		E4A32CE01F2FB420009AECFB /* AudioBible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioBible.swift; sourceTree = "<group>"; };
 		E4A32CE21F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = EmmaFirstLostTooth.mp3; sourceTree = "<group>"; };
 		E4A65BDA1F76B65E00C1725C /* AudioSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSession.swift; sourceTree = "<group>"; };
+		E4AB2E281F82015800CCDD5C /* AudioPlayerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioPlayerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4AB2E2C1F82015800CCDD5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4AB2E321F82019500CCDD5C /* TOCAudioBibleTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOCAudioBibleTest.swift; sourceTree = "<group>"; };
 		E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaDataReader.swift; sourceTree = "<group>"; };
 		E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioBible.swift; sourceTree = "<group>"; };
 		E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioBook.swift; sourceTree = "<group>"; };
@@ -90,6 +111,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E4AB2E251F82015800CCDD5C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E46543121F8292DA00F9B340 /* AWS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -97,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				E4A32CCD1F2FB310009AECFB /* AudioPlayer */,
+				E4AB2E291F82015800CCDD5C /* AudioPlayerTests */,
 				E4A32CCC1F2FB310009AECFB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -105,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				E4A32CCB1F2FB310009AECFB /* AudioPlayer.app */,
+				E4AB2E281F82015800CCDD5C /* AudioPlayerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,6 +171,15 @@
 			path = AudioPlayer;
 			sourceTree = "<group>";
 		};
+		E4AB2E291F82015800CCDD5C /* AudioPlayerTests */ = {
+			isa = PBXGroup;
+			children = (
+				E4AB2E321F82019500CCDD5C /* TOCAudioBibleTest.swift */,
+				E4AB2E2C1F82015800CCDD5C /* Info.plist */,
+			);
+			path = AudioPlayerTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -161,13 +201,31 @@
 			productReference = E4A32CCB1F2FB310009AECFB /* AudioPlayer.app */;
 			productType = "com.apple.product-type.application";
 		};
+		E4AB2E271F82015800CCDD5C /* AudioPlayerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E4AB2E2F1F82015800CCDD5C /* Build configuration list for PBXNativeTarget "AudioPlayerTests" */;
+			buildPhases = (
+				E4AB2E241F82015800CCDD5C /* Sources */,
+				E4AB2E251F82015800CCDD5C /* Frameworks */,
+				E4AB2E261F82015800CCDD5C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E4AB2E2E1F82015800CCDD5C /* PBXTargetDependency */,
+			);
+			name = AudioPlayerTests;
+			productName = AudioPlayerTests;
+			productReference = E4AB2E281F82015800CCDD5C /* AudioPlayerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		E4A32CC31F2FB310009AECFB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0830;
+				LastSwiftUpdateCheck = 0900;
 				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = ShortSands;
 				TargetAttributes = {
@@ -175,6 +233,12 @@
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 95C7NX5DGM;
 						ProvisioningStyle = Automatic;
+					};
+					E4AB2E271F82015800CCDD5C = {
+						CreatedOnToolsVersion = 9.0;
+						DevelopmentTeam = 95C7NX5DGM;
+						ProvisioningStyle = Automatic;
+						TestTargetID = E4A32CCA1F2FB310009AECFB;
 					};
 				};
 			};
@@ -192,6 +256,7 @@
 			projectRoot = "";
 			targets = (
 				E4A32CCA1F2FB310009AECFB /* AudioPlayer */,
+				E4AB2E271F82015800CCDD5C /* AudioPlayerTests */,
 			);
 		};
 /* End PBXProject section */
@@ -206,6 +271,13 @@
 				E4A32CD61F2FB310009AECFB /* Assets.xcassets in Resources */,
 				E4A32CD41F2FB310009AECFB /* Main.storyboard in Resources */,
 				E4A32CE31F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4AB2E261F82015800CCDD5C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,7 +306,29 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E4AB2E241F82015800CCDD5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E46543111F8292C700F9B340 /* AWSS3Cache.swift in Sources */,
+				E465430E1F82910200F9B340 /* TOCAudioChapter.swift in Sources */,
+				E46543101F8292BB00F9B340 /* TOCAudioBible.swift in Sources */,
+				E4AB2E331F82019500CCDD5C /* TOCAudioBibleTest.swift in Sources */,
+				E46543131F8292EC00F9B340 /* Reference.swift in Sources */,
+				E465430F1F82926600F9B340 /* TOCAudioBook.swift in Sources */,
+				E465430D1F82908400F9B340 /* MetaDataReader.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E4AB2E2E1F82015800CCDD5C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4A32CCA1F2FB310009AECFB /* AudioPlayer */;
+			targetProxy = E4AB2E2D1F82015800CCDD5C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		E4A32CD21F2FB310009AECFB /* Main.storyboard */ = {
@@ -383,6 +477,68 @@
 			};
 			name = Release;
 		};
+		E4AB2E301F82015800CCDD5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 95C7NX5DGM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/AudioPlayer",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = AudioPlayerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AudioPlayerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AudioPlayer.app/AudioPlayer";
+			};
+			name = Debug;
+		};
+		E4AB2E311F82015800CCDD5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 95C7NX5DGM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/AudioPlayer",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = AudioPlayerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AudioPlayerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AudioPlayer.app/AudioPlayer";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -400,6 +556,15 @@
 			buildConfigurations = (
 				E4A32CDE1F2FB310009AECFB /* Debug */,
 				E4A32CDF1F2FB310009AECFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E4AB2E2F1F82015800CCDD5C /* Build configuration list for PBXNativeTarget "AudioPlayerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4AB2E301F82015800CCDD5C /* Debug */,
+				E4AB2E311F82015800CCDD5C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

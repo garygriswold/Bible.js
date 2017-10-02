@@ -213,8 +213,10 @@ public class AudioBible : NSObject {
     func updateMediaPlayStateTime() {
         var result: CMTime = kCMTimeZero
         if let currentTime = self.player?.currentTime() {
-            if let time: CMTime = self.audioChapter?.findVerseByPosition(time: currentTime) {
-                result = time
+            if let verse: Int = self.audioChapter?.findVerseByPosition(priorVerse: 1, time: currentTime) {
+                if let time: CMTime = self.audioChapter?.findPositionOfVerse(verse: verse) {
+                    result = time
+                }
             }
         }
         MediaPlayState.update(url: self.currReference.toString(), time: result)
