@@ -63,7 +63,7 @@ class AudioBibleView : NSObject {
         
         let scrubRect = CGRect(x: screenWidth * 0.05, y: 230, width: screenWidth * 0.9, height: 60)
         let scrub = UISlider(frame: scrubRect)
-        scrub.isContinuous = false
+        scrub.isContinuous = true
         let thumbUpImg = UIImage(named: "Images/ThumbUP.png")
         scrub.setThumbImage(thumbUpImg, for: UIControlState.normal)
         let thumbDnImg = UIImage(named: "Images/ThumbDN.png")
@@ -171,9 +171,8 @@ class AudioBibleView : NSObject {
             }
             let current = CMTimeGetSeconds(item.currentTime())
             self.scrubSlider.setValue(Float(current), animated: true)
-            
             self.verseLabel.center = CGPoint(x: xPositionSeekBar(), y: 210)
-
+            
             if let verse = self.audioBible.audioChapter {
                 self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum,
                                                           seconds: Double(self.scrubSlider.value))
@@ -193,32 +192,34 @@ class AudioBibleView : NSObject {
     /**
     * Scrub Slider Event Handler
     */
-    func scrubSliderChanged(sender: UISlider, forEvent event: UIEvent) {
-        let slider = self.scrubSlider
-        print("scrub slider changed to \(slider.value)")
-        if let play = self.audioBible.player {
-            if (slider.value < slider.maximumValue) {
-                var current: CMTime
-                if let verse = self.audioBible.audioChapter {
-                    self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(slider.value))
-                    self.verseLabel.text = String(describing: self.verseNum)
-                    current = verse.findPositionOfVerse(verse: self.verseNum)
-                } else {
-                    current = CMTime(seconds: Double(slider.value), preferredTimescale: CMTimeScale(1.0))
-                }
-                play.seek(to: current)
-            } else {
-                self.audioBible.advanceToNextItem()
-                self.verseLabel.text = "1"
-            }
+    func scrubSliderChanged(sender: UISlider) {//}, forEvent event: UIEvent) {
+        //print("scrub slider changed to \(sender.value)")
+        if let verse = self.audioBible.audioChapter {
+            self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(sender.value))
+            self.verseLabel.text = String(describing: self.verseNum)
+            self.verseLabel.center = CGPoint(x: xPositionSeekBar(), y: 210)
         }
     }
     func touchDown() {
         print("**** touchDown ***")
         self.scrubSliderDrag = true
     }
-    func touchUpInside() {
+    func touchUpInside(sender: UISlider) {
         print("**** touchUpInside ***")
         self.scrubSliderDrag = false
+        
+        if let play = self.audioBible.player {
+            if (sender.value < sender.maximumValue) {
+                var current: CMTime
+                if let verse = self.audioBible.audioChapter {
+                    current = verse.findPositionOfVerse(verse: self.verseNum)
+                } else {
+                    current = CMTime(seconds: Double(sender.value), preferredTimescale: CMTimeScale(1.0))
+                }
+                play.seek(to: current)
+            } else {
+                self.audioBible.advanceToNextItem()
+            }
+        }
     }
  }
