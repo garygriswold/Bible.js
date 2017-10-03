@@ -32,7 +32,7 @@ class MetaDataReader {
             if (result is Array<AnyObject>) {
                 let array: Array<AnyObject> = result as! Array<AnyObject>
                 for item in array {
-                    let metaItem = TOCAudioBible(jsonObject: item)
+                    let metaItem = TOCAudioBible(mediaSource: "FCBH", jsonObject: item)
                     print("\(metaItem.toString())")
                     self.metaData[metaItem.damId] = metaItem
                 }

@@ -10,6 +10,7 @@ import Foundation
 
 class TOCAudioBible {
     
+    let mediaSource: String
     let damId: String
     let languageCode: String
     let mediaType: String
@@ -20,9 +21,10 @@ class TOCAudioBible {
     var booksById: Dictionary<String, TOCAudioBook>
     var booksBySeq: Dictionary<Int, TOCAudioBook>
 
-    init(jsonObject: AnyObject) {
+    init(mediaSource: String, jsonObject: AnyObject) {
         self.booksById = Dictionary<String, TOCAudioBook>()
         self.booksBySeq = Dictionary<Int, TOCAudioBook>()
+        self.mediaSource = mediaSource
         if jsonObject is Dictionary<String, AnyObject> {
             let item = jsonObject as! Dictionary<String, AnyObject>
             print("Inner Item \(item)")
