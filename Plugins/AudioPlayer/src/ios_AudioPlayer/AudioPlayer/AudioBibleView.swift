@@ -20,6 +20,9 @@ class AudioBibleView : NSObject {
     let scrubSlider: UISlider
     let verseLabel: UILabel
     var progressLink: CADisplayLink?
+    // Precomputed for positionVersePopup
+    let sliderRange: CGFloat
+    let sliderOrigin: CGFloat
     // Transient State Variables
     var scrubSliderDuration: CMTime
     var scrubSliderDrag: Bool
@@ -84,6 +87,10 @@ class AudioBibleView : NSObject {
         scrub.setValue(0.0, animated: false)
         self.view.addSubview(scrub)
         self.scrubSlider = scrub
+        
+        // Precompute Values for positionVersePopup()
+        self.sliderRange = scrub.frame.size.width - (scrub.currentThumbImage?.size.width)!
+        self.sliderOrigin = scrub.frame.origin.x + ((scrub.currentThumbImage?.size.width)! / 2.0)
         
         let verse = UILabel()
         verse.frame = CGRect(x: screenWidth * 0.05, y: 195, width: 30, height: 30)
@@ -171,7 +178,7 @@ class AudioBibleView : NSObject {
             }
             let current = CMTimeGetSeconds(item.currentTime())
             self.scrubSlider.setValue(Float(current), animated: true)
-            self.verseLabel.center = CGPoint(x: xPositionSeekBar(), y: 210)
+            self.verseLabel.center = positionVersePopup()
             
             if let verse = self.audioBible.audioChapter {
                 self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum,
@@ -180,13 +187,11 @@ class AudioBibleView : NSObject {
             }
         }
     }
-    private func xPositionSeekBar() -> CGFloat {
+    private func positionVersePopup() -> CGPoint {
         let slider = self.scrubSlider
-        let sliderRange: CGFloat = slider.frame.size.width - (slider.currentThumbImage?.size.width)! /// PRECOMPUTE
-        let sliderOrigin: CGFloat = slider.frame.origin.x + ((slider.currentThumbImage?.size.width)! / 2.0) /// PRECOMPUTE
         let sliderPct: Float = (slider.value - slider.minimumValue) / (slider.maximumValue - slider.minimumValue)
-        let sliderValueToPixels: CGFloat = (CGFloat(sliderPct) * sliderRange) + sliderOrigin
-        return sliderValueToPixels;
+        let sliderValueToPixels: CGFloat = (CGFloat(sliderPct) * self.sliderRange) + self.sliderOrigin
+        return CGPoint(x: sliderValueToPixels, y: 210)
     }
     
     /**
@@ -197,7 +202,7 @@ class AudioBibleView : NSObject {
         if let verse = self.audioBible.audioChapter {
             self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(sender.value))
             self.verseLabel.text = String(describing: self.verseNum)
-            self.verseLabel.center = CGPoint(x: xPositionSeekBar(), y: 210)
+            self.verseLabel.center = positionVersePopup()
         }
     }
     func touchDown() {
