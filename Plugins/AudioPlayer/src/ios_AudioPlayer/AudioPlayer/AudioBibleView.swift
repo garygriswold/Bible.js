@@ -93,7 +93,7 @@ class AudioBibleView : NSObject {
         self.sliderOrigin = scrub.frame.origin.x + ((scrub.currentThumbImage?.size.width)! / 2.0)
         
         let verse = UILabel()
-        verse.frame = CGRect(x: screenWidth * 0.05, y: 195, width: 30, height: 30)
+        verse.frame = CGRect(x: screenWidth * 0.05, y: 195, width: 32, height: 32)
         verse.text = "1"
         verse.font = UIFont(name: "Helvetica Neue", size: 12)
         verse.textColor = UIColor.black
@@ -102,14 +102,23 @@ class AudioBibleView : NSObject {
         verse.isUserInteractionEnabled = false
         verse.layer.borderColor = UIColor.black.cgColor
         verse.layer.borderWidth = 1.0
-        // These 4 statements are supposted to produce a shadow
-        verse.layer.shadowOpacity = 1.0;
-        verse.layer.shadowRadius = 0.0;
-        verse.layer.shadowColor = UIColor.black.cgColor
-        verse.layer.shadowOffset = CGSize(width: 0.0, height: -1.0)
-        
+        verse.layer.cornerRadius = verse.frame.width / 2
+
         self.view.addSubview(verse)
         self.verseLabel = verse
+        
+        playBtn.layer.shadowOpacity = 0.5
+        playBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
+        pauseBtn.layer.shadowOpacity = 0.5
+        pauseBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
+        stopBtn.layer.shadowOpacity = 0.5
+        stopBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
+        
+        //verse.layer.masksToBounds = true
+        verse.layer.shadowOpacity = 0.5
+        verse.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
+        //verse.clipsToBounds = true
+        verse.layer.masksToBounds = true
     }
     
     deinit {

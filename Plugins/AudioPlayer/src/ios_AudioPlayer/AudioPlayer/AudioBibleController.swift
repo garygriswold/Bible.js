@@ -22,7 +22,7 @@ class AudioBibleController {
     * This must be set to be the WKWebView
     */
     func present(view: UIView) {
-        view.backgroundColor = .blue // This is for Testing
+  //      view.backgroundColor = .blue // This is for Testing
         
         AwsS3.region = "us-west-2"
         let metaData = MetaDataReader()

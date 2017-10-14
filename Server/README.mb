@@ -1,0 +1,123 @@
+Bible Download Analytics
+========================
+
+	sqlite Analytics.db	
+	
+Views Intended to Simplify Query
+--------------------------------
+	
+Limit Result to GET.OBJECT by userid BibleApp and all errors
+
+	create view DownloadErrors AS
+	SELECT bucket, datetime, filename, httpStatus, prefLocale, locale, error, tranSize, fileSize, totalms, s3ms,
+	manufacturer, model, osType, osVersion
+	from bibledownload 
+	where operation='REST.GET.OBJECT' 
+	and userid like '%BibleApp'
+	and (httpStatus != 200 or error is not null);
+
+Limit Result to Successful GET.OBJECT by userid BibleApp
+
+	create view DownloadSuccess AS
+	SELECT strftime('%Y', datetime) as year, strftime('%m', datetime) as month, strftime('%d', datetime) as day, strftime('%H', datetime) as hour,
+	datetime, substr(prefLocale, 1, 2) as language, substr(locale, -2, 2) as country, prefLocale, locale, 
+	substr(bucket, 12) as region, substr(filename, 1, instr(filename, '.')-1) as version,
+	tranSize, fileSize, totalms, s3ms, manufacturer, model, osType, osVersion
+	from bibledownload 
+	where operation='REST.GET.OBJECT' 
+	and httpStatus=200
+	and error is null
+	and userid like '%BibleApp'
+	and osType != 'curl';
+	
+Limit Result to Successful GET.OBJECT by userid BibleApp of ERV
+Also, limit content somewhat
+
+	create view DownloadERV AS
+	SELECT strftime('%Y', datetime) as year, strftime('%m', datetime) as month, strftime('%d', datetime) as day, strftime('%H', datetime) as hour,
+	datetime, substr(prefLocale, 1, 2) as language, substr(locale, -2, 2) as country,
+	substr(bucket, 12) as region, substr(filename, 1, instr(filename, '.')-1) as version,
+	tranSize, fileSize, totalms, s3ms, manufacturer, model, osType, osVersion
+	from bibledownload 
+	where operation='REST.GET.OBJECT' 
+	and httpStatus=200
+	and error is null
+	and userid like '%BibleApp'
+	and osType != 'curl'
+	and version like 'ERV%';
+	
+Build Reporting Database
+------------------------
+
+Directory Analytics/year_month should contain a build_db.sh script that extracts data from
+the current analytics database and from versions.db in order to create one database
+with all of the needed information.
+	
+	
+Queries for Presentation
+------------------------
+
+Downloads of any ERV version in period.
+
+	select count(*) from DownloadERV 
+	where datetime >= '2016' and datetime < '2017-07';
+	
+	
+	
+
+
+
+	
+
+	
+Download of Versions by month
+
+	select version, year || '-' || month, count(*) from DownloadERV 
+	where datetime >= '2016' and datetime < '2017-07'
+	group by version, year || '-' || month;
+	
+Download of Versions by day
+
+	select year, month, day, version, count(*) from DownloadERV 
+	where datetime >= '2016' and datetime < '2017-07'
+	group by year, month, day, version;
+	
+Download of Versions by country in period.
+
+	select country, version, count(*) from DownloadERV 
+	where datetime >= '2016' and datetime < '2017-07'
+	group by country, version;
+	
+Download of Versions by language in period.
+
+	select version, language, count(*) from DownloadERV 
+	where datetime >= '2016' and datetime < '2017-07'
+	group by version, language
+	order by language, version;
+	
+Download of Versions by country and language in period.
+
+	select language, country, version, count(*) from DownloadERV 
+	where datetime >= '2016' and datetime < '2017-07'
+	group by language, country, version
+	order by version, language, country;
+	
+Download by OS in period
+
+	select osType, count(*) from DownloadERV 
+	where datetime >= '2016' and datetime < '2017-07'
+	group by osType;
+	
+Download by OS by month
+
+	select year, month, osType, count(*) from DownloadERV 
+	where datetime >= '2016' and datetime < '2017-07'
+	group by year, month, osType;
+	
+
+I might need to pull and language table and a country table into the database for joins
+Would this be a new database created for the report.
+
+What do I do with app download information????
+
+It appears that about March 1, ERV-ENG was included and no longer downloaded.
