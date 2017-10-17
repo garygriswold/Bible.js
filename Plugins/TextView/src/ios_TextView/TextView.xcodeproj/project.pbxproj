@@ -14,6 +14,7 @@
 		E453E2421F91C58500D938F6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E453E2401F91C58500D938F6 /* LaunchScreen.storyboard */; };
 		E453E24D1F91C58500D938F6 /* TextViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E453E24C1F91C58500D938F6 /* TextViewTests.swift */; };
 		E453E2581F91C58500D938F6 /* TextViewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E453E2571F91C58500D938F6 /* TextViewUITests.swift */; };
+		E468F9D21F966D89002FFFDB /* Codex.html in Resources */ = {isa = PBXBuildFile; fileRef = E468F9D11F966D89002FFFDB /* Codex.html */; };
 		E47BDD9E1F927E08008B9B12 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E47BDD9D1F927E08008B9B12 /* AWS.framework */; };
 		E47BDD9F1F927E08008B9B12 /* AWS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E47BDD9D1F927E08008B9B12 /* AWS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E47BDDA21F927E1C008B9B12 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E47BDDA11F927E1C008B9B12 /* AWSCore.framework */; };
@@ -70,6 +71,7 @@
 		E453E2531F91C58500D938F6 /* TextViewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TextViewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E453E2571F91C58500D938F6 /* TextViewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewUITests.swift; sourceTree = "<group>"; };
 		E453E2591F91C58500D938F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E468F9D11F966D89002FFFDB /* Codex.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Codex.html; sourceTree = "<group>"; };
 		E47BDD9D1F927E08008B9B12 /* AWS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWS.framework; sourceTree = "<group>"; };
 		E47BDDA11F927E1C008B9B12 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
 		E47BDDA41F927E35008B9B12 /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Zip.framework; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				E453E23E1F91C58500D938F6 /* Assets.xcassets */,
 				E453E2401F91C58500D938F6 /* LaunchScreen.storyboard */,
 				E453E2431F91C58500D938F6 /* Info.plist */,
+				E468F9D11F966D89002FFFDB /* Codex.html */,
 				E47BDDA71F928846008B9B12 /* Codex.css */,
 			);
 			path = TextView;
@@ -271,6 +274,7 @@
 				E453E23F1F91C58500D938F6 /* Assets.xcassets in Resources */,
 				E453E23D1F91C58500D938F6 /* Main.storyboard in Resources */,
 				E47BDDA81F928846008B9B12 /* Codex.css in Resources */,
+				E468F9D21F966D89002FFFDB /* Codex.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
