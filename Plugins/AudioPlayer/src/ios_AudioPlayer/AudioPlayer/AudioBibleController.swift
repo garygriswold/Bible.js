@@ -41,8 +41,7 @@ class AudioBibleController {
                     self.readerView = AudioBibleView(view: view, audioBible: reader)
                     self.audioSession = AudioSession(audioBibleView: self.readerView!)
                     reader.beginStreaming()
-                    //reader.beginDownload()
-                    //reader.beginLocal()
+                    //reader.beginReadFile()
                 }
             }
         })

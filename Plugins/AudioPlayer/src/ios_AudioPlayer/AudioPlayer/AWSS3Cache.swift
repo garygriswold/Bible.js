@@ -10,14 +10,17 @@
 //
 //
 
-import Foundation
 import AWS
 
 class AWSS3Cache {
     
+    private static let DEBUG = true
+    
+    public static let shared = AWSS3Cache()
+
     let cacheDir: URL
     
-    init() {
+    private init() {
         let homeDir: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
         let libDir: URL = homeDir.appendingPathComponent("Library")
         self.cacheDir = libDir.appendingPathComponent("Caches")
@@ -27,74 +30,123 @@ class AWSS3Cache {
         print("***** Deinit AWSS3Cache *****")
     }
     
-    func read(s3Bucket: String, s3Key: String, expireInterval: TimeInterval,
+    /**
+     * To force reading the data from AWS S3 use expireInterval 0.
+     * To prevent expiration of data in Cache and only use AWS S3 if the file is not present use Double.infinity
+     */
+    public func readData(s3Bucket: String, s3Key: String, expireInterval: TimeInterval,
               getComplete: @escaping (_ data: Data?) -> Void) {
-        let localKey = self.getLocalKey(s3Bucket: s3Bucket, s3Key: s3Key)
-        let path: URL = self.cacheDir.appendingPathComponent(localKey)
+        let startTime = Date()
+        let path: URL = self.getPath(s3Bucket: s3Bucket, s3Key: s3Key)
         let data: Data? = self.readCache(path: path, expireInterval: expireInterval)
         if data != nil {
+            reportTimeCompleted(start: startTime, success: true, inCache: true, path: path)
             getComplete(data)
         } else {
-            self.readAWSS3(s3Bucket: s3Bucket, s3Key: s3Key, filePath: path, getComplete: getComplete)
+            AwsS3.shared.downloadData(
+                s3Bucket: s3Bucket,
+                s3Key: s3Key,
+                complete: { error, data in
+                    if let err = error {
+                        print("Error accessing S3 in MetaDataCache \(err)")
+                        self.reportTimeCompleted(start: startTime, success: false, inCache: false, path: path)
+                        getComplete(nil)
+                    }
+                    else {
+                        self.reportTimeCompleted(start: startTime, success: true, inCache: false, path: path)
+                        getComplete(data)
+                        do {
+                            try data?.write(to: path)
+                        } catch( let writeErr ) {
+                            print("Error while writing file in AWSS3Cache.readAWSS3 \(writeErr)")
+                        }
+                    }
+                }
+            )
+        }
+    }
+
+    public func readFile(s3Bucket: String, s3Key: String, expireInterval: TimeInterval,
+                   getComplete: @escaping (_ file: URL?) -> Void) {
+        let startTime = Date()
+        let path: URL = self.getPath(s3Bucket: s3Bucket, s3Key: s3Key)
+        if FileManager.default.isReadableFile(atPath: path.path) {
+            reportTimeCompleted(start: startTime, success: true, inCache: true, path: path)
+            getComplete(path)
+        } else {
+            AwsS3.shared.downloadFile(
+                s3Bucket: s3Bucket,
+                s3Key: s3Key,
+                filePath: path,
+                complete: { error in
+                    if let err = error {
+                        print("Error accessing S3 in MetaDataCache \(err)")
+                        self.reportTimeCompleted(start: startTime, success: false, inCache: false, path: path)
+                        getComplete(nil)
+                    }
+                    else {
+                        self.reportTimeCompleted(start: startTime, success: true, inCache: false, path: path)
+                        getComplete(path)
+                    }
+                }
+            )
         }
     }
     
     private func readCache(path: URL, expireInterval: TimeInterval) -> Data? {
-        print("Path to read \(path)")
-        do {
-            let data = try Data(contentsOf: path, options: [])
-            if (self.isFileExpired(filePath: path, expireInterval: expireInterval)) {
-                print("File has expired in AWSS3Cache.readCache")
-                return nil
-            } else {
-                return data
-            }
-        } catch( let err ) {
-            print("Error occur in AWSS3Cache.readCache \(err)")
-            return nil
-        }
-    }
-    
-    private func readAWSS3(s3Bucket: String, s3Key: String, filePath: URL,
-                getComplete: @escaping (_ data: Data?) -> Void) {
-        AwsS3.shared.downloadData(
-            s3Bucket: s3Bucket,
-            s3Key: s3Key,
-            complete: { error, data in
-                if let err = error {
-                    print("Error accessing S3 in MetaDataCache \(err)")
-                    getComplete(nil)
-                }
-                else {
-                    getComplete(data)
+        if (expireInterval >= 0) {
+            print("Path to read \(path)")
+            if FileManager.default.isReadableFile(atPath: path.path) {
+                if (self.isFileExpired(filePath: path, expireInterval: expireInterval)) {
+                    print("File has expired in AWSS3Cache.readCache")
+                } else {
                     do {
-                        try data?.write(to: filePath)
-                    } catch( let writeErr ) {
-                        print("Error while writing file in AWSS3Cache.readAWSS3 \(writeErr)")
+                        let data = try Data(contentsOf: path, options: [])
+                        return data
+                    } catch let err {
+                        print("Error occur in AWSS3Cache.readCache \(err)")
                     }
                 }
             }
-        )
+        }
+        return nil
     }
 
-    private func getLocalKey(s3Bucket: String, s3Key: String) -> String {
-        return(s3Bucket + "_" + s3Key)
+    private func getPath(s3Bucket: String, s3Key: String) -> URL {
+        let localKey = s3Bucket + "_" + s3Key
+        return self.cacheDir.appendingPathComponent(localKey)
     }
     
     private func isFileExpired(filePath: URL, expireInterval: TimeInterval) -> Bool {
-        do {
-            let dictionary = try FileManager.default.attributesOfItem(atPath: filePath.path)
-            let creationDate = dictionary[FileAttributeKey.modificationDate] as? Date
-            if let creation = creationDate {
-                print("creationDate \(creation)")
-                let interval = abs(creation.timeIntervalSinceNow)
-                return interval > expireInterval
-            } else {
+        if (expireInterval >= Double.greatestFiniteMagnitude) {
+            return false
+        } else {
+            do {
+                let dictionary = try FileManager.default.attributesOfItem(atPath: filePath.path)
+                let modifyDate = dictionary[FileAttributeKey.modificationDate] as? Date
+                if let modDate = modifyDate {
+                    print("modifyDate \(modDate)")
+                    let interval = abs(modDate.timeIntervalSinceNow)
+                    return interval > expireInterval
+                } else {
+                    return true
+                }
+            } catch let err {
+                print("Error getting modification date \(err) ON FILE \(filePath)")
                 return true
             }
-        } catch let err {
-            print("Error getting creation date \(err) ON FILE \(filePath)")
-            return true
+        }
+    }
+
+    private func reportTimeCompleted(start: Date, success: Bool, inCache: Bool, path: URL) {
+        if AWSS3Cache.DEBUG {
+            let duration: TimeInterval? = start.timeIntervalSinceNow
+            if let dur = duration {
+                let howLong = round(dur * -1000)
+                print("##### Cache Duration: \(howLong)  isCached: \(inCache)  Success: \(success)  Path: \(path.path)")
+            } else {
+                print("##### Cache Duration Failed")
+            }
         }
     }
 }

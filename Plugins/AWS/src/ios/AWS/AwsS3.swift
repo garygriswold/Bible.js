@@ -8,12 +8,15 @@
 
 import Foundation
 import AWSCore
+import AWSCognito
 import Zip
 
 public class AwsS3 {
     
     // AwsS3.regionName should be set early in an App
     public static var region: String = "us-east-1"
+    private static let COGNITO_IDENT_POOL_ID = "us-east-1:a4817d0a-5398-472f-88a8-8a40b0ecf72f"
+    private static let COGNITO_REGION = AWSRegionType.USEast1
     
     // Do not instantiate AwsS3, use AwsS3.shared
     private static var instance: AwsS3?
@@ -37,8 +40,12 @@ public class AwsS3 {
         }
         self.region = regionType
 	    self.endpoint = AWSEndpoint(region: self.region, service: AWSServiceType.S3, useUnsafeURL: false)!
-        let configuration = AWSServiceConfiguration(region: self.region, endpoint: endpoint,
-                                                    credentialsProvider: Credentials.AWS_BIBLE_APP)
+        let credentialProvider = AWSCognitoCredentialsProvider(regionType: AwsS3.COGNITO_REGION,
+                                                               identityPoolId: AwsS3.COGNITO_IDENT_POOL_ID)
+        //let iamCredentialProvider = Credentials.AWS_BIBLE_APP // Kept here in case we return to IAM
+        let configuration = AWSServiceConfiguration(region: self.region,
+                                                    endpoint: endpoint,
+                                                    credentialsProvider: credentialProvider)
         AWSServiceManager.default().defaultServiceConfiguration = configuration
         //AWSS3TransferUtility.interceptApplication was not set, because we do not need it.
         self.transfer = AWSS3TransferUtility.default()

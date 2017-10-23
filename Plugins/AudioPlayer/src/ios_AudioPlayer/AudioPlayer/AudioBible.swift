@@ -44,38 +44,18 @@ public class AudioBible : NSObject {
         }
     }
     
-    public func beginDownload() {
-        print("BibleReader.BEGIN Download")
-        var filePath: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
-        filePath = filePath.appendingPathComponent("Library")
-        filePath = filePath.appendingPathComponent("Caches")
-        let s3Key = self.currReference.getS3Key()
-        filePath = filePath.appendingPathComponent(s3Key)
-        print("FilePath \(filePath.absoluteString)")
-        
-        AwsS3.shared.downloadFile(
-            s3Bucket: Reference.s3Bucket,
-            s3Key: s3Key,
-            filePath: filePath,
-            complete: { err in
-                print("I RECEIVED DownloadFile CALLBACK \(String(describing: err))")
-                if (err == nil) {
-                    self.initAudio(url: filePath)
-                }
-            }
-        )
+    public func beginReadFile() {
+        print("BibleReader.BEGIN Read File")
+        AWSS3Cache.shared.readFile(s3Bucket: Reference.s3Bucket,
+                   s3Key: self.currReference.getS3Key(),
+                   expireInterval: Double.infinity,
+                   getComplete: {
+                    url in
+                    if let audioURL = url {
+                        self.initAudio(url: audioURL)
+                    }
+        })
     }
-    
-    public func beginLocal() {
-        print("BibleReader.BEGIN Download")
-        var filePath: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
-        filePath = filePath.appendingPathComponent("Library")
-        filePath = filePath.appendingPathComponent("Caches")
-        let s3Key = self.currReference.getS3Key()
-        filePath = filePath.appendingPathComponent(s3Key)
-        print("FilePath \(filePath.absoluteString)")
-        self.initAudio(url: filePath)
-     }
     
     func initAudio(url: URL) {
         let asset = AVAsset(url: url)
