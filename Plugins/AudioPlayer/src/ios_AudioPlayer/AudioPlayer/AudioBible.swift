@@ -46,7 +46,7 @@ public class AudioBible : NSObject {
     
     public func beginReadFile() {
         print("BibleReader.BEGIN Read File")
-        AWSS3Cache.shared.readFile(s3Bucket: Reference.s3Bucket,
+        AwsS3Cache.shared.readFile(s3Bucket: Reference.s3Bucket,
                    s3Key: self.currReference.getS3Key(),
                    expireInterval: Double.infinity,
                    getComplete: {

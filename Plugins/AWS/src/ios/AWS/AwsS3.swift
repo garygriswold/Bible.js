@@ -33,7 +33,7 @@ public class AwsS3 {
     private let endpoint: AWSEndpoint
     private let transfer: AWSS3TransferUtility
     
-    init(region: String) {
+    private init(region: String) {
         var regionType = region.aws_regionTypeValue()
         if (regionType == AWSRegionType.Unknown) {
             regionType = AWSRegionType.USEast1

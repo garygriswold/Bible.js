@@ -1,5 +1,5 @@
 //
-//  AWSS3Cache.swift
+//  AwsS3Cache.swift
 //  AudioPlayer
 //
 //  Created by Gary Griswold on 8/9/17.
@@ -10,14 +10,12 @@
 //
 //
 
-import AWS
-
-class AWSS3Cache {
+public class AwsS3Cache {
     
     private static let DEBUG = true
     
-    public static let shared = AWSS3Cache()
-
+    public static let shared = AwsS3Cache()
+    
     let cacheDir: URL
     
     private init() {
@@ -27,7 +25,7 @@ class AWSS3Cache {
     }
     
     deinit {
-        print("***** Deinit AWSS3Cache *****")
+        print("***** Deinit AwsS3Cache *****")
     }
     
     /**
@@ -35,7 +33,7 @@ class AWSS3Cache {
      * To prevent expiration of data in Cache and only use AWS S3 if the file is not present use Double.infinity
      */
     public func readData(s3Bucket: String, s3Key: String, expireInterval: TimeInterval,
-              getComplete: @escaping (_ data: Data?) -> Void) {
+                         getComplete: @escaping (_ data: Data?) -> Void) {
         let startTime = Date()
         let path: URL = self.getPath(s3Bucket: s3Bucket, s3Key: s3Key)
         let data: Data? = self.readCache(path: path, expireInterval: expireInterval)
@@ -65,9 +63,9 @@ class AWSS3Cache {
             )
         }
     }
-
+    
     public func readFile(s3Bucket: String, s3Key: String, expireInterval: TimeInterval,
-                   getComplete: @escaping (_ file: URL?) -> Void) {
+                         getComplete: @escaping (_ file: URL?) -> Void) {
         let startTime = Date()
         let path: URL = self.getPath(s3Bucket: s3Bucket, s3Key: s3Key)
         if FileManager.default.isReadableFile(atPath: path.path) {
@@ -111,7 +109,7 @@ class AWSS3Cache {
         }
         return nil
     }
-
+    
     private func getPath(s3Bucket: String, s3Key: String) -> URL {
         let localKey = s3Bucket + "_" + s3Key
         return self.cacheDir.appendingPathComponent(localKey)
@@ -137,9 +135,9 @@ class AWSS3Cache {
             }
         }
     }
-
+    
     private func reportTimeCompleted(start: Date, success: Bool, inCache: Bool, path: URL) {
-        if AWSS3Cache.DEBUG {
+        if AwsS3Cache.DEBUG {
             let duration: TimeInterval? = start.timeIntervalSinceNow
             if let dur = duration {
                 let howLong = round(dur * -1000)
@@ -150,3 +148,4 @@ class AWSS3Cache {
         }
     }
 }
+

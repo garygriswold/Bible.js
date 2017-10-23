@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E434FDDD1F9E4F090064EB52 /* AwsS3Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E434FDDC1F9E4F090064EB52 /* AwsS3Cache.swift */; };
 		E470CE6F1EFBF515001061CB /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E470CE6E1EFBF515001061CB /* Zip.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		E471B15C1F9B05FE00C617A0 /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E471B15B1F9B05FE00C617A0 /* AWSCognito.framework */; };
 		E471B1601F9B125D00C617A0 /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E471B15B1F9B05FE00C617A0 /* AWSCognito.framework */; };
@@ -47,6 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E434FDDC1F9E4F090064EB52 /* AwsS3Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwsS3Cache.swift; sourceTree = "<group>"; };
 		E470CE6E1EFBF515001061CB /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Zip.framework; path = AWS/Zip.framework; sourceTree = "<group>"; };
 		E471B15B1F9B05FE00C617A0 /* AWSCognito.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCognito.framework; path = ../../../../../../Desktop/CognitoTest/AWSCognito.framework; sourceTree = "<group>"; };
 		E471B1671F9B173000C617A0 /* AWSTests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AWSTests2.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -139,6 +141,7 @@
 				E4E996C61EF0609900717F85 /* SS_AWSS3TransferUtility.h */,
 				E4E996C71EF0609900717F85 /* SS_AWSS3TransferUtility.m */,
 				E4E996BE1EF0607400717F85 /* AwsS3.swift */,
+				E434FDDC1F9E4F090064EB52 /* AwsS3Cache.swift */,
 				E4E996BF1EF0607400717F85 /* AwsS3UnitTest.swift */,
 				E4E996C01EF0607400717F85 /* Credentials.swift */,
 				E4E996A71EF0604700717F85 /* AWS.h */,
@@ -314,6 +317,7 @@
 				E4E996C31EF0607400717F85 /* Credentials.swift in Sources */,
 				E4E996C11EF0607400717F85 /* AwsS3.swift in Sources */,
 				E4E996C21EF0607400717F85 /* AwsS3UnitTest.swift in Sources */,
+				E434FDDD1F9E4F090064EB52 /* AwsS3Cache.swift in Sources */,
 				E4E996C91EF0609900717F85 /* SS_AWSS3PreSignedURL.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

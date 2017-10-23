@@ -6,7 +6,7 @@
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
 
-import Foundation
+import AWS
 
 class MetaDataReader {
     
@@ -23,7 +23,7 @@ class MetaDataReader {
     
     func read(languageCode: String, mediaType: String,
               readComplete: @escaping (_ metaData: Dictionary<String, TOCAudioBible>) -> Void) {
-        AWSS3Cache.shared.readData(s3Bucket: "audio-us-west-2-shortsands",
+        AwsS3Cache.shared.readData(s3Bucket: "audio-us-west-2-shortsands",
                    s3Key: languageCode + "_" + mediaType + ".json",
                    expireInterval: 604800, // 1 week in seconds
                    getComplete: { data in
@@ -45,7 +45,7 @@ class MetaDataReader {
     func readVerseAudio(damid: String, sequence: String, bookId: String, chapter: String,
                         readComplete: @escaping (_ audioVerse: TOCAudioChapter?) -> Void) {
         let s3Key = damid + "_" + sequence + "_" + bookId + "_" + chapter + "_verse.json"
-        AWSS3Cache.shared.readData(s3Bucket: "audio-us-west-2-shortsands",
+        AwsS3Cache.shared.readData(s3Bucket: "audio-us-west-2-shortsands",
                    s3Key: s3Key,
                    expireInterval: 604800, // 1 week in seconds
                    getComplete: { data in
