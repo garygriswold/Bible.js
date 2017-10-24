@@ -64,9 +64,12 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
 
     @Override
     public void onSeekComplete(MediaPlayer player) {
-        this.mediaPlayer.setOnSeekCompleteListener(null);
-        this.mediaPlayer.start();
-        this.controller.playHasStarted(this.mediaPlayer);
+        //this.mediaPlayer.setOnSeekCompleteListener(null);
+        player.setOnSeekCompleteListener(null);
+        //this.mediaPlayer.start();
+        player.start();
+        //this.controller.playHasStarted(this.mediaPlayer);
+        this.controller.playHasStarted(player);
         this.advanceToItem(this.currReference);
     }
 
