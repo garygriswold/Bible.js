@@ -5,6 +5,8 @@ package com.shortsands.audioplayer;
  */
 import android.content.Context;
 import android.util.Log;
+import com.shortsands.aws.AwsS3Cache;
+import com.shortsands.aws.CompletionHandler;
 import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONArray;
@@ -27,12 +29,11 @@ class MetaDataReader {
 
     void read(String languageCode, String mediaType, CompletionHandler completion) {
         this.readCompletion = completion;
-        AWSS3Cache cache = new AWSS3Cache(this.context);
         String s3Bucket = "audio-us-west-2-shortsands";
         String s3Key = languageCode + "_" + mediaType + ".json";
         int expireInterval = 604800; // seconds in 1 week
         ReadResponseHandler handler = new ReadResponseHandler();
-        cache.readText(s3Bucket, s3Key, expireInterval, handler);
+        AwsS3Cache.shared().readText(s3Bucket, s3Key, expireInterval, handler);
     }
 
     class ReadResponseHandler implements CompletionHandler {
@@ -68,12 +69,11 @@ class MetaDataReader {
     void readVerseAudio(String damid, String sequence, String bookId, String chapter,
                                CompletionHandler completion) {
         this.readVerseCompletion = completion;
-        AWSS3Cache cache = new AWSS3Cache(this.context);
         String s3Bucket = "audio-us-west-2-shortsands";
         String s3Key = damid + "_" + sequence + "_" + bookId + "_" + chapter + "_verse.json";
         int expireInterval = 604800; // seconds in 1 week
         ReadVerseResponseHandler handler = new ReadVerseResponseHandler();
-        cache.readText(s3Bucket, s3Key, expireInterval, handler);
+        AwsS3Cache.shared().readText(s3Bucket, s3Key, expireInterval, handler);
     }
 
     class ReadVerseResponseHandler implements CompletionHandler {

@@ -4,6 +4,8 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.PowerManager;
 import android.util.Log;
+import com.shortsands.aws.AwsS3Cache;
+import com.shortsands.aws.CompletionHandler;
 import java.io.File;
 import java.io.IOException;
 
@@ -49,9 +51,8 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
 
     void beginReadFile() {
         Log.d(TAG, "BibleReader.BEGIN Read File");
-        AWSS3Cache cache = new AWSS3Cache(this.controller.activity);
         BeginReadFileCompletion handler = new BeginReadFileCompletion();
-        cache.readFile(this.currReference.getS3Bucket(),
+        AwsS3Cache.shared().readFile(this.currReference.getS3Bucket(),
                 this.currReference.getS3Key(),
                 Integer.MAX_VALUE,
                 handler);

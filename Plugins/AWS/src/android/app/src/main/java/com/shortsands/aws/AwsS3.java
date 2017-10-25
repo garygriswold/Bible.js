@@ -32,7 +32,7 @@ public class AwsS3 {
 
     // AwsS3.regionName and Context should be set early in an App
     public static String region = "us-east-1";
-    private static Context context = null;
+    static Context context = null;
     private static final String COGNITO_IDENT_POOL_ID = "us-east-1:a4817d0a-5398-472f-88a8-8a40b0ecf72f";
     private static final Regions COGNITO_REGION = Regions.US_EAST_1;
 
@@ -53,7 +53,7 @@ public class AwsS3 {
     AmazonS3 amazonS3;
     TransferUtility transferUtility;
 
-    public AwsS3(String regionName, Context context) {
+    private AwsS3(String regionName, Context context) {
         super();
         Log.d(TAG, "regionName input = " + regionName);
         Region region = RegionUtils.getRegion(regionName);

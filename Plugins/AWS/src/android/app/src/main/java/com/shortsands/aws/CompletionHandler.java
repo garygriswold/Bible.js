@@ -1,4 +1,4 @@
-package com.shortsands.audioplayer;
+package com.shortsands.aws;
 
 /**
  * Created by garygriswold on 9/6/17.

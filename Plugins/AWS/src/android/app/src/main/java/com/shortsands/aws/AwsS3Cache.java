@@ -1,4 +1,4 @@
-package com.shortsands.audioplayer;
+package com.shortsands.aws;
 
 //
 //  AwsS3Cache.java
@@ -13,24 +13,28 @@ package com.shortsands.audioplayer;
 //
 import android.content.Context;
 import android.util.Log;
-import com.shortsands.aws.AwsS3;
-import com.shortsands.aws.DownloadFileListener;
 import com.shortsands.io.FileManager;
 import java.io.File;
 import java.util.Date;
 
-public class AWSS3Cache {
+public class AwsS3Cache {
 
-    private static final String TAG = "AWSS3Cache";
+    private static final String TAG = "AwsS3Cache";
     private static final boolean DEBUG = true;
 
-    //public static AWSS3Cache shared = new AWSS3Cache(); /// I wanted this to be a singleton
-    //initilze it with AwsS3.initialize
+    // Do not instantiate AwsS3Cache, use AwsS3Cache.shared
+    private static AwsS3Cache instance = null;
+    public static AwsS3Cache shared() {
+        if (AwsS3Cache.instance == null) {
+            AwsS3Cache.instance = new AwsS3Cache(AwsS3.context);
+        }
+        return AwsS3Cache.instance;
+    }
 
     private final Context context;
     private final File cacheDir;
 
-    public AWSS3Cache(Context context) {
+    public AwsS3Cache(Context context) {
         super();
         this.context = context;
         this.cacheDir = context.getCacheDir();
@@ -156,7 +160,7 @@ public class AWSS3Cache {
     }
 
     private void reportTimeCompleted(long start, boolean success, boolean inCache, File path) {
-        if (AWSS3Cache.DEBUG) {
+        if (AwsS3Cache.DEBUG) {
             long duration = System.currentTimeMillis() - start;
             Log.d(TAG, "##### Cache Duration: " + duration + "  isCached: " + inCache + "  Success: " + success + "  Path: " + path.getAbsolutePath());
         }

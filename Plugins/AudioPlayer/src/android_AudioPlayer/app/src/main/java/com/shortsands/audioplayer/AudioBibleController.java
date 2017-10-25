@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.media.MediaPlayer;
 import android.util.Log;
 import com.shortsands.aws.AwsS3;
+import com.shortsands.aws.CompletionHandler;
 import java.util.HashMap;
 /**
  * Created by garygriswold on 8/30/17.
