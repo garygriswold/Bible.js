@@ -6,6 +6,6 @@ package com.shortsands.audioplayer;
 
 public interface CompletionHandler {
 
-    void completed(Object result, Object attachment);
-    void failed(Throwable exception, Object attachment);
+    void completed(Object result);
+    void failed(Throwable exception);
 }

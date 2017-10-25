@@ -25,23 +25,19 @@ class MetaDataReader {
         this.metaData = new HashMap<String, TOCAudioBible>();
     }
 
-    //deinit {
-    //    print("***** Deinit MetaDataReader *****")
-    //}
-
     void read(String languageCode, String mediaType, CompletionHandler completion) {
         this.readCompletion = completion;
-        ReadResponseHandler handler = new ReadResponseHandler();
-        AWSS3Cache cache = new AWSS3Cache(this.context, handler);
+        AWSS3Cache cache = new AWSS3Cache(this.context);
         String s3Bucket = "audio-us-west-2-shortsands";
         String s3Key = languageCode + "_" + mediaType + ".json";
-        int expireInterval = 604800;
-        cache.read(s3Bucket, s3Key, expireInterval);
+        int expireInterval = 604800; // seconds in 1 week
+        ReadResponseHandler handler = new ReadResponseHandler();
+        cache.readText(s3Bucket, s3Key, expireInterval, handler);
     }
 
     class ReadResponseHandler implements CompletionHandler {
 
-        public void completed(Object result, Object attachment) {
+        public void completed(Object result) {
             Log.d(TAG, "***** Inside Completed in MetaDataReader");
             JSONArray json = parseJson(result);
             if (json != null) {
@@ -54,46 +50,46 @@ class MetaDataReader {
                         metaData.put(metaItem.damId, metaItem);
                     } catch(JSONException je) {
                         Log.e(TAG, "Could not parse Audio Meta Data " + je.toString());
-                        readCompletion.failed(je, attachment);
+                        readCompletion.failed(je);
                     }
                 }
-                readCompletion.completed(metaData, attachment);
+                readCompletion.completed(metaData);
             } else {
                 Log.d(TAG, "Not parsable JSON");
-                readCompletion.failed(new RuntimeException("Could not parse JSON"), attachment);
+                readCompletion.failed(new RuntimeException("Could not parse JSON"));
             }
         }
-        public void failed(Throwable exception, Object attachment) {
+        public void failed(Throwable exception) {
             Log.e(TAG, "Exception in MetaDataReader.read " + exception.toString());
-            readCompletion.failed(exception, attachment);
+            readCompletion.failed(exception);
         }
     }
 
     void readVerseAudio(String damid, String sequence, String bookId, String chapter,
                                CompletionHandler completion) {
         this.readVerseCompletion = completion;
-        ReadVerseResponseHandler handler = new ReadVerseResponseHandler();
-        AWSS3Cache cache = new AWSS3Cache(this.context, handler);
+        AWSS3Cache cache = new AWSS3Cache(this.context);
         String s3Bucket = "audio-us-west-2-shortsands";
         String s3Key = damid + "_" + sequence + "_" + bookId + "_" + chapter + "_verse.json";
-        int expireInterval = 604800;
-        cache.read(s3Bucket, s3Key, expireInterval);
+        int expireInterval = 604800; // seconds in 1 week
+        ReadVerseResponseHandler handler = new ReadVerseResponseHandler();
+        cache.readText(s3Bucket, s3Key, expireInterval, handler);
     }
 
     class ReadVerseResponseHandler implements CompletionHandler {
 
-        public void completed(Object result, Object attachment) {
+        public void completed(Object result) {
             JSONArray json = parseJson(result);
             if (json != null) {
                 metaDataVerse = new TOCAudioChapter(json);
-                readVerseCompletion.completed(metaDataVerse, this);
+                readVerseCompletion.completed(metaDataVerse);
             } else {
-                readVerseCompletion.failed(new RuntimeException("Failed to parse JSON"), this);
+                readVerseCompletion.failed(new RuntimeException("Failed to parse JSON"));
             }
         }
-        public void failed(Throwable exception, Object attachment) {
+        public void failed(Throwable exception) {
             Log.e(TAG, "Exception in MetaDataReader.readVerseAudio " + exception.toString());
-            readVerseCompletion.failed(exception, attachment);
+            readVerseCompletion.failed(exception);
         }
     }
 

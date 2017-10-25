@@ -4,6 +4,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.PowerManager;
 import android.util.Log;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -46,17 +47,44 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         this.initAudio(this.currReference.url.toString());
     }
 
+    void beginReadFile() {
+        Log.d(TAG, "BibleReader.BEGIN Read File");
+        AWSS3Cache cache = new AWSS3Cache(this.controller.activity);
+        BeginReadFileCompletion handler = new BeginReadFileCompletion();
+        cache.readFile(this.currReference.getS3Bucket(),
+                this.currReference.getS3Key(),
+                Integer.MAX_VALUE,
+                handler);
+    }
+
+    class BeginReadFileCompletion implements CompletionHandler {
+        @Override
+        public void completed(Object result) {
+            if (result instanceof File) {
+                File file = (File) result;
+                initAudio(file.getAbsolutePath());
+            }
+        }
+
+        @Override
+        public void failed(Throwable exception) {
+            Log.d(TAG, "BeginReadFile Failed " + exception.toString());
+        }
+    }
+
     private void initAudio(String url) {
         if (url != null) {
             this.mediaPlayer = this.initPlayer(url);
-            long seekTime = MediaPlayState.currentState.position;
-            if (seekTime > 100L) {
-                this.mediaPlayer.setOnSeekCompleteListener(this);
-                this.mediaPlayer.seekTo((int)seekTime);
-            } else {
-                this.onSeekComplete(this.mediaPlayer);
+            if (this.mediaPlayer != null) {
+                long seekTime = MediaPlayState.currentState.position;
+                if (seekTime > 100L) {
+                    this.mediaPlayer.setOnSeekCompleteListener(this);
+                    this.mediaPlayer.seekTo((int) seekTime);
+                } else {
+                    this.onSeekComplete(this.mediaPlayer);
+                }
+                this.audioAnalytics.playStarted(this.currReference.toString(), seekTime);
             }
-            this.audioAnalytics.playStarted(this.currReference.toString(), seekTime);
         } else {
             Log.e(TAG, "URL is null");
         }
@@ -64,11 +92,8 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
 
     @Override
     public void onSeekComplete(MediaPlayer player) {
-        //this.mediaPlayer.setOnSeekCompleteListener(null);
         player.setOnSeekCompleteListener(null);
-        //this.mediaPlayer.start();
         player.start();
-        //this.controller.playHasStarted(this.mediaPlayer);
         this.controller.playHasStarted(player);
         this.advanceToItem(this.currReference);
     }
@@ -198,16 +223,16 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         ReadVerseMetaDataHandler(Reference ref) {
             this.reference = ref;
         }
-        public void completed(Object result, Object attachment) {
+        public void completed(Object result) {
             if (result instanceof TOCAudioChapter) {
                 TOCAudioChapter chapter = (TOCAudioChapter)result;
                 reference.audioChapter = chapter;
                 //Log.d(TAG, "************" + chapter.toString());
             } else {
-                this.failed(new Exception("Could not cast to TOCAudioChapter"), attachment);
+                this.failed(new Exception("Could not cast to TOCAudioChapter"));
             }
         }
-        public void failed(Throwable exception, Object attachment) {
+        public void failed(Throwable exception) {
             Log.e(TAG, "Exception in ReadVerseMetaDataHandler " + exception.toString());
         }
     }

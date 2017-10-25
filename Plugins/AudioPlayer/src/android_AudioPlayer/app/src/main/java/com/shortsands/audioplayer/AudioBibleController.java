@@ -36,7 +36,7 @@ public class AudioBibleController {
 
     class MetaDataReaderResponse implements CompletionHandler {
 
-        public void completed(Object result, Object attachment) {
+        public void completed(Object result) {
             if (result instanceof HashMap) {
                 HashMap<String, TOCAudioBible> metaData = (HashMap<String, TOCAudioBible>)result;
                 TOCAudioBible bible = metaData.get("DEMO");
@@ -47,10 +47,11 @@ public class AudioBibleController {
                 readerView = new AudioBibleView(that, audioBible);
                 audioSession.setAudioBibleView(readerView);
 
-                audioBible.beginStreaming();
+                //audioBible.beginStreaming();
+                audioBible.beginReadFile();
             }
         }
-        public void failed(Throwable exception, Object attachment) {
+        public void failed(Throwable exception) {
             Log.e(TAG, "MetaDataReader failed " + exception.toString());
         }
     }

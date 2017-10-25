@@ -11,6 +11,7 @@ import AWS
 
 class Reference {
     
+    // Deprecated, use getS3Bucket to be consistent with ios.
     static let s3Bucket: String = "audio-" + AwsS3.region + "-shortsands"
     
     let damId: String
@@ -50,6 +51,13 @@ class Reference {
     var chapterNum: Int {
         get {
             return Int(self.chapter) ?? 1
+        }
+    }
+    
+    func getS3Bucket() -> String {
+        switch (this.fileType) {
+            case "mp3": return "audio-" + AwsS3.region + "-shortsands";
+            default: return "unknown";
         }
     }
     
