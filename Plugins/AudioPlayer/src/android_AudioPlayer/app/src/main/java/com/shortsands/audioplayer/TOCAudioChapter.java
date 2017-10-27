@@ -43,20 +43,38 @@ class TOCAudioChapter {
         }
     }
 
-    //deinit {
-    //    print("***** Deinit TOCAudioChapter *****")
-    //}
-
-    double findVerseByPosition(double seconds) {
-        for (int index=0; index<this.versePositions.size(); index++) {
-            double versePos = this.versePositions.get(index);
-            if (seconds == versePos) {
-                return seconds;
-            } else if (seconds < versePos) {
-                return (index > 0) ? this.versePositions.get(index - 1) : 0.0;
+    int findVerseByPosition(int priorVerse, int milliSeconds) {
+        double seconds = milliSeconds / 1000.0;
+        int index = (priorVerse > 0 && priorVerse < this.versePositions.size()) ? priorVerse : 1;
+        double priorPosition = this.versePositions.get(index);
+        if (seconds > priorPosition) {
+            while(index < (this.versePositions.size() - 1)) {
+                index += 1;
+                double versePos = this.versePositions.get(index);
+                if (seconds < versePos) {
+                    return index - 1;
+                }
             }
+            return this.versePositions.size() - 1;
+
+        } else if (seconds < priorPosition) {
+            while(index > 2) {
+                index -= 1;
+                double versePos = this.versePositions.get(index);
+                if (seconds >= versePos) {
+                    return index;
+                }
+            }
+            return 1;
+
+        } else { // seconds == priorPosition
+            return index;
         }
-        return (this.versePositions.size() > 0) ? this.versePositions.get(this.versePositions.size() - 1) : 0.0;
+    }
+
+    int findPositionOfVerse(int verse) {
+        double seconds = (verse > 0 && verse < this.versePositions.size()) ? this.versePositions.get(verse) : 0.0;
+        return (int)Math.round(seconds * 1000);
     }
 
     public String toString() {

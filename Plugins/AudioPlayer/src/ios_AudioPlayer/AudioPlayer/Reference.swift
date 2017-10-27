@@ -19,7 +19,7 @@ class Reference {
     let book: String
     let chapter: String
     let fileType: String
-    var url: URL?
+    var url: URL? // This is not used when TransferUtility is used.  It should be conditional, or deprecated
     
     init(damId: String, sequence: String, book: String, chapter: String, fileType: String) {
         self.damId = damId

@@ -48,7 +48,6 @@ public class AudioBibleController {
                 readerView = new AudioBibleView(that, audioBible);
                 audioSession.setAudioBibleView(readerView);
 
-                //audioBible.beginStreaming();
                 audioBible.beginReadFile();
             }
         }

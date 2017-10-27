@@ -45,10 +45,6 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
 
     Reference getCurrReference() { return(this.currReference); }
 
-    void beginStreaming() {
-        this.initAudio(this.currReference.url.toString());
-    }
-
     void beginReadFile() {
         Log.d(TAG, "BibleReader.BEGIN Read File");
         BeginReadFileCompletion handler = new BeginReadFileCompletion();
@@ -66,7 +62,6 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
                 initAudio(file.getAbsolutePath());
             }
         }
-
         @Override
         public void failed(Throwable exception) {
             Log.d(TAG, "BeginReadFile Failed " + exception.toString());
@@ -191,9 +186,12 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         if (reference != null) {
             this.currReference = reference;
             this.nextReference = this.tocBible.nextChapter(this.currReference);
-            this.nextPlayer = this.initPlayer(this.nextReference.url.toString());
-            this.mediaPlayer.setNextMediaPlayer(this.nextPlayer);
-            this.readVerseMetaData(this.currReference);
+
+            NextReadFileCompletion handler = new NextReadFileCompletion();
+            AwsS3Cache.shared().readFile(this.nextReference.getS3Bucket(),
+                    this.nextReference.getS3Key(),
+                    Integer.MAX_VALUE,
+                    handler);
         } else {
             this.sendAudioAnalytics();
             MediaPlayState.clear(this.controller.activity);
@@ -201,14 +199,31 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         }
     }
 
+    class NextReadFileCompletion implements CompletionHandler {
+        @Override
+        public void completed(Object result) {
+            if (result instanceof File) {
+                File file = (File) result;
+                nextPlayer = initPlayer(file.getAbsolutePath());
+                mediaPlayer.setNextMediaPlayer(nextPlayer);
+                readVerseMetaData(currReference);
+            }
+        }
+        @Override
+        public void failed(Throwable exception) {
+            Log.d(TAG, "NextReadFile Failed " + exception.toString());
+        }
+    }
+
     private void updateMediaPlayStateTime() {
         TOCAudioChapter chapter = this.currReference.audioChapter;
-        double position = this.mediaPlayer.getCurrentPosition() / 1000.0;
+        int position = this.mediaPlayer.getCurrentPosition();
         if (chapter != null) {
-            position = chapter.findVerseByPosition(position) * 1000.0;
+            int verseNum = chapter.findVerseByPosition(1, position);
+            position = chapter.findPositionOfVerse(verseNum);
         } else {
-            position = position - 3.0;
-            position = (position >= 0.0) ? position * 1000.0 : 0.0;
+            position -= 3000;
+            position = (position >= 0) ? position : 0;
         }
         MediaPlayState.update(this.controller.activity, this.currReference.getS3Key(), (int)position);
     }
