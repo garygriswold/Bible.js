@@ -216,23 +216,18 @@ class AudioBibleView {
                 if (isUser && player != null) {
                     Log.d(TAG, "value max " + value + "  " + seekBar.getMax());
                     if (value < seekBar.getMax()) {
-                        //int current;
+                        int position;
                         Reference curr = audioBible.getCurrReference();
                         if (curr.audioChapter != null) {
-
-                            //current = (int)curr.audioChapter.findVerseByPosition(value / 1000);
                             verseNum = curr.audioChapter.findVerseByPosition(verseNum, value);
-                            //seconds: Double(self.scrubSlider.value))
+                            position = curr.audioChapter.findPositionOfVerse(verseNum);
                             verseLabel.setText(String.valueOf(verseNum));
-                            //verseLabel.center = positionVersePopup();
-                    //        verseLabel.setX(positionVersePopup());
                         } else {
-                            //current = value / 1000;
-                            verseNum = value;
+                            position = value;
                         }
-                        Log.d(TAG, "***** Backup Verse: " + value + "  " + verseNum);
-                        //player.seekTo(current * 1000);
-                        player.seekTo(verseNum);
+                        player.seekTo(position);
+                    } else {
+                        audioBible.advanceToNextItem();
                     }
                 }
             }
@@ -269,7 +264,6 @@ class AudioBibleView {
                     if (message.what == 99) {
                         verseLabel.setText(String.valueOf(message.arg1));
                         verseLabel.animate().translationX(message.arg2).setDuration(80L).start();
-                        Log.d(TAG, "IN UI THREAD verseNum " + verseNum + "  position: " + message.arg2);
                     } else {
                         Log.d(TAG, "Unknown message " + message.what);
                     }

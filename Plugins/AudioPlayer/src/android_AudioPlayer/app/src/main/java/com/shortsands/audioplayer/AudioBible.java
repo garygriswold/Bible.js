@@ -182,6 +182,10 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         return true;
     }
 
+    void advanceToNextItem() {
+        //TBD
+    }
+
     private void advanceToItem(Reference reference) {
         if (reference != null) {
             this.currReference = reference;
