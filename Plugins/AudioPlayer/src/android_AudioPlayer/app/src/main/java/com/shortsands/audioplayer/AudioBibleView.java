@@ -43,6 +43,7 @@ class AudioBibleView {
     // Precomputed for positionVersePopup
     private Float sliderRange;
     private Float sliderOrigin;
+    private Float sliderOriginActual;
     // Transient State Variables
     private MonitorSeekBar monitorSeekBar = null;
     private boolean scrubSliderDrag = false;
@@ -169,6 +170,7 @@ class AudioBibleView {
         // Precompute Values for positionVersePopup()
         this.sliderRange = 0.0f + seekParams.width - seekParams.height;
         this.sliderOrigin = 0.0f;
+        this.sliderOriginActual = 0.0f + seekParams.leftMargin + (seekParams.height - verseParams.width) / 2.0f;
 
 //        play.layer.shadowOpacity = 0.5
 //        play.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
@@ -213,6 +215,7 @@ class AudioBibleView {
         this.scrubSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int value, boolean isUser) {
+                Log.d(TAG, "**** onProgressChanged " + isUser + "  " + System.currentTimeMillis() + "  " + value);
                 if (isUser && player != null) {
                     Log.d(TAG, "value max " + value + "  " + seekBar.getMax());
                     if (value < seekBar.getMax()) {
@@ -222,6 +225,7 @@ class AudioBibleView {
                             verseNum = curr.audioChapter.findVerseByPosition(verseNum, value);
                             position = curr.audioChapter.findPositionOfVerse(verseNum);
                             verseLabel.setText(String.valueOf(verseNum));
+                            verseLabel.setX(sliderOriginActual + positionVersePopup());
                         } else {
                             position = value;
                         }
@@ -248,6 +252,24 @@ class AudioBibleView {
                 scrubSliderDrag = false;
             }
         });
+    }
+
+    void stopPlay() {
+        if (this.monitorSeekBar != null) {
+            this.monitorSeekBar.isPlaying = false;
+            this.monitorSeekBar = null;
+        }
+        this.layout.removeView(this.playButton);
+        this.layout.removeView(this.pauseButton);
+        this.layout.removeView(this.stopButton);
+        this.layout.removeView(this.scrubSlider);
+        this.layout.removeView(this.verseLabel);
+
+        Window window = this.activity.getWindow();
+        ViewGroup view = (ViewGroup)window.getDecorView();
+        if (view != null) {
+            view.removeView(this.layout);
+        }
     }
 
     class MonitorSeekBar implements Runnable {
@@ -300,23 +322,5 @@ class AudioBibleView {
         Float sliderPct = 1.0f * this.scrubSlider.getProgress() / this.scrubSlider.getMax();
         Float sliderValueToPixels = sliderPct * this.sliderRange + this.sliderOrigin;
         return Math.round(sliderValueToPixels);
-    }
-
-    void stopPlay() {
-        if (this.monitorSeekBar != null) {
-            this.monitorSeekBar.isPlaying = false;
-            this.monitorSeekBar = null;
-        }
-        this.layout.removeView(this.playButton);
-        this.layout.removeView(this.pauseButton);
-        this.layout.removeView(this.stopButton);
-        this.layout.removeView(this.scrubSlider);
-        this.layout.removeView(this.verseLabel);
-
-        Window window = this.activity.getWindow();
-        ViewGroup view = (ViewGroup)window.getDecorView();
-        if (view != null) {
-            view.removeView(this.layout);
-        }
     }
 }
