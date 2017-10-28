@@ -80,7 +80,6 @@ public class AudioBible : NSObject {
         }
     }
     
-
     func play() {
         self.player?.play()
         print("Player Status = \(String(describing: self.player?.status))")
@@ -170,18 +169,6 @@ public class AudioBible : NSObject {
         self.updateMediaPlayStateTime()
     }
     
-    func advanceToNextItem() {
-        if let curr = self.nextReference {
-            self.currReference = curr
-            self.addNextChapter(reference: curr)
-            self.preFetchNextChapter(reference: curr)
-        } else {
-            self.sendAudioAnalytics()
-            MediaPlayState.clear()
-            self.stop()
-        }
-    }
-    
     func updateMediaPlayStateTime() {
         var result: CMTime = kCMTimeZero
         if let currentTime = self.player?.currentTime() {
@@ -192,6 +179,18 @@ public class AudioBible : NSObject {
             }
         }
         MediaPlayState.update(url: self.currReference.toString(), time: result)
+    }
+    
+    func advanceToNextItem() {
+        if let curr = self.nextReference {
+            self.currReference = curr
+            self.addNextChapter(reference: curr)
+            self.preFetchNextChapter(reference: curr)
+        } else {
+            self.sendAudioAnalytics()
+            MediaPlayState.clear()
+            self.stop()
+        }
     }
     
     private func addNextChapter(reference: Reference) {
