@@ -215,9 +215,7 @@ class AudioBibleView {
         this.scrubSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int value, boolean isUser) {
-                Log.d(TAG, "**** onProgressChanged " + isUser + "  " + System.currentTimeMillis() + "  " + value);
                 if (isUser && player != null) {
-                    Log.d(TAG, "value max " + value + "  " + seekBar.getMax());
                     if (value < seekBar.getMax()) {
                         int position;
                         Reference curr = audioBible.getCurrReference();
@@ -232,6 +230,7 @@ class AudioBibleView {
                         player.seekTo(position);
                     } else {
                         audioBible.advanceToNextItem();
+                        Log.d(TAG, "******** Progress moved to end " + System.currentTimeMillis());
                     }
                 }
             }

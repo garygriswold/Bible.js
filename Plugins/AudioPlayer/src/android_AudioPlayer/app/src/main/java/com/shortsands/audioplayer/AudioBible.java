@@ -19,7 +19,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     private static final String TAG = "AudioBible";
 
     private final AudioBibleController controller;
-    private final TOCAudioBible tocBible;
+    private final TOCAudioBible tocAudioBible;
     private final AudioAnalytics audioAnalytics;
     // Transient Variables
     private Reference currReference;
@@ -30,7 +30,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     public AudioBible(AudioBibleController controller, TOCAudioBible tocBible, Reference reference) {
         super();
         this.controller = controller;
-        this.tocBible = tocBible;
+        this.tocAudioBible = tocBible;
         this.audioAnalytics = new AudioAnalytics(controller.activity,
                 tocBible.mediaSource,
                 reference.damId,
@@ -90,8 +90,8 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     public void onSeekComplete(MediaPlayer player) {
         player.setOnSeekCompleteListener(null);
         player.start();
+        this.preFetchNextChapter(this.currReference);
         this.controller.playHasStarted(player);
-        this.advanceToItem(this.currReference);
     }
 
     private MediaPlayer initPlayer(String url) {
@@ -136,10 +136,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
 
     @Override
     public void onCompletion(MediaPlayer player) {
-        this.mediaPlayer = this.nextPlayer;
-        this.controller.playHasStarted(this.mediaPlayer);
-        //player.release(); // Is this needed?
-        this.advanceToItem(this.nextReference);
+        this.advanceToNextItem();
     }
 
     @Override
@@ -182,43 +179,6 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         return true;
     }
 
-    void advanceToNextItem() {
-        //TBD
-    }
-
-    private void advanceToItem(Reference reference) {
-        if (reference != null) {
-            this.currReference = reference;
-            this.nextReference = this.tocBible.nextChapter(this.currReference);
-
-            NextReadFileCompletion handler = new NextReadFileCompletion();
-            AwsS3Cache.shared().readFile(this.nextReference.getS3Bucket(),
-                    this.nextReference.getS3Key(),
-                    Integer.MAX_VALUE,
-                    handler);
-        } else {
-            this.sendAudioAnalytics();
-            MediaPlayState.clear(this.controller.activity);
-            this.stop();
-        }
-    }
-
-    class NextReadFileCompletion implements CompletionHandler {
-        @Override
-        public void completed(Object result) {
-            if (result instanceof File) {
-                File file = (File) result;
-                nextPlayer = initPlayer(file.getAbsolutePath());
-                mediaPlayer.setNextMediaPlayer(nextPlayer);
-                readVerseMetaData(currReference);
-            }
-        }
-        @Override
-        public void failed(Throwable exception) {
-            Log.d(TAG, "NextReadFile Failed " + exception.toString());
-        }
-    }
-
     private void updateMediaPlayStateTime() {
         TOCAudioChapter chapter = this.currReference.audioChapter;
         int position = this.mediaPlayer.getCurrentPosition();
@@ -231,6 +191,59 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         }
         MediaPlayState.update(this.controller.activity, this.currReference.getS3Key(), (int)position);
     }
+
+    void advanceToNextItem() {
+        if (this.nextReference != null) {
+            this.currReference = this.nextReference;
+            this.addNextChapter(this.currReference);
+            this.preFetchNextChapter(this.currReference);
+        } else {
+            this.sendAudioAnalytics();
+            MediaPlayState.clear(this.controller.activity);
+            this.stop();
+        }
+    }
+
+    private void addNextChapter(Reference reference) {
+        if (this.mediaPlayer.isPlaying()) {
+            this.mediaPlayer.stop();
+            this.mediaPlayer = this.nextPlayer;
+            this.mediaPlayer.start();
+        } else {
+            this.mediaPlayer = this.nextPlayer;
+        }
+        this.controller.playHasStarted(this.mediaPlayer);
+    }
+
+    private void preFetchNextChapter(Reference reference) {
+        this.readVerseMetaData(reference);
+        this.nextReference = this.tocAudioBible.nextChapter(reference);
+        if (this.nextReference != null) {
+            PreFetchCompletion handler = new PreFetchCompletion();
+            AwsS3Cache.shared().readFile(this.nextReference.getS3Bucket(),
+                    this.nextReference.getS3Key(),
+                    Integer.MAX_VALUE,
+                    handler);
+        } else {
+            nextPlayer = null;
+        }
+    }
+    class PreFetchCompletion implements CompletionHandler {
+        @Override
+        public void completed(Object result) {
+            if (result instanceof File) {
+                File file = (File) result;
+                nextPlayer = initPlayer(file.getAbsolutePath());
+                mediaPlayer.setNextMediaPlayer(nextPlayer);
+            }
+        }
+        @Override
+        public void failed(Throwable exception) {
+            Log.d(TAG, "NextReadFile Failed " + exception.toString());
+        }
+    }
+
+
 
     private void readVerseMetaData(Reference reference) {
         ReadVerseMetaDataHandler handler = new ReadVerseMetaDataHandler(reference);
