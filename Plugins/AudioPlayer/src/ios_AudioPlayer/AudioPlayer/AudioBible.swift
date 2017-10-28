@@ -38,15 +38,9 @@ public class AudioBible : NSObject {
         print("***** Deinit AudioBible *****")
     }
     
-    public func beginStreaming() {
-        if let audioUrl = self.currReference.url {
-            self.initAudio(url: audioUrl)
-        }
-    }
-    
     public func beginReadFile() {
         print("BibleReader.BEGIN Read File")
-        AwsS3Cache.shared.readFile(s3Bucket: Reference.s3Bucket,
+        AwsS3Cache.shared.readFile(s3Bucket: self.currReference.getS3Bucket(),
                    s3Key: self.currReference.getS3Key(),
                    expireInterval: Double.infinity,
                    getComplete: {
@@ -71,8 +65,7 @@ public class AudioBible : NSObject {
         self.initNotifications()
         
         self.play()
-        self.nextReference = self.tocAudioBible.nextChapter(reference: self.currReference)
-        self.readVerseMetaData(reference: self.currReference)
+        self.preFetchNextChapter(reference: self.currReference)
         
         self.controller.playHasStarted()
         
@@ -181,8 +174,7 @@ public class AudioBible : NSObject {
         if let curr = self.nextReference {
             self.currReference = curr
             self.addNextChapter(reference: curr)
-            self.nextReference = self.tocAudioBible.nextChapter(reference: curr)
-            self.readVerseMetaData(reference: curr)
+            self.preFetchNextChapter(reference: curr)
         } else {
             self.sendAudioAnalytics()
             MediaPlayState.clear()
@@ -202,6 +194,31 @@ public class AudioBible : NSObject {
         MediaPlayState.update(url: self.currReference.toString(), time: result)
     }
     
+    private func addNextChapter(reference: Reference) {
+        AwsS3Cache.shared.readFile(s3Bucket: reference.getS3Bucket(),
+                                   s3Key: reference.getS3Key(),
+                                   expireInterval: Double.infinity,
+                                   getComplete: {
+                                    url in
+                                    if let audioURL = url {
+                                        let asset = AVAsset(url: audioURL)
+                                        let playerItem = AVPlayerItem(asset: asset)
+                                        self.player?.replaceCurrentItem(with: playerItem)
+                                    }
+        })
+    }
+    
+    private func preFetchNextChapter(reference: Reference) {
+        self.readVerseMetaData(reference: reference)
+        self.nextReference = self.tocAudioBible.nextChapter(reference: reference)
+        if let next = self.nextReference {
+            AwsS3Cache.shared.readFile(s3Bucket: next.getS3Bucket(),
+                                       s3Key: next.getS3Key(),
+                                       expireInterval: Double.infinity,
+                                       getComplete: { url in })
+        }
+    }
+    
     private func readVerseMetaData(reference: Reference) {
         let reader = MetaDataReader()
         reader.readVerseAudio(damid: reference.damId, sequence: reference.sequence, bookId: reference.book, chapter: reference.chapter, readComplete: {
@@ -209,14 +226,6 @@ public class AudioBible : NSObject {
             self.audioChapter = audioChapter
             //print("PARSED DATA \(self.audioChapter?.toString())")
         })
-    }
-    
-    private func addNextChapter(reference: Reference) {
-        if let audioUrl = reference.url {
-            let asset = AVAsset(url: audioUrl)
-            let playerItem = AVPlayerItem(asset: asset)
-            self.player?.replaceCurrentItem(with: playerItem)
-        }
     }
     
     func sendAudioAnalytics() {

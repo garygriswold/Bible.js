@@ -5,21 +5,15 @@
 //  Created by Gary Griswold on 8/14/17.
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
-
-import Foundation
 import AWS
 
 class Reference {
-    
-    // Deprecated, use getS3Bucket to be consistent with ios.
-    static let s3Bucket: String = "audio-" + AwsS3.region + "-shortsands"
     
     let damId: String
     let sequence: String
     let book: String
     let chapter: String
     let fileType: String
-    var url: URL? // This is not used when TransferUtility is used.  It should be conditional, or deprecated
     
     init(damId: String, sequence: String, book: String, chapter: String, fileType: String) {
         self.damId = damId
@@ -27,15 +21,6 @@ class Reference {
         self.book = book
         self.chapter = chapter
         self.fileType = fileType
-        AwsS3.shared.preSignedUrlGET(
-            s3Bucket: Reference.s3Bucket,
-            s3Key: getS3Key(),
-            expires: 3600,
-            complete: { url in
-                //print("computed GET URL \(String(describing: url))")
-                self.url = url
-            }
-        )
     }
    
     deinit {
@@ -55,7 +40,7 @@ class Reference {
     }
     
     func getS3Bucket() -> String {
-        switch (this.fileType) {
+        switch (self.fileType) {
             case "mp3": return "audio-" + AwsS3.region + "-shortsands";
             default: return "unknown";
         }

@@ -40,7 +40,6 @@ class AudioBibleController {
                     let reader = AudioBible(controller: self, tocBible: tocBible, reference: reference)
                     self.readerView = AudioBibleView(view: view, audioBible: reader)
                     self.audioSession = AudioSession(audioBibleView: self.readerView!)
-                    //reader.beginStreaming()
                     reader.beginReadFile()
                 }
             }
