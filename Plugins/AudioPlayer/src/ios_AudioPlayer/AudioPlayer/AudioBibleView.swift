@@ -159,6 +159,7 @@ class AudioBibleView : NSObject {
         self.scrubSlider.addTarget(self, action: #selector(scrubSliderChanged), for: .valueChanged)
         self.scrubSlider.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
+        self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpOutside)
     }
     
     func stopPlay() {
@@ -176,6 +177,7 @@ class AudioBibleView : NSObject {
     */
     func updateProgress() {
         if self.scrubSliderDrag { return }
+        //print("Update progress \(CFAbsoluteTimeGetCurrent())")
         
         if let item = self.audioBible.getPlayer()?.currentItem {
             if CMTIME_IS_NUMERIC(item.duration) {
@@ -187,14 +189,15 @@ class AudioBibleView : NSObject {
             }
             let current = CMTimeGetSeconds(item.currentTime())
             self.scrubSlider.setValue(Float(current), animated: true)
-            self.verseLabel.center = positionVersePopup()
             
             if let verse = self.audioBible.getCurrentReference().audioChapter {
                 self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum,
                                                           seconds: Double(self.scrubSlider.value))
                 self.verseLabel.text = String(describing: self.verseNum)
+                self.verseLabel.center = positionVersePopup()
             }
         }
+        //print("Finished progress \(CFAbsoluteTimeGetCurrent())")
     }
     private func positionVersePopup() -> CGPoint {
         let slider = self.scrubSlider
@@ -205,8 +208,11 @@ class AudioBibleView : NSObject {
     
     /**
     * Scrub Slider Event Handler
+    * BUG: When the slider is dragged and released it sometimes momentarily jumps back to its starting point.
+    * I have verified that this is not because updateProgress was unfinished.  It seems like it must be a
+    * saved screen update.  I need to learn how to discard such when the
     */
-    func scrubSliderChanged(sender: UISlider) {//}, forEvent event: UIEvent) {
+    func scrubSliderChanged(sender: UISlider) {
         //print("scrub slider changed to \(sender.value)")
         if let verse = self.audioBible.getCurrentReference().audioChapter {
             self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(sender.value))
@@ -215,12 +221,12 @@ class AudioBibleView : NSObject {
         }
     }
     func touchDown() {
-        print("**** touchDown ***")
         self.scrubSliderDrag = true
+        //print("**** touchDown **** \(CFAbsoluteTimeGetCurrent())")
     }
     func touchUpInside(sender: UISlider) {
-        print("**** touchUpInside ***")
         self.scrubSliderDrag = false
+        //print("**** touchUpInside **** \(CFAbsoluteTimeGetCurrent())")
         
         if let play = self.audioBible.getPlayer() {
             if (sender.value < sender.maximumValue) {
@@ -236,4 +242,4 @@ class AudioBibleView : NSObject {
             }
         }
     }
- }
+}
