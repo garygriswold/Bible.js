@@ -177,7 +177,7 @@ class AudioBibleView : NSObject {
     func updateProgress() {
         if self.scrubSliderDrag { return }
         
-        if let item = self.audioBible.player?.currentItem {
+        if let item = self.audioBible.getPlayer()?.currentItem {
             if CMTIME_IS_NUMERIC(item.duration) {
                 if item.duration != self.scrubSliderDuration {
                     self.scrubSliderDuration = item.duration
@@ -189,7 +189,7 @@ class AudioBibleView : NSObject {
             self.scrubSlider.setValue(Float(current), animated: true)
             self.verseLabel.center = positionVersePopup()
             
-            if let verse = self.audioBible.audioChapter {
+            if let verse = self.audioBible.getCurrentReference().audioChapter {
                 self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum,
                                                           seconds: Double(self.scrubSlider.value))
                 self.verseLabel.text = String(describing: self.verseNum)
@@ -208,7 +208,7 @@ class AudioBibleView : NSObject {
     */
     func scrubSliderChanged(sender: UISlider) {//}, forEvent event: UIEvent) {
         //print("scrub slider changed to \(sender.value)")
-        if let verse = self.audioBible.audioChapter {
+        if let verse = self.audioBible.getCurrentReference().audioChapter {
             self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(sender.value))
             self.verseLabel.text = String(describing: self.verseNum)
             self.verseLabel.center = positionVersePopup()
@@ -222,10 +222,10 @@ class AudioBibleView : NSObject {
         print("**** touchUpInside ***")
         self.scrubSliderDrag = false
         
-        if let play = self.audioBible.player {
+        if let play = self.audioBible.getPlayer() {
             if (sender.value < sender.maximumValue) {
                 var current: CMTime
-                if let verse = self.audioBible.audioChapter {
+                if let verse = self.audioBible.getCurrentReference().audioChapter {
                     current = verse.findPositionOfVerse(verse: self.verseNum)
                 } else {
                     current = CMTime(seconds: Double(sender.value), preferredTimescale: CMTimeScale(1.0))

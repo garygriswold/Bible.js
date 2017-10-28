@@ -12,14 +12,13 @@ import AWS
 
 public class AudioBible : NSObject {
     
-    let controller: AudioBibleController
-    let tocAudioBible: TOCAudioBible
-    let audioAnalytics: AudioAnalytics
-    var audioChapter: TOCAudioChapter?
-    var player: AVPlayer?
+    private let controller: AudioBibleController
+    private let tocAudioBible: TOCAudioBible
+    private let audioAnalytics: AudioAnalytics
+    private var player: AVPlayer?
     // Transient Variables
-    var currReference: Reference
-    var nextReference: Reference?
+    private var currReference: Reference
+    private var nextReference: Reference?
     
     init(controller: AudioBibleController, tocBible: TOCAudioBible, reference: Reference) {
         self.controller = controller
@@ -36,6 +35,14 @@ public class AudioBible : NSObject {
     
     deinit {
         print("***** Deinit AudioBible *****")
+    }
+    
+    func getPlayer() -> AVPlayer? {
+        return self.player
+    }
+    
+    func getCurrentReference() -> Reference {
+        return self.currReference
     }
     
     public func beginReadFile() {
@@ -171,11 +178,10 @@ public class AudioBible : NSObject {
     
     func updateMediaPlayStateTime() {
         var result: CMTime = kCMTimeZero
-        if let currentTime = self.player?.currentTime() {
-            if let verse: Int = self.audioChapter?.findVerseByPosition(priorVerse: 1, time: currentTime) {
-                if let time: CMTime = self.audioChapter?.findPositionOfVerse(verse: verse) {
-                    result = time
-                }
+        if let audioChapter = self.currReference.audioChapter {
+            if let currentTime = self.player?.currentTime() {
+                let verse: Int = audioChapter.findVerseByPosition(priorVerse: 1, time: currentTime)
+                result = audioChapter.findPositionOfVerse(verse: verse)
             }
         }
         MediaPlayState.update(url: self.currReference.toString(), time: result)
@@ -222,7 +228,7 @@ public class AudioBible : NSObject {
         let reader = MetaDataReader()
         reader.readVerseAudio(damid: reference.damId, sequence: reference.sequence, bookId: reference.book, chapter: reference.chapter, readComplete: {
             audioChapter in
-            self.audioChapter = audioChapter
+            reference.audioChapter = audioChapter
             //print("PARSED DATA \(self.audioChapter?.toString())")
         })
     }

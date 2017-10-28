@@ -14,6 +14,7 @@ class Reference {
     let book: String
     let chapter: String
     let fileType: String
+    var audioChapter: TOCAudioChapter?
     
     init(damId: String, sequence: String, book: String, chapter: String, fileType: String) {
         self.damId = damId
