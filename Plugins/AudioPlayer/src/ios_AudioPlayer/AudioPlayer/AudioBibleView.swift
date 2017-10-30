@@ -18,7 +18,7 @@ class AudioBibleView : NSObject {
     let pauseButton: UIButton
     let stopButton: UIButton
     let scrubSlider: UISlider
-    let verseLabel: UILabel
+    let verseLabel: CATextLayer
     var progressLink: CADisplayLink?
     // Precomputed for positionVersePopup
     let sliderRange: CGFloat
@@ -92,33 +92,33 @@ class AudioBibleView : NSObject {
         self.sliderRange = scrub.frame.size.width - (scrub.currentThumbImage?.size.width)!
         self.sliderOrigin = scrub.frame.origin.x + ((scrub.currentThumbImage?.size.width)! / 2.0)
         
-        let verse = UILabel()
-        verse.frame = CGRect(x: screenWidth * 0.05, y: 195, width: 32, height: 32)
-        verse.text = "1"
-        verse.font = UIFont(name: "Helvetica Neue", size: 12)
-        verse.textColor = UIColor.black
-        verse.backgroundColor = UIColor.white
-        verse.textAlignment = NSTextAlignment.center
-        verse.isUserInteractionEnabled = false
-        verse.layer.borderColor = UIColor.black.cgColor
-        verse.layer.borderWidth = 1.0
-        verse.layer.cornerRadius = verse.frame.width / 2
-
-        self.view.addSubview(verse)
-        self.verseLabel = verse
+        let verse2 = CATextLayer()
+        verse2.frame = CGRect(x: screenWidth * 0.05, y: 195, width: 32, height: 32)
+        verse2.string = "\n1"
+        verse2.font = "Helvetica Neue" as CFString
+        verse2.fontSize = 9
+        verse2.foregroundColor = UIColor.black.cgColor
+        verse2.backgroundColor = UIColor.white.cgColor
+        verse2.contentsScale = UIScreen.main.scale
+        verse2.isWrapped = true
+        verse2.alignmentMode = kCAAlignmentCenter
+        verse2.contentsGravity = kCAGravityCenter // Why doesn't contentsGravity work
+        verse2.borderColor = UIColor.lightGray.cgColor
+        verse2.borderWidth = 1.0
+        verse2.cornerRadius = verse2.frame.width / 2
+        verse2.masksToBounds = false
+        verse2.shadowOpacity = 0.5
+        verse2.shadowOffset = CGSize(width: 1.0, height: 0.5)
         
+        self.view.layer.addSublayer(verse2)
+        self.verseLabel = verse2
+
         playBtn.layer.shadowOpacity = 0.5
         playBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
         pauseBtn.layer.shadowOpacity = 0.5
         pauseBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
         stopBtn.layer.shadowOpacity = 0.5
         stopBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
-        
-        //verse.layer.masksToBounds = true
-        verse.layer.shadowOpacity = 0.5
-        verse.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
-        //verse.clipsToBounds = true
-        verse.layer.masksToBounds = true
     }
     
     deinit {
@@ -168,7 +168,7 @@ class AudioBibleView : NSObject {
         self.pauseButton.removeFromSuperview()
         self.stopButton.removeFromSuperview()
         self.scrubSlider.removeFromSuperview()
-        self.verseLabel.removeFromSuperview()
+        self.verseLabel.removeFromSuperlayer()
         self.progressLink?.invalidate()
     }
     
@@ -193,8 +193,8 @@ class AudioBibleView : NSObject {
             if let verse = self.audioBible.getCurrentReference().audioChapter {
                 self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum,
                                                           seconds: Double(self.scrubSlider.value))
-                self.verseLabel.text = String(describing: self.verseNum)
-                self.verseLabel.center = positionVersePopup()
+                self.verseLabel.string = "\n" + String(self.verseNum)
+                self.verseLabel.position = positionVersePopup()
             }
         }
         //print("Finished progress \(CFAbsoluteTimeGetCurrent())")
@@ -216,8 +216,8 @@ class AudioBibleView : NSObject {
         //print("scrub slider changed to \(sender.value)")
         if let verse = self.audioBible.getCurrentReference().audioChapter {
             self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(sender.value))
-            self.verseLabel.text = String(describing: self.verseNum)
-            self.verseLabel.center = positionVersePopup()
+            self.verseLabel.string = "\n" + String(self.verseNum)
+            self.verseLabel.position = positionVersePopup()
         }
     }
     func touchDown() {
