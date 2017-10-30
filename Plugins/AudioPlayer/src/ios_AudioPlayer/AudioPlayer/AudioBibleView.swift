@@ -101,8 +101,6 @@ class AudioBibleView : NSObject {
         verse.borderWidth = 1.0
         verse.cornerRadius = verse.frame.width / 2
         verse.masksToBounds = false
-        verse.shadowOpacity = 0.5
-        verse.shadowOffset = CGSize(width: 1.0, height: 0.5)
         self.view.layer.addSublayer(verse)
         self.verseLabel = verse
         
@@ -118,12 +116,17 @@ class AudioBibleView : NSObject {
         verse.addSublayer(verse2)
         self.verseNumLabel = verse2
 
+        // UI control shadows
         playBtn.layer.shadowOpacity = 0.5
         playBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
         pauseBtn.layer.shadowOpacity = 0.5
         pauseBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
         stopBtn.layer.shadowOpacity = 0.5
         stopBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
+        verse.shadowOpacity = 0.5
+        verse.shadowOffset = CGSize(width: 1.0, height: 0.5)
+        scrub.layer.shadowOpacity = 0.5
+        scrub.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
     }
     
     deinit {
