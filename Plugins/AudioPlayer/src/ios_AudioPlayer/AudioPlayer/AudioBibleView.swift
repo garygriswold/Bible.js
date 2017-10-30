@@ -18,7 +18,8 @@ class AudioBibleView : NSObject {
     let pauseButton: UIButton
     let stopButton: UIButton
     let scrubSlider: UISlider
-    let verseLabel: CATextLayer
+    let verseLabel: CALayer
+    let verseNumLabel: CATextLayer
     var progressLink: CADisplayLink?
     // Precomputed for positionVersePopup
     let sliderRange: CGFloat
@@ -92,26 +93,30 @@ class AudioBibleView : NSObject {
         self.sliderRange = scrub.frame.size.width - (scrub.currentThumbImage?.size.width)!
         self.sliderOrigin = scrub.frame.origin.x + ((scrub.currentThumbImage?.size.width)! / 2.0)
         
+        let verse = CALayer()
+        verse.frame = CGRect(x: screenWidth * 0.05, y: 195, width: 32, height: 32)
+        verse.backgroundColor = UIColor.white.cgColor
+        verse.contentsScale = UIScreen.main.scale
+        verse.borderColor = UIColor.lightGray.cgColor
+        verse.borderWidth = 1.0
+        verse.cornerRadius = verse.frame.width / 2
+        verse.masksToBounds = false
+        verse.shadowOpacity = 0.5
+        verse.shadowOffset = CGSize(width: 1.0, height: 0.5)
+        self.view.layer.addSublayer(verse)
+        self.verseLabel = verse
+        
         let verse2 = CATextLayer()
-        verse2.frame = CGRect(x: screenWidth * 0.05, y: 195, width: 32, height: 32)
-        verse2.string = "\n1"
+        verse2.frame = CGRect(x: 0, y: 8, width: 32, height: 16)
+        verse2.string = "1"
         verse2.font = "Helvetica Neue" as CFString
-        verse2.fontSize = 9
+        verse2.fontSize = 12
         verse2.foregroundColor = UIColor.black.cgColor
-        verse2.backgroundColor = UIColor.white.cgColor
-        verse2.contentsScale = UIScreen.main.scale
-        verse2.isWrapped = true
+        verse2.isWrapped = false
         verse2.alignmentMode = kCAAlignmentCenter
         verse2.contentsGravity = kCAGravityCenter // Why doesn't contentsGravity work
-        verse2.borderColor = UIColor.lightGray.cgColor
-        verse2.borderWidth = 1.0
-        verse2.cornerRadius = verse2.frame.width / 2
-        verse2.masksToBounds = false
-        verse2.shadowOpacity = 0.5
-        verse2.shadowOffset = CGSize(width: 1.0, height: 0.5)
-        
-        self.view.layer.addSublayer(verse2)
-        self.verseLabel = verse2
+        verse.addSublayer(verse2)
+        self.verseNumLabel = verse2
 
         playBtn.layer.shadowOpacity = 0.5
         playBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
@@ -193,7 +198,7 @@ class AudioBibleView : NSObject {
             if let verse = self.audioBible.getCurrentReference().audioChapter {
                 self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum,
                                                           seconds: Double(self.scrubSlider.value))
-                self.verseLabel.string = "\n" + String(self.verseNum)
+                self.verseNumLabel.string = String(self.verseNum)
                 self.verseLabel.position = positionVersePopup()
             }
         }
@@ -216,7 +221,7 @@ class AudioBibleView : NSObject {
         //print("scrub slider changed to \(sender.value)")
         if let verse = self.audioBible.getCurrentReference().audioChapter {
             self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(sender.value))
-            self.verseLabel.string = "\n" + String(self.verseNum)
+            self.verseNumLabel.string = String(self.verseNum)
             self.verseLabel.position = positionVersePopup()
         }
     }
