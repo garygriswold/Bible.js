@@ -107,7 +107,7 @@ class AudioBibleView : NSObject {
         let verse2 = CATextLayer()
         verse2.frame = CGRect(x: 0, y: 8, width: 32, height: 16)
         verse2.string = "1"
-        verse2.font = "Helvetica Neue" as CFString
+        verse2.font = "HelveticaNeue" as CFString
         verse2.fontSize = 12
         verse2.foregroundColor = UIColor.black.cgColor
         verse2.isWrapped = false
