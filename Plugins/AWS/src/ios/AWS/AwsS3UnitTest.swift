@@ -74,7 +74,7 @@ public class AwsS3UnitTest {
     func testDownloadData() {
         let s3 = AwsS3.shared
         s3.downloadText(s3Bucket: "shortsands", s3Key: "hello1",
-                        complete: {error, data in print("DOWNLOADED err \(String(describing: error))  data \(data)")})
+                        complete: {error, data in print("DOWNLOADED err \(String(describing: error))  data \(String(describing: data))")})
     }
      
     func testDownloadFile() {
