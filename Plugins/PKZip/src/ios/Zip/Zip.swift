@@ -140,7 +140,6 @@ public class Zip {
             }
             currentPosition += Double(fileInfo.compressed_size)
             let fileNameSize = Int(fileInfo.size_filename) + 1
-            //let fileName = UnsafeMutablePointer<CChar>(allocatingCapacity: fileNameSize)
             let fileName = UnsafeMutablePointer<CChar>.allocate(capacity: fileNameSize)
 
             unzGetCurrentFileInfo64(zip, &fileInfo, fileName, UInt(fileNameSize), nil, 0, nil, 0)
@@ -165,8 +164,10 @@ public class Zip {
             let fullPath = destination.appendingPathComponent(pathString).path
 
             let creationDate = Date()
-            let directoryAttributes = [FileAttributeKey.creationDate.rawValue : creationDate,
-                                       FileAttributeKey.modificationDate.rawValue : creationDate]
+            //let directoryAttributes = [FileAttributeKey.creationDate.rawValue : creationDate, // changed 11/3/2017
+            //                           FileAttributeKey.modificationDate.rawValue : creationDate]
+            let directoryAttributes = [FileAttributeKey.creationDate: creationDate,
+                                       FileAttributeKey.modificationDate: creationDate]
             do {
                 if isDirectory {
                     try fileManager.createDirectory(atPath: fullPath, withIntermediateDirectories: true, attributes: directoryAttributes)

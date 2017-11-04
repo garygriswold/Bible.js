@@ -749,7 +749,7 @@
 				SKIP_INSTALL = NO;
 				SWIFT_INCLUDE_PATHS = "${SRCROOT}/Zip/minizip/**";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -774,7 +774,7 @@
 				"SKIP_INSTALL[sdk=*]" = NO;
 				SWIFT_INCLUDE_PATHS = "${SRCROOT}/Zip/minizip/**";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
