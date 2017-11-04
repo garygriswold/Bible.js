@@ -133,7 +133,7 @@ class AudioBibleView : NSObject {
         print("***** Deinit AudioBibleView *****")
     }
     
-    func play() {
+    @objc func play() {
         self.audioBible.play()
         if (self.isAudioViewActive) {
             self.playButton.removeFromSuperview()
@@ -141,7 +141,7 @@ class AudioBibleView : NSObject {
         }
     }
     
-    func pause() {
+    @objc func pause() {
         self.audioBible.pause()
         if (self.isAudioViewActive) {
             self.pauseButton.removeFromSuperview()
@@ -149,7 +149,7 @@ class AudioBibleView : NSObject {
         }
     }
     
-    func stop() {
+    @objc func stop() {
         self.audioBible.updateMediaPlayStateTime()
         self.audioBible.sendAudioAnalytics()
         self.audioBible.stop()
@@ -183,7 +183,7 @@ class AudioBibleView : NSObject {
     /**
     * Scrub Slider Animation
     */
-    func updateProgress() {
+    @objc func updateProgress() {
         if self.scrubSliderDrag { return }
         //print("Update progress \(CFAbsoluteTimeGetCurrent())")
         
@@ -220,7 +220,7 @@ class AudioBibleView : NSObject {
     * I have verified that this is not because updateProgress was unfinished.  It seems like it must be a
     * saved screen update.  I need to learn how to discard such when the
     */
-    func scrubSliderChanged(sender: UISlider) {
+    @objc func scrubSliderChanged(sender: UISlider) {
         //print("scrub slider changed to \(sender.value)")
         if let verse = self.audioBible.getCurrentReference().audioChapter {
             self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(sender.value))
@@ -228,11 +228,11 @@ class AudioBibleView : NSObject {
             self.verseLabel.position = positionVersePopup()
         }
     }
-    func touchDown() {
+    @objc func touchDown() {
         self.scrubSliderDrag = true
         //print("**** touchDown **** \(CFAbsoluteTimeGetCurrent())")
     }
-    func touchUpInside(sender: UISlider) {
+    @objc func touchUpInside(sender: UISlider) {
         self.scrubSliderDrag = false
         //print("**** touchUpInside **** \(CFAbsoluteTimeGetCurrent())")
         

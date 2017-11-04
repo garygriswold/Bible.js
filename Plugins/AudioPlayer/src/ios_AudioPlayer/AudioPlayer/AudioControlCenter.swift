@@ -7,3 +7,36 @@
 //
 
 import Foundation
+
+class AudioControlCenter {
+    
+    init() {
+        
+    }
+    
+    deinit {
+        
+    }
+/*
+    func setupRemoteTransportControls() {
+        let commandCenter = MPRemoteCommandCenter.shared()
+        
+        commandCenter.playCommand.addTarget { [unowned self] event in
+            if self.player.rate == 0.0 {
+                self.player.play()
+                return .success
+            }
+            return .commandFailed
+        }
+        
+        // Add handler for Pause Command
+        commandCenter.pauseCommand.addTarget { [unowned self] event in
+            if self.player.rate == 1.0 {
+                self.player.pause()
+                return .success
+            }
+            return .commandFailed
+        }
+    }
+ */
+}

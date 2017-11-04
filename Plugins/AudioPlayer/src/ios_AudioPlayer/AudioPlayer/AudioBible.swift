@@ -147,30 +147,30 @@ public class AudioBible : NSObject {
         //NotificationCenter.default.removeObserver(self, name: .AVPlayerItemTimeJumped, object: nil)
     }
     
-    func playerItemDidPlayToEndTime(note:Notification) {
+    @objc func playerItemDidPlayToEndTime(note:Notification) {
         print("\n** DID PLAY TO END \(String(describing: note.object))")
         self.advanceToNextItem()
     }
-    func playerItemFailedToPlayToEndTime(note:Notification) {
+    @objc func playerItemFailedToPlayToEndTime(note:Notification) {
         print("\n********* FAILED TO PLAY TO END *********\(String(describing: note.object))")
     }
-    func playerItemPlaybackStalled(note:Notification) {
+    @objc func playerItemPlaybackStalled(note:Notification) {
         print("\n****** PLAYBACK STALLED \(String(describing: note.object))")
     }
-    func playerItemNewErrorLogEntry(note:Notification) {
+    @objc func playerItemNewErrorLogEntry(note:Notification) {
         print("\n****** ERROR LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.errorLog()))")
     }
-    func playerItemNewAccessLogEntry(note:Notification) {
+    @objc func playerItemNewAccessLogEntry(note:Notification) {
         print("\n****** ACCESS LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.accessLog()))")
     }
-    func playerItemTimeJumped(note:Notification) {
+    @objc func playerItemTimeJumped(note:Notification) {
         print("\n****** TIME JUMPED \(String(describing: note.object))")
     }
     /**
      * This method is called when the Home button is clicked or double clicked.
      * And when an interruption occurs, such as a phone call.
      */
-    func applicationWillResignActive(note:Notification) {
+    @objc func applicationWillResignActive(note:Notification) {
         print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
         self.sendAudioAnalytics()
         self.updateMediaPlayStateTime()
