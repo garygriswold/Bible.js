@@ -20,11 +20,10 @@ class AudioControlCenter {
         print("***** Deinit AudioControlCenter *****")
     }
 
-    func setupControlCenter(player: AVPlayer?) {  // I think this should really be AudioPlayer
+    func setupControlCenter(player: AVPlayer?) {
         if let play = player {
             let controlCenter = MPRemoteCommandCenter.shared()
             
-            //controlCenter.playCommand.addTarget { [unowned self] event in
             controlCenter.playCommand.addTarget { event in
                 if play.rate == 0.0 {
                     play.play()
@@ -34,7 +33,7 @@ class AudioControlCenter {
             }
             
             controlCenter.pauseCommand.addTarget { event in
-                if play.rate == 1.0 {
+                if play.rate != 0.0 {
                     play.pause()
                     return MPRemoteCommandHandlerStatus.success
                 }
