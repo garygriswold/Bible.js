@@ -12,14 +12,16 @@ class Reference {
     let damId: String
     let sequence: String
     let book: String
+    let bookName: String
     let chapter: String
     let fileType: String
     var audioChapter: TOCAudioChapter?
     
-    init(damId: String, sequence: String, book: String, chapter: String, fileType: String) {
+    init(damId: String, sequence: String, book: String, bookName: String, chapter: String, fileType: String) {
         self.damId = damId
         self.sequence = sequence
         self.book = book
+        self.bookName = bookName
         self.chapter = chapter
         self.fileType = fileType
     }
@@ -37,6 +39,12 @@ class Reference {
     var chapterNum: Int {
         get {
             return Int(self.chapter) ?? 1
+        }
+    }
+    
+    var localName: String {
+        get {
+            return self.bookName + " " + String(Int(self.chapter) ?? 1)
         }
     }
     

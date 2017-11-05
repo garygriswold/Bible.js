@@ -6,37 +6,68 @@
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
 
-import Foundation
+import AVFoundation
+import MediaPlayer
 
 class AudioControlCenter {
     
-    init() {
-        
+    static let shared = AudioControlCenter()
+    
+    private init() {
     }
     
     deinit {
-        
+        print("***** Deinit AudioControlCenter *****")
     }
-/*
-    func setupRemoteTransportControls() {
-        let commandCenter = MPRemoteCommandCenter.shared()
-        
-        commandCenter.playCommand.addTarget { [unowned self] event in
-            if self.player.rate == 0.0 {
-                self.player.play()
-                return .success
+
+    func setupControlCenter(player: AVPlayer?) {  // I think this should really be AudioPlayer
+        if let play = player {
+            let controlCenter = MPRemoteCommandCenter.shared()
+            
+            //controlCenter.playCommand.addTarget { [unowned self] event in
+            controlCenter.playCommand.addTarget { event in
+                if play.rate == 0.0 {
+                    play.play()
+                    return MPRemoteCommandHandlerStatus.success
+                }
+                return MPRemoteCommandHandlerStatus.commandFailed
             }
-            return .commandFailed
-        }
-        
-        // Add handler for Pause Command
-        commandCenter.pauseCommand.addTarget { [unowned self] event in
-            if self.player.rate == 1.0 {
-                self.player.pause()
-                return .success
+            
+            controlCenter.pauseCommand.addTarget { event in
+                if play.rate == 1.0 {
+                    play.pause()
+                    return MPRemoteCommandHandlerStatus.success
+                }
+                return MPRemoteCommandHandlerStatus.commandFailed
             }
-            return .commandFailed
+            
+            controlCenter.nextTrackCommand.addTarget { event in
+                return MPRemoteCommandHandlerStatus.commandFailed // To be implemented if needed
+            }
+            
+            controlCenter.previousTrackCommand.addTarget { event in
+                return MPRemoteCommandHandlerStatus.commandFailed // To be implemented if needed
+            }
         }
     }
- */
+    
+    func nowPlaying(player: AVPlayer?, reference: Reference) {
+        if let play = player {
+            if let item = play.currentItem {
+                var nowPlayingInfo = [String : Any]()
+                nowPlayingInfo[MPMediaItemPropertyTitle] = reference.localName
+                if let image = UIImage(named: "lockscreen") {
+                    nowPlayingInfo[MPMediaItemPropertyArtwork] =
+                        MPMediaItemArtwork(boundsSize: image.size) { size in
+                            return image
+                    }
+                }
+                nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = item.currentTime().seconds
+                nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = item.asset.duration.seconds
+                nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = play.rate
+                
+                MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+            }
+        }
+    }
 }

@@ -14,6 +14,7 @@ public class AudioBible : NSObject {
     
     private let controller: AudioBibleController
     private let tocAudioBible: TOCAudioBible
+    private let controlCenter: AudioControlCenter
     private let audioAnalytics: AudioAnalytics
     private var player: AVPlayer?
     // Transient Variables
@@ -24,6 +25,7 @@ public class AudioBible : NSObject {
         self.controller = controller
         self.tocAudioBible = tocBible
         self.currReference = reference
+        self.controlCenter = AudioControlCenter.shared
         self.audioAnalytics = AudioAnalytics(mediaSource: "FCBH",
                                              mediaId: self.currReference.damId,
                                              languageId: tocBible.languageCode,
@@ -75,6 +77,9 @@ public class AudioBible : NSObject {
         self.preFetchNextChapter(reference: self.currReference)
         
         self.controller.playHasStarted()
+        
+        self.controlCenter.setupControlCenter(player: self.player)
+        self.controlCenter.nowPlaying(player: self.player, reference: self.currReference)
         
         self.audioAnalytics.playStarted(item: self.currReference.toString(), position: seekTime)
     }
@@ -209,6 +214,7 @@ public class AudioBible : NSObject {
                                         let asset = AVAsset(url: audioURL)
                                         let playerItem = AVPlayerItem(asset: asset)
                                         self.player?.replaceCurrentItem(with: playerItem)
+                                        self.controlCenter.nowPlaying(player: self.player, reference: reference)
                                     }
         })
     }
