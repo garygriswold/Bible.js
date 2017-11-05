@@ -168,6 +168,7 @@ class AudioBibleView : NSObject {
         self.scrubSlider.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
         self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpOutside)
+        self.initNotifications()
     }
     
     func stopPlay() {
@@ -178,6 +179,7 @@ class AudioBibleView : NSObject {
         self.scrubSlider.removeFromSuperview()
         self.verseLabel.removeFromSuperlayer()
         self.progressLink?.invalidate()
+        self.removeNotifications()
     }
     
     /**
@@ -247,6 +249,29 @@ class AudioBibleView : NSObject {
                 play.seek(to: current)
             } else {
                 self.audioBible.advanceToNextItem()
+            }
+        }
+    }
+    
+    private func initNotifications() {
+        let notify = NotificationCenter.default
+        notify.addObserver(self, selector: #selector(applicationWillEnterForeground(note:)),
+                           name: .UIApplicationWillEnterForeground, object: nil)
+    }
+    private func removeNotifications() {
+        let notify = NotificationCenter.default
+        notify.removeObserver(self, name: .UIApplicationWillEnterForeground, object: nil)
+    }
+    
+    @objc func applicationWillEnterForeground(note: Notification) {
+        print("\n****** APP WILL ENTER FOREGROUND IN VIEW \(Date().timeIntervalSince1970)")
+        if let play = self.audioBible.getPlayer() {
+            if (play.rate == 0.0) {
+                self.pauseButton.removeFromSuperview()
+                self.view.addSubview(self.playButton)
+            } else {
+                self.playButton.removeFromSuperview()
+                self.view.addSubview(self.pauseButton)
             }
         }
     }
