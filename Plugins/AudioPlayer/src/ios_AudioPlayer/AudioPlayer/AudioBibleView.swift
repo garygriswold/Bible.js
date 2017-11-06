@@ -150,8 +150,6 @@ class AudioBibleView : NSObject {
     }
     
     @objc func stop() {
-        self.audioBible.updateMediaPlayStateTime()
-        self.audioBible.sendAudioAnalytics()
         self.audioBible.stop()
     }
     

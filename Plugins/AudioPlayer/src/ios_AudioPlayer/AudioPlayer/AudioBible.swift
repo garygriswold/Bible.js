@@ -47,6 +47,10 @@ public class AudioBible : NSObject {
         return self.currReference
     }
     
+    func isPlaying() -> Bool {
+        return (self.player != nil) ? self.player!.rate > 0.0 : false
+    }
+    
     public func beginReadFile() {
         print("BibleReader.BEGIN Read File")
         AwsS3Cache.shared.readFile(s3Bucket: self.currReference.getS3Bucket(),
@@ -78,10 +82,8 @@ public class AudioBible : NSObject {
         
         self.controller.playHasStarted()
         
-        self.controlCenter.setupControlCenter(player: self.player)
-        self.controlCenter.nowPlaying(player: self.player, reference: self.currReference)
-        
-        self.audioAnalytics.playStarted(item: self.currReference.toString(), position: seekTime)
+        self.controlCenter.setupControlCenter(player: self)
+        self.controlCenter.nowPlaying(player: self)
     }
     
     func backupSeek(state: MediaPlayState) -> CMTime {
@@ -93,16 +95,26 @@ public class AudioBible : NSObject {
     }
     
     func play() {
-        self.player?.play()
-        print("Player Status = \(String(describing: self.player?.status))")
+        if let play = self.player {
+            print("\n*********** PLAY *************")
+            play.play()
+            self.audioAnalytics.playStarted(item: self.currReference.toString(), position: play.currentTime())
+        }
     }
     
     func pause() {
-        self.player?.pause()
-        print("Pause Status = \(String(describing: self.player?.status))")
+        if let play = self.player {
+            print("\n*********** PAUSE *************")
+            play.pause()
+            self.audioAnalytics.playEnded(item: self.currReference.toString(), position: play.currentTime())
+            self.updateMediaPlayStateTime()
+        }
     }
     
     func stop() {
+        if self.player != nil && self.player!.rate > 0.0 {
+            self.pause()
+        }
         self.removeNotifications()
         if self.player != nil {
             self.player = nil
@@ -111,45 +123,63 @@ public class AudioBible : NSObject {
     }
     
     func initNotifications() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(playerItemDidPlayToEndTime(note:)),
-                                               name: .AVPlayerItemDidPlayToEndTime,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(playerItemFailedToPlayToEndTime(note:)),
-                                               name: .AVPlayerItemFailedToPlayToEndTime,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(playerItemPlaybackStalled(note:)),
-                                               name: .AVPlayerItemPlaybackStalled,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(playerItemNewErrorLogEntry(note:)),
-                                               name: .AVPlayerItemNewErrorLogEntry,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationWillResignActive(note:)),
-                                               name: .UIApplicationWillResignActive,
-                                               object: nil)
-        /*NotificationCenter.default.addObserver(self,
-                                               selector: #selector(playerItemNewAccessLogEntry(note:)),
-                                               name: .AVPlayerItemNewAccessLogEntry,
-                                               object: nil)*/
-        /*NotificationCenter.default.addObserver(self,
-                                               selector: #selector(playerItemTimeJumped(note:)),
-                                               name: .AVPlayerItemTimeJumped,
-                                               object: nil)*/
+        let notify = NotificationCenter.default
+        notify.addObserver(self,
+                           selector: #selector(playerItemDidPlayToEndTime(note:)),
+                           name: .AVPlayerItemDidPlayToEndTime,
+                           object: nil)
+        notify.addObserver(self,
+                           selector: #selector(playerItemFailedToPlayToEndTime(note:)),
+                           name: .AVPlayerItemFailedToPlayToEndTime,
+                           object: nil)
+        notify.addObserver(self,
+                           selector: #selector(playerItemPlaybackStalled(note:)),
+                           name: .AVPlayerItemPlaybackStalled,
+                           object: nil)
+        notify.addObserver(self,
+                           selector: #selector(playerItemNewErrorLogEntry(note:)),
+                           name: .AVPlayerItemNewErrorLogEntry,
+                           object: nil)
+        /*notify.addObserver(self,
+                            selector: #selector(playerItemNewAccessLogEntry(note:)),
+                            name: .AVPlayerItemNewAccessLogEntry,
+                            object: nil)*/
+        /*notify.addObserver(self,
+                            selector: #selector(playerItemTimeJumped(note:)),
+                            name: .AVPlayerItemTimeJumped,
+                            object: nil)*/
+        notify.addObserver(self,
+                           selector: #selector(applicationDidFinishLaunching(note:)),
+                           name: .UIApplicationDidFinishLaunching,
+                           object: nil)
+        notify.addObserver(self,
+                           selector: #selector(applicationWillEnterForeground(note:)),
+                           name: .UIApplicationWillEnterForeground,
+                           object: nil)
+        notify.addObserver(self,
+                           selector: #selector(applicationDidEnterBackground(note:)),
+                           name: .UIApplicationDidEnterBackground,
+                           object: nil)
+        notify.addObserver(self,
+                           selector: #selector(applicationWillTerminate(note:)),
+                           name: .UIApplicationWillTerminate,
+                           object: nil)
     }
 
     func removeNotifications() {
         print("\n ***** INSIDE REMOVE NOTIFICATIONS")
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemFailedToPlayToEndTime, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemPlaybackStalled, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewErrorLogEntry, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .UIApplicationWillResignActive, object: nil)
-        //NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewAccessLogEntry, object: nil)
-        //NotificationCenter.default.removeObserver(self, name: .AVPlayerItemTimeJumped, object: nil)
+        let notify = NotificationCenter.default
+        notify.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
+        notify.removeObserver(self, name: .AVPlayerItemFailedToPlayToEndTime, object: nil)
+        notify.removeObserver(self, name: .AVPlayerItemPlaybackStalled, object: nil)
+        notify.removeObserver(self, name: .AVPlayerItemNewErrorLogEntry, object: nil)
+        //notify.removeObserver(self, name: .AVPlayerItemNewAccessLogEntry, object: nil)
+        //notify.removeObserver(self, name: .AVPlayerItemTimeJumped, object: nil)
+ 
+        notify.removeObserver(self, name: .UIApplicationDidFinishLaunching, object: nil)
+        notify.removeObserver(self, name: .UIApplicationWillEnterForeground, object: nil)
+        notify.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
+        notify.removeObserver(self, name: .UIApplicationWillTerminate, object: nil)
     }
     
     @objc func playerItemDidPlayToEndTime(note:Notification) {
@@ -171,17 +201,33 @@ public class AudioBible : NSObject {
     @objc func playerItemTimeJumped(note:Notification) {
         print("\n****** TIME JUMPED \(String(describing: note.object))")
     }
+    
     /**
-     * This method is called when the Home button is clicked or double clicked.
-     * And when an interruption occurs, such as a phone call.
-     */
-    @objc func applicationWillResignActive(note:Notification) {
-        print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
-        self.sendAudioAnalytics()
-        self.updateMediaPlayStateTime()
+    * This method is called when an App is first, launched, not when it is restarted in foreground
+    */
+    @objc func applicationDidFinishLaunching(note:Notification) {
+        print("\n****** APP DID FINISH LAUNCHING \(String(describing: note.object)) \(Date().timeIntervalSince1970)")
+    }
+    /**
+    * This method is called when an already running App, which went to background, restarts in foreground.
+    */
+    @objc func applicationWillEnterForeground(note:Notification) {
+        print("\n****** APP WILL ENTER FOREGROUND \(String(describing: note.object)) \(Date().timeIntervalSince1970)")
+    }
+    /**
+    * This method is called when the Home button or Lock button terminate the foreground App
+    */
+    @objc func applicationDidEnterBackground(note:Notification) {
+        print("\n****** APP DID ENTER BACKGROUND \(String(describing: note.object)) \(Date().timeIntervalSince1970)")
+    }
+    /**
+    * This method is called when the App is fully killed.  It is not affected by the Home or Lock button
+    */
+    @objc func applicationWillTerminate(note:Notification) {
+        print("\n****** APP WILL TERMINATE \(String(describing: note.object)) \(Date().timeIntervalSince1970)")
     }
     
-    func updateMediaPlayStateTime() {
+    private func updateMediaPlayStateTime() {
         var result: CMTime = kCMTimeZero
         if let audioChapter = self.currReference.audioChapter {
             if let currentTime = self.player?.currentTime() {
@@ -198,9 +244,8 @@ public class AudioBible : NSObject {
             self.addNextChapter(reference: curr)
             self.preFetchNextChapter(reference: curr)
         } else {
-            self.sendAudioAnalytics()
-            MediaPlayState.clear()
             self.stop()
+            MediaPlayState.clear() // Must do after stop, because stop updates
         }
     }
     
@@ -214,7 +259,7 @@ public class AudioBible : NSObject {
                                         let asset = AVAsset(url: audioURL)
                                         let playerItem = AVPlayerItem(asset: asset)
                                         self.player?.replaceCurrentItem(with: playerItem)
-                                        self.controlCenter.nowPlaying(player: self.player, reference: reference)
+                                        self.controlCenter.nowPlaying(player: self)
                                     }
         })
     }
@@ -237,12 +282,6 @@ public class AudioBible : NSObject {
             reference.audioChapter = audioChapter
             //print("PARSED DATA \(self.audioChapter?.toString())")
         })
-    }
-    
-    func sendAudioAnalytics() {
-        print("\n*********** INSIDE SAVE ANALYTICS *************")
-        let currTime = (self.player != nil) ? self.player!.currentTime() : kCMTimeZero
-        self.audioAnalytics.playEnded(item: self.currReference.toString(), position: currTime)
     }
 }
 

@@ -6,7 +6,6 @@
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
 
-import AVFoundation
 import MediaPlayer
 
 class AudioControlCenter {
@@ -20,38 +19,37 @@ class AudioControlCenter {
         print("***** Deinit AudioControlCenter *****")
     }
 
-    func setupControlCenter(player: AVPlayer?) {
-        if let play = player {
-            let controlCenter = MPRemoteCommandCenter.shared()
-            
-            controlCenter.playCommand.addTarget { event in
-                if play.rate == 0.0 {
-                    play.play()
-                    return MPRemoteCommandHandlerStatus.success
-                }
-                return MPRemoteCommandHandlerStatus.commandFailed
+    func setupControlCenter(player: AudioBible) {
+        let controlCenter = MPRemoteCommandCenter.shared()
+        
+        controlCenter.playCommand.addTarget { event in
+            if !player.isPlaying() {
+                player.play()
+                return MPRemoteCommandHandlerStatus.success
             }
-            
-            controlCenter.pauseCommand.addTarget { event in
-                if play.rate != 0.0 {
-                    play.pause()
-                    return MPRemoteCommandHandlerStatus.success
-                }
-                return MPRemoteCommandHandlerStatus.commandFailed
+            return MPRemoteCommandHandlerStatus.commandFailed
+        }
+        
+        controlCenter.pauseCommand.addTarget { event in
+            if player.isPlaying() {
+                player.pause()
+                return MPRemoteCommandHandlerStatus.success
             }
-            
-            controlCenter.nextTrackCommand.addTarget { event in
-                return MPRemoteCommandHandlerStatus.commandFailed // To be implemented if needed
-            }
-            
-            controlCenter.previousTrackCommand.addTarget { event in
-                return MPRemoteCommandHandlerStatus.commandFailed // To be implemented if needed
-            }
+            return MPRemoteCommandHandlerStatus.commandFailed
+        }
+        
+        controlCenter.nextTrackCommand.addTarget { event in
+            return MPRemoteCommandHandlerStatus.commandFailed // To be implemented if needed
+        }
+        
+        controlCenter.previousTrackCommand.addTarget { event in
+            return MPRemoteCommandHandlerStatus.commandFailed // To be implemented if needed
         }
     }
     
-    func nowPlaying(player: AVPlayer?, reference: Reference) {
-        if let play = player {
+    func nowPlaying(player: AudioBible) {
+        let reference = player.getCurrentReference()
+        if let play = player.getPlayer() {
             if let item = play.currentItem {
                 var nowPlayingInfo = [String : Any]()
                 nowPlayingInfo[MPMediaItemPropertyTitle] = reference.localName
