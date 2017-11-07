@@ -79,7 +79,6 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
                 } else {
                     this.onSeekComplete(this.mediaPlayer);
                 }
-                this.audioAnalytics.playStarted(this.currReference.toString(), seekTime);
             }
         } else {
             Log.e(TAG, "URL is null");
@@ -89,7 +88,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     @Override
     public void onSeekComplete(MediaPlayer player) {
         player.setOnSeekCompleteListener(null);
-        player.start();
+        this.play();
         this.preFetchNextChapter(this.currReference);
         this.controller.playHasStarted(player);
     }
@@ -111,17 +110,25 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     }
 
     void play() {
+        Log.d(TAG, "\n*********** PLAY *************");
         this.mediaPlayer.start();
+        long currTime = (this.mediaPlayer != null) ? this.mediaPlayer.getCurrentPosition() : 0;
+        this.audioAnalytics.playStarted(this.currReference.toString(), currTime);
     }
 
     void pause() {
+        Log.d(TAG, "\n*********** PAUSE *************");
         this.mediaPlayer.pause();
+        long currTime = (this.mediaPlayer != null) ? this.mediaPlayer.getCurrentPosition() : 0;
+        this.audioAnalytics.playEnded(this.currReference.toString(), currTime);
+        this.updateMediaPlayStateTime();
     }
 
     void stop() {
+        if (this.mediaPlayer.isPlaying()) {
+            this.pause();
+        }
         this.controller.playHasStopped();
-        this.updateMediaPlayStateTime();
-        this.sendAudioAnalytics();
         if (this.mediaPlayer != null) {
             this.mediaPlayer.reset();
             this.mediaPlayer.release();
@@ -198,9 +205,8 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
             this.addNextChapter(this.currReference);
             this.preFetchNextChapter(this.currReference);
         } else {
-            this.sendAudioAnalytics();
-            MediaPlayState.clear(this.controller.activity);
             this.stop();
+            MediaPlayState.clear(this.controller.activity); // Must be after stop, because stop does update
         }
     }
 
@@ -243,8 +249,6 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         }
     }
 
-
-
     private void readVerseMetaData(Reference reference) {
         ReadVerseMetaDataHandler handler = new ReadVerseMetaDataHandler(reference);
         MetaDataReader reader = new MetaDataReader(this.controller.activity);
@@ -268,11 +272,5 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         public void failed(Throwable exception) {
             Log.e(TAG, "Exception in ReadVerseMetaDataHandler " + exception.toString());
         }
-    }
-
-    void sendAudioAnalytics() {
-        Log.d(TAG, "\n*********** INSIDE SAVE ANALYTICS *************");
-        long currTime = (this.mediaPlayer != null) ? this.mediaPlayer.getCurrentPosition() : 0;
-        this.audioAnalytics.playEnded(this.currReference.toString(), currTime);
     }
 }
