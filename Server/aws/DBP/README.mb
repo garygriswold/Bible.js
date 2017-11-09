@@ -1,0 +1,12 @@
+Digital Bible Platform (DBP)
+========================
+
+Nov 8, 2017, GNG
+
+This section contains programs that extract data from DBP in order to create meta data files in json format
+that are then uploaded to S3 in order to support audio capability.  
+
+This approach is a change from storing meta data in the sqlite Versions.db database inside the App.
+It is being done this way now, because this is the approach that will be taken by the DBP4 system,
+and so I am using this approach now in order to learn as much as possible, in order to be most helpful
+to the design of the DBP 4 system.
