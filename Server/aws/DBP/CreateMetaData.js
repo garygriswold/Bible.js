@@ -10,6 +10,9 @@
 */
 
 "use strict";
+var http = require('http');
+
+
 var createMetaData = function(callback) {
 	
 	var silLangList = [];
@@ -120,22 +123,46 @@ var createMetaData = function(callback) {
 	}
 	
 	function getMetaData(query, callback) {
-		//s3Download.deleteObject(function() {
-		//	doNext();
-		//});
 		callback();
+	}
+	
+	function httpGet(url, callback) {
+		http.get(url, function(response) {
+		  	if (response.statusCode !== 200) {
+		    	var error = new Error('Request Failed. + Status Code: ' + response.statusCode);
+				response.resume();
+				errorMessage(error, url);
+				return;
+		  	}
+		
+		  	response.setEncoding('utf8');
+		  	var rawData = '';
+		  	response.on('data', function(chunk) { rawData += chunk; });
+		  	response.on('end', function() {
+		    	try {
+		      		callback(JSON.parse(rawData));
+		    	} catch (e) {
+		      		errorMessage(e, url);
+		    	}
+		  	});
+		}).on('error', function(e) {
+		  errorMessage(e, url);
+		});
 	}
 	
 	function writeFile(filename, data) {
 		// write file sync
 	}
 	
-//	function errorMessage(error, message) {
-//		console.log('ERROR', message, JSON.stringify(error));
-//		process.exit(1);
-//	}
+	function errorMessage(error, message) {
+		console.log('ERROR', message, JSON.stringify(error.message));
+		process.exit(1);
+	}
 };
+
 
 createMetaData(function() {
 	console.log('DONE WITH CREATE META DATA');
 });
+
+
