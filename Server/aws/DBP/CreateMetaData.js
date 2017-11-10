@@ -20,10 +20,10 @@ var createMetaData = function(callback) {
 	var KEY = "key=b37964021bdd346dc602421846bf5683&v=2";
 	var DIRECTORY = "output/";
 	
-	var silLangList = ['cmn'];
+	var silLangList = ['eng'];
 	var languageList = [];
 	var damIdList = [];
-	var chapterList = [];
+	var bookList = [];
 	
 	languageList = findAllLanguages(silLangList);
 	console.log(languageList);
@@ -31,7 +31,7 @@ var createMetaData = function(callback) {
 	doAllLanguages(languageList, function() {
 		console.log(damIdList);
 		doAllVolumes(damIdList, function() {
-			doAllChapters(chapterList, function() {
+			doAllChapters(bookList, function() {
 				callback();
 			});
 		});
@@ -84,7 +84,7 @@ var createMetaData = function(callback) {
 			callback();
 		}
 	}
-	
+
 	function doBookListQuery(damId, callback) {
 		var url = HOST + "library/book?" + KEY + "&dam_id=" + damId;
 		httpGet(url, function(json) {
@@ -93,33 +93,49 @@ var createMetaData = function(callback) {
 			var jsonResult = copyData(nameList, json);
 			for (var i=0; i<jsonResult.length; i++) {
 				var result = jsonResult[i];
-				result['book_id'] = getUSFMBookCode(result.book_id);
+				result.usfm_book_id = getUSFMBookCode(result.book_id);
 			}
 			var filename = DIRECTORY + 'VOLUME_' + damId + '.json';
 			writeFile(filename, jsonResult);
 			for (i=0; i<jsonResult.length; i++) {
-				result = jsonResult[i];
-				result['dam_id'] = damId;
-				chapterList.push(result);
+				var result2 = jsonResult[i];
+				result2.dam_id = damId;
+				bookList.push(result2);
 			}
 			callback();
 		});
 	}
 	
-	function doAllChapters(chapterList, callback) {
-		// use same logic as doAllChapterList	
-		// except you must iterate over each chapter up to the last in a book.
-		callback();
+	function doAllChapters(bookList, callback) {
+		var book = bookList.shift();
+		if (book) {
+			var numOfChapters = 0 + book.number_of_chapters;
+			doEachChapter(book, 1, numOfChapters, callback);
+		} else {
+			callback();
+		}
 	}
 	
-	function doVerseListQuery(damId, book, chapter, callback) {
-		// form query
-		var query = "";
-		httpGet(query, function(json) {
-			// parse json
-			// generate json
-			// generate filename
-			// write file
+	function doEachChapter(book, chapterNum, numOfChapters, callback) {
+		if (chapterNum <= numOfChapters) {
+			doVerseListQuery(book.dam_id, book.book_id, chapterNum, function() {
+				doEachChapter(book, chapterNum + 1, numOfChapters, callback);
+			});
+		} else {
+			callback();
+		}
+	}
+	
+	function doVerseListQuery(damId, book_id, chapter, callback) {
+		damId = 'ENGESVN2DA';
+		var url = HOST + "audio/versestart?" + KEY + "&dam_id=" + damId + "&osis_code=" + book_id + "&chapter_number=" + chapter;
+		httpGet(url, function(json) {
+			//console.log(json);
+			if (json.length > 0) {
+				var usfm_book_id = getUSFMBookCode(book_id);
+				var filename = DIRECTORY + 'VERSE_' + damId + '_' + usfm_book_id + '_' + chapter + '.json';
+				writeFile(filename, json);
+			}
 			callback();	
 		});	
 	}
