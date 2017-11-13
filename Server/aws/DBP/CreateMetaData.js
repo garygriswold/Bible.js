@@ -65,14 +65,16 @@ var createMetaData = function(callback) {
 	var damIdList = [];
 	var bookList = [];
 	var audioTableSql = [];
+	var audioBookTableSql = [];
+	var versePositions = {};
 	
 	doAllVersions(versionList, function() {
 		console.log(damIdList);
-		/*doAllVolumes(damIdList, function() {
+		doAllVolumes(damIdList, function() {
 			doAllChapters(bookList, function() {
 				callback();
 			});
-		});*/
+		});
 	});
 	
 	function doAllVersions(versionList, callback) {
@@ -83,7 +85,7 @@ var createMetaData = function(callback) {
 			var dbpVersion = DBPData[1];
 			console.log("LANG " + dbpLanguage + "  VERS " + dbpVersion);
 			doVolumeListQuery(version, dbpLanguage, dbpVersion, function() {
-				versionList = []; // DEBUG
+				//versionList = []; // DEBUG
 				doAllVersions(versionList, callback);
 			});
 		} else {
@@ -138,6 +140,8 @@ var createMetaData = function(callback) {
 				doAllVolumes(damIdList, callback);
 			});
 		} else {
+			var filename = DIRECTORY + 'AudioBookTable.sql';
+			writeSQLFile(filename, audioBookTableSql);
 			callback();
 		}
 	}
@@ -146,18 +150,19 @@ var createMetaData = function(callback) {
 		var url = HOST + "library/book?" + KEY + "&dam_id=" + damId;
 		httpGet(url, function(json) {
 			console.log(json.length);
-			var nameList = ['book_id', 'book_name', 'book_order', 'number_of_chapters'];
-			var jsonResult = copyData(nameList, json);
-			for (var i=0; i<jsonResult.length; i++) {
-				var result = jsonResult[i];
+			for (var i=0; i<json.length; i++) {
+				var result = json[i];
 				result.usfm_book_id = getUSFMBookCode(result.book_id);
+				bookList.push(result);
 			}
-			var filename = DIRECTORY + 'VOLUME_' + damId + '.json';
-			writeJsonFile(filename, jsonResult);
-			for (i=0; i<jsonResult.length; i++) {
-				var result2 = jsonResult[i];
-				result2.dam_id = damId;
-				bookList.push(result2);
+			var nameList = ['dam_id', 'usfm_book_id', 'book_order', 'number_of_chapters'];
+			var sqlResult = insertStmt('AudioBook', nameList, json);
+
+			for (i=0; i<sqlResult.length; i++) {
+				var row = sqlResult[i];
+				row.push(");");
+				console.log(row.join(''));
+				audioBookTableSql.push(row.join(''));
 			}
 			callback();
 		});
@@ -166,6 +171,7 @@ var createMetaData = function(callback) {
 	function doAllChapters(bookList, callback) {
 		var book = bookList.shift();
 		if (book) {
+			versePositions = {};
 			var numOfChapters = 0 + book.number_of_chapters;
 			doEachChapter(book, 1, numOfChapters, callback);
 		} else {
@@ -179,6 +185,9 @@ var createMetaData = function(callback) {
 				doEachChapter(book, chapterNum + 1, numOfChapters, callback);
 			});
 		} else {
+			var usfm_book_id = getUSFMBookCode(book.book_id);
+			var filename = DIRECTORY + 'Verse_' + book.dam_id + '_' + book.book_order + '_' + usfm_book_id + '.json';
+			writeJsonFile(filename, versePositions);			
 			callback();
 		}
 	}
@@ -187,11 +196,12 @@ var createMetaData = function(callback) {
 		damId = 'ENGESVN2DA';
 		var url = HOST + "audio/versestart?" + KEY + "&dam_id=" + damId + "&osis_code=" + book_id + "&chapter_number=" + chapter;
 		httpGet(url, function(json) {
-			//console.log(json);
-			if (json.length > 0) {
-				var usfm_book_id = getUSFMBookCode(book_id);
-				var filename = DIRECTORY + 'VERSE_' + damId + '_' + usfm_book_id + '_' + chapter + '.json';
-				writeJsonFile(filename, json);
+			var row = {};
+			for (var i=0; i<json.length; i++) {
+				var item = json[i];
+				row[item.verse_id] = item.verse_start;
+				//versePositions.push(row);
+				versePositions[chapter] = row;
 			}
 			callback();	
 		});	
@@ -293,11 +303,6 @@ var createMetaData = function(callback) {
 		}).on('error', function(e) {
 		  errorMessage(e, url);
 		});
-	}
-	
-	/** deprecated */
-	function copyData(nameList, json) {
-		return null;
 	}
 	
 	function insertStmt(table, columnList, json) {
