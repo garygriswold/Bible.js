@@ -69,8 +69,9 @@ var createMetaData = function(callback) {
 	var versePositions = {};
 	
 	doAllVersions(versionList, function() {
-		console.log(damIdList);
+		//console.log(damIdList);
 		doAllVolumes(damIdList, function() {
+			//console.log(bookList);
 			doAllChapters(bookList, function() {
 				callback();
 			});
@@ -103,16 +104,13 @@ var createMetaData = function(callback) {
 			var jsonVersion = pruneListByVersion(json, dbpVersion);
 			console.log("After Prune " + jsonVersion.length);			
 			console.log(jsonVersion);
-			var nameList = ['dam_id', 'language_code', 'version_code', 'collection_code', 'media_type', 'volume_name' ];
+			var nameList = [ 'dam_id', 'language_code', 'version_code', 'collection_code', 'media_type', 'volume_name' ];
 			var sqlResult = insertStmt('Audio', nameList, jsonVersion);
 			for (var r=0; r<sqlResult.length; r++) {
 				var row = sqlResult[r];
-				row.push(", '");
-				row.push(version);
-				row.push("', '");
+				row.splice(1, 0, "'" + version + "', ");
 				var date = new Date().toISOString().substr(0, 10);
-				row.push(date);
-				row.push("');");
+				row.splice(row.length - 1, 0, ", '" + date + "'");
 				console.log(row.join(''));
 				audioTableSql.push(row.join(''));
 			}
@@ -160,7 +158,6 @@ var createMetaData = function(callback) {
 
 			for (i=0; i<sqlResult.length; i++) {
 				var row = sqlResult[i];
-				row.push(");");
 				console.log(row.join(''));
 				audioBookTableSql.push(row.join(''));
 			}
@@ -171,9 +168,12 @@ var createMetaData = function(callback) {
 	function doAllChapters(bookList, callback) {
 		var book = bookList.shift();
 		if (book) {
+			console.log('Verses ' + book.dam_id + '  ' + book.book_id);
 			versePositions = {};
 			var numOfChapters = 0 + book.number_of_chapters;
-			doEachChapter(book, 1, numOfChapters, callback);
+			doEachChapter(book, 1, numOfChapters, function() {
+				doAllChapters(bookList, callback);
+			});
 		} else {
 			callback();
 		}
@@ -185,9 +185,12 @@ var createMetaData = function(callback) {
 				doEachChapter(book, chapterNum + 1, numOfChapters, callback);
 			});
 		} else {
-			var usfm_book_id = getUSFMBookCode(book.book_id);
-			var filename = DIRECTORY + 'Verse_' + book.dam_id + '_' + book.book_order + '_' + usfm_book_id + '.json';
-			writeJsonFile(filename, versePositions);			
+			if (Object.getOwnPropertyNames(versePositions).length > 0) {
+				var usfm_book_id = getUSFMBookCode(book.book_id);
+				console.log('Write Verses ' + book.dam_id + '  ' + book.book_id);
+				var filename = DIRECTORY + 'Verse_' + book.dam_id + '_' + book.book_order + '_' + usfm_book_id + '.json';
+				writeJsonFile(filename, versePositions);
+			}			
 			callback();
 		}
 	}
@@ -223,7 +226,8 @@ var createMetaData = function(callback) {
 			'1Sam':  '1SA',
 			'2Sam':  '2SA',
 			'1Kgs':  '1KI',
-			'2Kgs':  '1CH',
+			'2Kgs':  '2KI',
+			'1Chr':  '1CH',
 			'2Chr':  '2CH',
 			'Ezra':  'EZR',
 			'Neh':   'NEH',
@@ -278,7 +282,8 @@ var createMetaData = function(callback) {
 			'Jude':  'JUD',
 			'Rev':   'REV'
 		};
-		return(books[bookCode]);
+		var result = books[bookCode];
+		return((result) ? result : bookCode);
 	}
 	
 	function httpGet(url, callback) {
@@ -310,9 +315,7 @@ var createMetaData = function(callback) {
 		for (var i=0; i<json.length; i++) {
 			var row = [];
 			var item = json[i];
-			row.push("INSERT INTO ");
-			row.push(table);
-			row.push(" VALUES(");
+			row.push("INSERT INTO " + table + " VALUES (");
 			for (var n=0; n<columnList.length; n++) {
 				if (n > 0) {
 					row.push(', ');
@@ -322,6 +325,7 @@ var createMetaData = function(callback) {
 				row.push(item[col]);
 				row.push("'");
 			}
+			row.push(");");
 			array.push(row);
 		}
 		return array;
