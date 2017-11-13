@@ -20,58 +20,115 @@ var createMetaData = function(callback) {
 	var KEY = "key=b37964021bdd346dc602421846bf5683&v=2";
 	var DIRECTORY = "output/";
 	
-	var silLangList = ['eng'];
-	var languageList = [];
+	/**
+	* This table should be moved to the Version table with two new fields
+	* dbp_lang, and dbp_version
+	*/
+	var versions = {
+			// America
+			'ERV-ENG': ['ENG', 'WEB', false ],
+			'KJVPD':   ['ENG', 'KJV', true ],
+			'WEB':     ['ENG', 'WEB', true ],
+			'ERV-POR': ['POR', 'ARA', false ],
+			'ERV-SPA': ['SPN', 'WTC', true ], // or R95 or BDA
+			// East Asia
+			'ERV-CMN': ['YUH', 'UNV', false ], // or CHN, UNV 
+			'ERV-IND': ['INZ', 'SHL', false ],
+			'ERV-NEP': ['NEP', null, false ],
+			'ERV-THA': ['THA', null, false ],
+			'ERV-VIE': ['VIE', null, false ],
+			// Middle East
+			'ARBVDPD': ['ARB', 'WTC', false ],
+			'ERV-ARB': ['ARB', 'WTC', true ],
+			'NMV':     ['PES', null, false ],
+			// India
+			'ERV-AWA': ['AWA', 'WTC', true ],
+			'ERV-BEN': ['BNG', 'WTC', true ],
+			'ERV-HIN': ['HND', 'WTC', true ],
+			'ERV-KAN': ['ERV', 'WTC', true ],
+			'ERV-MAR': ['MAR', null, false ],
+			'ERV-ORI': ['ORY', null, false ],
+			'ERV-PAN': ['PAN', null, false ],
+			'ERV-TAM': ['TCV', 'WTC', true ],
+			'ERV-URD': ['URD', 'WTC', true ], // or PAK
+			// Eastern Europe
+			'ERV-BUL': ['BLG', 'AMB', false ],
+			'ERV-HRV': ['SRC', null, false ],
+			'ERV-HUN': ['HUN', 'HBS', false ],
+			'ERV-RUS': ['RUS', 'S76', false ],
+			'ERV-SRP': ['SRP', null, false ],
+			'ERV-UKR': ['UKR', 'O95', false ]
+	};
+	
+	var versionList = Object.getOwnPropertyNames(versions);
+	console.log("VERS " + versionList);
 	var damIdList = [];
 	var bookList = [];
+	var audioTableSql = [];
 	
-	languageList = findAllLanguages(silLangList);
-	console.log(languageList);
-	
-	doAllLanguages(languageList, function() {
+	doAllVersions(versionList, function() {
 		console.log(damIdList);
-		doAllVolumes(damIdList, function() {
+		/*doAllVolumes(damIdList, function() {
 			doAllChapters(bookList, function() {
 				callback();
 			});
-		});
+		});*/
 	});
 	
-	function findAllLanguages(silLangList) {
-		var list = [];
-		for (var i=0; i<silLangList.length; i++) {
-			var sil = silLangList[i];
-			var code = getLanguageCode(sil);
-			list.push(code);
-		}
-		return list;
-	}
-	
-	function doAllLanguages(languageList, callback) {
-		var language = languageList.shift();
-		if (language) {
-			doVolumeListQuery(language, function() {
-				doAllLanguages(languageList, callback);
+	function doAllVersions(versionList, callback) {
+		var version = versionList.shift();
+		if (version) {
+			var DBPData = versions[version];
+			var dbpLanguage = DBPData[0];
+			var dbpVersion = DBPData[1];
+			console.log("LANG " + dbpLanguage + "  VERS " + dbpVersion);
+			doVolumeListQuery(version, dbpLanguage, dbpVersion, function() {
+				versionList = []; // DEBUG
+				doAllVersions(versionList, callback);
 			});
 		} else {
+			var filename = DIRECTORY + 'AudioTable.sql';
+			console.log(audioTableSql);
+			writeSQLFile(filename, audioTableSql);			
 			callback();	
 		}
 	}
 	
-	function doVolumeListQuery(languageCode, callback) {
-		var url = HOST + "library/volume?" + KEY + "&media=audio&language_code=" + languageCode;
+	function doVolumeListQuery(version, dbpLanguage, dbpVersion, callback) {
+		var url = HOST + "library/volume?" + KEY + "&media=audio&language_code=" + dbpLanguage;
 		httpGet(url, function(json) {
-			console.log(json.length);
-			var nameList = ['dam_id', 'language_code', 'language_iso_1', 'language_iso', 'version_code', 'version_name', 'version_english', 'collection_code', 'media'];
-			var jsonResult = copyData(nameList, json);
-			var filename = DIRECTORY + 'LANG_' + languageCode + '.json';
-			writeFile(filename, jsonResult);
-			for (var i=0; i<jsonResult.length; i++) {
-				var result = jsonResult[i];
-				damIdList.push(result.dam_id);
+			console.log("Before Prune " + json.length);
+			var jsonVersion = pruneListByVersion(json, dbpVersion);
+			console.log("After Prune " + jsonVersion.length);			
+			console.log(jsonVersion);
+			var nameList = ['dam_id', 'language_code', 'version_code', 'collection_code', 'media_type', 'volume_name' ];
+			var sqlResult = insertStmt('Audio', nameList, jsonVersion);
+			for (var r=0; r<sqlResult.length; r++) {
+				var row = sqlResult[r];
+				row.push(", '");
+				row.push(version);
+				row.push("', '");
+				var date = new Date().toISOString().substr(0, 10);
+				row.push(date);
+				row.push("');");
+				console.log(row.join(''));
+				audioTableSql.push(row.join(''));
 			}
 			callback();
 		});
+	}
+	
+	function pruneListByVersion(volumeList, versionCode) {
+		var result = [];
+		for (var i=0; i<volumeList.length; i++) {
+			var volume = volumeList[i];
+			if (volume.version_code == versionCode) {
+				result.push(volume);
+				damIdList.push(volume.dam_id);
+				
+			}
+		}
+		return(result);
 	}
 	
 	function doAllVolumes(damIdList, callback) {
@@ -96,7 +153,7 @@ var createMetaData = function(callback) {
 				result.usfm_book_id = getUSFMBookCode(result.book_id);
 			}
 			var filename = DIRECTORY + 'VOLUME_' + damId + '.json';
-			writeFile(filename, jsonResult);
+			writeJsonFile(filename, jsonResult);
 			for (i=0; i<jsonResult.length; i++) {
 				var result2 = jsonResult[i];
 				result2.dam_id = damId;
@@ -134,48 +191,10 @@ var createMetaData = function(callback) {
 			if (json.length > 0) {
 				var usfm_book_id = getUSFMBookCode(book_id);
 				var filename = DIRECTORY + 'VERSE_' + damId + '_' + usfm_book_id + '_' + chapter + '.json';
-				writeFile(filename, json);
+				writeJsonFile(filename, json);
 			}
 			callback();	
 		});	
-	}
-	
-	/**
-	* Return a DBP language code, when given an SIL code as used by the App
-	* This should be deprecated by adding a DBP column to the versions.db
-	* language table.
-	*/
-	function getLanguageCode(code) {
-		var languages = {
-			'awa': 'AWA', // Awadhi			2
-			'ben': 'BNG', // Bengali		5
-			'bul': 'BLG', // Bulgarian		1
-			'cmn': 'YUH', // Chinese ZHO, CHI and CMN have none	0
-						  // CH1 4 text, 2 audio, Chuukese
-						  // YUH 8 text, 5 audio, Cantonese
-			'eng': 'ENG', // English		13
-			'hin': 'HND', // Hindi			3
-			'hrv': 'SRC', // Croatian		1
-			'hun': 'HUN', // Hungarian		3
-			'ind': 'INZ', // Indonesian		3
-			'kan': 'ERV', // Kannada		2
-			'mar': 'MAR', // Marathi		2
-			'nep': 'NEP', // Nepali			1
-			'ori': 'ORY', // Oriya			2
-			'pan': 'PAN', // Punjabi		0
-			'por': 'POR', // Portuguese		4
-			'rus': 'RUS', // Russian		3
-			'srp': 'SRP', // Serbian		0
-			'spa': 'SPN', // Spanish		7
-			'tam': 'TCV', // Tamil			2
-			'tha': 'THA', // Thai			2
-			'ukr': 'UKR', // Ukrainian		1
-			'vie': 'VIE', // Vietnamese		3
-			'arb': 'ARB', // Arabic			4
-			'pes': 'PES', // Persian		1
-			'urd': 'URD', // Urdu			2
-		};
-		return(languages[code]);
 	}
 	
 	/**
@@ -276,23 +295,44 @@ var createMetaData = function(callback) {
 		});
 	}
 	
+	/** deprecated */
 	function copyData(nameList, json) {
+		return null;
+	}
+	
+	function insertStmt(table, columnList, json) {
 		var array = [];
 		for (var i=0; i<json.length; i++) {
-			var result = {};
+			var row = [];
 			var item = json[i];
-			for (var n=0; n<nameList.length; n++) {
-				var name = nameList[n];
-				result[name] = item[name];
+			row.push("INSERT INTO ");
+			row.push(table);
+			row.push(" VALUES(");
+			for (var n=0; n<columnList.length; n++) {
+				if (n > 0) {
+					row.push(', ');
+				}
+				var col = columnList[n];
+				row.push("'");
+				row.push(item[col]);
+				row.push("'");
 			}
-			array.push(result);
+			array.push(row);
 		}
 		return array;
 	}
 	
-	function writeFile(filename, data) {
+	function writeJsonFile(filename, data) {
 		var json = JSON.stringify(data, null, '\t');
 		file.writeFile(filename, json, 'utf8', function(err) {
+			if (err) {
+				errorMessage(err, filename);
+			}
+		});
+	}
+	
+	function writeSQLFile(filename, array) {
+		file.writeFile(filename, array.join('\n'), 'utf8', function(err) {
 			if (err) {
 				errorMessage(err, filename);
 			}
