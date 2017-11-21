@@ -5,61 +5,107 @@
 //  Created by Gary Griswold on 11/13/17.
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
+// Documentation of the sqlite3 C interface
+// https://www.sqlite.org/cintro.html
+//
 
+import Foundation
 import SQLite3
+
+enum Sqlite3Error: Error {
+    case directoryCreateError(name: String, srcError: Error)
+    case databaseNotFound(name: String)
+    case databaseNotInBundle(name: String)
+    case databaseCopyError(name: String, srcError: Error)
+    case databaseOpenError(name: String, sqliteError: Int32)
+    case selectPrepareFailed(statement: String, sqliteError: Int32)
+}
 
 class Sqlite3 {
     
-    // Have static member and method to set the database location?
-    // Or, do I include the database location with each init?
-    // Or, do I have enum values for various locations?
+    private var databaseDir: URL
+    private var database: OpaquePointer?
     
-    public let isOpen: Bool
-    private let database: OpaquePointer?
-    
-    
-    init(dbPath: String, copyIfAbsent: Bool) {
-        if let fullPath = ensureDatabase(dbPath: dbPath, copyIfAbsent: copyIfAbsent) {
-        
-            var db: OpaquePointer? = nil
-            if sqlite3_open(fullPath, &db) == SQLITE_OK {
-                print("Successfully opened connection to database at \(fullPath)")
-                self.database = db!
-                self.isOpen = true
-            } else {
-                print("Unable to open database. Verify that you created the directory described " +
-                    "in the Getting Started section.")
-                self.database = nil
-                self.isOpen = false
-            }
-        } else {
-            self.database = nil
-            self.isOpen = false
-        }
+    init() {
+        print("****** Init Sqlite3 ******")
+        let homeDir: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
+        let libDir: URL = homeDir.appendingPathComponent("Library")
+        let dbDir: URL = libDir.appendingPathComponent("LocalDatabase") // Is this the correct name?
+
+        self.databaseDir = dbDir
+        self.database = nil
     }
-    
-    private func ensureDatabase(dbPath: String, copyIfAbsent: Bool) -> String? {
-        // compute full path
-        // check if present
-        // if present return fullPath
-        // else
-        //   if not copy if absent return nil
-        //   if copy If Absent
-        //      compute bundle path
-        //      check if present
-        //      if not present return nil
-        //      if present
-        //        use FileManager to copy from bundle to fullPath
-        //      if
-        return nil
-    }
+    // Could introduce alternate init that introduces different databaseDir
     
     deinit {
         print("****** Deinit Sqlite ******")
     }
+
+    public var isOpen: Bool {
+        get {
+            return self.database != nil
+        }
+    }
+  
+    public func open(dbPath: String, copyIfAbsent: Bool) throws {
+        self.database = nil
+        try self.ensureDirectory()
+        let fullPath = try self.ensureDatabase(dbPath: dbPath, copyIfAbsent: copyIfAbsent)
+        
+        var db: OpaquePointer? = nil
+        let result = sqlite3_open(fullPath.path, &db)
+        if result == SQLITE_OK {
+            print("Successfully opened connection to database at \(fullPath)")
+            self.database = db!
+        } else {
+            print("SQLITE Result Code = \(result)")
+            throw Sqlite3Error.databaseOpenError(name: dbPath, sqliteError: result)
+        }
+    }
     
-    func close() {
-        sqlite3_close(database)
+    private func ensureDatabase(dbPath: String, copyIfAbsent: Bool) throws -> URL {
+        let fullPath: URL = self.databaseDir.appendingPathComponent(dbPath)
+        print("Opening Database at \(fullPath.path)")
+        if FileManager.default.isReadableFile(atPath: fullPath.path) {
+            return fullPath
+        } else if copyIfAbsent {
+            print("Copy Bundle at \(dbPath)")
+            let parts = dbPath.split(separator: ".")
+            let name = String(parts[0])
+            let ext = String(parts[1])
+            let bundle = Bundle.main
+            let bundlePath = bundle.url(forResource: name, withExtension: ext)
+            if bundlePath != nil {
+                do {
+                    try FileManager.default.copyItem(at: bundlePath!, to: fullPath)
+                    return fullPath
+                } catch let err {
+                    throw Sqlite3Error.databaseCopyError(name: dbPath, srcError: err)
+                }
+            } else {
+                throw Sqlite3Error.databaseNotInBundle(name: dbPath)
+            }
+        } else {
+            throw Sqlite3Error.databaseNotFound(name: dbPath)
+        }
+    }
+    
+    private func ensureDirectory() throws {
+        let file = FileManager.default
+        if !file.fileExists(atPath: self.databaseDir.path) {
+            do {
+                try file.createDirectory(at: self.databaseDir, withIntermediateDirectories: true, attributes: nil)
+            } catch let err {
+                throw Sqlite3Error.directoryCreateError(name: self.databaseDir.path, srcError: err)
+            }
+        }
+    }
+    
+    public func close() {
+        if database != nil {
+            sqlite3_close(database)
+            database = nil
+        }
     }
     
     /**
@@ -68,33 +114,56 @@ class Sqlite3 {
     * For simplicity all results are String, and this is also most efficient, because
     * Almost all values in sqlite are stored as cstrings.
     */
-    func stringSelect(query: String, complete: @escaping (_ results:[String?]) -> Void) {
-        var resultSet: [[String?]] = []
-        var statement: OpaquePointer? = nil
-        if sqlite3_prepare_v2(database, query, -1, &statement, nil) == SQLITE_OK {
-            
-            while (sqlite3_step(statement) == SQLITE_ROW) {
+    public func stringSelect(query: String, complete: @escaping (_ results:[[String?]]) -> Void) throws {
+        if database != nil {
+            var resultSet: [[String?]] = []
+            var statement: OpaquePointer? = nil
+            let result = sqlite3_prepare_v2(database, query, -1, &statement, nil)
+            defer { sqlite3_finalize(statement) }
+            if result == SQLITE_OK {
                 let colCount = Int(sqlite3_column_count(statement))
-                var row: [String?] = [String?] (repeating: nil, count: colCount)
-                for i in 0..<colCount {
-                    if let cValue = sqlite3_column_text(statement, Int32(i)) {
-                        let value = String(cString: cValue)
-                        row[i] = value
-                    } else {
-                        row[i] = nil
+                while (sqlite3_step(statement) == SQLITE_ROW) {
+                    var row: [String?] = [String?] (repeating: nil, count: colCount)
+                    for i in 0..<colCount {
+                        if let cValue = sqlite3_column_text(statement, Int32(i)) {
+                            row[i] = String(cString: cValue)
+                        } else {
+                            row[i] = nil
+                        }
                     }
+                    resultSet.append(row)
                 }
-                resultSet.append(row)
+                complete(resultSet)
+            } else {
+                throw Sqlite3Error.selectPrepareFailed(statement: query, sqliteError: result)
+            }
+        }
+    }
+    
+    public static func errorDescription(error: Error) -> String {
+        if error is Sqlite3Error {
+            switch error {
+            case Sqlite3Error.directoryCreateError(let name, let srcError) :
+                return "DirectoryCreateError \(srcError)  at \(name)"
+            case Sqlite3Error.databaseNotFound(let name) :
+                return "DatabaseNotFound: \(name)"
+            case Sqlite3Error.databaseNotInBundle(let name) :
+                return "DatabaseNotInBundle: \(name)"
+            case Sqlite3Error.databaseCopyError(let name, let srcError) :
+                return "DatabaseCopyError: \(srcError.localizedDescription)  \(name)"
+            case Sqlite3Error.databaseOpenError(let name, let sqliteError) :
+                return "SqliteOpenError: \(sqliteError)  on database: \(name)"
+            case Sqlite3Error.selectPrepareFailed(let statement, let sqliteError) :
+                return "SelectPrepareFailed: \(sqliteError)  on stmt: \(statement)"
+            default:
+                return "Unknown Sqlite3Error"
             }
         } else {
-            print("SELECT statement could not be prepared")
+            return "Unknown Error Type"
         }
-        sqlite3_finalize(statement)
     }
 }
 
 // Results could be : [Dictionary<String, String>]
-
-
-//sqlite3_column_name(<#T##OpaquePointer!#>, <#T##N: Int32##Int32#>)
-//sqlite3_column_type(<#T##OpaquePointer!#>, <#T##iCol: Int32##Int32#>)
+// sqlite3_column_name(<#T##OpaquePointer!#>, <#T##N: Int32##Int32#>)
+// sqlite3_column_type(<#T##OpaquePointer!#>, <#T##iCol: Int32##Int32#>)
