@@ -64,6 +64,7 @@ var createMetaData = function(callback) {
 	console.log("VERS " + versionList);
 	var damIdList = [];
 	var bookList = [];
+	var audioVersionSql = [];
 	var audioTableSql = [];
 	var audioBookTableSql = [];
 	var versePositions = {};
@@ -72,9 +73,9 @@ var createMetaData = function(callback) {
 		//console.log(damIdList);
 		doAllVolumes(damIdList, function() {
 			//console.log(bookList);
-			doAllChapters(bookList, function() {
+			//doAllChapters(bookList, function() {
 				callback();
-			});
+			//});
 		});
 	});
 	
@@ -84,20 +85,29 @@ var createMetaData = function(callback) {
 			var DBPData = versions[version];
 			var dbpLanguage = DBPData[0];
 			var dbpVersion = DBPData[1];
-			console.log("LANG " + dbpLanguage + "  VERS " + dbpVersion);
-			doVolumeListQuery(version, dbpLanguage, dbpVersion, function() {
+			if (dbpVersion != null) {
+				var sql = "INSERT INTO AudioVersion VALUES ('" + version + "', '" + 
+				dbpLanguage + "', '" + dbpVersion + "');";
+				console.log(sql);
+				audioVersionSql.push(sql);
+			}
+			doVolumeListQuery(dbpLanguage, dbpVersion, function() {
 				//versionList = []; // DEBUG
 				doAllVersions(versionList, callback);
 			});
 		} else {
+			var versionFilename = DIRECTORY + 'AudioVersionTable.sql';
+			writeSQLFile(versionFilename, audioVersionSql);
+			
 			var filename = DIRECTORY + 'AudioTable.sql';
 			console.log(audioTableSql);
-			writeSQLFile(filename, audioTableSql);			
+			writeSQLFile(filename, audioTableSql);
+				
 			callback();	
 		}
 	}
 	
-	function doVolumeListQuery(version, dbpLanguage, dbpVersion, callback) {
+	function doVolumeListQuery(dbpLanguage, dbpVersion, callback) {
 		var url = HOST + "library/volume?" + KEY + "&media=audio&language_code=" + dbpLanguage;
 		httpGet(url, function(json) {
 			console.log("Before Prune " + json.length);
@@ -108,7 +118,6 @@ var createMetaData = function(callback) {
 			var sqlResult = insertStmt('Audio', nameList, jsonVersion);
 			for (var r=0; r<sqlResult.length; r++) {
 				var row = sqlResult[r];
-				row.splice(1, 0, "'" + version + "', ");
 				var date = new Date().toISOString().substr(0, 10);
 				row.splice(row.length - 1, 0, ", '" + date + "'");
 				console.log(row.join(''));
@@ -315,7 +324,7 @@ var createMetaData = function(callback) {
 		for (var i=0; i<json.length; i++) {
 			var row = [];
 			var item = json[i];
-			row.push("INSERT INTO " + table + " VALUES (");
+			row.push("REPLACE INTO " + table + " VALUES (");
 			for (var n=0; n<columnList.length; n++) {
 				if (n > 0) {
 					row.push(', ');
