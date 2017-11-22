@@ -28,7 +28,7 @@ public class AudioBible : NSObject {
         self.controlCenter = AudioControlCenter.shared
         self.audioAnalytics = AudioAnalytics(mediaSource: "FCBH",
                                              mediaId: self.currReference.damId,
-                                             languageId: tocBible.languageCode,
+                                             languageId: tocBible.dbpLanguageCode,
                                              silLang: "User's text lang setting")
         
         print("INSIDE BibleReader \(self.currReference.damId)")
@@ -277,7 +277,7 @@ public class AudioBible : NSObject {
     
     private func readVerseMetaData(reference: Reference) {
         let reader = MetaDataReader()
-        reader.readVerseAudio(damid: reference.damId, sequence: reference.sequence, bookId: reference.book, chapter: reference.chapter, readComplete: {
+        reader.readVerseAudio(damid: reference.damId, sequence: reference.sequence, bookId: reference.book, chapter: reference.chapter, complete: {
             audioChapter in
             reference.audioChapter = audioChapter
             //print("PARSED DATA \(self.audioChapter?.toString())")

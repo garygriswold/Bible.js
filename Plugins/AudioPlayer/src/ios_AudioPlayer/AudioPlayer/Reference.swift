@@ -12,7 +12,7 @@ class Reference {
     let damId: String
     let sequence: String
     let book: String
-    let bookName: String
+    let bookName: String // What is bookName doing here?  Can I remove it?
     let chapter: String
     let fileType: String
     var audioChapter: TOCAudioChapter?

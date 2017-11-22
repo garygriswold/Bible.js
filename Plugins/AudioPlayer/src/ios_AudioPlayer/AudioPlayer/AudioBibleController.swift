@@ -26,16 +26,19 @@ class AudioBibleController {
         
         AwsS3.region = "us-west-2"
         let metaData = MetaDataReader()
-        metaData.read(languageCode: "ENG", mediaType: "audio", readComplete: { tocDictionary in
-            
-            //let tocAudioBible = tocDictionary["ENGWEBN2DA"]
-            let tocAudioBible = tocDictionary["DEMO"]
+        metaData.read(versionCode: "WEB", complete: { tocDictionary in
+            print(tocDictionary)
+            print("DONE")
+        //metaData.read(languageCode: "ENG", mediaType: "audio", readComplete: { tocDictionary in
+            let tocAudioBible = tocDictionary["ENGWEBN2DA"]
+            //let tocAudioBible = tocDictionary["DEMO"]
             if let tocBible = tocAudioBible {
-                //let metaBook = tocBible.booksById["JHN"]
-                let metaBook = tocBible.booksById["TST"]
+                let metaBook = tocBible.booksById["JHN"]
+                //let metaBook = tocBible.booksById["TST"]
                 if let book = metaBook {
                     
-                    let reference = Reference(damId: tocBible.damId, sequence: book.sequence, book: book.bookId,
+                    let reference = Reference(damId: tocBible.damId, sequence: book.bookOrder,
+                                              book: book.bookId,
                                               bookName: book.bookName, chapter: "001", fileType: "mp3")
                     let reader = AudioBible(controller: self, tocBible: tocBible, reference: reference)
                     self.readerView = AudioBibleView(view: view, audioBible: reader)

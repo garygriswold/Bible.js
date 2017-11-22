@@ -17,7 +17,7 @@ class TOCAudioBibleTest: XCTestCase {
         super.setUp()
         if audioChapter == nil {
             let reader = MetaDataReader()
-            reader.readVerseAudio(damid: "DEMO", sequence: "01", bookId: "TST", chapter: "001", readComplete: {
+            reader.readVerseAudio(damid: "DEMO", sequence: "01", bookId: "TST", chapter: "001", complete: {
                 audioChapter in
                 self.audioChapter = audioChapter
                 print("PARSED DATA \(self.audioChapter?.toString())")

@@ -20,7 +20,7 @@ class MetaDataReader {
     deinit {
         print("***** Deinit MetaDataReader *****")
     }
-    
+    /*
     func read(languageCode: String, mediaType: String,
               readComplete: @escaping (_ metaData: Dictionary<String, TOCAudioBible>) -> Void) {
         AwsS3Cache.shared.readData(s3Bucket: "audio-us-west-2-shortsands",
@@ -41,17 +41,41 @@ class MetaDataReader {
             readComplete(self.metaData)
         })
     }
+    */
+    func read(versionCode: String, complete: @escaping (_ metaData: Dictionary<String, TOCAudioBible>) -> Void) {
+        let db = Sqlite3()
+        let query = "SELECT a.damId, a.collectionCode, a.mediaType, a.dbpLanguageCode, a.dbpVersionCode" +
+                " FROM audio a, audioVersion v" +
+                " WHERE a.dbpLanguageCode = v.dbpLanguageCode" +
+                " AND a.dbpVersionCode = v.dbpVersionCode" +
+                " AND v.versionCode = '" + versionCode + "'"
+        do {
+            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            defer { db.close() }
+            try db.stringSelect(query: query, complete: { resultSet in
+                for row in resultSet {
+                    let metaItem = TOCAudioBible(database: db, mediaSource: "FCBH", dbRow: row)
+                    print("\(metaItem.toString())")
+                    self.metaData[metaItem.damId] = metaItem
+                }
+                complete(self.metaData)
+            })
+        } catch let err {
+            print("ERROR \(Sqlite3.errorDescription(error: err))")
+            complete(self.metaData)
+        }
+    }
     
     func readVerseAudio(damid: String, sequence: String, bookId: String, chapter: String,
-                        readComplete: @escaping (_ audioVerse: TOCAudioChapter?) -> Void) {
+                        complete: @escaping (_ audioVerse: TOCAudioChapter?) -> Void) {
         let s3Key = damid + "_" + sequence + "_" + bookId + "_" + chapter + "_verse.json"
-        AwsS3Cache.shared.readData(s3Bucket: "audio-us-west-2-shortsands",
+        AwsS3Cache.shared.readData(s3Bucket: "audio-us-east-1-shortsands",
                    s3Key: s3Key,
                    expireInterval: 604800, // 1 week in seconds
                    getComplete: { data in
             let result = self.parseJson(data: data)
             self.metaDataVerse = TOCAudioChapter(jsonObject: result)
-            readComplete(self.metaDataVerse)
+            complete(self.metaDataVerse)
         })
     }
     
