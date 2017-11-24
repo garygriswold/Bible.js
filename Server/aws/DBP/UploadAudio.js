@@ -2,7 +2,6 @@
 
 
 "use strict";
-//var http = require('http');
 var fs = require('fs');
 var S3 = require('aws-sdk/clients/s3');
 
@@ -10,7 +9,7 @@ var S3 = require('aws-sdk/clients/s3');
 var uploadAudio = function(callback) {
 	
 	var DIRECTORY = process.env.HOME + "/ShortSands/DBL/FCBH_Audio/";
-	var BUCKET = "audio-us-east-1-shortsands";
+	var BUCKET_SUFFIX = "shortsands.com";
 	
 	var awsOptions = {
 		useDualstack: true,
@@ -48,8 +47,10 @@ var uploadAudio = function(callback) {
 		var file = fileList.shift();
 		if (file) {
 			console.log(file);
-			var s3Key = renameFile(file);
-			uploadFile(s3Key, directory, file, function() {
+			var s3Bucket = computeS3Bucket(file);
+			var s3Key = computeS3Key(file);
+			console.log(s3Bucket, s3Key);
+			uploadFile(s3Bucket, s3Key, directory, file, function() {
 				readNextFile(directory, fileList, callback);
 			});
 		} else {
@@ -57,11 +58,18 @@ var uploadAudio = function(callback) {
 		}
 	}
 	
+	function computeS3Bucket(filename) {
+		var lastPart = filename.substr(21).split('.');
+		var damId = lastPart[0];
+		var s3Bucket = damId.toLowerCase() + "." + BUCKET_SUFFIX;
+		return(s3Bucket);	
+	}
+	
 	/**
 	* Translate the name into a valid S3 key
-	* { id }_{bookNumber}_{ USFMCode }_{ chapterNumber }.mp3
+	* { id }/{bookNumber}_{ USFMCode }_{ chapterNumber }.mp3
 	*/
-	function renameFile(filename) {
+	function computeS3Key(filename) {
 		var type = filename.charAt(0);
 		var bookOrder = filename.substr(1, 2);
 		var chapter = filename.substr(5, 3);
@@ -79,9 +87,19 @@ var uploadAudio = function(callback) {
 			console.log(myFileName);
 			process.exit(1);
 		}
-		var s3Key = damId + "_" + bookOrder + "_" + usfmBookId(bookName) + "_" + chapter + "." + fileType;
-		console.log(s3Key);
+		var s3Key = bookNum(type, bookOrder) + "_" + usfmBookId(bookName) + "_" + chapter + "." + fileType;
 		return(s3Key);
+	}	
+	
+	function bookNum(type, bookOrder) {
+		if (type == 'A') {
+			return(bookOrder);
+		} else if (type == 'B') {
+			var num = parseInt(bookOrder) + 50;
+			return(num.toString());
+		} else {
+			errorMessage({message: type}, "UNEXPECTED TYPE");
+		}
 	}
 	
 	function usfmBookId(bookCode) {
@@ -160,21 +178,42 @@ var uploadAudio = function(callback) {
 		return(result);
 	}
 	
-	function uploadFile(key, directory, filename, callback) {
+	function uploadFile(bucket, key, directory, filename, callback) {
 		var fullname = directory + "/" + filename;
 		console.log("**" + fullname);
 		fs.readFile(fullname, function(err, content) {
 			if (err) {
 				errorMessage(err, "FILE READ ERROR");
 			} else {
-				s3.putObject({Bucket: BUCKET, Key: key, Body: content, ContentType: 'audio/mp3'}, function(err) {
-					if (err) {
-						errorMessage(err, "S3 UPLOAD ERROR");
-					}
-					callback();
+				ensureBucket(bucket, function() {
+					s3.putObject({Bucket: bucket, Key: key, Body: content, ContentType: 'audio/mp3'}, function(err) {
+						if (err) {
+							errorMessage(err, "S3 UPLOAD ERROR");
+						}
+						callback();
+					});
 				});
 			}
-		});	
+		});
+	}
+	
+	function ensureBucket(bucket, callback) {
+		s3.headBucket({Bucket: bucket}, function(err, data) {
+			if (err) {
+				var location = "us-west-2"; // Needs to be set somehow!
+				var params = { Bucket: bucket };
+				params.CreateBucketConfiguration = { LocationConstraint: location }
+ 				s3.createBucket(params, function(err, data) {
+ 					if (err) {
+	 					errorMessage(err, "Bucket Create Error");
+ 					} else {
+	 					callback();
+ 					}
+ 				});
+			} else {
+				callback();
+			}
+ 		});
 	}
 	
 	function errorMessage(error, message) {
