@@ -73,9 +73,9 @@ var createMetaData = function(callback) {
 		//console.log(damIdList);
 		doAllVolumes(damIdList, function() {
 			//console.log(bookList);
-			//doAllChapters(bookList, function() {
+			doAllChapters(bookList, function() {
 				callback();
-			//});
+			});
 		});
 	});
 	
@@ -85,7 +85,7 @@ var createMetaData = function(callback) {
 			var DBPData = versions[version];
 			var dbpLanguage = DBPData[0];
 			var dbpVersion = DBPData[1];
-			if (dbpVersion != null) {
+			if (dbpVersion) {
 				var sql = "INSERT INTO AudioVersion VALUES ('" + version + "', '" + 
 				dbpLanguage + "', '" + dbpVersion + "');";
 				console.log(sql);
@@ -159,6 +159,9 @@ var createMetaData = function(callback) {
 			console.log(json.length);
 			for (var i=0; i<json.length; i++) {
 				var result = json[i];
+				if (result.book_order.length == 1) {
+					result.book_order = "0" + result.book_order;
+				}			
 				result.usfm_book_id = getUSFMBookCode(result.book_id);
 				bookList.push(result);
 			}
@@ -197,8 +200,9 @@ var createMetaData = function(callback) {
 			if (Object.getOwnPropertyNames(versePositions).length > 0) {
 				var usfm_book_id = getUSFMBookCode(book.book_id);
 				console.log('Write Verses ' + book.dam_id + '  ' + book.book_id);
-				var filename = DIRECTORY + 'Verse_' + book.dam_id + '_' + book.book_order + '_' + usfm_book_id + '.json';
-				writeJsonFile(filename, versePositions);
+				var directory = DIRECTORY + book.dam_id;
+				var filename = 'Verse_' + book.book_order + '_' + usfm_book_id + '.json';
+				writeJsonFile(directory, filename, versePositions);
 			}			
 			callback();
 		}
@@ -340,13 +344,21 @@ var createMetaData = function(callback) {
 		return array;
 	}
 	
-	function writeJsonFile(filename, data) {
+	function writeJsonFile(directory, filename, data) {
+		ensureDirectory(directory);
+		var fullname = directory + "/" + filename;
 		var json = JSON.stringify(data, null, '\t');
-		file.writeFile(filename, json, 'utf8', function(err) {
+		file.writeFile(fullname, json, 'utf8', function(err) {
 			if (err) {
-				errorMessage(err, filename);
+				errorMessage(err, fullname);
 			}
 		});
+	}
+	
+	function ensureDirectory(directory) {
+		if (!file.existsSync(directory)) {
+			file.mkdirSync(directory);
+		}
 	}
 	
 	function writeSQLFile(filename, array) {
