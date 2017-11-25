@@ -5,7 +5,6 @@
 //  Created by Gary Griswold on 8/14/17.
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
-import AWS
 
 class Reference {
     
@@ -50,13 +49,13 @@ class Reference {
     
     func getS3Bucket() -> String {
         switch (self.fileType) {
-            case "mp3": return "audio-" + AwsS3.region + "-shortsands";
-            default: return "unknown";
+            case "mp3": return self.damId.lowercased() + ".shortsands.com"
+            default: return "unknown bucket"
         }
     }
     
     func getS3Key() -> String {
-        return self.damId + "_" + self.sequence + "_" + self.book + "_" + self.chapter + "." + self.fileType
+        return self.sequence + "_" + self.book + "_" + self.chapter + "." + self.fileType
     }
     
     func isEqual(reference: Reference) -> Bool {

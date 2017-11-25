@@ -6,35 +6,17 @@
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
 
-//import Foundation
-
 class TOCAudioBook {
     
+    let bible: TOCAudioBible
     let bookId: String
     let bookOrder: String
     let sequence: Int
     let bookName: String // I don't know why this is here.  Can I remove it?
     let numberOfChapters: Int
-    /*
-    init(jsonBook: AnyObject) {
-        if jsonBook is Dictionary<String, String> {
-            let item = jsonBook as! Dictionary<String, String>
-            self.bookId = item["book_id"] ?? ""
-            self.bookOrder = item["sequence"] ?? "000"
-            self.sequence = Int(self.bookOrder)
-            let chapters = item["number_of_chapters"] ?? "0"
-            self.numberOfChapters = Int(chapters)!
-        } else {
-           print("Could not determine type of book in MetaDataItemBook")
-            self.bookId = ""
-            self.bookOrder = "000"
-            self.sequence = 0
-            self.bookName = ""
-            self.numberOfChapters = 0
-        }
-    }
-    */
-    init(dbRow: [String?]) {
+
+    init(bible: TOCAudioBible, dbRow: [String?]) {
+        self.bible = bible
         self.bookId = dbRow[0]!
         self.bookOrder = dbRow[1]!
         self.sequence = Int(self.bookOrder) ?? 0

@@ -10,60 +10,66 @@ import AWS
 
 class MetaDataReader {
     
-    var metaData: Dictionary<String, TOCAudioBible>
+    var oldTestament: TOCAudioBible?
+    var newTestament: TOCAudioBible?
     var metaDataVerse: TOCAudioChapter?
     
     init() {
-        self.metaData = Dictionary<String, TOCAudioBible>()
+        self.oldTestament = nil
+        self.newTestament = nil
     }
     
     deinit {
         print("***** Deinit MetaDataReader *****")
     }
-    /*
-    func read(languageCode: String, mediaType: String,
-              readComplete: @escaping (_ metaData: Dictionary<String, TOCAudioBible>) -> Void) {
-        AwsS3Cache.shared.readData(s3Bucket: "audio-us-west-2-shortsands",
-                   s3Key: languageCode + "_" + mediaType + ".json",
-                   expireInterval: 604800, // 1 week in seconds
-                   getComplete: { data in
-            let result = self.parseJson(data: data)
-            if (result is Array<AnyObject>) {
-                let array: Array<AnyObject> = result as! Array<AnyObject>
-                for item in array {
-                    let metaItem = TOCAudioBible(mediaSource: "FCBH", jsonObject: item)
-                    print("\(metaItem.toString())")
-                    self.metaData[metaItem.damId] = metaItem
-                }
-            } else {
-                print("Could not determine type of outer object in Meta Data")
-            }
-            readComplete(self.metaData)
-        })
-    }
-    */
-    func read(versionCode: String, complete: @escaping (_ metaData: Dictionary<String, TOCAudioBible>) -> Void) {
+
+    func read(versionCode: String, complete: @escaping (_ oldTest:TOCAudioBible?, _ newTest:TOCAudioBible?) -> Void) {
         let db = Sqlite3()
         let query = "SELECT a.damId, a.collectionCode, a.mediaType, a.dbpLanguageCode, a.dbpVersionCode" +
                 " FROM audio a, audioVersion v" +
                 " WHERE a.dbpLanguageCode = v.dbpLanguageCode" +
                 " AND a.dbpVersionCode = v.dbpVersionCode" +
-                " AND v.versionCode = '" + versionCode + "'"
+                " AND v.versionCode = '" + versionCode + "'" +
+                " ORDER BY collectionCode DESC, mediaType ASC"
+                // collectionCode sequence O, N, C
+                // mediaType sequence Drama, NonDrama
         do {
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
             try db.stringSelect(query: query, complete: { resultSet in
+                print("LENGTH \(resultSet.count)")
                 for row in resultSet {
-                    let metaItem = TOCAudioBible(database: db, mediaSource: "FCBH", dbRow: row)
-                    print("\(metaItem.toString())")
-                    self.metaData[metaItem.damId] = metaItem
+                    let item = TOCAudioBible(database: db, mediaSource: "FCBH", dbRow: row)
+                    print("\(item.toString())")
+                    // Because of the sort sequence, the following logic prefers Drama over Non-Drama
+                    // And prefers NT or OT collection over CT
+                    if self.newTestament == nil && (item.collectionCode == "NT" || item.collectionCode == "CT") {
+                        self.newTestament = item
+                    }
+                    if self.oldTestament == nil && (item.collectionCode == "OT" || item.collectionCode == "CT" ) {
+                        self.oldTestament = item
+                    }
+                    // !!!!! I don't really know what collectionCode is for Complete, here it is shown as CT
                 }
-                complete(self.metaData)
+                complete(self.oldTestament, self.newTestament)
             })
         } catch let err {
             print("ERROR \(Sqlite3.errorDescription(error: err))")
-            complete(self.metaData)
+            complete(nil, nil)
         }
+    }
+    /**
+    * This function will only return results after read has been called.
+    */
+    func findBook(bookId: String) -> TOCAudioBook? {
+        var result: TOCAudioBook? = nil
+        if self.oldTestament != nil {
+            result = self.oldTestament!.booksById[bookId]
+        }
+        if self.newTestament != nil {
+            result = self.newTestament!.booksById[bookId]
+        }
+        return result
     }
     
     func readVerseAudio(damid: String, sequence: String, bookId: String, chapter: String,
@@ -73,9 +79,13 @@ class MetaDataReader {
                    s3Key: s3Key,
                    expireInterval: 604800, // 1 week in seconds
                    getComplete: { data in
-            let result = self.parseJson(data: data)
-            self.metaDataVerse = TOCAudioChapter(jsonObject: result)
-            complete(self.metaDataVerse)
+                    if let verses = data {
+                        let result = self.parseJson(data: verses)
+                        self.metaDataVerse = TOCAudioChapter(jsonObject: result)
+                    } else {
+                        self.metaDataVerse = nil
+                    }
+                    complete(self.metaDataVerse)
         })
     }
     

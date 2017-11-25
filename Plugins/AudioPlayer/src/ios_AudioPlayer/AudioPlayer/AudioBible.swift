@@ -6,7 +6,6 @@
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
 
-import Foundation
 import AVFoundation
 import AWS
 
@@ -279,8 +278,10 @@ public class AudioBible : NSObject {
         let reader = MetaDataReader()
         reader.readVerseAudio(damid: reference.damId, sequence: reference.sequence, bookId: reference.book, chapter: reference.chapter, complete: {
             audioChapter in
-            reference.audioChapter = audioChapter
-            //print("PARSED DATA \(self.audioChapter?.toString())")
+            if (audioChapter != nil) {
+                reference.audioChapter = audioChapter
+                //print("PARSED DATA \(self.audioChapter?.toString())")
+            }
         })
     }
 }

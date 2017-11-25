@@ -11,7 +11,7 @@ import CoreMedia
 
 class TOCAudioChapter {
     
-    var versePositions: [Double]
+    private var versePositions: [Double]
     
     init(jsonObject: Any?) {
         self.versePositions = [Double]()
@@ -37,6 +37,10 @@ class TOCAudioChapter {
     
     deinit {
         print("***** Deinit TOCAudioChapter *****")
+    }
+    
+    func hasPositions() -> Bool {
+        return versePositions.count > 0
     }
     
     func findVerseByPosition(priorVerse: Int, time: CMTime) -> Int {

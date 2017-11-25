@@ -24,27 +24,25 @@ class AudioBibleController {
     func present(view: UIView) {
   //      view.backgroundColor = .blue // This is for Testing
         
-        AwsS3.region = "us-west-2"
+        AwsS3.region = "us-east-1"
+        let readVersion = "KJVPD"
+        let readBook = "JHN"
+        let readChapter = "003"
+        let readType = "mp3"
+        
         let metaData = MetaDataReader()
-        metaData.read(versionCode: "WEB", complete: { tocDictionary in
-            print(tocDictionary)
-            print("DONE")
-        //metaData.read(languageCode: "ENG", mediaType: "audio", readComplete: { tocDictionary in
-            let tocAudioBible = tocDictionary["ENGWEBN2DA"]
-            //let tocAudioBible = tocDictionary["DEMO"]
-            if let tocBible = tocAudioBible {
-                let metaBook = tocBible.booksById["JHN"]
-                //let metaBook = tocBible.booksById["TST"]
-                if let book = metaBook {
-                    
-                    let reference = Reference(damId: tocBible.damId, sequence: book.bookOrder,
-                                              book: book.bookId,
-                                              bookName: book.bookName, chapter: "001", fileType: "mp3")
-                    let reader = AudioBible(controller: self, tocBible: tocBible, reference: reference)
-                    self.readerView = AudioBibleView(view: view, audioBible: reader)
-                    self.audioSession = AudioSession(audioBibleView: self.readerView!)
-                    reader.beginReadFile()
-                }
+        metaData.read(versionCode: readVersion, complete: { oldTestament, newTestament in
+            print("DONE reading metadata")
+            let metaBook = metaData.findBook(bookId: readBook)
+            if let book = metaBook {
+                let tocBible = book.bible
+                let reference = Reference(damId: tocBible.damId, sequence: book.bookOrder,
+                                          book: book.bookId,
+                                          bookName: book.bookName, chapter: readChapter, fileType: readType)
+                let reader = AudioBible(controller: self, tocBible: tocBible, reference: reference)
+                self.readerView = AudioBibleView(view: view, audioBible: reader)
+                self.audioSession = AudioSession(audioBibleView: self.readerView!)
+                reader.beginReadFile()
             }
         })
     }
@@ -53,6 +51,7 @@ class AudioBibleController {
         self.readerView?.startPlay()
         UIApplication.shared.isIdleTimerDisabled = true
     }
+    
     func playHasStopped() {
         self.readerView?.stopPlay()
         self.readerView = nil
