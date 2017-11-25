@@ -21,7 +21,7 @@ CREATE TABLE Audio(
 CREATE TABLE AudioBook(
 	damId TEXT NOT NULL REFERENCES Audio(damId),
 	bookId TEXT NOT NULL,
-	bookOrder INT NOT NULL,
+	bookOrder TEXT NOT NULL,
 	numberOfChapters INT NOT NULL,
 	PRIMARY KEY (damId, bookId)
 );

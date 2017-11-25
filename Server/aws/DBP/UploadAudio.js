@@ -4,12 +4,14 @@
 "use strict";
 var fs = require('fs');
 var S3 = require('aws-sdk/clients/s3');
+var Sqlite = require('./../desktop/Sqlite.js');
 
 
 var uploadAudio = function(callback) {
 	
 	var DIRECTORY = process.env.HOME + "/ShortSands/DBL/FCBH_Audio/";
 	var BUCKET_SUFFIX = "shortsands.com";
+	var VERSIONS_DB = process.env.HOME + "/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios_AudioPlayer/AudioPlayer/Versions.db";
 	
 	var awsOptions = {
 		useDualstack: true,
@@ -18,9 +20,12 @@ var uploadAudio = function(callback) {
 		signatureVersion: 'v4'
 	};
 	var s3 = new S3(awsOptions);
+	var database = new Sqlite(VERSIONS_DB, false);
+	
 	
 	var dirs = fs.readdirSync(DIRECTORY);
 	readNextDirectory(dirs, function() {
+		database.close();
 		console.log("DONE READ NEXT DIRECTORY");
 	});
 	
@@ -48,10 +53,11 @@ var uploadAudio = function(callback) {
 		if (file) {
 			console.log(file);
 			var s3Bucket = computeS3Bucket(file);
-			var s3Key = computeS3Key(file);
-			console.log(s3Bucket, s3Key);
-			uploadFile(s3Bucket, s3Key, directory, file, function() {
-				readNextFile(directory, fileList, callback);
+			var s3Key = computeS3Key(file, function(s3Key) {
+				console.log(s3Bucket, s3Key);
+				uploadFile(s3Bucket, s3Key, directory, file, function() {
+					readNextFile(directory, fileList, callback);
+				});
 			});
 		} else {
 			callback();
@@ -69,9 +75,7 @@ var uploadAudio = function(callback) {
 	* Translate the name into a valid S3 key
 	* { id }/{bookNumber}_{ USFMCode }_{ chapterNumber }.mp3
 	*/
-	function computeS3Key(filename) {
-		var type = filename.charAt(0);
-		var bookOrder = filename.substr(1, 2);
+	function computeS3Key(filename, callback) {
 		var chapter = filename.substr(5, 3);
 		if (chapter.charAt(0) == '_') chapter = "0" + chapter.substr(1, 2);
 		var bookName = filename.substr(9, 12);
@@ -81,25 +85,31 @@ var uploadAudio = function(callback) {
 		var fileType = (lastPart.length > 1) ? lastPart[1] : "";
 		var baseFilename = filename.replace(/_/g, "");
 		var chapterOrig = (bookName == "Psalms") ? chapter : chapter.substr(1,2);
-		var myFileName = type + bookOrder + chapterOrig + bookName + damId + "." + fileType;
+		var myFileName = filename.substr(0, 3) + chapterOrig + bookName + damId + "." + fileType;
 		if (baseFilename !== myFileName) {
 			console.log(baseFilename);
 			console.log(myFileName);
 			process.exit(1);
 		}
-		var s3Key = bookNum(type, bookOrder) + "_" + usfmBookId(bookName) + "_" + chapter + "." + fileType;
-		return(s3Key);
+		var bookId = usfmBookId(bookName);
+		findBookOrder(damId, bookId, function(bookOrder) {
+			var s3Key = bookOrder + "_" + bookId + "_" + chapter + "." + fileType;
+			callback(s3Key);
+		});
 	}	
 	
-	function bookNum(type, bookOrder) {
-		if (type == 'A') {
-			return(bookOrder);
-		} else if (type == 'B') {
-			var num = parseInt(bookOrder) + 50;
-			return(num.toString());
-		} else {
-			errorMessage({message: type}, "UNEXPECTED TYPE");
-		}
+	function findBookOrder(damId, bookId, callback) {
+		var query = "SELECT bookOrder FROM AudioBook WHERE damId=? AND bookId=?";
+		var values = [damId, bookId];
+		database.selectAll(query, values, function(results) {
+			if (results.length !== 1) {
+				errorMessage({message: results.length}, "INCORRECT NUM RESULTS IN AudioBook");
+				//callback("Unknown");
+			} else {
+				var row = results[0];
+				callback(row.bookOrder);
+			}
+		});
 	}
 	
 	function usfmBookId(bookCode) {
@@ -200,9 +210,12 @@ var uploadAudio = function(callback) {
 	function ensureBucket(bucket, callback) {
 		s3.headBucket({Bucket: bucket}, function(err, data) {
 			if (err) {
-				var location = "us-west-2"; // Needs to be set somehow!
+				var location = "us-east-1"; // Needs to be set somehow!
 				var params = { Bucket: bucket };
-				params.CreateBucketConfiguration = { LocationConstraint: location }
+				if (location != "us-east-1") {
+					params.CreateBucketConfiguration = { LocationConstraint: location };
+				}
+				console.log(params);
  				s3.createBucket(params, function(err, data) {
  					if (err) {
 	 					errorMessage(err, "Bucket Create Error");
