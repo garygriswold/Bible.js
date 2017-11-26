@@ -30,9 +30,9 @@ class MetaDataReader {
                 " WHERE a.dbpLanguageCode = v.dbpLanguageCode" +
                 " AND a.dbpVersionCode = v.dbpVersionCode" +
                 " AND v.versionCode = '" + versionCode + "'" +
-                " ORDER BY collectionCode DESC, mediaType ASC"
-                // collectionCode sequence O, N, C
+                " ORDER BY mediaType ASC, collectionCode ASC"
                 // mediaType sequence Drama, NonDrama
+                // collectionCode sequence NT, ON, OT
         do {
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
@@ -42,14 +42,19 @@ class MetaDataReader {
                     let item = TOCAudioBible(database: db, mediaSource: "FCBH", dbRow: row)
                     print("\(item.toString())")
                     // Because of the sort sequence, the following logic prefers Drama over Non-Drama
-                    // And prefers NT or OT collection over CT
-                    if self.newTestament == nil && (item.collectionCode == "NT" || item.collectionCode == "CT") {
+                    // Because of the sequenc of IF's, it prefers OT and NT over ON
+                    if self.newTestament == nil && item.collectionCode == "NT" {
                         self.newTestament = item
                     }
-                    if self.oldTestament == nil && (item.collectionCode == "OT" || item.collectionCode == "CT" ) {
+                    if self.newTestament == nil && item.collectionCode == "ON" {
+                        self.newTestament = item
+                    }
+                    if self.oldTestament == nil && item.collectionCode == "OT" {
                         self.oldTestament = item
                     }
-                    // !!!!! I don't really know what collectionCode is for Complete, here it is shown as CT
+                    if self.oldTestament == nil && item.collectionCode == "ON" {
+                        self.oldTestament = item
+                    }
                 }
                 complete(self.oldTestament, self.newTestament)
             })
