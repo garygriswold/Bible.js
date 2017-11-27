@@ -101,6 +101,7 @@ class AudioBibleView : NSObject {
         verse.borderWidth = 1.0
         verse.cornerRadius = verse.frame.width / 2
         verse.masksToBounds = false
+        verse.opacity = 0 // Will be set to 1 if data is available
         self.view.layer.addSublayer(verse)
         self.verseLabel = verse
         
@@ -202,7 +203,10 @@ class AudioBibleView : NSObject {
                 self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum,
                                                           seconds: Double(self.scrubSlider.value))
                 self.verseNumLabel.string = String(self.verseNum)
+                self.verseLabel.opacity = 1
                 self.verseLabel.position = positionVersePopup()
+            } else {
+                self.verseLabel.opacity = 0
             }
         }
         //print("Finished progress \(CFAbsoluteTimeGetCurrent())")
