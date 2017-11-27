@@ -79,36 +79,41 @@ class MetaDataReader {
     
     func readVerseAudio(damid: String, sequence: String, bookId: String, chapter: String,
                         complete: @escaping (_ audioVerse: TOCAudioChapter?) -> Void) {
-        let s3Key = damid + "_" + sequence + "_" + bookId + "_" + chapter + "_verse.json"
-        AwsS3Cache.shared.readData(s3Bucket: "audio-us-east-1-shortsands",
-                   s3Key: s3Key,
-                   expireInterval: 604800, // 1 week in seconds
-                   getComplete: { data in
+        self.metaDataVerse = nil
+        let s3Bucket = damid.lowercased() + ".shortsands.com"
+        let s3Key = "Verse_" + sequence + "_" + bookId + ".json"
+        AwsS3Cache.shared.readData(s3Bucket: s3Bucket,
+               s3Key: s3Key,
+               expireInterval: 604800, // 1 week in seconds
+               getComplete: { data in
                     if let verses = data {
-                        let result = self.parseJson(data: verses)
-                        self.metaDataVerse = TOCAudioChapter(jsonObject: result)
+                        let result = self.parseJsonDictionary(json: verses)
+                        if let chapterNum = Int(chapter) {
+                            let chapterStr = String(chapterNum)
+                            if let dictionary = result?[chapterStr] as? NSDictionary {
+                                self.metaDataVerse = TOCAudioChapter(chapterDictionary: dictionary)
+                            } else {
+                                print("ERROR: Chapter not found in verse meta data.")
+                            }
+                        } else {
+                            print("ERROR: Chapter was invalid number.")
+                        }
                     } else {
-                        self.metaDataVerse = nil
+                        print("ERROR: There was no data retrieved.")
                     }
                     complete(self.metaDataVerse)
-        })
+            })
     }
     
-    private func parseJson(data: Data?) -> Any? {
-        if let json = data {
-            do {
-                let result = try JSONSerialization.jsonObject(with: json, options: [])
-                return result
-            } catch let jsonError {
-                print("Error parsing Meta Data json \(jsonError)")
-                return nil
-            }
-        } else {
-            print("Download Meta Data Error")
+    private func parseJsonDictionary(json: Data) -> NSDictionary? {
+        do {
+            let result = try JSONSerialization.jsonObject(with: json, options:.allowFragments) as? NSDictionary
+            return result
+        } catch let jsonError {
+            print("Error parsing Meta Data json \(jsonError)")
             return nil
         }
     }
 }
-
 
 

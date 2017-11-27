@@ -13,25 +13,16 @@ class TOCAudioChapter {
     
     private var versePositions: [Double]
     
-    init(jsonObject: Any?) {
-        self.versePositions = [Double]()
-        
-        if (jsonObject is Array<AnyObject>) {
-            let array: Array<AnyObject> = jsonObject as! Array<AnyObject>
-            if (array.count > 0) {
-                let lastVerse: Int = array.last!["verse_id"] as? Int ?? 0
-                print("LAST VERSE \(lastVerse)")
-                self.versePositions = Array(repeating: 0, count: lastVerse + 1)
-                for item in array {
-                    let verseId = item["verse_id"] as? Int ?? 0
-                    let position = item["position"] as? Double ?? 0.0
-                    self.versePositions[verseId] = position
-                }
+    init(chapterDictionary: NSDictionary) {
+        let dictionary: [String: Double] = chapterDictionary as! [String : Double]
+
+        self.versePositions = [Double](repeating: 0.0, count: dictionary.count + 1)
+        for (verse, position) in dictionary {
+            if let verseNum = Int(verse) {
+                self.versePositions[verseNum] = position
             } else {
-                print("The verse array was length zero")
+                print("Error parsing Verse Data \(verse) -> \(position)")
             }
-        } else {
-            print("Could not determine type of outer object in Meta Data")
         }
     }
     
