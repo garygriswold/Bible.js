@@ -69,7 +69,7 @@ class TOCAudioChapter {
     
     func findPositionOfVerse(verse: Int) -> CMTime {
         let seconds = (verse > 0 && verse < self.versePositions.count) ? self.versePositions[verse] : 0.0
-        return CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1))
+        return CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1000))
     }
     
     func toString() -> String {
