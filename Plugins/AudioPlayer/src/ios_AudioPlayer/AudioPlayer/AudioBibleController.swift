@@ -25,7 +25,7 @@ class AudioBibleController {
   //      view.backgroundColor = .blue // This is for Testing
         
         AwsS3.region = "us-east-1"
-        let readVersion = "KJVPD"
+        let readVersion = "ESV"
         let readBook = "JHN"
         let readChapter = "003"
         let readType = "mp3"

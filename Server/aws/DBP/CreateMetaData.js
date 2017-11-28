@@ -26,6 +26,7 @@ var createMetaData = function(callback) {
 	*/
 	var versions = {
 			// America
+			'ESV':	   ['ENG', 'ESV', true],
 			'ERV-ENG': ['ENG', 'WEB', false ],
 			'KJVPD':   ['ENG', 'KJV', true ],
 			'WEB':     ['ENG', 'WEB', true ],
@@ -193,7 +194,11 @@ var createMetaData = function(callback) {
 	
 	function doEachChapter(book, chapterNum, numOfChapters, callback) {
 		if (chapterNum <= numOfChapters) {
-			doVerseListQuery(book.dam_id, book.book_id, chapterNum, function() {
+			doVerseListQuery(book.dam_id, book.book_id, chapterNum, function(count) {
+				if (chapterNum == 1 && count == 0) {
+					callback();
+					return;
+				}
 				doEachChapter(book, chapterNum + 1, numOfChapters, callback);
 			});
 		} else {
@@ -209,7 +214,6 @@ var createMetaData = function(callback) {
 	}
 	
 	function doVerseListQuery(damId, book_id, chapter, callback) {
-		damId = 'ENGESVN2DA';
 		var url = HOST + "audio/versestart?" + KEY + "&dam_id=" + damId + "&osis_code=" + book_id + "&chapter_number=" + chapter;
 		httpGet(url, function(json) {
 			var row = {};
@@ -219,7 +223,7 @@ var createMetaData = function(callback) {
 				//versePositions.push(row);
 				versePositions[chapter] = row;
 			}
-			callback();	
+			callback(json.length);	
 		});	
 	}
 	
