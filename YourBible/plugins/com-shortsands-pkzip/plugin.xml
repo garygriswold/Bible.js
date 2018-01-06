@@ -2,12 +2,12 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="com-shortsands-pkzip"
-    version="1.0.0">
+    version="1.0.1">
 	<name>PKZip</name>
 	<description>Plugin to Zip Services</description>
 	<author>Gary Griswold</author>
 	<engines>
-    	<engine name="cordova" version=">=6.0.0"/>
+    	<engine name="cordova" version=">=7.0.0"/>
 	</engines>
 
 	<js-module name="PKZip" src="www/PKZip.js">
@@ -15,7 +15,7 @@
 	</js-module>
 	
 	<platform name="android">
-    	<config-file target="config.xml" parent="/*">
+    	<config-file target="res/xml/config.xml" parent="/*">
 			<feature name="PKZip">
 				<param name="android-package" value="plugin.PKZip"/>
 			</feature>

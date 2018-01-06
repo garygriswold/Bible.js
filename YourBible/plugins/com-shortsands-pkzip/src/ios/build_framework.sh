@@ -23,6 +23,21 @@ ZIP=Zip.framework
 rm -rf $TARGET/../build/$ZIP
 cp -Rp $FRAMEROOT/Debug-iphonesimulator/$ZIP $TARGET/../build/
 
+# Copy Framework to AWS Plugin
+DEST=$PROJROOT/AWS/src/ios/AWS/$ZIP
+rm -rf $DEST
+cp -Rp $FRAMEROOT/Debug-iphonesimulator/$ZIP $DEST
+
+# Copy Framework to VideoPlayer Plugin
+DEST=$PROJROOT/VideoPlayer/src/ios/VideoPlayer/$ZIP
+rm -rf $DEST
+cp -Rp $FRAMEROOT/Debug-iphonesimulator/$ZIP $DEST
+
+# Copy Framework to AudioPlayer Plugin
+DEST=$PROJROOT/AudioPlayer/src/ios_AudioPlayer/AudioPlayer/$ZIP
+rm -rf $DEST
+cp -Rp $FRAMEROOT/Debug-iphonesimulator/$ZIP $DEST
+
 # Lipo info commands
 lipo -info $FRAMEROOT/Release-iphoneos/Zip.framework/Zip
 lipo -info $FRAMEROOT/Release-iphonesimulator/Zip.framework/Zip

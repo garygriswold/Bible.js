@@ -1,5 +1,147 @@
 # Changes
 
+## cordova-sqlite-ext 2.0.0
+
+## cordova-sqlite-storage 2.1.4
+
+- Visual Studio 2017 updates for Windows UWP build
+
+### cordova-sqlite-storage 1.5.4
+
+- Fix iOS/macOS version to report undefined insertId in case INSERT OR IGNORE is ignored
+- Fix FIRST_WORD check for android.sqlite.database implementation
+- SQLite 3.15.2 build fixes
+
+## cordova-sqlite-storage 2.0.2
+
+- Fix Windows target platform version
+
+### cordova-sqlite-storage 1.5.3
+
+- Fix merges to prevent possible conflicts with other plugins (Windows)
+- Fix handling of undefined SQL argument values (Windows)
+- Signal error in case of a failure opening the database file (iOS/macOS)
+
+### cordova-sqlite-storage 2.0.0
+
+- Reference Windows platform toolset v141 to support Visual Studio 2017 (RC)
+
+## cordova-sqlite-ext 0.10.7
+
+- cordova-sqlite-ext build flag fixes:
+  - SQLite (3.15.2) build with SQLITE_THREADSAFE=2 on iOS as well as macOS to avoid possible malformed database due to multithreaded access ref: litehelpers/Cordova-sqlite-storage#703
+  - Suppress warnings when building sqlite3.c on iOS/macOS
+  - Some additional iOS build flag updates in this plugin version
+
+##### cordova-sqlite-legacy-core 1.0.6
+
+###### cordova-sqlite-legacy-express-core 1.0.4
+
+- Cleaned up workaround solution to BUG 666: close db before opening (ignore close error)
+- android.database end transaction if active before closing (needed for new BUG 666 workaround solution to pass selfTest in case of builtin android.database implementation)
+
+##### cordova-sqlite-legacy-core 1.0.5
+
+###### cordova-sqlite-legacy-express-core 1.0.3
+
+- Resolve Java 6/7/8 concurrent map compatibility issue reported in litehelpers/Cordova-sqlite-storage#726, THANKS to pointer by @NeoLSN (Jason Yang/楊朝傑) in litehelpers/Cordova-sqlite-storage#727.
+- selfTest database cleanup do not ignore close or delete error on any platforms
+
+##### cordova-sqlite-legacy-core 1.0.4
+
+- New workaround solution to BUG 666: close db before opening (ignore close error)
+
+##### cordova-sqlite-legacy-core 1.0.3
+
+- Suppress warnings when building sqlite3.c & PSPDFThreadSafeMutableDictionary.m on iOS/macOS
+
+## cordova-sqlite-ext 0.10.6
+
+- SQLite 3.15.2 build with SQLITE_THREADSAFE=2 on macOS ONLY (SQLITE_THREADSAFE=1 on Android/iOS/Windows) and other flag fixes in this plugin version
+
+##### cordova-sqlite-legacy-core 1.0.2
+
+- Fix log in case of transaction waiting for open to finish; doc fixes
+- Windows 10 (UWP) build with /SAFESEH flag on Win32 (x86) target
+
+###### cordova-sqlite-legacy-express-core 1.0.2
+
+- Use PSPDFThreadSafeMutableDictionary for iOS/macOS to avoid threading issue ref: litehelpers/Cordova-sqlite-storage#716
+
+###### cordova-sqlite-legacy-express-core 1.0.1
+
+- Fix bug 666 workaround to trigger ROLLBACK in the next event tick (needed to support version with pre-populated database on Windows)
+
+###### cordova-sqlite-legacy-express-core 1.0.0
+
+- Workaround solution to BUG litehelpers/Cordova-sqlite-storage#666 (hanging transaction in case of location reload/change)
+- selfTest simulate scenario & test solution to BUG litehelpers/Cordova-sqlite-storage#666 (also includes string test and test of effects of location reload/change in this version branch, along with another internal check)
+- Drop engine constraints in package.json & plugin.xml (in this version branch)
+- Remove Lawnchair adapter from this version branch
+- Support macOS platform with builtin libsqlite3.dylib framework in this version branch
+
+## cordova-sqlite-ext 0.10.5
+
+- Part of openDatabase in nextTick as a hack to solve problem with workaround solution to litehelpers/Cordova-sqlite-storage#666 & pre-populated database on Windows
+- Completely remove engine constraints from package.json in this version branch
+
+###### cordova-sqlite-legacy-express-core 1.0.0
+
+- Workaround solution to BUG litehelpers/Cordova-sqlite-storage#666 (hanging transaction in case of location reload/change)
+- selfTest simulate scenario & test solution to BUG litehelpers/Cordova-sqlite-storage#666 (also includes string test and test of effects of location reload/change in this version branch, along with another internal check)
+
+## cordova-sqlite-ext 0.10.4
+
+### cordova-sqlite-storage 1.5.2
+
+- Check transaction callback functions to avoid crash on Windows
+- Fix echoTest callback handling
+- Fix openDatabase/deleteDatabase exception messages
+- Move Lawnchair adapter to a separate project
+- Doc updates
+
+## cordova-sqlite-ext 0.10.3
+
+### cordova-sqlite-ext-common 0.1.0
+
+- BASE64 support
+
+### cordova-sqlite-ext-common 0.0.1
+
+- REGEXP for Android/iOS/macOS using sqlite3-regexp-cached
+- Build with sqlite 3.15.2, with the following settings:
+  - SQLITE_TEMP_STORE=2
+  - SQLITE_THREADSAFE=1
+  - SQLITE_ENABLE_FTS3
+  - SQLITE_ENABLE_FTS3_PARENTHESIS
+  - SQLITE_ENABLE_FTS4
+  - SQLITE_ENABLE_RTREE
+  - SQLITE_OMIT_BUILTIN_TEST
+  - SQLITE_OMIT_LOAD_EXTENSION
+  - SQLITE_DEFAULT_PAGE_SIZE=1024 and SQLITE_DEFAULT_CACHE_SIZE=2000 to avoid "potentially distruptive change(s)" from SQLite 3.12.0 ref: <http://sqlite.org/pgszchng2016.html>
+  - SQLITE_OS_WINRT for Windows only
+
+### cordova-sqlite-storage 1.5.1
+
+- Add engines rule to package.json to specify plugin version >= 2.0.0 in case of cordova-windows 4.4.2 or newer for Visual Studio 2017 (Preview)
+
+### cordova-sqlite-storage 1.5.0
+
+- Build with sqlite 3.15.1, with the following settings:
+  - SQLITE_TEMP_STORE=2
+  - SQLITE_THREADSAFE=2
+  - FTS3, FTS4, and R-Tree enabled
+  - SQLITE_DEFAULT_PAGE_SIZE=1024 and SQLITE_DEFAULT_CACHE_SIZE=2000 to avoid "potentially distruptive change(s)" from SQLite 3.12.0 ref: <http://sqlite.org/pgszchng2016.html>
+- Drop support for Windows 8.1 & Windows Phone 8.1
+
+### cordova-sqlite-storage 1.4.9
+
+- Minor JavaScript fix (generated by CoffeeScript 1.11.1)
+- Update test due to issue with u2028/u2029 on cordova-android 6.0.0
+- doc fixes
+- Cleanup plugin.xml: remove old engine constraint that was already commented out
+- Fix LICENSE.md
+
 ## cordova-sqlite-ext 0.10.2
 
 ### cordova-sqlite-storage 1.4.8

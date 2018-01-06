@@ -1,70 +1,60 @@
 {
-    "prepare_queue": {
-        "installed": [],
-        "uninstalled": []
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-sqlite-ext": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
     },
-    "config_munge": {
-        "files": {}
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
     },
-    "installed_plugins": {
-        "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "cordova-plugin-file-transfer": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "cordova-plugin-globalization": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "cordova-plugin-network-information": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "cordova-plugin-wkwebview-engine": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "cordova-plugin-zip": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "cordova-sqlite-ext": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "com-shortsands-pkzip": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "com-shortsands-aws": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "com-shortsands-videoplayer": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        }
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
     },
-    "dependent_plugins": {
-        "cordova-plugin-compat": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        },
-        "cordova-plugin-webserver": {
-            "PACKAGE_NAME": "com.shortsands.yourbible"
-        }
+    "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
+    "cordova-plugin-globalization": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
+    "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
+    "cordova-plugin-wkwebview-engine": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
+    "cordova-plugin-zip": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
+    "ionic-plugin-keyboard": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
+    "com-shortsands-pkzip": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
+    "com-shortsands-aws": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
+    "com-shortsands-videoplayer": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
     }
+  },
+  "dependent_plugins": {}
 }

@@ -21,6 +21,34 @@
 
 # Release Notes
 
+### 1.1.4 (Nov 06, 2017)
+* added missing license header
+* [CB-13519](https://issues.apache.org/jira/browse/CB-13519) (all): Add 'protective' entry to `cordovaDependencies`
+* [CB-12895](https://issues.apache.org/jira/browse/CB-12895) added `eslint` and removed `jshint`
+* [CB-12847](https://issues.apache.org/jira/browse/CB-12847) fixed `bugs` entry in `package.json`.
+
+### 1.1.3 (Apr 27, 2017)
+* [CB-12696](https://issues.apache.org/jira/browse/CB-12696) (iOS) Fixing some Xcode warnings
+* [CB-12685](https://issues.apache.org/jira/browse/CB-12685) added `package.json` to tests folder
+* [CB-12575](https://issues.apache.org/jira/browse/CB-12575) cordova-plugin-wkwebview-engine missing LICENSE file
+* [CB-12519](https://issues.apache.org/jira/browse/CB-12519) added missing license header
+
+### 1.1.2 (Feb 28, 2017)
+* [CB-12497](https://issues.apache.org/jira/browse/CB-12497) `location.href` links are silently disallowed
+* [CB-12490](https://issues.apache.org/jira/browse/CB-12490) - Updated experimental plugin link
+* Allow to configure navigation by gestures
+* [CB-12297](https://issues.apache.org/jira/browse/CB-12297) Support `WKProcessPool` for cookie sharing
+* [CB-12414](https://issues.apache.org/jira/browse/CB-12414) **iOS:** Forward error from provisional load error to standard load error
+
+### 1.1.1 (Dec 07, 2016)
+* [CB-12224](https://issues.apache.org/jira/browse/CB-12224) Updated version and RELEASENOTES.md for release 1.1.1
+* [CB-10228](https://issues.apache.org/jira/browse/CB-10228) - AppendUserAgent not working with WKWebView
+* [CB-11997](https://issues.apache.org/jira/browse/CB-11997) - Add crash recovery for iOS 8
+* [CB-11917](https://issues.apache.org/jira/browse/CB-11917) - Remove pull request template checklist item: "iCLA has been submitted…"
+* [CB-11818](https://issues.apache.org/jira/browse/CB-11818) - Avoid retain cycle: WKUserContentController retains its message handler, to break it we cannot pass directly CDVWKWebViewEngine's instance
+* [CB-11832](https://issues.apache.org/jira/browse/CB-11832) Incremented plugin version.
+
+
 ### 1.1.0 (Sep 08, 2016)
 * [CB-11824](https://issues.apache.org/jira/browse/CB-11824) - Update tests to include objective-c tests
 * [CB-11554](https://issues.apache.org/jira/browse/CB-11554) - fixed unit tests

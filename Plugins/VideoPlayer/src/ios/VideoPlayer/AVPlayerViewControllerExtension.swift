@@ -86,33 +86,33 @@ extension AVPlayerViewController {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemNewAccessLogEntry, object: nil)
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemTimeJumped, object: nil)    
     }
-    func playerItemDidPlayToEndTime(note:Notification) {
+    @objc func playerItemDidPlayToEndTime(note:Notification) {
         print("\n** DID PLAY TO END \(String(describing: note.object))")
         self.dismiss(animated: false) // move this till after??
         sendVideoAnalytics(isStart: false, isDone: true)
         
         VideoViewState.clear()
     }
-    func playerItemFailedToPlayToEndTime(note:Notification) {
+    @objc func playerItemFailedToPlayToEndTime(note:Notification) {
         print("\n********* FAILED TO PLAY TO END *********\(String(describing: note.object))")
     }
-    func playerItemTimeJumped(note:Notification) {
+    @objc func playerItemTimeJumped(note:Notification) {
         print("\n****** TIME JUMPED \(String(describing: note.object))")
     }
-    func playerItemPlaybackStalled(note:Notification) {
+    @objc func playerItemPlaybackStalled(note:Notification) {
         print("\n****** PLAYBACK STALLED \(String(describing: note.object))")
     }
-    func playerItemNewAccessLogEntry(note:Notification) {
+    @objc func playerItemNewAccessLogEntry(note:Notification) {
         print("\n****** ACCESS LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.accessLog()))")
     }
-    func playerItemNewErrorLogEntry(note:Notification) {
+    @objc func playerItemNewErrorLogEntry(note:Notification) {
         print("\n****** ERROR LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.errorLog()))")
     }
     /**
     * This method is called when the Home button is clicked or double clicked.
     * VideoState is saved in this method
     */
-    func applicationWillResignActive(note:Notification) {
+    @objc func applicationWillResignActive(note:Notification) {
 	    print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
         sendVideoAnalytics(isStart: false, isDone: false)
 	    VideoViewState.update(time: self.player?.currentTime())

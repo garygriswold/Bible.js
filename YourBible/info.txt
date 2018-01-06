@@ -1,0 +1,90 @@
+Node version: v6.9.1
+
+Cordova version: 7.1.0
+
+Config.xml file: 
+
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.shortsands.yourbible" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>YourBible</name>
+    <description>
+        A sample Apache Cordova application that responds to the deviceready event.
+    </description>
+    <author email="dev@cordova.apache.org" href="http://cordova.io">
+        Apache Cordova Team
+    </author>
+    <content src="index.html" />
+    <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+    <engine name="ios" spec="^4.5.4" />
+    <engine name="android" spec="^7.0.0" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
+    <plugin name="cordova-plugin-device" spec="^1.1.7" />
+    <plugin name="cordova-plugin-file" spec="^5.0.0" />
+    <plugin name="cordova-plugin-file-transfer" spec="^1.7.0" />
+    <plugin name="cordova-plugin-globalization" spec="^1.0.8" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^1.7.2" />
+    <plugin name="cordova-plugin-network-information" spec="^1.3.4" />
+    <plugin name="cordova-plugin-splashscreen" spec="^4.1.0" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.3.0" />
+    <plugin name="cordova-plugin-wkwebview-engine" spec="^1.1.4" />
+    <plugin name="cordova-plugin-zip" spec="^3.1.0" />
+    <plugin name="com-shortsands-pkzip" spec="/Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip" />
+    <plugin name="com-shortsands-aws" spec="/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS" />
+    <plugin name="com-shortsands-videoplayer" spec="/Users/garygriswold/ShortSands/BibleApp/Plugins/VideoPlayer" />
+    <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
+    <plugin name="cordova-sqlite-ext" spec="^2.0.0" />
+</widget>
+
+
+Plugins: 
+
+com-shortsands-aws,com-shortsands-pkzip,com-shortsands-videoplayer,cordova-plugin-device,cordova-plugin-file,cordova-plugin-file-transfer,cordova-plugin-globalization,cordova-plugin-inappbrowser,cordova-plugin-network-information,cordova-plugin-splashscreen,cordova-plugin-statusbar,cordova-plugin-whitelist,cordova-plugin-wkwebview-engine,cordova-plugin-zip,cordova-sqlite-ext,ionic-plugin-keyboard
+
+Android platform:
+
+*************************************************************************
+The "android" command is deprecated.
+For manual SDK, AVD, and project management, please use Android Studio.
+For command-line tools, use tools/bin/sdkmanager and tools/bin/avdmanager
+*************************************************************************
+Running /Users/garygriswold/Library/Android/sdk/tools/bin/avdmanager list target
+
+Available Android targets:
+----------
+id: 1 or "android-25"
+     Name: Android API 25
+     Type: Platform
+     API level: 25
+     Revision: 3
+----------
+id: 2 or "android-26"
+     Name: Android API 26
+     Type: Platform
+     API level: 26
+     Revision: 2
+----------
+id: 3 or "android-27"
+     Name: Android API 27
+     Type: Platform
+     API level: 27
+     Revision: 1
+
+iOS platform:
+
+Xcode 9.2
+Build version 9C40b
+
