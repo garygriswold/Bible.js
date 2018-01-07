@@ -1,11 +1,11 @@
 #!/bin/sh
 
-cat ../Library/css/Codex.css > www/css/BibleApp.css
+cat ../Library/css/Status.css > www/css/BibleApp.css
+cat ../Library/css/Codex.css >> www/css/BibleApp.css
 cat ../Library/css/Copyright.css >> www/css/BibleApp.css
 cat ../Library/css/History.css >> www/css/BibleApp.css
 cat ../Library/css/Questions.css >> www/css/BibleApp.css
 cat ../Library/css/Search.css >> www/css/BibleApp.css
-cat ../Library/css/Status.css >> www/css/BibleApp.css
 cat ../Library/css/TableContents.css >> www/css/BibleApp.css
 cat ../Library/css/Settings.css >> www/css/BibleApp.css
 cat ../Library/css/Video.css >> www/css/BibleApp.css

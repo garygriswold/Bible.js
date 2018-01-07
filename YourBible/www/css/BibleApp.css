@@ -1,4 +1,29 @@
 /**
+* This css file pertains to the StatusBar
+*/
+body {
+	margin: 0;
+	width: 100%;
+}
+#statusRoot {
+	margin: 0;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width:100%;
+	z-index: 1000;
+}
+#statusRow td {
+	border:none;
+	padding:0;
+	margin:0;
+}
+
+
+
+
+
+/**
 * This css files pertains to the CodexView
 */
 #codexRoot {
@@ -685,31 +710,6 @@ p.conMore {
 	border-width: thin;
 	border-color: grey;
 }
-/**
-* This css file pertains to the StatusBar
-*/
-body {
-	margin: 0;
-	width: 100%;
-}
-#statusRoot {
-	margin: 0;
-	position: fixed;
-	left: 0;
-	top: 0;
-	width:100%;
-	z-index: 1000;
-}
-#statusRow td {
-	border:none;
-	padding:0;
-	margin:0;
-}
-
-
-
-
-
 /**
 * This css file pertains to the TableContentsView
 */
