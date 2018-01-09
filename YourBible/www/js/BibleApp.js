@@ -1140,8 +1140,8 @@ SearchView.prototype.prepareSelect = function(refList) {
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
-var HEADER_BUTTON_HEIGHT = 32;//44;
-var HEADER_BAR_HEIGHT = 40;//52;
+var HEADER_BUTTON_HEIGHT = 32;
+var HEADER_BAR_HEIGHT = 40;
 var STATUS_BAR_HEIGHT = 14;
 var CELL_SPACING = 5;
 
@@ -1150,23 +1150,30 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	//this.statusBarInHeader = false;
 
 	this.hite = HEADER_BUTTON_HEIGHT;
-	this.barHite = (this.statusBarInHeader) ? HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT : HEADER_BAR_HEIGHT;
-	this.cellTopPadding = (this.statusBarInHeader) ? 'padding-top:' + STATUS_BAR_HEIGHT + 'px' : 'padding-top:0px';
+	//this.barHite = (this.statusBarInHeader) ? HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT : HEADER_BAR_HEIGHT;
+	//this.cellTopPadding = (this.statusBarInHeader) ? 'padding-top:' + STATUS_BAR_HEIGHT + 'px' : 'padding-top:0px';
 	this.tableContents = tableContents;
 	this.version = version;
 	this.localizeNumber = localizeNumber;
 	this.videoAdapter = videoAdapter;
-	this.backgroundCanvas = null;
+	//this.backgroundCanvas = null;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.titleStartX = null;
 	this.titleWidth = null;
 	this.currentReference = null;
+	
+	var statusBar = document.createElement('div');
+	statusBar.id = 'statusBar';
+	document.body.appendChild(statusBar);
+	
 	this.rootNode = document.createElement('table');
 	this.rootNode.id = 'statusRoot';
-	this.rootNode.setAttribute('cellspacing', CELL_SPACING);
+	//this.rootNode.setAttribute('cellspacing', CELL_SPACING);
 	document.body.appendChild(this.rootNode);
+
 	this.rootRow = document.createElement('tr');
+	this.rootRow.id = 'toolBarRow';
 	this.rootNode.appendChild(this.rootRow);
 	this.labelCell = document.createElement('td');
 	this.labelCell.id = 'labelCell';
@@ -1209,9 +1216,9 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 }
 HeaderView.prototype.showView = function() {
 	var that = this;
-	this.backgroundCanvas = document.createElement('canvas');
-	paintBackground(this.backgroundCanvas, this.hite);
-	this.rootRow.appendChild(this.backgroundCanvas);
+	//this.backgroundCanvas = document.createElement('canvas');
+	//paintBackground(this.backgroundCanvas, this.hite);
+	//this.rootRow.appendChild(this.backgroundCanvas);
 
 	//this.videoAdapter.hasVideos(this.version.langCode, this.version.langPrefCode, function(videoCount) {
 	var menuWidth = setupIconButton('tocCell', drawTOCIcon, that.hite, BIBLE.SHOW_TOC);
@@ -1229,8 +1236,7 @@ HeaderView.prototype.showView = function() {
 	that.titleCanvas = document.createElement('canvas');
 	drawTitleField(that.titleCanvas, that.hite, avalWidth);
 	that.labelCell.appendChild(that.titleCanvas);
-	//});
-
+	/*
 	function paintBackground(canvas, hite) {
 		console.log('**** repaint background ****');
     	canvas.setAttribute('height', that.barHite);
@@ -1250,11 +1256,12 @@ HeaderView.prototype.showView = function() {
       	graphics.fillStyle = '#2E9EC9';//gradient; THE GRADIENT IS NOT BEING USED.
       	graphics.fill();
 	}
+	*/
 	function drawTitleField(canvas, hite, avalWidth) {
 		canvas.setAttribute('id', 'titleCanvas');
 		canvas.setAttribute('height', hite);
 		canvas.setAttribute('width', avalWidth);
-		canvas.setAttribute('style', that.cellTopPadding);
+		//canvas.setAttribute('style', that.cellTopPadding);
 		that.titleGraphics = canvas.getContext('2d');
 		
 		that.titleGraphics.fillStyle = '#1b2f76';
@@ -1273,7 +1280,7 @@ HeaderView.prototype.showView = function() {
 	}
 	function setupIconButton(parentCell, canvasFunction, hite, eventType) {
 		var canvas = canvasFunction(hite, '#F7F7BB');
-		canvas.setAttribute('style', that.cellTopPadding);
+		//canvas.setAttribute('style', that.cellTopPadding);
 		var parent = document.createElement('td');
 		parent.id = parentCell;
 		that.rootRow.appendChild(parent);

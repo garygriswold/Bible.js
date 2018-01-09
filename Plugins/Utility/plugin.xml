@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="com-shortsands-utility"
+    version="1.0.0">
+	<name>Utility</name>
+	<description>Plugin to Many Utility Services</description>
+	<author>Gary Griswold</author>
+	<engines>
+    	<engine name="cordova" version=">=6.0.0"/>
+	</engines>
+
+	<js-module name="Utility" src="www/Utility.js">
+    	<clobbers target="Utility" />
+	</js-module>
+
+	<platform name="android">
+    <config-file target="config.xml" parent="/*">
+			<feature name="Utility">
+				<param name="android-package" value="plugin.Utility"/>
+			</feature>
+		</config-file>
+		<source-file src="src/android/plugin/Utility.java" target-dir="src/plugin" />
+	</platform>
+  
+	<platform name="ios">
+		<config-file target="config.xml" parent="/*">
+	    <feature name="Utility">
+				<param name="ios-package" value="Utility" />
+			</feature>
+		</config-file>
+		<source-file src="src/ios/Utility.swift" />
+		<source-file src="src/ios/Utility/DeviceSettings.swift" />
+	</platform>
+
+</plugin>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
