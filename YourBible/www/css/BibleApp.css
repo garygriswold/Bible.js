@@ -9,48 +9,19 @@ body {
 	margin: 0;
 	position: fixed;
 	left: 0;
-	top: env(safe-area-inset-top);
-	width:100%;
-	/*height: 70px;*/
-	height: calc(32 + env(safe-area-inset-top));
-	z-index: 1000;
-	background-color: #2E9EC9;
-	
-    border-spacing: 0px;
-    border-collapse: collapse;
-	
-	border: solid;
-	border-color: red;
-}
-#statusBar {
-	margin: 0;
-	position: fixed;
-	left: 0;
 	top: 0;
-	width: 100%;
-	height: env(safe-area-inset-top);
-	background-color: #2E9EC9;
-	opacity: 1.0;
-	
-	border: solid;
-	border-color: green;
+	width:100%;
+	z-index: 1000;
 }
-#toolBarRow {
-	top: env(safe-area-inset-top);
-	border: solid;
-	border-color: fuchsia;
-	
-	padding: 0;
-}
-#toolBarRow td {
-	/*border:none;*/
+#statusRow td {
+	border:none;
 	padding:0;
 	margin:0;
-	text-align: bottom;
-	
-	border: solid;
-	border-color: blue;
 }
+
+
+
+
 
 /**
 * This css files pertains to the CodexView

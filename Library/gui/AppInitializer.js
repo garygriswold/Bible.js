@@ -14,6 +14,7 @@ AppInitializer.prototype.begin = function() {
 	var that = this;
 	console.log("AppInitializer.begin BibleAppConfig.versionCode = ", BibleAppConfig.versionCode);
 	var settingStorage = new SettingStorage();
+	deviceSettings.loadDeviceSettings();
 	deviceSettings.locale(function(locale, langCode, scriptCode, countryCode) {
 		console.log('user locale ', locale, langCode, countryCode);
 		that.langPrefCode = langCode;

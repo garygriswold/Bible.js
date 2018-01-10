@@ -6,7 +6,6 @@ var BuildInfo={version:"unknown"};
 * It also contains all of the custom event handler.  This is so they are
 * guaranteed to only be created once, even when there are multiple
 */
-
 function AppInitializer() {
 	this.controller = null;
 	this.langPrefCode = null;
@@ -22,15 +21,20 @@ AppInitializer.prototype.begin = function() {
 		that.langPrefCode = langCode;
 		that.countryCode = countryCode;
 		var appUpdater = new AppUpdater(settingStorage);
-		console.log('START APP UPDATER ', new Date().getTime());
+		console.log('START APP UPDATER');
 		appUpdater.doUpdate(function() {
-			console.log('DONE APP UPDATER ', new Date().getTime());
+			console.log('DONE APP UPDATER');
+			var versionsAdapter = new VersionsAdapter();
+			versionsAdapter.selectAWSRegion(countryCode, function(awsRegion) {
+				AWS.initializeRegion(awsRegion, function(done) {
+					console.log('AWS Initialized ' + awsRegion + ' ' + done);
+				});
+			});			
 		    settingStorage.getCurrentVersion(function(versionFilename) {
 			    if (versionFilename) {
 				    // Process with User's Version
 			    	changeVersionHandler(versionFilename);
 			    } else {
-					var versionsAdapter = new VersionsAdapter();
 					versionsAdapter.defaultVersion(langCode, function(filename) {
 						console.log('default version determined ', filename);
 						var parts = filename.split('.');
@@ -68,7 +72,7 @@ AppInitializer.prototype.begin = function() {
 	});
 		
 	function changeVersionHandler(versionFilename) {
-		console.log('CHANGE VERSION TO', versionFilename, new Date().getTime());
+		console.log('CHANGE VERSION TO', versionFilename);
 		var currBible = new BibleVersion(that.langPrefCode, that.countryCode);
 		currBible.fill(versionFilename, function() {
 			if (that.controller) {
@@ -76,10 +80,10 @@ AppInitializer.prototype.begin = function() {
 			}
 			settingStorage.setCurrentVersion(versionFilename);
 			settingStorage.setInstalledVersion(currBible.code, versionFilename, currBible.bibleVersion);
-			console.log("Begin AppViewController", new Date().getTime());
+			console.log("Begin AppViewController");
 			that.controller = new AppViewController(currBible, settingStorage);
 			that.controller.begin();
-			console.log('*** DID enable handlers ALL', new Date().getTime());
+			console.log('End AppViewController.begin');
 			enableHandlersExcept('NONE');		
 		});
 	}
@@ -1649,7 +1653,7 @@ VersionsView.prototype.buildCountriesList = function() {
 				that.dom.addNode(rowNode, 'td', 'localCtryName', prefCtryName);
 			}
 		}
-		that.dom.addNode(root, 'p', 'shortsands', 'Your Bible by Short Sands, LLC. support@shortsands.com, version: ' + 
+		that.dom.addNode(root, 'p', 'shortsands', 'SafeBible by Short Sands, LLC. support@shortsands.com, version: ' + 
 					BibleAppConfig.versionCode);
 		that.rootNode.appendChild(root);
 		that.buildVersionList(that.defaultCountryNode);
@@ -1765,7 +1769,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 */
 function RateMeView(version) {
 	this.version = version;
-	this.appName = 'Your Bible';
+	this.appName = 'SafeBible';
 	this.appIdIos = "1073396349";
 	this.appIdAndroid = "com.shortsands.yourbible";
 	this.dom = new DOMBuilder();
@@ -3243,6 +3247,18 @@ VersionsAdapter.prototype.selectURLCloudfront = function(versionFile, callback) 
 		}
 	});
 };
+VersionsAdapter.prototype.selectAWSRegion = function(countryCode, callback) {
+	var that = this;
+	var statement = 'SELECT awsRegion FROM Region WHERE countryCode=?';
+	this.database.select(statement, [countryCode], function(results) {
+		if (results instanceof IOError || results.rows.length === 0) {
+			callback('us-east-1');
+		} else {
+			var row = results.rows.item(0);
+			callback(row.awsRegion);
+		}
+	});
+};
 VersionsAdapter.prototype.selectURLS3 = function(versionFile, countryCode, callback) {
 	var that = this;
 	var statement = 'SELECT signedURL FROM DownloadURL d JOIN Region r ON r.awsRegion=d.awsRegion WHERE d.filename=? AND r.countryCode=?';
@@ -4527,7 +4543,10 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 	
 	var play = this.addNode(div, 'img', 'videoListPlay');
 	play.setAttribute('src', 'img/play.svg');
+	play.setAttribute('mediaSource', videoItem.mediaSource);
 	play.setAttribute('mediaId', videoItem.mediaId);
+	play.setAttribute('languageId', videoItem.languageId);
+	play.setAttribute('silCode', videoItem.silCode);
 	play.setAttribute('mediaURL', videoItem.mediaURL);
 	play.addEventListener('click', playVideo);
 	
@@ -4554,11 +4573,14 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 	}
 	
 	function playVideo(event) {
+		var mediaSource = this.getAttribute('mediaSource');
 		var videoId = this.getAttribute('mediaId');
+		var languageId = this.getAttribute('languageId');
+		var silCode = this.getAttribute('silCode');
 		var videoUrl = this.getAttribute('mediaURL');
 		
         console.log("\n\BEFORE VideoPlayer " + videoId + " : " + videoUrl);
-		window.VideoPlayer.showVideo(videoId, videoUrl,
+		window.VideoPlayer.showVideo(mediaSource, videoId, languageId, silCode, videoUrl,
 		function() {
 			console.log("SUCCESS FROM VideoPlayer " + videoUrl);
 		},
@@ -4587,6 +4609,7 @@ VideoListView.prototype.addNode = function(parent, type, clas, content, id) {
 
 "use strict";
 function VideoMetaData() {
+	this.mediaSource = null;
 	this.languageId = null;
 	this.silCode = null;
 	this.langCode = null;
@@ -4714,6 +4737,7 @@ VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCod
 		for (var i=0; i<results.rows.length; i++) {
 			var row = results.rows.item(i);
 			var meta = new VideoMetaData();
+			meta.mediaSource = (row.mediaId.indexOf("KOG") > -1) ? "Rock" : "JFP";
 			meta.languageId = languageId;
 			meta.silCode = silCode;
 			meta.langCode = row.langCode;

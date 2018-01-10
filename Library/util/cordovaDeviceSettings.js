@@ -2,6 +2,9 @@
  * This class accesses the device locale and language information using the globalization plugin
  * and the versions, platform and model of the device plugin, and the network status.
  */
+var deviceSettingsPlatform = null;
+var deviceSettingsModel = null;
+
 var deviceSettings = {
 	/* Deprecated, use locale is Used in AppInitializer and VersionsView */
     prefLanguage: function(callback) {
@@ -29,21 +32,29 @@ var deviceSettings = {
             callback('en-US', 'en', null, 'US');
         }	    
     },
+    loadDeviceSettings: function() {
+		Utility.platform(function(platform) {
+			deviceSettingsPlatform = platform.toLowerCase();
+		});
+		Utility.modelName(function(model) {
+			deviceSettingsModel = model;
+		});
+    },
     platform: function() {
-        return((device.platform) ? device.platform.toLowerCase() : null);
+        return(deviceSettingsPlatform);
     },
     model: function() {
-        return(device.model);
+        return(deviceSettingsModel);
     },
-    uuid: function() {
-        return(device.uuid);
-    },
-    osVersion: function() {
-        return(device.version);
-    },
-    cordovaVersion: function() {
-        return(device.cordova);
-    },
+    //uuid: function() {
+    //    return(device.uuid);
+    //},
+    //osVersion: function() {
+    //    return(device.version);
+    //},
+    //cordovaVersion: function() {
+    //    return(device.cordova);
+    //},
     connectionType: function() {
         return(navigator.connection.type);
     },

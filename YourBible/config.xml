@@ -62,7 +62,6 @@
     <engine name="android" spec="^6.3.0" />
     <engine name="ios" spec="^4.5.4" />
     <plugin name="cordova-sqlite-ext" spec="^2.0.0" />
-    <plugin name="cordova-plugin-device" spec="^2.0.1" />
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.0" />
     <plugin name="cordova-plugin-globalization" spec="^1.0.9" />
@@ -76,4 +75,5 @@
     <plugin name="com-shortsands-pkzip" spec="/Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip" />
     <plugin name="com-shortsands-aws" spec="/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS" />
     <plugin name="com-shortsands-videoplayer" spec="/Users/garygriswold/ShortSands/BibleApp/Plugins/VideoPlayer" />
+    <plugin name="com-shortsands-utility" spec="/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility" />
 </widget>
