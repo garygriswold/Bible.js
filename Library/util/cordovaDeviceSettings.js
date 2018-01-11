@@ -46,6 +46,7 @@ var deviceSettings = {
     model: function() {
         return(deviceSettingsModel);
     },
+    // removed 1/10/2018
     //uuid: function() {
     //    return(device.uuid);
     //},

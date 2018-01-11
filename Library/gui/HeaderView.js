@@ -2,18 +2,27 @@
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
-var HEADER_BUTTON_HEIGHT = 32;//44;
-var HEADER_BAR_HEIGHT = 40;//52;
+var HEADER_BUTTON_HEIGHT = 32;
+var HEADER_BAR_HEIGHT = 40;
 var STATUS_BAR_HEIGHT = 14;
+var PHONEX_STATUS_BAR_HEIGHT = 26;
 var CELL_SPACING = 5;
 
 function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
-	this.statusBarInHeader = (deviceSettings.platform() === 'ios') ? true : false;
-	//this.statusBarInHeader = false;
-
 	this.hite = HEADER_BUTTON_HEIGHT;
-	this.barHite = (this.statusBarInHeader) ? HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT : HEADER_BAR_HEIGHT;
-	this.cellTopPadding = (this.statusBarInHeader) ? 'padding-top:' + STATUS_BAR_HEIGHT + 'px' : 'padding-top:0px';
+	
+	if (deviceSettings.platform() == 'ios') {
+		if (deviceSettings.model() == 'iPhone X') {
+			this.barHite = HEADER_BAR_HEIGHT + PHONEX_STATUS_BAR_HEIGHT;
+			this.cellTopPadding = 'padding-top:' + PHONEX_STATUS_BAR_HEIGHT + 'px';
+		} else {
+			this.barHite = HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT;
+			this.cellTopPadding = 'padding-top:' + STATUS_BAR_HEIGHT + 'px';			
+		}
+	} else {
+		this.barHite = HEADER_BAR_HEIGHT;
+		this.cellTopPadding = 'padding-top:0px';			
+	}
 	this.tableContents = tableContents;
 	this.version = version;
 	this.localizeNumber = localizeNumber;
@@ -75,7 +84,6 @@ HeaderView.prototype.showView = function() {
 	paintBackground(this.backgroundCanvas, this.hite);
 	this.rootRow.appendChild(this.backgroundCanvas);
 
-	//this.videoAdapter.hasVideos(this.version.langCode, this.version.langPrefCode, function(videoCount) {
 	var menuWidth = setupIconButton('tocCell', drawTOCIcon, that.hite, BIBLE.SHOW_TOC);
 	var serhWidth = setupIconButton('searchCell', drawSearchIcon, that.hite, BIBLE.SHOW_SEARCH);
 	that.rootRow.appendChild(that.labelCell);
@@ -91,7 +99,6 @@ HeaderView.prototype.showView = function() {
 	that.titleCanvas = document.createElement('canvas');
 	drawTitleField(that.titleCanvas, that.hite, avalWidth);
 	that.labelCell.appendChild(that.titleCanvas);
-	//});
 
 	function paintBackground(canvas, hite) {
 		console.log('**** repaint background ****');
