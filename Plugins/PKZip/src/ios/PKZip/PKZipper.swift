@@ -48,23 +48,13 @@ public enum ZipCompression: Int {
     }
 }
 
-/// Zip class
-public class Zip {
+/// PKZipper class
+public class PKZipper {
     
     /**
      Set of vaild file extensions
      */
     internal static var customFileExtensions: Set<String> = []
-    
-    // MARK: Lifecycle
-    
-    /**
-     Init
-     
-     - returns: Zip object
-     */
-    public init () {
-    }
     
     // MARK: Unzip
     
@@ -82,7 +72,7 @@ public class Zip {
      - notes: Supports implicit progress composition
      */
     
-    public class func unzipFile(_ zipFilePath: URL, destination: URL, overwrite: Bool, password: String?, progress: ((_ progress: Double) -> ())?) throws {
+    public static func unzipFile(_ zipFilePath: URL, destination: URL, overwrite: Bool, password: String?, progress: ((_ progress: Double) -> ())?) throws {
         
         // File manager
         let fileManager = FileManager.default
@@ -248,7 +238,7 @@ public class Zip {
      
      - notes: Supports implicit progress composition
      */
-    public class func zipFiles(paths: [URL], zipFilePath: URL, password: String?, compression: ZipCompression = .DefaultCompression, progress: ((_ progress: Double) -> ())?) throws {
+    public static func zipFiles(paths: [URL], zipFilePath: URL, password: String?, compression: ZipCompression = .DefaultCompression, progress: ((_ progress: Double) -> ())?) throws {
         
         // File manager
         let fileManager = FileManager.default
@@ -357,7 +347,7 @@ public class Zip {
      
      - returns: false if the extension is a valid file extension, otherwise true.
      */
-    internal class func fileExtensionIsInvalid(_ fileExtension: String?) -> Bool {
+    internal static func fileExtensionIsInvalid(_ fileExtension: String?) -> Bool {
         
         guard let fileExtension = fileExtension else { return true }
         
@@ -369,7 +359,7 @@ public class Zip {
      
      - parameter fileExtension: A file extension.
      */
-    public class func addCustomFileExtension(_ fileExtension: String) {
+    public static func addCustomFileExtension(_ fileExtension: String) {
         customFileExtensions.insert(fileExtension)
     }
     
@@ -378,7 +368,7 @@ public class Zip {
      
      - parameter fileExtension: A file extension.
      */
-    public class func removeCustomFileExtension(_ fileExtension: String) {
+    public static func removeCustomFileExtension(_ fileExtension: String) {
         customFileExtensions.remove(fileExtension)
     }
     
@@ -389,7 +379,7 @@ public class Zip {
      
      - returns: true if the extension valid, otherwise false.
      */
-    public class func isValidFileExtension(_ fileExtension: String) -> Bool {
+    public static func isValidFileExtension(_ fileExtension: String) -> Bool {
         
         let validFileExtensions: Set<String> = customFileExtensions.union(["zip", "cbz"])
         

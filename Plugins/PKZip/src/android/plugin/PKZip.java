@@ -2,7 +2,7 @@ package plugin;
 
 import android.util.Log;
 
-import com.shortsands.zip.Zip;
+import com.shortsands.zip.PKZipper;
 
 import java.io.File;
 
@@ -38,7 +38,7 @@ public class PKZip extends CordovaPlugin {
 			cordova.getThreadPool().execute(new Runnable() {
             	public void run() {
 	            	try {
-	            		Zip.zipFile(source, target);
+	            		PKZipper.zipFile(source, target);
 						ctx.success();
 					} catch(Exception error) {
 						ctx.error("Error in PKZip.zip " + error.toString());
@@ -56,7 +56,7 @@ public class PKZip extends CordovaPlugin {
 			cordova.getThreadPool().execute(new Runnable() {
             	public void run() {
 	            	try {
-	            		Zip.unzipFile(source, target);
+	            		PKZipper.unzipFile(source, target);
 						ctx.success();
 					} catch(Exception error) {
 						ctx.error("Error in PKZip.unzip " + error.toString());

@@ -1,6 +1,6 @@
 # Bible.js
 
-The BibleApp is the source code for "Your Bible", which has been deployed in the Apple App Store, and the Google Play Store.  Deployment in the Microsoft Store or Amazon Store has not yet been scheduled.  More information about this app can be found on the website http://your-bible.org
+The BibleApp is the source code for "Your Bible", which has been deployed in the Apple App Store, and the Google Play Store.  Deployment in the Microsoft Store or Amazon Store has not yet been scheduled.  More information about this app can be found on the website http://safebible.org
 
 Objectives
 ----------

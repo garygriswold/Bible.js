@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Zip {
+extension PKZipper {
     
     //MARK: Quick Unzip
     

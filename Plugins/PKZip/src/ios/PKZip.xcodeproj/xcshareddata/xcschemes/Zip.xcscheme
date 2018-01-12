@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "343F50FE1C8DAEEC0028C434"
-               BuildableName = "Zip.framework"
-               BlueprintName = "Zip OSX"
-               ReferencedContainer = "container:Zip.xcodeproj">
+               BlueprintIdentifier = "347E3A731C1DFFB500A11FD3"
+               BuildableName = "PKZip.framework"
+               BlueprintName = "PKZip"
+               ReferencedContainer = "container:PKZip.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -26,26 +26,27 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "343F51071C8DAEEC0028C434"
-               BuildableName = "Zip OSXTests.xctest"
-               BlueprintName = "Zip OSXTests"
-               ReferencedContainer = "container:Zip.xcodeproj">
+               BlueprintIdentifier = "347E3A7D1C1DFFB500A11FD3"
+               BuildableName = "PKZipTests.xctest"
+               BlueprintName = "PKZipTests"
+               ReferencedContainer = "container:PKZip.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "343F50FE1C8DAEEC0028C434"
-            BuildableName = "Zip.framework"
-            BlueprintName = "Zip OSX"
-            ReferencedContainer = "container:Zip.xcodeproj">
+            BlueprintIdentifier = "347E3A731C1DFFB500A11FD3"
+            BuildableName = "PKZip.framework"
+            BlueprintName = "PKZip"
+            ReferencedContainer = "container:PKZip.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -55,6 +56,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -64,10 +66,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "343F50FE1C8DAEEC0028C434"
-            BuildableName = "Zip.framework"
-            BlueprintName = "Zip OSX"
-            ReferencedContainer = "container:Zip.xcodeproj">
+            BlueprintIdentifier = "347E3A731C1DFFB500A11FD3"
+            BuildableName = "PKZip.framework"
+            BlueprintName = "PKZip"
+            ReferencedContainer = "container:PKZip.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -82,10 +84,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "343F50FE1C8DAEEC0028C434"
-            BuildableName = "Zip.framework"
-            BlueprintName = "Zip OSX"
-            ReferencedContainer = "container:Zip.xcodeproj">
+            BlueprintIdentifier = "347E3A731C1DFFB500A11FD3"
+            BuildableName = "PKZip.framework"
+            BlueprintName = "PKZip"
+            ReferencedContainer = "container:PKZip.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

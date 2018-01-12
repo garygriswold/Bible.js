@@ -8,16 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		E434FDDD1F9E4F090064EB52 /* AwsS3Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E434FDDC1F9E4F090064EB52 /* AwsS3Cache.swift */; };
-		E470CE6F1EFBF515001061CB /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E470CE6E1EFBF515001061CB /* Zip.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		E471B15C1F9B05FE00C617A0 /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E471B15B1F9B05FE00C617A0 /* AWSCognito.framework */; };
-		E471B1601F9B125D00C617A0 /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E471B15B1F9B05FE00C617A0 /* AWSCognito.framework */; };
-		E471B1611F9B126300C617A0 /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E470CE6E1EFBF515001061CB /* Zip.framework */; };
+		E4602386200737A300EA545D /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4602385200737A300EA545D /* Zip.framework */; };
 		E471B1621F9B126800C617A0 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C08DBA1EFB5DEB0009BEB7 /* AWSCore.framework */; };
 		E471B16A1F9B173000C617A0 /* AWSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E471B1691F9B173000C617A0 /* AWSTests.swift */; };
 		E471B16C1F9B173000C617A0 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E996A41EF0604700717F85 /* AWS.framework */; };
 		E471B1721F9B17A500C617A0 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C08DBA1EFB5DEB0009BEB7 /* AWSCore.framework */; };
-		E471B1731F9B17A900C617A0 /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E470CE6E1EFBF515001061CB /* Zip.framework */; };
-		E471B1741F9B17AE00C617A0 /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E471B15B1F9B05FE00C617A0 /* AWSCognito.framework */; };
 		E4C08DBE1EFB7B600009BEB7 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C08DBA1EFB5DEB0009BEB7 /* AWSCore.framework */; };
 		E4E996AE1EF0604700717F85 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E996A41EF0604700717F85 /* AWS.framework */; };
 		E4E996B51EF0604700717F85 /* AWS.h in Headers */ = {isa = PBXBuildFile; fileRef = E4E996A71EF0604700717F85 /* AWS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -49,8 +44,7 @@
 
 /* Begin PBXFileReference section */
 		E434FDDC1F9E4F090064EB52 /* AwsS3Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwsS3Cache.swift; sourceTree = "<group>"; };
-		E470CE6E1EFBF515001061CB /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Zip.framework; path = AWS/Zip.framework; sourceTree = "<group>"; };
-		E471B15B1F9B05FE00C617A0 /* AWSCognito.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCognito.framework; path = ../../../../../../Desktop/CognitoTest/AWSCognito.framework; sourceTree = "<group>"; };
+		E4602385200737A300EA545D /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Zip.framework; path = "../../../../../../Library/Frameworks/Debug-iphonesimulator/Zip.framework"; sourceTree = "<group>"; };
 		E471B1671F9B173000C617A0 /* AWSTests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AWSTests2.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E471B1691F9B173000C617A0 /* AWSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSTests.swift; sourceTree = "<group>"; };
 		E471B16B1F9B173000C617A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -74,8 +68,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E471B16C1F9B173000C617A0 /* AWS.framework in Frameworks */,
-				E471B1731F9B17A900C617A0 /* Zip.framework in Frameworks */,
-				E471B1741F9B17AE00C617A0 /* AWSCognito.framework in Frameworks */,
 				E471B1721F9B17A500C617A0 /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,9 +76,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E470CE6F1EFBF515001061CB /* Zip.framework in Frameworks */,
+				E4602386200737A300EA545D /* Zip.framework in Frameworks */,
 				E4C08DBE1EFB7B600009BEB7 /* AWSCore.framework in Frameworks */,
-				E471B15C1F9B05FE00C617A0 /* AWSCognito.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,9 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E471B1601F9B125D00C617A0 /* AWSCognito.framework in Frameworks */,
 				E471B1621F9B126800C617A0 /* AWSCore.framework in Frameworks */,
-				E471B1611F9B126300C617A0 /* Zip.framework in Frameworks */,
 				E4E996AE1EF0604700717F85 /* AWS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -153,8 +142,7 @@
 		E4E996CC1EF060B800717F85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E471B15B1F9B05FE00C617A0 /* AWSCognito.framework */,
-				E470CE6E1EFBF515001061CB /* Zip.framework */,
+				E4602385200737A300EA545D /* Zip.framework */,
 				E4C08DBA1EFB5DEB0009BEB7 /* AWSCore.framework */,
 			);
 			name = Frameworks;
