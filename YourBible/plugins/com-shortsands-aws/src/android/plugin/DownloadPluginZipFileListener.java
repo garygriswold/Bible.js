@@ -3,7 +3,6 @@ package plugin;
 import android.util.Log;
 import java.io.File;
 import com.shortsands.aws.DownloadZipFileListener;
-import com.shortsands.zip.Zip;
 import org.apache.cordova.CallbackContext;
 /**
  * Created by garygriswold on 5/22/17.

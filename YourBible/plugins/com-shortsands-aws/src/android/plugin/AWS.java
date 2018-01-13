@@ -2,7 +2,6 @@ package plugin;
 
 import android.util.Log;
 
-import com.shortsands.zip.Zip;
 import com.shortsands.aws.AwsS3;
 
 import java.io.File;

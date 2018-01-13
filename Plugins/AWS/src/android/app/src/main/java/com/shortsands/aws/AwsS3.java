@@ -33,8 +33,6 @@ public class AwsS3 {
     // AwsS3.regionName and Context should be set early in an App
     public static String region = "us-east-1";
     static Context context = null;
-    private static final String COGNITO_IDENT_POOL_ID = "us-east-1:a4817d0a-5398-472f-88a8-8a40b0ecf72f";
-    private static final Regions COGNITO_REGION = Regions.US_EAST_1;
 
     public static void initialize(String regionName, Context ctx) {
         AwsS3.region = regionName;
@@ -60,13 +58,7 @@ public class AwsS3 {
         if (region == null) {
             region = RegionUtils.getRegion("us-east-1");
         }
-        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-                context.getApplicationContext(),
-                AwsS3.COGNITO_IDENT_POOL_ID,
-                AwsS3.COGNITO_REGION
-        );
-        //this.amazonS3 = new AmazonS3Client(Credentials.AWS_BIBLE_APP); // These are IAM Credentials
-        this.amazonS3 = new AmazonS3Client(credentialsProvider);
+        this.amazonS3 = new AmazonS3Client(Credentials.AWS_BIBLE_APP);
         this.amazonS3.setRegion(region);
         S3ClientOptions options = new S3ClientOptions();
         options.withPathStyleAccess(true);

@@ -10,6 +10,7 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "dependencies": {
+    "com-shortsands-pkzip": "/Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip",
     "com-shortsands-utility": "/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility",
     "cordova-android": "^6.3.0",
     "cordova-ios": "^4.5.4",
@@ -24,7 +25,6 @@
     "cordova-plugin-zip": "^3.1.0",
     "cordova-sqlite-ext": "^2.0.0",
     "ionic-plugin-keyboard": "^2.2.1",
-    "com-shortsands-pkzip": "/Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip",
     "com-shortsands-aws": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
     "com-shortsands-videoplayer": "/Users/garygriswold/ShortSands/BibleApp/Plugins/VideoPlayer"
   },
