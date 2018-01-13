@@ -40,6 +40,9 @@
     "ionic-plugin-keyboard": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
+    "com-shortsands-utility": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
     "com-shortsands-pkzip": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
@@ -47,9 +50,6 @@
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
     "com-shortsands-videoplayer": {
-      "PACKAGE_NAME": "com.shortsands.yourbible"
-    },
-    "com-shortsands-utility": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     }
   },

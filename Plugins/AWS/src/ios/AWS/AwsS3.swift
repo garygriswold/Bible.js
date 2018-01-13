@@ -8,7 +8,7 @@
 
 import Foundation
 import AWSCore
-import Zip
+import PKZip
 
 public class AwsS3 {
     
@@ -177,7 +177,7 @@ public class AwsS3 {
                     print("Download SUCCESS in s3.downloadZipFile \(s3Bucket) \(s3Key)")
                     do {
                         // unzip zip file
-                        try Zip.unzipFile(tempZipURL,
+                        try PKZipper.unzipFile(tempZipURL,
                             destination: temporaryDirectory,
                             overwrite: true,
                             password: nil,

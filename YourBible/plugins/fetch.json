@@ -87,6 +87,14 @@
     "is_top_level": true,
     "variables": {}
   },
+  "com-shortsands-utility": {
+    "source": {
+      "type": "local",
+      "path": "/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
   "com-shortsands-pkzip": {
     "source": {
       "type": "local",
@@ -107,14 +115,6 @@
     "source": {
       "type": "local",
       "path": "/Users/garygriswold/ShortSands/BibleApp/Plugins/VideoPlayer"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "com-shortsands-utility": {
-    "source": {
-      "type": "local",
-      "path": "/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility"
     },
     "is_top_level": true,
     "variables": {}

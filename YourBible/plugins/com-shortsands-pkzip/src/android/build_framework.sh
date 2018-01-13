@@ -3,7 +3,7 @@
 LIBROOT=${HOME}/Library/Frameworks
 DEBUG_ROOT=${LIBROOT}/Debug-android
 RELSE_ROOT=${LIBROOT}/Release-android
-JAR=Zip.jar
+JAR=PKZip.jar
 
 rm -f ${DEBUG_ROOT}/${JAR}
 rm -f ${RELSE_ROOT}/${JAR}

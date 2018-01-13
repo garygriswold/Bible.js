@@ -3,7 +3,7 @@ package com.shortsands.aws;
 import android.util.Log;
 import java.io.File;
 import com.shortsands.io.FileManager;
-import com.shortsands.zip.Zip;
+import com.shortsands.zip.PKZipper;
 /**
  * Created by garygriswold on 5/22/17.
  */
@@ -33,7 +33,7 @@ public class DownloadZipFileListener extends AwsS3AbstractListener {
             Log.d(TAG, "download size " + this.file.length());
             tmpDir = this.file.getParentFile();
             Log.d(TAG, "Unzip to " + tmpDir.getAbsolutePath());
-            Zip.unzipFile(this.file, tmpDir);
+            PKZipper.unzipFile(this.file, tmpDir);
             tmpUnzipped = new File(tmpDir, this.file.getName());
             Log.d(TAG, "Find file to move " + tmpUnzipped.length() + "  " + tmpUnzipped.getAbsolutePath());
             if (this.unzipped.getAbsolutePath().indexOf("storage") > -1) { // hack test for external

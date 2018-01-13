@@ -4,7 +4,7 @@ FRAMEROOT=$HOME/Library/Frameworks
 PROJROOT=$HOME/ShortSands/BibleApp/Plugins
 TARGET=$PROJROOT/AWS/src/ios/AWS
 
-ZIP=Zip.framework
+ZIP=PKZip.framework
 
 # Build iOS/Release
 rm -rf $TARGET/$ZIP

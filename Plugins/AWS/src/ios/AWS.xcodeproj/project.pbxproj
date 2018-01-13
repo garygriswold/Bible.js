@@ -8,11 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		E434FDDD1F9E4F090064EB52 /* AwsS3Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E434FDDC1F9E4F090064EB52 /* AwsS3Cache.swift */; };
-		E4602386200737A300EA545D /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4602385200737A300EA545D /* Zip.framework */; };
+		E44B17D12009285E0035D109 /* PKZip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44B17D02009285E0035D109 /* PKZip.framework */; };
+		E44B17D2200940B60035D109 /* PKZip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44B17D02009285E0035D109 /* PKZip.framework */; };
+		E44B17D4200940D50035D109 /* AwsS3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E996BE1EF0607400717F85 /* AwsS3.swift */; };
 		E471B1621F9B126800C617A0 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C08DBA1EFB5DEB0009BEB7 /* AWSCore.framework */; };
-		E471B16A1F9B173000C617A0 /* AWSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E471B1691F9B173000C617A0 /* AWSTests.swift */; };
-		E471B16C1F9B173000C617A0 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E996A41EF0604700717F85 /* AWS.framework */; };
-		E471B1721F9B17A500C617A0 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C08DBA1EFB5DEB0009BEB7 /* AWSCore.framework */; };
 		E4C08DBE1EFB7B600009BEB7 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C08DBA1EFB5DEB0009BEB7 /* AWSCore.framework */; };
 		E4E996AE1EF0604700717F85 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E996A41EF0604700717F85 /* AWS.framework */; };
 		E4E996B51EF0604700717F85 /* AWS.h in Headers */ = {isa = PBXBuildFile; fileRef = E4E996A71EF0604700717F85 /* AWS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -26,13 +25,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		E471B16D1F9B173000C617A0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4E9969B1EF0604700717F85 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4E996A31EF0604700717F85;
-			remoteInfo = AWS;
-		};
 		E4E996AF1EF0604700717F85 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E4E9969B1EF0604700717F85 /* Project object */;
@@ -44,8 +36,7 @@
 
 /* Begin PBXFileReference section */
 		E434FDDC1F9E4F090064EB52 /* AwsS3Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwsS3Cache.swift; sourceTree = "<group>"; };
-		E4602385200737A300EA545D /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Zip.framework; path = "../../../../../../Library/Frameworks/Debug-iphonesimulator/Zip.framework"; sourceTree = "<group>"; };
-		E471B1671F9B173000C617A0 /* AWSTests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AWSTests2.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E44B17D02009285E0035D109 /* PKZip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PKZip.framework; path = "../../../../../../Library/Frameworks/Debug-iphonesimulator/PKZip.framework"; sourceTree = "<group>"; };
 		E471B1691F9B173000C617A0 /* AWSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSTests.swift; sourceTree = "<group>"; };
 		E471B16B1F9B173000C617A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4C08DBA1EFB5DEB0009BEB7 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = AWS/AWSCore.framework; sourceTree = "<group>"; };
@@ -63,20 +54,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		E471B1641F9B173000C617A0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E471B16C1F9B173000C617A0 /* AWS.framework in Frameworks */,
-				E471B1721F9B17A500C617A0 /* AWSCore.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E4E996A01EF0604700717F85 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4602386200737A300EA545D /* Zip.framework in Frameworks */,
+				E44B17D12009285E0035D109 /* PKZip.framework in Frameworks */,
 				E4C08DBE1EFB7B600009BEB7 /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,6 +68,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E471B1621F9B126800C617A0 /* AWSCore.framework in Frameworks */,
+				E44B17D2200940B60035D109 /* PKZip.framework in Frameworks */,
 				E4E996AE1EF0604700717F85 /* AWS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -117,7 +100,6 @@
 			children = (
 				E4E996A41EF0604700717F85 /* AWS.framework */,
 				E4E996AD1EF0604700717F85 /* AWSTests.xctest */,
-				E471B1671F9B173000C617A0 /* AWSTests2.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -142,7 +124,7 @@
 		E4E996CC1EF060B800717F85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E4602385200737A300EA545D /* Zip.framework */,
+				E44B17D02009285E0035D109 /* PKZip.framework */,
 				E4C08DBA1EFB5DEB0009BEB7 /* AWSCore.framework */,
 			);
 			name = Frameworks;
@@ -164,24 +146,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		E471B1661F9B173000C617A0 /* AWSTests2 */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E471B16F1F9B173000C617A0 /* Build configuration list for PBXNativeTarget "AWSTests2" */;
-			buildPhases = (
-				E471B1631F9B173000C617A0 /* Sources */,
-				E471B1641F9B173000C617A0 /* Frameworks */,
-				E471B1651F9B173000C617A0 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E471B16E1F9B173000C617A0 /* PBXTargetDependency */,
-			);
-			name = AWSTests2;
-			productName = AWSTests2;
-			productReference = E471B1671F9B173000C617A0 /* AWSTests2.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		E4E996A31EF0604700717F85 /* AWS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E4E996B81EF0604700717F85 /* Build configuration list for PBXNativeTarget "AWS" */;
@@ -228,10 +192,6 @@
 				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = ShortSands;
 				TargetAttributes = {
-					E471B1661F9B173000C617A0 = {
-						CreatedOnToolsVersion = 9.0.1;
-						ProvisioningStyle = Automatic;
-					};
 					E4E996A31EF0604700717F85 = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 95C7NX5DGM;
@@ -259,19 +219,11 @@
 			targets = (
 				E4E996A31EF0604700717F85 /* AWS */,
 				E4E996AC1EF0604700717F85 /* AWSTests */,
-				E471B1661F9B173000C617A0 /* AWSTests2 */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		E471B1651F9B173000C617A0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E4E996A21EF0604700717F85 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -289,14 +241,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		E471B1631F9B173000C617A0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E471B16A1F9B173000C617A0 /* AWSTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E4E9969F1EF0604700717F85 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -314,17 +258,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E44B17D4200940D50035D109 /* AwsS3.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E471B16E1F9B173000C617A0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4E996A31EF0604700717F85 /* AWS */;
-			targetProxy = E471B16D1F9B173000C617A0 /* PBXContainerItemProxy */;
-		};
 		E4E996B01EF0604700717F85 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E4E996A31EF0604700717F85 /* AWS */;
@@ -333,64 +273,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		E471B1701F9B173000C617A0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 95C7NX5DGM;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/AWS",
-				);
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = AWSTests2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AWSTests2;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		E471B1711F9B173000C617A0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 95C7NX5DGM;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/AWS",
-				);
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = AWSTests2/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AWSTests2;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		E4E996B61EF0604700717F85 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -564,12 +446,13 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/AWS",
+					"$(USER_LIBRARY_DIR)/Frameworks/Debug-iphonesimulator",
 				);
 				INFOPLIST_FILE = AWSTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AWSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -582,27 +465,19 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/AWS",
+					"$(USER_LIBRARY_DIR)/Frameworks/Debug-iphonesimulator",
 				);
 				INFOPLIST_FILE = AWSTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AWSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E471B16F1F9B173000C617A0 /* Build configuration list for PBXNativeTarget "AWSTests2" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E471B1701F9B173000C617A0 /* Debug */,
-				E471B1711F9B173000C617A0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		E4E9969E1EF0604700717F85 /* Build configuration list for PBXProject "AWS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

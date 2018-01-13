@@ -13,7 +13,7 @@ import java.util.zip.ZipInputStream;
  * By zapl
  */
 
-public class Zip {
+public class PKZipper {
 
     public static void zipFile(File zipFile, File sourceDirectory) throws IOException {
         throw new IOException("Zip.zip is not yet implemented on Android.");

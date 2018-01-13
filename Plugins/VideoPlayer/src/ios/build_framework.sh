@@ -4,7 +4,7 @@ FRAMEROOT=$HOME/Library/Frameworks
 PROJROOT=$HOME/ShortSands/BibleApp/Plugins
 TARGET=$PROJROOT/VideoPlayer/src/ios/VideoPlayer
 
-ZIP=Zip.framework
+ZIP=PKZip.framework
 AWS=AWS.framework
 
 # Build iOS/Release

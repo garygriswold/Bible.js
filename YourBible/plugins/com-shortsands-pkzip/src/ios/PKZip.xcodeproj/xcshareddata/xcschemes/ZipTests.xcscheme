@@ -10,6 +10,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
@@ -17,9 +18,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "347E3A7D1C1DFFB500A11FD3"
-               BuildableName = "ZipTests.xctest"
-               BlueprintName = "ZipTests"
-               ReferencedContainer = "container:Zip.xcodeproj">
+               BuildableName = "PKZipTests.xctest"
+               BlueprintName = "PKZipTests"
+               ReferencedContainer = "container:PKZip.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -30,6 +31,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"

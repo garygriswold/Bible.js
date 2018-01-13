@@ -21,7 +21,7 @@ extension PKZipper {
      
      - returns: NSURL of the destination folder.
      */
-    public class func quickUnzipFile(_ path: URL) throws -> URL {
+    public static func quickUnzipFile(_ path: URL) throws -> URL {
         return try quickUnzipFile(path, progress: nil)
     }
     
@@ -37,7 +37,7 @@ extension PKZipper {
      
      - returns: NSURL of the destination folder.
      */
-    public class func quickUnzipFile(_ path: URL, progress: ((_ progress: Double) -> ())?) throws -> URL {
+    public static func quickUnzipFile(_ path: URL, progress: ((_ progress: Double) -> ())?) throws -> URL {
         let fileManager = FileManager.default
 
         let fileExtension = path.pathExtension
@@ -68,7 +68,7 @@ extension PKZipper {
      
      - returns: NSURL of the destination folder.
      */
-    public class func quickZipFiles(_ paths: [URL], fileName: String) throws -> URL {
+    public static func quickZipFiles(_ paths: [URL], fileName: String) throws -> URL {
         return try quickZipFiles(paths, fileName: fileName, progress: nil)
     }
     
@@ -85,7 +85,7 @@ extension PKZipper {
      
      - returns: NSURL of the destination folder.
      */
-    public class func quickZipFiles(_ paths: [URL], fileName: String, progress: ((_ progress: Double) -> ())?) throws -> URL {
+    public static func quickZipFiles(_ paths: [URL], fileName: String, progress: ((_ progress: Double) -> ())?) throws -> URL {
         let fileManager = FileManager.default
         let documentsUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0] as URL
         let destinationUrl = documentsUrl.appendingPathComponent("\(fileName).zip")

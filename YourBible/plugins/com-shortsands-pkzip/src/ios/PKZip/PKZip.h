@@ -1,5 +1,5 @@
 //
-//  Zip.h
+//  PKZip.h
 //  Zip
 //
 //  Created by Roy Marmelstein on 13/12/2015.

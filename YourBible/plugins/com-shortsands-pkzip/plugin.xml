@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="com-shortsands-pkzip"
-    version="1.0.1">
+    version="2.0.0">
 	<name>PKZip</name>
 	<description>Plugin to Zip Services</description>
 	<author>Gary Griswold</author>
@@ -21,7 +21,7 @@
 			</feature>
 		</config-file>
 		<source-file src="src/android/plugin/PKZip.java" target-dir="src/plugin"/>
-		<lib-file src="src/android/plugin/Zip.jar" target-dir="src/libs" />
+		<lib-file src="src/android/plugin/PKZip.jar" target-dir="src/libs" />
 	</platform>
 	
 	<platform name="ios">
@@ -31,7 +31,7 @@
 			</feature>
 		</config-file>
 		<source-file src="src/ios/PKZip.swift" />
-		<framework src="src/ios/build/Zip.framework" embed="true" custom="true" />
+		<framework src="src/ios/build/PKZip.framework" embed="true" custom="true" />
 	</platform>
 
 </plugin>

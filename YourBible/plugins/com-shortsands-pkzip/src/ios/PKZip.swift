@@ -10,7 +10,7 @@
 * It is a thin wrapper around the Zip class that Zip can also 
 * be used directly by other .swift classes.
 */
-import Zip
+import PKZip
 
 @objc(PKZip) class PKZip : CDVPlugin {
     
@@ -21,7 +21,7 @@ import Zip
 		let sourceFile = command.arguments[0] as? String ?? ""
 		let targetFile = command.arguments[1] as? String ?? ""
 		do {
-			try Zip.zipFiles(
+			try PKZipper.zipFiles(
 				paths: [ URL(fileURLWithPath: NSHomeDirectory() + sourceFile) ],
 				zipFilePath: URL(fileURLWithPath: NSHomeDirectory() + targetFile),
 				password: nil,
@@ -43,7 +43,7 @@ import Zip
 		let sourceFile = command.arguments[0] as? String ?? ""
 		let targetDir = command.arguments[1] as? String ?? ""
 		do {
-			try Zip.unzipFile(
+			try PKZipper.unzipFile(
 				URL(fileURLWithPath: NSHomeDirectory() + sourceFile),
 				destination: URL(fileURLWithPath: NSHomeDirectory() + targetDir),
 				overwrite: true, 
