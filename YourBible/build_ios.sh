@@ -6,12 +6,10 @@ LIBS=$HOME/Library/Frameworks
 
 VIDEO=VideoPlayer.framework
 AWS=AWS.framework
-ZIP=Zip.framework
+ZIP=PKZip.framework
 AWSCORE=AWSCore.framework
 
-#PLUGINS=$HOME/ShortSands/BibleApp/Plugins
 PLUGINS=$HOME/ShortSands/BibleApp/YourBible/platforms/ios/SafeBible/Plugins
-
 
 if [ "$1" == "Release" ]; then
 	SOURCE=$LIBS/Release-iphoneos
@@ -48,12 +46,12 @@ rm -rf $TARGET
 cp -Rf $SOURCE/$AWSCORE $TARGET
 lipo -info $TARGET/AWSCore
 
-# Copy Zip.framework to SafeBible
+# Copy PKZip.framework to SafeBible
 TARGET=$PLUGINS/com-shortsands-pkzip/$ZIP
 echo $TARGET
 rm -rf $TARGET
 cp -Rf $SOURCE/$ZIP $TARGET
-lipo -info $TARGET/Zip
+lipo -info $TARGET/PKZip
 
 
 ## Special Note about AWSCore

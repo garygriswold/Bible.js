@@ -1,62 +1,39 @@
 #!/bin/sh -ev
 
-exit 1
-
-# GNG 9/1/2017
-# OBSOLETE.  This script needs to be rewitten.  See the build_ios.sh and build_ios_obsolete.sh 
-# for more information
-
-# Usage build_android.sh [Release]
+# Usage build_android.sh Release | Debug
 
 LIBS=$HOME/Library/Frameworks
-DEBUG=$LIBS/Debug-android
-RELEASE=$LIBS/Release-android
 
 VIDEO=VideoPlayer.jar
 AWS=AWS.jar
-ZIP=Zip.jar
+ZIP=PKZip.jar
 
-PLUGINS=$HOME/ShortSands/BibleApp/Plugins
+PLUGINS=$HOME/ShortSands/BibleApp/YourBible/platforms/android/libs
 
-if [ -z "$1" ]; then
-SOURCE=$DEBUG 
+if [ "$1" == "Release" ]; then
+	SOURCE=$LIBS/Release-android
+elif [ "$1" == "Debug" ]; then
+	SOURCE=$LIBS/Debug-android
 else
-SOURCE=$RELEASE
+	echo "Usage: build_android.sh Release | Debug"
+	exit 1
 fi
 echo $SOURCE
 
-# Copy VideoPlayer.framework to it's own plugin dir
-TARGET=$PLUGINS/VideoPlayer/src/android/plugin/$VIDEO
+# Copy VideoPlayer.jar to SafeBible
+TARGET=$PLUGINS/$VIDEO
 echo $TARGET
 #rm -f $TARGET
 cp -f $SOURCE/$VIDEO $TARGET
 
-# Copy AWS.framework to VideoPlayer
-TARGET=$PLUGINS/VideoPlayer/src/android/app/libs/$AWS
+# Copy AWS.jar to SafeBible
+TARGET=$PLUGINS/$AWS
 echo $TARGET
 #rm -rf $TARGET
 cp -f $SOURCE/$AWS $TARGET
 
-## Copy Zip.framework to VideoPlayer
-TARGET=$PLUGINS/VideoPlayer/src/android/app/libs/$ZIP
-echo $TARGET
-#rm -rf $TARGET
-cp -f $SOURCE/$ZIP $TARGET
-
-# Copy AWS.framework to it's own plugin dir
-TARGET=$PLUGINS/AWS/src/android/plugin/$AWS
-echo $TARGET
-#rm -f $TARGET
-cp -f $SOURCE/$AWS $TARGET
-
-# Copy Zip.framework to AWS
-TARGET=$PLUGINS/AWS/src/android/app/libs/$ZIP
-echo $TARGET
-#rm -rf $TARGET
-cp -f $SOURCE/$ZIP $TARGET
-
-# Copy Zip.framework to it's own build
-TARGET=$PLUGINS/PKZip/src/android/plugin/$ZIP
+## Copy PKZip.framework to SafeBible
+TARGET=$PLUGINS/$ZIP
 echo $TARGET
 #rm -rf $TARGET
 cp -f $SOURCE/$ZIP $TARGET
