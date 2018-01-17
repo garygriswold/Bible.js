@@ -1143,8 +1143,8 @@ SearchView.prototype.prepareSelect = function(refList) {
 */
 var HEADER_BUTTON_HEIGHT = 32;
 var HEADER_BAR_HEIGHT = 40;
-var STATUS_BAR_HEIGHT = 14;
-var PHONEX_STATUS_BAR_HEIGHT = 26;
+var STATUS_BAR_HEIGHT = 20;//14;
+var PHONEX_STATUS_BAR_HEIGHT = 38;//26;
 var CELL_SPACING = 5;
 
 function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
@@ -1160,13 +1160,13 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 		}
 	} else {
 		this.barHite = HEADER_BAR_HEIGHT;
-		this.cellTopPadding = 'padding-top:0px';			
+		this.cellTopPadding = 'padding-top:5px';			
 	}
 	this.tableContents = tableContents;
 	this.version = version;
 	this.localizeNumber = localizeNumber;
 	this.videoAdapter = videoAdapter;
-	this.backgroundCanvas = null;
+	//this.backgroundCanvas = null;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.titleStartX = null;
@@ -1174,7 +1174,8 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	this.currentReference = null;
 	this.rootNode = document.createElement('table');
 	this.rootNode.id = 'statusRoot';
-	this.rootNode.setAttribute('cellspacing', CELL_SPACING);
+	this.rootNode.setAttribute('style', 'height:' + this.barHite + 'px');
+	//this.rootNode.setAttribute('cellspacing', CELL_SPACING);
 	document.body.appendChild(this.rootNode);
 	this.rootRow = document.createElement('tr');
 	this.rootNode.appendChild(this.rootRow);
@@ -1219,9 +1220,9 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 }
 HeaderView.prototype.showView = function() {
 	var that = this;
-	this.backgroundCanvas = document.createElement('canvas');
-	paintBackground(this.backgroundCanvas, this.hite);
-	this.rootRow.appendChild(this.backgroundCanvas);
+	//this.backgroundCanvas = document.createElement('canvas');
+	//paintBackground(this.backgroundCanvas, this.hite);
+	//this.rootRow.appendChild(this.backgroundCanvas);
 
 	var menuWidth = setupIconButton('tocCell', drawTOCIcon, that.hite, BIBLE.SHOW_TOC);
 	var serhWidth = setupIconButton('searchCell', drawSearchIcon, that.hite, BIBLE.SHOW_SEARCH);
@@ -1238,7 +1239,7 @@ HeaderView.prototype.showView = function() {
 	that.titleCanvas = document.createElement('canvas');
 	drawTitleField(that.titleCanvas, that.hite, avalWidth);
 	that.labelCell.appendChild(that.titleCanvas);
-
+/*
 	function paintBackground(canvas, hite) {
 		console.log('**** repaint background ****');
     	canvas.setAttribute('height', that.barHite);
@@ -1258,6 +1259,7 @@ HeaderView.prototype.showView = function() {
       	graphics.fillStyle = '#2E9EC9';//gradient; THE GRADIENT IS NOT BEING USED.
       	graphics.fill();
 	}
+*/
 	function drawTitleField(canvas, hite, avalWidth) {
 		canvas.setAttribute('id', 'titleCanvas');
 		canvas.setAttribute('height', hite);
