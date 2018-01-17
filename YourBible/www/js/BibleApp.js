@@ -1166,7 +1166,6 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	this.version = version;
 	this.localizeNumber = localizeNumber;
 	this.videoAdapter = videoAdapter;
-	//this.backgroundCanvas = null;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.titleStartX = null;
@@ -1175,7 +1174,6 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	this.rootNode = document.createElement('table');
 	this.rootNode.id = 'statusRoot';
 	this.rootNode.setAttribute('style', 'height:' + this.barHite + 'px');
-	//this.rootNode.setAttribute('cellspacing', CELL_SPACING);
 	document.body.appendChild(this.rootNode);
 	this.rootRow = document.createElement('tr');
 	this.rootNode.appendChild(this.rootRow);
@@ -1220,9 +1218,6 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 }
 HeaderView.prototype.showView = function() {
 	var that = this;
-	//this.backgroundCanvas = document.createElement('canvas');
-	//paintBackground(this.backgroundCanvas, this.hite);
-	//this.rootRow.appendChild(this.backgroundCanvas);
 
 	var menuWidth = setupIconButton('tocCell', drawTOCIcon, that.hite, BIBLE.SHOW_TOC);
 	var serhWidth = setupIconButton('searchCell', drawSearchIcon, that.hite, BIBLE.SHOW_SEARCH);
@@ -1239,27 +1234,7 @@ HeaderView.prototype.showView = function() {
 	that.titleCanvas = document.createElement('canvas');
 	drawTitleField(that.titleCanvas, that.hite, avalWidth);
 	that.labelCell.appendChild(that.titleCanvas);
-/*
-	function paintBackground(canvas, hite) {
-		console.log('**** repaint background ****');
-    	canvas.setAttribute('height', that.barHite);
-    	canvas.setAttribute('width', window.innerWidth);// outerWidth is zero on iOS
-    	canvas.setAttribute('style', 'position: absolute; top:0; left:0; z-index: -1');
-      	var graphics = canvas.getContext('2d');
-      	graphics.rect(0, 0, canvas.width, canvas.height);
 
-      	// create radial gradient
-      	var vMidpoint = hite / 2;
-      	var gradient = graphics.createRadialGradient(238, vMidpoint, 10, 238, vMidpoint, window.innerHeight - hite);
-      	// light blue
-      	gradient.addColorStop(0, '#2E9EC9');//'#8ED6FF');
-      	// dark blue
-      	gradient.addColorStop(1, '#2E9EC9');//'#004CB3');
-
-      	graphics.fillStyle = '#2E9EC9';//gradient; THE GRADIENT IS NOT BEING USED.
-      	graphics.fill();
-	}
-*/
 	function drawTitleField(canvas, hite, avalWidth) {
 		canvas.setAttribute('id', 'titleCanvas');
 		canvas.setAttribute('height', hite);
