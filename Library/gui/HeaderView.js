@@ -4,8 +4,8 @@
 */
 var HEADER_BUTTON_HEIGHT = 32;
 var HEADER_BAR_HEIGHT = 40;
-var STATUS_BAR_HEIGHT = 20;//14;
-var PHONEX_STATUS_BAR_HEIGHT = 38;//26;
+var STATUS_BAR_HEIGHT = 18;//14;
+var PHONEX_STATUS_BAR_HEIGHT = 36;//26;
 var CELL_SPACING = 5;
 
 function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
