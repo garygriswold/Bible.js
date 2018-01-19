@@ -44,6 +44,9 @@ It is critical to keep separate the various Apple Identifies
 	Create a Production App Store Certificate using instruction at above website
 	Create a Production provisioning file using instructions at the above website
 	Enter the current information into build.json file
+	
+	Note: On 1/18/18, it was necessary to set XCode to manual signing for the
+	production build, but set it to automatic signing for development.
 
 ### 	Distribution Certificate and Distribution Profiles must
 ### 	be created on the Apple Developer website, and then installed
@@ -143,10 +146,10 @@ Generate a private key using keytool. This example prompts you for passwords for
 Compile and Sign App
 --------------------
 
-NOTE: Jan 4, 2017 platforms/android/gradle.build had to be revised
-lines 203 - 218 were commented out.  This change prevented += 8 being added to the
-android version, which made the version number too small for an upload.
-Also changed line 215 to: defaultConfig.versionCode = defaultConfig.versionCode * 10 + 8
+### NOTE: Jan 4, 2017 platforms/android/gradle.build had to be revised
+### lines 203 - 218 were commented out.  This change prevented += 8 being added to the
+### android version, which made the version number too small for an upload.
+### Also changed line 215 to: defaultConfig.versionCode = defaultConfig.versionCode * 10 + 8
 
 If one needs to find the android version use the following:
 	
@@ -160,6 +163,7 @@ Update version code in config.xml
 Compile your app in release mode to obtain an unsigned APK.
 
 	cd $HOME/ShortSands/BibleApp/YourBible
+	./Build_android.sh Release
 	cordova build android --release
 	output:
 	/Users/garygriswold/ShortSands/BibleApp/YourBible/platforms/android/build/outputs/apk/android-release-unsigned.apk
