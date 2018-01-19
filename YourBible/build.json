@@ -8,7 +8,8 @@
 
     "release": {
       "developmentTeam": "95C7NX5DGM",
-      "codeSignIdentity": "iPhone Developer",
+      "codeSignIdentity": "iPhone Distribution",
+      "provisioningProfile": "aa5cd821-7ef3-4c2b-b17e-39596a76b9f8",
       "packageType": "app-store"
     }
   }

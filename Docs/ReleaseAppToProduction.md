@@ -1,20 +1,22 @@
 Preparation for Release
 =======================
-
-Encryption keys to be used for DigitalSignature of requests must be
-updated for the new version.
 	
 	cd BibleApp/YourBible
 	vi config.xml 
 	update version to the correct number
-	
-	cd $HOME/BibleCred/AppAuth
-	vi GenCredentials.sh
-	insert new key for the new version
-	./GenCredentials.sh
-	./DeployCredentials.sh
-	
-Verify that the addition of a key was the only change, and checkin the changes
+
+### The following relates to keys used on the server by QA feature, 
+### which has not been implemented.	
+### Encryption keys to be used for DigitalSignature of requests must be
+### updated for the new version.
+### 	
+### 	cd $HOME/BibleCred/AppAuth
+### 	vi GenCredentials.sh
+### 	insert new key for the new version
+### 	./GenCredentials.sh
+### 	./DeployCredentials.sh
+### 	
+### Verify that the addition of a key was the only change, and checkin the changes
 
 	git status
 	git difftool
@@ -24,42 +26,62 @@ Verify that the addition of a key was the only change, and checkin the changes
 Deploy iOS Production Version
 =============================
 
-	Distribution Certificate and Distribution Profiles must
-	be created on the Apple Developer website, and then installed
-	on the keychain on one's Mac.  Then these will be installed
-	automatically during the compilation of the production
-	version of the App.  The section "Signing The App Manually"
-	only needs to be done when certificates are expired.
+Create new Certificate and Provisions (if they have expired)
+-------------------------------------
+
+I must have a current Distribution certificate and provisioning profile.
+These can be created at the following Apple WebSite using instructions
+that you can find there.
+
+It is critical to keep separate the various Apple Identifies
 	
-Signing The App Manually
-------------------------
-
-The Release version of the App has been signed using the following tools.  It could also have been signed by various development environment.
-
-Log into into the Apple developer center
-
-	http://developer.apple.com
-	username: gary@shortsands.com
-	password: Br1......
-	Click on "Certificates, Identifiers, and Profiles"
+	95C7NX5DGM - Short Sands, LLC
+	4U62ERFA4L - Gary N Griswold
+	SDDE5M4NHR - ECS Ministries
 	
-Generate and download a Certificate
-
-	Generate an "iOS Distribution Certificate" if the current one is nearly expired
-	Download
-	cp iso_distribution.cer $HOME/BibleApp/YourBible/certificates/ios
+	https://developer.apple.com/account/#/overview/95C7NX5DGM
 	
-	
-Generate an Identifier using the current certificate, if a new certificate was created
+	Create a Production App Store Certificate using instruction at above website
+	Create a Production provisioning file using instructions at the above website
+	Enter the current information into build.json file
 
-	Your Bible com.shortsands.yourbible - is the current identifier
-	
-Generate and download an iOS Distribution Profile
-
-	YourBible_2016_01_13 is the current provisioning profile
-	It must reference the certificate and identifier above
-	Download
-	cp YourBible_2016_01_13.mobileprovision $HOME/BibleApp/YourBible/certificates/ios
+### 	Distribution Certificate and Distribution Profiles must
+### 	be created on the Apple Developer website, and then installed
+### 	on the keychain on one's Mac.  Then these will be installed
+### 	automatically during the compilation of the production
+### 	version of the App.  The section "Signing The App Manually"
+### 	only needs to be done when certificates are expired.
+### 
+### The following sections is obsolete. It was written about 2015	
+### Signing The App Manually
+### ------------------------
+### 
+### The Release version of the App has been signed using the following tools.  It could also have been signed by various development environment.
+### 
+### Log into into the Apple developer center
+### 
+### 	http://developer.apple.com
+### 	username: gary@shortsands.com
+### 	password: Br1......
+### 	Click on "Certificates, Identifiers, and Profiles"
+### 	
+### Generate and download a Certificate
+### 
+### 	Generate an "iOS Distribution Certificate" if the current one is nearly expired
+### 	Download
+### 	cp iso_distribution.cer $HOME/BibleApp/YourBible/certificates/ios
+### 	
+### 	
+### Generate an Identifier using the current certificate, if a new certificate was created
+### 
+### 	Your Bible com.shortsands.yourbible - is the current identifier
+### 	
+### Generate and download an iOS Distribution Profile
+### 
+### 	YourBible_2016_01_13 is the current provisioning profile
+### 	It must reference the certificate and identifier above
+### 	Download
+### 	cp YourBible_2016_01_13.mobileprovision $HOME/BibleApp/YourBible/certificates/ios
 	
 Compile and Sign App
 --------------------
@@ -84,8 +106,8 @@ Update the version code
 Rebuild the Custom Plugins to iphone Release
 
 	1. Rebuild each of 3 plugins
-	2. build_ios_phone.sh Release
-	3. InstallVideoModule.sh
+	2. InstallVideoModule.sh
+	3. build_ios.sh Release
 	
 Compile your app in release mode to obtain a signed IPA.
 
