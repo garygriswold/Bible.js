@@ -24,7 +24,7 @@ var downloadController = function(callback) {
 		var bucket = bucketList[i];
 		var region = cdnBuckets[bucket];
 		REGIONS.push(bucket + '-log');
-		REGIONS.push('analytics-' + region + '-shortsands');
+		//REGIONS.push('analytics-' + region + '-shortsands'); This will pick up Audio Files as of 1/19/18
 	}
 	console.log(REGIONS);
 	

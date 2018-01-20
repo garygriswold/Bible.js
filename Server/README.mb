@@ -1,14 +1,21 @@
 Bible Download Analytics
 ========================
 
+Download Analytics
+------------------
+
+Download the Analytics data that is stored in AWS S3, and populate Analytics.db
+
+	./DownloadAnalytics.sh
+
 	sqlite Analytics.db	
 	
-Views Intended to Simplify Query
---------------------------------
+Analytics.db has Views Intended to Simplify Query
+-------------------------------------------------
 	
 Limit Result to GET.OBJECT by userid BibleApp and all errors
 
-	create view DownloadErrors AS
+	CREATE view DownloadErrors AS
 	SELECT bucket, datetime, filename, httpStatus, prefLocale, locale, error, tranSize, fileSize, totalms, s3ms,
 	manufacturer, model, osType, osVersion
 	from bibledownload 
@@ -18,7 +25,7 @@ Limit Result to GET.OBJECT by userid BibleApp and all errors
 
 Limit Result to Successful GET.OBJECT by userid BibleApp
 
-	create view DownloadSuccess AS
+	CREATE view DownloadSuccess AS
 	SELECT strftime('%Y', datetime) as year, strftime('%m', datetime) as month, strftime('%d', datetime) as day, strftime('%H', datetime) as hour,
 	datetime, substr(prefLocale, 1, 2) as language, substr(locale, -2, 2) as country, prefLocale, locale, 
 	substr(bucket, 12) as region, substr(filename, 1, instr(filename, '.')-1) as version,
@@ -33,7 +40,7 @@ Limit Result to Successful GET.OBJECT by userid BibleApp
 Limit Result to Successful GET.OBJECT by userid BibleApp of ERV
 Also, limit content somewhat
 
-	create view DownloadERV AS
+	CREATE view DownloadERV AS
 	SELECT strftime('%Y', datetime) as year, strftime('%m', datetime) as month, strftime('%d', datetime) as day, strftime('%H', datetime) as hour,
 	datetime, substr(prefLocale, 1, 2) as language, substr(locale, -2, 2) as country,
 	substr(bucket, 12) as region, substr(filename, 1, instr(filename, '.')-1) as version,
@@ -49,63 +56,117 @@ Also, limit content somewhat
 Build Reporting Database
 ------------------------
 
-Directory Analytics/year_month should contain a build_db.sh script that extracts data from
-the current analytics database and from versions.db in order to create one database
-with all of the needed information.
+This section creates a reporting database specifically for ERV (Bible League Intl.)
+
+1. Under the directory Analytics create a subdirectory named year_month.
+2. Copy build_db.sh into the directory.
+3. Update the copied build_db.sh to have the correct date range in its.
+4. Execute the build_db.sh script.  
+
+It will create the following files:
+	downloadERV.sql
+	versions.sql
+	DownloadERV.db
+	
+It will create the following tables:
+	AWSRegion
+	BibleDownload
+	Language
+	Region
+	
+It will create the following view:
+	DownloadERV
+	
+
+Compute Summary Tables for Reporting
+------------------------------------
+
+This section adds computed tables to the DownloadERV.db
+
+1. In the prior reporting period, find a file named compute.sh
+2. Copy the file into the current Analytics/year_mon directory.
+3. Review to see if any new calculations are required.
+4. Execute the compute.sh script
+
+It will create the following tables:
+	VersionByCountry
+	VersionByDeviceOS
+	VersionByLanguage
+	VersionByMonth  
+	
+It will create the following output file:
+	VersionByCountry.csv
+	
+***** TO BE DONE
+
+## To BE DONE
+#	VersionByCountryPivot
+
+	
+Build Tables and Pie Charts
+---------------------------
+
+Copy the files PieChart.js and Pivot3.js into the current Analytics/year_mon directory.
+These program, run with a variety of parameters can be used to generate the numbers
+for various tables and Pie Charts as CSV files.
+
+Pivot3.js requires the following parameters
+
+	node Pivot3.js databaseName, tableName, xAxisColumn, yAxisColumn, value
+	
+PieChart.js requires the following parameters
+
+	node PieChart.js databaseName tableName chartColumn pieceColumn value
+
+Table: Downloads by Version and Month.  Presented as a table and a stacked graph
+
+	node Pivot3.js DownloadERV.db DownloadERV month version sum
+
+Pie Charts: Downloads by Country and Version.  Presented as a pie chart for each version
+and as a table
+
+Table: Downloads by Version and user's preferred language.  Presented as a table
+
+Downloads by Version and Device OS, Presented as a stacked graph and a table
 	
 	
-Queries for Presentation
-------------------------
+Example Queries that are useful for Presentation
+------------------------------------------------
 
 Downloads of any ERV version in period.
 
-	select count(*) from DownloadERV 
-	where datetime >= '2016' and datetime < '2017-07';
-	
-	
-	
-
-
-
-	
-
+	select count(*) from DownloadERV;
 	
 Download of Versions by month
 
 	select version, year || '-' || month, count(*) from DownloadERV 
-	where datetime >= '2016' and datetime < '2017-07'
 	group by version, year || '-' || month;
 	
 Download of Versions by day
 
 	select year, month, day, version, count(*) from DownloadERV 
-	where datetime >= '2016' and datetime < '2017-07'
 	group by year, month, day, version;
 	
 Download of Versions by country in period.
 
 	select country, version, count(*) from DownloadERV 
-	where datetime >= '2016' and datetime < '2017-07'
 	group by country, version;
 	
 Download of Versions by language in period.
 
 	select version, language, count(*) from DownloadERV 
-	where datetime >= '2016' and datetime < '2017-07'
 	group by version, language
 	order by language, version;
 	
 Download of Versions by country and language in period.
 
 	select language, country, version, count(*) from DownloadERV 
-	where datetime >= '2016' and datetime < '2017-07'
 	group by language, country, version
 	order by version, language, country;
 	
 Download by OS in period
 
 	select osType, count(*) from DownloadERV 
-	where datetime >= '2016' and datetime < '2017-07'
 	group by osType;
 	
 Download by OS by month
