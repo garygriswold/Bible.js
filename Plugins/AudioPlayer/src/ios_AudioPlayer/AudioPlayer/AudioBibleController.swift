@@ -6,8 +6,7 @@
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
 
-import Foundation
-import AWS
+import UIKit
 
 class AudioBibleController {
     
@@ -21,24 +20,18 @@ class AudioBibleController {
     /**
     * This must be set to be the WKWebView
     */
-    func present(view: UIView) {
+    func present(view: UIView, version: String, book: String, chapter: String, fileType: String) {
   //      view.backgroundColor = .blue // This is for Testing
         
-        AwsS3.region = "us-east-1"
-        let readVersion = "ESV"
-        let readBook = "JHN"
-        let readChapter = "003"
-        let readType = "mp3"
-        
         let metaData = MetaDataReader()
-        metaData.read(versionCode: readVersion, complete: { oldTestament, newTestament in
+        metaData.read(versionCode: version, complete: { oldTestament, newTestament in
             print("DONE reading metadata")
-            let metaBook = metaData.findBook(bookId: readBook)
+            let metaBook = metaData.findBook(bookId: book)
             if let book = metaBook {
                 let tocBible = book.bible
                 let reference = Reference(damId: tocBible.damId, sequence: book.bookOrder,
                                           book: book.bookId,
-                                          bookName: book.bookName, chapter: readChapter, fileType: readType)
+                                          bookName: book.bookName, chapter: chapter, fileType: fileType)
                 let reader = AudioBible(controller: self, tocBible: tocBible, reference: reference)
                 self.readerView = AudioBibleView(view: view, audioBible: reader)
                 self.audioSession = AudioSession(audioBibleView: self.readerView!)

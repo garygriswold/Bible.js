@@ -20,7 +20,7 @@ class AudioBibleView : NSObject {
     let scrubSlider: UISlider
     let verseLabel: CALayer
     let verseNumLabel: CATextLayer
-    let positionLabel: CATextLayer
+    //let positionLabel: CATextLayer
     var progressLink: CADisplayLink?
     // Precomputed for positionVersePopup
     let sliderRange: CGFloat
@@ -117,7 +117,7 @@ class AudioBibleView : NSObject {
         verse2.contentsGravity = kCAGravityCenter // Why doesn't contentsGravity work
         verse.addSublayer(verse2)
         self.verseNumLabel = verse2
-        
+/*
         // PositionLabel is for Debug only
         let position = CATextLayer()
         position.frame = CGRect(x: screenWidth * 0.05, y: 180, width: 64, height: 32)
@@ -126,7 +126,7 @@ class AudioBibleView : NSObject {
         position.foregroundColor = UIColor.black.cgColor
         self.view.layer.addSublayer(position)
         self.positionLabel = position
-
+*/
         // UI control shadows
         playBtn.layer.shadowOpacity = 0.5
         playBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
@@ -208,7 +208,7 @@ class AudioBibleView : NSObject {
             }
             let current = CMTimeGetSeconds(item.currentTime())
             self.scrubSlider.setValue(Float(current), animated: true)
-            self.positionLabel.string = String(current)
+            //self.positionLabel.string = String(current)
             
             if let verse = self.audioBible.getCurrentReference().audioChapter {
                 self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum,

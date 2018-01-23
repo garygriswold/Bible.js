@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AWS
 
 class ViewController: UIViewController {
     
@@ -14,7 +15,13 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.audioController.present(view: self.view)
+        AwsS3.region = "us-east-1"
+        let readVersion = "ESV"
+        let readBook = "JHN"
+        let readChapter = "002"
+        let readType = "mp3"
+        self.audioController.present(view: self.view, version: readVersion, book: readBook, chapter: readChapter,
+                                     fileType: readType)
     }
 
     override func didReceiveMemoryWarning() {
