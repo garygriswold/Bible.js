@@ -83,9 +83,9 @@ Compute Summary Tables for Reporting
 
 This section adds computed tables to the DownloadERV.db
 
-1. In the prior reporting period, find a file named compute.sh
-2. Copy the file into the current Analytics/year_mon directory.
-3. Review to see if any new calculations are required.
+1. In the prior reporting period, find files compute.sh, PieChart.js, Pivot3.js
+2. Copy the files into the current Analytics/year_mon directory.
+3. Review compute.sh to see if any new calculations are required.
 4. Execute the compute.sh script
 
 It will create the following tables:
@@ -94,25 +94,67 @@ It will create the following tables:
 	VersionByLanguage
 	VersionByMonth  
 	
-It will create the following output file:
+It will create the following output file that can be loaded into Numbers or Excel
+	VersionByMonth.csv
 	VersionByCountry.csv
-	
-***** TO BE DONE
-
-## To BE DONE
-#	VersionByCountryPivot
+	VersionByLanguage.csv
+	VersionByDeviceOS.csv
 
 	
 Build Tables and Pie Charts
 ---------------------------
 
-Copy the files PieChart.js and Pivot3.js into the current Analytics/year_mon directory.
-These program, run with a variety of parameters can be used to generate the numbers
-for various tables and Pie Charts as CSV files.
+Load the following files into Numbers or Excel and prepare
+the described spreadsheets and graphs
 
-Pivot3.js requires the following parameters
+VersionByMonth.csv
 
-	node Pivot3.js databaseName, tableName, xAxisColumn, yAxisColumn, value
+	Translations By Month - Stacked Bar Graph
+		Version on Y Axis
+		Months Stacked
+		Sum on X Axis
+		
+	Translations By Month - Spreadsheet
+		Version on Y Axis
+		Months on X Axis
+		Sum in Cells
+		Total for period in rightmost column
+		
+VersionByCountry.csv
+	
+	Translations By Country - Pie Chart
+		Pie Chart of each Version
+		Slices are Countries
+		
+	Translations By Country - Spreadsheet
+		Country name on Y Axis
+		Version on X Axis
+		Sum in Cells
+		Total for country in rightmost column
+		
+VersionByLanguage.csv
+
+	Translations By User's Preferred Language - Spreadsheet
+		Language on Y Axis
+		Version on X Axis
+		Sum in Cells
+		Total for language in rightmost column
+		
+VersionByDeviceOS.csv
+	
+	Translations by Device OS - Stacked Bar Graph
+		Version on Y Axis
+		OS on Stack
+		Sum on X Axis
+		
+	Translations by Device OS - Spreadsheet
+		Version on Y Axis
+		Device OS on X Axis
+		Sum in cells
+		Total for Version in rightmost column
+	
+
+
 	
 PieChart.js requires the following parameters
 
@@ -130,55 +172,3 @@ Table: Downloads by Version and user's preferred language.  Presented as a table
 Downloads by Version and Device OS, Presented as a stacked graph and a table
 	
 	
-Example Queries that are useful for Presentation
-------------------------------------------------
-
-Downloads of any ERV version in period.
-
-	select count(*) from DownloadERV;
-	
-Download of Versions by month
-
-	select version, year || '-' || month, count(*) from DownloadERV 
-	group by version, year || '-' || month;
-	
-Download of Versions by day
-
-	select year, month, day, version, count(*) from DownloadERV 
-	group by year, month, day, version;
-	
-Download of Versions by country in period.
-
-	select country, version, count(*) from DownloadERV 
-	group by country, version;
-	
-Download of Versions by language in period.
-
-	select version, language, count(*) from DownloadERV 
-	group by version, language
-	order by language, version;
-	
-Download of Versions by country and language in period.
-
-	select language, country, version, count(*) from DownloadERV 
-	group by language, country, version
-	order by version, language, country;
-	
-Download by OS in period
-
-	select osType, count(*) from DownloadERV 
-	group by osType;
-	
-Download by OS by month
-
-	select year, month, osType, count(*) from DownloadERV 
-	where datetime >= '2016' and datetime < '2017-07'
-	group by year, month, osType;
-	
-
-I might need to pull and language table and a country table into the database for joins
-Would this be a new database created for the report.
-
-What do I do with app download information????
-
-It appears that about March 1, ERV-ENG was included and no longer downloaded.
