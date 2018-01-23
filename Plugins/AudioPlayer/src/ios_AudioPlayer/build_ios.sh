@@ -5,7 +5,7 @@
 LIBS=$HOME/Library/Frameworks
 
 AWS=AWS.framework
-ZIP=Zip.framework
+ZIP=PKZip.framework
 AWSCORE=AWSCore.framework
 
 PLUGINS=$HOME/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios_AudioPlayer/AudioPlayer
@@ -44,7 +44,7 @@ TARGET=$PLUGINS/$ZIP
 echo $TARGET
 rm -rf $TARGET
 cp -Rf $SOURCE/$ZIP $TARGET
-lipo -info $TARGET/Zip
+lipo -info $TARGET/PKZip
 
 
 

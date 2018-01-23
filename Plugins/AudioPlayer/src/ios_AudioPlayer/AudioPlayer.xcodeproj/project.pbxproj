@@ -3,25 +3,23 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E40954C01F351E1700046DE7 /* AWS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E42B3F6E1F32426B00A51430 /* AWS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E40954C21F351E6700046DE7 /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E40954C11F351E6700046DE7 /* Zip.framework */; };
-		E40954C41F351E7100046DE7 /* Zip.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E40954C11F351E6700046DE7 /* Zip.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E40F85631F55BD0400282299 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = E40F85621F55BD0400282299 /* Images */; };
 		E4148DC71F3E859B007D5870 /* TOCAudioChapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC61F3E859B007D5870 /* TOCAudioChapter.swift */; };
 		E4148DC91F42828D007D5870 /* Reference.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC81F42828D007D5870 /* Reference.swift */; };
-		E417653E1F9C1E880048B4A7 /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E417653D1F9C1E880048B4A7 /* AWSCognito.framework */; };
-		E417653F1F9C1E880048B4A7 /* AWSCognito.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E417653D1F9C1E880048B4A7 /* AWSCognito.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E41765411F9C1F1C0048B4A7 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E41765401F9C1F1C0048B4A7 /* AWSCore.framework */; };
-		E41765421F9C1F1C0048B4A7 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E41765401F9C1F1C0048B4A7 /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E41E5EC41F38FB8700B18D3F /* AudioBibleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E5EC31F38FB8700B18D3F /* AudioBibleView.swift */; };
-		E42B3F6F1F32426B00A51430 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E42B3F6E1F32426B00A51430 /* AWS.framework */; };
 		E42C91811FBA625300612F38 /* Sqlite3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42C91801FBA625300612F38 /* Sqlite3.swift */; };
 		E43D50BD1F44BA8F00B38A7C /* MediaPlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43D50BC1F44BA8F00B38A7C /* MediaPlayState.swift */; };
 		E45154131FAD66440001D98E /* AudioControlCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45154121FAD66440001D98E /* AudioControlCenter.swift */; };
+		E459024E2017AC2000EAAA2B /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E42B3F6E1F32426B00A51430 /* AWS.framework */; };
+		E459024F2017AC2000EAAA2B /* AWS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E42B3F6E1F32426B00A51430 /* AWS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E45902532017AC3D00EAAA2B /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45902512017AC3D00EAAA2B /* AWSCore.framework */; };
+		E45902542017AC3D00EAAA2B /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E45902512017AC3D00EAAA2B /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E45902552017AC3D00EAAA2B /* PKZip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45902522017AC3D00EAAA2B /* PKZip.framework */; };
+		E45902562017AC3D00EAAA2B /* PKZip.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E45902522017AC3D00EAAA2B /* PKZip.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E465430D1F82908400F9B340 /* MetaDataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */; };
 		E465430E1F82910200F9B340 /* TOCAudioChapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC61F3E859B007D5870 /* TOCAudioChapter.swift */; };
 		E465430F1F82926600F9B340 /* TOCAudioBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */; };
@@ -59,16 +57,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		E40954BE1F351E1100046DE7 /* Embed Frameworks */ = {
+		E45902502017AC2000EAAA2B /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E40954C01F351E1700046DE7 /* AWS.framework in Embed Frameworks */,
-				E41765421F9C1F1C0048B4A7 /* AWSCore.framework in Embed Frameworks */,
-				E40954C41F351E7100046DE7 /* Zip.framework in Embed Frameworks */,
-				E417653F1F9C1E880048B4A7 /* AWSCognito.framework in Embed Frameworks */,
+				E459024F2017AC2000EAAA2B /* AWS.framework in Embed Frameworks */,
+				E45902562017AC3D00EAAA2B /* PKZip.framework in Embed Frameworks */,
+				E45902542017AC3D00EAAA2B /* AWSCore.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -76,18 +73,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		E40954C11F351E6700046DE7 /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Zip.framework; sourceTree = "<group>"; };
 		E40F85621F55BD0400282299 /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Images; sourceTree = "<group>"; };
 		E4148DC61F3E859B007D5870 /* TOCAudioChapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioChapter.swift; sourceTree = "<group>"; };
 		E4148DC81F42828D007D5870 /* Reference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reference.swift; sourceTree = "<group>"; };
-		E417653D1F9C1E880048B4A7 /* AWSCognito.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCognito.framework; path = "../../../../../../AWS_SDK/aws-ios-sdk-2.6.4/frameworks/AWSCognito.framework"; sourceTree = "<group>"; };
-		E41765401F9C1F1C0048B4A7 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = "../../../../../../AWS_SDK/aws-ios-sdk-2.6.4/frameworks/AWSCore.framework"; sourceTree = "<group>"; };
 		E41E5EC31F38FB8700B18D3F /* AudioBibleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioBibleView.swift; sourceTree = "<group>"; };
 		E42B3F6E1F32426B00A51430 /* AWS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWS.framework; sourceTree = "<group>"; };
-		E42B3F701F32428000A51430 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
 		E42C91801FBA625300612F38 /* Sqlite3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sqlite3.swift; sourceTree = "<group>"; };
 		E43D50BC1F44BA8F00B38A7C /* MediaPlayState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPlayState.swift; sourceTree = "<group>"; };
 		E45154121FAD66440001D98E /* AudioControlCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioControlCenter.swift; sourceTree = "<group>"; };
+		E45902512017AC3D00EAAA2B /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = AudioPlayer/AWSCore.framework; sourceTree = "<group>"; };
+		E45902522017AC3D00EAAA2B /* PKZip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PKZip.framework; path = AudioPlayer/PKZip.framework; sourceTree = "<group>"; };
 		E46E30091FC36315005AB310 /* Versions.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = Versions.db; path = AudioPlayer/Versions.db; sourceTree = "<group>"; };
 		E4826D191F4F21140031FFE0 /* AudioBibleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioBibleController.swift; sourceTree = "<group>"; };
 		E4A32CCB1F2FB310009AECFB /* AudioPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -116,10 +111,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E42B3F6F1F32426B00A51430 /* AWS.framework in Frameworks */,
-				E41765411F9C1F1C0048B4A7 /* AWSCore.framework in Frameworks */,
-				E40954C21F351E6700046DE7 /* Zip.framework in Frameworks */,
-				E417653E1F9C1E880048B4A7 /* AWSCognito.framework in Frameworks */,
+				E459024E2017AC2000EAAA2B /* AWS.framework in Frameworks */,
+				E45902552017AC3D00EAAA2B /* PKZip.framework in Frameworks */,
+				E45902532017AC3D00EAAA2B /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,9 +131,9 @@
 		E4A32CC21F2FB310009AECFB = {
 			isa = PBXGroup;
 			children = (
+				E45902512017AC3D00EAAA2B /* AWSCore.framework */,
+				E45902522017AC3D00EAAA2B /* PKZip.framework */,
 				E46E30091FC36315005AB310 /* Versions.db */,
-				E41765401F9C1F1C0048B4A7 /* AWSCore.framework */,
-				E417653D1F9C1E880048B4A7 /* AWSCognito.framework */,
 				E4A32CCD1F2FB310009AECFB /* AudioPlayer */,
 				E4AB2E291F82015800CCDD5C /* AudioPlayerTests */,
 				E4A32CCC1F2FB310009AECFB /* Products */,
@@ -158,8 +152,6 @@
 		E4A32CCD1F2FB310009AECFB /* AudioPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				E40954C11F351E6700046DE7 /* Zip.framework */,
-				E42B3F701F32428000A51430 /* AWSCore.framework */,
 				E42B3F6E1F32426B00A51430 /* AWS.framework */,
 				E4A32CE21F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 */,
 				E40F85621F55BD0400282299 /* Images */,
@@ -207,7 +199,7 @@
 				E4A32CC71F2FB310009AECFB /* Sources */,
 				E4A32CC81F2FB310009AECFB /* Frameworks */,
 				E4A32CC91F2FB310009AECFB /* Resources */,
-				E40954BE1F351E1100046DE7 /* Embed Frameworks */,
+				E45902502017AC2000EAAA2B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -260,7 +252,7 @@
 				};
 			};
 			buildConfigurationList = E4A32CC61F2FB310009AECFB /* Build configuration list for PBXProject "AudioPlayer" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
