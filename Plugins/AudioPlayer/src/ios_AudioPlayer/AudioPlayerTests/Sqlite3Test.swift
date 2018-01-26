@@ -50,8 +50,10 @@ class Sqlite3Test: XCTestCase {
     func testNonDBInBundle() {
         let db = Sqlite3()
         do {
-            try db.open(dbPath: "EmmaFirstLostTooth.mp3", copyIfAbsent: true)
+            try db.open(dbPath: "Reference.swift", copyIfAbsent: true)
             db.close()
+            //assert(true)
+        } catch Sqlite3Error.databaseNotInBundle {
             assert(true)
         } catch let err {
             assert(false, Sqlite3.errorDescription(error: err))
@@ -78,7 +80,7 @@ class Sqlite3Test: XCTestCase {
             try db.stringSelect(query: query, complete: { resultSet in
                 assert(false, "Throw should prevent this")
             })
-        } catch Sqlite3Error.selectPrepareFailed {
+        } catch Sqlite3Error.statementPrepareFailed {
             assert(true)
         } catch let err {
             assert(false, Sqlite3.errorDescription(error: err))
@@ -111,10 +113,89 @@ class Sqlite3Test: XCTestCase {
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
             let query = "select languageId, mediaId, lengthMS from Video"
-            try db.stringSelect(query: query, complete: { resultSet in
+            try db.queryV1(sql: query, values: nil, complete: { resultSet in
                 assert(resultSet.count > 10, "There should be many rows")
                 let row: [String?] = resultSet[0]
                 assert(row.count == 3, "There should be 3 columns.")
+                ready.fulfill()
+            })
+        } catch let err {
+            assert(false, Sqlite3.errorDescription(error: err))
+        }
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error, "Error")
+        })
+    }
+    
+    func XXtestValidCreateTable() {
+        let db = Sqlite3()
+        do {
+            let ready = expectation(description: "ready")
+            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            defer { db.close() }
+            let stmt = "CREATE TABLE TEST1(abc TEXT, def INT, ghi REAL, ijk BLOB)"
+            try db.executeV1(sql: stmt, values: nil, complete: { rowCount in
+                assert(rowCount == 0, "Create table returns zero rowCount")
+                ready.fulfill()
+            })
+        } catch let err {
+            assert(false, Sqlite3.errorDescription(error: err))
+        }
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error, "Error")
+        })
+    }
+    
+    func testValidInsertText() {
+        let db = Sqlite3()
+        do {
+            let ready = expectation(description: "ready")
+            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            defer { db.close() }
+            let stmt = "INSERT INTO TEST1 (abc, def, ghi, ijk) VALUES (?, ?, ?, ?)"
+            let vals = ["abc", "def", "ghi", "jkl"]
+            try db.executeV1(sql: stmt, values: vals, complete: { rowCount in
+                assert(rowCount == 1, "Insert Text should return 1 row.")
+                ready.fulfill()
+            })
+        } catch let err {
+            assert(false, Sqlite3.errorDescription(error: err))
+        }
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error, "Error")
+        })
+    }
+    
+    func testValidInsertInt() {
+        let db = Sqlite3()
+        do {
+            let ready = expectation(description: "ready")
+            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            defer { db.close() }
+            let stmt = "INSERT INTO TEST1 (abc, def, ghi, ijk) VALUES (?, ?, ?, ?)"
+            let vals = ["123", "345", "678", "910"]
+            try db.executeV1(sql: stmt, values: vals, complete: { rowCount in
+                assert(rowCount == 1, "Insert Int should return 1 row.")
+                ready.fulfill()
+            })
+        } catch let err {
+            assert(false, Sqlite3.errorDescription(error: err))
+        }
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error, "Error")
+        })
+    }
+    
+    func testValidInsertReal() {
+        let db = Sqlite3()
+        do {
+            let ready = expectation(description: "ready")
+            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            defer { db.close() }
+            let stmt = "INSERT INTO TEST1 (abc, def, ghi, ijk) VALUES (?, ?, ?, ?)"
+            let vals = ["12.3", "34.5", "67.8", "91.0"]
+            try db.executeV1(sql: stmt, values: vals, complete: { rowCount in
+                assert(rowCount == 1, "Insert Real should return 1 row.")
                 ready.fulfill()
             })
         } catch let err {

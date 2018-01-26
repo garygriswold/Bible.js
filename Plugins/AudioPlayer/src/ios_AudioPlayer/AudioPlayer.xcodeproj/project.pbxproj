@@ -34,7 +34,6 @@
 		E4A32CD61F2FB310009AECFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4A32CD51F2FB310009AECFB /* Assets.xcassets */; };
 		E4A32CD91F2FB310009AECFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4A32CD71F2FB310009AECFB /* LaunchScreen.storyboard */; };
 		E4A32CE11F2FB420009AECFB /* AudioBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A32CE01F2FB420009AECFB /* AudioBible.swift */; };
-		E4A32CE31F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E4A32CE21F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 */; };
 		E4A65BDB1F76B65E00C1725C /* AudioSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A65BDA1F76B65E00C1725C /* AudioSession.swift */; };
 		E4A848921FC2AA3A00C49C07 /* Sqlite3Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A848911FC2AA3A00C49C07 /* Sqlite3Test.swift */; };
 		E4A848931FC2AA6400C49C07 /* Sqlite3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42C91801FBA625300612F38 /* Sqlite3.swift */; };
@@ -93,7 +92,6 @@
 		E4A32CD81F2FB310009AECFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E4A32CDA1F2FB310009AECFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4A32CE01F2FB420009AECFB /* AudioBible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioBible.swift; sourceTree = "<group>"; };
-		E4A32CE21F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = EmmaFirstLostTooth.mp3; sourceTree = "<group>"; };
 		E4A65BDA1F76B65E00C1725C /* AudioSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSession.swift; sourceTree = "<group>"; };
 		E4A848911FC2AA3A00C49C07 /* Sqlite3Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sqlite3Test.swift; sourceTree = "<group>"; };
 		E4AB2E281F82015800CCDD5C /* AudioPlayerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioPlayerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -153,7 +151,6 @@
 			isa = PBXGroup;
 			children = (
 				E42B3F6E1F32426B00A51430 /* AWS.framework */,
-				E4A32CE21F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 */,
 				E40F85621F55BD0400282299 /* Images */,
 				E4148DC81F42828D007D5870 /* Reference.swift */,
 				E4A32CD01F2FB310009AECFB /* ViewController.swift */,
@@ -280,7 +277,6 @@
 				E46E300A1FC36315005AB310 /* Versions.db in Resources */,
 				E4A32CD61F2FB310009AECFB /* Assets.xcassets in Resources */,
 				E4A32CD41F2FB310009AECFB /* Main.storyboard in Resources */,
-				E4A32CE31F2FD64A009AECFB /* EmmaFirstLostTooth.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

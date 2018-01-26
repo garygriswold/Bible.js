@@ -17,8 +17,9 @@ enum Sqlite3Error: Error {
     case databaseNotFound(name: String)
     case databaseNotInBundle(name: String)
     case databaseCopyError(name: String, srcError: Error)
-    case databaseOpenError(name: String, sqliteError: Int32)
-    case selectPrepareFailed(statement: String, sqliteError: Int32)
+    case databaseOpenError(name: String, sqliteError: String)
+    case statementPrepareFailed(sql: String, sqliteError: String)
+    case statementExecuteFailed(sql: String, sqliteError: String)
 }
 
 class Sqlite3 {
@@ -59,7 +60,8 @@ class Sqlite3 {
             self.database = db!
         } else {
             print("SQLITE Result Code = \(result)")
-            throw Sqlite3Error.databaseOpenError(name: dbPath, sqliteError: result)
+            let openMsg = String.init(cString: sqlite3_errmsg(database))
+            throw Sqlite3Error.databaseOpenError(name: dbPath, sqliteError: openMsg)
         }
     }
     
@@ -109,18 +111,48 @@ class Sqlite3 {
     }
     
     /**
-    * This select statement returns an array of rows of string arrays.
-    * Column values are found in the result set by ordinal position in the query.
-    * For simplicity all results are String, and this is also most efficient, because
-    * Almost all values in sqlite are stored as cstrings.
+    * This execute accepts only strings on the understanding that sqlite will convert data into the type
+    * that is correct based on the affinity of the type in the database.
     */
-    public func stringSelect(query: String, complete: @escaping (_ results:[[String?]]) -> Void) throws {
+    public func executeV1(sql: String, values: [String?]?, complete: @escaping (_ count: Int) -> Void) throws {
+        if database != nil {
+            var statement: OpaquePointer? = nil
+            let prepareOut = sqlite3_prepare_v2(database, sql, -1, &statement, nil)
+            defer { sqlite3_finalize(statement) }
+            if prepareOut == SQLITE_OK {
+                self.bindStatement(statement: statement!, values: values)
+                let stepOut = sqlite3_step(statement)
+                if stepOut == SQLITE_DONE {
+                    let rowCount = Int(sqlite3_changes(database))
+                    complete(rowCount)
+                    
+                } else {
+                    let execMsg = String.init(cString: sqlite3_errmsg(database))
+                    throw Sqlite3Error.statementExecuteFailed(sql: sql, sqliteError: execMsg)
+                }
+            } else {
+                let prepareMsg = String.init(cString: sqlite3_errmsg(database))
+                throw Sqlite3Error.statementPrepareFailed(sql: sql, sqliteError: prepareMsg)
+            }
+        } else {
+            throw Sqlite3Error.databaseNotFound(name: "unknown")
+        }
+    }
+    
+    /**
+     * This execute accepts only strings on the understanding that sqlite will convert data into the type
+     * that is correct based on the affinity of the type in the database.
+     *
+     * Also, this query method returns a resultset that is an array of an array of Strings.
+     */
+    public func queryV1(sql: String, values: [String?]?, complete: @escaping (_ results:[[String?]]) -> Void) throws {
         if database != nil {
             var resultSet: [[String?]] = []
             var statement: OpaquePointer? = nil
-            let result = sqlite3_prepare_v2(database, query, -1, &statement, nil)
+            let prepareOut = sqlite3_prepare_v2(database, sql, -1, &statement, nil)
             defer { sqlite3_finalize(statement) }
-            if result == SQLITE_OK {
+            if prepareOut == SQLITE_OK {
+                self.bindStatement(statement: statement!, values: values)
                 let colCount = Int(sqlite3_column_count(statement))
                 while (sqlite3_step(statement) == SQLITE_ROW) {
                     var row: [String?] = [String?] (repeating: nil, count: colCount)
@@ -135,7 +167,23 @@ class Sqlite3 {
                 }
                 complete(resultSet)
             } else {
-                throw Sqlite3Error.selectPrepareFailed(statement: query, sqliteError: result)
+                let prepareMsg = String.init(cString: sqlite3_errmsg(database))
+                throw Sqlite3Error.statementPrepareFailed(sql: sql, sqliteError: prepareMsg)
+            }
+        } else {
+            throw Sqlite3Error.databaseNotFound(name: "unknown")
+        }
+    }
+    
+    private func bindStatement(statement: OpaquePointer, values: [String?]?) {
+        if let params = values {
+            for i in 0..<params.count {
+                let col = Int32(i + 1)
+                if let param = params[i] {
+                    sqlite3_bind_text(statement, col, (param as NSString).utf8String, -1, nil)
+                } else {
+                    sqlite3_bind_null(statement, col)
+                }
             }
         }
     }
@@ -153,8 +201,10 @@ class Sqlite3 {
                 return "DatabaseCopyError: \(srcError.localizedDescription)  \(name)"
             case Sqlite3Error.databaseOpenError(let name, let sqliteError) :
                 return "SqliteOpenError: \(sqliteError)  on database: \(name)"
-            case Sqlite3Error.selectPrepareFailed(let statement, let sqliteError) :
-                return "SelectPrepareFailed: \(sqliteError)  on stmt: \(statement)"
+            case Sqlite3Error.statementPrepareFailed(let sql, let sqliteError) :
+                return "StatementPrepareFailed: \(sqliteError)  on stmt: \(sql)"
+            case Sqlite3Error.statementExecuteFailed(let sql, let sqliteError) :
+                return "StatementExecuteFailed: \(sqliteError)  on stmt: \(sql)"
             default:
                 return "Unknown Sqlite3Error"
             }

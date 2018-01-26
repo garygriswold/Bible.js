@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         AwsS3.region = "us-east-1"
-        let readVersion = "ESV"
+        let readVersion = "KJVPD"//ESV"
         let readBook = "JHN"
         let readChapter = "002"
         let readType = "mp3"

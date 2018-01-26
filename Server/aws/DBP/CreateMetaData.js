@@ -27,7 +27,7 @@ var createMetaData = function(callback) {
 	var versions = {
 			// America
 			'ESV':	   ['ENG', 'ESV', true],
-			'ERV-ENG': ['ENG', 'WEB', false ],
+			'ERV-ENG': ['ENG', 'ESV', false ],
 			'KJVPD':   ['ENG', 'KJV', true ],
 			'WEB':     ['ENG', 'WEB', true ],
 			'ERV-POR': ['POR', 'ARA', false ],
