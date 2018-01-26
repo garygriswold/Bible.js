@@ -12,7 +12,7 @@ class TOCAudioBook {
     let bookId: String
     let bookOrder: String
     let sequence: Int
-    let bookName: String // Required by AudioControlCenter
+    var bookName: String // Used by AudioControlCenter
     let numberOfChapters: Int
 
     init(bible: TOCAudioBible, dbRow: [String?]) {
@@ -20,9 +20,9 @@ class TOCAudioBook {
         self.bookId = dbRow[0]!
         self.bookOrder = dbRow[1]!
         self.sequence = Int(self.bookOrder) ?? 0
-        self.bookName = ""
+        self.bookName = self.bookId // Reset by MetaDataReader.readBookNames to bookName
         let chapters = dbRow[2]!
-        self.numberOfChapters = Int(chapters) ?? 0
+        self.numberOfChapters = Int(chapters) ?? 1
     }
     
     deinit {

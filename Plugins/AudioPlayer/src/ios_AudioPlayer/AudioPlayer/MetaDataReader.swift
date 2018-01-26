@@ -64,6 +64,7 @@ class MetaDataReader {
                     self.newTestament = TOCAudioBible(database: db, mediaSource: "FCBH", dbRow: newRow)
                 }
                 complete(self.oldTestament, self.newTestament)
+                self.readBookNames(versionCode: versionCode)
             })
         } catch let err {
             print("ERROR \(Sqlite3.errorDescription(error: err))")
@@ -110,6 +111,28 @@ class MetaDataReader {
                     }
                     complete(self.metaDataVerse)
             })
+    }
+    
+    private func readBookNames(versionCode: String) {
+        let db = Sqlite3()
+        let query = "SELECT code, heading FROM tableContents"
+        do {
+            let dbName = versionCode + ".db"
+            try db.open(dbPath: dbName, copyIfAbsent: true)
+            defer { db.close() }
+            try db.queryV1(sql: query, values: nil, complete: { resultSet in
+                for row in resultSet {
+                    let bookId = row[0]!
+                    if let oldTest = self.oldTestament?.booksById[bookId] {
+                        oldTest.bookName = row[1]!
+                    } else if let newTest = self.newTestament?.booksById[bookId] {
+                        newTest.bookName = row[1]!
+                    }
+                }
+            })
+        } catch let err {
+            print("ERROR \(Sqlite3.errorDescription(error: err))")
+        }
     }
     
     private func parseJsonDictionary(json: Data) -> NSDictionary? {

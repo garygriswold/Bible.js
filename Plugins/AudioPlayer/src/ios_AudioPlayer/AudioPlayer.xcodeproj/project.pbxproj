@@ -38,6 +38,9 @@
 		E4A848921FC2AA3A00C49C07 /* Sqlite3Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A848911FC2AA3A00C49C07 /* Sqlite3Test.swift */; };
 		E4A848931FC2AA6400C49C07 /* Sqlite3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42C91801FBA625300612F38 /* Sqlite3.swift */; };
 		E4AB2E331F82019500CCDD5C /* TOCAudioBibleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AB2E321F82019500CCDD5C /* TOCAudioBibleTest.swift */; };
+		E4C93A89201BDBA300ED4E06 /* WEB.db in Resources */ = {isa = PBXBuildFile; fileRef = E4C93A86201BDBA300ED4E06 /* WEB.db */; };
+		E4C93A8A201BDBA300ED4E06 /* ERV-ENG.db in Resources */ = {isa = PBXBuildFile; fileRef = E4C93A87201BDBA300ED4E06 /* ERV-ENG.db */; };
+		E4C93A8B201BDBA300ED4E06 /* KJVPD.db in Resources */ = {isa = PBXBuildFile; fileRef = E4C93A88201BDBA300ED4E06 /* KJVPD.db */; };
 		E4F69CED1F39684800EE53AB /* MetaDataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */; };
 		E4F69CEF1F397CF200EE53AB /* TOCAudioBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */; };
 		E4F69CF11F397D0800EE53AB /* TOCAudioBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */; };
@@ -97,6 +100,9 @@
 		E4AB2E281F82015800CCDD5C /* AudioPlayerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioPlayerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4AB2E2C1F82015800CCDD5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4AB2E321F82019500CCDD5C /* TOCAudioBibleTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOCAudioBibleTest.swift; sourceTree = "<group>"; };
+		E4C93A86201BDBA300ED4E06 /* WEB.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = WEB.db; sourceTree = "<group>"; };
+		E4C93A87201BDBA300ED4E06 /* ERV-ENG.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ERV-ENG.db"; sourceTree = "<group>"; };
+		E4C93A88201BDBA300ED4E06 /* KJVPD.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = KJVPD.db; sourceTree = "<group>"; };
 		E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaDataReader.swift; sourceTree = "<group>"; };
 		E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioBible.swift; sourceTree = "<group>"; };
 		E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioBook.swift; sourceTree = "<group>"; };
@@ -166,6 +172,9 @@
 				E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */,
 				E4148DC61F3E859B007D5870 /* TOCAudioChapter.swift */,
 				E42C91801FBA625300612F38 /* Sqlite3.swift */,
+				E4C93A87201BDBA300ED4E06 /* ERV-ENG.db */,
+				E4C93A88201BDBA300ED4E06 /* KJVPD.db */,
+				E4C93A86201BDBA300ED4E06 /* WEB.db */,
 				E4A32CD21F2FB310009AECFB /* Main.storyboard */,
 				E4A32CCE1F2FB310009AECFB /* AppDelegate.swift */,
 				E4A32CD51F2FB310009AECFB /* Assets.xcassets */,
@@ -273,9 +282,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E40F85631F55BD0400282299 /* Images in Resources */,
+				E4C93A8A201BDBA300ED4E06 /* ERV-ENG.db in Resources */,
 				E4A32CD91F2FB310009AECFB /* LaunchScreen.storyboard in Resources */,
+				E4C93A8B201BDBA300ED4E06 /* KJVPD.db in Resources */,
 				E46E300A1FC36315005AB310 /* Versions.db in Resources */,
 				E4A32CD61F2FB310009AECFB /* Assets.xcassets in Resources */,
+				E4C93A89201BDBA300ED4E06 /* WEB.db in Resources */,
 				E4A32CD41F2FB310009AECFB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
