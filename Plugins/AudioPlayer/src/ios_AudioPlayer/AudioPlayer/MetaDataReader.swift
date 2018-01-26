@@ -29,14 +29,14 @@ class MetaDataReader {
                 " FROM audio a, audioVersion v" +
                 " WHERE a.dbpLanguageCode = v.dbpLanguageCode" +
                 " AND a.dbpVersionCode = v.dbpVersionCode" +
-                " AND v.versionCode = '" + versionCode + "'" +
+                " AND v.versionCode = ?" +
                 " ORDER BY mediaType ASC, collectionCode ASC"
                 // mediaType sequence Drama, NonDrama
                 // collectionCode sequence NT, ON, OT
         do {
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
-            try db.stringSelect(query: query, complete: { resultSet in
+            try db.queryV1(sql: query, values: [versionCode], complete: { resultSet in
                 print("LENGTH \(resultSet.count)")
                 for row in resultSet {
                     let item = TOCAudioBible(database: db, mediaSource: "FCBH", dbRow: row)

@@ -29,9 +29,7 @@ class AudioBibleController {
             let metaBook = metaData.findBook(bookId: book)
             if let book = metaBook {
                 let tocBible = book.bible
-                let reference = Reference(damId: tocBible.damId, sequence: book.bookOrder,
-                                          book: book.bookId,
-                                          bookName: book.bookName, chapter: chapter, fileType: fileType)
+                let reference = Reference(bible: tocBible, book: book, chapter: chapter, fileType: fileType)
                 let reader = AudioBible(controller: self, tocBible: tocBible, reference: reference)
                 self.readerView = AudioBibleView(view: view, audioBible: reader)
                 self.audioSession = AudioSession(audioBibleView: self.readerView!)

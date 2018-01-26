@@ -53,12 +53,16 @@ class AudioControlCenter {
             if let item = play.currentItem {
                 var nowPlayingInfo = [String : Any]()
                 nowPlayingInfo[MPMediaItemPropertyTitle] = reference.localName
-                if let image = UIImage(named: "lockscreen") {
-                    nowPlayingInfo[MPMediaItemPropertyArtwork] =
-                        MPMediaItemArtwork(boundsSize: image.size) { size in
-                            return image
-                    }
-                }
+                print("Name: \(reference.localName)")
+                //if let image = UIImage(named: "Images/PauseUPButton.png") {
+                //    nowPlayingInfo[MPMediaItemPropertyArtwork] =
+                //        MPMediaItemArtwork(boundsSize: image.size) { size in
+                //            return image
+                //    }
+                //}
+                print("Time: \(item.currentTime().seconds)")
+                print("Duration: \(item.asset.duration.seconds)")
+                print("Rate: \(play.rate)")
                 nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = item.currentTime().seconds
                 nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = item.asset.duration.seconds
                 nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = play.rate

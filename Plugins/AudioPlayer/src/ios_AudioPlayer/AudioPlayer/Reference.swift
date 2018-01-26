@@ -8,19 +8,15 @@
 
 class Reference {
     
-    let damId: String
-    let sequence: String
-    let book: String
-    let bookName: String // What is bookName doing here?  Can I remove it?
+    let tocAudioBible: TOCAudioBible
+    let tocAudioBook: TOCAudioBook
     let chapter: String
     let fileType: String
     var audioChapter: TOCAudioChapter?
     
-    init(damId: String, sequence: String, book: String, bookName: String, chapter: String, fileType: String) {
-        self.damId = damId
-        self.sequence = sequence
-        self.book = book
-        self.bookName = bookName
+    init(bible: TOCAudioBible, book: TOCAudioBook, chapter: String, fileType: String) {
+        self.tocAudioBible = bible
+        self.tocAudioBook = book
         self.chapter = chapter
         self.fileType = fileType
     }
@@ -29,9 +25,33 @@ class Reference {
         print("***** Deinit Reference ***** \(self.toString())")
     }
     
+    var damId: String {
+        get {
+            return self.tocAudioBible.damId
+        }
+    }
+    
+    var sequence: String {
+        get {
+            return self.tocAudioBook.bookOrder
+        }
+    }
+    
     var sequenceNum: Int {
         get {
-            return Int(self.sequence) ?? 1
+            return Int(self.tocAudioBook.bookOrder) ?? 1
+        }
+    }
+    
+    var book: String {
+        get {
+            return self.tocAudioBook.bookId
+        }
+    }
+    
+    var bookName: String {
+        get {
+            return self.tocAudioBook.bookName
         }
     }
     
@@ -43,7 +63,7 @@ class Reference {
     
     var localName: String {
         get {
-            return self.bookName + " " + String(Int(self.chapter) ?? 1)
+            return self.tocAudioBook.bookName + " " + String(Int(self.chapter) ?? 1)
         }
     }
     

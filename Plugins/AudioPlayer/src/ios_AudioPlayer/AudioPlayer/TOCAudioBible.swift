@@ -6,8 +6,6 @@
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
 
-//import Foundation
-
 class TOCAudioBible {
     
     let mediaSource: String
@@ -31,9 +29,9 @@ class TOCAudioBible {
 
         let query = "SELECT bookId, bookOrder, numberOfChapters" +
             " FROM AudioBook" +
-            " WHERE damId = '" + self.damId + "'"
+            " WHERE damId = ?"
         do {
-            try database.stringSelect(query: query, complete: { resultSet in
+            try database.queryV1(sql: query, values: [self.damId], complete: { resultSet in
                 for row in resultSet {
                     let book = TOCAudioBook(bible: self, dbRow: row)
                     print("\(book.toString())")
@@ -41,6 +39,7 @@ class TOCAudioBible {
                     self.booksBySeq[book.sequence] = book
                 }
             })
+            
         } catch let err {
             print("ERROR \(Sqlite3.errorDescription(error: err))")
         }
@@ -57,21 +56,16 @@ class TOCAudioBible {
                 let next = ref.chapterNum + 1
                 let nextStr = String(next)
                 switch(nextStr.count) {
-                    case 1: return Reference(damId: reference.damId, sequence: ref.sequence, book: ref.book,
-                                             bookName: ref.bookName, chapter: "00" + nextStr,
-                                             fileType: reference.fileType)
-                    case 2: return Reference(damId: reference.damId, sequence: ref.sequence, book: ref.book,
-                                             bookName: ref.bookName, chapter: "0" + nextStr,
-                                             fileType: reference.fileType)
-                    default: return Reference(damId: reference.damId, sequence: ref.sequence, book: ref.book,
-                                              bookName: ref.bookName, chapter: nextStr,
-                                              fileType: reference.fileType)
+                    case 1: return Reference(bible: ref.tocAudioBible, book: ref.tocAudioBook,
+                                             chapter: "00" + nextStr, fileType: ref.fileType)
+                    case 2: return Reference(bible: ref.tocAudioBible, book: ref.tocAudioBook,
+                                             chapter: "0" + nextStr, fileType: ref.fileType)
+                    default: return Reference(bible: ref.tocAudioBible, book: ref.tocAudioBook,
+                                              chapter: nextStr, fileType: ref.fileType)
                 }
             } else {
                 if let nextBook = self.booksBySeq[reference.sequenceNum + 1] {
-                    return Reference(damId: reference.damId, sequence: nextBook.bookOrder,
-                                     book: nextBook.bookId,
-                                     bookName: nextBook.bookName, chapter: "001", fileType: reference.fileType)
+                    return Reference(bible: ref.tocAudioBible, book: nextBook, chapter: "001", fileType: ref.fileType)
                 }
             }
         }

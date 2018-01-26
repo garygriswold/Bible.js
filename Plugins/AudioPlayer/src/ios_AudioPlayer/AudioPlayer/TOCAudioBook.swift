@@ -12,7 +12,7 @@ class TOCAudioBook {
     let bookId: String
     let bookOrder: String
     let sequence: Int
-    let bookName: String // I don't know why this is here.  Can I remove it?
+    let bookName: String // Required by AudioControlCenter
     let numberOfChapters: Int
 
     init(bible: TOCAudioBible, dbRow: [String?]) {
