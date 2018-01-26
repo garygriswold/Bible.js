@@ -5,7 +5,7 @@
 //  Created by Gary Griswold on 8/25/17.
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
-import Foundation
+
 import CoreMedia
 import AWS
 
