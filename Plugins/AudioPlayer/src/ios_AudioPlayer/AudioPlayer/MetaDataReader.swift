@@ -38,23 +38,30 @@ class MetaDataReader {
             defer { db.close() }
             try db.queryV1(sql: query, values: [versionCode], complete: { resultSet in
                 print("LENGTH \(resultSet.count)")
+                var oldTestRow: [String?]? = nil
+                var newTestRow: [String?]? = nil
                 for row in resultSet {
-                    let item = TOCAudioBible(database: db, mediaSource: "FCBH", dbRow: row)
-                    print("\(item.toString())")
                     // Because of the sort sequence, the following logic prefers Drama over Non-Drama
                     // Because of the sequenc of IF's, it prefers OT and NT over ON
-                    if self.newTestament == nil && item.collectionCode == "NT" {
-                        self.newTestament = item
+                    let collectionCode = row[1]!
+                    if newTestRow == nil && collectionCode == "NT" {
+                        newTestRow = row
                     }
-                    if self.newTestament == nil && item.collectionCode == "ON" {
-                        self.newTestament = item
+                    if newTestRow == nil && collectionCode == "ON" {
+                        newTestRow = row
                     }
-                    if self.oldTestament == nil && item.collectionCode == "OT" {
-                        self.oldTestament = item
+                    if oldTestRow == nil && collectionCode == "OT" {
+                        oldTestRow = row
                     }
-                    if self.oldTestament == nil && item.collectionCode == "ON" {
-                        self.oldTestament = item
+                    if oldTestRow == nil && collectionCode == "ON" {
+                        oldTestRow = row
                     }
+                }
+                if let oldRow = oldTestRow {
+                    self.oldTestament = TOCAudioBible(database: db, mediaSource: "FCBH", dbRow: oldRow)
+                }
+                if let newRow = newTestRow {
+                    self.newTestament = TOCAudioBible(database: db, mediaSource: "FCBH", dbRow: newRow)
                 }
                 complete(self.oldTestament, self.newTestament)
             })
