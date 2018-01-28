@@ -20,6 +20,18 @@ class Reference {
         self.chapter = chapter
         self.fileType = fileType
     }
+    
+    convenience init(bible: TOCAudioBible, book: TOCAudioBook, chapterNum: Int, fileType: String) {
+        let chapter = String(chapterNum)
+        switch chapter.count {
+        case 1:
+            self.init(bible: bible, book: book, chapter: "00" + chapter, fileType: fileType)
+        case 2:
+            self.init(bible: bible, book: book, chapter: "0" + chapter, fileType: fileType)
+        default:
+            self.init(bible: bible, book: book, chapter: chapter, fileType: fileType)
+        }
+    }
    
     deinit {
         print("***** Deinit Reference ***** \(self.toString())")

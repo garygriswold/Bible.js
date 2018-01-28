@@ -135,6 +135,18 @@ public class AudioBible : NSObject {
     
     /** This method is called by AudioControlCenter.swift when user clicks the prior button. */
     func priorChapter() {
+        if let item = self.player?.currentItem {
+            if item.currentTime().seconds < 1.0 {
+                if let prior = self.tocAudioBible.priorChapter(reference: self.currReference) {
+                    self.nextReference = self.currReference
+                    self.currReference = prior
+                    self.addNextChapter(reference: self.currReference)
+                }
+            } else {
+                item.seek(to: kCMTimeZero)
+                self.controlCenter.nowPlaying(player: self)
+            }
+        }
         self.player?.currentItem?.seek(to: kCMTimeZero)
     }
     
@@ -255,6 +267,7 @@ public class AudioBible : NSObject {
     }
     
     private func addNextChapter(reference: Reference) {
+        self.pause()
         AwsS3Cache.shared.readFile(s3Bucket: reference.getS3Bucket(),
                                    s3Key: reference.getS3Key(),
                                    expireInterval: Double.infinity,
@@ -265,6 +278,7 @@ public class AudioBible : NSObject {
                                         let playerItem = AVPlayerItem(asset: asset)
                                         self.player?.replaceCurrentItem(with: playerItem)
                                         self.controlCenter.nowPlaying(player: self)
+                                        self.play()
                                     }
         })
     }

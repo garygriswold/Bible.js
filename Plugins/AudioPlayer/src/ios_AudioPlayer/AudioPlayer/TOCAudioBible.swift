@@ -51,22 +51,27 @@ class TOCAudioBible {
     
     func nextChapter(reference: Reference) -> Reference? {
         let ref = reference
-        if let book = self.booksById[ref.book] {
-            if (ref.chapterNum < book.numberOfChapters) {
-                let next = ref.chapterNum + 1
-                let nextStr = String(next)
-                switch(nextStr.count) {
-                    case 1: return Reference(bible: ref.tocAudioBible, book: ref.tocAudioBook,
-                                             chapter: "00" + nextStr, fileType: ref.fileType)
-                    case 2: return Reference(bible: ref.tocAudioBible, book: ref.tocAudioBook,
-                                             chapter: "0" + nextStr, fileType: ref.fileType)
-                    default: return Reference(bible: ref.tocAudioBible, book: ref.tocAudioBook,
-                                              chapter: nextStr, fileType: ref.fileType)
-                }
-            } else {
-                if let nextBook = self.booksBySeq[reference.sequenceNum + 1] {
-                    return Reference(bible: ref.tocAudioBible, book: nextBook, chapter: "001", fileType: ref.fileType)
-                }
+        let book = ref.tocAudioBook
+        if (ref.chapterNum < book.numberOfChapters) {
+            let next = ref.chapterNum + 1
+            return Reference(bible: ref.tocAudioBible, book: ref.tocAudioBook, chapterNum: next, fileType: ref.fileType)
+        } else {
+            if let nextBook = self.booksBySeq[reference.sequenceNum + 1] {
+                return Reference(bible: ref.tocAudioBible, book: nextBook, chapter: "001", fileType: ref.fileType)
+            }
+        }
+        return nil
+    }
+    
+    func priorChapter(reference: Reference) -> Reference? {
+        let ref = reference
+        let prior = ref.chapterNum - 1
+        if (prior > 0) {
+            return Reference(bible: ref.tocAudioBible, book: ref.tocAudioBook, chapterNum: prior, fileType: ref.fileType)
+        } else {
+            if let priorBook = self.booksBySeq[reference.sequenceNum - 1] {
+                return Reference(bible: ref.tocAudioBible, book: priorBook,
+                                 chapterNum: priorBook.numberOfChapters, fileType: ref.fileType)
             }
         }
         return nil
