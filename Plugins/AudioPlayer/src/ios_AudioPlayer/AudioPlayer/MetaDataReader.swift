@@ -63,8 +63,8 @@ class MetaDataReader {
                 if let newRow = newTestRow {
                     self.newTestament = TOCAudioBible(database: db, mediaSource: "FCBH", dbRow: newRow)
                 }
-                complete(self.oldTestament, self.newTestament)
                 self.readBookNames(versionCode: versionCode)
+                complete(self.oldTestament, self.newTestament)
             })
         } catch let err {
             print("ERROR \(Sqlite3.errorDescription(error: err))")
