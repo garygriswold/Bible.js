@@ -39,11 +39,19 @@ class AudioControlCenter {
         }
         
         controlCenter.nextTrackCommand.addTarget { event in
-            return MPRemoteCommandHandlerStatus.commandFailed // To be implemented if needed
+            if player.isPlaying() {
+                player.nextChapter()
+                return MPRemoteCommandHandlerStatus.success
+            }
+            return MPRemoteCommandHandlerStatus.commandFailed
         }
         
         controlCenter.previousTrackCommand.addTarget { event in
-            return MPRemoteCommandHandlerStatus.commandFailed // To be implemented if needed
+            if player.isPlaying() {
+                player.priorChapter()
+                return MPRemoteCommandHandlerStatus.success
+            }
+            return MPRemoteCommandHandlerStatus.commandFailed
         }
     }
     

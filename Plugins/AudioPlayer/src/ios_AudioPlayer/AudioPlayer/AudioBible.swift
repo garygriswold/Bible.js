@@ -121,6 +121,23 @@ public class AudioBible : NSObject {
         self.controller.playHasStopped()
     }
     
+    /** This method is called by AudioControlCenter.swift when user clicks the next button. */
+    func nextChapter() {
+        if let curr = self.nextReference {
+            self.currReference = curr
+            self.addNextChapter(reference: curr)
+            self.preFetchNextChapter(reference: curr)
+        } else {
+            self.stop()
+            MediaPlayState.clear() // Must do after stop, because stop updates
+        }
+    }
+    
+    /** This method is called by AudioControlCenter.swift when user clicks the prior button. */
+    func priorChapter() {
+        self.player?.currentItem?.seek(to: kCMTimeZero)
+    }
+    
     func initNotifications() {
         let notify = NotificationCenter.default
         notify.addObserver(self,
@@ -183,7 +200,7 @@ public class AudioBible : NSObject {
     
     @objc func playerItemDidPlayToEndTime(note:Notification) {
         print("\n** DID PLAY TO END \(String(describing: note.object))")
-        self.advanceToNextItem()
+        self.nextChapter()
     }
     @objc func playerItemFailedToPlayToEndTime(note:Notification) {
         print("\n********* FAILED TO PLAY TO END *********\(String(describing: note.object))")
@@ -235,17 +252,6 @@ public class AudioBible : NSObject {
             }
         }
         MediaPlayState.update(url: self.currReference.toString(), time: result)
-    }
-    
-    func advanceToNextItem() {
-        if let curr = self.nextReference {
-            self.currReference = curr
-            self.addNextChapter(reference: curr)
-            self.preFetchNextChapter(reference: curr)
-        } else {
-            self.stop()
-            MediaPlayState.clear() // Must do after stop, because stop updates
-        }
     }
     
     private func addNextChapter(reference: Reference) {

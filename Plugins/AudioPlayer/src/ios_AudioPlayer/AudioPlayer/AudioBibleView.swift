@@ -260,7 +260,7 @@ class AudioBibleView : NSObject {
                 }
                 play.seek(to: current)
             } else {
-                self.audioBible.advanceToNextItem()
+                self.audioBible.nextChapter()
             }
         }
     }
