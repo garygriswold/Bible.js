@@ -61,8 +61,8 @@ class AudioSession: NSObject {
         if let value = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt {
             if let interruptionType =  AVAudioSessionInterruptionType(rawValue: value) {
                 if interruptionType == .began {
-                    print("\n****** Interruption Began, Pause in UI")
-                    self.audioBibleView.pause()
+                    print("\n****** Interruption Began")//, Pause in UI")
+                    //self.audioBibleView.pause()
                 } else if interruptionType == .ended {
                     print("\n****** Interruption Ended, Play in UI, try to resume")
                     if let optionValue = note.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt {
