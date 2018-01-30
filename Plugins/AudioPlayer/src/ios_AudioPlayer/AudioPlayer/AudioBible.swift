@@ -63,7 +63,7 @@ public class AudioBible : NSObject {
         })
     }
     
-    func initAudio(url: URL) {
+    private func initAudio(url: URL) {
         let asset = AVAsset(url: url)
         let playerItem = AVPlayerItem(asset: asset)
         print("Player Item Status \(playerItem.status)")
@@ -85,7 +85,7 @@ public class AudioBible : NSObject {
         self.controlCenter.nowPlaying(player: self)
     }
     
-    func backupSeek(state: MediaPlayState) -> CMTime {
+    private func backupSeek(state: MediaPlayState) -> CMTime {
         if (state.mediaUrl == self.currReference.toString()) {
             return state.position
         } else {
@@ -115,9 +115,6 @@ public class AudioBible : NSObject {
             self.pause()
         }
         self.removeNotifications()
-        if self.player != nil {
-            self.player = nil
-        }
         self.controller.playHasStopped()
     }
     
@@ -150,7 +147,7 @@ public class AudioBible : NSObject {
         self.player?.currentItem?.seek(to: kCMTimeZero)
     }
     
-    func initNotifications() {
+    private func initNotifications() {
         let notify = NotificationCenter.default
         notify.addObserver(self,
                            selector: #selector(playerItemDidPlayToEndTime(note:)),
@@ -194,7 +191,7 @@ public class AudioBible : NSObject {
                            object: nil)
     }
 
-    func removeNotifications() {
+    private func removeNotifications() {
         print("\n ***** INSIDE REMOVE NOTIFICATIONS")
         let notify = NotificationCenter.default
         notify.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
@@ -210,49 +207,50 @@ public class AudioBible : NSObject {
         notify.removeObserver(self, name: .UIApplicationWillTerminate, object: nil)
     }
     
-    @objc func playerItemDidPlayToEndTime(note:Notification) {
+    @objc private func playerItemDidPlayToEndTime(note:Notification) {
         print("\n** DID PLAY TO END \(String(describing: note.object))")
         self.nextChapter()
     }
-    @objc func playerItemFailedToPlayToEndTime(note:Notification) {
+    @objc private func playerItemFailedToPlayToEndTime(note:Notification) {
         print("\n********* FAILED TO PLAY TO END *********\(String(describing: note.object))")
     }
-    @objc func playerItemPlaybackStalled(note:Notification) {
+    @objc private func playerItemPlaybackStalled(note:Notification) {
         print("\n****** PLAYBACK STALLED \(String(describing: note.object))")
     }
-    @objc func playerItemNewErrorLogEntry(note:Notification) {
+    @objc private func playerItemNewErrorLogEntry(note:Notification) {
         print("\n****** ERROR LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.errorLog()))")
     }
-    @objc func playerItemNewAccessLogEntry(note:Notification) {
+    @objc private func playerItemNewAccessLogEntry(note:Notification) {
         print("\n****** ACCESS LOG ENTRY \(String(describing: note.object))\n\(String(describing: self.player?.currentItem?.accessLog()))")
     }
-    @objc func playerItemTimeJumped(note:Notification) {
+    @objc private func playerItemTimeJumped(note:Notification) {
         print("\n****** TIME JUMPED \(String(describing: note.object))")
     }
     
     /**
     * This method is called when an App is first, launched, not when it is restarted in foreground
     */
-    @objc func applicationDidFinishLaunching(note:Notification) {
+    @objc private func applicationDidFinishLaunching(note:Notification) {
         print("\n****** APP DID FINISH LAUNCHING \(String(describing: note.object)) \(Date().timeIntervalSince1970)")
     }
     /**
     * This method is called when an already running App, which went to background, restarts in foreground.
     */
-    @objc func applicationWillEnterForeground(note:Notification) {
+    @objc private func applicationWillEnterForeground(note:Notification) {
         print("\n****** APP WILL ENTER FOREGROUND \(String(describing: note.object)) \(Date().timeIntervalSince1970)")
     }
     /**
     * This method is called when the Home button or Lock button terminate the foreground App
     */
-    @objc func applicationDidEnterBackground(note:Notification) {
+    @objc private func applicationDidEnterBackground(note:Notification) {
         print("\n****** APP DID ENTER BACKGROUND \(String(describing: note.object)) \(Date().timeIntervalSince1970)")
     }
     /**
     * This method is called when the App is fully killed.  It is not affected by the Home or Lock button
     */
-    @objc func applicationWillTerminate(note:Notification) {
+    @objc private func applicationWillTerminate(note:Notification) {
         print("\n****** APP WILL TERMINATE \(String(describing: note.object)) \(Date().timeIntervalSince1970)")
+        self.stop()
     }
     
     private func updateMediaPlayStateTime() {
