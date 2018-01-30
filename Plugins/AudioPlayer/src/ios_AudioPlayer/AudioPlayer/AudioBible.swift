@@ -9,7 +9,7 @@
 import AVFoundation
 import AWS
 
-public class AudioBible : NSObject {
+class AudioBible {//}: NSObject {
     
     private let controller: AudioBibleController
     private let tocAudioBible: TOCAudioBible
@@ -50,7 +50,7 @@ public class AudioBible : NSObject {
         return (self.player != nil) ? self.player!.rate > 0.0 : false
     }
     
-    public func beginReadFile() {
+    func beginReadFile() {
         print("BibleReader.BEGIN Read File")
         AwsS3Cache.shared.readFile(s3Bucket: self.currReference.getS3Bucket(),
                    s3Key: self.currReference.getS3Key(),

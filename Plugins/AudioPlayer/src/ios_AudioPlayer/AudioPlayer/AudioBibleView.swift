@@ -9,7 +9,7 @@
 import AVFoundation
 import UIKit
 
-class AudioBibleView : NSObject {
+class AudioBibleView {//}: NSObject {
     
     let view: UIView
     let audioBible: AudioBible
@@ -159,7 +159,7 @@ class AudioBibleView : NSObject {
         }
     }
     
-    @objc func stop() {
+    @objc private func stop() {
         self.audioBible.stop()
     }
     
@@ -193,7 +193,7 @@ class AudioBibleView : NSObject {
     /**
     * Scrub Slider Animation
     */
-    @objc func updateProgress() {
+    @objc private func updateProgress() {
         if self.scrubSliderDrag { return }
         //print("Update progress \(CFAbsoluteTimeGetCurrent())")
         
@@ -234,7 +234,7 @@ class AudioBibleView : NSObject {
     * I have verified that this is not because updateProgress was unfinished.  It seems like it must be a
     * saved screen update.  I need to learn how to discard such when the
     */
-    @objc func scrubSliderChanged(sender: UISlider) {
+    @objc private func scrubSliderChanged(sender: UISlider) {
         //print("scrub slider changed to \(sender.value)")
         if let verse = self.audioBible.getCurrentReference().audioChapter {
             self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(sender.value))
@@ -242,11 +242,11 @@ class AudioBibleView : NSObject {
             self.verseLabel.position = positionVersePopup()
         }
     }
-    @objc func touchDown() {
+    @objc private func touchDown() {
         self.scrubSliderDrag = true
         //print("**** touchDown **** \(CFAbsoluteTimeGetCurrent())")
     }
-    @objc func touchUpInside(sender: UISlider) {
+    @objc private func touchUpInside(sender: UISlider) {
         self.scrubSliderDrag = false
         //print("**** touchUpInside **** \(CFAbsoluteTimeGetCurrent())")
         
@@ -275,7 +275,7 @@ class AudioBibleView : NSObject {
         notify.removeObserver(self, name: .UIApplicationWillEnterForeground, object: nil)
     }
     
-    @objc func applicationWillEnterForeground(note: Notification) {
+    @objc private func applicationWillEnterForeground(note: Notification) {
         print("\n****** APP WILL ENTER FOREGROUND IN VIEW \(Date().timeIntervalSince1970)")
         if let play = self.audioBible.getPlayer() {
             if (play.rate == 0.0) {
