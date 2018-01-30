@@ -114,7 +114,7 @@ public class AudioBible : NSObject {
         if self.player != nil && self.player!.rate > 0.0 {
             self.pause()
         }
-        self.removeNotifications()
+        //self.removeNotifications()
         self.controller.playHasStopped()
     }
     
@@ -190,7 +190,7 @@ public class AudioBible : NSObject {
                            name: .UIApplicationWillTerminate,
                            object: nil)
     }
-
+/*
     private func removeNotifications() {
         print("\n ***** INSIDE REMOVE NOTIFICATIONS")
         let notify = NotificationCenter.default
@@ -206,7 +206,7 @@ public class AudioBible : NSObject {
         notify.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
         notify.removeObserver(self, name: .UIApplicationWillTerminate, object: nil)
     }
-    
+*/
     @objc private func playerItemDidPlayToEndTime(note:Notification) {
         print("\n** DID PLAY TO END \(String(describing: note.object))")
         self.nextChapter()
