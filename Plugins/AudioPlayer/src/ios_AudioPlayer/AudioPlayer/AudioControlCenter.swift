@@ -59,22 +59,23 @@ class AudioControlCenter {
     }
     
     func nowPlaying(player: AudioBible) {
-        let reference = player.getCurrentReference()
-        if let play = player.getPlayer() {
-            if let item = play.currentItem {
-                var info = [String : Any]()
-                self.currentBookChapter = reference.localName
-                info[MPMediaItemPropertyTitle] = self.currentBookChapter
-                //if let image = UIImage(named: "Images/Logo80.png") {
-                //    info[MPMediaItemPropertyArtwork] =
-                //        MPMediaItemArtwork(boundsSize: image.size) { size in
-                //            return image
-                //    }
-                //}
-                info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = item.currentTime().seconds
-                info[MPMediaItemPropertyPlaybackDuration] = item.asset.duration.seconds
-                info[MPNowPlayingInfoPropertyPlaybackRate] = play.rate
-                MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+        if let reference = player.getCurrentReference() {
+            if let play = player.getPlayer() {
+                if let item = play.currentItem {
+                    var info = [String : Any]()
+                    self.currentBookChapter = reference.localName
+                    info[MPMediaItemPropertyTitle] = self.currentBookChapter
+                    //if let image = UIImage(named: "Images/Logo80.png") {
+                    //    info[MPMediaItemPropertyArtwork] =
+                    //        MPMediaItemArtwork(boundsSize: image.size) { size in
+                    //            return image
+                    //    }
+                    //}
+                    info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = item.currentTime().seconds
+                    info[MPMediaItemPropertyPlaybackDuration] = item.asset.duration.seconds
+                    info[MPNowPlayingInfoPropertyPlaybackRate] = play.rate
+                    MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+                }
             }
         }
     }

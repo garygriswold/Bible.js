@@ -214,7 +214,7 @@ class AudioBibleView {
     }
     
     private func labelVerseNum(updateControlCenter: Bool, position: Double) {
-        if let verse = self.audioBible.getCurrentReference().audioChapter {
+        if let verse = self.audioBible.getCurrentReference()?.audioChapter {
             let newVerseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(self.scrubSlider.value))
             if newVerseNum != self.verseNum {
                 self.verseNumLabel.string = String(newVerseNum)
@@ -257,7 +257,7 @@ class AudioBibleView {
         if let play = self.audioBible.getPlayer() {
             if (sender.value < sender.maximumValue) {
                 var current: CMTime
-                if let verse = self.audioBible.getCurrentReference().audioChapter {
+                if let verse = self.audioBible.getCurrentReference()?.audioChapter {
                     current = verse.findPositionOfVerse(verse: self.verseNum)
                 } else {
                     current = CMTime(seconds: Double(sender.value), preferredTimescale: CMTimeScale(1000))

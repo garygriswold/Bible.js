@@ -16,7 +16,7 @@ class AudioBible {
     private let audioAnalytics: AudioAnalytics
     private var player: AVPlayer?
     // Transient Variables
-    private var currReference: Reference
+    private var currReference: Reference?
     private var nextReference: Reference?
     
     init(controller: AudioBibleController, reference: Reference) {
@@ -24,12 +24,12 @@ class AudioBible {
         self.currReference = reference
         self.controlCenter = AudioControlCenter.shared
         self.audioAnalytics = AudioAnalytics(mediaSource: "FCBH",
-                                             mediaId: self.currReference.damId,
+                                             mediaId: reference.damId,
                                              languageId: reference.dpbLanguageCode,
                                              silLang: "User's text lang setting")
         
-        print("INSIDE BibleReader \(self.currReference.damId)")
-        MediaPlayState.retrieve(mediaId: self.currReference.damId)
+        print("INSIDE BibleReader \(reference.damId)")
+        MediaPlayState.retrieve(mediaId: reference.damId)
     }
     
     deinit {
@@ -40,7 +40,7 @@ class AudioBible {
         return self.player
     }
     
-    func getCurrentReference() -> Reference {
+    func getCurrentReference() -> Reference? {
         return self.currReference
     }
     
@@ -50,15 +50,17 @@ class AudioBible {
     
     func beginReadFile() {
         print("BibleReader.BEGIN Read File")
-        AwsS3Cache.shared.readFile(s3Bucket: self.currReference.getS3Bucket(),
-                   s3Key: self.currReference.getS3Key(),
-                   expireInterval: Double.infinity,
-                   getComplete: {
-                    url in
-                    if let audioURL = url {
-                        self.initAudio(url: audioURL)
-                    }
-        })
+        if let reference = self.currReference {
+            AwsS3Cache.shared.readFile(s3Bucket: reference.getS3Bucket(),
+                       s3Key: reference.getS3Key(),
+                       expireInterval: Double.infinity,
+                       getComplete: {
+                        url in
+                        if let audioURL = url {
+                            self.initAudio(url: audioURL)
+                        }
+            })
+        }
     }
     
     private func initAudio(url: URL) {
@@ -75,7 +77,7 @@ class AudioBible {
         self.initNotifications()
         
         self.play()
-        self.preFetchNextChapter(reference: self.currReference)
+        self.preFetchNextChapter(reference: self.currReference!)
         
         self.controller.playHasStarted()
         
@@ -84,7 +86,7 @@ class AudioBible {
     }
     
     private func backupSeek(state: MediaPlayState) -> CMTime {
-        if (state.mediaUrl == self.currReference.toString()) {
+        if (state.mediaUrl == self.currReference!.toString()) {
             return state.position
         } else {
             return kCMTimeZero
@@ -93,18 +95,22 @@ class AudioBible {
     
     func play() {
         if let play = self.player {
-            print("\n*********** PLAY *************")
-            play.play()
-            self.audioAnalytics.playStarted(item: self.currReference.toString(), position: play.currentTime())
+            if let reference = self.currReference {
+                print("\n*********** PLAY *************")
+                play.play()
+                self.audioAnalytics.playStarted(item: reference.toString(), position: play.currentTime())
+            }
         }
     }
     
     func pause() {
         if let play = self.player {
-            print("\n*********** PAUSE *************")
-            play.pause()
-            self.audioAnalytics.playEnded(item: self.currReference.toString(), position: play.currentTime())
-            self.updateMediaPlayStateTime()
+            if let reference = self.currReference {
+                print("\n*********** PAUSE *************")
+                play.pause()
+                self.audioAnalytics.playEnded(item: reference.toString(), position: play.currentTime())
+                self.updateMediaPlayStateTime(reference: reference)
+            }
         }
     }
     
@@ -132,10 +138,10 @@ class AudioBible {
     func priorChapter() {
         if let item = self.player?.currentItem {
             if item.currentTime().seconds < 1.0 {
-                if let prior = self.currReference.priorChapter() {
+                if let prior = self.currReference?.priorChapter() {
                     self.nextReference = self.currReference
                     self.currReference = prior
-                    self.addNextChapter(reference: self.currReference)
+                    self.addNextChapter(reference: self.currReference!)
                 }
             } else {
                 item.seek(to: kCMTimeZero)
@@ -251,15 +257,15 @@ class AudioBible {
         self.stop()
     }
     
-    private func updateMediaPlayStateTime() {
+    private func updateMediaPlayStateTime(reference: Reference) {
         var result: CMTime = kCMTimeZero
-        if let audioChapter = self.currReference.audioChapter {
+        if let audioChapter = reference.audioChapter {
             if let currentTime = self.player?.currentTime() {
                 let verse: Int = audioChapter.findVerseByPosition(priorVerse: 1, time: currentTime)
                 result = audioChapter.findPositionOfVerse(verse: verse)
             }
         }
-        MediaPlayState.update(url: self.currReference.toString(), time: result)
+        MediaPlayState.update(url: reference.toString(), time: result)
     }
     
     private func addNextChapter(reference: Reference) {
