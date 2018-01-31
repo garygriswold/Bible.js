@@ -12,7 +12,10 @@ class AudioControlCenter {
     
     static let shared = AudioControlCenter()
     
+    private var currentBookChapter: String
+    
     private init() {
+        self.currentBookChapter = ""
     }
     
     deinit {
@@ -59,24 +62,33 @@ class AudioControlCenter {
         let reference = player.getCurrentReference()
         if let play = player.getPlayer() {
             if let item = play.currentItem {
-                var nowPlayingInfo = [String : Any]()
-                nowPlayingInfo[MPMediaItemPropertyTitle] = reference.localName
-                print("Name: \(reference.localName)")
+                var info = [String : Any]()
+                self.currentBookChapter = reference.localName
+                info[MPMediaItemPropertyTitle] = self.currentBookChapter
                 //if let image = UIImage(named: "Images/PauseUPButton.png") {
-                //    nowPlayingInfo[MPMediaItemPropertyArtwork] =
+                //    info[MPMediaItemPropertyArtwork] =
                 //        MPMediaItemArtwork(boundsSize: image.size) { size in
                 //            return image
                 //    }
                 //}
-                print("Time: \(item.currentTime().seconds)")
-                print("Duration: \(item.asset.duration.seconds)")
-                print("Rate: \(play.rate)")
-                nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = item.currentTime().seconds
-                nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = item.asset.duration.seconds
-                nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = play.rate
-                
-                MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+                info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = item.currentTime().seconds
+                info[MPMediaItemPropertyPlaybackDuration] = item.asset.duration.seconds
+                info[MPNowPlayingInfoPropertyPlaybackRate] = play.rate
+                MPNowPlayingInfoCenter.default().nowPlayingInfo = info
             }
         }
+    }
+    
+    func updateNowPlaying(verse: Int, position: CMTime) {
+        var info = [String : Any]()
+        let title = self.currentBookChapter + ":" + String(verse)
+        let duration = MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration]
+        let playRate = MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate]
+
+        info[MPMediaItemPropertyTitle] = title
+        info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position.seconds
+        info[MPMediaItemPropertyPlaybackDuration] = duration
+        info[MPNowPlayingInfoPropertyPlaybackRate] = playRate
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = info
     }
 }

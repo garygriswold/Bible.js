@@ -265,7 +265,7 @@ class AudioBible {//}: NSObject {
     }
     
     private func addNextChapter(reference: Reference) {
-        self.pause()
+        self.player?.pause()
         AwsS3Cache.shared.readFile(s3Bucket: reference.getS3Bucket(),
                                    s3Key: reference.getS3Key(),
                                    expireInterval: Double.infinity,
@@ -275,8 +275,8 @@ class AudioBible {//}: NSObject {
                                         let asset = AVAsset(url: audioURL)
                                         let playerItem = AVPlayerItem(asset: asset)
                                         self.player?.replaceCurrentItem(with: playerItem)
+                                        self.player?.play()
                                         self.controlCenter.nowPlaying(player: self)
-                                        self.play()
                                     }
         })
     }

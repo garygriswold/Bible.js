@@ -9,7 +9,7 @@
 import AVFoundation
 import UIKit
 
-class AudioBibleView {//}: NSObject {
+class AudioBibleView {
     
     let view: UIView
     let audioBible: AudioBible
@@ -213,6 +213,8 @@ class AudioBibleView {//}: NSObject {
                 self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum,
                                                           seconds: Double(self.scrubSlider.value))
                 self.verseNumLabel.string = String(self.verseNum)
+                AudioControlCenter.shared.updateNowPlaying(verse: self.verseNum,
+                                                           position: self.audioBible.getPlayer()!.currentTime())
                 self.verseLabel.opacity = 1
                 self.verseLabel.position = positionVersePopup()
             } else {
@@ -259,6 +261,8 @@ class AudioBibleView {//}: NSObject {
                     current = CMTime(seconds: Double(sender.value), preferredTimescale: CMTimeScale(1000))
                 }
                 play.seek(to: current)
+                AudioControlCenter.shared.updateNowPlaying(verse: self.verseNum,
+                                                           position: self.audioBible.getPlayer()!.currentTime())
             } else {
                 self.audioBible.nextChapter()
             }
