@@ -79,14 +79,14 @@ class AudioControlCenter {
         }
     }
     
-    func updateNowPlaying(verse: Int, position: CMTime) {
+    func updateNowPlaying(verse: Int, position: Double) {
         var info = [String : Any]()
         let title = self.currentBookChapter + ":" + String(verse)
         let duration = MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration]
         let playRate = MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate]
 
         info[MPMediaItemPropertyTitle] = title
-        info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position.seconds
+        info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = position
         info[MPMediaItemPropertyPlaybackDuration] = duration
         info[MPNowPlayingInfoPropertyPlaybackRate] = playRate
         MPNowPlayingInfoCenter.default().nowPlayingInfo = info

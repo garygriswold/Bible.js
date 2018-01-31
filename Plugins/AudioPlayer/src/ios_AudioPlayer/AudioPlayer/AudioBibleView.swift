@@ -207,22 +207,29 @@ class AudioBibleView {
             }
             let current = CMTimeGetSeconds(item.currentTime())
             self.scrubSlider.setValue(Float(current), animated: true)
-            //self.positionLabel.string = String(current)
             
-            if let verse = self.audioBible.getCurrentReference().audioChapter {
-                self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum,
-                                                          seconds: Double(self.scrubSlider.value))
-                self.verseNumLabel.string = String(self.verseNum)
-                AudioControlCenter.shared.updateNowPlaying(verse: self.verseNum,
-                                                           position: self.audioBible.getPlayer()!.currentTime())
-                self.verseLabel.opacity = 1
-                self.verseLabel.position = positionVersePopup()
-            } else {
-                self.verseLabel.opacity = 0
-            }
+            self.labelVerseNum(updateControlCenter: true, position: current)
         }
         //print("Finished progress \(CFAbsoluteTimeGetCurrent())")
     }
+    
+    private func labelVerseNum(updateControlCenter: Bool, position: Double) {
+        if let verse = self.audioBible.getCurrentReference().audioChapter {
+            let newVerseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(self.scrubSlider.value))
+            if newVerseNum != self.verseNum {
+                self.verseNumLabel.string = String(newVerseNum)
+                if updateControlCenter {
+                    AudioControlCenter.shared.updateNowPlaying(verse: newVerseNum, position: position)
+                }
+                self.verseNum = newVerseNum
+            }
+            self.verseLabel.opacity = 1
+            self.verseLabel.position = positionVersePopup()
+        } else {
+            self.verseLabel.opacity = 0
+        }
+    }
+    
     private func positionVersePopup() -> CGPoint {
         let slider = self.scrubSlider
         let sliderPct: Float = (slider.value - slider.minimumValue) / (slider.maximumValue - slider.minimumValue)
@@ -237,12 +244,7 @@ class AudioBibleView {
     * saved screen update.  I need to learn how to discard such when the
     */
     @objc private func scrubSliderChanged(sender: UISlider) {
-        //print("scrub slider changed to \(sender.value)")
-        if let verse = self.audioBible.getCurrentReference().audioChapter {
-            self.verseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(sender.value))
-            self.verseNumLabel.string = String(self.verseNum)
-            self.verseLabel.position = positionVersePopup()
-        }
+        self.labelVerseNum(updateControlCenter: false, position: 0.0)
     }
     @objc private func touchDown() {
         self.scrubSliderDrag = true
@@ -261,8 +263,7 @@ class AudioBibleView {
                     current = CMTime(seconds: Double(sender.value), preferredTimescale: CMTimeScale(1000))
                 }
                 play.seek(to: current)
-                AudioControlCenter.shared.updateNowPlaying(verse: self.verseNum,
-                                                           position: self.audioBible.getPlayer()!.currentTime())
+                AudioControlCenter.shared.updateNowPlaying(verse: self.verseNum, position: current.seconds)
             } else {
                 self.audioBible.nextChapter()
             }
