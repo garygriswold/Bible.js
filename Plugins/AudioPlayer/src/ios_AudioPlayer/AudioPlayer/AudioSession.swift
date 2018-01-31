@@ -53,8 +53,7 @@ class AudioSession : NSObject {
     }
     
     deinit {
-        print("***** Deinit AudioSessionDelegate *****")
-        // session does not need to be deactivated
+        print("***** Deinit AudioSession *****")
     }
     
     @objc func audioSessionInterruption(note: NSNotification) {

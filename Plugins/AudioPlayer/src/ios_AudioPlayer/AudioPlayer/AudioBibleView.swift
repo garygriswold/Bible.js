@@ -11,24 +11,24 @@ import UIKit
 
 class AudioBibleView {
     
-    let view: UIView
-    let audioBible: AudioBible
-    let playButton: UIButton
-    let pauseButton: UIButton
-    let stopButton: UIButton
-    let scrubSlider: UISlider
-    let verseLabel: CALayer
-    let verseNumLabel: CATextLayer
+    private unowned let view: UIView
+    private let audioBible: AudioBible
+    private let playButton: UIButton
+    private let pauseButton: UIButton
+    private let stopButton: UIButton
+    private let scrubSlider: UISlider
+    private let verseLabel: CALayer
+    private let verseNumLabel: CATextLayer
     //let positionLabel: CATextLayer
-    var progressLink: CADisplayLink?
+    private var progressLink: CADisplayLink?
     // Precomputed for positionVersePopup
-    let sliderRange: CGFloat
-    let sliderOrigin: CGFloat
+    private let sliderRange: CGFloat
+    private let sliderOrigin: CGFloat
     // Transient State Variables
-    var scrubSliderDuration: CMTime
-    var scrubSliderDrag: Bool
-    var verseNum: Int = 1
-    var isAudioViewActive: Bool = false
+    private var scrubSliderDuration: CMTime
+    private var scrubSliderDrag: Bool
+    private var verseNum: Int = 1
+    private var isAudioViewActive: Bool = false
     
     init(view: UIView, audioBible: AudioBible) {
         self.view = view
