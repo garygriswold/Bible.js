@@ -9,10 +9,9 @@
 import AVFoundation
 import AWS
 
-class AudioBible {//}: NSObject {
+class AudioBible {
     
     private let controller: AudioBibleController
-    private let tocAudioBible: TOCAudioBible
     private let controlCenter: AudioControlCenter
     private let audioAnalytics: AudioAnalytics
     private var player: AVPlayer?
@@ -20,14 +19,13 @@ class AudioBible {//}: NSObject {
     private var currReference: Reference
     private var nextReference: Reference?
     
-    init(controller: AudioBibleController, tocBible: TOCAudioBible, reference: Reference) {
+    init(controller: AudioBibleController, reference: Reference) {
         self.controller = controller
-        self.tocAudioBible = tocBible
         self.currReference = reference
         self.controlCenter = AudioControlCenter.shared
         self.audioAnalytics = AudioAnalytics(mediaSource: "FCBH",
                                              mediaId: self.currReference.damId,
-                                             languageId: tocBible.dbpLanguageCode,
+                                             languageId: reference.dpbLanguageCode,
                                              silLang: "User's text lang setting")
         
         print("INSIDE BibleReader \(self.currReference.damId)")
@@ -134,7 +132,7 @@ class AudioBible {//}: NSObject {
     func priorChapter() {
         if let item = self.player?.currentItem {
             if item.currentTime().seconds < 1.0 {
-                if let prior = self.tocAudioBible.priorChapter(reference: self.currReference) {
+                if let prior = self.currReference.priorChapter() {
                     self.nextReference = self.currReference
                     self.currReference = prior
                     self.addNextChapter(reference: self.currReference)
@@ -283,7 +281,7 @@ class AudioBible {//}: NSObject {
     
     private func preFetchNextChapter(reference: Reference) {
         self.readVerseMetaData(reference: reference)
-        self.nextReference = self.tocAudioBible.nextChapter(reference: reference)
+        self.nextReference = reference.nextChapter()
         if let next = self.nextReference {
             AwsS3Cache.shared.readFile(s3Bucket: next.getS3Bucket(),
                                        s3Key: next.getS3Key(),

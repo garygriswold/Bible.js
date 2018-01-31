@@ -26,11 +26,9 @@ class AudioBibleController {
         let metaData = MetaDataReader()
         metaData.read(versionCode: version, complete: { oldTestament, newTestament in
             print("DONE reading metadata")
-            let metaBook = metaData.findBook(bookId: book)
-            if let book = metaBook {
-                let tocBible = book.bible
-                let reference = Reference(bible: tocBible, book: book, chapter: chapter, fileType: fileType)
-                let reader = AudioBible(controller: self, tocBible: tocBible, reference: reference)
+            if let meta = metaData.findBook(bookId: book) {
+                let reference = Reference(bible: meta.bible, book: meta, chapter: chapter, fileType: fileType)
+                let reader = AudioBible(controller: self, reference: reference)
                 self.readerView = AudioBibleView(view: view, audioBible: reader)
                 self.audioSession = AudioSession(audioBibleView: self.readerView!)
                 reader.beginReadFile()

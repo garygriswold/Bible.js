@@ -79,6 +79,20 @@ class Reference {
         }
     }
     
+    var dpbLanguageCode: String {
+        get {
+            return self.tocAudioBible.dbpLanguageCode
+        }
+    }
+    
+    func nextChapter() -> Reference? {
+        return self.tocAudioBible.nextChapter(reference: self)
+    }
+    
+    func priorChapter() -> Reference? {
+        return self.tocAudioBible.priorChapter(reference: self)
+    }
+    
     func getS3Bucket() -> String {
         switch (self.fileType) {
             case "mp3": return self.damId.lowercased() + ".shortsands.com"
