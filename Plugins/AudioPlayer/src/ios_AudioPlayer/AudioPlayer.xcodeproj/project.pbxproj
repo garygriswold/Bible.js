@@ -31,7 +31,6 @@
 		E4A32CCF1F2FB310009AECFB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A32CCE1F2FB310009AECFB /* AppDelegate.swift */; };
 		E4A32CD11F2FB310009AECFB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A32CD01F2FB310009AECFB /* ViewController.swift */; };
 		E4A32CD41F2FB310009AECFB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4A32CD21F2FB310009AECFB /* Main.storyboard */; };
-		E4A32CD61F2FB310009AECFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4A32CD51F2FB310009AECFB /* Assets.xcassets */; };
 		E4A32CD91F2FB310009AECFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4A32CD71F2FB310009AECFB /* LaunchScreen.storyboard */; };
 		E4A32CE11F2FB420009AECFB /* AudioBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A32CE01F2FB420009AECFB /* AudioBible.swift */; };
 		E4A65BDB1F76B65E00C1725C /* AudioSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A65BDA1F76B65E00C1725C /* AudioSession.swift */; };
@@ -44,6 +43,7 @@
 		E4F69CED1F39684800EE53AB /* MetaDataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */; };
 		E4F69CEF1F397CF200EE53AB /* TOCAudioBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */; };
 		E4F69CF11F397D0800EE53AB /* TOCAudioBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */; };
+		E4F78E782021961C003D4DFC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F78E772021961C003D4DFC /* Images.xcassets */; };
 		E4F932231F512028002A0A4D /* AudioAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F932221F512028002A0A4D /* AudioAnalytics.swift */; };
 		E4F932251F512095002A0A4D /* AnalyticsSessionId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F932241F512095002A0A4D /* AnalyticsSessionId.swift */; };
 /* End PBXBuildFile section */
@@ -91,7 +91,6 @@
 		E4A32CCE1F2FB310009AECFB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4A32CD01F2FB310009AECFB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E4A32CD31F2FB310009AECFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		E4A32CD51F2FB310009AECFB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4A32CD81F2FB310009AECFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E4A32CDA1F2FB310009AECFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4A32CE01F2FB420009AECFB /* AudioBible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioBible.swift; sourceTree = "<group>"; };
@@ -106,6 +105,7 @@
 		E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaDataReader.swift; sourceTree = "<group>"; };
 		E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioBible.swift; sourceTree = "<group>"; };
 		E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioBook.swift; sourceTree = "<group>"; };
+		E4F78E772021961C003D4DFC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E4F932221F512028002A0A4D /* AudioAnalytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioAnalytics.swift; sourceTree = "<group>"; };
 		E4F932241F512095002A0A4D /* AnalyticsSessionId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsSessionId.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -177,10 +177,10 @@
 				E4C93A86201BDBA300ED4E06 /* WEB.db */,
 				E4A32CD21F2FB310009AECFB /* Main.storyboard */,
 				E4A32CCE1F2FB310009AECFB /* AppDelegate.swift */,
-				E4A32CD51F2FB310009AECFB /* Assets.xcassets */,
 				E4A32CD71F2FB310009AECFB /* LaunchScreen.storyboard */,
 				E4A32CDA1F2FB310009AECFB /* Info.plist */,
 				E45154121FAD66440001D98E /* AudioControlCenter.swift */,
+				E4F78E772021961C003D4DFC /* Images.xcassets */,
 			);
 			path = AudioPlayer;
 			sourceTree = "<group>";
@@ -282,11 +282,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E40F85631F55BD0400282299 /* Images in Resources */,
+				E4F78E782021961C003D4DFC /* Images.xcassets in Resources */,
 				E4C93A8A201BDBA300ED4E06 /* ERV-ENG.db in Resources */,
 				E4A32CD91F2FB310009AECFB /* LaunchScreen.storyboard in Resources */,
 				E4C93A8B201BDBA300ED4E06 /* KJVPD.db in Resources */,
 				E46E300A1FC36315005AB310 /* Versions.db in Resources */,
-				E4A32CD61F2FB310009AECFB /* Assets.xcassets in Resources */,
 				E4C93A89201BDBA300ED4E06 /* WEB.db in Resources */,
 				E4A32CD41F2FB310009AECFB /* Main.storyboard in Resources */,
 			);
@@ -479,6 +479,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -497,6 +498,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

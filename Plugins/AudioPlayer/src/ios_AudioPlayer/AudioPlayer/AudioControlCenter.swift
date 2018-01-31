@@ -65,7 +65,7 @@ class AudioControlCenter {
                 var info = [String : Any]()
                 self.currentBookChapter = reference.localName
                 info[MPMediaItemPropertyTitle] = self.currentBookChapter
-                //if let image = UIImage(named: "Images/PauseUPButton.png") {
+                //if let image = UIImage(named: "Images/Logo80.png") {
                 //    info[MPMediaItemPropertyArtwork] =
                 //        MPMediaItemArtwork(boundsSize: image.size) { size in
                 //            return image
