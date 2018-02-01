@@ -19,6 +19,14 @@ import AVFoundation
 
 class AudioSession : NSObject {
     
+    private static var instance: AudioSession?
+    static func shared(audioBibleView: AudioBibleView) -> AudioSession {
+        if (AudioSession.instance == nil) {
+            AudioSession.instance = AudioSession(audioBibleView: audioBibleView)
+        }
+        return AudioSession.instance!
+    }
+    
     private let session: AVAudioSession = AVAudioSession.sharedInstance()
     private unowned let audioBibleView: AudioBibleView
     

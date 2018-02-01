@@ -11,7 +11,7 @@ import AWS
 
 class ViewController: UIViewController {
     
-    let audioController = AudioBibleController()
+    let audioController = AudioBibleController.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -11,6 +11,14 @@ import UIKit
 
 class AudioBibleView {
     
+    private static var instance: AudioBibleView?
+    static func shared(view: UIView, audioBible: AudioBible) -> AudioBibleView {
+        if (AudioBibleView.instance == nil) {
+            AudioBibleView.instance = AudioBibleView(view: view, audioBible: audioBible)
+        }
+        return AudioBibleView.instance!
+    }
+    
     private unowned let view: UIView
     private unowned let audioBible: AudioBible
     private let playButton: UIButton
@@ -30,7 +38,7 @@ class AudioBibleView {
     private var verseNum: Int = 1
     private var isAudioViewActive: Bool = false
     
-    init(view: UIView, audioBible: AudioBible) {
+    private init(view: UIView, audioBible: AudioBible) {
         self.view = view
         self.audioBible = audioBible
         self.scrubSliderDuration = kCMTimeZero

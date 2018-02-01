@@ -9,11 +9,15 @@
 import UIKit
 
 class AudioBibleController {
+    
+    static let shared: AudioBibleController = AudioBibleController()
  
     var audioBible: AudioBible?
-    var readerView: AudioBibleView?
+    var audioBibleView: AudioBibleView?
     var audioSession: AudioSession?
-
+    
+    private init() {
+    }
     
     deinit {
         print("***** Deinit AudioBibleController *****")
@@ -26,28 +30,26 @@ class AudioBibleController {
   //      view.backgroundColor = .blue // This is for Testing
         
         self.audioBible = AudioBible.shared(controller: self)
+        self.audioBibleView = AudioBibleView.shared(view: view, audioBible: self.audioBible!)
+        self.audioSession = AudioSession.shared(audioBibleView: self.audioBibleView!)
         
         let metaData = MetaDataReader()
         metaData.read(versionCode: version, complete: { [unowned self] oldTestament, newTestament in
             print("DONE reading metadata")
             if let meta = metaData.findBook(bookId: book) {
                 let reference = Reference(bible: meta.bible, book: meta, chapter: chapter, fileType: fileType)
-                self.readerView = AudioBibleView(view: view, audioBible: self.audioBible!)
-                self.audioSession = AudioSession(audioBibleView: self.readerView!)
                 self.audioBible!.beginReadFile(reference: reference)
             }
         })
     }
     
     func playHasStarted() {
-        self.readerView?.startPlay()
+        self.audioBibleView?.startPlay()
         UIApplication.shared.isIdleTimerDisabled = true
     }
     
     func playHasStopped() {
-        self.readerView?.stopPlay()
-        self.audioSession = nil
-        self.readerView = nil
+        self.audioBibleView?.stopPlay()
         UIApplication.shared.isIdleTimerDisabled = false
     }
 }
