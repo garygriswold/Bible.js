@@ -30,6 +30,7 @@ class AudioBible {
     private init(controller: AudioBibleController) {
         self.controller = controller
         self.controlCenter = AudioControlCenter.shared
+        self.controlCenter.setupControlCenter(player: self)
     }
     
     deinit {
@@ -61,8 +62,7 @@ class AudioBible {
         AwsS3Cache.shared.readFile(s3Bucket: reference.getS3Bucket(),
                    s3Key: reference.getS3Key(),
                    expireInterval: Double.infinity,
-                   getComplete: {
-                    url in
+                   getComplete: { [unowned self] url in
                     if let audioURL = url {
                         self.initAudio(url: audioURL)
                     }
@@ -87,7 +87,6 @@ class AudioBible {
         
         self.controller.playHasStarted()
         
-        self.controlCenter.setupControlCenter(player: self)
         self.controlCenter.nowPlaying(player: self)
     }
     
@@ -279,8 +278,7 @@ class AudioBible {
         AwsS3Cache.shared.readFile(s3Bucket: reference.getS3Bucket(),
                                    s3Key: reference.getS3Key(),
                                    expireInterval: Double.infinity,
-                                   getComplete: {
-                                    url in
+                                   getComplete: { [unowned self] url in
                                     if let audioURL = url {
                                         let asset = AVAsset(url: audioURL)
                                         let playerItem = AVPlayerItem(asset: asset)
