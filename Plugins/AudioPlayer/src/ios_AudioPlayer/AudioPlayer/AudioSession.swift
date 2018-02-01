@@ -19,8 +19,8 @@ import AVFoundation
 
 class AudioSession : NSObject {
     
-    let session: AVAudioSession = AVAudioSession.sharedInstance()
-    let audioBibleView: AudioBibleView
+    private let session: AVAudioSession = AVAudioSession.sharedInstance()
+    private unowned let audioBibleView: AudioBibleView
     
     init(audioBibleView: AudioBibleView) {
         self.audioBibleView = audioBibleView

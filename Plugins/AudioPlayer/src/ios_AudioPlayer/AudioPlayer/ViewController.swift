@@ -23,13 +23,13 @@ class ViewController: UIViewController {
         self.audioController.present(view: self.view, version: readVersion, book: readBook, chapter: readChapter,
                                      fileType: readType)
         
-        //let readBook2 = "MAT"
-        //self.audioController.present(view: self.view, version: readVersion, book: readBook2, chapter: readChapter,
-        //                             fileType: readType)
+        let readBook2 = "MAT"
+        self.audioController.present(view: self.view, version: readVersion, book: readBook2, chapter: readChapter,
+                                     fileType: readType)
         
-        //let readBook3 = "EPH"
-        //self.audioController.present(view: self.view, version: readVersion, book: readBook3, chapter: readChapter,
-        //                             fileType: readType)
+        let readBook3 = "EPH"
+        self.audioController.present(view: self.view, version: readVersion, book: readBook3, chapter: readChapter,
+                                     fileType: readType)
     }
 
     override func didReceiveMemoryWarning() {

@@ -12,7 +12,7 @@ import UIKit
 class AudioBibleView {
     
     private unowned let view: UIView
-    private let audioBible: AudioBible
+    private unowned let audioBible: AudioBible
     private let playButton: UIButton
     private let pauseButton: UIButton
     private let stopButton: UIButton

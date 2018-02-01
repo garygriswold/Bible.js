@@ -11,25 +11,25 @@ import AWS
 
 class AudioBible {
     
+    private static var instance: AudioBible?
+    static func shared(controller: AudioBibleController) -> AudioBible {
+        if (AudioBible.instance == nil) {
+            AudioBible.instance = AudioBible(controller: controller)
+        }
+        return AudioBible.instance!
+    }
+    
     private let controller: AudioBibleController
     private let controlCenter: AudioControlCenter
-    private let audioAnalytics: AudioAnalytics
+    private var audioAnalytics: AudioAnalytics?
     private var player: AVPlayer?
     // Transient Variables
     private var currReference: Reference?
     private var nextReference: Reference?
     
-    init(controller: AudioBibleController, reference: Reference) {
+    private init(controller: AudioBibleController) {
         self.controller = controller
-        self.currReference = reference
         self.controlCenter = AudioControlCenter.shared
-        self.audioAnalytics = AudioAnalytics(mediaSource: "FCBH",
-                                             mediaId: reference.damId,
-                                             languageId: reference.dpbLanguageCode,
-                                             silLang: "User's text lang setting")
-        
-        print("INSIDE BibleReader \(reference.damId)")
-        MediaPlayState.retrieve(mediaId: reference.damId)
     }
     
     deinit {
@@ -48,19 +48,25 @@ class AudioBible {
         return (self.player != nil) ? self.player!.rate > 0.0 : false
     }
     
-    func beginReadFile() {
+    func beginReadFile(reference: Reference) {
         print("BibleReader.BEGIN Read File")
-        if let reference = self.currReference {
-            AwsS3Cache.shared.readFile(s3Bucket: reference.getS3Bucket(),
-                       s3Key: reference.getS3Key(),
-                       expireInterval: Double.infinity,
-                       getComplete: {
-                        url in
-                        if let audioURL = url {
-                            self.initAudio(url: audioURL)
-                        }
-            })
-        }
+        self.currReference = reference
+        self.audioAnalytics = AudioAnalytics(mediaSource: "FCBH",
+                                             mediaId: reference.damId,
+                                             languageId: reference.dpbLanguageCode,
+                                             silLang: "User's text lang setting")
+        
+        print("INSIDE BibleReader \(reference.damId)")
+        MediaPlayState.retrieve(mediaId: reference.damId)
+        AwsS3Cache.shared.readFile(s3Bucket: reference.getS3Bucket(),
+                   s3Key: reference.getS3Key(),
+                   expireInterval: Double.infinity,
+                   getComplete: {
+                    url in
+                    if let audioURL = url {
+                        self.initAudio(url: audioURL)
+                    }
+        })
     }
     
     private func initAudio(url: URL) {
@@ -98,7 +104,7 @@ class AudioBible {
             if let reference = self.currReference {
                 print("\n*********** PLAY *************")
                 play.play()
-                self.audioAnalytics.playStarted(item: reference.toString(), position: play.currentTime())
+                self.audioAnalytics?.playStarted(item: reference.toString(), position: play.currentTime())
             }
         }
     }
@@ -108,7 +114,7 @@ class AudioBible {
             if let reference = self.currReference {
                 print("\n*********** PAUSE *************")
                 play.pause()
-                self.audioAnalytics.playEnded(item: reference.toString(), position: play.currentTime())
+                self.audioAnalytics?.playEnded(item: reference.toString(), position: play.currentTime())
                 self.updateMediaPlayStateTime(reference: reference)
             }
         }
