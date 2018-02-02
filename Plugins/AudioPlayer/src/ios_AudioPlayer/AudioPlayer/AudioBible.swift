@@ -83,11 +83,12 @@ class AudioBible {
         self.initNotifications()
         
         self.play()
-        self.preFetchNextChapter(reference: self.currReference!)
-        
         self.controller.playHasStarted()
         
+        self.readVerseMetaData(reference: self.currReference!)
         self.controlCenter.nowPlaying(player: self)
+        
+        self.preFetchNextChapter(reference: self.currReference!)
     }
     
     private func backupSeek(state: MediaPlayState) -> CMTime {
@@ -284,13 +285,13 @@ class AudioBible {
                                         let playerItem = AVPlayerItem(asset: asset)
                                         self.player?.replaceCurrentItem(with: playerItem)
                                         self.player?.play()
+                                        self.readVerseMetaData(reference: reference)
                                         self.controlCenter.nowPlaying(player: self)
                                     }
         })
     }
     
     private func preFetchNextChapter(reference: Reference) {
-        self.readVerseMetaData(reference: reference)
         self.nextReference = reference.nextChapter()
         if let next = self.nextReference {
             AwsS3Cache.shared.readFile(s3Bucket: next.getS3Bucket(),
