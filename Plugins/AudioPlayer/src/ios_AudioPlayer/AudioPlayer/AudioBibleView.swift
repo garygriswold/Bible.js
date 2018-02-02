@@ -35,7 +35,7 @@ class AudioBibleView {
     // Transient State Variables
     private var scrubSliderDuration: CMTime
     private var scrubSliderDrag: Bool
-    private var verseNum: Int = 1
+    private var verseNum: Int = 0
     private var isAudioViewActive: Bool = false
     
     private init(view: UIView, audioBible: AudioBible) {
@@ -223,6 +223,9 @@ class AudioBibleView {
     
     private func labelVerseNum(updateControlCenter: Bool, position: Double) {
         if let verse = self.audioBible.getCurrentReference()?.audioChapter {
+            if (self.scrubSlider.value == 0.0) {
+                self.verseNum = 0
+            }
             let newVerseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(self.scrubSlider.value))
             if newVerseNum != self.verseNum {
                 self.verseNumLabel.string = String(newVerseNum)
