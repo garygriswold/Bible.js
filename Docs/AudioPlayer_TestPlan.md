@@ -99,16 +99,16 @@ Interruptions
 Control Center (ios only)
 -------------------------
 
-1.	Control Center Info - When the user displays the Control Center, if Bible App audio was the last audio being played or is currently being played, the Control Center should display the book, and chapter, and possibly verse that was being played.
+1.	Control Center Info - When the user displays the Control Center, if Bible App audio was the last audio being played or is currently being played, the Control Center should display the book, and chapter, and verse that was being played.
 
 2.	Control Center Icon - The control center should display the icon of the App, if that is the last audio played.
 
-2.	Control Center when in Background - When the audio is playing in background, if the user presents the control center, it should be possible to pause and restart play from the control center. 
+3.	Control Center when in Background - When the audio is playing in background, if the user presents the control center, it should be possible to pause and restart play from the control center. 
 
-3.	Control Center Restart - When the App is not playing it should be possible for the user to present the control center, and restart the audio from where they were last listening. The audio should play in background and not restart the App in foreground.
+4.	Control Center Restart - When the App is not playing it should be possible for the user to present the control center, and restart the audio from where they were last listening. The audio should play in background and not restart the App in foreground.
 
-4.	Control Center Back - Clicking the back button should restart the chapter, or if near the beginning of the chapter, it should go to the prior chapter.
+5.	Control Center Back - Clicking the back button should restart the chapter, or if near the beginning of the chapter, it should go to the prior chapter.
 
-5.	Control Center Forward - Clicking the forward button should start the next chapter.
+6.	Control Center Forward - Clicking the forward button should start the next chapter.
 
 
