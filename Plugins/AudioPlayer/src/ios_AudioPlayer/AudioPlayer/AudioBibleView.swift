@@ -35,6 +35,7 @@ class AudioBibleView {
     // Transient State Variables
     private var scrubSliderDuration: CMTime
     private var scrubSliderDrag: Bool
+    private var scrubSuspendedPlay: Bool
     private var verseNum: Int = 0
     private var isAudioViewActive: Bool = false
     
@@ -43,6 +44,7 @@ class AudioBibleView {
         self.audioBible = audioBible
         self.scrubSliderDuration = kCMTimeZero
         self.scrubSliderDrag = false
+        self.scrubSuspendedPlay = false
 
         let screenSize = UIScreen.main.bounds
         let screenWidth = screenSize.width
@@ -259,14 +261,17 @@ class AudioBibleView {
     }
     @objc private func touchDown() {
         self.scrubSliderDrag = true
+        if self.audioBible.isPlaying() {
+            self.audioBible.getPlayer()?.pause()
+            self.scrubSuspendedPlay = true
+        }
         //print("**** touchDown **** \(CFAbsoluteTimeGetCurrent())")
     }
     @objc private func touchUpInside(sender: UISlider) {
-        self.scrubSliderDrag = false
         //print("**** touchUpInside **** \(CFAbsoluteTimeGetCurrent())")
         
         if let play = self.audioBible.getPlayer() {
-            if (sender.value < sender.maximumValue) {
+            if sender.value < sender.maximumValue || !self.scrubSuspendedPlay {
                 var current: CMTime
                 if let verse = self.audioBible.getCurrentReference()?.audioChapter {
                     current = verse.findPositionOfVerse(verse: self.verseNum)
@@ -274,9 +279,14 @@ class AudioBibleView {
                     current = CMTime(seconds: Double(sender.value), preferredTimescale: CMTimeScale(1000))
                 }
                 play.seek(to: current)
-                AudioControlCenter.shared.updateNowPlaying(verse: self.verseNum, position: current.seconds)
+                self.labelVerseNum(updateControlCenter: true, position: current.seconds)
             } else {
                 self.audioBible.nextChapter()
+            }
+            self.scrubSliderDrag = false
+            if self.scrubSuspendedPlay {
+                play.play()
+                self.scrubSuspendedPlay = false
             }
         }
     }

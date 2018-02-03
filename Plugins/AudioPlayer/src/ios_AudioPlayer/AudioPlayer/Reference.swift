@@ -19,6 +19,7 @@ class Reference {
         self.tocAudioBook = book
         self.chapter = chapter
         self.fileType = fileType
+        print("***** Init Reference ***** \(self.toString())")
     }
     
     convenience init(bible: TOCAudioBible, book: TOCAudioBook, chapterNum: Int, fileType: String) {
