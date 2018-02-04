@@ -14,7 +14,7 @@
     	<clobbers target="AudioPlayer" />
 	</js-module>
 
-	<platform name="android">
+	<!-- <platform name="android">
     	<config-file target="config.xml" parent="/*">
 			<feature name="AudioPlayer">
 				<param name="android-package" value="com.shortsands.audioplayer.AudioPlayer"/>
@@ -30,7 +30,7 @@
 		<source-file src="src/android/com/shortsands/audioplayer/AudioService.java" target-dir="src/com/shortsands/audioplayer" />
 		<source-file src="src/android/com/shortsands/audioplayer/AudioPersistence.java" target-dir="src/com/shortsands/audioplayer" />
 		<source-file src="src/android/com/shortsands/audioplayer/EventLogger.java" target-dir="src/com/shortsands/audioplayer" />
-	</platform>
+	</platform> -->
   
 	<platform name="ios">
 		<config-file target="config.xml" parent="/*">
@@ -38,11 +38,8 @@
 				<param name="ios-package" value="AudioPlayer" />
 			</feature>
 		</config-file>
-		<source-file src="src/ios/AudioPlayer.swift" target-dir="src" />
-		<source-file src="src/ios/AVPlayerViewControllerExtension.swift" target-dir="src" />
-		<source-file src="src/ios/AudioPlayerService.swift" target-dir="src" />
-		<source-file src="src/ios/AudioState.swift" target-dir="src" />
-		<framework src="MediaPlayer.framework" />
+		<source-file src="src/ios/build/AudioPlayer.swift" />
+		<framework src="src/ios/build/AudioPlayer.framework" custom="true" embed="true" />
 	</platform>
 
 </plugin>

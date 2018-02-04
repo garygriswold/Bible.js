@@ -1,11 +1,7 @@
-**** This plugin is not finished ****
-
-
 AudioPlayer
 ===========
 
-Native AudioPlayers for Android and iOS, which "bookmark" the position of play
-for multiple videos.
+Native AudioPlayers for Android and iOS.
 
 Example Use of Plugin
 ---------------------

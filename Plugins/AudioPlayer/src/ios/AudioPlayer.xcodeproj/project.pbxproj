@@ -36,9 +36,9 @@
 		E4DA506520256C370053CB94 /* StopUPButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E4DA505D20256C370053CB94 /* StopUPButton.png */; };
 		E4DA506720256D4F0053CB94 /* Sqlite3Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DA506620256D4F0053CB94 /* Sqlite3Test.swift */; };
 		E4DA506920256D5D0053CB94 /* TOCAudioBibleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DA506820256D5D0053CB94 /* TOCAudioBibleTest.swift */; };
-		E4DA506B20256DC10053CB94 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4DA506A20256DC10053CB94 /* AWS.framework */; };
-		E4DA506D20256DD80053CB94 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4DA506C20256DD80053CB94 /* AWSCore.framework */; };
-		E4DA506F20256DF00053CB94 /* PKZip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4DA506E20256DF00053CB94 /* PKZip.framework */; };
+		E4DA5073202576C50053CB94 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4DA5072202576C50053CB94 /* AWSCore.framework */; };
+		E4DA507A2025798B0053CB94 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4DA50792025798B0053CB94 /* AWS.framework */; };
+		E4DA507C202579BE0053CB94 /* PKZip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4DA507B202579BE0053CB94 /* PKZip.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,9 +84,9 @@
 		E4DA505D20256C370053CB94 /* StopUPButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = StopUPButton.png; path = ../../../ios_AudioPlayer/AudioPlayer/Images/StopUPButton.png; sourceTree = "<group>"; };
 		E4DA506620256D4F0053CB94 /* Sqlite3Test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Sqlite3Test.swift; path = ../../ios_AudioPlayer/AudioPlayerTests/Sqlite3Test.swift; sourceTree = "<group>"; };
 		E4DA506820256D5D0053CB94 /* TOCAudioBibleTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TOCAudioBibleTest.swift; path = ../../ios_AudioPlayer/AudioPlayerTests/TOCAudioBibleTest.swift; sourceTree = "<group>"; };
-		E4DA506A20256DC10053CB94 /* AWS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWS.framework; path = "../../../../../../../Library/Frameworks/Debug-iphonesimulator/AWS.framework"; sourceTree = "<group>"; };
-		E4DA506C20256DD80053CB94 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = "../../../../../../../Library/Frameworks/Debug-iphonesimulator/AWSCore.framework"; sourceTree = "<group>"; };
-		E4DA506E20256DF00053CB94 /* PKZip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PKZip.framework; path = "../../../../../../../Library/Frameworks/Debug-iphonesimulator/PKZip.framework"; sourceTree = "<group>"; };
+		E4DA5072202576C50053CB94 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
+		E4DA50792025798B0053CB94 /* AWS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWS.framework; path = AudioPlayer/AWS.framework; sourceTree = "<group>"; };
+		E4DA507B202579BE0053CB94 /* PKZip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PKZip.framework; path = AudioPlayer/PKZip.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,9 +94,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4DA506B20256DC10053CB94 /* AWS.framework in Frameworks */,
-				E4DA506F20256DF00053CB94 /* PKZip.framework in Frameworks */,
-				E4DA506D20256DD80053CB94 /* AWSCore.framework in Frameworks */,
+				E4DA507C202579BE0053CB94 /* PKZip.framework in Frameworks */,
+				E4DA507A2025798B0053CB94 /* AWS.framework in Frameworks */,
+				E4DA5073202576C50053CB94 /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,6 +117,7 @@
 				E4A717A12025497800A01B13 /* AudioPlayer */,
 				E4A717AC2025497900A01B13 /* AudioPlayerTests */,
 				E4A717A02025497800A01B13 /* Products */,
+				E4DA50782025798B0053CB94 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -149,9 +150,7 @@
 				E4DA504D20256B600053CB94 /* TOCAudioBook.swift */,
 				E4DA504F20256B700053CB94 /* TOCAudioChapter.swift */,
 				E4DA504920256B3F0053CB94 /* Sqlite3.swift */,
-				E4DA506E20256DF00053CB94 /* PKZip.framework */,
-				E4DA506C20256DD80053CB94 /* AWSCore.framework */,
-				E4DA506A20256DC10053CB94 /* AWS.framework */,
+				E4DA5072202576C50053CB94 /* AWSCore.framework */,
 			);
 			path = AudioPlayer;
 			sourceTree = "<group>";
@@ -182,6 +181,15 @@
 				E4DA505B20256C370053CB94 /* ThumbUP.png */,
 			);
 			path = Images;
+			sourceTree = "<group>";
+		};
+		E4DA50782025798B0053CB94 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E4DA507B202579BE0053CB94 /* PKZip.framework */,
+				E4DA50792025798B0053CB94 /* AWS.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -470,9 +478,11 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(USER_LIBRARY_DIR)/Frameworks/Debug-iphonesimulator",
+					"$(PROJECT_DIR)/AudioPlayer",
 				);
 				INFOPLIST_FILE = AudioPlayer/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AudioPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -497,9 +507,11 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(USER_LIBRARY_DIR)/Frameworks/Debug-iphonesimulator",
+					"$(PROJECT_DIR)/AudioPlayer",
 				);
 				INFOPLIST_FILE = AudioPlayer/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AudioPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
