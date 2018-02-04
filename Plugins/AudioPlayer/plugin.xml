@@ -26,6 +26,7 @@
 		<!-- <config-file target="AndroidManifest.xml" parent="/manifest/application">
 			<activity android:name="com.shortsands.videoplayer.AudioPlayer" android:label="AudioPlayer" android:screenOrientation="landscape"></activity>
 		</config-file> -->
+		<!--
 		<source-file src="src/android/com/shortsands/audioplayer/AudioPlayer.java" target-dir="src/com/shortsands/audioplayer" />
 		<source-file src="src/android/com/shortsands/audioplayer/AudioService.java" target-dir="src/com/shortsands/audioplayer" />
 		<source-file src="src/android/com/shortsands/audioplayer/AudioPersistence.java" target-dir="src/com/shortsands/audioplayer" />
