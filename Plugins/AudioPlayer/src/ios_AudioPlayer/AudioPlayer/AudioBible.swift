@@ -55,7 +55,8 @@ class AudioBible {
         self.audioAnalytics = AudioAnalytics(mediaSource: "FCBH",
                                              mediaId: reference.damId,
                                              languageId: reference.dpbLanguageCode,
-                                             silLang: "User's text lang setting")
+                                             textVersion: reference.textVersion,
+                                             silLang: reference.silLang)
         
         print("INSIDE BibleReader \(reference.damId)")
         MediaPlayState.retrieve(mediaId: reference.damId)

@@ -17,6 +17,7 @@ class AudioAnalytics {
     let mediaSource: String
     let mediaId: String
     let languageId: String
+    let textVersion: String
     let silLang: String
     let sessionId: String
     
@@ -27,11 +28,13 @@ class AudioAnalytics {
     init(mediaSource: String,
          mediaId: String,
          languageId: String,
+         textVersion: String,
          silLang: String) {
         
         self.mediaSource = mediaSource
         self.mediaId = mediaId
         self.languageId = languageId
+        self.textVersion = textVersion
         self.silLang = silLang
         
         let analyticsSessionId = AnalyticsSessionId()
@@ -56,6 +59,7 @@ class AudioAnalytics {
         self.dictionary["mediaSource"] = self.mediaSource
         self.dictionary["mediaId"] = self.mediaId
         self.dictionary["languageId"] = self.languageId
+        self.dictionary["textVersion"] = self.textVersion
         self.dictionary["silLang"] = self.silLang
         
         let locale = Locale.current

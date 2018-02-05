@@ -26,7 +26,7 @@ class AudioBibleController {
     /**
     * This must be set to be the WKWebView
     */
-    func present(view: UIView, version: String, book: String, chapter: String, fileType: String) {
+    func present(view: UIView, version: String, silLang: String, book: String, chapter: String, fileType: String) {
   //      view.backgroundColor = .blue // This is for Testing
         
         self.audioBible = AudioBible.shared(controller: self)
@@ -34,7 +34,7 @@ class AudioBibleController {
         self.audioSession = AudioSession.shared(audioBibleView: self.audioBibleView!)
         
         let metaData = MetaDataReader()
-        metaData.read(versionCode: version, complete: { [unowned self] oldTestament, newTestament in
+        metaData.read(versionCode: version, silLang: silLang, complete: { [unowned self] oldTestament, newTestament in
             print("DONE reading metadata")
             if let meta = metaData.findBook(bookId: book) {
                 let reference = Reference(bible: meta.bible, book: meta, chapter: chapter, fileType: fileType)

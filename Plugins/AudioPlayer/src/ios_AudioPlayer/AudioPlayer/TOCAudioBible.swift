@@ -8,6 +8,8 @@
 
 class TOCAudioBible {
     
+    let textVersion: String
+    let silLang: String
     let mediaSource: String
     let damId: String
     let dbpLanguageCode: String
@@ -17,9 +19,11 @@ class TOCAudioBible {
     var booksById: Dictionary<String, TOCAudioBook>
     var booksBySeq: Dictionary<Int, TOCAudioBook>
 
-    init(database: Sqlite3, mediaSource: String, dbRow: [String?]) {
+    init(database: Sqlite3, textVersion: String, silLang: String, mediaSource: String, dbRow: [String?]) {
         self.booksById = Dictionary<String, TOCAudioBook>()
         self.booksBySeq = Dictionary<Int, TOCAudioBook>()
+        self.textVersion = textVersion
+        self.silLang = silLang
         self.mediaSource = mediaSource
         self.damId = dbRow[0]!
         self.collectionCode = dbRow[1]!

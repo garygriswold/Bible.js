@@ -23,7 +23,8 @@ class MetaDataReader {
         print("***** Deinit MetaDataReader *****")
     }
 
-    func read(versionCode: String, complete: @escaping (_ oldTest:TOCAudioBible?, _ newTest:TOCAudioBible?) -> Void) {
+    func read(versionCode: String, silLang: String,
+              complete: @escaping (_ oldTest:TOCAudioBible?, _ newTest:TOCAudioBible?) -> Void) {
         let db = Sqlite3()
         let query = "SELECT a.damId, a.collectionCode, a.mediaType, a.dbpLanguageCode, a.dbpVersionCode" +
                 " FROM audio a, audioVersion v" +
@@ -58,10 +59,12 @@ class MetaDataReader {
                     }
                 }
                 if let oldRow = oldTestRow {
-                    self.oldTestament = TOCAudioBible(database: db, mediaSource: "FCBH", dbRow: oldRow)
+                    self.oldTestament = TOCAudioBible(database: db, textVersion: versionCode, silLang: silLang,
+                                                      mediaSource: "FCBH", dbRow: oldRow)
                 }
                 if let newRow = newTestRow {
-                    self.newTestament = TOCAudioBible(database: db, mediaSource: "FCBH", dbRow: newRow)
+                    self.newTestament = TOCAudioBible(database: db, textVersion: versionCode, silLang: silLang,
+                                                      mediaSource: "FCBH", dbRow: newRow)
                 }
                 self.readBookNames(versionCode: versionCode)
                 complete(self.oldTestament, self.newTestament)

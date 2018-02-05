@@ -17,11 +17,12 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         AwsS3.region = "us-east-1"
         let readVersion = "ERV-ENG"//KJVPD"//ESV"
+        let readLang = "eng"
         let readBook = "JHN"
         let readChapter = "002"
         let readType = "mp3"
-        self.audioController.present(view: self.view, version: readVersion, book: readBook, chapter: readChapter,
-                                     fileType: readType)
+        self.audioController.present(view: self.view, version: readVersion, silLang: readLang, book: readBook,
+                                     chapter: readChapter, fileType: readType)
         
 //        let readBook2 = "MAT"
 //        self.audioController.present(view: self.view, version: readVersion, book: readBook2, chapter: readChapter,

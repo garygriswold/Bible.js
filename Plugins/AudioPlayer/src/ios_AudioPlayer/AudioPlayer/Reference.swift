@@ -38,6 +38,18 @@ class Reference {
         print("***** Deinit Reference ***** \(self.toString())")
     }
     
+    var textVersion: String {
+        get {
+            return self.tocAudioBible.textVersion
+        }
+    }
+    
+    var silLang: String {
+        get {
+            return self.tocAudioBible.silLang
+        }
+    }
+    
     var damId: String {
         get {
             return self.tocAudioBible.damId
