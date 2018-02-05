@@ -15,6 +15,7 @@ class AudioBibleController {
     var audioBible: AudioBible?
     var audioBibleView: AudioBibleView?
     var audioSession: AudioSession?
+    var completionHandler: ((Error?)->Void)?
     
     private init() {
     }
@@ -26,12 +27,14 @@ class AudioBibleController {
     /**
     * This must be set to be the WKWebView
     */
-    func present(view: UIView, version: String, silLang: String, book: String, chapter: String, fileType: String) {
+    func present(view: UIView, version: String, silLang: String, book: String, chapter: String, fileType: String,
+                 complete: @escaping (_ error:Error?) -> Void) {
   //      view.backgroundColor = .blue // This is for Testing
         
         self.audioBible = AudioBible.shared(controller: self)
         self.audioBibleView = AudioBibleView.shared(view: view, audioBible: self.audioBible!)
         self.audioSession = AudioSession.shared(audioBibleView: self.audioBibleView!)
+        self.completionHandler = complete
         
         let metaData = MetaDataReader()
         metaData.read(versionCode: version, silLang: silLang, complete: { [unowned self] oldTestament, newTestament in
@@ -51,6 +54,7 @@ class AudioBibleController {
     func playHasStopped() {
         self.audioBibleView?.stopPlay()
         UIApplication.shared.isIdleTimerDisabled = false
+        self.completionHandler?(nil)
     }
 }
 
