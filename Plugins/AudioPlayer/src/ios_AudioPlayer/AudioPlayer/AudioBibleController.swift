@@ -8,9 +8,18 @@
 
 import UIKit
 
-class AudioBibleController {
+public class AudioBibleController {
     
-    static let shared: AudioBibleController = AudioBibleController()
+    private static var instance: AudioBibleController?
+    public static var shared: AudioBibleController {
+        get {
+            if AudioBibleController.instance == nil {
+                AudioBibleController.instance = AudioBibleController()
+            }
+            return AudioBibleController.instance!
+        }
+    }
+    //static let shared: AudioBibleController = AudioBibleController()
  
     var audioBible: AudioBible?
     var audioBibleView: AudioBibleView?
@@ -27,7 +36,7 @@ class AudioBibleController {
     /**
     * This must be set to be the WKWebView
     */
-    func present(view: UIView, version: String, silLang: String, book: String, chapter: String, fileType: String,
+    public func present(view: UIView, version: String, silLang: String, book: String, chapter: String, fileType: String,
                  complete: @escaping (_ error:Error?) -> Void) {
   //      view.backgroundColor = .blue // This is for Testing
         
