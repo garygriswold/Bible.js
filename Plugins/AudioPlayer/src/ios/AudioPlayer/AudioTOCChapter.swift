@@ -8,7 +8,7 @@
 
 import CoreMedia
 
-class TOCAudioChapter {
+class AudioTOCChapter {
     
     private var versePositions: [Double]
     
@@ -26,7 +26,7 @@ class TOCAudioChapter {
     }
     
     deinit {
-        print("***** Deinit TOCAudioChapter *****")
+        print("***** Deinit AudioTOCChapter *****")
     }
     
     func hasPositions() -> Bool {

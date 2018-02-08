@@ -42,20 +42,20 @@
 			</feature>
 		</config-file>
 		<source-file src="src/ios/AudioPlayer.swift" />
-		<source-file src="src/ios/AudioPlayer/Reference.swift" />
-		<source-file src="src/ios/AudioPlayer/AnalyticsSessionId.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioReference.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioAnalyticsSessionId.swift" />
 		<source-file src="src/ios/AudioPlayer/AudioAnalytics.swift" />
 		<source-file src="src/ios/AudioPlayer/AudioBible.swift" />
 		<source-file src="src/ios/AudioPlayer/AudioBibleController.swift" />
 		<source-file src="src/ios/AudioPlayer/AudioBibleView.swift" />
 		<source-file src="src/ios/AudioPlayer/AudioControlCenter.swift" />
 		<source-file src="src/ios/AudioPlayer/AudioSession.swift" />
-		<source-file src="src/ios/AudioPlayer/MediaPlayState.swift" />
-		<source-file src="src/ios/AudioPlayer/MetaDataReader.swift" />
-		<source-file src="src/ios/AudioPlayer/TOCAudioBible.swift" />
-		<source-file src="src/ios/AudioPlayer/TOCAudioBook.swift" />
-		<source-file src="src/ios/AudioPlayer/TOCAudioChapter.swift" />
-		<source-file src="src/ios/AudioPlayer/Sqlite3.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioPlayState.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioMetaDataReader.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioTOCBible.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioTOCBook.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioTOCChapter.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioSqlite3.swift" />
 		<resource-file src="src/ios/AudioPlayer/UIStopUPButton.png" />
 		<resource-file src="src/ios/AudioPlayer/UIStopDNButton.png" />
 		<resource-file src="src/ios/AudioPlayer/UIPlayUPButton.png" />
@@ -66,7 +66,6 @@
 		<resource-file src="src/ios/AudioPlayer/UISliderMin.png" />
 		<resource-file src="src/ios/AudioPlayer/UIThumbDN.png" />
 		<resource-file src="src/ios/AudioPlayer/UIThumbUP.png" />
-		<!-- <framework src="src/ios/build/AudioPlayer.framework" custom="true" embed="true" /> -->
 	</platform>
 
 </plugin>

@@ -19,7 +19,7 @@
  */
 import Foundation
 
-class AnalyticsSessionId {
+class AudioAnalyticsSessionId {
     
     static let SESSION_KEY: String = "ShortSandsSessionId"
     
@@ -29,11 +29,11 @@ class AnalyticsSessionId {
         let homeDir: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
         let libDir: URL = homeDir.appendingPathComponent("Library")
         let cacheDir = libDir.appendingPathComponent("Caches")
-        archiveURL = cacheDir.appendingPathComponent(AnalyticsSessionId.SESSION_KEY)
+        archiveURL = cacheDir.appendingPathComponent(AudioAnalyticsSessionId.SESSION_KEY)
     }
     
     deinit {
-        print("***** Deinit AnalyticsSessionId *****")
+        print("***** Deinit AudioAnalyticsSessionId *****")
     }
     
     func getSessionId() -> String {

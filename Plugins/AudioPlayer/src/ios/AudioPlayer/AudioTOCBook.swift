@@ -6,16 +6,16 @@
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
 
-class TOCAudioBook {
+class AudioTOCBook {
     
-    let bible: TOCAudioBible
+    let bible: AudioTOCBible
     let bookId: String
     let bookOrder: String
     let sequence: Int
     var bookName: String // Used by AudioControlCenter
     let numberOfChapters: Int
 
-    init(bible: TOCAudioBible, dbRow: [String?]) {
+    init(bible: AudioTOCBible, dbRow: [String?]) {
         self.bible = bible
         self.bookId = dbRow[0]!
         self.bookOrder = dbRow[1]!
@@ -26,7 +26,7 @@ class TOCAudioBook {
     }
     
     deinit {
-        print("***** Deinit TOCAudioBook *****")
+        print("***** Deinit AudioTOCBook *****")
     }
     
     func toString() -> String {

@@ -6,23 +6,23 @@
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
 
-class Reference {
+class AudioReference {
     
-    let tocAudioBible: TOCAudioBible
-    let tocAudioBook: TOCAudioBook
+    let tocAudioBible: AudioTOCBible
+    let tocAudioBook: AudioTOCBook
     let chapter: String
     let fileType: String
-    var audioChapter: TOCAudioChapter?
+    var audioChapter: AudioTOCChapter?
     
-    init(bible: TOCAudioBible, book: TOCAudioBook, chapter: String, fileType: String) {
+    init(bible: AudioTOCBible, book: AudioTOCBook, chapter: String, fileType: String) {
         self.tocAudioBible = bible
         self.tocAudioBook = book
         self.chapter = chapter
         self.fileType = fileType
-        print("***** Init Reference ***** \(self.toString())")
+        print("***** Init AudioReference ***** \(self.toString())")
     }
     
-    convenience init(bible: TOCAudioBible, book: TOCAudioBook, chapterNum: Int, fileType: String) {
+    convenience init(bible: AudioTOCBible, book: AudioTOCBook, chapterNum: Int, fileType: String) {
         let chapter = String(chapterNum)
         switch chapter.count {
         case 1:
@@ -35,7 +35,7 @@ class Reference {
     }
    
     deinit {
-        print("***** Deinit Reference ***** \(self.toString())")
+        print("***** Deinit AudioReference ***** \(self.toString())")
     }
     
     var textVersion: String {
@@ -98,11 +98,11 @@ class Reference {
         }
     }
     
-    func nextChapter() -> Reference? {
+    func nextChapter() -> AudioReference? {
         return self.tocAudioBible.nextChapter(reference: self)
     }
     
-    func priorChapter() -> Reference? {
+    func priorChapter() -> AudioReference? {
         return self.tocAudioBible.priorChapter(reference: self)
     }
     
@@ -117,7 +117,7 @@ class Reference {
         return self.sequence + "_" + self.book + "_" + self.chapter + "." + self.fileType
     }
     
-    func isEqual(reference: Reference) -> Bool {
+    func isEqual(reference: AudioReference) -> Bool {
         if (self.chapter != reference.chapter) { return false }
         if (self.book != reference.book) { return false }
         if (self.sequence != reference.sequence) { return false }

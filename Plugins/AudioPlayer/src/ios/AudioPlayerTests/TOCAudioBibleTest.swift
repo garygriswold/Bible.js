@@ -11,12 +11,12 @@ import AudioPlayer
 
 class TOCAudioBibleTest: XCTestCase {
     
-    var audioChapter: TOCAudioChapter?
+    var audioChapter: AudioTOCChapter?
     
     override func setUp() {
         super.setUp()
         if audioChapter == nil {
-            let reader = MetaDataReader()
+            let reader = AudioMetaDataReader()
             reader.readVerseAudio(damid: "DEMO", sequence: "01", bookId: "TST", chapter: "001", complete: {
                 audioChapter in
                 self.audioChapter = audioChapter

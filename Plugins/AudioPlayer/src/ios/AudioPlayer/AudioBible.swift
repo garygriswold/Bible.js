@@ -24,8 +24,8 @@ class AudioBible {
     private var audioAnalytics: AudioAnalytics?
     private var player: AVPlayer?
     // Transient Variables
-    private var currReference: Reference?
-    private var nextReference: Reference?
+    private var currReference: AudioReference?
+    private var nextReference: AudioReference?
     
     private init(controller: AudioBibleController) {
         self.controller = controller
@@ -41,7 +41,7 @@ class AudioBible {
         return self.player
     }
     
-    func getCurrentReference() -> Reference? {
+    func getCurrentReference() -> AudioReference? {
         return self.currReference
     }
     
@@ -49,7 +49,7 @@ class AudioBible {
         return (self.player != nil) ? self.player!.rate > 0.0 : false
     }
     
-    func beginReadFile(reference: Reference) {
+    func beginReadFile(reference: AudioReference) {
         print("BibleReader.BEGIN Read File")
         self.currReference = reference
         self.audioAnalytics = AudioAnalytics(mediaSource: "FCBH",
@@ -59,7 +59,7 @@ class AudioBible {
                                              silLang: reference.silLang)
         
         print("INSIDE BibleReader \(reference.damId)")
-        MediaPlayState.retrieve(mediaId: reference.damId)
+        AudioPlayState.retrieve(mediaId: reference.damId)
         AwsS3Cache.shared.readFile(s3Bucket: reference.getS3Bucket(),
                    s3Key: reference.getS3Key(),
                    expireInterval: Double.infinity,
@@ -75,7 +75,7 @@ class AudioBible {
         let playerItem = AVPlayerItem(asset: asset)
         print("Player Item Status \(playerItem.status)")
         
-        let seekTime = backupSeek(state: MediaPlayState.currentState)
+        let seekTime = backupSeek(state: AudioPlayState.currentState)
         if (CMTimeGetSeconds(seekTime) > 0.1) {
             playerItem.seek(to: seekTime)
         }
@@ -92,7 +92,7 @@ class AudioBible {
         self.preFetchNextChapter(reference: self.currReference!)
     }
     
-    private func backupSeek(state: MediaPlayState) -> CMTime {
+    private func backupSeek(state: AudioPlayState) -> CMTime {
         if (state.mediaUrl == self.currReference!.toString()) {
             return state.position
         } else {
@@ -137,7 +137,7 @@ class AudioBible {
             self.preFetchNextChapter(reference: curr)
         } else {
             self.stop()
-            MediaPlayState.clear() // Must do after stop, because stop updates
+            AudioPlayState.clear() // Must do after stop, because stop updates
         }
     }
     
@@ -264,7 +264,7 @@ class AudioBible {
         self.stop()
     }
     
-    private func updateMediaPlayStateTime(reference: Reference) {
+    private func updateMediaPlayStateTime(reference: AudioReference) {
         var result: CMTime = kCMTimeZero
         if let audioChapter = reference.audioChapter {
             if let currentTime = self.player?.currentTime() {
@@ -272,10 +272,10 @@ class AudioBible {
                 result = audioChapter.findPositionOfVerse(verse: verse)
             }
         }
-        MediaPlayState.update(url: reference.toString(), time: result)
+        AudioPlayState.update(url: reference.toString(), time: result)
     }
     
-    private func addNextChapter(reference: Reference) {
+    private func addNextChapter(reference: AudioReference) {
         self.player?.pause()
         AwsS3Cache.shared.readFile(s3Bucket: reference.getS3Bucket(),
                                    s3Key: reference.getS3Key(),
@@ -292,7 +292,7 @@ class AudioBible {
         })
     }
     
-    private func preFetchNextChapter(reference: Reference) {
+    private func preFetchNextChapter(reference: AudioReference) {
         self.nextReference = reference.nextChapter()
         if let next = self.nextReference {
             AwsS3Cache.shared.readFile(s3Bucket: next.getS3Bucket(),
@@ -302,8 +302,8 @@ class AudioBible {
         }
     }
     
-    private func readVerseMetaData(reference: Reference) {
-        let reader = MetaDataReader()
+    private func readVerseMetaData(reference: AudioReference) {
+        let reader = AudioMetaDataReader()
         reader.readVerseAudio(damid: reference.damId, sequence: reference.sequence, bookId: reference.book, chapter: reference.chapter, complete: {
             audioChapter in
             if (audioChapter != nil) {

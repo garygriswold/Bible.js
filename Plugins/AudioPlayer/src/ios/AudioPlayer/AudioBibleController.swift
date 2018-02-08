@@ -45,11 +45,11 @@ public class AudioBibleController {
         self.audioSession = AudioSession.shared(audioBibleView: self.audioBibleView!)
         self.completionHandler = complete
         
-        let metaData = MetaDataReader()
+        let metaData = AudioMetaDataReader()
         metaData.read(versionCode: version, silLang: silLang, complete: { [unowned self] oldTestament, newTestament in
             print("DONE reading metadata")
             if let meta = metaData.findBook(bookId: book) {
-                let reference = Reference(bible: meta.bible, book: meta, chapter: chapter, fileType: fileType)
+                let reference = AudioReference(bible: meta.bible, book: meta, chapter: chapter, fileType: fileType)
                 self.audioBible!.beginReadFile(reference: reference)
             }
         })

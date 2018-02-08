@@ -12,16 +12,16 @@ import CoreMedia
  * This class persists the mediaId, mediaUrl and position (time) so that any media
  * can be restarted from the last place that it was viewed or heard.
  */
-class MediaPlayState : NSObject, NSCoding {
+class AudioPlayState : NSObject, NSCoding {
     
     // Where is this stuff being stored? is should be Library/Caches
     static let stateDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
-    static var currentState = MediaPlayState(mediaId: "XXX")
+    static var currentState = AudioPlayState(mediaId: "XXX")
     
-    static func retrieve(mediaId: String) -> MediaPlayState {
+    static func retrieve(mediaId: String) -> AudioPlayState {
         let archiveURL = stateDirectory.appendingPathComponent(mediaId)
-        let state = NSKeyedUnarchiver.unarchiveObject(withFile: archiveURL.path) as? MediaPlayState
-        currentState = (state != nil) ? state! : MediaPlayState(mediaId: mediaId)
+        let state = NSKeyedUnarchiver.unarchiveObject(withFile: archiveURL.path) as? AudioPlayState
+        currentState = (state != nil) ? state! : AudioPlayState(mediaId: mediaId)
         return currentState
     }
     

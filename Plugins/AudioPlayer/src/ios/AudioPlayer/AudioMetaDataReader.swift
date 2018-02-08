@@ -8,11 +8,11 @@
 
 import AWS
 
-class MetaDataReader {
+class AudioMetaDataReader {
     
-    var oldTestament: TOCAudioBible?
-    var newTestament: TOCAudioBible?
-    var metaDataVerse: TOCAudioChapter?
+    var oldTestament: AudioTOCBible?
+    var newTestament: AudioTOCBible?
+    var metaDataVerse: AudioTOCChapter?
     
     init() {
         self.oldTestament = nil
@@ -20,12 +20,12 @@ class MetaDataReader {
     }
     
     deinit {
-        print("***** Deinit MetaDataReader *****")
+        print("***** Deinit AudioMetaDataReader *****")
     }
 
     func read(versionCode: String, silLang: String,
-              complete: @escaping (_ oldTest:TOCAudioBible?, _ newTest:TOCAudioBible?) -> Void) {
-        let db = Sqlite3()
+              complete: @escaping (_ oldTest:AudioTOCBible?, _ newTest:AudioTOCBible?) -> Void) {
+        let db = AudioSqlite3()
         let query = "SELECT a.damId, a.collectionCode, a.mediaType, a.dbpLanguageCode, a.dbpVersionCode" +
                 " FROM audio a, audioVersion v" +
                 " WHERE a.dbpLanguageCode = v.dbpLanguageCode" +
@@ -59,26 +59,26 @@ class MetaDataReader {
                     }
                 }
                 if let oldRow = oldTestRow {
-                    self.oldTestament = TOCAudioBible(database: db, textVersion: versionCode, silLang: silLang,
+                    self.oldTestament = AudioTOCBible(database: db, textVersion: versionCode, silLang: silLang,
                                                       mediaSource: "FCBH", dbRow: oldRow)
                 }
                 if let newRow = newTestRow {
-                    self.newTestament = TOCAudioBible(database: db, textVersion: versionCode, silLang: silLang,
+                    self.newTestament = AudioTOCBible(database: db, textVersion: versionCode, silLang: silLang,
                                                       mediaSource: "FCBH", dbRow: newRow)
                 }
                 self.readBookNames(versionCode: versionCode)
                 complete(self.oldTestament, self.newTestament)
             })
         } catch let err {
-            print("ERROR \(Sqlite3.errorDescription(error: err))")
+            print("ERROR \(AudioSqlite3.errorDescription(error: err))")
             complete(nil, nil)
         }
     }
     /**
     * This function will only return results after read has been called.
     */
-    func findBook(bookId: String) -> TOCAudioBook? {
-        var result: TOCAudioBook? = nil
+    func findBook(bookId: String) -> AudioTOCBook? {
+        var result: AudioTOCBook? = nil
         if self.oldTestament != nil {
             result = self.oldTestament!.booksById[bookId]
         }
@@ -89,7 +89,7 @@ class MetaDataReader {
     }
     
     func readVerseAudio(damid: String, sequence: String, bookId: String, chapter: String,
-                        complete: @escaping (_ audioVerse: TOCAudioChapter?) -> Void) {
+                        complete: @escaping (_ audioVerse: AudioTOCChapter?) -> Void) {
         self.metaDataVerse = nil
         let s3Bucket = damid.lowercased() + ".shortsands.com"
         let s3Key = "Verse_" + sequence + "_" + bookId + ".json"
@@ -102,7 +102,7 @@ class MetaDataReader {
                         if let chapterNum = Int(chapter) {
                             let chapterStr = String(chapterNum)
                             if let dictionary = result?[chapterStr] as? NSDictionary {
-                                self.metaDataVerse = TOCAudioChapter(chapterDictionary: dictionary)
+                                self.metaDataVerse = AudioTOCChapter(chapterDictionary: dictionary)
                             } else {
                                 print("ERROR: Chapter not found in verse meta data.")
                             }
@@ -117,7 +117,7 @@ class MetaDataReader {
     }
     
     private func readBookNames(versionCode: String) {
-        let db = Sqlite3()
+        let db = AudioSqlite3()
         let query = "SELECT code, heading FROM tableContents"
         do {
             let dbName = versionCode + ".db"
@@ -134,7 +134,7 @@ class MetaDataReader {
                 }
             })
         } catch let err {
-            print("ERROR \(Sqlite3.errorDescription(error: err))")
+            print("ERROR \(AudioSqlite3.errorDescription(error: err))")
         }
     }
     

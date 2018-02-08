@@ -22,13 +22,13 @@ enum Sqlite3Error: Error {
     case statementExecuteFailed(sql: String, sqliteError: String)
 }
 
-class Sqlite3 {
+class AudioSqlite3 {
     
     private var databaseDir: URL
     private var database: OpaquePointer?
     
     init() {
-        print("****** Init Sqlite3 ******")
+        print("****** Init AudioSqlite3 ******")
         let homeDir: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
         let libDir: URL = homeDir.appendingPathComponent("Library")
         let dbDir: URL = libDir.appendingPathComponent("LocalDatabase") // Is this the correct name?
@@ -39,7 +39,7 @@ class Sqlite3 {
     // Could introduce alternate init that introduces different databaseDir
     
     deinit {
-        print("****** Deinit Sqlite ******")
+        print("****** Deinit AudioSqlite ******")
     }
 
     public var isOpen: Bool {

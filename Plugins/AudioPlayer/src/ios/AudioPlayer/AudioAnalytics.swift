@@ -37,7 +37,7 @@ class AudioAnalytics {
         self.textVersion = textVersion
         self.silLang = silLang
         
-        let analyticsSessionId = AnalyticsSessionId()
+        let analyticsSessionId = AudioAnalyticsSessionId()
         self.sessionId = analyticsSessionId.getSessionId()
         
         self.timeStarted = Date()
