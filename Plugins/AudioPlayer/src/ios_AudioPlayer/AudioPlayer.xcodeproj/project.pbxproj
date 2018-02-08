@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E40F85631F55BD0400282299 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = E40F85621F55BD0400282299 /* Images */; };
 		E4148DC71F3E859B007D5870 /* TOCAudioChapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC61F3E859B007D5870 /* TOCAudioChapter.swift */; };
 		E4148DC91F42828D007D5870 /* Reference.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC81F42828D007D5870 /* Reference.swift */; };
 		E41E5EC41F38FB8700B18D3F /* AudioBibleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E5EC31F38FB8700B18D3F /* AudioBibleView.swift */; };
@@ -27,6 +26,16 @@
 		E46543121F8292DA00F9B340 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E42B3F6E1F32426B00A51430 /* AWS.framework */; };
 		E46543131F8292EC00F9B340 /* Reference.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC81F42828D007D5870 /* Reference.swift */; };
 		E46E300A1FC36315005AB310 /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E46E30091FC36315005AB310 /* Versions.db */; };
+		E480FF53202C15E0002EB425 /* UIPauseDNButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E480FF52202C15E0002EB425 /* UIPauseDNButton.png */; };
+		E480FF55202C1604002EB425 /* UIPauseUPButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E480FF54202C1604002EB425 /* UIPauseUPButton.png */; };
+		E480FF57202C1615002EB425 /* UIPlayDNButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E480FF56202C1615002EB425 /* UIPlayDNButton.png */; };
+		E480FF59202C162B002EB425 /* UIPlayUPButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E480FF58202C162B002EB425 /* UIPlayUPButton.png */; };
+		E480FF5B202C163C002EB425 /* UISliderMax.png in Resources */ = {isa = PBXBuildFile; fileRef = E480FF5A202C163B002EB425 /* UISliderMax.png */; };
+		E480FF5D202C164C002EB425 /* UISliderMin.png in Resources */ = {isa = PBXBuildFile; fileRef = E480FF5C202C164C002EB425 /* UISliderMin.png */; };
+		E480FF5F202C1661002EB425 /* UIStopDNButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E480FF5E202C1661002EB425 /* UIStopDNButton.png */; };
+		E480FF61202C1674002EB425 /* UIStopUPButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E480FF60202C1674002EB425 /* UIStopUPButton.png */; };
+		E480FF63202C1689002EB425 /* UIThumbDN.png in Resources */ = {isa = PBXBuildFile; fileRef = E480FF62202C1689002EB425 /* UIThumbDN.png */; };
+		E480FF65202C169B002EB425 /* UIThumbUP.png in Resources */ = {isa = PBXBuildFile; fileRef = E480FF64202C169B002EB425 /* UIThumbUP.png */; };
 		E4826D1A1F4F21140031FFE0 /* AudioBibleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4826D191F4F21140031FFE0 /* AudioBibleController.swift */; };
 		E4A32CCF1F2FB310009AECFB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A32CCE1F2FB310009AECFB /* AppDelegate.swift */; };
 		E4A32CD11F2FB310009AECFB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A32CD01F2FB310009AECFB /* ViewController.swift */; };
@@ -38,7 +47,6 @@
 		E4A848931FC2AA6400C49C07 /* Sqlite3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42C91801FBA625300612F38 /* Sqlite3.swift */; };
 		E4AB2E331F82019500CCDD5C /* TOCAudioBibleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AB2E321F82019500CCDD5C /* TOCAudioBibleTest.swift */; };
 		E4C93A89201BDBA300ED4E06 /* WEB.db in Resources */ = {isa = PBXBuildFile; fileRef = E4C93A86201BDBA300ED4E06 /* WEB.db */; };
-		E4C93A8A201BDBA300ED4E06 /* ERV-ENG.db in Resources */ = {isa = PBXBuildFile; fileRef = E4C93A87201BDBA300ED4E06 /* ERV-ENG.db */; };
 		E4C93A8B201BDBA300ED4E06 /* KJVPD.db in Resources */ = {isa = PBXBuildFile; fileRef = E4C93A88201BDBA300ED4E06 /* KJVPD.db */; };
 		E4F69CED1F39684800EE53AB /* MetaDataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */; };
 		E4F69CEF1F397CF200EE53AB /* TOCAudioBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */; };
@@ -75,7 +83,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		E40F85621F55BD0400282299 /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Images; sourceTree = "<group>"; };
 		E4148DC61F3E859B007D5870 /* TOCAudioChapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioChapter.swift; sourceTree = "<group>"; };
 		E4148DC81F42828D007D5870 /* Reference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reference.swift; sourceTree = "<group>"; };
 		E41E5EC31F38FB8700B18D3F /* AudioBibleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioBibleView.swift; sourceTree = "<group>"; };
@@ -86,6 +93,16 @@
 		E45902512017AC3D00EAAA2B /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = AudioPlayer/AWSCore.framework; sourceTree = "<group>"; };
 		E45902522017AC3D00EAAA2B /* PKZip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PKZip.framework; path = AudioPlayer/PKZip.framework; sourceTree = "<group>"; };
 		E46E30091FC36315005AB310 /* Versions.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = Versions.db; path = AudioPlayer/Versions.db; sourceTree = "<group>"; };
+		E480FF52202C15E0002EB425 /* UIPauseDNButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIPauseDNButton.png; sourceTree = "<group>"; };
+		E480FF54202C1604002EB425 /* UIPauseUPButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIPauseUPButton.png; sourceTree = "<group>"; };
+		E480FF56202C1615002EB425 /* UIPlayDNButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIPlayDNButton.png; sourceTree = "<group>"; };
+		E480FF58202C162B002EB425 /* UIPlayUPButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIPlayUPButton.png; sourceTree = "<group>"; };
+		E480FF5A202C163B002EB425 /* UISliderMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UISliderMax.png; sourceTree = "<group>"; };
+		E480FF5C202C164C002EB425 /* UISliderMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UISliderMin.png; sourceTree = "<group>"; };
+		E480FF5E202C1661002EB425 /* UIStopDNButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIStopDNButton.png; sourceTree = "<group>"; };
+		E480FF60202C1674002EB425 /* UIStopUPButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIStopUPButton.png; sourceTree = "<group>"; };
+		E480FF62202C1689002EB425 /* UIThumbDN.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIThumbDN.png; sourceTree = "<group>"; };
+		E480FF64202C169B002EB425 /* UIThumbUP.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIThumbUP.png; sourceTree = "<group>"; };
 		E4826D191F4F21140031FFE0 /* AudioBibleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioBibleController.swift; sourceTree = "<group>"; };
 		E4A32CCB1F2FB310009AECFB /* AudioPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4A32CCE1F2FB310009AECFB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -100,7 +117,6 @@
 		E4AB2E2C1F82015800CCDD5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4AB2E321F82019500CCDD5C /* TOCAudioBibleTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOCAudioBibleTest.swift; sourceTree = "<group>"; };
 		E4C93A86201BDBA300ED4E06 /* WEB.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = WEB.db; sourceTree = "<group>"; };
-		E4C93A87201BDBA300ED4E06 /* ERV-ENG.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ERV-ENG.db"; sourceTree = "<group>"; };
 		E4C93A88201BDBA300ED4E06 /* KJVPD.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = KJVPD.db; sourceTree = "<group>"; };
 		E4F69CEC1F39684800EE53AB /* MetaDataReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaDataReader.swift; sourceTree = "<group>"; };
 		E4F69CEE1F397CF200EE53AB /* TOCAudioBible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioBible.swift; sourceTree = "<group>"; };
@@ -157,7 +173,6 @@
 			isa = PBXGroup;
 			children = (
 				E42B3F6E1F32426B00A51430 /* AWS.framework */,
-				E40F85621F55BD0400282299 /* Images */,
 				E4148DC81F42828D007D5870 /* Reference.swift */,
 				E4A32CD01F2FB310009AECFB /* ViewController.swift */,
 				E4826D191F4F21140031FFE0 /* AudioBibleController.swift */,
@@ -172,7 +187,6 @@
 				E4F69CF01F397D0800EE53AB /* TOCAudioBook.swift */,
 				E4148DC61F3E859B007D5870 /* TOCAudioChapter.swift */,
 				E42C91801FBA625300612F38 /* Sqlite3.swift */,
-				E4C93A87201BDBA300ED4E06 /* ERV-ENG.db */,
 				E4C93A88201BDBA300ED4E06 /* KJVPD.db */,
 				E4C93A86201BDBA300ED4E06 /* WEB.db */,
 				E4A32CD21F2FB310009AECFB /* Main.storyboard */,
@@ -180,6 +194,16 @@
 				E4A32CD71F2FB310009AECFB /* LaunchScreen.storyboard */,
 				E4A32CDA1F2FB310009AECFB /* Info.plist */,
 				E45154121FAD66440001D98E /* AudioControlCenter.swift */,
+				E480FF52202C15E0002EB425 /* UIPauseDNButton.png */,
+				E480FF54202C1604002EB425 /* UIPauseUPButton.png */,
+				E480FF56202C1615002EB425 /* UIPlayDNButton.png */,
+				E480FF58202C162B002EB425 /* UIPlayUPButton.png */,
+				E480FF5A202C163B002EB425 /* UISliderMax.png */,
+				E480FF5C202C164C002EB425 /* UISliderMin.png */,
+				E480FF5E202C1661002EB425 /* UIStopDNButton.png */,
+				E480FF60202C1674002EB425 /* UIStopUPButton.png */,
+				E480FF62202C1689002EB425 /* UIThumbDN.png */,
+				E480FF64202C169B002EB425 /* UIThumbUP.png */,
 				E4F78E772021961C003D4DFC /* Images.xcassets */,
 			);
 			path = AudioPlayer;
@@ -246,7 +270,6 @@
 				TargetAttributes = {
 					E4A32CCA1F2FB310009AECFB = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = 95C7NX5DGM;
 						ProvisioningStyle = Automatic;
 					};
 					E4AB2E271F82015800CCDD5C = {
@@ -281,14 +304,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E40F85631F55BD0400282299 /* Images in Resources */,
+				E480FF63202C1689002EB425 /* UIThumbDN.png in Resources */,
+				E480FF59202C162B002EB425 /* UIPlayUPButton.png in Resources */,
+				E480FF61202C1674002EB425 /* UIStopUPButton.png in Resources */,
+				E480FF53202C15E0002EB425 /* UIPauseDNButton.png in Resources */,
+				E480FF55202C1604002EB425 /* UIPauseUPButton.png in Resources */,
 				E4F78E782021961C003D4DFC /* Images.xcassets in Resources */,
-				E4C93A8A201BDBA300ED4E06 /* ERV-ENG.db in Resources */,
 				E4A32CD91F2FB310009AECFB /* LaunchScreen.storyboard in Resources */,
 				E4C93A8B201BDBA300ED4E06 /* KJVPD.db in Resources */,
 				E46E300A1FC36315005AB310 /* Versions.db in Resources */,
+				E480FF57202C1615002EB425 /* UIPlayDNButton.png in Resources */,
+				E480FF5B202C163C002EB425 /* UISliderMax.png in Resources */,
 				E4C93A89201BDBA300ED4E06 /* WEB.db in Resources */,
+				E480FF5D202C164C002EB425 /* UISliderMin.png in Resources */,
 				E4A32CD41F2FB310009AECFB /* Main.storyboard in Resources */,
+				E480FF65202C169B002EB425 /* UIThumbUP.png in Resources */,
+				E480FF5F202C1661002EB425 /* UIStopDNButton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

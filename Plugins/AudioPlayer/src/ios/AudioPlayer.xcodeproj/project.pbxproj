@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E459FA68202B733700D9D8FF /* AudioBibleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DA503B20256AAD0053CB94 /* AudioBibleController.swift */; };
 		E4A717A92025497900A01B13 /* AudioPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4A7179F2025497800A01B13 /* AudioPlayer.framework */; };
 		E4A717AE2025497900A01B13 /* AudioPlayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A717AD2025497900A01B13 /* AudioPlayerTests.swift */; };
 		E4A717B02025497900A01B13 /* AudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = E4A717A22025497800A01B13 /* AudioPlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E4DA503620256A620053CB94 /* AnalyticsSessionId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DA503520256A620053CB94 /* AnalyticsSessionId.swift */; };
 		E4DA503820256A870053CB94 /* AudioAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DA503720256A870053CB94 /* AudioAnalytics.swift */; };
 		E4DA503A20256A9A0053CB94 /* AudioBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DA503920256A9A0053CB94 /* AudioBible.swift */; };
-		E4DA503C20256AAD0053CB94 /* AudioBibleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DA503B20256AAD0053CB94 /* AudioBibleController.swift */; };
 		E4DA503E20256ABE0053CB94 /* AudioBibleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DA503D20256ABE0053CB94 /* AudioBibleView.swift */; };
 		E4DA504020256AD10053CB94 /* AudioControlCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DA503F20256AD10053CB94 /* AudioControlCenter.swift */; };
 		E4DA504220256AEC0053CB94 /* AudioSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DA504120256AEB0053CB94 /* AudioSession.swift */; };
@@ -321,10 +321,10 @@
 				E4DA505020256B700053CB94 /* TOCAudioChapter.swift in Sources */,
 				E4DA503E20256ABE0053CB94 /* AudioBibleView.swift in Sources */,
 				E4DA504620256B1D0053CB94 /* MetaDataReader.swift in Sources */,
-				E4DA503C20256AAD0053CB94 /* AudioBibleController.swift in Sources */,
 				E4DA504820256B300053CB94 /* Reference.swift in Sources */,
 				E4DA503620256A620053CB94 /* AnalyticsSessionId.swift in Sources */,
 				E4DA503820256A870053CB94 /* AudioAnalytics.swift in Sources */,
+				E459FA68202B733700D9D8FF /* AudioBibleController.swift in Sources */,
 				E4DA504420256B0D0053CB94 /* MediaPlayState.swift in Sources */,
 				E4DA504220256AEC0053CB94 /* AudioSession.swift in Sources */,
 			);

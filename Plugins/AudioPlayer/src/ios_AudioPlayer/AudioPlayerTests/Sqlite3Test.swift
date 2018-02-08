@@ -77,7 +77,7 @@ class Sqlite3Test: XCTestCase {
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
             let query = "select * from NonExistantTable"
-            try db.stringSelect(query: query, complete: { resultSet in
+            try db.queryV1(sql: query, values: [], complete: { resultSet in
                 assert(false, "Throw should prevent this")
             })
         } catch Sqlite3Error.statementPrepareFailed {
@@ -94,7 +94,7 @@ class Sqlite3Test: XCTestCase {
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
             let query = "select * from Video where languageId is null"
-            try db.stringSelect(query: query, complete: { resultSet in
+            try db.queryV1(sql: query, values: [], complete: { resultSet in
                 assert(resultSet.count == 0, "There should be no rows returned")
                 ready.fulfill()
             })

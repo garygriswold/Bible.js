@@ -8,14 +8,13 @@
 * Returns:
 * func playHasStopped()
 */
-import AudioPlayer
 
 @objc(AudioPlayer) class AudioPlayer : CDVPlugin {
 	
-	let controller: AudioBibleController = AudioBibleController.shared
-	
 	@objc(present:) func present(command: CDVInvokedUrlCommand) {
-		self.controller.present(
+        AwsS3.region = "us-east-1"
+        let audioController = AudioBibleController.shared
+		audioController.present(
 			view: self.webView,
 			version: command.arguments[0] as? String ?? "",
 			silLang: command.arguments[1] as? String ?? "",
