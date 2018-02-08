@@ -8,7 +8,7 @@ AWS=AWS.framework
 ZIP=PKZip.framework
 AWSCORE=AWSCore.framework
 
-PLUGINS=$HOME/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios_AudioPlayer/AudioPlayer
+PLUGINS=$HOME/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer
 
 
 if [ "$1" == "Release" ]; then

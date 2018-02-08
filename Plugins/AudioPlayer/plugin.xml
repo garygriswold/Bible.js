@@ -42,30 +42,30 @@
 			</feature>
 		</config-file>
 		<source-file src="src/ios/AudioPlayer.swift" />
-		<source-file src="src/ios_AudioPlayer/AudioPlayer/Reference.swift" />
-		<source-file src="src/ios_AudioPlayer/AudioPlayer/AnalyticsSessionId.swift" />
-		<source-file src="src/ios_AudioPlayer/AudioPlayer/AudioAnalytics.swift" />
-		<source-file src="src/ios_AudioPlayer/AudioPlayer/AudioBible.swift" />
-		<source-file src="src/ios_AudioPlayer/AudioPlayer/AudioBibleController.swift" />
-		<source-file src="src/ios_AudioPlayer/AudioPlayer/AudioBibleView.swift" />
-		<source-file src="src/ios_AudioPlayer/AudioPlayer/AudioControlCenter.swift" />
-		<source-file src="src/ios_AudioPlayer/AudioPlayer/AudioSession.swift" />
-		<source-file src="src/ios_AudioPlayer/AudioPlayer/MediaPlayState.swift" />
-		<source-file src="src/ios_AudioPlayer/AudioPlayer/MetaDataReader.swift" />
-		<source-file src="src/ios_AudioPlayer/AudioPlayer/TOCAudioBible.swift" />
-		<source-file src="src/ios_AudioPlayer/AudioPlayer/TOCAudioBook.swift" />
-		<source-file src="src/ios_AudioPlayer/AudioPlayer/TOCAudioChapter.swift" />
-		<source-file src="src/ios_AudioPlayer/AudioPlayer/Sqlite3.swift" />
-		<resource-file src="src/ios_AudioPlayer/AudioPlayer/UIStopUPButton.png" />
-		<resource-file src="src/ios_AudioPlayer/AudioPlayer/UIStopDNButton.png" />
-		<resource-file src="src/ios_AudioPlayer/AudioPlayer/UIPlayUPButton.png" />
-		<resource-file src="src/ios_AudioPlayer/AudioPlayer/UIPlayDNButton.png" />
-		<resource-file src="src/ios_AudioPlayer/AudioPlayer/UIPauseUPButton.png" />
-		<resource-file src="src/ios_AudioPlayer/AudioPlayer/UIPauseDNButton.png" />
-		<resource-file src="src/ios_AudioPlayer/AudioPlayer/UISliderMax.png" />
-		<resource-file src="src/ios_AudioPlayer/AudioPlayer/UISliderMin.png" />
-		<resource-file src="src/ios_AudioPlayer/AudioPlayer/UIThumbDN.png" />
-		<resource-file src="src/ios_AudioPlayer/AudioPlayer/UIThumbUP.png" />
+		<source-file src="src/ios/AudioPlayer/Reference.swift" />
+		<source-file src="src/ios/AudioPlayer/AnalyticsSessionId.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioAnalytics.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioBible.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioBibleController.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioBibleView.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioControlCenter.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioSession.swift" />
+		<source-file src="src/ios/AudioPlayer/MediaPlayState.swift" />
+		<source-file src="src/ios/AudioPlayer/MetaDataReader.swift" />
+		<source-file src="src/ios/AudioPlayer/TOCAudioBible.swift" />
+		<source-file src="src/ios/AudioPlayer/TOCAudioBook.swift" />
+		<source-file src="src/ios/AudioPlayer/TOCAudioChapter.swift" />
+		<source-file src="src/ios/AudioPlayer/Sqlite3.swift" />
+		<resource-file src="src/ios/AudioPlayer/UIStopUPButton.png" />
+		<resource-file src="src/ios/AudioPlayer/UIStopDNButton.png" />
+		<resource-file src="src/ios/AudioPlayer/UIPlayUPButton.png" />
+		<resource-file src="src/ios/AudioPlayer/UIPlayDNButton.png" />
+		<resource-file src="src/ios/AudioPlayer/UIPauseUPButton.png" />
+		<resource-file src="src/ios/AudioPlayer/UIPauseDNButton.png" />
+		<resource-file src="src/ios/AudioPlayer/UISliderMax.png" />
+		<resource-file src="src/ios/AudioPlayer/UISliderMin.png" />
+		<resource-file src="src/ios/AudioPlayer/UIThumbDN.png" />
+		<resource-file src="src/ios/AudioPlayer/UIThumbUP.png" />
 		<!-- <framework src="src/ios/build/AudioPlayer.framework" custom="true" embed="true" /> -->
 	</platform>
 
