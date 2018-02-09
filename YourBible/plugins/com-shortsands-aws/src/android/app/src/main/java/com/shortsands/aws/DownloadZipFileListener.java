@@ -8,6 +8,11 @@ import com.shortsands.zip.PKZipper;
  * Created by garygriswold on 5/22/17.
  */
 
+/**
+ * This class has been deprecated, but is left here intact in case this feature is
+ * reimplemented.  See PKZip/README for more info.
+ */
+
 public class DownloadZipFileListener extends AwsS3AbstractListener {
 
     private static String TAG = "DownloadZipFileListener";

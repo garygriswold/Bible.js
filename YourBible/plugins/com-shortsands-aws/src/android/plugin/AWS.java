@@ -88,6 +88,9 @@ public class AWS extends CordovaPlugin {
 			AwsS3.shared().downloadFile(s3Bucket, s3Key, file, listener);
 			return true;			
 		}
+		/*
+			This method requires PKZip plugin, which has been removed.
+			See PKZip/README for more informarion.
 		else if (action.equals("downloadZipFile")) {
 			String s3Bucket = args.getString(0);
 			String s3Key = args.getString(1);
@@ -97,6 +100,7 @@ public class AWS extends CordovaPlugin {
 			AwsS3.shared().downloadZipFile(s3Bucket, s3Key, file, listener);
 			return true;			
 		}
+		*/
 		else if (action.equals("uploadAnalytics")) {
 			String sessionId = args.getString(0);
 			String timestamp = args.getString(1);

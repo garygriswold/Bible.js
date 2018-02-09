@@ -126,6 +126,7 @@ public class AWSInstrumentedTest {
     public void downloadFile() throws Exception {
         new DownloadFileTest().doTest();
     }
+    /*
     class DownloadZipFileTest extends DownloadZipFileListener {
         DownloadZipFileListener listener = this;
         CountDownLatch latch = new CountDownLatch(1);
@@ -164,6 +165,7 @@ public class AWSInstrumentedTest {
         Log.d(TAG, "Expect /storage/emulated/0/Android/data/com.shortsands.aws_s3_android/cache/Whatever.mp3.");
         assertEquals("Whoops", "abc", "def");
     }
+    */
     //@Test
     public void uploadAnalytics() throws Exception {
         JSONObject json = new JSONObject();

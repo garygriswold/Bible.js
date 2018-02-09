@@ -77,7 +77,7 @@ public class AwsS3UnitTest {
         s3.downloadFile("shortsands", "notthere", file3, listener3);
         Log.d(TAG, "Expect Error: The specified key does not exist.");
     }
-
+/*
     public void testDownloadZipFile() {
         AwsS3 s3 = AwsS3.shared();
 
@@ -102,7 +102,7 @@ public class AwsS3UnitTest {
         s3.downloadZipFile("shortsands", "hello1", file4, listener4);
         Log.d(TAG, "Expect /storage/emulated/0/Android/data/com.shortsands.aws_s3_android/cache/Whatever.mp3.");
     }
-
+*/
     public void testUploadAnalytics() {
         AwsS3 s3 = AwsS3.shared();
 

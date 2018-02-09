@@ -143,7 +143,10 @@ public class AwsS3 {
      * Download zip file that contains one file, unzips and extracts file.
      * If there is ever a need to download and unzip an archive a separate method should be written
      * rather than modify this one.
+     * GNG NOTE Feb 9, 2018.  This method is removed.  It will not work, because the PKZip plugin
+     * has been removed from the build.  See PKZip/README for more information.
      */
+    /*
     public void downloadZipFile(String s3Bucket, String s3Key, File file, DownloadZipFileListener listener) {
         File zipFile = null;
         try {
@@ -156,6 +159,7 @@ public class AwsS3 {
             Log.e(TAG, "Error in downloadZipFile " + err.toString());
         }
     }
+    */
     /////////////////////////////////////////////////////////////////////////
     // Upload Functions
     /////////////////////////////////////////////////////////////////////////
