@@ -14,7 +14,7 @@
     	<clobbers target="AudioPlayer" />
 	</js-module>
 	
-	<dependency id="com-shortsands-pkzip" url="file:////Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip" />
+	<!-- <dependency id="com-shortsands-pkzip" url="file:////Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip" /> -->
 	<dependency id="com-shortsands-aws" url="file:////Users/garygriswold/ShortSands/BibleApp/Plugins/AWS" />
 
 	<!-- <platform name="android">

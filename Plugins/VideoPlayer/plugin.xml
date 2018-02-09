@@ -14,7 +14,7 @@
     	<clobbers target="VideoPlayer" />
 	</js-module>
 	
-	<dependency id="com-shortsands-pkzip" url="file:////Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip" />
+	<!-- <dependency id="com-shortsands-pkzip" url="file:////Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip" /> -->
 	<dependency id="com-shortsands-aws" url="file:////Users/garygriswold/ShortSands/BibleApp/Plugins/AWS" />
 
 	<platform name="android">
@@ -43,7 +43,13 @@
 			</feature>
 		</config-file>
 		<source-file src="src/ios/VideoPlayer.swift" />
-		<framework src="src/ios/build/VideoPlayer.framework" custom="true" embed="true" />
+		<source-file src="src/ios/VideoPlayer/VideoAnalytics.swift" />
+		<source-file src="src/ios/VideoPlayer/AnalyticsSessionId.swift" />
+		<source-file src="src/ios/VideoPlayer/VideoViewState.swift" />
+		<source-file src="src/ios/VideoPlayer/VideoViewPlayer.swift" />
+		<source-file src="src/ios/VideoPlayer/AVPlayerViewControllerExtension.swift" />
+		<source-file src="src/ios/VideoPlayer/VideoViewControllerDelegate.swift" />
+		<!-- <framework src="src/ios/build/VideoPlayer.framework" custom="true" embed="true" /> -->
 		<framework src="MediaPlayer.framework" />
 	</platform>
 

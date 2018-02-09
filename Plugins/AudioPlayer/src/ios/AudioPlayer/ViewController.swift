@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import AWS
+//import AWS used for AWS.framework
 
 class ViewController: UIViewController {
     

@@ -87,14 +87,14 @@ public class AwsS3UnitTest {
         s3.downloadFile(s3Bucket: "shortsands", s3Key: "hello2", filePath: filePath2,
                         complete: { err in print("I RECEIVED testDownloadFile CALLBACK \(String(describing: err))")})
     }
-    
+/*
     func testDownloadZipFile() {
         let s3 = AwsS3.shared
         let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db")
         s3.downloadZipFile(s3Bucket: "shortsands", s3Key: "WEB.db.zip", filePath: filePath1,
                            complete: { err in print("I RECEIVED testDownloadZipFile CALLBACK \(String(describing: err))")})
     }
-    
+*/
     func testUploadFile() {
         let s3 = AwsS3.shared
         let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/MichaelMark.jpg")

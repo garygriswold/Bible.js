@@ -10,7 +10,7 @@
 * It is a thin wrapper around the AwsS3 class that AwsS3 can also 
 * be used directly by other .swift classes.
 */
-import AWS
+//import AWS used for AWS.framework
 
 @objc(AWS) class AWS : CDVPlugin {
 						    
@@ -117,7 +117,7 @@ import AWS
 	        }	    
 	    )
     }
-    
+/*
     @objc(downloadZipFile:) 
     func downloadZipFile(command: CDVInvokedUrlCommand) {
 	    print("Documents \(NSHomeDirectory())") 
@@ -137,7 +137,7 @@ import AWS
 	        }	    
 	    )
     }
-    
+*/
     @objc(uploadAnalytics:) 
     func uploadVideoAnalytics(command: CDVInvokedUrlCommand) {
 	    let data = command.arguments[3] as? String ?? ""

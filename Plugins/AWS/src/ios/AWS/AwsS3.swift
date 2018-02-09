@@ -8,7 +8,6 @@
 
 import Foundation
 import AWSCore
-import PKZip
 
 public class AwsS3 {
     
@@ -155,9 +154,10 @@ public class AwsS3 {
         //.continueWith has been dropped, because it did not report errors
     }   
     /**
-    * Download zip file and unzip it.  Like Download File this does not use 
-    * TransferUtility.fileDownload because its error reporting is poor.
+    * Download zip file and unzip it.  This method has been removed because it depends
+    * upon the PKZip plugin and that has been removed from the build Feb 8, 2018 GNG.
     */
+/*
     public func downloadZipFile(s3Bucket: String, s3Key: String, filePath: URL,
                          complete: @escaping (_ error:Error?) -> Void) {
  
@@ -208,6 +208,7 @@ public class AwsS3 {
                                completionHandler: completionHandler)
         //.continueWith has been dropped, because it did not report errors
     }
+*/
     private func removeItemNoThrow(at: URL) -> Void {
         do {
             try FileManager.default.removeItem(at: at)
