@@ -7,8 +7,9 @@
 //
 
 import UIKit
-//import AWS used for AWS.framework
-import AWS
+#if USE_FRAMEWORK
+    import AWS
+#endif
 
 class ViewController: UIViewController {
     

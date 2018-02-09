@@ -8,8 +8,9 @@
 
 import CoreMedia
 import UIKit
-import AWS
-//import AWS was for AWS.framework
+#if USE_FRAMEWORK
+    import AWS
+#endif
 
 class AudioAnalytics {
     

@@ -6,9 +6,10 @@
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
 
-//import AWS
-import AWS
 import Foundation
+#if USE_FRAMEWORK
+    import AWS
+#endif
 
 class AudioMetaDataReader {
     
