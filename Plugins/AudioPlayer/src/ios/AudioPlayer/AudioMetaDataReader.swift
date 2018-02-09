@@ -7,6 +7,7 @@
 //
 
 //import AWS
+import AWS
 import Foundation
 
 class AudioMetaDataReader {

@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:AWS.xcodeproj">
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS/src/ios/AWS/SS_AWSS3PreSignedURL.m">
+   </FileRef>
+   <FileRef
+      location = "self:">
    </FileRef>
 </Workspace>

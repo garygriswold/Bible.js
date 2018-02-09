@@ -8,6 +8,7 @@
 
 import AVFoundation
 //import AWS used for AWS.framework
+import AWS
 
 class AudioBible {
     
