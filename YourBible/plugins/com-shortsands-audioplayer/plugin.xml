@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="com-shortsands-audioplayer"
+    version="0.0.1">
+	<name>AudioPlayer</name>
+	<description>Plugin to Access Native Audio Player</description>
+	<author>Gary Griswold</author>
+	<engines>
+    	<engine name="cordova" version=">=6.0.0"/>
+	</engines>
+
+	<js-module name="AudioPlayer" src="www/AudioPlayer.js">
+    	<clobbers target="AudioPlayer" />
+	</js-module>
+	
+	<!-- <dependency id="com-shortsands-pkzip" url="file:////Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip" /> -->
+	<dependency id="com-shortsands-aws" url="file:////Users/garygriswold/ShortSands/BibleApp/Plugins/AWS" />
+
+	<!-- <platform name="android">
+    	<config-file target="config.xml" parent="/*">
+			<feature name="AudioPlayer">
+				<param name="android-package" value="com.shortsands.audioplayer.AudioPlayer"/>
+			</feature>
+		</config-file>
+		<config-file target="AndroidManifest.xml" parent="/manifest">
+			<uses-permission android:name="android.permission.INTERNET" />
+		</config-file>
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<activity android:name="com.shortsands.videoplayer.AudioPlayer" android:label="AudioPlayer" android:screenOrientation="landscape"></activity>
+		</config-file>
+		<source-file src="src/android/com/shortsands/audioplayer/AudioPlayer.java" target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/com/shortsands/audioplayer/AudioService.java" target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/com/shortsands/audioplayer/AudioPersistence.java" target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/com/shortsands/audioplayer/EventLogger.java" target-dir="src/com/shortsands/audioplayer" />
+	</platform> -->
+  
+	<platform name="ios">
+		<config-file target="config.xml" parent="/*">
+	    	<feature name="AudioPlayer">
+				<param name="ios-package" value="AudioPlayer" />
+			</feature>
+		</config-file>
+		<source-file src="src/ios/AudioPlayer.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioReference.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioAnalyticsSessionId.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioAnalytics.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioBible.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioBibleController.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioBibleView.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioControlCenter.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioSession.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioPlayState.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioMetaDataReader.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioTOCBible.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioTOCBook.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioTOCChapter.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioSqlite3.swift" />
+		<resource-file src="src/ios/AudioPlayer/UIStopUPButton.png" />
+		<resource-file src="src/ios/AudioPlayer/UIStopDNButton.png" />
+		<resource-file src="src/ios/AudioPlayer/UIPlayUPButton.png" />
+		<resource-file src="src/ios/AudioPlayer/UIPlayDNButton.png" />
+		<resource-file src="src/ios/AudioPlayer/UIPauseUPButton.png" />
+		<resource-file src="src/ios/AudioPlayer/UIPauseDNButton.png" />
+		<resource-file src="src/ios/AudioPlayer/UISliderMax.png" />
+		<resource-file src="src/ios/AudioPlayer/UISliderMin.png" />
+		<resource-file src="src/ios/AudioPlayer/UIThumbDN.png" />
+		<resource-file src="src/ios/AudioPlayer/UIThumbUP.png" />
+	</platform>
+
+</plugin>

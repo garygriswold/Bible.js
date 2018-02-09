@@ -14,7 +14,7 @@
     	<clobbers target="AWS" />
 	</js-module>
 	
-	<dependency id="com-shortsands-pkzip" url="file:////Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip" />
+	<!-- <dependency id="com-shortsands-pkzip" url="file:////Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip" /> -->
 	
 	<asset src="AWSUnitTest.js" target="js/AWSUnitTest.js" />
 
@@ -50,7 +50,14 @@
 			</feature>
 		</config-file>
 		<source-file src="src/ios/AWS.swift" />
-		<framework src="src/ios/build/AWS.framework" embed="true" custom="true" />
+		<!-- <framework src="src/ios/build/AWS.framework" embed="true" custom="true" /> -->
+		<header-file src="src/ios/AWS/SS_AWSS3PresignedURL.h" />
+		<header-file src="src/ios/AWS/SS_AWSS3TransferUtility.h" />
+		<source-file src="src/ios/AWS/SS_AWSS3PresignedURL.m" />
+		<source-file src="src/ios/AWS/SS_AWSS3TransferUtility.m" />
+		<source-file src="src/ios/AWS/AwsS3.swift" />
+		<source-file src="src/ios/AWS/AWSS3Cache.swift" />
+		<source-file src="src/ios/AWS/Credentials.swift" />
 		<framework src="src/ios/AWS/AWSCore.framework" embed="true" custom="true"/>
 	</platform>
 

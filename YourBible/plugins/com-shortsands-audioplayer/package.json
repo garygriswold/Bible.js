@@ -1,0 +1,47 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer",
+        "spec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer",
+        "type": "directory"
+      },
+      "/Users/garygriswold/ShortSands/BibleApp/YourBible"
+    ]
+  ],
+  "_from": "../Plugins/AudioPlayer",
+  "_id": "com-shortsands-audioplayer@0.0.1",
+  "_inCache": true,
+  "_location": "/com-shortsands-audioplayer",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer",
+    "spec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer",
+    "type": "directory"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "file:../Plugins/AudioPlayer",
+  "_shasum": "acf482b32ff946c607cc62d9debd1fe6e48ad29a",
+  "_shrinkwrap": null,
+  "_spec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer",
+  "_where": "/Users/garygriswold/ShortSands/BibleApp/YourBible",
+  "dependencies": {},
+  "description": "AudioPlayer ===========",
+  "devDependencies": {},
+  "name": "com-shortsands-audioplayer",
+  "optionalDependencies": {},
+  "readme": "AudioPlayer\n===========\n\nNative AudioPlayers for Android and iOS.\n\nExample Use of Plugin\n---------------------\n\n    var audioUrl = \"https://arc.gt/1e62h?apiSessionId=587858aea460f2.62190595\";\n\twindow.AudioPlayer.present(\"jesusFilm\", videoUrl,\n\tfunction() {\n\t\tconsole.log(\"SUCCESS FROM AudioPlayer\");\n\t},\n\tfunction(error) {\n\t\tconsole.log(\"ERROR FROM AudioPlayer \" + error);\n\t});\n\t\nAndroid Development\n===================\t\n\t\nDevelopment Process\n-------------------\n\n\tdevelop at: ShortSands/BibleApp/Plugins/AudioPlayer\n\t\n\tcreate app: ShortSands/AudioModule\n\t\n\tscript to install plugin\n\t./TestAudioPlugin.sh\n\t\nTesting Android Native AudioPlayer\n----------------------------------\n\nTest the Plugin inside a simple Cordova App, executing the App and plugin.\nAfter changing the App, I must run cordova emulate android before using\nAndroid Studio.  After changing the plugin, I must run ./TestVideoPlugin.sh\nbefore using Android Studio.\n\n\topen Android Studio\n\tselect ShortSands/AudioModule/platforms/android\n\trun\n\t\nMethod Profiling on Android\n---------------------------\n\n\tdisable Instant Run: Preferences -> Build -> Instant Run\n\t\n\tTried to use Systrace, but need to install pip the python manager\n\t\n\tTry TraceView\n\t\n\tAdd Debug.startMethodTracing(\"plugin\"); to VideoPlayer.execute\n\tAdd Debug.stopMethodTracing(); to VideoPlayer.onActivityResult\n\tAdd <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" /> to AndroidManifest.xml\n\t\n\tRun the App on a device or emulator\n\t\n\tIn a terminal window:\n\t\tadb devices\n\t\tadb -s 015d25785e27ea11 pull /sdcard/plugin.trace $HOME\n\t\t\n\tIn Android Studio turn on Tools -> Android -> Android Device Monitor\n\t\n\topen $HOME/plugin.trace\n\t\nA review of the CPU utilization of my code looked good.\n\n\nMemory & CPU Profiling on Android\n---------------------------------\n\t\t\n\tTools -> Android -> Enable ADB integration (turn on)\n\tStart Process\t\n\tWhen started: View -> Tools -> Android Monitor\n\tSelect com.shortsands.<whatever>\n\t\n//Memory is usually at 7.4Meg, cpu near zero, and network near zero\n//If I stop the application with Back button, home button, or kill button and restart with icon,\n//the memory use stays about the same, but the CPU use spikes to 40% for couple seconds\n//which looks like the prepare and seek, and then it stays high 10-20% for a few more seconds\n//while it does more buffering in of content.  After that cpu use drops to near zero with just \n//and occasional jump.\n\n//The one finding of concern is that the memory use never drops below 6.9Meg while the App is not running.\n//Except if I kill the App entirely, and then it appears to drop to zero.  But, I used onDestroy to\n//verify that MediaPlayer had been released and was null, and setting VideoView and VideoController\n//to null did not reduce memory noticably.\n\t\n\nApple iOS Development\n=====================\t\n\nTesting iOS Native AudioPlayer\n------------------------------\n\n\topen Xcode\n\tselect ShortSands/AudioModule/platforms/ios\n\trun\n\t\nGetting iOS to run\n-----------------\n\n\tModify Bridging-Header.h to include required things.\n\t<appname>/platforms/ios/VideoProto/Bridging-Header.h\n\t\n\t#import <AVFoundation/AVFoundation.h>\n\t#import <AVKit/AVKit.h>\n\t#import <UIKit/UIKit.h>\n\t\n\tRemoved unused functions that require ios 9 or 10.\n\t\n//After installing cordova-plugin-console, the JS console.log messages do get\n//into the XCode console.log, but they do not get into a file in the cordova directory\n//that can be accessed when running cordova and not xCode.\n\t",
+  "readmeFilename": "README.md",
+  "version": "0.0.1"
+}

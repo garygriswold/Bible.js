@@ -73,7 +73,7 @@
     <plugin name="cordova-plugin-zip" spec="^3.1.0" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <plugin name="com-shortsands-utility" spec="/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility" />
-    <plugin name="com-shortsands-pkzip" spec="/Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip" />
-    <plugin name="com-shortsands-aws" spec="/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS" />
-    <plugin name="com-shortsands-videoplayer" spec="/Users/garygriswold/ShortSands/BibleApp/Plugins/VideoPlayer" />
+    <plugin name="com-shortsands-aws" spec="file:///Users/garygriswold/ShortSands/BibleApp/Plugins/AWS" />
+    <plugin name="com-shortsands-audioplayer" spec="file:///Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer" />
+    <plugin name="com-shortsands-videoplayer" spec="file:///Users/garygriswold/ShortSands/BibleApp/Plugins/VideoPlayer" />
 </widget>

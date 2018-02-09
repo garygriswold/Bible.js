@@ -43,10 +43,10 @@
     "com-shortsands-utility": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
-    "com-shortsands-pkzip": {
+    "com-shortsands-aws": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
-    "com-shortsands-aws": {
+    "com-shortsands-audioplayer": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
     "com-shortsands-videoplayer": {
