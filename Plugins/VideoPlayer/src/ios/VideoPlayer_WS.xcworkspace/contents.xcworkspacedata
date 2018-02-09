@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../../../../../../../Library/Frameworks/Debug-iphonesimulator/AWSCore.framework">
+      location = "group:VideoPlayer.xcodeproj">
    </FileRef>
    <FileRef
-      location = "self:">
+      location = "group:../../../AWS/src/ios/AWS.xcodeproj">
    </FileRef>
 </Workspace>

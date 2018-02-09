@@ -44,7 +44,7 @@
 		</config-file>
 		<source-file src="src/ios/VideoPlayer.swift" />
 		<source-file src="src/ios/VideoPlayer/VideoAnalytics.swift" />
-		<source-file src="src/ios/VideoPlayer/AnalyticsSessionId.swift" />
+		<source-file src="src/ios/VideoPlayer/VideoAnalyticsSessionId.swift" />
 		<source-file src="src/ios/VideoPlayer/VideoViewState.swift" />
 		<source-file src="src/ios/VideoPlayer/VideoViewPlayer.swift" />
 		<source-file src="src/ios/VideoPlayer/AVPlayerViewControllerExtension.swift" />

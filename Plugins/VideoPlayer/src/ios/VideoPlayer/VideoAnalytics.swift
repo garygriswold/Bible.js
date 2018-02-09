@@ -8,7 +8,9 @@
 
 import Foundation
 import CoreMedia
-import AWS
+#if USE_FRAMEWORK
+    import AWS
+#endif
 
 class VideoAnalytics {
     
@@ -35,7 +37,7 @@ class VideoAnalytics {
         self.languageId = languageId
         self.silLang = silLang
         
-        let analyticsSessionId = AnalyticsSessionId()
+        let analyticsSessionId = VideoAnalyticsSessionId()
         self.sessionId = analyticsSessionId.getSessionId()
         
         self.timeStarted = Date()

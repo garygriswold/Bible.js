@@ -17,7 +17,7 @@
  */
 import Foundation
 
-class AnalyticsSessionId {
+class VideoAnalyticsSessionId {
     
     static let SESSION_KEY: String = "ShortSandsSessionId"
     
@@ -25,11 +25,11 @@ class AnalyticsSessionId {
     
     init() {
         let directory = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
-        archiveURL = directory.appendingPathComponent(AnalyticsSessionId.SESSION_KEY)
+        archiveURL = directory.appendingPathComponent(VideoAnalyticsSessionId.SESSION_KEY)
     }
     
     deinit {
-        print("AnalyticsSessionId is deallocated.")
+        print("VideoAnalyticsSessionId is deallocated.")
     }
     
     func getSessionId() -> String {
@@ -50,32 +50,6 @@ class AnalyticsSessionId {
     
     private func saveSessionId(sessionId: String) -> Void {
         NSKeyedArchiver.archiveRootObject(sessionId, toFile: self.archiveURL.path)
-    }
-    
-    /**
-    * Deprecated.  This is a method for getting sessionId from an external source, but I decided
-    * that the timing of this query to a distinct non-AWS source, could become a signature, and
-    * so it was abandoned.
-    */
-    private func getNewSessionIdDeprecated(complete: @escaping (_ sessionId:String) -> Void) {
-        let url = URL(string: "https://www.uuidgenerator.net/api/version1")!
-        let session = URLSession.shared
-        let task = session.dataTask(with: url) {
-            data, response, error in
-            if let err = error {
-                print(err.localizedDescription)
-                complete(UUID().uuidString)
-            } else if let httpResponse = response as? HTTPURLResponse {
-                if httpResponse.statusCode == 200 {
-                    let guid = String(data: data!, encoding: String.Encoding.ascii)
-                    complete(guid!)
-                }
-            } else {
-                print("Unexpected state in getNewSessionId! Create UUID instead")
-                complete(UUID().uuidString)
-            }
-        }
-        task.resume()
     }
 }
 
