@@ -83,6 +83,8 @@ HeaderView.prototype.showView = function() {
 	var menuWidth = setupIconButton('tocCell', drawTOCIcon, that.hite, BIBLE.SHOW_TOC);
 	var serhWidth = setupIconButton('searchCell', drawSearchIcon, that.hite, BIBLE.SHOW_SEARCH);
 	that.rootRow.appendChild(that.labelCell);
+	
+	var audioWidth = setupIconImgButton('audioCell', 'img/audioIcon128.png', that.hite, BIBLE.SHOW_AUDIO);
 	var videoWidth = setupIconButton('videoCell', drawVideoIcon, that.hite, BIBLE.SHOW_VIDEO);
 	if (that.version.isQaActive == 'T') {
 		var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, that.hite, BIBLE.SHOW_QUESTIONS);
@@ -90,7 +92,7 @@ HeaderView.prototype.showView = function() {
 		quesWidth = 0;
 	}
 	var settWidth = setupIconButton('settingsCell', drawSettingsIcon, that.hite, BIBLE.SHOW_SETTINGS);
-	var avalWidth = window.innerWidth - (menuWidth + serhWidth + videoWidth + quesWidth + settWidth + (6 * (4 + CELL_SPACING)));// six is fudge factor
+	var avalWidth = window.innerWidth - (menuWidth + serhWidth + + audioWidth + videoWidth + quesWidth + settWidth + (6 * (4 + CELL_SPACING)));// six is fudge factor
 
 	that.titleCanvas = document.createElement('canvas');
 	drawTitleField(that.titleCanvas, that.hite, avalWidth);
@@ -131,5 +133,20 @@ HeaderView.prototype.showView = function() {
 		});
 		return(canvas.width);
 	}
+	function setupIconImgButton(parentCell, iconFilename, hite, eventType) {
+		var canvas = document.createElement('img');
+		canvas.setAttribute('src', iconFilename);
+		canvas.setAttribute('style', that.cellTopPadding);
+		canvas.setAttribute('height', hite);
+		var parent = document.createElement('td');
+		parent.id = parentCell;
+		that.rootRow.appendChild(parent);
+		parent.appendChild(canvas);
+		canvas.addEventListener('click', function(event) {
+			event.stopImmediatePropagation();
+			console.log('clicked', parentCell);
+			document.body.dispatchEvent(new CustomEvent(eventType));
+		});
+		return(canvas.width);	}
 };
 
