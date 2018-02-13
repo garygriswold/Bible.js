@@ -116,6 +116,30 @@ AppInitializer.prototype.begin = function() {
 		that.controller.questionsView.showView();
 		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
 	}
+	function showAudioHandler(event) {
+		disableHandlers();
+		
+		var version = event.detail.version;
+		//console.log("VERSION: " + version);
+		//alert.show("VERSION " + version);
+		var ref = new Reference(event.detail.id);
+		//console.log("BOOK: " + ref.book);
+		//alert.show("BOOK " + ref.book);
+		
+		var chapterStr = String(ref.chapter);
+		if (chapterStr.length == 1) chapterStr = "00" + chapterStr;
+		if (chapterStr.length == 2) chapterStr = "0" + chapterStr;
+		//console.log("CHAPTER: " + chapterStr);
+		window.AudioPlayer.present(version, "eng", ref.book, chapterStr,
+			function() {
+				console.log("SUCESSFUL EXIT FROM AudioPlayer");
+			},
+			function(error) {
+				console.log("ERROR FROM AudioPlayer " + error);
+			}
+		);
+		enableHandlersExcept(BIBLE.SHOW_AUDIO);
+	}
 	function showVideoListHandler(event) {
 		disableHandlers();
 		that.controller.clearViews();
@@ -133,6 +157,7 @@ AppInitializer.prototype.begin = function() {
 		document.body.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		document.body.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
 		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		document.body.removeEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
 		document.body.removeEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
@@ -141,6 +166,7 @@ AppInitializer.prototype.begin = function() {
 		if (name !== BIBLE.SHOW_SEARCH) document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
 		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		if (name !== BIBLE.SHOW_AUDIO) document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
 		if (name !== BIBLE.SHOW_VIDEO) document.body.addEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
@@ -151,6 +177,7 @@ AppInitializer.prototype.begin = function() {
 var BIBLE = { CHG_VERSION: 'bible-chg-version', 
 		SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
+		SHOW_AUDIO: 'bible-show-audio', // present audio overlay above text
 		SHOW_QUESTIONS: 'bible-show-questions', // present questions page, create first
 		SHOW_HISTORY: 'bible-show-history', // present history tabs
 		HIDE_HISTORY: 'bible-hide-history', // hide history tabs
@@ -1219,20 +1246,21 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 HeaderView.prototype.showView = function() {
 	var that = this;
 
-	var menuWidth = setupIconButton('tocCell', drawTOCIcon, that.hite, BIBLE.SHOW_TOC);
-	var serhWidth = setupIconButton('searchCell', drawSearchIcon, that.hite, BIBLE.SHOW_SEARCH);
+	var menuWidth = setupIconImgButton('tocCell', 'img/MenuIcon128.png', that.hite, BIBLE.SHOW_TOC);
+	var serhWidth = setupIconImgButton('searchCell', 'img/SearchIcon128.png', that.hite, BIBLE.SHOW_SEARCH);
 	that.rootRow.appendChild(that.labelCell);
 	
-	var audioWidth = setupIconImgButton('audioCell', 'img/audioIcon128.png', that.hite, BIBLE.SHOW_AUDIO);
-	var videoWidth = setupIconButton('videoCell', drawVideoIcon, that.hite, BIBLE.SHOW_VIDEO);
-	if (that.version.isQaActive == 'T') {
-		var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, that.hite, BIBLE.SHOW_QUESTIONS);
-	} else {
-		quesWidth = 0;
-	}
-	var settWidth = setupIconButton('settingsCell', drawSettingsIcon, that.hite, BIBLE.SHOW_SETTINGS);
-	var avalWidth = window.innerWidth - (menuWidth + serhWidth + + audioWidth + videoWidth + quesWidth + settWidth + (6 * (4 + CELL_SPACING)));// six is fudge factor
-
+	var audioWidth = setupIconImgButton('audioCell', 'img/SoundIcon128.png', that.hite, BIBLE.SHOW_AUDIO);
+	var videoWidth = setupIconImgButton('videoCell', 'img/ScreenIcon128.png', that.hite, BIBLE.SHOW_VIDEO);
+	//if (that.version.isQaActive == 'T') {
+	//	var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, that.hite, BIBLE.SHOW_QUESTIONS);
+	//} else {
+	//	quesWidth = 0;
+	//}
+	var settWidth = setupIconImgButton('settingsCell', 'img/SettingsIcon128.png', that.hite, BIBLE.SHOW_SETTINGS);
+	//var avalWidth = window.innerWidth - (menuWidth + serhWidth + + audioWidth + videoWidth + quesWidth + settWidth + (6 * (4 + CELL_SPACING)));// six is fudge factor
+	var avalWidth = window.innerWidth - (menuWidth + serhWidth + + audioWidth + videoWidth + settWidth + (6 * (4 + CELL_SPACING)));
+	
 	that.titleCanvas = document.createElement('canvas');
 	drawTitleField(that.titleCanvas, that.hite, avalWidth);
 	that.labelCell.appendChild(that.titleCanvas);
@@ -1258,6 +1286,7 @@ HeaderView.prototype.showView = function() {
 			}
 		});
 	}
+	/** Deprecated 2/12/18 GNG. The drawn canvas images are not as sharp as pngs. */
 	function setupIconButton(parentCell, canvasFunction, hite, eventType) {
 		var canvas = canvasFunction(hite, '#F7F7BB');
 		canvas.setAttribute('style', that.cellTopPadding);
@@ -1277,16 +1306,22 @@ HeaderView.prototype.showView = function() {
 		canvas.setAttribute('src', iconFilename);
 		canvas.setAttribute('style', that.cellTopPadding);
 		canvas.setAttribute('height', hite);
+		canvas.setAttribute('width', hite);
 		var parent = document.createElement('td');
 		parent.id = parentCell;
 		that.rootRow.appendChild(parent);
 		parent.appendChild(canvas);
-		canvas.addEventListener('click', function(event) {
+		parent.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
 			console.log('clicked', parentCell);
-			document.body.dispatchEvent(new CustomEvent(eventType));
+			if (eventType === BIBLE.SHOW_AUDIO) {
+				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_AUDIO, { detail: { id: that.currentReference.nodeId, version: that.version.code }}));
+			} else {
+				document.body.dispatchEvent(new CustomEvent(eventType));
+			}
 		});
-		return(canvas.width);	}
+		return(canvas.width);
+	}
 };
 
 /**

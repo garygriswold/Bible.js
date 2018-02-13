@@ -80,20 +80,21 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 HeaderView.prototype.showView = function() {
 	var that = this;
 
-	var menuWidth = setupIconButton('tocCell', drawTOCIcon, that.hite, BIBLE.SHOW_TOC);
-	var serhWidth = setupIconButton('searchCell', drawSearchIcon, that.hite, BIBLE.SHOW_SEARCH);
+	var menuWidth = setupIconImgButton('tocCell', 'img/MenuIcon128.png', that.hite, BIBLE.SHOW_TOC);
+	var serhWidth = setupIconImgButton('searchCell', 'img/SearchIcon128.png', that.hite, BIBLE.SHOW_SEARCH);
 	that.rootRow.appendChild(that.labelCell);
 	
-	var audioWidth = setupIconImgButton('audioCell', 'img/audioIcon128.png', that.hite, BIBLE.SHOW_AUDIO);
-	var videoWidth = setupIconButton('videoCell', drawVideoIcon, that.hite, BIBLE.SHOW_VIDEO);
-	if (that.version.isQaActive == 'T') {
-		var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, that.hite, BIBLE.SHOW_QUESTIONS);
-	} else {
-		quesWidth = 0;
-	}
-	var settWidth = setupIconButton('settingsCell', drawSettingsIcon, that.hite, BIBLE.SHOW_SETTINGS);
-	var avalWidth = window.innerWidth - (menuWidth + serhWidth + + audioWidth + videoWidth + quesWidth + settWidth + (6 * (4 + CELL_SPACING)));// six is fudge factor
-
+	var audioWidth = setupIconImgButton('audioCell', 'img/SoundIcon128.png', that.hite, BIBLE.SHOW_AUDIO);
+	var videoWidth = setupIconImgButton('videoCell', 'img/ScreenIcon128.png', that.hite, BIBLE.SHOW_VIDEO);
+	//if (that.version.isQaActive == 'T') {
+	//	var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, that.hite, BIBLE.SHOW_QUESTIONS);
+	//} else {
+	//	quesWidth = 0;
+	//}
+	var settWidth = setupIconImgButton('settingsCell', 'img/SettingsIcon128.png', that.hite, BIBLE.SHOW_SETTINGS);
+	//var avalWidth = window.innerWidth - (menuWidth + serhWidth + + audioWidth + videoWidth + quesWidth + settWidth + (6 * (4 + CELL_SPACING)));// six is fudge factor
+	var avalWidth = window.innerWidth - (menuWidth + serhWidth + + audioWidth + videoWidth + settWidth + (6 * (4 + CELL_SPACING)));
+	
 	that.titleCanvas = document.createElement('canvas');
 	drawTitleField(that.titleCanvas, that.hite, avalWidth);
 	that.labelCell.appendChild(that.titleCanvas);
@@ -119,6 +120,7 @@ HeaderView.prototype.showView = function() {
 			}
 		});
 	}
+	/** Deprecated 2/12/18 GNG. The drawn canvas images are not as sharp as pngs. */
 	function setupIconButton(parentCell, canvasFunction, hite, eventType) {
 		var canvas = canvasFunction(hite, '#F7F7BB');
 		canvas.setAttribute('style', that.cellTopPadding);
@@ -138,15 +140,21 @@ HeaderView.prototype.showView = function() {
 		canvas.setAttribute('src', iconFilename);
 		canvas.setAttribute('style', that.cellTopPadding);
 		canvas.setAttribute('height', hite);
+		canvas.setAttribute('width', hite);
 		var parent = document.createElement('td');
 		parent.id = parentCell;
 		that.rootRow.appendChild(parent);
 		parent.appendChild(canvas);
-		canvas.addEventListener('click', function(event) {
+		parent.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
 			console.log('clicked', parentCell);
-			document.body.dispatchEvent(new CustomEvent(eventType));
+			if (eventType === BIBLE.SHOW_AUDIO) {
+				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_AUDIO, { detail: { id: that.currentReference.nodeId, version: that.version.code }}));
+			} else {
+				document.body.dispatchEvent(new CustomEvent(eventType));
+			}
 		});
-		return(canvas.width);	}
+		return(canvas.width);
+	}
 };
 

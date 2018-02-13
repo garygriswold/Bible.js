@@ -115,6 +115,30 @@ AppInitializer.prototype.begin = function() {
 		that.controller.questionsView.showView();
 		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
 	}
+	function showAudioHandler(event) {
+		disableHandlers();
+		
+		var version = event.detail.version;
+		//console.log("VERSION: " + version);
+		//alert.show("VERSION " + version);
+		var ref = new Reference(event.detail.id);
+		//console.log("BOOK: " + ref.book);
+		//alert.show("BOOK " + ref.book);
+		
+		var chapterStr = String(ref.chapter);
+		if (chapterStr.length == 1) chapterStr = "00" + chapterStr;
+		if (chapterStr.length == 2) chapterStr = "0" + chapterStr;
+		//console.log("CHAPTER: " + chapterStr);
+		window.AudioPlayer.present(version, "eng", ref.book, chapterStr,
+			function() {
+				console.log("SUCESSFUL EXIT FROM AudioPlayer");
+			},
+			function(error) {
+				console.log("ERROR FROM AudioPlayer " + error);
+			}
+		);
+		enableHandlersExcept(BIBLE.SHOW_AUDIO);
+	}
 	function showVideoListHandler(event) {
 		disableHandlers();
 		that.controller.clearViews();
@@ -132,6 +156,7 @@ AppInitializer.prototype.begin = function() {
 		document.body.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		document.body.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
 		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		document.body.removeEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
 		document.body.removeEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
@@ -140,6 +165,7 @@ AppInitializer.prototype.begin = function() {
 		if (name !== BIBLE.SHOW_SEARCH) document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
 		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		if (name !== BIBLE.SHOW_AUDIO) document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
 		if (name !== BIBLE.SHOW_VIDEO) document.body.addEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
