@@ -21,10 +21,10 @@ class ViewController: UIViewController {
         let readVersion = "ERV-ENG"//KJVPD"//ESV"
         let readLang = "eng"
         let readBook = "JHN"
-        let readChapter = "002"
+        let readChapter = 2
         let readType = "mp3"
         self.audioController.present(view: self.view, version: readVersion, silLang: readLang, book: readBook,
-                                     chapter: readChapter, fileType: readType, complete: { error in
+                                     chapterNum: readChapter, fileType: readType, complete: { error in
                                         print("ViewController.present did finish error: \(String(describing: error))")
                                         
         })

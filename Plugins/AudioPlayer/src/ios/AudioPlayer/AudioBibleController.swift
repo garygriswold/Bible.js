@@ -36,7 +36,7 @@ public class AudioBibleController {
     /**
     * This must be set to be the WKWebView
     */
-    public func present(view: UIView, version: String, silLang: String, book: String, chapter: String, fileType: String,
+    public func present(view: UIView, version: String, silLang: String, book: String, chapterNum: Int, fileType: String,
                  complete: @escaping (_ error:Error?) -> Void) {
   //      view.backgroundColor = .blue // This is for Testing
         
@@ -49,8 +49,8 @@ public class AudioBibleController {
         metaData.read(versionCode: version, silLang: silLang, complete: { [unowned self] oldTestament, newTestament in
             print("DONE reading metadata")
             if let meta = metaData.findBook(bookId: book) {
-                let reference = AudioReference(bible: meta.bible, book: meta, chapter: chapter, fileType: fileType)
-                self.audioBible!.beginReadFile(reference: reference)
+                let ref = AudioReference(bible: meta.bible, book: meta, chapterNum: chapterNum, fileType: fileType)
+                self.audioBible!.beginReadFile(reference: ref)
             }
         })
     }

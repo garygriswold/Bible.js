@@ -124,12 +124,8 @@ AppInitializer.prototype.begin = function() {
 		var ref = new Reference(event.detail.id);
 		//console.log("BOOK: " + ref.book);
 		
-		var chapterStr = String(ref.chapter);
-		if (chapterStr.length == 1) chapterStr = "00" + chapterStr;
-		if (chapterStr.length == 2) chapterStr = "0" + chapterStr;
-		//console.log("CHAPTER: " + chapterStr);
-		window.AudioPlayer.present("ERV-ENG", "eng", "JHN", "003",
-		//window.AudioPlayer.present(version, "eng", ref.book, chapterStr,
+		window.AudioPlayer.present("ERV-ENG", "eng", "JHN", 3,
+		//window.AudioPlayer.present(version, "eng", ref.book, ref.chapter,
 			function() {
 				console.log("SUCESSFUL EXIT FROM AudioPlayer");
 				document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);

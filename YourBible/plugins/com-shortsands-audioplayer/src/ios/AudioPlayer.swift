@@ -19,7 +19,7 @@
 			version: command.arguments[0] as? String ?? "",
 			silLang: command.arguments[1] as? String ?? "",
 			book: command.arguments[2] as? String ?? "",
-			chapter: command.arguments[3] as? String ?? "",
+			chapterNum: command.arguments[3] as? Int ?? 1,
 			fileType: command.arguments[4] as? String ?? "",
 			complete: { error in
 				var result: CDVPluginResult
