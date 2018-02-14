@@ -51,7 +51,7 @@ class AudioBibleView {
         let screenHeight = screenSize.height
         
         let playBtn = UIButton(type: .custom)
-        playBtn.frame = CGRect(x: screenWidth/3-40, y: screenHeight - 80, width: 80, height: 80)
+        playBtn.frame = CGRect(x: screenWidth/3-40, y: screenHeight - 85, width: 80, height: 80)
         let playUpImg = UIImage(named: "UIPlayUPButton.png")
         playBtn.setImage(playUpImg, for: UIControlState.normal)
         let playDnImg = UIImage(named: "UIPlayDNButton.png")
@@ -59,7 +59,7 @@ class AudioBibleView {
         self.playButton = playBtn
         
         let pauseBtn = UIButton(type: .custom)
-        pauseBtn.frame = CGRect(x: screenWidth/3-40, y: screenHeight - 80, width: 80, height: 80)
+        pauseBtn.frame = CGRect(x: screenWidth/3-40, y: screenHeight - 85, width: 80, height: 80)
         let pauseUpImg = UIImage(named: "UIPauseUPButton.png")
         pauseBtn.setImage(pauseUpImg, for: UIControlState.normal)
         let pauseDnImg = UIImage(named: "UIPauseDNButton.png")
@@ -67,14 +67,14 @@ class AudioBibleView {
         self.pauseButton = pauseBtn
         
         let stopBtn = UIButton(type: .custom)
-        stopBtn.frame = CGRect(x: screenWidth*2/3-40, y: screenHeight - 80, width: 80, height: 80)
+        stopBtn.frame = CGRect(x: screenWidth*2/3-40, y: screenHeight - 85, width: 80, height: 80)
         let stopUpImg = UIImage(named: "UIStopUPButton.png")
         stopBtn.setImage(stopUpImg, for: UIControlState.normal)
         let stopDnImg = UIImage(named: "UIStopDNButton.png")
         stopBtn.setImage(stopDnImg, for: UIControlState.highlighted)
         self.stopButton = stopBtn
         
-        let scrubRect = CGRect(x: screenWidth * 0.05, y: screenHeight - 140, width: screenWidth * 0.9, height: 60)
+        let scrubRect = CGRect(x: screenWidth * 0.05, y: screenHeight - 145, width: screenWidth * 0.9, height: 60)
         let scrub = UISlider(frame: scrubRect)
         scrub.isContinuous = true
         let thumbUpImg = UIImage(named: "UIThumbUP.png")
@@ -101,7 +101,7 @@ class AudioBibleView {
         self.sliderRange = scrub.frame.size.width - (scrub.currentThumbImage?.size.width)!
         self.sliderOrigin = scrub.frame.origin.x + ((scrub.currentThumbImage?.size.width)! / 2.0)
         
-        self.verseLabelYPos = screenHeight - 160
+        self.verseLabelYPos = screenHeight - 165
         let verse = CALayer()
         verse.frame = CGRect(x: screenWidth * 0.05, y: self.verseLabelYPos, width: 32, height: 32)
         verse.backgroundColor = UIColor.white.cgColor
