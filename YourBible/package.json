@@ -43,8 +43,8 @@
       "ionic-plugin-keyboard": {},
       "com-shortsands-utility": {},
       "com-shortsands-aws": {},
-      "com-shortsands-audioplayer": {},
-      "com-shortsands-videoplayer": {}
+      "com-shortsands-videoplayer": {},
+      "com-shortsands-audioplayer": {}
     },
     "platforms": [
       "android",

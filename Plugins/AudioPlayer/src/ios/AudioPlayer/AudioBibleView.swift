@@ -26,8 +26,8 @@ class AudioBibleView {
     private let stopButton: UIButton
     private let scrubSlider: UISlider
     private let verseLabel: CALayer
+    private let verseLabelYPos: CGFloat
     private let verseNumLabel: CATextLayer
-    //let positionLabel: CATextLayer
     private var progressLink: CADisplayLink?
     // Precomputed for positionVersePopup
     private let sliderRange: CGFloat
@@ -48,9 +48,10 @@ class AudioBibleView {
 
         let screenSize = UIScreen.main.bounds
         let screenWidth = screenSize.width
+        let screenHeight = screenSize.height
         
         let playBtn = UIButton(type: .custom)
-        playBtn.frame = CGRect(x: screenWidth/3-40, y: 100, width: 80, height: 80)
+        playBtn.frame = CGRect(x: screenWidth/3-40, y: screenHeight - 80, width: 80, height: 80)
         let playUpImg = UIImage(named: "UIPlayUPButton.png")
         playBtn.setImage(playUpImg, for: UIControlState.normal)
         let playDnImg = UIImage(named: "UIPlayDNButton.png")
@@ -58,24 +59,22 @@ class AudioBibleView {
         self.playButton = playBtn
         
         let pauseBtn = UIButton(type: .custom)
-        pauseBtn.frame = CGRect(x: screenWidth/3-40, y: 100, width: 80, height: 80)
+        pauseBtn.frame = CGRect(x: screenWidth/3-40, y: screenHeight - 80, width: 80, height: 80)
         let pauseUpImg = UIImage(named: "UIPauseUPButton.png")
         pauseBtn.setImage(pauseUpImg, for: UIControlState.normal)
         let pauseDnImg = UIImage(named: "UIPauseDNButton.png")
         pauseBtn.setImage(pauseDnImg, for: UIControlState.highlighted)
-        self.view.addSubview(pauseBtn)
         self.pauseButton = pauseBtn
         
         let stopBtn = UIButton(type: .custom)
-        stopBtn.frame = CGRect(x: screenWidth*2/3-40, y: 100, width: 80, height: 80)
+        stopBtn.frame = CGRect(x: screenWidth*2/3-40, y: screenHeight - 80, width: 80, height: 80)
         let stopUpImg = UIImage(named: "UIStopUPButton.png")
         stopBtn.setImage(stopUpImg, for: UIControlState.normal)
         let stopDnImg = UIImage(named: "UIStopDNButton.png")
         stopBtn.setImage(stopDnImg, for: UIControlState.highlighted)
-        self.view.addSubview(stopBtn)
         self.stopButton = stopBtn
         
-        let scrubRect = CGRect(x: screenWidth * 0.05, y: 230, width: screenWidth * 0.9, height: 60)
+        let scrubRect = CGRect(x: screenWidth * 0.05, y: screenHeight - 140, width: screenWidth * 0.9, height: 60)
         let scrub = UISlider(frame: scrubRect)
         scrub.isContinuous = true
         let thumbUpImg = UIImage(named: "UIThumbUP.png")
@@ -96,15 +95,15 @@ class AudioBibleView {
         scrub.setMaximumTrackImage(sliderMax, for: UIControlState.normal)
         
         scrub.setValue(0.0, animated: false)
-        self.view.addSubview(scrub)
         self.scrubSlider = scrub
         
         // Precompute Values for positionVersePopup()
         self.sliderRange = scrub.frame.size.width - (scrub.currentThumbImage?.size.width)!
         self.sliderOrigin = scrub.frame.origin.x + ((scrub.currentThumbImage?.size.width)! / 2.0)
         
+        self.verseLabelYPos = screenHeight - 160
         let verse = CALayer()
-        verse.frame = CGRect(x: screenWidth * 0.05, y: 195, width: 32, height: 32)
+        verse.frame = CGRect(x: screenWidth * 0.05, y: self.verseLabelYPos, width: 32, height: 32)
         verse.backgroundColor = UIColor.white.cgColor
         verse.contentsScale = UIScreen.main.scale
         verse.borderColor = UIColor.lightGray.cgColor
@@ -112,7 +111,6 @@ class AudioBibleView {
         verse.cornerRadius = verse.frame.width / 2
         verse.masksToBounds = false
         verse.opacity = 0 // Will be set to 1 if data is available
-        self.view.layer.addSublayer(verse)
         self.verseLabel = verse
         
         let verse2 = CATextLayer()
@@ -124,7 +122,6 @@ class AudioBibleView {
         verse2.isWrapped = false
         verse2.alignmentMode = kCAAlignmentCenter
         verse2.contentsGravity = kCAGravityCenter // Why doesn't contentsGravity work
-        verse.addSublayer(verse2)
         self.verseNumLabel = verse2
 /*
         // PositionLabel is for Debug only
@@ -175,6 +172,17 @@ class AudioBibleView {
     
     func startPlay() {
         self.isAudioViewActive = true
+        if self.audioBible.isPlaying() {
+            self.view.addSubview(self.pauseButton)
+        } else {
+            self.view.addSubview(self.playButton)
+        }
+        self.view.addSubview(self.pauseButton)
+        self.view.addSubview(self.stopButton)
+        self.view.addSubview(self.scrubSlider)
+        self.view.layer.addSublayer(self.verseLabel)
+        self.verseLabel.addSublayer(self.verseNumLabel)
+        
         self.progressLink = CADisplayLink(target: self, selector: #selector(updateProgress))
         self.progressLink!.add(to: .current, forMode: .defaultRunLoopMode)
         self.progressLink!.preferredFramesPerSecond = 15
@@ -247,7 +255,7 @@ class AudioBibleView {
         let slider = self.scrubSlider
         let sliderPct: Float = (slider.value - slider.minimumValue) / (slider.maximumValue - slider.minimumValue)
         let sliderValueToPixels: CGFloat = (CGFloat(sliderPct) * self.sliderRange) + self.sliderOrigin
-        return CGPoint(x: sliderValueToPixels, y: 210)
+        return CGPoint(x: sliderValueToPixels, y: self.verseLabelYPos)
     }
     
     /**
@@ -300,7 +308,6 @@ class AudioBibleView {
         let notify = NotificationCenter.default
         notify.removeObserver(self, name: .UIApplicationWillEnterForeground, object: nil)
     }
-    
     @objc private func applicationWillEnterForeground(note: Notification) {
         print("\n****** APP WILL ENTER FOREGROUND IN VIEW \(Date().timeIntervalSince1970)")
         if let play = self.audioBible.getPlayer() {

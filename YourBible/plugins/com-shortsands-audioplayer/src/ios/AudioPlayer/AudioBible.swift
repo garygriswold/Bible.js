@@ -127,7 +127,6 @@ class AudioBible {
         if self.player != nil && self.player!.rate > 0.0 {
             self.pause()
         }
-        //self.removeNotifications()
         self.controller.playHasStopped()
     }
     

@@ -120,22 +120,23 @@ AppInitializer.prototype.begin = function() {
 		disableHandlers();
 		
 		var version = event.detail.version;
-		//console.log("VERSION: " + version);
-		//alert.show("VERSION " + version);
+		//console.log("TEXT VERSION: " + version);
 		var ref = new Reference(event.detail.id);
 		//console.log("BOOK: " + ref.book);
-		//alert.show("BOOK " + ref.book);
 		
 		var chapterStr = String(ref.chapter);
 		if (chapterStr.length == 1) chapterStr = "00" + chapterStr;
 		if (chapterStr.length == 2) chapterStr = "0" + chapterStr;
 		//console.log("CHAPTER: " + chapterStr);
-		window.AudioPlayer.present(version, "eng", ref.book, chapterStr,
+		window.AudioPlayer.present("ERV-ENG", "eng", "JHN", "003",
+		//window.AudioPlayer.present(version, "eng", ref.book, chapterStr,
 			function() {
 				console.log("SUCESSFUL EXIT FROM AudioPlayer");
+				document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
 			},
 			function(error) {
 				console.log("ERROR FROM AudioPlayer " + error);
+				document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
 			}
 		);
 		enableHandlersExcept(BIBLE.SHOW_AUDIO);
