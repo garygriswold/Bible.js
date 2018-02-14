@@ -21,42 +21,33 @@ body {
 }
 #tocCell {
 	padding-left: 2%;
-	padding-top: 0;
+	padding-right: 1%;
 	padding-bottom: 0;
-	
-	background-color: red;
 }
 #searchCell {
-	padding-top: 0;
+	padding-left: 1%;
+	padding-right: 1%;
 	padding-bottom: 0;
-	
-	background-color: green;
 }
 #labelCell {
-	padding-top: 0;
+	padding-left: auto;
+	padding-right: auto;
 	padding-bottom: 0;
-	
-	background-color: aqua;
-	
 }
 #audioCell {
-	padding-top: 0;
+	padding-left: 1%;
+	padding-right: 1%;
 	padding-bottom: 0;
-	
-	background-color: orange;
 }
 #videoCell {
-	padding-top: 0;
+	padding-left: 1%;
+	padding-right: 1%;	
 	padding-bottom: 0;
-	
-	background-color: gray;
 }
 #settingsCell {
-	padding-right: 1%;
-	padding-top: 0;
+	padding-left: 1%;
+	padding-right: 2%;
 	padding-bottom: 0;
-	
-	background-color: fuchsia;
 }
 
 

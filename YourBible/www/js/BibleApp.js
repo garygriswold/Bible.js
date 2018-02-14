@@ -1253,14 +1253,8 @@ HeaderView.prototype.showView = function() {
 	
 	var audioWidth = setupIconImgButton('audioCell', 'img/SoundIcon128.png', that.hite, BIBLE.SHOW_AUDIO);
 	var videoWidth = setupIconImgButton('videoCell', 'img/ScreenIcon128.png', that.hite, BIBLE.SHOW_VIDEO);
-	//if (that.version.isQaActive == 'T') {
-	//	var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, that.hite, BIBLE.SHOW_QUESTIONS);
-	//} else {
-	//	quesWidth = 0;
-	//}
 	var settWidth = setupIconImgButton('settingsCell', 'img/SettingsIcon128.png', that.hite, BIBLE.SHOW_SETTINGS);
-	//var avalWidth = window.innerWidth - (menuWidth + serhWidth + + audioWidth + videoWidth + quesWidth + settWidth + (6 * (4 + CELL_SPACING)));// six is fudge factor
-	var avalWidth = window.innerWidth - (menuWidth + serhWidth + + audioWidth + videoWidth + settWidth + (6 * (4 + CELL_SPACING)));
+	var avalWidth = (window.innerWidth * 0.88) - (menuWidth + serhWidth + + audioWidth + videoWidth + settWidth);
 	
 	that.titleCanvas = document.createElement('canvas');
 	drawTitleField(that.titleCanvas, that.hite, avalWidth);
