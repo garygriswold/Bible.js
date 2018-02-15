@@ -208,7 +208,13 @@ class AudioBibleView {
     
     func startPlay() {
         self.isAudioViewActive = true
+        self.audioPanel.center.y = self.view.bounds.height + self.audioPanel.bounds.height / 2.0
         self.view.addSubview(self.audioPanel)
+        UIView.animate(withDuration: 1.0, delay: 0.0,
+                       options: UIViewAnimationOptions.curveEaseOut,
+                       animations: { self.audioPanel.center.y -= self.audioPanel.bounds.height },
+                       completion: nil
+        )
         if self.audioBible.isPlaying() {
             self.audioPanel.addSubview(self.pauseButton)
         } else {
@@ -230,7 +236,11 @@ class AudioBibleView {
 
     func stopPlay() {
         self.isAudioViewActive = false
-        self.audioPanel.removeFromSuperview()
+        UIView.animate(withDuration: 1.0, delay: 0.0,
+                       options: UIViewAnimationOptions.curveEaseOut,
+                       animations: { self.audioPanel.center.y += self.audioPanel.bounds.height },
+                       completion: { _ in self.audioPanel.removeFromSuperview() }
+        )
         self.progressLink?.invalidate()
         self.removeNotifications()
     }
@@ -287,9 +297,6 @@ class AudioBibleView {
     
     /**
     * Scrub Slider Event Handler
-    * BUG: When the slider is dragged and released it sometimes momentarily jumps back to its starting point.
-    * I have verified that this is not because updateProgress was unfinished.  It seems like it must be a
-    * saved screen update.  I need to learn how to discard such when the
     */
     @objc private func scrubSliderChanged(sender: UISlider) {
         self.labelVerseNum(updateControlCenter: false, position: 0.0)
