@@ -57,10 +57,28 @@ class AudioBibleView {
         let audioPanelHeight: CGFloat = 175.0
         panel.frame = CGRect(x: screenWidth * 0.02, y: screenHeight - 185.0,
                              width: audioPanelWidth, height: audioPanelHeight)
-        panel.backgroundColor = .white
         panel.layer.cornerRadius = 20
         panel.layer.masksToBounds = true
         self.audioPanel = panel
+        
+        if !UIAccessibilityIsReduceTransparencyEnabled() {
+            self.audioPanel.backgroundColor = .clear
+            
+            let blur = UIBlurEffect(style: .light)
+            let blurView = UIVisualEffectView(effect: blur)
+            
+            let vibrancy = UIVibrancyEffect(blurEffect: blur)
+            let vibrancyView = UIVisualEffectView(effect: vibrancy)
+            vibrancyView.translatesAutoresizingMaskIntoConstraints = false
+            
+            blurView.contentView.addSubview(vibrancyView)
+            blurView.frame = self.audioPanel.bounds
+            blurView.translatesAutoresizingMaskIntoConstraints = false
+            
+            self.audioPanel.addSubview(blurView)
+        } else {
+            self.audioPanel.backgroundColor = .white
+        }
         
         let playBtn = UIButton(type: .custom)
         playBtn.frame = CGRect(x: audioPanelWidth/3-40, y: 95, width: 80, height: 80)
@@ -84,6 +102,7 @@ class AudioBibleView {
         stopBtn.setImage(stopUpImg, for: UIControlState.normal)
         let stopDnImg = UIImage(named: "UIStopDNButton.png")
         stopBtn.setImage(stopDnImg, for: UIControlState.highlighted)
+        self.audioPanel.addSubview(stopBtn)
         self.stopButton = stopBtn
         
         let scrubX = audioPanelWidth * 0.05
@@ -109,6 +128,7 @@ class AudioBibleView {
         scrub.setMaximumTrackImage(sliderMax, for: UIControlState.normal)
         
         scrub.setValue(0.0, animated: false)
+        self.audioPanel.addSubview(scrub)
         self.scrubSlider = scrub
         
         // Precompute Values for positionVersePopup()
@@ -125,6 +145,7 @@ class AudioBibleView {
         verse.cornerRadius = verse.frame.width / 2
         verse.masksToBounds = false
         verse.opacity = 0 // Will be set to 1 if data is available
+        self.audioPanel.layer.addSublayer(verse)
         self.verseLabel = verse
         
         let verse2 = CATextLayer()
@@ -136,6 +157,7 @@ class AudioBibleView {
         verse2.isWrapped = false
         verse2.alignmentMode = kCAAlignmentCenter
         verse2.contentsGravity = kCAGravityCenter // Why doesn't contentsGravity work
+        self.verseLabel.addSublayer(verse2)
         self.verseNumLabel = verse2
 /*
         // PositionLabel is for Debug only
@@ -187,17 +209,11 @@ class AudioBibleView {
     func startPlay() {
         self.isAudioViewActive = true
         self.view.addSubview(self.audioPanel)
-        let parentView = blurUnderButtons()
         if self.audioBible.isPlaying() {
-            parentView.addSubview(self.pauseButton)
+            self.audioPanel.addSubview(self.pauseButton)
         } else {
-            parentView.addSubview(self.playButton)
+            self.audioPanel.addSubview(self.playButton)
         }
-        parentView.addSubview(self.stopButton)
-        parentView.addSubview(self.scrubSlider)
-        parentView.layer.addSublayer(self.verseLabel)
-        self.verseLabel.addSublayer(self.verseNumLabel)
-        
         self.progressLink = CADisplayLink(target: self, selector: #selector(updateProgress))
         self.progressLink!.add(to: .current, forMode: .defaultRunLoopMode)
         self.progressLink!.preferredFramesPerSecond = 15
@@ -211,34 +227,9 @@ class AudioBibleView {
         self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpOutside)
         self.initNotifications()
     }
-    
-    private func blurUnderButtons() -> UIView {
-        if !UIAccessibilityIsReduceTransparencyEnabled() {
-            self.audioPanel.backgroundColor = .clear
-            
-            let blur = UIBlurEffect(style: .light)
-            // UIBlurEffectStyle: .extraLight, .light, .dark, .extraDark, .regular, .prominent
-            let blurView = UIVisualEffectView(effect: blur)
-            
-            blurView.frame = self.audioPanel.bounds
-            blurView.translatesAutoresizingMaskIntoConstraints = false
-            
-            self.audioPanel.addSubview(blurView)
-            //return blurView.contentView
-            return self.audioPanel
-        } else {
-            self.audioPanel.backgroundColor = .white
-            return self.audioPanel
-        }
-    }
-    
+
     func stopPlay() {
         self.isAudioViewActive = false
-        self.playButton.removeFromSuperview()
-        self.pauseButton.removeFromSuperview()
-        self.stopButton.removeFromSuperview()
-        self.scrubSlider.removeFromSuperview()
-        self.verseLabel.removeFromSuperlayer()
         self.audioPanel.removeFromSuperview()
         self.progressLink?.invalidate()
         self.removeNotifications()
