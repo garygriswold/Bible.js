@@ -118,20 +118,10 @@ AppInitializer.prototype.begin = function() {
 	}
 	function showAudioHandler(event) {
 		disableHandlers();
-		
-		var version = event.detail.version;
-		//console.log("TEXT VERSION: " + version);
 		var ref = new Reference(event.detail.id);
-		//console.log("BOOK: " + ref.book);
-		
-		window.AudioPlayer.present("ERV-ENG", "eng", "JHN", 3,
-		//window.AudioPlayer.present(version, "eng", ref.book, ref.chapter,
+		window.AudioPlayer.present(ref.book, ref.chapter,
 			function() {
 				console.log("SUCESSFUL EXIT FROM AudioPlayer");
-				document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
-			},
-			function(error) {
-				console.log("ERROR FROM AudioPlayer " + error);
 				document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
 			}
 		);
@@ -1223,6 +1213,7 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 				that.titleStartX = (that.titleCanvas.width - that.titleWidth) / 2;
 				roundedRect(that.titleGraphics, that.titleStartX, 0, that.titleWidth, that.hite, 7);
 			}
+			//findAudioBook(book);
 		}
 		document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	}
@@ -1239,6 +1230,15 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	  ctx.arcTo(x,y,x,y+radius,radius);
 	  ctx.stroke();
 	}
+	//function findAudioBook(bookId) {
+	//	if (that.version.audioVersion != null) {
+	//		window.AudioPlayer.findAudioBook(bookId,
+	//			function(audioVersion) {
+	//				that.setAudioStatus(null, audioVersion);
+	//			}
+	//		)
+	//	}	
+	//}
 }
 HeaderView.prototype.showView = function() {
 	var that = this;
@@ -1251,6 +1251,8 @@ HeaderView.prototype.showView = function() {
 	var videoWidth = setupIconImgButton('videoCell', 'img/ScreenIcon128.png', that.hite, BIBLE.SHOW_VIDEO);
 	var settWidth = setupIconImgButton('settingsCell', 'img/SettingsIcon128.png', that.hite, BIBLE.SHOW_SETTINGS);
 	var avalWidth = (window.innerWidth * 0.88) - (menuWidth + serhWidth + + audioWidth + videoWidth + settWidth);
+	
+	findAudioVersion(that.version);
 	
 	that.titleCanvas = document.createElement('canvas');
 	drawTitleField(that.titleCanvas, that.hite, avalWidth);
@@ -1306,15 +1308,31 @@ HeaderView.prototype.showView = function() {
 			event.stopImmediatePropagation();
 			console.log('clicked', parentCell);
 			if (eventType === BIBLE.SHOW_AUDIO) {
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_AUDIO, { detail: { id: that.currentReference.nodeId, version: that.version.code }}));
+				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_AUDIO, { detail: { id: that.currentReference.nodeId }}));
 			} else {
 				document.body.dispatchEvent(new CustomEvent(eventType));
 			}
 		});
 		return(canvas.width);
 	}
+	function findAudioVersion(version) {
+		var audioNode = document.getElementById('audioCell');
+		console.log("FIND AUDIO VERSION " + version.code + "  " + version.silCode);
+		window.AudioPlayer.findAudioVersion(version.code, version.silCode,
+			function(audioVersion) {
+				console.log("FOUND AUDIO VERSION " + audioVersion);
+				that.version.audioVersion = audioVersion;
+				if (audioVersion !== null) {
+					audioNode.style = 'display: table-cell;';
+					console.log("DID SET TABLE-CELL");
+				} else {
+					audioNode.style = 'display: none;';
+					console.log("DID SET DISPLAY NONE");
+				}
+			}
+		)
+	}
 };
-
 /**
 * This class presents the table of contents, and responds to user actions.
 */
@@ -3866,6 +3884,7 @@ function BibleVersion(langPrefCode, countryCode) {
 	this.copyright = null;
 	this.bibleVersion = null;
 	this.introduction = null;
+	this.audioVersion = null;
 	Object.seal(this);
 }
 BibleVersion.prototype.fill = function(filename, callback) {

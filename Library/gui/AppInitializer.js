@@ -117,20 +117,10 @@ AppInitializer.prototype.begin = function() {
 	}
 	function showAudioHandler(event) {
 		disableHandlers();
-		
-		var version = event.detail.version;
-		//console.log("TEXT VERSION: " + version);
 		var ref = new Reference(event.detail.id);
-		//console.log("BOOK: " + ref.book);
-		
-		window.AudioPlayer.present("ERV-ENG", "eng", "JHN", 3,
-		//window.AudioPlayer.present(version, "eng", ref.book, ref.chapter,
+		window.AudioPlayer.present(ref.book, ref.chapter,
 			function() {
 				console.log("SUCESSFUL EXIT FROM AudioPlayer");
-				document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
-			},
-			function(error) {
-				console.log("ERROR FROM AudioPlayer " + error);
 				document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
 			}
 		);

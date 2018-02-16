@@ -297,9 +297,6 @@ class AudioBibleView {
     
     /**
     * Scrub Slider Event Handler
-    * BUG: When the slider is dragged and released it sometimes momentarily jumps back to its starting point.
-    * I have verified that this is not because updateProgress was unfinished.  It seems like it must be a
-    * saved screen update.  I need to learn how to discard such when the
     */
     @objc private func scrubSliderChanged(sender: UISlider) {
         self.labelVerseNum(updateControlCenter: false, position: 0.0)

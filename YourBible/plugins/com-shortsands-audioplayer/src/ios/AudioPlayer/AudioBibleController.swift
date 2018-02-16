@@ -19,25 +19,42 @@ public class AudioBibleController {
             return AudioBibleController.instance!
         }
     }
-    //static let shared: AudioBibleController = AudioBibleController()
  
+    var fileType: String
+    var metaDataReader: AudioMetaDataReader?
     var audioBible: AudioBible?
     var audioBibleView: AudioBibleView?
     var audioSession: AudioSession?
     var completionHandler: ((Error?)->Void)?
     
     private init() {
+        self.fileType = "mp3"
     }
     
     deinit {
         print("***** Deinit AudioBibleController *****")
     }
     
+    public func findAudioVersion(version: String, silLang: String,
+                                 complete: @escaping (_ audioVersion:String?) -> Void) {
+        self.metaDataReader = AudioMetaDataReader()
+        metaDataReader!.read(versionCode: version, silLang: silLang,
+                      complete: { oldTestament, newTestament in
+                        if let oldTest = oldTestament {
+                            complete(oldTest.dbpVersionCode)
+                        } else if let newTest = newTestament {
+                            complete(newTest.dbpVersionCode)
+                        } else {
+                            complete(nil)
+                        }
+            }
+        )
+    }
+    
     /**
     * This must be set to be the WKWebView
     */
-    public func present(view: UIView, version: String, silLang: String, book: String, chapterNum: Int, fileType: String,
-                 complete: @escaping (_ error:Error?) -> Void) {
+    public func present(view: UIView, book: String, chapterNum: Int, complete: @escaping (_ error:Error?) -> Void) {
   //      view.backgroundColor = .blue // This is for Testing
         
         self.audioBible = AudioBible.shared(controller: self)
@@ -45,14 +62,16 @@ public class AudioBibleController {
         self.audioSession = AudioSession.shared(audioBibleView: self.audioBibleView!)
         self.completionHandler = complete
         
-        let metaData = AudioMetaDataReader()
-        metaData.read(versionCode: version, silLang: silLang, complete: { [unowned self] oldTestament, newTestament in
-            print("DONE reading metadata")
-            if let meta = metaData.findBook(bookId: book) {
-                let ref = AudioReference(bible: meta.bible, book: meta, chapterNum: chapterNum, fileType: fileType)
+        if let reader = metaDataReader {
+            if let meta = reader.findBook(bookId: book) {
+                let ref = AudioReference(bible: meta.bible, book: meta, chapterNum: chapterNum, fileType: self.fileType)
                 self.audioBible!.beginReadFile(reference: ref)
+            } else {
+                complete(nil)
             }
-        })
+        } else {
+            complete(nil)
+        }
     }
     
     func playHasStarted() {
