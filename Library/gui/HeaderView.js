@@ -41,6 +41,7 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	this.labelCell = document.createElement('td');
 	this.labelCell.id = 'labelCell';
 	this.audioNode = null;
+	this.audioForBook = false;
 	document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	Object.seal(this);
 	var that = this;
@@ -63,9 +64,15 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 			}
 			if (that.audioNode !== null) {
 				if (that.version.hasAudioBook(that.currentReference.book)) {
-					that.audioNode.style = 'display: table-cell;';
+					if (! that.audioForBook) {
+						that.audioForBook = true;
+						TweenLite.fromTo(that.audioNode , 1.0, {opacity:0}, {opacity:1.0, display:'table-cell'});
+					}
 				} else {
-					that.audioNode.style = 'display: none;';
+					if (that.audioForBook) {
+						that.audioForBook = false;
+						TweenLite.fromTo(that.audioNode , 1.0, {opacity:1.0}, {opacity:0, display:'none'});
+					}
 				}
 			}
 		}
