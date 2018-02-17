@@ -82,11 +82,13 @@ class AudioMetaDataReader {
     */
     func findBook(bookId: String) -> AudioTOCBook? {
         var result: AudioTOCBook? = nil
-        if self.oldTestament != nil {
-            result = self.oldTestament!.booksById[bookId]
+        if let oldTest = self.oldTestament {
+            result = oldTest.booksById[bookId]
         }
-        if self.newTestament != nil {
-            result = self.newTestament!.booksById[bookId]
+        if result == nil {
+            if let newTest = self.newTestament {
+                result = newTest.booksById[bookId]
+            }
         }
         return result
     }

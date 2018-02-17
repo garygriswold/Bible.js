@@ -33,12 +33,12 @@ class AudioTOCBible {
 
         let query = "SELECT bookId, bookOrder, numberOfChapters" +
             " FROM AudioBook" +
-            " WHERE damId = ?"
+            " WHERE damId = ?" +
+            " ORDER BY bookOrder"
         do {
             try database.queryV1(sql: query, values: [self.damId], complete: { resultSet in
                 for row in resultSet {
                     let book = AudioTOCBook(bible: self, dbRow: row)
-                    print("\(book.toString())")
                     self.booksById[book.bookId] = book
                     self.booksBySeq[book.sequence] = book
                 }
@@ -79,6 +79,14 @@ class AudioTOCBible {
             }
         }
         return nil
+    }
+    
+    func getBookList() -> String {
+        var array = [String]()
+        for (_, book) in self.booksBySeq {
+            array.append(book.bookId)
+        }
+        return array.joined(separator: ",")
     }
     
     func toString() -> String {

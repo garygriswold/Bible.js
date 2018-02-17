@@ -36,17 +36,18 @@ public class AudioBibleController {
     }
     
     public func findAudioVersion(version: String, silLang: String,
-                                 complete: @escaping (_ audioVersion:String?) -> Void) {
+                                 complete: @escaping (_ bookList:String) -> Void) {
         self.metaDataReader = AudioMetaDataReader()
         metaDataReader!.read(versionCode: version, silLang: silLang,
                       complete: { oldTestament, newTestament in
+                        var bookIdList = ""
                         if let oldTest = oldTestament {
-                            complete(oldTest.dbpVersionCode)
-                        } else if let newTest = newTestament {
-                            complete(newTest.dbpVersionCode)
-                        } else {
-                            complete(nil)
+                            bookIdList = oldTest.getBookList()
                         }
+                        if let newTest = newTestament {
+                            bookIdList += "," + newTest.getBookList()
+                        }
+                        complete(bookIdList)
             }
         )
     }

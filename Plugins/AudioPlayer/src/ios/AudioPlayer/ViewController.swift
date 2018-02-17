@@ -23,7 +23,8 @@ class ViewController: UIViewController {
         let readBook = "JHN"
         let readChapter = 2
         self.audioController.findAudioVersion(version: readVersion, silLang: readLang,
-                                              complete: { audioVersion in
+                                              complete: { bookIdList in
+            print("BOOKS: \(bookIdList)")
                                                 
             self.audioController.present(view: self.view, book: readBook,
                                          chapterNum: readChapter, complete: { error in
