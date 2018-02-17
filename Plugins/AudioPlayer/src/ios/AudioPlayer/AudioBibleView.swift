@@ -209,10 +209,11 @@ class AudioBibleView {
     func startPlay() {
         self.isAudioViewActive = true
         self.audioPanel.center.y = self.view.bounds.height + self.audioPanel.bounds.height / 2.0
+        let homeBarSafe = self.view.bounds.height * 0.03
         self.view.addSubview(self.audioPanel)
         UIView.animate(withDuration: 1.0, delay: 0.0,
                        options: UIViewAnimationOptions.curveEaseOut,
-                       animations: { self.audioPanel.center.y -= self.audioPanel.bounds.height },
+                       animations: { self.audioPanel.center.y -= self.audioPanel.bounds.height + homeBarSafe },
                        completion: nil
         )
         if self.audioBible.isPlaying() {
