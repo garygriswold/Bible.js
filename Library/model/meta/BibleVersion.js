@@ -21,7 +21,7 @@ function BibleVersion(langPrefCode, countryCode) {
 	this.copyright = null;
 	this.bibleVersion = null;
 	this.introduction = null;
-	this.audioVersion = null;
+	this.audioBookIdList = null;
 	Object.seal(this);
 }
 BibleVersion.prototype.fill = function(filename, callback) {
@@ -66,5 +66,13 @@ BibleVersion.prototype.fill = function(filename, callback) {
 		}
 		callback();
 	});
+};
+BibleVersion.prototype.hasAudioBook = function(bookId) {
+	if (this.audioBookIdList !== null && this.audioBookIdList.length > 2) {
+		var index = this.audioBookIdList.indexOf(bookId);
+		return(index >= 0);
+	} else {
+		return false;
+	}
 };
 

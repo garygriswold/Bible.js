@@ -17,8 +17,8 @@
         audioController.findAudioVersion(
             version: command.arguments[0] as? String ?? "",
             silLang: command.arguments[1] as? String ?? "",
-            complete: { audioVersion in
-                let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: audioVersion)
+            complete: { bookIdList in
+                let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: bookIdList)
                 self.commandDelegate!.send(result, callbackId: command.callbackId)
             }
         )

@@ -1193,6 +1193,7 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	this.rootNode.appendChild(this.rootRow);
 	this.labelCell = document.createElement('td');
 	this.labelCell.id = 'labelCell';
+	this.audioNode = null;
 	document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	Object.seal(this);
 	var that = this;
@@ -1213,7 +1214,13 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 				that.titleStartX = (that.titleCanvas.width - that.titleWidth) / 2;
 				roundedRect(that.titleGraphics, that.titleStartX, 0, that.titleWidth, that.hite, 7);
 			}
-			//findAudioBook(book);
+			if (that.audioNode !== null) {
+				if (that.version.hasAudioBook(that.currentReference.book)) {
+					that.audioNode.style = 'display: table-cell;';
+				} else {
+					that.audioNode.style = 'display: none;';
+				}
+			}
 		}
 		document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	}
@@ -1230,15 +1237,6 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	  ctx.arcTo(x,y,x,y+radius,radius);
 	  ctx.stroke();
 	}
-	//function findAudioBook(bookId) {
-	//	if (that.version.audioVersion != null) {
-	//		window.AudioPlayer.findAudioBook(bookId,
-	//			function(audioVersion) {
-	//				that.setAudioStatus(null, audioVersion);
-	//			}
-	//		)
-	//	}	
-	//}
 }
 HeaderView.prototype.showView = function() {
 	var that = this;
@@ -1248,11 +1246,15 @@ HeaderView.prototype.showView = function() {
 	that.rootRow.appendChild(that.labelCell);
 	
 	var audioWidth = setupIconImgButton('audioCell', 'img/SoundIcon128.png', that.hite, BIBLE.SHOW_AUDIO);
+	that.audioNode = document.getElementById('audioCell');
 	var videoWidth = setupIconImgButton('videoCell', 'img/ScreenIcon128.png', that.hite, BIBLE.SHOW_VIDEO);
 	var settWidth = setupIconImgButton('settingsCell', 'img/SettingsIcon128.png', that.hite, BIBLE.SHOW_SETTINGS);
 	var avalWidth = (window.innerWidth * 0.88) - (menuWidth + serhWidth + + audioWidth + videoWidth + settWidth);
 	
-	findAudioVersion(that.version);
+	window.AudioPlayer.findAudioVersion(that.version.code, that.version.silCode, function(bookIdList) {
+		console.log("VERSION: " + that.version.code + "  SIL: " + that.version.silCode + "  BOOKLIST: " + bookIdList);
+		that.version.audioBookIdList = bookIdList;
+	});
 	
 	that.titleCanvas = document.createElement('canvas');
 	drawTitleField(that.titleCanvas, that.hite, avalWidth);
@@ -1279,21 +1281,6 @@ HeaderView.prototype.showView = function() {
 			}
 		});
 	}
-	/** Deprecated 2/12/18 GNG. The drawn canvas images are not as sharp as pngs. */
-	function setupIconButton(parentCell, canvasFunction, hite, eventType) {
-		var canvas = canvasFunction(hite, '#F7F7BB');
-		canvas.setAttribute('style', that.cellTopPadding);
-		var parent = document.createElement('td');
-		parent.id = parentCell;
-		that.rootRow.appendChild(parent);
-		parent.appendChild(canvas);
-		canvas.addEventListener('click', function(event) {
-			event.stopImmediatePropagation();
-			console.log('clicked', parentCell);
-			document.body.dispatchEvent(new CustomEvent(eventType));
-		});
-		return(canvas.width);
-	}
 	function setupIconImgButton(parentCell, iconFilename, hite, eventType) {
 		var canvas = document.createElement('img');
 		canvas.setAttribute('src', iconFilename);
@@ -1307,30 +1294,9 @@ HeaderView.prototype.showView = function() {
 		parent.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
 			console.log('clicked', parentCell);
-			if (eventType === BIBLE.SHOW_AUDIO) {
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_AUDIO, { detail: { id: that.currentReference.nodeId }}));
-			} else {
-				document.body.dispatchEvent(new CustomEvent(eventType));
-			}
+			document.body.dispatchEvent(new CustomEvent(eventType, { detail: { id: that.currentReference.nodeId }}));
 		});
 		return(canvas.width);
-	}
-	function findAudioVersion(version) {
-		var audioNode = document.getElementById('audioCell');
-		console.log("FIND AUDIO VERSION " + version.code + "  " + version.silCode);
-		window.AudioPlayer.findAudioVersion(version.code, version.silCode,
-			function(audioVersion) {
-				console.log("FOUND AUDIO VERSION " + audioVersion);
-				that.version.audioVersion = audioVersion;
-				if (audioVersion !== null) {
-					audioNode.style = 'display: table-cell;';
-					console.log("DID SET TABLE-CELL");
-				} else {
-					audioNode.style = 'display: none;';
-					console.log("DID SET DISPLAY NONE");
-				}
-			}
-		)
 	}
 };
 /**
@@ -3884,7 +3850,7 @@ function BibleVersion(langPrefCode, countryCode) {
 	this.copyright = null;
 	this.bibleVersion = null;
 	this.introduction = null;
-	this.audioVersion = null;
+	this.audioBookIdList = null;
 	Object.seal(this);
 }
 BibleVersion.prototype.fill = function(filename, callback) {
@@ -3929,6 +3895,14 @@ BibleVersion.prototype.fill = function(filename, callback) {
 		}
 		callback();
 	});
+};
+BibleVersion.prototype.hasAudioBook = function(bookId) {
+	if (this.audioBookIdList !== null && this.audioBookIdList.length > 2) {
+		var index = this.audioBookIdList.indexOf(bookId);
+		return(index >= 0);
+	} else {
+		return false;
+	}
 };
 
 /**
