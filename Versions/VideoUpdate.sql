@@ -290,3 +290,6 @@ INSERT INTO Video VALUES ('dje', 'KOG_NT', 'dje', 'dje', 'BOŊKOONI DARZANTA •
 'https://player.vimeo.com/external/183394230.sd.mp4?s=9b91f5b1dd89a784cdbee9c4e40802c3a05de14a&profile_id=164',
 null
 );
+
+-- New languages not yet added, because I do not have them in text. GNG 2/19/18
+-- Albanian, Tajik, Turkish

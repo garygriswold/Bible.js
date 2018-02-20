@@ -24,9 +24,13 @@ update video set longDescription=null where silCode != 'eng' and mediaId='1_cl-0
 vacuum;
 END_SQL
 
-cp Versions.db "$HOME/Library/Application Support/BibleAppNW/databases/file__0/58"
+# Create Audio Meta Data files in the output subdirectory
+node js/AudioDBPImporter.js
 
-cp Versions.db ../YourBible/www/Versions.db
+## cp Versions.db "$HOME/Library/Application Support/BibleAppNW/databases/file__0/58"
+
+## cp Versions.db ../YourBible/www/Versions.db
+sqldiff Versions.db orig_Versions.db 
 
 
 

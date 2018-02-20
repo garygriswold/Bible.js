@@ -14,51 +14,49 @@ var http = require('http');
 var file = require('fs');
 
 
-var createMetaData = function(callback) {
+var audioDBPImporter = function(callback) {
 	
 	var HOST = "http://dbt.io/";
 	var KEY = "key=b37964021bdd346dc602421846bf5683&v=2";
 	var DIRECTORY = "output/";
 	
 	/**
-	* This table should be moved to the Version table with two new fields
-	* dbp_lang, and dbp_version
+	* This table controls what Audio versions will be included, and what
+	* text versions that are associated with
 	*/
 	var versions = {
-			// America
-			'ESV':	   ['ENG', 'ESV', true],
-			'ERV-ENG': ['ENG', 'ESV', false ],
+			//'ERV-ARB': ['ARB', 'WTC', true ],
+			//'ARBVDPD': ['ARB', 'WTC', false ],
+			//'ERV-AWA': ['AWA', 'WTC', true ],
+			//'ERV-BEN': ['BNG', 'WTC', true ],
+			'ERV-BUL': ['BLG', 'AMB', false ],
+			'ERV-CMN': ['CHN', 'UNV', false ], // for mainland China
+			//'ERV-CMN': ['YUH', 'UNV', false ], // for Hong Kong
+			'ERV-ENG': ['ENG', 'ESV', false ], // must change to WEB in production
 			'KJVPD':   ['ENG', 'KJV', true ],
 			'WEB':     ['ENG', 'WEB', true ],
-			'ERV-POR': ['POR', 'ARA', false ],
-			'ERV-SPA': ['SPN', 'WTC', true ], // or R95 or BDA
-			// East Asia
-			'ERV-CMN': ['YUH', 'UNV', false ], // or CHN, UNV 
+			'ERV-HRV': ['SRC', null, false ],
+			//'ESV':	   ['ENG', 'ESV', true],
+			'ERV-HIN': ['HIN', null, false],
+			'ERV-HUN': ['HUN', 'HBS', false ],
 			'ERV-IND': ['INZ', 'SHL', false ],
-			'ERV-NEP': ['NEP', null, false ],
-			'ERV-THA': ['THA', null, false ],
-			'ERV-VIE': ['VIE', null, false ],
-			// Middle East
-			'ARBVDPD': ['ARB', 'WTC', false ],
-			'ERV-ARB': ['ARB', 'WTC', true ],
-			'NMV':     ['PES', null, false ],
-			// India
-			'ERV-AWA': ['AWA', 'WTC', true ],
-			'ERV-BEN': ['BNG', 'WTC', true ],
-			'ERV-HIN': ['HND', 'WTC', true ],
-			'ERV-KAN': ['ERV', 'WTC', true ],
+			//'ERV-KAN': ['ERV', 'WTC', true ],
 			'ERV-MAR': ['MAR', null, false ],
+			'ERV-NEP': ['NEP', null, false ],
 			'ERV-ORI': ['ORY', null, false ],
 			'ERV-PAN': ['PAN', null, false ],
-			'ERV-TAM': ['TCV', 'WTC', true ],
-			'ERV-URD': ['URD', 'WTC', true ], // or PAK
-			// Eastern Europe
-			'ERV-BUL': ['BLG', 'AMB', false ],
-			'ERV-HRV': ['SRC', null, false ],
-			'ERV-HUN': ['HUN', 'HBS', false ],
+			'ERV-POR': ['POR', 'ARA', false ],
 			'ERV-RUS': ['RUS', 'S76', false ],
+			//'ERV-SPA': ['SPN', 'WTC', true ],
+			'ERV-SPA': ['SPN', 'DBA', true ], // or R95 or BDA
 			'ERV-SRP': ['SRP', null, false ],
-			'ERV-UKR': ['UKR', 'O95', false ]
+			//'ERV-TAM': ['TCV', 'WTC', true ],
+			'ERV-THA': ['THA', null, false ],
+			'ERV-UKR': ['UKR', 'O95', false ],
+			//'ERV-URD': ['URD', 'WTC', true ],
+			'ERV-URD': ['URD', 'PAK', true ],
+			'ERV-VIE': ['VIE', null, false ],
+			'NMV':     ['PES', null, false ]
 	};
 	
 	var versionList = Object.getOwnPropertyNames(versions);
@@ -380,7 +378,7 @@ var createMetaData = function(callback) {
 };
 
 
-createMetaData(function() {
+audioDBPImporter(function() {
 	console.log('DONE WITH CREATE META DATA');
 });
 

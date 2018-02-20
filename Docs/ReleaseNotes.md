@@ -24,3 +24,9 @@ iOS Only
 This is identical to 1.9.5, except that two KOG films Lebanese and Swedish
 were added.  The purpose of the update was to add Arabic, Persian and
 Chinese stores.
+
+1.9.7 - Jan 2, 2018
+-------------------
+
+This is similar to prior releases, and was just issued to see if doing that
+affected the number of downloads.
