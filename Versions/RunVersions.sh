@@ -27,6 +27,12 @@ END_SQL
 # Create Audio Meta Data files in the output subdirectory
 node js/AudioDBPImporter.js
 
+# Insert Audio MetaData Files
+sqlite Versions.db < CreateAudioTables.sql
+sqlite Versions.db < output/AudioVersionTable.sql
+sqlite Versions.db < output/AudioTable.sql
+sqlite Versions.db < output/AudioBookTable.sql
+
 ## cp Versions.db "$HOME/Library/Application Support/BibleAppNW/databases/file__0/58"
 
 ## cp Versions.db ../YourBible/www/Versions.db

@@ -30,7 +30,7 @@ var audioDBPImporter = function(callback) {
 			//'ERV-AWA': ['AWA', 'WTC', true ],
 			//'ERV-BEN': ['BNG', 'WTC', true ],
 			'ERV-BUL': ['BLG', 'AMB', false ],
-			'ERV-CMN': ['CHN', 'UNV', false ], // for mainland China
+			'ERV-CMN': ['CHN', 'UNV', true ], // for mainland China
 			//'ERV-CMN': ['YUH', 'UNV', false ], // for Hong Kong
 			'ERV-ENG': ['ENG', 'ESV', false ], // must change to WEB in production
 			'KJVPD':   ['ENG', 'KJV', true ],
@@ -48,13 +48,13 @@ var audioDBPImporter = function(callback) {
 			'ERV-POR': ['POR', 'ARA', false ],
 			'ERV-RUS': ['RUS', 'S76', false ],
 			//'ERV-SPA': ['SPN', 'WTC', true ],
-			'ERV-SPA': ['SPN', 'DBA', true ], // or R95 or BDA
+			'ERV-SPA': ['SPN', 'R95', false ], // or R95 or BDA
 			'ERV-SRP': ['SRP', null, false ],
 			//'ERV-TAM': ['TCV', 'WTC', true ],
 			'ERV-THA': ['THA', null, false ],
 			'ERV-UKR': ['UKR', 'O95', false ],
 			//'ERV-URD': ['URD', 'WTC', true ],
-			'ERV-URD': ['URD', 'PAK', true ],
+			'ERV-URD': ['URD', 'PAK', false ],
 			'ERV-VIE': ['VIE', null, false ],
 			'NMV':     ['PES', null, false ]
 	};
@@ -110,6 +110,7 @@ var audioDBPImporter = function(callback) {
 		var url = HOST + "library/volume?" + KEY + "&media=audio&language_code=" + dbpLanguage;
 		httpGet(url, function(json) {
 			console.log("Before Prune " + json.length);
+			//console.log(json);
 			var jsonVersion = pruneListByVersion(json, dbpVersion);
 			console.log("After Prune " + jsonVersion.length);			
 			console.log(jsonVersion);

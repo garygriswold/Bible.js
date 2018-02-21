@@ -11,10 +11,10 @@ var uploadAudio = function(callback) {
 	
 	var DIRECTORY = process.env.HOME + "/ShortSands/DBL/FCBH_Audio/";
 	var BUCKET_SUFFIX = "shortsands.com";
-	var VERSIONS_DB = process.env.HOME + "/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios_AudioPlayer/AudioPlayer/Versions.db";
+	var VERSIONS_DB = process.env.HOME + "/ShortSands/BibleApp/Versions/Versions.db";
 	
 	var awsOptions = {
-		useDualstack: true,
+		//useDualstack: true,
 		sslEnabled: true,
 		s3ForcePathStyle: true,
 		signatureVersion: 'v4'
@@ -103,7 +103,7 @@ var uploadAudio = function(callback) {
 		var values = [damId, bookId];
 		database.selectAll(query, values, function(results) {
 			if (results.length !== 1) {
-				errorMessage({message: results.length}, "INCORRECT NUM RESULTS IN AudioBook");
+				errorMessage({message: results.length}, "INCORRECT NUM RESULTS IN AudioBook. It is " + results.length);
 				//callback("Unknown");
 			} else {
 				var row = results[0];
@@ -179,7 +179,53 @@ var uploadAudio = function(callback) {
 			'2John': 		'2JN',
 			'3John': 		'3JN',
 			'Jude':  		'JUD',
-			'Revelation':   'REV'
+			'Revelation':   'REV',
+			// Spanish
+			'SanMateo':		'MAT',
+			'SanMarcos':	'MRK',
+			'SanLucas':		'LUK',
+			'SanJuan':		'JHN',
+			'Hechos':		'ACT',
+			'Romanos':		'ROM',
+			'1Corintios':	'1CO',
+			'2Corintios':	'2CO',
+			'Galatas':		'GAL',
+			'Efesios':		'EPH',
+			'Filipenses':	'PHP',
+			'Colosenses':	'COL',
+			'1Tes':			'1TH',
+			'2Tes':			'2TH',
+			'1Timoteo':		'1TI',
+			'2Timoteo':		'2TI',
+			'Tito':			'TIT',
+			'Filemon':		'PHM',
+			'Hebreos':		'HEB',
+			'Santiago':		'JAS',
+			'1SanPedro':	'1PE',
+			'2SanPedro':	'2PE',
+			'1SanJuan':		'1JN',
+			'2SanJuan':		'2JN',
+			'3SanJuan':		'3JN',
+			'Judas':		'JUD',
+			'Apocalipsis':	'REV',
+			// Portuguese
+			'SMateus':		'MAT',
+			'SMarcos':		'MRK',
+			'SLucas':		'LUK',
+			'SJoao':		'JHN',
+			'Atos':			'ACT',
+			'Colossenses':	'COL',
+			'1Tess':		'1TH',
+			'2Tess':		'2TH',
+			'Hebreus':		'HEB',
+			'STiago':		'JAS',
+			'1Pedro':		'1PE',
+			'2Pedro':		'2PE',
+			'1SJoao':		'1JN',
+			'2SJoao':		'2JN',
+			'3SJoao':		'3JN',
+			'SJudas':		'JUD',
+			'Apocalipse':	'REV'
 		};
 		var result = books[bookCode];
 		if (!result) {
