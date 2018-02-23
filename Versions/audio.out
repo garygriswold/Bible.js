@@ -1,0 +1,6004 @@
+VERS ERV-BUL,ERV-CMN,ERV-ENG,KJVPD,WEB,ERV-HRV,ERV-HIN,ERV-HUN,ERV-IND,ERV-MAR,ERV-NEP,ERV-ORI,ERV-PAN,ERV-POR,ERV-RUS,ERV-SPA,ERV-SRP,ERV-THA,ERV-UKR,ERV-URD,ERV-VIE,NMV
+INSERT INTO AudioVersion VALUES ('ERV-BUL', 'BLG', 'AMB');
+Before Prune 1
+[ { dam_id: 'BLGAMBN1DA',
+    fcbh_id: 'BLGAMBN1DA',
+    volume_name: '1924 Protestant Version',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'BLG',
+    language_name: 'български',
+    language_english: 'Bulgarian',
+    language_iso: 'bul',
+    language_iso_2B: 'bul',
+    language_iso_2T: 'bul',
+    language_iso_1: 'bg',
+    language_iso_name: 'Bulgarian',
+    language_family_code: 'BUL',
+    language_family_name: 'български',
+    language_family_english: 'Bulgarian',
+    language_family_iso: 'bul',
+    language_family_iso_2B: 'bul',
+    language_family_iso_2T: 'bul',
+    language_family_iso_1: 'bg',
+    version_code: 'AMB',
+    version_name: '',
+    version_english: '',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-10-27 21:18:29',
+    created_on: '2010-09-14 16:59:40',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N1BLGAMB',
+    audio_zip_path: 'BLGAMBN1DA/BLGAMBN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] } ]
+After Prune 1
+[ { dam_id: 'BLGAMBN1DA',
+    fcbh_id: 'BLGAMBN1DA',
+    volume_name: '1924 Protestant Version',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'BLG',
+    language_name: 'български',
+    language_english: 'Bulgarian',
+    language_iso: 'bul',
+    language_iso_2B: 'bul',
+    language_iso_2T: 'bul',
+    language_iso_1: 'bg',
+    language_iso_name: 'Bulgarian',
+    language_family_code: 'BUL',
+    language_family_name: 'български',
+    language_family_english: 'Bulgarian',
+    language_family_iso: 'bul',
+    language_family_iso_2B: 'bul',
+    language_family_iso_2T: 'bul',
+    language_family_iso_1: 'bg',
+    version_code: 'AMB',
+    version_name: '',
+    version_english: '',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-10-27 21:18:29',
+    created_on: '2010-09-14 16:59:40',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N1BLGAMB',
+    audio_zip_path: 'BLGAMBN1DA/BLGAMBN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] } ]
+REPLACE INTO Audio VALUES ('BLGAMBN1DA', 'BLG', 'AMB', 'NT', 'Non-Drama', '1924 Protestant Version', '2018-02-20');
+INSERT INTO AudioVersion VALUES ('ERV-CMN', 'CHN', 'UNV');
+Before Prune 6
+[ { dam_id: 'CHNUN1N2DA',
+    fcbh_id: 'CHNUN1N2DA',
+    volume_name: 'Union Version (Simplified)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'CHN',
+    language_name: '中文',
+    language_english: 'Chinese, Mandarin',
+    language_iso: 'cmn',
+    language_iso_2B: '',
+    language_iso_2T: '',
+    language_iso_1: '',
+    language_iso_name: 'Mandarin Chinese',
+    language_family_code: 'CHN',
+    language_family_name: '中文',
+    language_family_english: 'Chinese, Mandarin',
+    language_family_iso: 'cmn',
+    language_family_iso_2B: '',
+    language_family_iso_2T: '',
+    language_family_iso_1: '',
+    version_code: 'UN1',
+    version_name: '联盟版',
+    version_english: 'Union Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2017-11-20 20:19:38',
+    created_on: '2011-08-02 17:04:59',
+    right_to_left: 'false',
+    num_art: '0',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'CHNUN1N2DA/CHNUN1N2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'mobile', 'web' ],
+    resolution: [] },
+  { dam_id: 'CHNUN1O1DA',
+    fcbh_id: 'CHNUN1O1DA',
+    volume_name: 'Union Version (Simplified)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'CHN',
+    language_name: '中文',
+    language_english: 'Chinese, Mandarin',
+    language_iso: 'cmn',
+    language_iso_2B: '',
+    language_iso_2T: '',
+    language_iso_1: '',
+    language_iso_name: 'Mandarin Chinese',
+    language_family_code: 'CHN',
+    language_family_name: '中文',
+    language_family_english: 'Chinese, Mandarin',
+    language_family_iso: 'cmn',
+    language_family_iso_2B: '',
+    language_family_iso_2T: '',
+    language_family_iso_1: '',
+    version_code: 'UN1',
+    version_name: '联盟版',
+    version_english: 'Union Version',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2017-11-22 15:25:59',
+    created_on: '2017-11-21 21:38:39',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'CHNUN1O1DA/CHNUN1O1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'CHNUN1O2DA',
+    fcbh_id: 'CHNUN1O2DA',
+    volume_name: 'Union Version (Simplified)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'CHN',
+    language_name: '中文',
+    language_english: 'Chinese, Mandarin',
+    language_iso: 'cmn',
+    language_iso_2B: '',
+    language_iso_2T: '',
+    language_iso_1: '',
+    language_iso_name: 'Mandarin Chinese',
+    language_family_code: 'CHN',
+    language_family_name: '中文',
+    language_family_english: 'Chinese, Mandarin',
+    language_family_iso: 'cmn',
+    language_family_iso_2B: '',
+    language_family_iso_2T: '',
+    language_family_iso_1: '',
+    version_code: 'UN1',
+    version_name: '联盟版',
+    version_english: 'Union Version',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2017-11-22 17:43:16',
+    created_on: '2017-11-21 23:09:06',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'CHNUN1O2DA/CHNUN1O2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'mobile', 'web' ],
+    resolution: [] },
+  { dam_id: 'CHNUNVN2DA',
+    fcbh_id: 'CHNUNVN2DA',
+    volume_name: 'Union Version (Traditional)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'CHN',
+    language_name: '中文',
+    language_english: 'Chinese, Mandarin',
+    language_iso: 'cmn',
+    language_iso_2B: '',
+    language_iso_2T: '',
+    language_iso_1: '',
+    language_iso_name: 'Mandarin Chinese',
+    language_family_code: 'CHN',
+    language_family_name: '中文',
+    language_family_english: 'Chinese, Mandarin',
+    language_family_iso: 'cmn',
+    language_family_iso_2B: '',
+    language_family_iso_2T: '',
+    language_family_iso_1: '',
+    version_code: 'UNV',
+    version_name: 'Union Version = 和合本',
+    version_english: 'Union Version = 和合本',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2017-11-20 22:33:43',
+    created_on: '2010-09-14 17:00:04',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2CHNUNV',
+    audio_zip_path: 'CHNUNVN2DA/CHNUNVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'CHNUNVO1DA',
+    fcbh_id: 'CHNUNVO1DA',
+    volume_name: 'Union Version (Traditional)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'CHN',
+    language_name: '中文',
+    language_english: 'Chinese, Mandarin',
+    language_iso: 'cmn',
+    language_iso_2B: '',
+    language_iso_2T: '',
+    language_iso_1: '',
+    language_iso_name: 'Mandarin Chinese',
+    language_family_code: 'CHN',
+    language_family_name: '中文',
+    language_family_english: 'Chinese, Mandarin',
+    language_family_iso: 'cmn',
+    language_family_iso_2B: '',
+    language_family_iso_2T: '',
+    language_family_iso_1: '',
+    version_code: 'UNV',
+    version_name: 'Union Version = 和合本',
+    version_english: 'Union Version = 和合本',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2017-11-22 15:28:05',
+    created_on: '2017-11-21 21:35:04',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'CHNUNVO1DA/CHNUNVO1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'CHNUNVO2DA',
+    fcbh_id: 'CHNUNVO2DA',
+    volume_name: 'Union Version (Traditional)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'CHN',
+    language_name: '中文',
+    language_english: 'Chinese, Mandarin',
+    language_iso: 'cmn',
+    language_iso_2B: '',
+    language_iso_2T: '',
+    language_iso_1: '',
+    language_iso_name: 'Mandarin Chinese',
+    language_family_code: 'CHN',
+    language_family_name: '中文',
+    language_family_english: 'Chinese, Mandarin',
+    language_family_iso: 'cmn',
+    language_family_iso_2B: '',
+    language_family_iso_2T: '',
+    language_family_iso_1: '',
+    version_code: 'UNV',
+    version_name: 'Union Version = 和合本',
+    version_english: 'Union Version = 和合本',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2017-11-22 15:29:08',
+    created_on: '2017-11-21 21:03:34',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'CHNUNVO2DA/CHNUNVO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] } ]
+After Prune 3
+[ { dam_id: 'CHNUNVN2DA',
+    fcbh_id: 'CHNUNVN2DA',
+    volume_name: 'Union Version (Traditional)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'CHN',
+    language_name: '中文',
+    language_english: 'Chinese, Mandarin',
+    language_iso: 'cmn',
+    language_iso_2B: '',
+    language_iso_2T: '',
+    language_iso_1: '',
+    language_iso_name: 'Mandarin Chinese',
+    language_family_code: 'CHN',
+    language_family_name: '中文',
+    language_family_english: 'Chinese, Mandarin',
+    language_family_iso: 'cmn',
+    language_family_iso_2B: '',
+    language_family_iso_2T: '',
+    language_family_iso_1: '',
+    version_code: 'UNV',
+    version_name: 'Union Version = 和合本',
+    version_english: 'Union Version = 和合本',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2017-11-20 22:33:43',
+    created_on: '2010-09-14 17:00:04',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2CHNUNV',
+    audio_zip_path: 'CHNUNVN2DA/CHNUNVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'CHNUNVO1DA',
+    fcbh_id: 'CHNUNVO1DA',
+    volume_name: 'Union Version (Traditional)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'CHN',
+    language_name: '中文',
+    language_english: 'Chinese, Mandarin',
+    language_iso: 'cmn',
+    language_iso_2B: '',
+    language_iso_2T: '',
+    language_iso_1: '',
+    language_iso_name: 'Mandarin Chinese',
+    language_family_code: 'CHN',
+    language_family_name: '中文',
+    language_family_english: 'Chinese, Mandarin',
+    language_family_iso: 'cmn',
+    language_family_iso_2B: '',
+    language_family_iso_2T: '',
+    language_family_iso_1: '',
+    version_code: 'UNV',
+    version_name: 'Union Version = 和合本',
+    version_english: 'Union Version = 和合本',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2017-11-22 15:28:05',
+    created_on: '2017-11-21 21:35:04',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'CHNUNVO1DA/CHNUNVO1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'CHNUNVO2DA',
+    fcbh_id: 'CHNUNVO2DA',
+    volume_name: 'Union Version (Traditional)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'CHN',
+    language_name: '中文',
+    language_english: 'Chinese, Mandarin',
+    language_iso: 'cmn',
+    language_iso_2B: '',
+    language_iso_2T: '',
+    language_iso_1: '',
+    language_iso_name: 'Mandarin Chinese',
+    language_family_code: 'CHN',
+    language_family_name: '中文',
+    language_family_english: 'Chinese, Mandarin',
+    language_family_iso: 'cmn',
+    language_family_iso_2B: '',
+    language_family_iso_2T: '',
+    language_family_iso_1: '',
+    version_code: 'UNV',
+    version_name: 'Union Version = 和合本',
+    version_english: 'Union Version = 和合本',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2017-11-22 15:29:08',
+    created_on: '2017-11-21 21:03:34',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'CHNUNVO2DA/CHNUNVO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] } ]
+REPLACE INTO Audio VALUES ('CHNUNVN2DA', 'CHN', 'UNV', 'NT', 'Drama', 'Union Version (Traditional)', '2018-02-20');
+REPLACE INTO Audio VALUES ('CHNUNVO1DA', 'CHN', 'UNV', 'OT', 'Non-Drama', 'Union Version (Traditional)', '2018-02-20');
+REPLACE INTO Audio VALUES ('CHNUNVO2DA', 'CHN', 'UNV', 'OT', 'Drama', 'Union Version (Traditional)', '2018-02-20');
+INSERT INTO AudioVersion VALUES ('ERV-ENG', 'ENG', 'ESV');
+Before Prune 13
+[ { dam_id: 'ENGCAVN2DA',
+    fcbh_id: 'ENGCAVN2DA',
+    volume_name: '1995 Contemporary English (African American)',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'CAV',
+    version_name: 'Contemporary English Version-AA',
+    version_english: 'Contemporary English Version-AA',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2015-10-27 21:19:17',
+    created_on: '2010-09-14 17:01:38',
+    right_to_left: 'false',
+    num_art: '6',
+    num_sample_audio: '1',
+    sku: 'N2CAV',
+    audio_zip_path: 'ENGCAVN2DA/ENGCAVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'web_streaming',
+       'download',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'ENGCEVN2DA',
+    fcbh_id: 'ENGCEVN2DA',
+    volume_name: '1991 Contemporary English',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'CEV',
+    version_name: 'Contemporary English Version',
+    version_english: 'Contemporary English Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2015-10-27 21:18:31',
+    created_on: '2010-09-14 17:00:04',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2CEV',
+    audio_zip_path: 'ENGCEVN2DA/ENGCEVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'web_streaming', 'mp3_cd', 'digital_download', 'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'ENGCEVO2DA',
+    fcbh_id: 'ENGCEVO2DA',
+    volume_name: '1995 Contemporary English',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'CEV',
+    version_name: 'Contemporary English Version',
+    version_english: 'Contemporary English Version',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2014-10-30 16:36:22',
+    created_on: '2010-09-14 17:01:51',
+    right_to_left: 'false',
+    num_art: '2',
+    num_sample_audio: '2',
+    sku: 'O2CEV',
+    audio_zip_path: 'ENGCEVO2DA/ENGCEVO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'digital_download' ],
+    resolution: [] },
+  { dam_id: 'ENGESVN2DA',
+    fcbh_id: 'ENGESVN2DA',
+    volume_name: 'Drama 2001/2007 English Standard',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'ESV',
+    version_name: 'English Standard Version   ',
+    version_english: 'English Standard Version   ',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2017-10-30 16:42:02',
+    created_on: '2010-09-14 17:00:58',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '1',
+    sku: 'N2ESV',
+    audio_zip_path: 'ENGESVN2DA/ENGESVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGESVO2DA',
+    fcbh_id: 'ENGESVO2DA',
+    volume_name: 'Drama 2001/2007 English Standard',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'ESV',
+    version_name: 'English Standard Version   ',
+    version_english: 'English Standard Version   ',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2018-01-26 18:34:21',
+    created_on: '2010-09-14 17:01:32',
+    right_to_left: 'false',
+    num_art: '5',
+    num_sample_audio: '1',
+    sku: 'O2ESV',
+    audio_zip_path: 'ENGESVO2DA/ENGESVO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'mobile', 'web', 'digital_download', 'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGKJVN1DA',
+    fcbh_id: 'ENGKJVN1DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2014-01-16 23:13:20',
+    created_on: '2010-09-14 16:59:45',
+    right_to_left: 'false',
+    num_art: '5',
+    num_sample_audio: '1',
+    sku: 'N1KJV',
+    audio_zip_path: 'ENGKJVN1DA/ENGKJVN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGKJVN2DA',
+    fcbh_id: 'ENGKJVN2DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2014-01-16 23:13:33',
+    created_on: '2010-09-14 17:00:23',
+    right_to_left: 'false',
+    num_art: '5',
+    num_sample_audio: '1',
+    sku: 'N2KJV',
+    audio_zip_path: 'ENGKJVN2DA/ENGKJVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGKJVO1DA',
+    fcbh_id: 'ENGKJVO1DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2014-01-16 23:13:54',
+    created_on: '2010-09-14 17:01:51',
+    right_to_left: 'false',
+    num_art: '2',
+    num_sample_audio: '1',
+    sku: 'O1KJV',
+    audio_zip_path: 'ENGKJVO1DA/ENGKJVO1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: [ 'mobile', 'web', 'digital_download', 'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGKJVO2DA',
+    fcbh_id: 'ENGKJVO2DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2014-01-16 23:14:09',
+    created_on: '2010-09-14 17:01:33',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '2',
+    sku: 'O2KJV',
+    audio_zip_path: 'ENGKJVO2DA/ENGKJVO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'mobile', 'web', 'digital_download', 'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGNRSN1DA',
+    fcbh_id: 'ENGNRSN1DA',
+    volume_name: '1989 New Revised Standard',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'NRS',
+    version_name: 'New Revised Standard Version ',
+    version_english: 'New Revised Standard Version ',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2015-10-27 21:18:28',
+    created_on: '2010-09-14 16:59:48',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N1NRS',
+    audio_zip_path: 'ENGNRSN1DA/ENGNRSN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'ENGNRSN2DA',
+    fcbh_id: 'ENGNRSN2DA',
+    volume_name: '1989 New Revised Standard',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'NRS',
+    version_name: 'New Revised Standard Version ',
+    version_english: 'New Revised Standard Version ',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2017-10-13 18:47:12',
+    created_on: '2010-09-14 17:00:35',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2NRS',
+    audio_zip_path: 'ENGNRSN2DA/ENGNRSN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'ENGNRSO2DA',
+    fcbh_id: 'ENGNRSO2DA',
+    volume_name: '1989 New Revised Standard',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'NRS',
+    version_name: 'New Revised Standard Version ',
+    version_english: 'New Revised Standard Version ',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2018-01-22 20:41:59',
+    created_on: '2010-09-14 17:01:52',
+    right_to_left: 'false',
+    num_art: '5',
+    num_sample_audio: '1',
+    sku: 'O2NRS',
+    audio_zip_path: 'ENGNRSO2DA/ENGNRSO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'mobile', 'web', 'digital_download' ],
+    resolution: [] },
+  { dam_id: 'ENGWEBN2DA',
+    fcbh_id: 'ENGWEBN2DA',
+    volume_name: 'World English Bible',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'WEB',
+    version_name: 'World English Bible',
+    version_english: 'World English Bible',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2013-11-26 19:22:23',
+    created_on: '2013-09-18 15:48:49',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'ENGWEBN2DA/ENGWEBN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] } ]
+After Prune 2
+[ { dam_id: 'ENGESVN2DA',
+    fcbh_id: 'ENGESVN2DA',
+    volume_name: 'Drama 2001/2007 English Standard',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'ESV',
+    version_name: 'English Standard Version   ',
+    version_english: 'English Standard Version   ',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2017-10-30 16:42:02',
+    created_on: '2010-09-14 17:00:58',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '1',
+    sku: 'N2ESV',
+    audio_zip_path: 'ENGESVN2DA/ENGESVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGESVO2DA',
+    fcbh_id: 'ENGESVO2DA',
+    volume_name: 'Drama 2001/2007 English Standard',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'ESV',
+    version_name: 'English Standard Version   ',
+    version_english: 'English Standard Version   ',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2018-01-26 18:34:21',
+    created_on: '2010-09-14 17:01:32',
+    right_to_left: 'false',
+    num_art: '5',
+    num_sample_audio: '1',
+    sku: 'O2ESV',
+    audio_zip_path: 'ENGESVO2DA/ENGESVO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'mobile', 'web', 'digital_download', 'subsplash' ],
+    resolution: [] } ]
+REPLACE INTO Audio VALUES ('ENGESVN2DA', 'ENG', 'ESV', 'NT', 'Drama', 'Drama 2001/2007 English Standard', '2018-02-20');
+REPLACE INTO Audio VALUES ('ENGESVO2DA', 'ENG', 'ESV', 'OT', 'Drama', 'Drama 2001/2007 English Standard', '2018-02-20');
+INSERT INTO AudioVersion VALUES ('KJVPD', 'ENG', 'KJV');
+Before Prune 13
+[ { dam_id: 'ENGCAVN2DA',
+    fcbh_id: 'ENGCAVN2DA',
+    volume_name: '1995 Contemporary English (African American)',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'CAV',
+    version_name: 'Contemporary English Version-AA',
+    version_english: 'Contemporary English Version-AA',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2015-10-27 21:19:17',
+    created_on: '2010-09-14 17:01:38',
+    right_to_left: 'false',
+    num_art: '6',
+    num_sample_audio: '1',
+    sku: 'N2CAV',
+    audio_zip_path: 'ENGCAVN2DA/ENGCAVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'web_streaming',
+       'download',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'ENGCEVN2DA',
+    fcbh_id: 'ENGCEVN2DA',
+    volume_name: '1991 Contemporary English',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'CEV',
+    version_name: 'Contemporary English Version',
+    version_english: 'Contemporary English Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2015-10-27 21:18:31',
+    created_on: '2010-09-14 17:00:04',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2CEV',
+    audio_zip_path: 'ENGCEVN2DA/ENGCEVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'web_streaming', 'mp3_cd', 'digital_download', 'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'ENGCEVO2DA',
+    fcbh_id: 'ENGCEVO2DA',
+    volume_name: '1995 Contemporary English',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'CEV',
+    version_name: 'Contemporary English Version',
+    version_english: 'Contemporary English Version',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2014-10-30 16:36:22',
+    created_on: '2010-09-14 17:01:51',
+    right_to_left: 'false',
+    num_art: '2',
+    num_sample_audio: '2',
+    sku: 'O2CEV',
+    audio_zip_path: 'ENGCEVO2DA/ENGCEVO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'digital_download' ],
+    resolution: [] },
+  { dam_id: 'ENGESVN2DA',
+    fcbh_id: 'ENGESVN2DA',
+    volume_name: 'Drama 2001/2007 English Standard',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'ESV',
+    version_name: 'English Standard Version   ',
+    version_english: 'English Standard Version   ',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2017-10-30 16:42:02',
+    created_on: '2010-09-14 17:00:58',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '1',
+    sku: 'N2ESV',
+    audio_zip_path: 'ENGESVN2DA/ENGESVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGESVO2DA',
+    fcbh_id: 'ENGESVO2DA',
+    volume_name: 'Drama 2001/2007 English Standard',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'ESV',
+    version_name: 'English Standard Version   ',
+    version_english: 'English Standard Version   ',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2018-01-26 18:34:21',
+    created_on: '2010-09-14 17:01:32',
+    right_to_left: 'false',
+    num_art: '5',
+    num_sample_audio: '1',
+    sku: 'O2ESV',
+    audio_zip_path: 'ENGESVO2DA/ENGESVO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'mobile', 'web', 'digital_download', 'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGKJVN1DA',
+    fcbh_id: 'ENGKJVN1DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2014-01-16 23:13:20',
+    created_on: '2010-09-14 16:59:45',
+    right_to_left: 'false',
+    num_art: '5',
+    num_sample_audio: '1',
+    sku: 'N1KJV',
+    audio_zip_path: 'ENGKJVN1DA/ENGKJVN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGKJVN2DA',
+    fcbh_id: 'ENGKJVN2DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2014-01-16 23:13:33',
+    created_on: '2010-09-14 17:00:23',
+    right_to_left: 'false',
+    num_art: '5',
+    num_sample_audio: '1',
+    sku: 'N2KJV',
+    audio_zip_path: 'ENGKJVN2DA/ENGKJVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGKJVO1DA',
+    fcbh_id: 'ENGKJVO1DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2014-01-16 23:13:54',
+    created_on: '2010-09-14 17:01:51',
+    right_to_left: 'false',
+    num_art: '2',
+    num_sample_audio: '1',
+    sku: 'O1KJV',
+    audio_zip_path: 'ENGKJVO1DA/ENGKJVO1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: [ 'mobile', 'web', 'digital_download', 'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGKJVO2DA',
+    fcbh_id: 'ENGKJVO2DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2014-01-16 23:14:09',
+    created_on: '2010-09-14 17:01:33',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '2',
+    sku: 'O2KJV',
+    audio_zip_path: 'ENGKJVO2DA/ENGKJVO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'mobile', 'web', 'digital_download', 'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGNRSN1DA',
+    fcbh_id: 'ENGNRSN1DA',
+    volume_name: '1989 New Revised Standard',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'NRS',
+    version_name: 'New Revised Standard Version ',
+    version_english: 'New Revised Standard Version ',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2015-10-27 21:18:28',
+    created_on: '2010-09-14 16:59:48',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N1NRS',
+    audio_zip_path: 'ENGNRSN1DA/ENGNRSN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'ENGNRSN2DA',
+    fcbh_id: 'ENGNRSN2DA',
+    volume_name: '1989 New Revised Standard',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'NRS',
+    version_name: 'New Revised Standard Version ',
+    version_english: 'New Revised Standard Version ',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2017-10-13 18:47:12',
+    created_on: '2010-09-14 17:00:35',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2NRS',
+    audio_zip_path: 'ENGNRSN2DA/ENGNRSN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'ENGNRSO2DA',
+    fcbh_id: 'ENGNRSO2DA',
+    volume_name: '1989 New Revised Standard',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'NRS',
+    version_name: 'New Revised Standard Version ',
+    version_english: 'New Revised Standard Version ',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2018-01-22 20:41:59',
+    created_on: '2010-09-14 17:01:52',
+    right_to_left: 'false',
+    num_art: '5',
+    num_sample_audio: '1',
+    sku: 'O2NRS',
+    audio_zip_path: 'ENGNRSO2DA/ENGNRSO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'mobile', 'web', 'digital_download' ],
+    resolution: [] },
+  { dam_id: 'ENGWEBN2DA',
+    fcbh_id: 'ENGWEBN2DA',
+    volume_name: 'World English Bible',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'WEB',
+    version_name: 'World English Bible',
+    version_english: 'World English Bible',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2013-11-26 19:22:23',
+    created_on: '2013-09-18 15:48:49',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'ENGWEBN2DA/ENGWEBN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] } ]
+After Prune 4
+[ { dam_id: 'ENGKJVN1DA',
+    fcbh_id: 'ENGKJVN1DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2014-01-16 23:13:20',
+    created_on: '2010-09-14 16:59:45',
+    right_to_left: 'false',
+    num_art: '5',
+    num_sample_audio: '1',
+    sku: 'N1KJV',
+    audio_zip_path: 'ENGKJVN1DA/ENGKJVN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGKJVN2DA',
+    fcbh_id: 'ENGKJVN2DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2014-01-16 23:13:33',
+    created_on: '2010-09-14 17:00:23',
+    right_to_left: 'false',
+    num_art: '5',
+    num_sample_audio: '1',
+    sku: 'N2KJV',
+    audio_zip_path: 'ENGKJVN2DA/ENGKJVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGKJVO1DA',
+    fcbh_id: 'ENGKJVO1DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2014-01-16 23:13:54',
+    created_on: '2010-09-14 17:01:51',
+    right_to_left: 'false',
+    num_art: '2',
+    num_sample_audio: '1',
+    sku: 'O1KJV',
+    audio_zip_path: 'ENGKJVO1DA/ENGKJVO1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: [ 'mobile', 'web', 'digital_download', 'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGKJVO2DA',
+    fcbh_id: 'ENGKJVO2DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2014-01-16 23:14:09',
+    created_on: '2010-09-14 17:01:33',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '2',
+    sku: 'O2KJV',
+    audio_zip_path: 'ENGKJVO2DA/ENGKJVO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'mobile', 'web', 'digital_download', 'subsplash' ],
+    resolution: [] } ]
+REPLACE INTO Audio VALUES ('ENGKJVN1DA', 'ENG', 'KJV', 'NT', 'Non-Drama', 'King James', '2018-02-20');
+REPLACE INTO Audio VALUES ('ENGKJVN2DA', 'ENG', 'KJV', 'NT', 'Drama', 'King James', '2018-02-20');
+REPLACE INTO Audio VALUES ('ENGKJVO1DA', 'ENG', 'KJV', 'OT', 'Non-Drama', 'King James', '2018-02-20');
+REPLACE INTO Audio VALUES ('ENGKJVO2DA', 'ENG', 'KJV', 'OT', 'Drama', 'King James', '2018-02-20');
+INSERT INTO AudioVersion VALUES ('WEB', 'ENG', 'WEB');
+Before Prune 13
+[ { dam_id: 'ENGCAVN2DA',
+    fcbh_id: 'ENGCAVN2DA',
+    volume_name: '1995 Contemporary English (African American)',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'CAV',
+    version_name: 'Contemporary English Version-AA',
+    version_english: 'Contemporary English Version-AA',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2015-10-27 21:19:17',
+    created_on: '2010-09-14 17:01:38',
+    right_to_left: 'false',
+    num_art: '6',
+    num_sample_audio: '1',
+    sku: 'N2CAV',
+    audio_zip_path: 'ENGCAVN2DA/ENGCAVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'web_streaming',
+       'download',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'ENGCEVN2DA',
+    fcbh_id: 'ENGCEVN2DA',
+    volume_name: '1991 Contemporary English',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'CEV',
+    version_name: 'Contemporary English Version',
+    version_english: 'Contemporary English Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2015-10-27 21:18:31',
+    created_on: '2010-09-14 17:00:04',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2CEV',
+    audio_zip_path: 'ENGCEVN2DA/ENGCEVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'web_streaming', 'mp3_cd', 'digital_download', 'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'ENGCEVO2DA',
+    fcbh_id: 'ENGCEVO2DA',
+    volume_name: '1995 Contemporary English',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'CEV',
+    version_name: 'Contemporary English Version',
+    version_english: 'Contemporary English Version',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2014-10-30 16:36:22',
+    created_on: '2010-09-14 17:01:51',
+    right_to_left: 'false',
+    num_art: '2',
+    num_sample_audio: '2',
+    sku: 'O2CEV',
+    audio_zip_path: 'ENGCEVO2DA/ENGCEVO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'digital_download' ],
+    resolution: [] },
+  { dam_id: 'ENGESVN2DA',
+    fcbh_id: 'ENGESVN2DA',
+    volume_name: 'Drama 2001/2007 English Standard',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'ESV',
+    version_name: 'English Standard Version   ',
+    version_english: 'English Standard Version   ',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2017-10-30 16:42:02',
+    created_on: '2010-09-14 17:00:58',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '1',
+    sku: 'N2ESV',
+    audio_zip_path: 'ENGESVN2DA/ENGESVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGESVO2DA',
+    fcbh_id: 'ENGESVO2DA',
+    volume_name: 'Drama 2001/2007 English Standard',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'ESV',
+    version_name: 'English Standard Version   ',
+    version_english: 'English Standard Version   ',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2018-01-26 18:34:21',
+    created_on: '2010-09-14 17:01:32',
+    right_to_left: 'false',
+    num_art: '5',
+    num_sample_audio: '1',
+    sku: 'O2ESV',
+    audio_zip_path: 'ENGESVO2DA/ENGESVO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'mobile', 'web', 'digital_download', 'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGKJVN1DA',
+    fcbh_id: 'ENGKJVN1DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2014-01-16 23:13:20',
+    created_on: '2010-09-14 16:59:45',
+    right_to_left: 'false',
+    num_art: '5',
+    num_sample_audio: '1',
+    sku: 'N1KJV',
+    audio_zip_path: 'ENGKJVN1DA/ENGKJVN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGKJVN2DA',
+    fcbh_id: 'ENGKJVN2DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2014-01-16 23:13:33',
+    created_on: '2010-09-14 17:00:23',
+    right_to_left: 'false',
+    num_art: '5',
+    num_sample_audio: '1',
+    sku: 'N2KJV',
+    audio_zip_path: 'ENGKJVN2DA/ENGKJVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGKJVO1DA',
+    fcbh_id: 'ENGKJVO1DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2014-01-16 23:13:54',
+    created_on: '2010-09-14 17:01:51',
+    right_to_left: 'false',
+    num_art: '2',
+    num_sample_audio: '1',
+    sku: 'O1KJV',
+    audio_zip_path: 'ENGKJVO1DA/ENGKJVO1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: [ 'mobile', 'web', 'digital_download', 'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGKJVO2DA',
+    fcbh_id: 'ENGKJVO2DA',
+    volume_name: 'King James',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'KJV',
+    version_name: 'King James Version',
+    version_english: 'King James Version',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2014-01-16 23:14:09',
+    created_on: '2010-09-14 17:01:33',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '2',
+    sku: 'O2KJV',
+    audio_zip_path: 'ENGKJVO2DA/ENGKJVO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'mobile', 'web', 'digital_download', 'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ENGNRSN1DA',
+    fcbh_id: 'ENGNRSN1DA',
+    volume_name: '1989 New Revised Standard',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'NRS',
+    version_name: 'New Revised Standard Version ',
+    version_english: 'New Revised Standard Version ',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2015-10-27 21:18:28',
+    created_on: '2010-09-14 16:59:48',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N1NRS',
+    audio_zip_path: 'ENGNRSN1DA/ENGNRSN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'ENGNRSN2DA',
+    fcbh_id: 'ENGNRSN2DA',
+    volume_name: '1989 New Revised Standard',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'NRS',
+    version_name: 'New Revised Standard Version ',
+    version_english: 'New Revised Standard Version ',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2017-10-13 18:47:12',
+    created_on: '2010-09-14 17:00:35',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2NRS',
+    audio_zip_path: 'ENGNRSN2DA/ENGNRSN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'ENGNRSO2DA',
+    fcbh_id: 'ENGNRSO2DA',
+    volume_name: '1989 New Revised Standard',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'NRS',
+    version_name: 'New Revised Standard Version ',
+    version_english: 'New Revised Standard Version ',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Old Testament',
+    updated_on: '2018-01-22 20:41:59',
+    created_on: '2010-09-14 17:01:52',
+    right_to_left: 'false',
+    num_art: '5',
+    num_sample_audio: '1',
+    sku: 'O2NRS',
+    audio_zip_path: 'ENGNRSO2DA/ENGNRSO2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: [ 'mobile', 'web', 'digital_download' ],
+    resolution: [] },
+  { dam_id: 'ENGWEBN2DA',
+    fcbh_id: 'ENGWEBN2DA',
+    volume_name: 'World English Bible',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'WEB',
+    version_name: 'World English Bible',
+    version_english: 'World English Bible',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2013-11-26 19:22:23',
+    created_on: '2013-09-18 15:48:49',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'ENGWEBN2DA/ENGWEBN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] } ]
+After Prune 1
+[ { dam_id: 'ENGWEBN2DA',
+    fcbh_id: 'ENGWEBN2DA',
+    volume_name: 'World English Bible',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ENG',
+    language_name: 'English',
+    language_english: 'English',
+    language_iso: 'eng',
+    language_iso_2B: 'eng',
+    language_iso_2T: 'eng',
+    language_iso_1: 'en',
+    language_iso_name: 'English',
+    language_family_code: 'ENG',
+    language_family_name: 'English',
+    language_family_english: 'English',
+    language_family_iso: 'eng',
+    language_family_iso_2B: 'eng',
+    language_family_iso_2T: 'eng',
+    language_family_iso_1: 'en',
+    version_code: 'WEB',
+    version_name: 'World English Bible',
+    version_english: 'World English Bible',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'New Testament',
+    updated_on: '2013-11-26 19:22:23',
+    created_on: '2013-09-18 15:48:49',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'ENGWEBN2DA/ENGWEBN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] } ]
+REPLACE INTO Audio VALUES ('ENGWEBN2DA', 'ENG', 'WEB', 'NT', 'Drama', 'World English Bible', '2018-02-20');
+Before Prune 1
+[ { dam_id: 'SRCCRVN1DA',
+    fcbh_id: 'SRCCRVN1DA',
+    volume_name: 'Croatian Version',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'SRC',
+    language_name: 'Croatian',
+    language_english: 'Croatian',
+    language_iso: 'hbs',
+    language_iso_2B: '',
+    language_iso_2T: '',
+    language_iso_1: 'sh',
+    language_iso_name: 'Serbo-Croatian',
+    language_family_code: 'SRC',
+    language_family_name: 'Croatian',
+    language_family_english: 'Croatian',
+    language_family_iso: 'hbs',
+    language_family_iso_2B: '',
+    language_family_iso_2T: '',
+    language_family_iso_1: 'sh',
+    version_code: 'CRV',
+    version_name: '',
+    version_english: '',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2017-04-26 23:01:40',
+    created_on: '2010-09-14 16:59:50',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N1SRCCRV',
+    audio_zip_path: 'SRCCRVN1DA/SRCCRVN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] } ]
+After Prune 0
+[]
+Before Prune 0
+[]
+After Prune 0
+[]
+INSERT INTO AudioVersion VALUES ('ERV-HUN', 'HUN', 'HBS');
+Before Prune 3
+[ { dam_id: 'HUNHBSN1DA',
+    fcbh_id: 'HUNHBSN1DA',
+    volume_name: '1990 Revised Edition',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'HUN',
+    language_name: 'Magyar',
+    language_english: 'Hungarian',
+    language_iso: 'hun',
+    language_iso_2B: 'hun',
+    language_iso_2T: 'hun',
+    language_iso_1: 'hu',
+    language_iso_name: 'Hungarian',
+    language_family_code: 'HUN',
+    language_family_name: 'Magyar',
+    language_family_english: 'Hungarian',
+    language_family_iso: 'hun',
+    language_family_iso_2B: 'hun',
+    language_family_iso_2T: 'hun',
+    language_family_iso_1: 'hu',
+    version_code: 'HBS',
+    version_name: '',
+    version_english: '',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Újszövetség',
+    updated_on: '2013-10-25 23:57:02',
+    created_on: '2010-09-14 17:01:52',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '1',
+    sku: 'N1HUNHBS',
+    audio_zip_path: 'HUNHBSN1DA/HUNHBSN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'HUNRNTN1DA',
+    fcbh_id: 'HUNRNTN1DA',
+    volume_name: '2014 Revideált új fordítású Biblia',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'HUN',
+    language_name: 'Magyar',
+    language_english: 'Hungarian',
+    language_iso: 'hun',
+    language_iso_2B: 'hun',
+    language_iso_2T: 'hun',
+    language_iso_1: 'hu',
+    language_iso_name: 'Hungarian',
+    language_family_code: 'HUN',
+    language_family_name: 'Magyar',
+    language_family_english: 'Hungarian',
+    language_family_iso: 'hun',
+    language_family_iso_2B: 'hun',
+    language_family_iso_2T: 'hun',
+    language_family_iso_1: 'hu',
+    version_code: 'RNT',
+    version_name: 'Revideált új fordítású Biblia (2014)',
+    version_english: 'Revised Hungarian New Translation (2014)',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Újszövetség',
+    updated_on: '2018-01-22 20:37:08',
+    created_on: '2016-10-14 16:34:05',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'HUNRNTN1DA/HUNRNTN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'HUNRNTO1DA',
+    fcbh_id: 'HUNRNTO1DA',
+    volume_name: '2014 Revideált új fordítású Biblia',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'HUN',
+    language_name: 'Magyar',
+    language_english: 'Hungarian',
+    language_iso: 'hun',
+    language_iso_2B: 'hun',
+    language_iso_2T: 'hun',
+    language_iso_1: 'hu',
+    language_iso_name: 'Hungarian',
+    language_family_code: 'HUN',
+    language_family_name: 'Magyar',
+    language_family_english: 'Hungarian',
+    language_family_iso: 'hun',
+    language_family_iso_2B: 'hun',
+    language_family_iso_2T: 'hun',
+    language_family_iso_1: 'hu',
+    version_code: 'RNT',
+    version_name: 'Revideált új fordítású Biblia (2014)',
+    version_english: 'Revised Hungarian New Translation (2014)',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Ószövetség',
+    updated_on: '2018-01-22 20:37:08',
+    created_on: '2016-10-14 16:26:34',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'HUNRNTO1DA/HUNRNTO1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] } ]
+After Prune 1
+[ { dam_id: 'HUNHBSN1DA',
+    fcbh_id: 'HUNHBSN1DA',
+    volume_name: '1990 Revised Edition',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'HUN',
+    language_name: 'Magyar',
+    language_english: 'Hungarian',
+    language_iso: 'hun',
+    language_iso_2B: 'hun',
+    language_iso_2T: 'hun',
+    language_iso_1: 'hu',
+    language_iso_name: 'Hungarian',
+    language_family_code: 'HUN',
+    language_family_name: 'Magyar',
+    language_family_english: 'Hungarian',
+    language_family_iso: 'hun',
+    language_family_iso_2B: 'hun',
+    language_family_iso_2T: 'hun',
+    language_family_iso_1: 'hu',
+    version_code: 'HBS',
+    version_name: '',
+    version_english: '',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Újszövetség',
+    updated_on: '2013-10-25 23:57:02',
+    created_on: '2010-09-14 17:01:52',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '1',
+    sku: 'N1HUNHBS',
+    audio_zip_path: 'HUNHBSN1DA/HUNHBSN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] } ]
+REPLACE INTO Audio VALUES ('HUNHBSN1DA', 'HUN', 'HBS', 'NT', 'Non-Drama', '1990 Revised Edition', '2018-02-20');
+INSERT INTO AudioVersion VALUES ('ERV-IND', 'INZ', 'SHL');
+Before Prune 3
+[ { dam_id: 'INZNTVN2DA',
+    fcbh_id: 'INZNTVN2DA',
+    volume_name: 'Indonesian New Translation (formal) Version, 1974',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'INZ',
+    language_name: 'Indonesian',
+    language_english: 'Indonesian',
+    language_iso: 'ind',
+    language_iso_2B: 'ind',
+    language_iso_2T: 'ind',
+    language_iso_1: 'id',
+    language_iso_name: 'Indonesian',
+    language_family_code: 'IND',
+    language_family_name: 'Indonesian',
+    language_family_english: 'Indonesian',
+    language_family_iso: 'ind',
+    language_family_iso_2B: 'ind',
+    language_family_iso_2T: 'ind',
+    language_family_iso_1: 'id',
+    version_code: 'NTV',
+    version_name: '1974 New Translation Version',
+    version_english: '1974 New Translation Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Perjanjian Baru',
+    updated_on: '2013-10-25 23:57:17',
+    created_on: '2010-09-14 17:00:18',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2INZNTV',
+    audio_zip_path: 'INZNTVN2DA/INZNTVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'INZTSIN1DA',
+    fcbh_id: 'INZTSIN1DA',
+    volume_name: 'Terjemahan Sederhana Indonesia (Plain Indonesian Translation)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'INZ',
+    language_name: 'Indonesian',
+    language_english: 'Indonesian',
+    language_iso: 'ind',
+    language_iso_2B: 'ind',
+    language_iso_2T: 'ind',
+    language_iso_1: 'id',
+    language_iso_name: 'Indonesian',
+    language_family_code: 'IND',
+    language_family_name: 'Indonesian',
+    language_family_english: 'Indonesian',
+    language_family_iso: 'ind',
+    language_family_iso_2B: 'ind',
+    language_family_iso_2T: 'ind',
+    language_family_iso_1: 'id',
+    version_code: 'TSI',
+    version_name: 'Terjemahan Sederhana Indonesia',
+    version_english: 'Terjemahan Sederhana Indonesia',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Perjanjian Baru',
+    updated_on: '2017-03-22 20:15:10',
+    created_on: '2017-03-22 18:46:32',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'INZTSIN1DA/INZTSIN1DA.zip',
+    font: 
+     { id: '12',
+       name: 'Charis SIL',
+       base_url: 'http://cloud.faithcomesbyhearing.com/fonts/Charis_SIL',
+       files: [Object],
+       platforms: [Object],
+       copyright: '&copy; 2000-2013, SIL International  ',
+       url: 'http://bit.ly/1uKBBMx' },
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'INZTSIN2DA',
+    fcbh_id: 'INZTSIN2DA',
+    volume_name: 'Terjemahan Sederhana Indonesia (Plain Indonesian Translation)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'INZ',
+    language_name: 'Indonesian',
+    language_english: 'Indonesian',
+    language_iso: 'ind',
+    language_iso_2B: 'ind',
+    language_iso_2T: 'ind',
+    language_iso_1: 'id',
+    language_iso_name: 'Indonesian',
+    language_family_code: 'IND',
+    language_family_name: 'Indonesian',
+    language_family_english: 'Indonesian',
+    language_family_iso: 'ind',
+    language_family_iso_2B: 'ind',
+    language_family_iso_2T: 'ind',
+    language_family_iso_1: 'id',
+    version_code: 'TSI',
+    version_name: 'Terjemahan Sederhana Indonesia',
+    version_english: 'Terjemahan Sederhana Indonesia',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Perjanjian Baru',
+    updated_on: '2017-03-22 20:18:26',
+    created_on: '2017-03-22 18:47:33',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'INZTSIN2DA/INZTSIN2DA.zip',
+    font: 
+     { id: '12',
+       name: 'Charis SIL',
+       base_url: 'http://cloud.faithcomesbyhearing.com/fonts/Charis_SIL',
+       files: [Object],
+       platforms: [Object],
+       copyright: '&copy; 2000-2013, SIL International  ',
+       url: 'http://bit.ly/1uKBBMx' },
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] } ]
+After Prune 0
+[]
+Before Prune 2
+[ { dam_id: 'MARWTCN1DA',
+    fcbh_id: 'MARWTCN1DA',
+    volume_name: '2015 Edition',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'MAR',
+    language_name: 'Marathi',
+    language_english: 'Marathi',
+    language_iso: 'mar',
+    language_iso_2B: 'mar',
+    language_iso_2T: 'mar',
+    language_iso_1: 'mr',
+    language_iso_name: 'Marathi',
+    language_family_code: 'MAR',
+    language_family_name: 'Marathi',
+    language_family_english: 'Marathi',
+    language_family_iso: 'mar',
+    language_family_iso_2B: 'mar',
+    language_family_iso_2T: 'mar',
+    language_family_iso_1: 'mr',
+    version_code: 'WTC',
+    version_name: 'World Bible Translation Center',
+    version_english: 'World Bible Translation Center',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-05-27 21:32:13',
+    created_on: '2015-05-27 21:05:26',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'MARWTCN1DA/MARWTCN1DA.zip',
+    font: 
+     { id: '74',
+       name: 'Lohit-Marathi',
+       base_url: 'http://cloud.faithcomesbyhearing.com/fonts/Lohit_Marathi',
+       files: [Object],
+       platforms: [Object],
+       copyright: '&copy; 2011-12 Lohit Fonts Project contributors',
+       url: 'http://bit.ly/1y7P7iU' },
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'MARWTCN2DA',
+    fcbh_id: 'MARWTCN2DA',
+    volume_name: '2015 Edition',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'MAR',
+    language_name: 'Marathi',
+    language_english: 'Marathi',
+    language_iso: 'mar',
+    language_iso_2B: 'mar',
+    language_iso_2T: 'mar',
+    language_iso_1: 'mr',
+    language_iso_name: 'Marathi',
+    language_family_code: 'MAR',
+    language_family_name: 'Marathi',
+    language_family_english: 'Marathi',
+    language_family_iso: 'mar',
+    language_family_iso_2B: 'mar',
+    language_family_iso_2T: 'mar',
+    language_family_iso_1: 'mr',
+    version_code: 'WTC',
+    version_name: 'World Bible Translation Center',
+    version_english: 'World Bible Translation Center',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-05-27 21:38:03',
+    created_on: '2015-05-27 21:08:36',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'MARWTCN2DA/MARWTCN2DA.zip',
+    font: 
+     { id: '74',
+       name: 'Lohit-Marathi',
+       base_url: 'http://cloud.faithcomesbyhearing.com/fonts/Lohit_Marathi',
+       files: [Object],
+       platforms: [Object],
+       copyright: '&copy; 2011-12 Lohit Fonts Project contributors',
+       url: 'http://bit.ly/1y7P7iU' },
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] } ]
+After Prune 0
+[]
+Before Prune 1
+[ { dam_id: 'NEPNRVN2DA',
+    fcbh_id: 'NEPNRVN2DA',
+    volume_name: 'New Revised Version',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'NEP',
+    language_name: 'Nepali',
+    language_english: 'Nepali',
+    language_iso: 'nep',
+    language_iso_2B: 'nep',
+    language_iso_2T: 'nep',
+    language_iso_1: 'ne',
+    language_iso_name: 'Nepali',
+    language_family_code: 'NEP',
+    language_family_name: 'Nepali',
+    language_family_english: 'Nepali',
+    language_family_iso: 'nep',
+    language_family_iso_2B: 'nep',
+    language_family_iso_2T: 'nep',
+    language_family_iso_1: 'ne',
+    version_code: 'NRV',
+    version_name: '',
+    version_english: '',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-10-27 21:18:37',
+    created_on: '2010-09-14 17:00:33',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2NEPNRV',
+    audio_zip_path: 'NEPNRVN2DA/NEPNRVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'download',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] } ]
+After Prune 0
+[]
+Before Prune 2
+[ { dam_id: 'ORYWTCN1DA',
+    fcbh_id: 'ORYWTCN1DA',
+    volume_name: '1997 Edition',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ORY',
+    language_name: 'Oriya',
+    language_english: 'Oriya',
+    language_iso: 'ori',
+    language_iso_2B: 'ori',
+    language_iso_2T: 'ori',
+    language_iso_1: 'or',
+    language_iso_name: 'Oriya',
+    language_family_code: 'ORY',
+    language_family_name: 'Oriya',
+    language_family_english: 'Oriya',
+    language_family_iso: 'ori',
+    language_family_iso_2B: 'ori',
+    language_family_iso_2T: 'ori',
+    language_family_iso_1: 'or',
+    version_code: 'WTC',
+    version_name: 'World Bible Translation Center',
+    version_english: 'World Bible Translation Center',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-06-09 16:46:26',
+    created_on: '2015-04-21 17:34:05',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'ORYWTCN1DA/ORYWTCN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'ORYWTCN2DA',
+    fcbh_id: 'ORYWTCN2DA',
+    volume_name: '1997 Edition',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'ORY',
+    language_name: 'Oriya',
+    language_english: 'Oriya',
+    language_iso: 'ori',
+    language_iso_2B: 'ori',
+    language_iso_2T: 'ori',
+    language_iso_1: 'or',
+    language_iso_name: 'Oriya',
+    language_family_code: 'ORY',
+    language_family_name: 'Oriya',
+    language_family_english: 'Oriya',
+    language_family_iso: 'ori',
+    language_family_iso_2B: 'ori',
+    language_family_iso_2T: 'ori',
+    language_family_iso_1: 'or',
+    version_code: 'WTC',
+    version_name: 'World Bible Translation Center',
+    version_english: 'World Bible Translation Center',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-06-09 16:47:41',
+    created_on: '2015-04-21 18:05:46',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'ORYWTCN2DA/ORYWTCN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] } ]
+After Prune 0
+[]
+Before Prune 0
+[]
+After Prune 0
+[]
+INSERT INTO AudioVersion VALUES ('ERV-POR', 'POR', 'ARA');
+Before Prune 4
+[ { dam_id: 'PORARAN2DA',
+    fcbh_id: 'PORARAN2DA',
+    volume_name: 'Almeida Revista e Atualizada (Brasil)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'POR',
+    language_name: 'Português',
+    language_english: 'Portuguese',
+    language_iso: 'por',
+    language_iso_2B: 'por',
+    language_iso_2T: 'por',
+    language_iso_1: 'pt',
+    language_iso_name: 'Portuguese',
+    language_family_code: 'POR',
+    language_family_name: 'Português',
+    language_family_english: 'Portuguese',
+    language_family_iso: 'por',
+    language_family_iso_2B: 'por',
+    language_family_iso_2T: 'por',
+    language_family_iso_1: 'pt',
+    version_code: 'ARA',
+    version_name: '',
+    version_english: '',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-12-22 18:24:13',
+    created_on: '2010-09-14 17:00:37',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2PORARA',
+    audio_zip_path: 'PORARAN2DA/PORARAN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'PORARCN2DA',
+    fcbh_id: 'PORARCN2DA',
+    volume_name: 'Almeida Revista e Corrigida (Brasil)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'POR',
+    language_name: 'Português',
+    language_english: 'Portuguese',
+    language_iso: 'por',
+    language_iso_2B: 'por',
+    language_iso_2T: 'por',
+    language_iso_1: 'pt',
+    language_iso_name: 'Portuguese',
+    language_family_code: 'POR',
+    language_family_name: 'Português',
+    language_family_english: 'Portuguese',
+    language_family_iso: 'por',
+    language_family_iso_2B: 'por',
+    language_family_iso_2T: 'por',
+    language_family_iso_1: 'pt',
+    version_code: 'ARC',
+    version_name: '',
+    version_english: '',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-12-22 18:22:51',
+    created_on: '2010-09-14 17:00:38',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2PORARC',
+    audio_zip_path: 'PORARCN2DA/PORARCN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'PORBSPN2DA',
+    fcbh_id: 'PORBSPN2DA',
+    volume_name: 'a BÍBLIA para todos (Portugal)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'POR',
+    language_name: 'Português',
+    language_english: 'Portuguese',
+    language_iso: 'por',
+    language_iso_2B: 'por',
+    language_iso_2T: 'por',
+    language_iso_1: 'pt',
+    language_iso_name: 'Portuguese',
+    language_family_code: 'POR',
+    language_family_name: 'Português',
+    language_family_english: 'Portuguese',
+    language_family_iso: 'por',
+    language_family_iso_2B: 'por',
+    language_family_iso_2T: 'por',
+    language_family_iso_1: 'pt',
+    version_code: 'BSP',
+    version_name: '',
+    version_english: '',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2013-10-25 23:59:27',
+    created_on: '2011-10-05 17:24:27',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'PORBSPN2DA/PORBSPN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'PORNLHN2DA',
+    fcbh_id: 'PORNLHN2DA',
+    volume_name: '(Brasil) Nova Traducao na Linguagem de Hoje',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'POR',
+    language_name: 'Português',
+    language_english: 'Portuguese',
+    language_iso: 'por',
+    language_iso_2B: 'por',
+    language_iso_2T: 'por',
+    language_iso_1: 'pt',
+    language_iso_name: 'Portuguese',
+    language_family_code: 'POR',
+    language_family_name: 'Português',
+    language_family_english: 'Portuguese',
+    language_family_iso: 'por',
+    language_family_iso_2B: 'por',
+    language_family_iso_2T: 'por',
+    language_family_iso_1: 'pt',
+    version_code: 'NLH',
+    version_name: 'Nova Traducao na Linguagem de Hoy',
+    version_english: 'Nova Traducao na Linguagem de Hoy',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2018-01-19 21:07:11',
+    created_on: '2011-05-09 22:17:23',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'PORNLHN2DA/PORNLHN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] } ]
+After Prune 1
+[ { dam_id: 'PORARAN2DA',
+    fcbh_id: 'PORARAN2DA',
+    volume_name: 'Almeida Revista e Atualizada (Brasil)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'POR',
+    language_name: 'Português',
+    language_english: 'Portuguese',
+    language_iso: 'por',
+    language_iso_2B: 'por',
+    language_iso_2T: 'por',
+    language_iso_1: 'pt',
+    language_iso_name: 'Portuguese',
+    language_family_code: 'POR',
+    language_family_name: 'Português',
+    language_family_english: 'Portuguese',
+    language_family_iso: 'por',
+    language_family_iso_2B: 'por',
+    language_family_iso_2T: 'por',
+    language_family_iso_1: 'pt',
+    version_code: 'ARA',
+    version_name: '',
+    version_english: '',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-12-22 18:24:13',
+    created_on: '2010-09-14 17:00:37',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2PORARA',
+    audio_zip_path: 'PORARAN2DA/PORARAN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] } ]
+REPLACE INTO Audio VALUES ('PORARAN2DA', 'POR', 'ARA', 'NT', 'Drama', 'Almeida Revista e Atualizada (Brasil)', '2018-02-20');
+INSERT INTO AudioVersion VALUES ('ERV-RUS', 'RUS', 'S76');
+Before Prune 3
+[ { dam_id: 'RUSBSRN2DA',
+    fcbh_id: 'RUSBSRN2DA',
+    volume_name: 'Holy Synod',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'RUS',
+    language_name: 'Русский',
+    language_english: 'Russian',
+    language_iso: 'rus',
+    language_iso_2B: 'rus',
+    language_iso_2T: 'rus',
+    language_iso_1: 'ru',
+    language_iso_name: 'Russian',
+    language_family_code: 'RUS',
+    language_family_name: 'Русский',
+    language_family_english: 'Russian',
+    language_family_iso: 'rus',
+    language_family_iso_2B: 'rus',
+    language_family_iso_2T: 'rus',
+    language_family_iso_1: 'ru',
+    version_code: 'BSR',
+    version_name: '',
+    version_english: '',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Новый Завет',
+    updated_on: '2015-10-27 21:19:18',
+    created_on: '2010-09-14 17:00:42',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2RUSBSR',
+    audio_zip_path: 'RUSBSRN2DA/RUSBSRN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'RUSS76N2DA',
+    fcbh_id: 'RUSS76N2DA',
+    volume_name: '1876 Synodal Bible',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'RUS',
+    language_name: 'Русский',
+    language_english: 'Russian',
+    language_iso: 'rus',
+    language_iso_2B: 'rus',
+    language_iso_2T: 'rus',
+    language_iso_1: 'ru',
+    language_iso_name: 'Russian',
+    language_family_code: 'RUS',
+    language_family_name: 'Русский',
+    language_family_english: 'Russian',
+    language_family_iso: 'rus',
+    language_family_iso_2B: 'rus',
+    language_family_iso_2T: 'rus',
+    language_family_iso_1: 'ru',
+    version_code: 'S76',
+    version_name: '1876 Synodal Version Bible',
+    version_english: '1876 Synodal Version Bible',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Новый Завет',
+    updated_on: '2017-06-26 19:49:59',
+    created_on: '2017-06-22 20:16:21',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'RUSS76N2DA/RUSS76N2DA.zip',
+    font: 
+     { id: '12',
+       name: 'Charis SIL',
+       base_url: 'http://cloud.faithcomesbyhearing.com/fonts/Charis_SIL',
+       files: [Object],
+       platforms: [Object],
+       copyright: '&copy; 2000-2013, SIL International  ',
+       url: 'http://bit.ly/1uKBBMx' },
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'RUSS76O2DA',
+    fcbh_id: 'RUSS76O2DA',
+    volume_name: '1876 Synodal Bible',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'RUS',
+    language_name: 'Русский',
+    language_english: 'Russian',
+    language_iso: 'rus',
+    language_iso_2B: 'rus',
+    language_iso_2T: 'rus',
+    language_iso_1: 'ru',
+    language_iso_name: 'Russian',
+    language_family_code: 'RUS',
+    language_family_name: 'Русский',
+    language_family_english: 'Russian',
+    language_family_iso: 'rus',
+    language_family_iso_2B: 'rus',
+    language_family_iso_2T: 'rus',
+    language_family_iso_1: 'ru',
+    version_code: 'S76',
+    version_name: '1876 Synodal Version Bible',
+    version_english: '1876 Synodal Version Bible',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Ветхий Завет',
+    updated_on: '2017-06-26 19:50:33',
+    created_on: '2017-06-22 21:31:45',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'RUSS76O2DA/RUSS76O2DA.zip',
+    font: 
+     { id: '12',
+       name: 'Charis SIL',
+       base_url: 'http://cloud.faithcomesbyhearing.com/fonts/Charis_SIL',
+       files: [Object],
+       platforms: [Object],
+       copyright: '&copy; 2000-2013, SIL International  ',
+       url: 'http://bit.ly/1uKBBMx' },
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] } ]
+After Prune 2
+[ { dam_id: 'RUSS76N2DA',
+    fcbh_id: 'RUSS76N2DA',
+    volume_name: '1876 Synodal Bible',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'RUS',
+    language_name: 'Русский',
+    language_english: 'Russian',
+    language_iso: 'rus',
+    language_iso_2B: 'rus',
+    language_iso_2T: 'rus',
+    language_iso_1: 'ru',
+    language_iso_name: 'Russian',
+    language_family_code: 'RUS',
+    language_family_name: 'Русский',
+    language_family_english: 'Russian',
+    language_family_iso: 'rus',
+    language_family_iso_2B: 'rus',
+    language_family_iso_2T: 'rus',
+    language_family_iso_1: 'ru',
+    version_code: 'S76',
+    version_name: '1876 Synodal Version Bible',
+    version_english: '1876 Synodal Version Bible',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Новый Завет',
+    updated_on: '2017-06-26 19:49:59',
+    created_on: '2017-06-22 20:16:21',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'RUSS76N2DA/RUSS76N2DA.zip',
+    font: 
+     { id: '12',
+       name: 'Charis SIL',
+       base_url: 'http://cloud.faithcomesbyhearing.com/fonts/Charis_SIL',
+       files: [Object],
+       platforms: [Object],
+       copyright: '&copy; 2000-2013, SIL International  ',
+       url: 'http://bit.ly/1uKBBMx' },
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'RUSS76O2DA',
+    fcbh_id: 'RUSS76O2DA',
+    volume_name: '1876 Synodal Bible',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'RUS',
+    language_name: 'Русский',
+    language_english: 'Russian',
+    language_iso: 'rus',
+    language_iso_2B: 'rus',
+    language_iso_2T: 'rus',
+    language_iso_1: 'ru',
+    language_iso_name: 'Russian',
+    language_family_code: 'RUS',
+    language_family_name: 'Русский',
+    language_family_english: 'Russian',
+    language_family_iso: 'rus',
+    language_family_iso_2B: 'rus',
+    language_family_iso_2T: 'rus',
+    language_family_iso_1: 'ru',
+    version_code: 'S76',
+    version_name: '1876 Synodal Version Bible',
+    version_english: '1876 Synodal Version Bible',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Ветхий Завет',
+    updated_on: '2017-06-26 19:50:33',
+    created_on: '2017-06-22 21:31:45',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'RUSS76O2DA/RUSS76O2DA.zip',
+    font: 
+     { id: '12',
+       name: 'Charis SIL',
+       base_url: 'http://cloud.faithcomesbyhearing.com/fonts/Charis_SIL',
+       files: [Object],
+       platforms: [Object],
+       copyright: '&copy; 2000-2013, SIL International  ',
+       url: 'http://bit.ly/1uKBBMx' },
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] } ]
+REPLACE INTO Audio VALUES ('RUSS76N2DA', 'RUS', 'S76', 'NT', 'Drama', '1876 Synodal Bible', '2018-02-20');
+REPLACE INTO Audio VALUES ('RUSS76O2DA', 'RUS', 'S76', 'OT', 'Drama', '1876 Synodal Bible', '2018-02-20');
+INSERT INTO AudioVersion VALUES ('ERV-SPA', 'SPN', 'R95');
+Before Prune 9
+[ { dam_id: 'SPNBDAN1DA',
+    fcbh_id: 'SPNBDAN1DA',
+    volume_name: '2010 Biblia de América',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'SPN',
+    language_name: 'Español',
+    language_english: 'Spanish',
+    language_iso: 'spa',
+    language_iso_2B: 'spa',
+    language_iso_2T: 'spa',
+    language_iso_1: 'es',
+    language_iso_name: 'Spanish',
+    language_family_code: 'SPN',
+    language_family_name: 'Español',
+    language_family_english: 'Spanish',
+    language_family_iso: 'spa',
+    language_family_iso_2B: 'spa',
+    language_family_iso_2T: 'spa',
+    language_family_iso_1: 'es',
+    version_code: 'BDA',
+    version_name: 'Biblia de América',
+    version_english: ' Biblia de America',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Nuevo Testamento',
+    updated_on: '2015-10-08 17:17:07',
+    created_on: '2015-07-08 19:13:25',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'SPNBDAN1DA/SPNBDAN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'SPNBDAN2DA',
+    fcbh_id: 'SPNBDAN2DA',
+    volume_name: '2010 Biblia de América',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'SPN',
+    language_name: 'Español',
+    language_english: 'Spanish',
+    language_iso: 'spa',
+    language_iso_2B: 'spa',
+    language_iso_2T: 'spa',
+    language_iso_1: 'es',
+    language_iso_name: 'Spanish',
+    language_family_code: 'SPN',
+    language_family_name: 'Español',
+    language_family_english: 'Spanish',
+    language_family_iso: 'spa',
+    language_family_iso_2B: 'spa',
+    language_family_iso_2T: 'spa',
+    language_family_iso_1: 'es',
+    version_code: 'BDA',
+    version_name: 'Biblia de América',
+    version_english: ' Biblia de America',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Nuevo Testamento',
+    updated_on: '2014-08-14 17:50:14',
+    created_on: '2012-10-08 16:32:46',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'SPNBDAN2DA/SPNBDAN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'SPNDHHN2DA',
+    fcbh_id: 'SPNDHHN2DA',
+    volume_name: 'Dios Habla Hoy',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'SPN',
+    language_name: 'Español',
+    language_english: 'Spanish',
+    language_iso: 'spa',
+    language_iso_2B: 'spa',
+    language_iso_2T: 'spa',
+    language_iso_1: 'es',
+    language_iso_name: 'Spanish',
+    language_family_code: 'SPN',
+    language_family_name: 'Español',
+    language_family_english: 'Spanish',
+    language_family_iso: 'spa',
+    language_family_iso_2B: 'spa',
+    language_family_iso_2T: 'spa',
+    language_family_iso_1: 'es',
+    version_code: 'DHH',
+    version_name: 'Dios Habla Hoy',
+    version_english: 'Dios Habla Hoy',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Nuevo Testamento',
+    updated_on: '2015-09-02 23:17:18',
+    created_on: '2010-09-14 17:00:44',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2SPNDHH',
+    audio_zip_path: 'SPNDHHN2DA/SPNDHHN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'SPNERVN1DA',
+    fcbh_id: 'SPNERVN1DA',
+    volume_name: 'Easy to Read Version',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'SPN',
+    language_name: 'Español',
+    language_english: 'Spanish',
+    language_iso: 'spa',
+    language_iso_2B: 'spa',
+    language_iso_2T: 'spa',
+    language_iso_1: 'es',
+    language_iso_name: 'Spanish',
+    language_family_code: 'SPN',
+    language_family_name: 'Español',
+    language_family_english: 'Spanish',
+    language_family_iso: 'spa',
+    language_family_iso_2B: 'spa',
+    language_family_iso_2T: 'spa',
+    language_family_iso_1: 'es',
+    version_code: 'ERV',
+    version_name: 'Easy to Read Version',
+    version_english: 'Easy to Read Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Nuevo Testamento',
+    updated_on: '2017-12-12 17:21:08',
+    created_on: '2017-12-12 15:48:34',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'SPNERVN1DA/SPNERVN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'SPNPDTN1DA',
+    fcbh_id: 'SPNPDTN1DA',
+    volume_name: 'La Palabra de Dios Para Todos',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'SPN',
+    language_name: 'Español',
+    language_english: 'Spanish',
+    language_iso: 'spa',
+    language_iso_2B: 'spa',
+    language_iso_2T: 'spa',
+    language_iso_1: 'es',
+    language_iso_name: 'Spanish',
+    language_family_code: 'SPN',
+    language_family_name: 'Español',
+    language_family_english: 'Spanish',
+    language_family_iso: 'spa',
+    language_family_iso_2B: 'spa',
+    language_family_iso_2T: 'spa',
+    language_family_iso_1: 'es',
+    version_code: 'PDT',
+    version_name: 'PDT',
+    version_english: 'PDT',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Nuevo Testamento',
+    updated_on: '2018-01-15 17:25:04',
+    created_on: '2018-01-15 17:07:39',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'SPNPDTN1DA/SPNPDTN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'SPNPDTO1DA',
+    fcbh_id: 'SPNPDTO1DA',
+    volume_name: 'La Palabra de Dios Para Todos',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'SPN',
+    language_name: 'Español',
+    language_english: 'Spanish',
+    language_iso: 'spa',
+    language_iso_2B: 'spa',
+    language_iso_2T: 'spa',
+    language_iso_1: 'es',
+    language_iso_name: 'Spanish',
+    language_family_code: 'SPN',
+    language_family_name: 'Español',
+    language_family_english: 'Spanish',
+    language_family_iso: 'spa',
+    language_family_iso_2B: 'spa',
+    language_family_iso_2T: 'spa',
+    language_family_iso_1: 'es',
+    version_code: 'PDT',
+    version_name: 'PDT',
+    version_english: 'PDT',
+    collection_code: 'OT',
+    rich: '0',
+    collection_name: 'Antiguo Testamento',
+    updated_on: '2018-01-24 17:59:34',
+    created_on: '2018-01-15 17:13:44',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'SPNPDTO1DA/SPNPDTO1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'SPNR95N2DA',
+    fcbh_id: 'SPNR95N2DA',
+    volume_name: '1995 Reina Valera',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'SPN',
+    language_name: 'Español',
+    language_english: 'Spanish',
+    language_iso: 'spa',
+    language_iso_2B: 'spa',
+    language_iso_2T: 'spa',
+    language_iso_1: 'es',
+    language_iso_name: 'Spanish',
+    language_family_code: 'SPN',
+    language_family_name: 'Español',
+    language_family_english: 'Spanish',
+    language_family_iso: 'spa',
+    language_family_iso_2B: 'spa',
+    language_family_iso_2T: 'spa',
+    language_family_iso_1: 'es',
+    version_code: 'R95',
+    version_name: 'Reina Valera 1995 Version',
+    version_english: 'Reina Valera 1995 Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Nuevo Testamento',
+    updated_on: '2015-10-14 23:14:25',
+    created_on: '2010-09-14 17:00:45',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2SPNR95',
+    audio_zip_path: 'SPNR95N2DA/SPNR95N2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'SPNWTCN1DA',
+    fcbh_id: 'SPNWTCN1DA',
+    volume_name: 'La Palabra de Dios para Todos',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'SPN',
+    language_name: 'Español',
+    language_english: 'Spanish',
+    language_iso: 'spa',
+    language_iso_2B: 'spa',
+    language_iso_2T: 'spa',
+    language_iso_1: 'es',
+    language_iso_name: 'Spanish',
+    language_family_code: 'SPN',
+    language_family_name: 'Español',
+    language_family_english: 'Spanish',
+    language_family_iso: 'spa',
+    language_family_iso_2B: 'spa',
+    language_family_iso_2T: 'spa',
+    language_family_iso_1: 'es',
+    version_code: 'WTC',
+    version_name: 'World Bible Translation Center',
+    version_english: 'World Bible Translation Center',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Nuevo Testamento',
+    updated_on: '2015-08-24 22:49:21',
+    created_on: '2015-08-24 20:19:00',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'SPNWTCN1DA/SPNWTCN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'SPNWTCN2DA',
+    fcbh_id: 'SPNWTCN2DA',
+    volume_name: 'La Palabra de Dios para Todos',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'SPN',
+    language_name: 'Español',
+    language_english: 'Spanish',
+    language_iso: 'spa',
+    language_iso_2B: 'spa',
+    language_iso_2T: 'spa',
+    language_iso_1: 'es',
+    language_iso_name: 'Spanish',
+    language_family_code: 'SPN',
+    language_family_name: 'Español',
+    language_family_english: 'Spanish',
+    language_family_iso: 'spa',
+    language_family_iso_2B: 'spa',
+    language_family_iso_2T: 'spa',
+    language_family_iso_1: 'es',
+    version_code: 'WTC',
+    version_name: 'World Bible Translation Center',
+    version_english: 'World Bible Translation Center',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Nuevo Testamento',
+    updated_on: '2016-08-02 21:02:36',
+    created_on: '2015-08-21 17:14:41',
+    right_to_left: 'false',
+    num_art: '6',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'SPNWTCN2DA/SPNWTCN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] } ]
+After Prune 1
+[ { dam_id: 'SPNR95N2DA',
+    fcbh_id: 'SPNR95N2DA',
+    volume_name: '1995 Reina Valera',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'SPN',
+    language_name: 'Español',
+    language_english: 'Spanish',
+    language_iso: 'spa',
+    language_iso_2B: 'spa',
+    language_iso_2T: 'spa',
+    language_iso_1: 'es',
+    language_iso_name: 'Spanish',
+    language_family_code: 'SPN',
+    language_family_name: 'Español',
+    language_family_english: 'Spanish',
+    language_family_iso: 'spa',
+    language_family_iso_2B: 'spa',
+    language_family_iso_2T: 'spa',
+    language_family_iso_1: 'es',
+    version_code: 'R95',
+    version_name: 'Reina Valera 1995 Version',
+    version_english: 'Reina Valera 1995 Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: 'Nuevo Testamento',
+    updated_on: '2015-10-14 23:14:25',
+    created_on: '2010-09-14 17:00:45',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2SPNR95',
+    audio_zip_path: 'SPNR95N2DA/SPNR95N2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] } ]
+REPLACE INTO Audio VALUES ('SPNR95N2DA', 'SPN', 'R95', 'NT', 'Drama', '1995 Reina Valera', '2018-02-20');
+Before Prune 0
+[]
+After Prune 0
+[]
+Before Prune 2
+[ { dam_id: 'THATSVN1DA',
+    fcbh_id: 'THATSVN1DA',
+    volume_name: 'Thai Standard Version',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'THA',
+    language_name: 'ภาษาไทย',
+    language_english: 'Thai',
+    language_iso: 'tha',
+    language_iso_2B: 'tha',
+    language_iso_2T: 'tha',
+    language_iso_1: 'th',
+    language_iso_name: 'Thai',
+    language_family_code: 'THA',
+    language_family_name: 'ภาษาไทย',
+    language_family_english: 'Thai',
+    language_family_iso: 'tha',
+    language_family_iso_2B: 'tha',
+    language_family_iso_2T: 'tha',
+    language_family_iso_1: 'th',
+    version_code: 'TSV',
+    version_name: '',
+    version_english: '',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2016-08-31 16:24:34',
+    created_on: '2016-01-25 18:52:52',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '0',
+    sku: '',
+    audio_zip_path: 'THATSVN1DA/THATSVN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'THATSVN2DA',
+    fcbh_id: 'THATSVN2DA',
+    volume_name: 'Thai Standard Version',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'THA',
+    language_name: 'ภาษาไทย',
+    language_english: 'Thai',
+    language_iso: 'tha',
+    language_iso_2B: 'tha',
+    language_iso_2T: 'tha',
+    language_iso_1: 'th',
+    language_iso_name: 'Thai',
+    language_family_code: 'THA',
+    language_family_name: 'ภาษาไทย',
+    language_family_english: 'Thai',
+    language_family_iso: 'tha',
+    language_family_iso_2B: 'tha',
+    language_family_iso_2T: 'tha',
+    language_family_iso_1: 'th',
+    version_code: 'TSV',
+    version_name: 'Thai Standard Version',
+    version_english: 'Thai Standard Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2017-07-11 20:53:04',
+    created_on: '2010-09-14 17:00:49',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2THATSV',
+    audio_zip_path: 'THATSVN2DA/THATSVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] } ]
+After Prune 0
+[]
+INSERT INTO AudioVersion VALUES ('ERV-UKR', 'UKR', 'O95');
+Before Prune 1
+[ { dam_id: 'UKRO95N2DA',
+    fcbh_id: 'UKRO95N2DA',
+    volume_name: '1995 Ohienko',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'UKR',
+    language_name: 'українська',
+    language_english: 'Ukrainian',
+    language_iso: 'ukr',
+    language_iso_2B: 'ukr',
+    language_iso_2T: 'ukr',
+    language_iso_1: 'uk',
+    language_iso_name: 'Ukrainian',
+    language_family_code: 'UKR',
+    language_family_name: 'українська',
+    language_family_english: 'Ukrainian',
+    language_family_iso: 'ukr',
+    language_family_iso_2B: 'ukr',
+    language_family_iso_2T: 'ukr',
+    language_family_iso_1: 'uk',
+    version_code: 'O95',
+    version_name: 'Urkainian Ohienko   ',
+    version_english: 'Urkainian Ohienko   ',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-10-27 21:18:32',
+    created_on: '2010-09-14 17:00:52',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2UKRO95',
+    audio_zip_path: 'UKRO95N2DA/UKRO95N2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'download',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] } ]
+After Prune 1
+[ { dam_id: 'UKRO95N2DA',
+    fcbh_id: 'UKRO95N2DA',
+    volume_name: '1995 Ohienko',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'UKR',
+    language_name: 'українська',
+    language_english: 'Ukrainian',
+    language_iso: 'ukr',
+    language_iso_2B: 'ukr',
+    language_iso_2T: 'ukr',
+    language_iso_1: 'uk',
+    language_iso_name: 'Ukrainian',
+    language_family_code: 'UKR',
+    language_family_name: 'українська',
+    language_family_english: 'Ukrainian',
+    language_family_iso: 'ukr',
+    language_family_iso_2B: 'ukr',
+    language_family_iso_2T: 'ukr',
+    language_family_iso_1: 'uk',
+    version_code: 'O95',
+    version_name: 'Urkainian Ohienko   ',
+    version_english: 'Urkainian Ohienko   ',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-10-27 21:18:32',
+    created_on: '2010-09-14 17:00:52',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2UKRO95',
+    audio_zip_path: 'UKRO95N2DA/UKRO95N2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'download',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] } ]
+REPLACE INTO Audio VALUES ('UKRO95N2DA', 'UKR', 'O95', 'NT', 'Drama', '1995 Ohienko', '2018-02-20');
+INSERT INTO AudioVersion VALUES ('ERV-URD', 'URD', 'PAK');
+Before Prune 2
+[ { dam_id: 'URDPAKN2DA',
+    fcbh_id: 'URDPAKN2DA',
+    volume_name: 'Bible Society Version (for Pakistan)',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'URD',
+    language_name: 'Urdu',
+    language_english: 'Urdu',
+    language_iso: 'urd',
+    language_iso_2B: 'urd',
+    language_iso_2T: 'urd',
+    language_iso_1: 'ur',
+    language_iso_name: 'Urdu',
+    language_family_code: 'URD',
+    language_family_name: 'Urdu',
+    language_family_english: 'Urdu',
+    language_family_iso: 'urd',
+    language_family_iso_2B: 'urd',
+    language_family_iso_2T: 'urd',
+    language_family_iso_1: 'ur',
+    version_code: 'PAK',
+    version_name: 'Pakistan',
+    version_english: 'Pakistan',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-10-27 21:19:08',
+    created_on: '2011-06-16 16:01:58',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'URDPAKN2DA/URDPAKN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'URDWTCN2DA',
+    fcbh_id: 'URDWTCN2DA',
+    volume_name: 'Easy-to-Read Version (for India)',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'URD',
+    language_name: 'Urdu',
+    language_english: 'Urdu',
+    language_iso: 'urd',
+    language_iso_2B: 'urd',
+    language_iso_2T: 'urd',
+    language_iso_1: 'ur',
+    language_iso_name: 'Urdu',
+    language_family_code: 'URD',
+    language_family_name: 'Urdu',
+    language_family_english: 'Urdu',
+    language_family_iso: 'urd',
+    language_family_iso_2B: 'urd',
+    language_family_iso_2T: 'urd',
+    language_family_iso_1: 'ur',
+    version_code: 'WTC',
+    version_name: 'World Bible Translation Center',
+    version_english: 'World Bible Translation Center',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2013-10-26 00:00:26',
+    created_on: '2012-05-09 21:45:25',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'URDWTCN2DA/URDWTCN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] } ]
+After Prune 1
+[ { dam_id: 'URDPAKN2DA',
+    fcbh_id: 'URDPAKN2DA',
+    volume_name: 'Bible Society Version (for Pakistan)',
+    status: 'live',
+    dbp_agreement: 'false',
+    expiration: '0000-00-00',
+    language_code: 'URD',
+    language_name: 'Urdu',
+    language_english: 'Urdu',
+    language_iso: 'urd',
+    language_iso_2B: 'urd',
+    language_iso_2T: 'urd',
+    language_iso_1: 'ur',
+    language_iso_name: 'Urdu',
+    language_family_code: 'URD',
+    language_family_name: 'Urdu',
+    language_family_english: 'Urdu',
+    language_family_iso: 'urd',
+    language_family_iso_2B: 'urd',
+    language_family_iso_2T: 'urd',
+    language_family_iso_1: 'ur',
+    version_code: 'PAK',
+    version_name: 'Pakistan',
+    version_english: 'Pakistan',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-10-27 21:19:08',
+    created_on: '2011-06-16 16:01:58',
+    right_to_left: 'false',
+    num_art: '3',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'URDPAKN2DA/URDPAKN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] } ]
+REPLACE INTO Audio VALUES ('URDPAKN2DA', 'URD', 'PAK', 'NT', 'Drama', 'Bible Society Version (for Pakistan)', '2018-02-20');
+Before Prune 3
+[ { dam_id: 'VIECOVN1DA',
+    fcbh_id: 'VIECOVN1DA',
+    volume_name: '1924 Khoi-Cadman',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'VIE',
+    language_name: 'Tiếng Việt',
+    language_english: 'Vietnamese',
+    language_iso: 'vie',
+    language_iso_2B: 'vie',
+    language_iso_2T: 'vie',
+    language_iso_1: 'vi',
+    language_iso_name: 'Vietnamese',
+    language_family_code: 'VIE',
+    language_family_name: 'Tiếng Việt',
+    language_family_english: 'Vietnamese',
+    language_family_iso: 'vie',
+    language_family_iso_2B: 'vie',
+    language_family_iso_2T: 'vie',
+    language_family_iso_1: 'vi',
+    version_code: 'COV',
+    version_name: '',
+    version_english: '',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2018-01-26 21:37:09',
+    created_on: '2010-09-14 16:59:52',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N1VIECOV',
+    audio_zip_path: 'VIECOVN1DA/VIECOVN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick' ],
+    resolution: [] },
+  { dam_id: 'VIEVOVN1DA',
+    fcbh_id: 'VIEVOVN1DA',
+    volume_name: 'Vietnamese Old Version',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'VIE',
+    language_name: 'Tiếng Việt',
+    language_english: 'Vietnamese',
+    language_iso: 'vie',
+    language_iso_2B: 'vie',
+    language_iso_2T: 'vie',
+    language_iso_1: 'vi',
+    language_iso_name: 'Vietnamese',
+    language_family_code: 'VIE',
+    language_family_name: 'Tiếng Việt',
+    language_family_english: 'Vietnamese',
+    language_family_iso: 'vie',
+    language_family_iso_2B: 'vie',
+    language_family_iso_2T: 'vie',
+    language_family_iso_1: 'vi',
+    version_code: 'VOV',
+    version_name: 'Vietnamese Old Version',
+    version_english: 'Vietnamese Old Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-07-28 20:46:36',
+    created_on: '2015-05-27 16:06:07',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: '',
+    audio_zip_path: 'VIEVOVN1DA/VIEVOVN1DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Non-Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] },
+  { dam_id: 'VIEVOVN2DA',
+    fcbh_id: 'VIEVOVN2DA',
+    volume_name: 'Vietnamese Old Version',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'VIE',
+    language_name: 'Tiếng Việt',
+    language_english: 'Vietnamese',
+    language_iso: 'vie',
+    language_iso_2B: 'vie',
+    language_iso_2T: 'vie',
+    language_iso_1: 'vi',
+    language_iso_name: 'Vietnamese',
+    language_family_code: 'VIE',
+    language_family_name: 'Tiếng Việt',
+    language_family_english: 'Vietnamese',
+    language_family_iso: 'vie',
+    language_family_iso_2B: 'vie',
+    language_family_iso_2T: 'vie',
+    language_family_iso_1: 'vi',
+    version_code: 'VOV',
+    version_name: 'Vietnamese Old Version',
+    version_english: 'Vietnamese Old Version',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2015-07-28 20:46:36',
+    created_on: '2010-09-14 17:00:54',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2VIEVOV',
+    audio_zip_path: 'VIEVOVN2DA/VIEVOVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] } ]
+After Prune 0
+[]
+Before Prune 1
+[ { dam_id: 'PESTPVN2DA',
+    fcbh_id: 'PESTPVN2DA',
+    volume_name: 'Today\'s Persian Version',
+    status: 'live',
+    dbp_agreement: 'true',
+    expiration: '0000-00-00',
+    language_code: 'PES',
+    language_name: 'فارسی',
+    language_english: 'Farsi, Western',
+    language_iso: 'fas',
+    language_iso_2B: 'per',
+    language_iso_2T: 'fas',
+    language_iso_1: 'fa',
+    language_iso_name: 'Persian',
+    language_family_code: 'PES',
+    language_family_name: 'فارسی',
+    language_family_english: 'Farsi, Western',
+    language_family_iso: 'fas',
+    language_family_iso_2B: 'per',
+    language_family_iso_2T: 'fas',
+    language_family_iso_1: 'fa',
+    version_code: 'TPV',
+    version_name: '',
+    version_english: '',
+    collection_code: 'NT',
+    rich: '0',
+    collection_name: '',
+    updated_on: '2017-03-10 20:11:27',
+    created_on: '2010-09-14 17:00:37',
+    right_to_left: 'false',
+    num_art: '4',
+    num_sample_audio: '1',
+    sku: 'N2PESTPV',
+    audio_zip_path: 'PESTPVN2DA/PESTPVN2DA.zip',
+    font: null,
+    arclight_language_id: '',
+    media: 'audio',
+    media_type: 'Drama',
+    delivery: 
+     [ 'mobile',
+       'web',
+       'web_streaming',
+       'streaming_url',
+       'mp3_cd',
+       'digital_download',
+       'bible_stick',
+       'subsplash' ],
+    resolution: [] } ]
+After Prune 0
+[]
+[ 'REPLACE INTO Audio VALUES (\'BLGAMBN1DA\', \'BLG\', \'AMB\', \'NT\', \'Non-Drama\', \'1924 Protestant Version\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'CHNUNVN2DA\', \'CHN\', \'UNV\', \'NT\', \'Drama\', \'Union Version (Traditional)\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'CHNUNVO1DA\', \'CHN\', \'UNV\', \'OT\', \'Non-Drama\', \'Union Version (Traditional)\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'CHNUNVO2DA\', \'CHN\', \'UNV\', \'OT\', \'Drama\', \'Union Version (Traditional)\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'ENGESVN2DA\', \'ENG\', \'ESV\', \'NT\', \'Drama\', \'Drama 2001/2007 English Standard\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'ENGESVO2DA\', \'ENG\', \'ESV\', \'OT\', \'Drama\', \'Drama 2001/2007 English Standard\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'ENGKJVN1DA\', \'ENG\', \'KJV\', \'NT\', \'Non-Drama\', \'King James\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'ENGKJVN2DA\', \'ENG\', \'KJV\', \'NT\', \'Drama\', \'King James\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'ENGKJVO1DA\', \'ENG\', \'KJV\', \'OT\', \'Non-Drama\', \'King James\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'ENGKJVO2DA\', \'ENG\', \'KJV\', \'OT\', \'Drama\', \'King James\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'ENGWEBN2DA\', \'ENG\', \'WEB\', \'NT\', \'Drama\', \'World English Bible\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'HUNHBSN1DA\', \'HUN\', \'HBS\', \'NT\', \'Non-Drama\', \'1990 Revised Edition\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'PORARAN2DA\', \'POR\', \'ARA\', \'NT\', \'Drama\', \'Almeida Revista e Atualizada (Brasil)\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'RUSS76N2DA\', \'RUS\', \'S76\', \'NT\', \'Drama\', \'1876 Synodal Bible\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'RUSS76O2DA\', \'RUS\', \'S76\', \'OT\', \'Drama\', \'1876 Synodal Bible\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'SPNR95N2DA\', \'SPN\', \'R95\', \'NT\', \'Drama\', \'1995 Reina Valera\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'UKRO95N2DA\', \'UKR\', \'O95\', \'NT\', \'Drama\', \'1995 Ohienko\', \'2018-02-20\');',
+  'REPLACE INTO Audio VALUES (\'URDPAKN2DA\', \'URD\', \'PAK\', \'NT\', \'Drama\', \'Bible Society Version (for Pakistan)\', \'2018-02-20\');' ]
+27
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'MAT', '55', '28');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'MRK', '56', '16');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'LUK', '57', '24');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'JHN', '58', '21');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'ACT', '59', '28');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'JAS', '60', '5');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', '1PE', '61', '5');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', '2PE', '62', '3');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', '1JN', '63', '5');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', '2JN', '64', '1');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', '3JN', '65', '1');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'JUD', '66', '1');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'ROM', '67', '16');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', '1CO', '68', '16');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', '2CO', '69', '13');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'GAL', '70', '6');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'EPH', '71', '6');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'PHP', '72', '4');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'COL', '73', '4');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', '1TH', '74', '5');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', '2TH', '75', '3');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', '1TI', '76', '6');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', '2TI', '77', '4');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'TIT', '78', '3');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'PHM', '79', '1');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'HEB', '80', '13');
+REPLACE INTO AudioBook VALUES ('BLGAMBN1DA', 'REV', '81', '22');
+27
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'MAT', '55', '28');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'MRK', '56', '16');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'LUK', '57', '24');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'JHN', '58', '21');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'ACT', '59', '28');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'ROM', '60', '16');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', '1CO', '61', '16');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', '2CO', '62', '13');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'GAL', '63', '6');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'EPH', '64', '6');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'PHP', '65', '4');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'COL', '66', '4');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', '1TH', '67', '5');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', '2TH', '68', '3');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', '1TI', '69', '6');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', '2TI', '70', '4');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'TIT', '71', '3');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'PHM', '72', '1');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'HEB', '73', '13');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'JAS', '74', '5');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', '1PE', '75', '5');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', '2PE', '76', '3');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', '1JN', '77', '5');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', '2JN', '78', '1');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', '3JN', '79', '1');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'JUD', '80', '1');
+REPLACE INTO AudioBook VALUES ('CHNUNVN2DA', 'REV', '81', '22');
+39
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'GEN', '01', '50');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'EXO', '02', '40');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'LEV', '03', '27');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'NUM', '04', '36');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'DEU', '05', '34');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'JOS', '06', '24');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'JDG', '07', '21');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'RUT', '08', '4');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', '1SA', '09', '31');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', '2SA', '10', '24');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', '1KI', '11', '22');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', '2KI', '12', '25');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', '1CH', '13', '29');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', '2CH', '14', '36');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'EZR', '15', '10');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'NEH', '16', '13');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'EST', '17', '10');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'JOB', '18', '42');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'PSA', '19', '150');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'PRO', '20', '31');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'ECC', '21', '12');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'SNG', '22', '8');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'ISA', '23', '66');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'JER', '24', '52');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'LAM', '25', '5');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'EZK', '26', '48');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'DAN', '27', '12');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'HOS', '28', '14');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'JOL', '29', '3');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'AMO', '30', '9');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'OBA', '31', '1');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'JON', '32', '4');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'MIC', '33', '7');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'NAM', '34', '3');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'HAB', '35', '3');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'ZEP', '36', '3');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'HAG', '37', '2');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'ZEC', '38', '14');
+REPLACE INTO AudioBook VALUES ('CHNUNVO1DA', 'MAL', '39', '4');
+39
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'GEN', '01', '50');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'EXO', '02', '40');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'LEV', '03', '27');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'NUM', '04', '36');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'DEU', '05', '34');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'JOS', '06', '24');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'JDG', '07', '21');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'RUT', '08', '4');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', '1SA', '09', '31');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', '2SA', '10', '24');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', '1KI', '11', '22');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', '2KI', '12', '25');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', '1CH', '13', '29');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', '2CH', '14', '36');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'EZR', '15', '10');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'NEH', '16', '13');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'EST', '17', '10');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'JOB', '18', '42');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'PSA', '19', '150');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'PRO', '20', '31');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'ECC', '21', '12');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'SNG', '22', '8');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'ISA', '23', '66');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'JER', '24', '52');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'LAM', '25', '5');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'EZK', '26', '48');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'DAN', '27', '12');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'HOS', '28', '14');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'JOL', '29', '3');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'AMO', '30', '9');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'OBA', '31', '1');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'JON', '32', '4');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'MIC', '33', '7');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'NAM', '34', '3');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'HAB', '35', '3');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'ZEP', '36', '3');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'HAG', '37', '2');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'ZEC', '38', '14');
+REPLACE INTO AudioBook VALUES ('CHNUNVO2DA', 'MAL', '39', '4');
+27
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'MAT', '55', '28');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'MRK', '56', '16');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'LUK', '57', '24');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'JHN', '58', '21');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'ACT', '59', '28');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'ROM', '60', '16');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', '1CO', '61', '16');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', '2CO', '62', '13');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'GAL', '63', '6');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'EPH', '64', '6');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'PHP', '65', '4');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'COL', '66', '4');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', '1TH', '67', '5');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', '2TH', '68', '3');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', '1TI', '69', '6');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', '2TI', '70', '4');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'TIT', '71', '3');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'PHM', '72', '1');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'HEB', '73', '13');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'JAS', '74', '5');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', '1PE', '75', '5');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', '2PE', '76', '3');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', '1JN', '77', '5');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', '2JN', '78', '1');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', '3JN', '79', '1');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'JUD', '80', '1');
+REPLACE INTO AudioBook VALUES ('ENGESVN2DA', 'REV', '81', '22');
+39
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'GEN', '01', '50');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'EXO', '02', '40');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'LEV', '03', '27');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'NUM', '04', '36');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'DEU', '05', '34');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'JOS', '06', '24');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'JDG', '07', '21');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'RUT', '08', '4');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', '1SA', '09', '31');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', '2SA', '10', '24');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', '1KI', '11', '22');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', '2KI', '12', '25');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', '1CH', '13', '29');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', '2CH', '14', '36');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'EZR', '15', '10');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'NEH', '16', '13');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'EST', '17', '10');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'JOB', '18', '42');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'PSA', '19', '150');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'PRO', '20', '31');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'ECC', '21', '12');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'SNG', '22', '8');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'ISA', '23', '66');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'JER', '24', '52');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'LAM', '25', '5');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'EZK', '26', '48');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'DAN', '27', '12');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'HOS', '28', '14');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'JOL', '29', '3');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'AMO', '30', '9');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'OBA', '31', '1');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'JON', '32', '4');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'MIC', '33', '7');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'NAM', '34', '3');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'HAB', '35', '3');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'ZEP', '36', '3');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'HAG', '37', '2');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'ZEC', '38', '14');
+REPLACE INTO AudioBook VALUES ('ENGESVO2DA', 'MAL', '39', '4');
+27
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'MAT', '55', '28');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'MRK', '56', '16');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'LUK', '57', '24');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'JHN', '58', '21');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'ACT', '59', '28');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'ROM', '60', '16');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', '1CO', '61', '16');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', '2CO', '62', '13');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'GAL', '63', '6');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'EPH', '64', '6');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'PHP', '65', '4');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'COL', '66', '4');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', '1TH', '67', '5');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', '2TH', '68', '3');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', '1TI', '69', '6');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', '2TI', '70', '4');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'TIT', '71', '3');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'PHM', '72', '1');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'HEB', '73', '13');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'JAS', '74', '5');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', '1PE', '75', '5');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', '2PE', '76', '3');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', '1JN', '77', '5');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', '2JN', '78', '1');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', '3JN', '79', '1');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'JUD', '80', '1');
+REPLACE INTO AudioBook VALUES ('ENGKJVN1DA', 'REV', '81', '22');
+27
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'MAT', '55', '28');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'MRK', '56', '16');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'LUK', '57', '24');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'JHN', '58', '21');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'ACT', '59', '28');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'ROM', '60', '16');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', '1CO', '61', '16');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', '2CO', '62', '13');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'GAL', '63', '6');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'EPH', '64', '6');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'PHP', '65', '4');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'COL', '66', '4');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', '1TH', '67', '5');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', '2TH', '68', '3');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', '1TI', '69', '6');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', '2TI', '70', '4');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'TIT', '71', '3');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'PHM', '72', '1');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'HEB', '73', '13');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'JAS', '74', '5');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', '1PE', '75', '5');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', '2PE', '76', '3');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', '1JN', '77', '5');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', '2JN', '78', '1');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', '3JN', '79', '1');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'JUD', '80', '1');
+REPLACE INTO AudioBook VALUES ('ENGKJVN2DA', 'REV', '81', '22');
+39
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'GEN', '01', '50');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'EXO', '02', '40');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'LEV', '03', '27');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'NUM', '04', '36');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'DEU', '05', '34');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'JOS', '06', '24');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'JDG', '07', '21');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'RUT', '08', '4');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', '1SA', '09', '31');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', '2SA', '10', '24');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', '1KI', '11', '22');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', '2KI', '12', '25');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', '1CH', '13', '29');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', '2CH', '14', '36');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'EZR', '15', '10');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'NEH', '16', '13');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'EST', '17', '10');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'JOB', '18', '42');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'PSA', '19', '150');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'PRO', '20', '31');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'ECC', '21', '12');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'SNG', '22', '8');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'ISA', '23', '66');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'JER', '24', '52');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'LAM', '25', '5');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'EZK', '26', '48');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'DAN', '27', '12');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'HOS', '28', '14');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'JOL', '29', '3');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'AMO', '30', '9');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'OBA', '31', '1');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'JON', '32', '4');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'MIC', '33', '7');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'NAM', '34', '3');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'HAB', '35', '3');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'ZEP', '36', '3');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'HAG', '37', '2');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'ZEC', '38', '14');
+REPLACE INTO AudioBook VALUES ('ENGKJVO1DA', 'MAL', '39', '4');
+39
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'GEN', '01', '50');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'EXO', '02', '40');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'LEV', '03', '27');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'NUM', '04', '36');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'DEU', '05', '34');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'JOS', '06', '24');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'JDG', '07', '21');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'RUT', '08', '4');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', '1SA', '09', '31');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', '2SA', '10', '24');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', '1KI', '11', '22');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', '2KI', '12', '25');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', '1CH', '13', '29');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', '2CH', '14', '36');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'EZR', '15', '10');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'NEH', '16', '13');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'EST', '17', '10');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'JOB', '18', '42');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'PSA', '19', '150');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'PRO', '20', '31');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'ECC', '21', '12');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'SNG', '22', '8');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'ISA', '23', '66');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'JER', '24', '52');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'LAM', '25', '5');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'EZK', '26', '48');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'DAN', '27', '12');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'HOS', '28', '14');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'JOL', '29', '3');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'AMO', '30', '9');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'OBA', '31', '1');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'JON', '32', '4');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'MIC', '33', '7');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'NAM', '34', '3');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'HAB', '35', '3');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'ZEP', '36', '3');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'HAG', '37', '2');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'ZEC', '38', '14');
+REPLACE INTO AudioBook VALUES ('ENGKJVO2DA', 'MAL', '39', '4');
+27
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'MAT', '55', '28');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'MRK', '56', '16');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'LUK', '57', '24');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'JHN', '58', '21');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'ACT', '59', '28');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'ROM', '60', '16');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', '1CO', '61', '16');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', '2CO', '62', '13');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'GAL', '63', '6');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'EPH', '64', '6');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'PHP', '65', '4');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'COL', '66', '4');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', '1TH', '67', '5');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', '2TH', '68', '3');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', '1TI', '69', '6');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', '2TI', '70', '4');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'TIT', '71', '3');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'PHM', '72', '1');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'HEB', '73', '13');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'JAS', '74', '5');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', '1PE', '75', '5');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', '2PE', '76', '3');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', '1JN', '77', '5');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', '2JN', '78', '1');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', '3JN', '79', '1');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'JUD', '80', '1');
+REPLACE INTO AudioBook VALUES ('ENGWEBN2DA', 'REV', '81', '22');
+27
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'MAT', '55', '28');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'MRK', '56', '16');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'LUK', '57', '24');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'JHN', '58', '21');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'ACT', '59', '28');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'ROM', '60', '16');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', '1CO', '61', '16');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', '2CO', '62', '13');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'GAL', '63', '6');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'EPH', '64', '6');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'PHP', '65', '4');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'COL', '66', '4');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', '1TH', '67', '5');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', '2TH', '68', '3');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', '1TI', '69', '6');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', '2TI', '70', '4');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'TIT', '71', '3');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'PHM', '72', '1');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'HEB', '73', '13');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'JAS', '74', '5');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', '1PE', '75', '5');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', '2PE', '76', '3');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', '1JN', '77', '5');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', '2JN', '78', '1');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', '3JN', '79', '1');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'JUD', '80', '1');
+REPLACE INTO AudioBook VALUES ('HUNHBSN1DA', 'REV', '81', '22');
+27
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'MAT', '55', '28');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'MRK', '56', '16');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'LUK', '57', '24');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'JHN', '58', '21');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'ACT', '59', '28');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'ROM', '60', '16');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', '1CO', '61', '16');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', '2CO', '62', '13');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'GAL', '63', '6');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'EPH', '64', '6');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'PHP', '65', '4');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'COL', '66', '4');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', '1TH', '67', '5');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', '2TH', '68', '3');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', '1TI', '69', '6');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', '2TI', '70', '4');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'TIT', '71', '3');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'PHM', '72', '1');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'HEB', '73', '13');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'JAS', '74', '5');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', '1PE', '75', '5');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', '2PE', '76', '3');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', '1JN', '77', '5');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', '2JN', '78', '1');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', '3JN', '79', '1');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'JUD', '80', '1');
+REPLACE INTO AudioBook VALUES ('PORARAN2DA', 'REV', '81', '22');
+27
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'MAT', '55', '28');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'MRK', '56', '16');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'LUK', '57', '24');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'JHN', '58', '21');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'ACT', '59', '28');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'JAS', '60', '5');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', '1PE', '61', '5');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', '2PE', '62', '3');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', '1JN', '63', '5');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', '2JN', '64', '1');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', '3JN', '65', '1');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'JUD', '66', '1');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'ROM', '67', '16');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', '1CO', '68', '16');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', '2CO', '69', '13');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'GAL', '70', '6');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'EPH', '71', '6');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'PHP', '72', '4');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'COL', '73', '4');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', '1TH', '74', '5');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', '2TH', '75', '3');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', '1TI', '76', '6');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', '2TI', '77', '4');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'TIT', '78', '3');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'PHM', '79', '1');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'HEB', '80', '13');
+REPLACE INTO AudioBook VALUES ('RUSS76N2DA', 'REV', '81', '22');
+39
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'GEN', '01', '50');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'EXO', '02', '40');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'LEV', '03', '27');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'NUM', '04', '36');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'DEU', '05', '34');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'JOS', '06', '24');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'JDG', '07', '21');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'RUT', '08', '4');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', '1SA', '09', '31');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', '2SA', '10', '24');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', '1KI', '11', '22');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', '2KI', '12', '25');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', '1CH', '13', '29');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', '2CH', '14', '36');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'EZR', '15', '10');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'NEH', '16', '13');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'EST', '17', '10');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'JOB', '18', '42');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'PSA', '19', '150');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'PRO', '20', '31');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'ECC', '21', '12');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'SNG', '22', '8');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'ISA', '23', '66');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'JER', '24', '52');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'LAM', '25', '5');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'EZK', '26', '48');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'DAN', '27', '12');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'HOS', '28', '14');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'JOL', '29', '3');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'AMO', '30', '9');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'OBA', '31', '1');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'JON', '32', '4');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'MIC', '33', '7');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'NAM', '34', '3');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'HAB', '35', '3');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'ZEP', '36', '3');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'HAG', '37', '2');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'ZEC', '38', '14');
+REPLACE INTO AudioBook VALUES ('RUSS76O2DA', 'MAL', '39', '4');
+27
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'MAT', '55', '28');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'MRK', '56', '16');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'LUK', '57', '24');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'JHN', '58', '21');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'ACT', '59', '28');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'ROM', '60', '16');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', '1CO', '61', '16');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', '2CO', '62', '13');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'GAL', '63', '6');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'EPH', '64', '6');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'PHP', '65', '4');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'COL', '66', '4');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', '1TH', '67', '5');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', '2TH', '68', '3');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', '1TI', '69', '6');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', '2TI', '70', '4');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'TIT', '71', '3');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'PHM', '72', '1');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'HEB', '73', '13');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'JAS', '74', '5');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', '1PE', '75', '5');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', '2PE', '76', '3');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', '1JN', '77', '5');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', '2JN', '78', '1');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', '3JN', '79', '1');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'JUD', '80', '1');
+REPLACE INTO AudioBook VALUES ('SPNR95N2DA', 'REV', '81', '22');
+27
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'MAT', '55', '28');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'MRK', '56', '16');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'LUK', '57', '24');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'JHN', '58', '21');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'ACT', '59', '28');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'ROM', '60', '16');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', '1CO', '61', '16');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', '2CO', '62', '13');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'GAL', '63', '6');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'EPH', '64', '6');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'PHP', '65', '4');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'COL', '66', '4');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', '1TH', '67', '5');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', '2TH', '68', '3');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', '1TI', '69', '6');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', '2TI', '70', '4');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'TIT', '71', '3');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'PHM', '72', '1');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'HEB', '73', '13');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'JAS', '74', '5');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', '1PE', '75', '5');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', '2PE', '76', '3');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', '1JN', '77', '5');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', '2JN', '78', '1');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', '3JN', '79', '1');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'JUD', '80', '1');
+REPLACE INTO AudioBook VALUES ('UKRO95N2DA', 'REV', '81', '22');
+27
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'MAT', '55', '28');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'MRK', '56', '16');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'LUK', '57', '24');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'JHN', '58', '21');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'ACT', '59', '28');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'ROM', '60', '16');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', '1CO', '61', '16');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', '2CO', '62', '13');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'GAL', '63', '6');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'EPH', '64', '6');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'PHP', '65', '4');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'COL', '66', '4');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', '1TH', '67', '5');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', '2TH', '68', '3');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', '1TI', '69', '6');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', '2TI', '70', '4');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'TIT', '71', '3');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'PHM', '72', '1');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'HEB', '73', '13');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'JAS', '74', '5');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', '1PE', '75', '5');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', '2PE', '76', '3');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', '1JN', '77', '5');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', '2JN', '78', '1');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', '3JN', '79', '1');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'JUD', '80', '1');
+REPLACE INTO AudioBook VALUES ('URDPAKN2DA', 'REV', '81', '22');
+Verses BLGAMBN1DA  Matt
+Verses BLGAMBN1DA  Mark
+Verses BLGAMBN1DA  Luke
+Verses BLGAMBN1DA  John
+Verses BLGAMBN1DA  Acts
+Verses BLGAMBN1DA  Jas
+Verses BLGAMBN1DA  1Pet
+Verses BLGAMBN1DA  2Pet
+Verses BLGAMBN1DA  1John
+Verses BLGAMBN1DA  2John
+Verses BLGAMBN1DA  3John
+Verses BLGAMBN1DA  Jude
+Verses BLGAMBN1DA  Rom
+Verses BLGAMBN1DA  1Cor
+Verses BLGAMBN1DA  2Cor
+Verses BLGAMBN1DA  Gal
+Verses BLGAMBN1DA  Eph
+Verses BLGAMBN1DA  Phil
+Verses BLGAMBN1DA  Col
+Verses BLGAMBN1DA  1Thess
+Verses BLGAMBN1DA  2Thess
+Verses BLGAMBN1DA  1Tim
+Verses BLGAMBN1DA  2Tim
+Verses BLGAMBN1DA  Titus
+Verses BLGAMBN1DA  Phlm
+Verses BLGAMBN1DA  Heb
+Verses BLGAMBN1DA  Rev
+Verses CHNUNVN2DA  Matt
+Write Verses CHNUNVN2DA  Matt
+Verses CHNUNVN2DA  Mark
+Write Verses CHNUNVN2DA  Mark
+Verses CHNUNVN2DA  Luke
+Write Verses CHNUNVN2DA  Luke
+Verses CHNUNVN2DA  John
+Write Verses CHNUNVN2DA  John
+Verses CHNUNVN2DA  Acts
+Write Verses CHNUNVN2DA  Acts
+Verses CHNUNVN2DA  Rom
+Write Verses CHNUNVN2DA  Rom
+Verses CHNUNVN2DA  1Cor
+Write Verses CHNUNVN2DA  1Cor
+Verses CHNUNVN2DA  2Cor
+Write Verses CHNUNVN2DA  2Cor
+Verses CHNUNVN2DA  Gal
+Write Verses CHNUNVN2DA  Gal
+Verses CHNUNVN2DA  Eph
+Write Verses CHNUNVN2DA  Eph
+Verses CHNUNVN2DA  Phil
+Write Verses CHNUNVN2DA  Phil
+Verses CHNUNVN2DA  Col
+Write Verses CHNUNVN2DA  Col
+Verses CHNUNVN2DA  1Thess
+Write Verses CHNUNVN2DA  1Thess
+Verses CHNUNVN2DA  2Thess
+Write Verses CHNUNVN2DA  2Thess
+Verses CHNUNVN2DA  1Tim
+Write Verses CHNUNVN2DA  1Tim
+Verses CHNUNVN2DA  2Tim
+Write Verses CHNUNVN2DA  2Tim
+Verses CHNUNVN2DA  Titus
+Write Verses CHNUNVN2DA  Titus
+Verses CHNUNVN2DA  Phlm
+Write Verses CHNUNVN2DA  Phlm
+Verses CHNUNVN2DA  Heb
+Write Verses CHNUNVN2DA  Heb
+Verses CHNUNVN2DA  Jas
+Write Verses CHNUNVN2DA  Jas
+Verses CHNUNVN2DA  1Pet
+Write Verses CHNUNVN2DA  1Pet
+Verses CHNUNVN2DA  2Pet
+Write Verses CHNUNVN2DA  2Pet
+Verses CHNUNVN2DA  1John
+Write Verses CHNUNVN2DA  1John
+Verses CHNUNVN2DA  2John
+Write Verses CHNUNVN2DA  2John
+Verses CHNUNVN2DA  3John
+Write Verses CHNUNVN2DA  3John
+Verses CHNUNVN2DA  Jude
+Write Verses CHNUNVN2DA  Jude
+Verses CHNUNVN2DA  Rev
+Write Verses CHNUNVN2DA  Rev
+Verses CHNUNVO1DA  Gen
+Verses CHNUNVO1DA  Exod
+Verses CHNUNVO1DA  Lev
+Verses CHNUNVO1DA  Num
+Verses CHNUNVO1DA  Deut
+Verses CHNUNVO1DA  Josh
+Verses CHNUNVO1DA  Judg
+Verses CHNUNVO1DA  Ruth
+Verses CHNUNVO1DA  1Sam
+Verses CHNUNVO1DA  2Sam
+Verses CHNUNVO1DA  1Kgs
+Verses CHNUNVO1DA  2Kgs
+Verses CHNUNVO1DA  1Chr
+Verses CHNUNVO1DA  2Chr
+Verses CHNUNVO1DA  Ezra
+Verses CHNUNVO1DA  Neh
+Verses CHNUNVO1DA  Esth
+Verses CHNUNVO1DA  Job
+Verses CHNUNVO1DA  Ps
+Verses CHNUNVO1DA  Prov
+Verses CHNUNVO1DA  Eccl
+Verses CHNUNVO1DA  Song
+Verses CHNUNVO1DA  Isa
+Verses CHNUNVO1DA  Jer
+Verses CHNUNVO1DA  Lam
+Verses CHNUNVO1DA  Ezek
+Verses CHNUNVO1DA  Dan
+Verses CHNUNVO1DA  Hos
+Verses CHNUNVO1DA  Joel
+Verses CHNUNVO1DA  Amos
+Verses CHNUNVO1DA  Obad
+Verses CHNUNVO1DA  Jonah
+Verses CHNUNVO1DA  Mic
+Verses CHNUNVO1DA  Nah
+Verses CHNUNVO1DA  Hab
+Verses CHNUNVO1DA  Zeph
+Verses CHNUNVO1DA  Hag
+Verses CHNUNVO1DA  Zech
+Verses CHNUNVO1DA  Mal
+Verses CHNUNVO2DA  Gen
+Verses CHNUNVO2DA  Exod
+Verses CHNUNVO2DA  Lev
+Verses CHNUNVO2DA  Num
+Verses CHNUNVO2DA  Deut
+Verses CHNUNVO2DA  Josh
+Verses CHNUNVO2DA  Judg
+Verses CHNUNVO2DA  Ruth
+Verses CHNUNVO2DA  1Sam
+Verses CHNUNVO2DA  2Sam
+Verses CHNUNVO2DA  1Kgs
+Verses CHNUNVO2DA  2Kgs
+Verses CHNUNVO2DA  1Chr
+Verses CHNUNVO2DA  2Chr
+Verses CHNUNVO2DA  Ezra
+Verses CHNUNVO2DA  Neh
+Verses CHNUNVO2DA  Esth
+Verses CHNUNVO2DA  Job
+Verses CHNUNVO2DA  Ps
+Verses CHNUNVO2DA  Prov
+Verses CHNUNVO2DA  Eccl
+Verses CHNUNVO2DA  Song
+Verses CHNUNVO2DA  Isa
+Verses CHNUNVO2DA  Jer
+Verses CHNUNVO2DA  Lam
+Verses CHNUNVO2DA  Ezek
+Verses CHNUNVO2DA  Dan
+Verses CHNUNVO2DA  Hos
+Verses CHNUNVO2DA  Joel
+Verses CHNUNVO2DA  Amos
+Verses CHNUNVO2DA  Obad
+Verses CHNUNVO2DA  Jonah
+Verses CHNUNVO2DA  Mic
+Verses CHNUNVO2DA  Nah
+Verses CHNUNVO2DA  Hab
+Verses CHNUNVO2DA  Zeph
+Verses CHNUNVO2DA  Hag
+Verses CHNUNVO2DA  Zech
+Verses CHNUNVO2DA  Mal
+Verses ENGESVN2DA  Matt
+Write Verses ENGESVN2DA  Matt
+Verses ENGESVN2DA  Mark
+Write Verses ENGESVN2DA  Mark
+Verses ENGESVN2DA  Luke
+Write Verses ENGESVN2DA  Luke
+Verses ENGESVN2DA  John
+Write Verses ENGESVN2DA  John
+Verses ENGESVN2DA  Acts
+Write Verses ENGESVN2DA  Acts
+Verses ENGESVN2DA  Rom
+Write Verses ENGESVN2DA  Rom
+Verses ENGESVN2DA  1Cor
+Write Verses ENGESVN2DA  1Cor
+Verses ENGESVN2DA  2Cor
+Write Verses ENGESVN2DA  2Cor
+Verses ENGESVN2DA  Gal
+Write Verses ENGESVN2DA  Gal
+Verses ENGESVN2DA  Eph
+Write Verses ENGESVN2DA  Eph
+Verses ENGESVN2DA  Phil
+Write Verses ENGESVN2DA  Phil
+Verses ENGESVN2DA  Col
+Write Verses ENGESVN2DA  Col
+Verses ENGESVN2DA  1Thess
+Write Verses ENGESVN2DA  1Thess
+Verses ENGESVN2DA  2Thess
+Write Verses ENGESVN2DA  2Thess
+Verses ENGESVN2DA  1Tim
+Write Verses ENGESVN2DA  1Tim
+Verses ENGESVN2DA  2Tim
+Write Verses ENGESVN2DA  2Tim
+Verses ENGESVN2DA  Titus
+Write Verses ENGESVN2DA  Titus
+Verses ENGESVN2DA  Phlm
+Write Verses ENGESVN2DA  Phlm
+Verses ENGESVN2DA  Heb
+Write Verses ENGESVN2DA  Heb
+Verses ENGESVN2DA  Jas
+Write Verses ENGESVN2DA  Jas
+Verses ENGESVN2DA  1Pet
+Write Verses ENGESVN2DA  1Pet
+Verses ENGESVN2DA  2Pet
+Write Verses ENGESVN2DA  2Pet
+Verses ENGESVN2DA  1John
+Write Verses ENGESVN2DA  1John
+Verses ENGESVN2DA  2John
+Write Verses ENGESVN2DA  2John
+Verses ENGESVN2DA  3John
+Write Verses ENGESVN2DA  3John
+Verses ENGESVN2DA  Jude
+Write Verses ENGESVN2DA  Jude
+Verses ENGESVN2DA  Rev
+Write Verses ENGESVN2DA  Rev
+Verses ENGESVO2DA  Gen
+Write Verses ENGESVO2DA  Gen
+Verses ENGESVO2DA  Exod
+Write Verses ENGESVO2DA  Exod
+Verses ENGESVO2DA  Lev
+Write Verses ENGESVO2DA  Lev
+Verses ENGESVO2DA  Num
+Write Verses ENGESVO2DA  Num
+Verses ENGESVO2DA  Deut
+Write Verses ENGESVO2DA  Deut
+Verses ENGESVO2DA  Josh
+Write Verses ENGESVO2DA  Josh
+Verses ENGESVO2DA  Judg
+Write Verses ENGESVO2DA  Judg
+Verses ENGESVO2DA  Ruth
+Write Verses ENGESVO2DA  Ruth
+Verses ENGESVO2DA  1Sam
+Write Verses ENGESVO2DA  1Sam
+Verses ENGESVO2DA  2Sam
+Write Verses ENGESVO2DA  2Sam
+Verses ENGESVO2DA  1Kgs
+Write Verses ENGESVO2DA  1Kgs
+Verses ENGESVO2DA  2Kgs
+Write Verses ENGESVO2DA  2Kgs
+Verses ENGESVO2DA  1Chr
+Write Verses ENGESVO2DA  1Chr
+Verses ENGESVO2DA  2Chr
+Write Verses ENGESVO2DA  2Chr
+Verses ENGESVO2DA  Ezra
+Write Verses ENGESVO2DA  Ezra
+Verses ENGESVO2DA  Neh
+Write Verses ENGESVO2DA  Neh
+Verses ENGESVO2DA  Esth
+Write Verses ENGESVO2DA  Esth
+Verses ENGESVO2DA  Job
+Write Verses ENGESVO2DA  Job
+Verses ENGESVO2DA  Ps
+Write Verses ENGESVO2DA  Ps
+Verses ENGESVO2DA  Prov
+Write Verses ENGESVO2DA  Prov
+Verses ENGESVO2DA  Eccl
+Write Verses ENGESVO2DA  Eccl
+Verses ENGESVO2DA  Song
+Write Verses ENGESVO2DA  Song
+Verses ENGESVO2DA  Isa
+Write Verses ENGESVO2DA  Isa
+Verses ENGESVO2DA  Jer
+Write Verses ENGESVO2DA  Jer
+Verses ENGESVO2DA  Lam
+Write Verses ENGESVO2DA  Lam
+Verses ENGESVO2DA  Ezek
+Write Verses ENGESVO2DA  Ezek
+Verses ENGESVO2DA  Dan
+Write Verses ENGESVO2DA  Dan
+Verses ENGESVO2DA  Hos
+Write Verses ENGESVO2DA  Hos
+Verses ENGESVO2DA  Joel
+Write Verses ENGESVO2DA  Joel
+Verses ENGESVO2DA  Amos
+Write Verses ENGESVO2DA  Amos
+Verses ENGESVO2DA  Obad
+Write Verses ENGESVO2DA  Obad
+Verses ENGESVO2DA  Jonah
+Write Verses ENGESVO2DA  Jonah
+Verses ENGESVO2DA  Mic
+Write Verses ENGESVO2DA  Mic
+Verses ENGESVO2DA  Nah
+Write Verses ENGESVO2DA  Nah
+Verses ENGESVO2DA  Hab
+Write Verses ENGESVO2DA  Hab
+Verses ENGESVO2DA  Zeph
+Write Verses ENGESVO2DA  Zeph
+Verses ENGESVO2DA  Hag
+Write Verses ENGESVO2DA  Hag
+Verses ENGESVO2DA  Zech
+Write Verses ENGESVO2DA  Zech
+Verses ENGESVO2DA  Mal
+Write Verses ENGESVO2DA  Mal
+Verses ENGKJVN1DA  Matt
+Verses ENGKJVN1DA  Mark
+Verses ENGKJVN1DA  Luke
+Verses ENGKJVN1DA  John
+Verses ENGKJVN1DA  Acts
+Verses ENGKJVN1DA  Rom
+Verses ENGKJVN1DA  1Cor
+Verses ENGKJVN1DA  2Cor
+Verses ENGKJVN1DA  Gal
+Verses ENGKJVN1DA  Eph
+Verses ENGKJVN1DA  Phil
+Verses ENGKJVN1DA  Col
+Verses ENGKJVN1DA  1Thess
+Verses ENGKJVN1DA  2Thess
+Verses ENGKJVN1DA  1Tim
+Verses ENGKJVN1DA  2Tim
+Verses ENGKJVN1DA  Titus
+Verses ENGKJVN1DA  Phlm
+Verses ENGKJVN1DA  Heb
+Verses ENGKJVN1DA  Jas
+Verses ENGKJVN1DA  1Pet
+Verses ENGKJVN1DA  2Pet
+Verses ENGKJVN1DA  1John
+Verses ENGKJVN1DA  2John
+Verses ENGKJVN1DA  3John
+Verses ENGKJVN1DA  Jude
+Verses ENGKJVN1DA  Rev
+Verses ENGKJVN2DA  Matt
+Verses ENGKJVN2DA  Mark
+Verses ENGKJVN2DA  Luke
+Verses ENGKJVN2DA  John
+Verses ENGKJVN2DA  Acts
+Verses ENGKJVN2DA  Rom
+Verses ENGKJVN2DA  1Cor
+Verses ENGKJVN2DA  2Cor
+Verses ENGKJVN2DA  Gal
+Verses ENGKJVN2DA  Eph
+Verses ENGKJVN2DA  Phil
+Verses ENGKJVN2DA  Col
+Verses ENGKJVN2DA  1Thess
+Verses ENGKJVN2DA  2Thess
+Verses ENGKJVN2DA  1Tim
+Verses ENGKJVN2DA  2Tim
+Verses ENGKJVN2DA  Titus
+Verses ENGKJVN2DA  Phlm
+Verses ENGKJVN2DA  Heb
+Verses ENGKJVN2DA  Jas
+Verses ENGKJVN2DA  1Pet
+Verses ENGKJVN2DA  2Pet
+Verses ENGKJVN2DA  1John
+Verses ENGKJVN2DA  2John
+Verses ENGKJVN2DA  3John
+Verses ENGKJVN2DA  Jude
+Verses ENGKJVN2DA  Rev
+Verses ENGKJVO1DA  Gen
+Verses ENGKJVO1DA  Exod
+Verses ENGKJVO1DA  Lev
+Verses ENGKJVO1DA  Num
+Verses ENGKJVO1DA  Deut
+Verses ENGKJVO1DA  Josh
+Verses ENGKJVO1DA  Judg
+Verses ENGKJVO1DA  Ruth
+Verses ENGKJVO1DA  1Sam
+Verses ENGKJVO1DA  2Sam
+Verses ENGKJVO1DA  1Kgs
+Verses ENGKJVO1DA  2Kgs
+Verses ENGKJVO1DA  1Chr
+Verses ENGKJVO1DA  2Chr
+Verses ENGKJVO1DA  Ezra
+Verses ENGKJVO1DA  Neh
+Verses ENGKJVO1DA  Esth
+Verses ENGKJVO1DA  Job
+Verses ENGKJVO1DA  Ps
+Verses ENGKJVO1DA  Prov
+Verses ENGKJVO1DA  Eccl
+Verses ENGKJVO1DA  Song
+Verses ENGKJVO1DA  Isa
+Verses ENGKJVO1DA  Jer
+Verses ENGKJVO1DA  Lam
+Verses ENGKJVO1DA  Ezek
+Verses ENGKJVO1DA  Dan
+Verses ENGKJVO1DA  Hos
+Verses ENGKJVO1DA  Joel
+Verses ENGKJVO1DA  Amos
+Verses ENGKJVO1DA  Obad
+Verses ENGKJVO1DA  Jonah
+Verses ENGKJVO1DA  Mic
+Verses ENGKJVO1DA  Nah
+Verses ENGKJVO1DA  Hab
+Verses ENGKJVO1DA  Zeph
+Verses ENGKJVO1DA  Hag
+Verses ENGKJVO1DA  Zech
+Verses ENGKJVO1DA  Mal
+Verses ENGKJVO2DA  Gen
+Verses ENGKJVO2DA  Exod
+Verses ENGKJVO2DA  Lev
+Verses ENGKJVO2DA  Num
+Verses ENGKJVO2DA  Deut
+Verses ENGKJVO2DA  Josh
+Verses ENGKJVO2DA  Judg
+Verses ENGKJVO2DA  Ruth
+Verses ENGKJVO2DA  1Sam
+Verses ENGKJVO2DA  2Sam
+Verses ENGKJVO2DA  1Kgs
+Verses ENGKJVO2DA  2Kgs
+Verses ENGKJVO2DA  1Chr
+Verses ENGKJVO2DA  2Chr
+Verses ENGKJVO2DA  Ezra
+Verses ENGKJVO2DA  Neh
+Verses ENGKJVO2DA  Esth
+Verses ENGKJVO2DA  Job
+Verses ENGKJVO2DA  Ps
+Verses ENGKJVO2DA  Prov
+Verses ENGKJVO2DA  Eccl
+Verses ENGKJVO2DA  Song
+Verses ENGKJVO2DA  Isa
+Verses ENGKJVO2DA  Jer
+Verses ENGKJVO2DA  Lam
+Verses ENGKJVO2DA  Ezek
+Verses ENGKJVO2DA  Dan
+Verses ENGKJVO2DA  Hos
+Verses ENGKJVO2DA  Joel
+Verses ENGKJVO2DA  Amos
+Verses ENGKJVO2DA  Obad
+Verses ENGKJVO2DA  Jonah
+Verses ENGKJVO2DA  Mic
+Verses ENGKJVO2DA  Nah
+Verses ENGKJVO2DA  Hab
+Verses ENGKJVO2DA  Zeph
+Verses ENGKJVO2DA  Hag
+Verses ENGKJVO2DA  Zech
+Verses ENGKJVO2DA  Mal
+Verses ENGWEBN2DA  Matt
+Verses ENGWEBN2DA  Mark
+Verses ENGWEBN2DA  Luke
+Verses ENGWEBN2DA  John
+Verses ENGWEBN2DA  Acts
+Verses ENGWEBN2DA  Rom
+Verses ENGWEBN2DA  1Cor
+Verses ENGWEBN2DA  2Cor
+Verses ENGWEBN2DA  Gal
+Verses ENGWEBN2DA  Eph
+Verses ENGWEBN2DA  Phil
+Verses ENGWEBN2DA  Col
+Verses ENGWEBN2DA  1Thess
+Verses ENGWEBN2DA  2Thess
+Verses ENGWEBN2DA  1Tim
+Verses ENGWEBN2DA  2Tim
+Verses ENGWEBN2DA  Titus
+Verses ENGWEBN2DA  Phlm
+Verses ENGWEBN2DA  Heb
+Verses ENGWEBN2DA  Jas
+Verses ENGWEBN2DA  1Pet
+Verses ENGWEBN2DA  2Pet
+Verses ENGWEBN2DA  1John
+Verses ENGWEBN2DA  2John
+Verses ENGWEBN2DA  3John
+Verses ENGWEBN2DA  Jude
+Verses ENGWEBN2DA  Rev
+Verses HUNHBSN1DA  Matt
+Verses HUNHBSN1DA  Mark
+Verses HUNHBSN1DA  Luke
+Verses HUNHBSN1DA  John
+Verses HUNHBSN1DA  Acts
+Verses HUNHBSN1DA  Rom
+Verses HUNHBSN1DA  1Cor
+Verses HUNHBSN1DA  2Cor
+Verses HUNHBSN1DA  Gal
+Verses HUNHBSN1DA  Eph
+Verses HUNHBSN1DA  Phil
+Verses HUNHBSN1DA  Col
+Verses HUNHBSN1DA  1Thess
+Verses HUNHBSN1DA  2Thess
+Verses HUNHBSN1DA  1Tim
+Verses HUNHBSN1DA  2Tim
+Verses HUNHBSN1DA  Titus
+Verses HUNHBSN1DA  Phlm
+Verses HUNHBSN1DA  Heb
+Verses HUNHBSN1DA  Jas
+Verses HUNHBSN1DA  1Pet
+Verses HUNHBSN1DA  2Pet
+Verses HUNHBSN1DA  1John
+Verses HUNHBSN1DA  2John
+Verses HUNHBSN1DA  3John
+Verses HUNHBSN1DA  Jude
+Verses HUNHBSN1DA  Rev
+Verses PORARAN2DA  Matt
+Verses PORARAN2DA  Mark
+Verses PORARAN2DA  Luke
+Verses PORARAN2DA  John
+Verses PORARAN2DA  Acts
+Verses PORARAN2DA  Rom
+Verses PORARAN2DA  1Cor
+Verses PORARAN2DA  2Cor
+Verses PORARAN2DA  Gal
+Verses PORARAN2DA  Eph
+Verses PORARAN2DA  Phil
+Verses PORARAN2DA  Col
+Verses PORARAN2DA  1Thess
+Verses PORARAN2DA  2Thess
+Verses PORARAN2DA  1Tim
+Verses PORARAN2DA  2Tim
+Verses PORARAN2DA  Titus
+Verses PORARAN2DA  Phlm
+Verses PORARAN2DA  Heb
+Verses PORARAN2DA  Jas
+Verses PORARAN2DA  1Pet
+Verses PORARAN2DA  2Pet
+Verses PORARAN2DA  1John
+Verses PORARAN2DA  2John
+Verses PORARAN2DA  3John
+Verses PORARAN2DA  Jude
+Verses PORARAN2DA  Rev
+Verses RUSS76N2DA  Matt
+Verses RUSS76N2DA  Mark
+Verses RUSS76N2DA  Luke
+Verses RUSS76N2DA  John
+Verses RUSS76N2DA  Acts
+Verses RUSS76N2DA  Jas
+Verses RUSS76N2DA  1Pet
+Verses RUSS76N2DA  2Pet
+Verses RUSS76N2DA  1John
+Verses RUSS76N2DA  2John
+Verses RUSS76N2DA  3John
+Verses RUSS76N2DA  Jude
+Verses RUSS76N2DA  Rom
+Verses RUSS76N2DA  1Cor
+Verses RUSS76N2DA  2Cor
+Verses RUSS76N2DA  Gal
+Verses RUSS76N2DA  Eph
+Verses RUSS76N2DA  Phil
+Verses RUSS76N2DA  Col
+Verses RUSS76N2DA  1Thess
+Verses RUSS76N2DA  2Thess
+Verses RUSS76N2DA  1Tim
+Verses RUSS76N2DA  2Tim
+Verses RUSS76N2DA  Titus
+Verses RUSS76N2DA  Phlm
+Verses RUSS76N2DA  Heb
+Verses RUSS76N2DA  Rev
+Verses RUSS76O2DA  Gen
+Verses RUSS76O2DA  Exod
+Verses RUSS76O2DA  Lev
+Verses RUSS76O2DA  Num
+Verses RUSS76O2DA  Deut
+Verses RUSS76O2DA  Josh
+Verses RUSS76O2DA  Judg
+Verses RUSS76O2DA  Ruth
+Verses RUSS76O2DA  1Sam
+Verses RUSS76O2DA  2Sam
+Verses RUSS76O2DA  1Kgs
+Verses RUSS76O2DA  2Kgs
+Verses RUSS76O2DA  1Chr
+Verses RUSS76O2DA  2Chr
+Verses RUSS76O2DA  Ezra
+Verses RUSS76O2DA  Neh
+Verses RUSS76O2DA  Esth
+Verses RUSS76O2DA  Job
+Verses RUSS76O2DA  Ps
+Verses RUSS76O2DA  Prov
+Verses RUSS76O2DA  Eccl
+Verses RUSS76O2DA  Song
+Verses RUSS76O2DA  Isa
+Verses RUSS76O2DA  Jer
+Verses RUSS76O2DA  Lam
+Verses RUSS76O2DA  Ezek
+Verses RUSS76O2DA  Dan
+Verses RUSS76O2DA  Hos
+Verses RUSS76O2DA  Joel
+Verses RUSS76O2DA  Amos
+Verses RUSS76O2DA  Obad
+Verses RUSS76O2DA  Jonah
+Verses RUSS76O2DA  Mic
+Verses RUSS76O2DA  Nah
+Verses RUSS76O2DA  Hab
+Verses RUSS76O2DA  Zeph
+Verses RUSS76O2DA  Hag
+Verses RUSS76O2DA  Zech
+Verses RUSS76O2DA  Mal
+Verses SPNR95N2DA  Matt
+Verses SPNR95N2DA  Mark
+Verses SPNR95N2DA  Luke
+Verses SPNR95N2DA  John
+Verses SPNR95N2DA  Acts
+Verses SPNR95N2DA  Rom
+Verses SPNR95N2DA  1Cor
+Verses SPNR95N2DA  2Cor
+Verses SPNR95N2DA  Gal
+Verses SPNR95N2DA  Eph
+Verses SPNR95N2DA  Phil
+Verses SPNR95N2DA  Col
+Verses SPNR95N2DA  1Thess
+Verses SPNR95N2DA  2Thess
+Verses SPNR95N2DA  1Tim
+Verses SPNR95N2DA  2Tim
+Verses SPNR95N2DA  Titus
+Verses SPNR95N2DA  Phlm
+Verses SPNR95N2DA  Heb
+Verses SPNR95N2DA  Jas
+Verses SPNR95N2DA  1Pet
+Verses SPNR95N2DA  2Pet
+Verses SPNR95N2DA  1John
+Verses SPNR95N2DA  2John
+Verses SPNR95N2DA  3John
+Verses SPNR95N2DA  Jude
+Verses SPNR95N2DA  Rev
+Verses UKRO95N2DA  Matt
+Verses UKRO95N2DA  Mark
+Verses UKRO95N2DA  Luke
+Verses UKRO95N2DA  John
+Verses UKRO95N2DA  Acts
+Verses UKRO95N2DA  Rom
+Verses UKRO95N2DA  1Cor
+Verses UKRO95N2DA  2Cor
+Verses UKRO95N2DA  Gal
+Verses UKRO95N2DA  Eph
+Verses UKRO95N2DA  Phil
+Verses UKRO95N2DA  Col
+Verses UKRO95N2DA  1Thess
+Verses UKRO95N2DA  2Thess
+Verses UKRO95N2DA  1Tim
+Verses UKRO95N2DA  2Tim
+Verses UKRO95N2DA  Titus
+Verses UKRO95N2DA  Phlm
+Verses UKRO95N2DA  Heb
+Verses UKRO95N2DA  Jas
+Verses UKRO95N2DA  1Pet
+Verses UKRO95N2DA  2Pet
+Verses UKRO95N2DA  1John
+Verses UKRO95N2DA  2John
+Verses UKRO95N2DA  3John
+Verses UKRO95N2DA  Jude
+Verses UKRO95N2DA  Rev
+Verses URDPAKN2DA  Matt
+Verses URDPAKN2DA  Mark
+Verses URDPAKN2DA  Luke
+Verses URDPAKN2DA  John
+Verses URDPAKN2DA  Acts
+Verses URDPAKN2DA  Rom
+Verses URDPAKN2DA  1Cor
+Verses URDPAKN2DA  2Cor
+Verses URDPAKN2DA  Gal
+Verses URDPAKN2DA  Eph
+Verses URDPAKN2DA  Phil
+Verses URDPAKN2DA  Col
+Verses URDPAKN2DA  1Thess
+Verses URDPAKN2DA  2Thess
+Verses URDPAKN2DA  1Tim
+Verses URDPAKN2DA  2Tim
+Verses URDPAKN2DA  Titus
+Verses URDPAKN2DA  Phlm
+Verses URDPAKN2DA  Heb
+Verses URDPAKN2DA  Jas
+Verses URDPAKN2DA  1Pet
+Verses URDPAKN2DA  2Pet
+Verses URDPAKN2DA  1John
+Verses URDPAKN2DA  2John
+Verses URDPAKN2DA  3John
+Verses URDPAKN2DA  Jude
+Verses URDPAKN2DA  Rev
+DONE WITH CREATE META DATA

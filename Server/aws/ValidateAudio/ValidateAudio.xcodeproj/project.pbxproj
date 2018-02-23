@@ -1,0 +1,332 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E46A8E61203DFD1100D6E943 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46A8E60203DFD1100D6E943 /* main.swift */; };
+		E46A8E68203E0C8100D6E943 /* AudioSqlite3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46A8E67203E0C8100D6E943 /* AudioSqlite3.swift */; };
+		E46A8E6B203E32C800D6E943 /* AudioTOCChapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46A8E6A203E32C800D6E943 /* AudioTOCChapter.swift */; };
+		E46A8E6D203E32EE00D6E943 /* AudioTOCBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46A8E6C203E32ED00D6E943 /* AudioTOCBook.swift */; };
+		E46A8E6F203E330B00D6E943 /* AudioTOCBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46A8E6E203E330A00D6E943 /* AudioTOCBible.swift */; };
+		E46A8E71203E332E00D6E943 /* AudioReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46A8E70203E332E00D6E943 /* AudioReference.swift */; };
+		E46A8E7C203E35CB00D6E943 /* MetaDataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46A8E7B203E35CB00D6E943 /* MetaDataReader.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E46A8E5B203DFD1100D6E943 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		E46A8E5D203DFD1100D6E943 /* ValidateAudio */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ValidateAudio; sourceTree = BUILT_PRODUCTS_DIR; };
+		E46A8E60203DFD1100D6E943 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		E46A8E67203E0C8100D6E943 /* AudioSqlite3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AudioSqlite3.swift; path = ../../../../Plugins/AudioPlayer/src/ios/AudioPlayer/AudioSqlite3.swift; sourceTree = "<group>"; };
+		E46A8E6A203E32C800D6E943 /* AudioTOCChapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AudioTOCChapter.swift; path = ../../../../Plugins/AudioPlayer/src/ios/AudioPlayer/AudioTOCChapter.swift; sourceTree = "<group>"; };
+		E46A8E6C203E32ED00D6E943 /* AudioTOCBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AudioTOCBook.swift; path = ../../../../Plugins/AudioPlayer/src/ios/AudioPlayer/AudioTOCBook.swift; sourceTree = "<group>"; };
+		E46A8E6E203E330A00D6E943 /* AudioTOCBible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AudioTOCBible.swift; path = ../../../../Plugins/AudioPlayer/src/ios/AudioPlayer/AudioTOCBible.swift; sourceTree = "<group>"; };
+		E46A8E70203E332E00D6E943 /* AudioReference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AudioReference.swift; path = ../../../../Plugins/AudioPlayer/src/ios/AudioPlayer/AudioReference.swift; sourceTree = "<group>"; };
+		E46A8E7B203E35CB00D6E943 /* MetaDataReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDataReader.swift; sourceTree = "<group>"; };
+		E4701A5F203E916200E47E84 /* ValidateAudio-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ValidateAudio-Bridging-Header.h"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E46A8E5A203DFD1100D6E943 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E46A8E54203DFD1100D6E943 = {
+			isa = PBXGroup;
+			children = (
+				E46A8E5F203DFD1100D6E943 /* ValidateAudio */,
+				E46A8E5E203DFD1100D6E943 /* Products */,
+				E46A8E76203E356E00D6E943 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		E46A8E5E203DFD1100D6E943 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E46A8E5D203DFD1100D6E943 /* ValidateAudio */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E46A8E5F203DFD1100D6E943 /* ValidateAudio */ = {
+			isa = PBXGroup;
+			children = (
+				E46A8E60203DFD1100D6E943 /* main.swift */,
+				E46A8E6A203E32C800D6E943 /* AudioTOCChapter.swift */,
+				E46A8E6C203E32ED00D6E943 /* AudioTOCBook.swift */,
+				E46A8E6E203E330A00D6E943 /* AudioTOCBible.swift */,
+				E46A8E70203E332E00D6E943 /* AudioReference.swift */,
+				E46A8E7B203E35CB00D6E943 /* MetaDataReader.swift */,
+				E46A8E67203E0C8100D6E943 /* AudioSqlite3.swift */,
+				E4701A5F203E916200E47E84 /* ValidateAudio-Bridging-Header.h */,
+			);
+			path = ValidateAudio;
+			sourceTree = "<group>";
+		};
+		E46A8E76203E356E00D6E943 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E46A8E5C203DFD1100D6E943 /* ValidateAudio */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E46A8E64203DFD1100D6E943 /* Build configuration list for PBXNativeTarget "ValidateAudio" */;
+			buildPhases = (
+				E46A8E59203DFD1100D6E943 /* Sources */,
+				E46A8E5A203DFD1100D6E943 /* Frameworks */,
+				E46A8E5B203DFD1100D6E943 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ValidateAudio;
+			productName = ValidateAudio;
+			productReference = E46A8E5D203DFD1100D6E943 /* ValidateAudio */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E46A8E55203DFD1100D6E943 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0920;
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = ShortSands;
+				TargetAttributes = {
+					E46A8E5C203DFD1100D6E943 = {
+						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 0920;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = E46A8E58203DFD1100D6E943 /* Build configuration list for PBXProject "ValidateAudio" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = E46A8E54203DFD1100D6E943;
+			productRefGroup = E46A8E5E203DFD1100D6E943 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E46A8E5C203DFD1100D6E943 /* ValidateAudio */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E46A8E59203DFD1100D6E943 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E46A8E71203E332E00D6E943 /* AudioReference.swift in Sources */,
+				E46A8E6D203E32EE00D6E943 /* AudioTOCBook.swift in Sources */,
+				E46A8E6F203E330B00D6E943 /* AudioTOCBible.swift in Sources */,
+				E46A8E7C203E35CB00D6E943 /* MetaDataReader.swift in Sources */,
+				E46A8E6B203E32C800D6E943 /* AudioTOCChapter.swift in Sources */,
+				E46A8E68203E0C8100D6E943 /* AudioSqlite3.swift in Sources */,
+				E46A8E61203DFD1100D6E943 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E46A8E62203DFD1100D6E943 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E46A8E63203DFD1100D6E943 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+			};
+			name = Release;
+		};
+		E46A8E65203DFD1100D6E943 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 95C7NX5DGM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ValidateAudio",
+					"$(PROJECT_DIR)",
+				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ValidateAudio/ValidateAudio-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		E46A8E66203DFD1100D6E943 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 95C7NX5DGM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ValidateAudio",
+					"$(PROJECT_DIR)",
+				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ValidateAudio/ValidateAudio-Bridging-Header.h";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E46A8E58203DFD1100D6E943 /* Build configuration list for PBXProject "ValidateAudio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E46A8E62203DFD1100D6E943 /* Debug */,
+				E46A8E63203DFD1100D6E943 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E46A8E64203DFD1100D6E943 /* Build configuration list for PBXNativeTarget "ValidateAudio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E46A8E65203DFD1100D6E943 /* Debug */,
+				E46A8E66203DFD1100D6E943 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E46A8E55203DFD1100D6E943 /* Project object */;
+}

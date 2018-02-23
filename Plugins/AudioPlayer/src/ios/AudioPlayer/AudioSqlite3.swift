@@ -65,6 +65,23 @@ class AudioSqlite3 {
         }
     }
     
+    /** This open method is used by command line or other programs that open the database at a
+    * specified path, not in the bundle.
+    */
+    public func openLocal(dbPath: String) throws {
+        self.database = nil
+        var db: OpaquePointer? = nil
+        let result = sqlite3_open(dbPath, &db)
+        if result == SQLITE_OK {
+            print("Successfully opened connection to database at \(dbPath)")
+            self.database = db!
+        } else {
+            print("SQLITE Result Code = \(result)")
+            let openMsg = String.init(cString: sqlite3_errmsg(database))
+            throw Sqlite3Error.databaseOpenError(name: dbPath, sqliteError: openMsg)
+        }
+    }
+    
     private func ensureDatabase(dbPath: String, copyIfAbsent: Bool) throws -> URL {
         let fullPath: URL = self.databaseDir.appendingPathComponent(dbPath)
         print("Opening Database at \(fullPath.path)")
