@@ -32,6 +32,7 @@ sqlite Versions.db < CreateAudioTables.sql
 sqlite Versions.db < output/AudioVersionTable.sql
 sqlite Versions.db < output/AudioTable.sql
 sqlite Versions.db < output/AudioBookTable.sql
+sqlite Versions.db < output/AudioChapterTable.sql
 
 ## cp Versions.db "$HOME/Library/Application Support/BibleAppNW/databases/file__0/58"
 

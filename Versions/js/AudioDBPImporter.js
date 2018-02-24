@@ -59,6 +59,10 @@ var audioDBPImporter = function(callback) {
 			'NMV':     ['PES', null, false ]
 	};
 	
+//	var versions = {
+//		'ERV-ENG': ['ENG', 'ESV', false ]	
+//	};
+	
 	var versionList = Object.getOwnPropertyNames(versions);
 	console.log("VERS " + versionList);
 	var damIdList = [];
@@ -66,7 +70,7 @@ var audioDBPImporter = function(callback) {
 	var audioVersionSql = [];
 	var audioTableSql = [];
 	var audioBookTableSql = [];
-	var versePositions = {};
+	var audioChapterTableSql = [];
 	
 	doAllVersions(versionList, function() {
 		//console.log(damIdList);
@@ -91,16 +95,12 @@ var audioDBPImporter = function(callback) {
 				audioVersionSql.push(sql);
 			}
 			doVolumeListQuery(dbpLanguage, dbpVersion, function() {
-				//versionList = []; // DEBUG
 				doAllVersions(versionList, callback);
 			});
 		} else {
-			var versionFilename = DIRECTORY + 'AudioVersionTable.sql';
-			writeSQLFile(versionFilename, audioVersionSql);
+			writeSQLFile(DIRECTORY + 'AudioVersionTable.sql', audioVersionSql);
 			
-			var filename = DIRECTORY + 'AudioTable.sql';
-			console.log(audioTableSql);
-			writeSQLFile(filename, audioTableSql);
+			writeSQLFile(DIRECTORY + 'AudioTable.sql', audioTableSql);
 				
 			callback();	
 		}
@@ -147,8 +147,7 @@ var audioDBPImporter = function(callback) {
 				doAllVolumes(damIdList, callback);
 			});
 		} else {
-			var filename = DIRECTORY + 'AudioBookTable.sql';
-			writeSQLFile(filename, audioBookTableSql);
+			writeSQLFile(DIRECTORY + 'AudioBookTable.sql', audioBookTableSql);
 			callback();
 		}
 	}
@@ -181,46 +180,42 @@ var audioDBPImporter = function(callback) {
 		var book = bookList.shift();
 		if (book) {
 			console.log('Verses ' + book.dam_id + '  ' + book.book_id);
-			versePositions = {};
 			var numOfChapters = 0 + book.number_of_chapters;
 			doEachChapter(book, 1, numOfChapters, function() {
 				doAllChapters(bookList, callback);
 			});
 		} else {
+			writeSQLFile(DIRECTORY + 'AudioChapterTable.sql', audioChapterTableSql);
 			callback();
 		}
 	}
 	
 	function doEachChapter(book, chapterNum, numOfChapters, callback) {
 		if (chapterNum <= numOfChapters) {
-			doVerseListQuery(book.dam_id, book.book_id, chapterNum, function(count) {
+			doVerseListQuery(book, chapterNum, function(count) {
 				if (chapterNum == 1 && count == 0) {
 					callback();
 					return;
 				}
 				doEachChapter(book, chapterNum + 1, numOfChapters, callback);
 			});
-		} else {
-			if (Object.getOwnPropertyNames(versePositions).length > 0) {
-				var usfm_book_id = getUSFMBookCode(book.book_id);
-				console.log('Write Verses ' + book.dam_id + '  ' + book.book_id);
-				var directory = DIRECTORY + book.dam_id;
-				var filename = 'Verse_' + book.book_order + '_' + usfm_book_id + '.json';
-				writeJsonFile(directory, filename, versePositions);
-			}			
+		} else {	
 			callback();
 		}
 	}
 	
-	function doVerseListQuery(damId, book_id, chapter, callback) {
-		var url = HOST + "audio/versestart?" + KEY + "&dam_id=" + damId + "&osis_code=" + book_id + "&chapter_number=" + chapter;
+	function doVerseListQuery(book, chapterNum, callback) {
+		var url = HOST + "audio/versestart?" + KEY + "&dam_id=" + book.dam_id + "&osis_code=" + book.book_id + "&chapter_number=" + chapterNum;
 		httpGet(url, function(json) {
 			var row = {};
 			for (var i=0; i<json.length; i++) {
 				var item = json[i];
 				row[item.verse_id] = item.verse_start;
-				//versePositions.push(row);
-				versePositions[chapter] = row;
+			}
+			if (json.length > 0) {
+				var sql = "INSERT INTO AudioChapter VALUES('" + book.dam_id + "', '" + book.usfm_book_id + "', '" + chapterNum + "', '" + JSON.stringify(row) + "');"
+				console.log(sql);
+				audioChapterTableSql.push(sql);
 			}
 			callback(json.length);	
 		});	
@@ -345,17 +340,6 @@ var audioDBPImporter = function(callback) {
 			array.push(row);
 		}
 		return array;
-	}
-	
-	function writeJsonFile(directory, filename, data) {
-		ensureDirectory(directory);
-		var fullname = directory + "/" + filename;
-		var json = JSON.stringify(data, null, '\t');
-		file.writeFile(fullname, json, 'utf8', function(err) {
-			if (err) {
-				errorMessage(err, fullname);
-			}
-		});
 	}
 	
 	function ensureDirectory(directory) {

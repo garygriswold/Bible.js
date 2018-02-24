@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS AudioChapter;
 DROP TABLE IF EXISTS AudioBook;
 DROP TABLE IF EXISTS Audio;
 DROP TABLE IF EXISTS AudioVersion;
@@ -22,8 +23,17 @@ CREATE TABLE AudioBook(
 	damId TEXT NOT NULL REFERENCES Audio(damId),
 	bookId TEXT NOT NULL,
 	bookOrder TEXT NOT NULL,
-	numberOfChapters INT NOT NULL,
+	numberOfChapters INTEGER NOT NULL,
 	PRIMARY KEY (damId, bookId)
+);
+
+CREATE TABLE AudioChapter(
+	damId TEXT NOT NULL REFERENCES Audio(damId),
+	bookId TEXT NOT NULL,
+	chapter INTEGER NOT NULL,
+	versePositions TEXT NOT NULL,
+	PRIMARY KEY (damId, bookId, chapter),
+	FOREIGN KEY (damId, bookId) REFERENCES AudioBook(damId, bookId)
 );
 
 
