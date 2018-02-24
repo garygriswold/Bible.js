@@ -15,7 +15,6 @@ class AudioMetaDataReader {
     
     var oldTestament: AudioTOCBible?
     var newTestament: AudioTOCBible?
-    var metaDataVerse: AudioTOCChapter?
     
     init() {
         self.oldTestament = nil
@@ -93,32 +92,30 @@ class AudioMetaDataReader {
         return result
     }
     
-    func readVerseAudio(damid: String, sequence: String, bookId: String, chapter: String,
+    func readVerseAudio(damid: String, bookId: String, chapter: Int,
                         complete: @escaping (_ audioVerse: AudioTOCChapter?) -> Void) {
-        self.metaDataVerse = nil
-        let s3Bucket = damid.lowercased() + ".shortsands.com"
-        let s3Key = "Verse_" + sequence + "_" + bookId + ".json"
-        AwsS3Cache.shared.readData(s3Bucket: s3Bucket,
-               s3Key: s3Key,
-               expireInterval: 604800, // 1 week in seconds
-               getComplete: { data in
-                    if let verses = data {
-                        let result = self.parseJsonDictionary(json: verses)
-                        if let chapterNum = Int(chapter) {
-                            let chapterStr = String(chapterNum)
-                            if let dictionary = result?[chapterStr] as? NSDictionary {
-                                self.metaDataVerse = AudioTOCChapter(chapterDictionary: dictionary)
-                            } else {
-                                print("ERROR: Chapter not found in verse meta data.")
-                            }
-                        } else {
-                            print("ERROR: Chapter was invalid number.")
+        var metaDataVerse: AudioTOCChapter? = nil
+        let db = AudioSqlite3()
+        let query = "SELECT versePositions FROM AudioChapter WHERE damId = ? AND bookId = ? AND chapter = ?"
+        do {
+            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            defer { db.close() }
+            try db.queryV1(sql: query, values: [damid, bookId, String(chapter)], complete: { resultSet in
+                print("LENGTH \(resultSet.count)")
+                if resultSet.count > 0 {
+                    let row = resultSet[0]
+                    if let verses = row[0] {
+                        if let dictionary = self.parseJsonDictionary(json: verses) {
+                            metaDataVerse = AudioTOCChapter(chapterDictionary: dictionary)
                         }
-                    } else {
-                        print("ERROR: There was no data retrieved.")
                     }
-                    complete(self.metaDataVerse)
+                }
+                complete(metaDataVerse)
             })
+        } catch let err {
+            print("ERROR \(AudioSqlite3.errorDescription(error: err))")
+            complete(nil)
+        }
     }
     
     private func readBookNames(versionCode: String) {
@@ -143,15 +140,16 @@ class AudioMetaDataReader {
         }
     }
     
-    private func parseJsonDictionary(json: Data) -> NSDictionary? {
-        do {
-            let result = try JSONSerialization.jsonObject(with: json, options:.allowFragments) as? NSDictionary
-            return result
-        } catch let jsonError {
-            print("Error parsing Meta Data json \(jsonError)")
-            return nil
+    private func parseJsonDictionary(json: String) -> NSDictionary? {
+        var result: NSDictionary? = nil
+        if let data = json.data(using: .utf8) {
+            do {
+                result = try JSONSerialization.jsonObject(with: data, options:.allowFragments) as? NSDictionary
+            } catch let jsonError {
+                print("Error parsing Meta Data json \(jsonError)")
+            }
         }
+        return result
     }
 }
-
 

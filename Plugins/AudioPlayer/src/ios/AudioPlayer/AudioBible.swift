@@ -305,8 +305,8 @@ class AudioBible {
     
     private func readVerseMetaData(reference: AudioReference) {
         let reader = AudioMetaDataReader()
-        reader.readVerseAudio(damid: reference.damId, sequence: reference.sequence, bookId: reference.book, chapter: reference.chapter, complete: {
-            audioChapter in
+        reader.readVerseAudio(damid: reference.damId, bookId: reference.book, chapter: reference.chapterNum,
+                              complete: { audioChapter in
             if (audioChapter != nil) {
                 reference.audioChapter = audioChapter
                 //print("PARSED DATA \(self.audioChapter?.toString())")
