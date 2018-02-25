@@ -12,17 +12,18 @@ class AudioTOCChapter {
     
     private var versePositions: [Double]
     
-    init(chapterDictionary: NSDictionary) {
-        let dictionary: [String: Double] = chapterDictionary as! [String : Double]
-
-        self.versePositions = [Double](repeating: 0.0, count: dictionary.count + 1)
-        for (verse, position) in dictionary {
-            if let verseNum = Int(verse) {
-                self.versePositions[verseNum] = position
-            } else {
-                print("Error parsing Verse Data \(verse) -> \(position)")
+    init(json: String) {
+        let start = json.index(json.startIndex, offsetBy: 1)
+        let end = json.index(json.endIndex, offsetBy: -1)
+        let trimmed = json[start..<end]
+        let parts = trimmed.split(separator: ",")
+        self.versePositions = [Double](repeating: 0.0, count: parts.count)
+        for index in 1..<parts.count {
+            if let dbl = Double(parts[index]) {
+                self.versePositions[index] = dbl
             }
         }
+        //print(self.versePositions)
     }
     
     deinit {

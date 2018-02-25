@@ -58,10 +58,9 @@ var audioDBPImporter = function(callback) {
 			'ERV-VIE': ['VIE', null, false ],
 			'NMV':     ['PES', null, false ]
 	};
-	
-//	var versions = {
-//		'ERV-ENG': ['ENG', 'ESV', false ]	
-//	};
+	//versions = {
+	//	'ERV-ENG': ['ENG', 'ESV', false ]	
+	//};
 	
 	var versionList = Object.getOwnPropertyNames(versions);
 	console.log("VERS " + versionList);
@@ -203,10 +202,34 @@ var audioDBPImporter = function(callback) {
 			callback();
 		}
 	}
-	
 	function doVerseListQuery(book, chapterNum, callback) {
 		var url = HOST + "audio/versestart?" + KEY + "&dam_id=" + book.dam_id + "&osis_code=" + book.book_id + "&chapter_number=" + chapterNum;
 		httpGet(url, function(json) {
+			var array = [];
+			array[0] = 0.0;
+			for (var i=0; i<json.length; i++) {
+				var item = json[i];
+				array[item.verse_id] = item.verse_start;
+			}
+			for (var j=1; j<array.length; j++) {
+				if (array[j] == null) {
+					array[j] = array[j - 1];
+				}
+			}
+			if (json.length > 0) {
+				var sql = "INSERT INTO AudioChapter VALUES('" + book.dam_id + "', '" + book.usfm_book_id + "', '" + chapterNum + "', '" + JSON.stringify(array) + "');"
+				console.log(sql);
+				audioChapterTableSql.push(sql);
+			}
+			callback(json.length);	
+		});	
+	}
+
+	/* This function generates json in an objct { 1: nn.nn, 2: nn.nn, ... }
+	function doVerseListQuery(book, chapterNum, callback) {
+		var url = HOST + "audio/versestart?" + KEY + "&dam_id=" + book.dam_id + "&osis_code=" + book.book_id + "&chapter_number=" + chapterNum;
+		httpGet(url, function(json) {
+			console.log(json);
 			var row = {};
 			for (var i=0; i<json.length; i++) {
 				var item = json[i];
@@ -220,6 +243,7 @@ var audioDBPImporter = function(callback) {
 			callback(json.length);	
 		});	
 	}
+	*/
 	
 	/**
 	* Return the USFM book code when given the OSIS book code

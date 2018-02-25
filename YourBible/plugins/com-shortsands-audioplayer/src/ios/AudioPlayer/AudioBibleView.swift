@@ -239,7 +239,7 @@ class AudioBibleView {
         self.isAudioViewActive = false
         UIView.animate(withDuration: 1.0, delay: 0.0,
                        options: UIViewAnimationOptions.curveEaseOut,
-                       animations: { self.audioPanel.center.y += self.audioPanel.bounds.height },
+                       animations: { self.audioPanel.center.y += self.audioPanel.bounds.height * 1.2 },
                        completion: { _ in self.audioPanel.removeFromSuperview() }
         )
         self.progressLink?.invalidate()

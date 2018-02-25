@@ -105,9 +105,7 @@ class AudioMetaDataReader {
                 if resultSet.count > 0 {
                     let row = resultSet[0]
                     if let verses = row[0] {
-                        if let dictionary = self.parseJsonDictionary(json: verses) {
-                            metaDataVerse = AudioTOCChapter(chapterDictionary: dictionary)
-                        }
+                        metaDataVerse = AudioTOCChapter(json: verses)
                     }
                 }
                 complete(metaDataVerse)
@@ -140,6 +138,8 @@ class AudioMetaDataReader {
         }
     }
     
+    /*
+    * Deprecated. This was used to parse verse positions as a dictionary
     private func parseJsonDictionary(json: String) -> NSDictionary? {
         var result: NSDictionary? = nil
         if let data = json.data(using: .utf8) {
@@ -151,5 +151,6 @@ class AudioMetaDataReader {
         }
         return result
     }
+    */
 }
 
