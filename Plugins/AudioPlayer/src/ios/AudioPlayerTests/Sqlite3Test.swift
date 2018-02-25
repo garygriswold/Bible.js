@@ -21,26 +21,26 @@ class Sqlite3Test: XCTestCase {
     }
     
     func testNonExistantDB() {
-        let db = Sqlite3()
+        let db = AudioSqlite3()
         do {
             try db.open(dbPath: "NonExistant.db", copyIfAbsent: false)
             assert(false, "Exception expected")
         } catch Sqlite3Error.databaseNotFound {
             assert(true)
         } catch let err {
-            assert(false, Sqlite3.errorDescription(error: err))
+            assert(false, AudioSqlite3.errorDescription(error: err))
         }
     }
     
     func testNonExistantWithCopy() {
-        let db = Sqlite3()
+        let db = AudioSqlite3()
         do {
             try db.open(dbPath: "NonExistant.db", copyIfAbsent: true)
             assert(false, "Exception Expected")
         } catch Sqlite3Error.databaseNotInBundle {
             assert(true)
         } catch let err {
-            assert(false, Sqlite3.errorDescription(error: err))
+            assert(false, AudioSqlite3.errorDescription(error: err))
         }
     }
     
@@ -48,7 +48,7 @@ class Sqlite3Test: XCTestCase {
     * This is succeeding, but I really wanted it to fail, because it is not a DB."
     */
     func testNonDBInBundle() {
-        let db = Sqlite3()
+        let db = AudioSqlite3()
         do {
             try db.open(dbPath: "Reference.swift", copyIfAbsent: true)
             db.close()
@@ -56,23 +56,23 @@ class Sqlite3Test: XCTestCase {
         } catch Sqlite3Error.databaseNotInBundle {
             assert(true)
         } catch let err {
-            assert(false, Sqlite3.errorDescription(error: err))
+            assert(false, AudioSqlite3.errorDescription(error: err))
         }
     }
     
     func testValidDBInBundle() {
-        let db = Sqlite3()
+        let db = AudioSqlite3()
         do {
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
             db.close()
             assert(true)
         } catch let err {
-            assert(false, Sqlite3.errorDescription(error: err))
+            assert(false, AudioSqlite3.errorDescription(error: err))
         }
     }
     
     func testInvalidSelect() {
-        let db = Sqlite3()
+        let db = AudioSqlite3()
         do {
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
@@ -83,12 +83,12 @@ class Sqlite3Test: XCTestCase {
         } catch Sqlite3Error.statementPrepareFailed {
             assert(true)
         } catch let err {
-            assert(false, Sqlite3.errorDescription(error: err))
+            assert(false, AudioSqlite3.errorDescription(error: err))
         }
     }
     
     func testValidSelectNoRows() {
-        let db = Sqlite3()
+        let db = AudioSqlite3()
         do {
             let ready = expectation(description: "ready")
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
@@ -99,7 +99,7 @@ class Sqlite3Test: XCTestCase {
                 ready.fulfill()
             })
         } catch let err {
-            assert(false, Sqlite3.errorDescription(error: err))
+            assert(false, AudioSqlite3.errorDescription(error: err))
         }
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error, "Error")
@@ -107,7 +107,7 @@ class Sqlite3Test: XCTestCase {
     }
     
     func testValidSelectRows() {
-        let db = Sqlite3()
+        let db = AudioSqlite3()
         do {
             let ready = expectation(description: "ready")
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
@@ -120,7 +120,7 @@ class Sqlite3Test: XCTestCase {
                 ready.fulfill()
             })
         } catch let err {
-            assert(false, Sqlite3.errorDescription(error: err))
+            assert(false, AudioSqlite3.errorDescription(error: err))
         }
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error, "Error")
@@ -128,7 +128,7 @@ class Sqlite3Test: XCTestCase {
     }
     
     func XXtestValidCreateTable() {
-        let db = Sqlite3()
+        let db = AudioSqlite3()
         do {
             let ready = expectation(description: "ready")
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
@@ -139,7 +139,7 @@ class Sqlite3Test: XCTestCase {
                 ready.fulfill()
             })
         } catch let err {
-            assert(false, Sqlite3.errorDescription(error: err))
+            assert(false, AudioSqlite3.errorDescription(error: err))
         }
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error, "Error")
@@ -147,7 +147,7 @@ class Sqlite3Test: XCTestCase {
     }
     
     func testValidInsertText() {
-        let db = Sqlite3()
+        let db = AudioSqlite3()
         do {
             let ready = expectation(description: "ready")
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
@@ -159,7 +159,7 @@ class Sqlite3Test: XCTestCase {
                 ready.fulfill()
             })
         } catch let err {
-            assert(false, Sqlite3.errorDescription(error: err))
+            assert(false, AudioSqlite3.errorDescription(error: err))
         }
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error, "Error")
@@ -167,7 +167,7 @@ class Sqlite3Test: XCTestCase {
     }
     
     func testValidInsertInt() {
-        let db = Sqlite3()
+        let db = AudioSqlite3()
         do {
             let ready = expectation(description: "ready")
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
@@ -179,7 +179,7 @@ class Sqlite3Test: XCTestCase {
                 ready.fulfill()
             })
         } catch let err {
-            assert(false, Sqlite3.errorDescription(error: err))
+            assert(false, AudioSqlite3.errorDescription(error: err))
         }
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error, "Error")
@@ -187,7 +187,7 @@ class Sqlite3Test: XCTestCase {
     }
     
     func testValidInsertReal() {
-        let db = Sqlite3()
+        let db = AudioSqlite3()
         do {
             let ready = expectation(description: "ready")
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
@@ -199,7 +199,7 @@ class Sqlite3Test: XCTestCase {
                 ready.fulfill()
             })
         } catch let err {
-            assert(false, Sqlite3.errorDescription(error: err))
+            assert(false, AudioSqlite3.errorDescription(error: err))
         }
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error, "Error")

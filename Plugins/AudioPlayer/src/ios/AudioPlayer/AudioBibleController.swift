@@ -21,7 +21,7 @@ public class AudioBibleController {
     }
  
     var fileType: String
-    var metaDataReader: AudioMetaDataReader?
+    var metaDataReader: AudioTOCBible?
     var audioBible: AudioBible?
     var audioBibleView: AudioBibleView?
     var audioSession: AudioSession?
@@ -37,7 +37,7 @@ public class AudioBibleController {
     
     public func findAudioVersion(version: String, silLang: String,
                                  complete: @escaping (_ bookList:String) -> Void) {
-        self.metaDataReader = AudioMetaDataReader()
+        self.metaDataReader = AudioTOCBible()
         metaDataReader!.read(versionCode: version, silLang: silLang,
                       complete: { oldTestament, newTestament in
                         var bookIdList = ""
@@ -65,7 +65,7 @@ public class AudioBibleController {
         
         if let reader = metaDataReader {
             if let meta = reader.findBook(bookId: book) {
-                let ref = AudioReference(bible: meta.bible, book: meta, chapterNum: chapterNum, fileType: self.fileType)
+                let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)
                 self.audioBible!.beginReadFile(reference: ref)
             } else {
                 complete(nil)

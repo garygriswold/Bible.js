@@ -8,15 +8,15 @@
 
 class AudioTOCBook {
     
-    let bible: AudioTOCBible
+    let testament: AudioTOCTestament
     let bookId: String
     let bookOrder: String
     let sequence: Int
     var bookName: String // Used by AudioControlCenter
     let numberOfChapters: Int
 
-    init(bible: AudioTOCBible, dbRow: [String?]) {
-        self.bible = bible
+    init(testament: AudioTOCTestament, dbRow: [String?]) {
+        self.testament = testament
         self.bookId = dbRow[0]!
         self.bookOrder = dbRow[1]!
         self.sequence = Int(self.bookOrder) ?? 0

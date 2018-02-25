@@ -8,29 +8,27 @@
 
 class AudioReference {
     
-    let tocAudioBible: AudioTOCBible
     let tocAudioBook: AudioTOCBook
     let chapter: String
     let fileType: String
     var audioChapter: AudioTOCChapter?
     
-    init(bible: AudioTOCBible, book: AudioTOCBook, chapter: String, fileType: String) {
-        self.tocAudioBible = bible
+    init(book: AudioTOCBook, chapter: String, fileType: String) {
         self.tocAudioBook = book
         self.chapter = chapter
         self.fileType = fileType
         print("***** Init AudioReference ***** \(self.toString())")
     }
     
-    convenience init(bible: AudioTOCBible, book: AudioTOCBook, chapterNum: Int, fileType: String) {
+    convenience init(book: AudioTOCBook, chapterNum: Int, fileType: String) {
         let chapter = String(chapterNum)
         switch chapter.count {
         case 1:
-            self.init(bible: bible, book: book, chapter: "00" + chapter, fileType: fileType)
+            self.init(book: book, chapter: "00" + chapter, fileType: fileType)
         case 2:
-            self.init(bible: bible, book: book, chapter: "0" + chapter, fileType: fileType)
+            self.init(book: book, chapter: "0" + chapter, fileType: fileType)
         default:
-            self.init(bible: bible, book: book, chapter: chapter, fileType: fileType)
+            self.init(book: book, chapter: chapter, fileType: fileType)
         }
     }
    
@@ -40,19 +38,19 @@ class AudioReference {
     
     var textVersion: String {
         get {
-            return self.tocAudioBible.textVersion
+            return self.tocAudioBook.testament.textVersion
         }
     }
     
     var silLang: String {
         get {
-            return self.tocAudioBible.silLang
+            return self.tocAudioBook.testament.silLang
         }
     }
     
     var damId: String {
         get {
-            return self.tocAudioBible.damId
+            return self.tocAudioBook.testament.damId
         }
     }
     
@@ -94,16 +92,16 @@ class AudioReference {
     
     var dpbLanguageCode: String {
         get {
-            return self.tocAudioBible.dbpLanguageCode
+            return self.tocAudioBook.testament.dbpLanguageCode
         }
     }
     
     func nextChapter() -> AudioReference? {
-        return self.tocAudioBible.nextChapter(reference: self)
+        return self.tocAudioBook.testament.nextChapter(reference: self)
     }
     
     func priorChapter() -> AudioReference? {
-        return self.tocAudioBible.priorChapter(reference: self)
+        return self.tocAudioBook.testament.priorChapter(reference: self)
     }
     
     func getS3Bucket() -> String {

@@ -304,7 +304,7 @@ class AudioBible {
     }
     
     private func readVerseMetaData(reference: AudioReference) {
-        let reader = AudioMetaDataReader()
+        let reader = AudioTOCBible()
         reader.readVerseAudio(damid: reference.damId, bookId: reference.book, chapter: reference.chapterNum,
                               complete: { audioChapter in
             if (audioChapter != nil) {

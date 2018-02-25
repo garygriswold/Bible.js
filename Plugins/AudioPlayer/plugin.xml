@@ -51,8 +51,8 @@
 		<source-file src="src/ios/AudioPlayer/AudioControlCenter.swift" />
 		<source-file src="src/ios/AudioPlayer/AudioSession.swift" />
 		<source-file src="src/ios/AudioPlayer/AudioPlayState.swift" />
-		<source-file src="src/ios/AudioPlayer/AudioMetaDataReader.swift" />
 		<source-file src="src/ios/AudioPlayer/AudioTOCBible.swift" />
+		<source-file src="src/ios/AudioPlayer/AudioTOCTestament.swift" />
 		<source-file src="src/ios/AudioPlayer/AudioTOCBook.swift" />
 		<source-file src="src/ios/AudioPlayer/AudioTOCChapter.swift" />
 		<source-file src="src/ios/AudioPlayer/AudioSqlite3.swift" />
