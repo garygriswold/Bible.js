@@ -15,6 +15,7 @@ class AudioTOCBible {
     
     let textVersion: String
     let silLang: String
+    let mediaSource: String
     let database = AudioSqlite3()
     var oldTestament: AudioTOCTestament?
     var newTestament: AudioTOCTestament?
@@ -22,6 +23,7 @@ class AudioTOCBible {
     init(versionCode: String, silLang: String) {
         self.textVersion = versionCode
         self.silLang = silLang
+        self.mediaSource = "FCBH"
         self.oldTestament = nil
         self.newTestament = nil
     }
@@ -64,12 +66,10 @@ class AudioTOCBible {
                     }
                 }
                 if let oldRow = oldTestRow {
-                    self.oldTestament = AudioTOCTestament(bible: self, database: self.database,
-                                                          mediaSource: "FCBH", dbRow: oldRow)
+                    self.oldTestament = AudioTOCTestament(bible: self, database: self.database, dbRow: oldRow)
                 }
                 if let newRow = newTestRow {
-                    self.newTestament = AudioTOCTestament(bible: self, database: self.database,
-                                                          mediaSource: "FCBH", dbRow: newRow)
+                    self.newTestament = AudioTOCTestament(bible: self, database: self.database, dbRow: newRow)
                 }
                 self.readBookNames()
                 complete(self.oldTestament, self.newTestament)

@@ -9,7 +9,6 @@
 class AudioTOCTestament {
     
     let bible: AudioTOCBible
-    let mediaSource: String
     let damId: String
     let dbpLanguageCode: String
     let dbpVersionCode: String
@@ -18,11 +17,10 @@ class AudioTOCTestament {
     var booksById: Dictionary<String, AudioTOCBook>
     var booksBySeq: Dictionary<Int, AudioTOCBook>
 
-    init(bible: AudioTOCBible, database: AudioSqlite3, mediaSource: String, dbRow: [String?]) {
+    init(bible: AudioTOCBible, database: AudioSqlite3, dbRow: [String?]) {
         self.bible = bible
         self.booksById = Dictionary<String, AudioTOCBook>()
         self.booksBySeq = Dictionary<Int, AudioTOCBook>()
-        self.mediaSource = mediaSource
         self.damId = dbRow[0]!
         self.collectionCode = dbRow[1]!
         self.mediaType = dbRow[2]!
