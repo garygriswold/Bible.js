@@ -1,5 +1,5 @@
 //
-//  AnalyticsSessionId.swift
+//  AudioAnalyticsSessionId.swift
 //  AnalyticsProto
 //
 //  Created by Gary Griswold on 6/6/17.

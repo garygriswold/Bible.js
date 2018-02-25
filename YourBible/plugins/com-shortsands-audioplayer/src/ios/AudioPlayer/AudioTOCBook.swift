@@ -1,5 +1,5 @@
 //
-//  MetaDataItemBook.swift
+//  AudioTOCBook.swift
 //  AudioPlayer
 //
 //  Created by Gary Griswold on 8/8/17.

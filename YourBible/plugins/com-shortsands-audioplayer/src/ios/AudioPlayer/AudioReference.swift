@@ -1,5 +1,5 @@
 //
-//  Reference.swift
+//  AudioReference.swift
 //  AudioPlayer
 //
 //  Created by Gary Griswold on 8/14/17.
@@ -35,19 +35,19 @@ class AudioReference {
     deinit {
         print("***** Deinit AudioReference ***** \(self.toString())")
     }
-    
+
     var textVersion: String {
         get {
-            return self.tocAudioBook.testament.textVersion
+            return self.tocAudioBook.testament.bible.textVersion
         }
     }
-    
+ 
     var silLang: String {
         get {
-            return self.tocAudioBook.testament.silLang
+            return self.tocAudioBook.testament.bible.silLang
         }
     }
-    
+
     var damId: String {
         get {
             return self.tocAudioBook.testament.damId

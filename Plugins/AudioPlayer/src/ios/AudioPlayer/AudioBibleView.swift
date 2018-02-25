@@ -1,5 +1,5 @@
 //
-//  BibleReaderView.swift
+//  AudioBibleView.swift
 //  AudioPlayer
 //
 //  Created by Gary Griswold on 8/7/17.

@@ -16,7 +16,7 @@ class TOCAudioBibleTest: XCTestCase {
     override func setUp() {
         super.setUp()
         if audioChapter == nil {
-            let reader = AudioTOCBible()
+            let reader = AudioTOCBible(versionCode: "dummy", silLang: "dummy")
             reader.readVerseAudio(damid: "DEMO", bookId: "TST", chapter: 1, complete: {
                 audioChapter in
                 self.audioChapter = audioChapter

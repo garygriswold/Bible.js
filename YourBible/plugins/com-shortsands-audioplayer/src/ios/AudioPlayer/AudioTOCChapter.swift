@@ -1,5 +1,5 @@
 //
-//  MetaDataAudioVerse.swift
+//  AudioTOCChapter.swift
 //  AudioPlayer
 //
 //  Created by Gary Griswold on 8/11/17.

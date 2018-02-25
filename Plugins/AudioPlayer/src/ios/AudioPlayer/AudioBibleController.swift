@@ -1,5 +1,5 @@
 //
-//  AudioBibleViewController.swift
+//  AudioBibleController.swift
 //  AudioPlayer
 //
 //  Created by Gary Griswold on 8/24/17.
@@ -37,9 +37,8 @@ public class AudioBibleController {
     
     public func findAudioVersion(version: String, silLang: String,
                                  complete: @escaping (_ bookList:String) -> Void) {
-        self.metaDataReader = AudioTOCBible()
-        metaDataReader!.read(versionCode: version, silLang: silLang,
-                      complete: { oldTestament, newTestament in
+        self.metaDataReader = AudioTOCBible(versionCode: version, silLang: silLang)
+        metaDataReader!.read(complete: { oldTestament, newTestament in
                         var bookIdList = ""
                         if let oldTest = oldTestament {
                             bookIdList = oldTest.getBookList()

@@ -1,5 +1,5 @@
 //
-//  MetaDataReader.swift
+//  AudioTOCBible.swift
 //  AudioPlayer
 //
 //  Created by Gary Griswold on 8/7/17.
@@ -13,10 +13,15 @@ import Foundation
 
 class AudioTOCBible {
     
+    let textVersion: String
+    let silLang: String
+    let database = AudioSqlite3()
     var oldTestament: AudioTOCTestament?
     var newTestament: AudioTOCTestament?
     
-    init() {
+    init(versionCode: String, silLang: String) {
+        self.textVersion = versionCode
+        self.silLang = silLang
         self.oldTestament = nil
         self.newTestament = nil
     }
@@ -25,9 +30,7 @@ class AudioTOCBible {
         print("***** Deinit AudioMetaDataReader *****")
     }
 
-    func read(versionCode: String, silLang: String,
-              complete: @escaping (_ oldTest:AudioTOCTestament?, _ newTest:AudioTOCTestament?) -> Void) {
-        let db = AudioSqlite3()
+    func read(complete: @escaping (_ oldTest:AudioTOCTestament?, _ newTest:AudioTOCTestament?) -> Void) {
         let query = "SELECT a.damId, a.collectionCode, a.mediaType, a.dbpLanguageCode, a.dbpVersionCode" +
                 " FROM audio a, audioVersion v" +
                 " WHERE a.dbpLanguageCode = v.dbpLanguageCode" +
@@ -37,9 +40,9 @@ class AudioTOCBible {
                 // mediaType sequence Drama, NonDrama
                 // collectionCode sequence NT, ON, OT
         do {
-            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
-            defer { db.close() }
-            try db.queryV1(sql: query, values: [versionCode], complete: { resultSet in
+            try self.database.open(dbPath: "Versions.db", copyIfAbsent: true)
+            defer { self.database.close() }
+            try self.database.queryV1(sql: query, values: [self.textVersion], complete: { resultSet in
                 print("LENGTH \(resultSet.count)")
                 var oldTestRow: [String?]? = nil
                 var newTestRow: [String?]? = nil
@@ -61,14 +64,14 @@ class AudioTOCBible {
                     }
                 }
                 if let oldRow = oldTestRow {
-                    self.oldTestament = AudioTOCTestament(bible: self, database: db, textVersion: versionCode, silLang: silLang,
-                                                      mediaSource: "FCBH", dbRow: oldRow)
+                    self.oldTestament = AudioTOCTestament(bible: self, database: self.database,
+                                                          mediaSource: "FCBH", dbRow: oldRow)
                 }
                 if let newRow = newTestRow {
-                    self.newTestament = AudioTOCTestament(bible: self, database: db, textVersion: versionCode, silLang: silLang,
-                                                      mediaSource: "FCBH", dbRow: newRow)
+                    self.newTestament = AudioTOCTestament(bible: self, database: self.database,
+                                                          mediaSource: "FCBH", dbRow: newRow)
                 }
-                self.readBookNames(versionCode: versionCode)
+                self.readBookNames()
                 complete(self.oldTestament, self.newTestament)
             })
         } catch let err {
@@ -95,12 +98,11 @@ class AudioTOCBible {
     func readVerseAudio(damid: String, bookId: String, chapter: Int,
                         complete: @escaping (_ audioVerse: AudioTOCChapter?) -> Void) {
         var metaDataVerse: AudioTOCChapter? = nil
-        let db = AudioSqlite3()
         let query = "SELECT versePositions FROM AudioChapter WHERE damId = ? AND bookId = ? AND chapter = ?"
         do {
-            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
-            defer { db.close() }
-            try db.queryV1(sql: query, values: [damid, bookId, String(chapter)], complete: { resultSet in
+            try self.database.open(dbPath: "Versions.db", copyIfAbsent: true)
+            defer { self.database.close() }
+            try self.database.queryV1(sql: query, values: [damid, bookId, String(chapter)], complete: { resultSet in
                 print("LENGTH \(resultSet.count)")
                 if resultSet.count > 0 {
                     let row = resultSet[0]
@@ -116,14 +118,13 @@ class AudioTOCBible {
         }
     }
     
-    private func readBookNames(versionCode: String) {
-        let db = AudioSqlite3()
+    private func readBookNames() {
         let query = "SELECT code, heading FROM tableContents"
         do {
-            let dbName = versionCode + ".db"
-            try db.open(dbPath: dbName, copyIfAbsent: true)
-            defer { db.close() }
-            try db.queryV1(sql: query, values: nil, complete: { resultSet in
+            let dbName = self.textVersion + ".db"
+            try self.database.open(dbPath: dbName, copyIfAbsent: true)
+            defer { self.database.close() }
+            try self.database.queryV1(sql: query, values: nil, complete: { resultSet in
                 for row in resultSet {
                     let bookId = row[0]!
                     if let oldTest = self.oldTestament?.booksById[bookId] {

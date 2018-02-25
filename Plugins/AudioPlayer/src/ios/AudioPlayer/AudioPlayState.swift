@@ -1,5 +1,5 @@
 //
-//  AudioBibleState.swift
+//  AudioPlayState.swift
 //  AudioPlayer
 //
 //  Created by Gary Griswold on 8/16/17.

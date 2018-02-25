@@ -1,5 +1,5 @@
 //
-//  BibleReader.swift
+//  AudioBible.swift
 //  AudioPlayer
 //
 //  Created by Gary Griswold on 7/31/17.
@@ -304,14 +304,13 @@ class AudioBible {
     }
     
     private func readVerseMetaData(reference: AudioReference) {
-        let reader = AudioTOCBible()
-        reader.readVerseAudio(damid: reference.damId, bookId: reference.book, chapter: reference.chapterNum,
-                              complete: { audioChapter in
-            if (audioChapter != nil) {
+        reference.audioChapter = nil
+        if let reader = self.controller.metaDataReader {
+            reader.readVerseAudio(damid: reference.damId, bookId: reference.book, chapter: reference.chapterNum,
+                                  complete: { audioChapter in
                 reference.audioChapter = audioChapter
-                //print("PARSED DATA \(self.audioChapter?.toString())")
-            }
-        })
+            })
+        }
     }
 }
 
