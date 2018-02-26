@@ -180,6 +180,8 @@ class AudioBibleView {
         verse.shadowOffset = CGSize(width: 1.0, height: 0.5)
         scrub.layer.shadowOpacity = 0.5
         scrub.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
+        
+        self.initNotifications()
     }
     
     deinit {
@@ -232,7 +234,6 @@ class AudioBibleView {
         self.scrubSlider.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
         self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpOutside)
-        self.initNotifications()
     }
 
     func stopPlay() {
@@ -243,7 +244,6 @@ class AudioBibleView {
                        completion: { _ in self.audioPanel.removeFromSuperview() }
         )
         self.progressLink?.invalidate()
-        self.removeNotifications()
     }
     
     /**
@@ -338,10 +338,6 @@ class AudioBibleView {
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(applicationWillEnterForeground(note:)),
                            name: .UIApplicationWillEnterForeground, object: nil)
-    }
-    private func removeNotifications() {
-        let notify = NotificationCenter.default
-        notify.removeObserver(self, name: .UIApplicationWillEnterForeground, object: nil)
     }
     @objc private func applicationWillEnterForeground(note: Notification) {
         print("\n****** APP WILL ENTER FOREGROUND IN VIEW \(Date().timeIntervalSince1970)")
