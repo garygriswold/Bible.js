@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.shortsands.yourbible" version="1.9.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.shortsands.yourbible" version="1.10.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>SafeBible</name>
     <description>A Bible App that is safe to use in any country.</description>
     <author email="gary@shortsands.com" href="http://safebible.org">Short Sands, LLC</author>

@@ -67,17 +67,17 @@ class AudioBible {
                    expireInterval: Double.infinity,
                    getComplete: { [unowned self] url in
                     if let audioURL = url {
-                        self.initAudio(url: audioURL)
+                        self.initAudio(url: audioURL, reference: reference)
                     }
         })
     }
     
-    private func initAudio(url: URL) {
+    private func initAudio(url: URL, reference: AudioReference) {
         let asset = AVAsset(url: url)
         let playerItem = AVPlayerItem(asset: asset)
         print("Player Item Status \(playerItem.status)")
         
-        let seekTime = backupSeek(state: AudioPlayState.currentState)
+        let seekTime = backupSeek(state: AudioPlayState.currentState, reference: reference)
         if (CMTimeGetSeconds(seekTime) > 0.1) {
             playerItem.seek(to: seekTime)
         }
@@ -88,15 +88,22 @@ class AudioBible {
         self.play()
         self.controller.playHasStarted()
         
-        self.readVerseMetaData(reference: self.currReference!)
+        self.readVerseMetaData(reference: reference)
         self.controlCenter.nowPlaying(player: self)
         
-        self.preFetchNextChapter(reference: self.currReference!)
+        self.preFetchNextChapter(reference: reference)
     }
     
-    private func backupSeek(state: AudioPlayState) -> CMTime {
-        if (state.mediaUrl == self.currReference!.toString()) {
-            return state.position
+    private func backupSeek(state: AudioPlayState, reference: AudioReference) -> CMTime {
+        if (state.mediaUrl == reference.toString()) {
+            if reference.audioChapter != nil {
+                return state.position
+            } else {
+                let duration: Int64 = Int64(Date().timeIntervalSince(state.timestamp))
+                let backupSec: Int = String(duration).count // could multiply by a factor here
+                let backupTime: CMTime = CMTimeMake(Int64(backupSec), 1)
+                return(CMTimeSubtract(state.position, backupTime))
+            }
         } else {
             return kCMTimeZero
         }
@@ -267,10 +274,12 @@ class AudioBible {
     
     private func updateMediaPlayStateTime(reference: AudioReference) {
         var result: CMTime = kCMTimeZero
-        if let audioChapter = reference.audioChapter {
-            if let currentTime = self.player?.currentTime() {
+        if let currentTime = self.player?.currentTime() {
+            if let audioChapter = reference.audioChapter {
                 let verse: Int = audioChapter.findVerseByPosition(priorVerse: 1, time: currentTime)
                 result = audioChapter.findPositionOfVerse(verse: verse)
+            } else {
+                result = currentTime
             }
         }
         AudioPlayState.update(url: reference.toString(), time: result)
@@ -306,7 +315,7 @@ class AudioBible {
     private func readVerseMetaData(reference: AudioReference) {
         reference.audioChapter = nil
         if let reader = self.controller.metaDataReader {
-            reader.readVerseAudio(damid: reference.damId, bookId: reference.book, chapter: reference.chapterNum,
+            reader.readVerseAudio(damid: reference.damId, bookId: reference.bookId, chapter: reference.chapterNum,
                                   complete: { audioChapter in
                 reference.audioChapter = audioChapter
             })

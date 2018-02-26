@@ -66,7 +66,7 @@ class AudioReference {
         }
     }
     
-    var book: String {
+    var bookId: String {
         get {
             return self.tocAudioBook.bookId
         }
@@ -112,12 +112,12 @@ class AudioReference {
     }
     
     func getS3Key() -> String {
-        return self.sequence + "_" + self.book + "_" + self.chapter + "." + self.fileType
+        return self.sequence + "_" + self.bookId + "_" + self.chapter + "." + self.fileType
     }
     
     func isEqual(reference: AudioReference) -> Bool {
         if (self.chapter != reference.chapter) { return false }
-        if (self.book != reference.book) { return false }
+        if (self.bookId != reference.bookId) { return false }
         if (self.sequence != reference.sequence) { return false }
         if (self.damId != reference.damId) { return false }
         if (self.fileType != reference.fileType) { return false }
@@ -125,6 +125,6 @@ class AudioReference {
     }
     
     func toString() -> String {
-        return self.damId + "_" + self.sequence + "_" + self.book + "_" + self.chapter + "." + self.fileType
+        return self.damId + "_" + self.sequence + "_" + self.bookId + "_" + self.chapter + "." + self.fileType
     }
 }
