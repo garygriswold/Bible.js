@@ -33,6 +33,7 @@ class AudioBible {
         self.controller = controller
         self.controlCenter = AudioControlCenter.shared
         self.controlCenter.setupControlCenter(player: self)
+        self.initNotifications()
     }
     
     deinit {
@@ -83,7 +84,6 @@ class AudioBible {
         }
         self.player = AVPlayer(playerItem: playerItem)
         self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.none
-        self.initNotifications()
         
         self.play()
         self.controller.playHasStarted()
@@ -207,23 +207,7 @@ class AudioBible {
                            name: .UIApplicationWillTerminate,
                            object: nil)
     }
-/*
-    private func removeNotifications() {
-        print("\n ***** INSIDE REMOVE NOTIFICATIONS")
-        let notify = NotificationCenter.default
-        notify.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
-        notify.removeObserver(self, name: .AVPlayerItemFailedToPlayToEndTime, object: nil)
-        notify.removeObserver(self, name: .AVPlayerItemPlaybackStalled, object: nil)
-        notify.removeObserver(self, name: .AVPlayerItemNewErrorLogEntry, object: nil)
-        //notify.removeObserver(self, name: .AVPlayerItemNewAccessLogEntry, object: nil)
-        //notify.removeObserver(self, name: .AVPlayerItemTimeJumped, object: nil)
- 
-        notify.removeObserver(self, name: .UIApplicationDidFinishLaunching, object: nil)
-        notify.removeObserver(self, name: .UIApplicationWillEnterForeground, object: nil)
-        notify.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
-        notify.removeObserver(self, name: .UIApplicationWillTerminate, object: nil)
-    }
-*/
+
     @objc private func playerItemDidPlayToEndTime(note:Notification) {
         print("\n** DID PLAY TO END \(String(describing: note.object))")
         self.nextChapter()
