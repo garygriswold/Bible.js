@@ -54,12 +54,12 @@ class AudioBible {
     func beginReadFile(reference: AudioReference) {
         print("BibleReader.BEGIN Read File")
         self.currReference = reference
-        self.audioAnalytics = AudioAnalytics(mediaSource: "FCBH",
+        self.audioAnalytics = AudioAnalytics(mediaSource: reference.tocAudioBook.testament.bible.mediaSource,
                                              mediaId: reference.damId,
                                              languageId: reference.dpbLanguageCode,
                                              textVersion: reference.textVersion,
                                              silLang: reference.silLang)
-        
+        self.readVerseMetaData(reference: reference)
         print("INSIDE BibleReader \(reference.damId)")
         AudioPlayState.retrieve(mediaId: reference.damId)
         AwsS3Cache.shared.readFile(s3Bucket: reference.getS3Bucket(),
@@ -87,8 +87,6 @@ class AudioBible {
         
         self.play()
         self.controller.playHasStarted()
-        
-        self.readVerseMetaData(reference: reference)
         self.controlCenter.nowPlaying(player: self)
         
         self.preFetchNextChapter(reference: reference)
