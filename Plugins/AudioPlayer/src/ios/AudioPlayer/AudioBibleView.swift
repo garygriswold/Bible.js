@@ -19,6 +19,15 @@ class AudioBibleView {
         }
         return AudioBibleView.instance!
     }
+    static var webview: WKWebView? {
+        get {
+            if let singleton = instance {
+                return singleton.view as? WKWebView
+            } else {
+                return nil
+            }
+        }
+    }
     
     private unowned let view: UIView
     private unowned let audioBible: AudioBible
@@ -271,21 +280,25 @@ class AudioBibleView {
     }
     
     private func labelVerseNum(updateControlCenter: Bool, position: Double) {
-        if let verse = self.audioBible.getCurrentReference()?.audioChapter {
-            if (self.scrubSlider.value == 0.0) {
-                self.verseNum = 0
-            }
-            let newVerseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(self.scrubSlider.value))
-            if newVerseNum != self.verseNum {
-                self.verseNumLabel.string = String(newVerseNum)
-                if updateControlCenter {
-                    AudioControlCenter.shared.updateNowPlaying(verse: newVerseNum, position: position)
+        if let reference = self.audioBible.getCurrentReference() {
+            if let verse = reference.audioChapter {
+                if (self.scrubSlider.value == 0.0) {
+                    self.verseNum = 0
                 }
-                self.updateTextPosition(verse: newVerseNum)
-                self.verseNum = newVerseNum
+                let newVerseNum = verse.findVerseByPosition(priorVerse: self.verseNum, seconds: Double(self.scrubSlider.value))
+                if newVerseNum != self.verseNum {
+                    self.verseNumLabel.string = String(newVerseNum)
+                    if updateControlCenter {
+                        AudioControlCenter.shared.updateNowPlaying(reference: reference,
+                                                                   verse: newVerseNum, position: position)
+                    }
+                    self.verseNum = newVerseNum
+                }
+                self.verseLabel.opacity = 1
+                self.verseLabel.position = positionVersePopup()
+            } else {
+                self.verseLabel.opacity = 0
             }
-            self.verseLabel.opacity = 1
-            self.verseLabel.position = positionVersePopup()
         } else {
             self.verseLabel.opacity = 0
         }
@@ -327,7 +340,6 @@ class AudioBibleView {
                 self.labelVerseNum(updateControlCenter: true, position: current.seconds)
             } else {
                 self.audioBible.nextChapter()
-                self.updateTextPosition(verse: 1)
             }
             self.scrubSliderDrag = false
             if self.scrubSuspendedPlay {
@@ -336,23 +348,7 @@ class AudioBibleView {
             }
         }
     }
-    
-    private func updateTextPosition(verse: Int) {
-        if let webview = self.view as? WKWebView {
-            if let ref = self.audioBible.getCurrentReference() {
-                let nodeId = ref.getNodeId(verse: verse)
-                let msg = "document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE," +
-                " { detail: { id: '\(nodeId)' }}));"
-                print("DISPATCH EVENT LISTENING TO \(nodeId)")
-                webview.evaluateJavaScript(msg, completionHandler: {(result, error) in
-                    if let err = error {
-                        print("Dispatch Event Listening to: Javascript error \(err)")
-                    }
-                })
-            }
-        }
-    }
-    
+
     private func initNotifications() {
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(applicationWillEnterForeground(note:)),

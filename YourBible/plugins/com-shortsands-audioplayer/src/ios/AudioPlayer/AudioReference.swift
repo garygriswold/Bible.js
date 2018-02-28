@@ -116,7 +116,11 @@ class AudioReference {
     }
     
     func getNodeId(verse: Int) -> String {
+        if verse > 0 {
             return self.bookId + ":" + String(self.chapterNum) + ":" + String(verse)
+        } else {
+            return self.bookId + ":" + String(self.chapterNum)
+        }
     }
     
     func isEqual(reference: AudioReference) -> Bool {

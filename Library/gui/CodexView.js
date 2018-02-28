@@ -42,7 +42,20 @@ CodexView.prototype.showView = function(nodeId) {
 		}
 		that.currentNodeId = firstChapter.nodeId;
 		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
-		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do		
+		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do
+		
+		document.body.addEventListener(BIBLE.SCROLL_TEXT, function(event) {
+			console.log('animateScrollTo', event.detail.id);
+			var verse = document.getElementById(event.detail.id);
+			if (verse) {
+				var rect = verse.getBoundingClientRect();
+				console.log("RECT TOP " + rect.top + "  window.scrollY " + window.scrollY);
+				//TweenMax.killTweensOf(window);
+				TweenMax.to(window, 0.7, {scrollTo: { y: rect.top + window.scrollY - that.headerHeight}});
+				//TweenMax.set(window, {scrollTo: { y: rect.top + window.scrollY - this.headerHeight}});
+				//window.scrollTo(0, rect.top + window.scrollY - that.headerHeight);
+			}				
+		});
 	});
 	function onScrollHandler(event) {
 		//console.log('windowHeight=', window.innerHeight, '  scrollHeight=', document.body.scrollHeight, '  scrollY=', window.scrollY);

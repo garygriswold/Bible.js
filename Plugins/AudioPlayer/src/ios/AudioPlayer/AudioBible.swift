@@ -154,7 +154,7 @@ class AudioBible {
                 if let prior = self.currReference?.priorChapter() {
                     self.nextReference = self.currReference
                     self.currReference = prior
-                    self.addNextChapter(reference: self.currReference!)
+                    self.addNextChapter(reference: prior)
                 }
             } else {
                 item.seek(to: kCMTimeZero)

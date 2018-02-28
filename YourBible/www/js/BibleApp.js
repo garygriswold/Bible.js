@@ -173,7 +173,8 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		CHG_HEADING: 'bible-chg-heading', // change title at top of page as result of user scrolling
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note', // Hide footnote as a result of user action
-		SHOW_VIDEO: 'bible-show-video' // Show Video List view as a result of user action
+		SHOW_VIDEO: 'bible-show-video', // Show Video List view as a result of user action
+		SCROLL_TEXT: 'bible-scroll-text' // Scroll Text as when listening to audio
 	};
 var SERVER_HOST = 'cloud.shortsands.com'; // For unused QuestionsView
 var SERVER_PORT = '8080';
@@ -388,7 +389,20 @@ CodexView.prototype.showView = function(nodeId) {
 		}
 		that.currentNodeId = firstChapter.nodeId;
 		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
-		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do		
+		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do
+		
+		document.body.addEventListener(BIBLE.SCROLL_TEXT, function(event) {
+			console.log('animateScrollTo', event.detail.id);
+			var verse = document.getElementById(event.detail.id);
+			if (verse) {
+				var rect = verse.getBoundingClientRect();
+				console.log("RECT TOP " + rect.top + "  window.scrollY " + window.scrollY);
+				//TweenMax.killTweensOf(window);
+				TweenMax.to(window, 0.7, {scrollTo: { y: rect.top + window.scrollY - that.headerHeight}});
+				//TweenMax.set(window, {scrollTo: { y: rect.top + window.scrollY - this.headerHeight}});
+				//window.scrollTo(0, rect.top + window.scrollY - that.headerHeight);
+			}				
+		});
 	});
 	function onScrollHandler(event) {
 		//console.log('windowHeight=', window.innerHeight, '  scrollHeight=', document.body.scrollHeight, '  scrollY=', window.scrollY);

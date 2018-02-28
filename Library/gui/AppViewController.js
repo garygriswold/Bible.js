@@ -14,7 +14,8 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		CHG_HEADING: 'bible-chg-heading', // change title at top of page as result of user scrolling
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note', // Hide footnote as a result of user action
-		SHOW_VIDEO: 'bible-show-video' // Show Video List view as a result of user action
+		SHOW_VIDEO: 'bible-show-video', // Show Video List view as a result of user action
+		SCROLL_TEXT: 'bible-scroll-text' // Scroll Text as when listening to audio
 	};
 var SERVER_HOST = 'cloud.shortsands.com'; // For unused QuestionsView
 var SERVER_PORT = '8080';
