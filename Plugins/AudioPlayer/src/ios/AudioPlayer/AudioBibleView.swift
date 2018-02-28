@@ -8,6 +8,7 @@
 
 import AVFoundation
 import UIKit
+import WebKit
 
 class AudioBibleView {
     
@@ -280,6 +281,7 @@ class AudioBibleView {
                 if updateControlCenter {
                     AudioControlCenter.shared.updateNowPlaying(verse: newVerseNum, position: position)
                 }
+                self.updateTextPosition(verse: newVerseNum)
                 self.verseNum = newVerseNum
             }
             self.verseLabel.opacity = 1
@@ -325,11 +327,28 @@ class AudioBibleView {
                 self.labelVerseNum(updateControlCenter: true, position: current.seconds)
             } else {
                 self.audioBible.nextChapter()
+                self.updateTextPosition(verse: 1)
             }
             self.scrubSliderDrag = false
             if self.scrubSuspendedPlay {
                 play.play()
                 self.scrubSuspendedPlay = false
+            }
+        }
+    }
+    
+    private func updateTextPosition(verse: Int) {
+        if let webview = self.view as? WKWebView {
+            if let ref = self.audioBible.getCurrentReference() {
+                let nodeId = ref.getNodeId(verse: verse)
+                let msg = "document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE," +
+                " { detail: { id: '\(nodeId)' }}));"
+                print("DISPATCH EVENT LISTENING TO \(nodeId)")
+                webview.evaluateJavaScript(msg, completionHandler: {(result, error) in
+                    if let err = error {
+                        print("Dispatch Event Listening to: Javascript error \(err)")
+                    }
+                })
             }
         }
     }
