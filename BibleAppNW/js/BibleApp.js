@@ -16,6 +16,7 @@ AppInitializer.prototype.begin = function() {
 	var that = this;
 	console.log("AppInitializer.begin BibleAppConfig.versionCode = ", BibleAppConfig.versionCode);
 	var settingStorage = new SettingStorage();
+	deviceSettings.loadDeviceSettings();
 	deviceSettings.locale(function(locale, langCode, scriptCode, countryCode) {
 		console.log('user locale ', locale, langCode, countryCode);
 		that.langPrefCode = langCode;
@@ -116,6 +117,17 @@ AppInitializer.prototype.begin = function() {
 		that.controller.questionsView.showView();
 		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
 	}
+	function showAudioHandler(event) {
+		disableHandlers();
+		var ref = new Reference(event.detail.id);
+		window.AudioPlayer.present(ref.book, ref.chapter,
+			function() {
+				console.log("SUCESSFUL EXIT FROM AudioPlayer");
+				document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
+			}
+		);
+		enableHandlersExcept(BIBLE.SHOW_AUDIO);
+	}
 	function showVideoListHandler(event) {
 		disableHandlers();
 		that.controller.clearViews();
@@ -133,6 +145,7 @@ AppInitializer.prototype.begin = function() {
 		document.body.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		document.body.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
 		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		document.body.removeEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
 		document.body.removeEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
@@ -141,6 +154,7 @@ AppInitializer.prototype.begin = function() {
 		if (name !== BIBLE.SHOW_SEARCH) document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
 		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		if (name !== BIBLE.SHOW_AUDIO) document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
 		if (name !== BIBLE.SHOW_VIDEO) document.body.addEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
@@ -151,6 +165,7 @@ AppInitializer.prototype.begin = function() {
 var BIBLE = { CHG_VERSION: 'bible-chg-version', 
 		SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
+		SHOW_AUDIO: 'bible-show-audio', // present audio overlay above text
 		SHOW_QUESTIONS: 'bible-show-questions', // present questions page, create first
 		SHOW_HISTORY: 'bible-show-history', // present history tabs
 		HIDE_HISTORY: 'bible-hide-history', // hide history tabs
@@ -159,7 +174,8 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		CHG_HEADING: 'bible-chg-heading', // change title at top of page as result of user scrolling
 		SHOW_NOTE: 'bible-show-note', // Show footnote as a result of user action
 		HIDE_NOTE: 'bible-hide-note', // Hide footnote as a result of user action
-		SHOW_VIDEO: 'bible-show-video' // Show Video List view as a result of user action
+		SHOW_VIDEO: 'bible-show-video', // Show Video List view as a result of user action
+		SCROLL_TEXT: 'bible-scroll-text' // Scroll Text as when listening to audio
 	};
 var SERVER_HOST = 'cloud.shortsands.com'; // For unused QuestionsView
 var SERVER_PORT = '8080';
@@ -374,7 +390,30 @@ CodexView.prototype.showView = function(nodeId) {
 		}
 		that.currentNodeId = firstChapter.nodeId;
 		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
-		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do		
+		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do
+		
+		document.body.addEventListener(BIBLE.SCROLL_TEXT, function(event) {
+			var nodeId = event.detail.id;
+			console.log('animateScrollTo', nodeId);
+			var verse = document.getElementById(nodeId);
+			if (verse) {
+				var rect = verse.getBoundingClientRect();
+				console.log("RECT TOP " + rect.top + "  window.scrollY " + window.scrollY);
+				//TweenMax.killTweensOf(window);
+				TweenMax.to(window, 0.7, {scrollTo: { y: rect.top + window.scrollY - that.headerHeight}});
+				//TweenMax.set(window, {scrollTo: { y: rect.top + window.scrollY - this.headerHeight}});
+				//window.scrollTo(0, rect.top + window.scrollY - that.headerHeight);
+			//} else {
+			//	var ref = Reference(nodeId);
+			//	that.showChapters([ref], true, function() {
+			//		verse = document.getElementById(nodeId);
+			//		if (verse) {
+			//			rect = verse.getBoundingClientRect();
+			//			TweenMax.to(window, 0.7, {scrollTo: { y: rect.top + window.scrollY - that.headerHeight}});
+			//		}
+			//	});
+			}	
+		});
 	});
 	function onScrollHandler(event) {
 		//console.log('windowHeight=', window.innerHeight, '  scrollHeight=', document.body.scrollHeight, '  scrollY=', window.scrollY);
@@ -1141,23 +1180,31 @@ SearchView.prototype.prepareSelect = function(refList) {
 * This class presents the status bar user interface, and responds to all
 * user interactions on the status bar.
 */
-var HEADER_BUTTON_HEIGHT = 32;//44;
-var HEADER_BAR_HEIGHT = 40;//52;
-var STATUS_BAR_HEIGHT = 14;
+var HEADER_BUTTON_HEIGHT = 32;
+var HEADER_BAR_HEIGHT = 40;
+var STATUS_BAR_HEIGHT = 18;//14;
+var PHONEX_STATUS_BAR_HEIGHT = 36;//26;
 var CELL_SPACING = 5;
 
 function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
-	this.statusBarInHeader = (deviceSettings.platform() === 'ios') ? true : false;
-	//this.statusBarInHeader = false;
-
 	this.hite = HEADER_BUTTON_HEIGHT;
-	this.barHite = (this.statusBarInHeader) ? HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT : HEADER_BAR_HEIGHT;
-	this.cellTopPadding = (this.statusBarInHeader) ? 'padding-top:' + STATUS_BAR_HEIGHT + 'px' : 'padding-top:0px';
+	
+	if (deviceSettings.platform() == 'ios') {
+		if (deviceSettings.model() == 'iPhone X') {
+			this.barHite = HEADER_BAR_HEIGHT + PHONEX_STATUS_BAR_HEIGHT;
+			this.cellTopPadding = 'padding-top:' + PHONEX_STATUS_BAR_HEIGHT + 'px';
+		} else {
+			this.barHite = HEADER_BAR_HEIGHT + STATUS_BAR_HEIGHT;
+			this.cellTopPadding = 'padding-top:' + STATUS_BAR_HEIGHT + 'px';			
+		}
+	} else {
+		this.barHite = HEADER_BAR_HEIGHT;
+		this.cellTopPadding = 'padding-top:5px';			
+	}
 	this.tableContents = tableContents;
 	this.version = version;
 	this.localizeNumber = localizeNumber;
 	this.videoAdapter = videoAdapter;
-	this.backgroundCanvas = null;
 	this.titleCanvas = null;
 	this.titleGraphics = null;
 	this.titleStartX = null;
@@ -1165,12 +1212,14 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	this.currentReference = null;
 	this.rootNode = document.createElement('table');
 	this.rootNode.id = 'statusRoot';
-	this.rootNode.setAttribute('cellspacing', CELL_SPACING);
+	this.rootNode.setAttribute('style', 'height:' + this.barHite + 'px');
 	document.body.appendChild(this.rootNode);
 	this.rootRow = document.createElement('tr');
 	this.rootNode.appendChild(this.rootRow);
 	this.labelCell = document.createElement('td');
 	this.labelCell.id = 'labelCell';
+	this.audioNode = null;
+	this.audioForBook = false;
 	document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	Object.seal(this);
 	var that = this;
@@ -1191,6 +1240,19 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 				that.titleStartX = (that.titleCanvas.width - that.titleWidth) / 2;
 				roundedRect(that.titleGraphics, that.titleStartX, 0, that.titleWidth, that.hite, 7);
 			}
+			if (that.audioNode !== null) {
+				if (that.version.hasAudioBook(that.currentReference.book)) {
+					if (! that.audioForBook) {
+						that.audioForBook = true;
+						TweenLite.fromTo(that.audioNode , 1.0, {opacity:0}, {opacity:1.0, display:'table-cell'});
+					}
+				} else {
+					if (that.audioForBook) {
+						that.audioForBook = false;
+						TweenLite.fromTo(that.audioNode , 1.0, {opacity:1.0}, {opacity:0, display:'none'});
+					}
+				}
+			}
 		}
 		document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	}
@@ -1210,47 +1272,26 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 }
 HeaderView.prototype.showView = function() {
 	var that = this;
-	this.backgroundCanvas = document.createElement('canvas');
-	paintBackground(this.backgroundCanvas, this.hite);
-	this.rootRow.appendChild(this.backgroundCanvas);
 
-	//this.videoAdapter.hasVideos(this.version.langCode, this.version.langPrefCode, function(videoCount) {
-	var menuWidth = setupIconButton('tocCell', drawTOCIcon, that.hite, BIBLE.SHOW_TOC);
-	var serhWidth = setupIconButton('searchCell', drawSearchIcon, that.hite, BIBLE.SHOW_SEARCH);
+	var menuWidth = setupIconImgButton('tocCell', 'img/MenuIcon128.png', that.hite, BIBLE.SHOW_TOC);
+	var serhWidth = setupIconImgButton('searchCell', 'img/SearchIcon128.png', that.hite, BIBLE.SHOW_SEARCH);
 	that.rootRow.appendChild(that.labelCell);
-	var videoWidth = setupIconButton('videoCell', drawVideoIcon, that.hite, BIBLE.SHOW_VIDEO);
-	if (that.version.isQaActive == 'T') {
-		var quesWidth = setupIconButton('questionsCell', drawQuestionsIcon, that.hite, BIBLE.SHOW_QUESTIONS);
-	} else {
-		quesWidth = 0;
-	}
-	var settWidth = setupIconButton('settingsCell', drawSettingsIcon, that.hite, BIBLE.SHOW_SETTINGS);
-	var avalWidth = window.innerWidth - (menuWidth + serhWidth + videoWidth + quesWidth + settWidth + (6 * (4 + CELL_SPACING)));// six is fudge factor
-
+	
+	var audioWidth = setupIconImgButton('audioCell', 'img/SoundIcon128.png', that.hite, BIBLE.SHOW_AUDIO);
+	that.audioNode = document.getElementById('audioCell');
+	var videoWidth = setupIconImgButton('videoCell', 'img/ScreenIcon128.png', that.hite, BIBLE.SHOW_VIDEO);
+	var settWidth = setupIconImgButton('settingsCell', 'img/SettingsIcon128.png', that.hite, BIBLE.SHOW_SETTINGS);
+	var avalWidth = (window.innerWidth * 0.88) - (menuWidth + serhWidth + + audioWidth + videoWidth + settWidth);
+	
+	window.AudioPlayer.findAudioVersion(that.version.code, that.version.silCode, function(bookIdList) {
+		console.log("VERSION: " + that.version.code + "  SIL: " + that.version.silCode + "  BOOKLIST: " + bookIdList);
+		that.version.audioBookIdList = bookIdList;
+	});
+	
 	that.titleCanvas = document.createElement('canvas');
 	drawTitleField(that.titleCanvas, that.hite, avalWidth);
 	that.labelCell.appendChild(that.titleCanvas);
-	//});
 
-	function paintBackground(canvas, hite) {
-		console.log('**** repaint background ****');
-    	canvas.setAttribute('height', that.barHite);
-    	canvas.setAttribute('width', window.innerWidth);// outerWidth is zero on iOS
-    	canvas.setAttribute('style', 'position: absolute; top:0; left:0; z-index: -1');
-      	var graphics = canvas.getContext('2d');
-      	graphics.rect(0, 0, canvas.width, canvas.height);
-
-      	// create radial gradient
-      	var vMidpoint = hite / 2;
-      	var gradient = graphics.createRadialGradient(238, vMidpoint, 10, 238, vMidpoint, window.innerHeight - hite);
-      	// light blue
-      	gradient.addColorStop(0, '#2E9EC9');//'#8ED6FF');
-      	// dark blue
-      	gradient.addColorStop(1, '#2E9EC9');//'#004CB3');
-
-      	graphics.fillStyle = '#2E9EC9';//gradient; THE GRADIENT IS NOT BEING USED.
-      	graphics.fill();
-	}
 	function drawTitleField(canvas, hite, avalWidth) {
 		canvas.setAttribute('id', 'titleCanvas');
 		canvas.setAttribute('height', hite);
@@ -1272,22 +1313,24 @@ HeaderView.prototype.showView = function() {
 			}
 		});
 	}
-	function setupIconButton(parentCell, canvasFunction, hite, eventType) {
-		var canvas = canvasFunction(hite, '#F7F7BB');
+	function setupIconImgButton(parentCell, iconFilename, hite, eventType) {
+		var canvas = document.createElement('img');
+		canvas.setAttribute('src', iconFilename);
 		canvas.setAttribute('style', that.cellTopPadding);
+		canvas.setAttribute('height', hite);
+		canvas.setAttribute('width', hite);
 		var parent = document.createElement('td');
 		parent.id = parentCell;
 		that.rootRow.appendChild(parent);
 		parent.appendChild(canvas);
-		canvas.addEventListener('click', function(event) {
+		parent.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
 			console.log('clicked', parentCell);
-			document.body.dispatchEvent(new CustomEvent(eventType));
+			document.body.dispatchEvent(new CustomEvent(eventType, { detail: { id: that.currentReference.nodeId }}));
 		});
 		return(canvas.width);
 	}
 };
-
 /**
 * This class presents the table of contents, and responds to user actions.
 */
@@ -3839,6 +3882,7 @@ function BibleVersion(langPrefCode, countryCode) {
 	this.copyright = null;
 	this.bibleVersion = null;
 	this.introduction = null;
+	this.audioBookIdList = null;
 	Object.seal(this);
 }
 BibleVersion.prototype.fill = function(filename, callback) {
@@ -3883,6 +3927,14 @@ BibleVersion.prototype.fill = function(filename, callback) {
 		}
 		callback();
 	});
+};
+BibleVersion.prototype.hasAudioBook = function(bookId) {
+	if (this.audioBookIdList !== null && this.audioBookIdList.length > 2) {
+		var index = this.audioBookIdList.indexOf(bookId);
+		return(index >= 0);
+	} else {
+		return false;
+	}
 };
 
 /**

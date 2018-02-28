@@ -392,8 +392,9 @@ CodexView.prototype.showView = function(nodeId) {
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do
 		
 		document.body.addEventListener(BIBLE.SCROLL_TEXT, function(event) {
-			console.log('animateScrollTo', event.detail.id);
-			var verse = document.getElementById(event.detail.id);
+			var nodeId = event.detail.id;
+			console.log('animateScrollTo', nodeId);
+			var verse = document.getElementById(nodeId);
 			if (verse) {
 				var rect = verse.getBoundingClientRect();
 				console.log("RECT TOP " + rect.top + "  window.scrollY " + window.scrollY);
@@ -401,7 +402,16 @@ CodexView.prototype.showView = function(nodeId) {
 				TweenMax.to(window, 0.7, {scrollTo: { y: rect.top + window.scrollY - that.headerHeight}});
 				//TweenMax.set(window, {scrollTo: { y: rect.top + window.scrollY - this.headerHeight}});
 				//window.scrollTo(0, rect.top + window.scrollY - that.headerHeight);
-			}				
+			//} else {
+			//	var ref = Reference(nodeId);
+			//	that.showChapters([ref], true, function() {
+			//		verse = document.getElementById(nodeId);
+			//		if (verse) {
+			//			rect = verse.getBoundingClientRect();
+			//			TweenMax.to(window, 0.7, {scrollTo: { y: rect.top + window.scrollY - that.headerHeight}});
+			//		}
+			//	});
+			}	
 		});
 	});
 	function onScrollHandler(event) {

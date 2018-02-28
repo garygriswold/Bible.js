@@ -699,11 +699,43 @@ body {
 	top: 0;
 	width:100%;
 	z-index: 1000;
+	
+	background-color: #2E9EC9;
+	
+	padding: 0;
+	border-collapse: collapse;
+	border-spacing: 0;
 }
-#statusRow td {
-	border:none;
-	padding:0;
-	margin:0;
+#tocCell {
+	padding-left: 2%;
+	padding-right: 1%;
+	padding-bottom: 0;
+}
+#searchCell {
+	padding-left: 1%;
+	padding-right: 1%;
+	padding-bottom: 0;
+}
+#labelCell {
+	padding-left: auto;
+	padding-right: auto;
+	padding-bottom: 0;
+}
+#audioCell {
+	padding-left: 1%;
+	padding-right: 1%;
+	padding-bottom: 0;
+	display: none;
+}
+#videoCell {
+	padding-left: 1%;
+	padding-right: 1%;	
+	padding-bottom: 0;
+}
+#settingsCell {
+	padding-left: 1%;
+	padding-right: 2%;
+	padding-bottom: 0;
 }
 
 

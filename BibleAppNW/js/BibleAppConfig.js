@@ -1,2 +1,2 @@
-		var BibleAppConfig = {versionCode: "1.9.7"};
+		var BibleAppConfig = {versionCode: "1.10.1"};
 		console.log('BibleAppConfig.versionCode = ', BibleAppConfig.versionCode);
