@@ -50,10 +50,9 @@ CodexView.prototype.showView = function(nodeId) {
 			var verse = document.getElementById(nodeId);
 			if (verse) {
 				var rect = verse.getBoundingClientRect();
-				console.log("RECT TOP " + rect.top + "  window.scrollY " + window.scrollY);
 				TweenMax.killTweensOf(window);
-				TweenMax.to(window, 0.7, {scrollTo: { y: rect.top + window.scrollY - that.headerHeight}});
-			}	
+				TweenMax.to(window, 0.7, {scrollTo: { y: rect.top + window.scrollY - that.headerHeight, autoKill: false }});
+			}
 		});
 	});
 	function onScrollHandler(event) {
