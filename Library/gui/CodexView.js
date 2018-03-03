@@ -23,6 +23,7 @@ CodexView.prototype.hideView = function() {
 	while (this.viewport.firstChild) {
 		this.viewport.removeChild(this.viewport.firstChild);
 	}
+	this.animateScrollTo(false);
 };
 CodexView.prototype.showView = function(nodeId) {
 	window.clearTimeout(this.checkScrollID);
@@ -36,16 +37,7 @@ CodexView.prototype.showView = function(nodeId) {
 		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do
 		
-		document.body.addEventListener(BIBLE.SCROLL_TEXT, function(event) {
-			var nodeId = event.detail.id;
-			console.log('animateScrollTo', nodeId);
-			var verse = document.getElementById(nodeId);
-			if (verse) {
-				var rect = verse.getBoundingClientRect();
-				TweenMax.killTweensOf(window);
-				TweenMax.to(window, 0.7, {scrollTo: { y: rect.top + window.scrollY - that.headerHeight, autoKill: false }});
-			}
-		});
+		that.animateScrollTo(true);
 	});
 	function onScrollHandler(event) {
 		var currNode = identifyCurrentChapter();//expensive solution
@@ -174,6 +166,22 @@ CodexView.prototype.scrollTo = function(nodeId) {
 		var rect = verse.getBoundingClientRect();
 		//window.scrollTo(0, rect.top + window.scrollY - this.headerHeight);
 		TweenMax.set(window, {scrollTo: { y: rect.top + window.scrollY - this.headerHeight}});
+	}
+};
+CodexView.prototype.animateScrollTo = function(scrollOn) {
+	var that = this;
+	if (scrollOn) document.body.addEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
+	else document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
+	
+	function animateScrollToHandler(event) {
+		var nodeId = event.detail.id;
+		console.log('animateScrollTo', nodeId);
+		var verse = document.getElementById(nodeId);
+		if (verse) {
+			var rect = verse.getBoundingClientRect();
+			TweenMax.killTweensOf(window);
+			TweenMax.to(window, 0.7, {scrollTo: { y: rect.top + window.scrollY - that.headerHeight, autoKill: false }});
+		}
 	}
 };
 /**
