@@ -348,7 +348,7 @@ AppViewController.prototype.close = function() {
 /**
 * This class contains user interface features for the display of the Bible text
 */
-var CODEX_VIEW = {BEFORE: 0, AFTER: 1, MAX: 100000, SCROLL_TIMEOUT: 250};
+var CODEX_VIEW = {BEFORE: 1, AFTER: 1, MAX: 100000, SCROLL_TIMEOUT: 250};
 
 function CodexView(chaptersAdapter, tableContents, headerHeight, copyrightView) {
 	this.chaptersAdapter = chaptersAdapter;
@@ -362,14 +362,14 @@ function CodexView(chaptersAdapter, tableContents, headerHeight, copyrightView) 
 	this.viewport.style.top = headerHeight + 'px'; // Start view at bottom of header.
 	this.currentNodeId = null;
 	this.checkScrollID = null;
-	this.userIsScrolling = false;
+	//this.userIsScrolling = false;
 	Object.seal(this);
 	var that = this;
-	if (deviceSettings.platform() == 'ios') {
-		window.addEventListener('scroll', function(event) {
-			that.userIsScrolling = true;
-		});
-	}
+	//if (deviceSettings.platform() == 'ios') {
+	//	window.addEventListener('scroll', function(event) {
+	//		that.userIsScrolling = true;
+	//	});
+	//}
 }
 CodexView.prototype.hideView = function() {
 	window.clearTimeout(this.checkScrollID);
@@ -383,10 +383,10 @@ CodexView.prototype.showView = function(nodeId) {
 	var firstChapter = new Reference(nodeId);
 	var rowId = this.tableContents.rowId(firstChapter);
 	var that = this;
-	this.showChapters([rowId, rowId + CODEX_VIEW.AFTER], true, function(err) {
-		if (firstChapter.verse) {
-			that.scrollTo(firstChapter.nodeId);
-		}
+	this.showChapters([rowId - CODEX_VIEW.BEFORE, rowId + CODEX_VIEW.AFTER], true, function(err) {
+		//if (firstChapter.verse) {
+		that.scrollTo(firstChapter.nodeId);
+		//}
 		that.currentNodeId = "top" + firstChapter.nodeId;
 		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do
@@ -413,6 +413,9 @@ CodexView.prototype.showView = function(nodeId) {
 			}
 			var firstChildId = that.viewport.firstChild.id;
 			var lastChildId = that.viewport.lastChild.id;
+			var firstChild = that.viewport.firstChild;
+			var firstRect = firstChild.getBoundingClientRect();
+			var firstTop = firstRect.top;
 			if (currNode.bottom === lastChildId || lastChildId.substr(7,1) === "0") {
 				var lastChapter = new Reference(lastChildId.substr(3));
 				var rowId = that.tableContents.rowId(lastChapter);
@@ -422,7 +425,8 @@ CodexView.prototype.showView = function(nodeId) {
 					});					
 				} else onScrollLastStep();
 			}
-			else if (currNode.top === firstChildId || firstChildId.substr(7,1) === "0") {
+			//else if (currNode.top === firstChildId || firstChildId.substr(7,1) === "0") {
+			else if (firstTop > 0) {
 				var firstChapter = new Reference(firstChildId.substr(3));
 				var rowId = that.tableContents.rowId(firstChapter);
 				if (rowId) {
@@ -434,7 +438,7 @@ CodexView.prototype.showView = function(nodeId) {
 		} else onScrollLastStep();
 	}
 	function onScrollLastStep() {
-		that.userIsScrolling = false;
+		//that.userIsScrolling = false;
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT); // should be last thing to do
 	}
 	function identifyCurrentChapter() {

@@ -84,6 +84,7 @@ VersionAdapter.prototype.loadVideoIntroductions = function(directory, callback) 
 /**
 * This method computes URL signatures for AWS cloudfront, and adds this information to the Version table	
 */
+/* Commented out 3/2/18 GNG
 VersionAdapter.prototype.addCloudfrontSignatures = function(callback) {
 	var that = this;
 	var signer = require('aws-cloudfront-sign');
@@ -110,14 +111,17 @@ VersionAdapter.prototype.addCloudfrontSignatures = function(callback) {
 		}
 	});
 };
+*/
 /**
-* This method computes URL signatures for AWS cloudfront, and adds this information to the Version table	
+* This method computes URL signatures for AWS S3, and adds this information to the Version table	
 */
 VersionAdapter.prototype.addS3URLSignatures = function(callback) {
 	var that = this;
 	var cred = require('../../../Credentials/UsersGroups/BibleApp.js');
 	var S3 = require('aws-sdk/clients/s3');
-	var expireTime = 60 * 60 * 24 * 365 * 20;
+	var years = 2037 - (new Date().getFullYear());
+	console.log("Expire years = " + years);
+	var expireTime = 60 * 60 * 24 * 365 * years;
 	console.log('expireTime = ', expireTime);
 	this.db.all('SELECT versionCode, filename FROM Version', [], function(err, versions) {
 		if (err) {
