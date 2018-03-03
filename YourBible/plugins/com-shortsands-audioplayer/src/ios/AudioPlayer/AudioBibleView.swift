@@ -348,23 +348,7 @@ class AudioBibleView {
             }
         }
     }
- /*
-    private func updateTextPosition(verse: Int) {
-        if let webview = self.view as? WKWebView {
-            if let ref = self.audioBible.getCurrentReference() {
-                let nodeId = ref.getNodeId(verse: verse)
-                let msg = "document.body.dispatchEvent(new CustomEvent(BIBLE.SCROLL_TEXT," +
-                " { detail: { id: '\(nodeId)' }}));"
-                print("DISPATCH EVENT LISTENING TO \(nodeId)")
-                webview.evaluateJavaScript(msg, completionHandler: {(result, error) in
-                    if let err = error {
-                        print("Dispatch Event Listening to: Javascript error \(err)")
-                    }
-                })
-            }
-        }
-    }
-  */
+
     private func initNotifications() {
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(applicationWillEnterForeground(note:)),

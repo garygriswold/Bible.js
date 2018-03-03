@@ -137,31 +137,48 @@ class AudioBible {
     
     /** This method is called by AudioControlCenter.swift when user clicks the next button. */
     func nextChapter() {
-        if let curr = self.nextReference {
-            self.currReference = curr
-            self.addNextChapter(reference: curr)
-            self.preFetchNextChapter(reference: curr)
-        } else {
-            self.stop()
-            AudioPlayState.clear() // Must do after stop, because stop updates
+        if let play = self.player {
+            let startPlayRate = play.rate
+            if let curr = self.nextReference {
+                self.currReference = curr
+                self.addNextChapter(reference: curr)
+                self.preFetchNextChapter(reference: curr)
+                if startPlayRate == 0 {
+                    self.audioAnalytics?.playStarted(item: curr.toString(), position: play.currentTime())
+                }
+            } else {
+                self.stop()
+                AudioPlayState.clear() // Must do after stop, because stop updates
+            }
         }
     }
     
     /** This method is called by AudioControlCenter.swift when user clicks the prior button. */
     func priorChapter() {
-        if let item = self.player?.currentItem {
-            if item.currentTime().seconds < 1.0 {
-                if let prior = self.currReference?.priorChapter() {
-                    self.nextReference = self.currReference
-                    self.currReference = prior
-                    self.addNextChapter(reference: prior)
+        if let play = self.player {
+            let startPlayRate = play.rate
+            if let item = play.currentItem {
+                if item.currentTime().seconds < 1.0 {
+                    if let prior = self.currReference?.priorChapter() {
+                        self.nextReference = self.currReference
+                        self.currReference = prior
+                        self.addNextChapter(reference: prior)
+                        if startPlayRate == 0 {
+                            self.audioAnalytics?.playStarted(item: prior.toString(), position: play.currentTime())
+                        }
+                    }
+                } else {
+                    item.seek(to: kCMTimeZero)
+                    self.controlCenter.nowPlaying(player: self)
+                    if startPlayRate == 0 {
+                        if let curr = self.currReference {
+                            self.audioAnalytics?.playStarted(item: curr.toString(), position: kCMTimeZero)
+                        }
+                    }
                 }
-            } else {
-                item.seek(to: kCMTimeZero)
-                self.controlCenter.nowPlaying(player: self)
             }
+            //play.currentItem?.seek(to: kCMTimeZero)
         }
-        self.player?.currentItem?.seek(to: kCMTimeZero)
     }
     
     private func initNotifications() {

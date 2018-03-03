@@ -43,7 +43,7 @@ class AudioControlCenter {
         }
         
         controlCenter.nextTrackCommand.addTarget { event in
-            if player.isPlaying() {
+            if player.getPlayer() != nil {
                 player.nextChapter()
                 return MPRemoteCommandHandlerStatus.success
             }
@@ -51,7 +51,7 @@ class AudioControlCenter {
         }
         
         controlCenter.previousTrackCommand.addTarget { event in
-            if player.isPlaying() {
+            if player.getPlayer() != nil {
                 player.priorChapter()
                 return MPRemoteCommandHandlerStatus.success
             }
@@ -66,12 +66,6 @@ class AudioControlCenter {
                     var info = [String : Any]()
                     self.currentBookChapter = reference.localName
                     info[MPMediaItemPropertyTitle] = self.currentBookChapter
-                    //if let image = UIImage(named: "Images/Logo80.png") {
-                    //    info[MPMediaItemPropertyArtwork] =
-                    //        MPMediaItemArtwork(boundsSize: image.size) { size in
-                    //            return image
-                    //    }
-                    //}
                     info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = item.currentTime().seconds
                     info[MPMediaItemPropertyPlaybackDuration] = item.asset.duration.seconds
                     info[MPNowPlayingInfoPropertyPlaybackRate] = play.rate
