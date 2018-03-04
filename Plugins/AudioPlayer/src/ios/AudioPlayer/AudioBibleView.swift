@@ -361,8 +361,7 @@ class AudioBibleView {
                 self.pauseButton.removeFromSuperview()
                 self.audioPanel.addSubview(self.playButton)
             } else {
-                self.playButton.removeFromSuperview()
-                self.audioPanel.addSubview(self.pauseButton)
+                self.startPlay()
             }
         }
     }
