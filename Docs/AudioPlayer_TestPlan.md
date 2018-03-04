@@ -1,10 +1,13 @@
 AudioPlayer Test Plan
 =====================
-Gary Griswold
-Jan 23, 2018
+Gary Griswold  
+Jan 23, 2018  
+Rev Mar 4, 2018  
 
 Audio Player Internal
 ---------------------
+
+Note: some tests must be repeated for translations with and without verse data.
 
 1.	Start of Play - When audio play starts, the player starts from Bible Text currently viewed; the current version, book and chapter.
 
@@ -20,30 +23,28 @@ Audio Player Internal
 
 7.	Audio Caching - AWS S3 component should cache audio files and not request them again, once they are requested.
 
-8.	Meta Data Caching - Meta Data should also be cached, but it should be only be reused when it is less than X days old.  In the current implementation this is only the verse position metadata.
+8.	Cache Cleanup - Cache should be stored in a location where the OS will erase old files if it needs storage. On iOS this is Library/Caches directory. 
 
-9.	Cache Cleanup - Cache should be stored in a location where the OS will erase old files if it needs storage. On iOS this is Library/Caches directory. 
-
-10.	Saving of Position - When the user stops playing by any means, the App will store the current location in the audio, and the identity of the chapter and version.
+9.	Saving of Position - When the user stops playing by any means, the App will store the current location in the audio, and the identity of the chapter and version.
 	1. Pause Button
 	2. Stop Button
 	3. Control Center pause
 	4. Killing the App
 	5. Device shutoff	
 
-11.	Using Stored Position - When the user again starts playing the same chapter, if verse position data is available, it will begin playing at the beginning of the verse where playing stopped.
+10.	Using Stored Position - When the user again starts playing the same chapter, if verse position data is available, it will begin playing at the beginning of the verse where playing stopped.
 
-12.	Using Stored Position - When the user starts playing the same chapter, but no verse position data is available, it should back up a few seconds from where playing stopped.
+11.	Using Stored Position - When the user starts playing the same chapter, but no verse position data is available, it should back up a few seconds from where playing stopped.
 
-13.	Using Old Stored Position - When the user again starts playing the same, chapter, if the position is more than Y days old, it should start at the beginning of the chapter. Or, the same rule that would apply if there were not stored position.
+12.	UNIMPLEMENTED: Using Old Stored Position - When the user again starts playing the same, chapter, if the position is more than Y days old, it should start at the beginning of the chapter. Or, the same rule that would apply if there were not stored position.
 
-14.	Bookmark control center - When the user starts playing again from the control center, it should start from the last place listened to.
+13.	Bookmark control center - When the user starts playing again from the control center, it should start from the last place listened to.
 
-15.	Analytics - Whenever the player is paused, at the end of play of part of a chapter or many chapters, the audio player should upload statistic.
+14.	Analytics - Whenever the player is paused, at the end of play of part of a chapter or many chapters, the audio player should upload statistic.
 
-16.	Statistics should be uploaded without having a bucket on the URL.
+15.	Statistics should be uploaded without having a bucket on the URL.
 
-17.	Analytics userId - In order that analytics for a single user can be recognized, each analytics upload will contain a userId, but this should be an App generated pseudo UUID, not any existing number from the device or phone service. It should be a pseudo UUID so that it cannot be used to infer the user’s MAC address.
+16.	Analytics userId - In order that analytics for a single user can be recognized, each analytics upload will contain a userId, but this should be an App generated pseudo UUID, not any existing number from the device or phone service. It should be a pseudo UUID so that it cannot be used to infer the user’s MAC address.
 	
 Foreground Play
 ---------------
@@ -110,5 +111,26 @@ Control Center (ios only)
 5.	Control Center Back - Clicking the back button should restart the chapter, or if near the beginning of the chapter, it should go to the prior chapter.
 
 6.	Control Center Forward - Clicking the forward button should start the next chapter.
+
+7.	The back and forward button should activate play even when the audio is currently paused.
+
+8.	When control center is playing, and user returns to App foreground, the App should be playing. a) When the App was left while playing, or b) When the App was left while not playing.
+
+App Switching Tests
+-------------------
+
+1.	When Audio is playing and the user opens TOC, Search, Video, or Settings the Audio should continue playing.
+
+2.	When the user selects a chapter / verse in the TOC, the audio should either stop playing, or begin playing at the new location.
+
+3.	When the user performs a search, Audio should continue playing.
+
+4.	When the user clicks on a search result, it should either stop playing, or begin playing at the new location.
+
+5.	When the user selects a video and starts playing, the audio should stop.
+
+6.	When the user changes font size, the audio should continue.
+
+7.	When the user changes Bible versions, the audio should stop, or begin playing the other version at the new location.
 
 
