@@ -76,12 +76,10 @@ public class AudioBibleController {
     
     func playHasStarted() {
         self.audioBibleView?.startPlay()
-        UIApplication.shared.isIdleTimerDisabled = true
     }
     
     func playHasStopped() {
         self.audioBibleView?.stopPlay()
-        UIApplication.shared.isIdleTimerDisabled = false
         self.completionHandler?(nil)
     }
 }

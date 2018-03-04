@@ -244,6 +244,8 @@ class AudioBibleView {
         self.scrubSlider.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
         self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpOutside)
+        
+        UIApplication.shared.isIdleTimerDisabled = true
     }
 
     func stopPlay() {
@@ -254,6 +256,8 @@ class AudioBibleView {
                        completion: { _ in self.audioPanel.removeFromSuperview() }
         )
         self.progressLink?.invalidate()
+        
+        UIApplication.shared.isIdleTimerDisabled = false
     }
     
     /**
