@@ -126,6 +126,12 @@ AppInitializer.prototype.begin = function() {
 		);
 		enableHandlersExcept(BIBLE.SHOW_AUDIO);
 	}
+	function stopAudioHandler(event) {
+		window.AudioPlayer.stop(function() {
+			console.log("SUCCESSFUL STOP OF AudioPlayer");
+			document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
+		});
+	}
 	function showVideoListHandler(event) {
 		disableHandlers();
 		that.controller.clearViews();
@@ -153,6 +159,7 @@ AppInitializer.prototype.begin = function() {
 		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
 		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
 		if (name !== BIBLE.SHOW_AUDIO) document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
+		if (name !== BIBLE.STOP_AUDIO) document.body.addEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 		if (name !== BIBLE.SHOW_VIDEO) document.body.addEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}

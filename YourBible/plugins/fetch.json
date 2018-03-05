@@ -95,18 +95,18 @@
     "is_top_level": true,
     "variables": {}
   },
-  "com-shortsands-aws": {
-    "source": {
-      "type": "local",
-      "path": "/Users/garygriswold/ShortSands/BibleApp/YourBible/node_modules/com-shortsands-aws"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "com-shortsands-videoplayer": {
     "source": {
       "type": "local",
       "path": "/Users/garygriswold/ShortSands/BibleApp/YourBible/node_modules/com-shortsands-videoplayer"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "com-shortsands-aws": {
+    "source": {
+      "type": "local",
+      "path": "/Users/garygriswold/ShortSands/BibleApp/YourBible/node_modules/com-shortsands-aws"
     },
     "is_top_level": true,
     "variables": {}

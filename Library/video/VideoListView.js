@@ -101,6 +101,7 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 		var videoUrl = this.getAttribute('mediaURL');
 		
         console.log("\n\BEFORE VideoPlayer " + videoId + " : " + videoUrl);
+        document.body.dispatchEvent(new CustomEvent(BIBLE.STOP_AUDIO));
 		window.VideoPlayer.showVideo(mediaSource, videoId, languageId, silCode, videoUrl,
 		function() {
 			console.log("SUCCESS FROM VideoPlayer " + videoUrl);

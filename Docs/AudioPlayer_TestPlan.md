@@ -121,16 +121,24 @@ App Switching Tests
 
 1.	When Audio is playing and the user opens TOC, Search, Video, or Settings the Audio should continue playing.
 
-2.	When the user selects a chapter / verse in the TOC, the audio should either stop playing, or begin playing at the new location.
+2.	When the user selects a chapter / verse in the TOC, the audio should continue playing.
 
-3.	When the user performs a search, Audio should continue playing.
+3.	When the user performs a search, and when the user clicks on a verse in search, the Audio should continue playing.
 
-4.	When the user clicks on a search result, it should either stop playing, or begin playing at the new location.
+4.	When the user selects a video and starts playing, the audio should stop.
 
-5.	When the user selects a video and starts playing, the audio should stop.
+5.	When the user changes font size, the audio should continue.
 
-6.	When the user changes font size, the audio should continue.
+6.	When the user changes Bible versions, the audio should continue, and jump to the position in the text that is being listened to.
 
-7.	When the user changes Bible versions, the audio should stop, or begin playing the other version at the new location.
+Network Reliability
+-------------------
 
+1.	Test that once a download is started the handler is disabled to prevent multiple downloads
+
+2.	Timeout - The timeout is currently set very long and I don't know how to change that.
+
+3.	Once a requested download succeeds, that audio should begin playing.
+
+4.	While an audio is in progress the App will allow the user to do other things.
 

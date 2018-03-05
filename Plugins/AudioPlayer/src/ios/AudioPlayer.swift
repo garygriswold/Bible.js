@@ -38,6 +38,13 @@
             }
 		)
 	}
+    
+    @objc(stop:) func stop(command: CDVInvokedUrlCommand) {
+        let audioController = AudioBibleController.shared
+        audioController.stop()
+        let result = CDVPluginResult(status: CDVCommandStatus_OK)
+        self.commandDelegate!.send(result, callbackId: command.callbackId)
+    }
 }
 
 

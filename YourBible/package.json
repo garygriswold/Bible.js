@@ -42,8 +42,8 @@
       "cordova-plugin-zip": {},
       "ionic-plugin-keyboard": {},
       "com-shortsands-utility": {},
-      "com-shortsands-aws": {},
       "com-shortsands-videoplayer": {},
+      "com-shortsands-aws": {},
       "com-shortsands-audioplayer": {}
     },
     "platforms": [

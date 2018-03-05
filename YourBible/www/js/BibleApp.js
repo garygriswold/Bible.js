@@ -127,6 +127,12 @@ AppInitializer.prototype.begin = function() {
 		);
 		enableHandlersExcept(BIBLE.SHOW_AUDIO);
 	}
+	function stopAudioHandler(event) {
+		window.AudioPlayer.stop(function() {
+			console.log("SUCCESSFUL STOP OF AudioPlayer");
+			document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
+		});
+	}
 	function showVideoListHandler(event) {
 		disableHandlers();
 		that.controller.clearViews();
@@ -154,6 +160,7 @@ AppInitializer.prototype.begin = function() {
 		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
 		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
 		if (name !== BIBLE.SHOW_AUDIO) document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
+		if (name !== BIBLE.STOP_AUDIO) document.body.addEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 		if (name !== BIBLE.SHOW_VIDEO) document.body.addEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
@@ -165,6 +172,7 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
 		SHOW_AUDIO: 'bible-show-audio', // present audio overlay above text
+		STOP_AUDIO: 'bible-stop-audio', // stop audio that is now playing
 		SHOW_QUESTIONS: 'bible-show-questions', // present questions page, create first
 		SHOW_HISTORY: 'bible-show-history', // present history tabs
 		HIDE_HISTORY: 'bible-hide-history', // hide history tabs
@@ -437,13 +445,6 @@ CodexView.prototype.showView = function(nodeId) {
 			if (result.bottom && result.middle) {
 				return(result);
 			}
-			//if (rect.bottom > windowTop) {
-			//	result.top = node.id;
-			//}
-			//if (result.top && result.middle && searchLimit === 0) {
-			//	// search only three more chapters once top and middle are known
-			//	searchLimit = Math.max(index - 3, 0);
-			//}
 			index--;
 		}
 		return(result);
@@ -4660,6 +4661,7 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 		var videoUrl = this.getAttribute('mediaURL');
 		
         console.log("\n\BEFORE VideoPlayer " + videoId + " : " + videoUrl);
+        document.body.dispatchEvent(new CustomEvent(BIBLE.STOP_AUDIO));
 		window.VideoPlayer.showVideo(mediaSource, videoId, languageId, silCode, videoUrl,
 		function() {
 			console.log("SUCCESS FROM VideoPlayer " + videoUrl);

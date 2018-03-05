@@ -6,6 +6,7 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_TOC: 'bible-show-toc', // present toc page, create if needed
 		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
 		SHOW_AUDIO: 'bible-show-audio', // present audio overlay above text
+		STOP_AUDIO: 'bible-stop-audio', // stop audio that is now playing
 		SHOW_QUESTIONS: 'bible-show-questions', // present questions page, create first
 		SHOW_HISTORY: 'bible-show-history', // present history tabs
 		HIDE_HISTORY: 'bible-hide-history', // hide history tabs

@@ -73,6 +73,12 @@ public class AudioBibleController {
             complete(nil)
         }
     }
+    /**
+    * This is called when the Audio must be stopped externally, such as when a Video is started.
+    */
+    public func stop() {
+        self.audioBible?.stop()
+    }
     
     func playHasStarted() {
         self.audioBibleView?.startPlay()
