@@ -48,29 +48,24 @@ CodexView.prototype.showView = function(nodeId) {
 				var currRef = new Reference(currNode.middle.substr(3));
 				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: currRef }}));
 			}
-			// If the following is a keeper, then identifyCurrentChapter must be rewritten to not search for top.
-			var firstChildId = that.viewport.firstChild.id;
 			var lastChildId = that.viewport.lastChild.id;
 			var firstChild = that.viewport.firstChild;
 			var firstRect = firstChild.getBoundingClientRect();
-			var firstTop = firstRect.top;
-			if (currNode.bottom === lastChildId || lastChildId.substr(7,1) === "0") {
+			if (firstRect.top > 0) {
+				var firstChapter = new Reference(that.viewport.firstChild.id.substr(3));
+				var rowId = that.tableContents.rowId(firstChapter);
+				if (rowId) {
+					that.showChapters([rowId - 1], false, function() {
+						onScrollLastStep();
+					});
+				} else onScrollLastStep();
+			} else if (currNode.bottom === lastChildId || lastChildId.substr(7,1) === "0") {
 				var lastChapter = new Reference(lastChildId.substr(3));
 				var rowId = that.tableContents.rowId(lastChapter);
 				if (rowId) {
 					that.showChapters([rowId + 1], true, function() {
 						onScrollLastStep();
 					});					
-				} else onScrollLastStep();
-			}
-			//else if (currNode.top === firstChildId || firstChildId.substr(7,1) === "0") {
-			else if (firstTop > 0) {
-				var firstChapter = new Reference(firstChildId.substr(3));
-				var rowId = that.tableContents.rowId(firstChapter);
-				if (rowId) {
-					that.showChapters([rowId - 1], false, function() {
-						onScrollLastStep();
-					});
 				} else onScrollLastStep();
 			} else onScrollLastStep();
 		} else onScrollLastStep();
@@ -79,14 +74,11 @@ CodexView.prototype.showView = function(nodeId) {
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT); // should be last thing to do
 	}
 	function identifyCurrentChapter() {
-		var result = {top: null, middle: null, bottom: null};
-		var windowTop = that.headerHeight;
+		var result = {middle: null, bottom: null};
 		var windowMid = window.innerHeight / 2;
 		var windowBot = window.innerHeight;
-		var searchLimit = 0;
 		var index = that.viewport.children.length -1;
-		var searchLimit = 0;
-		while(index >= searchLimit) {
+		while(index >= 0) {
 			var node = that.viewport.children[index];
 			var rect = node.getBoundingClientRect();
 			if (result.bottom === null && rect.top < windowBot) {
@@ -95,12 +87,8 @@ CodexView.prototype.showView = function(nodeId) {
 			if (result.middle === null && rect.top < windowMid) {
 				result.middle = node.id;
 			}
-			if (rect.bottom > windowTop) {
-				result.top = node.id;
-			}
-			if (result.top && result.middle && searchLimit === 0) {
-				// search only three more chapters once top and middle are known
-				searchLimit = Math.max(index - 3, 0);
+			if (result.bottom && result.middle) {
+				return(result);
 			}
 			index--;
 		}
