@@ -158,8 +158,6 @@ CodexView.prototype.scrollTo = function(nodeId) {
 };
 CodexView.prototype.animateScrollTo = function(scrollOn) {
 	var that = this;
-	if (scrollOn) document.body.addEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
-	else document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
 	
 	function animateScrollToHandler(event) {
 		var nodeId = event.detail.id;
@@ -171,6 +169,10 @@ CodexView.prototype.animateScrollTo = function(scrollOn) {
 			TweenMax.to(window, 0.7, {scrollTo: { y: rect.top + window.scrollY - that.headerHeight, autoKill: false }});
 		}
 	}
+	
+	console.log("****** animateScrollTo " + scrollOn);
+	if (scrollOn === true) document.body.addEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
+	else       document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
 };
 /**
 * This method displays the footnote by taking text contained in the 'note' attribute

@@ -121,14 +121,17 @@ AppInitializer.prototype.begin = function() {
 		window.AudioPlayer.present(ref.book, ref.chapter,
 			function() {
 				console.log("SUCESSFUL EXIT FROM AudioPlayer");
+				document.body.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 				document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
 			}
 		);
 		enableHandlersExcept(BIBLE.SHOW_AUDIO);
+		document.body.addEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 	}
 	function stopAudioHandler(event) {
 		window.AudioPlayer.stop(function() {
 			console.log("SUCCESSFUL STOP OF AudioPlayer");
+			document.body.removeEventListener(BIBLE.STOP_AUDIO, shopAudioHandler);
 			document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
 		});
 	}
@@ -159,7 +162,6 @@ AppInitializer.prototype.begin = function() {
 		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
 		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
 		if (name !== BIBLE.SHOW_AUDIO) document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
-		if (name !== BIBLE.STOP_AUDIO) document.body.addEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 		if (name !== BIBLE.SHOW_VIDEO) document.body.addEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
