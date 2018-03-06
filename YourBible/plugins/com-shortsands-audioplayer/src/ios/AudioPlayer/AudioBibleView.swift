@@ -198,6 +198,10 @@ class AudioBibleView {
         print("***** Deinit AudioBibleView *****")
     }
     
+    func audioBibleActive() -> Bool {
+        return self.isAudioViewActive
+    }
+    
     @objc func play() {
         self.audioBible.play()
         if (self.isAudioViewActive) {

@@ -15,16 +15,15 @@ function CodexView(chaptersAdapter, tableContents, headerHeight, copyrightView) 
 	this.viewport.style.top = headerHeight + 'px'; // Start view at bottom of header.
 	this.currentNodeId = null;
 	this.checkScrollID = null;
-	this.isAudioPlaying = false; // this is a problem
 	Object.seal(this);
 	var that = this;
 }
 CodexView.prototype.hideView = function() {
 	window.clearTimeout(this.checkScrollID);
+	this.enableAudioPlayer(false);
 	while (this.viewport.firstChild) {
 		this.viewport.removeChild(this.viewport.firstChild);
 	}
-	this.enableAudioPlayer(false);
 };
 CodexView.prototype.showView = function(nodeId) {
 	window.clearTimeout(this.checkScrollID);
@@ -160,15 +159,17 @@ CodexView.prototype.scrollTo = function(nodeId) {
 CodexView.prototype.enableAudioPlayer = function(textOn) {
 	var that = this;
 	
-	if (textOn === true && that.isAudioPlaying === false) {
+	if (textOn === true) {
 		document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
-	} else document.body.removeEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
+	} else {
+		document.body.removeEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
+		document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
+	}
 	
 	function startAudioHandler(event) {
 		document.body.removeEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
 		document.body.addEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 		document.body.addEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
-		that.isAudioPlaying = true;
 		var ref = new Reference(event.detail.id);
 		window.AudioPlayer.present(ref.book, ref.chapter,
 			function() {
@@ -176,7 +177,6 @@ CodexView.prototype.enableAudioPlayer = function(textOn) {
 				document.body.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 				document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
 				document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
-				that.isAudioPlaying = false;
 			}
 		);	
 	}
@@ -184,7 +184,6 @@ CodexView.prototype.enableAudioPlayer = function(textOn) {
 	function stopAudioHandler(event) {
 		document.body.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 		document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
-		that.isAudioPlaying = false;
 		window.AudioPlayer.stop(function() {
 			console.log("SUCCESSFUL STOP OF AudioPlayer");
 		});		

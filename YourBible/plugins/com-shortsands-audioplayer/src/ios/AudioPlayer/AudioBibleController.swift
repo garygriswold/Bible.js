@@ -62,16 +62,14 @@ public class AudioBibleController {
         self.audioSession = AudioSession.shared(audioBibleView: self.audioBibleView!)
         self.completionHandler = complete
         
-        if let reader = metaDataReader {
-            if let meta = reader.findBook(bookId: book) {
-                let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)
-                self.audioBible!.beginReadFile(reference: ref)
-            } else {
-                complete(nil)
-            }
-        } else {
-            complete(nil)
-        }
+        if !self.audioBibleView!.audioBibleActive() && !self.audioBible!.isPlaying() {
+            if let reader = metaDataReader {
+                if let meta = reader.findBook(bookId: book) {
+                    let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)
+                    self.audioBible!.beginReadFile(reference: ref)
+                } else { complete(nil) }
+            } else { complete(nil) }
+        } else { complete(nil) }
     }
     /**
     * This is called when the Audio must be stopped externally, such as when a Video is started.
