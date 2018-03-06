@@ -116,26 +116,26 @@ AppInitializer.prototype.begin = function() {
 		that.controller.questionsView.showView();
 		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
 	}
-	function showAudioHandler(event) {
-		disableHandlers();
-		var ref = new Reference(event.detail.id);
-		window.AudioPlayer.present(ref.book, ref.chapter,
-			function() {
-				console.log("SUCESSFUL EXIT FROM AudioPlayer");
-				document.body.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
-				document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
-			}
-		);
-		enableHandlersExcept(BIBLE.SHOW_AUDIO);
-		document.body.addEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
-	}
-	function stopAudioHandler(event) {
-		window.AudioPlayer.stop(function() {
-			console.log("SUCCESSFUL STOP OF AudioPlayer");
-			document.body.removeEventListener(BIBLE.STOP_AUDIO, shopAudioHandler);
-			document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
-		});
-	}
+//	function showAudioHandler(event) {
+//		disableHandlers();
+//		var ref = new Reference(event.detail.id);
+//		window.AudioPlayer.present(ref.book, ref.chapter,
+//			function() {
+//				console.log("SUCESSFUL EXIT FROM AudioPlayer");
+//				document.body.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
+//				document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
+//			}
+//		);
+//		enableHandlersExcept(BIBLE.SHOW_AUDIO);
+//		document.body.addEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
+//	}
+//	function stopAudioHandler(event) {
+//		window.AudioPlayer.stop(function() {
+//			console.log("SUCCESSFUL STOP OF AudioPlayer");
+//			document.body.removeEventListener(BIBLE.STOP_AUDIO, shopAudioHandler);
+//			document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
+//		});
+//	}
 	function showVideoListHandler(event) {
 		disableHandlers();
 		that.controller.clearViews();
@@ -153,7 +153,6 @@ AppInitializer.prototype.begin = function() {
 		document.body.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		document.body.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
 		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
-		document.body.removeEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
 		document.body.removeEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
@@ -162,7 +161,6 @@ AppInitializer.prototype.begin = function() {
 		if (name !== BIBLE.SHOW_SEARCH) document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
 		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
-		if (name !== BIBLE.SHOW_AUDIO) document.body.addEventListener(BIBLE.SHOW_AUDIO, showAudioHandler);
 		if (name !== BIBLE.SHOW_VIDEO) document.body.addEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
@@ -372,6 +370,7 @@ function CodexView(chaptersAdapter, tableContents, headerHeight, copyrightView) 
 	this.viewport.style.top = headerHeight + 'px'; // Start view at bottom of header.
 	this.currentNodeId = null;
 	this.checkScrollID = null;
+	this.isAudioPlaying = false;
 	Object.seal(this);
 	var that = this;
 }
@@ -380,7 +379,7 @@ CodexView.prototype.hideView = function() {
 	while (this.viewport.firstChild) {
 		this.viewport.removeChild(this.viewport.firstChild);
 	}
-	this.animateScrollTo(false);
+	this.enableAudioPlayer(false);
 };
 CodexView.prototype.showView = function(nodeId) {
 	window.clearTimeout(this.checkScrollID);
@@ -394,7 +393,7 @@ CodexView.prototype.showView = function(nodeId) {
 		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do
 		
-		that.animateScrollTo(true);
+		that.enableAudioPlayer(true);
 	});
 	function onScrollHandler(event) {
 		var currNode = identifyCurrentChapter();//expensive solution
@@ -513,8 +512,44 @@ CodexView.prototype.scrollTo = function(nodeId) {
 		TweenMax.set(window, {scrollTo: { y: rect.top + window.scrollY - this.headerHeight}});
 	}
 };
-CodexView.prototype.animateScrollTo = function(scrollOn) {
+//CodexView.prototype.animateScrollTo = function(scrollOn) {
+//	var that = this;	
+	//console.log("****** animateScrollTo " + scrollOn);
+	//if (scrollOn === true) document.body.addEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
+	//else document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
+//};
+CodexView.prototype.enableAudioPlayer = function(textOn) {
 	var that = this;
+	
+	if (textOn === true && that.isAudioPlaying === false) {
+		document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
+	} else document.body.removeEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
+	
+	function startAudioHandler(event) {
+		document.body.removeEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
+		document.body.addEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
+		document.body.addEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
+		that.isAudioPlaying = true;
+		var ref = new Reference(event.detail.id);
+		window.AudioPlayer.present(ref.book, ref.chapter,
+			function() {
+				console.log("SUCESSFUL EXIT FROM AudioPlayer");
+				document.body.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
+				document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
+				document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
+				that.isAudioPlaying = false;
+			}
+		);	
+	}
+	
+	function stopAudioHandler(event) {
+		document.body.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
+		document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
+		that.isAudioPlaying = false;
+		window.AudioPlayer.stop(function() {
+			console.log("SUCCESSFUL STOP OF AudioPlayer");
+		});		
+	}
 	
 	function animateScrollToHandler(event) {
 		var nodeId = event.detail.id;
@@ -526,10 +561,6 @@ CodexView.prototype.animateScrollTo = function(scrollOn) {
 			TweenMax.to(window, 0.7, {scrollTo: { y: rect.top + window.scrollY - that.headerHeight, autoKill: false }});
 		}
 	}
-	
-	console.log("****** animateScrollTo " + scrollOn);
-	if (scrollOn === true) document.body.addEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
-	else       document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
 };
 /**
 * This method displays the footnote by taking text contained in the 'note' attribute
