@@ -34,6 +34,7 @@ class AudioBible {
         self.controlCenter = AudioControlCenter.shared
         self.controlCenter.setupControlCenter(player: self)
         self.initNotifications()
+        print("***** Init AudioBible *****")
     }
     
     deinit {

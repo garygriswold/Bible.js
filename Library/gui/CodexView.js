@@ -20,7 +20,6 @@ function CodexView(chaptersAdapter, tableContents, headerHeight, copyrightView) 
 }
 CodexView.prototype.hideView = function() {
 	window.clearTimeout(this.checkScrollID);
-	this.enableAudioPlayer(false);
 	while (this.viewport.firstChild) {
 		this.viewport.removeChild(this.viewport.firstChild);
 	}
@@ -36,8 +35,6 @@ CodexView.prototype.showView = function(nodeId) {
 		that.currentNodeId = "top" + firstChapter.nodeId;
 		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do
-		
-		that.enableAudioPlayer(true);
 	});
 	function onScrollHandler(event) {
 		var currNode = identifyCurrentChapter();//expensive solution
@@ -154,50 +151,6 @@ CodexView.prototype.scrollTo = function(nodeId) {
 		var rect = verse.getBoundingClientRect();
 		//window.scrollTo(0, rect.top + window.scrollY - this.headerHeight);
 		TweenMax.set(window, {scrollTo: { y: rect.top + window.scrollY - this.headerHeight}});
-	}
-};
-CodexView.prototype.enableAudioPlayer = function(textOn) {
-	var that = this;
-	
-	if (textOn === true) {
-		document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
-	} else {
-		document.body.removeEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
-		document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
-	}
-	
-	function startAudioHandler(event) {
-		document.body.removeEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
-		document.body.addEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
-		document.body.addEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
-		var ref = new Reference(event.detail.id);
-		window.AudioPlayer.present(ref.book, ref.chapter,
-			function() {
-				console.log("SUCESSFUL EXIT FROM AudioPlayer");
-				document.body.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
-				document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
-				document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
-			}
-		);	
-	}
-	
-	function stopAudioHandler(event) {
-		document.body.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
-		document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
-		window.AudioPlayer.stop(function() {
-			console.log("SUCCESSFUL STOP OF AudioPlayer");
-		});		
-	}
-	
-	function animateScrollToHandler(event) {
-		var nodeId = event.detail.id;
-		console.log('animateScrollTo', nodeId);
-		var verse = document.getElementById(nodeId);
-		if (verse) {
-			var rect = verse.getBoundingClientRect();
-			TweenMax.killTweensOf(window);
-			TweenMax.to(window, 0.7, {scrollTo: { y: rect.top + window.scrollY - that.headerHeight, autoKill: false }});
-		}
 	}
 };
 /**

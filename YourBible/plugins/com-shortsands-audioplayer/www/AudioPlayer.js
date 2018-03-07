@@ -14,6 +14,14 @@ exports.findAudioVersion = function(version, silCode, callback) {
 //    }, "AudioPlayer", "findAudioVersion", [bookId]);
 //};
 
+exports.isPlaying = function(callback) {
+	console.log("INSIDE EXPORTS.ISPLAYING");
+	cordova.exec(callback, function(error) {
+		AudioPlayer.logError("isPlaying", error, []);
+		callback("F");
+	}, "AudioPlayer", "isPlaying", []);
+};
+
 exports.present = function(bookId, chapter, callback) {
 	cordova.exec(callback, function(error) {
 		AudioPlayer.logError("present", error, [bookId, chapter]);
@@ -25,7 +33,6 @@ exports.stop = function(callback) {
 	cordova.exec(callback, function(error) {
 		AudioPlayer.logError("stop", error, []);
 		callback();
-		
 	}, "AudioPlayer", "stop", []);
 };
 

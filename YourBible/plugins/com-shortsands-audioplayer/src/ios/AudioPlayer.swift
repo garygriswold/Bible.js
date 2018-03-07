@@ -23,6 +23,13 @@
             }
         )
     }
+    
+    @objc(isPlaying:) func isPlaying(command: CDVInvokedUrlCommand) {
+        let audioController = AudioBibleController.shared
+        let message:String = (audioController.isPlaying()) ? "T" : "F"
+        let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: message)
+        self.commandDelegate!.send(result, callbackId: command.callbackId)
+    }
 	
 	@objc(present:) func present(command: CDVInvokedUrlCommand) {
         AwsS3.region = "us-east-1"

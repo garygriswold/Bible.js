@@ -192,6 +192,7 @@ class AudioBibleView {
         scrub.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
         
         self.initNotifications()
+        print("***** Init AudioBibleView *****")
     }
     
     deinit {

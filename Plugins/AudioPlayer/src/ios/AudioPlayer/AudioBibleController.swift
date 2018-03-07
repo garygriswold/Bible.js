@@ -29,6 +29,7 @@ public class AudioBibleController {
     
     private init() {
         self.fileType = "mp3"
+        print("***** Init AudioBibleController *****")
     }
     
     deinit {
@@ -49,6 +50,16 @@ public class AudioBibleController {
                         complete(bookIdList)
             }
         )
+    }
+    
+    public func isPlaying() -> Bool {
+        var result:Bool = false
+        if let play = self.audioBible {
+            if let view = self.audioBibleView {
+                result = play.isPlaying() || view.audioBibleActive()
+            }
+        }
+        return result
     }
     
     /**
