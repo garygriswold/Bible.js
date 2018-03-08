@@ -16,14 +16,17 @@ Note: some tests must be repeated for translations with and without verse data.
 3.	Start of Play - Verse.  Play should start from the verse that is displayed at the top of the page. ??? Or, should it always start at the beginning of the chapter?
 
 4.	Start of Play: No Version - If there is no audio available for the Bible Text that is being displayed, the Audio UI features should be absent.
- 
+
+
 5.	Audio Download - The Audio should be downloaded using https and all information about the identity of the data downloaded should be on the URL path, not in the subhost of the domain. Inspect network transmissions.
- 
+
+
 6.	Continuation of Play - While a chapter is playing the player prefetches the next chapter, and prepares it for playing so that the next chapter will start immediately, when the current chapter ends.  Inspect network transmissions.
 
 7.	Audio Caching - AWS S3 component should cache audio files and not request them again, once they are requested.
 
-8.	Cache Cleanup - Cache should be stored in a location where the OS will erase old files if it needs storage. On iOS this is Library/Caches directory. 
+8.	Cache Cleanup - Cache should be stored in a location where the OS will erase old files if it needs storage. On iOS this is Library/Caches directory.
+
 
 9.	Saving of Position - When the user stops playing by any means, the App will store the current location in the audio, and the identity of the chapter and version.
 	1. Pause Button
@@ -53,11 +56,13 @@ Foreground Play
 
 2.	UI Location - the Location could be over text, or on toolbar separated from text.
 
-3.	UI Appearance - Play / Pause, button is Play when not playing and Pause when playing. Stop button is also present in case A. Includes scrub bar with draggable thumb. 
+3.	UI Appearance - Play / Pause, button is Play when not playing and Pause when playing. Stop button is also present in case A. Includes scrub bar with draggable thumb.
+
 
 4.	UI Highlighting - The Play, Pause, Stop and Thumb highlight in some way when touched.
 
-5.	UI Animation - While the audio is playing the thumb moves the length of the bar in the playing of each chapter, and jumps to the beginning for each succeeding chapter. 
+5.	UI Animation - While the audio is playing the thumb moves the length of the bar in the playing of each chapter, and jumps to the beginning for each succeeding chapter.
+
 
 6.	UI Verse Number - If verse start position data is available, the verse number displays in a bubble above the scrub bar thumb.
 
@@ -65,20 +70,22 @@ Foreground Play
 
 7.	UI Scrub Bar Interaction - User can change place in current chapter, by dragging the scrub bar thumb to any location in scrub bar. If verse start position data is available, the verse number displays in a bubble above the scrub bar thumb as it is dragged showing the user the audio location of each verse.
 
-8.	UI Text Cursor - While Play, the App might display a cursor that highlights the current verse being read.  This cursor, could be a highlighting of the verse, or a bar to the left and/or right of the text.  (This cursor idea might be more difficult that other features because it requires interaction between a native audio player and the Text displayed by JS code, but it is possible). (See YouVersion for example) 
+8.	UI Text Cursor - While Audio play, the App will do an animated scroll of the text verse by verse for those Audio Bibles where verse information is available.
 
 9.	UI Scrub Bar Verse Number Interaction - If the verse start position is available, the playing starts at the beginning of the verse where the thumb was released.
 
 10. UI Scrub Thumb Release, no verse position - If verse position data is not available, play starts a few seconds before where the thumb is released.
 
-11.	UI Scrub Bar Next Chapter - If the scrub bar is dragged all of the way to the right, the play jumps to the start of the next chapter. 
+11.	UI Scrub Bar Next Chapter - If the scrub bar is dragged all of the way to the right, the play jumps to the start of the next chapter.
+
 
 12.	UI Button Sizes - For ease of use, it would be good for the buttons and thumb to be close to 3/8 in or at least 1/4 in in size.
 	
 Background Play
 ---------------
 
-1.	Lock Button - When the User clicks the Pause of Stop button, the audio stops. But, when the user clicks the Lock button, the screen goes dark, and the audio continues to play. 
+1.	Lock Button - When the User clicks the Pause of Stop button, the audio stops. But, when the user clicks the Lock button, the screen goes dark, and the audio continues to play.
+
 
 2.	Home Button - When the user navigates to another App without stopping the audio, the audio continues to play.
 
@@ -91,9 +98,11 @@ Interruptions
 
 1.	Other Audio Stops - If the user starts the Bible Audio, other audio should stop.
 
-2.	Phone Call - If the user receives a calls or initiates a call while the audio is playing, the audio should pause on its own. When the call is finished, the audio should restart automatically. 
+2.	Phone Call - If the user receives a calls or initiates a call while the audio is playing, the audio should pause on its own. When the call is finished, the audio should restart automatically.
 
-3.	Earphones plugged in - If a user should plugin earphones while the audio is playing, there should be no change in the playing, (or it could pause momentarily because the plugin will cause a noticeable sound). 
+
+3.	Earphones plugged in - If a user should plugin earphones while the audio is playing, there should be no change in the playing, (or it could pause momentarily because the plugin will cause a noticeable sound).
+
 
 4.	Earphones unplugged - If the user should unplug earphones while the audio is playing, the player should automatically pause, and give the user a chance to adjust the volume, because the user will often need to reduce volume of the speaker.
 
@@ -104,7 +113,8 @@ Control Center (ios only)
 
 2.	Control Center Icon - The control center should display the icon of the App, if that is the last audio played.
 
-3.	Control Center when in Background - When the audio is playing in background, if the user presents the control center, it should be possible to pause and restart play from the control center. 
+3.	Control Center when in Background - When the audio is playing in background, if the user presents the control center, it should be possible to pause and restart play from the control center.
+
 
 4.	Control Center Restart - When the App is not playing it should be possible for the user to present the control center, and restart the audio from where they were last listening. The audio should play in background and not restart the App in foreground.
 

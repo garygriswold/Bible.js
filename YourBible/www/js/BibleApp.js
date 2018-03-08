@@ -84,7 +84,8 @@ AppInitializer.prototype.begin = function() {
 			that.controller = new AppViewController(currBible, settingStorage);
 			that.controller.begin();
 			console.log('End AppViewController.begin');
-			enableHandlersExcept('NONE');		
+			enableHandlersExcept('NONE');
+			enableAudioPlayer();		
 		});
 	}
 	function showTocHandler(event) {
@@ -171,7 +172,6 @@ AppInitializer.prototype.begin = function() {
 	function showSettingsHandler(event) {
 		disableHandlers();
 		that.controller.clearViews();
-		
 		that.controller.settingsView.showView();
 		enableHandlersExcept(BIBLE.SHOW_SETTINGS);
 	}	

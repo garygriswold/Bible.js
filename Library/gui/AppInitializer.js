@@ -83,7 +83,8 @@ AppInitializer.prototype.begin = function() {
 			that.controller = new AppViewController(currBible, settingStorage);
 			that.controller.begin();
 			console.log('End AppViewController.begin');
-			enableHandlersExcept('NONE');		
+			enableHandlersExcept('NONE');
+			enableAudioPlayer();		
 		});
 	}
 	function showTocHandler(event) {
