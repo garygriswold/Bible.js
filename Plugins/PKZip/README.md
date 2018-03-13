@@ -1,7 +1,12 @@
 PKZip
 =====
 
-This plugin has been the source of lots of problems that result from the large number of choices, 
+This plugin has been removed from the SafeBible project Jan 2018.  I changed iOS projects
+from using frameworks in Cordova plugin to using the raw files, I was unable to get this one
+to work because of the C files required some special linkage that I did not understand. 
+(GNG Mar 13, 2018)
+
+This plugin has been the source of lots of problems that result from the large number of choices,
 and the not so obvious result of those choices.
 
 Zip Alternatives
