@@ -29,7 +29,7 @@ public class AudioBibleController {
 
     public void present() {
         if (this.audioSession.startAudioSession()) {
-            MetaDataReader metaData = new MetaDataReader(this.activity);
+            AudioTOCBible metaData = new AudioTOCBible(this.activity);
             MetaDataReaderResponse response = new MetaDataReaderResponse();
             metaData.read("ENG", "audio", response);
         }
@@ -39,11 +39,11 @@ public class AudioBibleController {
 
         public void completed(Object result) {
             if (result instanceof HashMap) {
-                HashMap<String, TOCAudioBible> metaData = (HashMap<String, TOCAudioBible>)result;
-                TOCAudioBible bible = metaData.get("DEMO");
-                TOCAudioBook book = bible.booksById.get("TST");
+                HashMap<String, AudioTOCTestament> metaData = (HashMap<String, AudioTOCTestament>)result;
+                AudioTOCTestament bible = metaData.get("DEMO");
+                AudioTOCBook book = bible.booksById.get("TST");
 
-                Reference reference = new Reference(bible.damId, book.sequence, book.bookId, "001", "mp3");
+                AudioReference reference = new AudioReference(bible.damId, book.sequence, book.bookId, "001", "mp3");
                 audioBible = new AudioBible(that, bible, reference);
                 readerView = new AudioBibleView(that, audioBible);
                 audioSession.setAudioBibleView(readerView);

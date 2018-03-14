@@ -9,9 +9,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.HashMap;
 
-class TOCAudioBible {
+class AudioTOCTestament {
 
-    private static String TAG = "TOCAudioBible";
+    private static String TAG = "TOCAudioTestament";
 
     final String mediaSource;
     final String damId;
@@ -21,13 +21,13 @@ class TOCAudioBible {
     final String versionName;
     final String versionEnglish;
     final String collectionCode;
-    final HashMap<String, TOCAudioBook> booksById;
-    final HashMap<Integer, TOCAudioBook> booksBySeq;
+    final HashMap<String, AudioTOCBook> booksById;
+    final HashMap<Integer, AudioTOCBook> booksBySeq;
 
-    TOCAudioBible(String source, JSONObject jsonObject) {
+    AudioTOCTestament(String source, JSONObject jsonObject) {
         this.mediaSource = source;
-        this.booksById = new HashMap<String, TOCAudioBook>();
-        this.booksBySeq = new HashMap<Integer, TOCAudioBook>();
+        this.booksById = new HashMap<String, AudioTOCBook>();
+        this.booksBySeq = new HashMap<Integer, AudioTOCBook>();
         String temp;
         try { temp = jsonObject.getString("dam_id"); } catch (JSONException je) { temp = ""; }
         this.damId = temp;
@@ -47,7 +47,7 @@ class TOCAudioBible {
             JSONArray books = jsonObject.getJSONArray("books");
                 for (int i=0; i<books.length(); i++) {
                     JSONObject jsonBook = books.getJSONObject(i);
-                    TOCAudioBook book = new TOCAudioBook(jsonBook);
+                    AudioTOCBook book = new AudioTOCBook(jsonBook);
                     Log.d(TAG, "BOOK " + book.toString());
                     this.booksById.put(book.bookId, book);
                     this.booksBySeq.put(book.sequenceNum, book);
@@ -57,21 +57,21 @@ class TOCAudioBible {
         }
     }
 
-    Reference nextChapter(Reference ref) {
+    AudioReference nextChapter(AudioReference ref) {
         if (this.booksById.containsKey(ref.book)) {
-            TOCAudioBook book = this.booksById.get(ref.book);
+            AudioTOCBook book = this.booksById.get(ref.book);
             if (ref.chapterNum() < book.numberOfChapters) {
                 int next = ref.chapterNum() + 1;
                 String nextStr = String.valueOf(next);
                 switch(nextStr.length()) {
-                    case 1: return new Reference(ref.damId, ref.sequence, ref.book, "00" + nextStr, ref.fileType);
-                    case 2: return new Reference(ref.damId, ref.sequence, ref.book, "0" + nextStr, ref.fileType);
-                    default: return new Reference(ref.damId, ref.sequence, ref.book, nextStr, ref.fileType);
+                    case 1: return new AudioReference(ref.damId, ref.sequence, ref.book, "00" + nextStr, ref.fileType);
+                    case 2: return new AudioReference(ref.damId, ref.sequence, ref.book, "0" + nextStr, ref.fileType);
+                    default: return new AudioReference(ref.damId, ref.sequence, ref.book, nextStr, ref.fileType);
                 }
             } else {
                 if (this.booksBySeq.containsKey(ref.sequenceNum() + 1)) {
-                    TOCAudioBook nextBook = this.booksBySeq.get(ref.sequenceNum() + 1);
-                    return new Reference(ref.damId, nextBook.sequence, nextBook.bookId, "001", ref.fileType);
+                    AudioTOCBook nextBook = this.booksBySeq.get(ref.sequenceNum() + 1);
+                    return new AudioReference(ref.damId, nextBook.sequence, nextBook.bookId, "001", ref.fileType);
                 }
             }
         }

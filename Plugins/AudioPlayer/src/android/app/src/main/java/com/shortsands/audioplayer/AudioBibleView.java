@@ -215,7 +215,7 @@ class AudioBibleView {
                 if (isUser && player != null) {
                     if (value < seekBar.getMax()) {
                         int position;
-                        Reference curr = audioBible.getCurrReference();
+                        AudioReference curr = audioBible.getCurrReference();
                         if (curr.audioChapter != null) {
                             verseNum = curr.audioChapter.findVerseByPosition(verseNum, value);
                             position = curr.audioChapter.findPositionOfVerse(verseNum);
@@ -297,7 +297,7 @@ class AudioBibleView {
                     scrubSlider.setProgress(progressMS);
 
                     if (audioBible.getCurrReference().audioChapter != null) {
-                        TOCAudioChapter verse = audioBible.getCurrReference().audioChapter;
+                        AudioTOCChapter verse = audioBible.getCurrReference().audioChapter;
                         verseNum = verse.findVerseByPosition(verseNum, progressMS);
                         int verseXPos = positionVersePopup();
                         Message message = this.handler.obtainMessage(99, verseNum, verseXPos);

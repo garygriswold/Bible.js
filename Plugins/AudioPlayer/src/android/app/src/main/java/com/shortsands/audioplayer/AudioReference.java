@@ -5,18 +5,17 @@ package com.shortsands.audioplayer;
  */
 
 import com.shortsands.aws.AwsS3;
-import java.net.URL;
 
-class Reference {
+class AudioReference {
 
     final String damId;
     final String sequence;
     final String book;
     final String chapter;
     final String fileType;
-    TOCAudioChapter audioChapter;
+    AudioTOCChapter audioChapter;
 
-    Reference(String damId, String sequence, String book, String chapter, String fileType) {
+    AudioReference(String damId, String sequence, String book, String chapter, String fileType) {
         this.damId = damId;
         this.sequence = sequence;
         this.book = book;
@@ -44,7 +43,7 @@ class Reference {
         return (this.damId + "_" + this.sequence + "_" + this.book + "_" + this.chapter + "." + this.fileType);
     }
 
-    boolean isEqual(Reference reference) {
+    boolean isEqual(AudioReference reference) {
         if (this.chapter != reference.chapter) { return false; }
         if (this.book != reference.book) { return false; }
         if (this.sequence != reference.sequence) { return false; }

@@ -50,7 +50,7 @@ public class AudioAnalytics {
         this.languageId = languageId;
         this.silLang = silLang;
 
-        AnalyticsSessionId analyticsSessionId = new AnalyticsSessionId(context);
+        AudioAnalyticsSessionId analyticsSessionId = new AudioAnalyticsSessionId(context);
         this.sessionId = analyticsSessionId.getSessionId();
 
         this.startingPosition = 0L;

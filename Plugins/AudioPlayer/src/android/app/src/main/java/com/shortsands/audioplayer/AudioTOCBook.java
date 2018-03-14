@@ -9,7 +9,7 @@ import org.json.JSONObject;
  * Created by garygriswold on 8/30/17.
  */
 
-class TOCAudioBook {
+class AudioTOCBook {
 
     private static final String TAG = "TOCAudioBook";
 
@@ -19,7 +19,7 @@ class TOCAudioBook {
     final String bookName;
     final int numberOfChapters;
 
-    TOCAudioBook(JSONObject jsonBook) {
+    AudioTOCBook(JSONObject jsonBook) {
         String temp;
         try { temp = jsonBook.getString("book_id"); } catch (JSONException je) { temp = ""; }
         this.bookId = temp;

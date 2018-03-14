@@ -5,20 +5,20 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import java.util.UUID;
 /**
- *  AnalyticsSessionId.java
+ *  AudioAnalyticsSessionId.java
  *  AnalyticsProto
  *
  *  Created by Gary Griswold on 6/29/17.
  *  Copyright © 2017 ShortSands. All rights reserved.
  */
 
-class AnalyticsSessionId {
+class AudioAnalyticsSessionId {
 
     private static final String SESSION_KEY = "ShortSandsSessionId";
 
     private final Context context;
 
-    AnalyticsSessionId(Context context) {
+    AudioAnalyticsSessionId(Context context) {
         this.context = context;
     }
 

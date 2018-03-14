@@ -9,13 +9,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-class TOCAudioChapter {
+class AudioTOCChapter {
 
-    private static final String TAG = "TOCAudioChapter";
+    private static final String TAG = "AudioTOCChapter";
 
     final ArrayList<Double> versePositions;
 
-    TOCAudioChapter(JSONArray jsonArray) {
+    AudioTOCChapter(JSONArray jsonArray) {
         this.versePositions = new ArrayList<Double>();
         int lastItem = jsonArray.length() - 1;
         int lastVerseNum = 0;

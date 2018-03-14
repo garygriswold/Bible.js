@@ -12,19 +12,19 @@ import org.json.JSONException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-class MetaDataReader {
+class AudioTOCBible {
 
     private static final String TAG = "MetaDataReader";
 
     private final Context context;
-    private final HashMap<String, TOCAudioBible> metaData;
-    private TOCAudioChapter metaDataVerse;
+    private final HashMap<String, AudioTOCTestament> metaData;
+    private AudioTOCChapter metaDataVerse;
     private CompletionHandler readCompletion;
     private CompletionHandler readVerseCompletion;
 
-    MetaDataReader(Context context) {
+    AudioTOCBible(Context context) {
         this.context = context;
-        this.metaData = new HashMap<String, TOCAudioBible>();
+        this.metaData = new HashMap<String, AudioTOCTestament>();
     }
 
     void read(String languageCode, String mediaType, CompletionHandler completion) {
@@ -46,7 +46,7 @@ class MetaDataReader {
                 for (int i=0; i<json.length(); i++) {
                     try {
                         JSONObject item = json.getJSONObject(i);
-                        TOCAudioBible metaItem = new TOCAudioBible("FCBH", item);
+                        AudioTOCTestament metaItem = new AudioTOCTestament("FCBH", item);
                         Log.d(TAG, "TOCAudioBible item: " + metaItem.toString());
                         metaData.put(metaItem.damId, metaItem);
                     } catch(JSONException je) {
@@ -81,7 +81,7 @@ class MetaDataReader {
         public void completed(Object result) {
             JSONArray json = parseJson(result);
             if (json != null) {
-                metaDataVerse = new TOCAudioChapter(json);
+                metaDataVerse = new AudioTOCChapter(json);
                 readVerseCompletion.completed(metaDataVerse);
             } else {
                 readVerseCompletion.failed(new RuntimeException("Failed to parse JSON"));

@@ -10,7 +10,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-class MediaPlayState {
+class AudioPlayState {
 
     private static final String TAG = "MediaPlayState";
     private static final String MEDIA_ID = "mediaId";
@@ -18,9 +18,9 @@ class MediaPlayState {
     private static final String POSITION = "position";
     private static final String TIMESTAMP = "timestamp";
 
-    static MediaPlayState currentState = new MediaPlayState("jesusFilm");
+    static AudioPlayState currentState = new AudioPlayState("jesusFilm");
 
-    static MediaPlayState retrieve(Activity activity, String mediaId, String mediaUrl) {
+    static AudioPlayState retrieve(Activity activity, String mediaId, String mediaUrl) {
         currentState.mediaId = mediaId;
         currentState.mediaUrl = mediaUrl;
         Log.d(TAG, "***** SEEKING " + mediaId + "  " + mediaUrl);
@@ -45,7 +45,7 @@ class MediaPlayState {
         SharedPreferences.Editor editor = savedState.edit();
         editor.clear();
         editor.apply();
-        currentState = new MediaPlayState(currentState.mediaId);
+        currentState = new AudioPlayState(currentState.mediaId);
     }
 
     static void update(Activity activity, String mediaUrl, int time) {
@@ -67,14 +67,14 @@ class MediaPlayState {
     long position;
     long timestamp;
 
-    MediaPlayState(String mediaId, String mediaUrl, long position) {
+    AudioPlayState(String mediaId, String mediaUrl, long position) {
         this.mediaId = mediaId;
         this.mediaUrl = mediaUrl;
         this.position = position;
         this.timestamp = System.currentTimeMillis();
     }
 
-    MediaPlayState(String mediaId) {
+    AudioPlayState(String mediaId) {
         this.mediaId = mediaId;
         this.mediaUrl = null;
         this.position = 0L;

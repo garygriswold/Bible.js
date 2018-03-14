@@ -19,18 +19,18 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     private static final String TAG = "AudioBible";
 
     private final AudioBibleController controller;
-    private final TOCAudioBible tocAudioBible;
+    private final AudioTOCTestament tocTestament;
     private final AudioAnalytics audioAnalytics;
     // Transient Variables
-    private Reference currReference;
-    private Reference nextReference;
+    private AudioReference currReference;
+    private AudioReference nextReference;
     private MediaPlayer mediaPlayer;
     private MediaPlayer nextPlayer;
 
-    public AudioBible(AudioBibleController controller, TOCAudioBible tocBible, Reference reference) {
+    public AudioBible(AudioBibleController controller, AudioTOCTestament tocBible, AudioReference reference) {
         super();
         this.controller = controller;
-        this.tocAudioBible = tocBible;
+        this.tocTestament = tocBible;
         this.audioAnalytics = new AudioAnalytics(controller.activity,
                 tocBible.mediaSource,
                 reference.damId,
@@ -40,10 +40,10 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         this.nextReference = null;
         this.mediaPlayer = null;
         this.nextPlayer = null;
-        MediaPlayState.retrieve(this.controller.activity, reference.damId, reference.getS3Key());
+        AudioPlayState.retrieve(this.controller.activity, reference.damId, reference.getS3Key());
     }
 
-    Reference getCurrReference() { return(this.currReference); }
+    AudioReference getCurrReference() { return(this.currReference); }
 
     void beginReadFile() {
         Log.d(TAG, "BibleReader.BEGIN Read File");
@@ -72,7 +72,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         if (url != null) {
             this.mediaPlayer = this.initPlayer(url);
             if (this.mediaPlayer != null) {
-                long seekTime = MediaPlayState.currentState.position;
+                long seekTime = AudioPlayState.currentState.position;
                 if (seekTime > 100L) {
                     this.mediaPlayer.setOnSeekCompleteListener(this);
                     this.mediaPlayer.seekTo((int) seekTime);
@@ -187,7 +187,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     }
 
     private void updateMediaPlayStateTime() {
-        TOCAudioChapter chapter = this.currReference.audioChapter;
+        AudioTOCChapter chapter = this.currReference.audioChapter;
         int position = this.mediaPlayer.getCurrentPosition();
         if (chapter != null) {
             int verseNum = chapter.findVerseByPosition(1, position);
@@ -196,7 +196,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
             position -= 3000;
             position = (position >= 0) ? position : 0;
         }
-        MediaPlayState.update(this.controller.activity, this.currReference.getS3Key(), (int)position);
+        AudioPlayState.update(this.controller.activity, this.currReference.getS3Key(), (int)position);
     }
 
     void advanceToNextItem() {
@@ -206,11 +206,11 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
             this.preFetchNextChapter(this.currReference);
         } else {
             this.stop();
-            MediaPlayState.clear(this.controller.activity); // Must be after stop, because stop does update
+            AudioPlayState.clear(this.controller.activity); // Must be after stop, because stop does update
         }
     }
 
-    private void addNextChapter(Reference reference) {
+    private void addNextChapter(AudioReference reference) {
         if (this.mediaPlayer.isPlaying()) {
             this.mediaPlayer.stop();
             this.mediaPlayer = this.nextPlayer;
@@ -221,9 +221,9 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         this.controller.playHasStarted(this.mediaPlayer);
     }
 
-    private void preFetchNextChapter(Reference reference) {
+    private void preFetchNextChapter(AudioReference reference) {
         this.readVerseMetaData(reference);
-        this.nextReference = this.tocAudioBible.nextChapter(reference);
+        this.nextReference = this.tocTestament.nextChapter(reference);
         if (this.nextReference != null) {
             PreFetchCompletion handler = new PreFetchCompletion();
             AwsS3Cache.shared().readFile(this.nextReference.getS3Bucket(),
@@ -249,20 +249,20 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         }
     }
 
-    private void readVerseMetaData(Reference reference) {
+    private void readVerseMetaData(AudioReference reference) {
         ReadVerseMetaDataHandler handler = new ReadVerseMetaDataHandler(reference);
-        MetaDataReader reader = new MetaDataReader(this.controller.activity);
+        AudioTOCBible reader = new AudioTOCBible(this.controller.activity);
         reader.readVerseAudio(reference.damId, reference.sequence, reference.book, reference.chapter, handler);
     }
 
     class ReadVerseMetaDataHandler implements CompletionHandler {
-        private Reference reference;
-        ReadVerseMetaDataHandler(Reference ref) {
+        private AudioReference reference;
+        ReadVerseMetaDataHandler(AudioReference ref) {
             this.reference = ref;
         }
         public void completed(Object result) {
-            if (result instanceof TOCAudioChapter) {
-                TOCAudioChapter chapter = (TOCAudioChapter)result;
+            if (result instanceof AudioTOCChapter) {
+                AudioTOCChapter chapter = (AudioTOCChapter)result;
                 reference.audioChapter = chapter;
                 //Log.d(TAG, "************" + chapter.toString());
             } else {
