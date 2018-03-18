@@ -113,7 +113,7 @@ class Sqlite3Test: XCTestCase {
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
             let query = "select languageId, mediaId, lengthMS from Video"
-            try db.queryV1(sql: query, values: nil, complete: { resultSet in
+            try db.queryV1(sql: query, values: [], complete: { resultSet in
                 assert(resultSet.count > 10, "There should be many rows")
                 let row: [String?] = resultSet[0]
                 assert(row.count == 3, "There should be 3 columns.")
@@ -134,7 +134,7 @@ class Sqlite3Test: XCTestCase {
             try db.open(dbPath: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
             let stmt = "CREATE TABLE TEST1(abc TEXT, def INT, ghi REAL, ijk BLOB)"
-            try db.executeV1(sql: stmt, values: nil, complete: { rowCount in
+            try db.executeV1(sql: stmt, values: [], complete: { rowCount in
                 assert(rowCount == 0, "Create table returns zero rowCount")
                 ready.fulfill()
             })
