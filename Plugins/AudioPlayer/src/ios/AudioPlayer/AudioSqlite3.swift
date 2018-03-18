@@ -50,7 +50,6 @@ class AudioSqlite3 {
   
     public func open(dbPath: String, copyIfAbsent: Bool) throws {
         self.database = nil
-        try self.ensureDirectory()
         let fullPath = try self.ensureDatabase(dbPath: dbPath, copyIfAbsent: copyIfAbsent)
         
         var db: OpaquePointer? = nil
@@ -89,6 +88,7 @@ class AudioSqlite3 {
             return fullPath
         } else if copyIfAbsent {
             print("Copy Bundle at \(dbPath)")
+            try self.ensureDirectory()
             let parts = dbPath.split(separator: ".")
             let name = String(parts[0])
             let ext = String(parts[1])
