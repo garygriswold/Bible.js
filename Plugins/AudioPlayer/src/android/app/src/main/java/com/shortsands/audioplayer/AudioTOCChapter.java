@@ -12,18 +12,16 @@ class AudioTOCChapter {
     private Double[] versePositions;
 
     AudioTOCChapter(String json) {
-        String trimmed = json.substring(1, json.length() - 2);
+        String trimmed = json.substring(1, json.length() - 1);
         String[] parts = trimmed.split(",");
         this.versePositions = new Double[parts.length];
         this.versePositions[0] = 0.0;
         for (int i=1; i<parts.length; i++) {
-            //if (parts[i] != null) {
             try {
                 this.versePositions[i] = Double.parseDouble(parts[i]);
-            } catch (NumberFormatException ex) {
-                this.versePositions[i] = this.versePositions[i=1];
+            } catch (Exception ex) {
+                this.versePositions[i] = this.versePositions[i-1];
             }
-            //}
         }
         Log.d(TAG, this.versePositions.toString());
     }
@@ -72,13 +70,15 @@ class AudioTOCChapter {
 
     public String toString() {
         StringBuilder str = new StringBuilder();
-        for (int i=1; i<this.versePositions.length; i++) {
-            double position = this.versePositions[i];
-            str.append("verse_id=");
-            str.append(String.valueOf(i));
-            str.append(", position=");
-            str.append(String.valueOf(position));
-            str.append("\n");
+        if (this.versePositions != null) {
+            for (int i = 1; i < this.versePositions.length; i++) {
+                double position = this.versePositions[i];
+                str.append("verse_id=");
+                str.append(String.valueOf(i));
+                str.append(", position=");
+                str.append(String.valueOf(position));
+                str.append("\n");
+            }
         }
         return(str.toString());
     }

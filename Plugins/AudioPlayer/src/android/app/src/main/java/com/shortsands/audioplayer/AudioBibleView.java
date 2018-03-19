@@ -232,7 +232,7 @@ class AudioBibleView {
             public void onProgressChanged(SeekBar seekBar, int value, boolean isUser) {
                 if (isUser && player != null) {
                     if (value < seekBar.getMax()) {
-                        int position;
+                        long position;
                         AudioReference curr = audioBible.getCurrReference();
                         if (curr.audioChapter != null) {
                             verseNum = curr.audioChapter.findVerseByPosition(verseNum, value);
@@ -242,7 +242,7 @@ class AudioBibleView {
                         } else {
                             position = value;
                         }
-                        player.seekTo(position);
+                        player.seekTo((int)position);
                     } else {
                         audioBible.advanceToNextItem();
                         Log.d(TAG, "******** Progress moved to end " + System.currentTimeMillis());

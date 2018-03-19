@@ -105,7 +105,7 @@ class AudioTOCBible {
             String[] values = new String[3];
             values[0] = damid;
             values[1] = bookId;
-            values[3] = String.valueOf(chapter);
+            values[2] = String.valueOf(chapter);
             String[][] resultSet = this.database.queryV1(query, values);
             Log.d(TAG,"LENGTH " + resultSet.length);
             if (resultSet.length > 0) {
