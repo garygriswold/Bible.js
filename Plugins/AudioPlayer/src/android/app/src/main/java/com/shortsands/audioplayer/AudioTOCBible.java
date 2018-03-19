@@ -5,111 +5,143 @@ package com.shortsands.audioplayer;
  */
 import android.content.Context;
 import android.util.Log;
-import com.shortsands.aws.AwsS3Cache;
-import com.shortsands.aws.CompletionHandler;
-import java.util.HashMap;
-import org.json.JSONException;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 class AudioTOCBible {
 
-    private static final String TAG = "MetaDataReader";
+    private static final String TAG = "AudioTOCBible";
 
-    private final Context context;
-    private final HashMap<String, AudioTOCTestament> metaData;
-    private AudioTOCChapter metaDataVerse;
-    private CompletionHandler readCompletion;
-    private CompletionHandler readVerseCompletion;
+    private Context context;
+    // which of these should be private, none of them are in ios
+    String textVersion;
+    String silLang;
+    String mediaSource;
+    AudioTOCTestament oldTestament;
+    AudioTOCTestament newTestament;
+    AudioSqlite3 database;
 
-    AudioTOCBible(Context context) {
-        this.context = context;
-        this.metaData = new HashMap<String, AudioTOCTestament>();
+    AudioTOCBible(Context context, String versionCode, String silLang) {
+        this.textVersion = versionCode;
+        this.silLang = silLang;
+        this.mediaSource = "FCBH";
+        this.oldTestament = null;
+        this.newTestament = null;
+        this.database = new AudioSqlite3(context);
+        try {
+            this.database.open("Versions.db", true);
+        } catch (Exception err) {
+            Log.d(TAG,"ERROR " + AudioSqlite3.errorDescription(err));
+        }
     }
 
-    void read(String languageCode, String mediaType, CompletionHandler completion) {
-        this.readCompletion = completion;
-        String s3Bucket = "audio-us-west-2-shortsands";
-        String s3Key = languageCode + "_" + mediaType + ".json";
-        int expireInterval = 604800; // seconds in 1 week
-        ReadResponseHandler handler = new ReadResponseHandler();
-        AwsS3Cache.shared().readText(s3Bucket, s3Key, expireInterval, handler);
-    }
+    //deinit {
+    //    print("***** Deinit AudioMetaDataReader *****")
+    //}
 
-    class ReadResponseHandler implements CompletionHandler {
-
-        public void completed(Object result) {
-            Log.d(TAG, "***** Inside Completed in MetaDataReader");
-            JSONArray json = parseJson(result);
-            if (json != null) {
-                Log.d(TAG, "JSON PARSED " + json.toString());
-                for (int i=0; i<json.length(); i++) {
-                    try {
-                        JSONObject item = json.getJSONObject(i);
-                        AudioTOCTestament metaItem = new AudioTOCTestament("FCBH", item);
-                        Log.d(TAG, "TOCAudioBible item: " + metaItem.toString());
-                        metaData.put(metaItem.damId, metaItem);
-                    } catch(JSONException je) {
-                        Log.e(TAG, "Could not parse Audio Meta Data " + je.toString());
-                        readCompletion.failed(je);
-                    }
+    void read() {
+        String query = "SELECT a.damId, a.collectionCode, a.mediaType, a.dbpLanguageCode, a.dbpVersionCode" +
+                " FROM audio a, audioVersion v" +
+                " WHERE a.dbpLanguageCode = v.dbpLanguageCode" +
+                " AND a.dbpVersionCode = v.dbpVersionCode" +
+                " AND v.versionCode = ?" +
+                " ORDER BY mediaType ASC, collectionCode ASC";
+        // mediaType sequence Drama, NonDrama
+        // collectionCode sequence NT, ON, OT
+        try {
+            String[] values = new String[1];
+            values[0] = this.textVersion;
+            String[][] resultSet = this.database.queryV1(query, values);//, complete: { resultSet in
+            Log.d(TAG,"LENGTH " + resultSet.length);
+            String[] oldTestRow = null;
+            String[] newTestRow = null;
+            for(int i=0; i<resultSet.length; i++) {
+                // Because of the sort sequence, the following logic prefers Drama over Non-Drama
+                // Because of the sequenc of IF's, it prefers OT and NT over ON
+                String[] row = resultSet[i];
+                String collectionCode = row[1];
+                if (newTestRow == null && collectionCode.equals("NT")) {
+                    newTestRow = row;
                 }
-                readCompletion.completed(metaData);
-            } else {
-                Log.d(TAG, "Not parsable JSON");
-                readCompletion.failed(new RuntimeException("Could not parse JSON"));
-            }
-        }
-        public void failed(Throwable exception) {
-            Log.e(TAG, "Exception in MetaDataReader.read " + exception.toString());
-            readCompletion.failed(exception);
-        }
-    }
-
-    void readVerseAudio(String damid, String sequence, String bookId, String chapter,
-                               CompletionHandler completion) {
-        this.readVerseCompletion = completion;
-        String s3Bucket = "audio-us-west-2-shortsands";
-        String s3Key = damid + "_" + sequence + "_" + bookId + "_" + chapter + "_verse.json";
-        int expireInterval = 604800; // seconds in 1 week
-        ReadVerseResponseHandler handler = new ReadVerseResponseHandler();
-        AwsS3Cache.shared().readText(s3Bucket, s3Key, expireInterval, handler);
-    }
-
-    class ReadVerseResponseHandler implements CompletionHandler {
-
-        public void completed(Object result) {
-            JSONArray json = parseJson(result);
-            if (json != null) {
-                metaDataVerse = new AudioTOCChapter(json);
-                readVerseCompletion.completed(metaDataVerse);
-            } else {
-                readVerseCompletion.failed(new RuntimeException("Failed to parse JSON"));
-            }
-        }
-        public void failed(Throwable exception) {
-            Log.e(TAG, "Exception in MetaDataReader.readVerseAudio " + exception.toString());
-            readVerseCompletion.failed(exception);
-        }
-    }
-
-    private JSONArray parseJson(Object data) {
-        if (data != null) {
-            if (data instanceof String) {
-                try {
-                    JSONArray json = new JSONArray((String) data);
-                    return json;
-                } catch(JSONException exc) {
-                    Log.e(TAG, "Error parsing Meta Data json " + exc.toString());
-                    return null;
+                if (newTestRow == null && collectionCode.equals("ON")) {
+                    newTestRow = row;
                 }
-            } else {
-                Log.e(TAG, "Downloaded Meta Data is not String.");
-                return null;
+                if (oldTestRow == null && collectionCode.equals("OT")) {
+                    oldTestRow = row;
+                }
+                if (oldTestRow == null && collectionCode.equals("ON")) {
+                    oldTestRow = row;
+                }
             }
-        } else {
-            Log.e(TAG, "Download Meta Data Error.");
-            return null;
+            if (oldTestRow != null) {
+                this.oldTestament = new AudioTOCTestament(this, this.database, oldTestRow);
+            }
+            if (newTestRow != null) {
+                this.newTestament = new AudioTOCTestament(this, this.database, newTestRow);
+            }
+            this.readBookNames(); // This is not necessary on Android
+        } catch (Exception err) {
+            Log.d(TAG,"ERROR " + AudioSqlite3.errorDescription(err));
+        }
+    }
+    /**
+     * This function will only return results after read has been called.
+     */
+    AudioTOCBook findBook(String bookId) {
+        AudioTOCBook result = null;
+        if (this.oldTestament != null) {
+            result = this.oldTestament.booksById.get(bookId);
+        }
+        if (result == null) {
+            if (this.newTestament != null) {
+                result = this.newTestament.booksById.get(bookId);
+            }
+        }
+        return result;
+    }
+
+    AudioTOCChapter readVerseAudio(String damid, String bookId, int chapter) {
+        AudioTOCChapter tocChapter = null;
+        String query = "SELECT versePositions FROM AudioChapter WHERE damId = ? AND bookId = ? AND chapter = ?";
+        try {
+            String[] values = new String[3];
+            values[0] = damid;
+            values[1] = bookId;
+            values[3] = String.valueOf(chapter);
+            String[][] resultSet = this.database.queryV1(query, values);
+            Log.d(TAG,"LENGTH " + resultSet.length);
+            if (resultSet.length > 0) {
+                String[] row = resultSet[0];
+                if (row[0] != null) {
+                    tocChapter = new AudioTOCChapter(row[0]);
+                }
+            }
+        } catch (Exception err) {
+            Log.d(TAG,"ERROR " + AudioSqlite3.errorDescription(err));
+        } finally {
+            return(tocChapter);
+        }
+    }
+
+    private void readBookNames() {
+        String query = "SELECT code, heading FROM tableContents";
+        String[] values = new String[0];
+        AudioSqlite3 db = new AudioSqlite3(this.context);
+        try {
+            String dbName = this.textVersion + ".db";
+            db.open(dbName, true);
+            String[][] resultSet = db.queryV1(query, values);
+            for (int i=0; i<resultSet.length; i++) {
+                String[] row = resultSet[i];
+                String bookId = row[0];
+                if (this.oldTestament != null && this.oldTestament.booksById.containsKey(bookId)) {
+                    this.oldTestament.booksById.get(bookId).bookName = row[1];
+                } else if (this.newTestament != null && this.newTestament.booksById.containsKey(bookId)) {
+                    this.newTestament.booksById.get(bookId).bookName = row[1];
+                }
+            }
+        } catch (Exception err) {
+            Log.d(TAG, "ERROR: " + AudioSqlite3.errorDescription(err));
+        } finally {
+            db.close();
         }
     }
 }

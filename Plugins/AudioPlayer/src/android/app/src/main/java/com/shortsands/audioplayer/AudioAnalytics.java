@@ -32,6 +32,7 @@ public class AudioAnalytics {
     private String mediaSource;
     private String mediaId;
     private String languageId;
+    private String textVersion;
     private String silLang;
     private String sessionId;
 
@@ -43,11 +44,13 @@ public class AudioAnalytics {
                    String mediaSource,
                    String mediaId,
                    String languageId,
+                   String textVersion,
                    String silLang) {
         this.context = context;
         this.mediaSource = mediaSource;
         this.mediaId = mediaId;
         this.languageId = languageId;
+        this.textVersion = textVersion;
         this.silLang = silLang;
 
         AudioAnalyticsSessionId analyticsSessionId = new AudioAnalyticsSessionId(context);
@@ -55,8 +58,7 @@ public class AudioAnalytics {
 
         this.startingPosition = 0L;
 
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        //TimeZone tz = TimeZone.getDefault();
+        TimeZone tz = TimeZone.getTimeZone("UTC"); //should this be default, or local to user
         isoFormat.setTimeZone(tz);
     }
 

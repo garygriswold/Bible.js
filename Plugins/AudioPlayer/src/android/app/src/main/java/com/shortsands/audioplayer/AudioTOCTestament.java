@@ -4,96 +4,99 @@ package com.shortsands.audioplayer;
  * Created by garygriswold on 8/30/17.
  */
 import android.util.Log;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import java.util.HashMap;
+import java.util.Iterator;
 
 class AudioTOCTestament {
 
-    private static String TAG = "TOCAudioTestament";
+    private static String TAG = "AudioTOCTestament";
 
-    final String mediaSource;
-    final String damId;
-    final String languageCode;
-    final String mediaType;
-    final String versionCode;
-    final String versionName;
-    final String versionEnglish;
-    final String collectionCode;
-    final HashMap<String, AudioTOCBook> booksById;
-    final HashMap<Integer, AudioTOCBook> booksBySeq;
+    AudioTOCBible bible;
+    String damId;
+    String dbpLanguageCode;
+    String dbpVersionCode;
+    String collectionCode;
+    String mediaType;
+    HashMap<String, AudioTOCBook> booksById;
+    HashMap<Integer, AudioTOCBook> booksBySeq;
 
-    AudioTOCTestament(String source, JSONObject jsonObject) {
-        this.mediaSource = source;
+    AudioTOCTestament(AudioTOCBible bible, AudioSqlite3 database, String[] dbRow) {
+        this.bible = bible;
         this.booksById = new HashMap<String, AudioTOCBook>();
         this.booksBySeq = new HashMap<Integer, AudioTOCBook>();
-        String temp;
-        try { temp = jsonObject.getString("dam_id"); } catch (JSONException je) { temp = ""; }
-        this.damId = temp;
-        try { temp = jsonObject.getString("language_code"); } catch (JSONException je) { temp = ""; } // Not attr damid
-        this.languageCode = temp;
-        try { temp = jsonObject.getString("media"); } catch (JSONException je) { temp = ""; }// Not an attr of damid
-        this.mediaType = temp;
-        try { temp = jsonObject.getString("version_code"); } catch (JSONException je) { temp = ""; }
-        this.versionCode = temp;
-        try { temp = jsonObject.getString("version_name"); } catch (JSONException je) { temp = ""; }
-        this.versionName = temp;
-        try { temp = jsonObject.getString("version_english"); } catch (JSONException je) { temp = ""; }
-        this.versionEnglish = temp;
-        try { temp = jsonObject.getString("collection_code"); } catch (JSONException je) { temp = ""; }
-        this.collectionCode = temp;
+        this.damId = dbRow[0];
+        this.collectionCode = dbRow[1];
+        this.mediaType = dbRow[2];
+        this.dbpLanguageCode = dbRow[3];
+        this.dbpVersionCode = dbRow[4];
+
+        String query = "SELECT bookId, bookOrder, numberOfChapters" +
+            " FROM AudioBook" +
+            " WHERE damId = ?" +
+            " ORDER BY bookOrder";
+        String[] values = new String[1];
+        values[0] = this.damId;
         try {
-            JSONArray books = jsonObject.getJSONArray("books");
-                for (int i=0; i<books.length(); i++) {
-                    JSONObject jsonBook = books.getJSONObject(i);
-                    AudioTOCBook book = new AudioTOCBook(jsonBook);
-                    Log.d(TAG, "BOOK " + book.toString());
-                    this.booksById.put(book.bookId, book);
-                    this.booksBySeq.put(book.sequenceNum, book);
-                }
-        } catch(JSONException je) {
-            Log.e(TAG, "Could not determine type of JSON Object in MetaDataItem");
+            String[][] resultSet = database.queryV1(query, values);
+            for (int i=0; i<resultSet.length; i++) {
+                String[] row = resultSet[i];
+                AudioTOCBook book = new AudioTOCBook(this, row);
+                this.booksById.put(book.bookId, book);
+                this.booksBySeq.put(book.sequence, book);
+            }
+        } catch (Exception err) {
+            Log.d(TAG,"ERROR " + AudioSqlite3.errorDescription(err));
         }
     }
 
+    //deinit {
+    //    print("***** Deinit TOCAudioTOCBible *****")
+    //}
+
     AudioReference nextChapter(AudioReference ref) {
-        if (this.booksById.containsKey(ref.book)) {
-            AudioTOCBook book = this.booksById.get(ref.book);
-            if (ref.chapterNum() < book.numberOfChapters) {
-                int next = ref.chapterNum() + 1;
-                String nextStr = String.valueOf(next);
-                switch(nextStr.length()) {
-                    case 1: return new AudioReference(ref.damId, ref.sequence, ref.book, "00" + nextStr, ref.fileType);
-                    case 2: return new AudioReference(ref.damId, ref.sequence, ref.book, "0" + nextStr, ref.fileType);
-                    default: return new AudioReference(ref.damId, ref.sequence, ref.book, nextStr, ref.fileType);
-                }
-            } else {
-                if (this.booksBySeq.containsKey(ref.sequenceNum() + 1)) {
-                    AudioTOCBook nextBook = this.booksBySeq.get(ref.sequenceNum() + 1);
-                    return new AudioReference(ref.damId, nextBook.sequence, nextBook.bookId, "001", ref.fileType);
-                }
+        AudioTOCBook book = ref.tocAudioBook;
+        if (ref.chapterNum() < book.numberOfChapters) {
+            int next = ref.chapterNum() + 1;
+            return AudioReference.factory(ref.tocAudioBook, next, ref.fileType);
+        } else {
+            AudioTOCBook nextBook = this.booksBySeq.get(ref.sequenceNum() + 1);
+            if (nextBook != null) {
+                return AudioReference.factory(nextBook, 1, ref.fileType);
             }
         }
         return null;
     }
 
+    AudioReference priorChapter(AudioReference ref) {
+        int prior = ref.chapterNum() - 1;
+        if (prior > 0) {
+            return AudioReference.factory(ref.tocAudioBook, prior, ref.fileType);
+        } else {
+            AudioTOCBook priorBook = this.booksBySeq.get(ref.sequenceNum() - 1);
+            if (priorBook != null) {
+                return AudioReference.factory(priorBook, priorBook.numberOfChapters, ref.fileType);
+            }
+        }
+        return null;
+    }
+
+    String getBookList() {
+        StringBuffer array = new StringBuffer();
+        Iterator<AudioTOCBook> it = this.booksBySeq.values().iterator();
+        while(it.hasNext()) {
+            array.append(",");
+            array.append(it.next().bookId);
+        }
+        return array.toString();
+    }
+
     public String toString() {
-        StringBuilder str = new StringBuilder();
-        str.append("damId=");
-        str.append(this.damId);
-        str.append("\n languageCode=");
-        str.append(this.languageCode);
-        str.append("\n mediaType=");
-        str.append(this.mediaType);
-        str.append("\n versionCode=");
-        str.append(this.versionCode);
-        str.append("\n versionName=");
-        str.append(this.versionName);
-        str.append("\n versionEnglish=");
-        str.append(this.versionEnglish);
-        str.append("\n collectionCode=");
-        str.append(this.collectionCode);
-        return str.toString();
+        String str = "damId=" + this.damId +
+                "\n languageCode=" + this.dbpLanguageCode +
+                "\n versionCode=" + this.dbpVersionCode +
+                "\n mediaType=" + this.mediaType +
+                "\n collectionCode=" + this.collectionCode;
+        return str;
     }
 }
+

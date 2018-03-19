@@ -18,38 +18,53 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
 
     private static final String TAG = "AudioBible";
 
+    private static AudioBible instance = null;
+    static AudioBible shared(AudioBibleController controller) {
+        if (AudioBible.instance == null) {
+            AudioBible.instance = new AudioBible(controller);
+        }
+        return(AudioBible.instance);
+    }
+
     private final AudioBibleController controller;
-    private final AudioTOCTestament tocTestament;
-    private final AudioAnalytics audioAnalytics;
+    private AudioAnalytics audioAnalytics;
     // Transient Variables
     private AudioReference currReference;
     private AudioReference nextReference;
     private MediaPlayer mediaPlayer;
     private MediaPlayer nextPlayer;
 
-    public AudioBible(AudioBibleController controller, AudioTOCTestament tocBible, AudioReference reference) {
+    private AudioBible(AudioBibleController controller) {
         super();
         this.controller = controller;
-        this.tocTestament = tocBible;
-        this.audioAnalytics = new AudioAnalytics(controller.activity,
-                tocBible.mediaSource,
-                reference.damId,
-                tocBible.languageCode,
-                "User's text lang setting");
-        this.currReference = reference;
-        this.nextReference = null;
-        this.mediaPlayer = null;
-        this.nextPlayer = null;
-        AudioPlayState.retrieve(this.controller.activity, reference.damId, reference.getS3Key());
     }
 
-    AudioReference getCurrReference() { return(this.currReference); }
+    MediaPlayer getPlayer() {
+        return this.mediaPlayer;
+    }
 
-    void beginReadFile() {
+    AudioReference getCurrReference() {
+        return this.currReference;
+    }
+
+    boolean isPlaying() {
+        return (this.mediaPlayer != null) ? this.mediaPlayer.isPlaying() : false;
+    }
+
+    void beginReadFile(AudioReference reference) {
         Log.d(TAG, "BibleReader.BEGIN Read File");
+        this.currReference = reference;
+        this.audioAnalytics = new AudioAnalytics(controller.activity,
+            reference.tocAudioBook.testament.bible.mediaSource,
+            reference.damId(),
+            reference.dbpLanguageCode(),
+            reference.textVersion(),
+            reference.silLang());
         BeginReadFileCompletion handler = new BeginReadFileCompletion();
-        AwsS3Cache.shared().readFile(this.currReference.getS3Bucket(),
-                this.currReference.getS3Key(),
+        this.readVerseMetaData(reference);
+        AudioPlayState.retrieve(this.controller.activity, reference.damId());
+        AwsS3Cache.shared().readFile(reference.getS3Bucket(),
+                reference.getS3Key(),
                 Integer.MAX_VALUE,
                 handler);
     }
@@ -59,7 +74,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         public void completed(Object result) {
             if (result instanceof File) {
                 File file = (File) result;
-                initAudio(file.getAbsolutePath());
+                initAudio(file);
             }
         }
         @Override
@@ -68,7 +83,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         }
     }
 
-    private void initAudio(String url) {
+    private void initAudio(File url) {
         if (url != null) {
             this.mediaPlayer = this.initPlayer(url);
             if (this.mediaPlayer != null) {
@@ -93,7 +108,8 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         this.controller.playHasStarted(player);
     }
 
-    private MediaPlayer initPlayer(String url) {
+    private MediaPlayer initPlayer(File file) {
+        String url = file.getAbsolutePath();
         MediaPlayer player = new MediaPlayer();
         player.setLooping(false);
         player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL); // Replace with AudioAttributes in SDK 21
@@ -111,21 +127,25 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
 
     void play() {
         Log.d(TAG, "\n*********** PLAY *************");
-        this.mediaPlayer.start();
-        long currTime = (this.mediaPlayer != null) ? this.mediaPlayer.getCurrentPosition() : 0;
-        this.audioAnalytics.playStarted(this.currReference.toString(), currTime);
+        if (this.mediaPlayer != null) {
+            this.mediaPlayer.start();
+            long currTime = this.mediaPlayer.getCurrentPosition();
+            this.audioAnalytics.playStarted(this.currReference.toString(), currTime);
+        }
     }
 
     void pause() {
         Log.d(TAG, "\n*********** PAUSE *************");
-        this.mediaPlayer.pause();
-        long currTime = (this.mediaPlayer != null) ? this.mediaPlayer.getCurrentPosition() : 0;
-        this.audioAnalytics.playEnded(this.currReference.toString(), currTime);
-        this.updateMediaPlayStateTime();
+        if (this.mediaPlayer != null) {
+            this.mediaPlayer.pause();
+            long currTime = this.mediaPlayer.getCurrentPosition();
+            this.audioAnalytics.playEnded(this.currReference.toString(), currTime);
+            this.updateMediaPlayStateTime(this.currReference);
+        }
     }
 
     void stop() {
-        if (this.mediaPlayer.isPlaying()) {
+        if (this.mediaPlayer != null && this.mediaPlayer.isPlaying()) {
             this.pause();
         }
         this.controller.playHasStopped();
@@ -182,12 +202,11 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         //this.progressBar.setVisibility(View.VISIBLE);
         //Uri videoUri = Uri.parse(this.videoUrl);
         //this.videoView.setVideoURI(videoUri);
-
         return true;
     }
 
-    private void updateMediaPlayStateTime() {
-        AudioTOCChapter chapter = this.currReference.audioChapter;
+    private void updateMediaPlayStateTime(AudioReference reference) {
+        AudioTOCChapter chapter = reference.audioChapter;
         int position = this.mediaPlayer.getCurrentPosition();
         if (chapter != null) {
             int verseNum = chapter.findVerseByPosition(1, position);
@@ -196,7 +215,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
             position -= 3000;
             position = (position >= 0) ? position : 0;
         }
-        AudioPlayState.update(this.controller.activity, this.currReference.getS3Key(), (int)position);
+        AudioPlayState.update(this.controller.activity, reference.getS3Key(), (int)position);
     }
 
     void advanceToNextItem() {
@@ -218,12 +237,12 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         } else {
             this.mediaPlayer = this.nextPlayer;
         }
-        this.controller.playHasStarted(this.mediaPlayer);
+        this.controller.playHasStarted(this.mediaPlayer); // Why is this here it seems redundant?
+        this.readVerseMetaData(reference);
     }
 
     private void preFetchNextChapter(AudioReference reference) {
-        this.readVerseMetaData(reference);
-        this.nextReference = this.tocTestament.nextChapter(reference);
+        this.nextReference = reference.nextChapter();
         if (this.nextReference != null) {
             PreFetchCompletion handler = new PreFetchCompletion();
             AwsS3Cache.shared().readFile(this.nextReference.getS3Bucket(),
@@ -239,7 +258,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         public void completed(Object result) {
             if (result instanceof File) {
                 File file = (File) result;
-                nextPlayer = initPlayer(file.getAbsolutePath());
+                nextPlayer = initPlayer(file);
                 mediaPlayer.setNextMediaPlayer(nextPlayer);
             }
         }
@@ -250,27 +269,11 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     }
 
     private void readVerseMetaData(AudioReference reference) {
-        ReadVerseMetaDataHandler handler = new ReadVerseMetaDataHandler(reference);
-        AudioTOCBible reader = new AudioTOCBible(this.controller.activity);
-        reader.readVerseAudio(reference.damId, reference.sequence, reference.book, reference.chapter, handler);
-    }
-
-    class ReadVerseMetaDataHandler implements CompletionHandler {
-        private AudioReference reference;
-        ReadVerseMetaDataHandler(AudioReference ref) {
-            this.reference = ref;
-        }
-        public void completed(Object result) {
-            if (result instanceof AudioTOCChapter) {
-                AudioTOCChapter chapter = (AudioTOCChapter)result;
-                reference.audioChapter = chapter;
-                //Log.d(TAG, "************" + chapter.toString());
-            } else {
-                this.failed(new Exception("Could not cast to TOCAudioChapter"));
-            }
-        }
-        public void failed(Throwable exception) {
-            Log.e(TAG, "Exception in ReadVerseMetaDataHandler " + exception.toString());
+        AudioTOCBible reader = new AudioTOCBible(this.controller.activity, reference.textVersion(), reference.silLang());
+        AudioTOCChapter chapter = reader.readVerseAudio(reference.damId(), reference.bookId(), reference.chapterNum());
+        reference.audioChapter = chapter;
+        if (chapter == null) {
+           Log.d(TAG, "Unable to read verse position data");
         }
     }
 }

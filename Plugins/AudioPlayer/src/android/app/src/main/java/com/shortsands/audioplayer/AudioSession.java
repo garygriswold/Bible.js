@@ -3,6 +3,9 @@ package com.shortsands.audioplayer;
 /**
  * Created by garygriswold on 9/27/17.
  *
+ * This class is very distinct from the iOS version of AudioSession,
+ * because the Android provided services are very different from iOS.
+ *
  * Documentation: https://developer.android.com/guide/topics/media-apps/audio-focus.html
  *
  * When I upgrade to API 21 minimum, I should use AudioAttributes class
@@ -18,18 +21,24 @@ class AudioSession implements AudioManager.OnAudioFocusChangeListener {
 
     private static final String TAG = "AudioSession";
 
-    private final Activity activity;
-    private final AudioManager audioManager;
-    private AudioBibleView audioBibleView;
-
-    AudioSession(Activity activity) {
-        this.activity = activity;
-        this.audioManager = (AudioManager)this.activity.getSystemService(Context.AUDIO_SERVICE);
-        this.activity.setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
+    private static AudioSession instance = null;
+    static AudioSession shared(Activity activity, AudioBibleView audioBibleView) {
+        if (AudioSession.instance == null) {
+            AudioSession.instance = new AudioSession(activity, audioBibleView);
+        }
+        return AudioSession.instance;
     }
 
-    void setAudioBibleView(AudioBibleView audioBibleView) {
+    private final Activity activity;
+    private AudioBibleView audioBibleView;
+    private final AudioManager audioManager;
+
+
+    private AudioSession(Activity activity, AudioBibleView audioBibleView) {
+        this.activity = activity;
         this.audioBibleView = audioBibleView;
+        this.audioManager = (AudioManager)this.activity.getSystemService(Context.AUDIO_SERVICE);
+        this.activity.setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
     }
 
     public void onAudioFocusChange(int focusChange) {

@@ -11,7 +11,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 
-
 /**
  * Created by garygriswold on 3/13/18.
  * AudioSqlite3.java
@@ -86,7 +85,6 @@ public class AudioSqlite3 {
         try {
             in = this.context.getAssets().open("www/" + dbName);
             out = new FileOutputStream(destFile);
-            // Transfer bytes from in to out
             byte[] buf = new byte[1024];
             int len;
             while ((len = in.read(buf)) > 0) {

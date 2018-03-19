@@ -14,59 +14,90 @@ public class AudioBibleController {
 
     private static final String TAG = "AudioBibleController";
 
-    final Activity activity;
-    private final AudioBibleController that;
-    private final AudioSession audioSession;
-    private AudioBible audioBible;
-    private AudioBibleView readerView;
-
-    public AudioBibleController(Activity activity) {
-        this.activity = activity;
-        AwsS3.initialize("us-west-2", activity);
-        this.that = this;
-        this.audioSession = new AudioSession(this.activity);
-    }
-
-    public void present() {
-        if (this.audioSession.startAudioSession()) {
-            AudioTOCBible metaData = new AudioTOCBible(this.activity);
-            MetaDataReaderResponse response = new MetaDataReaderResponse();
-            metaData.read("ENG", "audio", response);
+    private static AudioBibleController instance = null;
+    public static AudioBibleController shared(Activity activity)  {
+        if (AudioBibleController.instance == null) {
+            AudioBibleController.instance = new AudioBibleController(activity);
         }
+        return AudioBibleController.instance;
     }
 
-    class MetaDataReaderResponse implements CompletionHandler {
+    final Activity activity;
+    private String fileType;
+    private AudioTOCBible metaDataReader;
+    private AudioBible audioBible;
+    private AudioBibleView audioBibleView;
+    private AudioSession audioSession;
 
-        public void completed(Object result) {
-            if (result instanceof HashMap) {
-                HashMap<String, AudioTOCTestament> metaData = (HashMap<String, AudioTOCTestament>)result;
-                AudioTOCTestament bible = metaData.get("DEMO");
-                AudioTOCBook book = bible.booksById.get("TST");
+    private AudioBibleController(Activity activity) {
+        this.activity = activity;
+        this.fileType = "mp3";
+    }
 
-                AudioReference reference = new AudioReference(bible.damId, book.sequence, book.bookId, "001", "mp3");
-                audioBible = new AudioBible(that, bible, reference);
-                readerView = new AudioBibleView(that, audioBible);
-                audioSession.setAudioBibleView(readerView);
+    public String findAudioVersion(String version, String silLang) {
+        this.metaDataReader = new AudioTOCBible(this.activity, version, silLang);
+        this.metaDataReader.read();
+        StringBuilder bookIdList = new StringBuilder();
+        if (this.metaDataReader.oldTestament != null) {
+            bookIdList.append(this.metaDataReader.oldTestament.getBookList());
+        }
+        if (this.metaDataReader.newTestament != null) {
+            bookIdList.append(this.metaDataReader.newTestament.getBookList());
+        }
+        return bookIdList.toString();
+    }
 
-                audioBible.beginReadFile();
+    public boolean isPlaying() {
+        boolean result = false;
+        if (this.audioBible != null && this.audioBibleView != null) {
+            result = this.audioBible.isPlaying() || this.audioBibleView.audioBibleActive();
+        }
+        return result;
+    }
+
+    // should this return an error code in order to be consistent to iOS?
+    public void present(String bookId, int chapterNum) {
+
+        this.audioBible = AudioBible.shared(this);
+        this.audioBibleView = AudioBibleView.shared(this, this.audioBible);
+        this.audioSession = AudioSession.shared(this.activity, this.audioBibleView);
+        //this.completionHandler = complete // something is required here for cordova
+
+        if (this.audioSession.startAudioSession()) {
+
+            if (!this.isPlaying()) {
+                if (this.metaDataReader != null) {
+                    AudioTOCBook meta = this.metaDataReader.findBook(bookId);
+                    if (meta != null) {
+                        AudioReference ref = AudioReference.factory(meta, chapterNum, this.fileType);
+                        this.audioBible.beginReadFile(ref);
+                    }
+                }
             }
         }
-        public void failed(Throwable exception) {
-            Log.e(TAG, "MetaDataReader failed " + exception.toString());
+    }
+
+    /**
+     * This is called when the Audio must be stopped externally, such as when a Video is started.
+     */
+    public void stop() {
+        if (this.audioBible != null) {
+            this.audioBible.stop();
         }
     }
 
     void playHasStarted(MediaPlayer player) {
-        if (this.readerView != null) {
-            this.readerView.startPlay(player);
+        if (this.audioBibleView != null) {
+            this.audioBibleView.startPlay(player);
         }
     }
 
     void playHasStopped() {
-        if (this.readerView != null) {
-            this.readerView.stopPlay();
-            this.readerView = null;
+        if (this.audioBibleView != null) {
+            this.audioBibleView.stopPlay();
+            this.audioBibleView = null;
         }
+        //this.completionHandler(null); // Is this needed for cordova?
         this.audioSession.stopAudioSession();
     }
 

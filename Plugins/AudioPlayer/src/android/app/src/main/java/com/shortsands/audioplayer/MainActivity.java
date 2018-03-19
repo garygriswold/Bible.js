@@ -6,11 +6,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.shortsands.aws.AwsS3;
 
 public class MainActivity extends AppCompatActivity {
 
     private static String TAG = "MainActivity";
-    AudioBibleController controller = null;
+    AudioBibleController audioController = AudioBibleController.shared(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +47,17 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "*** onResume is called.");
-        this.controller = new AudioBibleController(this);
-        this.controller.present();
 
+        AwsS3.initialize("us-east-1", this);
+        String readVersion = "ERV-ENG";//KJVPD"//ESV"
+        String readLang = "eng";
+        String readBook = "JHN";
+        int readChapter = 2;
+        String bookIdList = this.audioController.findAudioVersion(readVersion, readLang);
+        Log.d(TAG,"BOOKS: " + bookIdList);
+
+        this.audioController.present(readBook, readChapter);//, complete: { error in
+        // print("ViewController.present did finish error: \(String(describing: error))")
     }
 
     /**
@@ -59,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         Log.d(TAG, "*** onPause is called.");
-        if (this.controller != null) {
-            this.controller.appHasExited();
+        if (this.audioController != null) {
+            this.audioController.appHasExited();
         }
     }
 }

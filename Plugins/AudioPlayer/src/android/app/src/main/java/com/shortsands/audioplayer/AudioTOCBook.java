@@ -2,46 +2,48 @@ package com.shortsands.audioplayer;
 
 import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 /**
  * Created by garygriswold on 8/30/17.
  */
 
 class AudioTOCBook {
 
-    private static final String TAG = "TOCAudioBook";
+    private static final String TAG = "AudioTOCBook";
 
-    final String bookId;
-    final String sequence;
-    final int sequenceNum;
-    final String bookName;
-    final int numberOfChapters;
+    AudioTOCTestament testament;
+    String bookId;
+    String bookOrder;
+    Integer sequence;
+    String bookName;  // Used by AudioControlCenter
+    int numberOfChapters;
 
-    AudioTOCBook(JSONObject jsonBook) {
-        String temp;
-        try { temp = jsonBook.getString("book_id"); } catch (JSONException je) { temp = ""; }
-        this.bookId = temp;
-        try { temp = jsonBook.getString("sequence"); } catch (JSONException je) { temp = "000"; }
-        this.sequence = temp;
-        this.sequenceNum = Integer.parseInt(this.sequence);
-        try { temp = jsonBook.getString("book_name"); } catch(JSONException je) { temp = ""; }
-        this.bookName = temp;
-        try { temp = jsonBook.getString("number_of_chapters"); } catch(JSONException je) { temp = "0"; }
-        this.numberOfChapters = Integer.parseInt(temp);
+    AudioTOCBook(AudioTOCTestament testament, String[] dbRow) {
+        this.testament = testament;
+        this.bookId = dbRow[0];
+        this.bookOrder = dbRow[1];
+        try {
+            this.sequence = Integer.parseInt(this.bookOrder);
+        } catch (NumberFormatException ex) {
+            this.sequence = 0;
+        }
+        this.bookName = this.bookId; // Reset by MetaDataReader.readBookNames to bookName
+        String chapters = dbRow[2];
+        try {
+            this.numberOfChapters = Integer.parseInt(chapters);
+        } catch (NumberFormatException ex) {
+            this.numberOfChapters = 1;
+        }
     }
+
+    //deinit {
+    //    print("***** Deinit AudioTOCBook *****")
+    //}
 
     public String toString() {
-        StringBuilder str = new StringBuilder();
-        str.append("book_id=");
-        str.append(this.bookId);
-        str.append(", sequence=");
-        str.append(this.sequence);
-        str.append(", bookName=");
-        str.append(this.bookName);
-        str.append(", numberOfChapter=");
-        str.append(this.numberOfChapters);
-        return str.toString();
+        String str = "bookId=" + this.bookId +
+                ", bookOrder=" + this.bookOrder +
+                ", numberOfChapter=" + String.valueOf(this.numberOfChapters);
+        return str;
     }
+
 }

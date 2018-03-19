@@ -29,6 +29,14 @@ class AudioBibleView {
     private static final String TAG = "AudioBibleView";
     private static int TOP_BAR_HEIGHT = 0; // compute this as 5/8 inch.
 
+    private static AudioBibleView instance = null;
+    static AudioBibleView shared(AudioBibleController controller, AudioBible audioBible) {
+        if (AudioBibleView.instance == null) {
+            AudioBibleView.instance = new AudioBibleView(controller, audioBible);
+        }
+        return AudioBibleView.instance;
+    }
+
     private final AudioBibleController controller;
     private final Activity activity;
     private final AudioBible audioBible;
@@ -48,9 +56,10 @@ class AudioBibleView {
     private MonitorSeekBar monitorSeekBar = null;
     private boolean scrubSliderDrag = false;
     private int verseNum = 1;
+    private boolean isAudioViewActive = false;
     //private boolean isAudioViewActive = false; DO I need this on android?
 
-    AudioBibleView(AudioBibleController controller, AudioBible audioBible) {
+    private AudioBibleView(AudioBibleController controller, AudioBible audioBible) {
         this.controller = controller;
         this.activity = controller.activity;
         this.audioBible = audioBible;
@@ -181,16 +190,24 @@ class AudioBibleView {
         this.sliderOriginActual = 0.0f + seekParams.leftMargin + (seekParams.height - verseParams.width) / 2.0f;
     }
 
+    boolean audioBibleActive() {
+        return this.isAudioViewActive;
+    }
+
     void play() {
         this.audioBible.play();
-        this.layout.removeView(this.playButton);
-        this.layout.addView(this.pauseButton, this.pauseParams);
+        if (this.isAudioViewActive) {
+            this.layout.removeView(this.playButton);
+            this.layout.addView(this.pauseButton, this.pauseParams);
+        }
     }
 
     void pause() {
         this.audioBible.pause();
-        this.layout.removeView(this.pauseButton);
-        this.layout.addView(this.playButton, this.playParams);
+        if (this.isAudioViewActive) {
+            this.layout.removeView(this.pauseButton);
+            this.layout.addView(this.playButton, this.playParams);
+        }
     }
 
     void stop() {
@@ -202,6 +219,7 @@ class AudioBibleView {
      * @param player
      */
     void startPlay(final MediaPlayer player) {
+        this.isAudioViewActive = true;
         if (this.monitorSeekBar != null) {
             this.monitorSeekBar.isPlaying = false;
             this.monitorSeekBar = null;
@@ -251,6 +269,7 @@ class AudioBibleView {
     }
 
     void stopPlay() {
+        this.isAudioViewActive = false;
         if (this.monitorSeekBar != null) {
             this.monitorSeekBar.isPlaying = false;
             this.monitorSeekBar = null;

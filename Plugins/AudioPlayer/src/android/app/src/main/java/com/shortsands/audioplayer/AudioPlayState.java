@@ -20,17 +20,16 @@ class AudioPlayState {
 
     static AudioPlayState currentState = new AudioPlayState("jesusFilm");
 
-    static AudioPlayState retrieve(Activity activity, String mediaId, String mediaUrl) {
+    static AudioPlayState retrieve(Activity activity, String mediaId) {
         currentState.mediaId = mediaId;
-        currentState.mediaUrl = mediaUrl;
-        Log.d(TAG, "***** SEEKING " + mediaId + "  " + mediaUrl);
+        Log.d(TAG, "***** SEEKING " + mediaId);
         SharedPreferences savedState = activity.getSharedPreferences(mediaId, Context.MODE_PRIVATE);
         if (savedState != null) {
             String id = savedState.getString(MEDIA_ID, "");
             String url = savedState.getString(MEDIA_URL, "");
             Log.d(TAG, "***** SAVED STATE " + id + "   " + url);
         }
-        if (savedState != null && savedState.contains(MEDIA_ID) && mediaUrl.equals(savedState.getString(MEDIA_URL, ""))) {
+        if (savedState != null && savedState.contains(MEDIA_ID)) {
             currentState.position = savedState.getLong(POSITION, 0L);
             currentState.timestamp = savedState.getLong(TIMESTAMP, System.currentTimeMillis());
         } else {
@@ -48,7 +47,7 @@ class AudioPlayState {
         currentState = new AudioPlayState(currentState.mediaId);
     }
 
-    static void update(Activity activity, String mediaUrl, int time) {
+    static void update(Activity activity, String mediaUrl, long time) {
         currentState.mediaUrl = mediaUrl;
         currentState.position = time;
         currentState.timestamp = System.currentTimeMillis();
