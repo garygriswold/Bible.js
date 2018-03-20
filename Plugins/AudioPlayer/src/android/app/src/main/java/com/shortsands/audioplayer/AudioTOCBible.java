@@ -20,6 +20,7 @@ class AudioTOCBible {
     AudioSqlite3 database;
 
     AudioTOCBible(Context context, String versionCode, String silLang) {
+        this.context = context;
         this.textVersion = versionCode;
         this.silLang = silLang;
         this.mediaSource = "FCBH";

@@ -215,7 +215,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
             position -= 3000;
             position = (position >= 0) ? position : 0;
         }
-        AudioPlayState.update(this.controller.activity, reference.getS3Key(), (int)position);
+        AudioPlayState.update(this.controller.activity, reference.getS3Key(), position);
     }
 
     void advanceToNextItem() {

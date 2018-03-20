@@ -9,7 +9,7 @@ class AudioTOCChapter {
 
     private static final String TAG = "AudioTOCChapter";
 
-    private Double[] versePositions;
+    private Double[] versePositions = new Double[0];
 
     AudioTOCChapter(String json) {
         String trimmed = json.substring(1, json.length() - 1);
@@ -34,24 +34,22 @@ class AudioTOCChapter {
         return versePositions.length > 0;
     }
 
-    int findVerseByPosition(int priorVerse, double seconds) {
+    int findVerseByPosition(int priorVerse, int milliseconds) {
+        double seconds = milliseconds / 1000.0;
         int index = (priorVerse > 0 && priorVerse < this.versePositions.length) ? priorVerse : 1;
         double priorPosition = this.versePositions[index];
         if (seconds > priorPosition) {
-            while(index < (this.versePositions.length - 1)) {
-                index += 1;
-                double versePos = this.versePositions[index];
-                if (seconds < versePos) {
-                    return index - 1;
+            int lastVerse = this.versePositions.length - 1;
+            while(index++ < lastVerse) {
+                if (seconds < this.versePositions[index]) {
+                    return (index - 1);
                 }
             }
-            return this.versePositions.length - 1;
+            return (lastVerse);
 
         } else if (seconds < priorPosition) {
-            while(index > 2) {
-                index -= 1;
-                double versePos = this.versePositions[index];
-                if (seconds >= versePos) {
+            while(index-- > 2) {
+                if (seconds >= this.versePositions[index]) {
                     return index;
                 }
             }
@@ -65,20 +63,18 @@ class AudioTOCChapter {
     int findPositionOfVerse(int verse)  {
         double seconds = (verse > 0 && verse < this.versePositions.length) ? this.versePositions[verse] : 0.0;
         //return CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1000))
-        return (int)Math.floor(seconds * 1000);
+        return (int)Math.floor(seconds * 1000.0);
     }
 
     public String toString() {
         StringBuilder str = new StringBuilder();
-        if (this.versePositions != null) {
-            for (int i = 1; i < this.versePositions.length; i++) {
-                double position = this.versePositions[i];
-                str.append("verse_id=");
-                str.append(String.valueOf(i));
-                str.append(", position=");
-                str.append(String.valueOf(position));
-                str.append("\n");
-            }
+        for (int i = 1; i < this.versePositions.length; i++) {
+            double position = this.versePositions[i];
+            str.append("verse_id=");
+            str.append(String.valueOf(i));
+            str.append(", position=");
+            str.append(String.valueOf(position));
+            str.append("\n");
         }
         return(str.toString());
     }

@@ -55,7 +55,7 @@ class AudioBibleView {
     // Transient State Variables
     private MonitorSeekBar monitorSeekBar = null;
     private boolean scrubSliderDrag = false;
-    private int verseNum = 1;
+    private int verseNum = 0;
     private boolean isAudioViewActive = false;
     //private boolean isAudioViewActive = false; DO I need this on android?
 
@@ -316,6 +316,9 @@ class AudioBibleView {
                     scrubSlider.setProgress(progressMS);
 
                     if (audioBible.getCurrReference().audioChapter != null) {
+                        if (progressMS == 0) {
+                            verseNum = 0;
+                        }
                         AudioTOCChapter verse = audioBible.getCurrReference().audioChapter;
                         verseNum = verse.findVerseByPosition(verseNum, progressMS);
                         int verseXPos = positionVersePopup();
