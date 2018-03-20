@@ -140,6 +140,13 @@ public class AudioSqlite3 {
             throw new SQLiteCantOpenDatabaseException("Database must be opened before query.");
         }
     }
+    public Cursor queryV2(String sql, String[] values) throws SQLiteException {
+        if (this.isOpen()) {
+            return this.database.rawQuery(sql, values);
+        } else {
+            throw new SQLiteCantOpenDatabaseException("Database must be opended before queryV2.");
+        }
+    }
 
     public static String errorDescription(Exception error) {
         return ("AudioSqlite3 " + error.getMessage());

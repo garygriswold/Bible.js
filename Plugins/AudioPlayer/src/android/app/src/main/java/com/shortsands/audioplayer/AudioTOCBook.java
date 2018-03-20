@@ -1,5 +1,6 @@
 package com.shortsands.audioplayer;
 
+import android.database.Cursor;
 import android.util.Log;
 
 /**
@@ -17,20 +18,20 @@ class AudioTOCBook {
     String bookName;  // Used by AudioControlCenter
     int numberOfChapters;
 
-    AudioTOCBook(AudioTOCTestament testament, String[] dbRow) {
+    AudioTOCBook(AudioTOCTestament testament, Cursor cursor) {
         this.testament = testament;
-        this.bookId = dbRow[0];
-        this.bookOrder = dbRow[1];
+        this.bookId = cursor.getString(0);
+        this.bookOrder = cursor.getString(1);
         try {
             this.sequence = Integer.parseInt(this.bookOrder);
-        } catch (NumberFormatException ex) {
+        } catch (Exception ex) {
             this.sequence = 0;
         }
         this.bookName = this.bookId; // Reset by MetaDataReader.readBookNames to bookName
-        String chapters = dbRow[2];
+        String chapters = cursor.getString(2);
         try {
             this.numberOfChapters = Integer.parseInt(chapters);
-        } catch (NumberFormatException ex) {
+        } catch (Exception ex) {
             this.numberOfChapters = 1;
         }
     }

@@ -3,6 +3,7 @@ package com.shortsands.audioplayer;
 /**
  * Created by garygriswold on 8/30/17.
  */
+import android.database.Cursor;
 import android.util.Log;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,15 +21,15 @@ class AudioTOCTestament {
     HashMap<String, AudioTOCBook> booksById;
     HashMap<Integer, AudioTOCBook> booksBySeq;
 
-    AudioTOCTestament(AudioTOCBible bible, AudioSqlite3 database, String[] dbRow) {
+    AudioTOCTestament(AudioTOCBible bible, AudioSqlite3 database, Cursor cursor) {
         this.bible = bible;
         this.booksById = new HashMap<String, AudioTOCBook>();
         this.booksBySeq = new HashMap<Integer, AudioTOCBook>();
-        this.damId = dbRow[0];
-        this.collectionCode = dbRow[1];
-        this.mediaType = dbRow[2];
-        this.dbpLanguageCode = dbRow[3];
-        this.dbpVersionCode = dbRow[4];
+        this.damId = cursor.getString(0);
+        this.collectionCode = cursor.getString(1);
+        this.mediaType = cursor.getString(2);
+        this.dbpLanguageCode = cursor.getString(3);
+        this.dbpVersionCode = cursor.getString(4);
 
         String query = "SELECT bookId, bookOrder, numberOfChapters" +
             " FROM AudioBook" +
@@ -37,10 +38,9 @@ class AudioTOCTestament {
         String[] values = new String[1];
         values[0] = this.damId;
         try {
-            String[][] resultSet = database.queryV1(query, values);
-            for (int i=0; i<resultSet.length; i++) {
-                String[] row = resultSet[i];
-                AudioTOCBook book = new AudioTOCBook(this, row);
+            Cursor cursor2 = database.queryV2(query, values);
+            while(cursor2.moveToNext()) {
+                AudioTOCBook book = new AudioTOCBook(this, cursor2);
                 this.booksById.put(book.bookId, book);
                 this.booksBySeq.put(book.sequence, book);
             }

@@ -4,6 +4,7 @@ package com.shortsands.audioplayer;
  * Created by garygriswold on 8/30/17.
  */
 import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 
 class AudioTOCBible {
@@ -50,33 +51,18 @@ class AudioTOCBible {
         try {
             String[] values = new String[1];
             values[0] = this.textVersion;
-            String[][] resultSet = this.database.queryV1(query, values);//, complete: { resultSet in
-            Log.d(TAG,"LENGTH " + resultSet.length);
-            String[] oldTestRow = null;
-            String[] newTestRow = null;
-            for(int i=0; i<resultSet.length; i++) {
+            Cursor cursor = this.database.queryV2(query, values);
+            Log.d(TAG, "LENGTH " + cursor.getCount());
+            while (cursor.moveToNext()) {
                 // Because of the sort sequence, the following logic prefers Drama over Non-Drama
-                // Because of the sequenc of IF's, it prefers OT and NT over ON
-                String[] row = resultSet[i];
-                String collectionCode = row[1];
-                if (newTestRow == null && collectionCode.equals("NT")) {
-                    newTestRow = row;
+                // Because of the sequence of IF's, it prefers OT and NT over ON
+                String collectionCode = cursor.getString(1);
+                if (this.newTestament == null && collectionCode.equals("NT")) {
+                    this.newTestament = new AudioTOCTestament(this, this.database, cursor);
                 }
-                if (newTestRow == null && collectionCode.equals("ON")) {
-                    newTestRow = row;
+                if (this.oldTestament == null && collectionCode.equals("OT")) {
+                    this.oldTestament = new AudioTOCTestament(this, this.database, cursor);
                 }
-                if (oldTestRow == null && collectionCode.equals("OT")) {
-                    oldTestRow = row;
-                }
-                if (oldTestRow == null && collectionCode.equals("ON")) {
-                    oldTestRow = row;
-                }
-            }
-            if (oldTestRow != null) {
-                this.oldTestament = new AudioTOCTestament(this, this.database, oldTestRow);
-            }
-            if (newTestRow != null) {
-                this.newTestament = new AudioTOCTestament(this, this.database, newTestRow);
             }
             this.readBookNames(); // This is not necessary on Android
         } catch (Exception err) {
@@ -107,12 +93,11 @@ class AudioTOCBible {
             values[0] = damid;
             values[1] = bookId;
             values[2] = String.valueOf(chapter);
-            String[][] resultSet = this.database.queryV1(query, values);
-            Log.d(TAG,"LENGTH " + resultSet.length);
-            if (resultSet.length > 0) {
-                String[] row = resultSet[0];
-                if (row[0] != null) {
-                    tocChapter = new AudioTOCChapter(row[0]);
+            Cursor cursor = this.database.queryV2(query, values);
+            while(cursor.moveToNext()) {
+                String positions = cursor.getString(0);
+                if (positions != null) {
+                    tocChapter = new AudioTOCChapter(positions);
                 }
             }
         } catch (Exception err) {
