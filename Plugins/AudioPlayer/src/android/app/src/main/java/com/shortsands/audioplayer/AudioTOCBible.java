@@ -114,14 +114,13 @@ class AudioTOCBible {
         try {
             String dbName = this.textVersion + ".db";
             db.open(dbName, true);
-            String[][] resultSet = db.queryV1(query, values);
-            for (int i=0; i<resultSet.length; i++) {
-                String[] row = resultSet[i];
-                String bookId = row[0];
+            Cursor cursor = db.queryV2(query, values);
+            while(cursor.moveToNext()) {
+                String bookId = cursor.getString(0);
                 if (this.oldTestament != null && this.oldTestament.booksById.containsKey(bookId)) {
-                    this.oldTestament.booksById.get(bookId).bookName = row[1];
+                    this.oldTestament.booksById.get(bookId).bookName = cursor.getString(1);
                 } else if (this.newTestament != null && this.newTestament.booksById.containsKey(bookId)) {
-                    this.newTestament.booksById.get(bookId).bookName = row[1];
+                    this.newTestament.booksById.get(bookId).bookName = cursor.getString(1);
                 }
             }
         } catch (Exception err) {
