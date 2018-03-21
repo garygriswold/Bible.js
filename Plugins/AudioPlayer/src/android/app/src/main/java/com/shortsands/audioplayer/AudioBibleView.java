@@ -14,6 +14,7 @@ import android.os.Message;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -47,6 +48,7 @@ class AudioBibleView {
     private final ImageButton pauseButton;
     private final ImageButton stopButton;
     private final SeekBar scrubSlider;
+    private final ImageView verseButton;
     private final TextView verseLabel;
     // Precomputed for positionVersePopup
     private Float sliderRange;
@@ -165,29 +167,32 @@ class AudioBibleView {
         layout.addView(scrub, seekParams);
         this.scrubSlider = scrub;
 
+        final ImageView verseBtn = new ImageView(this.activity);
+        verseBtn.setImageResource(R.drawable.verse_button_32);
+        verseBtn.setBackgroundColor(Color.TRANSPARENT);
+        RelativeLayout.LayoutParams verseBtnParams = new RelativeLayout.LayoutParams(128, 128);
+        verseBtnParams.leftMargin = seekParams.leftMargin + seekParams.height / 2 - verseBtnParams.width / 2;
+        verseBtnParams.topMargin = seekParams.topMargin - verseBtnParams.height - 2;
+        layout.addView(verseBtn, verseBtnParams);
+        this.verseButton = verseBtn;
+
         TextView verse = new TextView(this.activity);
         verse.setSingleLine(true);
         verse.setText("1");
         verse.setTypeface(Typeface.SANS_SERIF);
         verse.setTextSize(12); // this is measured in pixels 12pt in ios
-        verse.setTextColor(0xFF000000);
-        verse.setBackgroundColor(0xFFFF0000);
         verse.setGravity(Gravity.CENTER);
 
-   //     verse.setSelected(false);
-//        verse.layer.borderColor = UIColor.black.cgColor
-//        verse.layer.borderWidth = 1.0
-//        verse.layer.cornerRadius = verse.frame.width / 2
         RelativeLayout.LayoutParams verseParams = new RelativeLayout.LayoutParams(btnRadius, btnRadius);
         verseParams.leftMargin = seekParams.leftMargin + seekParams.height / 2 - verseParams.width / 2;
-        verseParams.topMargin = seekParams.topMargin - verseParams.height - 2;
+        verseParams.topMargin = seekParams.topMargin - verseParams.height - 10;
         layout.addView(verse, verseParams);
         this.verseLabel = verse;
 
         // Precompute Values for positionVersePopup()
         this.sliderRange = 0.0f + seekParams.width - seekParams.height;
         this.sliderOrigin = 0.0f;
-        this.sliderOriginActual = 0.0f + seekParams.leftMargin + (seekParams.height - verseParams.width) / 2.0f;
+        this.sliderOriginActual = 0.0f + seekParams.leftMargin + (seekParams.height - verseBtnParams.width) / 2.0f;
     }
 
     boolean audioBibleActive() {
@@ -238,7 +243,9 @@ class AudioBibleView {
                             verseNum = curr.audioChapter.findVerseByPosition(verseNum, value);
                             position = curr.audioChapter.findPositionOfVerse(verseNum);
                             verseLabel.setText(String.valueOf(verseNum));
-                            verseLabel.setX(sliderOriginActual + positionVersePopup());
+                            float xPosition = sliderOriginActual + positionVersePopup();
+                            verseButton.setX(xPosition);
+                            verseLabel.setX(xPosition);
                         } else {
                             position = value;
                         }
@@ -300,6 +307,7 @@ class AudioBibleView {
                 public void handleMessage(Message message) {
                     if (message.what == 99) {
                         verseLabel.setText(String.valueOf(message.arg1));
+                        verseButton.animate().translationX(message.arg2).setDuration(80L).start();
                         verseLabel.animate().translationX(message.arg2).setDuration(80L).start();
                     } else {
                         Log.d(TAG, "Unknown message " + message.what);
