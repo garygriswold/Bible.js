@@ -237,7 +237,6 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         } else {
             this.mediaPlayer = this.nextPlayer;
         }
-        this.controller.playHasStarted(this.mediaPlayer); // Why is this here it seems redundant?
         this.readVerseMetaData(reference);
     }
 
@@ -269,7 +268,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     }
 
     private void readVerseMetaData(AudioReference reference) {
-        AudioTOCBible reader = new AudioTOCBible(this.controller.activity, reference.textVersion(), reference.silLang());
+        AudioTOCBible reader = reference.tocAudioBook.testament.bible;
         AudioTOCChapter chapter = reader.readVerseAudio(reference.damId(), reference.bookId(), reference.chapterNum());
         reference.audioChapter = chapter;
         if (chapter == null) {

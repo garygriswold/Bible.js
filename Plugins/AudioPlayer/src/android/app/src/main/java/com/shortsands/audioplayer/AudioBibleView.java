@@ -15,7 +15,6 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -28,7 +27,6 @@ import android.view.Window;
 class AudioBibleView {
 
     private static final String TAG = "AudioBibleView";
-    private static int TOP_BAR_HEIGHT = 0; // compute this as 5/8 inch.
 
     private static AudioBibleView instance = null;
     static AudioBibleView shared(AudioBibleController controller, AudioBible audioBible) {
@@ -41,7 +39,8 @@ class AudioBibleView {
     private final AudioBibleController controller;
     private final Activity activity;
     private final AudioBible audioBible;
-    private final RelativeLayout layout;
+    private final ViewGroup webview;
+    private final RelativeLayout audioPanel;
     private final RelativeLayout.LayoutParams playParams;
     private final RelativeLayout.LayoutParams pauseParams;
     private final ImageButton playButton;
@@ -59,7 +58,6 @@ class AudioBibleView {
     private boolean scrubSliderDrag = false;
     private int verseNum = 0;
     private boolean isAudioViewActive = false;
-    //private boolean isAudioViewActive = false; DO I need this on android?
 
     private AudioBibleView(AudioBibleController controller, AudioBible audioBible) {
         this.controller = controller;
@@ -67,24 +65,28 @@ class AudioBibleView {
         this.audioBible = audioBible;
 
         Window window = this.activity.getWindow();
-        ViewGroup view = (ViewGroup)window.getDecorView();
-
-        RelativeLayout layout = new RelativeLayout(this.activity);
-        layout.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        view.addView(layout);
-        this.layout = layout;
-
-        layout.setBackgroundColor(0x440000FF); /// For App debug only
+        this.webview = (ViewGroup)window.getDecorView();
+        //this.webview.setBackgroundColor(0x440000FF); // for debug only
 
         DisplayMetrics metrics = new DisplayMetrics();
         this.activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        Log.d(TAG, "metrics=" + metrics.toString());
 
         // Compute Dimensions: buttons 3/8 inches,
         int btnDiameter = Math.round(metrics.densityDpi * 3.1f / 8.0f);
         int btnRadius = btnDiameter / 2;
-        TOP_BAR_HEIGHT = Math.round(metrics.densityDpi / 2.0f); /// Computed for DEBUG
-        int buttonTop = TOP_BAR_HEIGHT + btnDiameter;
-        int scrubSliderTop = buttonTop + btnDiameter * 2;
+        int panelHeight = (int)(btnDiameter * 3.0);
+        int buttonTop = panelHeight - (int)(btnDiameter * 1.2);
+        int scrubSliderTop = buttonTop - (int)(btnDiameter * 1.05);
+
+        RelativeLayout layout = new RelativeLayout(this.activity);
+        layout.setBackgroundColor(0xFFFFFFFF);
+        RelativeLayout.LayoutParams layoutParams =
+                new RelativeLayout.LayoutParams((int)(metrics.widthPixels * 0.96), panelHeight);
+        layoutParams.leftMargin = (int)(metrics.widthPixels * 0.02);
+        layoutParams.topMargin = metrics.heightPixels - (int)(panelHeight * 1.05);
+        layout.setLayoutParams(layoutParams);
+        this.audioPanel = layout;
 
         final ImageButton playBtn = new ImageButton(this.activity);
         playBtn.setImageResource(R.drawable.play_up_button);
@@ -189,6 +191,7 @@ class AudioBibleView {
         layout.addView(verse, verseParams);
         this.verseLabel = verse;
 
+
         // Precompute Values for positionVersePopup()
         this.sliderRange = 0.0f + seekParams.width - seekParams.height;
         this.sliderOrigin = 0.0f;
@@ -202,16 +205,16 @@ class AudioBibleView {
     void play() {
         this.audioBible.play();
         if (this.isAudioViewActive) {
-            this.layout.removeView(this.playButton);
-            this.layout.addView(this.pauseButton, this.pauseParams);
+            this.audioPanel.removeView(this.playButton);
+            this.audioPanel.addView(this.pauseButton, this.pauseParams);
         }
     }
 
     void pause() {
         this.audioBible.pause();
         if (this.isAudioViewActive) {
-            this.layout.removeView(this.pauseButton);
-            this.layout.addView(this.playButton, this.playParams);
+            this.audioPanel.removeView(this.pauseButton);
+            this.audioPanel.addView(this.playButton, this.playParams);
         }
     }
 
@@ -224,7 +227,10 @@ class AudioBibleView {
      * @param player
      */
     void startPlay(final MediaPlayer player) {
-        this.isAudioViewActive = true;
+        if (!this.isAudioViewActive) {
+            this.isAudioViewActive = true;
+            this.webview.addView(this.audioPanel);
+        }
         if (this.monitorSeekBar != null) {
             this.monitorSeekBar.isPlaying = false;
             this.monitorSeekBar = null;
@@ -276,21 +282,13 @@ class AudioBibleView {
     }
 
     void stopPlay() {
-        this.isAudioViewActive = false;
+        if (this.audioBibleActive()) {
+            this.isAudioViewActive = false;
+            this.webview.removeView(this.audioPanel);
+        }
         if (this.monitorSeekBar != null) {
             this.monitorSeekBar.isPlaying = false;
             this.monitorSeekBar = null;
-        }
-        this.layout.removeView(this.playButton);
-        this.layout.removeView(this.pauseButton);
-        this.layout.removeView(this.stopButton);
-        this.layout.removeView(this.scrubSlider);
-        this.layout.removeView(this.verseLabel);
-
-        Window window = this.activity.getWindow();
-        ViewGroup view = (ViewGroup)window.getDecorView();
-        if (view != null) {
-            view.removeView(this.layout);
         }
     }
 
