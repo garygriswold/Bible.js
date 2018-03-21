@@ -86,7 +86,7 @@ class AudioBibleView {
         RelativeLayout.LayoutParams layoutParams =
                 new RelativeLayout.LayoutParams((int)(metrics.widthPixels * 0.96), panelHeight);
         layoutParams.leftMargin = (int)(metrics.widthPixels * 0.02);
-        layoutParams.topMargin = metrics.heightPixels;// - (int)(panelHeight * 1.05);
+        layoutParams.topMargin = metrics.heightPixels;
         layout.setLayoutParams(layoutParams);
         this.audioPanel = layout;
         this.webview.addView(this.audioPanel);
@@ -194,7 +194,6 @@ class AudioBibleView {
         layout.addView(verse, verseParams);
         this.verseLabel = verse;
 
-
         // Precompute Values for positionVersePopup()
         this.sliderRange = 0.0f + seekParams.width - seekParams.height;
         this.sliderOrigin = 0.0f;
@@ -232,10 +231,7 @@ class AudioBibleView {
     void startPlay(final MediaPlayer player) {
         if (!this.isAudioViewActive) {
             this.isAudioViewActive = true;
-            float movePanel = this.panelHeight * -1.1f;
-            ObjectAnimator animation = ObjectAnimator.ofFloat(this.audioPanel, "translationY", movePanel);
-            animation.setDuration(1000L);
-            animation.start();
+            this.audioPanel.animate().translationYBy(this.panelHeight * -1.1f).setDuration(1000);
         }
         if (this.monitorSeekBar != null) {
             this.monitorSeekBar.isPlaying = false;
@@ -290,10 +286,7 @@ class AudioBibleView {
     void stopPlay() {
         if (this.audioBibleActive()) {
             this.isAudioViewActive = false;
-            float movePanel = this.panelHeight * 1.1f;
-            ObjectAnimator animation = ObjectAnimator.ofFloat(this.audioPanel, "translationY", movePanel);
-            animation.setDuration(1000L);
-            animation.start();
+            this.audioPanel.animate().translationYBy(this.panelHeight * 1.1f).setDuration(1000);
         }
         if (this.monitorSeekBar != null) {
             this.monitorSeekBar.isPlaying = false;
