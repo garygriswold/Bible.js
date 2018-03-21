@@ -3,6 +3,7 @@ package com.shortsands.audioplayer;
 /**
  * Created by garygriswold on 8/30/17.
  */
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -41,6 +42,7 @@ class AudioBibleView {
     private final AudioBible audioBible;
     private final ViewGroup webview;
     private final RelativeLayout audioPanel;
+    private final int panelHeight;
     private final RelativeLayout.LayoutParams playParams;
     private final RelativeLayout.LayoutParams pauseParams;
     private final ImageButton playButton;
@@ -75,7 +77,7 @@ class AudioBibleView {
         // Compute Dimensions: buttons 3/8 inches,
         int btnDiameter = Math.round(metrics.densityDpi * 3.1f / 8.0f);
         int btnRadius = btnDiameter / 2;
-        int panelHeight = (int)(btnDiameter * 3.0);
+        this.panelHeight = (int)(btnDiameter * 3.0);
         int buttonTop = panelHeight - (int)(btnDiameter * 1.2);
         int scrubSliderTop = buttonTop - (int)(btnDiameter * 1.05);
 
@@ -84,9 +86,10 @@ class AudioBibleView {
         RelativeLayout.LayoutParams layoutParams =
                 new RelativeLayout.LayoutParams((int)(metrics.widthPixels * 0.96), panelHeight);
         layoutParams.leftMargin = (int)(metrics.widthPixels * 0.02);
-        layoutParams.topMargin = metrics.heightPixels - (int)(panelHeight * 1.05);
+        layoutParams.topMargin = metrics.heightPixels;// - (int)(panelHeight * 1.05);
         layout.setLayoutParams(layoutParams);
         this.audioPanel = layout;
+        this.webview.addView(this.audioPanel);
 
         final ImageButton playBtn = new ImageButton(this.activity);
         playBtn.setImageResource(R.drawable.play_up_button);
@@ -229,7 +232,10 @@ class AudioBibleView {
     void startPlay(final MediaPlayer player) {
         if (!this.isAudioViewActive) {
             this.isAudioViewActive = true;
-            this.webview.addView(this.audioPanel);
+            float movePanel = this.panelHeight * -1.1f;
+            ObjectAnimator animation = ObjectAnimator.ofFloat(this.audioPanel, "translationY", movePanel);
+            animation.setDuration(1000L);
+            animation.start();
         }
         if (this.monitorSeekBar != null) {
             this.monitorSeekBar.isPlaying = false;
@@ -284,7 +290,10 @@ class AudioBibleView {
     void stopPlay() {
         if (this.audioBibleActive()) {
             this.isAudioViewActive = false;
-            this.webview.removeView(this.audioPanel);
+            float movePanel = this.panelHeight * 1.1f;
+            ObjectAnimator animation = ObjectAnimator.ofFloat(this.audioPanel, "translationY", movePanel);
+            animation.setDuration(1000L);
+            animation.start();
         }
         if (this.monitorSeekBar != null) {
             this.monitorSeekBar.isPlaying = false;
