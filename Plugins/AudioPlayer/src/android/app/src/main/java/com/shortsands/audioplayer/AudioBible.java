@@ -238,6 +238,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         } else {
             this.mediaPlayer = this.nextPlayer;
         }
+        this.controller.nextMediaPlayer(this.mediaPlayer);
         this.mediaPlayer.setOnCompletionListener(this);
         this.readVerseMetaData(reference);
     }

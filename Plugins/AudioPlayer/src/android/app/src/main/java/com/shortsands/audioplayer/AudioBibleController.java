@@ -92,6 +92,12 @@ public class AudioBibleController {
         }
     }
 
+    void nextMediaPlayer(MediaPlayer player) {
+        if (this.audioBibleView != null) {
+            this.audioBibleView.startNewPlayer(player);
+        }
+    }
+
     void playHasStopped() {
         if (this.audioBibleView != null) {
             this.audioBibleView.stopPlay();

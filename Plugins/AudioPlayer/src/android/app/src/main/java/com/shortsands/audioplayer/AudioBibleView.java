@@ -233,17 +233,13 @@ class AudioBibleView {
             this.isAudioViewActive = true;
             this.audioPanel.animate().translationYBy(this.panelHeight * -1.1f).setDuration(1000);
         }
-        if (this.monitorSeekBar != null) {
-            this.monitorSeekBar.isPlaying = false;
-            this.monitorSeekBar = null;
-        }
-        this.monitorSeekBar = new MonitorSeekBar(player);
-        new Thread(this.monitorSeekBar).start();
+        this.startNewPlayer(player);
 
         this.scrubSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int value, boolean isUser) {
-                if (isUser && player != null && player.isPlaying()) {
+                MediaPlayer currPlayer = audioBible.getPlayer();
+                if (isUser && currPlayer != null && currPlayer.isPlaying()) {
                     if (value < seekBar.getMax()) {
                         long position;
                         AudioReference curr = audioBible.getCurrReference();
@@ -257,7 +253,7 @@ class AudioBibleView {
                         } else {
                             position = value;
                         }
-                        player.seekTo((int)position);
+                        currPlayer.seekTo((int)position);
                     } else {
                         audioBible.advanceToNextItem();
                         Log.d(TAG, "******** Progress moved to end " + System.currentTimeMillis());
@@ -281,6 +277,19 @@ class AudioBibleView {
                 scrubSliderDrag = false;
             }
         });
+    }
+
+    /**
+     * This method should be called each time a MediaPlayer is changed.  It is called
+     * internally, and by AudioBibleController.
+     */
+    void startNewPlayer(MediaPlayer player) {
+        if (this.monitorSeekBar != null) {
+            this.monitorSeekBar.isPlaying = false;
+            this.monitorSeekBar = null;
+        }
+        this.monitorSeekBar = new MonitorSeekBar(player);
+        new Thread(this.monitorSeekBar).start();
     }
 
     void stopPlay() {
