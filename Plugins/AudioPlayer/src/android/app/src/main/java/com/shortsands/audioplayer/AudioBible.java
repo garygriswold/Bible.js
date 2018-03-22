@@ -104,6 +104,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     public void onSeekComplete(MediaPlayer player) {
         player.setOnSeekCompleteListener(null);
         this.play();
+        player.setOnCompletionListener(this);
         this.preFetchNextChapter(this.currReference);
         this.controller.playHasStarted(player);
     }
@@ -116,7 +117,6 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         try {
             player.setDataSource(url);
             player.prepare();
-            player.setOnCompletionListener(this);
             player.setWakeMode(this.controller.activity, PowerManager.PARTIAL_WAKE_LOCK);
             return player;
         } catch(IOException ioe) {
@@ -163,6 +163,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
 
     @Override
     public void onCompletion(MediaPlayer player) {
+        player.setOnCompletionListener(null);
         this.advanceToNextItem();
     }
 
@@ -237,6 +238,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         } else {
             this.mediaPlayer = this.nextPlayer;
         }
+        this.mediaPlayer.setOnCompletionListener(this);
         this.readVerseMetaData(reference);
     }
 
