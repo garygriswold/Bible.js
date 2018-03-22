@@ -239,7 +239,7 @@ class AudioBibleView {
             @Override
             public void onProgressChanged(SeekBar seekBar, int value, boolean isUser) {
                 MediaPlayer currPlayer = audioBible.getPlayer();
-                if (isUser && currPlayer != null && currPlayer.isPlaying()) {
+                if (isUser && currPlayer != null) {
                     if (value < seekBar.getMax()) {
                         long position;
                         AudioReference curr = audioBible.getCurrReference();
