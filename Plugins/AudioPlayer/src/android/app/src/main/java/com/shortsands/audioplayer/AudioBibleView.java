@@ -243,7 +243,7 @@ class AudioBibleView {
         this.scrubSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int value, boolean isUser) {
-                if (isUser && player != null) {
+                if (isUser && player != null && player.isPlaying()) {
                     if (value < seekBar.getMax()) {
                         long position;
                         AudioReference curr = audioBible.getCurrReference();
