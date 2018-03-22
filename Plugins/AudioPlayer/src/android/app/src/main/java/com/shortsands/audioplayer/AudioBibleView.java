@@ -3,10 +3,11 @@ package com.shortsands.audioplayer;
 /**
  * Created by garygriswold on 8/30/17.
  */
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.shapes.RoundRectShape;
+import android.graphics.drawable.ShapeDrawable;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -81,8 +82,14 @@ class AudioBibleView {
         int buttonTop = panelHeight - (int)(btnDiameter * 1.2);
         int scrubSliderTop = buttonTop - (int)(btnDiameter * 1.05);
 
+        float radius = btnDiameter / 3.0f;
+        float[] radii = new float[] { radius, radius, radius, radius, radius, radius, radius, radius };
+        RoundRectShape roundRect = new RoundRectShape(radii, null, null);
+        ShapeDrawable background = new ShapeDrawable(roundRect);
+        background.getPaint().setColor(0xFFFFFFFF);
+
         RelativeLayout layout = new RelativeLayout(this.activity);
-        layout.setBackgroundColor(0xFFFFFFFF);
+        layout.setBackground(background);
         RelativeLayout.LayoutParams layoutParams =
                 new RelativeLayout.LayoutParams((int)(metrics.widthPixels * 0.96), panelHeight);
         layoutParams.leftMargin = (int)(metrics.widthPixels * 0.02);
