@@ -44,8 +44,6 @@ class AudioBibleView {
     private final ViewGroup webview;
     private final RelativeLayout audioPanel;
     private final int panelHeight;
-    private final RelativeLayout.LayoutParams playParams;
-    private final RelativeLayout.LayoutParams pauseParams;
     private final ImageButton playButton;
     private final ImageButton pauseButton;
     private final ImageButton stopButton;
@@ -96,7 +94,7 @@ class AudioBibleView {
         layoutParams.topMargin = metrics.heightPixels;
         layout.setLayoutParams(layoutParams);
         this.audioPanel = layout;
-        this.webview.addView(this.audioPanel);
+        this.webview.addView(layout);
 
         final ImageButton playBtn = new ImageButton(this.activity);
         playBtn.setImageResource(R.drawable.play_up_button);
@@ -116,9 +114,10 @@ class AudioBibleView {
                 return false;
             }
         });
-        this.playParams = new RelativeLayout.LayoutParams(btnDiameter, btnDiameter);
-        this.playParams.leftMargin = (metrics.widthPixels / 3) - btnRadius;
-        this.playParams.topMargin = buttonTop;
+        RelativeLayout.LayoutParams playPauseParams = new RelativeLayout.LayoutParams(btnDiameter, btnDiameter);
+        playPauseParams.leftMargin = (metrics.widthPixels / 3) - btnRadius;
+        playPauseParams.topMargin = buttonTop;
+        playBtn.setLayoutParams(playPauseParams);
         this.playButton = playBtn;
 
         final ImageButton pauseBtn = new ImageButton(this.activity);
@@ -139,10 +138,8 @@ class AudioBibleView {
                 return false;
             }
         });
-        this.pauseParams = new RelativeLayout.LayoutParams(btnDiameter, btnDiameter);
-        this.pauseParams.leftMargin = (metrics.widthPixels / 3) - btnRadius;
-        this.pauseParams.topMargin = buttonTop;
-        layout.addView(pauseBtn, this.pauseParams);
+        pauseBtn.setLayoutParams(playPauseParams);
+        layout.addView(pauseBtn);
         this.pauseButton = pauseBtn;
 
         final ImageButton stopBtn = new ImageButton(this.activity);
@@ -166,7 +163,8 @@ class AudioBibleView {
         RelativeLayout.LayoutParams stopParams = new RelativeLayout.LayoutParams(btnDiameter, btnDiameter);
         stopParams.leftMargin = (metrics.widthPixels * 2 / 3) - btnRadius;
         stopParams.topMargin = buttonTop;
-        layout.addView(stopBtn, stopParams);
+        stopBtn.setLayoutParams(stopParams);
+        layout.addView(stopBtn);
         this.stopButton = stopBtn;
 
         final SeekBar scrub = new SeekBar(this.activity);
@@ -176,7 +174,8 @@ class AudioBibleView {
         RelativeLayout.LayoutParams seekParams = new RelativeLayout.LayoutParams(metrics.widthPixels * 4 / 5, btnDiameter);
         seekParams.leftMargin = metrics.widthPixels / 10;
         seekParams.topMargin = scrubSliderTop;
-        layout.addView(scrub, seekParams);
+        scrub.setLayoutParams(seekParams);
+        layout.addView(scrub);
         this.scrubSlider = scrub;
 
         final ImageView verseBtn = new ImageView(this.activity);
@@ -185,7 +184,8 @@ class AudioBibleView {
         RelativeLayout.LayoutParams verseBtnParams = new RelativeLayout.LayoutParams(128, 128);
         verseBtnParams.leftMargin = seekParams.leftMargin + seekParams.height / 2 - verseBtnParams.width / 2;
         verseBtnParams.topMargin = seekParams.topMargin - verseBtnParams.height - 2;
-        layout.addView(verseBtn, verseBtnParams);
+        verseBtn.setLayoutParams(verseBtnParams);
+        layout.addView(verseBtn);
         this.verseButton = verseBtn;
 
         TextView verse = new TextView(this.activity);
@@ -194,11 +194,11 @@ class AudioBibleView {
         verse.setTypeface(Typeface.SANS_SERIF);
         verse.setTextSize(12); // this is measured in pixels 12pt in ios
         verse.setGravity(Gravity.CENTER);
-
         RelativeLayout.LayoutParams verseParams = new RelativeLayout.LayoutParams(btnRadius, btnRadius);
         verseParams.leftMargin = seekParams.leftMargin + seekParams.height / 2 - verseParams.width / 2;
         verseParams.topMargin = seekParams.topMargin - verseParams.height - 10;
-        layout.addView(verse, verseParams);
+        verse.setLayoutParams(verseParams);
+        layout.addView(verse);
         this.verseLabel = verse;
 
         // Precompute Values for positionVersePopup()
@@ -215,7 +215,7 @@ class AudioBibleView {
         this.audioBible.play();
         if (this.isAudioViewActive) {
             this.audioPanel.removeView(this.playButton);
-            this.audioPanel.addView(this.pauseButton, this.pauseParams);
+            this.audioPanel.addView(this.pauseButton);
         }
     }
 
@@ -223,7 +223,7 @@ class AudioBibleView {
         this.audioBible.pause();
         if (this.isAudioViewActive) {
             this.audioPanel.removeView(this.pauseButton);
-            this.audioPanel.addView(this.playButton, this.playParams);
+            this.audioPanel.addView(this.playButton);
         }
     }
 
