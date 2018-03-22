@@ -48,7 +48,7 @@ class AudioBibleView {
     private final ImageButton pauseButton;
     private final ImageButton stopButton;
     private final SeekBar scrubSlider;
-    private final ImageView verseButton;
+    private final RelativeLayout verseButton;
     private final TextView verseLabel;
     // Precomputed for positionVersePopup
     private Float sliderRange;
@@ -178,15 +178,21 @@ class AudioBibleView {
         layout.addView(scrub);
         this.scrubSlider = scrub;
 
+        RelativeLayout verseLayout = new RelativeLayout(this.activity);
+        RelativeLayout.LayoutParams verseParams = new RelativeLayout.LayoutParams(btnRadius, btnRadius);
+        verseParams.leftMargin = seekParams.leftMargin + seekParams.height / 2 - verseParams.width / 2;
+        verseParams.topMargin = seekParams.topMargin - verseParams.height - 2;
+        verseLayout.setLayoutParams(verseParams);
+        layout.addView(verseLayout);
+        this.verseButton = verseLayout;
+
         final ImageView verseBtn = new ImageView(this.activity);
         verseBtn.setImageResource(R.drawable.verse_button_32);
         verseBtn.setBackgroundColor(Color.TRANSPARENT);
-        RelativeLayout.LayoutParams verseBtnParams = new RelativeLayout.LayoutParams(128, 128);
-        verseBtnParams.leftMargin = seekParams.leftMargin + seekParams.height / 2 - verseBtnParams.width / 2;
-        verseBtnParams.topMargin = seekParams.topMargin - verseBtnParams.height - 2;
+        RelativeLayout.LayoutParams verseBtnParams = new RelativeLayout.LayoutParams(btnRadius, btnRadius);
+        verseBtnParams.addRule(RelativeLayout.CENTER_IN_PARENT);
         verseBtn.setLayoutParams(verseBtnParams);
-        layout.addView(verseBtn);
-        this.verseButton = verseBtn;
+        verseLayout.addView(verseBtn);
 
         TextView verse = new TextView(this.activity);
         verse.setSingleLine(true);
@@ -194,11 +200,10 @@ class AudioBibleView {
         verse.setTypeface(Typeface.SANS_SERIF);
         verse.setTextSize(12); // this is measured in pixels 12pt in ios
         verse.setGravity(Gravity.CENTER);
-        RelativeLayout.LayoutParams verseParams = new RelativeLayout.LayoutParams(btnRadius, btnRadius);
-        verseParams.leftMargin = seekParams.leftMargin + seekParams.height / 2 - verseParams.width / 2;
-        verseParams.topMargin = seekParams.topMargin - verseParams.height - 10;
-        verse.setLayoutParams(verseParams);
-        layout.addView(verse);
+        RelativeLayout.LayoutParams verseTextParams = new RelativeLayout.LayoutParams(btnRadius, btnRadius);
+        verseTextParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+        verse.setLayoutParams(verseTextParams);
+        verseLayout.addView(verse);
         this.verseLabel = verse;
 
         // Precompute Values for positionVersePopup()
@@ -256,7 +261,6 @@ class AudioBibleView {
                             verseLabel.setText(String.valueOf(verseNum));
                             float xPosition = sliderOriginActual + positionVersePopup();
                             verseButton.setX(xPosition);
-                            verseLabel.setX(xPosition);
                         } else {
                             position = value;
                         }
@@ -324,7 +328,6 @@ class AudioBibleView {
                     if (message.what == 99) {
                         verseLabel.setText(String.valueOf(message.arg1));
                         verseButton.animate().translationX(message.arg2).setDuration(80L).start();
-                        verseLabel.animate().translationX(message.arg2).setDuration(80L).start();
                     } else {
                         Log.d(TAG, "Unknown message " + message.what);
                     }
