@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "*** onResume is called.");
 
         AwsS3.initialize("us-east-1", this);
-        String readVersion = "ERV-ENG";//KJVPD"//ESV"
+        String readVersion = "KJVPD";//ERV-ENG";//KJVPD"//ESV"
         String readLang = "eng";
         String readBook = "JHN";
         int readChapter = 2;

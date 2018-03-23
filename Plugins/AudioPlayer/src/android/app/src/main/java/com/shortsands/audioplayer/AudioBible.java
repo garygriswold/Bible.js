@@ -87,7 +87,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         if (url != null) {
             this.mediaPlayer = this.initPlayer(url);
             if (this.mediaPlayer != null) {
-                long seekTime = AudioPlayState.currentState.position;
+                long seekTime = this.backupSeek(AudioPlayState.currentState, this.currReference);
                 if (seekTime > 100L) {
                     this.mediaPlayer.setOnSeekCompleteListener(this);
                     this.mediaPlayer.seekTo((int) seekTime);
@@ -100,13 +100,27 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         }
     }
 
+    private long backupSeek(AudioPlayState state, AudioReference reference) {
+        if (state.mediaUrl != null && state.mediaUrl.equals(reference.toString())) {
+            if (reference.audioChapter != null) {
+                return state.position;
+            } else {
+                long duration = System.currentTimeMillis() - state.timestamp;
+                long backupSec = String.valueOf(duration / 1000L).length() * 1000L;  // could multiply by a factor here
+                return(state.position - backupSec);
+            }
+        } else {
+            return 0L;
+        }
+    }
+
     @Override
     public void onSeekComplete(MediaPlayer player) {
         player.setOnSeekCompleteListener(null);
         this.play();
         player.setOnCompletionListener(this);
-        this.preFetchNextChapter(this.currReference);
         this.controller.playHasStarted(player);
+        this.preFetchNextChapter(this.currReference);
     }
 
     private MediaPlayer initPlayer(File file) {
@@ -161,15 +175,33 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         }
     }
 
+    /** This method is called by AudioControlCenter, which is not implemented in the android version */
+    void nextChapter() {
+        if (this.nextReference != null) {
+            this.currReference = this.nextReference;
+            this.addNextChapter(this.currReference);
+            this.preFetchNextChapter(this.currReference);
+        } else {
+            this.stop();
+            AudioPlayState.clear(this.controller.activity); // Must be after stop, because stop does update
+        }
+    }
+
+    /** This method is called by AudioControlCenter, which is not implemented in the android version */
+    void priorChapter() {
+
+    }
+
     @Override
     public void onCompletion(MediaPlayer player) {
         player.setOnCompletionListener(null);
-        this.advanceToNextItem();
+        this.nextChapter();
     }
 
     @Override
     public boolean onError(MediaPlayer player, int what, int extra) {
         //this.errorTime = System.currentTimeMillis();
+        player.setOnErrorListener(null);
         String message;
         switch (what) {
             case MediaPlayer.MEDIA_ERROR_IO:
@@ -198,7 +230,8 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         }
         Log.e(TAG, "onError " + message + " " + extra);
 
-        mediaPlayer.reset();
+        player.reset();
+        player.setOnErrorListener(this);
         //this.onErrorRecovery = true;
         //this.progressBar.setVisibility(View.VISIBLE);
         //Uri videoUri = Uri.parse(this.videoUrl);
@@ -213,21 +246,9 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
             int verseNum = chapter.findVerseByPosition(1, position);
             position = chapter.findPositionOfVerse(verseNum);
         } else {
-            position -= 3000;
             position = (position >= 0) ? position : 0;
         }
-        AudioPlayState.update(this.controller.activity, reference.getS3Key(), position);
-    }
-
-    void advanceToNextItem() {
-        if (this.nextReference != null) {
-            this.currReference = this.nextReference;
-            this.addNextChapter(this.currReference);
-            this.preFetchNextChapter(this.currReference);
-        } else {
-            this.stop();
-            AudioPlayState.clear(this.controller.activity); // Must be after stop, because stop does update
-        }
+        AudioPlayState.update(this.controller.activity, reference.toString(), position);
     }
 
     private void addNextChapter(AudioReference reference) {

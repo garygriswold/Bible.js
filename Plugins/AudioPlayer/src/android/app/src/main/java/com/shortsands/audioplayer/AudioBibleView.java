@@ -267,7 +267,7 @@ class AudioBibleView {
                         }
                         currPlayer.seekTo((int)position);
                     } else {
-                        audioBible.advanceToNextItem();
+                        audioBible.nextChapter();
                         Log.d(TAG, "******** Progress moved to end " + System.currentTimeMillis());
                     }
                 }

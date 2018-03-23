@@ -24,15 +24,12 @@ class AudioPlayState {
         currentState.mediaId = mediaId;
         Log.d(TAG, "***** SEEKING " + mediaId);
         SharedPreferences savedState = activity.getSharedPreferences(mediaId, Context.MODE_PRIVATE);
-        if (savedState != null) {
-            String id = savedState.getString(MEDIA_ID, "");
-            String url = savedState.getString(MEDIA_URL, "");
-            Log.d(TAG, "***** SAVED STATE " + id + "   " + url);
-        }
         if (savedState != null && savedState.contains(MEDIA_ID)) {
+            currentState.mediaUrl = savedState.getString(MEDIA_URL, null);
             currentState.position = savedState.getLong(POSITION, 0L);
             currentState.timestamp = savedState.getLong(TIMESTAMP, System.currentTimeMillis());
         } else {
+            currentState.mediaUrl = null;
             currentState.position = 0L;
             currentState.timestamp = System.currentTimeMillis();
         }
