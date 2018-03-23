@@ -57,8 +57,8 @@ class AudioBibleView {
     // Transient State Variables
     private MonitorSeekBar monitorSeekBar = null;
     private boolean scrubSliderDrag = false;
-    private int verseNum = 0;
     private boolean scrubSuspendedPlay = false;
+    private int verseNum = 0;
     private boolean isAudioViewActive = false;
 
     private AudioBibleView(AudioBibleController controller, AudioBible audioBible) {
@@ -362,6 +362,9 @@ class AudioBibleView {
                         int verseXPos = positionVersePopup();
                         Message message = this.handler.obtainMessage(99, verseNum, verseXPos);
                         message.sendToTarget();
+                        verseButton.setAlpha(1);
+                    } else {
+                        verseButton.setAlpha(0);
                     }
                 }
                 try {

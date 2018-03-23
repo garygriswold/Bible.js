@@ -69,6 +69,7 @@ public class AudioAnalytics {
             dictionary.put("mediaSource", this.mediaSource);
             dictionary.put("mediaId", this.mediaId);
             dictionary.put("languageId", this.languageId);
+            dictionary.put("textVersion", this.textVersion);
             dictionary.put("silLang", this.silLang);
 
             Locale locale = Locale.getDefault();
@@ -83,11 +84,11 @@ public class AudioAnalytics {
             dictionary.put("osVersion", Build.VERSION.RELEASE);
             try {
                 PackageInfo pInfo = this.context.getPackageManager().getPackageInfo(this.context.getPackageName(), 0);
-                dictionary.put("appVersion", pInfo.versionName);
                 dictionary.put("appName", pInfo.packageName);
+                dictionary.put("appVersion", pInfo.versionName);
             } catch(NameNotFoundException nnfe) {
-                dictionary.put("appVersion", nnfe.toString());
                 dictionary.put("appName", "");
+                dictionary.put("appVersion", nnfe.toString());
             }
             this.timeStarted = new Date();
             String timeStartedStr = isoFormat.format(this.timeStarted);
@@ -138,7 +139,8 @@ public class AudioAnalytics {
   "language" : "en",
   "mediaId" : "DEMO",
   "languageId" : "ENG",
-  "silLang" : "User's text lang setting",
+  "textVersion" : "KJV",
+  "silLang" : "eng",
   "language" : "en",
   "country" : "US",
   "locale" : "en_US",
