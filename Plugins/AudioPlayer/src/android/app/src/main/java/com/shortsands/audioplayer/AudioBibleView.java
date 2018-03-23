@@ -58,6 +58,7 @@ class AudioBibleView {
     private MonitorSeekBar monitorSeekBar = null;
     private boolean scrubSliderDrag = false;
     private int verseNum = 0;
+    private boolean scrubSuspendedPlay = false;
     private boolean isAudioViewActive = false;
 
     private AudioBibleView(AudioBibleController controller, AudioBible audioBible) {
@@ -278,6 +279,10 @@ class AudioBibleView {
                 final Resources resources = controller.activity.getResources();
                 seekBar.setThumb(resources.getDrawable(R.drawable.thumb_dn));
                 scrubSliderDrag = true;
+                if (audioBible.isPlaying()) {
+                    audioBible.getPlayer().pause();
+                    scrubSuspendedPlay = true;
+                }
             }
 
             @Override
@@ -286,6 +291,12 @@ class AudioBibleView {
                 final Resources resources = controller.activity.getResources();
                 seekBar.setThumb(resources.getDrawable(R.drawable.thumb_up));
                 scrubSliderDrag = false;
+                if (scrubSuspendedPlay) {
+                    if (audioBible.getPlayer() != null) {
+                        audioBible.getPlayer().start();
+                    }
+                    scrubSuspendedPlay = false;
+                }
             }
         });
     }
