@@ -50,7 +50,6 @@ class AudioSqlite3 {
   
     public func open(dbPath: String, copyIfAbsent: Bool) throws {
         self.database = nil
-        try self.ensureDirectory()
         let fullPath = try self.ensureDatabase(dbPath: dbPath, copyIfAbsent: copyIfAbsent)
         
         var db: OpaquePointer? = nil
@@ -89,6 +88,7 @@ class AudioSqlite3 {
             return fullPath
         } else if copyIfAbsent {
             print("Copy Bundle at \(dbPath)")
+            try self.ensureDirectory()
             let parts = dbPath.split(separator: ".")
             let name = String(parts[0])
             let ext = String(parts[1])
@@ -131,7 +131,7 @@ class AudioSqlite3 {
     * This execute accepts only strings on the understanding that sqlite will convert data into the type
     * that is correct based on the affinity of the type in the database.
     */
-    public func executeV1(sql: String, values: [String?]?, complete: @escaping (_ count: Int) -> Void) throws {
+    public func executeV1(sql: String, values: [String?], complete: @escaping (_ count: Int) -> Void) throws {
         if database != nil {
             var statement: OpaquePointer? = nil
             let prepareOut = sqlite3_prepare_v2(database, sql, -1, &statement, nil)
@@ -162,7 +162,7 @@ class AudioSqlite3 {
      *
      * Also, this query method returns a resultset that is an array of an array of Strings.
      */
-    public func queryV1(sql: String, values: [String?]?, complete: @escaping (_ results:[[String?]]) -> Void) throws {
+    public func queryV1(sql: String, values: [String?], complete: @escaping (_ results:[[String?]]) -> Void) throws {
         if database != nil {
             var resultSet: [[String?]] = []
             var statement: OpaquePointer? = nil

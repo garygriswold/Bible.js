@@ -105,10 +105,10 @@
   },
   "com-shortsands-aws": {
     "source": {
-      "type": "local",
-      "path": "/Users/garygriswold/ShortSands/BibleApp/YourBible/node_modules/com-shortsands-aws"
+      "type": "registry",
+      "id": "file:////Users/garygriswold/ShortSands/BibleApp/Plugins/AWS"
     },
-    "is_top_level": true,
+    "is_top_level": false,
     "variables": {}
   },
   "com-shortsands-audioplayer": {

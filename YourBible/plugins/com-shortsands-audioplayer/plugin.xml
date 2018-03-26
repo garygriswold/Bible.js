@@ -14,26 +14,78 @@
     	<clobbers target="AudioPlayer" />
 	</js-module>
 	
-	<!-- <dependency id="com-shortsands-pkzip" url="file:////Users/garygriswold/ShortSands/BibleApp/Plugins/PKZip" /> -->
 	<dependency id="com-shortsands-aws" url="file:////Users/garygriswold/ShortSands/BibleApp/Plugins/AWS" />
 
-	<!-- <platform name="android">
+	<platform name="android">
     	<config-file target="config.xml" parent="/*">
 			<feature name="AudioPlayer">
-				<param name="android-package" value="com.shortsands.audioplayer.AudioPlayer"/>
+				<param name="android-package" value="plugin.AudioPlayer"/>
 			</feature>
 		</config-file>
 		<config-file target="AndroidManifest.xml" parent="/manifest">
 			<uses-permission android:name="android.permission.INTERNET" />
+			<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 		</config-file>
 		<config-file target="AndroidManifest.xml" parent="/manifest/application">
-			<activity android:name="com.shortsands.videoplayer.AudioPlayer" android:label="AudioPlayer" android:screenOrientation="landscape"></activity>
+			<!-- <activity android:name="plugin.AudioPlayer" android:label="AudioPlayer"></activity> -->
+			<service android:enabled="true" android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService" />
 		</config-file>
-		<source-file src="src/android/com/shortsands/audioplayer/AudioPlayer.java" target-dir="src/com/shortsands/audioplayer" />
-		<source-file src="src/android/com/shortsands/audioplayer/AudioService.java" target-dir="src/com/shortsands/audioplayer" />
-		<source-file src="src/android/com/shortsands/audioplayer/AudioPersistence.java" target-dir="src/com/shortsands/audioplayer" />
-		<source-file src="src/android/com/shortsands/audioplayer/EventLogger.java" target-dir="src/com/shortsands/audioplayer" />
-	</platform> -->
+		<source-file src="src/android/plugin/AudioPlayer.java" target-dir="src/plugin" />
+		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioAnalytics.java" 
+			target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioAnalyticsSessionId.java" 
+			target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioBible.java" 
+			target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioBibleController.java" 
+			target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioBibleView.java" 
+			target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioControlCenter.java" 
+			target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioPlayState.java" 
+			target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioReference.java" 
+			target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioSession.java" 
+			target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioSqlite3.java" 
+			target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioTOCBible.java" 
+			target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioTOCBook.java" 
+			target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioTOCChapter.java" 
+			target-dir="src/com/shortsands/audioplayer" />
+		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioTOCTestament.java" 
+			target-dir="src/com/shortsands/audioplayer" />
+		<resource-file src="src/android/app/src/main/res/drawable/pause_dn_button.png" 
+			target="res/drawable/pause_dn_button.png" />
+		<resource-file src="src/android/app/src/main/res/drawable/pause_up_button.png"
+			target="res/drawable/pause_up_button.png" />
+		<resource-file src="src/android/app/src/main/res/drawable/play_dn_button.png"
+			target="res/drawable/play_dn_button.png" />
+		<resource-file src="src/android/app/src/main/res/drawable/play_up_button.png"
+			target="res/drawable/play_up_button.png" />
+		<resource-file src="src/android/app/src/main/res/drawable/slider_max.png"
+			target="res/drawable/slider_max.png" />
+		<resource-file src="src/android/app/src/main/res/drawable/slider_max_20.png"
+			target="res/drawable/slider_max_20.png" />
+		<resource-file src="src/android/app/src/main/res/drawable/slider_min.png"
+			target="res/drawable/slider_min.png" />
+		<resource-file src="src/android/app/src/main/res/drawable/slider_min_20.png"
+			target="res/drawable/slider_min_20.png" />
+		<resource-file src="src/android/app/src/main/res/drawable/stop_dn_button.png"
+			target="res/drawable/stop_dn_button.png" />
+		<resource-file src="src/android/app/src/main/res/drawable/stop_up_button.png"
+			target="res/drawable/stop_up_button.png" />
+		<resource-file src="src/android/app/src/main/res/drawable/thumb_dn.png"
+			target="res/drawable/thumb_dn.png" />
+		<resource-file src="src/android/app/src/main/res/drawable/thumb_up.png"
+			target="res/drawable/thumb_up.png" />
+		<resource-file src="src/android/app/src/main/res/drawable/verse_button_32.png"
+			target="res/drawable/verse_button_32.png" />
+	</platform>
   
 	<platform name="ios">
 		<config-file target="config.xml" parent="/*">

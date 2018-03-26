@@ -131,7 +131,7 @@ class AudioTOCBible {
             let db = AudioSqlite3()
             try db.open(dbPath: dbName, copyIfAbsent: true)
             defer { db.close() }
-            try db.queryV1(sql: query, values: nil, complete: { resultSet in
+            try db.queryV1(sql: query, values: [], complete: { resultSet in
                 for row in resultSet {
                     let bookId = row[0]!
                     if let oldTest = self.oldTestament?.booksById[bookId] {
