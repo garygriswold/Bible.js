@@ -2,7 +2,7 @@
 
 #cordova plugin remove cordova-sqlite-ext
 #cordova plugin remove com-shortsands-videoplayer
-#cordova plugin remove com-shortsands-audioplayer
+cordova plugin remove com-shortsands-audioplayer
 #cordova plugin remove com-shortsands-aws
 #cordova plugin remove com-shortsands-pkzip
 #cordova plugin remove com-shortsands-utility

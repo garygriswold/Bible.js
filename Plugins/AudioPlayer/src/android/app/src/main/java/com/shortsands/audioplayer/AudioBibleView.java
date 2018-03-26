@@ -26,6 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
+//import com.shortsands.yourbible.R; // Remove comment in production
+
 class AudioBibleView {
 
     private static final String TAG = "AudioBibleView";

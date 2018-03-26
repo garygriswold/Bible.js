@@ -94,9 +94,10 @@ class AudioReference {
     }
 
     String getS3Bucket() {
-        switch (this.fileType) {
-            case "mp3": return this.damId().toLowerCase() + ".shortsands.com";
-            default: return "unknown bucket";
+        if (this.fileType.equals("mp3")) {
+            return (this.damId().toLowerCase() + ".shortsands.com");
+        } else {
+            return "unknown bucket";
         }
     }
 
