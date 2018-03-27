@@ -248,7 +248,7 @@ class AudioBibleView {
             if (this.audioPanel.getParent() == null) {
                 this.webview.addView(this.audioPanel);
             }
-            this.audioPanel.animate().translationYBy(this.panelHeight * -1.1f).setDuration(1000);
+            this.audioPanel.animate().translationYBy(this.panelHeight * -1.0f).setDuration(1000);
         }
         this.startNewPlayer(player);
 
@@ -321,7 +321,7 @@ class AudioBibleView {
     void stopPlay() {
         if (this.audioBibleActive()) {
             this.isAudioViewActive = false;
-            this.audioPanel.animate().translationYBy(this.panelHeight * 1.1f).setDuration(1000);
+            this.audioPanel.animate().translationYBy(this.panelHeight * 1.0f).setDuration(1000);
         }
         if (this.monitorSeekBar != null) {
             this.monitorSeekBar.isPlaying = false;
