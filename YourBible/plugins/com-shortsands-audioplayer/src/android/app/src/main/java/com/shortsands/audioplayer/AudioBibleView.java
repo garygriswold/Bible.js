@@ -94,7 +94,7 @@ class AudioBibleView {
         RelativeLayout.LayoutParams layoutParams =
                 new RelativeLayout.LayoutParams((int)(metrics.widthPixels * 0.96), panelHeight);
         layoutParams.leftMargin = (int)(metrics.widthPixels * 0.02);
-        layoutParams.topMargin = metrics.heightPixels;
+        layoutParams.topMargin = metrics.heightPixels + (int)(panelHeight * 0.25);
         layout.setLayoutParams(layoutParams);
         this.audioPanel = layout;
 
@@ -248,7 +248,7 @@ class AudioBibleView {
             if (this.audioPanel.getParent() == null) {
                 this.webview.addView(this.audioPanel);
             }
-            this.audioPanel.animate().translationYBy(this.panelHeight * -1.0f).setDuration(1000);
+            this.audioPanel.animate().translationYBy(this.panelHeight * -1.25f).setDuration(1000);
         }
         this.startNewPlayer(player);
 
@@ -321,7 +321,7 @@ class AudioBibleView {
     void stopPlay() {
         if (this.audioBibleActive()) {
             this.isAudioViewActive = false;
-            this.audioPanel.animate().translationYBy(this.panelHeight * 1.0f).setDuration(1000);
+            this.audioPanel.animate().translationYBy(this.panelHeight * 1.25f).setDuration(1000);
         }
         if (this.monitorSeekBar != null) {
             this.monitorSeekBar.isPlaying = false;
