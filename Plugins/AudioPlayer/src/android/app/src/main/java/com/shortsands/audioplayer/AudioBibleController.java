@@ -86,9 +86,14 @@ public class AudioBibleController {
         }
     }
 
-    void playHasStarted(MediaPlayer player) {
+    void playHasStarted(final MediaPlayer player) {
         if (this.audioBibleView != null) {
-            this.audioBibleView.startPlay(player);
+            this.activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    audioBibleView.startPlay(player);
+                }
+            });
         }
     }
 

@@ -19,36 +19,34 @@ import org.json.JSONException;
 public class AudioPlayer extends CordovaPlugin {
 	
 	private static String TAG = "AudioPlayer";
-	
-    AudioBibleController audioController = AudioBibleController.shared(this.cordova.getActivity());
-    //AwsS3.region = "us-east-1"
 
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        
+     	AudioBibleController audioController = AudioBibleController.shared(this.cordova.getActivity());
+
         if (action.equals("findAudioVersion")) {
             String version = args.getString(0);
             String silLang = args.getString(1);
-            String bookList = this.audioController.findAudioVersion(version, silLang);
+            String bookList = audioController.findAudioVersion(version, silLang);
 	        callbackContext.success(bookList);
 	        return true;
 	    }
 	    else if (action.equals("isPlaying")) {
-            String message = (this.audioController.isPlaying()) ? "T" : "F";
+            String message = (audioController.isPlaying()) ? "T" : "F";
 			callbackContext.success(message);
 	        return true;
 		}
 		else if (action.equals("present")) {
 			String bookId = args.getString(0);
 			int chapterNum = args.getInt(1);
-            this.audioController.present(bookId, chapterNum);
+            audioController.present(bookId, chapterNum);
             // This could be present(this.webView, bookId, chapterNum);
             // How do I know when the present is done?
             callbackContext.success("");
 			return true;
 		}
 		else if (action.equals("stop")) {
-            this.audioController.stop();
+            audioController.stop();
             callbackContext.success("");
 			return true;
 		}
