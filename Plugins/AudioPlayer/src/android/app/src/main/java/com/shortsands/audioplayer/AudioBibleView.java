@@ -26,7 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-//import com.shortsands.yourbible.R; // Remove comment in production
+//import com.shortsands.yourbible.R; // Remove comment in SafeBible App
 
 class AudioBibleView {
 
@@ -170,9 +170,10 @@ class AudioBibleView {
         this.stopButton = stopBtn;
 
         final SeekBar scrub = new SeekBar(this.activity);
-        final Resources resources = this.controller.activity.getResources();
+        final Resources resources = this.activity.getResources();
         scrub.setThumb(resources.getDrawable(R.drawable.thumb_up));
         scrub.setPadding(btnRadius, 0, btnRadius, 0);
+        scrub.setProgressDrawable(resources.getDrawable(R.drawable.audio_progress2));
         RelativeLayout.LayoutParams seekParams = new RelativeLayout.LayoutParams(metrics.widthPixels * 4 / 5, btnDiameter);
         seekParams.leftMargin = metrics.widthPixels / 10;
         seekParams.topMargin = scrubSliderTop;
@@ -201,6 +202,7 @@ class AudioBibleView {
         verse.setText("1");
         verse.setTypeface(Typeface.SANS_SERIF);
         verse.setTextSize(12); // this is measured in pixels 12pt in ios
+        verse.setTextColor(0xFF555555);
         verse.setGravity(Gravity.CENTER);
         RelativeLayout.LayoutParams verseTextParams = new RelativeLayout.LayoutParams(btnRadius, btnRadius);
         verseTextParams.addRule(RelativeLayout.CENTER_IN_PARENT);
@@ -280,7 +282,7 @@ class AudioBibleView {
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 Log.d(TAG, "**** touchDown ***");
-                final Resources resources = controller.activity.getResources();
+                final Resources resources = activity.getResources();
                 seekBar.setThumb(resources.getDrawable(R.drawable.thumb_dn));
                 scrubSliderDrag = true;
                 if (audioBible.isPlaying()) {
@@ -292,7 +294,7 @@ class AudioBibleView {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Log.d(TAG, "**** touchUpInside ***");
-                final Resources resources = controller.activity.getResources();
+                final Resources resources = activity.getResources();
                 seekBar.setThumb(resources.getDrawable(R.drawable.thumb_up));
                 scrubSliderDrag = false;
                 if (scrubSuspendedPlay) {

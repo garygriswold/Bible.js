@@ -85,6 +85,8 @@
 			target="res/drawable/thumb_up.png" />
 		<resource-file src="src/android/app/src/main/res/drawable/verse_button_32.png"
 			target="res/drawable/verse_button_32.png" />
+		<resource-file src="src/android/app/src/main/res/drawable/audio_progress2.xml"
+			target="res/drawable/audio_progress2.xml" />
 	</platform>
   
 	<platform name="ios">
