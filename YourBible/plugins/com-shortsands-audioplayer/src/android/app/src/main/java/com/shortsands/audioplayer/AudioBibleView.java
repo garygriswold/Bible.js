@@ -87,7 +87,7 @@ class AudioBibleView {
         float[] radii = new float[] { radius, radius, radius, radius, radius, radius, radius, radius };
         RoundRectShape roundRect = new RoundRectShape(radii, null, null);
         ShapeDrawable background = new ShapeDrawable(roundRect);
-        background.getPaint().setColor(0xFFFFFFFF);
+        background.getPaint().setColor(0xF3FFFFFF);
 
         RelativeLayout layout = new RelativeLayout(this.activity);
         layout.setBackground(background);
