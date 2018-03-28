@@ -3,6 +3,7 @@ package plugin;
 import android.util.Log;
 
 import com.shortsands.audioplayer.AudioBibleController;
+import com.shortsands.aws.CompletionHandler;
 
 import java.io.File;
 import java.net.URL;
@@ -39,10 +40,8 @@ public class AudioPlayer extends CordovaPlugin {
 		else if (action.equals("present")) {
 			String bookId = args.getString(0);
 			int chapterNum = args.getInt(1);
-            audioController.present(bookId, chapterNum);
-            // This could be present(this.webView, bookId, chapterNum);
-            // How do I know when the present is done?
-            callbackContext.success("");
+			AudioPresentCompletion complete = new AudioPresentCompletion(callbackContext);
+            audioController.present(bookId, chapterNum, complete);
 			return true;
 		}
 		else if (action.equals("stop")) {
@@ -51,5 +50,21 @@ public class AudioPlayer extends CordovaPlugin {
 			return true;
 		}
 	    return false;
+	}
+
+	class AudioPresentCompletion implements CompletionHandler {
+		private CallbackContext callbackContext;
+		public AudioPresentCompletion(CallbackContext callbackContext) {
+			this.callbackContext = callbackContext;
+		}
+		@Override
+		public void completed(Object result) {
+			callbackContext.success("");
+		}
+		@Override
+		public void failed(Throwable exception) {
+			Log.d(TAG, "NextReadFile Failed " + exception.toString());
+			callbackContext.error(exception.toString());
+		}
 	}
 }

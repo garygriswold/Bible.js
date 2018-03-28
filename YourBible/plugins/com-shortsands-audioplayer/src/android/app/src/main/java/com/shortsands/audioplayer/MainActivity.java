@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.shortsands.aws.AwsS3;
+import com.shortsands.aws.CompletionHandler;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
         String bookIdList = this.audioController.findAudioVersion(readVersion, readLang);
         Log.d(TAG,"BOOKS: " + bookIdList);
 
-        this.audioController.present(readBook, readChapter);//, complete: { error in
+        AudioPresentCompletion complete = new AudioPresentCompletion();
+        this.audioController.present(readBook, readChapter, complete);
         // print("ViewController.present did finish error: \(String(describing: error))")
     }
 
@@ -72,4 +74,16 @@ public class MainActivity extends AppCompatActivity {
             this.audioController.appHasExited();
         }
     }
+
+    class AudioPresentCompletion implements CompletionHandler {
+        @Override
+        public void completed(Object result) {
+            Log.d(TAG, "AudioPlayer.present has completed OK.");
+        }
+        @Override
+        public void failed(Throwable exception) {
+            Log.d(TAG, "AudioPlayer.present exception " + exception.toString());
+        }
+    }
+
 }

@@ -28,6 +28,7 @@ public class AudioBibleController {
     private AudioBible audioBible;
     private AudioBibleView audioBibleView;
     private AudioSession audioSession;
+    private CompletionHandler completionHandler;
 
     private AudioBibleController(Activity activity) {
         this.activity = activity;
@@ -55,13 +56,12 @@ public class AudioBibleController {
         return result;
     }
 
-    // should this return an error code in order to be consistent to iOS?
-    public void present(String bookId, int chapterNum) {
+    public void present(String bookId, int chapterNum, CompletionHandler complete) {
 
         this.audioBible = AudioBible.shared(this);
         this.audioBibleView = AudioBibleView.shared(this, this.audioBible);
         this.audioSession = AudioSession.shared(this.activity, this.audioBibleView);
-        //this.completionHandler = complete // something is required here for cordova
+        this.completionHandler = complete;
 
         if (this.audioSession.startAudioSession()) {
 
@@ -108,8 +108,12 @@ public class AudioBibleController {
             this.audioBibleView.stopPlay();
             this.audioBibleView = null;
         }
-        //this.completionHandler(null); // Is this needed for cordova?
         this.audioSession.stopAudioSession();
+
+        if (this.completionHandler != null) {
+            this.completionHandler.completed("");
+            this.completionHandler = null;
+        }
     }
 
     /**
