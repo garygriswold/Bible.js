@@ -15,6 +15,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -44,7 +45,7 @@ class AudioBibleView {
     private final Activity activity;
     private final AudioBible audioBible;
     private final ViewGroup webview;
-    private final RelativeLayout audioPanel;
+    private final FrameLayout audioPanel;
     private final int panelHeight;
     private final ImageButton playButton;
     private final ImageButton pauseButton;
@@ -89,10 +90,10 @@ class AudioBibleView {
         ShapeDrawable background = new ShapeDrawable(roundRect);
         background.getPaint().setColor(0xF3FFFFFF);
 
-        RelativeLayout layout = new RelativeLayout(this.activity);
+        FrameLayout layout = new FrameLayout(this.activity);
         layout.setBackground(background);
-        RelativeLayout.LayoutParams layoutParams =
-                new RelativeLayout.LayoutParams((int)(metrics.widthPixels * 0.96), panelHeight);
+        FrameLayout.LayoutParams layoutParams =
+                new FrameLayout.LayoutParams((int)(metrics.widthPixels * 0.96), panelHeight);
         layoutParams.leftMargin = (int)(metrics.widthPixels * 0.02);
         layoutParams.topMargin = metrics.heightPixels + (int)(panelHeight * 0.3);
         layout.setLayoutParams(layoutParams);
@@ -116,7 +117,7 @@ class AudioBibleView {
                 return false;
             }
         });
-        RelativeLayout.LayoutParams playPauseParams = new RelativeLayout.LayoutParams(btnDiameter, btnDiameter);
+        FrameLayout.LayoutParams playPauseParams = new FrameLayout.LayoutParams(btnDiameter, btnDiameter);
         playPauseParams.leftMargin = (metrics.widthPixels / 3) - btnRadius;
         playPauseParams.topMargin = buttonTop;
         playBtn.setLayoutParams(playPauseParams);
@@ -162,7 +163,7 @@ class AudioBibleView {
                 return false;
             }
         });
-        RelativeLayout.LayoutParams stopParams = new RelativeLayout.LayoutParams(btnDiameter, btnDiameter);
+        FrameLayout.LayoutParams stopParams = new FrameLayout.LayoutParams(btnDiameter, btnDiameter);
         stopParams.leftMargin = (metrics.widthPixels * 2 / 3) - btnRadius;
         stopParams.topMargin = buttonTop;
         stopBtn.setLayoutParams(stopParams);
@@ -174,7 +175,7 @@ class AudioBibleView {
         scrub.setThumb(resources.getDrawable(R.drawable.thumb_up));
         scrub.setPadding(btnRadius, 0, btnRadius, 0);
         scrub.setProgressDrawable(resources.getDrawable(R.drawable.audio_progress2));
-        RelativeLayout.LayoutParams seekParams = new RelativeLayout.LayoutParams(metrics.widthPixels * 4 / 5, btnDiameter);
+        FrameLayout.LayoutParams seekParams = new FrameLayout.LayoutParams(metrics.widthPixels * 4 / 5, btnDiameter);
         seekParams.leftMargin = metrics.widthPixels / 10;
         seekParams.topMargin = scrubSliderTop;
         scrub.setLayoutParams(seekParams);
