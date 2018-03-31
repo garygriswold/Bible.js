@@ -27,6 +27,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     }
 
     private final AudioBibleController controller;
+    private final AudioControlCenter controlCenter;
     private AudioAnalytics audioAnalytics;
     // Transient Variables
     private AudioReference currReference;
@@ -37,6 +38,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     private AudioBible(AudioBibleController controller) {
         super();
         this.controller = controller;
+        this.controlCenter = AudioControlCenter.shared;
     }
 
     MediaPlayer getPlayer() {
@@ -120,6 +122,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         this.play();
         player.setOnCompletionListener(this);
         this.controller.playHasStarted(player);
+        this.controlCenter.nowPlaying(this);
         this.preFetchNextChapter(this.currReference);
     }
 
@@ -262,6 +265,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         this.controller.nextMediaPlayer(this.mediaPlayer);
         this.mediaPlayer.setOnCompletionListener(this);
         this.readVerseMetaData(reference);
+        this.controlCenter.nowPlaying(this);
     }
 
     private void preFetchNextChapter(AudioReference reference) {
