@@ -92,10 +92,11 @@ class AudioBibleView {
 
         FrameLayout layout = new FrameLayout(this.activity);
         layout.setBackground(background);
+        layout.setVisibility(View.INVISIBLE);
         FrameLayout.LayoutParams layoutParams =
-                new FrameLayout.LayoutParams((int)(metrics.widthPixels * 0.96), panelHeight);
+                new FrameLayout.LayoutParams((int)(metrics.widthPixels * 0.96), this.panelHeight);
         layoutParams.leftMargin = (int)(metrics.widthPixels * 0.02);
-        layoutParams.topMargin = metrics.heightPixels + (int)(panelHeight * 0.3);
+        layoutParams.topMargin = metrics.heightPixels + (int)(panelHeight * 0.2f);
         layout.setLayoutParams(layoutParams);
         this.audioPanel = layout;
 
@@ -250,8 +251,11 @@ class AudioBibleView {
             this.isAudioViewActive = true;
             if (this.audioPanel.getParent() == null) {
                 this.webview.addView(this.audioPanel);
+                this.audioPanel.setVisibility(View.VISIBLE);
+                this.audioPanel.animate().translationYBy(this.panelHeight * -1.2f).setDuration(1000);
+            } else {
+                this.audioPanel.animate().translationYBy(this.panelHeight * -1.3f).setDuration(1000);
             }
-            this.audioPanel.animate().translationYBy(this.panelHeight * -1.3f).setDuration(1000);
         }
         this.startNewPlayer(player);
 
