@@ -15,7 +15,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -25,9 +27,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 
 //import com.shortsands.yourbible.R; // Remove comment in SafeBible App
 
@@ -71,6 +70,7 @@ class AudioBibleView {
     private MonitorSeekBar monitorSeekBar = null;
     private boolean scrubSliderDrag = false;
     private boolean scrubSuspendedPlay = false;
+    private int versePriorX = 0;
     private int verseNum = 0;
     private boolean isAudioViewActive = false;
 
@@ -357,9 +357,15 @@ class AudioBibleView {
                 @Override
                 public void handleMessage(Message message) {
                     switch(message.what) {
+                        case 98:
+                            verseButton.animate().translationX(message.arg1).setDuration(80L).start();
+                            Log.d(TAG, "Animate X: " + message.arg1);
+                            break;
                         case 99:
                             verseButton.animate().translationX(message.arg1).setDuration(80L).start();
                             verseLabel.setText(String.valueOf(message.arg2));
+                            AudioControlCenter.shared.updateTextPosition((String)message.obj);
+                            Log.d(TAG, "Animate X: " + message.arg1 + "  " + message.arg2 + "  " + message.obj);
                             break;
                         default:
                             Log.d(TAG, "Unknown message " + message.what);
@@ -375,19 +381,25 @@ class AudioBibleView {
                     int progressMS = player.getCurrentPosition();
                     scrubSlider.setProgress(progressMS);
 
-                    if (audioBible.getCurrReference().audioChapter != null) {
+                    AudioReference reference = audioBible.getCurrReference();
+                    if (reference.audioChapter != null) {
                         if (progressMS == 0) {
                             verseNum = 0;
                         }
-                        AudioTOCChapter verse = audioBible.getCurrReference().audioChapter;
-                        int newVerseNum = verse.findVerseByPosition(verseNum, progressMS);
                         int verseXPos = positionVersePopup();
-                        Message message = this.handler.obtainMessage(99, verseXPos, newVerseNum);
-                        message.sendToTarget();
-                        verseButton.setAlpha(1);
+                        AudioTOCChapter verse = reference.audioChapter;
+                        int newVerseNum = verse.findVerseByPosition(verseNum, progressMS);
                         if (newVerseNum != verseNum) {
-                            //AudioControlCenter.shared.nowPlayingUpdate(audioBible.getCurrReference(), newVerseNum, progressMS);
+                            versePriorX = verseXPos;
                             verseNum = newVerseNum;
+                            String nodeId = reference.getNodeId(newVerseNum);
+                            Message message = this.handler.obtainMessage(99, verseXPos, newVerseNum, nodeId);
+                            message.sendToTarget();
+                            verseButton.setAlpha(1);
+                        } else if (verseXPos != versePriorX) {
+                            versePriorX = verseXPos;
+                            Message message = this.handler.obtainMessage(98, verseXPos, newVerseNum);
+                            message.sendToTarget();
                         }
                     } else {
                         verseButton.setAlpha(0);
