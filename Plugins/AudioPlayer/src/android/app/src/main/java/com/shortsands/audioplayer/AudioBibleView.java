@@ -15,6 +15,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -35,25 +36,25 @@ class AudioBibleView {
     private static final String TAG = "AudioBibleView";
 
     private static AudioBibleView instance = null;
-    static AudioBibleView shared(AudioBibleController controller, AudioBible audioBible) {
+    static AudioBibleView shared(Activity activity, WebView webview, AudioBible audioBible) {
         if (AudioBibleView.instance == null) {
-            AudioBibleView.instance = new AudioBibleView(controller, audioBible);
+            AudioBibleView.instance = new AudioBibleView(activity, webview, audioBible);
         }
         return AudioBibleView.instance;
     }
 
     public static WebView getWebView() {
-        if (AudioBibleView.instance != null && AudioBibleView.instance.webview instanceof WebView) {
-            return((WebView)AudioBibleView.instance.webview);
+        if (AudioBibleView.instance != null) {
+            return(AudioBibleView.instance.webview);
         } else {
             return(null);
         }
     }
 
-    private final AudioBibleController controller;
     private final Activity activity;
     private final AudioBible audioBible;
-    private final ViewGroup webview;
+    private final WebView webview;
+    private final ViewGroup rootView;
     private final FrameLayout audioPanel;
     private final int panelHeight;
     private final ImageButton playButton;
@@ -73,14 +74,13 @@ class AudioBibleView {
     private int verseNum = 0;
     private boolean isAudioViewActive = false;
 
-    private AudioBibleView(AudioBibleController controller, AudioBible audioBible) {
-        this.controller = controller;
-        this.activity = controller.activity;
+    private AudioBibleView(Activity activity, WebView webview, AudioBible audioBible) {
+        this.activity = activity;
+        this.webview = webview;
         this.audioBible = audioBible;
 
         Window window = this.activity.getWindow();
-        this.webview = (ViewGroup)window.getDecorView();
-        //this.webview.setBackgroundColor(0x440000FF); // for debug only
+        this.rootView = (ViewGroup)window.getDecorView();
 
         DisplayMetrics metrics = new DisplayMetrics();
         this.activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -259,7 +259,7 @@ class AudioBibleView {
         if (!this.isAudioViewActive) {
             this.isAudioViewActive = true;
             if (this.audioPanel.getParent() == null) {
-                this.webview.addView(this.audioPanel);
+                this.rootView.addView(this.audioPanel);
                 this.audioPanel.setVisibility(View.VISIBLE);
                 this.audioPanel.animate().translationYBy(this.panelHeight * -1.2f).setDuration(1000);
             } else {
@@ -386,7 +386,7 @@ class AudioBibleView {
                         message.sendToTarget();
                         verseButton.setAlpha(1);
                         if (newVerseNum != verseNum) {
-                            AudioControlCenter.shared.nowPlayingUpdate(audioBible.getCurrReference(), newVerseNum, progressMS);
+                            //AudioControlCenter.shared.nowPlayingUpdate(audioBible.getCurrReference(), newVerseNum, progressMS);
                             verseNum = newVerseNum;
                         }
                     } else {

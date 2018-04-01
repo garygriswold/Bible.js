@@ -15,6 +15,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -34,17 +36,25 @@ class AudioBibleView {
     private static final String TAG = "AudioBibleView";
 
     private static AudioBibleView instance = null;
-    static AudioBibleView shared(AudioBibleController controller, AudioBible audioBible) {
+    static AudioBibleView shared(Activity activity, WebView webview, AudioBible audioBible) {
         if (AudioBibleView.instance == null) {
-            AudioBibleView.instance = new AudioBibleView(controller, audioBible);
+            AudioBibleView.instance = new AudioBibleView(activity, webview, audioBible);
         }
         return AudioBibleView.instance;
     }
 
-    private final AudioBibleController controller;
+    public static WebView getWebView() {
+        if (AudioBibleView.instance != null) {
+            return(AudioBibleView.instance.webview);
+        } else {
+            return(null);
+        }
+    }
+
     private final Activity activity;
     private final AudioBible audioBible;
-    private final ViewGroup webview;
+    private final WebView webview;
+    private final ViewGroup rootView;
     private final FrameLayout audioPanel;
     private final int panelHeight;
     private final ImageButton playButton;
@@ -64,14 +74,13 @@ class AudioBibleView {
     private int verseNum = 0;
     private boolean isAudioViewActive = false;
 
-    private AudioBibleView(AudioBibleController controller, AudioBible audioBible) {
-        this.controller = controller;
-        this.activity = controller.activity;
+    private AudioBibleView(Activity activity, WebView webview, AudioBible audioBible) {
+        this.activity = activity;
+        this.webview = webview;
         this.audioBible = audioBible;
 
         Window window = this.activity.getWindow();
-        this.webview = (ViewGroup)window.getDecorView();
-        //this.webview.setBackgroundColor(0x440000FF); // for debug only
+        this.rootView = (ViewGroup)window.getDecorView();
 
         DisplayMetrics metrics = new DisplayMetrics();
         this.activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -250,7 +259,7 @@ class AudioBibleView {
         if (!this.isAudioViewActive) {
             this.isAudioViewActive = true;
             if (this.audioPanel.getParent() == null) {
-                this.webview.addView(this.audioPanel);
+                this.rootView.addView(this.audioPanel);
                 this.audioPanel.setVisibility(View.VISIBLE);
                 this.audioPanel.animate().translationYBy(this.panelHeight * -1.2f).setDuration(1000);
             } else {
@@ -347,11 +356,13 @@ class AudioBibleView {
             this.handler = new Handler(Looper.getMainLooper()) {
                 @Override
                 public void handleMessage(Message message) {
-                    if (message.what == 99) {
-                        verseLabel.setText(String.valueOf(message.arg1));
-                        verseButton.animate().translationX(message.arg2).setDuration(80L).start();
-                    } else {
-                        Log.d(TAG, "Unknown message " + message.what);
+                    switch(message.what) {
+                        case 99:
+                            verseButton.animate().translationX(message.arg1).setDuration(80L).start();
+                            verseLabel.setText(String.valueOf(message.arg2));
+                            break;
+                        default:
+                            Log.d(TAG, "Unknown message " + message.what);
                     }
                 }
             };
@@ -369,11 +380,15 @@ class AudioBibleView {
                             verseNum = 0;
                         }
                         AudioTOCChapter verse = audioBible.getCurrReference().audioChapter;
-                        verseNum = verse.findVerseByPosition(verseNum, progressMS);
+                        int newVerseNum = verse.findVerseByPosition(verseNum, progressMS);
                         int verseXPos = positionVersePopup();
-                        Message message = this.handler.obtainMessage(99, verseNum, verseXPos);
+                        Message message = this.handler.obtainMessage(99, verseXPos, newVerseNum);
                         message.sendToTarget();
                         verseButton.setAlpha(1);
+                        if (newVerseNum != verseNum) {
+                            //AudioControlCenter.shared.nowPlayingUpdate(audioBible.getCurrReference(), newVerseNum, progressMS);
+                            verseNum = newVerseNum;
+                        }
                     } else {
                         verseButton.setAlpha(0);
                     }

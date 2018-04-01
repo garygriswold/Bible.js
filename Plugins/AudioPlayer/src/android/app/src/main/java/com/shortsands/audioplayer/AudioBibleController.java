@@ -2,10 +2,8 @@ package com.shortsands.audioplayer;
 
 import android.app.Activity;
 import android.media.MediaPlayer;
-import android.util.Log;
-import com.shortsands.aws.AwsS3;
+import android.webkit.WebView;
 import com.shortsands.aws.CompletionHandler;
-import java.util.HashMap;
 /**
  * Created by garygriswold on 8/30/17.
  */
@@ -56,10 +54,10 @@ public class AudioBibleController {
         return result;
     }
 
-    public void present(String bookId, int chapterNum, CompletionHandler complete) {
+    public void present(WebView webview, String bookId, int chapterNum, CompletionHandler complete) {
 
         this.audioBible = AudioBible.shared(this);
-        this.audioBibleView = AudioBibleView.shared(this, this.audioBible);
+        this.audioBibleView = AudioBibleView.shared(this.activity, webview, this.audioBible);
         this.audioSession = AudioSession.shared(this.activity, this.audioBibleView);
         this.completionHandler = complete;
 

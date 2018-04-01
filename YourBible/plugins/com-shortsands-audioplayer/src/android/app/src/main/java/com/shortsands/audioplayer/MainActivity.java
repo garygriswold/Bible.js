@@ -13,13 +13,14 @@ import com.shortsands.aws.CompletionHandler;
 public class MainActivity extends AppCompatActivity {
 
     private static String TAG = "MainActivity";
-    AudioBibleController audioController = AudioBibleController.shared(this);
+    private AudioBibleController audioController = AudioBibleController.shared(this);
+    private WebView webview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WebView webview = new WebView(this);
-        setContentView(webview);
+        this.webview = new WebView(this);
+        setContentView(this.webview);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG,"BOOKS: " + bookIdList);
 
         AudioPresentCompletion complete = new AudioPresentCompletion();
-        this.audioController.present(readBook, readChapter, complete);
+        this.audioController.present(this.webview, readBook, readChapter, complete);
         // print("ViewController.present did finish error: \(String(describing: error))")
     }
 
