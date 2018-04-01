@@ -1,6 +1,8 @@
 package plugin;
 
 import android.util.Log;
+import android.view.View;
+import android.webkit.WebView;
 
 import com.shortsands.audioplayer.AudioBibleController;
 import com.shortsands.aws.CompletionHandler;
@@ -41,8 +43,14 @@ public class AudioPlayer extends CordovaPlugin {
 			String bookId = args.getString(0);
 			int chapterNum = args.getInt(1);
 			AudioPresentCompletion complete = new AudioPresentCompletion(callbackContext);
-            audioController.present(bookId, chapterNum, complete);
-			return true;
+			View view = super.webView.getView();
+			if (view instanceof WebView) {
+				audioController.present((WebView)view, bookId, chapterNum, complete);
+				return true;
+			} else {
+				complete.failed(new Exception("Unable to find WebView."));
+				return true;
+			}
 		}
 		else if (action.equals("stop")) {
             audioController.stop();
