@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -42,11 +43,14 @@ class AudioBibleView {
         return AudioBibleView.instance;
     }
 
-    public static WebView getWebView() {
+    public static void evaluateJavascript(final String msg, final ValueCallback<String> completed) {
         if (AudioBibleView.instance != null) {
-            return(AudioBibleView.instance.webview);
-        } else {
-            return(null);
+            AudioBibleView.instance.activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AudioBibleView.instance.webview.evaluateJavascript(msg, completed);
+                }
+            });
         }
     }
 
@@ -234,16 +238,26 @@ class AudioBibleView {
     void play() {
         this.audioBible.play();
         if (this.isAudioViewActive) {
-            this.audioPanel.removeView(this.playButton);
-            this.audioPanel.addView(this.pauseButton);
+            this.activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    audioPanel.removeView(playButton);
+                    audioPanel.addView(pauseButton);
+                }
+            });
         }
     }
 
     void pause() {
         this.audioBible.pause();
         if (this.isAudioViewActive) {
-            this.audioPanel.removeView(this.pauseButton);
-            this.audioPanel.addView(this.playButton);
+            this.activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    audioPanel.removeView(pauseButton);
+                    audioPanel.addView(playButton);
+                }
+            });
         }
     }
 
@@ -257,14 +271,19 @@ class AudioBibleView {
      */
     void startPlay(final MediaPlayer player) {
         if (!this.isAudioViewActive) {
-            this.isAudioViewActive = true;
-            if (this.audioPanel.getParent() == null) {
-                this.rootView.addView(this.audioPanel);
-                this.audioPanel.setVisibility(View.VISIBLE);
-                this.audioPanel.animate().translationYBy(this.panelHeight * -1.2f).setDuration(1000);
-            } else {
-                this.audioPanel.animate().translationYBy(this.panelHeight * -1.3f).setDuration(1000);
-            }
+            this.activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    isAudioViewActive = true;
+                    if (audioPanel.getParent() == null) {
+                        rootView.addView(audioPanel);
+                        audioPanel.setVisibility(View.VISIBLE);
+                        audioPanel.animate().translationYBy(panelHeight * -1.2f).setDuration(1000);
+                    } else {
+                        audioPanel.animate().translationYBy(panelHeight * -1.3f).setDuration(1000);
+                    }
+                }
+            });
         }
         this.startNewPlayer(player);
 
@@ -336,8 +355,13 @@ class AudioBibleView {
 
     void stopPlay() {
         if (this.audioBibleActive()) {
-            this.isAudioViewActive = false;
-            this.audioPanel.animate().translationYBy(this.panelHeight * 1.3f).setDuration(1000);
+            this.activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    isAudioViewActive = false;
+                    audioPanel.animate().translationYBy(panelHeight * 1.3f).setDuration(1000);
+                }
+            });
         }
         if (this.monitorSeekBar != null) {
             this.monitorSeekBar.isPlaying = false;

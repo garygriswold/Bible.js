@@ -32,18 +32,15 @@ public class AudioControlCenter {
     }
     void updateTextPosition(String nodeId) {
         Log.d(TAG, "NodeId: " + nodeId);
-        WebView webview = AudioBibleView.getWebView();
-        if (webview != null) {
-            final String msg = "document.body.dispatchEvent(new CustomEvent(BIBLE.SCROLL_TEXT," +
-                    " { detail: { id: '" + nodeId + "' }}));";
-            Log.d(TAG, "DISPATCH EVENT LISTENING TO " + nodeId);
-            ValueCallback<String> completion = new ValueCallback<String>() {
-                @Override
-                public void onReceiveValue(String value) {
-                    Log.d(TAG, "BIBLE Scroll Event Dispatched " + msg);
-                }
-            };
-            webview.evaluateJavascript(msg, completion);
-        }
+        final String msg = "document.body.dispatchEvent(new CustomEvent(BIBLE.SCROLL_TEXT," +
+                " { detail: { id: '" + nodeId + "' }}));";
+        Log.d(TAG, "DISPATCH EVENT LISTENING TO " + nodeId);
+        ValueCallback<String> completion = new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                Log.d(TAG, "BIBLE Scroll Event Dispatched " + msg);
+            }
+        };
+        AudioBibleView.evaluateJavascript(msg, completion);
     }
 }
