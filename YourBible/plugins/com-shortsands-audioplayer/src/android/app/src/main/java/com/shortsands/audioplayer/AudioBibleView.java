@@ -10,6 +10,7 @@ import android.graphics.drawable.shapes.RoundRectShape;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
+import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -44,7 +45,7 @@ class AudioBibleView {
     }
 
     public static void evaluateJavascript(final String msg, final ValueCallback<String> completed) {
-        if (AudioBibleView.instance != null) {
+        if (AudioBibleView.instance != null && VERSION.SDK_INT >= 19) {
             AudioBibleView.instance.activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

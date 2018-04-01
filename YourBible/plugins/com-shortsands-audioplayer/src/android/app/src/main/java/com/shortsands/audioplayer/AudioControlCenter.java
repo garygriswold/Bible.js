@@ -32,8 +32,6 @@ public class AudioControlCenter {
     }
     void updateTextPosition(String nodeId) {
         Log.d(TAG, "NodeId: " + nodeId);
-        //WebView webview = AudioBibleView.getWebView();
-        //if (webview != null) {
         final String msg = "document.body.dispatchEvent(new CustomEvent(BIBLE.SCROLL_TEXT," +
                 " { detail: { id: '" + nodeId + "' }}));";
         Log.d(TAG, "DISPATCH EVENT LISTENING TO " + nodeId);
@@ -44,7 +42,5 @@ public class AudioControlCenter {
             }
         };
         AudioBibleView.evaluateJavascript(msg, completion);
-        //    webview.evaluateJavascript(msg, completion);
-        //}
     }
 }
