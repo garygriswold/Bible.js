@@ -20,7 +20,7 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 			this.cellTopPadding = 'padding-top:' + STATUS_BAR_HEIGHT + 'px';			
 		}
 	} else {
-		this.barHite = HEADER_BAR_HEIGHT + 16;
+		this.barHite = HEADER_BAR_HEIGHT + 5;
 		this.cellTopPadding = 'padding-top:5px';			
 	}
 	this.tableContents = tableContents;
