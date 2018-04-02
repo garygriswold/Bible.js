@@ -1,5 +1,6 @@
 package plugin;
 
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
@@ -23,9 +24,12 @@ public class AudioPlayer extends CordovaPlugin {
 	
 	private static String TAG = "AudioPlayer";
 
+	private CallbackContext callbackContext;
+
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
      	AudioBibleController audioController = AudioBibleController.shared(this.cordova.getActivity());
+		this.callbackContext = callbackContext;
 
         if (action.equals("findAudioVersion")) {
             String version = args.getString(0);
@@ -42,7 +46,7 @@ public class AudioPlayer extends CordovaPlugin {
 		else if (action.equals("present")) {
 			String bookId = args.getString(0);
 			int chapterNum = args.getInt(1);
-			AudioPresentCompletion complete = new AudioPresentCompletion(callbackContext);
+			AudioPresentCompletion complete = new AudioPresentCompletion();
 			View view = super.webView.getView();
 			if (view instanceof WebView) {
 				audioController.present((WebView)view, bookId, chapterNum, complete);
@@ -61,10 +65,6 @@ public class AudioPlayer extends CordovaPlugin {
 	}
 
 	class AudioPresentCompletion implements CompletionHandler {
-		private CallbackContext callbackContext;
-		public AudioPresentCompletion(CallbackContext callbackContext) {
-			this.callbackContext = callbackContext;
-		}
 		@Override
 		public void completed(Object result) {
 			callbackContext.success("");
@@ -75,4 +75,18 @@ public class AudioPlayer extends CordovaPlugin {
 			callbackContext.error(exception.toString());
 		}
 	}
+
+	 /**
+     * Called when a plugin is the recipient of an Activity result after the CordovaActivity has
+     * been destroyed. The Bundle will be the same as the one the plugin returned in
+     * onSaveInstanceState()
+     *
+     * @param state             Bundle containing the state of the plugin
+     * @param callbackContext   Replacement Context to return the plugin result to
+     */
+    @Override
+    public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext) {
+	    Log.d(TAG, "onRestoreStateForActivityResult " + System.currentTimeMillis());
+	    this.callbackContext = callbackContext;
+    }
 }
