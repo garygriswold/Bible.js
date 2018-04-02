@@ -57,7 +57,7 @@ public class AudioBibleController {
     public void present(WebView webview, String bookId, int chapterNum, CompletionHandler complete) {
 
         this.audioBible = AudioBible.shared(this);
-        this.audioBibleView = AudioBibleView.shared(this.activity, webview, this.audioBible);
+        this.audioBibleView = AudioBibleView.shared(this.activity, this.audioBible);
         this.audioSession = AudioSession.shared(this.activity, this.audioBibleView);
         this.completionHandler = complete;
 
@@ -67,6 +67,7 @@ public class AudioBibleController {
                 if (this.metaDataReader != null) {
                     AudioTOCBook meta = this.metaDataReader.findBook(bookId);
                     if (meta != null) {
+                        this.audioBibleView.setWebView(webview);
                         AudioReference ref = AudioReference.factory(meta, chapterNum, this.fileType);
                         this.audioBible.beginReadFile(ref);
                     }

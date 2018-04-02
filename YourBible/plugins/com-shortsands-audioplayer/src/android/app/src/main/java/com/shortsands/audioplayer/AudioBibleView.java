@@ -3,6 +3,7 @@ package com.shortsands.audioplayer;
 /**
  * Created by garygriswold on 8/30/17.
  */
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -37,27 +38,29 @@ class AudioBibleView {
     private static final String TAG = "AudioBibleView";
 
     private static AudioBibleView instance = null;
-    static AudioBibleView shared(Activity activity, WebView webview, AudioBible audioBible) {
+    static AudioBibleView shared(Activity activity, AudioBible audioBible) {
         if (AudioBibleView.instance == null) {
-            AudioBibleView.instance = new AudioBibleView(activity, webview, audioBible);
+            AudioBibleView.instance = new AudioBibleView(activity, audioBible);
         }
         return AudioBibleView.instance;
     }
 
+    @TargetApi(19)
     public static void evaluateJavascript(final String msg, final ValueCallback<String> completed) {
-        if (AudioBibleView.instance != null && VERSION.SDK_INT >= 19) {
-            AudioBibleView.instance.activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    AudioBibleView.instance.webview.evaluateJavascript(msg, completed);
-                }
-            });
+        if (VERSION.SDK_INT >= 19) {
+            if (AudioBibleView.instance != null && AudioBibleView.instance.webView != null) {
+                AudioBibleView.instance.activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AudioBibleView.instance.webView.evaluateJavascript(msg, completed);
+                    }
+                });
+            }
         }
     }
 
     private final Activity activity;
     private final AudioBible audioBible;
-    private final WebView webview;
     private final ViewGroup rootView;
     private final FrameLayout audioPanel;
     private final int panelHeight;
@@ -67,6 +70,7 @@ class AudioBibleView {
     private final SeekBar scrubSlider;
     private final RelativeLayout verseButton;
     private final TextView verseLabel;
+    private WebView webView;
     // Precomputed for positionVersePopup
     private Float sliderRange;
     private Float sliderOrigin;
@@ -79,9 +83,8 @@ class AudioBibleView {
     private int verseNum = 0;
     private boolean isAudioViewActive = false;
 
-    private AudioBibleView(Activity activity, WebView webview, AudioBible audioBible) {
+    private AudioBibleView(Activity activity, AudioBible audioBible) {
         this.activity = activity;
-        this.webview = webview;
         this.audioBible = audioBible;
 
         Window window = this.activity.getWindow();
@@ -230,6 +233,10 @@ class AudioBibleView {
         this.sliderRange = 0.0f + seekParams.width - seekParams.height;
         this.sliderOrigin = 0.0f;
         this.sliderOriginActual = 0.0f + seekParams.leftMargin + (seekParams.height - verseBtnParams.width) / 2.0f;
+    }
+
+    void setWebView(WebView webview) {
+        this.webView = webview;
     }
 
     boolean audioBibleActive() {
@@ -384,13 +391,11 @@ class AudioBibleView {
                     switch(message.what) {
                         case 98:
                             verseButton.animate().translationX(message.arg1).setDuration(80L).start();
-                            Log.d(TAG, "Animate X: " + message.arg1);
                             break;
                         case 99:
                             verseButton.animate().translationX(message.arg1).setDuration(80L).start();
                             verseLabel.setText(String.valueOf(message.arg2));
                             AudioControlCenter.shared.updateTextPosition((String)message.obj);
-                            Log.d(TAG, "Animate X: " + message.arg1 + "  " + message.arg2 + "  " + message.obj);
                             break;
                         default:
                             Log.d(TAG, "Unknown message " + message.what);
