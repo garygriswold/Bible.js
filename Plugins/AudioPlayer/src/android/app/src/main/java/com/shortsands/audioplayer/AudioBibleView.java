@@ -341,6 +341,10 @@ class AudioBibleView {
                 if (scrubSuspendedPlay) {
                     if (audioBible.getPlayer() != null) {
                         audioBible.getPlayer().start();
+                        AudioReference ref = audioBible.getCurrReference();
+                        if (ref != null) {
+                            AudioControlCenter.shared.updateTextPosition(ref.getNodeId(verseNum));
+                        }
                     }
                     scrubSuspendedPlay = false;
                 }
