@@ -109,11 +109,4 @@ public class AudioBibleController {
             this.completionHandler = null;
         }
     }
-
-    /**
-     * This method is called by an outside controller to indicate that App has stopped.
-     */
-    public void appHasExited() {
-        this.audioBible.stop();
-    }
 }

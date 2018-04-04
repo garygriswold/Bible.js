@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         Log.d(TAG, "*** onPause is called.");
         if (this.audioController != null) {
-            this.audioController.appHasExited();
+            this.audioController.stop();
         }
     }
 

@@ -8,9 +8,6 @@ import android.webkit.WebView;
 import com.shortsands.audioplayer.AudioBibleController;
 import com.shortsands.aws.CompletionHandler;
 
-import java.io.File;
-import java.net.URL;
-
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 
@@ -53,7 +50,7 @@ public class AudioPlayer extends CordovaPlugin {
 				return true;
 			} else {
 				complete.failed(new Exception("Unable to find WebView."));
-				return true;
+				return false;
 			}
 		}
 		else if (action.equals("stop")) {
@@ -76,7 +73,53 @@ public class AudioPlayer extends CordovaPlugin {
 		}
 	}
 
-	 /**
+    /**
+     * Called when the system is about to start resuming a previous activity.
+     *
+     * @param multitasking		Flag indicating if multitasking is turned on for app
+     */
+    @Override
+    public void onPause(boolean multitasking) {
+    	Log.d(TAG, "Inside onPause");
+    }
+
+    /**
+     * Called when the activity will start interacting with the user.
+     *
+     * @param multitasking		Flag indicating if multitasking is turned on for app
+     */
+    @Override
+    public void onResume(boolean multitasking) {
+    	Log.d(TAG, "Inside onResume");
+    }
+
+    /**
+     * Called when the activity is becoming visible to the user.
+     */
+    @Override
+    public void onStart() {
+    	Log.d(TAG, "Inside onStart");
+    }
+
+    /**
+     * Called when the activity is no longer visible to the user.
+     */
+    @Override
+    public void onStop() {
+    	Log.d(TAG, "Inside onStop");
+    }
+
+    /**
+     * The final call you receive before your activity is destroyed.
+     */
+    @Override
+    public void onDestroy() {
+    	Log.d(TAG, "Inside onDestroy");
+      	AudioBibleController audioController = AudioBibleController.shared(this.cordova.getActivity());
+      	audioController.stop();   	
+    }
+
+	/**
      * Called when a plugin is the recipient of an Activity result after the CordovaActivity has
      * been destroyed. The Bundle will be the same as the one the plugin returned in
      * onSaveInstanceState()
