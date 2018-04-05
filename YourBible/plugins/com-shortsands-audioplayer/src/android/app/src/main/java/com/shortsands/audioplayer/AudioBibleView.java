@@ -304,9 +304,9 @@ class AudioBibleView {
                         long position;
                         AudioReference curr = audioBible.getCurrReference();
                         if (curr.audioChapter != null) {
-                            verseNum = curr.audioChapter.findVerseByPosition(verseNum, value);
-                            position = curr.audioChapter.findPositionOfVerse(verseNum);
-                            verseLabel.setText(String.valueOf(verseNum));
+                            int newVerseNum = curr.audioChapter.findVerseByPosition(verseNum, value);
+                            position = curr.audioChapter.findPositionOfVerse(newVerseNum);
+                            verseLabel.setText(String.valueOf(newVerseNum));
                             float xPosition = sliderOriginActual + positionVersePopup();
                             verseButton.setX(xPosition);
                         } else {
