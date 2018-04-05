@@ -102,6 +102,7 @@ AppInitializer.prototype.begin = function() {
 	}		
 	function showPassageHandler(event) {
 		disableHandlers();
+		enableAudioPlayer();
 		that.controller.clearViews();
 		setTimeout(function() { // delay is needed because with changes from History prior pages can interfere. Consider animation
 			that.controller.codexView.showView(event.detail.id);
@@ -117,8 +118,6 @@ AppInitializer.prototype.begin = function() {
 			console.log("INSIDE IS PLAYING: " + playing);
 			if (playing === "F") {
 				document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
-			//} else {
-				//document.body.removeEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
 			}
 		});
 	}
