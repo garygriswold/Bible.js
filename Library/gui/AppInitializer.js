@@ -101,7 +101,6 @@ AppInitializer.prototype.begin = function() {
 	}		
 	function showPassageHandler(event) {
 		disableHandlers();
-		enableAudioPlayer();
 		that.controller.clearViews();
 		setTimeout(function() { // delay is needed because with changes from History prior pages can interfere. Consider animation
 			that.controller.codexView.showView(event.detail.id);
@@ -117,6 +116,8 @@ AppInitializer.prototype.begin = function() {
 			console.log("INSIDE IS PLAYING: " + playing);
 			if (playing === "F") {
 				document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
+			} else {
+				document.body.removeEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
 			}
 		});
 	}
@@ -141,8 +142,9 @@ AppInitializer.prototype.begin = function() {
 	function stopAudioHandler(event) {
 		document.body.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 		document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
+		document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
 		window.AudioPlayer.stop(function() {
-			console.log("SUCCESSFUL STOP OF AudioPlayer");
+			console.log("SUCCESSFUL STOP OF AudioPlayer");			
 		});		
 	}
 	function animateScrollToHandler(event) {
@@ -181,7 +183,6 @@ AppInitializer.prototype.begin = function() {
 		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
 		document.body.removeEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
-		disableAudioPlayer();
 	}
 	function enableHandlersExcept(name) {
 		if (name !== BIBLE.SHOW_TOC) document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
