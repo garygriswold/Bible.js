@@ -117,14 +117,10 @@ AppInitializer.prototype.begin = function() {
 			console.log("INSIDE IS PLAYING: " + playing);
 			if (playing === "F") {
 				document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
-			} else {
-				document.body.removeEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
+			//} else {
+				//document.body.removeEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
 			}
 		});
-	}
-	function disableAudioPlayer() {
-		document.body.removeEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
-		document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);		
 	}
 	function startAudioHandler(event) {
 		document.body.removeEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
@@ -133,7 +129,7 @@ AppInitializer.prototype.begin = function() {
 		var ref = new Reference(event.detail.id);
 		window.AudioPlayer.present(ref.book, ref.chapter,
 			function() {
-				console.log("SUCESSFUL EXIT FROM AudioPlayer");
+				console.log("SUCCESSFUL EXIT FROM AudioPlayer");
 				document.body.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 				document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
 				document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);

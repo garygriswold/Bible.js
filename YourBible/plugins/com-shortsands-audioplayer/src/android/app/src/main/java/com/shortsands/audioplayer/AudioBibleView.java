@@ -361,6 +361,7 @@ class AudioBibleView {
             this.monitorSeekBar.isPlaying = false;
             this.monitorSeekBar = null;
         }
+        this.verseNum = 0;
         this.monitorSeekBar = new MonitorSeekBar(player);
         new Thread(this.monitorSeekBar).start();
     }
