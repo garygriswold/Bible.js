@@ -16,6 +16,7 @@
 		E44ED99D207810BA0003D90D /* AwsS3UnitTest2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44ED99C207810BA0003D90D /* AwsS3UnitTest2.swift */; };
 		E44ED9A2207812960003D90D /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44ED9A1207812960003D90D /* AWSCore.framework */; };
 		E44ED9A3207812960003D90D /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E44ED9A1207812960003D90D /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E44ED9A6207815E70003D90D /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44ED9A5207815E70003D90D /* Timer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,6 +44,7 @@
 		E44ED99A207810820003D90D /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E44ED99C207810BA0003D90D /* AwsS3UnitTest2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwsS3UnitTest2.swift; sourceTree = "<group>"; };
 		E44ED9A1207812960003D90D /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = AWS_Testharness/AWSCore.framework; sourceTree = "<group>"; };
+		E44ED9A5207815E70003D90D /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				E44ED99C207810BA0003D90D /* AwsS3UnitTest2.swift */,
+				E44ED9A5207815E70003D90D /* Timer.swift */,
 				E44ED98520780E060003D90D /* AppDelegate.swift */,
 				E44ED98720780E060003D90D /* ViewController.swift */,
 				E44ED98920780E060003D90D /* Main.storyboard */,
@@ -173,6 +176,7 @@
 				E44ED99D207810BA0003D90D /* AwsS3UnitTest2.swift in Sources */,
 				E44ED98820780E060003D90D /* ViewController.swift in Sources */,
 				E44ED98620780E060003D90D /* AppDelegate.swift in Sources */,
+				E44ED9A6207815E70003D90D /* Timer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

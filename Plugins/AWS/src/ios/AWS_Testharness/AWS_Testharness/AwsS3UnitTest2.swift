@@ -80,11 +80,11 @@ public class AwsS3UnitTest2 {
     
     func testDownloadFile() {
         let s3 = AwsS3.shared
-        print("Start WEB.db GET \(CFAbsoluteTimeGetCurrent())")
-        let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db.zip")
-        s3.downloadFile(s3Bucket: "shortsands", s3Key: "WEB.db.zip", filePath: filePath1,
+        let timer = Timer(place: "Start Download")
+        let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db")
+        s3.downloadFile(s3Bucket: "shortsands", s3Key: "WEB.db", filePath: filePath1,
                         complete: { err in print("I RECEIVED testDownloadFile CALLBACK \(String(describing: err))")
-                            print("End WEB.db GET \(CFAbsoluteTimeGetCurrent())")
+                            timer.duration(place: "END Download")
         })
         /*
          let filePath2 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/hello2.txt")
