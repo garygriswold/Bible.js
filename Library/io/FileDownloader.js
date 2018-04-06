@@ -7,8 +7,6 @@
 * 'LocalDatabase' is the file under Library where the database is expected.
 */
 function FileDownloader(database, locale, currVersion) {
-	//this.host = 'shortsands.com';
-	//this.host = 'cloudfront.net';
 	this.host = 's3.amazonaws.com';
 	this.database = database;
 	var parts = locale.split('-');
