@@ -17,7 +17,8 @@ public class AwsS3UnitTest2 {
         //testPresignedGET()
         //testUploadData()
         //testDownloadData()
-        testDownloadFile()
+        //testDownloadFile()
+        testUnzipFile()
         //testDownloadZipFile()
         //testZipUnzip()
         //testUploadFile()
@@ -91,6 +92,21 @@ public class AwsS3UnitTest2 {
          s3.downloadFile(s3Bucket: "shortsands", s3Key: "hello2", filePath: filePath2,
          complete: { err in print("I RECEIVED testDownloadFile CALLBACK \(String(describing: err))")})
          */
+    }
+    
+    func testUnzipFile() {
+        let timer = Timer(place: "Start Unzip WEB.db.zip")
+        let filePath = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db.zip")
+        let target = URL(fileURLWithPath: NSHomeDirectory() + "/Documents")
+        do {
+            try Zip.unzipFile(filePath, destination: target, overwrite: true, password: nil, progress: nil,
+                fileOutputHandler: { unzippedFile in
+                print("Unzipped file \(unzippedFile)")
+                timer.duration(place: "END Unzip")
+            })
+        } catch let err {
+            print("Caught Zip Error \(err)")
+        }
     }
     /*
      func testDownloadZipFile() {
