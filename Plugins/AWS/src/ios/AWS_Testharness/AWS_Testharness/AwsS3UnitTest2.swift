@@ -112,7 +112,7 @@ public class AwsS3UnitTest2 {
         let s3 = AwsS3.shared
         let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db")
         let timer = Timer(place: "Start Download and Unzip WEB.db.zip")
-        s3.downloadZipFile(s3Bucket: "shortsands", s3Key: "WEB.db.zip", filePath: filePath1,
+        s3.downloadZipFile(s3Bucket: "shortsands", s3Key: "WEB.db.zip", filePath: filePath1, progress: true,
             complete: { err in
                 print("I RECEIVED testDownloadZipFile CALLBACK \(String(describing: err))")
                 timer.duration(place: "END Zip Download and Unzip")

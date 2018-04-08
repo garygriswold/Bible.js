@@ -157,7 +157,7 @@ public class AwsS3 {
     * Download zip file and unzip it.  This method has been removed because it depends
     * upon the PKZip plugin and that has been removed from the build Feb 8, 2018 GNG.
     */
-    public func downloadZipFile(s3Bucket: String, s3Key: String, filePath: URL,
+    public func downloadZipFile(s3Bucket: String, s3Key: String, filePath: URL, progress: Bool,
                          complete: @escaping (_ error:Error?) -> Void) {
  
         let temporaryDirectory: URL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
@@ -166,6 +166,15 @@ public class AwsS3 {
         // Identify temp file for zip file download
         let tempZipURL = temporaryDirectory.appendingPathComponent(NSUUID().uuidString + ".zip")
         print("temp URL to store file \(tempZipURL.absoluteString)")
+        
+        var expression: AWSS3TransferUtilityDownloadExpression? = nil
+        if progress {
+            expression = AWSS3TransferUtilityDownloadExpression()
+            expression!.progressBlock = {(task, progress) in DispatchQueue.main.async(execute: {
+                let percent: Double = progress.fractionCompleted
+                print("PCT \(percent)")
+            })}
+        }
         
         let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) -> Void in
             DispatchQueue.main.async(execute: {
@@ -202,7 +211,7 @@ public class AwsS3 {
                 }
             })
         }
-        self.transfer.download(to: tempZipURL, bucket: s3Bucket, key: s3Key, expression: nil,
+        self.transfer.download(to: tempZipURL, bucket: s3Bucket, key: s3Key, expression: expression,
                                completionHandler: completionHandler)
         //.continueWith has been dropped, because it did not report errors
     }
