@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E431EC832079B81900017D22 /* ProgressCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E431EC822079B81900017D22 /* ProgressCircle.swift */; };
 		E44ED9AF20781FFE0003D90D /* libz.1.1.3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E44ED9AE20781FFE0003D90D /* libz.1.1.3.tbd */; };
 		E44ED9B9207859410003D90D /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = E44ED9B1207859410003D90D /* unzip.c */; };
 		E44ED9BA207859410003D90D /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = E44ED9B2207859410003D90D /* zip.c */; };
@@ -44,6 +45,7 @@
 /* Begin PBXFileReference section */
 		E41B44CD20772918009E0100 /* AWSTests2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSTests2.swift; sourceTree = "<group>"; };
 		E41B44CF20772918009E0100 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E431EC822079B81900017D22 /* ProgressCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCircle.swift; sourceTree = "<group>"; };
 		E44ED9AE20781FFE0003D90D /* libz.1.1.3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.1.3.tbd; path = usr/lib/libz.1.1.3.tbd; sourceTree = SDKROOT; };
 		E44ED9B1207859410003D90D /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
 		E44ED9B2207859410003D90D /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				E4D74E20202D670300097888 /* AwsS3.swift */,
 				E4D74E21202D670300097888 /* AwsS3Cache.swift */,
 				E4D74E22202D670300097888 /* Credentials.swift */,
+				E431EC822079B81900017D22 /* ProgressCircle.swift */,
 				E4D74E29202D671F00097888 /* SS_AWSS3PreSignedURL.h */,
 				E4D74E31202D6C7700097888 /* SS_AWSS3PreSignedURL.m */,
 				E4D74E28202D671F00097888 /* SS_AWSS3TransferUtility.h */,
@@ -286,6 +289,7 @@
 				E4D74E25202D670300097888 /* AwsS3Cache.swift in Sources */,
 				E44ED9C32078598F0003D90D /* Zip.swift in Sources */,
 				E4D74E24202D670300097888 /* AwsS3.swift in Sources */,
+				E431EC832079B81900017D22 /* ProgressCircle.swift in Sources */,
 				E44ED9BB207859410003D90D /* ioapi.c in Sources */,
 				E4D74E2A202D671F00097888 /* SS_AWSS3TransferUtility.m in Sources */,
 				E4D74E32202D6C7700097888 /* SS_AWSS3PreSignedURL.m in Sources */,

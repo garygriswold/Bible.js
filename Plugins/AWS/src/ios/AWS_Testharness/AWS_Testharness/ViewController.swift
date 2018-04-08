@@ -12,7 +12,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let awsS3UnitTest = AwsS3UnitTest2()
+        let awsS3UnitTest = AwsS3UnitTest2(view: self.view)
         awsS3UnitTest.testDriver()
     }
 

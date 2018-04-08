@@ -154,10 +154,10 @@ public class AwsS3 {
         //.continueWith has been dropped, because it did not report errors
     }   
     /**
-    * Download zip file and unzip it.  This method has been removed because it depends
-    * upon the PKZip plugin and that has been removed from the build Feb 8, 2018 GNG.
+    * Download zip file and unzip it.  When the optional view parameter is set a deterministic
+    * progress circle is displayed.
     */
-    public func downloadZipFile(s3Bucket: String, s3Key: String, filePath: URL, progress: Bool,
+    public func downloadZipFile(s3Bucket: String, s3Key: String, filePath: URL, view: UIView?,
                          complete: @escaping (_ error:Error?) -> Void) {
  
         let temporaryDirectory: URL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
@@ -168,11 +168,13 @@ public class AwsS3 {
         print("temp URL to store file \(tempZipURL.absoluteString)")
         
         var expression: AWSS3TransferUtilityDownloadExpression? = nil
-        if progress {
+        if let vue = view {
+            let progressCircle = ProgressCircle()
+            progressCircle.addToParentAndCenter(view: vue)
             expression = AWSS3TransferUtilityDownloadExpression()
             expression!.progressBlock = {(task, progress) in DispatchQueue.main.async(execute: {
                 let percent: Double = progress.fractionCompleted
-                print("PCT \(percent)")
+                progressCircle.progress = CGFloat(percent)
             })}
         }
         
