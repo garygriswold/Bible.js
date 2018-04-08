@@ -157,7 +157,6 @@ public class AwsS3 {
     * Download zip file and unzip it.  This method has been removed because it depends
     * upon the PKZip plugin and that has been removed from the build Feb 8, 2018 GNG.
     */
-/*
     public func downloadZipFile(s3Bucket: String, s3Key: String, filePath: URL,
                          complete: @escaping (_ error:Error?) -> Void) {
  
@@ -176,23 +175,22 @@ public class AwsS3 {
                 } else {
                     print("Download SUCCESS in s3.downloadZipFile \(s3Bucket) \(s3Key)")
                     do {
+                        var unzippedURL: URL = URL(fileURLWithPath: "")
                         // unzip zip file
-                        try PKZipper.unzipFile(tempZipURL,
+                        try Zip.unzipFile(tempZipURL,
                             destination: temporaryDirectory,
                             overwrite: true,
                             password: nil,
-                            progress: nil
+                            progress: nil,
+                            fileOutputHandler: { unzippedFile in
+                                print("Unipped File \(unzippedFile)")
+                                unzippedURL = URL(fileURLWithPath: unzippedFile.absoluteString)
+                            }
                         )
-                        
-                        // identify the unzipped file
-						let filename = filePath.lastPathComponent
-                        let unzippedURL = temporaryDirectory.appendingPathComponent(filename)
-						print("location of unzipped file \(unzippedURL)")
-						
-						// remove unzipped file if it already exists
+                        // remove unzipped file if it already exists
                         self.removeItemNoThrow(at: filePath)
 			
-						// move unzipped file to destination
+                        // move unzipped file to destination
                         try FileManager.default.moveItem(at: unzippedURL, to: filePath)
                         print("SUCCESS in s3.downloadZipFile \(s3Bucket) \(s3Key)")
                         complete(nil)
@@ -208,7 +206,7 @@ public class AwsS3 {
                                completionHandler: completionHandler)
         //.continueWith has been dropped, because it did not report errors
     }
-*/
+    
     private func removeItemNoThrow(at: URL) -> Void {
         do {
             try FileManager.default.removeItem(at: at)

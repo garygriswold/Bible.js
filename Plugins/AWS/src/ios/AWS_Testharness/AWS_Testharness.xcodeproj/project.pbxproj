@@ -12,11 +12,12 @@
 		E44ED98B20780E060003D90D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E44ED98920780E060003D90D /* Main.storyboard */; };
 		E44ED98D20780E060003D90D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E44ED98C20780E060003D90D /* Assets.xcassets */; };
 		E44ED99020780E060003D90D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E44ED98E20780E060003D90D /* LaunchScreen.storyboard */; };
-		E44ED99B207810820003D90D /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44ED99A207810820003D90D /* AWS.framework */; };
 		E44ED99D207810BA0003D90D /* AwsS3UnitTest2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44ED99C207810BA0003D90D /* AwsS3UnitTest2.swift */; };
 		E44ED9A2207812960003D90D /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44ED9A1207812960003D90D /* AWSCore.framework */; };
 		E44ED9A3207812960003D90D /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E44ED9A1207812960003D90D /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E44ED9A6207815E70003D90D /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44ED9A5207815E70003D90D /* Timer.swift */; };
+		E4ABA8F62079950B005DF747 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44ED99A207810820003D90D /* AWS.framework */; };
+		E4ABA8F72079950B005DF747 /* AWS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E44ED99A207810820003D90D /* AWS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,6 +27,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				E4ABA8F72079950B005DF747 /* AWS.framework in Embed Frameworks */,
 				E44ED9A3207812960003D90D /* AWSCore.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -52,7 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E44ED99B207810820003D90D /* AWS.framework in Frameworks */,
+				E4ABA8F62079950B005DF747 /* AWS.framework in Frameworks */,
 				E44ED9A2207812960003D90D /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

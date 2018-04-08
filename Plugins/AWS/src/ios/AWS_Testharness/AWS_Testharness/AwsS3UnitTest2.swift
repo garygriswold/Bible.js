@@ -18,9 +18,8 @@ public class AwsS3UnitTest2 {
         //testUploadData()
         //testDownloadData()
         //testDownloadFile()
-        testUnzipFile()
-        //testDownloadZipFile()
-        //testZipUnzip()
+        //testUnzipFile()
+        testDownloadZipFile()
         //testUploadFile()
     }
     
@@ -82,8 +81,8 @@ public class AwsS3UnitTest2 {
     func testDownloadFile() {
         let s3 = AwsS3.shared
         let timer = Timer(place: "Start Download")
-        let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db")
-        s3.downloadFile(s3Bucket: "shortsands", s3Key: "WEB.db", filePath: filePath1,
+        let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db.zip")
+        s3.downloadFile(s3Bucket: "shortsands", s3Key: "WEB.db.zip", filePath: filePath1,
                         complete: { err in print("I RECEIVED testDownloadFile CALLBACK \(String(describing: err))")
                             timer.duration(place: "END Download")
         })
@@ -108,14 +107,18 @@ public class AwsS3UnitTest2 {
             print("Caught Zip Error \(err)")
         }
     }
-    /*
-     func testDownloadZipFile() {
-     let s3 = AwsS3.shared
-     let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db")
-     s3.downloadZipFile(s3Bucket: "shortsands", s3Key: "WEB.db.zip", filePath: filePath1,
-     complete: { err in print("I RECEIVED testDownloadZipFile CALLBACK \(String(describing: err))")})
-     }
-     */
+    
+    func testDownloadZipFile() {
+        let s3 = AwsS3.shared
+        let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db")
+        let timer = Timer(place: "Start Download and Unzip WEB.db.zip")
+        s3.downloadZipFile(s3Bucket: "shortsands", s3Key: "WEB.db.zip", filePath: filePath1,
+            complete: { err in
+                print("I RECEIVED testDownloadZipFile CALLBACK \(String(describing: err))")
+                timer.duration(place: "END Zip Download and Unzip")
+        })
+    }
+    
     func testUploadFile() {
         let s3 = AwsS3.shared
         let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/MichaelMark.jpg")
@@ -132,15 +135,6 @@ public class AwsS3UnitTest2 {
         s3.uploadFile(s3Bucket: "shortsands", s3Key: "uploadFile3", filePath: filePath3,
                       contentType: "plain/text",
                       complete: { err in print("RESULT testUploadFile CALLBACK Error: \(String(describing: err))")})
-    }
-    
-    func testZipUnzip() {
-        //        let s3 = AwsS3.shared
-        //        s3.zip(sourceFile: "/Documents/ZIPTEST.db", targetFile: "/Documents/ZIPTEST.db.zip")
-        //        s3.unzip(sourceFile: "/Documents/ZIPTEST.db.zip", targetFile: "/Documents/ZIPTEST_OUT.db")
-        
-        //        let done = s3.unzip(sourceFile: "/Documents/ZIPTEST2.db.zip", targetDir: "/tmp/")
-        //        print("UNZIP /Documents/ZIPTEST2.db.zip is successful? \(done)")
     }
 }
 
