@@ -26,7 +26,7 @@ public class ProgressCircle : UIView {
     func configure() {
         progress = 0.0
         circlePathLayer.frame = bounds
-        circlePathLayer.lineWidth = 2
+        circlePathLayer.lineWidth = 4
         circlePathLayer.fillColor = UIColor.clear.cgColor
         circlePathLayer.strokeColor = UIColor.red.cgColor
         layer.addSublayer(circlePathLayer)
@@ -57,6 +57,14 @@ public class ProgressCircle : UIView {
                 circlePathLayer.strokeEnd = newValue
             }
         }
+    }
+    
+    func remove() {
+        UIView.animate(withDuration: 0.7, delay: 0.3,
+                       options: UIViewAnimationOptions.curveLinear,
+                       animations: { self.layer.opacity = 0 },
+                       completion: { (finished) in self.removeFromSuperview() }
+        )
     }
     
     func circleFrame() -> CGRect {

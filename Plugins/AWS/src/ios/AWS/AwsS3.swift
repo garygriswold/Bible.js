@@ -172,9 +172,13 @@ public class AwsS3 {
             let progressCircle = ProgressCircle()
             progressCircle.addToParentAndCenter(view: vue)
             expression = AWSS3TransferUtilityDownloadExpression()
+            expression!.setValue("en_Griswold_Header", forRequestHeader: "X-Locale_Header")
+            expression!.setValue("en_Griswold_Param", forRequestParameter: "X-Locale_Param")
             expression!.progressBlock = {(task, progress) in DispatchQueue.main.async(execute: {
-                let percent: Double = progress.fractionCompleted
-                progressCircle.progress = CGFloat(percent)
+                progressCircle.progress = CGFloat(progress.fractionCompleted)
+                if progress.isFinished {
+                    progressCircle.remove()
+                }
             })}
         }
         
