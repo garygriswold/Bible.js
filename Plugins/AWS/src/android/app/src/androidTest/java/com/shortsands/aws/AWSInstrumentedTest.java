@@ -68,7 +68,7 @@ public class AWSInstrumentedTest {
             latch.countDown();
         }
     }
-    @Test
+    //@Test
     public void downloadText() throws Exception {
         new DownloadTextTest().doTest();
     }
@@ -101,28 +101,31 @@ public class AWSInstrumentedTest {
     class DownloadFileTest extends DownloadFileListener {
         DownloadFileListener listener = this;
         CountDownLatch latch = new CountDownLatch(1);
+        long startTime = System.currentTimeMillis();
         public void doTest() {
             File root = InstrumentationRegistry.getTargetContext().getFilesDir();
-            File file1 = new File(root, "EmmaLooseTooth.mp3");
+            File file1 = new File(root, "WEB.db.zip");
             AwsS3 s3 = AwsS3.shared();
-            s3.downloadFile("shortsands", "EmmaFirstLostTooth.mp3", file1, listener);
+            s3.downloadFile("shortsands", "WEB.db.zip", file1, listener);
             try { latch.await(); } catch (InterruptedException ex) { Log.e(TAG, "Interrupted Exception"); }
         }
         public void onError(int id, Exception e) {
             super.onError(id, e);
             Log.e(TAG, "Error: " + e.toString() + " on " + this.file.getAbsolutePath());
             Log.d(TAG, "RESULTS |" + this.results + "|");
-            assertEquals("DownloadFileTest", 533651, this.results.length());
+            //assertEquals("DownloadFileTest", 22415360, this.results.length()); // WEB.db
+            assertEquals("DownloadFileTest", 6474887, this.results.length()); // WEB.db.zip
             latch.countDown();
         }
         protected void onComplete(int id) {
             super.onComplete(id);
-            Log.d(TAG, "onComplete ID " + id);
-            assertEquals("DownloadFileTest", 533651, this.results.length());
+            Log.d(TAG, "onComplete ID " + id + " " + (System.currentTimeMillis() - startTime));
+            //assertEquals("DownloadFileTest", 22415360, this.results.length()); // WEB.db
+            assertEquals("DownloadFileTest", 6474887, this.results.length()); // WEB.db.zip
             latch.countDown();
         }
     }
-    //@Test
+    @Test
     public void downloadFile() throws Exception {
         new DownloadFileTest().doTest();
     }
