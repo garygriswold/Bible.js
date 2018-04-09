@@ -167,14 +167,12 @@ public class AwsS3 {
         let tempZipURL = temporaryDirectory.appendingPathComponent(NSUUID().uuidString + ".zip")
         print("temp URL to store file \(tempZipURL.absoluteString)")
         
-        var expression: AWSS3TransferUtilityDownloadExpression? = nil
+        let expression = AWSS3TransferUtilityDownloadExpression()
+        expression.setValue(self.getLocaleParameter(), forRequestParameter: "X-Locale")
         if let vue = view {
             let progressCircle = ProgressCircle()
             progressCircle.addToParentAndCenter(view: vue)
-            expression = AWSS3TransferUtilityDownloadExpression()
-            expression!.setValue("en_Griswold_Header", forRequestHeader: "X-Locale_Header")
-            expression!.setValue("en_Griswold_Param", forRequestParameter: "X-Locale_Param")
-            expression!.progressBlock = {(task, progress) in DispatchQueue.main.async(execute: {
+            expression.progressBlock = {(task, progress) in DispatchQueue.main.async(execute: {
                 progressCircle.progress = CGFloat(progress.fractionCompleted)
                 if progress.isFinished {
                     progressCircle.remove()
@@ -315,5 +313,9 @@ public class AwsS3 {
             print("ERROR in s3.uploadFile, while reading file \(s3Bucket) \(s3Key) \(cotError.localizedDescription)")
             complete(cotError)
         }
+    }
+    
+    private func getLocaleParameter() -> String {
+        return Locale.preferredLanguages.joined(separator: ":") + "," + Locale.current.identifier
     }
 }
