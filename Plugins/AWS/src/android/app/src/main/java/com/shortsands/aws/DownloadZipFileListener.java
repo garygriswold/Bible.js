@@ -2,8 +2,10 @@ package com.shortsands.aws;
 
 import android.util.Log;
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import com.shortsands.io.FileManager;
-import com.shortsands.zip.PKZipper;
+import com.shortsands.io.Zip;
 /**
  * Created by garygriswold on 5/22/17.
  */
@@ -32,22 +34,25 @@ public class DownloadZipFileListener extends AwsS3AbstractListener {
     @Override
     protected void onComplete(int id) {
         super.onComplete(id);
-        File tmpDir = null;
         File tmpUnzipped = null;
         try {
             Log.d(TAG, "download size " + this.file.length());
-            tmpDir = this.file.getParentFile();
+            File tmpDir = this.file.getParentFile();
             Log.d(TAG, "Unzip to " + tmpDir.getAbsolutePath());
-            PKZipper.unzipFile(this.file, tmpDir);
-            tmpUnzipped = new File(tmpDir, this.file.getName());
-            Log.d(TAG, "Find file to move " + tmpUnzipped.length() + "  " + tmpUnzipped.getAbsolutePath());
-            if (this.unzipped.getAbsolutePath().indexOf("storage") > -1) { // hack test for external
-                FileManager.copy(tmpUnzipped, this.unzipped);
+            List<File> unzipResults = Zip.unzipFile(this.file, tmpDir);
+            if (unzipResults.size() >= 1) {
+                tmpUnzipped = unzipResults.get(0);
+                Log.d(TAG, "Find file to move " + tmpUnzipped.length() + "  " + tmpUnzipped.getAbsolutePath());
+                if (this.unzipped.getAbsolutePath().indexOf("storage") > -1) { // hack test for external
+                    FileManager.copy(tmpUnzipped, this.unzipped);
+                } else {
+                    tmpUnzipped.renameTo(this.unzipped);
+                }
+                this.results = this.unzipped;
+                Log.d(TAG, "Success: " + this.results.length() + "  " + this.results.getAbsolutePath());
             } else {
-                tmpUnzipped.renameTo(this.unzipped);
+                onError(id, new IOException("No results from unzip after download."));
             }
-            this.results = this.unzipped;
-            Log.d(TAG, "Success: " + this.results.length() + "  " + this.results.getAbsolutePath());
         } catch (Exception err) {
             Log.e(TAG, "Error in DownloadZipFileListener " + err.toString());
             onError(id, err);

@@ -22,7 +22,7 @@ public class Zip {
     private static String TAG = "Zip";
 
     public static List<File> unzipFile(File zipFile, File targetDirectory) throws IOException {
-        final int BUFFER_LEN = 32768;
+        final int BUFFER_LEN = 8192;
         ArrayList<File> files = new ArrayList<File>();
         BufferedOutputStream output = null;
         BufferedInputStream input = null;
