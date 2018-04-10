@@ -6,13 +6,17 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
+import com.shortsands.io.Zip;
+
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.*;
@@ -125,9 +129,26 @@ public class AWSInstrumentedTest {
             latch.countDown();
         }
     }
-    @Test
+    //@Test
     public void downloadFile() throws Exception {
         new DownloadFileTest().doTest();
+    }
+    @Test
+    public void unzipFile() {
+        // This test assumes there is a WEB.db.zip file present on the device
+        long startTime = System.currentTimeMillis();
+        File root = InstrumentationRegistry.getTargetContext().getFilesDir();
+        File zipFile = new File(root, "WEB.db.zip");
+        try {
+            List<File> results = Zip.unzipFile(zipFile, root);
+            Log.d(TAG, "Unzip completed in MS: " + (System.currentTimeMillis() - startTime));
+            assertEquals("There should be one file in zip", 1, results.size());
+            File out = results.get(0);
+            assertEquals("UnzipFileTest", 22415360, out.length());
+        } catch(IOException io) {
+            Log.d(TAG, "UnZip Exception " + io.toString());
+            assertTrue("There should not be an exception", false);
+        }
     }
     /*
     class DownloadZipFileTest extends DownloadZipFileListener {
