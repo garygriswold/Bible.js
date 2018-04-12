@@ -12,7 +12,7 @@ rm -f ${RELSE_ROOT}/${JAR}
 
 # Copy Jars to Frameworks
 cp app/build/intermediates/bundles/debug/classes.jar ${DEBUG_ROOT}/${JAR}
-cp app/build/intermediates/bundles/default/classes.jar ${RELSE_ROOT}/${JAR}
+cp app/build/intermediates/bundles/release/classes.jar ${RELSE_ROOT}/${JAR}
 
 # Copy Debug Jar to this project plugin 
 cp ${DEBUG_ROOT}/${JAR} plugin 
@@ -21,5 +21,5 @@ cp ${DEBUG_ROOT}/${JAR} plugin
 cp ${DEBUG_ROOT}/${JAR} ../../../VideoPlayer/src/android/app/libs/
 
 # Copy Debug Jar to AudioPlayer project libs
-cp ${DEBUG_ROOT}/${JAR} ../../../AudioPlayer/src/android_AudioPlayer/app/libs/
+cp ${DEBUG_ROOT}/${JAR} ../../../AudioPlayer/src/android/app/libs/
 
