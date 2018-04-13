@@ -1,6 +1,12 @@
 NOTES ON Use of AWS
 GNG 9/8/2017
 
+After making changes to this module.  You much run build_framework.sh in the project directory in order
+to promote those changes to other modules.
+
+But it is imported to the Cordova App as a plugin that picks up the source files, not the .jar
+
+
 When using AWS.jar be sure to put the necessary entries into the AndroidManifest.xml file.
 The includes:
 1. INTERNET permission

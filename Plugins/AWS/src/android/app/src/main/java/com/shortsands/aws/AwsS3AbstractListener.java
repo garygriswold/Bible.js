@@ -26,12 +26,9 @@ public class AwsS3AbstractListener implements TransferListener {
         this.progressCircle = new ProgressCircle(activity);
     }
     public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-        Log.d(TAG, "onProgress " + Integer.toString(id));
+        Log.d(TAG, "onProgress " + Integer.toString(id) + "  " + bytesCurrent + "  " + bytesTotal + "  " + System.currentTimeMillis());
         if (this.progressCircle != null) {
-            int total = (bytesTotal < (long) Integer.MAX_VALUE) ? (int) bytesTotal : (int) (bytesTotal / 1000L);
-            this.progressCircle.setMax(total);
-            int current = (bytesCurrent < (long) Integer.MAX_VALUE) ? (int) bytesCurrent : (int) (bytesCurrent / 1000L);
-            this.progressCircle.setProgress(current);
+            this.progressCircle.setProgress(bytesCurrent, bytesTotal);
         }
     }
     public void onStateChanged(int id, TransferState state) {
