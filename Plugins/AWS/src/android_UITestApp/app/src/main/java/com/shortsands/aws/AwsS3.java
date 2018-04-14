@@ -62,42 +62,13 @@ public class AwsS3 {
             region = RegionUtils.getRegion("us-east-1");
         }
         ClientConfiguration config = new ClientConfiguration();
-        config.setUserAgent(this.generateUserAgent());
+        config.setUserAgent(this.getUserAgent());
         this.amazonS3 = new AmazonS3Client(Credentials.AWS_BIBLE_APP, config);
         this.amazonS3.setRegion(region);
         S3ClientOptions options = new S3ClientOptions();
         options.withPathStyleAccess(true);
 		this.amazonS3.setS3ClientOptions(options);
         this.transferUtility = new TransferUtility(this.amazonS3, context);
-    }
-    private String generateUserAgent() {
-        StringBuilder result = new StringBuilder();
-        result.append("v1");
-        result.append(":");
-        String locale = Locale.getDefault().toString();
-        result.append(locale);
-        result.append(":");
-        result.append(locale); // This should be prefLang list, but it does not exist on android.
-        result.append(":");
-        result.append(Build.MANUFACTURER);
-        result.append(":");
-        result.append(Build.MODEL);
-        result.append(":");
-        result.append("android");
-        result.append(":");
-        result.append(Build.VERSION.RELEASE);
-        result.append(":");
-        try {
-            PackageInfo pInfo = AwsS3.context.getPackageManager().getPackageInfo(AwsS3.context.getPackageName(), 0);
-            result.append(pInfo.packageName);
-            result.append(":");
-            result.append(pInfo.versionName);
-        } catch(NameNotFoundException nnfe) {
-            result.append("unknown");
-            result.append(":");
-            result.append(nnfe.toString());
-        }
-        return(result.toString());
     }
     public String echo3(String msg) {
 	    return(msg);
@@ -251,5 +222,34 @@ public class AwsS3 {
         metadata.setContentType(contentType);
         TransferObserver observer = this.transferUtility.upload(s3Bucket, s3Key, file, metadata);
         observer.setTransferListener(listener); // why here
+    }
+    private String getUserAgent() {
+        StringBuilder result = new StringBuilder();
+        result.append("v1");
+        result.append(":");
+        String locale = Locale.getDefault().toString();
+        result.append(locale);
+        result.append(":");
+        result.append(locale); // This should be prefLang list, but it does not exist on android.
+        result.append(":");
+        result.append(Build.MANUFACTURER);
+        result.append(":");
+        result.append(Build.MODEL);
+        result.append(":");
+        result.append("android");
+        result.append(":");
+        result.append(Build.VERSION.RELEASE);
+        result.append(":");
+        try {
+            PackageInfo pInfo = AwsS3.context.getPackageManager().getPackageInfo(AwsS3.context.getPackageName(), 0);
+            result.append(pInfo.packageName);
+            result.append(":");
+            result.append(pInfo.versionName);
+        } catch(NameNotFoundException nnfe) {
+            result.append("unknown");
+            result.append(":");
+            result.append(nnfe.toString());
+        }
+        return(result.toString());
     }
 }

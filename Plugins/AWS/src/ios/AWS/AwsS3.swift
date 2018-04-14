@@ -27,6 +27,7 @@ public class AwsS3 {
     
     private let endpoint: AWSEndpoint
     private let transfer: AWSS3TransferUtility
+    private var userAgent: String? = nil
     
     private init(region: String) {
         var regionType = region.aws_regionTypeValue()
@@ -168,7 +169,7 @@ public class AwsS3 {
         print("temp URL to store file \(tempZipURL.absoluteString)")
         
         let expression = AWSS3TransferUtilityDownloadExpression()
-        expression.setValue(self.getLocaleParameter(), forRequestParameter: "X-Locale")
+        expression.setValue(self.getUserAgent(), forRequestHeader: "User-Agent")
         if let vue = view {
             let progressCircle = ProgressCircle()
             progressCircle.addToParentAndCenter(view: vue)
@@ -315,7 +316,22 @@ public class AwsS3 {
         }
     }
     
-    private func getLocaleParameter() -> String {
-        return Locale.preferredLanguages.joined(separator: ":") + "," + Locale.current.identifier
+    private func getUserAgent() -> String {
+        if (self.userAgent == nil) {
+            var result: [String] = []
+            result.append("v1")
+            result.append(Locale.current.identifier)
+            result.append(Locale.preferredLanguages.joined(separator: ","))
+            let device = UIDevice.current
+            result.append("Apple")
+            result.append(device.model)
+            result.append("ios")
+            result.append(device.systemVersion)
+            let info = Bundle.main.infoDictionary
+            result.append(info?["CFBundleIdentifier"] as? String ?? "")
+            result.append(info?["CFBundleShortVersionString"] as? String ?? "")
+            self.userAgent = result.joined(separator: ":")
+        }
+        return self.userAgent!
     }
 }
