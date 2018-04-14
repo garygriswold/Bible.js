@@ -1,27 +1,40 @@
 /**
-* This class encapsulates the Cordova FileTransfer plugin for file download
-* It is a simple plugin, but encapsulated here in order to make it easy to change
-* the implementation.
-*
-* 'persistent' will store the file in 'Documents' in Android and 'Library' in iOS
-* 'LocalDatabase' is the file under Library where the database is expected.
+* This revised FileDownloader uses the AWS plugin.
+* Gary Griswold, April 2018
 */
-function FileDownloader(database, locale, currVersion) {
-	this.host = 's3.amazonaws.com';
+function FileDownloader(database, locale) {//, currVersion) {
+	//this.host = 's3.amazonaws.com';
 	this.database = database;
 	var parts = locale.split('-');
 	this.countryCode = parts.pop();
 	console.log('Country Code', this.countryCode);
-	this.currVersion = currVersion;
-	if (deviceSettings.platform() === 'ios') {
-		this.downloadPath = cordova.file.tempDirectory;
-		this.finalPath = cordova.file.applicationStorageDirectory + 'Library/LocalDatabase/';
-	} else {
-		this.downloadPath = cordova.file.cacheDirectory;
-		this.finalPath = cordova.file.applicationStorageDirectory + 'databases/';
-	}
+	//this.currVersion = currVersion;
+	//if (deviceSettings.platform() === 'ios') {
+	//	//this.downloadPath = cordova.file.tempDirectory;
+	//	//this.finalPath = cordova.file.applicationStorageDirectory + 'Library/LocalDatabase/';
+	//	this.finalPath = 'Library/LocalDatabase/';
+	//} else {
+	//	//this.downloadPath = cordova.file.cacheDirectory;
+	//	//this.finalPath = cordova.file.applicationStorageDirectory + 'databases/';
+	//	this.finalPath = 'databases/';
+	//}
 	Object.seal(this);
 }
+FileDownloader.prototype.download = function(bibleVersion, callback) {
+	//var that = this;
+	//var tempPath = this.downloadPath + bibleVersion + '.zip';
+	this.database.selectBucketName(this.countryCode, function(s3Region, s3Bucket) {
+		console.log("SELECTED REGION: " + s3Region);
+		var s3Key = bibleVersion + ".db.zip";
+		var filePath = bibleVersion + ".db";
+		AWS.downloadZipFile(s3Bucket, s3Key, filePath, function(error) {
+			if (error == null) console.log("Download Success");
+			else console.log("Download Failed");
+			callback(error);
+		});
+	}
+};
+/*
 FileDownloader.prototype.download = function(bibleVersion, callback) {
 	if (this.host.indexOf('shortsands') > -1) {
 		this._downloadShortSands(bibleVersion, callback);
@@ -149,3 +162,4 @@ FileDownloader.prototype.clearTempDir = function() {
 		}
 	}
 };
+*/

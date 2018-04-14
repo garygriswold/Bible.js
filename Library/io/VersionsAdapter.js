@@ -122,6 +122,7 @@ VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
 /**
 * deprecated, the URL Signature is not present in Version table (Dec 16, 2016)
 */
+/*
 VersionsAdapter.prototype.selectURLCloudfront = function(versionFile, callback) {
 	var statement = 'SELECT URLSignature FROM Version WHERE filename=?';
 	this.database.select(statement, [versionFile], function(results) {
@@ -134,6 +135,7 @@ VersionsAdapter.prototype.selectURLCloudfront = function(versionFile, callback) 
 		}
 	});
 };
+*/
 VersionsAdapter.prototype.selectAWSRegion = function(countryCode, callback) {
 	var that = this;
 	var statement = 'SELECT awsRegion FROM Region WHERE countryCode=?';
@@ -146,6 +148,19 @@ VersionsAdapter.prototype.selectAWSRegion = function(countryCode, callback) {
 		}
 	});
 };
+VersionsAdapter.prototype.selectBucketName = function(regionCode, callback) {
+	var that = this;
+	var statement = 'SELECT r.awsRegion, a.s3TextBucket FROM Region r, AWSRegion a WHERE r.awsRegion = a.awsRegion AND countryCode=?';
+	this.database.select(statement, [regionCode], function(results) {
+		if (results instanceof IOError || results.rows.length === 0) {
+			callback('us-east-1', 'shortsands-na-va');
+		} else {
+			var row = results.rows.item(0);
+			callback(row.awsRegion, row.s3TextBucket);
+		}
+	});
+};
+/*
 VersionsAdapter.prototype.selectURLS3 = function(versionFile, countryCode, callback) {
 	var that = this;
 	var statement = 'SELECT signedURL FROM DownloadURL d JOIN Region r ON r.awsRegion=d.awsRegion WHERE d.filename=? AND r.countryCode=?';
@@ -165,6 +180,7 @@ VersionsAdapter.prototype.selectURLS3 = function(versionFile, countryCode, callb
 		}
 	});
 };
+*/
 VersionsAdapter.prototype.selectInstalledBibleVersions = function(callback) {
 	var versList = [];
 	var now = new Date().toISOString();
