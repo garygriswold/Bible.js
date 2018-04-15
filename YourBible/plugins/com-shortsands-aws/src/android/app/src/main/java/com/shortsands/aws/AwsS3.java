@@ -4,13 +4,15 @@ package com.shortsands.aws;
  * Created by garygriswold on 5/19/17.
  */
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Build;
 import android.util.Log;
 
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.RegionUtils;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 
@@ -25,6 +27,7 @@ import com.shortsands.io.FileManager;
 import java.io.File;
 import java.net.URL;
 import java.util.Date;
+import java.util.Locale;
 
 public class AwsS3 {
 
@@ -58,12 +61,43 @@ public class AwsS3 {
         if (region == null) {
             region = RegionUtils.getRegion("us-east-1");
         }
-        this.amazonS3 = new AmazonS3Client(Credentials.AWS_BIBLE_APP);
+        ClientConfiguration config = new ClientConfiguration();
+        config.setUserAgent(this.generateUserAgent());
+        this.amazonS3 = new AmazonS3Client(Credentials.AWS_BIBLE_APP, config);
         this.amazonS3.setRegion(region);
         S3ClientOptions options = new S3ClientOptions();
         options.withPathStyleAccess(true);
 		this.amazonS3.setS3ClientOptions(options);
         this.transferUtility = new TransferUtility(this.amazonS3, context);
+    }
+    private String generateUserAgent() {
+        StringBuilder result = new StringBuilder();
+        result.append("v1");
+        result.append(":");
+        String locale = Locale.getDefault().toString();
+        result.append(locale);
+        result.append(":");
+        result.append(locale); // This should be prefLang list, but it does not exist on android.
+        result.append(":");
+        result.append(Build.MANUFACTURER);
+        result.append(":");
+        result.append(Build.MODEL);
+        result.append(":");
+        result.append("android");
+        result.append(":");
+        result.append(Build.VERSION.RELEASE);
+        result.append(":");
+        try {
+            PackageInfo pInfo = AwsS3.context.getPackageManager().getPackageInfo(AwsS3.context.getPackageName(), 0);
+            result.append(pInfo.packageName);
+            result.append(":");
+            result.append(pInfo.versionName);
+        } catch(NameNotFoundException nnfe) {
+            result.append("unknown");
+            result.append(":");
+            result.append(nnfe.toString());
+        }
+        return(result.toString());
     }
     public String echo3(String msg) {
 	    return(msg);
@@ -112,7 +146,7 @@ public class AwsS3 {
             System.out.println("temp file created " + tempFile.getAbsolutePath());
             listener.setFile(tempFile);
             TransferObserver observer = this.transferUtility.download(s3Bucket, s3Key, tempFile);
-            observer.setTransferListener(listener);
+            observer.setTransferListener(listener); // why here
         } catch(Exception err) {
             Log.e(TAG, "Error in downloadText " + s3Bucket + "." + s3Key + "  " + err.toString());
         }
@@ -126,7 +160,7 @@ public class AwsS3 {
             tempFile = File.createTempFile("downloadData", null);
             listener.setFile(tempFile);
             TransferObserver observer = this.transferUtility.download(s3Bucket, s3Key, tempFile);
-            observer.setTransferListener(listener);
+            observer.setTransferListener(listener); // why here
         } catch(Exception err) {
             Log.e(TAG, "Error in downloadData " + s3Bucket + "." + s3Key + "  " + err.toString());
         }
@@ -137,29 +171,24 @@ public class AwsS3 {
     public void downloadFile(String s3Bucket, String s3Key, File file, DownloadFileListener listener) {
 	    listener.setFile(file);
         TransferObserver observer = this.transferUtility.download(s3Bucket, s3Key, file);
-        observer.setTransferListener(listener);
+        observer.setTransferListener(listener); // why here
     }
     /**
      * Download zip file that contains one file, unzips and extracts file.
      * If there is ever a need to download and unzip an archive a separate method should be written
      * rather than modify this one.
-     * GNG NOTE Feb 9, 2018.  This method is removed.  It will not work, because the PKZip plugin
-     * has been removed from the build.  See PKZip/README for more information.
      */
-    /*
     public void downloadZipFile(String s3Bucket, String s3Key, File file, DownloadZipFileListener listener) {
         File zipFile = null;
         try {
 	        listener.setFile(file);
             zipFile = File.createTempFile("downloadZip", "");
             listener.setZipFile(zipFile);
-            TransferObserver observer = this.transferUtility.download(s3Bucket, s3Key, zipFile);
-            observer.setTransferListener(listener);
+            TransferObserver observer = this.transferUtility.download(s3Bucket, s3Key, zipFile, listener);
         } catch (Exception err) {
             Log.e(TAG, "Error in downloadZipFile " + err.toString());
         }
     }
-    */
     /////////////////////////////////////////////////////////////////////////
     // Upload Functions
     /////////////////////////////////////////////////////////////////////////
@@ -221,6 +250,6 @@ public class AwsS3 {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(contentType);
         TransferObserver observer = this.transferUtility.upload(s3Bucket, s3Key, file, metadata);
-        observer.setTransferListener(listener);
+        observer.setTransferListener(listener); // why here
     }
 }

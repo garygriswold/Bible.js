@@ -79,10 +79,10 @@ exports.downloadFile = function(s3Bucket, s3Key, filePath, callback) {
 
 exports.downloadZipFile = function(s3Bucket, s3Key, filePath, callback) {
     exec(function() {
-	    callback(true);
+	    callback(null);
 	},  function(error) {
 		AWS.logError("downloadZipFile", error, s3Bucket, s3Key, filePath);
-	    callback(false);			    
+	    callback(error);			    
     }, "AWS", "downloadZipFile", [s3Bucket, s3Key, filePath]);
 };
 

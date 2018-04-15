@@ -27,6 +27,7 @@ public class AwsS3 {
     
     private let endpoint: AWSEndpoint
     private let transfer: AWSS3TransferUtility
+    private var userAgent: String? = nil
     
     private init(region: String) {
         var regionType = region.aws_regionTypeValue()
@@ -154,11 +155,10 @@ public class AwsS3 {
         //.continueWith has been dropped, because it did not report errors
     }   
     /**
-    * Download zip file and unzip it.  This method has been removed because it depends
-    * upon the PKZip plugin and that has been removed from the build Feb 8, 2018 GNG.
+    * Download zip file and unzip it.  When the optional view parameter is set a deterministic
+    * progress circle is displayed.
     */
-/*
-    public func downloadZipFile(s3Bucket: String, s3Key: String, filePath: URL,
+    public func downloadZipFile(s3Bucket: String, s3Key: String, filePath: URL, view: UIView?,
                          complete: @escaping (_ error:Error?) -> Void) {
  
         let temporaryDirectory: URL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
@@ -168,6 +168,19 @@ public class AwsS3 {
         let tempZipURL = temporaryDirectory.appendingPathComponent(NSUUID().uuidString + ".zip")
         print("temp URL to store file \(tempZipURL.absoluteString)")
         
+        let expression = AWSS3TransferUtilityDownloadExpression()
+        expression.setValue(self.getUserAgent(), forRequestHeader: "User-Agent")
+        if let vue = view {
+            let progressCircle = ProgressCircle()
+            progressCircle.addToParentAndCenter(view: vue)
+            expression.progressBlock = {(task, progress) in DispatchQueue.main.async(execute: {
+                progressCircle.progress = CGFloat(progress.fractionCompleted)
+                if progress.isFinished {
+                    progressCircle.remove()
+                }
+            })}
+        }
+        
         let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) -> Void in
             DispatchQueue.main.async(execute: {
                 if let err = error {
@@ -176,23 +189,22 @@ public class AwsS3 {
                 } else {
                     print("Download SUCCESS in s3.downloadZipFile \(s3Bucket) \(s3Key)")
                     do {
+                        var unzippedURL: URL = URL(fileURLWithPath: "")
                         // unzip zip file
-                        try PKZipper.unzipFile(tempZipURL,
+                        try Zip.unzipFile(tempZipURL,
                             destination: temporaryDirectory,
                             overwrite: true,
                             password: nil,
-                            progress: nil
+                            progress: nil,
+                            fileOutputHandler: { unzippedFile in
+                                print("Unipped File \(unzippedFile)")
+                                unzippedURL = URL(fileURLWithPath: unzippedFile.absoluteString)
+                            }
                         )
-                        
-                        // identify the unzipped file
-						let filename = filePath.lastPathComponent
-                        let unzippedURL = temporaryDirectory.appendingPathComponent(filename)
-						print("location of unzipped file \(unzippedURL)")
-						
-						// remove unzipped file if it already exists
+                        // remove unzipped file if it already exists
                         self.removeItemNoThrow(at: filePath)
 			
-						// move unzipped file to destination
+                        // move unzipped file to destination
                         try FileManager.default.moveItem(at: unzippedURL, to: filePath)
                         print("SUCCESS in s3.downloadZipFile \(s3Bucket) \(s3Key)")
                         complete(nil)
@@ -204,11 +216,11 @@ public class AwsS3 {
                 }
             })
         }
-        self.transfer.download(to: tempZipURL, bucket: s3Bucket, key: s3Key, expression: nil,
+        self.transfer.download(to: tempZipURL, bucket: s3Bucket, key: s3Key, expression: expression,
                                completionHandler: completionHandler)
         //.continueWith has been dropped, because it did not report errors
     }
-*/
+    
     private func removeItemNoThrow(at: URL) -> Void {
         do {
             try FileManager.default.removeItem(at: at)
@@ -302,5 +314,24 @@ public class AwsS3 {
             print("ERROR in s3.uploadFile, while reading file \(s3Bucket) \(s3Key) \(cotError.localizedDescription)")
             complete(cotError)
         }
+    }
+    
+    private func getUserAgent() -> String {
+        if (self.userAgent == nil) {
+            var result: [String] = []
+            result.append("v1")
+            result.append(Locale.current.identifier)
+            result.append(Locale.preferredLanguages.joined(separator: ","))
+            let device = UIDevice.current
+            result.append("Apple")
+            result.append(device.model)
+            result.append("ios")
+            result.append(device.systemVersion)
+            let info = Bundle.main.infoDictionary
+            result.append(info?["CFBundleIdentifier"] as? String ?? "")
+            result.append(info?["CFBundleShortVersionString"] as? String ?? "")
+            self.userAgent = result.joined(separator: ":")
+        }
+        return self.userAgent!
     }
 }

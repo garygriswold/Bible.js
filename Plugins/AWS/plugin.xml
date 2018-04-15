@@ -58,6 +58,17 @@
 		<source-file src="src/ios/AWS/AwsS3.swift" />
 		<source-file src="src/ios/AWS/AWSS3Cache.swift" />
 		<source-file src="src/ios/AWS/Credentials.swift" />
+		<source-file src="src/ios/AWS/ProgressCircle.swift" />
+		<source-file src="src/ios/AWS/Zip.swift" />
+		<source-file src="src/ios/AWS/ZipUtilities.swift" />
+		<source-file src="src/ios/AWS/minizip/module.modulemap" target-dir="minizip" />
+		<header-file src="src/ios/AWS/minizip/crypt.h" target-dir="minizip" />
+		<header-file src="src/ios/AWS/minizip/ioapi.h" target-dir="minizip" />
+		<header-file src="src/ios/AWS/minizip/unzip.h" target-dir="minizip" />
+		<header-file src="src/ios/AWS/minizip/zip.h" target-dir="minizip" />
+		<source-file src="src/ios/AWS/minizip/ioapi.c" target-dir="minizip" />
+		<source-file src="src/ios/AWS/minizip/unzip.c" target-dir="minizip" />
+		<source-file src="src/ios/AWS/minizip/zip.c" target-dir="minizip" />
 		<framework src="src/ios/AWS/AWSCore.framework" embed="true" custom="true"/>
 	</platform>
 

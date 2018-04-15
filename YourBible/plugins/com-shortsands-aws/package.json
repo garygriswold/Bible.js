@@ -2,11 +2,11 @@
   "_args": [
     [
       {
-        "raw": "file:////Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
+        "raw": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
         "scope": null,
         "escapedName": null,
         "name": null,
-        "rawSpec": "file:////Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
+        "rawSpec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
         "spec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
         "type": "directory"
       },
@@ -19,11 +19,11 @@
   "_location": "/com-shortsands-aws",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "file:////Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
+    "raw": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
     "scope": null,
     "escapedName": null,
     "name": null,
-    "rawSpec": "file:////Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
+    "rawSpec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
     "spec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
     "type": "directory"
   },
@@ -32,9 +32,9 @@
     "/"
   ],
   "_resolved": "file:../Plugins/AWS",
-  "_shasum": "113e5c987524946213a0c751a07a1887fef1f61e",
+  "_shasum": "a87ca39bff5dd21fb56e820acefee59ac7f2481d",
   "_shrinkwrap": null,
-  "_spec": "file:////Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
+  "_spec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
   "_where": "/Users/garygriswold/ShortSands/BibleApp/YourBible",
   "dependencies": {},
   "description": "AWS ===",

@@ -6,13 +6,17 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
+import com.shortsands.io.Zip;
+
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.*;
@@ -68,7 +72,7 @@ public class AWSInstrumentedTest {
             latch.countDown();
         }
     }
-    @Test
+    //@Test
     public void downloadText() throws Exception {
         new DownloadTextTest().doTest();
     }
@@ -101,24 +105,27 @@ public class AWSInstrumentedTest {
     class DownloadFileTest extends DownloadFileListener {
         DownloadFileListener listener = this;
         CountDownLatch latch = new CountDownLatch(1);
+        long startTime = System.currentTimeMillis();
         public void doTest() {
             File root = InstrumentationRegistry.getTargetContext().getFilesDir();
-            File file1 = new File(root, "EmmaLooseTooth.mp3");
+            File file1 = new File(root, "WEB.db.zip");
             AwsS3 s3 = AwsS3.shared();
-            s3.downloadFile("shortsands", "EmmaFirstLostTooth.mp3", file1, listener);
+            s3.downloadFile("shortsands", "WEB.db.zip", file1, listener);
             try { latch.await(); } catch (InterruptedException ex) { Log.e(TAG, "Interrupted Exception"); }
         }
         public void onError(int id, Exception e) {
             super.onError(id, e);
             Log.e(TAG, "Error: " + e.toString() + " on " + this.file.getAbsolutePath());
             Log.d(TAG, "RESULTS |" + this.results + "|");
-            assertEquals("DownloadFileTest", 533651, this.results.length());
+            //assertEquals("DownloadFileTest", 22415360, this.results.length()); // WEB.db
+            assertEquals("DownloadFileTest", 6474887, this.results.length()); // WEB.db.zip
             latch.countDown();
         }
         protected void onComplete(int id) {
             super.onComplete(id);
-            Log.d(TAG, "onComplete ID " + id);
-            assertEquals("DownloadFileTest", 533651, this.results.length());
+            Log.d(TAG, "onComplete ID " + id + " " + (System.currentTimeMillis() - startTime));
+            //assertEquals("DownloadFileTest", 22415360, this.results.length()); // WEB.db
+            assertEquals("DownloadFileTest", 6474887, this.results.length()); // WEB.db.zip
             latch.countDown();
         }
     }
@@ -126,32 +133,49 @@ public class AWSInstrumentedTest {
     public void downloadFile() throws Exception {
         new DownloadFileTest().doTest();
     }
-    /*
+    //@Test
+    public void unzipFile() {
+        // This test assumes there is a WEB.db.zip file present on the device
+        long startTime = System.currentTimeMillis();
+        File root = InstrumentationRegistry.getTargetContext().getFilesDir();
+        File zipFile = new File(root, "WEB.db.zip");
+        try {
+            List<File> results = Zip.unzipFile(zipFile, root);
+            Log.d(TAG, "Unzip completed in MS: " + (System.currentTimeMillis() - startTime));
+            assertEquals("There should be one file in zip", 1, results.size());
+            File out = results.get(0);
+            assertEquals("UnzipFileTest", 22415360, out.length());
+        } catch(IOException io) {
+            Log.d(TAG, "UnZip Exception " + io.toString());
+            assertTrue("There should not be an exception", false);
+        }
+    }
     class DownloadZipFileTest extends DownloadZipFileListener {
         DownloadZipFileListener listener = this;
         CountDownLatch latch = new CountDownLatch(1);
+        long startTime = System.currentTimeMillis();
         public void doTest() {
             File root = InstrumentationRegistry.getTargetContext().getFilesDir();
-            File file1 = new File(root, "ERV-UKR.db.zip");
+            File file1 = new File(root, "WEB.db");
             AwsS3 s3 = AwsS3.shared();
-            s3.downloadZipFile("shortsands", "ERV-UKR.db", file1, listener);
+            s3.downloadZipFile("shortsands", "WEB.db.zip", file1, listener);
             try { latch.await(); } catch (InterruptedException ex) { Log.e(TAG, "Interrupted Exception"); }
         }
         public void onError(int id, Exception e) {
             super.onError(id, e);
             Log.e(TAG, "Error: " + e.toString() + " on " + this.file.getAbsolutePath());
             Log.d(TAG, "RESULTS |" + this.results + "|");
-            assertEquals("DownloadZipFileTest", 533651, this.results.length());
+            assertEquals("DownloadZipFileTest", 22413312, this.results.length());
             latch.countDown();
         }
         protected void onComplete(int id) {
             super.onComplete(id);
-            Log.d(TAG, "onComplete ID " + id);
-            assertEquals("DownloadZipFileTest", 533651, this.results.length());
+            Log.d(TAG, "onComplete ID " + id + "  " + (System.currentTimeMillis() - startTime) + "ms  ");
+            assertEquals("DownloadZipFileTest", 22413312, this.results.length());
             latch.countDown();
         }
     }
-    //@Test  This one is not working GNG 9/7/2017
+    @Test  //This one is not working GNG 9/7/2017
     public void downloadZipFile() throws Exception {
         new DownloadZipFileTest().doTest();
     }
@@ -165,7 +189,6 @@ public class AWSInstrumentedTest {
         Log.d(TAG, "Expect /storage/emulated/0/Android/data/com.shortsands.aws_s3_android/cache/Whatever.mp3.");
         assertEquals("Whoops", "abc", "def");
     }
-    */
     //@Test
     public void uploadAnalytics() throws Exception {
         JSONObject json = new JSONObject();

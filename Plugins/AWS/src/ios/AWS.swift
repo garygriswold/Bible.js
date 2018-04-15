@@ -117,7 +117,6 @@
 	        }	    
 	    )
     }
-/*
     @objc(downloadZipFile:) 
     func downloadZipFile(command: CDVInvokedUrlCommand) {
 	    print("Documents \(NSHomeDirectory())") 
@@ -126,6 +125,7 @@
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 			filePath: URL(fileURLWithPath: NSHomeDirectory() + filePath),
+			view: nil,
             complete: { error in
 	            var result: CDVPluginResult
 	            if let err = error {
@@ -137,7 +137,6 @@
 	        }	    
 	    )
     }
-*/
     @objc(uploadAnalytics:) 
     func uploadVideoAnalytics(command: CDVInvokedUrlCommand) {
 	    let data = command.arguments[3] as? String ?? ""

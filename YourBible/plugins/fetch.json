@@ -15,14 +15,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-file-transfer": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-file-transfer@^1.7.0"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-globalization": {
     "source": {
       "type": "registry",
@@ -71,14 +63,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-zip": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-zip"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "ionic-plugin-keyboard": {
     "source": {
       "type": "registry",
@@ -103,18 +87,18 @@
     "is_top_level": true,
     "variables": {}
   },
-  "com-shortsands-aws": {
-    "source": {
-      "type": "registry",
-      "id": "file:////Users/garygriswold/ShortSands/BibleApp/Plugins/AWS"
-    },
-    "is_top_level": false,
-    "variables": {}
-  },
   "com-shortsands-audioplayer": {
     "source": {
       "type": "local",
       "path": "/Users/garygriswold/ShortSands/BibleApp/YourBible/node_modules/com-shortsands-audioplayer"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "com-shortsands-aws": {
+    "source": {
+      "type": "local",
+      "path": "/Users/garygriswold/ShortSands/BibleApp/YourBible/node_modules/com-shortsands-aws"
     },
     "is_top_level": true,
     "variables": {}

@@ -46,7 +46,7 @@ AppInitializer.prototype.begin = function() {
 							} else {
 								var gsPreloader = new GSPreloader(gsPreloaderOptions);
 								gsPreloader.active(true);
-								var downloader = new FileDownloader(versionsAdapter, locale, 'none');
+								var downloader = new FileDownloader(versionsAdapter, locale);
 								downloader.download(filename, function(error) {
 									//console.log('Download error', JSON.stringify(error));
 									gsPreloader.active(false);
@@ -1783,7 +1783,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		var versionCode = iconNode.id.substr(3);
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		that.settingStorage.getCurrentVersion(function(currVersion) {
-			var downloader = new FileDownloader(that.database, that.locale, currVersion);
+			var downloader = new FileDownloader(that.database, that.locale);
 			downloader.download(versionFile, function(error) {
 				gsPreloader.active(false);
 				if (error) {
@@ -3284,6 +3284,7 @@ VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
 /**
 * deprecated, the URL Signature is not present in Version table (Dec 16, 2016)
 */
+/*
 VersionsAdapter.prototype.selectURLCloudfront = function(versionFile, callback) {
 	var statement = 'SELECT URLSignature FROM Version WHERE filename=?';
 	this.database.select(statement, [versionFile], function(results) {
@@ -3296,6 +3297,7 @@ VersionsAdapter.prototype.selectURLCloudfront = function(versionFile, callback) 
 		}
 	});
 };
+*/
 VersionsAdapter.prototype.selectAWSRegion = function(countryCode, callback) {
 	var that = this;
 	var statement = 'SELECT awsRegion FROM Region WHERE countryCode=?';
@@ -3308,6 +3310,19 @@ VersionsAdapter.prototype.selectAWSRegion = function(countryCode, callback) {
 		}
 	});
 };
+VersionsAdapter.prototype.selectBucketName = function(regionCode, callback) {
+	var that = this;
+	var statement = 'SELECT r.awsRegion, a.s3TextBucket FROM Region r, AWSRegion a WHERE r.awsRegion = a.awsRegion AND countryCode=?';
+	this.database.select(statement, [regionCode], function(results) {
+		if (results instanceof IOError || results.rows.length === 0) {
+			callback('us-east-1', 'shortsands-na-va');
+		} else {
+			var row = results.rows.item(0);
+			callback(row.awsRegion, row.s3TextBucket);
+		}
+	});
+};
+/*
 VersionsAdapter.prototype.selectURLS3 = function(versionFile, countryCode, callback) {
 	var that = this;
 	var statement = 'SELECT signedURL FROM DownloadURL d JOIN Region r ON r.awsRegion=d.awsRegion WHERE d.filename=? AND r.countryCode=?';
@@ -3327,6 +3342,7 @@ VersionsAdapter.prototype.selectURLS3 = function(versionFile, countryCode, callb
 		}
 	});
 };
+*/
 VersionsAdapter.prototype.selectInstalledBibleVersions = function(callback) {
 	var versList = [];
 	var now = new Date().toISOString();
@@ -3713,158 +3729,35 @@ AppUpdater.prototype.doUpdate = function(callback) {
 	}
 };
 /**
-* This class encapsulates the Cordova FileTransfer plugin for file download
-* It is a simple plugin, but encapsulated here in order to make it easy to change
-* the implementation.
-*
-* 'persistent' will store the file in 'Documents' in Android and 'Library' in iOS
-* 'LocalDatabase' is the file under Library where the database is expected.
+* This revised FileDownloader uses the AWS plugin.
+* Gary Griswold, April 2018
 */
-function FileDownloader(database, locale, currVersion) {
-	//this.host = 'shortsands.com';
-	//this.host = 'cloudfront.net';
-	this.host = 's3.amazonaws.com';
+function FileDownloader(database, locale) {
 	this.database = database;
 	var parts = locale.split('-');
 	this.countryCode = parts.pop();
 	console.log('Country Code', this.countryCode);
-	this.currVersion = currVersion;
 	if (deviceSettings.platform() === 'ios') {
-		this.downloadPath = cordova.file.tempDirectory;
-		this.finalPath = cordova.file.applicationStorageDirectory + 'Library/LocalDatabase/';
+		this.finalPath = '/Library/LocalDatabase/';
 	} else {
-		this.downloadPath = cordova.file.cacheDirectory;
-		this.finalPath = cordova.file.applicationStorageDirectory + 'databases/';
+		this.finalPath = '/databases/';
 	}
 	Object.seal(this);
 }
 FileDownloader.prototype.download = function(bibleVersion, callback) {
-	if (this.host.indexOf('shortsands') > -1) {
-		this._downloadShortSands(bibleVersion, callback);
-	} else if (this.host.indexOf('cloudfront') > -1) {
-		this._downloadCloudfront(bibleVersion, callback);
-	} else if (this.host.indexOf('amazonaws.com') > -1) {
-		this._downloadAWSS3(bibleVersion, callback);
-	} else {
-		console.log('ERROR: cannot download from host=', this.host);
-		callback();
-	}
-};
-FileDownloader.prototype._downloadShortSands = function(bibleVersion, callback) {
 	var that = this;
-	var bibleVersionZip = bibleVersion + '.zip';
-	var tempPath = this.downloadPath + bibleVersionZip;
-	var uri = encodeURI('http://' + this.host + ':8080/book/');
-	var remotePath = uri + bibleVersionZip;
-	console.log('shortsands download from', remotePath, ' to ', tempPath);
-	var datetime = new Date().toISOString();
-	var encrypted = CryptoJS.AES.encrypt(datetime, CREDENTIAL.key);
-	this._getLocale(function(locale) {
-		var options = { 
-			headers: {
-				'Authorization': 'Signature  ' + CREDENTIAL.id + '  ' + CREDENTIAL.version + '  ' + encrypted,
-				'x-time': datetime,
-				'x-locale': locale,
-				'x-referer-version': that.currVersion
-			}
-		};
-		that._performDownload(remotePath, tempPath, true, options, callback);
-	});
-};
-FileDownloader.prototype._downloadCloudfront = function(bibleVersion, callback) {
-	var that = this;
-	var tempPath = this.downloadPath + bibleVersion + '.zip';
-	this.database.selectURLCloudfront(bibleVersion, function(remotePath) {
-		console.log('cloudfront download from', remotePath, ' to ', tempPath);
-		that._getLocale(function(locale) {
-			var options = { 
-				headers: {
-					'Cookie': locale + ';' + that.currVersion,
-					'Connection': 'close'
-				}
-			};
-			that._performDownload(remotePath, tempPath, false, options, callback);
+	this.database.selectBucketName(this.countryCode, function(s3Region, s3Bucket) {
+		console.log("SELECTED REGION: " + s3Region + " " + s3Bucket);
+		var s3Key = bibleVersion + ".zip";
+		var filePath = that.finalPath + bibleVersion;
+		AWS.downloadZipFile(s3Bucket, s3Key, filePath, function(error) {
+			if (error == null) console.log("Download Success");
+			else console.log("Download Failed");
+			callback(error);
 		});
 	});
 };
-FileDownloader.prototype._downloadAWSS3 = function(bibleVersion, callback) {
-	var that = this;
-	var tempPath = this.downloadPath + bibleVersion + '.zip';
-	this.database.selectURLS3(bibleVersion, this.countryCode, function(remotePath) {
-		console.log('aws s3 download from', remotePath, ' to ', tempPath);
-		that._getLocale(function(locale) {
-			var options = { 
-				headers: {
-					'Connection': 'close'
-				}
-			};
-			remotePath = remotePath.replace('?', '?X-Locale=' + locale + '&');
-			that._performDownload(remotePath, tempPath, false, options, callback);
-		});
-	});
-};
-FileDownloader.prototype._getLocale = function(callback) {
-	preferredLanguage(function(pLocale) {
-		localeName(function(locale) {
-			callback(pLocale + ',' + locale);
-		});
-	});
-	function preferredLanguage(callback) {
-		navigator.globalization.getPreferredLanguage(
-	    	function(locale) { callback(locale.value); },
-			function() { callback(''); }
-		);
-	}
-	function localeName(callback) {
-		navigator.globalization.getLocaleName(
-	    	function(locale) { callback(locale.value); },
-			function() { callback(''); }
-		);
-	}
-};
-FileDownloader.prototype._performDownload = function(remotePath, tempPath, trustAllHosts, options, callback) {
-	var that = this;
-	var fileTransfer = new FileTransfer();
-	fileTransfer.download(remotePath, tempPath, onDownSuccess, onDownError, trustAllHosts, options);
 
-	function onDownSuccess(entry) {
-		console.log("download complete: ", JSON.stringify(entry));
-		zip.unzip(tempPath, that.finalPath, function(resultCode) {
-	    	if (resultCode == 0) {
-	    		console.log('ZIP done', resultCode);
-	    		callback();		    	
-	    	} else {
-		    	callback(new IOError({code: 'unzip failed', message: entry.nativeURL}));
-	    	}
-	    	that.clearTempDir();
-		});
-	}
-	function onDownError(error) {
-		console.log('ERROR File Download', JSON.stringify(error));
-		callback(new IOError({ code: error.code, message: error.source}));
-	}
-};
-FileDownloader.prototype.clearTempDir = function() {
-	window.resolveLocalFileSystemURL(this.downloadPath, function(dirEntry) {
-		var dirReader = dirEntry.createReader();
-		dirReader.readEntries(function(files) {
-			removeFiles(files);
-		});
-	});
-	function removeFiles(files) {
-		var file = files.pop();
-		if (file) {
-			file.remove(function() {
-				console.log('Deleted temp file', file.name);
-				removeFiles(files);
-			},
-			function(error) {
-				console.log('Error Deleting temp file', file.name, JSON.stringify(error));
-				removeFiles(files);
-			});
-		}
-	}
-};
 /**
 * This class is used to contain the fields about a version of the Bible
 * as needed.

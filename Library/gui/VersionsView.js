@@ -150,7 +150,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 		var versionCode = iconNode.id.substr(3);
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		that.settingStorage.getCurrentVersion(function(currVersion) {
-			var downloader = new FileDownloader(that.database, that.locale);//, currVersion);
+			var downloader = new FileDownloader(that.database, that.locale);
 			downloader.download(versionFile, function(error) {
 				gsPreloader.active(false);
 				if (error) {

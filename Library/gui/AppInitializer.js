@@ -45,7 +45,7 @@ AppInitializer.prototype.begin = function() {
 							} else {
 								var gsPreloader = new GSPreloader(gsPreloaderOptions);
 								gsPreloader.active(true);
-								var downloader = new FileDownloader(versionsAdapter, locale);//, 'none');
+								var downloader = new FileDownloader(versionsAdapter, locale);
 								downloader.download(filename, function(error) {
 									//console.log('Download error', JSON.stringify(error));
 									gsPreloader.active(false);

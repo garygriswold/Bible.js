@@ -16,9 +16,6 @@
     "cordova-plugin-file": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
-    "cordova-plugin-file-transfer": {
-      "PACKAGE_NAME": "com.shortsands.yourbible"
-    },
     "cordova-plugin-globalization": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
@@ -37,9 +34,6 @@
     "cordova-plugin-wkwebview-engine": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
-    "cordova-plugin-zip": {
-      "PACKAGE_NAME": "com.shortsands.yourbible"
-    },
     "cordova-sqlite-ext": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
@@ -48,11 +42,10 @@
     },
     "com-shortsands-audioplayer": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
-    }
-  },
-  "dependent_plugins": {
+    },
     "com-shortsands-aws": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     }
-  }
+  },
+  "dependent_plugins": {}
 }

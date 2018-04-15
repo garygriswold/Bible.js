@@ -7,10 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E431EC832079B81900017D22 /* ProgressCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E431EC822079B81900017D22 /* ProgressCircle.swift */; };
+		E44ED9AF20781FFE0003D90D /* libz.1.1.3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E44ED9AE20781FFE0003D90D /* libz.1.1.3.tbd */; };
+		E44ED9B9207859410003D90D /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = E44ED9B1207859410003D90D /* unzip.c */; };
+		E44ED9BA207859410003D90D /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = E44ED9B2207859410003D90D /* zip.c */; };
+		E44ED9BB207859410003D90D /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = E44ED9B3207859410003D90D /* ioapi.c */; };
+		E44ED9BC207859410003D90D /* crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = E44ED9B4207859410003D90D /* crypt.h */; };
+		E44ED9BD207859410003D90D /* zip.h in Headers */ = {isa = PBXBuildFile; fileRef = E44ED9B5207859410003D90D /* zip.h */; };
+		E44ED9BE207859410003D90D /* unzip.h in Headers */ = {isa = PBXBuildFile; fileRef = E44ED9B6207859410003D90D /* unzip.h */; };
+		E44ED9BF207859410003D90D /* ioapi.h in Headers */ = {isa = PBXBuildFile; fileRef = E44ED9B8207859410003D90D /* ioapi.h */; };
+		E44ED9C32078598F0003D90D /* Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44ED9C22078598E0003D90D /* Zip.swift */; };
+		E44ED9C7207866CD0003D90D /* ZipUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44ED9C6207866CD0003D90D /* ZipUtilities.swift */; };
+		E458D41620772F3800CD5F14 /* AWSTests2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B44CD20772918009E0100 /* AWSTests2.swift */; };
 		E4C23FDD202D627F00F98324 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C23FD3202D627F00F98324 /* AWS.framework */; };
-		E4C23FE2202D627F00F98324 /* AWSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C23FE1202D627F00F98324 /* AWSTests.swift */; };
 		E4C23FE4202D627F00F98324 /* AWS.h in Headers */ = {isa = PBXBuildFile; fileRef = E4C23FD6202D627F00F98324 /* AWS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E4D74E23202D670300097888 /* AwsS3UnitTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D74E1F202D670300097888 /* AwsS3UnitTest.swift */; };
 		E4D74E24202D670300097888 /* AwsS3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D74E20202D670300097888 /* AwsS3.swift */; };
 		E4D74E25202D670300097888 /* AwsS3Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D74E21202D670300097888 /* AwsS3Cache.swift */; };
 		E4D74E26202D670300097888 /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D74E22202D670300097888 /* Credentials.swift */; };
@@ -19,6 +29,7 @@
 		E4D74E2C202D671F00097888 /* SS_AWSS3PreSignedURL.h in Headers */ = {isa = PBXBuildFile; fileRef = E4D74E29202D671F00097888 /* SS_AWSS3PreSignedURL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E4D74E2E202D673000097888 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D74E2D202D673000097888 /* AWSCore.framework */; };
 		E4D74E32202D6C7700097888 /* SS_AWSS3PreSignedURL.m in Sources */ = {isa = PBXBuildFile; fileRef = E4D74E31202D6C7700097888 /* SS_AWSS3PreSignedURL.m */; };
+		E4E7330620772AD400318456 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D74E2D202D673000097888 /* AWSCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,13 +43,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E41B44CD20772918009E0100 /* AWSTests2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSTests2.swift; sourceTree = "<group>"; };
+		E41B44CF20772918009E0100 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E431EC822079B81900017D22 /* ProgressCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCircle.swift; sourceTree = "<group>"; };
+		E44ED9AE20781FFE0003D90D /* libz.1.1.3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.1.3.tbd; path = usr/lib/libz.1.1.3.tbd; sourceTree = SDKROOT; };
+		E44ED9B1207859410003D90D /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		E44ED9B2207859410003D90D /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		E44ED9B3207859410003D90D /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		E44ED9B4207859410003D90D /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		E44ED9B5207859410003D90D /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		E44ED9B6207859410003D90D /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		E44ED9B7207859410003D90D /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		E44ED9B8207859410003D90D /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		E44ED9C22078598E0003D90D /* Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zip.swift; sourceTree = "<group>"; };
+		E44ED9C6207866CD0003D90D /* ZipUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZipUtilities.swift; sourceTree = "<group>"; };
 		E4C23FD3202D627F00F98324 /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4C23FD6202D627F00F98324 /* AWS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AWS.h; sourceTree = "<group>"; };
 		E4C23FD7202D627F00F98324 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4C23FDC202D627F00F98324 /* AWSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AWSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E4C23FE1202D627F00F98324 /* AWSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSTests.swift; sourceTree = "<group>"; };
-		E4C23FE3202D627F00F98324 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E4D74E1F202D670300097888 /* AwsS3UnitTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AwsS3UnitTest.swift; sourceTree = "<group>"; };
 		E4D74E20202D670300097888 /* AwsS3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AwsS3.swift; sourceTree = "<group>"; };
 		E4D74E21202D670300097888 /* AwsS3Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AwsS3Cache.swift; sourceTree = "<group>"; };
 		E4D74E22202D670300097888 /* Credentials.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Credentials.swift; sourceTree = "<group>"; };
@@ -54,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E44ED9AF20781FFE0003D90D /* libz.1.1.3.tbd in Frameworks */,
 				E4D74E2E202D673000097888 /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -63,18 +86,52 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4C23FDD202D627F00F98324 /* AWS.framework in Frameworks */,
+				E4E7330620772AD400318456 /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E41B44CC20772918009E0100 /* AWSTests */ = {
+			isa = PBXGroup;
+			children = (
+				E41B44CD20772918009E0100 /* AWSTests2.swift */,
+				E41B44CF20772918009E0100 /* Info.plist */,
+			);
+			path = AWSTests;
+			sourceTree = "<group>";
+		};
+		E44ED9AD20781FFE0003D90D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E44ED9AE20781FFE0003D90D /* libz.1.1.3.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E44ED9B0207859410003D90D /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				E44ED9B1207859410003D90D /* unzip.c */,
+				E44ED9B6207859410003D90D /* unzip.h */,
+				E44ED9B2207859410003D90D /* zip.c */,
+				E44ED9B3207859410003D90D /* ioapi.c */,
+				E44ED9B4207859410003D90D /* crypt.h */,
+				E44ED9B5207859410003D90D /* zip.h */,
+				E44ED9B8207859410003D90D /* ioapi.h */,
+				E44ED9B7207859410003D90D /* module.modulemap */,
+			);
+			path = minizip;
+			sourceTree = "<group>";
+		};
 		E4C23FC9202D627F00F98324 = {
 			isa = PBXGroup;
 			children = (
 				E4C23FD5202D627F00F98324 /* AWS */,
-				E4C23FE0202D627F00F98324 /* AWSTests */,
+				E41B44CC20772918009E0100 /* AWSTests */,
 				E4C23FD4202D627F00F98324 /* Products */,
+				E44ED9AD20781FFE0003D90D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -92,26 +149,20 @@
 			children = (
 				E4D74E20202D670300097888 /* AwsS3.swift */,
 				E4D74E21202D670300097888 /* AwsS3Cache.swift */,
-				E4D74E1F202D670300097888 /* AwsS3UnitTest.swift */,
 				E4D74E22202D670300097888 /* Credentials.swift */,
+				E431EC822079B81900017D22 /* ProgressCircle.swift */,
 				E4D74E29202D671F00097888 /* SS_AWSS3PreSignedURL.h */,
 				E4D74E31202D6C7700097888 /* SS_AWSS3PreSignedURL.m */,
 				E4D74E28202D671F00097888 /* SS_AWSS3TransferUtility.h */,
 				E4D74E27202D671F00097888 /* SS_AWSS3TransferUtility.m */,
 				E4C23FD6202D627F00F98324 /* AWS.h */,
+				E44ED9C22078598E0003D90D /* Zip.swift */,
+				E44ED9C6207866CD0003D90D /* ZipUtilities.swift */,
+				E44ED9B0207859410003D90D /* minizip */,
 				E4C23FD7202D627F00F98324 /* Info.plist */,
 				E4D74E2D202D673000097888 /* AWSCore.framework */,
 			);
 			path = AWS;
-			sourceTree = "<group>";
-		};
-		E4C23FE0202D627F00F98324 /* AWSTests */ = {
-			isa = PBXGroup;
-			children = (
-				E4C23FE1202D627F00F98324 /* AWSTests.swift */,
-				E4C23FE3202D627F00F98324 /* Info.plist */,
-			);
-			path = AWSTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -121,9 +172,13 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E44ED9BF207859410003D90D /* ioapi.h in Headers */,
 				E4D74E2B202D671F00097888 /* SS_AWSS3TransferUtility.h in Headers */,
 				E4D74E2C202D671F00097888 /* SS_AWSS3PreSignedURL.h in Headers */,
 				E4C23FE4202D627F00F98324 /* AWS.h in Headers */,
+				E44ED9BE207859410003D90D /* unzip.h in Headers */,
+				E44ED9BD207859410003D90D /* zip.h in Headers */,
+				E44ED9BC207859410003D90D /* crypt.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,7 +227,7 @@
 		E4C23FCA202D627F00F98324 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0920;
+				LastSwiftUpdateCheck = 0930;
 				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = ShortSands;
 				TargetAttributes = {
@@ -228,9 +283,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4D74E26202D670300097888 /* Credentials.swift in Sources */,
+				E44ED9BA207859410003D90D /* zip.c in Sources */,
+				E44ED9C7207866CD0003D90D /* ZipUtilities.swift in Sources */,
+				E44ED9B9207859410003D90D /* unzip.c in Sources */,
 				E4D74E25202D670300097888 /* AwsS3Cache.swift in Sources */,
-				E4D74E23202D670300097888 /* AwsS3UnitTest.swift in Sources */,
+				E44ED9C32078598F0003D90D /* Zip.swift in Sources */,
 				E4D74E24202D670300097888 /* AwsS3.swift in Sources */,
+				E431EC832079B81900017D22 /* ProgressCircle.swift in Sources */,
+				E44ED9BB207859410003D90D /* ioapi.c in Sources */,
 				E4D74E2A202D671F00097888 /* SS_AWSS3TransferUtility.m in Sources */,
 				E4D74E32202D6C7700097888 /* SS_AWSS3PreSignedURL.m in Sources */,
 			);
@@ -240,7 +300,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4C23FE2202D627F00F98324 /* AWSTests.swift in Sources */,
+				E458D41620772F3800CD5F14 /* AWSTests2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,6 +450,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AWS;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				"SWIFT_INCLUDE_PATHS[arch=*]" = /Users/garygriswold/ShortSands/BibleApp/Plugins/AWS/src/ios/AWS/minizip;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -418,6 +479,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AWS;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				"SWIFT_INCLUDE_PATHS[arch=*]" = /Users/garygriswold/ShortSands/BibleApp/Plugins/AWS/src/ios/AWS/minizip;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -429,6 +491,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/AWS",
+				);
 				INFOPLIST_FILE = AWSTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AWSTests;
@@ -444,6 +510,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/AWS",
+				);
 				INFOPLIST_FILE = AWSTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AWSTests;
