@@ -12,6 +12,7 @@ package com.shortsands.aws;
 import android.animation.Animator;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.os.Build.VERSION;
 import android.R.style;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -63,7 +64,11 @@ public class ProgressCircle extends ProgressBar {
                     int total = (bytesTotal < (long)Integer.MAX_VALUE) ? (int)bytesTotal : (int)(bytesTotal / 1000L);
                     setMax(total);
                     int current = (bytesCurrent < (long)Integer.MAX_VALUE) ? (int)bytesCurrent : (int)(bytesCurrent / 1000L);
-                    setProgress(current, true);
+                    if (VERSION.SDK_INT >= 24) {
+                        setProgress(current, true);
+                    } else {
+                        setProgress(current);
+                    }
                 }
             });
         }

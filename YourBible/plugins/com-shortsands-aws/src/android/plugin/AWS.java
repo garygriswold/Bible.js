@@ -83,24 +83,21 @@ public class AWS extends CordovaPlugin {
 			String s3Bucket = args.getString(0);
 			String s3Key = args.getString(1);
 			String filePath = args.getString(2);
-			File file = new File(cordova.getActivity().getFilesDir(), filePath);
+			File file = new File(cordova.getActivity().getDataDir(), filePath);
 			DownloadPluginFileListener listener = new DownloadPluginFileListener(callbackContext);
 			AwsS3.shared().downloadFile(s3Bucket, s3Key, file, listener);
 			return true;			
 		}
-		/*
-			This method requires PKZip plugin, which has been removed.
-			See PKZip/README for more informarion.
 		else if (action.equals("downloadZipFile")) {
 			String s3Bucket = args.getString(0);
 			String s3Key = args.getString(1);
 			String filePath = args.getString(2);
-			File file = new File(cordova.getActivity().getFilesDir(), filePath);
+			File file = new File(cordova.getActivity().getDataDir(), filePath);
 			DownloadPluginZipFileListener listener = new DownloadPluginZipFileListener(callbackContext);
+			listener.setActivity(cordova.getActivity()); // presents ProgressCircle
 			AwsS3.shared().downloadZipFile(s3Bucket, s3Key, file, listener);
 			return true;			
 		}
-		*/
 		else if (action.equals("uploadAnalytics")) {
 			String sessionId = args.getString(0);
 			String timestamp = args.getString(1);
@@ -134,7 +131,7 @@ public class AWS extends CordovaPlugin {
 			String s3Key = args.getString(1);
 			String filePath = args.getString(2);
 			String contentType = args.getString(3);
-			File file = new File(cordova.getActivity().getFilesDir(), filePath);
+			File file = new File(cordova.getActivity().getDataDir(), filePath);
 			UploadPluginFileListener listener = new UploadPluginFileListener(callbackContext);
 			AwsS3.shared().uploadFile(s3Bucket, s3Key, file, contentType, listener);
 			return true;			

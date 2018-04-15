@@ -18,7 +18,6 @@ AppInitializer.prototype.begin = function() {
 	deviceSettings.loadDeviceSettings();
 	deviceSettings.locale(function(locale, langCode, scriptCode, countryCode) {
 		console.log('user locale ', locale, langCode, countryCode);
-		countryCode = 'IN';
 		that.langPrefCode = langCode;
 		that.countryCode = countryCode;
 		var appUpdater = new AppUpdater(settingStorage);
@@ -1778,15 +1777,12 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	}
 	function downloadVersionHandler(event) {
 		this.removeEventListener('click', downloadVersionHandler);
-		//var gsPreloader = new GSPreloader(gsPreloaderOptions);
-		//gsPreloader.active(true);
 		var iconNode = this;
 		var versionCode = iconNode.id.substr(3);
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		that.settingStorage.getCurrentVersion(function(currVersion) {
 			var downloader = new FileDownloader(that.database, that.locale);
 			downloader.download(versionFile, function(error) {
-				//gsPreloader.active(false);
 				if (error) {
 					console.log(JSON.stringify(error));
 					iconNode.setAttribute('src', DOWNLOAD_FAIL);

@@ -16,6 +16,6 @@ cordova plugin add $HOME/ShortSands/BibleApp/Plugins/AWS
 #cp plugins/com-shortsands-videoplayer/src/android/build-extras.gradle platforms/android/
 #cordova plugin add cordova-sqlite-ext --save
 
-cordova prepare ios
-#cordova prepare android
+#cordova prepare ios
+cordova prepare android
 
