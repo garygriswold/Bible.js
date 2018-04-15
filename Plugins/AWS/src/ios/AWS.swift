@@ -125,7 +125,7 @@
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 			filePath: URL(fileURLWithPath: NSHomeDirectory() + filePath),
-			view: nil,
+			view: self.webView,
             complete: { error in
 	            var result: CDVPluginResult
 	            if let err = error {

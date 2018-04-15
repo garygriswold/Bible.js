@@ -10,8 +10,9 @@ import Foundation
 
 public class ProgressCircle : UIView {
 
+    let circleBackLayer = CAShapeLayer()
     let circlePathLayer = CAShapeLayer()
-    let circleRadius: CGFloat = 20.0
+    let circleRadius: CGFloat = 50.0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,12 +26,23 @@ public class ProgressCircle : UIView {
 
     func configure() {
         progress = 0.0
+        backgroundColor = UIColor.clear
+        
+        circleBackLayer.frame = bounds
+        circleBackLayer.lineWidth = 6
+        circleBackLayer.fillColor = UIColor.clear.cgColor
+        circleBackLayer.strokeColor = UIColor(white: 0.2, alpha: 0.2).cgColor
+        circleBackLayer.strokeStart = 0
+        circleBackLayer.strokeEnd = 1
+        layer.addSublayer(circleBackLayer)
+        
         circlePathLayer.frame = bounds
-        circlePathLayer.lineWidth = 4
+        circlePathLayer.lineWidth = 6
         circlePathLayer.fillColor = UIColor.clear.cgColor
         circlePathLayer.strokeColor = UIColor.red.cgColor
+        circlePathLayer.strokeStart = 0
+        circlePathLayer.strokeEnd = 0
         layer.addSublayer(circlePathLayer)
-        backgroundColor = .white
     }
     
     func addToParentAndCenter(view: UIView) {
@@ -81,6 +93,8 @@ public class ProgressCircle : UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
+        circleBackLayer.frame = bounds
+        circleBackLayer.path = circlePath().cgPath
         circlePathLayer.frame = bounds
         circlePathLayer.path = circlePath().cgPath
     }

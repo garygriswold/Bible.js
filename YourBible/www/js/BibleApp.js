@@ -18,6 +18,7 @@ AppInitializer.prototype.begin = function() {
 	deviceSettings.loadDeviceSettings();
 	deviceSettings.locale(function(locale, langCode, scriptCode, countryCode) {
 		console.log('user locale ', locale, langCode, countryCode);
+		countryCode = 'IN';
 		that.langPrefCode = langCode;
 		that.countryCode = countryCode;
 		var appUpdater = new AppUpdater(settingStorage);
@@ -1777,15 +1778,15 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	}
 	function downloadVersionHandler(event) {
 		this.removeEventListener('click', downloadVersionHandler);
-		var gsPreloader = new GSPreloader(gsPreloaderOptions);
-		gsPreloader.active(true);
+		//var gsPreloader = new GSPreloader(gsPreloaderOptions);
+		//gsPreloader.active(true);
 		var iconNode = this;
 		var versionCode = iconNode.id.substr(3);
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		that.settingStorage.getCurrentVersion(function(currVersion) {
 			var downloader = new FileDownloader(that.database, that.locale);
 			downloader.download(versionFile, function(error) {
-				gsPreloader.active(false);
+				//gsPreloader.active(false);
 				if (error) {
 					console.log(JSON.stringify(error));
 					iconNode.setAttribute('src', DOWNLOAD_FAIL);
@@ -3281,23 +3282,6 @@ VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
 		}
 	});
 };
-/**
-* deprecated, the URL Signature is not present in Version table (Dec 16, 2016)
-*/
-/*
-VersionsAdapter.prototype.selectURLCloudfront = function(versionFile, callback) {
-	var statement = 'SELECT URLSignature FROM Version WHERE filename=?';
-	this.database.select(statement, [versionFile], function(results) {
-		if (results instanceof IOError) {
-			callback(results);
-		} else if (results.rows.length === 0) {
-			callback();
-		} else {
-			callback(results.rows.item(0).URLSignature);
-		}
-	});
-};
-*/
 VersionsAdapter.prototype.selectAWSRegion = function(countryCode, callback) {
 	var that = this;
 	var statement = 'SELECT awsRegion FROM Region WHERE countryCode=?';
@@ -3322,27 +3306,6 @@ VersionsAdapter.prototype.selectBucketName = function(regionCode, callback) {
 		}
 	});
 };
-/*
-VersionsAdapter.prototype.selectURLS3 = function(versionFile, countryCode, callback) {
-	var that = this;
-	var statement = 'SELECT signedURL FROM DownloadURL d JOIN Region r ON r.awsRegion=d.awsRegion WHERE d.filename=? AND r.countryCode=?';
-	this.database.select(statement, [versionFile, countryCode], function(results) {
-		if (results instanceof IOError) {
-			callback(results);
-		} else if (results.rows.length === 0) {
-			that.database.select(statement, [versionFile, 'US'], function(results) {
-				if (results instanceof IOError) {
-					callback(results);
-				} else {
-					callback(results.rows.item(0).signedURL)
-				}
-			});
-		} else {
-			callback(results.rows.item(0).signedURL);
-		}
-	});
-};
-*/
 VersionsAdapter.prototype.selectInstalledBibleVersions = function(callback) {
 	var versList = [];
 	var now = new Date().toISOString();

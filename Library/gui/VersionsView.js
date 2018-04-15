@@ -144,15 +144,12 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	}
 	function downloadVersionHandler(event) {
 		this.removeEventListener('click', downloadVersionHandler);
-		var gsPreloader = new GSPreloader(gsPreloaderOptions);
-		gsPreloader.active(true);
 		var iconNode = this;
 		var versionCode = iconNode.id.substr(3);
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		that.settingStorage.getCurrentVersion(function(currVersion) {
 			var downloader = new FileDownloader(that.database, that.locale);
 			downloader.download(versionFile, function(error) {
-				gsPreloader.active(false);
 				if (error) {
 					console.log(JSON.stringify(error));
 					iconNode.setAttribute('src', DOWNLOAD_FAIL);
