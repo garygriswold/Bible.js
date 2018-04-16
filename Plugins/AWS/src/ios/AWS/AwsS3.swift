@@ -170,12 +170,12 @@ public class AwsS3 {
         
         let expression = AWSS3TransferUtilityDownloadExpression()
         expression.setValue(self.getUserAgent(), forRequestHeader: "User-Agent")
+        let progressCircle = ProgressCircle()
         if let vue = view {
-            let progressCircle = ProgressCircle()
             progressCircle.addToParentAndCenter(view: vue)
             expression.progressBlock = {(task, progress) in DispatchQueue.main.async(execute: {
                 progressCircle.progress = CGFloat(progress.fractionCompleted)
-                if progress.isFinished {
+                if progress.isFinished || progress.isCancelled {
                     progressCircle.remove()
                 }
             })}
@@ -185,6 +185,7 @@ public class AwsS3 {
             DispatchQueue.main.async(execute: {
                 if let err = error {
                     print("ERROR in s3.downloadZipFile \(s3Bucket) \(s3Key) Error: \(err)")
+                    progressCircle.remove()
                     complete(err)
                 } else {
                     print("Download SUCCESS in s3.downloadZipFile \(s3Bucket) \(s3Key)")
@@ -210,6 +211,7 @@ public class AwsS3 {
                         complete(nil)
                     } catch let cotError {
 	                    print("ERROR in s3.downloadZipFile \(s3Bucket) \(s3Key) Error: \(cotError)")
+                        progressCircle.remove()
                         complete(cotError)
                     }
                     self.removeItemNoThrow(at: tempZipURL)

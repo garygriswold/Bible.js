@@ -52,7 +52,6 @@
 		<source-file src="src/android/app/src/main/java/com/shortsands/aws/UploadFileListener.java" target-dir="src/com/shortsands/aws" />
 		<source-file src="src/android/app/src/main/java/com/shortsands/io/FileManager.java" target-dir="src/com/shortsands/io" />
 		<source-file src="src/android/app/src/main/java/com/shortsands/io/Zip.java" target-dir="src/com/shortsands/io" />
-		<!-- <lib-file src="src/android/plugin/AWS.jar" target-dir="src/libs" /> -->
 		<lib-file src="src/android/app/libs/aws-android-sdk-core-2.4.2.jar" target-dir="src/libs" />
 		<lib-file src="src/android/app/libs/aws-android-sdk-s3-2.4.2.jar" target-dir="src/libs" />
 	</platform>
