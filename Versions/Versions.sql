@@ -244,14 +244,15 @@ CREATE INDEX Region_awsRegion_index ON Region(awsRegion);
 .import data/Region.txt Region
 
 
+-- This table is removed April 18, 2018, replaced by AWS plugin
 -- This table is populate by Versions/js/VersionAdapter
-CREATE TABLE DownloadURL(
-	filename TEXT NOT NULL,
-	awsRegion TEXT NOT NULL REFERENCES AWSRegion(awsRegion),
-	signedURL TEXT NOT NULL,
-	PRIMARY KEY(filename, awsRegion)
-);
-CREATE INDEX DownloadURL_awsRegion_index ON DownloadURL(awsRegion);
+-- CREATE TABLE DownloadURL(
+--	filename TEXT NOT NULL,
+--	awsRegion TEXT NOT NULL REFERENCES AWSRegion(awsRegion),
+--	signedURL TEXT NOT NULL,
+--	PRIMARY KEY(filename, awsRegion)
+-- );
+-- CREATE INDEX DownloadURL_awsRegion_index ON DownloadURL(awsRegion);
 
 CREATE TABLE CountryVersion (
 countryCode TEXT REFERENCES Country(countryCode),

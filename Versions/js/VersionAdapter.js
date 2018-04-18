@@ -80,41 +80,10 @@ VersionAdapter.prototype.loadVideoIntroductions = function(directory, callback) 
 		}
 	});
 };
-
-/**
-* This method computes URL signatures for AWS cloudfront, and adds this information to the Version table	
-*/
-/* Commented out 3/2/18 GNG
-VersionAdapter.prototype.addCloudfrontSignatures = function(callback) {
-	var that = this;
-	var signer = require('aws-cloudfront-sign');
-	var pkeyPath = '../../Credentials/AWSCloudfront/pk-APKAJ7UXJKWYASMHCDEA.pem.txt';
-	var expireTime = new Date(2038, 0, 1); // This is maximum unix Date.
-	var options = {keypairId: 'APKAJ7UXJKWYASMHCDEA', privateKeyPath: pkeyPath, expireTime: expireTime};
-	this.db.all('SELECT versionCode, filename FROM Version', [], function(err, results) {
-		if (err) {
-			console.log('SQL Error in VersionAdapter.addCloudfrontSignatures');
-			callback(err);
-		} else {
-			var signed = [];
-			for (var i=0; i<results.length; i++) {
-				var row = results[i];
-				var url = 'https://d1obplp0ybf6eo.cloudfront.net/' + row.filename + '.zip';
-				var signedURL = signer.getSignedUrl(url, options);
-				//console.log(row.versionCode, 'Signed URL', signedURL);
-				signed.push([signedURL, row.versionCode]);
-			}
-			that.executeSQL('UPDATE Version SET URLSignature=? WHERE versionCode=?', signed, function(rowCount) {
-				console.log(rowCount, 'Rows of the version table updated');
-				callback();
-			});
-		}
-	});
-};
-*/
 /**
 * This method computes URL signatures for AWS S3, and adds this information to the Version table	
 */
+/* Removed April 18, 2018
 VersionAdapter.prototype.addS3URLSignatures = function(callback) {
 	var that = this;
 	var cred = require('../../../Credentials/UsersGroups/BibleApp.js');
@@ -163,6 +132,7 @@ VersionAdapter.prototype.addS3URLSignatures = function(callback) {
 		}
 	});
 };
+*/
 /**
 * This method validates that the translation table is complete for all languages in use,
 * and that the same items have been translated for all languages.
@@ -227,19 +197,19 @@ console.log('Start Version Adapter');
 database.loadIntroductions('data/VersionIntro', function() {
 	console.log('Loaded Introductions');
 	database.loadVideoIntroductions('data/VideoIntro', function() {
-		database.addS3URLSignatures(function() {		// Use for S3
-			console.log('Added URL Signatures');
-			database.validateTranslation(function(errCount) {
-				console.log('Validated Translation');
-				database.close();
-				console.log('Database Closed');
-				if (errCount == 0) {
-					console.log('SUCCESSFULLY CREATED Versions.db');
-				} else {
-					console.log('COMPLETED WITH ERRORS', errCount);
-				}
-			});
+		//database.addS3URLSignatures(function() {		// Use for S3
+		//	console.log('Added URL Signatures');
+		database.validateTranslation(function(errCount) {
+			console.log('Validated Translation');
+			database.close();
+			console.log('Database Closed');
+			if (errCount == 0) {
+				console.log('SUCCESSFULLY CREATED Versions.db');
+			} else {
+				console.log('COMPLETED WITH ERRORS', errCount);
+			}
 		});
+		//});
 	});
 });
 
