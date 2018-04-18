@@ -16,8 +16,7 @@
 						    
     @objc(initializeRegion:)
     func initializeRegion(command:  CDVInvokedUrlCommand) {
-        let regionName = command.arguments[0] as? String ?? ""
-        AwsS3.region = regionName
+	    let manager = AwsS3Manager.getSingleton()
         let result = CDVPluginResult(status: CDVCommandStatus_OK)
         self.commandDelegate!.send(result, callbackId: command.callbackId)
     }
@@ -32,14 +31,14 @@
 	@objc(echo3:)
 	func echo3(command: CDVInvokedUrlCommand) {
 		let message = command.arguments[0] as? String ?? ""
-		let response = AwsS3.shared.echo3(message: message);
+		let response = AwsS3Manager.findSS().echo3(message: message);
 		let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: response)
 		self.commandDelegate!.send(result, callbackId: command.callbackId)		
 	}
 	
 	@objc(preSignedUrlGET:) 
 	func preSignedUrlGET(command: CDVInvokedUrlCommand) {
-		AwsS3.shared.preSignedUrlGET(
+		AwsS3Manager.findSS().preSignedUrlGET(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 			expires: command.arguments[2] as? Int ?? 3600,
@@ -52,7 +51,7 @@
 	
 	@objc(preSignedUrlPUT:) 
 	func preSignedUrlPUT(command: CDVInvokedUrlCommand) {
-		AwsS3.shared.preSignedUrlPUT(
+		AwsS3Manager.findSS().preSignedUrlPUT(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 			expires: command.arguments[2] as? Int ?? 3600,
@@ -66,7 +65,7 @@
 
 	@objc(downloadText:) 
 	func downloadText(command: CDVInvokedUrlCommand) {
-		AwsS3.shared.downloadText(
+		AwsS3Manager.findSS().downloadText(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
             complete: { error, data in
@@ -83,7 +82,7 @@
     
     @objc(downloadData:) 
     func downloadData(command: CDVInvokedUrlCommand) {	
-		AwsS3.shared.downloadData(
+		AwsS3Manager.findSS().downloadData(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
             complete: { error, data in
@@ -102,7 +101,7 @@
     func downloadFile(command: CDVInvokedUrlCommand) {
 	    print("Documents \(NSHomeDirectory())") 
 	    let filePath: String = command.arguments[2] as? String ?? ""
-	    AwsS3.shared.downloadFile(
+	    AwsS3Manager.findSS().downloadFile(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 			filePath: URL(fileURLWithPath: NSHomeDirectory() + filePath),
@@ -121,7 +120,7 @@
     func downloadZipFile(command: CDVInvokedUrlCommand) {
 	    print("Documents \(NSHomeDirectory())") 
 	    let filePath: String = command.arguments[2] as? String ?? ""
-	    AwsS3.shared.downloadZipFile(
+	    AwsS3Manager.findSS().downloadZipFile(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 			filePath: URL(fileURLWithPath: NSHomeDirectory() + filePath),
@@ -140,7 +139,7 @@
     @objc(uploadAnalytics:) 
     func uploadVideoAnalytics(command: CDVInvokedUrlCommand) {
 	    let data = command.arguments[3] as? String ?? ""
-	    AwsS3.shared.uploadAnalytics(
+	    AwsS3Manager.findSS().uploadAnalytics(
 		    sessionId: command.arguments[0] as? String ?? "", 
 		    timestamp: command.arguments[1] as? String ?? "",
 		    prefix: command.arguments[2] as? String ?? "",
@@ -159,7 +158,7 @@
     
     @objc(uploadText:) 
     func uploadText(command: CDVInvokedUrlCommand) {    
-	    AwsS3.shared.uploadText(
+	    AwsS3Manager.findSS().uploadText(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 		    data: command.arguments[2] as? String ?? "",
@@ -178,7 +177,7 @@
     
     @objc(uploadData:) 
     func uploadData(command: CDVInvokedUrlCommand) {
-	    AwsS3.shared.uploadData(
+	    AwsS3Manager.findSS().uploadData(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 		    data: command.arguments[2] as? Data ?? Data(),
@@ -202,7 +201,7 @@
     @objc(uploadFile:) 
     func uploadFile(command: CDVInvokedUrlCommand) {
 	    let filePath = command.arguments[2] as? String ?? ""
-	    AwsS3.shared.uploadFile(
+	    AwsS3Manager.findSS().uploadFile(
 			s3Bucket: command.arguments[0] as? String ?? "",
 			s3Key: command.arguments[1] as? String ?? "",
 			filePath: URL(fileURLWithPath: NSHomeDirectory() + filePath),

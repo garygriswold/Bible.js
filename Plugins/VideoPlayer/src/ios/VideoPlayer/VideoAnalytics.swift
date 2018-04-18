@@ -86,7 +86,7 @@ class VideoAnalytics {
         self.mediaViewStartingPosition = CMTimeGetSeconds(position)
         self.dictionary["mediaViewStartingPosition"] = String(round(self.mediaViewStartingPosition * 1000) / 1000)
         
-        AwsS3.shared.uploadAnalytics(sessionId: self.sessionId,
+        AwsS3Manager.findSS().uploadAnalytics(sessionId: self.sessionId,
                                      timestamp: self.dictionary["timeStarted"]! + "-B",
                                      prefix: "VideoBegV1",
                                      dictionary: self.dictionary, complete: { (error) in
@@ -110,7 +110,7 @@ class VideoAnalytics {
         self.dictionary["mediaTimeViewInSeconds"] = String(round(mediaTimeViewInSeconds * 1000) / 1000)
         self.dictionary["mediaViewCompleted"] = String(completed)
         
-        AwsS3.shared.uploadAnalytics(sessionId: self.sessionId,
+        AwsS3Manager.findSS().uploadAnalytics(sessionId: self.sessionId,
                                      timestamp: self.dictionary["timeCompleted"]! + "-E",
                                      prefix: "VideoEndV1",
                                      dictionary: self.dictionary,

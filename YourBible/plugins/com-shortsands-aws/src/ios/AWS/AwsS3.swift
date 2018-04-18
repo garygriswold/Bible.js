@@ -11,37 +11,27 @@ import AWSCore
 
 public class AwsS3 {
     
-    // AwsS3.regionName should be set early in an App
-    public static var region: String = "us-east-1"
-    
-    // Do not instantiate AwsS3, use AwsS3.shared
-    private static var instance: AwsS3?
-    public static var shared: AwsS3 {
-        get {
-            if (AwsS3.instance == nil) {
-                AwsS3.instance = AwsS3(region: AwsS3.region)
-            }
-            return AwsS3.instance!
-        }
-    }
-    
-    private let endpoint: AWSEndpoint
+    private let region: AwsS3Region
     private let transfer: AWSS3TransferUtility
     private var userAgent: String? = nil
     
-    private init(region: String) {
-        var regionType = region.aws_regionTypeValue()
-        if (regionType == AWSRegionType.Unknown) {
-            regionType = AWSRegionType.USEast1
-        }
-	    self.endpoint = AWSEndpoint(region: regionType, service: AWSServiceType.S3, useUnsafeURL: false)!
+    public init(region: AwsS3Region) {
+        self.region = region
+	    let endpoint = AWSEndpoint(region: region.type, service: AWSServiceType.S3, useUnsafeURL: false)!
         let credentialProvider = Credentials.AWS_BIBLE_APP
-        let configuration = AWSServiceConfiguration(region: regionType,
+        let configuration = AWSServiceConfiguration(region: region.type,
                                                     endpoint: endpoint,
                                                     credentialsProvider: credentialProvider)
-        AWSServiceManager.default().defaultServiceConfiguration = configuration
-        //AWSS3TransferUtility.interceptApplication was not set, because we do not need it.
-        self.transfer = AWSS3TransferUtility.default()
+        let transferUtility = AWSS3TransferUtilityConfiguration()
+        AWSS3TransferUtility.register(
+            with: configuration!,
+            transferUtilityConfiguration: transferUtility,
+            forKey: self.region.name
+        )
+        self.transfer = AWSS3TransferUtility.s3TransferUtility(forKey: self.region.name)
+    }
+    deinit {
+        print("****** deinit AwsS3 ******")
     }
     /**
     * A Unit Test Method
@@ -161,6 +151,7 @@ public class AwsS3 {
     public func downloadZipFile(s3Bucket: String, s3Key: String, filePath: URL, view: UIView?,
                          complete: @escaping (_ error:Error?) -> Void) {
  
+        let bucket = regionalizeBucket(bucket: s3Bucket)
         let temporaryDirectory: URL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
         print("Temp Zip File Directory \(temporaryDirectory.absoluteString)")
         
@@ -184,11 +175,11 @@ public class AwsS3 {
         let completionHandler: AWSS3TransferUtilityDownloadCompletionHandlerBlock = {(task, url, data, error) -> Void in
             DispatchQueue.main.async(execute: {
                 if let err = error {
-                    print("ERROR in s3.downloadZipFile \(s3Bucket) \(s3Key) Error: \(err)")
+                    print("ERROR in s3.downloadZipFile \(bucket) \(s3Key) Error: \(err)")
                     progressCircle.remove()
                     complete(err)
                 } else {
-                    print("Download SUCCESS in s3.downloadZipFile \(s3Bucket) \(s3Key)")
+                    print("Download SUCCESS in s3.downloadZipFile \(bucket) \(s3Key)")
                     do {
                         var unzippedURL: URL = URL(fileURLWithPath: "")
                         // unzip zip file
@@ -207,10 +198,10 @@ public class AwsS3 {
 			
                         // move unzipped file to destination
                         try FileManager.default.moveItem(at: unzippedURL, to: filePath)
-                        print("SUCCESS in s3.downloadZipFile \(s3Bucket) \(s3Key)")
+                        print("SUCCESS in s3.downloadZipFile \(bucket) \(s3Key)")
                         complete(nil)
                     } catch let cotError {
-	                    print("ERROR in s3.downloadZipFile \(s3Bucket) \(s3Key) Error: \(cotError)")
+	                    print("ERROR in s3.downloadZipFile \(bucket) \(s3Key) Error: \(cotError)")
                         progressCircle.remove()
                         complete(cotError)
                     }
@@ -218,7 +209,7 @@ public class AwsS3 {
                 }
             })
         }
-        self.transfer.download(to: tempZipURL, bucket: s3Bucket, key: s3Key, expression: expression,
+        self.transfer.download(to: tempZipURL, bucket: bucket, key: s3Key, expression: expression,
                                completionHandler: completionHandler)
         //.continueWith has been dropped, because it did not report errors
     }
@@ -257,7 +248,8 @@ public class AwsS3 {
     */
     public func uploadAnalytics(sessionId: String, timestamp: String, prefix: String, json: Data,
                                 complete: @escaping (_ error: Error?) -> Void) {
-        let s3Bucket = "analytics-" + self.endpoint.regionName + "-shortsands"
+        //let s3Bucket = "analytics-" + self.endpoint.regionName + "-shortsands"
+        let s3Bucket = "analytics-" + self.region.name + "-shortsands"
         let s3Key = sessionId + "-" + timestamp
         let jsonPrefix = "{\"" + prefix + "\": "
         let jsonSuffix = "}"
@@ -335,5 +327,29 @@ public class AwsS3 {
             self.userAgent = result.joined(separator: ":")
         }
         return self.userAgent!
+    }
+    
+    private func regionalizeBucket(bucket: String) -> String {
+        let bucket2: NSString = bucket as NSString
+        if bucket2.contains("oldregion") {
+            switch(self.region.type) {
+            case AWSRegionType.USEast1:
+                return bucket2.replacingOccurrences(of: "oldregion", with: "na-va")
+            case AWSRegionType.EUWest1:
+                return bucket2.replacingOccurrences(of: "oldregion", with: "eu-ie")
+            case AWSRegionType.APNortheast1:
+                return bucket2.replacingOccurrences(of: "oldregion", with: "as-jp")
+            case AWSRegionType.APSoutheast1:
+                return bucket2.replacingOccurrences(of: "oldregion", with: "as-sg")
+            case AWSRegionType.APSoutheast2:
+                return bucket2.replacingOccurrences(of: "oldregion", with: "oc-au")
+            default:
+                return bucket2.replacingOccurrences(of: "oldregion", with: "na-va")
+            }
+        }
+        if bucket2.contains("region") {
+            return bucket2.replacingOccurrences(of: "region", with: self.region.name)
+        }
+        return bucket
     }
 }

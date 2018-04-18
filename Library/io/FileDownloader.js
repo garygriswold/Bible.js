@@ -15,16 +15,13 @@ function FileDownloader(database, locale) {
 	Object.seal(this);
 }
 FileDownloader.prototype.download = function(bibleVersion, callback) {
-	var that = this;
-	this.database.selectBucketName(this.countryCode, function(s3Region, s3Bucket) {
-		console.log("SELECTED REGION: " + s3Region + " " + s3Bucket);
-		var s3Key = bibleVersion + ".zip";
-		var filePath = that.finalPath + bibleVersion;
-		AWS.downloadZipFile(s3Bucket, s3Key, filePath, function(error) {
-			if (error == null) console.log("Download Success");
-			else console.log("Download Failed");
-			callback(error);
-		});
+	var s3Bucket = "shortsands-oldregion";
+	var s3Key = bibleVersion + ".zip";
+	var filePath = this.finalPath + bibleVersion;
+	AWS.downloadZipFile(s3Bucket, s3Key, filePath, function(error) {
+		if (error == null) console.log("Download Success");
+		else console.log("Download Failed");
+		callback(error);
 	});
 };
 

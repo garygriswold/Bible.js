@@ -10,13 +10,13 @@
 "use strict";
 var exec = require('cordova/exec');
 
-exports.initializeRegion = function(regionName, callback) {
+exports.initializeRegion = function(callback) {
 	exec(function() {
 		callback(true);
 	}, function(error) {
 		console.log("ERROR: AWS.initializeRegion " + error);
 		callback(false);
-	}, "AWS", "initializeRegion", [regionName]);
+	}, "AWS", "initializeRegion", []);
 };
 
 exports.echo1 = function(message, callback) {

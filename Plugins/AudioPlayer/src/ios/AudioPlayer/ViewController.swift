@@ -17,7 +17,6 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        AwsS3.region = "us-east-1"
         let readVersion = "ERV-ENG"//KJVPD"//ESV"
         let readLang = "eng"
         let readBook = "JHN"

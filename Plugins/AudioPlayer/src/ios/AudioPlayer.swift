@@ -12,7 +12,6 @@
 @objc(AudioPlayer) class AudioPlayer : CDVPlugin {
     
     @objc(findAudioVersion:) func findAudioVersion(command: CDVInvokedUrlCommand) {
-        AwsS3.region = "us-east-1"
         let audioController = AudioBibleController.shared
         audioController.findAudioVersion(
             version: command.arguments[0] as? String ?? "",
@@ -32,7 +31,6 @@
     }
 	
 	@objc(present:) func present(command: CDVInvokedUrlCommand) {
-        AwsS3.region = "us-east-1"
         let audioController = AudioBibleController.shared
 		audioController.present(
 			view: self.webView,

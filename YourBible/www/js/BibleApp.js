@@ -25,11 +25,11 @@ AppInitializer.prototype.begin = function() {
 		appUpdater.doUpdate(function() {
 			console.log('DONE APP UPDATER');
 			var versionsAdapter = new VersionsAdapter();
-			versionsAdapter.selectAWSRegion(countryCode, function(awsRegion) {
-				AWS.initializeRegion(awsRegion, function(done) {
-					console.log('AWS Initialized ' + awsRegion + ' ' + done);
-				});
-			});			
+			//versionsAdapter.selectAWSRegion(countryCode, function(awsRegion) {
+			AWS.initializeRegion(function(done) {
+				console.log('AWS Initialized ' + done);
+			});
+			//});			
 		    settingStorage.getCurrentVersion(function(versionFilename) {
 			    if (versionFilename) {
 				    // Process with User's Version
@@ -3704,17 +3704,18 @@ function FileDownloader(database, locale) {
 	Object.seal(this);
 }
 FileDownloader.prototype.download = function(bibleVersion, callback) {
-	var that = this;
-	this.database.selectBucketName(this.countryCode, function(s3Region, s3Bucket) {
-		console.log("SELECTED REGION: " + s3Region + " " + s3Bucket);
-		var s3Key = bibleVersion + ".zip";
-		var filePath = that.finalPath + bibleVersion;
-		AWS.downloadZipFile(s3Bucket, s3Key, filePath, function(error) {
-			if (error == null) console.log("Download Success");
-			else console.log("Download Failed");
-			callback(error);
-		});
+	//var that = this;
+	//this.database.selectBucketName(this.countryCode, function(s3Region, s3Bucket) {
+	//	console.log("SELECTED REGION: " + s3Region + " " + s3Bucket);
+	var s3Bucket = "shortsands-oldregion";
+	var s3Key = bibleVersion + ".zip";
+	var filePath = this.finalPath + bibleVersion;
+	AWS.downloadZipFile(s3Bucket, s3Key, filePath, function(error) {
+		if (error == null) console.log("Download Success");
+		else console.log("Download Failed");
+		callback(error);
 	});
+	//});
 };
 
 /**

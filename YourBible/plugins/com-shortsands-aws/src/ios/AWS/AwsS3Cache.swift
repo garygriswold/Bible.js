@@ -41,7 +41,7 @@ public class AwsS3Cache {
             reportTimeCompleted(start: startTime, success: true, inCache: true, path: path)
             getComplete(data)
         } else {
-            AwsS3.shared.downloadData(
+            AwsS3Manager.findDbp().downloadData(
                 s3Bucket: s3Bucket,
                 s3Key: s3Key,
                 complete: { error, data in
@@ -72,7 +72,7 @@ public class AwsS3Cache {
             reportTimeCompleted(start: startTime, success: true, inCache: true, path: path)
             getComplete(path)
         } else {
-            AwsS3.shared.downloadFile(
+            AwsS3Manager.findDbp().downloadFile(
                 s3Bucket: s3Bucket,
                 s3Key: s3Key,
                 filePath: path,

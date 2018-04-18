@@ -91,7 +91,7 @@ class AudioAnalytics {
         self.startingPosition = CMTimeGetSeconds(position)
         self.dictionary["startingPosition"] = String(round(self.startingPosition * 1000) / 1000)
         
-        AwsS3.shared.uploadAnalytics(sessionId: self.sessionId,
+        AwsS3Manager.findSS().uploadAnalytics(sessionId: self.sessionId,
                                      timestamp: self.dictionary["timeStarted"]! + "-B",
                                      prefix: "AudioBegV1",
                                      dictionary: self.dictionary, complete: { (error) in
@@ -114,7 +114,7 @@ class AudioAnalytics {
         let endingPosition = CMTimeGetSeconds(position)
         self.dictionary["endingPosition"] = String(round(endingPosition * 1000) / 1000)
         
-        AwsS3.shared.uploadAnalytics(sessionId: self.sessionId,
+        AwsS3Manager.findSS().uploadAnalytics(sessionId: self.sessionId,
                                      timestamp: self.dictionary["timeCompleted"]! + "-E",
                                      prefix: "AudioEndV1",
                                      dictionary: self.dictionary,

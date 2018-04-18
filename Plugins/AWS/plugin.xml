@@ -63,15 +63,17 @@
 			</feature>
 		</config-file>
 		<source-file src="src/ios/AWS.swift" />
-		<!-- <framework src="src/ios/build/AWS.framework" embed="true" custom="true" /> -->
 		<header-file src="src/ios/AWS/SS_AWSS3PresignedURL.h" />
 		<header-file src="src/ios/AWS/SS_AWSS3TransferUtility.h" />
 		<source-file src="src/ios/AWS/SS_AWSS3PresignedURL.m" />
 		<source-file src="src/ios/AWS/SS_AWSS3TransferUtility.m" />
+		<source-file src="src/ios/AWS/AwsS3Manager.swift" />
+		<source-file src="src/ios/AWS/AwsS3Region.swift" />
 		<source-file src="src/ios/AWS/AwsS3.swift" />
 		<source-file src="src/ios/AWS/AWSS3Cache.swift" />
 		<source-file src="src/ios/AWS/Credentials.swift" />
 		<source-file src="src/ios/AWS/ProgressCircle.swift" />
+		<source-file src="src/ios/AWS/AWSSqlite3.swift" />
 		<source-file src="src/ios/AWS/Zip.swift" />
 		<source-file src="src/ios/AWS/ZipUtilities.swift" />
 		<source-file src="src/ios/AWS/minizip/module.modulemap" target-dir="minizip" />

@@ -24,10 +24,8 @@ AppInitializer.prototype.begin = function() {
 		appUpdater.doUpdate(function() {
 			console.log('DONE APP UPDATER');
 			var versionsAdapter = new VersionsAdapter();
-			versionsAdapter.selectAWSRegion(countryCode, function(awsRegion) {
-				AWS.initializeRegion(awsRegion, function(done) {
-					console.log('AWS Initialized ' + awsRegion + ' ' + done);
-				});
+			AWS.initializeRegion(function(done) {
+				console.log('AWS Initialized ' + done);
 			});			
 		    settingStorage.getCurrentVersion(function(versionFilename) {
 			    if (versionFilename) {

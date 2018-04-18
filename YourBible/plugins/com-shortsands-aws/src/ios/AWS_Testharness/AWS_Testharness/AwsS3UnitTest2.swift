@@ -19,8 +19,7 @@ public class AwsS3UnitTest2 {
     }
     
     func testDriver() {
-        
-        AwsS3.region = "us-west-2"
+        //AwsS3.region = "us-west-2"
         //testPresignedGET()
         //testUploadData()
         //testDownloadData()
@@ -31,7 +30,7 @@ public class AwsS3UnitTest2 {
     }
     
     func testPresignedGET() {
-        let s3 = AwsS3.shared
+        let s3 = AwsS3Manager.findTest()
         s3.preSignedUrlGET(s3Bucket: "shortsands", s3Key: "KJVPD.db.zip", expires: 3600,
                            complete: {
                             url in print("computed GET URL \(String(describing: url))")
@@ -55,7 +54,7 @@ public class AwsS3UnitTest2 {
     }
     
     func testUploadData() {
-        let s3 = AwsS3.shared
+        let s3 = AwsS3Manager.findTest()
         let message = "Hello World"
         let data = message.data(using: String.Encoding.utf8)
         s3.uploadData(s3Bucket: "shortsands", s3Key: "hello1", data: data!, contentType: "text/plain",
@@ -80,13 +79,13 @@ public class AwsS3UnitTest2 {
     }
     
     func testDownloadData() {
-        let s3 = AwsS3.shared
+        let s3 = AwsS3Manager.findTest()
         s3.downloadText(s3Bucket: "shortsands", s3Key: "hello1",
                         complete: {error, data in print("DOWNLOADED err \(String(describing: error))  data \(String(describing: data))")})
     }
     
     func testDownloadFile() {
-        let s3 = AwsS3.shared
+        let s3 = AwsS3Manager.findTest()
         let timer = Timer(place: "Start Download")
         let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db.zip")
         s3.downloadFile(s3Bucket: "shortsands", s3Key: "WEB.db.zip", filePath: filePath1,
@@ -116,7 +115,7 @@ public class AwsS3UnitTest2 {
     }
     
     func testDownloadZipFile() {
-        let s3 = AwsS3.shared
+        let s3 = AwsS3Manager.findTest()
         let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/WEB.db")
         let timer = Timer(place: "Start Download and Unzip WEB.db.zip")
         s3.downloadZipFile(s3Bucket: "shortsands", s3Key: "WEB.db.zip", filePath: filePath1, view: self.view,
@@ -127,7 +126,7 @@ public class AwsS3UnitTest2 {
     }
     
     func testUploadFile() {
-        let s3 = AwsS3.shared
+        let s3 = AwsS3Manager.findTest()
         let filePath1 = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/MichaelMark.jpg")
         s3.uploadFile(s3Bucket: "shortsands", s3Key: "uploadFile1", filePath: filePath1,
                       contentType: "image/jpg",

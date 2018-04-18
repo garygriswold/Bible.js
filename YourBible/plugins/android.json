@@ -10,9 +10,6 @@
     "com-shortsands-utility": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
-    "com-shortsands-videoplayer": {
-      "PACKAGE_NAME": "com.shortsands.yourbible"
-    },
     "cordova-plugin-file": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
@@ -38,6 +35,9 @@
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
     "ionic-plugin-keyboard": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
+    "com-shortsands-videoplayer": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
     "com-shortsands-audioplayer": {
