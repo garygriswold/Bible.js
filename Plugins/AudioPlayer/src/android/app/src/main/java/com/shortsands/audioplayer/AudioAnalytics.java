@@ -6,7 +6,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.util.Log;
 
-import com.shortsands.aws.AwsS3;
+import com.shortsands.aws.AwsS3Manager;
 import com.shortsands.aws.UploadDataListener;
 
 import org.json.JSONException;
@@ -101,7 +101,7 @@ public class AudioAnalytics {
             Log.d(TAG, "BEGIN " + dictionary.toString());
 
             UploadDataListener listener = new UploadDataListener();
-            AwsS3.shared().uploadAnalytics(this.sessionId, timeStartedStr + "-B", "AudioBegV1", dictionary.toString(2), listener);
+            AwsS3Manager.findDbp().uploadAnalytics(this.sessionId, timeStartedStr + "-B", "AudioBegV1", dictionary.toString(2), listener);
         } catch(JSONException ex) {
             Log.e(TAG, "Error building Analytics Begin " + ex.toString());
         }
@@ -125,7 +125,7 @@ public class AudioAnalytics {
             Log.d(TAG, "END " + dictionary.toString());
 
             UploadDataListener listener = new UploadDataListener();
-            AwsS3.shared().uploadAnalytics(this.sessionId, timeCompletedStr + "-E", "AudioEndV1", dictionary.toString(2), listener);
+            AwsS3Manager.findDbp().uploadAnalytics(this.sessionId, timeCompletedStr + "-E", "AudioEndV1", dictionary.toString(2), listener);
         } catch(JSONException ex) {
             Log.e(TAG, "Error building Analytics End " + ex.toString());
         }

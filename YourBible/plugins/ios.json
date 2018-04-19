@@ -37,10 +37,10 @@
     "ionic-plugin-keyboard": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
-    "com-shortsands-videoplayer": {
+    "com-shortsands-audioplayer": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
-    "com-shortsands-audioplayer": {
+    "com-shortsands-videoplayer": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
     "com-shortsands-aws": {

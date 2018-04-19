@@ -26,7 +26,7 @@ public class AwsS3Cache {
     private static AwsS3Cache instance = null;
     public static AwsS3Cache shared() {
         if (AwsS3Cache.instance == null) {
-            AwsS3Cache.instance = new AwsS3Cache(AwsS3.context);
+            AwsS3Cache.instance = new AwsS3Cache(AwsS3Manager.context);
         }
         return AwsS3Cache.instance;
     }
@@ -34,7 +34,7 @@ public class AwsS3Cache {
     private final Context context;
     private final File cacheDir;
 
-    public AwsS3Cache(Context context) {
+    private AwsS3Cache(Context context) {
         super();
         this.context = context;
         this.cacheDir = context.getCacheDir();
@@ -49,7 +49,7 @@ public class AwsS3Cache {
             handler.completed(data);
         } else {
             CacheDownloadTextListener listener = new CacheDownloadTextListener(startTime, filePath, handler);
-            AwsS3.shared().downloadFile(s3Bucket, s3Key, filePath, listener);
+            AwsS3Manager.findDbp().downloadFile(s3Bucket, s3Key, filePath, listener);
             Log.d(TAG, "**** AWSS3Cache performed downloadFile");
         }
     }
@@ -89,7 +89,7 @@ public class AwsS3Cache {
             handler.completed(filePath);
         } else {
             CacheDownloadFileListener listener = new CacheDownloadFileListener(startTime, filePath, handler);
-            AwsS3.shared().downloadFile(s3Bucket, s3Key, filePath, listener);
+            AwsS3Manager.findDbp().downloadFile(s3Bucket, s3Key, filePath, listener);
             Log.d(TAG, "**** AWSS3Cache performed downloadFile");
         }
     }

@@ -38,8 +38,8 @@
       "cordova-plugin-wkwebview-engine": {},
       "ionic-plugin-keyboard": {},
       "com-shortsands-utility": {},
-      "com-shortsands-videoplayer": {},
       "com-shortsands-audioplayer": {},
+      "com-shortsands-videoplayer": {},
       "com-shortsands-aws": {}
     },
     "platforms": [

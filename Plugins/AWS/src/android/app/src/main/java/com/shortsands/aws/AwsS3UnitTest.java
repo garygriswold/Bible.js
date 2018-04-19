@@ -15,20 +15,20 @@ public class AwsS3UnitTest {
 
     private Context context;
 
-    public AwsS3UnitTest(String regionName, Context context) {
-        AwsS3.initialize(regionName, context);
+    public AwsS3UnitTest(Context context) {
+        AwsS3Manager.initialize(context);
         this.context = context;
     }
 
     public void testPresignedURL() {
-        AwsS3 s3 = AwsS3.shared();
+        AwsS3 s3 = AwsS3Manager.findTest();
         URL result1 = s3.preSignedUrlGET("shortsands", "WEB.db.zip", 3600);
 
         URL result2 = s3.preSignedUrlPUT("shortsands", "abcd", 3600, "text/plain");
     }
 
     public void testDownloadText() {
-        AwsS3 s3 = AwsS3.shared();
+        AwsS3 s3 = AwsS3Manager.findTest();
 
         // Download text
         DownloadTextListener listener1 = new DownloadTextListener();
@@ -47,7 +47,7 @@ public class AwsS3UnitTest {
     }
 
     public void testDownloadData() {
-        AwsS3 s3 = AwsS3.shared();
+        AwsS3 s3 = AwsS3Manager.findTest();
 
         DownloadDataListener listener1 = new DownloadDataListener();
         s3.downloadData("shortsands", "EmmaFirstLostTooth.mp3", listener1);
@@ -59,7 +59,7 @@ public class AwsS3UnitTest {
     }
 
     public void testDownloadFile() {
-        AwsS3 s3 = AwsS3.shared();
+        AwsS3 s3 = AwsS3Manager.findTest();
 
         File root = this.context.getFilesDir();
         File file1 = new File(root, "EmmaLooseTooth.mp3");
@@ -104,7 +104,7 @@ public class AwsS3UnitTest {
     }
 */
     public void testUploadAnalytics() {
-        AwsS3 s3 = AwsS3.shared();
+        AwsS3 s3 = AwsS3Manager.findTest();
 
         UploadDataListener listener1 = new UploadDataListener();
         s3.uploadAnalytics("1234512345", "2017-05-23T23:22:00", "HelloV1", "{message: more}", listener1);
@@ -112,7 +112,7 @@ public class AwsS3UnitTest {
     }
 
     public void testUploadText() {
-        AwsS3 s3 = AwsS3.shared();
+        AwsS3 s3 = AwsS3Manager.findTest();
 
         UploadDataListener listener1 = new UploadDataListener();
         s3.uploadText("shortsands", "Hello_123", "{Hello World Message}", "application/json", listener1);
@@ -124,7 +124,7 @@ public class AwsS3UnitTest {
     }
 
     public void testUploadData() {
-        AwsS3 s3 = AwsS3.shared();
+        AwsS3 s3 = AwsS3Manager.findTest();
 
         File testData = new File(this.context.getFilesDir(), "EmmaLooseTooth.mp3");
         byte[] bytes = FileManager.readBinaryFully(testData);
@@ -146,7 +146,7 @@ public class AwsS3UnitTest {
     }
 
     public void testUploadFile() {
-        AwsS3 s3 = AwsS3.shared();
+        AwsS3 s3 = AwsS3Manager.findTest();
 
         // Valid file upload.  It was downloaded by testDownloadFile
         File file1 = new File(this.context.getFilesDir(), "EmmaLooseTooth.mp3");

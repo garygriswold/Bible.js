@@ -33,71 +33,22 @@ public class AwsS3 {
 
     static String TAG = "AwsS3";
 
-    // AwsS3.regionName and Context should be set early in an App
-    public static String region = "us-east-1";
-    static Context context = null;
-
-    public static void initialize(String regionName, Context ctx) {
-        AwsS3.region = regionName;
-        AwsS3.context = ctx;
-    }
-
-    // Do not instantiate AwsS3, use AwsS3.shared
-    private static AwsS3 instance = null;
-    public static AwsS3 shared() {
-        if (AwsS3.instance == null) {
-            AwsS3.instance = new AwsS3(AwsS3.region, AwsS3.context);
-        }
-        return AwsS3.instance;
-    }
-
+    AwsS3Region region;
     AmazonS3 amazonS3;
     TransferUtility transferUtility;
 
-    private AwsS3(String regionName, Context context) {
+    public AwsS3(AwsS3Region region, Context context) {
         super();
-        Log.d(TAG, "regionName input = " + regionName);
-        Region region = RegionUtils.getRegion(regionName);
-        if (region == null) {
-            region = RegionUtils.getRegion("us-east-1");
-        }
+        this.region = region;
+        Log.d(TAG, "regionName input = " + region.name);
         ClientConfiguration config = new ClientConfiguration();
-        config.setUserAgent(this.generateUserAgent());
+        config.setUserAgent(this.getUserAgent());
         this.amazonS3 = new AmazonS3Client(Credentials.AWS_BIBLE_APP, config);
-        this.amazonS3.setRegion(region);
+        this.amazonS3.setRegion(region.type);
         S3ClientOptions options = new S3ClientOptions();
         options.withPathStyleAccess(true);
 		this.amazonS3.setS3ClientOptions(options);
         this.transferUtility = new TransferUtility(this.amazonS3, context);
-    }
-    private String generateUserAgent() {
-        StringBuilder result = new StringBuilder();
-        result.append("v1");
-        result.append(":");
-        String locale = Locale.getDefault().toString();
-        result.append(locale);
-        result.append(":");
-        result.append(locale); // This should be prefLang list, but it does not exist on android.
-        result.append(":");
-        result.append(Build.MANUFACTURER);
-        result.append(":");
-        result.append(Build.MODEL);
-        result.append(":");
-        result.append("android");
-        result.append(":");
-        result.append(Build.VERSION.RELEASE);
-        result.append(":");
-        try {
-            PackageInfo pInfo = AwsS3.context.getPackageManager().getPackageInfo(AwsS3.context.getPackageName(), 0);
-            result.append(pInfo.packageName);
-            result.append(":");
-            result.append(pInfo.versionName);
-        } catch(NameNotFoundException nnfe) {
-            result.append("unknown");
-            result.append(":");
-            result.append(nnfe.toString());
-        }
-        return(result.toString());
     }
     public String echo3(String msg) {
 	    return(msg);
@@ -180,11 +131,12 @@ public class AwsS3 {
      */
     public void downloadZipFile(String s3Bucket, String s3Key, File file, DownloadZipFileListener listener) {
         File zipFile = null;
+        String bucket = regionalizeBucket(s3Bucket);
         try {
 	        listener.setFile(file);
             zipFile = File.createTempFile("downloadZip", "");
             listener.setZipFile(zipFile);
-            TransferObserver observer = this.transferUtility.download(s3Bucket, s3Key, zipFile, listener);
+            TransferObserver observer = this.transferUtility.download(bucket, s3Key, zipFile, listener);
         } catch (Exception err) {
             Log.e(TAG, "Error in downloadZipFile " + err.toString());
         }
@@ -197,7 +149,7 @@ public class AwsS3 {
      * The ios version also has a method to upload a Dictionary, which is converts to json
      */
     public void uploadAnalytics(String sessionId, String timestamp, String prefix, String data, UploadDataListener listener) {
-        String s3Bucket = "analytics-" + AwsS3.region + "-shortsands";
+        String s3Bucket = "analytics-" + this.region.name + "-shortsands";
         Log.d(TAG, "Bucket " + s3Bucket);
         String s3Key = sessionId + "-" + timestamp;
         Log.d(TAG, "Key " + s3Key);
@@ -251,5 +203,56 @@ public class AwsS3 {
         metadata.setContentType(contentType);
         TransferObserver observer = this.transferUtility.upload(s3Bucket, s3Key, file, metadata);
         observer.setTransferListener(listener); // why here
+    }
+    private String getUserAgent() {
+        StringBuilder result = new StringBuilder();
+        result.append("v1");
+        result.append(":");
+        String locale = Locale.getDefault().toString();
+        result.append(locale);
+        result.append(":");
+        result.append(locale); // This should be prefLang list, but it does not exist on android.
+        result.append(":");
+        result.append(Build.MANUFACTURER);
+        result.append(":");
+        result.append(Build.MODEL);
+        result.append(":");
+        result.append("android");
+        result.append(":");
+        result.append(Build.VERSION.RELEASE);
+        result.append(":");
+        try {
+            PackageInfo pInfo = AwsS3Manager.context.getPackageManager().getPackageInfo(AwsS3Manager.context.getPackageName(), 0);
+            result.append(pInfo.packageName);
+            result.append(":");
+            result.append(pInfo.versionName);
+        } catch(NameNotFoundException nnfe) {
+            result.append("unknown");
+            result.append(":");
+            result.append(nnfe.toString());
+        }
+        return(result.toString());
+    }
+    private String regionalizeBucket(String bucket) {
+        if (bucket.contains("oldregion")) {
+            String reg = this.region.name;
+            if (reg.equals("us-east-1")) {
+                return bucket.replace("oldregion", "na-va");
+            } else if (reg.equals("eu-west-1")) {
+                return bucket.replace("oldregion", "eu-ie");
+            } else if (reg.equals("ap-northeast-1")) {
+                return bucket.replace("oldregion", "as-jp");
+            } else if (reg.equals("ap-southeast-1")) {
+                return bucket.replace("oldregion", "as-sg");
+            } else if (reg.equals("ap-southeast-2")) {
+                return bucket.replace("oldregion", "oc-au");
+            } else {
+                return bucket.replace("oldregion", "na-va");
+            }
+        }
+        if (bucket.contains("region")) {
+            return bucket.replace("region", this.region.name);
+        }
+        return bucket;
     }
 }

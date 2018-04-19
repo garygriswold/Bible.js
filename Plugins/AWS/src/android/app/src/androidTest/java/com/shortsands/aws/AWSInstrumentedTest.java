@@ -33,19 +33,19 @@ public class AWSInstrumentedTest {
 
     @Before
     public void setUp() throws Exception {
-        AwsS3.initialize("us-west-2", InstrumentationRegistry.getTargetContext());
+        AwsS3Manager.initialize("us-west-2", InstrumentationRegistry.getTargetContext());
         //AwsS3.initialize("us-east-1", InstrumentationRegistry.getTargetContext());
     }
 
     //@Test
     public void getPresignedGetURL() throws Exception {
-        AwsS3 s3 = AwsS3.shared();
+        AwsS3 s3 = AwsS3Manager.findSS();
         URL result1 = s3.preSignedUrlGET("shortsands", "WEB.db.zip", 3600);
         assertEquals("Whoops getPresignedGetURL", "s3-us-west-2.amazonaws.com", result1.getHost());
     }
     //@Test
     public void getPresignedPutURL() throws Exception {
-        AwsS3 s3 = AwsS3.shared();
+        AwsS3 s3 = AwsS3Manager.findSS();
         URL result2 = s3.preSignedUrlPUT("shortsands", "abcd", 3600, "text/plain");
         assertEquals("Whoops getPresignedPutURL", "s3-us-west-2.amazonaws.com", result2.getHost());
     }
@@ -53,7 +53,7 @@ public class AWSInstrumentedTest {
         DownloadTextListener listener = this;
         CountDownLatch latch = new CountDownLatch(1);
         public void doTest() {
-            AwsS3 s3 = AwsS3.shared();
+            AwsS3 s3 = AwsS3Manager.findSS();
             s3.downloadText("shortsands", "hello1", listener);
             try { latch.await(); } catch (InterruptedException ex) { Log.e(TAG, "Interrupted Exception"); }
             Log.d(TAG, "Expect: Hello World");
@@ -80,7 +80,7 @@ public class AWSInstrumentedTest {
         DownloadDataListener listener = this;
         CountDownLatch latch = new CountDownLatch(1);
         public void doTest() {
-            AwsS3 s3 = AwsS3.shared();
+            AwsS3 s3 = AwsS3Manager.findSS();
             s3.downloadData("shortsands", "EmmaFirstLostTooth.mp3", listener);
             try { latch.await(); } catch (InterruptedException ex) { Log.e(TAG, "Interrupted Exception"); }
         }
@@ -109,7 +109,7 @@ public class AWSInstrumentedTest {
         public void doTest() {
             File root = InstrumentationRegistry.getTargetContext().getFilesDir();
             File file1 = new File(root, "WEB.db.zip");
-            AwsS3 s3 = AwsS3.shared();
+            AwsS3 s3 = AwsS3Manager.findSS();
             s3.downloadFile("shortsands", "WEB.db.zip", file1, listener);
             try { latch.await(); } catch (InterruptedException ex) { Log.e(TAG, "Interrupted Exception"); }
         }
@@ -157,7 +157,7 @@ public class AWSInstrumentedTest {
         public void doTest() {
             File root = InstrumentationRegistry.getTargetContext().getFilesDir();
             File file1 = new File(root, "WEB.db");
-            AwsS3 s3 = AwsS3.shared();
+            AwsS3 s3 = AwsS3Manager.findSS();
             s3.downloadZipFile("shortsands", "WEB.db.zip", file1, listener);
             try { latch.await(); } catch (InterruptedException ex) { Log.e(TAG, "Interrupted Exception"); }
         }
@@ -185,7 +185,7 @@ public class AWSInstrumentedTest {
         Context context = InstrumentationRegistry.getTargetContext();
         File file4 = new File(context.getExternalCacheDir(), "Whatever.mp3");
         DownloadZipFileListener listener4 = new DownloadZipFileListener();
-        AwsS3.shared().downloadZipFile("shortsands", "hello1", file4, listener4);
+        AwsS3Manager.findSS().downloadZipFile("shortsands", "hello1", file4, listener4);
         Log.d(TAG, "Expect /storage/emulated/0/Android/data/com.shortsands.aws_s3_android/cache/Whatever.mp3.");
         assertEquals("Whoops", "abc", "def");
     }
@@ -194,7 +194,7 @@ public class AWSInstrumentedTest {
         JSONObject json = new JSONObject();
         json.put("sample", "value1");
         UploadDataListener listener1 = new UploadDataListener();
-        AwsS3.shared().uploadAnalytics("sessionId", "2017-01-01T12:12:12", "TestV1", json.toString(), listener1);
+        AwsS3Manager.findSS().uploadAnalytics("sessionId", "2017-01-01T12:12:12", "TestV1", json.toString(), listener1);
         Thread.sleep(10000);
         assertEquals("What", "Hi", listener1.file.getName());
         Log.d(TAG, "Check Log Error: com.amazonaws.services.s3");
