@@ -11,6 +11,7 @@
 		E411B0482005504D002F888B /* UtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E411B0472005504D002F888B /* UtilityTests.swift */; };
 		E411B04A2005504D002F888B /* Utility.h in Headers */ = {isa = PBXBuildFile; fileRef = E411B03C2005504D002F888B /* Utility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E411B054200550BE002F888B /* DeviceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E411B053200550BE002F888B /* DeviceSettings.swift */; };
+		E42A3C8E2088E1D4003F3F18 /* Sqlite3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42A3C8D2088E1D4003F3F18 /* Sqlite3.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +32,7 @@
 		E411B0472005504D002F888B /* UtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityTests.swift; sourceTree = "<group>"; };
 		E411B0492005504D002F888B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E411B053200550BE002F888B /* DeviceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSettings.swift; sourceTree = "<group>"; };
+		E42A3C8D2088E1D4003F3F18 /* Sqlite3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sqlite3.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +78,7 @@
 				E411B03C2005504D002F888B /* Utility.h */,
 				E411B03D2005504D002F888B /* Info.plist */,
 				E411B053200550BE002F888B /* DeviceSettings.swift */,
+				E42A3C8D2088E1D4003F3F18 /* Sqlite3.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -201,6 +204,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E411B054200550BE002F888B /* DeviceSettings.swift in Sources */,
+				E42A3C8E2088E1D4003F3F18 /* Sqlite3.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
