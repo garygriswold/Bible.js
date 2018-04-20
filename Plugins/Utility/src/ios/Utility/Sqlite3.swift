@@ -12,7 +12,7 @@
 import Foundation
 import SQLite3
 
-enum Sqlite3Error: Error {
+public enum Sqlite3Error: Error {
     case directoryCreateError(name: String, srcError: Error)
     case databaseNotFound(name: String)
     case databaseNotInBundle(name: String)
@@ -27,7 +27,7 @@ public class Sqlite3 {
     private var databaseDir: URL
     private var database: OpaquePointer?
     
-    init() {
+    public init() {
         print("****** Init Sqlite3 ******")
         let homeDir: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
         let libDir: URL = homeDir.appendingPathComponent("Library")
@@ -93,6 +93,8 @@ public class Sqlite3 {
             let name = String(parts[0])
             let ext = String(parts[1])
             let bundle = Bundle.main
+            
+            print("bundle \(bundle.bundlePath)")
             let bundlePath = bundle.url(forResource: name, withExtension: ext)
             if bundlePath != nil {
                 do {
@@ -178,6 +180,11 @@ public class Sqlite3 {
         })
     }
     
+    /**
+     * This returns a classic sql result set as an array of dictionaries.  It is probably not a good choice
+     * if a large number of rows are returned.  It returns types: String, Int, Double, and nil because JSON
+     * will accept these types.
+     */
     public func queryV0(sql: String, values: [String?],
                         complete: @escaping (_ results: [Dictionary<String,Any?>]) -> Void) throws {
         if database != nil {

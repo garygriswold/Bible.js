@@ -1,15 +1,14 @@
 //
-//  UtilityTests.swift
-//  UtilityTests
+//  Utility_TestTests.swift
+//  Utility_TestTests
 //
-//  Created by Gary Griswold on 1/9/18.
+//  Created by Gary Griswold on 4/19/18.
 //  Copyright © 2018 ShortSands. All rights reserved.
 //
 
 import XCTest
-@testable import Utility
 
-class UtilityTests: XCTestCase {
+class Utility_TestTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
