@@ -202,23 +202,18 @@ public class Sqlite3 {
                         let name = String(cString: sqlite3_column_name(statement, col))
                         let type: Int32 = sqlite3_column_type(statement, col)
                         switch type {
-                        case 0:
-                            row[name] = String(cString: sqlite3_column_text(statement, col))
+                        case 1: // INT
+                            row[name] = Int(sqlite3_column_int(statement, col))
                             break
-                        case 1:
-                            row[name] = String(cString: sqlite3_column_text(statement, col))
+                        case 2: // Double
+                            row[name] = sqlite3_column_double(statement, col)
                             break
-                        case 2:
+                        case 3: // TEXT
                             row[name] = String(cString: sqlite3_column_text(statement, col))
                             break
                         default:
                             row[name] = String(cString: sqlite3_column_text(statement, col))
                             break
-                            //sqlite3_column_int()
-                            //sqlite3_column_int64()
-                            //sqlite3_column_double()
-                            // json could serialize other kinds of numbers and bool if that were possible in sqlite
-                            
                         }
                     }
                     resultSet.append(row)

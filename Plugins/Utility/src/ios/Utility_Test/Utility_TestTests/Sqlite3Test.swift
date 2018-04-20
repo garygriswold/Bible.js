@@ -148,7 +148,7 @@ class Sqlite3Test: XCTestCase {
         })
     }
     
-    func testValidInsertText() {
+    func NOtestValidInsertText() {
         let db = Sqlite3()
         do {
             let ready = expectation(description: "ready")
@@ -168,7 +168,7 @@ class Sqlite3Test: XCTestCase {
         })
     }
     
-    func testValidInsertInt() {
+    func NOtestValidInsertInt() {
         let db = Sqlite3()
         do {
             let ready = expectation(description: "ready")
@@ -188,7 +188,7 @@ class Sqlite3Test: XCTestCase {
         })
     }
     
-    func testValidInsertReal() {
+    func NOtestValidInsertReal() {
         let db = Sqlite3()
         do {
             let ready = expectation(description: "ready")
@@ -198,6 +198,30 @@ class Sqlite3Test: XCTestCase {
             let vals = ["12.3", "34.5", "67.8", "91.0"]
             try db.executeV1(sql: stmt, values: vals, complete: { rowCount in
                 assert(rowCount == 1, "Insert Real should return 1 row.")
+                ready.fulfill()
+            })
+        } catch let err {
+            assert(false, Sqlite3.errorDescription(error: err))
+        }
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error, "Error")
+        })
+    }
+    
+    func testQueryV0() {
+        let db = Sqlite3()
+        do {
+            let ready = expectation(description: "ready")
+            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            defer { db.close() }
+            let stmt = "SELECT abc, def, ghi FROM TEST1"
+            try db.queryV0(sql: stmt, values: [], complete: { resultSet in
+                for row in resultSet {
+                    let abc = row["abc"]
+                    let def = row["def"]
+                    let ghi = row["ghi"]
+                    print("ROW \(abc)  \(def)  \(ghi)")
+                }
                 ready.fulfill()
             })
         } catch let err {
