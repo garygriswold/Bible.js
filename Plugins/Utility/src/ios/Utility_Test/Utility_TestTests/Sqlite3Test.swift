@@ -232,6 +232,25 @@ class Sqlite3Test: XCTestCase {
         })
     }
     
+    func testQueryJS() {
+        let db = Sqlite3()
+        do {
+            let ready = expectation(description: "ready")
+            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            defer { db.close() }
+            let stmt = "SELECT abc, def, ghi FROM TEST1"
+            try db.queryJS(sql: stmt, values: [], complete: { resultSet in
+                print("ResultSet \(resultSet)")
+                ready.fulfill()
+            })
+        } catch let err {
+            assert(false, Sqlite3.errorDescription(error: err))
+        }
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error, "Error")
+        })
+    }
+    
     func NOtestPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
