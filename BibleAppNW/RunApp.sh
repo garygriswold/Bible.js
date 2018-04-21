@@ -38,7 +38,7 @@ cat ../Library/gui/icons/drawVideoIcon.js >> js/BibleApp.js
 
 cat ../Library/io/IOError.js >> js/BibleApp.js
 cat ../Library/io/SettingStorage.js >> js/BibleApp.js
-cat ../Library/io/DatabaseHelper.js >> js/BibleApp.js
+cat ../Library/io/DatabaseHelperWebKit.js >> js/BibleApp.js
 cat ../Library/io/ChaptersAdapter.js >> js/BibleApp.js
 cat ../Library/io/VersesAdapter.js >> js/BibleApp.js
 cat ../Library/io/ConcordanceAdapter.js >> js/BibleApp.js
