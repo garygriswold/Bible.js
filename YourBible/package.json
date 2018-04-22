@@ -12,7 +12,7 @@
   "dependencies": {
     "com-shortsands-audioplayer": "file:///Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer",
     "com-shortsands-aws": "file:///Users/garygriswold/ShortSands/BibleApp/Plugins/AWS",
-    "com-shortsands-utility": "/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility",
+    "com-shortsands-utility": "file:///Users/garygriswold/ShortSands/BibleApp/Plugins/Utility",
     "com-shortsands-videoplayer": "file:///Users/garygriswold/ShortSands/BibleApp/Plugins/VideoPlayer",
     "cordova-android": "^6.3.0",
     "cordova-ios": "^4.5.4",
@@ -37,10 +37,10 @@
       "cordova-plugin-whitelist": {},
       "cordova-plugin-wkwebview-engine": {},
       "ionic-plugin-keyboard": {},
-      "com-shortsands-utility": {},
-      "com-shortsands-audioplayer": {},
       "com-shortsands-videoplayer": {},
-      "com-shortsands-aws": {}
+      "com-shortsands-aws": {},
+      "com-shortsands-audioplayer": {},
+      "com-shortsands-utility": {}
     },
     "platforms": [
       "android",

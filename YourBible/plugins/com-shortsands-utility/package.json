@@ -1,4 +1,45 @@
 {
+  "_args": [
+    [
+      {
+        "raw": "/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility",
+        "spec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility",
+        "type": "directory"
+      },
+      "/Users/garygriswold/ShortSands/BibleApp/YourBible"
+    ]
+  ],
+  "_from": "../Plugins/Utility",
+  "_id": "com-shortsands-utility@1.0.0",
+  "_inCache": true,
+  "_location": "/com-shortsands-utility",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility",
+    "spec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility",
+    "type": "directory"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "file:../Plugins/Utility",
+  "_shasum": "fbbb7e659749ea79d008cca0a1a421b2ba7644af",
+  "_shrinkwrap": null,
+  "_spec": "/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility",
+  "_where": "/Users/garygriswold/ShortSands/BibleApp/YourBible",
+  "dependencies": {},
+  "devDependencies": {},
   "name": "com-shortsands-utility",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
   "version": "1.0.0"
 }

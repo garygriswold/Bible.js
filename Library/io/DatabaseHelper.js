@@ -4,56 +4,42 @@
 */
 function DatabaseHelper(dbname, isCopyDatabase) {
 	this.dbname = dbname;
-	var size = 30 * 1024 * 1024;
-    if (window.sqlitePlugin === undefined) {
-        console.log('opening WEB SQL Database, stores in Cache', this.dbname);
-        this.database = window.openDatabase(this.dbname, "1.0", this.dbname, size);
-    } else {
-        console.log('opening SQLitePlugin Database, stores in Documents with no cloud', this.dbname);
-        var options = { name: this.dbname, location: 2 };
-        if (isCopyDatabase) options.createFromLocation = 1;
-        this.database = window.sqlitePlugin.openDatabase(options);
-    }
+	Utility.openDatabase(dbname, isCopyDatabase, function(error) {
+		// The error has already been reported in JS glue layer
+		// All subsequent access to database will fail, because it is not open.
+	});
 	Object.seal(this);
 }
 DatabaseHelper.prototype.select = function(statement, values, callback) {
-    this.database.readTransaction(function(tx) {
-        console.log(statement, values);
-        tx.executeSql(statement, values, onSelectSuccess, onSelectError);
-    });
-    function onSelectSuccess(tx, results) {
-        console.log('select success results, rowCount=', results.rows.length);
-        callback(results);
-    }
-    function onSelectError(tx, err) {
-        console.log('select error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
+	Utility.queryJS(this.dbname, statement, values, function(error, resultSet) {
+		if (error) {
+			callback(new IOError(error));
+		} else {
+			callback(resultSet);
+		}
+	});
 };
 DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
-    this.database.transaction(function(tx) {
-	    console.log('exec tran start', statement, values);
-        tx.executeSql(statement, values, onExecSuccess, onExecError);
-    });
-    function onExecSuccess(tx, results) {
-    	console.log('excute sql success', results.rowsAffected);
-    	callback(results.rowsAffected);
-    }
-    function onExecError(tx, err) {
-        console.log('execute tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
+	Utility.executeV1(this.dbname, statement, values, function(error, rowCount) {
+		if (error) {
+			callback(new IOError(error));
+		} else {
+			callback(rowCount);
+		}
+	});
 };
 DatabaseHelper.prototype.manyExecuteDML = function(statement, array, callback) {
 	var that = this;
+	var totalRowCount = 0;
 	executeOne(0);
 	
 	function executeOne(index) {
 		if (index < array.length) {
-			that.executeDML(statement, array[index], function(results) {
+			that.executeDML(statement, array[index], function(error, rowCount) {
 				if (results instanceof IOError) {
 					callback(results);
 				} else {
+					totalRowCount += rowCount;
 					executeOne(index + 1);
 				}
 			});
@@ -63,43 +49,58 @@ DatabaseHelper.prototype.manyExecuteDML = function(statement, array, callback) {
 	}	
 };
 DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
-    var rowCount = 0;
-	this.database.transaction(onTranStart, onTranError, onTranSuccess);
-
-    function onTranStart(tx) {
-  		console.log('bulk tran start', statement);
-  		for (var i=0; i<array.length; i++) {
-        	tx.executeSql(statement, array[i], onExecSuccess);
-        }
+	var that = this;
+    var totalRowCount = 0;
+    Utility.executeV1(this.dbname, "BEGIN TRAN", null, function(error) {
+	    if (error != null) {
+	    	executeOne(0);
+	    }
+    });
+    
+    function executeOne(index) {
+	    if (index < array.length) {
+		    Utility.executeV1(that.dbname, statement, array[index], function(error, rowCount) {
+			    if (error) {
+				    rollback(callback);
+			    } else {
+				    totalRowCount += rowCount;
+				    executeOne(index + 1);
+			    }
+		    });
+	    } else {
+		    Utility.executeV1(that.dbname, "COMMIT TRAN", null, function(error) {
+			    if (error) {
+				    rollback(callback);
+			    } else {
+				    callback(totalRowCount);
+			    }
+		    });
+	    }
     }
-    function onTranError(err) {
-        console.log('bulk tran error', JSON.stringify(err));
-        callback(new IOError(err));
-    }
-    function onTranSuccess() {
-        console.log('bulk tran completed');
-        callback(rowCount);
-    }
-    function onExecSuccess(tx, results) {
-        rowCount += results.rowsAffected;
+    
+    function rollback(callback) {
+	    Utility.executeV1(that.dbname, "ROLLBACK TRAN", null, function(error) {
+		    if (error) {
+			    callback(new IOError(error));
+		    } else {
+			    callback(0);
+		    }
+	    });
     }
 };
 DatabaseHelper.prototype.executeDDL = function(statement, callback) {
-    this.database.transaction(function(tx) {
-        console.log('exec tran start', statement);
-        tx.executeSql(statement, [], onExecSuccess, onExecError);
-    });
-    function onExecSuccess(tx, results) {
-        callback();
-    }
-    function onExecError(tx, err) {
-        callback(new IOError(err));
-    }
+	Utility.executeV1(this.dbname, statement, null, function(error, rowCount) {
+		if (error) {
+			callback(new IOError(error));
+		} else {
+			callback(rowCount);
+		}
+	});
 };
 DatabaseHelper.prototype.close = function() {
-	if (window.sqlitePlugin) {
-		this.database.close();
-	}
+	Utility.closeDatabase(this.dbname, function(error) {
+		// The error has already been logged in the JS glue layer
+	});
 };
 /** A smoke test is needed before a database is opened. */
 /** A second more though test is needed after a database is opened.*/

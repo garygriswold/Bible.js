@@ -31,6 +31,7 @@
 		</config-file>
 		<source-file src="src/ios/Utility.swift" />
 		<source-file src="src/ios/Utility/DeviceSettings.swift" />
+		<source-file src="src/ios/Utility/Sqlite3.swift" />
 	</platform>
 
 </plugin>

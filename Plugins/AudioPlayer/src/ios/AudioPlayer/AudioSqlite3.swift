@@ -12,7 +12,7 @@
 import Foundation
 import SQLite3
 
-enum Sqlite3Error: Error {
+enum AudioSqlite3Error: Error {
     case directoryCreateError(name: String, srcError: Error)
     case databaseNotFound(name: String)
     case databaseNotInBundle(name: String)
@@ -60,7 +60,7 @@ class AudioSqlite3 {
         } else {
             print("SQLITE Result Code = \(result)")
             let openMsg = String.init(cString: sqlite3_errmsg(database))
-            throw Sqlite3Error.databaseOpenError(name: dbPath, sqliteError: openMsg)
+            throw AudioSqlite3Error.databaseOpenError(name: dbPath, sqliteError: openMsg)
         }
     }
     
@@ -77,7 +77,7 @@ class AudioSqlite3 {
         } else {
             print("SQLITE Result Code = \(result)")
             let openMsg = String.init(cString: sqlite3_errmsg(database))
-            throw Sqlite3Error.databaseOpenError(name: dbPath, sqliteError: openMsg)
+            throw AudioSqlite3Error.databaseOpenError(name: dbPath, sqliteError: openMsg)
         }
     }
     
@@ -99,13 +99,13 @@ class AudioSqlite3 {
                     try FileManager.default.copyItem(at: bundlePath!, to: fullPath)
                     return fullPath
                 } catch let err {
-                    throw Sqlite3Error.databaseCopyError(name: dbPath, srcError: err)
+                    throw AudioSqlite3Error.databaseCopyError(name: dbPath, srcError: err)
                 }
             } else {
-                throw Sqlite3Error.databaseNotInBundle(name: dbPath)
+                throw AudioSqlite3Error.databaseNotInBundle(name: dbPath)
             }
         } else {
-            throw Sqlite3Error.databaseNotFound(name: dbPath)
+            throw AudioSqlite3Error.databaseNotFound(name: dbPath)
         }
     }
     
@@ -115,7 +115,7 @@ class AudioSqlite3 {
             do {
                 try file.createDirectory(at: self.databaseDir, withIntermediateDirectories: true, attributes: nil)
             } catch let err {
-                throw Sqlite3Error.directoryCreateError(name: self.databaseDir.path, srcError: err)
+                throw AudioSqlite3Error.directoryCreateError(name: self.databaseDir.path, srcError: err)
             }
         }
     }
@@ -145,14 +145,14 @@ class AudioSqlite3 {
                     
                 } else {
                     let execMsg = String.init(cString: sqlite3_errmsg(database))
-                    throw Sqlite3Error.statementExecuteFailed(sql: sql, sqliteError: execMsg)
+                    throw AudioSqlite3Error.statementExecuteFailed(sql: sql, sqliteError: execMsg)
                 }
             } else {
                 let prepareMsg = String.init(cString: sqlite3_errmsg(database))
-                throw Sqlite3Error.statementPrepareFailed(sql: sql, sqliteError: prepareMsg)
+                throw AudioSqlite3Error.statementPrepareFailed(sql: sql, sqliteError: prepareMsg)
             }
         } else {
-            throw Sqlite3Error.databaseNotFound(name: "unknown")
+            throw AudioSqlite3Error.databaseNotFound(name: "unknown")
         }
     }
     
@@ -185,10 +185,10 @@ class AudioSqlite3 {
                 complete(resultSet)
             } else {
                 let prepareMsg = String.init(cString: sqlite3_errmsg(database))
-                throw Sqlite3Error.statementPrepareFailed(sql: sql, sqliteError: prepareMsg)
+                throw AudioSqlite3Error.statementPrepareFailed(sql: sql, sqliteError: prepareMsg)
             }
         } else {
-            throw Sqlite3Error.databaseNotFound(name: "unknown")
+            throw AudioSqlite3Error.databaseNotFound(name: "unknown")
         }
     }
     
@@ -206,21 +206,21 @@ class AudioSqlite3 {
     }
     
     public static func errorDescription(error: Error) -> String {
-        if error is Sqlite3Error {
+        if error is AudioSqlite3Error {
             switch error {
-            case Sqlite3Error.directoryCreateError(let name, let srcError) :
+            case AudioSqlite3Error.directoryCreateError(let name, let srcError) :
                 return "DirectoryCreateError \(srcError)  at \(name)"
-            case Sqlite3Error.databaseNotFound(let name) :
+            case AudioSqlite3Error.databaseNotFound(let name) :
                 return "DatabaseNotFound: \(name)"
-            case Sqlite3Error.databaseNotInBundle(let name) :
+            case AudioSqlite3Error.databaseNotInBundle(let name) :
                 return "DatabaseNotInBundle: \(name)"
-            case Sqlite3Error.databaseCopyError(let name, let srcError) :
+            case AudioSqlite3Error.databaseCopyError(let name, let srcError) :
                 return "DatabaseCopyError: \(srcError.localizedDescription)  \(name)"
-            case Sqlite3Error.databaseOpenError(let name, let sqliteError) :
+            case AudioSqlite3Error.databaseOpenError(let name, let sqliteError) :
                 return "SqliteOpenError: \(sqliteError)  on database: \(name)"
-            case Sqlite3Error.statementPrepareFailed(let sql, let sqliteError) :
+            case AudioSqlite3Error.statementPrepareFailed(let sql, let sqliteError) :
                 return "StatementPrepareFailed: \(sqliteError)  on stmt: \(sql)"
-            case Sqlite3Error.statementExecuteFailed(let sql, let sqliteError) :
+            case AudioSqlite3Error.statementExecuteFailed(let sql, let sqliteError) :
                 return "StatementExecuteFailed: \(sqliteError)  on stmt: \(sql)"
             default:
                 return "Unknown Sqlite3Error"

@@ -38,9 +38,50 @@ exports.deviceSize = function(callback) {
     }, "Utility", "deviceSize", []);
 };
 
+export.openDatabase = function(database, isCopyDatabase, callback) {
+	exec(function(results) {
+		callback(null);
+	},
+	function(error) {
+		callback(error);
+		Utility.logError("openDatabase", error);
+	}, "Utility", "open", [database, isCopyDatabase]);
+};
+
+export.queryJS = function(database, statement, values, callback) {
+	exec(function(results) {
+		callback(null, results);
+	},
+	function(error) {
+		Utility.logError("queryJS", error);
+		callback(error);
+	}, "Utility", "queryJS", [database, statement, values]);
+};
+
+export.executeV1 = function(database, statement, values, callback) {
+	exec(function(results) {
+		callback(null, results);
+	},
+	function(error) {
+		Utility.logError("executeV1", error);
+		callback(error);
+	}, "Utility", "executeV1", [database, statement, values]);	
+};
+
+export.closeDatabase = function(database, callback) {
+	exec(function(results) {
+		callback(null);
+	},
+	function(error) {
+		Utility.logError("closeDatabase", error);
+		callback(error);
+	}, "Utility", "close", [database]);	
+};
+
 exports.logError = function(method, error) {
 	var msg = ["\nERROR: Utility."];
 	msg.push(method);
 	msg.push(" -> " + error);
 	console.log(msg.join(""));	
 };
+

@@ -71,22 +71,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "com-shortsands-utility": {
-    "source": {
-      "type": "local",
-      "path": "/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "com-shortsands-audioplayer": {
-    "source": {
-      "type": "local",
-      "path": "/Users/garygriswold/ShortSands/BibleApp/YourBible/node_modules/com-shortsands-audioplayer"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "com-shortsands-videoplayer": {
     "source": {
       "type": "local",
@@ -99,6 +83,22 @@
     "source": {
       "type": "local",
       "path": "/Users/garygriswold/ShortSands/BibleApp/YourBible/node_modules/com-shortsands-aws"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "com-shortsands-audioplayer": {
+    "source": {
+      "type": "local",
+      "path": "/Users/garygriswold/ShortSands/BibleApp/YourBible/node_modules/com-shortsands-audioplayer"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "com-shortsands-utility": {
+    "source": {
+      "type": "local",
+      "path": "/Users/garygriswold/ShortSands/BibleApp/YourBible/node_modules/com-shortsands-utility"
     },
     "is_top_level": true,
     "variables": {}

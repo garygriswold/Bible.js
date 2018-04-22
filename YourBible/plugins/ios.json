@@ -7,9 +7,6 @@
     "files": {}
   },
   "installed_plugins": {
-    "com-shortsands-utility": {
-      "PACKAGE_NAME": "com.shortsands.yourbible"
-    },
     "cordova-plugin-file": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
@@ -37,13 +34,16 @@
     "ionic-plugin-keyboard": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
-    "com-shortsands-audioplayer": {
-      "PACKAGE_NAME": "com.shortsands.yourbible"
-    },
     "com-shortsands-videoplayer": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
     "com-shortsands-aws": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
+    "com-shortsands-audioplayer": {
+      "PACKAGE_NAME": "com.shortsands.yourbible"
+    },
+    "com-shortsands-utility": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     }
   },

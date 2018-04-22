@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Utility.xcodeproj">
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility/src/ios/UtilityTests/MyDatabase.db">
+   </FileRef>
+   <FileRef
+      location = "self:">
    </FileRef>
 </Workspace>

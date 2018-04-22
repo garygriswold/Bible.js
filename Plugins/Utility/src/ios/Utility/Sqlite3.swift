@@ -13,6 +13,7 @@ import Foundation
 import SQLite3
 
 public enum Sqlite3Error: Error {
+    case databaseNotOpenError(name: String)
     case directoryCreateError(name: String, srcError: Error)
     case databaseNotFound(name: String)
     case databaseNotInBundle(name: String)
@@ -23,6 +24,32 @@ public enum Sqlite3Error: Error {
 }
 
 public class Sqlite3 {
+    
+    private static var openDatabases = Dictionary<String, Sqlite3>()
+    public static func findDB(dbname: String) throws -> Sqlite3 {
+        if let openDB: Sqlite3 = openDatabases[dbname] {
+            return openDB
+        } else {
+            throw Sqlite3Error.databaseNotOpenError(name: dbname)
+        }
+    }
+    public static func openDB(dbname: String, copyIfAbsent: Bool) throws -> Sqlite3 {
+        if let openDB: Sqlite3 = openDatabases[dbname] {
+            return openDB
+        } else {
+            let newDB = Sqlite3()
+            try newDB.open(dbname: dbname, copyIfAbsent: copyIfAbsent)
+            openDatabases[dbname] = newDB
+            return newDB
+        }
+    }
+    public static func closeDB(dbname: String) {
+        if let openDB: Sqlite3 = openDatabases[dbname] {
+            openDB.close()
+            openDatabases.removeValue(forKey: dbname)
+        }
+    }
+    
     
     private var databaseDir: URL
     private var database: OpaquePointer?
@@ -48,9 +75,9 @@ public class Sqlite3 {
         }
     }
     
-    public func open(dbPath: String, copyIfAbsent: Bool) throws {
+    public func open(dbname: String, copyIfAbsent: Bool) throws {
         self.database = nil
-        let fullPath = try self.ensureDatabase(dbPath: dbPath, copyIfAbsent: copyIfAbsent)
+        let fullPath = try self.ensureDatabase(dbname: dbname, copyIfAbsent: copyIfAbsent)
         
         var db: OpaquePointer? = nil
         let result = sqlite3_open(fullPath.path, &db)
@@ -60,36 +87,36 @@ public class Sqlite3 {
         } else {
             print("SQLITE Result Code = \(result)")
             let openMsg = String.init(cString: sqlite3_errmsg(database))
-            throw Sqlite3Error.databaseOpenError(name: dbPath, sqliteError: openMsg)
+            throw Sqlite3Error.databaseOpenError(name: dbname, sqliteError: openMsg)
         }
     }
     
     /** This open method is used by command line or other programs that open the database at a
      * specified path, not in the bundle.
      */
-    public func openLocal(dbPath: String) throws {
+    public func openLocal(dbname: String) throws {
         self.database = nil
         var db: OpaquePointer? = nil
-        let result = sqlite3_open(dbPath, &db)
+        let result = sqlite3_open(dbname, &db)
         if result == SQLITE_OK {
-            print("Successfully opened connection to database at \(dbPath)")
+            print("Successfully opened connection to database at \(dbname)")
             self.database = db!
         } else {
             print("SQLITE Result Code = \(result)")
             let openMsg = String.init(cString: sqlite3_errmsg(database))
-            throw Sqlite3Error.databaseOpenError(name: dbPath, sqliteError: openMsg)
+            throw Sqlite3Error.databaseOpenError(name: dbname, sqliteError: openMsg)
         }
     }
     
-    private func ensureDatabase(dbPath: String, copyIfAbsent: Bool) throws -> URL {
-        let fullPath: URL = self.databaseDir.appendingPathComponent(dbPath)
+    private func ensureDatabase(dbname: String, copyIfAbsent: Bool) throws -> URL {
+        let fullPath: URL = self.databaseDir.appendingPathComponent(dbname)
         print("Opening Database at \(fullPath.path)")
         if FileManager.default.isReadableFile(atPath: fullPath.path) {
             return fullPath
         } else if copyIfAbsent {
-            print("Copy Bundle at \(dbPath)")
+            print("Copy Bundle at \(dbname)")
             try self.ensureDirectory()
-            let parts = dbPath.split(separator: ".")
+            let parts = dbname.split(separator: ".")
             let name = String(parts[0])
             let ext = String(parts[1])
             let bundle = Bundle.main
@@ -101,13 +128,13 @@ public class Sqlite3 {
                     try FileManager.default.copyItem(at: bundlePath!, to: fullPath)
                     return fullPath
                 } catch let err {
-                    throw Sqlite3Error.databaseCopyError(name: dbPath, srcError: err)
+                    throw Sqlite3Error.databaseCopyError(name: dbname, srcError: err)
                 }
             } else {
-                throw Sqlite3Error.databaseNotInBundle(name: dbPath)
+                throw Sqlite3Error.databaseNotInBundle(name: dbname)
             }
         } else {
-            throw Sqlite3Error.databaseNotFound(name: dbPath)
+            throw Sqlite3Error.databaseNotFound(name: dbname)
         }
     }
     
@@ -280,6 +307,8 @@ public class Sqlite3 {
     public static func errorDescription(error: Error) -> String {
         if error is Sqlite3Error {
             switch error {
+            case Sqlite3Error.databaseNotOpenError(let name) :
+                return "DatabaseNotOpen: \(name)"
             case Sqlite3Error.directoryCreateError(let name, let srcError) :
                 return "DirectoryCreateError \(srcError)  at \(name)"
             case Sqlite3Error.databaseNotFound(let name) :
