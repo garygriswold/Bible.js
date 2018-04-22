@@ -28,9 +28,6 @@
     "cordova-plugin-wkwebview-engine": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },
-    "cordova-sqlite-ext": {
-      "PACKAGE_NAME": "com.shortsands.yourbible"
-    },
     "ionic-plugin-keyboard": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },

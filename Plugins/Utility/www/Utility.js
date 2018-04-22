@@ -38,7 +38,7 @@ exports.deviceSize = function(callback) {
     }, "Utility", "deviceSize", []);
 };
 
-export.openDatabase = function(database, isCopyDatabase, callback) {
+exports.openDatabase = function(database, isCopyDatabase, callback) {
 	exec(function(results) {
 		callback(null);
 	},
@@ -48,7 +48,7 @@ export.openDatabase = function(database, isCopyDatabase, callback) {
 	}, "Utility", "open", [database, isCopyDatabase]);
 };
 
-export.queryJS = function(database, statement, values, callback) {
+exports.queryJS = function(database, statement, values, callback) {
 	exec(function(results) {
 		callback(null, results);
 	},
@@ -58,7 +58,7 @@ export.queryJS = function(database, statement, values, callback) {
 	}, "Utility", "queryJS", [database, statement, values]);
 };
 
-export.executeV1 = function(database, statement, values, callback) {
+exports.executeV1 = function(database, statement, values, callback) {
 	exec(function(results) {
 		callback(null, results);
 	},
@@ -68,7 +68,7 @@ export.executeV1 = function(database, statement, values, callback) {
 	}, "Utility", "executeV1", [database, statement, values]);	
 };
 
-export.closeDatabase = function(database, callback) {
+exports.closeDatabase = function(database, callback) {
 	exec(function(results) {
 		callback(null);
 	},

@@ -97,7 +97,7 @@ SettingStorage.prototype.selectSettings = function(callback) {
         	}
         	callback(map);
 		}
-	})	
+	});	
 };
 SettingStorage.prototype.getInstalledVersions = function(callback) {
 	var loadedVersions = {};

@@ -14,7 +14,7 @@ function StopIcon(color) {
 }
 StopIcon.prototype.showIcon = function() {
 	if (this.iconCanvas === null) {
-		this.iconCanvas = this.drawIcon()
+		this.iconCanvas = this.drawIcon();
 	}
 	document.body.appendChild(this.iconDiv);
 	this.iconDiv.appendChild(this.iconCanvas);

@@ -1,6 +1,6 @@
 //
 //  Utility.swift
-//  TempDevice
+//  Utility
 //
 //  Created by Gary Griswold on 1/9/18.
 //  Copyright © 2018 ShortSands. All rights reserved.
@@ -47,7 +47,8 @@ import UIKit
 	    				copyIfAbsent: command.arguments[1] as? Bool ?? false)
 	    	result = CDVPluginResult(status: CDVCommandStatus_OK)
 	    } catch let err {
-		    result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: err.localizedDescription)
+		    let message = Sqlite3.errorDescription(error: err)
+		    result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: message)
 		}
 		self.commandDelegate!.send(result, callbackId: command.callbackId)
 	}
@@ -64,8 +65,9 @@ import UIKit
 				    		result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: json)
 				    		self.commandDelegate!.send(result, callbackId: command.callbackId)
 			    		})
-		} catch let err {    	
-		    result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: err.localizedDescription)
+		} catch let err {
+			let message = Sqlite3.errorDescription(error: err)    	
+		    result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: message)
 		    self.commandDelegate!.send(result, callbackId: command.callbackId)
 		}
 	}
@@ -81,8 +83,9 @@ import UIKit
 				    		result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: rowCount)
 				    		self.commandDelegate!.send(result, callbackId: command.callbackId)
 			    		})
-		} catch let err {    	
-		    result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: err.localizedDescription)
+		} catch let err {
+			let message = Sqlite3.errorDescription(error: err)  	
+		    result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: message)
 		    self.commandDelegate!.send(result, callbackId: command.callbackId)
 		}
 	}

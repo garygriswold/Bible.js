@@ -23,12 +23,10 @@
     "cordova-plugin-splashscreen": "^5.0.1",
     "cordova-plugin-whitelist": "^1.3.3",
     "cordova-plugin-wkwebview-engine": "^1.1.4",
-    "cordova-sqlite-ext": "^2.0.0",
     "ionic-plugin-keyboard": "^2.2.1"
   },
   "cordova": {
     "plugins": {
-      "cordova-sqlite-ext": {},
       "cordova-plugin-file": {},
       "cordova-plugin-globalization": {},
       "cordova-plugin-inappbrowser": {},
