@@ -19,6 +19,7 @@ public enum Sqlite3Error: Error {
     case databaseNotInBundle(name: String)
     case databaseCopyError(name: String, srcError: Error)
     case databaseOpenError(name: String, sqliteError: String)
+    case databaseColBindError(value: Any)
     case statementPrepareFailed(sql: String, sqliteError: String)
     case statementExecuteFailed(sql: String, sqliteError: String)
 }
@@ -161,13 +162,13 @@ public class Sqlite3 {
      * This execute accepts only strings on the understanding that sqlite will convert data into the type
      * that is correct based on the affinity of the type in the database.
      */
-    public func executeV1(sql: String, values: [String?], complete: @escaping (_ count: Int) -> Void) throws {
+    public func executeV1(sql: String, values: [Any?], complete: @escaping (_ count: Int) -> Void) throws {
         if database != nil {
             var statement: OpaquePointer? = nil
             let prepareOut = sqlite3_prepare_v2(database, sql, -1, &statement, nil)
             defer { sqlite3_finalize(statement) }
             if prepareOut == SQLITE_OK {
-                self.bindStatement(statement: statement!, values: values)
+                try self.bindStatement(statement: statement!, values: values)
                 let stepOut = sqlite3_step(statement)
                 if stepOut == SQLITE_DONE {
                     let rowCount = Int(sqlite3_changes(database))
@@ -191,7 +192,7 @@ public class Sqlite3 {
      * a JSON array that can be serialized and sent back to Javascript.  It supports both String and Int
      * results, because that is what are used in the current databases.
      */
-    public func queryJS(sql: String, values: [String?], complete: @escaping (_ results: Data) -> Void) throws {
+    public func queryJS(sql: String, values: [Any?], complete: @escaping (_ results: Data) -> Void) throws {
         try queryV0(sql: sql, values: values, complete: { results in
             var message: Data
             do {
@@ -211,7 +212,7 @@ public class Sqlite3 {
      * if a large number of rows are returned.  It returns types: String, Int, Double, and nil because JSON
      * will accept these types.
      */
-    public func queryV0(sql: String, values: [String?],
+    public func queryV0(sql: String, values: [Any?],
                         complete: @escaping (_ results: [Dictionary<String,Any?>]) -> Void) throws {
         if database != nil {
             var resultSet = [Dictionary<String,Any?>]()
@@ -219,7 +220,7 @@ public class Sqlite3 {
             let prepareOut = sqlite3_prepare_v2(database, sql, -1, &statement, nil)
             defer { sqlite3_finalize(statement) }
             if prepareOut == SQLITE_OK {
-                self.bindStatement(statement: statement!, values: values)
+                try self.bindStatement(statement: statement!, values: values)
                 let colCount = Int(sqlite3_column_count(statement))
                 while (sqlite3_step(statement) == SQLITE_ROW) {
                     var row = Dictionary<String, Any?>()
@@ -263,14 +264,14 @@ public class Sqlite3 {
      *
      * Also, this query method returns a resultset that is an array of an array of Strings.
      */
-    public func queryV1(sql: String, values: [String?], complete: @escaping (_ results:[[String?]]) -> Void) throws {
+    public func queryV1(sql: String, values: [Any?], complete: @escaping (_ results:[[String?]]) -> Void) throws {
         if database != nil {
             var resultSet: [[String?]] = []
             var statement: OpaquePointer? = nil
             let prepareOut = sqlite3_prepare_v2(database, sql, -1, &statement, nil)
             defer { sqlite3_finalize(statement) }
             if prepareOut == SQLITE_OK {
-                self.bindStatement(statement: statement!, values: values)
+                try self.bindStatement(statement: statement!, values: values)
                 let colCount = Int(sqlite3_column_count(statement))
                 while (sqlite3_step(statement) == SQLITE_ROW) {
                     var row: [String?] = [String?] (repeating: nil, count: colCount)
@@ -293,15 +294,20 @@ public class Sqlite3 {
         }
     }
     
-    private func bindStatement(statement: OpaquePointer, values: [String?]?) {
-        if let params = values {
-            for i in 0..<params.count {
-                let col = Int32(i + 1)
-                if let param = params[i] {
-                    sqlite3_bind_text(statement, col, (param as NSString).utf8String, -1, nil)
-                } else {
-                    sqlite3_bind_null(statement, col)
-                }
+    private func bindStatement(statement: OpaquePointer, values: [Any?]) throws {
+        for i in 0..<values.count {
+            let col = Int32(i + 1)
+            let value = values[i];
+            if value is String {
+                sqlite3_bind_text(statement, col, (value as! NSString).utf8String, -1, nil)
+            } else if value is Int {
+                sqlite3_bind_int(statement, col, Int32(value as! Int))
+            } else if value is Double {
+                sqlite3_bind_double(statement, col, (value as! Double))
+            } else if value == nil {
+                sqlite3_bind_null(statement, col)
+            } else {
+                throw Sqlite3Error.databaseColBindError(value: value!)
             }
         }
     }
@@ -321,6 +327,8 @@ public class Sqlite3 {
                 return "DatabaseCopyError: \(srcError.localizedDescription)  \(name)"
             case Sqlite3Error.databaseOpenError(let name, let sqliteError) :
                 return "SqliteOpenError: \(sqliteError)  on database: \(name)"
+            case Sqlite3Error.databaseColBindError(let value) :
+                return "DatabaseBindError: value: \(value)"
             case Sqlite3Error.statementPrepareFailed(let sql, let sqliteError) :
                 return "StatementPrepareFailed: \(sqliteError)  on stmt: \(sql)"
             case Sqlite3Error.statementExecuteFailed(let sql, let sqliteError) :
