@@ -53,8 +53,6 @@ function AppViewController(version, settingStorage) {
     this.verses = new VersesAdapter(this.database);
 	this.tableAdapter = new TableContentsAdapter(this.database);
 	this.concordance = new ConcordanceAdapter(this.database);
-	this.styleIndex = new StyleIndexAdapter(this.database);
-	this.styleUse = new StyleUseAdapter(this.database);
 
 	this.history = new HistoryAdapter(this.settingStorage.database);
 	this.questions = new QuestionsAdapter(this.settingStorage.database);

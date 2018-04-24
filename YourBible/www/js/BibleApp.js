@@ -241,8 +241,6 @@ function AppViewController(version, settingStorage) {
     this.verses = new VersesAdapter(this.database);
 	this.tableAdapter = new TableContentsAdapter(this.database);
 	this.concordance = new ConcordanceAdapter(this.database);
-	this.styleIndex = new StyleIndexAdapter(this.database);
-	this.styleUse = new StyleUseAdapter(this.database);
 
 	this.history = new HistoryAdapter(this.settingStorage.database);
 	this.questions = new QuestionsAdapter(this.settingStorage.database);
@@ -2886,92 +2884,6 @@ TableContentsAdapter.prototype.selectAll = function(callback) {
 				array.push(tocBook);
 			}
 			callback(array);
-		}
-	});
-};/**
-* This class is the database adapter for the styleIndex table
-*/
-function StyleIndexAdapter(database) {
-	this.database = database;
-	this.className = 'StyleIndexAdapter';
-	Object.freeze(this);
-}
-StyleIndexAdapter.prototype.drop = function(callback) {
-	this.database.executeDDL('drop table if exists styleIndex', function(err) {
-		if (err instanceof IOError) {
-			callback(err);
-		} else {
-			console.log('drop styleIndex success');
-			callback();
-		}
-	});
-};
-StyleIndexAdapter.prototype.create = function(callback) {
-	var statement = 'create table if not exists styleIndex(' +
-		'style text not null, ' +
-		'usage text not null, ' +
-		'book text not null, ' +
-		'chapter integer null, ' +
-		'verse integer null)';
-	this.database.executeDDL(statement, function(err) {
-		if (err instanceof IOError) {
-			callback(err);
-		} else {
-			console.log('create styleIndex success');
-			callback();
-		}
-	});
-};
-StyleIndexAdapter.prototype.load = function(array, callback) {
-	var statement = 'insert into styleIndex(style, usage, book, chapter, verse) values (?,?,?,?,?)';
-	this.database.bulkExecuteDML(statement, array, function(count) {
-		if (count instanceof IOError) {
-			callback(count);
-		} else {
-			console.log('load styleIndex success', count);
-			callback();
-		}
-	});
-};/**
-* This class is the database adapter for the styleUse table
-*/
-function StyleUseAdapter(database) {
-	this.database = database;
-	this.className = 'StyleUseAdapter';
-	Object.freeze(this);
-}
-StyleUseAdapter.prototype.drop = function(callback) {
-	this.database.executeDDL('drop table if exists styleUse', function(err) {
-		if (err instanceof IOError) {
-			callback(err);
-		} else {
-			console.log('drop styleUse success');
-			callback();
-		}
-	});
-};
-StyleUseAdapter.prototype.create = function(callback) {
-	var statement = 'create table if not exists styleUse(' +
-		'style text not null, ' +
-		'usage text not null, ' +
-		'primary key(style, usage))';
-	this.database.executeDDL(statement, function(err) {
-		if (err instanceof IOError) {
-			callback(err);
-		} else {
-			console.log('create styleUse success');
-			callback();
-		}
-	});
-};
-StyleUseAdapter.prototype.load = function(array, callback) {
-	var statement = 'insert into styleUse(style, usage) values (?,?)';
-	this.database.bulkExecuteDML(statement, array, function(count) {
-		if (count instanceof IOError) {
-			callback(count);
-		} else {
-			console.log('load styleUse success', count);
-			callback();
 		}
 	});
 };/**

@@ -43,8 +43,6 @@ cat ../Library/io/ChaptersAdapter.js >> js/BibleApp.js
 cat ../Library/io/VersesAdapter.js >> js/BibleApp.js
 cat ../Library/io/ConcordanceAdapter.js >> js/BibleApp.js
 cat ../Library/io/TableContentsAdapter.js >> js/BibleApp.js
-cat ../Library/io/StyleIndexAdapter.js >> js/BibleApp.js
-cat ../Library/io/StyleUseAdapter.js >> js/BibleApp.js
 cat ../Library/io/HistoryAdapter.js >> js/BibleApp.js
 cat ../Library/io/QuestionsAdapter.js >> js/BibleApp.js
 cat ../Library/io/VersionsAdapter.js >> js/BibleApp.js
