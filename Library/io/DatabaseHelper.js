@@ -11,11 +11,12 @@ function DatabaseHelper(dbname, isCopyDatabase) {
 	Object.seal(this);
 }
 DatabaseHelper.prototype.select = function(statement, values, callback) {
-	Utility.queryJS(this.dbname, statement, values, function(error, resultSet) {
+	console.log("SQL: " + statement + " " + values.join(","));
+	Utility.queryJS(this.dbname, statement, values, function(error, results) {
 		if (error) {
 			callback(new IOError(error));
 		} else {
-			callback(resultSet);
+			callback(new ResultSet(results));
 		}
 	});
 };
@@ -51,7 +52,7 @@ DatabaseHelper.prototype.manyExecuteDML = function(statement, array, callback) {
 DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
 	var that = this;
     var totalRowCount = 0;
-    Utility.executeV1(this.dbname, "BEGIN TRAN", null, function(error) {
+    Utility.executeV1(this.dbname, "BEGIN", null, function(error) {
 	    if (error != null) {
 	    	executeOne(0);
 	    }
@@ -68,7 +69,7 @@ DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
 			    }
 		    });
 	    } else {
-		    Utility.executeV1(that.dbname, "COMMIT TRAN", null, function(error) {
+		    Utility.executeV1(that.dbname, "COMMIT", null, function(error) {
 			    if (error) {
 				    rollback(callback);
 			    } else {
@@ -79,7 +80,7 @@ DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
     }
     
     function rollback(callback) {
-	    Utility.executeV1(that.dbname, "ROLLBACK TRAN", null, function(error) {
+	    Utility.executeV1(that.dbname, "ROLLBACK", null, function(error) {
 		    if (error) {
 			    callback(new IOError(error));
 		    } else {
@@ -121,3 +122,17 @@ DatabaseHelper.prototype.smokeTest = function(callback) {
         }
     });
 };
+
+function ResultSet(results) {
+	this.rows = new RowItems(results);
+}
+function RowItems(results) {
+	this.rows = JSON.parse(results);
+	console.log("RESULTS: " + JSON.stringify(this.rows));
+	this.length = this.rows.length;
+	console.log("LENGTH: " + this.length);
+}
+RowItems.prototype.item = function(index) {
+	return(this.rows[index]);
+};
+

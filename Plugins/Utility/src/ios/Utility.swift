@@ -40,7 +40,7 @@ import UIKit
     }
     
     @objc(open:) func open(command: CDVInvokedUrlCommand) {
-	    DispatchQueue.global().async {
+	    DispatchQueue.global().sync {
 		    var result: CDVPluginResult
 		    do {
 		    	let database = try Sqlite3.openDB(
@@ -77,7 +77,7 @@ import UIKit
 	}
 	
 	@objc(executeV1:) func executeV1(command: CDVInvokedUrlCommand) {
-		DispatchQueue.global().async {
+		DispatchQueue.global().sync {
 		    var result: CDVPluginResult? = nil
 		    do {
 			    let database = try Sqlite3.findDB(dbname: command.arguments[0] as? String ?? "")
@@ -97,7 +97,7 @@ import UIKit
 	}
 	
 	@objc(close:) func close(command: CDVInvokedUrlCommand) {
-		DispatchQueue.global().async {
+		DispatchQueue.global().sync {
 		    var result: CDVPluginResult
 		    Sqlite3.closeDB(dbname: command.arguments[0] as? String ?? "")
 			result = CDVPluginResult(status: CDVCommandStatus_OK)

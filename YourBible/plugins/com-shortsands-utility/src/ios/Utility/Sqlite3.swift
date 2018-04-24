@@ -113,7 +113,10 @@ public class Sqlite3 {
         print("Opening Database at \(fullPath.path)")
         if FileManager.default.isReadableFile(atPath: fullPath.path) {
             return fullPath
-        } else if copyIfAbsent {
+        } else if !copyIfAbsent {
+            try self.ensureDirectory()
+            return fullPath
+        } else {
             print("Copy Bundle at \(dbname)")
             try self.ensureDirectory()
             let parts = dbname.split(separator: ".")
@@ -122,7 +125,7 @@ public class Sqlite3 {
             let bundle = Bundle.main
             
             print("bundle \(bundle.bundlePath)")
-            let bundlePath = bundle.url(forResource: name, withExtension: ext)
+            let bundlePath = bundle.url(forResource: name, withExtension: ext, subdirectory: "www")
             if bundlePath != nil {
                 do {
                     try FileManager.default.copyItem(at: bundlePath!, to: fullPath)
@@ -133,8 +136,6 @@ public class Sqlite3 {
             } else {
                 throw Sqlite3Error.databaseNotInBundle(name: dbname)
             }
-        } else {
-            throw Sqlite3Error.databaseNotFound(name: dbname)
         }
     }
     
@@ -194,15 +195,13 @@ public class Sqlite3 {
         try queryV0(sql: sql, values: values, complete: { results in
             var message: Data
             do {
-                message = try JSONSerialization.data(withJSONObject: results,
-                                                     options: JSONSerialization.WritingOptions.prettyPrinted)
+                message = try JSONSerialization.data(withJSONObject: results)//,
+                                                     //options: JSONSerialization.WritingOptions.prettyPrinted)
             } catch let jsonError {
                 print("ERROR while converting resultSet to JSON \(jsonError)")
                 let errorMessage = "{\"Error\": \"Sqlite3.queryJS \(jsonError.localizedDescription)\"}"
                 message = errorMessage.data(using: String.Encoding.utf8)!
             }
-            // debug
-            print("message \(String(describing: String(data: message, encoding: String.Encoding.utf8)))")
             complete(message)
         })
     }
@@ -228,6 +227,9 @@ public class Sqlite3 {
                         let col = Int32(i)
                         let name = String(cString: sqlite3_column_name(statement, col))
                         let type: Int32 = sqlite3_column_type(statement, col)
+                        if name == "html" {
+                            print("Found \(col) \(name) \(type)")
+                        }
                         switch type {
                         case 1: // INT
                             row[name] = Int(sqlite3_column_int(statement, col))
@@ -237,6 +239,9 @@ public class Sqlite3 {
                             break
                         case 3: // TEXT
                             row[name] = String(cString: sqlite3_column_text(statement, col))
+                            break
+                        case 5: // NULL
+                            row[name] = nil
                             break
                         default:
                             row[name] = String(cString: sqlite3_column_text(statement, col))
@@ -331,4 +336,27 @@ public class Sqlite3 {
         }
     }
 }
+
+/*
+ One person's recommendation to make sqlite threadsafe.
+ 
+ 
+ +(sqlite3*) getInstance {
+ if (instance == NULL) {
+ sqlite3_shutdown();
+ sqlite3_config(SQLITE_CONFIG_SERIALIZED);
+ sqlite3_initialize();
+ 
+ NSLog(@"isThreadSafe %d", sqlite3_threadsafe());
+ 
+ const char *path = [@"./path/to/db/db.sqlite" cStringUsingEncoding:NSUTF8StringEncoding];
+ 
+ if (sqlite3_open_v2(path, &database, SQLITE_OPEN_READWRITE|SQLITE_OPEN_FULLMUTEX, NULL) != SQLITE_OK) {
+ NSLog(@"Database opening failed!");
+ }
+ }
+ 
+ return instance;
+ }
+ */
 

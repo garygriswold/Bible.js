@@ -22,12 +22,10 @@ class Sqlite3Test: XCTestCase {
         super.tearDown()
     }
     
-    func testNonExistantDB() {
+    func testCreateNonExistantDB() {
         let db = Sqlite3()
         do {
-            try db.open(dbPath: "NonExistant.db", copyIfAbsent: false)
-            assert(false, "Exception expected")
-        } catch Sqlite3Error.databaseNotFound {
+            try db.open(dbname: "NonExistant.db", copyIfAbsent: false)
             assert(true)
         } catch let err {
             assert(false, Sqlite3.errorDescription(error: err))
@@ -37,7 +35,7 @@ class Sqlite3Test: XCTestCase {
     func testNonExistantWithCopy() {
         let db = Sqlite3()
         do {
-            try db.open(dbPath: "NonExistant.db", copyIfAbsent: true)
+            try db.open(dbname: "AnotherNonExistant.db", copyIfAbsent: true)
             assert(false, "Exception Expected")
         } catch Sqlite3Error.databaseNotInBundle {
             assert(true)
@@ -52,7 +50,7 @@ class Sqlite3Test: XCTestCase {
     func testNonDBInBundle() {
         let db = Sqlite3()
         do {
-            try db.open(dbPath: "Reference.swift", copyIfAbsent: true)
+            try db.open(dbname: "Reference.swift", copyIfAbsent: true)
             db.close()
             //assert(true)
         } catch Sqlite3Error.databaseNotInBundle {
@@ -65,7 +63,7 @@ class Sqlite3Test: XCTestCase {
     func testValidDBInBundle() {
         let db = Sqlite3()
         do {
-            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            try db.open(dbname: "Versions.db", copyIfAbsent: true)
             db.close()
             assert(true)
         } catch let err {
@@ -76,7 +74,7 @@ class Sqlite3Test: XCTestCase {
     func testInvalidSelect() {
         let db = Sqlite3()
         do {
-            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            try db.open(dbname: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
             let query = "select * from NonExistantTable"
             try db.queryV1(sql: query, values: [], complete: { resultSet in
@@ -93,7 +91,7 @@ class Sqlite3Test: XCTestCase {
         let db = Sqlite3()
         do {
             let ready = expectation(description: "ready")
-            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            try db.open(dbname: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
             let query = "select * from Video where languageId is null"
             try db.queryV1(sql: query, values: [], complete: { resultSet in
@@ -112,7 +110,7 @@ class Sqlite3Test: XCTestCase {
         let db = Sqlite3()
         do {
             let ready = expectation(description: "ready")
-            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            try db.open(dbname: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
             let query = "select languageId, mediaId, lengthMS from Video"
             try db.queryV1(sql: query, values: [], complete: { resultSet in
@@ -133,7 +131,7 @@ class Sqlite3Test: XCTestCase {
         let db = Sqlite3()
         do {
             let ready = expectation(description: "ready")
-            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            try db.open(dbname: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
             let stmt = "CREATE TABLE TEST1(abc TEXT, def INT, ghi REAL, ijk BLOB)"
             try db.executeV1(sql: stmt, values: [], complete: { rowCount in
@@ -152,7 +150,7 @@ class Sqlite3Test: XCTestCase {
         let db = Sqlite3()
         do {
             let ready = expectation(description: "ready")
-            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            try db.open(dbname: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
             let stmt = "INSERT INTO TEST1 (abc, def, ghi, ijk) VALUES (?, ?, ?, ?)"
             let vals = ["abc", "def", "ghi", "jkl"]
@@ -172,7 +170,7 @@ class Sqlite3Test: XCTestCase {
         let db = Sqlite3()
         do {
             let ready = expectation(description: "ready")
-            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            try db.open(dbname: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
             let stmt = "INSERT INTO TEST1 (abc, def, ghi, ijk) VALUES (?, ?, ?, ?)"
             let vals = ["123", "345", "678", "910"]
@@ -192,7 +190,7 @@ class Sqlite3Test: XCTestCase {
         let db = Sqlite3()
         do {
             let ready = expectation(description: "ready")
-            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            try db.open(dbname: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
             let stmt = "INSERT INTO TEST1 (abc, def, ghi, ijk) VALUES (?, ?, ?, ?)"
             let vals = ["12.3", "34.5", "67.8", "91.0"]
@@ -212,7 +210,7 @@ class Sqlite3Test: XCTestCase {
         let db = Sqlite3()
         do {
             let ready = expectation(description: "ready")
-            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            try db.open(dbname: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
             let stmt = "SELECT abc, def, ghi FROM TEST1"
             try db.queryV0(sql: stmt, values: [], complete: { resultSet in
@@ -236,7 +234,7 @@ class Sqlite3Test: XCTestCase {
         let db = Sqlite3()
         do {
             let ready = expectation(description: "ready")
-            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            try db.open(dbname: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
             let stmt = "SELECT abc, def, ghi FROM TEST1"
             try db.queryJS(sql: stmt, values: [], complete: { resultSet in
