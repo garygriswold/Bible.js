@@ -49,7 +49,7 @@ VersionsAdapter.prototype.buildTranslateMap = function(locale, callback) {
 };
 VersionsAdapter.prototype.selectCountries = function(callback) {
 	var statement = 'SELECT countryCode, primLanguage, localCountryName FROM Country ORDER BY localCountryName';
-	this.database.select(statement, null, function(results) {
+	this.database.select(statement, [], function(results) {
 		if (results instanceof IOError) {
 			callback(results);
 		} else {

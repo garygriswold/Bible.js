@@ -52,7 +52,7 @@ DatabaseHelper.prototype.manyExecuteDML = function(statement, array, callback) {
 DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
 	var that = this;
     var totalRowCount = 0;
-    Utility.executeV1(this.dbname, "BEGIN", null, function(error) {
+    Utility.executeV1(this.dbname, "BEGIN", [], function(error) {
 	    if (error != null) {
 	    	executeOne(0);
 	    }
@@ -69,7 +69,7 @@ DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
 			    }
 		    });
 	    } else {
-		    Utility.executeV1(that.dbname, "COMMIT", null, function(error) {
+		    Utility.executeV1(that.dbname, "COMMIT", [], function(error) {
 			    if (error) {
 				    rollback(callback);
 			    } else {
@@ -80,7 +80,7 @@ DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
     }
     
     function rollback(callback) {
-	    Utility.executeV1(that.dbname, "ROLLBACK", null, function(error) {
+	    Utility.executeV1(that.dbname, "ROLLBACK", [], function(error) {
 		    if (error) {
 			    callback(new IOError(error));
 		    } else {
@@ -90,7 +90,7 @@ DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
     }
 };
 DatabaseHelper.prototype.executeDDL = function(statement, callback) {
-	Utility.executeV1(this.dbname, statement, null, function(error, rowCount) {
+	Utility.executeV1(this.dbname, statement, [], function(error, rowCount) {
 		if (error) {
 			callback(new IOError(error));
 		} else {
