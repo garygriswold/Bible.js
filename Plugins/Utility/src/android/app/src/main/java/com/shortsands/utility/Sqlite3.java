@@ -154,10 +154,10 @@ public class Sqlite3 {
      * a JSON array that can be serialized and sent back to Javascript.  It supports both String and Int
      * results, because that is what are used in the current databases.
      */
-    public JSONArray queryJS(String sql, String[] values) throws Exception {
+    public JSONArray queryJS(String sql, Object[] values) throws Exception {
         if (this.isOpen()) {
             JSONArray resultSet = new JSONArray();
-            Cursor cursor = this.database.rawQuery(sql, values);
+            Cursor cursor = this.database.rawQuery(sql, bindStatement(values));
             int colCount = cursor.getColumnCount();
             int rowNum = 0;
             while(cursor.moveToNext()) {
@@ -197,9 +197,9 @@ public class Sqlite3 {
      * if a large number of rows are returned.  It returns types: String, Int, Double, and nil because JSON
      * will accept these types.
      */
-    public Cursor queryV0(String sql, String[] values) throws SQLiteException {
+    public Cursor queryV0(String sql, Object[] values) throws SQLiteException {
         if (this.isOpen()) {
-            return this.database.rawQuery(sql, values);
+            return this.database.rawQuery(sql, bindStatement(values));
         } else {
             throw new SQLiteCantOpenDatabaseException("Database must be opended before queryV0.");
         }
@@ -211,9 +211,9 @@ public class Sqlite3 {
      *
      * Also, this query method returns a resultset that is an array of an array of Strings.
      */
-    public String[][] queryV1(String sql, String[] values) throws SQLiteException {
+    public String[][] queryV1(String sql, Object[] values) throws SQLiteException {
         if (this.isOpen()) {
-            Cursor cursor = this.database.rawQuery(sql, values);
+            Cursor cursor = this.database.rawQuery(sql, bindStatement(values));
             int colCount = cursor.getColumnCount();
             String[][] resultSet = new String[cursor.getCount()][colCount];
             int rowNum = 0;
@@ -230,6 +230,14 @@ public class Sqlite3 {
         } else {
             throw new SQLiteCantOpenDatabaseException("Database must be opened before query.");
         }
+    }
+
+    private String[] bindStatement(Object[] values) {
+        String[] result = new String[values.length];
+        for (int i=0; i<values.length; i++) {
+            result[i] = String.valueOf(values[i]);
+        }
+        return result;
     }
 
     public static String errorDescription(Exception error) {

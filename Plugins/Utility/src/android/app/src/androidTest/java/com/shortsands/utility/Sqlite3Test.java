@@ -255,6 +255,48 @@ public class Sqlite3Test {
         }
     }
 
+    @Test
+    public void testIntBinding() {
+        Context appContext = InstrumentationRegistry.getTargetContext();
+        Sqlite3 db = new Sqlite3(appContext);
+        try {
+            db.open("Versions.db", true);
+            String stmt = "SELECT abc, def, ghi FROM TEST1 WHERE abc=?";
+            Object[] values = {123};
+            JSONArray resultSet = db.queryJS(stmt, values);
+            String message = resultSet.toString();
+            assertTrue("Should contain one row", (resultSet.length() == 1));
+            JSONObject row = resultSet.getJSONObject(0);
+            int oneCol = row.getInt("abc");
+            assertTrue("Should contain columns", (oneCol == 123));
+        } catch(Exception e) {
+            assertTrue(e.toString(), false);
+        } finally {
+            db.close();
+        }
+    }
+
+    @Test
+    public void testDoubleBinding() {
+        Context appContext = InstrumentationRegistry.getTargetContext();
+        Sqlite3 db = new Sqlite3(appContext);
+        try {
+            db.open("Versions.db", true);
+            String stmt = "SELECT abc, def, ghi FROM TEST1 WHERE ghi=?";
+            Object[] values = {67.8};
+            JSONArray resultSet = db.queryJS(stmt, values);
+            String message = resultSet.toString();
+            assertTrue("Should contain one row", (resultSet.length() == 1));
+            JSONObject row = resultSet.getJSONObject(0);
+            double oneCol = row.getDouble("ghi");
+            assertTrue("Should contain columns", (oneCol == 67.8));
+        } catch(Exception e) {
+            assertTrue(e.toString(), false);
+        } finally {
+            db.close();
+        }
+    }
+
 }
 
 
