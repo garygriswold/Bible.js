@@ -71,15 +71,17 @@ public class Sqlite3 {
         return this.database != null && this.database.isOpen();
     }
 
-    public void open(String dbPath, boolean copyIfAbsent) throws Exception {
-        File fullPath = this.ensureDatabase(dbPath, copyIfAbsent);
-        int flags = SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.NO_LOCALIZED_COLLATORS;
+    public void open(String dbname, boolean copyIfAbsent) throws Exception {
+        File fullPath = this.ensureDatabase(dbname, copyIfAbsent);
+        int flags = SQLiteDatabase.OPEN_READWRITE |
+                SQLiteDatabase.NO_LOCALIZED_COLLATORS |
+                SQLiteDatabase.CREATE_IF_NECESSARY;
         this.database = SQLiteDatabase.openDatabase(fullPath.getPath(), null, flags);
         Log.d(TAG,"Successfully opened connection to database at " + fullPath);
     }
 
-    private File ensureDatabase(String dbPath, boolean copyIfAbsent) throws IOException {
-        File fullPath = this.context.getDatabasePath(dbPath);
+    private File ensureDatabase(String dbname, boolean copyIfAbsent) throws IOException {
+        File fullPath = this.context.getDatabasePath(dbname);
         Log.d(TAG, "Opening Database as " + fullPath.getAbsolutePath());
         if (fullPath.exists()) {
             return fullPath;
@@ -90,10 +92,10 @@ public class Sqlite3 {
             Log.d(TAG,"Copy Bundle at " + fullPath);
             this.ensureDirectory(fullPath);
             try {
-                this.copyDatabase(dbPath, fullPath);
+                this.copyDatabase(dbname, fullPath);
                 return fullPath;
             } catch(IOException ex) {
-                throw new IOException("ensureDatabase did not find database in app " + dbPath);
+                throw new IOException("ensureDatabase did not find database in app " + dbname);
             }
         }
     }
@@ -183,6 +185,7 @@ public class Sqlite3 {
                 }
                 resultSet.put(row);
             }
+            cursor.close();
             return(resultSet);
         } else {
             throw new SQLiteException("Database is not found.");
@@ -222,6 +225,7 @@ public class Sqlite3 {
                 resultSet[rowNum] = row;
                 rowNum++;
             }
+            cursor.close();
             return (resultSet);
         } else {
             throw new SQLiteCantOpenDatabaseException("Database must be opened before query.");
