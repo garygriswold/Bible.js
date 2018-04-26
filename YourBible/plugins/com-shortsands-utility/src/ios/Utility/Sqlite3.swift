@@ -159,10 +159,9 @@ public class Sqlite3 {
     }
     
     /**
-     * This execute accepts only strings on the understanding that sqlite will convert data into the type
-     * that is correct based on the affinity of the type in the database.
+     * This is the single statement execute
      */
-    public func executeV1(sql: String, values: [Any?], complete: @escaping (_ count: Int) -> Void) throws {
+    public func executeV1(sql: String, values: [Any?]) throws -> Int {
         if database != nil {
             var statement: OpaquePointer? = nil
             let prepareOut = sqlite3_prepare_v2(database, sql, -1, &statement, nil)
@@ -172,12 +171,42 @@ public class Sqlite3 {
                 let stepOut = sqlite3_step(statement)
                 if stepOut == SQLITE_DONE {
                     let rowCount = Int(sqlite3_changes(database))
-                    complete(rowCount)
-                    
+                    return rowCount
                 } else {
                     let execMsg = String.init(cString: sqlite3_errmsg(database))
                     throw Sqlite3Error.statementExecuteFailed(sql: sql, sqliteError: execMsg)
                 }
+            } else {
+                let prepareMsg = String.init(cString: sqlite3_errmsg(database))
+                throw Sqlite3Error.statementPrepareFailed(sql: sql, sqliteError: prepareMsg)
+            }
+        } else {
+            throw Sqlite3Error.databaseNotFound(name: "unknown")
+        }
+    }
+    
+    /*
+    * This method executes an array of values against one prepared statement
+    */
+    public func bulkExecuteV1(sql: String, values: [[Any?]]) throws -> Int {
+        var totalRowCount = 0
+        if database != nil {
+            var statement: OpaquePointer? = nil
+            let prepareOut = sqlite3_prepare_v2(database, sql, -1, &statement, nil)
+            defer { sqlite3_finalize(statement) }
+            if prepareOut == SQLITE_OK {
+                for row: [Any?] in values {
+                    try self.bindStatement(statement: statement!, values: row)
+                    if sqlite3_step(statement) == SQLITE_DONE {
+                        let rowCount = Int(sqlite3_changes(database))
+                        totalRowCount += rowCount
+                        sqlite3_reset(statement);
+                    } else {
+                        let execMsg = String.init(cString: sqlite3_errmsg(database))
+                        throw Sqlite3Error.statementExecuteFailed(sql: sql, sqliteError: execMsg)
+                    }
+                }
+                return totalRowCount
             } else {
                 let prepareMsg = String.init(cString: sqlite3_errmsg(database))
                 throw Sqlite3Error.statementPrepareFailed(sql: sql, sqliteError: prepareMsg)
@@ -192,19 +221,17 @@ public class Sqlite3 {
      * a JSON array that can be serialized and sent back to Javascript.  It supports both String and Int
      * results, because that is what are used in the current databases.
      */
-    public func queryJS(sql: String, values: [Any?], complete: @escaping (_ results: Data) -> Void) throws {
-        try queryV0(sql: sql, values: values, complete: { results in
-            var message: Data
-            do {
-                message = try JSONSerialization.data(withJSONObject: results)//,
-                                                     //options: JSONSerialization.WritingOptions.prettyPrinted)
-            } catch let jsonError {
-                print("ERROR while converting resultSet to JSON \(jsonError)")
-                let errorMessage = "{\"Error\": \"Sqlite3.queryJS \(jsonError.localizedDescription)\"}"
-                message = errorMessage.data(using: String.Encoding.utf8)!
-            }
-            complete(message)
-        })
+    public func queryJS(sql: String, values: [Any?]) throws -> Data {
+        let results: [Dictionary<String,Any?>] = try self.queryV0(sql: sql, values: values)
+        var message: Data
+        do {
+            message = try JSONSerialization.data(withJSONObject: results)
+        } catch let jsonError {
+            print("ERROR while converting resultSet to JSON \(jsonError)")
+            let errorMessage = "{\"Error\": \"Sqlite3.queryJS \(jsonError.localizedDescription)\"}"
+            message = errorMessage.data(using: String.Encoding.utf8)!
+        }
+        return message
     }
     
     /**
@@ -212,8 +239,7 @@ public class Sqlite3 {
      * if a large number of rows are returned.  It returns types: String, Int, Double, and nil because JSON
      * will accept these types.
      */
-    public func queryV0(sql: String, values: [Any?],
-                        complete: @escaping (_ results: [Dictionary<String,Any?>]) -> Void) throws {
+    public func queryV0(sql: String, values: [Any?]) throws -> [Dictionary<String,Any?>] {
         if database != nil {
             var resultSet = [Dictionary<String,Any?>]()
             var statement: OpaquePointer? = nil
@@ -248,7 +274,7 @@ public class Sqlite3 {
                     }
                     resultSet.append(row)
                 }
-                complete(resultSet)
+                return resultSet
             } else {
                 let prepareMsg = String.init(cString: sqlite3_errmsg(database))
                 throw Sqlite3Error.statementPrepareFailed(sql: sql, sqliteError: prepareMsg)
@@ -264,7 +290,7 @@ public class Sqlite3 {
      *
      * Also, this query method returns a resultset that is an array of an array of Strings.
      */
-    public func queryV1(sql: String, values: [Any?], complete: @escaping (_ results:[[String?]]) -> Void) throws {
+    public func queryV1(sql: String, values: [Any?]) throws -> [[String?]] {
         if database != nil {
             var resultSet: [[String?]] = []
             var statement: OpaquePointer? = nil
@@ -284,7 +310,7 @@ public class Sqlite3 {
                     }
                     resultSet.append(row)
                 }
-                complete(resultSet)
+                return resultSet
             } else {
                 let prepareMsg = String.init(cString: sqlite3_errmsg(database))
                 throw Sqlite3Error.statementPrepareFailed(sql: sql, sqliteError: prepareMsg)
