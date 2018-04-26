@@ -127,6 +127,25 @@ class Sqlite3Test: XCTestCase {
         })
     }
     
+    func NOtestDropTableTest1() {
+        let db = Sqlite3()
+        do {
+            let ready = expectation(description: "ready")
+            try db.open(dbname: "Versions.db", copyIfAbsent: true)
+            defer { db.close() }
+            let stmt = "DROP TABLE TEST1"
+            try db.executeV1(sql: stmt, values: [], complete: { rowCount in
+                assert(rowCount == 0, "Create table returns zero rowCount")
+                ready.fulfill()
+            })
+        } catch let err {
+            assert(false, Sqlite3.errorDescription(error: err))
+        }
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error, "Error")
+        })
+    }
+    
     func ONLYONCEtestValidCreateTable() {
         let db = Sqlite3()
         do {
@@ -206,7 +225,7 @@ class Sqlite3Test: XCTestCase {
         })
     }
     
-    func testQueryV0() {
+    func NOtestQueryV0() {
         let db = Sqlite3()
         do {
             let ready = expectation(description: "ready")
@@ -238,13 +257,36 @@ class Sqlite3Test: XCTestCase {
             defer { db.close() }
             let stmt = "SELECT abc, def, ghi FROM TEST1"
             try db.queryJS(sql: stmt, values: [], complete: { resultSet in
-                print("ResultSet \(resultSet)")
+                let json = String(data: resultSet, encoding: String.Encoding.utf8)
+                print("ResultSet \(json)")
                 ready.fulfill()
             })
         } catch let err {
             assert(false, Sqlite3.errorDescription(error: err))
         }
         waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error, "Error")
+        })
+    }
+    
+    func testBulkInsert() {
+        let db = Sqlite3()
+        do {
+            let ready = expectation(description: "ready")
+            try db.open(dbname: "Versions.db", copyIfAbsent: true)
+            defer { db.close() }
+            let stmt = "INSERT INTO TEST1 VALUES (?,?,?,?)"
+            let values: [[Any?]] = [["one", 1, 1.12, nil],["two", 2, 2.22, nil],["three", 3, 3.33, nil]]
+            try db.bulkExecuteV1(sql: stmt, values: values, complete: { totalRowCount in
+                print("total row count inserted \(totalRowCount)")
+                assert((totalRowCount == 3), "rowcount should be 3")
+                ready.fulfill()
+            })
+        } catch let err {
+            print(Sqlite3.errorDescription(error: err))
+            assert(false, Sqlite3.errorDescription(error: err))
+        }
+        waitForExpectations(timeout: 10, handler: { error in
             XCTAssertNil(error, "Error")
         })
     }

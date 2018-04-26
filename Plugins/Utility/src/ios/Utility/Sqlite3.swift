@@ -159,8 +159,7 @@ public class Sqlite3 {
     }
     
     /**
-     * This execute accepts only strings on the understanding that sqlite will convert data into the type
-     * that is correct based on the affinity of the type in the database.
+     * This is the single statement execute
      */
     public func executeV1(sql: String, values: [Any?], complete: @escaping (_ count: Int) -> Void) throws {
         if database != nil {
@@ -173,11 +172,42 @@ public class Sqlite3 {
                 if stepOut == SQLITE_DONE {
                     let rowCount = Int(sqlite3_changes(database))
                     complete(rowCount)
-                    
                 } else {
                     let execMsg = String.init(cString: sqlite3_errmsg(database))
                     throw Sqlite3Error.statementExecuteFailed(sql: sql, sqliteError: execMsg)
                 }
+            } else {
+                let prepareMsg = String.init(cString: sqlite3_errmsg(database))
+                throw Sqlite3Error.statementPrepareFailed(sql: sql, sqliteError: prepareMsg)
+            }
+        } else {
+            throw Sqlite3Error.databaseNotFound(name: "unknown")
+        }
+    }
+    
+    /*
+    * This method executes an array of values against one prepared statement
+    */
+    public func bulkExecuteV1(sql: String, values: [[Any?]],
+                              complete: @escaping (_ count: Int) -> Void) throws {
+        var totalRowCount = 0
+        if database != nil {
+            var statement: OpaquePointer? = nil
+            let prepareOut = sqlite3_prepare_v2(database, sql, -1, &statement, nil)
+            defer { sqlite3_finalize(statement) }
+            if prepareOut == SQLITE_OK {
+                for row: [Any?] in values {
+                    try self.bindStatement(statement: statement!, values: row)
+                    if sqlite3_step(statement) == SQLITE_DONE {
+                        let rowCount = Int(sqlite3_changes(database))
+                        totalRowCount += rowCount
+                        sqlite3_reset(statement);
+                    } else {
+                        let execMsg = String.init(cString: sqlite3_errmsg(database))
+                        throw Sqlite3Error.statementExecuteFailed(sql: sql, sqliteError: execMsg)
+                    }
+                }
+                complete(totalRowCount)
             } else {
                 let prepareMsg = String.init(cString: sqlite3_errmsg(database))
                 throw Sqlite3Error.statementPrepareFailed(sql: sql, sqliteError: prepareMsg)
