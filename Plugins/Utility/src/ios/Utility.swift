@@ -76,7 +76,7 @@ import UIKit
 		}
 	}
 	
-	@objc(executeV1:) func executeV1(command: CDVInvokedUrlCommand) {
+	@objc(executeJS:) func executeJS(command: CDVInvokedUrlCommand) {
 		DispatchQueue.global().sync {
 		    var result: CDVPluginResult? = nil
 		    do {

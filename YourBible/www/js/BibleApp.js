@@ -2443,6 +2443,7 @@ SettingStorage.prototype.removeInstalledVersion = function(version, callback) {
 	});
 };
 SettingStorage.prototype.bulkReplaceInstalledVersions = function(versions, callback) {
+	console.log("BULK REPLACE INSTALLED VERSIONS " + versions);
 	var that = this;
 	this.database.bulkExecuteDML('REPLACE INTO Installed(version, filename, timestamp, bibleVersion) VALUES (?,?,?,?)', versions, function(results) {
 		if (results instanceof IOError) {
@@ -2477,7 +2478,7 @@ DatabaseHelper.prototype.select = function(statement, values, callback) {
 	});
 };
 DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
-	Utility.executeV1(this.dbname, statement, values, function(error, rowCount) {
+	Utility.executeJS(this.dbname, statement, values, function(error, rowCount) {
 		if (error) {
 			callback(new IOError(error));
 		} else {
@@ -2506,17 +2507,23 @@ DatabaseHelper.prototype.manyExecuteDML = function(statement, array, callback) {
 	}	
 };
 DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
+	console.log("START BULK DML " + array);
 	var that = this;
     var totalRowCount = 0;
-    Utility.executeV1(this.dbname, "BEGIN", [], function(error) {
-	    if (error != null) {
+    Utility.executeJS(this.dbname, "BEGIN", [], function(error) {
+	    console.log("DID BEGIN " + error);
+	    if (error) {
+			callback(totalRowCount);
+		} else {
 	    	executeOne(0);
 	    }
     });
     
     function executeOne(index) {
 	    if (index < array.length) {
-		    Utility.executeV1(that.dbname, statement, array[index], function(error, rowCount) {
+		    console.log("INSERTING " + array[index]);
+		    Utility.executeJS(that.dbname, statement, array[index], function(error, rowCount) {
+			    console.log("INSERT RESULT " + error + " " + rowCount);
 			    if (error) {
 				    rollback(callback);
 			    } else {
@@ -2525,7 +2532,7 @@ DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
 			    }
 		    });
 	    } else {
-		    Utility.executeV1(that.dbname, "COMMIT", [], function(error) {
+		    Utility.executeJS(that.dbname, "COMMIT", [], function(error) {
 			    if (error) {
 				    rollback(callback);
 			    } else {
@@ -2536,7 +2543,7 @@ DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
     }
     
     function rollback(callback) {
-	    Utility.executeV1(that.dbname, "ROLLBACK", [], function(error) {
+	    Utility.executeJS(that.dbname, "ROLLBACK", [], function(error) {
 		    if (error) {
 			    callback(new IOError(error));
 		    } else {
@@ -2546,7 +2553,7 @@ DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
     }
 };
 DatabaseHelper.prototype.executeDDL = function(statement, callback) {
-	Utility.executeV1(this.dbname, statement, [], function(error, rowCount) {
+	Utility.executeJS(this.dbname, statement, [], function(error, rowCount) {
 		if (error) {
 			callback(new IOError(error));
 		} else {
@@ -3373,6 +3380,7 @@ AppUpdater.prototype.doUpdate = function(callback) {
 				createTables(function() {
 					var database = new VersionsAdapter();
 					database.selectInstalledBibleVersions(function(bibleVersionList) {
+						console.log("OUTPUT OF selectInstalledBibleVersions " + bibleVersionList);
 						that.settingStorage.bulkReplaceInstalledVersions(bibleVersionList, function() {
 							updateVersion();
 							//dumpSettingsDB(function() {

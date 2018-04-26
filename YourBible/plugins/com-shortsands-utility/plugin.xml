@@ -21,6 +21,7 @@
 			</feature>
 		</config-file>
 		<source-file src="src/android/plugin/Utility.java" target-dir="src/plugin" />
+		<source-file src="src/android/app/src/main/java/com/shortsands/utility/Sqlite3.java" target-dir="src/com/shortsands/utility" />
 	</platform>
   
 	<platform name="ios">

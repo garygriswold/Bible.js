@@ -58,14 +58,14 @@ exports.queryJS = function(database, statement, values, callback) {
 	}, "Utility", "queryJS", [database, statement, values]);
 };
 
-exports.executeV1 = function(database, statement, values, callback) {
+exports.executeJS = function(database, statement, values, callback) {
 	exec(function(results) {
 		callback(null, results);
 	},
 	function(error) {
-		Utility.logError("executeV1", error);
+		Utility.logError("executeJS", error);
 		callback(error);
-	}, "Utility", "executeV1", [database, statement, values]);	
+	}, "Utility", "executeJS", [database, statement, values]);	
 };
 
 exports.closeDatabase = function(database, callback) {
