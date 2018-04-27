@@ -126,7 +126,11 @@ public class Sqlite3 {
             let bundle = Bundle.main
             
             print("bundle \(bundle.bundlePath)")
-            let bundlePath = bundle.url(forResource: name, withExtension: ext, subdirectory: "www")
+            var bundlePath = bundle.url(forResource: name, withExtension: ext, subdirectory: "www")
+            if bundlePath == nil {
+                // This option is here only because I have not been able to get databases in www in my projects
+                bundlePath = bundle.url(forResource: name, withExtension: ext)
+            }
             if bundlePath != nil {
                 do {
                     try FileManager.default.copyItem(at: bundlePath!, to: fullPath)

@@ -8,6 +8,7 @@
 
 import Foundation
 import AWSCore
+import Utility
 
 public class AwsS3Manager {
     
@@ -54,23 +55,22 @@ public class AwsS3Manager {
         self.awsS3Map = [AWSRegionType: AwsS3]()
     }
     private func initialize() {
-        let db = AWSSqlite3()
+        let db = Sqlite3()
         let sql = "SELECT awsRegion FROM Region WHERE countryCode=?"
         do {
-            try db.open(dbPath: "Versions.db", copyIfAbsent: true)
+            try db.open(dbname: "Versions.db", copyIfAbsent: true)
             defer { db.close() }
-            try db.queryV1(sql: sql, values: [self.countryCode], complete: { resultSet in
-                if resultSet.count > 0 {
-                    let row = resultSet[0]
-                    if let awsRegion = row[0] {
-                        self.ssRegion = AwsS3Manager.getRegionType(region: awsRegion)
-                    }
-                    // The following is here as a reminder that we should pull this from the Region table.
-                    self.dbpRegion = AwsS3Manager.getRegionType(region: "us-east-1")
+            let resultSet = try db.queryV1(sql: sql, values: [self.countryCode])
+            if resultSet.count > 0 {
+                let row = resultSet[0]
+                if let awsRegion = row[0] {
+                    self.ssRegion = AwsS3Manager.getRegionType(region: awsRegion)
                 }
-            })
+                // The following is here as a reminder that we should pull this from the Region table.
+                self.dbpRegion = AwsS3Manager.getRegionType(region: "us-east-1")
+            }
         } catch let err {
-            print("Unable to set regions \(AWSSqlite3.errorDescription(error: err))")
+            print("Unable to set regions \(Sqlite3.errorDescription(error: err))")
         }
     }
     static func getRegionType(region: String) -> AwsS3Region {
