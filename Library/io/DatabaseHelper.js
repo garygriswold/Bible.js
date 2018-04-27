@@ -11,7 +11,6 @@ function DatabaseHelper(dbname, isCopyDatabase) {
 	Object.seal(this);
 }
 DatabaseHelper.prototype.select = function(statement, values, callback) {
-	console.log("SQL: " + statement + " " + values.join(","));
 	Utility.queryJS(this.dbname, statement, values, function(error, results) {
 		if (error) {
 			callback(new IOError(error));
@@ -29,67 +28,14 @@ DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
 		}
 	});
 };
-DatabaseHelper.prototype.manyExecuteDML = function(statement, array, callback) {
-	var that = this;
-	var totalRowCount = 0;
-	executeOne(0);
-	
-	function executeOne(index) {
-		if (index < array.length) {
-			that.executeDML(statement, array[index], function(error, rowCount) {
-				if (results instanceof IOError) {
-					callback(results);
-				} else {
-					totalRowCount += rowCount;
-					executeOne(index + 1);
-				}
-			});
-		} else {
-			callback(array.length);
-		}
-	}	
-};
 DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
-	var that = this;
-    var totalRowCount = 0;
-    Utility.executeJS(this.dbname, "BEGIN", [], function(error) {
-	    if (error) {
-			callback(totalRowCount);
+	Utility.bulkExecuteJS(this.dbname, statement, values, function(error, rowCount) {
+		if (error) {
+			callback(new IOError(error));
 		} else {
-	    	executeOne(0);
-	    }
-    });
-    
-    function executeOne(index) {
-	    if (index < array.length) {
-		    Utility.executeJS(that.dbname, statement, array[index], function(error, rowCount) {
-			    if (error) {
-				    rollback(callback);
-			    } else {
-				    totalRowCount += rowCount;
-				    executeOne(index + 1);
-			    }
-		    });
-	    } else {
-		    Utility.executeJS(that.dbname, "COMMIT", [], function(error) {
-			    if (error) {
-				    rollback(callback);
-			    } else {
-				    callback(totalRowCount);
-			    }
-		    });
-	    }
-    }
-    
-    function rollback(callback) {
-	    Utility.executeJS(that.dbname, "ROLLBACK", [], function(error) {
-		    if (error) {
-			    callback(new IOError(error));
-		    } else {
-			    callback(0);
-		    }
-	    });
-    }
+			callback(rowCount);
+		}
+	});
 };
 DatabaseHelper.prototype.executeDDL = function(statement, callback) {
 	Utility.executeJS(this.dbname, statement, [], function(error, rowCount) {

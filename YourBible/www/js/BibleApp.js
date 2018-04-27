@@ -2443,7 +2443,6 @@ SettingStorage.prototype.removeInstalledVersion = function(version, callback) {
 	});
 };
 SettingStorage.prototype.bulkReplaceInstalledVersions = function(versions, callback) {
-	console.log("BULK REPLACE INSTALLED VERSIONS " + versions);
 	var that = this;
 	this.database.bulkExecuteDML('REPLACE INTO Installed(version, filename, timestamp, bibleVersion) VALUES (?,?,?,?)', versions, function(results) {
 		if (results instanceof IOError) {
@@ -2468,7 +2467,6 @@ function DatabaseHelper(dbname, isCopyDatabase) {
 	Object.seal(this);
 }
 DatabaseHelper.prototype.select = function(statement, values, callback) {
-	console.log("SQL: " + statement + " " + values.join(","));
 	Utility.queryJS(this.dbname, statement, values, function(error, results) {
 		if (error) {
 			callback(new IOError(error));
@@ -2486,6 +2484,7 @@ DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
 		}
 	});
 };
+/*
 DatabaseHelper.prototype.manyExecuteDML = function(statement, array, callback) {
 	var that = this;
 	var totalRowCount = 0;
@@ -2506,12 +2505,20 @@ DatabaseHelper.prototype.manyExecuteDML = function(statement, array, callback) {
 		}
 	}	
 };
+*/
 DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
-	console.log("START BULK DML " + array);
+	Utility.bulkExecuteJS(this.dbname, statement, values, function(error, rowCount) {
+		if (error) {
+			callback(new IOError(error));
+		} else {
+			callback(rowCount);
+		}
+	});
+};
+/*
 	var that = this;
     var totalRowCount = 0;
     Utility.executeJS(this.dbname, "BEGIN", [], function(error) {
-	    console.log("DID BEGIN " + error);
 	    if (error) {
 			callback(totalRowCount);
 		} else {
@@ -2521,9 +2528,7 @@ DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
     
     function executeOne(index) {
 	    if (index < array.length) {
-		    console.log("INSERTING " + array[index]);
 		    Utility.executeJS(that.dbname, statement, array[index], function(error, rowCount) {
-			    console.log("INSERT RESULT " + error + " " + rowCount);
 			    if (error) {
 				    rollback(callback);
 			    } else {
@@ -2552,6 +2557,7 @@ DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
 	    });
     }
 };
+*/
 DatabaseHelper.prototype.executeDDL = function(statement, callback) {
 	Utility.executeJS(this.dbname, statement, [], function(error, rowCount) {
 		if (error) {
@@ -3380,7 +3386,6 @@ AppUpdater.prototype.doUpdate = function(callback) {
 				createTables(function() {
 					var database = new VersionsAdapter();
 					database.selectInstalledBibleVersions(function(bibleVersionList) {
-						console.log("OUTPUT OF selectInstalledBibleVersions " + bibleVersionList);
 						that.settingStorage.bulkReplaceInstalledVersions(bibleVersionList, function() {
 							updateVersion();
 							//dumpSettingsDB(function() {

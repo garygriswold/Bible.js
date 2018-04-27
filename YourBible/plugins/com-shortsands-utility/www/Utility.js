@@ -68,6 +68,16 @@ exports.executeJS = function(database, statement, values, callback) {
 	}, "Utility", "executeJS", [database, statement, values]);	
 };
 
+exports.bulkExecuteJS = function(database, statement, values, callback) {
+	exec(function(results) {
+		callback(null, results);
+	},
+	function(error) {
+		Utility.logError("bulkExecuteJS", error);
+		callback(error);
+	}, "Utility", "bulkExecuteJS", [database, statement, values]);	
+};
+
 exports.closeDatabase = function(database, callback) {
 	exec(function(results) {
 		callback(null);

@@ -52,9 +52,19 @@ public class Utility extends CordovaPlugin {
 				JSONArray values = args.getJSONArray(2);
 				int rowCount = database.executeJS(sql, values);
 				callbackContext.success(rowCount);
-			} catch(Exception error) {
+			} catch (Exception error) {
 				callbackContext.error(error.toString() + " on database executeJS");
-			}			
+			}
+		} else if (action.equals("bulkExecuteJS")) {
+        	try {
+				Sqlite3 database = Sqlite3.findDB(args.getString(0));
+				String sql = args.getString(1);
+				JSONArray values = args.getJSONArray(2);
+				int rowCount = database.bulkExecuteJS(sql, values);
+				callbackContext.success(rowCount);
+			} catch (Exception error) {
+				callbackContext.error(error.toString() + " on database bulkExecuteJS");
+			}
 		} else if (action.equals("close")) {
 			try {
 				Sqlite3 database = Sqlite3.findDB(args.getString(0));
