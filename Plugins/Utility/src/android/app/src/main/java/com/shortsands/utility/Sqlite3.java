@@ -154,8 +154,33 @@ public class Sqlite3 {
      */
     public int executeV1(String sql, Object[] values) throws SQLiteException {
         if (this.isOpen()) {
-            this.database.execSQL(sql, values);
+            this.database.execSQL(sql, bindObjects(values));
             return 1;
+        } else {
+            throw new SQLiteException("Database is not open.");
+        }
+    }
+
+    public int bulkExecuteJS(String sql, JSONArray values) throws Exception {
+        if (this.isOpen()) {
+            int len = values.length();
+            for (int i = 0; i < len; i++) {
+                JSONArray row = values.getJSONArray(i);
+                this.database.execSQL(sql, bindJSONArray(row));
+            }
+            return len;
+        } else {
+            throw new SQLiteException("Database is not open.");
+        }
+    }
+
+    public int bulkExecuteV1(String sql, Object[][] values) throws SQLiteException {
+        if (this.isOpen()) {
+            for (int i = 0; i < values.length; i++) {
+                Object[] row = values[i];
+                this.database.execSQL(sql, bindObjects(row));
+            }
+            return values.length;
         } else {
             throw new SQLiteException("Database is not open.");
         }
@@ -211,7 +236,7 @@ public class Sqlite3 {
      */
     public Cursor queryV0(String sql, Object[] values) throws SQLiteException {
         if (this.isOpen()) {
-            return this.database.rawQuery(sql, bindStatement(values));
+            return this.database.rawQuery(sql, bindObjects(values));
         } else {
             throw new SQLiteCantOpenDatabaseException("Database must be opended before queryV0.");
         }
@@ -225,7 +250,7 @@ public class Sqlite3 {
      */
     public String[][] queryV1(String sql, Object[] values) throws SQLiteException {
         if (this.isOpen()) {
-            Cursor cursor = this.database.rawQuery(sql, bindStatement(values));
+            Cursor cursor = this.database.rawQuery(sql, bindObjects(values));
             int colCount = cursor.getColumnCount();
             String[][] resultSet = new String[cursor.getCount()][colCount];
             int rowNum = 0;
@@ -243,8 +268,29 @@ public class Sqlite3 {
             throw new SQLiteCantOpenDatabaseException("Database must be opened before query.");
         }
     }
-
-    private String[] bindStatement(Object[] values) {
+/*
+    Statement binding was tried, but I had more trouble with double and floating point equivalence.
+    private void bindStatement(SQLiteStatement statement, Object[] values) throws SQLiteException {
+        for (int i=0; i<values.length; i++) {
+            int col = i + 1;
+            Object value = values[i];
+            if (value instanceof String) {
+                statement.bindString(col, (String)value);
+            } else if (value instanceof Integer) {
+                statement.bindLong(col, (Integer)value);
+            } else if (value instanceof Long) {
+                statement.bindLong(col, (Long)value);
+            } else if ((value instanceof Double) || (value instanceof Float)) {
+                statement.bindDouble(col, (Double)value);
+            } else if (value == null) {
+                statement.bindNull(col);
+            } else {
+                throw new SQLiteException("Unable to bind " + (value.getClass().getName()));
+            }
+        }
+    }
+*/
+    private String[] bindObjects(Object[] values) {
         String[] result = new String[values.length];
         for (int i=0; i<values.length; i++) {
             result[i] = String.valueOf(values[i]);
