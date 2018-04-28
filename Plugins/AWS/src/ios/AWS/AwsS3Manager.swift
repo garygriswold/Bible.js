@@ -8,7 +8,9 @@
 
 import Foundation
 import AWSCore
+#if USE_FRAMEWORK
 import Utility
+#endif
 
 public class AwsS3Manager {
     

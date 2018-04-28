@@ -1,5 +1,6 @@
 package com.shortsands.audioplayer;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -7,7 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
-import com.shortsands.aws.AwsS3;
+import com.shortsands.aws.AwsS3Manager;
 import com.shortsands.aws.CompletionHandler;
 
 public class MainActivity extends AppCompatActivity {
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         Log.d(TAG, "*** onResume is called.");
 
-        AwsS3.initialize("us-east-1", this);
+        AwsS3Manager.initialize(this);
         String readVersion = "ERV-ENG";//KJVPD"//ESV"
         String readLang = "eng";
         String readBook = "JHN";

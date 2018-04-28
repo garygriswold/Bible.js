@@ -5,6 +5,7 @@ package com.shortsands.audioplayer;
  */
 import android.database.Cursor;
 import android.util.Log;
+import com.shortsands.utility.Sqlite3;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -21,7 +22,7 @@ class AudioTOCTestament {
     HashMap<String, AudioTOCBook> booksById;
     HashMap<Integer, AudioTOCBook> booksBySeq;
 
-    AudioTOCTestament(AudioTOCBible bible, AudioSqlite3 database, Cursor cursor) {
+    AudioTOCTestament(AudioTOCBible bible, Sqlite3 database, Cursor cursor) {
         this.bible = bible;
         this.booksById = new HashMap<String, AudioTOCBook>();
         this.booksBySeq = new HashMap<Integer, AudioTOCBook>();
@@ -35,17 +36,17 @@ class AudioTOCTestament {
             " FROM AudioBook" +
             " WHERE damId = ?" +
             " ORDER BY bookOrder";
-        String[] values = new String[1];
+        Object[] values = new Object[1];
         values[0] = this.damId;
         try {
-            Cursor cursor2 = database.queryV2(query, values);
+            Cursor cursor2 = database.queryV0(query, values);
             while(cursor2.moveToNext()) {
                 AudioTOCBook book = new AudioTOCBook(this, cursor2);
                 this.booksById.put(book.bookId, book);
                 this.booksBySeq.put(book.sequence, book);
             }
         } catch (Exception err) {
-            Log.d(TAG,"ERROR " + AudioSqlite3.errorDescription(err));
+            Log.d(TAG,"ERROR " + Sqlite3.errorDescription(err));
         }
     }
 

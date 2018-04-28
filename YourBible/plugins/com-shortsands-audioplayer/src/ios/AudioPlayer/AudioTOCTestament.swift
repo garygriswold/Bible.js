@@ -5,6 +5,9 @@
 //  Created by Gary Griswold on 8/8/17.
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
+#if USE_FRAMEWORK
+import Utility
+#endif
 
 class AudioTOCTestament {
     
@@ -17,7 +20,7 @@ class AudioTOCTestament {
     var booksById: Dictionary<String, AudioTOCBook>
     var booksBySeq: Dictionary<Int, AudioTOCBook>
 
-    init(bible: AudioTOCBible, database: AudioSqlite3, dbRow: [String?]) {
+    init(bible: AudioTOCBible, database: Sqlite3, dbRow: [String?]) {
         self.bible = bible
         self.booksById = Dictionary<String, AudioTOCBook>()
         self.booksBySeq = Dictionary<Int, AudioTOCBook>()
@@ -32,16 +35,14 @@ class AudioTOCTestament {
             " WHERE damId = ?" +
             " ORDER BY bookOrder"
         do {
-            try database.queryV1(sql: query, values: [self.damId], complete: { resultSet in
-                for row in resultSet {
-                    let book = AudioTOCBook(testament: self, dbRow: row)
-                    self.booksById[book.bookId] = book
-                    self.booksBySeq[book.sequence] = book
-                }
-            })
-            
+            let resultSet = try database.queryV1(sql: query, values: [self.damId])
+            for row in resultSet {
+                let book = AudioTOCBook(testament: self, dbRow: row)
+                self.booksById[book.bookId] = book
+                self.booksBySeq[book.sequence] = book
+            }
         } catch let err {
-            print("ERROR \(AudioSqlite3.errorDescription(error: err))")
+            print("ERROR \(Sqlite3.errorDescription(error: err))")
         }
     }
     

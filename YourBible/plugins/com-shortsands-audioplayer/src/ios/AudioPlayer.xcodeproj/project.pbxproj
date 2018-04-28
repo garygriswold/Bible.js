@@ -10,15 +10,14 @@
 		E4148DC71F3E859B007D5870 /* AudioTOCChapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC61F3E859B007D5870 /* AudioTOCChapter.swift */; };
 		E4148DC91F42828D007D5870 /* AudioReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC81F42828D007D5870 /* AudioReference.swift */; };
 		E41E5EC41F38FB8700B18D3F /* AudioBibleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E5EC31F38FB8700B18D3F /* AudioBibleView.swift */; };
-		E42C91811FBA625300612F38 /* AudioSqlite3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42C91801FBA625300612F38 /* AudioSqlite3.swift */; };
 		E43D50BD1F44BA8F00B38A7C /* AudioPlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43D50BC1F44BA8F00B38A7C /* AudioPlayState.swift */; };
+		E440D02C2094280D00BE85D4 /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E440D02B2094280D00BE85D4 /* Utility.framework */; };
 		E45154131FAD66440001D98E /* AudioControlCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45154121FAD66440001D98E /* AudioControlCenter.swift */; };
 		E465430D1F82908400F9B340 /* AudioTOCBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEC1F39684800EE53AB /* AudioTOCBible.swift */; };
 		E465430E1F82910200F9B340 /* AudioTOCChapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC61F3E859B007D5870 /* AudioTOCChapter.swift */; };
 		E465430F1F82926600F9B340 /* AudioTOCBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CF01F397D0800EE53AB /* AudioTOCBook.swift */; };
 		E46543101F8292BB00F9B340 /* AudioTOCTestament.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEE1F397CF200EE53AB /* AudioTOCTestament.swift */; };
 		E46543131F8292EC00F9B340 /* AudioReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4148DC81F42828D007D5870 /* AudioReference.swift */; };
-		E46E300A1FC36315005AB310 /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E46E30091FC36315005AB310 /* Versions.db */; };
 		E480FF53202C15E0002EB425 /* UIPauseDNButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E480FF52202C15E0002EB425 /* UIPauseDNButton.png */; };
 		E480FF55202C1604002EB425 /* UIPauseUPButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E480FF54202C1604002EB425 /* UIPauseUPButton.png */; };
 		E480FF57202C1615002EB425 /* UIPlayDNButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E480FF56202C1615002EB425 /* UIPlayDNButton.png */; };
@@ -30,6 +29,9 @@
 		E480FF63202C1689002EB425 /* UIThumbDN.png in Resources */ = {isa = PBXBuildFile; fileRef = E480FF62202C1689002EB425 /* UIThumbDN.png */; };
 		E480FF65202C169B002EB425 /* UIThumbUP.png in Resources */ = {isa = PBXBuildFile; fileRef = E480FF64202C169B002EB425 /* UIThumbUP.png */; };
 		E4826D1A1F4F21140031FFE0 /* AudioBibleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4826D191F4F21140031FFE0 /* AudioBibleController.swift */; };
+		E48A12F92093AD6E0092FCC5 /* WEB.db in Resources */ = {isa = PBXBuildFile; fileRef = E48A12F62093AD6D0092FCC5 /* WEB.db */; };
+		E48A12FA2093AD6E0092FCC5 /* KJVPD.db in Resources */ = {isa = PBXBuildFile; fileRef = E48A12F72093AD6E0092FCC5 /* KJVPD.db */; };
+		E48A12FB2093AD6E0092FCC5 /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E48A12F82093AD6E0092FCC5 /* Versions.db */; };
 		E4A0439E202D4DCD008447BF /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4A0439F202D4DCD008447BF /* AWS.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		E4A32CCF1F2FB310009AECFB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A32CCE1F2FB310009AECFB /* AppDelegate.swift */; };
 		E4A32CD11F2FB310009AECFB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A32CD01F2FB310009AECFB /* ViewController.swift */; };
@@ -37,11 +39,7 @@
 		E4A32CD91F2FB310009AECFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4A32CD71F2FB310009AECFB /* LaunchScreen.storyboard */; };
 		E4A32CE11F2FB420009AECFB /* AudioBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A32CE01F2FB420009AECFB /* AudioBible.swift */; };
 		E4A65BDB1F76B65E00C1725C /* AudioSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A65BDA1F76B65E00C1725C /* AudioSession.swift */; };
-		E4A848921FC2AA3A00C49C07 /* Sqlite3Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A848911FC2AA3A00C49C07 /* Sqlite3Test.swift */; };
-		E4A848931FC2AA6400C49C07 /* AudioSqlite3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42C91801FBA625300612F38 /* AudioSqlite3.swift */; };
 		E4AB2E331F82019500CCDD5C /* TOCAudioBibleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AB2E321F82019500CCDD5C /* TOCAudioBibleTest.swift */; };
-		E4C93A89201BDBA300ED4E06 /* WEB.db in Resources */ = {isa = PBXBuildFile; fileRef = E4C93A86201BDBA300ED4E06 /* WEB.db */; };
-		E4C93A8B201BDBA300ED4E06 /* KJVPD.db in Resources */ = {isa = PBXBuildFile; fileRef = E4C93A88201BDBA300ED4E06 /* KJVPD.db */; };
 		E4D74E39202D8E4800097888 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4DE8657202D5D33003B8BFA /* AWSCore.framework */; };
 		E4D74E3A202D8E4800097888 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4DE8657202D5D33003B8BFA /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4F69CED1F39684800EE53AB /* AudioTOCBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F69CEC1F39684800EE53AB /* AudioTOCBible.swift */; };
@@ -80,10 +78,9 @@
 		E4148DC61F3E859B007D5870 /* AudioTOCChapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioTOCChapter.swift; sourceTree = "<group>"; };
 		E4148DC81F42828D007D5870 /* AudioReference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioReference.swift; sourceTree = "<group>"; };
 		E41E5EC31F38FB8700B18D3F /* AudioBibleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioBibleView.swift; sourceTree = "<group>"; };
-		E42C91801FBA625300612F38 /* AudioSqlite3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSqlite3.swift; sourceTree = "<group>"; };
 		E43D50BC1F44BA8F00B38A7C /* AudioPlayState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayState.swift; sourceTree = "<group>"; };
+		E440D02B2094280D00BE85D4 /* Utility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Utility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E45154121FAD66440001D98E /* AudioControlCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioControlCenter.swift; sourceTree = "<group>"; };
-		E46E30091FC36315005AB310 /* Versions.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = Versions.db; path = AudioPlayer/Versions.db; sourceTree = "<group>"; };
 		E480FF52202C15E0002EB425 /* UIPauseDNButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIPauseDNButton.png; sourceTree = "<group>"; };
 		E480FF54202C1604002EB425 /* UIPauseUPButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIPauseUPButton.png; sourceTree = "<group>"; };
 		E480FF56202C1615002EB425 /* UIPlayDNButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIPlayDNButton.png; sourceTree = "<group>"; };
@@ -95,6 +92,9 @@
 		E480FF62202C1689002EB425 /* UIThumbDN.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIThumbDN.png; sourceTree = "<group>"; };
 		E480FF64202C169B002EB425 /* UIThumbUP.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIThumbUP.png; sourceTree = "<group>"; };
 		E4826D191F4F21140031FFE0 /* AudioBibleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioBibleController.swift; sourceTree = "<group>"; };
+		E48A12F62093AD6D0092FCC5 /* WEB.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = WEB.db; path = AudioPlayer/www/WEB.db; sourceTree = SOURCE_ROOT; };
+		E48A12F72093AD6E0092FCC5 /* KJVPD.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = KJVPD.db; path = AudioPlayer/www/KJVPD.db; sourceTree = SOURCE_ROOT; };
+		E48A12F82093AD6E0092FCC5 /* Versions.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = Versions.db; path = AudioPlayer/www/Versions.db; sourceTree = SOURCE_ROOT; };
 		E4A0439A202D4A53008447BF /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4A0439F202D4DCD008447BF /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4A32CCB1F2FB310009AECFB /* AudioPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,12 +105,9 @@
 		E4A32CDA1F2FB310009AECFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4A32CE01F2FB420009AECFB /* AudioBible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioBible.swift; sourceTree = "<group>"; };
 		E4A65BDA1F76B65E00C1725C /* AudioSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSession.swift; sourceTree = "<group>"; };
-		E4A848911FC2AA3A00C49C07 /* Sqlite3Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sqlite3Test.swift; sourceTree = "<group>"; };
 		E4AB2E281F82015800CCDD5C /* AudioPlayerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioPlayerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4AB2E2C1F82015800CCDD5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4AB2E321F82019500CCDD5C /* TOCAudioBibleTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOCAudioBibleTest.swift; sourceTree = "<group>"; };
-		E4C93A86201BDBA300ED4E06 /* WEB.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = WEB.db; sourceTree = "<group>"; };
-		E4C93A88201BDBA300ED4E06 /* KJVPD.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = KJVPD.db; sourceTree = "<group>"; };
 		E4DE8657202D5D33003B8BFA /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = ../../../AWS/src/ios/AWS/AWSCore.framework; sourceTree = "<group>"; };
 		E4F69CEC1F39684800EE53AB /* AudioTOCBible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioTOCBible.swift; sourceTree = "<group>"; };
 		E4F69CEE1F397CF200EE53AB /* AudioTOCTestament.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioTOCTestament.swift; sourceTree = "<group>"; };
@@ -125,6 +122,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E440D02C2094280D00BE85D4 /* Utility.framework in Frameworks */,
 				E4A0439E202D4DCD008447BF /* AWS.framework in Frameworks */,
 				E4D74E39202D8E4800097888 /* AWSCore.framework in Frameworks */,
 			);
@@ -143,6 +141,7 @@
 		E4A0439D202D4DCD008447BF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E440D02B2094280D00BE85D4 /* Utility.framework */,
 				E4A0439F202D4DCD008447BF /* AWS.framework */,
 			);
 			name = Frameworks;
@@ -153,7 +152,6 @@
 			children = (
 				E4DE8657202D5D33003B8BFA /* AWSCore.framework */,
 				E4A0439A202D4A53008447BF /* AWS.framework */,
-				E46E30091FC36315005AB310 /* Versions.db */,
 				E4A32CCD1F2FB310009AECFB /* AudioPlayer */,
 				E4AB2E291F82015800CCDD5C /* AudioPlayerTests */,
 				E4A32CCC1F2FB310009AECFB /* Products */,
@@ -173,6 +171,9 @@
 		E4A32CCD1F2FB310009AECFB /* AudioPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				E48A12F72093AD6E0092FCC5 /* KJVPD.db */,
+				E48A12F82093AD6E0092FCC5 /* Versions.db */,
+				E48A12F62093AD6D0092FCC5 /* WEB.db */,
 				E4148DC81F42828D007D5870 /* AudioReference.swift */,
 				E4A32CD01F2FB310009AECFB /* ViewController.swift */,
 				E4826D191F4F21140031FFE0 /* AudioBibleController.swift */,
@@ -186,10 +187,7 @@
 				E4F69CEE1F397CF200EE53AB /* AudioTOCTestament.swift */,
 				E4F69CF01F397D0800EE53AB /* AudioTOCBook.swift */,
 				E4148DC61F3E859B007D5870 /* AudioTOCChapter.swift */,
-				E42C91801FBA625300612F38 /* AudioSqlite3.swift */,
 				E45154121FAD66440001D98E /* AudioControlCenter.swift */,
-				E4C93A88201BDBA300ED4E06 /* KJVPD.db */,
-				E4C93A86201BDBA300ED4E06 /* WEB.db */,
 				E4A32CD21F2FB310009AECFB /* Main.storyboard */,
 				E4A32CCE1F2FB310009AECFB /* AppDelegate.swift */,
 				E4A32CD71F2FB310009AECFB /* LaunchScreen.storyboard */,
@@ -214,7 +212,6 @@
 			children = (
 				E4AB2E321F82019500CCDD5C /* TOCAudioBibleTest.swift */,
 				E4AB2E2C1F82015800CCDD5C /* Info.plist */,
-				E4A848911FC2AA3A00C49C07 /* Sqlite3Test.swift */,
 			);
 			path = AudioPlayerTests;
 			sourceTree = "<group>";
@@ -310,13 +307,13 @@
 				E480FF53202C15E0002EB425 /* UIPauseDNButton.png in Resources */,
 				E480FF55202C1604002EB425 /* UIPauseUPButton.png in Resources */,
 				E4F78E782021961C003D4DFC /* Images.xcassets in Resources */,
+				E48A12F92093AD6E0092FCC5 /* WEB.db in Resources */,
 				E4A32CD91F2FB310009AECFB /* LaunchScreen.storyboard in Resources */,
-				E4C93A8B201BDBA300ED4E06 /* KJVPD.db in Resources */,
-				E46E300A1FC36315005AB310 /* Versions.db in Resources */,
+				E48A12FB2093AD6E0092FCC5 /* Versions.db in Resources */,
 				E480FF57202C1615002EB425 /* UIPlayDNButton.png in Resources */,
 				E480FF5B202C163C002EB425 /* UISliderMax.png in Resources */,
-				E4C93A89201BDBA300ED4E06 /* WEB.db in Resources */,
 				E480FF5D202C164C002EB425 /* UISliderMin.png in Resources */,
+				E48A12FA2093AD6E0092FCC5 /* KJVPD.db in Resources */,
 				E4A32CD41F2FB310009AECFB /* Main.storyboard in Resources */,
 				E480FF65202C169B002EB425 /* UIThumbUP.png in Resources */,
 				E480FF5F202C1661002EB425 /* UIStopDNButton.png in Resources */,
@@ -346,7 +343,6 @@
 				E4F69CEF1F397CF200EE53AB /* AudioTOCTestament.swift in Sources */,
 				E45154131FAD66440001D98E /* AudioControlCenter.swift in Sources */,
 				E4148DC91F42828D007D5870 /* AudioReference.swift in Sources */,
-				E42C91811FBA625300612F38 /* AudioSqlite3.swift in Sources */,
 				E4A32CE11F2FB420009AECFB /* AudioBible.swift in Sources */,
 				E4F932231F512028002A0A4D /* AudioAnalytics.swift in Sources */,
 				E4F69CED1F39684800EE53AB /* AudioTOCBible.swift in Sources */,
@@ -364,8 +360,6 @@
 				E46543101F8292BB00F9B340 /* AudioTOCTestament.swift in Sources */,
 				E4AB2E331F82019500CCDD5C /* TOCAudioBibleTest.swift in Sources */,
 				E46543131F8292EC00F9B340 /* AudioReference.swift in Sources */,
-				E4A848921FC2AA3A00C49C07 /* Sqlite3Test.swift in Sources */,
-				E4A848931FC2AA6400C49C07 /* AudioSqlite3.swift in Sources */,
 				E465430F1F82926600F9B340 /* AudioTOCBook.swift in Sources */,
 				E465430D1F82908400F9B340 /* AudioTOCBible.swift in Sources */,
 			);

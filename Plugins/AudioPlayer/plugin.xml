@@ -49,8 +49,6 @@
 			target-dir="src/com/shortsands/audioplayer" />
 		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioSession.java" 
 			target-dir="src/com/shortsands/audioplayer" />
-		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioSqlite3.java" 
-			target-dir="src/com/shortsands/audioplayer" />
 		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioTOCBible.java" 
 			target-dir="src/com/shortsands/audioplayer" />
 		<source-file src="src/android/app/src/main/java/com/shortsands/audioplayer/AudioTOCBook.java" 
@@ -109,7 +107,6 @@
 		<source-file src="src/ios/AudioPlayer/AudioTOCTestament.swift" />
 		<source-file src="src/ios/AudioPlayer/AudioTOCBook.swift" />
 		<source-file src="src/ios/AudioPlayer/AudioTOCChapter.swift" />
-		<source-file src="src/ios/AudioPlayer/AudioSqlite3.swift" />
 		<resource-file src="src/ios/AudioPlayer/UIStopUPButton.png" />
 		<resource-file src="src/ios/AudioPlayer/UIStopDNButton.png" />
 		<resource-file src="src/ios/AudioPlayer/UIPlayUPButton.png" />

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E431EC832079B81900017D22 /* ProgressCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E431EC822079B81900017D22 /* ProgressCircle.swift */; };
+		E440D02E20942A2A00BE85D4 /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48A12E120936A090092FCC5 /* Utility.framework */; };
 		E44ED9AF20781FFE0003D90D /* libz.1.1.3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E44ED9AE20781FFE0003D90D /* libz.1.1.3.tbd */; };
 		E44ED9B9207859410003D90D /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = E44ED9B1207859410003D90D /* unzip.c */; };
 		E44ED9BA207859410003D90D /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = E44ED9B2207859410003D90D /* zip.c */; };
@@ -88,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E440D02E20942A2A00BE85D4 /* Utility.framework in Frameworks */,
 				E44ED9AF20781FFE0003D90D /* libz.1.1.3.tbd in Frameworks */,
 				E4D74E2E202D673000097888 /* AWSCore.framework in Frameworks */,
 			);
@@ -491,6 +493,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AWS;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = USE_FRAMEWORK;
 				"SWIFT_INCLUDE_PATHS[arch=*]" = /Users/garygriswold/ShortSands/BibleApp/Plugins/AWS/src/ios/AWS/minizip;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
@@ -520,6 +523,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.AWS;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = USE_FRAMEWORK;
 				"SWIFT_INCLUDE_PATHS[arch=*]" = /Users/garygriswold/ShortSands/BibleApp/Plugins/AWS/src/ios/AWS/minizip;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

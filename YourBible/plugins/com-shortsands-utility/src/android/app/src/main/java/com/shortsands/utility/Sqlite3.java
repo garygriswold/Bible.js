@@ -62,7 +62,7 @@ public class Sqlite3 {
     private Context context;
     private SQLiteDatabase database;
 
-    Sqlite3(Context context) {
+    public Sqlite3(Context context) {
         Log.d(TAG,"****** Init AudioSqlite3 ******");
         this.context = context;
         this.database = null;

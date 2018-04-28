@@ -8,8 +8,10 @@
 
 import Foundation
 #if USE_FRAMEWORK
-    import AWS
+import AWS
+import Utility
 #endif
+
 
 class AudioTOCBible {
     
@@ -18,7 +20,7 @@ class AudioTOCBible {
     let mediaSource: String
     var oldTestament: AudioTOCTestament?
     var newTestament: AudioTOCTestament?
-    let database: AudioSqlite3
+    let database: Sqlite3
     
     init(versionCode: String, silLang: String) {
         self.textVersion = versionCode
@@ -26,11 +28,11 @@ class AudioTOCBible {
         self.mediaSource = "FCBH"
         self.oldTestament = nil
         self.newTestament = nil
-        self.database = AudioSqlite3()
+        self.database = Sqlite3()
         do {
-            try self.database.open(dbPath: "Versions.db", copyIfAbsent: true)
+            try self.database.open(dbname: "Versions.db", copyIfAbsent: true)
         } catch let err {
-            print("ERROR \(AudioSqlite3.errorDescription(error: err))")
+            print("ERROR \(Sqlite3.errorDescription(error: err))")
         }
     }
     
@@ -50,38 +52,37 @@ class AudioTOCBible {
         do {
             //try self.database.open(dbPath: "Versions.db", copyIfAbsent: true)
             //defer { self.database.close() }
-            try self.database.queryV1(sql: query, values: [self.textVersion], complete: { resultSet in
-                print("LENGTH \(resultSet.count)")
-                var oldTestRow: [String?]? = nil
-                var newTestRow: [String?]? = nil
-                for row in resultSet {
-                    // Because of the sort sequence, the following logic prefers Drama over Non-Drama
-                    // Because of the sequenc of IF's, it prefers OT and NT over ON
-                    let collectionCode = row[1]!
-                    if newTestRow == nil && collectionCode == "NT" {
-                        newTestRow = row
-                    }
-                    if newTestRow == nil && collectionCode == "ON" {
-                        newTestRow = row
-                    }
-                    if oldTestRow == nil && collectionCode == "OT" {
-                        oldTestRow = row
-                    }
-                    if oldTestRow == nil && collectionCode == "ON" {
-                        oldTestRow = row
-                    }
+            let resultSet = try self.database.queryV1(sql: query, values: [self.textVersion])
+            print("LENGTH \(resultSet.count)")
+            var oldTestRow: [String?]? = nil
+            var newTestRow: [String?]? = nil
+            for row in resultSet {
+                // Because of the sort sequence, the following logic prefers Drama over Non-Drama
+                // Because of the sequenc of IF's, it prefers OT and NT over ON
+                let collectionCode = row[1]!
+                if newTestRow == nil && collectionCode == "NT" {
+                    newTestRow = row
                 }
-                if let oldRow = oldTestRow {
-                    self.oldTestament = AudioTOCTestament(bible: self, database: self.database, dbRow: oldRow)
+                if newTestRow == nil && collectionCode == "ON" {
+                    newTestRow = row
                 }
-                if let newRow = newTestRow {
-                    self.newTestament = AudioTOCTestament(bible: self, database: self.database, dbRow: newRow)
+                if oldTestRow == nil && collectionCode == "OT" {
+                    oldTestRow = row
                 }
-                self.readBookNames()
-                complete(self.oldTestament, self.newTestament)
-            })
+                if oldTestRow == nil && collectionCode == "ON" {
+                    oldTestRow = row
+                }
+            }
+            if let oldRow = oldTestRow {
+                self.oldTestament = AudioTOCTestament(bible: self, database: self.database, dbRow: oldRow)
+            }
+            if let newRow = newTestRow {
+                self.newTestament = AudioTOCTestament(bible: self, database: self.database, dbRow: newRow)
+            }
+            self.readBookNames()
+            complete(self.oldTestament, self.newTestament)
         } catch let err {
-            print("ERROR \(AudioSqlite3.errorDescription(error: err))")
+            print("ERROR \(Sqlite3.errorDescription(error: err))")
             complete(nil, nil)
         }
     }
@@ -106,20 +107,17 @@ class AudioTOCBible {
         var metaDataVerse: AudioTOCChapter? = nil
         let query = "SELECT versePositions FROM AudioChapter WHERE damId = ? AND bookId = ? AND chapter = ?"
         do {
-            //try self.database.open(dbPath: "Versions.db", copyIfAbsent: true)
-            //defer { self.database.close() }
-            try self.database.queryV1(sql: query, values: [damid, bookId, String(chapter)], complete: { resultSet in
-                print("LENGTH \(resultSet.count)")
-                if resultSet.count > 0 {
-                    let row = resultSet[0]
-                    if let verses = row[0] {
-                        metaDataVerse = AudioTOCChapter(json: verses)
-                    }
+            let resultSet = try self.database.queryV1(sql: query, values: [damid, bookId, String(chapter)])
+            print("LENGTH \(resultSet.count)")
+            if resultSet.count > 0 {
+                let row = resultSet[0]
+                if let verses = row[0] {
+                    metaDataVerse = AudioTOCChapter(json: verses)
                 }
-                complete(metaDataVerse)
-            })
+            }
+            complete(metaDataVerse)
         } catch let err {
-            print("ERROR \(AudioSqlite3.errorDescription(error: err))")
+            print("ERROR \(Sqlite3.errorDescription(error: err))")
             complete(nil)
         }
     }
@@ -128,21 +126,20 @@ class AudioTOCBible {
         let query = "SELECT code, heading FROM tableContents"
         do {
             let dbName = self.textVersion + ".db"
-            let db = AudioSqlite3()
-            try db.open(dbPath: dbName, copyIfAbsent: true)
+            let db = Sqlite3()
+            try db.open(dbname: dbName, copyIfAbsent: true)
             defer { db.close() }
-            try db.queryV1(sql: query, values: [], complete: { resultSet in
-                for row in resultSet {
-                    let bookId = row[0]!
-                    if let oldTest = self.oldTestament?.booksById[bookId] {
-                        oldTest.bookName = row[1]!
-                    } else if let newTest = self.newTestament?.booksById[bookId] {
-                        newTest.bookName = row[1]!
-                    }
+            let resultSet = try db.queryV1(sql: query, values: [])
+            for row in resultSet {
+                let bookId = row[0]!
+                if let oldTest = self.oldTestament?.booksById[bookId] {
+                    oldTest.bookName = row[1]!
+                } else if let newTest = self.newTestament?.booksById[bookId] {
+                    newTest.bookName = row[1]!
                 }
-            })
+            }
         } catch let err {
-            print("ERROR \(AudioSqlite3.errorDescription(error: err))")
+            print("ERROR \(Sqlite3.errorDescription(error: err))")
         }
     }
     
