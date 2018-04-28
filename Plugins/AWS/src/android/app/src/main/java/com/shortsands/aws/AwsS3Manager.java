@@ -7,6 +7,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.amazonaws.regions.Region;
+import com.shortsands.utility.Sqlite3;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -65,7 +66,7 @@ public class AwsS3Manager {
         this.awsS3Map = new HashMap<String, AwsS3>();
     }
     private void initialize() {
-        AWSSqlite3 db = new AWSSqlite3(AwsS3Manager.context);
+        Sqlite3 db = new Sqlite3(AwsS3Manager.context);
         String sql = "SELECT awsRegion FROM Region WHERE countryCode=?";
         String[] values = new String[1];
         values[0] = this.countryCode;
@@ -82,7 +83,7 @@ public class AwsS3Manager {
                 this.dbpRegion = new AwsS3Region("us-east-1");
             }
         } catch (Exception err) {
-            Log.d(TAG, "Unable to set regions " + AWSSqlite3.errorDescription(err));
+            Log.d(TAG, "Unable to set regions " + Sqlite3.errorDescription(err));
         } finally {
             db.close();
         }
