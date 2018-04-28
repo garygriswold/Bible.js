@@ -6,6 +6,7 @@ package com.shortsands.audioplayer;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
+import com.shortsands.utility.Sqlite3;
 
 class AudioTOCBible {
 
@@ -18,7 +19,7 @@ class AudioTOCBible {
     String mediaSource;
     AudioTOCTestament oldTestament;
     AudioTOCTestament newTestament;
-    AudioSqlite3 database;
+    Sqlite3 database;
 
     AudioTOCBible(Context context, String versionCode, String silLang) {
         this.context = context;
@@ -27,11 +28,11 @@ class AudioTOCBible {
         this.mediaSource = "FCBH";
         this.oldTestament = null;
         this.newTestament = null;
-        this.database = new AudioSqlite3(context);
+        this.database = new Sqlite3(context);
         try {
             this.database.open("Versions.db", true);
         } catch (Exception err) {
-            Log.d(TAG,"ERROR " + AudioSqlite3.errorDescription(err));
+            Log.d(TAG,"ERROR " + Sqlite3.errorDescription(err));
         }
     }
 
@@ -49,9 +50,9 @@ class AudioTOCBible {
         // mediaType sequence Drama, NonDrama
         // collectionCode sequence NT, ON, OT
         try {
-            String[] values = new String[1];
+            Object[] values = new Object[1];
             values[0] = this.textVersion;
-            Cursor cursor = this.database.queryV2(query, values);
+            Cursor cursor = this.database.queryV0(query, values);
             Log.d(TAG, "LENGTH " + cursor.getCount());
             while (cursor.moveToNext()) {
                 // Because of the sort sequence, the following logic prefers Drama over Non-Drama
@@ -66,7 +67,7 @@ class AudioTOCBible {
             }
             this.readBookNames(); // This is not necessary on Android
         } catch (Exception err) {
-            Log.d(TAG,"ERROR " + AudioSqlite3.errorDescription(err));
+            Log.d(TAG,"ERROR " + Sqlite3.errorDescription(err));
         }
     }
     /**
@@ -89,11 +90,11 @@ class AudioTOCBible {
         AudioTOCChapter tocChapter = null;
         String query = "SELECT versePositions FROM AudioChapter WHERE damId = ? AND bookId = ? AND chapter = ?";
         try {
-            String[] values = new String[3];
+            Object[] values = new Object[3];
             values[0] = damid;
             values[1] = bookId;
             values[2] = String.valueOf(chapter);
-            Cursor cursor = this.database.queryV2(query, values);
+            Cursor cursor = this.database.queryV0(query, values);
             while(cursor.moveToNext()) {
                 String positions = cursor.getString(0);
                 if (positions != null) {
@@ -101,7 +102,7 @@ class AudioTOCBible {
                 }
             }
         } catch (Exception err) {
-            Log.d(TAG,"ERROR " + AudioSqlite3.errorDescription(err));
+            Log.d(TAG,"ERROR " + Sqlite3.errorDescription(err));
         } finally {
             return(tocChapter);
         }
@@ -109,12 +110,12 @@ class AudioTOCBible {
 
     private void readBookNames() {
         String query = "SELECT code, heading FROM tableContents";
-        String[] values = new String[0];
-        AudioSqlite3 db = new AudioSqlite3(this.context);
+        Object[] values = new Object[0];
+        Sqlite3 db = new Sqlite3(this.context);
         try {
             String dbName = this.textVersion + ".db";
             db.open(dbName, true);
-            Cursor cursor = db.queryV2(query, values);
+            Cursor cursor = db.queryV0(query, values);
             while(cursor.moveToNext()) {
                 String bookId = cursor.getString(0);
                 if (this.oldTestament != null && this.oldTestament.booksById.containsKey(bookId)) {
@@ -124,7 +125,7 @@ class AudioTOCBible {
                 }
             }
         } catch (Exception err) {
-            Log.d(TAG, "ERROR: " + AudioSqlite3.errorDescription(err));
+            Log.d(TAG, "ERROR: " + Sqlite3.errorDescription(err));
         } finally {
             db.close();
         }
