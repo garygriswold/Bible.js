@@ -115,6 +115,16 @@ exports.deleteDB = function(database, callback) {
 	}, "Utility", "deleteDB", [database]);	
 };
 
+exports.hideKeyboard = function(callback) {
+	exec(function(results) {
+		callback(results);
+	},
+	function(error) {
+		Utility.logError("hideKeyboard", error);
+		callback(error);
+	}, "Utility", "hideKeyboard", []);	
+};
+
 exports.logError = function(method, error) {
 	var msg = ["\nERROR: Utility."];
 	msg.push(method);

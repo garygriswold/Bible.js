@@ -17,14 +17,12 @@
     "cordova-android": "^6.3.0",
     "cordova-ios": "^4.5.4",
     "cordova-plugin-splashscreen": "^5.0.1",
-    "cordova-plugin-wkwebview-engine": "^1.1.4",
-    "ionic-plugin-keyboard": "^2.2.1"
+    "cordova-plugin-wkwebview-engine": "^1.1.4"
   },
   "cordova": {
     "plugins": {
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-wkwebview-engine": {},
-      "ionic-plugin-keyboard": {},
       "com-shortsands-videoplayer": {},
       "com-shortsands-aws": {},
       "com-shortsands-audioplayer": {},

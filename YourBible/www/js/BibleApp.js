@@ -992,7 +992,12 @@ SearchView.prototype.showSearchField = function() {
 	var that = this;
 	inputField.addEventListener('keyup', function(event) {
 		if (event.keyCode === 13) {
-			if (typeof(cordova) !== 'undefined') cordova.plugins.Keyboard.close();
+			//if (typeof(cordova) !== 'undefined') cordova.plugins.Keyboard.close();
+			if (typeof(cordova) !== 'undefined') {
+				Utility.hideKeyboard(function(hidden) {
+					console.log("Keyboard did hide " + hidden);
+				});
+			}
 			that.startSearch(this.value.trim());
 		}
 	});
@@ -2532,9 +2537,9 @@ function ResultSet(results) {
 }
 function RowItems(results) {
 	this.rows = JSON.parse(results);
-	console.log("RESULTS: " + JSON.stringify(this.rows));
 	this.length = this.rows.length;
-	console.log("LENGTH: " + this.length);
+	var msg = (results.length > 1000) ? results.substr(0, 1000) : results;
+	console.log("RESULTS: " + this.rows.length + ":  " + msg);
 }
 RowItems.prototype.item = function(index) {
 	return(this.rows[index]);

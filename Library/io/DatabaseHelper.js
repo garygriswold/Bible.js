@@ -76,9 +76,9 @@ function ResultSet(results) {
 }
 function RowItems(results) {
 	this.rows = JSON.parse(results);
-	console.log("RESULTS: " + JSON.stringify(this.rows));
 	this.length = this.rows.length;
-	console.log("LENGTH: " + this.length);
+	var msg = (results.length > 1000) ? results.substr(0, 1000) : results;
+	console.log("RESULTS: " + this.rows.length + ":  " + msg);
 }
 RowItems.prototype.item = function(index) {
 	return(this.rows[index]);

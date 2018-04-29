@@ -7,6 +7,8 @@ package plugin;
 import android.content.Context;
 import android.content.res.Resources;
 import android.provider.Settings;
+import android.view.inputmethod.InputMethodManager;
+import android.view.View;
 import com.shortsands.utility.Sqlite3;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -98,6 +100,19 @@ public class Utility extends CordovaPlugin {
 				callbackContext.success();
 			} catch (Exception error) {
 				callbackContext.error(error.toString() + " on database listDB");
+			}
+		} else if (action.equals("hideKeyboard")) {
+			try {
+            	InputMethodManager inputManager = (InputMethodManager) cordova.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                View v = cordova.getActivity().getCurrentFocus();
+                if (v != null) {
+	                inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    callbackContext.success();
+	            } else {
+                    callbackContext.error("No current focus");
+                }
+			} catch (Exception error) {
+				callbackContext.error(error.toString() + " on hideKeyboard");
 			}
         } else {
             return false;

@@ -134,6 +134,16 @@ import UIKit
         }
     }
     
+    @objc(hideKeyboard:) func hideKeyboard(command: CDVInvokedUrlCommand) {
+		do {
+	   		let hidden = self.webView.endEditing(true)
+	   		let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: hidden)
+            self.commandDelegate!.send(result, callbackId: command.callbackId)
+	   } catch let err {
+		   self.returnError(error: err, command: command)
+	   }
+	}
+    
     private func returnError(error: Error, command: CDVInvokedUrlCommand) {
         let message = Sqlite3.errorDescription(error: error)
         let result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: message)
