@@ -88,6 +88,26 @@ exports.closeDatabase = function(database, callback) {
 	}, "Utility", "close", [database]);	
 };
 
+exports.listDB = function(callback) {
+	exec(function(results) {
+		callback(null);
+	},
+	function(error) {
+		Utility.logError("listDB", error);
+		callback(error);
+	}, "Utility", "listDB", []);	
+};
+
+exports.deleteDB = function(database, callback) {
+	exec(function(results) {
+		callback(null);
+	},
+	function(error) {
+		Utility.logError("deleteDB", error);
+		callback(error);
+	}, "Utility", "deleteDB", [database]);	
+};
+
 exports.logError = function(method, error) {
 	var msg = ["\nERROR: Utility."];
 	msg.push(method);

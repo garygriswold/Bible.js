@@ -380,6 +380,16 @@ public class Sqlite3Test {
         }
     }
 
+    @Test
+    public void testListDB() {
+        Context appContext = InstrumentationRegistry.getTargetContext();
+        try {
+            Sqlite3.listDB(appContext);
+        } catch(Exception e) {
+            assertTrue(e.toString(), false);
+        }
+    }
+
 }
 
 

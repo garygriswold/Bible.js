@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Utility
 
 class Utility_TestTests: XCTestCase {
     
@@ -20,9 +21,12 @@ class Utility_TestTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testDirectoryList() {
+        do {
+            let files = try Sqlite3.listDB()
+        } catch let err {
+            print("ERROR \(err)")
+        }
     }
     
     func testPerformanceExample() {

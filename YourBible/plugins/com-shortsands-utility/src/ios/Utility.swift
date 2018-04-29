@@ -41,52 +41,46 @@ import UIKit
     
     @objc(open:) func open(command: CDVInvokedUrlCommand) {
 	    DispatchQueue.global().sync {
-		    var result: CDVPluginResult
 		    do {
 		    	let database = try Sqlite3.openDB(
 		    				dbname: command.arguments[0] as? String ?? "",
 		    				copyIfAbsent: command.arguments[1] as? Bool ?? false)
-		    	result = CDVPluginResult(status: CDVCommandStatus_OK)
+		    	let result = CDVPluginResult(status: CDVCommandStatus_OK)
+                self.commandDelegate!.send(result, callbackId: command.callbackId)
 		    } catch let err {
-			    let message = Sqlite3.errorDescription(error: err)
-			    result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: message)
+                self.returnError(error: err, command: command)
 			}
-			self.commandDelegate!.send(result, callbackId: command.callbackId)
 		}
 	}
 	
     @objc(queryJS:) func queryJS(command: CDVInvokedUrlCommand) {
 	    DispatchQueue.global().sync {
-		    var result: CDVPluginResult? = nil
 		    do {
 			    let database = try Sqlite3.findDB(dbname: command.arguments[0] as? String ?? "")
 			    let resultSet = try database.queryJS(
 				    		sql: command.arguments[1] as? String ?? "",
 				    		values: command.arguments[2] as? [Any?] ?? [])
                 let json = String(data: resultSet, encoding: String.Encoding.utf8)
-                result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: json)
+                let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: json)
+                self.commandDelegate!.send(result, callbackId: command.callbackId)
 			} catch let err {
-				let message = Sqlite3.errorDescription(error: err)    	
-			    result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: message)
+                self.returnError(error: err, command: command)
 			}
-            self.commandDelegate!.send(result, callbackId: command.callbackId)
 		}
 	}
 	
 	@objc(executeJS:) func executeJS(command: CDVInvokedUrlCommand) {
 		DispatchQueue.global().sync {
-		    var result: CDVPluginResult? = nil
 		    do {
 			    let database = try Sqlite3.findDB(dbname: command.arguments[0] as? String ?? "")
 			    let rowCount = try database.executeV1(
 				    		sql: command.arguments[1] as? String ?? "",
 				    		values: command.arguments[2] as? [Any?] ?? [])
-                result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: rowCount)
+                let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: rowCount)
+                self.commandDelegate!.send(result, callbackId: command.callbackId)
 			} catch let err {
-				let message = Sqlite3.errorDescription(error: err)  	
-			    result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: message)
+				self.returnError(error: err, command: command)
 			}
-            self.commandDelegate!.send(result, callbackId: command.callbackId)
 		}
 	}
 	
@@ -97,4 +91,30 @@ import UIKit
 		    self.commandDelegate!.send(result, callbackId: command.callbackId)
 	    }
 	}
+    
+    @objc(listDB:) func listDB(command: CDVInvokedUrlCommand) {
+        do {
+            let files = try Sqlite3.listDB()
+            let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: files)
+            self.commandDelegate!.send(result, callbackId: command.callbackId)
+        } catch let err {
+            self.returnError(error: err, command: command)
+        }
+    }
+    
+    @objc(deleteDB:) func deleteDB(command: CDVInvokedUrlCommand) {
+        do {
+            try Sqlite3.deleteDB(dbname: command.arguments[0] as? String ?? "")
+            let result = CDVPluginResult(status: CDVCommandStatus_OK)
+            self.commandDelegate!.send(result, callbackId: command.callbackId)
+        } catch let err {
+            self.returnError(error: err, command: command)
+        }
+    }
+    
+    private func returnError(error: Error, command: CDVInvokedUrlCommand) {
+        let message = Sqlite3.errorDescription(error: error)
+        let result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: message)
+        self.commandDelegate!.send(result, callbackId: command.callbackId)
+    }
 }

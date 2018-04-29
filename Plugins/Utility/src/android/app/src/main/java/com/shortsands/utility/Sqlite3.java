@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONArray;
@@ -56,6 +57,24 @@ public class Sqlite3 {
             openDB.close();
             openDatabases.remove(dbname);
         }
+    }
+    public static ArrayList<String> listDB(Context context) throws IOException {
+        ArrayList<String> results = new ArrayList<String>();
+        Sqlite3 db = new Sqlite3(context);
+        String[] files = db.context.databaseList();
+        for (int i=0; i<files.length; i++) {
+            String file = files[i];
+            if (file.endsWith(".db")) {
+                results.add(file);
+            }
+        }
+        return results;
+    }
+    public static void deleteDB(Context context, String dbname) throws IOException {
+        Sqlite3 db = new Sqlite3(context);
+        db.context.deleteDatabase(dbname);
+        File fullPath = db.context.getDatabasePath(dbname);
+        boolean done = fullPath.delete();
     }
 
 

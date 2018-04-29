@@ -6,6 +6,8 @@ package plugin;
 
 import android.content.Context;
 import android.provider.Settings;
+import com.shortsands.utility.Sqlite3;
+import java.util.ArrayList;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -13,7 +15,6 @@ import org.apache.cordova.CordovaInterface;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.shortsands.utility.Sqlite3;
 
 public class Utility extends CordovaPlugin {
 
@@ -23,7 +24,7 @@ public class Utility extends CordovaPlugin {
         } else if (action.equals("modelType")) {
             callbackContext.success(android.os.Build.BRAND);
         } else if (action.equals("modelName")) {
-            callbackContext.success(android.os.Build.MODEL);
+			callbackContext.success(android.os.Build.MODEL);
         } else if (action.equals("open")) {
 	        // what about threading each of these database calls
 	        try {
@@ -70,9 +71,24 @@ public class Utility extends CordovaPlugin {
 				Sqlite3 database = Sqlite3.findDB(args.getString(0));
 				database.close();
 				callbackContext.success();
-			} catch(Exception error) {
+			} catch (Exception error) {
 				callbackContext.error(error.toString() + " on database close");
-			}			
+			}
+		} else if (action.equals("listDB")) {
+        	try {
+        		ArrayList<String> files = Sqlite3.listDB(this.cordova.getActivity());
+        		JSONArray json = new JSONArray(files);
+        		callbackContext.success(json);
+			} catch (Exception error) {
+				callbackContext.error(error.toString() + " on database listDB");
+			}
+		} else if (action.equals("deleteDB")) {
+			try {
+				Sqlite3.deleteDB(this.cordova.getActivity(), args.getString(0));
+				callbackContext.success();
+			} catch (Exception error) {
+				callbackContext.error(error.toString() + " on database listDB");
+			}
         } else {
             return false;
         }

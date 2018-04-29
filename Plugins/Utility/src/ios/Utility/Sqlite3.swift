@@ -50,7 +50,22 @@ public class Sqlite3 {
             openDatabases.removeValue(forKey: dbname)
         }
     }
-    
+    public static func listDB() throws -> [String] {
+        var results = [String]()
+        let db = Sqlite3()
+        let files = try FileManager.default.contentsOfDirectory(atPath: db.databaseDir.path)
+        for file in files {
+            if file.hasSuffix(".db") {
+                results.append(file)
+            }
+        }
+        return results
+    }
+    public static func deleteDB(dbname: String) throws {
+        let db = Sqlite3()
+        let fullPath: URL = db.databaseDir.appendingPathComponent(dbname)
+        try FileManager.default.removeItem(at: fullPath)
+    }
     
     private var databaseDir: URL
     private var database: OpaquePointer?
