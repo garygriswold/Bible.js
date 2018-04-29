@@ -6,31 +6,20 @@ var deviceSettingsPlatform = null;
 var deviceSettingsModel = null;
 
 var deviceSettings = {
-	/* Deprecated, use locale is Used in AppInitializer and VersionsView */
+	/* Deprecated, used only VersionsView */
     prefLanguage: function(callback) {
-        navigator.globalization.getPreferredLanguage(onSuccess, onError);
-
-        function onSuccess(pref) {
-            callback(pref.value);
-        }
-        function onError() {
-            callback('en-US');
-        }
+	    Utility.locale(function(results) {
+			callback(results[0]);
+	    });
     },
     locale: function(callback) {
-        navigator.globalization.getPreferredLanguage(onSuccess, onError);
-
-        function onSuccess(pref) {
-	        var parts = pref.value.split('-');
-	        var lang = parts[0];
-	     	var script = (parts.length > 2) ? parts[1] : null;
-	        var cnty = (parts.length > 1) ? parts.pop() : 'US';
-
-            callback(pref.value, lang, script, cnty);
-        }
-        function onError() {
-            callback('en-US', 'en', null, 'US');
-        }	    
+	    Utility.locale(function(results) {
+			var locale = (results[0].length > 0) ? results[0] : 'en-US';
+			var language = (results.length > 0 && results[1].length > 0) ? results[1] : 'en';
+			var script = (results.length > 1) ? results[2] : '';
+			var country = (results.length > 2 && results[3].length > 0) ? results[3] : 'US';
+			callback(locale, language, script, country); 
+	    });    
     },
     loadDeviceSettings: function() {
 		Utility.platform(function(platform) {
@@ -45,7 +34,7 @@ var deviceSettings = {
     },
     model: function() {
         return(deviceSettingsModel);
-    },
+    }
     // removed 1/10/2018
     //uuid: function() {
     //    return(device.uuid);
@@ -56,11 +45,12 @@ var deviceSettings = {
     //cordovaVersion: function() {
     //    return(device.cordova);
     //},
-    connectionType: function() {
-        return(navigator.connection.type);
-    },
-    hasConnection: function() {
-        var type = navigator.connection.type;
-        return(type !== 'none' && type !== 'unknown'); // not sure of correct value for UNKNOWN
-    }
+    // removed 4/29/2018
+    //connectionType: function() {
+    //    return(navigator.connection.type);
+    //},
+    //hasConnection: function() {
+    //    var type = navigator.connection.type;
+    //    return(type !== 'none' && type !== 'unknown'); // not sure of correct value for UNKNOWN
+    //}
 };

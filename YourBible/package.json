@@ -16,14 +16,12 @@
     "com-shortsands-videoplayer": "file:///Users/garygriswold/ShortSands/BibleApp/Plugins/VideoPlayer",
     "cordova-android": "^6.3.0",
     "cordova-ios": "^4.5.4",
-    "cordova-plugin-globalization": "^1.0.9",
     "cordova-plugin-splashscreen": "^5.0.1",
     "cordova-plugin-wkwebview-engine": "^1.1.4",
     "ionic-plugin-keyboard": "^2.2.1"
   },
   "cordova": {
     "plugins": {
-      "cordova-plugin-globalization": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-wkwebview-engine": {},
       "ionic-plugin-keyboard": {},

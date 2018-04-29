@@ -16,7 +16,8 @@ import UIKit
 @objc(Utility) class Utility : CDVPlugin {
     
     @objc(locale:) func locale(command: CDVInvokedUrlCommand) {
-        let message = Locale.current.identifier
+        let loc = Locale.current
+        let message: [String?] = [ loc.identifier, loc.languageCode, loc.scriptCode, loc.regionCode ]
         let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: message)
         self.commandDelegate!.send(result, callbackId: command.callbackId)
     }

@@ -7,9 +7,6 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-globalization": {
-      "PACKAGE_NAME": "com.shortsands.yourbible"
-    },
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "com.shortsands.yourbible"
     },

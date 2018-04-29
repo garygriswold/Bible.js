@@ -10,6 +10,13 @@
 "use strict";
 var exec = require('cordova/exec');
 
+exports.locale = function(callback) {
+    exec(callback, function(error) {
+	    Utility.logError("locale", error);
+	    callback(null);
+    }, "Utility", "locale", []);	
+};
+
 exports.platform = function(callback) {
     exec(callback, function(error) {
 	    Utility.logError("platform", error);

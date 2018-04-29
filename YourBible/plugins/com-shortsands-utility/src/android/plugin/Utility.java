@@ -5,9 +5,11 @@ package plugin;
  */
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.provider.Settings;
 import com.shortsands.utility.Sqlite3;
 import java.util.ArrayList;
+import java.util.Locale;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -19,7 +21,15 @@ import org.json.JSONObject;
 public class Utility extends CordovaPlugin {
 
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equals("platform")) {
+	    if (action.equals("locale")) {
+			Locale loc = Locale.getDefault();
+			JSONArray message = new JSONArray();
+			message.put(loc.toString());
+			message.put(loc.getLanguage());
+			message.put(loc.getScript());
+			message.put(loc.getCountry());
+			callbackContext.success(message);
+	    } else if (action.equals("platform")) {
             callbackContext.success("Android");
         } else if (action.equals("modelType")) {
             callbackContext.success(android.os.Build.BRAND);
