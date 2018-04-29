@@ -90,11 +90,11 @@ exports.closeDatabase = function(database, callback) {
 
 exports.listDB = function(callback) {
 	exec(function(results) {
-		callback(null);
+		callback(results);
 	},
 	function(error) {
 		Utility.logError("listDB", error);
-		callback(error);
+		callback([]);
 	}, "Utility", "listDB", []);	
 };
 

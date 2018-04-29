@@ -29,7 +29,7 @@ DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
 	});
 };
 DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
-	Utility.bulkExecuteJS(this.dbname, statement, values, function(error, rowCount) {
+	Utility.bulkExecuteJS(this.dbname, statement, array, function(error, rowCount) {
 		if (error) {
 			callback(new IOError(error));
 		} else {

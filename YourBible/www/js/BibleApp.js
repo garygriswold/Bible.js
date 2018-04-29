@@ -2444,6 +2444,7 @@ SettingStorage.prototype.removeInstalledVersion = function(version, callback) {
 };
 SettingStorage.prototype.bulkReplaceInstalledVersions = function(versions, callback) {
 	var that = this;
+	console.log("BULK REPLACE THESE", versions);
 	this.database.bulkExecuteDML('REPLACE INTO Installed(version, filename, timestamp, bibleVersion) VALUES (?,?,?,?)', versions, function(results) {
 		if (results instanceof IOError) {
 			console.log('ERROR: Replace All Installed', JSON.stringify(results));
@@ -2484,30 +2485,8 @@ DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
 		}
 	});
 };
-/*
-DatabaseHelper.prototype.manyExecuteDML = function(statement, array, callback) {
-	var that = this;
-	var totalRowCount = 0;
-	executeOne(0);
-	
-	function executeOne(index) {
-		if (index < array.length) {
-			that.executeDML(statement, array[index], function(error, rowCount) {
-				if (results instanceof IOError) {
-					callback(results);
-				} else {
-					totalRowCount += rowCount;
-					executeOne(index + 1);
-				}
-			});
-		} else {
-			callback(array.length);
-		}
-	}	
-};
-*/
 DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
-	Utility.bulkExecuteJS(this.dbname, statement, values, function(error, rowCount) {
+	Utility.bulkExecuteJS(this.dbname, statement, array, function(error, rowCount) {
 		if (error) {
 			callback(new IOError(error));
 		} else {
@@ -2515,49 +2494,6 @@ DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
 		}
 	});
 };
-/*
-	var that = this;
-    var totalRowCount = 0;
-    Utility.executeJS(this.dbname, "BEGIN", [], function(error) {
-	    if (error) {
-			callback(totalRowCount);
-		} else {
-	    	executeOne(0);
-	    }
-    });
-    
-    function executeOne(index) {
-	    if (index < array.length) {
-		    Utility.executeJS(that.dbname, statement, array[index], function(error, rowCount) {
-			    if (error) {
-				    rollback(callback);
-			    } else {
-				    totalRowCount += rowCount;
-				    executeOne(index + 1);
-			    }
-		    });
-	    } else {
-		    Utility.executeJS(that.dbname, "COMMIT", [], function(error) {
-			    if (error) {
-				    rollback(callback);
-			    } else {
-				    callback(totalRowCount);
-			    }
-		    });
-	    }
-    }
-    
-    function rollback(callback) {
-	    Utility.executeJS(that.dbname, "ROLLBACK", [], function(error) {
-		    if (error) {
-			    callback(new IOError(error));
-		    } else {
-			    callback(0);
-		    }
-	    });
-    }
-};
-*/
 DatabaseHelper.prototype.executeDDL = function(statement, callback) {
 	Utility.executeJS(this.dbname, statement, [], function(error, rowCount) {
 		if (error) {
@@ -3398,28 +3334,33 @@ AppUpdater.prototype.doUpdate = function(callback) {
 				checkIfUpdate(function(isUpdate) {
 					console.log('Check if Update', isUpdate);
 					if (isUpdate) {
-						getStorageFiles(function(fileMap) {
-							var versionsDB = fileMap['Versions.db'];
-							removeFile(versionsDB, function() {
-								version16xTableUpdate(function() {
-									var database = new VersionsAdapter();
-									database.selectAllBibleVersions(function(bibleVersionMap) {
-										identifyObsolete(bibleVersionMap, function(wwwObsolete, downloadedObsolete) {
-											removeWwwObsoleteFiles(fileMap, wwwObsolete, function() {
-												database.selectInstalledBibleVersions(function(bibleVersionList) {
-													that.settingStorage.bulkReplaceInstalledVersions(bibleVersionList, function() {
-														updateInstalled(downloadedObsolete, function() {
-															updateVersion();
-															//dumpSettingsDB(function() {
-																callback();
-															//});							
-														});
+						//getStorageFiles(function(fileMap) {
+						getStorageFiles(function(files) {
+							console.log("DATABASE FILES: " + files);
+							//var versionsDB = fileMap['Versions.db'];
+							//removeFile(versionsDB, function() {
+							removeFile('Versions.db', function() {
+								//version16xTableUpdate(function() {
+								var database = new VersionsAdapter();
+								database.selectAllBibleVersions(function(bibleVersionMap) {
+									identifyObsolete(bibleVersionMap, function(wwwObsolete, downloadedObsolete) {
+										//removeWwwObsoleteFiles(fileMap, wwwObsolete, function() {
+										removeWwwObsoleteFiles(wwwObsolete, function() {
+											database.selectInstalledBibleVersions(function(bibleVersionList) {
+												console.log("INSTALLED BIBLE VERSIONS", bibleVersionList);
+												that.settingStorage.bulkReplaceInstalledVersions(bibleVersionList, function() {
+													updateInstalled(downloadedObsolete, function() {
+														//updateVersion();
+														dumpSettingsDB(function() {
+															callback();
+														});							
 													});
 												});
 											});
 										});
 									});
 								});
+								//});
 							});
 						});
 					} else {
@@ -3472,16 +3413,21 @@ AppUpdater.prototype.doUpdate = function(callback) {
 	}
 	
 	function getStorageFiles(callback) {
-		if (deviceSettings.platform() === 'ios') {
-			var path = cordova.file.applicationStorageDirectory + 'Library/LocalDatabase/';
-		} else {
-			path = cordova.file.applicationStorageDirectory + 'databases/';
-		}
-		getFiles(path, function(fileMap) {
-			callback(fileMap);
-		});	
+		console.log("BEFORE GET FILES 2");
+		Utility.listDB(function(files) {
+			console.log("AFTER GET FILES 2", files);
+			callback(files);
+		});
+		//if (deviceSettings.platform() === 'ios') {
+		//	var path = cordova.file.applicationStorageDirectory + 'Library/LocalDatabase/';
+		//} else {
+		//	path = cordova.file.applicationStorageDirectory + 'databases/';
+		//}
+		//getFiles(path, function(fileMap) {
+		//	callback(fileMap);
+		//});	
 	}
-	
+	/*
 	function getFiles(filePath, callback) {
 		var dirMap = {};
 		window.resolveLocalFileSystemURL(filePath, function(dirEntry) {
@@ -3507,7 +3453,8 @@ AppUpdater.prototype.doUpdate = function(callback) {
 			callback(dirMap);
 		});
 	}
-	
+	*/
+	/*
 	function version16xTableUpdate(callback) {
 		// This code was added for version 1.6.x
 		that.settingStorage.database.select('PRAGMA table_info(Installed)', [], function(results) {
@@ -3537,6 +3484,7 @@ AppUpdater.prototype.doUpdate = function(callback) {
 			}
 		});		
 	}
+	*/
 	/**
 	* There are two kinds of obsolete that this function finds: downloadedObsolete, and wwwObsolete.
 	*/
@@ -3563,13 +3511,16 @@ AppUpdater.prototype.doUpdate = function(callback) {
 		});
 	}
 	
-	function removeWwwObsoleteFiles(fileMap, obsoleteList, callback) {
+	//function removeWwwObsoleteFiles(fileMap, obsoleteList, callback) {
+	function removeWwwObsoleteFiles(obsoleteList, callback) {
 		var obsolete = obsoleteList.shift();
 		if (obsolete) {
-			console.log('Remove File', obsolete.filename);
-			var file = fileMap[obsolete.filename];
-			removeFile(file, function() {
-				removeWwwObsoleteFiles(fileMap, obsoleteList, callback);
+			//console.log('Remove File', obsolete.filename);
+			//var file = fileMap[obsolete.filename];
+			//removeFile(file, function() {
+			removeFile(obsolete.filename, function() {
+				//removeWwwObsoleteFiles(fileMap, obsoleteList, callback);
+				removeWwwObsoleteFiles(obsoleteList, callback);
 			});
 		} else {
 			callback();
@@ -3580,9 +3531,6 @@ AppUpdater.prototype.doUpdate = function(callback) {
 		var obsolete = obsoleteVersions.shift();
 		if (obsolete) {
 			that.settingStorage.removeInstalledVersion(obsolete.versionCode, function(results) {
-				//if (results instanceof IOError) {
-				//	console.log('ERROR', JSON.stringify(results), 'AppUpdater.updateInstalled');
-				//}
 				updateInstalled(obsoleteVersions, callback);
 			});
 		} else {
@@ -3591,18 +3539,22 @@ AppUpdater.prototype.doUpdate = function(callback) {
 	}
 	
 	function removeFile(file, callback) {
-		if (file) {
-			file.remove(function() {
-				console.log('REMOVE FROM /databases SUCCESS', file.name);
-				callback();
-			}, 
-			function(fileError) {
-				console.log('REMOVE ERROR', file.name, JSON.stringify(fileError));
-				callback();
-			});
-		} else {
+		console.log("REMOVE DB ", file);
+		Utility.deleteDB(file, function(error) {
 			callback();
-		}
+		});
+		//if (file) {
+			//file.remove(function() {
+			//	console.log('REMOVE FROM /databases SUCCESS', file.name);
+			//	callback();
+			//}, 
+			//function(fileError) {
+			//	console.log('REMOVE ERROR', file.name, JSON.stringify(fileError));
+			//	callback();
+			//});
+		//} else {
+		//	callback();
+		//}
 	}
 	
 	function dumpSettingsDB(callback) {
@@ -3614,8 +3566,10 @@ AppUpdater.prototype.doUpdate = function(callback) {
 					var installed = installedMap[keys[i]];
 					console.log('INSTALLED', installed.filename, installed.bibleVersion);
 				}
-				getStorageFiles(function(fileMap) {
-					console.log('LIST STORAGE FILES', Object.keys(fileMap));
+				//getStorageFiles(function(fileMap) {
+				getStorageFiles(function(files) {
+					//console.log('LIST STORAGE FILES', Object.keys(fileMap));
+					console.log('LIST STORAGE FILES', files);
 					callback();
 				});
 			});

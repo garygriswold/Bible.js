@@ -83,6 +83,21 @@ import UIKit
 			}
 		}
 	}
+    
+    @objc(bulkExecuteJS:) func bulkExecuteJS(command: CDVInvokedUrlCommand) {
+        DispatchQueue.global().sync {
+            do {
+                let database = try Sqlite3.findDB(dbname: command.arguments[0] as? String ?? "")
+                let rowCount = try database.bulkExecuteV1(
+                    sql: command.arguments[1] as? String ?? "",
+                    values: command.arguments[2] as? [[Any?]] ?? [[]])
+                let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: rowCount)
+                self.commandDelegate!.send(result, callbackId: command.callbackId)
+            } catch let err {
+                self.returnError(error: err, command: command)
+            }
+        }
+    }
 	
 	@objc(close:) func close(command: CDVInvokedUrlCommand) {
 		DispatchQueue.global().sync {
