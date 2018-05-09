@@ -34,10 +34,6 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
         let url = URL(fileURLWithPath: path!)
         let request = URLRequest(url: url)
         webView.load(request)
-        
-        //let myURL = URL(string: "https://www.apple.com")
-        //let myRequest = URLRequest(url: myURL!)
-        //webView.load(myRequest)
     }
     
     /**
@@ -46,6 +42,22 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
     */
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         print("got message: \(message.body)")
+        if message.body is Dictionary<String, String> {
+            let request: Dictionary<String, String> = (message.body as? Dictionary<String, String>)!
+            print("request \(request)")
+            let command = request["command"]
+            let handler = request["handler"]
+            print("command \(command)")
+            if (command == "getLocale") {
+                var locale = Locale.current.identifier
+                locale = "es_ES"
+                print("locale \(locale)")
+                let response = handler! + "('" + locale + "');";
+                self.webView.evaluateJavaScript(response, completionHandler: { data, error in
+                    print("evaluate error \(error)  \(data)")
+                })
+            }
+        }
     }
 }
 

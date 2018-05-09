@@ -1,7 +1,10 @@
 
+
 function displayLocale() {
-	console.log("start JS");
+    var message = {'command': 'getLocale', 'handler': 'displayLocaleSuccess' };
+    window.webkit.messageHandlers.callNative.postMessage(message);
+}
+function displayLocaleSuccess(locale) {
 	var element = document.getElementById("locale");
-	element.innerHTML = "en_US";
-	console.log("fin JS");
+	element.innerHTML = locale;	
 }

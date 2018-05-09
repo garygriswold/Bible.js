@@ -38,7 +38,7 @@
 /* Begin PBXFileReference section */
 		E439FE2320A3665C00CD37CB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = TestAppIOS/Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E439FE2720A38AE500CD37CB /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
-		E439FE2920A391D500CD37CB /* test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = test.js; path = ../www/test.js; sourceTree = "<group>"; };
+		E439FE2920A391D500CD37CB /* test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = test.js; sourceTree = "<group>"; };
 		E4D5683C20A35C8800ED291A /* TestAppIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestAppIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4D5683F20A35C8800ED291A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4D5684120A35C8800ED291A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -81,6 +81,7 @@
 		E439FE2620A38AE500CD37CB /* www */ = {
 			isa = PBXGroup;
 			children = (
+				E439FE2920A391D500CD37CB /* test.js */,
 				E439FE2720A38AE500CD37CB /* index.html */,
 			);
 			name = www;
@@ -90,7 +91,6 @@
 		E4D5683320A35C8800ED291A = {
 			isa = PBXGroup;
 			children = (
-				E439FE2920A391D500CD37CB /* test.js */,
 				E439FE2620A38AE500CD37CB /* www */,
 				E4D5683E20A35C8800ED291A /* TestAppIOS */,
 				E4D5685320A35C8A00ED291A /* TestAppIOSTests */,
