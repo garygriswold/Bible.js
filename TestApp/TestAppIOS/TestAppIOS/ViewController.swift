@@ -14,13 +14,15 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
+class ViewController: UIViewController, WKUIDelegate {
 
     var webView: WKWebView!
+    var messageHandler: JSMessageHandler!
     
     override func loadView() {
+        self.messageHandler = JSMessageHandler(controller: self)
         let configuration = WKWebViewConfiguration()
-        configuration.userContentController.add(self, name: "callNative")
+        configuration.userContentController.add(self.messageHandler, name: "callNative")
         webView = WKWebView(frame: .zero, configuration: configuration)
         webView.uiDelegate = self
         view = webView
@@ -36,46 +38,14 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
         webView.load(request)
     }
     
-    /**
-     * var aMessage = {'command':'hello', data:[5,6,7,8,9]}
-     * window.webkit.messageHandlers.callNative.postMessage(aMessage)
-    */
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        print("got message: \(message.body)")
-        if message.body is Dictionary<String, Any> {
-            let request = (message.body as? Dictionary<String, Any>)!
-            let plugin = request["plugin"] as? String ?? "notString"
-            if (plugin == "Utility") {
-                utilityPlugin(request: request)
-            } else {
-                print("Unknown plugin \(plugin)")
-                // Should I try to respond to this?
-            }
-        } else {
-            print("Message set to callNative, must be a dictionary")
-            // I think there is no other error response possible here.
-        }
-    }
-    
-    private func utilityPlugin(request: Dictionary<String, Any>) {
-        print("request \(request)")
-        let method = request["method"] as? String ?? "notString"
-        let handler = request["handler"] as? String ?? "notString"
-        print("method \(method)")
-        if (method == "getLocale") {
-            var locale = Locale.current.identifier
-            locale = "es_GB"
-            print("locale \(locale)")
-            let response = handler + "('" + locale + "');";
-            callback(response: response)
-        } else {
-            print("Unknown method \(method) in Plugin Utility")
-        }
-    }
-    
-    private func callback(response: String) {
+    func jsCallback(response: String) {
         self.webView.evaluateJavaScript(response, completionHandler: { data, error in
-            print("evaluate error \(error)  \(data)")
+            if let err = error {
+                print("jsCallbackError \(err)")
+            }
+            if let resp = data {
+                print("jsCallback has unexpected response \(resp)")
+            }
         })
     }
 }
