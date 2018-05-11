@@ -14,11 +14,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
 
         WebView webview = new WebView(this);
         setContentView(webview);
-        //webview.loadUrl("http://shortsands.com/");
         webview.loadUrl("file:///android_asset/www/index.html");
+
+        webview.getSettings().setJavaScriptEnabled(true);
+        JSMessageHandler handler = new JSMessageHandler(this);
+        webview.addJavascriptInterface(handler, "callAndroid");
     }
 }
