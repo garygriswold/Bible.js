@@ -2,7 +2,7 @@ package com.shortsands.testapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
+import android.webkit.ValueCallback;
 import android.webkit.WebView;
 
 /**
@@ -11,16 +11,28 @@ import android.webkit.WebView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private WebView webview;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        WebView webview = new WebView(this);
-        setContentView(webview);
-        webview.loadUrl("file:///android_asset/www/index.html");
+        this.webview = new WebView(this);
+        setContentView(this.webview);
+        this.webview.loadUrl("file:///android_asset/www/index.html");
 
-        webview.getSettings().setJavaScriptEnabled(true);
+        this.webview.getSettings().setJavaScriptEnabled(true);
         JSMessageHandler handler = new JSMessageHandler(this);
-        webview.addJavascriptInterface(handler, "callAndroid");
+        this.webview.addJavascriptInterface(handler, "callAndroid");
+    }
+
+    public void jsCallback(final String message) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //ValueCallback<String> result = new ValueCallback<String>();
+                webview.evaluateJavascript(message, null);
+            }
+        });
     }
 }

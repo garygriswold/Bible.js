@@ -13,10 +13,10 @@ import org.json.JSONArray;
 public class JSMessageHandler {
 
     private static String TAG = "JSMessageHandler";
-    private Context context;
+    private MainActivity activity;
 
-    public JSMessageHandler(Context context) {
-        this.context = context;
+    public JSMessageHandler(MainActivity activity) {
+        this.activity = activity;
     }
 
     /**
@@ -37,10 +37,10 @@ public class JSMessageHandler {
         Log.d(TAG, "method " + method);
         if (method.equals("getLocale")) {
             String locale = Locale.getDefault().toString();
-            locale = "es_XB";
+            locale = "es_X2";
             Log.d(TAG, "locale " + locale);
             String response = handler + "('" + locale + "');";
-            //controller.jsCallback(response: response)
+            this.activity.jsCallback(response);
         } else {
             Log.d(TAG, "Unknown method " + method + " in Plugin Utility");
         }
