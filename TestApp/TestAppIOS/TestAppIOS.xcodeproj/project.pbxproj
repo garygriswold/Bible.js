@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		E439FE2420A3665C00CD37CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E439FE2220A3665C00CD37CB /* Main.storyboard */; };
-		E439FE2820A38B7500CD37CB /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = E439FE2720A38AE500CD37CB /* index.html */; };
-		E439FE2A20A391D500CD37CB /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = E439FE2920A391D500CD37CB /* test.js */; };
+		E4A2ECF320A73FF8003BD00E /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = E4A2ECF220A73FF7003BD00E /* index.html */; };
+		E4A2ECF520A7400E003BD00E /* BibleApp.js in Resources */ = {isa = PBXBuildFile; fileRef = E4A2ECF420A7400E003BD00E /* BibleApp.js */; };
+		E4A2ECF720A74022003BD00E /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E4A2ECF620A74021003BD00E /* Versions.db */; };
 		E4C5D68820A4962F009DD340 /* JSMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C5D68720A4962F009DD340 /* JSMessageHandler.swift */; };
 		E4D5684020A35C8800ED291A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5683F20A35C8800ED291A /* AppDelegate.swift */; };
 		E4D5684220A35C8800ED291A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5684120A35C8800ED291A /* ViewController.swift */; };
@@ -40,6 +41,9 @@
 		E439FE2320A3665C00CD37CB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = TestAppIOS/Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E439FE2720A38AE500CD37CB /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		E439FE2920A391D500CD37CB /* test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = test.js; sourceTree = "<group>"; };
+		E4A2ECF220A73FF7003BD00E /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = index.html; path = TestAppIOS/www/index.html; sourceTree = "<group>"; };
+		E4A2ECF420A7400E003BD00E /* BibleApp.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = BibleApp.js; path = TestAppIOS/www/js/BibleApp.js; sourceTree = "<group>"; };
+		E4A2ECF620A74021003BD00E /* Versions.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = Versions.db; path = TestAppIOS/www/Versions.db; sourceTree = "<group>"; };
 		E4C5D68720A4962F009DD340 /* JSMessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSMessageHandler.swift; sourceTree = "<group>"; };
 		E4D5683C20A35C8800ED291A /* TestAppIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestAppIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4D5683F20A35C8800ED291A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +97,9 @@
 		E4D5683320A35C8800ED291A = {
 			isa = PBXGroup;
 			children = (
+				E4A2ECF620A74021003BD00E /* Versions.db */,
+				E4A2ECF420A7400E003BD00E /* BibleApp.js */,
+				E4A2ECF220A73FF7003BD00E /* index.html */,
 				E439FE2620A38AE500CD37CB /* www */,
 				E4D5683E20A35C8800ED291A /* TestAppIOS */,
 				E4D5685320A35C8A00ED291A /* TestAppIOSTests */,
@@ -247,8 +254,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E439FE2A20A391D500CD37CB /* test.js in Resources */,
-				E439FE2820A38B7500CD37CB /* index.html in Resources */,
+				E4A2ECF720A74022003BD00E /* Versions.db in Resources */,
+				E4A2ECF520A7400E003BD00E /* BibleApp.js in Resources */,
+				E4A2ECF320A73FF8003BD00E /* index.html in Resources */,
 				E439FE2420A3665C00CD37CB /* Main.storyboard in Resources */,
 				E4D5684A20A35C8A00ED291A /* LaunchScreen.storyboard in Resources */,
 				E4D5684720A35C8A00ED291A /* Assets.xcassets in Resources */,

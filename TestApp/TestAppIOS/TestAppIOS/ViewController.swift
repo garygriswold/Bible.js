@@ -22,6 +22,8 @@ class ViewController: UIViewController, WKUIDelegate {
     override func loadView() {
         self.messageHandler = JSMessageHandler(controller: self)
         let configuration = WKWebViewConfiguration()
+        configuration.preferences.javaScriptEnabled = true;
+        configuration.preferences.javaScriptCanOpenWindowsAutomatically = true; // not sure
         configuration.userContentController.add(self.messageHandler, name: "callNative")
         webView = WKWebView(frame: .zero, configuration: configuration)
         webView.uiDelegate = self
