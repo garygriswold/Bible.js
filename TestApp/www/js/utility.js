@@ -5,10 +5,6 @@ cordovaDeviceSettings
   line 25 Utility.platform(function(platform) {})
   line 28 Utility.modelName(function(model) {})
 
-AppUpdater
-  line 127 Utility.listDB(function(files) {})
-  line 181 Utility.deleteDB(file, function(error) {})
-
 SearchView
   line 86 Utility.hideKeyboard(function(hidden) {})
 */
@@ -32,7 +28,12 @@ function platformHandler(platform) {
 function modelNameHandler(model) {
   alert(model);
   if (assert((model == "iPhone"), 'Utility', 'modelName', 'should be ios')) {
-
+  	callNative('Utility', 'hideKeyboard', 'hideKeyboardHandler', []);
   }
+}
+function hideKeyboardHandler(hidden) {
+	if (assert(hidden, 'Utility', 'hideKeyboard', 'should be true') {
+		console.log('Done with utility test');
+	}
 }
 
