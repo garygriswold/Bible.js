@@ -16,8 +16,14 @@ import WebKit
 
 class ViewController: UIViewController, WKUIDelegate {
 
-    var webView: WKWebView!
-    var messageHandler: JSMessageHandler!
+    private var webView: WKWebView!
+    private var messageHandler: JSMessageHandler!
+    
+    var webview: WKWebView {
+        get {
+            return webView
+        }
+    }
     
     override func loadView() {
         self.messageHandler = JSMessageHandler(controller: self)

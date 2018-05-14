@@ -18,6 +18,9 @@
 		E4D5684A20A35C8A00ED291A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4D5684820A35C8A00ED291A /* LaunchScreen.storyboard */; };
 		E4D5685520A35C8A00ED291A /* TestAppIOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5685420A35C8A00ED291A /* TestAppIOSTests.swift */; };
 		E4D5686020A35C8A00ED291A /* TestAppIOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5685F20A35C8A00ED291A /* TestAppIOSUITests.swift */; };
+		E4FB082620A9243900A053A4 /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4FB082520A9243900A053A4 /* Utility.framework */; };
+		E4FB082820A9315400A053A4 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4FB082720A9315400A053A4 /* AWS.framework */; };
+		E4FB082A20A937C000A053A4 /* VideoPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4FB082920A937C000A053A4 /* VideoPlayer.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +37,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = E4D5683B20A35C8800ED291A;
 			remoteInfo = TestAppIOS;
+		};
+		E4FB083020A93CB400A053A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4FB082B20A93CB400A053A4 /* AudioPlayer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E4A32CCB1F2FB310009AECFB;
+			remoteInfo = AudioPlayer;
+		};
+		E4FB083220A93CB400A053A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4FB082B20A93CB400A053A4 /* AudioPlayer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E4AB2E281F82015800CCDD5C;
+			remoteInfo = AudioPlayerTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -57,6 +74,10 @@
 		E4D5685B20A35C8A00ED291A /* TestAppIOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestAppIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4D5685F20A35C8A00ED291A /* TestAppIOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppIOSUITests.swift; sourceTree = "<group>"; };
 		E4D5686120A35C8A00ED291A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4FB082520A9243900A053A4 /* Utility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Utility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4FB082720A9315400A053A4 /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4FB082920A937C000A053A4 /* VideoPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4FB082B20A93CB400A053A4 /* AudioPlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AudioPlayer.xcodeproj; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +85,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4FB082A20A937C000A053A4 /* VideoPlayer.framework in Frameworks */,
+				E4FB082820A9315400A053A4 /* AWS.framework in Frameworks */,
+				E4FB082620A9243900A053A4 /* Utility.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,6 +129,7 @@
 				E4D5685320A35C8A00ED291A /* TestAppIOSTests */,
 				E4D5685E20A35C8A00ED291A /* TestAppIOSUITests */,
 				E4D5683D20A35C8800ED291A /* Products */,
+				E4FB082420A9243900A053A4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -148,6 +173,26 @@
 				E4D5686120A35C8A00ED291A /* Info.plist */,
 			);
 			path = TestAppIOSUITests;
+			sourceTree = "<group>";
+		};
+		E4FB082420A9243900A053A4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E4FB082B20A93CB400A053A4 /* AudioPlayer.xcodeproj */,
+				E4FB082920A937C000A053A4 /* VideoPlayer.framework */,
+				E4FB082720A9315400A053A4 /* AWS.framework */,
+				E4FB082520A9243900A053A4 /* Utility.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E4FB082C20A93CB400A053A4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E4FB083120A93CB400A053A4 /* AudioPlayer.app */,
+				E4FB083320A93CB400A053A4 /* AudioPlayerTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -240,6 +285,12 @@
 			mainGroup = E4D5683320A35C8800ED291A;
 			productRefGroup = E4D5683D20A35C8800ED291A /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = E4FB082C20A93CB400A053A4 /* Products */;
+					ProjectRef = E4FB082B20A93CB400A053A4 /* AudioPlayer.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				E4D5683B20A35C8800ED291A /* TestAppIOS */,
@@ -248,6 +299,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		E4FB083120A93CB400A053A4 /* AudioPlayer.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = AudioPlayer.app;
+			remoteRef = E4FB083020A93CB400A053A4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E4FB083320A93CB400A053A4 /* AudioPlayerTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AudioPlayerTests.xctest;
+			remoteRef = E4FB083220A93CB400A053A4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		E4D5683A20A35C8800ED291A /* Resources */ = {

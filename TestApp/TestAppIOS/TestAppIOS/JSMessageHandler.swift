@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 import WebKit
+import Utility
+import AWS
+//import AudioPlayer
+import VideoPlayer
 
 class JSMessageHandler : NSObject, WKScriptMessageHandler {
     
@@ -79,20 +83,17 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
         //    controller.jsCallback(response: modelTypeResponse)
             
         } else if method == "modelName" {
-            //let modelName = DeviceSettings.modelName()
-            let modelName = "Dummy"
+            let modelName = DeviceSettings.modelName()
             let response = format(handler: handler, result: modelName) // if error return nil
             controller.jsCallback(response: response)
             
-        //} else if method == "deviceSize" {
-        //    //let deviceSize = DeviceSettings.deviceSize()
-        //    let deviceSize = "Dummy"
-        //    let deviceSizeResponse = format(handler: handler, result: deviceSize) if error return nil
-        //    controller.jsCallback(response: deviceSizeResponse)
+        } else if method == "deviceSize" {
+            let deviceSize = DeviceSettings.deviceSize()
+            let response = format(handler: handler, result: deviceSize) // if error return nil
+            controller.jsCallback(response: response)
             
         } else if method == "hideKeyboard" {
-            //let hidden = self.webView.endEditing(true)
-            let hidden = true
+            let hidden = self.controller.webview.endEditing(true)
             let response = format(handler: handler, result: hidden) // if error return false
             controller.jsCallback(response: response)
             
@@ -110,8 +111,11 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
             if parameters.count == 2 {
                 let dbname = parameters[0] as? String ?? "notString"
                 let isCopyDatabase = parameters[1] as? Bool ?? true
-                // do call here
-                error = "whatever"
+                do {
+                    try Sqlite3.openDB(dbname: dbname, copyIfAbsent: isCopyDatabase)
+                } catch let err {
+                    error = logError(plugin: "Sqlite", method: method, message: err.localizedDescription)
+                }
             } else {
                 error = logError(plugin: "Sqlite", method: method, message: "Must have two parameters")
             }
@@ -119,13 +123,18 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
             controller.jsCallback(response: response)
             
         } else if method == "queryJS" {
-            let result: [Dictionary<String,Any?>]
+            var result: [Dictionary<String,Any?>]
             if parameters.count == 3 {
                 let dbname = parameters[0] as? String ?? "notString"
                 let statement = parameters[1] as? String ?? "notString"
                 let values = parameters[2] as? [Any] ?? []
-                // do call here
-                result = [Dictionary<String,Any?>]()
+                do {
+                    let db = try Sqlite3.findDB(dbname: dbname)
+                    result = try db.queryV0(sql: statement, values: values)
+                } catch let err {
+                    result = []
+                    error = logError(plugin: "Sqlite", method: method, message: err.localizedDescription)
+                }
             } else {
                 result = []
                 error = logError(plugin: "Sqlite", method: method, message: "must have three parameters")
@@ -139,10 +148,14 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
                 let dbname = parameters[0] as? String ?? "notString"
                 let statement = parameters[1] as? String ?? "notString"
                 let values = parameters[2] as? [Any] ?? []
-                // do call here
-                result = 1
+                do {
+                    let db = try Sqlite3.findDB(dbname: dbname)
+                    result = try db.executeV1(sql: statement, values: values)
+                } catch let err {
+                    error = logError(plugin: "Sqlite", method: method, message: err.localizedDescription)
+                }
             } else {
-                let error = logError(plugin: "Sqlite", method: method, message: "must have three parameters")
+                error = logError(plugin: "Sqlite", method: method, message: "must have three parameters")
             }
             let response = format(handler: handler, error: nil, result: result) // if error, return error
             controller.jsCallback(response: response)
@@ -153,8 +166,12 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
                 let dbname = parameters[0] as? String ?? "notString"
                 let statement = parameters[1] as? String ?? "notString"
                 let values = parameters[2] as? [Any] ?? []
-                // do call here
-                result = 1
+                do {
+                    let db = try Sqlite3.findDB(dbname: dbname)
+                    result = try db.executeV1(sql: statement, values: values)
+                } catch let err {
+                    error = logError(plugin: "Sqlite", method: method, message: err.localizedDescription)
+                }
             } else {
                 error = logError(plugin: "Sqlite", method: method, message: "must have three parameters")
             }
@@ -164,8 +181,7 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
         } else if method == "closeDB" {
             if parameters.count == 1 {
                 let dbname = parameters[0] as? String ?? "notString"
-                // do call here
-                error = "whatever"
+                Sqlite3.closeDB(dbname: dbname)
             } else {
                 error = logError(plugin: "Sqlite", method: method, message: "must have one parameter")
             }
@@ -173,16 +189,24 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
             controller.jsCallback(response: response)
 
         } else if method == "listDB" {
-            // do call here
-            let result = "abcde"
+            var result: [String]
+            do {
+                result = try Sqlite3.listDB()
+            } catch let err {
+                result = []
+                logError(plugin: "Sqlite", method: method, message: err.localizedDescription)
+            }
             let response = format(handler: handler, result: result) // if error, return []
             controller.jsCallback(response: response)
             
         } else if method == "deleteDB" {
             if parameters.count == 1 {
                 let dbname = parameters[0] as? String ?? "notString"
-                // do call here
-                error = "whatever"
+                do {
+                    try Sqlite3.deleteDB(dbname: dbname)
+                } catch let err {
+                    error = logError(plugin: "Sqlite", method: method, message: err.localizedDescription)
+                }
             } else {
                 error = logError(plugin: "Sqlite", method: method, message: "must have one parameter")
             }
@@ -200,7 +224,7 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
         var error: String? = nil
         
         if method == "initialize" {
-            // do call here
+            let s3: AwsS3 = AwsS3Manager.findDbp()
             let result = true
             let response = format(handler: handler, result: result) // if error, return false
             controller.jsCallback(response: response)
@@ -210,8 +234,14 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
                 let s3Bucket = parameters[0] as? String ?? "notString"
                 let s3Key = parameters[1] as? String ?? "notString"
                 let filePath = parameters[2] as? String ?? "notString"
-                // do call here
-                error = "whatever"
+                let fileURL = URL(fileURLWithPath: filePath)
+                let s3 = AwsS3Manager.findDbp()
+                s3.downloadZipFile(s3Bucket: s3Bucket, s3Key: s3Key, filePath: fileURL, view: nil, complete: { err in
+                    if err != nil {
+                        error = self.logError(plugin: "Sqlite", method: method, message: err!.localizedDescription)
+                        // Will this error get captured
+                    }
+                })
             } else {
                 error = logError(plugin: "AWS", method: method, message: "must have three parameters")
             }
@@ -277,12 +307,17 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
         
         if method == "showVideo" {
             if parameters.count == 5 {
-                let mediaSource = parameters[0] as? String ?? "notString"
-                let videoId = parameters[1] as? String ?? "notString"
-                let languageId = parameters[2] as? String ?? "notString"
-                let silCode = parameters[3] as? String ?? "notString"
-                let videoUrl = parameters[4] as? String ?? "notString"
-                // do call here
+                let player = VideoViewPlayer(mediaSource: parameters[0] as? String ?? "notString",
+                                             videoId: parameters[1] as? String ?? "notString",
+                                             languageId: parameters[2] as? String ?? "notString",
+                                             silLang: parameters[3] as? String ?? "notString",
+                                             videoUrl: parameters[4] as? String ?? "notString")
+                player.begin(complete: { err in
+                    if err != nil {
+                        error = self.logError(plugin: "VideoPlayer", method: method, message: err!.localizedDescription)
+                        // Will this error get captured?
+                    }
+                })
             } else {
                 error = logError(plugin: "VideoPlayer", method: method, message: "must have five parameters")
             }

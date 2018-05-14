@@ -9,7 +9,7 @@ import UIKit
 
 public class DeviceSettings {
     
-    static func modelName() -> String {
+    public static func modelName() -> String {
         #if (arch(i386) || arch(x86_64)) && os(iOS)
             let DEVICE_IS_SIMULATOR = true
         #else
@@ -68,7 +68,7 @@ public class DeviceSettings {
         }
     }
     
-    static func deviceSize() -> String {
+    public static func deviceSize() -> String {
         let height = UIScreen.main.nativeBounds.height
         let width = UIScreen.main.nativeBounds.width
         let bigger = max(height, width)

@@ -5,9 +5,9 @@
 //  Created by Gary Griswold on 8/8/17.
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
-#if USE_FRAMEWORK
+//#if USE_FRAMEWORK
 import Utility
-#endif
+//#endif
 
 class AudioTOCTestament {
     
