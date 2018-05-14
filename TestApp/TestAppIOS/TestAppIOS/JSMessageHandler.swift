@@ -45,8 +45,9 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
             } else if plugin == "VideoPlayer" {
                 videoPlayerPlugin(method: method, handler: handler, parameters: parameters)
             } else {
-                print("Unknown plugin \(plugin).\(method)")
-                // Should I try to respond to this?
+                let error = logError(plugin: plugin, method: method, message: "Unknown plugin")
+                let response = format(handler: handler, result: error)
+                controller.jsCallback(response: response)
             }
         } else {
             print("Message set to callNative, must be a dictionary")
@@ -59,140 +60,144 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
         if method == "locale" {
             let locale = Locale.current.identifier
             print("locale \(locale)")
-            let response = format(handler: handler, result: locale)
+            let response = format(handler: handler, result: locale) // if error return nil
             controller.jsCallback(response: response)
             
         } else if method == "platform" {
             let platform = "iOS"
-            let response = format(handler: handler, result: platform)
+            let response = format(handler: handler, result: platform) // if error return nil
             controller.jsCallback(response: response)
             
         //} else if method == "modelType" {
         //    let modelType = UIDevice.current.model
-        //    let modelTypeResponse = format(handler: handler, result: modelType)
+        //    let modelTypeResponse = format(handler: handler, result: modelType) // if error return nil
         //    controller.jsCallback(response: modelTypeResponse)
             
         } else if method == "modelName" {
             //let modelName = DeviceSettings.modelName()
             let modelName = "Dummy"
-            let response = format(handler: handler, result: modelName)
+            let response = format(handler: handler, result: modelName) // if error return nil
             controller.jsCallback(response: response)
             
         //} else if method == "deviceSize" {
         //    //let deviceSize = DeviceSettings.deviceSize()
         //    let deviceSize = "Dummy"
-        //    let deviceSizeResponse = format(handler: handler, result: deviceSize)
+        //    let deviceSizeResponse = format(handler: handler, result: deviceSize) if error return nil
         //    controller.jsCallback(response: deviceSizeResponse)
             
         } else if method == "hideKeyboard" {
             //let hidden = self.webView.endEditing(true)
             let hidden = true
-            let response = format(handler: handler, result: hidden)
+            let response = format(handler: handler, result: hidden) // if error return false
             controller.jsCallback(response: response)
             
         } else {
-            print("Unknown method \(method) in Plugin Utility")
+            logError(plugin: "Utility", method: method, message: "unknown method")
+            let response = format(handler: handler) // on error return nil
+            controller.jsCallback(response: response)
         }
     }
     
     private func sqlitePlugin(method: String, handler: String, parameters: [Any]) {
+        var error: String? = nil
         
         if method == "openDB" {
             if parameters.count == 2 {
                 let dbname = parameters[0] as? String ?? "notString"
                 let isCopyDatabase = parameters[1] as? Bool ?? true
                 // do call here
-                let error = "whatever"
-                let response = format(handler: handler, result: error)
-                controller.jsCallback(response: response)
+                error = "whatever"
             } else {
-                let response = format(handler: handler, result: "openDB must have two parameters")
-                controller.jsCallback(response: response)
+                error = logError(plugin: "Sqlite", method: method, message: "Must have two parameters")
             }
+            let response = format(handler: handler, result: error) // if error, return error, else nil
+            controller.jsCallback(response: response)
             
         } else if method == "queryJS" {
+            let result: [Dictionary<String,Any?>]
             if parameters.count == 3 {
                 let dbname = parameters[0] as? String ?? "notString"
                 let statement = parameters[1] as? String ?? "notString"
                 let values = parameters[2] as? [Any] ?? []
                 // do call here
-                let result = [Dictionary<String,Any?>]()
-                let response = format(handler: handler, error: nil, result: result)
-                controller.jsCallback(response: response)
+                result = [Dictionary<String,Any?>]()
             } else {
-                let response = format(handler: handler, error: "queryJS must have three parameters", result: [])
-                controller.jsCallback(response: response)
+                result = []
+                error = logError(plugin: "Sqlite", method: method, message: "must have three parameters")
             }
+            let response = format(handler: handler, error: error, result: result) // if error, return error
+            controller.jsCallback(response: response)
             
         } else if method == "executeJS" {
+            var result: Int = 0
             if parameters.count == 3 {
                 let dbname = parameters[0] as? String ?? "notString"
                 let statement = parameters[1] as? String ?? "notString"
                 let values = parameters[2] as? [Any] ?? []
                 // do call here
-                let result = 1
-                let response = format(handler: handler, error: nil, result: result)
-                controller.jsCallback(response: response)
+                result = 1
             } else {
-                let response = format(handler: handler, error: "executeJS must have three parameters", result: [])
-                controller.jsCallback(response: response)
+                let error = logError(plugin: "Sqlite", method: method, message: "must have three parameters")
             }
+            let response = format(handler: handler, error: nil, result: result) // if error, return error
+            controller.jsCallback(response: response)
             
         } else if method == "bulkExecuteJS" {
+            var result: Int = 0
             if parameters.count == 3 {
                 let dbname = parameters[0] as? String ?? "notString"
                 let statement = parameters[1] as? String ?? "notString"
                 let values = parameters[2] as? [Any] ?? []
                 // do call here
-                let result = 1
-                let response = format(handler: handler, error: nil, result: result)
-                controller.jsCallback(response: response)
+                result = 1
             } else {
-                let response = format(handler: handler, error: "bulkExecuteJS must have three parameters", result: [])
-                controller.jsCallback(response: response)
+                error = logError(plugin: "Sqlite", method: method, message: "must have three parameters")
             }
+            let response = format(handler: handler, error: error, result: result) // if error, return error
+            controller.jsCallback(response: response)
             
         } else if method == "closeDB" {
             if parameters.count == 1 {
                 let dbname = parameters[0] as? String ?? "notString"
                 // do call here
-                let error = "whatever"
-                let response = format(handler: handler, result: error)
-                controller.jsCallback(response: response)
+                error = "whatever"
             } else {
-                let response = format(handler: handler, result: "closeDB must have one parameter")
-                controller.jsCallback(response: response)
+                error = logError(plugin: "Sqlite", method: method, message: "must have one parameter")
             }
+            let response = format(handler: handler, result: error) // if error, return error
+            controller.jsCallback(response: response)
 
         } else if method == "listDB" {
             // do call here
             let result = "abcde"
-            let response = format(handler: handler, result: result)
+            let response = format(handler: handler, result: result) // if error, return []
             controller.jsCallback(response: response)
             
         } else if method == "deleteDB" {
             if parameters.count == 1 {
                 let dbname = parameters[0] as? String ?? "notString"
                 // do call here
-                let error = "whatever"
-                let response = format(handler: handler, result: error)
-                controller.jsCallback(response: response)
+                error = "whatever"
             } else {
-                let response = format(handler: handler, result: "deleteDB must have one parameter")
-                controller.jsCallback(response: response)
+                error = logError(plugin: "Sqlite", method: method, message: "must have one parameter")
             }
+            let response = format(handler: handler, result: error) // if error, return error, else nil
+            controller.jsCallback(response: response)
             
         } else {
-            print("Unknown method \(method) in Plugin Sqlite")
+            let error = logError(plugin: "Sqlite", method: method, message: "unknown method")
+            let response = format(handler: handler, result: error) // if error, return error
+            controller.jsCallback(response: response)
         }
     }
     
     private func awsPlugin(method: String, handler: String, parameters: [Any]) {
+        var error: String? = nil
         
         if method == "initialize" {
             // do call here
             let result = true
-            let response = format(handler: handler, result: result)
+            let response = format(handler: handler, result: result) // if error, return false
             controller.jsCallback(response: response)
             
         } else if method == "downloadZipFile" {
@@ -201,20 +206,22 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
                 let s3Key = parameters[1] as? String ?? "notString"
                 let filePath = parameters[2] as? String ?? "notString"
                 // do call here
-                let error = "whatever"
-                let response = format(handler: handler, result: error)
-                controller.jsCallback(response: response)
+                error = "whatever"
             } else {
-                let response = format(handler: handler, result: "downloadZipFile must have three parameters")
-                controller.jsCallback(response: response)
+                error = logError(plugin: "AWS", method: method, message: "must have three parameters")
             }
+            let response = format(handler: handler, result: error) // if error, return error
+            controller.jsCallback(response: response)
 
         } else {
-            print("Unknown method \(method) in Plugin AWS")
+            let error = logError(plugin: "AWS", method: method, message: "unknown method")
+            let response = format(handler: handler, result: error) // if error, return error
+            controller.jsCallback(response: response)
         }
     }
     
     private func audioPlayerPlugin(method: String, handler: String, parameters: [Any]) {
+        var error: String? = nil
         
         if method == "findAudioVersion" {
             if parameters.count == 2 {
@@ -222,17 +229,18 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
                 let silCode = parameters[1] as? String ?? "notString"
                 // do call here
                 let bookList = "abcde"
-                let response = format(handler: handler, result: bookList)
+                let response = format(handler: handler, result: bookList) // if error, return nil, else list
                 controller.jsCallback(response: response)
             } else {
-                let response = format(handler: handler, result: "findAudioVersion must have two parameters")
+                logError(plugin: "AudioPlayer", method: method, message: "must have two parameters")
+                let response = format(handler: handler) // if error, return nil
                 controller.jsCallback(response: response)
             }
 
         } else if method == "isPlaying" {
             // do call here
             let isPlaying = true
-            let response = format(handler: handler, result: isPlaying)
+            let response = format(handler: handler, result: isPlaying) // if error, return "F"
             controller.jsCallback(response: response)
             
         } else if method == "present" {
@@ -240,25 +248,27 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
                 let bookCode = parameters[0] as? String ?? "notString"
                 let chapter = parameters[1] as? String ?? "notString"
                 // do call here
-                let response = handler + "();"
-                controller.jsCallback(response: response)
             } else {
-                let response = format(handler: handler, result: "present must have two parameters")
-                controller.jsCallback(response: response)
+                error = logError(plugin: "AudioPlayer", method: method, message: "must have two parameters")
             }
+            let response = format(handler: handler, result: error) // if error, return error
+            controller.jsCallback(response: response)
         
         } else if method == "stop" {
             // do call here
-            let response = handler + "();"
+            let response = format(handler: handler) // if error, return error
             controller.jsCallback(response: response)
             
         } else {
-            print("Unknown method \(method) in Plugin AudioPlayer")
+            logError(plugin: "AudioPlayer", method: method, message: "unknown method")
+            let response = format(handler: handler) // if error, return nil
+            controller.jsCallback(response: response)
         }
  
     }
     
     private func videoPlayerPlugin(method: String, handler: String, parameters: [Any]) {
+        var error: String? = nil
         
         if method == "showVideo" {
             if parameters.count == 5 {
@@ -268,19 +278,27 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
                 let silCode = parameters[3] as? String ?? "notString"
                 let videoUrl = parameters[4] as? String ?? "notString"
                 // do call here
-                let response = handler + "();"
-                controller.jsCallback(response: response)
             } else {
-                let response = format(handler: handler, result: "showVideo must have five parameters")
-                controller.jsCallback(response: response)
+                error = logError(plugin: "VideoPlayer", method: method, message: "must have five parameters")
             }
+            let response = format(handler: handler, result: error) // if error, return error
+            controller.jsCallback(response: response)
+            
         } else {
-            print("Unknown method \(method) in Plugin VideoPlayer")
+            let error = logError(plugin: "VideoPlayer", method: method, message: "unknown method")
+            let response = format(handler: handler, result: error) // if error, return error
+            controller.jsCallback(response: response)
         }
     }
-    
-    private func format(handler: String, result: String) -> String {
-        return handler + "('" + result + "');"
+    private func format(handler: String) -> String {
+        return handler + "();"
+    }
+    private func format(handler: String, result: String?) -> String {
+        if let res = result {
+            return handler + "('" + res + "');"
+        } else {
+            return handler + "();"
+        }
     }
     private func format(handler: String, result: Bool) -> String {
         return handler + "(" + String(result) + ");"
@@ -288,14 +306,20 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
     private func format(handler: String, error: String?, result: Int) -> String {
         return handler + "(" + String(result) + ");"
     }
-    private func format(handler: String, error: String?, result: [Dictionary<String, Any>]) -> String {
+    private func format(handler: String, error: String?, result: [Dictionary<String, Any?>]) -> String {
         do {
             let message = try JSONSerialization.data(withJSONObject: result)
                                                  //options: JSONSerialization.WritingOptions.prettyPrinted)
-            return handler + "('" + String(data: message, encoding: String.Encoding.utf8)! + "');"
+            //return handler + "('" + String(data: message, encoding: String.Encoding.utf8)! + "');"
+            return format(handler: handler, result: String(data: message, encoding: String.Encoding.utf8)!)
         } catch let jsonError {
-            print("ERROR while converting message to JSON \(jsonError)")
-            return handler + "('" + jsonError.localizedDescription + "');"
+            let error = logError(plugin: "Sqlite", method: "queryJS", message: jsonError.localizedDescription)
+            return format(handler: handler, result: error)
         }
+    }
+    private func logError(plugin: String, method: String, message: String) -> String {
+        let error = "PLUGIN ERROR: \(plugin).\(method):  \(message)"
+        print(error)
+        return error
     }
 }
