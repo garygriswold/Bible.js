@@ -14,11 +14,11 @@ mkdir $AND_DIR/js
 
 echo '"use strict";' > 			BibleApp.js
 cat www/js/tester.js >> 		BibleApp.js
-cat www/js/audioPlayer.js >>	BibleApp.js
-cat www/js/aws.js >>			BibleApp.js
-cat www/js/sqlite.js >>			BibleApp.js
 cat www/js/utility.js >>		BibleApp.js
-cat www/js/videoPlayer.js >>	BibleApp.js
+#cat www/js/audioPlayer.js >>	BibleApp.js
+#cat www/js/aws.js >>			BibleApp.js
+#cat www/js/sqlite.js >>			BibleApp.js
+#cat www/js/videoPlayer.js >>	BibleApp.js
 
 cp BibleApp.js BibleAppIos.js
 cat www/js/iosOnly.js >> 		BibleAppIos.js

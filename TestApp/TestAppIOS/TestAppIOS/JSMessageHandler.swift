@@ -14,7 +14,7 @@ import AWS
 //import AudioPlayer
 import VideoPlayer
 
-class JSMessageHandler : NSObject, WKScriptMessageHandler {
+public class JSMessageHandler : NSObject, WKScriptMessageHandler {
     
     let controller: ViewController
 
@@ -30,10 +30,10 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
      * var aMessage = {'command':'hello', data:[5,6,7,8,9]}
      * window.webkit.messageHandlers.callNative.postMessage(aMessage)
      */
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        print("got message: \(message.body)")
-        if message.body is Dictionary<String, Any> {
-            let request = (message.body as? Dictionary<String, Any>)!
+    public func userContentController(_ userContentController: WKUserContentController, didReceive: WKScriptMessage) {
+        print("got message: \(didReceive.body)")
+        if didReceive.body is Dictionary<String, Any> {
+            let request = (didReceive.body as? Dictionary<String, Any>)!
             let plugin = request["plugin"] as? String ?? "notString"
             let method = request["method"] as? String ?? "notString"
             let handler = request["handler"] as? String ?? "notString"

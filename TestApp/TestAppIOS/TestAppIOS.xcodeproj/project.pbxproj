@@ -11,6 +11,8 @@
 		E4A2ECF320A73FF8003BD00E /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = E4A2ECF220A73FF7003BD00E /* index.html */; };
 		E4A2ECF520A7400E003BD00E /* BibleApp.js in Resources */ = {isa = PBXBuildFile; fileRef = E4A2ECF420A7400E003BD00E /* BibleApp.js */; };
 		E4A2ECF720A74022003BD00E /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E4A2ECF620A74021003BD00E /* Versions.db */; };
+		E4A8D5E120A9DC0F000A0881 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4A8D5DD20A9DBCA000A0881 /* AWSCore.framework */; };
+		E4A8D5E220A9DC0F000A0881 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4A8D5DD20A9DBCA000A0881 /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4C5D68820A4962F009DD340 /* JSMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C5D68720A4962F009DD340 /* JSMessageHandler.swift */; };
 		E4D5684020A35C8800ED291A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5683F20A35C8800ED291A /* AppDelegate.swift */; };
 		E4D5684220A35C8800ED291A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5684120A35C8800ED291A /* ViewController.swift */; };
@@ -54,6 +56,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		E4A8D5E320A9DC0F000A0881 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E4A8D5E220A9DC0F000A0881 /* AWSCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		E439FE2320A3665C00CD37CB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = TestAppIOS/Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E439FE2720A38AE500CD37CB /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
@@ -61,6 +77,7 @@
 		E4A2ECF220A73FF7003BD00E /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = index.html; path = TestAppIOS/www/index.html; sourceTree = "<group>"; };
 		E4A2ECF420A7400E003BD00E /* BibleApp.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = BibleApp.js; path = TestAppIOS/www/js/BibleApp.js; sourceTree = "<group>"; };
 		E4A2ECF620A74021003BD00E /* Versions.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = Versions.db; path = TestAppIOS/www/Versions.db; sourceTree = "<group>"; };
+		E4A8D5DD20A9DBCA000A0881 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = "../../../../Library/Frameworks/Debug-iphonesimulator/AWSCore.framework"; sourceTree = "<group>"; };
 		E4C5D68720A4962F009DD340 /* JSMessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSMessageHandler.swift; sourceTree = "<group>"; };
 		E4D5683C20A35C8800ED291A /* TestAppIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestAppIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4D5683F20A35C8800ED291A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +103,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4FB082A20A937C000A053A4 /* VideoPlayer.framework in Frameworks */,
+				E4A8D5E120A9DC0F000A0881 /* AWSCore.framework in Frameworks */,
 				E4FB082820A9315400A053A4 /* AWS.framework in Frameworks */,
 				E4FB082620A9243900A053A4 /* Utility.framework in Frameworks */,
 			);
@@ -178,6 +196,7 @@
 		E4FB082420A9243900A053A4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E4A8D5DD20A9DBCA000A0881 /* AWSCore.framework */,
 				E4FB082B20A93CB400A053A4 /* AudioPlayer.xcodeproj */,
 				E4FB082920A937C000A053A4 /* VideoPlayer.framework */,
 				E4FB082720A9315400A053A4 /* AWS.framework */,
@@ -205,6 +224,7 @@
 				E4D5683820A35C8800ED291A /* Sources */,
 				E4D5683920A35C8800ED291A /* Frameworks */,
 				E4D5683A20A35C8800ED291A /* Resources */,
+				E4A8D5E320A9DC0F000A0881 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -529,6 +549,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks/Debug-iphonesimulator",
+				);
 				INFOPLIST_FILE = TestAppIOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -547,6 +571,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks/Debug-iphonesimulator",
+				);
 				INFOPLIST_FILE = TestAppIOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

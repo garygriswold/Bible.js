@@ -14,26 +14,26 @@ function testUtility() {
 	callNative('Utility', 'locale', 'localeHandler', []);
 }
 function localeHandler(locale) {
-  alert(locale);
-  if (assert((locale == "en-US"), 'Utility', 'locale', 'should be en-US')) {
-    callNative('Utility', 'platform', 'platformHandler', []);
+  var loc = JSON.parse(locale);
+  if (assert((loc.length == 4), 'Utility', 'locale', 'should be 4 element')) {
+	  if (assert((loc[0] == "en_US"), 'Utility', 'locale', 'first part should be en_USx')) {
+	  	callNative('Utility', 'platform', 'platformHandler', []);
+	  }
   }
 }
 function platformHandler(platform) {
-  alert(platform);
    if (assert((platform == "iOS"), 'Utility', 'platform', 'should be ios')) {
     callNative('Utility', 'modelName', 'modelNameHandler', []);
   }
 }
 function modelNameHandler(model) {
-  alert(model);
-  if (assert((model == "iPhone"), 'Utility', 'modelName', 'should be ios')) {
+  if (assert((model.substr(0,6) == "iPhone"), 'Utility', 'modelName', 'should be ios')) {
   	callNative('Utility', 'hideKeyboard', 'hideKeyboardHandler', []);
   }
 }
 function hideKeyboardHandler(hidden) {
-	if (assert(hidden, 'Utility', 'hideKeyboard', 'should be true') {
-		console.log('Done with utility test');
+	if (assert((hidden == true), 'Utility', 'hideKeyboard', 'should be true')) {
+		log('Done with utility test');
 	}
 }
 

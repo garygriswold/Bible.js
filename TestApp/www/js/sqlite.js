@@ -32,7 +32,7 @@ function queryJSHandler1(error, results) {
 }
 function queryJSHandler2(error, results) {
 	if (assert((error == null), "Query 2 should succeed")) {
-		var resultSet = JSONParse(results);
+		var resultSet = JSON.parse(results);
 		if (assert((results.length > 10 && results.length < 30), "Query 2 should have many rows")) {
 			var database = 'Versions.db';
 			var statement = 'select * from Identity where versionCode = ?';
@@ -43,7 +43,7 @@ function queryJSHandler2(error, results) {
 }
 function queryJSHandler3(error, results) {
 	if (assert((error == null), "Query 3 should succeed")) {
-		var resultSet = JSONParse(results);
+		var resultSet = JSON.parse(results);
 		if (assert((resultSet.length == 1), "Query 3 should return 1 row.")) {
 			var row = resultSet[0];
 			if (assert((row.filename == "ERV-ENG.db"), "Query 3 should have filename ERV-ENG.db")) {
@@ -67,7 +67,7 @@ function executeJSHandler2(error, rowCount) {
 	if (!assert(error, error)) {
 		if (assert((rowCount == 1), "rowcount should be 1 or zero")) {
 			var database = 'Versions.db';
-			var statement 'INSERT INTO TEST1 VALUES (?, ?)';
+			var statement = 'INSERT INTO TEST1 VALUES (?, ?)';
 			var values = [['abc', 1], ['def', 2], ['ghi', 3]];
 			callNative('Sqlite', 'bulkExecuteJS', 'bulkExecuteJSHandler', [database, statement, values]);
 		}
@@ -97,10 +97,10 @@ function closeDBHandler2(error) {
 }
 function listDBHandler(files) {
 	if (assert(files, 'There should be a files result')) {
-		if (assert(files.length > 1), "There should be multiple files");
+		if (assert(files.length > 1), "There should be multiple files") {
 			var file = files[1];
 			if (assert((file == 'Temp.db'), 'The second file should be Temp.db')) {
-				callNative('Sqlite', 'deleteDB', 'deleteDBHandler', ['Temp.db'])l
+				callNative('Sqlite', 'deleteDB', 'deleteDBHandler', ['Temp.db']);
 			}
 		}
 	}
