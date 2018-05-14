@@ -5,7 +5,7 @@ DatabaseHelper
   line 23 Utility.executeJS(dbname, statement, values, function(error, rowCount) {}) returns error, if occurs
   line 32 Utility.bulkExecuteJS(dbname, statement, array, function(error, rowCount) {}) returns error, if occurs
   line 41 Utility.executeJS(dbname, statement, [], function(error, rowCount) {}) returns error, if occurs
-  line 50 Utility.closeDatabase(dbname, function(error) {}) returns error, if occurs, else null
+  line 50 Utility.closeDatabase(dbname, function() {}) no error can occur
 
 AppUpdater
   line 127 Utility.listDB(function(files) {}) returns [], if error occurs
@@ -33,7 +33,7 @@ function queryJSHandler1(error, results) {
 function queryJSHandler2(error, results) {
 	if (assert((error == null), "Query 2 should succeed")) {
 		var resultSet = JSON.parse(results);
-		if (assert((results.length > 10 && results.length < 30), "Query 2 should have many rows")) {
+		if (assert((resultSet.length > 10 && resultSet.length < 30), "Query 2 should have many rows")) {
 			var database = 'Versions.db';
 			var statement = 'select * from Identity where versionCode = ?';
 			var values = ['ERV-ENG'];
@@ -56,16 +56,20 @@ function queryJSHandler3(error, results) {
 	}
 }
 function executeJSHandler1(error, rowCount) {
-	if (assert(error, "execute should produce an error")) {
+	if (assert((error), "execute should produce an error")) {
 		var database = 'Versions.db';
 		var statement = 'CREATE TABLE TEST1(abc TEXT, def INT)';
-		var values = [];		
-		callNative('Sqlite', 'executeJS', 'executeJSHandler2', []);
+		var values = [];
+		callNative('Sqlite', 'executeJS', 'executeJSHandler9', [database, 'DROP TABLE IF EXISTS TEST1', []]);
+		callNative('Sqlite', 'executeJS', 'executeJSHandler2', [database, statement, values]);
 	}
+}
+function executeJSHandler9(error, rowCount) {
+	
 }
 function executeJSHandler2(error, rowCount) {
 	if (!assert(error, error)) {
-		if (assert((rowCount == 1), "rowcount should be 1 or zero")) {
+		if (assert((rowCount == 0), "rowcount should be zero")) {
 			var database = 'Versions.db';
 			var statement = 'INSERT INTO TEST1 VALUES (?, ?)';
 			var values = [['abc', 1], ['def', 2], ['ghi', 3]];
@@ -73,17 +77,16 @@ function executeJSHandler2(error, rowCount) {
 		}
 	}
 }
-function executeBulkExecuteJSHandler(error, rowCount) {
+function bulkExecuteJSHandler(error, rowCount) {
+	log(error);
 	if (!assert(error, error)) {
 		if (assert((rowCount == 3), "rowcount should be 3")) {
 			callNative('Sqlite', 'closeDB', 'closeDBHandler1', ['NoDB']);
 		}
 	}
 }
-function closeDBHandler1(error) {
-	if (assert(error, 'close should fail db does not exists')) {
-		callNative('Sqlite', 'executeJS', 'dropTableHandler', ['Versions.db', 'DROP TABLE TEST1', []]);
-	}
+function closeDBHandler1() {
+	callNative('Sqlite', 'executeJS', 'dropTableHandler', ['Versions.db', 'DROP TABLE TEST1', []]);
 }
 function dropTableHandler(error, rowCount) {
 	if (!assert(error, error)) {
@@ -91,22 +94,32 @@ function dropTableHandler(error, rowCount) {
 	}
 }
 function closeDBHandler2(error) {
-	if (assert((error == null), "CloseDB error should be null")) {
-		callNative('Sqlite', 'listDB', 'listDBHandler', []);
-	}
+	//if (assert((error == null), "CloseDB error should be null")) {
+	callNative('Sqlite', 'openDB', 'openDBHandler9', ['Temp.db', false]);
+	callNative('Sqlite', 'listDB', 'listDBHandler', []);
+	//}
+}
+function openDBHandler9(error) {
+	
 }
 function listDBHandler(files) {
-	if (assert(files, 'There should be a files result')) {
-		if (assert(files.length > 1), "There should be multiple files") {
-			var file = files[1];
-			if (assert((file == 'Temp.db'), 'The second file should be Temp.db')) {
+	log(files);
+	var filesArray = JSON.parse(files);
+	if (assert(filesArray, 'There should be a files result')) {
+		if (assert(filesArray.length > 1), "There should be multiple files") {
+			var file = filesArray[0];
+			if (assert((file == 'Temp.db'), 'The first file should be Temp.db')) {
+				callNative('Sqlite', 'closeDB', 'closeDBHandler99', ['Temp.db']);
 				callNative('Sqlite', 'deleteDB', 'deleteDBHandler', ['Temp.db']);
 			}
 		}
 	}
 }
+function closeDBHandler99() {
+	
+}
 function deleteDBHandler(error) {
-	if (!assert(error, error)) {
-		console.log('Sqlite Test Done');
+	if (assert((error == null), error)) {
+		log('Sqlite Test Done');
 	}
 }

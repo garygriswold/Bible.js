@@ -50,6 +50,12 @@ public class Sqlite3 {
             openDatabases.removeValue(forKey: dbname)
         }
     }
+    public static func closeAllDB() {
+        for (_, openDB) in openDatabases {
+            openDB.close()
+        }
+        openDatabases.removeAll()
+    }
     public static func listDB() throws -> [String] {
         var results = [String]()
         let db = Sqlite3()

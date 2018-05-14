@@ -157,7 +157,7 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
             } else {
                 error = logError(plugin: "Sqlite", method: method, message: "must have three parameters")
             }
-            let response = format(handler: handler, error: nil, result: result) // if error, return error
+            let response = format(handler: handler, error: error, result: result) // if error, return error
             controller.jsCallback(response: response)
             
         } else if method == "bulkExecuteJS" {
@@ -165,10 +165,10 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
             if parameters.count == 3 {
                 let dbname = parameters[0] as? String ?? "notString"
                 let statement = parameters[1] as? String ?? "notString"
-                let values = parameters[2] as? [Any] ?? []
+                let values = parameters[2] as? [[Any]] ?? [[]]
                 do {
                     let db = try Sqlite3.findDB(dbname: dbname)
-                    result = try db.executeV1(sql: statement, values: values)
+                    result = try db.bulkExecuteV1(sql: statement, values: values)
                 } catch let err {
                     error = logError(plugin: "Sqlite", method: method, message: err.localizedDescription)
                 }
@@ -344,7 +344,8 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
         return handler + "(" + String(result) + ");"
     }
     private func format(handler: String, error: String?, result: Int) -> String {
-        return handler + "(" + String(result) + ");"
+        let errStr = (error != nil) ? "'" + error! + "'" : "null"
+        return handler + "(" + errStr + ", " + String(result) + ");"
     }
     private func format(handler: String, result: [String?]) -> String {
         do {
@@ -356,13 +357,15 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
         }
     }
     private func format(handler: String, error: String?, result: [Dictionary<String, Any?>]) -> String {
+        let errStr = (error != nil) ? "'" + error! + "'" : "null"
         do {
             let message = try JSONSerialization.data(withJSONObject: result)
                                                  //options: JSONSerialization.WritingOptions.prettyPrinted)
-            return format(handler: handler, result: String(data: message, encoding: String.Encoding.utf8)!)
+            return handler + "(" + errStr + ", '" +
+                String(data: message, encoding: String.Encoding.utf8)! + "');"
         } catch let jsonError {
             let error = logError(plugin: "Sqlite", method: "queryJS", message: jsonError.localizedDescription)
-            return format(handler: handler, result: error)
+            return format(handler: handler, error: error, result: [])
         }
     }
     private func logError(plugin: String, method: String, message: String) -> String {
