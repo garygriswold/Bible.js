@@ -1,11 +1,11 @@
   /*
   HeaderView
-    line 108 AudioPlayer.findAudioVersion(versionCode, silCode, function(bookList) {})
+    line 108 AudioPlayer.findAudioVersion(versionCode, silCode, function(bookList) {}) if error, return nil (or should this be empty list?)
 
   AppInitializer
-    line 114 AudioPlayer.isPlaying(function(playing) {})
-    line 126 AudioPlayer.present(ref.book, ref.chapter, function() {}) return required
-    line 139 AudioPlayer.stop(function() {})
+    line 114 AudioPlayer.isPlaying(function(playing) {}) if error, return "F"
+    line 126 AudioPlayer.present(ref.book, ref.chapter, function() {}) return required, error not returned
+    line 139 AudioPlayer.stop(function() {}) error not returned
   */
  function testAudioPlayer() {
 	 callNative('AudioPlayer', 'isPlaying', 'isPlayingHandler', []);

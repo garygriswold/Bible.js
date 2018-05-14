@@ -1,15 +1,15 @@
 /*
 DatabaseHelper
-  line 7 Utility.openDatabase(dbname, isCopyDatabase, function(error) {})
-  line 14 Utility.queryJS(dbname, statement, values, function(error, results) {})
-  line 23 Utility.executeJS(dbname, statement, values, function(error, rowCount) {})
-  line 32 Utility.bulkExecuteJS(dbname, statement, array, function(error, rowCount) {})
-  line 41 Utility.executeJS(dbname, statement, [], function(error, rowCount) {})
-  line 50 Utility.closeDatabase(dbname, function(error) {})
+  line 7 Utility.openDatabase(dbname, isCopyDatabase, function(error) {}) returns error, if occur, else null
+  line 14 Utility.queryJS(dbname, statement, values, function(error, results) {}) returns error, if occurs
+  line 23 Utility.executeJS(dbname, statement, values, function(error, rowCount) {}) returns error, if occurs
+  line 32 Utility.bulkExecuteJS(dbname, statement, array, function(error, rowCount) {}) returns error, if occurs
+  line 41 Utility.executeJS(dbname, statement, [], function(error, rowCount) {}) returns error, if occurs
+  line 50 Utility.closeDatabase(dbname, function(error) {}) returns error, if occurs, else null
 
 AppUpdater
-  line 127 Utility.listDB(function(files) {})
-  line 181 Utility.deleteDB(file, function(error) {})
+  line 127 Utility.listDB(function(files) {}) returns [], if error occurs
+  line 181 Utility.deleteDB(file, function(error) {}) returns error, if occurs, else null
 */
 function testSqlite() {
 	callNative('Sqlite', 'openDB', 'openDBHandler', ['Versions.db', true]);

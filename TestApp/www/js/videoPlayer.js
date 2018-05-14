@@ -1,6 +1,6 @@
  /*
  VideoListView
-   line 105 VideoPlayer.showVideo(mediaSource, videoId, languageId, silCode, videoUrl, function() {})
+   line 105 VideoPlayer.showVideo(mediaSource, videoId, languageId, silCode, videoUrl, function() {}) if error, return error
  */
  function testVideoPlayer() {
 	 var mediaSource = 'FCBH';

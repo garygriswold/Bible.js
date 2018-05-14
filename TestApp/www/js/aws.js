@@ -1,9 +1,9 @@
 /*
 AppInitializer
-  line 27 AWS.initializeRegion(function(done) {})
+  line 27 AWS.initializeRegion(function(done) {}) return false, if error occurs
 
 FileDownloader
-  line 21 AWS.downloadZipFile(s3Bucket, s3Key, filePath, function(error) {})
+  line 21 AWS.downloadZipFile(s3Bucket, s3Key, filePath, function(error) {}) returns error, if occurs, else null
 */
 function testAWS() {
 	callNative('AWS', 'initialize', 'initializeHandler', []);

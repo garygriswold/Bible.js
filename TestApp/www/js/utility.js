@@ -1,12 +1,12 @@
 /**
 cordovaDeviceSettings
-  line 11 Utility.locale(function(results) {})
-  line 16 Utility.locale(function(results) {})
-  line 25 Utility.platform(function(platform) {})
-  line 28 Utility.modelName(function(model) {})
+  line 11 Utility.locale(function(results) {}) no error possible, should return null if it did happen
+  line 16 Utility.locale(function(results) {}) no error possible, should return null if it did happen
+  line 25 Utility.platform(function(platform) {}) no error possible, should return null if it did happen
+  line 28 Utility.modelName(function(model) {}) no error possible, should return null if it did happen
 
 SearchView
-  line 86 Utility.hideKeyboard(function(hidden) {})
+  line 86 Utility.hideKeyboard(function(hidden) {}) if error, returns false
 */
 function testUtility() {
 	var e = document.getElementById("locale");

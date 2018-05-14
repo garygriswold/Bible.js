@@ -58,9 +58,14 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
     private func utilityPlugin(method: String, handler: String, parameters: [Any]) {
         
         if method == "locale" {
-            let locale = Locale.current.identifier
-            print("locale \(locale)")
-            let response = format(handler: handler, result: locale) // if error return nil
+            let locale = Locale.current
+            let localeStr = locale.identifier
+            let language = locale.languageCode
+            let script = locale.scriptCode
+            let country = locale.regionCode
+            print("locale \(localeStr)")
+            let result = [localeStr, language, script, country]
+            let response = format(handler: handler, result: result) // if error return nil
             controller.jsCallback(response: response)
             
         } else if method == "platform" {
@@ -239,7 +244,7 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
 
         } else if method == "isPlaying" {
             // do call here
-            let isPlaying = true
+            let isPlaying = "T"
             let response = format(handler: handler, result: isPlaying) // if error, return "F"
             controller.jsCallback(response: response)
             
@@ -306,11 +311,19 @@ class JSMessageHandler : NSObject, WKScriptMessageHandler {
     private func format(handler: String, error: String?, result: Int) -> String {
         return handler + "(" + String(result) + ");"
     }
+    private func format(handler: String, result: [String?]) -> String {
+        do {
+            let message = try JSONSerialization.data(withJSONObject: result)
+            return format(handler: handler, result: String(data: message, encoding: String.Encoding.utf8)!)
+        } catch let jsonError {
+            let error = logError(plugin: "Utility", method: "locale", message: jsonError.localizedDescription)
+            return format(handler: handler, result: error)
+        }
+    }
     private func format(handler: String, error: String?, result: [Dictionary<String, Any?>]) -> String {
         do {
             let message = try JSONSerialization.data(withJSONObject: result)
                                                  //options: JSONSerialization.WritingOptions.prettyPrinted)
-            //return handler + "('" + String(data: message, encoding: String.Encoding.utf8)! + "');"
             return format(handler: handler, result: String(data: message, encoding: String.Encoding.utf8)!)
         } catch let jsonError {
             let error = logError(plugin: "Sqlite", method: "queryJS", message: jsonError.localizedDescription)
