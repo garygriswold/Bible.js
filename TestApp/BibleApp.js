@@ -46,7 +46,7 @@ function modelNameHandler(model) {
   }
 }
 function hideKeyboardHandler(hidden) {
-	if (assert((hidden == true), 'Utility', 'hideKeyboard', 'should be true')) {
+	if (assert((hidden === true), 'Utility', 'hideKeyboard', 'should be true')) {
 		log('Done with utility test');
 	}
 }
@@ -122,7 +122,7 @@ function executeJSHandler9(error, rowCount) {
 }
 function executeJSHandler2(error, rowCount) {
 	if (!assert(error, error)) {
-		if (assert((rowCount == 0), "rowcount should be zero")) {
+		if (assert((rowCount === 0), "rowcount should be zero")) {
 			var database = 'Versions.db';
 			var statement = 'INSERT INTO TEST1 VALUES (?, ?)';
 			var values = [['abc', 1], ['def', 2], ['ghi', 3]];
@@ -147,10 +147,8 @@ function dropTableHandler(error, rowCount) {
 	}
 }
 function closeDBHandler2(error) {
-	//if (assert((error == null), "CloseDB error should be null")) {
 	callNative('Sqlite', 'openDB', 'openDBHandler9', ['Temp.db', false]);
 	callNative('Sqlite', 'listDB', 'listDBHandler', []);
-	//}
 }
 function openDBHandler9(error) {
 	
@@ -174,5 +172,35 @@ function closeDBHandler99() {
 function deleteDBHandler(error) {
 	if (assert((error == null), error)) {
 		log('Sqlite Test Done');
+	}
+}
+/*
+AppInitializer
+  line 27 AWS.initializeRegion(function(done) {}) return false, if error occurs DEPRECATED
+
+FileDownloader
+  line 21 AWS.downloadZipFile(s3Bucket, s3Key, filePath, function(error) {}) returns error, if occurs, else null
+*/
+function testAWS() {
+	var region = 'TEST';
+	var bucket = 'nonehere';
+	var key = 'nonehere';
+	var filename = 'nonehere';
+	callNative('AWS', 'downloadZipFile', 'downloadZipHandler1', [region, bucket, key, filename]);
+}
+function downloadZipHandler1(error) {
+	log(error);
+	if (assert(error, "Download should fail for non-existing object.")) {
+		var region = 'TEST';
+		var bucket = 'shortsands';
+		var key = 'ERV-ENG.db.zip';
+		var filename = 'ERV-ENG.db';
+		callNative('AWS', 'downloadZipFile', 'downloadZipHandler2', [region, bucket, key, filename]);
+	}
+}
+function downloadZipHandler2(error) {
+	//log(error);
+	if (!assert(error, error)) {
+		log("AWS Test did succeed");
 	}
 }

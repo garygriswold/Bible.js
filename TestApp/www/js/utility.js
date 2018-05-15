@@ -32,7 +32,7 @@ function modelNameHandler(model) {
   }
 }
 function hideKeyboardHandler(hidden) {
-	if (assert((hidden == true), 'Utility', 'hideKeyboard', 'should be true')) {
+	if (assert((hidden === true), 'Utility', 'hideKeyboard', 'should be true')) {
 		log('Done with utility test');
 	}
 }

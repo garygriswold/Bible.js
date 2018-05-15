@@ -221,38 +221,48 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
     }
     
     private func awsPlugin(method: String, handler: String, parameters: [Any]) {
-        var error: String? = nil
-        
-        if method == "initialize" {
-            let s3: AwsS3 = AwsS3Manager.findDbp()
-            let result = true
-            let response = format(handler: handler, result: result) // if error, return false
-            controller.jsCallback(response: response)
-            
-        } else if method == "downloadZipFile" {
-            if parameters.count == 3 {
-                let s3Bucket = parameters[0] as? String ?? "notString"
-                let s3Key = parameters[1] as? String ?? "notString"
-                let filePath = parameters[2] as? String ?? "notString"
-                let fileURL = URL(fileURLWithPath: filePath)
-                let s3 = AwsS3Manager.findDbp()
-                s3.downloadZipFile(s3Bucket: s3Bucket, s3Key: s3Key, filePath: fileURL, view: nil, complete: { err in
-                    if err != nil {
-                        error = self.logError(plugin: "Sqlite", method: method, message: err!.localizedDescription)
-                        // Will this error get captured
-                    }
-                })
-            } else {
-                error = logError(plugin: "AWS", method: method, message: "must have three parameters")
-            }
-            let response = format(handler: handler, result: error) // if error, return error
-            controller.jsCallback(response: response)
 
+        if method == "downloadZipFile" {
+            if parameters.count == 4 {
+                let regionType = parameters[0] as? String ?? "notString"
+                let s3Bucket = parameters[1] as? String ?? "notString"
+                let s3Key = parameters[2] as? String ?? "notString"
+                let filePath = parameters[3] as? String ?? "notString"
+                let fileURL = URL(fileURLWithPath: NSHomeDirectory() + filePath)
+                var s3: AwsS3? = nil
+                if regionType == "SS" {
+                    s3 = AwsS3Manager.findSS()
+                } else if regionType == "DBP" {
+                    s3 = AwsS3Manager.findDbp()
+                } else if regionType == "TEST" {
+                    s3 = AwsS3Manager.findTest()
+                } else {
+                    awsResponse(method: method, handler: handler, error: "Region must be SS, DBP, or TEST")
+                }
+                if let awsS3 = s3 {
+                    awsS3.downloadZipFile(s3Bucket: s3Bucket, s3Key: s3Key, filePath: fileURL, view: nil,
+                                          complete: { err in
+                        if let err1 = err {
+                            self.awsResponse(method: method, handler: handler, error: err1.localizedDescription)
+                        } else {
+                            self.awsResponse(method: method, handler: handler, error: nil)
+                        }
+                    })
+                }
+            } else {
+                awsResponse(method: method, handler: handler, error: "must have three parameters")
+            }
         } else {
-            let error = logError(plugin: "AWS", method: method, message: "unknown method")
-            let response = format(handler: handler, result: error) // if error, return error
-            controller.jsCallback(response: response)
+            awsResponse(method: method, handler: handler, error: "unknown method")
         }
+    }
+    private func awsResponse(method: String, handler: String, error: String?) {
+        var err: String? = nil
+        if let err1 = error {
+            err = logError(plugin: "AWS", method: method, message: err1)
+        }
+        let response = format(handler: handler, result: err) // if error, return error
+        controller.jsCallback(response: response)
     }
     
     private func audioPlayerPlugin(method: String, handler: String, parameters: [Any]) {

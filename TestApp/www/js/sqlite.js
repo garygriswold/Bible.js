@@ -69,7 +69,7 @@ function executeJSHandler9(error, rowCount) {
 }
 function executeJSHandler2(error, rowCount) {
 	if (!assert(error, error)) {
-		if (assert((rowCount == 0), "rowcount should be zero")) {
+		if (assert((rowCount === 0), "rowcount should be zero")) {
 			var database = 'Versions.db';
 			var statement = 'INSERT INTO TEST1 VALUES (?, ?)';
 			var values = [['abc', 1], ['def', 2], ['ghi', 3]];
@@ -94,10 +94,8 @@ function dropTableHandler(error, rowCount) {
 	}
 }
 function closeDBHandler2(error) {
-	//if (assert((error == null), "CloseDB error should be null")) {
 	callNative('Sqlite', 'openDB', 'openDBHandler9', ['Temp.db', false]);
 	callNative('Sqlite', 'listDB', 'listDBHandler', []);
-	//}
 }
 function openDBHandler9(error) {
 	

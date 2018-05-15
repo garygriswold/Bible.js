@@ -53,7 +53,6 @@ public class AwsS3Manager {
         self.ssRegion = AwsS3Region(type: AWSRegionType.USEast1, name: "us-east-1")
         self.dbpRegion = AwsS3Region(type: AWSRegionType.USEast1, name: "us-east-1")
         self.testRegion = AwsS3Region(type: AWSRegionType.USWest2, name: "us-west-2")
-        print("ALL Regions \(Locale.isoRegionCodes.joined(separator: ","))")
         self.awsS3Map = [AWSRegionType: AwsS3]()
     }
     private func initialize() {
