@@ -2,9 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:AudioPlayer.xcodeproj">
+      location = "group:AudioPlayer_TestHarness/AudioPlayer_TestHarness.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:../../../AWS/src/ios/AWS.xcodeproj">
+      location = "group:../../../Utility/src/ios/Utility.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:AudioPlayer.xcodeproj">
    </FileRef>
 </Workspace>

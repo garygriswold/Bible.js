@@ -7,10 +7,10 @@
 //
 
 import Foundation
-//#if USE_FRAMEWORK
+#if USE_FRAMEWORK
 import AWS
 import Utility
-//#endif
+#endif
 
 
 class AudioTOCBible {

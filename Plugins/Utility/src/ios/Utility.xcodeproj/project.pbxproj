@@ -9,9 +9,25 @@
 /* Begin PBXBuildFile section */
 		E411B04A2005504D002F888B /* Utility.h in Headers */ = {isa = PBXBuildFile; fileRef = E411B03C2005504D002F888B /* Utility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E411B054200550BE002F888B /* DeviceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E411B053200550BE002F888B /* DeviceSettings.swift */; };
-		E41BE9A72089221E00C43922 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E411B03D2005504D002F888B /* Info.plist */; };
 		E42A3C8E2088E1D4003F3F18 /* Sqlite3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42A3C8D2088E1D4003F3F18 /* Sqlite3.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E48D903220AB5C2700F59D5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E48D902D20AB5C2700F59D5F /* AWS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E4C23FD3202D627F00F98324;
+			remoteInfo = AWS;
+		};
+		E48D903420AB5C2700F59D5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E48D902D20AB5C2700F59D5F /* AWS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E4C23FDC202D627F00F98324;
+			remoteInfo = AWSTests;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		E411B0392005504D002F888B /* Utility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Utility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -19,6 +35,7 @@
 		E411B03D2005504D002F888B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E411B053200550BE002F888B /* DeviceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSettings.swift; sourceTree = "<group>"; };
 		E42A3C8D2088E1D4003F3F18 /* Sqlite3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sqlite3.swift; sourceTree = "<group>"; };
+		E48D902D20AB5C2700F59D5F /* AWS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AWS.xcodeproj; path = ../../../AWS/src/ios/AWS.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +52,7 @@
 		E411B02F2005504D002F888B = {
 			isa = PBXGroup;
 			children = (
+				E48D902D20AB5C2700F59D5F /* AWS.xcodeproj */,
 				E411B03B2005504D002F888B /* Utility */,
 				E411B03A2005504D002F888B /* Products */,
 			);
@@ -57,6 +75,15 @@
 				E42A3C8D2088E1D4003F3F18 /* Sqlite3.swift */,
 			);
 			path = Utility;
+			sourceTree = "<group>";
+		};
+		E48D902E20AB5C2700F59D5F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E48D903320AB5C2700F59D5F /* AWS.framework */,
+				E48D903520AB5C2700F59D5F /* AWSTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -98,7 +125,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = ShortSands;
 				TargetAttributes = {
 					E411B0382005504D002F888B = {
@@ -119,6 +146,12 @@
 			mainGroup = E411B02F2005504D002F888B;
 			productRefGroup = E411B03A2005504D002F888B /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = E48D902E20AB5C2700F59D5F /* Products */;
+					ProjectRef = E48D902D20AB5C2700F59D5F /* AWS.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				E411B0382005504D002F888B /* Utility */,
@@ -126,12 +159,28 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXReferenceProxy section */
+		E48D903320AB5C2700F59D5F /* AWS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AWS.framework;
+			remoteRef = E48D903220AB5C2700F59D5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E48D903520AB5C2700F59D5F /* AWSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AWSTests.xctest;
+			remoteRef = E48D903420AB5C2700F59D5F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXResourcesBuildPhase section */
 		E411B0372005504D002F888B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E41BE9A72089221E00C43922 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +213,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -171,6 +221,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -224,6 +275,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -231,6 +283,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;

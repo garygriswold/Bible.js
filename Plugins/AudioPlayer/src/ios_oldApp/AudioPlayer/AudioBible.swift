@@ -7,9 +7,9 @@
 //
 
 import AVFoundation
-//#if USE_FRAMEWORK
-import AWS
-//#endif
+#if USE_FRAMEWORK
+    import AWS
+#endif
 
 class AudioBible {
     

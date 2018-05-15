@@ -7,9 +7,10 @@
 //
 
 import UIKit
-#if USE_FRAMEWORK
-    import AWS
-#endif
+//#if USE_FRAMEWORK
+//import AWS
+import AudioPlayer
+//#endif
 
 class ViewController: UIViewController {
     
@@ -17,7 +18,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let readVersion = "ERV-ENG"//KJVPD"//ESV"
+        let readVersion = "WEB"//KJVPD"//ESV"
         let readLang = "eng"
         let readBook = "JHN"
         let readChapter = 2

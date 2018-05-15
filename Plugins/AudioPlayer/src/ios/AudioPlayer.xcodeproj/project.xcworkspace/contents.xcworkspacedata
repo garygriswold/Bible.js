@@ -2,6 +2,78 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:AudioPlayer.xcodeproj">
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/UIPauseDNButton.png">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/UIPauseUPButton.png">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/UIPlayDNButton.png">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/UIPlayUPButton.png">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/UISliderMax.png">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/UISliderMin.png">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/UIStopDNButton.png">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/UIStopUPButton.png">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/UIThumbDN.png">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/UIThumbUP.png">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioAnalyticsSessionId.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioBible.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioBibleController.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioBibleView.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioControlCenter.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioPlayer.h">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioPlayState.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioReference.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioSession.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioTOCBible.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioTOCBook.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioTOCChapter.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioTOCTestament.swift">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioAnalytics.swift">
+   </FileRef>
+   <FileRef
+      location = "self:">
    </FileRef>
 </Workspace>
