@@ -17,6 +17,7 @@ import VideoPlayer
 public class JSMessageHandler : NSObject, WKScriptMessageHandler {
     
     let controller: ViewController
+    private var videoViewPlayer: VideoViewPlayer?
 
     init(controller: ViewController) {
         self.controller = controller
@@ -313,7 +314,6 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
     }
     
     private func videoPlayerPlugin(method: String, handler: String, parameters: [Any]) {
-        var error: String? = nil
         
         if method == "showVideo" {
             if parameters.count == 5 {
@@ -322,24 +322,31 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
                                              languageId: parameters[2] as? String ?? "notString",
                                              silLang: parameters[3] as? String ?? "notString",
                                              videoUrl: parameters[4] as? String ?? "notString")
+                self.videoViewPlayer = player
                 player.begin(complete: { err in
-                    if err != nil {
-                        error = self.logError(plugin: "VideoPlayer", method: method, message: err!.localizedDescription)
-                        // Will this error get captured?
+                    if let err1 = err {
+                        self.videoResponse(method: method, handler: handler, error: err1.localizedDescription)
+                    } else {
+                        self.videoResponse(method: method, handler: handler, error: nil)
                     }
                 })
+                self.controller.present(player.controller, animated: true)
             } else {
-                error = logError(plugin: "VideoPlayer", method: method, message: "must have five parameters")
+                videoResponse(method: method, handler: handler, error: "must have five parameters")
             }
-            let response = format(handler: handler, result: error) // if error, return error
-            controller.jsCallback(response: response)
-            
         } else {
-            let error = logError(plugin: "VideoPlayer", method: method, message: "unknown method")
-            let response = format(handler: handler, result: error) // if error, return error
-            controller.jsCallback(response: response)
+            videoResponse(method: method, handler: handler, error: "unknown method")
         }
     }
+    private func videoResponse(method: String, handler: String, error: String?) {
+        var err: String? = nil
+        if let err1 = error {
+            err = logError(plugin: "VideoPlayer", method: method, message: err1)
+        }
+        let response = format(handler: handler, result: err) // if error, return error
+        controller.jsCallback(response: response)
+    }
+    
     private func format(handler: String) -> String {
         return handler + "();"
     }

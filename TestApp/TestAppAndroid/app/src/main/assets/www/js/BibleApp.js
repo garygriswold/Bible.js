@@ -203,7 +203,37 @@ function downloadZipHandler2(error) {
 	if (!assert(error, error)) {
 		log("AWS Test did succeed");
 	}
-}/*
+} /*
+ VideoListView
+   line 105 VideoPlayer.showVideo(mediaSource, videoId, languageId, silCode, videoUrl, function() {}) if error, return error
+ */
+ function testVideoPlayer() {
+	 var mediaSource = 'FCBH';
+	 var videoId = 'myvideoId';
+	 var languageId = 'ENG';
+	 var silCode = 'eng';
+	 var videoUrl = 'https://whatever';
+	 var parameters = [mediaSource, videoId, languageId, silCode, videoUrl];
+	 callNative('VideoPlayer', 'showVideo', 'showVideoHandler1', parameters);
+ }
+ function showVideoHandler1(nothing) {
+	 log(nothing);
+	 if (assert((nothing == null), "video should return nothing")) {
+		 var mediaSource = "JFP";
+		 var videoId = 'Jesus';
+		 var languageId = '528';
+		 var silCode = 'eng';
+		 var videoUrl = 'https://arc.gt/j67rz?apiSessionId=5a8b6c35e31419.49477826';
+		 //var videoUrl = 'https://player.vimeo.com/external/157336122.m3u8?s=861d8aca0bddff67874ef38116d3bf5027474858';
+		 var parameters = [mediaSource, videoId, languageId, silCode, videoUrl];
+		 callNative('VideoPlayer', 'showVideo', 'showVideoHandler2', parameters);		 
+	 }
+ }
+ function showVideoHandler2(nothing) {
+	 if (assert((nothing == null), "video should succeed, but return nothing")) {
+		 console.log('VideoPlayer test is complete.');
+	 }
+ }/*
 * This must be called with a String plugin name, String method name,
 * String handler (function) name, and a parameter array.  The items
 * in the array can be any String, number, or boolean.
