@@ -17,7 +17,7 @@ cat www/js/tester.js >> 		BibleApp.js
 cat www/js/utility.js >>		BibleApp.js
 cat www/js/sqlite.js >>			BibleApp.js
 cat www/js/aws.js >>			BibleApp.js
-#cat www/js/audioPlayer.js >>	BibleApp.js		
+cat www/js/audioPlayer.js >>	BibleApp.js		
 cat www/js/videoPlayer.js >>	BibleApp.js
 
 cp BibleApp.js BibleAppIos.js
@@ -36,5 +36,11 @@ cp www/Versions.db $AND_DIR
 
 cp www/ERV-ENG.db $IOS_DIR
 cp www/ERV-ENG.db $AND_DIR
+
+cp www/WEB.db $IOS_DIR
+cp www/WEB.db $AND_DIR
+
+cp www/KJVPD.db $IOS_DIR
+cp www/KJVPD.db $AND_DIR
 
 

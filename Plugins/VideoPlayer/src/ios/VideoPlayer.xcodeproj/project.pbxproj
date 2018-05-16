@@ -44,7 +44,6 @@
 		E41B244C1EF45B34004492A5 /* VideoViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewControllerDelegate.swift; sourceTree = "<group>"; };
 		E42D838D1EF62D730032EE44 /* VideoAnalytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoAnalytics.swift; sourceTree = "<group>"; };
 		E42D83911EF62E9A0032EE44 /* VideoAnalyticsSessionId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoAnalyticsSessionId.swift; sourceTree = "<group>"; };
-		E44B17D52009B1B10035D109 /* PKZip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PKZip.framework; path = "../../../../../../Library/Frameworks/Debug-iphonesimulator/PKZip.framework"; sourceTree = "<group>"; };
 		E44B17D72009B1C50035D109 /* AWS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWS.framework; path = "../../../../../../Library/Frameworks/Debug-iphonesimulator/AWS.framework"; sourceTree = "<group>"; };
 		E4C08DC21EFB7F4A0009BEB7 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = VideoPlayer/AWSCore.framework; sourceTree = "<group>"; };
 		E4C08DC61EFB7F6E0009BEB7 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -123,7 +122,6 @@
 			children = (
 				E4D74E41202DFFEF00097888 /* AWS.framework */,
 				E44B17D72009B1C50035D109 /* AWS.framework */,
-				E44B17D52009B1B10035D109 /* PKZip.framework */,
 				E4C08DC61EFB7F6E0009BEB7 /* MediaPlayer.framework */,
 				E4C08DC21EFB7F4A0009BEB7 /* AWSCore.framework */,
 			);

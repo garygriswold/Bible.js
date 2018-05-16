@@ -11,7 +11,7 @@ import UIKit
 import WebKit
 import Utility
 import AWS
-//import AudioPlayer
+import AudioPlayer
 import VideoPlayer
 
 public class JSMessageHandler : NSObject, WKScriptMessageHandler {
@@ -271,43 +271,52 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
         
         if method == "findAudioVersion" {
             if parameters.count == 2 {
-                let versionCode = parameters[0] as? String ?? "notString"
-                let silCode = parameters[1] as? String ?? "notString"
-                // do call here
-                let bookList = "abcde"
-                let response = format(handler: handler, result: bookList) // if error, return nil, else list
-                controller.jsCallback(response: response)
+                let audioController = AudioBibleController.shared
+                audioController.findAudioVersion(
+                    version: parameters[0] as? String ?? "notString",
+                    silLang: parameters[1] as? String ?? "notString",
+                    complete: { bookIdList in
+                        let response = self.format(handler: handler, result: bookIdList) // if error, return ""
+                        self.controller.jsCallback(response: response)
+                })
             } else {
                 logError(plugin: "AudioPlayer", method: method, message: "must have two parameters")
-                let response = format(handler: handler) // if error, return nil
+                let response = format(handler: handler, result: "") // if error, return nil
                 controller.jsCallback(response: response)
             }
 
         } else if method == "isPlaying" {
-            // do call here
-            let isPlaying = "T"
-            let response = format(handler: handler, result: isPlaying) // if error, return "F"
+            let audioController = AudioBibleController.shared
+            let result: String = (audioController.isPlaying()) ? "T" : "F"
+            let response = format(handler: handler, result: result) // if error, return "F"
             controller.jsCallback(response: response)
             
         } else if method == "present" {
             if parameters.count == 2 {
-                let bookCode = parameters[0] as? String ?? "notString"
-                let chapter = parameters[1] as? String ?? "notString"
-                // do call here
+                let audioController = AudioBibleController.shared
+                audioController.present(view: controller.webview,
+                                        book: parameters[0] as? String ?? "notString",
+                                        chapterNum: parameters[1] as? Int ?? 1,
+                                        complete: { error in
+                                            // No error is being returned
+                                            let response = self.format(handler: handler, result: nil)
+                                            self.controller.jsCallback(response: response)
+                })
             } else {
                 error = logError(plugin: "AudioPlayer", method: method, message: "must have two parameters")
+                let response = format(handler: handler, result: error) // if error, return error
+                controller.jsCallback(response: response)
             }
-            let response = format(handler: handler, result: error) // if error, return error
-            controller.jsCallback(response: response)
         
         } else if method == "stop" {
-            // do call here
-            let response = format(handler: handler) // if error, return error
+            let audioController = AudioBibleController.shared
+            audioController.stop()
+            let response = format(handler: handler, result: error) // if error, return error
             controller.jsCallback(response: response)
             
         } else {
-            logError(plugin: "AudioPlayer", method: method, message: "unknown method")
-            let response = format(handler: handler) // if error, return nil
+            error = logError(plugin: "AudioPlayer", method: method, message: "unknown method")
+            let response = format(handler: handler, result: error) // if error, return error
             controller.jsCallback(response: response)
         }
  

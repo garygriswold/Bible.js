@@ -8,6 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		E439FE2420A3665C00CD37CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E439FE2220A3665C00CD37CB /* Main.storyboard */; };
+		E487FAB220AC8202001DCE7E /* KJVPD.db in Resources */ = {isa = PBXBuildFile; fileRef = E487FAB120AC8201001DCE7E /* KJVPD.db */; };
+		E487FAB420AC8213001DCE7E /* WEB.db in Resources */ = {isa = PBXBuildFile; fileRef = E487FAB320AC8213001DCE7E /* WEB.db */; };
+		E487FABF20AC8A1C001DCE7E /* UIThumbUP.png in Resources */ = {isa = PBXBuildFile; fileRef = E487FAB520AC8A1B001DCE7E /* UIThumbUP.png */; };
+		E487FAC020AC8A1C001DCE7E /* UIPlayDNButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E487FAB620AC8A1B001DCE7E /* UIPlayDNButton.png */; };
+		E487FAC120AC8A1C001DCE7E /* UIStopUPButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E487FAB720AC8A1B001DCE7E /* UIStopUPButton.png */; };
+		E487FAC220AC8A1C001DCE7E /* UISliderMax.png in Resources */ = {isa = PBXBuildFile; fileRef = E487FAB820AC8A1B001DCE7E /* UISliderMax.png */; };
+		E487FAC320AC8A1C001DCE7E /* UIPauseUPButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E487FAB920AC8A1B001DCE7E /* UIPauseUPButton.png */; };
+		E487FAC420AC8A1C001DCE7E /* UIPauseDNButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E487FABA20AC8A1B001DCE7E /* UIPauseDNButton.png */; };
+		E487FAC520AC8A1C001DCE7E /* UISliderMin.png in Resources */ = {isa = PBXBuildFile; fileRef = E487FABB20AC8A1B001DCE7E /* UISliderMin.png */; };
+		E487FAC620AC8A1C001DCE7E /* UIPlayUPButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E487FABC20AC8A1C001DCE7E /* UIPlayUPButton.png */; };
+		E487FAC720AC8A1C001DCE7E /* UIStopDNButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E487FABD20AC8A1C001DCE7E /* UIStopDNButton.png */; };
+		E487FAC820AC8A1C001DCE7E /* UIThumbDN.png in Resources */ = {isa = PBXBuildFile; fileRef = E487FABE20AC8A1C001DCE7E /* UIThumbDN.png */; };
+		E48D906F20AB7A8700F59D5F /* AudioPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48D906E20AB7A8700F59D5F /* AudioPlayer.framework */; };
+		E48D907220AB804800F59D5F /* ERV-ENG.db in Resources */ = {isa = PBXBuildFile; fileRef = E48D907120AB804800F59D5F /* ERV-ENG.db */; };
 		E4A2ECF320A73FF8003BD00E /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = E4A2ECF220A73FF7003BD00E /* index.html */; };
 		E4A2ECF520A7400E003BD00E /* BibleApp.js in Resources */ = {isa = PBXBuildFile; fileRef = E4A2ECF420A7400E003BD00E /* BibleApp.js */; };
 		E4A2ECF720A74022003BD00E /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E4A2ECF620A74021003BD00E /* Versions.db */; };
@@ -40,20 +54,6 @@
 			remoteGlobalIDString = E4D5683B20A35C8800ED291A;
 			remoteInfo = TestAppIOS;
 		};
-		E4FB083020A93CB400A053A4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4FB082B20A93CB400A053A4 /* AudioPlayer.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E4A32CCB1F2FB310009AECFB;
-			remoteInfo = AudioPlayer;
-		};
-		E4FB083220A93CB400A053A4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4FB082B20A93CB400A053A4 /* AudioPlayer.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E4AB2E281F82015800CCDD5C;
-			remoteInfo = AudioPlayerTests;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -74,6 +74,20 @@
 		E439FE2320A3665C00CD37CB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = TestAppIOS/Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E439FE2720A38AE500CD37CB /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		E439FE2920A391D500CD37CB /* test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = test.js; sourceTree = "<group>"; };
+		E487FAB120AC8201001DCE7E /* KJVPD.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = KJVPD.db; path = TestAppIOS/www/KJVPD.db; sourceTree = "<group>"; };
+		E487FAB320AC8213001DCE7E /* WEB.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = WEB.db; path = TestAppIOS/www/WEB.db; sourceTree = "<group>"; };
+		E487FAB520AC8A1B001DCE7E /* UIThumbUP.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIThumbUP.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIThumbUP.png; sourceTree = "<group>"; };
+		E487FAB620AC8A1B001DCE7E /* UIPlayDNButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIPlayDNButton.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIPlayDNButton.png; sourceTree = "<group>"; };
+		E487FAB720AC8A1B001DCE7E /* UIStopUPButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIStopUPButton.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIStopUPButton.png; sourceTree = "<group>"; };
+		E487FAB820AC8A1B001DCE7E /* UISliderMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UISliderMax.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UISliderMax.png; sourceTree = "<group>"; };
+		E487FAB920AC8A1B001DCE7E /* UIPauseUPButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIPauseUPButton.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIPauseUPButton.png; sourceTree = "<group>"; };
+		E487FABA20AC8A1B001DCE7E /* UIPauseDNButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIPauseDNButton.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIPauseDNButton.png; sourceTree = "<group>"; };
+		E487FABB20AC8A1B001DCE7E /* UISliderMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UISliderMin.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UISliderMin.png; sourceTree = "<group>"; };
+		E487FABC20AC8A1C001DCE7E /* UIPlayUPButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIPlayUPButton.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIPlayUPButton.png; sourceTree = "<group>"; };
+		E487FABD20AC8A1C001DCE7E /* UIStopDNButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIStopDNButton.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIStopDNButton.png; sourceTree = "<group>"; };
+		E487FABE20AC8A1C001DCE7E /* UIThumbDN.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIThumbDN.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIThumbDN.png; sourceTree = "<group>"; };
+		E48D906E20AB7A8700F59D5F /* AudioPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AudioPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E48D907120AB804800F59D5F /* ERV-ENG.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ERV-ENG.db"; path = "TestAppIOS/www/ERV-ENG.db"; sourceTree = "<group>"; };
 		E4A2ECF220A73FF7003BD00E /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = index.html; path = TestAppIOS/www/index.html; sourceTree = "<group>"; };
 		E4A2ECF420A7400E003BD00E /* BibleApp.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = BibleApp.js; path = TestAppIOS/www/js/BibleApp.js; sourceTree = "<group>"; };
 		E4A2ECF620A74021003BD00E /* Versions.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = Versions.db; path = TestAppIOS/www/Versions.db; sourceTree = "<group>"; };
@@ -94,7 +108,6 @@
 		E4FB082520A9243900A053A4 /* Utility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Utility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4FB082720A9315400A053A4 /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4FB082920A937C000A053A4 /* VideoPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E4FB082B20A93CB400A053A4 /* AudioPlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AudioPlayer.xcodeproj; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E48D906F20AB7A8700F59D5F /* AudioPlayer.framework in Frameworks */,
 				E4FB082A20A937C000A053A4 /* VideoPlayer.framework in Frameworks */,
 				E4A8D5E120A9DC0F000A0881 /* AWSCore.framework in Frameworks */,
 				E4FB082820A9315400A053A4 /* AWS.framework in Frameworks */,
@@ -139,6 +153,19 @@
 		E4D5683320A35C8800ED291A = {
 			isa = PBXGroup;
 			children = (
+				E487FABA20AC8A1B001DCE7E /* UIPauseDNButton.png */,
+				E487FAB920AC8A1B001DCE7E /* UIPauseUPButton.png */,
+				E487FAB620AC8A1B001DCE7E /* UIPlayDNButton.png */,
+				E487FABC20AC8A1C001DCE7E /* UIPlayUPButton.png */,
+				E487FAB820AC8A1B001DCE7E /* UISliderMax.png */,
+				E487FABB20AC8A1B001DCE7E /* UISliderMin.png */,
+				E487FABD20AC8A1C001DCE7E /* UIStopDNButton.png */,
+				E487FAB720AC8A1B001DCE7E /* UIStopUPButton.png */,
+				E487FABE20AC8A1C001DCE7E /* UIThumbDN.png */,
+				E487FAB520AC8A1B001DCE7E /* UIThumbUP.png */,
+				E487FAB320AC8213001DCE7E /* WEB.db */,
+				E487FAB120AC8201001DCE7E /* KJVPD.db */,
+				E48D907120AB804800F59D5F /* ERV-ENG.db */,
 				E4A2ECF620A74021003BD00E /* Versions.db */,
 				E4A2ECF420A7400E003BD00E /* BibleApp.js */,
 				E4A2ECF220A73FF7003BD00E /* index.html */,
@@ -196,22 +223,13 @@
 		E4FB082420A9243900A053A4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E48D906E20AB7A8700F59D5F /* AudioPlayer.framework */,
 				E4A8D5DD20A9DBCA000A0881 /* AWSCore.framework */,
-				E4FB082B20A93CB400A053A4 /* AudioPlayer.xcodeproj */,
 				E4FB082920A937C000A053A4 /* VideoPlayer.framework */,
 				E4FB082720A9315400A053A4 /* AWS.framework */,
 				E4FB082520A9243900A053A4 /* Utility.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		E4FB082C20A93CB400A053A4 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E4FB083120A93CB400A053A4 /* AudioPlayer.app */,
-				E4FB083320A93CB400A053A4 /* AudioPlayerTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -305,12 +323,6 @@
 			mainGroup = E4D5683320A35C8800ED291A;
 			productRefGroup = E4D5683D20A35C8800ED291A /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = E4FB082C20A93CB400A053A4 /* Products */;
-					ProjectRef = E4FB082B20A93CB400A053A4 /* AudioPlayer.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				E4D5683B20A35C8800ED291A /* TestAppIOS */,
@@ -320,28 +332,24 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXReferenceProxy section */
-		E4FB083120A93CB400A053A4 /* AudioPlayer.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = AudioPlayer.app;
-			remoteRef = E4FB083020A93CB400A053A4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E4FB083320A93CB400A053A4 /* AudioPlayerTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = AudioPlayerTests.xctest;
-			remoteRef = E4FB083220A93CB400A053A4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
-
 /* Begin PBXResourcesBuildPhase section */
 		E4D5683A20A35C8800ED291A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E487FABF20AC8A1C001DCE7E /* UIThumbUP.png in Resources */,
+				E487FAC020AC8A1C001DCE7E /* UIPlayDNButton.png in Resources */,
+				E487FAC120AC8A1C001DCE7E /* UIStopUPButton.png in Resources */,
+				E487FAC220AC8A1C001DCE7E /* UISliderMax.png in Resources */,
+				E487FAC320AC8A1C001DCE7E /* UIPauseUPButton.png in Resources */,
+				E487FAC420AC8A1C001DCE7E /* UIPauseDNButton.png in Resources */,
+				E487FAC520AC8A1C001DCE7E /* UISliderMin.png in Resources */,
+				E487FAC620AC8A1C001DCE7E /* UIPlayUPButton.png in Resources */,
+				E487FAC720AC8A1C001DCE7E /* UIStopDNButton.png in Resources */,
+				E487FAC820AC8A1C001DCE7E /* UIThumbDN.png in Resources */,
+				E487FAB420AC8213001DCE7E /* WEB.db in Resources */,
+				E487FAB220AC8202001DCE7E /* KJVPD.db in Resources */,
+				E48D907220AB804800F59D5F /* ERV-ENG.db in Resources */,
 				E4A2ECF720A74022003BD00E /* Versions.db in Resources */,
 				E4A2ECF520A7400E003BD00E /* BibleApp.js in Resources */,
 				E4A2ECF320A73FF8003BD00E /* index.html in Resources */,

@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../../Plugins/AudioPlayer/src/ios/AudioPlayer.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:../../Plugins/VideoPlayer/src/ios/VideoPlayer.xcodeproj">
    </FileRef>
    <FileRef
