@@ -14,32 +14,36 @@ function testUtility() {
 	callNative('Utility', 'locale', [], "S", function(locale) {
 		if (assert((locale.length == 4), 'Utility', 'locale', 'should be 4 element')) {
 			if (assert((locale[0] == "en_US"), 'Utility', 'locale', 'first part should be en_USx')) {
-				log("Done with locale test");
+				testPlatform();
 			}
 		}	
 	});
 }
-function localeHandler(locale) {
-  var loc = JSON.parse(locale);
-  if (assert((loc.length == 4), 'Utility', 'locale', 'should be 4 element')) {
-	  if (assert((loc[0] == "en_US"), 'Utility', 'locale', 'first part should be en_USx')) {
-	  	callNative('Utility', 'platform', 'platformHandler', []);
-	  }
-  }
+function testPlatform() {
+	callNative('Utility', 'platform', [], "S", function(platform) {
+		if (assert((platform == "iOS"), 'Utility', 'platform', 'should be ios')) {
+	    	testModelName();
+		}		
+	});
 }
-function platformHandler(platform) {
-   if (assert((platform == "iOS"), 'Utility', 'platform', 'should be ios')) {
-    callNative('Utility', 'modelName', 'modelNameHandler', []);
-  }
+function testModelName() {
+	callNative('Utility', 'modelName', [], "S", function(model) {
+		if (assert((model.substr(0,6) == "iPhone"), 'Utility', 'modelName', 'should be iPhone')) {
+			testHideKeyboard();
+		}
+	});
 }
-function modelNameHandler(model) {
-  if (assert((model.substr(0,6) == "iPhone"), 'Utility', 'modelName', 'should be ios')) {
-  	callNative('Utility', 'hideKeyboard', 'hideKeyboardHandler', []);
-  }
+function testHideKeyboard() {
+  	callNative('Utility', 'hideKeyboard', [], "S", function(hidden) {
+		if (assert((hidden === true), 'Utility', 'hideKeyboard', 'should be true')) {
+			testModelType();
+		}	  	
+  	});
 }
-function hideKeyboardHandler(hidden) {
-	if (assert((hidden === true), 'Utility', 'hideKeyboard', 'should be true')) {
+function testModelType() {
+	callNative('Utility', 'modelType', [], "S", function(model) {
 		log('Done with utility test');
-	}
+	});
 }
+
 

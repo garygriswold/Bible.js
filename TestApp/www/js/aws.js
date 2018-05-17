@@ -10,21 +10,20 @@ function testAWS() {
 	var bucket = 'nonehere';
 	var key = 'nonehere';
 	var filename = 'nonehere';
-	callNative('AWS', 'downloadZipFile', 'downloadZipHandler1', [region, bucket, key, filename]);
+	callNative('AWS', 'downloadZipFile', [region, bucket, key, filename], "E", function(error) {
+		if (assert(error, "Download should fail for non-existing object.")) {
+			testDownloadZip2();
+		}
+	});
 }
-function downloadZipHandler1(error) {
-	log(error);
-	if (assert(error, "Download should fail for non-existing object.")) {
-		var region = 'TEST';
-		var bucket = 'shortsands';
-		var key = 'ERV-ENG.db.zip';
-		var filename = 'ERV-ENG.db';
-		callNative('AWS', 'downloadZipFile', 'downloadZipHandler2', [region, bucket, key, filename]);
-	}
-}
-function downloadZipHandler2(error) {
-	//log(error);
-	if (!assert(error, error)) {
-		log("AWS Test did succeed");
-	}
+function testDownloadZip2() {
+	var region = 'TEST';
+	var bucket = 'shortsands';
+	var key = 'ERV-ENG.db.zip';
+	var filename = 'ERV-ENG.db';
+	callNative('AWS', 'downloadZipFile', [region, bucket, key, filename], "E", function(error) {
+		if (!assert(error, error)) {
+			log("AWS Test did succeed");
+		}
+	});
 }

@@ -35,7 +35,7 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
      * window.webkit.messageHandlers.callNative.postMessage(aMessage)
      */
     public func userContentController(_ userContentController: WKUserContentController, didReceive: WKScriptMessage) {
-        print("got message: \(didReceive.body)")
+        print("CALL FROM JS: \(didReceive.body)")
         if didReceive.body is Dictionary<String, Any> {
             let request = (didReceive.body as? Dictionary<String, Any>)!
             let plugin = request["plugin"] as? String ?? "notString"
@@ -77,9 +77,8 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
         } else if method == "platform" {
             jsCallback(callbackId: callbackId, response: "iOS")
             
-        //} else if method == "modelType" {
-        //    let modelType = UIDevice.current.model
-        //    jsCallback(callbackId: callbackId, response: modelTypeResponse)
+        } else if method == "modelType" {
+            jsCallback(callbackId: callbackId, response: UIDevice.current.model)
             
         } else if method == "modelName" {
             let modelName = DeviceSettings.modelName()
@@ -344,16 +343,6 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
         return error
     }
     
-    // is this needed
-//    func jsCallbackJSON(callbackId: String, plugin: String, method: String, response: [String?]) {
-//        jsCallbackJSON(callbackId: callbackId, plugin: plugin, method: method, response: response)
-//    }
-    
-    // is this needed
-//    func jsCallbackJSON(callbackId: String, plugin: String, method: String, response: [Dictionary<String,Any?>]) {
-//        jsCallbackJSON(callbackId: callbackId, plugin: plugin, method: method, response: response)
-//    }
-    
     func jsCallbackJSON(callbackId: String, plugin: String, method: String, response: [Any?]) {
         do {
             let message: Data = try JSONSerialization.data(withJSONObject: response)
@@ -386,7 +375,7 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
     func rawCallback(callbackId: String, json: Bool, error: String, response: Any) {
         let isJson: Int = (json) ? 1 : 0
         let message = "handleNative('\(callbackId)', \(isJson), \(error), \(response));"
-        print("MESSAGE \(message)")
+        print("RETURN TO JS: \(message)")
         self.controller.webview.evaluateJavaScript(message, completionHandler: { data, error in
             if let err = error {
                 print("jsCallbackError \(err)")

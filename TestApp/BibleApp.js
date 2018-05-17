@@ -28,34 +28,38 @@ function testUtility() {
 	callNative('Utility', 'locale', [], "S", function(locale) {
 		if (assert((locale.length == 4), 'Utility', 'locale', 'should be 4 element')) {
 			if (assert((locale[0] == "en_US"), 'Utility', 'locale', 'first part should be en_USx')) {
-				log("Done with locale test");
+				testPlatform();
 			}
 		}	
 	});
 }
-function localeHandler(locale) {
-  var loc = JSON.parse(locale);
-  if (assert((loc.length == 4), 'Utility', 'locale', 'should be 4 element')) {
-	  if (assert((loc[0] == "en_US"), 'Utility', 'locale', 'first part should be en_USx')) {
-	  	callNative('Utility', 'platform', 'platformHandler', []);
-	  }
-  }
+function testPlatform() {
+	callNative('Utility', 'platform', [], "S", function(platform) {
+		if (assert((platform == "iOS"), 'Utility', 'platform', 'should be ios')) {
+	    	testModelName();
+		}		
+	});
 }
-function platformHandler(platform) {
-   if (assert((platform == "iOS"), 'Utility', 'platform', 'should be ios')) {
-    callNative('Utility', 'modelName', 'modelNameHandler', []);
-  }
+function testModelName() {
+	callNative('Utility', 'modelName', [], "S", function(model) {
+		if (assert((model.substr(0,6) == "iPhone"), 'Utility', 'modelName', 'should be iPhone')) {
+			testHideKeyboard();
+		}
+	});
 }
-function modelNameHandler(model) {
-  if (assert((model.substr(0,6) == "iPhone"), 'Utility', 'modelName', 'should be ios')) {
-  	callNative('Utility', 'hideKeyboard', 'hideKeyboardHandler', []);
-  }
+function testHideKeyboard() {
+  	callNative('Utility', 'hideKeyboard', [], "S", function(hidden) {
+		if (assert((hidden === true), 'Utility', 'hideKeyboard', 'should be true')) {
+			testModelType();
+		}	  	
+  	});
 }
-function hideKeyboardHandler(hidden) {
-	if (assert((hidden === true), 'Utility', 'hideKeyboard', 'should be true')) {
+function testModelType() {
+	callNative('Utility', 'modelType', [], "S", function(model) {
 		log('Done with utility test');
-	}
+	});
 }
+
 
 /*
 DatabaseHelper
@@ -71,114 +75,119 @@ AppUpdater
   line 181 Utility.deleteDB(file, function(error) {}) returns error, if occurs, else null
 */
 function testSqlite() {
-	callNative('Sqlite', 'openDB', 'openDBHandler', ['Versions.db', true]);
-}
-function openDBHandler(error) {
-	if (assert((error == null), "openDB should return true")) {
-		var database = 'Versions.db';
-		var statement = 'select count(*) from bob';
-		var values = [];
-		callNative('Sqlite', 'queryJS', 'queryJSHandler1', [database, statement, values]);
-	}
-}
-function queryJSHandler1(error, results) {
-	if (assert(error, "Query should produce an error")) {
-		var database = 'Versions.db';
-		var statement = 'select * from Identity';
-		var values = [];
-		callNative('Sqlite', 'queryJS', 'queryJSHandler2', [database, statement, values]);
-	}
-}
-function queryJSHandler2(error, results) {
-	if (assert((error == null), "Query 2 should succeed")) {
-		var resultSet = JSON.parse(results);
-		if (assert((resultSet.length > 10 && resultSet.length < 30), "Query 2 should have many rows")) {
-			var database = 'Versions.db';
-			var statement = 'select * from Identity where versionCode = ?';
-			var values = ['ERV-ENG'];
-			callNative('Sqlite', 'queryJS', 'queryJSHandler3', [database, statement, values]);
+	callNative('Sqlite', 'openDB', ['Versions.db', true], "E", function(error) {
+		if (assert((error === null), "openDB should return true")) {
+			testQueryJS();
 		}
-	}
+	});
 }
-function queryJSHandler3(error, results) {
-	if (assert((error == null), "Query 3 should succeed")) {
-		var resultSet = JSON.parse(results);
-		if (assert((resultSet.length == 1), "Query 3 should return 1 row.")) {
-			var row = resultSet[0];
-			if (assert((row.filename == "ERV-ENG.db"), "Query 3 should have filename ERV-ENG.db")) {
-			var database = 'Versions.db';
-			var statement = 'INSERT INTO NoTable VALUES (?)';
-			var values = ['ERV-ENG'];				
-				callNative('Sqlite', 'executeJS', 'executeJSHandler1', [database, statement, values]);
+function testQueryJS() {
+	var database = 'Versions.db';
+	var statement = 'select count(*) from bob';
+	var values = [];
+	callNative('Sqlite', 'queryJS', [database, statement, values], "ES", function(error, results) {
+		if (assert(error, "Query should produce an error")) {
+			testQueryJS2();
+		}
+	});
+}
+function testQueryJS2() {
+	var database = 'Versions.db';
+	var statement = 'select * from Identity';
+	var values = [];
+	callNative('Sqlite', 'queryJS', [database, statement, values], "ES", function(error, results) {
+		if (assert((error == null), "Query 2 should succeed")) {
+			if (assert((results.length > 10 && results.length < 30), "Query 2 should have many rows")) {
+				testQueryJS3();
 			}
 		}
-	}
+	});
 }
-function executeJSHandler1(error, rowCount) {
-	if (assert((error), "execute should produce an error")) {
-		var database = 'Versions.db';
-		var statement = 'CREATE TABLE TEST1(abc TEXT, def INT)';
-		var values = [];
-		callNative('Sqlite', 'executeJS', 'executeJSHandler9', [database, 'DROP TABLE IF EXISTS TEST1', []]);
-		callNative('Sqlite', 'executeJS', 'executeJSHandler2', [database, statement, values]);
-	}
-}
-function executeJSHandler9(error, rowCount) {
-	
-}
-function executeJSHandler2(error, rowCount) {
-	if (!assert(error, error)) {
-		if (assert((rowCount === 0), "rowcount should be zero")) {
-			var database = 'Versions.db';
-			var statement = 'INSERT INTO TEST1 VALUES (?, ?)';
-			var values = [['abc', 1], ['def', 2], ['ghi', 3]];
-			callNative('Sqlite', 'bulkExecuteJS', 'bulkExecuteJSHandler', [database, statement, values]);
-		}
-	}
-}
-function bulkExecuteJSHandler(error, rowCount) {
-	log(error);
-	if (!assert(error, error)) {
-		if (assert((rowCount == 3), "rowcount should be 3")) {
-			callNative('Sqlite', 'closeDB', 'closeDBHandler1', ['NoDB']);
-		}
-	}
-}
-function closeDBHandler1() {
-	callNative('Sqlite', 'executeJS', 'dropTableHandler', ['Versions.db', 'DROP TABLE TEST1', []]);
-}
-function dropTableHandler(error, rowCount) {
-	if (!assert(error, error)) {
-		callNative('Sqlite', 'closeDB', 'closeDBHandler2', ['Versions.db']);
-	}
-}
-function closeDBHandler2(error) {
-	callNative('Sqlite', 'openDB', 'openDBHandler9', ['Temp.db', false]);
-	callNative('Sqlite', 'listDB', 'listDBHandler', []);
-}
-function openDBHandler9(error) {
-	
-}
-function listDBHandler(files) {
-	log(files);
-	var filesArray = JSON.parse(files);
-	if (assert(filesArray, 'There should be a files result')) {
-		if (assert(filesArray.length > 1), "There should be multiple files") {
-			var file = filesArray[0];
-			if (assert((file == 'Temp.db'), 'The first file should be Temp.db')) {
-				callNative('Sqlite', 'closeDB', 'closeDBHandler99', ['Temp.db']);
-				callNative('Sqlite', 'deleteDB', 'deleteDBHandler', ['Temp.db']);
+function testQueryJS3() {
+	var database = 'Versions.db';
+	var statement = 'select * from Identity where versionCode = ?';
+	var values = ['ERV-ENG'];
+	callNative('Sqlite', 'queryJS', [database, statement, values], "ES", function(error, results) {
+		if (assert((error == null), "Query 3 should succeed")) {
+			if (assert((results.length == 1), "Query 3 should return 1 row.")) {
+				var row = results[0];
+				if (assert((row.filename == "ERV-ENG.db"), "Query 3 should have filename ERV-ENG.db")) {
+					testExecuteJS1();
+				}
 			}
-		}
-	}
+		}	
+	});
 }
-function closeDBHandler99() {
+function testExecuteJS1() {
+	var database = 'Versions.db';
+	var statement = 'INSERT INTO NoTable VALUES (?)';
+	var values = ['ERV-ENG'];				
+	callNative('Sqlite', 'executeJS', [database, statement, values], "ES", function(error, rowCount) {
+		if (assert((error), "execute should produce an error")) {
+			testExecuteJS2();
+		}	
+	});
+}
+function testExecuteJS2() {
+	var database = 'Versions.db';
+	var statement = 'CREATE TABLE TEST1(abc TEXT, def INT)';
+	var values = [];
+	callNative('Sqlite', 'executeJS', [database, 'DROP TABLE IF EXISTS TEST1', values], "ES", function(error, rowCount) {
+		callNative('Sqlite', 'executeJS', [database, statement, values], "ES", function(error, rowCount) {
+			if (!assert(error, error)) {
+				if (assert((rowCount === 0), "rowcount should be zero")) {
+					testExecuteBulkJS1();
+				}
+			}
+		});
+	});
 	
 }
-function deleteDBHandler(error) {
-	if (assert((error == null), error)) {
-		log('Sqlite Test Done');
-	}
+
+function testExecuteBulkJS1() {
+	var database = 'Versions.db';
+	var statement = 'INSERT INTO TEST1 VALUES (?, ?)';
+	var values = [['abc', 1], ['def', 2], ['ghi', 3]];
+	callNative('Sqlite', 'bulkExecuteJS', [database, statement, values], "ES", function(error, rowCount) {
+		if (!assert(error, error)) {
+			if (assert((rowCount == 3), "rowcount should be 3")) {
+				testCloseDB();
+			}
+		}	
+	});
+}
+function testCloseDB() {
+	callNative('Sqlite', 'closeDB', ['NoDB'], "E", function(error) {
+		testCloseDB2();
+	});
+}
+function testCloseDB2() {
+	callNative('Sqlite', 'closeDB', ['Versions.db'], "E", function(error) {
+		testListDB();
+	});
+}
+function testListDB() {
+	callNative('Sqlite', 'openDB', ['Temp.db', false], "E", function(error) {
+		callNative('Sqlite', 'listDB', [], "S", function(results) {
+			if (assert(results, 'There should be a files result')) {
+				if (assert(results.length > 1), "There should be multiple files") {
+					var file = results[0];
+					if (assert((file == 'Temp.db'), 'The first file should be Temp.db')) {
+						testDeleteDb();
+					}
+				}
+			}
+		});
+	});
+}
+function testDeleteDb() {
+	callNative('Sqlite', 'closeDB', ['Temp.db'], "E", function(error) {
+		callNative('Sqlite', 'deleteDB', ['Temp.db'], "E", function(error) {
+			if (assert((error == null), error)) {
+				log('Sqlite Test Done');
+			}
+		});
+	});
 }
 /*
 AppInitializer
@@ -192,24 +201,24 @@ function testAWS() {
 	var bucket = 'nonehere';
 	var key = 'nonehere';
 	var filename = 'nonehere';
-	callNative('AWS', 'downloadZipFile', 'downloadZipHandler1', [region, bucket, key, filename]);
+	callNative('AWS', 'downloadZipFile', [region, bucket, key, filename], "E", function(error) {
+		if (assert(error, "Download should fail for non-existing object.")) {
+			testDownloadZip2();
+		}
+	});
 }
-function downloadZipHandler1(error) {
-	log(error);
-	if (assert(error, "Download should fail for non-existing object.")) {
-		var region = 'TEST';
-		var bucket = 'shortsands';
-		var key = 'ERV-ENG.db.zip';
-		var filename = 'ERV-ENG.db';
-		callNative('AWS', 'downloadZipFile', 'downloadZipHandler2', [region, bucket, key, filename]);
-	}
+function testDownloadZip2() {
+	var region = 'TEST';
+	var bucket = 'shortsands';
+	var key = 'ERV-ENG.db.zip';
+	var filename = 'ERV-ENG.db';
+	callNative('AWS', 'downloadZipFile', [region, bucket, key, filename], "E", function(error) {
+		if (!assert(error, error)) {
+			log("AWS Test did succeed");
+		}
+	});
 }
-function downloadZipHandler2(error) {
-	//log(error);
-	if (!assert(error, error)) {
-		log("AWS Test did succeed");
-	}
-}  /*
+  /*
   HeaderView
     line 108 AudioPlayer.findAudioVersion(versionCode, silCode, function(bookList) {}) if error, return "" 
 
