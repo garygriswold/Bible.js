@@ -73,7 +73,6 @@
 /* Begin PBXFileReference section */
 		E439FE2320A3665C00CD37CB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = TestAppIOS/Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E439FE2720A38AE500CD37CB /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
-		E439FE2920A391D500CD37CB /* test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = test.js; sourceTree = "<group>"; };
 		E487FAB120AC8201001DCE7E /* KJVPD.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = KJVPD.db; path = TestAppIOS/www/KJVPD.db; sourceTree = "<group>"; };
 		E487FAB320AC8213001DCE7E /* WEB.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = WEB.db; path = TestAppIOS/www/WEB.db; sourceTree = "<group>"; };
 		E487FAB520AC8A1B001DCE7E /* UIThumbUP.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIThumbUP.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIThumbUP.png; sourceTree = "<group>"; };
@@ -143,7 +142,6 @@
 		E439FE2620A38AE500CD37CB /* www */ = {
 			isa = PBXGroup;
 			children = (
-				E439FE2920A391D500CD37CB /* test.js */,
 				E439FE2720A38AE500CD37CB /* index.html */,
 			);
 			name = www;

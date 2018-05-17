@@ -11,7 +11,13 @@ SearchView
 function testUtility() {
 	var e = document.getElementById("locale");
 	e.innerHTML = "inside testUtility";
-	callNative('Utility', 'locale', 'localeHandler', []);
+	callNative('Utility', 'locale', [], "S", function(locale) {
+		if (assert((locale.length == 4), 'Utility', 'locale', 'should be 4 element')) {
+			if (assert((locale[0] == "en_US"), 'Utility', 'locale', 'first part should be en_USx')) {
+				log("Done with locale test");
+			}
+		}	
+	});
 }
 function localeHandler(locale) {
   var loc = JSON.parse(locale);

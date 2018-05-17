@@ -35,6 +35,7 @@ class ViewController: UIViewController, WKUIDelegate {
         webView.uiDelegate = self
         view = webView
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,17 +45,6 @@ class ViewController: UIViewController, WKUIDelegate {
         let url = URL(fileURLWithPath: path!)
         let request = URLRequest(url: url)
         webView.load(request)
-    }
-    
-    func jsCallback(response: String) {
-        self.webView.evaluateJavaScript(response, completionHandler: { data, error in
-            if let err = error {
-                print("jsCallbackError \(err)")
-            }
-            if let resp = data {
-                print("jsCallback has unexpected response \(resp)")
-            }
-        })
     }
 }
 
