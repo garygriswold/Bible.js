@@ -228,41 +228,47 @@ function testDownloadZip2() {
     line 139 AudioPlayer.stop(function() {}) error not returned
   */
  function testAudioPlayer() {
-	 callNative('AudioPlayer', 'isPlaying', 'isPlayingHandler', []);
+	callNative('AudioPlayer', 'isPlaying', [], "S", function(result) {
+		if (assert((result === "F"), "It is be playing is false")) {
+			testFindVersion1();
+		}
+	});
  }
- function isPlayingHandler(playing) {
-	 if (assert((playing === "F"), "It is be playing is false")) {
-		 callNative('AudioPlayer', 'findAudioVersion', 'findVersionHandler', ['versionxx', 'silCode']);
-	 }
+ function testFindVersion1() {
+	callNative('AudioPlayer', 'findAudioVersion', ['versionxx', 'silCode'], "S", function(result) {
+		if (assert((result === ""), "BookList must not be null")) {
+			testFindVersion2();
+		}
+	});
  }
- function findVersionHandler(bookList) {
-	 if (assert((bookList === ""), "BookList must not be null")) {
-		 callNative('AudioPlayer', 'findAudioVersion', 'findVersionHandler2', ['WEB', 'eng']);
-	}
+ function testFindVersion2() {
+	callNative('AudioPlayer', 'findAudioVersion', ['WEB', 'eng'], "S", function(result) {
+		if (assert(result.length > 100), "BookList must be a string of books") {
+			var books = result.split(',');
+			log(typeof books);
+			if (assert((books.length > 20), "BookList must be a comma separated list")) {
+				testPresentAudio();
+			}
+		}		
+	});
 }
-function findVersionHandler2(bookList) {
-	log(typeof bookList);
-	 if (assert(bookList.length > 100), "BookList must be a string of books") {
-		 var books = bookList.split(',');
-		 log(typeof books);
-		 if (assert((books.length > 20), "BookList must be a comma separated list")) {
-			 var book = "JHN";
-			 var chapter = 3;
-			 callNative('AudioPlayer', 'present', 'presentHandler', [book, chapter]);
-		 }
-	 }
+function testPresentAudio() {
+	var book = "JHN";
+	var chapter = 3;
+	callNative('AudioPlayer', 'present', [book, chapter], "N", function() {
+		//if (assert((nothing == null), "present should return nothing")) {
+			testStopAudio();
+		//}	
+	});
  }
- function presentHandler(nothing) {
-	 log(nothing);
-	 if (assert((nothing == null), "present should return nothing")) {
-		 callNative('AudioPlayer', 'stop', 'stopHandler', []);
-	 }
+ function testStopAudio() {
+	callNative('AudioPlayer', 'stop', [], "E", function(error) {
+		if (assert((error == null), "stop should return nothing")) {
+			log('AudioPlayer test is complete');
+		}		
+	});
  }
- function stopHandler(nothing) {
-	 if (assert((nothing == null), "stop should return nothing")) {
-		 log('AudioPlayer test is complete');
-	 }
- } /*
+  /*
  VideoListView
    line 105 VideoPlayer.showVideo(mediaSource, videoId, languageId, silCode, videoUrl, function() {}) if error, return error
  */
@@ -273,26 +279,27 @@ function findVersionHandler2(bookList) {
 	 var silCode = 'eng';
 	 var videoUrl = 'https://whatever';
 	 var parameters = [mediaSource, videoId, languageId, silCode, videoUrl];
-	 callNative('VideoPlayer', 'showVideo', 'showVideoHandler1', parameters);
+	 callNative('VideoPlayer', 'showVideo', parameters, "E", function(error) {
+		 if (assert(error === null), "video should return nothing") {
+			 testVideoPlayer2();
+		 }
+	 });
  }
- function showVideoHandler1(nothing) {
-	 log(nothing);
-	 if (assert((nothing == null), "video should return nothing")) {
-		 var mediaSource = "JFP";
-		 var videoId = 'Jesus';
-		 var languageId = '528';
-		 var silCode = 'eng';
-		 var videoUrl = 'https://arc.gt/j67rz?apiSessionId=5a8b6c35e31419.49477826';
-		 //var videoUrl = 'https://player.vimeo.com/external/157336122.m3u8?s=861d8aca0bddff67874ef38116d3bf5027474858';
-		 var parameters = [mediaSource, videoId, languageId, silCode, videoUrl];
-		 callNative('VideoPlayer', 'showVideo', 'showVideoHandler2', parameters);		 
-	 }
+ function testVideoPlayer2() {
+	var mediaSource = "JFP";
+	var videoId = 'Jesus';
+	var languageId = '528';
+	var silCode = 'eng';
+	var videoUrl = 'https://arc.gt/j67rz?apiSessionId=5a8b6c35e31419.49477826';
+	//var videoUrl = 'https://player.vimeo.com/external/157336122.m3u8?s=861d8aca0bddff67874ef38116d3bf5027474858';
+	var parameters = [mediaSource, videoId, languageId, silCode, videoUrl];
+	callNative('VideoPlayer', 'showVideo', parameters, "E", function(error) {
+		if (assert((error == null), "video should succeed, but return nothing")) {
+			console.log('VideoPlayer test is complete.');
+	 	}
+	});		 
  }
- function showVideoHandler2(nothing) {
-	 if (assert((nothing == null), "video should succeed, but return nothing")) {
-		 console.log('VideoPlayer test is complete.');
-	 }
- }/*
+/*
 * This must be called with a String plugin name, String method name,
 * handler is an anonymous function, and a parameter array.  The items
 * in the array can be any String, number, or boolean.
@@ -314,27 +321,31 @@ function callNative(plugin, method, parameters, rtnType, handler) {
 function handleNative(callbackId, isJson, error, results) {
 	log(callbackId);
 	var callObj = pluginCallMap[callbackId];
-	delete pluginCallMap[callbackId];
-	
-	var rtnType = callObj.rtnType;
-	var handler = callObj.handler;
-	
-	if (rtnType === "N") {
-		handler();
-	} else if (rtnType === "E") {
-		handler(error);
-	} else if (rtnType === "S") {
-		if (isJson > 0) {
-			handler(JSON.parse(results));
+	if (callObj) {
+		delete pluginCallMap[callbackId];
+		
+		var rtnType = callObj.rtnType;
+		var handler = callObj.handler;
+		
+		if (rtnType === "N") {
+			handler();
+		} else if (rtnType === "E") {
+			handler(error);
+		} else if (rtnType === "S") {
+			if (isJson > 0) {
+				handler(JSON.parse(results));
+			} else {
+				handler(results);
+			}
 		} else {
-			handler(results);
+			if (isJson > 0) {
+				handler(error, JSON.parse(results));
+			} else {
+				handler(error, results);
+			}
 		}
 	} else {
-		if (isJson > 0) {
-			handler(error, JSON.parse(results));
-		} else {
-			handler(error, results);
-		}
+		throw "Duplicate return for " + callbackId;
 	}
 }
 

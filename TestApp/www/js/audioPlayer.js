@@ -8,38 +8,44 @@
     line 139 AudioPlayer.stop(function() {}) error not returned
   */
  function testAudioPlayer() {
-	 callNative('AudioPlayer', 'isPlaying', 'isPlayingHandler', []);
+	callNative('AudioPlayer', 'isPlaying', [], "S", function(result) {
+		if (assert((result === "F"), "It is be playing is false")) {
+			testFindVersion1();
+		}
+	});
  }
- function isPlayingHandler(playing) {
-	 if (assert((playing === "F"), "It is be playing is false")) {
-		 callNative('AudioPlayer', 'findAudioVersion', 'findVersionHandler', ['versionxx', 'silCode']);
-	 }
+ function testFindVersion1() {
+	callNative('AudioPlayer', 'findAudioVersion', ['versionxx', 'silCode'], "S", function(result) {
+		if (assert((result === ""), "BookList must not be null")) {
+			testFindVersion2();
+		}
+	});
  }
- function findVersionHandler(bookList) {
-	 if (assert((bookList === ""), "BookList must not be null")) {
-		 callNative('AudioPlayer', 'findAudioVersion', 'findVersionHandler2', ['WEB', 'eng']);
-	}
+ function testFindVersion2() {
+	callNative('AudioPlayer', 'findAudioVersion', ['WEB', 'eng'], "S", function(result) {
+		if (assert(result.length > 100), "BookList must be a string of books") {
+			var books = result.split(',');
+			log(typeof books);
+			if (assert((books.length > 20), "BookList must be a comma separated list")) {
+				testPresentAudio();
+			}
+		}		
+	});
 }
-function findVersionHandler2(bookList) {
-	log(typeof bookList);
-	 if (assert(bookList.length > 100), "BookList must be a string of books") {
-		 var books = bookList.split(',');
-		 log(typeof books);
-		 if (assert((books.length > 20), "BookList must be a comma separated list")) {
-			 var book = "JHN";
-			 var chapter = 3;
-			 callNative('AudioPlayer', 'present', 'presentHandler', [book, chapter]);
-		 }
-	 }
+function testPresentAudio() {
+	var book = "JHN";
+	var chapter = 3;
+	callNative('AudioPlayer', 'present', [book, chapter], "N", function() {
+		//if (assert((nothing == null), "present should return nothing")) {
+			testStopAudio();
+		//}	
+	});
  }
- function presentHandler(nothing) {
-	 log(nothing);
-	 if (assert((nothing == null), "present should return nothing")) {
-		 callNative('AudioPlayer', 'stop', 'stopHandler', []);
-	 }
+ function testStopAudio() {
+	callNative('AudioPlayer', 'stop', [], "E", function(error) {
+		if (assert((error == null), "stop should return nothing")) {
+			log('AudioPlayer test is complete');
+		}		
+	});
  }
- function stopHandler(nothing) {
-	 if (assert((nothing == null), "stop should return nothing")) {
-		 log('AudioPlayer test is complete');
-	 }
- }
+ 

@@ -20,27 +20,31 @@ function callNative(plugin, method, parameters, rtnType, handler) {
 function handleNative(callbackId, isJson, error, results) {
 	log(callbackId);
 	var callObj = pluginCallMap[callbackId];
-	delete pluginCallMap[callbackId];
-	
-	var rtnType = callObj.rtnType;
-	var handler = callObj.handler;
-	
-	if (rtnType === "N") {
-		handler();
-	} else if (rtnType === "E") {
-		handler(error);
-	} else if (rtnType === "S") {
-		if (isJson > 0) {
-			handler(JSON.parse(results));
+	if (callObj) {
+		delete pluginCallMap[callbackId];
+		
+		var rtnType = callObj.rtnType;
+		var handler = callObj.handler;
+		
+		if (rtnType === "N") {
+			handler();
+		} else if (rtnType === "E") {
+			handler(error);
+		} else if (rtnType === "S") {
+			if (isJson > 0) {
+				handler(JSON.parse(results));
+			} else {
+				handler(results);
+			}
 		} else {
-			handler(results);
+			if (isJson > 0) {
+				handler(error, JSON.parse(results));
+			} else {
+				handler(error, results);
+			}
 		}
 	} else {
-		if (isJson > 0) {
-			handler(error, JSON.parse(results));
-		} else {
-			handler(error, results);
-		}
+		throw "Duplicate return for " + callbackId;
 	}
 }
 
