@@ -69,7 +69,7 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
             let country = locale.regionCode
             print("locale \(localeStr)")
             let result = [localeStr, language, script, country]
-            jsSuccess(callbackId: callbackId, plugin: "Utility", method: method, response: result)
+            jsSuccess(callbackId: callbackId, method: method, response: result)
             
         } else if method == "Utility.platform" {
             jsSuccess(callbackId: callbackId, response: "iOS")
@@ -118,7 +118,7 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
                 do {
                     let db = try Sqlite3.findDB(dbname: dbname)
                     let result: [Dictionary<String,Any?>] = try db.queryV0(sql: statement, values: values)
-                    jsSuccess(callbackId: callbackId, plugin: "Sqlite", method: method, response: result)
+                    jsSuccess(callbackId: callbackId, method: method, response: result)
                 } catch let err {
                     jsError(callbackId: callbackId, method: method, error: err.localizedDescription, defaultVal: [])
                 }
@@ -170,7 +170,7 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
         } else if method == "Sqlite.listDB" {
             do {
                 let result: [String] = try Sqlite3.listDB()
-                jsSuccess(callbackId: callbackId, plugin: "Sqlite", method: method, response: result)
+                jsSuccess(callbackId: callbackId, method: method, response: result)
             } catch let err {
                 jsError(callbackId: callbackId, method: method, error: err.localizedDescription, defaultVal: [])
             }
@@ -231,6 +231,7 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
     
     private func audioPlayerPlugin(callbackId: String, method: String, parameters: [Any]) {
         
+        // NOTE: I don't know why this is asynchronous.  It is only a database query.  I should time it.
         if method == "AudioPlayer.findAudioVersion" {
             if parameters.count == 2 {
                 let audioController = AudioBibleController.shared
@@ -324,7 +325,7 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
         jsCallback(callbackId: callbackId, json: false, error: nil, response: result)
     }
     
-    private func jsSuccess(callbackId: String, plugin: String, method: String, response: [Any?]) {
+    private func jsSuccess(callbackId: String, method: String, response: [Any?]) {
         do {
             let message: Data = try JSONSerialization.data(withJSONObject: response)
             let result = "'" + String(data: message, encoding: String.Encoding.utf8)! + "'"

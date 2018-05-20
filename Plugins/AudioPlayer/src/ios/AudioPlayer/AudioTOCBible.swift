@@ -40,6 +40,7 @@ class AudioTOCBible {
         print("***** Deinit AudioMetaDataReader *****")
     }
 
+    // NOTE: I don't know why this is asynchronous.  It is only a database query.
     func read(complete: @escaping (_ oldTest:AudioTOCTestament?, _ newTest:AudioTOCTestament?) -> Void) {
         let query = "SELECT a.damId, a.collectionCode, a.mediaType, a.dbpLanguageCode, a.dbpVersionCode" +
                 " FROM audio a, audioVersion v" +

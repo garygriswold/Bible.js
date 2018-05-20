@@ -11,28 +11,22 @@ import android.webkit.WebView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private WebView webview;
+    private WebView webView;
+
+    public WebView getWebview() {
+        return webView;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.webview = new WebView(this);
-        setContentView(this.webview);
-        this.webview.loadUrl("file:///android_asset/www/index.html");
+        this.webView = new WebView(this);
+        setContentView(this.webView);
+        this.webView.loadUrl("file:///android_asset/www/index.html");
 
-        this.webview.getSettings().setJavaScriptEnabled(true);
+        this.webView.getSettings().setJavaScriptEnabled(true);
         JSMessageHandler handler = new JSMessageHandler(this);
-        this.webview.addJavascriptInterface(handler, "callAndroid");
-    }
-
-    public void jsCallback(final String message) {
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                //ValueCallback<String> result = new ValueCallback<String>();
-                webview.evaluateJavascript(message, null);
-            }
-        });
+        this.webView.addJavascriptInterface(handler, "callAndroid");
     }
 }
