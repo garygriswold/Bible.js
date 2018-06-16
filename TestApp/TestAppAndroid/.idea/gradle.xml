@@ -7,6 +7,10 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
+            <option value="$PROJECT_DIR$/../../Plugins/AWS/src/android/app" />
+            <option value="$PROJECT_DIR$/../../Plugins/AudioPlayer/src/android/app" />
+            <option value="$PROJECT_DIR$/../../Plugins/Utility/src/android/app" />
+            <option value="$PROJECT_DIR$/../../Plugins/VideoPlayer/src/android/app" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
           </set>

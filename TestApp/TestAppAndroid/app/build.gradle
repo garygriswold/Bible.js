@@ -22,7 +22,20 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation ('com.android.support:support-annotations:27.1.1')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    compile project(":utility")
+    compile project(":aws")
+    compile project(":audioplayer")
+    compile project(":videoplayer")
+
+    //compile files("/Users/garygriswold/ShortSands/BibleApp/Plugins/Utility/src/android/plugin/Utility.jar")
+    //compile files("/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS/src/android/app/libs/aws-android-sdk-core-2.4.2.jar")
+    //compile files("/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS/src/android/app/libs/aws-android-sdk-s3-2.4.2.jar")
+    //compile files("/Users/garygriswold/ShortSands/BibleApp/Plugins/AWS/src/android/plugin/AWS.jar")
+    //compile files("/Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/android/plugin/AudioPlayer.jar")
+    //compile files("/Users/garygriswold/ShortSands/BibleApp/Plugins/VideoPlayer/src/android/plugin/VideoPlayer.jar")
+
 }
