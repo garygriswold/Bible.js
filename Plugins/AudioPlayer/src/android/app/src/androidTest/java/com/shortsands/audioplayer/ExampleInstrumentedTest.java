@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.shortsands.utility.Sqlite3;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -19,7 +21,7 @@ public class ExampleInstrumentedTest {
     @Test
     public void testNonExistantDB() {
         Context context = InstrumentationRegistry.getTargetContext();
-        AudioSqlite3 db = new AudioSqlite3(context);
+        Sqlite3 db = new Sqlite3(context);
         try {
             db.open("NonExistant.db", false);
             assertTrue("ExceptionExpected", false );
@@ -34,7 +36,7 @@ public class ExampleInstrumentedTest {
     @Test
     public void testNonExistantWithCopy() {
         Context context = InstrumentationRegistry.getTargetContext();
-        AudioSqlite3 db = new AudioSqlite3(context);
+        Sqlite3 db = new Sqlite3(context);
         try {
             db.open("NonExistant.db", true);
             assertTrue("Exception Expected", false);
@@ -49,7 +51,7 @@ public class ExampleInstrumentedTest {
     @Test
     public void testNonDBInBundle() {
         Context context = InstrumentationRegistry.getTargetContext();
-        AudioSqlite3 db = new AudioSqlite3(context);
+        Sqlite3 db = new Sqlite3(context);
         try {
             db.open("AudioReference.java", true);
             assertTrue("Exception Expected", false);
@@ -60,7 +62,7 @@ public class ExampleInstrumentedTest {
     @Test
     public void testValidDBInBundle() {
         Context context = InstrumentationRegistry.getTargetContext();
-        AudioSqlite3 db = new AudioSqlite3(context);
+        Sqlite3 db = new Sqlite3(context);
         try {
             db.open("Versions.db", true);
             assert(true);
@@ -73,7 +75,7 @@ public class ExampleInstrumentedTest {
     @Test
     public void testInvalidSelect() {
         Context context = InstrumentationRegistry.getTargetContext();
-        AudioSqlite3 db = new AudioSqlite3(context);
+        Sqlite3 db = new Sqlite3(context);
         try {
             db.open("Versions.db", true);
             String query = "select * from NonExistantTable";
@@ -93,7 +95,7 @@ public class ExampleInstrumentedTest {
     @Test
     public void testValidSelectNoRows() {
         Context context = InstrumentationRegistry.getTargetContext();
-        AudioSqlite3 db = new AudioSqlite3(context);
+        Sqlite3 db = new Sqlite3(context);
         try {
             db.open("Versions.db", true);
             String query = "select * from Video where languageId is null";
@@ -109,7 +111,7 @@ public class ExampleInstrumentedTest {
     @Test
     public void testValidSelectRows() {
         Context context = InstrumentationRegistry.getTargetContext();
-        AudioSqlite3 db = new AudioSqlite3(context);
+        Sqlite3 db = new Sqlite3(context);
         try {
             db.open("Versions.db", true);
             String query = "select languageId, mediaId, lengthMS from Video";
@@ -126,7 +128,7 @@ public class ExampleInstrumentedTest {
     @Test
     public void testValidCreateTable() {
         Context context = InstrumentationRegistry.getTargetContext();
-        AudioSqlite3 db = new AudioSqlite3(context);
+        Sqlite3 db = new Sqlite3(context);
         try {
             String[] empty = new String[0];
             db.open("Versions.db", true);

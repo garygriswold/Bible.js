@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TestAppAndroid.iml" filepath="$PROJECT_DIR$/TestAppAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TestAppAndroid.iml" filepath="$PROJECT_DIR$/TestAppAndroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../Plugins/AudioPlayer/src/android/app/audioplayer.iml" filepath="$PROJECT_DIR$/../../Plugins/AudioPlayer/src/android/app/audioplayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../Plugins/AWS/src/android/app/aws.iml" filepath="$PROJECT_DIR$/../../Plugins/AWS/src/android/app/aws.iml" />

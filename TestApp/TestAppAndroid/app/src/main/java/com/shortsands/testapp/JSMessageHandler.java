@@ -11,7 +11,13 @@ import android.view.View;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
+import com.shortsands.audioplayer.AudioBibleController;
+import com.shortsands.aws.AwsS3;
+import com.shortsands.aws.AwsS3Manager;
+import com.shortsands.aws.CompletionHandler;
+import com.shortsands.aws.DownloadZipFileListener;
 import com.shortsands.utility.Sqlite3;
+import com.shortsands.videoplayer.VideoActivity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -27,6 +33,9 @@ public class JSMessageHandler {
     private static final String TAG = "JSMessageHandler";
     private static final int ACTIVITY_CODE_PLAY_VIDEO = 7;
     private MainActivity activity;
+    // Transient
+    private String currVideoCallbackId;
+    private String currVideoMethod;
 
     public JSMessageHandler(MainActivity activity) {
         this.activity = activity;
@@ -100,9 +109,9 @@ public class JSMessageHandler {
 
         if (method.equals("Sqlite.openDB")) {
             if (parameters.length() == 2) {
-                String dbname = parameters.getString(0);
-                boolean copyIfAbsent = parameters.getBoolean(1);
                 try {
+                    String dbname = parameters.getString(0);
+                    boolean copyIfAbsent = parameters.getBoolean(1);
                     Sqlite3.openDB(this.activity, dbname, copyIfAbsent);
                     jsSuccess(callbackId);
                 } catch(Exception err) {
@@ -114,10 +123,10 @@ public class JSMessageHandler {
 
         } else if (method.equals("Sqlite.queryJS")) {
             if (parameters.length() == 3) {
-                String dbname = parameters.getString(0);
-                String statement = parameters.getString(1);
-                JSONArray values = parameters.getJSONArray(2);
                 try {
+                    String dbname = parameters.getString(0);
+                    String statement = parameters.getString(1);
+                    JSONArray values = parameters.getJSONArray(2);
                     Sqlite3 db = Sqlite3.findDB(dbname);
                     JSONArray result = db.queryJS(statement, values);
                     jsSuccess(callbackId, result);
@@ -130,10 +139,10 @@ public class JSMessageHandler {
 
         } else if (method.equals("Sqlite.executeJS")) {
             if (parameters.length() == 3) {
-                String dbname = parameters.getString(0);
-                String statement = parameters.getString(1);
-                JSONArray values = parameters.getJSONArray(2);
                 try {
+                    String dbname = parameters.getString(0);
+                    String statement = parameters.getString(1);
+                    JSONArray values = parameters.getJSONArray(2);
                     Sqlite3 db = Sqlite3.findDB(dbname);
                     int result = db.executeJS(statement, values);
                     jsSuccess(callbackId, result);
@@ -146,11 +155,11 @@ public class JSMessageHandler {
 
         } else if (method.equals("Sqlite.bulkExecuteJS")) {
             if (parameters.length() == 3) {
-                String dbname = parameters.getString(0);
-                String statement = parameters.getString(1);
-                JSONArray values = parameters.getJSONArray(2);
                 try {
-                    Sqlite db = Sqlite3.findDB(dbname);
+                    String dbname = parameters.getString(0);
+                    String statement = parameters.getString(1);
+                    JSONArray values = parameters.getJSONArray(2);
+                    Sqlite3 db = Sqlite3.findDB(dbname);
                     int result = db.bulkExecuteJS(statement, values);
                     jsSuccess(callbackId, result);
                 } catch(Exception err) {
@@ -184,8 +193,8 @@ public class JSMessageHandler {
 
         } else if (method.equals("Sqlite.deleteDB")) {
             if (parameters.length() == 1) {
-                String dbname = parameters.getString(0);
                 try {
+                    String dbname = parameters.getString(0);
                     Sqlite3.deleteDB(this.activity, dbname);
                     jsSuccess(callbackId);
                 } catch(Exception err) {
@@ -204,33 +213,37 @@ public class JSMessageHandler {
 
         if (method.equals("AWS.downloadZipFile")) {
             if (parameters.length() == 4) {
-                String regionType = parameters.getString(0);
-                String s3Bucket = parameters.getString(1);
-                String s3Key = parameters.getString(2);
-                String filePath = parameters.getString(3);
-                File file = new File(this.activity.getDataDir(), filePath);
-                AwsS3 s3 = null;
-                if (regionType.equals("SS")) {
-                    s3 = AwsS3Manager.findSS();
-                } else if (regionType.equals("DBP")) {
-                    s3 = AwsS3Manager.findDbp();
-                } else if (regionType.equals("TEST")) {
-                    s3 = AwsS3Manager.findTest();
-                } else {
-                    jsError(callbackId, method, "Region must be SS, DBP, or TEST");
-                }
-                if (s3 != null) {
-                    DownloadPluginZipFileListener listener = new DownloadPluginZipFileListener(this, callbackId, method);
-                    listener.setActivity(this.activity); // presents ProgressCircle
-                    s3.downloadZipFile(s3Bucket, s3Key, file, listener);
+                try {
+                    String regionType = parameters.getString(0);
+                    String s3Bucket = parameters.getString(1);
+                    String s3Key = parameters.getString(2);
+                    String filePath = parameters.getString(3);
+                    File file = new File(this.activity.getDataDir(), filePath);
+                    AwsS3 s3 = null;
+                    if (regionType.equals("SS")) {
+                        s3 = AwsS3Manager.findSS();
+                    } else if (regionType.equals("DBP")) {
+                        s3 = AwsS3Manager.findDbp();
+                    } else if (regionType.equals("TEST")) {
+                        s3 = AwsS3Manager.findTest();
+                    } else {
+                        jsError(callbackId, method, "Region must be SS, DBP, or TEST");
+                    }
+                    if (s3 != null) {
+                        DownloadPluginZipFileListener listener = new DownloadPluginZipFileListener(this, callbackId, method);
+                        listener.setActivity(this.activity); // presents ProgressCircle
+                        s3.downloadZipFile(s3Bucket, s3Key, file, listener);
 
-                    /*, complete: { err in
-                        if let err1 = err {
-                            self.jsError(callbackId, method, err1.toString());
-                        } else {
-                            self.jsSuccess(callbackId);
-                        }
-                    })*/
+                        /*, complete: { err in
+                            if let err1 = err {
+                                self.jsError(callbackId, method, err1.toString());
+                            } else {
+                                self.jsSuccess(callbackId);
+                            }
+                        })*/
+                    }
+                } catch(Exception err) {
+                    jsError(callbackId, method, err.toString());
                 }
             } else {
                 jsError(callbackId, method, "must have three parameters");
@@ -243,7 +256,7 @@ public class JSMessageHandler {
 
     class DownloadPluginZipFileListener extends DownloadZipFileListener {
 
-        private static String TAG = "DownloadPluginZipFileListener";
+        //private static String TAG = "DownloadPluginZipFileListener";
         private JSMessageHandler jsMessageHandler;
         private String callbackId;
         private String method;
@@ -276,33 +289,41 @@ public class JSMessageHandler {
 
         if (method.equals("AudioPlayer.findAudioVersion")) {
             if (parameters.length() == 2) {
-                String version = parameters.getString(0);
-                String silLang = parameters.getString(1);
-                AudioBibleController audioController = AudioBibleController.shared;
-                String bookList = audioController.findAudioVersion(version, silLang);
-                jsSuccess(callbackId, bookList);
+                try {
+                    String version = parameters.getString(0);
+                    String silLang = parameters.getString(1);
+                    AudioBibleController audioController = AudioBibleController.shared(this.activity);
+                    String bookList = audioController.findAudioVersion(version, silLang);
+                    jsSuccess(callbackId, bookList);
+                } catch(Exception err) {
+                    jsError(callbackId, method, err.toString());
+                }
             } else {
                 jsError(callbackId, method, "must have two parameters", "");
             }
 
         } else if (method.equals("AudioPlayer.isPlaying")) {
-            AudioBibleController audioController = AudioBibleController.shared;
+            AudioBibleController audioController = AudioBibleController.shared(this.activity);
             String result = (audioController.isPlaying()) ? "T" : "F";
             jsSuccess(callbackId, result);
 
         } else if (method.equals("AudioPlayer.present")) {
             if (parameters.length() == 2) {
-                String book = parameters.getString(0);
-                int chapter = parameters.getInt(1);
-                AudioBibleController audioController = AudioBibleController.shared;
-                AudioPresentCompletion complete = new AudioPresentCompletion();
-                audioController.present(this.activity.getWebview(), book, chapter, complete);
+                try {
+                    String book = parameters.getString(0);
+                    int chapter = parameters.getInt(1);
+                    AudioBibleController audioController = AudioBibleController.shared(this.activity);
+                    AudioPresentCompletion complete = new AudioPresentCompletion(callbackId, method);
+                    audioController.present(this.activity.getWebview(), book, chapter, complete);
+                } catch(Exception err) {
+                    jsError(callbackId, method, err.toString());
+                }
             } else {
                 jsError(callbackId, method, "must have two parameters");
             }
 
         } else if (method.equals("AudioPlayer.stop")) {
-            AudioBibleController audioController = AudioBibleController.shared;
+            AudioBibleController audioController = AudioBibleController.shared(this.activity);
             audioController.stop();
             jsSuccess(callbackId);
 
@@ -312,37 +333,48 @@ public class JSMessageHandler {
     }
 
     class AudioPresentCompletion implements CompletionHandler {
+        private String callbackId;
+        private String method;
+
+        public AudioPresentCompletion(String callbackId, String method) {
+            this.callbackId = callbackId;
+            this.method = method;
+        }
         @Override
         public void completed(Object result) {
             //callbackContext.success("");
-            jsSuccess(callbackId);
+            jsSuccess(this.callbackId);
         }
         @Override
         public void failed(Throwable exception) {
             Log.d(TAG, "NextReadFile Failed " + exception.toString());
             //callbackContext.error(exception.toString());
-            jsError(callbackId, method, exception.toString());
+            jsError(this.callbackId, this.method, exception.toString());
         }
     }
 
-    private void videoPlayerPlugin(String callbackId, String method, JSONArray parameters) {
+    private void videoPlayerPlugin(final String callbackId, final String method, final JSONArray parameters) {
+        this.currVideoCallbackId = callbackId;
+        this.currVideoMethod = method;
 
         if (method.equals("VideoPlayer.showVideo")) {
             if (parameters.length() == 5) {
                 this.activity.runOnUiThread(new Runnable() {
                     public void run() {
-                        final Intent videoIntent = new Intent(this.activity.getApplicationContext(), VideoActivity.class);
+                        final Intent videoIntent = new Intent(activity.getApplicationContext(), VideoActivity.class);
                         Bundle extras = new Bundle();
-                        extras.putString("mediaSource", parameters.getString(0));
-                        extras.putString("videoId", parameters.getString(1));
-                        extras.putString("languageId", parameters.getString(2));
-                        extras.putString("silLang", parameters.getString(3));
-                        extras.putString("videoUrl", parameters.getString(4));
-                        videoIntent.putExtras(extras);
-                        //cordova.startActivityForResult(plugin, videoIntent, ACTIVITY_CODE_PLAY_VIDEO);
-
-
-                        activity.startActivityForResult(videoIntent, ACTIVITY_CODE_PLAY_VIDEO);
+                        try {
+                            extras.putString("mediaSource", parameters.getString(0));
+                            extras.putString("videoId", parameters.getString(1));
+                            extras.putString("languageId", parameters.getString(2));
+                            extras.putString("silLang", parameters.getString(3));
+                            extras.putString("videoUrl", parameters.getString(4));
+                            videoIntent.putExtras(extras);
+                            //cordova.startActivityForResult(plugin, videoIntent, ACTIVITY_CODE_PLAY_VIDEO);
+                            activity.startActivityForResult(videoIntent, ACTIVITY_CODE_PLAY_VIDEO);
+                        } catch(Exception err) {
+                            jsError(callbackId, method, err.toString());
+                        }
                     }
                 });
             } else {
@@ -361,14 +393,14 @@ public class JSMessageHandler {
         if (ACTIVITY_CODE_PLAY_VIDEO == requestCode) {
             if (Activity.RESULT_OK == resultCode) {
                 //this.callbackContext.success();
-                jsSuccess(callbackId);
+                jsSuccess(this.currVideoCallbackId);
             } else if (Activity.RESULT_CANCELED == resultCode) {
                 String errMsg = "Error";
                 if (intent != null && intent.hasExtra("message")) {
                     errMsg = intent.getStringExtra("message");
                 }
                 //this.callbackContext.error(errMsg);
-                jsError(callbackId, method, errMsg);
+                jsError(this.currVideoCallbackId, this.currVideoMethod, errMsg);
             }
         }
     }

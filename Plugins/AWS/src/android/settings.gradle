@@ -1,1 +1,4 @@
 include ':app'
+include ":utility"
+
+project(":utility").projectDir = file("../../../Utility/src/android/app")

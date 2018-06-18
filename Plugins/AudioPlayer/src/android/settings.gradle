@@ -1,1 +1,6 @@
 include ':app'
+include ":utility"
+include ":aws"
+
+project(":utility").projectDir = file("../../../Utility/src/android/app")
+project(":aws").projectDir = file("../../../AWS/src/android/app")
