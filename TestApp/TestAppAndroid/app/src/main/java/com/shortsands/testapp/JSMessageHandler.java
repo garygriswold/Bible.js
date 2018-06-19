@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import org.json.JSONArray;
 
-
 /**
  * Created by garygriswold on 5/10/18.
  */
@@ -427,7 +426,7 @@ public class JSMessageHandler {
 
     private void jsSuccess(String callbackId, JSONArray response) {
         String result = "'" + response.toString() + "'";
-        jsCallback(callbackId, false, null, result);
+        jsCallback(callbackId, true, null, result);
     }
 
     /**
@@ -457,18 +456,22 @@ public class JSMessageHandler {
     private void jsError(String callbackId, String method, String error, JSONArray defaultVal) {
         String err = logError(method, error);
         String response = "'" + defaultVal.toString() + "'";
-        jsCallback(callbackId, false, err, response);
+        jsCallback(callbackId, true, err, response);
     }
 
     private void jsCallback(String callbackId, boolean json, String error, Object response) {
         int isJson = (json) ? 1 : 0;
         String err = (error != null) ? "'" + error + "'" : "null";
-        String message = "handleNative('" + callbackId + "', " + isJson + ", " + err + ", " + response + ");";
+        final String message = "handleNative('" + callbackId + "', " + isJson + ", " + err + ", " + response + ");";
         Log.d(TAG, "RETURN TO JS: " + message);
-        this.activity.getWebview().evaluateJavascript(message, new ValueCallback<String>() {
-            @Override
-            public void onReceiveValue(String str) {
-                Log.d("jsCallbackError", str);
+        this.activity.runOnUiThread(new Runnable() {
+            public void run() {
+                activity.getWebview().evaluateJavascript(message, new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String str) {
+                        Log.d("jsCallbackError", str);
+                    }
+                });
             }
         });
     }

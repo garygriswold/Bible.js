@@ -35,7 +35,7 @@ function testUtility() {
 }
 function testPlatform() {
 	callNative('Utility', 'platform', [], "S", function(platform) {
-		if (assert((platform == "iOS"), 'Utility', 'platform', 'should be ios')) {
+		if (assert((platform == "iOS" || platform == "Android"), 'Utility', 'platform', 'should be iOS and Android')) {
 	    	testModelName();
 		}		
 	});
@@ -314,8 +314,9 @@ var pluginCallMap = {};
 function callNative(plugin, method, parameters, rtnType, handler) {
 	var callbackId = plugin + "." + method + "." + pluginCallCount++;
 	pluginCallMap[callbackId] = {handler: handler, rtnType: rtnType};
-	var message = {plugin: plugin, method: method, parameters: parameters, callbackId: callbackId};
-	window.webkit.messageHandlers.callNative.postMessage(message);
+	//var message = {plugin: plugin, method: method, parameters: parameters, callbackId: callbackId};
+	//window.webkit.messageHandlers.callNative.postMessage(message);
+	callNativeForOS(callbackId, plugin, method, parameters)
 }
 
 function handleNative(callbackId, isJson, error, results) {
@@ -350,3 +351,11 @@ function handleNative(callbackId, isJson, error, results) {
 }
 
 
+/**
+* This file makes the actual native call for iOS
+*/
+function callNativeForOS(callbackId, plugin, method, parameters) {
+	var message = {plugin: plugin, method: method, parameters: parameters, callbackId: callbackId};
+	window.webkit.messageHandlers.callNative.postMessage(message);
+}
+	

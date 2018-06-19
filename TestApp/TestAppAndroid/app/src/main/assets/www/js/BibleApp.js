@@ -35,7 +35,7 @@ function testUtility() {
 }
 function testPlatform() {
 	callNative('Utility', 'platform', [], "S", function(platform) {
-		if (assert((platform == "iOS"), 'Utility', 'platform', 'should be ios')) {
+		if (assert((platform == "iOS" || platform == "Android"), 'Utility', 'platform', 'should be iOS and Android')) {
 	    	testModelName();
 		}		
 	});
@@ -301,9 +301,60 @@ function testPresentAudio() {
  }
 /*
 * This must be called with a String plugin name, String method name,
-* String handler (function) name, and a parameter array.  The items
+* handler is an anonymous function, and a parameter array.  The items
 * in the array can be any String, number, or boolean.
 */
-function callNative(plugin, method, handler, parameters) {
-	callAndroid.jsHandler(plugin, method, handler, parameters);
+var pluginCallCount = 0;
+var pluginCallMap = {};
+
+/**
+* This method is called by Javascript code to call Native functions
+* handler is normally an anonymous function that will receive the results.
+*/
+function callNative(plugin, method, parameters, rtnType, handler) {
+	var callbackId = plugin + "." + method + "." + pluginCallCount++;
+	pluginCallMap[callbackId] = {handler: handler, rtnType: rtnType};
+	//var message = {plugin: plugin, method: method, parameters: parameters, callbackId: callbackId};
+	//window.webkit.messageHandlers.callNative.postMessage(message);
+	callNativeForOS(callbackId, plugin, method, parameters)
 }
+
+function handleNative(callbackId, isJson, error, results) {
+	log(callbackId);
+	var callObj = pluginCallMap[callbackId];
+	if (callObj) {
+		delete pluginCallMap[callbackId];
+		
+		var rtnType = callObj.rtnType;
+		var handler = callObj.handler;
+		
+		if (rtnType === "N") {
+			handler();
+		} else if (rtnType === "E") {
+			handler(error);
+		} else if (rtnType === "S") {
+			if (isJson > 0) {
+				handler(JSON.parse(results));
+			} else {
+				handler(results);
+			}
+		} else {
+			if (isJson > 0) {
+				handler(error, JSON.parse(results));
+			} else {
+				handler(error, results);
+			}
+		}
+	} else {
+		throw "Duplicate return for " + callbackId;
+	}
+}
+
+
+/**
+* This file makes the actual native call for Android
+*/
+function callNativeForOS(callbackId, plugin, method, parameters) {
+	callAndroid.jsHandler(callbackId, plugin, method, parameters);
+}
+

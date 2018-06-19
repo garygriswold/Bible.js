@@ -21,7 +21,7 @@ function testUtility() {
 }
 function testPlatform() {
 	callNative('Utility', 'platform', [], "S", function(platform) {
-		if (assert((platform == "iOS"), 'Utility', 'platform', 'should be ios')) {
+		if (assert((platform == "iOS" || platform == "Android"), 'Utility', 'platform', 'should be iOS and Android')) {
 	    	testModelName();
 		}		
 	});
