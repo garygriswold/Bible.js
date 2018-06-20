@@ -13,8 +13,6 @@ var pluginCallMap = {};
 function callNative(plugin, method, parameters, rtnType, handler) {
 	var callbackId = plugin + "." + method + "." + pluginCallCount++;
 	pluginCallMap[callbackId] = {handler: handler, rtnType: rtnType};
-	//var message = {plugin: plugin, method: method, parameters: parameters, callbackId: callbackId};
-	//window.webkit.messageHandlers.callNative.postMessage(message);
 	callNativeForOS(callbackId, plugin, method, parameters)
 }
 

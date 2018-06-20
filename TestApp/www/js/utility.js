@@ -28,7 +28,8 @@ function testPlatform() {
 }
 function testModelName() {
 	callNative('Utility', 'modelName', [], "S", function(model) {
-		if (assert((model.substr(0,6) == "iPhone"), 'Utility', 'modelName', 'should be iPhone')) {
+		var parts = model.split(' ');
+		if (assert((parts[0] == "iPhone" || parts[0] == "Android"), 'Utility', 'modelName', model)) {
 			testHideKeyboard();
 		}
 	});

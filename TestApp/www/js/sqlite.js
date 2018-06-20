@@ -70,9 +70,9 @@ function testExecuteJS2() {
 	var statement = 'CREATE TABLE TEST1(abc TEXT, def INT)';
 	var values = [];
 	callNative('Sqlite', 'executeJS', [database, 'DROP TABLE IF EXISTS TEST1', values], "ES", function(error, rowCount) {
-		callNative('Sqlite', 'executeJS', [database, statement, values], "ES", function(error, rowCount) {
+		callNative('Sqlite', 'executeJS', [database, statement, values], "ES", function(error, rowCount2) {
 			if (!assert(error, error)) {
-				if (assert((rowCount === 0), "rowcount should be zero")) {
+				if (assert((rowCount2 === 0 || rowCount2 ===1), "rowcount should be zero, but was " + String.valueOf(rowCount2))) {
 					testExecuteBulkJS1();
 				}
 			}
@@ -108,8 +108,9 @@ function testListDB() {
 		callNative('Sqlite', 'listDB', [], "S", function(results) {
 			if (assert(results, 'There should be a files result')) {
 				if (assert(results.length > 1), "There should be multiple files") {
-					var file = results[0];
-					if (assert((file == 'Temp.db'), 'The first file should be Temp.db')) {
+					var f1 = results[0];
+					var f2 = results[1];
+					if (assert((f1 == 'Temp.db' || f2 == "Temp.db"), 'The first file should be Temp.db')) {
 						testDeleteDb();
 					}
 				}

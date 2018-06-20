@@ -44,20 +44,25 @@ public class JSMessageHandler {
      *
      */
     @JavascriptInterface
-    public void jsHandler(String callbackId, String plugin, String method, JSONArray parameters) {
-        Log.d(TAG, "Plugin " + plugin);
-        if (plugin.equals("Utility")) {
-            utilityPlugin(callbackId, "Utility." + method, parameters);
-        } else if (plugin.equals("Sqlite")) {
-            sqlitePlugin(callbackId, "Sqlite." + method, parameters);
-        } else if (plugin.equals("AWS")) {
-            awsPlugin(callbackId, "AWS." + method, parameters);
-        } else if (plugin.equals("AudioPlayer")) {
-            audioPlayerPlugin(callbackId, "AudioPlayer." + method, parameters);
-        } else if (plugin.equals("VideoPlayer")) {
-            videoPlayerPlugin(callbackId, "VideoPlayer." + method, parameters);
-        } else {
-            jsError(callbackId, method, "Unknown plugin");
+    public void jsHandler(String callbackId, String plugin, String method, String parameterStr) {
+        try {
+            JSONArray parameters = new JSONArray(parameterStr);
+            Log.d(TAG, "Plugin " + plugin);
+            if (plugin.equals("Utility")) {
+                utilityPlugin(callbackId, "Utility." + method, parameters);
+            } else if (plugin.equals("Sqlite")) {
+                sqlitePlugin(callbackId, "Sqlite." + method, parameters);
+            } else if (plugin.equals("AWS")) {
+                awsPlugin(callbackId, "AWS." + method, parameters);
+            } else if (plugin.equals("AudioPlayer")) {
+                audioPlayerPlugin(callbackId, "AudioPlayer." + method, parameters);
+            } else if (plugin.equals("VideoPlayer")) {
+                videoPlayerPlugin(callbackId, "VideoPlayer." + method, parameters);
+            } else {
+                jsError(callbackId, method, "Unknown plugin");
+            }
+        } catch(Exception err) {
+            jsError(callbackId, plugin + "." + method, err.toString());
         }
     }
 
@@ -107,7 +112,7 @@ public class JSMessageHandler {
     private void sqlitePlugin(String callbackId, String method, JSONArray parameters) {
 
         if (method.equals("Sqlite.openDB")) {
-            if (parameters.length() == 2) {
+            if (parameters != null && parameters.length() == 2) {
                 try {
                     String dbname = parameters.getString(0);
                     boolean copyIfAbsent = parameters.getBoolean(1);
@@ -121,7 +126,7 @@ public class JSMessageHandler {
             }
 
         } else if (method.equals("Sqlite.queryJS")) {
-            if (parameters.length() == 3) {
+            if (parameters != null && parameters.length() == 3) {
                 try {
                     String dbname = parameters.getString(0);
                     String statement = parameters.getString(1);
@@ -137,7 +142,7 @@ public class JSMessageHandler {
             }
 
         } else if (method.equals("Sqlite.executeJS")) {
-            if (parameters.length() == 3) {
+            if (parameters != null && parameters.length() == 3) {
                 try {
                     String dbname = parameters.getString(0);
                     String statement = parameters.getString(1);
@@ -153,7 +158,7 @@ public class JSMessageHandler {
             }
 
         } else if (method.equals("Sqlite.bulkExecuteJS")) {
-            if (parameters.length() == 3) {
+            if (parameters != null && parameters.length() == 3) {
                 try {
                     String dbname = parameters.getString(0);
                     String statement = parameters.getString(1);
@@ -169,7 +174,7 @@ public class JSMessageHandler {
             }
 
         } else if (method.equals("Sqlite.closeDB")) {
-            if (parameters.length() == 1) {
+            if (parameters != null && parameters.length() == 1) {
                 try {
                     String dbname = parameters.getString(0);
                     Sqlite3.closeDB(dbname);
@@ -191,7 +196,7 @@ public class JSMessageHandler {
             }
 
         } else if (method.equals("Sqlite.deleteDB")) {
-            if (parameters.length() == 1) {
+            if (parameters != null && parameters.length() == 1) {
                 try {
                     String dbname = parameters.getString(0);
                     Sqlite3.deleteDB(this.activity, dbname);
@@ -211,7 +216,7 @@ public class JSMessageHandler {
     private void awsPlugin(String callbackId, String method, JSONArray parameters) {
 
         if (method.equals("AWS.downloadZipFile")) {
-            if (parameters.length() == 4) {
+            if (parameters != null && parameters.length() == 4) {
                 try {
                     String regionType = parameters.getString(0);
                     String s3Bucket = parameters.getString(1);
@@ -287,7 +292,7 @@ public class JSMessageHandler {
     private void audioPlayerPlugin(String callbackId, String method, JSONArray parameters) {
 
         if (method.equals("AudioPlayer.findAudioVersion")) {
-            if (parameters.length() == 2) {
+            if (parameters != null && parameters.length() == 2) {
                 try {
                     String version = parameters.getString(0);
                     String silLang = parameters.getString(1);
@@ -307,7 +312,7 @@ public class JSMessageHandler {
             jsSuccess(callbackId, result);
 
         } else if (method.equals("AudioPlayer.present")) {
-            if (parameters.length() == 2) {
+            if (parameters != null && parameters.length() == 2) {
                 try {
                     String book = parameters.getString(0);
                     int chapter = parameters.getInt(1);
@@ -357,7 +362,7 @@ public class JSMessageHandler {
         this.currVideoMethod = method;
 
         if (method.equals("VideoPlayer.showVideo")) {
-            if (parameters.length() == 5) {
+            if (parameters != null && parameters.length() == 5) {
                 this.activity.runOnUiThread(new Runnable() {
                     public void run() {
                         final Intent videoIntent = new Intent(activity.getApplicationContext(), VideoActivity.class);
