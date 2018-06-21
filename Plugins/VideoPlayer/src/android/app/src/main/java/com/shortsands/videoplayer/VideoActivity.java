@@ -233,7 +233,7 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
         } else {
         	setResult(resultCode);
         }
-        finish(); // Calls onPause
+       finish(); // Calls onPause
     }
     
  	/**
@@ -259,7 +259,9 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
 				this.videoPlaybackComplete = true;
 				this.wrapItUp(Activity.RESULT_OK, null);
 				break;
-			case ExoPlayer.STATE_IDLE:
+			case ExoPlayer.STATE_IDLE: // Occurs when there is no media to play
+				this.videoPlaybackComplete = true;
+				this.wrapItUp(Activity.RESULT_CANCELED, "No Media");
 				message = "Idle";
 				break;
 			case ExoPlayer.STATE_READY:

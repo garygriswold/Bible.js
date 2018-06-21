@@ -30,11 +30,8 @@ import org.json.JSONArray;
 public class JSMessageHandler {
 
     private static final String TAG = "JSMessageHandler";
-    private static final int ACTIVITY_CODE_PLAY_VIDEO = 7;
+
     private MainActivity activity;
-    // Transient
-    private String currVideoCallbackId;
-    private String currVideoMethod;
 
     public JSMessageHandler(MainActivity activity) {
         this.activity = activity;
@@ -348,28 +345,23 @@ public class JSMessageHandler {
 
     private void videoPlayerPlugin(final String callbackId, final String method, final JSONArray parameters) {
         AwsS3Manager.initialize(this.activity);
-        this.currVideoCallbackId = callbackId;
-        this.currVideoMethod = method;
 
         if (method.equals("VideoPlayer.showVideo")) {
             if (parameters != null && parameters.length() == 5) {
-                this.activity.runOnUiThread(new Runnable() {
-                    public void run() {
-                        final Intent videoIntent = new Intent(activity.getApplicationContext(), VideoActivity.class);
-                        Bundle extras = new Bundle();
-                        try {
-                            extras.putString("mediaSource", parameters.getString(0));
-                            extras.putString("videoId", parameters.getString(1));
-                            extras.putString("languageId", parameters.getString(2));
-                            extras.putString("silLang", parameters.getString(3));
-                            extras.putString("videoUrl", parameters.getString(4));
-                            videoIntent.putExtras(extras);
-                            activity.startActivityForResult(videoIntent, ACTIVITY_CODE_PLAY_VIDEO);
-                        } catch(Exception err) {
-                            jsError(callbackId, method, err.toString());
-                        }
-                    }
-                });
+                final Intent videoIntent = new Intent(activity.getApplicationContext(), VideoActivity.class);
+                Bundle extras = new Bundle();
+                try {
+                    extras.putString("mediaSource", parameters.getString(0));
+                    extras.putString("videoId", parameters.getString(1));
+                    extras.putString("languageId", parameters.getString(2));
+                    extras.putString("silLang", parameters.getString(3));
+                    extras.putString("videoUrl", parameters.getString(4));
+                    videoIntent.putExtras(extras);
+                    this.activity.startVideoActivity(callbackId, method, videoIntent);
+                    // See method this.activity.onActivityResult for response handling
+                } catch(Exception err) {
+                    jsError(callbackId, method, err.toString());
+                }
             } else {
                 jsError(callbackId, method, "must have five parameters");
             }
@@ -379,27 +371,10 @@ public class JSMessageHandler {
         }
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        Log.d(TAG, "onActivityResult: " + requestCode + " " + resultCode + " " + System.currentTimeMillis());
-
-        if (ACTIVITY_CODE_PLAY_VIDEO == requestCode) {
-            this.activity.finishActivity(requestCode);
-            if (Activity.RESULT_OK == resultCode) {
-                jsSuccess(this.currVideoCallbackId);
-            } else if (Activity.RESULT_CANCELED == resultCode) {
-                String errMsg = "Error";
-                if (intent != null && intent.hasExtra("message")) {
-                    errMsg = intent.getStringExtra("message");
-                }
-                jsError(this.currVideoCallbackId, this.currVideoMethod, errMsg);
-            }
-        }
-    }
-
     /**
     * Success Callbacks
     */
-    private void jsSuccess(String callbackId) {
+    public void jsSuccess(String callbackId) {
         jsCallback(callbackId, false, null, "null");
     }
 
@@ -424,7 +399,7 @@ public class JSMessageHandler {
     /**
     * Error Callbacks
     */
-    private void jsError(String callbackId, String method, String error) {
+    public void jsError(String callbackId, String method, String error) {
         String err = logError(method, error);
         jsCallback(callbackId, false, err, "null");
     }
