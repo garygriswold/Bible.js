@@ -238,14 +238,6 @@ public class JSMessageHandler {
                         DownloadPluginZipFileListener listener = new DownloadPluginZipFileListener(this, callbackId, method);
                         listener.setActivity(this.activity); // presents ProgressCircle
                         s3.downloadZipFile(s3Bucket, s3Key, file, listener);
-
-                        /*, complete: { err in
-                            if let err1 = err {
-                                self.jsError(callbackId, method, err1.toString());
-                            } else {
-                                self.jsSuccess(callbackId);
-                            }
-                        })*/
                     }
                 } catch(Exception err) {
                     jsError(callbackId, method, err.toString());
@@ -261,7 +253,6 @@ public class JSMessageHandler {
 
     class DownloadPluginZipFileListener extends DownloadZipFileListener {
 
-        //private static String TAG = "DownloadPluginZipFileListener";
         private JSMessageHandler jsMessageHandler;
         private String callbackId;
         private String method;
@@ -279,18 +270,17 @@ public class JSMessageHandler {
         protected void onComplete(int id) {
             super.onComplete(id);
             this.jsMessageHandler.jsSuccess(this.callbackId);
-            //this.callbackContext.success();
         }
 
         @Override
         public void onError(int id, Exception error) {
             super.onError(id, error);
-            //this.callbackContext.error(error.toString() + " on " + this.file.getAbsolutePath());
             this.jsMessageHandler.jsError(this.callbackId, this.method, error.toString() + " on " + file.getAbsolutePath());
         }
     }
 
     private void audioPlayerPlugin(String callbackId, String method, JSONArray parameters) {
+        AwsS3Manager.initialize(this.activity);
 
         if (method.equals("AudioPlayer.findAudioVersion")) {
             if (parameters != null && parameters.length() == 2) {
@@ -347,18 +337,17 @@ public class JSMessageHandler {
         }
         @Override
         public void completed(Object result) {
-            //callbackContext.success("");
             jsSuccess(this.callbackId);
         }
         @Override
         public void failed(Throwable exception) {
             Log.d(TAG, "NextReadFile Failed " + exception.toString());
-            //callbackContext.error(exception.toString());
             jsError(this.callbackId, this.method, exception.toString());
         }
     }
 
     private void videoPlayerPlugin(final String callbackId, final String method, final JSONArray parameters) {
+        AwsS3Manager.initialize(this.activity);
         this.currVideoCallbackId = callbackId;
         this.currVideoMethod = method;
 
@@ -375,7 +364,6 @@ public class JSMessageHandler {
                             extras.putString("silLang", parameters.getString(3));
                             extras.putString("videoUrl", parameters.getString(4));
                             videoIntent.putExtras(extras);
-                            //cordova.startActivityForResult(plugin, videoIntent, ACTIVITY_CODE_PLAY_VIDEO);
                             activity.startActivityForResult(videoIntent, ACTIVITY_CODE_PLAY_VIDEO);
                         } catch(Exception err) {
                             jsError(callbackId, method, err.toString());
@@ -391,20 +379,18 @@ public class JSMessageHandler {
         }
     }
 
-    //@Override This really belongs on VideoActivity, but how does it get JSMessageHandler
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         Log.d(TAG, "onActivityResult: " + requestCode + " " + resultCode + " " + System.currentTimeMillis());
 
         if (ACTIVITY_CODE_PLAY_VIDEO == requestCode) {
+            this.activity.finishActivity(requestCode);
             if (Activity.RESULT_OK == resultCode) {
-                //this.callbackContext.success();
                 jsSuccess(this.currVideoCallbackId);
             } else if (Activity.RESULT_CANCELED == resultCode) {
                 String errMsg = "Error";
                 if (intent != null && intent.hasExtra("message")) {
                     errMsg = intent.getStringExtra("message");
                 }
-                //this.callbackContext.error(errMsg);
                 jsError(this.currVideoCallbackId, this.currVideoMethod, errMsg);
             }
         }
