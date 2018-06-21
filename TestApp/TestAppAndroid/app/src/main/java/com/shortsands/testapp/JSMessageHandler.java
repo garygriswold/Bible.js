@@ -214,6 +214,7 @@ public class JSMessageHandler {
     }
 
     private void awsPlugin(String callbackId, String method, JSONArray parameters) {
+        AwsS3Manager.initialize(this.activity);
 
         if (method.equals("AWS.downloadZipFile")) {
             if (parameters != null && parameters.length() == 4) {
