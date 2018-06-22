@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:../../Plugins/VideoPlayer/src/ios/VideoPlayer.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:../../Plugins/AudioPlayer/src/ios/AudioPlayer.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:../../Plugins/AWS/src/ios/AWS.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:../../Plugins/Utility/src/ios/Utility.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:SafeBible.xcodeproj">
+   </FileRef>
+</Workspace>
