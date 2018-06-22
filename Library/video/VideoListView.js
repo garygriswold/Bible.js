@@ -102,12 +102,19 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 		
         console.log("\n\BEFORE VideoPlayer " + videoId + " : " + videoUrl);
         document.body.dispatchEvent(new CustomEvent(BIBLE.STOP_AUDIO));
-		window.VideoPlayer.showVideo(mediaSource, videoId, languageId, silCode, videoUrl,
-		function() {
-			console.log("SUCCESS FROM VideoPlayer " + videoUrl);
-		},
-		function(error) {
-			console.log("ERROR FROM VideoPlayer " + error);
+		//window.VideoPlayer.showVideo(mediaSource, videoId, languageId, silCode, videoUrl,
+		var parameters = [mediaSource, videoId, languageId, silCode, videoUrl];
+		callNative('VideoPlayer', 'showVideo', parameters, "E", function(error) {
+		//function() {
+		//	console.log("SUCCESS FROM VideoPlayer " + videoUrl);
+		//},
+		//function(error) {
+		//	console.log("ERROR FROM VideoPlayer " + error);
+			if (error) {
+				console.log("ERROR FROM VideoPlayer " + error);
+			} else {
+				console.log("SUCCESS FROM VideoPlayer " + videoUrl);
+			}
 		});
 	}
 };

@@ -18,7 +18,8 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 	var s3Bucket = "shortsands-oldregion";
 	var s3Key = bibleVersion + ".zip";
 	var filePath = this.finalPath + bibleVersion;
-	AWS.downloadZipFile(s3Bucket, s3Key, filePath, function(error) {
+	//AWS.downloadZipFile(s3Bucket, s3Key, filePath, function(error) {
+	callNative('AWS', 'downloadZipFile', ["SS", s3Bucket, s3Key, filePath], "E", function(error) {
 		if (error == null) console.log("Download Success");
 		else console.log("Download Failed");
 		callback(error);

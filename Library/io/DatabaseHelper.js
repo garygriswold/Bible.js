@@ -4,14 +4,16 @@
 */
 function DatabaseHelper(dbname, isCopyDatabase) {
 	this.dbname = dbname;
-	Utility.openDatabase(dbname, isCopyDatabase, function(error) {
+	//Utility.openDatabase(dbname, isCopyDatabase, function(error) {
+	callNative('Sqlite', 'openDB', [dbname, isCopyDatabase], "E", function(error) {
 		// The error has already been reported in JS glue layer
 		// All subsequent access to database will fail, because it is not open.
 	});
 	Object.seal(this);
 }
 DatabaseHelper.prototype.select = function(statement, values, callback) {
-	Utility.queryJS(this.dbname, statement, values, function(error, results) {
+	//Utility.queryJS(this.dbname, statement, values, function(error, results) {
+	callNative('Sqlite', 'queryJS', [this.dbname, statement, values], "ES", function(error, results) {
 		if (error) {
 			callback(new IOError(error));
 		} else {
@@ -20,7 +22,8 @@ DatabaseHelper.prototype.select = function(statement, values, callback) {
 	});
 };
 DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
-	Utility.executeJS(this.dbname, statement, values, function(error, rowCount) {
+	//Utility.executeJS(this.dbname, statement, values, function(error, rowCount) {
+	callNative('Sqlite', 'executeJS', [this.dbname, statement, values], "ES", function(error, rowCount) {
 		if (error) {
 			callback(new IOError(error));
 		} else {
@@ -29,7 +32,8 @@ DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
 	});
 };
 DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
-	Utility.bulkExecuteJS(this.dbname, statement, array, function(error, rowCount) {
+	//Utility.bulkExecuteJS(this.dbname, statement, array, function(error, rowCount) {
+	callNative('Sqlite', 'bulkExecuteJS', [this.dbname, statement, values], "ES", function(error, rowCount) {
 		if (error) {
 			callback(new IOError(error));
 		} else {
@@ -38,7 +42,8 @@ DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
 	});
 };
 DatabaseHelper.prototype.executeDDL = function(statement, callback) {
-	Utility.executeJS(this.dbname, statement, [], function(error, rowCount) {
+	//Utility.executeJS(this.dbname, statement, [], function(error, rowCount) {
+	callNative('Sqlite', 'executeJS', [this.dbname, statement, []], "ES", function(error, rowCount) {
 		if (error) {
 			callback(new IOError(error));
 		} else {
@@ -47,7 +52,8 @@ DatabaseHelper.prototype.executeDDL = function(statement, callback) {
 	});
 };
 DatabaseHelper.prototype.close = function() {
-	Utility.closeDatabase(this.dbname, function(error) {
+	//Utility.closeDatabase(this.dbname, function(error) {
+	callNative('Sqlite', 'closeDB', [this.dbname], "E", function(error) {
 		// The error has already been logged in the JS glue layer
 	});
 };

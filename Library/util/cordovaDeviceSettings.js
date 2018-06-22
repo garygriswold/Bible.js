@@ -8,12 +8,16 @@ var deviceSettingsModel = null;
 var deviceSettings = {
 	/* Deprecated, used only VersionsView */
     prefLanguage: function(callback) {
-	    Utility.locale(function(results) {
-			callback(results[0]);
+	    //Utility.locale(function(results) {
+		//	callback(results[0]);
+	    //});
+	    callNative('Utility', 'locale', [], "S", function(results) {
+		    callback(results[0]);
 	    });
     },
     locale: function(callback) {
-	    Utility.locale(function(results) {
+	    //Utility.locale(function(results) {
+		callNative('Utility', 'locale', [], "S", function(results) {
 			var locale = (results[0].length > 0) ? results[0] : 'en-US';
 			var language = (results.length > 0 && results[1].length > 0) ? results[1] : 'en';
 			var script = (results.length > 1) ? results[2] : '';
@@ -22,10 +26,12 @@ var deviceSettings = {
 	    });    
     },
     loadDeviceSettings: function() {
-		Utility.platform(function(platform) {
+		//Utility.platform(function(platform) {
+		callNative('Utility', 'platform', [], "S", function(platform) {
 			deviceSettingsPlatform = platform.toLowerCase();
 		});
-		Utility.modelName(function(model) {
+		//Utility.modelName(function(model) {
+		callNative('Utility', 'modelName', [], "S", function(model) {
 			deviceSettingsModel = model;
 		});
     },

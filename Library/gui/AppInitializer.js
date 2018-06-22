@@ -24,9 +24,9 @@ AppInitializer.prototype.begin = function() {
 		appUpdater.doUpdate(function() {
 			console.log('DONE APP UPDATER');
 			var versionsAdapter = new VersionsAdapter();
-			AWS.initializeRegion(function(done) {
-				console.log('AWS Initialized ' + done);
-			});			
+			//AWS.initializeRegion(function(done) {
+			//	console.log('AWS Initialized ' + done);
+			//});			
 		    settingStorage.getCurrentVersion(function(versionFilename) {
 			    if (versionFilename) {
 				    // Process with User's Version
@@ -111,7 +111,8 @@ AppInitializer.prototype.begin = function() {
 	}
 	function enableAudioPlayer() {
 		console.log("INSIDE ENABLE AUDIO PLAYER");
-		window.AudioPlayer.isPlaying(function(playing) {
+		//window.AudioPlayer.isPlaying(function(playing) {
+		callNative('AudioPlayer', 'isPlaying', [], "S", function(playing) {
 			console.log("INSIDE IS PLAYING: " + playing);
 			if (playing === "F") {
 				document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
@@ -123,7 +124,8 @@ AppInitializer.prototype.begin = function() {
 		document.body.addEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 		document.body.addEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
 		var ref = new Reference(event.detail.id);
-		window.AudioPlayer.present(ref.book, ref.chapter,
+		//window.AudioPlayer.present(ref.book, ref.chapter,
+		callNative('AudioPlayer', 'present', [ref.book, ref.chapter], "N",
 			function() {
 				console.log("SUCCESSFUL EXIT FROM AudioPlayer");
 				document.body.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
@@ -136,7 +138,8 @@ AppInitializer.prototype.begin = function() {
 		document.body.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 		document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
 		document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
-		window.AudioPlayer.stop(function() {
+		//window.AudioPlayer.stop(function() {
+		callNative('AudioPlayer', 'stop', [], "E", function(error) {
 			console.log("SUCCESSFUL STOP OF AudioPlayer");			
 		});		
 	}

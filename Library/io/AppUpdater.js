@@ -124,7 +124,8 @@ AppUpdater.prototype.doUpdate = function(callback) {
 	}
 	
 	function getStorageFiles(callback) {
-		Utility.listDB(function(files) {
+		//Utility.listDB(function(files) {
+		callNative('Sqlite', 'listDB', [], "S", function(files) { 
 			callback(files);
 		});
 	}
@@ -178,7 +179,8 @@ AppUpdater.prototype.doUpdate = function(callback) {
 	
 	function removeFile(file, callback) {
 		console.log("REMOVE DB ", file);
-		Utility.deleteDB(file, function(error) {
+		//Utility.deleteDB(file, function(error) {
+		callNative('Sqlite', 'deleteDB', [file], "E", function(error) {
 			callback();
 		});
 	}

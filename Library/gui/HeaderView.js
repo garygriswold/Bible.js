@@ -103,9 +103,10 @@ HeaderView.prototype.showView = function() {
 	that.audioNode = document.getElementById('audioCell');
 	var videoWidth = setupIconImgButton('videoCell', 'img/ScreenIcon128.png', that.hite, BIBLE.SHOW_VIDEO);
 	var settWidth = setupIconImgButton('settingsCell', 'img/SettingsIcon128.png', that.hite, BIBLE.SHOW_SETTINGS);
-	var avalWidth = (window.innerWidth * 0.88) - (menuWidth + serhWidth + + audioWidth + videoWidth + settWidth);
+	var avalWidth = (window.innerWidth * 0.88) - (menuWidth + serhWidth + audioWidth + videoWidth + settWidth);
 	
-	window.AudioPlayer.findAudioVersion(that.version.code, that.version.silCode, function(bookIdList) {
+	//window.AudioPlayer.findAudioVersion(that.version.code, that.version.silCode, function(bookIdList) {
+	callNative('AudioPlayer', 'findAudioVersion', [that.version.code, that.version.silCode], "S", function(bookIdList) {
 		console.log("VERSION: " + that.version.code + "  SIL: " + that.version.silCode + "  BOOKLIST: " + bookIdList);
 		that.version.audioBookIdList = bookIdList;
 	});
