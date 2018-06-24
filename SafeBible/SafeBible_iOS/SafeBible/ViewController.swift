@@ -39,9 +39,9 @@ class ViewController: UIViewController, WKUIDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let bundle = Bundle.main
+        let bundle: Bundle = Bundle.main
         print("path \(bundle.bundlePath)")
-        let path = bundle.path(forResource: "index", ofType: ".html")
+        let path = bundle.path(forResource: "www/index", ofType: "html")
         let url = URL(fileURLWithPath: path!)
         let request = URLRequest(url: url)
         webView.load(request)

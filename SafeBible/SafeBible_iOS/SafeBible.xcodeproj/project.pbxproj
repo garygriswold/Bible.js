@@ -12,6 +12,7 @@
 		E4BC9CB620DD55C100E0E87F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4BC9CB420DD55C100E0E87F /* Main.storyboard */; };
 		E4BC9CB820DD55C300E0E87F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4BC9CB720DD55C300E0E87F /* Assets.xcassets */; };
 		E4BC9CBB20DD55C300E0E87F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4BC9CB920DD55C300E0E87F /* LaunchScreen.storyboard */; };
+		E4D6997B20DF4FBC0049FEEA /* www in Resources */ = {isa = PBXBuildFile; fileRef = E4D6997A20DF4FBC0049FEEA /* www */; };
 		E4F1A82D20DD57900098023B /* JSMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F1A82C20DD57900098023B /* JSMessageHandler.swift */; };
 		E4F1A83520DD5C9B0098023B /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4F1A83420DD5C9B0098023B /* Utility.framework */; };
 		E4F1A83720DD5CA60098023B /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4F1A83620DD5CA60098023B /* AWS.framework */; };
@@ -43,12 +44,12 @@
 		E4BC9CB720DD55C300E0E87F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4BC9CBA20DD55C300E0E87F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E4BC9CBC20DD55C300E0E87F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4D6997A20DF4FBC0049FEEA /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
 		E4F1A82C20DD57900098023B /* JSMessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSMessageHandler.swift; sourceTree = "<group>"; };
 		E4F1A83420DD5C9B0098023B /* Utility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Utility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F1A83620DD5CA60098023B /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F1A83820DD5CAE0098023B /* AudioPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AudioPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F1A83A20DD5CB50098023B /* VideoPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E4F1A83C20DD5D290098023B /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = ../../Plugins/AWS/src/ios/AWS/AWSCore.framework; sourceTree = "<group>"; };
 		E4F1A84420DD5EBB0098023B /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = SafeBible/AWSCore.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -71,7 +72,6 @@
 		E4BC9CA420DD55C100E0E87F = {
 			isa = PBXGroup;
 			children = (
-				E4F1A83C20DD5D290098023B /* AWSCore.framework */,
 				E4F1A84420DD5EBB0098023B /* AWSCore.framework */,
 				E4BC9CAF20DD55C100E0E87F /* SafeBible */,
 				E4BC9CAE20DD55C100E0E87F /* Products */,
@@ -90,6 +90,7 @@
 		E4BC9CAF20DD55C100E0E87F /* SafeBible */ = {
 			isa = PBXGroup;
 			children = (
+				E4D6997A20DF4FBC0049FEEA /* www */,
 				E4BC9CB020DD55C100E0E87F /* AppDelegate.swift */,
 				E4BC9CB220DD55C100E0E87F /* ViewController.swift */,
 				E4F1A82C20DD57900098023B /* JSMessageHandler.swift */,
@@ -171,6 +172,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4D6997B20DF4FBC0049FEEA /* www in Resources */,
 				E4BC9CBB20DD55C300E0E87F /* LaunchScreen.storyboard in Resources */,
 				E4BC9CB820DD55C300E0E87F /* Assets.xcassets in Resources */,
 				E4BC9CB620DD55C100E0E87F /* Main.storyboard in Resources */,
