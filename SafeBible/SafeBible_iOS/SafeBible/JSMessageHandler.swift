@@ -33,8 +33,9 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
      * window.webkit.messageHandlers.callNative.postMessage(aMessage)
      */
     public func userContentController(_ userContentController: WKUserContentController, didReceive: WKScriptMessage) {
-        print("CALL FROM JS: \(didReceive.body)")
+
         if didReceive.body is Dictionary<String, Any> {
+            print("CALL FROM JS: \(didReceive.body)")
             let request = (didReceive.body as? Dictionary<String, Any>)!
             let callbackId = request["callbackId"] as? String ?? "notString"
             let plugin = request["plugin"] as? String ?? "notString"
@@ -54,8 +55,8 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
                 jsError(callbackId: callbackId, method: method, error: "Unknown plugin")
             }
         } else {
-            print("Message set to callNative, must be a dictionary")
-            // I think there is no other error response possible here.
+            // Simply log anything else that arrives
+            print("JS ***** \(didReceive.body)")
         }
     }
     
@@ -63,12 +64,12 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
         
         if method == "Utility.locale" {
             let locale = Locale.current
-            let localeStr = locale.identifier
-            let language = locale.languageCode
-            let script = locale.scriptCode
-            let country = locale.regionCode
-            print("locale \(localeStr)")
-            let result = [localeStr, language, script, country]
+            let locStr: String = locale.identifier
+            let ident: String = locStr.replacingOccurrences(of: "_", with: "-", options: .literal, range: nil)
+            let language: String? = locale.languageCode
+            let script: String? = locale.scriptCode
+            let country: String? = locale.regionCode
+            let result = [ident, language, script, country]
             jsSuccess(callbackId: callbackId, method: method, response: result)
             
         } else if method == "Utility.platform" {
@@ -328,8 +329,9 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
     private func jsSuccess(callbackId: String, method: String, response: [Any?]) {
         do {
             let message: Data = try JSONSerialization.data(withJSONObject: response)
-            let result = "'" + String(data: message, encoding: String.Encoding.utf8)! + "'"
-            jsCallback(callbackId: callbackId, json: true, error: nil, response: result)
+            let result1 = String(data: message, encoding: String.Encoding.utf8)! // Can this fail?
+            let result2 = result1.replacingOccurrences(of: "'", with: "\\'", options: .literal)
+            jsCallback(callbackId: callbackId, json: true, error: nil, response: "'" + result2 + "'")
         } catch let jsonErr {
             let error = logError(method: method, message: jsonErr.localizedDescription)
             jsCallback(callbackId: callbackId, json: false, error: error, response: "null")
@@ -363,9 +365,10 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
     private func jsError(callbackId: String, method: String, error: String, defaultVal: [Any?]) {
         do {
             let message: Data = try JSONSerialization.data(withJSONObject: defaultVal)
-            let result = "'" + String(data: message, encoding: String.Encoding.utf8)! + "'"
+            let result1 = String(data: message, encoding: String.Encoding.utf8)! // Can this fail?
+            let result2 = result1.replacingOccurrences(of: "'", with: "\\'", options: .literal)
             let err = logError(method: method, message: error)
-            jsCallback(callbackId: callbackId, json: true, error: err, response: result)
+            jsCallback(callbackId: callbackId, json: true, error: err, response: "'" + result2 + "'")
         } catch let jsonErr {
             let error = logError(method: method, message: jsonErr.localizedDescription)
             jsCallback(callbackId: callbackId, json: false, error: error, response: "null")

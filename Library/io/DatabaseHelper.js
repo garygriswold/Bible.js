@@ -81,10 +81,8 @@ function ResultSet(results) {
 	this.rows = new RowItems(results);
 }
 function RowItems(results) {
-	this.rows = JSON.parse(results);
+	this.rows = results;
 	this.length = this.rows.length;
-	var msg = (results.length > 1000) ? results.substr(0, 1000) : results;
-	console.log("RESULTS: " + this.rows.length + ":  " + msg);
 }
 RowItems.prototype.item = function(index) {
 	return(this.rows[index]);

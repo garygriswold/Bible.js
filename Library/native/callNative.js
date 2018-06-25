@@ -13,11 +13,11 @@ var pluginCallMap = {};
 function callNative(plugin, method, parameters, rtnType, handler) {
 	var callbackId = plugin + "." + method + "." + pluginCallCount++;
 	pluginCallMap[callbackId] = {handler: handler, rtnType: rtnType};
-	callNativeForOS(callbackId, plugin, method, parameters)
+	callNativeForOS(callbackId, plugin, method, parameters);
 }
 
 function handleNative(callbackId, isJson, error, results) {
-	log(callbackId);
+	console.logOne(results);
 	var callObj = pluginCallMap[callbackId];
 	if (callObj) {
 		delete pluginCallMap[callbackId];
@@ -31,13 +31,24 @@ function handleNative(callbackId, isJson, error, results) {
 			handler(error);
 		} else if (rtnType === "S") {
 			if (isJson > 0) {
-				handler(JSON.parse(results));
+				try {
+					handler(JSON.parse(results));
+				} catch(err) {
+					console.log("ERROR JSON.parse ", err.message);
+					handler(results);
+				}
 			} else {
 				handler(results);
 			}
 		} else {
 			if (isJson > 0) {
-				handler(error, JSON.parse(results));
+				try {
+					console.log("JSON.parse");
+					handler(error, JSON.parse(results));
+				} catch(err) {
+					console.log("ERROR JSON.parse ", err.message);
+					handler(error, results);
+				}
 			} else {
 				handler(error, results);
 			}

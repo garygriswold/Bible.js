@@ -2548,10 +2548,8 @@ function ResultSet(results) {
 	this.rows = new RowItems(results);
 }
 function RowItems(results) {
-	this.rows = JSON.parse(results);
+	this.rows = results;
 	this.length = this.rows.length;
-	var msg = (results.length > 1000) ? results.substr(0, 1000) : results;
-	console.log("RESULTS: " + this.rows.length + ":  " + msg);
 }
 RowItems.prototype.item = function(index) {
 	return(this.rows[index]);
@@ -3140,7 +3138,9 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
 	});
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
-	var statement = 'SELECT v.versionCode, v.silCode, v.hasHistory, v.isQaActive, v.copyright, v.introduction,' +
+	// temp modification to debug
+	var statement = 'SELECT v.versionCode, v.silCode, v.hasHistory, v.isQaActive, v.copyright, " " AS introduction,' +
+	//var statement = 'SELECT v.versionCode, v.silCode, v.hasHistory, v.isQaActive, v.copyright, v.introduction,' +
 		' l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr, o.ownerCode, o.localOwnerName, o.ownerURL, i.bibleVersion' +
 		' FROM Version v' +
 		' JOIN Owner o ON v.ownerCode = o.ownerCode' +

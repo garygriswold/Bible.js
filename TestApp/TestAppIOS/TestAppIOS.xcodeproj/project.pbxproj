@@ -23,7 +23,6 @@
 		E48D906F20AB7A8700F59D5F /* AudioPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48D906E20AB7A8700F59D5F /* AudioPlayer.framework */; };
 		E48D907220AB804800F59D5F /* ERV-ENG.db in Resources */ = {isa = PBXBuildFile; fileRef = E48D907120AB804800F59D5F /* ERV-ENG.db */; };
 		E4A2ECF320A73FF8003BD00E /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = E4A2ECF220A73FF7003BD00E /* index.html */; };
-		E4A2ECF520A7400E003BD00E /* BibleApp.js in Resources */ = {isa = PBXBuildFile; fileRef = E4A2ECF420A7400E003BD00E /* BibleApp.js */; };
 		E4A2ECF720A74022003BD00E /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E4A2ECF620A74021003BD00E /* Versions.db */; };
 		E4A8D5E120A9DC0F000A0881 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4A8D5DD20A9DBCA000A0881 /* AWSCore.framework */; };
 		E4A8D5E220A9DC0F000A0881 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4A8D5DD20A9DBCA000A0881 /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -34,6 +33,9 @@
 		E4D5684A20A35C8A00ED291A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4D5684820A35C8A00ED291A /* LaunchScreen.storyboard */; };
 		E4D5685520A35C8A00ED291A /* TestAppIOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5685420A35C8A00ED291A /* TestAppIOSTests.swift */; };
 		E4D5686020A35C8A00ED291A /* TestAppIOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5685F20A35C8A00ED291A /* TestAppIOSUITests.swift */; };
+		E4D6997420DF35060049FEEA /* NavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D6997320DF35060049FEEA /* NavigationDelegate.swift */; };
+		E4D6997620DF38420049FEEA /* BibleApp.js in Resources */ = {isa = PBXBuildFile; fileRef = E4D6997520DF38420049FEEA /* BibleApp.js */; };
+		E4D6997820DF49B80049FEEA /* FullBibleApp.js in Resources */ = {isa = PBXBuildFile; fileRef = E4D6997720DF49B70049FEEA /* FullBibleApp.js */; };
 		E4FB082620A9243900A053A4 /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4FB082520A9243900A053A4 /* Utility.framework */; };
 		E4FB082820A9315400A053A4 /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4FB082720A9315400A053A4 /* AWS.framework */; };
 		E4FB082A20A937C000A053A4 /* VideoPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4FB082920A937C000A053A4 /* VideoPlayer.framework */; };
@@ -104,6 +106,15 @@
 		E4D5685B20A35C8A00ED291A /* TestAppIOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestAppIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4D5685F20A35C8A00ED291A /* TestAppIOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppIOSUITests.swift; sourceTree = "<group>"; };
 		E4D5686120A35C8A00ED291A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4D6996C20DF10A60049FEEA /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		E4D6996D20DF10A60049FEEA /* ERV-ENG.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ERV-ENG.db"; sourceTree = "<group>"; };
+		E4D6996F20DF10A60049FEEA /* BibleApp.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = BibleApp.js; sourceTree = "<group>"; };
+		E4D6997020DF10A60049FEEA /* Versions.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = Versions.db; sourceTree = "<group>"; };
+		E4D6997120DF10A60049FEEA /* WEB.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = WEB.db; sourceTree = "<group>"; };
+		E4D6997220DF10A60049FEEA /* KJVPD.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = KJVPD.db; sourceTree = "<group>"; };
+		E4D6997320DF35060049FEEA /* NavigationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationDelegate.swift; sourceTree = "<group>"; };
+		E4D6997520DF38420049FEEA /* BibleApp.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = BibleApp.js; path = TestAppIOS/www/js/BibleApp.js; sourceTree = "<group>"; };
+		E4D6997720DF49B70049FEEA /* FullBibleApp.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = FullBibleApp.js; path = TestAppIOS/www/js/FullBibleApp.js; sourceTree = "<group>"; };
 		E4FB082520A9243900A053A4 /* Utility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Utility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4FB082720A9315400A053A4 /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4FB082920A937C000A053A4 /* VideoPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -151,6 +162,9 @@
 		E4D5683320A35C8800ED291A = {
 			isa = PBXGroup;
 			children = (
+				E4D6997720DF49B70049FEEA /* FullBibleApp.js */,
+				E4D6997520DF38420049FEEA /* BibleApp.js */,
+				E4D6996B20DF10A60049FEEA /* www */,
 				E487FABA20AC8A1B001DCE7E /* UIPauseDNButton.png */,
 				E487FAB920AC8A1B001DCE7E /* UIPauseUPButton.png */,
 				E487FAB620AC8A1B001DCE7E /* UIPlayDNButton.png */,
@@ -196,6 +210,7 @@
 				E4D5684620A35C8A00ED291A /* Assets.xcassets */,
 				E4D5684820A35C8A00ED291A /* LaunchScreen.storyboard */,
 				E4D5684B20A35C8A00ED291A /* Info.plist */,
+				E4D6997320DF35060049FEEA /* NavigationDelegate.swift */,
 			);
 			path = TestAppIOS;
 			sourceTree = "<group>";
@@ -216,6 +231,28 @@
 				E4D5686120A35C8A00ED291A /* Info.plist */,
 			);
 			path = TestAppIOSUITests;
+			sourceTree = "<group>";
+		};
+		E4D6996B20DF10A60049FEEA /* www */ = {
+			isa = PBXGroup;
+			children = (
+				E4D6996C20DF10A60049FEEA /* index.html */,
+				E4D6996D20DF10A60049FEEA /* ERV-ENG.db */,
+				E4D6996E20DF10A60049FEEA /* js */,
+				E4D6997020DF10A60049FEEA /* Versions.db */,
+				E4D6997120DF10A60049FEEA /* WEB.db */,
+				E4D6997220DF10A60049FEEA /* KJVPD.db */,
+			);
+			name = www;
+			path = TestAppIOS/www;
+			sourceTree = "<group>";
+		};
+		E4D6996E20DF10A60049FEEA /* js */ = {
+			isa = PBXGroup;
+			children = (
+				E4D6996F20DF10A60049FEEA /* BibleApp.js */,
+			);
+			path = js;
 			sourceTree = "<group>";
 		};
 		E4FB082420A9243900A053A4 /* Frameworks */ = {
@@ -335,6 +372,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4D6997820DF49B80049FEEA /* FullBibleApp.js in Resources */,
+				E4D6997620DF38420049FEEA /* BibleApp.js in Resources */,
 				E487FABF20AC8A1C001DCE7E /* UIThumbUP.png in Resources */,
 				E487FAC020AC8A1C001DCE7E /* UIPlayDNButton.png in Resources */,
 				E487FAC120AC8A1C001DCE7E /* UIStopUPButton.png in Resources */,
@@ -349,7 +388,6 @@
 				E487FAB220AC8202001DCE7E /* KJVPD.db in Resources */,
 				E48D907220AB804800F59D5F /* ERV-ENG.db in Resources */,
 				E4A2ECF720A74022003BD00E /* Versions.db in Resources */,
-				E4A2ECF520A7400E003BD00E /* BibleApp.js in Resources */,
 				E4A2ECF320A73FF8003BD00E /* index.html in Resources */,
 				E439FE2420A3665C00CD37CB /* Main.storyboard in Resources */,
 				E4D5684A20A35C8A00ED291A /* LaunchScreen.storyboard in Resources */,
@@ -380,6 +418,7 @@
 			files = (
 				E4D5684220A35C8800ED291A /* ViewController.swift in Sources */,
 				E4C5D68820A4962F009DD340 /* JSMessageHandler.swift in Sources */,
+				E4D6997420DF35060049FEEA /* NavigationDelegate.swift in Sources */,
 				E4D5684020A35C8800ED291A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

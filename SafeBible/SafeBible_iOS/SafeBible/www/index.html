@@ -10,15 +10,17 @@
         <script type="text/javascript" src="js/aes.js"></script>
         <script type="text/javascript" src="js/BibleAppConfig.js"></script>
         <script type="text/javascript" src="js/BibleApp.js"></script>
-        <script type="text/javascript" src="js/NativeCall.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <!-- <script type="text/javascript" src="js/Credentials.js"></script> -->
+        <script type="text/javascript" src="js/CallNative.js"></script>
         <script type="text/javascript" src="licensed/greensock/TweenMax.js"></script>
         <script type="text/javascript" src="licensed/greensock/Draggable.js"></script>
         <script type="text/javascript" src="licensed/greensock/ThrowPropsPlugin.js"></script>
         <script type="text/javascript" src="licensed/greensock/TimelineLite.js"></script>
-        <script type="text/javascript" src="licensed/greensock/ScrollToPlugin.js"></script>      
-        <title>The Bible</title>
+        <script type="text/javascript" src="licensed/greensock/ScrollToPlugin.js"></script>
+        <script>
+            var initializer = new AppInitializer();
+            initializer.begin();
+        </script>
+        <title>SafeBible</title>
     </head>
     <body>
     </body>
