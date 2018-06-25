@@ -408,7 +408,8 @@ CodexView.prototype.showView = function(nodeId) {
 	var firstChapter = new Reference(nodeId);
 	var rowId = this.tableContents.rowId(firstChapter);
 	var that = this;
-	this.showChapters([rowId - CODEX_VIEW.BEFORE, rowId + CODEX_VIEW.AFTER], true, function(err) {
+	//this.showChapters([rowId - CODEX_VIEW.BEFORE, rowId + CODEX_VIEW.AFTER], true, function(err) {
+	this.showChapters([rowId], true, function(err) {
 		that.scrollTo(firstChapter.nodeId);
 		that.currentNodeId = "top" + firstChapter.nodeId;
 		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
@@ -472,56 +473,32 @@ CodexView.prototype.showView = function(nodeId) {
 };
 CodexView.prototype.showChapters = function(chapters, append, callback) {
 	var that = this;
-	this.chaptersAdapter.getChapters(chapters, function(results) {
-		if (results instanceof IOError) {
-			console.log((JSON.stringify(results)));
-			callback(results);
+	this.chaptersAdapter.getChapters(chapters, function(html) {
+		if (html instanceof IOError) {
+			console.log((JSON.stringify(html)));
+			callback(html);
 		} else {
-			for (var i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);
-				var reference = new Reference(row.reference);
-				var html = (reference.chapter > 0) ? row.html + that.copyrightView.copyrightNotice : row.html;
-				if (append) {
-					reference.append(that.viewport, html);
-				} else {
-					var scrollHeight1 = that.viewport.scrollHeight;
-					var scrollY1 = window.scrollY;
-					reference.prepend(that.viewport, html);
-					//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
-					TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
-				}
-				console.log('added chapter', reference.nodeId);
+			//for (var i=0; i<results.rows.length; i++) {
+			//var html = (reference.chapter > 0) ? row.html + that.copyrightView.copyrightNotice : row.html;
+			var startId = html.indexOf("id=") + 4;
+			var endId = html.indexOf("\"", startId + 1);
+			var nodeId = html.substring(startId, endId);
+			var reference = new Reference(nodeId);
+			if (append) {
+				reference.append(that.viewport, html);
+			} else {
+				var scrollHeight1 = that.viewport.scrollHeight;
+				var scrollY1 = window.scrollY;
+				reference.prepend(that.viewport, html);
+				//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
+				TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
 			}
+			console.log('added chapter', reference.nodeId);
+			//}
 			callback();
 		}
 	});
 };
-/**
-* This was written to incrementally eliminate chapters as chapters were added,
-* but tests showed that it is possible to have the entire Bible in one scroll
-* without a problem.  GNG 12/29/2015, ergo deprecated by setting MAX at 100000.
-*/
-/*
-CodexView.prototype.checkChapterQueueSize = function(whichEnd) {
-	if (this.viewport.children.length > CODEX_VIEW.MAX) {
-		switch(whichEnd) {
-			case 'top':
-				var scrollHeight = this.viewport.scrollHeight;
-				var discard = this.viewport.firstChild;
-				this.viewport.removeChild(discard);
-				window.scrollBy(0, this.viewport.scrollHeight - scrollHeight);
-				break;
-			case 'bottom':
-				discard = this.viewport.lastChild;
-				this.viewport.removeChild(discard);
-				break;
-			default:
-				console.log('unknown end ' + whichEnd + ' in CodexView.checkChapterQueueSize.');
-		}
-		console.log('discarded chapter ', discard.id.substr(3), 'at', whichEnd);
-	}
-};
-*/
 CodexView.prototype.scrollTo = function(nodeId) {
 	console.log('scrollTo', nodeId);
 	var verse = document.getElementById(nodeId);
@@ -2488,6 +2465,16 @@ DatabaseHelper.prototype.select = function(statement, values, callback) {
 		}
 	});
 };
+DatabaseHelper.prototype.selectHTML = function(statement, values, callback) {
+	//Utility.queryJS(this.dbname, statement, values, function(error, results) {
+	callNative('Sqlite', 'queryHTML', [this.dbname, statement, values], "ES", function(error, results) {
+		if (error) {
+			callback(new IOError(error));
+		} else {
+			callback(results);
+		}
+	});
+};
 DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
 	//Utility.executeJS(this.dbname, statement, values, function(error, rowCount) {
 	callNative('Sqlite', 'executeJS', [this.dbname, statement, values], "ES", function(error, rowCount) {
@@ -2601,13 +2588,13 @@ ChaptersAdapter.prototype.load = function(array, callback) {
 	});
 };
 ChaptersAdapter.prototype.getChapters = function(values, callback) {
-	var statement = 'select reference, html from chapters where';
+	var statement = 'select html, reference from chapters where';
 	if (values.length === 1) {
 		statement += ' rowid = ?';
 	} else {
 		statement += ' rowid >= ? and rowid <= ? order by rowid';
 	}
-	this.database.select(statement, values, function(results) {
+	this.database.selectHTML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
 			callback(results);

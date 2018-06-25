@@ -21,6 +21,16 @@ DatabaseHelper.prototype.select = function(statement, values, callback) {
 		}
 	});
 };
+DatabaseHelper.prototype.selectHTML = function(statement, values, callback) {
+	//Utility.queryJS(this.dbname, statement, values, function(error, results) {
+	callNative('Sqlite', 'queryHTML', [this.dbname, statement, values], "ES", function(error, results) {
+		if (error) {
+			callback(new IOError(error));
+		} else {
+			callback(results);
+		}
+	});
+};
 DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
 	//Utility.executeJS(this.dbname, statement, values, function(error, rowCount) {
 	callNative('Sqlite', 'executeJS', [this.dbname, statement, values], "ES", function(error, rowCount) {

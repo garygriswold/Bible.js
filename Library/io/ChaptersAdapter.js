@@ -44,13 +44,13 @@ ChaptersAdapter.prototype.load = function(array, callback) {
 	});
 };
 ChaptersAdapter.prototype.getChapters = function(values, callback) {
-	var statement = 'select reference, html from chapters where';
+	var statement = 'select html, reference from chapters where';
 	if (values.length === 1) {
 		statement += ' rowid = ?';
 	} else {
 		statement += ' rowid >= ? and rowid <= ? order by rowid';
 	}
-	this.database.select(statement, values, function(results) {
+	this.database.selectHTML(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('found Error', results);
 			callback(results);

@@ -127,6 +127,24 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
                 jsError(callbackId: callbackId, method: method, error: "must have three parameters", defaultVal: [])
             }
             
+        } else if method == "Sqlite.queryHTML" {
+            if parameters.count == 3 {
+                let dbname = parameters[0] as? String ?? "notString"
+                let statement = parameters[1] as? String ?? "notString"
+                let values = parameters[2] as? [Any] ?? []
+                do {
+                    let db = try Sqlite3.findDB(dbname: dbname)
+                    let result1: String = try db.queryHTML(sql: statement, values: values)
+                    let result2: String = result1.replacingOccurrences(of: "\r", with: "\\r")
+                    let result3: String = result2.replacingOccurrences(of: "\n", with: "\\n")
+                    jsSuccess(callbackId: callbackId, response: result3)
+                } catch let err {
+                    jsError(callbackId: callbackId, method: method, error: err.localizedDescription, defaultVal: [])
+                }
+            } else {
+                jsError(callbackId: callbackId, method: method, error: "must have three parameters", defaultVal: [])
+            }
+            
         } else if method == "Sqlite.executeJS" {
             if parameters.count == 3 {
                 let dbname = parameters[0] as? String ?? "notString"
@@ -322,8 +340,12 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
     }
     
     private func jsSuccess(callbackId: String, response: String?) {
-        let result: String = (response != nil) ? "'" + response! + "'" : "null"
-        jsCallback(callbackId: callbackId, json: false, error: nil, response: result)
+        if let result1 = response {
+            let result2 = "'" + result1.replacingOccurrences(of: "'", with: "\\'") + "'"
+            jsCallback(callbackId: callbackId, json: false, error: nil, response: result2)
+        } else {
+            jsCallback(callbackId: callbackId, json: false, error: nil, response: "null")
+        }
     }
     
     private func jsSuccess(callbackId: String, method: String, response: [Any?]) {
