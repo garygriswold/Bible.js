@@ -101,17 +101,17 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 			callback(html);
 		} else {
 			//for (var i=0; i<results.rows.length; i++) {
-			//var html = (reference.chapter > 0) ? row.html + that.copyrightView.copyrightNotice : row.html;
 			var startId = html.indexOf("id=") + 4;
 			var endId = html.indexOf("\"", startId + 1);
 			var nodeId = html.substring(startId, endId);
 			var reference = new Reference(nodeId);
+			var page = (reference.chapter > 0) ? html + that.copyrightView.copyrightNotice : html;
 			if (append) {
-				reference.append(that.viewport, html);
+				reference.append(that.viewport, page);
 			} else {
 				var scrollHeight1 = that.viewport.scrollHeight;
 				var scrollY1 = window.scrollY;
-				reference.prepend(that.viewport, html);
+				reference.prepend(that.viewport, page);
 				//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
 				TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
 			}

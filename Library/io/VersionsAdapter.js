@@ -91,7 +91,7 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
 	// temp modification to debug
-	var statement = 'SELECT v.versionCode, v.silCode, v.hasHistory, v.isQaActive, v.copyright, " " AS introduction,' +
+	var statement = 'SELECT v.versionCode, v.silCode, v.hasHistory, v.isQaActive, v.copyright,' +
 	//var statement = 'SELECT v.versionCode, v.silCode, v.hasHistory, v.isQaActive, v.copyright, v.introduction,' +
 		' l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr, o.ownerCode, o.localOwnerName, o.ownerURL, i.bibleVersion' +
 		' FROM Version v' +
@@ -109,6 +109,12 @@ VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callba
 		}
 	});
 };
+VersionsAdapter.prototype.selectIntroduction = function(versionCode, callback) {
+	var statement = 'SELECT introduction FROM Version WHERE versionCode = ?';
+	this.database.selectHTML(statement, [versionCode], function(results) {
+		callback(results);
+	});
+}
 VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
 	var statement = 'SELECT filename FROM DefaultVersion WHERE langCode = ?';
 	this.database.select(statement, [lang], function(results) {

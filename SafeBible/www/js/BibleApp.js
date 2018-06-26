@@ -484,12 +484,13 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 			var endId = html.indexOf("\"", startId + 1);
 			var nodeId = html.substring(startId, endId);
 			var reference = new Reference(nodeId);
+			var page = (reference.chapter > 0) ? html + that.copyrightView.copyrightNotice : html;
 			if (append) {
-				reference.append(that.viewport, html);
+				reference.append(that.viewport, page);
 			} else {
 				var scrollHeight1 = that.viewport.scrollHeight;
 				var scrollY1 = window.scrollY;
-				reference.prepend(that.viewport, html);
+				reference.prepend(that.viewport, page);
 				//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
 				TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
 			}
@@ -2466,7 +2467,6 @@ DatabaseHelper.prototype.select = function(statement, values, callback) {
 	});
 };
 DatabaseHelper.prototype.selectHTML = function(statement, values, callback) {
-	//Utility.queryJS(this.dbname, statement, values, function(error, results) {
 	callNative('Sqlite', 'queryHTML', [this.dbname, statement, values], "ES", function(error, results) {
 		if (error) {
 			callback(new IOError(error));
@@ -3126,7 +3126,7 @@ VersionsAdapter.prototype.selectVersions = function(countryCode, callback) {
 };
 VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callback) {
 	// temp modification to debug
-	var statement = 'SELECT v.versionCode, v.silCode, v.hasHistory, v.isQaActive, v.copyright, " " AS introduction,' +
+	var statement = 'SELECT v.versionCode, v.silCode, v.hasHistory, v.isQaActive, v.copyright,' +
 	//var statement = 'SELECT v.versionCode, v.silCode, v.hasHistory, v.isQaActive, v.copyright, v.introduction,' +
 		' l.localLanguageName, l.langCode, l.direction, v.localVersionName, v.versionAbbr, o.ownerCode, o.localOwnerName, o.ownerURL, i.bibleVersion' +
 		' FROM Version v' +
@@ -3144,6 +3144,12 @@ VersionsAdapter.prototype.selectVersionByFilename = function(versionFile, callba
 		}
 	});
 };
+VersionsAdapter.prototype.selectIntroduction = function(versionCode, callback) {
+	var statement = 'SELECT introduction FROM Version WHERE versionCode = ?';
+	this.database.selectHTML(statement, [versionCode], function(results) {
+		callback(results);
+	});
+}
 VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
 	var statement = 'SELECT filename FROM DefaultVersion WHERE langCode = ?';
 	this.database.select(statement, [lang], function(results) {
@@ -3565,7 +3571,6 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.ownerURL = 'www.eBible.org';
 			that.copyright = 'World English Bible (WEB), Public Domain, eBible.';
 			that.bibleVersion = null;
-			that.introduction = null;
 		} else {
 			that.code = row.versionCode;
 			that.filename = filename;
@@ -3582,9 +3587,15 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.ownerURL = row.ownerURL;
 			that.copyright = row.copyright;
 			that.bibleVersion = row.bibleVersion;
-			that.introduction = row.introduction;
 		}
-		callback();
+		versionsAdapter.selectIntroduction(that.code, function(result) {
+			if (result instanceof IOError) {
+				that.introduction = null;
+			} else {
+				that.introduction = result;
+			}
+			callback();
+		});
 	});
 };
 BibleVersion.prototype.hasAudioBook = function(bookId) {
@@ -4478,6 +4489,7 @@ VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCod
 	function returnVideoMap(languageId, silCode, results, callback) {
 		var videoMap = {};
 		for (var i=0; i<results.rows.length; i++) {
+			console.log("NUM VIDEOW", results.rows.length);
 			var row = results.rows.item(i);
 			var meta = new VideoMetaData();
 			meta.mediaSource = (row.mediaId.indexOf("KOG") > -1) ? "Rock" : "JFP";

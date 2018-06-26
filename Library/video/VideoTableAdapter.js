@@ -91,6 +91,7 @@ VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCod
 	function returnVideoMap(languageId, silCode, results, callback) {
 		var videoMap = {};
 		for (var i=0; i<results.rows.length; i++) {
+			console.log("NUM VIDEOW", results.rows.length);
 			var row = results.rows.item(i);
 			var meta = new VideoMetaData();
 			meta.mediaSource = (row.mediaId.indexOf("KOG") > -1) ? "Rock" : "JFP";

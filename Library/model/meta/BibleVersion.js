@@ -45,7 +45,6 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.ownerURL = 'www.eBible.org';
 			that.copyright = 'World English Bible (WEB), Public Domain, eBible.';
 			that.bibleVersion = null;
-			that.introduction = null;
 		} else {
 			that.code = row.versionCode;
 			that.filename = filename;
@@ -62,9 +61,15 @@ BibleVersion.prototype.fill = function(filename, callback) {
 			that.ownerURL = row.ownerURL;
 			that.copyright = row.copyright;
 			that.bibleVersion = row.bibleVersion;
-			that.introduction = row.introduction;
 		}
-		callback();
+		versionsAdapter.selectIntroduction(that.code, function(result) {
+			if (result instanceof IOError) {
+				that.introduction = null;
+			} else {
+				that.introduction = result;
+			}
+			callback();
+		});
 	});
 };
 BibleVersion.prototype.hasAudioBook = function(bookId) {
