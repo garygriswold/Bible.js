@@ -341,7 +341,7 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
     
     private func jsSuccess(callbackId: String, response: String?) {
         if let result1 = response {
-            let result2 = "'" + result1.replacingOccurrences(of: "'", with: "\\'") + "'"
+            let result2 = "\"" + result1.replacingOccurrences(of: "\"", with: "\\\"") + "\""
             jsCallback(callbackId: callbackId, json: false, error: nil, response: result2)
         } else {
             jsCallback(callbackId: callbackId, json: false, error: nil, response: "null")
@@ -350,10 +350,8 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
     
     private func jsSuccess(callbackId: String, method: String, response: [Any?]) {
         do {
-            let message: Data = try JSONSerialization.data(withJSONObject: response)
-            let result1 = String(data: message, encoding: String.Encoding.utf8)! // Can this fail?
-            let result2 = result1.replacingOccurrences(of: "'", with: "\\'", options: .literal)
-            jsCallback(callbackId: callbackId, json: true, error: nil, response: "'" + result2 + "'")
+            let message: String = try convertToJSON(response: response)
+            jsCallback(callbackId: callbackId, json: true, error: nil, response: "\"" + message + "\"")
         } catch let jsonErr {
             let error = logError(method: method, message: jsonErr.localizedDescription)
             jsCallback(callbackId: callbackId, json: false, error: error, response: "null")
@@ -386,18 +384,32 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
     
     private func jsError(callbackId: String, method: String, error: String, defaultVal: [Any?]) {
         do {
-            let message: Data = try JSONSerialization.data(withJSONObject: defaultVal)
-            let result1 = String(data: message, encoding: String.Encoding.utf8)! // Can this fail?
-            let result2 = result1.replacingOccurrences(of: "'", with: "\\'", options: .literal)
+            let message: String = try convertToJSON(response: defaultVal)
             let err = logError(method: method, message: error)
-            jsCallback(callbackId: callbackId, json: true, error: err, response: "'" + result2 + "'")
+            jsCallback(callbackId: callbackId, json: true, error: err, response: "'" + message + "'")
         } catch let jsonErr {
             let error = logError(method: method, message: jsonErr.localizedDescription)
             jsCallback(callbackId: callbackId, json: false, error: error, response: "null")
         }
     }
     
-    private func jsCallback(callbackId: String, json: Bool, error: String?, response: Any) {
+    /**
+     * This is a work in progress to know what conversions must be done to the string.
+     */
+    private func convertToJSON(response: [Any?]) throws -> String {
+        do {
+            let message: Data = try JSONSerialization.data(withJSONObject: response)
+            if let result1 = String(data: message, encoding: String.Encoding.utf8) {
+                let result2 = result1.replacingOccurrences(of: "\"", with: "\\\"", options: .literal)
+                let result3 = result2.replacingOccurrences(of: "\\\\\"", with: "\\\"", options: .literal)
+                return result3
+            } else {
+                return ""
+            }
+        }
+    }
+    
+    private func jsCallback(callbackId: String, json: Bool, error: String?, response: String) {
         let isJson: Int = (json) ? 1 : 0
         let err = (error != nil) ? "'" + error! + "'" : "null"
         let message = "handleNative('\(callbackId)', \(isJson), \(err), \(response));"

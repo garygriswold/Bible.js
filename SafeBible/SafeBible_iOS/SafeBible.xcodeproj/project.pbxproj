@@ -13,6 +13,16 @@
 		E4BC9CB820DD55C300E0E87F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4BC9CB720DD55C300E0E87F /* Assets.xcassets */; };
 		E4BC9CBB20DD55C300E0E87F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4BC9CB920DD55C300E0E87F /* LaunchScreen.storyboard */; };
 		E4D6997B20DF4FBC0049FEEA /* www in Resources */ = {isa = PBXBuildFile; fileRef = E4D6997A20DF4FBC0049FEEA /* www */; };
+		E4D8A10420E19BBF004534BF /* UIThumbUP.png in Resources */ = {isa = PBXBuildFile; fileRef = E4D8A0FA20E19BBD004534BF /* UIThumbUP.png */; };
+		E4D8A10520E19BBF004534BF /* UIPlayDNButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E4D8A0FB20E19BBE004534BF /* UIPlayDNButton.png */; };
+		E4D8A10620E19BBF004534BF /* UIStopUPButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E4D8A0FC20E19BBE004534BF /* UIStopUPButton.png */; };
+		E4D8A10720E19BBF004534BF /* UISliderMax.png in Resources */ = {isa = PBXBuildFile; fileRef = E4D8A0FD20E19BBE004534BF /* UISliderMax.png */; };
+		E4D8A10820E19BBF004534BF /* UIPauseUPButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E4D8A0FE20E19BBE004534BF /* UIPauseUPButton.png */; };
+		E4D8A10920E19BBF004534BF /* UIPauseDNButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E4D8A0FF20E19BBE004534BF /* UIPauseDNButton.png */; };
+		E4D8A10A20E19BBF004534BF /* UISliderMin.png in Resources */ = {isa = PBXBuildFile; fileRef = E4D8A10020E19BBE004534BF /* UISliderMin.png */; };
+		E4D8A10B20E19BBF004534BF /* UIPlayUPButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E4D8A10120E19BBE004534BF /* UIPlayUPButton.png */; };
+		E4D8A10C20E19BBF004534BF /* UIStopDNButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E4D8A10220E19BBE004534BF /* UIStopDNButton.png */; };
+		E4D8A10D20E19BBF004534BF /* UIThumbDN.png in Resources */ = {isa = PBXBuildFile; fileRef = E4D8A10320E19BBE004534BF /* UIThumbDN.png */; };
 		E4F1A82D20DD57900098023B /* JSMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F1A82C20DD57900098023B /* JSMessageHandler.swift */; };
 		E4F1A83520DD5C9B0098023B /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4F1A83420DD5C9B0098023B /* Utility.framework */; };
 		E4F1A83720DD5CA60098023B /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4F1A83620DD5CA60098023B /* AWS.framework */; };
@@ -45,6 +55,16 @@
 		E4BC9CBA20DD55C300E0E87F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E4BC9CBC20DD55C300E0E87F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4D6997A20DF4FBC0049FEEA /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
+		E4D8A0FA20E19BBD004534BF /* UIThumbUP.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIThumbUP.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIThumbUP.png; sourceTree = "<group>"; };
+		E4D8A0FB20E19BBE004534BF /* UIPlayDNButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIPlayDNButton.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIPlayDNButton.png; sourceTree = "<group>"; };
+		E4D8A0FC20E19BBE004534BF /* UIStopUPButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIStopUPButton.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIStopUPButton.png; sourceTree = "<group>"; };
+		E4D8A0FD20E19BBE004534BF /* UISliderMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UISliderMax.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UISliderMax.png; sourceTree = "<group>"; };
+		E4D8A0FE20E19BBE004534BF /* UIPauseUPButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIPauseUPButton.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIPauseUPButton.png; sourceTree = "<group>"; };
+		E4D8A0FF20E19BBE004534BF /* UIPauseDNButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIPauseDNButton.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIPauseDNButton.png; sourceTree = "<group>"; };
+		E4D8A10020E19BBE004534BF /* UISliderMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UISliderMin.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UISliderMin.png; sourceTree = "<group>"; };
+		E4D8A10120E19BBE004534BF /* UIPlayUPButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIPlayUPButton.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIPlayUPButton.png; sourceTree = "<group>"; };
+		E4D8A10220E19BBE004534BF /* UIStopDNButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIStopDNButton.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIStopDNButton.png; sourceTree = "<group>"; };
+		E4D8A10320E19BBE004534BF /* UIThumbDN.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIThumbDN.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIThumbDN.png; sourceTree = "<group>"; };
 		E4F1A82C20DD57900098023B /* JSMessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSMessageHandler.swift; sourceTree = "<group>"; };
 		E4F1A83420DD5C9B0098023B /* Utility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Utility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F1A83620DD5CA60098023B /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -72,6 +92,16 @@
 		E4BC9CA420DD55C100E0E87F = {
 			isa = PBXGroup;
 			children = (
+				E4D8A0FF20E19BBE004534BF /* UIPauseDNButton.png */,
+				E4D8A0FE20E19BBE004534BF /* UIPauseUPButton.png */,
+				E4D8A0FB20E19BBE004534BF /* UIPlayDNButton.png */,
+				E4D8A10120E19BBE004534BF /* UIPlayUPButton.png */,
+				E4D8A0FD20E19BBE004534BF /* UISliderMax.png */,
+				E4D8A10020E19BBE004534BF /* UISliderMin.png */,
+				E4D8A10220E19BBE004534BF /* UIStopDNButton.png */,
+				E4D8A0FC20E19BBE004534BF /* UIStopUPButton.png */,
+				E4D8A10320E19BBE004534BF /* UIThumbDN.png */,
+				E4D8A0FA20E19BBD004534BF /* UIThumbUP.png */,
 				E4F1A84420DD5EBB0098023B /* AWSCore.framework */,
 				E4BC9CAF20DD55C100E0E87F /* SafeBible */,
 				E4BC9CAE20DD55C100E0E87F /* Products */,
@@ -172,6 +202,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4D8A10420E19BBF004534BF /* UIThumbUP.png in Resources */,
+				E4D8A10520E19BBF004534BF /* UIPlayDNButton.png in Resources */,
+				E4D8A10620E19BBF004534BF /* UIStopUPButton.png in Resources */,
+				E4D8A10720E19BBF004534BF /* UISliderMax.png in Resources */,
+				E4D8A10820E19BBF004534BF /* UIPauseUPButton.png in Resources */,
+				E4D8A10920E19BBF004534BF /* UIPauseDNButton.png in Resources */,
+				E4D8A10A20E19BBF004534BF /* UISliderMin.png in Resources */,
+				E4D8A10B20E19BBF004534BF /* UIPlayUPButton.png in Resources */,
+				E4D8A10C20E19BBF004534BF /* UIStopDNButton.png in Resources */,
+				E4D8A10D20E19BBF004534BF /* UIThumbDN.png in Resources */,
 				E4D6997B20DF4FBC0049FEEA /* www in Resources */,
 				E4BC9CBB20DD55C300E0E87F /* LaunchScreen.storyboard in Resources */,
 				E4BC9CB820DD55C300E0E87F /* Assets.xcassets in Resources */,
