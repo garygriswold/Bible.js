@@ -140,7 +140,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	
 	function selectVersionHandler(event) {
 		var filename = this.getAttribute('data-id').substr(3);
-		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: filename }}));
+		document.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: filename }}));
 	}
 	function downloadVersionHandler(event) {
 		this.removeEventListener('click', downloadVersionHandler);
@@ -158,7 +158,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 				} else {
 					iconNode.setAttribute('src', INSTALLED_VERS);
 					iconNode.addEventListener('click',  selectVersionHandler);
-					document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
+					document.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
 				}
 			});
 		});

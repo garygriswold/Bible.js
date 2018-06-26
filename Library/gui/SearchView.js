@@ -198,7 +198,7 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText, 
 	entryNode.addEventListener('click', function(event) {
 		var nodeId = this.id.substr(3);
 		console.log('open chapter', nodeId);
-		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
+		document.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
 	});
 
 	function styleSearchWords(verseText, refList) {

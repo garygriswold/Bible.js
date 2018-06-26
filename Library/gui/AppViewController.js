@@ -27,7 +27,7 @@ function bibleShowNoteClick(nodeId) {
 	event.stopImmediatePropagation();
 	var node = document.getElementById(nodeId);
 	if (node) {
-		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: node }}));
+		document.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: node }}));
 		node.setAttribute('onclick', "bibleHideNoteClick('" + nodeId + "');");
 	}
 }
@@ -36,7 +36,7 @@ function bibleHideNoteClick(nodeId) {
 	event.stopImmediatePropagation();
 	var node = document.getElementById(nodeId);
 	if (node) {
-		document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: node }}));
+		document.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: node }}));
 		node.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	}
 }
@@ -124,10 +124,10 @@ AppViewController.prototype.begin = function(develop) {
 		document.documentElement.style.webkitTouchCallout = 'none';
         document.documentElement.style.webkitUserSelect = 'none';
 
-		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
+		document.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);
 		});
-		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
+		document.addEventListener(BIBLE.HIDE_NOTE, function(event) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
 		that.touch.on("panright", function(event) {

@@ -3,7 +3,7 @@
 * and when a info btn is clicked it display more detail.
 * and when the play button is clicked, it starts the video.
 */
-"use strict";
+
 function VideoListView(version, videoAdapter) {
 	this.videoIdList = [ 'KOG_OT', 'KOG_NT', '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
 	this.version = version;
@@ -111,7 +111,7 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 		var videoUrl = this.getAttribute('mediaURL');
 		
         console.log("\n\BEFORE VideoPlayer " + videoId + " : " + videoUrl);
-        document.body.dispatchEvent(new CustomEvent(BIBLE.STOP_AUDIO));
+        document.dispatchEvent(new CustomEvent(BIBLE.STOP_AUDIO));
 		var parameters = [mediaSource, videoId, languageId, silCode, videoUrl];
 		callNative('VideoPlayer', 'showVideo', parameters, "E", function(error) {
 			if (error) {

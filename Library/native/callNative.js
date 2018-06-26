@@ -17,7 +17,7 @@ function callNative(plugin, method, parameters, rtnType, handler) {
 }
 
 function handleNative(callbackId, isJson, error, results) {
-	console.logOne(results);
+	//console.logOne(results);
 	var callObj = pluginCallMap[callbackId];
 	if (callObj) {
 		delete pluginCallMap[callbackId];

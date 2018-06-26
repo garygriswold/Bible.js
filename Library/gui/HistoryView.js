@@ -92,7 +92,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 					btn.addEventListener('click', function(event) {
 						console.log('btn clicked', this.id);
 						var nodeId = this.id.substr(3);
-						document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
+						document.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 						that.hideView();
 					});
 				}

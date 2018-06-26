@@ -34,7 +34,7 @@ CodexView.prototype.showView = function(nodeId) {
 	this.showChapters([rowId], true, function(err) {
 		that.scrollTo(firstChapter.nodeId);
 		that.currentNodeId = "top" + firstChapter.nodeId;
-		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
+		document.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do
 	});
 	function onScrollHandler(event) {
@@ -44,7 +44,7 @@ CodexView.prototype.showView = function(nodeId) {
 			if (currNode.middle !== that.currentNodeId) {
 				that.currentNodeId = currNode.middle;
 				var currRef = new Reference(currNode.middle.substr(3));
-				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: currRef }}));
+				document.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: currRef }}));
 			}
 			var lastChildId = that.viewport.lastChild.id;
 			var firstChild = that.viewport.firstChild;

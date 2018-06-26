@@ -24,10 +24,7 @@ AppInitializer.prototype.begin = function() {
 		console.log('START APP UPDATER');
 		appUpdater.doUpdate(function() {
 			console.log('DONE APP UPDATER');
-			var versionsAdapter = new VersionsAdapter();
-			//AWS.initializeRegion(function(done) {
-			//	console.log('AWS Initialized ' + done);
-			//});			
+			var versionsAdapter = new VersionsAdapter();			
 		    settingStorage.getCurrentVersion(function(versionFilename) {
 			    if (versionFilename) {
 				    // Process with User's Version
@@ -65,7 +62,7 @@ AppInitializer.prototype.begin = function() {
 		});
 	});
     
-    document.body.addEventListener(BIBLE.CHG_VERSION, function(event) {
+    document.addEventListener(BIBLE.CHG_VERSION, function(event) {
 		changeVersionHandler(event.detail.version);
 	});
 		
@@ -116,29 +113,29 @@ AppInitializer.prototype.begin = function() {
 		callNative('AudioPlayer', 'isPlaying', [], "S", function(playing) {
 			console.log("INSIDE IS PLAYING: " + playing);
 			if (playing === "F") {
-				document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
+				document.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
 			}
 		});
 	}
 	function startAudioHandler(event) {
-		document.body.removeEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
-		document.body.addEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
-		document.body.addEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
+		document.removeEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
+		document.addEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
+		document.addEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
 		var ref = new Reference(event.detail.id);
 		//window.AudioPlayer.present(ref.book, ref.chapter,
 		callNative('AudioPlayer', 'present', [ref.book, ref.chapter], "N",
 			function() {
 				console.log("SUCCESSFUL EXIT FROM AudioPlayer");
-				document.body.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
-				document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
-				document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
+				document.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
+				document.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
+				document.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
 			}
 		);	
 	}
 	function stopAudioHandler(event) {
-		document.body.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
-		document.body.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
-		document.body.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
+		document.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
+		document.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
+		document.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
 		//window.AudioPlayer.stop(function() {
 		callNative('AudioPlayer', 'stop', [], "E", function(error) {
 			console.log("SUCCESSFUL STOP OF AudioPlayer");			
@@ -174,20 +171,20 @@ AppInitializer.prototype.begin = function() {
 		enableHandlersExcept(BIBLE.SHOW_SETTINGS);
 	}	
 	function disableHandlers() {
-		document.body.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);
-		document.body.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
-		document.body.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
-		document.body.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
-		document.body.removeEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
-		document.body.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
+		document.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);
+		document.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+		document.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+		document.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		document.removeEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
+		document.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
 	function enableHandlersExcept(name) {
-		if (name !== BIBLE.SHOW_TOC) document.body.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
-		if (name !== BIBLE.SHOW_SEARCH) document.body.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
-		if (name !== BIBLE.SHOW_PASSAGE) document.body.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
-		if (name !== BIBLE.SHOW_QUESTIONS) document.body.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
-		if (name !== BIBLE.SHOW_VIDEO) document.body.addEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
-		if (name !== BIBLE.SHOW_SETTINGS) document.body.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
+		if (name !== BIBLE.SHOW_TOC) document.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
+		if (name !== BIBLE.SHOW_SEARCH) document.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
+		if (name !== BIBLE.SHOW_PASSAGE) document.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
+		if (name !== BIBLE.SHOW_QUESTIONS) document.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
+		if (name !== BIBLE.SHOW_VIDEO) document.addEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
+		if (name !== BIBLE.SHOW_SETTINGS) document.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
 };/**
 * BibleApp is a global object that contains pointers to all of the key elements of
@@ -218,7 +215,7 @@ function bibleShowNoteClick(nodeId) {
 	event.stopImmediatePropagation();
 	var node = document.getElementById(nodeId);
 	if (node) {
-		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: node }}));
+		document.dispatchEvent(new CustomEvent(BIBLE.SHOW_NOTE, { detail: { id: node }}));
 		node.setAttribute('onclick', "bibleHideNoteClick('" + nodeId + "');");
 	}
 }
@@ -227,7 +224,7 @@ function bibleHideNoteClick(nodeId) {
 	event.stopImmediatePropagation();
 	var node = document.getElementById(nodeId);
 	if (node) {
-		document.body.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: node }}));
+		document.dispatchEvent(new CustomEvent(BIBLE.HIDE_NOTE, { detail: { id: node }}));
 		node.setAttribute('onclick', "bibleShowNoteClick('" + nodeId + "');");
 	}
 }
@@ -315,10 +312,10 @@ AppViewController.prototype.begin = function(develop) {
 		document.documentElement.style.webkitTouchCallout = 'none';
         document.documentElement.style.webkitUserSelect = 'none';
 
-		document.body.addEventListener(BIBLE.SHOW_NOTE, function(event) {
+		document.addEventListener(BIBLE.SHOW_NOTE, function(event) {
 			that.codexView.showFootnote(event.detail.id);
 		});
-		document.body.addEventListener(BIBLE.HIDE_NOTE, function(event) {
+		document.addEventListener(BIBLE.HIDE_NOTE, function(event) {
 			that.codexView.hideFootnote(event.detail.id);
 		});
 		that.touch.on("panright", function(event) {
@@ -412,7 +409,7 @@ CodexView.prototype.showView = function(nodeId) {
 	this.showChapters([rowId], true, function(err) {
 		that.scrollTo(firstChapter.nodeId);
 		that.currentNodeId = "top" + firstChapter.nodeId;
-		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
+		document.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: firstChapter }}));
 		that.checkScrollID = window.setTimeout(onScrollHandler, CODEX_VIEW.SCROLL_TIMEOUT);	// should be last thing to do
 	});
 	function onScrollHandler(event) {
@@ -422,7 +419,7 @@ CodexView.prototype.showView = function(nodeId) {
 			if (currNode.middle !== that.currentNodeId) {
 				that.currentNodeId = currNode.middle;
 				var currRef = new Reference(currNode.middle.substr(3));
-				document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: currRef }}));
+				document.dispatchEvent(new CustomEvent(BIBLE.CHG_HEADING, { detail: { reference: currRef }}));
 			}
 			var lastChildId = that.viewport.lastChild.id;
 			var firstChild = that.viewport.firstChild;
@@ -724,7 +721,7 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 					btn.addEventListener('click', function(event) {
 						console.log('btn clicked', this.id);
 						var nodeId = this.id.substr(3);
-						document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
+						document.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 						that.hideView();
 					});
 				}
@@ -1088,7 +1085,7 @@ SearchView.prototype.appendReference = function(bookNode, reference, verseText, 
 	entryNode.addEventListener('click', function(event) {
 		var nodeId = this.id.substr(3);
 		console.log('open chapter', nodeId);
-		document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
+		document.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId, source: that.query }}));
 	});
 
 	function styleSearchWords(verseText, refList) {
@@ -1209,13 +1206,13 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	this.labelCell.id = 'labelCell';
 	this.audioNode = null;
 	this.audioForBook = false;
-	document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
+	document.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	Object.seal(this);
 	var that = this;
 	
 	function drawTitleHandler(event) {
 		if (that.titleGraphics == null) return;
-		document.body.removeEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
+		document.removeEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
 		that.currentReference = event.detail.reference;
 		
@@ -1243,7 +1240,7 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 				}
 			}
 		}
-		document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
+		document.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	}
 	function roundedRect(ctx, x, y, width, height, radius) {
 	  ctx.beginPath();
@@ -1299,7 +1296,7 @@ HeaderView.prototype.showView = function() {
 		that.titleCanvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
 			if (that.currentReference && event.offsetX > that.titleStartX && event.offsetX < (that.titleStartX + that.titleWidth)) {
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference.nodeId }}));
+				document.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference.nodeId }}));
 			}
 		});
 	}
@@ -1316,7 +1313,7 @@ HeaderView.prototype.showView = function() {
 		parent.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
 			console.log('clicked', parentCell);
-			document.body.dispatchEvent(new CustomEvent(eventType, { detail: { id: that.currentReference.nodeId }}));
+			document.dispatchEvent(new CustomEvent(eventType, { detail: { id: that.currentReference.nodeId }}));
 		});
 		return(canvas.width);
 	}
@@ -1394,7 +1391,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 					cell.addEventListener('click', function(event) {
 						var nodeId = this.id.substring(3);
 						console.log('open chapter', nodeId);
-						document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
+						document.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 					});
 				}
 			}
@@ -1408,7 +1405,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 		} else {
 			var nodeId = book.code + ':0';
 			console.log('open chapter', nodeId);
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
+			document.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 		}
 	}
 	
@@ -1757,7 +1754,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	
 	function selectVersionHandler(event) {
 		var filename = this.getAttribute('data-id').substr(3);
-		document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: filename }}));
+		document.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: filename }}));
 	}
 	function downloadVersionHandler(event) {
 		this.removeEventListener('click', downloadVersionHandler);
@@ -1775,7 +1772,7 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 				} else {
 					iconNode.setAttribute('src', INSTALLED_VERS);
 					iconNode.addEventListener('click',  selectVersionHandler);
-					document.body.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
+					document.dispatchEvent(new CustomEvent(BIBLE.CHG_VERSION, { detail: { version: versionFile }}));
 				}
 			});
 		});
@@ -3148,7 +3145,7 @@ VersionsAdapter.prototype.selectIntroduction = function(versionCode, callback) {
 	this.database.selectHTML(statement, [versionCode], function(results) {
 		callback(results);
 	});
-}
+};
 VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
 	var statement = 'SELECT filename FROM DefaultVersion WHERE langCode = ?';
 	this.database.select(statement, [lang], function(results) {
@@ -4227,7 +4224,7 @@ DynamicCSS.prototype.setDirection = function(direction) {
 * and when a info btn is clicked it display more detail.
 * and when the play button is clicked, it starts the video.
 */
-"use strict";
+
 function VideoListView(version, videoAdapter) {
 	this.videoIdList = [ 'KOG_OT', 'KOG_NT', '1_jf-0-0', '1_wl-0-0', '1_cl-0-0' ];
 	this.version = version;
@@ -4335,7 +4332,7 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 		var videoUrl = this.getAttribute('mediaURL');
 		
         console.log("\n\BEFORE VideoPlayer " + videoId + " : " + videoUrl);
-        document.body.dispatchEvent(new CustomEvent(BIBLE.STOP_AUDIO));
+        document.dispatchEvent(new CustomEvent(BIBLE.STOP_AUDIO));
 		var parameters = [mediaSource, videoId, languageId, silCode, videoUrl];
 		callNative('VideoPlayer', 'showVideo', parameters, "E", function(error) {
 			if (error) {
@@ -4364,7 +4361,6 @@ VideoListView.prototype.addNode = function(parent, type, clas, content, id) {
 };
 
 
-"use strict";
 function VideoMetaData() {
 	this.mediaSource = null;
 	this.languageId = null;
@@ -4406,7 +4402,6 @@ VideoMetaData.prototype.toJSON = function() {
 * and uses it to access Jesus Film Meta Data, and parses out data that is 
 * needed for processing.
 */
-"use strict";
 
 function VideoTableAdapter() {
 	this.database = new DatabaseHelper('Versions.db', true);
@@ -4423,7 +4418,7 @@ VideoTableAdapter.prototype.hasVideos = function(langCode, langPrefCode, callbac
 			console.log('SQL Error in VideoTableAdapter.hasVideos', results);
 			callback(0);
 		} else {
-			callback(results.rows.item(0).count)
+			callback(results.rows.item(0).count);
 		}
 	});
 };
@@ -4494,7 +4489,6 @@ VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCod
 	function returnVideoMap(languageId, silCode, results, callback) {
 		var videoMap = {};
 		for (var i=0; i<results.rows.length; i++) {
-			console.log("NUM VIDEO", results.rows.length);
 			var row = results.rows.item(i);
 			var meta = new VideoMetaData();
 			meta.mediaSource = (row.mediaId.indexOf("KOG") > -1) ? "Rock" : "JFP";

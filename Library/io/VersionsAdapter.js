@@ -114,7 +114,7 @@ VersionsAdapter.prototype.selectIntroduction = function(versionCode, callback) {
 	this.database.selectHTML(statement, [versionCode], function(results) {
 		callback(results);
 	});
-}
+};
 VersionsAdapter.prototype.defaultVersion = function(lang, callback) {
 	var statement = 'SELECT filename FROM DefaultVersion WHERE langCode = ?';
 	this.database.select(statement, [lang], function(results) {

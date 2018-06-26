@@ -42,13 +42,13 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 	this.labelCell.id = 'labelCell';
 	this.audioNode = null;
 	this.audioForBook = false;
-	document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
+	document.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	Object.seal(this);
 	var that = this;
 	
 	function drawTitleHandler(event) {
 		if (that.titleGraphics == null) return;
-		document.body.removeEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
+		document.removeEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 		console.log('caught set title event', JSON.stringify(event.detail.reference.nodeId));
 		that.currentReference = event.detail.reference;
 		
@@ -76,7 +76,7 @@ function HeaderView(tableContents, version, localizeNumber, videoAdapter) {
 				}
 			}
 		}
-		document.body.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
+		document.addEventListener(BIBLE.CHG_HEADING, drawTitleHandler);
 	}
 	function roundedRect(ctx, x, y, width, height, radius) {
 	  ctx.beginPath();
@@ -132,7 +132,7 @@ HeaderView.prototype.showView = function() {
 		that.titleCanvas.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
 			if (that.currentReference && event.offsetX > that.titleStartX && event.offsetX < (that.titleStartX + that.titleWidth)) {
-				document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference.nodeId }}));
+				document.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: that.currentReference.nodeId }}));
 			}
 		});
 	}
@@ -149,7 +149,7 @@ HeaderView.prototype.showView = function() {
 		parent.addEventListener('click', function(event) {
 			event.stopImmediatePropagation();
 			console.log('clicked', parentCell);
-			document.body.dispatchEvent(new CustomEvent(eventType, { detail: { id: that.currentReference.nodeId }}));
+			document.dispatchEvent(new CustomEvent(eventType, { detail: { id: that.currentReference.nodeId }}));
 		});
 		return(canvas.width);
 	}

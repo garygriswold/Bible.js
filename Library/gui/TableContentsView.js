@@ -71,7 +71,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 					cell.addEventListener('click', function(event) {
 						var nodeId = this.id.substring(3);
 						console.log('open chapter', nodeId);
-						document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
+						document.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 					});
 				}
 			}
@@ -85,7 +85,7 @@ TableContentsView.prototype.showTocChapterList = function(bookCode) {
 		} else {
 			var nodeId = book.code + ':0';
 			console.log('open chapter', nodeId);
-			document.body.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
+			document.dispatchEvent(new CustomEvent(BIBLE.SHOW_PASSAGE, { detail: { id: nodeId }}));
 		}
 	}
 	

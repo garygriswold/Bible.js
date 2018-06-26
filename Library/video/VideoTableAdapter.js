@@ -4,7 +4,6 @@
 * and uses it to access Jesus Film Meta Data, and parses out data that is 
 * needed for processing.
 */
-"use strict";
 
 function VideoTableAdapter() {
 	this.database = new DatabaseHelper('Versions.db', true);
@@ -21,7 +20,7 @@ VideoTableAdapter.prototype.hasVideos = function(langCode, langPrefCode, callbac
 			console.log('SQL Error in VideoTableAdapter.hasVideos', results);
 			callback(0);
 		} else {
-			callback(results.rows.item(0).count)
+			callback(results.rows.item(0).count);
 		}
 	});
 };
