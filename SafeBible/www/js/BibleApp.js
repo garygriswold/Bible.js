@@ -479,7 +479,6 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 			callback(html);
 		} else {
 			//for (var i=0; i<results.rows.length; i++) {
-			//var html = (reference.chapter > 0) ? row.html + that.copyrightView.copyrightNotice : row.html;
 			var startId = html.indexOf("id=") + 4;
 			var endId = html.indexOf("\"", startId + 1);
 			var nodeId = html.substring(startId, endId);
@@ -4301,16 +4300,26 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 
 	this.addNode(div, 'p', 'videoListDur', videoItem.duration());
 	
-	if (videoItem.longDescription) {
+	if (videoItem.hasDescription == 1) {
 		info.addEventListener('click', buildVideoDescription);
-		var desc = this.addNode(div, 'p', 'videoListDesc', videoItem.longDescription);
-		desc.setAttribute('hidden', 'hidden');
 	} else {
 		info.setAttribute('style', 'opacity: 0');
 	}
 	
 	function buildVideoDescription(event) {
-		var descNode = this.nextSibling.nextSibling;
+		if (videoItem.longDescription == null) {
+			that.videoAdapter.selectDescription(videoItem.languageId, videoItem.silCode, videoItem.mediaId, function(results) {
+				videoItem.longDescription = results;
+				var desc = that.addNode(div, 'p', 'videoListDesc', videoItem.longDescription);
+				desc.setAttribute('hidden', 'hidden');
+				displayVideoDescription(desc);
+			});
+		} else {
+			displayVideoDescription(this.nextSibling.nextSibling);
+		}
+	}
+	
+	function displayVideoDescription(descNode) {
 		if (descNode.hasAttribute('hidden')) {
 			descNode.removeAttribute('hidden');
 		} else {
@@ -4327,14 +4336,8 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 		
         console.log("\n\BEFORE VideoPlayer " + videoId + " : " + videoUrl);
         document.body.dispatchEvent(new CustomEvent(BIBLE.STOP_AUDIO));
-		//window.VideoPlayer.showVideo(mediaSource, videoId, languageId, silCode, videoUrl,
 		var parameters = [mediaSource, videoId, languageId, silCode, videoUrl];
 		callNative('VideoPlayer', 'showVideo', parameters, "E", function(error) {
-		//function() {
-		//	console.log("SUCCESS FROM VideoPlayer " + videoUrl);
-		//},
-		//function(error) {
-		//	console.log("ERROR FROM VideoPlayer " + error);
 			if (error) {
 				console.log("ERROR FROM VideoPlayer " + error);
 			} else {
@@ -4369,7 +4372,8 @@ function VideoMetaData() {
 	this.langCode = null;
 	this.mediaId = null;
 	this.title = null;
-	this.shortDescription = null;
+	//this.shortDescription = null;
+	this.hasDescription = null;
 	this.longDescription = null;
 	this.lengthInMilliseconds = null;
 	this.imageHighRes = null;
@@ -4390,7 +4394,7 @@ VideoMetaData.prototype.toJSON = function() {
 			', langCode: ' + this.langCode +
 			', mediaId: ' + this.mediaId + 
 			', title: ' + this.title +
-			', shortDescription: ' + this.shortDescription +
+			', hasDescription: ' + this.hasDescription +
 			', longDescription: ' + this.longDescription +
 			', lengthInMilliseconds: ' + this.lengthInMilliseconds +
 			', imageHighRes: ' + this.imageHighRes +
@@ -4453,7 +4457,8 @@ VideoTableAdapter.prototype.selectJesusFilmLanguage = function(countryCode, silC
 */
 VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCode, langPrefCode, callback) {
 	var that = this;
-	var selectList = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL, longDescription FROM Video';
+	var selectList = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL,' +
+		' (longDescription is not NULL) AS hasDescription FROM Video';
 	var statement = selectList + ' WHERE languageId IN (?,?)';
 	this.database.select(statement, [ languageId, silCode ], function(results) {
 		if (results instanceof IOError) {
@@ -4489,7 +4494,7 @@ VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCod
 	function returnVideoMap(languageId, silCode, results, callback) {
 		var videoMap = {};
 		for (var i=0; i<results.rows.length; i++) {
-			console.log("NUM VIDEOW", results.rows.length);
+			console.log("NUM VIDEO", results.rows.length);
 			var row = results.rows.item(i);
 			var meta = new VideoMetaData();
 			meta.mediaSource = (row.mediaId.indexOf("KOG") > -1) ? "Rock" : "JFP";
@@ -4499,11 +4504,22 @@ VideoTableAdapter.prototype.selectVideos = function(languageId, silCode, langCod
 			meta.mediaId = row.mediaId;
 			meta.title = row.title;
 			meta.lengthInMilliseconds = row.lengthMS;
-			meta.longDescription = row.longDescription;
+			meta.hasDescription = row.hasDescription;
 			meta.mediaURL = row.HLS_URL;
 			videoMap[row.mediaId] = meta;
 		}
         callback(videoMap);		
 	}
+};
+VideoTableAdapter.prototype.selectDescription = function(languageId, silCode, mediaId, callback) {
+	var that = this;
+	var statement = "SELECT longDescription FROM Video WHERE (languageId = ? OR silCode = ?) AND mediaID = ?";
+	this.database.selectHTML(statement, [languageId, silCode, mediaId], function(results) {
+		if (results instanceof IOError) {
+			callback("");
+		} else {
+			callback(results);
+		}
+	});
 };
 

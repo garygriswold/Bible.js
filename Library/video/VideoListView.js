@@ -76,16 +76,26 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 
 	this.addNode(div, 'p', 'videoListDur', videoItem.duration());
 	
-	if (videoItem.longDescription) {
+	if (videoItem.hasDescription == 1) {
 		info.addEventListener('click', buildVideoDescription);
-		var desc = this.addNode(div, 'p', 'videoListDesc', videoItem.longDescription);
-		desc.setAttribute('hidden', 'hidden');
 	} else {
 		info.setAttribute('style', 'opacity: 0');
 	}
 	
 	function buildVideoDescription(event) {
-		var descNode = this.nextSibling.nextSibling;
+		if (videoItem.longDescription == null) {
+			that.videoAdapter.selectDescription(videoItem.languageId, videoItem.silCode, videoItem.mediaId, function(results) {
+				videoItem.longDescription = results;
+				var desc = that.addNode(div, 'p', 'videoListDesc', videoItem.longDescription);
+				desc.setAttribute('hidden', 'hidden');
+				displayVideoDescription(desc);
+			});
+		} else {
+			displayVideoDescription(this.nextSibling.nextSibling);
+		}
+	}
+	
+	function displayVideoDescription(descNode) {
 		if (descNode.hasAttribute('hidden')) {
 			descNode.removeAttribute('hidden');
 		} else {
@@ -102,14 +112,8 @@ VideoListView.prototype.showVideoItem = function(videoItem) {
 		
         console.log("\n\BEFORE VideoPlayer " + videoId + " : " + videoUrl);
         document.body.dispatchEvent(new CustomEvent(BIBLE.STOP_AUDIO));
-		//window.VideoPlayer.showVideo(mediaSource, videoId, languageId, silCode, videoUrl,
 		var parameters = [mediaSource, videoId, languageId, silCode, videoUrl];
 		callNative('VideoPlayer', 'showVideo', parameters, "E", function(error) {
-		//function() {
-		//	console.log("SUCCESS FROM VideoPlayer " + videoUrl);
-		//},
-		//function(error) {
-		//	console.log("ERROR FROM VideoPlayer " + error);
 			if (error) {
 				console.log("ERROR FROM VideoPlayer " + error);
 			} else {

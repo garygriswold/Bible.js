@@ -9,7 +9,8 @@ function VideoMetaData() {
 	this.langCode = null;
 	this.mediaId = null;
 	this.title = null;
-	this.shortDescription = null;
+	//this.shortDescription = null;
+	this.hasDescription = null;
 	this.longDescription = null;
 	this.lengthInMilliseconds = null;
 	this.imageHighRes = null;
@@ -30,7 +31,7 @@ VideoMetaData.prototype.toJSON = function() {
 			', langCode: ' + this.langCode +
 			', mediaId: ' + this.mediaId + 
 			', title: ' + this.title +
-			', shortDescription: ' + this.shortDescription +
+			', hasDescription: ' + this.hasDescription +
 			', longDescription: ' + this.longDescription +
 			', lengthInMilliseconds: ' + this.lengthInMilliseconds +
 			', imageHighRes: ' + this.imageHighRes +
