@@ -30,7 +30,9 @@ RateMeView.prototype._buildView = function() {
 				window.open("https://play.google.com/store/apps/details?id=" + that.appIdAndroid, '_blank', 'location=yes');
 			    break;
 			case 'ios':
-			    window.open("itms-apps://itunes.apple.com/app/id" + that.appIdIos, '_blank', 'location=yes');
+			    callNative('Utility', 'rateApp', [], 'N', function() {
+				    console.log("RATE ME COMPLETE");
+			    });
 			    break;
 			case 'node':
 				window.open("https://play.google.com/store/apps/details?id=" + that.appIdAndroid, '_system');

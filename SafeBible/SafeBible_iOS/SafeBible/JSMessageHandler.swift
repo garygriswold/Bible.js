@@ -10,6 +10,7 @@
 import Foundation
 import UIKit
 import WebKit
+import StoreKit
 import Utility
 import AWS
 import AudioPlayer
@@ -90,6 +91,13 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
             let hidden = self.controller.webview.endEditing(true)
             jsSuccess(callbackId: callbackId, response: hidden)
             
+        } else if method == "Utility.rateApp" {
+            let version = Float(UIDevice.current.systemVersion) ?? 0.0
+            if version >= 10.3 {
+                SKStoreReviewController.requestReview()
+            }
+            jsSuccess(callbackId: callbackId)
+        
         } else {
             jsError(callbackId: callbackId, method: method, error: "unknown method")
         }
