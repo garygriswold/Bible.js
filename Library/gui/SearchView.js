@@ -82,12 +82,9 @@ SearchView.prototype.showSearchField = function() {
 	var that = this;
 	inputField.addEventListener('keyup', function(event) {
 		if (event.keyCode === 13) {
-			//if (typeof(cordova) !== 'undefined') {
-			//Utility.hideKeyboard(function(hidden) {
 			callNative('Utility', 'hideKeyboard', [], "S", function(hidden) {
 				console.log("Keyboard did hide " + hidden);
 			});
-			//}
 			that.startSearch(this.value.trim());
 		}
 	});

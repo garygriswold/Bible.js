@@ -108,8 +108,6 @@ AppInitializer.prototype.begin = function() {
 		}, 5); 
 	}
 	function enableAudioPlayer() {
-		console.log("INSIDE ENABLE AUDIO PLAYER");
-		//window.AudioPlayer.isPlaying(function(playing) {
 		callNative('AudioPlayer', 'isPlaying', [], "S", function(playing) {
 			console.log("INSIDE IS PLAYING: " + playing);
 			if (playing === "F") {
@@ -122,7 +120,6 @@ AppInitializer.prototype.begin = function() {
 		document.addEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 		document.addEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
 		var ref = new Reference(event.detail.id);
-		//window.AudioPlayer.present(ref.book, ref.chapter,
 		callNative('AudioPlayer', 'present', [ref.book, ref.chapter], "N",
 			function() {
 				console.log("SUCCESSFUL EXIT FROM AudioPlayer");
@@ -136,7 +133,6 @@ AppInitializer.prototype.begin = function() {
 		document.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 		document.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
 		document.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
-		//window.AudioPlayer.stop(function() {
 		callNative('AudioPlayer', 'stop', [], "E", function(error) {
 			console.log("SUCCESSFUL STOP OF AudioPlayer");			
 		});		
@@ -969,12 +965,9 @@ SearchView.prototype.showSearchField = function() {
 	var that = this;
 	inputField.addEventListener('keyup', function(event) {
 		if (event.keyCode === 13) {
-			//if (typeof(cordova) !== 'undefined') {
-			//Utility.hideKeyboard(function(hidden) {
 			callNative('Utility', 'hideKeyboard', [], "S", function(hidden) {
 				console.log("Keyboard did hide " + hidden);
 			});
-			//}
 			that.startSearch(this.value.trim());
 		}
 	});
@@ -1269,7 +1262,6 @@ HeaderView.prototype.showView = function() {
 	var settWidth = setupIconImgButton('settingsCell', 'img/SettingsIcon128.png', that.hite, BIBLE.SHOW_SETTINGS);
 	var avalWidth = (window.innerWidth * 0.88) - (menuWidth + serhWidth + audioWidth + videoWidth + settWidth);
 	
-	//window.AudioPlayer.findAudioVersion(that.version.code, that.version.silCode, function(bookIdList) {
 	callNative('AudioPlayer', 'findAudioVersion', [that.version.code, that.version.silCode], "S", function(bookIdList) {
 		console.log("VERSION: " + that.version.code + "  SIL: " + that.version.silCode + "  BOOKLIST: " + bookIdList);
 		that.version.audioBookIdList = bookIdList;
@@ -2447,7 +2439,6 @@ SettingStorage.prototype.bulkReplaceInstalledVersions = function(versions, callb
 */
 function DatabaseHelper(dbname, isCopyDatabase) {
 	this.dbname = dbname;
-	//Utility.openDatabase(dbname, isCopyDatabase, function(error) {
 	callNative('Sqlite', 'openDB', [dbname, isCopyDatabase], "E", function(error) {
 		// The error has already been reported in JS glue layer
 		// All subsequent access to database will fail, because it is not open.
@@ -2455,7 +2446,6 @@ function DatabaseHelper(dbname, isCopyDatabase) {
 	Object.seal(this);
 }
 DatabaseHelper.prototype.select = function(statement, values, callback) {
-	//Utility.queryJS(this.dbname, statement, values, function(error, results) {
 	callNative('Sqlite', 'queryJS', [this.dbname, statement, values], "ES", function(error, results) {
 		if (error) {
 			callback(new IOError(error));
@@ -2474,7 +2464,6 @@ DatabaseHelper.prototype.selectHTML = function(statement, values, callback) {
 	});
 };
 DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
-	//Utility.executeJS(this.dbname, statement, values, function(error, rowCount) {
 	callNative('Sqlite', 'executeJS', [this.dbname, statement, values], "ES", function(error, rowCount) {
 		if (error) {
 			callback(new IOError(error));
@@ -2484,7 +2473,6 @@ DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
 	});
 };
 DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
-	//Utility.bulkExecuteJS(this.dbname, statement, array, function(error, rowCount) {
 	callNative('Sqlite', 'bulkExecuteJS', [this.dbname, statement, array], "ES", function(error, rowCount) {
 		if (error) {
 			callback(new IOError(error));
@@ -2494,7 +2482,6 @@ DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
 	});
 };
 DatabaseHelper.prototype.executeDDL = function(statement, callback) {
-	//Utility.executeJS(this.dbname, statement, [], function(error, rowCount) {
 	callNative('Sqlite', 'executeJS', [this.dbname, statement, []], "ES", function(error, rowCount) {
 		if (error) {
 			callback(new IOError(error));
@@ -2504,7 +2491,6 @@ DatabaseHelper.prototype.executeDDL = function(statement, callback) {
 	});
 };
 DatabaseHelper.prototype.close = function() {
-	//Utility.closeDatabase(this.dbname, function(error) {
 	callNative('Sqlite', 'closeDB', [this.dbname], "E", function(error) {
 		// The error has already been logged in the JS glue layer
 	});
@@ -3400,7 +3386,6 @@ AppUpdater.prototype.doUpdate = function(callback) {
 	}
 	
 	function getStorageFiles(callback) {
-		//Utility.listDB(function(files) {
 		callNative('Sqlite', 'listDB', [], "S", function(files) { 
 			callback(files);
 		});
@@ -3455,7 +3440,6 @@ AppUpdater.prototype.doUpdate = function(callback) {
 	
 	function removeFile(file, callback) {
 		console.log("REMOVE DB ", file);
-		//Utility.deleteDB(file, function(error) {
 		callNative('Sqlite', 'deleteDB', [file], "E", function(error) {
 			callback();
 		});
@@ -3502,7 +3486,6 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 	var s3Bucket = "shortsands-oldregion";
 	var s3Key = bibleVersion + ".zip";
 	var filePath = this.finalPath + bibleVersion;
-	//AWS.downloadZipFile(s3Bucket, s3Key, filePath, function(error) {
 	callNative('AWS', 'downloadZipFile', ["SS", s3Bucket, s3Key, filePath], "E", function(error) {
 		if (error == null) console.log("Download Success");
 		else console.log("Download Failed");

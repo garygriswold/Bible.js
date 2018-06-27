@@ -107,8 +107,6 @@ AppInitializer.prototype.begin = function() {
 		}, 5); 
 	}
 	function enableAudioPlayer() {
-		console.log("INSIDE ENABLE AUDIO PLAYER");
-		//window.AudioPlayer.isPlaying(function(playing) {
 		callNative('AudioPlayer', 'isPlaying', [], "S", function(playing) {
 			console.log("INSIDE IS PLAYING: " + playing);
 			if (playing === "F") {
@@ -121,7 +119,6 @@ AppInitializer.prototype.begin = function() {
 		document.addEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 		document.addEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
 		var ref = new Reference(event.detail.id);
-		//window.AudioPlayer.present(ref.book, ref.chapter,
 		callNative('AudioPlayer', 'present', [ref.book, ref.chapter], "N",
 			function() {
 				console.log("SUCCESSFUL EXIT FROM AudioPlayer");
@@ -135,7 +132,6 @@ AppInitializer.prototype.begin = function() {
 		document.removeEventListener(BIBLE.STOP_AUDIO, stopAudioHandler);
 		document.removeEventListener(BIBLE.SCROLL_TEXT, animateScrollToHandler);
 		document.addEventListener(BIBLE.SHOW_AUDIO, startAudioHandler);
-		//window.AudioPlayer.stop(function() {
 		callNative('AudioPlayer', 'stop', [], "E", function(error) {
 			console.log("SUCCESSFUL STOP OF AudioPlayer");			
 		});		
