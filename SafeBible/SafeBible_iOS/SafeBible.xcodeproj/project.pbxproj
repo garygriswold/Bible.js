@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E42009BF20E42EDC0084C1A9 /* VideoPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4F1A83A20DD5CB50098023B /* VideoPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E42009C020E42EE50084C1A9 /* AudioPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4F1A83820DD5CAE0098023B /* AudioPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E42009C120E42F100084C1A9 /* AWS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4F1A83620DD5CA60098023B /* AWS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E42009C220E42F190084C1A9 /* Utility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4F1A83420DD5C9B0098023B /* Utility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4BC9CB120DD55C100E0E87F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BC9CB020DD55C100E0E87F /* AppDelegate.swift */; };
 		E4BC9CB320DD55C100E0E87F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BC9CB220DD55C100E0E87F /* ViewController.swift */; };
 		E4BC9CB620DD55C100E0E87F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4BC9CB420DD55C100E0E87F /* Main.storyboard */; };
@@ -26,7 +30,7 @@
 		E4F1A83520DD5C9B0098023B /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4F1A83420DD5C9B0098023B /* Utility.framework */; };
 		E4F1A83720DD5CA60098023B /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4F1A83620DD5CA60098023B /* AWS.framework */; };
 		E4F1A83920DD5CAE0098023B /* AudioPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4F1A83820DD5CAE0098023B /* AudioPlayer.framework */; };
-		E4F1A83B20DD5CB50098023B /* VideoPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4F1A83A20DD5CB50098023B /* VideoPlayer.framework */; };
+		E4F1A83B20DD5CB50098023B /* VideoPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4F1A83A20DD5CB50098023B /* VideoPlayer.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		E4F1A84520DD5EBB0098023B /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4F1A84420DD5EBB0098023B /* AWSCore.framework */; };
 		E4F1A84620DD5EBB0098023B /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4F1A84420DD5EBB0098023B /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -38,6 +42,10 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				E42009C220E42F190084C1A9 /* Utility.framework in Embed Frameworks */,
+				E42009C120E42F100084C1A9 /* AWS.framework in Embed Frameworks */,
+				E42009C020E42EE50084C1A9 /* AudioPlayer.framework in Embed Frameworks */,
+				E42009BF20E42EDC0084C1A9 /* VideoPlayer.framework in Embed Frameworks */,
 				E4F1A84620DD5EBB0098023B /* AWSCore.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
