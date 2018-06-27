@@ -231,8 +231,8 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
                     jsError(callbackId: callbackId, method: method, error: "Region must be SS, DBP, or TEST")
                 }
                 if let awsS3 = s3 {
-                    awsS3.downloadZipFile(s3Bucket: s3Bucket, s3Key: s3Key, filePath: fileURL, view: nil,
-                                          complete: { err in
+                    awsS3.downloadZipFile(s3Bucket: s3Bucket, s3Key: s3Key, filePath: fileURL,
+                                          view: controller.webview, complete: { err in
                                             if let err1 = err {
                                                 self.jsError(callbackId: callbackId, method: method, error: err1.localizedDescription)
                                             } else {
