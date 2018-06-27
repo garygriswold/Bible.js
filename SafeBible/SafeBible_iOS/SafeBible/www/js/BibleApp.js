@@ -2483,7 +2483,7 @@ DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
 };
 DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
 	//Utility.bulkExecuteJS(this.dbname, statement, array, function(error, rowCount) {
-	callNative('Sqlite', 'bulkExecuteJS', [this.dbname, statement, values], "ES", function(error, rowCount) {
+	callNative('Sqlite', 'bulkExecuteJS', [this.dbname, statement, array], "ES", function(error, rowCount) {
 		if (error) {
 			callback(new IOError(error));
 		} else {
@@ -3320,39 +3320,37 @@ function AppUpdater(settingStorage) {
 }
 AppUpdater.prototype.doUpdate = function(callback) {
 	var that = this;
-	if (typeof(cordova) !== 'undefined') {
-		checkIfInstall(function(isInstall) {
-			console.log('Check if Install', isInstall);
-			if (isInstall) {
-				createTables(function() {
-					var database = new VersionsAdapter();
-					database.selectInstalledBibleVersions(function(bibleVersionList) {
-						that.settingStorage.bulkReplaceInstalledVersions(bibleVersionList, function() {
-							updateVersion();
-							//dumpSettingsDB(function() {
-								callback();
-							//});
-						});
+	checkIfInstall(function(isInstall) {
+		console.log('Check if Install', isInstall);
+		if (isInstall) {
+			createTables(function() {
+				var database = new VersionsAdapter();
+				database.selectInstalledBibleVersions(function(bibleVersionList) {
+					that.settingStorage.bulkReplaceInstalledVersions(bibleVersionList, function() {
+						updateVersion();
+						//dumpSettingsDB(function() {
+							callback();
+						//});
 					});
 				});
-			} else {
-				checkIfUpdate(function(isUpdate) {
-					console.log('Check if Update', isUpdate);
-					if (isUpdate) {
-						getStorageFiles(function(files) {
-							console.log("DATABASE FILES: " + files);
-							removeFile('Versions.db', function() {
-								var database = new VersionsAdapter();
-								database.selectAllBibleVersions(function(bibleVersionMap) {
-									identifyObsolete(bibleVersionMap, function(wwwObsolete, downloadedObsolete) {
-										removeWwwObsoleteFiles(wwwObsolete, function() {
-											database.selectInstalledBibleVersions(function(bibleVersionList) {
-												that.settingStorage.bulkReplaceInstalledVersions(bibleVersionList, function() {
-													updateInstalled(downloadedObsolete, function() {
-														dumpSettingsDB(function() {
-															callback();
-														});							
-													});
+			});
+		} else {
+			checkIfUpdate(function(isUpdate) {
+				console.log('Check if Update', isUpdate);
+				if (isUpdate) {
+					getStorageFiles(function(files) {
+						console.log("DATABASE FILES: " + files);
+						removeFile('Versions.db', function() {
+							var database = new VersionsAdapter();
+							database.selectAllBibleVersions(function(bibleVersionMap) {
+								identifyObsolete(bibleVersionMap, function(wwwObsolete, downloadedObsolete) {
+									removeWwwObsoleteFiles(wwwObsolete, function() {
+										database.selectInstalledBibleVersions(function(bibleVersionList) {
+											that.settingStorage.bulkReplaceInstalledVersions(bibleVersionList, function() {
+												updateInstalled(downloadedObsolete, function() {
+													dumpSettingsDB(function() {
+														callback();
+													});							
 												});
 											});
 										});
@@ -3360,23 +3358,13 @@ AppUpdater.prototype.doUpdate = function(callback) {
 								});
 							});
 						});
-					} else {
-						callback();
-					}	
-				});
-			}
-		});
-	} else {
-		checkIfInstall(function(isInstall) {
-			if (isInstall) {
-				createTables(function() {
+					});
+				} else {
 					callback();
-				});
-			} else {
-				callback();
-			}			
-		});
-	}
+				}	
+			});
+		}
+	});
 	
 	function checkIfInstall(callback) {
 		var doFullInstall = false;

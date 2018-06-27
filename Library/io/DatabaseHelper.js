@@ -42,7 +42,7 @@ DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
 };
 DatabaseHelper.prototype.bulkExecuteDML = function(statement, array, callback) {
 	//Utility.bulkExecuteJS(this.dbname, statement, array, function(error, rowCount) {
-	callNative('Sqlite', 'bulkExecuteJS', [this.dbname, statement, values], "ES", function(error, rowCount) {
+	callNative('Sqlite', 'bulkExecuteJS', [this.dbname, statement, array], "ES", function(error, rowCount) {
 		if (error) {
 			callback(new IOError(error));
 		} else {

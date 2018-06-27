@@ -32,7 +32,8 @@ function handleNative(callbackId, isJson, error, results) {
 		} else if (rtnType === "S") {
 			if (isJson > 0) {
 				try {
-					handler(JSON.parse(results));
+					var obj = JSON.parse(results);
+					handler(obj);
 				} catch(err) {
 					console.log("ERROR JSON.parse ", err.message);
 					handler(results);
@@ -43,8 +44,9 @@ function handleNative(callbackId, isJson, error, results) {
 		} else {
 			if (isJson > 0) {
 				try {
-					console.log("JSON.parse");
-					handler(error, JSON.parse(results));
+					//console.log("JSON.parse", results);
+					var obj = JSON.parse(results);
+					handler(error, obj);
 				} catch(err) {
 					console.log("ERROR JSON.parse ", err.message);
 					handler(error, results);
