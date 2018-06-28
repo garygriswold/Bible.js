@@ -382,6 +382,8 @@ public class Sqlite3 {
                 sqlite3_bind_int(statement, col, Int32(value as! Int))
             } else if value is Double {
                 sqlite3_bind_double(statement, col, (value as! Double))
+            } else if value is NSNull {
+                sqlite3_bind_null(statement, col)
             } else if value == nil {
                 sqlite3_bind_null(statement, col)
             } else {
