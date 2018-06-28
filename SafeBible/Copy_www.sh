@@ -3,7 +3,7 @@
 export IOS_DIR=SafeBible_iOS/SafeBible/www
 #export AND_DIR=SafeBible_Android/app/src/main/assets/www
 
-node ../Library/util/BibleAppConfigWriter.js www/js/BibleAppConfig.js
+##node ../Library/util/BibleAppConfigWriter.js www/js/BibleAppConfig.js DEPRECATED
 cp www/js/BibleAppConfig.js $IOS_DIR/js/BibleAppConfig.js
 #cp www/js/BibleAppConfig.js $AND_DIR/js/BibleAppConfig.js
 
