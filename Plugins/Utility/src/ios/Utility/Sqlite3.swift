@@ -22,6 +22,7 @@ public enum Sqlite3Error: Error {
     case databaseColBindError(value: Any)
     case statementPrepareFailed(sql: String, sqliteError: String)
     case statementExecuteFailed(sql: String, sqliteError: String)
+    case columnTypeUnknown(column: String, sqliteType: String)
 }
 
 public class Sqlite3 {
@@ -240,24 +241,6 @@ public class Sqlite3 {
             throw Sqlite3Error.databaseNotFound(name: "unknown")
         }
     }
- 
-    /**
-     * This one is written to conform to the query interface of the cordova sqlite plugin.  It returns
-     * a JSON array that can be serialized and sent back to Javascript.  It supports both String and Int
-     * results, because that is what are used in the current databases.
-     */
-    public func queryJS(sql: String, values: [Any?]) throws -> Data {
-        let results: [Dictionary<String,Any?>] = try self.queryV0(sql: sql, values: values)
-        var message: Data
-        do {
-            message = try JSONSerialization.data(withJSONObject: results)
-        } catch let jsonError {
-            print("ERROR while converting resultSet to JSON \(jsonError)")
-            let errorMessage = "{\"Error\": \"Sqlite3.queryJS \(jsonError.localizedDescription)\"}"
-            message = errorMessage.data(using: String.Encoding.utf8)!
-        }
-        return message
-    }
     
     /**
      * This returns a classic sql result set as an array of dictionaries.  It is probably not a good choice
@@ -350,7 +333,7 @@ public class Sqlite3 {
     * HTML rows that should be displayed consequtively, so that concatentation of the rows returns
     * a correct result.
     */
-    public func queryHTML(sql: String, values: [Any?]) throws -> String {
+    public func queryHTMLv0(sql: String, values: [Any?]) throws -> String {
         if database != nil {
             var resultSet: String = ""
             var statement: OpaquePointer? = nil
@@ -372,6 +355,110 @@ public class Sqlite3 {
             throw Sqlite3Error.databaseNotFound(name: "unknown")
         }
     }
+    
+    /**
+    * This query method returns its result in a proprietary format named SSIF (Short Sands Interchange Format),
+    * or, Super Simple Interchange Format.  It is intended to provide the same capabilities as JSON for data
+    * interchange without the process of first creating objects that must be serialized, and then desearialized
+    * when received in JS.
+    *
+    * The format is for records that have the same number of fields in each record,
+    * and each field has the same type in each record.
+    * The Field delimiter is |
+    * The Record delimiter is ~
+    * There is no Field delimiter before the first field or after the last field in a record
+    * e.g. ~ abc | def | ghi ~, because this will enable efficient splitting using JS string.split
+    * There is no Record delimiter at the beginning and end of the data
+    * Before adding any String to SSIF, any | and ~ character must be escaped using HTML entities.
+    * These are ~ becomes &#126; and | becomes &#124;
+    * Note, that \| and |~ are not used, because this would prevent the use of a simple string.split in JS
+    * The first row always contains the field name for each field.
+    * The second row always contains the type for each field. The types are S, I, D, B, R
+    * These types are (String, Integer, Double, Boolean, Raw (which is sqlite Blob)
+    * Strings are not quoted with either single or double quotes, because their type defines them as strings.
+    * On the Javascript side it is expected that these would be converted using
+    * parseInt(v), parseFloat(v), (v === 'true'), strings are not converted, and I am not sure how to handle blob.
+    * When the string data that is returned is going to be displayed in an HTML view, there is no need to
+    * unescape the HTML entity, the webview will do that.
+    * Null is represented by the string null, not by a zero length string.  Unfortunately, this means that we
+    * cannot distinguish between a null in the database and the string "null" in the database, but this might be
+    * a good thing.
+    *
+    * When this data is received on the JS side, it could be processed by a function that knows what it is expecting,
+    * for type and field and skips the first two rows.  This would be the more efficient thing to do.
+    * However, it is also possible for a generic SSIF.parse method to return an array of objects.
+    * Consider JS classes ResultSet and ResultItem.  The ResultSet constructor would split the data into rows
+    * using the ~ delimiter, and it would split the first two rows (field names and field types) using the |
+    * delimiter.  The split rows would also be passed into a ResultItem constructor.  The ResultItem class has a
+    * property length, that will return the number of rows split, less the names and type row.  It also has an items(i)
+    * method that returns a zero relative data row.  When called on a row, it splits the row into fields and
+    * creates an object with the correct field names, and with data correctly typed, using parseInt(v), parseFloat(v)
+    * and (v === 'true').
+    */
+    public func querySSIFv0(sql: String, values: [Any?]) throws -> String {
+        if database != nil {
+            var resultSet = [String]()
+            var statement: OpaquePointer? = nil
+            let prepareOut = sqlite3_prepare_v2(database, sql, -1, &statement, nil)
+            defer { sqlite3_finalize(statement) }
+            if prepareOut == SQLITE_OK {
+                try self.bindStatement(statement: statement!, values: values)
+                let colCount = Int(sqlite3_column_count(statement))
+                var names = [String](repeating: "", count: colCount)
+                var types = [String](repeating: "S", count: colCount)
+                for i in 0..<colCount {
+                    let col = Int32(i)
+                    names[i] = String(cString: sqlite3_column_name(statement, col))
+                    let type: String = String(cString: sqlite3_column_decltype(statement, col))
+                    switch type.lowercased() {
+                    case "int":
+                        types[i] = "I"
+                        break
+                    case "real":
+                        types[i] = "D"
+                        break
+                    case "text":
+                        types[i] = "S"
+                        break
+                    case "blob":
+                        types[i] = "R"
+                        break
+                    default:
+                        throw Sqlite3Error.columnTypeUnknown(column: names[i], sqliteType: type)
+                    }
+                }
+                resultSet.append(names.joined(separator: "|"))
+                resultSet.append(types.joined(separator: "|"))
+                
+                let characterset = CharacterSet(charactersIn: "|~\n\r")
+                while (sqlite3_step(statement) == SQLITE_ROW) {
+                    var row = [String](repeating: "", count: colCount)
+                    for i in 0..<colCount {
+                        let col = Int32(i)
+                        if let cValue = sqlite3_column_text(statement, col) {
+                            row[i] = String(cString: cValue)
+                            if types[i] == "S" && row[i].rangeOfCharacter(from: characterset) != nil {
+                                let str2 = row[i].replacingOccurrences(of: "|", with: "&#124")
+                                let str3 = str2.replacingOccurrences(of: "~", with: "&#126")
+                                let str4 = str3.replacingOccurrences(of: "\r", with: "\\r")
+                                row[i] = str4.replacingOccurrences(of: "\n", with: "\\n")
+                            }
+                        } else {
+                            row[i] = "null"
+                        }
+                    }
+                    resultSet.append(row.joined(separator: "|"))
+                }
+                return resultSet.joined(separator: "~")
+            } else {
+                let prepareMsg = String.init(cString: sqlite3_errmsg(database))
+                throw Sqlite3Error.statementPrepareFailed(sql: sql, sqliteError: prepareMsg)
+            }
+        } else {
+            throw Sqlite3Error.databaseNotFound(name: "unknown")
+        }
+    }
+    
     private func bindStatement(statement: OpaquePointer, values: [Any?]) throws {
         for i in 0..<values.count {
             let col = Int32(i + 1)
@@ -413,11 +500,13 @@ public class Sqlite3 {
                 return "StatementPrepareFailed: \(sqliteError)  on stmt: \(sql)"
             case Sqlite3Error.statementExecuteFailed(let sql, let sqliteError) :
                 return "StatementExecuteFailed: \(sqliteError)  on stmt: \(sql)"
+            case Sqlite3Error.columnTypeUnknown(let column, let sqliteType) :
+                return "ColumnTypeUnknown: col \(column) type \(sqliteType)"
             default:
                 return "Unknown Sqlite3Error"
             }
         } else {
-            return "Unknown Error Type"
+            return error.localizedDescription
         }
     }
 }

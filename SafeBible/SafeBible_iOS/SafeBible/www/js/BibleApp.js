@@ -999,10 +999,10 @@ SearchView.prototype.showSearch = function(query) {
 				} else {
 					var priorBook = null;
 					var bookNode = null;
-					for (var i=0; i<results.rows.length; i++) {
-						var row = results.rows.item(i);
-						var nodeId = row.reference;
-						var verseText = row.html;
+					for (var i=2; i<results.length; i++) {
+						var row = results[i].split("|");
+						var nodeId = row[0];
+						var verseText = row[1];
 						var reference = new Reference(nodeId);
 						var bookCode = reference.book;
 						if (bookCode !== priorBook) {
@@ -1130,10 +1130,10 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 			if (results instanceof IOError) {
 				// display some error graphic?
 			} else {
-				for (var i=3; i<results.rows.length; i++) {
-					var row = results.rows.item(i);
-					var nodeId = row.reference;
-					var verseText = row.html;
+				for (var i=5; i<results.length; i++) { // skip 2 meta data rows and first 3 results
+					var row = results[i].split("|");
+					var nodeId = row[0];
+					var verseText = row[1];
 					var reference = new Reference(nodeId);
 					that.appendReference(bookNode, reference, verseText, selectMap[nodeId]);
 				}
@@ -2463,6 +2463,15 @@ DatabaseHelper.prototype.selectHTML = function(statement, values, callback) {
 		}
 	});
 };
+DatabaseHelper.prototype.selectSSIF = function(statement, values, callback) {
+	callNative('Sqlite', 'querySSIF', [this.dbname, statement, values], "ES", function(error, results) {
+		if (error) {
+			callback(new IOError(error));
+		} else {
+			callback(results.split("~"));
+		}
+	});
+};
 DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
 	callNative('Sqlite', 'executeJS', [this.dbname, statement, values], "ES", function(error, rowCount) {
 		if (error) {
@@ -2638,14 +2647,16 @@ VersesAdapter.prototype.getVerses = function(values, callback) {
 		array[i] = '?';
 	}
 	var statement = 'select reference, html from verses where reference in (' + array.join(',') + ') order by rowid';
-	this.database.select(statement, values, function(results) {
+	this.database.selectSSIF(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('VersesAdapter select found Error', results);
 			callback(results);
-		} else if (results.rows.length === 0) {
-			callback(new IOError({code: 0, message: 'No Rows Found'}));// Is this really an error?
 		} else {
-			callback(results);
+			if (results.length < 3) {
+				callback(new IOError({code: 0, message: 'No Rows Found'}));// Is this really an error?
+			} else {
+				callback(results);
+        	}
         }
 	});
 };/**

@@ -49,14 +49,16 @@ VersesAdapter.prototype.getVerses = function(values, callback) {
 		array[i] = '?';
 	}
 	var statement = 'select reference, html from verses where reference in (' + array.join(',') + ') order by rowid';
-	this.database.select(statement, values, function(results) {
+	this.database.selectSSIF(statement, values, function(results) {
 		if (results instanceof IOError) {
 			console.log('VersesAdapter select found Error', results);
 			callback(results);
-		} else if (results.rows.length === 0) {
-			callback(new IOError({code: 0, message: 'No Rows Found'}));// Is this really an error?
 		} else {
-			callback(results);
+			if (results.length < 3) {
+				callback(new IOError({code: 0, message: 'No Rows Found'}));// Is this really an error?
+			} else {
+				callback(results);
+        	}
         }
 	});
 };

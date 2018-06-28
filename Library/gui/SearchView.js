@@ -116,10 +116,10 @@ SearchView.prototype.showSearch = function(query) {
 				} else {
 					var priorBook = null;
 					var bookNode = null;
-					for (var i=0; i<results.rows.length; i++) {
-						var row = results.rows.item(i);
-						var nodeId = row.reference;
-						var verseText = row.html;
+					for (var i=2; i<results.length; i++) {
+						var row = results[i].split("|");
+						var nodeId = row[0];
+						var verseText = row[1];
 						var reference = new Reference(nodeId);
 						var bookCode = reference.book;
 						if (bookCode !== priorBook) {
@@ -247,10 +247,10 @@ SearchView.prototype.appendSeeMore = function(bookNode, bookCode) {
 			if (results instanceof IOError) {
 				// display some error graphic?
 			} else {
-				for (var i=3; i<results.rows.length; i++) {
-					var row = results.rows.item(i);
-					var nodeId = row.reference;
-					var verseText = row.html;
+				for (var i=5; i<results.length; i++) { // skip 2 meta data rows and first 3 results
+					var row = results[i].split("|");
+					var nodeId = row[0];
+					var verseText = row[1];
 					var reference = new Reference(nodeId);
 					that.appendReference(bookNode, reference, verseText, selectMap[nodeId]);
 				}

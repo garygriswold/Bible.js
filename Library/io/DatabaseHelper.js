@@ -28,6 +28,15 @@ DatabaseHelper.prototype.selectHTML = function(statement, values, callback) {
 		}
 	});
 };
+DatabaseHelper.prototype.selectSSIF = function(statement, values, callback) {
+	callNative('Sqlite', 'querySSIF', [this.dbname, statement, values], "ES", function(error, results) {
+		if (error) {
+			callback(new IOError(error));
+		} else {
+			callback(results.split("~"));
+		}
+	});
+};
 DatabaseHelper.prototype.executeDML = function(statement, values, callback) {
 	callNative('Sqlite', 'executeJS', [this.dbname, statement, values], "ES", function(error, rowCount) {
 		if (error) {

@@ -22,7 +22,7 @@ class Sqlite3Test: XCTestCase {
         super.tearDown()
     }
     
-    func testCreateNonExistantDB() {
+    func NOtestCreateNonExistantDB() {
         let db = Sqlite3()
         do {
             try db.open(dbname: "NonExistant.db", copyIfAbsent: false)
@@ -32,7 +32,7 @@ class Sqlite3Test: XCTestCase {
         }
     }
     
-    func testNonExistantWithCopy() {
+    func NOtestNonExistantWithCopy() {
         let db = Sqlite3()
         do {
             try db.open(dbname: "AnotherNonExistant.db", copyIfAbsent: true)
@@ -47,7 +47,7 @@ class Sqlite3Test: XCTestCase {
     /**
     * This is succeeding, but I really wanted it to fail, because it is not a DB."
     */
-    func testNonDBInBundle() {
+    func NOtestNonDBInBundle() {
         let db = Sqlite3()
         do {
             try db.open(dbname: "Reference.swift", copyIfAbsent: true)
@@ -59,7 +59,7 @@ class Sqlite3Test: XCTestCase {
         }
     }
     
-    func testValidDBInBundle() {
+    func NOtestValidDBInBundle() {
         let db = Sqlite3()
         do {
             try db.open(dbname: "Versions.db", copyIfAbsent: true)
@@ -70,7 +70,7 @@ class Sqlite3Test: XCTestCase {
         }
     }
     
-    func testInvalidSelect() {
+    func NOtestInvalidSelect() {
         let db = Sqlite3()
         do {
             try db.open(dbname: "Versions.db", copyIfAbsent: true)
@@ -85,7 +85,7 @@ class Sqlite3Test: XCTestCase {
         }
     }
     
-    func testValidSelectNoRows() {
+    func NOtestValidSelectNoRows() {
         let db = Sqlite3()
         do {
             try db.open(dbname: "Versions.db", copyIfAbsent: true)
@@ -98,7 +98,7 @@ class Sqlite3Test: XCTestCase {
         }
     }
     
-    func testValidSelectRows() {
+    func NOtestValidSelectRows() {
         let db = Sqlite3()
         do {
             try db.open(dbname: "Versions.db", copyIfAbsent: true)
@@ -126,7 +126,7 @@ class Sqlite3Test: XCTestCase {
         }
     }
     
-    func NOtestValidCreateTable() {
+    func NOestValidCreateTable() {
         let db = Sqlite3()
         do {
             try db.open(dbname: "Versions.db", copyIfAbsent: true)
@@ -148,6 +148,20 @@ class Sqlite3Test: XCTestCase {
             let vals = ["abc", "def", "ghi", "jkl"]
             let rowCount = try db.executeV1(sql: stmt, values: vals)
             assert(rowCount == 1, "Insert Text should return 1 row.")
+        } catch let err {
+            assert(false, Sqlite3.errorDescription(error: err))
+        }
+    }
+    
+    func testValidInsertNull() {
+        let db = Sqlite3()
+        do {
+            try db.open(dbname: "Versions.db", copyIfAbsent: true)
+            defer { db.close() }
+            let stmt = "INSERT INTO TEST1 (abc, def, ghi, ijk) VALUES (?, ?, ?, ?)"
+            let vals: [Any?] = [nil, nil, nil, nil]
+            let rowCount = try db.executeV1(sql: stmt, values: vals)
+            assert(rowCount == 1, "Insert Nulls should return 1 row.")
         } catch let err {
             assert(false, Sqlite3.errorDescription(error: err))
         }
@@ -181,7 +195,7 @@ class Sqlite3Test: XCTestCase {
         }
     }
     
-    func testQueryV0() {
+    func NotestQueryV0() {
         let db = Sqlite3()
         do {
             try db.open(dbname: "Versions.db", copyIfAbsent: true)
@@ -198,22 +212,8 @@ class Sqlite3Test: XCTestCase {
             assert(false, Sqlite3.errorDescription(error: err))
         }
     }
-    
-    func testQueryJS() {
-        let db = Sqlite3()
-        do {
-            try db.open(dbname: "Versions.db", copyIfAbsent: true)
-            defer { db.close() }
-            let stmt = "SELECT abc, def, ghi FROM TEST1"
-            let resultSet = try db.queryJS(sql: stmt, values: [])
-            let json = String(data: resultSet, encoding: String.Encoding.utf8)
-            print("ResultSet \(json)")
-        } catch let err {
-            assert(false, Sqlite3.errorDescription(error: err))
-        }
-    }
-    
-    func testBulkInsert() {
+
+    func NotestBulkInsert() {
         let db = Sqlite3()
         do {
             try db.open(dbname: "Versions.db", copyIfAbsent: true)
@@ -228,6 +228,27 @@ class Sqlite3Test: XCTestCase {
             assert(false, Sqlite3.errorDescription(error: err))
         }
     }
+    
+    func testQuerySSIF() {
+        let db = Sqlite3()
+        do {
+            try db.open(dbname: "Versions.db", copyIfAbsent: true)
+            defer { db.close() }
+            let stmt = "SELECT abc, def, ghi, ijk FROM TEST1"
+            let resultSet: String = try db.querySSIFv0(sql: stmt, values: [])
+            let rows = resultSet.split(separator: "~")
+            for row in rows {
+                let flds = row.split(separator: "|")
+                let abc = flds[0]
+                let def = flds[1]
+                let ghi = flds[2]
+                print("ROW \(abc)  \(def)  \(ghi)")
+            }
+        } catch let err {
+            assert(false, Sqlite3.errorDescription(error: err))
+        }
+    }
+
     
     func NOtestPerformanceExample() {
         // This is an example of a performance test case.
