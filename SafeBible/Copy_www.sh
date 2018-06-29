@@ -1,11 +1,11 @@
 #!/bin/sh -ve
 
 export IOS_DIR=SafeBible_iOS/SafeBible/www
-#export AND_DIR=SafeBible_Android/app/src/main/assets/www
+export AND_DIR=SafeBible_Android/app/src/main/assets/www
 
 ##node ../Library/util/BibleAppConfigWriter.js www/js/BibleAppConfig.js DEPRECATED
 cp www/js/BibleAppConfig.js $IOS_DIR/js/BibleAppConfig.js
-#cp www/js/BibleAppConfig.js $AND_DIR/js/BibleAppConfig.js
+cp www/js/BibleAppConfig.js $AND_DIR/js/BibleAppConfig.js
 
 
 cat ../Library/css/Status.css > www/css/BibleApp.css
@@ -18,7 +18,7 @@ cat ../Library/css/TableContents.css >> www/css/BibleApp.css
 cat ../Library/css/Settings.css >> www/css/BibleApp.css
 cat ../Library/css/Video.css >> www/css/BibleApp.css
 cp www/css/BibleApp.css $IOS_DIR/css/BibleApp.css
-#cp www/css/BibleApp.css $AND_DIR/css/BibleApp.css
+cp www/css/BibleApp.css $AND_DIR/css/BibleApp.css
 
 
 echo \"use strict\"\; > www/js/BibleApp.js
@@ -78,7 +78,7 @@ cat ../Library/video/VideoListView.js >> www/js/BibleApp.js
 cat ../Library/video/VideoMetaData.js >> www/js/BibleApp.js
 cat ../Library/video/VideoTableAdapter.js >> www/js/BibleApp.js
 cp www/js/BibleApp.js $IOS_DIR/js/BibleApp.js
-#cp www/js/BibleApp.js $AND_DIR/js/BibleApp.js
+cp www/js/BibleApp.js $AND_DIR/js/BibleApp.js
 
 
 echo \"use strict\"\; > /tmp/callNativeiOS.js
@@ -87,9 +87,9 @@ cat ../Library/native/iosOnly.js >> /tmp/callNativeiOS.js
 cp /tmp/callNativeiOS.js $IOS_DIR/js/CallNative.js
 
 
-#echo \"use strict\"\; > /tmp/callNativeAndroid.js
-#cat ../Library/native/callNative.js >> /tmp/callNativeAndroid.js
-#cat ../Library/native/androidOnly.js >> /tmp/callNativeAndroid.js
-#cp /tmp/callNativeAndroid.js $AND_DIR/js/CallNative.js
+echo \"use strict\"\; > /tmp/callNativeAndroid.js
+cat ../Library/native/callNative.js >> /tmp/callNativeAndroid.js
+cat ../Library/native/androidOnly.js >> /tmp/callNativeAndroid.js
+cp /tmp/callNativeAndroid.js $AND_DIR/js/CallNative.js
 
 
