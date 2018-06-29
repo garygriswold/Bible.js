@@ -1,1 +1,11 @@
-include ':app'
+include ":app"
+include ":utility"
+include ":aws"
+include ":audioplayer"
+include ":videoplayer"
+
+project(":utility").projectDir = file("../../Plugins/Utility/src/android/app")
+project(":aws").projectDir = file("../../Plugins/AWS/src/android/app")
+project(":audioplayer").projectDir = file("../../Plugins/AudioPlayer/src/android/app")
+project(":videoplayer").projectDir = file("../../Plugins/VideoPlayer/src/android/app")
+
