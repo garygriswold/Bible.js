@@ -89,7 +89,7 @@ public class JSMessageHandler {
 
         } else if (method.equals("Utility.hideKeyboard")) {
             try {
-                InputMethodManager inputManager = (InputMethodManager)this.activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager inputManager = (InputMethodManager) this.activity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 View v = this.activity.getCurrentFocus();
                 if (v != null) {
                     inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -101,9 +101,14 @@ public class JSMessageHandler {
                 jsError(callbackId, method, error.toString() + " on hideKeyboard");
             }
 
+        } else if (method.equals("Utility.rateApp")) {
+            // Not yet implemented
+            jsSuccess(callbackId);
+
         } else {
             jsError(callbackId, method, "unknown method");
         }
+
     }
 
     private void sqlitePlugin(String callbackId, String method, JSONArray parameters) {
@@ -136,6 +141,42 @@ public class JSMessageHandler {
                 }
             } else {
                 jsError(callbackId, method, "must have three parameters", new JSONArray());
+            }
+
+        } else if (method.equals("Sqlite.queryHTML")) {
+            if (parameters != null && parameters.length() == 3) {
+                try {
+                    String dbname = parameters.getString(0);
+                    String statement = parameters.getString(1);
+                    JSONArray values = parameters.getJSONArray(2);
+                    Sqlite3 db = Sqlite3.findDB(dbname);
+                    String result1 = db.queryHTMLv0(statement, values);
+                    String result2 = result1.replace("\r", "\\r");
+                    String result3 = result2.replace("\n", "\\n");
+                    jsSuccess(callbackId, result3);
+                } catch(Exception err) {
+                    jsError(callbackId, method, err.toString(), "");
+                }
+            } else {
+                //let err = JSMessageError.mustHaveParameters(method: method, num: 3)
+                jsError(callbackId, method, "must have three parameters", "");
+            }
+
+        } else if (method.equals("Sqlite.querySSIF")) {
+            if (parameters != null && parameters.length() == 3) {
+                try {
+                    String dbname = parameters.getString(0);
+                    String statement = parameters.getString(1);
+                    JSONArray values = parameters.getJSONArray(2);
+                    Sqlite3 db = Sqlite3.findDB(dbname);
+                    String result = db.querySSIFv0(statement, values);
+                    jsSuccess(callbackId, result);
+                } catch(Exception err) {
+                    jsError(callbackId, err.toString(), "");
+                }
+            } else {
+                //let err = JSMessageError.mustHaveParameters(method: method, num: 3)
+                jsError(callbackId, "must have three parameters", "");
             }
 
         } else if (method.equals("Sqlite.executeJS")) {

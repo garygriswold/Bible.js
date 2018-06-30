@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -212,37 +213,41 @@ public class Sqlite3 {
      */
     public JSONArray queryJS(String sql, JSONArray values) throws Exception {
         if (this.isOpen()) {
-            JSONArray resultSet = new JSONArray();
-            Cursor cursor = this.database.rawQuery(sql, bindJSONArray(values));
-            int colCount = cursor.getColumnCount();
-            int rowNum = 0;
-            while(cursor.moveToNext()) {
-                JSONObject row = new JSONObject();
-                for (int col=0; col<colCount; col++) {
-                    String name = cursor.getColumnName(col);
-                    int type = cursor.getType(col);
-                    switch(type) {
-                        case 1: // INT
-                            row.put(name, cursor.getInt(col));
-                            break;
-                        case 2: // Double
-                            row.put(name, cursor.getDouble(col));
-                            break;
-                        case 3: // TEXT
-                            row.put(name, cursor.getString(col));
-                            break;
-                        case 5: // NULL
-                            row.put(name, null);
-                            break;
-                        default:
-                            row.put(name, cursor.getString(col));
-                            break;
+            Cursor cursor = null;
+            try {
+                JSONArray resultSet = new JSONArray();
+                cursor = this.database.rawQuery(sql, bindJSONArray(values));
+                int colCount = cursor.getColumnCount();
+                int rowNum = 0;
+                while (cursor.moveToNext()) {
+                    JSONObject row = new JSONObject();
+                    for (int col = 0; col < colCount; col++) {
+                        String name = cursor.getColumnName(col);
+                        int type = cursor.getType(col);
+                        switch (type) {
+                            case 1: // INT
+                                row.put(name, cursor.getInt(col));
+                                break;
+                            case 2: // Double
+                                row.put(name, cursor.getDouble(col));
+                                break;
+                            case 3: // TEXT
+                                row.put(name, cursor.getString(col));
+                                break;
+                            case 5: // NULL
+                                row.put(name, null);
+                                break;
+                            default:
+                                row.put(name, cursor.getString(col));
+                                break;
+                        }
                     }
+                    resultSet.put(row);
                 }
-                resultSet.put(row);
+                return (resultSet);
+            } finally {
+                if (cursor != null) cursor.close();
             }
-            cursor.close();
-            return(resultSet);
         } else {
             throw new SQLiteException("Database is not found.");
         }
@@ -269,25 +274,154 @@ public class Sqlite3 {
      */
     public String[][] queryV1(String sql, Object[] values) throws SQLiteException {
         if (this.isOpen()) {
-            Cursor cursor = this.database.rawQuery(sql, bindObjects(values));
-            int colCount = cursor.getColumnCount();
-            String[][] resultSet = new String[cursor.getCount()][colCount];
-            int rowNum = 0;
-            while (cursor.moveToNext()) {
-                String[] row = new String[colCount];
-                for (int i = 0; i < colCount; i++) {
-                    row[i] = cursor.getString(i);
+            Cursor cursor = null;
+            try {
+                cursor = this.database.rawQuery(sql, bindObjects(values));
+                int colCount = cursor.getColumnCount();
+                String[][] resultSet = new String[cursor.getCount()][colCount];
+                int rowNum = 0;
+                while (cursor.moveToNext()) {
+                    String[] row = new String[colCount];
+                    for (int i = 0; i < colCount; i++) {
+                        row[i] = cursor.getString(i);
+                    }
+                    resultSet[rowNum] = row;
+                    rowNum++;
                 }
-                resultSet[rowNum] = row;
-                rowNum++;
+                return (resultSet);
+            } finally {
+                if (cursor != null) cursor.close();
             }
-            cursor.close();
-            return (resultSet);
         } else {
             throw new SQLiteCantOpenDatabaseException("Database must be opened before query.");
         }
     }
-/*
+
+    /**
+     * This one returns its result as a single string.  It was specifically designed for returning
+     * HTML rows that should be displayed consequtively, so that concatentation of the rows returns
+     * a correct result.
+     */
+    public String queryHTMLv0(String sql, JSONArray values) throws SQLiteException, JSONException {
+        if (this.isOpen()) {
+            Cursor cursor = null;
+            try {
+                String resultSet = "";
+                cursor = this.database.rawQuery(sql, bindJSONArray(values));
+                while (cursor.moveToNext()) {
+                    resultSet += cursor.getString(0);
+                }
+                return (resultSet);
+            } finally {
+                if (cursor != null) cursor.close();
+            }
+        } else {
+            throw new SQLiteCantOpenDatabaseException("Database must be opened before query.");
+        }
+    }
+
+    /**
+     * This query method returns its result in a proprietary format named SSIF (Short Sands Interchange Format),
+     * or, Super Simple Interchange Format.  It is intended to provide the same capabilities as JSON for data
+     * interchange without the process of first creating objects that must be serialized, and then desearialized
+     * when received in JS.
+     *
+     * The format is for records that have the same number of fields in each record,
+     * and each field has the same type in each record.
+     * The Field delimiter is |
+     * The Record delimiter is ~
+     * There is no Field delimiter before the first field or after the last field in a record
+     * e.g. ~ abc | def | ghi ~, because this will enable efficient splitting using JS string.split
+     * There is no Record delimiter at the beginning and end of the data
+     * Before adding any String to SSIF, any | and ~ character must be escaped using HTML entities.
+     * These are ~ becomes &#126; and | becomes &#124;
+     * Note, that \| and |~ are not used, because this would prevent the use of a simple string.split in JS
+     * The first row always contains the field name for each field.
+     * The second row always contains the type for each field. The types are S, I, D, B, R
+     * These types are (String, Integer, Double, Boolean, Raw (which is sqlite Blob)
+     * Strings are not quoted with either single or double quotes, because their type defines them as strings.
+     * On the Javascript side it is expected that these would be converted using
+     * parseInt(v), parseFloat(v), (v === 'true'), strings are not converted, and I am not sure how to handle blob.
+     * When the string data that is returned is going to be displayed in an HTML view, there is no need to
+     * unescape the HTML entity, the webview will do that.
+     * Null is represented by the string null, not by a zero length string.  Unfortunately, this means that we
+     * cannot distinguish between a null in the database and the string "null" in the database, but this might be
+     * a good thing.
+     *
+     * When this data is received on the JS side, it could be processed by a function that knows what it is expecting,
+     * for type and field and skips the first two rows.  This would be the more efficient thing to do.
+     * However, it is also possible for a generic SSIF.parse method to return an array of objects.
+     * Consider JS classes ResultSet and ResultItem.  The ResultSet constructor would split the data into rows
+     * using the ~ delimiter, and it would split the first two rows (field names and field types) using the |
+     * delimiter.  The split rows would also be passed into a ResultItem constructor.  The ResultItem class has a
+     * property length, that will return the number of rows split, less the names and type row.  It also has an items(i)
+     * method that returns a zero relative data row.  When called on a row, it splits the row into fields and
+     * creates an object with the correct field names, and with data correctly typed, using parseInt(v), parseFloat(v)
+     * and (v === 'true').
+     */
+    public String querySSIFv0(String sql, JSONArray values) throws SQLiteException, JSONException {
+        if (this.isOpen()) {
+            Cursor cursor = null;
+            try {
+                ArrayList<String> resultSet = new ArrayList<String>();
+                cursor = this.database.rawQuery(sql, bindJSONArray(values));
+                int colCount = cursor.getColumnCount();
+                String[] names = new String[colCount];
+                String[] types = new String[colCount];
+                for (int col=0; col<colCount; col++) {
+                    names[col] = cursor.getColumnName(col);
+                    int type = cursor.getType(col);
+                    switch(type) {
+                        case Cursor.FIELD_TYPE_INTEGER:
+                            types[col] = "I";
+                            break;
+                        case Cursor.FIELD_TYPE_FLOAT:
+                            types[col] = "D";
+                            break;
+                        case Cursor.FIELD_TYPE_STRING:
+                            types[col] = "S";
+                            break;
+                        case Cursor.FIELD_TYPE_BLOB:
+                            types[col] = "R";
+                            break;
+                        // The Cursor doc said there was a type FIELD_TYPE_NULL, but what to do
+                        default:
+                            throw new SQLiteException("Column " + names[col] + " has unknown type " + type);
+                    }
+                }
+                resultSet.add(String.join("|", names));
+                resultSet.add(String.join("|", types));
+
+                //Pattern regex = Pattern.compile("|~\n\r");
+                while (cursor.moveToNext()) {
+                    String[] row = new String[colCount];
+                    for (int col=0; col<colCount; col++) {
+                        row[col] = cursor.getString(col);
+                        if (row[col] != null) {
+                            if (types[col] == "S" && row[col].matches("|~\n\r")) {
+                                String str2 = row[col].replace("|", "&#124");
+                                String str3 = str2.replace("~", "&#126");
+                                String str4 = str3.replace("\r", "\\r");
+                                row[col] = str4.replace("\n", "\\n");
+                            }
+                        } else{
+                            row[col] = "null";
+                        }
+                    }
+                    resultSet.add(String.join("|", row));
+                }
+                String[] rows = new String[resultSet.size()];
+                rows = resultSet.toArray(rows);
+                return String.join("~", rows);
+            } finally {
+                if (cursor != null) cursor.close();
+            }
+        } else {
+            throw new SQLiteCantOpenDatabaseException("Database must be opened before query.");
+        }
+    }
+
+    /*
     Statement binding was tried, but I had more trouble with double and floating point equivalence.
     private void bindStatement(SQLiteStatement statement, Object[] values) throws SQLiteException {
         for (int i=0; i<values.length; i++) {

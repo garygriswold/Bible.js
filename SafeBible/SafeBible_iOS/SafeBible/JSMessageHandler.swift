@@ -158,11 +158,11 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
                     let result3: String = result2.replacingOccurrences(of: "\n", with: "\\n")
                     jsSuccess(callbackId: callbackId, response: result3)
                 } catch let err {
-                    jsError(callbackId: callbackId, error: err, defaultVal: [])
+                    jsError(callbackId: callbackId, error: err, defaultVal: "")
                 }
             } else {
                 let err = JSMessageError.mustHaveParameters(method: method, num: 3)
-                jsError(callbackId: callbackId, error: err, defaultVal: [])
+                jsError(callbackId: callbackId, error: err, defaultVal: "")
             }
             
         } else if method == "Sqlite.querySSIF" {
@@ -176,11 +176,11 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
                     print("query result len \(result.count)")
                     jsSuccess(callbackId: callbackId, response: result)
                 } catch let err {
-                    jsError(callbackId: callbackId, error: err, defaultVal: [])
+                    jsError(callbackId: callbackId, error: err, defaultVal: "")
                 }
             } else {
                 let err = JSMessageError.mustHaveParameters(method: method, num: 3)
-                jsError(callbackId: callbackId, error: err, defaultVal: [])
+                jsError(callbackId: callbackId, error: err, defaultVal: "")
             }
             
         } else if method == "Sqlite.executeJS" {
