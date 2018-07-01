@@ -43,20 +43,24 @@ public class JSMessageHandler {
     @JavascriptInterface
     public void jsHandler(String callbackId, String plugin, String method, String parameterStr) {
         try {
-            JSONArray parameters = new JSONArray(parameterStr);
-            Log.d(TAG, "Plugin " + plugin);
-            if (plugin.equals("Utility")) {
-                utilityPlugin(callbackId, "Utility." + method, parameters);
-            } else if (plugin.equals("Sqlite")) {
-                sqlitePlugin(callbackId, "Sqlite." + method, parameters);
-            } else if (plugin.equals("AWS")) {
-                awsPlugin(callbackId, "AWS." + method, parameters);
-            } else if (plugin.equals("AudioPlayer")) {
-                audioPlayerPlugin(callbackId, "AudioPlayer." + method, parameters);
-            } else if (plugin.equals("VideoPlayer")) {
-                videoPlayerPlugin(callbackId, "VideoPlayer." + method, parameters);
+            if (plugin.equals("console")) {
+                Log.d("Javascript", parameterStr);
             } else {
-                jsError(callbackId, method, "Unknown plugin");
+                Log.d(TAG, "CALL FROM JS: " + plugin + "." + method + " " + parameterStr);
+                JSONArray parameters = new JSONArray(parameterStr);
+                if (plugin.equals("Utility")) {
+                    utilityPlugin(callbackId, "Utility." + method, parameters);
+                } else if (plugin.equals("Sqlite")) {
+                    sqlitePlugin(callbackId, "Sqlite." + method, parameters);
+                } else if (plugin.equals("AWS")) {
+                    awsPlugin(callbackId, "AWS." + method, parameters);
+                } else if (plugin.equals("AudioPlayer")) {
+                    audioPlayerPlugin(callbackId, "AudioPlayer." + method, parameters);
+                } else if (plugin.equals("VideoPlayer")) {
+                    videoPlayerPlugin(callbackId, "VideoPlayer." + method, parameters);
+                } else {
+                    jsError(callbackId, method, "Unknown plugin");
+                }
             }
         } catch(Exception err) {
             jsError(callbackId, plugin + "." + method, err.toString());
@@ -67,7 +71,7 @@ public class JSMessageHandler {
         if (method.equals("Utility.locale")) {
             JSONArray result = new JSONArray();
             Locale locale = Locale.getDefault();
-            result.put(locale.toString());
+            result.put(locale.toString().replace("_", "-"));
             result.put(locale.getLanguage());
             result.put(locale.getScript());
             result.put(locale.getCountry());
@@ -108,7 +112,6 @@ public class JSMessageHandler {
         } else {
             jsError(callbackId, method, "unknown method");
         }
-
     }
 
     private void sqlitePlugin(String callbackId, String method, JSONArray parameters) {
@@ -428,6 +431,7 @@ public class JSMessageHandler {
     }
 
     private void jsSuccess(String callbackId, String response) {
+        //String result = (response != null) ? "'" + response.replace("'", "\'") + "'" : "null";
         String result = (response != null) ? "'" + response + "'" : "null";
         jsCallback(callbackId, false, null, result);
     }
@@ -457,6 +461,7 @@ public class JSMessageHandler {
 
     private void jsError(String callbackId, String method, String error, String defaultVal) {
         String err = logError(method, error);
+        //String response = "'" + defaultVal.replace("'", "\'") + "'";
         String response = "'" + defaultVal + "'";
         jsCallback(callbackId, false, err, response);
     }
@@ -477,7 +482,9 @@ public class JSMessageHandler {
                 activity.getWebview().evaluateJavascript(message, new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String str) {
-                        Log.d("jsCallbackError", str);
+                        if (str != "null") {
+                            Log.d("jsCallbackError", str);
+                        }
                     }
                 });
             }

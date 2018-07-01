@@ -18,7 +18,7 @@ function callNative(plugin, method, parameters, rtnType, handler) {
 }
 
 function handleNative(callbackId, isJson, error, results) {
-	//console.logOne(results);
+	//console.log(results);
 	var callObj = pluginCallMap[callbackId];
 	if (callObj) {
 		delete pluginCallMap[callbackId];
@@ -45,7 +45,6 @@ function handleNative(callbackId, isJson, error, results) {
 		} else {
 			if (isJson > 0) {
 				try {
-					//console.log("JSON.parse", results);
 					var obj = JSON.parse(results);
 					handler(error, obj);
 				} catch(err) {
@@ -57,7 +56,7 @@ function handleNative(callbackId, isJson, error, results) {
 			}
 		}
 	} else {
-		throw "Duplicate return for " + callbackId;
+		console.log("ERROR CallNative Duplicate return for " + callbackId);
 	}
 }
 
@@ -68,5 +67,16 @@ function handleNative(callbackId, isJson, error, results) {
 function callNativeForOS(callbackId, plugin, method, parameters) {
 	var params = JSON.stringify(parameters);
 	callAndroid.jsHandler(callbackId, plugin, method, params);
+}
+
+var console = {
+    log: function(a, b, c, d) {
+	    var params = JSON.stringify(arguments);
+	    callAndroid.jsHandler(null, "console", "log", params);
+	},
+	logOne: function(a) {
+	    var params = JSON.stringify(a);
+	    callAndroid.jsHandler(null, "console", "log", a);
+	}
 }
 
