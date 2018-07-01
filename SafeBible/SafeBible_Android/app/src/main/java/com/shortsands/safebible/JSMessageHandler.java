@@ -431,8 +431,7 @@ public class JSMessageHandler {
     }
 
     private void jsSuccess(String callbackId, String response) {
-        //String result = (response != null) ? "'" + response.replace("'", "\'") + "'" : "null";
-        String result = (response != null) ? "'" + response + "'" : "null";
+        String result = (response != null) ? "'" + response.replace("'", "&apos;") + "'" : "null";
         jsCallback(callbackId, false, null, result);
     }
 
@@ -472,7 +471,7 @@ public class JSMessageHandler {
         jsCallback(callbackId, true, err, response);
     }
 
-    private void jsCallback(String callbackId, boolean json, String error, Object response) {
+    private void jsCallback(String callbackId, boolean json, String error, String response) {
         int isJson = (json) ? 1 : 0;
         String err = (error != null) ? "'" + error + "'" : "null";
         final String message = "handleNative('" + callbackId + "', " + isJson + ", " + err + ", " + response + ");";
@@ -482,7 +481,7 @@ public class JSMessageHandler {
                 activity.getWebview().evaluateJavascript(message, new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String str) {
-                        if (str != "null") {
+                        if (!str.equals("null")) {
                             Log.d("jsCallbackError", str);
                         }
                     }

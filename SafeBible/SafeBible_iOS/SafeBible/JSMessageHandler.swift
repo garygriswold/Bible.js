@@ -391,7 +391,7 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
     
     private func jsSuccess(callbackId: String, response: String?) {
         if let result1 = response {
-            let result2 = "\"" + result1.replacingOccurrences(of: "\"", with: "\\\"") + "\""
+            let result2 = "\"" + result1.replacingOccurrences(of: "\"", with: "\\\"") + "\"" // Is this really needed?, I wrap in apos only JSON is wrapped in double quote
             jsCallback(callbackId: callbackId, json: false, error: nil, response: result2)
         } else {
             jsCallback(callbackId: callbackId, json: false, error: nil, response: "null")
