@@ -460,7 +460,6 @@ public class JSMessageHandler {
 
     private void jsError(String callbackId, String method, String error, String defaultVal) {
         String err = logError(method, error);
-        //String response = "'" + defaultVal.replace("'", "\'") + "'";
         String response = "'" + defaultVal + "'";
         jsCallback(callbackId, false, err, response);
     }

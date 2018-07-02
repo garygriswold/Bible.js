@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:hardwareAccelerated="true"
     android:versionCode="11201"
     android:versionName="1.12.1"
@@ -12,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <!-- android:icon="@mipmap/icon" from cordova version of app -->
+        <activity
+            android:name="com.shortsands.audioplayer.MainActivity"
+            tools:node="remove" />
         <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:launchMode="singleTop"
             android:name=".MainActivity"
