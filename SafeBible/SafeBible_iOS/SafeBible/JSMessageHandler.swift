@@ -119,7 +119,7 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
                 let dbname = parameters[0] as? String ?? "notString"
                 let isCopyDatabase = parameters[1] as? Bool ?? true
                 do {
-                    try Sqlite3.openDB(dbname: dbname, copyIfAbsent: isCopyDatabase)
+                    _ = try Sqlite3.openDB(dbname: dbname, copyIfAbsent: isCopyDatabase)
                     jsSuccess(callbackId: callbackId)
                 } catch let err {
                     jsError(callbackId: callbackId, error: err)

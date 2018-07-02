@@ -63,7 +63,7 @@ class AudioBible {
                                              silLang: reference.silLang)
         self.readVerseMetaData(reference: reference)
         print("INSIDE BibleReader \(reference.damId)")
-        AudioPlayState.retrieve(mediaId: reference.damId)
+        _ = AudioPlayState.retrieve(mediaId: reference.damId)
         AwsS3Cache.shared.readFile(s3Bucket: reference.getS3Bucket(),
                    s3Key: reference.getS3Key(),
                    expireInterval: Double.infinity,
@@ -81,7 +81,7 @@ class AudioBible {
         
         let seekTime = backupSeek(state: AudioPlayState.currentState, reference: reference)
         if (CMTimeGetSeconds(seekTime) > 0.1) {
-            playerItem.seek(to: seekTime)
+            playerItem.seek(to: seekTime, completionHandler: nil) // nil handler added 6/2/18
         }
         self.player = AVPlayer(playerItem: playerItem)
         self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.none
@@ -169,7 +169,7 @@ class AudioBible {
                         }
                     }
                 } else {
-                    item.seek(to: kCMTimeZero)
+                    item.seek(to: kCMTimeZero, completionHandler: nil) // nil handler added 7/2/18
                     self.controlCenter.nowPlaying(player: self)
                     if startPlayRate == 0 {
                         if let curr = self.currReference {
