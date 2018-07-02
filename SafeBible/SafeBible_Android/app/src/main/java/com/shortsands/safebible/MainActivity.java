@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         this.webView.loadUrl("file:///android_asset/www/index.html");
 
         this.webView.getSettings().setJavaScriptEnabled(true);
-        //JSMessageHandler handler = new JSMessageHandler(this);
         this.handler = new JSMessageHandler(this);
         this.webView.addJavascriptInterface(this.handler, "callAndroid");
     }
@@ -58,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onActivityResult: " + requestCode + " " + resultCode + " " + System.currentTimeMillis());
 
         if (ACTIVITY_CODE_PLAY_VIDEO == requestCode) {
-            //this.finishActivity(requestCode);
             if (Activity.RESULT_OK == resultCode) {
                 this.handler.jsSuccess(this.videoCallbackId);
             } else if (Activity.RESULT_CANCELED == resultCode) {
