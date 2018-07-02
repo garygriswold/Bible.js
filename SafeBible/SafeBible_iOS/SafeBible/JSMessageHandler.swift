@@ -173,7 +173,6 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
                 do {
                     let db = try Sqlite3.findDB(dbname: dbname)
                     let result: String = try db.querySSIFv0(sql: statement, values: values)
-                    print("query result len \(result.count)")
                     jsSuccess(callbackId: callbackId, response: result)
                 } catch let err {
                     jsError(callbackId: callbackId, error: err, defaultVal: "")
@@ -391,7 +390,8 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
     
     private func jsSuccess(callbackId: String, response: String?) {
         if let result1 = response {
-            let result2 = "\"" + result1.replacingOccurrences(of: "\"", with: "\\\"") + "\"" // Is this really needed?, I wrap in apos only JSON is wrapped in double quote
+            // The replace of ' for &apos; does not seem to be needed in iOS, but is included for compat with Android
+            let result2 = "'" + result1.replacingOccurrences(of: "'", with: "&apos;") + "'"
             jsCallback(callbackId: callbackId, json: false, error: nil, response: result2)
         } else {
             jsCallback(callbackId: callbackId, json: false, error: nil, response: "null")
