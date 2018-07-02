@@ -38,12 +38,8 @@ AppInitializer.prototype.begin = function() {
 								// Process locale's default version installed
 								changeVersionHandler(filename);
 							} else {
-								var gsPreloader = new GSPreloader(gsPreloaderOptions);
-								gsPreloader.active(true);
 								var downloader = new FileDownloader(versionsAdapter, locale);
 								downloader.download(filename, function(error) {
-									//console.log('Download error', JSON.stringify(error));
-									gsPreloader.active(false);
 									if (error) {
 										console.log(JSON.stringify(error));
 										// Process all default version on error

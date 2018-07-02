@@ -39,12 +39,8 @@ AppInitializer.prototype.begin = function() {
 								// Process locale's default version installed
 								changeVersionHandler(filename);
 							} else {
-								var gsPreloader = new GSPreloader(gsPreloaderOptions);
-								gsPreloader.active(true);
 								var downloader = new FileDownloader(versionsAdapter, locale);
 								downloader.download(filename, function(error) {
-									//console.log('Download error', JSON.stringify(error));
-									gsPreloader.active(false);
 									if (error) {
 										console.log(JSON.stringify(error));
 										// Process all default version on error
@@ -1896,275 +1892,6 @@ function drawCloseIcon(hite, color) {
 	graphics.stroke();
 	return(canvas);
 }/**
-* This function draws and icon that is used as a questions button
-* on the StatusBar.
-*/
-function drawQuestionsIcon(hite, color) {
-	var widthDiff = 1.25;
-
-	var canvas = document.createElement('canvas');
-	canvas.setAttribute('height', hite);
-	canvas.setAttribute('width', hite * 1.2);
-	var graphics = canvas.getContext('2d');
-
-	drawOval(graphics, hite * 0.72);
-	drawArc(graphics, hite * 0.72);
-	return(canvas);
-
-	function drawOval(graphics, hite) {
-    	var centerX = 0;
-    	var centerY = 0;
-    	var radius = hite * 0.5;
-
-		graphics.beginPath();
-    	graphics.save();
-    	graphics.translate(canvas.width * 0.5, canvas.height * 0.5);
-    	graphics.scale(widthDiff, 1);
-    	graphics.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-    	graphics.restore();
-    	graphics.fillStyle = color;
-   		graphics.fill();
-    }
-    
-    function drawArc(graphics, hite) {
-    	graphics.beginPath();
-    	graphics.moveTo(hite * 0.3, hite * 1.25);
-    	graphics.bezierCurveTo(hite * 0.6, hite * 1.2, hite * 0.65, hite * 1.1, hite * 0.7, hite * 0.9);
-    	graphics.lineTo(hite * 0.5, hite * 0.9);
-    	graphics.bezierCurveTo(hite * 0.5, hite * 1, hite * 0.5, hite * 1.1, hite * 0.3, hite * 1.25);
-    	graphics.fillStyle = color;
-   		graphics.fill();
-    }
-}
-
- /**
-* This function draws the spyglass that is used as the search
-* button on the status bar.
-*/
-function drawSearchIcon(hite, color) {
-	var lineThick = hite / 8.0;
-	var radius = (hite / 2) - (lineThick * 2.0);
-	var coordX = radius + (lineThick * 1.5);
-	var coordY = radius + lineThick * 1.25;
-	var edgeX = coordX + radius / 2 + 2;
-	var edgeY = coordY + radius / 2 + 2;
-
-	var canvas = document.createElement('canvas');
-	canvas.setAttribute('height', hite);
-	canvas.setAttribute('width', hite + lineThick);
-	var graphics = canvas.getContext('2d');
-	
-	//graphics.fillStyle = '#AAA';
-    //graphics.fillRect(0,0,hite,hite);
-
-	graphics.beginPath();
-	graphics.arc(coordX, coordY, radius, 0, Math.PI*2, true);
-	graphics.moveTo(edgeX, edgeY);
-	graphics.lineTo(edgeX + radius, edgeY + radius);
-	graphics.closePath();
-
-	graphics.lineWidth = lineThick;
-	graphics.strokeStyle = color;
-	graphics.stroke();
-	return(canvas);
-}/**
-* This function draws and icon that is used as a send arrow button
-* on the QuestionsView input block.
-*/
-function drawSendIcon(hite, color) {
-	var widthDiff = 1.25;
-
-	var canvas = document.createElement('canvas');
-	canvas.setAttribute('height', hite);
-	canvas.setAttribute('width', hite * widthDiff);
-	var graphics = canvas.getContext('2d');
-
-	var lineWidth = hite / 7.0;
-	drawArrow(graphics, lineWidth);
-	return(canvas);
-
-	function drawArrow(graphics, lineWidth) {
-		var middle = canvas.height * 0.5;
-		var widt = canvas.width;
-		var doubleLineWidth = lineWidth * 2.0;
-		var tripleLineWidth = lineWidth * 3.5;
-		var controlX = widt - lineWidth * 2.5;
-
-		graphics.beginPath();
-		graphics.moveTo(lineWidth, middle);
-		graphics.lineTo(widt - 2 * lineWidth, middle);
-		graphics.strokeStyle = color;
-		graphics.lineWidth = lineWidth;
-		graphics.stroke();
-
-		graphics.beginPath();
-		graphics.moveTo(widt - lineWidth, middle);
-		graphics.lineTo(widt - tripleLineWidth, middle - doubleLineWidth);
-
-		graphics.moveTo(widt - lineWidth, middle);
-		graphics.lineTo(widt - tripleLineWidth, middle + doubleLineWidth);
-
-		graphics.bezierCurveTo(controlX, middle, controlX, middle, widt - tripleLineWidth, middle - doubleLineWidth);
-
-		graphics.fillStyle = color;
-		graphics.fill();
-	}
-}/**
-* This function draws the gear that is used as the settings
-* button on the status bar.
-*/
-function drawSettingsIcon(hite, color) {
-	var lineThick = hite / 8.0;
-	var radius = (hite / 2) - (lineThick * 2.0);
-	var coord = hite / 2;
-	var circle = Math.PI * 2;
-	var increment = Math.PI / 4;
-	var first = increment / 2;
-
-	var canvas = document.createElement('canvas');
-	canvas.setAttribute('height', hite);
-	canvas.setAttribute('width', hite);
-	var graphics = canvas.getContext('2d');
-	
-	//graphics.fillStyle = '#AAA';
-    //graphics.fillRect(0,0,hite,hite);
-
-	graphics.beginPath();
-	graphics.arc(coord, coord, radius, 0, Math.PI*2, true);
-	for (var angle=first; angle<circle; angle+=increment) {
-		graphics.moveTo(Math.cos(angle) * radius + coord, Math.sin(angle) * radius + coord);
-		graphics.lineTo(Math.cos(angle) * radius * 1.6 + coord, Math.sin(angle) * radius * 1.6 + coord);
-	}
-	graphics.closePath();
-
-	graphics.lineWidth = lineThick;
-	graphics.strokeStyle = color;
-	graphics.stroke();
-	return(canvas);
-}/**
-* This function draws an icon that is used as a TOC button
-* on the StatusBar.
-*/
-function drawTOCIcon(hite, color) {
-	var lineThick = hite / 8.0;
-	var line1Y = lineThick * 1.5;
-	var lineXBeg = lineThick;
-	var lineXEnd = hite - lineThick;
-	var line2Y = lineThick * 2.5 + line1Y;
-	var line3Y = lineThick * 2.5 + line2Y;
-
-	var canvas = document.createElement('canvas');
-	canvas.setAttribute('height', hite);
-	canvas.setAttribute('width', hite);// + lineXBeg * 0.5);
-	var graphics = canvas.getContext('2d');
-	
-	//graphics.fillStyle = '#AAA';
-    //graphics.fillRect(0,0,hite,hite);
-
-	graphics.beginPath();
-	graphics.moveTo(lineXBeg, line1Y);
-	graphics.lineTo(lineXEnd, line1Y);
-	graphics.moveTo(lineXBeg, line2Y);
-	graphics.lineTo(lineXEnd, line2Y);
-	graphics.moveTo(lineXBeg, line3Y);
-	graphics.lineTo(lineXEnd, line3Y);
-
-	graphics.lineWidth = lineThick;
-	graphics.lineCap = 'square';
-	graphics.strokeStyle = color;
-	graphics.stroke();
-
-	return(canvas);
-}//Pure JS, completely customizable preloader from GreenSock.
-//Once you create an instance like var preloader = new GSPreloader(), call preloader.active(true) to open it, preloader.active(false) to close it, and preloader.active() to get the current status. Only requires TweenLite and CSSPlugin (http://www.greensock.com/gsap/)
-// Modified so that it must be instantiated preloader = new GSPreloader(gsPreloaderOptions);
-var gsPreloaderOptions = {
-  radius:42, 
-  dotSize:15, 
-  dotCount:10, 
-  colors:["#61AC27","#555","purple","#FF6600"], //have as many or as few colors as you want.
-  boxOpacity:0.2,
-  boxBorder:"1px solid #AAA",
-  animationOffset: 1.8, //jump 1.8 seconds into the animation for a more active part of the spinning initially (just looks a bit better in my opinion)
-};
-
-//this is the whole preloader class/function
-function GSPreloader(options) {
-  options = options || {};
-  var parent = options.parent || document.body,
-      element = this.element = document.createElement("div"),
-      radius = options.radius || 42,
-      dotSize = options.dotSize || 15,
-      animationOffset = options.animationOffset || 1.8, //jumps to a more active part of the animation initially (just looks cooler especially when the preloader isn't displayed for very long)
-      createDot = function(rotation) {
-          var dot = document.createElement("div");
-        element.appendChild(dot);
-        TweenLite.set(dot, {width:dotSize, height:dotSize, transformOrigin:(-radius + "px 0px"), x: radius, backgroundColor:colors[colors.length-1], borderRadius:"50%", force3D:true, position:"absolute", rotation:rotation});
-        dot.className = options.dotClass || "preloader-dot";
-        return dot; 
-      }, 
-      i = options.dotCount || 10,
-      rotationIncrement = 360 / i,
-      colors = options.colors || ["#61AC27","black"],
-      animation = new TimelineLite({paused:true}),
-      dots = [],
-      isActive = false,
-      box = document.createElement("div"),
-      tl, dot, closingAnimation, j;
-  colors.push(colors.shift());
-  
-  //setup background box
-  TweenLite.set(box, {width: radius * 2 + 70, height: radius * 2 + 70, borderRadius:"14px", backgroundColor:options.boxColor || "white", border: options.boxBorder || "1px solid #AAA", position:"absolute", xPercent:-50, yPercent:-50, opacity:((options.boxOpacity != null) ? options.boxOpacity : 0.3)});
-  box.className = options.boxClass || "preloader-box";
-  element.appendChild(box);
-  
-  parent.appendChild(element);
-  TweenLite.set(element, {position:"fixed", top:"45%", left:"50%", perspective:600, overflow:"visible", zIndex:2000});
-  animation.from(box, 0.1, {opacity:0, scale:0.1, ease:Power1.easeOut}, animationOffset);
-  while (--i > -1) {
-    dot = createDot(i * rotationIncrement);
-    dots.unshift(dot);
-    animation.from(dot, 0.1, {scale:0.01, opacity:0, ease:Power1.easeOut}, animationOffset);
-    //tuck the repeating parts of the animation into a nested TimelineMax (the intro shouldn't be repeated)
-    tl = new TimelineMax({repeat:-1, repeatDelay:0.25});
-    for (j = 0; j < colors.length; j++) {
-      tl.to(dot, 2.5, {rotation:"-=360", ease:Power2.easeInOut}, j * 2.9)
-        .to(dot, 1.2, {skewX:"+=360", backgroundColor:colors[j], ease:Power2.easeInOut}, 1.6 + 2.9 * j);
-    }
-    //stagger its placement into the master timeline
-    animation.add(tl, i * 0.07);
-  }
-  if (TweenLite.render) {
-    TweenLite.render(); //trigger the from() tweens' lazy-rendering (otherwise it'd take one tick to render everything in the beginning state, thus things may flash on the screen for a moment initially). There are other ways around this, but TweenLite.render() is probably the simplest in this case.
-  }
-  
-  //call preloader.active(true) to open the preloader, preloader.active(false) to close it, or preloader.active() to get the current state.
-  this.active = function(show) {
-    if (!arguments.length) {
-      return isActive;
-    }
-    if (isActive != show) {
-      isActive = show;
-      if (closingAnimation) {
-        closingAnimation.kill(); //in case the preloader is made active/inactive/active/inactive really fast and there's still a closing animation running, kill it.
-      }
-      if (isActive) {
-        element.style.visibility = "visible";
-        TweenLite.set([element, box], {rotation:0});
-        animation.play(animationOffset);
-      } else {
-        closingAnimation = new TimelineLite();
-        if (animation.time() < animationOffset + 0.3) {
-          animation.pause();
-          closingAnimation.to(element, 1, {rotation:-360, ease:Power1.easeInOut}).to(box, 1, {rotation:360, ease:Power1.easeInOut}, 0);
-        }
-        closingAnimation.staggerTo(dots, 0.3, {scale:0.01, opacity:0, ease:Power1.easeIn, overwrite:false}, 0.05, 0).to(box, 0.4, {opacity:0, scale:0.2, ease:Power2.easeIn, overwrite:false}, 0).call(function() { animation.pause(); closingAnimation = null; }).set(element, {visibility:"hidden"});
-      }
-    }
-    return this;
-  };
-}
-/**
 * This class draws the stop icon that is displayed
 * when there are no search results.
 */
@@ -2224,37 +1951,47 @@ StopIcon.prototype.drawIcon = function() {
 // stop = new StopIcon(200, '#FF0000');
 //stop.showIcon();
 /**
-* This function draws the rectangle icon that is used as the video
-* button on the status bar.
+* This function draws and icon that is used as a send arrow button
+* on the QuestionsView input block.
 */
-function drawVideoIcon(hite, color) {
-	var lineThick = hite / 8.0;
-	var lineYBeg = lineThick * 2.0;
-	var lineXBeg = lineThick;
-	var lineXEnd = hite - lineThick;
-	var lineYEnd = hite - lineThick * 2.0;
+function drawSendIcon(hite, color) {
+	var widthDiff = 1.25;
 
 	var canvas = document.createElement('canvas');
 	canvas.setAttribute('height', hite);
-	canvas.setAttribute('width', hite);
+	canvas.setAttribute('width', hite * widthDiff);
 	var graphics = canvas.getContext('2d');
-	
-	//graphics.fillStyle = '#AAA';
-    //graphics.fillRect(0,0,hite,hite);	
 
-	graphics.beginPath();
-	graphics.moveTo(lineXBeg, lineYBeg);
-	graphics.lineTo(lineXEnd, lineYBeg);
-	graphics.lineTo(lineXEnd, lineYEnd);
-	graphics.lineTo(lineXBeg, lineYEnd);
-	graphics.lineTo(lineXBeg, lineYBeg);
-	graphics.closePath();
-
-	graphics.lineWidth = lineThick;
-	graphics.strokeStyle = color;
-	graphics.lineJoin = 'round';
-	graphics.stroke();
+	var lineWidth = hite / 7.0;
+	drawArrow(graphics, lineWidth);
 	return(canvas);
+
+	function drawArrow(graphics, lineWidth) {
+		var middle = canvas.height * 0.5;
+		var widt = canvas.width;
+		var doubleLineWidth = lineWidth * 2.0;
+		var tripleLineWidth = lineWidth * 3.5;
+		var controlX = widt - lineWidth * 2.5;
+
+		graphics.beginPath();
+		graphics.moveTo(lineWidth, middle);
+		graphics.lineTo(widt - 2 * lineWidth, middle);
+		graphics.strokeStyle = color;
+		graphics.lineWidth = lineWidth;
+		graphics.stroke();
+
+		graphics.beginPath();
+		graphics.moveTo(widt - lineWidth, middle);
+		graphics.lineTo(widt - tripleLineWidth, middle - doubleLineWidth);
+
+		graphics.moveTo(widt - lineWidth, middle);
+		graphics.lineTo(widt - tripleLineWidth, middle + doubleLineWidth);
+
+		graphics.bezierCurveTo(controlX, middle, controlX, middle, widt - tripleLineWidth, middle - doubleLineWidth);
+
+		graphics.fillStyle = color;
+		graphics.fill();
+	}
 }/**
 * This class is a wrapper for SQL Error so that we can always distinguish an error
 * from valid results.  Any method that calls an IO routine, which can expect valid results

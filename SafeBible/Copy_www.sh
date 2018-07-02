@@ -36,14 +36,8 @@ cat ../Library/gui/VersionsView.js >> www/js/BibleApp.js
 cat ../Library/gui/RateMeView.js >> www/js/BibleApp.js
 
 cat ../Library/gui/icons/drawCloseIcon.js >> www/js/BibleApp.js
-cat ../Library/gui/icons/drawQuestionsIcon.js >> www/js/BibleApp.js
-cat ../Library/gui/icons/drawSearchIcon.js >> www/js/BibleApp.js
-cat ../Library/gui/icons/drawSendIcon.js >> www/js/BibleApp.js
-cat ../Library/gui/icons/drawSettingsIcon.js >> www/js/BibleApp.js
-cat ../Library/gui/icons/drawTOCIcon.js >> www/js/BibleApp.js
-cat ../Library/gui/icons/GSPreloader.js >> www/js/BibleApp.js
 cat ../Library/gui/icons/StopIcon.js >> www/js/BibleApp.js
-cat ../Library/gui/icons/drawVideoIcon.js >> www/js/BibleApp.js
+cat ../Library/gui/icons/drawSendIcon.js >> www/js/BibleApp.js
 
 cat ../Library/io/IOError.js >> www/js/BibleApp.js
 cat ../Library/io/SettingStorage.js >> www/js/BibleApp.js
