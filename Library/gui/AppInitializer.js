@@ -143,12 +143,6 @@ AppInitializer.prototype.begin = function() {
 			TweenMax.to(window, 0.7, {scrollTo: { y: yPosition, autoKill: false }});
 		}
 	}
-	function showQuestionsHandler(event) {
-		disableHandlers();
-		that.controller.clearViews();	
-		that.controller.questionsView.showView();
-		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
-	}
 	function showVideoListHandler(event) {
 		disableHandlers();
 		that.controller.clearViews();
@@ -165,7 +159,6 @@ AppInitializer.prototype.begin = function() {
 		document.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);
 		document.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		document.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
-		document.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
 		document.removeEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		document.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
@@ -173,7 +166,6 @@ AppInitializer.prototype.begin = function() {
 		if (name !== BIBLE.SHOW_TOC) document.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
 		if (name !== BIBLE.SHOW_SEARCH) document.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		if (name !== BIBLE.SHOW_PASSAGE) document.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
-		if (name !== BIBLE.SHOW_QUESTIONS) document.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
 		if (name !== BIBLE.SHOW_VIDEO) document.addEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		if (name !== BIBLE.SHOW_SETTINGS) document.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}

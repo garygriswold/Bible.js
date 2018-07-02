@@ -7,7 +7,6 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
 		SHOW_AUDIO: 'bible-show-audio', // present audio overlay above text
 		STOP_AUDIO: 'bible-stop-audio', // stop audio that is now playing
-		SHOW_QUESTIONS: 'bible-show-questions', // present questions page, create first
 		SHOW_HISTORY: 'bible-show-history', // present history tabs
 		HIDE_HISTORY: 'bible-hide-history', // hide history tabs
 		SHOW_PASSAGE: 'bible-show-passage', // show passage in codex view
@@ -18,8 +17,6 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_VIDEO: 'bible-show-video', // Show Video List view as a result of user action
 		SCROLL_TEXT: 'bible-scroll-text' // Scroll Text as when listening to audio
 	};
-var SERVER_HOST = 'cloud.shortsands.com'; // For unused QuestionsView
-var SERVER_PORT = '8080';
 var DEFAULT_VERSION = 'ERV-ENG.db'; // This version must be preinstalled in the App.
 
 function bibleShowNoteClick(nodeId) {
@@ -53,9 +50,7 @@ function AppViewController(version, settingStorage) {
     this.verses = new VersesAdapter(this.database);
 	this.tableAdapter = new TableContentsAdapter(this.database);
 	this.concordance = new ConcordanceAdapter(this.database);
-
 	this.history = new HistoryAdapter(this.settingStorage.database);
-	this.questions = new QuestionsAdapter(this.settingStorage.database);
 	
 	this.videoAdapter = new VideoTableAdapter();
 }
@@ -75,8 +70,6 @@ AppViewController.prototype.begin = function(develop) {
 		that.codexView = new CodexView(that.chapters, that.tableContents, that.header.barHite, that.copyrightView);
 		that.historyView = new HistoryView(that.history, that.tableContents, that.localizeNumber);
 		that.historyView.rootNode.style.top = that.header.barHite + 'px';
-		that.questionsView = new QuestionsView(that.questions, that.verses, that.tableContents, that.version);
-		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.settingStorage, that.verses, that.version);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.videoListView = new VideoListView(that.version, that.videoAdapter);
@@ -95,9 +88,6 @@ AppViewController.prototype.begin = function(develop) {
 			break;
 		case 'HistoryView':
 			that.historyView.showView();
-			break;
-		case 'QuestionsView':
-			that.questionsView.showView();
 			break;
 		case 'SettingsView':
 			that.settingsView.showView();
@@ -154,7 +144,6 @@ AppViewController.prototype.clearViews = function() {
 	this.tableContentsView.hideView();
 	this.searchView.hideView();
 	this.codexView.hideView();
-	this.questionsView.hideView();
 	this.videoListView.hideView();
 	this.settingsView.hideView();
 	this.historyView.hideView();
@@ -177,7 +166,6 @@ AppViewController.prototype.close = function() {
 	this.searchView = null;
 	this.codexView = null;
 	this.historyView = null;
-	this.questionsView = null;
 	this.settingsView = null;
 	this.videoListView = null;
 	this.copyrightView = null;

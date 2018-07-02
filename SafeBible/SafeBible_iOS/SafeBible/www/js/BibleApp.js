@@ -144,12 +144,6 @@ AppInitializer.prototype.begin = function() {
 			TweenMax.to(window, 0.7, {scrollTo: { y: yPosition, autoKill: false }});
 		}
 	}
-	function showQuestionsHandler(event) {
-		disableHandlers();
-		that.controller.clearViews();	
-		that.controller.questionsView.showView();
-		enableHandlersExcept(BIBLE.SHOW_QUESTIONS);
-	}
 	function showVideoListHandler(event) {
 		disableHandlers();
 		that.controller.clearViews();
@@ -166,7 +160,6 @@ AppInitializer.prototype.begin = function() {
 		document.removeEventListener(BIBLE.SHOW_TOC, showTocHandler);
 		document.removeEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		document.removeEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
-		document.removeEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
 		document.removeEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		document.removeEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
@@ -174,7 +167,6 @@ AppInitializer.prototype.begin = function() {
 		if (name !== BIBLE.SHOW_TOC) document.addEventListener(BIBLE.SHOW_TOC, showTocHandler);
 		if (name !== BIBLE.SHOW_SEARCH) document.addEventListener(BIBLE.SHOW_SEARCH, showSearchHandler);
 		if (name !== BIBLE.SHOW_PASSAGE) document.addEventListener(BIBLE.SHOW_PASSAGE, showPassageHandler);
-		if (name !== BIBLE.SHOW_QUESTIONS) document.addEventListener(BIBLE.SHOW_QUESTIONS, showQuestionsHandler);
 		if (name !== BIBLE.SHOW_VIDEO) document.addEventListener(BIBLE.SHOW_VIDEO, showVideoListHandler);
 		if (name !== BIBLE.SHOW_SETTINGS) document.addEventListener(BIBLE.SHOW_SETTINGS, showSettingsHandler);
 	}
@@ -187,7 +179,6 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_SEARCH: 'bible-show-search', // present search page, create if needed
 		SHOW_AUDIO: 'bible-show-audio', // present audio overlay above text
 		STOP_AUDIO: 'bible-stop-audio', // stop audio that is now playing
-		SHOW_QUESTIONS: 'bible-show-questions', // present questions page, create first
 		SHOW_HISTORY: 'bible-show-history', // present history tabs
 		HIDE_HISTORY: 'bible-hide-history', // hide history tabs
 		SHOW_PASSAGE: 'bible-show-passage', // show passage in codex view
@@ -198,8 +189,6 @@ var BIBLE = { CHG_VERSION: 'bible-chg-version',
 		SHOW_VIDEO: 'bible-show-video', // Show Video List view as a result of user action
 		SCROLL_TEXT: 'bible-scroll-text' // Scroll Text as when listening to audio
 	};
-var SERVER_HOST = 'cloud.shortsands.com'; // For unused QuestionsView
-var SERVER_PORT = '8080';
 var DEFAULT_VERSION = 'ERV-ENG.db'; // This version must be preinstalled in the App.
 
 function bibleShowNoteClick(nodeId) {
@@ -233,9 +222,7 @@ function AppViewController(version, settingStorage) {
     this.verses = new VersesAdapter(this.database);
 	this.tableAdapter = new TableContentsAdapter(this.database);
 	this.concordance = new ConcordanceAdapter(this.database);
-
 	this.history = new HistoryAdapter(this.settingStorage.database);
-	this.questions = new QuestionsAdapter(this.settingStorage.database);
 	
 	this.videoAdapter = new VideoTableAdapter();
 }
@@ -255,8 +242,6 @@ AppViewController.prototype.begin = function(develop) {
 		that.codexView = new CodexView(that.chapters, that.tableContents, that.header.barHite, that.copyrightView);
 		that.historyView = new HistoryView(that.history, that.tableContents, that.localizeNumber);
 		that.historyView.rootNode.style.top = that.header.barHite + 'px';
-		that.questionsView = new QuestionsView(that.questions, that.verses, that.tableContents, that.version);
-		that.questionsView.rootNode.style.top = that.header.barHite + 'px'; // Start view at bottom of header.
 		that.settingsView = new SettingsView(that.settingStorage, that.verses, that.version);
 		that.settingsView.rootNode.style.top = that.header.barHite + 'px';  // Start view at bottom of header.
 		that.videoListView = new VideoListView(that.version, that.videoAdapter);
@@ -275,9 +260,6 @@ AppViewController.prototype.begin = function(develop) {
 			break;
 		case 'HistoryView':
 			that.historyView.showView();
-			break;
-		case 'QuestionsView':
-			that.questionsView.showView();
 			break;
 		case 'SettingsView':
 			that.settingsView.showView();
@@ -334,7 +316,6 @@ AppViewController.prototype.clearViews = function() {
 	this.tableContentsView.hideView();
 	this.searchView.hideView();
 	this.codexView.hideView();
-	this.questionsView.hideView();
 	this.videoListView.hideView();
 	this.settingsView.hideView();
 	this.historyView.hideView();
@@ -357,7 +338,6 @@ AppViewController.prototype.close = function() {
 	this.searchView = null;
 	this.codexView = null;
 	this.historyView = null;
-	this.questionsView = null;
 	this.settingsView = null;
 	this.videoListView = null;
 	this.copyrightView = null;
@@ -729,154 +709,6 @@ HistoryView.prototype.buildHistoryView = function(callback) {
 	}
 };
 
-/**
-* This class provides the user interface to the question and answer feature.
-* This view class differs from some of the others in that it does not try
-* to keep the data in memory, but simply reads the data from a file when
-* needed.  Because the question.json file could become large, this approach
-* is essential.
-*/
-function QuestionsView(questionsAdapter, versesAdapter, tableContents, version) {
-	this.tableContents = tableContents;
-	this.versesAdapter = versesAdapter;
-	this.questions = new Questions(questionsAdapter, versesAdapter, tableContents, version);
-	this.formatter = new DateTimeFormatter();
-	this.dom = new DOMBuilder();
-	this.viewRoot = null;
-	this.rootNode = document.createElement('div');
-	this.rootNode.id = 'questionsRoot';
-	document.body.appendChild(this.rootNode);
-	this.referenceInput = null;
-	this.questionInput = null;
-	Object.seal(this);
-}
-QuestionsView.prototype.showView = function() {
-	var that = this;
-	document.body.style.backgroundColor = '#FFF';
-	this.questions.fill(function(results) {
-		if (results instanceof IOError) {
-			console.log('Error: QuestionView.showView.fill');
-		} else {
-			presentView();
-		}
-	});
-	function presentView() {
-		that.viewRoot = that.buildQuestionsView();
-		that.rootNode.appendChild(that.viewRoot);
-
-		that.questions.checkServer(function(results) {
-			for (var i=0; i<results.length; i++) {
-				var itemId = results[i];
-				var questionNode = document.getElementById('que' + itemId);
-				that.displayAnswer(questionNode);
-			}
-		});		
-	}
-};
-QuestionsView.prototype.hideView = function() {
-	if (this.rootNode.children.length > 0) {
-		// why not save scroll position
-		for (var i=this.rootNode.children.length -1; i>=0; i--) {
-			this.rootNode.removeChild(this.rootNode.children[i]);
-		}
-		this.viewRoot = null;
-	}
-};
-QuestionsView.prototype.buildQuestionsView = function() {
-	var that = this;
-	var root = document.createElement('div');
-	root.setAttribute('id', 'questionsView');
-	var numQuestions = this.questions.size();
-	for (var i=0; i<numQuestions; i++) {
-		var item = this.questions.find(i);
-		buildOneQuestion(root, item);
-	}
-	includeInputBlock(root);
-	return(root);
-
-	function buildOneQuestion(parent, item) {
-		var questionBorder = that.dom.addNode(parent, 'div', 'questionBorder');
-		var wid = window.innerWidth * 0.74;
-		questionBorder.setAttribute('style', 'width:' + wid + 'px');
-		questionBorder.setAttribute('style', 'padding: 3px 3px');
-		
-		var aQuestion = that.dom.addNode(questionBorder, 'div', 'oneQuestion', null, 'que' + i);
-		aQuestion.setAttribute('style', 'width:' + (wid - 6) + 'px');
-		
-		var line1 = that.dom.addNode(aQuestion, 'div', 'queTop');
-		that.dom.addNode(line1, 'p', 'queRef', item.reference);
-		that.dom.addNode(line1, 'p', 'queDate', that.formatter.localDatetime(item.askedDateTime));
-		that.dom.addNode(aQuestion, 'p', 'queText', item.question);
-
-		if (i === numQuestions -1) {
-			that.displayAnswer(aQuestion);
-		} else {
-			aQuestion.addEventListener('click', displayAnswerOnRequest);	
-		}
-	}
-	function displayAnswerOnRequest(event) {
-		var selected = document.getElementById(this.id);
-		selected.removeEventListener('click', displayAnswerOnRequest);
-		that.displayAnswer(selected);
-	}
-	function includeInputBlock(parentNode) {
-		var wid = window.innerWidth * 0.74;
-
-		var inputTop = that.dom.addNode(parentNode, 'div', 'questionBorder');
-		inputTop.setAttribute('style', 'width:' + wid + 'px');
-		inputTop.setAttribute('style', 'padding: 5px 5px');		
-		
-		that.questionInput = that.dom.addNode(inputTop, 'textarea', 'questionField', null, 'inputText');
-		that.questionInput.setAttribute('style', 'width:' + (wid - 10) + 'px');
-		that.questionInput.setAttribute('rows', 10);
-		that.versesAdapter.getVerses(['MAT:7:7'], function(results) {
-			if (results instanceof IOError) {
-				console.log('Error while getting MAT:7:7');
-			} else {
-				if (results.rows.length > 0) {
-					var row = results.rows.item(0);
-					that.questionInput.setAttribute('placeholder', row.html);
-					// Hack to force display of placeholder when loaded.
-					that.questionInput.style.display = 'none';
-					that.questionInput.style.display = 'block';
-				}	
-			}
-		});
-		var quesBtn = that.dom.addNode(parentNode, 'button', null, null, 'inputBtn');
-		quesBtn.appendChild(drawSendIcon(50, '#F7F7BB'));
-
-		quesBtn.addEventListener('click', function(event) {
-			console.log('submit button clicked');
-
-			var item = new QuestionItem();
-			item.reference = ''; // should be set by program based on user's position.
-			item.question = that.questionInput.value;
-			if (item.question && item.question.length > 5) {
-
-				that.questions.addQuestion(item, function(error) {
-					if (error) {
-						console.error('error at server', error);
-					} else {
-						console.log('file is written to disk and server');
-						parentNode.removeChild(inputTop);
-						parentNode.removeChild(quesBtn);
-						buildOneQuestion(parentNode, item);
-					}
-				});
-			}
-		});
-	}
-};
-QuestionsView.prototype.displayAnswer = function(parent) {
-	var idNum = parent.id.substr(3);
-	var item = this.questions.find(idNum);
-
-	this.dom.addNode(parent, 'hr', 'ansLine');
-	var answerTop = this.dom.addNode(parent, 'div', 'ansTop');
-	this.dom.addNode(answerTop, 'p', 'ansInstructor', item.instructor);
-	this.dom.addNode(answerTop, 'p', 'ansDate', this.formatter.localDatetime(item.answerDateTime));
-	this.dom.addNode(parent, 'p', 'ansText', item.answer);
-};
 /**
 * This class provides the User Interface part of the concordance and search capabilities of the app.
 * It does a lazy create of all of the objects needed.
@@ -2682,90 +2514,6 @@ HistoryAdapter.prototype.cleanup = function(callback) {
 		}
 	});
 };/**
-* This class is the database adapter for the questions table
-*/
-function QuestionsAdapter(database) {
-	this.database = database;
-	this.className = 'QuestionsAdapter';
-	Object.freeze(this);
-}
-QuestionsAdapter.prototype.drop = function(callback) {
-	this.database.executeDDL('drop table if exists Questions', function(err) {
-		if (err instanceof IOError) {
-			callback(err);
-		} else {
-			console.log('drop Questions success');
-			callback();
-		}
-	});
-};
-QuestionsAdapter.prototype.create = function(callback) {
-	var statement = 'create table if not exists Questions(' +
-		'askedDateTime text not null primary key, ' +
-		'discourseId text not null, ' +
-		'reference text null, ' + // possibly should be not null
-		'question text not null, ' +
-		'instructor text null, ' +
-		'answerDateTime text null, ' +
-		'answer text null)';
-	this.database.executeDDL(statement, function(err) {
-		if (err instanceof IOError) {
-			callback(err);
-		} else {
-			console.log('create Questions success');
-			callback();
-		}
-	});
-};
-QuestionsAdapter.prototype.selectAll = function(callback) {
-	var statement = 'select discourseId, reference, question, askedDateTime, instructor, answerDateTime, answer ' +
-		'from Questions order by askedDateTime';
-	this.database.select(statement, [], function(results) {
-		if (results instanceof IOError) {
-			console.log('select Questions failure ' + JSON.stringify(results));
-			callback(results);
-		} else {
-			var array = [];
-			for (var i=0; i<results.rows.length; i++) {
-				var row = results.rows.item(i);	
-				var askedDateTime = (row.askedDateTime) ? new Date(row.askedDateTime) : null;
-				var answerDateTime = (row.answerDateTime) ? new Date(row.answerDateTime) : null;
-				var ques = new QuestionItem(row.reference, row.question, 
-					askedDateTime, row.instructor, answerDateTime, row.answer);
-				ques.discourseId = row.discourseId;
-				array.push(ques);
-			}
-			callback(array);
-		}
-	});
-};
-QuestionsAdapter.prototype.replace = function(item, callback) {
-	var statement = 'replace into Questions(discourseId, reference, question, askedDateTime) ' +
-		'values (?,?,?,?)';
-	var values = [ item.discourseId, item.reference, item.question, item.askedDateTime.toISOString() ];
-	this.database.executeDML(statement, values, function(results) {
-		if (results instanceof IOError) {
-			console.log('Error on Insert');
-			callback(results);
-		} else {
-			callback(results);
-		}
-	});
-};
-QuestionsAdapter.prototype.update = function(item, callback) {
-	var statement = 'update Questions set instructor = ?, answerDateTime = ?, answer = ?' +
-		'where askedDateTime = ?';
-	var values = [ item.instructor, item.answerDateTime.toISOString(), item.answer, item.askedDateTime.toISOString() ];
-	this.database.executeDML(statement, values, function(results) {
-		if (results instanceof IOError) {
-			console.log('Error on update');
-			callback(results);
-		} else {
-			callback(results);
-		}
-	});
-};
-/**
 * This database adapter is different from the others in this package.  It accesses
 * not the Bible, but a different database, which contains a catalog of versions of the Bible.
 *
@@ -2952,72 +2700,6 @@ VersionsAdapter.prototype.selectAllBibleVersions = function(callback) {
 };
 VersionsAdapter.prototype.close = function() {
 	this.database.close();		
-};
-
-/**
-* This class encapsulates the get and post to the BibleApp Server
-* from the BibleApp
-*/
-function HttpClient(server, port) {
-	this.server = server;
-	this.port = port;
-	this.authority = 'http://' + this.server + ':' + this.port;
-}
-HttpClient.prototype.get = function(path, callback) {
-	this.request('GET', path, null, callback);
-};
-HttpClient.prototype.put = function(path, postData, callback) {
-	this.request('PUT', path, postData, callback);
-};
-HttpClient.prototype.post = function(path, postData, callback) {
-	this.request('POST', path, postData, callback);
-};
-HttpClient.prototype.request = function(method, path, postData, callback) {
-	console.log(method, path, postData);	
-	var request = createRequest();
-	if (request) {
-		request.onreadystatechange = progressEvents;
-		request.open(method, this.authority + path, true);
-		var data = (postData) ? JSON.stringify(postData) : null;
-		if (data) {
-			request.setRequestHeader('Content-Type', 'application/json');
-		}
-		request.send(data);		
-	} else {
-		callback(-2, new Error('XMLHttpRequest was not created.'));
-	}
-
-	function progressEvents() {
-		try {
-	    	if (request.readyState === 4) {
-		    	if (request.status === 0) {
-			    	callback(request.status, new Error('Could not reach the server, please try again when you have a better connection.'));
-		    	} else {
-		    		callback(request.status, JSON.parse(request.responseText));
-		    	}
-	    	}
-	    } catch(error) {
-		    callback(-1, error);
-	    }
-  	}
-
-	function createRequest() {
-		var request;
-		if (window.XMLHttpRequest) { // Mozilla, Safari, ...
-			request = new XMLHttpRequest();
-    	} else if (window.ActiveXObject) { // IE
-			try {
-				request = new ActiveXObject("Msxml2.XMLHTTP");
-      		} 
-	  		catch (e) {
-	  			try {
-	  				request = new ActiveXObject("Microsoft.XMLHTTP");
-        		} 
-				catch (e) {}
-      		}
-    	}
-    	return(request);
-	}
 };
 
 /**
@@ -3492,137 +3174,6 @@ Lookup.prototype.find = function(search) {
 			return(false);
 		}
 	}
-};
-/**
-* This class contains the contents of one user question and one instructor response.
-*/
-function QuestionItem(reference, question, askedDt, instructor, answerDt, answer) {
-	this.discourseId = null;
-	this.reference = reference;
-	this.question = question;
-	this.askedDateTime = askedDt;
-	this.instructor = instructor;
-	this.answerDateTime = answerDt;
-	this.answer = answer;
-	Object.seal(this);
-}/**
-* This class contains the list of questions and answers for this student
-* or device.
-*/
-function Questions(questionsAdapter, versesAdapter, tableContents, version) {
-	this.questionsAdapter = questionsAdapter;
-	this.versesAdapter = versesAdapter;
-	this.tableContents = tableContents;
-	this.version = version;
-	this.httpClient = new HttpClient(SERVER_HOST, SERVER_PORT);
-	this.items = [];
-	Object.seal(this);
-}
-Questions.prototype.size = function() {
-	return(this.items.length);
-};
-Questions.prototype.find = function(index) {
-	return((index >= 0 && index < this.items.length) ? this.items[index] : null);
-};
-Questions.prototype.addQuestion = function(item, callback) {
-	var that = this;
-	var postData = {versionId:this.version.code, reference:item.reference, message:item.question};
-	this.httpClient.put('/question', postData, function(status, results) {
-		if (status !== 200 && status !== 201) {
-			callback(results);
-		} else {
-			item.discourseId = results.discourseId;
-			item.askedDateTime = new Date(results.timestamp);
-			that.addQuestionLocal(item, callback);
-		}
-	});
-};
-Questions.prototype.addQuestionLocal = function(item, callback) {
-	var that = this;
-	this.questionsAdapter.replace(item, function(results) {
-		if (results instanceof IOError) {
-			callback(results);
-		} else {
-			that.items.push(item);
-			callback();
-		}
-	});
-};
-Questions.prototype.addAnswerLocal = function(item, callback) {
-	this.questionsAdapter.update(item, function(results) {
-		if (results instanceof IOError) {
-			console.log('Error on update', results);
-			callback(results);
-		} else {
-			callback();
-		}
-	});
-};
-Questions.prototype.fill = function(callback) {
-	var that = this;
-	this.questionsAdapter.selectAll(function(results) {
-		if (results instanceof IOError) {
-			console.log('select questions failure ' + JSON.stringify(results));
-			callback(results);
-		} else {
-			that.items = results;
-			callback(results);// needed to determine if zero length result
-		}
-	});
-};
-Questions.prototype.checkServer = function(callback) {
-	var that = this;
-	var unanswered = findUnansweredQuestions();
-	var discourseIds = Object.keys(unanswered);
-	if (discourseIds.length > 0) {
-		var path = '/response/' + discourseIds.join('/');
-		this.httpClient.get(path, function(status, results) {
-			if (status === 200) {
-				var indexes = updateAnsweredQuestions(unanswered, results);
-				callback(indexes);
-			} else {
-				callback([]);
-			}
-		});
-	} else {
-		callback([]);
-	}
-	function findUnansweredQuestions() {
-		var indexes = {};
-		for (var i=0; i<that.items.length; i++) {
-			var item = that.items[i];
-			if (item.answerDateTime === null || item.answerDateTime === undefined) {
-				indexes[item.discourseId] = i;
-			}
-		}
-		return(indexes);
-	}
-	function updateAnsweredQuestions(unanswered, results) {
-		var indexes = [];
-		for (var i=0; i<results.length; i++) {
-			var row = results[i];
-			var itemId = unanswered[row.discourseId];
-			var item = that.items[itemId];
-			if (item.discourseId !== row.discourseId) {
-				console.log('Attempt to update wrong item in Questions.checkServer');
-			} else {
-				item.instructor = row.pseudonym;
-				item.answerDateTime = new Date(row.timestamp);
-				item.answer = row.message;
-				indexes.push(itemId);
-				
-				that.addAnswerLocal(item, function(error) {
-					if (error) {
-						console.log('Error occurred adding answer to local store ' + error);
-					}
-				});
-			}
-		}
-		return(indexes);
-	}
-};
-Questions.prototype.toJSON = function() {
-	return(JSON.stringify(this.items, null, ' '));
 };
 /**
 * This class contains a reference to a chapter or verse.  It is used to

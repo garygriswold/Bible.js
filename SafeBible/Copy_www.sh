@@ -3,7 +3,6 @@
 export IOS_DIR=SafeBible_iOS/SafeBible/www
 export AND_DIR=SafeBible_Android/app/src/main/assets/www
 
-##node ../Library/util/BibleAppConfigWriter.js www/js/BibleAppConfig.js DEPRECATED
 cp www/js/BibleAppConfig.js $IOS_DIR/js/BibleAppConfig.js
 cp www/js/BibleAppConfig.js $AND_DIR/js/BibleAppConfig.js
 
@@ -12,7 +11,6 @@ cat ../Library/css/Status.css > www/css/BibleApp.css
 cat ../Library/css/Codex.css >> www/css/BibleApp.css
 cat ../Library/css/Copyright.css >> www/css/BibleApp.css
 cat ../Library/css/History.css >> www/css/BibleApp.css
-cat ../Library/css/Questions.css >> www/css/BibleApp.css
 cat ../Library/css/Search.css >> www/css/BibleApp.css
 cat ../Library/css/TableContents.css >> www/css/BibleApp.css
 cat ../Library/css/Settings.css >> www/css/BibleApp.css
@@ -27,7 +25,6 @@ cat ../Library/gui/AppViewController.js >> www/js/BibleApp.js
 cat ../Library/gui/CodexView.js >> www/js/BibleApp.js
 cat ../Library/gui/CopyrightView.js >> www/js/BibleApp.js
 cat ../Library/gui/HistoryView.js >> www/js/BibleApp.js
-cat ../Library/gui/QuestionsView.js >> www/js/BibleApp.js
 cat ../Library/gui/SearchView.js >> www/js/BibleApp.js
 cat ../Library/gui/HeaderView.js >> www/js/BibleApp.js
 cat ../Library/gui/TableContentsView.js >> www/js/BibleApp.js
@@ -47,17 +44,13 @@ cat ../Library/io/VersesAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/ConcordanceAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/TableContentsAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/HistoryAdapter.js >> www/js/BibleApp.js
-cat ../Library/io/QuestionsAdapter.js >> www/js/BibleApp.js
 cat ../Library/io/VersionsAdapter.js >> www/js/BibleApp.js
-cat ../Library/io/HttpClient.js >> www/js/BibleApp.js
 cat ../Library/io/AppUpdater.js >> www/js/BibleApp.js
 cat ../Library/io/FileDownloader.js >> www/js/BibleApp.js
 
 cat ../Library/model/meta/BibleVersion.js >> www/js/BibleApp.js
 cat ../Library/model/meta/Concordance.js >> www/js/BibleApp.js
 cat ../Library/model/meta/Lookup.js >> www/js/BibleApp.js
-cat ../Library/model/meta/QuestionItem.js >> www/js/BibleApp.js
-cat ../Library/model/meta/Questions.js >> www/js/BibleApp.js
 cat ../Library/model/meta/Reference.js >> www/js/BibleApp.js
 cat ../Library/model/meta/TOC.js >> www/js/BibleApp.js
 cat ../Library/model/meta/TOCBook.js >> www/js/BibleApp.js
