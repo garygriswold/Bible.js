@@ -22,6 +22,8 @@ SettingStorage.prototype.create = function(callback) {
 				if (err instanceof IOError) {
 					console.log('Error creating Installed', err);
 				} else {
+					var history = new HistoryAdapter(that.database);
+					history.create(function(){});
 					callback();
 				}
 			});

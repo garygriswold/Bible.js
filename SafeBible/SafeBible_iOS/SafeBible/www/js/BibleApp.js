@@ -1862,6 +1862,8 @@ SettingStorage.prototype.create = function(callback) {
 				if (err instanceof IOError) {
 					console.log('Error creating Installed', err);
 				} else {
+					var history = new HistoryAdapter(that.database);
+					history.create(function(){});
 					callback();
 				}
 			});
@@ -2742,7 +2744,7 @@ AppUpdater.prototype.doUpdate = function(callback) {
 		checkIfInstall(function(isInstall) {
 			console.log('Check if Install', isInstall);
 			if (isInstall) {
-				createTables(function() {
+				that.settingStorage.create(function() {
 					var database = new VersionsAdapter();
 					database.selectInstalledBibleVersions(function(bibleVersionList) {
 						that.settingStorage.bulkReplaceInstalledVersions(bibleVersionList, function() {
@@ -2789,7 +2791,7 @@ AppUpdater.prototype.doUpdate = function(callback) {
 	
 	function checkIfInstall(callback) {
 		var doFullInstall = false;
-		var statement = 'SELECT count(*) AS count FROM sqlite_master WHERE type="table" AND name IN ("Settings", "Installed", "History", "Questions")';
+		var statement = 'SELECT count(*) AS count FROM sqlite_master WHERE type="table" AND name IN ("Settings", "Installed", "History")';
 		that.settingStorage.database.select(statement, [], function(results) {
 			if (results instanceof IOError) {
 				console.log('SELECT sqlite_master ERROR', JSON.stringify(results));
@@ -2797,7 +2799,7 @@ AppUpdater.prototype.doUpdate = function(callback) {
 			} else {
 				var num = results.rows.item(0).count;
 				console.log('found tables', num);
-				callback(num !== 4);
+				callback(num < 3);
 			}
 		});
 	}
@@ -2805,16 +2807,6 @@ AppUpdater.prototype.doUpdate = function(callback) {
 	function checkIfUpdate(currAppVersion, callback) {
 		that.settingStorage.getAppVersion(function(appVersion) {
 			callback(currAppVersion !== appVersion);
-		});
-	}
-	
-	function createTables(callback) {
-		that.settingStorage.create(function() {
-			var history = new HistoryAdapter(that.settingStorage.database);
-			history.create(function(){});
-			var questions = new QuestionsAdapter(that.settingStorage.database);
-			questions.create(function(){});
-			callback();
 		});
 	}
 	
