@@ -3,6 +3,8 @@ package com.shortsands.safebible;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -90,6 +92,15 @@ public class JSMessageHandler {
             //} else if (method.equals("Utility.deviceSize")) {
             //    String deviceSize = DeviceSettings.deviceSize();
             //    jsSuccess(callbackId, deviceSize);
+
+        } else if (method.equals("Utility.appVersion")) {
+            try {
+                Context ctx = this.activity.getApplicationContext();
+                PackageInfo info = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0);
+                jsSuccess(callbackId, info.versionName);
+            } catch(NameNotFoundException ex) {
+                jsError(callbackId, method, ex.toString(), "unknown");
+            }
 
         } else if (method.equals("Utility.hideKeyboard")) {
             try {
