@@ -1,4 +1,4 @@
-package com.shortsands.safebible;
+package com.shortsands.yourbible;
 
 import org.junit.Test;
 

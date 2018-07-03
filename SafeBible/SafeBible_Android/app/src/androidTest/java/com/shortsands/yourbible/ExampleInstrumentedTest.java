@@ -1,4 +1,4 @@
-package com.shortsands.safebible;
+package com.shortsands.yourbible;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
