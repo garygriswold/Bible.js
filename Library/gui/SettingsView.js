@@ -76,9 +76,9 @@ SettingsView.prototype.buildSettingsView = function() {
 			if (results instanceof IOError) {
 				console.log('Error while getting JHN:3:16');
 			} else {
-				if (results.rows.length > 0) {
-					var row = results.rows.item(0);
-					verseNode.textContent = row.html;
+				if (results.length > 2) {
+					var row = results[2].split("|");
+					verseNode.textContent = row[1];
 				}	
 			}
 		});

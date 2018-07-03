@@ -368,32 +368,32 @@ public class Sqlite3 {
                 int colCount = cursor.getColumnCount();
                 String[] names = new String[colCount];
                 String[] types = new String[colCount];
-                for (int col=0; col<colCount; col++) {
-                    names[col] = cursor.getColumnName(col);
-                    int type = cursor.getType(col);
-                    switch(type) {
-                        case Cursor.FIELD_TYPE_INTEGER:
-                            types[col] = "I";
-                            break;
-                        case Cursor.FIELD_TYPE_FLOAT:
-                            types[col] = "D";
-                            break;
-                        case Cursor.FIELD_TYPE_STRING:
-                            types[col] = "S";
-                            break;
-                        case Cursor.FIELD_TYPE_BLOB:
-                            types[col] = "R";
-                            break;
-                        // The Cursor doc said there was a type FIELD_TYPE_NULL, but what to do
-                        default:
-                            throw new SQLiteException("Column " + names[col] + " has unknown type " + type);
-                    }
-                }
-                resultSet.add(String.join("|", names));
-                resultSet.add(String.join("|", types));
-
-                //Pattern regex = Pattern.compile("|~\n\r");
                 while (cursor.moveToNext()) {
+                    if (cursor.isFirst()) {
+                        for (int col=0; col<colCount; col++) {
+                            names[col] = cursor.getColumnName(col);
+                            int type = cursor.getType(col);
+                            switch(type) {
+                            case Cursor.FIELD_TYPE_INTEGER:
+                                types[col] = "I";
+                                break;
+                            case Cursor.FIELD_TYPE_FLOAT:
+                                types[col] = "D";
+                                break;
+                            case Cursor.FIELD_TYPE_STRING:
+                                types[col] = "S";
+                                break;
+                            case Cursor.FIELD_TYPE_BLOB:
+                                types[col] = "R";
+                                break;
+                                // The Cursor doc said there was a type FIELD_TYPE_NULL, but what to do
+                            default:
+                                throw new SQLiteException("Column " + names[col] + " has unknown type " + type);
+                            }
+                        }
+                        resultSet.add(String.join("|", names));
+                        resultSet.add(String.join("|", types));
+                    }
                     String[] row = new String[colCount];
                     for (int col=0; col<colCount; col++) {
                         row[col] = cursor.getString(col);
