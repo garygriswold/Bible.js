@@ -81,59 +81,6 @@ VersionAdapter.prototype.loadVideoIntroductions = function(directory, callback) 
 	});
 };
 /**
-* This method computes URL signatures for AWS S3, and adds this information to the Version table	
-*/
-/* Removed April 18, 2018
-VersionAdapter.prototype.addS3URLSignatures = function(callback) {
-	var that = this;
-	var cred = require('../../../Credentials/UsersGroups/BibleApp.js');
-	var S3 = require('aws-sdk/clients/s3');
-	var years = 2037 - (new Date().getFullYear());
-	console.log("Expire years = " + years);
-	var expireTime = 60 * 60 * 24 * 365 * years;
-	console.log('expireTime = ', expireTime);
-	this.db.all('SELECT versionCode, filename FROM Version', [], function(err, versions) {
-		if (err) {
-			console.log('SQL Error in VersionAdapter.addS3URLSignatures');
-			callback(err);
-		} else {
-			that.db.all('SELECT awsRegion, s3TextBucket FROM AWSRegion WHERE s3TextBucket IS NOT NULL', [], function(err, regions) {
-				if (err) {
-					console.log('SQL Error in VersionAdapter.select AWSRegion.awsRegion');
-					callback(err);
-				} else {
-					var signed = [];
-					for (var i=0; i< regions.length; i++) {
-						var reg = regions[i];
-						console.log('DOING REGION', reg.awsRegion, reg.s3TextBucket);
-						var awsOptions = {
-								useDualstack: true,
-								accessKeyId: cred.BIBLE_APP_KEY_ID,
-								secretAccessKey: cred.BIBLE_APP_SECRET_KEY,
-								region: reg.awsRegion,
-								sslEnabled: true,
-								s3ForcePathStyle: true
-						};
-						var s3 = new S3(awsOptions);
-						for (var j=0; j<versions.length; j++) {
-							var ver = versions[j];
-							var params = {Bucket: reg.s3TextBucket, Key: ver.filename + '.zip', Expires: expireTime};
-							var signedURL = s3.getSignedUrl('getObject', params);
-							console.log(reg.awsRegion, ver.versionCode, 'Signed URL', signedURL);
-							signed.push([ver.filename, reg.awsRegion, signedURL]);
-						}
-					}
-					that.executeSQL('INSERT INTO DownloadURL (filename, awsRegion, signedURL) VALUES (?,?,?)', signed, function(rowCount) {
-						console.log('INSERTED INTO DownloadURL', rowCount);
-						callback();
-					});
-				}
-			});
-		}
-	});
-};
-*/
-/**
 * This method validates that the translation table is complete for all languages in use,
 * and that the same items have been translated for all languages.
 */

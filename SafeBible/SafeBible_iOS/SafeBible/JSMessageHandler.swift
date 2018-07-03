@@ -95,6 +95,15 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
             let deviceSize = DeviceSettings.deviceSize()
             jsSuccess(callbackId: callbackId, response: deviceSize)
             
+        } else if method == "Utility.appVersion" {
+            let bundle = Bundle.main
+            let info = bundle.infoDictionary
+            if let version = info?["CFBundleShortVersionString"] as? String {
+                jsSuccess(callbackId: callbackId, response: version)
+            } else {
+                jsSuccess(callbackId: callbackId, response: "unknown")
+            }
+            
         } else if method == "Utility.hideKeyboard" {
             let hidden = self.controller.webview.endEditing(true)
             jsSuccess(callbackId: callbackId, response: hidden)

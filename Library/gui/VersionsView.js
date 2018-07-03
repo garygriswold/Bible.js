@@ -69,11 +69,12 @@ VersionsView.prototype.buildCountriesList = function() {
 				that.dom.addNode(rowNode, 'td', 'localCtryName', prefCtryName);
 			}
 		}
-		that.dom.addNode(root, 'p', 'shortsands', 'SafeBible by Short Sands, LLC. support@shortsands.com, version: ' + 
-					BibleAppConfig.versionCode);
-		that.rootNode.appendChild(root);
-		that.buildVersionList(that.defaultCountryNode);
-		that.root = root;
+		callNative('Utility', 'appVersion', [], "S", function(appVersion) {
+			that.dom.addNode(root, 'p', 'shortsands', 'SafeBible by Short Sands, LLC. support@shortsands.com, version: ' + appVersion);
+			that.rootNode.appendChild(root);
+			that.buildVersionList(that.defaultCountryNode);
+			that.root = root;			
+		});
 	});
 	
 	function countryClickHandler(event) {
