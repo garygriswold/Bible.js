@@ -25,21 +25,9 @@ RateMeView.prototype._buildView = function() {
 	var buttonText = this._getButtonText(this.version.langCode);
 	var button = this.dom.addNode(cell, 'button', null, buttonText, 'ratebtn');
 	button.addEventListener('click', function(event) {
-		switch(deviceSettings.platform()) {
-			case 'android':
-				window.open("https://play.google.com/store/apps/details?id=" + that.appIdAndroid, '_blank', 'location=yes');
-			    break;
-			case 'ios':
-			    callNative('Utility', 'rateApp', [], 'N', function() {
-				    console.log("RATE ME COMPLETE");
-			    });
-			    break;
-			case 'node':
-				window.open("https://play.google.com/store/apps/details?id=" + that.appIdAndroid, '_system');
-			    break;
-			default:
-			    break;
-		}
+		callNative('Utility', 'rateApp', [], 'N', function() {
+			console.log("RATE ME COMPLETE");
+		});
 	});
 };
 RateMeView.prototype._getButtonText = function(langCode) {

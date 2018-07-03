@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.inputmethod.InputMethodManager;
@@ -117,7 +118,9 @@ public class JSMessageHandler {
             }
 
         } else if (method.equals("Utility.rateApp")) {
-            // Not yet implemented
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("market://details?id=com.shortsands.yourbible"));
+            this.activity.startActivity(intent);
             jsSuccess(callbackId);
 
         } else {
