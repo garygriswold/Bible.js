@@ -12,8 +12,8 @@ public class MediaPlayState {
     public final String mediaType;
     public String mediaId;
     public String mediaUrl;
-    public Long position;
-    public Long timestamp;
+    public long position;
+    public long timestamp;
 
     private MediaPlayState(String mediaType) {
         this.mediaType = mediaType;
@@ -34,7 +34,7 @@ public class MediaPlayState {
         this.timestamp = MediaPlayState.now();
     }
 
-    public static Long now() {
+    public static long now() {
         return System.currentTimeMillis();
     }
 
@@ -74,23 +74,21 @@ public class MediaPlayState {
         this.dump("retrieve");
     }
 
-    public void update(Long position) {
+    public void update(long position) {
         this.update(this.mediaUrl, position);
     }
 
-    public void update(String mediaUrl, Long position) {
+    public void update(String mediaUrl, long position) {
         try {
-            if (!this.mediaUrl.equals("")) {
-                this.mediaUrl = mediaUrl;
-                this.position = position;
-                this.timestamp = MediaPlayState.now();
-                Sqlite3 db = this.findDB();
-                if (db != null) {
-                    String sql = "REPLACE INTO MediaState(mediaType, mediaId, mediaUrl, position, timestamp)" +
-                            " VALUES (?, ?, ?, ?, ?)";
-                    Object[] values = {this.mediaType, this.mediaId, this.mediaUrl, this.position, this.timestamp};
-                    int rowCount = db.executeV1(sql, values);
-                }
+            this.mediaUrl = mediaUrl;
+            this.position = position;
+            this.timestamp = MediaPlayState.now();
+            Sqlite3 db = this.findDB();
+            if (db != null) {
+                String sql = "REPLACE INTO MediaState(mediaType, mediaId, mediaUrl, position, timestamp)" +
+                        " VALUES (?, ?, ?, ?, ?)";
+                Object[] values = {this.mediaType, this.mediaId, this.mediaUrl, this.position, this.timestamp};
+                int rowCount = db.executeV1(sql, values);
             }
         } catch(Exception err) {
             handleError("MediaPlayState.update", err);

@@ -6,6 +6,19 @@
 //  Copyright © 2018 ShortSands. All rights reserved.
 //
 
+/**
+* This class is used by both audio and video files to store the current position of play.
+* But, the use is slightly different for audio and video.  The mediaType identifies audio
+* vs video.  The mediaId is the key to look up the position and timestamp.
+*
+* For video, mediaUrl does not change for a mediaId.  So, it does not really need to be stored,
+* but, both VideoPlayers store the information in MediaPlayState for their processing.
+*
+* For audio, the mediaId refers to a version of the Bible, while the mediaUrl refers to a chapter.
+* The mediaUrl must be stored with the other information.  When it is retrieved, the audio player
+* much check to see if the chapter being played now is the last one saved.  If it is the same, then
+* the saved position information should be used.
+*/
 import Foundation
 import CoreMedia
 

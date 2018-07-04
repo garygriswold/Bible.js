@@ -33,6 +33,7 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.shortsands.utility.MediaPlayState;
 
 /**
  * Created by garygriswold on 4/28/2016
@@ -42,7 +43,7 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
     private final static String TAG = "VideoActivity";
     private final static boolean DEBUG = false;
     private ProgressBar progressBar;
-    private VideoPersistence videoState;
+    private MediaPlayState videoState;
 	private SimpleExoPlayer player;
 	private SimpleExoPlayerView playerView;
 	private VideoAnalytics videoAnalytics;
@@ -113,7 +114,9 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
         Bundle bundle = getIntent().getExtras();
         String videoId = bundle.getString("videoId");
         String videoUrl = bundle.getString("videoUrl");
-        this.videoState = VideoPersistence.retrieve(this, videoId, videoUrl);
+		MediaPlayState.video.retrieve(videoId);
+		this.videoState = MediaPlayState.video;
+		this.videoState.mediaUrl = videoUrl;
 	    	    
 	    // 2. Create a default TrackSelector
 		Handler mainHandler = new Handler();
@@ -149,7 +152,7 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
 			Util.getUserAgent(this, "ShortSands"), bandwidthMeter2);
 			
 		// 6. This is the MediaSource representing the media to be played.
-        Uri videoUri = Uri.parse(this.videoState.videoUrl);
+        Uri videoUri = Uri.parse(this.videoState.mediaUrl);
 		MediaSource videoSource = new HlsMediaSource(videoUri, dataSourceFactory, mainHandler, this.eventLogger);
 
 		// 7. Prepare the player with the source.
@@ -168,9 +171,9 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
     private long backupSeek() {
 	    long duration = System.currentTimeMillis() - this.videoState.timestamp;
 	    int backupMs = Long.toString(duration).length() * 1000; // could multiply by a factor here
-	    long seekTime = this.videoState.currentPosition - backupMs;
+		long seekTime = this.videoState.position - backupMs;
 		seekTime = (seekTime >= 0) ? seekTime : 0L;
-	    Log.d(TAG, "current and seekTime " + this.videoState.currentPosition + " " + seekTime);
+		Log.d(TAG, "current and seekTime " + this.videoState.position + " " + seekTime);
 	    return(seekTime);
     }
 
@@ -197,10 +200,10 @@ public class VideoActivity extends Activity implements ExoPlayer.EventListener {
 			long currentPosition = this.player.getCurrentPosition();
 			if (this.videoPlaybackComplete) {
 				this.videoAnalytics.playEnded(currentPosition, true);
-				VideoPersistence.clear(this);
+				MediaPlayState.video.delete();
 			} else {
 				this.videoAnalytics.playEnded(currentPosition, false);
-				VideoPersistence.update(this, currentPosition);
+				MediaPlayState.video.update(currentPosition);
 			}
 		    this.player.release();
 		    this.player = null;

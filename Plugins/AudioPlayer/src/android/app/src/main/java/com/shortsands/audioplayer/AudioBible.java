@@ -6,6 +6,7 @@ import android.os.PowerManager;
 import android.util.Log;
 import com.shortsands.aws.AwsS3Cache;
 import com.shortsands.aws.CompletionHandler;
+import com.shortsands.utility.MediaPlayState;
 import java.io.File;
 import java.io.IOException;
 
@@ -64,7 +65,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
             reference.silLang());
         BeginReadFileCompletion handler = new BeginReadFileCompletion();
         this.readVerseMetaData(reference);
-        AudioPlayState.retrieve(this.controller.activity, reference.damId());
+        MediaPlayState.audio.retrieve(reference.damId());
         AwsS3Cache.shared().readFile(reference.getS3Bucket(),
                 reference.getS3Key(),
                 Integer.MAX_VALUE,
@@ -89,7 +90,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         if (url != null) {
             this.mediaPlayer = this.initPlayer(url);
             if (this.mediaPlayer != null) {
-                long seekTime = this.backupSeek(AudioPlayState.currentState, this.currReference);
+                long seekTime = this.backupSeek(MediaPlayState.audio, this.currReference);
                 if (seekTime > 100L) {
                     this.mediaPlayer.setOnSeekCompleteListener(this);
                     this.mediaPlayer.seekTo((int) seekTime);
@@ -102,7 +103,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         }
     }
 
-    private long backupSeek(AudioPlayState state, AudioReference reference) {
+    private long backupSeek(MediaPlayState state, AudioReference reference) {
         if (state.mediaUrl != null && state.mediaUrl.equals(reference.toString())) {
             if (reference.audioChapter != null) {
                 return state.position;
@@ -186,7 +187,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
             this.preFetchNextChapter(this.currReference);
         } else {
             this.stop();
-            AudioPlayState.clear(this.controller.activity); // Must be after stop, because stop does update
+            MediaPlayState.audio.delete(); // Must be after stop, because stop does update
         }
     }
 
@@ -251,7 +252,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
         } else {
             position = (position >= 0) ? position : 0;
         }
-        AudioPlayState.update(this.controller.activity, reference.toString(), position);
+        MediaPlayState.audio.update(reference.toString(), position);
     }
 
     private void addNextChapter(AudioReference reference) {
