@@ -21,7 +21,7 @@ class AudioBible {
     }
     
     private let controller: AudioBibleController
-    private let mediaPlayState: MediaPlayStateIO
+    private let mediaPlayState: MediaPlayState
     private let controlCenter: AudioControlCenter
     private var audioAnalytics: AudioAnalytics?
     private var player: AVPlayer?
@@ -31,7 +31,7 @@ class AudioBible {
     
     private init(controller: AudioBibleController) {
         self.controller = controller
-        self.mediaPlayState = MediaPlayStateIO(mediaType: "audio")
+        self.mediaPlayState = MediaPlayState.audio
         self.controlCenter = AudioControlCenter.shared
         self.controlCenter.setupControlCenter(player: self)
         self.initNotifications()
@@ -64,7 +64,7 @@ class AudioBible {
                                              silLang: reference.silLang)
         self.readVerseMetaData(reference: reference)
         print("INSIDE BibleReader \(reference.damId)")
-        _ = self.mediaPlayState.retrieve(mediaId: reference.damId)
+        self.mediaPlayState.retrieve(mediaId: reference.damId)
         AwsS3Cache.shared.readFile(s3Bucket: reference.getS3Bucket(),
                    s3Key: reference.getS3Key(),
                    expireInterval: Double.infinity,
@@ -80,7 +80,7 @@ class AudioBible {
         let playerItem = AVPlayerItem(asset: asset)
         print("Player Item Status \(playerItem.status)")
         
-        let seekTime = backupSeek(state: mediaPlayState.current, reference: reference)
+        let seekTime = backupSeek(state: mediaPlayState, reference: reference)
         if (CMTimeGetSeconds(seekTime) > 0.1) {
             playerItem.seek(to: seekTime, completionHandler: nil) // nil handler added 6/2/18
         }
@@ -150,7 +150,7 @@ class AudioBible {
                 }
             } else {
                 self.stop()
-                self.mediaPlayState.clear() // Must do after stop, because stop updates
+                self.mediaPlayState.delete() // Must do after stop, because stop updates
             }
         }
     }

@@ -11,7 +11,6 @@
 		E411B054200550BE002F888B /* DeviceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E411B053200550BE002F888B /* DeviceSettings.swift */; };
 		E42A3C8E2088E1D4003F3F18 /* Sqlite3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42A3C8D2088E1D4003F3F18 /* Sqlite3.swift */; };
 		E46E847F20EBD11700A48DEB /* MediaPlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E847E20EBD11700A48DEB /* MediaPlayState.swift */; };
-		E46E848320EBE27800A48DEB /* MediaPlayStateIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E848220EBE27800A48DEB /* MediaPlayStateIO.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +37,6 @@
 		E411B053200550BE002F888B /* DeviceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSettings.swift; sourceTree = "<group>"; };
 		E42A3C8D2088E1D4003F3F18 /* Sqlite3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sqlite3.swift; sourceTree = "<group>"; };
 		E46E847E20EBD11700A48DEB /* MediaPlayState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayState.swift; sourceTree = "<group>"; };
-		E46E848220EBE27800A48DEB /* MediaPlayStateIO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayStateIO.swift; sourceTree = "<group>"; };
 		E48D902D20AB5C2700F59D5F /* AWS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AWS.xcodeproj; path = ../../../AWS/src/ios/AWS.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -78,7 +76,6 @@
 				E411B053200550BE002F888B /* DeviceSettings.swift */,
 				E42A3C8D2088E1D4003F3F18 /* Sqlite3.swift */,
 				E46E847E20EBD11700A48DEB /* MediaPlayState.swift */,
-				E46E848220EBE27800A48DEB /* MediaPlayStateIO.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -199,7 +196,6 @@
 			files = (
 				E411B054200550BE002F888B /* DeviceSettings.swift in Sources */,
 				E46E847F20EBD11700A48DEB /* MediaPlayState.swift in Sources */,
-				E46E848320EBE27800A48DEB /* MediaPlayStateIO.swift in Sources */,
 				E42A3C8E2088E1D4003F3F18 /* Sqlite3.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
