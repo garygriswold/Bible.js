@@ -10,7 +10,6 @@ import AVFoundation
 import AWS
 import Utility
 
-
 class AudioBible {
     
     private static var instance: AudioBible?
@@ -22,7 +21,7 @@ class AudioBible {
     }
     
     private let controller: AudioBibleController
-    private let audioPlayState: MediaPlayStateIO
+    private let mediaPlayState: MediaPlayStateIO
     private let controlCenter: AudioControlCenter
     private var audioAnalytics: AudioAnalytics?
     private var player: AVPlayer?
@@ -32,7 +31,7 @@ class AudioBible {
     
     private init(controller: AudioBibleController) {
         self.controller = controller
-        self.audioPlayState = MediaPlayStateIO(mediaType: "audio")
+        self.mediaPlayState = MediaPlayStateIO(mediaType: "audio")
         self.controlCenter = AudioControlCenter.shared
         self.controlCenter.setupControlCenter(player: self)
         self.initNotifications()
@@ -65,7 +64,7 @@ class AudioBible {
                                              silLang: reference.silLang)
         self.readVerseMetaData(reference: reference)
         print("INSIDE BibleReader \(reference.damId)")
-        _ = self.audioPlayState.retrieve(mediaId: reference.damId)
+        _ = self.mediaPlayState.retrieve(mediaId: reference.damId)
         AwsS3Cache.shared.readFile(s3Bucket: reference.getS3Bucket(),
                    s3Key: reference.getS3Key(),
                    expireInterval: Double.infinity,
@@ -81,7 +80,7 @@ class AudioBible {
         let playerItem = AVPlayerItem(asset: asset)
         print("Player Item Status \(playerItem.status)")
         
-        let seekTime = backupSeek(state: audioPlayState.current, reference: reference)
+        let seekTime = backupSeek(state: mediaPlayState.current, reference: reference)
         if (CMTimeGetSeconds(seekTime) > 0.1) {
             playerItem.seek(to: seekTime, completionHandler: nil) // nil handler added 6/2/18
         }
@@ -151,7 +150,7 @@ class AudioBible {
                 }
             } else {
                 self.stop()
-                self.audioPlayState.clear() // Must do after stop, because stop updates
+                self.mediaPlayState.clear() // Must do after stop, because stop updates
             }
         }
     }
@@ -284,7 +283,7 @@ class AudioBible {
                 result = currentTime
             }
         }
-        self.audioPlayState.update(mediaUrl: reference.toString(), position: result)
+        self.mediaPlayState.update(mediaUrl: reference.toString(), position: result)
     }
     
     private func addNextChapter(reference: AudioReference) {
