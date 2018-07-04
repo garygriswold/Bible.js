@@ -12,7 +12,6 @@
 		E40245B91EF386FF004FFD57 /* VideoPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = E40245AB1EF386FF004FFD57 /* VideoPlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E40245C31EF38735004FFD57 /* AVPlayerViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40245C21EF38735004FFD57 /* AVPlayerViewControllerExtension.swift */; };
 		E40245C51EF3875F004FFD57 /* VideoViewPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40245C41EF3875F004FFD57 /* VideoViewPlayer.swift */; };
-		E40245C71EF3876F004FFD57 /* VideoViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40245C61EF3876F004FFD57 /* VideoViewState.swift */; };
 		E41B244D1EF45B34004492A5 /* VideoViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B244C1EF45B34004492A5 /* VideoViewControllerDelegate.swift */; };
 		E42D838E1EF62D730032EE44 /* VideoAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42D838D1EF62D730032EE44 /* VideoAnalytics.swift */; };
 		E42D83921EF62E9A0032EE44 /* VideoAnalyticsSessionId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42D83911EF62E9A0032EE44 /* VideoAnalyticsSessionId.swift */; };
@@ -40,7 +39,6 @@
 		E40245B81EF386FF004FFD57 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E40245C21EF38735004FFD57 /* AVPlayerViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVPlayerViewControllerExtension.swift; sourceTree = "<group>"; };
 		E40245C41EF3875F004FFD57 /* VideoViewPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewPlayer.swift; sourceTree = "<group>"; };
-		E40245C61EF3876F004FFD57 /* VideoViewState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewState.swift; sourceTree = "<group>"; };
 		E41B244C1EF45B34004492A5 /* VideoViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoViewControllerDelegate.swift; sourceTree = "<group>"; };
 		E42D838D1EF62D730032EE44 /* VideoAnalytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoAnalytics.swift; sourceTree = "<group>"; };
 		E42D83911EF62E9A0032EE44 /* VideoAnalyticsSessionId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoAnalyticsSessionId.swift; sourceTree = "<group>"; };
@@ -98,7 +96,6 @@
 				E4D74E45202E036F00097888 /* AWSCore.framework */,
 				E42D83911EF62E9A0032EE44 /* VideoAnalyticsSessionId.swift */,
 				E42D838D1EF62D730032EE44 /* VideoAnalytics.swift */,
-				E40245C61EF3876F004FFD57 /* VideoViewState.swift */,
 				E40245C41EF3875F004FFD57 /* VideoViewPlayer.swift */,
 				E40245C21EF38735004FFD57 /* AVPlayerViewControllerExtension.swift */,
 				E40245AB1EF386FF004FFD57 /* VideoPlayer.h */,
@@ -241,7 +238,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E40245C71EF3876F004FFD57 /* VideoViewState.swift in Sources */,
 				E40245C31EF38735004FFD57 /* AVPlayerViewControllerExtension.swift in Sources */,
 				E42D838E1EF62D730032EE44 /* VideoAnalytics.swift in Sources */,
 				E40245C51EF3875F004FFD57 /* VideoViewPlayer.swift in Sources */,

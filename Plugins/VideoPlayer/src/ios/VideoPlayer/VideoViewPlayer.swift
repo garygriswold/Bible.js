@@ -10,6 +10,7 @@
 import AVFoundation
 import AVKit
 import CoreMedia
+import Utility
 
 public class VideoViewPlayer : NSObject {
 	
@@ -17,7 +18,7 @@ public class VideoViewPlayer : NSObject {
     private let delegate = VideoViewControllerDelegate() // Without this delegate is lost because weak to controller
     
     let videoAnalytics: VideoAnalytics
-    let currentState: VideoViewState // To help prevent GC
+    let currentState: MediaPlayState // To help prevent GC
     
     public init(mediaSource: String,
                 videoId: String,
@@ -25,8 +26,9 @@ public class VideoViewPlayer : NSObject {
                 silLang: String,
                 videoUrl: String) {
 	    print("INSIDE VideoViewPlayer \(videoId)  \(videoUrl)")
-		self.currentState = VideoViewState.retrieve(videoId: videoId)
-        self.currentState.videoUrl = videoUrl
+        self.currentState = MediaPlayState.video
+        self.currentState.retrieve(mediaId: videoId)
+        self.currentState.mediaUrl = videoUrl
         self.videoAnalytics = VideoAnalytics(mediaSource: mediaSource,
                                         mediaId: videoId,
                                         languageId: languageId,
@@ -39,7 +41,7 @@ public class VideoViewPlayer : NSObject {
 
     public func begin(complete: @escaping (_ error:Error?) -> Void) {
         print("VideoViewPlayer.BEGIN")
-        let videoUrl: URL? = URL(string: self.currentState.videoUrl)
+        let videoUrl: URL? = URL(string: self.currentState.mediaUrl)
         if let url: URL = videoUrl {
             let asset = AVAsset(url: url)
             let playerItem = AVPlayerItem(asset: asset)
@@ -58,7 +60,7 @@ public class VideoViewPlayer : NSObject {
         }
     }
     
-    func backupSeek(state: VideoViewState) -> CMTime {
+    func backupSeek(state: MediaPlayState) -> CMTime {
 		let duration: Int64 = Int64(Date().timeIntervalSince(state.timestamp))
 		let backupSec: Int = String(duration).count // could multiply by a factor here
 		let backupTime: CMTime = CMTimeMake(Int64(backupSec), 1)

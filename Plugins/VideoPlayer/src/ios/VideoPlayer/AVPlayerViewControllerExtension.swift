@@ -8,6 +8,7 @@
 import AVKit
 import UIKit
 import CoreMedia
+import Utility
 
 extension AVPlayerViewController {
     
@@ -35,7 +36,9 @@ extension AVPlayerViewController {
         print("\n********** VIEW DID DISAPPEAR ***** in AVPlayerViewController \(animated)")
 
         sendVideoAnalytics(isStart: false, isDone: false)
-        VideoViewState.update(time: self.player?.currentTime())
+        if let position = self.player?.currentTime() {
+            MediaPlayState.video.update(position: position)
+        }
         releaseVideoPlayer()
     }
     override open func didReceiveMemoryWarning() {
@@ -90,8 +93,7 @@ extension AVPlayerViewController {
         print("\n** DID PLAY TO END \(String(describing: note.object))")
         self.dismiss(animated: false) // move this till after??
         sendVideoAnalytics(isStart: false, isDone: true)
-        
-        VideoViewState.clear()
+        MediaPlayState.video.delete()
     }
     @objc func playerItemFailedToPlayToEndTime(note:Notification) {
         print("\n********* FAILED TO PLAY TO END *********\(String(describing: note.object))")
@@ -115,7 +117,9 @@ extension AVPlayerViewController {
     @objc func applicationWillResignActive(note:Notification) {
 	    print("\n******* APPLICATION WILL RESIGN ACTIVE *** in AVPlayerViewController")
         sendVideoAnalytics(isStart: false, isDone: false)
-	    VideoViewState.update(time: self.player?.currentTime())
+        if let position = self.player?.currentTime() {
+            MediaPlayState.video.update(position: position)
+        }
     }
     private func releaseVideoPlayer() {
         print("\n******* INSIDE RELEASE PLAYER ")
