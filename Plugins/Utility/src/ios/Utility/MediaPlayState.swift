@@ -37,7 +37,7 @@ public class MediaPlayState {
         }
     }
     
-    init(mediaType: String) {
+    private init(mediaType: String) {
         self.mediaType = mediaType
         self.mediaId = "unknown"
         self.mediaUrl = ""
@@ -49,29 +49,31 @@ public class MediaPlayState {
         print("****** deinit MediaPlayState ******")
     }
     
-    func clear() {
+    private func clear() {
         self.clear(mediaId: "unknown")
     }
     
-    func clear(mediaId: String) {
+    private func clear(mediaId: String) {
         self.mediaId = mediaId
         self.mediaUrl = ""
         self.positionMS = 0
         self.timestampMS = MediaPlayState.now()
     }
     
-    public func dump() {
-        print("mediaType \(mediaType)")
-        print("mediaId   \(mediaId)")
-        print("mediaUrl  \(mediaUrl)")
-        print("position  \(position)  \(positionMS)")
-        print("timestamp \(timestamp) \(timestampMS)")
-    }
-
     public static func now() -> Int64 {
         return Int64(Date().timeIntervalSince1970 * 1000.0)
     }
     
+    public func dump(location: String) {
+        print(location + ": " + self.toString())
+    }
+    
+    public func toString() -> String {
+        let result = "MediaId: \(self.mediaId), MediaUrl: \(self.mediaUrl)," +
+            " Position: \(self.position), Timestamp: \(self.timestamp)"
+        return result
+    }
+
     /**********************************************************************************************
     * Adapter Methods
     ***********************************************************************************************/
@@ -94,7 +96,7 @@ public class MediaPlayState {
         } catch let err {
             handleError(caller: "MediaPlayState.retrieve", error: err)
         }
-        self.dump()
+        self.dump(location: "retrieve")
     }
     
     public func update(position: CMTime) {
@@ -103,20 +105,21 @@ public class MediaPlayState {
     
     public func update(mediaUrl: String, position: CMTime) {
         do {
-            self.dump()
-            self.mediaUrl = mediaUrl
-            self.position = position
-            self.timestampMS = MediaPlayState.now()
-            self.dump()
-            if let db = self.findDB() {
-                let sql = "REPLACE INTO MediaState(mediaType, mediaId, mediaUrl, position, timestamp)" +
-                " VALUES (?, ?, ?, ?, ?)"
-                let values: [Any] = [self.mediaType, self.mediaId, self.mediaUrl, self.positionMS, self.timestampMS]
-                _ = try db.executeV1(sql: sql, values: values)
+            if (self.mediaUrl != "") {
+                self.mediaUrl = mediaUrl
+                self.position = position
+                self.timestampMS = MediaPlayState.now()
+                if let db = self.findDB() {
+                    let sql = "REPLACE INTO MediaState(mediaType, mediaId, mediaUrl, position, timestamp)" +
+                    " VALUES (?, ?, ?, ?, ?)"
+                    let values: [Any] = [self.mediaType, self.mediaId, self.mediaUrl, self.positionMS, self.timestampMS]
+                    _ = try db.executeV1(sql: sql, values: values)
+                }
             }
         } catch let err {
             handleError(caller: "MediaPlayState.update", error: err)
         }
+        self.dump(location: "update")
     }
     
     public func delete() {
@@ -130,6 +133,7 @@ public class MediaPlayState {
         } catch let err {
             handleError(caller: "MediaPlayState.delete", error: err)
         }
+        self.dump(location: "delete")
     }
     
     private func handleError(caller: String, error: Error) {
