@@ -11,13 +11,13 @@ import CoreMedia
 
 public class MediaPlayStateIO {
    
-    public let currentState: MediaPlayState
+    public let current: MediaPlayState
     private let database: Sqlite3?
     
     public init(mediaType: String) {
-        self.currentState = MediaPlayState(mediaType: mediaType)
+        self.current = MediaPlayState(mediaType: mediaType)
         do {
-            self.database = try Sqlite3.openDB(dbname: "Settings.db", copyIfAbsent: false)
+            self.database = try Sqlite3.findDB(dbname: "Settings.db")
         } catch let err {
             print("Error opening Settings.db \(err.localizedDescription)")
             self.database = nil
@@ -30,36 +30,39 @@ public class MediaPlayStateIO {
     
     public func retrieve(mediaId: String) -> MediaPlayState {
         do {
-            self.currentState.clear(mediaId: mediaId)
+            self.current.clear(mediaId: mediaId)
             if let db = self.database {
                 let sql = "SELECT mediaUrl, position, timestamp" +
-                " FROM MediaPlayState WHERE mediaType = ? AND mediaId = ?";
-                let resultSet: [Dictionary<String,Any?>] = try db.queryV0(sql: sql,
-                                                                          values: self.currentState.getKey())
+                " FROM MediaState WHERE mediaType = ? AND mediaId = ?"
+                let resultSet: [[String?]] = try db.queryV1(sql: sql, values: self.current.getKey())
                 if (resultSet.count > 0) {
                     let row = resultSet[0];
-                    self.currentState.mediaUrl = row["mediaUrl"] as? String ?? "unknown"
-                    self.currentState.positionMS = row["position"] as? Int64 ?? 0
-                    self.currentState.timestampMS = row["timesamp"] as? Int64 ?? 0
+                    self.current.mediaUrl = row[0] ?? "unknown"
+                    self.current.positionMS = Int64(row[1] ?? "0") ?? 0
+                    self.current.timestampMS = Int64(row[2] ?? "0") ?? MediaPlayState.now()
                 }
             }
         } catch let err {
             handleError(caller: "MediaPlayStateIO.retrieve", error: err)
         }
-        return self.currentState
+        self.current.dump()
+        return self.current
     }
     
     public func update(position: CMTime) {
-        update(mediaUrl: currentState.mediaUrl, position: position)
+        update(mediaUrl: current.mediaUrl, position: position)
     }
     
     public func update(mediaUrl: String, position: CMTime) {
         do {
-            self.currentState.update(mediaUrl: mediaUrl, position: position)
+            self.current.dump()
+            self.current.update(mediaUrl: mediaUrl, position: position)
+            self.current.dump()
             if let db = self.database {
-                let sql = "REPLACE INTO MediaPlayState(mediaType, mediaId, mediaUrl, position, timestamp)" +
-                " VALUES (?, ?, ?, ?, ?);"
-                _ = try db.executeV1(sql: sql, values: self.currentState.getDBFields())
+                let sql = "REPLACE INTO MediaState(mediaType, mediaId, mediaUrl, position, timestamp)" +
+                " VALUES (?, ?, ?, ?, ?)"
+                print("FIELDS \(self.current.getDBFields())")
+                _ = try db.executeV1(sql: sql, values: self.current.getDBFields())
             }
         } catch let err {
             handleError(caller: "MediaPlayStateIO.update", error: err)
@@ -69,10 +72,10 @@ public class MediaPlayStateIO {
     public func clear() {
         do {
             if let db = self.database {
-                let sql = "DELETE FROM MediaPlayState WHERE mediaType = ? AND mediaId = ?"
-                _ = try db.executeV1(sql: sql, values: self.currentState.getKey())
+                let sql = "DELETE FROM MediaState WHERE mediaType = ? AND mediaId = ?"
+                _ = try db.executeV1(sql: sql, values: self.current.getKey())
             }
-            self.currentState.clear()
+            self.current.clear()
         } catch let err {
             handleError(caller: "MediaPlayStateIO.clear", error: err)
         }
@@ -82,19 +85,29 @@ public class MediaPlayStateIO {
         print("ERROR at \(caller) \(error.localizedDescription)")
         do {
             if let db = self.database {
-                let sql = "CREATE TABLE MediaPlayState(" +
-                    " mediaType TEXT NOT NULL," +
-                    " mediaId TEXT NOT NULL," +
-                    " mediaUrl TEXT NOT NULL," +
-                    " position INT default 0," +
-                    " timestamp INT NOT NULL," +
-                    " PRIMARY KEY(mediaType, mediaId)," +
-                    " CHECK (mediaType IN ('audio', 'video'))"
-                _ = try db.executeV1(sql: sql, values: [])
+                let sql1 = "SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'MediaState'"
+                let resultSet: [[String?]] = try db.queryV1(sql: sql1, values: [])
+                if (resultSet.count > 0) {
+                    let row: [String?] = resultSet[0]
+                    if let countStr = row[0] {
+                        if let count = Int(countStr) {
+                            if count < 1 {
+                                let sql2 = "CREATE TABLE MediaState(" +
+                                    " mediaType TEXT NOT NULL," +
+                                    " mediaId TEXT NOT NULL," +
+                                    " mediaUrl TEXT NOT NULL," +
+                                    " position INT default 0," +
+                                    " timestamp INT NOT NULL," +
+                                    " PRIMARY KEY(mediaType, mediaId)," +
+                                " CHECK (mediaType IN ('audio', 'video')))"
+                                _ = try db.executeV1(sql: sql2, values: [])
+                            }
+                        }
+                    }
+                }
             }
         } catch let err {
             print("ERROR at MediaPlayStateIO.handleError \(err.localizedDescription)")
         }
-        self.currentState.clear()
     }
 }

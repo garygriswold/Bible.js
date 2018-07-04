@@ -18,20 +18,30 @@ public class MediaPlayState {
     public var timestampMS: Int64
     public var position: CMTime {
         get {
+            //let time: CMTime = CMTimeMake(self.positionMS, 1000)
+            //let ms: Int64 = Int64(CMTimeGetSeconds(time) * 1000)
+            //if (self.positionMS != ms) {
+            //    print("ERROR")
+            //}
             return CMTimeMake(self.positionMS, 1000)
         }
         set(newPosition) {
-            self.positionMS = Int64(CMTimeGetSeconds(newPosition))
+            self.positionMS = Int64(CMTimeGetSeconds(newPosition) * 1000)
         }
     }
     public var timestamp: Date {
         get {
+            //let inter = TimeInterval(Double(self.timestampMS) / 1000.0)
+            //let d: Date = Date(timeIntervalSince1970: inter)
+            //let ms = Int64(d.timeIntervalSince1970 * 1000.0)
+            //if (self.timestampMS != ms) {
+            //    print("ERROR")
+            //}
             let interval = TimeInterval(Double(self.timestampMS) / 1000.0)
             return Date(timeIntervalSince1970: interval)
         }
         set(newTime) {
-            
-            self.timestampMS = Int64(newTime.timeIntervalSinceNow * 1000.0)
+            self.timestampMS = Int64(newTime.timeIntervalSince1970 * 1000.0)
         }
     }
     
@@ -40,7 +50,7 @@ public class MediaPlayState {
         self.mediaId = "unknown"
         self.mediaUrl = ""
         self.positionMS = 0
-        self.timestampMS = Int64(Date().timeIntervalSince1970 * 1000.0)
+        self.timestampMS = MediaPlayState.now()
     }
     
     deinit {
@@ -55,13 +65,13 @@ public class MediaPlayState {
         self.mediaId = mediaId
         self.mediaUrl = ""
         self.positionMS = 0
-        self.timestampMS = now()
+        self.timestampMS = MediaPlayState.now()
     }
     
     func update(mediaUrl: String, position: CMTime) {
         self.mediaUrl = mediaUrl
         self.position = position
-        self.timestampMS = now()
+        self.timestampMS = MediaPlayState.now()
     }
     
     func getKey() -> [String] {
@@ -71,8 +81,16 @@ public class MediaPlayState {
     func getDBFields() -> [Any] {
         return [self.mediaType, self.mediaId, self.mediaUrl, self.positionMS, self.timestampMS]
     }
+    
+    public func dump() {
+        print("mediaType \(mediaType)")
+        print("mediaId   \(mediaId)")
+        print("mediaUrl  \(mediaUrl)")
+        print("position  \(position)  \(positionMS)")
+        print("timestamp \(timestamp) \(timestampMS)")
+    }
 
-    private func now() -> Int64 {
+    public static func now() -> Int64 {
         return Int64(Date().timeIntervalSince1970 * 1000.0)
     }
 }

@@ -467,6 +467,8 @@ public class Sqlite3 {
                 sqlite3_bind_text(statement, col, (value as! NSString).utf8String, -1, nil)
             } else if value is Int {
                 sqlite3_bind_int(statement, col, Int32(value as! Int))
+            } else if value is Int64 {
+                sqlite3_bind_int64(statement, col, Int64(value as! Int64))
             } else if value is Double {
                 sqlite3_bind_double(statement, col, (value as! Double))
             } else if value is NSNull {

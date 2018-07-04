@@ -7,9 +7,9 @@
 //
 
 import AVFoundation
-//#if USE_FRAMEWORK
 import AWS
-//#endif
+import Utility
+
 
 class AudioBible {
     
@@ -22,6 +22,7 @@ class AudioBible {
     }
     
     private let controller: AudioBibleController
+    private let audioPlayState: MediaPlayStateIO
     private let controlCenter: AudioControlCenter
     private var audioAnalytics: AudioAnalytics?
     private var player: AVPlayer?
@@ -31,6 +32,7 @@ class AudioBible {
     
     private init(controller: AudioBibleController) {
         self.controller = controller
+        self.audioPlayState = MediaPlayStateIO(mediaType: "audio")
         self.controlCenter = AudioControlCenter.shared
         self.controlCenter.setupControlCenter(player: self)
         self.initNotifications()
@@ -63,7 +65,7 @@ class AudioBible {
                                              silLang: reference.silLang)
         self.readVerseMetaData(reference: reference)
         print("INSIDE BibleReader \(reference.damId)")
-        _ = AudioPlayState.retrieve(mediaId: reference.damId)
+        _ = self.audioPlayState.retrieve(mediaId: reference.damId)
         AwsS3Cache.shared.readFile(s3Bucket: reference.getS3Bucket(),
                    s3Key: reference.getS3Key(),
                    expireInterval: Double.infinity,
@@ -79,7 +81,7 @@ class AudioBible {
         let playerItem = AVPlayerItem(asset: asset)
         print("Player Item Status \(playerItem.status)")
         
-        let seekTime = backupSeek(state: AudioPlayState.currentState, reference: reference)
+        let seekTime = backupSeek(state: audioPlayState.current, reference: reference)
         if (CMTimeGetSeconds(seekTime) > 0.1) {
             playerItem.seek(to: seekTime, completionHandler: nil) // nil handler added 6/2/18
         }
@@ -93,7 +95,7 @@ class AudioBible {
         self.preFetchNextChapter(reference: reference)
     }
     
-    private func backupSeek(state: AudioPlayState, reference: AudioReference) -> CMTime {
+    private func backupSeek(state: MediaPlayState, reference: AudioReference) -> CMTime {
         if (state.mediaUrl == reference.toString()) {
             if reference.audioChapter != nil {
                 return state.position
@@ -149,7 +151,7 @@ class AudioBible {
                 }
             } else {
                 self.stop()
-                AudioPlayState.clear() // Must do after stop, because stop updates
+                self.audioPlayState.clear() // Must do after stop, because stop updates
             }
         }
     }
@@ -282,7 +284,7 @@ class AudioBible {
                 result = currentTime
             }
         }
-        AudioPlayState.update(url: reference.toString(), time: result)
+        self.audioPlayState.update(mediaUrl: reference.toString(), position: result)
     }
     
     private func addNextChapter(reference: AudioReference) {

@@ -14,7 +14,6 @@
 		E48D8FCD20AB55D300F59D5F /* AudioTOCChapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D8FB820AB55D100F59D5F /* AudioTOCChapter.swift */; };
 		E48D8FCE20AB55D300F59D5F /* AudioTOCBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D8FB920AB55D100F59D5F /* AudioTOCBook.swift */; };
 		E48D8FCF20AB55D300F59D5F /* AudioTOCBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D8FBA20AB55D200F59D5F /* AudioTOCBible.swift */; };
-		E48D8FD020AB55D300F59D5F /* AudioPlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D8FBE20AB55D200F59D5F /* AudioPlayState.swift */; };
 		E48D8FD120AB55D300F59D5F /* AudioControlCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D8FC020AB55D200F59D5F /* AudioControlCenter.swift */; };
 		E48D8FD220AB55D300F59D5F /* AudioReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D8FC220AB55D200F59D5F /* AudioReference.swift */; };
 		E48D8FD320AB55D300F59D5F /* AudioTOCTestament.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D8FC320AB55D300F59D5F /* AudioTOCTestament.swift */; };
@@ -69,7 +68,6 @@
 		E48D8FBB20AB55D200F59D5F /* UIPauseDNButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIPauseDNButton.png; path = /Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/UIPauseDNButton.png; sourceTree = "<absolute>"; };
 		E48D8FBC20AB55D200F59D5F /* UIPlayUPButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIPlayUPButton.png; path = /Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/UIPlayUPButton.png; sourceTree = "<absolute>"; };
 		E48D8FBD20AB55D200F59D5F /* UISliderMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UISliderMin.png; path = /Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/UISliderMin.png; sourceTree = "<absolute>"; };
-		E48D8FBE20AB55D200F59D5F /* AudioPlayState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AudioPlayState.swift; path = /Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioPlayState.swift; sourceTree = "<absolute>"; };
 		E48D8FBF20AB55D200F59D5F /* UIPauseUPButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIPauseUPButton.png; path = /Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/UIPauseUPButton.png; sourceTree = "<absolute>"; };
 		E48D8FC020AB55D200F59D5F /* AudioControlCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AudioControlCenter.swift; path = /Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioControlCenter.swift; sourceTree = "<absolute>"; };
 		E48D8FC120AB55D200F59D5F /* AudioPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AudioPlayer.h; path = /Users/garygriswold/ShortSands/BibleApp/Plugins/AudioPlayer/src/ios/AudioPlayer/AudioPlayer.h; sourceTree = "<absolute>"; };
@@ -141,7 +139,6 @@
 				E48D8FB320AB55D100F59D5F /* AudioBibleView.swift */,
 				E48D8FC020AB55D200F59D5F /* AudioControlCenter.swift */,
 				E48D8FC120AB55D200F59D5F /* AudioPlayer.h */,
-				E48D8FBE20AB55D200F59D5F /* AudioPlayState.swift */,
 				E48D8FC220AB55D200F59D5F /* AudioReference.swift */,
 				E48D8FC720AB55D300F59D5F /* AudioSession.swift */,
 				E48D8FBA20AB55D200F59D5F /* AudioTOCBible.swift */,
@@ -334,7 +331,6 @@
 				E48D8FCF20AB55D300F59D5F /* AudioTOCBible.swift in Sources */,
 				E48D8FCD20AB55D300F59D5F /* AudioTOCChapter.swift in Sources */,
 				E48D8FCB20AB55D300F59D5F /* AudioBibleView.swift in Sources */,
-				E48D8FD020AB55D300F59D5F /* AudioPlayState.swift in Sources */,
 				E48D8FCC20AB55D300F59D5F /* AudioBibleController.swift in Sources */,
 				E48D8FD120AB55D300F59D5F /* AudioControlCenter.swift in Sources */,
 			);
