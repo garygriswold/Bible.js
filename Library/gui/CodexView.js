@@ -49,20 +49,19 @@ CodexView.prototype.showView = function(nodeId) {
 			var lastChildId = that.viewport.lastChild.id;
 			var firstChild = that.viewport.firstChild;
 			var firstRect = firstChild.getBoundingClientRect();
-			var rowId = null;
 			if (firstRect.top > 0) {
 				var firstChapter = new Reference(that.viewport.firstChild.id.substr(3));
-				rowId = that.tableContents.rowId(firstChapter);
-				if (rowId) {
-					that.showChapters([rowId - 1], false, function() {
+				var priorRowId = that.tableContents.priorRowId(firstChapter);
+				if (priorRowId) {
+					that.showChapters([priorRowId], false, function() {
 						onScrollLastStep();
 					});
 				} else onScrollLastStep();
 			} else if (currNode.bottom === lastChildId || lastChildId.substr(7,1) === "0") {
 				var lastChapter = new Reference(lastChildId.substr(3));
-				rowId = that.tableContents.rowId(lastChapter);
-				if (rowId) {
-					that.showChapters([rowId + 1], true, function() {
+				var nextRowId = that.tableContents.nextRowId(lastChapter);
+				if (nextRowId) {
+					that.showChapters([nextRowId], true, function() {
 						onScrollLastStep();
 					});					
 				} else onScrollLastStep();

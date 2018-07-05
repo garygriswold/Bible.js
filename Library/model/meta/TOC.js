@@ -5,6 +5,7 @@ function TOC(adapter) {
 	this.adapter = adapter;
 	this.bookList = [];
 	this.bookMap = {};
+	this.maxRowId = 0;
 	this.isFilled = false;
 	Object.seal(this);
 }
@@ -19,6 +20,7 @@ TOC.prototype.fill = function(callback) {
 			for (var i=0; i<results.length; i++) {
 				var tocBook = results[i];
 				that.bookMap[tocBook.code] = tocBook;
+				that.maxRowId = tocBook.chapterRowId + tocBook.lastChapter;
 			}
 			that.isFilled = true;
 		}
@@ -32,6 +34,14 @@ TOC.prototype.addBook = function(book) {
 };
 TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
+};
+TOC.prototype.priorRowId = function(reference) {
+	var rid = this.rowId(reference);
+	return((rid && rid > 1) ? rid - 1: null);
+};
+TOC.prototype.nextRowId = function(reference) {
+	var rid = this.rowId(reference);
+	return((rid && rid < this.maxRowId) ? rid + 1: null);	
 };
 TOC.prototype.rowId = function(reference) {
 	var current = this.bookMap[reference.book];

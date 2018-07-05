@@ -395,20 +395,19 @@ CodexView.prototype.showView = function(nodeId) {
 			var lastChildId = that.viewport.lastChild.id;
 			var firstChild = that.viewport.firstChild;
 			var firstRect = firstChild.getBoundingClientRect();
-			var rowId = null;
 			if (firstRect.top > 0) {
 				var firstChapter = new Reference(that.viewport.firstChild.id.substr(3));
-				rowId = that.tableContents.rowId(firstChapter);
-				if (rowId) {
-					that.showChapters([rowId - 1], false, function() {
+				var priorRowId = that.tableContents.priorRowId(firstChapter);
+				if (priorRowId) {
+					that.showChapters([priorRowId], false, function() {
 						onScrollLastStep();
 					});
 				} else onScrollLastStep();
 			} else if (currNode.bottom === lastChildId || lastChildId.substr(7,1) === "0") {
 				var lastChapter = new Reference(lastChildId.substr(3));
-				rowId = that.tableContents.rowId(lastChapter);
-				if (rowId) {
-					that.showChapters([rowId + 1], true, function() {
+				var nextRowId = that.tableContents.nextRowId(lastChapter);
+				if (nextRowId) {
+					that.showChapters([nextRowId], true, function() {
 						onScrollLastStep();
 					});					
 				} else onScrollLastStep();
@@ -3214,6 +3213,7 @@ function TOC(adapter) {
 	this.adapter = adapter;
 	this.bookList = [];
 	this.bookMap = {};
+	this.maxRowId = 0;
 	this.isFilled = false;
 	Object.seal(this);
 }
@@ -3228,6 +3228,7 @@ TOC.prototype.fill = function(callback) {
 			for (var i=0; i<results.length; i++) {
 				var tocBook = results[i];
 				that.bookMap[tocBook.code] = tocBook;
+				that.maxRowId = tocBook.chapterRowId + tocBook.lastChapter;
 			}
 			that.isFilled = true;
 		}
@@ -3241,6 +3242,14 @@ TOC.prototype.addBook = function(book) {
 };
 TOC.prototype.find = function(code) {
 	return(this.bookMap[code]);
+};
+TOC.prototype.priorRowId = function(reference) {
+	var rid = this.rowId(reference);
+	return((rid && rid > 1) ? rid - 1: null);
+};
+TOC.prototype.nextRowId = function(reference) {
+	var rid = this.rowId(reference);
+	return((rid && rid < this.maxRowId) ? rid + 1: null);	
 };
 TOC.prototype.rowId = function(reference) {
 	var current = this.bookMap[reference.book];
