@@ -385,8 +385,8 @@ CodexView.prototype.showView = function(nodeId) {
 	});
 	function onScrollHandler(event) {
 		var currNode = identifyCurrentChapter();//expensive solution
-		//console.log("currNode top: " + currNode.top + "  mid: " + currNode.middle + "  bot: " + currNode.bottom);
 		if (currNode) {
+			//console.log("currNode top: " + currNode.top + "  mid: " + currNode.middle + "  bot: " + currNode.bottom);
 			if (currNode.middle !== that.currentNodeId) {
 				that.currentNodeId = currNode.middle;
 				var currRef = new Reference(currNode.middle.substr(3));
@@ -395,9 +395,10 @@ CodexView.prototype.showView = function(nodeId) {
 			var lastChildId = that.viewport.lastChild.id;
 			var firstChild = that.viewport.firstChild;
 			var firstRect = firstChild.getBoundingClientRect();
+			var rowId = null;
 			if (firstRect.top > 0) {
 				var firstChapter = new Reference(that.viewport.firstChild.id.substr(3));
-				var rowId = that.tableContents.rowId(firstChapter);
+				rowId = that.tableContents.rowId(firstChapter);
 				if (rowId) {
 					that.showChapters([rowId - 1], false, function() {
 						onScrollLastStep();
@@ -405,7 +406,7 @@ CodexView.prototype.showView = function(nodeId) {
 				} else onScrollLastStep();
 			} else if (currNode.bottom === lastChildId || lastChildId.substr(7,1) === "0") {
 				var lastChapter = new Reference(lastChildId.substr(3));
-				var rowId = that.tableContents.rowId(lastChapter);
+				rowId = that.tableContents.rowId(lastChapter);
 				if (rowId) {
 					that.showChapters([rowId + 1], true, function() {
 						onScrollLastStep();
@@ -419,8 +420,8 @@ CodexView.prototype.showView = function(nodeId) {
 	}
 	function identifyCurrentChapter() {
 		var result = {middle: null, bottom: null};
-		var windowMid = window.innerHeight / 2;
 		var windowBot = window.innerHeight;
+		var windowMid = windowBot / 2;
 		var index = that.viewport.children.length -1;
 		while(index >= 0) {
 			var node = that.viewport.children[index];
@@ -446,23 +447,24 @@ CodexView.prototype.showChapters = function(chapters, append, callback) {
 			console.log((JSON.stringify(html)));
 			callback(html);
 		} else {
-			//for (var i=0; i<results.rows.length; i++) {
-			var startId = html.indexOf("id=") + 4;
-			var endId = html.indexOf("\"", startId + 1);
-			var nodeId = html.substring(startId, endId);
-			var reference = new Reference(nodeId);
-			var page = (reference.chapter > 0) ? html + that.copyrightView.copyrightNotice : html;
-			if (append) {
-				reference.append(that.viewport, page);
-			} else {
-				var scrollHeight1 = that.viewport.scrollHeight;
-				var scrollY1 = window.scrollY;
-				reference.prepend(that.viewport, page);
-				//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
-				TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
+			if (html && html.length > 2) {
+				//for (var i=0; i<results.rows.length; i++) {
+				var startId = html.indexOf("id=") + 4;
+				var endId = html.indexOf("\"", startId + 1);
+				var nodeId = html.substring(startId, endId);
+				var reference = new Reference(nodeId);
+				var page = (reference.chapter > 0) ? html + that.copyrightView.copyrightNotice : html;
+				if (append) {
+					reference.append(that.viewport, page);
+				} else {
+					var scrollHeight1 = that.viewport.scrollHeight;
+					var scrollY1 = window.scrollY;
+					reference.prepend(that.viewport, page);
+					//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
+					TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
+				}
+				console.log('added chapter', reference.nodeId);
 			}
-			console.log('added chapter', reference.nodeId);
-			//}
 			callback();
 		}
 	});
@@ -1637,21 +1639,9 @@ RateMeView.prototype._buildView = function() {
 	var buttonText = this._getButtonText(this.version.langCode);
 	var button = this.dom.addNode(cell, 'button', null, buttonText, 'ratebtn');
 	button.addEventListener('click', function(event) {
-		switch(deviceSettings.platform()) {
-			case 'android':
-				window.open("https://play.google.com/store/apps/details?id=" + that.appIdAndroid, '_blank', 'location=yes');
-			    break;
-			case 'ios':
-			    callNative('Utility', 'rateApp', [], 'N', function() {
-				    console.log("RATE ME COMPLETE");
-			    });
-			    break;
-			case 'node':
-				window.open("https://play.google.com/store/apps/details?id=" + that.appIdAndroid, '_system');
-			    break;
-			default:
-			    break;
-		}
+		callNative('Utility', 'rateApp', [], 'N', function() {
+			console.log("RATE ME COMPLETE");
+		});
 	});
 };
 RateMeView.prototype._getButtonText = function(langCode) {
