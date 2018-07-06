@@ -48,7 +48,7 @@ public class ProgressCircle : UIView {
     func addToParentAndCenter(view: UIView) {
         view.addSubview(self)
         let xCenter = view.frame.width - (circleRadius * 2.0)
-        let yCenter = circleRadius * 1.4//view.frame.height / 2 - circleRadius
+        let yCenter = circleRadius * 1.4
         self.frame = CGRect(x: xCenter, y: yCenter,
                             width: circleRadius, height: circleRadius)
         self.circleBackLayer.frame = CGRect(x: xCenter, y: yCenter,

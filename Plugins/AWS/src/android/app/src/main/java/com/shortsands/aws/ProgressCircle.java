@@ -40,13 +40,13 @@ public class ProgressCircle extends ProgressBar {
             DisplayMetrics metrics = new DisplayMetrics();
             activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
             Log.d(TAG, "metrics=" + metrics.toString());
-            int diameter = metrics.widthPixels / 6;
+            int diameter = metrics.widthPixels / 8;
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(diameter, diameter);
-            params.leftMargin = (metrics.widthPixels - diameter) / 2;
-            params.topMargin = (metrics.heightPixels - diameter) / 2;
+            params.leftMargin = metrics.widthPixels - diameter;
+            params.topMargin = diameter / 2;
             this.setLayoutParams(params);
-
+            
             final ProgressCircle progBar = this;
             this.activity.runOnUiThread(new Runnable() {
                 @Override
