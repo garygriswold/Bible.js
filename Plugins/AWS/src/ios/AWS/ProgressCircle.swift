@@ -47,13 +47,14 @@ public class ProgressCircle : UIView {
     
     func addToParentAndCenter(view: UIView) {
         view.addSubview(self)
-        view.addConstraints(NSLayoutConstraint.constraints(
-            withVisualFormat: "V:|[v]|", options: .init(rawValue: 0),
-            metrics: nil, views: ["v": self]))
-        view.addConstraints(NSLayoutConstraint.constraints(
-            withVisualFormat: "H:|[v]|", options: .init(rawValue: 0),
-            metrics: nil, views:  ["v": self]))
-        self.translatesAutoresizingMaskIntoConstraints = false
+        let xCenter = view.frame.width / 2 - circleRadius
+        let yCenter = view.frame.height / 2 - circleRadius
+        self.frame = CGRect(x: xCenter, y: yCenter,
+                            width: circleRadius, height: circleRadius)
+        self.circleBackLayer.frame = CGRect(x: xCenter, y: yCenter,
+                                            width: circleRadius, height: circleRadius)
+        self.circlePathLayer.frame = CGRect(x: xCenter, y: yCenter,
+                                            width: circleRadius, height: circleRadius)
     }
     
     var progress: CGFloat {
