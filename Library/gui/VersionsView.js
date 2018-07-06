@@ -5,7 +5,7 @@ var FLAG_PATH = 'licensed/icondrawer/flags/64/';
 var CURRENT_VERS = 'licensed/sebastiano/check.png';
 var INSTALLED_VERS = 'licensed/sebastiano/contacts.png';
 var DOWNLOAD_VERS = 'licensed/sebastiano/cloud-download.png';
-var DOWNLOAD_FAIL = 'licensed/melissa/cloud-lightning.png';
+var DOWNLOAD_STRT = 'licensed/melissa/cloud-lightning.png';
 
 function VersionsView(settingStorage) {
 	this.settingStorage = settingStorage;
@@ -35,10 +35,10 @@ VersionsView.prototype.showView = function() {
 		this.rootNode.appendChild(this.root);
 		window.scrollTo(10, this.scrollPosition);// move to settings view?
 		
-		while(this.downloadErrors.length > 0) {
-			var node = this.downloadErrors.pop();
-			node.setAttribute('src', DOWNLOAD_VERS);
-		}
+		//while(this.downloadErrors.length > 0) {
+		//	var node = this.downloadErrors.pop();
+		//	node.setAttribute('src', DOWNLOAD_VERS);
+		//}
 	}
 };
 VersionsView.prototype.buildCountriesList = function() {
@@ -146,14 +146,15 @@ VersionsView.prototype.buildVersionList = function(countryNode) {
 	function downloadVersionHandler(event) {
 		this.removeEventListener('click', downloadVersionHandler);
 		var iconNode = this;
+		iconNode.setAttribute('src', DOWNLOAD_STRT);
 		var versionCode = iconNode.id.substr(3);
 		var versionFile = iconNode.getAttribute('data-id').substr(3);
 		that.settingStorage.getCurrentVersion(function(currVersion) {
 			var downloader = new FileDownloader(that.database, that.locale);
 			downloader.download(versionFile, function(error) {
 				if (error) {
-					console.log(JSON.stringify(error));
-					iconNode.setAttribute('src', DOWNLOAD_FAIL);
+					console.log(error);
+					iconNode.setAttribute('src', DOWNLOAD_VERS);
 					iconNode.addEventListener('click', downloadVersionHandler);
 					that.downloadErrors.push(iconNode);
 				} else {

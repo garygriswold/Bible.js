@@ -12,7 +12,7 @@ public class ProgressCircle : UIView {
 
     let circleBackLayer = CAShapeLayer()
     let circlePathLayer = CAShapeLayer()
-    let circleRadius: CGFloat = 50.0
+    let circleRadius: CGFloat = 20.0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -24,7 +24,7 @@ public class ProgressCircle : UIView {
         configure()
     }
 
-    func configure() {
+    private func configure() {
         progress = 0.0
         backgroundColor = UIColor.clear
         
@@ -47,8 +47,8 @@ public class ProgressCircle : UIView {
     
     func addToParentAndCenter(view: UIView) {
         view.addSubview(self)
-        let xCenter = view.frame.width / 2 - circleRadius
-        let yCenter = view.frame.height / 2 - circleRadius
+        let xCenter = view.frame.width - (circleRadius * 2.0)
+        let yCenter = circleRadius * 1.4//view.frame.height / 2 - circleRadius
         self.frame = CGRect(x: xCenter, y: yCenter,
                             width: circleRadius, height: circleRadius)
         self.circleBackLayer.frame = CGRect(x: xCenter, y: yCenter,
@@ -80,23 +80,23 @@ public class ProgressCircle : UIView {
         )
     }
     
-    func circleFrame() -> CGRect {
-        var circleFrame = CGRect(x: 0, y: 0, width: 2 * circleRadius, height: 2 * circleRadius)
-        let circlePathBounds = circlePathLayer.bounds
-        circleFrame.origin.x = circlePathBounds.midX - circleFrame.midX
-        circleFrame.origin.y = circlePathBounds.midY - circleFrame.midY
-        return circleFrame
-    }
-    
-    func circlePath() -> UIBezierPath {
-        return UIBezierPath(ovalIn: circleFrame())
-    }
-    
     public override func layoutSubviews() {
         super.layoutSubviews()
         circleBackLayer.frame = bounds
         circleBackLayer.path = circlePath().cgPath
         circlePathLayer.frame = bounds
         circlePathLayer.path = circlePath().cgPath
+    }
+    
+    private func circlePath() -> UIBezierPath {
+        return UIBezierPath(ovalIn: circleFrame())
+    }
+    
+    private func circleFrame() -> CGRect {
+        var circleFrame = CGRect(x: 0, y: 0, width: 2 * circleRadius, height: 2 * circleRadius)
+        let circlePathBounds = circlePathLayer.bounds
+        circleFrame.origin.x = circlePathBounds.midX - circleFrame.midX
+        circleFrame.origin.y = circlePathBounds.midY - circleFrame.midY
+        return circleFrame
     }
 }

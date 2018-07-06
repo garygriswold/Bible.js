@@ -20,7 +20,7 @@ FileDownloader.prototype.download = function(bibleVersion, callback) {
 	var filePath = this.finalPath + bibleVersion;
 	callNative('AWS', 'downloadZipFile', ["SS", s3Bucket, s3Key, filePath], "E", function(error) {
 		if (error == null) console.log("Download Success");
-		else console.log("Download Failed");
+		else console.log("Download Failed", error);
 		callback(error);
 	});
 };
