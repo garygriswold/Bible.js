@@ -20,12 +20,8 @@ DatabaseHelper.prototype.select = function(statement, values, callback) {
 	});
 };
 DatabaseHelper.prototype.selectHTML = function(statement, values, callback) {
-	callNative('Sqlite', 'queryHTML', [this.dbname, statement, values], "ES", function(error, results) {
-		if (error) {
-			callback(new IOError(error));
-		} else {
-			callback(results);
-		}
+	callNative('Sqlite', 'queryHTML', [this.dbname, statement, values], "S", function(results) {
+		callback(results);
 	});
 };
 DatabaseHelper.prototype.selectSSIF = function(statement, values, callback) {

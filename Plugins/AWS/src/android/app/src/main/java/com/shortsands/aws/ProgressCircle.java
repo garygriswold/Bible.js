@@ -46,7 +46,7 @@ public class ProgressCircle extends ProgressBar {
             params.leftMargin = metrics.widthPixels - diameter;
             params.topMargin = diameter / 2;
             this.setLayoutParams(params);
-            
+
             final ProgressCircle progBar = this;
             this.activity.runOnUiThread(new Runnable() {
                 @Override

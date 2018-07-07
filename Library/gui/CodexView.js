@@ -96,30 +96,25 @@ CodexView.prototype.showView = function(nodeId) {
 CodexView.prototype.showChapters = function(chapters, append, callback) {
 	var that = this;
 	this.chaptersAdapter.getChapters(chapters, function(html) {
-		if (html instanceof IOError) {
-			console.log((JSON.stringify(html)));
-			callback(html);
-		} else {
-			if (html && html.length > 2) {
-				//for (var i=0; i<results.rows.length; i++) {
-				var startId = html.indexOf("id=") + 4;
-				var endId = html.indexOf("\"", startId + 1);
-				var nodeId = html.substring(startId, endId);
-				var reference = new Reference(nodeId);
-				var page = (reference.chapter > 0) ? html + that.copyrightView.copyrightNotice : html;
-				if (append) {
-					reference.append(that.viewport, page);
-				} else {
-					var scrollHeight1 = that.viewport.scrollHeight;
-					var scrollY1 = window.scrollY;
-					reference.prepend(that.viewport, page);
-					//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
-					TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
-				}
-				console.log('added chapter', reference.nodeId);
+		if (html && html.length > 10) {
+			//for (var i=0; i<results.rows.length; i++) {
+			var startId = html.indexOf("id=") + 4;
+			var endId = html.indexOf("\"", startId + 1);
+			var nodeId = html.substring(startId, endId);
+			var reference = new Reference(nodeId);
+			var page = (reference.chapter > 0) ? html + that.copyrightView.copyrightNotice : html;
+			if (append) {
+				reference.append(that.viewport, page);
+			} else {
+				var scrollHeight1 = that.viewport.scrollHeight;
+				var scrollY1 = window.scrollY;
+				reference.prepend(that.viewport, page);
+				//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
+				TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
 			}
-			callback();
+			console.log('added chapter', reference.nodeId);
 		}
+		callback();
 	});
 };
 CodexView.prototype.scrollTo = function(nodeId) {

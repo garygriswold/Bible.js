@@ -3,10 +3,6 @@
 export IOS_DIR=SafeBible_iOS/SafeBible/www
 export AND_DIR=SafeBible_Android/app/src/main/assets/www
 
-#cp www/js/BibleAppConfig.js $IOS_DIR/js/BibleAppConfig.js
-#cp www/js/BibleAppConfig.js $AND_DIR/js/BibleAppConfig.js
-
-
 cat ../Library/css/Status.css > www/css/BibleApp.css
 cat ../Library/css/Codex.css >> www/css/BibleApp.css
 cat ../Library/css/Copyright.css >> www/css/BibleApp.css
@@ -17,7 +13,6 @@ cat ../Library/css/Settings.css >> www/css/BibleApp.css
 cat ../Library/css/Video.css >> www/css/BibleApp.css
 cp www/css/BibleApp.css $IOS_DIR/css/BibleApp.css
 cp www/css/BibleApp.css $AND_DIR/css/BibleApp.css
-
 
 echo \"use strict\"\; > www/js/BibleApp.js
 cat ../Library/gui/AppInitializer.js >> www/js/BibleApp.js

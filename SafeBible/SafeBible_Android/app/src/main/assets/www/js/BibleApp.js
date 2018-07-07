@@ -442,30 +442,25 @@ CodexView.prototype.showView = function(nodeId) {
 CodexView.prototype.showChapters = function(chapters, append, callback) {
 	var that = this;
 	this.chaptersAdapter.getChapters(chapters, function(html) {
-		if (html instanceof IOError) {
-			console.log((JSON.stringify(html)));
-			callback(html);
-		} else {
-			if (html && html.length > 2) {
-				//for (var i=0; i<results.rows.length; i++) {
-				var startId = html.indexOf("id=") + 4;
-				var endId = html.indexOf("\"", startId + 1);
-				var nodeId = html.substring(startId, endId);
-				var reference = new Reference(nodeId);
-				var page = (reference.chapter > 0) ? html + that.copyrightView.copyrightNotice : html;
-				if (append) {
-					reference.append(that.viewport, page);
-				} else {
-					var scrollHeight1 = that.viewport.scrollHeight;
-					var scrollY1 = window.scrollY;
-					reference.prepend(that.viewport, page);
-					//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
-					TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
-				}
-				console.log('added chapter', reference.nodeId);
+		if (html && html.length > 10) {
+			//for (var i=0; i<results.rows.length; i++) {
+			var startId = html.indexOf("id=") + 4;
+			var endId = html.indexOf("\"", startId + 1);
+			var nodeId = html.substring(startId, endId);
+			var reference = new Reference(nodeId);
+			var page = (reference.chapter > 0) ? html + that.copyrightView.copyrightNotice : html;
+			if (append) {
+				reference.append(that.viewport, page);
+			} else {
+				var scrollHeight1 = that.viewport.scrollHeight;
+				var scrollY1 = window.scrollY;
+				reference.prepend(that.viewport, page);
+				//window.scrollTo(0, scrollY1 + that.viewport.scrollHeight - scrollHeight1);
+				TweenMax.set(window, {scrollTo: { y: scrollY1 + that.viewport.scrollHeight - scrollHeight1}});
 			}
-			callback();
+			console.log('added chapter', reference.nodeId);
 		}
+		callback();
 	});
 };
 CodexView.prototype.scrollTo = function(nodeId) {
@@ -1468,11 +1463,6 @@ VersionsView.prototype.showView = function() {
 	else if (this.rootNode.children.length < 4) {
 		this.rootNode.appendChild(this.root);
 		window.scrollTo(10, this.scrollPosition);// move to settings view?
-		
-		//while(this.downloadErrors.length > 0) {
-		//	var node = this.downloadErrors.pop();
-		//	node.setAttribute('src', DOWNLOAD_VERS);
-		//}
 	}
 };
 VersionsView.prototype.buildCountriesList = function() {
@@ -2016,12 +2006,8 @@ DatabaseHelper.prototype.select = function(statement, values, callback) {
 	});
 };
 DatabaseHelper.prototype.selectHTML = function(statement, values, callback) {
-	callNative('Sqlite', 'queryHTML', [this.dbname, statement, values], "ES", function(error, results) {
-		if (error) {
-			callback(new IOError(error));
-		} else {
-			callback(results);
-		}
+	callNative('Sqlite', 'queryHTML', [this.dbname, statement, values], "S", function(results) {
+		callback(results);
 	});
 };
 DatabaseHelper.prototype.selectSSIF = function(statement, values, callback) {
@@ -2149,12 +2135,7 @@ ChaptersAdapter.prototype.getChapters = function(values, callback) {
 		statement += ' rowid >= ? and rowid <= ? order by rowid';
 	}
 	this.database.selectHTML(statement, values, function(results) {
-		if (results instanceof IOError) {
-			console.log('found Error', results);
-			callback(results);
-		} else {
-			callback(results);
-        }
+		callback(results);
 	});
 };
 /**

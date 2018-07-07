@@ -51,11 +51,6 @@ ChaptersAdapter.prototype.getChapters = function(values, callback) {
 		statement += ' rowid >= ? and rowid <= ? order by rowid';
 	}
 	this.database.selectHTML(statement, values, function(results) {
-		if (results instanceof IOError) {
-			console.log('found Error', results);
-			callback(results);
-		} else {
-			callback(results);
-        }
+		callback(results);
 	});
 };

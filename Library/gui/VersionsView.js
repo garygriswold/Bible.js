@@ -34,11 +34,6 @@ VersionsView.prototype.showView = function() {
 	else if (this.rootNode.children.length < 4) {
 		this.rootNode.appendChild(this.root);
 		window.scrollTo(10, this.scrollPosition);// move to settings view?
-		
-		//while(this.downloadErrors.length > 0) {
-		//	var node = this.downloadErrors.pop();
-		//	node.setAttribute('src', DOWNLOAD_VERS);
-		//}
 	}
 };
 VersionsView.prototype.buildCountriesList = function() {
