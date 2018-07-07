@@ -21,25 +21,26 @@ Public domain license using the MIT template.
 Repository Structure
 --------------------
 
+BibleAppNW - (Obsolete, will be deleted soon) This is a Node/WebKit App, which will run as a local (not browser) application on desktop computers.  This is where the original development is often done, because of the ease of development in this environment.
+
 Docs - This directory contains critical how-to instructions.
 
 Library - This is the common javascript library.  Many projects contain a shell script that copies all of the files that they need from this Library.
 
-Publisher - This project prepares copies of the Bible for publication.  It takes as input a USX package from the Digital Bible Library and produces a SQLite database of the content, concordance, and table of contents in the form needed by the App.
+Plugins - This contains the native code for various modules (frameworks in iOS).  They include: VideoPlayer, AudioPlayer, AWS (Amazon Web Services), and Utility, which is primarily Sqlite3.
+
+Publisher - This project prepares copies of the Bible for publication.  It takes as input a Bible in USX format and produces a SQLite database of the content, concordance, and table of contents in the form needed by the App.
+
+SafeBible - This directory contains the iOS and Android versions of the mobile App.
+
+Server - This directory contains programs and scripts for woking with files stored in AWS S3. This includes Bible text and audio content, and analytics of the App's use.
+
+TestApp - (Obsolete, this will be deleted soon) This was a test App developed during the rewrite of the App that removed Cordova.
+
+UnitTests - This is various unit tests for the Javascript portion. of the App
 
 Validation - This directory contains a number of scripts that test the correctness of the Bible database as produced by Publisher.
 
-BibleAppNW - This is a Node/WebKit App, which will run as a local (not browser) application on desktop computers.  This is where the original development is often done, because of the ease of development in this environment.
-
-YourBible - This is a mobile Cordova version of the App.  This version of the App runs on mobile devices. It currently runs well on Android and iOS.
-
-QAApp - This is a web App that is used by instructors to answer questions of students.  It is written in a single-page architecture so that it could be rewritten as a mobile App.  This feature has not been deployed in production
-
-Server - This is a project for the server, which will deliver copies of the Bible and handle the delivery of student questions and Instructor answers.  The Bible delivery capability of this has been moved to cloudfront.net.  The student question and instructor answer feature has not been put into production.
-	aws/lambda - Contains the Amazon Web Services Lambda functions that are currently in production.
-	www - Contains a node application server which was in production in the past, but has been retired.
-
-UnitTest - This is a repository of UnitTests for various parts of the system.
-
 Versions - The project builds a database of information about versions of the Bible which can be downloaded by the App.  This database is included in the BibleApp.
 
+YourBible - (Obsolete, this will be deleted soon.  Cordova has been removed from the current version) This is a mobile Cordova version of the App.  This version of the App runs on mobile devices. It currently runs well on Android and iOS.

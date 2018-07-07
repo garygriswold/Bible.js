@@ -94,7 +94,7 @@ class AudioControlCenter {
     
     private func updateTextPosition(nodeId: String) {
         if let webview = AudioBibleView.webview {
-            let msg = "document.body.dispatchEvent(new CustomEvent(BIBLE.SCROLL_TEXT," +
+            let msg = "document.dispatchEvent(new CustomEvent(BIBLE.SCROLL_TEXT," +
             " { detail: { id: '\(nodeId)' }}));"
             print("DISPATCH EVENT LISTENING TO \(nodeId)")
             webview.evaluateJavaScript(msg, completionHandler: {(result, error) in

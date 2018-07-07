@@ -32,7 +32,7 @@ public class AudioControlCenter {
     }
     void updateTextPosition(String nodeId) {
         Log.d(TAG, "NodeId: " + nodeId);
-        final String msg = "document.body.dispatchEvent(new CustomEvent(BIBLE.SCROLL_TEXT," +
+        final String msg = "document.dispatchEvent(new CustomEvent(BIBLE.SCROLL_TEXT," +
                 " { detail: { id: '" + nodeId + "' }}));";
         Log.d(TAG, "DISPATCH EVENT LISTENING TO " + nodeId);
         ValueCallback<String> completion = new ValueCallback<String>() {
