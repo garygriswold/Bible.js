@@ -118,16 +118,14 @@ public class MediaPlayState {
     
     public func update(mediaUrl: String, position: CMTime) {
         do {
-            if (self.mediaUrl != "") {
-                self.mediaUrl = mediaUrl
-                self.position = position
-                self.timestampMS = MediaPlayState.now()
-                if let db = self.findDB() {
-                    let sql = "REPLACE INTO MediaState(mediaType, mediaId, mediaUrl, position, timestamp)" +
-                    " VALUES (?, ?, ?, ?, ?)"
-                    let values: [Any] = [self.mediaType, self.mediaId, self.mediaUrl, self.positionMS, self.timestampMS]
-                    _ = try db.executeV1(sql: sql, values: values)
-                }
+            self.mediaUrl = mediaUrl
+            self.position = position
+            self.timestampMS = MediaPlayState.now()
+            if let db = self.findDB() {
+                let sql = "REPLACE INTO MediaState(mediaType, mediaId, mediaUrl, position, timestamp)" +
+                " VALUES (?, ?, ?, ?, ?)"
+                let values: [Any] = [self.mediaType, self.mediaId, self.mediaUrl, self.positionMS, self.timestampMS]
+                _ = try db.executeV1(sql: sql, values: values)
             }
         } catch let err {
             handleError(caller: "MediaPlayState.update", error: err)
