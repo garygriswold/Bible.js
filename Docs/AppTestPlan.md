@@ -48,8 +48,8 @@ Startup Download
 	4. Test that ERV-ENG.db is used when no default is found.
 	5. Test that startup download is bypassed if version is already present on device
 	6. Test that startup download succeeds if version is not already present on device
-	7. Test that lightening cloud is used if there is a failure in download.
-	8. Test that download cloud reappears after leaving and returning to VersionView
+	7. Test that icon changes to lightening cloud when clicked
+	8. Test that icon changes back to cloud on failure. (how does it fail?)
 	
 AWS Server
 ----------
@@ -156,6 +156,17 @@ Server Test
 
 AppUpdater Unit Test Plan
 =========================
+
+Basic Test
+----------
+
+	1. Check that Settings.db is created on initial install
+	2. Check it is present on subsequent starts.
+	3. Check that default version in Versions.db becomes version in Settings.db Installed.
+	4. Check that installed versions in Versions.db become available in VersionsView.
+	
+Test Intro
+----------
 AppUpdater is complex, and needs a significant unit test.  This plan covers the following cases:
 
 	1. Bible in www, not used, version 1.1 				(Test 1 NMV)
