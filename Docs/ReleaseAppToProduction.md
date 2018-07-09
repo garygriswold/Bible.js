@@ -97,36 +97,37 @@ ERV-ENG, ERV-ARB, NMV
 
 Verify that IOS-Deployment-Target is 8.0 in xCode
 
-Make Certain that App is hitting a production server
-
-	BibleApp/Library/io/FileDownloader.js
-	this.host = 's3.amazonaws.com';
-
+##Make Certain that App is hitting a production server
+##
+##	BibleApp/Library/io/FileDownloader.js
+##	this.host = 's3.amazonaws.com';
+##
 Update the version code
 
-	vi $HOME/ShortSands/BibleApp/YourBible/config.xml
+##	vi $HOME/ShortSands/BibleApp/YourBible/config.xml
+	xCode
 	
-Rebuild the Custom Plugins to iphone Release
-
-	1. Rebuild each of 3 plugins
-	2. InstallVideoModule.sh
-	3. build_ios.sh Release
-	
-Compile your app in release mode to obtain a signed IPA.
-
-	cd $HOME/ShortSands/BibleApp/YourBible
-	cordova build ios --release --device
-	Note location of IPA, currently: /Users/garygriswold/ShortSands/BibleApp/YourBible/platforms/ios/build/device/SafeBible.ipa
-	
-Upload IPA
-
-	Use Spotlight to locate Application Loader, use this program to upload the App.ipa file.
-	
-Checkin Final changes
-
-	git commit -am"ddd"
-	git branch x.x.x
-	
+##Rebuild the Custom Plugins to iphone Release
+##
+##	1. Rebuild each of 3 plugins
+##	2. InstallVideoModule.sh
+##	3. build_ios.sh Release
+##	
+##Compile your app in release mode to obtain a signed IPA.
+##
+##	cd $HOME/ShortSands/BibleApp/YourBible
+##	cordova build ios --release --device
+##	Note location of IPA, currently: /Users/garygriswold/ShortSands/BibleApp/YourBible/platforms/ios/build/device/SafeBible.ipa
+##	
+##Upload IPA
+#3
+##	Use Spotlight to locate Application Loader, use this program to upload the App.ipa file.
+##	
+##Checkin Final changes
+##
+##	git commit -am"ddd"
+##	git branch x.x.x
+##	
 
 Deploy Android Production Version
 =================================

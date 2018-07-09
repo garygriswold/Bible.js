@@ -7,10 +7,7 @@
 //
 
 import UIKit
-//#if USE_FRAMEWORK
-//import AWS
 import AudioPlayer
-//#endif
 
 class ViewController: UIViewController {
     
