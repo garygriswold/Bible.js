@@ -15,6 +15,7 @@
 		E4BC9CB320DD55C100E0E87F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BC9CB220DD55C100E0E87F /* ViewController.swift */; };
 		E4BC9CB620DD55C100E0E87F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4BC9CB420DD55C100E0E87F /* Main.storyboard */; };
 		E4BC9CB820DD55C300E0E87F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4BC9CB720DD55C300E0E87F /* Assets.xcassets */; };
+		E4CB8AFC20F3130A0027A957 /* icon_180.png in Resources */ = {isa = PBXBuildFile; fileRef = E4CB8AFB20F3130A0027A957 /* icon_180.png */; };
 		E4D6997B20DF4FBC0049FEEA /* www in Resources */ = {isa = PBXBuildFile; fileRef = E4D6997A20DF4FBC0049FEEA /* www */; };
 		E4D8A10420E19BBF004534BF /* UIThumbUP.png in Resources */ = {isa = PBXBuildFile; fileRef = E4D8A0FA20E19BBD004534BF /* UIThumbUP.png */; };
 		E4D8A10520E19BBF004534BF /* UIPlayDNButton.png in Resources */ = {isa = PBXBuildFile; fileRef = E4D8A0FB20E19BBE004534BF /* UIPlayDNButton.png */; };
@@ -61,6 +62,7 @@
 		E4BC9CB720DD55C300E0E87F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4BC9CBA20DD55C300E0E87F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E4BC9CBC20DD55C300E0E87F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4CB8AFB20F3130A0027A957 /* icon_180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_180.png; path = SafeBible/Assets.xcassets/AppIcon.appiconset/icon_180.png; sourceTree = "<group>"; };
 		E4D6997A20DF4FBC0049FEEA /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
 		E4D8A0FA20E19BBD004534BF /* UIThumbUP.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIThumbUP.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIThumbUP.png; sourceTree = "<group>"; };
 		E4D8A0FB20E19BBE004534BF /* UIPlayDNButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIPlayDNButton.png; path = ../../Plugins/AudioPlayer/src/ios/AudioPlayer/UIPlayDNButton.png; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 		E4BC9CA420DD55C100E0E87F = {
 			isa = PBXGroup;
 			children = (
+				E4CB8AFB20F3130A0027A957 /* icon_180.png */,
 				E4D8A0FF20E19BBE004534BF /* UIPauseDNButton.png */,
 				E4D8A0FE20E19BBE004534BF /* UIPauseUPButton.png */,
 				E4D8A0FB20E19BBE004534BF /* UIPlayDNButton.png */,
@@ -214,6 +217,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4CB8AFC20F3130A0027A957 /* icon_180.png in Resources */,
 				E4D8A10420E19BBF004534BF /* UIThumbUP.png in Resources */,
 				E4D8A10520E19BBF004534BF /* UIPlayDNButton.png in Resources */,
 				E4D8A10620E19BBF004534BF /* UIStopUPButton.png in Resources */,

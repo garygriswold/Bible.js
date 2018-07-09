@@ -64,6 +64,14 @@ class AudioControlCenter {
             if let play = player.getPlayer() {
                 if let item = play.currentItem {
                     var info = [String : Any]()
+                    if let image = UIImage(named: "icon_180") {
+                        info[MPMediaItemPropertyArtwork] =
+                            MPMediaItemArtwork(boundsSize: image.size) { size in
+                                return image
+                        }
+                    } else {
+                        print("Error: Could not find image for Control Center.")
+                    }
                     self.currentBookChapter = reference.localName
                     info[MPMediaItemPropertyTitle] = self.currentBookChapter
                     info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = item.currentTime().seconds
