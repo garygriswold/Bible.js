@@ -1,4 +1,4 @@
-Update the Development Environment
+Update the Development Environment - This is obsolete and should be recorded, as of July 2018, I not longer use corova
 ==================================
 
 This contains notes of little got'yas found along the way.
