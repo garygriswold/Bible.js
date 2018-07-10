@@ -391,8 +391,8 @@ public class Sqlite3 {
                                 throw new SQLiteException("Column " + names[col] + " has unknown type " + type);
                             }
                         }
-                        resultSet.add(String.join("|", names));
-                        resultSet.add(String.join("|", types));
+                        resultSet.add(this.join("|", names));
+                        resultSet.add(this.join("|", types));
                     }
                     String[] row = new String[colCount];
                     for (int col=0; col<colCount; col++) {
@@ -408,17 +408,31 @@ public class Sqlite3 {
                             row[col] = "null";
                         }
                     }
-                    resultSet.add(String.join("|", row));
+                    resultSet.add(this.join("|", row));
                 }
                 String[] rows = new String[resultSet.size()];
                 rows = resultSet.toArray(rows);
-                return String.join("~", rows);
+                return this.join("~", rows);
             } finally {
                 if (cursor != null) cursor.close();
             }
         } else {
             throw new SQLiteCantOpenDatabaseException("Database must be opened before query.");
         }
+    }
+
+    /**
+     * This can be replaced with Java 8 String.join when available.
+     */
+    private String join(String delim, String[] array) {
+        StringBuilder result = new StringBuilder();
+        for (int i=0; i<array.length; i++) {
+            if (i > 0) {
+                result.append(delim);
+            }
+            result.append(array[i]);
+        }
+        return(result.toString());
     }
 
     /*
