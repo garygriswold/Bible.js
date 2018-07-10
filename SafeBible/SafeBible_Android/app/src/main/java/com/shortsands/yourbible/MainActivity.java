@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
+import android.webkit.WebSettings;
 
 /**
  * https://stackoverflow.com/questions/22895140/call-android-methods-from-javascript
@@ -32,12 +33,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         this.webView = new WebView(this);
-        setContentView(this.webView);
-        this.webView.loadUrl("file:///android_asset/www/index.html");
-
-        this.webView.getSettings().setJavaScriptEnabled(true);
+        WebSettings settings = this.webView.getSettings();
+        settings.setAllowFileAccessFromFileURLs(true); // Enables Dynamic CSS manipulation
+        settings.setBlockNetworkLoads(true); // App Security
+        settings.setCacheMode(WebSettings.LOAD_NO_CACHE); // This should help performance
+        settings.setJavaScriptEnabled(true);
         this.handler = new JSMessageHandler(this);
         this.webView.addJavascriptInterface(this.handler, "callAndroid");
+
+        setContentView(this.webView);
+        this.webView.loadUrl("file:///android_asset/www/index.html");
     }
 
     public void startVideoActivity(String callbackId, String method, final Intent intent) {
