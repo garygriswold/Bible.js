@@ -380,9 +380,9 @@ public class Sqlite3 {
     * parseInt(v), parseFloat(v), (v === 'true'), strings are not converted, and I am not sure how to handle blob.
     * When the string data that is returned is going to be displayed in an HTML view, there is no need to
     * unescape the HTML entity, the webview will do that.
-    * Null is represented by the string null, not by a zero length string.  Unfortunately, this means that we
-    * cannot distinguish between a null in the database and the string "null" in the database, but this might be
-    * a good thing.
+    * Null is represented by by a zero length string.  Unfortunately, this means that we cannot distinguish
+    * between a null in the database and the string "" in the database, but in JS they both return false on
+    * an if (str) test.
     *
     * When this data is received on the JS side, it could be processed by a function that knows what it is expecting,
     * for type and field and skips the first two rows.  This would be the more efficient thing to do.
@@ -444,7 +444,7 @@ public class Sqlite3 {
                                 row[i] = str4.replacingOccurrences(of: "\n", with: "\\n")
                             }
                         } else {
-                            row[i] = "null"
+                            row[i] = ""
                         }
                     }
                     resultSet.append(row.joined(separator: "|"))

@@ -283,7 +283,11 @@ public class Sqlite3 {
                 while (cursor.moveToNext()) {
                     String[] row = new String[colCount];
                     for (int i = 0; i < colCount; i++) {
-                        row[i] = cursor.getString(i);
+                        if (cursor.isNull(i)) {
+                            row[i] = null;
+                        } else {
+                            row[i] = cursor.getString(i);
+                        }
                     }
                     resultSet[rowNum] = row;
                     rowNum++;
@@ -309,7 +313,9 @@ public class Sqlite3 {
                 String resultSet = "";
                 cursor = this.database.rawQuery(sql, bindJSONArray(values));
                 while (cursor.moveToNext()) {
-                    resultSet += cursor.getString(0);
+                    if (!cursor.isNull(0)) {
+                        resultSet += cursor.getString(0);
+                    }
                 }
                 return (resultSet);
             } finally {
@@ -396,16 +402,16 @@ public class Sqlite3 {
                     }
                     String[] row = new String[colCount];
                     for (int col=0; col<colCount; col++) {
-                        row[col] = cursor.getString(col);
-                        if (row[col] != null) {
+                        if (cursor.isNull(col)) {
+                            row[col] = "";
+                        } else {
+                            row[col] = cursor.getString(col);
                             if (types[col] == "S" && row[col].matches("|~\n\r")) {
                                 String str2 = row[col].replace("|", "&#124");
                                 String str3 = str2.replace("~", "&#126");
                                 String str4 = str3.replace("\r", "\\r");
                                 row[col] = str4.replace("\n", "\\n");
                             }
-                        } else{
-                            row[col] = "null";
                         }
                     }
                     resultSet.add(this.join("|", row));
