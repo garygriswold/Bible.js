@@ -223,23 +223,26 @@ public class Sqlite3 {
                     JSONObject row = new JSONObject();
                     for (int col = 0; col < colCount; col++) {
                         String name = cursor.getColumnName(col);
-                        int type = cursor.getType(col);
-                        switch (type) {
-                            case 1: // INT
-                                row.put(name, cursor.getInt(col));
-                                break;
-                            case 2: // Double
-                                row.put(name, cursor.getDouble(col));
-                                break;
-                            case 3: // TEXT
-                                row.put(name, cursor.getString(col));
-                                break;
-                            case 5: // NULL
-                                row.put(name, null);
-                                break;
-                            default:
-                                row.put(name, cursor.getString(col));
-                                break;
+                        if (cursor.isNull(col)) {
+                            row.put(name, null);
+                        } else {
+                            switch (cursor.getType(col)) {
+                                case 1: // INT
+                                    row.put(name, cursor.getInt(col));
+                                    break;
+                                case 2: // Double
+                                    row.put(name, cursor.getDouble(col));
+                                    break;
+                                case 3: // TEXT
+                                    row.put(name, cursor.getString(col));
+                                    break;
+                                case 5: // NULL
+                                    row.put(name, null);
+                                    break;
+                                default:
+                                    row.put(name, cursor.getString(col));
+                                    break;
+                            }
                         }
                     }
                     resultSet.put(row);

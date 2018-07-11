@@ -56,7 +56,7 @@ SearchView.prototype.hideView = function() {
 };
 SearchView.prototype.startSearch = function(query) {
 	this.query = query;
-	console.log('Create new search page');
+	console.log('Create new search page', query);
 	if (! this.lookup.find(query)) {
 		this.showSearch(query);
 		for (var i=this.rootNode.children.length -1; i>=1; i--) { // remove viewRoot if present
