@@ -49,7 +49,7 @@ CodexView.prototype.showView = function(nodeId) {
 			var lastChildId = that.viewport.lastChild.id;
 			var firstChild = that.viewport.firstChild;
 			var firstRect = firstChild.getBoundingClientRect();
-			if (firstRect.top > 0) {
+			if (firstRect.top > 0 && lastChildId.substr(7,1) !== "0") {
 				var firstChapter = new Reference(that.viewport.firstChild.id.substr(3));
 				var priorRowId = that.tableContents.priorRowId(firstChapter);
 				if (priorRowId) {
