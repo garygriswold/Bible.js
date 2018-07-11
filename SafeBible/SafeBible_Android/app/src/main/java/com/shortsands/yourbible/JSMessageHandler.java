@@ -445,7 +445,7 @@ public class JSMessageHandler {
     }
 
     private void jsSuccess(String callbackId, String response) {
-        String result = (response != null) ? "'" + response.replace("'", "&apos;") + "'" : "null";
+        String result = (response != null) ? "'" + response.replace("'", "&#39;") + "'" : "null";
         jsCallback(callbackId, false, null, result);
     }
 

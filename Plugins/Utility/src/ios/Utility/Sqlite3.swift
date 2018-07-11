@@ -438,8 +438,8 @@ public class Sqlite3 {
                         if let cValue = sqlite3_column_text(statement, col) {
                             row[i] = String(cString: cValue)
                             if types[i] == "S" && row[i].rangeOfCharacter(from: characterset) != nil {
-                                let str2 = row[i].replacingOccurrences(of: "|", with: "&#124")
-                                let str3 = str2.replacingOccurrences(of: "~", with: "&#126")
+                                let str2 = row[i].replacingOccurrences(of: "|", with: "&#124;")
+                                let str3 = str2.replacingOccurrences(of: "~", with: "&#126;")
                                 let str4 = str3.replacingOccurrences(of: "\r", with: "\\r")
                                 row[i] = str4.replacingOccurrences(of: "\n", with: "\\n")
                             }

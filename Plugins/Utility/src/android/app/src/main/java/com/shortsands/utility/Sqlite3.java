@@ -407,8 +407,8 @@ public class Sqlite3 {
                         } else {
                             row[col] = cursor.getString(col);
                             if (types[col] == "S" && row[col].matches("|~\n\r")) {
-                                String str2 = row[col].replace("|", "&#124");
-                                String str3 = str2.replace("~", "&#126");
+                                String str2 = row[col].replace("|", "&#124;");
+                                String str3 = str2.replace("~", "&#126;");
                                 String str4 = str3.replace("\r", "\\r");
                                 row[col] = str4.replace("\n", "\\n");
                             }

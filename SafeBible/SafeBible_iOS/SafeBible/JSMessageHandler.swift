@@ -400,7 +400,7 @@ public class JSMessageHandler : NSObject, WKScriptMessageHandler {
     private func jsSuccess(callbackId: String, response: String?) {
         if let result1 = response {
             // The replace of ' for &apos; does not seem to be needed in iOS, but is included for compat with Android
-            let result2 = "'" + result1.replacingOccurrences(of: "'", with: "&apos;") + "'"
+            let result2 = "'" + result1.replacingOccurrences(of: "'", with: "&#39;") + "'"
             jsCallback(callbackId: callbackId, json: false, error: nil, response: result2)
         } else {
             jsCallback(callbackId: callbackId, json: false, error: nil, response: "null")
