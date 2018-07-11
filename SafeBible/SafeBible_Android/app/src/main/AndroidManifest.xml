@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:hardwareAccelerated="true"
-    android:versionCode="11103"
-    android:versionName="1.11.3"
     package="com.shortsands.yourbible">
     <application android:hardwareAccelerated="true"
         android:allowBackup="false"
