@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -408,13 +409,12 @@ public class Sqlite3 {
                         if (cursor.isNull(col)) {
                             row[col] = "";
                         } else {
+                            // Never got pattern match of [|~\n\r] working
                             row[col] = cursor.getString(col);
-                            if (types[col] == "S" && row[col].matches("|~\n\r")) {
-                                String str2 = row[col].replace("|", "&#124;");
-                                String str3 = str2.replace("~", "&#126;");
-                                String str4 = str3.replace("\r", "\\r");
-                                row[col] = str4.replace("\n", "\\n");
-                            }
+                            String str2 = row[col].replace("|", "&#124;");
+                            String str3 = str2.replace("~", "&#126;");
+                            String str4 = str3.replace("\r", "\\r");
+                            row[col] = str4.replace("\n", "\\n");
                         }
                     }
                     resultSet.add(this.join("|", row));

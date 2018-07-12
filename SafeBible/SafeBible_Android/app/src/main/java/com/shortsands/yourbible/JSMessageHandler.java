@@ -488,7 +488,6 @@ public class JSMessageHandler {
         int isJson = (json) ? 1 : 0;
         String err = (error != null) ? "'" + error + "'" : "null";
         final String message = "handleNative('" + callbackId + "', " + isJson + ", " + err + ", " + response + ");";
-        Log.d(TAG, "RETURN TO JS: " + message);
         this.activity.runOnUiThread(new Runnable() {
             public void run() {
                 activity.getWebview().evaluateJavascript(message, new ValueCallback<String>() {
