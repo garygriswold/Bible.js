@@ -11,6 +11,13 @@ import android.webkit.WebView;
 import com.shortsands.aws.AwsS3Manager;
 import com.shortsands.aws.CompletionHandler;
 
+/**
+ * I think this class should be deleted.  It appears to be a bit of code left over from when this
+ * module was an application.  But, it has been changed to a library.  When it is deleted, it is
+ * probably necessary to also remove an activity record in the SafeBible AndroidManifest.xml file
+ * that refers to this activity. GNG July 12, 2018
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     private static String TAG = "MainActivity";
