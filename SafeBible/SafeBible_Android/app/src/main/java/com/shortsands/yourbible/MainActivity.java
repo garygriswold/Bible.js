@@ -8,6 +8,7 @@ import android.util.Log;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebSettings;
+import com.shortsands.audioplayer.AudioBibleController;
 
 /**
  * https://stackoverflow.com/questions/22895140/call-android-methods-from-javascript
@@ -72,5 +73,15 @@ public class MainActivity extends AppCompatActivity {
                 this.handler.jsError(this.videoCallbackId, this.videoMethod, errMsg);
             }
         }
+    }
+
+    /**
+     * The final call you receive before your activity is destroyed.
+     */
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "Inside onDestroy");
+        AudioBibleController audioController = AudioBibleController.shared(this);
+        audioController.stop();
     }
 }
