@@ -6,6 +6,10 @@ import android.webkit.WebView;
 import com.shortsands.aws.CompletionHandler;
 /**
  * Created by garygriswold on 8/30/17.
+ *
+ * GNG Note: July 12, 2018
+ * If this were written as an activity, then the back button could be used to terminate
+ * this.  Currently, this runs within the MainActivity, so the back button terminates the App.
  */
 
 public class AudioBibleController {
