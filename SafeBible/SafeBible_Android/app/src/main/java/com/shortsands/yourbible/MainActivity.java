@@ -75,49 +75,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Called when the system is about to start resuming a previous activity.
-     *
-     * @param multitasking		Flag indicating if multitasking is turned on for app
-     */
-    @Override
-    public void onPause(boolean multitasking) {
-        Log.d(TAG, "Inside MainActivity.onPause");
-    }
-
-    /**
-     * Called when the activity will start interacting with the user.
-     *
-     * @param multitasking		Flag indicating if multitasking is turned on for app
-     */
-    @Override
-    public void onResume(boolean multitasking) {
-        Log.d(TAG, "Inside MainActivity.onResume");
-    }
-
-    /**
-     * Called when the activity is becoming visible to the user.
-     */
-    @Override
-    public void onStart() {
-        Log.d(TAG, "Inside MainActivity.onStart");
-    }
-
-    /**
-     * Called when the activity is no longer visible to the user.
-     */
-    @Override
-    public void onStop() {
-        Log.d(TAG, "Inside MainActivity.onStop");
-    }
-
-    /**
-     * The final call you receive before your activity is destroyed.
-     */
-    @Override
-    public void onDestroy() {
-        Log.d(TAG, "Inside MainActivity.onDestroy");
+    public void onBackPressed() {
+        Log.d(TAG, "Inside MainActivity.onBackPressed");
         AudioBibleController audioController = AudioBibleController.shared(this);
-        audioController.stop();
+        if (audioController.isPlaying()) {
+            audioController.stop();
+        } else {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+        }
     }
 }
