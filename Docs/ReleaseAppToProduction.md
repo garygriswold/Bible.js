@@ -1,3 +1,7 @@
+This document is mostly obsolete as of July 2018.  It was about App release under Cordova, 
+and now the releases are done using xCode and Android Studio, which makes them very simple.
+
+
 Preparation for Release
 =======================
 	
