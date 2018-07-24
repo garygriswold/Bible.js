@@ -17,6 +17,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     let textDisplayCell = UITableViewCell()
     let languagesCell = UITableViewCell()
     let versionsCell = UITableViewCell() // This is placeholder
+    let settingsModel = SettingsModel()
     
     let cellBackground = UIColor.white
     
@@ -62,7 +63,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     // Customize the section headings for each section
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 3: return "Bibles"
+        case 3: return "My Bibles"
         default: return nil
         }
     }
@@ -73,7 +74,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         case 0: return 2
         case 1: return 2
         case 2: return 1
-        case 3: return 3
+        case 3: return self.settingsModel.getVersionCount()
         default: fatalError("Unknown number of sections")
         }
     }
@@ -99,15 +100,11 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             default: fatalError("Unknown row \(indexPath.row) in section 2")
             }
         case 3:
-            //switch indexPath.row {
-            //case 0: return self.versionsCell
-            //default: fatalError("Unknown row \(indexPath.row) in section 3")
-            //}
             let cell = tableView.dequeueReusableCell(withIdentifier: "currVersion", for: indexPath)
-            cell.textLabel?.text = "Section \(indexPath.section) Row \(indexPath.row)"
+            let version = self.settingsModel.getVersion(index: indexPath.row)
+            cell.textLabel?.text = "\(version.versionAbbr), \(version.versionName)"
             return cell
         default: fatalError("Unknown section")
         }
     }
-    
 }
