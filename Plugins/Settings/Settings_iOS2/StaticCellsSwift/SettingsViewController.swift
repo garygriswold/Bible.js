@@ -8,9 +8,12 @@ import UIKit
 
 class SettingsViewController: UITableViewController {
     
-    var reviewCell: UITableViewCell = UITableViewCell()
-    let feedbackCell: UITableViewCell = UITableViewCell()
-    var shareCell: UITableViewCell = UITableViewCell()
+    let reviewCell = UITableViewCell()
+    let feedbackCell = UITableViewCell()
+    let textSliderCell = UITableViewCell()
+    let textDisplayCell = UITableViewCell()
+    let languagesCell = UITableViewCell()
+    let versionsCell = UITableViewCell() // This is placeholder
     
     let cellBackground = UIColor.white
         
@@ -19,6 +22,10 @@ class SettingsViewController: UITableViewController {
         
         // set the view title
         self.title = "Settings"
+        
+        if let tableView = self.view as? UITableView {
+            tableView.allowsMultipleSelectionDuringEditing = false // This might not be needed, not sure
+        }
         
         // reviewCell, section 0, row 0
         self.reviewCell.backgroundColor = cellBackground
@@ -30,31 +37,48 @@ class SettingsViewController: UITableViewController {
         self.feedbackCell.textLabel?.text = "Send Us Feedback"
         self.feedbackCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         
-        // construct share cell, section 1, row 0
-        self.shareCell.textLabel?.text = "Share with Friends"
-        self.shareCell.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5)
-        self.shareCell.accessoryType = UITableViewCellAccessoryType.checkmark
+        // textSlider, section 1, row 0
+        self.textSliderCell.backgroundColor = cellBackground
+        self.textSliderCell.textLabel?.text = "Text Slider TBD"
+        
+        // textDisplay, section 1, row 1
+        self.textDisplayCell.backgroundColor = cellBackground
+        self.textDisplayCell.textLabel?.text = "For God so loved TBD"
+        
+        // languages, section 2, row 0
+        self.languagesCell.backgroundColor = cellBackground
+        self.languagesCell.textLabel?.text = "Languages"
+        self.languagesCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+        
+        // versions, section 3, row 0
+        self.versionsCell.backgroundColor = cellBackground
+        self.versionsCell.textLabel?.text = "KJV, King James Version"
+        //self.versionsCell.editingAccessoryType = UITableViewCellEditingStyle.delete
+        //self.versionsCell.editingStyle = UITableViewCellEditingStyle.delete
+        self.versionsCell.showsReorderControl = true
+        
     }
     
     // Return the number of sections
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 4
     }
     
     // Customize the section headings for each section
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 0: return nil
-        case 1: return "Social"
-        default: fatalError("Unknown section")
+        case 3: return "Bibles"
+        default: return nil
         }
     }
     
     // Return the number of rows for each section in your static table
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: return 2    // section 0 has 2 rows
-        case 1: return 1    // section 1 has 1 row
+        case 0: return 2
+        case 1: return 2
+        case 2: return 1
+        case 3: return 1
         default: fatalError("Unknown number of sections")
         }
     }
@@ -66,14 +90,33 @@ class SettingsViewController: UITableViewController {
             switch indexPath.row {
             case 0: return self.reviewCell
             case 1: return self.feedbackCell
-            default: fatalError("Unknown row in section 0")
+            default: fatalError("Unknown row \(indexPath.row) in section 0")
             }
         case 1:
             switch indexPath.row {
-            case 0: return self.shareCell       // section 1, row 0 is the share option
-            default: fatalError("Unknown row in section 1")
+            case 0: return self.textSliderCell
+            case 1: return self.textDisplayCell
+            default: fatalError("Unknown row \(indexPath.row) in section 1")
+            }
+        case 2:
+            switch indexPath.row {
+            case 0: return self.languagesCell
+            default: fatalError("Unknown row \(indexPath.row) in section 2")
+            }
+        case 3:
+            switch indexPath.row {
+            case 0: return self.versionsCell
+            default: fatalError("Unknown row \(indexPath.row) in section 3")
             }
         default: fatalError("Unknown section")
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt: IndexPath) -> UITableViewCellEditingStyle {
+        if editingStyleForRowAt.section == 3 {
+            return UITableViewCellEditingStyle.delete
+        } else {
+            return UITableViewCellEditingStyle.none
         }
     }
     
@@ -87,18 +130,31 @@ class SettingsViewController: UITableViewController {
         case 1:
             switch indexPath.row {
             case 0:
-                
+                break
                 // toggle check mark
-                if self.shareCell.accessoryType == UITableViewCellAccessoryType.none {
-                    self.shareCell.accessoryType = UITableViewCellAccessoryType.checkmark
-                } else {
-                    self.shareCell.accessoryType = UITableViewCellAccessoryType.none
-                }
+                //if self.shareCell.accessoryType == UITableViewCellAccessoryType.none {
+                //    self.shareCell.accessoryType = UITableViewCellAccessoryType.checkmark
+                //} else {
+                //    self.shareCell.accessoryType = UITableViewCellAccessoryType.none
+                //}
             default:
                 break
             }
         default:
             break
         }
+    }
+    
+    // This should not be needed. It is only needed to turn off moving
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.section == 3 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, moveRowAt: IndexPath, to: IndexPath) {
+        
     }
 }
