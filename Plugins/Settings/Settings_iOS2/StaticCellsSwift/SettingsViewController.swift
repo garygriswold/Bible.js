@@ -1,9 +1,6 @@
 //
-//  TableViewController.swift
+//  SettingsViewController.swift
 //  StaticCellsSwift
-//
-//  Created by Brian Mancini on 9/28/14.
-//  Copyright (c) 2014 iOSExamples. All rights reserved.
 //
 
 import Foundation
@@ -11,30 +8,27 @@ import UIKit
 
 class SettingsViewController: UITableViewController {
     
-    var firstNameCell: UITableViewCell = UITableViewCell()
-    var lastNameCell: UITableViewCell = UITableViewCell()
+    var reviewCell: UITableViewCell = UITableViewCell()
+    let feedbackCell: UITableViewCell = UITableViewCell()
     var shareCell: UITableViewCell = UITableViewCell()
     
-    var firstNameText: UITextField = UITextField()
-    var lastNameText: UITextField = UITextField()
+    let cellBackground = UIColor.white
         
     override func loadView() {
         super.loadView()
         
-        // set the title
-        self.title = "User Options"
+        // set the view title
+        self.title = "Settings"
         
-        // construct first name cell, section 0, row 0
-        self.firstNameCell.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5)
-        self.firstNameText = UITextField(frame: self.firstNameCell.contentView.bounds.insetBy(dx: 15, dy: 0))
-        self.firstNameText.placeholder = "First Name"
-        self.firstNameCell.addSubview(self.firstNameText)
+        // reviewCell, section 0, row 0
+        self.reviewCell.backgroundColor = cellBackground
+        self.reviewCell.textLabel?.text = "Write A Review"
+        self.reviewCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         
-        // construct last name cell, section 0, row 1
-        self.lastNameCell.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5)
-        self.lastNameText = UITextField(frame: self.lastNameCell.contentView.bounds.insetBy(dx: 15, dy: 0))
-        self.lastNameText.placeholder = "Last Name"
-        self.lastNameCell.addSubview(self.lastNameText)
+        // feedbackCell, section 0, row 1
+        self.feedbackCell.backgroundColor = cellBackground
+        self.feedbackCell.textLabel?.text = "Send Us Feedback"
+        self.feedbackCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         
         // construct share cell, section 1, row 0
         self.shareCell.textLabel?.text = "Share with Friends"
@@ -45,6 +39,15 @@ class SettingsViewController: UITableViewController {
     // Return the number of sections
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
+    }
+    
+    // Customize the section headings for each section
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section {
+        case 0: return nil
+        case 1: return "Social"
+        default: fatalError("Unknown section")
+        }
     }
     
     // Return the number of rows for each section in your static table
@@ -61,8 +64,8 @@ class SettingsViewController: UITableViewController {
         switch indexPath.section {
         case 0:
             switch indexPath.row {
-            case 0: return self.firstNameCell   // section 0, row 0 is the first name
-            case 1: return self.lastNameCell    // section 0, row 1 is the last name
+            case 0: return self.reviewCell
+            case 1: return self.feedbackCell
             default: fatalError("Unknown row in section 0")
             }
         case 1:
@@ -74,31 +77,28 @@ class SettingsViewController: UITableViewController {
         }
     }
     
-    // Customize the section headings for each section
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0: return "Profile"
-        case 1: return "Social"
-        default: fatalError("Unknown section")
-        }
-    }
-    
     // Configure the row selection code for any cells that you want to customize the row selection
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         
-        // Handle social cell selection to toggle checkmark
-        if indexPath.section == 1 && indexPath.row == 0 {
-            
-            // deselect row
-            tableView.deselectRow(at: indexPath, animated: false)
-            
-            // toggle check mark
-            if self.shareCell.accessoryType == UITableViewCellAccessoryType.none {
-                self.shareCell.accessoryType = UITableViewCellAccessoryType.checkmark
-            } else {
-                self.shareCell.accessoryType = UITableViewCellAccessoryType.none
+        switch indexPath.section {
+        case 0:
+            break
+        case 1:
+            switch indexPath.row {
+            case 0:
+                
+                // toggle check mark
+                if self.shareCell.accessoryType == UITableViewCellAccessoryType.none {
+                    self.shareCell.accessoryType = UITableViewCellAccessoryType.checkmark
+                } else {
+                    self.shareCell.accessoryType = UITableViewCellAccessoryType.none
+                }
+            default:
+                break
             }
+        default:
+            break
         }
     }
-    
 }
