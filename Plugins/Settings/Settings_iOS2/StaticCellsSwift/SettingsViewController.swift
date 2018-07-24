@@ -2,6 +2,7 @@
 //  SettingsViewController.swift
 //  StaticCellsSwift
 //
+// http://derpturkey.com/create-a-static-uitableview-without-storyboards/
 
 import Foundation
 import UIKit
@@ -57,6 +58,8 @@ class SettingsViewController: UITableViewController {
         //self.versionsCell.editingStyle = UITableViewCellEditingStyle.delete
         self.versionsCell.showsReorderControl = true
         
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "currVersion")
+        
     }
     
     // Return the number of sections
@@ -78,7 +81,7 @@ class SettingsViewController: UITableViewController {
         case 0: return 2
         case 1: return 2
         case 2: return 1
-        case 3: return 1
+        case 3: return 3
         default: fatalError("Unknown number of sections")
         }
     }
@@ -104,10 +107,13 @@ class SettingsViewController: UITableViewController {
             default: fatalError("Unknown row \(indexPath.row) in section 2")
             }
         case 3:
-            switch indexPath.row {
-            case 0: return self.versionsCell
-            default: fatalError("Unknown row \(indexPath.row) in section 3")
-            }
+            //switch indexPath.row {
+            //case 0: return self.versionsCell
+            //default: fatalError("Unknown row \(indexPath.row) in section 3")
+            //}
+            let cell = tableView.dequeueReusableCell(withIdentifier: "currVersion", for: indexPath)
+            cell.textLabel?.text = "Section \(indexPath.section) Row \(indexPath.row)"
+            return cell
         default: fatalError("Unknown section")
         }
     }
