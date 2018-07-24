@@ -10,6 +10,8 @@
 		3500362319D9017500E69508 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3500362219D9017500E69508 /* AppDelegate.swift */; };
 		3500362A19D9017500E69508 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3500362919D9017500E69508 /* Images.xcassets */; };
 		3500365219D903D800E69508 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3500365119D903D800E69508 /* SettingsViewController.swift */; };
+		E4FEE9D5210780BE007BA9EF /* SettingsViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FEE9D4210780BE007BA9EF /* SettingsViewDataSource.swift */; };
+		E4FEE9D7210780D6007BA9EF /* SettingsViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FEE9D6210780D6007BA9EF /* SettingsViewDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,6 +20,8 @@
 		3500362919D9017500E69508 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3500365119D903D800E69508 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		E4632D332106DCF700F56DA4 /* StaticCellsSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StaticCellsSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4FEE9D4210780BE007BA9EF /* SettingsViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewDataSource.swift; sourceTree = "<group>"; };
+		E4FEE9D6210780D6007BA9EF /* SettingsViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +48,8 @@
 			children = (
 				3500362219D9017500E69508 /* AppDelegate.swift */,
 				3500365119D903D800E69508 /* SettingsViewController.swift */,
+				E4FEE9D4210780BE007BA9EF /* SettingsViewDataSource.swift */,
+				E4FEE9D6210780D6007BA9EF /* SettingsViewDelegate.swift */,
 				3500362919D9017500E69508 /* Images.xcassets */,
 				3500362019D9017500E69508 /* Supporting Files */,
 			);
@@ -127,8 +133,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4FEE9D7210780D6007BA9EF /* SettingsViewDelegate.swift in Sources */,
 				3500365219D903D800E69508 /* SettingsViewController.swift in Sources */,
 				3500362319D9017500E69508 /* AppDelegate.swift in Sources */,
+				E4FEE9D5210780BE007BA9EF /* SettingsViewDataSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
