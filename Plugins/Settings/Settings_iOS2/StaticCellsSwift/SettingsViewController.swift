@@ -25,10 +25,8 @@ class SettingsViewController: UIViewController {
         // set the view title
         self.title = "Settings"
         
-        //if let tableView = self.view as? UITableView {
-        //    tableView.allowsMultipleSelectionDuringEditing = false // This might not be needed, not sure
-        //}
-
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "currVersion")
+        //self.tableView.setEditing(true, animated: false)
+        
+        self.tableView.register(VersionCell.self, forCellReuseIdentifier: "currVersion")
     }
 }

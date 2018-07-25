@@ -16,7 +16,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     let textSliderCell = UITableViewCell()
     let textDisplayCell = UITableViewCell()
     let languagesCell = UITableViewCell()
-    let versionsCell = UITableViewCell() // This is placeholder
+    let searchCell = UITableViewCell()
     let settingsModel = SettingsModel()
     
     let cellBackground = UIColor.white
@@ -47,23 +47,21 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         self.languagesCell.textLabel?.text = "Languages"
         self.languagesCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         
-        // versions, section 3, row 0
-        self.versionsCell.backgroundColor = cellBackground
-        self.versionsCell.textLabel?.text = "KJV, King James Version"
-        //self.versionsCell.editingAccessoryType = UITableViewCellEditingStyle.delete
-        //self.versionsCell.editingStyle = UITableViewCellEditingStyle.delete
-        self.versionsCell.showsReorderControl = true
+        // search, section 4, row 0
+        self.searchCell.backgroundColor = cellBackground
+        self.searchCell.textLabel?.text = "Search"
     }
     
     // Return the number of sections
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return 5
     }
     
     // Customize the section headings for each section
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 3: return "My Bibles"
+        case 4: return "Other Bibles"
         default: return nil
         }
     }
@@ -75,6 +73,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         case 1: return 2
         case 2: return 1
         case 3: return self.settingsModel.getVersionCount()
+        case 4: return self.settingsModel.getVersionCount() + 1
         default: fatalError("Unknown number of sections")
         }
     }
@@ -100,10 +99,23 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             default: fatalError("Unknown row \(indexPath.row) in section 2")
             }
         case 3:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "currVersion", for: indexPath)
+            let selectedCell = tableView.dequeueReusableCell(withIdentifier: "currVersion", for: indexPath)
             let version = self.settingsModel.getVersion(index: indexPath.row)
-            cell.textLabel?.text = "\(version.versionAbbr), \(version.versionName)"
-            return cell
+            selectedCell.textLabel?.text = "\(version.versionAbbr), \(version.versionName)"
+            selectedCell.detailTextLabel?.text = "\(version.ownerName)"
+            selectedCell.accessoryType = UITableViewCellAccessoryType.detailButton // not working
+            return selectedCell
+        case 4:
+            if indexPath.row == 0 {
+                return self.searchCell
+            } else {
+                let otherCell = tableView.dequeueReusableCell(withIdentifier: "currVersion", for: indexPath)
+                let version = self.settingsModel.getVersion(index: indexPath.row - 1)
+                otherCell.textLabel?.text = "\(version.versionAbbr), \(version.versionName)"
+                otherCell.detailTextLabel?.text = "\(version.ownerName)"
+                otherCell.accessoryType = UITableViewCellAccessoryType.detailButton // not working
+                return otherCell
+            }
         default: fatalError("Unknown section")
         }
     }

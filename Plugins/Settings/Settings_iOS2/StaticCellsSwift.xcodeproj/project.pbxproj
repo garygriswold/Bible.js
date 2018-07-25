@@ -13,6 +13,7 @@
 		E4FEE9D5210780BE007BA9EF /* SettingsViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FEE9D4210780BE007BA9EF /* SettingsViewDataSource.swift */; };
 		E4FEE9D7210780D6007BA9EF /* SettingsViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FEE9D6210780D6007BA9EF /* SettingsViewDelegate.swift */; };
 		E4FEE9D921078CE0007BA9EF /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FEE9D821078CE0007BA9EF /* SettingsModel.swift */; };
+		E4FEE9DB2107BF55007BA9EF /* VersionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FEE9DA2107BF55007BA9EF /* VersionCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		E4FEE9D4210780BE007BA9EF /* SettingsViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewDataSource.swift; sourceTree = "<group>"; };
 		E4FEE9D6210780D6007BA9EF /* SettingsViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewDelegate.swift; sourceTree = "<group>"; };
 		E4FEE9D821078CE0007BA9EF /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
+		E4FEE9DA2107BF55007BA9EF /* VersionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +52,7 @@
 			children = (
 				3500362219D9017500E69508 /* AppDelegate.swift */,
 				3500365119D903D800E69508 /* SettingsViewController.swift */,
+				E4FEE9DA2107BF55007BA9EF /* VersionCell.swift */,
 				E4FEE9D4210780BE007BA9EF /* SettingsViewDataSource.swift */,
 				E4FEE9D6210780D6007BA9EF /* SettingsViewDelegate.swift */,
 				E4FEE9D821078CE0007BA9EF /* SettingsModel.swift */,
@@ -141,6 +144,7 @@
 				3500365219D903D800E69508 /* SettingsViewController.swift in Sources */,
 				3500362319D9017500E69508 /* AppDelegate.swift in Sources */,
 				E4FEE9D5210780BE007BA9EF /* SettingsViewDataSource.swift in Sources */,
+				E4FEE9DB2107BF55007BA9EF /* VersionCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

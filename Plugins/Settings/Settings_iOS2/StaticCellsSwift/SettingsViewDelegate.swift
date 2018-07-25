@@ -15,17 +15,24 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         print("****** Deinit SettingsViewDelegate ******")
     }
     
-    //override
-    func tableView(_ tableView: UITableView, editingStyleForRowAt: IndexPath) -> UITableViewCellEditingStyle {
-        if editingStyleForRowAt.section == 3 {
-            return UITableViewCellEditingStyle.delete
-        } else {
-            return UITableViewCellEditingStyle.none
+    // Keeps non-editable rows from indenting
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt: IndexPath) -> Bool {
+        switch shouldIndentWhileEditingRowAt.section {
+        case 3: return true
+        case 4: return true
+        default: return false
         }
     }
-    
+ 
+    func tableView(_ tableView: UITableView, editingStyleForRowAt: IndexPath) -> UITableViewCellEditingStyle {
+        switch editingStyleForRowAt.section {
+        case 3: return UITableViewCellEditingStyle.delete
+        case 4: return UITableViewCellEditingStyle.insert
+        default: return UITableViewCellEditingStyle.none
+        }
+    }
+ 
     // Configure the row selection code for any cells that you want to customize the row selection
-    //override
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -51,7 +58,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     }
     
     // This should not be needed. It is only needed to turn off moving
-    //override
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         if indexPath.section == 3 {
             return true
@@ -60,7 +66,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         }
     }
     
-    //override
+    //
     func tableView(_ tableView: UITableView, moveRowAt: IndexPath, to: IndexPath) {
         
     }
