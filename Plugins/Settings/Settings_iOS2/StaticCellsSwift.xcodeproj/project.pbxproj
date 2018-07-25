@@ -52,10 +52,10 @@
 			children = (
 				3500362219D9017500E69508 /* AppDelegate.swift */,
 				3500365119D903D800E69508 /* SettingsViewController.swift */,
-				E4FEE9DA2107BF55007BA9EF /* VersionCell.swift */,
 				E4FEE9D4210780BE007BA9EF /* SettingsViewDataSource.swift */,
 				E4FEE9D6210780D6007BA9EF /* SettingsViewDelegate.swift */,
 				E4FEE9D821078CE0007BA9EF /* SettingsModel.swift */,
+				E4FEE9DA2107BF55007BA9EF /* VersionCell.swift */,
 				3500362919D9017500E69508 /* Images.xcassets */,
 				3500362019D9017500E69508 /* Supporting Files */,
 			);
