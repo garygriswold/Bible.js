@@ -118,12 +118,15 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             if indexPath.row == 0 {
                 return self.searchCell
             } else {
-                let otherCell = tableView.dequeueReusableCell(withIdentifier: "versionCell", for: indexPath)
+                let availableCell = tableView.dequeueReusableCell(withIdentifier: "versionCell", for: indexPath)
                 let version = self.settingsModel.getAvailableVersion(index: indexPath.row - 1)
-                otherCell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
-                otherCell.detailTextLabel?.text = "\(version.organizationName)"
-                otherCell.accessoryType = UITableViewCellAccessoryType.detailButton // not working
-                return otherCell
+                if let available = availableCell as? VersionCell {
+                    available.versionCode = version.versionCode
+                }
+                availableCell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
+                availableCell.detailTextLabel?.text = "\(version.organizationName)"
+                availableCell.accessoryType = UITableViewCellAccessoryType.detailButton // not working
+                return availableCell
             }
         default: fatalError("Unknown section")
         }
@@ -142,11 +145,20 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                                                      method: "delete-row") {
                 self.settingsModel.removeSelectedVersion(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-                // Now, I need to figure out how to locate where the new field is to be added in the availVersions
-                // How do I identify the correct position.
+                self.settingsModel.insertAvailableVersion(versionCode: versionCode, at: 0)
+                let destination = IndexPath(item: 1, section: 4)
+                tableView.insertRows(at: [destination], with: UITableViewRowAnimation.automatic)
             }
         } else if editingStyle == UITableViewCellEditingStyle.insert {
-            
+            if let versionCode = self.getVersionCode(tableView: tableView, indexPath: indexPath,
+                                                     method: "insert-row") {
+                self.settingsModel.removeAvailableVersion(at: indexPath.row - 1)
+                tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+                self.settingsModel.appendSelectedVersion(versionCode: versionCode)
+                let length = self.settingsModel.getSelectedVersionCount()
+                let destination = IndexPath(item: (length - 1), section: 3)
+                tableView.insertRows(at: [destination], with: UITableViewRowAnimation.automatic)
+            }
         }
     }
 

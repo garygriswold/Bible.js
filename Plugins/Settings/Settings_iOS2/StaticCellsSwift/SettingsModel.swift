@@ -184,8 +184,20 @@ class SettingsModel {
         self.versSelected.insert(versionCode, at: at)
     }
     
+    func appendSelectedVersion(versionCode: String) {
+        self.versSelected.append(versionCode)
+    }
+    
     func removeSelectedVersion(at: Int) {
         self.versSelected.remove(at: at)
+    }
+    
+    func insertAvailableVersion(versionCode: String, at: Int) {
+        self.versAvailable.insert(versionCode, at: at)
+    }
+    
+    func removeAvailableVersion(at: Int) {
+        self.versAvailable.remove(at: at)
     }
     
     private func ensureLanguages() {
