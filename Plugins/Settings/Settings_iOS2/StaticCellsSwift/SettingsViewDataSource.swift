@@ -105,8 +105,11 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             default: fatalError("Unknown row \(indexPath.row) in section 2")
             }
         case 3:
-            let selectedCell = tableView.dequeueReusableCell(withIdentifier: "currVersion", for: indexPath)
+            let selectedCell = tableView.dequeueReusableCell(withIdentifier: "versionCell", for: indexPath)
             let version = self.settingsModel.getSelectedVersion(index: indexPath.row)
+            if let selected = selectedCell as? VersionCell {
+                selected.versionCode = version.versionCode
+            }
             selectedCell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
             selectedCell.detailTextLabel?.text = "\(version.organizationName)"
             selectedCell.accessoryType = UITableViewCellAccessoryType.detailButton // not working
@@ -115,7 +118,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             if indexPath.row == 0 {
                 return self.searchCell
             } else {
-                let otherCell = tableView.dequeueReusableCell(withIdentifier: "currVersion", for: indexPath)
+                let otherCell = tableView.dequeueReusableCell(withIdentifier: "versionCell", for: indexPath)
                 let version = self.settingsModel.getAvailableVersion(index: indexPath.row - 1)
                 otherCell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
                 otherCell.detailTextLabel?.text = "\(version.organizationName)"
@@ -134,7 +137,17 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     // Commit data row change to the data source
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle,
                    forRowAt indexPath: IndexPath) {
-        // TBD
+        if editingStyle == UITableViewCellEditingStyle.delete {
+            if let versionCode = self.getVersionCode(tableView: tableView, indexPath: indexPath,
+                                                     method: "delete-row") {
+                self.settingsModel.removeSelectedVersion(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+                // Now, I need to figure out how to locate where the new field is to be added in the availVersions
+                // How do I identify the correct position.
+            }
+        } else if editingStyle == UITableViewCellEditingStyle.insert {
+            
+        }
     }
 
     // Return true for each row that can be moved
@@ -145,6 +158,29 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     // Commit the row move in the data source
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath,
                    to destinationIndexPath: IndexPath) {
-        // TBD
+        let sourceIndex = sourceIndexPath.row
+        let targetIndex = destinationIndexPath.row
+        if let versionCode = self.getVersionCode(tableView: tableView, indexPath: sourceIndexPath,
+                                                 method: "moveRowAt-source") {
+            self.settingsModel.removeSelectedVersion(at: sourceIndex)
+            self.settingsModel.insertSelectedVersion(versionCode: versionCode, at: targetIndex)
+        }
+        ///print("Updated: \(self.settingsModel.versSelected)")
+    }
+    
+    private func getVersionCode(tableView: UITableView, indexPath: IndexPath, method: String) -> String? {
+        guard let cell = tableView.cellForRow(at: indexPath) else {
+            print("SettingsViewDataSource.\(method) did not find cell at Index")
+            return nil
+        }
+        guard let versionCell = cell as? VersionCell else {
+            print("SettingsViewDataSource.\(method) cell was non-VersionCell")
+            return nil
+        }
+        guard let versionCode = versionCell.versionCode else {
+            print("SettingsViewDataSource.\(method) cell had no versionCode")
+            return nil
+        }
+        return versionCode
     }
 }

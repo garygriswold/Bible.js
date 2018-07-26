@@ -29,7 +29,7 @@ class SettingsViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneHandler))
         //self.saveHandler(sender: nil)
         
-        self.tableView.register(VersionCell.self, forCellReuseIdentifier: "currVersion")
+        self.tableView.register(VersionCell.self, forCellReuseIdentifier: "versionCell")
         
         self.tableView.dataSource = self.dataSource
         self.tableView.delegate = self.delegate

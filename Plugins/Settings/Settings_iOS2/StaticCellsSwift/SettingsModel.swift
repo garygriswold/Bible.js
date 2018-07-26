@@ -180,6 +180,14 @@ class SettingsModel {
         return versMap[versAvailable[index]]!
     }
     
+    func insertSelectedVersion(versionCode: String, at: Int) {
+        self.versSelected.insert(versionCode, at: at)
+    }
+    
+    func removeSelectedVersion(at: Int) {
+        self.versSelected.remove(at: at)
+    }
+    
     private func ensureLanguages() {
         ensureVersions()
         if languages.count == 0 {

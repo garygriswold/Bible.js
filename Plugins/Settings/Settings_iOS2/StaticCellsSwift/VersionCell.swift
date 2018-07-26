@@ -11,6 +11,8 @@ import UIKit
 
 class VersionCell : UITableViewCell {
     
+    var versionCode: String? = nil
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.subtitle, reuseIdentifier: reuseIdentifier)
     }
