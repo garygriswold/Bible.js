@@ -8,96 +8,188 @@
 
 import Foundation
 
-struct userLocale {
-    let langCode: String
-    let variantCode: String?
-    let scriptCode: String?
-    let countryCode: String
+// This does not conform to naming, but only lang code could
+struct UserLocale {
+    let langIso1Code: String    // iso 2 char language from locale
+    let variantCode: String?    // optional variant from locale
+    let scriptCode: String?     // optional script from locale
+    let countryCode: String     // country code from locale
+    let languageCode: String    // FCBH 3 char language code
 }
 
 struct Language {
-    let langCode: String    // iso 2 char code
-    let langName: String    // name in language of user
-    let localName: String   // name in its own language
-    
+    let languageCode: String    // FCBH 3 char code
+    let languageName: String    // name in its own language
+    let englishName: String     // name in English
+    let rightToLeft: Bool       // true if lang is Right to Left
+    let localizedName: String   // name in language of the user
 }
 
 struct Version {
-    let langCode: String        // iso 2 char code
-    let versionCode: String     // versionCode is unique
-    let versionAbbr: String     // versionCode, but not unique
-    let versionName: String
-    let direction: String       // ltr or rtl
-    let ownerCode: String       //
-    let ownerName: String       //
+    let versionCode: String     // FCBH 3 char code is unique
+    let languageCode: String    // FCBH 3 char language code
+    let versionName: String     // Name in the language of the version
+    let englishName: String     // Name of the version in English
+    let organizationId: String  // This is placeholder, where is this information in FCBH?
+    let organizationName: String // This is placeholder, where is this information in FCBH?
+    let copyright: String       // This is placeholder, where is this information in FCBH?
 }
-
-
-struct ActiveVersion {
-    let langCode: String        // iso 2 char code
-    let silCode: String         // 3 char sil lang code of version
-    let versionCode: String     // versionCode is unique
-    let versionAbbr: String     // versionCode, but not unique
-    let versionName: String
-    let direction: String       // ltr or rtl
-    let ownerCode: String       //
-    let ownerName: String       //
-    let ownerURL: String        //
-    let copyright: String       //
-}
-
+///
+/// This class should probably do as much directly from the database in order to simply logic.
+///
 class SettingsModel {
     
     var languages = [Language]()
+    var langMap = [String : Language]()
+    var langSelected = [String]()
+    var langAvailable = [String]()
+    
     var versions = [Version]()
+    var versMap = [String : Version]()
+    var versSelected = [String]()
+    var versAvailable = [String]()
     
     func fillLanguages() {
-        languages.append(Language(langCode: "en", langName: "English", localName: "English"))
-        languages.append(Language(langCode: "fr", langName: "French", localName: "Francaise"))
-        languages.append(Language(langCode: "de", langName: "German", localName: "Deutsch"))
+        langSelected.append("ENG")
+        langSelected.append("ARB")
+        langSelected.append("CMN")
+        // This is equivalent to select languageCode from selectedLanguages order by sequence;
+        // Or possibly select languageCode from languages where sequence is not null order by sequence
+        
+        var langSelectedMap = [String : Bool]()
+        for lang in langSelected {
+            langSelectedMap[lang] = true
+        }
+        
+        languages.append(Language(languageCode: "ENG", languageName: "English", englishName: "English",
+                                  rightToLeft: false, localizedName: "English"))
+        languages.append(Language(languageCode: "FRN", languageName: "Francaise", englishName: "French",
+                                  rightToLeft: false, localizedName: "French"))
+        languages.append(Language(languageCode: "DEU", languageName: "Deutsch", englishName: "German",
+                                  rightToLeft: false, localizedName: "German"))
+        languages.append(Language(languageCode: "SPN", languageName: "Espanol", englishName: "Spanish",
+                                  rightToLeft: false, localizedName: "Spanish"))
+        languages.append(Language(languageCode: "ARB", languageName: "العربية", englishName: "Arabic",
+                                  rightToLeft: true, localizedName: "Arabic"))
+        languages.append(Language(languageCode: "CMN", languageName: "汉语, 漢語", englishName: "Chinese",
+                                  rightToLeft: false, localizedName: "Chinese"))
+        
+        for lang in languages {
+            let langCode = lang.languageCode
+            langMap[langCode] = lang
+            if langSelectedMap[langCode] == nil {
+                langAvailable.append(langCode)
+                // This is equivalent to select languageCode from languages where languageCode not in (select languageCode from selectedlanguages)
+                // Or, possibly select languageCode from languages where sequence is null order by languages
+            }
+        }
     }
     
     func fillVersions() {
-        versions.append(Version(langCode: "en", versionCode: "KJVPD", versionAbbr: "KJV",
-                                versionName: "King James Version", direction: "ltr",
-                                ownerCode: "PD", ownerName: "Public Domain"))
-        versions.append(Version(langCode: "en", versionCode: "WEB", versionAbbr: "WEB",
-                                versionName: "World English Bible", direction: "ltr",
-                                ownerCode: "PD", ownerName: "Public Domain"))
-        versions.append(Version(langCode: "en", versionCode: "ESV", versionAbbr: "ESV",
-                                versionName: "English Standard Version", direction: "ltr",
-                                ownerCode: "GP", ownerName: "Gospel Folio Press"))
-        versions.append(Version(langCode: "en", versionCode: "NIV", versionAbbr: "NIV",
-                                versionName: "New International Version", direction: "ltr",
-                                ownerCode: "HAR", ownerName: "Harold Publishing"))
+        versSelected.append("ESV")
+        versSelected.append("ERV-CMN")
+        versSelected.append("ERV-ARB")
+        
+        var versSelectedMap = [String : Bool]()
+        for vers in versSelected {
+            versSelectedMap[vers] = true
+        }
+        
+        versions.append(Version(versionCode: "KJV", languageCode: "ENG",
+                                versionName: "King James Version",
+                                englishName: "King James Version",
+                                organizationId: "PD", organizationName: "Public Domain",
+                                copyright: ""))
+        versions.append(Version(versionCode: "WEB", languageCode: "ENG",
+                                versionName: "World English Bible",
+                                englishName: "World English Bible",
+                                organizationId: "PD", organizationName: "Public Domain",
+                                copyright: ""))
+        versions.append(Version(versionCode: "ESV", languageCode: "ENG",
+                                versionName: "English Standard Version",
+                                englishName: "English Standard Version",
+                                organizationId: "GP", organizationName: "Gospel Folio Press",
+                                copyright: ""))
+        versions.append(Version(versionCode: "NIV", languageCode: "ENG",
+                                versionName: "New International Version",
+                                englishName: "New International Version",
+                                organizationId: "HAR", organizationName: "Harold Publishing",
+                                copyright: ""))
+        versions.append(Version(versionCode: "ERV-ENG", languageCode: "ENG",
+                                versionName: "Easy Read Version",
+                                englishName: "Easy Read Version",
+                                organizationId: "BLI", organizationName: "Bible League International",
+                                copyright: ""))
+        versions.append(Version(versionCode: "ERV-CMN", languageCode: "CMN",
+                                versionName: "圣经–普通话本",
+                                englishName: "Chinese Union Version",
+                                organizationId: "BLI", organizationName: "Bible League International",
+                                copyright: "2016"))
+        versions.append(Version(versionCode: "ERV-ARB", languageCode: "ARB",
+                                versionName: "الكتاب المقدس ترجمة فان دايك",
+                                englishName: "Van Dycke Bible",
+                                organizationId: "BLI", organizationName: "Bible League International",
+                                copyright: ""))
+        
+        for vers in versions {
+            let versCode = vers.versionCode
+            versMap[versCode] = vers
+            if versSelectedMap[versCode] == nil {
+                versAvailable.append(versCode)
+            }
+        }
     }
     
-    func getLanguageCount() -> Int {
+    func getSelectedLanguageCount() -> Int {
+        ensureLanguages()
+        return langSelected.count
+    }
+    
+    func getAvailableLanguageCount() -> Int {
+        ensureLanguages()
+        return langAvailable.count
+    }
+    
+    func getSelectedVersionCount() -> Int {
+        ensureVersions()
+        return versSelected.count
+    }
+    
+    func getAvailableVersionCount() -> Int {
+        ensureVersions()
+        return versAvailable.count
+    }
+    
+    func getSelectedLanguage(index: Int) -> Language {
+        ensureLanguages()
+        return langMap[langSelected[index]]! // what should I do about out of range?
+    }
+    
+    func getAvailableLanguage(index: Int) -> Language {
+        ensureLanguages()
+        return langMap[langAvailable[index]]! // what should I do about out of range?
+    }
+    
+    func getSelectedVersion(index: Int) -> Version {
+        ensureVersions()
+        return versMap[versSelected[index]]!
+    }
+    
+    func getAvailableVersion(index: Int) -> Version {
+        ensureVersions()
+        return versMap[versAvailable[index]]!
+    }
+    
+    private func ensureLanguages() {
+        ensureVersions()
         if languages.count == 0 {
             fillLanguages()
         }
-        return languages.count
     }
-    
-    func getVersionCount() -> Int {
+    private func ensureVersions() {
         if versions.count == 0 {
             fillVersions()
         }
-        return versions.count
-    }
-    
-    func getLanguage(index: Int) -> Language {
-        if languages.count == 0 {
-            fillLanguages()
-        }
-        return languages[index] // what should I do about out of range?
-    }
-    
-    func getVersion(index: Int) -> Version {
-        if versions.count == 0 {
-            fillVersions()
-        }
-        return versions[index]
     }
 }
 

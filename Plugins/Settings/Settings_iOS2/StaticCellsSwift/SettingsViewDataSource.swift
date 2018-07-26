@@ -78,8 +78,8 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         case 0: return 2
         case 1: return 2
         case 2: return 1
-        case 3: return self.settingsModel.getVersionCount()
-        case 4: return self.settingsModel.getVersionCount() + 1
+        case 3: return self.settingsModel.getSelectedVersionCount()
+        case 4: return self.settingsModel.getAvailableVersionCount() + 1
         default: fatalError("Unknown number of sections")
         }
     }
@@ -106,9 +106,9 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             }
         case 3:
             let selectedCell = tableView.dequeueReusableCell(withIdentifier: "currVersion", for: indexPath)
-            let version = self.settingsModel.getVersion(index: indexPath.row)
-            selectedCell.textLabel?.text = "\(version.versionAbbr), \(version.versionName)"
-            selectedCell.detailTextLabel?.text = "\(version.ownerName)"
+            let version = self.settingsModel.getSelectedVersion(index: indexPath.row)
+            selectedCell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
+            selectedCell.detailTextLabel?.text = "\(version.organizationName)"
             selectedCell.accessoryType = UITableViewCellAccessoryType.detailButton // not working
             return selectedCell
         case 4:
@@ -116,9 +116,9 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 return self.searchCell
             } else {
                 let otherCell = tableView.dequeueReusableCell(withIdentifier: "currVersion", for: indexPath)
-                let version = self.settingsModel.getVersion(index: indexPath.row - 1)
-                otherCell.textLabel?.text = "\(version.versionAbbr), \(version.versionName)"
-                otherCell.detailTextLabel?.text = "\(version.ownerName)"
+                let version = self.settingsModel.getAvailableVersion(index: indexPath.row - 1)
+                otherCell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
+                otherCell.detailTextLabel?.text = "\(version.organizationName)"
                 otherCell.accessoryType = UITableViewCellAccessoryType.detailButton // not working
                 return otherCell
             }
