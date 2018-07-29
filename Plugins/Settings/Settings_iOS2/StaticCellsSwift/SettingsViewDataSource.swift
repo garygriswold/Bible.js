@@ -82,7 +82,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         case 3: return self.settingsModel.getSelectedVersionCount()
         case 4: return 1
         case 5:
-            if isFiltering() {
+            if isSearching() {
                 return self.settingsModel.versFiltered.count
             } else {
                 return self.settingsModel.getAvailableVersionCount()
@@ -126,7 +126,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         case 5:
             let availableCell = tableView.dequeueReusableCell(withIdentifier: "versionCell", for: indexPath)
             var version: Version
-            if isFiltering() {
+            if isSearching() {
                 version = self.settingsModel.versFiltered[indexPath.row]
             } else {
                 version = self.settingsModel.getAvailableVersion(index: indexPath.row)
@@ -149,12 +149,17 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
                    forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete {
             let destination = IndexPath(item: 0, section: 5)
-            self.settingsModel.moveSelectedToAvailable(source: indexPath.row, destination: destination.row)
+            self.settingsModel.moveSelectedToAvailable(source: indexPath.row,
+                                                       destination: destination.row, search: isSearching())
             tableView.moveRow(at: indexPath, to: destination)
+            if isSearching() {
+                updateSearchResults(for: searchController)
+            }
         } else if editingStyle == UITableViewCellEditingStyle.insert {
             let length = self.settingsModel.getSelectedVersionCount()
             let destination = IndexPath(item: length, section: 3)
-            self.settingsModel.moveAvailableToSelected(source: indexPath.row, destination: destination.row)
+            self.settingsModel.moveAvailableToSelected(source: indexPath.row,
+                                                       destination: destination.row, search: isSearching())
             tableView.moveRow(at: indexPath, to: destination)
         }
     }
@@ -185,8 +190,8 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         }
     }
     
-    func isFiltering() -> Bool {
-        print("****** INSIDE isFiltering ******")
+    func isSearching() -> Bool {
+        print("****** INSIDE isSearching ******")
         let searchBarEmpty = self.searchController.searchBar.text?.isEmpty ?? true
         return self.searchController.isActive && !searchBarEmpty
     }

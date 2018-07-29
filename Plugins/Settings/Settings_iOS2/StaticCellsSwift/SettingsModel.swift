@@ -18,15 +18,23 @@ struct UserLocale {
     let languageCode: String    // FCBH 3 char language code
 }
 
-struct Language {
+struct Language : Equatable {
     let languageCode: String    // FCBH 3 char code
     let languageName: String    // name in its own language
     let englishName: String     // name in English
     let rightToLeft: Bool       // true if lang is Right to Left
     let localizedName: String   // name in language of the user
+    
+    static func == (lhs: Language, rhs: Language) -> Bool {
+        return lhs.languageCode == rhs.languageCode
+    }
 }
 
-struct Version {
+// NOTE: Equatable might prove inefficient with a large list.  Wait and see. But its advantage
+// is that it is only used when needed.  The disadvantage is that it is used to pass over the
+// entire list.  The alternative would be to have a hash map of versionCode for everything in available,
+// but it would need to be maintained as the available list changes.
+struct Version : Equatable {
     let versionCode: String     // FCBH 3 char code is unique
     let languageCode: String    // FCBH 3 char language code
     let versionName: String     // Name in the language of the version
@@ -34,6 +42,10 @@ struct Version {
     let organizationId: String  // This is placeholder, where is this information in FCBH?
     let organizationName: String // This is placeholder, where is this information in FCBH?
     let copyright: String       // This is placeholder, where is this information in FCBH?
+    
+    static func == (lhs: Version, rhs: Version) -> Bool {
+        return lhs.versionCode == rhs.versionCode
+    }
 }
 ///
 /// This class should probably do as much directly from the database in order to simply logic.
@@ -193,16 +205,30 @@ class SettingsModel {
         self.versSelected.insert(version, at: destination)
     }
     
-    func moveAvailableToSelected(source: Int, destination: Int) {
-        let version = self.versAvailable[source]
-        self.versAvailable.remove(at: source)
+    func moveAvailableToSelected(source: Int, destination: Int, search: Bool) {
+        var version: Version
+        if search {
+            version = self.versFiltered[source]
+            guard let availableIndex = self.versAvailable.index(of: version) else {
+                print("Item in filtered not found in available? \(version.versionCode)")
+                return
+            }
+            self.versFiltered.remove(at: source)
+            self.versAvailable.remove(at: availableIndex)
+        } else {
+            version = self.versAvailable[source]
+            self.versAvailable.remove(at: source)
+        }
         self.versSelected.insert(version, at: destination)
     }
     
-    func moveSelectedToAvailable(source: Int, destination: Int) {
+    func moveSelectedToAvailable(source: Int, destination: Int, search: Bool) {
         let version = self.versSelected[source]
         self.versSelected.remove(at: source)
         self.versAvailable.insert(version, at: destination)
+        if search {
+            self.versFiltered.insert(version, at: destination)
+        }
     }
     
     func filterVersionsForSearchText(searchText: String) {
