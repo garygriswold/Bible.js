@@ -58,13 +58,11 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             // Must get detail
             print("Selected version \(indexPath.row) selected")
         case 4:
-            if indexPath.row == 0 {
-                // Must perform search
-                print("Search selected")
-            } else {
-                // Must get detail
-                print("Other version \(indexPath.row) selected")
-            }
+            // Must perform search
+            print("Search selected")
+        case 5:
+            // Must get detail
+            print("Other version \(indexPath.row) selected")
         default:
             print("Unknown section \(indexPath.row)")
         }
@@ -80,20 +78,20 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     func tableView(_ tableView: UITableView, editingStyleForRowAt: IndexPath) -> UITableViewCellEditingStyle {
         switch editingStyleForRowAt.section {
         case 3: return UITableViewCellEditingStyle.delete
-        case 4: return UITableViewCellEditingStyle.insert
+        case 5: return UITableViewCellEditingStyle.insert
         default: return UITableViewCellEditingStyle.none
         }
     }
     
-    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        return (indexPath.section == 3) ? "Remove" : nil
-    }
+    //func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+    //    return (indexPath.section == 3) ? "Remove" : nil
+    //}
     
     // Keeps non-editable rows from indenting
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt: IndexPath) -> Bool {
         switch shouldIndentWhileEditingRowAt.section {
         case 3: return true
-        case 4: return true
+        case 5: return true
         default: return false
         }
     }

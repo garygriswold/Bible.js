@@ -9,55 +9,56 @@
 import Foundation
 import UIKit
 
-class SettingsViewDataSource : NSObject, UITableViewDataSource {
+class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsUpdating {
     
     let reviewCell = UITableViewCell()
     let feedbackCell = UITableViewCell()
     let textSliderCell = UITableViewCell()
     let textDisplayCell = UITableViewCell()
     let languagesCell = UITableViewCell()
-    let searchCell = UITableViewCell()
+    var searchCell: VersionSearchCell?
     let settingsModel = SettingsModel()
     
-    let cellBackground = UIColor.white
+    var tableView: UITableView? // needed by updateSearchResults
+    
+    let searchController = UISearchController(searchResultsController: nil)
     
     override init() {
         super.init()
         
         // reviewCell, section 0, row 0
-        self.reviewCell.backgroundColor = cellBackground
         self.reviewCell.textLabel?.text = "Write A Review"
         self.reviewCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         
         // feedbackCell, section 0, row 1
-        self.feedbackCell.backgroundColor = cellBackground
         self.feedbackCell.textLabel?.text = "Send Us Feedback"
         self.feedbackCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         
         // textSlider, section 1, row 0
-        self.textSliderCell.backgroundColor = cellBackground
         self.textSliderCell.textLabel?.text = "Text Slider TBD"
         self.textSliderCell.selectionStyle = UITableViewCellSelectionStyle.none
         
         // textDisplay, section 1, row 1
-        self.textDisplayCell.backgroundColor = cellBackground
         self.textDisplayCell.textLabel?.text = "For God so loved TBD"
         self.textDisplayCell.selectionStyle = UITableViewCellSelectionStyle.none
         
         // languages, section 2, row 0
-        self.languagesCell.backgroundColor = cellBackground
         self.languagesCell.textLabel?.text = "Languages"
         self.languagesCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         
         // search, section 4, row 0
-        self.searchCell.backgroundColor = cellBackground
-        self.searchCell.textLabel?.text = "Search"
-        self.searchCell.selectionStyle = UITableViewCellSelectionStyle.none
+        self.searchCell = VersionSearchCell(searchBar: self.searchController.searchBar)
+        // Setup the Search Controller
+        self.searchController.searchResultsUpdater = self
+        self.searchController.obscuresBackgroundDuringPresentation = false
+        //navigationItem.searchController = searchController // suggested by Ray
+
     }
     
     // Return the number of sections
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        self.tableView = tableView // needed by updateSearchResults
+        return 6
     }
     
     // Customize the section headings for each section
@@ -79,7 +80,13 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         case 1: return 2
         case 2: return 1
         case 3: return self.settingsModel.getSelectedVersionCount()
-        case 4: return self.settingsModel.getAvailableVersionCount() + 1
+        case 4: return 1
+        case 5:
+            if isFiltering() {
+                return self.settingsModel.versFiltered.count
+            } else {
+                return self.settingsModel.getAvailableVersionCount()
+            }
         default: fatalError("Unknown number of sections")
         }
     }
@@ -115,26 +122,32 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             selectedCell.accessoryType = UITableViewCellAccessoryType.detailButton // not working
             return selectedCell
         case 4:
-            if indexPath.row == 0 {
-                return self.searchCell
-            } else {
-                let availableCell = tableView.dequeueReusableCell(withIdentifier: "versionCell", for: indexPath)
-                let version = self.settingsModel.getAvailableVersion(index: indexPath.row - 1)
-                if let available = availableCell as? VersionCell {
-                    available.versionCode = version.versionCode
-                }
-                availableCell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
-                availableCell.detailTextLabel?.text = "\(version.organizationName)"
-                availableCell.accessoryType = UITableViewCellAccessoryType.detailButton // not working
-                return availableCell
+            switch indexPath.row {
+            case 0: return self.searchCell!
+            default: fatalError("Unknown row \(indexPath.row) in section 4")
             }
-        default: fatalError("Unknown section")
+        case 5:
+            let availableCell = tableView.dequeueReusableCell(withIdentifier: "versionCell", for: indexPath)
+            var version: Version
+            if isFiltering() {
+                version = self.settingsModel.versFiltered[indexPath.row]
+            } else {
+                version = self.settingsModel.getAvailableVersion(index: indexPath.row)
+            }
+            if let available = availableCell as? VersionCell {
+                available.versionCode = version.versionCode
+            }
+            availableCell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
+            availableCell.detailTextLabel?.text = "\(version.organizationName)"
+            availableCell.accessoryType = UITableViewCellAccessoryType.detailButton // not working
+            return availableCell
+        default: fatalError("Unknown section \(indexPath.section)")
         }
     }
     
     // Return true for each row that can be edited
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return (indexPath.section == 3 || (indexPath.section == 4 && indexPath.row > 0))
+        return (indexPath.section == 3 || indexPath.section == 5)
     }
     
     // Commit data row change to the data source
@@ -144,20 +157,18 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             if let versionCode = self.getVersionCode(tableView: tableView, indexPath: indexPath,
                                                      method: "delete-row") {
                 self.settingsModel.removeSelectedVersion(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
                 self.settingsModel.insertAvailableVersion(versionCode: versionCode, at: 0)
-                let destination = IndexPath(item: 1, section: 4)
-                tableView.insertRows(at: [destination], with: UITableViewRowAnimation.automatic)
+                let destination = IndexPath(item: 0, section: 5)
+                tableView.moveRow(at: indexPath, to: destination)
             }
         } else if editingStyle == UITableViewCellEditingStyle.insert {
             if let versionCode = self.getVersionCode(tableView: tableView, indexPath: indexPath,
                                                      method: "insert-row") {
-                self.settingsModel.removeAvailableVersion(at: indexPath.row - 1)
-                tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+                self.settingsModel.removeAvailableVersion(at: indexPath.row)
                 self.settingsModel.appendSelectedVersion(versionCode: versionCode)
                 let length = self.settingsModel.getSelectedVersionCount()
                 let destination = IndexPath(item: (length - 1), section: 3)
-                tableView.insertRows(at: [destination], with: UITableViewRowAnimation.automatic)
+                tableView.moveRow(at: indexPath, to: destination)
             }
         }
     }
@@ -177,7 +188,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             self.settingsModel.removeSelectedVersion(at: sourceIndex)
             self.settingsModel.insertSelectedVersion(versionCode: versionCode, at: targetIndex)
         }
-        ///print("Updated: \(self.settingsModel.versSelected)")
     }
     
     private func getVersionCode(tableView: UITableView, indexPath: IndexPath, method: String) -> String? {
@@ -194,5 +204,25 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             return nil
         }
         return versionCode
+    }
+    
+    // MARK: - UISearchResultsUpdating Delegate
+    func updateSearchResults(for searchController: UISearchController) {
+        print("****** INSIDE update Search Results ********")
+        print("found \(searchController.searchBar.text)")
+        if let text = self.searchController.searchBar.text {
+            if text.count > 0 {
+                self.settingsModel.filterVersionsForSearchText(searchText: text)
+                print("Filtered \(self.settingsModel.versFiltered)")
+            }
+            let sections = IndexSet(integer: 5)
+            self.tableView?.reloadSections(sections, with: UITableViewRowAnimation.automatic)
+        }
+    }
+    
+    func isFiltering() -> Bool {
+        print("****** INSIDE isFiltering ******")
+        let searchBarEmpty = self.searchController.searchBar.text?.isEmpty ?? true
+        return self.searchController.isActive && !searchBarEmpty
     }
 }

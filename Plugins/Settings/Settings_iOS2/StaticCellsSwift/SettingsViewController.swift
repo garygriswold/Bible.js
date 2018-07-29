@@ -25,6 +25,9 @@ class SettingsViewController: UIViewController {
         // set the view title
         self.title = "Settings"
         
+        // prevent searchBar from holding onto focus
+        self.definesPresentationContext = true
+        
         // set Top Bar items
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneHandler))
         //self.saveHandler(sender: nil)
@@ -52,5 +55,3 @@ class SettingsViewController: UIViewController {
     }
 }
 
-
-// why does auto rotation not work

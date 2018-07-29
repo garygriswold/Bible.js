@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit // temp
 
 // This does not conform to naming, but only lang code could
 struct UserLocale {
@@ -48,6 +49,8 @@ class SettingsModel {
     var versMap = [String : Version]()
     var versSelected = [String]()
     var versAvailable = [String]()
+    
+    var versFiltered = [Version]()
     
     func fillLanguages() {
         langSelected.append("ENG")
@@ -198,6 +201,21 @@ class SettingsModel {
     
     func removeAvailableVersion(at: Int) {
         self.versAvailable.remove(at: at)
+    }
+    
+    func filterVersionsForSearchText(searchText: String) {
+        print("****** INSIDE FILTER CONTENT FOR SEARCH ******")
+        let searchFor = searchText.lowercased()
+        //self.versFiltered = versions.filter({( version : Version) -> Bool in
+        //    return version.versionName.lowercased().contains(searchFor)
+        //
+        //})
+        self.versFiltered.removeAll()
+        for vers in versions {
+            if (vers.versionName.lowercased().contains(searchFor)) {
+                self.versFiltered.append(vers)
+            }
+        }
     }
     
     private func ensureLanguages() {
