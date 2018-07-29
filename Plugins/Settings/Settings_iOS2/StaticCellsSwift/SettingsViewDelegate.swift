@@ -68,6 +68,24 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         }
     }
     
+    // This is required for heightForHeaderInSection to work
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
+    }
+    
+    // This is required for heightForFooterInSection to work
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return nil
+    }
+ 
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return (section == 5) ? 0.0 : -1.0
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return (section == 4) ? 0.0 : -1.0
+    }
+    
     // Called when swipe is used to begin editing
     //func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath)
     
