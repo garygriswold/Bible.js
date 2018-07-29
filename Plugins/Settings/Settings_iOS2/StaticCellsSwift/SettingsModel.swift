@@ -7,7 +7,10 @@
 //
 
 import Foundation
-import UIKit // temp
+
+// Because structs are passed by value and copied on assignment, I should test changing the
+// Language and Version structs to classes and compare performance.
+//
 
 // This does not conform to naming, but only lang code could
 struct UserLocale {
