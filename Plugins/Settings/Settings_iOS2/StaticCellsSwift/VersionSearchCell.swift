@@ -28,7 +28,6 @@ class VersionSearchCell : UITableViewCell {
         super.layoutSubviews()
         
         self.searchBar.frame = self.bounds
-        self.searchBar.delegate = VersionSearchBarDelegate()
         self.searchBar.placeholder = "Find Bibles"
         self.searchBar.barTintColor = UIColor(red: 0.179, green: 0.617, blue: 0.785, alpha: 1.0) // #2E9EC9;
         self.searchBar.searchBarStyle = UISearchBarStyle.prominent // can be (minimal or prominent)
@@ -39,4 +38,6 @@ class VersionSearchCell : UITableViewCell {
         self.addSubview(self.searchBar)
     }
 }
+
+// The above could be moved to Settings View Controller if the search Controller were instantiated there.
 
