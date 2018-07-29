@@ -41,26 +41,28 @@ struct Version {
 class SettingsModel {
     
     var languages = [Language]()
-    var langMap = [String : Language]()
-    var langSelected = [String]()
-    var langAvailable = [String]()
+    var langSequence = [String]()
+    var langSelected = [Language]()
+    var langAvailable = [Language]()
+    
+    var langFiltered = [Language]()
     
     var versions = [Version]()
-    var versMap = [String : Version]()
-    var versSelected = [String]()
-    var versAvailable = [String]()
+    var versSequence = [String]()
+    var versSelected = [Version]()
+    var versAvailable = [Version]()
     
     var versFiltered = [Version]()
     
     func fillLanguages() {
-        langSelected.append("ENG")
-        langSelected.append("ARB")
-        langSelected.append("CMN")
+        langSequence.append("ENG")
+        langSequence.append("ARB")
+        langSequence.append("CMN")
         // This is equivalent to select languageCode from selectedLanguages order by sequence;
         // Or possibly select languageCode from languages where sequence is not null order by sequence
         
         var langSelectedMap = [String : Bool]()
-        for lang in langSelected {
+        for lang in langSequence {
             langSelectedMap[lang] = true
         }
         
@@ -79,22 +81,23 @@ class SettingsModel {
         
         for lang in languages {
             let langCode = lang.languageCode
-            langMap[langCode] = lang
             if langSelectedMap[langCode] == nil {
-                langAvailable.append(langCode)
+                langAvailable.append(lang)
                 // This is equivalent to select languageCode from languages where languageCode not in (select languageCode from selectedlanguages)
                 // Or, possibly select languageCode from languages where sequence is null order by languages
+            } else {
+                langSelected.append(lang)
             }
         }
     }
     
     func fillVersions() {
-        versSelected.append("ESV")
-        versSelected.append("ERV-CMN")
-        versSelected.append("ERV-ARB")
+        versSequence.append("ESV")
+        versSequence.append("ERV-CMN")
+        versSequence.append("ERV-ARB")
         
         var versSelectedMap = [String : Bool]()
-        for vers in versSelected {
+        for vers in versSequence {
             versSelectedMap[vers] = true
         }
         
@@ -136,9 +139,10 @@ class SettingsModel {
         
         for vers in versions {
             let versCode = vers.versionCode
-            versMap[versCode] = vers
             if versSelectedMap[versCode] == nil {
-                versAvailable.append(versCode)
+                versAvailable.append(vers)
+            } else {
+                versSelected.append(vers)
             }
         }
     }
@@ -165,42 +169,40 @@ class SettingsModel {
     
     func getSelectedLanguage(index: Int) -> Language {
         ensureLanguages()
-        return langMap[langSelected[index]]! // what should I do about out of range?
+        return langSelected[index] // what should I do about out of range?
     }
     
     func getAvailableLanguage(index: Int) -> Language {
         ensureLanguages()
-        return langMap[langAvailable[index]]! // what should I do about out of range?
+        return langAvailable[index] // what should I do about out of range?
     }
     
     func getSelectedVersion(index: Int) -> Version {
         ensureVersions()
-        return versMap[versSelected[index]]!
+        return versSelected[index]
     }
     
     func getAvailableVersion(index: Int) -> Version {
         ensureVersions()
-        return versMap[versAvailable[index]]!
+        return versAvailable[index]
     }
     
-    func insertSelectedVersion(versionCode: String, at: Int) {
-        self.versSelected.insert(versionCode, at: at)
+    func moveSelected(source: Int, destination: Int) {
+        let version = self.versSelected[source]
+        self.versSelected.remove(at: source)
+        self.versSelected.insert(version, at: destination)
     }
     
-    func appendSelectedVersion(versionCode: String) {
-        self.versSelected.append(versionCode)
+    func moveAvailableToSelected(source: Int, destination: Int) {
+        let version = self.versAvailable[source]
+        self.versAvailable.remove(at: source)
+        self.versSelected.insert(version, at: destination)
     }
     
-    func removeSelectedVersion(at: Int) {
-        self.versSelected.remove(at: at)
-    }
-    
-    func insertAvailableVersion(versionCode: String, at: Int) {
-        self.versAvailable.insert(versionCode, at: at)
-    }
-    
-    func removeAvailableVersion(at: Int) {
-        self.versAvailable.remove(at: at)
+    func moveSelectedToAvailable(source: Int, destination: Int) {
+        let version = self.versSelected[source]
+        self.versSelected.remove(at: source)
+        self.versAvailable.insert(version, at: destination)
     }
     
     func filterVersionsForSearchText(searchText: String) {
@@ -211,7 +213,7 @@ class SettingsModel {
         //
         //})
         self.versFiltered.removeAll()
-        for vers in versions {
+        for vers in versAvailable {
             if (vers.versionName.lowercased().contains(searchFor)) {
                 self.versFiltered.append(vers)
             }

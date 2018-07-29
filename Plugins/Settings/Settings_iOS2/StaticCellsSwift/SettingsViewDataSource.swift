@@ -114,9 +114,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         case 3:
             let selectedCell = tableView.dequeueReusableCell(withIdentifier: "versionCell", for: indexPath)
             let version = self.settingsModel.getSelectedVersion(index: indexPath.row)
-            if let selected = selectedCell as? VersionCell {
-                selected.versionCode = version.versionCode
-            }
             selectedCell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
             selectedCell.detailTextLabel?.text = "\(version.organizationName)"
             selectedCell.accessoryType = UITableViewCellAccessoryType.detailButton // not working
@@ -133,9 +130,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
                 version = self.settingsModel.versFiltered[indexPath.row]
             } else {
                 version = self.settingsModel.getAvailableVersion(index: indexPath.row)
-            }
-            if let available = availableCell as? VersionCell {
-                available.versionCode = version.versionCode
             }
             availableCell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
             availableCell.detailTextLabel?.text = "\(version.organizationName)"
@@ -154,22 +148,14 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle,
                    forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete {
-            if let versionCode = self.getVersionCode(tableView: tableView, indexPath: indexPath,
-                                                     method: "delete-row") {
-                self.settingsModel.removeSelectedVersion(at: indexPath.row)
-                self.settingsModel.insertAvailableVersion(versionCode: versionCode, at: 0)
-                let destination = IndexPath(item: 0, section: 5)
-                tableView.moveRow(at: indexPath, to: destination)
-            }
+            let destination = IndexPath(item: 0, section: 5)
+            self.settingsModel.moveSelectedToAvailable(source: indexPath.row, destination: destination.row)
+            tableView.moveRow(at: indexPath, to: destination)
         } else if editingStyle == UITableViewCellEditingStyle.insert {
-            if let versionCode = self.getVersionCode(tableView: tableView, indexPath: indexPath,
-                                                     method: "insert-row") {
-                self.settingsModel.removeAvailableVersion(at: indexPath.row)
-                self.settingsModel.appendSelectedVersion(versionCode: versionCode)
-                let length = self.settingsModel.getSelectedVersionCount()
-                let destination = IndexPath(item: (length - 1), section: 3)
-                tableView.moveRow(at: indexPath, to: destination)
-            }
+            let length = self.settingsModel.getSelectedVersionCount()
+            let destination = IndexPath(item: length, section: 3)
+            self.settingsModel.moveAvailableToSelected(source: indexPath.row, destination: destination.row)
+            tableView.moveRow(at: indexPath, to: destination)
         }
     }
 
@@ -181,31 +167,10 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     // Commit the row move in the data source
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath,
                    to destinationIndexPath: IndexPath) {
-        let sourceIndex = sourceIndexPath.row
-        let targetIndex = destinationIndexPath.row
-        if let versionCode = self.getVersionCode(tableView: tableView, indexPath: sourceIndexPath,
-                                                 method: "moveRowAt-source") {
-            self.settingsModel.removeSelectedVersion(at: sourceIndex)
-            self.settingsModel.insertSelectedVersion(versionCode: versionCode, at: targetIndex)
-        }
+        self.settingsModel.moveSelected(source: sourceIndexPath.row,
+                                        destination: destinationIndexPath.row)
     }
-    
-    private func getVersionCode(tableView: UITableView, indexPath: IndexPath, method: String) -> String? {
-        guard let cell = tableView.cellForRow(at: indexPath) else {
-            print("SettingsViewDataSource.\(method) did not find cell at Index")
-            return nil
-        }
-        guard let versionCell = cell as? VersionCell else {
-            print("SettingsViewDataSource.\(method) cell was non-VersionCell")
-            return nil
-        }
-        guard let versionCode = versionCell.versionCode else {
-            print("SettingsViewDataSource.\(method) cell had no versionCode")
-            return nil
-        }
-        return versionCode
-    }
-    
+
     // MARK: - UISearchResultsUpdating Delegate
     func updateSearchResults(for searchController: UISearchController) {
         print("****** INSIDE update Search Results ********")
