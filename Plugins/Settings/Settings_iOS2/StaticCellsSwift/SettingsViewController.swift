@@ -11,7 +11,7 @@ class SettingsViewController: UIViewController {
     
     var tableView: UITableView!
     let dataSource = SettingsViewDataSource()
-    let delegate = SettingsViewDelegate()
+    let delegate = SettingsViewDelegate(selectionViewSection: 3)
 
     override func loadView() {
         super.loadView()

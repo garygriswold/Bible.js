@@ -11,6 +11,19 @@ import UIKit
 
 class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
+    let isPrimaryTable: Bool
+    let selectedSection: Int
+    let searchSection: Int
+    let availableSection: Int
+    
+    init(selectionViewSection: Int) {
+        self.isPrimaryTable = (selectionViewSection > 1)
+        self.selectedSection = selectionViewSection
+        self.searchSection = selectionViewSection + 1
+        self.availableSection = selectionViewSection + 2
+        super.init()
+    }
+    
     deinit {
         print("****** Deinit SettingsViewDelegate ******")
     }
@@ -29,7 +42,14 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     // Handle row selection.
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+        if isPrimaryTable {
+            primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
+        } else {
+            selectionViewRowSelect(tableView: tableView, indexPath: indexPath)
+        }
+    }
+    
+    private func primaryViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
             switch indexPath.row {
@@ -56,13 +76,20 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         case 2:
             // Must navigate to language selection view
             print("Languages selected")
-        case 3:
+        default:
+            selectionViewRowSelect(tableView: tableView, indexPath: indexPath)
+        }
+    }
+    
+    private func selectionViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
+        switch indexPath.section {
+        case self.selectedSection:
             // Must get detail
             print("Selected \(indexPath.row) clicked")
-        case 4:
+        case self.searchSection:
             // Must perform search
             print("Search selected")
-        case 5:
+        case self.availableSection:
             // Must get detail
             print("Other \(indexPath.row) clicked")
         default:
@@ -81,11 +108,11 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     }
  
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return (section == 5) ? 0.0 : -1.0
+        return (section == self.availableSection) ? 0.0 : -1.0
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return (section == 4) ? 0.0 : -1.0
+        return (section == self.searchSection) ? 0.0 : -1.0
     }
     
     // Called when swipe is used to begin editing
@@ -97,8 +124,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     // Identifies Add and Delete Rows
     func tableView(_ tableView: UITableView, editingStyleForRowAt: IndexPath) -> UITableViewCellEditingStyle {
         switch editingStyleForRowAt.section {
-        case 3: return UITableViewCellEditingStyle.delete
-        case 5: return UITableViewCellEditingStyle.insert
+        case self.selectedSection: return UITableViewCellEditingStyle.delete
+        case self.availableSection: return UITableViewCellEditingStyle.insert
         default: return UITableViewCellEditingStyle.none
         }
     }
@@ -110,8 +137,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     // Keeps non-editable rows from indenting
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt: IndexPath) -> Bool {
         switch shouldIndentWhileEditingRowAt.section {
-        case 3: return true
-        case 5: return true
+        case self.selectedSection: return true
+        case self.availableSection: return true
         default: return false
         }
     }

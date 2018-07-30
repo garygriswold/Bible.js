@@ -15,11 +15,9 @@
 		E4C8F63E210F7C6C00FE1A8E /* LanguageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F63D210F7C6C00FE1A8E /* LanguageModel.swift */; };
 		E4C8F640210F7F7E00FE1A8E /* LanguageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F63F210F7F7E00FE1A8E /* LanguageViewController.swift */; };
 		E4C8F642210F7F9C00FE1A8E /* LanguageViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F641210F7F9C00FE1A8E /* LanguageViewDataSource.swift */; };
-		E4C8F644210F7FB500FE1A8E /* LanguageViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F643210F7FB500FE1A8E /* LanguageViewDelegate.swift */; };
 		E4C8F646210F803900FE1A8E /* LanguageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F645210F803900FE1A8E /* LanguageCell.swift */; };
 		E4C8F648210F855200FE1A8E /* VersionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F647210F855200FE1A8E /* VersionViewController.swift */; };
 		E4C8F64A210F856500FE1A8E /* VersionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F649210F856500FE1A8E /* VersionViewDataSource.swift */; };
-		E4C8F64C210F857700FE1A8E /* VersionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F64B210F857700FE1A8E /* VersionViewDelegate.swift */; };
 		E4D0A1A0210A28350068FD9D /* VersionSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D0A19F210A28350068FD9D /* VersionSearchCell.swift */; };
 		E4FEE9D5210780BE007BA9EF /* SettingsViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FEE9D4210780BE007BA9EF /* SettingsViewDataSource.swift */; };
 		E4FEE9D7210780D6007BA9EF /* SettingsViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FEE9D6210780D6007BA9EF /* SettingsViewDelegate.swift */; };
@@ -37,11 +35,9 @@
 		E4C8F63D210F7C6C00FE1A8E /* LanguageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageModel.swift; sourceTree = "<group>"; };
 		E4C8F63F210F7F7E00FE1A8E /* LanguageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewController.swift; sourceTree = "<group>"; };
 		E4C8F641210F7F9C00FE1A8E /* LanguageViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewDataSource.swift; sourceTree = "<group>"; };
-		E4C8F643210F7FB500FE1A8E /* LanguageViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewDelegate.swift; sourceTree = "<group>"; };
 		E4C8F645210F803900FE1A8E /* LanguageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageCell.swift; sourceTree = "<group>"; };
 		E4C8F647210F855200FE1A8E /* VersionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionViewController.swift; sourceTree = "<group>"; };
 		E4C8F649210F856500FE1A8E /* VersionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionViewDataSource.swift; sourceTree = "<group>"; };
-		E4C8F64B210F857700FE1A8E /* VersionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionViewDelegate.swift; sourceTree = "<group>"; };
 		E4D0A19F210A28350068FD9D /* VersionSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionSearchCell.swift; sourceTree = "<group>"; };
 		E4FEE9D4210780BE007BA9EF /* SettingsViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewDataSource.swift; sourceTree = "<group>"; };
 		E4FEE9D6210780D6007BA9EF /* SettingsViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewDelegate.swift; sourceTree = "<group>"; };
@@ -78,11 +74,9 @@
 				E4D0A19F210A28350068FD9D /* VersionSearchCell.swift */,
 				E4C8F63F210F7F7E00FE1A8E /* LanguageViewController.swift */,
 				E4C8F641210F7F9C00FE1A8E /* LanguageViewDataSource.swift */,
-				E4C8F643210F7FB500FE1A8E /* LanguageViewDelegate.swift */,
 				E4C8F645210F803900FE1A8E /* LanguageCell.swift */,
 				E4C8F647210F855200FE1A8E /* VersionViewController.swift */,
 				E4C8F649210F856500FE1A8E /* VersionViewDataSource.swift */,
-				E4C8F64B210F857700FE1A8E /* VersionViewDelegate.swift */,
 				E4C8F639210EC75C00FE1A8E /* SettingsModelInterface.swift */,
 				E4C8F63B210ECC2500FE1A8E /* VersionModel.swift */,
 				E4C8F63D210F7C6C00FE1A8E /* LanguageModel.swift */,
@@ -169,11 +163,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4C8F64C210F857700FE1A8E /* VersionViewDelegate.swift in Sources */,
 				E4C8F642210F7F9C00FE1A8E /* LanguageViewDataSource.swift in Sources */,
 				E4C8F640210F7F7E00FE1A8E /* LanguageViewController.swift in Sources */,
 				E4FEE9D7210780D6007BA9EF /* SettingsViewDelegate.swift in Sources */,
-				E4C8F644210F7FB500FE1A8E /* LanguageViewDelegate.swift in Sources */,
 				E4C8F63E210F7C6C00FE1A8E /* LanguageModel.swift in Sources */,
 				E4C8F63A210EC75C00FE1A8E /* SettingsModelInterface.swift in Sources */,
 				3500365219D903D800E69508 /* SettingsViewController.swift in Sources */,

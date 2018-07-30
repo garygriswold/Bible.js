@@ -13,7 +13,7 @@ class VersionViewController: UIViewController {
     
     var tableView: UITableView!
     let dataSource = VersionViewDataSource()
-    let delegate = VersionViewDelegate()
+    let delegate = SettingsViewDelegate(selectionViewSection: 0)
     
     override func loadView() {
         super.loadView()
