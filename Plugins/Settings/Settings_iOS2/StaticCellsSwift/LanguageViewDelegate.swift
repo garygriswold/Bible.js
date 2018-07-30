@@ -1,22 +1,22 @@
 //
-//  SettingsViewDelegate.swift
+//  LanguageViewDelegate.swift
 //  StaticCellsSwift
 //
-//  Created by Gary Griswold on 7/24/18.
-//  Copyright © 2018 Short Sands, LLC All rights reserved.
+//  Created by Gary Griswold on 7/30/18.
+//  Copyright © 2018 iOSExamples. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-class SettingsViewDelegate : NSObject, UITableViewDelegate {
+class LanguageViewDelegate : NSObject, UITableViewDelegate {
     
     deinit {
         print("****** Deinit SettingsViewDelegate ******")
     }
     
     //func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        //return UITableViewAutomaticDimension
+    //return UITableViewAutomaticDimension
     //}
     
     //func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {}
@@ -32,37 +32,12 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         
         switch indexPath.section {
         case 0:
-            switch indexPath.row {
-            case 0:
-                // Must call Apple review widget
-                print("Write a review selected")
-            case 1:
-                // Must go to feedback page
-                print("Send us feedback selected")
-            default:
-                print("Unknown row \(indexPath.row) in section 0")
-            }
-        case 1:
-            switch indexPath.row {
-            case 0:
-                // Must resize text
-                print("Text size widget selected")
-            case 1:
-                // Should disable selection
-                print("Text size demo selected")
-            default:
-                print("Unknown row \(indexPath.row) in section 1")
-            }
-        case 2:
-            // Must navigate to language selection view
-            print("Languages selected")
-        case 3:
             // Must get detail
             print("Selected \(indexPath.row) clicked")
-        case 4:
+        case 1:
             // Must perform search
             print("Search selected")
-        case 5:
+        case 2:
             // Must get detail
             print("Other \(indexPath.row) clicked")
         default:
@@ -79,13 +54,13 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return nil
     }
- 
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return (section == 5) ? 0.0 : -1.0
+        return (section == 2) ? 0.0 : -1.0
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return (section == 4) ? 0.0 : -1.0
+        return (section == 1) ? 0.0 : -1.0
     }
     
     // Called when swipe is used to begin editing
@@ -97,8 +72,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     // Identifies Add and Delete Rows
     func tableView(_ tableView: UITableView, editingStyleForRowAt: IndexPath) -> UITableViewCellEditingStyle {
         switch editingStyleForRowAt.section {
-        case 3: return UITableViewCellEditingStyle.delete
-        case 5: return UITableViewCellEditingStyle.insert
+        case 0: return UITableViewCellEditingStyle.delete
+        case 2: return UITableViewCellEditingStyle.insert
         default: return UITableViewCellEditingStyle.none
         }
     }
@@ -110,8 +85,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     // Keeps non-editable rows from indenting
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt: IndexPath) -> Bool {
         switch shouldIndentWhileEditingRowAt.section {
-        case 3: return true
-        case 5: return true
+        case 0: return true
+        case 2: return true
         default: return false
         }
     }
@@ -140,4 +115,5 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     //func tableView(_ tableView: UITableView,
     //               trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
 }
+
 

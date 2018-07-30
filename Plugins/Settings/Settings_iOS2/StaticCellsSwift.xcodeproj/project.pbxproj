@@ -12,6 +12,11 @@
 		3500365219D903D800E69508 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3500365119D903D800E69508 /* SettingsViewController.swift */; };
 		E4C8F63A210EC75C00FE1A8E /* SettingsModelInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F639210EC75C00FE1A8E /* SettingsModelInterface.swift */; };
 		E4C8F63C210ECC2500FE1A8E /* VersionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F63B210ECC2500FE1A8E /* VersionModel.swift */; };
+		E4C8F63E210F7C6C00FE1A8E /* LanguageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F63D210F7C6C00FE1A8E /* LanguageModel.swift */; };
+		E4C8F640210F7F7E00FE1A8E /* LanguageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F63F210F7F7E00FE1A8E /* LanguageViewController.swift */; };
+		E4C8F642210F7F9C00FE1A8E /* LanguageViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F641210F7F9C00FE1A8E /* LanguageViewDataSource.swift */; };
+		E4C8F644210F7FB500FE1A8E /* LanguageViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F643210F7FB500FE1A8E /* LanguageViewDelegate.swift */; };
+		E4C8F646210F803900FE1A8E /* LanguageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F645210F803900FE1A8E /* LanguageCell.swift */; };
 		E4D0A1A0210A28350068FD9D /* VersionSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D0A19F210A28350068FD9D /* VersionSearchCell.swift */; };
 		E4FEE9D5210780BE007BA9EF /* SettingsViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FEE9D4210780BE007BA9EF /* SettingsViewDataSource.swift */; };
 		E4FEE9D7210780D6007BA9EF /* SettingsViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FEE9D6210780D6007BA9EF /* SettingsViewDelegate.swift */; };
@@ -26,6 +31,11 @@
 		E4632D332106DCF700F56DA4 /* StaticCellsSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StaticCellsSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4C8F639210EC75C00FE1A8E /* SettingsModelInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModelInterface.swift; sourceTree = "<group>"; };
 		E4C8F63B210ECC2500FE1A8E /* VersionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionModel.swift; sourceTree = "<group>"; };
+		E4C8F63D210F7C6C00FE1A8E /* LanguageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageModel.swift; sourceTree = "<group>"; };
+		E4C8F63F210F7F7E00FE1A8E /* LanguageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewController.swift; sourceTree = "<group>"; };
+		E4C8F641210F7F9C00FE1A8E /* LanguageViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewDataSource.swift; sourceTree = "<group>"; };
+		E4C8F643210F7FB500FE1A8E /* LanguageViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewDelegate.swift; sourceTree = "<group>"; };
+		E4C8F645210F803900FE1A8E /* LanguageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageCell.swift; sourceTree = "<group>"; };
 		E4D0A19F210A28350068FD9D /* VersionSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionSearchCell.swift; sourceTree = "<group>"; };
 		E4FEE9D4210780BE007BA9EF /* SettingsViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewDataSource.swift; sourceTree = "<group>"; };
 		E4FEE9D6210780D6007BA9EF /* SettingsViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewDelegate.swift; sourceTree = "<group>"; };
@@ -60,8 +70,13 @@
 				E4FEE9D6210780D6007BA9EF /* SettingsViewDelegate.swift */,
 				E4FEE9DA2107BF55007BA9EF /* VersionCell.swift */,
 				E4D0A19F210A28350068FD9D /* VersionSearchCell.swift */,
+				E4C8F63F210F7F7E00FE1A8E /* LanguageViewController.swift */,
+				E4C8F641210F7F9C00FE1A8E /* LanguageViewDataSource.swift */,
+				E4C8F643210F7FB500FE1A8E /* LanguageViewDelegate.swift */,
+				E4C8F645210F803900FE1A8E /* LanguageCell.swift */,
 				E4C8F639210EC75C00FE1A8E /* SettingsModelInterface.swift */,
 				E4C8F63B210ECC2500FE1A8E /* VersionModel.swift */,
+				E4C8F63D210F7C6C00FE1A8E /* LanguageModel.swift */,
 				3500362919D9017500E69508 /* Images.xcassets */,
 				3500362019D9017500E69508 /* Supporting Files */,
 			);
@@ -145,9 +160,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4C8F642210F7F9C00FE1A8E /* LanguageViewDataSource.swift in Sources */,
+				E4C8F640210F7F7E00FE1A8E /* LanguageViewController.swift in Sources */,
 				E4FEE9D7210780D6007BA9EF /* SettingsViewDelegate.swift in Sources */,
+				E4C8F644210F7FB500FE1A8E /* LanguageViewDelegate.swift in Sources */,
+				E4C8F63E210F7C6C00FE1A8E /* LanguageModel.swift in Sources */,
 				E4C8F63A210EC75C00FE1A8E /* SettingsModelInterface.swift in Sources */,
 				3500365219D903D800E69508 /* SettingsViewController.swift in Sources */,
+				E4C8F646210F803900FE1A8E /* LanguageCell.swift in Sources */,
 				3500362319D9017500E69508 /* AppDelegate.swift in Sources */,
 				E4D0A1A0210A28350068FD9D /* VersionSearchCell.swift in Sources */,
 				E4FEE9D5210780BE007BA9EF /* SettingsViewDataSource.swift in Sources */,
