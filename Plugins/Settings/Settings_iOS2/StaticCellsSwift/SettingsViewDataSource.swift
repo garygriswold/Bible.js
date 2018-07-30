@@ -116,7 +116,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             let version = self.settingsModel.getSelectedVersion(index: indexPath.row)
             selectedCell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
             selectedCell.detailTextLabel?.text = "\(version.organizationName)"
-            selectedCell.accessoryType = UITableViewCellAccessoryType.detailButton // not working
+            selectedCell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
             return selectedCell
         case 4:
             switch indexPath.row {
@@ -133,7 +133,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             }
             availableCell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
             availableCell.detailTextLabel?.text = "\(version.organizationName)"
-            availableCell.accessoryType = UITableViewCellAccessoryType.detailButton // not working
+            availableCell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
             return availableCell
         default: fatalError("Unknown section \(indexPath.section)")
         }
