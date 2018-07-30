@@ -17,7 +17,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     let textDisplayCell = UITableViewCell()
     let languagesCell = UITableViewCell()
     var searchCell: VersionSearchCell?
-    let settingsModel = SettingsModel()
+    let dataModel = VersionModel()
     
     var tableView: UITableView? // needed by updateSearchResults
     
@@ -79,13 +79,13 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         case 0: return 2
         case 1: return 2
         case 2: return 1
-        case 3: return self.settingsModel.getSelectedVersionCount()
+        case 3: return self.dataModel.selectedCount
         case 4: return 1
         case 5:
             if isSearching() {
-                return self.settingsModel.versFiltered.count
+                return self.dataModel.filteredCount
             } else {
-                return self.settingsModel.getAvailableVersionCount()
+                return self.dataModel.availableCount
             }
         default: fatalError("Unknown number of sections")
         }
@@ -112,29 +112,14 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             default: fatalError("Unknown row \(indexPath.row) in section 2")
             }
         case 3:
-            let selectedCell = tableView.dequeueReusableCell(withIdentifier: "versionCell", for: indexPath)
-            let version = self.settingsModel.getSelectedVersion(index: indexPath.row)
-            selectedCell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
-            selectedCell.detailTextLabel?.text = "\(version.organizationName)"
-            selectedCell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
-            return selectedCell
+            return self.dataModel.selectedCell(tableView: tableView, indexPath: indexPath)
         case 4:
             switch indexPath.row {
             case 0: return self.searchCell!
             default: fatalError("Unknown row \(indexPath.row) in section 4")
             }
         case 5:
-            let availableCell = tableView.dequeueReusableCell(withIdentifier: "versionCell", for: indexPath)
-            var version: Version
-            if isSearching() {
-                version = self.settingsModel.versFiltered[indexPath.row]
-            } else {
-                version = self.settingsModel.getAvailableVersion(index: indexPath.row)
-            }
-            availableCell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
-            availableCell.detailTextLabel?.text = "\(version.organizationName)"
-            availableCell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
-            return availableCell
+            return self.dataModel.availableCell(tableView: tableView, indexPath: indexPath, inSearch: isSearching())
         default: fatalError("Unknown section \(indexPath.section)")
         }
     }
@@ -149,17 +134,17 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
                    forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete {
             let destination = IndexPath(item: 0, section: 5)
-            self.settingsModel.moveSelectedToAvailable(source: indexPath.row,
-                                                       destination: destination.row, search: isSearching())
+            self.dataModel.moveSelectedToAvailable(source: indexPath.row,
+                                                   destination: destination.row, inSearch: isSearching())
             tableView.moveRow(at: indexPath, to: destination)
             if isSearching() {
                 updateSearchResults(for: searchController)
             }
         } else if editingStyle == UITableViewCellEditingStyle.insert {
-            let length = self.settingsModel.getSelectedVersionCount()
+            let length = self.dataModel.selectedCount
             let destination = IndexPath(item: length, section: 3)
-            self.settingsModel.moveAvailableToSelected(source: indexPath.row,
-                                                       destination: destination.row, search: isSearching())
+            self.dataModel.moveAvailableToSelected(source: indexPath.row,
+                                                   destination: destination.row, inSearch: isSearching())
             tableView.moveRow(at: indexPath, to: destination)
         }
     }
@@ -172,8 +157,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     // Commit the row move in the data source
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath,
                    to destinationIndexPath: IndexPath) {
-        self.settingsModel.moveSelected(source: sourceIndexPath.row,
-                                        destination: destinationIndexPath.row)
+        self.dataModel.moveSelected(source: sourceIndexPath.row, destination: destinationIndexPath.row)
     }
 
     // MARK: - UISearchResultsUpdating Delegate
@@ -182,8 +166,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         print("found \(searchController.searchBar.text)")
         if let text = self.searchController.searchBar.text {
             if text.count > 0 {
-                self.settingsModel.filterVersionsForSearchText(searchText: text)
-                print("Filtered \(self.settingsModel.versFiltered)")
+                self.dataModel.filterForSearch(searchText: text)
             }
             let sections = IndexSet(integer: 5)
             self.tableView?.reloadSections(sections, with: UITableViewRowAnimation.automatic)
