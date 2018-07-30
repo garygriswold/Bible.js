@@ -21,7 +21,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     let textSliderCell = UITableViewCell()
     let textDisplayCell = UITableViewCell()
     let languagesCell = UITableViewCell()
-    var searchCell: VersionSearchCell?
+    var searchCell: SearchCell?
     let dataModel: SettingsModelInterface
     
     var tableView: UITableView? // needed by updateSearchResults
@@ -33,10 +33,13 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         switch settingsViewType {
         case .primary:
             self.dataModel = VersionModel()
+            self.searchController.searchBar.placeholder = "Find Bibles"
         case .language:
             self.dataModel = LanguageModel()
+            self.searchController.searchBar.placeholder = "Find Languages"
         case .version:
             self.dataModel = VersionModel()
+            self.searchController.searchBar.placeholder = "Find Bibles"
         }
         self.selectedSection = selectionViewSection
         self.searchSection = selectionViewSection + 1
@@ -44,7 +47,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         super.init()
         
         // search Cell
-        self.searchCell = VersionSearchCell(searchBar: self.searchController.searchBar)
+        self.searchCell = SearchCell(searchBar: self.searchController.searchBar)
         // Setup the Search Controller
         self.searchController.searchResultsUpdater = self
         self.searchController.obscuresBackgroundDuringPresentation = false

@@ -11,7 +11,7 @@
 import Foundation
 import UIKit
 
-class VersionSearchCell : UITableViewCell {
+class SearchCell : UITableViewCell {
     
     let searchBar: UISearchBar
     
@@ -28,7 +28,6 @@ class VersionSearchCell : UITableViewCell {
         super.layoutSubviews()
         
         self.searchBar.frame = self.bounds
-        self.searchBar.placeholder = "Find Bibles"
         //self.searchBar.barTintColor = UIColor(red: 0.179, green: 0.617, blue: 0.785, alpha: 1.0) // #2E9EC9;
         self.searchBar.searchBarStyle = UISearchBarStyle.default // can be (defult or minimal or prominent)
         self.searchBar.showsCancelButton = false
