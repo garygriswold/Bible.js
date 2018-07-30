@@ -15,9 +15,26 @@ enum SettingsViewType {
 
 class SettingsViewController: UIViewController {
     
+    let settingsViewType: SettingsViewType
+    let dataSource: SettingsViewDataSource
+    let delegate: SettingsViewDelegate
     var tableView: UITableView!
-    let dataSource = SettingsViewDataSource(settingsViewType: .primary, selectionViewSection: 3)
-    let delegate = SettingsViewDelegate(settingsViewType: .primary, selectionViewSection: 3)
+    
+    init(settingsViewType: SettingsViewType) {
+        self.settingsViewType = settingsViewType
+        let section = (settingsViewType == .primary) ? 3 : 0
+        self.dataSource = SettingsViewDataSource(settingsViewType: settingsViewType, selectionViewSection: section)
+        self.delegate = SettingsViewDelegate(settingsViewType: settingsViewType, selectionViewSection: section)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    // This constructor is not used
+    required init?(coder: NSCoder) {
+        self.settingsViewType = .primary
+        self.dataSource = SettingsViewDataSource(settingsViewType: .primary, selectionViewSection: 3)
+        self.delegate = SettingsViewDelegate(settingsViewType: .primary, selectionViewSection: 3)
+        super.init(coder: coder)
+    }
 
     override func loadView() {
         super.loadView()
@@ -28,8 +45,17 @@ class SettingsViewController: UIViewController {
         self.tableView.setEditing(true, animated: false)
         self.view = self.tableView
  
-        // set the view title
-        self.title = "Settings"
+        switch self.settingsViewType {
+        case .primary:
+            self.title = "Settings"
+            self.tableView.register(VersionCell.self, forCellReuseIdentifier: "versionCell")
+        case .language:
+            self.title = "Languages"
+            self.tableView.register(VersionCell.self, forCellReuseIdentifier: "languageCell")
+        case .version:
+            self.title = "Bibles"
+            self.tableView.register(VersionCell.self, forCellReuseIdentifier: "versionCell")
+        }
         
         // prevent searchBar from holding onto focus
         self.definesPresentationContext = true
@@ -37,8 +63,6 @@ class SettingsViewController: UIViewController {
         // set Top Bar items
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneHandler))
         //self.saveHandler(sender: nil)
-        
-        self.tableView.register(VersionCell.self, forCellReuseIdentifier: "versionCell")
         
         self.tableView.dataSource = self.dataSource
         self.tableView.delegate = self.delegate
