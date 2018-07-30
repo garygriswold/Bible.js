@@ -11,62 +11,93 @@ import UIKit
 
 class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsUpdating {
     
+    let settingsViewType: SettingsViewType
+    let selectedSection: Int
+    let searchSection: Int
+    let availableSection: Int
+    
     let reviewCell = UITableViewCell()
     let feedbackCell = UITableViewCell()
     let textSliderCell = UITableViewCell()
     let textDisplayCell = UITableViewCell()
     let languagesCell = UITableViewCell()
     var searchCell: VersionSearchCell?
-    let dataModel = VersionModel()
+    let dataModel: SettingsModelInterface
     
     var tableView: UITableView? // needed by updateSearchResults
     
     let searchController = UISearchController(searchResultsController: nil)
     
-    override init() {
+    init(settingsViewType: SettingsViewType, selectionViewSection: Int) {
+        self.settingsViewType = settingsViewType
+        switch settingsViewType {
+        case .primary:
+            self.dataModel = VersionModel()
+        case .language:
+            self.dataModel = LanguageModel()
+        case .version:
+            self.dataModel = VersionModel()
+        }
+        self.selectedSection = selectionViewSection
+        self.searchSection = selectionViewSection + 1
+        self.availableSection = selectionViewSection + 2
         super.init()
         
-        // reviewCell, section 0, row 0
-        self.reviewCell.textLabel?.text = "Write A Review"
-        self.reviewCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-        
-        // feedbackCell, section 0, row 1
-        self.feedbackCell.textLabel?.text = "Send Us Feedback"
-        self.feedbackCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-        
-        // textSlider, section 1, row 0
-        self.textSliderCell.textLabel?.text = "Text Slider TBD"
-        self.textSliderCell.selectionStyle = UITableViewCellSelectionStyle.none
-        
-        // textDisplay, section 1, row 1
-        self.textDisplayCell.textLabel?.text = "For God so loved TBD"
-        self.textDisplayCell.selectionStyle = UITableViewCellSelectionStyle.none
-        
-        // languages, section 2, row 0
-        self.languagesCell.textLabel?.text = "Languages"
-        self.languagesCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-        
-        // search, section 4, row 0
+        // search Cell
         self.searchCell = VersionSearchCell(searchBar: self.searchController.searchBar)
         // Setup the Search Controller
         self.searchController.searchResultsUpdater = self
         self.searchController.obscuresBackgroundDuringPresentation = false
         //navigationItem.searchController = searchController // suggested by Ray
-
+        
+        if self.settingsViewType == .primary {
+        
+            // reviewCell, section 0, row 0
+            self.reviewCell.textLabel?.text = "Write A Review"
+            self.reviewCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+            
+            // feedbackCell, section 0, row 1
+            self.feedbackCell.textLabel?.text = "Send Us Feedback"
+            self.feedbackCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+            
+            // textSlider, section 1, row 0
+            self.textSliderCell.textLabel?.text = "Text Slider TBD"
+            self.textSliderCell.selectionStyle = UITableViewCellSelectionStyle.none
+            
+            // textDisplay, section 1, row 1
+            self.textDisplayCell.textLabel?.text = "For God so loved TBD"
+            self.textDisplayCell.selectionStyle = UITableViewCellSelectionStyle.none
+            
+            // languages, section 2, row 0
+            self.languagesCell.textLabel?.text = "Languages"
+            self.languagesCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+        }
     }
     
     // Return the number of sections
     func numberOfSections(in tableView: UITableView) -> Int {
         self.tableView = tableView // needed by updateSearchResults
-        return 6
+        if self.settingsViewType == .primary {
+            return 6
+        } else {
+            return 3
+        }
     }
     
     // Customize the section headings for each section
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 3: return "My Bibles"
-        case 4: return "Other Bibles"
-        default: return nil
+        if self.settingsViewType == .language {
+            switch section {
+            case self.selectedSection: return "My Languages"
+            case self.searchSection: return "Other Other"
+            default: return nil
+            }
+        } else {
+            switch section {
+            case self.selectedSection: return "My Bibles"
+            case self.searchSection: return "Other Bibles"
+            default: return nil
+            }
         }
     }
     
@@ -75,65 +106,77 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     
     // Return the number of rows for each section in your static table
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0: return 2
-        case 1: return 2
-        case 2: return 1
-        case 3: return self.dataModel.selectedCount
-        case 4: return 1
-        case 5:
-            if isSearching() {
-                return self.dataModel.filteredCount
-            } else {
-                return self.dataModel.availableCount
+        if self.settingsViewType == .primary && section < self.selectedSection {
+            switch section {
+            case 0: return 2
+            case 1: return 2
+            case 2: return 1
+            default: fatalError("Unknown number of sections")
             }
-        default: fatalError("Unknown number of sections")
+        } else {
+            switch section {
+            case self.selectedSection: return self.dataModel.selectedCount
+            case self.searchSection: return 1
+            case self.availableSection:
+                if isSearching() {
+                    return self.dataModel.filteredCount
+                } else {
+                    return self.dataModel.availableCount
+                }
+            default: fatalError("Unknown number of sections")
+            }
         }
     }
     
     // Return the row cell for the corresponding section and row
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
-            switch indexPath.row {
-            case 0: return self.reviewCell
-            case 1: return self.feedbackCell
-            default: fatalError("Unknown row \(indexPath.row) in section 0")
+        if self.settingsViewType == .primary && indexPath.section < self.selectedSection {
+            switch indexPath.section {
+            case 0:
+                switch indexPath.row {
+                case 0: return self.reviewCell
+                case 1: return self.feedbackCell
+                default: fatalError("Unknown row \(indexPath.row) in section 0")
+                }
+            case 1:
+                switch indexPath.row {
+                case 0: return self.textSliderCell
+                case 1: return self.textDisplayCell
+                default: fatalError("Unknown row \(indexPath.row) in section 1")
+                }
+            case 2:
+                switch indexPath.row {
+                case 0: return self.languagesCell
+                default: fatalError("Unknown row \(indexPath.row) in section 2")
+                }
+            default: fatalError("")
             }
-        case 1:
-            switch indexPath.row {
-            case 0: return self.textSliderCell
-            case 1: return self.textDisplayCell
-            default: fatalError("Unknown row \(indexPath.row) in section 1")
+        } else {
+            switch indexPath.section {
+            case self.selectedSection:
+                return self.dataModel.selectedCell(tableView: tableView, indexPath: indexPath)
+            case self.searchSection:
+                switch indexPath.row {
+                case 0: return self.searchCell!
+                default: fatalError("Unknown row \(indexPath.row) in section 4")
+                }
+            case self.availableSection:
+                return self.dataModel.availableCell(tableView: tableView, indexPath: indexPath, inSearch: isSearching())
+            default: fatalError("Unknown section \(indexPath.section)")
             }
-        case 2:
-            switch indexPath.row {
-            case 0: return self.languagesCell
-            default: fatalError("Unknown row \(indexPath.row) in section 2")
-            }
-        case 3:
-            return self.dataModel.selectedCell(tableView: tableView, indexPath: indexPath)
-        case 4:
-            switch indexPath.row {
-            case 0: return self.searchCell!
-            default: fatalError("Unknown row \(indexPath.row) in section 4")
-            }
-        case 5:
-            return self.dataModel.availableCell(tableView: tableView, indexPath: indexPath, inSearch: isSearching())
-        default: fatalError("Unknown section \(indexPath.section)")
         }
     }
     
     // Return true for each row that can be edited
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return (indexPath.section == 3 || indexPath.section == 5)
+        return (indexPath.section == self.selectedSection || indexPath.section == self.availableSection)
     }
     
     // Commit data row change to the data source
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle,
                    forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete {
-            let destination = IndexPath(item: 0, section: 5)
+            let destination = IndexPath(item: 0, section: self.availableSection)
             self.dataModel.moveSelectedToAvailable(source: indexPath.row,
                                                    destination: destination.row, inSearch: isSearching())
             tableView.moveRow(at: indexPath, to: destination)
@@ -142,7 +185,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             }
         } else if editingStyle == UITableViewCellEditingStyle.insert {
             let length = self.dataModel.selectedCount
-            let destination = IndexPath(item: length, section: 3)
+            let destination = IndexPath(item: length, section: self.selectedSection)
             self.dataModel.moveAvailableToSelected(source: indexPath.row,
                                                    destination: destination.row, inSearch: isSearching())
             tableView.moveRow(at: indexPath, to: destination)
@@ -151,7 +194,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
 
     // Return true for each row that can be moved
     func tableView(_ tableView: UITableView, canMoveRowAt: IndexPath) -> Bool {
-        return (canMoveRowAt.section == 3)
+        return (canMoveRowAt.section == self.selectedSection)
     }
     
     // Commit the row move in the data source
@@ -168,7 +211,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             if text.count > 0 {
                 self.dataModel.filterForSearch(searchText: text)
             }
-            let sections = IndexSet(integer: 5)
+            let sections = IndexSet(integer: self.availableSection)
             self.tableView?.reloadSections(sections, with: UITableViewRowAnimation.automatic)
         }
     }

@@ -52,6 +52,7 @@ protocol SettingsModelInterface {
  
     var selectedCount: Int { get }
     var availableCount: Int { get }
+    var filteredCount: Int { get }
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     func availableCell(tableView: UITableView, indexPath: IndexPath, inSearch: Bool) -> UITableViewCell
     func moveSelected(source: Int, destination: Int)

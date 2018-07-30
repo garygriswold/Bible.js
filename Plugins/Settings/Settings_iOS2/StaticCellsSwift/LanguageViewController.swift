@@ -12,7 +12,7 @@ import UIKit
 class LanguageViewController: UIViewController {
     
     var tableView: UITableView!
-    let dataSource = LanguageViewDataSource()
+    let dataSource = SettingsViewDataSource(settingsViewType: .language, selectionViewSection: 0)
     let delegate = SettingsViewDelegate(settingsViewType: .language, selectionViewSection: 0)
     
     override func loadView() {

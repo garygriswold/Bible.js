@@ -16,7 +16,7 @@ enum SettingsViewType {
 class SettingsViewController: UIViewController {
     
     var tableView: UITableView!
-    let dataSource = SettingsViewDataSource()
+    let dataSource = SettingsViewDataSource(settingsViewType: .primary, selectionViewSection: 3)
     let delegate = SettingsViewDelegate(settingsViewType: .primary, selectionViewSection: 3)
 
     override func loadView() {
