@@ -1,5 +1,5 @@
 //
-//  LanguageViewController.swift
+//  VersionViewController.swift
 //  StaticCellsSwift
 //
 //  Created by Gary Griswold on 7/30/18.
@@ -9,11 +9,11 @@
 import Foundation
 import UIKit
 
-class LanguageViewController: UIViewController {
+class VersionViewController: UIViewController {
     
     var tableView: UITableView!
-    let dataSource = LanguageViewDataSource()
-    let delegate = LanguageViewDelegate()
+    let dataSource = VersionViewDataSource()
+    let delegate = VersionViewDelegate()
     
     override func loadView() {
         super.loadView()
@@ -25,7 +25,7 @@ class LanguageViewController: UIViewController {
         self.view = self.tableView
         
         // set the view title
-        self.title = "Languages"
+        self.title = "Bibles"
         
         // prevent searchBar from holding onto focus
         self.definesPresentationContext = true
@@ -34,7 +34,7 @@ class LanguageViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneHandler))
         //self.saveHandler(sender: nil)
         
-        self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
+        self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "versionCell")
         
         self.tableView.dataSource = self.dataSource
         self.tableView.delegate = self.delegate
@@ -56,5 +56,3 @@ class LanguageViewController: UIViewController {
         print("Done button clicked")
     }
 }
-
-

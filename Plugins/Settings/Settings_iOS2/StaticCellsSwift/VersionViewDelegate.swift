@@ -1,5 +1,5 @@
 //
-//  LanguageViewDelegate.swift
+//  VersionViewDelegate.swift
 //  StaticCellsSwift
 //
 //  Created by Gary Griswold on 7/30/18.
@@ -9,10 +9,10 @@
 import Foundation
 import UIKit
 
-class LanguageViewDelegate : NSObject, UITableViewDelegate {
+class VersionViewDelegate : NSObject, UITableViewDelegate {
     
     deinit {
-        print("****** Deinit LanguageViewDelegate ******")
+        print("****** Deinit VersionViewDelegate ******")
     }
     
     //func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -115,5 +115,3 @@ class LanguageViewDelegate : NSObject, UITableViewDelegate {
     //func tableView(_ tableView: UITableView,
     //               trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
 }
-
-
