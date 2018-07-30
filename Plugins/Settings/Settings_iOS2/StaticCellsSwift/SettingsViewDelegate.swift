@@ -11,13 +11,13 @@ import UIKit
 
 class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
-    let isPrimaryTable: Bool
+    let settingsViewType: SettingsViewType
     let selectedSection: Int
     let searchSection: Int
     let availableSection: Int
     
-    init(selectionViewSection: Int) {
-        self.isPrimaryTable = (selectionViewSection > 1)
+    init(settingsViewType: SettingsViewType, selectionViewSection: Int) {
+        self.settingsViewType = settingsViewType
         self.selectedSection = selectionViewSection
         self.searchSection = selectionViewSection + 1
         self.availableSection = selectionViewSection + 2
@@ -42,7 +42,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     // Handle row selection.
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if isPrimaryTable {
+        if self.settingsViewType == SettingsViewType.primary {
             primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
         } else {
             selectionViewRowSelect(tableView: tableView, indexPath: indexPath)

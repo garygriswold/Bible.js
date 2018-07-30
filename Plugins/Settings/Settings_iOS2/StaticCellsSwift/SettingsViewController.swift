@@ -7,11 +7,17 @@
 import Foundation
 import UIKit
 
+enum SettingsViewType {
+    case primary
+    case language
+    case version
+}
+
 class SettingsViewController: UIViewController {
     
     var tableView: UITableView!
     let dataSource = SettingsViewDataSource()
-    let delegate = SettingsViewDelegate(selectionViewSection: 3)
+    let delegate = SettingsViewDelegate(settingsViewType: .primary, selectionViewSection: 3)
 
     override func loadView() {
         super.loadView()
