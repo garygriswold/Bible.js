@@ -79,6 +79,10 @@ class SettingsViewController: UIViewController {
                                                object: nil)
     }
     
+    /**
+     * iOS 10 includes: .adjustsFontForContentSizeCategory, which can be set to each label to
+     * perform automatic text size adjustment
+    */
     @objc func preferredContentSizeChanged(note: NSNotification) {
         tableView.reloadData() // updates preferred font size
     }
