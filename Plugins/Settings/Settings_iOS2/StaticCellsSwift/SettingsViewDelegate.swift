@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import StoreKit
 
 class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
@@ -55,7 +56,10 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             switch indexPath.row {
             case 0:
                 // Must call Apple review widget
-                print("Write a review selected")
+                let version = Float(UIDevice.current.systemVersion) ?? 0.0
+                if version >= 10.3 {
+                    SKStoreReviewController.requestReview()
+                }
             case 1:
                 // Must go to feedback page
                 print("Send us feedback selected")
