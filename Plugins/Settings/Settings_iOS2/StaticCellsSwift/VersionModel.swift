@@ -94,7 +94,6 @@ class VersionModel : SettingsModelInterface {
         let version = selected[indexPath.row]
         cell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
         cell.detailTextLabel?.text = "\(version.organizationName)"
-        cell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
         return cell
     }
     
@@ -103,7 +102,6 @@ class VersionModel : SettingsModelInterface {
         let version = (inSearch) ? filtered[indexPath.row] : available[indexPath.row]
         cell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
         cell.detailTextLabel?.text = "\(version.organizationName)"
-        cell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
         return cell
     }
     

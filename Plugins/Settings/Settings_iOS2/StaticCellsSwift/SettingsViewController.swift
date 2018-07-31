@@ -51,11 +51,13 @@ class SettingsViewController: UIViewController {
             self.tableView.register(VersionCell.self, forCellReuseIdentifier: "versionCell")
         case .language:
             self.title = "Languages"
-            self.tableView.register(VersionCell.self, forCellReuseIdentifier: "languageCell")
+            self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
         case .version:
             self.title = "Bibles"
             self.tableView.register(VersionCell.self, forCellReuseIdentifier: "versionCell")
         }
+        self.tableView.register(SearchCell.self, forCellReuseIdentifier: "searchCell")
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
         
         // prevent searchBar from holding onto focus
         self.definesPresentationContext = true
@@ -66,6 +68,19 @@ class SettingsViewController: UIViewController {
         
         self.tableView.dataSource = self.dataSource
         self.tableView.delegate = self.delegate
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(preferredContentSizeChanged(note:)),
+                                               name: NSNotification.Name.UIContentSizeCategoryDidChange,
+                                               object: nil)
+    }
+    
+    @objc func preferredContentSizeChanged(note: NSNotification) {
+        tableView.reloadData() // updates preferred font size
     }
     
     //@objc func editHandler(sender: UIBarButtonItem?) {

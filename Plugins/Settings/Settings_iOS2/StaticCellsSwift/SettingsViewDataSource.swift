@@ -16,11 +16,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     let searchSection: Int
     let availableSection: Int
     
-    let reviewCell = UITableViewCell()
-    let feedbackCell = UITableViewCell()
-    let textSliderCell = UITableViewCell()
-    let textDisplayCell = UITableViewCell()
-    let languagesCell = UITableViewCell()
     var searchCell: SearchCell?
     let dataModel: SettingsModelInterface
     
@@ -52,29 +47,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         self.searchController.searchResultsUpdater = self
         self.searchController.obscuresBackgroundDuringPresentation = false
         //navigationItem.searchController = searchController // suggested by Ray
-        
-        if self.settingsViewType == .primary {
-        
-            // reviewCell, section 0, row 0
-            self.reviewCell.textLabel?.text = "Write A Review"
-            self.reviewCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-            
-            // feedbackCell, section 0, row 1
-            self.feedbackCell.textLabel?.text = "Send Us Feedback"
-            self.feedbackCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-            
-            // textSlider, section 1, row 0
-            self.textSliderCell.textLabel?.text = "Text Slider TBD"
-            self.textSliderCell.selectionStyle = UITableViewCellSelectionStyle.none
-            
-            // textDisplay, section 1, row 1
-            self.textDisplayCell.textLabel?.text = "For God so loved TBD"
-            self.textDisplayCell.selectionStyle = UITableViewCellSelectionStyle.none
-            
-            // languages, section 2, row 0
-            self.languagesCell.textLabel?.text = "Languages"
-            self.languagesCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-        }
     }
     
     // Return the number of sections
@@ -137,19 +109,44 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             switch indexPath.section {
             case 0:
                 switch indexPath.row {
-                case 0: return self.reviewCell
-                case 1: return self.feedbackCell
+                case 0:
+                    let reviewCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
+                    reviewCell.textLabel?.text = "Write A Review"
+                    reviewCell.textLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+                    reviewCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                    return reviewCell
+                case 1:
+                    let feedbackCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
+                    feedbackCell.textLabel?.text = "Send Us Feedback"
+                    feedbackCell.textLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+                    feedbackCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                    return feedbackCell
                 default: fatalError("Unknown row \(indexPath.row) in section 0")
                 }
             case 1:
                 switch indexPath.row {
-                case 0: return self.textSliderCell
-                case 1: return self.textDisplayCell
+                case 0:
+                    let textSliderCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
+                    textSliderCell.textLabel?.text = "Text Slider TBD"
+                    textSliderCell.textLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+                    textSliderCell.selectionStyle = UITableViewCellSelectionStyle.none
+                    return textSliderCell
+                case 1:
+                    let textDisplayCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
+                    textDisplayCell.textLabel?.text = "For God so loved TBD"
+                    textDisplayCell.textLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+                    textDisplayCell.selectionStyle = UITableViewCellSelectionStyle.none
+                    return textDisplayCell
                 default: fatalError("Unknown row \(indexPath.row) in section 1")
                 }
             case 2:
                 switch indexPath.row {
-                case 0: return self.languagesCell
+                case 0:
+                    let languagesCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
+                    languagesCell.textLabel?.text = "Languages"
+                    languagesCell.textLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+                    languagesCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                    return languagesCell
                 default: fatalError("Unknown row \(indexPath.row) in section 2")
                 }
             default: fatalError("")
@@ -161,6 +158,8 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             case self.searchSection:
                 switch indexPath.row {
                 case 0: return self.searchCell!
+                //case 0:
+                //    let searchCell = tableView.dequeueReusableCell(withIdentifier: "searchCell", for: indexPath)
                 default: fatalError("Unknown row \(indexPath.row) in section 4")
                 }
             case self.availableSection:

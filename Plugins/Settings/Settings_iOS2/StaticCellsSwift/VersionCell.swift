@@ -22,5 +22,12 @@ class VersionCell : UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        // UIFontTextStyle .largerTitle, .title1, .title2, .title3, .headline, .body, .callout
+        // .subheadline, .footnote, .caption1, .caption2
+        self.textLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+        self.detailTextLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.footnote)
+        
+        self.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
     }
 }
