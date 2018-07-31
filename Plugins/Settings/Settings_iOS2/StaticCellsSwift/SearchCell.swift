@@ -37,7 +37,7 @@ class SearchCell : UITableViewCell {
         self.addSubview(self.searchBar)
     }
     
-    static func updateFontSize() {
+    static func updatePreferredFontSize() {
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).font =
             UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
     }

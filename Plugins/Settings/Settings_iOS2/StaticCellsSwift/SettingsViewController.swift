@@ -62,7 +62,7 @@ class SettingsViewController: UIViewController {
         // prevent searchBar from holding onto focus
         self.definesPresentationContext = true
         
-        SearchCell.updateFontSize()
+        SearchCell.updatePreferredFontSize()
         
         // set Top Bar items
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneHandler))
@@ -87,7 +87,7 @@ class SettingsViewController: UIViewController {
     */
     @objc func preferredContentSizeChanged(note: NSNotification) {
         tableView.reloadData() // updates preferred font size
-        SearchCell.updateFontSize()
+        SearchCell.updatePreferredFontSize()
     }
     
     //@objc func editHandler(sender: UIBarButtonItem?) {
