@@ -36,6 +36,11 @@ class SearchCell : UITableViewCell {
         //self.searchBar.showsSearchResultsButton = true // if I want way to see prior results
         self.addSubview(self.searchBar)
     }
+    
+    static func updateFontSize() {
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).font =
+            UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+    }
 }
 
 // The above could be moved to Settings View Controller if the search Controller were instantiated there.
