@@ -36,8 +36,8 @@ class TextSizeSliderCell : UITableViewCell {
         let height = bounds.height
         
         self.textSlider.frame = CGRect(x: width * 0.1, y: 0, width: width * 0.75, height: height)
-        self.textSlider.minimumValue = 14.0 // minimum value in UIFont.preferredFont
-        self.textSlider.maximumValue = 53.0 // maximum value in UIFont.preferredFont w/ accessiblity on
+        self.textSlider.minimumValue = 0.5
+        self.textSlider.maximumValue = 2.0
         self.textSlider.isContinuous = true
         
         self.textSlider.addTarget(self, action: #selector(textSliderChanged), for: .valueChanged)
@@ -45,16 +45,14 @@ class TextSizeSliderCell : UITableViewCell {
         self.textSlider.addTarget(self, action: #selector(touchUp), for: .touchUpOutside)
         self.addSubview(self.textSlider)
         
-        let font = labelFont()
-        
         self.leftLabel.frame = CGRect(x: width * 0.05, y: 0, width: width * 0.05, height: height)
         self.leftLabel.text = "A"
-        self.leftLabel.font = font.withSize(10.0)
+        self.leftLabel.font = AppFont.serif(ofRelativeSize: CGFloat(self.textSlider.minimumValue))
         self.addSubview(self.leftLabel)
         
         self.rightLabel.frame = CGRect(x: width * 0.88, y: 0, width: width * 0.10, height: height)
         self.rightLabel.text = "A"
-        self.rightLabel.font = font.withSize(53.0)
+        self.rightLabel.font = AppFont.serif(ofRelativeSize: CGFloat(self.textSlider.maximumValue))
         self.addSubview(self.rightLabel)
     }
     
@@ -64,19 +62,5 @@ class TextSizeSliderCell : UITableViewCell {
     
     @objc func touchUp(sender: UISlider) {
         print("touch up \(sender.value)")
-    }
-    
-    private func labelFont() -> UIFont {
-        var font = UIFont(name: "Cochin", size: 53.0)
-        if font == nil {
-            font = UIFont(name: "Baskerville", size: 53.0)
-            if font == nil {
-                font = UIFont(name: "Didot", size: 53.0)
-                if font == nil {
-                    font = UIFont.systemFont(ofSize: 53.0)
-                }
-            }
-        }
-        return font!
     }
 }

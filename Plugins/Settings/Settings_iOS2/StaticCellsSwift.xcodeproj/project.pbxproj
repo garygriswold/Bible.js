@@ -10,6 +10,7 @@
 		3500362319D9017500E69508 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3500362219D9017500E69508 /* AppDelegate.swift */; };
 		3500362A19D9017500E69508 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3500362919D9017500E69508 /* Images.xcassets */; };
 		3500365219D903D800E69508 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3500365119D903D800E69508 /* SettingsViewController.swift */; };
+		E486FF63211246A600336223 /* AppFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = E486FF62211246A600336223 /* AppFont.swift */; };
 		E4A771F12111033900FF062D /* TextSizeSliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A771F02111033900FF062D /* TextSizeSliderCell.swift */; };
 		E4A771F32111615B00FF062D /* TextSampleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A771F22111615B00FF062D /* TextSampleCell.swift */; };
 		E4C8F63A210EC75C00FE1A8E /* SettingsModelInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F639210EC75C00FE1A8E /* SettingsModelInterface.swift */; };
@@ -29,6 +30,7 @@
 		3500362919D9017500E69508 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3500365119D903D800E69508 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		E4632D332106DCF700F56DA4 /* StaticCellsSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StaticCellsSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E486FF62211246A600336223 /* AppFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFont.swift; sourceTree = "<group>"; };
 		E4A771F02111033900FF062D /* TextSizeSliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSizeSliderCell.swift; sourceTree = "<group>"; };
 		E4A771F22111615B00FF062D /* TextSampleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSampleCell.swift; sourceTree = "<group>"; };
 		E4C8F639210EC75C00FE1A8E /* SettingsModelInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModelInterface.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				E4C8F645210F803900FE1A8E /* LanguageCell.swift */,
 				E4FEE9DA2107BF55007BA9EF /* VersionCell.swift */,
 				E4D0A19F210A28350068FD9D /* SearchCell.swift */,
+				E486FF62211246A600336223 /* AppFont.swift */,
 				E4C8F639210EC75C00FE1A8E /* SettingsModelInterface.swift */,
 				E4C8F63B210ECC2500FE1A8E /* VersionModel.swift */,
 				E4C8F63D210F7C6C00FE1A8E /* LanguageModel.swift */,
@@ -162,6 +165,7 @@
 			files = (
 				E4FEE9D7210780D6007BA9EF /* SettingsViewDelegate.swift in Sources */,
 				E4C8F63E210F7C6C00FE1A8E /* LanguageModel.swift in Sources */,
+				E486FF63211246A600336223 /* AppFont.swift in Sources */,
 				E4C8F64E210FFBBA00FE1A8E /* FeedbackViewController.swift in Sources */,
 				E4C8F63A210EC75C00FE1A8E /* SettingsModelInterface.swift in Sources */,
 				3500365219D903D800E69508 /* SettingsViewController.swift in Sources */,
