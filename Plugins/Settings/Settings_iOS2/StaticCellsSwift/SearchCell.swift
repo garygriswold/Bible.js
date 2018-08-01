@@ -30,12 +30,13 @@ class SearchCell : UITableViewCell {
         self.searchBar.frame = self.bounds
         //self.searchBar.barTintColor = UIColor(red: 0.179, green: 0.617, blue: 0.785, alpha: 1.0) // #2E9EC9;
         self.searchBar.searchBarStyle = UISearchBarStyle.default // can be (defult or minimal or prominent)
-        self.searchBar.showsCancelButton = false
-        //self.searchBar.setShowsCancelButton(true, animated: true)
+        //self.searchBar.showsCancelButton = false
+        self.searchBar.setShowsCancelButton(true, animated: true)
         //self.searchBar.showsBookmarkButton = true // if I want to implement bookmark
         //self.searchBar.showsSearchResultsButton = true // if I want way to see prior results
         self.addSubview(self.searchBar)
     }
+    
     
     static func updatePreferredFontSize() {
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).font =
