@@ -65,7 +65,8 @@ class SettingsViewController: UIViewController {
         SearchCell.updatePreferredFontSize()
         
         // set Top Bar items
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneHandler))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
+                                                                action: #selector(doneHandler))
         //self.saveHandler(sender: nil)
         
         self.tableView.dataSource = self.dataSource
@@ -86,7 +87,7 @@ class SettingsViewController: UIViewController {
      * perform automatic text size adjustment
     */
     @objc func preferredContentSizeChanged(note: NSNotification) {
-        tableView.reloadData() // updates preferred font size
+        tableView.reloadData() // updates preferred font size in table
         SearchCell.updatePreferredFontSize()
     }
     

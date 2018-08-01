@@ -17,7 +17,7 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         
         self.title = "Send Us Feedback"
-        self.view.backgroundColor = UIColor.yellow
+        self.view.backgroundColor = UIColor.white
         
         // set Top Bar items
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self,
@@ -26,7 +26,8 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
                                                                  action: #selector(doneHandler))
         
         self.textView = UITextView(frame: UIScreen.main.bounds)
-        self.textView.textContainerInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        let inset = self.textView.frame.width * 0.05
+        self.textView.textContainerInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         self.textView.isEditable = true
         self.textView.isSelectable = true
         self.textView.allowsEditingTextAttributes = true

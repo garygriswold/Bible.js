@@ -16,6 +16,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     let searchSection: Int
     let availableSection: Int
     
+    var textSizeSliderCell: TextSizeSliderCell
     var searchCell: SearchCell?
     let dataModel: SettingsModelInterface
     
@@ -39,6 +40,10 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         self.selectedSection = selectionViewSection
         self.searchSection = selectionViewSection + 1
         self.availableSection = selectionViewSection + 2
+        
+        // Text Size Cell
+        self.textSizeSliderCell = TextSizeSliderCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+        
         super.init()
         
         // search Cell
@@ -126,11 +131,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             case 1:
                 switch indexPath.row {
                 case 0:
-                    let textSliderCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                    textSliderCell.textLabel?.text = "Text Slider TBD"
-                    textSliderCell.textLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
-                    textSliderCell.selectionStyle = UITableViewCellSelectionStyle.none
-                    return textSliderCell
+                    return self.textSizeSliderCell
                 case 1:
                     let textDisplayCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
                     textDisplayCell.textLabel?.text = "For God so loved TBD"
