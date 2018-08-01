@@ -60,7 +60,6 @@ class TextSizeSliderCell : UITableViewCell {
     
     @objc func textSliderChanged(sender: UISlider) {
         print("slider value \(sender.value)")
-        
     }
     
     @objc func touchUp(sender: UISlider) {

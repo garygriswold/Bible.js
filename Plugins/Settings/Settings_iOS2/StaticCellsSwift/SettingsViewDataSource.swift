@@ -16,7 +16,8 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     let searchSection: Int
     let availableSection: Int
     
-    var textSizeSliderCell: TextSizeSliderCell
+    let textSizeSliderCell: TextSizeSliderCell
+    //let textSampleCell: TextSampleCell
     var searchCell: SearchCell?
     let dataModel: SettingsModelInterface
     
@@ -42,7 +43,8 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         self.availableSection = selectionViewSection + 2
         
         // Text Size Cell
-        self.textSizeSliderCell = TextSizeSliderCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+        self.textSizeSliderCell = TextSizeSliderCell(style: .default, reuseIdentifier: nil)
+        //self.textSampleCell = TextSampleCell(style: .default, reuseIdentifier: nil)
         
         super.init()
         
@@ -133,9 +135,13 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
                 case 0:
                     return self.textSizeSliderCell
                 case 1:
+                    //return self.textSampleCell
                     let textDisplayCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                    textDisplayCell.textLabel?.text = "For God so loved TBD"
+                    textDisplayCell.textLabel?.text = "Your word is a lamp to my feet and a light to my path." +
+                    " Your word is a lamp to my feet and a light to my path."
                     textDisplayCell.textLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+                    textDisplayCell.textLabel?.numberOfLines = 0
+                    textDisplayCell.textLabel?.lineBreakMode = .byWordWrapping
                     textDisplayCell.selectionStyle = UITableViewCellSelectionStyle.none
                     return textDisplayCell
                 default: fatalError("Unknown row \(indexPath.row) in section 1")
