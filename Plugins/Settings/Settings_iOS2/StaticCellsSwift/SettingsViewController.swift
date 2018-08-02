@@ -56,13 +56,12 @@ class SettingsViewController: UIViewController {
             self.title = "Bibles"
             self.tableView.register(VersionCell.self, forCellReuseIdentifier: "versionCell")
         }
-        self.tableView.register(SearchCell.self, forCellReuseIdentifier: "searchCell")
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
         
         // prevent searchBar from holding onto focus
         self.definesPresentationContext = true
         
-        SearchCell.updatePreferredFontSize()
+        SearchCell.updateFontSize()
         
         // set Top Bar items
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
@@ -87,8 +86,9 @@ class SettingsViewController: UIViewController {
      * perform automatic text size adjustment
     */
     @objc func preferredContentSizeChanged(note: NSNotification) {
+        AppFont.userFontDelta = 1.0
         tableView.reloadData() // updates preferred font size in table
-        SearchCell.updatePreferredFontSize()
+        SearchCell.updateFontSize()
     }
     
     //@objc func editHandler(sender: UIBarButtonItem?) {

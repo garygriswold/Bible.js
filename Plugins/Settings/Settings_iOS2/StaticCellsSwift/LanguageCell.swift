@@ -17,13 +17,4 @@ class LanguageCell : UITableViewCell {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.textLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
-        self.detailTextLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.footnote)
-        
-        self.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
-    }
 }

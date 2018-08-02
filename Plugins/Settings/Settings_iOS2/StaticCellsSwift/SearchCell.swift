@@ -38,9 +38,8 @@ class SearchCell : UITableViewCell {
     }
     
     
-    static func updatePreferredFontSize() {
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).font =
-            UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+    static func updateFontSize() {
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).font = AppFont.sansSerif(style: .body)
     }
 }
 

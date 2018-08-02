@@ -14,17 +14,20 @@ class TextSizeSliderCell : UITableViewCell {
     let textSlider: UISlider
     let leftLabel: UILabel
     let rightLabel: UILabel
+    var tableView: UITableView?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         self.textSlider = UISlider(frame: .zero)
         self.leftLabel = UILabel(frame: .zero)
         self.rightLabel = UILabel(frame: .zero)
+        self.textSlider.value = Float(AppFont.userFontDelta)
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     required init?(coder: NSCoder) {
         self.textSlider = UISlider(frame: CGRect.zero)
         self.leftLabel = UILabel(frame: .zero)
         self.rightLabel = UILabel(frame: .zero)
+        self.textSlider.value = Float(AppFont.userFontDelta)
         super.init(coder: coder)
     }
     
@@ -36,8 +39,8 @@ class TextSizeSliderCell : UITableViewCell {
         let height = bounds.height
         
         self.textSlider.frame = CGRect(x: width * 0.1, y: 0, width: width * 0.75, height: height)
-        self.textSlider.minimumValue = 0.5
-        self.textSlider.maximumValue = 2.0
+        self.textSlider.minimumValue = 0.75
+        self.textSlider.maximumValue = 1.5
         self.textSlider.isContinuous = true
         
         self.textSlider.addTarget(self, action: #selector(textSliderChanged), for: .valueChanged)
@@ -62,5 +65,8 @@ class TextSizeSliderCell : UITableViewCell {
     
     @objc func touchUp(sender: UISlider) {
         print("touch up \(sender.value)")
+        AppFont.userFontDelta = CGFloat(sender.value)
+        self.tableView?.reloadData()
+        SearchCell.updateFontSize()
     }
 }

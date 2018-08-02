@@ -72,17 +72,23 @@ class LanguageModel : SettingsModelInterface {
     
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "languageCell", for: indexPath)
+        cell.textLabel?.font = AppFont.sansSerif(style: .body)
+        cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         let language = selected[indexPath.row]
         cell.textLabel?.text = language.localizedName
         cell.detailTextLabel?.text = language.languageName
+        cell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
         return cell
     }
     
     func availableCell(tableView: UITableView, indexPath: IndexPath, inSearch: Bool) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "languageCell", for: indexPath)
+        cell.textLabel?.font = AppFont.sansSerif(style: .body)
+        cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         let language = (inSearch) ? filtered[indexPath.row] : available[indexPath.row]
         cell.textLabel?.text = language.localizedName
         cell.detailTextLabel?.text = language.languageName
+        cell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
         return cell
     }
     

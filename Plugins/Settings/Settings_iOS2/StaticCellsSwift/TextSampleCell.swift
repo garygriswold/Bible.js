@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 
-//// This is not being used yet.
+//// This is not being used yet.  It is deprecated
 class TextSampleCell : UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {

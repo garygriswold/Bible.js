@@ -59,6 +59,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     // Return the number of sections
     func numberOfSections(in tableView: UITableView) -> Int {
         self.tableView = tableView // needed by updateSearchResults
+        self.textSizeSliderCell.tableView = self.tableView
         if self.settingsViewType == .primary {
             return 6
         } else {
@@ -91,7 +92,8 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         if self.settingsViewType == .primary && section < self.selectedSection {
             switch section {
             case 0: return 2
-            case 1: return 2
+            //case 1: return 2
+            case 1: return 1
             case 2: return 1
             default: fatalError("Unknown number of sections")
             }
@@ -119,13 +121,13 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
                 case 0:
                     let reviewCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
                     reviewCell.textLabel?.text = "Write A Review"
-                    reviewCell.textLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+                    reviewCell.textLabel?.font = AppFont.sansSerif(style: .body)
                     reviewCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
                     return reviewCell
                 case 1:
                     let feedbackCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
                     feedbackCell.textLabel?.text = "Send Us Feedback"
-                    feedbackCell.textLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+                    feedbackCell.textLabel?.font = AppFont.sansSerif(style: .body)
                     feedbackCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
                     return feedbackCell
                 default: fatalError("Unknown row \(indexPath.row) in section 0")
@@ -134,16 +136,16 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
                 switch indexPath.row {
                 case 0:
                     return self.textSizeSliderCell
-                case 1:
-                    //return self.textSampleCell
-                    let textDisplayCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                    textDisplayCell.textLabel?.text = "Your word is a lamp to my feet and a light to my path." +
-                    " Your word is a lamp to my feet and a light to my path."
-                    textDisplayCell.textLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
-                    textDisplayCell.textLabel?.numberOfLines = 0
-                    textDisplayCell.textLabel?.lineBreakMode = .byWordWrapping
-                    textDisplayCell.selectionStyle = UITableViewCellSelectionStyle.none
-                    return textDisplayCell
+                //case 1:
+                //    //return self.textSampleCell
+                //    let textDisplayCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
+                //    textDisplayCell.textLabel?.text = "Your word is a lamp to my feet and a light to my path." +
+                //    " Your word is a lamp to my feet and a light to my path."
+                //    textDisplayCell.textLabel?.font = AppFont.sansSerif(style: .body)
+                //    textDisplayCell.textLabel?.numberOfLines = 0
+                //    textDisplayCell.textLabel?.lineBreakMode = .byWordWrapping
+                //    textDisplayCell.selectionStyle = UITableViewCellSelectionStyle.none
+                //    return textDisplayCell
                 default: fatalError("Unknown row \(indexPath.row) in section 1")
                 }
             case 2:
@@ -151,7 +153,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
                 case 0:
                     let languagesCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
                     languagesCell.textLabel?.text = "Languages"
-                    languagesCell.textLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+                    languagesCell.textLabel?.font = AppFont.sansSerif(style: .body)
                     languagesCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
                     return languagesCell
                 default: fatalError("Unknown row \(indexPath.row) in section 2")
@@ -165,8 +167,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             case self.searchSection:
                 switch indexPath.row {
                 case 0: return self.searchCell!
-                //case 0:
-                //    let searchCell = tableView.dequeueReusableCell(withIdentifier: "searchCell", for: indexPath)
                 default: fatalError("Unknown row \(indexPath.row) in section 4")
                 }
             case self.availableSection:

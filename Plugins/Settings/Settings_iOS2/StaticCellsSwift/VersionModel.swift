@@ -91,17 +91,23 @@ class VersionModel : SettingsModelInterface {
     
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "versionCell", for: indexPath)
+        cell.textLabel?.font = AppFont.sansSerif(style: .body)
+        cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         let version = selected[indexPath.row]
-        cell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
-        cell.detailTextLabel?.text = "\(version.organizationName)"
+        cell.textLabel?.text = version.versionCode + ", " + version.versionName
+        cell.detailTextLabel?.text = version.organizationName
+        cell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
         return cell
     }
     
     func availableCell(tableView: UITableView, indexPath: IndexPath, inSearch: Bool) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "versionCell", for: indexPath)
+        cell.textLabel?.font = AppFont.sansSerif(style: .body)
+        cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         let version = (inSearch) ? filtered[indexPath.row] : available[indexPath.row]
-        cell.textLabel?.text = "\(version.versionCode), \(version.versionName)"
-        cell.detailTextLabel?.text = "\(version.organizationName)"
+        cell.textLabel?.text = version.versionCode + ", " + version.versionName
+        cell.detailTextLabel?.text = version.organizationName
+        cell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
         return cell
     }
     
