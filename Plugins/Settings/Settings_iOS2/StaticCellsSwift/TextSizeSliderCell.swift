@@ -11,12 +11,13 @@ import UIKit
 
 class TextSizeSliderCell : UITableViewCell {
     
+    let controller: SettingsViewController
     let textSlider: UISlider
     let leftLabel: UILabel
     let rightLabel: UILabel
-    var tableView: UITableView?
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    init(controller: SettingsViewController, style: UITableViewCellStyle, reuseIdentifier: String?) {
+        self.controller = controller
         self.textSlider = UISlider(frame: .zero)
         self.leftLabel = UILabel(frame: .zero)
         self.rightLabel = UILabel(frame: .zero)
@@ -24,6 +25,7 @@ class TextSizeSliderCell : UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     required init?(coder: NSCoder) {
+        self.controller = SettingsViewController(settingsViewType: .primary)
         self.textSlider = UISlider(frame: CGRect.zero)
         self.leftLabel = UILabel(frame: .zero)
         self.rightLabel = UILabel(frame: .zero)
@@ -66,7 +68,7 @@ class TextSizeSliderCell : UITableViewCell {
     @objc func touchUp(sender: UISlider) {
         print("touch up \(sender.value)")
         AppFont.userFontDelta = CGFloat(sender.value)
-        self.tableView?.reloadData()
+        self.controller.tableView.reloadData()
         SearchCell.updateFontSize()
     }
 }

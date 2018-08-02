@@ -18,11 +18,8 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     let availableSection: Int
     
     let textSizeSliderCell: TextSizeSliderCell
-    //let textSampleCell: TextSampleCell
     var searchCell: SearchCell?
     let dataModel: SettingsModelInterface
-    
-    var tableView: UITableView? // needed by updateSearchResults
     
     let searchController = UISearchController(searchResultsController: nil)
     
@@ -45,8 +42,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         self.availableSection = selectionViewSection + 2
         
         // Text Size Cell
-        self.textSizeSliderCell = TextSizeSliderCell(style: .default, reuseIdentifier: nil)
-        //self.textSampleCell = TextSampleCell(style: .default, reuseIdentifier: nil)
+        self.textSizeSliderCell = TextSizeSliderCell(controller: self.controller, style: .default, reuseIdentifier: nil)
         
         super.init()
         
@@ -60,8 +56,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     
     // Return the number of sections
     func numberOfSections(in tableView: UITableView) -> Int {
-        self.tableView = tableView // needed by updateSearchResults
-        self.textSizeSliderCell.tableView = self.tableView
         if self.settingsViewType == .primary {
             return 6
         } else {
@@ -217,13 +211,13 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     // MARK: - UISearchResultsUpdating Delegate
     func updateSearchResults(for searchController: UISearchController) {
         print("****** INSIDE update Search Results ********")
-        print("found \(searchController.searchBar.text)")
+        //print("found \(searchController.searchBar.text)")
         if let text = self.searchController.searchBar.text {
             if text.count > 0 {
                 self.dataModel.filterForSearch(searchText: text)
             }
             let sections = IndexSet(integer: self.availableSection)
-            self.tableView?.reloadSections(sections, with: UITableViewRowAnimation.automatic)
+            self.controller.tableView.reloadSections(sections, with: UITableViewRowAnimation.automatic)
         }
     }
     
