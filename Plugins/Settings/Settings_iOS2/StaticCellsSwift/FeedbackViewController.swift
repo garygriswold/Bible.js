@@ -31,7 +31,7 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
         self.textView.isEditable = true
         self.textView.isSelectable = true
         self.textView.allowsEditingTextAttributes = true
-        self.textView.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+        self.textView.font = AppFont.sansSerif(style: .body)
         self.view.addSubview(self.textView)
         
         let notify = NotificationCenter.default
@@ -50,7 +50,7 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
     //}
     
     @objc func preferredContentSizeChanged(note: NSNotification) {
-        self.textView.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
+        self.textView.font = AppFont.sansSerif(style: .body)
     }
     
     @objc func keyboardWillShow(note: NSNotification) {
