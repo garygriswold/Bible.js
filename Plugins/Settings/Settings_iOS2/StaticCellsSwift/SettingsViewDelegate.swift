@@ -12,13 +12,15 @@ import StoreKit
 
 class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
+    let controller: SettingsViewController
     let settingsViewType: SettingsViewType
     let selectedSection: Int
     let searchSection: Int
     let availableSection: Int
     
-    init(settingsViewType: SettingsViewType, selectionViewSection: Int) {
-        self.settingsViewType = settingsViewType
+    init(controller: SettingsViewController, selectionViewSection: Int) {
+        self.controller = controller
+        self.settingsViewType = controller.settingsViewType
         self.selectedSection = selectionViewSection
         self.searchSection = selectionViewSection + 1
         self.availableSection = selectionViewSection + 2

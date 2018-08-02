@@ -16,23 +16,18 @@ enum SettingsViewType {
 class SettingsViewController: UIViewController {
     
     let settingsViewType: SettingsViewType
-    let dataSource: SettingsViewDataSource
-    let delegate: SettingsViewDelegate
+    var dataSource: SettingsViewDataSource!
+    var delegate: SettingsViewDelegate!
     var tableView: UITableView!
     
     init(settingsViewType: SettingsViewType) {
         self.settingsViewType = settingsViewType
-        let section = (settingsViewType == .primary) ? 3 : 0
-        self.dataSource = SettingsViewDataSource(settingsViewType: settingsViewType, selectionViewSection: section)
-        self.delegate = SettingsViewDelegate(settingsViewType: settingsViewType, selectionViewSection: section)
         super.init(nibName: nil, bundle: nil)
     }
     
     // This constructor is not used
     required init?(coder: NSCoder) {
         self.settingsViewType = .primary
-        self.dataSource = SettingsViewDataSource(settingsViewType: .primary, selectionViewSection: 3)
-        self.delegate = SettingsViewDelegate(settingsViewType: .primary, selectionViewSection: 3)
         super.init(coder: coder)
     }
 
@@ -68,6 +63,9 @@ class SettingsViewController: UIViewController {
                                                                 action: #selector(doneHandler))
         //self.saveHandler(sender: nil)
         
+        let section = (settingsViewType == .primary) ? 3 : 0
+        self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: section)
+        self.delegate = SettingsViewDelegate(controller: self, selectionViewSection: section)
         self.tableView.dataSource = self.dataSource
         self.tableView.delegate = self.delegate
     }
