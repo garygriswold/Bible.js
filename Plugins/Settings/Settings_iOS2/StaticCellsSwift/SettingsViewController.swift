@@ -16,6 +16,7 @@ enum SettingsViewType {
 class SettingsViewController: UIViewController {
     
     let settingsViewType: SettingsViewType
+    var dataModel: SettingsModelInterface!
     var dataSource: SettingsViewDataSource!
     var delegate: SettingsViewDelegate!
     var tableView: UITableView!
@@ -43,12 +44,15 @@ class SettingsViewController: UIViewController {
         switch self.settingsViewType {
         case .primary:
             self.title = "Settings"
+            self.dataModel = VersionModel()
             self.tableView.register(VersionCell.self, forCellReuseIdentifier: "versionCell")
         case .language:
             self.title = "Languages"
+            self.dataModel = LanguageModel()
             self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
         case .version:
             self.title = "Bibles"
+            self.dataModel = VersionModel()
             self.tableView.register(VersionCell.self, forCellReuseIdentifier: "versionCell")
         }
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")

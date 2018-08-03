@@ -13,6 +13,7 @@ import StoreKit
 class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
     let controller: SettingsViewController
+    let dataModel: SettingsModelInterface
     let settingsViewType: SettingsViewType
     let selectedSection: Int
     let searchSection: Int
@@ -20,6 +21,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
     init(controller: SettingsViewController, selectionViewSection: Int) {
         self.controller = controller
+        self.dataModel = controller.dataModel
         self.settingsViewType = controller.settingsViewType
         self.selectedSection = selectionViewSection
         self.searchSection = selectionViewSection + 1
@@ -45,10 +47,13 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     // Handle row selection.
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if self.settingsViewType == SettingsViewType.primary {
+        switch self.settingsViewType {
+        case .primary:
             primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
-        } else {
-            selectionViewRowSelect(tableView: tableView, indexPath: indexPath)
+        case .version:
+            versionViewRowSelect(tableView: tableView, indexPath: indexPath)
+        case .language:
+            languageViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
     }
     
@@ -57,47 +62,54 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         case 0:
             switch indexPath.row {
             case 0:
-                // Must call Apple review widget
                 let version = Float(UIDevice.current.systemVersion) ?? 0.0
                 if version >= 10.3 {
                     SKStoreReviewController.requestReview()
                 }
             case 1:
-                // Must go to feedback page
-                print("Send us feedback selected")
+                let feedbackController = FeedbackViewController()
+                self.controller.navigationController?.pushViewController(feedbackController, animated: true)
             default:
                 print("Unknown row \(indexPath.row) in section 0")
             }
         case 1:
-            switch indexPath.row {
-            case 0:
-                // Must resize text
-                print("Text size widget selected")
-            case 1:
-                // Should disable selection
-                print("Text size demo selected")
-            default:
-                print("Unknown row \(indexPath.row) in section 1")
-            }
+            print("section 1 is not selectable")
         case 2:
-            // Must navigate to language selection view
-            print("Languages selected")
+            let languageController = SettingsViewController(settingsViewType: .language)
+            self.controller.navigationController?.pushViewController(languageController, animated: true)
         default:
-            selectionViewRowSelect(tableView: tableView, indexPath: indexPath)
+            versionViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
     }
     
-    private func selectionViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
+    private func versionViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
         switch indexPath.section {
         case self.selectedSection:
-            // Must get detail
-            print("Selected \(indexPath.row) clicked")
+            let version = self.dataModel.getSelectedVersion(row: indexPath.row)
+            // push detail version controller
         case self.searchSection:
-            // Must perform search
-            print("Search selected")
+            print("Search should not be selectable")
         case self.availableSection:
-            // Must get detail
-            print("Other \(indexPath.row) clicked")
+            let version = self.dataModel.getSelectedVersion(row: indexPath.row)
+            // push detail version controller
+        default:
+            print("Unknown section \(indexPath.row)")
+        }
+    }
+    
+    private func languageViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
+        switch indexPath.section {
+        case self.selectedSection:
+            print("Selected \(indexPath.row) clicked")
+            let language = self.dataModel.getSelectedLanguage(row: indexPath.row)
+            let versionController = SettingsViewController(settingsViewType: .version)
+            self.controller.navigationController?.pushViewController(versionController, animated: true)
+        case self.searchSection:
+            print("search should not be selectable")
+        case self.availableSection:
+            let language = self.dataModel.getAvailableLanguage(row: indexPath.row)
+            let versionController = SettingsViewController(settingsViewType: .version)
+            self.controller.navigationController?.pushViewController(versionController, animated: true)
         default:
             print("Unknown section \(indexPath.row)")
         }

@@ -12,6 +12,7 @@ import UIKit
 class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsUpdating {
     
     let controller: SettingsViewController
+    let dataModel: SettingsModelInterface
     let settingsViewType: SettingsViewType
     let selectedSection: Int
     let searchSection: Int
@@ -19,22 +20,19 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     
     let textSizeSliderCell: TextSizeSliderCell
     var searchCell: SearchCell?
-    let dataModel: SettingsModelInterface
     
     let searchController = UISearchController(searchResultsController: nil)
     
     init(controller: SettingsViewController, selectionViewSection: Int) {
         self.controller = controller
+        self.dataModel = controller.dataModel
         self.settingsViewType = controller.settingsViewType
         switch settingsViewType {
         case .primary:
-            self.dataModel = VersionModel()
             self.searchController.searchBar.placeholder = "Find Bibles"
         case .language:
-            self.dataModel = LanguageModel()
             self.searchController.searchBar.placeholder = "Find Languages"
         case .version:
-            self.dataModel = VersionModel()
             self.searchController.searchBar.placeholder = "Find Bibles"
         }
         self.selectedSection = selectionViewSection
@@ -68,7 +66,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         if self.settingsViewType == .language {
             switch section {
             case self.selectedSection: return "My Languages"
-            case self.searchSection: return "Other Other"
+            case self.searchSection: return "Other Languages"
             default: return nil
             }
         } else {
@@ -132,16 +130,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
                 switch indexPath.row {
                 case 0:
                     return self.textSizeSliderCell
-                //case 1:
-                //    //return self.textSampleCell
-                //    let textDisplayCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                //    textDisplayCell.textLabel?.text = "Your word is a lamp to my feet and a light to my path." +
-                //    " Your word is a lamp to my feet and a light to my path."
-                //    textDisplayCell.textLabel?.font = AppFont.sansSerif(style: .body)
-                //    textDisplayCell.textLabel?.numberOfLines = 0
-                //    textDisplayCell.textLabel?.lineBreakMode = .byWordWrapping
-                //    textDisplayCell.selectionStyle = UITableViewCellSelectionStyle.none
-                //    return textDisplayCell
                 default: fatalError("Unknown row \(indexPath.row) in section 1")
                 }
             case 2:

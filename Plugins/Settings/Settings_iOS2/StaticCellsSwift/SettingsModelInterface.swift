@@ -53,6 +53,10 @@ protocol SettingsModelInterface {
     var selectedCount: Int { get }
     var availableCount: Int { get }
     var filteredCount: Int { get }
+    func getSelectedVersion(row: Int) -> Version?
+    func getSelectedLanguage(row: Int) -> Language?
+    func getAvailableVersion(row: Int) -> Version?
+    func getAvailableLanguage(row: Int) -> Language?
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     func availableCell(tableView: UITableView, indexPath: IndexPath, inSearch: Bool) -> UITableViewCell
     func moveSelected(source: Int, destination: Int)

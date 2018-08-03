@@ -89,6 +89,19 @@ class VersionModel : SettingsModelInterface {
         get { return filtered.count }
     }
     
+    func getSelectedVersion(row: Int) -> Version? {
+        return (row >= 0 && row < selected.count) ? selected[row] : nil
+    }
+    func getSelectedLanguage(row: Int) -> Language? {
+        return nil
+    }
+    func getAvailableVersion(row: Int) -> Version? {
+        return (row >= 0 && row < available.count) ? available[row] : nil
+    }
+    func getAvailableLanguage(row: Int) -> Language? {
+        return nil
+    }
+    
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "versionCell", for: indexPath)
         cell.textLabel?.font = AppFont.sansSerif(style: .body)

@@ -70,6 +70,19 @@ class LanguageModel : SettingsModelInterface {
         get { return filtered.count }
     }
     
+    func getSelectedVersion(row: Int) -> Version? {
+        return nil
+    }
+    func getSelectedLanguage(row: Int) -> Language? {
+        return (row >= 0 && row < selected.count) ? selected[row] : nil
+    }
+    func getAvailableVersion(row: Int) -> Version? {
+        return nil
+    }
+    func getAvailableLanguage(row: Int) -> Language? {
+        return (row >= 0 && row < available.count) ? available[row] : nil
+    }
+    
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "languageCell", for: indexPath)
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
