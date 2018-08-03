@@ -43,7 +43,7 @@ class SettingsViewController: UIViewController {
         switch self.settingsViewType {
         case .primary:
             self.navigationItem.title = "Settings"
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "\u{FF1c} Bible", style: .done, target: self,
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "\u{FF1c} Read", style: .done, target: self,
                                                                     action: #selector(doneHandler))
             self.dataModel = VersionModel()
             self.tableView.register(VersionCell.self, forCellReuseIdentifier: "versionCell")

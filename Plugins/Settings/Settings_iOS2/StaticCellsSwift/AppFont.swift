@@ -39,6 +39,11 @@ public class AppFont {
         return UIFont.monospacedDigitSystemFont(ofSize: ofSize * userFontDelta, weight: weight)
     }
     
+    public static func serif(style: UIFontTextStyle) -> UIFont {
+        let font = UIFont.preferredFont(forTextStyle: style)
+        return getSerifFont().withSize(font.pointSize * userFontDelta)
+    }
+    
     public static func serif(ofSize: CGFloat) -> UIFont {
         return getSerifFont().withSize(ofSize * userFontDelta)
     }

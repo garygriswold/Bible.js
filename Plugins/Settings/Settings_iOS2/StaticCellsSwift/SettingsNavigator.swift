@@ -16,6 +16,7 @@ public class SettingsNavigator {
         //let viewController = SettingsViewController(settingsViewType: .language)
         //let viewController = SettingsViewController(settingsViewType: .version)
         //let viewController = FeedbackViewController()
+        //let viewController = VersionDetailViewController()
         let navController = UINavigationController(rootViewController: viewController)
         navController.hidesBarsOnSwipe = true
         return navController

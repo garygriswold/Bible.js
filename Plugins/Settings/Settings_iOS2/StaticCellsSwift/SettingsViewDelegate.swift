@@ -96,13 +96,17 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     private func versionViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
         switch indexPath.section {
         case self.selectedSection:
-            let version = self.dataModel.getSelectedVersion(row: indexPath.row)
-            // push detail version controller
+            if let version = self.dataModel.getSelectedVersion(row: indexPath.row) {
+                let detailController = VersionDetailViewController(version: version)
+                self.controller.navigationController?.pushViewController(detailController, animated: true)
+            }
         case self.searchSection:
             print("Search should not be selectable")
         case self.availableSection:
-            let version = self.dataModel.getSelectedVersion(row: indexPath.row)
-            // push detail version controller
+            if let version = self.dataModel.getAvailableVersion(row: indexPath.row) {
+                let detailController = VersionDetailViewController(version: version)
+                self.controller.navigationController?.pushViewController(detailController, animated: true)
+            }
         default:
             print("Unknown section \(indexPath.row)")
         }
