@@ -107,8 +107,8 @@ class VersionModel : SettingsModelInterface {
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
         cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         let version = selected[indexPath.row]
-        cell.textLabel?.text = version.versionCode + ", " + version.versionName
-        cell.detailTextLabel?.text = version.organizationName
+        cell.textLabel?.text = version.versionName
+        cell.detailTextLabel?.text = version.versionCode
         cell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
         return cell
     }
@@ -118,8 +118,8 @@ class VersionModel : SettingsModelInterface {
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
         cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         let version = (inSearch) ? filtered[indexPath.row] : available[indexPath.row]
-        cell.textLabel?.text = version.versionCode + ", " + version.versionName
-        cell.detailTextLabel?.text = version.organizationName
+        cell.textLabel?.text = version.versionName
+        cell.detailTextLabel?.text = version.versionCode
         cell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
         return cell
     }
