@@ -2,7 +2,6 @@
 //  SettingsViewController.swift
 //  StaticCellsSwift
 //
-// http://derpturkey.com/create-a-static-uitableview-without-storyboards/
 
 import Foundation
 import UIKit
@@ -43,15 +42,17 @@ class SettingsViewController: UIViewController {
  
         switch self.settingsViewType {
         case .primary:
-            self.title = "Settings"
+            self.navigationItem.title = "Settings"
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "\u{FF1c} Bible", style: .done, target: self,
+                                                                    action: #selector(doneHandler))
             self.dataModel = VersionModel()
             self.tableView.register(VersionCell.self, forCellReuseIdentifier: "versionCell")
         case .language:
-            self.title = "Languages"
+            self.navigationItem.title = "Languages"
             self.dataModel = LanguageModel()
             self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
         case .version:
-            self.title = "Bibles"
+            self.navigationItem.title = "Bibles"
             self.dataModel = VersionModel()
             self.tableView.register(VersionCell.self, forCellReuseIdentifier: "versionCell")
         }
@@ -62,10 +63,7 @@ class SettingsViewController: UIViewController {
         
         SearchCell.updateFontSize()
         
-        // set Top Bar items
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
-                                                                action: #selector(doneHandler))
-        //self.saveHandler(sender: nil)
+        self.saveHandler(sender: nil)
         
         let section = (settingsViewType == .primary) ? 3 : 0
         self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: section)
@@ -93,20 +91,20 @@ class SettingsViewController: UIViewController {
         SearchCell.updateFontSize()
     }
     
-    //@objc func editHandler(sender: UIBarButtonItem?) {
-    //    self.tableView.setEditing(true, animated: true)
-    //    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self,
-    //                                                             action: #selector(saveHandler))
-    //}
+    @objc func editHandler(sender: UIBarButtonItem?) {
+        self.tableView.setEditing(true, animated: true)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self,
+                                                                 action: #selector(saveHandler))
+    }
     
-    //@objc func saveHandler(sender: UIBarButtonItem?) {
-    //    self.tableView.setEditing(false, animated: true)
-    //    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
-    //                                                             action: #selector(editHandler))
-    //}
+    @objc func saveHandler(sender: UIBarButtonItem?) {
+        self.tableView.setEditing(false, animated: true)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
+                                                                 action: #selector(editHandler))
+    }
     
     @objc func doneHandler(sender: UIBarButtonItem?) {
-        print("Done button clicked")
+        print("Settings Done button clicked")
     }
 }
 

@@ -19,7 +19,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     let availableSection: Int
     
     let textSizeSliderCell: TextSizeSliderCell
-    var searchCell: SearchCell?
+    var searchCell: SearchCell!
     
     let searchController = UISearchController(searchResultsController: nil)
     
@@ -49,7 +49,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         // Setup the Search Controller
         self.searchController.searchResultsUpdater = self
         self.searchController.obscuresBackgroundDuringPresentation = false
-        //navigationItem.searchController = searchController // suggested by Ray
     }
     
     // Return the number of sections
@@ -150,7 +149,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
                 return self.dataModel.selectedCell(tableView: tableView, indexPath: indexPath)
             case self.searchSection:
                 switch indexPath.row {
-                case 0: return self.searchCell!
+                case 0: return self.searchCell
                 default: fatalError("Unknown row \(indexPath.row) in section 4")
                 }
             case self.availableSection:
@@ -211,7 +210,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     
     func isSearching() -> Bool {
         print("****** INSIDE isSearching ******")
-        let searchBarEmpty = self.searchController.searchBar.text?.isEmpty ?? true
+        let searchBarEmpty: Bool = self.searchController.searchBar.text?.isEmpty ?? true
         return self.searchController.isActive && !searchBarEmpty
     }
 }

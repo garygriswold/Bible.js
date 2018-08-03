@@ -41,9 +41,20 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
     // Define edit actions for a row swipe
     //func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {}
-    
-    //func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {}
-    
+ 
+    // Does the same as didSelectRow at, not sure why I could not call it directly.
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        switch self.settingsViewType {
+        case .primary:
+            primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
+        case .version:
+            versionViewRowSelect(tableView: tableView, indexPath: indexPath)
+        case .language:
+            languageViewRowSelect(tableView: tableView, indexPath: indexPath)
+        }
+    }
+
     // Handle row selection.
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)

@@ -76,10 +76,10 @@
 				E4C8F645210F803900FE1A8E /* LanguageCell.swift */,
 				E4FEE9DA2107BF55007BA9EF /* VersionCell.swift */,
 				E4D0A19F210A28350068FD9D /* SearchCell.swift */,
-				E486FF62211246A600336223 /* AppFont.swift */,
 				E4C8F639210EC75C00FE1A8E /* SettingsModelInterface.swift */,
 				E4C8F63B210ECC2500FE1A8E /* VersionModel.swift */,
 				E4C8F63D210F7C6C00FE1A8E /* LanguageModel.swift */,
+				E486FF62211246A600336223 /* AppFont.swift */,
 				3500362919D9017500E69508 /* Images.xcassets */,
 				3500362019D9017500E69508 /* Supporting Files */,
 			);

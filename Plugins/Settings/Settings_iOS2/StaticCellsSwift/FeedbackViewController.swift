@@ -16,14 +16,12 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Send Us Feedback"
         self.view.backgroundColor = UIColor.white
         
         // set Top Bar items
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self,
+        self.navigationItem.title = "Send Us Feedback"
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self,
                                                                 action: #selector(cancelHandler))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
-                                                                 action: #selector(doneHandler))
         
         self.textView = UITextView(frame: UIScreen.main.bounds)
         let inset = self.textView.frame.width * 0.05
@@ -69,9 +67,6 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
     
     @objc func cancelHandler(sender: UIBarButtonItem?) {
         print("Cancel bar clicked")
-    }
-    
-    @objc func doneHandler(sender: UIBarButtonItem?) {
-        print("Done bar clicked: \(self.textView.text)")
+        self.navigationController?.popViewController(animated: true)
     }
 }
