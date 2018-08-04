@@ -98,7 +98,7 @@ class TextSizeSliderCell : UITableViewCell {
         print("touch up \(sender.value)")
         AppFont.userFontDelta = CGFloat(sender.value)
         self.controller.tableView.reloadData()
-        SearchCell.updateFontSize()
+        //SearchCell.updateFontSize()
         
         self.sampleTextLabel?.removeFromSuperview()
     }

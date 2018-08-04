@@ -19,8 +19,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     let searchController: UISearchController
     let textSizeSliderCell: TextSizeSliderCell
     
-
-    
     init(controller: SettingsViewController, selectionViewSection: Int) {
         self.controller = controller
         self.dataModel = controller.dataModel
@@ -46,8 +44,10 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         self.searchController.searchResultsUpdater = self
         self.searchController.obscuresBackgroundDuringPresentation = false
         self.controller.navigationItem.searchController = self.searchController
-        self.searchController.searchBar.searchBarStyle = UISearchBarStyle.default // (defult or minimal or prominent)
-        self.searchController.searchBar.setShowsCancelButton(true, animated: true)
+        self.controller.navigationItem.hidesSearchBarWhenScrolling = false
+        // These don't seem to have an effect when search controller is set to naviation item
+        //self.searchController.searchBar.searchBarStyle = UISearchBarStyle.default // (defult or minimal or prominent)
+        //self.searchController.searchBar.setShowsCancelButton(false, animated: true)
     }
     
     // Return the number of sections
@@ -64,13 +64,13 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         if self.settingsViewType == .language {
             switch section {
             case self.selectedSection: return "My Languages"
-            case self.availableSection: return "Other Languages"
+            case self.availableSection: return "More Languages"
             default: return nil
             }
         } else {
             switch section {
             case self.selectedSection: return "My Bibles"
-            case self.availableSection: return "Other Bibles"
+            case self.availableSection: return "More Bibles"
             default: return nil
             }
         }

@@ -134,9 +134,9 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     //    return nil
     //}
  
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return (section == 0) ? 0.0 : -1.0
-    }
+    //func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    //    return (section == 0) ? 0.0 : -1.0
+    //}
     
     //func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
     //    return (section == self.searchSection) ? 0.0 : -1.0

@@ -37,8 +37,8 @@ class SettingsViewController: UIViewController {
         // create Table view
         self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableViewStyle.grouped)
         self.tableView.allowsSelectionDuringEditing = true
-        self.tableView.setEditing(true, animated: false)
         self.view = self.tableView
+        let width = self.view.bounds.width
  
         switch self.settingsViewType {
         case .primary:
@@ -50,10 +50,12 @@ class SettingsViewController: UIViewController {
         case .language:
             self.navigationItem.title = "Languages"
             self.dataModel = LanguageModel()
+            self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
             self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
         case .version:
             self.navigationItem.title = "Bibles"
             self.dataModel = VersionModel()
+            self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
             self.tableView.register(VersionCell.self, forCellReuseIdentifier: "versionCell")
         }
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
