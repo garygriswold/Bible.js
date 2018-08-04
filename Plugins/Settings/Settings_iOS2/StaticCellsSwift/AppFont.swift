@@ -57,6 +57,11 @@ public class AppFont {
         return getSerifFont().withSize(font.pointSize * ofRelativeSize)
     }
     
+    // This does not appear to work. It must be that NavigationBar is overridding this setting.
+    public static func updateSearchFontSize() {
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).font = AppFont.sansSerif(style: .body)
+    }
+    
     private static func getSerifFont() -> UIFont {
         if serifFont == nil {
             serifFont = UIFont(name: "Cochin", size: 50.0)
