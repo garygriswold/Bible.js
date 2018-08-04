@@ -18,7 +18,7 @@ public class SettingsNavigator {
         //let viewController = FeedbackViewController()
         //let viewController = VersionDetailViewController()
         let navController = UINavigationController(rootViewController: viewController)
-        navController.hidesBarsOnSwipe = true
+        navController.hidesBarsOnSwipe = false // true prevents cell move from working
         return navController
     }
     
