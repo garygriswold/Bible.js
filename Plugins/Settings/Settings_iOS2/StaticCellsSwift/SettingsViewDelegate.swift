@@ -16,7 +16,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     let dataModel: SettingsModelInterface
     let settingsViewType: SettingsViewType
     let selectedSection: Int
-    let searchSection: Int
     let availableSection: Int
     
     init(controller: SettingsViewController, selectionViewSection: Int) {
@@ -24,8 +23,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         self.dataModel = controller.dataModel
         self.settingsViewType = controller.settingsViewType
         self.selectedSection = selectionViewSection
-        self.searchSection = selectionViewSection + 1
-        self.availableSection = selectionViewSection + 2
+        self.availableSection = selectionViewSection + 1
         super.init()
     }
     
@@ -100,8 +98,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 let detailController = VersionDetailViewController(version: version)
                 self.controller.navigationController?.pushViewController(detailController, animated: true)
             }
-        case self.searchSection:
-            print("Search should not be selectable")
         case self.availableSection:
             if let version = self.dataModel.getAvailableVersion(row: indexPath.row) {
                 let detailController = VersionDetailViewController(version: version)
@@ -119,8 +115,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             let language = self.dataModel.getSelectedLanguage(row: indexPath.row)
             let versionController = SettingsViewController(settingsViewType: .version)
             self.controller.navigationController?.pushViewController(versionController, animated: true)
-        case self.searchSection:
-            print("search should not be selectable")
         case self.availableSection:
             let language = self.dataModel.getAvailableLanguage(row: indexPath.row)
             let versionController = SettingsViewController(settingsViewType: .version)
@@ -129,25 +123,25 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             print("Unknown section \(indexPath.row)")
         }
     }
-    
+
     // This is required for heightForHeaderInSection to work
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return nil
-    }
+    //func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    //    return nil
+    //}
     
     // This is required for heightForFooterInSection to work
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return nil
-    }
+    //func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    //    return nil
+    //}
  
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return (section == self.availableSection) ? 0.0 : -1.0
+        return (section == 0) ? 0.0 : -1.0
     }
     
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return (section == self.searchSection) ? 0.0 : -1.0
-    }
-    
+    //func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    //    return (section == self.searchSection) ? 0.0 : -1.0
+    //}
+
     // Called when swipe is used to begin editing
     //func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath)
     

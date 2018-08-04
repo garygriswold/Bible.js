@@ -15,17 +15,16 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     let dataModel: SettingsModelInterface
     let settingsViewType: SettingsViewType
     let selectedSection: Int
-    let searchSection: Int
     let availableSection: Int
-    
+    let searchController: UISearchController
     let textSizeSliderCell: TextSizeSliderCell
-    var searchCell: SearchCell!
     
-    let searchController = UISearchController(searchResultsController: nil)
+
     
     init(controller: SettingsViewController, selectionViewSection: Int) {
         self.controller = controller
         self.dataModel = controller.dataModel
+        self.searchController = UISearchController(searchResultsController: nil)
         self.settingsViewType = controller.settingsViewType
         switch settingsViewType {
         case .primary:
@@ -36,27 +35,27 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             self.searchController.searchBar.placeholder = "Find Bibles"
         }
         self.selectedSection = selectionViewSection
-        self.searchSection = selectionViewSection + 1
-        self.availableSection = selectionViewSection + 2
+        self.availableSection = selectionViewSection + 1
         
         // Text Size Cell
         self.textSizeSliderCell = TextSizeSliderCell(controller: self.controller, style: .default, reuseIdentifier: nil)
-        
+       
         super.init()
         
-        // search Cell
-        self.searchCell = SearchCell(searchBar: self.searchController.searchBar)
         // Setup the Search Controller
         self.searchController.searchResultsUpdater = self
         self.searchController.obscuresBackgroundDuringPresentation = false
+        self.controller.navigationItem.searchController = self.searchController
+        self.searchController.searchBar.searchBarStyle = UISearchBarStyle.default // (defult or minimal or prominent)
+        self.searchController.searchBar.setShowsCancelButton(true, animated: true)
     }
     
     // Return the number of sections
     func numberOfSections(in tableView: UITableView) -> Int {
         if self.settingsViewType == .primary {
-            return 6
+            return 5
         } else {
-            return 3
+            return 2
         }
     }
     
@@ -65,13 +64,13 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         if self.settingsViewType == .language {
             switch section {
             case self.selectedSection: return "My Languages"
-            case self.searchSection: return "Other Languages"
+            case self.availableSection: return "Other Languages"
             default: return nil
             }
         } else {
             switch section {
             case self.selectedSection: return "My Bibles"
-            case self.searchSection: return "Other Bibles"
+            case self.availableSection: return "Other Bibles"
             default: return nil
             }
         }
@@ -85,7 +84,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         if self.settingsViewType == .primary && section < self.selectedSection {
             switch section {
             case 0: return 2
-            //case 1: return 2
             case 1: return 1
             case 2: return 1
             default: fatalError("Unknown number of sections")
@@ -93,7 +91,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         } else {
             switch section {
             case self.selectedSection: return self.dataModel.selectedCount
-            case self.searchSection: return 1
             case self.availableSection:
                 if isSearching() {
                     return self.dataModel.filteredCount
@@ -147,11 +144,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             switch indexPath.section {
             case self.selectedSection:
                 return self.dataModel.selectedCell(tableView: tableView, indexPath: indexPath)
-            case self.searchSection:
-                switch indexPath.row {
-                case 0: return self.searchCell
-                default: fatalError("Unknown row \(indexPath.row) in section 4")
-                }
             case self.availableSection:
                 return self.dataModel.availableCell(tableView: tableView, indexPath: indexPath, inSearch: isSearching())
             default: fatalError("Unknown section \(indexPath.section)")

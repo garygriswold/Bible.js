@@ -61,7 +61,7 @@ class SettingsViewController: UIViewController {
         // prevent searchBar from holding onto focus
         self.definesPresentationContext = true
         
-        SearchCell.updateFontSize()
+        //SearchCell.updateFontSize()
         
         self.saveHandler(sender: nil)
         
@@ -88,7 +88,7 @@ class SettingsViewController: UIViewController {
     @objc func preferredContentSizeChanged(note: NSNotification) {
         AppFont.userFontDelta = 1.0
         tableView.reloadData() // updates preferred font size in table
-        SearchCell.updateFontSize()
+        //SearchCell.updateFontSize()
     }
     
     @objc func editHandler(sender: UIBarButtonItem?) {
