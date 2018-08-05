@@ -15,6 +15,8 @@ enum SettingsViewType {
 class SettingsViewController: UIViewController {
     
     let settingsViewType: SettingsViewType
+    let selectedSection: Int
+    let availableSection: Int
     var dataModel: SettingsModelInterface!
     var dataSource: SettingsViewDataSource!
     var delegate: SettingsViewDelegate!
@@ -22,12 +24,16 @@ class SettingsViewController: UIViewController {
     
     init(settingsViewType: SettingsViewType) {
         self.settingsViewType = settingsViewType
+        self.selectedSection = (settingsViewType == .primary) ? 3 : 0
+        self.availableSection = self.selectedSection + 1
         super.init(nibName: nil, bundle: nil)
     }
     
     // This constructor is not used
     required init?(coder: NSCoder) {
         self.settingsViewType = .primary
+        self.selectedSection = (settingsViewType == .primary) ? 3 : 0
+        self.availableSection = self.selectedSection + 1
         super.init(coder: coder)
     }
 
@@ -68,9 +74,8 @@ class SettingsViewController: UIViewController {
         
         self.saveHandler(sender: nil)
         
-        let section = (settingsViewType == .primary) ? 3 : 0
-        self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: section)
-        self.delegate = SettingsViewDelegate(controller: self, selectionViewSection: section)
+        self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: self.selectedSection)
+        self.delegate = SettingsViewDelegate(controller: self, selectionViewSection: self.selectedSection)
         self.tableView.dataSource = self.dataSource
         self.tableView.delegate = self.delegate
     }
@@ -105,6 +110,7 @@ class SettingsViewController: UIViewController {
                 self.tableView.frame = CGRect(x: 0.0, y: 0.0, width: bounds.width, height: keyboardTop)
             }
         }
+        self.tableView.scrollToRow(at: IndexPath(item: 0, section: self.availableSection), at: .top, animated: true)
     }
     
     @objc func keyboardWillHide(note: NSNotification) {
