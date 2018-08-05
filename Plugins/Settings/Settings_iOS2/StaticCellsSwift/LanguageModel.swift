@@ -90,7 +90,7 @@ class LanguageModel : SettingsModelInterface {
         let language = selected[indexPath.row]
         cell.textLabel?.text = language.localizedName
         cell.detailTextLabel?.text = language.languageName
-        cell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
+        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
         return cell
     }
     
@@ -101,7 +101,7 @@ class LanguageModel : SettingsModelInterface {
         let language = (inSearch) ? filtered[indexPath.row] : available[indexPath.row]
         cell.textLabel?.text = language.localizedName
         cell.detailTextLabel?.text = language.languageName
-        cell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
+        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
         return cell
     }
     
