@@ -37,7 +37,8 @@ class SettingsViewController: UIViewController {
         // create Table view
         self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableViewStyle.grouped)
         self.tableView.allowsSelectionDuringEditing = true
-        self.view = self.tableView
+        self.view.backgroundColor = UIColor.white
+        self.view.addSubview(self.tableView)
         let width = self.view.bounds.width
  
         switch self.settingsViewType {
@@ -77,10 +78,13 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(preferredContentSizeChanged(note:)),
-                                               name: NSNotification.Name.UIContentSizeCategoryDidChange,
-                                               object: nil)
+        let notify = NotificationCenter.default
+        notify.addObserver(self, selector: #selector(preferredContentSizeChanged(note:)),
+                           name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        notify.addObserver(self, selector: #selector(keyboardWillShow),
+                           name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notify.addObserver(self, selector: #selector(keyboardWillHide),
+                           name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     /**
@@ -91,6 +95,20 @@ class SettingsViewController: UIViewController {
         AppFont.userFontDelta = 1.0
         tableView.reloadData() // updates preferred font size in table
         AppFont.updateSearchFontSize()
+    }
+    
+    @objc func keyboardWillShow(note: NSNotification) {
+        if let keyboardInfo: Dictionary = note.userInfo {
+            if let keyboardRect: CGRect = keyboardInfo[UIKeyboardFrameEndUserInfoKey] as? CGRect {
+                let keyboardTop = keyboardRect.minY
+                let bounds = UIScreen.main.bounds
+                self.tableView.frame = CGRect(x: 0.0, y: 0.0, width: bounds.width, height: keyboardTop)
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(note: NSNotification) {
+        self.tableView.frame = UIScreen.main.bounds
     }
     
     @objc func editHandler(sender: UIBarButtonItem?) {
