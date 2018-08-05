@@ -111,10 +111,12 @@ class SettingsViewController: UIViewController {
             }
         }
         self.tableView.scrollToRow(at: IndexPath(item: 0, section: self.availableSection), at: .top, animated: true)
+        self.editHandler(sender: nil)
     }
     
     @objc func keyboardWillHide(note: NSNotification) {
         self.tableView.frame = UIScreen.main.bounds
+        self.saveHandler(sender: nil)
     }
     
     @objc func editHandler(sender: UIBarButtonItem?) {
