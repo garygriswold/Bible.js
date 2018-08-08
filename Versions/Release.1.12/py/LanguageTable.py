@@ -7,15 +7,14 @@ import json
 
 out = io.open("sql/language.sql", mode="w", encoding="utf-8")
 
-#line1 = "DROP TABLE IF EXISTS Language;\n".encode('utf-8')
-#out.write(line1)
 out.write(u"DROP TABLE IF EXISTS Language;\n")
 out.write(u"CREATE TABLE Language (\n")
 out.write(u"  iso TEXT NOT NULL PRIMARY KEY,\n")
 out.write(u"  name TEXT NOT NULL,\n")
 out.write(u"  iso1 TEXT NULL,\n")
+out.write(u"  rightToLeft CHECK (rightToLeft IN('T','F')) default('F'),\n")
 out.write(u"  english TEXT NULL);\n")
-prefix = "INSERT INTO Language (iso, name, iso1, english) VALUES"
+prefix = "REPLACE INTO Language (iso, name, iso1, english) VALUES"
 
 data = sys.stdin.read()
 print "Counted", len(data), "chars."
@@ -28,9 +27,6 @@ for lang in langs:
 	english = lang['english_name'].replace("\\", "").replace("'", "''")
 	iso1 = 'null' if (iso1 is None or len(iso1) == 0) else  "'" + iso1 + "'"
 	english = 'null' if (english is None or english == name) else "'" + english + "'"
-	line = "%s ('%s', '%s', %s, %s)\n" % (prefix, iso, name, iso1, english)
-	out.write(line)
+	out.write("%s ('%s', '%s', %s, %s);\n" % (prefix, iso, name, iso1, english))
 
-
-	#print("%s ('%s', '%s', %s, %s)" % (prefix, iso, name.encode('utf-8'), iso1, english.encode('utf-8')))
-
+out.close()

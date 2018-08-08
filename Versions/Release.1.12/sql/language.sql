@@ -3,2022 +3,2023 @@ CREATE TABLE Language (
   iso TEXT NOT NULL PRIMARY KEY,
   name TEXT NOT NULL,
   iso1 TEXT NULL,
+  rightToLeft CHECK (rightToLeft IN('T','F')) default('F'),
   english TEXT NULL);
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cou', 'Wamey', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lgl', 'Wala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pnn', 'Pinai-Hagahai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tsv', 'Tsogo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zaj', 'Zaramo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aiw', 'Aari', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aau', 'Abau', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('abi', 'Abidji', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kgr', 'Abun', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('knj', 'Akateko', null, 'Acateco')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ace', 'Aceh', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ace', 'Aceh', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('acr', 'Achí', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aca', 'Achagua', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('guq', 'Aché', null, 'Ache')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('acc', 'Achi de Cubulco', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ach', 'Acholi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('acu', 'Achuar-Shiwiar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ada', 'Adangme', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ade', 'Adele', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('adi', 'Adi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('adj', 'Adioukrou', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ort', 'Adivasi Oriya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ady', 'Adyghe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('adz', 'Adzera', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aar', 'Afar', 'aa', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('afr', 'Afrikaans', 'af', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('agd', 'Agarabi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('agx', 'Aghul', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('duo', 'Agta Dupaninan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('due', 'Agta Umiray Dumaget', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('apf', 'Agta, Palanan', null, 'Agta, Pahanan')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('agu', 'Aguacateco', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('agn', 'Agutaynen', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ajg', 'Aja (Benin)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aka', 'Akan', 'ak', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aka', 'Akan: Akuapem', 'ak', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aka', 'Akan: Asante', 'ak', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aka', 'Akan: Fante', 'ak', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ake', 'Akawaio', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aeu', 'Akeu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ahk', 'Akha ', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('akl', 'Aklanon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bss', 'Akoose', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('alw', 'Alaba-K''abeena', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mim', 'Mixtec, Alacatlatzala', null, 'Alacatlatzala Mixtec')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('amp', 'Alamblak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('alj', 'Alangan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sqi', 'Shqip', 'sq', 'Albanian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gah', 'Alekano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ald', 'Alladian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('alt', 'Altai, Southern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('alp', 'Alune', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('alz', 'Alur', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('amm', 'Ama (Papua New Guinea)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('amn', 'Amanab', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('amr', 'Amarakaeri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aaz', 'Amarasi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('amk', 'Ambai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('abt', 'Ambulas-Maprik', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('abt', 'Ambulas-Wosera-Kamu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('adx', 'Amdo Tibetan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aey', 'Amele', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ase', 'American Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ase', 'American Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ifa', 'Central Ifugao', null, 'Amganad Ifugao')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('amh', 'Amharic', 'am', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('amu', 'Amuzgo de Guerrero', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('anw', 'Anaang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aby', 'Aneme Wake', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('agm', 'Angaataha', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('akh', 'Angal Heneng', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('anp', 'Angika', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('anp', 'Angika', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('agg', 'Angor', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('boj', 'Anjam', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aak', 'Angave', null, 'Ankave')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aig', 'Antigua and Barbuda Creole English', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ify', 'Antipolo Ifugao', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('anu', 'Anuak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cko', 'Anufo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aui', 'Anuki', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('any', 'Agni Sanvi', null, 'Anyin')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ena', 'Apal', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('apn', 'Apinayé', null, 'Apinaye')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('apu', 'Apurinã', null, 'Apurina')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('arl', 'Arabela', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('acm', 'العربية', null, 'Arabic')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aec', 'العربية', null, 'Arabic')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('afb', 'العربية', null, 'Arabic')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('apd', 'العربية', null, 'Arabic')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ara', 'العربية', 'ar', 'Arabic')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('arb', 'العربية', null, 'Arabic')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('arz', 'العربية', null, 'Arabic')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('shu', 'العربية', null, 'Arabic')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('atq', 'Aralle-Tabulahan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('stk', 'Arammba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('arp', 'Arapaho', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aon', 'Arapesh Bumbita', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mwc', 'Are', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aai', 'Arifama-Miniafia', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('luc', 'Aringa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hye', 'Armenian Western', 'hy', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('apr', 'Arop-Lokep', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aps', 'Arop-Sissano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aia', 'Arosi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('msy', 'Aruamu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cjo', 'Ashéninka Pajonal', null, 'Ash&eacute;ninka Pajonal')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cni', 'Ashaninca', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cpb', 'Asheninka Ucayali-Yurua', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('csh', 'Asho Chin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('asm', 'Assamese', 'as', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aii', 'Assyrian Neo-Aramaic', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('teo', 'Ateso', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('avt', 'Au', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kud', 'Kurux', null, 'Auhelawa')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('djk', 'Aukaans', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ava', 'Avar', 'av', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('avn', 'Sideme', null, 'Avatime')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('avi', 'Avikam', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('avu', 'Avokaya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kwi', 'Awa for Ecuador', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('awb', 'Awa for Papua New Guinea', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('awa', 'Awadhi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('agr', 'Awajun', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('awo', 'Awak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('awx', 'Awara', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('auy', 'Awiyaana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('awn', 'Awngi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ifb', 'Ayangan Ifugao', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ayr', 'Aymara, Central', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ayo', 'Ayoré', null, 'Ayore')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sgb', 'Ayta Mag-antsi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('azj', 'Azərbaycan, Şimali', null, 'Azerbaijani, North')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('azb', 'Azərbaycan, Cənubi', null, 'Azerbaijani, South')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aza', 'Azha', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mpg', 'Azumeina', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bav', 'Babungo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bcy', 'Bacama', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bhz', 'Bada', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bfq', 'Badaga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ozm', 'Badwe''e', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bvc', 'Baelelea', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ksf', 'Bafia ', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bfd', 'Bafut', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bsp', 'Ambai', null, 'Baga Sitemu')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bfy', 'Bagheli', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bgq', 'Bagri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('btd', 'Bahasa Pakpak Dairi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pmf', 'Bahasa Taa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bdq', 'Bahnar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bdh', 'Baka (Sudan)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bkq', 'Bakairí', null, 'Bakairi')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bqi', 'Bakhtiari', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ble', 'Balanta-Kentohe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('blz', 'Balantak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ban', 'Balinese', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('krc', 'Balkar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bcc', 'Balochi, Southern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bcc', 'بلؤچی', null, 'Balochi, Southern')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bft', 'Balti', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ptu', 'Bambam', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bam', 'Bambara', 'bm', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bax', 'Bamun', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bcw', 'Bana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('liy', 'Banda-Bambari', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bza', 'Bandi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bqj', 'Bandial', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bxg', 'Bangala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bgz', 'Banggai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bsj', 'Bangwinji', null, 'Bangjinge')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bjn', 'Banjar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bjn', 'Banjar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lmn', 'Banjara (Lambadi)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('amf', 'Banna', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bap', 'Bantawa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bno', 'Bantoanon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bci', 'Baoulé', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bhr', 'Bara Malagasy', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bbb', 'Barai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mlp', 'Bargam', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bfa', 'Bari', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bch', 'Bariai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bba', 'Bariba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bak', 'Bashkir', 'ba', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bst', 'Basketo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bas', 'Bassa for Cameroon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bsq', 'Bassa for Liberia', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bud', 'Bassar Ntcham', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('akb', 'Batak Angkola', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('btx', 'Batak Karo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bts', 'Batak Simalungun', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bbc', 'Batak Toba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bge', 'Bauria', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bvz', 'Bauzi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bgr', 'Bawm', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bda', 'Bayot', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bfr', 'Bazigar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('beo', 'Beami', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('beq', 'Beembe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dbj', 'Begak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bep', 'Behoa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bkv', 'Bekwarra', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bel', 'Belarusian', 'be', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('blm', 'Jur Beli', null, 'Beli (Sudan)')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bzj', 'Belize Kriol', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('blh', 'Belleh', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yun', 'Bena (Nigeria)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bez', 'Bena (Tanzania)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bef', 'Benabena', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bcq', 'Bench', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ben', 'Bengali', 'bn', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bkl', 'Berik', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bom', 'Berom', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bew', 'Betawi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bev', 'Bete, Daloa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('btt', 'Bete-Bendi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kap', 'Бежкьалас миц', null, 'Bezhta')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bhd', 'Bhadrawahi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bgw', 'Bhatri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bhb', 'Bhili', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bho', 'Bhojpuri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bho', 'Bhojpuri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bhw', 'Biak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('beh', 'Biali', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('big', 'Biangai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('biu', 'Biate', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bcl', 'Bicolano, Central', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bjg', 'Bijago', null, 'Bidyogo')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bhp', 'Bima', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bhl', 'Bimin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bim', 'Bimoba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bon', 'Bine', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bkd', 'Binukid', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bjr', 'Binumarien', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bfo', 'Birifor, Northern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('biv', 'Birifor, Southern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bis', 'Bislama', 'bi', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bib', 'Bissa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bzi', 'Bisu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mux', 'Bo-Ung', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bwq', 'Bobo Madare, Southern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bqc', 'Illo Busa', null, 'Boko')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bqc', 'Boo', null, 'Boko')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bus', 'Bokobaru', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bdt', 'Bhogoto', null, 'Bokoto')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bky', 'Bokyi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bnp', 'Bola', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bvl', 'Bolivian Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bdg', 'Bonggi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bot', 'Bongo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bmq', 'Boomu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('boa', 'Bora', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gax', 'Borana (Oromo)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gai', 'Mborena Kam', null, 'Borei')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('brx', 'Boro', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ksr', 'Borong', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bor', 'Borôro', null, 'Bororo')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bos', 'Bosnian', 'bs', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wra', 'Bouni Barupu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wra', 'Bouni Pou', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pcc', 'Bouyei Zhenningxian', null, 'Bouyei')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('brh', 'Brahui', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bra', 'Braj', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bzs', 'Brazilian Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bzd', 'Bribri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bru', 'Bru Eastern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('box', 'Buamu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mmo', 'Buang - Mangga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bzh', 'Buang, Central', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('buu', 'Budu: Koya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('buu', 'Budu: Nita', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bug', 'Bugis', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sab', 'Buglere', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bku', 'Buhid', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ubl', 'Buhi''non Bikol', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('buk', 'Bukawa - Bugawa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ape', 'Bukiyip', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bxk', 'Bukusu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bul', 'български', 'bg', 'Bulgarian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bul', 'български', 'bg', 'Bulgarian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bwu', 'Buli', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bum', 'Bulu for Cameroon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bmv', 'Bum', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bdd', 'Bunama', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bns', 'Bundeli', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bwr', 'Bura', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bys', 'Burak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mya', 'Burmese', 'my', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bmu', 'Burum-Mindik', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('1bi', 'Burundian Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bxr', 'Buryat', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bqp', 'Bisã', null, 'Busa')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tte', 'Bwanabwana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dri', 'C''lela', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cjp', 'Cabecar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cbv', 'Cacua', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ckb', 'Cakchiquel Santo Domingo Xenacoj', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cak', 'Cakchiquel, Central', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cak', 'Cakchiquel, Santa  Maria de Jesus', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cak', 'Cakchiquel, South Central', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cak', 'Cakchiquel, Western', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cak', 'Cakchiquel, Yepocapa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rab', 'Camling', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kbh', 'Camsa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ram', 'Canela', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ram', 'Canela', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kaq', 'Capanahua', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cot', 'Caquinte', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cbc', 'Carapana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('car', 'Carib', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cat', 'Catalan', 'ca', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ceb', 'Cebuano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('khm', 'Central Khmer', 'km', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ckb', 'Central Kurdish', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cmo', 'Bunong', null, 'Central Mnong')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pbs', 'Central Pame', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tar', 'Central Tarahumara', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cme', 'Cerma', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cbi', 'Chachi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ccp', 'Chakma', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cld', 'Chaldean Neo-Aramaic', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ceg', 'Chamacoco', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cdh', 'Chambeali', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cha', 'Chamorro', 'ch', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('asa', 'Chasu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cta', 'Chatino de Tataltepec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cly', 'Chatino Lachao Yolotepec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cya', 'Chatino Nopala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ctp', 'Chatino, Zona Alta Occidental', null, 'Chatino, Western Highland')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hne', 'Chhattisgarhi', null, 'Chattisgarhi')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cbk', 'Chavacano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cbk', 'Chavacano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cbt', 'Shawi', null, 'Chayahuita')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('che', 'Chechen', 'ce', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('chr', 'Cherokee', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bem', 'Chibemba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nyj', 'Chichewa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gog', 'Chigogo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kdn', 'Chikunda', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('clc', 'Chilcotin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('clc', 'Chilcotin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cfm', 'Chin Bualkhaw', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('czt', 'Chin Zotung', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mwq', 'Chin, Cho', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cfm', 'Chin, Falam', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cnh', 'Chin, Haka', null, 'Chin, Hakha')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cnk', 'Chin, Matu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hlt', 'Chin, Matu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cmr', 'Chin, Mro-Khimi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cnw', 'Chin, Ngawn', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pck', 'Chin, Paite', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ctd', 'Chin, Tiddim', null, 'Chin, Tedim')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ctd', 'Zokam', null, 'Chin, Tedim')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tcz', 'Chin, Thado', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('chz', 'Chinantec de Ozumacin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('chj', 'Chinantec Ojitlán', null, 'Chinantec Ojitl&aacute;n')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cco', 'Chinanteco de Comaltepec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cpa', 'Chinanteco de Palantla', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cnl', 'Chinanteco de San Juan Lalana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cle', 'Chinanteco de San Juan Lealao', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cso', 'Chinanteco de Sochiapan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cnt', 'Chinanteco de Tepetotutla', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cuc', 'Chinanteco de Usila', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zho', '中国的 - 中國的', 'zh', 'Chinese')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yue', 'Chinese Cantonese', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yue', 'Chinese Cantonese', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('chk', 'Chinese Mandarin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cmn', 'Chinese Mandarin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cmn', 'Chinese Mandarin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('csl', 'Chinese Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yue', '廣東話', null, 'Chinese, Cantonese')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('chk', '中文', null, 'Chinese, Mandarin')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cmn', '中文', null, 'Chinese, Mandarin')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hsn', 'Chinese, Xiang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cap', 'Chipaya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('chp', 'Dene', null, 'Chipewyan')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cax', 'Chiquitano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cdf', 'Chiru', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('toi', 'Chitonga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ctg', 'Malmusch', null, 'Chittagonian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tum', 'Chitumbuka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yao', 'Chiyao', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cdi', 'Chodri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cjk', 'Chokwe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ctu', 'Chol Tumbala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('chf', 'Chontal, Tabasco', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cce', 'Txitxopi', null, 'Chopi')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('caa', 'Chorti', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cje', 'Chru', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cjv', 'Chuave', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cac', 'Chuj, San Mateo Ixtatan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cac', 'Chuj, San Sebastian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ckt', 'Chukot', null, 'Chukchi')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ncu', 'Chumburung', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('chk', 'Chuukese', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('chv', 'Chuvash', 'cv', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('chw', 'Chwabo', null, 'Chuwabu')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('asg', 'Cishingini', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('con', 'Cofan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('csn', 'Colombian Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cof', 'Colorado', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('crn', 'Cora, El Nayar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('crn', 'Cora, Presidio de los Reyes', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cok', 'Cora, Santa Teresa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cor', 'Cornish', 'kw', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('csr', 'Costa Rican Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('crk', 'Cree, Plains', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('crs', 'Creole French, Sesselwa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('crh', 'Crimean Tatar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pov', 'Crioulo, Upper Guinea', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hrv', 'Hrvatski', 'hr', 'Croatian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hbs', 'Croatian', 'sh', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mfn', 'Cross River Mbembe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cro', 'Crow', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cub', 'Cubeo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cui', 'Cuiba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cul', 'Culina', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kpc', 'Curripaco', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kpc', 'Curripaco', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ces', 'česky', 'cs', 'Czech')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dsh', 'Daasanach', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dbq', 'Daba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mps', 'Dadibi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mps', 'Dadibi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dbd', 'Dadiya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dgz', 'Daga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dga', 'Dagaare, Southern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dgi', 'Dagara, Northern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dag', 'Dagbani', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('daf', 'Dan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('daf', 'Dan, East', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('daf', 'Dan, West', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('daq', 'Dandami Maria', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('daa', 'Dangaléat', null, 'Dangaleat')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('thl', 'Dangaura Tharu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ada', 'Dangme', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dnw', 'Lani', null, 'Dani, Western')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dan', 'Dansk', 'da', 'Danish')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aso', 'Dano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dar', 'Dargwa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('prs', 'Dari', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dln', 'Darlong', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tcc', 'Datooga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dta', 'Daur', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dww', 'Dawawa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dwr', 'Dawro', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mhy', 'Dayak Ma''anyan', null, 'Dayak  Maanyan')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('otd', 'Dayak Ot Danum', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dzg', 'Dazaga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dcc', 'Deccan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ded', 'Dedua', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mzw', 'Deg', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ddn', 'Dendi (Benin)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('anv', 'Denya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kna', 'Dera (Nigeria)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('des', 'Desano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dhn', 'Dhanki', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mki', 'Dhatki', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('div', 'Dhivehi', 'dv', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('adh', 'Dhopadhola', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gud', 'Dida, Yocoboué', null, 'Dida, Yocobou&eacute;')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('did', 'Didinga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('did', 'Didinga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mhu', 'Digaro-Mishmi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dig', 'Digo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('oss', 'Digor', 'os', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dur', 'Dii', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cfa', 'Dijim-Bwilim', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dis', 'Dimasa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dip', 'Dinka, Padang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dik', 'Dinka, Rek', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gdl', 'Dirasha', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tbz', 'Ditammari', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dob', 'Dobu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dts', 'Dogon, Toroso', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dos', 'Dogosé', null, 'Dogos&eacute;')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dgo', 'Dogri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dgr', 'Tlicho', null, 'Dogrib')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kqc', 'Doromu-Koki', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dua', 'Douala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dow', 'Doyayo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dud', 'Dukanci', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dng', 'Dungan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mvp', 'Duri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dug', 'Duruma', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pci', 'Duruwa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dtp', 'Dusun, Central', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nld', 'Nederlands', 'nl', 'Dutch')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jen', 'Dzə', null, 'Dza')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dzo', 'Dzongkha', 'dz', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bgp', 'Eastern Balochi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ike', 'Eastern Canadian Inuktitut', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cjm', 'Eastern Cham', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('otm', 'Eastern Highland Otomi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kqo', 'Eastern Krahn', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mgp', 'Eastern Magar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('emk', 'Eastern Maninkakan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bnj', 'Eastern Tawbuid', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('igb', 'Ebira', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ebr', 'Ebrié', null, 'Ebrie')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bin', 'Edo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('etr', 'Edolo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bsn', 'Eduria-Barasana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('efi', 'Efik', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ego', 'Eggon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('eip', 'Bahasa Lik', null, 'Eipomek')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('etu', 'Ejagham', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('eja', 'Jola-Felupe', null, 'Ejamat')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('eka', 'Ekajuk', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('guz', 'Ekegusii', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('elm', 'Eleme', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ycl', 'Elo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('emp', 'Embera, Northern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cto', 'Embera Katio', null, 'Embera-Catio')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pbh', 'E''ñapa Woromaipu', null, 'Enapa Woromaipu')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('enq', 'Enga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('eng', 'English', 'en', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('eng', 'English', 'en', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('eng', 'English, Australian', 'en', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('eng', 'English, Native American', 'en', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('leg', 'Enhlit', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('enx', 'Enxet', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sja', 'Epera pedee', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mcq', 'Ese', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ese', 'Ese Ejja', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ekk', 'Estonian, Standard', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('eth', 'Ethiopian Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('eus', 'Euskara', 'eu', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('evn', 'Evenki', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nou', 'Ewage-Notu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ewe', 'Ewe', 'ee', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ewo', 'Ewondo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('eza', 'Ezaa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('izi', 'Ezaa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fab', 'Fa D''ambu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fai', 'Faiwol', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gel', 'Fakai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fal', 'Fali, South', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fng', 'Fanagalo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fan', 'Fang ', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fmu', 'Gaita Koitor', null, 'Far Western Muria')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fao', 'Faroese', 'fo', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fas', 'فارسی', 'fa', 'Farsi, Western')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('faa', 'Fasu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('far', 'Fataleka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hif', 'Fiji-Hindi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fij', 'Fijian', 'fj', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aoj', 'Filifita', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fin', 'Suomi', 'fi', 'Finnish')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fip', 'Kifipa', null, 'Fipa')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ppo', 'Folopa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fon', 'Fon (Fongbe)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('frd', 'Fordata', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('for', 'Fore', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gur', 'Frafra', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fra', 'Français', 'fr', 'French')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fra', 'Français', 'fr', 'French')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fsl', 'French Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fub', 'Fulfulde, Adamawa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fub', 'Fulfulde, Adamawa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fue', 'Fulfulde, Borgu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fuh', 'Fulfulde, Burkina Faso', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fuq', 'Fulfulde, Central Eastern Niger', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ffm', 'Fulfulde, Maasina', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fuv', 'Fulfulde, Nigerian (Caka)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fuv', 'Fulfulde, Nigerian (Caka)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fuh', 'Fulfulde, Western Niger', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('flr', 'Fuliiru', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gaa', 'Ga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gqa', 'Ga''anda', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gla', 'Gaelic, Scottish', 'gd', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gag', 'Gagauz', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gbi', 'Galela', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('glg', 'Galician', 'gl', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gbl', 'Gamit', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gmv', 'Gamo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pwg', 'Gapapaiwa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gbm', 'Garhwali', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cab', 'Garifuna', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('grt', 'Garo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gvo', 'Gavião Do Jiparaná', null, 'Gaviao Do Jiparana')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wbj', 'Gawali', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gbr', 'Gbagyi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ggu', 'Gban', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gby', 'Gbari', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gya', 'Gbaya, Northwest', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gso', 'Gbaya, Southwest', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gbp', 'Gbaya-Bossangoa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ggb', 'Base', null, 'Gbii')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hmj', 'Ge', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('drs', 'Gedeo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kat', 'ქართულ', 'ka', 'Georgian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kat', 'Georgian', 'ka', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('deu', 'Deutsch', 'de', 'German')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('deu', 'Deutsch', 'de', 'German')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gse', 'Ghanaian Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bmk', 'Ghayavi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bbj', 'Ghomala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gid', 'Gidar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kiu', 'Gikuyu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kik', 'Gikuyu', 'ki', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gwj', 'Gikwe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('acd', 'Gikyode', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('glk', 'Gilaki', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bbr', 'Girawa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nyf', 'Giryama', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('toh', 'Gitonga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gom', 'Goan Konkani', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ank', 'Goemai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gof', 'Goffa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gof', 'Goffa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kuh', 'Goji', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gkn', 'Gokana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gol', 'Gola', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gvf', 'Golin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gjn', 'Gonja', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gqr', 'Gor', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gor', 'Gorontalo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gux', 'Gulmancema', null, 'Gourmanchema')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gbo', 'Grebo, Northern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ell', 'Greek', 'el', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gcf', 'Guadeloupean Creole French', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('guh', 'Guahibo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gub', 'Guajajára', null, 'Guajajara')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gum', 'Guambiano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gvc', 'Guanano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gui', 'Guarani, Bolivian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gun', 'Guarani, Mbya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gug', 'Guarani, Paraguayan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gyr', 'Guarayo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('guo', 'Guayabero', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gym', 'Guaymi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gde', 'Gude', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ghs', 'Guhu-Samane', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bet', 'Guiberoua Béte', null, 'Guiberoua Bete')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('giz', 'Guiziga, South', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('guj', 'Gujarati', 'gu', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gax', 'Guji', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gvl', 'Gulei', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('guk', 'Gumuz', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('guw', 'Gun-Gbe', null, 'Gun-Alada')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sgw', 'Gurage Chaha ', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('goa', 'Guro', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gyn', 'Guyanese Creole English', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dah', 'Gwahatike', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gwi', 'Gwichʼin', null, 'Gwichin')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gji', 'Gyazi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hdy', 'Hadiyya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hoj', 'Hadothi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hat', 'Kreyòl ayisyen', 'ht', 'Haitian Creole')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('haj', 'Hajong', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hak', 'Hakka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hak', 'Hakka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hlb', 'Halbi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hla', 'Halia', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hag', 'Hanga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wos', 'Hanga Hundi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hnn', 'Hanunoo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bgc', 'Haryanvi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hau', 'Hausa', 'ha', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hau', 'Hausa', 'ha', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('haz', 'Hazaragi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xed', 'Hdi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('heb', 'עברית', 'he', 'Hebrew')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nix', 'Hema', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hem', 'Hemba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('her', 'Herero', 'hz', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hig', 'Higgi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('poi', 'Popoluca de la Sierra', null, 'Highland Popoluca')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hil', 'Hiligaynon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hin', 'Hindi', 'hi', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hin', 'Hindi', 'hi', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hin', 'हिंदी', 'hi', 'Hindi')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hno', 'Hindko, Northern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hix', 'Hixkaryána', null, 'Hixkaryana')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mww', 'Hmong Daw', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hnj', 'Hmong Njua', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hoc', 'Ho', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hop', 'Hopi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hot', 'Hote', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hre', 'Hre', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hub', 'Huambisa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('var', 'Huarijio', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hus', 'Huasteco, Veracruz', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mau', 'Huautla Mazatec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('huv', 'Huave de San Mateo del Mar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hbb', 'Huba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('czh', 'Hui', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hch', 'Huichol', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('huu', 'Huitoto Murui', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hto', 'Huitoto, Minica', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hui', 'Huli', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hum', 'Hungana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hun', 'Magyar', 'hu', 'Hungarian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hwo', 'Hwona', null, 'Hwana')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yml', 'Iamalele', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ian', 'Iatmul', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ibl', 'Ibaloi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('iba', 'Iban', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ibg', 'Ibanag', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ibb', 'Ibibio', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('isl', 'Icelandic', 'is', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('idu', 'Idoma', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('viv', 'Iduna', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ife', 'Ifè', null, 'Ife')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('igl', 'Igala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ibo', 'Igbo', 'ig', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ige', 'Igede', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ign', 'Ignaciano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ahl', 'Igo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ikk', 'Ika', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kpo', 'Ikposo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('iqw', 'Ikwo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ilo', 'Ilocano', null, 'Ilokano')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('imo', 'Imbongu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aps', 'Indian (Andhra Pradesh) Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('2in', 'Indian (Karnataka) Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('1in', 'Indian (Kerala) Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tnq', 'Indian (Tamil Nadu) Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ind', 'Indonesian', 'id', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ind', 'Indonesian', 'id', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('inb', 'Inga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('inh', 'Ingush', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ino', 'Inoke-Yate', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('esk', 'Inupiaq', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ipi', 'Ipili', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('iry', 'Iraya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('iri', 'Irigwe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('iru', 'Irula', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xho', 'Isixhosa', 'xh', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zul', 'Isizulu', 'zu', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('isd', 'Isnag', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('iso', 'Isoko', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ita', 'Italiano', 'it', 'Italian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('itv', 'Itawit', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('itl', 'Itelmen', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('itl', 'Itelmen', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('its', 'Itsekiri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ium', 'Iu Mien', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kbm', 'Iwal', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ixl', 'Ixil', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ixi', 'Ixil', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ixl', 'Ixil', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nca', 'Iyo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('izr', 'Izere', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('izr', 'Izere', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('izi', 'Izi-Ezaa-Ikwo-Mgbo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('izz', 'Izii', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ijc', 'Izon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jac', 'Jacalteco, Eastern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jac', 'Jacalteco, Western', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jam', 'Jamaican Creole', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jaa', 'Jamamadí', null, 'Jamamadi')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jpn', '日本語', 'ja', 'Japanese')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jsl', 'Japanese Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jar', 'Jarawa (Nigeria)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jav', 'Javanese, Indonesian', 'jv', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jvn', 'Javanese, Suriname', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jib', 'Jibu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jit', 'Jita', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kaj', 'Jju', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('csk', 'Jola Kasa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dyo', 'Jola-Fogny', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jun', 'Juang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jbu', 'Jukun', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dyu', 'Jula', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jml', 'Jumli', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cbs', 'Junikuin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bex', 'Jur Modo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('vmc', 'Juxtlahuaca Mixtec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gna', 'Kaansa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('urb', 'Ka&rsquo;apor', null, 'Kaapor')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ksp', 'Kaba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kbd', 'Kabardian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kbp', 'Kabiye', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kea', 'Kabuverdianu, Barlavente', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kea', 'Kabuverdianu, Sotaventu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cwa', 'Kabwa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kab', 'Kabyle', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kfr', 'Kachchi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kac', 'Kachin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kzj', 'Kadazan, Coastal', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dtb', 'Kadazan, Labuk Kinabatangan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kbr', 'Kafa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cgc', 'Kagayanen', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kzf', 'Kaili, Da''a', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kgk', 'Kaiwá', null, 'Kaiwa')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kqf', 'Kakabai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cbr', 'Kakataibo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kkj', 'Kako', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('keo', 'Kakwa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kal', 'Kalaallisut', 'kl', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ijn', 'Kalabari', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kqe', 'Kalagan, Eastern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kqe', 'Kalagan, Western', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aah', 'Kalam', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aah', 'Kalam (Minimib)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kck', 'Kalanga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kln', 'Kalenjin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('knb', 'Kalinga Lubuagan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xal', 'Kalmyk-Oirat', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('khz', 'Kalo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bco', 'Kaluli', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kms', 'Kamasau', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ktb', 'Kambaata', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xbr', 'Kambera', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kcq', 'Kamo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xla', 'Kamula', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('soq', 'Kanasi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kqw', 'Kandas', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gam', 'Kandawo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cbu', 'Kandozi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xnr', 'Kangri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kmu', 'Kanite', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kjb', 'Kanjobal, Eastern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kne', 'Kankanaey', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kan', 'ಕನ್ನಡ', 'kn', 'Kannada')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('knc', 'Kanuri, Central', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kny', 'Kanyok', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kqn', 'Kaonde', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kpg', 'Kapingamarangi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kvj', 'Kapsiki', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('leu', 'Kara (Papua New Guinea)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xrb', 'Karaboro', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kaa', 'Karakalpak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kzr', 'Karang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mjw', 'Karbi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kai', 'Karai-Karai', null, 'Karekare')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('krl', 'Karelian, North', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pww', 'Karen Pwo, Northern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ksw', 'Karen, S''Gaw', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('car', 'Kariña', null, 'Kari&ntilde;a')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kdj', 'Karimojong', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yuj', 'Karkar-Yuri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xsm', 'Kasem', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kas', 'Kashmiri', 'ks', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('csb', 'Kashubian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kmg', 'Kâte', null, 'Kate')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pss', 'Kaulong', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kyz', 'Kayabi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kyu', 'Kayah, Western', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pdu', 'Kayan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('txu', 'Kayapo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kaz', 'Kazakh', 'kk', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kdp', 'Kebu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bmh', 'Kein', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kek', 'Kekchi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('khy', 'Kele (DRC)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kbo', 'Keliko', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kbo', 'Keliko', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('knx', 'Kendayan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kyq', 'Kenga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xki', 'Kenyan Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ken', 'Kenyang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ker', 'Kera', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kjs', 'Kewa, East', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kew', 'Kewa, West', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kyg', 'Keyagana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kjh', 'Khakas', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('khg', 'Khams Tibetan', null, 'Khampa, Eastern')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ogo', 'Khana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('khn', 'Khandesi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kca', 'Khanty', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('khr', 'Kharia', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kha', 'Khasi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kao', 'Khassonke ', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('khm', 'Khmer, Central', 'km', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kxm', 'Khmer, Northern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kjg', 'Khmu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xuu', 'Kxoe', null, 'Khwe')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('quc', 'K''iche'', Cunén', null, 'Kiche, Cunen')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ebu', 'Kiembu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('heh', 'Kihehe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('irk', 'Kiiraqw', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kki', 'Kikagulu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kik', 'Kikamba', 'ki', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kng', 'Kikongo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lub', 'Kiluba', 'lu', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kia', 'Garap', null, 'Kim')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jmc', 'Kimashami', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kmb', 'Kimbundu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mer', 'Kimeru', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('old', 'Kimochi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kqp', 'Kimre', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nnb', 'Kinandi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('krj', 'Kinaray-a', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nyy', 'Kinyakyusa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nym', 'Kinyamwezi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kin', 'Kinyarwanda', 'rw', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rim', 'Kinyaturu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nim', 'Kinyiramba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('geb', 'Kire', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kir', 'Kirghiz', 'ky', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gil', 'Kiribati', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kij', 'Kiriwina', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('run', 'Kirundi', 'rn', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kje', 'Kisar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kss', 'Kisi, Southern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gru', 'Kistane', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('suk', 'Kisukuma', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('swh', 'Kiswahili', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('swc', 'Kiswahili', null, 'Kiswahili, Congo')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mkw', 'Kituba for Congo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ktu', 'Kituba for DRC', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('vun', 'Kivunjo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('klu', 'Klao', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kpw', 'Kobon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('thq', 'Kochila Tharu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ksz', 'Kodaku', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kog', 'Kogi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kpm', 'Koho', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kpx', 'Koiali, Mountain', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('trp', 'Kok Borok', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kfb', 'Kolami, Northwestern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bkm', 'Kom for Cameroon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kmy', 'Koma', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kpf', 'Komba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kpf', 'Komba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xbi', 'Kombio - Wampukuamp', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kbi', 'Kombio - Yanimoi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xbi', 'Kombio - Yanimoi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kge', 'Komering', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('koi', 'Komi-Permyak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kpv', 'Komi-Zyrian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bbo', 'Bobo Madaré, Southern', null, 'Konabere')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kfc', 'Konda-Dora', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('knn', 'Konkani', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xon', 'Konkomba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xon', 'Konkomba, Likoonli', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xon', 'Konkomba, Likpakpaaln', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kno', 'Kono', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kxc', 'Konso', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mku', 'Konyanka Maninka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ozm', 'Koonzime', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kqy', 'Koorete', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kpr', 'Korafe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kor', '한국어', 'ko', 'Korean')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kvk', 'Korean Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kor', '한국어, 북한', 'ko', 'Korean, North')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kor', '한국어, 한국', 'ko', 'Korean, South')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('coe', 'Koreguaje', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kfq', 'Korku', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bpr', 'Koronadal Blaan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kpq', 'Kimyal of Korupun', null, 'Korupun-Sela')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kfp', 'Korwa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kpy', 'Koryak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kze', 'Kosena', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kyf', 'Kouya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kff', 'Koya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('khq', 'Songhay, Timbuktu', null, 'Koyra Ciini')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gkp', 'Kpelle for Guinea', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xpe', 'Kpelle for Liberia', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('krw', 'Krahn, Western', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kri', 'Krio', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ted', 'Krumen Tepo', null, 'Kroumen Tepo')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ktj', 'Krumen, Plapo', null, 'Kroumen, Plaapo')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ksd', 'Kuanua', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kua', 'Kuanyama', 'kj', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kgf', 'Kube', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kxu', 'Kui (India)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kez', 'Kukele', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kfx', 'Kulvi', null, 'Kullu Pahari')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kle', 'Kulung', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kue', 'Kumam', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kue', 'Kuman', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kfy', 'Kumaoni', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kum', 'Kumyk', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kvn', 'Kuna Border', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cuk', 'Kuna San Blas', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kup', 'Kunimaipa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xuo', 'Kuo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kto', 'Kuot', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kpz', 'Kupsapiny', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('knk', 'Kuranko', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kmr', 'Kurdish Behdini', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kmr', 'Kurmancî', null, 'Kurdish Kurmanji')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kmr', 'Kurmancî', null, 'Kurdish Kurmanji')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kuj', 'Kuria', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kru', 'Kurukh', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xuj', 'Kurumba, Jennu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kus', 'Kusaal', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kub', 'Kutep', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kdc', 'Kutu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kxv', 'Kuvi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kdt', 'Kuy', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kwj', 'Kwanga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kwn', 'Kwangali', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('knp', 'Kwanja', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kwf', 'Kwara''ae', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cwt', 'Kwatay', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cwe', 'Kwere', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kmo', 'Kwoma', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kyc', 'Kyaka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tye', 'Kyanga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lbb', 'Label', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lac', 'Lacandon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lbj', 'Ladakhi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lhu', 'Lahu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lbe', 'Lak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('leb', 'Lala-Bisa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lla', 'Lala-Roba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lam', 'Lamba for Togo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lam', 'Lamba for Zambia', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lai', 'Lambya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lmk', 'Lamkang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lns', 'Lamnso', null, 'Lamnso''')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ljp', 'Lampung', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('laj', 'Lango', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lao', 'ລາວ', 'lo', 'Lao')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lao', 'ລາວ', 'lo', 'Lao')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hmd', 'Large Flowery Miao', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ldi', 'Lari', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lsi', 'Lacid', null, 'Lashi')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lat', 'Latin', 'la', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lav', 'Latvijas', 'lv', 'Latvian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('law', 'Lauje', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lew', 'Ledo Kaili', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lea', 'Lega-Shabunda', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lln', 'Lélé (Chad)', null, 'Lele (Chad)')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lef', 'Lelemi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('led', 'Lendu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('leh', 'Lenje', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lep', 'Lepcha', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lww', 'Lewo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lez', 'Lezghian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mhx', 'Lhaovo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lir', 'Liberian Pidgin English', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lik', 'Lika', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lia', 'Limba West', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lif', 'Limbu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lmp', 'Limbum', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lin', 'Lingala', 'ln', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('onb', 'Elque', null, 'Lingao')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lis', 'Lisu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lit', 'Lietuvių', 'lt', 'Lithuanian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('loq', 'Lobala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('loq', 'Lobala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lob', 'Lobiri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('log', 'Logo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rag', 'Logooli', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yaz', 'Lokaa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lok', 'Loko', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dop', 'Lokpa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lol', 'Lomongo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ngl', 'Lomwe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lnu', 'Longuda', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lom', 'Lorma', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('uvl', 'Lote', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ztp', 'Loxicha Zapotec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('loz', 'Lozi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('khb', 'Lü', null, 'Lu')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lex', 'Luang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lch', 'Luchazi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lug', 'Luganda', 'lg', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lgg', 'Lugbara', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rub', 'Gungu', null, 'Lugungu')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ruf', 'Lughuru', null, 'Luguru')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gwr', 'Lugwere', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ida', 'Lukakamega', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('myx', 'Lumasaaba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lnd', 'Lun Bawang - Lun Dayah', null, 'Lun Dayah')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lun', 'Lunda', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('luo', 'Luo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lsm', 'Lusamya-Lugwe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ndy', 'Rito', null, 'Lutos')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lue', 'Luvale', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lwo', 'Luwo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lee', 'Lyele', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mhi', 'Ma''di', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mdy', 'Maale', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mas', 'Maasai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ymm', 'Maay', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mfz', 'Mabaan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mkd', 'Macedonian', 'mk', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mpd', 'Machineri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('myy', 'Macuna', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mbc', 'Macushi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mda', 'Mada', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mmx', 'Madak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mad', 'Madurese', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mag', 'Magahi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mdh', 'Maguindanaon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ayz', 'Mai Brat', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ayz', 'Mai Brat', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mzz', 'Maiadomu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mai', 'Maithili', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mca', 'Maka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mcp', 'Makaa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mak', 'Makassar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('vmw', 'Makhuwa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mgh', 'Makhuwa-Meetto', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kde', 'Makonde', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mlg', 'Malagasy', 'mg', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mlg', 'Malagasy', 'mg', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('txy', 'Malagasy Tanosy', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xmw', 'Malagasy Tsimihety', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lon', 'Elhomwe', null, 'Malawi Lomwe')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zlm', 'Malay', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zsm', 'Malay Bahasa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mal', 'Malayalam', 'ml', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xml', 'Malaysian Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tcf', 'Malinaltepec Me''phaa', null, 'Malinaltepec Mephaa')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mbk', 'Malol', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mjt', 'Malto', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mup', 'Malvi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mvc', 'Mam, Central', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mam', 'Mam, Northern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mam', 'Mam, Southern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mam', 'Mam, Todos Santos', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mqj', 'Mamasa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mcu', 'Mambila for Cameroon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mzk', 'Mambila for Nigeria', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mgr', 'Mambwe-Lungu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('maw', 'Mampruli', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xmm', 'Manadonese Malay', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mva', 'Manam', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mdr', 'Mandar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mfi', 'Mandara', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tbf', 'Mandara', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mjl', 'Mandeali', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mnk', 'Mandinka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mfv', 'Mandjak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kby', 'Manga Kanuri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mdj', 'Mangbetu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mbh', 'Mangseng', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('msc', 'Maninka, Sankaran', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mzj', 'Manya', null, 'Maninyakan')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mni', 'Manipuri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('knf', 'Mankanya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mev', 'Mano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('obo', 'Minonuvu', null, 'Manobo')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('msm', 'Manobo, Agusan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mta', 'Manobo, Cotabato', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mbb', 'Manobo, Western Bukidnon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('msw', 'Mansoanka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mxc', 'Manyika', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('swb', 'Maore Comorian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mri', 'Maori', 'mi', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mri', 'Maori', 'mi', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mlh', 'Mape', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('arn', 'Mapudungun', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sjm', 'Mapun', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mch', 'Dhe&rsquo;cwana', null, 'Maquiritari')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('enb', 'Marakwet', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mrw', 'Maranao', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mar', 'Marathi', 'mr', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ayp', 'North Mesopotamian Arabic', null, 'Mardini')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mfm', 'Marghi South', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mrt', 'Margi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mhr', 'Mari-Meadow', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dad', 'Marik', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mah', 'Marshallese', 'mh', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rwr', 'Marwari (India)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mve', 'Marwari (Pakistan)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mas', 'Masai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mas', 'Masai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('msb', 'Masbatenyo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('msh', 'Masikoro Malagasy', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('klv', 'Maskelynes', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mcn', 'Massana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mfh', 'Matal', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mbt', 'Matigsalug', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('met', 'Mato', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mcb', 'Matsigenka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mfe', 'Mauritian Kreol', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mhl', 'Mawake', null, 'Mauwake')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mke', 'Mawchi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mbl', 'Maxakalí', null, 'Maxakali')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mop', 'Maya, Mopan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yua', 'Maya, Yucatan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yan', 'Mayangna', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mfy', 'Mayo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mdm', 'Mayogo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ifu', 'Mayoyao Ifugao', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('maz', 'Mazahua, Central', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('maa', 'Mazatec (San Antonio & San Jeronimo)', null, 'Mazatec (San Antonio &amp; San Jeronimo)')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mzi', 'Mazatec Ixcatlán', null, 'Mazatec Ixcatl&aacute;n')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('maq', 'Mazatec, Chiquihuitlán', null, 'Mazatec, Chiquihuitlan')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('vmy', 'Mazateco de Ayautla', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('maj', 'Mazateco, Jalapa de Diaz', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mdp', 'Mbala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('myb', 'Mbay ', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mdw', 'Mbosi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mqb', 'Mbuko', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mhw', 'Mbukushu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mna', 'Mbula', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mbu', 'Mbula-Bwazza', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('byv', 'Medumba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mni', 'Meithei', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mek', 'Mekeo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('med', 'Melpa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('men', 'Mende', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sim', 'Mende (Papua New Guinea)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mee', 'Mengen', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mwv', 'Mentawai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mcr', 'Menya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('meq', 'Merey', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sac', 'Meskwaki', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zim', 'Zimé', null, 'Mesme')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mgo', 'Meta', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mxv', 'Mixtec, Metlatónoc', null, 'Metlatonoc Mixtec')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mtr', 'Mewari', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mfs', 'Mexican Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mej', 'Meyah', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mpt', 'Mian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mmc', 'Michoacán Mazahua', null, 'Michoacan Mazahua')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mpp', 'Migabac', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cdo', 'Min Dong Chinese', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gej', 'Mina', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('min', 'Minangkabau', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xmf', 'Mingrelian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('myk', 'Miniyanka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mpx', 'Misima-Panaeyati', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('miq', 'Mískito', null, 'Miskito')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('neq', 'Mixe de Atitlan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mco', 'Mixe de Coatlan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mzl', 'Mixe de Mazatlán Tutla', null, 'Mixe de Mazatlan Tutla')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mxq', 'Mixe de San Juan Juquila', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mir', 'Mixe del Istmo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pxm', 'Mixe Quetzaltepec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mto', 'Mixe Totontepec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('miy', 'Mixteco de Ayutla', null, 'Mixtec Ayutla')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xtd', 'Mixtec Diuxi-Tilantongo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xtm', 'Mixtec, Magdalena Peñasco', null, 'Mixtec Magdalena Penasco')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mza', 'Mixtec, Zacatepec', null, 'Mixtec Zacatepec')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mbz', 'Mixtec, Amoltepec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mio', 'Mixtec, Pinotepa Nacional', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mks', 'Mixtec, Silacayoapan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('meh', 'Mixtec, Southwestern Tlaxiaco', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xta', 'Mixtec, Xochapa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mip', 'Mixteco Apasco-Apoala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mib', 'Mixtec, Atatláhuca', null, 'Mixteco de Atatl&aacute;huca')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('miz', 'Mixteco de Coatzospan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mxt', 'Mixteco de Jamiltepec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mie', 'Mixteco de Ocotepec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mil', 'Mixteco de Penoles', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mpm', 'Mixteco de Santiago Yosundua', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mxb', 'Mixteco de Tezoatlan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xtn', 'Mixteco del Norte de Tlaxiaco', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mit', 'Mixteco del Sur de Puebla', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mkf', 'Miya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lus', 'Mizo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mfq', 'Moba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mfq', 'Moba Lok', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ell', 'Modern Greek (1453-)', 'el', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('maf', 'Mofa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mfk', 'Mofu, North', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mif', 'Mofu-Gudur', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mkl', 'Mokole', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mdf', 'Moksha', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pwm', 'Molbog', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mox', 'Molima', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ver', 'Mom Jango', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mnw', 'Mon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('khk', 'Mongolian, Outer', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mog', 'Mongondow', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mos', 'Moore', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('myv', 'Mordvin-Erzya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ary', 'Moroccan Arabic', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mgc', 'Morokodo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mqn', 'Moronene', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mqn', 'Moronene', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mqn', 'Moronene', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mgd', 'Moru', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mtj', 'Moskona', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('meu', 'Motu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hmo', 'Motu, Hiri', 'ho', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mua', 'Moundang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mug', 'Mousgoum', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mcx', 'Mpiemo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wiv', 'Vitu', null, 'Muduapa')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aoj', 'Mufian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bmr', 'Muinane', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mzm', 'Mumuye', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mnb', 'Muna', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mnf', 'Mundani', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('unr', 'Mundari', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('muh', 'Mundu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('myu', 'Mundurukú', null, 'Munduruku')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tnr', 'Münik', null, 'Munik')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mtq', 'Muong', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mur', 'Murle', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mui', 'Musi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('emi', 'Mussau-Emira', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('muy', 'Muyang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('myw', 'Muyuw', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sur', 'Mwaghavul', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('moa', 'Mwan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wmw', 'Mwani', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('1my', 'Myanmar (Yangon) Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nas', 'Naasioi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('naf', 'Nabak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nfr', 'Nafaanra', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tnk', 'Nafe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nag', 'Naga Pidgin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('njo', 'Naga, Ao', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nkf', 'Naga, Inpui', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('njh', 'Naga, Lotha', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nsm', 'Naga, Sumi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ote', 'Nahnu Otomi Mezquital', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nch', 'Nahuatl Huasteca, Central', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nhe', 'Nahuatl Huasteca, Eastern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nhe', 'Nahuatl Huasteca, Eastern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nhw', 'Nahuatl Huasteca, Western', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ncj', 'Nahuatl Norte Puebla', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nuz', 'Nahuatl Tlamacazapa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ngu', 'Nahuatl, Guerrero', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ngu', 'Nahuatl, Guerrero', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('azz', 'Nahuatl, Highland Puebla', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nhx', 'Nahuatl, Mecayapan', null, 'Nahuatl, Isthmus-Mecayapan')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nhx', 'Nahuatl, Mecayapan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ncl', 'Nahuatl, Michoacán', null, 'Nahuatl, Michoacan')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nhy', 'Nahuatl, Norte de Oaxaca', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nsu', 'Nahuatl, Sierra Negra', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('npl', 'Nahuatl, Southeastern Puebla', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nhx', 'Nahuatl, Tatahuicapan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nhi', 'Nahuatl, Tenango', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nak', 'Nakanai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nlc', 'Nalca', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nss', 'Nali', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('naq', 'Nama (Namibia)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nvm', 'Namiae', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nnc', 'Nangjere', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bjv', 'Nangnda', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cox', 'Nanti', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('npy', 'Napu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pbb', 'Nasa Yuwe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nsk', 'Naskapi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ntm', 'Nateni', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nau', 'Nauru', 'na', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nav', 'Navajo', 'nv', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nmz', 'Nawdm', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('naw', 'Nawuri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ndj', 'Ndamba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ndc', 'Ndau', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nde', 'Ndebele for Zimbabwe', 'nd', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ndz', 'Ndogo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ndl', 'Ndolo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nsn', 'Nehan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nif', 'Nek', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yrk', 'Nenets', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nep', 'Nepali', 'ne', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nzs', 'New Zealand Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('new', 'Newar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nij', 'Ngaju', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sba', 'Ngambay', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gng', 'Gangam', null, 'Ngangam')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('anc', 'Ngas', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zdj', 'Ngazidja Comorian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nga', 'Ngbaka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ngb', 'Ngbandi, Northern', null, 'Ngbanbi, Northern')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nbq', 'Nggem', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nnh', 'Ngiemboon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pls', 'Ngigua, San Marcos Tlacoyalco', null, 'Ngigua, San Marcos Tlalcoyalco')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nnq', 'Ngindo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('niy', 'Ndruna', null, 'Ngiti')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('acn', 'Ngochang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jgo', 'Ngomba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nla', 'Ngombale', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ngc', 'Ngombe (DRC)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ngp', 'Nguu', null, 'Ngulu')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nia', 'Nias', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('1ng', 'Nigeria Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pcm', 'Nigerian Pidgin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('1ng', 'Nigerian Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nsi', 'Nigerian Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nii', 'Nii', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gur', 'Ninkare', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nin', 'Ninzo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dap', 'Nisi (India)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cag', 'Nivaclé', null, 'Nivacle')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nko', 'Nkonya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gaw', 'Nobonob', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lem', 'Nomaande', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('not', 'Nomatsiguenga', null, 'Nomatsigenga')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('snf', 'Noon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nhu', 'Nooni', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tnn', 'Nen-naka', null, 'North Tanna')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bmm', 'Northern Betsimisaraka Malagasy', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gno', 'Northern Gondi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kqs', 'Northern Kissi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lrc', 'Northern Luri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('stb', 'Northern Subanen', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nod', 'กำเมือง', null, 'Northern Thai')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('twf', 'Northern Tiwa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('uzn', 'Northern Uzbek', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mxa', 'Northwest Oaxaca Mixtec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nor', 'Norsk', 'no', 'Norwegian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nob', 'Norwegian Bokmål', 'nb', 'Norwegian Bokmal')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ntr', 'Ntrubo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mor', 'Nuba Moro', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nus', 'Nuer', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nop', 'Numanggang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nut', 'Nung (Viet Nam)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nnw', 'Nuni, Southern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nup', 'Nupe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nwb', 'Nyaboa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mwn', 'Nyamwanga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nya', 'Nyanja', 'ny', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nih', 'Nyiha (Tanzania)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lid', 'Nyindrou', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nuj', 'Lunyole', null, 'Nyole')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nyu', 'Nyungwe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nzk', 'Nzakara', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nja', 'Nzanyi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nzb', 'Nzebi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mzi', 'Nzema', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nzi', 'Nzima', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ann', 'Obolo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kkc', 'Odoodee', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('eri', 'Ogea', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ojs', 'Ojibwe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ojb', 'Ojibwe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ojs', 'Ojibwe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('atg', 'Okphela', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('okr', 'Okrika', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('opm', 'Oksapmin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('oku', 'Oku', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ong', 'Olo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('luy', 'Oluluyia', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('omi', 'Omi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aom', 'Ömie', null, 'Omie')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('omw', 'Omwunra Toqura', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('omw', 'Omwunra Toqura', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('onr', 'Wolwale', null, 'One, Northern')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bsc', 'Oniyan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('onr', 'Onnele Goiniri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pap', 'O''othham', null, 'Oothham')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ore', 'Maijuna', null, 'Orej&oacute;n')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mti', 'Oren Maiwa (Papua New Guinea)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ori', 'Oriya', 'or', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('okv', 'Orokaiva', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hae', 'Oromo, Eastern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gaz', 'Oromo, West Central', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ury', 'Orya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('oss', 'Ossetic', 'os', 'Osetin')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tll', 'Otetela', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('otq', 'Otomí de Querétaro', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lot', 'Otuho', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('stn', 'Owa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('blk', 'Pa''o Karen', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sig', 'Paasaal', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pao', 'Paiute, Northern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pau', 'Palauan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('plw', 'Palawano, Brooke''s Point', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pam', 'Pampangan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tdb', 'Panchpargania', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pag', 'Pangasinan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pbo', 'Papel', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('prf', 'Paranan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pab', 'Parecis', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pbu', 'Pashto, Northern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pbc', 'Patamona', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ptp', 'Patep', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gfk', 'Patpatar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mfa', 'Pattani Malay', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pad', 'Paumari', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ata', 'Pele-Ata', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aoc', 'Pemon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pez', 'Penan Eastern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mvf', 'Peripheral Mongolian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pip', 'Pero', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lme', 'Peve', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pem', 'Phende', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pid', 'Piaroa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wes', 'Pidgin for Cameroon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pis', 'Pijin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pny', 'Pinyin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pir', 'Piratapuyo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pjt', 'Pitjantjatjara', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('plt', 'Plateau Malagasy', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pdt', 'Plautdietsch', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pdt', 'Plautdietsch', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pbi', 'Podoko', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('poy', 'Pogoro', null, 'Pogolo')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pon', 'Pohnpeian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pof', 'Poke', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('poh', 'Pokomchi, Eastern ', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pkb', 'Pokomo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pko', 'Pokoot', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('plj', 'Polci', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pol', 'Polski', 'pl', 'Polish')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pol', 'Polski', 'pl', 'Polish')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pow', 'Popoloca, San Felipe Otlaltepec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('poe', 'Ngiva, San Juan Atzingo', null, 'Popoloca, San Juan Atzingo')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pps', 'Ngigua, San Luís Temalacayuca', null, 'Popoloca, San Luis Temalacayuca')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('poh', 'Poqomchi Occidental', null, 'Poqomchi&rsquo;')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('por', 'Português', 'pt', 'Portuguese')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('por', 'Português', 'pt', 'Portuguese')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pui', 'Puinave', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fuc', 'Pulaar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('fuf', 'Pular', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pan', 'Punjabi', 'pa', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('puu', 'Punu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tsz', 'Purepecha', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kjp', 'Pwo Eastern Karen', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pwo', 'Pwo Western Karen', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('byx', 'Qaqet', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qva', 'Quechua Ambo-Pasco', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('quy', 'Quechua, Ayacucho', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qvc', 'Quechua, Cajamarca', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('quz', 'Quechua, Cuzco', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qve', 'Quechua, Eastern Apurímac', null, 'Quechua, Eastern Apurimac')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qub', 'Quechua, Huallaga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qvh', 'Quechua, Huamalies Dos de Mayo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qwh', 'Quechua, Huaylas', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qvw', 'Quechua, Huaylla Wanca', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('quf', 'Quechua, Lambayeque', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qvm', 'Quechua, Margos', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qul', 'Quechua, North Bolivian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qvn', 'Quechua, North Junin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qxn', 'Quechua, Northern Conchucos Ancash', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qxh', 'Quechua, Panao Huanuco', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qvs', 'Quechua, San Martin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('quh', 'Quechua, South Bolivian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qxo', 'Quechua, Southern Conchucos Ancash', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qup', 'Quechua, Southern Pastaza', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('quc', 'Quiche', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('quc', 'Quiche, Joyabaj', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('quc', 'Quiche, West Central', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qxr', 'Quichua Cañar Highland', null, 'Quichua Ca&ntilde;ar Highland')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qug', 'Quichua, Chimborazo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qvi', 'Quichua, Imbabura Highland', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qvo', 'Quichua, Napo Lowland', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qvz', 'Quichua, Northern Pastaza', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('qxl', 'Quichua, Salasaka Highland', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('quw', 'Quichua, Tena Lowland', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('chq', 'Quiotepec Chinantec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rjs', 'Rajbanshi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rjs', 'Rajbanshi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rki', 'Rakhine', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wra', 'Ramo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rai', 'Ramoaaina', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('thr', 'Rana Tharu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rnl', 'Ranglong', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rkt', 'Rangpuri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rap', 'Rapa Nui', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bgd', 'Rathwi Bareli', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rwo', 'Rawa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('raw', 'Rvwang', null, 'Rawang')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rej', 'Rejang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rej', 'Rejang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rel', 'Rendille', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rcf', 'Réunion Creole French', null, 'Reunion Creole French')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rmy', 'Romane, Vlax', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rml', 'Romani, Baltic', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rmc', 'Romani, East Slovak', null, 'Romani, Carpathian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rmo', 'Romani, Sinti', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ron', 'Român', 'ro', 'Romanian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rms', 'Romanian Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('onr', 'Rombar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rol', 'Romblomanon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('twu', 'Rote', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('roo', 'Rotokas', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rug', 'Roviana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bzw', 'Rubassa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pce', 'Ruching Palaung', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hay', 'Ruhaya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rbb', 'Rumai Palaung', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('klq', 'Rumu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nyn', 'Runyankore-Rukiga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nyo', 'Runyoro-Rutoro', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rus', 'Русский', 'ru', 'Russian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rus', 'Русский', 'ru', 'Russian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rsl', 'Russian Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rnd', 'Ruund', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('spy', 'Sabaot', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hvn', 'Sabu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sck', 'Sadani', null, 'Sadri')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('apz', 'Safeyoka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('saj', 'Sahu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('acf', 'Saint Lucian Creole', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('skg', 'Sakalava Malagasy', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('skq', 'Sakalava: Analalava', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('skq', 'Sakalava: Besalampy', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('skt', 'Sakata', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sbe', 'Saliba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sll', 'Salt-Yui', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('loe', 'Saluan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sse', 'Sama, Balangingi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('war', 'Samareno', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ccg', 'Samba Daka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ndi', 'Samba Leko', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sbl', 'Sambal, Botolan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xsb', 'Sambali', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ssx', 'Sembeleke', null, 'Samberigi')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('saq', 'Samburu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('smo', 'Samoan', 'sm', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rav', 'Sampang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sbd', 'San', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('icr', 'Islander Creole English', null, 'San Andres Creole')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('icr', 'San Andres Islander Creole', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('azg', 'San Pedro Amuzgo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zpf', 'San Pedro Quiatoni Zapotec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kwy', 'San Salvador Kongo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sng', 'Sanga (DRC)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('snl', 'Sangil', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sxn', 'Sangir', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sag', 'Sango', 'sg', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sny', 'Saniyo-Hiyewe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sat', 'Santhali', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sps', 'Saposa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mwm', 'Sar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('srm', 'Saramaccan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bps', 'Sarangani Blaan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('hns', 'Sarnami Hindi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sas', 'Sasak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bjj', 'SAUJI', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tuc', 'Saveeng, Oov', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tuc', 'Saveeng-Tuam', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('say', 'Saya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sey', 'Secoya', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tvw', 'Sedoa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('srr', 'Seereer', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sfw', 'Sehwi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ssg', 'Seimat', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lip', 'Sekpele', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('snw', 'Selee', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('spl', 'Selepet', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sea', 'Semai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sdm', 'Semandang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('seh', 'Chisena', null, 'Sena')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('swk', 'Chisena', null, 'Sena, Malawi')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('szg', 'Sengele', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sef', 'Senoufo, Cebaara', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dyi', 'Senoufo, Djimini', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('iws', 'Sepik Iwam', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('skr', 'Seraiki', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pse', 'Serawai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('srp', 'Serbian', 'sr', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sei', 'Seri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tsn', 'Setswana', 'tn', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ksb', 'Kishambala', null, 'Shambala')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('shn', 'Shan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sho', 'Shanga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mcd', 'Sharanahua', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('swv', 'Shekhawati', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bun', 'Sherbro', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xsr', 'Sherpa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('shr', 'Shi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('shk', 'Shilluk', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('shp', 'Shipibo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sna', 'Shona', 'sn', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sna', 'Shona', 'sn', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cjs', 'Shor', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jiv', 'Shuar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('snp', 'Siane (Komongu)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('snp', 'Siane (Lambau)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sid', 'Sidamo', null, 'Sidaama')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bla', 'Siksika', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('smt', 'Simte', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sml', 'Sinama', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('snc', 'Sinaugoro', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('snd', 'Sindhi', 'sd', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sin', 'Sinhala', 'si', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xsi', 'Sio', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('snn', 'Siona', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sri', 'Siriano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ssd', 'Siroi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sil', 'Sisaala, Tumulung', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sld', 'Sissala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sso', 'Sissano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ssw', 'Siswati', 'ss', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('akp', 'Siwu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('slk', 'Slovenčina', 'sk', 'Slovak')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('slv', 'Slovenian', 'sl', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xog', 'Lusoga', null, 'Soga')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('soy', 'Sola', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('som', 'Somali', 'so', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sop', 'Songe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ses', 'Songhay, Gao', null, 'Songhay, Koyraboro Senni')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('urw', 'Sob', null, 'Sop')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('srb', 'Sora', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nso', 'Sotho, Northern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sot', 'Sotho, Southern', 'st', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lnl', 'South Central Banda', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dib', 'Dinka, Agar-Bor', null, 'South Central Dinka')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nbl', 'South Ndebele', 'nr', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xsl', 'South Slavey', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ijs', 'Southeast Ijo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kmc', 'Southern Dong', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nqg', 'Southern Nago', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nab', 'Southern Nambikuára', null, 'Southern Nambikuara')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zsr', 'Southern Rincon Zapotec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ssb', 'Southern Sama', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sou', 'Thai, Southern', null, 'Southern Thai')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nwi', 'Nevhaar', null, 'Southwest Tanna')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('spa', 'Español', 'es', 'Spanish')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('csc', 'Spanish (Catalan) Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ssp', 'Spanish Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('srn', 'Sranan Tongo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ess', 'St. Lawrence Island Yupik', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lvs', 'Standard Latvian', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sto', 'Stoney', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('swp', 'Suau', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sxb', 'Suba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('skn', 'Subanon, Kolibugan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('suc', 'Subanon, Western', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tgo', 'Sudest', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sue', 'Suena', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('swi', 'Sui', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('suk', 'Sulka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wrs', 'Sumo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sun', 'Sundanese', 'su', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('suz', 'Sunuwar', null, 'Sunwar')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('spp', 'Supyire', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('suq', 'Suri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sjp', 'Surjapuri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sgz', 'Sursurunga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sus', 'Susu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ssw', 'Swati', 'ss', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('swe', 'Svenska', 'sv', 'Swedish')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('swe', 'Svenska', 'sv', 'Swedish')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('syl', 'Sylheti', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('syc', 'Syriac, Classical', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tap', 'Taabwa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tby', 'Tabaru', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tab', 'Tabassaran', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('knv', 'Tabo Aramia', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('knv', 'Tabo Fly River', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tna', 'Tacana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('shy', 'Tachawit', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tdy', 'Tadyawan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tgl', 'Tagalog', 'tl', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tgw', 'Tagbana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tah', 'Tahitian', 'ty', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('blt', 'Tai Dam', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tnq', 'Taino', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tbg', 'Tairora, North', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dav', 'Taita', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nan', 'Hokkien', null, 'Taiwanese')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tgk', 'Tajik', 'tg', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tbc', 'Takia', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nho', 'Takuu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tke', 'Takwane', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tlj', 'Lubwisi', null, 'Talinga-Bwisi')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tly', 'Talysh', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('taj', 'Tamang, Eastern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('taq', 'Tamasheq', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tzm', 'Tamazight, Central Atlas', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tam', 'தமிழ்', 'ta', 'Tamil')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tpm', 'Tampulma', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tdx', 'Tandroy-Mahafaly Malagasy', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tan', 'Tangale', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nmf', 'Tangkhul Naga', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tgp', 'Tangoa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tnc', 'Tanimuca-Letuama', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tza', 'Tanzanian Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tac', 'Tarahumara Baja', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rif', 'Tarifit', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yer', 'Tarok', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('shi', 'تاشلحيت', null, 'Tashelhayt')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ttr', 'Tatar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tat', 'Tatar', 'tt', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tav', 'Tatuyo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tpa', 'Taupota', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tsg', 'Tausug', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tbo', 'Tawala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ttq', 'Tawallammat Tamajaq', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bnj', 'Tawbuid, Eastern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tyz', 'Tày', null, 'Tay')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tbl', 'Tboli', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ttc', 'Tektiteko', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tlf', 'Telefol', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tel', 'Telugu', 'te', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kdh', 'Tem', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tbt', 'Tembo (Kitembo)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pah', 'Tenharim', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tee', 'Tepehua de Huehuetla', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tpp', 'Tepehua Pisaflores', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tpt', 'Tepehua Tlachichilco', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('stp', 'Tepehuan de Durango', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ntp', 'Tepehuán del Norte', null, 'Tepehuan del Norte')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cux', 'Tepeuxila Cuicatec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ter', 'Terena', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tfr', 'Teribe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tec', 'Terik', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tet', 'Tetum', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tha', 'ภาษาไทย', 'th', 'Thai')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('thk', 'Tharaka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tem', 'Themne', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bod', 'Tibetan', 'bo', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tca', 'Ticuna', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tig', 'Tigre', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tir', 'Tigrinya', 'ti', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tik', 'Tikar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tim', 'Timbe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('aoz', 'Timor Dakwan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tih', 'Timugon Murut', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tpz', 'Tinputz', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tic', 'Tira', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tiv', 'Tiv', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tix', 'Tiwa, Southern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ctl', 'Tlacoatzintepec Chinantec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tqo', 'Toaripi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tob', 'Toba Qom', null, 'Toba Sur')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tlb', 'Tobelo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ood', 'O''othham', null, 'Tohono O''odham')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('toj', 'Tojolabal', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tpi', 'Tok Pisin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jic', 'Tol', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lbw', 'Tolaki', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tod', 'Toma', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('txa', 'Tombonuo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tog', 'Tonga (Nyasa)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ton', 'Tongan', 'to', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sda', 'Toraja', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('top', 'Totonac Papantla', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('toc', 'Totonaco de Coyutla', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tos', 'Totonaco de la Sierra', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('neb', 'Toura', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('trn', 'Trinitario', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tri', 'Trio', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('trs', 'Triqui Chicahuaxtla', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('trc', 'Triqui, San Juan Copala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('trc', 'Triqui, San Juan Copala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('trq', 'Triqui, San Martín Itunyoso', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tkr', 'Tsakhur', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xsu', 'Sanumá', null, 'Tsanuma')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tsj', 'Tshangla', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lub', 'Tshiluba', 'lu', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kdl', 'Tsikimba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cas', 'Tsimane', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cas', 'Tsimane', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tsw', 'Tsishingini', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tso', 'Tsonga', 'ts', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tvd', 'Tsuvadi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tuo', 'Tucano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tuo', 'Tukano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tul', 'Tula', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tcy', 'Tulu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('iou', 'Tuma-Irumu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tmc', 'Tumak', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tuf', 'U''wa', null, 'Tunebo, Central')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('lcm', 'Tungag', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tui', 'Tupuri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tuz', 'Turka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tuv', 'Turkana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tur', 'Türkçe', 'tr', 'Turkish')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tuk', 'Turkmen', 'tk', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tru', 'Turoyo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tyv', 'Tuvin', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ifk', 'Tuwali Ifugao', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bov', 'Tuwuli', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tue', 'Tuyuca', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('kcg', 'Tyap', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tzh', 'Tzeltal, Bachajon', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tzh', 'Tzeltal, Oxchuc', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tzo', 'Tzotzil, Chamula', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tzo', 'Tzotzil, Chenalho', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tzj', 'Tzutujil, Eastern', null, 'Tzutijil Santtiago Atitlan')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tzt', 'Tzutujil, Western', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('waw', 'UaiUai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ubr', 'Ubir', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('udm', 'Udmurt', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('udu', 'Uduk', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ugn', 'Ugandan Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ukr', 'українська', 'uk', 'Ukrainian')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ukl', 'Ukrainian Sign Language', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ppk', 'Uma', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gdn', 'Umanakaina', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ubu', 'Umbu Ungu - Andelale', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ubu', 'Umbu Ungu Kala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ubu', 'Umbu Ungu No Penge', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('umb', 'Umbundu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('urk', 'Urak Lawoi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('url', 'Urak Lawoi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ura', 'Urarina', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('urd', 'Urdu', 'ur', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('urh', 'Urhobo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('uri', 'Urim', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('upv', 'Uripiv', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wnu', 'Usan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('usa', 'Usarufa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('usp', 'Uspanteco', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ui1', 'Уйғурчә', null, 'Uyghur (Central Asia)')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('uig', 'Uyghur (China)', 'ug', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('uzn', 'Uzbek, Northern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('uzs', 'Uzbek, Southern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('vag', 'Vagla', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('vai', 'Vai', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('vas', 'Vasavi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ven', 'Venda', 've', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('vid', 'Vidunda', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('vie', 'Tiếng Việt', 'vi', 'Vietnamese')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('vif', 'Vili', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('svc', 'Vincentian Creole English', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('vic', 'Crucian Creole', null, 'Virgin Islands Creole English')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('vut', 'Vute', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('prk', 'Wa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wbm', 'Wa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wwa', 'Waama', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('waj', 'Waffa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rro', 'Waima', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bao', 'Waimaja', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wja', 'Waja', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wlx', 'Wali (Ghana)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wnc', 'Wantoat', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('auc', 'Waorani', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('juk', 'Wapan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wap', 'Wapishana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wba', 'Warao', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wrs', 'Waris', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wji', 'Warji', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wsk', 'Waskia', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wtk', 'Watakataui', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wau', 'Waurá', null, 'Waura')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('oym', 'Wayampi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('way', 'Wayana', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('guc', 'Wayuu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gxx', 'Wè Southern', null, 'We Southern')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wob', 'We, Northern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wed', 'Wedau', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mtp', 'Weenhayek', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wew', 'Wejewa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cym', 'Cymraeg', 'cy', 'Welsh')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wer', 'Weri', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('bgn', 'Western Balochi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gnw', 'Guaraní, Western Bolivian', null, 'Western Bolivian Guaraní')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('cja', 'Western Cham', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gvr', 'Western Gurung', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('mrd', 'Western Magar', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ojw', 'Western Ojibwa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pnb', 'Western Panjabi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tdg', 'Western Tamang', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('twb', 'Tawbuid', null, 'Western Tawbuid')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gdr', 'Wipi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wiu', 'Wiru', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wal', 'Wolaitta', null, 'Wolaytta')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wal', 'Wolaitta', null, 'Wolaytta')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wal', 'Wolaitta', null, 'Wolaytta')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wol', 'Wolof', 'wo', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('noa', 'Wounaan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wuu', 'Wu Chinese', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ywq', 'Wuding-Luquan Yi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wuv', 'Wuvulu-Aua', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('xav', 'Xavante', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('rng', 'Ronga', null, 'Xhirhonga')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tso', 'Tsonga', 'ts', 'Xichangana')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('tsc', 'Xitshwa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('jae', 'Yabem', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yad', 'Yagua', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('axk', 'Yaka (CAR)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yaf', 'Yaka (DRC)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yka', 'Yakan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('sah', 'Yakut', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yba', 'Yala', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yli', 'Yali, Angguruk', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yal', 'Yalunka', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yam', 'Yamba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yat', 'Yambeta', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yaa', 'Yaminahua', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ame', 'Yanesha', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('wca', 'Yanomami Sanumá', null, 'Yanomami Sanuma')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('guu', 'Yanomamö', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yns', 'Yansi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yre', 'Yaouré', null, 'Yaour&eacute;')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yaq', 'Yaqui', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yrb', 'Yareba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yuw', 'Yau (Morobe Province)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yva', 'Yawa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yby', 'Yaweyuha', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yle', 'Yele', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ybb', 'Yemba', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yeu', 'Yerukula', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yss', 'Yessan-Mayo Yamano', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yss', 'Yessan-Mayo Yuwu', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ydd', 'Yiddish, Eastern', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pib', 'Yine', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('byr', 'Yipma (Baruya)', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gud', 'Yocoboué Dida', null, 'Yocobou&eacute; Dida')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('pil', 'Yom', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yom', 'Yombe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yon', 'Yongkom', null, 'Yonggom')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yut', 'Yopno', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yor', 'Yoruba', 'yo', null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ycn', 'Yucuna', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('yuz', 'Yuracare', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('atb', 'Zaiwa', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zak', 'Zanaki', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zne', 'Zande', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zpc', 'Zapotec Choapan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zca', 'Zapotec Coatecas Altas', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zad', 'Zapotec de Yaganiza', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zar', 'Zapotec del Rincón', null, 'Zapotec del Rincon')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zaq', 'Zapotec de Aloápam', null, 'Zapotec, Aloapam')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zpv', 'Zapotec, Chichicapan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zae', 'Zapotec, Yareni', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zas', 'Zapoteco de Albarradas', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zpo', 'Zapoteco de Amatlan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zpl', 'Zapoteco de Lachixio ', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zpm', 'Zapoteco de Mixtepec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zac', 'Zapoteco de Ocotlan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zao', 'Zapoteco de Ozolotepec', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ztq', 'Zapoteco de Quioquitani', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zab', 'Zapoteco de San Juan Guelavia', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zpt', 'Zapoteco de San Vicente Coatlán', null, 'Zapoteco de San Vicente Coatlan')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zpi', 'Zapoteco de Santa María Quiegolani', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zpz', 'Zapoteco de Texmelucan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zpu', 'Zapoteco de Yalalag', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zty', 'Zapoteco de Yatee', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zpq', 'Zapoteco de Zoogocho', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zai', 'Zapoteco del Istmo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zam', 'Zapoteco, Central Miahuatlan', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zaw', 'Zapoteco, Mitla', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zaa', 'Zapoteco, Sierra Juárez', null, 'Zapoteco, Sierra Juarez')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zav', 'Zapoteco, Yatzachi', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('dje', 'Zarma', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zyb', 'Zhuang, Yongbei', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zia', 'Zia', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('ziw', 'Zigula', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zin', 'Zinza', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zos', 'Zoque de Francisco León', null, 'Zoque de Francisco Leon')
-INSERT INTO Language (iso, name, iso1, english) VALUES ('gnd', 'Zulgo', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zun', 'Zuni', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('zyp', 'Zyphe', null, null)
-INSERT INTO Language (iso, name, iso1, english) VALUES ('nog', 'Nogai', null, 'Ногай')
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cou', 'Wamey', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lgl', 'Wala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pnn', 'Pinai-Hagahai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tsv', 'Tsogo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zaj', 'Zaramo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aiw', 'Aari', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aau', 'Abau', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('abi', 'Abidji', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kgr', 'Abun', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('knj', 'Akateko', null, 'Acateco');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ace', 'Aceh', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ace', 'Aceh', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('acr', 'Achí', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aca', 'Achagua', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('guq', 'Aché', null, 'Ache');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('acc', 'Achi de Cubulco', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ach', 'Acholi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('acu', 'Achuar-Shiwiar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ada', 'Adangme', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ade', 'Adele', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('adi', 'Adi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('adj', 'Adioukrou', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ort', 'Adivasi Oriya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ady', 'Adyghe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('adz', 'Adzera', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aar', 'Afar', 'aa', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('afr', 'Afrikaans', 'af', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('agd', 'Agarabi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('agx', 'Aghul', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('duo', 'Agta Dupaninan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('due', 'Agta Umiray Dumaget', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('apf', 'Agta, Palanan', null, 'Agta, Pahanan');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('agu', 'Aguacateco', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('agn', 'Agutaynen', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ajg', 'Aja (Benin)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aka', 'Akan', 'ak', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aka', 'Akan: Akuapem', 'ak', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aka', 'Akan: Asante', 'ak', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aka', 'Akan: Fante', 'ak', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ake', 'Akawaio', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aeu', 'Akeu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ahk', 'Akha ', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('akl', 'Aklanon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bss', 'Akoose', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('alw', 'Alaba-K''abeena', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mim', 'Mixtec, Alacatlatzala', null, 'Alacatlatzala Mixtec');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('amp', 'Alamblak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('alj', 'Alangan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sqi', 'Shqip', 'sq', 'Albanian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gah', 'Alekano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ald', 'Alladian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('alt', 'Altai, Southern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('alp', 'Alune', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('alz', 'Alur', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('amm', 'Ama (Papua New Guinea)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('amn', 'Amanab', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('amr', 'Amarakaeri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aaz', 'Amarasi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('amk', 'Ambai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('abt', 'Ambulas-Maprik', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('abt', 'Ambulas-Wosera-Kamu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('adx', 'Amdo Tibetan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aey', 'Amele', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ase', 'American Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ase', 'American Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ifa', 'Central Ifugao', null, 'Amganad Ifugao');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('amh', 'Amharic', 'am', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('amu', 'Amuzgo de Guerrero', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('anw', 'Anaang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aby', 'Aneme Wake', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('agm', 'Angaataha', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('akh', 'Angal Heneng', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('anp', 'Angika', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('anp', 'Angika', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('agg', 'Angor', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('boj', 'Anjam', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aak', 'Angave', null, 'Ankave');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aig', 'Antigua and Barbuda Creole English', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ify', 'Antipolo Ifugao', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('anu', 'Anuak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cko', 'Anufo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aui', 'Anuki', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('any', 'Agni Sanvi', null, 'Anyin');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ena', 'Apal', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('apn', 'Apinayé', null, 'Apinaye');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('apu', 'Apurinã', null, 'Apurina');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('arl', 'Arabela', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('acm', 'العربية', null, 'Arabic');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aec', 'العربية', null, 'Arabic');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('afb', 'العربية', null, 'Arabic');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('apd', 'العربية', null, 'Arabic');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ara', 'العربية', 'ar', 'Arabic');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('arb', 'العربية', null, 'Arabic');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('arz', 'العربية', null, 'Arabic');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('shu', 'العربية', null, 'Arabic');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('atq', 'Aralle-Tabulahan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('stk', 'Arammba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('arp', 'Arapaho', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aon', 'Arapesh Bumbita', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mwc', 'Are', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aai', 'Arifama-Miniafia', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('luc', 'Aringa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hye', 'Armenian Western', 'hy', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('apr', 'Arop-Lokep', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aps', 'Arop-Sissano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aia', 'Arosi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('msy', 'Aruamu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cjo', 'Ashéninka Pajonal', null, 'Ash&eacute;ninka Pajonal');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cni', 'Ashaninca', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cpb', 'Asheninka Ucayali-Yurua', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('csh', 'Asho Chin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('asm', 'Assamese', 'as', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aii', 'Assyrian Neo-Aramaic', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('teo', 'Ateso', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('avt', 'Au', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kud', 'Kurux', null, 'Auhelawa');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('djk', 'Aukaans', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ava', 'Avar', 'av', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('avn', 'Sideme', null, 'Avatime');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('avi', 'Avikam', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('avu', 'Avokaya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kwi', 'Awa for Ecuador', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('awb', 'Awa for Papua New Guinea', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('awa', 'Awadhi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('agr', 'Awajun', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('awo', 'Awak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('awx', 'Awara', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('auy', 'Awiyaana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('awn', 'Awngi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ifb', 'Ayangan Ifugao', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ayr', 'Aymara, Central', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ayo', 'Ayoré', null, 'Ayore');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sgb', 'Ayta Mag-antsi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('azj', 'Azərbaycan, Şimali', null, 'Azerbaijani, North');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('azb', 'Azərbaycan, Cənubi', null, 'Azerbaijani, South');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aza', 'Azha', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mpg', 'Azumeina', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bav', 'Babungo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bcy', 'Bacama', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bhz', 'Bada', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bfq', 'Badaga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ozm', 'Badwe''e', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bvc', 'Baelelea', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ksf', 'Bafia ', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bfd', 'Bafut', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bsp', 'Ambai', null, 'Baga Sitemu');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bfy', 'Bagheli', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bgq', 'Bagri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('btd', 'Bahasa Pakpak Dairi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pmf', 'Bahasa Taa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bdq', 'Bahnar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bdh', 'Baka (Sudan)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bkq', 'Bakairí', null, 'Bakairi');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bqi', 'Bakhtiari', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ble', 'Balanta-Kentohe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('blz', 'Balantak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ban', 'Balinese', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('krc', 'Balkar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bcc', 'Balochi, Southern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bcc', 'بلؤچی', null, 'Balochi, Southern');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bft', 'Balti', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ptu', 'Bambam', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bam', 'Bambara', 'bm', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bax', 'Bamun', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bcw', 'Bana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('liy', 'Banda-Bambari', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bza', 'Bandi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bqj', 'Bandial', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bxg', 'Bangala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bgz', 'Banggai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bsj', 'Bangwinji', null, 'Bangjinge');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bjn', 'Banjar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bjn', 'Banjar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lmn', 'Banjara (Lambadi)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('amf', 'Banna', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bap', 'Bantawa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bno', 'Bantoanon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bci', 'Baoulé', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bhr', 'Bara Malagasy', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bbb', 'Barai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mlp', 'Bargam', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bfa', 'Bari', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bch', 'Bariai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bba', 'Bariba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bak', 'Bashkir', 'ba', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bst', 'Basketo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bas', 'Bassa for Cameroon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bsq', 'Bassa for Liberia', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bud', 'Bassar Ntcham', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('akb', 'Batak Angkola', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('btx', 'Batak Karo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bts', 'Batak Simalungun', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bbc', 'Batak Toba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bge', 'Bauria', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bvz', 'Bauzi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bgr', 'Bawm', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bda', 'Bayot', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bfr', 'Bazigar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('beo', 'Beami', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('beq', 'Beembe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dbj', 'Begak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bep', 'Behoa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bkv', 'Bekwarra', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bel', 'Belarusian', 'be', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('blm', 'Jur Beli', null, 'Beli (Sudan)');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bzj', 'Belize Kriol', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('blh', 'Belleh', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yun', 'Bena (Nigeria)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bez', 'Bena (Tanzania)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bef', 'Benabena', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bcq', 'Bench', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ben', 'Bengali', 'bn', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bkl', 'Berik', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bom', 'Berom', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bew', 'Betawi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bev', 'Bete, Daloa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('btt', 'Bete-Bendi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kap', 'Бежкьалас миц', null, 'Bezhta');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bhd', 'Bhadrawahi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bgw', 'Bhatri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bhb', 'Bhili', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bho', 'Bhojpuri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bho', 'Bhojpuri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bhw', 'Biak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('beh', 'Biali', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('big', 'Biangai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('biu', 'Biate', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bcl', 'Bicolano, Central', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bjg', 'Bijago', null, 'Bidyogo');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bhp', 'Bima', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bhl', 'Bimin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bim', 'Bimoba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bon', 'Bine', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bkd', 'Binukid', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bjr', 'Binumarien', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bfo', 'Birifor, Northern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('biv', 'Birifor, Southern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bis', 'Bislama', 'bi', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bib', 'Bissa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bzi', 'Bisu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mux', 'Bo-Ung', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bwq', 'Bobo Madare, Southern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bqc', 'Illo Busa', null, 'Boko');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bqc', 'Boo', null, 'Boko');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bus', 'Bokobaru', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bdt', 'Bhogoto', null, 'Bokoto');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bky', 'Bokyi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bnp', 'Bola', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bvl', 'Bolivian Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bdg', 'Bonggi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bot', 'Bongo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bmq', 'Boomu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('boa', 'Bora', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gax', 'Borana (Oromo)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gai', 'Mborena Kam', null, 'Borei');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('brx', 'Boro', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ksr', 'Borong', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bor', 'Borôro', null, 'Bororo');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bos', 'Bosnian', 'bs', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wra', 'Bouni Barupu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wra', 'Bouni Pou', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pcc', 'Bouyei Zhenningxian', null, 'Bouyei');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('brh', 'Brahui', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bra', 'Braj', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bzs', 'Brazilian Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bzd', 'Bribri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bru', 'Bru Eastern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('box', 'Buamu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mmo', 'Buang - Mangga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bzh', 'Buang, Central', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('buu', 'Budu: Koya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('buu', 'Budu: Nita', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bug', 'Bugis', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sab', 'Buglere', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bku', 'Buhid', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ubl', 'Buhi''non Bikol', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('buk', 'Bukawa - Bugawa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ape', 'Bukiyip', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bxk', 'Bukusu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bul', 'български', 'bg', 'Bulgarian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bul', 'български', 'bg', 'Bulgarian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bwu', 'Buli', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bum', 'Bulu for Cameroon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bmv', 'Bum', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bdd', 'Bunama', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bns', 'Bundeli', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bwr', 'Bura', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bys', 'Burak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mya', 'Burmese', 'my', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bmu', 'Burum-Mindik', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('1bi', 'Burundian Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bxr', 'Buryat', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bqp', 'Bisã', null, 'Busa');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tte', 'Bwanabwana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dri', 'C''lela', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cjp', 'Cabecar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cbv', 'Cacua', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ckb', 'Cakchiquel Santo Domingo Xenacoj', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cak', 'Cakchiquel, Central', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cak', 'Cakchiquel, Santa  Maria de Jesus', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cak', 'Cakchiquel, South Central', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cak', 'Cakchiquel, Western', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cak', 'Cakchiquel, Yepocapa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rab', 'Camling', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kbh', 'Camsa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ram', 'Canela', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ram', 'Canela', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kaq', 'Capanahua', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cot', 'Caquinte', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cbc', 'Carapana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('car', 'Carib', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cat', 'Catalan', 'ca', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ceb', 'Cebuano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('khm', 'Central Khmer', 'km', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ckb', 'Central Kurdish', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cmo', 'Bunong', null, 'Central Mnong');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pbs', 'Central Pame', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tar', 'Central Tarahumara', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cme', 'Cerma', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cbi', 'Chachi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ccp', 'Chakma', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cld', 'Chaldean Neo-Aramaic', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ceg', 'Chamacoco', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cdh', 'Chambeali', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cha', 'Chamorro', 'ch', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('asa', 'Chasu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cta', 'Chatino de Tataltepec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cly', 'Chatino Lachao Yolotepec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cya', 'Chatino Nopala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ctp', 'Chatino, Zona Alta Occidental', null, 'Chatino, Western Highland');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hne', 'Chhattisgarhi', null, 'Chattisgarhi');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cbk', 'Chavacano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cbk', 'Chavacano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cbt', 'Shawi', null, 'Chayahuita');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('che', 'Chechen', 'ce', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('chr', 'Cherokee', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bem', 'Chibemba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nyj', 'Chichewa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gog', 'Chigogo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kdn', 'Chikunda', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('clc', 'Chilcotin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('clc', 'Chilcotin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cfm', 'Chin Bualkhaw', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('czt', 'Chin Zotung', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mwq', 'Chin, Cho', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cfm', 'Chin, Falam', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cnh', 'Chin, Haka', null, 'Chin, Hakha');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cnk', 'Chin, Matu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hlt', 'Chin, Matu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cmr', 'Chin, Mro-Khimi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cnw', 'Chin, Ngawn', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pck', 'Chin, Paite', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ctd', 'Chin, Tiddim', null, 'Chin, Tedim');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ctd', 'Zokam', null, 'Chin, Tedim');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tcz', 'Chin, Thado', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('chz', 'Chinantec de Ozumacin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('chj', 'Chinantec Ojitlán', null, 'Chinantec Ojitl&aacute;n');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cco', 'Chinanteco de Comaltepec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cpa', 'Chinanteco de Palantla', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cnl', 'Chinanteco de San Juan Lalana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cle', 'Chinanteco de San Juan Lealao', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cso', 'Chinanteco de Sochiapan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cnt', 'Chinanteco de Tepetotutla', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cuc', 'Chinanteco de Usila', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zho', '中国的 - 中國的', 'zh', 'Chinese');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yue', 'Chinese Cantonese', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yue', 'Chinese Cantonese', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('chk', 'Chinese Mandarin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cmn', 'Chinese Mandarin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cmn', 'Chinese Mandarin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('csl', 'Chinese Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yue', '廣東話', null, 'Chinese, Cantonese');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('chk', '中文', null, 'Chinese, Mandarin');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cmn', '中文', null, 'Chinese, Mandarin');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hsn', 'Chinese, Xiang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cap', 'Chipaya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('chp', 'Dene', null, 'Chipewyan');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cax', 'Chiquitano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cdf', 'Chiru', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('toi', 'Chitonga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ctg', 'Malmusch', null, 'Chittagonian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tum', 'Chitumbuka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yao', 'Chiyao', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cdi', 'Chodri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cjk', 'Chokwe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ctu', 'Chol Tumbala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('chf', 'Chontal, Tabasco', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cce', 'Txitxopi', null, 'Chopi');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('caa', 'Chorti', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cje', 'Chru', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cjv', 'Chuave', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cac', 'Chuj, San Mateo Ixtatan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cac', 'Chuj, San Sebastian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ckt', 'Chukot', null, 'Chukchi');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ncu', 'Chumburung', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('chk', 'Chuukese', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('chv', 'Chuvash', 'cv', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('chw', 'Chwabo', null, 'Chuwabu');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('asg', 'Cishingini', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('con', 'Cofan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('csn', 'Colombian Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cof', 'Colorado', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('crn', 'Cora, El Nayar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('crn', 'Cora, Presidio de los Reyes', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cok', 'Cora, Santa Teresa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cor', 'Cornish', 'kw', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('csr', 'Costa Rican Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('crk', 'Cree, Plains', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('crs', 'Creole French, Sesselwa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('crh', 'Crimean Tatar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pov', 'Crioulo, Upper Guinea', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hrv', 'Hrvatski', 'hr', 'Croatian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hbs', 'Croatian', 'sh', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mfn', 'Cross River Mbembe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cro', 'Crow', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cub', 'Cubeo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cui', 'Cuiba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cul', 'Culina', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kpc', 'Curripaco', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kpc', 'Curripaco', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ces', 'česky', 'cs', 'Czech');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dsh', 'Daasanach', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dbq', 'Daba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mps', 'Dadibi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mps', 'Dadibi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dbd', 'Dadiya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dgz', 'Daga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dga', 'Dagaare, Southern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dgi', 'Dagara, Northern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dag', 'Dagbani', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('daf', 'Dan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('daf', 'Dan, East', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('daf', 'Dan, West', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('daq', 'Dandami Maria', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('daa', 'Dangaléat', null, 'Dangaleat');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('thl', 'Dangaura Tharu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ada', 'Dangme', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dnw', 'Lani', null, 'Dani, Western');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dan', 'Dansk', 'da', 'Danish');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aso', 'Dano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dar', 'Dargwa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('prs', 'Dari', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dln', 'Darlong', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tcc', 'Datooga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dta', 'Daur', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dww', 'Dawawa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dwr', 'Dawro', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mhy', 'Dayak Ma''anyan', null, 'Dayak  Maanyan');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('otd', 'Dayak Ot Danum', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dzg', 'Dazaga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dcc', 'Deccan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ded', 'Dedua', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mzw', 'Deg', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ddn', 'Dendi (Benin)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('anv', 'Denya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kna', 'Dera (Nigeria)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('des', 'Desano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dhn', 'Dhanki', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mki', 'Dhatki', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('div', 'Dhivehi', 'dv', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('adh', 'Dhopadhola', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gud', 'Dida, Yocoboué', null, 'Dida, Yocobou&eacute;');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('did', 'Didinga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('did', 'Didinga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mhu', 'Digaro-Mishmi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dig', 'Digo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('oss', 'Digor', 'os', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dur', 'Dii', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cfa', 'Dijim-Bwilim', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dis', 'Dimasa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dip', 'Dinka, Padang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dik', 'Dinka, Rek', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gdl', 'Dirasha', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tbz', 'Ditammari', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dob', 'Dobu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dts', 'Dogon, Toroso', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dos', 'Dogosé', null, 'Dogos&eacute;');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dgo', 'Dogri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dgr', 'Tlicho', null, 'Dogrib');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kqc', 'Doromu-Koki', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dua', 'Douala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dow', 'Doyayo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dud', 'Dukanci', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dng', 'Dungan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mvp', 'Duri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dug', 'Duruma', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pci', 'Duruwa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dtp', 'Dusun, Central', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nld', 'Nederlands', 'nl', 'Dutch');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jen', 'Dzə', null, 'Dza');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dzo', 'Dzongkha', 'dz', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bgp', 'Eastern Balochi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ike', 'Eastern Canadian Inuktitut', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cjm', 'Eastern Cham', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('otm', 'Eastern Highland Otomi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kqo', 'Eastern Krahn', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mgp', 'Eastern Magar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('emk', 'Eastern Maninkakan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bnj', 'Eastern Tawbuid', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('igb', 'Ebira', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ebr', 'Ebrié', null, 'Ebrie');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bin', 'Edo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('etr', 'Edolo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bsn', 'Eduria-Barasana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('efi', 'Efik', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ego', 'Eggon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('eip', 'Bahasa Lik', null, 'Eipomek');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('etu', 'Ejagham', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('eja', 'Jola-Felupe', null, 'Ejamat');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('eka', 'Ekajuk', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('guz', 'Ekegusii', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('elm', 'Eleme', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ycl', 'Elo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('emp', 'Embera, Northern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cto', 'Embera Katio', null, 'Embera-Catio');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pbh', 'E''ñapa Woromaipu', null, 'Enapa Woromaipu');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('enq', 'Enga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('eng', 'English', 'en', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('eng', 'English', 'en', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('eng', 'English, Australian', 'en', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('eng', 'English, Native American', 'en', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('leg', 'Enhlit', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('enx', 'Enxet', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sja', 'Epera pedee', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mcq', 'Ese', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ese', 'Ese Ejja', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ekk', 'Estonian, Standard', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('eth', 'Ethiopian Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('eus', 'Euskara', 'eu', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('evn', 'Evenki', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nou', 'Ewage-Notu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ewe', 'Ewe', 'ee', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ewo', 'Ewondo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('eza', 'Ezaa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('izi', 'Ezaa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fab', 'Fa D''ambu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fai', 'Faiwol', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gel', 'Fakai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fal', 'Fali, South', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fng', 'Fanagalo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fan', 'Fang ', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fmu', 'Gaita Koitor', null, 'Far Western Muria');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fao', 'Faroese', 'fo', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fas', 'فارسی', 'fa', 'Farsi, Western');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('faa', 'Fasu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('far', 'Fataleka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hif', 'Fiji-Hindi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fij', 'Fijian', 'fj', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aoj', 'Filifita', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fin', 'Suomi', 'fi', 'Finnish');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fip', 'Kifipa', null, 'Fipa');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ppo', 'Folopa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fon', 'Fon (Fongbe)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('frd', 'Fordata', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('for', 'Fore', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gur', 'Frafra', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fra', 'Français', 'fr', 'French');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fra', 'Français', 'fr', 'French');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fsl', 'French Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fub', 'Fulfulde, Adamawa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fub', 'Fulfulde, Adamawa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fue', 'Fulfulde, Borgu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fuh', 'Fulfulde, Burkina Faso', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fuq', 'Fulfulde, Central Eastern Niger', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ffm', 'Fulfulde, Maasina', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fuv', 'Fulfulde, Nigerian (Caka)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fuv', 'Fulfulde, Nigerian (Caka)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fuh', 'Fulfulde, Western Niger', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('flr', 'Fuliiru', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gaa', 'Ga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gqa', 'Ga''anda', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gla', 'Gaelic, Scottish', 'gd', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gag', 'Gagauz', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gbi', 'Galela', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('glg', 'Galician', 'gl', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gbl', 'Gamit', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gmv', 'Gamo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pwg', 'Gapapaiwa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gbm', 'Garhwali', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cab', 'Garifuna', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('grt', 'Garo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gvo', 'Gavião Do Jiparaná', null, 'Gaviao Do Jiparana');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wbj', 'Gawali', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gbr', 'Gbagyi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ggu', 'Gban', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gby', 'Gbari', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gya', 'Gbaya, Northwest', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gso', 'Gbaya, Southwest', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gbp', 'Gbaya-Bossangoa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ggb', 'Base', null, 'Gbii');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hmj', 'Ge', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('drs', 'Gedeo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kat', 'ქართულ', 'ka', 'Georgian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kat', 'Georgian', 'ka', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('deu', 'Deutsch', 'de', 'German');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('deu', 'Deutsch', 'de', 'German');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gse', 'Ghanaian Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bmk', 'Ghayavi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bbj', 'Ghomala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gid', 'Gidar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kiu', 'Gikuyu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kik', 'Gikuyu', 'ki', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gwj', 'Gikwe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('acd', 'Gikyode', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('glk', 'Gilaki', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bbr', 'Girawa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nyf', 'Giryama', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('toh', 'Gitonga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gom', 'Goan Konkani', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ank', 'Goemai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gof', 'Goffa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gof', 'Goffa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kuh', 'Goji', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gkn', 'Gokana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gol', 'Gola', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gvf', 'Golin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gjn', 'Gonja', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gqr', 'Gor', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gor', 'Gorontalo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gux', 'Gulmancema', null, 'Gourmanchema');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gbo', 'Grebo, Northern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ell', 'Greek', 'el', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gcf', 'Guadeloupean Creole French', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('guh', 'Guahibo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gub', 'Guajajára', null, 'Guajajara');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gum', 'Guambiano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gvc', 'Guanano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gui', 'Guarani, Bolivian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gun', 'Guarani, Mbya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gug', 'Guarani, Paraguayan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gyr', 'Guarayo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('guo', 'Guayabero', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gym', 'Guaymi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gde', 'Gude', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ghs', 'Guhu-Samane', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bet', 'Guiberoua Béte', null, 'Guiberoua Bete');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('giz', 'Guiziga, South', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('guj', 'Gujarati', 'gu', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gax', 'Guji', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gvl', 'Gulei', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('guk', 'Gumuz', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('guw', 'Gun-Gbe', null, 'Gun-Alada');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sgw', 'Gurage Chaha ', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('goa', 'Guro', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gyn', 'Guyanese Creole English', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dah', 'Gwahatike', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gwi', 'Gwichʼin', null, 'Gwichin');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gji', 'Gyazi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hdy', 'Hadiyya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hoj', 'Hadothi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hat', 'Kreyòl ayisyen', 'ht', 'Haitian Creole');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('haj', 'Hajong', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hak', 'Hakka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hak', 'Hakka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hlb', 'Halbi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hla', 'Halia', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hag', 'Hanga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wos', 'Hanga Hundi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hnn', 'Hanunoo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bgc', 'Haryanvi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hau', 'Hausa', 'ha', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hau', 'Hausa', 'ha', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('haz', 'Hazaragi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xed', 'Hdi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('heb', 'עברית', 'he', 'Hebrew');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nix', 'Hema', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hem', 'Hemba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('her', 'Herero', 'hz', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hig', 'Higgi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('poi', 'Popoluca de la Sierra', null, 'Highland Popoluca');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hil', 'Hiligaynon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hin', 'Hindi', 'hi', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hin', 'Hindi', 'hi', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hin', 'हिंदी', 'hi', 'Hindi');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hno', 'Hindko, Northern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hix', 'Hixkaryána', null, 'Hixkaryana');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mww', 'Hmong Daw', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hnj', 'Hmong Njua', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hoc', 'Ho', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hop', 'Hopi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hot', 'Hote', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hre', 'Hre', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hub', 'Huambisa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('var', 'Huarijio', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hus', 'Huasteco, Veracruz', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mau', 'Huautla Mazatec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('huv', 'Huave de San Mateo del Mar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hbb', 'Huba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('czh', 'Hui', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hch', 'Huichol', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('huu', 'Huitoto Murui', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hto', 'Huitoto, Minica', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hui', 'Huli', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hum', 'Hungana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hun', 'Magyar', 'hu', 'Hungarian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hwo', 'Hwona', null, 'Hwana');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yml', 'Iamalele', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ian', 'Iatmul', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ibl', 'Ibaloi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('iba', 'Iban', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ibg', 'Ibanag', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ibb', 'Ibibio', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('isl', 'Icelandic', 'is', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('idu', 'Idoma', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('viv', 'Iduna', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ife', 'Ifè', null, 'Ife');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('igl', 'Igala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ibo', 'Igbo', 'ig', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ige', 'Igede', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ign', 'Ignaciano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ahl', 'Igo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ikk', 'Ika', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kpo', 'Ikposo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('iqw', 'Ikwo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ilo', 'Ilocano', null, 'Ilokano');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('imo', 'Imbongu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aps', 'Indian (Andhra Pradesh) Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('2in', 'Indian (Karnataka) Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('1in', 'Indian (Kerala) Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tnq', 'Indian (Tamil Nadu) Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ind', 'Indonesian', 'id', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ind', 'Indonesian', 'id', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('inb', 'Inga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('inh', 'Ingush', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ino', 'Inoke-Yate', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('esk', 'Inupiaq', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ipi', 'Ipili', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('iry', 'Iraya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('iri', 'Irigwe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('iru', 'Irula', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xho', 'Isixhosa', 'xh', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zul', 'Isizulu', 'zu', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('isd', 'Isnag', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('iso', 'Isoko', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ita', 'Italiano', 'it', 'Italian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('itv', 'Itawit', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('itl', 'Itelmen', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('itl', 'Itelmen', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('its', 'Itsekiri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ium', 'Iu Mien', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kbm', 'Iwal', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ixl', 'Ixil', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ixi', 'Ixil', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ixl', 'Ixil', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nca', 'Iyo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('izr', 'Izere', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('izr', 'Izere', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('izi', 'Izi-Ezaa-Ikwo-Mgbo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('izz', 'Izii', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ijc', 'Izon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jac', 'Jacalteco, Eastern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jac', 'Jacalteco, Western', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jam', 'Jamaican Creole', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jaa', 'Jamamadí', null, 'Jamamadi');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jpn', '日本語', 'ja', 'Japanese');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jsl', 'Japanese Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jar', 'Jarawa (Nigeria)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jav', 'Javanese, Indonesian', 'jv', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jvn', 'Javanese, Suriname', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jib', 'Jibu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jit', 'Jita', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kaj', 'Jju', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('csk', 'Jola Kasa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dyo', 'Jola-Fogny', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jun', 'Juang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jbu', 'Jukun', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dyu', 'Jula', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jml', 'Jumli', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cbs', 'Junikuin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bex', 'Jur Modo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('vmc', 'Juxtlahuaca Mixtec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gna', 'Kaansa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('urb', 'Ka&rsquo;apor', null, 'Kaapor');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ksp', 'Kaba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kbd', 'Kabardian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kbp', 'Kabiye', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kea', 'Kabuverdianu, Barlavente', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kea', 'Kabuverdianu, Sotaventu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cwa', 'Kabwa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kab', 'Kabyle', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kfr', 'Kachchi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kac', 'Kachin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kzj', 'Kadazan, Coastal', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dtb', 'Kadazan, Labuk Kinabatangan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kbr', 'Kafa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cgc', 'Kagayanen', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kzf', 'Kaili, Da''a', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kgk', 'Kaiwá', null, 'Kaiwa');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kqf', 'Kakabai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cbr', 'Kakataibo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kkj', 'Kako', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('keo', 'Kakwa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kal', 'Kalaallisut', 'kl', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ijn', 'Kalabari', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kqe', 'Kalagan, Eastern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kqe', 'Kalagan, Western', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aah', 'Kalam', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aah', 'Kalam (Minimib)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kck', 'Kalanga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kln', 'Kalenjin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('knb', 'Kalinga Lubuagan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xal', 'Kalmyk-Oirat', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('khz', 'Kalo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bco', 'Kaluli', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kms', 'Kamasau', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ktb', 'Kambaata', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xbr', 'Kambera', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kcq', 'Kamo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xla', 'Kamula', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('soq', 'Kanasi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kqw', 'Kandas', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gam', 'Kandawo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cbu', 'Kandozi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xnr', 'Kangri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kmu', 'Kanite', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kjb', 'Kanjobal, Eastern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kne', 'Kankanaey', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kan', 'ಕನ್ನಡ', 'kn', 'Kannada');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('knc', 'Kanuri, Central', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kny', 'Kanyok', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kqn', 'Kaonde', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kpg', 'Kapingamarangi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kvj', 'Kapsiki', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('leu', 'Kara (Papua New Guinea)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xrb', 'Karaboro', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kaa', 'Karakalpak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kzr', 'Karang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mjw', 'Karbi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kai', 'Karai-Karai', null, 'Karekare');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('krl', 'Karelian, North', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pww', 'Karen Pwo, Northern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ksw', 'Karen, S''Gaw', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('car', 'Kariña', null, 'Kari&ntilde;a');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kdj', 'Karimojong', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yuj', 'Karkar-Yuri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xsm', 'Kasem', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kas', 'Kashmiri', 'ks', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('csb', 'Kashubian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kmg', 'Kâte', null, 'Kate');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pss', 'Kaulong', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kyz', 'Kayabi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kyu', 'Kayah, Western', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pdu', 'Kayan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('txu', 'Kayapo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kaz', 'Kazakh', 'kk', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kdp', 'Kebu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bmh', 'Kein', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kek', 'Kekchi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('khy', 'Kele (DRC)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kbo', 'Keliko', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kbo', 'Keliko', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('knx', 'Kendayan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kyq', 'Kenga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xki', 'Kenyan Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ken', 'Kenyang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ker', 'Kera', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kjs', 'Kewa, East', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kew', 'Kewa, West', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kyg', 'Keyagana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kjh', 'Khakas', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('khg', 'Khams Tibetan', null, 'Khampa, Eastern');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ogo', 'Khana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('khn', 'Khandesi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kca', 'Khanty', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('khr', 'Kharia', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kha', 'Khasi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kao', 'Khassonke ', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('khm', 'Khmer, Central', 'km', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kxm', 'Khmer, Northern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kjg', 'Khmu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xuu', 'Kxoe', null, 'Khwe');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('quc', 'K''iche'', Cunén', null, 'Kiche, Cunen');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ebu', 'Kiembu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('heh', 'Kihehe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('irk', 'Kiiraqw', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kki', 'Kikagulu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kik', 'Kikamba', 'ki', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kng', 'Kikongo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lub', 'Kiluba', 'lu', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kia', 'Garap', null, 'Kim');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jmc', 'Kimashami', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kmb', 'Kimbundu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mer', 'Kimeru', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('old', 'Kimochi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kqp', 'Kimre', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nnb', 'Kinandi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('krj', 'Kinaray-a', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nyy', 'Kinyakyusa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nym', 'Kinyamwezi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kin', 'Kinyarwanda', 'rw', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rim', 'Kinyaturu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nim', 'Kinyiramba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('geb', 'Kire', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kir', 'Kirghiz', 'ky', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gil', 'Kiribati', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kij', 'Kiriwina', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('run', 'Kirundi', 'rn', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kje', 'Kisar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kss', 'Kisi, Southern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gru', 'Kistane', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('suk', 'Kisukuma', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('swh', 'Kiswahili', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('swc', 'Kiswahili', null, 'Kiswahili, Congo');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mkw', 'Kituba for Congo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ktu', 'Kituba for DRC', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('vun', 'Kivunjo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('klu', 'Klao', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kpw', 'Kobon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('thq', 'Kochila Tharu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ksz', 'Kodaku', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kog', 'Kogi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kpm', 'Koho', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kpx', 'Koiali, Mountain', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('trp', 'Kok Borok', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kfb', 'Kolami, Northwestern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bkm', 'Kom for Cameroon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kmy', 'Koma', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kpf', 'Komba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kpf', 'Komba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xbi', 'Kombio - Wampukuamp', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kbi', 'Kombio - Yanimoi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xbi', 'Kombio - Yanimoi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kge', 'Komering', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('koi', 'Komi-Permyak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kpv', 'Komi-Zyrian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bbo', 'Bobo Madaré, Southern', null, 'Konabere');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kfc', 'Konda-Dora', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('knn', 'Konkani', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xon', 'Konkomba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xon', 'Konkomba, Likoonli', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xon', 'Konkomba, Likpakpaaln', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kno', 'Kono', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kxc', 'Konso', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mku', 'Konyanka Maninka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ozm', 'Koonzime', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kqy', 'Koorete', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kpr', 'Korafe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kor', '한국어', 'ko', 'Korean');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kvk', 'Korean Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kor', '한국어, 북한', 'ko', 'Korean, North');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kor', '한국어, 한국', 'ko', 'Korean, South');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('coe', 'Koreguaje', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kfq', 'Korku', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bpr', 'Koronadal Blaan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kpq', 'Kimyal of Korupun', null, 'Korupun-Sela');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kfp', 'Korwa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kpy', 'Koryak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kze', 'Kosena', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kyf', 'Kouya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kff', 'Koya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('khq', 'Songhay, Timbuktu', null, 'Koyra Ciini');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gkp', 'Kpelle for Guinea', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xpe', 'Kpelle for Liberia', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('krw', 'Krahn, Western', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kri', 'Krio', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ted', 'Krumen Tepo', null, 'Kroumen Tepo');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ktj', 'Krumen, Plapo', null, 'Kroumen, Plaapo');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ksd', 'Kuanua', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kua', 'Kuanyama', 'kj', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kgf', 'Kube', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kxu', 'Kui (India)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kez', 'Kukele', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kfx', 'Kulvi', null, 'Kullu Pahari');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kle', 'Kulung', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kue', 'Kumam', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kue', 'Kuman', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kfy', 'Kumaoni', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kum', 'Kumyk', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kvn', 'Kuna Border', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cuk', 'Kuna San Blas', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kup', 'Kunimaipa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xuo', 'Kuo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kto', 'Kuot', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kpz', 'Kupsapiny', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('knk', 'Kuranko', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kmr', 'Kurdish Behdini', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kmr', 'Kurmancî', null, 'Kurdish Kurmanji');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kmr', 'Kurmancî', null, 'Kurdish Kurmanji');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kuj', 'Kuria', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kru', 'Kurukh', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xuj', 'Kurumba, Jennu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kus', 'Kusaal', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kub', 'Kutep', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kdc', 'Kutu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kxv', 'Kuvi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kdt', 'Kuy', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kwj', 'Kwanga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kwn', 'Kwangali', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('knp', 'Kwanja', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kwf', 'Kwara''ae', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cwt', 'Kwatay', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cwe', 'Kwere', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kmo', 'Kwoma', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kyc', 'Kyaka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tye', 'Kyanga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lbb', 'Label', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lac', 'Lacandon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lbj', 'Ladakhi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lhu', 'Lahu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lbe', 'Lak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('leb', 'Lala-Bisa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lla', 'Lala-Roba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lam', 'Lamba for Togo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lam', 'Lamba for Zambia', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lai', 'Lambya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lmk', 'Lamkang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lns', 'Lamnso', null, 'Lamnso''');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ljp', 'Lampung', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('laj', 'Lango', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lao', 'ລາວ', 'lo', 'Lao');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lao', 'ລາວ', 'lo', 'Lao');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hmd', 'Large Flowery Miao', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ldi', 'Lari', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lsi', 'Lacid', null, 'Lashi');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lat', 'Latin', 'la', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lav', 'Latvijas', 'lv', 'Latvian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('law', 'Lauje', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lew', 'Ledo Kaili', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lea', 'Lega-Shabunda', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lln', 'Lélé (Chad)', null, 'Lele (Chad)');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lef', 'Lelemi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('led', 'Lendu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('leh', 'Lenje', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lep', 'Lepcha', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lww', 'Lewo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lez', 'Lezghian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mhx', 'Lhaovo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lir', 'Liberian Pidgin English', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lik', 'Lika', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lia', 'Limba West', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lif', 'Limbu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lmp', 'Limbum', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lin', 'Lingala', 'ln', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('onb', 'Elque', null, 'Lingao');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lis', 'Lisu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lit', 'Lietuvių', 'lt', 'Lithuanian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('loq', 'Lobala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('loq', 'Lobala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lob', 'Lobiri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('log', 'Logo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rag', 'Logooli', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yaz', 'Lokaa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lok', 'Loko', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dop', 'Lokpa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lol', 'Lomongo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ngl', 'Lomwe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lnu', 'Longuda', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lom', 'Lorma', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('uvl', 'Lote', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ztp', 'Loxicha Zapotec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('loz', 'Lozi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('khb', 'Lü', null, 'Lu');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lex', 'Luang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lch', 'Luchazi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lug', 'Luganda', 'lg', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lgg', 'Lugbara', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rub', 'Gungu', null, 'Lugungu');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ruf', 'Lughuru', null, 'Luguru');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gwr', 'Lugwere', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ida', 'Lukakamega', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('myx', 'Lumasaaba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lnd', 'Lun Bawang - Lun Dayah', null, 'Lun Dayah');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lun', 'Lunda', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('luo', 'Luo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lsm', 'Lusamya-Lugwe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ndy', 'Rito', null, 'Lutos');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lue', 'Luvale', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lwo', 'Luwo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lee', 'Lyele', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mhi', 'Ma''di', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mdy', 'Maale', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mas', 'Maasai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ymm', 'Maay', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mfz', 'Mabaan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mkd', 'Macedonian', 'mk', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mpd', 'Machineri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('myy', 'Macuna', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mbc', 'Macushi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mda', 'Mada', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mmx', 'Madak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mad', 'Madurese', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mag', 'Magahi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mdh', 'Maguindanaon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ayz', 'Mai Brat', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ayz', 'Mai Brat', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mzz', 'Maiadomu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mai', 'Maithili', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mca', 'Maka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mcp', 'Makaa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mak', 'Makassar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('vmw', 'Makhuwa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mgh', 'Makhuwa-Meetto', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kde', 'Makonde', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mlg', 'Malagasy', 'mg', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mlg', 'Malagasy', 'mg', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('txy', 'Malagasy Tanosy', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xmw', 'Malagasy Tsimihety', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lon', 'Elhomwe', null, 'Malawi Lomwe');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zlm', 'Malay', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zsm', 'Malay Bahasa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mal', 'Malayalam', 'ml', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xml', 'Malaysian Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tcf', 'Malinaltepec Me''phaa', null, 'Malinaltepec Mephaa');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mbk', 'Malol', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mjt', 'Malto', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mup', 'Malvi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mvc', 'Mam, Central', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mam', 'Mam, Northern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mam', 'Mam, Southern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mam', 'Mam, Todos Santos', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mqj', 'Mamasa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mcu', 'Mambila for Cameroon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mzk', 'Mambila for Nigeria', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mgr', 'Mambwe-Lungu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('maw', 'Mampruli', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xmm', 'Manadonese Malay', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mva', 'Manam', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mdr', 'Mandar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mfi', 'Mandara', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tbf', 'Mandara', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mjl', 'Mandeali', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mnk', 'Mandinka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mfv', 'Mandjak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kby', 'Manga Kanuri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mdj', 'Mangbetu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mbh', 'Mangseng', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('msc', 'Maninka, Sankaran', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mzj', 'Manya', null, 'Maninyakan');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mni', 'Manipuri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('knf', 'Mankanya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mev', 'Mano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('obo', 'Minonuvu', null, 'Manobo');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('msm', 'Manobo, Agusan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mta', 'Manobo, Cotabato', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mbb', 'Manobo, Western Bukidnon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('msw', 'Mansoanka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mxc', 'Manyika', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('swb', 'Maore Comorian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mri', 'Maori', 'mi', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mri', 'Maori', 'mi', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mlh', 'Mape', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('arn', 'Mapudungun', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sjm', 'Mapun', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mch', 'Dhe&rsquo;cwana', null, 'Maquiritari');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('enb', 'Marakwet', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mrw', 'Maranao', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mar', 'Marathi', 'mr', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ayp', 'North Mesopotamian Arabic', null, 'Mardini');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mfm', 'Marghi South', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mrt', 'Margi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mhr', 'Mari-Meadow', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dad', 'Marik', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mah', 'Marshallese', 'mh', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rwr', 'Marwari (India)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mve', 'Marwari (Pakistan)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mas', 'Masai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mas', 'Masai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('msb', 'Masbatenyo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('msh', 'Masikoro Malagasy', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('klv', 'Maskelynes', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mcn', 'Massana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mfh', 'Matal', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mbt', 'Matigsalug', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('met', 'Mato', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mcb', 'Matsigenka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mfe', 'Mauritian Kreol', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mhl', 'Mawake', null, 'Mauwake');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mke', 'Mawchi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mbl', 'Maxakalí', null, 'Maxakali');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mop', 'Maya, Mopan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yua', 'Maya, Yucatan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yan', 'Mayangna', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mfy', 'Mayo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mdm', 'Mayogo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ifu', 'Mayoyao Ifugao', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('maz', 'Mazahua, Central', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('maa', 'Mazatec (San Antonio & San Jeronimo)', null, 'Mazatec (San Antonio &amp; San Jeronimo)');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mzi', 'Mazatec Ixcatlán', null, 'Mazatec Ixcatl&aacute;n');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('maq', 'Mazatec, Chiquihuitlán', null, 'Mazatec, Chiquihuitlan');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('vmy', 'Mazateco de Ayautla', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('maj', 'Mazateco, Jalapa de Diaz', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mdp', 'Mbala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('myb', 'Mbay ', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mdw', 'Mbosi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mqb', 'Mbuko', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mhw', 'Mbukushu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mna', 'Mbula', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mbu', 'Mbula-Bwazza', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('byv', 'Medumba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mni', 'Meithei', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mek', 'Mekeo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('med', 'Melpa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('men', 'Mende', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sim', 'Mende (Papua New Guinea)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mee', 'Mengen', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mwv', 'Mentawai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mcr', 'Menya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('meq', 'Merey', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sac', 'Meskwaki', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zim', 'Zimé', null, 'Mesme');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mgo', 'Meta', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mxv', 'Mixtec, Metlatónoc', null, 'Metlatonoc Mixtec');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mtr', 'Mewari', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mfs', 'Mexican Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mej', 'Meyah', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mpt', 'Mian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mmc', 'Michoacán Mazahua', null, 'Michoacan Mazahua');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mpp', 'Migabac', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cdo', 'Min Dong Chinese', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gej', 'Mina', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('min', 'Minangkabau', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xmf', 'Mingrelian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('myk', 'Miniyanka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mpx', 'Misima-Panaeyati', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('miq', 'Mískito', null, 'Miskito');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('neq', 'Mixe de Atitlan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mco', 'Mixe de Coatlan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mzl', 'Mixe de Mazatlán Tutla', null, 'Mixe de Mazatlan Tutla');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mxq', 'Mixe de San Juan Juquila', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mir', 'Mixe del Istmo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pxm', 'Mixe Quetzaltepec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mto', 'Mixe Totontepec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('miy', 'Mixteco de Ayutla', null, 'Mixtec Ayutla');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xtd', 'Mixtec Diuxi-Tilantongo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xtm', 'Mixtec, Magdalena Peñasco', null, 'Mixtec Magdalena Penasco');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mza', 'Mixtec, Zacatepec', null, 'Mixtec Zacatepec');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mbz', 'Mixtec, Amoltepec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mio', 'Mixtec, Pinotepa Nacional', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mks', 'Mixtec, Silacayoapan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('meh', 'Mixtec, Southwestern Tlaxiaco', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xta', 'Mixtec, Xochapa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mip', 'Mixteco Apasco-Apoala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mib', 'Mixtec, Atatláhuca', null, 'Mixteco de Atatl&aacute;huca');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('miz', 'Mixteco de Coatzospan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mxt', 'Mixteco de Jamiltepec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mie', 'Mixteco de Ocotepec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mil', 'Mixteco de Penoles', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mpm', 'Mixteco de Santiago Yosundua', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mxb', 'Mixteco de Tezoatlan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xtn', 'Mixteco del Norte de Tlaxiaco', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mit', 'Mixteco del Sur de Puebla', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mkf', 'Miya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lus', 'Mizo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mfq', 'Moba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mfq', 'Moba Lok', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ell', 'Modern Greek (1453-)', 'el', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('maf', 'Mofa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mfk', 'Mofu, North', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mif', 'Mofu-Gudur', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mkl', 'Mokole', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mdf', 'Moksha', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pwm', 'Molbog', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mox', 'Molima', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ver', 'Mom Jango', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mnw', 'Mon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('khk', 'Mongolian, Outer', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mog', 'Mongondow', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mos', 'Moore', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('myv', 'Mordvin-Erzya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ary', 'Moroccan Arabic', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mgc', 'Morokodo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mqn', 'Moronene', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mqn', 'Moronene', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mqn', 'Moronene', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mgd', 'Moru', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mtj', 'Moskona', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('meu', 'Motu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hmo', 'Motu, Hiri', 'ho', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mua', 'Moundang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mug', 'Mousgoum', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mcx', 'Mpiemo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wiv', 'Vitu', null, 'Muduapa');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aoj', 'Mufian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bmr', 'Muinane', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mzm', 'Mumuye', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mnb', 'Muna', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mnf', 'Mundani', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('unr', 'Mundari', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('muh', 'Mundu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('myu', 'Mundurukú', null, 'Munduruku');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tnr', 'Münik', null, 'Munik');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mtq', 'Muong', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mur', 'Murle', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mui', 'Musi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('emi', 'Mussau-Emira', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('muy', 'Muyang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('myw', 'Muyuw', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sur', 'Mwaghavul', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('moa', 'Mwan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wmw', 'Mwani', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('1my', 'Myanmar (Yangon) Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nas', 'Naasioi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('naf', 'Nabak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nfr', 'Nafaanra', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tnk', 'Nafe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nag', 'Naga Pidgin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('njo', 'Naga, Ao', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nkf', 'Naga, Inpui', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('njh', 'Naga, Lotha', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nsm', 'Naga, Sumi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ote', 'Nahnu Otomi Mezquital', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nch', 'Nahuatl Huasteca, Central', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nhe', 'Nahuatl Huasteca, Eastern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nhe', 'Nahuatl Huasteca, Eastern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nhw', 'Nahuatl Huasteca, Western', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ncj', 'Nahuatl Norte Puebla', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nuz', 'Nahuatl Tlamacazapa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ngu', 'Nahuatl, Guerrero', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ngu', 'Nahuatl, Guerrero', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('azz', 'Nahuatl, Highland Puebla', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nhx', 'Nahuatl, Mecayapan', null, 'Nahuatl, Isthmus-Mecayapan');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nhx', 'Nahuatl, Mecayapan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ncl', 'Nahuatl, Michoacán', null, 'Nahuatl, Michoacan');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nhy', 'Nahuatl, Norte de Oaxaca', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nsu', 'Nahuatl, Sierra Negra', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('npl', 'Nahuatl, Southeastern Puebla', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nhx', 'Nahuatl, Tatahuicapan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nhi', 'Nahuatl, Tenango', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nak', 'Nakanai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nlc', 'Nalca', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nss', 'Nali', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('naq', 'Nama (Namibia)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nvm', 'Namiae', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nnc', 'Nangjere', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bjv', 'Nangnda', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cox', 'Nanti', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('npy', 'Napu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pbb', 'Nasa Yuwe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nsk', 'Naskapi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ntm', 'Nateni', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nau', 'Nauru', 'na', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nav', 'Navajo', 'nv', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nmz', 'Nawdm', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('naw', 'Nawuri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ndj', 'Ndamba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ndc', 'Ndau', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nde', 'Ndebele for Zimbabwe', 'nd', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ndz', 'Ndogo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ndl', 'Ndolo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nsn', 'Nehan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nif', 'Nek', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yrk', 'Nenets', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nep', 'Nepali', 'ne', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nzs', 'New Zealand Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('new', 'Newar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nij', 'Ngaju', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sba', 'Ngambay', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gng', 'Gangam', null, 'Ngangam');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('anc', 'Ngas', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zdj', 'Ngazidja Comorian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nga', 'Ngbaka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ngb', 'Ngbandi, Northern', null, 'Ngbanbi, Northern');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nbq', 'Nggem', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nnh', 'Ngiemboon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pls', 'Ngigua, San Marcos Tlacoyalco', null, 'Ngigua, San Marcos Tlalcoyalco');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nnq', 'Ngindo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('niy', 'Ndruna', null, 'Ngiti');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('acn', 'Ngochang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jgo', 'Ngomba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nla', 'Ngombale', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ngc', 'Ngombe (DRC)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ngp', 'Nguu', null, 'Ngulu');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nia', 'Nias', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('1ng', 'Nigeria Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pcm', 'Nigerian Pidgin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('1ng', 'Nigerian Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nsi', 'Nigerian Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nii', 'Nii', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gur', 'Ninkare', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nin', 'Ninzo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dap', 'Nisi (India)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cag', 'Nivaclé', null, 'Nivacle');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nko', 'Nkonya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gaw', 'Nobonob', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lem', 'Nomaande', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('not', 'Nomatsiguenga', null, 'Nomatsigenga');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('snf', 'Noon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nhu', 'Nooni', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tnn', 'Nen-naka', null, 'North Tanna');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bmm', 'Northern Betsimisaraka Malagasy', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gno', 'Northern Gondi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kqs', 'Northern Kissi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lrc', 'Northern Luri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('stb', 'Northern Subanen', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nod', 'กำเมือง', null, 'Northern Thai');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('twf', 'Northern Tiwa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('uzn', 'Northern Uzbek', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mxa', 'Northwest Oaxaca Mixtec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nor', 'Norsk', 'no', 'Norwegian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nob', 'Norwegian Bokmål', 'nb', 'Norwegian Bokmal');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ntr', 'Ntrubo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mor', 'Nuba Moro', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nus', 'Nuer', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nop', 'Numanggang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nut', 'Nung (Viet Nam)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nnw', 'Nuni, Southern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nup', 'Nupe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nwb', 'Nyaboa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mwn', 'Nyamwanga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nya', 'Nyanja', 'ny', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nih', 'Nyiha (Tanzania)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lid', 'Nyindrou', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nuj', 'Lunyole', null, 'Nyole');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nyu', 'Nyungwe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nzk', 'Nzakara', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nja', 'Nzanyi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nzb', 'Nzebi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mzi', 'Nzema', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nzi', 'Nzima', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ann', 'Obolo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kkc', 'Odoodee', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('eri', 'Ogea', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ojs', 'Ojibwe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ojb', 'Ojibwe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ojs', 'Ojibwe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('atg', 'Okphela', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('okr', 'Okrika', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('opm', 'Oksapmin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('oku', 'Oku', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ong', 'Olo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('luy', 'Oluluyia', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('omi', 'Omi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aom', 'Ömie', null, 'Omie');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('omw', 'Omwunra Toqura', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('omw', 'Omwunra Toqura', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('onr', 'Wolwale', null, 'One, Northern');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bsc', 'Oniyan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('onr', 'Onnele Goiniri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pap', 'O''othham', null, 'Oothham');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ore', 'Maijuna', null, 'Orej&oacute;n');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mti', 'Oren Maiwa (Papua New Guinea)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ori', 'Oriya', 'or', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('okv', 'Orokaiva', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hae', 'Oromo, Eastern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gaz', 'Oromo, West Central', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ury', 'Orya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('oss', 'Ossetic', 'os', 'Osetin');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tll', 'Otetela', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('otq', 'Otomí de Querétaro', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lot', 'Otuho', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('stn', 'Owa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('blk', 'Pa''o Karen', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sig', 'Paasaal', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pao', 'Paiute, Northern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pau', 'Palauan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('plw', 'Palawano, Brooke''s Point', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pam', 'Pampangan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tdb', 'Panchpargania', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pag', 'Pangasinan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pbo', 'Papel', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('prf', 'Paranan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pab', 'Parecis', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pbu', 'Pashto, Northern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pbc', 'Patamona', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ptp', 'Patep', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gfk', 'Patpatar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mfa', 'Pattani Malay', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pad', 'Paumari', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ata', 'Pele-Ata', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aoc', 'Pemon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pez', 'Penan Eastern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mvf', 'Peripheral Mongolian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pip', 'Pero', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lme', 'Peve', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pem', 'Phende', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pid', 'Piaroa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wes', 'Pidgin for Cameroon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pis', 'Pijin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pny', 'Pinyin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pir', 'Piratapuyo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pjt', 'Pitjantjatjara', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('plt', 'Plateau Malagasy', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pdt', 'Plautdietsch', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pdt', 'Plautdietsch', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pbi', 'Podoko', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('poy', 'Pogoro', null, 'Pogolo');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pon', 'Pohnpeian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pof', 'Poke', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('poh', 'Pokomchi, Eastern ', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pkb', 'Pokomo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pko', 'Pokoot', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('plj', 'Polci', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pol', 'Polski', 'pl', 'Polish');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pol', 'Polski', 'pl', 'Polish');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pow', 'Popoloca, San Felipe Otlaltepec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('poe', 'Ngiva, San Juan Atzingo', null, 'Popoloca, San Juan Atzingo');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pps', 'Ngigua, San Luís Temalacayuca', null, 'Popoloca, San Luis Temalacayuca');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('poh', 'Poqomchi Occidental', null, 'Poqomchi&rsquo;');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('por', 'Português', 'pt', 'Portuguese');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('por', 'Português', 'pt', 'Portuguese');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pui', 'Puinave', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fuc', 'Pulaar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('fuf', 'Pular', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pan', 'Punjabi', 'pa', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('puu', 'Punu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tsz', 'Purepecha', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kjp', 'Pwo Eastern Karen', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pwo', 'Pwo Western Karen', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('byx', 'Qaqet', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qva', 'Quechua Ambo-Pasco', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('quy', 'Quechua, Ayacucho', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qvc', 'Quechua, Cajamarca', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('quz', 'Quechua, Cuzco', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qve', 'Quechua, Eastern Apurímac', null, 'Quechua, Eastern Apurimac');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qub', 'Quechua, Huallaga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qvh', 'Quechua, Huamalies Dos de Mayo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qwh', 'Quechua, Huaylas', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qvw', 'Quechua, Huaylla Wanca', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('quf', 'Quechua, Lambayeque', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qvm', 'Quechua, Margos', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qul', 'Quechua, North Bolivian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qvn', 'Quechua, North Junin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qxn', 'Quechua, Northern Conchucos Ancash', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qxh', 'Quechua, Panao Huanuco', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qvs', 'Quechua, San Martin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('quh', 'Quechua, South Bolivian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qxo', 'Quechua, Southern Conchucos Ancash', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qup', 'Quechua, Southern Pastaza', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('quc', 'Quiche', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('quc', 'Quiche, Joyabaj', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('quc', 'Quiche, West Central', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qxr', 'Quichua Cañar Highland', null, 'Quichua Ca&ntilde;ar Highland');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qug', 'Quichua, Chimborazo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qvi', 'Quichua, Imbabura Highland', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qvo', 'Quichua, Napo Lowland', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qvz', 'Quichua, Northern Pastaza', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('qxl', 'Quichua, Salasaka Highland', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('quw', 'Quichua, Tena Lowland', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('chq', 'Quiotepec Chinantec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rjs', 'Rajbanshi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rjs', 'Rajbanshi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rki', 'Rakhine', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wra', 'Ramo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rai', 'Ramoaaina', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('thr', 'Rana Tharu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rnl', 'Ranglong', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rkt', 'Rangpuri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rap', 'Rapa Nui', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bgd', 'Rathwi Bareli', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rwo', 'Rawa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('raw', 'Rvwang', null, 'Rawang');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rej', 'Rejang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rej', 'Rejang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rel', 'Rendille', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rcf', 'Réunion Creole French', null, 'Reunion Creole French');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rmy', 'Romane, Vlax', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rml', 'Romani, Baltic', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rmc', 'Romani, East Slovak', null, 'Romani, Carpathian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rmo', 'Romani, Sinti', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ron', 'Român', 'ro', 'Romanian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rms', 'Romanian Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('onr', 'Rombar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rol', 'Romblomanon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('twu', 'Rote', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('roo', 'Rotokas', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rug', 'Roviana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bzw', 'Rubassa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pce', 'Ruching Palaung', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hay', 'Ruhaya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rbb', 'Rumai Palaung', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('klq', 'Rumu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nyn', 'Runyankore-Rukiga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nyo', 'Runyoro-Rutoro', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rus', 'Русский', 'ru', 'Russian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rus', 'Русский', 'ru', 'Russian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rsl', 'Russian Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rnd', 'Ruund', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('spy', 'Sabaot', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hvn', 'Sabu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sck', 'Sadani', null, 'Sadri');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('apz', 'Safeyoka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('saj', 'Sahu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('acf', 'Saint Lucian Creole', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('skg', 'Sakalava Malagasy', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('skq', 'Sakalava: Analalava', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('skq', 'Sakalava: Besalampy', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('skt', 'Sakata', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sbe', 'Saliba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sll', 'Salt-Yui', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('loe', 'Saluan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sse', 'Sama, Balangingi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('war', 'Samareno', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ccg', 'Samba Daka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ndi', 'Samba Leko', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sbl', 'Sambal, Botolan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xsb', 'Sambali', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ssx', 'Sembeleke', null, 'Samberigi');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('saq', 'Samburu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('smo', 'Samoan', 'sm', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rav', 'Sampang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sbd', 'San', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('icr', 'Islander Creole English', null, 'San Andres Creole');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('icr', 'San Andres Islander Creole', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('azg', 'San Pedro Amuzgo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zpf', 'San Pedro Quiatoni Zapotec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kwy', 'San Salvador Kongo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sng', 'Sanga (DRC)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('snl', 'Sangil', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sxn', 'Sangir', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sag', 'Sango', 'sg', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sny', 'Saniyo-Hiyewe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sat', 'Santhali', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sps', 'Saposa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mwm', 'Sar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('srm', 'Saramaccan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bps', 'Sarangani Blaan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('hns', 'Sarnami Hindi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sas', 'Sasak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bjj', 'SAUJI', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tuc', 'Saveeng, Oov', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tuc', 'Saveeng-Tuam', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('say', 'Saya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sey', 'Secoya', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tvw', 'Sedoa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('srr', 'Seereer', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sfw', 'Sehwi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ssg', 'Seimat', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lip', 'Sekpele', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('snw', 'Selee', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('spl', 'Selepet', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sea', 'Semai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sdm', 'Semandang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('seh', 'Chisena', null, 'Sena');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('swk', 'Chisena', null, 'Sena, Malawi');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('szg', 'Sengele', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sef', 'Senoufo, Cebaara', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dyi', 'Senoufo, Djimini', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('iws', 'Sepik Iwam', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('skr', 'Seraiki', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pse', 'Serawai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('srp', 'Serbian', 'sr', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sei', 'Seri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tsn', 'Setswana', 'tn', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ksb', 'Kishambala', null, 'Shambala');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('shn', 'Shan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sho', 'Shanga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mcd', 'Sharanahua', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('swv', 'Shekhawati', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bun', 'Sherbro', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xsr', 'Sherpa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('shr', 'Shi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('shk', 'Shilluk', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('shp', 'Shipibo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sna', 'Shona', 'sn', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sna', 'Shona', 'sn', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cjs', 'Shor', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jiv', 'Shuar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('snp', 'Siane (Komongu)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('snp', 'Siane (Lambau)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sid', 'Sidamo', null, 'Sidaama');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bla', 'Siksika', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('smt', 'Simte', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sml', 'Sinama', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('snc', 'Sinaugoro', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('snd', 'Sindhi', 'sd', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sin', 'Sinhala', 'si', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xsi', 'Sio', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('snn', 'Siona', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sri', 'Siriano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ssd', 'Siroi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sil', 'Sisaala, Tumulung', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sld', 'Sissala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sso', 'Sissano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ssw', 'Siswati', 'ss', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('akp', 'Siwu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('slk', 'Slovenčina', 'sk', 'Slovak');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('slv', 'Slovenian', 'sl', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xog', 'Lusoga', null, 'Soga');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('soy', 'Sola', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('som', 'Somali', 'so', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sop', 'Songe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ses', 'Songhay, Gao', null, 'Songhay, Koyraboro Senni');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('urw', 'Sob', null, 'Sop');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('srb', 'Sora', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nso', 'Sotho, Northern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sot', 'Sotho, Southern', 'st', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lnl', 'South Central Banda', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dib', 'Dinka, Agar-Bor', null, 'South Central Dinka');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nbl', 'South Ndebele', 'nr', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xsl', 'South Slavey', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ijs', 'Southeast Ijo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kmc', 'Southern Dong', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nqg', 'Southern Nago', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nab', 'Southern Nambikuára', null, 'Southern Nambikuara');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zsr', 'Southern Rincon Zapotec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ssb', 'Southern Sama', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sou', 'Thai, Southern', null, 'Southern Thai');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nwi', 'Nevhaar', null, 'Southwest Tanna');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('spa', 'Español', 'es', 'Spanish');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('csc', 'Spanish (Catalan) Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ssp', 'Spanish Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('srn', 'Sranan Tongo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ess', 'St. Lawrence Island Yupik', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lvs', 'Standard Latvian', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sto', 'Stoney', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('swp', 'Suau', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sxb', 'Suba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('skn', 'Subanon, Kolibugan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('suc', 'Subanon, Western', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tgo', 'Sudest', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sue', 'Suena', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('swi', 'Sui', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('suk', 'Sulka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wrs', 'Sumo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sun', 'Sundanese', 'su', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('suz', 'Sunuwar', null, 'Sunwar');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('spp', 'Supyire', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('suq', 'Suri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sjp', 'Surjapuri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sgz', 'Sursurunga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sus', 'Susu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ssw', 'Swati', 'ss', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('swe', 'Svenska', 'sv', 'Swedish');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('swe', 'Svenska', 'sv', 'Swedish');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('syl', 'Sylheti', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('syc', 'Syriac, Classical', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tap', 'Taabwa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tby', 'Tabaru', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tab', 'Tabassaran', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('knv', 'Tabo Aramia', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('knv', 'Tabo Fly River', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tna', 'Tacana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('shy', 'Tachawit', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tdy', 'Tadyawan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tgl', 'Tagalog', 'tl', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tgw', 'Tagbana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tah', 'Tahitian', 'ty', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('blt', 'Tai Dam', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tnq', 'Taino', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tbg', 'Tairora, North', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dav', 'Taita', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nan', 'Hokkien', null, 'Taiwanese');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tgk', 'Tajik', 'tg', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tbc', 'Takia', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nho', 'Takuu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tke', 'Takwane', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tlj', 'Lubwisi', null, 'Talinga-Bwisi');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tly', 'Talysh', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('taj', 'Tamang, Eastern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('taq', 'Tamasheq', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tzm', 'Tamazight, Central Atlas', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tam', 'தமிழ்', 'ta', 'Tamil');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tpm', 'Tampulma', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tdx', 'Tandroy-Mahafaly Malagasy', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tan', 'Tangale', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nmf', 'Tangkhul Naga', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tgp', 'Tangoa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tnc', 'Tanimuca-Letuama', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tza', 'Tanzanian Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tac', 'Tarahumara Baja', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rif', 'Tarifit', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yer', 'Tarok', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('shi', 'تاشلحيت', null, 'Tashelhayt');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ttr', 'Tatar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tat', 'Tatar', 'tt', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tav', 'Tatuyo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tpa', 'Taupota', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tsg', 'Tausug', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tbo', 'Tawala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ttq', 'Tawallammat Tamajaq', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bnj', 'Tawbuid, Eastern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tyz', 'Tày', null, 'Tay');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tbl', 'Tboli', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ttc', 'Tektiteko', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tlf', 'Telefol', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tel', 'Telugu', 'te', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kdh', 'Tem', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tbt', 'Tembo (Kitembo)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pah', 'Tenharim', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tee', 'Tepehua de Huehuetla', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tpp', 'Tepehua Pisaflores', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tpt', 'Tepehua Tlachichilco', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('stp', 'Tepehuan de Durango', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ntp', 'Tepehuán del Norte', null, 'Tepehuan del Norte');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cux', 'Tepeuxila Cuicatec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ter', 'Terena', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tfr', 'Teribe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tec', 'Terik', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tet', 'Tetum', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tha', 'ภาษาไทย', 'th', 'Thai');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('thk', 'Tharaka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tem', 'Themne', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bod', 'Tibetan', 'bo', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tca', 'Ticuna', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tig', 'Tigre', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tir', 'Tigrinya', 'ti', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tik', 'Tikar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tim', 'Timbe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('aoz', 'Timor Dakwan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tih', 'Timugon Murut', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tpz', 'Tinputz', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tic', 'Tira', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tiv', 'Tiv', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tix', 'Tiwa, Southern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ctl', 'Tlacoatzintepec Chinantec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tqo', 'Toaripi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tob', 'Toba Qom', null, 'Toba Sur');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tlb', 'Tobelo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ood', 'O''othham', null, 'Tohono O''odham');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('toj', 'Tojolabal', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tpi', 'Tok Pisin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jic', 'Tol', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lbw', 'Tolaki', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tod', 'Toma', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('txa', 'Tombonuo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tog', 'Tonga (Nyasa)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ton', 'Tongan', 'to', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sda', 'Toraja', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('top', 'Totonac Papantla', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('toc', 'Totonaco de Coyutla', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tos', 'Totonaco de la Sierra', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('neb', 'Toura', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('trn', 'Trinitario', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tri', 'Trio', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('trs', 'Triqui Chicahuaxtla', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('trc', 'Triqui, San Juan Copala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('trc', 'Triqui, San Juan Copala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('trq', 'Triqui, San Martín Itunyoso', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tkr', 'Tsakhur', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xsu', 'Sanumá', null, 'Tsanuma');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tsj', 'Tshangla', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lub', 'Tshiluba', 'lu', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kdl', 'Tsikimba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cas', 'Tsimane', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cas', 'Tsimane', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tsw', 'Tsishingini', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tso', 'Tsonga', 'ts', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tvd', 'Tsuvadi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tuo', 'Tucano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tuo', 'Tukano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tul', 'Tula', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tcy', 'Tulu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('iou', 'Tuma-Irumu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tmc', 'Tumak', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tuf', 'U''wa', null, 'Tunebo, Central');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('lcm', 'Tungag', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tui', 'Tupuri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tuz', 'Turka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tuv', 'Turkana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tur', 'Türkçe', 'tr', 'Turkish');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tuk', 'Turkmen', 'tk', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tru', 'Turoyo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tyv', 'Tuvin', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ifk', 'Tuwali Ifugao', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bov', 'Tuwuli', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tue', 'Tuyuca', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('kcg', 'Tyap', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tzh', 'Tzeltal, Bachajon', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tzh', 'Tzeltal, Oxchuc', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tzo', 'Tzotzil, Chamula', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tzo', 'Tzotzil, Chenalho', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tzj', 'Tzutujil, Eastern', null, 'Tzutijil Santtiago Atitlan');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tzt', 'Tzutujil, Western', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('waw', 'UaiUai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ubr', 'Ubir', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('udm', 'Udmurt', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('udu', 'Uduk', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ugn', 'Ugandan Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ukr', 'українська', 'uk', 'Ukrainian');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ukl', 'Ukrainian Sign Language', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ppk', 'Uma', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gdn', 'Umanakaina', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ubu', 'Umbu Ungu - Andelale', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ubu', 'Umbu Ungu Kala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ubu', 'Umbu Ungu No Penge', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('umb', 'Umbundu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('urk', 'Urak Lawoi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('url', 'Urak Lawoi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ura', 'Urarina', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('urd', 'Urdu', 'ur', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('urh', 'Urhobo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('uri', 'Urim', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('upv', 'Uripiv', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wnu', 'Usan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('usa', 'Usarufa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('usp', 'Uspanteco', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ui1', 'Уйғурчә', null, 'Uyghur (Central Asia)');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('uig', 'Uyghur (China)', 'ug', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('uzn', 'Uzbek, Northern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('uzs', 'Uzbek, Southern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('vag', 'Vagla', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('vai', 'Vai', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('vas', 'Vasavi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ven', 'Venda', 've', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('vid', 'Vidunda', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('vie', 'Tiếng Việt', 'vi', 'Vietnamese');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('vif', 'Vili', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('svc', 'Vincentian Creole English', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('vic', 'Crucian Creole', null, 'Virgin Islands Creole English');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('vut', 'Vute', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('prk', 'Wa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wbm', 'Wa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wwa', 'Waama', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('waj', 'Waffa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rro', 'Waima', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bao', 'Waimaja', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wja', 'Waja', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wlx', 'Wali (Ghana)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wnc', 'Wantoat', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('auc', 'Waorani', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('juk', 'Wapan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wap', 'Wapishana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wba', 'Warao', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wrs', 'Waris', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wji', 'Warji', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wsk', 'Waskia', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wtk', 'Watakataui', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wau', 'Waurá', null, 'Waura');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('oym', 'Wayampi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('way', 'Wayana', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('guc', 'Wayuu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gxx', 'Wè Southern', null, 'We Southern');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wob', 'We, Northern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wed', 'Wedau', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mtp', 'Weenhayek', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wew', 'Wejewa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cym', 'Cymraeg', 'cy', 'Welsh');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wer', 'Weri', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('bgn', 'Western Balochi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gnw', 'Guaraní, Western Bolivian', null, 'Western Bolivian Guaraní');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('cja', 'Western Cham', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gvr', 'Western Gurung', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('mrd', 'Western Magar', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ojw', 'Western Ojibwa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pnb', 'Western Panjabi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tdg', 'Western Tamang', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('twb', 'Tawbuid', null, 'Western Tawbuid');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gdr', 'Wipi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wiu', 'Wiru', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wal', 'Wolaitta', null, 'Wolaytta');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wal', 'Wolaitta', null, 'Wolaytta');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wal', 'Wolaitta', null, 'Wolaytta');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wol', 'Wolof', 'wo', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('noa', 'Wounaan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wuu', 'Wu Chinese', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ywq', 'Wuding-Luquan Yi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wuv', 'Wuvulu-Aua', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('xav', 'Xavante', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('rng', 'Ronga', null, 'Xhirhonga');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tso', 'Tsonga', 'ts', 'Xichangana');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('tsc', 'Xitshwa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('jae', 'Yabem', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yad', 'Yagua', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('axk', 'Yaka (CAR)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yaf', 'Yaka (DRC)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yka', 'Yakan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('sah', 'Yakut', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yba', 'Yala', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yli', 'Yali, Angguruk', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yal', 'Yalunka', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yam', 'Yamba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yat', 'Yambeta', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yaa', 'Yaminahua', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ame', 'Yanesha', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('wca', 'Yanomami Sanumá', null, 'Yanomami Sanuma');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('guu', 'Yanomamö', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yns', 'Yansi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yre', 'Yaouré', null, 'Yaour&eacute;');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yaq', 'Yaqui', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yrb', 'Yareba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yuw', 'Yau (Morobe Province)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yva', 'Yawa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yby', 'Yaweyuha', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yle', 'Yele', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ybb', 'Yemba', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yeu', 'Yerukula', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yss', 'Yessan-Mayo Yamano', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yss', 'Yessan-Mayo Yuwu', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ydd', 'Yiddish, Eastern', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pib', 'Yine', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('byr', 'Yipma (Baruya)', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gud', 'Yocoboué Dida', null, 'Yocobou&eacute; Dida');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('pil', 'Yom', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yom', 'Yombe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yon', 'Yongkom', null, 'Yonggom');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yut', 'Yopno', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yor', 'Yoruba', 'yo', null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ycn', 'Yucuna', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('yuz', 'Yuracare', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('atb', 'Zaiwa', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zak', 'Zanaki', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zne', 'Zande', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zpc', 'Zapotec Choapan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zca', 'Zapotec Coatecas Altas', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zad', 'Zapotec de Yaganiza', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zar', 'Zapotec del Rincón', null, 'Zapotec del Rincon');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zaq', 'Zapotec de Aloápam', null, 'Zapotec, Aloapam');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zpv', 'Zapotec, Chichicapan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zae', 'Zapotec, Yareni', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zas', 'Zapoteco de Albarradas', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zpo', 'Zapoteco de Amatlan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zpl', 'Zapoteco de Lachixio ', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zpm', 'Zapoteco de Mixtepec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zac', 'Zapoteco de Ocotlan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zao', 'Zapoteco de Ozolotepec', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ztq', 'Zapoteco de Quioquitani', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zab', 'Zapoteco de San Juan Guelavia', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zpt', 'Zapoteco de San Vicente Coatlán', null, 'Zapoteco de San Vicente Coatlan');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zpi', 'Zapoteco de Santa María Quiegolani', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zpz', 'Zapoteco de Texmelucan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zpu', 'Zapoteco de Yalalag', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zty', 'Zapoteco de Yatee', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zpq', 'Zapoteco de Zoogocho', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zai', 'Zapoteco del Istmo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zam', 'Zapoteco, Central Miahuatlan', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zaw', 'Zapoteco, Mitla', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zaa', 'Zapoteco, Sierra Juárez', null, 'Zapoteco, Sierra Juarez');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zav', 'Zapoteco, Yatzachi', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('dje', 'Zarma', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zyb', 'Zhuang, Yongbei', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zia', 'Zia', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('ziw', 'Zigula', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zin', 'Zinza', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zos', 'Zoque de Francisco León', null, 'Zoque de Francisco Leon');
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('gnd', 'Zulgo', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zun', 'Zuni', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('zyp', 'Zyphe', null, null);
+REPLACE INTO Language (iso, name, iso1, english) VALUES ('nog', 'Nogai', null, 'Ногай');
