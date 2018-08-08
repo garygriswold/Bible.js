@@ -46,8 +46,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         switch self.settingsViewType {
         case .primary:
             primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
-        case .version:
-            versionViewRowSelect(tableView: tableView, indexPath: indexPath)
+        case .bible:
+            bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
         case .language:
             languageViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
@@ -59,8 +59,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         switch self.settingsViewType {
         case .primary:
             primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
-        case .version:
-            versionViewRowSelect(tableView: tableView, indexPath: indexPath)
+        case .bible:
+            bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
         case .language:
             languageViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
@@ -87,20 +87,20 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             let languageController = SettingsViewController(settingsViewType: .language)
             self.controller.navigationController?.pushViewController(languageController, animated: true)
         default:
-            versionViewRowSelect(tableView: tableView, indexPath: indexPath)
+            bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
     }
     
-    private func versionViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
+    private func bibleViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
         switch indexPath.section {
         case self.selectedSection:
-            if let version = self.dataModel.getSelectedVersion(row: indexPath.row) {
-                let detailController = VersionDetailViewController(version: version)
+            if let bible = self.dataModel.getSelectedBible(row: indexPath.row) {
+                let detailController = BibleDetailViewController(bible: bible)
                 self.controller.navigationController?.pushViewController(detailController, animated: true)
             }
         case self.availableSection:
-            if let version = self.dataModel.getAvailableVersion(row: indexPath.row) {
-                let detailController = VersionDetailViewController(version: version)
+            if let bible = self.dataModel.getAvailableBible(row: indexPath.row) {
+                let detailController = BibleDetailViewController(bible: bible)
                 self.controller.navigationController?.pushViewController(detailController, animated: true)
             }
         default:
@@ -113,12 +113,12 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         case self.selectedSection:
             print("Selected \(indexPath.row) clicked")
             let language = self.dataModel.getSelectedLanguage(row: indexPath.row)
-            let versionController = SettingsViewController(settingsViewType: .version)
-            self.controller.navigationController?.pushViewController(versionController, animated: true)
+            let bibleController = SettingsViewController(settingsViewType: .bible)
+            self.controller.navigationController?.pushViewController(bibleController, animated: true)
         case self.availableSection:
             let language = self.dataModel.getAvailableLanguage(row: indexPath.row)
-            let versionController = SettingsViewController(settingsViewType: .version)
-            self.controller.navigationController?.pushViewController(versionController, animated: true)
+            let bibleController = SettingsViewController(settingsViewType: .bible)
+            self.controller.navigationController?.pushViewController(bibleController, animated: true)
         default:
             print("Unknown section \(indexPath.row)")
         }

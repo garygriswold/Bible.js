@@ -33,21 +33,21 @@ class LanguageModel : SettingsModelInterface {
             langSelectedMap[lang] = true
         }
         
-        languages.append(Language(languageCode: "ENG", languageName: "English", englishName: "English",
-                                  rightToLeft: false, localizedName: "English"))
-        languages.append(Language(languageCode: "FRN", languageName: "Francaise", englishName: "French",
-                                  rightToLeft: false, localizedName: "French"))
-        languages.append(Language(languageCode: "DEU", languageName: "Deutsch", englishName: "German",
-                                  rightToLeft: false, localizedName: "German"))
-        languages.append(Language(languageCode: "SPN", languageName: "Espanol", englishName: "Spanish",
-                                  rightToLeft: false, localizedName: "Spanish"))
-        languages.append(Language(languageCode: "ARB", languageName: "العربية", englishName: "Arabic",
-                                  rightToLeft: true, localizedName: "Arabic"))
-        languages.append(Language(languageCode: "CMN", languageName: "汉语, 漢語", englishName: "Chinese",
-                                  rightToLeft: false, localizedName: "Chinese"))
+        languages.append(Language(iso: "ENG", name: "English", iso1: "en",
+                                  rightToLeft: false))
+        languages.append(Language(iso: "FRN", name: "Francaise", iso1: "fr",
+                                  rightToLeft: false))
+        languages.append(Language(iso: "DEU", name: "Deutsch", iso1: "de",
+                                  rightToLeft: false))
+        languages.append(Language(iso: "SPN", name: "Espanol", iso1: "es",
+                                  rightToLeft: false))
+        languages.append(Language(iso: "ARB", name: "العربية", iso1: "ar",
+                                  rightToLeft: true))
+        languages.append(Language(iso: "CMN", name: "汉语, 漢語", iso1: "zh",
+                                  rightToLeft: false))
         
         for lang in languages {
-            let langCode = lang.languageCode
+            let langCode = lang.iso
             if langSelectedMap[langCode] == nil {
                 available.append(lang)
                 // This is equivalent to select languageCode from languages where languageCode not in (select languageCode from selectedlanguages)
@@ -70,13 +70,13 @@ class LanguageModel : SettingsModelInterface {
         get { return filtered.count }
     }
     
-    func getSelectedVersion(row: Int) -> Version? {
+    func getSelectedBible(row: Int) -> Bible? {
         return nil
     }
     func getSelectedLanguage(row: Int) -> Language? {
         return (row >= 0 && row < selected.count) ? selected[row] : nil
     }
-    func getAvailableVersion(row: Int) -> Version? {
+    func getAvailableBible(row: Int) -> Bible? {
         return nil
     }
     func getAvailableLanguage(row: Int) -> Language? {
@@ -88,8 +88,8 @@ class LanguageModel : SettingsModelInterface {
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
         cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         let language = selected[indexPath.row]
-        cell.textLabel?.text = language.localizedName
-        cell.detailTextLabel?.text = language.languageName
+        cell.textLabel?.text = language.name
+        cell.detailTextLabel?.text = language.name
         cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
         return cell
     }
@@ -99,8 +99,8 @@ class LanguageModel : SettingsModelInterface {
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
         cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         let language = (inSearch) ? filtered[indexPath.row] : available[indexPath.row]
-        cell.textLabel?.text = language.localizedName
-        cell.detailTextLabel?.text = language.languageName
+        cell.textLabel?.text = language.name
+        cell.detailTextLabel?.text = language.name
         cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
         return cell
     }
@@ -116,7 +116,7 @@ class LanguageModel : SettingsModelInterface {
         if inSearch {
             language = self.filtered[source]
             guard let availableIndex = self.available.index(of: language) else {
-                print("Item in filtered not found in available? \(language.languageCode)")
+                print("Item in filtered not found in available? \(language.iso)")
                 return
             }
             self.filtered.remove(at: source)
@@ -142,8 +142,8 @@ class LanguageModel : SettingsModelInterface {
         let searchFor = searchText.lowercased()
         self.filtered.removeAll()
         for lang in available {
-            if lang.languageName.lowercased().contains(searchFor) ||
-                lang.localizedName.lowercased().contains(searchFor) {
+            if lang.name.lowercased().contains(searchFor) ||
+                lang.name.lowercased().contains(searchFor) { // This needs to be able to search on localized??
                 self.filtered.append(lang)
             }
         }

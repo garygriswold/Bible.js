@@ -1,5 +1,5 @@
 //
-//  VersionDetailViewController.swift
+//  BibleDetailViewController.swift
 //  StaticCellsSwift
 //
 //  Created by Gary Griswold on 8/3/18.
@@ -9,19 +9,18 @@
 import Foundation
 import UIKit
 
-class VersionDetailViewController : UIViewController {
+class BibleDetailViewController : UIViewController {
     
-    let version: Version
+    let bible: Bible
     var textView: UITextView!
     
-    init(version: Version) {
-        self.version = version
+    init(bible: Bible) {
+        self.bible = bible
         self.textView = UITextView(frame: .zero)
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
-        self.version = Version(versionCode: "", languageCode: "", versionName: "", englishName: "",
-                               organizationId: "", organizationName: "", copyright: "")
+        self.bible = Bible(bibleId: "", abbr: "", iso: "", name: "", vname: "")
         self.textView = UITextView(frame: .zero)
         super.init(coder: coder)
     }
@@ -32,7 +31,7 @@ class VersionDetailViewController : UIViewController {
         self.view.backgroundColor = UIColor.white
         
         // set Top Bar items
-        self.navigationItem.title = version.versionName
+        self.navigationItem.title = bible.name
         
         self.textView = UITextView(frame: UIScreen.main.bounds)
         let inset = self.textView.frame.width * 0.05

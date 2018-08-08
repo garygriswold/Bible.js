@@ -9,7 +9,7 @@ import UIKit
 enum SettingsViewType {
     case primary
     case language
-    case version
+    case bible
 }
 
 class SettingsViewController: UIViewController {
@@ -52,18 +52,18 @@ class SettingsViewController: UIViewController {
             self.navigationItem.title = "Settings"
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "\u{FF1c} Read", style: .done, target: self,
                                                                     action: #selector(doneHandler))
-            self.dataModel = VersionModel()
-            self.tableView.register(VersionCell.self, forCellReuseIdentifier: "versionCell")
+            self.dataModel = BibleModel()
+            self.tableView.register(BibleCell.self, forCellReuseIdentifier: "bibleCell")
         case .language:
             self.navigationItem.title = "Languages"
             self.dataModel = LanguageModel()
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
             self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
-        case .version:
+        case .bible:
             self.navigationItem.title = "Bibles"
-            self.dataModel = VersionModel()
+            self.dataModel = BibleModel()
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
-            self.tableView.register(VersionCell.self, forCellReuseIdentifier: "versionCell")
+            self.tableView.register(BibleCell.self, forCellReuseIdentifier: "bibleCell")
         }
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
         

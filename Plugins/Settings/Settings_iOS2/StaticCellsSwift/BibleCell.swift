@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class VersionCell : UITableViewCell {
+class BibleCell : UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.value1, reuseIdentifier: reuseIdentifier)

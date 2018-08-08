@@ -10,18 +10,19 @@
 		3500362319D9017500E69508 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3500362219D9017500E69508 /* AppDelegate.swift */; };
 		3500362A19D9017500E69508 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3500362919D9017500E69508 /* Images.xcassets */; };
 		3500365219D903D800E69508 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3500365119D903D800E69508 /* SettingsViewController.swift */; };
+		E45AC82D211AA95600D31D21 /* SettingsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45AC82C211AA95600D31D21 /* SettingsAdapter.swift */; };
 		E486FF63211246A600336223 /* AppFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = E486FF62211246A600336223 /* AppFont.swift */; };
 		E4A771F12111033900FF062D /* TextSizeSliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A771F02111033900FF062D /* TextSizeSliderCell.swift */; };
-		E4A9D9EE2114FCF500D707B7 /* VersionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A9D9ED2114FCF500D707B7 /* VersionDetailViewController.swift */; };
+		E4A9D9EE2114FCF500D707B7 /* BibleDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A9D9ED2114FCF500D707B7 /* BibleDetailViewController.swift */; };
 		E4AE1AD22114069A00DE6EC0 /* SettingsNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AE1AD12114069A00DE6EC0 /* SettingsNavigator.swift */; };
 		E4C8F63A210EC75C00FE1A8E /* SettingsModelInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F639210EC75C00FE1A8E /* SettingsModelInterface.swift */; };
-		E4C8F63C210ECC2500FE1A8E /* VersionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F63B210ECC2500FE1A8E /* VersionModel.swift */; };
+		E4C8F63C210ECC2500FE1A8E /* BibleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F63B210ECC2500FE1A8E /* BibleModel.swift */; };
 		E4C8F63E210F7C6C00FE1A8E /* LanguageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F63D210F7C6C00FE1A8E /* LanguageModel.swift */; };
 		E4C8F646210F803900FE1A8E /* LanguageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F645210F803900FE1A8E /* LanguageCell.swift */; };
 		E4C8F64E210FFBBA00FE1A8E /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C8F64D210FFBBA00FE1A8E /* FeedbackViewController.swift */; };
 		E4FEE9D5210780BE007BA9EF /* SettingsViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FEE9D4210780BE007BA9EF /* SettingsViewDataSource.swift */; };
 		E4FEE9D7210780D6007BA9EF /* SettingsViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FEE9D6210780D6007BA9EF /* SettingsViewDelegate.swift */; };
-		E4FEE9DB2107BF55007BA9EF /* VersionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FEE9DA2107BF55007BA9EF /* VersionCell.swift */; };
+		E4FEE9DB2107BF55007BA9EF /* BibleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FEE9DA2107BF55007BA9EF /* BibleCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,19 +30,20 @@
 		3500362219D9017500E69508 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3500362919D9017500E69508 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3500365119D903D800E69508 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		E45AC82C211AA95600D31D21 /* SettingsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAdapter.swift; sourceTree = "<group>"; };
 		E4632D332106DCF700F56DA4 /* StaticCellsSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StaticCellsSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E486FF62211246A600336223 /* AppFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFont.swift; sourceTree = "<group>"; };
 		E4A771F02111033900FF062D /* TextSizeSliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSizeSliderCell.swift; sourceTree = "<group>"; };
-		E4A9D9ED2114FCF500D707B7 /* VersionDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionDetailViewController.swift; sourceTree = "<group>"; };
+		E4A9D9ED2114FCF500D707B7 /* BibleDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleDetailViewController.swift; sourceTree = "<group>"; };
 		E4AE1AD12114069A00DE6EC0 /* SettingsNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigator.swift; sourceTree = "<group>"; };
 		E4C8F639210EC75C00FE1A8E /* SettingsModelInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModelInterface.swift; sourceTree = "<group>"; };
-		E4C8F63B210ECC2500FE1A8E /* VersionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionModel.swift; sourceTree = "<group>"; };
+		E4C8F63B210ECC2500FE1A8E /* BibleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleModel.swift; sourceTree = "<group>"; };
 		E4C8F63D210F7C6C00FE1A8E /* LanguageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageModel.swift; sourceTree = "<group>"; };
 		E4C8F645210F803900FE1A8E /* LanguageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageCell.swift; sourceTree = "<group>"; };
 		E4C8F64D210FFBBA00FE1A8E /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		E4FEE9D4210780BE007BA9EF /* SettingsViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewDataSource.swift; sourceTree = "<group>"; };
 		E4FEE9D6210780D6007BA9EF /* SettingsViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewDelegate.swift; sourceTree = "<group>"; };
-		E4FEE9DA2107BF55007BA9EF /* VersionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionCell.swift; sourceTree = "<group>"; };
+		E4FEE9DA2107BF55007BA9EF /* BibleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,13 +74,14 @@
 				E4FEE9D4210780BE007BA9EF /* SettingsViewDataSource.swift */,
 				E4FEE9D6210780D6007BA9EF /* SettingsViewDelegate.swift */,
 				E4C8F64D210FFBBA00FE1A8E /* FeedbackViewController.swift */,
-				E4A9D9ED2114FCF500D707B7 /* VersionDetailViewController.swift */,
+				E4A9D9ED2114FCF500D707B7 /* BibleDetailViewController.swift */,
 				E4A771F02111033900FF062D /* TextSizeSliderCell.swift */,
 				E4C8F645210F803900FE1A8E /* LanguageCell.swift */,
-				E4FEE9DA2107BF55007BA9EF /* VersionCell.swift */,
+				E4FEE9DA2107BF55007BA9EF /* BibleCell.swift */,
 				E4C8F639210EC75C00FE1A8E /* SettingsModelInterface.swift */,
-				E4C8F63B210ECC2500FE1A8E /* VersionModel.swift */,
+				E4C8F63B210ECC2500FE1A8E /* BibleModel.swift */,
 				E4C8F63D210F7C6C00FE1A8E /* LanguageModel.swift */,
+				E45AC82C211AA95600D31D21 /* SettingsAdapter.swift */,
 				E486FF62211246A600336223 /* AppFont.swift */,
 				3500362919D9017500E69508 /* Images.xcassets */,
 				3500362019D9017500E69508 /* Supporting Files */,
@@ -167,16 +170,17 @@
 				E4C8F63E210F7C6C00FE1A8E /* LanguageModel.swift in Sources */,
 				E486FF63211246A600336223 /* AppFont.swift in Sources */,
 				E4C8F64E210FFBBA00FE1A8E /* FeedbackViewController.swift in Sources */,
-				E4A9D9EE2114FCF500D707B7 /* VersionDetailViewController.swift in Sources */,
+				E4A9D9EE2114FCF500D707B7 /* BibleDetailViewController.swift in Sources */,
 				E4C8F63A210EC75C00FE1A8E /* SettingsModelInterface.swift in Sources */,
 				3500365219D903D800E69508 /* SettingsViewController.swift in Sources */,
 				E4C8F646210F803900FE1A8E /* LanguageCell.swift in Sources */,
 				3500362319D9017500E69508 /* AppDelegate.swift in Sources */,
 				E4FEE9D5210780BE007BA9EF /* SettingsViewDataSource.swift in Sources */,
+				E45AC82D211AA95600D31D21 /* SettingsAdapter.swift in Sources */,
 				E4AE1AD22114069A00DE6EC0 /* SettingsNavigator.swift in Sources */,
-				E4FEE9DB2107BF55007BA9EF /* VersionCell.swift in Sources */,
+				E4FEE9DB2107BF55007BA9EF /* BibleCell.swift in Sources */,
 				E4A771F12111033900FF062D /* TextSizeSliderCell.swift in Sources */,
-				E4C8F63C210ECC2500FE1A8E /* VersionModel.swift in Sources */,
+				E4C8F63C210ECC2500FE1A8E /* BibleModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

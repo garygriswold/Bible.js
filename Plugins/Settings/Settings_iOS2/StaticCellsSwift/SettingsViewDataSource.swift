@@ -29,7 +29,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             self.searchController.searchBar.placeholder = "Find Bibles"
         case .language:
             self.searchController.searchBar.placeholder = "Find Languages"
-        case .version:
+        case .bible:
             self.searchController.searchBar.placeholder = "Find Bibles"
         }
         self.selectedSection = selectionViewSection
