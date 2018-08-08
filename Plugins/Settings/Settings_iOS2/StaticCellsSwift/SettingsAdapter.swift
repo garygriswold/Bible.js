@@ -10,14 +10,42 @@ import Foundation
 
 class SettingsAdapter {
     
+    func getLanguageSettings() -> [String] {
+        // Add logic to get from settings
+        // Add logic to get from device when absend, and update settings
+        let settings = "eng,fra,deu"
+        return settings.components(separatedBy: ",")
+    }
+    
+    func updateLanguageSettings(languages: [String]) {
+        
+    }
+    
+    func getBibleSettings() -> [String] {
+        // Add logic to get from settings
+        // Add logic to get from recommended when absent, and update settings
+        let settings = "ENGNIV,ENGKJV,ESVESV"
+        return settings.components(separatedBy: ",")
+    }
+    
+    func updateBibleSettings(bibles: [String]) {
+        
+    }
+    
+//    func getLanguagesSelected(selected: String) -> [Language] {
+//        let sql =  "SELECT iso, name, iso1, rightToLeft FROM Language WHERE iso IN (?)"
+//
+//    }
+    
+ //   func getLanguagesAvailable(selected: String) -> [Language] {
+ //       let sql =  "SELECT iso, name, iso1, rightToLeft FROM Language"
+ //   }
+    
+    private func toQuotedString(array: [String]) -> String {
+        return "'" + array.joined(separator: "','") + "'"
+    }
+    
     /*
-    settings selectedLanguages = “eng,fra,deu”
-    if selected is null, populate from preferred languages
-    
-    settings selectedBibles = “ENGNIV,ENGKJV,ESVESV”
-    if null select bibleId from Bibles where iso in (selectedLanguages) and recommended=’T’
-    
-    
     1. get selected languages
     select iso, name, iso1 from Language where iso in (selectedLanguages)
     
