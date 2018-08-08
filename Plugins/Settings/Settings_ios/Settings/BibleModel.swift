@@ -11,56 +11,19 @@ import UIKit
 
 class BibleModel : SettingsModelInterface {
     
-    private var bibles = [Bible]() // temporary, I think
-    private var sequence = [String]()
-    private var selected = [Bible]()
-    private var available = [Bible]()
+    private let adapter: SettingsAdapter
+    private var languages: [String]
+    private var sequence: [String]
+    private var selected: [Bible]
+    private var available: [Bible]
     private var filtered = [Bible]()
     
     init() {
-        fill()
-    }
-    
-    func fill() {
-        sequence.append("ESV")
-        sequence.append("ERV-CMN")
-        sequence.append("ERV-ARB")
-        
-        var bibleSelectedMap = [String : Bool]()
-        for vers in sequence {
-            bibleSelectedMap[vers] = true
-        }
-        
-        bibles.append(Bible(bibleId: "ENGKJV", abbr: "KJV", iso: "eng",
-                                name: "King James Version",
-                                vname: "King James Version"))
-        bibles.append(Bible(bibleId: "ENGWEB", abbr: "WEB", iso: "eng",
-                                name: "World English Bible",
-                                vname: "World English Bible"))
-        bibles.append(Bible(bibleId: "ENGESV", abbr: "ESV", iso: "eng",
-                                name: "English Standard Version",
-                                vname: "English Standard Version"))
-        bibles.append(Bible(bibleId: "ENGNIV", abbr: "NIV", iso: "eng",
-                                name: "New International Version",
-                                vname: "New International Version"))
-        bibles.append(Bible(bibleId: "ERV-ENG", abbr: "ERV", iso: "eng",
-                                name: "Easy Read Version",
-                                vname: "Easy Read Version"))
-        bibles.append(Bible(bibleId: "ERV-CMN", abbr: "ERV", iso: "cmn",
-                                name: "圣经–普通话本",
-                                vname: "Chinese Union Version"))
-        bibles.append(Bible(bibleId: "ERV-ARB", abbr: "ERV", iso: "arb",
-                                name: "الكتاب المقدس ترجمة فان دايك",
-                                vname: "Van Dycke Bible"))
-        
-        for vers in bibles {
-            let bibleId = vers.bibleId
-            if bibleSelectedMap[bibleId] == nil {
-                available.append(vers)
-            } else {
-                selected.append(vers)
-            }
-        }
+        self.adapter = SettingsAdapter()
+        self.languages = self.adapter.getLanguageSettings()
+        self.sequence = self.adapter.getBibleSettings()
+        self.selected = self.adapter.getBiblesSelected(selectedLanguages: self.languages, selectedBibles: self.sequence)
+        self.available = self.adapter.getBiblesAvailable(selectedLanguages: self.languages, selectedBibles: self.sequence)
     }
 
     var selectedCount: Int {

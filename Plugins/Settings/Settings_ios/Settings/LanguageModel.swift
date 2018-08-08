@@ -11,51 +11,17 @@ import UIKit
 
 class LanguageModel : SettingsModelInterface {
     
-    private var languages = [Language]() // temporary, I think
-    private var sequence = [String]()
-    private var selected = [Language]()
-    private var available = [Language]()
+    private let adapter: SettingsAdapter
+    private var sequence: [String]
+    private var selected: [Language]
+    private var available: [Language]
     private var filtered = [Language]()
     
     init() {
-        fill()
-    }
-    
-    func fill() {
-        sequence.append("ENG")
-        sequence.append("ARB")
-        sequence.append("CMN")
-        // This is equivalent to select languageCode from selectedLanguages order by sequence;
-        // Or possibly select languageCode from languages where sequence is not null order by sequence
-        
-        var langSelectedMap = [String : Bool]()
-        for lang in sequence {
-            langSelectedMap[lang] = true
-        }
-        
-        languages.append(Language(iso: "ENG", name: "English", iso1: "en",
-                                  rightToLeft: false))
-        languages.append(Language(iso: "FRN", name: "Francaise", iso1: "fr",
-                                  rightToLeft: false))
-        languages.append(Language(iso: "DEU", name: "Deutsch", iso1: "de",
-                                  rightToLeft: false))
-        languages.append(Language(iso: "SPN", name: "Espanol", iso1: "es",
-                                  rightToLeft: false))
-        languages.append(Language(iso: "ARB", name: "العربية", iso1: "ar",
-                                  rightToLeft: true))
-        languages.append(Language(iso: "CMN", name: "汉语, 漢語", iso1: "zh",
-                                  rightToLeft: false))
-        
-        for lang in languages {
-            let langCode = lang.iso
-            if langSelectedMap[langCode] == nil {
-                available.append(lang)
-                // This is equivalent to select languageCode from languages where languageCode not in (select languageCode from selectedlanguages)
-                // Or, possibly select languageCode from languages where sequence is null order by languages
-            } else {
-                selected.append(lang)
-            }
-        }
+        self.adapter = SettingsAdapter()
+        self.sequence = self.adapter.getLanguageSettings()
+        self.selected = self.adapter.getLanguagesSelected(selected: self.sequence)
+        self.available = self.adapter.getLanguagesAvailable(selected: self.sequence)
     }
     
     var selectedCount: Int {

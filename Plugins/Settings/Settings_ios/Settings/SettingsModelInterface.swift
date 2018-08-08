@@ -9,20 +9,10 @@
 import Foundation
 import UIKit
 
-// This does not conform to naming, but only lang code could
-/*
-struct UserLocale {
-    let langIso1Code: String    // iso 2 char language from locale
-    let variantCode: String?    // optional variant from locale
-    let scriptCode: String?     // optional script from locale
-    let countryCode: String     // country code from locale
-    let languageCode: String    // FCBH 3 char language code
-}
-*/
 struct Language : Equatable {
     let iso: String         // sil 3 char code
     let name: String        // name in its own language
-    let iso1: String        // 2 char iso code
+    let iso1: String?       // 2 char iso code
     let rightToLeft: Bool
     
     static func == (lhs: Language, rhs: Language) -> Bool {
@@ -39,7 +29,7 @@ struct Bible : Equatable {
     let abbr: String        // Version Abbreviation
     let iso: String         // SIL 3 char language code
     let name: String        // Name in the language of the version
-    let vname: String       // Name of the version in English
+    let vname: String?      // Name of the version in English
     
     static func == (lhs: Bible, rhs: Bible) -> Bool {
         return lhs.bibleId == rhs.bibleId
