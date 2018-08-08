@@ -1,6 +1,6 @@
 //
 //  AppFont.swift
-//  StaticCellsSwift
+//  Settings
 //
 //  Created by Gary Griswold on 8/1/18.
 //  Copyright © 2018 Short Sands, LLC. All rights reserved.

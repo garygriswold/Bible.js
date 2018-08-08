@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  StaticCellsSwift
+//  Settings
 //
 
 import UIKit

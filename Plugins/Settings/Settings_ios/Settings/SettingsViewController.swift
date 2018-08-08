@@ -1,6 +1,6 @@
 //
 //  SettingsViewController.swift
-//  StaticCellsSwift
+//  Settings
 //
 
 import Foundation

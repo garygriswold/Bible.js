@@ -1,9 +1,9 @@
 //
 //  SettingsAdapter.swift
-//  StaticCellsSwift
+//  Settings
 //
 //  Created by Gary Griswold on 8/8/18.
-//  Copyright © 2018 iOSExamples. All rights reserved.
+//  Copyright © 2018 Short Sands, LLC. All rights reserved.
 //
 
 import Foundation

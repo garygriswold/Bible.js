@@ -1,6 +1,6 @@
 //
 //  TextSizeSliderCell.swift
-//  StaticCellsSwift
+//  Settings
 //
 //  Created by Gary Griswold on 7/31/18.
 //  Copyright © 2018 Short Sands, LLC. All rights reserved.

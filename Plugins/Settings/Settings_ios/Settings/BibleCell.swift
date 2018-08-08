@@ -1,9 +1,9 @@
 //
 //  VersionSelectedCell.swift
-//  StaticCellsSwift
+//  Settings
 //
 //  Created by Gary Griswold on 7/24/18.
-//  Copyright © 2018 iOSExamples. All rights reserved.
+//  Copyright © 2018 Short Sands, LLC. All rights reserved.
 //
 
 import Foundation
