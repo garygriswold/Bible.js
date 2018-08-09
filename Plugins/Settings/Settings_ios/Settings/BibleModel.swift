@@ -120,10 +120,19 @@ class BibleModel : SettingsModelInterface {
         let searchFor = searchText.uppercased()
         self.filtered.removeAll()
         for vers in available {
-            // It would be nice if I could match on each word of name
-            if vers.name.uppercased().hasPrefix(searchFor) ||
-                vers.abbr.hasPrefix(searchFor) {
+            if vers.abbr.hasPrefix(searchFor) {
                 self.filtered.append(vers)
+            } else if vers.name.uppercased().hasPrefix(searchFor) {
+                self.filtered.append(vers)
+            } else {
+                // This could be precomputed and stored for performance reasons
+                let words: [String] = vers.name.components(separatedBy: " ")
+                for word in words {
+                    if word.uppercased().hasPrefix(searchFor) {
+                        self.filtered.append(vers)
+                        break // jump out of word loop, back to vers loop
+                    }
+                }
             }
         }
     }
