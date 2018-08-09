@@ -13,8 +13,8 @@ class SettingsAdapter {
     
     private static let SETTINGS_DB = "Settings.db"
     private static let VERSIONS_DB = "Versions.db"
-    private static let LANGS_SELECTED = "LANGS_SELECTED"
-    private static let BIBLE_SELECTED = "BIBLE_SELECTED"
+    private static let LANGS_SELECTED = "langs_selected"
+    private static let BIBLE_SELECTED = "bible_selected"
     
     //
     // Settings methods
@@ -32,12 +32,20 @@ class SettingsAdapter {
         //return self.getSettings(name: SettingsAdapter.BIBLE_SELECTED)
     }
     
-    func updateLanguageSettings(languages: [String]) {
-        self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: languages)
+    func updateSettings(languages: [Language]) {
+        var keys = [String]()
+        for lang in languages {
+            keys.append(lang.iso)
+        }
+        self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: keys)
     }
     
-    func updateBibleSettings(bibles: [String]) {
-        self.updateSettings(name: SettingsAdapter.BIBLE_SELECTED, settings: bibles)
+    func updateSettings(bibles: [Bible]) {
+        var keys = [String]()
+        for bible in bibles {
+            keys.append(bible.bibleId)
+        }
+        self.updateSettings(name: SettingsAdapter.BIBLE_SELECTED, settings: keys)
     }
     
     private func getSettings(name: String) -> [String] {
@@ -61,8 +69,8 @@ class SettingsAdapter {
     }
     
     private func updateSettings(name: String, settings: [String]) {
-        let sql = "UPDATE Settings SET value = ? WHERE name = ?"
-        let values = [settings.joined(separator: ","), name]
+        let sql = "REPLACE INTO Settings (name, value) VALUES (?,?)"
+        let values = [name, settings.joined(separator: ",")]
         do {
             let db: Sqlite3 = try self.getSettingsDB()
             let count = try db.executeV1(sql: sql, values: values)
@@ -76,13 +84,11 @@ class SettingsAdapter {
         var db: Sqlite3?
         do {
             db = try Sqlite3.findDB(dbname: SettingsAdapter.SETTINGS_DB)
-        } catch Sqlite3Error.databaseNotFound {
+        } catch Sqlite3Error.databaseNotOpenError {
             db = try Sqlite3.openDB(dbname: SettingsAdapter.SETTINGS_DB, copyIfAbsent: false)
             // Caution, this create table comes from AppUpdate.js and must be consistent with it.
             let create = "CREATE TABLE IF NOT EXISTS Settings(name TEXT PRIMARY KEY NOT NULL, value TEXT NULL)"
             _ = try db?.executeV1(sql: create, values: [])
-        } catch Sqlite3Error.databaseNotOpenError {
-            db = try Sqlite3.openDB(dbname: SettingsAdapter.SETTINGS_DB, copyIfAbsent: false)
         }
         return db!
     }

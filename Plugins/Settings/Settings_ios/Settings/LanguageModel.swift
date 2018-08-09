@@ -79,9 +79,10 @@ class LanguageModel : SettingsModelInterface {
     }
     
     func moveSelected(source: Int, destination: Int) {
-        let version = self.selected[source]
+        let language = self.selected[source]
         self.selected.remove(at: source)
-        self.selected.insert(version, at: destination)
+        self.selected.insert(language, at: destination)
+        self.adapter.updateSettings(languages: self.selected)
     }
     
     func moveAvailableToSelected(source: Int, destination: Int, inSearch: Bool) {
@@ -99,15 +100,17 @@ class LanguageModel : SettingsModelInterface {
             self.available.remove(at: source)
         }
         self.selected.insert(language, at: destination)
+        self.adapter.updateSettings(languages: self.selected)
     }
     
     func moveSelectedToAvailable(source: Int, destination: Int, inSearch: Bool) {
-        let version = self.selected[source]
+        let language = self.selected[source]
         self.selected.remove(at: source)
-        self.available.insert(version, at: destination)
+        self.available.insert(language, at: destination)
         if inSearch {
-            self.filtered.insert(version, at: destination)
+            self.filtered.insert(language, at: destination)
         }
+        self.adapter.updateSettings(languages: self.selected)
     }
     
     func filterForSearch(searchText: String) {

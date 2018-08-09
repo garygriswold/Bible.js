@@ -87,6 +87,7 @@ class BibleModel : SettingsModelInterface {
         let version = self.selected[source]
         self.selected.remove(at: source)
         self.selected.insert(version, at: destination)
+        self.adapter.updateSettings(bibles: self.selected)
     }
     
     func moveAvailableToSelected(source: Int, destination: Int, inSearch: Bool) {
@@ -104,6 +105,7 @@ class BibleModel : SettingsModelInterface {
             self.available.remove(at: source)
         }
         self.selected.insert(bible, at: destination)
+        self.adapter.updateSettings(bibles: self.selected)
     }
     
     func moveSelectedToAvailable(source: Int, destination: Int, inSearch: Bool) {
@@ -113,6 +115,7 @@ class BibleModel : SettingsModelInterface {
         if inSearch {
             self.filtered.insert(version, at: destination)
         }
+        self.adapter.updateSettings(bibles: self.selected)
     }
     
     /**
