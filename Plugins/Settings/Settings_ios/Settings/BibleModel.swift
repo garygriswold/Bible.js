@@ -117,11 +117,12 @@ class BibleModel : SettingsModelInterface {
     
     func filterForSearch(searchText: String) {
         print("****** INSIDE FILTER CONTENT FOR SEARCH ******")
-        let searchFor = searchText.lowercased()
+        let searchFor = searchText.uppercased()
         self.filtered.removeAll()
         for vers in available {
-            if vers.name.lowercased().contains(searchFor) ||
-                vers.abbr.lowercased().contains(searchFor) {
+            // It would be nice if I could match on each word of name
+            if vers.name.uppercased().hasPrefix(searchFor) ||
+                vers.abbr.hasPrefix(searchFor) {
                 self.filtered.append(vers)
             }
         }

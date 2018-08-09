@@ -115,8 +115,8 @@ class LanguageModel : SettingsModelInterface {
         let searchFor = searchText.lowercased()
         self.filtered.removeAll()
         for lang in available {
-            if lang.name.lowercased().contains(searchFor) ||
-                lang.name.lowercased().contains(searchFor) { // This needs to be able to search on localized??
+            if lang.name.lowercased().hasPrefix(searchFor) ||
+                lang.localized.lowercased().hasPrefix(searchFor) {
                 self.filtered.append(lang)
             }
         }

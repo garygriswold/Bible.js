@@ -78,7 +78,7 @@ class SettingsAdapter {
     }
     
     func getBiblesSelected(selectedLanguages: [String], selectedBibles: [String]) -> [Bible] {
-        let sql =  "SELECT bibleId, abbr, iso, name, vname  FROM Bible WHERE bibleId" +
+        let sql =  "SELECT bibleId, abbr, iso, name, vname FROM Bible WHERE bibleId" +
             genQuest(array: selectedBibles) + " AND iso" + genQuest(array: selectedLanguages)
         return getBibles(sql: sql, selectedLanguages: selectedLanguages, selectedBibles: selectedBibles)
     }
