@@ -58,8 +58,9 @@ class LanguageModel : SettingsModelInterface {
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
         cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         let language = selected[indexPath.row]
-        cell.textLabel?.text = language.name
-        cell.detailTextLabel?.text = language.name
+        let ownLocale = Locale(identifier: language.iso)
+        cell.textLabel?.text = ownLocale.localizedString(forLanguageCode: language.iso)
+        cell.detailTextLabel?.text = Locale.current.localizedString(forLanguageCode: language.iso)
         cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
         return cell
     }
@@ -69,8 +70,9 @@ class LanguageModel : SettingsModelInterface {
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
         cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         let language = (inSearch) ? filtered[indexPath.row] : available[indexPath.row]
-        cell.textLabel?.text = language.name
-        cell.detailTextLabel?.text = language.name
+        let ownLocale = Locale(identifier: language.iso)
+        cell.textLabel?.text = ownLocale.localizedString(forLanguageCode: language.iso)
+        cell.detailTextLabel?.text = Locale.current.localizedString(forLanguageCode: language.iso)
         cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
         return cell
     }
