@@ -12,12 +12,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
-        do {
-            _ = try Sqlite3.openDB(dbname: "Versions.db", copyIfAbsent: true)
-        } catch let err {
-            print("Could not open Versions.db \(err)")
-        }
 
         //let viewController = SettingsViewController(settingsViewType: .primary)
         //let viewController = SettingsViewController(settingsViewType: .language)

@@ -11,8 +11,10 @@ import Utility
 
 class SettingsAdapter {
     
-    private static var LANGS_SELECTED = "LANGS_SELECTED"
-    private static var BIBLE_SELECTED = "BIBLE_SELECTED"
+    private static let SETTINGS_DB = "Settings.db"
+    private static let VERSIONS_DB = "Versions.db"
+    private static let LANGS_SELECTED = "LANGS_SELECTED"
+    private static let BIBLE_SELECTED = "BIBLE_SELECTED"
     
     //
     // Settings methods
@@ -41,7 +43,7 @@ class SettingsAdapter {
     private func getSettings(name: String) -> [String] {
         let sql = "SELECT value FROM Settings WHERE name = ?"
         do {
-            let db: Sqlite3 = try Sqlite3.findDB(dbname: "Settings.db")
+            let db: Sqlite3 = try self.getSettingsDB()
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: [name])
             if resultSet.count > 0 && resultSet[0].count > 0 {
                 let value = resultSet[0][0]!
@@ -62,12 +64,27 @@ class SettingsAdapter {
         let sql = "UPDATE Settings SET value = ? WHERE name = ?"
         let values = [settings.joined(separator: ","), name]
         do {
-            let db: Sqlite3 = try Sqlite3.findDB(dbname: "Settings.db")
+            let db: Sqlite3 = try self.getSettingsDB()
             let count = try db.executeV1(sql: sql, values: values)
             print("Settings updated \(count)")
         } catch let err {
             print("ERROR: SettingsAdapter.updateSettings \(err)")
         }
+    }
+    
+    private func getSettingsDB() throws -> Sqlite3 {
+        var db: Sqlite3?
+        do {
+            db = try Sqlite3.findDB(dbname: SettingsAdapter.SETTINGS_DB)
+        } catch Sqlite3Error.databaseNotFound {
+            db = try Sqlite3.openDB(dbname: SettingsAdapter.SETTINGS_DB, copyIfAbsent: false)
+            // Caution, this create table comes from AppUpdate.js and must be consistent with it.
+            let create = "CREATE TABLE IF NOT EXISTS Settings(name TEXT PRIMARY KEY NOT NULL, value TEXT NULL)"
+            _ = try db?.executeV1(sql: create, values: [])
+        } catch Sqlite3Error.databaseNotOpenError {
+            db = try Sqlite3.openDB(dbname: SettingsAdapter.SETTINGS_DB, copyIfAbsent: false)
+        }
+        return db!
     }
     
     //
@@ -100,7 +117,7 @@ class SettingsAdapter {
         var languages = [Language]()
         do {
             let currLocale = Locale.current
-            let db: Sqlite3 = try Sqlite3.findDB(dbname: "Versions.db")
+            let db: Sqlite3 = try self.getVersionsDB()
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: selected)
             for row in resultSet {
                 let iso: String = row[0]!
@@ -155,7 +172,7 @@ class SettingsAdapter {
     private func getBibles(sql: String, selectedLanguages: [String], selectedBibles: [String]) -> [Bible] {
         var bibles = [Bible]()
         do {
-            let db: Sqlite3 = try Sqlite3.findDB(dbname: "Versions.db")
+            let db: Sqlite3 = try self.getVersionsDB()
             let values = selectedBibles + selectedLanguages
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: values)
             for row in resultSet {
@@ -166,6 +183,16 @@ class SettingsAdapter {
             print("ERROR: SettingsAdapter.getBibles \(err)")
         }
         return bibles
+    }
+    
+    private func getVersionsDB() throws -> Sqlite3 {
+        var db: Sqlite3?
+        do {
+            db = try Sqlite3.findDB(dbname: SettingsAdapter.VERSIONS_DB)
+        } catch Sqlite3Error.databaseNotOpenError {
+            db = try Sqlite3.openDB(dbname: SettingsAdapter.VERSIONS_DB, copyIfAbsent: true)
+        }
+        return db!
     }
     
     private func genQuest(array: [String]) -> String {
