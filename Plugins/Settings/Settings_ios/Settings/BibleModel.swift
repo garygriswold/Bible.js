@@ -115,6 +115,10 @@ class BibleModel : SettingsModelInterface {
         }
     }
     
+    /**
+    * A better search would search starting with each word, but compare from
+    * there to the end of the next word.
+    */
     func filterForSearch(searchText: String) {
         print("****** INSIDE FILTER CONTENT FOR SEARCH ******")
         let searchFor = searchText.uppercased()
