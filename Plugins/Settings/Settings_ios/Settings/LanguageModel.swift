@@ -24,6 +24,10 @@ class LanguageModel : SettingsModelInterface {
         self.available = self.adapter.getLanguagesAvailable(selected: self.sequence)
     }
     
+    deinit {
+        print("***** deinit LanguageModel ******")
+    }
+    
     var selectedCount: Int {
         get { return selected.count }
     }

@@ -31,6 +31,10 @@ class BibleModel : SettingsModelInterface {
                                                              selectedBibles: self.sequence)
         }
     }
+    
+    deinit {
+        print("***** deinit BibleModel ******")
+    }
 
     var selectedCount: Int {
         get { return selected.count }
