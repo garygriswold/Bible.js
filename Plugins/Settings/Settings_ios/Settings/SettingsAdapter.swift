@@ -11,24 +11,84 @@ import Utility
 
 class SettingsAdapter {
     
+    private static var LANGS_SELECTED = "LANGS_SELECTED"
+    private static var BIBLE_SELECTED = "BIBLE_SELECTED"
+    
     //
-    // Language methods
+    // Settings methods
     //
     
     func getLanguageSettings() -> [String] {
-        // Add logic to get from settings
-        // Add logic to get from device when absend, and update settings
-        let settings = "eng,fra,deu"
+        let settings = "eng,deu,fra"
         return settings.components(separatedBy: ",")
+        //return self.getSettings(name: SettingsAdapter.LANGS_SELECTED)
+    }
+    
+    func getBibleSettings() -> [String] {
+        let settings = "ENGKJV,ENGNIV,ENGESV"
+        return settings.components(separatedBy: ",")
+        //return self.getSettings(name: SettingsAdapter.BIBLE_SELECTED)
     }
     
     func updateLanguageSettings(languages: [String]) {
-        //db.executeV1(sql: String, values: [Any?]) throws -> Int {}
+        self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: languages)
     }
+    
+    func updateBibleSettings(bibles: [String]) {
+        self.updateSettings(name: SettingsAdapter.BIBLE_SELECTED, settings: bibles)
+    }
+    
+    private func getSettings(name: String) -> [String] {
+        let sql = "SELECT value FROM Settings WHERE name = ?"
+        do {
+            let db: Sqlite3 = try Sqlite3.findDB(dbname: "Settings.db")
+            let resultSet: [[String?]] = try db.queryV1(sql: sql, values: [name])
+            if resultSet.count > 0 && resultSet[0].count > 0 {
+                let value = resultSet[0][0]!
+                return value.components(separatedBy: ",")
+            } else {
+                // must do default here and save result
+                // In the meantime
+                let settings = "eng,fra,deu"
+                return settings.components(separatedBy: ",")
+            }
+        } catch let err {
+            print("ERROR: SettingsAdapter.getSettings \(err)")
+        }
+        return []
+    }
+    
+    private func updateSettings(name: String, settings: [String]) {
+        let sql = "UPDATE Settings SET value = ? WHERE name = ?"
+        let values = [settings.joined(separator: ","), name]
+        do {
+            let db: Sqlite3 = try Sqlite3.findDB(dbname: "Settings.db")
+            let count = try db.executeV1(sql: sql, values: values)
+            print("Settings updated \(count)")
+        } catch let err {
+            print("ERROR: SettingsAdapter.updateSettings \(err)")
+        }
+    }
+    
+    //
+    // Language Versions.db methods
     
     func getLanguagesSelected(selected: [String]) -> [Language] {
         let sql =  "SELECT iso, iso1, rightToLeft FROM Language WHERE iso" + genQuest(array: selected)
-        return getLanguages(sql: sql, selected: selected)
+        let results = getLanguages(sql: sql, selected: selected)
+        
+        // Sort results by selected list
+        var map = [String:Language]()
+        for result in results {
+            map[result.iso] = result
+        }
+        var languages = [Language]()
+        for iso: String in selected {
+            if let found: Language = map[iso] {
+                languages.append(found)
+            }
+        }
+        return languages
     }
     
     func getLanguagesAvailable(selected: [String]) -> [Language] {
@@ -57,30 +117,32 @@ class SettingsAdapter {
                 }
             }
         } catch let err {
-            print(err)
+            print("ERROR: SettingsAdapter.getLanguages \(err)")
         }
         return languages
     }
     
     //
-    // Bible methods
+    // Bible Versions.db methods
     //
-    
-    func getBibleSettings() -> [String] {
-        // Add logic to get from settings
-        // Add logic to get from recommended when absent, and update settings
-        let settings = "ENGNIV,ENGKJV,ESVESV"
-        return settings.components(separatedBy: ",")
-    }
-    
-    func updateBibleSettings(bibles: [String]) {
-        // db.executeV1(sql: String, values: [Any?]) throws -> Int {}
-    }
     
     func getBiblesSelected(selectedLanguages: [String], selectedBibles: [String]) -> [Bible] {
         let sql =  "SELECT bibleId, abbr, iso, name, vname FROM Bible WHERE bibleId" +
             genQuest(array: selectedBibles) + " AND iso" + genQuest(array: selectedLanguages)
-        return getBibles(sql: sql, selectedLanguages: selectedLanguages, selectedBibles: selectedBibles)
+        let results = getBibles(sql: sql, selectedLanguages: selectedLanguages, selectedBibles: selectedBibles)
+        
+        // Sort results by selectedBibles list
+        var map = [String:Bible]()
+        for result in results {
+            map[result.bibleId] = result
+        }
+        var bibles = [Bible]()
+        for bibleId: String in selectedBibles {
+            if let found: Bible = map[bibleId] {
+                bibles.append(found)
+            }
+        }
+        return bibles
     }
     
     func getBiblesAvailable(selectedLanguages: [String], selectedBibles: [String]) -> [Bible] {
@@ -101,7 +163,7 @@ class SettingsAdapter {
                 bibles.append(Bible(bibleId: row[0]!, abbr: row[1]!, iso: row[2]!, name: name))
             }
         } catch let err {
-            print(err)
+            print("ERROR: SettingsAdapter.getBibles \(err)")
         }
         return bibles
     }
