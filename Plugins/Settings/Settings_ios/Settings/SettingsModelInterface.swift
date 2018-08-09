@@ -29,8 +29,7 @@ struct Bible : Equatable {
     let bibleId: String     // FCBH 6 to 8 char code
     let abbr: String        // Version Abbreviation
     let iso: String         // SIL 3 char language code
-    let name: String        // Name in the language of the version
-    let vname: String?      // Name of the version in English
+    let name: String        // Name in the language, but sometimes in English
     
     static func == (lhs: Bible, rhs: Bible) -> Bool {
         return lhs.bibleId == rhs.bibleId

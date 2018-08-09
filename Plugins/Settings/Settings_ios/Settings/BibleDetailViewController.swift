@@ -20,7 +20,7 @@ class BibleDetailViewController : UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
-        self.bible = Bible(bibleId: "", abbr: "", iso: "", name: "", vname: "")
+        self.bible = Bible(bibleId: "", abbr: "", iso: "", name: "")
         self.textView = UITextView(frame: .zero)
         super.init(coder: coder)
     }

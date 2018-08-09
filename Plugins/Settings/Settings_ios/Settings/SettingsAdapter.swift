@@ -97,7 +97,8 @@ class SettingsAdapter {
             let values = selectedBibles + selectedLanguages
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: values)
             for row in resultSet {
-                bibles.append(Bible(bibleId: row[0]!, abbr: row[1]!, iso: row[2]!, name: row[3]!, vname: row[4]))
+                let name = (row[4] != nil) ? row[4]! : row[3]!
+                bibles.append(Bible(bibleId: row[0]!, abbr: row[1]!, iso: row[2]!, name: name))
             }
         } catch let err {
             print(err)
