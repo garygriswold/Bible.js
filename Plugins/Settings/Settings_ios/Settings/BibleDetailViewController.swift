@@ -11,8 +11,8 @@ import UIKit
 
 class BibleDetailViewController : UIViewController {
     
-    let bible: Bible
-    var textView: UITextView!
+    private let bible: Bible
+    private var textView: UITextView!
     
     init(bible: Bible) {
         self.bible = bible

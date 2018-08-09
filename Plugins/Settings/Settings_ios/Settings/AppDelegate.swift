@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         do {
-            try Sqlite3.openDB(dbname: "Versions.db", copyIfAbsent: true)
+            _ = try Sqlite3.openDB(dbname: "Versions.db", copyIfAbsent: true)
         } catch let err {
             print("Could not open Versions.db \(err)")
         }

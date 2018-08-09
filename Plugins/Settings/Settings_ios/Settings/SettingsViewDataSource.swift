@@ -11,13 +11,13 @@ import UIKit
 
 class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsUpdating {
     
-    let controller: SettingsViewController
-    let dataModel: SettingsModelInterface
-    let settingsViewType: SettingsViewType
-    let selectedSection: Int
-    let availableSection: Int
-    let searchController: UISearchController
-    let textSizeSliderCell: TextSizeSliderCell
+    private let controller: SettingsViewController
+    private let dataModel: SettingsModelInterface
+    private let settingsViewType: SettingsViewType
+    private let selectedSection: Int
+    private let availableSection: Int
+    private let searchController: UISearchController
+    private let textSizeSliderCell: TextSizeSliderCell
     
     init(controller: SettingsViewController, selectionViewSection: Int) {
         self.controller = controller

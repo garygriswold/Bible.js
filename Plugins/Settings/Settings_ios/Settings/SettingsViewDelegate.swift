@@ -12,11 +12,11 @@ import StoreKit
 
 class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
-    let controller: SettingsViewController
-    let dataModel: SettingsModelInterface
-    let settingsViewType: SettingsViewType
-    let selectedSection: Int
-    let availableSection: Int
+    private let controller: SettingsViewController
+    private let dataModel: SettingsModelInterface
+    private let settingsViewType: SettingsViewType
+    private let selectedSection: Int
+    private let availableSection: Int
     
     init(controller: SettingsViewController, selectionViewSection: Int) {
         self.controller = controller
@@ -112,12 +112,12 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         switch indexPath.section {
         case self.selectedSection:
             print("Selected \(indexPath.row) clicked")
-            let language = self.dataModel.getSelectedLanguage(row: indexPath.row)
             let bibleController = SettingsViewController(settingsViewType: .bible)
+            bibleController.language = self.dataModel.getSelectedLanguage(row: indexPath.row)
             self.controller.navigationController?.pushViewController(bibleController, animated: true)
         case self.availableSection:
-            let language = self.dataModel.getAvailableLanguage(row: indexPath.row)
             let bibleController = SettingsViewController(settingsViewType: .bible)
+            bibleController.language = self.dataModel.getAvailableLanguage(row: indexPath.row)
             self.controller.navigationController?.pushViewController(bibleController, animated: true)
         default:
             print("Unknown section \(indexPath.row)")

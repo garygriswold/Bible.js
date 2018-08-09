@@ -11,7 +11,7 @@ import UIKit
 
 class FeedbackViewController: UIViewController, UITextViewDelegate {
     
-    var textView: UITextView!
+    private var textView: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()

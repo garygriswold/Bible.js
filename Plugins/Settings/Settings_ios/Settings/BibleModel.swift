@@ -18,12 +18,18 @@ class BibleModel : SettingsModelInterface {
     private var available: [Bible]
     private var filtered = [Bible]()
     
-    init() {
+    init(language: Language?) {
         self.adapter = SettingsAdapter()
         self.languages = self.adapter.getLanguageSettings()
         self.sequence = self.adapter.getBibleSettings()
         self.selected = self.adapter.getBiblesSelected(selectedLanguages: self.languages, selectedBibles: self.sequence)
-        self.available = self.adapter.getBiblesAvailable(selectedLanguages: self.languages, selectedBibles: self.sequence)
+        if let lang = language {
+            self.available = self.adapter.getBiblesAvailable(selectedLanguages: [lang.iso],
+                                                             selectedBibles: self.sequence)
+        } else {
+            self.available = self.adapter.getBiblesAvailable(selectedLanguages: self.languages,
+                                                             selectedBibles: self.sequence)
+        }
     }
 
     var selectedCount: Int {

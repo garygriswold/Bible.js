@@ -15,12 +15,15 @@ enum SettingsViewType {
 class SettingsViewController: UIViewController {
     
     let settingsViewType: SettingsViewType
-    let selectedSection: Int
-    let availableSection: Int
     var dataModel: SettingsModelInterface!
-    var dataSource: SettingsViewDataSource!
-    var delegate: SettingsViewDelegate!
     var tableView: UITableView!
+    var language: Language? // Used only when SettingsViewType is .bible
+    
+    private let selectedSection: Int
+    private let availableSection: Int
+    private var dataSource: SettingsViewDataSource!
+    private var delegate: SettingsViewDelegate!
+    
     
     init(settingsViewType: SettingsViewType) {
         self.settingsViewType = settingsViewType
@@ -52,7 +55,7 @@ class SettingsViewController: UIViewController {
             self.navigationItem.title = "Settings"
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "\u{FF1c} Read", style: .done, target: self,
                                                                     action: #selector(doneHandler))
-            self.dataModel = BibleModel()
+            self.dataModel = BibleModel(language: nil)
             self.tableView.register(BibleCell.self, forCellReuseIdentifier: "bibleCell")
         case .language:
             self.navigationItem.title = "Languages"
@@ -61,7 +64,7 @@ class SettingsViewController: UIViewController {
             self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
         case .bible:
             self.navigationItem.title = "Bibles"
-            self.dataModel = BibleModel()
+            self.dataModel = BibleModel(language: self.language)
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
             self.tableView.register(BibleCell.self, forCellReuseIdentifier: "bibleCell")
         }
