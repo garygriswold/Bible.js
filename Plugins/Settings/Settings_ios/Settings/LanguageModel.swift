@@ -21,7 +21,8 @@ class LanguageModel : SettingsModelInterface {
         self.adapter = SettingsAdapter()
         self.sequence = self.adapter.getLanguageSettings()
         self.selected = self.adapter.getLanguagesSelected(selected: self.sequence)
-        self.available = self.adapter.getLanguagesAvailable(selected: self.sequence)
+        let avail = self.adapter.getLanguagesAvailable(selected: self.sequence)
+        self.available = avail.sorted{ $0.localized < $1.localized }
     }
     
     deinit {

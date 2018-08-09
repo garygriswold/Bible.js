@@ -11,9 +11,10 @@ import UIKit
 
 struct Language : Equatable {
     let iso: String         // sil 3 char code
-    let name: String        // name in its own language
     let iso1: String?       // 2 char iso code
     let rightToLeft: Bool
+    let name: String        // name in its own language
+    let localized: String   // name localized to user language
     
     static func == (lhs: Language, rhs: Language) -> Bool {
         return lhs.iso == rhs.iso

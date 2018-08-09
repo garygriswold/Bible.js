@@ -27,24 +27,34 @@ class SettingsAdapter {
     }
     
     func getLanguagesSelected(selected: [String]) -> [Language] {
-        let sql =  "SELECT iso, name, iso1, rightToLeft FROM Language WHERE iso IN " + countInList(array: selected)
+        let sql =  "SELECT iso, iso1, rightToLeft FROM Language WHERE iso" + genQuest(array: selected)
         return getLanguages(sql: sql, selected: selected)
     }
     
     func getLanguagesAvailable(selected: [String]) -> [Language] {
-        let sql =  "SELECT iso, name, iso1, rightToLeft FROM Language WHERE iso NOT IN " +
-            countInList(array: selected) + " ORDER BY name"
+        let sql =  "SELECT iso, iso1, rightToLeft FROM Language WHERE iso NOT" + genQuest(array: selected)
         return getLanguages(sql: sql, selected: selected)
     }
     
     private func getLanguages(sql: String, selected: [String]) -> [Language] {
         var languages = [Language]()
         do {
+            let currLocale = Locale.current
             let db: Sqlite3 = try Sqlite3.findDB(dbname: "Versions.db")
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: selected)
             for row in resultSet {
-                let rightToLeft = (row[3] == "T")
-                languages.append(Language(iso: row[0]!, name: row[1]!, iso1: row[2], rightToLeft: rightToLeft))
+                let iso: String = row[0]!
+                let iso1: String? = row[1]
+                let rightToLeft: Bool = (row[2] == "T")
+                let langLocale = Locale(identifier: iso)
+                let name = langLocale.localizedString(forLanguageCode: iso)
+                let localized = currLocale.localizedString(forLanguageCode: iso)
+                if name != nil && localized != nil {
+                    languages.append(Language(iso: iso, iso1: iso1, rightToLeft: rightToLeft,
+                                              name: name!, localized: localized!))
+                } else {
+                    print("Dropped language \(iso) because localizedString failed.")
+                }
             }
         } catch let err {
             print(err)
@@ -68,14 +78,14 @@ class SettingsAdapter {
     }
     
     func getBiblesSelected(selectedLanguages: [String], selectedBibles: [String]) -> [Bible] {
-        let sql =  "SELECT bibleId, abbr, iso, name, vname  FROM Bible WHERE bibleId IN " +
-            countInList(array: selectedBibles) + " AND iso IN " + countInList(array: selectedLanguages)
+        let sql =  "SELECT bibleId, abbr, iso, name, vname  FROM Bible WHERE bibleId" +
+            genQuest(array: selectedBibles) + " AND iso" + genQuest(array: selectedLanguages)
         return getBibles(sql: sql, selectedLanguages: selectedLanguages, selectedBibles: selectedBibles)
     }
     
     func getBiblesAvailable(selectedLanguages: [String], selectedBibles: [String]) -> [Bible] {
-        let sql =  "SELECT bibleId, abbr, iso, name, vname FROM Bible WHERE bibleId NOT IN " +
-            countInList(array: selectedBibles) + " AND iso IN " + countInList(array: selectedLanguages) +
+        let sql =  "SELECT bibleId, abbr, iso, name, vname FROM Bible WHERE bibleId NOT" +
+            genQuest(array: selectedBibles) + " AND iso" + genQuest(array: selectedLanguages) +
             " ORDER BY abbr"
         return getBibles(sql: sql, selectedLanguages: selectedLanguages, selectedBibles: selectedBibles)
     }
@@ -95,8 +105,8 @@ class SettingsAdapter {
         return bibles
     }
     
-    private func countInList(array: [String]) -> String {
+    private func genQuest(array: [String]) -> String {
         let quest = [String](repeating: "?", count: array.count)
-        return "(" + quest.joined(separator: ",") + ")"
+        return " IN (" + quest.joined(separator: ",") + ")"
     }
 }
