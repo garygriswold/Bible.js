@@ -12,7 +12,7 @@ import UIKit
 class TextSizeSliderCell : UITableViewCell {
     
     private static let indexPath = IndexPath(item: 0, section: 2) // Used by get cell location in table.
-    private let controller: SettingsViewController
+    private weak var controller: SettingsViewController? // only needs tableView, not controller
     private let textSlider: UISlider
     private let leftLabel: UILabel
     private let rightLabel: UILabel
@@ -71,26 +71,27 @@ class TextSizeSliderCell : UITableViewCell {
     }
 
     @objc func touchDownHandler(sender: UISlider) {
-        let rect = self.controller.tableView.rectForRow(at: TextSizeSliderCell.indexPath)
-        let width = rect.width
-        // I don't know why -180 is correct.  It seems like is should be - 100
-        let labelRect = CGRect(x: width * 0.05, y: (rect.minY - 180), width: (width * 0.9), height: 100)
-        let label = UILabel(frame: labelRect)
-        //label.drawText(in: CGRect(x: 50, y: 5, width: (width * 0.9) - 100, height: 90)) // could be in subclass
-        label.text = "Your word is a lamp to my feet and a light to my path."
-        label.layer.borderWidth = 1
-        label.layer.cornerRadius = 20
-        label.layer.masksToBounds = true
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        label.textAlignment = .center
-        label.backgroundColor = UIColor.groupTableViewBackground
-        label.alpha = 0.9
-        //let textSize = label.intrinsicContentSize // could be useful to animate size of box
-        self.sampleTextLabel = label
-        self.serifBodyFont = AppFont.serif(ofRelativeSize: 1.0)
-        self.valueChangedHandler(sender: sender) // set initial size correctly
-        self.controller.tableView.addSubview(label)
+        if let rect = self.controller?.tableView.rectForRow(at: TextSizeSliderCell.indexPath) {
+            let width = rect.width
+            // I don't know why -180 is correct.  It seems like is should be - 100
+            let labelRect = CGRect(x: width * 0.05, y: (rect.minY - 180), width: (width * 0.9), height: 100)
+            let label = UILabel(frame: labelRect)
+            //label.drawText(in: CGRect(x: 50, y: 5, width: (width * 0.9) - 100, height: 90)) // could be in subclass
+            label.text = "Your word is a lamp to my feet and a light to my path."
+            label.layer.borderWidth = 1
+            label.layer.cornerRadius = 20
+            label.layer.masksToBounds = true
+            label.numberOfLines = 0
+            label.lineBreakMode = .byWordWrapping
+            label.textAlignment = .center
+            label.backgroundColor = UIColor.groupTableViewBackground
+            label.alpha = 0.9
+            //let textSize = label.intrinsicContentSize // could be useful to animate size of box
+            self.sampleTextLabel = label
+            self.serifBodyFont = AppFont.serif(ofRelativeSize: 1.0)
+            self.valueChangedHandler(sender: sender) // set initial size correctly
+            self.controller?.tableView.addSubview(label)
+        }
     }
 
     @objc func valueChangedHandler(sender: UISlider) {
@@ -102,7 +103,7 @@ class TextSizeSliderCell : UITableViewCell {
     @objc func touchUpHandler(sender: UISlider) {
         print("touch up \(sender.value)")
         AppFont.userFontDelta = CGFloat(sender.value)
-        self.controller.tableView.reloadData()
+        self.controller?.tableView.reloadData()
         AppFont.updateSearchFontSize()
         
         self.sampleTextLabel?.removeFromSuperview()

@@ -11,7 +11,7 @@ import UIKit
 
 class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsUpdating {
     
-    private let controller: SettingsViewController
+    private weak var controller: SettingsViewController?
     private let dataModel: SettingsModelInterface
     private let settingsViewType: SettingsViewType
     private let selectedSection: Int
@@ -36,7 +36,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         self.availableSection = selectionViewSection + 1
         
         // Text Size Cell
-        self.textSizeSliderCell = TextSizeSliderCell(controller: self.controller, style: .default, reuseIdentifier: nil)
+        self.textSizeSliderCell = TextSizeSliderCell(controller: self.controller!, style: .default, reuseIdentifier: nil)
        
         super.init()
         
@@ -45,8 +45,8 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         if self.dataModel.availableCount > numRequiredForSearchBar {
             self.searchController.searchResultsUpdater = self
             self.searchController.obscuresBackgroundDuringPresentation = false
-            self.controller.navigationItem.searchController = self.searchController
-            self.controller.navigationItem.hidesSearchBarWhenScrolling = false
+            self.controller?.navigationItem.searchController = self.searchController
+            self.controller?.navigationItem.hidesSearchBarWhenScrolling = false
             // These don't seem to have an effect when search controller is set to naviation item
             //self.searchController.searchBar.searchBarStyle = UISearchBarStyle.default // (defult or minimal or prominent)
             //self.searchController.searchBar.setShowsCancelButton(false, animated: true)
@@ -203,7 +203,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
                 self.dataModel.filterForSearch(searchText: text)
             }
             let sections = IndexSet(integer: self.availableSection)
-            self.controller.tableView.reloadSections(sections, with: UITableViewRowAnimation.automatic)
+            self.controller?.tableView.reloadSections(sections, with: UITableViewRowAnimation.automatic)
         }
     }
     
