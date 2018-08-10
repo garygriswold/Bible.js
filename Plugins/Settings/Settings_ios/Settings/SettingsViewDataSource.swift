@@ -54,7 +54,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     }
     
     deinit {
-        print("**** deinit SettingsViewDataSource \(self.settingsViewType)) ******")
+        print("**** deinit SettingsViewDataSource \(self.settingsViewType) ******")
     }
     
     // Return the number of sections

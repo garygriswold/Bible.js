@@ -28,7 +28,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     }
     
     deinit {
-        print("**** deinit SettingsViewDelegate \(self.settingsViewType)) ******")
+        print("**** deinit SettingsViewDelegate \(self.settingsViewType) ******")
     }
     
     //func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

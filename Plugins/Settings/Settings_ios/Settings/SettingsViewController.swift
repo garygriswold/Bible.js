@@ -32,7 +32,7 @@ class SettingsViewController: UIViewController {
     }
     
     deinit {
-        print("**** deinit SettingsViewController \(settingsViewType)) ******")
+        print("**** deinit SettingsViewController \(settingsViewType) ******")
     }
     
     // This constructor is not used
