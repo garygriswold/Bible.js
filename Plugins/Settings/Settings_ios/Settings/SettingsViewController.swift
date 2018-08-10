@@ -58,16 +58,13 @@ class SettingsViewController: UIViewController {
             self.navigationItem.title = "Settings"
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "\u{FF1c} Read", style: .done, target: self,
                                                                     action: #selector(doneHandler))
-            self.dataModel = BibleModel(language: nil)
             self.tableView.register(BibleCell.self, forCellReuseIdentifier: "bibleCell")
         case .language:
             self.navigationItem.title = "Languages"
-            self.dataModel = LanguageModel()
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
             self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
         case .bible:
             self.navigationItem.title = "Bibles"
-            self.dataModel = BibleModel(language: self.language)
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
             self.tableView.register(BibleCell.self, forCellReuseIdentifier: "bibleCell")
         }
@@ -80,11 +77,6 @@ class SettingsViewController: UIViewController {
         
         //self.saveHandler(sender: nil)
         self.tableView.setEditing(true, animated: true)
-        
-        self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: self.selectedSection)
-        self.delegate = SettingsViewDelegate(controller: self, selectionViewSection: self.selectedSection)
-        self.tableView.dataSource = self.dataSource
-        self.tableView.delegate = self.delegate
     }
     
     override func viewDidLoad() {
@@ -97,6 +89,23 @@ class SettingsViewController: UIViewController {
                            name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         notify.addObserver(self, selector: #selector(keyboardWillHide),
                            name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        switch self.settingsViewType {
+        case .primary:
+            self.dataModel = BibleModel(language: nil)
+        case .language:
+            self.dataModel = LanguageModel()
+        case .bible:
+            self.dataModel = BibleModel(language: self.language)
+        }
+        self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: self.selectedSection)
+        self.delegate = SettingsViewDelegate(controller: self, selectionViewSection: self.selectedSection)
+        self.tableView.dataSource = self.dataSource
+        self.tableView.delegate = self.delegate
     }
     
     /**
