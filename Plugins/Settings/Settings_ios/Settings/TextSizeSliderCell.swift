@@ -12,7 +12,7 @@ import UIKit
 class TextSizeSliderCell : UITableViewCell {
     
     private static let indexPath = IndexPath(item: 0, section: 2) // Used by get cell location in table.
-    private weak var controller: SettingsViewController? // only needs tableView, not controller
+    private weak var tableView: UITableView?
     private let textSlider: UISlider
     private let leftLabel: UILabel
     private let rightLabel: UILabel
@@ -20,7 +20,7 @@ class TextSizeSliderCell : UITableViewCell {
     private var serifBodyFont: UIFont?
     
     init(controller: SettingsViewController, style: UITableViewCellStyle, reuseIdentifier: String?) {
-        self.controller = controller
+        self.tableView = controller.tableView
         self.textSlider = UISlider(frame: .zero)
         self.leftLabel = UILabel(frame: .zero)
         self.rightLabel = UILabel(frame: .zero)
@@ -28,7 +28,6 @@ class TextSizeSliderCell : UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     required init?(coder: NSCoder) {
-        self.controller = SettingsViewController(settingsViewType: .primary)
         self.textSlider = UISlider(frame: CGRect.zero)
         self.leftLabel = UILabel(frame: .zero)
         self.rightLabel = UILabel(frame: .zero)
@@ -71,7 +70,7 @@ class TextSizeSliderCell : UITableViewCell {
     }
 
     @objc func touchDownHandler(sender: UISlider) {
-        if let rect = self.controller?.tableView.rectForRow(at: TextSizeSliderCell.indexPath) {
+        if let rect = self.tableView?.rectForRow(at: TextSizeSliderCell.indexPath) {
             let width = rect.width
             // I don't know why -180 is correct.  It seems like is should be - 100
             let labelRect = CGRect(x: width * 0.05, y: (rect.minY - 180), width: (width * 0.9), height: 100)
@@ -90,7 +89,7 @@ class TextSizeSliderCell : UITableViewCell {
             self.sampleTextLabel = label
             self.serifBodyFont = AppFont.serif(ofRelativeSize: 1.0)
             self.valueChangedHandler(sender: sender) // set initial size correctly
-            self.controller?.tableView.addSubview(label)
+            self.tableView?.addSubview(label)
         }
     }
 
@@ -103,7 +102,7 @@ class TextSizeSliderCell : UITableViewCell {
     @objc func touchUpHandler(sender: UISlider) {
         print("touch up \(sender.value)")
         AppFont.userFontDelta = CGFloat(sender.value)
-        self.controller?.tableView.reloadData()
+        self.tableView?.reloadData()
         AppFont.updateSearchFontSize()
         
         self.sampleTextLabel?.removeFromSuperview()
