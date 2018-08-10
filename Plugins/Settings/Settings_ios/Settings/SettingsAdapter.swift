@@ -16,6 +16,10 @@ class SettingsAdapter {
     private static let LANGS_SELECTED = "langs_selected"
     private static let BIBLE_SELECTED = "bible_selected"
     
+    deinit {
+        print("**** deinit SettingsAdapter ******")
+    }
+    
     //
     // Settings methods
     //

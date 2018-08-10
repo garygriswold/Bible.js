@@ -17,4 +17,8 @@ class LanguageCell : UITableViewCell {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+    
+    deinit {
+        print("**** deinit LanguageCell ******")
+    }
 }

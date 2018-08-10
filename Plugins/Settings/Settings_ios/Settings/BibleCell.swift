@@ -17,4 +17,8 @@ class BibleCell : UITableViewCell {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+    
+    deinit {
+        print("**** deinit BibleCell ******")
+    }
 }

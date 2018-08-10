@@ -13,6 +13,10 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
     
     private var textView: UITextView!
     
+    deinit {
+        print("**** deinit FeedbackViewController ******")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

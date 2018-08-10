@@ -25,6 +25,10 @@ class BibleDetailViewController : UIViewController {
         super.init(coder: coder)
     }
     
+    deinit {
+        print("**** deinit BibleDetailViewController ******")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

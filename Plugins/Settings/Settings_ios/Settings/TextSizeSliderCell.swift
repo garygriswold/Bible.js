@@ -36,6 +36,10 @@ class TextSizeSliderCell : UITableViewCell {
         super.init(coder: coder)
     }
     
+    deinit {
+        print("**** deinit TextSizeSliderCell ******")
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         

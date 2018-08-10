@@ -11,6 +11,10 @@ import UIKit
 
 public class SettingsNavigator {
     
+    deinit {
+        print("**** deinit SettingsNavigator ******")
+    }
+    
     public func present() -> UINavigationController {
         let viewController = SettingsViewController(settingsViewType: .primary)
         //let viewController = SettingsViewController(settingsViewType: .language)

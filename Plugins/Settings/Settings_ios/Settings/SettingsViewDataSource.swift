@@ -53,6 +53,10 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         }
     }
     
+    deinit {
+        print("**** deinit SettingsViewDataSource \(self.settingsViewType)) ******")
+    }
+    
     // Return the number of sections
     func numberOfSections(in tableView: UITableView) -> Int {
         if self.settingsViewType == .primary {

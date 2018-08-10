@@ -24,12 +24,15 @@ class SettingsViewController: UIViewController {
     private var dataSource: SettingsViewDataSource!
     private var delegate: SettingsViewDelegate!
     
-    
     init(settingsViewType: SettingsViewType) {
         self.settingsViewType = settingsViewType
         self.selectedSection = (settingsViewType == .primary) ? 3 : 0
         self.availableSection = self.selectedSection + 1
         super.init(nibName: nil, bundle: nil)
+    }
+    
+    deinit {
+        print("**** deinit SettingsViewController \(settingsViewType)) ******")
     }
     
     // This constructor is not used
