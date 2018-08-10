@@ -21,15 +21,11 @@ class SettingsAdapter {
     //
     
     func getLanguageSettings() -> [String] {
-        let settings = "eng,deu,fra"
-        return settings.components(separatedBy: ",")
-        //return self.getSettings(name: SettingsAdapter.LANGS_SELECTED)
+        return self.getSettings(name: SettingsAdapter.LANGS_SELECTED)
     }
     
     func getBibleSettings() -> [String] {
-        let settings = "ENGKJV,ENGNIV,ENGESV"
-        return settings.components(separatedBy: ",")
-        //return self.getSettings(name: SettingsAdapter.BIBLE_SELECTED)
+        return self.getSettings(name: SettingsAdapter.BIBLE_SELECTED)
     }
     
     func updateSettings(languages: [Language]) {

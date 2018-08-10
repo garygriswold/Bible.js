@@ -12,16 +12,15 @@ import UIKit
 class LanguageModel : SettingsModelInterface {
     
     private let adapter: SettingsAdapter
-    private var sequence: [String]
     private var selected: [Language]
     private var available: [Language]
     private var filtered = [Language]()
     
     init() {
         self.adapter = SettingsAdapter()
-        self.sequence = self.adapter.getLanguageSettings()
-        self.selected = self.adapter.getLanguagesSelected(selected: self.sequence)
-        let avail = self.adapter.getLanguagesAvailable(selected: self.sequence)
+        let sequence = self.adapter.getLanguageSettings()
+        self.selected = self.adapter.getLanguagesSelected(selected: sequence)
+        let avail = self.adapter.getLanguagesAvailable(selected: sequence)
         self.available = avail.sorted{ $0.localized < $1.localized }
     }
     
