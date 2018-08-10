@@ -25,11 +25,40 @@ class SettingsAdapter {
     //
     
     func getLanguageSettings() -> [String] {
-        return self.getSettings(name: SettingsAdapter.LANGS_SELECTED)
+        if let langs = self.getSettings(name: SettingsAdapter.LANGS_SELECTED) {
+            return langs
+        } else {
+            var iso1s = [String]()
+            for loc in Locale.preferredLanguages { // Returns locale in String form
+                let locale = Locale(identifier: loc)
+                if let code = locale.languageCode {
+                    iso1s.append(code)
+                }
+            }
+            var isos = [String]()
+            let sql2 = "SELECT iso FROM Language WHERE iso1" + genQuest(array: iso1s)
+            do {
+                let db: Sqlite3 = try self.getVersionsDB()
+                let resultSet: [[String?]] = try db.queryV1(sql: sql2, values: iso1s)
+                for row in resultSet {
+                    isos.append(row[0]!)
+                }
+                print(iso1s)
+                print(isos)
+                self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: isos)
+            } catch let err {
+                print("ERROR: SettingsAdapter.getLanguageSettings \(err)")
+            }
+            return isos
+        }
     }
     
     func getBibleSettings() -> [String] {
-        return self.getSettings(name: SettingsAdapter.BIBLE_SELECTED)
+        if let bibles = self.getSettings(name: SettingsAdapter.BIBLE_SELECTED) {
+            return bibles
+        } else {
+            return [] // TBD
+        }
     }
     
     func updateSettings(languages: [Language]) {
@@ -48,7 +77,7 @@ class SettingsAdapter {
         self.updateSettings(name: SettingsAdapter.BIBLE_SELECTED, settings: keys)
     }
     
-    private func getSettings(name: String) -> [String] {
+    private func getSettings(name: String) -> [String]? {
         let sql = "SELECT value FROM Settings WHERE name = ?"
         do {
             let db: Sqlite3 = try self.getSettingsDB()
@@ -57,10 +86,7 @@ class SettingsAdapter {
                 let value = resultSet[0][0]!
                 return value.components(separatedBy: ",")
             } else {
-                // must do default here and save result
-                // In the meantime
-                let settings = "eng,fra,deu"
-                return settings.components(separatedBy: ",")
+                return nil
             }
         } catch let err {
             print("ERROR: SettingsAdapter.getSettings \(err)")
