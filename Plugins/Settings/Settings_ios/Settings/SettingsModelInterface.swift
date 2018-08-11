@@ -12,7 +12,6 @@ import UIKit
 struct Language : Equatable {
     let iso: String         // sil 3 char code
     let iso1: String?       // 2 char iso code
-    let rightToLeft: Bool
     let name: String        // name in its own language
     let localized: String   // name localized to user language
     
@@ -30,7 +29,7 @@ struct Bible : Equatable {
     let abbr: String        // Version Abbreviation
     let iso: String         // SIL 3 char language code
     let name: String        // Name in the language, but sometimes in English
-    let recommended: Bool   // Version added as default, when language is selected.
+    //let recommended: Bool   // Version added as default, when language is selected.
     
     static func == (lhs: Bible, rhs: Bible) -> Bool {
         return lhs.bibleId == rhs.bibleId

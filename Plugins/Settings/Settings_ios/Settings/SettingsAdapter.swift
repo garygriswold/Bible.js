@@ -123,7 +123,7 @@ class SettingsAdapter {
     // Language Versions.db methods
     
     func getLanguagesSelected(selected: [String]) -> [Language] {
-        let sql =  "SELECT iso, iso1, rightToLeft FROM Language WHERE iso" + genQuest(array: selected)
+        let sql =  "SELECT iso, iso1 FROM Language WHERE iso" + genQuest(array: selected)
         let results = getLanguages(sql: sql, selected: selected)
         
         // Sort results by selected list
@@ -141,7 +141,7 @@ class SettingsAdapter {
     }
     
     func getLanguagesAvailable(selected: [String]) -> [Language] {
-        let sql =  "SELECT iso, iso1, rightToLeft FROM Language WHERE iso NOT" + genQuest(array: selected)
+        let sql =  "SELECT iso, iso1 FROM Language WHERE iso NOT" + genQuest(array: selected)
         return getLanguages(sql: sql, selected: selected)
     }
     
@@ -154,13 +154,12 @@ class SettingsAdapter {
             for row in resultSet {
                 let iso: String = row[0]!
                 let iso1: String? = row[1]
-                let rightToLeft: Bool = (row[2] == "T")
-                let langLocale = Locale(identifier: iso)
-                let name = langLocale.localizedString(forLanguageCode: iso)
-                let localized = currLocale.localizedString(forLanguageCode: iso)
+                let lang: String = (iso1 != nil) ? iso1! : iso
+                let langLocale = Locale(identifier: lang)
+                let name = langLocale.localizedString(forLanguageCode: lang)
+                let localized = currLocale.localizedString(forLanguageCode: lang)
                 if name != nil && localized != nil {
-                    languages.append(Language(iso: iso, iso1: iso1, rightToLeft: rightToLeft,
-                                              name: name!, localized: localized!))
+                    languages.append(Language(iso: iso, iso1: iso1, name: name!, localized: localized!))
                 } else {
                     print("Dropped language \(iso) because localizedString failed.")
                 }
