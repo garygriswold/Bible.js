@@ -18,9 +18,10 @@ sqlite Versions.db <<END_SQL
 select count(*) AS Language_Count from Language;
 select count(*) AS Bibles_Count from Bible;
 delete from Language where iso1 is null;
-delete from Bible where iso not in (select iso from Language);
-delete from Language where iso not in (select iso from Bible);
+delete from Bible where iso3 not in (select iso3 from Language);
+delete from Language where iso3 not in (select iso3 from Bible);
 select count(*) AS Language_Count from Language;
 select count(*) AS Bibles_Count from Bible;
+vacuum;
 END_SQL
 

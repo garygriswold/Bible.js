@@ -87,7 +87,7 @@ class LanguageModel : SettingsModelInterface {
         if inSearch {
             language = self.filtered[source]
             guard let availableIndex = self.available.index(of: language) else {
-                print("Item in filtered not found in available? \(language.iso)")
+                print("Item in filtered not found in available? \(language.iso3)")
                 return
             }
             self.filtered.remove(at: source)

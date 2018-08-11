@@ -4,7 +4,7 @@
 #
 # iso-639-3.txt
 #	tab delimited, line 1 is heading
-#	0. iso
+#	0. iso3
 #	1. iso2B
 #	2. iso2T
 #	3. iso1
@@ -49,25 +49,25 @@ out = io.open("sql/language.sql", mode="w", encoding="utf-8")
 
 out.write(u"DROP TABLE IF EXISTS Language;\n")
 out.write(u"CREATE TABLE Language (\n")
-out.write(u"  iso TEXT NOT NULL PRIMARY KEY,\n")
+out.write(u"  iso3 TEXT NOT NULL PRIMARY KEY,\n")
 out.write(u"  iso1 TEXT NULL,\n")
 out.write(u"  macro TEXT NULL,\n")
 out.write(u"  name TEXT NOT NULL);\n")
-prefix = "REPLACE INTO Language (iso, iso1, macro, name) VALUES"
+prefix = "REPLACE INTO Language (iso3, iso1, macro, name) VALUES"
 
 # Output table, and looking ios1 for any language with a macro language
 for lang in isoTable:
-	iso = lang[0]
+	iso3 = lang[0]
 	iso1 = lang[1]
 	macro = lang[2]
 	name = lang[3].replace("\\", "").replace("'", "''")
 	if (len(iso1) == 0):
 		iso1 = iso1Map.get(macro, "")
-	iso = "'" + iso + "'"
+	iso3 = "'" + iso3 + "'"
 	iso1 = "'" + iso1 + "'" if (len(iso1) > 0) else 'null'
 	macro = "'" + macro + "'" if (len(macro) > 0) else 'null'
 	name = "'" + name + "'"
-	out.write("%s (%s, %s, %s, %s);\n" % (prefix, iso, iso1, macro, name))
+	out.write("%s (%s, %s, %s, %s);\n" % (prefix, iso3, iso1, macro, name))
 
 out.close()
 

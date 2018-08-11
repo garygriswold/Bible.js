@@ -22,7 +22,7 @@ class BibleModel : SettingsModelInterface {
         let sequence = self.adapter.getBibleSettings()
         self.selected = self.adapter.getBiblesSelected(selectedLanguages: languages, selectedBibles: sequence)
         if let lang = language {
-            self.available = self.adapter.getBiblesAvailable(selectedLanguages: [lang.iso],
+            self.available = self.adapter.getBiblesAvailable(selectedLanguages: [lang.iso3],
                                                              selectedBibles: sequence)
         } else {
             self.available = self.adapter.getBiblesAvailable(selectedLanguages: languages,
