@@ -1,0 +1,239 @@
+af\tAfrikaans
+af-ZA\tAfrikaans (South Africa)
+ar\tArabic
+ar-AE\tArabic (U.A.E.)
+ar-BH\tArabic (Bahrain)
+ar-DZ\tArabic (Algeria)
+ar-EG\tArabic (Egypt)
+ar-IQ\tArabic (Iraq)
+ar-JO\tArabic (Jordan)
+ar-KW\tArabic (Kuwait)
+ar-LB\tArabic (Lebanon)
+ar-LY\tArabic (Libya)
+ar-MA\tArabic (Morocco)
+ar-OM\tArabic (Oman)
+ar-QA\tArabic (Qatar)
+ar-SA\tArabic (Saudi Arabia)
+ar-SY\tArabic (Syria)
+ar-TN\tArabic (Tunisia)
+ar-YE\tArabic (Yemen)
+az\tAzeri (Latin)
+az-AZ\tAzeri (Latin) (Azerbaijan)
+az-AZ\tAzeri (Cyrillic) (Azerbaijan)
+be\tBelarusian
+be-BY\tBelarusian (Belarus)
+bg\tBulgarian
+bg-BG\tBulgarian (Bulgaria)
+bs-BA\tBosnian (Bosnia and Herzegovina)
+ca\tCatalan
+ca-ES\tCatalan (Spain)
+cs\tCzech
+cs-CZ\tCzech (Czech Republic)
+cy\tWelsh
+cy-GB\tWelsh (United Kingdom)
+da\tDanish
+da-DK\tDanish (Denmark)
+de\tGerman
+de-AT\tGerman (Austria)
+de-CH\tGerman (Switzerland)
+de-DE\tGerman (Germany)
+de-LI\tGerman (Liechtenstein)
+de-LU\tGerman (Luxembourg)
+dv\tDivehi
+dv-MV\tDivehi (Maldives)
+el\tGreek
+el-GR\tGreek (Greece)
+en\tEnglish
+en-AU\tEnglish (Australia)
+en-BZ\tEnglish (Belize)
+en-CA\tEnglish (Canada)
+en-CB\tEnglish (Caribbean)
+en-GB\tEnglish (United Kingdom)
+en-IE\tEnglish (Ireland)
+en-JM\tEnglish (Jamaica)
+en-NZ\tEnglish (New Zealand)
+en-PH\tEnglish (Republic of the Philippines)
+en-TT\tEnglish (Trinidad and Tobago)
+en-US\tEnglish (United States)
+en-ZA\tEnglish (South Africa)
+en-ZW\tEnglish (Zimbabwe)
+eo\tEsperanto
+es\tSpanish
+es-AR\tSpanish (Argentina)
+es-BO\tSpanish (Bolivia)
+es-CL\tSpanish (Chile)
+es-CO\tSpanish (Colombia)
+es-CR\tSpanish (Costa Rica)
+es-DO\tSpanish (Dominican Republic)
+es-EC\tSpanish (Ecuador)
+es-ES\tSpanish (Castilian)
+es-ES\tSpanish (Spain)
+es-GT\tSpanish (Guatemala)
+es-HN\tSpanish (Honduras)
+es-MX\tSpanish (Mexico)
+es-NI\tSpanish (Nicaragua)
+es-PA\tSpanish (Panama)
+es-PE\tSpanish (Peru)
+es-PR\tSpanish (Puerto Rico)
+es-PY\tSpanish (Paraguay)
+es-SV\tSpanish (El Salvador)
+es-UY\tSpanish (Uruguay)
+es-VE\tSpanish (Venezuela)
+et\tEstonian
+et-EE\tEstonian (Estonia)
+eu\tBasque
+eu-ES\tBasque (Spain)
+fa\tFarsi
+fa-IR\tFarsi (Iran)
+fi\tFinnish
+fi-FI\tFinnish (Finland)
+fo\tFaroese
+fo-FO\tFaroese (Faroe Islands)
+fr\tFrench
+fr-BE\tFrench (Belgium)
+fr-CA\tFrench (Canada)
+fr-CH\tFrench (Switzerland)
+fr-FR\tFrench (France)
+fr-LU\tFrench (Luxembourg)
+fr-MC\tFrench (Principality of Monaco)
+gl\tGalician
+gl-ES\tGalician (Spain)
+gu\tGujarati
+gu-IN\tGujarati (India)
+he\tHebrew
+he-IL\tHebrew (Israel)
+hi\tHindi
+hi-IN\tHindi (India)
+hr\tCroatian
+hr-BA\tCroatian (Bosnia and Herzegovina)
+hr-HR\tCroatian (Croatia)
+hu\tHungarian
+hu-HU\tHungarian (Hungary)
+hy\tArmenian
+hy-AM\tArmenian (Armenia)
+id\tIndonesian
+id-ID\tIndonesian (Indonesia)
+is\tIcelandic
+is-IS\tIcelandic (Iceland)
+it\tItalian
+it-CH\tItalian (Switzerland)
+it-IT\tItalian (Italy)
+ja\tJapanese
+ja-JP\tJapanese (Japan)
+ka\tGeorgian
+ka-GE\tGeorgian (Georgia)
+kk\tKazakh
+kk-KZ\tKazakh (Kazakhstan)
+kn\tKannada
+kn-IN\tKannada (India)
+ko\tKorean
+ko-KR\tKorean (Korea)
+kok\tKonkani
+kok-IN\tKonkani (India)
+ky\tKyrgyz
+ky-KG\tKyrgyz (Kyrgyzstan)
+lt\tLithuanian
+lt-LT\tLithuanian (Lithuania)
+lv\tLatvian
+lv-LV\tLatvian (Latvia)
+mi\tMaori
+mi-NZ\tMaori (New Zealand)
+mk\tFYRO Macedonian
+mk-MK\tFYRO Macedonian (Former Yugoslav Republic of Macedonia)
+mn\tMongolian
+mn-MN\tMongolian (Mongolia)
+mr\tMarathi
+mr-IN\tMarathi (India)
+ms\tMalay
+ms-BN\tMalay (Brunei Darussalam)
+ms-MY\tMalay (Malaysia)
+mt\tMaltese
+mt-MT\tMaltese (Malta)
+nb\tNorwegian (Bokm?l)
+nb-NO\tNorwegian (Bokm?l) (Norway)
+nl\tDutch
+nl-BE\tDutch (Belgium)
+nl-NL\tDutch (Netherlands)
+nn-NO\tNorwegian (Nynorsk) (Norway)
+ns\tNorthern Sotho
+ns-ZA\tNorthern Sotho (South Africa)
+pa\tPunjabi
+pa-IN\tPunjabi (India)
+pl\tPolish
+pl-PL\tPolish (Poland)
+ps\tPashto
+ps-AR\tPashto (Afghanistan)
+pt\tPortuguese
+pt-BR\tPortuguese (Brazil)
+pt-PT\tPortuguese (Portugal)
+qu\tQuechua
+qu-BO\tQuechua (Bolivia)
+qu-EC\tQuechua (Ecuador)
+qu-PE\tQuechua (Peru)
+ro\tRomanian
+ro-RO\tRomanian (Romania)
+ru\tRussian
+ru-RU\tRussian (Russia)
+sa\tSanskrit
+sa-IN\tSanskrit (India)
+se\tSami (Northern)
+se-FI\tSami (Northern) (Finland)
+se-FI\tSami (Skolt) (Finland)
+se-FI\tSami (Inari) (Finland)
+se-NO\tSami (Northern) (Norway)
+se-NO\tSami (Lule) (Norway)
+se-NO\tSami (Southern) (Norway)
+se-SE\tSami (Northern) (Sweden)
+se-SE\tSami (Lule) (Sweden)
+se-SE\tSami (Southern) (Sweden)
+sk\tSlovak
+sk-SK\tSlovak (Slovakia)
+sl\tSlovenian
+sl-SI\tSlovenian (Slovenia)
+sq\tAlbanian
+sq-AL\tAlbanian (Albania)
+sr-BA\tSerbian (Latin) (Bosnia and Herzegovina)
+sr-BA\tSerbian (Cyrillic) (Bosnia and Herzegovina)
+sr-SP\tSerbian (Latin) (Serbia and Montenegro)
+sr-SP\tSerbian (Cyrillic) (Serbia and Montenegro)
+sv\tSwedish
+sv-FI\tSwedish (Finland)
+sv-SE\tSwedish (Sweden)
+sw\tSwahili
+sw-KE\tSwahili (Kenya)
+syr\tSyriac
+syr-SY\tSyriac (Syria)
+ta\tTamil
+ta-IN\tTamil (India)
+te\tTelugu
+te-IN\tTelugu (India)
+th\tThai
+th-TH\tThai (Thailand)
+tl\tTagalog
+tl-PH\tTagalog (Philippines)
+tn\tTswana
+tn-ZA\tTswana (South Africa)
+tr\tTurkish
+tr-TR\tTurkish (Turkey)
+tt\tTatar
+tt-RU\tTatar (Russia)
+ts\tTsonga
+uk\tUkrainian
+uk-UA\tUkrainian (Ukraine)
+ur\tUrdu
+ur-PK\tUrdu (Islamic Republic of Pakistan)
+uz\tUzbek (Latin)
+uz-UZ\tUzbek (Latin) (Uzbekistan)
+uz-UZ\tUzbek (Cyrillic) (Uzbekistan)
+vi\tVietnamese
+vi-VN\tVietnamese (Viet Nam)
+xh\tXhosa
+xh-ZA\tXhosa (South Africa)
+zh\tChinese
+zh-CN\tChinese (S)
+zh-HK\tChinese (Hong Kong)
+zh-MO\tChinese (Macau)
+zh-SG\tChinese (Singapore)
+zh-TW\tChinese (T)
+zu\tZulu
+zu-ZA\tZulu (South Africa)
