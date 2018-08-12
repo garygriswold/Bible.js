@@ -24,19 +24,20 @@ class SettingsAdapter {
     // Settings methods
     //
     
-    func getLanguageSettings() -> [String] {
+    func getLanguageSettings() -> [Locale] {
+        var locales = [Locale]()
         if let langs = self.getSettings(name: SettingsAdapter.LANGS_SELECTED) {
-            return langs
-        } else {
-            var isos = [String]()
-            for loc in Locale.preferredLanguages { // Returns locale in String form
-                let locale = Locale(identifier: loc)
-                if let code = locale.languageCode {
-                    isos.append(code)
-                }
+            for lang in langs {
+                locales.append(Locale(identifier: lang))
             }
-            self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: isos)
-            return isos
+            return locales
+        } else {
+            let langs: [String] = Locale.preferredLanguages
+            for lang in langs {
+                locales.append(Locale(identifier: lang))
+            }
+            self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: langs)
+            return locales
         }
     }
     
@@ -45,8 +46,8 @@ class SettingsAdapter {
             return bibles
         } else {
             var bibles = [String]()
-            let langs = self.getSettings(name: SettingsAdapter.LANGS_SELECTED) // This could be passed in, instead
-            let biblesObjs = self.getBiblesForLanguages(languages: langs!)
+            let langs = self.getLanguageSettings()
+            let biblesObjs = self.getBiblesForLanguages(languages: langs)
             for bible in biblesObjs { // This is not needed if method returned string
                 bibles.append(bible.bibleId)
             }
@@ -116,7 +117,7 @@ class SettingsAdapter {
     //
     // Language Versions.db methods
     
-    func getLanguagesSelected(selected: [String]) -> [Language] {
+    func getLanguagesSelected(selected: [Locale]) -> [Language] {
         let sql =  "SELECT distinct iso1 FROM Language WHERE iso1" + genQuest(array: selected)
         let results = getLanguages(sql: sql, selected: selected)
         
@@ -126,25 +127,29 @@ class SettingsAdapter {
             map[result.iso] = result
         }
         var languages = [Language]()
-        for iso: String in selected {
-            if let found: Language = map[iso] {
+        for loc: Locale in selected {
+            if let found: Language = map[loc.languageCode ?? "xx"] {
                 languages.append(found)
             }
         }
         return languages
     }
     
-    func getLanguagesAvailable(selected: [String]) -> [Language] {
+    func getLanguagesAvailable(selected: [Locale]) -> [Language] {
         let sql =  "SELECT distinct iso1 FROM Language WHERE iso1 NOT" + genQuest(array: selected)
         return getLanguages(sql: sql, selected: selected)
     }
     
-    private func getLanguages(sql: String, selected: [String]) -> [Language] {
+    private func getLanguages(sql: String, selected: [Locale]) -> [Language] {
         var languages = [Language]()
         do {
+            var isos = [String]()
+            for locale in selected {
+                isos.append(locale.languageCode ?? "xx") // each locale must add an entry
+            }
             let currLocale = Locale.current
             let db: Sqlite3 = try self.getVersionsDB()
-            let resultSet: [[String?]] = try db.queryV1(sql: sql, values: selected)
+            let resultSet: [[String?]] = try db.queryV1(sql: sql, values: isos)
             for row in resultSet {
                 let iso: String = row[0]!
                 let langLocale = Locale(identifier: iso)
@@ -166,21 +171,13 @@ class SettingsAdapter {
     // Bible Versions.db methods
     //
     
-    func getBiblesForLanguages(languages: [Language]) -> [Bible] {
-        var isos = [String]()
-        for lang in languages {
-            isos.append(lang.iso)
-        }
-        return getBiblesForLanguages(languages: isos)
-    }
-    
-    func getBiblesForLanguages(languages: [String]) -> [Bible] {
+    func getBiblesForLanguages(languages: [Locale]) -> [Bible] {
         let sql = "SELECT  bibleId, abbr, iso3, name, vname FROM Bible" +
             " WHERE iso3 IN (SELECT iso3 FROM Language where iso1" + genQuest(array: languages) + ")"
         return self.getBibles(sql: sql, selectedLanguages: languages, selectedBibles: [])
     }
     
-    func getBiblesSelected(selectedLanguages: [String], selectedBibles: [String]) -> [Bible] {
+    func getBiblesSelected(selectedLanguages: [Locale], selectedBibles: [String]) -> [Bible] {
         let sql =  "SELECT bibleId, abbr, iso3, name, vname FROM Bible WHERE bibleId" +
             genQuest(array: selectedBibles) + " AND iso3 IN (SELECT iso3 FROM Language WHERE iso1" +
             genQuest(array: selectedLanguages) + ")"
@@ -200,18 +197,22 @@ class SettingsAdapter {
         return bibles
     }
     
-    func getBiblesAvailable(selectedLanguages: [String], selectedBibles: [String]) -> [Bible] {
+    func getBiblesAvailable(selectedLanguages: [Locale], selectedBibles: [String]) -> [Bible] {
         let sql =  "SELECT bibleId, abbr, iso3, name, vname FROM Bible WHERE bibleId NOT" +
             genQuest(array: selectedBibles) + " AND iso3 IN (SELECT iso3 FROM Language WHERE iso1" +
             genQuest(array: selectedLanguages) + ") ORDER BY abbr"
         return getBibles(sql: sql, selectedLanguages: selectedLanguages, selectedBibles: selectedBibles)
     }
     
-    private func getBibles(sql: String, selectedLanguages: [String], selectedBibles: [String]) -> [Bible] {
+    private func getBibles(sql: String, selectedLanguages: [Locale], selectedBibles: [String]) -> [Bible] {
         var bibles = [Bible]()
+        var isos = [String]()
+        for locale in selectedLanguages {
+            isos.append(locale.languageCode ?? "xx")
+        }
         do {
             let db: Sqlite3 = try self.getVersionsDB()
-            let values = selectedBibles + selectedLanguages
+            let values = selectedBibles + isos
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: values)
             for row in resultSet {
                 let name = (row[4] != nil) ? row[4]! : row[3]!
@@ -233,7 +234,7 @@ class SettingsAdapter {
         return db!
     }
     
-    private func genQuest(array: [String]) -> String {
+    private func genQuest(array: [Any]) -> String {
         let quest = [String](repeating: "?", count: array.count)
         return " IN (" + quest.joined(separator: ",") + ")"
     }

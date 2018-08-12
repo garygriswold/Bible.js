@@ -12,21 +12,23 @@ import UIKit
 class BibleModel : SettingsModelInterface {
     
     private let adapter: SettingsAdapter
+    private var languages: [Locale]
+    private var bibles: [String]
     private var selected: [Bible]
     private var available: [Bible]
     private var filtered = [Bible]()
     
     init(language: Language?) {
         self.adapter = SettingsAdapter()
-        let languages = self.adapter.getLanguageSettings()
-        let sequence = self.adapter.getBibleSettings()
-        self.selected = self.adapter.getBiblesSelected(selectedLanguages: languages, selectedBibles: sequence)
+        self.languages = self.adapter.getLanguageSettings()
+        self.bibles = self.adapter.getBibleSettings()
+        self.selected = self.adapter.getBiblesSelected(selectedLanguages: languages, selectedBibles: bibles)
         if let lang = language {
-            self.available = self.adapter.getBiblesAvailable(selectedLanguages: [lang.iso],
-                                                             selectedBibles: sequence)
+            self.available = self.adapter.getBiblesAvailable(selectedLanguages: [Locale(identifier: lang.iso)],
+                                                             selectedBibles: bibles)
         } else {
             self.available = self.adapter.getBiblesAvailable(selectedLanguages: languages,
-                                                             selectedBibles: sequence)
+                                                             selectedBibles: bibles)
         }
     }
     

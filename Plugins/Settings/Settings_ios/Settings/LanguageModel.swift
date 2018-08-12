@@ -12,15 +12,16 @@ import UIKit
 class LanguageModel : SettingsModelInterface {
     
     private let adapter: SettingsAdapter
+    private var languages: [Locale]
     private var selected: [Language]
     private var available: [Language]
     private var filtered = [Language]()
     
     init() {
         self.adapter = SettingsAdapter()
-        let sequence = self.adapter.getLanguageSettings()
-        self.selected = self.adapter.getLanguagesSelected(selected: sequence)
-        let avail = self.adapter.getLanguagesAvailable(selected: sequence)
+        self.languages = self.adapter.getLanguageSettings()
+        self.selected = self.adapter.getLanguagesSelected(selected: languages)
+        let avail = self.adapter.getLanguagesAvailable(selected: languages)
         self.available = avail.sorted{ $0.localized < $1.localized }
     }
     
@@ -99,9 +100,9 @@ class LanguageModel : SettingsModelInterface {
         self.selected.insert(language, at: destination)
         self.adapter.updateSettings(languages: self.selected)
         
-        // Should I add call to add get more selected Bibles
-        // Add them to Selected Bibles
-        // Update settings
+        // The following I can do, but how do I add the bibles found to selected Bibles from Language DataModel
+        //let bibles = self.adapter.getBiblesForLanguages(languages: [Locale(identifier: language.iso)])
+        // Unfinished.
     }
     
     func moveSelectedToAvailable(source: Int, destination: Int, inSearch: Bool) {
