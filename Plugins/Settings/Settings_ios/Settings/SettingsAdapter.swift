@@ -28,28 +28,14 @@ class SettingsAdapter {
         if let langs = self.getSettings(name: SettingsAdapter.LANGS_SELECTED) {
             return langs
         } else {
-            var iso1s = [String]()
+            var isos = [String]()
             for loc in Locale.preferredLanguages { // Returns locale in String form
                 let locale = Locale(identifier: loc)
                 if let code = locale.languageCode {
-                    iso1s.append(code)
+                    isos.append(code)
                 }
             }
-            var iso3s = [String]()
-            let sql2 = "SELECT iso3 FROM Language WHERE iso1" + genQuest(array: iso1s)
-            do {
-                let db: Sqlite3 = try self.getVersionsDB()
-                let resultSet: [[String?]] = try db.queryV1(sql: sql2, values: iso1s)
-                for row in resultSet {
-                    iso3s.append(row[0]!)
-                }
-                print(iso1s)
-                print(iso3s)
-                self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: iso3s)
-            } catch let err {
-                print("ERROR: SettingsAdapter.getLanguageSettings \(err)")
-            }
-            return iso3s
+            return isos
         }
     }
     
@@ -64,7 +50,7 @@ class SettingsAdapter {
     func updateSettings(languages: [Language]) {
         var keys = [String]()
         for lang in languages {
-            keys.append(lang.iso3)
+            keys.append(lang.iso)
         }
         self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: keys)
     }
@@ -123,17 +109,17 @@ class SettingsAdapter {
     // Language Versions.db methods
     
     func getLanguagesSelected(selected: [String]) -> [Language] {
-        let sql =  "SELECT iso3, iso1 FROM Language WHERE iso3" + genQuest(array: selected)
+        let sql =  "SELECT distinct iso1 FROM Language WHERE iso1" + genQuest(array: selected)
         let results = getLanguages(sql: sql, selected: selected)
         
         // Sort results by selected list
         var map = [String:Language]()
         for result in results {
-            map[result.iso3] = result
+            map[result.iso] = result
         }
         var languages = [Language]()
-        for iso3: String in selected {
-            if let found: Language = map[iso3] {
+        for iso: String in selected {
+            if let found: Language = map[iso] {
                 languages.append(found)
             }
         }
@@ -141,7 +127,7 @@ class SettingsAdapter {
     }
     
     func getLanguagesAvailable(selected: [String]) -> [Language] {
-        let sql =  "SELECT iso3, iso1 FROM Language WHERE iso3 NOT" + genQuest(array: selected)
+        let sql =  "SELECT distinct iso1 FROM Language WHERE iso1 NOT" + genQuest(array: selected)
         return getLanguages(sql: sql, selected: selected)
     }
     
@@ -152,16 +138,14 @@ class SettingsAdapter {
             let db: Sqlite3 = try self.getVersionsDB()
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: selected)
             for row in resultSet {
-                let iso3: String = row[0]!
-                let iso1: String? = row[1]
-                let lang: String = (iso1 != nil) ? iso1! : iso3
-                let langLocale = Locale(identifier: lang)
-                let name = langLocale.localizedString(forLanguageCode: lang)
-                let localized = currLocale.localizedString(forLanguageCode: lang)
+                let iso: String = row[0]!
+                let langLocale = Locale(identifier: iso)
+                let name = langLocale.localizedString(forLanguageCode: iso)
+                let localized = currLocale.localizedString(forLanguageCode: iso)
                 if name != nil && localized != nil {
-                    languages.append(Language(iso3: iso3, iso1: iso1, name: name!, localized: localized!))
+                    languages.append(Language(iso: iso, name: name!, localized: localized!))
                 } else {
-                    print("Dropped language \(iso3) because localizedString failed.")
+                    print("Dropped language \(iso) because localizedString failed.")
                 }
             }
         } catch let err {
@@ -176,7 +160,8 @@ class SettingsAdapter {
     
     func getBiblesSelected(selectedLanguages: [String], selectedBibles: [String]) -> [Bible] {
         let sql =  "SELECT bibleId, abbr, iso3, name, vname FROM Bible WHERE bibleId" +
-            genQuest(array: selectedBibles) + " AND iso3" + genQuest(array: selectedLanguages)
+            genQuest(array: selectedBibles) + " AND iso3 IN (SELECT iso3 FROM Language WHERE iso1" +
+            genQuest(array: selectedLanguages) + ")"
         let results = getBibles(sql: sql, selectedLanguages: selectedLanguages, selectedBibles: selectedBibles)
         
         // Sort results by selectedBibles list
@@ -195,8 +180,8 @@ class SettingsAdapter {
     
     func getBiblesAvailable(selectedLanguages: [String], selectedBibles: [String]) -> [Bible] {
         let sql =  "SELECT bibleId, abbr, iso3, name, vname FROM Bible WHERE bibleId NOT" +
-            genQuest(array: selectedBibles) + " AND iso3" + genQuest(array: selectedLanguages) +
-            " ORDER BY abbr"
+            genQuest(array: selectedBibles) + " AND iso3 IN (SELECT iso3 FROM Language WHERE iso1" +
+            genQuest(array: selectedLanguages) + ") ORDER BY abbr"
         return getBibles(sql: sql, selectedLanguages: selectedLanguages, selectedBibles: selectedBibles)
     }
     
