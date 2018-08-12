@@ -18,6 +18,7 @@ class SettingsViewController: UIViewController {
     var dataModel: SettingsModelInterface!
     var tableView: UITableView!
     var language: Language? // Used only when SettingsViewType is .bible
+    var isEditable: Bool
     
     private let selectedSection: Int
     private let availableSection: Int
@@ -28,6 +29,7 @@ class SettingsViewController: UIViewController {
         self.settingsViewType = settingsViewType
         self.selectedSection = (settingsViewType == .primary) ? 3 : 0
         self.availableSection = self.selectedSection + 1
+        self.isEditable = false
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -40,6 +42,7 @@ class SettingsViewController: UIViewController {
         self.settingsViewType = .primary
         self.selectedSection = (settingsViewType == .primary) ? 3 : 0
         self.availableSection = self.selectedSection + 1
+        self.isEditable = false
         super.init(coder: coder)
     }
 
@@ -76,7 +79,7 @@ class SettingsViewController: UIViewController {
         AppFont.updateSearchFontSize()
         
         //self.saveHandler(sender: nil)
-        self.tableView.setEditing(true, animated: true)
+        self.tableView.setEditing(self.isEditable, animated: true)
     }
     
     override func viewDidLoad() {

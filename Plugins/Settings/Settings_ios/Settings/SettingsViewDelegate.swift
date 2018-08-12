@@ -85,6 +85,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             print("section 1 is not selectable")
         case 2:
             let languageController = SettingsViewController(settingsViewType: .language)
+            languageController.isEditable = true
             self.navController?.pushViewController(languageController, animated: true)
         default:
             bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
@@ -114,10 +115,12 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             print("Selected \(indexPath.row) clicked")
             let bibleController = SettingsViewController(settingsViewType: .bible)
             bibleController.language = self.dataModel.getSelectedLanguage(row: indexPath.row)
+            bibleController.isEditable = true
             self.navController?.pushViewController(bibleController, animated: true)
         case self.availableSection:
             let bibleController = SettingsViewController(settingsViewType: .bible)
             bibleController.language = self.dataModel.getAvailableLanguage(row: indexPath.row)
+            bibleController.isEditable = false
             self.navController?.pushViewController(bibleController, animated: true)
         default:
             print("Unknown section \(indexPath.row)")
