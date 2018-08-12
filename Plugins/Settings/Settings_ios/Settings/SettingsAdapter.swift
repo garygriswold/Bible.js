@@ -35,6 +35,7 @@ class SettingsAdapter {
                     isos.append(code)
                 }
             }
+            self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: isos)
             return isos
         }
     }
@@ -43,7 +44,14 @@ class SettingsAdapter {
         if let bibles = self.getSettings(name: SettingsAdapter.BIBLE_SELECTED) {
             return bibles
         } else {
-            return [] // TBD
+            var bibles = [String]()
+            let langs = self.getSettings(name: SettingsAdapter.LANGS_SELECTED) // This could be passed in, instead
+            let biblesObjs = self.getBiblesForLanguages(languages: langs!)
+            for bible in biblesObjs { // This is not needed if method returned string
+                bibles.append(bible.bibleId)
+            }
+            self.updateSettings(bibles: biblesObjs)
+            return bibles
         }
     }
     
@@ -157,6 +165,20 @@ class SettingsAdapter {
     //
     // Bible Versions.db methods
     //
+    
+    func getBiblesForLanguages(languages: [Language]) -> [Bible] {
+        var isos = [String]()
+        for lang in languages {
+            isos.append(lang.iso)
+        }
+        return getBiblesForLanguages(languages: isos)
+    }
+    
+    func getBiblesForLanguages(languages: [String]) -> [Bible] {
+        let sql = "SELECT  bibleId, abbr, iso3, name, vname FROM Bible" +
+            " WHERE iso3 IN (SELECT iso3 FROM Language where iso1" + genQuest(array: languages) + ")"
+        return self.getBibles(sql: sql, selectedLanguages: languages, selectedBibles: [])
+    }
     
     func getBiblesSelected(selectedLanguages: [String], selectedBibles: [String]) -> [Bible] {
         let sql =  "SELECT bibleId, abbr, iso3, name, vname FROM Bible WHERE bibleId" +

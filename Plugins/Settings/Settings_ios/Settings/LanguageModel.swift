@@ -98,6 +98,10 @@ class LanguageModel : SettingsModelInterface {
         }
         self.selected.insert(language, at: destination)
         self.adapter.updateSettings(languages: self.selected)
+        
+        // Should I add call to add get more selected Bibles
+        // Add them to Selected Bibles
+        // Update settings
     }
     
     func moveSelectedToAvailable(source: Int, destination: Int, inSearch: Bool) {
