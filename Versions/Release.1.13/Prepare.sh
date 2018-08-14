@@ -1,18 +1,20 @@
 #!/bin/sh -ve
 
 python py/LanguageTable.py
-
+python py/ISO3PriorityTable.py 
 python py/BibleTable.py < metadata/FCBH/bible.json
 
 sqlite Versions.db <<END_SQL
 DROP TABLE IF EXISTS Bible;
 DROP TABLE IF EXISTS Owner;
+DROP TABLE IF EXISTS IOS3Priority;
 DROP TABLE IF EXISTS Language;
 DROP TABLE IF EXISTS Country;
 END_SQL
 
 sqlite Versions.db < sql/country.sql
 sqlite Versions.db < sql/language.sql
+sqlite Versions.db < sql/iso3Priority.sql
 sqlite Versions.db < sql/copied_owner.sql
 sqlite Versions.db < sql/bible.sql
 
