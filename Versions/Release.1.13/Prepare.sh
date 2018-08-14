@@ -8,8 +8,10 @@ sqlite Versions.db <<END_SQL
 DROP TABLE IF EXISTS Bible;
 DROP TABLE IF EXISTS Owner;
 DROP TABLE IF EXISTS Language;
+DROP TABLE IF EXISTS Country;
 END_SQL
 
+sqlite Versions.db < sql/country.sql
 sqlite Versions.db < sql/language.sql
 sqlite Versions.db < sql/copied_owner.sql
 sqlite Versions.db < sql/bible.sql
