@@ -9,6 +9,9 @@
 // of Bible Versions.  This class is uses to sort iso3 languges in the order that might be most
 // relevant to them, and then to sort the Bibles into the best sequence.
 //
+// It is intended that the selected Bibles are returned first in the order of the selected languages
+// and second within the score for the specific language
+//
 
 import Foundation
 import Utility
@@ -39,7 +42,7 @@ class BibleInitialSelect {
     func getBiblesSelected(selectedLanguages: [Locale]) -> [Bible] {
         let details: [LanguageDetail] = self.getInitialLanguageDetails(languages: selectedLanguages)
         self.selectedBibles = self.getBiblesSelected(languages: selectedLanguages, languageDetail: details)
-        self.adapter.updateSettings(bibles: self.selectedBibles!)
+        self.adapter.updateSettings(bibles: self.selectedBibles!) TEMP Disable
         return self.selectedBibles!
     }
     
@@ -137,20 +140,32 @@ class BibleInitialSelect {
         // individual Bibles, and add to the score of those that match.
         
         // Sort results by Language Detail
+        let groups: [String: [Bible]] = self.groupBiblesByIso3(bibles: bibles)
+        let sorted: [Bible] = self.sortBibleGroupsByIso3(languageDetail: languageDetail, bibleGroups: groups)
+        return sorted
+    }
+    
+    private func groupBiblesByIso3(bibles: [Bible]) -> [String: [Bible]] {
         var map = [String: [Bible]]()
         for bible in bibles {
             if var bibleList = map[bible.iso3] {
                 if bibleList.count < 3 { // Limit to 3 versions for each language
                     bibleList.append(bible)
                     map[bible.iso3] = bibleList // is this line needed?
+                } else {
+                    print("Dropped \(bible.bibleId)")
                 }
             } else {
                 map[bible.iso3] = [bible]
             }
         }
+        return map
+    }
+    
+    private func sortBibleGroupsByIso3(languageDetail: [LanguageDetail], bibleGroups: [String: [Bible]]) -> [Bible] {
         var sorted = [Bible]()
         for lang in languageDetail {
-            if let found: [Bible] = map[lang.iso] {
+            if let found: [Bible] = bibleGroups[lang.iso] {
                 for one in found {
                     sorted.append(one)
                 }

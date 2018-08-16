@@ -19,16 +19,11 @@ struct Language : Equatable {
     }
 }
 
-// NOTE: Equatable might prove inefficient with a large list.  Wait and see. But its advantage
-// is that it is only used when needed.  The disadvantage is that it is used to pass over the
-// entire list.  The alternative would be to have a hash map of versionCode for everything in available,
-// but it would need to be maintained as the available list changes.
 struct Bible : Equatable {
     let bibleId: String     // FCBH 6 to 8 char code
     let abbr: String        // Version Abbreviation
     let iso3: String        // SIL 3 char SIL language code
     let name: String        // Name in the language, but sometimes in English
-    //let recommended: Bool   // Version added as default, when language is selected.
     
     static func == (lhs: Bible, rhs: Bible) -> Bool {
         return lhs.bibleId == rhs.bibleId
