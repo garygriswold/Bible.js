@@ -45,14 +45,7 @@ class SettingsAdapter {
         if let bibles = self.getSettings(name: SettingsAdapter.BIBLE_SELECTED) {
             return bibles
         } else {
-            var bibles = [String]()
-            let langs = self.getLanguageSettings()
-            let biblesObjs = self.getBiblesForLanguages(languages: langs)
-            for bible in biblesObjs { // This is not needed if method returned string
-                bibles.append(bible.bibleId)
-            }
-            self.updateSettings(bibles: biblesObjs)
-            return bibles
+            return [] // Returning empty causes BibleInitialSelect to be used.
         }
     }
     
@@ -224,7 +217,7 @@ class SettingsAdapter {
         return bibles
     }
     
-    private func getVersionsDB() throws -> Sqlite3 {
+    func getVersionsDB() throws -> Sqlite3 {
         var db: Sqlite3?
         do {
             db = try Sqlite3.findDB(dbname: SettingsAdapter.VERSIONS_DB)
@@ -234,7 +227,7 @@ class SettingsAdapter {
         return db!
     }
     
-    private func genQuest(array: [Any]) -> String {
+    func genQuest(array: [Any]) -> String {
         let quest = [String](repeating: "?", count: array.count)
         return " IN (" + quest.joined(separator: ",") + ")"
     }
