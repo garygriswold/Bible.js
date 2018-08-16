@@ -1,5 +1,5 @@
 //
-//  BibleSequence.swift
+//  BibleInitialSelect.swift
 //  Settings
 //
 //  Created by Gary Griswold on 8/15/18.
@@ -29,7 +29,7 @@ class BibleInitialSelect {
     }
     
     private var adapter: SettingsAdapter
-    private var selectedBibles: [Bible]?
+    private var selected: [Bible]?
     
     init(adapter: SettingsAdapter) {
         self.adapter = adapter
@@ -39,15 +39,15 @@ class BibleInitialSelect {
         print("****** Deinit BibleSequence ******")
     }
     
-    func getBiblesSelected(selectedLanguages: [Locale]) -> [Bible] {
-        let details: [LanguageDetail] = self.getInitialLanguageDetails(languages: selectedLanguages)
-        self.selectedBibles = self.getBiblesSelected(languages: selectedLanguages, languageDetail: details)
-        self.adapter.updateSettings(bibles: self.selectedBibles!) TEMP Disable
-        return self.selectedBibles!
+    func getBiblesSelected(locales: [Locale]) -> [Bible] {
+        let details: [LanguageDetail] = self.getInitialLanguageDetails(locales: locales)
+        self.selected = self.getBiblesSelected(locales: locales, languages: details)
+        self.adapter.updateSettings(bibles: self.selected!) //TEMP Disable
+        return self.selected!
     }
     
     func getBibleSettings() -> [String] {
-        if let bibles = self.selectedBibles {
+        if let bibles = self.selected {
             var result = [String]()
             for bible in bibles {
                 result.append(bible.bibleId)
@@ -62,9 +62,9 @@ class BibleInitialSelect {
     * Iterate over all of a user's locales and get a list of iso3 languages
     * that is sorted by those locales and a score of each individual locale.
     */
-    private func getInitialLanguageDetails(languages: [Locale]) -> [LanguageDetail] {
+    private func getInitialLanguageDetails(locales: [Locale]) -> [LanguageDetail] {
         var details = [LanguageDetail]()
-        for locale in languages {
+        for locale in locales {
             let results = self.getOneInitialLanguageDetail(locale: locale)
             details += results
         }
@@ -116,13 +116,13 @@ class BibleInitialSelect {
      * Then limit to 3 or 4 versions in each of the original locales.
      */
     
-    private func getBiblesSelected(languages: [Locale], languageDetail: [LanguageDetail]) -> [Bible] {
+    private func getBiblesSelected(locales: [Locale], languages: [LanguageDetail]) -> [Bible] {
         let sql =  "SELECT bibleId, abbr, iso3, name, vname FROM Bible WHERE iso3" +
-            self.adapter.genQuest(array: languageDetail)
+            self.adapter.genQuest(array: languages)
 
         var bibles = [Bible]()
         var iso3s = [String]()
-        for lang in languageDetail {
+        for lang in languages {
             iso3s.append(lang.iso)
         }
         do {
@@ -141,7 +141,7 @@ class BibleInitialSelect {
         
         // Sort results by Language Detail
         let groups: [String: [Bible]] = self.groupBiblesByIso3(bibles: bibles)
-        let sorted: [Bible] = self.sortBibleGroupsByIso3(languageDetail: languageDetail, bibleGroups: groups)
+        let sorted: [Bible] = self.sortBibleGroupsByIso3(languages: languages, bibleGroups: groups)
         return sorted
     }
     
@@ -162,9 +162,9 @@ class BibleInitialSelect {
         return map
     }
     
-    private func sortBibleGroupsByIso3(languageDetail: [LanguageDetail], bibleGroups: [String: [Bible]]) -> [Bible] {
+    private func sortBibleGroupsByIso3(languages: [LanguageDetail], bibleGroups: [String: [Bible]]) -> [Bible] {
         var sorted = [Bible]()
-        for lang in languageDetail {
+        for lang in languages {
             if let found: [Bible] = bibleGroups[lang.iso] {
                 for one in found {
                     sorted.append(one)

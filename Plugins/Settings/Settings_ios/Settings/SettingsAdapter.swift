@@ -163,18 +163,11 @@ class SettingsAdapter {
     //
     // Bible Versions.db methods
     //
-    
-    func getBiblesForLanguages(languages: [Locale]) -> [Bible] {
-        let sql = "SELECT  bibleId, abbr, iso3, name, vname FROM Bible" +
-            " WHERE iso3 IN (SELECT iso3 FROM Language where iso1" + genQuest(array: languages) + ")"
-        return self.getBibles(sql: sql, selectedLanguages: languages, selectedBibles: [])
-    }
-    
-    func getBiblesSelected(selectedLanguages: [Locale], selectedBibles: [String]) -> [Bible] {
+    func getBiblesSelected(locales: [Locale], selectedBibles: [String]) -> [Bible] {
         let sql =  "SELECT bibleId, abbr, iso3, name, vname FROM Bible WHERE bibleId" +
             genQuest(array: selectedBibles) + " AND iso3 IN (SELECT iso3 FROM Language WHERE iso1" +
-            genQuest(array: selectedLanguages) + ")"
-        let results = getBibles(sql: sql, selectedLanguages: selectedLanguages, selectedBibles: selectedBibles)
+            genQuest(array: locales) + ")"
+        let results = getBibles(sql: sql, locales: locales, selectedBibles: selectedBibles)
         
         // Sort results by selectedBibles list
         var map = [String:Bible]()
@@ -190,17 +183,17 @@ class SettingsAdapter {
         return bibles
     }
     
-    func getBiblesAvailable(selectedLanguages: [Locale], selectedBibles: [String]) -> [Bible] {
+    func getBiblesAvailable(locales: [Locale], selectedBibles: [String]) -> [Bible] {
         let sql =  "SELECT bibleId, abbr, iso3, name, vname FROM Bible WHERE bibleId NOT" +
             genQuest(array: selectedBibles) + " AND iso3 IN (SELECT iso3 FROM Language WHERE iso1" +
-            genQuest(array: selectedLanguages) + ") ORDER BY abbr"
-        return getBibles(sql: sql, selectedLanguages: selectedLanguages, selectedBibles: selectedBibles)
+            genQuest(array: locales) + ") ORDER BY abbr"
+        return getBibles(sql: sql, locales: locales, selectedBibles: selectedBibles)
     }
     
-    private func getBibles(sql: String, selectedLanguages: [Locale], selectedBibles: [String]) -> [Bible] {
+    private func getBibles(sql: String, locales: [Locale], selectedBibles: [String]) -> [Bible] {
         var bibles = [Bible]()
         var isos = [String]()
-        for locale in selectedLanguages {
+        for locale in locales {
             isos.append(locale.languageCode ?? "xx")
         }
         do {

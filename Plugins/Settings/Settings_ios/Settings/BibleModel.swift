@@ -1,5 +1,5 @@
 //
-//  VersionModel.swift
+//  BibleModel.swift
 //  Settings
 //
 //  Created by Gary Griswold on 7/30/18.
@@ -12,7 +12,7 @@ import UIKit
 class BibleModel : SettingsModelInterface {
     
     private let adapter: SettingsAdapter
-    private var languages: [Locale]
+    private var locales: [Locale]
     private var bibles: [String]
     private var selected: [Bible]
     private var available: [Bible]
@@ -20,21 +20,20 @@ class BibleModel : SettingsModelInterface {
     
     init(language: Language?) {
         self.adapter = SettingsAdapter()
-        self.languages = self.adapter.getLanguageSettings()
+        self.locales = self.adapter.getLanguageSettings()
         self.bibles = self.adapter.getBibleSettings()
         if self.bibles.count > 0 {
-            self.selected = self.adapter.getBiblesSelected(selectedLanguages: languages, selectedBibles: bibles)
+            self.selected = self.adapter.getBiblesSelected(locales: self.locales, selectedBibles: self.bibles)
         } else {
             let initial = BibleInitialSelect(adapter: self.adapter)
-            self.selected = initial.getBiblesSelected(selectedLanguages: languages)
+            self.selected = initial.getBiblesSelected(locales: self.locales)
             self.bibles = initial.getBibleSettings()
         }
         if let lang = language {
-            self.available = self.adapter.getBiblesAvailable(selectedLanguages: [Locale(identifier: lang.iso)],
+            self.available = self.adapter.getBiblesAvailable(locales: [Locale(identifier: lang.iso)],
                                                              selectedBibles: bibles)
         } else {
-            self.available = self.adapter.getBiblesAvailable(selectedLanguages: languages,
-                                                             selectedBibles: bibles)
+            self.available = self.adapter.getBiblesAvailable(locales: locales, selectedBibles: bibles)
         }
     }
     
