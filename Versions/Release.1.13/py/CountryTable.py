@@ -19,4 +19,5 @@ for line in input:
     if (len(row[0]) == 2):
     	out.write("%s ('%s', '%s');\n" % (prefix, row[0], row[1]))
 input.close()
+out.close()
 
