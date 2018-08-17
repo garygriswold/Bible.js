@@ -18,13 +18,25 @@ import Utility
 
 class BibleInitialSelect {
     
-    struct LanguageDetail : Equatable {
-        let iso: String         // unique iso-1 and iso-3 codes
+    struct LanguageScore : Equatable {
+        let iso3: String
         let country: String?
         let score: Float
         
-        static func == (lhs: LanguageDetail, rhs: LanguageDetail) -> Bool {
-            return lhs.iso == rhs.iso
+        static func == (lhs: LanguageScore, rhs: LanguageScore) -> Bool {
+            return lhs.iso3 == rhs.iso3
+        }
+    }
+    
+    struct BibleScore : Equatable {
+        let bibleId: String     // FCBH 6 to 8 char code
+        let abbr: String        // Version Abbreviation
+        let iso3: String        // SIL 3 char SIL language code
+        let name: String        // Name in the language, but sometimes in English
+        var score: Float
+        
+        static func == (lhs: BibleScore, rhs: BibleScore) -> Bool {
+            return lhs.bibleId == rhs.bibleId
         }
     }
     
@@ -40,8 +52,23 @@ class BibleInitialSelect {
     }
     
     func getBiblesSelected(locales: [Locale]) -> [Bible] {
-        let details: [LanguageDetail] = self.getInitialLanguageDetails(locales: locales)
-        self.selected = self.getBiblesSelected(locales: locales, languages: details)
+        self.selected = [Bible]()
+        for locale in locales {
+            let langs = self.getInitialLanguageDetail(locale: locale)
+            let langsSorted = langs.sorted{ $0.score > $1.score }
+            var bibles = self.getBiblesSelected(locale: locale, languages: langsSorted)
+            self.scoreBibles(locale: locale, bibles: &bibles)
+            var biblesSorted = bibles.sorted{ $0.score > $1.score }
+            while biblesSorted.count > 3 {
+                _ = biblesSorted.popLast()
+            }
+            for bb in biblesSorted {
+                let bible = Bible(bibleId: bb.bibleId, abbr: bb.abbr, iso3: bb.iso3, name: bb.name)
+                if !self.selected!.contains(bible) {
+                    self.selected!.append(bible)
+                }
+            }
+        }
         self.adapter.updateSettings(bibles: self.selected!) //TEMP Disable
         return self.selected!
     }
@@ -59,24 +86,11 @@ class BibleInitialSelect {
     }
     
     /**
-    * Iterate over all of a user's locales and get a list of iso3 languages
-    * that is sorted by those locales and a score of each individual locale.
-    */
-    private func getInitialLanguageDetails(locales: [Locale]) -> [LanguageDetail] {
-        var details = [LanguageDetail]()
-        for locale in locales {
-            let results = self.getOneInitialLanguageDetail(locale: locale)
-            details += results
-        }
-        return details
-    }
-    
-    /**
     * Retrieve all iso3 languages for a locale and sort those languages by a score that is
     * based upon population and country match with the locale
     */
-    private func getOneInitialLanguageDetail(locale: Locale) -> [LanguageDetail] {
-        var details = [LanguageDetail]()
+    private func getInitialLanguageDetail(locale: Locale) -> [LanguageScore] {
+        var details = [LanguageScore]()
         var sql: String
         if locale.languageCode?.count == 2 {
             sql = "SELECT iso3, country, pop FROM Language WHERE iso1 = ?"
@@ -94,12 +108,10 @@ class BibleInitialSelect {
                 } else if country == "*" {
                     score *= 5.0
                 }
-                let lang = LanguageDetail(iso: row[0]!, country: country, score: score)
+                let lang = LanguageScore(iso3: row[0]!, country: country, score: score)
                 details.append(lang)
             }
-            return details.sorted{ $0.score > $1.score } // sort desc by score
-            // Should I limit the list size before I return it?
-            
+            return details
         } catch let err {
             print("ERROR: SettingsAdapter.updateSettings \(err)")
         }
@@ -107,70 +119,56 @@ class BibleInitialSelect {
     }
     
     /**
-     * Using a sorted list of languages, retrieve the Bibles that match,
-     * and sort the returned bibles into the order of the languages.
-     *
-     * Then within a language try do do additional matching on script to prioritize
-     * the languages.
-     *
-     * Then limit to 3 or 4 versions in each of the original locales.
+     * Using a sorted list of languages, retrieve the Bibles that match.
      */
-    
-    private func getBiblesSelected(locales: [Locale], languages: [LanguageDetail]) -> [Bible] {
+    private func getBiblesSelected(locale: Locale, languages: [LanguageScore]) -> [BibleScore] {
+        var langScore = [String: Float]()
+        for lang in languages {
+            langScore[lang.iso3] = lang.score
+        }
         let sql =  "SELECT bibleId, abbr, iso3, name, vname FROM Bible WHERE iso3" +
             self.adapter.genQuest(array: languages)
 
-        var bibles = [Bible]()
+        var bibles = [BibleScore]()
         var iso3s = [String]()
         for lang in languages {
-            iso3s.append(lang.iso)
+            iso3s.append(lang.iso3)
         }
         do {
             let db: Sqlite3 = try self.adapter.getVersionsDB()
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: iso3s)
             for row in resultSet {
+                let iso3 = row[2]!
+                let score = (langScore[iso3] != nil) ? langScore[iso3]! : 0.10
                 let name = (row[4] != nil) ? row[4]! : row[3]!
-                bibles.append(Bible(bibleId: row[0]!, abbr: row[1]!, iso3: row[2]!, name: name))
+                bibles.append(BibleScore(bibleId: row[0]!, abbr: row[1]!, iso3: iso3, name: name, score: score))
             }
         } catch let err {
-            print("ERROR: SettingsAdapter.getBibles \(err)")
+            print("ERROR: BibleInitSelect.getBiblesSelected \(err)")
         }
-        // The locales are passed in here, because for each Locale that has a script code,
-        // or language that could have a script code, I want to match on the script code of the
-        // individual Bibles, and add to the score of those that match.
-        
-        // Sort results by Language Detail
-        let groups: [String: [Bible]] = self.groupBiblesByIso3(bibles: bibles)
-        let sorted: [Bible] = self.sortBibleGroupsByIso3(languages: languages, bibleGroups: groups)
-        return sorted
+        return bibles
     }
-    
-    private func groupBiblesByIso3(bibles: [Bible]) -> [String: [Bible]] {
-        var map = [String: [Bible]]()
-        for bible in bibles {
-            if var bibleList = map[bible.iso3] {
-                if bibleList.count < 3 { // Limit to 3 versions for each language
-                    bibleList.append(bible)
-                    map[bible.iso3] = bibleList // is this line needed?
-                } else {
-                    print("Dropped \(bible.bibleId)")
-                }
-            } else {
-                map[bible.iso3] = [bible]
-            }
-        }
-        return map
-    }
-    
-    private func sortBibleGroupsByIso3(languages: [LanguageDetail], bibleGroups: [String: [Bible]]) -> [Bible] {
-        var sorted = [Bible]()
-        for lang in languages {
-            if let found: [Bible] = bibleGroups[lang.iso] {
-                for one in found {
-                    sorted.append(one)
+
+    // There needs to be additional logic here to score based upon script code
+    private func scoreBibles(locale: Locale, bibles: inout [BibleScore]) {
+        switch locale.languageCode {
+        case "en":
+            for i in 0..<bibles.count {
+                switch bibles[i].abbr {
+                case "ESV":
+                    bibles[i].score *= 7.0
+                case "NIV":
+                    bibles[i].score *= 6.0
+                case "NKJV":
+                    bibles[i].score *= 5.0
+                default:
+                    bibles[i].score *= 1.0
                 }
             }
+        // case "es" // Must distinquish latin american from Spanish translations
+        default:
+            print("")
         }
-        return sorted
+        // There needs to be code here based upon script.
     }
 }
