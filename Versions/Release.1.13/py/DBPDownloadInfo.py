@@ -6,30 +6,29 @@ import boto3
 import io
 import os
 
-media = "text"
-bibleId = "ENGKJV"
-target = "/Users/garygriswold/ShortSands/DBL/FCBH"
-search = media + "/" + bibleId + "/"
-searchLen = len(search)
+media = "text/ENG"
+mediaLen = len(media)
+filename = "about.html"#"info.json"
+target = "/Users/garygriswold/ShortSands/DBL/FCBH_info"
 
 session = boto3.Session(profile_name='FCBH_BibleApp')
 client = session.client('s3')
 
 input = io.open("metadata/FCBH/dbp_dev.txt", mode="r", encoding="utf-8")
 for line in input:
-	if line[0:searchLen] == search:
+	if line[0:mediaLen] == media:
 		line = line.strip()
 		row = line.split("/")
-		numDirs = len(row) - 1
-		directory = target
-		for index in range(1, numDirs):
-			directory += "/" + row[index]
-			print directory
+		last = row[-1]
+		if last == filename:
+			directory = target + "/" + row[1]
 			if not os.path.exists(directory):
 				os.makedirs(directory)
-		last = row[-1]
-		filename = directory + "/" + last
-		client.download_file('dbp-prod', line, filename)
+			path = directory + "/" + last
+			try:
+				client.download_file('dbp-prod', line, path)
+				print "Sucessfully downloaded", path
+			except:
+				print "Failed ", line
 
 input.close()
-
