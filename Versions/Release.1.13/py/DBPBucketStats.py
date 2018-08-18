@@ -9,9 +9,10 @@ bibles = dict()
 input = io.open("metadata/FCBH/dbp_dev.txt", mode="r", encoding="utf-8")
 for line in input:
     row = line.split("/")
+    numelements = len(row)
     element1.add(row[0])
     if row[0] == "text":
-    	bibleId = row[1]
+    	bibleId = row[1] + "-" + str(numelements)
     	if bibleId in bibles:
     		last = row[-1].strip()
     		if last == "about.html":
@@ -39,8 +40,6 @@ for id in bibles:
 	abbr = id[3:]
 	data = bibles[id]
 	print id, iso3, abbr, data
-
-
 
 #bibleIds	1136
 #about.html	1352
