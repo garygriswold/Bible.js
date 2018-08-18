@@ -2,6 +2,8 @@
 # This program reads a list of keys in a DBP bucket, and produces counts
 # of the number of various kinds of objects.
 #
+# This program is not finished, and does not do anything important
+#
 import io
 
 element1 = set()

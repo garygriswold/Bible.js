@@ -2,7 +2,7 @@
 
 python py/LanguageTable.py
 python py/ISO3PriorityTable.py 
-python py/BibleTable.py < metadata/FCBH/bible.json
+python py/BibleTable.py
 
 sqlite Versions.db <<END_SQL
 DROP TABLE IF EXISTS Bible;
