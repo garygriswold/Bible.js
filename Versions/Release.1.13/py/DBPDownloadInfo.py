@@ -6,9 +6,10 @@ import boto3
 import io
 import os
 
-media = "text/ENG"
+media = "text/ENGESV"
 mediaLen = len(media)
-filename = "about.html"#"info.json"
+filename1 = "about.html"
+filename2 = "info.json"
 target = "/Users/garygriswold/ShortSands/DBL/FCBH_info"
 
 session = boto3.Session(profile_name='FCBH_BibleApp')
@@ -20,7 +21,7 @@ for line in input:
 		line = line.strip()
 		row = line.split("/")
 		last = row[-1]
-		if last == filename:
+		if last == filename1 or last == filename2:
 			directory = target + "/" + row[1]
 			if not os.path.exists(directory):
 				os.makedirs(directory)
