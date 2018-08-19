@@ -9,10 +9,10 @@ import boto3
 
 #out = io.open("metadata/FCBH/dbp_dev.txt", mode="w", encoding="utf-8")
 
-session = boto3.Session(profile_name='Gary')
+session = boto3.Session(profile_name='FCBH_Gary')
 client = session.client('s3')
 
-request = { 'Bucket':'dbp-dev', 'MaxKeys':1000 }
+request = { 'Bucket':'dbp-prod', 'MaxKeys':1000 }
 # Bucket, Delimiter, EncodingType, Market, MaxKeys, Prefix
 
 hasMore = True
