@@ -16,6 +16,14 @@ class SettingsAdapter {
     private static let LANGS_SELECTED = "langs_selected"
     private static let BIBLE_SELECTED = "bible_selected"
     
+    private var locales: [Locale]
+    private var localeMap: [String : Locale] // This could be eliminated with my own UserLocale struct
+    
+    init() {
+        self.locales = [Locale]()
+        self.localeMap = [String : Locale]()
+    }
+    
     deinit {
         print("**** deinit SettingsAdapter ******")
     }
@@ -25,20 +33,23 @@ class SettingsAdapter {
     //
     
     func getLanguageSettings() -> [Locale] {
-        var locales = [Locale]()
+        var languages: [String]
         if let langs = self.getSettings(name: SettingsAdapter.LANGS_SELECTED) {
-            for lang in langs {
-                locales.append(Locale(identifier: lang))
-            }
-            return locales
+            languages = langs
         } else {
-            let langs: [String] = Locale.preferredLanguages
-            for lang in langs {
-                locales.append(Locale(identifier: lang))
-            }
-            self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: langs)
-            return locales
+            languages = Locale.preferredLanguages
+            self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: languages)
         }
+        self.locales = [Locale]() // This seems redundant
+        self.localeMap = [String: Locale]() // This seems redundant also.
+        for lang in languages {
+            let locale = Locale(identifier: lang)
+            self.locales.append(locale)
+            if let langCode = locale.languageCode {
+                self.localeMap[langCode] = locale
+            }
+        }
+        return self.locales
     }
     
     func getBibleSettings() -> [String] {
@@ -50,11 +61,16 @@ class SettingsAdapter {
     }
     
     func updateSettings(languages: [Language]) {
-        var keys = [String]()
+        var locales = [String]()
         for lang in languages {
-            keys.append(lang.iso)
+            if let locale = self.localeMap[lang.iso] {
+                locales.append(locale.identifier)
+            } else {
+                print("ERROR: language \(lang.iso) has no locale")
+                locales.append(lang.iso)
+            }
         }
-        self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: keys)
+        self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: locales)
     }
     
     func updateSettings(bibles: [Bible]) {

@@ -12,16 +12,15 @@ import UIKit
 class LanguageModel : SettingsModelInterface {
     
     private let adapter: SettingsAdapter
-    private var locales: [Locale]
     private var selected: [Language]
     private var available: [Language]
     private var filtered = [Language]()
     
     init() {
         self.adapter = SettingsAdapter()
-        self.locales = self.adapter.getLanguageSettings()
-        self.selected = self.adapter.getLanguagesSelected(selected: self.locales)
-        let avail = self.adapter.getLanguagesAvailable(selected: self.locales)
+        let locales = self.adapter.getLanguageSettings()
+        self.selected = self.adapter.getLanguagesSelected(selected: locales)
+        let avail = self.adapter.getLanguagesAvailable(selected: locales)
         self.available = avail.sorted{ $0.localized < $1.localized }
     }
     
