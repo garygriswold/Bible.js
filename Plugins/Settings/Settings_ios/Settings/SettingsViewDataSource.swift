@@ -18,10 +18,12 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     private let availableSection: Int
     private let searchController: UISearchController
     private let textSizeSliderCell: TextSizeSliderCell
+    private var language: Language? // Used only in .bible settingsViewType
     
     init(controller: SettingsViewController, selectionViewSection: Int) {
         self.controller = controller
         self.dataModel = controller.dataModel
+        self.language = controller.language
         self.searchController = UISearchController(searchResultsController: nil)
         self.settingsViewType = controller.settingsViewType
         switch settingsViewType {
@@ -68,18 +70,25 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     
     // Customize the section headings for each section
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if self.settingsViewType == .language {
-            switch section {
-            case self.selectedSection: return "My Languages"
-            case self.availableSection: return "More Languages"
-            default: return nil
+        switch self.settingsViewType {
+        case .primary:
+            if section == self.selectedSection { return "My Bibles" }
+            else if section == self.availableSection { return "More Bibles" }
+            else { return nil }
+        case .language:
+            if section == self.selectedSection { return "My Languages" }
+            else if section == self.availableSection { return "More Languages" }
+            else { return nil }
+        case .bible:
+            if section == self.selectedSection { return "My Bibles" }
+            else if section == self.availableSection {
+                if let lang = self.language?.localized {
+                    return lang + " Bibles"
+                } else {
+                    return "More Bibles"
+                }
             }
-        } else {
-            switch section {
-            case self.selectedSection: return "My Bibles"
-            case self.availableSection: return "More Bibles"
-            default: return nil
-            }
+            else { return nil }
         }
     }
     
