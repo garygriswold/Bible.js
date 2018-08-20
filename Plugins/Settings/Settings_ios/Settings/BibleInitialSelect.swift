@@ -69,7 +69,6 @@ class BibleInitialSelect {
                 }
             }
         }
-        self.adapter.updateSettings(bibles: self.selected!) //TEMP Disable
         return self.selected!
     }
     

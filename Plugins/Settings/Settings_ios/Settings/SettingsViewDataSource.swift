@@ -195,6 +195,14 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             if let lang = self.language {
                 self.dataModel.settingsAdapter.addLanguage(language: lang)
             }
+            // When I move a language from, available to selected, then select initial versions
+            if self.dataModel is LanguageModel {
+                if let language = self.dataModel.getSelectedLanguage(row: destination.row) {
+                    let initial = BibleInitialSelect(adapter: self.dataModel.settingsAdapter)
+                    let bibles = initial.getBiblesSelected(locales: [language.locale])
+                    self.dataModel.settingsAdapter.addBibles(bibles: bibles)
+                }
+            }
         }
     }
 

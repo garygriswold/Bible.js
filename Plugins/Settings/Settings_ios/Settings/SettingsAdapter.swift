@@ -61,6 +61,17 @@ class SettingsAdapter {
         self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: localeStrs)
     }
     
+    func addBibles(bibles: [Bible]) {
+        var currBibles = self.getBibleSettings()
+        for bible in bibles {
+            let bibleId = bible.bibleId
+            if !currBibles.contains(bibleId) {
+                currBibles.append(bibleId)
+            }
+        }
+        self.updateSettings(name: SettingsAdapter.BIBLE_SELECTED, settings: currBibles)
+    }
+    
     func updateSettings(languages: [Language]) {
         var locales = [String]()
         for lang in languages {
