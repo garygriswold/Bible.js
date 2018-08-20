@@ -16,14 +16,6 @@ class SettingsAdapter {
     private static let LANGS_SELECTED = "langs_selected"
     private static let BIBLE_SELECTED = "bible_selected"
     
-    private var locales: [Locale]
-    private var localeMap: [String : Locale] // This could be eliminated with my own UserLocale struct
-    
-    init() {
-        self.locales = [Locale]()
-        self.localeMap = [String : Locale]()
-    }
-    
     deinit {
         print("**** deinit SettingsAdapter ******")
     }
@@ -40,16 +32,12 @@ class SettingsAdapter {
             languages = Locale.preferredLanguages
             self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: languages)
         }
-        self.locales = [Locale]() // This seems redundant
-        self.localeMap = [String: Locale]() // This seems redundant also.
+        var locales = [Locale]()
         for lang in languages {
             let locale = Locale(identifier: lang)
-            self.locales.append(locale)
-            if let langCode = locale.languageCode {
-                self.localeMap[langCode] = locale
-            }
+            locales.append(locale)
         }
-        return self.locales
+        return locales
     }
     
     func getBibleSettings() -> [String] {
@@ -63,12 +51,7 @@ class SettingsAdapter {
     func updateSettings(languages: [Language]) {
         var locales = [String]()
         for lang in languages {
-            if let locale = self.localeMap[lang.iso] {
-                locales.append(locale.identifier)
-            } else {
-                print("ERROR: language \(lang.iso) has no locale")
-                locales.append(lang.iso)
-            }
+            locales.append(lang.locale.identifier)
         }
         self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: locales)
     }
@@ -137,7 +120,8 @@ class SettingsAdapter {
         }
         var languages = [Language]()
         for loc: Locale in selected {
-            if let found: Language = map[loc.languageCode ?? "xx"] {
+            if var found: Language = map[loc.languageCode ?? "xx"] {
+                found.locale = loc
                 languages.append(found)
             }
         }
@@ -161,11 +145,11 @@ class SettingsAdapter {
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: isos)
             for row in resultSet {
                 let iso: String = row[0]!
-                let langLocale = Locale(identifier: iso)
-                let name = langLocale.localizedString(forLanguageCode: iso)
+                let locale = Locale(identifier: iso)
+                let name = locale.localizedString(forLanguageCode: iso)
                 let localized = currLocale.localizedString(forLanguageCode: iso)
                 if name != nil && localized != nil {
-                    languages.append(Language(iso: iso, name: name!, localized: localized!))
+                    languages.append(Language(iso: iso, locale: locale, name: name!, localized: localized!))
                 } else {
                     print("Dropped language \(iso) because localizedString failed.")
                 }
