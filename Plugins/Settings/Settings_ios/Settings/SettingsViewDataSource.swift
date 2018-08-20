@@ -189,6 +189,12 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             self.dataModel.moveAvailableToSelected(source: indexPath.row,
                                                    destination: destination.row, inSearch: isSearching())
             tableView.moveRow(at: indexPath, to: destination)
+            
+            // When self.language is not null and we are moving an available Bible to selected
+            // We also want to add the Language to selected Languages.
+            //if let lang = self.language {
+            //    self.dataModel.settingsAdapter.addLanguage(language: lang)
+            //}
         }
     }
 
