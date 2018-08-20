@@ -192,9 +192,9 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             
             // When self.language is not null and we are moving an available Bible to selected
             // We also want to add the Language to selected Languages.
-            //if let lang = self.language {
-            //    self.dataModel.settingsAdapter.addLanguage(language: lang)
-            //}
+            if let lang = self.language {
+                self.dataModel.settingsAdapter.addLanguage(language: lang)
+            }
         }
     }
 

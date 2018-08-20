@@ -48,6 +48,19 @@ class SettingsAdapter {
         }
     }
     
+    func addLanguage(language: Language) {
+        var localeStrs = [String]()
+        let locales = self.getLanguageSettings()
+        for locale in locales {
+            localeStrs.append(locale.identifier)
+        }
+        let newLocale = language.locale
+        if !locales.contains(newLocale) {
+            localeStrs.append(newLocale.identifier)
+        }
+        self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: localeStrs)
+    }
+    
     func updateSettings(languages: [Language]) {
         var locales = [String]()
         for lang in languages {
