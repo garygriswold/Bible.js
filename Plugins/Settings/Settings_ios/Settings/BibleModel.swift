@@ -73,7 +73,7 @@ class BibleModel : SettingsModelInterface {
         let bible = selected[indexPath.row]
         cell.textLabel?.text = bible.name
         cell.detailTextLabel?.text = bible.abbr
-        cell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
+        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
         return cell
     }
     
@@ -84,7 +84,7 @@ class BibleModel : SettingsModelInterface {
         let bible = (inSearch) ? filtered[indexPath.row] : available[indexPath.row]
         cell.textLabel?.text = bible.name
         cell.detailTextLabel?.text = bible.abbr
-        cell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
+        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
         return cell
     }
     

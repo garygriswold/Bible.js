@@ -120,7 +120,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         case self.availableSection:
             let bibleController = SettingsViewController(settingsViewType: .bible)
             bibleController.language = self.dataModel.getAvailableLanguage(row: indexPath.row)
-            bibleController.isEditable = false
+            bibleController.isEditable = true
             self.navController?.pushViewController(bibleController, animated: true)
         default:
             print("Unknown section \(indexPath.row)")

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 struct Language : Equatable {
-    let iso: String         // unique iso-1 and iso-3 codes
+    let iso: String         // unique iso-1 and iso-3 for those with no iso-1
     let name: String        // name in its own language
     let localized: String   // name localized to user language
     

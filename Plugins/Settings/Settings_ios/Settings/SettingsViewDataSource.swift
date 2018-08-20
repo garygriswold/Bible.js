@@ -217,7 +217,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     }
     
     func isSearching() -> Bool {
-        print("****** INSIDE isSearching ******")
         let searchBarEmpty: Bool = self.searchController.searchBar.text?.isEmpty ?? true
         return self.searchController.isActive && !searchBarEmpty
     }
