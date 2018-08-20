@@ -2,7 +2,6 @@
 # This program generates SQL statements to create and populate the Bible table
 # This was previously called the Version table
 #
-#import sys
 import io
 import os
 import json
@@ -22,7 +21,6 @@ out.write(u"  script TEXT NULL,\n")										# from script
 out.write(u"  countryCode TEXT NULL REFERENCES Country(code),\n")		# from countryCode
 out.write(u"  stylesheet TEXT NULL,\n")									# from stylesheet
 out.write(u"  redistribute TEXT CHECK (redistribute IN('T', 'F')) default('F'),\n")
-#out.write(u"  redistribute TEXT default('N'),\n")
 out.write(u"  audioDirectory TEXT NULL,\n")								# from audioDirectory
 out.write(u"  organizationId TEXT NULL REFERENCES Owner(ownerCode),\n")	# unknown source
 out.write(u"  ssFilename TEXT NULL,\n")									# from me

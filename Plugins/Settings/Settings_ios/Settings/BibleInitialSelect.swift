@@ -126,7 +126,7 @@ class BibleInitialSelect {
         for lang in languages {
             langScore[lang.iso3] = lang.score
         }
-        let sql =  "SELECT bibleId, abbr, iso3, name, vname FROM Bible WHERE iso3" +
+        let sql =  "SELECT bibleId, abbr, iso3, name FROM Bible WHERE iso3" +
             self.adapter.genQuest(array: languages)
 
         var bibles = [BibleScore]()
@@ -140,8 +140,7 @@ class BibleInitialSelect {
             for row in resultSet {
                 let iso3 = row[2]!
                 let score = (langScore[iso3] != nil) ? langScore[iso3]! : 0.10
-                let name = (row[4] != nil) ? row[4]! : row[3]!
-                bibles.append(BibleScore(bibleId: row[0]!, abbr: row[1]!, iso3: iso3, name: name, score: score))
+                bibles.append(BibleScore(bibleId: row[0]!, abbr: row[1]!, iso3: iso3, name: row[3]!, score: score))
             }
         } catch let err {
             print("ERROR: BibleInitSelect.getBiblesSelected \(err)")

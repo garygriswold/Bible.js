@@ -164,7 +164,7 @@ class SettingsAdapter {
     // Bible Versions.db methods
     //
     func getBiblesSelected(locales: [Locale], selectedBibles: [String]) -> [Bible] {
-        let sql =  "SELECT bibleId, abbr, iso3, name, vname FROM Bible WHERE bibleId" +
+        let sql =  "SELECT bibleId, abbr, iso3, name FROM Bible WHERE bibleId" +
             genQuest(array: selectedBibles) + " AND iso3 IN (SELECT iso3 FROM Language WHERE iso1" +
             genQuest(array: locales) + ")"
         let results = getBibles(sql: sql, locales: locales, selectedBibles: selectedBibles)
@@ -184,7 +184,7 @@ class SettingsAdapter {
     }
     
     func getBiblesAvailable(locales: [Locale], selectedBibles: [String]) -> [Bible] {
-        let sql =  "SELECT bibleId, abbr, iso3, name, vname FROM Bible WHERE bibleId NOT" +
+        let sql =  "SELECT bibleId, abbr, iso3, name FROM Bible WHERE bibleId NOT" +
             genQuest(array: selectedBibles) + " AND iso3 IN (SELECT iso3 FROM Language WHERE iso1" +
             genQuest(array: locales) + ") ORDER BY abbr"
         return getBibles(sql: sql, locales: locales, selectedBibles: selectedBibles)
@@ -201,8 +201,7 @@ class SettingsAdapter {
             let values = selectedBibles + isos
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: values)
             for row in resultSet {
-                let name = (row[4] != nil) ? row[4]! : row[3]!
-                bibles.append(Bible(bibleId: row[0]!, abbr: row[1]!, iso3: row[2]!, name: name))
+                bibles.append(Bible(bibleId: row[0]!, abbr: row[1]!, iso3: row[2]!, name: row[3]!))
             }
         } catch let err {
             print("ERROR: SettingsAdapter.getBibles \(err)")
