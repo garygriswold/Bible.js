@@ -17,11 +17,13 @@ class LanguageModel : SettingsModelInterface {
     private var filtered = [Language]()
     
     init() {
+        let start: Double = CFAbsoluteTimeGetCurrent()
         self.adapter = SettingsAdapter()
         let locales = self.adapter.getLanguageSettings()
         self.selected = self.adapter.getLanguagesSelected(selected: locales)
         let avail = self.adapter.getLanguagesAvailable(selected: locales)
         self.available = avail.sorted{ $0.localized < $1.localized }
+        print("*** LanguageModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
     }
     
     deinit {

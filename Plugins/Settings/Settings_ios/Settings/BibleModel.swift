@@ -17,6 +17,7 @@ class BibleModel : SettingsModelInterface {
     private var filtered = [Bible]()
     
     init(language: Language?) {
+        let start: Double = CFAbsoluteTimeGetCurrent()
         self.adapter = SettingsAdapter()
         let locales = self.adapter.getLanguageSettings()
         var bibles: [String] = self.adapter.getBibleSettings()
@@ -36,6 +37,7 @@ class BibleModel : SettingsModelInterface {
         } else {
             self.available = self.adapter.getBiblesAvailable(locales: locales, selectedBibles: bibles)
         }
+        print("*** BibleModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
     }
     
     deinit {

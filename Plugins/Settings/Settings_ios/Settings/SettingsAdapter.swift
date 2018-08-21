@@ -188,9 +188,10 @@ class SettingsAdapter {
     // Bible Versions.db methods
     //
     func getBiblesSelected(locales: [Locale], selectedBibles: [String]) -> [Bible] {
-        let sql =  "SELECT bibleId, abbr, iso3, name FROM Bible WHERE bibleId" +
-            genQuest(array: selectedBibles) + " AND iso3 IN (SELECT iso3 FROM Language WHERE iso1" +
-            genQuest(array: locales) + ")"
+        let sql = "SELECT bibleId, abbr, b.iso3, b.name" +
+            " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
+            " AND b.bibleId" + genQuest(array: selectedBibles) +
+            " AND l.iso1" + genQuest(array: locales)
         let results = getBibles(sql: sql, locales: locales, selectedBibles: selectedBibles)
         
         // Sort results by selectedBibles list
@@ -208,9 +209,10 @@ class SettingsAdapter {
     }
     
     func getBiblesAvailable(locales: [Locale], selectedBibles: [String]) -> [Bible] {
-        let sql =  "SELECT bibleId, abbr, iso3, name FROM Bible WHERE bibleId NOT" +
-            genQuest(array: selectedBibles) + " AND iso3 IN (SELECT iso3 FROM Language WHERE iso1" +
-            genQuest(array: locales) + ") ORDER BY abbr"
+        let sql = "SELECT bibleId, abbr, b.iso3, b.name" +
+            " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
+            " AND b.bibleId NOT" + genQuest(array: selectedBibles) +
+            " AND l.iso1" + genQuest(array: locales) + " ORDER BY b.abbr"
         return getBibles(sql: sql, locales: locales, selectedBibles: selectedBibles)
     }
     
