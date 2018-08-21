@@ -18,22 +18,36 @@ import Utility
 
 class BibleInitialSelect {
     
-    struct LanguageScore : Equatable {
+    class LanguageScore : Equatable {
         let iso3: String
         let country: String?
         let score: Float
+        
+        init(iso3: String, country: String?, score: Float) {
+            self.iso3 = iso3
+            self.country = country
+            self.score = score
+        }
         
         static func == (lhs: LanguageScore, rhs: LanguageScore) -> Bool {
             return lhs.iso3 == rhs.iso3
         }
     }
     
-    struct BibleScore : Equatable {
+    class BibleScore : Equatable {
         let bibleId: String     // FCBH 6 to 8 char code
         let abbr: String        // Version Abbreviation
         let iso3: String        // SIL 3 char SIL language code
         let name: String        // Name in the language, but sometimes in English
         var score: Float
+        
+        init(bibleId: String, abbr: String, iso3: String, name: String, score: Float) {
+            self.bibleId = bibleId
+            self.abbr = abbr
+            self.iso3 = iso3
+            self.name = name
+            self.score = score
+        }
         
         static func == (lhs: BibleScore, rhs: BibleScore) -> Bool {
             return lhs.bibleId == rhs.bibleId
