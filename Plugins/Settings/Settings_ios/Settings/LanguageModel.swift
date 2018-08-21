@@ -102,10 +102,6 @@ class LanguageModel : SettingsModelInterface {
         }
         self.selected.insert(language, at: destination)
         self.adapter.updateSettings(languages: self.selected)
-        
-        // The following I can do, but how do I add the bibles found to selected Bibles from Language DataModel
-        //let bibles = self.adapter.getBiblesForLanguages(languages: [Locale(identifier: language.iso)])
-        // Unfinished.
     }
     
     func moveSelectedToAvailable(source: Int, destination: Int, inSearch: Bool) {
