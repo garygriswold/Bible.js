@@ -144,7 +144,7 @@ class SettingsAdapter {
         }
         var languages = [Language]()
         for loc: Locale in selected {
-            if var found: Language = map[loc.languageCode ?? "xx"] {
+            if let found: Language = map[loc.languageCode ?? "??"] {
                 found.locale = loc
                 languages.append(found)
             }
