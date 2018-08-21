@@ -6,19 +6,14 @@
 //  Copyright © 2018 Short Sands, LLC. All rights reserved.
 //
 
-import Foundation
 import Utility
 
-class SettingsAdapter {
+struct SettingsAdapter {
     
     private static let SETTINGS_DB = "Settings.db"
     private static let VERSIONS_DB = "Versions.db"
     private static let LANGS_SELECTED = "langs_selected"
     private static let BIBLE_SELECTED = "bible_selected"
-    
-    deinit {
-        print("**** deinit SettingsAdapter ******")
-    }
     
     //
     // Settings methods

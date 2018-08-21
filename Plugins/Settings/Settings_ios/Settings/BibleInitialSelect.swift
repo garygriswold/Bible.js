@@ -13,7 +13,6 @@
 // and second within the score for the specific language
 //
 
-import Foundation
 import Utility
 
 class BibleInitialSelect {
