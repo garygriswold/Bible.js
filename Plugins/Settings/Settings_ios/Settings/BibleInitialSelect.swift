@@ -15,7 +15,7 @@
 
 import Utility
 
-class BibleInitialSelect {
+struct BibleInitialSelect {
     
     class LanguageScore : Equatable {
         let iso3: String
@@ -54,18 +54,13 @@ class BibleInitialSelect {
     }
     
     private var adapter: SettingsAdapter
-    private var selected: [Bible]?
     
     init(adapter: SettingsAdapter) {
         self.adapter = adapter
     }
     
-    deinit {
-        print("****** Deinit BibleSequence ******")
-    }
-    
     func getBiblesSelected(locales: [Locale]) -> [Bible] {
-        self.selected = [Bible]()
+        var selected = [Bible]()
         for locale in locales {
             let langs = self.getInitialLanguageDetail(locale: locale)
             let langsSorted = langs.sorted{ $0.score > $1.score }
@@ -77,26 +72,14 @@ class BibleInitialSelect {
             }
             for bb in biblesSorted {
                 let bible = Bible(bibleId: bb.bibleId, abbr: bb.abbr, iso3: bb.iso3, name: bb.name)
-                if !self.selected!.contains(bible) {
-                    self.selected!.append(bible)
+                if !selected.contains(bible) {
+                    selected.append(bible)
                 }
             }
         }
-        return self.selected!
+        return selected
     }
-    
-    func getBibleSettings() -> [String] {
-        if let bibles = self.selected {
-            var result = [String]()
-            for bible in bibles {
-                result.append(bible.bibleId)
-            }
-            return result
-        } else {
-            return []
-        }
-    }
-    
+
     /**
     * Retrieve all iso3 languages for a locale and sort those languages by a score that is
     * based upon population and country match with the locale
