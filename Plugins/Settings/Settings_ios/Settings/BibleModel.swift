@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class BibleModel : SettingsModelInterface {
+class BibleModel : SettingsModel {
     
     private let adapter: SettingsAdapter
     private var selected: [Bible]

@@ -15,7 +15,7 @@ enum SettingsViewType {
 class SettingsViewController: UIViewController {
     
     let settingsViewType: SettingsViewType
-    var dataModel: SettingsModelInterface!
+    var dataModel: SettingsModel!
     var tableView: UITableView!
     var language: Language? // Used only when SettingsViewType is .bible
     var isEditable: Bool

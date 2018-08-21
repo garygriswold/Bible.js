@@ -12,7 +12,7 @@ import UIKit
 class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsUpdating {
     
     private weak var controller: SettingsViewController?
-    private let dataModel: SettingsModelInterface
+    private let dataModel: SettingsModel
     private let settingsViewType: SettingsViewType
     private let selectedSection: Int
     private let availableSection: Int

@@ -45,7 +45,7 @@ class Bible : Equatable {
     }
 }
 
-protocol SettingsModelInterface {
+protocol SettingsModel {
  
     var settingsAdapter: SettingsAdapter { get }
     var selectedCount: Int { get }

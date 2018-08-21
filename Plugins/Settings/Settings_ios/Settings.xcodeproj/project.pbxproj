@@ -23,7 +23,7 @@
 		E4C2E98E211B712D00B71CC5 /* TextSizeSliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E985211B712C00B71CC5 /* TextSizeSliderCell.swift */; };
 		E4C2E98F211B712D00B71CC5 /* LanguageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E986211B712C00B71CC5 /* LanguageCell.swift */; };
 		E4C2E990211B712D00B71CC5 /* SettingsNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E987211B712C00B71CC5 /* SettingsNavigator.swift */; };
-		E4C2E991211B712D00B71CC5 /* SettingsModelInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E988211B712D00B71CC5 /* SettingsModelInterface.swift */; };
+		E4C2E991211B712D00B71CC5 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E988211B712D00B71CC5 /* SettingsModel.swift */; };
 		E4C2E992211B712D00B71CC5 /* SettingsViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E989211B712D00B71CC5 /* SettingsViewDelegate.swift */; };
 		E4F720BA211B6F2A00E26B07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */; };
 		E4F720BF211B6F2A00E26B07 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F720BD211B6F2A00E26B07 /* Main.storyboard */; };
@@ -61,7 +61,7 @@
 		E4C2E985211B712C00B71CC5 /* TextSizeSliderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextSizeSliderCell.swift; sourceTree = "<group>"; };
 		E4C2E986211B712C00B71CC5 /* LanguageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanguageCell.swift; sourceTree = "<group>"; };
 		E4C2E987211B712C00B71CC5 /* SettingsNavigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsNavigator.swift; sourceTree = "<group>"; };
-		E4C2E988211B712D00B71CC5 /* SettingsModelInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsModelInterface.swift; sourceTree = "<group>"; };
+		E4C2E988211B712D00B71CC5 /* SettingsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		E4C2E989211B712D00B71CC5 /* SettingsViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewDelegate.swift; sourceTree = "<group>"; };
 		E4F720B6211B6F2A00E26B07 /* Settings.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Settings.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -125,7 +125,7 @@
 				E4C2E983211B712C00B71CC5 /* LanguageModel.swift */,
 				E4C2E97C211B711C00B71CC5 /* BibleModel.swift */,
 				E4825C412124F0B400D36620 /* BibleInitialSelect.swift */,
-				E4C2E988211B712D00B71CC5 /* SettingsModelInterface.swift */,
+				E4C2E988211B712D00B71CC5 /* SettingsModel.swift */,
 				E4C2E982211B712C00B71CC5 /* SettingsAdapter.swift */,
 				E4C2E977211B70F500B71CC5 /* AppFont.swift */,
 				E4F720BD211B6F2A00E26B07 /* Main.storyboard */,
@@ -223,7 +223,7 @@
 				E4C2E98F211B712D00B71CC5 /* LanguageCell.swift in Sources */,
 				E4C2E992211B712D00B71CC5 /* SettingsViewDelegate.swift in Sources */,
 				E4C2E98E211B712D00B71CC5 /* TextSizeSliderCell.swift in Sources */,
-				E4C2E991211B712D00B71CC5 /* SettingsModelInterface.swift in Sources */,
+				E4C2E991211B712D00B71CC5 /* SettingsModel.swift in Sources */,
 				E4F720BA211B6F2A00E26B07 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

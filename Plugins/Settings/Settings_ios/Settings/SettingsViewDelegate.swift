@@ -13,7 +13,7 @@ import StoreKit
 class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
     private weak var navController: UINavigationController?
-    private let dataModel: SettingsModelInterface
+    private let dataModel: SettingsModel
     private let settingsViewType: SettingsViewType
     private let selectedSection: Int
     private let availableSection: Int

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class LanguageModel : SettingsModelInterface {
+class LanguageModel : SettingsModel {
     
     private let adapter: SettingsAdapter
     private var selected: [Language]
