@@ -48,13 +48,6 @@ class LanguageModel : GenericModel<Language>, SettingsModel {
         return cell
     }
     
-    func moveSelected(source: Int, destination: Int) {
-        let language = self.selected[source]
-        self.selected.remove(at: source)
-        self.selected.insert(language, at: destination)
-        self.adapter.updateSettings(languages: self.selected)
-    }
-    
     func moveAvailableToSelected(source: Int, destination: Int, inSearch: Bool) {
         var language: Language
         if inSearch {

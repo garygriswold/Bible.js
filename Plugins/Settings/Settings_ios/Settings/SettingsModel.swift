@@ -107,14 +107,27 @@ class GenericModel<Element> {
     func getAvailableLanguage(row: Int) -> Language? {
         return (row >= 0 && row < available.count) ? available[row] as? Language : nil
     }
-    /*
+    
     func moveSelected(source: Int, destination: Int) {
-        let version = self.selected[source]
+        let element = self.selected[source]
         self.selected.remove(at: source)
-        self.selected.insert(version, at: destination)
-        self.adapter.updateSettings(bibles: self.selected)
+        self.selected.insert(element, at: destination)
+        self.updateSelectedSettings(item: element)
     }
     
+    /**
+    * The Element is passed in only to discern its type
+    */
+    private func updateSelectedSettings(item: Element) {
+        if item is Language {
+            self.adapter.updateSettings(languages: self.selected as! [Language])
+        } else if item is Bible {
+            self.adapter.updateSettings(bibles: self.selected as! [Bible])
+        } else {
+            print("ERROR: Unknown element type in GenericModel.updateSelectedSettings")
+        }
+    }
+    /*
     func moveAvailableToSelected(source: Int, destination: Int, inSearch: Bool) {
         var element: Equatable
         if inSearch {

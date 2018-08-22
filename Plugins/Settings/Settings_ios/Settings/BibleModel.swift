@@ -64,13 +64,6 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
         return cell
     }
     
-    func moveSelected(source: Int, destination: Int) {
-        let version = self.selected[source]
-        self.selected.remove(at: source)
-        self.selected.insert(version, at: destination)
-        self.adapter.updateSettings(bibles: self.selected)
-    }
-    
     func moveAvailableToSelected(source: Int, destination: Int, inSearch: Bool) {
         var bible: Bible
         if inSearch {
