@@ -91,18 +91,19 @@ class GenericModel<Element> {
     var filteredCount: Int {
         get { return filtered.count }
     }
-    
+    // I attempted to replace this with Generic methods, but their generic type needs to
+    // be used when they are typed or instantiated
     func getSelectedBible(row: Int) -> Bible? {
-        return (row >= 0 && row < selected.count) ? selected[row] as! Bible : nil
+        return (row >= 0 && row < selected.count) ? selected[row] as? Bible : nil
     }
     func getSelectedLanguage(row: Int) -> Language? {
-        return nil
+        return (row >= 0 && row < selected.count) ? selected[row] as? Language : nil
     }
     func getAvailableBible(row: Int) -> Bible? {
-        return (row >= 0 && row < available.count) ? available[row] as! Bible : nil
+        return (row >= 0 && row < available.count) ? available[row] as? Bible : nil
     }
     func getAvailableLanguage(row: Int) -> Language? {
-        return nil
+        return (row >= 0 && row < available.count) ? available[row] as? Language : nil
     }
     /*
     func moveSelected(source: Int, destination: Int) {
