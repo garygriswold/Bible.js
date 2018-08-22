@@ -43,21 +43,19 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
     }
 
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "bibleCell", for: indexPath)
-        cell.textLabel?.font = AppFont.sansSerif(style: .body)
-        cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         let bible = selected[indexPath.row]
-        cell.textLabel?.text = bible.name
-        cell.detailTextLabel?.text = bible.abbr
-        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
-        return cell
+        return self.generateCell(tableView: tableView, indexPath: indexPath, bible: bible)
     }
     
     func availableCell(tableView: UITableView, indexPath: IndexPath, inSearch: Bool) -> UITableViewCell {
+        let bible = (inSearch) ? filtered[indexPath.row] : available[indexPath.row]
+        return self.generateCell(tableView: tableView, indexPath: indexPath, bible: bible)
+    }
+    
+    private func generateCell(tableView: UITableView, indexPath: IndexPath, bible: Bible) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "bibleCell", for: indexPath)
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
         cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
-        let bible = (inSearch) ? filtered[indexPath.row] : available[indexPath.row]
         cell.textLabel?.text = bible.name
         cell.detailTextLabel?.text = bible.abbr
         cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing

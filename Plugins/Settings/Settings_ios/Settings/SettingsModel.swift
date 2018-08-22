@@ -65,8 +65,7 @@ protocol SettingsModel {
 
 class GenericModel<Element> where Element : Equatable {
   
-    // Make these private if I can get all references into this class
-    let adapter: SettingsAdapter
+    private let adapter: SettingsAdapter
     var selected: [Element]
     var available: [Element]
     var filtered: [Element]

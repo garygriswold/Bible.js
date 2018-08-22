@@ -27,21 +27,19 @@ class LanguageModel : GenericModel<Language>, SettingsModel {
     }
     
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "languageCell", for: indexPath)
-        cell.textLabel?.font = AppFont.sansSerif(style: .body)
-        cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         let language = selected[indexPath.row]
-        cell.textLabel?.text = language.name
-        cell.detailTextLabel?.text = language.localized
-        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
-        return cell
+        return self.generateCell(tableView: tableView, indexPath: indexPath, language: language)
     }
     
     func availableCell(tableView: UITableView, indexPath: IndexPath, inSearch: Bool) -> UITableViewCell {
+        let language = (inSearch) ? filtered[indexPath.row] : available[indexPath.row]
+        return self.generateCell(tableView: tableView, indexPath: indexPath, language: language)
+    }
+    
+    private func generateCell(tableView: UITableView, indexPath: IndexPath, language: Language) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "languageCell", for: indexPath)
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
         cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
-        let language = (inSearch) ? filtered[indexPath.row] : available[indexPath.row]
         cell.textLabel?.text = language.name
         cell.detailTextLabel?.text = language.localized
         cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
