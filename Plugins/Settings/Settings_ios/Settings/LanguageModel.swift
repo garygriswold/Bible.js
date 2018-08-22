@@ -47,35 +47,7 @@ class LanguageModel : GenericModel<Language>, SettingsModel {
         cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
         return cell
     }
-    
-    func moveAvailableToSelected(source: Int, destination: Int, inSearch: Bool) {
-        var language: Language
-        if inSearch {
-            language = self.filtered[source]
-            guard let availableIndex = self.available.index(of: language) else {
-                print("Item in filtered not found in available? \(language.iso)")
-                return
-            }
-            self.filtered.remove(at: source)
-            self.available.remove(at: availableIndex)
-        } else {
-            language = self.available[source]
-            self.available.remove(at: source)
-        }
-        self.selected.insert(language, at: destination)
-        self.adapter.updateSettings(languages: self.selected)
-    }
-    
-    func moveSelectedToAvailable(source: Int, destination: Int, inSearch: Bool) {
-        let language = self.selected[source]
-        self.selected.remove(at: source)
-        self.available.insert(language, at: destination)
-        if inSearch {
-            self.filtered.insert(language, at: destination)
-        }
-        self.adapter.updateSettings(languages: self.selected)
-    }
-    
+
     func filterForSearch(searchText: String) {
         print("****** INSIDE FILTER CONTENT FOR SEARCH ******")
         let searchFor = searchText.lowercased()

@@ -63,7 +63,7 @@ protocol SettingsModel {
     func filterForSearch(searchText: String)
 }
 
-class GenericModel<Element> {
+class GenericModel<Element> where Element : Equatable {
   
     // Make these private if I can get all references into this class
     let adapter: SettingsAdapter
@@ -115,21 +115,8 @@ class GenericModel<Element> {
         self.updateSelectedSettings(item: element)
     }
     
-    /**
-    * The Element is passed in only to discern its type
-    */
-    private func updateSelectedSettings(item: Element) {
-        if item is Language {
-            self.adapter.updateSettings(languages: self.selected as! [Language])
-        } else if item is Bible {
-            self.adapter.updateSettings(bibles: self.selected as! [Bible])
-        } else {
-            print("ERROR: Unknown element type in GenericModel.updateSelectedSettings")
-        }
-    }
-    /*
     func moveAvailableToSelected(source: Int, destination: Int, inSearch: Bool) {
-        var element: Equatable
+        var element: Element
         if inSearch {
             element = self.filtered[source]
             guard let availableIndex = self.available.index(of: element) else {
@@ -142,18 +129,30 @@ class GenericModel<Element> {
             element = self.available[source]
             self.available.remove(at: source)
         }
-        self.selected.insert(bible, at: destination)
-        self.adapter.updateSettings(bibles: self.selected)
+        self.selected.insert(element, at: destination)
+        self.updateSelectedSettings(item: element)
     }
     
     func moveSelectedToAvailable(source: Int, destination: Int, inSearch: Bool) {
-        let version = self.selected[source]
+        let element: Element = self.selected[source]
         self.selected.remove(at: source)
-        self.available.insert(version, at: destination)
+        self.available.insert(element, at: destination)
         if inSearch {
-            self.filtered.insert(version, at: destination)
+            self.filtered.insert(element, at: destination)
         }
-        self.adapter.updateSettings(bibles: self.selected)
+        self.updateSelectedSettings(item: element)
     }
- */
+ 
+    /**
+     * The Element is passed in only to discern its type
+     */
+    private func updateSelectedSettings(item: Element) {
+        if item is Language {
+            self.adapter.updateSettings(languages: self.selected as! [Language])
+        } else if item is Bible {
+            self.adapter.updateSettings(bibles: self.selected as! [Bible])
+        } else {
+            print("ERROR: Unknown element type in GenericModel.updateSelectedSettings")
+        }
+    }
 }

@@ -63,35 +63,7 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
         cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
         return cell
     }
-    
-    func moveAvailableToSelected(source: Int, destination: Int, inSearch: Bool) {
-        var bible: Bible
-        if inSearch {
-            bible = self.filtered[source]
-            guard let availableIndex = self.available.index(of: bible) else {
-                print("Item in filtered not found in available? \(bible.bibleId)")
-                return
-            }
-            self.filtered.remove(at: source)
-            self.available.remove(at: availableIndex)
-        } else {
-            bible = self.available[source]
-            self.available.remove(at: source)
-        }
-        self.selected.insert(bible, at: destination)
-        self.adapter.updateSettings(bibles: self.selected)
-    }
-    
-    func moveSelectedToAvailable(source: Int, destination: Int, inSearch: Bool) {
-        let version = self.selected[source]
-        self.selected.remove(at: source)
-        self.available.insert(version, at: destination)
-        if inSearch {
-            self.filtered.insert(version, at: destination)
-        }
-        self.adapter.updateSettings(bibles: self.selected)
-    }
-    
+
     /**
     * A better search would search starting with each word, but compare from
     * there to the end of the next word.
