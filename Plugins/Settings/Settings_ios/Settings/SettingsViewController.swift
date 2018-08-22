@@ -61,16 +61,14 @@ class SettingsViewController: UIViewController {
             self.navigationItem.title = "Settings"
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "\u{FF1c} Read", style: .done, target: self,
                                                                     action: #selector(doneHandler))
-            self.tableView.register(BibleCell.self, forCellReuseIdentifier: "bibleCell")
         case .language:
             self.navigationItem.title = "Languages"
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
-            self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
         case .bible:
             self.navigationItem.title = "Bibles"
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
-            self.tableView.register(BibleCell.self, forCellReuseIdentifier: "bibleCell")
         }
+        self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
         
         // prevent searchBar from holding onto focus

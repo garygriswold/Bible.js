@@ -53,7 +53,7 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
     }
     
     private func generateCell(tableView: UITableView, indexPath: IndexPath, bible: Bible) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "bibleCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "languageCell", for: indexPath)
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
         cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         cell.textLabel?.text = bible.name
