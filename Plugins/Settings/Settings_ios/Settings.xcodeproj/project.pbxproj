@@ -10,6 +10,8 @@
 		E44C056C211B7DE700476DAD /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E44C056B211B7DE700476DAD /* Versions.db */; };
 		E44C056D211BE1F700476DAD /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44C0566211B77AA00476DAD /* Utility.framework */; };
 		E44C056E211BE1F700476DAD /* Utility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E44C0566211B77AA00476DAD /* Utility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E44F0B68212D46EC00CDB32F /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44F0B53212D43F000CDB32F /* AWSCore.framework */; };
+		E44F0B69212D46EC00CDB32F /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E44F0B53212D43F000CDB32F /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4825C412124F0B400D36620 /* BibleInitialSelect.swift */; };
 		E4C2E978211B70F500B71CC5 /* AppFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E977211B70F500B71CC5 /* AppFont.swift */; };
 		E4C2E97E211B711C00B71CC5 /* BibleDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */; };
@@ -38,6 +40,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				E44C056E211BE1F700476DAD /* Utility.framework in Embed Frameworks */,
+				E44F0B69212D46EC00CDB32F /* AWSCore.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -47,6 +50,7 @@
 /* Begin PBXFileReference section */
 		E44C0566211B77AA00476DAD /* Utility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Utility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E44C056B211B7DE700476DAD /* Versions.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = Versions.db; path = Settings/Versions.db; sourceTree = "<group>"; };
+		E44F0B53212D43F000CDB32F /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = ../../AWS/src/ios/AWS/AWSCore.framework; sourceTree = "<group>"; };
 		E4825C412124F0B400D36620 /* BibleInitialSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleInitialSelect.swift; sourceTree = "<group>"; };
 		E4C2E977211B70F500B71CC5 /* AppFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFont.swift; sourceTree = "<group>"; };
 		E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BibleDetailViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +79,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E44C056D211BE1F700476DAD /* Utility.framework in Frameworks */,
+				E44F0B68212D46EC00CDB32F /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +89,7 @@
 		E44C0565211B77AA00476DAD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E44F0B53212D43F000CDB32F /* AWSCore.framework */,
 				E44C0566211B77AA00476DAD /* Utility.framework */,
 			);
 			name = Frameworks;

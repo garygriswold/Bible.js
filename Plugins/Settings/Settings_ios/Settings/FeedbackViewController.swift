@@ -6,8 +6,9 @@
 //  Copyright © 2018 Short Sands, LLC. All rights reserved.
 //
 
-import Foundation
+//import Foundation
 import UIKit
+import AWS
 
 class FeedbackViewController: UIViewController, UITextViewDelegate {
     

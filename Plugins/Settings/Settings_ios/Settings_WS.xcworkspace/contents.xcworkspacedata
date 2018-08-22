@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../../AWS/src/ios/AWS.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:../../Utility/src/ios/Utility.xcodeproj">
    </FileRef>
    <FileRef
