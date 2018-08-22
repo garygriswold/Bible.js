@@ -27,11 +27,7 @@ struct SettingsAdapter {
             languages = Locale.preferredLanguages
             self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: languages)
         }
-        var locales = [Locale]()
-        for lang in languages {
-            let locale = Locale(identifier: lang)
-            locales.append(locale)
-        }
+        let locales: [Locale] = languages.map { Locale(identifier: $0) }
         return locales
     }
     
@@ -44,11 +40,8 @@ struct SettingsAdapter {
     }
     
     func addLanguage(language: Language) {
-        var localeStrs = [String]()
         let locales = self.getLanguageSettings()
-        for locale in locales {
-            localeStrs.append(locale.identifier)
-        }
+        var localeStrs = locales.map { $0.identifier }
         let newLocale = language.locale
         if !locales.contains(newLocale) {
             localeStrs.append(newLocale.identifier)
@@ -68,18 +61,12 @@ struct SettingsAdapter {
     }
     
     func updateSettings(languages: [Language]) {
-        var locales = [String]()
-        for lang in languages {
-            locales.append(lang.locale.identifier)
-        }
+        let locales = languages.map { $0.locale.identifier }
         self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: locales)
     }
     
     func updateSettings(bibles: [Bible]) {
-        var keys = [String]()
-        for bible in bibles {
-            keys.append(bible.bibleId)
-        }
+        let keys = bibles.map { $0.bibleId }
         self.updateSettings(name: SettingsAdapter.BIBLE_SELECTED, settings: keys)
     }
     
@@ -149,16 +136,14 @@ struct SettingsAdapter {
     
     func getLanguagesAvailable(selected: [Locale]) -> [Language] {
         let sql =  "SELECT distinct iso1 FROM Language WHERE iso1 NOT" + genQuest(array: selected)
-        return getLanguages(sql: sql, selected: selected)
+        let available = getLanguages(sql: sql, selected: selected)
+        return available.sorted{ $0.localized < $1.localized }
     }
     
     private func getLanguages(sql: String, selected: [Locale]) -> [Language] {
         var languages = [Language]()
         do {
-            var isos = [String]()
-            for locale in selected {
-                isos.append(locale.languageCode ?? "xx") // each locale must add an entry
-            }
+            let isos: [String] = selected.map { $0.languageCode ?? "??" }
             let currLocale = Locale.current
             let db: Sqlite3 = try self.getVersionsDB()
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: isos)
@@ -213,16 +198,13 @@ struct SettingsAdapter {
     
     private func getBibles(sql: String, locales: [Locale], selectedBibles: [String]) -> [Bible] {
         var bibles = [Bible]()
-        var isos = [String]()
-        for locale in locales {
-            isos.append(locale.languageCode ?? "xx")
-        }
+        let isos: [String] = locales.map { $0.languageCode ?? "??" }
         do {
             let db: Sqlite3 = try self.getVersionsDB()
             let values = selectedBibles + isos
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: values)
-            for row in resultSet {
-                bibles.append(Bible(bibleId: row[0]!, abbr: row[1]!, iso3: row[2]!, name: row[3]!))
+            bibles = resultSet.map {
+                Bible(bibleId: $0[0]!, abbr: $0[1]!, iso3: $0[2]!, name: $0[3]!)
             }
         } catch let err {
             print("ERROR: SettingsAdapter.getBibles \(err)")

@@ -16,8 +16,7 @@ class LanguageModel : GenericModel<Language>, SettingsModel {
         let adapter = SettingsAdapter()
         let locales = adapter.getLanguageSettings()
         let selected = adapter.getLanguagesSelected(selected: locales)
-        let avail = adapter.getLanguagesAvailable(selected: locales)
-        let available = avail.sorted{ $0.localized < $1.localized }
+        let available = adapter.getLanguagesAvailable(selected: locales)
         super.init(adapter: adapter, selected: selected, available: available)
         print("*** LanguageModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
     }

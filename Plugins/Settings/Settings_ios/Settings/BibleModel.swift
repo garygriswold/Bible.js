@@ -23,9 +23,7 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
         } else {
             let initial = BibleInitialSelect(adapter: adapter)
             selected = initial.getBiblesSelected(locales: locales)
-            for bible in selected {
-                bibles.append(bible.bibleId)
-            }
+            bibles = selected.map { $0.bibleId }
             adapter.updateSettings(bibles: selected)
         }
         if let lang = language {
