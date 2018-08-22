@@ -11,41 +11,35 @@ import UIKit
 
 class BibleModel : GenericModel<Bible>, SettingsModel {
     
-    private let adapter: SettingsAdapter
-    
     init(language: Language?) {
-        self.adapter = SettingsAdapter()
+        let adapter = SettingsAdapter()
         var selected: [Bible]
         var available: [Bible]
         let start: Double = CFAbsoluteTimeGetCurrent()
-        let locales = self.adapter.getLanguageSettings()
-        var bibles: [String] = self.adapter.getBibleSettings()
+        let locales = adapter.getLanguageSettings()
+        var bibles: [String] = adapter.getBibleSettings()
         if bibles.count > 0 {
-            selected = self.adapter.getBiblesSelected(locales: locales, selectedBibles: bibles)
+            selected = adapter.getBiblesSelected(locales: locales, selectedBibles: bibles)
         } else {
-            let initial = BibleInitialSelect(adapter: self.adapter)
+            let initial = BibleInitialSelect(adapter: adapter)
             selected = initial.getBiblesSelected(locales: locales)
             for bible in selected {
                 bibles.append(bible.bibleId)
             }
-            self.adapter.updateSettings(bibles: selected)
+            adapter.updateSettings(bibles: selected)
         }
         if let lang = language {
-            available = self.adapter.getBiblesAvailable(locales: [Locale(identifier: lang.iso)],
+            available = adapter.getBiblesAvailable(locales: [Locale(identifier: lang.iso)],
                                                              selectedBibles: bibles)
         } else {
-            available = self.adapter.getBiblesAvailable(locales: locales, selectedBibles: bibles)
+            available = adapter.getBiblesAvailable(locales: locales, selectedBibles: bibles)
         }
-        super.init(selected: selected, available: available)
+        super.init(adapter: adapter, selected: selected, available: available)
         print("*** BibleModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
     }
     
     deinit {
         print("***** deinit BibleModel ******")
-    }
- 
-    var settingsAdapter: SettingsAdapter {
-        get { return self.adapter }
     }
 
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {

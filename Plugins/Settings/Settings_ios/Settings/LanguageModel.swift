@@ -11,25 +11,19 @@ import UIKit
 
 class LanguageModel : GenericModel<Language>, SettingsModel {
     
-    private let adapter: SettingsAdapter
-    
     init() {
         let start: Double = CFAbsoluteTimeGetCurrent()
-        self.adapter = SettingsAdapter()
-        let locales = self.adapter.getLanguageSettings()
-        let selected = self.adapter.getLanguagesSelected(selected: locales)
-        let avail = self.adapter.getLanguagesAvailable(selected: locales)
+        let adapter = SettingsAdapter()
+        let locales = adapter.getLanguageSettings()
+        let selected = adapter.getLanguagesSelected(selected: locales)
+        let avail = adapter.getLanguagesAvailable(selected: locales)
         let available = avail.sorted{ $0.localized < $1.localized }
-        super.init(selected: selected, available: available)
+        super.init(adapter: adapter, selected: selected, available: available)
         print("*** LanguageModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
     }
     
     deinit {
         print("***** deinit LanguageModel ******")
-    }
-    
-    var settingsAdapter: SettingsAdapter {
-        get { return self.adapter }
     }
     
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {

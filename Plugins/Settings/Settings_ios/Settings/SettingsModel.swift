@@ -65,20 +65,22 @@ protocol SettingsModel {
 
 class GenericModel<Element> {
   
-    //let adapter: SettingsAdapter
+    // Make these private if I can get all references into this class
+    let adapter: SettingsAdapter
     var selected: [Element]
     var available: [Element]
     var filtered: [Element]
     
-    init(selected: [Element], available: [Element]) {
+    init(adapter: SettingsAdapter, selected: [Element], available: [Element]) {
+        self.adapter = adapter
         self.selected = selected
         self.available = available
         self.filtered = [Element]()
     }
     
-    //var settingsAdapter: SettingsAdapter {
-    //    get { return self.adapter }
-    //}
+    var settingsAdapter: SettingsAdapter {
+        get { return self.adapter }
+    }
     
     var selectedCount: Int {
         get { return selected.count }
