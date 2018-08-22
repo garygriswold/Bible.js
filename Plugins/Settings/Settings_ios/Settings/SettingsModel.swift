@@ -62,3 +62,82 @@ protocol SettingsModel {
     func moveSelectedToAvailable(source: Int, destination: Int, inSearch: Bool)
     func filterForSearch(searchText: String)
 }
+
+class GenericModel<Element> {
+  
+    //let adapter: SettingsAdapter
+    var selected: [Element]
+    var available: [Element]
+    var filtered: [Element]
+    
+    init(selected: [Element], available: [Element]) {
+        self.selected = selected
+        self.available = available
+        self.filtered = [Element]()
+    }
+    
+    //var settingsAdapter: SettingsAdapter {
+    //    get { return self.adapter }
+    //}
+    
+    var selectedCount: Int {
+        get { return selected.count }
+    }
+    
+    var availableCount: Int {
+        get { return available.count }
+    }
+    
+    var filteredCount: Int {
+        get { return filtered.count }
+    }
+    
+    func getSelectedBible(row: Int) -> Bible? {
+        return (row >= 0 && row < selected.count) ? selected[row] as! Bible : nil
+    }
+    func getSelectedLanguage(row: Int) -> Language? {
+        return nil
+    }
+    func getAvailableBible(row: Int) -> Bible? {
+        return (row >= 0 && row < available.count) ? available[row] as! Bible : nil
+    }
+    func getAvailableLanguage(row: Int) -> Language? {
+        return nil
+    }
+    /*
+    func moveSelected(source: Int, destination: Int) {
+        let version = self.selected[source]
+        self.selected.remove(at: source)
+        self.selected.insert(version, at: destination)
+        self.adapter.updateSettings(bibles: self.selected)
+    }
+    
+    func moveAvailableToSelected(source: Int, destination: Int, inSearch: Bool) {
+        var element: Equatable
+        if inSearch {
+            element = self.filtered[source]
+            guard let availableIndex = self.available.index(of: element) else {
+                print("Item in filtered not found in available? \(element)")
+                return
+            }
+            self.filtered.remove(at: source)
+            self.available.remove(at: availableIndex)
+        } else {
+            element = self.available[source]
+            self.available.remove(at: source)
+        }
+        self.selected.insert(bible, at: destination)
+        self.adapter.updateSettings(bibles: self.selected)
+    }
+    
+    func moveSelectedToAvailable(source: Int, destination: Int, inSearch: Bool) {
+        let version = self.selected[source]
+        self.selected.remove(at: source)
+        self.available.insert(version, at: destination)
+        if inSearch {
+            self.filtered.insert(version, at: destination)
+        }
+        self.adapter.updateSettings(bibles: self.selected)
+    }
+ */
+}

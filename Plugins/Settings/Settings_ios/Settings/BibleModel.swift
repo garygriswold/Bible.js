@@ -9,70 +9,45 @@
 import Foundation
 import UIKit
 
-class BibleModel : SettingsModel {
+class BibleModel : GenericModel<Bible>, SettingsModel {
     
     private let adapter: SettingsAdapter
-    private var selected: [Bible]
-    private var available: [Bible]
-    private var filtered = [Bible]()
     
     init(language: Language?) {
-        let start: Double = CFAbsoluteTimeGetCurrent()
         self.adapter = SettingsAdapter()
+        var selected: [Bible]
+        var available: [Bible]
+        let start: Double = CFAbsoluteTimeGetCurrent()
         let locales = self.adapter.getLanguageSettings()
         var bibles: [String] = self.adapter.getBibleSettings()
         if bibles.count > 0 {
-            self.selected = self.adapter.getBiblesSelected(locales: locales, selectedBibles: bibles)
+            selected = self.adapter.getBiblesSelected(locales: locales, selectedBibles: bibles)
         } else {
             let initial = BibleInitialSelect(adapter: self.adapter)
-            self.selected = initial.getBiblesSelected(locales: locales)
-            for bible in self.selected {
+            selected = initial.getBiblesSelected(locales: locales)
+            for bible in selected {
                 bibles.append(bible.bibleId)
             }
-            self.adapter.updateSettings(bibles: self.selected)
+            self.adapter.updateSettings(bibles: selected)
         }
         if let lang = language {
-            self.available = self.adapter.getBiblesAvailable(locales: [Locale(identifier: lang.iso)],
+            available = self.adapter.getBiblesAvailable(locales: [Locale(identifier: lang.iso)],
                                                              selectedBibles: bibles)
         } else {
-            self.available = self.adapter.getBiblesAvailable(locales: locales, selectedBibles: bibles)
+            available = self.adapter.getBiblesAvailable(locales: locales, selectedBibles: bibles)
         }
+        super.init(selected: selected, available: available)
         print("*** BibleModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
     }
     
     deinit {
         print("***** deinit BibleModel ******")
     }
-    
+ 
     var settingsAdapter: SettingsAdapter {
         get { return self.adapter }
     }
 
-    var selectedCount: Int {
-        get { return selected.count }
-    }
-    
-    var availableCount: Int {
-        get { return available.count }
-    }
-    
-    var filteredCount: Int {
-        get { return filtered.count }
-    }
-    
-    func getSelectedBible(row: Int) -> Bible? {
-        return (row >= 0 && row < selected.count) ? selected[row] : nil
-    }
-    func getSelectedLanguage(row: Int) -> Language? {
-        return nil
-    }
-    func getAvailableBible(row: Int) -> Bible? {
-        return (row >= 0 && row < available.count) ? available[row] : nil
-    }
-    func getAvailableLanguage(row: Int) -> Language? {
-        return nil
-    }
-    
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "bibleCell", for: indexPath)
         cell.textLabel?.font = AppFont.sansSerif(style: .body)

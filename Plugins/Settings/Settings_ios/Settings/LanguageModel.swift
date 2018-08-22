@@ -9,20 +9,18 @@
 import Foundation
 import UIKit
 
-class LanguageModel : SettingsModel {
+class LanguageModel : GenericModel<Language>, SettingsModel {
     
     private let adapter: SettingsAdapter
-    private var selected: [Language]
-    private var available: [Language]
-    private var filtered = [Language]()
     
     init() {
         let start: Double = CFAbsoluteTimeGetCurrent()
         self.adapter = SettingsAdapter()
         let locales = self.adapter.getLanguageSettings()
-        self.selected = self.adapter.getLanguagesSelected(selected: locales)
+        let selected = self.adapter.getLanguagesSelected(selected: locales)
         let avail = self.adapter.getLanguagesAvailable(selected: locales)
-        self.available = avail.sorted{ $0.localized < $1.localized }
+        let available = avail.sorted{ $0.localized < $1.localized }
+        super.init(selected: selected, available: available)
         print("*** LanguageModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
     }
     
@@ -32,31 +30,6 @@ class LanguageModel : SettingsModel {
     
     var settingsAdapter: SettingsAdapter {
         get { return self.adapter }
-    }
-    
-    var selectedCount: Int {
-        get { return selected.count }
-    }
-    
-    var availableCount: Int {
-        get { return available.count }
-    }
-    
-    var filteredCount: Int {
-        get { return filtered.count }
-    }
-    
-    func getSelectedBible(row: Int) -> Bible? {
-        return nil
-    }
-    func getSelectedLanguage(row: Int) -> Language? {
-        return (row >= 0 && row < selected.count) ? selected[row] : nil
-    }
-    func getAvailableBible(row: Int) -> Bible? {
-        return nil
-    }
-    func getAvailableLanguage(row: Int) -> Language? {
-        return (row >= 0 && row < available.count) ? available[row] : nil
     }
     
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
