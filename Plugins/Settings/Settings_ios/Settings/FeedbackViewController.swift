@@ -70,8 +70,29 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
         self.textView.frame = UIScreen.main.bounds
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        let adapter = SettingsAdapter()
+        let userId: String = adapter.getPseudoUserId()
+        if let text: String = self.textView.text?.trimmingCharacters(in: .whitespacesAndNewlines) {
+            if !text.isEmpty {
+                let aws = AwsS3Manager.findUSEast1()
+                let key = userId + String(text.hashValue)
+                let message = userId + "|" + text
+                aws.uploadText(s3Bucket: "user.feedback.safebible", s3Key: key, data: message,
+                               contentType: "text/plain; charset=UTF-8",
+                           complete: { error in
+                            if let err = error {
+                                print("ERROR in upload of user feedback \(err)")
+                            }
+                })
+            }
+        }
+        print("Feedbck view Will Disappear")
+    }
+    
     @objc func cancelHandler(sender: UIBarButtonItem?) {
-        print("Cancel bar clicked")
+        print("Feedback Cancel bar clicked")
         self.navigationController?.popViewController(animated: true)
     }
 }

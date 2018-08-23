@@ -22,10 +22,21 @@ public class AwsS3Manager {
         }
         return AwsS3Manager.instance!
     }
-    
+    /**
+    * This AwsS3 instance is computed based upon the country of the user to be the closest
+    * region to the user.
+    */
     public static func findSS() -> AwsS3 {
         let manager = getSingleton()
         return manager.findFor(region: manager.ssRegion)
+    }
+    /**
+    * This AwsS3 instance is always us-east-1.  It is for Short Sands local buckets
+    * such as user.feedback.safebible
+    */
+    public static func findUSEast1() -> AwsS3 {
+        let manager = getSingleton()
+        return manager.findFor(region: manager.usEast1)
     }
     public static func findDbp() -> AwsS3 {
         let manager = getSingleton()
@@ -38,6 +49,7 @@ public class AwsS3Manager {
 
     private let countryCode: String
     private var ssRegion: AwsS3Region
+    private var usEast1: AwsS3Region
     private var dbpRegion: AwsS3Region
     private var testRegion: AwsS3Region
     private var awsS3Map: [AWSRegionType: AwsS3]
@@ -51,8 +63,10 @@ public class AwsS3Manager {
         }
         // Set defaults to a valid region in case that initialize region fails.
         self.ssRegion = AwsS3Region(type: AWSRegionType.USEast1, name: "us-east-1")
+        self.usEast1 = AwsS3Region(type: AWSRegionType.USEast1, name: "us-east-1")
         self.dbpRegion = AwsS3Region(type: AWSRegionType.USEast1, name: "us-east-1")
         self.testRegion = AwsS3Region(type: AWSRegionType.USWest2, name: "us-west-2")
+
         self.awsS3Map = [AWSRegionType: AwsS3]()
     }
     private func initialize() {

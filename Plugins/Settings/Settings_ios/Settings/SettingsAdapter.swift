@@ -14,6 +14,7 @@ struct SettingsAdapter {
     private static let VERSIONS_DB = "Versions.db"
     private static let LANGS_SELECTED = "langs_selected"
     private static let BIBLE_SELECTED = "bible_selected"
+    private static let PSEUDO_USER_ID = "pseudo_user_id"
     
     //
     // Settings methods
@@ -70,32 +71,52 @@ struct SettingsAdapter {
         self.updateSettings(name: SettingsAdapter.BIBLE_SELECTED, settings: keys)
     }
     
+    func getPseudoUserId() -> String {
+        var userId: String? = self.getSetting(name: SettingsAdapter.PSEUDO_USER_ID)
+        if userId == nil {
+            userId = UUID().uuidString // Generates a pseudo random GUID
+            self.updateSetting(name: SettingsAdapter.PSEUDO_USER_ID, setting: userId!)
+        }
+        return userId!
+    }
+    
     private func getSettings(name: String) -> [String]? {
+        if let value = self.getSetting(name: name) {
+            return value.components(separatedBy: ",")
+        } else {
+            return nil
+        }
+    }
+    
+    private func getSetting(name: String) -> String? {
         let sql = "SELECT value FROM Settings WHERE name = ?"
         do {
             let db: Sqlite3 = try self.getSettingsDB()
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: [name])
             if resultSet.count > 0 && resultSet[0].count > 0 {
-                let value = resultSet[0][0]!
-                return value.components(separatedBy: ",")
+                return resultSet[0][0]!
             } else {
                 return nil
             }
         } catch let err {
             print("ERROR: SettingsAdapter.getSettings \(err)")
         }
-        return []
+        return ""
     }
     
     private func updateSettings(name: String, settings: [String]) {
+        self.updateSetting(name: name, setting: settings.joined(separator: ","))
+    }
+    
+    private func updateSetting(name: String, setting: String) {
         let sql = "REPLACE INTO Settings (name, value) VALUES (?,?)"
-        let values = [name, settings.joined(separator: ",")]
+        let values = [name, setting]
         do {
             let db: Sqlite3 = try self.getSettingsDB()
             let count = try db.executeV1(sql: sql, values: values)
-            print("Settings updated \(count)")
+            print("Setting updated \(count)")
         } catch let err {
-            print("ERROR: SettingsAdapter.updateSettings \(err)")
+            print("ERROR: SettingsAdapter.updateSetting \(err)")
         }
     }
     
