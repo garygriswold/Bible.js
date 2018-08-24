@@ -25,7 +25,7 @@ hasLemma is absent from ENGESV
 abbr is always equal to id
 dir is always ltr or rtl
 lang is sometimes uppercase and sometimes lowercase
-lang is different that id[0:3] only 26 times
+lang is different than id[0:3] only 26 times
 fontClass is absent for ENGESV
 script is absent for ENGESV
 dialectCode is absent for ENGESV
@@ -34,6 +34,11 @@ dialectCode[3:] is always 'Latin', which is not correct
 audioDirectory is absent for ENGESV
 audioDirectory is always the same as bibleId
 the first part of a filename is media: text or audio
+the second part of the filename is the same as bibleId, except about 80 times
+the third part of the filename is almost always the same at the bibleId, but there are 3 exceptions:
+	bibleId= GRTBBS fileId= GUDBSCI someId= GUDBSC lang= grt
+	bibleId= AMPWBT someId= AM1WBT bibleId=fileId lang= amp
+	bibleId= MLYBSM fileId= ZLMTMV someId= ZLMBSM lang= ml
 
 
 

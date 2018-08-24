@@ -11,6 +11,7 @@ import os
 import json
 import sys
 
+bibleDict = dict()
 fontSet = set()
 scriptSet = set()
 
@@ -28,6 +29,11 @@ for filename in os.listdir(directory):
 
 		# extract info.json related parts and compare to related parts
 		bibleId = info['id']
+		bibleExists = bibleDict.get(bibleId)
+		if bibleExists != None:
+			print "Duplicate bibleId=", bibleId, "first=", bibleExists, "next=", filename
+		else:
+			bibleDict[bibleId] = filename
 		haiolaId = info.get('haiola_id', '')
 		if bibleId != haiolaId:
 			print "id=", bibleId, "haiola_id=", haiolaId
@@ -77,13 +83,16 @@ for filename in os.listdir(directory):
 		if media != 'text' and media != 'audio':
 			print "media=", media, "bibleId=", bibleId
 		fileId = parts[1]
-		if fileId != bibleId:
-			print "fileId=", fileId, "bibleId=", bibleId
 		someId = parts[2]
-		if someId != "info.json" and someId != bibleId:
-			print "someId=", someId, "bibleId=", bibleId
+		if bibleId == fileId and bibleId != someId and someId != "info.json":
+			print "bibleId=", bibleId, "someId=", someId, "bibleId=fileId", "lang=", lang
+		#if bibleId == someId and bibleId != fileId:
+		#	print "bibleId=", bibleId, "fileId=", fileId, "bibleId=someId", "lang=", lang
+		if bibleId != fileId and bibleId != someId and someId != fileId and someId != "info.json":
+			print "bibleId=", bibleId, "fileId=", fileId, "someId=", someId, "lang=", lang
 
-		// investiagate everything about the fileId, someId differences
+		# I must redo this using : as a substribute for /, be
+		# test for duplicate bibleId and report paths when they exist.
 
 #for f in fontSet:
 #	print "font=", f
