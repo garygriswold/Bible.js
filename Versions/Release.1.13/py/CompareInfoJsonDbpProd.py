@@ -1,10 +1,10 @@
 #
 # This program reads each info.json file, and compares the content of the
 # file to the S3 keys as stored in dbp_prod.
-# This is done to validate the correctness of the info.json file
+# This is done to validate the correctness of the info.json file.
 #
 # In the distant future, this program might be rewritten to access
-# info.json and object heads over the Internet
+# info.json and object heads over the Internet.
 #
 import io
 import os
@@ -50,8 +50,8 @@ for filename in os.listdir(directory):
 		if dir != 'ltr' and dir != 'rtl':
 			print "dir=", dir, "bibleId=", bibleId
 		lang = info['lang'].lower()
-		#if lang != bibleId[0:3].lower():
-		#	print "lang=", lang, "bibleId=", bibleId[0:3]
+		if lang != bibleId[0:3].lower():
+			print "lang=", lang, "bibleId=", bibleId[0:3]
 		font = info.get('fontClass', 'none')
 		fontSet.add(font)
 		if font == 'none':
@@ -82,6 +82,8 @@ for filename in os.listdir(directory):
 		someId = parts[2]
 		if someId != "info.json" and someId != bibleId:
 			print "someId=", someId, "bibleId=", bibleId
+
+		// investiagate everything about the fileId, someId differences
 
 #for f in fontSet:
 #	print "font=", f
