@@ -1,0 +1,41 @@
+JSON parse errors
+
+Could not parse Invalid \escape: line 31 column 20 (char 2499) text|C2ESV|C2ESV|info.json
+Could not parse Invalid \escape: line 76 column 7 (char 9691) text|TPIPNG|info.json
+Could not parse Invalid \escape: line 76 column 8 (char 10814) text|TPIPNG|TPIPNG|info.json
+Could not parse Invalid \escape: line 32 column 9 (char 2103) text|KDJBSU|KDJBSU|info.json
+Could not parse Expecting ',' delimiter: line 29 column 43 (char 1432) text|LSIBSM|LSIBSM|info.json
+Could not parse Invalid \escape: line 41 column 8 (char 4735) text|PRKBSM|PRKBSM|info.json
+
+Most of these contained very obvious errors that might have been caused by accidental editing,
+or by saving the file using a program that used an incompatible character encoding.
+All of the above were manually corrected on copies of info.json stored on my laptop.
+
+Most files contained one or two errors, but KDJSBU contain a very large number of identical errors.
+
+LSIBSM contained Bible book names with embedded double and single quotes. I escaped them using commas as a guide.
+
+Differences:
+
+haiola_id == id in every case except ENGESV, where it is absent
+type == 'bible' in every file
+name is absent for BULB40
+nameEnglish is absent for ENGESV
+hasLemma is absent from ENGESV
+abbr is always equal to id
+dir is always ltr or rtl
+lang is sometimes uppercase and sometimes lowercase
+lang is different that id[0:3] only 26 times
+fontClass is absent for ENGESV
+script is absent for ENGESV
+dialectCode is absent for ENGESV
+dialectCode[0:3] is always equal to lang
+dialectCode[3:] is always 'Latin', which is not correct
+audioDirectory is absent for ENGESV
+audioDirectory is always the same as bibleId
+the first part of a filename is media: text or audio
+
+
+
+
+
