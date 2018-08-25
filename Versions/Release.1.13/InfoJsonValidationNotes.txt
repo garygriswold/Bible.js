@@ -56,6 +56,19 @@ I assume that the two character code is an older scheme, not sure.  But, both of
 text/SUSFBI/SUSAPB/info.json
 text/ENGESV/ENGESV/info.json
 
+Comparison to DBP V4.
+
+I compared the table of Bible records that was created from these info.json files with
+a json file of Bibles that was pulled down from DBP v4.  By, matching on the Id from the
+two systems, I was able to use what appeared to be more current data from DBPv4, and I
+performed the following number of updates:
+
+iso3 UpdateCount= 1
+name UpdateCount= 462
+englishName UpdateCount= 684
+Id mismatchCount = 1013 // This seems very high, but I think that is because the file of Bibles
+that I am reading is not just text, but also audio.
+
 Minor Problems:
 
 Most of the info.json files contain all of the same data and are formatted the same way

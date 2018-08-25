@@ -32,6 +32,7 @@ abbrUpdateCount = 0
 iso3UpdateCount = 0
 nameUpdateCount = 0
 englishUpdateCount = 0
+mismatchCount = 0
 
 for bible in bibles:
 	bibleId = bible['abbr']
@@ -72,6 +73,7 @@ for bible in bibles:
 			englishUpdateCount += 1
 	else:
 		print "No match", bibleId
+		mismatchCount += 1
 
 	#out.write("%s ('%s', '%s', '%s', '%s', '%s');\n" % (prefix, bibleId, abbr, iso3, name, englishName))
 	#break
@@ -86,4 +88,5 @@ print "abbrUpdateCount=", abbrUpdateCount
 print "iso3UpdateCount=", iso3UpdateCount
 print "nameUpdateCount=", nameUpdateCount
 print "englishUpdateCount=", englishUpdateCount
+print "idMismatchCount=", mismatchCount
 
