@@ -16,7 +16,7 @@ input = io.open("metadata/FCBH/dbp_prod.txt", mode="r", encoding="utf-8")
 for line in input:
 	line = line.strip()
 	if line.endswith(searchFile):
-		filename = target + line.replace("/", "|")
+		filename = target + line.replace("/", ":")
 		try:
 			client.download_file('dbp-prod', line, filename)
 			print "Done ", line
