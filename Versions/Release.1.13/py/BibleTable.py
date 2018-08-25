@@ -18,7 +18,7 @@ out.write(u"  englishName TEXT NULL,\n")								# from nameEnglish
 out.write(u"  direction TEXT CHECK (direction IN('ltr','rtl')) default('ltr'),\n") # from dir
 out.write(u"  fontClass TEXT NULL,\n")									# from fontClass
 out.write(u"  script TEXT NULL,\n")										# from script
-out.write(u"  countryCode TEXT NULL REFERENCES Country(code),\n")		# from countryCode
+out.write(u"  country TEXT NULL REFERENCES Country(code),\n")			# from countryCode
 out.write(u"  stylesheet TEXT NULL,\n")									# from stylesheet
 out.write(u"  redistribute TEXT CHECK (redistribute IN('T', 'F')) default('F'),\n")
 out.write(u"  objectKey TEXT NOT NULL,\n")									# from info.json filename
@@ -29,7 +29,7 @@ out.write(u"  copyright TEXT NULL,\n")									# from me
 # consider adding numbers, and array of numeric values in string form
 out.write(u"  introduction TEXT NULL);\n")								# about.html (should be in own table)
 
-prefix2 = "REPLACE INTO Bible (bibleId, abbr, iso3, name, englishName, direction, fontClass, script, countryCode, stylesheet, redistribute, objectKey) VALUES"
+prefix2 = "REPLACE INTO Bible (bibleId, abbr, iso3, name, englishName, direction, fontClass, script, country, stylesheet, redistribute, objectKey) VALUES"
 
 # read and process all info.json files
 source = "/Users/garygriswold/ShortSands/DBL/FCBH_info/"

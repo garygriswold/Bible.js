@@ -38,13 +38,17 @@ struct BibleInitialSelect {
         let abbr: String        // Version Abbreviation
         let iso3: String        // SIL 3 char SIL language code
         let name: String        // Name in the language, but sometimes in English
+        let script: String?     // Optional script code of the Bible
+        let country: String?    // Optional country code of the Bible
         var score: Float
         
-        init(bibleId: String, abbr: String, iso3: String, name: String, score: Float) {
+        init(bibleId: String, abbr: String, iso3: String, name: String, script: String?, country: String?, score: Float) {
             self.bibleId = bibleId
             self.abbr = abbr
             self.iso3 = iso3
             self.name = name
+            self.script = script
+            self.country = country
             self.score = score
         }
         
@@ -121,21 +125,19 @@ struct BibleInitialSelect {
         for lang in languages {
             langScore[lang.iso3] = lang.score
         }
-        let sql =  "SELECT bibleId, abbr, iso3, name FROM Bible WHERE iso3" +
+        let sql =  "SELECT bibleId, abbr, iso3, name, script, country FROM Bible WHERE iso3" +
             self.adapter.genQuest(array: languages)
 
         var bibles = [BibleScore]()
-        var iso3s = [String]()
-        for lang in languages {
-            iso3s.append(lang.iso3)
-        }
+        let iso3s = languages.map { $0.iso3 }
         do {
             let db: Sqlite3 = try self.adapter.getVersionsDB()
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: iso3s)
             for row in resultSet {
                 let iso3 = row[2]!
                 let score = (langScore[iso3] != nil) ? langScore[iso3]! : 0.10
-                bibles.append(BibleScore(bibleId: row[0]!, abbr: row[1]!, iso3: iso3, name: row[3]!, score: score))
+                bibles.append(BibleScore(bibleId: row[0]!, abbr: row[1]!, iso3: iso3, name: row[3]!,
+                                         script: row[4], country: row[5], score: score))
             }
         } catch let err {
             print("ERROR: BibleInitSelect.getBiblesSelected \(err)")
@@ -143,7 +145,6 @@ struct BibleInitialSelect {
         return bibles
     }
 
-    // There needs to be additional logic here to score based upon script code
     private func scoreBibles(locale: Locale, bibles: inout [BibleScore]) {
         switch locale.languageCode {
         case "en":
@@ -159,10 +160,32 @@ struct BibleInitialSelect {
                     bibles[i].score *= 1.0
                 }
             }
-        // case "es" // Must distinquish latin american from Spanish translations
         default:
             print("")
         }
-        // There needs to be code here based upon script.
+        if let script = locale.scriptCode {
+            for i in 0..<bibles.count {
+                if bibles[i].script == script {
+                    bibles[i].score *= 20
+                }
+            }
+        }
+        if let country = locale.regionCode {
+            if locale.languageCode == "es" {
+                for i in 0..<bibles.count {
+                    if bibles[i].country == "es" && country == "es" {
+                        bibles[i].score *= 10
+                    } else if bibles[i].country != "es" && country != "es" {
+                        bibles[i].score *= 10 // Assume that user and Bible is in America
+                    }
+                }
+            } else {
+                for i in 0..<bibles.count {
+                    if bibles[i].country == country {
+                        bibles[i].score *= 10
+                    }
+                }
+            }
+        }
     }
 }
