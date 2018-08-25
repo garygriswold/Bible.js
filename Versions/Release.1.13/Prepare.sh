@@ -1,5 +1,6 @@
 #!/bin/sh -ve
 
+# Create SQL Files to populate database
 python py/LanguageTable.py
 python py/ISO3PriorityTable.py 
 python py/BibleTable.py
@@ -12,6 +13,7 @@ DROP TABLE IF EXISTS Language;
 DROP TABLE IF EXISTS Country;
 END_SQL
 
+# Load database
 sqlite Versions.db < sql/country.sql
 sqlite Versions.db < sql/language.sql
 sqlite Versions.db < sql/iso3Priority.sql
@@ -35,7 +37,14 @@ INSERT INTO Language
 select l.iso3, l.iso1, l.macro, l.name, p.country, p.pop 
 FROM LanguageTemp l LEFT OUTER JOIN ISO3Priority p 
 ON p.iso3=l.iso3;
+vacuum;
 END_SQL1
+
+# Create A Copy of DB before Deletions
+cp Versions.db VersionsFull.db
+
+# Read Bible.json and use to update Bible table
+python py/UpdateBibleByBibleJson.py
 
 # Remove Languages and Bibles that are not used.
 sqlite Versions.db <<END_SQL
