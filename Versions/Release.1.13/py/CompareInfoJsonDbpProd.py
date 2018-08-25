@@ -134,16 +134,16 @@ for filename in os.listdir(directory):
 		if len(divisions) != len(divisionNames):
 			print "divisions=", len(divisions), "divisionNames=", len(divisionNames), "bibleId=", bibleId
 
-		print filename
-		baseFilename = media + "/" + fileId + "/" + someId + "/"
-		for division in divisions:
-			if len(division) == 2:
-				item = baseFilename + division + ".html"
-			else:
-				sequence = bookNum[division]
-				item = baseFilename + someId + "_" + sequence + "_" + division + ".html"
-			print item
-			# using the filename
+		#print filename
+		#baseFilename = media + "/" + fileId + "/" + someId + "/"
+		#for division in divisions:
+		#	if len(division) == 2:
+		#		item = baseFilename + division + ".html"
+		#	else:
+		#		sequence = bookNum[division]
+		#		item = baseFilename + someId + "_" + sequence + "_" + division + ".html"
+		#	print item
+		#	# using the filename
 
 
 #for f in fontSet:
