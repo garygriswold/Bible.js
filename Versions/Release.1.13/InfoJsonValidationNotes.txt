@@ -78,10 +78,9 @@ type == 'bible' in every file
 abbr is always equal to id
 dir is always ltr or rtl
 lang is sometimes uppercase and sometimes lowercase, I need will convert to lowercase
-lang is different than id[0:3] only 26 times
 dialectCode[0:3] is always equal to lang
 dialectCode[3:] is always 'Latin', which is not correct
-audioDirectory is always the same as bibleId
+audioDirectory is always the same as Id
 the first part of a filename is text or audio
 
 Language code exists on its own, but is also part of the Id, and the second and
@@ -91,24 +90,15 @@ iso-639-3 SIL language codes.
 
 The following are some observations about these similarities:
 
+lang is different than id[0:3] only 26 times
 lang is different than the second part of filename 53 times
 lang is different than the third part of filename 28 times
 
 the second part of the filename is the same as Id, except about 80 times
 
 the third part of the filename is almost always the same at the Id, but there are 3 exceptions:
-	bibleId= GRTBBS fileId= GUDBSCI someId= GUDBSC lang= grt (this one is a duplicate GRTBBS)
 	bibleId= AMPWBT someId= AM1WBT bibleId=fileId lang= amp (appears to be a lang difference, usually done in fileId)
 	bibleId= MLYBSM fileId= ZLMTMV someId= ZLMBSM lang= mly
-
-
-
-
-
-
-
-
-
-
+	bibleId= GRTBBS fileId= GUDBSCI someId= GUDBSC lang= grt (this one is a duplicate GRTBBS)
 
 
