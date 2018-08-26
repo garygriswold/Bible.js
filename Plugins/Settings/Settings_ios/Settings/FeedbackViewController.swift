@@ -78,7 +78,7 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
             if !text.isEmpty {
                 let aws = AwsS3Manager.findUSEast1()
                 let key = userId + String(text.hashValue)
-                let message = userId + "|" + text
+                let message = userId + "|" + Locale.current.identifier + "|" + text
                 aws.uploadText(s3Bucket: "user.feedback.safebible", s3Key: key, data: message,
                                contentType: "text/plain; charset=UTF-8",
                            complete: { error in
