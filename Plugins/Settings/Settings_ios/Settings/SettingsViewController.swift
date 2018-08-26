@@ -19,6 +19,7 @@ class SettingsViewController: UIViewController {
     var tableView: UITableView!
     var language: Language? // Used only when SettingsViewType is .bible
     var isEditable: Bool
+    var recentContentOffset: CGPoint // Used to restore position when returning to view
     
     private let selectedSection: Int
     private let availableSection: Int
@@ -30,6 +31,7 @@ class SettingsViewController: UIViewController {
         self.selectedSection = (settingsViewType == .primary) ? 3 : 0
         self.availableSection = self.selectedSection + 1
         self.isEditable = false
+        self.recentContentOffset = CGPoint(x:0, y: 0)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -43,6 +45,7 @@ class SettingsViewController: UIViewController {
         self.selectedSection = (settingsViewType == .primary) ? 3 : 0
         self.availableSection = self.selectedSection + 1
         self.isEditable = false
+        self.recentContentOffset = CGPoint(x:0, y: 0)
         super.init(coder: coder)
     }
 
@@ -52,6 +55,9 @@ class SettingsViewController: UIViewController {
         // create Table view
         self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableViewStyle.grouped)
         self.tableView.allowsSelectionDuringEditing = true
+        let barHeight = self.navigationController?.navigationBar.frame.height ?? 44
+        self.recentContentOffset = CGPoint(x:0, y: -1 * barHeight)
+        print("barHeight = \(barHeight)")
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(self.tableView)
         let width = self.view.bounds.width
@@ -94,6 +100,7 @@ class SettingsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.tableView.contentOffset = self.recentContentOffset
         
         switch self.settingsViewType {
         case .primary:
@@ -107,6 +114,11 @@ class SettingsViewController: UIViewController {
         self.delegate = SettingsViewDelegate(controller: self, selectionViewSection: self.selectedSection)
         self.tableView.dataSource = self.dataSource
         self.tableView.delegate = self.delegate
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.recentContentOffset = self.tableView.contentOffset;
+        super.viewWillDisappear(animated)
     }
     
     /**
