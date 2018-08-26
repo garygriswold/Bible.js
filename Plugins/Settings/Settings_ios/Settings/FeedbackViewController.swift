@@ -36,7 +36,11 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
         self.textView.allowsEditingTextAttributes = true
         self.textView.font = AppFont.sansSerif(style: .body)
         self.view.addSubview(self.textView)
-        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(preferredContentSizeChanged(note:)),
                            name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
@@ -47,10 +51,6 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
         
         self.textView.becomeFirstResponder()
     }
-    
-    //func textViewDidEndEditing(_ textView: UITextView) {
-    //    print(textView.text)
-    //}
     
     @objc func preferredContentSizeChanged(note: NSNotification) {
         self.textView.font = AppFont.sansSerif(style: .body)
