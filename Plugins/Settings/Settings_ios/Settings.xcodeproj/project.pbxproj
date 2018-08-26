@@ -26,6 +26,8 @@
 		E4C2E990211B712D00B71CC5 /* SettingsNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E987211B712C00B71CC5 /* SettingsNavigator.swift */; };
 		E4C2E991211B712D00B71CC5 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E988211B712D00B71CC5 /* SettingsModel.swift */; };
 		E4C2E992211B712D00B71CC5 /* SettingsViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E989211B712D00B71CC5 /* SettingsViewDelegate.swift */; };
+		E4D708D0213328E600E4A8BF /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D708CF213328E600E4A8BF /* AWS.framework */; };
+		E4D708D1213328E600E4A8BF /* AWS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4D708CF213328E600E4A8BF /* AWS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4F720BA211B6F2A00E26B07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */; };
 		E4F720BF211B6F2A00E26B07 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F720BD211B6F2A00E26B07 /* Main.storyboard */; };
 		E4F720C1211B6F2C00E26B07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F720C0211B6F2C00E26B07 /* Assets.xcassets */; };
@@ -39,6 +41,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				E4D708D1213328E600E4A8BF /* AWS.framework in Embed Frameworks */,
 				E44C056E211BE1F700476DAD /* Utility.framework in Embed Frameworks */,
 				E44F0B69212D46EC00CDB32F /* AWSCore.framework in Embed Frameworks */,
 			);
@@ -65,6 +68,7 @@
 		E4C2E987211B712C00B71CC5 /* SettingsNavigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsNavigator.swift; sourceTree = "<group>"; };
 		E4C2E988211B712D00B71CC5 /* SettingsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		E4C2E989211B712D00B71CC5 /* SettingsViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewDelegate.swift; sourceTree = "<group>"; };
+		E4D708CF213328E600E4A8BF /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F720B6211B6F2A00E26B07 /* Settings.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Settings.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4F720BE211B6F2A00E26B07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -78,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4D708D0213328E600E4A8BF /* AWS.framework in Frameworks */,
 				E44C056D211BE1F700476DAD /* Utility.framework in Frameworks */,
 				E44F0B68212D46EC00CDB32F /* AWSCore.framework in Frameworks */,
 			);
@@ -98,6 +103,7 @@
 		E4F720AD211B6F2A00E26B07 = {
 			isa = PBXGroup;
 			children = (
+				E4D708CF213328E600E4A8BF /* AWS.framework */,
 				E44C056B211B7DE700476DAD /* Versions.db */,
 				E4F720B8211B6F2A00E26B07 /* Settings */,
 				E4F720B7211B6F2A00E26B07 /* Products */,
