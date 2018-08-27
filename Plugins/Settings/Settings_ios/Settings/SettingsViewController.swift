@@ -88,7 +88,7 @@ class SettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+      
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(preferredContentSizeChanged(note:)),
                            name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
@@ -119,6 +119,12 @@ class SettingsViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         self.recentContentOffset = self.tableView.contentOffset;
         super.viewWillDisappear(animated)
+        
+        //Must remove, or this view will scroll because of keyboard actions in upper view.
+        let notify = NotificationCenter.default
+        notify.removeObserver(self, name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        notify.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notify.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     /**

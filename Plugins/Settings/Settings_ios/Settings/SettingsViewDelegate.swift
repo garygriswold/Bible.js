@@ -80,13 +80,12 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 self.navController?.pushViewController(feedbackController, animated: true)
             case 2:
                 let userMessageController = UserMessageController()
-                //userMessageController.presentCompose()
-                self.navController?.pushViewController(userMessageController, animated: true)
+                self.navController?.present(userMessageController, animated: true, completion: nil)
             default:
                 print("Unknown row \(indexPath.row) in section 0")
             }
         case 1:
-            print("section 1 is not selectable")
+            print("Section 1 Font Size Widget.  It is not selectable.")
         case 2:
             let languageController = SettingsViewController(settingsViewType: .language)
             languageController.isEditable = true

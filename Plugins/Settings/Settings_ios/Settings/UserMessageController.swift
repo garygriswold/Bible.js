@@ -9,33 +9,24 @@
 import UIKit
 import MessageUI
 
-class UserMessageController : UIViewController, MFMessageComposeViewControllerDelegate {
+class UserMessageController : MFMessageComposeViewController, MFMessageComposeViewControllerDelegate {
     
     static func isAvailable() -> Bool {
         return MFMessageComposeViewController.canSendText()
     }
     
-    //func presentCompose() {
     override func loadView() {
         super.loadView()
         
-        self.view.backgroundColor = .white
-        
-        let composer = MFMessageComposeViewController()
-        composer.modalTransitionStyle = .flipHorizontal
-        composer.messageComposeDelegate = self
-        composer.body = "Hello from California!"
-        if let appURL = URL(string: "https://itunes.apple.com/app/id1073396349") {
-            composer.addAttachmentURL(appURL, withAlternateFilename: nil)
-        }
-        
-        self.present(composer, animated: true, completion: nil)
+        self.modalTransitionStyle = .coverVertical
+        self.messageComposeDelegate = self
+        self.body = "\n\nhttps://itunes.apple.com/app/id1073396349"
+        //self.body = "http://appstore.com/safebibleprivacysafebible"
     }
     
     func messageComposeViewController(_ controller: MFMessageComposeViewController,
                                       didFinishWith result: MessageComposeResult) {
-        self.dismiss(animated: true, completion: nil)
-        self.navigationController?.popViewController(animated: true)
+        controller.dismiss(animated: true, completion: nil)
     }
 }
 
