@@ -78,6 +78,10 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             case 1:
                 let feedbackController = FeedbackViewController()
                 self.navController?.pushViewController(feedbackController, animated: true)
+            case 2:
+                let userMessageController = UserMessageController()
+                //userMessageController.presentCompose()
+                self.navController?.pushViewController(userMessageController, animated: true)
             default:
                 print("Unknown row \(indexPath.row) in section 0")
             }

@@ -99,7 +99,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.settingsViewType == .primary && section < self.selectedSection {
             switch section {
-            case 0: return 2
+            case 0: return (UserMessageController.isAvailable()) ? 3 : 2
             case 1: return 1
             case 2: return 1
             default: fatalError("Unknown number of sections")
@@ -136,6 +136,12 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
                     feedbackCell.textLabel?.font = AppFont.sansSerif(style: .body)
                     feedbackCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
                     return feedbackCell
+                case 2:
+                    let messageCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
+                    messageCell.textLabel?.text = "Share SafeBible"
+                    messageCell.textLabel?.font = AppFont.sansSerif(style: .body)
+                    messageCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                    return messageCell
                 default: fatalError("Unknown row \(indexPath.row) in section 0")
                 }
             case 1:
