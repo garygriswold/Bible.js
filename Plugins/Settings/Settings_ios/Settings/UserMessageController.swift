@@ -18,10 +18,9 @@ class UserMessageController : MFMessageComposeViewController, MFMessageComposeVi
     override func loadView() {
         super.loadView()
         
-        self.modalTransitionStyle = .coverVertical
+        self.modalTransitionStyle = .flipHorizontal
         self.messageComposeDelegate = self
-        self.body = "\n\nhttps://itunes.apple.com/app/id1073396349"
-        //self.body = "http://appstore.com/safebibleprivacysafebible"
+        self.body = "I like it!\nhttps://itunes.apple.com/app/id1073396349"
     }
     
     func messageComposeViewController(_ controller: MFMessageComposeViewController,
