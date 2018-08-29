@@ -10,10 +10,25 @@ import Foundation
 import UIKit
 
 public class AppFont {
-    
-    public static var userFontDelta: CGFloat = 1.0
+
     public static var serifFont: UIFont?
-    
+    private static var _userFontDelta: CGFloat?
+    public static var userFontDelta: CGFloat {
+        get {
+            if _userFontDelta == nil {
+                let adapter = SettingsAdapter()
+                _userFontDelta = adapter.getUserFontDelta()
+            }
+            print("**** USER FONT DELTA = \(_userFontDelta!)")
+            return _userFontDelta!
+        }
+        set(newValue) {
+            _userFontDelta = newValue
+            let adapter = SettingsAdapter()
+            adapter.setUserFontDelta(fontDelta: newValue)
+        }
+    }
+
     public static func sansSerif(style: UIFontTextStyle) -> UIFont {
         let font = UIFont.preferredFont(forTextStyle: style)
         return font.withSize(font.pointSize * userFontDelta)

@@ -24,14 +24,12 @@ class TextSizeSliderCell : UITableViewCell {
         self.textSlider = UISlider(frame: .zero)
         self.leftLabel = UILabel(frame: .zero)
         self.rightLabel = UILabel(frame: .zero)
-        self.textSlider.value = Float(AppFont.userFontDelta)
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     required init?(coder: NSCoder) {
         self.textSlider = UISlider(frame: CGRect.zero)
         self.leftLabel = UILabel(frame: .zero)
         self.rightLabel = UILabel(frame: .zero)
-        self.textSlider.value = Float(AppFont.userFontDelta)
         super.init(coder: coder)
     }
     
@@ -49,6 +47,7 @@ class TextSizeSliderCell : UITableViewCell {
         self.textSlider.frame = CGRect(x: width * 0.1, y: 0, width: width * 0.75, height: height)
         self.textSlider.minimumValue = 0.75
         self.textSlider.maximumValue = 1.5
+        self.textSlider.value = Float(AppFont.userFontDelta)
         self.textSlider.isContinuous = true
         
         self.textSlider.addTarget(self, action: #selector(touchDownHandler), for: .touchDown)

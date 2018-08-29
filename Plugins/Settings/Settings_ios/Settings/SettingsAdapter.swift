@@ -10,11 +10,14 @@ import Utility
 
 struct SettingsAdapter {
     
+    // Changing these static values would break data stored in User settings
     private static let SETTINGS_DB = "Settings.db"
     private static let VERSIONS_DB = "Versions.db"
     private static let LANGS_SELECTED = "langs_selected"
     private static let BIBLE_SELECTED = "bible_selected"
     private static let PSEUDO_USER_ID = "pseudo_user_id"
+    private static let CURR_VERSION = "version"
+    private static let USER_FONT_DELTA = "userFontDelta"
     
     //
     // Settings methods
@@ -69,6 +72,9 @@ struct SettingsAdapter {
     func updateSettings(bibles: [Bible]) {
         let keys = bibles.map { $0.bibleId }
         self.updateSettings(name: SettingsAdapter.BIBLE_SELECTED, settings: keys)
+        if let first = keys.first {
+            self.updateSetting(name: SettingsAdapter.CURR_VERSION, setting: first)
+        }
     }
     
     func getPseudoUserId() -> String {
@@ -78,6 +84,20 @@ struct SettingsAdapter {
             self.updateSetting(name: SettingsAdapter.PSEUDO_USER_ID, setting: userId!)
         }
         return userId!
+    }
+    
+    func getUserFontDelta() -> CGFloat {
+        if let deltaStr = self.getSetting(name: SettingsAdapter.USER_FONT_DELTA) {
+            if let deltaDbl = Double(deltaStr) {
+                return CGFloat(deltaDbl)
+            }
+        }
+        return 1.0
+    }
+    
+    func setUserFontDelta(fontDelta: CGFloat) {
+        let deltatDbl = Double(fontDelta)
+        self.updateSetting(name: SettingsAdapter.USER_FONT_DELTA, setting: String(deltatDbl))
     }
     
     private func getSettings(name: String) -> [String]? {
