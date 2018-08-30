@@ -44,7 +44,16 @@ class TextSizeSliderCell : UITableViewCell {
         let width = bounds.width
         let height = bounds.height
         
-        self.textSlider.frame = CGRect(x: width * 0.1, y: 0, width: width * 0.75, height: height)
+        if UIView.userInterfaceLayoutDirection(for: self.semanticContentAttribute) == .leftToRight {
+            self.textSlider.frame = CGRect(x: width * 0.1, y: 0, width: width * 0.75, height: height)
+            self.leftLabel.frame = CGRect(x: width * 0.05, y: 0, width: width * 0.05, height: height)
+            self.rightLabel.frame = CGRect(x: width * 0.88, y: 0, width: width * 0.10, height: height)
+        } else {
+            self.textSlider.frame = CGRect(x: width * 0.12, y: 0, width: width * 0.80, height: height)
+            self.rightLabel.frame = CGRect(x: width * 0.05, y: 0, width: width * 0.05, height: height)
+            self.leftLabel.frame = CGRect(x: width * 0.88, y: 0, width: width * 0.10, height: height)
+        }
+
         self.textSlider.minimumValue = 0.75
         self.textSlider.maximumValue = 1.5
         self.textSlider.value = Float(AppFont.userFontDelta)
@@ -57,12 +66,10 @@ class TextSizeSliderCell : UITableViewCell {
 
         self.addSubview(self.textSlider)
         
-        self.leftLabel.frame = CGRect(x: width * 0.05, y: 0, width: width * 0.05, height: height)
         self.leftLabel.text = "A"
         self.leftLabel.font = AppFont.serif(ofRelativeSize: CGFloat(self.textSlider.minimumValue))
         self.addSubview(self.leftLabel)
         
-        self.rightLabel.frame = CGRect(x: width * 0.88, y: 0, width: width * 0.10, height: height)
         self.rightLabel.text = "A"
         self.rightLabel.font = AppFont.serif(ofRelativeSize: CGFloat(self.textSlider.maximumValue))
         self.addSubview(self.rightLabel)
