@@ -28,11 +28,12 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         self.settingsViewType = controller.settingsViewType
         switch settingsViewType {
         case .primary:
-            self.searchController.searchBar.placeholder = "Find Bibles"
+            self.searchController.searchBar.placeholder = NSLocalizedString("Find Bibles", comment: "Bibles search bar")
         case .language:
-            self.searchController.searchBar.placeholder = "Find Languages"
+            self.searchController.searchBar.placeholder = NSLocalizedString("Find Languages",
+                                                                            comment: "Languages search bar")
         case .bible:
-            self.searchController.searchBar.placeholder = "Find Bibles"
+            self.searchController.searchBar.placeholder = NSLocalizedString("Find Bibles", comment: "Bibles search bar")
         }
         self.selectedSection = selectionViewSection
         self.availableSection = selectionViewSection + 1
@@ -72,20 +73,30 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch self.settingsViewType {
         case .primary:
-            if section == self.selectedSection { return "My Bibles" }
-            else if section == self.availableSection { return "More Bibles" }
+            if section == self.selectedSection {
+                return NSLocalizedString("My Bibles", comment: "Section heading for User selected Bibles")
+            }
+            else if section == self.availableSection {
+                return NSLocalizedString("More Bibles", comment: "Section heading for available Bibles")
+            }
             else { return nil }
         case .language:
-            if section == self.selectedSection { return "My Languages" }
-            else if section == self.availableSection { return "More Languages" }
+            if section == self.selectedSection {
+                return NSLocalizedString("My Languages", comment: "Section heading for User languages")
+            }
+            else if section == self.availableSection {
+                return NSLocalizedString("More Languages", comment: "Section heading for Other languages")
+            }
             else { return nil }
         case .bible:
-            if section == self.selectedSection { return "My Bibles" }
+            if section == self.selectedSection {
+                return NSLocalizedString("My Bibles", comment: "Section heading for User selected Bibles")
+            }
             else if section == self.availableSection {
                 if let lang = self.language?.localized {
-                    return lang + " Bibles"
+                    return lang + " " + NSLocalizedString("Bibles", comment: "Section heading for Bibles in one lang")
                 } else {
-                    return "More Bibles"
+                    return NSLocalizedString("More Bibles", comment: "Section heading for available Bibles")
                 }
             }
             else { return nil }
@@ -126,19 +137,19 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
                 switch indexPath.row {
                 case 0:
                     let reviewCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                    reviewCell.textLabel?.text = "Write A Review"
+                    reviewCell.textLabel?.text = NSLocalizedString("Write A Review", comment: "Clickable cell title")
                     reviewCell.textLabel?.font = AppFont.sansSerif(style: .body)
                     reviewCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
                     return reviewCell
                 case 1:
                     let feedbackCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                    feedbackCell.textLabel?.text = "Send Us Feedback"
+                    feedbackCell.textLabel?.text = NSLocalizedString("Send Us Feedback", comment: "Clickable cell title")
                     feedbackCell.textLabel?.font = AppFont.sansSerif(style: .body)
                     feedbackCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
                     return feedbackCell
                 case 2:
                     let messageCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                    messageCell.textLabel?.text = "Share SafeBible"
+                    messageCell.textLabel?.text = NSLocalizedString("Share SafeBible", comment: "Clickable cell title")
                     messageCell.textLabel?.font = AppFont.sansSerif(style: .body)
                     messageCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
                     return messageCell
@@ -154,7 +165,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
                 switch indexPath.row {
                 case 0:
                     let languagesCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                    languagesCell.textLabel?.text = "Languages"
+                    languagesCell.textLabel?.text = NSLocalizedString("Languages", comment: "Clickable cell title")
                     languagesCell.textLabel?.font = AppFont.sansSerif(style: .body)
                     languagesCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
                     return languagesCell

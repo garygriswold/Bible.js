@@ -24,7 +24,7 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
         self.view.backgroundColor = UIColor.white
         
         // set Top Bar items
-        self.navigationItem.title = "Send Us Feedback"
+        self.navigationItem.title = NSLocalizedString("Send Us Feedback", comment: "Feedback view title")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self,
                                                                 action: #selector(cancelHandler))
         

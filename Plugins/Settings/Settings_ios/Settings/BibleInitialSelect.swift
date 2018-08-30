@@ -33,10 +33,10 @@ struct BibleDetail : Equatable {
 /**
  * The real BibleInitialSelect is below. This experiment was an attempt to solve the same problem, by
  * using preferredLocalizations.  It could be a better and more accurate solution. But, it did not
- * return good results.  For example zh-Hant-US returned no Bibles.  Also, it worked by removing
- * parts of the Locale so it tends to return very reduced locales, like 'en', or 'de'.  The problem
- * is that I don't know how to match this back Bibles.
- * NOTE: This code should be discarded, if I don't find a solution.
+ * return good results.  For example zh-Hant-US returned no Languages.  Also, it worked by removing
+ * parts of the Locale so it tends to return very reduced locales, like 'en', or 'de'.  It would
+ * take a similar reduction logic in my code to match back to Bibles.
+ * NOTE: This code should be discarded, if I don't find a way to fix these problems.
  */
 struct BibleInitialSelectExperiment {
  

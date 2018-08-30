@@ -64,14 +64,14 @@ class SettingsViewController: UIViewController {
  
         switch self.settingsViewType {
         case .primary:
-            self.navigationItem.title = "Settings"
+            self.navigationItem.title = NSLocalizedString("Settings", comment: "Settings view page title")
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "\u{FF1c} Read", style: .done, target: self,
                                                                     action: #selector(doneHandler))
         case .language:
-            self.navigationItem.title = "Languages"
+            self.navigationItem.title = NSLocalizedString("Languages", comment: "Languages view page title")
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
         case .bible:
-            self.navigationItem.title = "Bibles"
+            self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
         }
         self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")

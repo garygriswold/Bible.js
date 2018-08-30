@@ -20,7 +20,8 @@ class UserMessageController : MFMessageComposeViewController, MFMessageComposeVi
         
         self.modalTransitionStyle = .flipHorizontal
         self.messageComposeDelegate = self
-        self.body = "I like it!\nhttps://itunes.apple.com/app/id1073396349"
+        let message = NSLocalizedString("I like it!", comment: "User text in message to other")
+        self.body = message + "\nhttps://itunes.apple.com/app/id1073396349"
     }
     
     func messageComposeViewController(_ controller: MFMessageComposeViewController,
