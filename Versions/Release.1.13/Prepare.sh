@@ -37,6 +37,10 @@ INSERT INTO Language
 select l.iso3, l.iso1, l.macro, l.name, p.country, p.pop 
 FROM LanguageTemp l LEFT OUTER JOIN ISO3Priority p 
 ON p.iso3=l.iso3;
+
+-- cleanup null fields
+update Bible set script=null where script = '';
+update Bible set country=null where country = '';
 vacuum;
 END_SQL1
 

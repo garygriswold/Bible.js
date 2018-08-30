@@ -253,6 +253,24 @@ struct SettingsAdapter {
         return bibles
     }
     
+    /**
+     * Deprecated: 8/30/18.  This method is only used by BibleInitialSelectExperiment.
+    */
+    func getAllBibles() -> [BibleDetail] {
+        var bibles = [BibleDetail]()
+        let sql = "SELECT bibleId, b.iso3, l.iso1, b.script, b.country FROM Bible b, Language l WHERE b.iso3 = l.iso3"
+        do {
+            let db: Sqlite3 = try self.getVersionsDB()
+            let resultSet: [[String?]] = try db.queryV1(sql: sql, values: [])
+            bibles = resultSet.map {
+                BibleDetail(bibleId: $0[0]!, iso3: $0[1]!, iso1: $0[2], script: $0[3], country: $0[4])
+            }
+        } catch let err {
+            print("ERROR: SettingsAdapter.getAllBibles \(err)")
+        }
+        return bibles
+    }
+    
     func getVersionsDB() throws -> Sqlite3 {
         var db: Sqlite3?
         do {

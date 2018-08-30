@@ -89,7 +89,7 @@ for filename in os.listdir(source):
 		script = "'" + script + "'" if script != None else 'null'
 
 		country = bible.get('countryCode')
-		country = "'" + country + "'" if country != None else 'null'
+		country = "'" + country.upper() + "'" if country != None else 'null'
 		stylesheet = bible.get('stylesheet')
 		stylesheet = "'" + stylesheet + "'" if stylesheet != None else 'null'
 		redistribute = 'T' if (bible.get('redistributable', False)) else 'F'

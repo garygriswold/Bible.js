@@ -15,6 +15,89 @@
 
 import Utility
 
+/**
+ * Used only by BibleInitialSelectExperiment
+ */
+struct BibleDetail : Equatable {
+    let bibleId: String
+    let iso3: String
+    let iso1: String?
+    let script: String?
+    let country: String?
+    
+    static func == (lhs: BibleDetail, rhs: BibleDetail) -> Bool {
+        return lhs.bibleId == rhs.bibleId
+    }
+}
+
+/**
+ * The real BibleInitialSelect is below. This experiment was an attempt to solve the same problem, by
+ * using preferredLocalizations.  It could be a better and more accurate solution. But, it did not
+ * return good results.  For example zh-Hant-US returned no Bibles.  Also, it worked by removing
+ * parts of the Locale so it tends to return very reduced locales, like 'en', or 'de'.  The problem
+ * is that I don't know how to match this back Bibles.
+ * NOTE: This code should be discarded, if I don't find a solution.
+ */
+struct BibleInitialSelectExperiment {
+ 
+    private var adapter: SettingsAdapter
+    
+    init(adapter: SettingsAdapter) {
+        self.adapter = adapter
+    }
+    
+    func getBiblesSelected(locales: [Locale]) -> [String] {
+        let allBibles: [BibleDetail] = self.adapter.getAllBibles()
+        var bibleLocaleMap = [String : [BibleDetail]]()
+        for bible in allBibles {
+            let iso = (bible.iso1 != nil) ? bible.iso1 : bible.iso3
+            let bibleLocale: String = initLocale(iso: iso!, script: bible.script, country: bible.country)
+            var bibleList: [BibleDetail]? = bibleLocaleMap[bibleLocale]
+            if bibleList != nil {
+                bibleList!.append(bible)
+            } else {
+                bibleList = [bible]
+            }
+            bibleLocaleMap[bibleLocale] = bibleList
+        }
+        let distinctLocales: [String] = bibleLocaleMap.keys.map { $0 }
+        var selected = [BibleDetail]()
+        for userLocale in locales {
+            print("Search for Locale \(userLocale.identifier)")
+            let bibleLocales: [String] = Bundle.preferredLocalizations(from: distinctLocales,
+                                                                       forPreferences: [userLocale.identifier])
+            for locale in bibleLocales {
+                if let bibles = bibleLocaleMap[locale] {
+                    for bible in bibles {
+                        if !selected.contains(bible) {
+                            selected.append(bible)
+                            print("Found Bible \(bible)")
+                        }
+                    }
+                }
+            }
+        }
+        // How do I limit it to 3 per language
+        let bibleIds = selected.map { $0.bibleId }
+        //return adapter.getBiblesSelected(locales: locales, selectedBibles: bibleIds)
+        return bibleIds
+    }
+    
+    private func initLocale(iso: String, script: String?, country: String?) -> String {
+        var locale = iso
+        if script != nil {
+            locale += "_" + script!
+        }
+        if country != nil {
+            locale += "_" + country!
+        }
+        // When converting to identifier, Apple makes some adjustments that must make sense to them.
+        // Since the data is only used as input to Bundle.preferredLocalization, doing this seems
+        // like a good idea
+        return Locale(identifier: locale).identifier
+    }
+}
+
 struct BibleInitialSelect {
     
     class LanguageScore : Equatable {

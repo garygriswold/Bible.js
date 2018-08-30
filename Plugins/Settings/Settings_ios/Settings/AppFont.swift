@@ -19,7 +19,6 @@ public class AppFont {
                 let adapter = SettingsAdapter()
                 _userFontDelta = adapter.getUserFontDelta()
             }
-            print("**** USER FONT DELTA = \(_userFontDelta!)")
             return _userFontDelta!
         }
         set(newValue) {
