@@ -1,0 +1,45 @@
+/* First letter in alphabet */
+"A" = "A";
+
+/* Bibles view page title
+   Section heading for Bibles in one lang */
+"Bibles" = "聖經";
+
+/* Bibles search bar */
+"Find Bibles" = "找聖經";
+
+/* Languages search bar */
+"Find Languages" = "查找語言";
+
+/* User text in message to other */
+"I like it!" = "我喜歡！";
+
+/* Clickable cell title
+   Languages view page title */
+"Languages" = "語言";
+
+/* Section heading for available Bibles */
+"More Bibles" = "更多聖經";
+
+/* Section heading for Other languages */
+"More Languages" = "更多語言";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "我的聖經";
+
+/* Section heading for User languages */
+"My Languages" = "我的語言";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Feedback" = "向我們發送反饋";
+
+/* Settings view page title */
+"Settings" = "設置";
+
+/* Clickable cell title */
+"Share SafeBible" = "分享SafeBible";
+
+/* Clickable cell title */
+"Write A Review" = "寫評論";
+

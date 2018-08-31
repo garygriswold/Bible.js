@@ -66,6 +66,9 @@
 		E4A3AF132138E72D006EDEFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		E4A3AF142138EC0F006EDEFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4A3AF162138EE96006EDEFE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		E4A3AF172138F3AE006EDEFE /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		E4A3AF182138F3AE006EDEFE /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		E4A3AF192138F3AF006EDEFE /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E4C2E977211B70F500B71CC5 /* AppFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFont.swift; sourceTree = "<group>"; };
 		E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BibleDetailViewController.swift; sourceTree = "<group>"; };
 		E4C2E97C211B711C00B71CC5 /* BibleModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BibleModel.swift; sourceTree = "<group>"; };
@@ -204,6 +207,7 @@
 				Base,
 				de,
 				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = E4F720AD211B6F2A00E26B07;
 			productRefGroup = E4F720B7211B6F2A00E26B07 /* Products */;
@@ -263,6 +267,7 @@
 			children = (
 				E428B7E42138BD7F000AB2A8 /* es */,
 				E428B7EA2138C003000AB2A8 /* fr */,
+				E4A3AF192138F3AF006EDEFE /* zh-Hant */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -274,6 +279,7 @@
 				E428B7E92138BF70000AB2A8 /* fr */,
 				E4A3AF142138EC0F006EDEFE /* de */,
 				E4A3AF162138EE96006EDEFE /* zh-Hans */,
+				E4A3AF182138F3AE006EDEFE /* zh-Hant */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -283,6 +289,7 @@
 			children = (
 				E428B7ED2138C297000AB2A8 /* Base */,
 				E4A3AF132138E72D006EDEFE /* de */,
+				E4A3AF172138F3AE006EDEFE /* zh-Hant */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
