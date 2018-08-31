@@ -1,0 +1,45 @@
+/* First letter in alphabet */
+"A" = "A";
+
+/* Bibles view page title
+   Section heading for Bibles in one lang */
+"Bibles" = "Bibleses";
+
+/* Bibles search bar */
+"Find Bibles" = "Fond Bibleses";
+
+/* Languages search bar */
+"Find Languages" = "Find Languageses";
+
+/* User text in message to other */
+"I like it!" = "I like ites!";
+
+/* Clickable cell title
+   Languages view page title */
+"Languages" = "Languageses";
+
+/* Section heading for available Bibles */
+"More Bibles" = "More Bibleses";
+
+/* Section heading for Other languages */
+"More Languages" = "More Languageses";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "My Bibleses";
+
+/* Section heading for User languages */
+"My Languages" = "My Languageses";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Feedback" = "Send Us Feedbackes";
+
+/* Settings view page title */
+"Settings" = "Settingses";
+
+/* Clickable cell title */
+"Share SafeBible" = "Share SafeBiblees";
+
+/* Clickable cell title */
+"Write A Review" = "Write A Reviewes";
+
