@@ -3,43 +3,43 @@
 
 /* Bibles view page title
    Section heading for Bibles in one lang */
-"Bibles" = "Bibles";
+"Bibles" = "Bibeln";
 
 /* Bibles search bar */
-"Find Bibles" = "Trouver des bibles";
+"Find Bibles" = "Finde Bibeln";
 
 /* Languages search bar */
-"Find Languages" = "Trouver des langues";
+"Find Languages" = "Finde Sprachen";
 
 /* User text in message to other */
-"I like it!" = "J'aime ça!";
+"I like it!" = "Ich mag das!";
 
 /* Clickable cell title
    Languages view page title */
-"Languages" = "Langues";
+"Languages" = "Sprachen";
 
 /* Section heading for available Bibles */
-"More Bibles" = "Plus de bibles";
+"More Bibles" = "Mehr Bibeln";
 
 /* Section heading for Other languages */
-"More Languages" = "Plus de langues";
+"More Languages" = "Mehr Sprachen";
 
 /* Section heading for User selected Bibles */
-"My Bibles" = "Mes bibles";
+"My Bibles" = "Meine Bibeln";
 
 /* Section heading for User languages */
-"My Languages" = "Mes langues";
+"My Languages" = "Meine Sprachen";
 
 /* Clickable cell title
    Feedback view title */
-"Send Us Feedback" = "Envoyez-nous vos commentaires";
+"Send Us Feedback" = "Sende uns Feedback";
 
 /* Settings view page title */
-"Settings" = "Paramètres";
+"Settings" = "die Einstellungen";
 
 /* Clickable cell title */
-"Share SafeBible" = "Partager SafeBible";
+"Share SafeBible" = "Teilen Sie SafeBible";
 
 /* Clickable cell title */
-"Write A Review" = "Écrire une critique";
+"Write A Review" = "Eine Rezension schreiben";
 
