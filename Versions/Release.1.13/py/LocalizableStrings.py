@@ -5,6 +5,7 @@
 import httplib
 import io
 import sys
+import json
 
 sourceDir = "/Users/garygriswold/ShortSands/BibleApp/Plugins/Settings/Settings_ios/Settings/"
 targetDir = "/Users/garygriswold/Downloads/"
@@ -89,7 +90,7 @@ def parseLocalizableString(langCode):
 	input.close()
 	return parsedFile
 
-def generateGenericRequest(parseFile):
+def generateGenericRequest(parsedFile):
 	request = '{ "source":"en", "target":"**"'
 	for item in parsedFile:
 		request += ', "q":' + item[0]
@@ -108,6 +109,12 @@ def getTranslation(body):
 	print response.status, response.reason
 	return response.read()
 
+# generate result Localizable.String file and write
+def generateLocalizableString(parsedFile, response):
+	json = json.parse(response)
+	print json
+
+
 parsedFile = parseLocalizableString("es")
 genericRequest = generateGenericRequest(parsedFile)
 for lang in languages:
@@ -117,6 +124,7 @@ for lang in languages:
 	print request
 	response = getTranslation(request)
 	print response
+	print response.data
 
 
 
