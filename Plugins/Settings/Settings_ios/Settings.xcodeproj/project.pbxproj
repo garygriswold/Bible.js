@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		E428B7E52138BD7F000AB2A8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E32138BD7F000AB2A8 /* InfoPlist.strings */; };
-		E428B7E82138BD7F000AB2A8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E62138BD7F000AB2A8 /* Localizable.strings */; };
 		E44C056C211B7DE700476DAD /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E44C056B211B7DE700476DAD /* Versions.db */; };
 		E44C056D211BE1F700476DAD /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44C0566211B77AA00476DAD /* Utility.framework */; };
 		E44C056E211BE1F700476DAD /* Utility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E44C0566211B77AA00476DAD /* Utility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -228,7 +227,6 @@
 			files = (
 				E44C056C211B7DE700476DAD /* Versions.db in Resources */,
 				E4A3AF152138EC0F006EDEFE /* Localizable.strings in Resources */,
-				E428B7E82138BD7F000AB2A8 /* Localizable.strings in Resources */,
 				E4F720C4211B6F2C00E26B07 /* LaunchScreen.storyboard in Resources */,
 				E4F720C1211B6F2C00E26B07 /* Assets.xcassets in Resources */,
 				E428B7E52138BD7F000AB2A8 /* InfoPlist.strings in Resources */,

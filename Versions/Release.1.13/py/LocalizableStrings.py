@@ -2,6 +2,13 @@
 # This program is used to generate Localizable.strings files using Google Translate
 # to perform the translation.
 #
+# When there is a revision of the code that requires this to be regenerated.
+# 1. Complete editing of NSLocalizableString in source code
+# 2. Editor -> Export for Localization -> (Development Language Only)
+# 3. Make any needed changes to this file and import it
+# 4. Editor -> Import for Localization
+# 5. Run this program 
+#
 import httplib
 import io
 import os
@@ -133,14 +140,12 @@ def generateLocalizableStringFile(langCode, parsedFile, response):
 				lineCount += 1
 				output.write(line)
 				output.write(u'\n')
-			#print '%s = "%s"' % (parsedItem[0], translation)
 			output.write('%s = "%s";\n\n' % (parsedItem[0], translation))
-			#print
 		output.close()
 
 
 
-parsedFile = parseLocalizableString("es")
+parsedFile = parseLocalizableString("en")
 genericRequest = generateGenericRequest(parsedFile)
 for lang in languages:
 	print lang
