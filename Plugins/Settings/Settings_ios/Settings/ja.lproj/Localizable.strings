@@ -3,43 +3,43 @@
 
 /* Bibles view page title
    Section heading for Bibles in one lang */
-"Bibles" = "Bibleses";
+"Bibles" = "聖書";
 
 /* Bibles search bar */
-"Find Bibles" = "Fond Bibleses";
+"Find Bibles" = "聖書を見つける";
 
 /* Languages search bar */
-"Find Languages" = "Find Languageses";
+"Find Languages" = "言語を探す";
 
 /* User text in message to other */
-"I like it!" = "I like ites!";
+"I like it!" = "私はそれが好きです！";
 
 /* Clickable cell title
    Languages view page title */
-"Languages" = "Languageses";
+"Languages" = "言語";
 
 /* Section heading for available Bibles */
-"More Bibles" = "More Bibleses";
+"More Bibles" = "もっと聖書";
 
 /* Section heading for Other languages */
-"More Languages" = "More Languageses";
+"More Languages" = "その他の言語";
 
 /* Section heading for User selected Bibles */
-"My Bibles" = "My Bibleses";
+"My Bibles" = "私の聖書";
 
 /* Section heading for User languages */
-"My Languages" = "My Languageses";
+"My Languages" = "私の言語";
 
 /* Clickable cell title
    Feedback view title */
-"Send Us Feedback" = "Send Us Feedbackes";
+"Send Us Feedback" = "フィードバックを送信";
 
 /* Settings view page title */
-"Settings" = "Settingses";
+"Settings" = "設定";
 
 /* Clickable cell title */
-"Share SafeBible" = "Share SafeBiblees";
+"Share SafeBible" = "SafeBibleを共有する";
 
 /* Clickable cell title */
-"Write A Review" = "Write A Reviewes";
+"Write A Review" = "レビューを書く";
 

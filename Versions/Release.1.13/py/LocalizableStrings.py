@@ -4,50 +4,51 @@
 #
 import httplib
 import io
+import os
 import sys
 import json
 
 sourceDir = "/Users/garygriswold/ShortSands/BibleApp/Plugins/Settings/Settings_ios/Settings/"
-targetDir = "/Users/garygriswold/Downloads/"
+targetDir = "/Users/garygriswold/Downloads/Output/"
 
 # item 0 is Apple code for language
 # item 1 is Google code for language
 # item 2 is common name for language
 languages = [
-#['ar', 'ar', 'Arabic'],
-#['ca', 'ca', 'Catalan'],
-['zh-Hans', 'zh-CN', 'Chinese Simplified']#,
-#['zh-Hant', 'zh-TW', 'Chinese Traditional'],
-#['hr', 'hr', 'Croatian'],
-#['cs', 'cs', 'Czech'],
-#['da', 'da', 'Danish'],
-#['nl', 'nl', 'Dutch'],
-#['fi', 'fi', 'Finnish'],
-#['fr', 'fr', 'French'],
-#['de', 'de', 'German'],
-#['el', 'el', 'Greek'],
-#['he', 'he', 'Hebrew'],
-#['hi', 'hi', 'Hindi'],
-#['hu', 'hu', 'Hungarian'],
-#['id', 'id', 'Indonesian'],
-#['it', 'it', 'Italian'],
-#['ja', 'ja', 'Japanese'],
-#['ko', 'ko', 'Korean'],
-#['ms', 'ms', 'Malay'],
-#['nb', 'no', 'Norwegian Bokmal'], # changed nb to no
-#['pl', 'pl', 'Polish'],
-#['pt-BR', 'pt', 'Portuguese Brazil'],
-#['pt-PT', 'pt', 'Portuguese'],
-#['ro', 'ro', 'Romanian'],
-#['ru', 'ru', 'Russian'],
-#['sk', 'sk', 'Slovak'],
-#['es', 'es', 'Spanish'],
-#['es-419', 'es', 'Spanish Latin Amer'], # same as Spanish
-#['sv', 'sv', 'Swedish'],
-#['th', 'th', 'Thai'],
-#['tr', 'tr', 'Turkish'],
-#['uk', 'uk', 'Ukrainian'],
-#['vi', 'vi', 'Vietnamese']
+['ar', 'ar', 'Arabic'],
+['ca', 'ca', 'Catalan'],
+['zh-Hans', 'zh-CN', 'Chinese Simplified'],
+['zh-Hant', 'zh-TW', 'Chinese Traditional'],
+['hr', 'hr', 'Croatian'],
+['cs', 'cs', 'Czech'],
+['da', 'da', 'Danish'],
+['nl', 'nl', 'Dutch'],
+['fi', 'fi', 'Finnish'],
+['fr', 'fr', 'French'],
+['de', 'de', 'German'],
+['el', 'el', 'Greek'],
+['he', 'he', 'Hebrew'],
+['hi', 'hi', 'Hindi'],
+['hu', 'hu', 'Hungarian'],
+['id', 'id', 'Indonesian'],
+['it', 'it', 'Italian'],
+['ja', 'ja', 'Japanese'],
+['ko', 'ko', 'Korean'],
+['ms', 'ms', 'Malay'],
+['nb', 'no', 'Norwegian Bokmal'], # changed nb to no
+['pl', 'pl', 'Polish'],
+['pt-BR', 'pt', 'Portuguese Brazil'],
+['pt-PT', 'pt', 'Portuguese'],
+['ro', 'ro', 'Romanian'],
+['ru', 'ru', 'Russian'],
+['sk', 'sk', 'Slovak'],
+['es', 'es', 'Spanish'],
+['es-419', 'es', 'Spanish Latin Amer'], # same as Spanish
+['sv', 'sv', 'Swedish'],
+['th', 'th', 'Thai'],
+['tr', 'tr', 'Turkish'],
+['uk', 'uk', 'Ukrainian'],
+['vi', 'vi', 'Vietnamese']
 ]
 
 # Parse a Localizable.strings file into an array of items
@@ -110,31 +111,44 @@ def getTranslation(body):
 	return response.read()
 
 # generate result Localizable.String file and write
-def generateLocalizableString(parsedFile, response):
-	json = json.parse(response)
-	print json
+def generateLocalizableStringFile(langCode, parsedFile, response):
+	obj = json.JSONDecoder().decode(response)
+	translations = obj["data"]["translations"]
+	print len(translations), len(parsedFile)
+	if len(translations) != len(parsedFile):
+		print("num translations not correct", len(translations), len(parsedFile))
+		sys.exit()
+	else:
+		directory = targetDir + langCode + ".lproj/"
+		if not os.path.exists(directory):
+			os.mkdir(directory)
+		output = io.open(directory + "Localizable.strings", mode="w", encoding="utf-8")
+		for index in range(0, len(translations)):
+			parsedItem = parsedFile[index]
+			translation = translations[index]['translatedText']
+			lineCount = 0
+			for line in parsedItem[3]:
+				if lineCount > 0:
+					output.write(u'   ')
+				lineCount += 1
+				output.write(line)
+				output.write(u'\n')
+			#print '%s = "%s"' % (parsedItem[0], translation)
+			output.write('%s = "%s";\n\n' % (parsedItem[0], translation))
+			#print
+		output.close()
+
 
 
 parsedFile = parseLocalizableString("es")
 genericRequest = generateGenericRequest(parsedFile)
 for lang in languages:
+	print lang
 	appleCode = lang[0]
 	googleCode = lang[1]
 	request = genericRequest.replace("**", googleCode)
-	print request
 	response = getTranslation(request)
-	print response
-	print response.data
+	generateLocalizableStringFile(appleCode, parsedFile, str(response))
 
 
-
-
-# Build up the Generic Google Translate Request
-
-
-
-
-
-
-# Generate the body of a request
 
