@@ -1,5 +1,6 @@
 #
-#
+# This program is used to generate Localizable.strings files using Google Translate
+# to perform the translation.
 #
 import httplib
 import io
@@ -48,8 +49,56 @@ languages = [
 #['vi', 'vi', 'Vietnamese']
 ]
 
-#print languages
+# Parse a Localizable.strings file into an array of items
+# [ Key, Value, None, CommentArray ]
+def parseLocalizableString(langCode):
+	parsedFile = []
+	BEGIN = 0
+	COMMENT = 1
+	KEY_VALUE = 2
+	state = BEGIN
+	input = io.open(sourceDir + langCode + ".lproj/Localizable.strings", mode="r", encoding="utf-8")
+	for line in input:
+		line = line.strip()
+		if len(line) == 0:
+			state = state
+		elif state == BEGIN:
+			comment = [line]
+			if line[0:2] == "/*" and line[-2:] == "*/":
+				state = KEY_VALUE
+			elif line[0:2] == "/*":
+				state = COMMENT
+			else:
+				print("UNEXPECTED LINE in BEGIN " + line)
+				sys.exit()
+		elif state == COMMENT:
+			comment.append(line)
+			if line[-2:] == "*/":
+				state = KEY_VALUE
+		elif state == KEY_VALUE:
+			parts = line.split("=")
+			if len(parts) != 2:
+				print("UNEXPECTED LINE in KEY_VALUE " + line)
+				sys.exit()
+			key = parts[0].strip()
+			value = parts[1].strip()
+			parsedFile.append([key, value, None, comment])
+			state = BEGIN
+		else:
+			print("UNKNOWN STATE " + state)
+	input.close()
+	return parsedFile
 
+def generateGenericRequest(parseFile):
+	request = '{ "source":"en", "target":"**"'
+	for item in parsedFile:
+		request += ', "q":' + item[0]
+		print item
+	request += ' }'
+	return request
+
+
+# submits a request to Google for translation
 def getTranslation(body):
 	conn = httplib.HTTPSConnection("translation.googleapis.com")
 	path = "/language/translate/v2?key=AIzaSyAl5-Sk0A8w7Qci93-SIwerWS7lvP_6d_4"
@@ -59,49 +108,21 @@ def getTranslation(body):
 	print response.status, response.reason
 	return response.read()
 
-# Parse a Localizable.strings file
-appleCode = "es"
-parsedFile = []
-BEGIN = 0
-COMMENT = 1
-KEY_VALUE = 2
-state = BEGIN
-input = io.open(sourceDir + appleCode + ".lproj/Localizable.strings", mode="r", encoding="utf-8")
-for line in input:
-	line = line.strip()
-	if len(line) == 0:
-		state = state
-	elif state == BEGIN:
-		comment = [line]
-		if line[0:2] == "/*" and line[-2:] == "*/":
-			state = KEY_VALUE
-		elif line[0:2] == "/*":
-			state = COMMENT
-		else:
-			print("UNEXPECTED LINE in BEGIN " + line)
-			sys.exit()
-	elif state == COMMENT:
-		comment.append(line)
-		if line[-2:] == "*/":
-			state = KEY_VALUE
-	elif state == KEY_VALUE:
-		parts = line.split("=")
-		if len(parts) != 2:
-			print("UNEXPECTED LINE in KEY_VALUE " + line)
-			sys.exit()
-		key = parts[0].strip()
-		value = parts[1].strip()
-		parsedFile.append([key, value, None, comment])
-		state = BEGIN
-	else:
-		print("UNKNOWN STATE " + state)
+parsedFile = parseLocalizableString("es")
+genericRequest = generateGenericRequest(parsedFile)
+for lang in languages:
+	appleCode = lang[0]
+	googleCode = lang[1]
+	request = genericRequest.replace("**", googleCode)
+	print request
+	response = getTranslation(request)
+	print response
 
-input.close()
+
 
 
 # Build up the Generic Google Translate Request
-for item in parsedFile:
-		print item
+
 
 
 
