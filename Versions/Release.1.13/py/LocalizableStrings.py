@@ -5,17 +5,17 @@
 # When there is a revision of the code that requires this to be regenerated.
 # 1. Complete editing of NSLocalizableString in source code
 # 2. Editor -> Export for Localization -> (Development Language Only)
-# 3. Make any needed changes to this file and import it
-# 4. Editor -> Import for Localization
-# 5. Run this program 
+# 3. Run this program to generate all of the other localizations
 #
 import httplib
 import io
 import os
 import sys
 import json
+import xml.dom.minidom
 
-sourceDir = "/Users/garygriswold/ShortSands/BibleApp/Plugins/Settings/Settings_ios/Settings/"
+#sourceDir = "/Users/garygriswold/ShortSands/BibleApp/Plugins/Settings/Settings_ios/Settings/"
+sourceDir = "/Users/garygriswold/Downloads/Settings/"
 targetDir = "/Users/garygriswold/Downloads/Output/"
 
 # item 0 is Apple code for language
@@ -58,6 +58,29 @@ languages = [
 ['vi', 'vi', 'Vietnamese']
 ]
 
+# Parse an XLIFF file to extract keys, and comments to be translated
+#[ Key, Value, None, Comment]
+def parseXLIFF(langCode):
+	parsedFile = []
+	filename = sourceDir + langCode + ".xliff"
+	doc = xml.dom.minidom.parse(filename)
+	body = doc.getElementsByTagName("body")[1]
+	for transUnit in body.childNodes:
+		if transUnit.nodeType == transUnit.ELEMENT_NODE:
+			key = transUnit.getAttribute("id")
+			for item in transUnit.childNodes:
+				if item.nodeType == item.ELEMENT_NODE:
+					nodeName = item.nodeName
+					for text in item.childNodes:
+						textValue = text.nodeValue
+					if nodeName == "source":
+						value = textValue
+					elif nodeName == "note":
+						comment = textValue
+			parsedFile.append([key, value, None, comment])
+	return parsedFile
+
+# Deprecated, but keep this method, it would be useful if I were writing a merge feature
 # Parse a Localizable.strings file into an array of items
 # [ Key, Value, None, CommentArray ]
 def parseLocalizableString(langCode):
@@ -101,8 +124,8 @@ def parseLocalizableString(langCode):
 def generateGenericRequest(parsedFile):
 	request = '{ "source":"en", "target":"**"'
 	for item in parsedFile:
-		request += ', "q":' + item[0]
-		print item
+		request += ', "q":"' + item[0] + '"'
+		#print item
 	request += ' }'
 	return request
 
@@ -121,7 +144,7 @@ def getTranslation(body):
 def generateLocalizableStringFile(langCode, parsedFile, response):
 	obj = json.JSONDecoder().decode(response)
 	translations = obj["data"]["translations"]
-	print len(translations), len(parsedFile)
+	#print len(translations), len(parsedFile)
 	if len(translations) != len(parsedFile):
 		print("num translations not correct", len(translations), len(parsedFile))
 		sys.exit()
@@ -133,27 +156,21 @@ def generateLocalizableStringFile(langCode, parsedFile, response):
 		for index in range(0, len(translations)):
 			parsedItem = parsedFile[index]
 			translation = translations[index]['translatedText']
-			lineCount = 0
-			for line in parsedItem[3]:
-				if lineCount > 0:
-					output.write(u'   ')
-				lineCount += 1
-				output.write(line)
-				output.write(u'\n')
-			output.write('%s = "%s";\n\n' % (parsedItem[0], translation))
+			output.write('/* ' + parsedItem[3] + ' */\n')
+			output.write('"%s" = "%s";\n\n' % (parsedItem[0], translation))
 		output.close()
 
 
-
-parsedFile = parseLocalizableString("en")
+parsedFile = parseXLIFF("en")
+#parsedFile = parseLocalizableString("en")
 genericRequest = generateGenericRequest(parsedFile)
 for lang in languages:
-	print lang
 	appleCode = lang[0]
 	googleCode = lang[1]
+	print appleCode, googleCode
 	request = genericRequest.replace("**", googleCode)
 	response = getTranslation(request)
-	generateLocalizableStringFile(appleCode, parsedFile, str(response))
+	generateLocalizableStringFile(appleCode, parsedFile, response)
 
 
 
