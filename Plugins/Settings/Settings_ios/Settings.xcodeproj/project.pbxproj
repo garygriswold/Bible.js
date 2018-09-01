@@ -69,6 +69,7 @@
 		E4A3AF172138F3AE006EDEFE /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		E4A3AF182138F3AE006EDEFE /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		E4A3AF192138F3AF006EDEFE /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		E4A3AF1A2139968E006EDEFE /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4C2E977211B70F500B71CC5 /* AppFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFont.swift; sourceTree = "<group>"; };
 		E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BibleDetailViewController.swift; sourceTree = "<group>"; };
 		E4C2E97C211B711C00B71CC5 /* BibleModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BibleModel.swift; sourceTree = "<group>"; };
@@ -208,6 +209,7 @@
 				de,
 				"zh-Hans",
 				"zh-Hant",
+				ja,
 			);
 			mainGroup = E4F720AD211B6F2A00E26B07;
 			productRefGroup = E4F720B7211B6F2A00E26B07 /* Products */;
@@ -280,6 +282,7 @@
 				E4A3AF142138EC0F006EDEFE /* de */,
 				E4A3AF162138EE96006EDEFE /* zh-Hans */,
 				E4A3AF182138F3AE006EDEFE /* zh-Hant */,
+				E4A3AF1A2139968E006EDEFE /* ja */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
