@@ -1,5 +1,5 @@
 /* First letter in alphabet */
-"A" = "A";
+"A" = "UNE";
 
 /* Bibles view page title
    Section heading for Bibles in one lang */
@@ -12,7 +12,7 @@
 "Find Languages" = "Trouver des langues";
 
 /* User text in message to other */
-"I like it!" = "J'aime ça!";
+"I like it!" = "J&#39;aime ça!";
 
 /* Clickable cell title
    Languages view page title */

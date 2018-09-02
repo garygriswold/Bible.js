@@ -1,0 +1,45 @@
+/* First letter in alphabet */
+"A" = "А.";
+
+/* Bibles view page title
+   Section heading for Bibles in one lang */
+"Bibles" = "Біблії";
+
+/* Bibles search bar */
+"Find Bibles" = "Знайти Біблії";
+
+/* Languages search bar */
+"Find Languages" = "Знайти мови";
+
+/* User text in message to other */
+"I like it!" = "Мені це подобається!";
+
+/* Clickable cell title
+   Languages view page title */
+"Languages" = "Мови";
+
+/* Section heading for available Bibles */
+"More Bibles" = "Більше Біблій";
+
+/* Section heading for Other languages */
+"More Languages" = "Більше мов";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "Мої Біблії";
+
+/* Section heading for User languages */
+"My Languages" = "Мої мови";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Feedback" = "Надішліть нам відгук";
+
+/* Settings view page title */
+"Settings" = "Налаштування";
+
+/* Clickable cell title */
+"Share SafeBible" = "Поділитися SafeBible";
+
+/* Clickable cell title */
+"Write A Review" = "Написати відгук";
+

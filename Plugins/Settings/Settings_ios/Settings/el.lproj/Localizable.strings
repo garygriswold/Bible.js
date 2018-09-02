@@ -1,0 +1,45 @@
+/* First letter in alphabet */
+"A" = "ΕΝΑ";
+
+/* Bibles view page title
+   Section heading for Bibles in one lang */
+"Bibles" = "Βίβλοι";
+
+/* Bibles search bar */
+"Find Bibles" = "Βρείτε Βίβλους";
+
+/* Languages search bar */
+"Find Languages" = "Βρείτε γλώσσες";
+
+/* User text in message to other */
+"I like it!" = "Μου αρέσει!";
+
+/* Clickable cell title
+   Languages view page title */
+"Languages" = "Γλώσσες";
+
+/* Section heading for available Bibles */
+"More Bibles" = "Περισσότερες Βίβλοι";
+
+/* Section heading for Other languages */
+"More Languages" = "Περισσότερες γλώσσες";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "Οι Γραφές Μου";
+
+/* Section heading for User languages */
+"My Languages" = "Οι γλώσσες μου";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Feedback" = "Στείλτε μας Σχόλια";
+
+/* Settings view page title */
+"Settings" = "Ρυθμίσεις";
+
+/* Clickable cell title */
+"Share SafeBible" = "Μοιραστείτε το SafeBible";
+
+/* Clickable cell title */
+"Write A Review" = "Γράψτε μια κριτική";
+

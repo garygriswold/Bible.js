@@ -1,0 +1,45 @@
+/* First letter in alphabet */
+"A" = "ا";
+
+/* Bibles view page title
+   Section heading for Bibles in one lang */
+"Bibles" = "الأناجيل";
+
+/* Bibles search bar */
+"Find Bibles" = "العثور على الكتاب المقدس";
+
+/* Languages search bar */
+"Find Languages" = "البحث عن اللغات";
+
+/* User text in message to other */
+"I like it!" = "احب ذلك!";
+
+/* Clickable cell title
+   Languages view page title */
+"Languages" = "اللغات";
+
+/* Section heading for available Bibles */
+"More Bibles" = "المزيد من الكتاب المقدس";
+
+/* Section heading for Other languages */
+"More Languages" = "المزيد من اللغات";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "بلدي الأناجيل";
+
+/* Section heading for User languages */
+"My Languages" = "لغاتي";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Feedback" = "أرسل لنا ردود الفعل";
+
+/* Settings view page title */
+"Settings" = "إعدادات";
+
+/* Clickable cell title */
+"Share SafeBible" = "شارك SafeBible";
+
+/* Clickable cell title */
+"Write A Review" = "أكتب مراجعة";
+

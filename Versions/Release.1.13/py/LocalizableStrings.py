@@ -14,7 +14,6 @@ import sys
 import json
 import xml.dom.minidom
 
-#sourceDir = "/Users/garygriswold/ShortSands/BibleApp/Plugins/Settings/Settings_ios/Settings/"
 sourceDir = "/Users/garygriswold/Downloads/Settings/"
 targetDir = "/Users/garygriswold/Downloads/Output/"
 
@@ -125,7 +124,6 @@ def generateGenericRequest(parsedFile):
 	request = '{ "source":"en", "target":"**"'
 	for item in parsedFile:
 		request += ', "q":"' + item[0] + '"'
-		#print item
 	request += ' }'
 	return request
 
@@ -144,7 +142,6 @@ def getTranslation(body):
 def generateLocalizableStringFile(langCode, parsedFile, response):
 	obj = json.JSONDecoder().decode(response)
 	translations = obj["data"]["translations"]
-	#print len(translations), len(parsedFile)
 	if len(translations) != len(parsedFile):
 		print("num translations not correct", len(translations), len(parsedFile))
 		sys.exit()

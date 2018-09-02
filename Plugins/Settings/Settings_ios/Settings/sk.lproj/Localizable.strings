@@ -1,45 +1,45 @@
 /* First letter in alphabet */
-"A" = "一个";
+"A" = "";
 
 /* Bibles view page title
    Section heading for Bibles in one lang */
-"Bibles" = "圣经";
+"Bibles" = "Biblia";
 
 /* Bibles search bar */
-"Find Bibles" = "找圣经";
+"Find Bibles" = "Nájdite biblie";
 
 /* Languages search bar */
-"Find Languages" = "查找语言";
+"Find Languages" = "Nájsť jazyky";
 
 /* User text in message to other */
-"I like it!" = "我喜欢！";
+"I like it!" = "Páči sa mi to!";
 
 /* Clickable cell title
    Languages view page title */
-"Languages" = "语言";
+"Languages" = "jazyky";
 
 /* Section heading for available Bibles */
-"More Bibles" = "更多圣经";
+"More Bibles" = "Viac Bibli";
 
 /* Section heading for Other languages */
-"More Languages" = "更多语言";
+"More Languages" = "Viac jazykov";
 
 /* Section heading for User selected Bibles */
-"My Bibles" = "我的圣经";
+"My Bibles" = "Moje biblie";
 
 /* Section heading for User languages */
-"My Languages" = "我的语言";
+"My Languages" = "Moje jazyky";
 
 /* Clickable cell title
    Feedback view title */
-"Send Us Feedback" = "向我们发送反馈";
+"Send Us Feedback" = "Pošlite nám spätnú väzbu";
 
 /* Settings view page title */
-"Settings" = "设置";
+"Settings" = "nastavenie";
 
 /* Clickable cell title */
-"Share SafeBible" = "分享SafeBible";
+"Share SafeBible" = "Zdieľajte SafeBible";
 
 /* Clickable cell title */
-"Write A Review" = "写评论";
+"Write A Review" = "Napísať recenziu";
 
