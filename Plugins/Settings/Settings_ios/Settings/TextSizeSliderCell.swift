@@ -50,7 +50,7 @@ class TextSizeSliderCell : UITableViewCell {
             self.rightLabel.frame = CGRect(x: width * 0.88, y: 0, width: width * 0.10, height: height)
         } else {
             self.textSlider.frame = CGRect(x: width * 0.12, y: 0, width: width * 0.80, height: height)
-            self.rightLabel.frame = CGRect(x: width * 0.05, y: 0, width: width * 0.05, height: height)
+            self.rightLabel.frame = CGRect(x: width * 0.01, y: 0, width: width * 0.10, height: height)
             self.leftLabel.frame = CGRect(x: width * 0.88, y: 0, width: width * 0.10, height: height)
         }
 
