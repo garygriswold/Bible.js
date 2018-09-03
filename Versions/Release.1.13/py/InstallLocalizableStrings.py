@@ -3,12 +3,9 @@
 # It fails when the directory is not present, because this means that the language
 # has not been added to the App
 #
-#import httplib
-#import io
 import os
 import sys
 from shutil import copyfile
-#import json
 
 
 sourceDir = "/Users/garygriswold/Downloads/Output/"
