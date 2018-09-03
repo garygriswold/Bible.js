@@ -24,12 +24,18 @@ def getTranslation(body):
 		print "Error: ", str(err), body
 		return None
 
+# This function adjusts some names, because they were translating poorly
+# Especially the word 'Version' is a problem
+def fixEnglishName(englishName):
+	return englishName
+
 
 out = io.open("sql/LocalizedBibleNames.sql", mode="w", encoding="utf-8")
 db = sqlite3.connect('Versions.db')
 cursor = db.cursor()
 sql = "SELECT b.bibleId, b.iso3, b.name, b.englishName, l.iso1"
 sql += " FROM Bible b, Language l WHERE b.iso3 = l.iso3"
+sql += " ORDER BY b.bibleId"
 values = ( )
 cursor.execute(sql, values)
 for row in cursor:
@@ -45,7 +51,6 @@ for row in cursor:
 		if englishName == None or englishName.strip() == '':
 			print "ERROR no EnglishName for", bibleId
 		request = u'{ "source":"en", "target":"%s", "q":"%s" }' % (iso1, englishName)
-		#print request
 		response = getTranslation(request)
 		if response != None:
 			if response.status == 200:
@@ -54,14 +59,13 @@ for row in cursor:
 				translated = translations[0]['translatedText']
 				if englishName == translated:
 					print "200, but no translation ", bibleId, iso3, iso1, name, englishName
-				#print bibleId, name, translated
 			elif response.status == 400:
 				#print "400", bibleId, name, englishName
 				if name != englishName:
 					translated = name
 				else:
 					print "400", name, englishName
-					out.write("400 matching names %s\n" % bibleId)
+					out.write("-- 400 matching names %s (%s) {%s}\n" % (bibleId, englishName, name))
 			else:
 				print "ERROR", response.status, bibleId, name, englishName
 				out.write("ERROR %s %s" % response.status, name)
@@ -72,9 +76,17 @@ for row in cursor:
 		translated = None
 		#print "No iso1 code for Translation ", bibleId
 	if translated != None:
-		translated = translated.replace("'", "''")
-		out.write("UPDATE Bible set localizedName = '%s' WHERE bibleId = '%s'; -- %s %s %s -> %s\n" % 
-		(translated, bibleId, iso1, iso3, name, englishName))
+		backTranslated = None
+		request2 = u'{ "source":"%s", "target":"en", "q":"%s" }' % (iso1, translated)
+		response2 = getTranslation(request2)
+		if response2.status == 200:
+			obj2 = json.JSONDecoder().decode(response2.read())
+			translations2 = obj2["data"]["translations"]
+			backTranslated = translations2[0]['translatedText']	
+		if translated.find("'") >= 0 and translated.find("''") < 0:
+			translated = translated.replace("'", "''")
+		out.write("UPDATE Bible set localizedName = '%s' WHERE bibleId = '%s'; -- %s %s [%s] (%s) {%s}\n" % 
+		(translated, bibleId, iso1, iso3, backTranslated, englishName, name))
 
 db.close()
 out.close()
