@@ -15,7 +15,7 @@ out.write(u"  abbr TEXT NOT NULL,\n")									# from abbr
 out.write(u"  iso3 TEXT NOT NULL REFERENCES Language(iso3),\n")			# from lang
 out.write(u"  name TEXT NOT NULL,\n")									# from name
 out.write(u"  englishName TEXT NULL,\n")								# from nameEnglish
-out.write(u"  translatedName TEXT NULL,\n")								# from Google Translate API		
+out.write(u"  localizedName TEXT NULL,\n")								# from Google Translate API		
 out.write(u"  direction TEXT CHECK (direction IN('ltr','rtl')) default('ltr'),\n") # from dir
 out.write(u"  fontClass TEXT NULL,\n")									# from fontClass
 out.write(u"  script TEXT NULL,\n")										# from script
