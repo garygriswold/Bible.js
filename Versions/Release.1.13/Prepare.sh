@@ -48,7 +48,8 @@ END_SQL1
 cp Versions.db VersionsFull.db
 
 # Read Bible.json and use to update Bible table
-python py/UpdateBibleByBibleJson.py
+# Removed 9/3/18 i.e. use only json.info
+#python py/UpdateBibleByBibleJson.py
 
 # Remove Languages and Bibles that are not used.
 sqlite Versions.db <<END_SQL

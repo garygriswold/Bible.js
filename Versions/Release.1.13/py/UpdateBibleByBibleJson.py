@@ -1,22 +1,11 @@
 #
 # This program is for reading the Bible.json file into SQL,
-# so that it can be compared to info.json files using SQL.
+# so that it can be used to update the Bible table
+# This is not currently being used. GNG 9/3/18
 #
 import io
 import json
 import sqlite3
-
-#out = io.open("sql/bibleJson.sql", mode="w", encoding="utf-8")
-
-#out.write(u"DROP TABLE IF EXISTS BibleJson;\n")
-#out.write(u"CREATE TABLE BibleJson (\n")
-#out.write(u"  bibleId TEXT NOT NULL PRIMARY KEY,\n") 					# from id
-#out.write(u"  abbr TEXT NOT NULL,\n")									# from abbr
-#out.write(u"  iso3 TEXT NOT NULL REFERENCES Language(iso3),\n")			# from lang
-#out.write(u"  name TEXT NOT NULL,\n")									# from name
-#out.write(u"  englishName TEXT NULL);\n")								# from nameEnglish
-
-#prefix = "INSERT INTO BibleJson (bibleId, abbr, iso3, name, englishName) VALUES"
 
 # read and process bible.json
 input = io.open("metadata/FCBH/bible.json", mode="r", encoding="utf-8")
