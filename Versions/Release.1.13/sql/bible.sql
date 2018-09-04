@@ -5,6 +5,7 @@ CREATE TABLE Bible (
   iso3 TEXT NOT NULL REFERENCES Language(iso3),
   name TEXT NOT NULL,
   englishName TEXT NULL,
+  localizedName TEXT NULL,
   direction TEXT CHECK (direction IN('ltr','rtl')) default('ltr'),
   fontClass TEXT NULL,
   script TEXT NULL,

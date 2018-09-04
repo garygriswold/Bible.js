@@ -209,10 +209,11 @@ struct SettingsAdapter {
     // Bible Versions.db methods
     //
     func getBiblesSelected(locales: [Locale], selectedBibles: [String]) -> [Bible] {
-        let sql = "SELECT bibleId, abbr, b.iso3, b.name" +
+        let sql = "SELECT bibleId, abbr, b.iso3, b.localizedName" +
             " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
             " AND b.bibleId" + genQuest(array: selectedBibles) +
-            " AND l.iso1" + genQuest(array: locales)
+            " AND l.iso1" + genQuest(array: locales) +
+            " AND b.localizedName is NOT null"
         let results = getBibles(sql: sql, locales: locales, selectedBibles: selectedBibles)
         
         // Sort results by selectedBibles list
@@ -230,10 +231,11 @@ struct SettingsAdapter {
     }
     
     func getBiblesAvailable(locales: [Locale], selectedBibles: [String]) -> [Bible] {
-        let sql = "SELECT bibleId, abbr, b.iso3, b.name" +
+        let sql = "SELECT bibleId, abbr, b.iso3, b.localizedName" +
             " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
             " AND b.bibleId NOT" + genQuest(array: selectedBibles) +
-            " AND l.iso1" + genQuest(array: locales) + " ORDER BY b.abbr"
+            " AND l.iso1" + genQuest(array: locales) +
+            " AND b.localizedName is NOT null ORDER BY b.abbr"
         return getBibles(sql: sql, locales: locales, selectedBibles: selectedBibles)
     }
     

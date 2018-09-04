@@ -44,6 +44,10 @@ update Bible set country=null where country = '';
 vacuum;
 END_SQL1
 
+# Use Google Translate to improve the Bible names
+python py/TranslateBibleNames.py
+sqlite Versions.db < sql/LocalizedBibleNames.sql
+
 # Create A Copy of DB before Deletions
 cp Versions.db VersionsFull.db
 
