@@ -1,0 +1,192 @@
+text/TAMOTB/TAMOTB/info.json	TAMOTB	tam	ta-Latn-IN	The Free Tamil Bible	ബൈബിൾ	ബൈബിൾ
+text/MALTBK/MALTBK/info.json	MALTBK	mal	ml-Latn-IN	Sathyavedapusthakam (The Book) 1910	സത്യവേദപുസ്തകം	The Book of Psalms
+text/INZSHL/INZSHL/info.json	INZSHL	ind	id-Latn-ID	[Bible]	[Bible]	[Bible]
+text/ARBWTC/ARBWTC/info.json	ARBWTC	arb	ar-Arab-SA	Easy to Read Version NT	Easy to Read Version NT	Easy to Read Version NT
+text/TSOBSM/TSOBSM/info.json	TSOBSM	tso	ts-Latn-MZ	[Bible]	[Bible]	400
+text/AMHUBS/AMHUBS/info.json	AMHUBS	amh	am-Latn-ET	Amharic New Testament	መጽሐፍ ቅዱስ	The Bible
+text/ENGRV5/ENGRV5/info.json	ENGRV5	eng	en-Latn-GB	Revised Version	Revised Version with Apocrypha (1895)	400
+text/ENGOE1/ENGOE1/info.json	ENGOE1	eng	en-Latn-GB	Open English Bible (Commonwealth)	Open English Bible (Commonwealth Spelling)	400
+text/TAMERV/TAMERV/info.json	TAMERV	tam	ta-Latn-IN	Tamil: Easy-to-Read Version	Tamil: Easy-to-Read Version	Tamil: Easy-to-Read Version
+text/BENWYC/BENWYC/info.json	BENWYC	ben	bn-Latn-IN	The Old Bengali Bible, 1909	ধর্মপুস্তক সহ পুরাতন ও নুতন নিয়মের	Old and New Testament With Religions
+text/FFMWBT/FFMTBL/info.json	FFMTBL	ffm	ff-Latn-ML	2005 Edition NT	2005 Edition NT	400
+text/BENOBB/BENOBB/info.json	BENOBB	ben	bn-Latn-IN	The Free Bengali Bible, 2017	বাঙালি বাইবেল	Bengali Bible
+text/KANERV/KANERV/info.json	KANERV	kan	kn-Latn-IN	Kannada: Easy-to-Read Version	Kannada: Easy-to-Read Version	Kannada: Easy-to-Read Version
+text/ASMOAB/ASMOAB/info.json	ASMOAB	asm	as-Beng-IN	The Free Assamese Bible	অসমীয়া বাইবেল	400
+text/HATBIV/HATBIV/info.json	HATBIV	hat	ht-Latn-HT	[Bible]	[Bible]	[Bible]
+text/CESNKB/CESNKB/info.json	CESNKB	ces	cs-Latn-CZ	Czech NBK New Testament	Nova Bible Kralicka	The New Bible of Kralicka
+text/CESKMS/CESKMS/info.json	CESKMS	ces	cs-Latn-CZ	Czech KMS New Testament	Czech Preklad KMS Nova smlouva	English Translation KMS New contract
+text/GNWNTM/GNWNTM/info.json	GNWNTM	gnw	gn-Latn-BO	1984 Edition NT	1984 Edition NT	400
+text/TAMWTC/TCVWTC/info.json	TCVWTC	tam	ta-Taml-IN	Easy-to-Read Version NT	Easy-to-Read Version NT	Easy-to-Read Version NT
+text/SWHPOR/SWHPOR/info.json	SWHPOR	swh	sw-Latn-TZ	Swahili Bible	Biblia Takatifu	The Holy Bible
+text/SRPERV/SRPERV/info.json	SRPERV	srp	sr-Latn-RS	Serbian Easy-to-Read Version	Савремени српски превод	Modern Serbian translation
+text/ENGERU/ENGERU/info.json	ENGERU	eng	en-Latn-US	US English: Easy-to-Read Version	US English: Easy-to-Read Version	400
+text/ENGGLW/ENGGLW/info.json	ENGGLW	eng	en-Latn-US	God''s Living Word	God''s Living Word	400
+text/SPARVC/SPNRVC/info.json	SPNRVC	spa	es-Latn-ES	Reina Valera, Revisada y Corregida (1865) NT	Reina Valera, Revisada y Corregida (1865) NT	Reina Valera, Revised and Corrected (1865) NT
+text/QWHLLB/QWHLLB/info.json	QWHLLB	qwh	qu-Latn-PE	Huaylas Ancash Quechua New Testament	Teyta Diospa Mushoq Testamentun	400
+text/SPNLPS/SPNLPS/info.json	SPNLPS	spa	es-Latn-ES	[Bible]	[Bible]	[Bible]
+text/KIRIBT/KIRIBT/info.json	KIRIBT	kir	ky-Latn-KG	Kyrgyz New Testament and Old Testament Portions	Кыргызча Инжил - ЛС версия	Commodity Testament version
+text/LDIL07/LDIBSC/info.json	LDIBSC	ldi	kg-Latn-CG	2007 Edition New Testament	2007 Edition New Testament	400
+text/URDWTC/URDWTC/info.json	URDWTC	urd	ur-Arab-PK	Easy-to-Read Version (for India) NT	Easy-to-Read Version (for India) NT	Easy-to-Read Version (for India) NT
+text/UKRBLI/UKRERV/info.json	UKRERV	ukr	uk-Latn-UA	Ukrainian Easy-to-Read Version	Сучасною мовою	Modern language
+text/MLGEIV/MEXEIV/info.json	MEXEIV	mlg	mg-Latn-MG	[Bible]	[Bible]	[Bible]
+text/KATIBT/KATIBT/info.json	KATIBT	kat	ka-Geor-GE	New Testament in Georgian	ახალი აღთქმა	New Testament
+text/QVWTBL/QVWTBL/info.json	QVWTBL	qvw	qu-Latn-PE	Huaylla Wanca Quechua New Testament	Muśhü limalicuy	400
+text/ENGWMB/ENGWMB/info.json	ENGWMB	eng	en-Latn-US	World Messianic Bible	World Messianic Bible	400
+text/BENRBV/BNGRBV/info.json	BNGRBV	ben	bn-Beng-BD	Re-edit Bangla Version OT	Re-edit Bangla Version OT	Re-edit Bangla Version OT
+text/QXLWBT/QXLWBT/info.json	QXLWBT	qxl	qu-Latn-EC	[Bible]	[Bible]	400
+text/CMNUN1/CMNUN1/info.json	CMNUN1	cmn	zh-Latn-CN	Chinese Union Version (simplified)	新标点和合本	New punctuation and combination
+text/ARBIBS/ARBIBS/info.json	ARBIBS	arb	ar-Arab-SA	Holy Bible, New Arabic Version (Ketab al Hayat) NT	Holy Bible, New Arabic Version (Ketab al Hayat) NT	Holy Bible, New Arabic Version (Ketab al Hayat) NT
+text/ARBERV/ARBERV/info.json	ARBERV	arb	ar-Arab-SA	Arabic Easy-to-Read Version	التَّرْجَمَةُ العَرَبِيَّةُ المُبَسَّطَةُ	Simplified Arabic translation
+text/BELJFC/BELJFC/info.json	BELJFC	bel	be-Latn-BY	[Bible]	[Bible]	[Bible]
+text/UZBIB2/UZBIB2/info.json	UZBIB2	uzb	uz-Latn-UZ	Holy Bible: Modern Uzbek Translation	Муқаддас Китоб: Замонавий ўзбек тилидаги	The Bible: Modern Uzbek
+text/CHEIBT/CHEIBT/info.json	CHEIBT	che	ce-Latn-RU	[Bible]	[Bible]	400
+text/HUNERV/HUNERV/info.json	HUNERV	hun	hu-Latn-HU	Hungarian Easy-to-Read Version	Egyszerű fordítás	Simple translation
+text/SPNWTC/SPNWTC/info.json	SPNWTC	spa	es-Latn-ES	La Palabra de Dios para Todos NT	La Palabra de Dios para Todos NT	The Word of God for All NT
+text/HAUCLV/HAUCLV/info.json	HAUCLV	hau	ha-Latn-NE	Common Language Version NT	Common Language Version NT	Common Language Version NT
+text/CMNERV/CMNERV/info.json	CMNERV	cmn	zh-Latn-CN	Chinese Easy-To-Read Version	普通话本	Mandarin
+text/QVCTBL/QVCTBL/info.json	QVCTBL	qvc	qu-Latn-PE	Cajamarca Quechua New Testament	Mushuq Tistamintu	400
+text/ARBVDV/ARBVDV/info.json	ARBVDV	arb	ar-Arab-SA	Arabic Van Dyck Bible	الكتاب المقدس باللغة العربية ،ڤان دايك	The Bible in Arabic, Van Dyck
+text/QUHSBB/QUHSBB/info.json	QUHSBB	quh	qu-Latn-BO	South Bolivian Quechua New Testament	Dios Parlapawanchej	400
+text/FUHSIM/FUHSIM/info.json	FUHSIM	fuh	ff-Latn-BF	2012 Edition NT	2012 Edition NT	400
+text/NORNBS/NORNBS/info.json	NORNBS	nor	no-Latn-NO	1930 Det Norsk Bibelselskap NT	1930 Det Norsk Bibelselskap NT	1930 The Norwegian Bible NT
+text/RUSS76/RUSS76/info.json	RUSS76	rus	ru-Latn-RU	Russian Synodal Translation	Синодальный перевод	Synodal Translation
+text/FUFPBT/FUFPBT/info.json	FUFPBT	fuf	ff-Latn-GN	Pular New Testament	Pular Fuuta-Jallon New Testament	400
+text/ENGKJV/ENGKJV/info.json	ENGKJV	eng	en-Latn-GB	King James Version and Apocrypha	King James Version and Apocrypha	400
+text/ZYBNBP/ZYBNBP/info.json	ZYBNBP	zyb	za-Latn-CN	[Bible]	[Bible]	400
+text/GUNWBT/GUNWBT/info.json	GUNWBT	gun	gn-Latn-BR	Mbyá Guaraní New Testament	Nhanderuete ayvu iky''a e''ỹ va''e	400
+text/FUESIM/FUESIM/info.json	FUESIM	fue	ff-Latn-BJ	Fulfulde Borgu New Testament Portions	Alkawal Kesal	400
+text/QVETBL/QVETBL/info.json	QVETBL	qve	qu-Latn-PE	Eastern Apurímac Quechua New Testament	Mosoq Testamento	400
+text/C2WMV---/C2WMV---/info.json	C2WMV---	eng	en-Latn-GB	[Bible]	[Bible]	400
+text/ORIOOB/ORIOOB/info.json	ORIOOB	ori	or-Latn-IN	The Free Oriya Bible	ଓଡ଼ିଆ ବାଇବଲ	400
+text/ISLIB07/ISLICE/info.json	ISLICE	isl	is-Latn-IS	Biblián Heilög Ritning	Biblián Heilög Ritning	Library of the Holy Scriptures
+text/GUISBU/GUISBU/info.json	GUISBU	gui	gn-Latn-BO	Eastern Bolivian Guaraní New Testament	Nuevo Testamento Guaraní Pe	400
+text/TUKIBT/TUKIBT/info.json	TUKIBT	tuk	tk-Latn-	2016 Edition OT	2016 Edition OT	400
+text/PORERV/PORERV/info.json	PORERV	por	pt-Latn-PT	Portuguese Easy-to-Read Version	Versã Fácil de Ler	Easy to read version
+text/ARBVDV/ARZVDV/info.json	ARZVDV	arz	ar-Arab-EG	Van Dyke Version OT	Van Dyke Version OT	Van Dyke Version OT
+text/ALSABV/ALSABV/info.json	ALSABV	als	sq-Latn-AL	Albanian Bible Version NT	Albanian Bible Version NT	English Bible Version NT
+text/CHVIBT/CHVIBT/info.json	CHVIBT	chv	cv-Latn-RU	2009 Edition NT	2009 Edition NT	400
+text/QVIBSE/QVIBSE/info.json	QVIBSE	qvi	qu-Latn-EC	[Bible]	[Bible]	400
+text/ENGDRV/ENGDRV/info.json	ENGDRV	eng	en-Latn-GB	Douay-Rheims 1899	Douay-Rheims 1899	400
+text/ZLMAVB/ZLMAVB/info.json	ZLMAVB	zlm	ms-Latn-	Alkitab Versi Borneo OT	Alkitab Versi Borneo OT	Bible Version of Borneo OT
+text/MLGRCV/MEXRPV/info.json	MEXRPV	mlg	mg-Latn-MG	[Bible]	[Bible]	[Bible]
+text/ENGT4T/ENGT4T/info.json	ENGT4T	eng	en-Latn-US	Translation for Translators	Translation for Translators	400
+text/ENGLXU/ENGLXU/info.json	ENGLXU	eng	en-Latn-GB	British English Septuagint 2012	LXX2012: Septuagint in British/International English 2012	400
+text/URDWTC/URDERV/info.json	URDERV	urd	ur-Latn-PK	Urdu: Easy-to-Read Version	Urdu: Easy-to-Read Version	Urdu: Easy-to-Read Version
+text/ORIERV/ORIERV/info.json	ORIERV	ori	or-Latn-IN	Oriya: Easy-to-Read Version	Oriya: Easy-to-Read Version	400
+text/LATCLV/LATCLV/info.json	LATCLV	lat	la-Latn-VA	Clementine Vulgate 1598	Bibbia Vulgata Clementina na 1598	Bibbia Version na 1598
+text/UZBIBL/UZBIBL/info.json	UZBIBL	uzb	uz-Latn-UZ	Uzbek New Testament, Genesis, and Psalms (Latin)	O‘zbek tilidagi Injil (2008)	The Bible in Uzbek (2008)
+text/BENBBS/BNGBBS/info.json	BNGBBS	ben	bn-Beng-BD	Mussolmani Version OT	Mussolmani Version OT	Mussolmani Version OT
+text/FFMWBT/FFMWBT/info.json	FFMWBT	ffm	ff-Latn-ML	Maasina Fulfulde New Testament	Aadi keyri: linjiila iisaa almasiihu	400
+text/TELOTB/TELOTB/info.json	TELOTB	tel	te-Latn-IN	The Free Telugu Bible	తెలుగు బైబిల్	Telugu Bible
+text/KMRKLA/KMRKLA/info.json	KMRKLA	kmr	ku-Latn-TR	[Bible]	[Bible]	[Bible]
+text/POLNCV/POLNCV/info.json	POLNCV	pol	pl-Latn-PL	New Covenant Translation	New Covenant Translation	New Covenant Translation
+text/ENGOUR/ENGOUR/info.json	ENGOUR	eng	en-Latn-US	One Unity Resource Bible	One Unity Resource Bible	400
+text/QUHQUE/QUHRBV/info.json	QUHRBV	quh	qu-Latn-BO	2014 Edition NT	2014 Edition NT	400
+text/GNWWBT/GNWWBT/info.json	GNWWBT	gnw	gn-Latn-BO	Western Bolivian Guaraní New Testament	Nuevo Testamento Guaraní Pe	400
+text/PORACF/PORACF/info.json	PORACF	por	pt-Latn-	Almeida Corrigida Fiel NT	Almeida Corrigida Fiel NT	Almeida Corrigida Fiel NT
+text/FRAOST/FRAOST/info.json	FRAOST	fra	fr-Latn-fr	French Ostervald Bible	La Sainte Bible	The Holy Bible
+text/MYABJB/MYAOJV/info.json	MYAOJV	mya	my-Latn-MM	Old Judson Version NT	Old Judson Version NT	Old Judson Version NT
+text/PORJFA/PORJFA/info.json	PORJFA	por	pt-Latn-	João Ferreira de Almeida (Brazil) OT	João Ferreira de Almeida (Brazil) OT	João Ferreira de Almeida (Brazil) OT
+text/ENGWMU/ENGWMU/info.json	ENGWMU	eng	en-Latn-GB	World Messianic Bible British Edition	World Messianic Bible British Edition	400
+text/QUFLLB/QUFLLB/info.json	QUFLLB	quf	qu-Latn-PE	Lambayeque Quechua New Testament	Mushuq Testamento	400
+text/ENGDBY/ENGDBY/info.json	ENGDBY	eng	en-Latn-GB	Darby Translation	Darby Translation	400
+text/ZLMCTX/ZLMCTX/info.json	ZLMCTX	zlm	ms-Latn-MY	Contextualized Malay New Testament	Kitab Suci Zabur dan Injil	The Bible and the Gospel
+text/KORERV/KORERV/info.json	KORERV	kor	ko-Latn-KR	Korean: Easy-to-Read Version	읽기 쉬운 신약성경	Read New Testament
+text/CMNUNV/CMNUNV/info.json	CMNUNV	cmn	zh-Latn-CN	Chinese Union Version (traditional)	新標點和合本	New punctuation and combination
+text/ENGWEBC/ENGWEBC/info.json	ENGWEBC	eng	en-Latn-US	World English Bible (Catholic)	World English Bible (Catholic)	400
+text/URDOUB/URDOUB/info.json	URDOUB	urd	ur-Latn-IN	The Open Urdu Bible: Devanagari Version	उर्दू बाइबिल	Urdu Bible
+text/MALOMB/MALOMB/info.json	MALOMB	mal	ml-Latn-IN	The Free Malayalam Bible	മലയാളം ബൈബിൾ	English Bible
+text/ENGWEU/ENGWEU/info.json	ENGWEU	eng	en-Latn-GB	World English Bible British Edition with Deuterocanon	World English Bible British Edition with Deuterocanon	400
+text/HNDSKV/HNDSKV/info.json	HNDSKV	hin	hi-Deva-IN	Sab Ki Version NT	Sab Ki Version NT	Sab Ki Version NT
+text/QVZWBT/QVZWBT/info.json	QVZWBT	qvz	qu-Latn-EC	Northern Pastaza Quichua New Testament	Diospa shimi	400
+text/BULERV/BULERV/info.json	BULERV	bul	bg-Latn-BG	Bulgarian Easy-to-Read Version	Съвременен превод	Contemporary translation
+text/SWESFV/SWESFV/info.json	SWESFV	swe	sv-Latn-	2015 Stiftelsen Svenska Folkbibeln OT	2015 Stiftelsen Svenska Folkbibeln OT	2015 Stiftelsen Svenska Folkbibeln OT
+text/YORYOR/YORUBS/info.json	YORUBS	yor	yo-Latn-NG	1960 Edition NT	1960 Edition NT	1960 NT Edition
+text/QVNLLB/QVNLLB/info.json	QVNLLB	qvn	qu-Latn-PE	North Junín Quechua New Testament	Tayta Diospa Guepacag Testamentun	400
+text/HINWTC/HNDWTC/info.json	HNDWTC	hin	hi-Deva-IN	Easy-to-Read Version NT	Easy-to-Read Version NT	Easy-to-Read Version NT
+text/THATSV/THATSV/info.json	THATSV	tha	th-Thai-TH	Thai Standard Version OT	Thai Standard Version OT	Thai Standard Version OT
+text/EUSBSS/EUSEAB/info.json	EUSEAB	eus	eu-Latn-ES	Elizen Arteko Biblia (EAB) Biblia en Euskara, Traducción Interconfesional NT	Elizen Arteko Biblia (EAB) Biblia en Euskara, Traducción Interconfesional NT	Bible Interpretation (EAB) Bible in Basque, Interconfessional Translation NT
+text/KMRIBL/KMRIBL/info.json	KMRIBL	kmr	ku-Latn-AM	New Testament in Kurdish (Latin)	MIZGÎNÎ	MUSIC
+text/THAERV/THAERV/info.json	THAERV	tha	th-Latn-TH	Thai Easy-to-Read Version	ฉบับ​อ่าน​เข้า​ใจ​ง่าย	Read it easy
+text/QVMTBL/QVMTBL/info.json	QVMTBL	qvm	qu-Latn-PE	Margos-Yarowilca-Lauricocha Quechua New Testament	Mushog Testamento	400
+text/ENGASV/ENGASV/info.json	ENGASV	eng	en-Latn-US	American Standard Version (1901)	American Standard Version (1901)	400
+text/QXOLLB/QXOLLB/info.json	QXOLLB	qxo	qu-Latn-PE	Southern Conchucos Ancash Quechua New Testament	Mushog Testamento	400
+text/CHACHA/CHACHA/info.json	CHACHA	cha	ch-Latn-GU	Chamorro Gospels, Acts, and Psalms	Y CUATRO EBANGELIO SIJA YAN Y CHECHO Y APOSTOLES  YAN Y SALMO SIJA	400
+text/BULB40/BULB40/info.json	BULB40	bul	bg-Latn-	1940 Bulgarian Bible NT		
+text/KORSYS/KORSYS/info.json	KORSYS	kor	ko-Latn-KR	First Korean Bible (1911)	셩경젼셔 구약젼셔	The Old Testament
+text/AVAANT/AVAIBT/info.json	AVAIBT	ava	av-Cyrl-RU	2008 Edition NT	2008 Edition NT	400
+text/ENGBRE/ENGBRE/info.json	ENGBRE	eng	en-Latn-GB	Brenton English Septuagint	Brenton Septuagint Translation	400
+text/FUQWBT/FUQWBT/info.json	FUQWBT	fuq	ff-Latn-	2015 Edition NT	2015 Edition NT	400
+text/ARBASV/ARBASV/info.json	ARBASV	arb	ar-Arab-SA	[Bible]	[Bible]	[Bible]
+text/CHNCNV/CHNCNV/info.json	CHNCNV	cmn	zh-Latn-CN	[Bible]	[Bible]	[Bible]
+text/QVHLLB/QVHLLB/info.json	QVHLLB	qvh	qu-Latn-PE	Huamalíes-Dos de Mayo Huánuco Quechua New Testament	Mushog Testamento	400
+text/TONBSP/TONBSP/info.json	TONBSP	ton	to-Latn-TO	BSP Version NT	BSP Version NT	400
+text/VIEWTC/VIEWTC/info.json	VIEWTC	vie	vi-Latn-VN	2010 Edition NT	2010 Edition NT	2010 NT Edition
+text/AZEBSA/AZEBSA/info.json	AZEBSA	aze	az-Latn-AZ	Kitab Shirketi Version	Kitab Shirketi Version	Book Company Version
+text/GUJGOV/GUJGOV/info.json	GUJGOV	guj	gu-Latn-IN	The Gujarati Old Version	પવિત્ર બાઇબલ	Holy Bible
+text/AFRABY/AFRABY/info.json	AFRABY	afr	af-Latn-ZA	Afrikaans Old Bible	Afrikaans Ou Vertaling	Afrikaans Old Translation
+text/AZBEMV/AZBEMV/info.json	AZBEMV	azb	az-Arab-AZ	2009 Edition NT	2009 Edition NT	2009 Edition NT
+text/QULSBB/QULSBB/info.json	QULSBB	qul	qu-Latn-BO	North Bolivian Quechua New Testament	Mosoj Testamento	400
+text/ENGMEV/ENGMEV/info.json	ENGMEV	eng	en-Latn-GB	Modern English Version	Modern English Version	400
+text/RUMWTC/RUMWTC/info.json	RUMWTC	ron	ro-Latn-RO	[Bible]	[Bible]	[Bible]
+text/TURERV/TURERV/info.json	TURERV	tur	tr-Latn-TR	Turkish: Easy-to-Read Version	HALK DİLİNDE	PUBLIC LANGUAGE
+text/KURIBC/KURIBC/info.json	KURIBC	kur	ku-Latn-AM	New Testament in Kurdish (Cyrillic)	НОВЫЙ ЗАВЕТ	НОВЫЙ ЗАВЕТ
+text/NEPERV/NEPERV/info.json	NEPERV	nep	ne-Latn-NP	Nepali: Easy-to-Read Version	Nepali: Easy-to-Read Version	Nepali: Easy-to-Read Version
+text/SPARV09/SPARV09/info.json	SPARV09	spa	es-Latn-ES	Reina Valera 1909	Santa Biblia — Reina Valera 1909	Holy Bible - King James Version 1909
+text/ENGESV/ENGESV/info.json	ENGESV	eng	en-None-None		English Standard Version	400
+text/QXRBSE/QXRBSE/info.json	QXRBSE	qxr	qu-Latn-EC	2010 Edition NT	2010 Edition NT	400
+text/DEUL12/DEUL12/info.json	DEUL12	deu	de-Latn-DE	German Luther Bible 1912	Luther Bibel 1912	Luther Bible 1912
+text/ENGBBE/ENGBBE/info.json	ENGBBE	eng	en-Latn-GB	Bible in Basic English	Bible in Basic English	400
+text/AZJBSA/AZEBSA/info.json	AZEBSA	aze	az-Latn-IR	Daily Bible Azerbaijan	مقدَس کتاب آذربايجان ديلی	مقدس کتاب آذربايجان ديلی
+text/QVSTBL/QVSTBL/info.json	QVSTBL	qvs	qu-Latn-PE	San Martín Quechua New Testament	Tata Diospa Mushuk Rimanan	400
+text/JPNN65/JPNN65/info.json	JPNN65	jpn	ja--JP	New Japanese New Testament	新改訳新約聖書(1965年版)	New Translation New Testament (1965 edition)
+text/PANERV/PANERV/info.json	PANERV	pan	pa-Latn-IN	Punjabi: Easy-to-Read Version	Punjabi: Easy-to-Read Version	English: Easy-to-Read Version
+text/ENGGID/ENGGID/info.json	ENGGID	eng	en-Latn-GB	[Bible]	[Bible]	400
+text/QXHWBT/QXHWBT/info.json	QXHWBT	qxh	qu-Latn-	2009 Edition NT	2009 Edition NT	400
+text/ENGLXX/ENGLXX/info.json	ENGLXX	eng	en-Latn-US	LXX2012 U. S. English	LXX2012: Septuagint in American English 2012	400
+text/TONBAX/TONRWT/info.json	TONRWT	ton	to-Latn-TO	Revised West Translation NT	Revised West Translation NT	400
+text/QUPTBL/QUPTBL/info.json	QUPTBL	qup	qu-Latn-PE	Southern Pastaza Quechua New Testament	Yaya Diospa mushu killkachishkan shimi	400
+text/MAROMB/MAROMB/info.json	MAROMB	mar	mr-Latn-IN	The Free Marathi Bible	मराठी बायबल	Marathi Bibles
+text/ORYWTC/ORYWTC/info.json	ORYWTC	ori	or-Orya-IN	1997 Edition NT	1997 Edition NT	400
+text/HAEBSE/HAEBSE/info.json	HAEBSE	hae	om-Latn-ET	2005 Edition New Testament	2005 Edition New Testament	400
+text/BREBRB/BREBRB/info.json	BREBRB	bre	br-Latn-FR	Breton Gospels	an Bibl	400
+text/RONWTC/RONERV/info.json	RONERV	ron	ro-Latn-RO	Romanian: Easy-to-Read Version	Traducere în limba română modernă	Modern Romanian translation
+text/NORNBV/NORNBV/info.json	NORNBV	nor	no-Latn-	Norsk Bibel AS 2016 OT	Norsk Bibel AS 2016 OT	Norsk Bibel AS 2016 OT
+text/MARWTC/MARWTC/info.json	MARWTC	mar	mr-Deva-IN	2015 Edition NT	2015 Edition NT	2015 Edition NT
+text/KAZKAZ/KAZKAZ/info.json	KAZKAZ	kaz	kk-Latn-KZ	2010 Kiyeli kitap NT	2010 Kiyeli kitap NT	2010 Kiyeli book NT
+text/ENGWEB/ENGWEB/info.json	ENGWEB	eng	en-Latn-US	World English Bible with Deuterocanon	World English Bible with Deuterocanon	400
+text/QXNWBT/QXNWBT/info.json	QXNWBT	qxn	qu-Latn-PE	Northern Conchucos Ancash Quechua New Testament	Señor Jesucristopa alli willacuynin	400
+text/UZNIBT/UZBIBT/info.json	UZBIBT	uzb	uz-Latn-UZ	2003 Institute for Bible Translation Version	2003 Institute for Bible Translation Version	2003 Institute for Bible Translation Version
+text/BENWTC/BNGWTC/info.json	BNGWTC	ben	bn-Beng-BD	Easy-to-Read Version NT	Easy-to-Read Version NT	Easy-to-Read Version NT
+text/QUBPBS/QUBPBS/info.json	QUBPBS	qub	qu-Latn-PE	Huallaga Huánuco Quechua Bible	Tayta Diosninchi Isquirbichishan	400
+text/HINOHB/HINOHB/info.json	HINOHB	hin	hi-Latn-IN	The Free Hindi Bible	हिन्दी बाइबल	Hindi Bible
+text/THAKJV/THAKJV/info.json	THAKJV	tha	th-Latn-TH	King James Version NT	King James Version NT	King James Version NT
+text/PESNMV/PESEMV/info.json	PESEMV	pes	fa-Latn-	2014 New Millenium Version NT	2014 New Millenium Version NT	2014 New Millenium Version NT
+text/C2ESV/C2ESV/info.json	C2ESV	eng	en-Latn-GB	[Bible]	[Bible]	400
+text/VIEWTC/VIEERV/info.json	VIEERV	vie	vi-Latn-VN	Vietnamese: Easy-to-Read Version	Bản Phổ thông	General
+text/BAKIBT/BAKIBT/info.json	BAKIBT	bak	ba-Cyrl-RU	IBT Version NT	IBT Version NT	400
+text/OSSIBT/OSSIBT/info.json	OSSIBT	oss	os-Latn-RU	Ossetian New Testament and Old Testament Portions	Нӕ Хицау Йесо Чырыстийы	400
+text/PESOPV/PESOPV/info.json	PESOPV	pes	fa-Latn-IR	Old Persion Version Bible	ترجمه قدیم	Old translation
+text/HRVERV/HRVERV/info.json	HRVERV	hrv	hr-Latn-HR	Croatian Easy-to-Read Version	Suvremeni prijevod	Contemporary translation
+text/BENCLV/BNGCLV/info.json	BNGCLV	ben	bn-Beng-BD	Common Language Version OT	Common Language Version OT	Common Language Version OT
+text/MARERV/MARERV/info.json	MARERV	mar	mr-Latn-IN	Marathi: Easy-to-Read Version	Marathi: Easy-to-Read Version	Marathi: Easy-to-Read Version
+text/EWEB11/EWEBSG/info.json	EWEBSG	ewe	ee-Latn-GH	Ghana - 2010 Edition NT	Ghana - 2010 Edition NT	400
+text/HMOPNG/HMOPNG/info.json	HMOPNG	hmo	ho-Latn-PG	Hiri Motu Bible	Buka Helaga	400
+text/TGLAB8/TGLAB8/info.json	TGLAB8	tgl	tl-Latn-PH	Tagalog Bible 1978	Tagalog Ang Biblia 1978	English Bible 1978
+text/ENGOEB/ENGOEB/info.json	ENGOEB	eng	en-Latn-US	Open English Bible (US)	Open English Bible (U. S. spelling)	400
+text/FRALSG/FRALSG/info.json	FRALSG	fra	fr-Latn-FR	French Louis Segond 1910 Bible	Louis Segond 1910	Louis Segond 1910
+text/BENERV/BENERV/info.json	BENERV	ben	bn-Beng-BD	Bengali: Easy-to-Read Version	Bengali: Easy-to-Read Version	Bengali: Easy-to-Read Version
+text/TGKIBC/TGKIBC/info.json	TGKIBT	tgk	tg-Latn-TJ	1992 Tajiki Bible	Китоби Муқаддас 1992	Bible 1992
+text/RUSWTC/RUSWTC/info.json	RUSWTC	rus	ru-Latn-	2014 Edition OT	2014 Edition OT	2014 Edition OT
+text/ESKWBT/ESKWBT/info.json	ESKWBT	esk	ik-Latn-US	Northwest Alaska Eskimo New Testament	Ipqitchuat Makpiġaat - Agaayyutim Uqałhi Iñupiatun	400
+text/SOMSIM/SOMSIM/info.json	SOMSIM	som	so-Latn-SO	Somali Bible	Kitaabka Quduuska Ah	The Bible
+text/HUNHUN/HUNRNT/info.json	HUNRNT	hun	hu-Latn-HU	2014 Revideált új fordítású Biblia NT	2014 Revideált új fordítású Biblia NT	2014 Revised New Revised Bible NT
+text/ALSSHQ/ALSSHQ/info.json	ALSSHQ	als	sq-Latn-AL	Albanian Bible	Bibla e Shenjtë	Holy Bible
+text/TONBAX/TONBAX/info.json	TONBAX	ton	to-Latn-TO	Revised West Version	Koe Tohi Tabu Katoa	400
+text/HINERV/HINERV/info.json	HINERV	hin	hi-Deva-IN	Hindi Easy-to-Read Version	Hindi Easy-to-Read Version	Hindi Easy-to-Read Version
+text/GUJOGB/GUJOGB/info.json	GUJOGB	guj	gu-Latn-IN	The Free Gujarati Bible	ગુજરાતી બાઇબલ	English Bible
+text/PRSGNN/PRSGNN/info.json	PRSGNN	prs	fa-Latn-AF	Good News for a New Age	Good News for a New Age	Good News for a New Age
+text/TIRTBI/TIRUBS/info.json	TIRUBS	tir	ti-Ethi-ER	1991 Edition NT	1991 Edition NT	400
+text/APDASV/APDASV/info.json	APDASV	apd	ar-Arab-SD	[Bible]	[Bible]	[Bible]
+text/TATIBT/TATIBT/info.json	TATIBT	tat	tt-Latn-RU	[Bible]	[Bible]	400
+text/INDERV/INDERV/info.json	INDERV	ind	id-Latn-ID	Indonesian: Easy-to-Read Version	Versi Mudah Dibaca	Easy to Read Version
