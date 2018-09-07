@@ -25,36 +25,32 @@ var audioDBPImporter = function(callback) {
 	* text versions that are associated with
 	*/
 	var versions = {
-			//'ERV-ARB': ['ARB', 'WTC', true ],
-			//'ARBVDPD': ['ARB', 'WTC', false ],
-			//'ERV-AWA': ['AWA', 'WTC', true ],
-			//'ERV-BEN': ['BNG', 'WTC', true ],
-			'ERV-BUL': ['BLG', 'AMB', false ],
-			'ERV-CMN': ['CHN', 'UNV', true ], // for mainland China
-			//'ERV-CMN': ['YUH', 'UNV', false ], // for Hong Kong
-			'ERV-ENG': ['ENG', 'ESV', false ], // must change to WEB in production
-			'KJVPD':   ['ENG', 'KJV', true ],
-			'WEB':     ['ENG', 'WEB', true ],
+			'ERV-ARB': ['ARB', 'WTC', true ], 	// ARBWTC/ARBWTCN1DA, ARBWTCO1DA
+			'ARBVDPD': ['ARZ', 'VDV', true ], 	// ARBVDV/ARZVDVN2DA, ARZVDVO2DA
+			'ERV-AWA': ['AWA', 'WTC', true ], 	// AWAWTC/AWAWTCN2DA,
+			'ERV-BEN': ['BNG', 'WTC', true ], 	// BENWTC/BNGWTCN1DA, BNGWTCN2DA
+			'ERV-BUL': ['BLG', 'AMB', false ], 	// BULPRB/BLGAMBN1DA
+			'ERV-CMN': ['CHN', 'UNV', true ], 	// CMNUN1/CHNUNVN2DA, CMNUNV/CHNUNVO2DA
+			'ERV-ENG': ['ENG', 'ESV', false ], 	// ENGESV/ENGESVN2DA, ENGESVO2DA
+			'KJVPD':   ['ENG', 'KJV', true ], 	// ENGKJV/ENGKJVN2DA, ENGKJVO2DA
+			'WEB':     ['ENG', 'WEB', true ], 	// ENGWEB/ENGWEBN2DA, ENGWEBO2DA
 			'ERV-HRV': ['SRC', null, false ],
-			//'ESV':	   ['ENG', 'ESV', true],
-			'ERV-HIN': ['HIN', null, false],
-			'ERV-HUN': ['HUN', 'HBS', false ],
-			'ERV-IND': ['INZ', 'SHL', false ],
-			//'ERV-KAN': ['ERV', 'WTC', true ],
-			'ERV-MAR': ['MAR', null, false ],
+			'ERV-HIN': ['HND', 'WTC', true], 	// HINWTC/HNDWTCN2DA
+			'ERV-HUN': ['HUN', 'HBS', false ],	// HUNHBS/HUNHBSN1DA
+			'ERV-IND': ['INZ', 'SHL', false ],	// INDSHL/INZSHLN2DA
+			'ERV-KAN': ['ERV', 'WTC', true ],	// KANWTC/ERVWTCN1DA, ERVWTCN2DA
+			'ERV-MAR': ['MAR', 'WTC', true ],	// MARWTC/MARWTCN1DA, MARWTCN2DA
 			'ERV-NEP': ['NEP', null, false ],
-			'ERV-ORI': ['ORY', null, false ],
+			'ERV-ORI': ['ORY', 'WTC', true ],	// ORYWTC/ORYWTCN1DA, ORYWTCN2DA
 			'ERV-PAN': ['PAN', null, false ],
-			'ERV-POR': ['POR', 'ARA', false ],
-			'ERV-RUS': ['RUS', 'S76', false ],
-			//'ERV-SPA': ['SPN', 'WTC', true ],
-			'ERV-SPA': ['SPN', 'R95', false ], // or R95 or BDA
+			'ERV-POR': ['POR', 'ARA', false ],	// PORBAR/PORARAN2DA
+			'ERV-RUS': ['RUS', 'S76', false ],	// RUSS76/RUSS76N2DA, RUSS76O2DA
+			'ERV-SPA': ['SPN', 'WTC', true ],	// SPAWTC/SPNWTCN2DA
 			'ERV-SRP': ['SRP', null, false ],
-			//'ERV-TAM': ['TCV', 'WTC', true ],
+			'ERV-TAM': ['TCV', 'WTC', true ],	// TAMWTC/TCVWTCN1DA
 			'ERV-THA': ['THA', null, false ],
-			'ERV-UKR': ['UKR', 'O95', false ],
-			//'ERV-URD': ['URD', 'WTC', true ],
-			'ERV-URD': ['URD', 'PAK', false ],
+			'ERV-UKR': ['UKR', 'O95', false ],	// UKRN39/UKRO95N2DA
+			'ERV-URD': ['URD', 'WTC', true ],	// URDWTC/URDWTCN2DA
 			'ERV-VIE': ['VIE', null, false ],
 			'NMV':     ['PES', null, false ]
 	};

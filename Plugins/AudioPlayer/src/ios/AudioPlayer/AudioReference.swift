@@ -106,7 +106,8 @@ class AudioReference {
     
     func getS3Bucket() -> String {
         switch (self.fileType) {
-            case "mp3": return self.damId.lowercased() + ".shortsands.com"
+            //case "mp3": return self.damId.lowercased() + ".shortsands.com"
+        case "mp3": return "dbp-prod"
             default: return "unknown bucket"
         }
     }
