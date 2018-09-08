@@ -5,8 +5,6 @@
 //  Created by Gary Griswold on 7/30/18.
 //  Copyright © 2018 Short Sands, LLC. All rights reserved.
 //
-
-//import Foundation
 import UIKit
 import AWS
 
@@ -25,8 +23,8 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
         
         // set Top Bar items
         self.navigationItem.title = NSLocalizedString("Send Us Feedback", comment: "Feedback view title")
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self,
-                                                                action: #selector(cancelHandler))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .reply, target: self,
+                                                                action: #selector(replyHandler))
         
         self.textView = UITextView(frame: UIScreen.main.bounds)
         let inset = self.textView.frame.width * 0.05
@@ -70,29 +68,25 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
         self.textView.frame = UIScreen.main.bounds
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        let adapter = SettingsAdapter()
-        let userId: String = adapter.getPseudoUserId()
+    @objc func replyHandler(sender: UIBarButtonItem?) {
+        print("Feedback Reply bar clicked")
+        self.navigationController?.popViewController(animated: true)
+        
         if let text: String = self.textView.text?.trimmingCharacters(in: .whitespacesAndNewlines) {
             if !text.isEmpty {
+                let adapter = SettingsAdapter()
+                let userId: String = adapter.getPseudoUserId()
                 let aws = AwsS3Manager.findUSEast1()
                 let key = userId + String(text.hashValue)
                 let message = userId + "\n" + Locale.current.identifier + "\n" + text
                 aws.uploadText(s3Bucket: "user.feedback.safebible", s3Key: key, data: message,
                                contentType: "text/plain; charset=UTF-8",
-                           complete: { error in
-                            if let err = error {
-                                print("ERROR in upload of user feedback \(err)")
-                            }
+                               complete: { error in
+                                if let err = error {
+                                    print("ERROR in upload of user feedback \(err)")
+                                }
                 })
             }
         }
-        print("Feedbck view Will Disappear")
-    }
-    
-    @objc func cancelHandler(sender: UIBarButtonItem?) {
-        print("Feedback Cancel bar clicked")
-        self.navigationController?.popViewController(animated: true)
     }
 }
