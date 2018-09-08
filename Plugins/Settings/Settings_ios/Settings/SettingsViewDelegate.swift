@@ -163,9 +163,13 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         }
     }
     
-    //func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-    //    return (indexPath.section == 3) ? "Remove" : nil
-    //}
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        if self.settingsViewType == .primary {
+            return (indexPath.section == 3) ? "Remove" : nil
+        } else {
+            return (indexPath.section == 0) ? "Remove" : nil
+        }
+    }
     
     // Keeps non-editable rows from indenting
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt: IndexPath) -> Bool {
