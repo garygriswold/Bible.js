@@ -165,9 +165,9 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
         if self.settingsViewType == .primary {
-            return (indexPath.section == 3) ? "Remove" : nil
+            return (indexPath.section == 3) ? NSLocalizedString("Remove", comment: "Red Delete Button text") : nil
         } else {
-            return (indexPath.section == 0) ? "Remove" : nil
+            return (indexPath.section == 0) ? NSLocalizedString("Remove", comment: "Red Delete Button text") : nil
         }
     }
     
