@@ -7,6 +7,7 @@
 //
 import UIKit
 import AWS
+import AudioToolbox
 
 class FeedbackViewController: UIViewController, UITextViewDelegate {
     
@@ -70,10 +71,14 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
     
     @objc func replyHandler(sender: UIBarButtonItem?) {
         print("Feedback Reply bar clicked")
+        self.uploadMessage()
         self.navigationController?.popViewController(animated: true)
-        
+    }
+    
+    private func uploadMessage() {
         if let text: String = self.textView.text?.trimmingCharacters(in: .whitespacesAndNewlines) {
             if !text.isEmpty {
+                self.playMessageSentSound()
                 let adapter = SettingsAdapter()
                 let userId: String = adapter.getPseudoUserId()
                 let aws = AwsS3Manager.findUSEast1()
@@ -87,6 +92,14 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
                                 }
                 })
             }
+        }
+    }
+    
+    private func playMessageSentSound() {
+        var soundID: SystemSoundID = 0
+        if let url = Bundle.main.url(forResource: "Sent", withExtension: "aiff") {
+            AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
+            AudioServicesPlaySystemSound(soundID)
         }
     }
 }
