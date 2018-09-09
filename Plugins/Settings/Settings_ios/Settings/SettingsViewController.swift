@@ -82,8 +82,8 @@ class SettingsViewController: UIViewController {
         
         AppFont.updateSearchFontSize()
         
-        //self.saveHandler(sender: nil)
-        self.tableView.setEditing(self.isEditable, animated: true)
+        self.saveHandler(sender: nil)
+        //self.tableView.setEditing(self.isEditable, animated: true)
     }
     
     override func viewDidLoad() {
@@ -146,25 +146,25 @@ class SettingsViewController: UIViewController {
             }
         }
         self.tableView.scrollToRow(at: IndexPath(item: 0, section: self.availableSection), at: .top, animated: true)
-        //self.editHandler(sender: nil)
+        self.editHandler(sender: nil)
     }
     
     @objc func keyboardWillHide(note: NSNotification) {
         self.tableView.frame = UIScreen.main.bounds
-        //self.saveHandler(sender: nil)
+        self.saveHandler(sender: nil)
     }
     
-    //@objc func editHandler(sender: UIBarButtonItem?) {
-    //    self.tableView.setEditing(true, animated: true)
-    //    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self,
-    //                                                             action: #selector(saveHandler))
-    //}
+    @objc func editHandler(sender: UIBarButtonItem?) {
+        self.tableView.setEditing(true, animated: true)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self,
+                                                                 action: #selector(saveHandler))
+    }
     
-    //@objc func saveHandler(sender: UIBarButtonItem?) {
-    //    self.tableView.setEditing(false, animated: true)
-    //    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
-    //                                                             action: #selector(editHandler))
-    //}
+    @objc func saveHandler(sender: UIBarButtonItem?) {
+        self.tableView.setEditing(false, animated: true)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
+                                                                 action: #selector(editHandler))
+    }
     
     @objc func doneHandler(sender: UIBarButtonItem?) {
         print("Settings Done button clicked")

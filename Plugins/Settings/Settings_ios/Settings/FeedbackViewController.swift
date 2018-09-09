@@ -97,7 +97,7 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
     
     private func playMessageSentSound() {
         var soundID: SystemSoundID = 0
-        if let url = Bundle.main.url(forResource: "Sent", withExtension: "aiff") {
+        if let url = Bundle.main.url(forResource: "www/audio/Sent", withExtension: "aiff") {
             AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
             AudioServicesPlaySystemSound(soundID)
         }
