@@ -15,6 +15,7 @@
 		E45C598221431934009C1F0E /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E45C598021431934009C1F0E /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4825C412124F0B400D36620 /* BibleInitialSelect.swift */; };
 		E4A3AF152138EC0F006EDEFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E62138BD7F000AB2A8 /* Localizable.strings */; };
+		E4A7130021461090009D99E2 /* SettingsSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A712FF21461090009D99E2 /* SettingsSearchController.swift */; };
 		E4AFAC6C2144C047008EE537 /* www in Resources */ = {isa = PBXBuildFile; fileRef = E4AFAC6B2144C047008EE537 /* www */; };
 		E4C2E978211B70F500B71CC5 /* AppFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E977211B70F500B71CC5 /* AppFont.swift */; };
 		E4C2E97E211B711C00B71CC5 /* BibleDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */; };
@@ -98,7 +99,7 @@
 		E4A3AF182138F3AE006EDEFE /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		E4A3AF192138F3AF006EDEFE /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E4A3AF1A2139968E006EDEFE /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
-		E4AFAC672144710C008EE537 /* Sent.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = Sent.aiff; path = Settings/www/audio/Sent.aiff; sourceTree = SOURCE_ROOT; };
+		E4A712FF21461090009D99E2 /* SettingsSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSearchController.swift; sourceTree = "<group>"; };
 		E4AFAC6B2144C047008EE537 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = Settings/www; sourceTree = "<group>"; };
 		E4C2E977211B70F500B71CC5 /* AppFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFont.swift; sourceTree = "<group>"; };
 		E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BibleDetailViewController.swift; sourceTree = "<group>"; };
@@ -148,7 +149,6 @@
 			isa = PBXGroup;
 			children = (
 				E4AFAC6B2144C047008EE537 /* www */,
-				E4AFAC672144710C008EE537 /* Sent.aiff */,
 				E45C598021431934009C1F0E /* AWSCore.framework */,
 				E4D708CF213328E600E4A8BF /* AWS.framework */,
 				E44C056B211B7DE700476DAD /* Versions.db */,
@@ -173,6 +173,7 @@
 				E4C2E987211B712C00B71CC5 /* SettingsNavigator.swift */,
 				E4C2E981211B712C00B71CC5 /* SettingsViewController.swift */,
 				E4C2E984211B712C00B71CC5 /* SettingsViewDataSource.swift */,
+				E4A712FF21461090009D99E2 /* SettingsSearchController.swift */,
 				E4C2E989211B712D00B71CC5 /* SettingsViewDelegate.swift */,
 				E4C2E97D211B711C00B71CC5 /* FeedbackViewController.swift */,
 				E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */,
@@ -314,6 +315,7 @@
 				E4C2E97F211B711C00B71CC5 /* BibleModel.swift in Sources */,
 				E4C2E97E211B711C00B71CC5 /* BibleDetailViewController.swift in Sources */,
 				E4C2E98F211B712D00B71CC5 /* LanguageCell.swift in Sources */,
+				E4A7130021461090009D99E2 /* SettingsSearchController.swift in Sources */,
 				E4C2E992211B712D00B71CC5 /* SettingsViewDelegate.swift in Sources */,
 				E4C2E98E211B712D00B71CC5 /* TextSizeSliderCell.swift in Sources */,
 				E4C2E991211B712D00B71CC5 /* SettingsModel.swift in Sources */,

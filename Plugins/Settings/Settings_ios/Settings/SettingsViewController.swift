@@ -15,6 +15,7 @@ enum SettingsViewType {
 class SettingsViewController: UIViewController {
     
     let settingsViewType: SettingsViewType
+    var searchController: SettingsSearchController!
     var dataModel: SettingsModel!
     var tableView: UITableView!
     var language: Language? // Used only when SettingsViewType is .bible
@@ -32,7 +33,10 @@ class SettingsViewController: UIViewController {
         self.availableSection = self.selectedSection + 1
         self.isEditable = false
         self.recentContentOffset = CGPoint(x:0, y: 0)
+        
         super.init(nibName: nil, bundle: nil)
+        
+        self.searchController = SettingsSearchController(controller: self, selectionViewSection: self.selectedSection)
     }
     
     deinit {
@@ -98,7 +102,8 @@ class SettingsViewController: UIViewController {
         case .bible:
             self.dataModel = BibleModel(language: self.language)
         }
-        self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: self.selectedSection)
+        self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: self.selectedSection,
+                                                 searchController: self.searchController)
         self.delegate = SettingsViewDelegate(controller: self, selectionViewSection: self.selectedSection)
         self.tableView.dataSource = self.dataSource
         self.tableView.delegate = self.delegate
@@ -110,6 +115,10 @@ class SettingsViewController: UIViewController {
                            name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         notify.addObserver(self, selector: #selector(keyboardWillHide),
                            name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        if self.dataModel.availableCount > 3 {
+            self.searchController.viewAppears(dataModel: self.dataModel)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

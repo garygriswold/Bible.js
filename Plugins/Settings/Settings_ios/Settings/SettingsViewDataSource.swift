@@ -6,35 +6,25 @@
 //  Copyright © 2018 Short Sands, LLC. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
-class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsUpdating {
+class SettingsViewDataSource : NSObject, UITableViewDataSource {
     
     private weak var controller: SettingsViewController?
     private let dataModel: SettingsModel
     private let settingsViewType: SettingsViewType
     private let selectedSection: Int
     private let availableSection: Int
-    private let searchController: UISearchController
+    private let searchController: SettingsSearchController
     private let textSizeSliderCell: TextSizeSliderCell
     private var language: Language? // Used only in .bible settingsViewType
     
-    init(controller: SettingsViewController, selectionViewSection: Int) {
+    init(controller: SettingsViewController, selectionViewSection: Int, searchController: SettingsSearchController) {
         self.controller = controller
         self.dataModel = controller.dataModel
         self.language = controller.language
-        self.searchController = UISearchController(searchResultsController: nil)
+        self.searchController = searchController
         self.settingsViewType = controller.settingsViewType
-        switch settingsViewType {
-        case .primary:
-            self.searchController.searchBar.placeholder = NSLocalizedString("Find Bibles", comment: "Bibles search bar")
-        case .language:
-            self.searchController.searchBar.placeholder = NSLocalizedString("Find Languages",
-                                                                            comment: "Languages search bar")
-        case .bible:
-            self.searchController.searchBar.placeholder = NSLocalizedString("Find Bibles", comment: "Bibles search bar")
-        }
         self.selectedSection = selectionViewSection
         self.availableSection = selectionViewSection + 1
         
@@ -42,18 +32,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         self.textSizeSliderCell = TextSizeSliderCell(controller: self.controller!, style: .default, reuseIdentifier: nil)
        
         super.init()
-        
-        // Setup the Search Controller
-        let numRequiredForSearchBar = 3
-        if self.dataModel.availableCount > numRequiredForSearchBar {
-            self.searchController.searchResultsUpdater = self
-            self.searchController.obscuresBackgroundDuringPresentation = false
-            self.controller?.navigationItem.searchController = self.searchController
-            self.controller?.navigationItem.hidesSearchBarWhenScrolling = false
-            // These don't seem to have an effect when search controller is set to naviation item
-            //self.searchController.searchBar.searchBarStyle = UISearchBarStyle.default // (defult or minimal or prominent)
-            //self.searchController.searchBar.setShowsCancelButton(false, animated: true)
-        }
     }
     
     deinit {
@@ -119,7 +97,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             switch section {
             case self.selectedSection: return self.dataModel.selectedCount
             case self.availableSection:
-                if isSearching() {
+                if self.searchController.isSearching() {
                     return self.dataModel.filteredCount
                 } else {
                     return self.dataModel.availableCount
@@ -178,7 +156,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
             case self.selectedSection:
                 return self.dataModel.selectedCell(tableView: tableView, indexPath: indexPath)
             case self.availableSection:
-                return self.dataModel.availableCell(tableView: tableView, indexPath: indexPath, inSearch: isSearching())
+                return self.dataModel.availableCell(tableView: tableView, indexPath: indexPath, inSearch: self.searchController.isSearching())
             default: fatalError("Unknown section \(indexPath.section)")
             }
         }
@@ -195,16 +173,16 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
         if editingStyle == UITableViewCellEditingStyle.delete {
             let destination = IndexPath(item: 0, section: self.availableSection)
             self.dataModel.moveSelectedToAvailable(source: indexPath.row,
-                                                   destination: destination.row, inSearch: isSearching())
+                                                   destination: destination.row,
+                                                   inSearch: self.searchController.isSearching())
             tableView.moveRow(at: indexPath, to: destination)
-            if isSearching() {
-                updateSearchResults(for: searchController)
-            }
+            self.searchController.updateSearchResults()
         } else if editingStyle == UITableViewCellEditingStyle.insert {
             let length = self.dataModel.selectedCount
             let destination = IndexPath(item: length, section: self.selectedSection)
             self.dataModel.moveAvailableToSelected(source: indexPath.row,
-                                                   destination: destination.row, inSearch: isSearching())
+                                                   destination: destination.row,
+                                                   inSearch: self.searchController.isSearching())
             tableView.moveRow(at: indexPath, to: destination)
             
             // When self.language is not null and we are moving an available Bible to selected
@@ -232,23 +210,5 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource, UISearchResultsU
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath,
                    to destinationIndexPath: IndexPath) {
         self.dataModel.moveSelected(source: sourceIndexPath.row, destination: destinationIndexPath.row)
-    }
-
-    // MARK: - UISearchResultsUpdating Delegate
-    func updateSearchResults(for searchController: UISearchController) {
-        print("****** INSIDE update Search Results ********")
-        //print("found \(searchController.searchBar.text)")
-        if let text = self.searchController.searchBar.text {
-            if text.count > 0 {
-                self.dataModel.filterForSearch(searchText: text)
-            }
-            let sections = IndexSet(integer: self.availableSection)
-            self.controller?.tableView.reloadSections(sections, with: UITableViewRowAnimation.automatic)
-        }
-    }
-    
-    func isSearching() -> Bool {
-        let searchBarEmpty: Bool = self.searchController.searchBar.text?.isEmpty ?? true
-        return self.searchController.isActive && !searchBarEmpty
     }
 }

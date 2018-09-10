@@ -1,0 +1,76 @@
+//
+//  SettingsSearchController.swift
+//  Settings
+//
+//  Created by Gary Griswold on 9/9/18.
+//  Copyright © 2018 ShortSands. All rights reserved.
+//
+
+import UIKit
+
+class SettingsSearchController: NSObject, UISearchResultsUpdating {
+    
+    private weak var controller: SettingsViewController?
+    private let settingsViewType: SettingsViewType
+    private let availableSection: Int
+    private let searchController: UISearchController
+    private var dataModel: SettingsModel?
+    
+    init(controller: SettingsViewController, selectionViewSection: Int) {
+        self.controller = controller
+        self.settingsViewType = controller.settingsViewType
+        self.availableSection = selectionViewSection + 1
+        self.searchController = UISearchController(searchResultsController: nil)
+        switch settingsViewType {
+        case .primary:
+            self.searchController.searchBar.placeholder = NSLocalizedString("Find Bibles", comment: "Bibles search bar")
+        case .language:
+            self.searchController.searchBar.placeholder = NSLocalizedString("Find Languages",
+                                                                            comment: "Languages search bar")
+        case .bible:
+            self.searchController.searchBar.placeholder = NSLocalizedString("Find Bibles", comment: "Bibles search bar")
+        }
+        
+        super.init()
+        
+        self.searchController.searchResultsUpdater = self
+        self.searchController.obscuresBackgroundDuringPresentation = false
+        self.controller?.navigationItem.searchController = self.searchController
+        self.controller?.navigationItem.hidesSearchBarWhenScrolling = false
+            // These don't seem to have an effect when search controller is set to naviation item
+            //self.searchController.searchBar.searchBarStyle = UISearchBarStyle.default // (defult or minimal or prominent)
+            //self.searchController.searchBar.setShowsCancelButton(false, animated: true)
+        //}
+    }
+    
+    deinit {
+        print("**** deinit SettingsSearchController \(self.settingsViewType) ******")
+    }
+    
+    func viewAppears(dataModel: SettingsModel) {
+        self.dataModel = dataModel
+    }
+    
+    func isSearching() -> Bool {
+        let searchBarEmpty: Bool = self.searchController.searchBar.text?.isEmpty ?? true
+        return self.searchController.isActive && !searchBarEmpty
+    }
+    
+    func updateSearchResults() {
+        if isSearching() {
+            updateSearchResults(for: self.searchController)
+        }
+    }
+    
+    // MARK: - UISearchResultsUpdating Delegate
+    func updateSearchResults(for searchController: UISearchController) {
+        print("****** INSIDE update Search Results ********")
+        if let text = self.searchController.searchBar.text {
+            if text.count > 0 {
+                self.dataModel?.filterForSearch(searchText: text)
+            }
+            let sections = IndexSet(integer: self.availableSection)
+            self.controller?.tableView.reloadSections(sections, with: UITableViewRowAnimation.automatic)
+        }
+    }
+}
