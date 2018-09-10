@@ -86,18 +86,6 @@ class SettingsViewController: UIViewController {
         //self.tableView.setEditing(self.isEditable, animated: true)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-      
-        let notify = NotificationCenter.default
-        notify.addObserver(self, selector: #selector(preferredContentSizeChanged(note:)),
-                           name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
-        notify.addObserver(self, selector: #selector(keyboardWillShow),
-                           name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        notify.addObserver(self, selector: #selector(keyboardWillHide),
-                           name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.contentOffset = self.recentContentOffset
@@ -114,6 +102,14 @@ class SettingsViewController: UIViewController {
         self.delegate = SettingsViewDelegate(controller: self, selectionViewSection: self.selectedSection)
         self.tableView.dataSource = self.dataSource
         self.tableView.delegate = self.delegate
+        
+        let notify = NotificationCenter.default
+        notify.addObserver(self, selector: #selector(preferredContentSizeChanged(note:)),
+                           name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        notify.addObserver(self, selector: #selector(keyboardWillShow),
+                           name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notify.addObserver(self, selector: #selector(keyboardWillHide),
+                           name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
