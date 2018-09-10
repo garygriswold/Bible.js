@@ -130,18 +130,18 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         }
     }
 
-    // This is required for heightForHeaderInSection to work
-    //func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-    //    return nil
-    //}
+    // This must return nil on order for heightForHeaderInSection to work
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
+    }
+ 
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return (self.settingsViewType == .primary && section == 0) ? 0.0 : -1.0
+    }
     
-    // This is required for heightForFooterInSection to work
+    // This must return nil on order for heightForFooterInSection to work
     //func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
     //    return nil
-    //}
- 
-    //func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-    //    return (section == 0) ? 0.0 : -1.0
     //}
     
     //func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
