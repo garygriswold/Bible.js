@@ -5,7 +5,6 @@
 //  Created by Gary Griswold on 9/9/18.
 //  Copyright © 2018 ShortSands. All rights reserved.
 //
-
 import UIKit
 
 class SettingsSearchController: NSObject, UISearchResultsUpdating {
@@ -35,20 +34,22 @@ class SettingsSearchController: NSObject, UISearchResultsUpdating {
         
         self.searchController.searchResultsUpdater = self
         self.searchController.obscuresBackgroundDuringPresentation = false
-        self.controller?.navigationItem.searchController = self.searchController
         self.controller?.navigationItem.hidesSearchBarWhenScrolling = false
-            // These don't seem to have an effect when search controller is set to naviation item
-            //self.searchController.searchBar.searchBarStyle = UISearchBarStyle.default // (defult or minimal or prominent)
-            //self.searchController.searchBar.setShowsCancelButton(false, animated: true)
-        //}
+        //self.searchController.searchBar.setShowsCancelButton(false, animated: true)
     }
     
     deinit {
         print("**** deinit SettingsSearchController \(self.settingsViewType) ******")
     }
     
-    func viewAppears(dataModel: SettingsModel) {
-        self.dataModel = dataModel
+    func viewAppears(dataModel: SettingsModel?) {
+        if let data = dataModel {
+            self.dataModel = data
+            self.controller?.navigationItem.searchController = self.searchController
+        } else {
+            self.dataModel = nil
+            self.controller?.navigationItem.searchController = nil
+        }
     }
     
     func isSearching() -> Bool {

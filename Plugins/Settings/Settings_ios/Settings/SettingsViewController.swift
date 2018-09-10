@@ -116,7 +116,7 @@ class SettingsViewController: UIViewController {
         notify.addObserver(self, selector: #selector(keyboardWillHide),
                            name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        if self.dataModel.availableCount > 3 {
+        if self.dataModel.availableCount > 5 {
             self.searchController.viewAppears(dataModel: self.dataModel)
         }
     }
@@ -161,7 +161,7 @@ class SettingsViewController: UIViewController {
     
     @objc func editHandler(sender: UIBarButtonItem?) {
         self.tableView.setEditing(true, animated: true)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self,
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
                                                                  action: #selector(saveHandler))
     }
     
