@@ -17,7 +17,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     private let availableSection: Int
     private let searchController: SettingsSearchController
     private let textSizeSliderCell: TextSizeSliderCell
-    private var language: Language? // Used only in .bible settingsViewType
+    private let language: Language? // Used only in .bible settingsViewType
     
     init(controller: SettingsViewController, selectionViewSection: Int, searchController: SettingsSearchController) {
         self.controller = controller
@@ -46,43 +46,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             return 2
         }
     }
-    
-    // Customize the section headings for each section
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch self.settingsViewType {
-        case .primary:
-            if section == self.selectedSection {
-                return NSLocalizedString("My Bibles", comment: "Section heading for User selected Bibles")
-            }
-            else if section == self.availableSection {
-                return NSLocalizedString("More Bibles", comment: "Section heading for available Bibles")
-            }
-            else { return nil }
-        case .language:
-            if section == self.selectedSection {
-                return NSLocalizedString("My Languages", comment: "Section heading for User languages")
-            }
-            else if section == self.availableSection {
-                return NSLocalizedString("More Languages", comment: "Section heading for Other languages")
-            }
-            else { return nil }
-        case .bible:
-            if section == self.selectedSection {
-                return NSLocalizedString("My Bibles", comment: "Section heading for User selected Bibles")
-            }
-            else if section == self.availableSection {
-                if let lang = self.language?.localized {
-                    return lang + " " + NSLocalizedString("Bibles", comment: "Section heading for Bibles in one lang")
-                } else {
-                    return NSLocalizedString("More Bibles", comment: "Section heading for available Bibles")
-                }
-            }
-            else { return nil }
-        }
-    }
-    
-    // Customize the section footer for each section
-    // fun tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {}
     
     // Return the number of rows for each section in your static table
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
