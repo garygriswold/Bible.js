@@ -73,10 +73,9 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         case 0:
             switch indexPath.row {
             case 0:
-                let version = Float(UIDevice.current.systemVersion) ?? 0.0
-                if version >= 10.3 {
-                    SKStoreReviewController.requestReview()
-                }
+                guard let reviewURL = URL(string: "https://itunes.apple.com/app/id1073396349?action=write-review")
+                else { fatalError("Expected a valid URL") }
+                UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
             case 1:
                 let feedbackController = FeedbackViewController()
                 self.navController?.pushViewController(feedbackController, animated: true)
@@ -195,7 +194,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         }
     }
 
-    // This must return nil on order for heightForFooterInSection to work
+    // This must return nil in order for heightForFooterInSection to work
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return nil
     }
