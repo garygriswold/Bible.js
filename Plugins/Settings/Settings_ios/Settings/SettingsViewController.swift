@@ -92,6 +92,9 @@ class SettingsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // When UserMessage is dismissed, it has sometimes left behind only the top half of the screen
+        self.tableView.frame = UIScreen.main.bounds
+        
         self.tableView.contentOffset = self.recentContentOffset
         
         switch self.settingsViewType {
