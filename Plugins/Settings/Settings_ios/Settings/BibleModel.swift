@@ -59,6 +59,18 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
         cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
         return cell
     }
+    
+    func findAvailableInsertIndex(selectedIndex: Int) -> Int {
+        let bible = self.selected[selectedIndex]
+        let searchName = bible.abbr
+        for index in 0..<self.available.count {
+            let bible = self.available[index]
+            if bible.abbr > searchName {
+                return index
+            }
+        }
+        return self.available.count
+    }
 
     /**
     * A better search would search starting with each word, but compare from

@@ -60,6 +60,7 @@ protocol SettingsModel {
     func moveSelected(source: Int, destination: Int)
     func moveAvailableToSelected(source: Int, destination: Int, inSearch: Bool)
     func moveSelectedToAvailable(source: Int, destination: Int, inSearch: Bool)
+    func findAvailableInsertIndex(selectedIndex: Int) -> Int
     func filterForSearch(searchText: String)
 }
 

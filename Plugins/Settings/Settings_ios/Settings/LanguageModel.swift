@@ -44,6 +44,18 @@ class LanguageModel : GenericModel<Language>, SettingsModel {
         cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
         return cell
     }
+    
+    func findAvailableInsertIndex(selectedIndex: Int) -> Int {
+        let language = self.selected[selectedIndex]
+        let searchName = language.localized
+        for index in 0..<self.available.count {
+            let language = self.available[index]
+            if language.localized > searchName {
+                return index
+            }
+        }
+        return self.available.count
+    }
 
     func filterForSearch(searchText: String) {
         print("****** INSIDE FILTER CONTENT FOR SEARCH ******")

@@ -134,7 +134,8 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle,
                    forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete {
-            let destination = IndexPath(item: 0, section: self.availableSection)
+            let index = self.dataModel.findAvailableInsertIndex(selectedIndex: indexPath.row)
+            let destination = IndexPath(item: index, section: self.availableSection)
             self.dataModel.moveSelectedToAvailable(source: indexPath.row,
                                                    destination: destination.row,
                                                    inSearch: self.searchController.isSearching())
