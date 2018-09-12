@@ -76,6 +76,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 guard let reviewURL = URL(string: "https://itunes.apple.com/app/id1073396349?action=write-review")
                 else { fatalError("Expected a valid URL") }
                 UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
+                // I have also tried to use WKWebView to access itunes, but it requires User AppleId
+                // login credentials.
             case 1:
                 let feedbackController = FeedbackViewController()
                 self.navController?.pushViewController(feedbackController, animated: true)
