@@ -193,23 +193,45 @@ def usfmBookId(bookName):
 underscores = "_______________"
 
 
-out = io.open("output/AudioVersionTable.sql", mode="w", encoding="utf-8")
-out.write(u"DROP TABLE IF EXISTS AudioVersion;\n")
-out.write(u"CREATE TABLE AudioVersion(\n")
-out.write(u"  ssVersionCode TEXT NOT NULL PRIMARY KEY,\n")
-out.write(u"  dbpLanguageCode TEXT NOT NULL,\n")
-out.write(u"  dbpVersionCode TEXT NOT NULL);\n")	
+
+abbrSet = set()	
 for version in versions.keys():
 	row = versions[version]
 	if row[1] != None:
-		out.write(u"INSERT INTO AudioVersion VALUES ('%s', '%s', '%s');\n"
-		% (version, row[0], row[1]))
-out.close()
-sys.exit()
+		abbr = row[0] + row[1]
+		abbrSet.add(abbr)
 
-orderSet = set()
-chapterSet = dict()
-bookSet = set()
+
+versionOut = io.open("output/AudioVersionTable.sql", mode="w", encoding="utf-8")
+versionOut.write(u"DROP TABLE IF EXISTS AudioVersion;\n")
+versionOut.write(u"CREATE TABLE AudioVersion(\n")
+versionOut.write(u"  ssVersionCode TEXT NOT NULL PRIMARY KEY,\n")
+versionOut.write(u"  dbpLanguageCode TEXT NOT NULL,\n")
+versionOut.write(u"  dbpVersionCode TEXT NOT NULL);\n")
+
+audioOut = io.open("output/AudioTable.sql", mode="w", encoding="utf-8")
+audioOut.write(u"DROP TABLE IF EXISTS Audio;\n")
+audioOut.write(u"CREATE TABLE Audio(\n")
+audioOut.write(u"  damId TEXT NOT NULL PRIMARY KEY,\n")
+audioOut.write(u"  dbpLanguageCode TEXT NOT NULL,\n")
+audioOut.write(u"  dbpVersionCode TEXT NOT NULL,\n")
+audioOut.write(u"  collectionCode TEXT NOT NULL,\n")
+audioOut.write(u"  mediaType TEXT NOT NULL);\n")
+
+bookOut = io.open("output/AudioBookTable.sql", mode="w", encoding="utf-8")
+bookOut.write(u"DROP TABLE IF EXISTS AudioBook;\n")
+bookOut.write(u"CREATE TABLE AudioBook(\n")
+bookOut.write(u"  damId TEXT NOT NULL REFERENCES Audio(damId),\n")
+bookOut.write(u"  bookId TEXT NOT NULL,\n")
+bookOut.write(u"  bookOrder TEXT NOT NULL,\n")
+bookOut.write(u"  bookName TEXT NOT NULL,\n")
+bookOut.write(u"  numberOfChapters INTEGER NOT NULL,\n")
+bookOut.write(u"  PRIMARY KEY (damId, bookId));\n")
+
+
+versionIdSet = set()
+damIdSet = set()
+bookIdSet = set()
 dbpProd = io.open("Release.1.13/metadata/FCBH/dbp_prod.txt", mode="r", encoding="utf-8")
 for line in dbpProd:
 	line = line.strip()
@@ -219,20 +241,23 @@ for line in dbpProd:
 		abbr = parts[1]
 		damId = parts[2]
 		if len(abbr) == 6 and len(damId) == 10 and numParts == 4 and abbr in abbrSet:
-			#print line
+			if not abbr in versionIdSet:
+				versionIdSet.add(abbr)
+				versionOut.write(u"INSERT INTO AudioVersion VALUES ('%s', '%s', '%s');\n"
+				% (version, row[0], row[1]))
 			book = parts[3]
 			testament = book[0:1]
 			if testament == 'A' or testament == 'B':
 				#print line
 				order = book[1:3]
-				orderSet.add(order)
+				#orderSet.add(order)
 				chapter = book[5:8]
 				chapter = chapter.replace("_", "")
-				chapterCount = chapterSet.get(chapter, 0)
-				chapterSet[chapter] = chapterCount + 1
+				#chapterCount = chapterSet.get(chapter, 0)
+				#chapterSet[chapter] = chapterCount + 1
 				name = book[9:21]
 				name = name.replace("_", " ").strip()
-				bookSet.add(name)
+				#bookSet.add(name)
 				damId2 = book[21:31].replace("_", " ").strip()
 				if damId == damId2:
 					usfm = usfmBookId(name)
@@ -247,8 +272,29 @@ for line in dbpProd:
 						print "ERROR"
 						print line
 						print generated
+					collectionCode = damId[6:7] + "T"
+					if collectionCode == 'OT' or collectionCode == 'NT':
+						mType = damId[7:]
+						if mType != '1DA' and mType != '2DA':
+							print "ERROR mediaType", line
+						mediaType = 'Drama' if (mType == '2DA') else 'Non-Drama'
+						#print mediaType
+						#print collectionCode
+						if not damId in damIdSet:
+							damIdSet.add(damId)
+							audioOut.write(u"REPLACE INTO Audio VALUES('%s', '%s', '%s', '%s', '%s');\n"
+							% (damId, abbr[0:3], abbr[3:6], collectionCode, mediaType))
+						bookIdKey = damId + usfm
+						if not bookIdKey in bookIdSet:
+							bookIdSet.add(bookIdKey)
+							bookOut.write(u"REPLACE INTO AudioBook VALUES('%s', '%s', '%s', '%s', '%s');\n"
+							% (damId, usfm, order, name, "99"))
+
 
 dbpProd.close()
+versionOut.close()
+audioOut.close()
+bookOut.close()
 
 #for order in orderSet:
 #	print order
@@ -256,6 +302,6 @@ dbpProd.close()
 #for chapter in chapterSet.keys():
 #	print chapter, chapterSet[chapter]
 
-for book in bookSet:
-	print book
+#for book in bookSet:
+#	print book
 
