@@ -1,21 +1,26 @@
+DROP TABLE IF EXISTS AudioVersion;
+CREATE TABLE AudioVersion(
+  ssVersionCode TEXT NOT NULL PRIMARY KEY,
+  dbpLanguageCode TEXT NOT NULL,
+  dbpVersionCode TEXT NOT NULL);
+INSERT INTO AudioVersion VALUES ('ERV-IND', 'IND', 'SHL');
+INSERT INTO AudioVersion VALUES ('ERV-CMN', 'CMN', 'UN1');
+INSERT INTO AudioVersion VALUES ('ERV-POR', 'POR', 'BAR');
+INSERT INTO AudioVersion VALUES ('ERV-SPA', 'SPA', 'WTC');
+INSERT INTO AudioVersion VALUES ('ERV-BEN', 'BEN', 'WTC');
 INSERT INTO AudioVersion VALUES ('ERV-ARB', 'ARB', 'WTC');
-INSERT INTO AudioVersion VALUES ('ARBVDPD', 'ARZ', 'VDV');
-INSERT INTO AudioVersion VALUES ('ERV-AWA', 'AWA', 'WTC');
-INSERT INTO AudioVersion VALUES ('ERV-BEN', 'BNG', 'WTC');
-INSERT INTO AudioVersion VALUES ('ERV-BUL', 'BLG', 'AMB');
-INSERT INTO AudioVersion VALUES ('ERV-CMN', 'CHN', 'UNV');
-INSERT INTO AudioVersion VALUES ('ERV-ENG', 'ENG', 'ESV');
 INSERT INTO AudioVersion VALUES ('KJVPD', 'ENG', 'KJV');
 INSERT INTO AudioVersion VALUES ('WEB', 'ENG', 'WEB');
-INSERT INTO AudioVersion VALUES ('ERV-HIN', 'HND', 'WTC');
-INSERT INTO AudioVersion VALUES ('ERV-HUN', 'HUN', 'HBS');
-INSERT INTO AudioVersion VALUES ('ERV-IND', 'INZ', 'SHL');
-INSERT INTO AudioVersion VALUES ('ERV-KAN', 'ERV', 'WTC');
-INSERT INTO AudioVersion VALUES ('ERV-MAR', 'MAR', 'WTC');
-INSERT INTO AudioVersion VALUES ('ERV-ORI', 'ORY', 'WTC');
-INSERT INTO AudioVersion VALUES ('ERV-POR', 'POR', 'ARA');
 INSERT INTO AudioVersion VALUES ('ERV-RUS', 'RUS', 'S76');
-INSERT INTO AudioVersion VALUES ('ERV-SPA', 'SPN', 'WTC');
-INSERT INTO AudioVersion VALUES ('ERV-TAM', 'TCV', 'WTC');
-INSERT INTO AudioVersion VALUES ('ERV-UKR', 'UKR', 'O95');
+INSERT INTO AudioVersion VALUES ('ERV-KAN', 'KAN', 'WTC');
+INSERT INTO AudioVersion VALUES ('ARBVDPD', 'ARB', 'VDV');
+INSERT INTO AudioVersion VALUES ('ERV-UKR', 'UKR', 'N39');
+INSERT INTO AudioVersion VALUES ('ERV-ORI', 'ORY', 'WTC');
+INSERT INTO AudioVersion VALUES ('ERV-TAM', 'TAM', 'WTC');
+INSERT INTO AudioVersion VALUES ('ERV-HIN', 'HIN', 'WTC');
+INSERT INTO AudioVersion VALUES ('ERV-AWA', 'AWA', 'WTC');
+INSERT INTO AudioVersion VALUES ('ERV-ENG', 'ENG', 'ESV');
+INSERT INTO AudioVersion VALUES ('ERV-BUL', 'BUL', 'PRB');
 INSERT INTO AudioVersion VALUES ('ERV-URD', 'URD', 'WTC');
+INSERT INTO AudioVersion VALUES ('ERV-HUN', 'HUN', 'HBS');
+INSERT INTO AudioVersion VALUES ('ERV-MAR', 'MAR', 'WTC');
