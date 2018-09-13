@@ -105,10 +105,10 @@ def usfmBookId(bookName):
 		'Jude':  		'JUD',
 		'Revelation':   'REV',
 		# Spanish
-		'SanMateo':		'MAT',
-		'SanMarcos':	'MRK',
-		'SanLucas':		'LUK',
-		'SanJuan':		'JHN',
+		'San Mateo':	'MAT',
+		'San Marcos':	'MRK',
+		'San Lucas':	'LUK',
+		'San Juan':		'JHN',
 		'Hechos':		'ACT',
 		'Romanos':		'ROM',
 		'1Corintios':	'1CO',
@@ -125,44 +125,60 @@ def usfmBookId(bookName):
 		'Filemon':		'PHM',
 		'Hebreos':		'HEB',
 		'Santiago':		'JAS',
-		'1SanPedro':	'1PE',
-		'2SanPedro':	'2PE',
-		'1SanJuan':		'1JN',
-		'2SanJuan':		'2JN',
-		'3SanJuan':		'3JN',
+		'1San Pedro':	'1PE',
+		'2San Pedro':	'2PE',
+		'1San Juan':	'1JN',
+		'2San Juan':	'2JN',
+		'3San Juan':	'3JN',
 		'Judas':		'JUD',
 		'Apocalipsis':	'REV',
 		# Portuguese
-		'SMateus':		'MAT',
-		'SMarcos':		'MRK',
-		'SLucas':		'LUK',
-		'SJoao':		'JHN',
+		'S Mateus':		'MAT',
+		'S Marcos':		'MRK',
+		'S Lucas':		'LUK',
+		'S Joao':		'JHN',
 		'Atos':			'ACT',
 		'Colossenses':	'COL',
 		'1Tess':		'1TH',
 		'2Tess':		'2TH',
 		'Hebreus':		'HEB',
-		'STiago':		'JAS',
+		'S Tiago':		'JAS',
 		'1Pedro':		'1PE',
 		'2Pedro':		'2PE',
-		'1SJoao':		'1JN',
-		'2SJoao':		'2JN',
-		'3SJoao':		'3JN',
-		'SJudas':		'JUD',
-		'Apocalipse':	'REV'
+		'1S Joao':		'1JN',
+		'2S Joao':		'2JN',
+		'3S Joao':		'3JN',
+		'S Judas':		'JUD',
+		'Apocalipse':	'REV',
+		# Indonesian
+		'Matius':		'MAT',
+		'Markus':		'MRK',
+		'Lukas':		'LUK',
+		'Yohanes':		'JHN',
+		'Kisah Rasul':	'ACT',
+		'Roma':			'ROM',
+		'1Korintus':	'1CO',
+		'2Korintus':	'2CO',
+		'Galatia':		'GAL',
+		'Efesus':		'EPH',
+		'Filipi':		'PHP',
+		'Kolose':		'COL',
+		'1Tesalonika':	'1TH',
+		'2Tesalonika':	'2TH',
+		'1Timotius':	'1TI',
+		'2Timotius':	'2TI',
+		'Ibrani':		'HEB',
+		'Yakobus':		'JAS',
+		'1Petrus':		'1PE',
+		'2Petrus':		'2PE',
+		'1Yohanes':		'1JN',
+		'2Yohanes':		'2JN',
+		'3Yohanes':		'3JN',
+		'Yudas':		'JUD',
+		'Wahyu':		'REV'
 	}
-	result = books[bookName]
-	if (result == None):
-		print("UNKNOWN BOOK NAME ", bookName)
+	result = books.get(bookName, None)
 	return result
-
-#def filterArray(list):
-#	parts = list.split('_')
-#	row = []
-#	for part in parts:
-#		if len(part) > 0:
-#			row.append(part)
-#	return row
 
 underscores = "_______________"
 
@@ -194,20 +210,18 @@ for line in dbpProd:
 				bookSet.add(name)
 				damId2 = book[21:31].replace("_", " ").strip()
 				if damId == damId2:
-					#print damId, damId2, line
+					usfm = usfmBookId(name)
+					if usfm == None:
+						print "ERROR", line, name
 					if len(chapter) < 3:
 						chapter = "_" + chapter
 					name = name.replace(" ", "_")
 					name = name + underscores[0: 12 - len(name)]
 					generated = "audio/%s/%s/%s%s__%s_%s%s.mp3" % (abbr, damId, testament, order, chapter, name, damId)
 					if line != generated:
+						print "ERROR"
 						print line
 						print generated
-						print ""
-					
-
-
-
 
 dbpProd.close()
 
