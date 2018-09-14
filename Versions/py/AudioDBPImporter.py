@@ -251,7 +251,7 @@ for line in dbpProd:
 			book = parts[3]
 			testament = book[0:1]
 			if testament == 'A' or testament == 'B':
-				order = book[1:3]
+				order = book[0:3]
 				chapter = book[5:8]
 				chapter = chapter.replace("_", "")
 				name = book[9:21]
@@ -266,7 +266,7 @@ for line in dbpProd:
 						checkChapter = "_" + checkChapter
 					checkName = name.replace(" ", "_")
 					checkName = checkName + underscores[0: 12 - len(name)]
-					generated = "audio/%s/%s/%s%s__%s_%s%s.mp3" % (abbr, damId, testament, order, checkChapter, checkName, damId)
+					generated = "audio/%s/%s/%s__%s_%s%s.mp3" % (abbr, damId, order, checkChapter, checkName, damId)
 					if line != generated:
 						print "ERROR"
 						print line

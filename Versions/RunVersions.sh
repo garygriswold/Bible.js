@@ -25,18 +25,24 @@ vacuum;
 END_SQL
 
 # Create Audio Meta Data files in the output subdirectory
-node js/AudioDBPImporter.js
+#node js/AudioDBPImporter.js
+python py/AudioDBPImporter.py
 
 # Insert Audio MetaData Files
-sqlite Versions.db < CreateAudioTables.sql
+sqlite Versions.db <<END_SQL2
+DROP TABLE IF EXISTS AudioBook;
+DROP TABLE IF EXISTS Audio;
+DROP TABLE IF EXISTS AudioVersion;
+END_SQL2
 sqlite Versions.db < output/AudioVersionTable.sql
 sqlite Versions.db < output/AudioTable.sql
 sqlite Versions.db < output/AudioBookTable.sql
 sqlite Versions.db < output/AudioChapterTable.sql
+# Note: The current AudioDBPImporter is not creating an AudioChapterTable.sql, 
+# Hence the old file is being picked up.
 
-## cp Versions.db "$HOME/Library/Application Support/BibleAppNW/databases/file__0/58"
-
-## cp Versions.db ../YourBible/www/Versions.db
+#cp Versions.db ../SafeBible/SafeBible_iOS/SafeBible/www/
+#cp Versions.db ../SafeBible/SafeBible_Android/app/src/main/assets/www/
 
 ## cp Versions.db ../Plugins/AudioPlayer/src/ios/AudioPlayer/Versions.db
 sqldiff Versions.db orig_Versions.db 
