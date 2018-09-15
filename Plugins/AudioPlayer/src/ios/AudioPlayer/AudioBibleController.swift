@@ -20,12 +20,12 @@ public class AudioBibleController {
         }
     }
  
-    var fileType: String
     var metaDataReader: AudioTOCBible?
-    var audioBible: AudioBible?
-    var audioBibleView: AudioBibleView?
-    var audioSession: AudioSession?
-    var completionHandler: ((Error?)->Void)?
+    private var fileType: String
+    private var audioBible: AudioBible?
+    private var audioBibleView: AudioBibleView?
+    private var audioSession: AudioSession?
+    private var completionHandler: ((Error?)->Void)?
     
     private init() {
         self.fileType = "mp3"

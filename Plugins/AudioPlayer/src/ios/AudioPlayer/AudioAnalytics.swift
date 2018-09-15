@@ -8,21 +8,19 @@
 
 import CoreMedia
 import UIKit
-//#if USE_FRAMEWORK
 import AWS
-//#endif
 
 class AudioAnalytics {
     
-    var dictionary = [String: String]()
-    let dateFormatter = DateFormatter()
+    private var dictionary = [String: String]()
+    private let dateFormatter = DateFormatter()
     
-    let mediaSource: String
-    let mediaId: String
-    let languageId: String
-    let textVersion: String
-    let silLang: String
-    let sessionId: String
+    private let mediaSource: String
+    private let mediaId: String
+    private let languageId: String
+    private let textVersion: String
+    private let silLang: String
+    private let sessionId: String
     
     // Pass following from play to playEnd
     var timeStarted: Date

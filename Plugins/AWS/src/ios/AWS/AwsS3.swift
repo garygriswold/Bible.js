@@ -15,13 +15,12 @@ public class AwsS3 {
     private let transfer: AWSS3TransferUtility
     private var userAgent: String? = nil
     
-    public init(region: AwsS3Region) {
+    init(region: AwsS3Region, credential: Credentials) {
         self.region = region
 	    let endpoint = AWSEndpoint(region: region.type, service: AWSServiceType.S3, useUnsafeURL: false)!
-        let credentialProvider = Credentials.AWS_BIBLE_APP
-        let configuration = AWSServiceConfiguration(region: region.type,
+        let configuration = AWSServiceConfiguration(region: credential.region,
                                                     endpoint: endpoint,
-                                                    credentialsProvider: credentialProvider)
+                                                    credentialsProvider: credential.provider)
         let transferUtility = AWSS3TransferUtilityConfiguration()
         AWSS3TransferUtility.register(
             with: configuration!,

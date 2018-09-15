@@ -12,16 +12,18 @@ class AudioTOCBook {
     let bookId: String
     let bookOrder: String
     let sequence: Int
+    let dbpBookName: String
     var bookName: String // Used by AudioControlCenter
     let numberOfChapters: Int
 
-    init(testament: AudioTOCTestament, dbRow: [String?]) {
+    init(testament: AudioTOCTestament, index: Int, dbRow: [String?]) {
         self.testament = testament
         self.bookId = dbRow[0]!
         self.bookOrder = dbRow[1]!
-        self.sequence = Int(self.bookOrder) ?? 0
-        self.bookName = self.bookId // Reset by MetaDataReader.readBookNames to bookName
-        let chapters = dbRow[2]!
+        self.sequence = index
+        self.dbpBookName = dbRow[2]!
+        self.bookName = self.dbpBookName // Reset by MetaDataReader.readBookNames to bookName
+        let chapters = dbRow[3]!
         self.numberOfChapters = Int(chapters) ?? 1
     }
     

@@ -5,12 +5,8 @@
 //  Created by Gary Griswold on 4/16/18.
 //  Copyright © 2018 ShortSands. All rights reserved.
 //
-
-import Foundation
 import AWSCore
-#if USE_FRAMEWORK
 import Utility
-#endif
 
 public class AwsS3Manager {
     
@@ -28,7 +24,7 @@ public class AwsS3Manager {
     */
     public static func findSS() -> AwsS3 {
         let manager = getSingleton()
-        return manager.findFor(region: manager.ssRegion)
+        return manager.findFor(region: manager.ssRegion, credential: Credentials.AWS_BIBLE_APP)
     }
     /**
     * This AwsS3 instance is always us-east-1.  It is for Short Sands local buckets
@@ -36,15 +32,18 @@ public class AwsS3Manager {
     */
     public static func findUSEast1() -> AwsS3 {
         let manager = getSingleton()
-        return manager.findFor(region: manager.usEast1)
+        return manager.findFor(region: manager.usEast1, credential: Credentials.AWS_BIBLE_APP)
     }
+    /**
+    * This AwsS3 instance is for accessing FCBH and DBS buckets.
+    */
     public static func findDbp() -> AwsS3 {
         let manager = getSingleton()
-        return manager.findFor(region: manager.dbpRegion)
+        return manager.findFor(region: manager.dbpRegion, credential: Credentials.DBP_BIBLE_APP)
     }
     public static func findTest() -> AwsS3 {
         let manager = getSingleton()
-        return manager.findFor(region: manager.testRegion)
+        return manager.findFor(region: manager.testRegion, credential: Credentials.AWS_BIBLE_APP)
     }
 
     private let countryCode: String
@@ -52,7 +51,7 @@ public class AwsS3Manager {
     private var usEast1: AwsS3Region
     private var dbpRegion: AwsS3Region
     private var testRegion: AwsS3Region
-    private var awsS3Map: [AWSRegionType: AwsS3]
+    private var awsS3Map: [String: AwsS3]
     
     private init() {
         if let country: String = Locale.current.regionCode {
@@ -67,7 +66,7 @@ public class AwsS3Manager {
         self.dbpRegion = AwsS3Region(type: AWSRegionType.USEast1, name: "us-east-1")
         self.testRegion = AwsS3Region(type: AWSRegionType.USWest2, name: "us-west-2")
 
-        self.awsS3Map = [AWSRegionType: AwsS3]()
+        self.awsS3Map = [String: AwsS3]()
     }
     private func initialize() {
         let db = Sqlite3()
@@ -99,11 +98,12 @@ public class AwsS3Manager {
     deinit {
         print("****** Deinitialize AwsS3Manager ******")
     }
-    private func findFor(region: AwsS3Region) -> AwsS3 {
-        var awsS3 = self.awsS3Map[region.type]
+    private func findFor(region: AwsS3Region, credential: Credentials) -> AwsS3 {
+        let key = credential.name + region.name
+        var awsS3 = self.awsS3Map[key]
         if (awsS3 == nil) {
-            awsS3 = AwsS3(region: region)
-            self.awsS3Map[region.type] = awsS3
+            awsS3 = AwsS3(region: region, credential: credential)
+            self.awsS3Map[key] = awsS3
         }
         return(awsS3!)
     }

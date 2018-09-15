@@ -59,7 +59,7 @@ class AudioBible {
         self.currReference = reference
         self.audioAnalytics = AudioAnalytics(mediaSource: reference.tocAudioBook.testament.bible.mediaSource,
                                              mediaId: reference.damId,
-                                             languageId: reference.dpbLanguageCode,
+                                             languageId: reference.dbpLanguageCode,
                                              textVersion: reference.textVersion,
                                              silLang: reference.silLang)
         self.readVerseMetaData(reference: reference)

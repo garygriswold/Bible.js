@@ -15,10 +15,10 @@ class AudioTOCTestament {
     let damId: String
     let dbpLanguageCode: String
     let dbpVersionCode: String
-    let collectionCode: String
-    let mediaType: String
+    private let collectionCode: String
+    private let mediaType: String
     var booksById: Dictionary<String, AudioTOCBook>
-    var booksBySeq: Dictionary<Int, AudioTOCBook>
+    private var booksBySeq: Dictionary<Int, AudioTOCBook>
 
     init(bible: AudioTOCBible, database: Sqlite3, dbRow: [String?]) {
         self.bible = bible
@@ -30,14 +30,15 @@ class AudioTOCTestament {
         self.dbpLanguageCode = dbRow[3]!
         self.dbpVersionCode = dbRow[4]!
 
-        let query = "SELECT bookId, bookOrder, numberOfChapters" +
+        let query = "SELECT bookId, bookOrder, bookName, numberOfChapters" +
             " FROM AudioBook" +
             " WHERE damId = ?" +
             " ORDER BY bookOrder"
         do {
             let resultSet = try database.queryV1(sql: query, values: [self.damId])
-            for row in resultSet {
-                let book = AudioTOCBook(testament: self, dbRow: row)
+            for index in 0..<resultSet.count {
+                let row = resultSet[index]
+                let book = AudioTOCBook(testament: self, index: index, dbRow: row)
                 self.booksById[book.bookId] = book
                 self.booksBySeq[book.sequence] = book
             }

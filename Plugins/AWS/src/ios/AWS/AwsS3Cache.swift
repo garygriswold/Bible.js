@@ -111,7 +111,7 @@ public class AwsS3Cache {
     }
     
     private func getPath(s3Bucket: String, s3Key: String) -> URL {
-        let localKey = s3Bucket + "_" + s3Key
+        let localKey = s3Bucket + ":" + s3Key.replacingOccurrences(of: "/", with: ":")
         return self.cacheDir.appendingPathComponent(localKey)
     }
     

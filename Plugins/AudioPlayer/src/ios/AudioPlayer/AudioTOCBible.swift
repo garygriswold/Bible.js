@@ -5,22 +5,17 @@
 //  Created by Gary Griswold on 8/7/17.
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
-
-import Foundation
-//#if USE_FRAMEWORK
 import AWS
 import Utility
-//#endif
-
 
 class AudioTOCBible {
     
     let textVersion: String
     let silLang: String
     let mediaSource: String
-    var oldTestament: AudioTOCTestament?
-    var newTestament: AudioTOCTestament?
-    let database: Sqlite3
+    private var oldTestament: AudioTOCTestament?
+    private var newTestament: AudioTOCTestament?
+    private let database: Sqlite3
     
     init(versionCode: String, silLang: String) {
         self.textVersion = versionCode
@@ -46,7 +41,7 @@ class AudioTOCBible {
                 " FROM audio a, audioVersion v" +
                 " WHERE a.dbpLanguageCode = v.dbpLanguageCode" +
                 " AND a.dbpVersionCode = v.dbpVersionCode" +
-                " AND v.versionCode = ?" +
+                " AND v.ssVersionCode = ?" +
                 " ORDER BY mediaType ASC, collectionCode ASC"
                 // mediaType sequence Drama, NonDrama
                 // collectionCode sequence NT, ON, OT

@@ -9,7 +9,7 @@
 class AudioReference {
     
     let tocAudioBook: AudioTOCBook
-    let chapter: String
+    private let chapter: String
     let fileType: String
     var audioChapter: AudioTOCChapter?
     
@@ -53,28 +53,22 @@ class AudioReference {
             return self.tocAudioBook.testament.damId
         }
     }
-    
-    var sequence: String {
+  
+    private var sequence: String {
         get {
             return self.tocAudioBook.bookOrder
         }
     }
-    
+ 
     var sequenceNum: Int {
         get {
-            return Int(self.tocAudioBook.bookOrder) ?? 1
+            return self.tocAudioBook.sequence
         }
     }
     
     var bookId: String {
         get {
             return self.tocAudioBook.bookId
-        }
-    }
-    
-    var bookName: String {
-        get {
-            return self.tocAudioBook.bookName
         }
     }
     
@@ -90,9 +84,21 @@ class AudioReference {
         }
     }
     
-    var dpbLanguageCode: String {
+    var dbpLanguageCode: String {
         get {
             return self.tocAudioBook.testament.dbpLanguageCode
+        }
+    }
+    
+    private var dbpVersionCode: String {
+        get {
+            return self.tocAudioBook.testament.dbpVersionCode
+        }
+    }
+    
+    private var dbpBookName: String {
+        get {
+            return self.tocAudioBook.dbpBookName
         }
     }
     
@@ -106,14 +112,22 @@ class AudioReference {
     
     func getS3Bucket() -> String {
         switch (self.fileType) {
-            //case "mp3": return self.damId.lowercased() + ".shortsands.com"
         case "mp3": return "dbp-prod"
             default: return "unknown bucket"
         }
     }
     
     func getS3Key() -> String {
-        return self.sequence + "_" + self.bookId + "_" + self.chapter + "." + self.fileType
+        let abbr = self.dbpLanguageCode + self.dbpVersionCode
+        var chapNum = self.chapter
+        if self.bookId != "PSA" {
+            chapNum = "_" + String(chapNum.dropFirst(1))
+        }
+        var name: String = self.dbpBookName.replacingOccurrences(of: " ", with: "_")
+        name = name.padding(toLength: 12, withPad: "_", startingAt: 0)
+        let key = "audio/\(abbr)/\(self.damId)/\(self.sequence)__\(chapNum)_\(name)\(self.damId).\(self.fileType)"
+        print("KEY: \(key)")
+        return key
     }
     
     func getNodeId(verse: Int) -> String {
