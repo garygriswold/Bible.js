@@ -37,14 +37,14 @@ public class AwsS3 {
     AmazonS3 amazonS3;
     TransferUtility transferUtility;
 
-    public AwsS3(AwsS3Region region, Context context) {
+    public AwsS3(AwsS3Region region, Credentials credential, Context context) {
         super();
         this.region = region;
         Log.d(TAG, "regionName input = " + region.name);
         ClientConfiguration config = new ClientConfiguration();
         config.setUserAgent(this.getUserAgent());
-        this.amazonS3 = new AmazonS3Client(Credentials.AWS_BIBLE_APP, config);
-        this.amazonS3.setRegion(region.type);
+        this.amazonS3 = new AmazonS3Client(credential.provider, config);
+        this.amazonS3.setRegion(credential.region);
         S3ClientOptions options = new S3ClientOptions();
         options.withPathStyleAccess(true);
 		this.amazonS3.setS3ClientOptions(options);

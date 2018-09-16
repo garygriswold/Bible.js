@@ -17,10 +17,10 @@ class AudioTOCTestament {
     String damId;
     String dbpLanguageCode;
     String dbpVersionCode;
-    String collectionCode;
-    String mediaType;
+    private String collectionCode;
+    private String mediaType;
     HashMap<String, AudioTOCBook> booksById;
-    HashMap<Integer, AudioTOCBook> booksBySeq;
+    private HashMap<Integer, AudioTOCBook> booksBySeq;
 
     AudioTOCTestament(AudioTOCBible bible, Sqlite3 database, Cursor cursor) {
         this.bible = bible;
@@ -32,7 +32,7 @@ class AudioTOCTestament {
         this.dbpLanguageCode = cursor.getString(3);
         this.dbpVersionCode = cursor.getString(4);
 
-        String query = "SELECT bookId, bookOrder, numberOfChapters" +
+        String query = "SELECT bookId, bookOrder, bookName, numberOfChapters" +
             " FROM AudioBook" +
             " WHERE damId = ?" +
             " ORDER BY bookOrder";
@@ -40,10 +40,12 @@ class AudioTOCTestament {
         values[0] = this.damId;
         try {
             Cursor cursor2 = database.queryV0(query, values);
+            int rowNum = 0;
             while(cursor2.moveToNext()) {
-                AudioTOCBook book = new AudioTOCBook(this, cursor2);
+                AudioTOCBook book = new AudioTOCBook(this, rowNum, cursor2);
                 this.booksById.put(book.bookId, book);
                 this.booksBySeq.put(book.sequence, book);
+                rowNum++;
             }
         } catch (Exception err) {
             Log.d(TAG,"ERROR " + Sqlite3.errorDescription(err));

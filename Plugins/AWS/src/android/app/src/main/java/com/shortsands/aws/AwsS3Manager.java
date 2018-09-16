@@ -34,15 +34,15 @@ public class AwsS3Manager {
 
     public static AwsS3 findSS() {
         AwsS3Manager manager = getSingleton();
-        return manager.findFor(manager.ssRegion);
+        return manager.findFor(manager.ssRegion, Credentials.AWS_BIBLE_APP);
     }
     public static AwsS3 findDbp() {
         AwsS3Manager manager = getSingleton();
-        return manager.findFor(manager.dbpRegion);
+        return manager.findFor(manager.dbpRegion, Credentials.DBP_BIBLE_APP);
     }
     public static AwsS3 findTest() {
         AwsS3Manager manager = getSingleton();
-        return manager.findFor(manager.testRegion);
+        return manager.findFor(manager.testRegion, Credentials.AWS_BIBLE_APP);
     }
 
     private String countryCode;
@@ -89,11 +89,12 @@ public class AwsS3Manager {
         }
     }
 
-    private AwsS3 findFor(AwsS3Region region) {
-        AwsS3 awsS3 = this.awsS3Map.get(region.name);
+    private AwsS3 findFor(AwsS3Region region, Credentials credential) {
+        String key = credential.name + region.name;
+        AwsS3 awsS3 = this.awsS3Map.get(key);
         if (awsS3 == null) {
-            awsS3 = new AwsS3(region, this.context);
-            this.awsS3Map.put(region.name, awsS3);
+            awsS3 = new AwsS3(region, credential, this.context);
+            this.awsS3Map.put(key, awsS3);
         }
         return(awsS3);
     }

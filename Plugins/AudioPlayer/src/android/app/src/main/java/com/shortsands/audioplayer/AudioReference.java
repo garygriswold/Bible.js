@@ -53,20 +53,10 @@ class AudioReference {
         return this.tocAudioBook.bookOrder;
     }
 
-    Integer sequenceNum() {
-        try {
-            return Integer.parseInt(this.tocAudioBook.bookOrder);
-        } catch(NumberFormatException ex) {
-            return 1;
-        }
-    }
+    Integer sequenceNum() { return this.tocAudioBook.sequence; }
 
     String bookId() {
         return this.tocAudioBook.bookId;
-    }
-
-    String bookName() {
-        return this.tocAudioBook.bookName;
     }
 
     int chapterNum() {
@@ -85,6 +75,10 @@ class AudioReference {
         return this.tocAudioBook.testament.dbpLanguageCode;
     }
 
+    private String dbpVersionCode() { return this.tocAudioBook.testament.dbpVersionCode; }
+
+    private String dbpBookName() { return this.tocAudioBook.dbpBookName; }
+
     AudioReference nextChapter() {
         return this.tocAudioBook.testament.nextChapter(this);
     }
@@ -95,14 +89,24 @@ class AudioReference {
 
     String getS3Bucket() {
         if (this.fileType.equals("mp3")) {
-            return (this.damId().toLowerCase() + ".shortsands.com");
+            return "dbp-prod";
         } else {
             return "unknown bucket";
         }
     }
 
     String getS3Key() {
-        return this.sequence() + "_" + this.bookId() + "_" + this.chapter + "." + this.fileType;
+        String abbr = this.dbpLanguageCode() + this.dbpVersionCode();
+        String chapNum = this.chapter;
+        if (this.bookId() != "PSA") {
+            chapNum = "_" + chapNum.substring(1);
+        }
+        String name = this.dbpBookName().replace(" ", "_");
+        name = name + "____________".substring(0, (12 - name.length()));
+        String key = String.format("audio/%s/%s/%s__%s_%s%s.%s", abbr, this.damId(), this.sequence(),
+                chapNum, name, this.damId(), this.fileType);
+        Log.d("TAG", "Key=" + key);
+        return key;
     }
 
     String getNodeId(int verse)  {

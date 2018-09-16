@@ -15,20 +15,18 @@ class AudioTOCBook {
     String bookId;
     String bookOrder;
     Integer sequence;
-    String bookName;  // Used by AudioControlCenter
+    String dbpBookName;
+    String bookName;  // Localized Bookname from Bible, Used by AudioControlCenter
     int numberOfChapters;
 
-    AudioTOCBook(AudioTOCTestament testament, Cursor cursor) {
+    AudioTOCBook(AudioTOCTestament testament, int index, Cursor cursor) {
         this.testament = testament;
         this.bookId = cursor.getString(0);
         this.bookOrder = cursor.getString(1);
-        try {
-            this.sequence = Integer.parseInt(this.bookOrder);
-        } catch (Exception ex) {
-            this.sequence = 0;
-        }
+        this.sequence = index;
+        this.dbpBookName = cursor.getString(2);
         this.bookName = this.bookId; // Reset by MetaDataReader.readBookNames to bookName
-        String chapters = cursor.getString(2);
+        String chapters = cursor.getString(3);
         try {
             this.numberOfChapters = Integer.parseInt(chapters);
         } catch (Exception ex) {

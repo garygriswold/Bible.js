@@ -134,7 +134,7 @@ public class AwsS3Cache {
     }
 
     private File getPath(String s3Bucket, String s3Key) {
-        String localKey = s3Bucket + "_" + s3Key;
+        String localKey = s3Key.replace("/", "_");
         File filePath = new File(this.cacheDir, localKey);
         return filePath;
     }

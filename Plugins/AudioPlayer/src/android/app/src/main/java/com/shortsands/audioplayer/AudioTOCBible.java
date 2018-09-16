@@ -19,7 +19,7 @@ class AudioTOCBible {
     String mediaSource;
     AudioTOCTestament oldTestament;
     AudioTOCTestament newTestament;
-    Sqlite3 database;
+    private Sqlite3 database;
 
     AudioTOCBible(Context context, String versionCode, String silLang) {
         this.context = context;
@@ -45,7 +45,7 @@ class AudioTOCBible {
                 " FROM audio a, audioVersion v" +
                 " WHERE a.dbpLanguageCode = v.dbpLanguageCode" +
                 " AND a.dbpVersionCode = v.dbpVersionCode" +
-                " AND v.versionCode = ?" +
+                " AND v.ssVersionCode = ?" +
                 " ORDER BY mediaType ASC, collectionCode ASC";
         // mediaType sequence Drama, NonDrama
         // collectionCode sequence NT, ON, OT
