@@ -21,8 +21,6 @@ Public domain license using the MIT template.
 Repository Structure
 --------------------
 
-BibleAppNW - (Obsolete, will be deleted soon) This is a Node/WebKit App, which will run as a local (not browser) application on desktop computers.  This is where the original development is often done, because of the ease of development in this environment.
-
 Docs - This directory contains critical how-to instructions.
 
 Library - This is the common javascript library.  Many projects contain a shell script that copies all of the files that they need from this Library.
@@ -35,12 +33,10 @@ SafeBible - This directory contains the iOS and Android versions of the mobile A
 
 Server - This directory contains programs and scripts for woking with files stored in AWS S3. This includes Bible text and audio content, and analytics of the App's use.
 
-TestApp - (Obsolete, this will be deleted soon) This was a test App developed during the rewrite of the App that removed Cordova.
-
 UnitTests - This is various unit tests for the Javascript portion. of the App
 
 Validation - This directory contains a number of scripts that test the correctness of the Bible database as produced by Publisher.
 
 Versions - The project builds a database of information about versions of the Bible which can be downloaded by the App.  This database is included in the BibleApp.
 
-YourBible - (Obsolete, this will be deleted soon.  Cordova has been removed from the current version) This is a mobile Cordova version of the App.  This version of the App runs on mobile devices. It currently runs well on Android and iOS.
+YourBible - (Obsolete, this will be moved to OBSOLETE soon.  Cordova has been removed from the current version) This is a mobile Cordova version of the App.  This version of the App runs on mobile devices. It currently runs well on Android and iOS.
