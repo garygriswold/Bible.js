@@ -12,8 +12,6 @@
 		E48D8FFD20AB5A2800F59D5F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E48D8FFB20AB5A2800F59D5F /* Main.storyboard */; };
 		E48D8FFF20AB5A2900F59D5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E48D8FFE20AB5A2900F59D5F /* Assets.xcassets */; };
 		E48D900220AB5A2900F59D5F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E48D900020AB5A2900F59D5F /* LaunchScreen.storyboard */; };
-		E48D900D20AB5A2900F59D5F /* AudioPlayer_TestHarnessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D900C20AB5A2900F59D5F /* AudioPlayer_TestHarnessTests.swift */; };
-		E48D901820AB5A2900F59D5F /* AudioPlayer_TestHarnessUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D901720AB5A2900F59D5F /* AudioPlayer_TestHarnessUITests.swift */; };
 		E48D903720AB5C8100F59D5F /* AudioPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48D903620AB5C8100F59D5F /* AudioPlayer.framework */; };
 		E48D903820AB5C8100F59D5F /* AudioPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E48D903620AB5C8100F59D5F /* AudioPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E48D903C20AB5E6000F59D5F /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48D903B20AB5E6000F59D5F /* AWS.framework */; };
@@ -80,11 +78,7 @@
 		E48D900120AB5A2900F59D5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E48D900320AB5A2900F59D5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E48D900820AB5A2900F59D5F /* AudioPlayer_TestHarnessTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioPlayer_TestHarnessTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E48D900C20AB5A2900F59D5F /* AudioPlayer_TestHarnessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer_TestHarnessTests.swift; sourceTree = "<group>"; };
-		E48D900E20AB5A2900F59D5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E48D901320AB5A2900F59D5F /* AudioPlayer_TestHarnessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AudioPlayer_TestHarnessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E48D901720AB5A2900F59D5F /* AudioPlayer_TestHarnessUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer_TestHarnessUITests.swift; sourceTree = "<group>"; };
-		E48D901920AB5A2900F59D5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E48D903620AB5C8100F59D5F /* AudioPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AudioPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E48D903B20AB5E6000F59D5F /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E48D903E20AB5EE800F59D5F /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = ../../../../AWS/src/ios/AWS/AWSCore.framework; sourceTree = "<group>"; };
@@ -156,8 +150,6 @@
 				E48D903B20AB5E6000F59D5F /* AWS.framework */,
 				E48D903620AB5C8100F59D5F /* AudioPlayer.framework */,
 				E48D8FF620AB5A2800F59D5F /* AudioPlayer_TestHarness */,
-				E48D900B20AB5A2900F59D5F /* AudioPlayer_TestHarnessTests */,
-				E48D901620AB5A2900F59D5F /* AudioPlayer_TestHarnessUITests */,
 				E48D8FF520AB5A2800F59D5F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -183,24 +175,6 @@
 				E48D900320AB5A2900F59D5F /* Info.plist */,
 			);
 			path = AudioPlayer_TestHarness;
-			sourceTree = "<group>";
-		};
-		E48D900B20AB5A2900F59D5F /* AudioPlayer_TestHarnessTests */ = {
-			isa = PBXGroup;
-			children = (
-				E48D900C20AB5A2900F59D5F /* AudioPlayer_TestHarnessTests.swift */,
-				E48D900E20AB5A2900F59D5F /* Info.plist */,
-			);
-			path = AudioPlayer_TestHarnessTests;
-			sourceTree = "<group>";
-		};
-		E48D901620AB5A2900F59D5F /* AudioPlayer_TestHarnessUITests */ = {
-			isa = PBXGroup;
-			children = (
-				E48D901720AB5A2900F59D5F /* AudioPlayer_TestHarnessUITests.swift */,
-				E48D901920AB5A2900F59D5F /* Info.plist */,
-			);
-			path = AudioPlayer_TestHarnessUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -357,7 +331,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E48D900D20AB5A2900F59D5F /* AudioPlayer_TestHarnessTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,7 +338,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E48D901820AB5A2900F59D5F /* AudioPlayer_TestHarnessUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
