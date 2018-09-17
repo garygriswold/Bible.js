@@ -15,7 +15,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let readVersion = "WEB"//KJVPD"//ESV"
+        let readVersion = "KJVPD"//WEB"//KJVPD"//
         let readLang = "eng"
         let readBook = "JHN"
         let readChapter = 2

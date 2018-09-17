@@ -43,6 +43,7 @@ sqlite Versions.db < output/AudioChapterTable.sql
 
 #cp Versions.db ../SafeBible/SafeBible_iOS/SafeBible/www/
 #cp Versions.db ../SafeBible/SafeBible_Android/app/src/main/assets/www/
+#cp Versions.db ../Plugins/AudioPlayer/src/ios/AudioPlayer_TestHarness/AudioPlayer_TestHarness/www/
 
 ## cp Versions.db ../Plugins/AudioPlayer/src/ios/AudioPlayer/Versions.db
 sqldiff Versions.db orig_Versions.db 
