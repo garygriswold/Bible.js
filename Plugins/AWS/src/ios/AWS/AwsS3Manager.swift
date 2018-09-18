@@ -61,10 +61,10 @@ public class AwsS3Manager {
             self.countryCode = "US"
         }
         // Set defaults to a valid region in case that initialize region fails.
-        self.ssRegion = AwsS3Region(type: AWSRegionType.USEast1, name: "us-east-1")
-        self.usEast1 = AwsS3Region(type: AWSRegionType.USEast1, name: "us-east-1")
-        self.dbpRegion = AwsS3Region(type: AWSRegionType.USWest2, name: "us-west-2")
-        self.testRegion = AwsS3Region(type: AWSRegionType.USWest2, name: "us-west-2")
+        self.ssRegion = AwsS3Region(name: "us-east-1")
+        self.usEast1 = AwsS3Region(name: "us-east-1")
+        self.dbpRegion = AwsS3Region(name: "us-west-2")
+        self.testRegion = AwsS3Region(name: "us-west-2")
 
         self.awsS3Map = [String: AwsS3]()
     }
@@ -78,21 +78,14 @@ public class AwsS3Manager {
             if resultSet.count > 0 {
                 let row = resultSet[0]
                 if let awsRegion = row[0] {
-                    self.ssRegion = AwsS3Manager.getRegionType(region: awsRegion)
+                    self.ssRegion = AwsS3Region(name: awsRegion)
                 }
             }
         } catch let err {
             print("Unable to set regions \(Sqlite3.errorDescription(error: err))")
         }
     }
-    static func getRegionType(region: String) -> AwsS3Region {
-        let regionType = region.aws_regionTypeValue()
-        if (regionType == AWSRegionType.Unknown) {
-            return AwsS3Region(type: AWSRegionType.USEast1, name: "us-east-1")
-        } else {
-            return AwsS3Region(type: regionType, name: region)
-        }
-    }
+
     deinit {
         print("****** Deinitialize AwsS3Manager ******")
     }

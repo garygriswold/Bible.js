@@ -6,18 +6,15 @@
 //  Copyright © 2018 ShortSands. All rights reserved.
 //
 
-import Foundation
-
-public class AwsS3Region {
+public struct AwsS3Region {
     
     let type: AWSRegionType
     let name: String
     
-    init(type: AWSRegionType, name: String) {
-        self.type = type
+    init(name: String) {
+        self.type = name.aws_regionTypeValue()
         self.name = name
     }
-    deinit {
-        print("****** deinit AwsS3Region ******")
-    }
 }
+
+
