@@ -61,7 +61,7 @@ public class AwsS3Manager {
         }
 
         this.ssRegion = new AwsS3Region("us-east-1");
-        this.dbpRegion = new AwsS3Region("us-east-1");
+        this.dbpRegion = new AwsS3Region("us-west-2");
         this.testRegion = new AwsS3Region("us-west-2");
         this.awsS3Map = new HashMap<String, AwsS3>();
     }
@@ -79,8 +79,6 @@ public class AwsS3Manager {
                 if (awsRegion != null) {
                     this.ssRegion = new AwsS3Region(awsRegion);
                 }
-                // The following is here as a reminder that we should pull this from the Region table.
-                this.dbpRegion = new AwsS3Region("us-east-1");
             }
         } catch (Exception err) {
             Log.d(TAG, "Unable to set regions " + Sqlite3.errorDescription(err));

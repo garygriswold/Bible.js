@@ -44,7 +44,7 @@ public class AwsS3 {
         ClientConfiguration config = new ClientConfiguration();
         config.setUserAgent(this.getUserAgent());
         this.amazonS3 = new AmazonS3Client(credential.provider, config);
-        this.amazonS3.setRegion(credential.region);
+        this.amazonS3.setRegion(region.type);
         S3ClientOptions options = new S3ClientOptions();
         options.withPathStyleAccess(true);
 		this.amazonS3.setS3ClientOptions(options);
