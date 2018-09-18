@@ -63,7 +63,7 @@ public class AwsS3Manager {
         // Set defaults to a valid region in case that initialize region fails.
         self.ssRegion = AwsS3Region(type: AWSRegionType.USEast1, name: "us-east-1")
         self.usEast1 = AwsS3Region(type: AWSRegionType.USEast1, name: "us-east-1")
-        self.dbpRegion = AwsS3Region(type: AWSRegionType.USEast1, name: "us-east-1")
+        self.dbpRegion = AwsS3Region(type: AWSRegionType.USWest2, name: "us-west-2")
         self.testRegion = AwsS3Region(type: AWSRegionType.USWest2, name: "us-west-2")
 
         self.awsS3Map = [String: AwsS3]()
@@ -80,8 +80,6 @@ public class AwsS3Manager {
                 if let awsRegion = row[0] {
                     self.ssRegion = AwsS3Manager.getRegionType(region: awsRegion)
                 }
-                // The following is here as a reminder that we should pull this from the Region table.
-                self.dbpRegion = AwsS3Manager.getRegionType(region: "us-east-1")
             }
         } catch let err {
             print("Unable to set regions \(Sqlite3.errorDescription(error: err))")

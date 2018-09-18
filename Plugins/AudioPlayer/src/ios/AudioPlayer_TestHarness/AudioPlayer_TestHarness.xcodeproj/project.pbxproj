@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E41D202721502FED0078C707 /* AudioS3KeyUnitTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41D202621502FED0078C707 /* AudioS3KeyUnitTest.swift */; };
 		E48D8FF820AB5A2800F59D5F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D8FF720AB5A2800F59D5F /* AppDelegate.swift */; };
 		E48D8FFA20AB5A2800F59D5F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D8FF920AB5A2800F59D5F /* ViewController.swift */; };
 		E48D8FFD20AB5A2800F59D5F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E48D8FFB20AB5A2800F59D5F /* Main.storyboard */; };
@@ -70,6 +71,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E41D202621502FED0078C707 /* AudioS3KeyUnitTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioS3KeyUnitTest.swift; sourceTree = "<group>"; };
 		E48D8FF420AB5A2800F59D5F /* AudioPlayer_TestHarness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioPlayer_TestHarness.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E48D8FF720AB5A2800F59D5F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E48D8FF920AB5A2800F59D5F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 				E48D8FFE20AB5A2900F59D5F /* Assets.xcassets */,
 				E48D900020AB5A2900F59D5F /* LaunchScreen.storyboard */,
 				E48D900320AB5A2900F59D5F /* Info.plist */,
+				E41D202621502FED0078C707 /* AudioS3KeyUnitTest.swift */,
 			);
 			path = AudioPlayer_TestHarness;
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E48D8FFA20AB5A2800F59D5F /* ViewController.swift in Sources */,
+				E41D202721502FED0078C707 /* AudioS3KeyUnitTest.swift in Sources */,
 				E48D8FF820AB5A2800F59D5F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

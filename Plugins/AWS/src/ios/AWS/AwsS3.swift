@@ -18,16 +18,17 @@ public class AwsS3 {
     init(region: AwsS3Region, credential: Credentials) {
         self.region = region
 	    let endpoint = AWSEndpoint(region: region.type, service: AWSServiceType.S3, useUnsafeURL: false)!
-        let configuration = AWSServiceConfiguration(region: credential.region,
+        let configuration = AWSServiceConfiguration(region: region.type,
                                                     endpoint: endpoint,
                                                     credentialsProvider: credential.provider)
         let transferUtility = AWSS3TransferUtilityConfiguration()
+        let key = credential.name + region.name // This is identical to the key used in AwsS3Manager
         AWSS3TransferUtility.register(
             with: configuration!,
             transferUtilityConfiguration: transferUtility,
-            forKey: self.region.name
+            forKey: key
         )
-        self.transfer = AWSS3TransferUtility.s3TransferUtility(forKey: self.region.name)
+        self.transfer = AWSS3TransferUtility.s3TransferUtility(forKey: key)
     }
     deinit {
         print("****** deinit AwsS3 ******")
