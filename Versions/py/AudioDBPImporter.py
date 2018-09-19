@@ -1,14 +1,8 @@
 #
-# The purpose of this program is to validate the book code
-# associated with each audio bible in dbp-prod
+# The purpose of this program is to generate the Audio meta data tables,
+# including AudioVersion, Audio, and AudioBook.  AudioChapter is separately
+# created.
 #
-
-# TO Do
-# 1. Write a program that parses each bookname, and looks it up in this table to report missing names
-# 2. Also build a table of Book Order associated with each BookName or usfm bookCode if possible
-# 3. Output any name mismatches
-# 4. Output order codes for usfm bookCodes, and for bookNames
-# 5. Put the resulting corresponding usfm -> [Order Code, Name]
 
 import io
 import sys
@@ -16,34 +10,35 @@ import sys
 # This table controls what Audio versions will be included, and what
 # text versions that are associated with
 versions = [
-	['ERV-ARB', 'ARB', 'WTC', True ], 	# ARBWTC/ARBWTCN1DA, ARBWTCO1DA
-	['ARBVDPD', 'ARB', 'VDV', True ], 	# ARBVDV/ARZVDVN2DA, ARZVDVO2DA
-	['ERV-AWA', 'AWA', 'WTC', True ], 	# AWAWTC/AWAWTCN2DA,
-	['ERV-BEN', 'BEN', 'WTC', True ], 	# BENWTC/BNGWTCN1DA, BNGWTCN2DA
-	['ERV-BUL', 'BUL', 'PRB', False ], 	# BULPRB/BLGAMBN1DA
-	['ERV-CMN', 'CMN', 'UN1', True ], 	# CMNUN1/CHNUNVN2DA, CMNUNV/CHNUNVO2DA
-	['ERV-ENG', 'ENG', 'ESV', False ], 	# ENGESV/ENGESVN2DA, ENGESVO2DA
-	['KJVPD', 	'ENG', 'KJV', True ], 	# ENGKJV/ENGKJVN2DA, ENGKJVO2DA
-	['WEB', 	'ENG', 'WEB', True ], 	# ENGWEB/ENGWEBN2DA, ENGWEBO2DA
-	['ERV-HRV', 'SRC', None, False ],
-	['ERV-HIN', 'HIN', 'WTC', True], 	# HINWTC/HNDWTCN2DA
-	['ERV-HUN', 'HUN', 'HBS', False ],	# HUNHBS/HUNHBSN1DA
-	['ERV-IND', 'IND', 'SHL', False ],	# INDSHL/INZSHLN2DA
-	['ERV-KAN', 'KAN', 'WTC', True ],	# KANWTC/ERVWTCN1DA, ERVWTCN2DA
-	['ERV-MAR', 'MAR', 'WTC', True ],	# MARWTC/MARWTCN1DA, MARWTCN2DA
-	['ERV-NEP', 'NEP', None, False ],
-	['ERV-ORI', 'ORY', 'WTC', True ],	# ORYWTC/ORYWTCN1DA, ORYWTCN2DA
-	['ERV-PAN', 'PAN', None, False ],
-	['ERV-POR', 'POR', 'BAR', False ],	# PORBAR/PORARAN2DA
-	['ERV-RUS', 'RUS', 'S76', False ],	# RUSS76/RUSS76N2DA, RUSS76O2DA
-	['ERV-SPA', 'SPA', 'WTC', True ],	# SPAWTC/SPNWTCN2DA
-	['ERV-SRP', 'SRP', None, False ],
-	['ERV-TAM', 'TAM', 'WTC', True ],	# TAMWTC/TCVWTCN1DA
-	['ERV-THA', 'THA', None, False ],
-	['ERV-UKR', 'UKR', 'N39', False ],	# UKRN39/UKRO95N2DA
-	['ERV-URD', 'URD', 'WTC', True ],	# URDWTC/URDWTCN2DA
-	['ERV-VIE', 'VIE', None, False ],
-	['NMV', 	'PES', None, False ]
+	['ERV-ARB', 'ARB', 'WTC', True,	 ['ARBWTCN1DA', 'ARBWTCO1DA']],
+	['ARBVDPD', 'ARB', 'VDV', True,	 ['ARZVDVN2DA', 'ARZVDVO2DA']],
+	['ERV-AWA', 'AWA', 'WTC', True,  ['AWAWTCN2DA']],
+	['ERV-BEN', 'BEN', 'WTC', True,  ['BNGWTCN1DA', 'BNGWTCN2DA']],
+	['ERV-BUL', 'BUL', 'PRB', False, ['BLGAMBN1DA']],
+	['ERV-CMN', 'CMN', 'UN1', False, ['CHNUN1N2DA', 'CHNUN1O2DA']],
+	['ERV-CHM', 'CMN', 'UNV', False, ['CHNUNVN2DA', 'CHNUNVO2DA']],
+	['ERV-ENG', 'ENG', 'ESV', False, ['ENGESVN2DA', 'ENGESVO2DA']],
+	['KJVPD', 	'ENG', 'KJV', True,  ['ENGKJVN2DA', 'ENGKJVO2DA']],
+	['WEB', 	'ENG', 'WEB', True,  ['ENGWEBN2DA', 'ENGWEBO2DA']],
+	['ERV-HRV', 'SRC', None,  False, []],
+	['ERV-HIN', 'HIN', 'WTC', True,  ['HNDWTCN2DA']],
+	['ERV-HUN', 'HUN', 'HBS', False, ['HUNHBSN1DA']],
+	['ERV-IND', 'IND', 'SHL', False, ['INZSHLN2DA']],
+	['ERV-KAN', 'KAN', 'WTC', True,	 ['ERVWTCN1DA', 'ERVWTCN2DA']],
+	['ERV-MAR', 'MAR', 'WTC', True,	 ['MARWTCN1DA', 'MARWTCN2DA']],
+	['ERV-NEP', 'NEP', None,  False, []],
+	['ERV-ORI', 'ORY', 'WTC', True,	 ['ORYWTCN1DA', 'ORYWTCN2DA']],
+	['ERV-PAN', 'PAN', None,  False, []],
+	['ERV-POR', 'POR', 'BAR', False, ['PORARAN2DA']],
+	['ERV-RUS', 'RUS', 'S76', False, ['RUSS76N2DA', 'RUSS76O2DA']],
+	['ERV-SPA', 'SPA', 'WTC', True,  ['SPNWTCN2DA']],
+	['ERV-SRP', 'SRP', None,  False, []],
+	['ERV-TAM', 'TAM', 'WTC', True,  ['TCVWTCN2DA']],
+	['ERV-THA', 'THA', None,  False, []],
+	['ERV-UKR', 'UKR', 'N39', False, ['UKRO95N2DA']],
+	['ERV-URD', 'URD', 'WTC', True,	 ['URDWTCN2DA']],
+	['ERV-VIE', 'VIE', None,  False, []],
+	['NMV', 	'PES', None,  False, []]
 ]
 
 #for version in versions:
@@ -193,13 +188,11 @@ def usfmBookId(bookName):
 	result = books.get(bookName, None)
 	return result
 
-underscores = "_______________"
-
 abbrDict = dict()	
 for version in versions:
 	if version[2] != None:
 		abbr = version[1] + version[2]
-		abbrDict[abbr] = version[0]
+		abbrDict[abbr] = (version[0], version[4])
 
 versionOut = io.open("output/AudioVersionTable.sql", mode="w", encoding="utf-8")
 versionOut.write(u"DROP TABLE IF EXISTS AudioVersion;\n")
@@ -242,52 +235,59 @@ for line in dbpProd:
 	if parts[0] == 'audio' and parts[numParts -1][-4:] == ".mp3":
 		abbr = parts[1]
 		damId = parts[2]
-		if len(abbr) == 6 and len(damId) == 10 and numParts == 4 and abbr in abbrDict.keys():
-			if not abbr in versionIdSet:
-				versionIdSet.add(abbr)
-				ssVersionCode = abbrDict[abbr]
-				versionOut.write(u"INSERT INTO AudioVersion VALUES ('%s', '%s', '%s');\n"
-				% (ssVersionCode, abbr[0:3], abbr[3:]))
-			book = parts[3]
-			testament = book[0:1]
-			if testament == 'A' or testament == 'B':
-				order = book[0:3]
-				chapter = book[5:8]
-				chapter = chapter.replace("_", "")
-				name = book[9:21]
-				name = name.replace("_", " ").strip()
+		if numParts == 4 and abbr in abbrDict.keys():
+			ssVersionCode = abbrDict[abbr][0]
+			allowDamId = abbrDict[abbr][1]
+			if damId in allowDamId:
+
+				# Write AudioVersion Row
+				if not abbr in versionIdSet:
+					versionIdSet.add(abbr)
+					versionOut.write(u"INSERT INTO AudioVersion VALUES ('%s', '%s', '%s');\n"
+					% (ssVersionCode, abbr[0:3], abbr[3:]))
+
+				# Write Audio Row
+				if not damId in damIdSet:
+					damIdSet.add(damId)
+					collectionCode = damId[6:7] + "T"
+					mType = damId[7:]
+					if mType != '1DA' and mType != '2DA':
+						print "ERROR mediaType", line
+					mediaType = 'Drama' if (mType == '2DA') else 'Non-Drama'
+					audioOut.write(u"REPLACE INTO Audio VALUES('%s', '%s', '%s', '%s', '%s');\n"
+					% (damId, abbr[0:3], abbr[3:6], collectionCode, mediaType))
+
+				# Write AudioBookRow
+				book = parts[3]
 				damId2 = book[21:31].replace("_", " ").strip()
 				if damId == damId2:
+					order = book[0:3]
+					chapter = book[5:8]
+					chapter = chapter.replace("_", "")
+					name = book[9:21]
+					name = name.replace("_", " ").strip()
 					usfm = usfmBookId(name)
 					if usfm == None:
 						print "ERROR", line, name
+					bookIdKey = damId + usfm
+					if usfm != lastUsfm or damId != lastDamId:
+						if bookLine != None:
+							bookOut.write(bookLine)
+						lastUsfm = usfm
+						lastDamId = damId
+					bookLine = u"REPLACE INTO AudioBook VALUES('%s', '%s', '%s', '%s', '%s');\n" % (damId, usfm, order, name, chapter)
+
+					# Validate Key Generation Logic
 					checkChapter = chapter
 					if len(checkChapter) < 3:
 						checkChapter = "_" + checkChapter
 					checkName = name.replace(" ", "_")
-					checkName = checkName + underscores[0: 12 - len(name)]
+					checkName = checkName + "_______________"[0: 12 - len(name)]
 					generated = "audio/%s/%s/%s__%s_%s%s.mp3" % (abbr, damId, order, checkChapter, checkName, damId)
 					if line != generated:
 						print "ERROR"
 						print line
 						print generated
-					collectionCode = damId[6:7] + "T"
-					if collectionCode == 'OT' or collectionCode == 'NT':
-						mType = damId[7:]
-						if mType != '1DA' and mType != '2DA':
-							print "ERROR mediaType", line
-						mediaType = 'Drama' if (mType == '2DA') else 'Non-Drama'
-						if not damId in damIdSet:
-							damIdSet.add(damId)
-							audioOut.write(u"REPLACE INTO Audio VALUES('%s', '%s', '%s', '%s', '%s');\n"
-							% (damId, abbr[0:3], abbr[3:6], collectionCode, mediaType))
-						bookIdKey = damId + usfm
-						if usfm != lastUsfm or damId != lastDamId:
-							if bookLine != None:
-								bookOut.write(bookLine)
-							lastUsfm = usfm
-							lastDamId = damId
-						bookLine = u"REPLACE INTO AudioBook VALUES('%s', '%s', '%s', '%s', '%s');\n" % (damId, usfm, order, name, chapter)
 
 
 dbpProd.close()
