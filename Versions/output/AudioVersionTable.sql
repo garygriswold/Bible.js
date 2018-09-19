@@ -8,7 +8,6 @@ INSERT INTO AudioVersion VALUES ('ERV-ARB', 'ARB', 'WTC');
 INSERT INTO AudioVersion VALUES ('ERV-AWA', 'AWA', 'WTC');
 INSERT INTO AudioVersion VALUES ('ERV-BEN', 'BEN', 'WTC');
 INSERT INTO AudioVersion VALUES ('ERV-BUL', 'BUL', 'PRB');
-INSERT INTO AudioVersion VALUES ('ERV-CMN', 'CMN', 'UN1');
 INSERT INTO AudioVersion VALUES ('ERV-CHM', 'CMN', 'UNV');
 INSERT INTO AudioVersion VALUES ('ERV-ENG', 'ENG', 'ESV');
 INSERT INTO AudioVersion VALUES ('KJVPD', 'ENG', 'KJV');

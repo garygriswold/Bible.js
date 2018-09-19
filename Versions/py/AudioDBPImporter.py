@@ -15,7 +15,6 @@ versions = [
 	['ERV-AWA', 'AWA', 'WTC', True,  ['AWAWTCN2DA']],
 	['ERV-BEN', 'BEN', 'WTC', True,  ['BNGWTCN1DA', 'BNGWTCN2DA']],
 	['ERV-BUL', 'BUL', 'PRB', False, ['BLGAMBN1DA']],
-	['ERV-CMN', 'CMN', 'UN1', False, ['CHNUN1N2DA', 'CHNUN1O2DA']],
 	['ERV-CHM', 'CMN', 'UNV', False, ['CHNUNVN2DA', 'CHNUNVO2DA']],
 	['ERV-ENG', 'ENG', 'ESV', False, ['ENGESVN2DA', 'ENGESVO2DA']],
 	['KJVPD', 	'ENG', 'KJV', True,  ['ENGKJVN2DA', 'ENGKJVO2DA']],
