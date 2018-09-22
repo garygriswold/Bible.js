@@ -54,11 +54,12 @@ public class AwsS3Manager {
     private AwsS3Manager() {
         String country = Locale.getDefault().getCountry();
         if (country != null) {
-            Log.d(TAG, "Country Code " + country);
             this.countryCode = country;
         } else {
             this.countryCode = "US";
         }
+        //this.countryCode = "AU"; // Uncomment for testing regions
+        Log.d(TAG, "Country Code " + this.countryCode);
 
         this.ssRegion = new AwsS3Region("us-east-1");
         this.dbpRegion = new AwsS3Region("us-west-2");
