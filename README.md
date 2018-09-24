@@ -39,4 +39,3 @@ Validation - This directory contains a number of scripts that test the correctne
 
 Versions - The project builds a database of information about versions of the Bible which can be downloaded by the App.  This database is included in the BibleApp.
 
-YourBible - (Obsolete, this will be moved to OBSOLETE soon.  Cordova has been removed from the current version) This is a mobile Cordova version of the App.  This version of the App runs on mobile devices. It currently runs well on Android and iOS.
