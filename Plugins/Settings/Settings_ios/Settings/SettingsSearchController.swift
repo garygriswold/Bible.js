@@ -26,8 +26,8 @@ class SettingsSearchController: NSObject, UISearchResultsUpdating {
         case .language:
             self.searchController.searchBar.placeholder = NSLocalizedString("Find Languages",
                                                                             comment: "Languages search bar")
-        case .bible:
-            self.searchController.searchBar.placeholder = NSLocalizedString("Find Bibles", comment: "Bibles search bar")
+        //case .bible:
+        //    self.searchController.searchBar.placeholder = NSLocalizedString("Find Bibles", comment: "Bibles search bar")
         }
         
         super.init()

@@ -42,17 +42,17 @@ struct SettingsAdapter {
             return [] // Returning empty causes BibleInitialSelect to be used.
         }
     }
-    
-    func addLanguage(language: Language) {
-        let locales = self.getLanguageSettings()
-        var localeStrs = locales.map { $0.identifier }
-        let newLocale = language.locale
-        if !locales.contains(newLocale) {
-            localeStrs.append(newLocale.identifier)
-        }
-        self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: localeStrs)
-    }
-    
+ 
+//    func addLanguage(language: Language) {
+//        let locales = self.getLanguageSettings()
+//        var localeStrs = locales.map { $0.identifier }
+//        let newLocale = language.locale
+//        if !locales.contains(newLocale) {
+//            localeStrs.append(newLocale.identifier)
+//        }
+//        self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: localeStrs)
+//    }
+
     func addBibles(bibles: [Bible]) {
         var currBibles = self.getBibleSettings()
         for bible in bibles {

@@ -41,7 +41,8 @@ class LanguageModel : GenericModel<Language>, SettingsModel {
         cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         cell.textLabel?.text = language.name
         cell.detailTextLabel?.text = language.localized
-        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
+        //cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
+        cell.selectionStyle = .none
         return cell
     }
     

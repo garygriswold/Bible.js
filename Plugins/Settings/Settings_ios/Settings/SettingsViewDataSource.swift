@@ -17,12 +17,12 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     private let availableSection: Int
     private let searchController: SettingsSearchController
     private let textSizeSliderCell: TextSizeSliderCell
-    private let language: Language? // Used only in .bible settingsViewType
+    //private let language: Language? // Used only in .bible settingsViewType
     
     init(controller: SettingsViewController, selectionViewSection: Int, searchController: SettingsSearchController) {
         self.controller = controller
         self.dataModel = controller.dataModel
-        self.language = controller.language
+        //self.language = controller.language
         self.searchController = searchController
         self.settingsViewType = controller.settingsViewType
         self.selectedSection = selectionViewSection
@@ -106,7 +106,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 switch indexPath.row {
                 case 0:
                     let languagesCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                    languagesCell.textLabel?.text = NSLocalizedString("Languages", comment: "Clickable cell title")
+                    languagesCell.textLabel?.text = NSLocalizedString("All Languages", comment: "Clickable cell title")
                     languagesCell.textLabel?.font = AppFont.sansSerif(style: .body)
                     languagesCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
                     return languagesCell
@@ -151,9 +151,9 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             
             // When self.language is not null and we are moving an available Bible to selected
             // We also want to add the Language to selected Languages.
-            if let lang = self.language {
-                self.dataModel.settingsAdapter.addLanguage(language: lang)
-            }
+            //if let lang = self.language {
+            //    self.dataModel.settingsAdapter.addLanguage(language: lang)
+            //}
             // When I move a language from, available to selected, then select initial versions
             if self.dataModel is LanguageModel {
                 if let language = self.dataModel.getSelectedLanguage(row: destination.row) {

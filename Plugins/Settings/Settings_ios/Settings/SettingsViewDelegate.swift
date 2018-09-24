@@ -17,7 +17,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     private let settingsViewType: SettingsViewType
     private let selectedSection: Int
     private let availableSection: Int
-    private let language: Language? // Used only in .bible settingsViewType
+    //private let language: Language? // Used only in .bible settingsViewType
     
     init(controller: SettingsViewController, selectionViewSection: Int) {
         self.navController = controller.navigationController
@@ -25,7 +25,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         self.settingsViewType = controller.settingsViewType
         self.selectedSection = selectionViewSection
         self.availableSection = selectionViewSection + 1
-        self.language = controller.language
+        //self.language = controller.language
         super.init()
     }
     
@@ -48,10 +48,11 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         switch self.settingsViewType {
         case .primary:
             primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
-        case .bible:
-            bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
+        //case .bible:
+        //    bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
         case .language:
-            languageViewRowSelect(tableView: tableView, indexPath: indexPath)
+            print("noop")
+        //    languageViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
     }
 
@@ -61,10 +62,11 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         switch self.settingsViewType {
         case .primary:
             primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
-        case .bible:
-            bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
+        //case .bible:
+        //    bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
         case .language:
-            languageViewRowSelect(tableView: tableView, indexPath: indexPath)
+            print("noop")
+        //    languageViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
     }
     
@@ -115,23 +117,23 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         }
     }
     
-    private func languageViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
-        switch indexPath.section {
-        case self.selectedSection:
-            print("Selected \(indexPath.row) clicked")
-            let bibleController = SettingsViewController(settingsViewType: .bible)
-            bibleController.language = self.dataModel.getSelectedLanguage(row: indexPath.row)
-            bibleController.isEditable = true
-            self.navController?.pushViewController(bibleController, animated: true)
-        case self.availableSection:
-            let bibleController = SettingsViewController(settingsViewType: .bible)
-            bibleController.language = self.dataModel.getAvailableLanguage(row: indexPath.row)
-            bibleController.isEditable = true
-            self.navController?.pushViewController(bibleController, animated: true)
-        default:
-            print("Unknown section \(indexPath.row)")
-        }
-    }
+    //private func languageViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
+    //    switch indexPath.section {
+    //    case self.selectedSection:
+    //        print("Selected \(indexPath.row) clicked")
+    //        let bibleController = SettingsViewController(settingsViewType: .bible)
+    //        bibleController.language = self.dataModel.getSelectedLanguage(row: indexPath.row)
+    //        bibleController.isEditable = true
+    //        self.navController?.pushViewController(bibleController, animated: true)
+    //    case self.availableSection:
+    //        let bibleController = SettingsViewController(settingsViewType: .bible)
+    //        bibleController.language = self.dataModel.getAvailableLanguage(row: indexPath.row)
+    //        bibleController.isEditable = true
+    //        self.navController?.pushViewController(bibleController, animated: true)
+    //    default:
+    //        print("Unknown section \(indexPath.row)")
+    //    }
+    //}
 
     // This must return nil in order for heightForHeaderInSection to work
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -169,18 +171,18 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 return NSLocalizedString("More Languages", comment: "Section heading for Other languages")
             }
             else { return nil }
-        case .bible:
-            if section == self.selectedSection {
-                return NSLocalizedString("My Bibles", comment: "Section heading for User selected Bibles")
-            }
-            else if section == self.availableSection {
-                if let lang = self.language?.localized {
-                    return lang + " " + NSLocalizedString("Bibles", comment: "Section heading for Bibles in one lang")
-                } else {
-                    return NSLocalizedString("More Bibles", comment: "Section heading for available Bibles")
-                }
-            }
-            else { return nil }
+        //case .bible:
+        //    if section == self.selectedSection {
+        //        return NSLocalizedString("My Bibles", comment: "Section heading for User selected Bibles")
+        //    }
+        //    else if section == self.availableSection {
+        //        if let lang = self.language?.localized {
+        //            return lang + " " + NSLocalizedString("Bibles", comment: "Section heading for Bibles in //one lang")
+        //        } else {
+        //            return NSLocalizedString("More Bibles", comment: "Section heading for available Bibles")
+        //        }
+        //    }
+        //    else { return nil }
         }
     }
 

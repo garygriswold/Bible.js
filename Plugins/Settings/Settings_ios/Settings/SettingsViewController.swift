@@ -9,7 +9,7 @@ import UIKit
 enum SettingsViewType {
     case primary
     case language
-    case bible
+    //case bible
 }
 
 class SettingsViewController: UIViewController {
@@ -18,7 +18,7 @@ class SettingsViewController: UIViewController {
     var searchController: SettingsSearchController!
     var dataModel: SettingsModel!
     var tableView: UITableView!
-    var language: Language? // Used only when SettingsViewType is .bible
+    //var language: Language? // Used only when SettingsViewType is .bible
     var isEditable: Bool
     var recentContentOffset: CGPoint // Used to restore position when returning to view
     
@@ -74,9 +74,9 @@ class SettingsViewController: UIViewController {
         case .language:
             self.navigationItem.title = NSLocalizedString("Languages", comment: "Languages view page title")
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
-        case .bible:
-            self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
-            self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
+        //case .bible:
+        //    self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
+        //    self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
         }
         self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
@@ -87,7 +87,7 @@ class SettingsViewController: UIViewController {
         AppFont.updateSearchFontSize()
         
         self.saveHandler(sender: nil)
-        //self.tableView.setEditing(self.isEditable, animated: true)
+        self.tableView.setEditing(self.isEditable, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -99,11 +99,12 @@ class SettingsViewController: UIViewController {
         
         switch self.settingsViewType {
         case .primary:
-            self.dataModel = BibleModel(language: nil)
+            //self.dataModel = BibleModel(language: nil)
+            self.dataModel = BibleModel()
         case .language:
             self.dataModel = LanguageModel()
-        case .bible:
-            self.dataModel = BibleModel(language: self.language)
+        //case .bible:
+        //    self.dataModel = BibleModel(language: self.language)
         }
         self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: self.selectedSection,
                                                  searchController: self.searchController)
