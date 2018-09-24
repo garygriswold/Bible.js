@@ -6,8 +6,8 @@ android {
         applicationId "com.shortsands.yourbible"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 11201
-        versionName "1.12.1"
+        versionCode 11203
+        versionName "1.12.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

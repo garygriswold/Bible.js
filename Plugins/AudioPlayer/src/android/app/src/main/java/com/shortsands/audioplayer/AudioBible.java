@@ -284,7 +284,7 @@ public class AudioBible implements MediaPlayer.OnErrorListener, MediaPlayer.OnCo
     class PreFetchCompletion implements CompletionHandler {
         @Override
         public void completed(Object result) {
-            if (result instanceof File) {
+            if (result instanceof File && mediaPlayer != null) {
                 File file = (File) result;
                 nextPlayer = initPlayer(file);
                 mediaPlayer.setNextMediaPlayer(nextPlayer);
