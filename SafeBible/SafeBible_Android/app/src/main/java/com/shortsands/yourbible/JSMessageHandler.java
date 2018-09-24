@@ -277,8 +277,8 @@ public class JSMessageHandler {
                     String regionType = parameters.getString(0);
                     String s3Bucket = parameters.getString(1);
                     String s3Key = parameters.getString(2);
-                    String filePath = parameters.getString(3);
-                    File file = new File(this.activity.getDataDir(), filePath);
+                    String dbName = parameters.getString(3);
+                    File file = this.activity.getDatabasePath(dbName);
                     AwsS3 s3 = null;
                     if (regionType.equals("SS")) {
                         s3 = AwsS3Manager.findSS();

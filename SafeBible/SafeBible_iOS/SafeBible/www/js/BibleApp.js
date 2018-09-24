@@ -2874,7 +2874,7 @@ function FileDownloader(database, locale) {
 	if (deviceSettings.platform() === 'ios') {
 		this.finalPath = '/Library/LocalDatabase/';
 	} else {
-		this.finalPath = '/databases/';
+		this.finalPath = '';
 	}
 	Object.seal(this);
 }
