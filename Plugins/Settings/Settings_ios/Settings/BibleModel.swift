@@ -13,11 +13,9 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
     
     let locales: [Locale]
     
-    //init(language: Language?) {
     init() {
         let adapter = SettingsAdapter()
         var selected: [Bible]
-        //var available: [Bible]
         let start: Double = CFAbsoluteTimeGetCurrent()
         self.locales = adapter.getLanguageSettings()
         var bibles: [String] = adapter.getBibleSettings()
@@ -29,12 +27,8 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
             bibles = selected.map { $0.bibleId }
             adapter.updateSettings(bibles: selected)
         }
-        //if let lang = language {
-        //    available = adapter.getBiblesAvailable(locales: [Locale(identifier: lang.iso)],
-        //                                                     selectedBibles: bibles)
-        //} else {
         let available = adapter.getBiblesAvailable(locales: locales, selectedBibles: bibles)
-        //}
+        
         super.init(adapter: adapter, selected: selected, available: available)
         print("*** BibleModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
     }
@@ -59,7 +53,6 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
         cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         cell.textLabel?.text = bible.name
         cell.detailTextLabel?.text = bible.abbr
-        //cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator // only works when not editing
         cell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
         return cell
     }

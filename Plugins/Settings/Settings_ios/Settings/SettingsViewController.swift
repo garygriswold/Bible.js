@@ -71,9 +71,6 @@ class SettingsViewController: UIViewController {
         case .language:
             self.navigationItem.title = NSLocalizedString("Languages", comment: "Languages view page title")
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
-        //case .bible:
-        //    self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
-        //    self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
         }
         self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
@@ -95,12 +92,9 @@ class SettingsViewController: UIViewController {
         
         switch self.settingsViewType {
         case .primary:
-            //self.dataModel = BibleModel(language: nil)
             self.dataModel = BibleModel()
         case .language:
             self.dataModel = LanguageModel()
-        //case .bible:
-        //    self.dataModel = BibleModel(language: self.language)
         }
         self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: self.selectedSection,
                                                  searchController: self.searchController)

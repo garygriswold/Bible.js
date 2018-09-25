@@ -17,12 +17,10 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     private let availableSection: Int
     private let searchController: SettingsSearchController?
     private let textSizeSliderCell: TextSizeSliderCell
-    //private let language: Language? // Used only in .bible settingsViewType
     
     init(controller: SettingsViewController, selectionViewSection: Int, searchController: SettingsSearchController?) {
         self.controller = controller
         self.dataModel = controller.dataModel
-        //self.language = controller.language
         self.searchController = searchController
         self.settingsViewType = controller.settingsViewType
         self.selectedSection = selectionViewSection
@@ -40,36 +38,31 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     
     // Return the number of sections
     func numberOfSections(in tableView: UITableView) -> Int {
-        if self.settingsViewType == .primary {
-            return 5
-            //return 4 + self.dataModel.locales.count
-        } else {
-            return 2
+        switch self.settingsViewType {
+        case .primary: return 5 //return 4 + self.dataModel.locales.count
+        case .language: return 2
         }
     }
     
     // Return the number of rows for each section in your static table
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.settingsViewType == .primary && section < self.selectedSection {
+        switch self.settingsViewType {
+        case .primary:
             switch section {
             case 0: return (UserMessageController.isAvailable()) ? 3 : 2
             case 1: return 1
             case 2: return 1
-            default: fatalError("Unknown number of sections")
+            case 3: return self.dataModel.selectedCount
+            default: return self.dataModel.availableCount
             }
-        } else {
+        case .language:
             switch section {
-            case self.selectedSection: return self.dataModel.selectedCount
-            case self.availableSection:
-                switch self.settingsViewType {
-                case .primary:
+            case 0: return self.dataModel.selectedCount
+            case 1:
+                if self.searchController!.isSearching() {
+                    return self.dataModel.filteredCount
+                } else {
                     return self.dataModel.availableCount
-                case .language:
-                    if self.searchController!.isSearching() {
-                        return self.dataModel.filteredCount
-                    } else {
-                        return self.dataModel.availableCount
-                    }
                 }
             default: fatalError("Unknown number of sections")
             }
@@ -78,7 +71,8 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     
     // Return the row cell for the corresponding section and row
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.settingsViewType == .primary && indexPath.section < self.selectedSection {
+        switch self.settingsViewType {
+        case .primary:
             switch indexPath.section {
             case 0:
                 switch indexPath.row {
@@ -118,13 +112,16 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                     return languagesCell
                 default: fatalError("Unknown row \(indexPath.row) in section 2")
                 }
-            default: fatalError("")
-            }
-        } else {
-            switch indexPath.section {
-            case self.selectedSection:
+            case 3:
                 return self.dataModel.selectedCell(tableView: tableView, indexPath: indexPath)
-            case self.availableSection:
+            default:
+                return self.dataModel.availableCell(tableView: tableView, indexPath: indexPath, inSearch:       self.searchController?.isSearching() ?? false)
+            }
+        case .language:
+            switch indexPath.section {
+            case 0:
+                return self.dataModel.selectedCell(tableView: tableView, indexPath: indexPath)
+            case 1:
                 return self.dataModel.availableCell(tableView: tableView, indexPath: indexPath, inSearch: self.searchController?.isSearching() ?? false)
             default: fatalError("Unknown section \(indexPath.section)")
             }
@@ -133,7 +130,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     
     // Return true for each row that can be edited
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return (indexPath.section == self.selectedSection || indexPath.section == self.availableSection)
+        return indexPath.section >= selectedSection
     }
     
     // Commit data row change to the data source
@@ -155,12 +152,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                                                    inSearch: self.searchController?.isSearching() ?? false)
             tableView.moveRow(at: indexPath, to: destination)
             
-            // When self.language is not null and we are moving an available Bible to selected
-            // We also want to add the Language to selected Languages.
-            //if let lang = self.language {
-            //    self.dataModel.settingsAdapter.addLanguage(language: lang)
-            //}
-            // When I move a language from, available to selected, then select initial versions
+            // When we move a language from available to selected, then select initial versions
             if self.dataModel is LanguageModel {
                 if let language = self.dataModel.getSelectedLanguage(row: destination.row) {
                     let initial = BibleInitialSelect(adapter: self.dataModel.settingsAdapter)

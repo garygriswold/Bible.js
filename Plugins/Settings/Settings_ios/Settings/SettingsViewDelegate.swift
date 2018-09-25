@@ -17,7 +17,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     private let settingsViewType: SettingsViewType
     private let selectedSection: Int
     private let availableSection: Int
-    //private let language: Language? // Used only in .bible settingsViewType
     
     init(controller: SettingsViewController, selectionViewSection: Int) {
         self.navController = controller.navigationController
@@ -25,7 +24,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         self.settingsViewType = controller.settingsViewType
         self.selectedSection = selectionViewSection
         self.availableSection = selectionViewSection + 1
-        //self.language = controller.language
         super.init()
     }
     
@@ -45,28 +43,16 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     // Does the same as didSelectRow at, not sure why I could not call it directly.
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        switch self.settingsViewType {
-        case .primary:
+        if self.settingsViewType == .primary {
             primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
-        //case .bible:
-        //    bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
-        case .language:
-            print("noop")
-        //    languageViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
     }
 
     // Handle row selection.
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        switch self.settingsViewType {
-        case .primary:
+        if self.settingsViewType == .primary {
             primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
-        //case .bible:
-        //    bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
-        case .language:
-            print("noop")
-        //    languageViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
     }
     
@@ -100,39 +86,19 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     }
     
     private func bibleViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
-        switch indexPath.section {
-        case self.selectedSection:
+        if indexPath.section  == self.selectedSection {
             if let bible = self.dataModel.getSelectedBible(row: indexPath.row) {
                 let detailController = BibleDetailViewController(bible: bible)
                 self.navController?.pushViewController(detailController, animated: true)
             }
-        case self.availableSection:
+        }
+        else if indexPath.section >= self.availableSection {
             if let bible = self.dataModel.getAvailableBible(row: indexPath.row) {
                 let detailController = BibleDetailViewController(bible: bible)
                 self.navController?.pushViewController(detailController, animated: true)
             }
-        default:
-            print("Unknown section \(indexPath.row)")
         }
     }
-    
-    //private func languageViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
-    //    switch indexPath.section {
-    //    case self.selectedSection:
-    //        print("Selected \(indexPath.row) clicked")
-    //        let bibleController = SettingsViewController(settingsViewType: .bible)
-    //        bibleController.language = self.dataModel.getSelectedLanguage(row: indexPath.row)
-    //        bibleController.isEditable = true
-    //        self.navController?.pushViewController(bibleController, animated: true)
-    //    case self.availableSection:
-    //        let bibleController = SettingsViewController(settingsViewType: .bible)
-    //        bibleController.language = self.dataModel.getAvailableLanguage(row: indexPath.row)
-    //        bibleController.isEditable = true
-    //        self.navController?.pushViewController(bibleController, animated: true)
-    //    default:
-    //        print("Unknown section \(indexPath.row)")
-    //    }
-    //}
 
     // This must return nil in order for heightForHeaderInSection to work
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -170,18 +136,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 return NSLocalizedString("More Languages", comment: "Section heading for Other languages")
             }
             else { return nil }
-        //case .bible:
-        //    if section == self.selectedSection {
-        //        return NSLocalizedString("My Bibles", comment: "Section heading for User selected Bibles")
-        //    }
-        //    else if section == self.availableSection {
-        //        if let lang = self.language?.localized {
-        //            return lang + " " + NSLocalizedString("Bibles", comment: "Section heading for Bibles in //one lang")
-        //        } else {
-        //            return NSLocalizedString("More Bibles", comment: "Section heading for available Bibles")
-        //        }
-        //    }
-        //    else { return nil }
         }
     }
 
@@ -214,28 +168,28 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
     // Identifies Add and Delete Rows
     func tableView(_ tableView: UITableView, editingStyleForRowAt: IndexPath) -> UITableViewCellEditingStyle {
-        switch editingStyleForRowAt.section {
-        case self.selectedSection: return UITableViewCellEditingStyle.delete
-        case self.availableSection: return UITableViewCellEditingStyle.insert
-        default: return UITableViewCellEditingStyle.none
+        if editingStyleForRowAt.section == selectedSection {
+            return UITableViewCellEditingStyle.delete
+        }
+        else if editingStyleForRowAt.section >= self.availableSection {
+            return UITableViewCellEditingStyle.insert
+        }
+        else {
+            return UITableViewCellEditingStyle.none
         }
     }
     
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        if self.settingsViewType == .primary {
-            return (indexPath.section == 3) ? NSLocalizedString("Remove", comment: "Red Delete Button text") : nil
+        if indexPath.section == selectedSection {
+            return NSLocalizedString("Remove", comment: "Red Delete Button text")
         } else {
-            return (indexPath.section == 0) ? NSLocalizedString("Remove", comment: "Red Delete Button text") : nil
+            return nil
         }
     }
     
     // Keeps non-editable rows from indenting
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt: IndexPath) -> Bool {
-        switch shouldIndentWhileEditingRowAt.section {
-        case self.selectedSection: return true
-        case self.availableSection: return true
-        default: return false
-        }
+        return (shouldIndentWhileEditingRowAt.section >= self.selectedSection)
     }
     
     // Limit the movement of rows
