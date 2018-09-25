@@ -235,8 +235,10 @@ struct SettingsAdapter {
             " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
             " AND b.bibleId NOT" + genQuest(array: selectedBibles) +
             " AND l.iso1" + genQuest(array: locales) +
-            " AND b.localizedName is NOT null ORDER BY b.abbr"
-        return getBibles(sql: sql, locales: locales, selectedBibles: selectedBibles)
+            " AND b.localizedName is NOT null ORDER BY b.iso3, b.localizedName"
+        let results = getBibles(sql: sql, locales: locales, selectedBibles: selectedBibles)
+        return results
+
     }
     
     private func getBibles(sql: String, locales: [Locale], selectedBibles: [String]) -> [Bible] {

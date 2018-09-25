@@ -11,10 +11,12 @@ import UIKit
 
 class LanguageModel : GenericModel<Language>, SettingsModel {
     
+    let locales: [Locale]
+    
     init() {
         let start: Double = CFAbsoluteTimeGetCurrent()
         let adapter = SettingsAdapter()
-        let locales = adapter.getLanguageSettings()
+        self.locales = adapter.getLanguageSettings()
         let selected = adapter.getLanguagesSelected(selected: locales)
         let available = adapter.getLanguagesAvailable(selected: locales)
         super.init(adapter: adapter, selected: selected, available: available)

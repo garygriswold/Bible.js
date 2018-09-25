@@ -11,13 +11,15 @@ import UIKit
 
 class BibleModel : GenericModel<Bible>, SettingsModel {
     
+    let locales: [Locale]
+    
     //init(language: Language?) {
     init() {
         let adapter = SettingsAdapter()
         var selected: [Bible]
-        var available: [Bible]
+        //var available: [Bible]
         let start: Double = CFAbsoluteTimeGetCurrent()
-        let locales = adapter.getLanguageSettings()
+        self.locales = adapter.getLanguageSettings()
         var bibles: [String] = adapter.getBibleSettings()
         if bibles.count > 0 {
             selected = adapter.getBiblesSelected(locales: locales, selectedBibles: bibles)
@@ -31,7 +33,7 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
         //    available = adapter.getBiblesAvailable(locales: [Locale(identifier: lang.iso)],
         //                                                     selectedBibles: bibles)
         //} else {
-        available = adapter.getBiblesAvailable(locales: locales, selectedBibles: bibles)
+        let available = adapter.getBiblesAvailable(locales: locales, selectedBibles: bibles)
         //}
         super.init(adapter: adapter, selected: selected, available: available)
         print("*** BibleModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")

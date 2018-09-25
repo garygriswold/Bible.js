@@ -48,6 +48,7 @@ class Bible : Equatable {
 protocol SettingsModel {
  
     var settingsAdapter: SettingsAdapter { get }
+    var locales: [Locale] { get }
     var selectedCount: Int { get }
     var availableCount: Int { get }
     var filteredCount: Int { get }
