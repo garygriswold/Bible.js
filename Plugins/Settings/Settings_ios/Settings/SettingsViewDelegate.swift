@@ -93,7 +93,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             }
         }
         else if indexPath.section >= self.availableSection {
-            if let bible = self.dataModel.getAvailableBible(row: indexPath.row) {
+            let bibleModel = self.dataModel as! BibleModel
+            if let bible = bibleModel.getAvailableBible(section: (indexPath.section - 4), row: indexPath.row) {
                 let detailController = BibleDetailViewController(bible: bible)
                 self.navController?.pushViewController(detailController, animated: true)
             }
