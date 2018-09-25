@@ -12,6 +12,7 @@ import UIKit
 class BibleModel : GenericModel<Bible>, SettingsModel {
     
     let locales: [Locale]
+    var available2: [Locale: [Bible]]
     
     init() {
         let adapter = SettingsAdapter()
@@ -27,9 +28,15 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
             bibles = selected.map { $0.bibleId }
             adapter.updateSettings(bibles: selected)
         }
-        let available = adapter.getBiblesAvailable(locales: locales, selectedBibles: bibles)
-        
+        let available = [Bible]()
+        self.available2 = [Locale: [Bible]]()
+        var available1: [Bible]
+        for locale in self.locales {
+            available1 = adapter.getBiblesAvailable(locale: locale, selectedBibles: bibles)
+            available2[locale] = available1
+        }
         super.init(adapter: adapter, selected: selected, available: available)
+    
         print("*** BibleModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
     }
     
@@ -43,7 +50,11 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
     }
     
     func availableCell(tableView: UITableView, indexPath: IndexPath, inSearch: Bool) -> UITableViewCell {
-        let bible = (inSearch) ? filtered[indexPath.row] : available[indexPath.row]
+        let index = indexPath.section - 4
+        let locale = self.locales[index] // need safety
+        let bibles = self.available2[locale]! // need safety
+        let bible = bibles[indexPath.row] // need safety
+        //let bible = (inSearch) ? filtered[indexPath.row] : available[indexPath.row]
         return self.generateCell(tableView: tableView, indexPath: indexPath, bible: bible)
     }
     
@@ -69,29 +80,6 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
         return self.available.count
     }
 
-    /**
-    * A better search would search starting with each word, but compare from
-    * there to the end of the next word.
-    */
     func filterForSearch(searchText: String) {
-        print("****** INSIDE FILTER CONTENT FOR SEARCH ******")
-        let searchFor = searchText.uppercased()
-        self.filtered.removeAll()
-        for vers in available {
-            if vers.abbr.hasPrefix(searchFor) {
-                self.filtered.append(vers)
-            } else if vers.name.uppercased().hasPrefix(searchFor) {
-                self.filtered.append(vers)
-            } else {
-                // This could be precomputed and stored for performance reasons
-                let words: [String] = vers.name.components(separatedBy: " ")
-                for word in words {
-                    if word.uppercased().hasPrefix(searchFor) {
-                        self.filtered.append(vers)
-                        break // jump out of word loop, back to vers loop
-                    }
-                }
-            }
-        }
     }
 }

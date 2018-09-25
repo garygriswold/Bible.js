@@ -124,10 +124,15 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             if section == self.selectedSection {
                 return NSLocalizedString("My Bibles", comment: "Section heading for User selected Bibles")
             }
-            else if section == self.availableSection {
-                return NSLocalizedString("More Bibles", comment: "Section heading for available Bibles")
+            else if section >= self.availableSection {
+                let index = section - 4
+                let locale = self.dataModel.locales[index]
+                let lang = Locale.current.localizedString(forLanguageCode: locale.languageCode ?? "en")
+                return lang
             }
-            else { return nil }
+            else {
+                return nil
+            }
         case .language:
             if section == self.selectedSection {
                 return NSLocalizedString("My Languages", comment: "Section heading for User languages")

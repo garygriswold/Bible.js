@@ -167,7 +167,7 @@ struct SettingsAdapter {
         }
         var languages = [Language]()
         for loc: Locale in selected {
-            if let found: Language = map[loc.languageCode ?? "??"] {
+            if var found: Language = map[loc.languageCode ?? "??"] {
                 found.locale = loc
                 languages.append(found)
             }
@@ -230,13 +230,13 @@ struct SettingsAdapter {
         return bibles
     }
     
-    func getBiblesAvailable(locales: [Locale], selectedBibles: [String]) -> [Bible] {
+    func getBiblesAvailable(locale: Locale, selectedBibles: [String]) -> [Bible] {
         let sql = "SELECT bibleId, abbr, b.iso3, b.localizedName" +
             " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
             " AND b.bibleId NOT" + genQuest(array: selectedBibles) +
-            " AND l.iso1" + genQuest(array: locales) +
-            " AND b.localizedName is NOT null ORDER BY b.iso3, b.localizedName"
-        let results = getBibles(sql: sql, locales: locales, selectedBibles: selectedBibles)
+            " AND l.iso1 = ?" + // + genQuest(array: locales) +
+            " AND b.localizedName is NOT null ORDER BY b.localizedName"
+        let results = getBibles(sql: sql, locales: [locale], selectedBibles: selectedBibles)
         return results
 
     }

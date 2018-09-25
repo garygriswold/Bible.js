@@ -39,7 +39,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     // Return the number of sections
     func numberOfSections(in tableView: UITableView) -> Int {
         switch self.settingsViewType {
-        case .primary: return 5 //return 4 + self.dataModel.locales.count
+        case .primary: return 4 + self.dataModel.locales.count
         case .language: return 2
         }
     }
@@ -53,7 +53,15 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             case 1: return 1
             case 2: return 1
             case 3: return self.dataModel.selectedCount
-            default: return self.dataModel.availableCount
+            default: //return self.dataModel.availableCount
+                let index = section - 4
+                let locale = self.dataModel.locales[index] // need safety
+                if let bibleModel = self.dataModel as? BibleModel {
+                    let bibles = bibleModel.available2[locale]
+                    return (bibles != nil) ? bibles!.count : 0
+                } else {
+                    return 0
+                }
             }
         case .language:
             switch section {
