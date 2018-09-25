@@ -93,7 +93,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             print("Section 1 Font Size Widget.  It is not selectable.")
         case 2:
             let languageController = SettingsViewController(settingsViewType: .language)
-            languageController.isEditable = true
             self.navController?.pushViewController(languageController, animated: true)
         default:
             bibleViewRowSelect(tableView: tableView, indexPath: indexPath)

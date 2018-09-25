@@ -17,7 +17,6 @@ public class SettingsNavigator {
     
     public func present() -> UINavigationController {
         let viewController = SettingsViewController(settingsViewType: .primary)
-        viewController.isEditable = true
         //let viewController = SettingsViewController(settingsViewType: .language)
         //let viewController = SettingsViewController(settingsViewType: .version)
         //let viewController = FeedbackViewController()

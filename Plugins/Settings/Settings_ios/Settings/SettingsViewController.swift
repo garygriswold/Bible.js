@@ -9,7 +9,6 @@ import UIKit
 enum SettingsViewType {
     case primary
     case language
-    //case bible
 }
 
 class SettingsViewController: UIViewController {
@@ -18,8 +17,6 @@ class SettingsViewController: UIViewController {
     var searchController: SettingsSearchController?
     var dataModel: SettingsModel!
     var tableView: UITableView!
-    //var language: Language? // Used only when SettingsViewType is .bible
-    var isEditable: Bool
     var recentContentOffset: CGPoint // Used to restore position when returning to view
     
     private let selectedSection: Int
@@ -31,7 +28,6 @@ class SettingsViewController: UIViewController {
         self.settingsViewType = settingsViewType
         self.selectedSection = (settingsViewType == .primary) ? 3 : 0
         self.availableSection = self.selectedSection + 1
-        self.isEditable = false
         self.recentContentOffset = CGPoint(x:0, y: 0)
         
         super.init(nibName: nil, bundle: nil)
@@ -50,7 +46,6 @@ class SettingsViewController: UIViewController {
         self.settingsViewType = .primary
         self.selectedSection = (settingsViewType == .primary) ? 3 : 0
         self.availableSection = self.selectedSection + 1
-        self.isEditable = false
         self.recentContentOffset = CGPoint(x:0, y: 0)
         super.init(coder: coder)
     }
@@ -88,8 +83,7 @@ class SettingsViewController: UIViewController {
         
         AppFont.updateSearchFontSize()
         
-        self.saveHandler(sender: nil)
-        self.tableView.setEditing(self.isEditable, animated: true)
+        self.tableView.setEditing(true, animated: false)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -157,14 +151,14 @@ class SettingsViewController: UIViewController {
             }
         }
         self.tableView.scrollToRow(at: IndexPath(item: 0, section: self.availableSection), at: .top, animated: true)
-        self.editHandler(sender: nil)
+        //self.editHandler(sender: nil)
     }
     
     @objc func keyboardWillHide(note: NSNotification) {
         self.tableView.frame = UIScreen.main.bounds
-        self.saveHandler(sender: nil)
+        //self.saveHandler(sender: nil)
     }
-    
+/*
     @objc func editHandler(sender: UIBarButtonItem?) {
         self.tableView.setEditing(true, animated: true)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
@@ -176,7 +170,7 @@ class SettingsViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
                                                                  action: #selector(editHandler))
     }
-    
+*/
     @objc func doneHandler(sender: UIBarButtonItem?) {
         print("Settings Done button clicked")
     }
