@@ -10,26 +10,16 @@ import UIKit
 class SettingsSearchController: NSObject, UISearchResultsUpdating {
     
     private weak var controller: SettingsViewController?
-    private let settingsViewType: SettingsViewType
     private let availableSection: Int
     private let searchController: UISearchController
     private var dataModel: SettingsModel?
     
     init(controller: SettingsViewController, selectionViewSection: Int) {
         self.controller = controller
-        self.settingsViewType = controller.settingsViewType
         self.availableSection = selectionViewSection + 1
         self.searchController = UISearchController(searchResultsController: nil)
-        switch settingsViewType {
-        case .primary:
-            self.searchController.searchBar.placeholder = NSLocalizedString("Find Bibles", comment: "Bibles search bar")
-        case .language:
-            self.searchController.searchBar.placeholder = NSLocalizedString("Find Languages",
-                                                                            comment: "Languages search bar")
-        //case .bible:
-        //    self.searchController.searchBar.placeholder = NSLocalizedString("Find Bibles", comment: "Bibles search bar")
-        }
-        
+        self.searchController.searchBar.placeholder = NSLocalizedString("Find Languages",
+                                                                        comment: "Languages search bar")
         super.init()
         
         self.searchController.searchResultsUpdater = self
@@ -39,7 +29,7 @@ class SettingsSearchController: NSObject, UISearchResultsUpdating {
     }
     
     deinit {
-        print("**** deinit SettingsSearchController \(self.settingsViewType) ******")
+        print("**** deinit SettingsSearchController ******")
     }
     
     func viewAppears(dataModel: SettingsModel?) {

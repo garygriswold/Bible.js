@@ -15,7 +15,7 @@ enum SettingsViewType {
 class SettingsViewController: UIViewController {
     
     let settingsViewType: SettingsViewType
-    var searchController: SettingsSearchController!
+    var searchController: SettingsSearchController?
     var dataModel: SettingsModel!
     var tableView: UITableView!
     //var language: Language? // Used only when SettingsViewType is .bible
@@ -36,7 +36,9 @@ class SettingsViewController: UIViewController {
         
         super.init(nibName: nil, bundle: nil)
         
-        self.searchController = SettingsSearchController(controller: self, selectionViewSection: self.selectedSection)
+        if settingsViewType == .language {
+            self.searchController = SettingsSearchController(controller: self, selectionViewSection: self.selectedSection)
+        }
     }
     
     deinit {
@@ -120,8 +122,8 @@ class SettingsViewController: UIViewController {
         notify.addObserver(self, selector: #selector(keyboardWillHide),
                            name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        if self.dataModel.availableCount > 5 {
-            self.searchController.viewAppears(dataModel: self.dataModel)
+        if self.settingsViewType == .language {
+            self.searchController?.viewAppears(dataModel: self.dataModel)
         }
     }
     

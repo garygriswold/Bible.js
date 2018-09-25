@@ -15,11 +15,11 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     private let settingsViewType: SettingsViewType
     private let selectedSection: Int
     private let availableSection: Int
-    private let searchController: SettingsSearchController
+    private let searchController: SettingsSearchController?
     private let textSizeSliderCell: TextSizeSliderCell
     //private let language: Language? // Used only in .bible settingsViewType
     
-    init(controller: SettingsViewController, selectionViewSection: Int, searchController: SettingsSearchController) {
+    init(controller: SettingsViewController, selectionViewSection: Int, searchController: SettingsSearchController?) {
         self.controller = controller
         self.dataModel = controller.dataModel
         //self.language = controller.language
@@ -42,6 +42,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         if self.settingsViewType == .primary {
             return 5
+            //return 4 + self.dataModel.locales.count
         } else {
             return 2
         }
@@ -60,10 +61,15 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             switch section {
             case self.selectedSection: return self.dataModel.selectedCount
             case self.availableSection:
-                if self.searchController.isSearching() {
-                    return self.dataModel.filteredCount
-                } else {
+                switch self.settingsViewType {
+                case .primary:
                     return self.dataModel.availableCount
+                case .language:
+                    if self.searchController!.isSearching() {
+                        return self.dataModel.filteredCount
+                    } else {
+                        return self.dataModel.availableCount
+                    }
                 }
             default: fatalError("Unknown number of sections")
             }
@@ -119,7 +125,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             case self.selectedSection:
                 return self.dataModel.selectedCell(tableView: tableView, indexPath: indexPath)
             case self.availableSection:
-                return self.dataModel.availableCell(tableView: tableView, indexPath: indexPath, inSearch: self.searchController.isSearching())
+                return self.dataModel.availableCell(tableView: tableView, indexPath: indexPath, inSearch: self.searchController?.isSearching() ?? false)
             default: fatalError("Unknown section \(indexPath.section)")
             }
         }
@@ -138,15 +144,15 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             let destination = IndexPath(item: index, section: self.availableSection)
             self.dataModel.moveSelectedToAvailable(source: indexPath.row,
                                                    destination: destination.row,
-                                                   inSearch: self.searchController.isSearching())
+                                                   inSearch: self.searchController?.isSearching() ?? false)
             tableView.moveRow(at: indexPath, to: destination)
-            self.searchController.updateSearchResults()
+            self.searchController?.updateSearchResults()
         } else if editingStyle == UITableViewCellEditingStyle.insert {
             let length = self.dataModel.selectedCount
             let destination = IndexPath(item: length, section: self.selectedSection)
             self.dataModel.moveAvailableToSelected(source: indexPath.row,
                                                    destination: destination.row,
-                                                   inSearch: self.searchController.isSearching())
+                                                   inSearch: self.searchController?.isSearching() ?? false)
             tableView.moveRow(at: indexPath, to: destination)
             
             // When self.language is not null and we are moving an available Bible to selected
