@@ -81,19 +81,8 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
     }
     
     func moveAvailableToSelected(source: IndexPath, destination: IndexPath, inSearch: Bool) {
-        var element: Bible
-        //if inSearch {
-        //    element = self.filtered[source.row]
-        //    guard let availableIndex = self.available.index(of: element) else {
-        //        print("Item in filtered not found in available? \(element)")
-        //        return
-        //    }
-        //    self.filtered.remove(at: source.row)
-        //    self.available.remove(at: availableIndex)
-        //} else {
-        element = self.available[source.row]
-        self.available.remove(at: source.row)
-        //}
+        let element: Bible = self.available2[source.section - 4][source.row]
+        self.available2[source.section - 4].remove(at: source.row)
         self.selected.insert(element, at: destination.row)
         self.updateSelectedSettings(item: element)
     }
@@ -101,26 +90,32 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
     func moveSelectedToAvailable(source: IndexPath, destination: IndexPath, inSearch: Bool) {
         let element: Bible = self.selected[source.row]
         self.selected.remove(at: source.row)
-        // must get the locale from Element
-        // using locale must lookup bible list in available
-        //
-        self.available.insert(element, at: destination.row)
-        if inSearch {
-            self.filtered.insert(element, at: destination.row)
-        }
+        self.available2[destination.section - 4].insert(element, at: destination.row)
         self.updateSelectedSettings(item: element)
     }
     
     func findAvailableInsertIndex(selectedIndex: IndexPath) -> IndexPath {
         let bible = self.selected[selectedIndex.row]
-        let searchName = bible.abbr
-        for index in 0..<self.available.count {
-            let bible = self.available[index]
-            if bible.abbr > searchName {
-                return IndexPath(item: index, section: selectedIndex.section + 1)
+        let localeIndex = self.findAvailableLocale(locale: bible.locale)
+        let bibleList = self.available2[localeIndex]
+        let searchName = bible.name
+        for index in 0..<bibleList.count {
+            let bible = bibleList[index]
+            if bible.name > searchName {
+                return IndexPath(item: index, section: (localeIndex + 4)) // ??????? const
             }
         }
-        return IndexPath(item: self.available.count, section: selectedIndex.section + 1)
+        return IndexPath(item: self.available.count, section: (localeIndex + 4)) // ????? const
+    }
+    
+    private func findAvailableLocale(locale: Locale) -> Int {
+        for index in 0..<available2.count {
+            let bibles = available2[index]
+            if bibles.count > 0 && bibles[0].locale == locale {
+                return index
+            }
+        }
+        return 0
     }
 
     func filterForSearch(searchText: String) {
