@@ -44,6 +44,15 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
         print("***** deinit BibleModel ******")
     }
     
+    func getAvailableBibleCount(section: Int) -> Int {
+        if let locale = (section < self.locales.count) ? self.locales[section] : nil {
+            if let bibles = self.available2[locale] {
+                return bibles.count
+            }
+        }
+        return 0
+    }
+    
     func getAvailableBible(section: Int, row: Int) -> Bible? {
         if let locale = (section < self.locales.count) ? self.locales[section] : nil {
             if let bibles = self.available2[locale] {
@@ -61,7 +70,7 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
     }
     
     func availableCell(tableView: UITableView, indexPath: IndexPath, inSearch: Bool) -> UITableViewCell {
-        let bible = self.getAvailableBible(section: indexPath.section - 4, row: indexPath.row)!
+        let bible = self.getAvailableBible(section: indexPath.section - 4, row: indexPath.row)! // ??????????? safety
         return self.generateCell(tableView: tableView, indexPath: indexPath, bible: bible)
     }
     
