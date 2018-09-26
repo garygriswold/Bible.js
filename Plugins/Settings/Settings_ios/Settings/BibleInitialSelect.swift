@@ -158,7 +158,7 @@ struct BibleInitialSelect {
                 _ = biblesSorted.popLast()
             }
             for bb in biblesSorted {
-                let bible = Bible(bibleId: bb.bibleId, abbr: bb.abbr, iso3: bb.iso3, name: bb.name)
+                let bible = Bible(bibleId: bb.bibleId, abbr: bb.abbr, iso3: bb.iso3, name: bb.name, locale: locale)
                 if !selected.contains(bible) {
                     selected.append(bible)
                 }

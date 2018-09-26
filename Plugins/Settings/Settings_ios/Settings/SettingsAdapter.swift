@@ -208,13 +208,13 @@ struct SettingsAdapter {
     //
     // Bible Versions.db methods
     //
-    func getBiblesSelected(locales: [Locale], selectedBibles: [String]) -> [Bible] {
+    func getBiblesSelected(locale: Locale, selectedBibles: [String]) -> [Bible] {
         let sql = "SELECT bibleId, abbr, b.iso3, b.localizedName" +
             " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
             " AND b.bibleId" + genQuest(array: selectedBibles) +
-            " AND l.iso1" + genQuest(array: locales) +
+            " AND l.iso1 = ?" +
             " AND b.localizedName is NOT null"
-        let results = getBibles(sql: sql, locales: locales, selectedBibles: selectedBibles)
+        let results = getBibles(sql: sql, locale: locale, selectedBibles: selectedBibles)
         
         // Sort results by selectedBibles list
         var map = [String:Bible]()
@@ -234,22 +234,22 @@ struct SettingsAdapter {
         let sql = "SELECT bibleId, abbr, b.iso3, b.localizedName" +
             " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
             " AND b.bibleId NOT" + genQuest(array: selectedBibles) +
-            " AND l.iso1 = ?" + // + genQuest(array: locales) +
+            " AND l.iso1 = ?" +
             " AND b.localizedName is NOT null ORDER BY b.localizedName"
-        let results = getBibles(sql: sql, locales: [locale], selectedBibles: selectedBibles)
+        let results = getBibles(sql: sql, locale: locale, selectedBibles: selectedBibles)
         return results
 
     }
     
-    private func getBibles(sql: String, locales: [Locale], selectedBibles: [String]) -> [Bible] {
+    private func getBibles(sql: String, locale: Locale, selectedBibles: [String]) -> [Bible] {
         var bibles = [Bible]()
-        let isos: [String] = locales.map { $0.languageCode ?? "??" }
+        let iso: String = locale.languageCode ?? "??"
         do {
             let db: Sqlite3 = try self.getVersionsDB()
-            let values = selectedBibles + isos
+            let values = selectedBibles + [iso]
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: values)
             bibles = resultSet.map {
-                Bible(bibleId: $0[0]!, abbr: $0[1]!, iso3: $0[2]!, name: $0[3]!)
+                Bible(bibleId: $0[0]!, abbr: $0[1]!, iso3: $0[2]!, name: $0[3]!, locale: locale)
             }
         } catch let err {
             print("ERROR: SettingsAdapter.getBibles \(err)")

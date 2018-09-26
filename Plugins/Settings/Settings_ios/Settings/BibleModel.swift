@@ -12,16 +12,19 @@ import UIKit
 class BibleModel : GenericModel<Bible>, SettingsModel {
     
     let locales: [Locale]
-    var available2: [Locale: [Bible]]
+    var available2: [[Bible]]
     
     init() {
         let adapter = SettingsAdapter()
-        var selected: [Bible]
+        var selected = [Bible]()
         let start: Double = CFAbsoluteTimeGetCurrent()
         self.locales = adapter.getLanguageSettings()
         var bibles: [String] = adapter.getBibleSettings()
         if bibles.count > 0 {
-            selected = adapter.getBiblesSelected(locales: locales, selectedBibles: bibles)
+            for locale in self.locales {
+                let some = adapter.getBiblesSelected(locale: locale, selectedBibles: bibles)
+                selected += some
+            }
         } else {
             let initial = BibleInitialSelect(adapter: adapter)
             selected = initial.getBiblesSelected(locales: locales)
@@ -29,11 +32,11 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
             adapter.updateSettings(bibles: selected)
         }
         let available = [Bible]()
-        self.available2 = [Locale: [Bible]]()
+        self.available2 = [[Bible]]()
         var available1: [Bible]
         for locale in self.locales {
             available1 = adapter.getBiblesAvailable(locale: locale, selectedBibles: bibles)
-            available2[locale] = available1
+            available2.append(available1)
         }
         super.init(adapter: adapter, selected: selected, available: available)
     
@@ -45,21 +48,14 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
     }
     
     func getAvailableBibleCount(section: Int) -> Int {
-        if let locale = (section < self.locales.count) ? self.locales[section] : nil {
-            if let bibles = self.available2[locale] {
-                return bibles.count
-            }
-        }
-        return 0
+        let bibles: [Bible] = self.available2[section]
+        return bibles.count
     }
     
     func getAvailableBible(section: Int, row: Int) -> Bible? {
-        if let locale = (section < self.locales.count) ? self.locales[section] : nil {
-            if let bibles = self.available2[locale] {
-                if let bible = (row < bibles.count) ? bibles[row] : nil {
-                    return bible
-                }
-            }
+        let bibles = self.available2[section]
+        if let bible = (row < bibles.count) ? bibles[row] : nil {
+            return bible
         }
         return nil
     }
@@ -86,18 +82,18 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
     
     func moveAvailableToSelected(source: IndexPath, destination: IndexPath, inSearch: Bool) {
         var element: Bible
-        if inSearch {
-            element = self.filtered[source.row]
-            guard let availableIndex = self.available.index(of: element) else {
-                print("Item in filtered not found in available? \(element)")
-                return
-            }
-            self.filtered.remove(at: source.row)
-            self.available.remove(at: availableIndex)
-        } else {
-            element = self.available[source.row]
-            self.available.remove(at: source.row)
-        }
+        //if inSearch {
+        //    element = self.filtered[source.row]
+        //    guard let availableIndex = self.available.index(of: element) else {
+        //        print("Item in filtered not found in available? \(element)")
+        //        return
+        //    }
+        //    self.filtered.remove(at: source.row)
+        //    self.available.remove(at: availableIndex)
+        //} else {
+        element = self.available[source.row]
+        self.available.remove(at: source.row)
+        //}
         self.selected.insert(element, at: destination.row)
         self.updateSelectedSettings(item: element)
     }
@@ -105,6 +101,9 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
     func moveSelectedToAvailable(source: IndexPath, destination: IndexPath, inSearch: Bool) {
         let element: Bible = self.selected[source.row]
         self.selected.remove(at: source.row)
+        // must get the locale from Element
+        // using locale must lookup bible list in available
+        //
         self.available.insert(element, at: destination.row)
         if inSearch {
             self.filtered.insert(element, at: destination.row)

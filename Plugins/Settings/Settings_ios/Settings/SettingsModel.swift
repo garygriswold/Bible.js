@@ -25,6 +25,7 @@ struct Bible : Equatable {
     let abbr: String        // Version Abbreviation
     let iso3: String        // SIL 3 char SIL language code
     let name: String        // Name in the language, but sometimes in English
+    let locale: Locale      // The user locale that is associated
     
     static func == (lhs: Bible, rhs: Bible) -> Bool {
         return lhs.bibleId == rhs.bibleId
@@ -39,9 +40,9 @@ protocol SettingsModel {
     var availableCount: Int { get }
     var filteredCount: Int { get }
     func getSelectedBible(row: Int) -> Bible?
-    func getSelectedLanguage(row: Int) -> Language?
-    func getAvailableBible(row: Int) -> Bible?
-    func getAvailableLanguage(row: Int) -> Language?
+    //func getSelectedLanguage(row: Int) -> Language?
+    //func getAvailableBible(row: Int) -> Bible?
+    //func getAvailableLanguage(row: Int) -> Language?
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     func availableCell(tableView: UITableView, indexPath: IndexPath, inSearch: Bool) -> UITableViewCell
     func moveSelected(source: Int, destination: Int)
@@ -85,6 +86,7 @@ class GenericModel<Element> where Element : Equatable {
     func getSelectedBible(row: Int) -> Bible? {
         return (row >= 0 && row < selected.count) ? selected[row] as? Bible : nil
     }
+    /*
     func getSelectedLanguage(row: Int) -> Language? {
         return (row >= 0 && row < selected.count) ? selected[row] as? Language : nil
     }
@@ -94,7 +96,7 @@ class GenericModel<Element> where Element : Equatable {
     func getAvailableLanguage(row: Int) -> Language? {
         return (row >= 0 && row < available.count) ? available[row] as? Language : nil
     }
-    
+  */
     func moveSelected(source: Int, destination: Int) {
         let element = self.selected[source]
         self.selected.remove(at: source)
