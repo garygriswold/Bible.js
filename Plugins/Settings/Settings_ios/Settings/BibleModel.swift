@@ -57,10 +57,6 @@ class BibleModel : SettingsModel {
     var filteredCount: Int {
         get { return filtered.count }
     }
-    
-    var settingsAdapter: SettingsAdapter {
-        get { return self.adapter }
-    }
 
     func getSelectedBible(row: Int) -> Bible? {
         return (row >= 0 && row < selected.count) ? selected[row] : nil

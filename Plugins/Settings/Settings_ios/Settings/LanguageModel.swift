@@ -42,10 +42,6 @@ class LanguageModel : SettingsModel {
         get { return self.filtered.count }
     }
     
-    var settingsAdapter: SettingsAdapter { //// what is this here for?
-        get { return self.adapter }
-    }
-    
     func getSelectedBible(row: Int) -> Bible? {
         return nil
     }
