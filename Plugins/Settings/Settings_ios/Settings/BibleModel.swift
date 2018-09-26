@@ -15,10 +15,12 @@ class BibleModel : SettingsModel {
     var available: [[Bible]]
     var filtered: [Bible]
     private let adapter: SettingsAdapter
+    private let availableSection: Int
     
     init() {
         let start: Double = CFAbsoluteTimeGetCurrent()
         self.adapter = SettingsAdapter()
+        self.availableSection = 4 ////  Should get this from constructor
         self.locales = adapter.getLanguageSettings()
         self.selected = [Bible]()
         var bibles: [String] = adapter.getBibleSettings()
@@ -81,7 +83,8 @@ class BibleModel : SettingsModel {
     }
     
     func availableCell(tableView: UITableView, indexPath: IndexPath, inSearch: Bool) -> UITableViewCell {
-        let bible = self.getAvailableBible(section: indexPath.section - 4, row: indexPath.row)! // ??????????? safety
+        let section = indexPath.section - self.availableSection
+        let bible = self.getAvailableBible(section: section, row: indexPath.row)! // ??????????? safety
         return self.generateCell(tableView: tableView, indexPath: indexPath, bible: bible)
     }
     
@@ -103,8 +106,8 @@ class BibleModel : SettingsModel {
     }
     
     func moveAvailableToSelected(source: IndexPath, destination: IndexPath, inSearch: Bool) {
-        let element: Bible = self.available[source.section - 4][source.row]
-        self.available[source.section - 4].remove(at: source.row)
+        let element: Bible = self.available[source.section - self.availableSection][source.row]
+        self.available[source.section - self.availableSection].remove(at: source.row)
         self.selected.insert(element, at: destination.row)
         self.adapter.updateSettings(bibles: self.selected)
     }
@@ -112,7 +115,7 @@ class BibleModel : SettingsModel {
     func moveSelectedToAvailable(source: IndexPath, destination: IndexPath, inSearch: Bool) {
         let element: Bible = self.selected[source.row]
         self.selected.remove(at: source.row)
-        self.available[destination.section - 4].insert(element, at: destination.row)
+        self.available[destination.section - self.availableSection].insert(element, at: destination.row)
         self.adapter.updateSettings(bibles: self.selected)
     }
     
@@ -124,20 +127,20 @@ class BibleModel : SettingsModel {
         for index in 0..<bibleList.count {
             let bible = bibleList[index]
             if bible.name > searchName {
-                return IndexPath(item: index, section: (localeIndex + 4)) // ??????? const
+                return IndexPath(item: index, section: (localeIndex + self.availableSection))
             }
         }
-        return IndexPath(item: self.available.count, section: (localeIndex + 4)) // ????? const
+        return IndexPath(item: bibleList.count, section: (localeIndex + self.availableSection))
     }
     
     private func findAvailableLocale(locale: Locale) -> Int {
-        for index in 0..<available.count {
-            let bibles = available[index]
-            if bibles.count > 0 && bibles[0].locale == locale {
+        for index in 0..<locales.count {
+            let loc = locales[index]
+            if loc == locale {
                 return index
             }
         }
-        return 0
+        return locales.count - 1
     }
 
     func filterForSearch(searchText: String) {
