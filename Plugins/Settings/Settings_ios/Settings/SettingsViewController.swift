@@ -92,9 +92,9 @@ class SettingsViewController: UIViewController {
         
         switch self.settingsViewType {
         case .primary:
-            self.dataModel = BibleModel()
+            self.dataModel = BibleModel(availableSection: self.availableSection)
         case .language:
-            self.dataModel = LanguageModel()
+            self.dataModel = LanguageModel(availableSection: self.availableSection)
         }
         self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: self.selectedSection,
                                                  searchController: self.searchController)

@@ -17,10 +17,10 @@ class BibleModel : SettingsModel {
     private let adapter: SettingsAdapter
     private let availableSection: Int
     
-    init() {
+    init(availableSection: Int) {
         let start: Double = CFAbsoluteTimeGetCurrent()
         self.adapter = SettingsAdapter()
-        self.availableSection = 4 ////  Should get this from constructor
+        self.availableSection = availableSection
         self.locales = adapter.getLanguageSettings()
         self.selected = [Bible]()
         var bibles: [String] = adapter.getBibleSettings()

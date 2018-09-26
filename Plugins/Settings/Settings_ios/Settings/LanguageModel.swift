@@ -15,10 +15,12 @@ class LanguageModel : SettingsModel {
     var available: [Language]
     var filtered: [Language]
     private let adapter: SettingsAdapter
+    private let availableSection: Int
     
-    init() {
+    init(availableSection: Int) {
         let start: Double = CFAbsoluteTimeGetCurrent()
         self.adapter = SettingsAdapter()
+        self.availableSection = availableSection
         self.locales = adapter.getLanguageSettings()
         self.selected = adapter.getLanguagesSelected(selected: locales)
         self.available = adapter.getLanguagesAvailable(selected: locales)
@@ -107,10 +109,10 @@ class LanguageModel : SettingsModel {
         for index in 0..<self.available.count {
             let language = self.available[index]
             if language.localized > searchName {
-                return IndexPath(item: index, section: selectedIndex.section + 1)
+                return IndexPath(item: index, section: selectedIndex.section + self.availableSection)
             }
         }
-        return IndexPath(item: self.available.count, section: selectedIndex.section + 1)
+        return IndexPath(item: self.available.count, section: selectedIndex.section + self.availableSection)
     }
 
     func filterForSearch(searchText: String) {
