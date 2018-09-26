@@ -6,7 +6,6 @@
 //  Copyright © 2018 Short Sands, LLC. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 struct Language : Equatable {
@@ -40,9 +39,6 @@ protocol SettingsModel {
     var availableCount: Int { get }
     var filteredCount: Int { get }
     func getSelectedBible(row: Int) -> Bible?
-    //func getSelectedLanguage(row: Int) -> Language?
-    //func getAvailableBible(row: Int) -> Bible?
-    //func getAvailableLanguage(row: Int) -> Language?
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     func availableCell(tableView: UITableView, indexPath: IndexPath, inSearch: Bool) -> UITableViewCell
     func moveSelected(source: Int, destination: Int)
@@ -52,68 +48,3 @@ protocol SettingsModel {
     func filterForSearch(searchText: String)
 }
 
-class GenericModel<Element> where Element : Equatable {
-  
-    private let adapter: SettingsAdapter
-    var selected: [Element]
-    var available: [Element]
-    var filtered: [Element]
-    
-    init(adapter: SettingsAdapter, selected: [Element], available: [Element]) {
-        self.adapter = adapter
-        self.selected = selected
-        self.available = available
-        self.filtered = [Element]()
-    }
-    
-    var settingsAdapter: SettingsAdapter {
-        get { return self.adapter }
-    }
-    
-    var selectedCount: Int {
-        get { return selected.count }
-    }
-    
-    var availableCount: Int {
-        get { return available.count }
-    }
-    
-    var filteredCount: Int {
-        get { return filtered.count }
-    }
-    // I attempted to replace this with Generic methods, but their generic type needs to
-    // be used when they are typed or instantiated
-    func getSelectedBible(row: Int) -> Bible? {
-        return (row >= 0 && row < selected.count) ? selected[row] as? Bible : nil
-    }
-    /*
-    func getSelectedLanguage(row: Int) -> Language? {
-        return (row >= 0 && row < selected.count) ? selected[row] as? Language : nil
-    }
-    func getAvailableBible(row: Int) -> Bible? {
-        return (row >= 0 && row < available.count) ? available[row] as? Bible : nil
-    }
-    func getAvailableLanguage(row: Int) -> Language? {
-        return (row >= 0 && row < available.count) ? available[row] as? Language : nil
-    }
-  */
-    func moveSelected(source: Int, destination: Int) {
-        let element = self.selected[source]
-        self.selected.remove(at: source)
-        self.selected.insert(element, at: destination)
-        self.updateSelectedSettings(item: element)
-    }
- 
-    /**
-     * The Element is passed in only to discern its type
-     */
-    func updateSelectedSettings(item: Element) {
-        if item is Language {
-            self.adapter.updateSettings(languages: self.selected as! [Language])
-        } else if item is Bible {
-            self.adapter.updateSettings(bibles: self.selected as! [Bible])
-        } else {
-            print("ERROR: Unknown element type in GenericModel.updateSelectedSettings")
-        }
-    }
-}

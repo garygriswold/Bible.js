@@ -6,25 +6,48 @@
 //  Copyright © 2018 Short Sands, LLC. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
-class LanguageModel : GenericModel<Language>, SettingsModel {
+class LanguageModel : SettingsModel {
     
     let locales: [Locale]
+    var selected: [Language]
+    var available: [Language]
+    var filtered: [Language]
+    private let adapter: SettingsAdapter
     
     init() {
         let start: Double = CFAbsoluteTimeGetCurrent()
-        let adapter = SettingsAdapter()
+        self.adapter = SettingsAdapter()
         self.locales = adapter.getLanguageSettings()
-        let selected = adapter.getLanguagesSelected(selected: locales)
-        let available = adapter.getLanguagesAvailable(selected: locales)
-        super.init(adapter: adapter, selected: selected, available: available)
+        self.selected = adapter.getLanguagesSelected(selected: locales)
+        self.available = adapter.getLanguagesAvailable(selected: locales)
+        self.filtered = [Language]()
         print("*** LanguageModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
     }
     
     deinit {
         print("***** deinit LanguageModel ******")
+    }
+    
+    var selectedCount: Int {
+        get { return self.selected.count }
+    }
+    
+    var availableCount: Int {
+        get { return self.available.count }
+    }
+    
+    var filteredCount: Int {
+        get { return self.filtered.count }
+    }
+    
+    var settingsAdapter: SettingsAdapter { //// what is this here for?
+        get { return self.adapter }
+    }
+    
+    func getSelectedBible(row: Int) -> Bible? {
+        return nil
     }
     
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
@@ -48,6 +71,13 @@ class LanguageModel : GenericModel<Language>, SettingsModel {
         return cell
     }
     
+    func moveSelected(source: Int, destination: Int) {
+        let element = self.selected[source]
+        self.selected.remove(at: source)
+        self.selected.insert(element, at: destination)
+        self.adapter.updateSettings(languages: self.selected)
+    }
+    
     func moveAvailableToSelected(source: IndexPath, destination: IndexPath, inSearch: Bool) {
         var element: Language
         if inSearch {
@@ -63,7 +93,7 @@ class LanguageModel : GenericModel<Language>, SettingsModel {
             self.available.remove(at: source.row)
         }
         self.selected.insert(element, at: destination.row)
-        self.updateSelectedSettings(item: element)
+        self.adapter.updateSettings(languages: self.selected)
     }
     
     func moveSelectedToAvailable(source: IndexPath, destination: IndexPath, inSearch: Bool) {
@@ -73,7 +103,7 @@ class LanguageModel : GenericModel<Language>, SettingsModel {
         if inSearch {
             self.filtered.insert(element, at: destination.row)
         }
-        self.updateSelectedSettings(item: element)
+        self.adapter.updateSettings(languages: self.selected)
     }
     
     func findAvailableInsertIndex(selectedIndex: IndexPath) -> IndexPath {
