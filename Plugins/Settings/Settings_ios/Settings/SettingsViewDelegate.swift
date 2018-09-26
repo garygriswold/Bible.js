@@ -86,7 +86,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     }
     
     private func bibleViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
-        if indexPath.section  == self.selectedSection {
+        if indexPath.section == self.selectedSection {
             if let bible = self.dataModel.getSelectedBible(row: indexPath.row) {
                 let detailController = BibleDetailViewController(bible: bible)
                 self.navController?.pushViewController(detailController, animated: true)
@@ -94,7 +94,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         }
         else if indexPath.section >= self.availableSection {
             let bibleModel = self.dataModel as! BibleModel
-            if let bible = bibleModel.getAvailableBible(section: (indexPath.section - 4), row: indexPath.row) {
+            let section = indexPath.section - self.availableSection
+            if let bible = bibleModel.getAvailableBible(section: section, row: indexPath.row) {
                 let detailController = BibleDetailViewController(bible: bible)
                 self.navController?.pushViewController(detailController, animated: true)
             }
@@ -126,14 +127,12 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 return NSLocalizedString("My Bibles", comment: "Section heading for User selected Bibles")
             }
             else if section >= self.availableSection {
-                let index = section - 4
+                let index = section - self.availableSection
                 let locale = self.dataModel.locales[index]
                 let lang = Locale.current.localizedString(forLanguageCode: locale.languageCode ?? "en")
                 return lang
             }
-            else {
-                return nil
-            }
+            else { return nil }
         case .language:
             if section == self.selectedSection {
                 return NSLocalizedString("My Languages", comment: "Section heading for User languages")
@@ -163,7 +162,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return (section == self.availableSection) ? -1.0 : 0.0
+        //return (section >= self.availableSection) ? -1.0 : 0.0
+        return 0.0
     }
 
     // Called when swipe is used to begin editing
