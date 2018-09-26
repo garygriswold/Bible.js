@@ -101,39 +101,11 @@ class GenericModel<Element> where Element : Equatable {
         self.selected.insert(element, at: destination)
         self.updateSelectedSettings(item: element)
     }
-    
-    func moveAvailableToSelected(source: IndexPath, destination: IndexPath, inSearch: Bool) {
-        var element: Element
-        if inSearch {
-            element = self.filtered[source.row]
-            guard let availableIndex = self.available.index(of: element) else {
-                print("Item in filtered not found in available? \(element)")
-                return
-            }
-            self.filtered.remove(at: source.row)
-            self.available.remove(at: availableIndex)
-        } else {
-            element = self.available[source.row]
-            self.available.remove(at: source.row)
-        }
-        self.selected.insert(element, at: destination.row)
-        self.updateSelectedSettings(item: element)
-    }
-    
-    func moveSelectedToAvailable(source: IndexPath, destination: IndexPath, inSearch: Bool) {
-        let element: Element = self.selected[source.row]
-        self.selected.remove(at: source.row)
-        self.available.insert(element, at: destination.row)
-        if inSearch {
-            self.filtered.insert(element, at: destination.row)
-        }
-        self.updateSelectedSettings(item: element)
-    }
  
     /**
      * The Element is passed in only to discern its type
      */
-    private func updateSelectedSettings(item: Element) {
+    func updateSelectedSettings(item: Element) {
         if item is Language {
             self.adapter.updateSettings(languages: self.selected as! [Language])
         } else if item is Bible {

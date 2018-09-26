@@ -84,6 +84,34 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
         return cell
     }
     
+    func moveAvailableToSelected(source: IndexPath, destination: IndexPath, inSearch: Bool) {
+        var element: Bible
+        if inSearch {
+            element = self.filtered[source.row]
+            guard let availableIndex = self.available.index(of: element) else {
+                print("Item in filtered not found in available? \(element)")
+                return
+            }
+            self.filtered.remove(at: source.row)
+            self.available.remove(at: availableIndex)
+        } else {
+            element = self.available[source.row]
+            self.available.remove(at: source.row)
+        }
+        self.selected.insert(element, at: destination.row)
+        self.updateSelectedSettings(item: element)
+    }
+    
+    func moveSelectedToAvailable(source: IndexPath, destination: IndexPath, inSearch: Bool) {
+        let element: Bible = self.selected[source.row]
+        self.selected.remove(at: source.row)
+        self.available.insert(element, at: destination.row)
+        if inSearch {
+            self.filtered.insert(element, at: destination.row)
+        }
+        self.updateSelectedSettings(item: element)
+    }
+    
     func findAvailableInsertIndex(selectedIndex: IndexPath) -> IndexPath {
         let bible = self.selected[selectedIndex.row]
         let searchName = bible.abbr
