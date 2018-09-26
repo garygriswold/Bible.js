@@ -48,16 +48,16 @@ class LanguageModel : GenericModel<Language>, SettingsModel {
         return cell
     }
     
-    func findAvailableInsertIndex(selectedIndex: Int) -> Int {
-        let language = self.selected[selectedIndex]
+    func findAvailableInsertIndex(selectedIndex: IndexPath) -> IndexPath {
+        let language = self.selected[selectedIndex.row]
         let searchName = language.localized
         for index in 0..<self.available.count {
             let language = self.available[index]
             if language.localized > searchName {
-                return index
+                return IndexPath(item: index, section: selectedIndex.section + 1)
             }
         }
-        return self.available.count
+        return IndexPath(item: self.available.count, section: selectedIndex.section + 1)
     }
 
     func filterForSearch(searchText: String) {

@@ -84,16 +84,16 @@ class BibleModel : GenericModel<Bible>, SettingsModel {
         return cell
     }
     
-    func findAvailableInsertIndex(selectedIndex: Int) -> Int {
-        let bible = self.selected[selectedIndex]
+    func findAvailableInsertIndex(selectedIndex: IndexPath) -> IndexPath {
+        let bible = self.selected[selectedIndex.row]
         let searchName = bible.abbr
         for index in 0..<self.available.count {
             let bible = self.available[index]
             if bible.abbr > searchName {
-                return index
+                return IndexPath(item: index, section: selectedIndex.section + 1)
             }
         }
-        return self.available.count
+        return IndexPath(item: self.available.count, section: selectedIndex.section + 1)
     }
 
     func filterForSearch(searchText: String) {
