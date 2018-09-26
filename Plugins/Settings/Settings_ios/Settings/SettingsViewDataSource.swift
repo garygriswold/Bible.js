@@ -144,16 +144,16 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                    forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete {
             let destination = self.dataModel.findAvailableInsertIndex(selectedIndex: indexPath)
-            self.dataModel.moveSelectedToAvailable(source: indexPath.row,
-                                                   destination: destination.row,
+            self.dataModel.moveSelectedToAvailable(source: indexPath,
+                                                   destination: destination,
                                                    inSearch: self.searchController?.isSearching() ?? false)
             tableView.moveRow(at: indexPath, to: destination)
             self.searchController?.updateSearchResults()
         } else if editingStyle == UITableViewCellEditingStyle.insert {
             let length = self.dataModel.selectedCount
             let destination = IndexPath(item: length, section: self.selectedSection)
-            self.dataModel.moveAvailableToSelected(source: indexPath.row,
-                                                   destination: destination.row,
+            self.dataModel.moveAvailableToSelected(source: indexPath,
+                                                   destination: destination,
                                                    inSearch: self.searchController?.isSearching() ?? false)
             tableView.moveRow(at: indexPath, to: destination)
             

@@ -45,8 +45,8 @@ protocol SettingsModel {
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     func availableCell(tableView: UITableView, indexPath: IndexPath, inSearch: Bool) -> UITableViewCell
     func moveSelected(source: Int, destination: Int)
-    func moveAvailableToSelected(source: Int, destination: Int, inSearch: Bool)
-    func moveSelectedToAvailable(source: Int, destination: Int, inSearch: Bool)
+    func moveAvailableToSelected(source: IndexPath, destination: IndexPath, inSearch: Bool)
+    func moveSelectedToAvailable(source: IndexPath, destination: IndexPath, inSearch: Bool)
     func findAvailableInsertIndex(selectedIndex: IndexPath) -> IndexPath
     func filterForSearch(searchText: String)
 }
@@ -102,30 +102,30 @@ class GenericModel<Element> where Element : Equatable {
         self.updateSelectedSettings(item: element)
     }
     
-    func moveAvailableToSelected(source: Int, destination: Int, inSearch: Bool) {
+    func moveAvailableToSelected(source: IndexPath, destination: IndexPath, inSearch: Bool) {
         var element: Element
         if inSearch {
-            element = self.filtered[source]
+            element = self.filtered[source.row]
             guard let availableIndex = self.available.index(of: element) else {
                 print("Item in filtered not found in available? \(element)")
                 return
             }
-            self.filtered.remove(at: source)
+            self.filtered.remove(at: source.row)
             self.available.remove(at: availableIndex)
         } else {
-            element = self.available[source]
-            self.available.remove(at: source)
+            element = self.available[source.row]
+            self.available.remove(at: source.row)
         }
-        self.selected.insert(element, at: destination)
+        self.selected.insert(element, at: destination.row)
         self.updateSelectedSettings(item: element)
     }
     
-    func moveSelectedToAvailable(source: Int, destination: Int, inSearch: Bool) {
-        let element: Element = self.selected[source]
-        self.selected.remove(at: source)
-        self.available.insert(element, at: destination)
+    func moveSelectedToAvailable(source: IndexPath, destination: IndexPath, inSearch: Bool) {
+        let element: Element = self.selected[source.row]
+        self.selected.remove(at: source.row)
+        self.available.insert(element, at: destination.row)
         if inSearch {
-            self.filtered.insert(element, at: destination)
+            self.filtered.insert(element, at: destination.row)
         }
         self.updateSelectedSettings(item: element)
     }
