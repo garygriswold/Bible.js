@@ -61,15 +61,18 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         case 0:
             switch indexPath.row {
             case 0:
+                let aboutPageController = AboutPageController()
+                self.navController?.pushViewController(aboutPageController, animated: true)
+            case 1:
                 guard let reviewURL = URL(string: "https://itunes.apple.com/app/id1073396349?action=write-review")
                 else { fatalError("Expected a valid URL") }
                 UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
                 // I have also tried to use WKWebView to access itunes, but it requires User AppleId
                 // login credentials.
-            case 1:
+            case 2:
                 let feedbackController = FeedbackViewController()
                 self.navController?.pushViewController(feedbackController, animated: true)
-            case 2:
+            case 3:
                 let userMessageController = UserMessageController()
                 self.navController?.present(userMessageController, animated: true, completion: nil)
             default:

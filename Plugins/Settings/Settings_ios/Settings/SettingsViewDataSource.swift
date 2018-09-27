@@ -49,7 +49,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         switch self.settingsViewType {
         case .primary:
             switch section {
-            case 0: return (UserMessageController.isAvailable()) ? 3 : 2
+            case 0: return (UserMessageController.isAvailable()) ? 4 : 3
             case 1: return 1
             case 2: return 1
             case 3: return self.dataModel.selectedCount
@@ -83,18 +83,24 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             case 0:
                 switch indexPath.row {
                 case 0:
+                    let aboutCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
+                    aboutCell.textLabel?.text = NSLocalizedString("About SafeBible", comment: "About cell title")
+                    aboutCell.textLabel?.font = AppFont.sansSerif(style: .body)
+                    aboutCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                    return aboutCell
+                case 1:
                     let reviewCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
                     reviewCell.textLabel?.text = NSLocalizedString("Write A Review", comment: "Clickable cell title")
                     reviewCell.textLabel?.font = AppFont.sansSerif(style: .body)
                     reviewCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
                     return reviewCell
-                case 1:
+                case 2:
                     let feedbackCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
                     feedbackCell.textLabel?.text = NSLocalizedString("Send Us Feedback", comment: "Clickable cell title")
                     feedbackCell.textLabel?.font = AppFont.sansSerif(style: .body)
                     feedbackCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
                     return feedbackCell
-                case 2:
+                case 3:
                     let messageCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
                     messageCell.textLabel?.text = NSLocalizedString("Share SafeBible", comment: "Clickable cell title")
                     messageCell.textLabel?.font = AppFont.sansSerif(style: .body)
