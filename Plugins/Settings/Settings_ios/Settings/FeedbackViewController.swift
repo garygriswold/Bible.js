@@ -37,22 +37,21 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
         self.view.addSubview(self.textView)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.textView.font = AppFont.sansSerif(style: .body)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         let notify = NotificationCenter.default
-        notify.addObserver(self, selector: #selector(preferredContentSizeChanged(note:)),
-                           name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
         notify.addObserver(self, selector: #selector(keyboardWillShow),
                            name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         notify.addObserver(self, selector: #selector(keyboardWillHide),
                            name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         self.textView.becomeFirstResponder()
-    }
-    
-    @objc func preferredContentSizeChanged(note: NSNotification) {
-        self.textView.font = AppFont.sansSerif(style: .body)
     }
     
     @objc func keyboardWillShow(note: NSNotification) {

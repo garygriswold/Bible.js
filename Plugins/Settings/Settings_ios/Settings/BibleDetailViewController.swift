@@ -6,7 +6,6 @@
 //  Copyright © 2018 Short Sands, LLC. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class BibleDetailViewController : UIViewController {
@@ -46,15 +45,10 @@ class BibleDetailViewController : UIViewController {
         //self.textView.allowsEditingTextAttributes = true
         self.textView.font = AppFont.serif(style: .body)
         self.view.addSubview(self.textView)
-        
-        let notify = NotificationCenter.default
-        notify.addObserver(self, selector: #selector(preferredContentSizeChanged(note:)),
-                           name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
-        
-        self.textView.becomeFirstResponder()
     }
     
-    @objc func preferredContentSizeChanged(note: NSNotification) {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.textView.font = AppFont.sansSerif(style: .body)
     }
     
