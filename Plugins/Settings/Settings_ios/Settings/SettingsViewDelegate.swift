@@ -145,7 +145,10 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if self.settingsViewType == .primary && section == 0 { return 0.0 }
+        if self.settingsViewType == .primary && section == 0 {
+            let font = AppFont.sansSerif(style: .subheadline)
+            return 1.0 * font.lineHeight
+        }
         else if self.settingsViewType == .primary && section < self.selectedSection {
             let font = AppFont.sansSerif(style: .subheadline)
             return 1.5 * font.lineHeight

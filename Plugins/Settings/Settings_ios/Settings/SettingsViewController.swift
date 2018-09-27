@@ -87,6 +87,8 @@ class SettingsViewController: UIViewController {
         super.viewWillAppear(animated)
         // When UserMessage is dismissed, it has sometimes left behind only the top half of the screen
         self.tableView.frame = UIScreen.main.bounds
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1.0))
+        self.tableView.tableHeaderView = label
         
         self.tableView.contentOffset = self.recentContentOffset
         
