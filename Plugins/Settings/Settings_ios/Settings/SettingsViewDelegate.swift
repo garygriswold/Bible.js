@@ -102,19 +102,16 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         }
     }
 
-    // This must return nil in order for heightForHeaderInSection to work
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if let heading = titleForHeaderInSection(section: section) {
             let font = AppFont.sansSerif(style: .subheadline)
             let rect = CGRect(x: 0, y: font.lineHeight, width: tableView.frame.size.width - 10, height: font.lineHeight)
-            let view = UIView(frame: rect)
             let label = UILabel(frame: rect)
             label.font = font
             label.textAlignment = .center
             label.textColor = UIColor.darkGray
             label.text = heading
-            view.addSubview(label)
-            return view
+            return label
         } else {
             return nil
         }
@@ -159,14 +156,15 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         }
     }
 
-    // This must return nil in order for heightForFooterInSection to work
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return nil
+        let rect = CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 0.4)
+        let label = UILabel(frame: rect)
+        label.backgroundColor = UIColor.lightGray
+        return label
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        //return (section >= self.availableSection) ? -1.0 : 0.0
-        return 0.0
+        return 0.4
     }
 
     // Called when swipe is used to begin editing
