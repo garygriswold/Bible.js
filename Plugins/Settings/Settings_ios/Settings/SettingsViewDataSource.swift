@@ -84,7 +84,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 switch indexPath.row {
                 case 0:
                     let aboutCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                    aboutCell.textLabel?.text = NSLocalizedString("About SafeBible", comment: "About cell title")
+                    aboutCell.textLabel?.text = NSLocalizedString("Privacy Policy", comment: "Privacy Policy cell title")
                     aboutCell.textLabel?.font = AppFont.sansSerif(style: .body)
                     aboutCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
                     return aboutCell
