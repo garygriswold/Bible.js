@@ -213,7 +213,7 @@ struct SettingsAdapter {
             " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
             " AND b.bibleId" + genQuest(array: selectedBibles) +
             " AND l.iso1 = ?" +
-            " AND b.localizedName is NOT null"
+            " AND b.localizedName IS NOT null"
         let results = getBibles(sql: sql, locale: locale, selectedBibles: selectedBibles)
         
         // Sort results by selectedBibles list
@@ -235,7 +235,8 @@ struct SettingsAdapter {
             " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
             " AND b.bibleId NOT" + genQuest(array: selectedBibles) +
             " AND l.iso1 = ?" +
-            " AND b.localizedName is NOT null ORDER BY b.localizedName"
+            " AND b.localizedName IS NOT null" +
+            " ORDER BY b.localizedName"
         let results = getBibles(sql: sql, locale: locale, selectedBibles: selectedBibles)
         return results
 

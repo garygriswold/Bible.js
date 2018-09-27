@@ -1,6 +1,7 @@
 #!/bin/sh -ve
 
 # Create SQL Files to populate database
+# I think missing py/CountryTable.py
 python py/LanguageTable.py
 python py/ISO3PriorityTable.py 
 python py/BibleTable.py
@@ -47,6 +48,9 @@ END_SQL1
 # Use Google Translate to improve the Bible names
 python py/TranslateBibleNames.py
 sqlite Versions.db < sql/LocalizedBibleNames.sql
+sqlite Versions.db <<END_SQL2
+UPDATE Bible SET localizedName = name WHERE localizedName is NULL;
+END_SQL2
 
 # Create A Copy of DB before Deletions
 cp Versions.db VersionsFull.db
