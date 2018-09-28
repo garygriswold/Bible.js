@@ -16,6 +16,7 @@ public class SettingsNavigator {
     }
     
     public func present() -> UINavigationController {
+        let review = StoreReviewController.shared
         let viewController = SettingsViewController(settingsViewType: .primary)
         //let viewController = SettingsViewController(settingsViewType: .language)
         //let viewController = SettingsViewController(settingsViewType: .version)
