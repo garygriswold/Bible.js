@@ -13,7 +13,7 @@ import StoreKit
 class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
     private weak var navController: UINavigationController?
-    private let dataModel: SettingsModel
+    private let dataModel: SettingsModel?
     private let settingsViewType: SettingsViewType
     private let selectedSection: Int
     private let availableSection: Int
@@ -46,6 +46,9 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         if self.settingsViewType == .primary {
             primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
+        else if self.settingsViewType == .about {
+            aboutViewRowSelect(tableView: tableView, indexPath: indexPath)
+        }
     }
 
     // Handle row selection.
@@ -54,30 +57,16 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         if self.settingsViewType == .primary {
             primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
+        else if self.settingsViewType == .about {
+            aboutViewRowSelect(tableView: tableView, indexPath: indexPath)
+        }
     }
     
     private func primaryViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            switch indexPath.row {
-            case 0:
-                let aboutPageController = AboutPageController()
-                self.navController?.pushViewController(aboutPageController, animated: true)
-            case 1:
-                guard let reviewURL = URL(string: "https://itunes.apple.com/app/id1073396349?action=write-review")
-                else { fatalError("Expected a valid URL") }
-                UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
-                // I have also tried to use WKWebView to access itunes, but it requires User AppleId
-                // login credentials.
-            case 2:
-                let feedbackController = FeedbackViewController()
-                self.navController?.pushViewController(feedbackController, animated: true)
-            case 3:
-                let userMessageController = UserMessageController()
-                self.navController?.present(userMessageController, animated: true, completion: nil)
-            default:
-                print("Unknown row \(indexPath.row) in section 0")
-            }
+            let aboutController = SettingsViewController(settingsViewType: .about)
+            self.navController?.pushViewController(aboutController, animated: true)
         case 1:
             print("Section 1 Font Size Widget.  It is not selectable.")
         case 2:
@@ -90,7 +79,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
     private func bibleViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
         if indexPath.section == self.selectedSection {
-            if let bible = self.dataModel.getSelectedBible(row: indexPath.row) {
+            if let bible = self.dataModel!.getSelectedBible(row: indexPath.row) {
                 let detailController = BibleDetailViewController(bible: bible)
                 self.navController?.pushViewController(detailController, animated: true)
             }
@@ -102,6 +91,28 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 let detailController = BibleDetailViewController(bible: bible)
                 self.navController?.pushViewController(detailController, animated: true)
             }
+        }
+    }
+    
+    private func aboutViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
+        switch indexPath.row {
+        case 0:
+            let aboutPageController = AboutPageController()
+            self.navController?.pushViewController(aboutPageController, animated: true)
+        case 1:
+            guard let reviewURL = URL(string: "https://itunes.apple.com/app/id1073396349?action=write-review")
+                else { fatalError("Expected a valid URL") }
+            UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
+            // I have also tried to use WKWebView to access itunes, but it requires User AppleId
+        // login credentials.
+        case 2:
+            let feedbackController = FeedbackViewController()
+            self.navController?.pushViewController(feedbackController, animated: true)
+        case 3:
+            let userMessageController = UserMessageController()
+            self.navController?.present(userMessageController, animated: true, completion: nil)
+        default:
+            print("Unknown row \(indexPath.row) in section 0")
         }
     }
 
@@ -128,7 +139,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             }
             else if section >= self.availableSection {
                 let index = section - self.availableSection
-                let locale = self.dataModel.locales[index]
+                let locale = self.dataModel!.locales[index]
                 let lang = Locale.current.localizedString(forLanguageCode: locale.languageCode ?? "en")
                 return lang
             }
@@ -141,6 +152,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 return NSLocalizedString("More Languages", comment: "Section heading for Other languages")
             }
             else { return nil }
+        case .about:
+            return nil
         }
     }
 
@@ -152,6 +165,10 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         else if self.settingsViewType == .primary && section < self.selectedSection {
             let font = AppFont.sansSerif(style: .subheadline)
             return 1.5 * font.lineHeight
+        }
+        else if self.settingsViewType == .about {
+            let font = AppFont.sansSerif(style: .subheadline)
+            return 1.0 * font.lineHeight
         }
         else {
             let font = AppFont.sansSerif(style: .subheadline)

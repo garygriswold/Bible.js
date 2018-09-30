@@ -9,6 +9,7 @@ import UIKit
 enum SettingsViewType {
     case primary
     case language
+    case about
 }
 
 class SettingsViewController: UIViewController {
@@ -71,6 +72,9 @@ class SettingsViewController: UIViewController {
         case .language:
             self.navigationItem.title = NSLocalizedString("Languages", comment: "Languages view page title")
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
+        case .about:
+            self.navigationItem.title = NSLocalizedString("About SafeBible", comment: "About view page title")
+            self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
         }
         self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
@@ -97,6 +101,8 @@ class SettingsViewController: UIViewController {
             self.dataModel = BibleModel(availableSection: self.availableSection)
         case .language:
             self.dataModel = LanguageModel(availableSection: self.availableSection)
+        case .about:
+            self.dataModel = nil
         }
         self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: self.selectedSection,
                                                  searchController: self.searchController)
