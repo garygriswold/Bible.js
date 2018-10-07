@@ -43,37 +43,81 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     // Does the same as didSelectRow at, not sure why I could not call it directly.
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if self.settingsViewType == .primary {
+        switch self.settingsViewType {
+        case .primary:
             primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
-        }
-        else if self.settingsViewType == .about {
-            aboutViewRowSelect(tableView: tableView, indexPath: indexPath)
+        case .bible:
+            bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
+        case .language:
+            print("Language should not be selectable")
         }
     }
 
     // Handle row selection.
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if self.settingsViewType == .primary {
+        switch self.settingsViewType {
+        case .primary:
             primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
-        }
-        else if self.settingsViewType == .about {
-            aboutViewRowSelect(tableView: tableView, indexPath: indexPath)
+        case .bible:
+            bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
+        case .language:
+            print("Language should not be selectable")
         }
     }
     
     private func primaryViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            let aboutController = SettingsViewController(settingsViewType: .about)
-            self.navController?.pushViewController(aboutController, animated: true)
+            switch indexPath.row {
+            case 0:
+                let tocController = ExternControllerImpl()
+                tocController.present(title: "Table of Contents")
+                self.navController?.pushViewController(tocController, animated: true)
+            case 1:
+                let histController = ExternControllerImpl()
+                histController.present(title: "History")
+                self.navController?.pushViewController(histController, animated: true)
+            case 2:
+                let videoController = ExternControllerImpl()
+                videoController.present(title: "Table of Contents")
+                self.navController?.pushViewController(videoController, animated: true)
+            default: fatalError("Unknown row \(indexPath.row) in section 0")
+            }
         case 1:
             print("Section 1 Font Size Widget.  It is not selectable.")
         case 2:
-            let languageController = SettingsViewController(settingsViewType: .language)
-            self.navController?.pushViewController(languageController, animated: true)
+            switch indexPath.row {
+            case 0:
+                let bibleController = SettingsViewController(settingsViewType: .bible)
+                self.navController?.pushViewController(bibleController, animated: true)
+            case 1:
+                let languageController = SettingsViewController(settingsViewType: .language)
+                self.navController?.pushViewController(languageController, animated: true)
+            default: fatalError("Unknown row \(indexPath.row) in section 1")
+            }
+        case 3:
+            switch indexPath.row {
+            case 0:
+                guard let reviewURL = URL(string: "https://itunes.apple.com/app/id1073396349?action=write-review")
+                    else { fatalError("Expected a valid URL") }
+                UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
+                // I have also tried to use WKWebView to access itunes, but it requires User AppleId
+                // login credentials.
+            case 1:
+                let feedbackController = FeedbackViewController()
+                self.navController?.pushViewController(feedbackController, animated: true)
+            case 2:
+                let infoPageController = InfoPageController()
+                self.navController?.pushViewController(infoPageController, animated: true)
+            case 3:
+                let userMessageController = UserMessageController()
+                self.navController?.present(userMessageController, animated: true, completion: nil)
+            default:
+                print("Unknown row \(indexPath.row) in section 0 in .primary")
+            }
         default:
-            bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
+            fatalError("Unknown section \(indexPath.section) in .primary")
         }
     }
     
@@ -91,28 +135,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 let detailController = BibleDetailViewController(bible: bible)
                 self.navController?.pushViewController(detailController, animated: true)
             }
-        }
-    }
-    
-    private func aboutViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
-        switch indexPath.row {
-        case 0:
-            let aboutPageController = AboutPageController()
-            self.navController?.pushViewController(aboutPageController, animated: true)
-        case 1:
-            guard let reviewURL = URL(string: "https://itunes.apple.com/app/id1073396349?action=write-review")
-                else { fatalError("Expected a valid URL") }
-            UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
-            // I have also tried to use WKWebView to access itunes, but it requires User AppleId
-        // login credentials.
-        case 2:
-            let feedbackController = FeedbackViewController()
-            self.navController?.pushViewController(feedbackController, animated: true)
-        case 3:
-            let userMessageController = UserMessageController()
-            self.navController?.present(userMessageController, animated: true, completion: nil)
-        default:
-            print("Unknown row \(indexPath.row) in section 0")
         }
     }
 
@@ -134,6 +156,14 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     private func titleForHeaderInSection(section: Int) -> String? {
         switch self.settingsViewType {
         case .primary:
+            switch section {
+            case 0: return nil
+            case 1: return nil
+            case 2: return NSLocalizedString("Bibles", comment: "Section heading for User selected Bibles")
+            case 3: return NSLocalizedString("About", comment: "Section heading for About")
+            default: fatalError("Unknown section \(section) in .primary")
+            }
+        case .bible:
             if section == self.selectedSection {
                 return NSLocalizedString("My Bibles", comment: "Section heading for User selected Bibles")
             }
@@ -152,8 +182,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 return NSLocalizedString("More Languages", comment: "Section heading for Other languages")
             }
             else { return nil }
-        case .about:
-            return nil
         }
     }
 
@@ -162,13 +190,9 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             let font = AppFont.sansSerif(style: .subheadline)
             return 1.0 * font.lineHeight
         }
-        else if self.settingsViewType == .primary && section < self.selectedSection {
+        else if self.settingsViewType == .primary && section <= 1 {
             let font = AppFont.sansSerif(style: .subheadline)
             return 1.5 * font.lineHeight
-        }
-        else if self.settingsViewType == .about {
-            let font = AppFont.sansSerif(style: .subheadline)
-            return 1.0 * font.lineHeight
         }
         else {
             let font = AppFont.sansSerif(style: .subheadline)

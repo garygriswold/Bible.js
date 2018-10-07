@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AboutPageController : UIViewController {
+class InfoPageController : UIViewController {
     
     private var textView: UITextView!
     

@@ -3,13 +3,13 @@
 //  Settings
 //
 
-import Foundation
+//import Foundation
 import UIKit
 
 enum SettingsViewType {
     case primary
+    case bible
     case language
-    case about
 }
 
 class SettingsViewController: UIViewController {
@@ -27,7 +27,7 @@ class SettingsViewController: UIViewController {
     
     init(settingsViewType: SettingsViewType) {
         self.settingsViewType = settingsViewType
-        self.selectedSection = (settingsViewType == .primary) ? 3 : 0
+        self.selectedSection = 0
         self.availableSection = self.selectedSection + 1
         self.recentContentOffset = CGPoint(x:0, y: 0)
         
@@ -45,7 +45,7 @@ class SettingsViewController: UIViewController {
     // This constructor is not used
     required init?(coder: NSCoder) {
         self.settingsViewType = .primary
-        self.selectedSection = (settingsViewType == .primary) ? 3 : 0
+        self.selectedSection = 0
         self.availableSection = self.selectedSection + 1
         self.recentContentOffset = CGPoint(x:0, y: 0)
         super.init(coder: coder)
@@ -67,13 +67,12 @@ class SettingsViewController: UIViewController {
         switch self.settingsViewType {
         case .primary:
             self.navigationItem.title = NSLocalizedString("Settings", comment: "Settings view page title")
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "\u{FF1c} Read", style: .plain, target: self,
-                                                                    action: #selector(doneHandler))
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "\u{FF1c} Read", style: .plain, target: self, action: #selector(doneHandler))
+        case .bible:
+            self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
+            self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
         case .language:
             self.navigationItem.title = NSLocalizedString("Languages", comment: "Languages view page title")
-            self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
-        case .about:
-            self.navigationItem.title = NSLocalizedString("About SafeBible", comment: "About view page title")
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
         }
         self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
@@ -98,11 +97,11 @@ class SettingsViewController: UIViewController {
         
         switch self.settingsViewType {
         case .primary:
+            self.dataModel = nil
+        case .bible:
             self.dataModel = BibleModel(availableSection: self.availableSection)
         case .language:
             self.dataModel = LanguageModel(availableSection: self.availableSection)
-        case .about:
-            self.dataModel = nil
         }
         self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: self.selectedSection,
                                                  searchController: self.searchController)

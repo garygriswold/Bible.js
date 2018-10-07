@@ -39,9 +39,9 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     // Return the number of sections
     func numberOfSections(in tableView: UITableView) -> Int {
         switch self.settingsViewType {
-        case .primary: return self.availableSection + self.dataModel!.locales.count
+        case .primary: return 4
+        case .bible: return self.dataModel!.locales.count
         case .language: return 2
-        case .about: return 1
         }
     }
     
@@ -50,12 +50,17 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         switch self.settingsViewType {
         case .primary:
             switch section {
-            case 0: return 1//(UserMessageController.isAvailable()) ? 4 : 3
+            case 0: return 3
             case 1: return 1
-            case 2: return 1
-            case 3: return self.dataModel!.selectedCount
+            case 2: return 2
+            case 3: return (UserMessageController.isAvailable()) ? 4 : 3
+            default: fatalError("Unknown number of sections")
+            }
+        case .bible:
+            switch section {
+            case 0: return self.dataModel!.selectedCount
             default:
-                let index = section - self.availableSection
+                let index = section - 1
                 if let bibleModel = self.dataModel as? BibleModel {
                     return bibleModel.getAvailableBibleCount(section: index)
                 } else {
@@ -73,8 +78,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 }
             default: fatalError("Unknown number of sections")
             }
-        case .about:
-            return (UserMessageController.isAvailable()) ? 4 : 3
         }
     }
     
@@ -84,11 +87,18 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         case .primary:
             switch indexPath.section {
             case 0:
-                let aboutCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                aboutCell.textLabel?.text = NSLocalizedString("About SafeBible", comment: "About Cell Title")
-                aboutCell.textLabel?.font = AppFont.sansSerif(style: .body)
-                aboutCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-                return aboutCell
+                switch indexPath.row {
+                case 0:
+                    let tocText = NSLocalizedString("Table of Contents", comment: "Table of Contents Title")
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: tocText)
+                case 1:
+                    let histText = NSLocalizedString("History", comment: "History Cell Title")
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: histText)
+                case 2:
+                    let videoText = NSLocalizedString("Videos", comment: "Videos Cell Title")
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: videoText)
+                default: fatalError("Unknown row \(indexPath.row) in section 0")
+                }
             case 1:
                 switch indexPath.row {
                 case 0:
@@ -98,17 +108,39 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             case 2:
                 switch indexPath.row {
                 case 0:
-                    let languagesCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                    languagesCell.textLabel?.text = NSLocalizedString("All Languages", comment: "Clickable cell title")
-                    languagesCell.textLabel?.font = AppFont.sansSerif(style: .body)
-                    languagesCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-                    return languagesCell
+                    let bibleText = NSLocalizedString("More Bibles", comment: "Clickable cell title")
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: bibleText)
+                case 1:
+                    let langText = NSLocalizedString("More Languages", comment: "Clickable cell title")
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: langText)
                 default: fatalError("Unknown row \(indexPath.row) in section 2")
                 }
             case 3:
+                switch indexPath.row {
+                case 0:
+                    let reviewText = NSLocalizedString("Write A Review", comment: "Clickable cell title")
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: reviewText)
+                case 1:
+                    let commentText = NSLocalizedString("Send Us Comments", comment: "Clickable cell title")
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: commentText)
+                case 2:
+                    let privText = NSLocalizedString("Privacy Policy", comment: "Privacy Policy cell title")
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: privText)
+                case 3:
+                    let shareText = NSLocalizedString("Share SafeBible", comment: "Clickable cell title")
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: shareText)
+                default: fatalError("Unknown row \(indexPath.row) in section 3")
+                }
+            default:
+                fatalError("Unknown section \(indexPath.section) in .primary")
+            }
+        case .bible:
+            switch indexPath.section {
+            case 0:
                 return self.dataModel!.selectedCell(tableView: tableView, indexPath: indexPath)
             default:
-                return self.dataModel!.availableCell(tableView: tableView, indexPath: indexPath, inSearch:       self.searchController?.isSearching() ?? false)
+                return self.dataModel!.availableCell(tableView: tableView, indexPath: indexPath,
+                                                     inSearch: false)
             }
         case .language:
             switch indexPath.section {
@@ -116,35 +148,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 return self.dataModel!.selectedCell(tableView: tableView, indexPath: indexPath)
             case 1:
                 return self.dataModel!.availableCell(tableView: tableView, indexPath: indexPath, inSearch: self.searchController?.isSearching() ?? false)
-            default: fatalError("Unknown section \(indexPath.section)")
-            }
-        case .about:
-            switch indexPath.row {
-            case 0:
-                let aboutCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                aboutCell.textLabel?.text = NSLocalizedString("Privacy Policy", comment: "Privacy Policy cell title")
-                aboutCell.textLabel?.font = AppFont.sansSerif(style: .body)
-                aboutCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-                return aboutCell
-            case 1:
-                let reviewCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                reviewCell.textLabel?.text = NSLocalizedString("Write A Review", comment: "Clickable cell title")
-                reviewCell.textLabel?.font = AppFont.sansSerif(style: .body)
-                reviewCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-                return reviewCell
-            case 2:
-                let feedbackCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                feedbackCell.textLabel?.text = NSLocalizedString("Send Us Comments", comment: "Clickable cell title")
-                feedbackCell.textLabel?.font = AppFont.sansSerif(style: .body)
-                feedbackCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-                return feedbackCell
-            case 3:
-                let messageCell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                messageCell.textLabel?.text = NSLocalizedString("Share SafeBible", comment: "Clickable cell title")
-                messageCell.textLabel?.font = AppFont.sansSerif(style: .body)
-                messageCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-                return messageCell
-            default: fatalError("Unknown row \(indexPath.row) in section 0")
+            default: fatalError("Unknown section \(indexPath.section) in .language")
             }
         }
     }
@@ -152,12 +156,9 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     // Return true for each row that can be edited
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         switch self.settingsViewType {
-        case .primary:
-            return indexPath.section >= selectedSection
-        case .language:
-            return indexPath.section >= selectedSection
-        case .about:
-            return false
+        case .primary: return false
+        case .bible: return true
+        case .language: return true
         }
     }
     
@@ -192,12 +193,20 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
 
     // Return true for each row that can be moved
     func tableView(_ tableView: UITableView, canMoveRowAt: IndexPath) -> Bool {
-        return (canMoveRowAt.section == self.selectedSection)
+        return (self.settingsViewType != .primary && canMoveRowAt.section == self.selectedSection)
     }
     
     // Commit the row move in the data source
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath,
                    to destinationIndexPath: IndexPath) {
         self.dataModel!.moveSelected(source: sourceIndexPath.row, destination: destinationIndexPath.row)
+    }
+        
+    private func genericCell(view: UITableView, indexPath: IndexPath, title: String) -> UITableViewCell {
+        let cell = view.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
+        cell.textLabel?.text = title
+        cell.textLabel?.font = AppFont.sansSerif(style: .body)
+        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+        return cell
     }
 }

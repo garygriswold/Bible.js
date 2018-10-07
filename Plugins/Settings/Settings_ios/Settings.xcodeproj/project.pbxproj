@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E4015258215D2DF60031654B /* AboutPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4015257215D2DF60031654B /* AboutPageController.swift */; };
+		E4015258215D2DF60031654B /* InfoPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4015257215D2DF60031654B /* InfoPageController.swift */; };
 		E428B7E52138BD7F000AB2A8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E32138BD7F000AB2A8 /* InfoPlist.strings */; };
 		E44C056C211B7DE700476DAD /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E44C056B211B7DE700476DAD /* Versions.db */; };
 		E44C056D211BE1F700476DAD /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44C0566211B77AA00476DAD /* Utility.framework */; };
@@ -15,6 +15,7 @@
 		E45C598121431934009C1F0E /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45C598021431934009C1F0E /* AWSCore.framework */; };
 		E45C598221431934009C1F0E /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E45C598021431934009C1F0E /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4825C412124F0B400D36620 /* BibleInitialSelect.swift */; };
+		E49F7296216AC830007D2856 /* ExternControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */; };
 		E4A3AF152138EC0F006EDEFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E62138BD7F000AB2A8 /* Localizable.strings */; };
 		E4A7130021461090009D99E2 /* SettingsSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A712FF21461090009D99E2 /* SettingsSearchController.swift */; };
 		E4AFAC6C2144C047008EE537 /* www in Resources */ = {isa = PBXBuildFile; fileRef = E4AFAC6B2144C047008EE537 /* www */; };
@@ -57,7 +58,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		E4015257215D2DF60031654B /* AboutPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPageController.swift; sourceTree = "<group>"; };
+		E4015257215D2DF60031654B /* InfoPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPageController.swift; sourceTree = "<group>"; };
 		E428B7E42138BD7F000AB2A8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E428B7E72138BD7F000AB2A8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E428B7E92138BF70000AB2A8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -95,6 +96,7 @@
 		E49ACDD5213B50720031625C /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E49ACDD6213B507F0031625C /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E49ACDD7213B508B0031625C /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternControllerProtocol.swift; sourceTree = "<group>"; };
 		E4A3AF132138E72D006EDEFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		E4A3AF142138EC0F006EDEFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4A3AF162138EE96006EDEFE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -179,13 +181,14 @@
 				E4A712FF21461090009D99E2 /* SettingsSearchController.swift */,
 				E4C2E984211B712C00B71CC5 /* SettingsViewDataSource.swift */,
 				E4C2E989211B712D00B71CC5 /* SettingsViewDelegate.swift */,
-				E4015257215D2DF60031654B /* AboutPageController.swift */,
+				E4015257215D2DF60031654B /* InfoPageController.swift */,
 				E4C2E97D211B711C00B71CC5 /* FeedbackViewController.swift */,
 				E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */,
 				E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */,
 				E4C2E985211B712C00B71CC5 /* TextSizeSliderCell.swift */,
 				E4C2E986211B712C00B71CC5 /* LanguageCell.swift */,
 				E4C2E988211B712D00B71CC5 /* SettingsModel.swift */,
+				E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */,
 				E4C2E983211B712C00B71CC5 /* LanguageModel.swift */,
 				E4C2E97C211B711C00B71CC5 /* BibleModel.swift */,
 				E4825C412124F0B400D36620 /* BibleInitialSelect.swift */,
@@ -310,13 +313,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4C2E98D211B712D00B71CC5 /* SettingsViewDataSource.swift in Sources */,
+				E49F7296216AC830007D2856 /* ExternControllerProtocol.swift in Sources */,
 				E4C2E978211B70F500B71CC5 /* AppFont.swift in Sources */,
 				E4EC586F215D9D4C009BAA4F /* StoreReviewController.swift in Sources */,
 				E4C2E98C211B712D00B71CC5 /* LanguageModel.swift in Sources */,
 				E4E12B2E2133F30800CAFE78 /* UserMessageController.swift in Sources */,
 				E4C2E980211B711C00B71CC5 /* FeedbackViewController.swift in Sources */,
 				E4C2E98B211B712D00B71CC5 /* SettingsAdapter.swift in Sources */,
-				E4015258215D2DF60031654B /* AboutPageController.swift in Sources */,
+				E4015258215D2DF60031654B /* InfoPageController.swift in Sources */,
 				E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */,
 				E4C2E98A211B712D00B71CC5 /* SettingsViewController.swift in Sources */,
 				E4C2E990211B712D00B71CC5 /* SettingsNavigator.swift in Sources */,
