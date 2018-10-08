@@ -90,13 +90,16 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 switch indexPath.row {
                 case 0:
                     let tocText = NSLocalizedString("Table of Contents", comment: "Table of Contents Title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: tocText)
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: tocText,
+                                            icon: "ios-keypad.png")
                 case 1:
                     let histText = NSLocalizedString("History", comment: "History Cell Title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: histText)
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: histText,
+                                            icon: "ios-previous.png")
                 case 2:
                     let videoText = NSLocalizedString("Videos", comment: "Videos Cell Title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: videoText)
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: videoText,
+                                            icon: "ios-films.png")
                 default: fatalError("Unknown row \(indexPath.row) in section 0")
                 }
             case 1:
@@ -109,26 +112,32 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 switch indexPath.row {
                 case 0:
                     let bibleText = NSLocalizedString("More Bibles", comment: "Clickable cell title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: bibleText)
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: bibleText,
+                                            icon: "cel-bible.png")
                 case 1:
                     let langText = NSLocalizedString("More Languages", comment: "Clickable cell title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: langText)
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: langText,
+                                            icon: "ios-world-times.png")
                 default: fatalError("Unknown row \(indexPath.row) in section 2")
                 }
             case 3:
                 switch indexPath.row {
                 case 0:
                     let reviewText = NSLocalizedString("Write A Review", comment: "Clickable cell title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: reviewText)
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: reviewText,
+                                            icon: "ios-new.png")
                 case 1:
                     let commentText = NSLocalizedString("Send Us Comments", comment: "Clickable cell title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: commentText)
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: commentText,
+                                            icon: "ios-reply.png")
                 case 2:
                     let privText = NSLocalizedString("Privacy Policy", comment: "Privacy Policy cell title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: privText)
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: privText,
+                                            icon: "sec-shield-diagonal.png")
                 case 3:
                     let shareText = NSLocalizedString("Share SafeBible", comment: "Clickable cell title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: shareText)
+                    return self.genericCell(view: tableView, indexPath: indexPath, title: shareText,
+                                            icon: "ios-upload.png")
                 default: fatalError("Unknown row \(indexPath.row) in section 3")
                 }
             default:
@@ -202,10 +211,16 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         self.dataModel!.moveSelected(source: sourceIndexPath.row, destination: destinationIndexPath.row)
     }
         
-    private func genericCell(view: UITableView, indexPath: IndexPath, title: String) -> UITableViewCell {
+    private func genericCell(view: UITableView, indexPath: IndexPath, title: String, icon: String?) -> UITableViewCell {
         let cell = view.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
         cell.textLabel?.text = title
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
+        if icon != nil {
+            var image = UIImage(named: "www/images/" + icon!)
+            image = image?.withRenderingMode(.alwaysTemplate)
+            cell.imageView?.tintColor = UIColor.gray
+            cell.imageView?.image = image
+        }
         cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         return cell
     }
