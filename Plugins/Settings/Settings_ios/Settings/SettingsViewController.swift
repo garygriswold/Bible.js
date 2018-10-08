@@ -66,7 +66,7 @@ class SettingsViewController: UIViewController {
  
         switch self.settingsViewType {
         case .primary:
-            self.navigationItem.title = NSLocalizedString("Settings", comment: "Settings view page title")
+            self.navigationItem.title = NSLocalizedString("Menu", comment: "Menu view page title")
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "\u{FF1c} Read", style: .plain, target: self, action: #selector(doneHandler))
         case .bible:
             self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
