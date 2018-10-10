@@ -66,7 +66,10 @@ class SettingsViewController: UIViewController {
         switch self.settingsViewType {
         case .primary:
             self.navigationItem.title = NSLocalizedString("Menu", comment: "Menu view page title")
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "\u{FF1c} Read", style: .plain, target: self, action: #selector(doneHandler))
+            let image = UIImage(named: "www/images/ios-previous.png")
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .plain,
+                                                                    target: self,
+                                                                    action: #selector(doneHandler))
         case .bible:
             self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
