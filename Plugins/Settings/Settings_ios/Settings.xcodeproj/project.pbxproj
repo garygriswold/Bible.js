@@ -186,20 +186,20 @@
 				E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */,
 				E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */,
 				E4C2E985211B712C00B71CC5 /* TextSizeSliderCell.swift */,
+				E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */,
 				E4C2E986211B712C00B71CC5 /* LanguageCell.swift */,
 				E4C2E988211B712D00B71CC5 /* SettingsModel.swift */,
-				E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */,
 				E4C2E983211B712C00B71CC5 /* LanguageModel.swift */,
 				E4C2E97C211B711C00B71CC5 /* BibleModel.swift */,
 				E4825C412124F0B400D36620 /* BibleInitialSelect.swift */,
 				E4C2E982211B712C00B71CC5 /* SettingsAdapter.swift */,
 				E4C2E977211B70F500B71CC5 /* AppFont.swift */,
+				E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */,
 				E4F720C5211B6F2C00E26B07 /* Info.plist */,
 				E428B7E62138BD7F000AB2A8 /* Localizable.strings */,
 				E428B7E32138BD7F000AB2A8 /* InfoPlist.strings */,
 				E4F720C0211B6F2C00E26B07 /* Assets.xcassets */,
 				E4F720C2211B6F2C00E26B07 /* LaunchScreen.storyboard */,
-				E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";

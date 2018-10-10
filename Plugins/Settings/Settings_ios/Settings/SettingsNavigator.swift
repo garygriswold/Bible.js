@@ -6,7 +6,6 @@
 //  Copyright © 2018 Short Sands, LLC. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 public class SettingsNavigator {
@@ -16,7 +15,6 @@ public class SettingsNavigator {
     }
     
     public func present() -> UINavigationController {
-        let review = StoreReviewController.shared
         let viewController = SettingsViewController(settingsViewType: .primary)
         //let viewController = SettingsViewController(settingsViewType: .language)
         //let viewController = SettingsViewController(settingsViewType: .version)
@@ -24,6 +22,7 @@ public class SettingsNavigator {
         //let viewController = VersionDetailViewController()
         let navController = UINavigationController(rootViewController: viewController)
         navController.hidesBarsOnSwipe = false // true prevents cell move from working
+        let review = StoreReviewController.shared  // This could be postponed more
         return navController
     }
     

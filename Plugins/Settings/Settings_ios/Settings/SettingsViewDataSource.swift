@@ -40,7 +40,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         switch self.settingsViewType {
         case .primary: return 4
-        case .bible: return self.dataModel!.locales.count
+        case .bible: return 1 + self.dataModel!.locales.count
         case .language: return 2
         }
     }

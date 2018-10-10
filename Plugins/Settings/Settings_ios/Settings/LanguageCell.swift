@@ -6,7 +6,6 @@
 //  Copyright © 2018 Short Sands, LLC. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class LanguageCell : UITableViewCell {

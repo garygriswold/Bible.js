@@ -14,7 +14,7 @@ import StoreKit
  */
 class StoreReviewController {
     
-    public static let shared = StoreReviewController()
+    public static var shared = StoreReviewController() // var for lazy initialization
     
     private static let APP_USE_SEC = "app_use_sec"
     private static let REVIEW_INTERVAL_SEC = 1800.0 // 30 min

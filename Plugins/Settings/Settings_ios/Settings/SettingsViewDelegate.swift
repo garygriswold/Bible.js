@@ -6,9 +6,7 @@
 //  Copyright © 2018 Short Sands, LLC All rights reserved.
 //
 
-import Foundation
 import UIKit
-import StoreKit
 
 class SettingsViewDelegate : NSObject, UITableViewDelegate {
     

@@ -3,7 +3,6 @@
 //  Settings
 //
 
-//import Foundation
 import UIKit
 
 enum SettingsViewType {
