@@ -10,6 +10,7 @@ import UIKit
 
 class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
+    private weak var controller: SettingsViewController?
     private weak var navController: UINavigationController?
     private weak var dataSource: SettingsViewDataSource?
     private let dataModel: SettingsModel?
@@ -18,6 +19,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     private let availableSection: Int
     
     init(controller: SettingsViewController, selectionViewSection: Int) {
+        self.controller = controller
         self.navController = controller.navigationController
         self.dataSource = controller.dataSource
         self.dataModel = controller.dataModel
@@ -124,7 +126,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     private func bibleViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
         if indexPath.section == self.selectedSection {
             if let bible = self.dataModel!.getSelectedBible(row: indexPath.row) {
-                let detailController = BibleDetailViewController(bible: bible)
+                let detailController = BibleDetailViewController(controller: self.controller!,
+                                                                 indexPath: indexPath, bible: bible)
                 self.navController?.pushViewController(detailController, animated: true)
             }
         }
@@ -132,7 +135,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             let bibleModel = self.dataModel as! BibleModel
             let section = indexPath.section - self.availableSection
             if let bible = bibleModel.getAvailableBible(section: section, row: indexPath.row) {
-                let detailController = BibleDetailViewController(bible: bible)
+                let detailController = BibleDetailViewController(controller: self.controller!,
+                                                                 indexPath: indexPath, bible: bible)
                 self.navController?.pushViewController(detailController, animated: true)
             }
         }

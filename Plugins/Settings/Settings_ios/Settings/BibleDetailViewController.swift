@@ -10,15 +10,20 @@ import UIKit
 
 class BibleDetailViewController : UIViewController {
     
+    private weak var controller: SettingsViewController?
+    private let indexPath: IndexPath
     private let bible: Bible
-    private var textView: UITextView!
+    private var textView: UITextView
     
-    init(bible: Bible) {
+    init(controller: SettingsViewController, indexPath: IndexPath, bible: Bible) {
+        self.controller = controller
+        self.indexPath = indexPath
         self.bible = bible
         self.textView = UITextView(frame: .zero)
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
+        self.indexPath = IndexPath(item: 0, section: 0)
         self.bible = Bible(bibleId: "", abbr: "", iso3: "", name: "", locale: Locale(identifier: "en-US"))
         self.textView = UITextView(frame: .zero)
         super.init(coder: coder)
@@ -35,7 +40,11 @@ class BibleDetailViewController : UIViewController {
         
         // set Top Bar items
         self.navigationItem.title = bible.name
-        
+        if indexPath.section > 0 { // is an available Bible
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
+                                                                     target: self,
+                                                                     action: #selector(addHandler))
+        }
         self.textView = UITextView(frame: UIScreen.main.bounds)
         let inset = self.textView.frame.width * 0.05
         self.textView.textContainerInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
@@ -64,5 +73,12 @@ class BibleDetailViewController : UIViewController {
         let localized = Locale(identifier: self.bible.iso3).localizedString(forLanguageCode: self.bible.iso3)
         lines.append("localized = \(localized ?? what)")
         return lines.joined(separator: "\n")
+    }
+    
+    @objc func addHandler(sender: UIBarButtonItem?) {
+        if let tableView = self.controller?.tableView {
+            self.controller?.dataSource.insertRow(tableView: tableView, indexPath: self.indexPath)
+        }
+        self.controller?.navigationController?.popViewController(animated: true)
     }
 }
