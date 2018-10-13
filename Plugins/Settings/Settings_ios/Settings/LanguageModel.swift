@@ -32,6 +32,10 @@ class LanguageModel : SettingsModel {
         print("***** deinit LanguageModel ******")
     }
     
+    var settingsAdapter: SettingsAdapter {
+        get { return adapter }
+    }
+    
     var selectedCount: Int {
         get { return self.selected.count }
     }

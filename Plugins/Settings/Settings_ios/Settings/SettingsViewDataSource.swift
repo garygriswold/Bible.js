@@ -199,12 +199,12 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         tableView.moveRow(at: indexPath, to: destination)
         
         // When we move a language from available to selected, then select initial versions
-        if self.dataModel is LanguageModel {
-            //if let language = self.dataModel.getSelectedLanguage(row: destination.row) {
-            //    let initial = BibleInitialSelect(adapter: self.dataModel.settingsAdapter)
-            //    let bibles = initial.getBiblesSelected(locales: [language.locale])
-            //    self.dataModel.settingsAdapter.addBibles(bibles: bibles)
-            //}
+        if let model = self.dataModel as? LanguageModel {
+            if let language = model.getSelectedLanguage(row: destination.row) {
+                let initial = BibleInitialSelect(adapter: model.settingsAdapter)
+                let bibles = initial.getBiblesSelected(locales: [language.locale])
+                model.settingsAdapter.addBibles(bibles: bibles)
+            }
         }
     }
     

@@ -48,6 +48,10 @@ class BibleModel : SettingsModel {
         print("***** deinit BibleModel ******")
     }
     
+    var settingsAdapter: SettingsAdapter {
+        get { return adapter }
+    }
+    
     var selectedCount: Int {
         get { return selected.count }
     }
