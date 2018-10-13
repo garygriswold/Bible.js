@@ -59,6 +59,10 @@ class BibleModel : SettingsModel {
     var filteredCount: Int {
         get { return filtered.count }
     }
+    
+    func getSelectedLanguage(row: Int) -> Language? {
+        return nil
+    }
 
     func getSelectedBible(row: Int) -> Bible? {
         return (row >= 0 && row < selected.count) ? selected[row] : nil

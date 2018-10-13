@@ -21,7 +21,7 @@ class SettingsViewController: UIViewController {
     
     private let selectedSection: Int
     private let availableSection: Int
-    private var dataSource: SettingsViewDataSource!
+    var dataSource: SettingsViewDataSource!
     private var delegate: SettingsViewDelegate!
     
     init(settingsViewType: SettingsViewType) {

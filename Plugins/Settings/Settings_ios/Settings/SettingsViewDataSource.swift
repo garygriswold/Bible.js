@@ -175,31 +175,39 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle,
                    forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete {
-            let destination = self.dataModel!.findAvailableInsertIndex(selectedIndex: indexPath)
-            self.dataModel!.moveSelectedToAvailable(source: indexPath,
-                                                   destination: destination,
-                                                   inSearch: self.searchController?.isSearching() ?? false)
-            tableView.moveRow(at: indexPath, to: destination)
-            self.searchController?.updateSearchResults()
+            self.deleteRow(tableView: tableView, indexPath: indexPath)
         } else if editingStyle == UITableViewCellEditingStyle.insert {
-            let length = self.dataModel!.selectedCount
-            let destination = IndexPath(item: length, section: self.selectedSection)
-            self.dataModel!.moveAvailableToSelected(source: indexPath,
-                                                   destination: destination,
-                                                   inSearch: self.searchController?.isSearching() ?? false)
-            tableView.moveRow(at: indexPath, to: destination)
-            
-            // When we move a language from available to selected, then select initial versions
-            //if self.dataModel is LanguageModel {
-            //    if let language = self.dataModel.getSelectedLanguage(row: destination.row) {
-            //        let initial = BibleInitialSelect(adapter: self.dataModel.settingsAdapter)
-            //        let bibles = initial.getBiblesSelected(locales: [language.locale])
-            //        self.dataModel.settingsAdapter.addBibles(bibles: bibles)
-            //    }
+            self.insertRow(tableView: tableView, indexPath: indexPath)
+        }
+    }
+    
+    func deleteRow(tableView: UITableView, indexPath: IndexPath) {
+        let destination = self.dataModel!.findAvailableInsertIndex(selectedIndex: indexPath)
+        self.dataModel!.moveSelectedToAvailable(source: indexPath,
+                                                destination: destination,
+                                                inSearch: self.searchController?.isSearching() ?? false)
+        tableView.moveRow(at: indexPath, to: destination)
+        self.searchController?.updateSearchResults()
+    }
+    
+    func insertRow(tableView: UITableView, indexPath: IndexPath) {
+        let length = self.dataModel!.selectedCount
+        let destination = IndexPath(item: length, section: self.selectedSection)
+        self.dataModel!.moveAvailableToSelected(source: indexPath,
+                                                destination: destination,
+                                                inSearch: self.searchController?.isSearching() ?? false)
+        tableView.moveRow(at: indexPath, to: destination)
+        
+        // When we move a language from available to selected, then select initial versions
+        if self.dataModel is LanguageModel {
+            //if let language = self.dataModel.getSelectedLanguage(row: destination.row) {
+            //    let initial = BibleInitialSelect(adapter: self.dataModel.settingsAdapter)
+            //    let bibles = initial.getBiblesSelected(locales: [language.locale])
+            //    self.dataModel.settingsAdapter.addBibles(bibles: bibles)
             //}
         }
     }
-
+    
     // Return true for each row that can be moved
     func tableView(_ tableView: UITableView, canMoveRowAt: IndexPath) -> Bool {
         return (self.settingsViewType != .primary && canMoveRowAt.section == self.selectedSection)

@@ -11,6 +11,7 @@ import UIKit
 class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
     private weak var navController: UINavigationController?
+    private weak var dataSource: SettingsViewDataSource?
     private let dataModel: SettingsModel?
     private let settingsViewType: SettingsViewType
     private let selectedSection: Int
@@ -18,6 +19,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
     init(controller: SettingsViewController, selectionViewSection: Int) {
         self.navController = controller.navigationController
+        self.dataSource = controller.dataSource
         self.dataModel = controller.dataModel
         self.settingsViewType = controller.settingsViewType
         self.selectedSection = selectionViewSection
@@ -60,7 +62,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         case .bible:
             bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
         case .language:
-            print("Language should not be selectable")
+            languageViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
     }
     
@@ -133,6 +135,12 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 let detailController = BibleDetailViewController(bible: bible)
                 self.navController?.pushViewController(detailController, animated: true)
             }
+        }
+    }
+    
+    private func languageViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
+        if indexPath.section >= self.availableSection {
+            self.dataSource?.insertRow(tableView: tableView, indexPath: indexPath)
         }
     }
 

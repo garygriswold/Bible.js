@@ -37,6 +37,7 @@ protocol SettingsModel {
     var selectedCount: Int { get }
     var availableCount: Int { get }
     var filteredCount: Int { get }
+    func getSelectedLanguage(row: Int) -> Language?
     func getSelectedBible(row: Int) -> Bible?
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     func availableCell(tableView: UITableView, indexPath: IndexPath, inSearch: Bool) -> UITableViewCell

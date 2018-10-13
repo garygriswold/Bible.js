@@ -44,6 +44,10 @@ class LanguageModel : SettingsModel {
         get { return self.filtered.count }
     }
     
+    func getSelectedLanguage(row: Int) -> Language? {
+        return (row >= 0 && row < selected.count) ? selected[row] : nil
+    }
+    
     func getSelectedBible(row: Int) -> Bible? {
         return nil
     }
