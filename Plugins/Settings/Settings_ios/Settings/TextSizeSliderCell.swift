@@ -65,7 +65,7 @@ class TextSizeSliderCell : UITableViewCell {
 
         self.addSubview(self.textSlider)
         
-        let titleLetter = NSLocalizedString("A", comment: "First letter in alphabet")
+        let titleLetter = "A"
         self.leftLabel.text = titleLetter
         self.leftLabel.font = AppFont.serif(ofRelativeSize: CGFloat(self.textSlider.minimumValue))
         self.addSubview(self.leftLabel)
