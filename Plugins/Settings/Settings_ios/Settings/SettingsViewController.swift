@@ -18,6 +18,7 @@ class SettingsViewController: UIViewController {
     var dataModel: SettingsModel!
     var tableView: UITableView!
     var recentContentOffset: CGPoint // Used to restore position when returning to view
+    var editModeOnOff = false // Set to true for edit button in top right
     
     private let selectedSection: Int
     private let availableSection: Int
@@ -85,7 +86,11 @@ class SettingsViewController: UIViewController {
         
         AppFont.updateSearchFontSize()
         
-        self.tableView.setEditing(true, animated: false)
+        if self.editModeOnOff {
+            self.saveHandler(sender: nil)
+        } else {
+            self.tableView.setEditing(true, animated: false)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -153,27 +158,34 @@ class SettingsViewController: UIViewController {
                 self.tableView.frame = CGRect(x: 0.0, y: 0.0, width: bounds.width, height: keyboardTop)
             }
         }
-        self.tableView.scrollToRow(at: IndexPath(item: 0, section: self.availableSection), at: .top, animated: true)
-        //self.editHandler(sender: nil)
+        self.tableView.scrollToRow(at: IndexPath(item: 0, section: self.availableSection), at: .top,
+                                   animated: true)
+        if self.editModeOnOff {
+            self.editHandler(sender: nil)
+        }
     }
     
     @objc func keyboardWillHide(note: NSNotification) {
         self.tableView.frame = UIScreen.main.bounds
-        //self.saveHandler(sender: nil)
+        if self.editModeOnOff {
+            self.saveHandler(sender: nil)
+        }
     }
-/*
+
     @objc func editHandler(sender: UIBarButtonItem?) {
+        self.setEditing(true, animated: true)
         self.tableView.setEditing(true, animated: true)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
                                                                  action: #selector(saveHandler))
     }
     
     @objc func saveHandler(sender: UIBarButtonItem?) {
+        self.setEditing(false, animated: true)
         self.tableView.setEditing(false, animated: true)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
                                                                  action: #selector(editHandler))
     }
-*/
+
     @objc func doneHandler(sender: UIBarButtonItem?) {
         print("Settings Done button clicked")
     }

@@ -74,15 +74,15 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             switch indexPath.row {
             case 0:
                 let tocController = ExternControllerImpl()
-                tocController.present(title: "Table of Contents")
+                tocController.present(title: NSLocalizedString("Table of Contents", comment: "View title"))
                 self.navController?.pushViewController(tocController, animated: true)
             case 1:
                 let histController = ExternControllerImpl()
-                histController.present(title: "History")
+                histController.present(title: NSLocalizedString("History", comment: "View title"))
                 self.navController?.pushViewController(histController, animated: true)
             case 2:
                 let videoController = ExternControllerImpl()
-                videoController.present(title: "Table of Contents")
+                videoController.present(title: NSLocalizedString("Videos", comment: "View title"))
                 self.navController?.pushViewController(videoController, animated: true)
             default: fatalError("Unknown row \(indexPath.row) in section 0")
             }
@@ -92,9 +92,11 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             switch indexPath.row {
             case 0:
                 let bibleController = SettingsViewController(settingsViewType: .bible)
+                //bibleController.editModeOnOff = true
                 self.navController?.pushViewController(bibleController, animated: true)
             case 1:
                 let languageController = SettingsViewController(settingsViewType: .language)
+                //languageController.editModeOnOff = true
                 self.navController?.pushViewController(languageController, animated: true)
             default: fatalError("Unknown row \(indexPath.row) in section 1")
             }
@@ -143,8 +145,10 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     }
     
     private func languageViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
-        if indexPath.section >= self.availableSection {
-            self.dataSource?.insertRow(tableView: tableView, indexPath: indexPath)
+        if self.controller?.isEditing ?? false {
+            if indexPath.section >= self.availableSection {
+                self.dataSource?.insertRow(tableView: tableView, indexPath: indexPath)
+            }
         }
     }
 
