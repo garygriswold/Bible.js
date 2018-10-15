@@ -18,7 +18,7 @@ class SettingsViewController: UIViewController {
     var dataModel: SettingsModel!
     var tableView: UITableView!
     var recentContentOffset: CGPoint // Used to restore position when returning to view
-    var editModeOnOff = false // Set to true for edit button in top right
+    var editModeOnOff = false // Set to true in order to have edit button in top right
     
     private let selectedSection: Int
     private let availableSection: Int
