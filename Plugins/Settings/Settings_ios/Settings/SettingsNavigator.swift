@@ -15,7 +15,8 @@ public class SettingsNavigator {
     }
     
     public func present() -> UINavigationController {
-        let viewController = SettingsViewController(settingsViewType: .primary)
+        let viewController = ReaderViewController()
+        //let viewController = SettingsViewController(settingsViewType: .primary)
         //let viewController = SettingsViewController(settingsViewType: .language)
         //let viewController = SettingsViewController(settingsViewType: .version)
         //let viewController = FeedbackViewController()

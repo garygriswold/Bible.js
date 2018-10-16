@@ -12,12 +12,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-
-        //let viewController = SettingsViewController(settingsViewType: .primary)
-        //let viewController = SettingsViewController(settingsViewType: .language)
-        //let viewController = SettingsViewController(settingsViewType: .version)
-        //let viewController = FeedbackViewController()
-        //let navController = UINavigationController(rootViewController: viewController)
         
         let settingsNavigator = SettingsNavigator()
         let navController = settingsNavigator.present()

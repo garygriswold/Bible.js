@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E4015258215D2DF60031654B /* InfoPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4015257215D2DF60031654B /* InfoPageController.swift */; };
+		E404A3B82176622B00340395 /* ReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E404A3B72176622B00340395 /* ReaderViewController.swift */; };
 		E428B7E52138BD7F000AB2A8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E32138BD7F000AB2A8 /* InfoPlist.strings */; };
 		E44C056C211B7DE700476DAD /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E44C056B211B7DE700476DAD /* Versions.db */; };
 		E44C056D211BE1F700476DAD /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44C0566211B77AA00476DAD /* Utility.framework */; };
@@ -59,6 +60,7 @@
 
 /* Begin PBXFileReference section */
 		E4015257215D2DF60031654B /* InfoPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPageController.swift; sourceTree = "<group>"; };
+		E404A3B72176622B00340395 /* ReaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderViewController.swift; sourceTree = "<group>"; };
 		E428B7E42138BD7F000AB2A8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E428B7E72138BD7F000AB2A8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E428B7E92138BF70000AB2A8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */,
+				E404A3B72176622B00340395 /* ReaderViewController.swift */,
 				E4C2E987211B712C00B71CC5 /* SettingsNavigator.swift */,
 				E4C2E981211B712C00B71CC5 /* SettingsViewController.swift */,
 				E4A712FF21461090009D99E2 /* SettingsSearchController.swift */,
@@ -314,6 +317,7 @@
 			files = (
 				E4C2E98D211B712D00B71CC5 /* SettingsViewDataSource.swift in Sources */,
 				E49F7296216AC830007D2856 /* ExternControllerProtocol.swift in Sources */,
+				E404A3B82176622B00340395 /* ReaderViewController.swift in Sources */,
 				E4C2E978211B70F500B71CC5 /* AppFont.swift in Sources */,
 				E4EC586F215D9D4C009BAA4F /* StoreReviewController.swift in Sources */,
 				E4C2E98C211B712D00B71CC5 /* LanguageModel.swift in Sources */,
