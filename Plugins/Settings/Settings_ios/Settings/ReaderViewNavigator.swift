@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class SettingsNavigator {
+public class ReaderViewNavigator {
     
     deinit {
         print("**** deinit SettingsNavigator ******")
