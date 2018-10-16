@@ -208,14 +208,12 @@ struct SettingsAdapter {
     //
     // Bible Versions.db methods
     //
-    func getBiblesSelected(locale: Locale, selectedBibles: [String]) -> [Bible] {
-        let sql = "SELECT bibleId, abbr, b.iso3, b.localizedName" +
-            " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
-            " AND b.bibleId" + genQuest(array: selectedBibles) +
-            " AND l.iso1 = ?" +
-            " AND b.localizedName IS NOT null"
-        let results = getBibles(sql: sql, locale: locale, selectedBibles: selectedBibles)
-        
+    func getBiblesSelected(locales: [Locale], selectedBibles: [String]) -> [Bible] {
+        var results = [Bible]()
+        for locale in locales {
+            let some = self.getBiblesSelected(locale: locale, selectedBibles: selectedBibles)
+            results += some
+        }
         // Sort results by selectedBibles list
         var map = [String:Bible]()
         for result in results {
@@ -230,6 +228,15 @@ struct SettingsAdapter {
         return bibles
     }
     
+    private func getBiblesSelected(locale: Locale, selectedBibles: [String]) -> [Bible] {
+        let sql = "SELECT bibleId, abbr, b.iso3, b.localizedName" +
+            " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
+            " AND b.bibleId" + genQuest(array: selectedBibles) +
+            " AND l.iso1 = ?" +
+            " AND b.localizedName IS NOT null"
+        return getBibles(sql: sql, locale: locale, selectedBibles: selectedBibles)
+    }
+    
     func getBiblesAvailable(locale: Locale, selectedBibles: [String]) -> [Bible] {
         let sql = "SELECT bibleId, abbr, b.iso3, b.localizedName" +
             " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
@@ -237,9 +244,7 @@ struct SettingsAdapter {
             " AND l.iso1 = ?" +
             " AND b.localizedName IS NOT null" +
             " ORDER BY b.localizedName"
-        let results = getBibles(sql: sql, locale: locale, selectedBibles: selectedBibles)
-        return results
-
+        return getBibles(sql: sql, locale: locale, selectedBibles: selectedBibles)
     }
     
     private func getBibles(sql: String, locale: Locale, selectedBibles: [String]) -> [Bible] {

@@ -25,10 +25,7 @@ class BibleModel : SettingsModel {
         self.selected = [Bible]()
         var bibles: [String] = adapter.getBibleSettings()
         if bibles.count > 0 {
-            for locale in self.locales {
-                let some = adapter.getBiblesSelected(locale: locale, selectedBibles: bibles)
-                self.selected += some
-            }
+            self.selected = adapter.getBiblesSelected(locales: self.locales, selectedBibles: bibles)
         } else {
             let initial = BibleInitialSelect(adapter: adapter)
             self.selected = initial.getBiblesSelected(locales: locales)
