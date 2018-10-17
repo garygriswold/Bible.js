@@ -4,7 +4,6 @@
 //
 
 import UIKit
-import Utility
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
