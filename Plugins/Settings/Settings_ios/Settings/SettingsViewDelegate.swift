@@ -51,7 +51,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         case .bible:
             bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
         case .language:
-            print("Language should not be selectable")
+            languageViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
     }
 
@@ -92,11 +92,9 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             switch indexPath.row {
             case 0:
                 let bibleController = SettingsViewController(settingsViewType: .bible)
-                //bibleController.editModeOnOff = true
                 self.navController?.pushViewController(bibleController, animated: true)
             case 1:
                 let languageController = SettingsViewController(settingsViewType: .language)
-                //languageController.editModeOnOff = true
                 self.navController?.pushViewController(languageController, animated: true)
             default: fatalError("Unknown row \(indexPath.row) in section 1")
             }
@@ -128,19 +126,18 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     private func bibleViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
         if indexPath.section == self.selectedSection {
             if let bible = self.dataModel!.getSelectedBible(row: indexPath.row) {
-                let detailController = BibleDetailViewController(controller: self.controller!,
-                                                                 indexPath: indexPath, bible: bible)
-                self.navController?.pushViewController(detailController, animated: true)
+                // Need to pass Bible back to ReaderViewController
             }
+            self.controller?.navigationController?.popToRootViewController(animated: true)
         }
         else if indexPath.section >= self.availableSection {
             let bibleModel = self.dataModel as! BibleModel
             let section = indexPath.section - self.availableSection
             if let bible = bibleModel.getAvailableBible(section: section, row: indexPath.row) {
-                let detailController = BibleDetailViewController(controller: self.controller!,
-                                                                 indexPath: indexPath, bible: bible)
-                self.navController?.pushViewController(detailController, animated: true)
+                // Need to pass Bible back to ReaderViewController
             }
+            self.controller?.dataSource.insertRow(tableView: tableView, indexPath: indexPath)
+            self.controller?.navigationController?.popToRootViewController(animated: true)
         }
     }
     
@@ -148,6 +145,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         if self.controller?.isEditing ?? false {
             if indexPath.section >= self.availableSection {
                 self.dataSource?.insertRow(tableView: tableView, indexPath: indexPath)
+                // Selecting a language should not add it, but should click through
+                // But adding a language should be what????
             }
         }
     }
