@@ -42,6 +42,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         case .primary: return 4
         case .bible: return 1 + self.dataModel!.locales.count
         case .language: return 2
+        case .oneLang: return 2
         }
     }
     
@@ -54,7 +55,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             case 1: return 1
             case 2: return 2
             case 3: return (UserMessageController.isAvailable()) ? 4 : 3
-            default: fatalError("Unknown number of sections")
+            default: fatalError("Unknown section \(section) in .primary")
             }
         case .bible:
             switch section {
@@ -76,7 +77,18 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 } else {
                     return self.dataModel!.availableCount
                 }
-            default: fatalError("Unknown number of sections")
+            default: fatalError("Unknown section \(section) in .language ")
+            }
+        case .oneLang:
+            switch section {
+            case 0: return self.dataModel!.selectedCount
+            case 1:
+                if let bibleModel = self.dataModel as? BibleModel {
+                    return bibleModel.getAvailableBibleCount(section: 0)
+                } else {
+                    return 0
+                }
+            default: fatalError("Unknown section \(section) in .oneLang")
             }
         }
     }
@@ -159,6 +171,15 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 return self.dataModel!.availableCell(tableView: tableView, indexPath: indexPath, inSearch: self.searchController?.isSearching() ?? false)
             default: fatalError("Unknown section \(indexPath.section) in .language")
             }
+        case .oneLang:
+            switch indexPath.section {
+            case 0:
+                return self.dataModel!.selectedCell(tableView: tableView, indexPath: indexPath)
+            case 1:
+                return self.dataModel!.availableCell(tableView: tableView, indexPath: indexPath,
+                                                     inSearch: false)
+            default: fatalError("Unknown section \(indexPath.section) in .oneLang")
+            }
         }
     }
     
@@ -168,6 +189,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         case .primary: return false
         case .bible: return true
         case .language: return true
+        case .oneLang: return true
         }
     }
     

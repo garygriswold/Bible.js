@@ -32,15 +32,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     deinit {
         print("**** deinit SettingsViewDelegate \(self.settingsViewType) ******")
     }
-    
-    //func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    //    return UITableViewAutomaticDimension
-    //}
-    
-    //func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {}
-    
-    // Define edit actions for a row swipe
-    //func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {}
  
     // Does the same as didSelectRow at, not sure why I could not call it directly.
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
@@ -52,6 +43,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
         case .language:
             languageViewRowSelect(tableView: tableView, indexPath: indexPath)
+        case .oneLang:
+            bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
     }
 
@@ -65,6 +58,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
         case .language:
             languageViewRowSelect(tableView: tableView, indexPath: indexPath)
+        case .oneLang:
+            bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
         }
     }
     
@@ -131,9 +126,9 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             self.controller?.navigationController?.popToRootViewController(animated: true)
         }
         else if indexPath.section >= self.availableSection {
-            let bibleModel = self.dataModel as! BibleModel
+            //let bibleModel = self.dataModel as! BibleModel
             let section = indexPath.section - self.availableSection
-            if let bible = bibleModel.getAvailableBible(section: section, row: indexPath.row) {
+            if let bible = self.dataModel!.getAvailableBible(section: section, row: indexPath.row) {
                 // Need to pass Bible back to ReaderViewController
             }
             self.controller?.dataSource.insertRow(tableView: tableView, indexPath: indexPath)
@@ -142,15 +137,15 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     }
     
     private func languageViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
-        let oneLang = SettingsViewController(settingsViewType: .bible)
+        var language: Language?
+        if indexPath.section == self.selectedSection {
+            language = self.dataModel!.getSelectedLanguage(row: indexPath.row)
+        } else {
+            language = self.dataModel!.getAvailableLanguage(row: indexPath.row)
+        }
+        let oneLang = SettingsViewController(settingsViewType: .oneLang)
+        oneLang.oneLanguage = language
         self.controller?.navigationController?.pushViewController(oneLang, animated: true)
-        //if self.controller?.isEditing ?? false {
-        //    if indexPath.section >= self.availableSection {
-                //self.dataSource?.insertRow(tableView: tableView, indexPath: indexPath)
-                // Selecting a language should not add it, but should click through
-                // But adding a language should be what????
-        //    }
-        //}
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -197,6 +192,13 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 return NSLocalizedString("More Languages", comment: "Section heading for Other languages")
             }
             else { return nil }
+        case .oneLang:
+            if section == self.selectedSection {
+                return NSLocalizedString("My Bibles", comment: "Section heading for User selected Bibles")
+            } else {
+                ////// Somehow we need to knwo the language.
+                return "whoops"
+            }
         }
     }
 

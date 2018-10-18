@@ -9,6 +9,7 @@ enum SettingsViewType {
     case primary
     case bible
     case language
+    case oneLang
 }
 
 class SettingsViewController: UIViewController {
@@ -17,6 +18,7 @@ class SettingsViewController: UIViewController {
     var searchController: SettingsSearchController?
     var dataModel: SettingsModel!
     var tableView: UITableView!
+    var oneLanguage: Language? // Used only when settingsViewType == .oneLang
     var recentContentOffset: CGPoint // Used to restore position when returning to view
     var editModeOnOff = false // Set to true in order to have edit button in top right
     
@@ -73,6 +75,10 @@ class SettingsViewController: UIViewController {
         case .language:
             self.navigationItem.title = NSLocalizedString("Languages", comment: "Languages view page title")
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
+        case .oneLang:
+            /// This should be a pre- translated language name
+            self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
+            self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
         }
         self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "languageCell")
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
@@ -102,9 +108,11 @@ class SettingsViewController: UIViewController {
         case .primary:
             self.dataModel = nil
         case .bible:
-            self.dataModel = BibleModel(availableSection: self.availableSection)
+            self.dataModel = BibleModel(availableSection: self.availableSection, language: nil)
         case .language:
             self.dataModel = LanguageModel(availableSection: self.availableSection)
+        case .oneLang:
+            self.dataModel = BibleModel(availableSection: self.availableSection, language: self.oneLanguage)
         }
         self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: self.selectedSection,
                                                  searchController: self.searchController)

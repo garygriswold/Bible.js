@@ -14,13 +14,15 @@ class BibleModel : SettingsModel {
     var selected: [Bible]
     var available: [[Bible]]
     var filtered: [Bible]
+    var oneLanguage: Language? // Used only when settingsViewType == .oneLang
     private let adapter: SettingsAdapter
     private let availableSection: Int
     
-    init(availableSection: Int) {
+    init(availableSection: Int, language: Language?) {
         let start: Double = CFAbsoluteTimeGetCurrent()
         self.adapter = SettingsAdapter()
         self.availableSection = availableSection
+        self.oneLanguage = language
         self.locales = adapter.getLanguageSettings()
         self.selected = [Bible]()
         var bibles: [String] = adapter.getBibleSettings()
@@ -33,9 +35,14 @@ class BibleModel : SettingsModel {
             adapter.updateSettings(bibles: self.selected)
         }
         self.available = [[Bible]]()
-        for locale in self.locales {
-            let available1 = adapter.getBiblesAvailable(locale: locale, selectedBibles: bibles)
-            available.append(available1)
+        if self.oneLanguage != nil {
+            let avail = adapter.getBiblesAvailable(locale: oneLanguage!.locale, selectedBibles: bibles)
+            self.available.append(avail)
+        } else {
+            for locale in self.locales {
+                let available1 = adapter.getBiblesAvailable(locale: locale, selectedBibles: bibles)
+                self.available.append(available1)
+            }
         }
         self.filtered = [Bible]()
         print("*** BibleModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
@@ -67,6 +74,10 @@ class BibleModel : SettingsModel {
 
     func getSelectedBible(row: Int) -> Bible? {
         return (row >= 0 && row < selected.count) ? selected[row] : nil
+    }
+    
+    func getAvailableLanguage(row: Int) -> Language? {
+        return nil
     }
     
     func getAvailableBibleCount(section: Int) -> Int {
@@ -126,7 +137,12 @@ class BibleModel : SettingsModel {
     
     func findAvailableInsertIndex(selectedIndex: IndexPath) -> IndexPath {
         let bible = self.selected[selectedIndex.row]
-        let localeIndex = self.findAvailableLocale(locale: bible.locale)
+        var localeIndex: Int
+        if self.oneLanguage != nil {
+            localeIndex = 0
+        } else {
+            localeIndex = self.findAvailableLocale(locale: bible.locale)
+        }
         let bibleList = self.available[localeIndex]
         let searchName = bible.name
         for index in 0..<bibleList.count {

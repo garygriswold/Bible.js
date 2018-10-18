@@ -56,6 +56,14 @@ class LanguageModel : SettingsModel {
         return nil
     }
     
+    func getAvailableLanguage(row: Int) -> Language? {
+        return (row >= 0 && row < available.count) ? available[row] : nil
+    }
+    
+    func getAvailableBible(section: Int, row: Int) -> Bible? {
+        return nil
+    }
+    
     func selectedCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         let language = selected[indexPath.row]
         return self.generateCell(tableView: tableView, indexPath: indexPath, language: language)
