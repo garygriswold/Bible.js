@@ -142,13 +142,15 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     }
     
     private func languageViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
-        if self.controller?.isEditing ?? false {
-            if indexPath.section >= self.availableSection {
-                self.dataSource?.insertRow(tableView: tableView, indexPath: indexPath)
+        let oneLang = SettingsViewController(settingsViewType: .bible)
+        self.controller?.navigationController?.pushViewController(oneLang, animated: true)
+        //if self.controller?.isEditing ?? false {
+        //    if indexPath.section >= self.availableSection {
+                //self.dataSource?.insertRow(tableView: tableView, indexPath: indexPath)
                 // Selecting a language should not add it, but should click through
                 // But adding a language should be what????
-            }
-        }
+        //    }
+        //}
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
