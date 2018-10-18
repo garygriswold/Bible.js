@@ -22,9 +22,7 @@ class ReaderViewController : UIViewController {
     override func loadView() {
         super.loadView()
         
-        if let nav = self.navigationController {
-            nav.setNavigationBarHidden(true, animated: false)
-        }
+        self.navigationItem.title = NSLocalizedString("Read", comment: "Read view page title")
         
         let configuration = WKWebViewConfiguration()
         self.webView = WKWebView(frame: .zero, configuration: configuration)
@@ -44,9 +42,22 @@ class ReaderViewController : UIViewController {
         self.createToolbar()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.isToolbarHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+ 
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.navigationController?.isToolbarHidden = true
+    }
+    
     private func createToolbar() {
         if let nav = self.navigationController {
-            nav.isToolbarHidden = false
             
             nav.toolbar.isTranslucent = false
             nav.toolbar.barTintColor = .white
@@ -106,6 +117,8 @@ class ReaderViewController : UIViewController {
     
     @objc func menuTapHandler(sender: UIBarButtonItem) {
         print("menu button handler")
+        let menuController = SettingsViewController(settingsViewType: .primary)
+        self.navigationController?.pushViewController(menuController, animated: true)
     }
     
     @objc func priorTapHandler(sender: UIBarButtonItem) {

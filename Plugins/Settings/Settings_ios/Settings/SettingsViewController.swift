@@ -67,10 +67,6 @@ class SettingsViewController: UIViewController {
         switch self.settingsViewType {
         case .primary:
             self.navigationItem.title = NSLocalizedString("Menu", comment: "Menu view page title")
-            let image = UIImage(named: "www/images/ios-previous.png")
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .plain,
-                                                                    target: self,
-                                                                    action: #selector(doneHandler))
         case .bible:
             self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
@@ -184,10 +180,6 @@ class SettingsViewController: UIViewController {
         self.tableView.setEditing(false, animated: true)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
                                                                  action: #selector(editHandler))
-    }
-
-    @objc func doneHandler(sender: UIBarButtonItem?) {
-        print("Settings Done button clicked")
     }
 }
 
