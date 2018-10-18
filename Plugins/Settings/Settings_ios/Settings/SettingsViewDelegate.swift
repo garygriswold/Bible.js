@@ -132,6 +132,9 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 // Need to pass Bible back to ReaderViewController
             }
             self.controller?.dataSource.insertRow(tableView: tableView, indexPath: indexPath)
+            // Ensure the language is selected, is added when a Bible is added
+            let model = self.dataModel as? BibleModel
+            model?.settingsAdapter.ensureLanguageAdded(language: model?.oneLanguage)
             self.controller?.navigationController?.popToRootViewController(animated: true)
         }
     }

@@ -43,15 +43,16 @@ struct SettingsAdapter {
         }
     }
  
-//    func addLanguage(language: Language) {
-//        let locales = self.getLanguageSettings()
-//        var localeStrs = locales.map { $0.identifier }
-//        let newLocale = language.locale
-//        if !locales.contains(newLocale) {
-//            localeStrs.append(newLocale.identifier)
-//        }
-//        self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: localeStrs)
-//    }
+    func ensureLanguageAdded(language: Language?) {
+        if (language != nil) {
+            var locales = self.getLanguageSettings()
+            if !locales.contains(language!.locale) {
+                locales.append(language!.locale)
+                let localeStrs = locales.map { $0.identifier }
+                self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: localeStrs)
+            }
+        }
+    }
 
     func addBibles(bibles: [Bible]) {
         var currBibles = self.getBibleSettings()
