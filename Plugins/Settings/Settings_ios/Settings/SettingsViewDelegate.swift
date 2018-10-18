@@ -196,8 +196,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             if section == self.selectedSection {
                 return NSLocalizedString("My Bibles", comment: "Section heading for User selected Bibles")
             } else {
-                ////// Somehow we need to knwo the language.
-                return "whoops"
+                let model = self.dataModel as? BibleModel
+                return model?.oneLanguage?.name
             }
         }
     }
@@ -227,12 +227,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.4
     }
-
-    // Called when swipe is used to begin editing
-    //func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath)
-    
-    // Called when editing is ended that was initiated by swipe
-    //func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?)
     
     // Identifies Add and Delete Rows
     func tableView(_ tableView: UITableView, editingStyleForRowAt: IndexPath) -> UITableViewCellEditingStyle {
