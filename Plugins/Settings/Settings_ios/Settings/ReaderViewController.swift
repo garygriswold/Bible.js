@@ -12,6 +12,8 @@ import WebKit
 class ReaderViewController : UIViewController {
     
     private var webView: WKWebView!
+    // Toolbar
+    private var versionLabel: UILabel!
     
     deinit {
         print("****** deinit Reader View Controller")
@@ -63,8 +65,7 @@ class ReaderViewController : UIViewController {
         let request = URLRequest(url: url)
         self.webView.load(request)
         
-        let curr = HistoryModel.shared.current().toString()
-        self.webView.loadHTMLString("<html><body><h1>Hello!\(curr)</h1></body></html>", baseURL: nil)
+        self.versionLabel.text = reference.bibleId
     }
     
     private func createToolbar() {
@@ -101,11 +102,20 @@ class ReaderViewController : UIViewController {
         items.append(toc)
         items.append(spacer)
         
-        let versionImage = UIImage(named: "www/images/cel-bible.png")
-        let version = UIBarButtonItem(image: versionImage, style: .plain, target: self,
-                                      action: #selector(versionTapHandler))
+        let versionFrame = CGRect(x: 0, y: 0, width: 32, height: 32)
+        let versLabel = UILabel(frame: versionFrame)
+        versLabel.sizeToFit()
+        versLabel.textAlignment = .center
+        versLabel.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+        versLabel.textColor = UIColor(red: 0.24, green: 0.5, blue: 0.96, alpha: 1.0)
+        let versGesture = UITapGestureRecognizer(target: self, action: #selector(versionTapHandler))
+        versGesture.numberOfTapsRequired = 1
+        versLabel.addGestureRecognizer(versGesture)
+        versLabel.isUserInteractionEnabled = true
+        let version = UIBarButtonItem(customView: versLabel)
         items.append(version)
         items.append(spacer)
+        self.versionLabel = versLabel
         
         let audioImage = UIImage(named: "www/images/mus-vol-med.png")
         let audio = UIBarButtonItem(image: audioImage, style: .plain, target: self,
