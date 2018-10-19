@@ -16,6 +16,7 @@
 		E45C598121431934009C1F0E /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45C598021431934009C1F0E /* AWSCore.framework */; };
 		E45C598221431934009C1F0E /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E45C598021431934009C1F0E /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E463896E21793DC0009BF5E2 /* HistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463896D21793DC0009BF5E2 /* HistoryModel.swift */; };
+		E463897221799013009BF5E2 /* BiblesActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463897121799013009BF5E2 /* BiblesActionSheet.swift */; };
 		E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4825C412124F0B400D36620 /* BibleInitialSelect.swift */; };
 		E49F7296216AC830007D2856 /* ExternControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */; };
 		E4A3AF152138EC0F006EDEFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E62138BD7F000AB2A8 /* Localizable.strings */; };
@@ -72,6 +73,7 @@
 		E44F0B53212D43F000CDB32F /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = ../../AWS/src/ios/AWS/AWSCore.framework; sourceTree = "<group>"; };
 		E45C598021431934009C1F0E /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = Settings/AWSCore.framework; sourceTree = "<group>"; };
 		E463896D21793DC0009BF5E2 /* HistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryModel.swift; sourceTree = "<group>"; };
+		E463897121799013009BF5E2 /* BiblesActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblesActionSheet.swift; sourceTree = "<group>"; };
 		E4825C412124F0B400D36620 /* BibleInitialSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleInitialSelect.swift; sourceTree = "<group>"; };
 		E49ACDBD213B4F4E0031625C /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E49ACDBE213B4F590031625C /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 				E4A712FF21461090009D99E2 /* SettingsSearchController.swift */,
 				E4C2E984211B712C00B71CC5 /* SettingsViewDataSource.swift */,
 				E4C2E989211B712D00B71CC5 /* SettingsViewDelegate.swift */,
+				E463897121799013009BF5E2 /* BiblesActionSheet.swift */,
 				E4015257215D2DF60031654B /* InfoPageController.swift */,
 				E4C2E97D211B711C00B71CC5 /* FeedbackViewController.swift */,
 				E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */,
@@ -336,6 +339,7 @@
 				E4C2E98F211B712D00B71CC5 /* LanguageCell.swift in Sources */,
 				E463896E21793DC0009BF5E2 /* HistoryModel.swift in Sources */,
 				E4A7130021461090009D99E2 /* SettingsSearchController.swift in Sources */,
+				E463897221799013009BF5E2 /* BiblesActionSheet.swift in Sources */,
 				E4C2E992211B712D00B71CC5 /* SettingsViewDelegate.swift in Sources */,
 				E4C2E98E211B712D00B71CC5 /* TextSizeSliderCell.swift in Sources */,
 				E4C2E991211B712D00B71CC5 /* SettingsModel.swift in Sources */,

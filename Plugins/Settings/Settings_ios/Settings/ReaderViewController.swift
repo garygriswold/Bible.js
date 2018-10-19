@@ -122,7 +122,6 @@ class ReaderViewController : UIViewController {
     }
     
     @objc func menuTapHandler(sender: UIBarButtonItem) {
-        print("menu button handler")
         let menuController = SettingsViewController(settingsViewType: .primary)
         self.navigationController?.pushViewController(menuController, animated: true)
     }
@@ -140,7 +139,11 @@ class ReaderViewController : UIViewController {
     }
     
     @objc func versionTapHandler(sender: UIBarButtonItem) {
-        print("version button handler")
+        // Need to come up with a reduced BibleModel that only contains selected
+        // Pass it into BiblesActionSheet()
+        // Is there any reason to cache it?  How would I invalidate it?
+        let biblesAlert = BiblesActionSheet()
+        self.present(biblesAlert, animated: true, completion: nil)
     }
     
     @objc func audioTapHandler(sender: UIBarButtonItem) {
