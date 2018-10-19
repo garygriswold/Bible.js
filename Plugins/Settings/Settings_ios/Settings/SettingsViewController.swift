@@ -108,11 +108,14 @@ class SettingsViewController: UIViewController {
         case .primary:
             self.dataModel = nil
         case .bible:
-            self.dataModel = BibleModel(availableSection: self.availableSection, language: nil)
+            self.dataModel = BibleModel(availableSection: self.availableSection, language: nil,
+                                        selectedOnly: false)
         case .language:
             self.dataModel = LanguageModel(availableSection: self.availableSection)
         case .oneLang:
-            self.dataModel = BibleModel(availableSection: self.availableSection, language: self.oneLanguage)
+            self.dataModel = BibleModel(availableSection: self.availableSection,
+                                        language: self.oneLanguage,
+                                        selectedOnly: false)
         }
         self.dataSource = SettingsViewDataSource(controller: self, selectionViewSection: self.selectedSection,
                                                  searchController: self.searchController)

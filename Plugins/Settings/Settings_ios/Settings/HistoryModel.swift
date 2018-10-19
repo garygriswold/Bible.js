@@ -8,13 +8,13 @@
 
 import Utility
 
-struct History : Equatable {
+struct Reference : Equatable {
     let bibleId: String
     let bookId: String
     let chapter: Int
     let verse: Int
     
-    static func == (lhs: History, rhs: History) -> Bool {
+    static func == (lhs: Reference, rhs: Reference) -> Bool {
         return lhs.bibleId == rhs.bibleId
     }
     
@@ -27,23 +27,23 @@ struct HistoryModel {
     
     static var shared = HistoryModel()
     
-    private var history = [History]()
+    private var history = [Reference]()
     private var index = 0
     
     init() {
         self.history = self.getHistory()
         self.index = self.history.count - 1
         if self.index < 0 {
-            self.history.append(History(bibleId: "ENGESV", bookId: "JHN", chapter: 3, verse: 1))
+            self.history.append(Reference(bibleId: "ENGESV", bookId: "JHN", chapter: 3, verse: 1))
             self.index = 0
-            self.storeHistory(history: self.history[0])
+            self.storeHistory(reference: self.history[0])
         }
     }
     
-    mutating func add(history: History) {
-        self.history.append(history)
+    mutating func add(reference: Reference) {
+        self.history.append(reference)
         self.index += 1
-        self.storeHistory(history: history)
+        self.storeHistory(reference: reference)
     }
     /*
     mutating func add(bibleId: String, bookId: String, chapter: Int, verse: Int) {
@@ -69,36 +69,36 @@ struct HistoryModel {
     */
     mutating func changeBible(bible: Bible) {
         if let top = self.history.last {
-            let hist = History(bibleId: bible.bibleId, bookId: top.bookId, chapter: top.chapter,
+            let ref = Reference(bibleId: bible.bibleId, bookId: top.bookId, chapter: top.chapter,
                                verse: top.verse)
-            self.add(history: hist)
+            self.add(reference: ref)
         } else {
             print("Unable to add history, because empty in changeBible")
         }
     }
     
-    func current() -> History {
+    func current() -> Reference {
         return self.history[self.index]
     }
     
-    mutating func back() -> History? {
+    mutating func back() -> Reference? {
         self.index -= 1
         return (self.index >= 0 && self.index < self.history.count) ? self.history[self.index] : nil
     }
     
-    mutating func forward() -> History? {
+    mutating func forward() -> Reference? {
         self.index += 1
         return (self.index >= 0 && self.index < self.history.count) ? self.history[self.index] : nil
     }
     
-    private func getHistory() -> [History] {
+    private func getHistory() -> [Reference] {
         let db: Sqlite3
         do {
             db = try getSettingsDB()
             let sql = "SELECT bibleId, bookId, chapter, verse FROM History ORDER BY datetime desc limit 100"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let history = resultSet.map {
-                History(bibleId: $0[0]!, bookId: $0[1]!,
+                Reference(bibleId: $0[0]!, bookId: $0[1]!,
                         chapter: Int($0[2]!) ?? 1,
                         verse: Int($0[3]!) ?? 1)
             }
@@ -108,13 +108,14 @@ struct HistoryModel {
         }
     }
     
-    private func storeHistory(history: History) {
+    private func storeHistory(reference: Reference) {
         let db: Sqlite3
         do {
             db = try getSettingsDB()
-            let sql = "INSERT INTO History (bibleId, bookId, chapter, verses, datetime) VALUES (?,?,?,?,?)"
+            let sql = "INSERT INTO History (bibleId, bookId, chapter, verse, datetime) VALUES (?,?,?,?,?)"
             let datetime = Date().description
-            let values: [Any] = [history.bibleId, history.bookId, history.chapter, history.verse, datetime]
+            let values: [Any] = [reference.bibleId, reference.bookId, reference.chapter,
+                                 reference.verse, datetime]
             _ = try db.executeV1(sql: sql, values: values)
         } catch {
     

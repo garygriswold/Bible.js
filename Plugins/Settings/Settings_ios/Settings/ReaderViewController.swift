@@ -39,9 +39,14 @@ class ReaderViewController : UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.loadBiblePage()
+        let ref = HistoryModel.shared.current()
+        self.loadBiblePage(reference: ref)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.isToolbarHidden = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -51,7 +56,7 @@ class ReaderViewController : UIViewController {
         self.navigationController?.isToolbarHidden = true
     }
     
-    private func loadBiblePage() {
+    func loadBiblePage(reference: Reference) {
         let bundle: Bundle = Bundle.main
         let path = bundle.path(forResource: "www/index", ofType: "html")
         let url = URL(fileURLWithPath: path!)
@@ -139,10 +144,7 @@ class ReaderViewController : UIViewController {
     }
     
     @objc func versionTapHandler(sender: UIBarButtonItem) {
-        // Need to come up with a reduced BibleModel that only contains selected
-        // Pass it into BiblesActionSheet()
-        // Is there any reason to cache it?  How would I invalidate it?
-        let biblesAlert = BiblesActionSheet()
+        let biblesAlert = BiblesActionSheet(controller: self)
         self.present(biblesAlert, animated: true, completion: nil)
     }
     

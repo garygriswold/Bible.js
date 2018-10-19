@@ -18,7 +18,7 @@ class BibleModel : SettingsModel {
     private let adapter: SettingsAdapter
     private let availableSection: Int
     
-    init(availableSection: Int, language: Language?) {
+    init(availableSection: Int, language: Language?, selectedOnly: Bool) {
         let start: Double = CFAbsoluteTimeGetCurrent()
         self.adapter = SettingsAdapter()
         self.availableSection = availableSection
@@ -35,13 +35,15 @@ class BibleModel : SettingsModel {
             adapter.updateSettings(bibles: self.selected)
         }
         self.available = [[Bible]]()
-        if self.oneLanguage != nil {
-            let avail = adapter.getBiblesAvailable(locale: oneLanguage!.locale, selectedBibles: bibles)
-            self.available.append(avail)
-        } else {
-            for locale in self.locales {
-                let available1 = adapter.getBiblesAvailable(locale: locale, selectedBibles: bibles)
-                self.available.append(available1)
+        if !selectedOnly {
+            if self.oneLanguage != nil {
+                let avail = adapter.getBiblesAvailable(locale: oneLanguage!.locale, selectedBibles: bibles)
+                self.available.append(avail)
+            } else {
+                for locale in self.locales {
+                    let available1 = adapter.getBiblesAvailable(locale: locale, selectedBibles: bibles)
+                    self.available.append(available1)
+                }
             }
         }
         self.filtered = [Bible]()
