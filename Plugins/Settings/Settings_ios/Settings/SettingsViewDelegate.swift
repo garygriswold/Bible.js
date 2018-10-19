@@ -121,15 +121,14 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     private func bibleViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
         if indexPath.section == self.selectedSection {
             if let bible = self.dataModel!.getSelectedBible(row: indexPath.row) {
-                // Need to pass Bible back to ReaderViewController
+                HistoryModel.shared.changeBible(bible: bible)
             }
             self.controller?.navigationController?.popToRootViewController(animated: true)
         }
         else if indexPath.section >= self.availableSection {
-            //let bibleModel = self.dataModel as! BibleModel
             let section = indexPath.section - self.availableSection
             if let bible = self.dataModel!.getAvailableBible(section: section, row: indexPath.row) {
-                // Need to pass Bible back to ReaderViewController
+                HistoryModel.shared.changeBible(bible: bible)
             }
             self.controller?.dataSource.insertRow(tableView: tableView, indexPath: indexPath)
             // Ensure the language is selected, is added when a Bible is added

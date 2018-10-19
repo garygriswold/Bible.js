@@ -19,11 +19,13 @@ struct History : Equatable {
     }
     
     func toString() -> String {
-        return "\(self.bookId) \(self.bookId):\(self.chapter):\(self.verse)"
+        return "\(self.bibleId) \(self.bookId):\(self.chapter):\(self.verse)"
     }
 }
 
 struct HistoryModel {
+    
+    static var shared = HistoryModel()
     
     private var history = [History]()
     private var index = 0
@@ -43,25 +45,35 @@ struct HistoryModel {
         self.index += 1
         self.storeHistory(history: history)
     }
-    
+    /*
     mutating func add(bibleId: String, bookId: String, chapter: Int, verse: Int) {
         self.add(history: History(bibleId: bibleId, bookId: bookId, chapter: chapter, verse: verse))
     }
     
     mutating func add(bookId: String, chapter: Int, verse: Int) {
         if let top = self.history.last {
-            self.add(history: History(bibleId: top.bookId, bookId: bookId, chapter: chapter, verse: verse))
+            self.add(history: History(bibleId: top.bibleId, bookId: bookId, chapter: chapter, verse: verse))
         } else {
-            fatalError("Unable to add history, because empty")
+            print("Unable to add history, because empty in addBook")
         }
     }
     
     mutating func add(chapter: Int, verse: Int) {
         if let top = self.history.last {
-            self.add(history: History(bibleId: top.bookId, bookId: top.bookId, chapter: chapter,
+            self.add(history: History(bibleId: top.bibleId, bookId: top.bookId, chapter: chapter,
                                       verse: verse))
         } else {
-            fatalError("Unable to add history, because empty")
+            print("Unable to add history, because empty in addChapter")
+        }
+    }
+    */
+    mutating func changeBible(bible: Bible) {
+        if let top = self.history.last {
+            let hist = History(bibleId: bible.bibleId, bookId: top.bookId, chapter: top.chapter,
+                               verse: top.verse)
+            self.add(history: hist)
+        } else {
+            print("Unable to add history, because empty in changeBible")
         }
     }
     

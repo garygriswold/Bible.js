@@ -33,18 +33,13 @@ class ReaderViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let bundle: Bundle = Bundle.main
-        let path = bundle.path(forResource: "www/index", ofType: "html")
-        let url = URL(fileURLWithPath: path!)
-        let request = URLRequest(url: url)
-        self.webView.load(request)
-        
         self.createToolbar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.loadBiblePage()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.isToolbarHidden = false
     }
@@ -54,6 +49,17 @@ class ReaderViewController : UIViewController {
  
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationController?.isToolbarHidden = true
+    }
+    
+    private func loadBiblePage() {
+        let bundle: Bundle = Bundle.main
+        let path = bundle.path(forResource: "www/index", ofType: "html")
+        let url = URL(fileURLWithPath: path!)
+        let request = URLRequest(url: url)
+        self.webView.load(request)
+        
+        let curr = HistoryModel.shared.current().toString()
+        self.webView.loadHTMLString("<html><body><h1>Hello!\(curr)</h1></body></html>", baseURL: nil)
     }
     
     private func createToolbar() {
