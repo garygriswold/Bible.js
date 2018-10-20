@@ -34,16 +34,21 @@ struct BibleDB {
         }
     }
     
-    func storeTableContents(values: [[Any]]) -> Int {
-        let db: Sqlite3
-        do {
-            db = try self.getBibleDB()
-            let sql = "REPLACE INTO TableContents (bookId, ordinal, name, lastChapter) VALUES (?,?,?,?)"
-            return try db.bulkExecuteV1(sql: sql, values: values)
-        } catch let err {
-            print("ERROR BibleDB.storeTableContents \(err)")
-            return 0
-        }
+    func storeTableContents(books: [Book]) {
+        DispatchQueue.main.async(execute: {
+            let db: Sqlite3
+            var values = [[Any]]()
+            for book in books {
+                values.append([book.bookId, book.ordinal, book.name, book.lastChapter])
+            }
+            do {
+                db = try self.getBibleDB()
+                let sql = "REPLACE INTO TableContents (bookId, ordinal, name, lastChapter) VALUES (?,?,?,?)"
+                _ = try db.bulkExecuteV1(sql: sql, values: values)
+            } catch let err {
+                print("ERROR BibleDB.storeTableContents \(err)")
+            }
+        })
     }
     
     private func getBibleDB() throws -> Sqlite3 {

@@ -7,11 +7,15 @@
 //
 import Foundation
 
-struct Book {
+struct Book : Equatable {
     let bookId: String
     let ordinal: Int
     let name: String
     let lastChapter: Int
+    
+    static func == (lhs: Book, rhs: Book) -> Bool {
+        return lhs.bookId == rhs.bookId
+    }
 }
 
 struct TableContentsModel {
@@ -30,13 +34,13 @@ struct TableContentsModel {
             let url = URL(fileURLWithPath: path!)
             do {
                 let data = try Data(contentsOf: url)
-                let parsed = parseJSON(data: data)
+                self.contents = parseJSON(data: data)
                 let start2: Double = CFAbsoluteTimeGetCurrent()
-                _ = bibleDB.storeTableContents(values: parsed)
+                _ = bibleDB.storeTableContents(books: self.contents)
                 print("*** Store duration \((CFAbsoluteTimeGetCurrent() - start2) * 1000) ms")
-                let start3: Double = CFAbsoluteTimeGetCurrent()
-                self.contents = bibleDB.getTableContents()
-                print("*** Get duration \((CFAbsoluteTimeGetCurrent() - start3) * 1000) ms")
+                //let start3: Double = CFAbsoluteTimeGetCurrent()
+                //self.contents = bibleDB.getTableContents()
+                //print("*** Get duration \((CFAbsoluteTimeGetCurrent() - start3) * 1000) ms")
                 //print(self.contents)
                 
             // perform a get from AWS.
@@ -49,8 +53,8 @@ struct TableContentsModel {
         print("*** TableContentsModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
     }
     
-    private func parseJSON(data: Data) -> [[Any]] {
-        let books: [[Any]]
+    private func parseJSON(data: Data) -> [Book] {
+        let books: [Book]
         do {
             if let json = try JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                 let bookIds = json["divisions"] as? [String]
@@ -60,11 +64,11 @@ struct TableContentsModel {
                 let lastChapters = self.findLastChapters(chapters: chapters)
                 books = self.assmTableContents(bookIds: bookIds!, names: bookNames!, chapters: lastChapters)
             } else {
-                books = [[Any]]()
+                books = [Book]()
             }
         } catch let err {
             print(err)
-            books = [[Any]]()
+            books = [Book]()
         }
         return books
     }
@@ -81,11 +85,12 @@ struct TableContentsModel {
         return lastChapters
     }
     
-    private func assmTableContents(bookIds: [String], names: [String], chapters: [String: Int]) -> [[Any]] {
-        var books = [[Any]]()
+    private func assmTableContents(bookIds: [String], names: [String], chapters: [String: Int]) -> [Book] {
+        var books = [Book]()
         for index in 0..<bookIds.count {
             let bookId = bookIds[index]
-            let book: [Any] = [ bookIds[index], index, names[index], chapters[bookId] ?? 1 ]
+            let book = Book(bookId: bookId, ordinal: index, name: names[index],
+                            lastChapter: chapters[bookId] ?? 1)
             books.append(book)
         }
         return books
