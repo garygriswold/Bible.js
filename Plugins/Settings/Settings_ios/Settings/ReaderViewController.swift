@@ -6,6 +6,7 @@
 //  Copyright © 2018 ShortSands. All rights reserved.
 //
 
+import Foundation
 import UIKit
 import WebKit
 
@@ -149,6 +150,9 @@ class ReaderViewController : UIViewController {
     
     @objc func tocBookHandler(sender: UIBarButtonItem) {
         print("toc book handler")
+        let bible = Bible(bibleId: "ENGKJV", abbr: "KJV", iso3: "eng", name: "King James",
+                          locale: Locale(identifier: "en"))
+        let toc = TableContentsModel(bible: bible)
     }
     
     @objc func tocChapHandler(sender: UIBarButtonItem) {
