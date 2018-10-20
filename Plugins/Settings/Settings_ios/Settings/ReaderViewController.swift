@@ -14,6 +14,8 @@ class ReaderViewController : UIViewController {
     private var webView: WKWebView!
     // Toolbar
     private var versionLabel: UILabel!
+    private var tocBookLabel: UILabel!
+    private var tocChapLabel: UILabel!
     
     deinit {
         print("****** deinit Reader View Controller")
@@ -59,6 +61,8 @@ class ReaderViewController : UIViewController {
     }
     
     func loadBiblePage(reference: Reference) {
+        self.tocBookLabel.text = reference.bookId
+        self.tocChapLabel.text = String(reference.chapter)
         self.versionLabel.text = reference.abbr
         
         let bundle: Bundle = Bundle.main
@@ -96,26 +100,20 @@ class ReaderViewController : UIViewController {
         items.append(next)
         items.append(spacer)
         
-        let tocImage = UIImage(named: "www/images/ios-keypad.png")
-        let toc = UIBarButtonItem(image: tocImage, style: .plain, target: self,
-                                   action: #selector(tocTapHandler))
-        items.append(toc)
+        self.tocBookLabel = toolbarLabel(width: 80, action: #selector(tocBookHandler))
+        let tocBook = UIBarButtonItem(customView: self.tocBookLabel)
+        items.append(tocBook)
         items.append(spacer)
         
-        let versionFrame = CGRect(x: 0, y: 0, width: 38, height: 32)
-        let versLabel = UILabel(frame: versionFrame)
-        versLabel.adjustsFontSizeToFitWidth = true
-        versLabel.textAlignment = .center
-        versLabel.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-        versLabel.textColor = UIColor(red: 0.24, green: 0.5, blue: 0.96, alpha: 1.0)
-        let versGesture = UITapGestureRecognizer(target: self, action: #selector(versionTapHandler))
-        versGesture.numberOfTapsRequired = 1
-        versLabel.addGestureRecognizer(versGesture)
-        versLabel.isUserInteractionEnabled = true
-        let version = UIBarButtonItem(customView: versLabel)
+        self.tocChapLabel = toolbarLabel(width: 22, action: #selector(tocChapHandler))
+        let tocChap = UIBarButtonItem(customView: self.tocChapLabel)
+        items.append(tocChap)
+        items.append(spacer)
+        
+        self.versionLabel = toolbarLabel(width: 38, action: #selector(versionTapHandler))
+        let version = UIBarButtonItem(customView: self.versionLabel)
         items.append(version)
         items.append(spacer)
-        self.versionLabel = versLabel
         
         let audioImage = UIImage(named: "www/images/mus-vol-med.png")
         let audio = UIBarButtonItem(image: audioImage, style: .plain, target: self,
@@ -149,8 +147,12 @@ class ReaderViewController : UIViewController {
         print("next button handler")
     }
     
-    @objc func tocTapHandler(sender: UIBarButtonItem) {
-        print("toc button handler")
+    @objc func tocBookHandler(sender: UIBarButtonItem) {
+        print("toc book handler")
+    }
+    
+    @objc func tocChapHandler(sender: UIBarButtonItem) {
+        print("toc chapter handler")
     }
     
     @objc func versionTapHandler(sender: UIBarButtonItem) {
@@ -168,5 +170,19 @@ class ReaderViewController : UIViewController {
     
     @objc func searchTapHandler(sender: UIBarButtonItem) {
         print("search button handler")
+    }
+    
+    private func toolbarLabel(width: CGFloat, action: Selector) -> UILabel {
+        let frame = CGRect(x: 0, y: 0, width: width, height: 32)
+        let label = UILabel(frame: frame)
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
+        label.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+        label.textColor = UIColor(red: 0.24, green: 0.5, blue: 0.96, alpha: 1.0)
+        let gesture = UITapGestureRecognizer(target: self, action: action)
+        gesture.numberOfTapsRequired = 1
+        label.addGestureRecognizer(gesture)
+        label.isUserInteractionEnabled = true
+        return label
     }
 }
