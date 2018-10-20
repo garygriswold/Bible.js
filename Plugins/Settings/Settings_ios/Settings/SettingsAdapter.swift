@@ -22,21 +22,20 @@ struct SettingsAdapter {
     //
     // Settings methods
     //
-    
     func getLanguageSettings() -> [Locale] {
         var languages: [String]
-        if let langs = self.getSettings(name: SettingsAdapter.LANGS_SELECTED) {
+        if let langs = SettingsDB.shared.getSettings(name: SettingsAdapter.LANGS_SELECTED) {
             languages = langs
         } else {
             languages = Locale.preferredLanguages
-            self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: languages)
+            SettingsDB.shared.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: languages)
         }
         let locales: [Locale] = languages.map { Locale(identifier: $0) }
         return locales
     }
     
     func getBibleSettings() -> [String] {
-        if let bibles = self.getSettings(name: SettingsAdapter.BIBLE_SELECTED) {
+        if let bibles = SettingsDB.shared.getSettings(name: SettingsAdapter.BIBLE_SELECTED) {
             return bibles
         } else {
             return [] // Returning empty causes BibleInitialSelect to be used.
@@ -49,7 +48,7 @@ struct SettingsAdapter {
             if !locales.contains(language!.locale) {
                 locales.append(language!.locale)
                 let localeStrs = locales.map { $0.identifier }
-                self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: localeStrs)
+                SettingsDB.shared.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: localeStrs)
             }
         }
     }
@@ -62,33 +61,33 @@ struct SettingsAdapter {
                 currBibles.append(bibleId)
             }
         }
-        self.updateSettings(name: SettingsAdapter.BIBLE_SELECTED, settings: currBibles)
+        SettingsDB.shared.updateSettings(name: SettingsAdapter.BIBLE_SELECTED, settings: currBibles)
     }
     
     func updateSettings(languages: [Language]) {
         let locales = languages.map { $0.locale.identifier }
-        self.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: locales)
+        SettingsDB.shared.updateSettings(name: SettingsAdapter.LANGS_SELECTED, settings: locales)
     }
     
     func updateSettings(bibles: [Bible]) {
         let keys = bibles.map { $0.bibleId }
-        self.updateSettings(name: SettingsAdapter.BIBLE_SELECTED, settings: keys)
+        SettingsDB.shared.updateSettings(name: SettingsAdapter.BIBLE_SELECTED, settings: keys)
         if let first = keys.first {
-            self.updateSetting(name: SettingsAdapter.CURR_VERSION, setting: first)
+            SettingsDB.shared.updateSetting(name: SettingsAdapter.CURR_VERSION, setting: first)
         }
     }
     
     func getPseudoUserId() -> String {
-        var userId: String? = self.getSetting(name: SettingsAdapter.PSEUDO_USER_ID)
+        var userId: String? = SettingsDB.shared.getSetting(name: SettingsAdapter.PSEUDO_USER_ID)
         if userId == nil {
             userId = UUID().uuidString // Generates a pseudo random GUID
-            self.updateSetting(name: SettingsAdapter.PSEUDO_USER_ID, setting: userId!)
+            SettingsDB.shared.updateSetting(name: SettingsAdapter.PSEUDO_USER_ID, setting: userId!)
         }
         return userId!
     }
     
     func getUserFontDelta() -> CGFloat {
-        if let deltaStr = self.getSetting(name: SettingsAdapter.USER_FONT_DELTA) {
+        if let deltaStr = SettingsDB.shared.getSetting(name: SettingsAdapter.USER_FONT_DELTA) {
             if let deltaDbl = Double(deltaStr) {
                 return CGFloat(deltaDbl)
             }
@@ -98,60 +97,7 @@ struct SettingsAdapter {
     
     func setUserFontDelta(fontDelta: CGFloat) {
         let deltatDbl = Double(fontDelta)
-        self.updateSetting(name: SettingsAdapter.USER_FONT_DELTA, setting: String(deltatDbl))
-    }
-    
-    private func getSettings(name: String) -> [String]? {
-        if let value = self.getSetting(name: name) {
-            return value.components(separatedBy: ",")
-        } else {
-            return nil
-        }
-    }
-    
-    private func getSetting(name: String) -> String? {
-        let sql = "SELECT value FROM Settings WHERE name = ?"
-        do {
-            let db: Sqlite3 = try self.getSettingsDB()
-            let resultSet: [[String?]] = try db.queryV1(sql: sql, values: [name])
-            if resultSet.count > 0 && resultSet[0].count > 0 {
-                return resultSet[0][0]!
-            } else {
-                return nil
-            }
-        } catch let err {
-            print("ERROR: SettingsAdapter.getSettings \(err)")
-        }
-        return ""
-    }
-    
-    private func updateSettings(name: String, settings: [String]) {
-        self.updateSetting(name: name, setting: settings.joined(separator: ","))
-    }
-    
-    private func updateSetting(name: String, setting: String) {
-        let sql = "REPLACE INTO Settings (name, value) VALUES (?,?)"
-        let values = [name, setting]
-        do {
-            let db: Sqlite3 = try self.getSettingsDB()
-            let count = try db.executeV1(sql: sql, values: values)
-            print("Setting updated \(count)")
-        } catch let err {
-            print("ERROR: SettingsAdapter.updateSetting \(err)")
-        }
-    }
-    
-    private func getSettingsDB() throws -> Sqlite3 {
-        var db: Sqlite3?
-        do {
-            db = try Sqlite3.findDB(dbname: SettingsAdapter.SETTINGS_DB)
-        } catch Sqlite3Error.databaseNotOpenError {
-            db = try Sqlite3.openDB(dbname: SettingsAdapter.SETTINGS_DB, copyIfAbsent: false)
-            // Caution, this create table comes from AppUpdate.js and must be consistent with it.
-            let create = "CREATE TABLE IF NOT EXISTS Settings(name TEXT PRIMARY KEY NOT NULL, value TEXT NULL)"
-            _ = try db?.executeV1(sql: create, values: [])
-        }
-        return db!
+        SettingsDB.shared.updateSetting(name: SettingsAdapter.USER_FONT_DELTA, setting: String(deltatDbl))
     }
     
     //

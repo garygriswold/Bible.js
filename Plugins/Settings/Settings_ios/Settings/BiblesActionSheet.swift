@@ -42,7 +42,7 @@ class BiblesActionSheet : UIAlertController {
         }
         
         let moreBiblesText = NSLocalizedString("+ More Bibles", comment: "Title on action sheet")
-        let moreBibles = UIAlertAction(title: moreBiblesText, style: .destructive, handler: { _ in
+        let moreBibles = UIAlertAction(title: moreBiblesText, style: .default, handler: { _ in
             let biblesController = SettingsViewController(settingsViewType: .bible)
             if let nav = self.controller?.navigationController {
                 nav.pushViewController(biblesController, animated: true)
@@ -51,7 +51,7 @@ class BiblesActionSheet : UIAlertController {
         self.addAction(moreBibles)
         
         let moreLangText = NSLocalizedString("+ More Languages", comment: "Title on action sheet")
-        let moreLang = UIAlertAction(title: moreLangText, style: .destructive, handler: { _ in
+        let moreLang = UIAlertAction(title: moreLangText, style: .default, handler: { _ in
             let langController = SettingsViewController(settingsViewType: .language)
             if let nav = self.controller?.navigationController {
                 nav.pushViewController(langController, animated: true)

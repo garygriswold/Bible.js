@@ -59,13 +59,13 @@ class ReaderViewController : UIViewController {
     }
     
     func loadBiblePage(reference: Reference) {
+        self.versionLabel.text = reference.abbr
+        
         let bundle: Bundle = Bundle.main
         let path = bundle.path(forResource: "www/index", ofType: "html")
         let url = URL(fileURLWithPath: path!)
         let request = URLRequest(url: url)
         self.webView.load(request)
-        
-        self.versionLabel.text = reference.abbr
     }
     
     private func createToolbar() {
