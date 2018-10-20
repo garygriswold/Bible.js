@@ -65,7 +65,7 @@ class ReaderViewController : UIViewController {
         let request = URLRequest(url: url)
         self.webView.load(request)
         
-        self.versionLabel.text = reference.bibleId
+        self.versionLabel.text = reference.abbr
     }
     
     private func createToolbar() {
@@ -102,9 +102,9 @@ class ReaderViewController : UIViewController {
         items.append(toc)
         items.append(spacer)
         
-        let versionFrame = CGRect(x: 0, y: 0, width: 32, height: 32)
+        let versionFrame = CGRect(x: 0, y: 0, width: 38, height: 32)
         let versLabel = UILabel(frame: versionFrame)
-        versLabel.sizeToFit()
+        versLabel.adjustsFontSizeToFitWidth = true
         versLabel.textAlignment = .center
         versLabel.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
         versLabel.textColor = UIColor(red: 0.24, green: 0.5, blue: 0.96, alpha: 1.0)

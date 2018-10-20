@@ -10,6 +10,7 @@ import Utility
 
 struct Reference : Equatable {
     let bibleId: String
+    let abbr: String
     let bookId: String
     let chapter: Int
     let verse: Int
@@ -34,7 +35,8 @@ struct HistoryModel {
         self.history = self.getHistory()
         self.index = self.history.count - 1
         if self.index < 0 {
-            self.history.append(Reference(bibleId: "ENGESV", bookId: "JHN", chapter: 3, verse: 1))
+            self.history.append(Reference(bibleId: "ENGESV", abbr: "ESV", bookId: "JHN",
+                                          chapter: 3, verse: 1))
             self.index = 0
             self.storeHistory(reference: self.history[0])
         }
@@ -69,8 +71,8 @@ struct HistoryModel {
     */
     mutating func changeBible(bible: Bible) {
         if let top = self.history.last {
-            let ref = Reference(bibleId: bible.bibleId, bookId: top.bookId, chapter: top.chapter,
-                               verse: top.verse)
+            let ref = Reference(bibleId: bible.bibleId, abbr: bible.abbr, bookId: top.bookId,
+                                chapter: top.chapter, verse: top.verse)
             self.add(reference: ref)
         } else {
             print("Unable to add history, because empty in changeBible")
@@ -95,12 +97,12 @@ struct HistoryModel {
         let db: Sqlite3
         do {
             db = try getSettingsDB()
-            let sql = "SELECT bibleId, bookId, chapter, verse FROM History ORDER BY datetime desc limit 100"
+            let sql = "SELECT bibleId, abbr, bookId, chapter, verse FROM History ORDER BY datetime desc limit 100"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let history = resultSet.map {
-                Reference(bibleId: $0[0]!, bookId: $0[1]!,
-                        chapter: Int($0[2]!) ?? 1,
-                        verse: Int($0[3]!) ?? 1)
+                Reference(bibleId: $0[0]!, abbr: $0[1]!, bookId: $0[2]!,
+                        chapter: Int($0[3]!) ?? 1,
+                        verse: Int($0[4]!) ?? 1)
             }
             return history
         } catch {
@@ -112,9 +114,9 @@ struct HistoryModel {
         let db: Sqlite3
         do {
             db = try getSettingsDB()
-            let sql = "INSERT INTO History (bibleId, bookId, chapter, verse, datetime) VALUES (?,?,?,?,?)"
+            let sql = "INSERT INTO History (bibleId, abbr, bookId, chapter, verse, datetime) VALUES (?,?,?,?,?,?)"
             let datetime = Date().description
-            let values: [Any] = [reference.bibleId, reference.bookId, reference.chapter,
+            let values: [Any] = [reference.bibleId, reference.abbr, reference.bookId, reference.chapter,
                                  reference.verse, datetime]
             _ = try db.executeV1(sql: sql, values: values)
         } catch {
@@ -130,7 +132,8 @@ struct HistoryModel {
         } catch Sqlite3Error.databaseNotOpenError {
             db = try Sqlite3.openDB(dbname: dbname, copyIfAbsent: false)
             let create = "CREATE TABLE IF NOT EXISTS History(" +
-                        " bibleId TEXT PRIMARY KEY NOT NULL," +
+                        " bibleId TEXT NOT NULL," +
+                        " abbr TEXT NOT NULL," +
                         " bookId TEXT NOT NULL," +
                         " chapter INT NOT NULL," +
                         " verse INT NOT NULL," +

@@ -156,7 +156,7 @@ struct SettingsAdapter {
     
     //
     // Language Versions.db methods
-    
+    //
     func getLanguagesSelected(selected: [Locale]) -> [Language] {
         let sql =  "SELECT distinct iso1 FROM Language WHERE iso1" + genQuest(array: selected)
         let results = getLanguages(sql: sql, selected: selected)
