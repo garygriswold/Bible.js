@@ -80,7 +80,7 @@ class LanguageModel : SettingsModel {
         cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         cell.textLabel?.text = language.name
         cell.detailTextLabel?.text = language.localized
-        cell.selectionStyle = .none
+        cell.selectionStyle = .default
         return cell
     }
     

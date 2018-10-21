@@ -21,26 +21,26 @@ struct Book : Equatable {
 
 class TableContentsModel { // class is used to permit self.contents inside closure
     
-    let bible: Bible
-    var contents: [Book]
+    private let bible: Bible
+    private var books: [Book]
     
     init(bible: Bible) {
         self.bible = bible
-        self.contents = [Book]()
+        self.books = [Book]()
     }
     
     func load() {
         let start: Double = CFAbsoluteTimeGetCurrent()
         let bibleDB = BibleDB(bible: bible)
-        self.contents = bibleDB.getTableContents()
-        if self.contents.count < 1 {
+        self.books = bibleDB.getTableContents()
+        if self.books.count < 1 {
             AwsS3Manager.findDbp().downloadData(s3Bucket: "dbp-prod",
                                        s3Key: "text/\(self.bible.bibleId)/\(self.bible.bibleId)/info.json",
                                        complete: { error, data in
                                         if let data1 = data {
                                             print(data1)
-                                            self.contents = self.parseJSON(data: data1)
-                                            _ = bibleDB.storeTableContents(books: self.contents)
+                                            self.books = self.parseJSON(data: data1)
+                                            _ = bibleDB.storeTableContents(books: self.books)
                                             print("*** TableContentsModel.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                                         }
             })
@@ -87,5 +87,19 @@ class TableContentsModel { // class is used to permit self.contents inside closu
             books.append(book)
         }
         return books
+    }
+    
+    var bookCount: Int {
+        get { return books.count }
+    }
+    
+    func generateCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        let book = self.books[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
+        cell.textLabel?.font = AppFont.sansSerif(style: .body)
+        cell.textLabel?.text = book.name
+        cell.selectionStyle = .default
+        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+        return cell
     }
 }

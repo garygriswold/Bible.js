@@ -150,6 +150,7 @@ class ReaderViewController : UIViewController {
     
     @objc func tocBookHandler(sender: UIBarButtonItem) {
         print("toc book handler")
+        /*
         //let bible = Bible(bibleId: "ENGKJV", abbr: "KJV", iso3: "eng", name: "King James",
         //                 locale: Locale(identifier: "en"))
         let bible = Bible(bibleId: "ENGWEB", abbr: "WEB", iso3: "eng", name: "World English",
@@ -158,6 +159,9 @@ class ReaderViewController : UIViewController {
         //                  locale: Locale(identifier: "en"))
         let toc = TableContentsModel(bible: bible)
         toc.load()
+        */
+        let tableContents = TableContentsViewController()
+        self.navigationController?.pushViewController(tableContents, animated: true)
     }
     
     @objc func tocChapHandler(sender: UIBarButtonItem) {

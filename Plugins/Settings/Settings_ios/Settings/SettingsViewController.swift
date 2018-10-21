@@ -63,7 +63,7 @@ class SettingsViewController: UIViewController {
         self.recentContentOffset = CGPoint(x:0, y: -1 * barHeight)
         print("barHeight = \(barHeight)")
         self.view.backgroundColor = UIColor.white
-        self.view.addSubview(self.tableView)
+        self.view = self.tableView // OR //self.view.addSubview(self.tableView)
         let width = self.view.bounds.width
  
         switch self.settingsViewType {

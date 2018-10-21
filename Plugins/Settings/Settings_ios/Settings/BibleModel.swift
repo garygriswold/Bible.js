@@ -112,6 +112,7 @@ class BibleModel : SettingsModel {
         cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         cell.textLabel?.text = bible.name
         cell.detailTextLabel?.text = bible.abbr
+        cell.selectionStyle = .default
         cell.accessoryType = UITableViewCellAccessoryType.detailButton // only works when not editing
         return cell
     }

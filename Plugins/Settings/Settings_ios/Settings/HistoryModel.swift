@@ -28,18 +28,27 @@ struct HistoryModel {
     
     static var shared = HistoryModel()
     
+    private var bible: Bible
     private var history = [Reference]()
     private var index = 0
     
     init() {
+        self.bible = Bible(bibleId: "ENGESV", abbr: "ESV", iso3: "eng", name: "English Standard",
+                           locale: Locale(identifier: "en"))
         self.history = SettingsDB.shared.getHistory()
         self.index = self.history.count - 1
         if self.index < 0 {
+            self.bible = Bible(bibleId: "ENGESV", abbr: "ESV", iso3: "eng", name: "English Standard",
+                               locale: Locale(identifier: "en"))
             self.history.append(Reference(bibleId: "ENGESV", abbr: "ESV", bookId: "JHN",
                                           chapter: 3, verse: 1))
             self.index = 0
             SettingsDB.shared.storeHistory(reference: self.history[0])
         }
+    }
+    
+    func currBible() -> Bible {
+        return self.bible
     }
     
     mutating func add(reference: Reference) {
@@ -70,6 +79,7 @@ struct HistoryModel {
     }
     */
     mutating func changeBible(bible: Bible) {
+        self.bible = bible
         if let top = self.history.last {
             let ref = Reference(bibleId: bible.bibleId, abbr: bible.abbr, bookId: top.bookId,
                                 chapter: top.chapter, verse: top.verse)

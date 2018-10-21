@@ -22,10 +22,10 @@ struct BibleDB {
         let db: Sqlite3
         do {
             db = try self.getBibleDB()
-            let sql = "SELECT bookId, ordinal name, lastChapter FROM TableContents ORDER BY ordinal"
+            let sql = "SELECT bookId, ordinal, name, lastChapter FROM TableContents ORDER BY ordinal"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let toc = resultSet.map {
-                Book(bookId: $0[0]!, ordinal: Int($0[1]!) ?? 0, name: $0[1]!, lastChapter: Int($0[2]!) ?? 1)
+                Book(bookId: $0[0]!, ordinal: Int($0[1]!) ?? 0, name: $0[2]!, lastChapter: Int($0[3]!) ?? 1)
             }
             return toc
         } catch let err {
