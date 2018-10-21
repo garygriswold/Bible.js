@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS Owner;
 DROP TABLE IF EXISTS IOS3Priority;
 DROP TABLE IF EXISTS Language;
 DROP TABLE IF EXISTS Country;
+DROP TABLE IF EXISTS Region;
 END_SQL
 
 # Load database
@@ -20,6 +21,9 @@ sqlite Versions.db < sql/language.sql
 sqlite Versions.db < sql/iso3Priority.sql
 sqlite Versions.db < sql/copied_owner.sql
 sqlite Versions.db < sql/bible.sql
+# Add Region table for AWS to know SS Regions
+sqlite Versions.db < sql/copied_region.sql
+
 
 # Merge ISO3Priority into Language
 sqlite Versions.db <<END_SQL1

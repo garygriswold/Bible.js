@@ -6,6 +6,7 @@
 //  Copyright © 2018 ShortSands. All rights reserved.
 //
 import Foundation
+import AWS
 
 struct Book : Equatable {
     let bookId: String
@@ -18,59 +19,51 @@ struct Book : Equatable {
     }
 }
 
-struct TableContentsModel {
+class TableContentsModel { // class is used to permit self.contents inside closure
     
     let bible: Bible
     var contents: [Book]
     
-    init?(bible: Bible) {
-        let start: Double = CFAbsoluteTimeGetCurrent()
+    init(bible: Bible) {
         self.bible = bible
+        self.contents = [Book]()
+    }
+    
+    func load() {
+        let start: Double = CFAbsoluteTimeGetCurrent()
         let bibleDB = BibleDB(bible: bible)
         self.contents = bibleDB.getTableContents()
         if self.contents.count < 1 {
-            let bundle: Bundle = Bundle.main
-            let path = bundle.path(forResource: "www/test:ENGKJV:ENGKJV:info", ofType: "json")
-            let url = URL(fileURLWithPath: path!)
-            do {
-                let data = try Data(contentsOf: url)
-                self.contents = parseJSON(data: data)
-                let start2: Double = CFAbsoluteTimeGetCurrent()
-                _ = bibleDB.storeTableContents(books: self.contents)
-                print("*** Store duration \((CFAbsoluteTimeGetCurrent() - start2) * 1000) ms")
-                //let start3: Double = CFAbsoluteTimeGetCurrent()
-                //self.contents = bibleDB.getTableContents()
-                //print("*** Get duration \((CFAbsoluteTimeGetCurrent() - start3) * 1000) ms")
-                //print(self.contents)
-                
-            // perform a get from AWS.
-            // populate the database and model, or populate the database and then model
-            // how do I handle async aspect of this?
-            } catch let err {
-                print(err)
-            }
+            AwsS3Manager.findDbp().downloadData(s3Bucket: "dbp-prod",
+                                       s3Key: "text/\(self.bible.bibleId)/\(self.bible.bibleId)/info.json",
+                                       complete: { error, data in
+                                        if let data1 = data {
+                                            print(data1)
+                                            self.contents = self.parseJSON(data: data1)
+                                            _ = bibleDB.storeTableContents(books: self.contents)
+                                            print("*** TableContentsModel.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
+                                        }
+            })
         }
-        print("*** TableContentsModel.init duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
+        print("*** TableContentsModel.DB load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
     }
     
     private func parseJSON(data: Data) -> [Book] {
-        let books: [Book]
         do {
             if let json = try JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                 let bookIds = json["divisions"] as? [String]
                 let bookNames = json["divisionNames"] as? [String]
                 let chapters = json["sections"] as? [String]
-                //print(chapters)
                 let lastChapters = self.findLastChapters(chapters: chapters)
-                books = self.assmTableContents(bookIds: bookIds!, names: bookNames!, chapters: lastChapters)
+                return self.buildTableContents(bookIds: bookIds!, names: bookNames!,
+                                              chapters: lastChapters)
             } else {
-                books = [Book]()
+                return [Book]()
             }
         } catch let err {
             print(err)
-            books = [Book]()
+            return [Book]()
         }
-        return books
     }
     
     private func findLastChapters(chapters: [String]?) -> [String: Int] {
@@ -85,7 +78,7 @@ struct TableContentsModel {
         return lastChapters
     }
     
-    private func assmTableContents(bookIds: [String], names: [String], chapters: [String: Int]) -> [Book] {
+    private func buildTableContents(bookIds: [String], names: [String], chapters: [String: Int]) -> [Book] {
         var books = [Book]()
         for index in 0..<bookIds.count {
             let bookId = bookIds[index]
