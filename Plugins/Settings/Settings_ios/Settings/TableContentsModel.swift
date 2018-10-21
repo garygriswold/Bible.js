@@ -23,16 +23,21 @@ class TableContentsModel { // class is used to permit self.contents inside closu
     
     private let bible: Bible
     private var books: [Book]
+    private var index: [String]
+    private var filtered: [Book]
     
     init(bible: Bible) {
         self.bible = bible
         self.books = [Book]()
+        self.index = [String]()
+        self.filtered = [Book]()
     }
     
     func load() {
         let start: Double = CFAbsoluteTimeGetCurrent()
         let bibleDB = BibleDB(bible: bible)
         self.books = bibleDB.getTableContents()
+        self.index = self.buildIndex()
         if self.books.count < 1 {
             AwsS3Manager.findDbp().downloadData(s3Bucket: "dbp-prod",
                                        s3Key: "text/\(self.bible.bibleId)/\(self.bible.bibleId)/info.json",
@@ -40,6 +45,7 @@ class TableContentsModel { // class is used to permit self.contents inside closu
                                         if let data1 = data {
                                             print(data1)
                                             self.books = self.parseJSON(data: data1)
+                                            self.index = self.buildIndex()
                                             _ = bibleDB.storeTableContents(books: self.books)
                                             print("*** TableContentsModel.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                                         }
@@ -89,12 +95,24 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         return books
     }
     
+    private func buildIndex() -> [String] {
+        var idxSet = Set<String>()
+        for book in books {
+            idxSet.insert(String(book.name.prefix(1)))
+        }
+        return Array(idxSet).sorted()
+    }
+    
     var bookCount: Int {
-        get { return books.count }
+        get { return (self.filtered.count > 0) ? self.filtered.count : self.books.count }
+    }
+    
+    var sideIndex: [String] {
+        get { return self.index }
     }
     
     func generateCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
-        let book = self.books[indexPath.row]
+        let book = (self.filtered.count > 0) ? self.filtered[indexPath.row] : self.books[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
         cell.textLabel?.text = book.name
@@ -102,4 +120,10 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         return cell
     }
+    
+    func filterBooks(letter: String) {
+        self.filtered = self.books.filter({ $0.name.prefix(1) == letter })
+    }
+    
+    
 }

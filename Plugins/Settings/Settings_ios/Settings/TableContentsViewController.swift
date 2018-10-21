@@ -68,10 +68,21 @@ class TableContentsViewController : UIViewController, UITableViewDataSource, UIT
     // Data Source
     //
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataModel.bookCount
+        return self.dataModel.bookCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return dataModel.generateCell(tableView: tableView, indexPath: indexPath)
+        return self.dataModel.generateCell(tableView: tableView, indexPath: indexPath)
+    }
+    
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return self.dataModel.sideIndex
+    }
+    
+    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String,
+                   at index: Int) -> Int {
+        self.dataModel.filterBooks(letter: title)
+        tableView.reloadData()
+        return -1
     }
 }

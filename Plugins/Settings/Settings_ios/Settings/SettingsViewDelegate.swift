@@ -68,9 +68,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         case 0:
             switch indexPath.row {
             case 0:
-                let tocController = ExternControllerImpl()
-                tocController.present(title: NSLocalizedString("Table of Contents", comment: "View title"))
-                self.navController?.pushViewController(tocController, animated: true)
+                let tableContents = TableContentsViewController()
+                self.navController?.pushViewController(tableContents, animated: true)
             case 1:
                 let histController = ExternControllerImpl()
                 histController.present(title: NSLocalizedString("History", comment: "View title"))
