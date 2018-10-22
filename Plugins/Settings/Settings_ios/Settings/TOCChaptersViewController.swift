@@ -1,20 +1,21 @@
 //
-//  TableContentsViewController.swift
+//  TOCChaptersViewController.swift
 //  Settings
 //
-//  Created by Gary Griswold on 10/21/18.
+//  Created by Gary Griswold on 10/22/18.
 //  Copyright © 2018 ShortSands. All rights reserved.
 //
 
 import UIKit
 
-class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
-
+class TOCChaptersViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
+    var book: Book!
     var dataModel: TableContentsModel!
     var tableView: UITableView!
     
     deinit {
-        print("**** deinit TOCBooksViewController ******")
+        print("**** deinit TOCChaptersViewController ******")
     }
     
     override func loadView() {
@@ -24,8 +25,8 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
         self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableViewStyle.plain)
         self.view.backgroundColor = UIColor.white
         self.view = self.tableView // OR self.view.addSubview(self.tableView)
-
-        self.navigationItem.title = NSLocalizedString("Books", comment: "Table Contents view page title")
+        
+        self.navigationItem.title = NSLocalizedString("Chapters", comment: "Table Contents view page title")
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
         
         AppFont.updateSearchFontSize()
@@ -37,7 +38,7 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.createToolbar()
+        //self.createToolbar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,68 +75,24 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
         AppFont.updateSearchFontSize()
     }
     
-    private func createToolbar() {
-        if let nav = self.navigationController {
-            
-            nav.toolbar.isTranslucent = false
-            nav.toolbar.barTintColor = .white
-        }
-        var items = [UIBarButtonItem]()
-        
-        let trad = NSLocalizedString("Traditional", comment: "Bible books in traditional sequence")
-        let alpha = NSLocalizedString("Alphabetical", comment: "Bible books in alphabetical sequence")
-        let sortControl = UISegmentedControl(items: [trad, alpha])
-        sortControl.selectedSegmentIndex = 0
-        sortControl.addTarget(self, action: #selector(sortHandler), for: .valueChanged)
-        
-        let sortCtrl = UIBarButtonItem(customView: sortControl)
-        items.append(sortCtrl)
-        
-        self.setToolbarItems(items, animated: true)
-    }
-    
-    @objc func sortHandler(sender: UISegmentedControl) {
-        print("sort handler clicked")
-        dataModel.clearFilteredBooks()
-        let index = sender.selectedSegmentIndex
-        if index == 0 {
-            dataModel.sortBooksTraditional()
-        } else {
-            dataModel.sortBooksAlphabetical()
-        }
-        self.tableView.reloadData()
-    }
-
     //
     // Data Source
     //
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.dataModel.bookCount
+        return self.book.lastChapter
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return self.dataModel.generateBookCell(tableView: tableView, indexPath: indexPath)
+        //return self.dataModel.generateCell(tableView: tableView, indexPath: indexPath)
+        return self.dataModel.generateChapterCell(tableView: tableView, indexPath: indexPath)
     }
     
-    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return self.dataModel.sideIndex
-    }
-    
-    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String,
-                   at index: Int) -> Int {
-        self.dataModel.filterBooks(letter: title)
-        tableView.reloadData()
-        return -1
-    }
     //
     // Delegate
     //
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let book = self.dataModel.getBook(row: indexPath.row) {
-            tableView.deselectRow(at: indexPath, animated: true)
-            let chaptersController = TOCChaptersViewController()
-            chaptersController.book = book
-            self.navigationController?.pushViewController(chaptersController, animated: true)
-        }
+        tableView.deselectRow(at: indexPath, animated: true)
+        HistoryModel.shared.changeReference(book: self.book, chapter: (indexPath.row + 1))
+        self.navigationController?.popToRootViewController(animated: true)
     }
 }

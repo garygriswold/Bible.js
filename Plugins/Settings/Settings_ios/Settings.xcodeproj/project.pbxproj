@@ -43,6 +43,7 @@
 		E4E12B2E2133F30800CAFE78 /* UserMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */; };
 		E4EC586F215D9D4C009BAA4F /* StoreReviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */; };
 		E4F66863217C377600E998CC /* TOCBooksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F66862217C377600E998CC /* TOCBooksViewController.swift */; };
+		E4F66865217D85AC00E998CC /* TOCChaptersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F66864217D85AC00E998CC /* TOCChaptersViewController.swift */; };
 		E4F720BA211B6F2A00E26B07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */; };
 		E4F720C1211B6F2C00E26B07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F720C0211B6F2C00E26B07 /* Assets.xcassets */; };
 		E4F720C4211B6F2C00E26B07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F720C2211B6F2C00E26B07 /* LaunchScreen.storyboard */; };
@@ -136,6 +137,7 @@
 		E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageController.swift; sourceTree = "<group>"; };
 		E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreReviewController.swift; sourceTree = "<group>"; };
 		E4F66862217C377600E998CC /* TOCBooksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOCBooksViewController.swift; sourceTree = "<group>"; };
+		E4F66864217D85AC00E998CC /* TOCChaptersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOCChaptersViewController.swift; sourceTree = "<group>"; };
 		E4F720B6211B6F2A00E26B07 /* Settings.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Settings.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4F720C0211B6F2C00E26B07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 				E4C2E985211B712C00B71CC5 /* TextSizeSliderCell.swift */,
 				E4C2E977211B70F500B71CC5 /* AppFont.swift */,
 				E4F66862217C377600E998CC /* TOCBooksViewController.swift */,
+				E4F66864217D85AC00E998CC /* TOCChaptersViewController.swift */,
 				E402BCB4217B80BA0026E1DE /* TableContentsModel.swift */,
 				E463897121799013009BF5E2 /* BiblesActionSheet.swift */,
 				E4638973217AE210009BF5E2 /* SettingsDB.swift */,
@@ -350,6 +353,7 @@
 				E4C2E990211B712D00B71CC5 /* ReaderViewNavigator.swift in Sources */,
 				E4C2E97F211B711C00B71CC5 /* BibleModel.swift in Sources */,
 				E4C2E97E211B711C00B71CC5 /* BibleDetailViewController.swift in Sources */,
+				E4F66865217D85AC00E998CC /* TOCChaptersViewController.swift in Sources */,
 				E4C2E98F211B712D00B71CC5 /* LanguageCell.swift in Sources */,
 				E463896E21793DC0009BF5E2 /* HistoryModel.swift in Sources */,
 				E4A7130021461090009D99E2 /* SettingsSearchController.swift in Sources */,

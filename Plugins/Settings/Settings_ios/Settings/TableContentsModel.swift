@@ -111,11 +111,26 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         get { return self.index }
     }
     
-    func generateCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+    func getBook(row: Int) -> Book? {
+        return (row >= 0 && row < self.books.count) ? self.books[row] : nil
+    }
+    
+    func generateBookCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         let book = (self.filtered.count > 0) ? self.filtered[indexPath.row] : self.books[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
         cell.textLabel?.text = book.name
+        cell.selectionStyle = .default
+        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+        return cell
+    }
+    
+    func generateChapterCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+        //let book = (self.filtered.count > 0) ? self.filtered[indexPath.row] : self.books[indexPath.row]
+        //let chapter = indexPath.row
+        let cell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
+        cell.textLabel?.font = AppFont.sansSerif(style: .body)
+        cell.textLabel?.text = String(indexPath.row + 1)
         cell.selectionStyle = .default
         cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         return cell

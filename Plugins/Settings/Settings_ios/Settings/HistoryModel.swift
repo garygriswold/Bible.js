@@ -29,18 +29,21 @@ struct HistoryModel {
     static var shared = HistoryModel()
     
     private var bible: Bible
+    private var book: Book
     private var history = [Reference]()
     private var index = 0
     
     init() {
-        self.bible = Bible(bibleId: "ENGESV", abbr: "ESV", iso3: "eng", name: "English Standard",
+        self.bible = Bible(bibleId: "ENGWEB", abbr: "WEB", iso3: "eng", name: "World English",
                            locale: Locale(identifier: "en"))
+        self.book = Book(bookId: "JHN", ordinal: 25, name: "John", lastChapter: 28)
         self.history = SettingsDB.shared.getHistory()
         self.index = self.history.count - 1
         if self.index < 0 {
-            self.bible = Bible(bibleId: "ENGESV", abbr: "ESV", iso3: "eng", name: "English Standard",
+            self.bible = Bible(bibleId: "ENGWEB", abbr: "WEB", iso3: "eng", name: "English Standard",
                                locale: Locale(identifier: "en"))
-            self.history.append(Reference(bibleId: "ENGESV", abbr: "ESV", bookId: "JHN",
+            self.book = Book(bookId: "JHN", ordinal: 25, name: "John", lastChapter: 28)
+            self.history.append(Reference(bibleId: "ENGWEB", abbr: "WEB", bookId: "JHN",
                                           chapter: 3, verse: 1))
             self.index = 0
             SettingsDB.shared.storeHistory(reference: self.history[0])
@@ -51,33 +54,10 @@ struct HistoryModel {
         return self.bible
     }
     
-    mutating func add(reference: Reference) {
-        self.history.append(reference)
-        self.index += 1
-        SettingsDB.shared.storeHistory(reference: reference)
+    func currBook() -> Book {
+        return self.book
     }
-    /*
-    mutating func add(bibleId: String, bookId: String, chapter: Int, verse: Int) {
-        self.add(history: History(bibleId: bibleId, bookId: bookId, chapter: chapter, verse: verse))
-    }
-    
-    mutating func add(bookId: String, chapter: Int, verse: Int) {
-        if let top = self.history.last {
-            self.add(history: History(bibleId: top.bibleId, bookId: bookId, chapter: chapter, verse: verse))
-        } else {
-            print("Unable to add history, because empty in addBook")
-        }
-    }
-    
-    mutating func add(chapter: Int, verse: Int) {
-        if let top = self.history.last {
-            self.add(history: History(bibleId: top.bibleId, bookId: top.bookId, chapter: chapter,
-                                      verse: verse))
-        } else {
-            print("Unable to add history, because empty in addChapter")
-        }
-    }
-    */
+
     mutating func changeBible(bible: Bible) {
         self.bible = bible
         if let top = self.history.last {
@@ -87,6 +67,29 @@ struct HistoryModel {
         } else {
             print("Unable to add history, because empty in changeBible")
         }
+    }
+    
+    mutating func changeReference(book: Book, chapter: Int) {
+        self.book = book
+        let ref = Reference(bibleId: self.bible.bibleId, abbr: self.bible.abbr, bookId: book.bookId,
+                            chapter: chapter, verse: 1)
+        self.add(reference: ref)
+    }
+    
+//    mutating func changeChapter(chapter: Int) {
+//        if let top = self.history.last {
+//            let ref = Reference(bibleId: top.bibleId, abbr: top.abbr, bookId: top.bookId,
+//                                chapter: chapter, verse: 1)
+//            self.add(reference: ref)
+//        } else {
+//            print("Unable to add history, because empty in changeChapter")
+//        }
+//    }
+    
+    private mutating func add(reference: Reference) {
+        self.history.append(reference)
+        self.index += 1
+        SettingsDB.shared.storeHistory(reference: reference)
     }
     
     func current() -> Reference {

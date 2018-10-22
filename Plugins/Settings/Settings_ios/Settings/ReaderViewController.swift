@@ -149,7 +149,6 @@ class ReaderViewController : UIViewController {
     }
     
     @objc func tocBookHandler(sender: UIBarButtonItem) {
-        print("toc book handler")
         /*
         //let bible = Bible(bibleId: "ENGKJV", abbr: "KJV", iso3: "eng", name: "King James",
         //                 locale: Locale(identifier: "en"))
@@ -165,7 +164,9 @@ class ReaderViewController : UIViewController {
     }
     
     @objc func tocChapHandler(sender: UIBarButtonItem) {
-        print("toc chapter handler")
+        let chaptersTOC = TOCChaptersViewController()
+        chaptersTOC.book = HistoryModel.shared.currBook()
+        self.navigationController?.pushViewController(chaptersTOC, animated: true)
     }
     
     @objc func versionTapHandler(sender: UIBarButtonItem) {
