@@ -42,7 +42,7 @@
 		E4D708D1213328E600E4A8BF /* AWS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4D708CF213328E600E4A8BF /* AWS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4E12B2E2133F30800CAFE78 /* UserMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */; };
 		E4EC586F215D9D4C009BAA4F /* StoreReviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */; };
-		E4F66863217C377600E998CC /* TableContentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F66862217C377600E998CC /* TableContentsViewController.swift */; };
+		E4F66863217C377600E998CC /* TOCBooksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F66862217C377600E998CC /* TOCBooksViewController.swift */; };
 		E4F720BA211B6F2A00E26B07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */; };
 		E4F720C1211B6F2C00E26B07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F720C0211B6F2C00E26B07 /* Assets.xcassets */; };
 		E4F720C4211B6F2C00E26B07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F720C2211B6F2C00E26B07 /* LaunchScreen.storyboard */; };
@@ -135,7 +135,7 @@
 		E4D708CF213328E600E4A8BF /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageController.swift; sourceTree = "<group>"; };
 		E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreReviewController.swift; sourceTree = "<group>"; };
-		E4F66862217C377600E998CC /* TableContentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableContentsViewController.swift; sourceTree = "<group>"; };
+		E4F66862217C377600E998CC /* TOCBooksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOCBooksViewController.swift; sourceTree = "<group>"; };
 		E4F720B6211B6F2A00E26B07 /* Settings.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Settings.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4F720C0211B6F2C00E26B07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -192,30 +192,30 @@
 				E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */,
 				E4C2E987211B712C00B71CC5 /* ReaderViewNavigator.swift */,
 				E404A3B92176BAA100340395 /* ReaderViewController.swift */,
-				E4F66862217C377600E998CC /* TableContentsViewController.swift */,
+				E463896D21793DC0009BF5E2 /* HistoryModel.swift */,
 				E4C2E981211B712C00B71CC5 /* SettingsViewController.swift */,
 				E4A712FF21461090009D99E2 /* SettingsSearchController.swift */,
 				E4C2E984211B712C00B71CC5 /* SettingsViewDataSource.swift */,
 				E4C2E989211B712D00B71CC5 /* SettingsViewDelegate.swift */,
-				E463897121799013009BF5E2 /* BiblesActionSheet.swift */,
-				E4015257215D2DF60031654B /* InfoPageController.swift */,
-				E4C2E97D211B711C00B71CC5 /* FeedbackViewController.swift */,
-				E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */,
-				E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */,
-				E4C2E985211B712C00B71CC5 /* TextSizeSliderCell.swift */,
-				E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */,
 				E4C2E986211B712C00B71CC5 /* LanguageCell.swift */,
-				E402BCB4217B80BA0026E1DE /* TableContentsModel.swift */,
 				E4C2E988211B712D00B71CC5 /* SettingsModel.swift */,
-				E4C2E983211B712C00B71CC5 /* LanguageModel.swift */,
 				E4C2E97C211B711C00B71CC5 /* BibleModel.swift */,
-				E463896D21793DC0009BF5E2 /* HistoryModel.swift */,
-				E4638973217AE210009BF5E2 /* SettingsDB.swift */,
-				E402BCB6217B878F0026E1DE /* BibleDB.swift */,
+				E4C2E983211B712C00B71CC5 /* LanguageModel.swift */,
 				E4825C412124F0B400D36620 /* BibleInitialSelect.swift */,
 				E4C2E982211B712C00B71CC5 /* SettingsAdapter.swift */,
+				E4C2E985211B712C00B71CC5 /* TextSizeSliderCell.swift */,
 				E4C2E977211B70F500B71CC5 /* AppFont.swift */,
+				E4F66862217C377600E998CC /* TOCBooksViewController.swift */,
+				E402BCB4217B80BA0026E1DE /* TableContentsModel.swift */,
+				E463897121799013009BF5E2 /* BiblesActionSheet.swift */,
+				E4638973217AE210009BF5E2 /* SettingsDB.swift */,
+				E402BCB6217B878F0026E1DE /* BibleDB.swift */,
+				E4015257215D2DF60031654B /* InfoPageController.swift */,
+				E4C2E97D211B711C00B71CC5 /* FeedbackViewController.swift */,
+				E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */,
+				E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */,
 				E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */,
+				E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */,
 				E4F720C5211B6F2C00E26B07 /* Info.plist */,
 				E428B7E62138BD7F000AB2A8 /* Localizable.strings */,
 				E428B7E32138BD7F000AB2A8 /* InfoPlist.strings */,
@@ -335,7 +335,7 @@
 			files = (
 				E4C2E98D211B712D00B71CC5 /* SettingsViewDataSource.swift in Sources */,
 				E49F7296216AC830007D2856 /* ExternControllerProtocol.swift in Sources */,
-				E4F66863217C377600E998CC /* TableContentsViewController.swift in Sources */,
+				E4F66863217C377600E998CC /* TOCBooksViewController.swift in Sources */,
 				E404A3BA2176BAA100340395 /* ReaderViewController.swift in Sources */,
 				E4C2E978211B70F500B71CC5 /* AppFont.swift in Sources */,
 				E4EC586F215D9D4C009BAA4F /* StoreReviewController.swift in Sources */,

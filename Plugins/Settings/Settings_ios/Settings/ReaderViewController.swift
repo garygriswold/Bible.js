@@ -160,7 +160,7 @@ class ReaderViewController : UIViewController {
         let toc = TableContentsModel(bible: bible)
         toc.load()
         */
-        let tableContents = TableContentsViewController()
+        let tableContents = TOCBooksViewController()
         self.navigationController?.pushViewController(tableContents, animated: true)
     }
     

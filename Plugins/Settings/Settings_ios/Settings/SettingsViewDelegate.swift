@@ -68,7 +68,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         case 0:
             switch indexPath.row {
             case 0:
-                let tableContents = TableContentsViewController()
+                let tableContents = TOCBooksViewController()
                 self.navController?.pushViewController(tableContents, animated: true)
             case 1:
                 let histController = ExternControllerImpl()

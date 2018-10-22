@@ -26,7 +26,7 @@ public class ReaderViewNavigator {
         //let viewController = VersionDetailViewController()
         self.navController = UINavigationController(rootViewController: self.viewController!)
         self.navController!.hidesBarsOnSwipe = false // true prevents cell move from working
-        let review = StoreReviewController.shared  // This could be postponed more
+        _ = StoreReviewController.shared  // This could be postponed more
         return navController!
     }
     

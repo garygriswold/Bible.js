@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TableContentsViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
+class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     var dataModel: TableContentsModel!
     var tableView: UITableView!
