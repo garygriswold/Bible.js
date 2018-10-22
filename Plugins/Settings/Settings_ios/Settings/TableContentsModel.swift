@@ -125,5 +125,15 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         self.filtered = self.books.filter({ $0.name.prefix(1) == letter })
     }
     
+    func clearFilteredBooks() {
+        self.filtered.removeAll()
+    }
     
+    func sortBooksTraditional() {
+        self.books = self.books.sorted(by: { $0.ordinal < $1.ordinal })
+    }
+    
+    func sortBooksAlphabetical() {
+        self.books = self.books.sorted(by: { $0.name < $1.name })
+    }
 }

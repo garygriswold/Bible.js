@@ -34,6 +34,12 @@ class TableContentsViewController : UIViewController, UITableViewDataSource, UIT
         //self.tableView.delegate = self.delegate
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.createToolbar()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -45,6 +51,8 @@ class TableContentsViewController : UIViewController, UITableViewDataSource, UIT
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(preferredContentSizeChanged(note:)),
                            name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        
+        self.navigationController?.isToolbarHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -52,6 +60,8 @@ class TableContentsViewController : UIViewController, UITableViewDataSource, UIT
         
         let notify = NotificationCenter.default
         notify.removeObserver(self, name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        
+        self.navigationController?.isToolbarHidden = true
     }
     
     /**
@@ -62,6 +72,38 @@ class TableContentsViewController : UIViewController, UITableViewDataSource, UIT
         AppFont.userFontDelta = 1.0
         tableView.reloadData() // updates preferred font size in table
         AppFont.updateSearchFontSize()
+    }
+    
+    private func createToolbar() {
+        if let nav = self.navigationController {
+            
+            nav.toolbar.isTranslucent = false
+            nav.toolbar.barTintColor = .white
+        }
+        var items = [UIBarButtonItem]()
+        
+        let trad = NSLocalizedString("Traditional", comment: "Bible books in traditional sequence")
+        let alpha = NSLocalizedString("Alphabetical", comment: "Bible books in alphabetical sequence")
+        let sortControl = UISegmentedControl(items: [trad, alpha])
+        sortControl.selectedSegmentIndex = 0
+        sortControl.addTarget(self, action: #selector(sortHandler), for: .valueChanged)
+        
+        let sortCtrl = UIBarButtonItem(customView: sortControl)
+        items.append(sortCtrl)
+        
+        self.setToolbarItems(items, animated: true)
+    }
+    
+    @objc func sortHandler(sender: UISegmentedControl) {
+        print("sort handler clicked")
+        dataModel.clearFilteredBooks()
+        let index = sender.selectedSegmentIndex
+        if index == 0 {
+            dataModel.sortBooksTraditional()
+        } else {
+            dataModel.sortBooksAlphabetical()
+        }
+        self.tableView.reloadData()
     }
 
     //
