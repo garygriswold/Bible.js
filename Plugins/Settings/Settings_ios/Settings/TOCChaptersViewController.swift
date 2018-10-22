@@ -8,91 +8,60 @@
 
 import UIKit
 
-class TOCChaptersViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
+class TOCChaptersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
     
     var book: Book!
-    var dataModel: TableContentsModel!
-    var tableView: UITableView!
+    
+    init(book: Book) {
+        self.book = book
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        self.book = Book(bookId: "JHN", ordinal: 22, name: "John", lastChapter: 28)
+        super.init(coder: coder)
+    }
     
     deinit {
         print("**** deinit TOCChaptersViewController ******")
     }
     
-    override func loadView() {
-        super.loadView()
-        
-        // create Table view
-        self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableViewStyle.plain)
-        self.view.backgroundColor = UIColor.white
-        self.view = self.tableView // OR self.view.addSubview(self.tableView)
-        
-        self.navigationItem.title = NSLocalizedString("Chapters", comment: "Table Contents view page title")
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
-        
-        AppFont.updateSearchFontSize()
-        
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //self.createToolbar()
+        self.navigationItem.title = book.name
+        
+        let flowLayout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: flowLayout)
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ChapterNumCell")
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.backgroundColor = UIColor.cyan
+        
+        self.view.addSubview(collectionView)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        let curr = HistoryModel.shared.currBible()
-        
-        self.dataModel = TableContentsModel(bible: curr)
-        self.dataModel.load()
-        
-        let notify = NotificationCenter.default
-        notify.addObserver(self, selector: #selector(preferredContentSizeChanged(note:)),
-                           name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
-        
-        self.navigationController?.isToolbarHidden = false
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        let notify = NotificationCenter.default
-        notify.removeObserver(self, name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
-        
-        self.navigationController?.isToolbarHidden = true
-    }
-    
-    /**
-     * iOS 10 includes: .adjustsFontForContentSizeCategory, which can be set to each label to
-     * perform automatic text size adjustment
-     */
-    @objc func preferredContentSizeChanged(note: NSNotification) {
-        AppFont.userFontDelta = 1.0
-        tableView.reloadData() // updates preferred font size in table
-        AppFont.updateSearchFontSize()
-    }
-    
-    //
-    // Data Source
-    //
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.book.lastChapter
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //return self.dataModel.generateCell(tableView: tableView, indexPath: indexPath)
-        return self.dataModel.generateChapterCell(tableView: tableView, indexPath: indexPath)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChapterNumCell",
+                                                      for: indexPath as IndexPath)
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        label.textAlignment = .center
+        label.text = String(indexPath.row + 1)
+        cell.contentView.addSubview(label)
+        cell.backgroundColor = UIColor.green
+        return cell
     }
     
-    //
-    // Delegate
-    //
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        HistoryModel.shared.changeReference(book: self.book, chapter: (indexPath.row + 1))
-        self.navigationController?.popToRootViewController(animated: true)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 50, height: 50)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     }
 }
+

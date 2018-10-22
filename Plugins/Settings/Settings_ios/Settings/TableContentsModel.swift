@@ -125,17 +125,6 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         return cell
     }
     
-    func generateChapterCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
-        //let book = (self.filtered.count > 0) ? self.filtered[indexPath.row] : self.books[indexPath.row]
-        //let chapter = indexPath.row
-        let cell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-        cell.textLabel?.font = AppFont.sansSerif(style: .body)
-        cell.textLabel?.text = String(indexPath.row + 1)
-        cell.selectionStyle = .default
-        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-        return cell
-    }
-    
     func filterBooks(letter: String) {
         self.filtered = self.books.filter({ $0.name.prefix(1) == letter })
     }

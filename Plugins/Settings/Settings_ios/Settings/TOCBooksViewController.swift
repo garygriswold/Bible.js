@@ -133,8 +133,7 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let book = self.dataModel.getBook(row: indexPath.row) {
             tableView.deselectRow(at: indexPath, animated: true)
-            let chaptersController = TOCChaptersViewController()
-            chaptersController.book = book
+            let chaptersController = TOCChaptersViewController(book: book)
             self.navigationController?.pushViewController(chaptersController, animated: true)
         }
     }
