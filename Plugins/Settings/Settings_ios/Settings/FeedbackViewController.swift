@@ -47,16 +47,16 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
 
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(keyboardWillShow),
-                           name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+                           name: UIResponder.keyboardWillShowNotification, object: nil)
         notify.addObserver(self, selector: #selector(keyboardWillHide),
-                           name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+                           name: UIResponder.keyboardWillHideNotification, object: nil)
         
         self.textView.becomeFirstResponder()
     }
     
     @objc func keyboardWillShow(note: NSNotification) {
         if let keyboardInfo: Dictionary = note.userInfo {
-            if let keyboardRect: CGRect = keyboardInfo[UIKeyboardFrameEndUserInfoKey] as? CGRect {
+            if let keyboardRect: CGRect = keyboardInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
                 let keyboardTop = keyboardRect.minY
                 let bounds = UIScreen.main.bounds
                 textView.frame = CGRect(x: 0.0, y: 0.0, width: bounds.width, height: keyboardTop)

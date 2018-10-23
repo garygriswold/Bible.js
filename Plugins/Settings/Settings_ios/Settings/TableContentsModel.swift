@@ -128,7 +128,7 @@ class TableContentsModel { // class is used to permit self.contents inside closu
             cell.backgroundColor = UIColor(red: 0.89, green: 0.98, blue: 0.96, alpha: 1.0)
         }
         cell.selectionStyle = .default
-        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+        cell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
         return cell
     }
     

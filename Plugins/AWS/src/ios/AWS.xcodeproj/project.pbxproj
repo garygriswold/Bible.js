@@ -258,7 +258,7 @@
 				TargetAttributes = {
 					E4C23FD2202D627F00F98324 = {
 						CreatedOnToolsVersion = 9.2;
-						LastSwiftMigration = 0920;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					E4C23FDB202D627F00F98324 = {
@@ -500,7 +500,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = USE_FRAMEWORK;
 				"SWIFT_INCLUDE_PATHS[arch=*]" = /Users/garygriswold/ShortSands/BibleApp/Plugins/AWS/src/ios/AWS/minizip;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -529,7 +529,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = USE_FRAMEWORK;
 				"SWIFT_INCLUDE_PATHS[arch=*]" = /Users/garygriswold/ShortSands/BibleApp/Plugins/AWS/src/ios/AWS/minizip;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

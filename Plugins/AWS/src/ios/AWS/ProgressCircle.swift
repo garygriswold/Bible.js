@@ -74,7 +74,7 @@ public class ProgressCircle : UIView {
     
     func remove() {
         UIView.animate(withDuration: 0.7, delay: 0.3,
-                       options: UIViewAnimationOptions.curveLinear,
+                       options: UIView.AnimationOptions.curveLinear,
                        animations: { self.layer.opacity = 0 },
                        completion: { (finished) in self.removeFromSuperview() }
         )

@@ -61,7 +61,7 @@ class SettingsSearchController: NSObject, UISearchResultsUpdating {
                 self.dataModel?.filterForSearch(searchText: text)
             }
             let sections = IndexSet(integer: self.availableSection)
-            self.controller?.tableView.reloadSections(sections, with: UITableViewRowAnimation.automatic)
+            self.controller?.tableView.reloadSections(sections, with: UITableView.RowAnimation.automatic)
         }
     }
 }

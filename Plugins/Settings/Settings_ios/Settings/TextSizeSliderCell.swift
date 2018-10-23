@@ -18,7 +18,7 @@ class TextSizeSliderCell : UITableViewCell {
     private var sampleTextLabel: UILabel?
     private var serifBodyFont: UIFont?
     
-    init(controller: SettingsViewController, style: UITableViewCellStyle, reuseIdentifier: String?) {
+    init(controller: SettingsViewController, style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.tableView = controller.tableView
         self.textSlider = UISlider(frame: .zero)
         self.leftLabel = UILabel(frame: .zero)

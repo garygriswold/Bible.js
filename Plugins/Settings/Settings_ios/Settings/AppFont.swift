@@ -27,7 +27,7 @@ public class AppFont {
         }
     }
 
-    public static func sansSerif(style: UIFontTextStyle) -> UIFont {
+    public static func sansSerif(style: UIFont.TextStyle) -> UIFont {
         let font = UIFont.preferredFont(forTextStyle: style)
         return font.withSize(font.pointSize * userFontDelta)
     }
@@ -52,7 +52,7 @@ public class AppFont {
         return UIFont.monospacedDigitSystemFont(ofSize: ofSize * userFontDelta, weight: weight)
     }
     
-    public static func serif(style: UIFontTextStyle) -> UIFont {
+    public static func serif(style: UIFont.TextStyle) -> UIFont {
         let font = UIFont.preferredFont(forTextStyle: style)
         return getSerifFont().withSize(font.pointSize * userFontDelta)
     }

@@ -21,7 +21,7 @@ class BiblesActionSheet : UIAlertController {
         super.init(coder: coder)
     }
     
-    override var preferredStyle: UIAlertControllerStyle { get { return .actionSheet } }
+    override var preferredStyle: UIAlertController.Style { get { return .actionSheet } }
     
     override func viewDidLoad() {
         super.viewDidLoad()

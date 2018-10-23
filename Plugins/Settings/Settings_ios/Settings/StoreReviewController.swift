@@ -26,19 +26,19 @@ class StoreReviewController {
         let notify = NotificationCenter.default
         notify.addObserver(self,
                            selector: #selector(startTimer(note:)),
-                           name: .UIApplicationDidFinishLaunching,
+                           name: UIApplication.didFinishLaunchingNotification,
                            object: nil)
         notify.addObserver(self,
                            selector: #selector(startTimer(note:)),
-                           name: .UIApplicationWillEnterForeground,
+                           name: UIApplication.willEnterForegroundNotification,
                            object: nil)
         notify.addObserver(self,
                            selector: #selector(completeTimer(note:)),
-                           name: .UIApplicationDidEnterBackground,
+                           name: UIApplication.didEnterBackgroundNotification,
                            object: nil)
         notify.addObserver(self,
                            selector: #selector(completeTimer(note:)),
-                           name: .UIApplicationWillTerminate,
+                           name: UIApplication.willTerminateNotification,
                            object: nil)
     }
     

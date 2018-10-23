@@ -194,11 +194,11 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     }
     
     // Commit data row change to the data source
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle,
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle,
                    forRowAt indexPath: IndexPath) {
-        if editingStyle == UITableViewCellEditingStyle.delete {
+        if editingStyle == UITableViewCell.EditingStyle.delete {
             self.deleteRow(tableView: tableView, indexPath: indexPath)
-        } else if editingStyle == UITableViewCellEditingStyle.insert {
+        } else if editingStyle == UITableViewCell.EditingStyle.insert {
             self.insertRow(tableView: tableView, indexPath: indexPath)
         }
     }
@@ -251,7 +251,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             cell.imageView?.tintColor = UIColor.gray
             cell.imageView?.image = image
         }
-        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+        cell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
         return cell
     }
 }

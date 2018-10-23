@@ -57,7 +57,7 @@ class SettingsViewController: UIViewController {
         super.loadView()
  
         // create Table view
-        self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableViewStyle.grouped)
+        self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableView.Style.grouped)
         self.tableView.allowsSelectionDuringEditing = true
         let barHeight = self.navigationController?.navigationBar.frame.height ?? 44
         self.recentContentOffset = CGPoint(x:0, y: -1 * barHeight)
@@ -125,11 +125,11 @@ class SettingsViewController: UIViewController {
         
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(preferredContentSizeChanged(note:)),
-                           name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+                           name: UIContentSizeCategory.didChangeNotification, object: nil)
         notify.addObserver(self, selector: #selector(keyboardWillShow),
-                           name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+                           name: UIResponder.keyboardWillShowNotification, object: nil)
         notify.addObserver(self, selector: #selector(keyboardWillHide),
-                           name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+                           name: UIResponder.keyboardWillHideNotification, object: nil)
         
         if self.settingsViewType == .language {
             self.searchController?.viewAppears(dataModel: self.dataModel)
@@ -142,9 +142,9 @@ class SettingsViewController: UIViewController {
         
         //Must remove, or this view will scroll because of keyboard actions in upper view.
         let notify = NotificationCenter.default
-        notify.removeObserver(self, name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
-        notify.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        notify.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        notify.removeObserver(self, name: UIContentSizeCategory.didChangeNotification, object: nil)
+        notify.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        notify.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     /**
@@ -159,7 +159,7 @@ class SettingsViewController: UIViewController {
     
     @objc func keyboardWillShow(note: NSNotification) {
         if let keyboardInfo: Dictionary = note.userInfo {
-            if let keyboardRect: CGRect = keyboardInfo[UIKeyboardFrameEndUserInfoKey] as? CGRect {
+            if let keyboardRect: CGRect = keyboardInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
                 let keyboardTop = keyboardRect.minY
                 let bounds = UIScreen.main.bounds
                 self.tableView.frame = CGRect(x: 0.0, y: 0.0, width: bounds.width, height: keyboardTop)

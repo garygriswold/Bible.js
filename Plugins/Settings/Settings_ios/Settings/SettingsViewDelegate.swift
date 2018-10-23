@@ -97,7 +97,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             case 0:
                 guard let reviewURL = URL(string: "https://itunes.apple.com/app/id1073396349?action=write-review")
                     else { fatalError("Expected a valid URL") }
-                UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
+                UIApplication.shared.open(reviewURL, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
                 // I have also tried to use WKWebView to access itunes, but it requires User AppleId
                 // login credentials.
             case 1:
@@ -230,15 +230,15 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     }
     
     // Identifies Add and Delete Rows
-    func tableView(_ tableView: UITableView, editingStyleForRowAt: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt: IndexPath) -> UITableViewCell.EditingStyle {
         if editingStyleForRowAt.section == selectedSection {
-            return UITableViewCellEditingStyle.delete
+            return UITableViewCell.EditingStyle.delete
         }
         else if editingStyleForRowAt.section >= self.availableSection {
-            return UITableViewCellEditingStyle.insert
+            return UITableViewCell.EditingStyle.insert
         }
         else {
-            return UITableViewCellEditingStyle.none
+            return UITableViewCell.EditingStyle.none
         }
     }
     
@@ -280,3 +280,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     //               trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
+}

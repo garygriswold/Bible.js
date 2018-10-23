@@ -21,7 +21,7 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
         super.loadView()
         
         // create Table view
-        self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableViewStyle.plain)
+        self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableView.Style.plain)
         self.tableView.layer.borderWidth = 0.4
         self.tableView.layer.borderColor = UIColor(white: 0.8, alpha: 1.0).cgColor
         self.view.backgroundColor = UIColor.white
@@ -51,7 +51,7 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
         
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(preferredContentSizeChanged(note:)),
-                           name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+                           name: UIContentSizeCategory.didChangeNotification, object: nil)
         
         self.navigationController?.isToolbarHidden = false
     }
@@ -60,7 +60,7 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
         super.viewWillDisappear(animated)
         
         let notify = NotificationCenter.default
-        notify.removeObserver(self, name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        notify.removeObserver(self, name: UIContentSizeCategory.didChangeNotification, object: nil)
         
         self.navigationController?.isToolbarHidden = true
     }

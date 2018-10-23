@@ -34,7 +34,7 @@ public class MediaPlayState {
     public var timestampMS: Int64
     public var position: CMTime {
         get {
-            return CMTimeMake(self.positionMS, 1000)
+            return CMTimeMake(value: self.positionMS, timescale: 1000)
         }
         set(newPosition) {
             self.positionMS = Int64(CMTimeGetSeconds(newPosition) * 1000)
