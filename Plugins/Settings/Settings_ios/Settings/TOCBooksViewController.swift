@@ -22,13 +22,14 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
         
         // create Table view
         self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableViewStyle.plain)
+        self.tableView.layer.borderWidth = 0.4
+        self.tableView.layer.borderColor = UIColor(white: 0.8, alpha: 1.0).cgColor
         self.view.backgroundColor = UIColor.white
-        self.view = self.tableView // OR self.view.addSubview(self.tableView)
+        self.view.addSubview(self.tableView)
 
         self.navigationItem.title = NSLocalizedString("Books", comment: "Table Contents view page title")
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
         
-        AppFont.updateSearchFontSize()
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
@@ -95,7 +96,6 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
     }
     
     @objc func sortHandler(sender: UISegmentedControl) {
-        print("sort handler clicked")
         dataModel.clearFilteredBooks()
         let index = sender.selectedSegmentIndex
         if index == 0 {
@@ -104,6 +104,21 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
             dataModel.sortBooksAlphabetical()
         }
         self.tableView.reloadData()
+        self.positionMidView(midview: false)
+    }
+    
+    private func positionMidView(midview: Bool) {
+        let frame: CGRect
+        if midview {
+            let height = self.tableView.contentSize.height
+            let blankSpace = (UIScreen.main.bounds.height - height) / 2.0
+            frame = CGRect(x: 0, y: blankSpace, width: self.view.bounds.width,
+                           height: self.view.bounds.height - blankSpace)
+        } else {
+            frame = CGRect(x: 0, y: 0, width: self.view.bounds.width,
+                           height: self.view.bounds.height)
+        }
+        self.tableView.frame = frame
     }
 
     //
@@ -125,6 +140,7 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
                    at index: Int) -> Int {
         self.dataModel.filterBooks(letter: title)
         tableView.reloadData()
+        self.positionMidView(midview: true)
         return -1
     }
     //

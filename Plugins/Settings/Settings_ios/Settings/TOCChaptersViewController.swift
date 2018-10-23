@@ -41,9 +41,9 @@ class TOCChaptersViewController: UIViewController, UICollectionViewDataSource, U
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(collectionView)
         
-        // Reposition collectionView to bottom
+        // Reposition collectionView to midview
         let height = collectionView.collectionViewLayout.collectionViewContentSize.height
-        let blankSpace = UIScreen.main.bounds.height - height
+        let blankSpace = (UIScreen.main.bounds.height - height) / 2.0
         collectionView.frame = CGRect(x: 0, y: blankSpace, width: self.view.bounds.width,
                                  height: self.view.bounds.height - blankSpace)
     }
@@ -80,7 +80,7 @@ class TOCChaptersViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 20, left: 20, bottom: 50, right: 20)
+        return UIEdgeInsets(top: 50, left: 20, bottom: 20, right: 20)
     }
     
     //
