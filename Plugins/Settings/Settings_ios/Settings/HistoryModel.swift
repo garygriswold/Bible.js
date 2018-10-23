@@ -30,6 +30,7 @@ struct HistoryModel {
     
     private var bible: Bible
     private var book: Book
+    private var tableContents: TableContentsModel
     private var history = [Reference]()
     private var index = 0
     
@@ -37,12 +38,14 @@ struct HistoryModel {
         self.bible = Bible(bibleId: "ENGWEB", abbr: "WEB", iso3: "eng", name: "World English",
                            locale: Locale(identifier: "en"))
         self.book = Book(bookId: "JHN", ordinal: 25, name: "John", lastChapter: 28)
+        self.tableContents = TableContentsModel(bible: self.bible)
         self.history = SettingsDB.shared.getHistory()
         self.index = self.history.count - 1
         if self.index < 0 {
             self.bible = Bible(bibleId: "ENGWEB", abbr: "WEB", iso3: "eng", name: "English Standard",
                                locale: Locale(identifier: "en"))
             self.book = Book(bookId: "JHN", ordinal: 25, name: "John", lastChapter: 28)
+            self.tableContents = TableContentsModel(bible: self.bible)
             self.history.append(Reference(bibleId: "ENGWEB", abbr: "WEB", bookId: "JHN",
                                           chapter: 3, verse: 1))
             self.index = 0
@@ -50,16 +53,21 @@ struct HistoryModel {
         }
     }
     
-    func currBible() -> Bible {
-        return self.bible
+    var currBible: Bible {
+        get { return self.bible }
     }
     
-    func currBook() -> Book {
-        return self.book
+    var currBook: Book {
+        get { return self.book }
+    }
+    
+    var currTableContents: TableContentsModel {
+        get { return self.tableContents }
     }
 
     mutating func changeBible(bible: Bible) {
         self.bible = bible
+        self.tableContents = TableContentsModel(bible: self.bible)
         if let top = self.history.last {
             let ref = Reference(bibleId: bible.bibleId, abbr: bible.abbr, bookId: top.bookId,
                                 chapter: top.chapter, verse: top.verse)

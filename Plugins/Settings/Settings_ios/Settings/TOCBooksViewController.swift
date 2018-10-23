@@ -44,9 +44,7 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let curr = HistoryModel.shared.currBible()
-        
-        self.dataModel = TableContentsModel(bible: curr)
+        self.dataModel = HistoryModel.shared.currTableContents
         self.dataModel.load()
         
         let notify = NotificationCenter.default

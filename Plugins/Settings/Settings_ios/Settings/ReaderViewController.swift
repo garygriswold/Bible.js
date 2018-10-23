@@ -164,7 +164,7 @@ class ReaderViewController : UIViewController {
     }
     
     @objc func tocChapHandler(sender: UIBarButtonItem) {
-        let book = HistoryModel.shared.currBook()
+        let book = HistoryModel.shared.currBook
         let chaptersTOC = TOCChaptersViewController(book: book)
         self.navigationController?.pushViewController(chaptersTOC, animated: true)
     }
