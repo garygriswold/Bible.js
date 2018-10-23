@@ -103,16 +103,20 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         return Array(idxSet).sorted()
     }
     
-    var bookCount: Int {
-        get { return (self.filtered.count > 0) ? self.filtered.count : self.books.count }
-    }
-    
     var sideIndex: [String] {
         get { return self.index }
     }
     
+    var bookCount: Int {
+        get { return (self.filtered.count > 0) ? self.filtered.count : self.books.count }
+    }
+    
     func getBook(row: Int) -> Book? {
-        return (row >= 0 && row < self.books.count) ? self.books[row] : nil
+        if self.filtered.count > 0 {
+            return (row >= 0 && row < self.filtered.count) ? self.filtered[row] : nil
+        } else {
+            return (row >= 0 && row < self.books.count) ? self.books[row] : nil
+        }
     }
     
     func generateBookCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
@@ -120,6 +124,9 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         let cell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
         cell.textLabel?.text = book.name
+        if HistoryModel.shared.currBook().bookId == book.bookId {
+            cell.backgroundColor = UIColor(red: 0.89, green: 0.98, blue: 0.96, alpha: 1.0)
+        }
         cell.selectionStyle = .default
         cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         return cell

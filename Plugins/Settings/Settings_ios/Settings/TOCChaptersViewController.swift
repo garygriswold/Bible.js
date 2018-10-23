@@ -58,16 +58,21 @@ class TOCChaptersViewController: UIViewController, UICollectionViewDataSource, U
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChapterNumCell",
                                                       for: indexPath as IndexPath)
-        
+        let chapter = indexPath.row + 1
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: self.size, height: self.size))
         label.textAlignment = .center
-        label.text = String(indexPath.row + 1)
+        label.text = String(chapter)
         label.textColor = UIColor(red: 0.24, green: 0.5, blue: 0.96, alpha: 1.0)
         
         label.bounds = CGRect(x: 0.0, y: 0.0, width: self.size, height: self.size)
         label.layer.cornerRadius = self.size / 2
         label.layer.borderWidth = 2.0
         label.layer.borderColor = UIColor.init(white: 0.8, alpha: 1.0).cgColor
+        let lastRef = HistoryModel.shared.current()
+        if lastRef.bookId == self.book.bookId && lastRef.chapter == chapter {
+            label.backgroundColor = UIColor(red: 0.89, green: 0.98, blue: 0.96, alpha: 1.0)
+            label.layer.masksToBounds = true
+        }
         cell.contentView.addSubview(label)
         return cell
     }
