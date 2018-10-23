@@ -10,7 +10,8 @@ import UIKit
 
 class TOCChaptersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
     
-    var book: Book!
+    private let book: Book
+    private let size: CGFloat = 50.0
     
     init(book: Book) {
         self.book = book
@@ -36,11 +37,16 @@ class TOCChaptersViewController: UIViewController, UICollectionViewDataSource, U
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ChapterNumCell")
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = UIColor.cyan
+        collectionView.backgroundColor = UIColor.white
+        //self.view.addSubview(collectionView)
+        self.view = collectionView
         
-        self.view.addSubview(collectionView)
+        print("hight1 \(self.view.bounds)")
     }
     
+    //
+    // UICollectionViewDataSource
+    //
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.book.lastChapter
     }
@@ -48,20 +54,38 @@ class TOCChaptersViewController: UIViewController, UICollectionViewDataSource, U
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChapterNumCell",
                                                       for: indexPath as IndexPath)
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: self.size, height: self.size))
         label.textAlignment = .center
         label.text = String(indexPath.row + 1)
+        label.textColor = UIColor(red: 0.24, green: 0.5, blue: 0.96, alpha: 1.0)
+        
+        label.bounds = CGRect(x: 0.0, y: 0.0, width: self.size, height: self.size)
+        label.layer.cornerRadius = self.size / 2
+        label.layer.borderWidth = 2.0
+        label.layer.borderColor = UIColor.init(white: 0.8, alpha: 1.0).cgColor
         cell.contentView.addSubview(label)
-        cell.backgroundColor = UIColor.green
         return cell
     }
     
+    //
+    // UICollectionViewDelegateFlowLayout
+    //
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 50, height: 50)
+        return CGSize(width: self.size, height: self.size)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        return UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+    }
+    
+    //
+    // UICollectionViewDelegate
+    //
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let chapter = indexPath.row + 1
+        HistoryModel.shared.changeReference(book: self.book, chapter: chapter)
+        self.navigationController?.popToRootViewController(animated: true)
     }
 }
 
