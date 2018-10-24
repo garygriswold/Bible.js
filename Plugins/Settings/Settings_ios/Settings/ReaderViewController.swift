@@ -62,7 +62,7 @@ class ReaderViewController : UIViewController {
     }
     
     func loadBiblePage(reference: Reference) {
-        self.tocBookLabel.text = reference.bookId
+        self.tocBookLabel.text = reference.bookName
         self.tocChapLabel.text = String(reference.chapter)
         self.versionLabel.text = reference.abbr
         
@@ -149,16 +149,6 @@ class ReaderViewController : UIViewController {
     }
     
     @objc func tocBookHandler(sender: UIBarButtonItem) {
-        /*
-        //let bible = Bible(bibleId: "ENGKJV", abbr: "KJV", iso3: "eng", name: "King James",
-        //                 locale: Locale(identifier: "en"))
-        let bible = Bible(bibleId: "ENGWEB", abbr: "WEB", iso3: "eng", name: "World English",
-                          locale: Locale(identifier: "en"))
-        //let bible = Bible(bibleId: "ENGESV", abbr: "ESV", iso3: "eng", name: "English Standard",
-        //                  locale: Locale(identifier: "en"))
-        let toc = TableContentsModel(bible: bible)
-        toc.load()
-        */
         let tableContents = TOCBooksViewController()
         self.navigationController?.pushViewController(tableContents, animated: true)
     }

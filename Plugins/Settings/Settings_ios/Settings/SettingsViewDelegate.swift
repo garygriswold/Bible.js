@@ -71,8 +71,7 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 let tableContents = TOCBooksViewController()
                 self.navController?.pushViewController(tableContents, animated: true)
             case 1:
-                let histController = ExternControllerImpl()
-                histController.present(title: NSLocalizedString("History", comment: "View title"))
+                let histController = HistoryViewController()
                 self.navController?.pushViewController(histController, animated: true)
             case 2:
                 let videoController = ExternControllerImpl()

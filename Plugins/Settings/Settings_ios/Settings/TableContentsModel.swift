@@ -21,7 +21,7 @@ struct Book : Equatable {
 
 class TableContentsModel { // class is used to permit self.contents inside closure
     
-    private let bible: Bible
+    let bible: Bible
     private var books: [Book]
     private var index: [String]
     private var filtered: [Book]

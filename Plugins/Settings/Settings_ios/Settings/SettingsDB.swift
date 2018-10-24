@@ -63,12 +63,14 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "SELECT bibleId, abbr, bookId, chapter, verse FROM History ORDER BY datetime desc limit 100"
+            let sql = "SELECT bibleId, abbr, bibleName, bookId, bookName, chapter, verse" +
+                    " FROM History ORDER BY datetime desc limit 100"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let history = resultSet.map {
-                Reference(bibleId: $0[0]!, abbr: $0[1]!, bookId: $0[2]!,
-                          chapter: Int($0[3]!) ?? 1,
-                          verse: Int($0[4]!) ?? 1)
+                Reference(bibleId: $0[0]!, abbr: $0[1]!, bibleName: $0[2]!,
+                          bookId: $0[3]!, bookName: $0[4]!,
+                          chapter: Int($0[5]!) ?? 1,
+                          verse: Int($0[6]!) ?? 1)
             }
             return history
         } catch {
@@ -80,13 +82,25 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "INSERT INTO History (bibleId, abbr, bookId, chapter, verse, datetime) VALUES (?,?,?,?,?,?)"
+            let sql = "INSERT INTO History (bibleId, abbr, bibleName, bookId, bookName, chapter, verse," +
+                    " datetime) VALUES (?,?,?,?,?,?)"
             let datetime = Date().description
             let values: [Any] = [reference.bibleId, reference.abbr, reference.bookId, reference.chapter,
                                  reference.verse, datetime]
             _ = try db.executeV1(sql: sql, values: values)
         } catch {
             
+        }
+    }
+    
+    func clearHistory() {
+        let db: Sqlite3
+        do {
+            db = try self.getSettingsDB()
+            let sql = "DELETE FROM History"
+            _ = try db.executeV1(sql: sql, values: [])
+        } catch let err {
+            print("ERROR SettingsDB.clearHistory \(err)")
         }
     }
     
@@ -104,7 +118,9 @@ struct SettingsDB {
             let create2 = "CREATE TABLE IF NOT EXISTS History(" +
                 " bibleId TEXT NOT NULL," +
                 " abbr TEXT NOT NULL," +
+                " bibleName TEXT NOT NULL," +
                 " bookId TEXT NOT NULL," +
+                " bookName TEXT NOT NULL," +
                 " chapter INT NOT NULL," +
                 " verse INT NOT NULL," +
             " datetime TEXT NOT NULL)"
