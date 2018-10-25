@@ -48,6 +48,7 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
         super.viewWillAppear(animated)
         
         self.dataModel = HistoryModel.shared.currTableContents
+        self.dataModel.clearFilteredBooks()
         self.navigationController?.isToolbarHidden = false
     }
     
