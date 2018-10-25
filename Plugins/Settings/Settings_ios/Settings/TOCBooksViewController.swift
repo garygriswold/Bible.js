@@ -63,10 +63,6 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
         self.navigationController?.pushViewController(historyController, animated: true)
     }
     
-    @objc override func preferredContentSizeChanged(note: NSNotification) {
-        //tableView.reloadData() // updates preferred font size in table
-    }
-    
     private func createToolbar() {
         if let nav = self.navigationController {
             

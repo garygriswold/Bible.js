@@ -18,7 +18,10 @@ struct Reference : Equatable {
     let verse: Int
     
     static func == (lhs: Reference, rhs: Reference) -> Bool {
-        return lhs.bibleId == rhs.bibleId
+        return lhs.bibleId == rhs.bibleId &&
+            lhs.bookId == rhs.bookId &&
+            lhs.chapter == rhs.chapter &&
+            lhs.verse == rhs.verse
     }
     
     func description() -> String {
@@ -115,9 +118,11 @@ struct HistoryModel {
     }
     
     private mutating func add(reference: Reference) {
-        self.history.append(reference)
-        self.index += 1
-        SettingsDB.shared.storeHistory(reference: reference)
+        if reference != self.current() {
+            self.history.append(reference)
+            self.index += 1
+            SettingsDB.shared.storeHistory(reference: reference)
+        }
     }
     
     func current() -> Reference {
