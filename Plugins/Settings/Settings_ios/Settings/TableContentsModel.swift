@@ -31,9 +31,6 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         self.books = [Book]()
         self.index = [String]()
         self.filtered = [Book]()
-    }
-    
-    func load() {
         let start: Double = CFAbsoluteTimeGetCurrent()
         let bibleDB = BibleDB(bible: bible)
         self.books = bibleDB.getTableContents()
@@ -118,7 +115,17 @@ class TableContentsModel { // class is used to permit self.contents inside closu
             return (row >= 0 && row < self.books.count) ? self.books[row] : nil
         }
     }
-    
+ 
+    /// Is this really the right way to do this, why not keep and index, not the argument
+    func getBook(bookId: String) -> Book? {
+        for book in self.books {
+            if book.bookId == bookId {
+                return book
+            }
+        }
+        return nil
+    }
+
     func generateBookCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         let book = (self.filtered.count > 0) ? self.filtered[indexPath.row] : self.books[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
@@ -126,6 +133,8 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         cell.textLabel?.text = book.name
         if HistoryModel.shared.currBook.bookId == book.bookId {
             cell.backgroundColor = UIColor(red: 0.89, green: 0.98, blue: 0.96, alpha: 1.0)
+        } else {
+            cell.backgroundColor = .white
         }
         cell.selectionStyle = .default
         cell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator

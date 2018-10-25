@@ -64,7 +64,7 @@ struct SettingsDB {
         do {
             db = try self.getSettingsDB()
             let sql = "SELECT bibleId, abbr, bibleName, bookId, bookName, chapter, verse" +
-                    " FROM History ORDER BY datetime desc limit 100"
+                    " FROM History ORDER BY datetime asc limit 100"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let history = resultSet.map {
                 Reference(bibleId: $0[0]!, abbr: $0[1]!, bibleName: $0[2]!,
@@ -83,9 +83,10 @@ struct SettingsDB {
         do {
             db = try self.getSettingsDB()
             let sql = "INSERT INTO History (bibleId, abbr, bibleName, bookId, bookName, chapter, verse," +
-                    " datetime) VALUES (?,?,?,?,?,?)"
+                    " datetime) VALUES (?,?,?,?,?,?,?,?)"
             let datetime = Date().description
-            let values: [Any] = [reference.bibleId, reference.abbr, reference.bookId, reference.chapter,
+            let values: [Any] = [reference.bibleId, reference.abbr, reference.bibleName,
+                                 reference.bookId, reference.bookName, reference.chapter,
                                  reference.verse, datetime]
             _ = try db.executeV1(sql: sql, values: values)
         } catch {

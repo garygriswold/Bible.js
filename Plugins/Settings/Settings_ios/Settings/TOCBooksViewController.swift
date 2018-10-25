@@ -45,7 +45,6 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
         super.viewWillAppear(animated)
         
         self.dataModel = HistoryModel.shared.currTableContents
-        self.dataModel.load()
         
         let notify = NotificationCenter.default
         notify.addObserver(self, selector: #selector(preferredContentSizeChanged(note:)),

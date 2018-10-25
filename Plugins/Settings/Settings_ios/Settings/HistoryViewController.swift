@@ -53,7 +53,8 @@ class HistoryViewController : UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let reference = HistoryModel.shared.getHistory(row: indexPath.row)
+        let index = HistoryModel.shared.historyCount - indexPath.row - 1
+        let reference = HistoryModel.shared.getHistory(row: index)
         let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath)
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
         cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)

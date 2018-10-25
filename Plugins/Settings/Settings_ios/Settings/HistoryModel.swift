@@ -34,40 +34,37 @@ struct HistoryModel {
     
     static var shared = HistoryModel()
     
-    private var book: Book
     private var tableContents: TableContentsModel
     private var history = [Reference]()
     private var index = 0
     
     init() {
-        let bible = Bible(bibleId: "ENGWEB", abbr: "WEB", iso3: "eng", name: "World English",
-                           locale: Locale(identifier: "en"))
-        self.book = Book(bookId: "JHN", ordinal: 25, name: "John", lastChapter: 28)
-        self.tableContents = TableContentsModel(bible: bible)
         self.history = SettingsDB.shared.getHistory()
         self.index = self.history.count - 1
-        if self.index < 0 {
-            let bible = Bible(bibleId: "ENGWEB", abbr: "WEB", iso3: "eng", name: "English Standard",
-                               locale: Locale(identifier: "en"))
-            self.book = Book(bookId: "JHN", ordinal: 25, name: "John", lastChapter: 28)
-            self.tableContents = TableContentsModel(bible: bible)
-            self.history.append(Reference(bibleId: "ENGWEB", abbr: "WEB",
-                                          bibleName: "World English", bookId: "JHN",
-                                          bookName: "John",
-                                          chapter: 3, verse: 1))
+        if self.history.count < 1 {
+            /// How do I really get the preferred version, not this default
+            let reference = Reference(bibleId: "ENGWEB", abbr: "WEB",
+                                      bibleName: "World English", bookId: "JHN",
+                                      bookName: "John", chapter: 3, verse: 1)
+            self.history.append(reference)
             self.index = 0
             SettingsDB.shared.storeHistory(reference: self.history[0])
         }
+        let curr = self.history.last!
+        let bible = VersionsDB.shared.getBible(bibleId: curr.bibleId)! /// safety
+        self.tableContents = TableContentsModel(bible: bible)
     }
     
-    //var currBible: Bible {
-    //    get { return self.bible }
-    //}
-    
+    var currBible: Bible {
+        get { return self.tableContents.bible }
+    }
+ 
     var currBook: Book {
-        get { return self.book }
+        get {
+            return self.tableContents.getBook(bookId: self.current().bookId)! /// safety
+        }
     }
-    
+ 
     var currTableContents: TableContentsModel {
         get { return self.tableContents }
     }
@@ -81,7 +78,6 @@ struct HistoryModel {
     }
 
     mutating func changeBible(bible: Bible) {
-        //self.bible = bible
         self.tableContents = TableContentsModel(bible: bible)
         if let top = self.history.last {
             let ref = Reference(bibleId: bible.bibleId, abbr: bible.abbr, bibleName: bible.name,
@@ -95,7 +91,6 @@ struct HistoryModel {
     
     mutating func changeReference(book: Book, chapter: Int) {
         let bible = self.tableContents.bible
-        self.book = book
         let ref = Reference(bibleId: bible.bibleId, abbr: bible.abbr, bibleName: bible.name,
                             bookId: book.bookId, bookName: book.name,
                             chapter: chapter, verse: 1)
@@ -118,16 +113,6 @@ struct HistoryModel {
         SettingsDB.shared.clearHistory()
         self.add(reference: top)
     }
-    
-//    mutating func changeChapter(chapter: Int) {
-//        if let top = self.history.last {
-//            let ref = Reference(bibleId: top.bibleId, abbr: top.abbr, bookId: top.bookId,
-//                                chapter: chapter, verse: 1)
-//            self.add(reference: ref)
-//        } else {
-//            print("Unable to add history, because empty in changeChapter")
-//        }
-//    }
     
     private mutating func add(reference: Reference) {
         self.history.append(reference)
