@@ -12,7 +12,7 @@ enum SettingsViewType {
     case oneLang
 }
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: AppViewController {
     
     let settingsViewType: SettingsViewType
     var searchController: SettingsSearchController?
@@ -61,8 +61,6 @@ class SettingsViewController: UIViewController {
         self.tableView.allowsSelectionDuringEditing = true
         let barHeight = self.navigationController?.navigationBar.frame.height ?? 44
         self.recentContentOffset = CGPoint(x:0, y: -1 * barHeight)
-        print("barHeight = \(barHeight)")
-        self.view.backgroundColor = UIColor.white
         self.view = self.tableView // OR //self.view.addSubview(self.tableView)
         let width = self.view.bounds.width
  
@@ -124,8 +122,6 @@ class SettingsViewController: UIViewController {
         self.tableView.delegate = self.delegate
         
         let notify = NotificationCenter.default
-        notify.addObserver(self, selector: #selector(preferredContentSizeChanged(note:)),
-                           name: UIContentSizeCategory.didChangeNotification, object: nil)
         notify.addObserver(self, selector: #selector(keyboardWillShow),
                            name: UIResponder.keyboardWillShowNotification, object: nil)
         notify.addObserver(self, selector: #selector(keyboardWillHide),
@@ -142,19 +138,14 @@ class SettingsViewController: UIViewController {
         
         //Must remove, or this view will scroll because of keyboard actions in upper view.
         let notify = NotificationCenter.default
-        notify.removeObserver(self, name: UIContentSizeCategory.didChangeNotification, object: nil)
         notify.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         notify.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    /**
-     * iOS 10 includes: .adjustsFontForContentSizeCategory, which can be set to each label to
-     * perform automatic text size adjustment
-    */
-    @objc func preferredContentSizeChanged(note: NSNotification) {
-        AppFont.userFontDelta = 1.0
-        tableView.reloadData() // updates preferred font size in table
-        AppFont.updateSearchFontSize()
+    @objc override func preferredContentSizeChanged(note: NSNotification) {
+        super.preferredContentSizeChanged(note: note)
+
+        //tableView.reloadData() // updates preferred font size in table
     }
     
     @objc func keyboardWillShow(note: NSNotification) {

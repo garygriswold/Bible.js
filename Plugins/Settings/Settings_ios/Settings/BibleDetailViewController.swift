@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BibleDetailViewController : UIViewController {
+class BibleDetailViewController : AppViewController {
     
     private weak var controller: SettingsViewController?
     private let indexPath: IndexPath
@@ -35,8 +35,6 @@ class BibleDetailViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.view.backgroundColor = UIColor.white
         
         // set Top Bar items
         self.navigationItem.title = bible.name

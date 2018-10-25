@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import WebKit
 
-class ReaderViewController : UIViewController {
+class ReaderViewController : AppViewController {
     
     private var webView: WKWebView!
     // Toolbar

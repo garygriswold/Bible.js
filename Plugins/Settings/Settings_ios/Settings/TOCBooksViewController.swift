@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
+class TOCBooksViewController : AppViewController, UITableViewDataSource, UITableViewDelegate {
 
     var dataModel: TableContentsModel!
     var tableView: UITableView!
@@ -24,7 +24,6 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
         self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableView.Style.plain)
         self.tableView.layer.borderWidth = 0.4
         self.tableView.layer.borderColor = UIColor(white: 0.8, alpha: 1.0).cgColor
-        self.view.backgroundColor = UIColor.white
         self.view.addSubview(self.tableView)
 
         self.navigationItem.title = NSLocalizedString("Books", comment: "Table Contents view page title")
@@ -49,20 +48,12 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
         super.viewWillAppear(animated)
         
         self.dataModel = HistoryModel.shared.currTableContents
-        
-        let notify = NotificationCenter.default
-        notify.addObserver(self, selector: #selector(preferredContentSizeChanged(note:)),
-                           name: UIContentSizeCategory.didChangeNotification, object: nil)
-        
         self.navigationController?.isToolbarHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        let notify = NotificationCenter.default
-        notify.removeObserver(self, name: UIContentSizeCategory.didChangeNotification, object: nil)
-        
+    
         self.navigationController?.isToolbarHidden = true
     }
     
@@ -71,14 +62,8 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
         self.navigationController?.pushViewController(historyController, animated: true)
     }
     
-    /**
-     * iOS 10 includes: .adjustsFontForContentSizeCategory, which can be set to each label to
-     * perform automatic text size adjustment
-     */
-    @objc func preferredContentSizeChanged(note: NSNotification) {
-        AppFont.userFontDelta = 1.0
-        tableView.reloadData() // updates preferred font size in table
-        AppFont.updateSearchFontSize()
+    @objc override func preferredContentSizeChanged(note: NSNotification) {
+        //tableView.reloadData() // updates preferred font size in table
     }
     
     private func createToolbar() {

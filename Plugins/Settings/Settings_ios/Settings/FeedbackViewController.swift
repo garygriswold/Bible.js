@@ -9,7 +9,7 @@ import UIKit
 import AWS
 import AudioToolbox
 
-class FeedbackViewController: UIViewController, UITextViewDelegate {
+class FeedbackViewController: AppViewController, UITextViewDelegate {
     
     private var textView: UITextView!
     
@@ -19,8 +19,6 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.view.backgroundColor = UIColor.white
         
         // set Top Bar items
         self.navigationItem.title = NSLocalizedString("Send Us Comments", comment: "Feedback view title")
@@ -69,7 +67,6 @@ class FeedbackViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func replyHandler(sender: UIBarButtonItem?) {
-        print("Feedback Reply bar clicked")
         self.uploadMessage()
         self.navigationController?.popViewController(animated: true)
     }

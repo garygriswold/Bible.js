@@ -13,7 +13,7 @@ protocol ExternControllerProtocol {
     func present(title: String)
 }
 
-class ExternControllerImpl : UIViewController, ExternControllerProtocol {
+class ExternControllerImpl : AppViewController, ExternControllerProtocol {
 
     private var textView: UITextView!
     private var navTitle: String?
@@ -24,8 +24,6 @@ class ExternControllerImpl : UIViewController, ExternControllerProtocol {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.view.backgroundColor = UIColor.white
         
         // set Top Bar items
         self.navigationItem.title = self.navTitle

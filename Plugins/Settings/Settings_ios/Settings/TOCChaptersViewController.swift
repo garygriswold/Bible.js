@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TOCChaptersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
+class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
     
     private let book: Book
     private let size: CGFloat = 50.0
@@ -42,7 +42,6 @@ class TOCChaptersViewController: UIViewController, UICollectionViewDataSource, U
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = UIColor.white
-        self.view.backgroundColor = UIColor.white
         self.view.addSubview(collectionView)
         
         // Reposition collectionView to midview

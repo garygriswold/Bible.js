@@ -123,7 +123,8 @@ class TableContentsModel { // class is used to permit self.contents inside closu
                 return book
             }
         }
-        return nil
+        //return nil
+        return self.books[0] /////// Could I be getting a bookId for a version that does have one?
     }
 
     func generateBookCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
@@ -131,7 +132,7 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         let cell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
         cell.textLabel?.font = AppFont.sansSerif(style: .body)
         cell.textLabel?.text = book.name
-        if HistoryModel.shared.currBook.bookId == book.bookId {
+        if HistoryModel.shared.currBook.bookId == book.bookId { //// Needs optimization, it is searching each row
             cell.backgroundColor = UIColor(red: 0.89, green: 0.98, blue: 0.96, alpha: 1.0)
         } else {
             cell.backgroundColor = .white

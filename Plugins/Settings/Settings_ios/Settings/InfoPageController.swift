@@ -8,7 +8,7 @@
 
 import UIKit
 
-class InfoPageController : UIViewController {
+class InfoPageController : AppViewController {
     
     private var textView: UITextView!
     
@@ -27,8 +27,6 @@ class InfoPageController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.view.backgroundColor = UIColor.white
         
         // set Top Bar items
         self.navigationItem.title = NSLocalizedString("Privacy Policy", comment: "Title of Page")

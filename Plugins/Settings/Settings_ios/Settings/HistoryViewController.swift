@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HistoryViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
+class HistoryViewController : AppViewController, UITableViewDataSource, UITableViewDelegate {
     
     var tableView: UITableView!
     
@@ -21,7 +21,6 @@ class HistoryViewController : UIViewController, UITableViewDataSource, UITableVi
         
         // create Table view
         self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableView.Style.plain)
-        self.view.backgroundColor = UIColor.white
         self.view.addSubview(self.tableView)
         
         self.navigationItem.title = NSLocalizedString("History", comment: "History view page title")
