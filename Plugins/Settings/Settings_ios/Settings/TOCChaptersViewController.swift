@@ -31,6 +31,10 @@ class TOCChaptersViewController: UIViewController, UICollectionViewDataSource, U
         super.viewDidLoad()
         
         self.navigationItem.title = book.name
+        let history = NSLocalizedString("History", comment: "Button to display History")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: history, style: .plain,
+                                                                 target: self,
+                                                                 action: #selector(historyHandler))
         
         let flowLayout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: flowLayout)
@@ -46,6 +50,11 @@ class TOCChaptersViewController: UIViewController, UICollectionViewDataSource, U
         let blankSpace = (UIScreen.main.bounds.height - height) / 2.0
         collectionView.frame = CGRect(x: 0, y: blankSpace, width: self.view.bounds.width,
                                  height: self.view.bounds.height - blankSpace)
+    }
+    
+    @objc func historyHandler(sender: UIBarButtonItem) {
+        let historyController = HistoryViewController()
+        self.navigationController?.pushViewController(historyController, animated: true)
     }
     
     //

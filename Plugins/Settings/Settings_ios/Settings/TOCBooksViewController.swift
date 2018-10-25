@@ -28,6 +28,10 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
         self.view.addSubview(self.tableView)
 
         self.navigationItem.title = NSLocalizedString("Books", comment: "Table Contents view page title")
+        let history = NSLocalizedString("History", comment: "Button to display History")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: history, style: .plain,
+                                                                 target: self,
+                                                                 action: #selector(historyHandler))
         
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
         
@@ -60,6 +64,11 @@ class TOCBooksViewController : UIViewController, UITableViewDataSource, UITableV
         notify.removeObserver(self, name: UIContentSizeCategory.didChangeNotification, object: nil)
         
         self.navigationController?.isToolbarHidden = true
+    }
+    
+    @objc func historyHandler(sender: UIBarButtonItem) {
+        let historyController = HistoryViewController()
+        self.navigationController?.pushViewController(historyController, animated: true)
     }
     
     /**
