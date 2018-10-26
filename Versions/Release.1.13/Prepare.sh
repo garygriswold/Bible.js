@@ -24,6 +24,10 @@ sqlite Versions.db < sql/bible.sql
 # Add Region table for AWS to know SS Regions
 sqlite Versions.db < sql/copied_region.sql
 
+# Update column s3Key
+sqlite Versions.db <<END_SQL0
+update Bible set s3Key = '%I_%O_%B_%C.html';
+END_SQL1
 
 # Merge ISO3Priority into Language
 sqlite Versions.db <<END_SQL1

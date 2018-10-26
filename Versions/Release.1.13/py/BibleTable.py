@@ -22,7 +22,8 @@ out.write(u"  script TEXT NULL,\n")										# from script
 out.write(u"  country TEXT NULL REFERENCES Country(code),\n")			# from countryCode
 out.write(u"  stylesheet TEXT NULL,\n")									# from stylesheet
 out.write(u"  redistribute TEXT CHECK (redistribute IN('T', 'F')) default('F'),\n")
-out.write(u"  objectKey TEXT NOT NULL,\n")									# from info.json filename
+out.write(u"  s3KeyPrefix TEXT NOT NULL,\n")							# from info.json filename
+out.write(u"  s3Key TEXT NULL,\n")										# populated by s3KeyTemplate.py
 out.write(u"  organizationId TEXT NULL REFERENCES Owner(ownerCode),\n")	# unknown source
 out.write(u"  ssFilename TEXT NULL,\n")									# from me
 out.write(u"  hasHistory TEXT CHECK (hasHistory IN('T','F')) default('F'),\n") # from me
@@ -30,7 +31,7 @@ out.write(u"  copyright TEXT NULL,\n")									# from me
 # consider adding numbers, and array of numeric values in string form
 out.write(u"  introduction TEXT NULL);\n")								# about.html (should be in own table)
 
-prefix2 = "REPLACE INTO Bible (bibleId, abbr, iso3, name, englishName, direction, fontClass, script, country, stylesheet, redistribute, objectKey) VALUES"
+prefix2 = "REPLACE INTO Bible (bibleId, abbr, iso3, name, englishName, direction, fontClass, script, country, stylesheet, redistribute, s3KeyPrefix) VALUES"
 
 # read and process all info.json files
 source = "/Users/garygriswold/ShortSands/DBL/FCBH_info/"

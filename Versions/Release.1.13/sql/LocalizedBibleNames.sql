@@ -15,13 +15,13 @@ UPDATE Bible set localizedName = '2009 Edition NT' WHERE bibleId = 'AZBEMV'; -- 
 UPDATE Bible set localizedName = 'Gündəlik Müqəddəs Azərbaycan' WHERE bibleId = 'AZEBSA'; -- az Azerbaijani [Daily Sacred Azerbaijan] (Daily Bible Azerbaijan) {مقدَس کتاب آذربايجان ديلی}
 -- 400 matching names BAKIBT (IBT Version NT) {IBT Version NT}
 UPDATE Bible set localizedName = 'біблія' WHERE bibleId = 'BELJFC'; -- be Belarusian [bible] (Bible) {Bible}
-UPDATE Bible set localizedName = 'বাংলা: সহজে পড়া সংস্করণ' WHERE bibleId = 'BENERV'; -- bn Bengali [Bengali: Easy read version] (Bengali: Easy-to-Read Version) {Bengali: Easy-to-Read Version}
-UPDATE Bible set localizedName = 'মুক্ত বাংলা বাইবেল, 2017' WHERE bibleId = 'BENOBB'; -- bn Bengali [The Free Bangla Bible, 2017] (The Free Bengali Bible, 2017) {বাঙালি বাইবেল}
-UPDATE Bible set localizedName = 'পুরানো বাংলা বাইবেল, 1909' WHERE bibleId = 'BENWYC'; -- bn Bengali [Old Bangla Bible, 1909] (The Old Bengali Bible, 1909) {ধর্মপুস্তক সহ পুরাতন ও নুতন নিয়মের}
-UPDATE Bible set localizedName = 'মুসুলমনি সংস্করণ OT' WHERE bibleId = 'BNGBBS'; -- bn Bengali [Muscular Version OT] (Mussolmani Version OT) {Mussolmani Version OT}
-UPDATE Bible set localizedName = 'সাধারণ ভাষা সংস্করণ OT' WHERE bibleId = 'BNGCLV'; -- bn Bengali [General Language Version OT] (Common Language Version OT) {Common Language Version OT}
+UPDATE Bible set localizedName = 'বাংলা: সহজে পড়ুন সংস্করণ' WHERE bibleId = 'BENERV'; -- bn Bengali [Bengali: Easy Read Version] (Bengali: Easy-to-Read Version) {Bengali: Easy-to-Read Version}
+UPDATE Bible set localizedName = 'ফ্রি বাংলা বাইবেল, 2017' WHERE bibleId = 'BENOBB'; -- bn Bengali [Free Bangla Bible, 2017] (The Free Bengali Bible, 2017) {বাঙালি বাইবেল}
+UPDATE Bible set localizedName = 'ওল্ড বাঙালি বাইবেল, 1909' WHERE bibleId = 'BENWYC'; -- bn Bengali [Old Bengali Bible, 1909] (The Old Bengali Bible, 1909) {ধর্মপুস্তক সহ পুরাতন ও নুতন নিয়মের}
+UPDATE Bible set localizedName = 'মুসোলমানি সংস্করণ ওটি' WHERE bibleId = 'BNGBBS'; -- bn Bengali [Muslinmani Edition O] (Mussolmani Version OT) {Mussolmani Version OT}
+UPDATE Bible set localizedName = 'সাধারণ ভাষা সংস্করণ ওটি' WHERE bibleId = 'BNGCLV'; -- bn Bengali [The general language version is OT] (Common Language Version OT) {Common Language Version OT}
 UPDATE Bible set localizedName = 'বাংলা বাইবেল' WHERE bibleId = 'BNGRBV'; -- bn Bengali [Bengali Bible] (Bangla Bible) {Re-edit Bangla Version OT}
-UPDATE Bible set localizedName = 'সহজ সংস্করণ এনটি' WHERE bibleId = 'BNGWTC'; -- bn Bengali [Simple version nt] (Easy-to-Read Version NT) {Easy-to-Read Version NT}
+UPDATE Bible set localizedName = 'সহজে পড়ুন সংস্করণ এনটি' WHERE bibleId = 'BNGWTC'; -- bn Bengali [Easily read Version NT] (Easy-to-Read Version NT) {Easy-to-Read Version NT}
 UPDATE Bible set localizedName = 'an Bibl' WHERE bibleId = 'BREBRB'; -- br Breton [None] (Breton Gospels) {an Bibl}
 UPDATE Bible set localizedName = '1940 Българска Библия NT' WHERE bibleId = 'BULB40'; -- bg Bulgarian [1940 Bulgarian Bible NT] (1940 Bulgarian Bible NT) {}
 UPDATE Bible set localizedName = 'Българска лесна за четене версия' WHERE bibleId = 'BULERV'; -- bg Bulgarian [Bulgarian easy-to-read version] (Bulgarian Easy-to-Read Version) {Съвременен превод}
@@ -43,7 +43,7 @@ UPDATE Bible set localizedName = 'Brenton English Septuagint' WHERE bibleId = 'E
 UPDATE Bible set localizedName = 'Darby Translation' WHERE bibleId = 'ENGDBY'; -- en English [None] (Darby Translation) {Darby Translation}
 UPDATE Bible set localizedName = 'Douay-Rheims 1899' WHERE bibleId = 'ENGDRV'; -- en English [None] (Douay-Rheims 1899) {Douay-Rheims 1899}
 UPDATE Bible set localizedName = 'US English: Easy-to-Read Version' WHERE bibleId = 'ENGERU'; -- en English [None] (US English: Easy-to-Read Version) {US English: Easy-to-Read Version}
-UPDATE Bible set localizedName = '' WHERE bibleId = 'ENGESV'; -- en English [None] () {English Standard Version}
+UPDATE Bible set localizedName = 'English Standard Version' WHERE bibleId = 'ENGESV'; -- en English [None] () {English Standard Version}
 UPDATE Bible set localizedName = 'Bible' WHERE bibleId = 'ENGGID'; -- en English [None] (Bible) {Bible}
 UPDATE Bible set localizedName = 'God''s Living Word' WHERE bibleId = 'ENGGLW'; -- en English [None] (God's Living Word) {God's Living Word}
 UPDATE Bible set localizedName = 'King James Version and Apocrypha' WHERE bibleId = 'ENGKJV'; -- en English [None] (King James Version and Apocrypha) {King James Version and Apocrypha}
@@ -66,7 +66,7 @@ UPDATE Bible set localizedName = 'Elizen Arteko Biblia (EAB) Biblia en euskara, 
 -- 400 matching names FFMTBL (2005 Edition NT) {2005 Edition NT}
 UPDATE Bible set localizedName = 'Aadi keyri: linjiila iisaa almasiihu' WHERE bibleId = 'FFMWBT'; -- ff Maasina Fulfulde [None] (Maasina Fulfulde New Testament) {Aadi keyri: linjiila iisaa almasiihu}
 UPDATE Bible set localizedName = 'Louis Segond 1910' WHERE bibleId = 'FRALSG'; -- fr French [Louis Segond 1910] (French Louis Segond 1910 Bible) {Louis Segond 1910}
-UPDATE Bible set localizedName = 'Bible d&#39;ostervald français' WHERE bibleId = 'FRAOST'; -- fr French [French ostervald Bible] (French Ostervald Bible) {La Sainte Bible}
+UPDATE Bible set localizedName = 'Bible d&#39;Ostervald française' WHERE bibleId = 'FRAOST'; -- fr French [French Ostervald Bible] (French Ostervald Bible) {La Sainte Bible}
 UPDATE Bible set localizedName = 'Alkawal Kesal' WHERE bibleId = 'FUESIM'; -- ff Borgu Fulfulde [None] (Fulfulde Borgu New Testament Portions) {Alkawal Kesal}
 UPDATE Bible set localizedName = 'Pular Fuuta-Jallon New Testament' WHERE bibleId = 'FUFPBT'; -- ff Pular [None] (Pular New Testament) {Pular Fuuta-Jallon New Testament}
 -- 400 matching names FUHSIM (2012 Edition NT) {2012 Edition NT}
@@ -85,7 +85,7 @@ UPDATE Bible set localizedName = 'फ्री हिंदी बाइबि�
 UPDATE Bible set localizedName = 'Buka Helaga' WHERE bibleId = 'HMOPNG'; -- ho Hiri Motu [None] (Hiri Motu Bible) {Buka Helaga}
 UPDATE Bible set localizedName = 'सब की संस्करण एनटी' WHERE bibleId = 'HNDSKV'; -- hi Hindi [All versions nt] (Sab Ki Version NT) {Sab Ki Version NT}
 UPDATE Bible set localizedName = 'आसान-पढ़ने-पढ़ने संस्करण एनटी' WHERE bibleId = 'HNDWTC'; -- hi Hindi [Easy-reading-reading version nt] (Easy-to-Read Version NT) {Easy-to-Read Version NT}
-UPDATE Bible set localizedName = 'Hrvatska verzija za čitanje' WHERE bibleId = 'HRVERV'; -- hr Croatian [Croatian version of the reading] (Croatian Easy-to-Read Version) {Suvremeni prijevod}
+UPDATE Bible set localizedName = 'Hrvatska verzija za čitanje' WHERE bibleId = 'HRVERV'; -- hr Croatian [Croatian version for reading] (Croatian Easy-to-Read Version) {Suvremeni prijevod}
 UPDATE Bible set localizedName = 'Magyar könnyen olvasható verzió' WHERE bibleId = 'HUNERV'; -- hu Hungarian [Hungarian easy to read version] (Hungarian Easy-to-Read Version) {Egyszerű fordítás}
 UPDATE Bible set localizedName = '2014 Revideált új fordítású Biblia NT' WHERE bibleId = 'HUNRNT'; -- hu Hungarian [2014 Revised New Revised Bible NT] (2014 Revideált új fordítású Biblia NT) {2014 Revideált új fordítású Biblia NT}
 UPDATE Bible set localizedName = 'Bahasa Indonesia: Versi Mudah Dibaca' WHERE bibleId = 'INDERV'; -- id Indonesian [Indonesian: Easy to Read Version] (Indonesian: Easy-to-Read Version) {Versi Mudah Dibaca}
@@ -105,8 +105,8 @@ UPDATE Bible set localizedName = 'Clementine Vulgate MDXCVIII' WHERE bibleId = '
 -- 400 matching names LDIBSC (2007 Edition New Testament) {2007 Edition New Testament}
 UPDATE Bible set localizedName = 'സ്വതന്ത്ര മലയാളം ബൈബിൾ' WHERE bibleId = 'MALOMB'; -- ml Malayalam [Free Bible] (The Free Malayalam Bible) {മലയാളം ബൈബിൾ}
 UPDATE Bible set localizedName = 'സത്യവേദപുസ്തകം' WHERE bibleId = 'MALTBK'; -- ml Malayalam [The Book of Psalms] (Sathyavedapusthakam (The Book) 1910) {സത്യവേദപുസ്തകം}
-UPDATE Bible set localizedName = 'मराठी: सुलभ वाचा आवृत्ती' WHERE bibleId = 'MARERV'; -- mr Marathi [Marathi: Easy read version] (Marathi: Easy-to-Read Version) {Marathi: Easy-to-Read Version}
-UPDATE Bible set localizedName = 'मुक्त मराठी बायबल' WHERE bibleId = 'MAROMB'; -- mr Marathi [Free Marathi Bible] (The Free Marathi Bible) {मराठी बायबल}
+UPDATE Bible set localizedName = 'मराठी: सुलभ वाचन आवृत्ती' WHERE bibleId = 'MARERV'; -- mr Marathi [Marathi: Easy reading version] (Marathi: Easy-to-Read Version) {Marathi: Easy-to-Read Version}
+UPDATE Bible set localizedName = 'फ्री मराठी बायबल' WHERE bibleId = 'MAROMB'; -- mr Marathi [Free Marathi Bibles] (The Free Marathi Bible) {मराठी बायबल}
 UPDATE Bible set localizedName = '2015 संस्करण एनटी' WHERE bibleId = 'MARWTC'; -- mr Marathi [2015 version nt] (2015 Edition NT) {2015 Edition NT}
 UPDATE Bible set localizedName = 'Malagasy' WHERE bibleId = 'MEXEIV'; -- mg Malagasy [Malagasy] (Bible) {Bible}
 UPDATE Bible set localizedName = 'Malagasy' WHERE bibleId = 'MEXRPV'; -- mg Malagasy [Malagasy] (Bible) {Bible}
@@ -151,8 +151,8 @@ UPDATE Bible set localizedName = 'Mushog Testamento' WHERE bibleId = 'QXOLLB'; -
 UPDATE Bible set localizedName = '2010 Edition NT' WHERE bibleId = 'QXRBSE'; -- qu Cañar Highland Quichua [None] (2010 Edition NT) {2010 Edition NT}
 UPDATE Bible set localizedName = 'Română: Versiune ușor de citit' WHERE bibleId = 'RONERV'; -- ro Romanian [English: Readable version] (Romanian: Easy-to-Read Version) {Traducere în limba română modernă}
 UPDATE Bible set localizedName = 'Biblie' WHERE bibleId = 'RUMWTC'; -- ro Romanian [Bible] (Bible) {Bible}
-UPDATE Bible set localizedName = 'Русский синодальный перевод' WHERE bibleId = 'RUSS76'; -- ru Russian [Russian Synodal Translation] (Russian Synodal Translation) {Синодальный перевод}
-UPDATE Bible set localizedName = 'Выпуск 2014 OT' WHERE bibleId = 'RUSWTC'; -- ru Russian [Release 2014 OT] (2014 Edition OT) {2014 Edition OT}
+UPDATE Bible set localizedName = 'Русский синодальный перевод' WHERE bibleId = 'RUSS76'; -- ru Russian [Russian synodal translation] (Russian Synodal Translation) {Синодальный перевод}
+UPDATE Bible set localizedName = 'Выпуск 2014 OT' WHERE bibleId = 'RUSWTC'; -- ru Russian [2014 OT Edition] (2014 Edition OT) {2014 Edition OT}
 UPDATE Bible set localizedName = 'Kitaabka Quduuska Ah' WHERE bibleId = 'SOMSIM'; -- so Somali [The Bible] (Somali Bible) {Kitaabka Quduuska Ah}
 UPDATE Bible set localizedName = 'Reina Valera 1909' WHERE bibleId = 'SPARV09'; -- es Spanish [King James Version 1909] (Reina Valera 1909) {Santa Biblia — Reina Valera 1909}
 UPDATE Bible set localizedName = 'Biblia' WHERE bibleId = 'SPNLPS'; -- es Spanish [Bible] (Bible) {Bible}
