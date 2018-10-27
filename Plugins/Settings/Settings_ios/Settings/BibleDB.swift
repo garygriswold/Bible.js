@@ -56,7 +56,7 @@ struct BibleDB {
         do {
             db = try self.getBibleDB()
             let sql = "SELECT html FROM Chapters WHERE bookId = ? AND chapter = ?"
-            let resultSet = try db.queryHTMLv0(sql: sql, values: [reference.bibleId, reference.chapter])
+            let resultSet = try db.queryHTMLv0(sql: sql, values: [reference.bookId, reference.chapter])
             return (resultSet.count > 0) ? resultSet : nil
         } catch let err {
             print("ERROR BibleDB.getBiblePage \(err)")
