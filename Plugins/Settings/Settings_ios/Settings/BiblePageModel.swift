@@ -36,8 +36,8 @@ class BiblePage { // Not a struct because closure could not set property
     
     func loadPage(webView: WKWebView) {
         let start = CFAbsoluteTimeGetCurrent()
-        let bibleDB = BibleDB(bible: self.bible) // Maybe this should be Singleton
-        self.html = bibleDB.getBiblePage(reference: self.reference)
+        let bibleDB = BibleDB(bibleId: self.bible.bibleId) // Maybe this should be Singleton
+        self.html = bibleDB.getBiblePage(bookId: reference.bookId, chapter: self.reference.chapter)
         if self.html == nil {
             let s3Key = self.generateKey(keyPrefix: bible.s3KeyPrefix, key: bible.s3Key,
                                          bookId: book.bookId, chapter: self.reference.chapter)
@@ -46,7 +46,9 @@ class BiblePage { // Not a struct because closure could not set property
                     if let data1 = data {
                         self.html = data1
                         webView.loadHTMLString(data1, baseURL: nil)
-                        _ = bibleDB.storeBiblePage(html: data1, reference: self.reference)
+                        _ = bibleDB.storeBiblePage(bookId: self.reference.bookId,
+                                                   chapter: self.reference.chapter,
+                                                   html: data1)
                         print("*** BiblePage.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                     }
             })

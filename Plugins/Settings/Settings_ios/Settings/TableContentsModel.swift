@@ -33,7 +33,7 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         self.index = [String]()
         self.filtered = [Book]()
         let start: Double = CFAbsoluteTimeGetCurrent()
-        let bibleDB = BibleDB(bible: bible)
+        let bibleDB = BibleDB(bibleId: bible.bibleId)
         self.books = bibleDB.getTableContents()
         self.index = self.buildIndex()
         if self.books.count < 1 {

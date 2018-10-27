@@ -10,12 +10,12 @@ import Utility
 
 struct BibleDB {
     
-    let bible: Bible
+    let bibleId: String
     let dbname: String
     
-    init(bible: Bible) {
-        self.bible = bible
-        self.dbname = bible.bibleId + ".db"
+    init(bibleId: String) {
+        self.bibleId = bibleId
+        self.dbname = bibleId + ".db"
     }
     
     func getTableContents() -> [Book] {
@@ -51,12 +51,12 @@ struct BibleDB {
         })
     }
     
-    func getBiblePage(reference: Reference) -> String? {
+    func getBiblePage(bookId: String, chapter: Int) -> String? {
         let db: Sqlite3
         do {
             db = try self.getBibleDB()
             let sql = "SELECT html FROM Chapters WHERE bookId = ? AND chapter = ?"
-            let resultSet = try db.queryHTMLv0(sql: sql, values: [reference.bookId, reference.chapter])
+            let resultSet = try db.queryHTMLv0(sql: sql, values: [bookId, chapter])
             return (resultSet.count > 0) ? resultSet : nil
         } catch let err {
             print("ERROR BibleDB.getBiblePage \(err)")
@@ -64,10 +64,10 @@ struct BibleDB {
         }
     }
     
-    func storeBiblePage(html: String, reference: Reference) {
+    func storeBiblePage(bookId: String, chapter: Int, html: String) {
         DispatchQueue.main.async(execute: {
             let db: Sqlite3
-            let values: [Any] = [reference.bookId, reference.chapter, html]
+            let values: [Any] = [bookId, chapter, html]
             do {
                 db = try self.getBibleDB()
                 let sql = "REPLACE INTO Chapters (bookId, chapter, html) VALUES (?,?,?)"
