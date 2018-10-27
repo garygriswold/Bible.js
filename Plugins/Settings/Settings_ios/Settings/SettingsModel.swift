@@ -24,6 +24,8 @@ struct Bible : Equatable {
     let abbr: String        // Version Abbreviation
     let iso3: String        // SIL 3 char SIL language code
     let name: String        // Name in the language, but sometimes in English
+    let s3KeyPrefix: String // Part of S3 key that is common to all objects of a Bible
+    let s3Key: String       // Template of part of S3 key that identifies object
     let locale: Locale      // The user locale that is associated
     
     static func == (lhs: Bible, rhs: Bible) -> Bool {

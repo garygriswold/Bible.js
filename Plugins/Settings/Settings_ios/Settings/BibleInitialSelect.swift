@@ -16,7 +16,7 @@
 import Utility
 
 /**
- * Used only by BibleInitialSelectExperiment
+ * Deprecated: Used only by BibleInitialSelectExperiment
  */
 struct BibleDetail : Equatable {
     let bibleId: String
@@ -123,15 +123,19 @@ struct BibleInitialSelect {
         let name: String        // Name in the language, but sometimes in English
         let script: String?     // Optional script code of the Bible
         let country: String?    // Optional country code of the Bible
+        let s3KeyPrefix: String
+        let s3Key: String
         var score: Float
         
-        init(bibleId: String, abbr: String, iso3: String, name: String, script: String?, country: String?, score: Float) {
+        init(bibleId: String, abbr: String, iso3: String, name: String, script: String?, country: String?, s3KeyPrefix: String, s3Key: String, score: Float) {
             self.bibleId = bibleId
             self.abbr = abbr
             self.iso3 = iso3
             self.name = name
             self.script = script
             self.country = country
+            self.s3KeyPrefix = s3KeyPrefix
+            self.s3Key = s3Key
             self.score = score
         }
         
@@ -158,7 +162,8 @@ struct BibleInitialSelect {
                 _ = biblesSorted.popLast()
             }
             for bb in biblesSorted {
-                let bible = Bible(bibleId: bb.bibleId, abbr: bb.abbr, iso3: bb.iso3, name: bb.name, locale: locale)
+                let bible = Bible(bibleId: bb.bibleId, abbr: bb.abbr, iso3: bb.iso3, name: bb.name,
+                                  s3KeyPrefix: bb.s3KeyPrefix, s3Key: bb.s3Key, locale: locale)
                 if !selected.contains(bible) {
                     selected.append(bible)
                 }
@@ -208,8 +213,8 @@ struct BibleInitialSelect {
         for lang in languages {
             langScore[lang.iso3] = lang.score
         }
-        let sql =  "SELECT bibleId, abbr, iso3, name, script, country FROM Bible WHERE iso3" +
-            self.adapter.genQuest(array: languages)
+        let sql =  "SELECT bibleId, abbr, iso3, name, script, country, s3KeyPrefix, s3Key" +
+                " FROM Bible WHERE iso3" + self.adapter.genQuest(array: languages)
 
         var bibles = [BibleScore]()
         let iso3s = languages.map { $0.iso3 }
@@ -220,7 +225,8 @@ struct BibleInitialSelect {
                 let iso3 = row[2]!
                 let score = (langScore[iso3] != nil) ? langScore[iso3]! : 0.10
                 bibles.append(BibleScore(bibleId: row[0]!, abbr: row[1]!, iso3: iso3, name: row[3]!,
-                                         script: row[4], country: row[5], score: score))
+                                         script: row[4], country: row[5],
+                                         s3KeyPrefix: row[6]!, s3Key: row[6]!, score: score))
             }
         } catch let err {
             print("ERROR: BibleInitSelect.getBiblesSelected \(err)")

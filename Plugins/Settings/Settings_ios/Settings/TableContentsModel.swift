@@ -27,6 +27,7 @@ class TableContentsModel { // class is used to permit self.contents inside closu
     private var filtered: [Book]
     
     init(bible: Bible) {
+        print("****** init TableContentsModel \(bible.bibleId) ******")
         self.bible = bible
         self.books = [Book]()
         self.index = [String]()
@@ -37,7 +38,7 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         self.index = self.buildIndex()
         if self.books.count < 1 {
             AwsS3Manager.findDbp().downloadData(s3Bucket: "dbp-prod",
-                                       s3Key: "text/\(self.bible.bibleId)/\(self.bible.bibleId)/info.json",
+                                       s3Key: "\(self.bible.s3KeyPrefix)info.json",
                                        complete: { error, data in
                                         if let data1 = data {
                                             print(data1)

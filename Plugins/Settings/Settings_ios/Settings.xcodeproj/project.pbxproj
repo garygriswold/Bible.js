@@ -14,6 +14,7 @@
 		E40D605F217FC70700A06B54 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D605E217FC70700A06B54 /* HistoryViewController.swift */; };
 		E40D60612180EEA700A06B54 /* VersionsDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D60602180EEA700A06B54 /* VersionsDB.swift */; };
 		E40D60632182013300A06B54 /* AppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D60622182013300A06B54 /* AppViewController.swift */; };
+		E40D6065218252CA00A06B54 /* BiblePageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D6064218252CA00A06B54 /* BiblePageModel.swift */; };
 		E428B7E52138BD7F000AB2A8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E32138BD7F000AB2A8 /* InfoPlist.strings */; };
 		E44C056C211B7DE700476DAD /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E44C056B211B7DE700476DAD /* Versions.db */; };
 		E44C056D211BE1F700476DAD /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44C0566211B77AA00476DAD /* Utility.framework */; };
@@ -76,6 +77,7 @@
 		E40D605E217FC70700A06B54 /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		E40D60602180EEA700A06B54 /* VersionsDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionsDB.swift; sourceTree = "<group>"; };
 		E40D60622182013300A06B54 /* AppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewController.swift; sourceTree = "<group>"; };
+		E40D6064218252CA00A06B54 /* BiblePageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblePageModel.swift; sourceTree = "<group>"; };
 		E428B7E42138BD7F000AB2A8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E428B7E72138BD7F000AB2A8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E428B7E92138BF70000AB2A8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				E4C2E987211B712C00B71CC5 /* ReaderViewNavigator.swift */,
 				E40D60622182013300A06B54 /* AppViewController.swift */,
 				E404A3B92176BAA100340395 /* ReaderViewController.swift */,
+				E40D6064218252CA00A06B54 /* BiblePageModel.swift */,
 				E463896D21793DC0009BF5E2 /* HistoryModel.swift */,
 				E4C2E981211B712C00B71CC5 /* SettingsViewController.swift */,
 				E4A712FF21461090009D99E2 /* SettingsSearchController.swift */,
@@ -349,6 +352,7 @@
 				E40D605F217FC70700A06B54 /* HistoryViewController.swift in Sources */,
 				E40D60632182013300A06B54 /* AppViewController.swift in Sources */,
 				E4C2E98D211B712D00B71CC5 /* SettingsViewDataSource.swift in Sources */,
+				E40D6065218252CA00A06B54 /* BiblePageModel.swift in Sources */,
 				E49F7296216AC830007D2856 /* ExternControllerProtocol.swift in Sources */,
 				E4F66863217C377600E998CC /* TOCBooksViewController.swift in Sources */,
 				E404A3BA2176BAA100340395 /* ReaderViewController.swift in Sources */,

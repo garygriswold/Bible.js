@@ -176,7 +176,7 @@ struct SettingsAdapter {
     }
     
     private func getBiblesSelected(locale: Locale, selectedBibles: [String]) -> [Bible] {
-        let sql = "SELECT bibleId, abbr, b.iso3, b.localizedName" +
+        let sql = "SELECT bibleId, abbr, b.iso3, b.localizedName, b.s3KeyPrefix, b.s3Key" +
             " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
             " AND b.bibleId" + genQuest(array: selectedBibles) +
             " AND l.iso1 = ?" +
@@ -185,7 +185,7 @@ struct SettingsAdapter {
     }
     
     func getBiblesAvailable(locale: Locale, selectedBibles: [String]) -> [Bible] {
-        let sql = "SELECT bibleId, abbr, b.iso3, b.localizedName" +
+        let sql = "SELECT bibleId, abbr, b.iso3, b.localizedName, b.s3KeyPrefix, b.s3Key" +
             " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
             " AND b.bibleId NOT" + genQuest(array: selectedBibles) +
             " AND l.iso1 = ?" +
@@ -202,7 +202,8 @@ struct SettingsAdapter {
             let values = selectedBibles + [iso]
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: values)
             bibles = resultSet.map {
-                Bible(bibleId: $0[0]!, abbr: $0[1]!, iso3: $0[2]!, name: $0[3]!, locale: locale)
+                Bible(bibleId: $0[0]!, abbr: $0[1]!, iso3: $0[2]!, name: $0[3]!, s3KeyPrefix: $0[4]!,
+                      s3Key: $0[5]!, locale: locale)
             }
         } catch let err {
             print("ERROR: SettingsAdapter.getBibles \(err)")

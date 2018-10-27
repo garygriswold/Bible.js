@@ -16,14 +16,15 @@ struct VersionsDB {
     // Bible
     //
     func getBible(bibleId: String) -> Bible? {
-        let sql = "SELECT bibleId, abbr, iso3, localizedName FROM Bible WHERE bibleId = ?"
+        let sql = "SELECT bibleId, abbr, iso3, localizedName, s3KeyPrefix, s3Key" +
+                " FROM Bible WHERE bibleId = ?"
         do {
             let db: Sqlite3 = try self.getVersionsDB()
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: [bibleId])
             if resultSet.count > 0 && resultSet[0].count > 0 {
                 let row = resultSet[0]
                 return Bible(bibleId: row[0]!, abbr: row[1]!, iso3: row[2]!, name: row[3]!,
-                             locale: Locale.current)
+                             s3KeyPrefix: row[4]!, s3Key: row[5]!, locale: Locale.current)
             } else {
                 return nil
             }

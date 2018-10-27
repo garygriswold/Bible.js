@@ -67,11 +67,14 @@ class ReaderViewController : AppViewController {
         self.tocChapLabel.text = String(reference.chapter)
         self.versionLabel.text = reference.abbr
         
-        let bundle: Bundle = Bundle.main
-        let path = bundle.path(forResource: "www/index", ofType: "html")
-        let url = URL(fileURLWithPath: path!)
-        let request = URLRequest(url: url)
-        self.webView.load(request)
+        let biblePage = HistoryModel.shared.biblePage
+        biblePage.loadPage(webView: self.webView)
+        
+        //let bundle: Bundle = Bundle.main
+        //let path = bundle.path(forResource: "www/index", ofType: "html")
+        //let url = URL(fileURLWithPath: path!)
+        //let request = URLRequest(url: url)
+        //self.webView.load(request)
     }
     
     private func createToolbar() {

@@ -24,7 +24,8 @@ class BibleDetailViewController : AppViewController {
     }
     required init?(coder: NSCoder) {
         self.indexPath = IndexPath(item: 0, section: 0)
-        self.bible = Bible(bibleId: "", abbr: "", iso3: "", name: "", locale: Locale(identifier: "en-US"))
+        self.bible = Bible(bibleId: "", abbr: "", iso3: "", name: "", s3KeyPrefix: "", s3Key: "",
+        locale: Locale(identifier: "en-US"))
         self.textView = UITextView(frame: .zero)
         super.init(coder: coder)
     }
