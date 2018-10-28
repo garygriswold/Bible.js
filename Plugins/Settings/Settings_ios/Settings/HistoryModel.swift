@@ -67,7 +67,7 @@ struct HistoryModel {
             return self.tableContents.getBook(bookId: self.current().bookId)! /// safety
         }
     }
- 
+
     var currTableContents: TableContentsModel {
         get { return self.tableContents }
     }
@@ -78,7 +78,8 @@ struct HistoryModel {
     
     var biblePage: BiblePage {
         get {
-            return BiblePage(bible: self.currBible, book: self.currBook, chapter: self.current().chapter)
+            let curr = self.current()
+            return BiblePage(bible: self.currBible, bookId: curr.bookId, chapter: curr.chapter)
         }
     }
     

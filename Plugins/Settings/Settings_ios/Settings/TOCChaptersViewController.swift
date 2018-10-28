@@ -30,7 +30,7 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = book.name
+        self.navigationItem.title = self.book.name
         let history = NSLocalizedString("History", comment: "Button to display History")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: history, style: .plain,
                                                                  target: self,

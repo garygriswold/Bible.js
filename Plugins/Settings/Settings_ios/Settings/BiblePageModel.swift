@@ -22,32 +22,29 @@ import WebKit
 class BiblePage { // Not a struct because closure could not set property
     
     let bible: Bible
-    let book: Book
-    let reference: Reference
-    var html: String?
+    let bookId: String
+    let chapter: Int
+    var html: String? /// This is probably not needed
     
-    init(bible: Bible, book: Book, chapter: Int) {
+    init(bible: Bible, bookId: String, chapter: Int) {
         self.bible = bible
-        self.book = book
-        self.reference = Reference(bibleId: bible.bibleId, abbr: bible.abbr, bibleName: bible.name,
-                                   bookId: book.bookId, bookName: book.name,
-                                   chapter: chapter, verse: 1)
+        self.bookId = bookId
+        self.chapter = chapter
     }
     
     func loadPage(webView: WKWebView) {
         let start = CFAbsoluteTimeGetCurrent()
         let bibleDB = BibleDB(bibleId: self.bible.bibleId) // Maybe this should be Singleton
-        self.html = bibleDB.getBiblePage(bookId: reference.bookId, chapter: self.reference.chapter)
+        self.html = bibleDB.getBiblePage(bookId: self.bookId, chapter: self.chapter)
         if self.html == nil {
-            let s3Key = self.generateKey(keyPrefix: bible.s3KeyPrefix, key: bible.s3Key,
-                                         bookId: book.bookId, chapter: self.reference.chapter)
+            let s3Key = self.generateKey(keyPrefix: self.bible.s3KeyPrefix, key: self.bible.s3Key,
+                                         bookId: self.bookId, chapter: self.chapter)
             AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
                 complete: { error, data in
                     if let data1 = data {
                         self.html = data1
                         webView.loadHTMLString(data1, baseURL: nil)
-                        _ = bibleDB.storeBiblePage(bookId: self.reference.bookId,
-                                                   chapter: self.reference.chapter,
+                        _ = bibleDB.storeBiblePage(bookId: self.bookId, chapter: self.chapter,
                                                    html: data1)
                         print("*** BiblePage.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                     }
