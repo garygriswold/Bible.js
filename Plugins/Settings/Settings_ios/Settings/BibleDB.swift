@@ -10,18 +10,12 @@ import Utility
 
 struct BibleDB {
     
-    let bibleId: String
-    let dbname: String
+    static var shared = BibleDB()
     
-    init(bibleId: String) {
-        self.bibleId = bibleId
-        self.dbname = bibleId + ".db"
-    }
-    
-    func getTableContents() -> [Book] {
+    func getTableContents(bibleId: String) -> [Book] {
         let db: Sqlite3
         do {
-            db = try self.getBibleDB()
+            db = try self.getBibleDB(bibleId: bibleId)
             let sql = "SELECT bookId, ordinal, name, lastChapter FROM TableContents ORDER BY ordinal"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let toc = resultSet.map {
@@ -34,7 +28,7 @@ struct BibleDB {
         }
     }
     
-    func storeTableContents(books: [Book]) {
+    func storeTableContents(bibleId: String, books: [Book]) {
         DispatchQueue.main.async(execute: {
             let db: Sqlite3
             var values = [[Any]]()
@@ -42,7 +36,7 @@ struct BibleDB {
                 values.append([book.bookId, book.ordinal, book.name, book.lastChapter])
             }
             do {
-                db = try self.getBibleDB()
+                db = try self.getBibleDB(bibleId: bibleId)
                 let sql = "REPLACE INTO TableContents (bookId, ordinal, name, lastChapter) VALUES (?,?,?,?)"
                 _ = try db.bulkExecuteV1(sql: sql, values: values)
             } catch let err {
@@ -51,10 +45,10 @@ struct BibleDB {
         })
     }
     
-    func getBiblePage(bookId: String, chapter: Int) -> String? {
+    func getBiblePage(bibleId: String, bookId: String, chapter: Int) -> String? {
         let db: Sqlite3
         do {
-            db = try self.getBibleDB()
+            db = try self.getBibleDB(bibleId: bibleId)
             let sql = "SELECT html FROM Chapters WHERE bookId = ? AND chapter = ?"
             let resultSet = try db.queryHTMLv0(sql: sql, values: [bookId, chapter])
             return (resultSet.count > 0) ? resultSet : nil
@@ -64,12 +58,12 @@ struct BibleDB {
         }
     }
     
-    func storeBiblePage(bookId: String, chapter: Int, html: String) {
+    func storeBiblePage(bibleId: String, bookId: String, chapter: Int, html: String) {
         DispatchQueue.main.async(execute: {
             let db: Sqlite3
             let values: [Any] = [bookId, chapter, html]
             do {
-                db = try self.getBibleDB()
+                db = try self.getBibleDB(bibleId: bibleId)
                 let sql = "REPLACE INTO Chapters (bookId, chapter, html) VALUES (?,?,?)"
                 _ = try db.executeV1(sql: sql, values: values)
             } catch let err {
@@ -78,10 +72,11 @@ struct BibleDB {
         })
     }
     
-    private func getBibleDB() throws -> Sqlite3 {
+    private func getBibleDB(bibleId: String) throws -> Sqlite3 {
         var db: Sqlite3?
+        let dbname = bibleId + ".db"
         do {
-            db = try Sqlite3.findDB(dbname: self.dbname)
+            db = try Sqlite3.findDB(dbname: dbname)
         } catch Sqlite3Error.databaseNotOpenError {
             db = try Sqlite3.openDB(dbname: dbname, copyIfAbsent: false) // No more embedded Bibles
             let create1 = "CREATE TABLE IF NOT EXISTS TableContents(" +

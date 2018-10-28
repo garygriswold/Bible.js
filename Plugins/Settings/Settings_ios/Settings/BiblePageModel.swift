@@ -19,12 +19,11 @@
 import AWS
 import WebKit
 
-class BiblePage { // Not a struct because closure could not set property
+struct BiblePage {
     
-    let bible: Bible
-    let bookId: String
-    let chapter: Int
-    var html: String? /// This is probably not needed
+    private let bible: Bible
+    private let bookId: String
+    private let chapter: Int
     
     init(bible: Bible, bookId: String, chapter: Int) {
         self.bible = bible
@@ -34,23 +33,23 @@ class BiblePage { // Not a struct because closure could not set property
     
     func loadPage(webView: WKWebView) {
         let start = CFAbsoluteTimeGetCurrent()
-        let bibleDB = BibleDB(bibleId: self.bible.bibleId) // Maybe this should be Singleton
-        self.html = bibleDB.getBiblePage(bookId: self.bookId, chapter: self.chapter)
-        if self.html == nil {
+        let html = BibleDB.shared.getBiblePage(bibleId: self.bible.bibleId, bookId: self.bookId,
+                                               chapter: self.chapter)
+        if html == nil {
             let s3Key = self.generateKey(keyPrefix: self.bible.s3KeyPrefix, key: self.bible.s3Key,
                                          bookId: self.bookId, chapter: self.chapter)
             AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
                 complete: { error, data in
                     if let data1 = data {
-                        self.html = data1
                         webView.loadHTMLString(data1, baseURL: nil)
-                        _ = bibleDB.storeBiblePage(bookId: self.bookId, chapter: self.chapter,
-                                                   html: data1)
+                        _ = BibleDB.shared.storeBiblePage(bibleId: self.bible.bibleId,
+                                                          bookId: self.bookId, chapter: self.chapter,
+                                                          html: data1)
                         print("*** BiblePage.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                     }
             })
         } else {
-            webView.loadHTMLString(self.html!, baseURL: nil)
+            webView.loadHTMLString(html!, baseURL: nil)
         }
     }
     

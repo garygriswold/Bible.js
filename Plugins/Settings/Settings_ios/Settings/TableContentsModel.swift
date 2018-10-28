@@ -35,9 +35,7 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         self.index = [String]()
         self.filtered = [Book]()
         let start: Double = CFAbsoluteTimeGetCurrent()
-        let bibleDB = BibleDB(bibleId: bible.bibleId)
-        self.books = bibleDB.getTableContents()
-
+        self.books = BibleDB.shared.getTableContents(bibleId: bible.bibleId)
         if self.books.count < 1 {
             AwsS3Manager.findDbp().downloadData(s3Bucket: "dbp-prod",
                                        s3Key: "\(self.bible.s3KeyPrefix)info.json",
@@ -47,7 +45,8 @@ class TableContentsModel { // class is used to permit self.contents inside closu
                                             self.books = self.parseJSON(data: data1)
                                             self.bookMap = self.buildMap()
                                             self.index = self.buildIndex()
-                                            _ = bibleDB.storeTableContents(books: self.books)
+                                            _ = BibleDB.shared.storeTableContents(bibleId: bible.bibleId,
+                                                                                  books: self.books)
                                             print("*** TableContentsModel.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                                         }
             })
