@@ -21,29 +21,27 @@ import WebKit
 
 struct BiblePage {
     
-    private let bible: Bible
-    private let bookId: String
-    private let chapter: Int
+    private let reference: Reference
     
-    init(bible: Bible, bookId: String, chapter: Int) {
-        self.bible = bible
-        self.bookId = bookId
-        self.chapter = chapter
+    init(reference: Reference) {
+        self.reference = reference
     }
     
     func loadPage(webView: WKWebView) {
         let start = CFAbsoluteTimeGetCurrent()
-        let html = BibleDB.shared.getBiblePage(bibleId: self.bible.bibleId, bookId: self.bookId,
-                                               chapter: self.chapter)
+        let html = BibleDB.shared.getBiblePage(bibleId: self.reference.bibleId,
+                                               bookId: self.reference.bookId,
+                                               chapter: self.reference.chapter)
         if html == nil {
-            let s3Key = self.generateKey(keyPrefix: self.bible.s3KeyPrefix, key: self.bible.s3Key,
-                                         bookId: self.bookId, chapter: self.chapter)
+            let s3Key = self.generateKey(keyPrefix: self.reference.s3KeyPrefix, key: self.reference.s3Key,
+                                         bookId: self.reference.bookId, chapter: self.reference.chapter)
             AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
                 complete: { error, data in
                     if let data1 = data {
                         webView.loadHTMLString(data1, baseURL: nil)
-                        _ = BibleDB.shared.storeBiblePage(bibleId: self.bible.bibleId,
-                                                          bookId: self.bookId, chapter: self.chapter,
+                        _ = BibleDB.shared.storeBiblePage(bibleId: self.reference.bibleId,
+                                                          bookId: self.reference.bookId,
+                                                          chapter: self.reference.chapter,
                                                           html: data1)
                         print("*** BiblePage.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                     }

@@ -103,10 +103,7 @@ struct HistoryModel {
     }
     
     var biblePage: BiblePage {
-        get {
-            let curr = self.current()
-            return BiblePage(bible: self.currBible, bookId: curr.bookId, chapter: curr.chapter)
-        }
+        get { return BiblePage(reference: self.current()) }
     }
     
     func getHistory(row: Int) -> Reference {
