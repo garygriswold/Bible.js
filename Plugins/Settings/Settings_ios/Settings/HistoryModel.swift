@@ -80,15 +80,14 @@ struct HistoryModel {
             self.index = 0
             SettingsDB.shared.storeHistory(reference: self.history[0])
         }
-        let curr = self.history.last!
-        let bible = VersionsDB.shared.getBible(bibleId: curr.bibleId)! /// safety
-        self.tableContents = TableContentsModel(bible: bible)
+        let curr = self.history[self.index]
+        self.tableContents = TableContentsModel(bible: curr.bible)
     }
     
     var currBible: Bible {
-        get { return self.tableContents.bible }
+        get { return self.current().bible }
     }
- 
+
     var currBook: Book {
         get {
             return self.tableContents.getBook(bookId: self.current().bookId)! /// safety
@@ -116,27 +115,23 @@ struct HistoryModel {
 
     mutating func changeBible(bible: Bible) {
         self.tableContents = TableContentsModel(bible: bible)
-        if let top = self.history.last {
-            let ref = Reference(bibleId: bible.bibleId, bookId: top.bookId, bookName: top.bookName,
-                                chapter: top.chapter, verse: top.verse)
-            self.add(reference: ref)
-        } else {
-            print("Unable to add history, because empty in changeBible")
-        }
+        let curr = self.current()
+        let ref = Reference(bibleId: bible.bibleId, bookId: curr.bookId, bookName: curr.bookName,
+                            chapter: curr.chapter, verse: curr.verse)
+        self.add(reference: ref)
     }
     
     mutating func changeReference(book: Book, chapter: Int) {
-        let bible = self.tableContents.bible
-        let ref = Reference(bibleId: bible.bibleId, bookId: book.bookId, bookName: book.name,
+        let curr = self.current()
+        let ref = Reference(bibleId: curr.bibleId, bookId: book.bookId, bookName: book.name,
                             chapter: chapter, verse: 1)
         self.add(reference: ref)
     }
     
     mutating func changeReference(reference: Reference) {
-        if reference.bibleId != self.tableContents.bible.bibleId {
-            if let bible = VersionsDB.shared.getBible(bibleId: reference.bibleId) {
-                self.tableContents = TableContentsModel(bible: bible)
-            }
+        let curr = self.current()
+        if reference.bibleId != curr.bibleId {
+            self.tableContents = TableContentsModel(bible: curr.bible)
         }
         self.add(reference: reference)
     }

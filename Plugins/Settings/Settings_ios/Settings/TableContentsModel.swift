@@ -21,8 +21,9 @@ struct Book : Equatable {
 
 class TableContentsModel { // class is used to permit self.contents inside closure
     
-    let bible: Bible
+    private let bible: Bible
     private var books: [Book]
+    private var bookMap: [String:Book]
     private var index: [String]
     private var filtered: [Book]
     
@@ -30,12 +31,13 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         print("****** init TableContentsModel \(bible.bibleId) ******")
         self.bible = bible
         self.books = [Book]()
+        self.bookMap = [String:Book]()
         self.index = [String]()
         self.filtered = [Book]()
         let start: Double = CFAbsoluteTimeGetCurrent()
         let bibleDB = BibleDB(bibleId: bible.bibleId)
         self.books = bibleDB.getTableContents()
-        self.index = self.buildIndex()
+
         if self.books.count < 1 {
             AwsS3Manager.findDbp().downloadData(s3Bucket: "dbp-prod",
                                        s3Key: "\(self.bible.s3KeyPrefix)info.json",
@@ -43,11 +45,15 @@ class TableContentsModel { // class is used to permit self.contents inside closu
                                         if let data1 = data {
                                             print(data1)
                                             self.books = self.parseJSON(data: data1)
+                                            self.bookMap = self.buildMap()
                                             self.index = self.buildIndex()
                                             _ = bibleDB.storeTableContents(books: self.books)
                                             print("*** TableContentsModel.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                                         }
             })
+        } else {
+            self.bookMap = self.buildMap()
+            self.index = self.buildIndex()
         }
         print("*** TableContentsModel.DB load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
     }
@@ -93,6 +99,14 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         return books
     }
     
+    private func buildMap() -> [String:Book] {
+        var map = [String:Book]()
+        for book in self.books {
+            map[book.bookId] = book
+        }
+        return map
+    }
+    
     private func buildIndex() -> [String] {
         var idxSet = Set<String>()
         for book in books {
@@ -116,16 +130,9 @@ class TableContentsModel { // class is used to permit self.contents inside closu
             return (row >= 0 && row < self.books.count) ? self.books[row] : nil
         }
     }
- 
-    /// Is this really the right way to do this, why not keep and index, not the argument
+
     func getBook(bookId: String) -> Book? {
-        for book in self.books {
-            if book.bookId == bookId {
-                return book
-            }
-        }
-        //return nil
-        return self.books[0] /////// Could I be getting a bookId for a version that does have one?
+        return self.bookMap[bookId]
     }
 
     func generateBookCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
