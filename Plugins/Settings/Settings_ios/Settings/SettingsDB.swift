@@ -63,14 +63,13 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "SELECT bibleId, abbr, bibleName, bookId, bookName, chapter, verse" +
+            let sql = "SELECT bibleId, bookId, bookName, chapter, verse" +
                     " FROM History ORDER BY datetime asc limit 100"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let history = resultSet.map {
-                Reference(bibleId: $0[0]!, abbr: $0[1]!, bibleName: $0[2]!,
-                          bookId: $0[3]!, bookName: $0[4]!,
-                          chapter: Int($0[5]!) ?? 1,
-                          verse: Int($0[6]!) ?? 1)
+                Reference(bibleId: $0[0]!, bookId: $0[1]!, bookName: $0[2]!,
+                          chapter: Int($0[3]!) ?? 1,
+                          verse: Int($0[4]!) ?? 1)
             }
             return history
         } catch {
@@ -82,12 +81,11 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "INSERT INTO History (bibleId, abbr, bibleName, bookId, bookName, chapter, verse," +
-                    " datetime) VALUES (?,?,?,?,?,?,?,?)"
+            let sql = "INSERT INTO History (bibleId, bookId, bookName, chapter, verse," +
+                    " datetime) VALUES (?,?,?,?,?,?)"
             let datetime = Date().description
-            let values: [Any] = [reference.bibleId, reference.abbr, reference.bibleName,
-                                 reference.bookId, reference.bookName, reference.chapter,
-                                 reference.verse, datetime]
+            let values: [Any] = [reference.bibleId, reference.bookId, reference.bookName,
+                                 reference.chapter, reference.verse, datetime]
             _ = try db.executeV1(sql: sql, values: values)
         } catch {
             
@@ -118,8 +116,6 @@ struct SettingsDB {
             _ = try db?.executeV1(sql: create1, values: [])
             let create2 = "CREATE TABLE IF NOT EXISTS History(" +
                 " bibleId TEXT NOT NULL," +
-                " abbr TEXT NOT NULL," +
-                " bibleName TEXT NOT NULL," +
                 " bookId TEXT NOT NULL," +
                 " bookName TEXT NOT NULL," +
                 " chapter INT NOT NULL," +

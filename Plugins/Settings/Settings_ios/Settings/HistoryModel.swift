@@ -9,9 +9,10 @@
 import Utility
 
 struct Reference : Equatable {
+    
+    private static var bibleMap = [String:Bible]()
+    
     let bibleId: String
-    let abbr: String
-    let bibleName: String
     let bookId: String
     let bookName: String
     let chapter: Int
@@ -22,6 +23,33 @@ struct Reference : Equatable {
             lhs.bookId == rhs.bookId &&
             lhs.chapter == rhs.chapter &&
             lhs.verse == rhs.verse
+    }
+    
+    var abbr: String {
+        get { return self.bible.abbr }
+    }
+    
+    var bibleName: String {
+        get { return self.bible.name }
+    }
+    
+    var s3KeyPrefix: String {
+        get { return self.bible.s3KeyPrefix }
+    }
+    
+    var s3Key: String {
+        get { return self.bible.s3Key }
+    }
+    
+    var bible: Bible {
+        get {
+            var bibl = Reference.bibleMap[self.bibleId]
+            if bibl == nil {
+                bibl = VersionsDB.shared.getBible(bibleId: self.bibleId)
+                Reference.bibleMap[self.bibleId] = bibl
+            }
+            return bibl!
+        }
     }
     
     func description() -> String {
@@ -46,8 +74,7 @@ struct HistoryModel {
         self.index = self.history.count - 1
         if self.history.count < 1 {
             /// How do I really get the preferred version, not this default
-            let reference = Reference(bibleId: "ENGWEB", abbr: "WEB",
-                                      bibleName: "World English", bookId: "JHN",
+            let reference = Reference(bibleId: "ENGWEB", bookId: "JHN",
                                       bookName: "John", chapter: 3, verse: 1)
             self.history.append(reference)
             self.index = 0
@@ -90,8 +117,7 @@ struct HistoryModel {
     mutating func changeBible(bible: Bible) {
         self.tableContents = TableContentsModel(bible: bible)
         if let top = self.history.last {
-            let ref = Reference(bibleId: bible.bibleId, abbr: bible.abbr, bibleName: bible.name,
-                                bookId: top.bookId, bookName: top.bookName,
+            let ref = Reference(bibleId: bible.bibleId, bookId: top.bookId, bookName: top.bookName,
                                 chapter: top.chapter, verse: top.verse)
             self.add(reference: ref)
         } else {
@@ -101,8 +127,7 @@ struct HistoryModel {
     
     mutating func changeReference(book: Book, chapter: Int) {
         let bible = self.tableContents.bible
-        let ref = Reference(bibleId: bible.bibleId, abbr: bible.abbr, bibleName: bible.name,
-                            bookId: book.bookId, bookName: book.name,
+        let ref = Reference(bibleId: bible.bibleId, bookId: book.bookId, bookName: book.name,
                             chapter: chapter, verse: 1)
         self.add(reference: ref)
     }

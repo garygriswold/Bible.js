@@ -68,7 +68,8 @@ class HistoryViewController : AppViewController, UITableViewDataSource, UITableV
     // Delegate
     //
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let ref = HistoryModel.shared.getHistory(row: indexPath.row)
+        let index = HistoryModel.shared.historyCount - indexPath.row - 1
+        let ref = HistoryModel.shared.getHistory(row: index)
         tableView.deselectRow(at: indexPath, animated: true)
         HistoryModel.shared.changeReference(reference: ref)
         self.navigationController?.popToRootViewController(animated: true)

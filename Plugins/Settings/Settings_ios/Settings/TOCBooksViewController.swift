@@ -10,8 +10,8 @@ import UIKit
 
 class TOCBooksViewController : AppViewController, UITableViewDataSource, UITableViewDelegate {
 
-    var dataModel: TableContentsModel!
-    var tableView: UITableView!
+    private var dataModel: TableContentsModel!
+    private var tableView: UITableView!
     
     deinit {
         print("**** deinit TOCBooksViewController ******")
@@ -84,12 +84,12 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
     }
     
     @objc func sortHandler(sender: UISegmentedControl) {
-        dataModel.clearFilteredBooks()
+        self.dataModel.clearFilteredBooks()
         let index = sender.selectedSegmentIndex
         if index == 0 {
-            dataModel.sortBooksTraditional()
+            self.dataModel.sortBooksTraditional()
         } else {
-            dataModel.sortBooksAlphabetical()
+            self.dataModel.sortBooksAlphabetical()
         }
         self.tableView.reloadData()
         self.positionMidView(midview: false)
