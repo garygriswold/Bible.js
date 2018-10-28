@@ -12,6 +12,8 @@ struct SettingsDB {
     
     static var shared = SettingsDB()
     
+    private init() {}
+    
     //
     // Settings Table
     //

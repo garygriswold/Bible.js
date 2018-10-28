@@ -12,6 +12,8 @@ struct VersionsDB {
     
     static var shared = VersionsDB()
     
+    private init() {}
+    
     //
     // Bible
     //

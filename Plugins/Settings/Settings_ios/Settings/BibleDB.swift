@@ -12,6 +12,8 @@ struct BibleDB {
     
     static var shared = BibleDB()
     
+    private init() {}
+    
     func getTableContents(bibleId: String) -> [Book] {
         let db: Sqlite3
         do {
