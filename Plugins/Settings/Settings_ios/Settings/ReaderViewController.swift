@@ -62,13 +62,15 @@ class ReaderViewController : AppViewController {
     }
     
     func loadBiblePage(reference: Reference) {
+        let biblePage = HistoryModel.shared.biblePage
+        biblePage.loadPage(webView: self.webView)
+        
         self.tocBookLabel.frame = CGRect(x: 0, y: 0, width: 80, height: 32) // prevents fields running together
         self.tocBookLabel.text = reference.bookName
         self.tocChapLabel.text = String(reference.chapter)
         self.versionLabel.text = reference.abbr
         
-        let biblePage = HistoryModel.shared.biblePage
-        biblePage.loadPage(webView: self.webView)
+
         
         //let bundle: Bundle = Bundle.main
         //let path = bundle.path(forResource: "www/index", ofType: "html")
