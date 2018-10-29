@@ -27,6 +27,18 @@ struct Bible : Equatable {
     let s3KeyPrefix: String // Part of S3 key that is common to all objects of a Bible
     let s3Key: String       // Template of part of S3 key that identifies object
     let locale: Locale      // The user locale that is associated
+    var tableContents: TableContentsModel?
+    
+    init(bibleId: String, abbr: String, iso3: String, name: String,
+         s3KeyPrefix: String, s3Key: String, locale: Locale) {
+        self.bibleId = bibleId
+        self.abbr = abbr
+        self.iso3 = iso3
+        self.name = name
+        self.s3KeyPrefix = s3KeyPrefix
+        self.s3Key = s3Key
+        self.locale = locale
+    }
     
     static func == (lhs: Bible, rhs: Bible) -> Bool {
         return lhs.bibleId == rhs.bibleId

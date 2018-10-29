@@ -41,12 +41,12 @@ struct Reference : Equatable {
     
     var bible: Bible {
         get {
-            var bibl = Reference.bibleMap[self.bibleId]
-            if bibl == nil {
-                bibl = VersionsDB.shared.getBible(bibleId: self.bibleId)
-                Reference.bibleMap[self.bibleId] = bibl
-            }
-            return bibl!
+            let bibl1 = Reference.bibleMap[self.bibleId]
+            if bibl1 != nil { return bibl1! }
+            var bibl2 = VersionsDB.shared.getBible(bibleId: self.bibleId)
+            bibl2.tableContents = TableContentsModel(bible: bibl2)
+            Reference.bibleMap[self.bibleId] = bibl2
+            return bibl2
         }
     }
     

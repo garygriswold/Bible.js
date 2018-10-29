@@ -10,7 +10,6 @@ struct HistoryModel {
     
     static var shared = HistoryModel()
     
-    private var tableContents: TableContentsModel
     private var history = [Reference]()
     private var index = 0
     
@@ -25,8 +24,6 @@ struct HistoryModel {
             self.index = 0
             SettingsDB.shared.storeHistory(reference: self.history[0])
         }
-        let curr = self.history[self.index]
-        self.tableContents = TableContentsModel(bible: curr.bible)
     }
     
     var currBible: Bible {
@@ -35,12 +32,13 @@ struct HistoryModel {
 
     var currBook: Book {
         get {
-            return self.tableContents.getBook(bookId: self.current().bookId)! /// safety
+            let curr = self.current()
+            return curr.bible.tableContents!.getBook(bookId: curr.bookId)!  // unsafe
         }
     }
 
     var currTableContents: TableContentsModel {
-        get { return self.tableContents }
+        get { return self.current().bible.tableContents! }
     }
     
     var historyCount: Int {
@@ -56,7 +54,6 @@ struct HistoryModel {
     }
 
     mutating func changeBible(bible: Bible) {
-        self.tableContents = TableContentsModel(bible: bible)
         let curr = self.current()
         let ref = Reference(bibleId: bible.bibleId, bookId: curr.bookId, bookName: curr.bookName,
                             chapter: curr.chapter, verse: curr.verse)
@@ -71,10 +68,6 @@ struct HistoryModel {
     }
     
     mutating func changeReference(reference: Reference) {
-        let curr = self.current()
-        if reference.bibleId != curr.bibleId {
-            self.tableContents = TableContentsModel(bible: curr.bible)
-        }
         self.add(reference: reference)
     }
     
