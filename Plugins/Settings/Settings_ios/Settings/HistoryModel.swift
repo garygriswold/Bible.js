@@ -18,8 +18,7 @@ struct HistoryModel {
         self.index = self.history.count - 1
         if self.history.count < 1 {
             /// How do I really get the preferred version, not this default
-            let reference = Reference(bibleId: "ENGWEB", bookId: "JHN",
-                                      bookName: "John", chapter: 3, verse: 1)
+            let reference = Reference(bibleId: "ENGWEB", bookId: "JHN", chapter: 3, verse: 1)
             self.history.append(reference)
             self.index = 0
             SettingsDB.shared.storeHistory(reference: self.history[0])
@@ -30,11 +29,8 @@ struct HistoryModel {
         get { return self.current().bible }
     }
 
-    var currBook: Book {
-        get {
-            let curr = self.current()
-            return curr.bible.tableContents!.getBook(bookId: curr.bookId)!  // unsafe
-        }
+    var currBook: Book? { // nil only when TOC data has not arrived from AWS yet.
+        get { return self.current().book }
     }
 
     var currTableContents: TableContentsModel {
@@ -55,14 +51,14 @@ struct HistoryModel {
 
     mutating func changeBible(bible: Bible) {
         let curr = self.current()
-        let ref = Reference(bibleId: bible.bibleId, bookId: curr.bookId, bookName: curr.bookName,
+        let ref = Reference(bibleId: bible.bibleId, bookId: curr.bookId,
                             chapter: curr.chapter, verse: curr.verse)
         self.add(reference: ref)
     }
     
     mutating func changeReference(book: Book, chapter: Int) {
         let curr = self.current()
-        let ref = Reference(bibleId: curr.bibleId, bookId: book.bookId, bookName: book.name,
+        let ref = Reference(bibleId: curr.bibleId, bookId: book.bookId,
                             chapter: chapter, verse: 1)
         self.add(reference: ref)
     }

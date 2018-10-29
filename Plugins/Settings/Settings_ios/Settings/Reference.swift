@@ -12,7 +12,6 @@ struct Reference : Equatable {
     
     let bibleId: String
     let bookId: String
-    let bookName: String
     let chapter: Int
     let verse: Int
     
@@ -48,6 +47,20 @@ struct Reference : Equatable {
             Reference.bibleMap[self.bibleId] = bibl2
             return bibl2
         }
+    }
+    
+    var bookName: String {
+        get {
+            if let book = self.book {
+                return book.name
+            } else {
+                return self.bookId
+            }
+        }
+    }
+    
+    var book: Book? { // Will return null if TOC has not yet arrived from AWS
+        get { return self.bible.tableContents!.getBook(bookId: self.bookId) }
     }
     
     func description() -> String {

@@ -65,13 +65,12 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "SELECT bibleId, bookId, bookName, chapter, verse" +
+            let sql = "SELECT bibleId, bookId, chapter, verse" +
                     " FROM History ORDER BY datetime asc limit 100"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let history = resultSet.map {
-                Reference(bibleId: $0[0]!, bookId: $0[1]!, bookName: $0[2]!,
-                          chapter: Int($0[3]!) ?? 1,
-                          verse: Int($0[4]!) ?? 1)
+                Reference(bibleId: $0[0]!, bookId: $0[1]!,
+                          chapter: Int($0[2]!) ?? 1, verse: Int($0[3]!) ?? 1)
             }
             return history
         } catch {
@@ -83,8 +82,8 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "INSERT INTO History (bibleId, bookId, bookName, chapter, verse," +
-                    " datetime) VALUES (?,?,?,?,?,?)"
+            let sql = "INSERT INTO History (bibleId, bookId, chapter, verse," +
+                    " datetime) VALUES (?,?,?,?,?)"
             let datetime = Date().description
             let values: [Any] = [reference.bibleId, reference.bookId, reference.bookName,
                                  reference.chapter, reference.verse, datetime]
@@ -112,14 +111,12 @@ struct SettingsDB {
             db = try Sqlite3.findDB(dbname: dbname)
         } catch Sqlite3Error.databaseNotOpenError {
             db = try Sqlite3.openDB(dbname: dbname, copyIfAbsent: false)
-            // Caution, this create table comes from AppUpdate.js and must be consistent with it.
             let create1 = "CREATE TABLE IF NOT EXISTS Settings(" +
                 " name TEXT PRIMARY KEY NOT NULL, value TEXT NULL)"
             _ = try db?.executeV1(sql: create1, values: [])
             let create2 = "CREATE TABLE IF NOT EXISTS History(" +
                 " bibleId TEXT NOT NULL," +
                 " bookId TEXT NOT NULL," +
-                " bookName TEXT NOT NULL," +
                 " chapter INT NOT NULL," +
                 " verse INT NOT NULL," +
             " datetime TEXT NOT NULL)"
