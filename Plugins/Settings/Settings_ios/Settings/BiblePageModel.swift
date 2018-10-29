@@ -21,6 +21,8 @@ import WebKit
 
 struct BiblePage {
     
+    private static var mobileCSS: String = ""
+    
     private let reference: Reference
     
     init(reference: Reference) {
@@ -38,7 +40,7 @@ struct BiblePage {
             AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
                 complete: { error, data in
                     if let data1 = data {
-                        webView.loadHTMLString(data1, baseURL: nil)
+                        webView.loadHTMLString(data1 + self.getCSS(), baseURL: nil)
                         _ = BibleDB.shared.storeBiblePage(bibleId: self.reference.bibleId,
                                                           bookId: self.reference.bookId,
                                                           chapter: self.reference.chapter,
@@ -47,7 +49,7 @@ struct BiblePage {
                     }
             })
         } else {
-            webView.loadHTMLString(html!, baseURL: nil)
+            webView.loadHTMLString(html! + getCSS(), baseURL: nil)
         }
     }
     
@@ -96,6 +98,22 @@ struct BiblePage {
             }
         }
         return keyPrefix + result.joined()
+    }
+    
+    private func getCSS() -> String {
+        if BiblePage.mobileCSS.count == 0 {
+            let bundle: Bundle = Bundle.main
+            let path = bundle.path(forResource: "www/mobile", ofType: "css")
+            let url = URL(fileURLWithPath: path!)
+            do {
+                let css = try String(contentsOf: url)
+                let hideNav = ".header { display: none }\n.footer { display: none }\n"
+                BiblePage.mobileCSS = "<style>" + hideNav + css + "</style>"
+            } catch let err {
+                print("ERROR: BiblePage.getCSS() \(err)")
+            }
+        }
+        return BiblePage.mobileCSS
     }
     
     struct BookData {
