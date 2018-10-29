@@ -31,9 +31,8 @@ struct BiblePage {
     
     func loadPage(webView: WKWebView) {
         let start = CFAbsoluteTimeGetCurrent()
-        let html = BibleDB.shared.getBiblePage(bibleId: self.reference.bibleId,
-                                               bookId: self.reference.bookId,
-                                               chapter: self.reference.chapter)
+        webView.loadHTMLString("", baseURL: nil)
+        let html = BibleDB.shared.getBiblePage(reference: self.reference)
         if html == nil {
             let s3Key = self.generateKey(keyPrefix: self.reference.s3KeyPrefix, key: self.reference.s3Key,
                                          bookId: self.reference.bookId, chapter: self.reference.chapter)
@@ -41,10 +40,7 @@ struct BiblePage {
                 complete: { error, data in
                     if let data1 = data {
                         webView.loadHTMLString(data1 + self.getCSS(), baseURL: nil)
-                        _ = BibleDB.shared.storeBiblePage(bibleId: self.reference.bibleId,
-                                                          bookId: self.reference.bookId,
-                                                          chapter: self.reference.chapter,
-                                                          html: data1)
+                        _ = BibleDB.shared.storeBiblePage(reference: self.reference, html: data1)
                         print("*** BiblePage.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                     }
             })

@@ -47,12 +47,12 @@ struct BibleDB {
         })
     }
     
-    func getBiblePage(bibleId: String, bookId: String, chapter: Int) -> String? {
+    func getBiblePage(reference: Reference) -> String? {
         let db: Sqlite3
         do {
-            db = try self.getBibleDB(bibleId: bibleId)
+            db = try self.getBibleDB(bibleId: reference.bibleId)
             let sql = "SELECT html FROM Chapters WHERE bookId = ? AND chapter = ?"
-            let resultSet = try db.queryHTMLv0(sql: sql, values: [bookId, chapter])
+            let resultSet = try db.queryHTMLv0(sql: sql, values: [reference.bookId, reference.chapter])
             return (resultSet.count > 0) ? resultSet : nil
         } catch let err {
             print("ERROR BibleDB.getBiblePage \(err)")
@@ -60,12 +60,12 @@ struct BibleDB {
         }
     }
     
-    func storeBiblePage(bibleId: String, bookId: String, chapter: Int, html: String) {
+    func storeBiblePage(reference: Reference, html: String) {
         DispatchQueue.main.async(execute: {
             let db: Sqlite3
-            let values: [Any] = [bookId, chapter, html]
+            let values: [Any] = [reference.bookId, reference.chapter, html]
             do {
-                db = try self.getBibleDB(bibleId: bibleId)
+                db = try self.getBibleDB(bibleId: reference.bibleId)
                 let sql = "REPLACE INTO Chapters (bookId, chapter, html) VALUES (?,?,?)"
                 _ = try db.executeV1(sql: sql, values: values)
             } catch let err {
