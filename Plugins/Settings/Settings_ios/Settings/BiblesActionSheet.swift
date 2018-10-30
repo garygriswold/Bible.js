@@ -10,9 +10,9 @@ import UIKit
 
 class BiblesActionSheet : UIAlertController {
     
-    private weak var controller: ReaderViewController?
+    private weak var controller: ReaderPagesController?
     
-    init(controller: ReaderViewController) {
+    init(controller: ReaderPagesController) {
         self.controller = controller
         super.init(nibName: nil, bundle: nil)
     }

@@ -6,15 +6,14 @@
 //  Copyright © 2018 ShortSands. All rights reserved.
 //
 
-//import Foundation
 import UIKit
 
 class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
+    private var toolBar: ReaderToolbar!
+    
     init() {
-        super.init(transitionStyle: .scroll, //UIPageViewController.TransitionStyle,
-                   navigationOrientation: .horizontal, //UIPageViewController.NavigationOrientation,
-                   options: nil)//[UIPageViewController.OptionsKey : Any]? = nil)
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -23,6 +22,8 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.toolBar = ReaderToolbar(controller: self)
         
         self.dataSource = self
         self.delegate = self
@@ -37,6 +38,19 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
                            completion: nil )//((Bool) -> Void)? = nil)
         
         // set gesture recognizers here as well
+        
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let ref = HistoryModel.shared.current()
+        self.loadBiblePage(reference: ref)
+    }
+    
+    func loadBiblePage(reference: Reference) {
+        self.toolBar.loadBiblePage(reference: reference)
     }
     
     //

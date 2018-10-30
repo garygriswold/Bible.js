@@ -18,7 +18,7 @@ public class ReaderViewNavigator {
     }
     
     public func present() -> UINavigationController {
-        self.viewController = ReaderPageController()
+        self.viewController = ReaderPagesController()
         //self.viewController = ReaderViewController()
         //let viewController = SettingsViewController(settingsViewType: .primary)
         //let viewController = SettingsViewController(settingsViewType: .language)
