@@ -30,17 +30,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         self.dataSource = self
         self.delegate = self
         
-        let page1 = ReaderViewController()
-        page1.reference = HistoryModel.shared.current()
-        
-        self.setViewControllers([page1],
-                           direction: .forward,
-                           animated: true,
-                           completion: nil )//((Bool) -> Void)? = nil)
-        
         // set gesture recognizers here as well
-        
-        
     }
     
     func loadBiblePage(reference: Reference) {
@@ -50,11 +40,19 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.isToolbarHidden = false
+        
         let ref = HistoryModel.shared.current()
         self.loadBiblePage(reference: ref)
         
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.navigationController?.isToolbarHidden = false
+        let page1 = ReaderViewController()
+        page1.reference = HistoryModel.shared.current()
+        
+        self.setViewControllers([page1],
+                                direction: .forward,
+                                animated: true,
+                                completion: nil )//((Bool) -> Void)? = nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -97,7 +95,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
         print("presentation count called")
         //return references.count
-        return 10
+        return 4
     }
 /*
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {

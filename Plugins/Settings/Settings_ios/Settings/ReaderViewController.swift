@@ -16,7 +16,7 @@ class ReaderViewController : AppViewController {
     var reference: Reference!
     
     deinit {
-        print("****** deinit Reader View Controller")
+        print("****** deinit Reader View Controller \(self.reference)")
     }
     
     override func loadView() {
