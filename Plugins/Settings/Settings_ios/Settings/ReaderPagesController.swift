@@ -33,10 +33,11 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         
         self.page1 = ReaderViewController()
         self.page2 = ReaderViewController()
+        self.page2.loadBiblePage(reference: HistoryModel.shared.current())
         self.page3 = ReaderViewController()
         
         self.setViewControllers([page2],// page2, page3],
-                           direction: .reverse, //UIPageViewController.NavigationDirection,
+                           direction: .forward, //UIPageViewController.NavigationDirection,
                            animated: true,
                            completion: nil )//((Bool) -> Void)? = nil)
         
@@ -45,30 +46,40 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         
     }
     
+    func loadBiblePage(reference: Reference) {
+        self.toolBar.loadBiblePage(reference: reference)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         let ref = HistoryModel.shared.current()
         self.loadBiblePage(reference: ref)
+        
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.isToolbarHidden = false
     }
     
-    func loadBiblePage(reference: Reference) {
-        self.toolBar.loadBiblePage(reference: reference)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.navigationController?.isToolbarHidden = true
     }
-    
     //
     // DataSource
     //
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerBefore viewController: UIViewController) -> UIViewController? {
         print("presentation Before controller called")
-        //return nil
+        page1.loadBiblePage(reference: HistoryModel.shared.current())
         return self.page1
     }
     
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerAfter viewController: UIViewController) -> UIViewController? {
         print("presentation After controller called")
+        page3.loadBiblePage(reference: HistoryModel.shared.current())
         return self.page3
     }
     

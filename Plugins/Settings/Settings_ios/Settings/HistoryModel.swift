@@ -43,10 +43,6 @@ struct HistoryModel {
         get { return self.history.count }
     }
     
-    var biblePage: BiblePage {
-        get { return BiblePage(reference: self.current()) }
-    }
-    
     func getHistory(row: Int) -> Reference {
         return (row >= 0 && row < self.history.count) ? self.history[row] : self.history[0]
     }
