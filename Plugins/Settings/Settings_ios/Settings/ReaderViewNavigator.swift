@@ -11,14 +11,15 @@ import UIKit
 public class ReaderViewNavigator {
     
     var navController: UINavigationController?
-    var viewController: ReaderViewController?
+    var viewController: UIViewController?
     
     deinit {
         print("**** deinit ReaderViewNavigator ******")
     }
     
     public func present() -> UINavigationController {
-        self.viewController = ReaderViewController()
+        self.viewController = ReaderPageController()
+        //self.viewController = ReaderViewController()
         //let viewController = SettingsViewController(settingsViewType: .primary)
         //let viewController = SettingsViewController(settingsViewType: .language)
         //let viewController = SettingsViewController(settingsViewType: .version)

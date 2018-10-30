@@ -17,7 +17,9 @@ struct HistoryModel {
         self.history = SettingsDB.shared.getHistory()
         self.index = self.history.count - 1
         if self.history.count < 1 {
-            /// How do I really get the preferred version, not this default
+            let bibleModel = BibleModel(availableSection: 0, language: nil, selectedOnly: true)
+            let bible = bibleModel.getSelectedBible(row: 0)! /// unsafe ??
+            //let reference = Reference(bibleId: bible.bibleId, bookId: "JHN", chapter: 3, verse: 1)
             let reference = Reference(bibleId: "ENGWEB", bookId: "JHN", chapter: 3, verse: 1)
             self.history.append(reference)
             self.index = 0
