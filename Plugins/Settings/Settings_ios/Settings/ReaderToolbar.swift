@@ -97,10 +97,16 @@ class ReaderToolbar {
     }
     
     @objc func priorTapHandler(sender: UIBarButtonItem) {
+        if let prior = HistoryModel.shared.back() {
+            print("GO TO \(prior)")
+        }
         print("prior button handler")
     }
     
     @objc func nextTapHandler(sender: UIBarButtonItem) {
+        if let next = HistoryModel.shared.forward() {
+            print("GO TO \(next)")
+        }
         print("next button handler")
     }
     
