@@ -11,7 +11,10 @@ import UIKit
 class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
     private var toolBar: ReaderToolbar!
-    
+    private var page1: ReaderViewController!
+    private var page2: ReaderViewController!
+    private var page3: ReaderViewController!
+
     init() {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     }
@@ -19,7 +22,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,11 +31,11 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         self.dataSource = self
         self.delegate = self
         
-        let page1 = ReaderViewController()
-        let page2 = ReaderViewController()
-        let page3 = ReaderViewController()
+        self.page1 = ReaderViewController()
+        self.page2 = ReaderViewController()
+        self.page3 = ReaderViewController()
         
-        self.setViewControllers([page1],// page2, page3],
+        self.setViewControllers([page2],// page2, page3],
                            direction: .reverse, //UIPageViewController.NavigationDirection,
                            animated: true,
                            completion: nil )//((Bool) -> Void)? = nil)
@@ -58,20 +61,25 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     //
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        return nil
+        print("presentation Before controller called")
+        //return nil
+        return self.page1
     }
     
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        return nil
+        print("presentation After controller called")
+        return self.page3
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return 1
+        print("presentation count called")
+        return 3
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        return 2
+        print("presentation Index called")
+        return 1
     }
     //
     // Delegate
