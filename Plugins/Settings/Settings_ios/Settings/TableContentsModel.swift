@@ -164,4 +164,36 @@ class TableContentsModel { // class is used to permit self.contents inside closu
     func sortBooksAlphabetical() {
         self.books = self.books.sorted(by: { $0.name < $1.name })
     }
+    
+    func nextChapter(reference: Reference) -> Reference {
+        let book = self.getBook(bookId: reference.bookId)!
+        if reference.chapter < book.lastChapter {
+            return Reference(bibleId: reference.bibleId, bookId: reference.bookId,
+                             chapter: reference.chapter + 1, verse: 1)
+        } else {
+            if let next = self.getBook(row: book.ordinal + 1) {
+                return Reference(bibleId: reference.bibleId, bookId: next.bookId, chapter: 1, verse: 1)
+            } else {
+                let first = self.getBook(row: 0)!
+                return Reference(bibleId: reference.bibleId, bookId: first.bookId, chapter: 1, verse: 1)
+            }
+        }
+    }
+    
+    func priorChapter(reference: Reference) -> Reference {
+        if reference.chapter > 1 {
+            return Reference(bibleId: reference.bibleId, bookId: reference.bookId,
+                             chapter: reference.chapter - 1, verse: 1)
+        } else {
+            let book = self.getBook(bookId: reference.bookId)!
+            if let prior = self.getBook(row: book.ordinal - 1) {
+                return Reference(bibleId: reference.bibleId, bookId: prior.bookId,
+                                 chapter: prior.lastChapter, verse: 1)
+            } else {
+                let last = self.getBook(row: self.bookCount - 1)!
+                return Reference(bibleId: reference.bibleId, bookId: last.bookId,
+                                 chapter: last.lastChapter, verse: 1)
+            }
+        }
+    }
 }
