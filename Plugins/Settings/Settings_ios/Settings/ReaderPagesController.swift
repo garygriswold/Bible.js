@@ -11,9 +11,6 @@ import UIKit
 class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
     private var toolBar: ReaderToolbar!
-    private var page1: ReaderViewController!
-    private var page2: ReaderViewController!
-    private var page3: ReaderViewController!
 
     init() {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
@@ -22,6 +19,8 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+    
+    override var prefersStatusBarHidden: Bool { return true }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,13 +30,11 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         self.dataSource = self
         self.delegate = self
         
-        self.page1 = ReaderViewController()
-        self.page2 = ReaderViewController()
-        self.page2.loadBiblePage(reference: HistoryModel.shared.current())
-        self.page3 = ReaderViewController()
+        let page1 = ReaderViewController()
+        page1.reference = HistoryModel.shared.current()
         
-        self.setViewControllers([page2],// page2, page3],
-                           direction: .forward, //UIPageViewController.NavigationDirection,
+        self.setViewControllers([page1],
+                           direction: .forward,
                            animated: true,
                            completion: nil )//((Bool) -> Void)? = nil)
         
@@ -72,39 +69,57 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerBefore viewController: UIViewController) -> UIViewController? {
         print("presentation Before controller called")
-        page1.loadBiblePage(reference: HistoryModel.shared.current())
-        return self.page1
+        return self.presentPage(controller: viewController, next: false)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerAfter viewController: UIViewController) -> UIViewController? {
         print("presentation After controller called")
-        page3.loadBiblePage(reference: HistoryModel.shared.current())
-        return self.page3
+        return self.presentPage(controller: viewController, next: true)
+    }
+    
+    private func presentPage(controller: UIViewController, next: Bool) -> UIViewController? {
+        if let page = controller as? ReaderViewController {
+            let reference = page.reference!
+            var another: Reference
+            if next {
+                another = reference.bible.tableContents!.nextChapter(reference: reference)
+            } else {
+                another = reference.bible.tableContents!.priorChapter(reference: reference)
+            }
+            let reader = ReaderViewController()
+            reader.reference = another
+            return reader
+        }
+        return nil
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
         print("presentation count called")
-        return 3
+        //return references.count
+        return 10
     }
-    
+/*
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         print("presentation Index called")
         return 1
     }
+ */
     //
     // Delegate
     //
     func pageViewController(_ pageViewController: UIPageViewController,
                             willTransitionTo pendingViewControllers: [UIViewController]) {
-        print("willTransitionTo called")
+        print("willTransitionTo called \(pendingViewControllers.count)")
     }
     
     func pageViewController(_ pageViewController: UIPageViewController,
                             didFinishAnimating finished: Bool,
                             previousViewControllers: [UIViewController],
                             transitionCompleted completed: Bool) {
-        print("transition completed called")
+        if let page = self.viewControllers as? [ReaderViewController] {
+            self.toolBar.loadBiblePage(reference: page[0].reference)
+        }
     }
     
     func pageViewControllerSupportedInterfaceOrientations(_ pageViewController: UIPageViewController) -> UIInterfaceOrientationMask {

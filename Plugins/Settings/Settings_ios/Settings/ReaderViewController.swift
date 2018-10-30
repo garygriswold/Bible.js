@@ -13,16 +13,10 @@ import WebKit
 class ReaderViewController : AppViewController {
     
     private var webView: WKWebView!
-    private var reference: Reference!
+    var reference: Reference!
     
     deinit {
         print("****** deinit Reader View Controller")
-    }
-    
-    override var prefersStatusBarHidden: Bool { return true }
-    
-    func loadBiblePage(reference: Reference) {
-        self.reference = reference
     }
     
     override func loadView() {
@@ -37,5 +31,7 @@ class ReaderViewController : AppViewController {
 
         let biblePage = BiblePage(reference: self.reference)
         biblePage.loadPage(webView: self.webView)
+        
+        print("Loading Page \(self.reference)")
     }
 }
