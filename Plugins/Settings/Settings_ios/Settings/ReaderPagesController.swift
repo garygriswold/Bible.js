@@ -127,6 +127,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
                             transitionCompleted completed: Bool) {
         if let page = self.viewControllers as? [ReaderViewController] {
             self.toolBar.loadBiblePage(reference: page[0].reference)
+            HistoryModel.shared.changeReference(reference: page[0].reference)
         }
     }
     
