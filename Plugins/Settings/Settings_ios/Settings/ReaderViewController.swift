@@ -29,7 +29,7 @@ class ReaderViewController : AppViewController {
         self.webView.backgroundColor = .white
         self.view = self.webView
 
-        let biblePage = BiblePage(reference: self.reference)
+        let biblePage = BiblePageModel(reference: self.reference)
         biblePage.loadPage(webView: self.webView)
         
         print("Loading Page \(self.reference)")
