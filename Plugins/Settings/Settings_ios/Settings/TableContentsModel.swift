@@ -169,13 +169,13 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         let book = self.getBook(bookId: reference.bookId)!
         if reference.chapter < book.lastChapter {
             return Reference(bibleId: reference.bibleId, bookId: reference.bookId,
-                             chapter: reference.chapter + 1, verse: 1)
+                             chapter: reference.chapter + 1)
         } else {
             if let next = self.getBook(row: book.ordinal + 1) {
-                return Reference(bibleId: reference.bibleId, bookId: next.bookId, chapter: 1, verse: 1)
+                return Reference(bibleId: reference.bibleId, bookId: next.bookId, chapter: 1)
             } else {
                 let first = self.getBook(row: 0)!
-                return Reference(bibleId: reference.bibleId, bookId: first.bookId, chapter: 1, verse: 1)
+                return Reference(bibleId: reference.bibleId, bookId: first.bookId, chapter: 1)
             }
         }
     }

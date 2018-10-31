@@ -13,7 +13,21 @@ struct Reference : Equatable {
     let bibleId: String
     let bookId: String
     let chapter: Int
-    let verse: Int
+    let verse: Int?
+    
+    init(bibleId: String, bookId: String, chapter: Int, verse: Int?) {
+        self.bibleId = bibleId
+        self.bookId = bookId
+        self.chapter = chapter
+        self.verse = verse
+    }
+    
+    init(bibleId: String, bookId: String, chapter: Int) {
+        self.bibleId = bibleId
+        self.bookId = bookId
+        self.chapter = chapter
+        self.verse = nil
+    }
     
     static func == (lhs: Reference, rhs: Reference) -> Bool {
         return lhs.bibleId == rhs.bibleId &&
@@ -64,7 +78,11 @@ struct Reference : Equatable {
     }
     
     func description() -> String {
-        return "\(self.bookName) \(self.chapter):\(self.verse)"
+        if self.verse != nil {
+            return "\(self.bookName) \(self.chapter):\(self.verse!)"
+        } else {
+            return "\(self.bookName) \(self.chapter)"
+        }
     }
     
     func toString() -> String {
