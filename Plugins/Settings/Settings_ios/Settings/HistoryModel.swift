@@ -74,7 +74,7 @@ struct HistoryModel {
     }
     
     private mutating func add(reference: Reference) {
-        if reference != self.current() {
+        if self.history.count == 0 || reference != self.current() {
             self.history.append(reference)
             self.index += 1
             SettingsDB.shared.storeHistory(reference: reference)

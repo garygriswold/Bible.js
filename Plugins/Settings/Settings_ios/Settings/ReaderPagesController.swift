@@ -11,7 +11,6 @@ import UIKit
 class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
     private var toolBar: ReaderToolbar!
-    private var reference: Reference?
 
     init() {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
@@ -50,7 +49,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         self.toolBar.loadBiblePage(reference: reference)
         
         let page1 = ReaderViewController()
-        page1.reference = HistoryModel.shared.current()
+        page1.reference = reference
         
         self.setViewControllers([page1],
                                 direction: .forward,
@@ -64,8 +63,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.isToolbarHidden = false
         
-        self.reference = HistoryModel.shared.current()
-        self.loadBiblePage(reference: self.reference!)
+        self.loadBiblePage(reference: HistoryModel.shared.current())
     }
     
     override func viewWillDisappear(_ animated: Bool) {
