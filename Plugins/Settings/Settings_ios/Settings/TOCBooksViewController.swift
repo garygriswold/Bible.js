@@ -50,6 +50,8 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
         self.dataModel = HistoryModel.shared.currTableContents
         self.dataModel.clearFilteredBooks()
         self.navigationController?.isToolbarHidden = false
+        
+        self.positionMidView(midview: false) // Need here to adjust frame size to content size
     }
     
     override func viewWillDisappear(_ animated: Bool) {
