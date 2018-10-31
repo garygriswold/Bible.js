@@ -69,7 +69,7 @@ struct BibleDB {
                 let sql = "REPLACE INTO Chapters (bookId, chapter, html) VALUES (?,?,?)"
                 _ = try db.executeV1(sql: sql, values: values)
             } catch let err {
-                print("ERROR BibleDB.storeTableContents \(err)")
+                print("ERROR BibleDB.storeBiblePage \(err)")
             }
         })
     }

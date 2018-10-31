@@ -31,13 +31,15 @@ struct BiblePage {
     
     func loadPage(webView: WKWebView) {
         let start = CFAbsoluteTimeGetCurrent()
-        webView.loadHTMLString("", baseURL: nil)
+        //webView.loadHTMLString("", baseURL: nil)
         let html = BibleDB.shared.getBiblePage(reference: self.reference)
         if html == nil {
+            let progress = self.addProgressIndicator(webView: webView)
             let s3Key = self.generateKey(keyPrefix: self.reference.s3KeyPrefix, key: self.reference.s3Key,
                                          bookId: self.reference.bookId, chapter: self.reference.chapter)
             AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
                 complete: { error, data in
+                    self.removeProgressIndicator(indicator: progress)
                     if let data1 = data {
                         webView.loadHTMLString(data1 + self.getCSS(), baseURL: nil)
                         _ = BibleDB.shared.storeBiblePage(reference: self.reference, html: data1)
@@ -47,6 +49,19 @@ struct BiblePage {
         } else {
             webView.loadHTMLString(html! + getCSS(), baseURL: nil)
         }
+    }
+    
+    private func addProgressIndicator(webView: WKWebView) -> UIActivityIndicatorView {
+        let progress = UIActivityIndicatorView(style: .gray)
+        progress.frame = CGRect(x: 20, y: 20, width: 30, height: 30)
+        webView.addSubview(progress)
+        progress.startAnimating()
+        return progress
+    }
+    
+    private func removeProgressIndicator(indicator: UIActivityIndicatorView) {
+        indicator.stopAnimating()
+        indicator.removeFromSuperview()
     }
     
     private func generateKey(keyPrefix: String, key: String, bookId: String, chapter: Int) -> String {
