@@ -33,6 +33,18 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         // set gesture recognizers here as well
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.view.backgroundColor = .white
+        if let pageControl = self.view.subviews[1] as? UIPageControl {
+            pageControl.pageIndicatorTintColor = .lightGray
+            pageControl.currentPageIndicatorTintColor = .black
+            pageControl.layer.borderWidth = 0.4
+            pageControl.layer.borderColor = UIColor(white: 0.8, alpha: 1.0).cgColor
+        }
+    }
+    
     func loadBiblePage(reference: Reference) {
         self.toolBar.loadBiblePage(reference: reference)
     }
@@ -97,12 +109,12 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         //return references.count
         return 4
     }
-/*
+
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         print("presentation Index called")
         return 1
     }
- */
+ 
     //
     // Delegate
     //
