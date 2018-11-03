@@ -79,7 +79,7 @@ class TextSizeSliderCell : UITableViewCell {
         if let rect = self.tableView?.rectForRow(at: TextSizeSliderCell.indexPath) {
             let width = rect.width
             // I don't know why -180 is correct.  It seems like is should be - 100
-            let labelRect = CGRect(x: width * 0.05, y: (rect.minY - 180), width: (width * 0.9), height: 100)
+            let labelRect = CGRect(x: width * 0.05, y: (rect.minY - 220), width: (width * 0.9), height: 100)
             let label = UILabel(frame: labelRect)
             //label.drawText(in: CGRect(x: 50, y: 5, width: (width * 0.9) - 100, height: 90)) // could be in subclass
             label.text = "Your word is a lamp to my feet and a light to my path."
@@ -93,7 +93,7 @@ class TextSizeSliderCell : UITableViewCell {
             label.alpha = 0.9
             //let textSize = label.intrinsicContentSize // could be useful to animate size of box
             self.sampleTextLabel = label
-            self.serifBodyFont = AppFont.serif(ofRelativeSize: 1.0)
+            self.serifBodyFont = AppFont.serif(ofRelativeSize: 1.2) // 1.2 gives best results, I don't know why
             self.valueChangedHandler(sender: sender) // set initial size correctly
             self.tableView?.addSubview(label)
         }

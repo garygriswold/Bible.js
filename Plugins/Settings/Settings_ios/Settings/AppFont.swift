@@ -77,13 +77,13 @@ public class AppFont {
     
     private static func getSerifFont() -> UIFont {
         if serifFont == nil {
-            serifFont = UIFont(name: "Cochin", size: 50.0)
+            serifFont = UIFont(name: "Cambria", size: 16.0)
             if serifFont == nil {
-                serifFont = UIFont(name: "Baskerville", size: 50.0)
+                serifFont = UIFont(name: "Times", size: 16.0)
                 if serifFont == nil {
-                    serifFont = UIFont(name: "Didot", size: 50.0)
+                    serifFont = UIFont(name: "Cochin", size: 16.0)
                     if serifFont == nil {
-                        serifFont = UIFont.systemFont(ofSize: 50.0)
+                        serifFont = UIFont.systemFont(ofSize: 16.0)
                     }
                 }
             }
