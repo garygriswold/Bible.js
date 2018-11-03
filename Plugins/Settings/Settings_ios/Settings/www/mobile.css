@@ -6,7 +6,7 @@
 
 html,
 body {
-  font-size: 16pt;
+    font-size: 1.0rem; /* 16pt */
 }
 
 a {
@@ -124,7 +124,7 @@ header .name,
   top: 8px;
   left: 0;
   width: 100%;
-  font-size: 12pt;
+  font-size: 0.75rem;
   text-align: center;
   color: #eee;
 }
@@ -147,7 +147,7 @@ display: none;
  */
 /* main index of all texts/versions */
 .texts-index .name {
-  font-size: 14pt;
+  font-size: 0.875rem;
   padding-top: 5px;
   display: block;
 }
@@ -184,14 +184,14 @@ display: none;
 
 /* index of books in a version */
 .text-index .name {
-  font-size: 14pt;
+  font-size: 0.875rem;
   padding-top: 5px;
   display: block;
 }
 
 /* book index */
 .division-index .name {
-  font-size: 14pt;
+  font-size: 0.875rem;
   padding-top: 5px;
   display: block;
 }
@@ -240,35 +240,35 @@ display: none;
 /* document */
 .section-document .name,
 .section-document .location {
-  font-size: 10pt;
+  font-size: 0.625rem;
 }
 
 .section {
   padding: 20px;
-  font-size: 14pt;
+  font-size: 0.875rem;
   font-family: Cambria, Times;
 }
 
 .footnotes {
-  margin: 1em;
+  margin: 1.0rem; /* 1em */
   border-top: 1px solid #666;
-  padding-top: 1em;
-  font-size: .8em;
+  padding-top: 1.0rem; /* 1em */
+  font-size: 0.8rem; /* .8em */
 }
 
 .footnotes .footnote {
-  margin-bottom: 1em;
-  padding-left: 1.1em;
+  margin-bottom: 1.0rem; /* 1em */
+  padding-left: 1.1rem; /* 1.1em */
   position: relative;
   display: block;
 }
 
 .footnotes .footnote .key {
   position: absolute;
-  top: .25em;
+  top: 0.25rem; /* .25em */
   left: 0;
   width: 10px;
-  font-size: .6em;
+  font-size: 0.6rem; /* .6em */
   display: block;
   text-align: right;
 }
@@ -276,7 +276,7 @@ display: none;
 .footnotes .footnote .backref {
   color: #2a85e8;
   display: inline-block;
-  padding-right: .5em;
+  padding-right: 0.5rem; /* .5em */
 }
 
 /* BIBLE.css *
@@ -315,7 +315,7 @@ margin: 1.2em 0;
 .section p,
 .section div.p,
 .chapter div.p {
-  text-indent: 1em;
+  text-indent: 1.0rem; /* 1em */
 }
 
 .section ins {
@@ -325,9 +325,9 @@ margin: 1.2em 0;
 
 .chapter-num {
   float: left;
-  font-size: 2em;
+  font-size: 2.0rem; /* 2em */
   line-height: 1;
-  margin: 0 .25em .5em 0;
+  margin: 0 0.25rem 0.5rem 0; /* 0 .25em .5em 0 */
 }
 
 .chapter-num + p {
@@ -336,13 +336,13 @@ margin: 1.2em 0;
 
 .chapter[dir=rtl] .chapter-num {
   float: right;
-  margin: 0 0 .5em .5em;
+  margin: 0 0 0.5rem 0.5rem; /* 0 0 .5em .5em */
 }
 
 .verse-num,
 .v-num {
   font-weight: bold;
-  font-size: 70%;
+  font-size: 0.7rem; /* 70% */
   vertical-align: top;
   color: #333;
   font-family: avenir, helvetica;
@@ -351,7 +351,7 @@ margin: 1.2em 0;
 [lang=heb],.section[lang=he] .p,.section[lang=heb] .p,.chapter[lang=he] .p
 .chapter[lang=heb] .p {
   font-family: 'SBL Hebrew', 'Ezra SIL', EzraSILRegular!important;
-  font-size: 125%;
+  font-size: 1.25rem; /* 125% */
 }
 
 [lang=gre],
@@ -380,7 +380,7 @@ margin: 1.5em 0 0.5em 0;
 .note .key,
 .cf .key {
   vertical-align: top;
-  font-size: 60%;
+  font-size: 0.6rem; /* 60% */
   font-weight: normal;
   font-style: normal;
   color: #7491CE;
@@ -445,12 +445,12 @@ span[class^='verse PSA_'] {
 .section .chapter-num,
 .section .c-num {
   float: left;
-  font-size: 2em;
+  font-size: 2.0rem; /* 2em */
   line-height: 1;
   font-weight: bold;
   margin-top: 0;
   margin-bottom: 0;
-  margin-right: .2em;
+  margin-right: 0.2rem; /* .2em */
   font-family: avenir, helvetica;
 }
 
@@ -459,7 +459,7 @@ span[class^='verse PSA_'] {
 [dir=rtl] .section .c-num {
   float: right;
   margin-right: 0;
-  margin-left: .2em;
+  margin-left: 0.2rem; /* .2em */
 }
 
 div.c + div.p,
@@ -477,8 +477,8 @@ div.c + div.q {
 
 /* Psalms */
 .PS .c {
-  font-size: 1.2em;
-  margin-top: 2em;
+  font-size: 1.2rem; /* 1.2em */
+  margin-top: 2.0rem; /* 2em */
   text-align: center;
   float: none;
 }
@@ -494,7 +494,7 @@ div.c + div.q .v-1 {
 div[lang=heb] .c {
   float: right;
   margin-right: 0;
-  margin-left: .2em;
+  margin-left: 0.2rem; /* .2em */
 }
 
 div[lang=heb] {
@@ -521,26 +521,26 @@ div.is1 {
 }
 
 .q {
-  padding-left: 3em!important;
-  text-indent: -1.5em!important;
+  padding-left: 3.0rem!important; /* 3em */
+  text-indent: -1.5rem!important; /* -1.5em */
   position: relative;
 }
 
 .q2 {
-  padding-left: 4em!important;
-  text-indent: -1.5em!important;
+  padding-left: 4.0rem!important; /* 4em */
+  text-indent: -1.5rem!important; /* -1.5em */
   position: relative;
 }
 
 [dir=rtl] .q {
-  padding-right: 3em!important;
-  text-indent: -1.5em!important;
+  padding-right: 3.0rem!important; /* 3em */
+  text-indent: -1.5rem!important; /* -1.5em */
   position: relative;
 }
 
 [dir=rtl] .q2 {
-  padding-right: 4em!important;
-  text-indent: -1.5em!important;
+  padding-right: 4.0rem!important; /* 4em */
+  text-indent: -1.5rem!important; /* -1.5em */
   position: relative;
 }
 
@@ -597,7 +597,7 @@ div.is1 {
 }
 
 .d {
-  font-size: .8em;
+  font-size: 0.8rem; /* .8em */
   text-align: center;
 }
 
@@ -605,9 +605,9 @@ div.is1 {
 .mt {
   display: block;
   text-align: center;
-  font-size: 2em;
-  margin-top: 3em;
-  margin-bottom: 1em;
+  font-size: 2.0rem; /* 2em */
+  margin-top: 3.0rem; /* 3em */
+  margin-bottom: 1.0rem; /* 1em */
   line-height: 1.2;
 }
 
@@ -615,8 +615,8 @@ div.is1 {
 .mt3 {
   display: block;
   text-align: center;
-  font-size: 1.4em;
-  margin-top: 3em;
+  font-size: 1.4rem; /* 1.4em */
+  margin-top: 3.0rem; /* 3em */
   line-height: 1.2;
 }
 

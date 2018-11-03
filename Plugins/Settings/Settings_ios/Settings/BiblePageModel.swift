@@ -21,7 +21,7 @@ import WebKit
 
 struct BiblePageModel {
     
-    private static var mobileCSS: String = ""
+    private static var mobileCSS: String?
     
     private let reference: Reference
     
@@ -31,7 +31,6 @@ struct BiblePageModel {
     
     func loadPage(webView: WKWebView) {
         let start = CFAbsoluteTimeGetCurrent()
-        //webView.loadHTMLString("", baseURL: nil)
         let html = BibleDB.shared.getBiblePage(reference: self.reference)
         if html == nil {
             let progress = self.addProgressIndicator(webView: webView)
@@ -41,13 +40,13 @@ struct BiblePageModel {
                 complete: { error, data in
                     self.removeProgressIndicator(indicator: progress)
                     if let data1 = data {
-                        webView.loadHTMLString(data1 + self.getCSS(), baseURL: nil)
+                        webView.loadHTMLString(self.getCSS() + data1, baseURL: nil)
                         _ = BibleDB.shared.storeBiblePage(reference: self.reference, html: data1)
                         print("*** BiblePage.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                     }
             })
         } else {
-            webView.loadHTMLString(html! + getCSS(), baseURL: nil)
+            webView.loadHTMLString(self.getCSS() + html!, baseURL: nil)
         }
     }
     
@@ -110,21 +109,21 @@ struct BiblePageModel {
         }
         return keyPrefix + result.joined()
     }
-    
+ 
     private func getCSS() -> String {
-        if BiblePageModel.mobileCSS.count == 0 {
+        if BiblePageModel.mobileCSS == nil {
             let bundle: Bundle = Bundle.main
             let path = bundle.path(forResource: "www/mobile", ofType: "css")
             let url = URL(fileURLWithPath: path!)
             do {
                 let css = try String(contentsOf: url)
                 let hideNav = ".header { display: none }\n.footer { display: none }\n"
-                BiblePageModel.mobileCSS = "<style>" + hideNav + css + "</style>"
+                BiblePageModel.mobileCSS = "<style type='text/css'>\n" + css + hideNav + "</style>\n"
             } catch let err {
                 print("ERROR: BiblePage.getCSS() \(err)")
             }
         }
-        return BiblePageModel.mobileCSS
+        return BiblePageModel.mobileCSS!
     }
     
     struct BookData {
