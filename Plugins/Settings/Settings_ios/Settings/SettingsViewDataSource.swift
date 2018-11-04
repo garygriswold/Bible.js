@@ -17,6 +17,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     private let availableSection: Int
     private let searchController: SettingsSearchController?
     private let textSizeSliderCell: TextSizeSliderCell
+    private let textHeightSliderCell: TextHeightSliderCell
     
     init(controller: SettingsViewController, selectionViewSection: Int, searchController: SettingsSearchController?) {
         self.controller = controller
@@ -28,6 +29,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         
         // Text Size Cell
         self.textSizeSliderCell = TextSizeSliderCell(controller: self.controller!, style: .default, reuseIdentifier: nil)
+        self.textHeightSliderCell = TextHeightSliderCell(controller: self.controller!, style: .default, reuseIdentifier: nil)
        
         super.init()
     }
@@ -52,7 +54,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         case .primary:
             switch section {
             case 0: return 3
-            case 1: return 1
+            case 1: return 2
             case 2: return 2
             case 3: return (UserMessageController.isAvailable()) ? 4 : 3
             default: fatalError("Unknown section \(section) in .primary")
@@ -118,6 +120,10 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 switch indexPath.row {
                 case 0:
                     return self.textSizeSliderCell
+                case 1:
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
+                    
+                    return self.textHeightSliderCell
                 default: fatalError("Unknown row \(indexPath.row) in section 1")
                 }
             case 2:

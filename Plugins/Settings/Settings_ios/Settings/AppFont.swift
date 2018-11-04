@@ -12,6 +12,8 @@ public class AppFont {
 
     public static var serifFont: UIFont?
     private static var _userFontDelta: CGFloat?
+    private static var _bodyLineHeight: Float?
+    
     public static var userFontDelta: CGFloat {
         get {
             if _userFontDelta == nil {
@@ -24,6 +26,19 @@ public class AppFont {
             _userFontDelta = newValue
             let adapter = SettingsAdapter()
             adapter.setUserFontDelta(fontDelta: newValue)
+        }
+    }
+    
+    public static var bodyLineHeight: Float {
+        get {
+            if _bodyLineHeight == nil {
+                _bodyLineHeight = SettingsDB.shared.getFloat(name: "body-line-height", ifNone: 1.8)
+            }
+            return _bodyLineHeight!
+        }
+        set(newValue) {
+            _bodyLineHeight = newValue
+            SettingsDB.shared.updateFloat(name: "body-line-height", setting: newValue)
         }
     }
 

@@ -79,7 +79,7 @@ class TextSizeSliderCell : UITableViewCell {
         if let rect = self.tableView?.rectForRow(at: TextSizeSliderCell.indexPath) {
             let width = rect.width
             // I don't know why -180 is correct.  It seems like is should be - 100
-            let labelRect = CGRect(x: width * 0.05, y: (rect.minY - 220), width: (width * 0.9), height: 100)
+            let labelRect = CGRect(x: width * 0.05, y: (rect.minY - 240), width: (width * 0.9), height: 100)
             let label = UILabel(frame: labelRect)
             //label.drawText(in: CGRect(x: 50, y: 5, width: (width * 0.9) - 100, height: 90)) // could be in subclass
             label.text = "Your word is a lamp to my feet and a light to my path."
@@ -101,7 +101,7 @@ class TextSizeSliderCell : UITableViewCell {
 
     @objc func valueChangedHandler(sender: UISlider) {
         if self.serifBodyFont != nil {
-            sampleTextLabel?.font = self.serifBodyFont?.withSize(self.serifBodyFont!.pointSize * CGFloat(sender.value))
+            self.sampleTextLabel?.font = self.serifBodyFont!.withSize(self.serifBodyFont!.pointSize * CGFloat(sender.value))
         }
     }
     

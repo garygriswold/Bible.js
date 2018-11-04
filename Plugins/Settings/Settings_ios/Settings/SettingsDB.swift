@@ -25,6 +25,14 @@ struct SettingsDB {
         }
     }
     
+    func getFloat(name: String, ifNone: Float) -> Float {
+        if let value = self.getSetting(name: name) {
+            if let float = Float(value) {
+                return float
+            }
+        }
+        return ifNone
+    }
 
     func getSetting(name: String) -> String? {
         let sql = "SELECT value FROM Settings WHERE name = ?"
@@ -46,6 +54,10 @@ struct SettingsDB {
         self.updateSetting(name: name, setting: settings.joined(separator: ","))
     }
     
+    func updateFloat(name: String, setting: Float) {
+        self.updateSetting(name: name, setting: "\(setting)")
+    }
+    
     func updateSetting(name: String, setting: String) {
         let sql = "REPLACE INTO Settings (name, value) VALUES (?,?)"
         let values = [name, setting]
@@ -57,6 +69,8 @@ struct SettingsDB {
             print("ERROR: SettingsDB.updateSetting \(err)")
         }
     }
+    
+    
     
     //
     // History Table

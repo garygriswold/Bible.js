@@ -27,6 +27,7 @@
 		E463896E21793DC0009BF5E2 /* HistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463896D21793DC0009BF5E2 /* HistoryModel.swift */; };
 		E463897221799013009BF5E2 /* BiblesActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463897121799013009BF5E2 /* BiblesActionSheet.swift */; };
 		E4638974217AE210009BF5E2 /* SettingsDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4638973217AE210009BF5E2 /* SettingsDB.swift */; };
+		E46B2C83218E50200063E68C /* TextHeightSliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */; };
 		E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4825C412124F0B400D36620 /* BibleInitialSelect.swift */; };
 		E49F7296216AC830007D2856 /* ExternControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */; };
 		E4A3AF152138EC0F006EDEFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E62138BD7F000AB2A8 /* Localizable.strings */; };
@@ -96,6 +97,7 @@
 		E463896D21793DC0009BF5E2 /* HistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryModel.swift; sourceTree = "<group>"; };
 		E463897121799013009BF5E2 /* BiblesActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblesActionSheet.swift; sourceTree = "<group>"; };
 		E4638973217AE210009BF5E2 /* SettingsDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDB.swift; sourceTree = "<group>"; };
+		E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextHeightSliderCell.swift; sourceTree = "<group>"; };
 		E4825C412124F0B400D36620 /* BibleInitialSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleInitialSelect.swift; sourceTree = "<group>"; };
 		E49ACDBD213B4F4E0031625C /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E49ACDBE213B4F590031625C /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 				E4825C412124F0B400D36620 /* BibleInitialSelect.swift */,
 				E4C2E982211B712C00B71CC5 /* SettingsAdapter.swift */,
 				E4C2E985211B712C00B71CC5 /* TextSizeSliderCell.swift */,
+				E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */,
 				E4C2E977211B70F500B71CC5 /* AppFont.swift */,
 				E40D605E217FC70700A06B54 /* HistoryViewController.swift */,
 				E4F66862217C377600E998CC /* TOCBooksViewController.swift */,
@@ -388,6 +391,7 @@
 				E4A7130021461090009D99E2 /* SettingsSearchController.swift in Sources */,
 				E4638974217AE210009BF5E2 /* SettingsDB.swift in Sources */,
 				E402BCB5217B80BA0026E1DE /* TableContentsModel.swift in Sources */,
+				E46B2C83218E50200063E68C /* TextHeightSliderCell.swift in Sources */,
 				E463897221799013009BF5E2 /* BiblesActionSheet.swift in Sources */,
 				E4C2E992211B712D00B71CC5 /* SettingsViewDelegate.swift in Sources */,
 				E4C2E98E211B712D00B71CC5 /* TextSizeSliderCell.swift in Sources */,
