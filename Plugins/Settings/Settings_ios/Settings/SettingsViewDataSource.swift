@@ -18,6 +18,9 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     private let searchController: SettingsSearchController?
     private let textSizeSliderCell: TextSizeSliderCell
     private let textHeightSliderCell: TextHeightSliderCell
+    //
+    private var nightSwitch: UISwitch?
+    private var verseSwitch: UISwitch?
     
     init(controller: SettingsViewController, selectionViewSection: Int, searchController: SettingsSearchController?) {
         self.controller = controller
@@ -105,15 +108,15 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 case 0:
                     let tocText = NSLocalizedString("Table of Contents", comment: "Table of Contents Title")
                     return self.genericCell(view: tableView, indexPath: indexPath, title: tocText,
-                                            icon: "ios-keypad.png")
+                                            accessory: true, icon: "ios-keypad.png")
                 case 1:
                     let histText = NSLocalizedString("History", comment: "History Cell Title")
                     return self.genericCell(view: tableView, indexPath: indexPath, title: histText,
-                                            icon: "ios-previous.png")
+                                            accessory: true, icon: "ios-previous.png")
                 case 2:
                     let videoText = NSLocalizedString("Videos", comment: "Videos Cell Title")
                     return self.genericCell(view: tableView, indexPath: indexPath, title: videoText,
-                                            icon: "ios-films.png")
+                                            accessory: true, icon: "ios-films.png")
                 default: fatalError("Unknown row \(indexPath.row) in section 0")
                 }
             case 1:
@@ -124,16 +127,23 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                     return self.textHeightSliderCell
                 case 2:
                     let nightText = NSLocalizedString("Night Time", comment: "Clickable cell title")
-                    let nightCell = self.toggleCell(view: tableView, indexPath: indexPath, title: nightText,
-                                                    icon: "wea-moon.png")
-                    
-                    (nightCell.accessoryView as! UISwitch).setOn(false, animated: false)
+                    let nightCell = self.genericCell(view: tableView, indexPath: indexPath, title: nightText,
+                                                    accessory: false, icon: "wea-moon.png")
+                    self.nightSwitch = UISwitch(frame: .zero)
+                    self.nightSwitch!.setOn(false, animated: false)
+                    self.nightSwitch!.addTarget(self, action: #selector(nightSwitchHandler),
+                                                for: .valueChanged)
+                    nightCell.accessoryView = self.nightSwitch
                     return nightCell
                 case 3:
                     let verseText = NSLocalizedString("Verse Numbers", comment: "Clickable cell title")
-                    let verseCell = self.toggleCell(view: tableView, indexPath: indexPath, title: verseText,
-                                                    icon: "typ-bullets-numbers.png")
-                    (verseCell.accessoryView as! UISwitch).setOn(true, animated: false)
+                    let verseCell = self.genericCell(view: tableView, indexPath: indexPath, title: verseText,
+                                                    accessory: false, icon: "typ-bullets-numbers.png")
+                    self.verseSwitch = UISwitch(frame: .zero)
+                    self.verseSwitch!.setOn(true, animated: false)
+                    self.verseSwitch!.addTarget(self, action: #selector(verseSwitchHandler),
+                                                for: .valueChanged)
+                    verseCell.accessoryView = self.verseSwitch
                     return verseCell
                 default: fatalError("Unknown row \(indexPath.row) in section 1")
                 }
@@ -142,11 +152,11 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 case 0:
                     let bibleText = NSLocalizedString("More Bibles", comment: "Clickable cell title")
                     return self.genericCell(view: tableView, indexPath: indexPath, title: bibleText,
-                                            icon: "cel-bible.png")
+                                            accessory: true, icon: "cel-bible.png")
                 case 1:
                     let langText = NSLocalizedString("More Languages", comment: "Clickable cell title")
                     return self.genericCell(view: tableView, indexPath: indexPath, title: langText,
-                                            icon: "ios-world-times.png")
+                                            accessory: true, icon: "ios-world-times.png")
                 default: fatalError("Unknown row \(indexPath.row) in section 2")
                 }
             case 3:
@@ -154,19 +164,19 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 case 0:
                     let reviewText = NSLocalizedString("Write A Review", comment: "Clickable cell title")
                     return self.genericCell(view: tableView, indexPath: indexPath, title: reviewText,
-                                            icon: "ios-new.png")
+                                            accessory: true, icon: "ios-new.png")
                 case 1:
                     let commentText = NSLocalizedString("Send Us Comments", comment: "Clickable cell title")
                     return self.genericCell(view: tableView, indexPath: indexPath, title: commentText,
-                                            icon: "ios-reply.png")
+                                            accessory: true, icon: "ios-reply.png")
                 case 2:
                     let privText = NSLocalizedString("Privacy Policy", comment: "Privacy Policy cell title")
                     return self.genericCell(view: tableView, indexPath: indexPath, title: privText,
-                                            icon: "sec-shield-diagonal.png")
+                                            accessory: true, icon: "sec-shield-diagonal.png")
                 case 3:
                     let shareText = NSLocalizedString("Share SafeBible", comment: "Clickable cell title")
                     return self.genericCell(view: tableView, indexPath: indexPath, title: shareText,
-                                            icon: "ios-upload.png")
+                                            accessory: true, icon: "ios-upload.png")
                 default: fatalError("Unknown row \(indexPath.row) in section 3")
                 }
             default:
@@ -259,7 +269,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     }
         
     private func genericCell(view: UITableView, indexPath: IndexPath, title: String,
-                             icon: String) -> UITableViewCell {
+                             accessory: Bool, icon: String) -> UITableViewCell {
         let cell = view.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
         cell.textLabel?.text = title
         cell.textLabel?.font = AppFont.cellLabelFont
@@ -267,20 +277,17 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         image = image?.withRenderingMode(.alwaysTemplate)
         cell.imageView?.tintColor = UIColor.gray
         cell.imageView?.image = image
-        cell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
+        if accessory {
+            cell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
+        }
         return cell
     }
     
-    private func toggleCell(view: UITableView, indexPath: IndexPath, title: String,
-                             icon: String) -> UITableViewCell {
-        let cell = view.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-        cell.textLabel?.text = title
-        cell.textLabel?.font = AppFont.cellLabelFont
-        var image = UIImage(named: "www/images/" + icon)
-        image = image?.withRenderingMode(.alwaysTemplate)
-        cell.imageView?.tintColor = UIColor.gray
-        cell.imageView?.image = image
-        cell.accessoryView = UISwitch(frame: .zero)
-        return cell
+    @objc func nightSwitchHandler(sender: UISwitch) {
+        print("night switch \(sender.isOn)")
+    }
+    
+    @objc func verseSwitchHandler(sender: UISwitch) {
+        print("verse switch \(sender.isOn)")
     }
 }
