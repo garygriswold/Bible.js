@@ -46,7 +46,9 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
     
     private func updateFontSize() {
         let font = AppFont.serif(style: .body)
-        let message = "document.styleSheets[0].addRule('html', 'font-size: \(Int(font.pointSize))pt');"
+        let message = "var sheet = document.styleSheets[0];\n" +
+            "sheet.addRule('html', 'font-size:\(Int(font.pointSize))pt');" +
+            "sheet.addRule('.section,.chapter', 'line-height:\(AppFont.bodyLineHeight);');"
         print(message)
         self.execJavascript(message: message)
     }
