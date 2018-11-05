@@ -21,7 +21,8 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
         super.loadView()
         
         // create Table view
-        self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableView.Style.plain)
+        let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
+        self.tableView = UITableView(frame: frame, style: UITableView.Style.plain)
         self.tableView.layer.borderWidth = 0.4
         self.tableView.layer.borderColor = UIColor(white: 0.8, alpha: 1.0).cgColor
         self.view.addSubview(self.tableView)
@@ -50,6 +51,10 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
         self.dataModel = HistoryModel.shared.currTableContents
         self.dataModel.clearFilteredBooks()
         self.navigationController?.isToolbarHidden = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
         self.positionMidView(midview: false) // Need here to adjust frame size to content size
     }
