@@ -54,7 +54,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         case .primary:
             switch section {
             case 0: return 3
-            case 1: return 2
+            case 1: return 4
             case 2: return 2
             case 3: return (UserMessageController.isAvailable()) ? 4 : 3
             default: fatalError("Unknown section \(section) in .primary")
@@ -122,6 +122,19 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                     return self.textSizeSliderCell
                 case 1:
                     return self.textHeightSliderCell
+                case 2:
+                    let nightText = NSLocalizedString("Night Time", comment: "Clickable cell title")
+                    let nightCell = self.toggleCell(view: tableView, indexPath: indexPath, title: nightText,
+                                                    icon: "wea-moon.png")
+                    
+                    (nightCell.accessoryView as! UISwitch).setOn(false, animated: false)
+                    return nightCell
+                case 3:
+                    let verseText = NSLocalizedString("Verse Numbers", comment: "Clickable cell title")
+                    let verseCell = self.toggleCell(view: tableView, indexPath: indexPath, title: verseText,
+                                                    icon: "typ-bullets-numbers.png")
+                    (verseCell.accessoryView as! UISwitch).setOn(true, animated: false)
+                    return verseCell
                 default: fatalError("Unknown row \(indexPath.row) in section 1")
                 }
             case 2:
@@ -245,17 +258,29 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         self.dataModel!.moveSelected(source: sourceIndexPath.row, destination: destinationIndexPath.row)
     }
         
-    private func genericCell(view: UITableView, indexPath: IndexPath, title: String, icon: String?) -> UITableViewCell {
+    private func genericCell(view: UITableView, indexPath: IndexPath, title: String,
+                             icon: String) -> UITableViewCell {
         let cell = view.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
         cell.textLabel?.text = title
         cell.textLabel?.font = AppFont.cellLabelFont
-        if icon != nil {
-            var image = UIImage(named: "www/images/" + icon!)
-            image = image?.withRenderingMode(.alwaysTemplate)
-            cell.imageView?.tintColor = UIColor.gray
-            cell.imageView?.image = image
-        }
+        var image = UIImage(named: "www/images/" + icon)
+        image = image?.withRenderingMode(.alwaysTemplate)
+        cell.imageView?.tintColor = UIColor.gray
+        cell.imageView?.image = image
         cell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
+        return cell
+    }
+    
+    private func toggleCell(view: UITableView, indexPath: IndexPath, title: String,
+                             icon: String) -> UITableViewCell {
+        let cell = view.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
+        cell.textLabel?.text = title
+        cell.textLabel?.font = AppFont.cellLabelFont
+        var image = UIImage(named: "www/images/" + icon)
+        image = image?.withRenderingMode(.alwaysTemplate)
+        cell.imageView?.tintColor = UIColor.gray
+        cell.imageView?.image = image
+        cell.accessoryView = UISwitch(frame: .zero)
         return cell
     }
 }
