@@ -11,6 +11,8 @@ import UIKit
 public class AppFont {
 
     public static var serifFont: UIFont?
+    public static let cellLabelFont = AppFont.sansSerif(style: .subheadline) // .callout is 20% larger
+    public static let cellDetailFont = AppFont.sansSerif(style: .footnote)
     private static var _userFontDelta: CGFloat?
     private static var _bodyLineHeight: Float?
     

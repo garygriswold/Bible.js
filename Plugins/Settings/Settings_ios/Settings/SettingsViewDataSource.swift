@@ -121,8 +121,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                 case 0:
                     return self.textSizeSliderCell
                 case 1:
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-                    
                     return self.textHeightSliderCell
                 default: fatalError("Unknown row \(indexPath.row) in section 1")
                 }
@@ -250,7 +248,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     private func genericCell(view: UITableView, indexPath: IndexPath, title: String, icon: String?) -> UITableViewCell {
         let cell = view.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
         cell.textLabel?.text = title
-        cell.textLabel?.font = AppFont.sansSerif(style: .body)
+        cell.textLabel?.font = AppFont.cellLabelFont
         if icon != nil {
             var image = UIImage(named: "www/images/" + icon!)
             image = image?.withRenderingMode(.alwaysTemplate)

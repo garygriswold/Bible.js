@@ -76,8 +76,8 @@ class LanguageModel : SettingsModel {
     
     private func generateCell(tableView: UITableView, indexPath: IndexPath, language: Language) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "languageCell", for: indexPath)
-        cell.textLabel?.font = AppFont.sansSerif(style: .body)
-        cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
+        cell.textLabel?.font = AppFont.cellLabelFont
+        cell.detailTextLabel?.font = AppFont.cellDetailFont
         cell.textLabel?.text = language.name
         cell.detailTextLabel?.text = language.localized
         cell.selectionStyle = .default
