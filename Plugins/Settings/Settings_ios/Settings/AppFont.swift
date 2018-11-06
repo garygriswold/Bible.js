@@ -15,6 +15,8 @@ public class AppFont {
     public static let cellDetailFont = AppFont.sansSerif(style: .footnote)
     private static var _userFontDelta: CGFloat?
     private static var _bodyLineHeight: Float?
+    private static var _nightMode: Bool?
+    private static var _verseNumbers: Bool?
     
     public static var userFontDelta: CGFloat {
         get {
@@ -31,7 +33,7 @@ public class AppFont {
         }
     }
     
-    public static var bodyLineHeight: Float {
+    static var bodyLineHeight: Float {
         get {
             if _bodyLineHeight == nil {
                 _bodyLineHeight = SettingsDB.shared.getFloat(name: "body-line-height", ifNone: 1.8)
@@ -41,6 +43,46 @@ public class AppFont {
         set(newValue) {
             _bodyLineHeight = newValue
             SettingsDB.shared.updateFloat(name: "body-line-height", setting: newValue)
+        }
+    }
+    
+    static var nightMode: Bool {
+        get {
+            if _nightMode == nil {
+                _nightMode = SettingsDB.shared.getBool(name: "night-mode", ifNone: false)
+            }
+            return _nightMode!
+        }
+        set(newValue) {
+            _nightMode = newValue
+            SettingsDB.shared.updateBool(name: "night-mode", setting: newValue)
+        }
+    }
+    
+    static var backgroundColor: UIColor {
+        get { return nightMode ? .black : .white }
+        //get { return .red }
+    }
+    
+    static var groupTableViewBackground: UIColor {
+        get { return UIColor.groupTableViewBackground }
+    }
+    
+    static var textColor: UIColor {
+        get { return nightMode ? .white : .black }
+        //get { return .black }
+    }
+    
+    static var verseNumbers: Bool {
+        get {
+            if _verseNumbers == nil {
+                _verseNumbers = SettingsDB.shared.getBool(name: "verse-numbers", ifNone: true)
+            }
+            return _verseNumbers!
+        }
+        set(newValue) {
+            _verseNumbers = newValue
+            SettingsDB.shared.updateBool(name: "verse-numbers", setting: newValue)
         }
     }
 

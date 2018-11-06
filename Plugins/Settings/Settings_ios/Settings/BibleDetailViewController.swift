@@ -19,14 +19,14 @@ class BibleDetailViewController : AppViewController {
         self.controller = controller
         self.indexPath = indexPath
         self.bible = bible
-        self.textView = UITextView(frame: .zero)
+        self.textView = UITextView(frame: UIScreen.main.bounds)
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
         self.indexPath = IndexPath(item: 0, section: 0)
         self.bible = Bible(bibleId: "", abbr: "", iso3: "", name: "", s3KeyPrefix: "", s3Key: "",
         locale: Locale(identifier: "en-US"))
-        self.textView = UITextView(frame: .zero)
+        self.textView = UITextView(frame: UIScreen.main.bounds)
         super.init(coder: coder)
     }
     
@@ -44,7 +44,7 @@ class BibleDetailViewController : AppViewController {
                                                                      target: self,
                                                                      action: #selector(addHandler))
         }
-        self.textView = UITextView(frame: UIScreen.main.bounds)
+        self.textView.backgroundColor = AppFont.backgroundColor
         let inset = self.textView.frame.width * 0.05
         self.textView.textContainerInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         self.textView.text = debugInfo()

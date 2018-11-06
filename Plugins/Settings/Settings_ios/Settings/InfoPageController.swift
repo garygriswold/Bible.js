@@ -10,14 +10,14 @@ import UIKit
 
 class InfoPageController : AppViewController {
     
-    private var textView: UITextView!
+    private let textView: UITextView
     
     init() {
-        self.textView = UITextView(frame: .zero)
+        self.textView = UITextView(frame: UIScreen.main.bounds)
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
-        self.textView = UITextView(frame: .zero)
+        self.textView = UITextView(frame: UIScreen.main.bounds)
         super.init(coder: coder)
     }
     
@@ -31,7 +31,7 @@ class InfoPageController : AppViewController {
         // set Top Bar items
         self.navigationItem.title = NSLocalizedString("Privacy Policy", comment: "Title of Page")
         
-        self.textView = UITextView(frame: UIScreen.main.bounds)
+        self.textView.backgroundColor = AppFont.backgroundColor
         let inset = self.textView.frame.width * 0.05
         self.textView.textContainerInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         self.textView.text = aboutInfo()
@@ -45,6 +45,7 @@ class InfoPageController : AppViewController {
         super.viewWillAppear(animated)
         
         self.textView.font = AppFont.serif(style: .body)
+        self.textView.textColor = AppFont.textColor
         
         let navHeight = self.navigationController?.navigationBar.frame.size.height ?? 44
         let point = CGPoint(x: 0, y: navHeight)

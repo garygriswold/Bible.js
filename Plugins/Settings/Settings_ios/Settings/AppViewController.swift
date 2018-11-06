@@ -12,8 +12,9 @@ class AppViewController : UIViewController {
     
     override func loadView() {
         super.loadView()
-       
-        self.view.backgroundColor = UIColor.white
+      
+        self.navigationController?.navigationBar.barTintColor = AppFont.backgroundColor
+        self.view.backgroundColor = AppFont.backgroundColor
     }
     
     override func viewWillAppear(_ animated: Bool) {

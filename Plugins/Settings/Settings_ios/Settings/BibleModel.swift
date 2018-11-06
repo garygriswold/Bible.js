@@ -108,7 +108,9 @@ class BibleModel : SettingsModel {
     
     private func generateCell(tableView: UITableView, indexPath: IndexPath, bible: Bible) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "languageCell", for: indexPath)
+        cell.backgroundColor = AppFont.backgroundColor
         cell.textLabel?.font = AppFont.cellLabelFont
+        cell.textLabel?.textColor = AppFont.textColor
         cell.detailTextLabel?.font = AppFont.cellDetailFont
         cell.textLabel?.text = bible.name
         cell.detailTextLabel?.text = bible.abbr

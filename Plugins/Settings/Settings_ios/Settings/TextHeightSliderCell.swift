@@ -38,6 +38,8 @@ class TextHeightSliderCell : UITableViewCell {
         let width = bounds.width
         let height = bounds.height
         
+        self.backgroundColor = AppFont.backgroundColor
+        
         var image = UIImage(named: "www/images/typ-height.png")
         image = image?.withRenderingMode(.alwaysTemplate)
         self.imageView!.tintColor = UIColor.gray
@@ -73,7 +75,7 @@ class TextHeightSliderCell : UITableViewCell {
             label.numberOfLines = 0
             label.lineBreakMode = .byWordWrapping
             label.textAlignment = .center
-            label.backgroundColor = UIColor.groupTableViewBackground
+            label.backgroundColor = AppFont.groupTableViewBackground
             label.alpha = 0.9
             //let textSize = label.intrinsicContentSize // could be useful to animate size of box
             self.sampleTextLabel = label

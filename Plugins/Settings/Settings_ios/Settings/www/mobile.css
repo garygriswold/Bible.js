@@ -344,7 +344,7 @@ margin: 1.2em 0;
   font-weight: bold;
   font-size: 0.7rem; /* 70% */
   vertical-align: top;
-  color: #333;
+  color: #888;/*#333;*/
   font-family: avenir, helvetica;
 }
 

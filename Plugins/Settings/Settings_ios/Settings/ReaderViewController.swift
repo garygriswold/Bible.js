@@ -26,8 +26,8 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
         
         let configuration = WKWebViewConfiguration()
         configuration.preferences.javaScriptEnabled = true
-        self.webView = WKWebView(frame: .zero, configuration: configuration)
-        self.webView.backgroundColor = .white
+        self.webView = WKWebView(frame: UIScreen.main.bounds, configuration: configuration)
+        self.webView.backgroundColor = AppFont.backgroundColor
         self.view = self.webView
         
         self.webView.navigationDelegate = self
@@ -46,9 +46,14 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
     
     private func updateFontSize() {
         let font = AppFont.serif(style: .body)
-        let message = "var sheet = document.styleSheets[0];\n" +
-            "sheet.addRule('html', 'font-size:\(Int(font.pointSize))pt');" +
-            "sheet.addRule('.section,.chapter', 'line-height:\(AppFont.bodyLineHeight);');"
+        let verseNumbers = AppFont.verseNumbers ? "inline" : "none"
+        let nightMode = AppFont.nightMode ? "background-color:black; color:white;"
+        : "background-color:white; color:black;"
+        let message = "var sheet = document.styleSheets[0];\n"
+            + "sheet.addRule('html', 'font-size:\(Int(font.pointSize))pt');\n"
+            + "sheet.addRule('.section,.chapter', 'line-height:\(AppFont.bodyLineHeight);');\n"
+            + "sheet.addRule('.v-num', 'display:\(verseNumbers)');\n"
+            + "sheet.addRule('html', '\(nightMode)');"
         print(message)
         self.execJavascript(message: message)
     }

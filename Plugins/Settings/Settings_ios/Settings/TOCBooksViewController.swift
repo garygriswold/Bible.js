@@ -23,6 +23,7 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
         // create Table view
         let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         self.tableView = UITableView(frame: frame, style: UITableView.Style.plain)
+        self.tableView.backgroundColor = AppFont.groupTableViewBackground
         self.tableView.layer.borderWidth = 0.4
         self.tableView.layer.borderColor = UIColor(white: 0.8, alpha: 1.0).cgColor
         self.view.addSubview(self.tableView)
@@ -74,7 +75,7 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
         if let nav = self.navigationController {
             
             nav.toolbar.isTranslucent = false
-            nav.toolbar.barTintColor = .white
+            nav.toolbar.barTintColor = AppFont.backgroundColor
         }
         var items = [UIBarButtonItem]()
         

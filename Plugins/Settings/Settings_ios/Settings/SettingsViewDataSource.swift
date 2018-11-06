@@ -130,7 +130,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                     let nightCell = self.genericCell(view: tableView, indexPath: indexPath, title: nightText,
                                                     accessory: false, icon: "wea-moon.png")
                     self.nightSwitch = UISwitch(frame: .zero)
-                    self.nightSwitch!.setOn(false, animated: false)
+                    self.nightSwitch!.setOn(AppFont.nightMode, animated: false)
                     self.nightSwitch!.addTarget(self, action: #selector(nightSwitchHandler),
                                                 for: .valueChanged)
                     nightCell.accessoryView = self.nightSwitch
@@ -140,7 +140,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                     let verseCell = self.genericCell(view: tableView, indexPath: indexPath, title: verseText,
                                                     accessory: false, icon: "typ-bullets-numbers.png")
                     self.verseSwitch = UISwitch(frame: .zero)
-                    self.verseSwitch!.setOn(true, animated: false)
+                    self.verseSwitch!.setOn(AppFont.verseNumbers, animated: false)
                     self.verseSwitch!.addTarget(self, action: #selector(verseSwitchHandler),
                                                 for: .valueChanged)
                     verseCell.accessoryView = self.verseSwitch
@@ -273,6 +273,8 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         let cell = view.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
         cell.textLabel?.text = title
         cell.textLabel?.font = AppFont.cellLabelFont
+        cell.textLabel?.textColor = AppFont.textColor
+        cell.backgroundColor = AppFont.backgroundColor
         var image = UIImage(named: "www/images/" + icon)
         image = image?.withRenderingMode(.alwaysTemplate)
         cell.imageView?.tintColor = UIColor.gray
@@ -284,10 +286,10 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     }
     
     @objc func nightSwitchHandler(sender: UISwitch) {
-        print("night switch \(sender.isOn)")
+        AppFont.nightMode = sender.isOn
     }
     
     @objc func verseSwitchHandler(sender: UISwitch) {
-        print("verse switch \(sender.isOn)")
+        AppFont.verseNumbers = sender.isOn
     }
 }

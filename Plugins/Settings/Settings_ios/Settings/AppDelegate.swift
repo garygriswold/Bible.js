@@ -16,8 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navController = readerNavigator.present()
         
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window?.rootViewController = navController
-        self.window?.makeKeyAndVisible()
+        self.window!.rootViewController = navController
+        self.window!.rootViewController!.view.backgroundColor = AppFont.backgroundColor
+        self.window!.makeKeyAndVisible()
         
         return true
     }

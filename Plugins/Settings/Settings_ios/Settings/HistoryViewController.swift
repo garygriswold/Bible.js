@@ -21,6 +21,7 @@ class HistoryViewController : AppViewController, UITableViewDataSource, UITableV
         
         // create Table view
         self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableView.Style.plain)
+        self.tableView.backgroundColor = AppFont.groupTableViewBackground
         self.view.addSubview(self.tableView)
         
         self.navigationItem.title = NSLocalizedString("History", comment: "History view page title")
@@ -55,7 +56,9 @@ class HistoryViewController : AppViewController, UITableViewDataSource, UITableV
         let index = HistoryModel.shared.historyCount - indexPath.row - 1
         let reference = HistoryModel.shared.getHistory(row: index)
         let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath)
+        cell.backgroundColor = AppFont.backgroundColor
         cell.textLabel?.font = AppFont.cellLabelFont
+        cell.textLabel?.textColor = AppFont.textColor
         cell.detailTextLabel?.font = AppFont.cellDetailFont
         cell.textLabel?.text = reference.description()
         cell.detailTextLabel?.text = reference.bibleName

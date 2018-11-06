@@ -33,6 +33,8 @@ struct BiblePageModel {
         let start = CFAbsoluteTimeGetCurrent()
         let html = BibleDB.shared.getBiblePage(reference: self.reference)
         if html == nil {
+            let tempHTML = self.getCSS() + "<html><body></body></html>"
+            webView.loadHTMLString(tempHTML, baseURL: nil)
             let progress = self.addProgressIndicator(webView: webView)
             let s3Key = self.generateKey(keyPrefix: self.reference.s3KeyPrefix, key: self.reference.s3Key,
                                          bookId: self.reference.bookId, chapter: self.reference.chapter)
@@ -117,8 +119,9 @@ struct BiblePageModel {
             let url = URL(fileURLWithPath: path!)
             do {
                 let css = try String(contentsOf: url)
+                let vars = "html { background-color:red; color:white; }\n"
                 let hideNav = ".header { display: none }\n.footer { display: none }\n"
-                BiblePageModel.mobileCSS = "<style type='text/css'>\n" + css + hideNav + "</style>\n"
+                BiblePageModel.mobileCSS = "<style type='text/css'>\n" + vars + css + hideNav + "</style>\n"
             } catch let err {
                 print("ERROR: BiblePage.getCSS() \(err)")
             }

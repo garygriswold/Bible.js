@@ -139,10 +139,11 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         let cell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
         cell.textLabel?.font = AppFont.cellLabelFont
         cell.textLabel?.text = book.name
+        cell.textLabel?.textColor = AppFont.textColor
         if HistoryModel.shared.current().bookId == book.bookId {
             cell.backgroundColor = UIColor(red: 0.89, green: 0.98, blue: 0.96, alpha: 1.0)
         } else {
-            cell.backgroundColor = .white
+            cell.backgroundColor = AppFont.backgroundColor
         }
         cell.selectionStyle = .default
         cell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator

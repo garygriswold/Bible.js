@@ -24,7 +24,7 @@ class ReaderToolbar {
         if let nav = self.navigationController {
             
             nav.toolbar.isTranslucent = false
-            nav.toolbar.barTintColor = .white
+            nav.toolbar.barTintColor = AppFont.backgroundColor
         }
         var items = [UIBarButtonItem]()
         
@@ -142,7 +142,11 @@ class ReaderToolbar {
         let label = UILabel(frame: frame)
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
-        label.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+        if AppFont.nightMode {
+            label.backgroundColor = UIColor(white: 0.20, alpha: 1.0)
+        } else {
+            label.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+        }
         label.textColor = UIColor(red: 0.24, green: 0.5, blue: 0.96, alpha: 1.0)
         let gesture = UITapGestureRecognizer(target: self, action: action)
         gesture.numberOfTapsRequired = 1

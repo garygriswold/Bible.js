@@ -33,6 +33,13 @@ struct SettingsDB {
         }
         return ifNone
     }
+    
+    func getBool(name: String, ifNone: Bool) -> Bool {
+        if let value = self.getSetting(name: name) {
+            return (value == "T") ? true : false
+        }
+        return ifNone
+    }
 
     func getSetting(name: String) -> String? {
         let sql = "SELECT value FROM Settings WHERE name = ?"
@@ -56,6 +63,10 @@ struct SettingsDB {
     
     func updateFloat(name: String, setting: Float) {
         self.updateSetting(name: name, setting: "\(setting)")
+    }
+    
+    func updateBool(name: String, setting: Bool) {
+        self.updateSetting(name: name, setting: (setting) ? "T" : "F")
     }
     
     func updateSetting(name: String, setting: String) {

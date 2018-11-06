@@ -20,11 +20,12 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         super.init(coder: coder)
     }
     
-    override var prefersStatusBarHidden: Bool { return true }
+    //override var prefersStatusBarHidden: Bool { return true }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.backgroundColor = AppFont.backgroundColor
         self.toolBar = ReaderToolbar(controller: self)
         
         self.dataSource = self
@@ -35,8 +36,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        self.view.backgroundColor = .white
+
         if let pageControl = self.view.subviews[1] as? UIPageControl {
             pageControl.pageIndicatorTintColor = .lightGray
             pageControl.currentPageIndicatorTintColor = .black

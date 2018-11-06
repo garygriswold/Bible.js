@@ -26,6 +26,7 @@ class FeedbackViewController: AppViewController, UITextViewDelegate {
                                                                 action: #selector(replyHandler))
         
         self.textView = UITextView(frame: UIScreen.main.bounds)
+        self.textView.backgroundColor = AppFont.backgroundColor
         let inset = self.textView.frame.width * 0.05
         self.textView.textContainerInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         self.textView.isEditable = true

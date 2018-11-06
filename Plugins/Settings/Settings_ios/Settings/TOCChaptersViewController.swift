@@ -41,7 +41,7 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ChapterNumCell")
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = UIColor.white
+        collectionView.backgroundColor = AppFont.backgroundColor
         self.view.addSubview(collectionView)
         
         // Reposition collectionView to midview

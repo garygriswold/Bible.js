@@ -58,11 +58,12 @@ class SettingsViewController: AppViewController {
  
         // create Table view
         self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableView.Style.grouped)
+        self.tableView.backgroundColor = AppFont.groupTableViewBackground
         self.tableView.allowsSelectionDuringEditing = true
         let barHeight = self.navigationController?.navigationBar.frame.height ?? 44
         self.recentContentOffset = CGPoint(x:0, y: -1 * barHeight)
         self.view = self.tableView // OR //self.view.addSubview(self.tableView)
-        let width = self.view.bounds.width
+        let width = UIScreen.main.bounds.width
  
         switch self.settingsViewType {
         case .primary:
