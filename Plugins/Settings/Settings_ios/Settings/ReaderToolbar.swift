@@ -13,9 +13,9 @@ class ReaderToolbar {
     private weak var controller: ReaderPagesController?
     private weak var navigationController: UINavigationController?
     
-    private var versionLabel: UILabel!
     private var tocBookLabel: UILabel!
     private var tocChapLabel: UILabel!
+    private var versionLabel: UILabel!
     
     init(controller: ReaderPagesController) {
         self.controller = controller
@@ -26,6 +26,7 @@ class ReaderToolbar {
             nav.toolbar.isTranslucent = false
             nav.toolbar.barTintColor = AppFont.backgroundColor
         }
+        
         var items = [UIBarButtonItem]()
         
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -80,6 +81,17 @@ class ReaderToolbar {
                                      action: #selector(searchTapHandler))
         items.append(search)
         self.controller!.setToolbarItems(items, animated: true)
+    }
+    
+    func refresh() {
+        if let nav = self.navigationController {
+            nav.toolbar.barTintColor = AppFont.backgroundColor
+        }
+        let background = AppFont.nightMode ? UIColor(white: 0.20, alpha: 1.0) :
+            UIColor(white: 0.95, alpha: 1.0)
+        self.tocBookLabel.backgroundColor = background
+        self.tocChapLabel.backgroundColor = background
+        self.versionLabel.backgroundColor = background
     }
     
     func loadBiblePage(reference: Reference) {

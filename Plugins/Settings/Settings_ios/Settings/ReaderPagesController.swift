@@ -38,11 +38,13 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         super.viewDidLayoutSubviews()
 
         if let pageControl = self.view.subviews[1] as? UIPageControl {
+            pageControl.backgroundColor = AppFont.backgroundColor
             pageControl.pageIndicatorTintColor = .lightGray
             pageControl.currentPageIndicatorTintColor = .black
             pageControl.layer.borderWidth = 0.4
             pageControl.layer.borderColor = UIColor(white: 0.8, alpha: 1.0).cgColor
         }
+        self.toolBar.refresh()
     }
     
     func loadBiblePage(reference: Reference) {
