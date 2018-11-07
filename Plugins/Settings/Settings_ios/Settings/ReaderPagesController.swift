@@ -20,7 +20,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         super.init(coder: coder)
     }
     
-    override var prefersStatusBarHidden: Bool { return false }
+    override var prefersStatusBarHidden: Bool { get { return true } }
 
     override func viewDidLoad() {
         super.viewDidLoad()
