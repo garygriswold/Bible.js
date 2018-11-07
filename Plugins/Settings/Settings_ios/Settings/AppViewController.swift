@@ -10,6 +10,10 @@ import UIKit
 
 class AppViewController : UIViewController {
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        get { return AppFont.nightMode ? .lightContent : .default }
+    }
+    
     override func loadView() {
         super.loadView()
       

@@ -287,6 +287,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     
     @objc func nightSwitchHandler(sender: UISwitch) {
         AppFont.nightMode = sender.isOn
+        self.controller?.setNeedsStatusBarAppearanceUpdate()
     }
     
     @objc func verseSwitchHandler(sender: UISwitch) {
