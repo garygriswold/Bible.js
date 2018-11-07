@@ -17,10 +17,12 @@ class AppViewController : UIViewController {
     override func loadView() {
         super.loadView()
       
-        // Controls Navbar background color
-        self.navigationController?.navigationBar.barTintColor = AppFont.backgroundColor
-        // Controls Navbar text color
-        self.navigationController?.navigationBar.barStyle = (AppFont.nightMode) ? .black : .default
+        if let navBar = self.navigationController?.navigationBar {
+            // Controls Navbar background color
+            navBar.barTintColor = AppFont.backgroundColor
+            // Controls Navbar text color
+            navBar.barStyle = (AppFont.nightMode) ? .black : .default
+        }
         self.view.backgroundColor = AppFont.backgroundColor
     }
     

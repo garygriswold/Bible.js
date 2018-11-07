@@ -18,9 +18,8 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     private let searchController: SettingsSearchController?
     private let textSizeSliderCell: TextSizeSliderCell
     private let textHeightSliderCell: TextHeightSliderCell
-    //
-    private var nightSwitch: UISwitch?
-    private var verseSwitch: UISwitch?
+    private let nightSwitch: UISwitch
+    private let verseSwitch: UISwitch
     
     init(controller: SettingsViewController, selectionViewSection: Int, searchController: SettingsSearchController?) {
         self.controller = controller
@@ -33,6 +32,8 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         // Text Size Cell
         self.textSizeSliderCell = TextSizeSliderCell(controller: self.controller!, style: .default, reuseIdentifier: nil)
         self.textHeightSliderCell = TextHeightSliderCell(controller: self.controller!, style: .default, reuseIdentifier: nil)
+        self.nightSwitch = UISwitch(frame: .zero)
+        self.verseSwitch = UISwitch(frame: .zero)
        
         super.init()
     }
@@ -129,9 +130,8 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                     let nightText = NSLocalizedString("Night Time", comment: "Clickable cell title")
                     let nightCell = self.genericCell(view: tableView, indexPath: indexPath, title: nightText,
                                                     accessory: false, icon: "wea-moon.png")
-                    self.nightSwitch = UISwitch(frame: .zero)
-                    self.nightSwitch!.setOn(AppFont.nightMode, animated: false)
-                    self.nightSwitch!.addTarget(self, action: #selector(nightSwitchHandler),
+                    self.nightSwitch.setOn(AppFont.nightMode, animated: false)
+                    self.nightSwitch.addTarget(self, action: #selector(nightSwitchHandler),
                                                 for: .valueChanged)
                     nightCell.accessoryView = self.nightSwitch
                     return nightCell
@@ -139,9 +139,8 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                     let verseText = NSLocalizedString("Verse Numbers", comment: "Clickable cell title")
                     let verseCell = self.genericCell(view: tableView, indexPath: indexPath, title: verseText,
                                                     accessory: false, icon: "typ-bullets-numbers.png")
-                    self.verseSwitch = UISwitch(frame: .zero)
-                    self.verseSwitch!.setOn(AppFont.verseNumbers, animated: false)
-                    self.verseSwitch!.addTarget(self, action: #selector(verseSwitchHandler),
+                    self.verseSwitch.setOn(AppFont.verseNumbers, animated: false)
+                    self.verseSwitch.addTarget(self, action: #selector(verseSwitchHandler),
                                                 for: .valueChanged)
                     verseCell.accessoryView = self.verseSwitch
                     return verseCell
@@ -287,7 +286,20 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     
     @objc func nightSwitchHandler(sender: UISwitch) {
         AppFont.nightMode = sender.isOn
-        self.controller?.setNeedsStatusBarAppearanceUpdate()
+        if let cell = sender.superview as? UITableViewCell {
+            if let table = cell.superview as? UITableView {
+                table.refreshControl = UIRefreshControl()
+                table.refreshControl?.backgroundColor = AppFont.backgroundColor
+                table.backgroundColor = AppFont.backgroundColor
+                table.reloadData()
+            }
+        }
+        if let navBar = self.controller?.navigationController?.navigationBar {
+            // Controls Navbar background color
+            navBar.barTintColor = AppFont.backgroundColor
+            // Controls Navbar text color
+            navBar.barStyle = (AppFont.nightMode) ? .black : .default
+        }
     }
     
     @objc func verseSwitchHandler(sender: UISwitch) {
