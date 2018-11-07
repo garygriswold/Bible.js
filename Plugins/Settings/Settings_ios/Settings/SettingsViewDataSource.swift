@@ -288,8 +288,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         AppFont.nightMode = sender.isOn
         if let cell = sender.superview as? UITableViewCell {
             if let table = cell.superview as? UITableView {
-                table.refreshControl = UIRefreshControl()
-                table.refreshControl?.backgroundColor = AppFont.backgroundColor
                 table.backgroundColor = AppFont.backgroundColor
                 table.reloadData()
             }
