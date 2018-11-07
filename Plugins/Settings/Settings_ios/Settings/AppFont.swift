@@ -65,7 +65,7 @@ public class AppFont {
     }
     
     static var groupTableViewBackground: UIColor {
-        get { return UIColor.groupTableViewBackground }
+        get { return nightMode ? UIColor(white: 0.17, alpha: 1.0) : UIColor.groupTableViewBackground }
     }
     
     static var textColor: UIColor {

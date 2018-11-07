@@ -141,7 +141,8 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         cell.textLabel?.text = book.name
         cell.textLabel?.textColor = AppFont.textColor
         if HistoryModel.shared.current().bookId == book.bookId {
-            cell.backgroundColor = UIColor(red: 0.89, green: 0.98, blue: 0.96, alpha: 1.0)
+            let alpha = AppFont.nightMode ? 0.2 : 1.0
+            cell.backgroundColor = UIColor(red: 0.89, green: 0.98, blue: 0.96, alpha: CGFloat(alpha))
         } else {
             cell.backgroundColor = AppFont.backgroundColor
         }

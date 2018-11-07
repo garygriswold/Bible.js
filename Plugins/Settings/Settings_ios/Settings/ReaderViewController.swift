@@ -19,6 +19,8 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
         print("****** deinit Reader View Controller \(self.reference)")
     }
     
+    override var prefersStatusBarHidden: Bool { return false }
+    
     override func loadView() {
         super.loadView()
         

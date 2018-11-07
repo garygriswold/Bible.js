@@ -78,7 +78,8 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
         label.layer.borderColor = UIColor.init(white: 0.8, alpha: 1.0).cgColor
         let lastRef = HistoryModel.shared.current()
         if lastRef.bookId == self.book.bookId && lastRef.chapter == chapter {
-            label.backgroundColor = UIColor(red: 0.89, green: 0.98, blue: 0.96, alpha: 1.0)
+            let alpha = AppFont.nightMode ? 0.3 : 1.0
+            label.backgroundColor = UIColor(red: 0.89, green: 0.98, blue: 0.96, alpha: CGFloat(alpha))
             label.layer.masksToBounds = true
         }
         cell.contentView.addSubview(label)
