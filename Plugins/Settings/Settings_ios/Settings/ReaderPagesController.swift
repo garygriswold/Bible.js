@@ -25,6 +25,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.frame = UIScreen.main.bounds
         self.view.backgroundColor = AppFont.backgroundColor
         self.toolBar = ReaderToolbar(controller: self)
         
@@ -40,9 +41,13 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         if let pageControl = self.view.subviews[1] as? UIPageControl {
             pageControl.backgroundColor = AppFont.backgroundColor
             pageControl.pageIndicatorTintColor = .lightGray
-            pageControl.currentPageIndicatorTintColor = .black
-            pageControl.layer.borderWidth = 0.4
-            pageControl.layer.borderColor = UIColor(white: 0.8, alpha: 1.0).cgColor
+            pageControl.currentPageIndicatorTintColor = AppFont.nightMode ? .white : .black
+            
+            let layer = CALayer()
+            layer.borderColor = UIColor.lightGray.cgColor
+            layer.borderWidth = 0.3
+            layer.frame = CGRect(x: 0, y: 0, width: pageControl.frame.width, height: 0.3)
+            pageControl.layer.addSublayer(layer)
         }
         self.toolBar.refresh()
     }
