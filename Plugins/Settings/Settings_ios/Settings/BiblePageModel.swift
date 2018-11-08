@@ -31,10 +31,9 @@ struct BiblePageModel {
     
     func loadPage(webView: WKWebView) {
         let start = CFAbsoluteTimeGetCurrent()
+        print(DynamicCSS.shared.getCSS())
         let html = BibleDB.shared.getBiblePage(reference: self.reference)
         if html == nil {
-            let tempHTML = self.getCSS() + "<html><body></body></html>"
-            webView.loadHTMLString(tempHTML, baseURL: nil)
             let progress = self.addProgressIndicator(webView: webView)
             let s3Key = self.generateKey(keyPrefix: self.reference.s3KeyPrefix, key: self.reference.s3Key,
                                          bookId: self.reference.bookId, chapter: self.reference.chapter)
@@ -42,13 +41,14 @@ struct BiblePageModel {
                 complete: { error, data in
                     self.removeProgressIndicator(indicator: progress)
                     if let data1 = data {
-                        webView.loadHTMLString(self.getCSS() + data1, baseURL: nil)
+                        webView.loadHTMLString(DynamicCSS.shared.getCSS() + data1, baseURL: nil)
                         _ = BibleDB.shared.storeBiblePage(reference: self.reference, html: data1)
                         print("*** BiblePage.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                     }
             })
+            webView.loadHTMLString(DynamicCSS.shared.getEmptyHtml(), baseURL: nil)
         } else {
-            webView.loadHTMLString(self.getCSS() + html!, baseURL: nil)
+            webView.loadHTMLString(DynamicCSS.shared.getCSS() + html!, baseURL: nil)
         }
     }
     
@@ -111,24 +111,7 @@ struct BiblePageModel {
         }
         return keyPrefix + result.joined()
     }
- 
-    private func getCSS() -> String {
-        if BiblePageModel.mobileCSS == nil {
-            let bundle: Bundle = Bundle.main
-            let path = bundle.path(forResource: "www/mobile", ofType: "css")
-            let url = URL(fileURLWithPath: path!)
-            do {
-                let css = try String(contentsOf: url)
-                let vars = "html { background-color:red; color:white; }\n"
-                let hideNav = ".header { display: none }\n.footer { display: none }\n"
-                BiblePageModel.mobileCSS = "<style type='text/css'>\n" + vars + css + hideNav + "</style>\n"
-            } catch let err {
-                print("ERROR: BiblePage.getCSS() \(err)")
-            }
-        }
-        return BiblePageModel.mobileCSS!
-    }
-    
+
     struct BookData {
         let seq: String
         let seq3: String

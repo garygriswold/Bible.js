@@ -271,7 +271,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
                              accessory: Bool, icon: String) -> UITableViewCell {
         let cell = view.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
         cell.textLabel?.text = title
-        cell.textLabel?.font = AppFont.cellLabelFont
+        cell.textLabel?.font = AppFont.sansSerif(style: .subheadline)
         cell.textLabel?.textColor = AppFont.textColor
         cell.backgroundColor = AppFont.backgroundColor
         var image = UIImage(named: "www/images/" + icon)

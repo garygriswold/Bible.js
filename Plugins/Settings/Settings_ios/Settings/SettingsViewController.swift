@@ -146,7 +146,7 @@ class SettingsViewController: AppViewController {
     @objc override func preferredContentSizeChanged(note: NSNotification) {
         super.preferredContentSizeChanged(note: note)
 
-        //tableView.reloadData() // updates preferred font size in table
+        tableView.reloadData() // updates preferred font size in table
     }
     
     @objc func keyboardWillShow(note: NSNotification) {

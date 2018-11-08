@@ -137,7 +137,7 @@ class TableContentsModel { // class is used to permit self.contents inside closu
     func generateBookCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         let book = (self.filtered.count > 0) ? self.filtered[indexPath.row] : self.books[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-        cell.textLabel?.font = AppFont.cellLabelFont
+        cell.textLabel?.font = AppFont.sansSerif(style: .subheadline)
         cell.textLabel?.text = book.name
         cell.textLabel?.textColor = AppFont.textColor
         if HistoryModel.shared.current().bookId == book.bookId {

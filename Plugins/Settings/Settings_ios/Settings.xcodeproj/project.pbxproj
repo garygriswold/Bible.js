@@ -16,6 +16,7 @@
 		E40D60632182013300A06B54 /* AppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D60622182013300A06B54 /* AppViewController.swift */; };
 		E40D6065218252CA00A06B54 /* BiblePageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D6064218252CA00A06B54 /* BiblePageModel.swift */; };
 		E428B7E52138BD7F000AB2A8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E32138BD7F000AB2A8 /* InfoPlist.strings */; };
+		E431E92A21938D7300CF609C /* DynamicCSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E431E92921938D7300CF609C /* DynamicCSS.swift */; };
 		E4480A2C21866E7F00C019B0 /* Reference.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4480A2B21866E7F00C019B0 /* Reference.swift */; };
 		E4480A2E2187D3DD00C019B0 /* ReaderPagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4480A2D2187D3DD00C019B0 /* ReaderPagesController.swift */; };
 		E4480A302188147200C019B0 /* ReaderToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4480A2F2188147200C019B0 /* ReaderToolbar.swift */; };
@@ -87,6 +88,7 @@
 		E428B7E92138BF70000AB2A8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E428B7EA2138C003000AB2A8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E428B7ED2138C297000AB2A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E431E92921938D7300CF609C /* DynamicCSS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicCSS.swift; sourceTree = "<group>"; };
 		E4480A2B21866E7F00C019B0 /* Reference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reference.swift; sourceTree = "<group>"; };
 		E4480A2D2187D3DD00C019B0 /* ReaderPagesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderPagesController.swift; sourceTree = "<group>"; };
 		E4480A2F2188147200C019B0 /* ReaderToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderToolbar.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				E4480A2D2187D3DD00C019B0 /* ReaderPagesController.swift */,
 				E40D60622182013300A06B54 /* AppViewController.swift */,
 				E404A3B92176BAA100340395 /* ReaderViewController.swift */,
+				E431E92921938D7300CF609C /* DynamicCSS.swift */,
 				E4480A2F2188147200C019B0 /* ReaderToolbar.swift */,
 				E40D6064218252CA00A06B54 /* BiblePageModel.swift */,
 				E4480A2B21866E7F00C019B0 /* Reference.swift */,
@@ -392,6 +395,7 @@
 				E4638974217AE210009BF5E2 /* SettingsDB.swift in Sources */,
 				E402BCB5217B80BA0026E1DE /* TableContentsModel.swift in Sources */,
 				E46B2C83218E50200063E68C /* TextHeightSliderCell.swift in Sources */,
+				E431E92A21938D7300CF609C /* DynamicCSS.swift in Sources */,
 				E463897221799013009BF5E2 /* BiblesActionSheet.swift in Sources */,
 				E4C2E992211B712D00B71CC5 /* SettingsViewDelegate.swift in Sources */,
 				E4C2E98E211B712D00B71CC5 /* TextSizeSliderCell.swift in Sources */,

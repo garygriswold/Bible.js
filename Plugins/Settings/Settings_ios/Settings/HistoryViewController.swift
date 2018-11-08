@@ -57,9 +57,9 @@ class HistoryViewController : AppViewController, UITableViewDataSource, UITableV
         let reference = HistoryModel.shared.getHistory(row: index)
         let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath)
         cell.backgroundColor = AppFont.backgroundColor
-        cell.textLabel?.font = AppFont.cellLabelFont
+        cell.textLabel?.font = AppFont.sansSerif(style: .subheadline)
         cell.textLabel?.textColor = AppFont.textColor
-        cell.detailTextLabel?.font = AppFont.cellDetailFont
+        cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
         cell.textLabel?.text = reference.description()
         cell.detailTextLabel?.text = reference.bibleName
         cell.selectionStyle = .default

@@ -95,12 +95,10 @@ class ReaderToolbar {
     }
     
     func loadBiblePage(reference: Reference) {
-        
         self.tocBookLabel.frame = CGRect(x: 0, y: 0, width: 80, height: 32) // prevents fields running together
         self.tocBookLabel.text = reference.bookName
         self.tocChapLabel.text = String(reference.chapter)
         self.versionLabel.text = reference.abbr
-        
     }
     
     @objc func menuTapHandler(sender: UIBarButtonItem) {
