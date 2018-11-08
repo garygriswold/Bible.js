@@ -82,6 +82,8 @@ struct DynamicCSS {
     }
     
     func getEmptyHtml() -> String {
-        return "<style type='text/css'>" + nightMode.genCSS() + "</style><html><body></body></html>"
+        return "<html><head><style type='text/css'>" + nightMode.genCSS() + "</style>"
+            + "<meta name=\"viewport\" content=\"viewport-fit=cover\" />"
+            + "</head><body></body></html>"
     }
 }

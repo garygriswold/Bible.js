@@ -22,14 +22,20 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
     override func loadView() {
         super.loadView()
         
+        self.view.frame = UIScreen.main.bounds
+        self.view.backgroundColor = AppFont.backgroundColor
+
         self.navigationItem.title = NSLocalizedString("Read", comment: "Read view page title")
         
         let configuration = WKWebViewConfiguration()
         configuration.preferences.javaScriptEnabled = true
         self.webView = WKWebView(frame: UIScreen.main.bounds, configuration: configuration)
         self.webView.backgroundColor = AppFont.backgroundColor
-        self.view.frame = UIScreen.main.bounds
-        self.view.backgroundColor = AppFont.backgroundColor
+        
+        self.webView.scrollView.frame = UIScreen.main.bounds
+        self.webView.scrollView.contentInsetAdjustmentBehavior = .never
+        self.webView.scrollView.backgroundColor = AppFont.backgroundColor
+        
         self.view.addSubview(self.webView)
         
         self.webView.navigationDelegate = self

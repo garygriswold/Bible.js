@@ -31,7 +31,6 @@ struct BiblePageModel {
     
     func loadPage(webView: WKWebView) {
         let start = CFAbsoluteTimeGetCurrent()
-        print(DynamicCSS.shared.getCSS())
         let html = BibleDB.shared.getBiblePage(reference: self.reference)
         if html == nil {
             let progress = self.addProgressIndicator(webView: webView)
@@ -46,7 +45,6 @@ struct BiblePageModel {
                         print("*** BiblePage.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                     }
             })
-            webView.loadHTMLString(DynamicCSS.shared.getEmptyHtml(), baseURL: nil)
         } else {
             webView.loadHTMLString(DynamicCSS.shared.getCSS() + html!, baseURL: nil)
         }

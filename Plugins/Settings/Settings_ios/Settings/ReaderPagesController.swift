@@ -62,7 +62,8 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let hideNavBar = (AppFont.nightMode) ? false : true
+        //let hideNavBar = (AppFont.nightMode) ? false : true
+        let hideNavBar = true
         self.navigationController?.setNavigationBarHidden(hideNavBar, animated: false)
         self.navigationController?.isToolbarHidden = false
         
