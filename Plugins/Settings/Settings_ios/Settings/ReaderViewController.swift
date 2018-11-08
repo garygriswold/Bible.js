@@ -28,7 +28,9 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
         configuration.preferences.javaScriptEnabled = true
         self.webView = WKWebView(frame: UIScreen.main.bounds, configuration: configuration)
         self.webView.backgroundColor = AppFont.backgroundColor
-        self.view = self.webView
+        self.view.frame = UIScreen.main.bounds
+        self.view.backgroundColor = AppFont.backgroundColor
+        self.view.addSubview(self.webView)
         
         self.webView.navigationDelegate = self
 
