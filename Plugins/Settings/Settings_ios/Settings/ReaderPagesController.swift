@@ -99,12 +99,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     private func presentPage(controller: UIViewController, next: Bool) -> UIViewController? {
         if let page = controller as? ReaderViewController {
             let reference = page.reference!
-            var another: Reference
-            if next {
-                another = reference.bible.tableContents!.nextChapter(reference: reference)
-            } else {
-                another = reference.bible.tableContents!.priorChapter(reference: reference)
-            }
+            let another = next ? reference.nextChapter() : reference.priorChapter()
             let reader = ReaderViewController()
             reader.reference = another
             return reader

@@ -77,6 +77,14 @@ struct Reference : Equatable {
         get { return self.bible.tableContents!.getBook(bookId: self.bookId) }
     }
     
+    func nextChapter() -> Reference {
+        return self.bible.tableContents!.nextChapter(reference: self)
+    }
+    
+    func priorChapter() -> Reference {
+        return self.bible.tableContents!.priorChapter(reference: self)
+    }
+    
     func description() -> String {
         if self.verse != nil {
             return "\(self.bookName) \(self.chapter):\(self.verse!)"
