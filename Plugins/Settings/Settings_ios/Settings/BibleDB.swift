@@ -60,6 +60,12 @@ struct BibleDB {
         }
     }
     
+    // Could be optimized?
+    func hasBiblePage(reference: Reference) -> Bool {
+        let result = self.getBiblePage(reference: reference)
+        return (result != nil)
+    }
+    
     func storeBiblePage(reference: Reference, html: String) {
         DispatchQueue.main.async(execute: {
             let db: Sqlite3

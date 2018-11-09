@@ -19,34 +19,58 @@
 import AWS
 import WebKit
 
+enum GetChapter {
+    case this
+    case next
+    case prior
+}
+
 struct BiblePageModel {
     
     private static var mobileCSS: String?
     
-    private let reference: Reference
-    
-    init(reference: Reference) {
-        self.reference = reference
-    }
-    
-    func loadPage(webView: WKWebView) {
+    func loadPage(reference: Reference, which: GetChapter, webView: WKWebView) -> Reference {
         let start = CFAbsoluteTimeGetCurrent()
-        let html = BibleDB.shared.getBiblePage(reference: self.reference)
+        var ref: Reference
+        switch which {
+        case .this:
+            ref = reference
+        case .next:
+            ref = reference.nextChapter()
+        case .prior:
+            ref = reference.priorChapter()
+        }
+        let html = BibleDB.shared.getBiblePage(reference: ref)
         if html == nil {
             let progress = self.addProgressIndicator(webView: webView)
-            let s3Key = self.generateKey(keyPrefix: self.reference.s3KeyPrefix, key: self.reference.s3Key,
-                                         bookId: self.reference.bookId, chapter: self.reference.chapter)
+            let s3Key = self.generateKey(reference: ref)
             AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
                 complete: { error, data in
                     self.removeProgressIndicator(indicator: progress)
                     if let data1 = data {
                         webView.loadHTMLString(DynamicCSS.shared.getCSS() + data1, baseURL: nil)
-                        _ = BibleDB.shared.storeBiblePage(reference: self.reference, html: data1)
+                        _ = BibleDB.shared.storeBiblePage(reference: ref, html: data1)
                         print("*** BiblePage.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                     }
             })
         } else {
             webView.loadHTMLString(DynamicCSS.shared.getCSS() + html!, baseURL: nil)
+        }
+        return ref
+    }
+    
+    func preloadPage(reference: Reference, which: GetChapter, count: Int) {
+        let start = CFAbsoluteTimeGetCurrent()
+        let hasPage = BibleDB.shared.hasBiblePage(reference: reference)
+        if !hasPage {
+            let s3Key = self.generateKey(reference: reference)
+            AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
+                                                complete: { error, data in
+                                                    if let data1 = data {
+                                                        _ = BibleDB.shared.storeBiblePage(reference: reference, html: data1)
+                                                        print("*** BiblePage.AWS preload duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
+                                                    }
+            })
         }
     }
     
@@ -63,10 +87,10 @@ struct BiblePageModel {
         indicator.removeFromSuperview()
     }
     
-    private func generateKey(keyPrefix: String, key: String, bookId: String, chapter: Int) -> String {
+    private func generateKey(reference: Reference) -> String {
         var result = [String]()
         var inItem = false
-        for char: Character in key {
+        for char: Character in reference.s3Key {
             if char == "%" {
                 inItem = true
             } else if !inItem {
@@ -74,31 +98,31 @@ struct BiblePageModel {
             } else {
                 inItem = false
                 switch char {
-                case "I": // Id in last part of s3KeyPrefix
-                    let parts = keyPrefix.split(separator: "/")
+                case "I": // Id is last part of s3KeyPrefix
+                    let parts = reference.s3KeyPrefix.split(separator: "/")
                     result.append(String(parts[parts.count - 1]))
                 case "O": // ordinal 1 is GEN, 70 is MAT, not zero filled
-                    if let seq = bookMap[bookId]?.seq {
+                    if let seq = bookMap[reference.bookId]?.seq {
                         result.append(seq)
                     }
                 case "o": // 3 char ordinal A01 is GEN, zero filled
-                    if let seq3 = bookMap[bookId]?.seq3 {
+                    if let seq3 = bookMap[reference.bookId]?.seq3 {
                         result.append(seq3)
                     }
                 case "B": // USFM 3 char book code
-                    result.append(bookId)
+                    result.append(reference.bookId)
                 case "b": // 2 char book code
-                    if let id2 = bookMap[bookId]?.id2 {
+                    if let id2 = bookMap[reference.bookId]?.id2 {
                         result.append(id2)
                     }
                 case "C": // chapter number, not zero filled
-                    result.append(String(chapter))
+                    result.append(String(reference.chapter))
                 case "d": // chapter number, 2 char zero filled, Psalms 3 char
-                    var chapStr = String(chapter)
+                    var chapStr = String(reference.chapter)
                     if chapStr.count == 1 {
                         chapStr = "0" + chapStr
                     }
-                    if chapStr.count == 2 && bookId == "PSA" {
+                    if chapStr.count == 2 && reference.bookId == "PSA" {
                         chapStr = "0" + chapStr
                     }
                     result.append(chapStr)
@@ -107,7 +131,7 @@ struct BiblePageModel {
                 }
             }
         }
-        return keyPrefix + result.joined()
+        return reference.s3KeyPrefix + result.joined()
     }
 
     struct BookData {

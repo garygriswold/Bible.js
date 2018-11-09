@@ -57,11 +57,9 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         
         let page1 = ReaderViewController()
         page1.reference = reference
+        page1.which = .this
         
-        self.setViewControllers([page1],
-                                direction: .forward,
-                                animated: true,
-                                completion: nil )//((Bool) -> Void)? = nil)
+        self.setViewControllers([page1], direction: .forward, animated: true, completion: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -86,22 +84,19 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     //
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        print("presentation Before controller called")
-        return self.presentPage(controller: viewController, next: false)
+        return self.presentPage(controller: viewController, which: .prior)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        print("presentation After controller called")
-        return self.presentPage(controller: viewController, next: true)
+        return self.presentPage(controller: viewController, which: .next)
     }
     
-    private func presentPage(controller: UIViewController, next: Bool) -> UIViewController? {
+    private func presentPage(controller: UIViewController, which: GetChapter) -> UIViewController? {
         if let page = controller as? ReaderViewController {
-            let reference = page.reference!
-            let another = next ? reference.nextChapter() : reference.priorChapter()
             let reader = ReaderViewController()
-            reader.reference = another
+            reader.reference = page.reference!
+            reader.which = which
             return reader
         }
         return nil

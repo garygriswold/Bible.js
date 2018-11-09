@@ -14,6 +14,7 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
     
     private var webView: WKWebView!
     var reference: Reference!
+    var which: GetChapter = .this
     
     deinit {
         print("****** deinit Reader View Controller \(self.reference)")
@@ -40,8 +41,10 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
         
         self.webView.navigationDelegate = self
 
-        let biblePage = BiblePageModel(reference: self.reference)
-        biblePage.loadPage(webView: self.webView)
+        let biblePage = BiblePageModel()
+        self.reference = biblePage.loadPage(reference: self.reference, which: self.which,
+                                            webView: self.webView)
+        self.which = .this
         
         print("Loading Page \(self.reference!)")
     }
