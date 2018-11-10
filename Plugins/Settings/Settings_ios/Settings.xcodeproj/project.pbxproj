@@ -28,6 +28,7 @@
 		E463896E21793DC0009BF5E2 /* HistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463896D21793DC0009BF5E2 /* HistoryModel.swift */; };
 		E463897221799013009BF5E2 /* BiblesActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463897121799013009BF5E2 /* BiblesActionSheet.swift */; };
 		E4638974217AE210009BF5E2 /* SettingsDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4638973217AE210009BF5E2 /* SettingsDB.swift */; };
+		E469080B21964F5E00155F2A /* Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469080A21964F5E00155F2A /* Measurement.swift */; };
 		E46B2C83218E50200063E68C /* TextHeightSliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */; };
 		E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4825C412124F0B400D36620 /* BibleInitialSelect.swift */; };
 		E49F7296216AC830007D2856 /* ExternControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */; };
@@ -99,6 +100,7 @@
 		E463896D21793DC0009BF5E2 /* HistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryModel.swift; sourceTree = "<group>"; };
 		E463897121799013009BF5E2 /* BiblesActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblesActionSheet.swift; sourceTree = "<group>"; };
 		E4638973217AE210009BF5E2 /* SettingsDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDB.swift; sourceTree = "<group>"; };
+		E469080A21964F5E00155F2A /* Measurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Measurement.swift; sourceTree = "<group>"; };
 		E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextHeightSliderCell.swift; sourceTree = "<group>"; };
 		E4825C412124F0B400D36620 /* BibleInitialSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleInitialSelect.swift; sourceTree = "<group>"; };
 		E49ACDBD213B4F4E0031625C /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 				E428B7E32138BD7F000AB2A8 /* InfoPlist.strings */,
 				E4F720C0211B6F2C00E26B07 /* Assets.xcassets */,
 				E4F720C2211B6F2C00E26B07 /* LaunchScreen.storyboard */,
+				E469080A21964F5E00155F2A /* Measurement.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -400,6 +403,7 @@
 				E4C2E992211B712D00B71CC5 /* SettingsViewDelegate.swift in Sources */,
 				E4C2E98E211B712D00B71CC5 /* TextSizeSliderCell.swift in Sources */,
 				E4C2E991211B712D00B71CC5 /* SettingsModel.swift in Sources */,
+				E469080B21964F5E00155F2A /* Measurement.swift in Sources */,
 				E4F720BA211B6F2A00E26B07 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
