@@ -10,13 +10,16 @@ import UIKit
 
 class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
+    private var readerViewQueue: ReaderViewQueue
     private var toolBar: ReaderToolbar!
 
     init() {
+        self.readerViewQueue = ReaderViewQueue()
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     }
     
     required init?(coder: NSCoder) {
+        self.readerViewQueue = ReaderViewQueue()
         super.init(coder: coder)
     }
     
@@ -55,10 +58,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     func loadBiblePage(reference: Reference) {
         self.toolBar.loadBiblePage(reference: reference)
         
-        let page1 = ReaderViewController()
-        page1.reference = reference
-        page1.which = .this
-        
+        let page1 = self.readerViewQueue.first(reference: reference)
         self.setViewControllers([page1], direction: .forward, animated: true, completion: nil)
     }
     
@@ -84,22 +84,12 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     //
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        return self.presentPage(controller: viewController, which: .prior)
+        return self.readerViewQueue.prior(controller: viewController)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        return self.presentPage(controller: viewController, which: .next)
-    }
-    
-    private func presentPage(controller: UIViewController, which: GetChapter) -> UIViewController? {
-        if let page = controller as? ReaderViewController {
-            let reader = ReaderViewController()
-            reader.reference = page.reference!
-            reader.which = which
-            return reader
-        }
-        return nil
+        return self.readerViewQueue.next(controller: viewController)
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
@@ -117,17 +107,19 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     //
     func pageViewController(_ pageViewController: UIPageViewController,
                             willTransitionTo pendingViewControllers: [UIViewController]) {
-        print("willTransitionTo called \(pendingViewControllers.count)")
+        //let page = pendingViewControllers[0] as! ReaderViewController
+        //print("will Transition To \(page.reference.toString())")
     }
     
     func pageViewController(_ pageViewController: UIPageViewController,
                             didFinishAnimating finished: Bool,
                             previousViewControllers: [UIViewController],
                             transitionCompleted completed: Bool) {
-        if let page = self.viewControllers as? [ReaderViewController] {
-            self.toolBar.loadBiblePage(reference: page[0].reference)
-            HistoryModel.shared.changeReference(reference: page[0].reference)
-        }
+        let page = self.viewControllers![0] as! ReaderViewController
+        print("Display \(page.reference.toString())")
+        self.toolBar.loadBiblePage(reference: page.reference)
+        HistoryModel.shared.changeReference(reference: page.reference)
+        self.readerViewQueue.ensurePreload(reference: page.reference)
     }
     
     func pageViewControllerSupportedInterfaceOrientations(_ pageViewController: UIPageViewController) -> UIInterfaceOrientationMask {

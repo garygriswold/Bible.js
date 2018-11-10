@@ -13,11 +13,18 @@ import WebKit
 class ReaderViewController : AppViewController, WKNavigationDelegate {
     
     private var webView: WKWebView!
-    var reference: Reference!
-    var which: GetChapter = .this
+    private var isValid: Bool = false
+    private var _reference: Reference!
+    var reference: Reference! {
+        get { return _reference }
+        set(newValue) {
+            _reference = newValue
+            isValid = false
+        }
+    }
     
     deinit {
-        print("****** deinit Reader View Controller \(self.reference)")
+        print("****** deinit Reader View Controller \(self.reference.toString())")
     }
     
     override func loadView() {
@@ -40,13 +47,23 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
         self.view.addSubview(self.webView)
         
         self.webView.navigationDelegate = self
-
-        let biblePage = BiblePageModel()
-        self.reference = biblePage.loadPage(reference: self.reference, which: self.which,
-                                            webView: self.webView)
-        self.which = .this
+    }
+    
+    func clearWebView() {
+        if self.webView != nil {
+            // measures about 0.35 to 0.7 ms on simulator
+            self.webView.loadHTMLString(DynamicCSS.shared.getEmptyHtml(), baseURL: nil)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        print("Loading Page \(self.reference!)")
+        if !self.isValid {
+            self.isValid = true
+            let biblePage = BiblePageModel()
+            biblePage.loadPage(reference: self.reference, webView: self.webView)
+        }
     }
     
     @objc override func preferredContentSizeChanged(note: NSNotification) {

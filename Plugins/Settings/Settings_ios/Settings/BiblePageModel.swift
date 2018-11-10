@@ -19,65 +19,29 @@
 import AWS
 import WebKit
 
-enum GetChapter {
-    case this
-    case next
-    case prior
-}
-
 struct BiblePageModel {
     
     private static var mobileCSS: String?
     
-    func loadPage(reference: Reference, which: GetChapter, webView: WKWebView) -> Reference {
+    func loadPage(reference: Reference, webView: WKWebView) {
         let start = CFAbsoluteTimeGetCurrent()
-        let ref = self.whichReference(reference: reference, which: which)
-        let html = BibleDB.shared.getBiblePage(reference: ref)
+        let html = BibleDB.shared.getBiblePage(reference: reference)
         if html == nil {
             let progress = self.addProgressIndicator(webView: webView)
-            let s3Key = self.generateKey(reference: ref)
+            let s3Key = self.generateKey(reference: reference)
             AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
                 complete: { error, data in
                     self.removeProgressIndicator(indicator: progress)
                     if let data1 = data {
                         webView.loadHTMLString(DynamicCSS.shared.getCSS() + data1, baseURL: nil)
-                        _ = BibleDB.shared.storeBiblePage(reference: ref, html: data1)
-                        //self.preloadPage(reference: ref, which: which)
+                        print("AWS Load \(reference.toString())")
+                        _ = BibleDB.shared.storeBiblePage(reference: reference, html: data1)
                         print("*** BiblePage.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                     }
             })
         } else {
             webView.loadHTMLString(DynamicCSS.shared.getCSS() + html!, baseURL: nil)
-            //self.preloadPage(reference: ref, which: which)
-        }
-        return ref
-    }
-    
-    func preloadPage(reference: Reference, which: GetChapter) {
-        let start = CFAbsoluteTimeGetCurrent()
-        let ref = self.whichReference(reference: reference, which: which)
-        let hasPage = BibleDB.shared.hasBiblePage(reference: ref)
-        if !hasPage {
-            let s3Key = self.generateKey(reference: ref)
-            AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
-                                                complete: { error, data in
-                                                    if let data1 = data {
-                                                        _ = BibleDB.shared.storeBiblePage(reference: ref,
-                                                                                          html: data1)
-                                                        print("*** BiblePage.AWS preload duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
-                                                    }
-            })
-        }
-    }
-    
-    private func whichReference(reference: Reference, which: GetChapter) -> Reference {
-        switch which {
-        case .this:
-            return reference
-        case .next:
-            return reference.nextChapter()
-        case .prior:
-            return reference.priorChapter()
+            print("DB Load \(reference.toString())")
         }
     }
     

@@ -185,16 +185,16 @@ class TableContentsModel { // class is used to permit self.contents inside closu
     func priorChapter(reference: Reference) -> Reference {
         if reference.chapter > 1 {
             return Reference(bibleId: reference.bibleId, bookId: reference.bookId,
-                             chapter: reference.chapter - 1, verse: 1)
+                             chapter: reference.chapter - 1)
         } else {
             let book = self.getBook(bookId: reference.bookId)!
             if let prior = self.getBook(row: book.ordinal - 1) {
                 return Reference(bibleId: reference.bibleId, bookId: prior.bookId,
-                                 chapter: prior.lastChapter, verse: 1)
+                                 chapter: prior.lastChapter)
             } else {
                 let last = self.getBook(row: self.bookCount - 1)!
                 return Reference(bibleId: reference.bibleId, bookId: last.bookId,
-                                 chapter: last.lastChapter, verse: 1)
+                                 chapter: last.lastChapter)
             }
         }
     }

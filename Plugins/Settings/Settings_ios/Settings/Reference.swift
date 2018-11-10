@@ -94,6 +94,10 @@ struct Reference : Equatable {
     }
     
     func toString() -> String {
-        return "\(self.bibleId) \(self.bookId):\(self.chapter):\(self.verse)"
+        if self.verse != nil {
+            return "\(self.bibleId) \(self.bookId):\(self.chapter):\(self.verse!)"
+        } else {
+            return "\(self.bibleId) \(self.bookId):\(self.chapter)"
+        }
     }
 }
