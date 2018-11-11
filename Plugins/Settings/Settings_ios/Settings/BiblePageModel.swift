@@ -36,7 +36,6 @@ struct BiblePageModel {
                         webView.loadHTMLString(DynamicCSS.shared.getCSS() + data1, baseURL: nil)
                         print("AWS Load \(reference.toString())")
                         _ = BibleDB.shared.storeBiblePage(reference: reference, html: data1)
-                        
                         print("*** BiblePage.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                     }
             })

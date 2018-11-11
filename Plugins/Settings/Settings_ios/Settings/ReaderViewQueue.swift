@@ -70,7 +70,7 @@ struct ReaderViewQueue {
     * but never for the initial set, and only most of the time when the page is swiped.
     * This method is called after any page is loaded to add one additional pages before and or after
     */
-    mutating func preload(controller: UIViewController) {
+    mutating func preload() {
         switch self.previousCall {
         case .first:
             _ = self.appendAfter()
@@ -119,7 +119,7 @@ struct ReaderViewQueue {
     }
     
     mutating private func addUnused(controller: ReaderViewController) {
-        //controller.clearWebView() // Needed to clear old content off page
+        controller.clearWebView() // Needed to clear old content off page
         self.unused.insert(controller)
     }
     

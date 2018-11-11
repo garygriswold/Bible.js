@@ -62,6 +62,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         
         let page1 = self.readerViewQueue.first(reference: reference)
         self.setViewControllers([page1], direction: .forward, animated: true, completion: nil)
+        print("Doing setViewController \(reference.toString())")
         // listen for completion of webView set with content in ReaderViewController
         NotificationCenter.default.addObserver(self, selector: #selector(setViewControllerComplete),
                                                name: ReaderPagesController.WEB_LOAD_DONE, object: nil)
@@ -70,7 +71,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     @objc func setViewControllerComplete(note: NSNotification) {
         //NotificationCenter.default.removeObserver(self, name: ReaderPagesController.WEB_LOAD_DONE,
         //                                          object: nil)
-        self.readerViewQueue.preload(controller: self.viewControllers![0])
+        self.readerViewQueue.preload()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -81,6 +82,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         self.navigationController?.setNavigationBarHidden(hideNavBar, animated: false)
         self.navigationController?.isToolbarHidden = false
         
+        // WHY
         self.loadBiblePage(reference: HistoryModel.shared.current())
     }
     
