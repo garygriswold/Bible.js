@@ -75,6 +75,8 @@ class HistoryViewController : AppViewController, UITableViewDataSource, UITableV
         let ref = HistoryModel.shared.getHistory(row: index)
         tableView.deselectRow(at: indexPath, animated: true)
         HistoryModel.shared.changeReference(reference: ref)
+        NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                        object: HistoryModel.shared.current())
         self.navigationController?.popToRootViewController(animated: true)
     }
 }

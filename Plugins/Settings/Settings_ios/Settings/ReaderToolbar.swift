@@ -108,13 +108,13 @@ class ReaderToolbar {
     
     @objc func priorTapHandler(sender: UIBarButtonItem) {
         if let prior = HistoryModel.shared.back() {
-            self.controller?.loadBiblePage(reference: prior)
+            NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE, object: prior)
         }
     }
     
     @objc func nextTapHandler(sender: UIBarButtonItem) {
         if let next = HistoryModel.shared.forward() {
-            self.controller?.loadBiblePage(reference: next)
+            NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE, object: next)
         }
     }
     

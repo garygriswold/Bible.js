@@ -10,6 +10,7 @@ import UIKit
 
 class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
+    static let NEW_REFERENCE = NSNotification.Name("new-reference")
     static let WEB_LOAD_DONE = NSNotification.Name("web-load-done")
     
     private var readerViewQueue: ReaderViewQueue
@@ -18,6 +19,8 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     init() {
         self.readerViewQueue = ReaderViewQueue()
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(loadBiblePage(note:)),
+                                               name: ReaderPagesController.NEW_REFERENCE, object: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -38,6 +41,10 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         self.delegate = self
         
         // set gesture recognizers here as well
+
+        // Load the starting page
+        NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                        object: HistoryModel.shared.current())
     }
     
     override func viewDidLayoutSubviews() {
@@ -57,7 +64,8 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         self.toolBar.refresh()
     }
     
-    func loadBiblePage(reference: Reference) {
+    @objc func loadBiblePage(note: NSNotification) {
+        let reference = note.object as! Reference
         self.toolBar.loadBiblePage(reference: reference)
         
         let page1 = self.readerViewQueue.first(reference: reference)
@@ -69,8 +77,6 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     }
     
     @objc func setViewControllerComplete(note: NSNotification) {
-        //NotificationCenter.default.removeObserver(self, name: ReaderPagesController.WEB_LOAD_DONE,
-        //                                          object: nil)
         self.readerViewQueue.preload()
     }
     
@@ -81,9 +87,6 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         let hideNavBar = true
         self.navigationController?.setNavigationBarHidden(hideNavBar, animated: false)
         self.navigationController?.isToolbarHidden = false
-        
-        // WHY
-        self.loadBiblePage(reference: HistoryModel.shared.current())
     }
     
     override func viewWillDisappear(_ animated: Bool) {

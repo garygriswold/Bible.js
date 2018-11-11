@@ -103,6 +103,8 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let chapter = indexPath.row + 1
         HistoryModel.shared.changeReference(book: self.book, chapter: chapter)
+        NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                        object: HistoryModel.shared.current())
         self.navigationController?.popToRootViewController(animated: true)
     }
 }

@@ -32,10 +32,8 @@ class BiblesActionSheet : UIAlertController {
             if let bible = dataModel.getSelectedBible(row: index) {
                 let item = UIAlertAction(title: bible.name, style: .default, handler: { _ in
                     HistoryModel.shared.changeBible(bible: bible)
-                    let ref = HistoryModel.shared.current()
-                    if let controller = self.controller {
-                        controller.loadBiblePage(reference: ref)
-                    }
+                    NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                                    object: HistoryModel.shared.current())
                 })
                 self.addAction(item)
             }

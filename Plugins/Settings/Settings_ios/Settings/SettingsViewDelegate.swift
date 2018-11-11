@@ -121,6 +121,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             if let bible = self.dataModel!.getSelectedBible(row: indexPath.row) {
                 HistoryModel.shared.changeBible(bible: bible)
             }
+            NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                            object: HistoryModel.shared.current())
             self.controller?.navigationController?.popToRootViewController(animated: true)
         }
         else if indexPath.section >= self.availableSection {
@@ -132,6 +134,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             // Ensure the language is selected, is added when a Bible is added
             let model = self.dataModel as? BibleModel
             model?.settingsAdapter.ensureLanguageAdded(language: model?.oneLanguage)
+            NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                            object: HistoryModel.shared.current())
             self.controller?.navigationController?.popToRootViewController(animated: true)
         }
     }
