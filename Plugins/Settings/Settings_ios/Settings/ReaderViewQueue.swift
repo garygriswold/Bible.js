@@ -38,6 +38,7 @@ struct ReaderViewQueue {
     mutating func next(controller: UIViewController) -> ReaderViewController {
         guard let readController = controller as? ReaderViewController
             else { fatalError("ReaderViewQueue.next must receive ReaderViewController") }
+        print("In NEXT \(readController.reference.toString())")
         let index = findController(reference: readController.reference)
         if index < (queue.count - 1) {
             return self.queue[index + 1]
@@ -57,15 +58,10 @@ struct ReaderViewQueue {
         }
     }
     
-    mutating func ensurePreload(reference: Reference) {
-        print("ensurePreload \(reference.toString())")
-        //let index = findController(reference: reference)
-        //if (self.queue.count - index) < ReaderViewQueue.EXTRA_NEXT {
-        //    _ = self.appendAfter()
-        //}
-        //if index < ReaderViewQueue.EXTRA_PRIOR {
-        //    _ = self.insertBefore()
-        //}
+    mutating func preload() {
+        print("preload")
+        _ = self.appendAfter()
+        _ = self.insertBefore()
     }
     
     mutating private func appendAfter() -> ReaderViewController {

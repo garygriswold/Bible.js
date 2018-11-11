@@ -27,15 +27,16 @@ struct BiblePageModel {
         let start = CFAbsoluteTimeGetCurrent()
         let html = BibleDB.shared.getBiblePage(reference: reference)
         if html == nil {
-            let progress = self.addProgressIndicator(webView: webView)
+            //let progress = self.addProgressIndicator(webView: webView)
             let s3Key = self.generateKey(reference: reference)
             AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
                 complete: { error, data in
-                    self.removeProgressIndicator(indicator: progress)
+                    //self.removeProgressIndicator(indicator: progress)
                     if let data1 = data {
                         webView.loadHTMLString(DynamicCSS.shared.getCSS() + data1, baseURL: nil)
                         print("AWS Load \(reference.toString())")
                         _ = BibleDB.shared.storeBiblePage(reference: reference, html: data1)
+                        
                         print("*** BiblePage.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                     }
             })
@@ -45,19 +46,19 @@ struct BiblePageModel {
         }
     }
     
-    private func addProgressIndicator(webView: WKWebView) -> UIActivityIndicatorView {
-        let progress = UIActivityIndicatorView(style: .gray)
-        progress.frame = CGRect(x: 20, y: 20, width: 30, height: 30)
-        webView.addSubview(progress)
-        progress.startAnimating()
-        return progress
-    }
-    
-    private func removeProgressIndicator(indicator: UIActivityIndicatorView) {
-        indicator.stopAnimating()
-        indicator.removeFromSuperview()
-    }
-    
+//    private func addProgressIndicator(webView: WKWebView) -> UIActivityIndicatorView {
+//        let progress = UIActivityIndicatorView(style: .gray)
+//        progress.frame = CGRect(x: 20, y: 20, width: 30, height: 30)
+//        webView.addSubview(progress)
+//        progress.startAnimating()
+//        return progress
+//    }
+//
+//    private func removeProgressIndicator(indicator: UIActivityIndicatorView) {
+//        indicator.stopAnimating()
+//        indicator.removeFromSuperview()
+//    }
+
     private func generateKey(reference: Reference) -> String {
         var result = [String]()
         var inItem = false

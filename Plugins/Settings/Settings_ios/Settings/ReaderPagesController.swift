@@ -10,6 +10,8 @@ import UIKit
 
 class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
+    static let WEB_LOAD_DONE = NSNotification.Name("web-load-done")
+    
     private var readerViewQueue: ReaderViewQueue
     private var toolBar: ReaderToolbar!
 
@@ -60,6 +62,15 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         
         let page1 = self.readerViewQueue.first(reference: reference)
         self.setViewControllers([page1], direction: .forward, animated: true, completion: nil)
+        // listen for completion of webView set with content in ReaderViewController
+        NotificationCenter.default.addObserver(self, selector: #selector(setViewControllerComplete),
+                                               name: ReaderPagesController.WEB_LOAD_DONE, object: nil)
+    }
+    
+    @objc func setViewControllerComplete(note: NSNotification) {
+        NotificationCenter.default.removeObserver(self, name: ReaderPagesController.WEB_LOAD_DONE,
+                                                  object: nil)
+        self.readerViewQueue.preload()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -119,7 +130,6 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         print("Display \(page.reference.toString())")
         self.toolBar.loadBiblePage(reference: page.reference)
         HistoryModel.shared.changeReference(reference: page.reference)
-        self.readerViewQueue.ensurePreload(reference: page.reference)
     }
     
     func pageViewControllerSupportedInterfaceOrientations(_ pageViewController: UIPageViewController) -> UIInterfaceOrientationMask {

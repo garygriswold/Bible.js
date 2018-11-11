@@ -65,7 +65,6 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
         self.execJavascript(message: message)
     }
 
-    
     func execJavascript(message: String) {
         self.webView.evaluateJavaScript(message, completionHandler: { data, error in
             if let err = error {
@@ -75,5 +74,17 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
                 print("jsCallback has a response \(resp)")
             }
         })
+    }
+    
+    //
+    // Delegate
+    //
+    func webView(_: WKWebView, didFinish: WKNavigation!) {
+        NotificationCenter.default.post(name: ReaderPagesController.WEB_LOAD_DONE, object: nil)
+    }
+    
+    func webView(_: WKWebView, didFail: WKNavigation!, withError: Error) {
+        print("ERROR: Bible page load error \(withError)")
+        NotificationCenter.default.post(name: ReaderPagesController.WEB_LOAD_DONE, object: nil)
     }
 }
