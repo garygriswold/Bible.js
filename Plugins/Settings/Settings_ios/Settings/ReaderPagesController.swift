@@ -68,9 +68,9 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     }
     
     @objc func setViewControllerComplete(note: NSNotification) {
-        NotificationCenter.default.removeObserver(self, name: ReaderPagesController.WEB_LOAD_DONE,
-                                                  object: nil)
-        self.readerViewQueue.preload()
+        //NotificationCenter.default.removeObserver(self, name: ReaderPagesController.WEB_LOAD_DONE,
+        //                                          object: nil)
+        self.readerViewQueue.preload(controller: self.viewControllers![0])
     }
     
     override func viewWillAppear(_ animated: Bool) {

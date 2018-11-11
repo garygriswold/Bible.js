@@ -50,13 +50,15 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
         let biblePage = BiblePageModel()
         biblePage.loadPage(reference: _reference, webView: self.webView)
     }
-    
+ 
+    /* Deprecated because it causes page load events
     func clearWebView() {
         if self.webView != nil {
             // measures about 0.35 to 0.7 ms on simulator
             self.webView.loadHTMLString(DynamicCSS.shared.getEmptyHtml(), baseURL: nil)
         }
     }
+    */
     
     @objc override func preferredContentSizeChanged(note: NSNotification) {
         super.preferredContentSizeChanged(note: note)
@@ -80,6 +82,7 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
     // Delegate
     //
     func webView(_: WKWebView, didFinish: WKNavigation!) {
+        print("Web page loaded \(_reference.toString())")
         NotificationCenter.default.post(name: ReaderPagesController.WEB_LOAD_DONE, object: nil)
     }
     
