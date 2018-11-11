@@ -10,8 +10,8 @@ import UIKit
 struct ReaderViewQueue {
     
     private static let QUEUE_MAX: Int = 10
-    private static let EXTRA_NEXT: Int = 4
-    private static let EXTRA_PRIOR: Int = 3
+    private static let EXTRA_NEXT: Int = 1
+    private static let EXTRA_PRIOR: Int = 1
     
     private var queue: [ReaderViewController]
     private var unused: Set<ReaderViewController>
@@ -58,13 +58,14 @@ struct ReaderViewQueue {
     }
     
     mutating func ensurePreload(reference: Reference) {
-        let index = findController(reference: reference)
-        if (self.queue.count - index) < ReaderViewQueue.EXTRA_NEXT {
-            _ = self.appendAfter()
-        }
-        if index < ReaderViewQueue.EXTRA_PRIOR {
-            _ = self.insertBefore()
-        }
+        print("ensurePreload \(reference.toString())")
+        //let index = findController(reference: reference)
+        //if (self.queue.count - index) < ReaderViewQueue.EXTRA_NEXT {
+        //    _ = self.appendAfter()
+        //}
+        //if index < ReaderViewQueue.EXTRA_PRIOR {
+        //    _ = self.insertBefore()
+        //}
     }
     
     mutating private func appendAfter() -> ReaderViewController {
@@ -96,7 +97,7 @@ struct ReaderViewQueue {
         if webView == nil {
             webView = ReaderViewController()
         }
-        webView!.reference = reference
+        webView!.loadReference(reference: reference)
         return webView!
     }
     

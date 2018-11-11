@@ -13,18 +13,13 @@ import WebKit
 class ReaderViewController : AppViewController, WKNavigationDelegate {
     
     private var webView: WKWebView!
-    private var isValid: Bool = false
     private var _reference: Reference!
     var reference: Reference! {
         get { return _reference }
-        set(newValue) {
-            _reference = newValue
-            isValid = false
-        }
     }
-    
+
     deinit {
-        print("****** deinit Reader View Controller \(self.reference.toString())")
+        print("****** deinit Reader View Controller \(self._reference.toString())")
     }
     
     override func loadView() {
@@ -49,20 +44,17 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
         self.webView.navigationDelegate = self
     }
     
+    func loadReference(reference: Reference) {
+        self._reference = reference
+        self.view.backgroundColor = AppFont.backgroundColor // to ensure loadView has been called
+        let biblePage = BiblePageModel()
+        biblePage.loadPage(reference: _reference, webView: self.webView)
+    }
+    
     func clearWebView() {
         if self.webView != nil {
             // measures about 0.35 to 0.7 ms on simulator
             self.webView.loadHTMLString(DynamicCSS.shared.getEmptyHtml(), baseURL: nil)
-        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        if !self.isValid {
-            self.isValid = true
-            let biblePage = BiblePageModel()
-            biblePage.loadPage(reference: self.reference, webView: self.webView)
         }
     }
     
