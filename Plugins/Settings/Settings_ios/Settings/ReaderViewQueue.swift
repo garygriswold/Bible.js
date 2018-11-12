@@ -45,23 +45,29 @@ struct ReaderViewQueue {
     * The ReaderViewController is one that is already in the queue.
     * So, it is guarantteed to be found within the list.
     */
-    mutating func next(controller: UIViewController) -> ReaderViewController {
+    mutating func next(controller: UIViewController) -> ReaderViewController? {
         self.previousCall = .next
-        let index = self.findController(controller: controller)
-        if index < (queue.count - 1) {
-            return self.queue[index + 1]
+        if let index = self.findController(controller: controller) {
+            if index < (queue.count - 1) {
+                return self.queue[index + 1]
+            } else {
+                return appendAfter()
+            }
         } else {
-            return appendAfter()
+            return nil
         }
     }
     
-    mutating func prior(controller: UIViewController) -> ReaderViewController {
+    mutating func prior(controller: UIViewController) -> ReaderViewController? {
         self.previousCall = .prior
-        let index = self.findController(controller: controller)
-        if index > 0 {
-            return self.queue[index - 1]
+        if let index = self.findController(controller: controller) {
+            if index > 0 {
+                return self.queue[index - 1]
+            } else {
+                return insertBefore()
+            }
         } else {
-            return insertBefore()
+            return nil
         }
     }
     
@@ -130,7 +136,7 @@ struct ReaderViewQueue {
         self.unused.insert(controller)
     }
     
-    private func findController(controller: UIViewController) -> Int {
+    private func findController(controller: UIViewController) -> Int? {
         guard let readController = controller as? ReaderViewController
             else { fatalError("ReaderViewQueue.findController must receive ReaderViewController") }
         let reference = readController.reference!
@@ -139,6 +145,6 @@ struct ReaderViewQueue {
                 return index
             }
         }
-        fatalError("ReaderViewQueue.findController should find \(reference)")
+        return nil
     }
 }
