@@ -46,7 +46,8 @@ struct BiblePageModel {
     }
     
     private func addProgressIndicator(webView: WKWebView) -> UIActivityIndicatorView {
-        let progress = UIActivityIndicatorView(style: .gray)
+        let style: UIActivityIndicatorView.Style = AppFont.nightMode ? .white : .gray
+        let progress = UIActivityIndicatorView(style: style)
         progress.frame = CGRect(x: 40, y: 40, width: 0, height: 0)
         webView.addSubview(progress)
         progress.startAnimating()
