@@ -94,8 +94,8 @@ struct SettingsDB {
                     " FROM History ORDER BY datetime asc limit 100"
             let resultSet = try db.queryV1(sql: sql, values: [])
             let history = resultSet.map {
-                Reference(bibleId: $0[0]!, bookId: $0[1]!,
-                          chapter: Int($0[2]!) ?? 1, verse: Int($0[3]!) ?? 1)
+                Reference(bibleId: $0[0]!, bookId: $0[1]!, chapter: Int($0[2]!) ?? 1,
+                          verse: ($0[3] != nil) ? Int($0[3]!) : nil)
             }
             return history
         } catch {
@@ -113,8 +113,8 @@ struct SettingsDB {
             let values: [Any] = [reference.bibleId, reference.bookId,
                                  reference.chapter, reference.verse, datetime]
             _ = try db.executeV1(sql: sql, values: values)
-        } catch {
-            
+        } catch let err {
+            print("ERROR SettingsDB.storeHistory \(err)")
         }
     }
     
@@ -143,7 +143,7 @@ struct SettingsDB {
                 " bibleId TEXT NOT NULL," +
                 " bookId TEXT NOT NULL," +
                 " chapter INT NOT NULL," +
-                " verse INT NOT NULL," +
+                " verse INT NULL," +
             " datetime TEXT NOT NULL)"
             _ = try db?.executeV1(sql: create2, values: [])
         }
