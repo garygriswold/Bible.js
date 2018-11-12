@@ -127,12 +127,12 @@ struct ReaderViewQueue {
         if webView == nil {
             webView = ReaderViewController()
         }
+        webView!.clearWebView() // Needed to clear old content off page, 0.4 ms to 0.0ms
         webView!.loadReference(reference: reference) // The page is loaded when this is called
         return webView!
     }
     
     mutating private func addUnused(controller: ReaderViewController) {
-        controller.clearWebView() // Needed to clear old content off page
         self.unused.insert(controller)
     }
     
