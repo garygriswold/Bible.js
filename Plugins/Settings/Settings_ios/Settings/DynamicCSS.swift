@@ -21,7 +21,7 @@ struct DynamicCSS {
             return "\(selector) { \(declaration) }\n"
         }
         func genRule() -> String {
-            return "document.styleSheets[0].addRule('\(selector)', '\(declaration)');"
+            return "document.styleSheets[0].addRule('\(selector)', '\(declaration)');\n"
         }
     }
     
@@ -77,6 +77,13 @@ struct DynamicCSS {
             self.nightMode.genCSS() +
             self.verseNumbers.genCSS() +
         "</style>\n"
+    }
+    
+    func getAllRules() -> String {
+        return self.fontSize.genRule() +
+            self.lineHeight.genRule() +
+            self.nightMode.genRule() +
+            self.verseNumbers.genRule()
     }
     
     func getEmptyHtml() -> String {

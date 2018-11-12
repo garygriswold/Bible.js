@@ -85,6 +85,13 @@ struct ReaderViewQueue {
         self.previousCall = .preload
     }
     
+    mutating func updateCSS() {
+        let css = DynamicCSS.shared.getAllRules()
+        for webView in self.queue {
+            webView.execJavascript(message: css)
+        }
+    }
+    
     mutating private func appendAfter() -> ReaderViewController {
         let reference = self.queue.last!.reference!
         let controller = self.getUnused(reference: reference.nextChapter())
