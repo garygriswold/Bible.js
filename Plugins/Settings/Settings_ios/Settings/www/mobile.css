@@ -9,11 +9,22 @@ body {
     font-size: 1.0rem; /* 16pt */
 }
 
+/* GNG Added 11/11/18 to give top and bottom margins */
+body {
+    margin-top: 20pt;
+    margin-bottom: 90pt;
+}
+
 a {
   text-decoration: none;
   color: #333;
 }
 
+/* GNG Added 11/11/18 */
+.header, .footer {
+    display: none;
+}
+/* GNG remove 11/11/18, replaced by .header .footer display: none
 .header,
 header,
 .footer,
@@ -139,13 +150,9 @@ header .location,
   text-align: center;
   color: #fff;
 }
+*/
 
-/*
-header .home {
-display: none;
-}
- */
-/* main index of all texts/versions */
+/* GNG Removed 11/11/18 These appear to apply only to index pages
 .texts-index .name {
   font-size: 0.875rem;
   padding-top: 5px;
@@ -182,14 +189,12 @@ display: none;
   text-align: center;
 }
 
-/* index of books in a version */
 .text-index .name {
   font-size: 0.875rem;
   padding-top: 5px;
   display: block;
 }
 
-/* book index */
 .division-index .name {
   font-size: 0.875rem;
   padding-top: 5px;
@@ -216,7 +221,6 @@ display: none;
   padding: 5px;
 }
 
-/* chapter index */
 .section-list li {
   border-bottom: 1px solid #ddd;
 }
@@ -236,6 +240,7 @@ display: none;
   text-align: center;
   padding: 5px;
 }
+*/
 
 /* document */
 .section-document .name,
@@ -277,6 +282,16 @@ display: none;
   color: #2a85e8;
   display: inline-block;
   padding-right: 0.5rem; /* .5em */
+}
+
+/* GNG Added 11/11/18, because footnote data appeared incomplete */
+div.footnotes {
+    display: none;
+}
+
+/* GNG Added 11/11/18, because footnote data appeared incomplete */
+span.note {
+    display: none;
 }
 
 /* BIBLE.css *
@@ -363,14 +378,6 @@ margin: 1.2em 0;
   font-family: Gentium, GentiumPlus!important;
 }
 
-/*
-.chapter h3,
-.chapter .c {
-font-weight: bold;
-line-height: 1.4;
-margin: 1.5em 0 0.5em 0;
-}
-  */
 /* notes and cross references */
 .note,
 .cf {
@@ -543,28 +550,6 @@ div.is1 {
   text-indent: -1.5rem!important; /* -1.5em */
   position: relative;
 }
-
-/*
-.q .verse-num,
-.q .v-num {
-  position: absolute;
-  display: block;
-  width: 2em;
-  text-align: right;
-  top: 0;
-  left: 0;
-}
-
-[dir=rtl] .q .verse-num,
-[dir=rtl] .q .v-num {
-  position: absolute;
-  display: block;
-  width: 2em;
-  text-align: left;
-  top: 0;
-  right: 0;
-}
-*/
 
 .qs {
   text-align: right;

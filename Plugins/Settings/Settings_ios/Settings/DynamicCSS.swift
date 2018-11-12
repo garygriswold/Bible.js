@@ -26,7 +26,6 @@ struct DynamicCSS {
     }
     
     private let cssFile: String
-    private let hideNav: String
     
     init() {
         let bundle: Bundle = Bundle.main
@@ -38,7 +37,6 @@ struct DynamicCSS {
             print("ERROR: DynamicCSS.init() Loading CSS \(err)")
             self.cssFile = ""
         }
-        self.hideNav = ".header { display:none }\n.footer { display:none }\n"
     }
     
     var fontSize: RuleSet {
@@ -73,7 +71,7 @@ struct DynamicCSS {
     
     func getCSS() -> String {
         return "<style type='text/css'>" +
-            cssFile + hideNav +
+            cssFile +
             self.fontSize.genCSS() +
             self.lineHeight.genCSS() +
             self.nightMode.genCSS() +
