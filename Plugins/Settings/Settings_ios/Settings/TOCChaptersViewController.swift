@@ -27,8 +27,8 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
         print("**** deinit TOCChaptersViewController ******")
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         
         self.navigationItem.title = self.book.name
         let history = NSLocalizedString("History", comment: "Button to display History")

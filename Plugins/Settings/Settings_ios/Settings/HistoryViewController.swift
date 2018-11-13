@@ -19,15 +19,14 @@ class HistoryViewController : AppViewController, UITableViewDataSource, UITableV
     override func loadView() {
         super.loadView()
         
-        // create Table view
-        self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableView.Style.plain)
-        self.tableView.backgroundColor = AppFont.groupTableViewBackground
-        self.view.addSubview(self.tableView)
-        
         self.navigationItem.title = NSLocalizedString("History", comment: "History view page title")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Clear", style: .plain,
                                                                  target: self,
                                                                  action: #selector(clearHandler))
+        // create Table view
+        self.tableView = UITableView(frame: self.view.bounds, style: UITableView.Style.plain)
+        self.tableView.backgroundColor = AppFont.groupTableViewBackground
+        self.view = self.tableView
         
         self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "historyCell")
         
