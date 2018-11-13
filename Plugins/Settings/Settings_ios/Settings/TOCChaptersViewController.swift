@@ -36,19 +36,31 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
                                                                  target: self,
                                                                  action: #selector(historyHandler))
         
+        let rect = self.view.bounds
+        let width = (rect.width < rect.height) ? rect.width : rect.height
+        let frame = CGRect(x: 0, y: 0, width: width, height: rect.height)
+        
         let flowLayout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: flowLayout)
+        let collectionView = UICollectionView(frame: frame, collectionViewLayout: flowLayout)
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ChapterNumCell")
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = AppFont.backgroundColor
         self.view.addSubview(collectionView)
         
-        // Reposition collectionView to midview
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        let guide = UILayoutGuide()
+        self.view.addLayoutGuide(guide)
+
+        guide.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        guide.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        
         let height = collectionView.collectionViewLayout.collectionViewContentSize.height
-        let blankSpace = (UIScreen.main.bounds.height - height) / 2.0
-        collectionView.frame = CGRect(x: 0, y: blankSpace, width: self.view.bounds.width,
-                                 height: self.view.bounds.height - blankSpace)
+        
+        collectionView.widthAnchor.constraint(equalToConstant: width).isActive = true
+        collectionView.heightAnchor.constraint(equalToConstant: height).isActive = true
+        collectionView.centerYAnchor.constraint(equalTo: guide.centerYAnchor).isActive = true
+        collectionView.centerXAnchor.constraint(equalTo: guide.centerXAnchor).isActive = true
     }
     
     @objc func historyHandler(sender: UIBarButtonItem) {
