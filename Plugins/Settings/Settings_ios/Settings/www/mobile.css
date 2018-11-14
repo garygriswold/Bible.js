@@ -9,12 +9,6 @@ body {
     font-size: 1.0rem; /* 16pt */
 }
 
-/* GNG Added 11/11/18 to give top and bottom margins */
-body {
-    margin-top: 20pt;
-    margin-bottom: 90pt;
-}
-
 a {
   text-decoration: none;
   color: #333;
