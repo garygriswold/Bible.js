@@ -57,14 +57,22 @@ class SettingsViewController: AppViewController {
         super.loadView()
  
         // create Table view
-        self.tableView = UITableView(frame: UIScreen.main.bounds, style: UITableView.Style.grouped)
+        self.tableView = UITableView(frame: self.view.bounds, style: UITableView.Style.grouped)
         self.tableView.backgroundColor = AppFont.groupTableViewBackground
         self.tableView.allowsSelectionDuringEditing = true
         let barHeight = self.navigationController?.navigationBar.frame.height ?? 44
         self.recentContentOffset = CGPoint(x:0, y: -1 * barHeight)
-        self.view = self.tableView // OR //self.view.addSubview(self.tableView)
+        self.view.addSubview(self.tableView)
+        
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let margins = view.safeAreaLayoutGuide
+        self.tableView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
+        self.tableView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+        self.tableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+        self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
+        
         let width = UIScreen.main.bounds.width
- 
         switch self.settingsViewType {
         case .primary:
             self.navigationItem.title = NSLocalizedString("Menu", comment: "Menu view page title")
