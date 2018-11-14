@@ -26,17 +26,20 @@ class HistoryViewController : AppViewController, UITableViewDataSource, UITableV
         // create Table view
         self.tableView = UITableView(frame: self.view.bounds, style: UITableView.Style.plain)
         self.tableView.backgroundColor = AppFont.groupTableViewBackground
-        self.view = self.tableView
+        self.view.addSubview(self.tableView)
         
         self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "historyCell")
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
         
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let margins = view.safeAreaLayoutGuide
+        self.tableView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
+        self.tableView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+        self.tableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+        self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
     
     @objc func clearHandler(sender: UIBarButtonItem) {
