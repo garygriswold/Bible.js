@@ -290,6 +290,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
             if let table = cell.superview as? UITableView {
                 table.backgroundColor = AppFont.backgroundColor
                 table.reloadData()
+                table.superview?.backgroundColor = AppFont.backgroundColor
             }
         }
         if let navBar = self.controller?.navigationController?.navigationBar {

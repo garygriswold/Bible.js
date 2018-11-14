@@ -26,7 +26,6 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
         super.loadView()
         
         self.view.frame = UIScreen.main.bounds
-        //self.view.backgroundColor = AppFont.backgroundColor
 
         self.navigationItem.title = NSLocalizedString("Read", comment: "Read view page title")
         
@@ -42,6 +41,14 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
         self.view.addSubview(self.webView)
         
         self.webView.navigationDelegate = self
+        
+        self.webView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let margins = view.safeAreaLayoutGuide
+        self.webView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
+        self.webView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+        self.webView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+        self.webView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
     
     func loadReference(reference: Reference) {

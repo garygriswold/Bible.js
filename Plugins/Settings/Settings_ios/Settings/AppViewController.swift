@@ -23,11 +23,12 @@ class AppViewController : UIViewController {
             // Controls Navbar text color
             navBar.barStyle = (AppFont.nightMode) ? .black : .default
         }
-        self.view.backgroundColor = AppFont.backgroundColor
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        self.view.backgroundColor = AppFont.backgroundColor
         
         NotificationCenter.default.addObserver(self, selector: #selector(preferredContentSizeChanged(note:)),
                            name: UIContentSizeCategory.didChangeNotification, object: nil)
