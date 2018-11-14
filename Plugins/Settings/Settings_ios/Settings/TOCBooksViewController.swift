@@ -12,6 +12,7 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
 
     private var dataModel: TableContentsModel!
     private var tableView: UITableView!
+    private var topAnchor: NSLayoutConstraint!
     
     deinit {
         print("**** deinit TOCBooksViewController ******")
@@ -20,6 +21,11 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
     override func loadView() {
         super.loadView()
         
+        self.navigationItem.title = NSLocalizedString("Books", comment: "Table Contents view page title")
+        let history = NSLocalizedString("History", comment: "Button to display History")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: history, style: .plain,
+                                                                 target: self,
+                                                                 action: #selector(historyHandler))
         // create Table view
         let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         self.tableView = UITableView(frame: frame, style: UITableView.Style.plain)
@@ -28,18 +34,21 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
         self.tableView.layer.borderColor = UIColor(white: 0.8, alpha: 1.0).cgColor
         self.view.addSubview(self.tableView)
 
-        self.navigationItem.title = NSLocalizedString("Books", comment: "Table Contents view page title")
-        let history = NSLocalizedString("History", comment: "Button to display History")
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: history, style: .plain,
-                                                                 target: self,
-                                                                 action: #selector(historyHandler))
-        
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let margins = view.safeAreaLayoutGuide
+        self.topAnchor = self.tableView.topAnchor.constraint(equalTo: margins.topAnchor)
+        self.topAnchor.isActive = true
+        self.tableView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+        self.tableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+        self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -54,16 +63,19 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
         self.navigationController?.isToolbarHidden = false
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        self.positionMidView(midview: false) // Need here to adjust frame size to content size
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     
         self.navigationController?.isToolbarHidden = true
+    }
+    
+    override func viewWillTransition(to size: CGSize,
+                                     with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        self.dataModel.clearFilteredBooks()
+        self.tableView.reloadData()
+        self.positionMidView()
     }
     
     @objc func historyHandler(sender: UIBarButtonItem) {
@@ -100,21 +112,22 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
             self.dataModel.sortBooksAlphabetical()
         }
         self.tableView.reloadData()
-        self.positionMidView(midview: false)
+        self.positionMidView()
     }
     
-    private func positionMidView(midview: Bool) {
-        let frame: CGRect
-        if midview {
-            let height = self.tableView.contentSize.height
-            let blankSpace = (UIScreen.main.bounds.height - height) / 2.0
-            frame = CGRect(x: 0, y: blankSpace, width: self.view.bounds.width,
-                           height: self.view.bounds.height - blankSpace)
-        } else {
-            frame = CGRect(x: 0, y: 0, width: self.view.bounds.width,
-                           height: self.view.bounds.height)
+    private func positionMidView() {
+        var blankSpace: CGFloat = 0.0
+        let contentHeight = self.tableView.contentSize.height
+        let safeHeight = self.view.safeAreaLayoutGuide.layoutFrame.height
+        if contentHeight < safeHeight {
+            blankSpace = (safeHeight - contentHeight) / 2.0
         }
-        self.tableView.frame = frame
+        if blankSpace != self.topAnchor.constant {
+            self.topAnchor.isActive = false
+            self.topAnchor = self.tableView.topAnchor.constraint(
+                equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: blankSpace)
+            self.topAnchor.isActive = true
+        }
     }
 
     //
@@ -136,7 +149,7 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
                    at index: Int) -> Int {
         self.dataModel.filterBooks(letter: title)
         tableView.reloadData()
-        self.positionMidView(midview: true)
+        self.positionMidView()
         return -1
     }
     //

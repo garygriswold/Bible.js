@@ -26,7 +26,7 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
         super.loadView()
         
         self.view.frame = UIScreen.main.bounds
-        self.view.backgroundColor = AppFont.backgroundColor
+        //self.view.backgroundColor = AppFont.backgroundColor
 
         self.navigationItem.title = NSLocalizedString("Read", comment: "Read view page title")
         
@@ -46,7 +46,8 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
     
     func loadReference(reference: Reference) {
         self._reference = reference
-        self.view.backgroundColor = AppFont.backgroundColor // to ensure loadView has been called
+        self.loadViewIfNeeded()
+        //self.view.backgroundColor = AppFont.backgroundColor // to ensure loadView has been called
         let biblePage = BiblePageModel()
         biblePage.loadPage(reference: _reference, webView: self.webView)
     }
