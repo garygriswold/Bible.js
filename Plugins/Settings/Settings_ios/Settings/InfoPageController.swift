@@ -10,35 +10,36 @@ import UIKit
 
 class InfoPageController : AppViewController {
     
-    private let textView: UITextView
-    
-    init() {
-        self.textView = UITextView(frame: UIScreen.main.bounds)
-        super.init(nibName: nil, bundle: nil)
-    }
-    required init?(coder: NSCoder) {
-        self.textView = UITextView(frame: UIScreen.main.bounds)
-        super.init(coder: coder)
-    }
+    private var textView: UITextView!
     
     deinit {
         print("**** deinit AboutPageController ******")
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         
         // set Top Bar items
         self.navigationItem.title = NSLocalizedString("Privacy Policy", comment: "Title of Page")
         
+        self.textView = UITextView(frame: self.view.bounds)
         self.textView.backgroundColor = AppFont.backgroundColor
         let inset = self.textView.frame.width * 0.05
         self.textView.textContainerInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
+        
         self.textView.text = aboutInfo()
         self.textView.isEditable = false
         self.textView.isSelectable = true
         self.textView.font = AppFont.serif(style: .body)
         self.view.addSubview(self.textView)
+        
+        self.textView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let margins = view.safeAreaLayoutGuide
+        self.textView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
+        self.textView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+        self.textView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+        self.textView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,10 +47,6 @@ class InfoPageController : AppViewController {
         
         self.textView.font = AppFont.serif(style: .body)
         self.textView.textColor = AppFont.textColor
-        
-        let navHeight = self.navigationController?.navigationBar.frame.size.height ?? 44
-        let point = CGPoint(x: 0, y: navHeight)
-        self.textView.setContentOffset(point, animated: false)
     }
     
     private func aboutInfo() -> String {
