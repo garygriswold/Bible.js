@@ -71,6 +71,10 @@ public class AppFont {
         //get { return .black }
     }
     
+    static var textColorHEX: String {
+        get { return nightMode ? "#FFF" : "#000" }
+    }
+    
     static var verseNumbers: Bool {
         get {
             if _verseNumbers == nil {
