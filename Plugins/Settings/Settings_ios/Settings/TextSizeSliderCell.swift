@@ -70,10 +70,12 @@ class TextSizeSliderCell : UITableViewCell {
         let titleLetter = "A"
         self.leftLabel.text = titleLetter
         self.leftLabel.font = AppFont.serif(ofRelativeSize: CGFloat(self.textSlider.minimumValue))
+        self.leftLabel.textColor = AppFont.textColor
         self.addSubview(self.leftLabel)
         
         self.rightLabel.text = titleLetter
         self.rightLabel.font = AppFont.serif(ofRelativeSize: CGFloat(self.textSlider.maximumValue))
+        self.rightLabel.textColor = AppFont.textColor
         self.addSubview(self.rightLabel)
     }
 
@@ -92,6 +94,7 @@ class TextSizeSliderCell : UITableViewCell {
             label.lineBreakMode = .byWordWrapping
             label.textAlignment = .center
             label.backgroundColor = AppFont.groupTableViewBackground
+            label.textColor = AppFont.textColor
             label.alpha = 0.9
             //let textSize = label.intrinsicContentSize // could be useful to animate size of box
             self.sampleTextLabel = label
