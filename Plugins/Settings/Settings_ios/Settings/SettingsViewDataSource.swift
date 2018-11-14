@@ -274,6 +274,7 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         cell.textLabel?.font = AppFont.sansSerif(style: .subheadline)
         cell.textLabel?.textColor = AppFont.textColor
         cell.backgroundColor = AppFont.backgroundColor
+        cell.accessoryView = nil
         var image = UIImage(named: "www/images/" + icon)
         image = image?.withRenderingMode(.alwaysTemplate)
         cell.imageView?.tintColor = UIColor.gray
