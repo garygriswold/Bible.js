@@ -17,8 +17,8 @@ class FeedbackViewController: AppViewController, UITextViewDelegate {
         print("**** deinit FeedbackViewController ******")
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         
         // set Top Bar items
         self.navigationItem.title = NSLocalizedString("Send Us Comments", comment: "Feedback view title")
@@ -27,6 +27,7 @@ class FeedbackViewController: AppViewController, UITextViewDelegate {
         
         self.textView = UITextView(frame: self.view.bounds)
         self.textView.backgroundColor = AppFont.backgroundColor
+        self.textView.textColor = AppFont.textColor
         let inset = self.textView.frame.width * 0.05
         self.textView.textContainerInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         self.textView.isEditable = true

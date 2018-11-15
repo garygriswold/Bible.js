@@ -30,8 +30,8 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     
     override var prefersStatusBarHidden: Bool { get { return true } }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         
         self.view.backgroundColor = AppFont.backgroundColor
         self.toolBar = ReaderToolbar(controller: self)

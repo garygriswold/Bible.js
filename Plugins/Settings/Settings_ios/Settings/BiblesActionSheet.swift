@@ -23,8 +23,8 @@ class BiblesActionSheet : UIAlertController {
     
     override var preferredStyle: UIAlertController.Style { get { return .actionSheet } }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         
         let dataModel = BibleModel(availableSection: 0, language: nil, selectedOnly: true)
         

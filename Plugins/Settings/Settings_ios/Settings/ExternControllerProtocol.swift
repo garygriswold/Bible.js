@@ -22,8 +22,8 @@ class ExternControllerImpl : AppViewController, ExternControllerProtocol {
         self.navTitle = title
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         
         // set Top Bar items
         self.navigationItem.title = self.navTitle

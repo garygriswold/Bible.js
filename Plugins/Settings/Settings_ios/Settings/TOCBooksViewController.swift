@@ -47,10 +47,6 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
         self.tableView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
         self.tableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
         self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
         
         self.createToolbar()
     }

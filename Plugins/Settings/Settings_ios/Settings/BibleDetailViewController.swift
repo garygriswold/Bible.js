@@ -32,8 +32,8 @@ class BibleDetailViewController : AppViewController {
         print("**** deinit BibleDetailViewController ******")
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         
         self.textView = UITextView(frame: self.view.frame)
         // set Top Bar items
