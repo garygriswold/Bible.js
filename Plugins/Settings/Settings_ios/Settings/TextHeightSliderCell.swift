@@ -72,6 +72,7 @@ class TextHeightSliderCell : UITableViewCell {
         label.layer.masksToBounds = true
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .center
         label.backgroundColor = AppFont.groupTableViewBackground
         label.alpha = 0.9
         //let textSize = label.intrinsicContentSize // could be useful to animate size of box
@@ -87,12 +88,13 @@ class TextHeightSliderCell : UITableViewCell {
     }
     
     @objc func valueChangedHandler(sender: UISlider) {
-        let html = "<html><body style='font-size:\(self.pointSize!)pt;" +
+        let html = "<html><body><p style='font-size:\(self.pointSize!)pt;" +
+            " margin-top:-20pt; margin-bottom:0; padding:0;" +
             " line-height:\(sender.value);" +
-            " text-align: center;" +
+            " text-align:center;" +
             " color:\(AppFont.textColorHEX);'>" +
             "Your word is a lamp to my feet<br/>and a light to my path." +
-            "</body></html>"
+            "</p></body></html>"
         let data: Data? = html.data(using: .utf8)
         do {
             let attributed = try NSAttributedString(data: data!, documentAttributes: nil)
