@@ -15,6 +15,7 @@
 		E40D60612180EEA700A06B54 /* VersionsDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D60602180EEA700A06B54 /* VersionsDB.swift */; };
 		E40D60632182013300A06B54 /* AppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D60622182013300A06B54 /* AppViewController.swift */; };
 		E40D6065218252CA00A06B54 /* BiblePageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D6064218252CA00A06B54 /* BiblePageModel.swift */; };
+		E427DF7C219CFC9600219401 /* SampleTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E427DF7B219CFC9600219401 /* SampleTextViewController.swift */; };
 		E428B7E52138BD7F000AB2A8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E32138BD7F000AB2A8 /* InfoPlist.strings */; };
 		E431E92A21938D7300CF609C /* DynamicCSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E431E92921938D7300CF609C /* DynamicCSS.swift */; };
 		E4480A2C21866E7F00C019B0 /* Reference.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4480A2B21866E7F00C019B0 /* Reference.swift */; };
@@ -85,6 +86,7 @@
 		E40D60602180EEA700A06B54 /* VersionsDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionsDB.swift; sourceTree = "<group>"; };
 		E40D60622182013300A06B54 /* AppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewController.swift; sourceTree = "<group>"; };
 		E40D6064218252CA00A06B54 /* BiblePageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblePageModel.swift; sourceTree = "<group>"; };
+		E427DF7B219CFC9600219401 /* SampleTextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleTextViewController.swift; sourceTree = "<group>"; };
 		E428B7E42138BD7F000AB2A8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E428B7E72138BD7F000AB2A8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E428B7E92138BF70000AB2A8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 				E4F720C0211B6F2C00E26B07 /* Assets.xcassets */,
 				E4F720C2211B6F2C00E26B07 /* LaunchScreen.storyboard */,
 				E469080A21964F5E00155F2A /* Measurement.swift */,
+				E427DF7B219CFC9600219401 /* SampleTextViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -393,6 +396,7 @@
 				E4C2E98A211B712D00B71CC5 /* SettingsViewController.swift in Sources */,
 				E4C2E990211B712D00B71CC5 /* ReaderViewNavigator.swift in Sources */,
 				E4C2E97F211B711C00B71CC5 /* BibleModel.swift in Sources */,
+				E427DF7C219CFC9600219401 /* SampleTextViewController.swift in Sources */,
 				E4C2E97E211B711C00B71CC5 /* BibleDetailViewController.swift in Sources */,
 				E4F66865217D85AC00E998CC /* TOCChaptersViewController.swift in Sources */,
 				E4C2E98F211B712D00B71CC5 /* LanguageCell.swift in Sources */,
