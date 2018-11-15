@@ -65,21 +65,19 @@ class TextHeightSliderCell : UITableViewCell {
     @objc func touchDownHandler(sender: UISlider) {
         let width = self.frame.width
         let yTop = self.frame.origin.y
-        let labelRect = CGRect(x: width * 0.05, y: yTop - 200, width: (width * 0.9), height: 200)
+        let labelRect = CGRect(x: width * 0.05, y: yTop - 110, width: (width * 0.9), height: 110)
         let label = UILabel(frame: labelRect)
         label.layer.borderWidth = 1
         label.layer.cornerRadius = 20
         label.layer.masksToBounds = true
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.textAlignment = .center
         label.backgroundColor = AppFont.groupTableViewBackground
-        label.textColor = AppFont.textColor
         label.alpha = 0.9
         //let textSize = label.intrinsicContentSize // could be useful to animate size of box
         self.sampleTextLabel = label
 
-        self.pointSize = AppFont.serif(style: .body).pointSize
+        self.pointSize = 20//AppFont.serif(style: .body).pointSize
         self.valueChangedHandler(sender: sender) // set initial size correctly
         self.tableView?.addSubview(label)
         
@@ -89,11 +87,12 @@ class TextHeightSliderCell : UITableViewCell {
     }
     
     @objc func valueChangedHandler(sender: UISlider) {
-        let html = "<html><body><p style='font-size:\(self.pointSize!)pt;" +
+        let html = "<html><body style='font-size:\(self.pointSize!)pt;" +
             " line-height:\(sender.value);" +
+            " text-align: center;" +
             " color:\(AppFont.textColorHEX);'>" +
             "Your word is a lamp to my feet<br/>and a light to my path." +
-            "</p></body></html>"
+            "</body></html>"
         let data: Data? = html.data(using: .utf8)
         do {
             let attributed = try NSAttributedString(data: data!, documentAttributes: nil)
