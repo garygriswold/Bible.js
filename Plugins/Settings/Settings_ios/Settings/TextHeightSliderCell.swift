@@ -72,7 +72,7 @@ class TextHeightSliderCell : UITableViewCell {
         label.alpha = 0.9
         self.sampleTextLabel = label
 
-        self.pointSize = 20//AppFont.serif(style: .body).pointSize
+        self.pointSize = AppFont.serif(style: .body).pointSize
         self.valueChangedHandler(sender: sender) // set initial size correctly
         self.tableView?.addSubview(label)
         
@@ -94,7 +94,7 @@ class TextHeightSliderCell : UITableViewCell {
             " line-height:\(sender.value);" +
             " text-align:center;" +
             " color:\(AppFont.textColorHEX);'>" +
-            "Your word is a lamp to my feet<br/>and a light to my path." +
+            "Your word is a lamp to my feet and a light to my path." +
             "</p></body></html>"
         let data: Data? = html.data(using: .utf8)
         do {

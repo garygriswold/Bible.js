@@ -85,13 +85,12 @@ class TextSizeSliderCell : UITableViewCell {
         label.layer.masksToBounds = true
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.textAlignment = .center
         label.backgroundColor = AppFont.groupTableViewBackground
         label.textColor = AppFont.textColor
         label.alpha = 0.9
         self.sampleTextLabel = label
         
-        self.serifBodyFont = AppFont.serif(ofRelativeSize: 1.2) // 1.2 gives best results, I don't know why
+        self.serifBodyFont = AppFont.serif(ofRelativeSize: 0.9) // This is not 1.0 as a hack, reason unknown
         self.valueChangedHandler(sender: sender) // set initial size correctly
         self.tableView?.addSubview(label)
         
@@ -108,8 +107,20 @@ class TextSizeSliderCell : UITableViewCell {
     }
 
     @objc func valueChangedHandler(sender: UISlider) {
-        if self.serifBodyFont != nil {
-            self.sampleTextLabel?.font = self.serifBodyFont!.withSize(self.serifBodyFont!.pointSize * CGFloat(sender.value))
+        let fontSize = self.serifBodyFont!.pointSize * CGFloat(sender.value)
+        let html = "<html><body><p style='font-size:\(fontSize)pt;" +
+            " margin-top:-20pt; margin-bottom:-20pt; padding:0;" +
+            " line-height:\(AppFont.bodyLineHeight);" +
+            " text-align:center;" +
+            " color:\(AppFont.textColorHEX);'>" +
+            "Your word is a lamp to my feet and a light to my path." +
+        "</p></body></html>"
+        let data: Data? = html.data(using: .utf8)
+        do {
+            let attributed = try NSAttributedString(data: data!, documentAttributes: nil)
+            self.sampleTextLabel!.attributedText = attributed
+        } catch let err {
+            print(err)
         }
     }
     
