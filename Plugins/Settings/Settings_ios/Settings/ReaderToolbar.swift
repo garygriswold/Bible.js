@@ -13,6 +13,8 @@ class ReaderToolbar {
     private weak var controller: ReaderPagesController?
     private weak var navigationController: UINavigationController?
     
+    private var historyBack: UIBarButtonItem!
+    private var historyForward: UIBarButtonItem!
     private var tocBookLabel: UILabel!
     private var tocChapLabel: UILabel!
     private var versionLabel: UILabel!
@@ -38,15 +40,17 @@ class ReaderToolbar {
         items.append(spacer)
         
         let priorImage = UIImage(named: "www/images/ios-previous.png")
-        let prior = UIBarButtonItem(image: priorImage, style: .plain, target: self,
-                                    action: #selector(priorTapHandler))
-        items.append(prior)
+        self.historyBack = UIBarButtonItem(image: priorImage, style: .plain, target: self,
+                                           action: #selector(priorTapHandler))
+        self.historyBack.isEnabled = HistoryModel.shared.hasBack()
+        items.append(self.historyBack)
         //items.append(spacer)
         
         let nextImage = UIImage(named: "www/images/ios-next.png")
-        let next = UIBarButtonItem(image: nextImage, style: .plain, target: self,
-                                   action: #selector(nextTapHandler))
-        items.append(next)
+        self.historyForward = UIBarButtonItem(image: nextImage, style: .plain, target: self,
+                                              action: #selector(nextTapHandler))
+        self.historyForward.isEnabled = HistoryModel.shared.hasForward()
+        items.append(self.historyForward)
         items.append(spacer)
         
         self.tocBookLabel = toolbarLabel(width: 80, action: #selector(tocBookHandler))
@@ -99,6 +103,8 @@ class ReaderToolbar {
         self.tocBookLabel.text = reference.bookName
         self.tocChapLabel.text = String(reference.chapter)
         self.versionLabel.text = reference.abbr
+        self.historyBack.isEnabled = HistoryModel.shared.hasBack()
+        self.historyForward.isEnabled = HistoryModel.shared.hasForward()
     }
     
     @objc func menuTapHandler(sender: UIBarButtonItem) {

@@ -18,7 +18,7 @@ struct HistoryModel {
         self.index = self.history.count - 1
         if self.history.count < 1 {
             let bibleModel = BibleModel(availableSection: 0, language: nil, selectedOnly: true)
-            let bible = bibleModel.getSelectedBible(row: 0)! /// unsafe ??
+            let bible = bibleModel.getSelectedBible(row: 0)! /// unsafe should be used to for Reference
             //let reference = Reference(bibleId: bible.bibleId, bookId: "JHN", chapter: 3, verse: 1)
             let reference = Reference(bibleId: "ENGWEB", bookId: "JHN", chapter: 3)
             self.history.append(reference)
@@ -84,13 +84,31 @@ struct HistoryModel {
         return self.history[self.index]
     }
     
+    func hasBack() -> Bool {
+        let idx = self.index - 1
+        return idx >= 0 && idx < self.history.count
+    }
+    
+    func hasForward() -> Bool {
+        let idx = self.index + 1
+        return idx >= 0 && idx < self.history.count
+    }
+    
     mutating func back() -> Reference? {
-        self.index -= 1
-        return (self.index >= 0 && self.index < self.history.count) ? self.history[self.index] : nil
+        if self.hasBack() {
+            self.index -= 1
+            return self.history[self.index]
+        } else {
+            return nil
+        }
     }
     
     mutating func forward() -> Reference? {
-        self.index += 1
-        return (self.index >= 0 && self.index < self.history.count) ? self.history[self.index] : nil
+        if self.hasForward() {
+            self.index += 1
+            return self.history[self.index]
+        } else {
+            return nil
+        }
     }
 }
