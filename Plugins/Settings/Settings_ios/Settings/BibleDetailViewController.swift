@@ -13,20 +13,18 @@ class BibleDetailViewController : AppViewController {
     private weak var controller: SettingsViewController?
     private let indexPath: IndexPath
     private let bible: Bible
-    private var textView: UITextView
+    private var textView: UITextView!
     
     init(controller: SettingsViewController, indexPath: IndexPath, bible: Bible) {
         self.controller = controller
         self.indexPath = indexPath
         self.bible = bible
-        self.textView = UITextView(frame: UIScreen.main.bounds)
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
         self.indexPath = IndexPath(item: 0, section: 0)
         self.bible = Bible(bibleId: "", abbr: "", iso3: "", name: "", s3KeyPrefix: "", s3Key: "",
         locale: Locale(identifier: "en-US"))
-        self.textView = UITextView(frame: UIScreen.main.bounds)
         super.init(coder: coder)
     }
     
@@ -37,6 +35,7 @@ class BibleDetailViewController : AppViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.textView = UITextView(frame: self.view.frame)
         // set Top Bar items
         self.navigationItem.title = bible.name
         if indexPath.section > 0 { // is an available Bible

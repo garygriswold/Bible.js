@@ -28,7 +28,7 @@ class ExternControllerImpl : AppViewController, ExternControllerProtocol {
         // set Top Bar items
         self.navigationItem.title = self.navTitle
         
-        self.textView = UITextView(frame: UIScreen.main.bounds)
+        self.textView = UITextView(frame: self.view.bounds)
         let inset = self.textView.frame.width * 0.05
         self.textView.textContainerInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         self.textView.text = "To Be Developed"

@@ -72,7 +72,7 @@ class SettingsViewController: AppViewController {
         self.tableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
         self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
         
-        let width = UIScreen.main.bounds.width
+        let width = self.view.bounds.width
         switch self.settingsViewType {
         case .primary:
             self.navigationItem.title = NSLocalizedString("Menu", comment: "Menu view page title")
@@ -105,8 +105,8 @@ class SettingsViewController: AppViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // When UserMessage is dismissed, it has sometimes left behind only the top half of the screen
-        self.tableView.frame = UIScreen.main.bounds
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1.0))
+        self.tableView.frame = self.view.bounds
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 1.0))
         self.tableView.tableHeaderView = label
         
         self.tableView.contentOffset = self.recentContentOffset
@@ -161,7 +161,7 @@ class SettingsViewController: AppViewController {
         if let keyboardInfo: Dictionary = note.userInfo {
             if let keyboardRect: CGRect = keyboardInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
                 let keyboardTop = keyboardRect.minY
-                let bounds = UIScreen.main.bounds
+                let bounds = self.view.bounds
                 self.tableView.frame = CGRect(x: 0.0, y: 0.0, width: bounds.width, height: keyboardTop)
             }
         }
@@ -173,7 +173,7 @@ class SettingsViewController: AppViewController {
     }
     
     @objc func keyboardWillHide(note: NSNotification) {
-        self.tableView.frame = UIScreen.main.bounds
+        self.tableView.frame = self.view.bounds
         if self.editModeOnOff {
             self.saveHandler(sender: nil)
         }

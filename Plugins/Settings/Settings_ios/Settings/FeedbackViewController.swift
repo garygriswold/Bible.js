@@ -25,7 +25,7 @@ class FeedbackViewController: AppViewController, UITextViewDelegate {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .reply, target: self,
                                                                 action: #selector(replyHandler))
         
-        self.textView = UITextView(frame: UIScreen.main.bounds)
+        self.textView = UITextView(frame: self.view.bounds)
         self.textView.backgroundColor = AppFont.backgroundColor
         let inset = self.textView.frame.width * 0.05
         self.textView.textContainerInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
@@ -57,14 +57,14 @@ class FeedbackViewController: AppViewController, UITextViewDelegate {
         if let keyboardInfo: Dictionary = note.userInfo {
             if let keyboardRect: CGRect = keyboardInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
                 let keyboardTop = keyboardRect.minY
-                let bounds = UIScreen.main.bounds
+                let bounds = self.view.bounds
                 textView.frame = CGRect(x: 0.0, y: 0.0, width: bounds.width, height: keyboardTop)
             }
         }
     }
     
     @objc func keyboardWillHide(note: NSNotification) {
-        self.textView.frame = UIScreen.main.bounds
+        self.textView.frame = self.view.bounds
     }
     
     @objc func replyHandler(sender: UIBarButtonItem?) {

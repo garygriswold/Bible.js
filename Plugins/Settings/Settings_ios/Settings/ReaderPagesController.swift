@@ -33,7 +33,6 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.frame = UIScreen.main.bounds
         self.view.backgroundColor = AppFont.backgroundColor
         self.toolBar = ReaderToolbar(controller: self)
         

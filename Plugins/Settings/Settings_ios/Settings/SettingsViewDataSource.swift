@@ -289,9 +289,12 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         AppFont.nightMode = sender.isOn
         if let cell = sender.superview as? UITableViewCell {
             if let table = cell.superview as? UITableView {
-                table.backgroundColor = AppFont.backgroundColor
                 table.reloadData()
-                table.superview?.backgroundColor = AppFont.backgroundColor
+                var vu: UIView? = table
+                while(vu != nil) {
+                    vu!.backgroundColor = AppFont.backgroundColor
+                    vu = vu!.superview
+                }
             }
         }
         if let navBar = self.controller?.navigationController?.navigationBar {
