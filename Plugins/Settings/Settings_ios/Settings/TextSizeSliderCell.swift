@@ -61,9 +61,6 @@ class TextSizeSliderCell : UITableViewCell {
         self.textSlider.isContinuous = true
         
         self.textSlider.addTarget(self, action: #selector(touchDownHandler), for: .touchDown)
-        self.textSlider.addTarget(self, action: #selector(valueChangedHandler), for: .valueChanged)
-        self.textSlider.addTarget(self, action: #selector(touchUpHandler), for: .touchUpInside)
-        self.textSlider.addTarget(self, action: #selector(touchUpHandler), for: .touchUpOutside)
 
         self.addSubview(self.textSlider)
         
@@ -80,12 +77,10 @@ class TextSizeSliderCell : UITableViewCell {
     }
 
     @objc func touchDownHandler(sender: UISlider) {
-        let width = self.frame.width
-        let yTop = self.frame.origin.y
-        let labelRect = CGRect(x: width * 0.05, y: (yTop - 100), width: (width * 0.9), height: 100)
-        let label = UILabel(frame: labelRect)
+        let label = UILabel()
         label.text = "Your word is a lamp to my feet and a light to my path."
-        label.layer.borderWidth = 1
+        label.layer.borderWidth = 0.5
+        label.layer.borderColor = UIColor.gray.cgColor
         label.layer.cornerRadius = 20
         label.layer.masksToBounds = true
         label.numberOfLines = 0
@@ -94,11 +89,22 @@ class TextSizeSliderCell : UITableViewCell {
         label.backgroundColor = AppFont.groupTableViewBackground
         label.textColor = AppFont.textColor
         label.alpha = 0.9
-        //let textSize = label.intrinsicContentSize // could be useful to animate size of box
         self.sampleTextLabel = label
+        
         self.serifBodyFont = AppFont.serif(ofRelativeSize: 1.2) // 1.2 gives best results, I don't know why
         self.valueChangedHandler(sender: sender) // set initial size correctly
         self.tableView?.addSubview(label)
+        
+        self.sampleTextLabel!.translatesAutoresizingMaskIntoConstraints = false
+        
+        let horzMargin = self.frame.width * 0.05
+        self.sampleTextLabel!.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: horzMargin).isActive = true
+        self.sampleTextLabel!.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -horzMargin).isActive = true
+        self.sampleTextLabel!.bottomAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        
+        self.textSlider.addTarget(self, action: #selector(valueChangedHandler), for: .valueChanged)
+        self.textSlider.addTarget(self, action: #selector(touchUpHandler), for: .touchUpInside)
+        self.textSlider.addTarget(self, action: #selector(touchUpHandler), for: .touchUpOutside)
     }
 
     @objc func valueChangedHandler(sender: UISlider) {

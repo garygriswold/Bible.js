@@ -35,8 +35,6 @@ class TextHeightSliderCell : UITableViewCell {
         super.layoutSubviews()
         
         let bounds = self.bounds
-        let width = bounds.width
-        let height = bounds.height
         
         self.backgroundColor = AppFont.backgroundColor
         
@@ -48,9 +46,9 @@ class TextHeightSliderCell : UITableViewCell {
         self.textLabel?.text = "" // Required for image to appear
         
         let sliderX = self.textLabel!.frame.minX
-        let sliderWid = (width * 0.90) - sliderX
+        let sliderWid = (bounds.width * 0.90) - sliderX
 
-        self.textSlider.frame = CGRect(x: sliderX, y: 0, width: sliderWid, height: height)
+        self.textSlider.frame = CGRect(x: sliderX, y: 0, width: sliderWid, height: bounds.height)
         
         self.textSlider.minimumValue = 1.2
         self.textSlider.maximumValue = 2.0
@@ -63,24 +61,27 @@ class TextHeightSliderCell : UITableViewCell {
     }
     
     @objc func touchDownHandler(sender: UISlider) {
-        let width = self.frame.width
-        let yTop = self.frame.origin.y
-        let labelRect = CGRect(x: width * 0.05, y: yTop - 110, width: (width * 0.9), height: 110)
-        let label = UILabel(frame: labelRect)
-        label.layer.borderWidth = 1
+        let label = UILabel()
+        label.layer.borderWidth = 0.5
+        label.layer.borderColor = UIColor.gray.cgColor
         label.layer.cornerRadius = 20
         label.layer.masksToBounds = true
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.textAlignment = .center
         label.backgroundColor = AppFont.groupTableViewBackground
         label.alpha = 0.9
-        //let textSize = label.intrinsicContentSize // could be useful to animate size of box
         self.sampleTextLabel = label
 
         self.pointSize = 20//AppFont.serif(style: .body).pointSize
         self.valueChangedHandler(sender: sender) // set initial size correctly
         self.tableView?.addSubview(label)
+        
+        self.sampleTextLabel!.translatesAutoresizingMaskIntoConstraints = false
+        
+        let horzMargin = self.frame.width * 0.05
+        self.sampleTextLabel!.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: horzMargin).isActive = true
+        self.sampleTextLabel!.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -horzMargin).isActive = true
+        self.sampleTextLabel!.bottomAnchor.constraint(equalTo: self.topAnchor).isActive = true
         
         self.textSlider.addTarget(self, action: #selector(valueChangedHandler), for: .valueChanged)
         self.textSlider.addTarget(self, action: #selector(touchUpHandler), for: .touchUpInside)
@@ -89,7 +90,7 @@ class TextHeightSliderCell : UITableViewCell {
     
     @objc func valueChangedHandler(sender: UISlider) {
         let html = "<html><body><p style='font-size:\(self.pointSize!)pt;" +
-            " margin-top:-20pt; margin-bottom:0; padding:0;" +
+            " margin-top:-20pt; margin-bottom:-20pt; padding:0;" +
             " line-height:\(sender.value);" +
             " text-align:center;" +
             " color:\(AppFont.textColorHEX);'>" +
@@ -98,7 +99,7 @@ class TextHeightSliderCell : UITableViewCell {
         let data: Data? = html.data(using: .utf8)
         do {
             let attributed = try NSAttributedString(data: data!, documentAttributes: nil)
-            self.sampleTextLabel?.attributedText = attributed
+            self.sampleTextLabel!.attributedText = attributed
         } catch let err {
             print(err)
         }
