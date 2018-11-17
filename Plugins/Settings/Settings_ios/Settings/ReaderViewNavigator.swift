@@ -30,5 +30,4 @@ public class ReaderViewNavigator {
         _ = StoreReviewController.shared  // This could be postponed more
         return navController!
     }
-    
 }

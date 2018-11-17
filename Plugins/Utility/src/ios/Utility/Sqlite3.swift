@@ -471,6 +471,9 @@ public class Sqlite3 {
                 sqlite3_bind_int64(statement, col, Int64(value as! Int64))
             } else if value is Double {
                 sqlite3_bind_double(statement, col, (value as! Double))
+            } else if value is Bool {
+                let fld = (value as! Bool) ? "T" : "F"
+                sqlite3_bind_text(statement, col, (fld as NSString).utf8String, -1, nil)
             } else if value is NSNull {
                 sqlite3_bind_null(statement, col)
             } else if value == nil {

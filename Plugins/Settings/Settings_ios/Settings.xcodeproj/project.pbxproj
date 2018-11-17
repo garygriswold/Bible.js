@@ -34,6 +34,7 @@
 		E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4825C412124F0B400D36620 /* BibleInitialSelect.swift */; };
 		E49F7296216AC830007D2856 /* ExternControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */; };
 		E4A3AF152138EC0F006EDEFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E62138BD7F000AB2A8 /* Localizable.strings */; };
+		E4A4B325219F5D5800F70888 /* NotesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A4B324219F5D5700F70888 /* NotesModel.swift */; };
 		E4A7130021461090009D99E2 /* SettingsSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A712FF21461090009D99E2 /* SettingsSearchController.swift */; };
 		E4AFAC6C2144C047008EE537 /* www in Resources */ = {isa = PBXBuildFile; fileRef = E4AFAC6B2144C047008EE537 /* www */; };
 		E4B7B357219E7E210057E838 /* WKWebViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B7B356219E7E210057E838 /* WKWebViewExtension.swift */; };
@@ -141,6 +142,7 @@
 		E4A3AF182138F3AE006EDEFE /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		E4A3AF192138F3AF006EDEFE /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		E4A3AF1A2139968E006EDEFE /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E4A4B324219F5D5700F70888 /* NotesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesModel.swift; sourceTree = "<group>"; };
 		E4A712FF21461090009D99E2 /* SettingsSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSearchController.swift; sourceTree = "<group>"; };
 		E4AFAC6B2144C047008EE537 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = Settings/www; sourceTree = "<group>"; };
 		E4B7B356219E7E210057E838 /* WKWebViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKWebViewExtension.swift; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 				E4F720C2211B6F2C00E26B07 /* LaunchScreen.storyboard */,
 				E469080A21964F5E00155F2A /* Measurement.swift */,
 				E4B7B356219E7E210057E838 /* WKWebViewExtension.swift */,
+				E4A4B324219F5D5700F70888 /* NotesModel.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -405,6 +408,7 @@
 				E4638974217AE210009BF5E2 /* SettingsDB.swift in Sources */,
 				E402BCB5217B80BA0026E1DE /* TableContentsModel.swift in Sources */,
 				E46B2C83218E50200063E68C /* TextHeightSliderCell.swift in Sources */,
+				E4A4B325219F5D5800F70888 /* NotesModel.swift in Sources */,
 				E431E92A21938D7300CF609C /* DynamicCSS.swift in Sources */,
 				E463897221799013009BF5E2 /* BiblesActionSheet.swift in Sources */,
 				E4C2E992211B712D00B71CC5 /* SettingsViewDelegate.swift in Sources */,

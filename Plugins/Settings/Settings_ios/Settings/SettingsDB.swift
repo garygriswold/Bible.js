@@ -129,6 +129,60 @@ struct SettingsDB {
         }
     }
     
+    //
+    // Notes Table
+    //
+    func getNotes(bookId: String, chapter: Int, verse: Int, bibleId: String) -> [Any] {
+        let db: Sqlite3
+        do {
+            db = try self.getSettingsDB()
+            let sql = "SELECT bookmark, highlightColor, startChar, endChar, note" +
+                " FROM Notes" +
+                " WHERE bookId = ?" +
+                " AND chapter = ?" +
+                " AND verse = ?" +
+                " AND bibleId = ?"
+            let values: [Any] = [bookId, chapter, verse, bibleId]
+            let resultSet = try db.queryV1(sql: sql, values: values)
+            let notes = resultSet.map {
+                Note(bookId: bookId, chapter: chapter, verse: verse, bibleId: bibleId,
+                     bookmark: $0[0] == "T", highlightColor: $0[1],
+                     startChar: toInt($0[2]), endChar: toInt($0[3]), note: $0[4])
+            }
+            return notes
+        } catch let err {
+            print("ERROR SettingsDB.getNotes \(err)")
+            return []
+        }
+    }
+    
+    private func toInt(_ value: String?) -> Int? {
+        return (value != nil) ? Int(value!) : nil
+    }
+    
+    func storeNote(note: Note) {
+        let db: Sqlite3
+        do {
+            db = try self.getSettingsDB()
+            let sql = "REPLACE INTO Notes (bookId, chapter, verse, bibleId," +
+                " bookmark, highlightColor, startChar, endChar, note) VALUES" +
+                " (?,?,?,?,?,?,?,?,?)"
+            var values = [Any?]()
+            values.append(note.bookId)
+            values.append(note.chapter)
+            values.append(note.verse)
+            values.append(note.bibleId)
+            values.append(note.bookmark)
+            values.append(note.highlightColor)
+            values.append(note.startChar)
+            values.append(note.endChar)
+            values.append(note.note)
+            _ = try db.executeV1(sql: sql, values: values)
+        } catch let err {
+            print("ERROR SettingsDB.storeNote \(err)")
+        }
+    }
+    
     private func getSettingsDB() throws -> Sqlite3 {
         var db: Sqlite3?
         let dbname = "Settings.db"
@@ -144,8 +198,20 @@ struct SettingsDB {
                 " bookId TEXT NOT NULL," +
                 " chapter INT NOT NULL," +
                 " verse INT NULL," +
-            " datetime TEXT NOT NULL)"
+                " datetime TEXT NOT NULL)" ///// ??? The datetime should be primary key
             _ = try db?.executeV1(sql: create2, values: [])
+            let create3 = "CREATE TABLE IF NOT EXISTS Notes(" +
+                " bookId TEXT NOT NULL," +
+                " chapter INT NOT NULL," +
+                " verse INT NOT NULL," +
+                " bibleId TEXT NOT NULL," +
+                " bookmark TEXT check(bookmark IN ('T', 'F'))," +
+                " highlightColor TEXT NULL," +
+                " startChar INT NULL," +
+                " endChar INT NULL," +
+                " note TEXT NULL," +
+                " PRIMARY KEY (bookId, chapter, verse, bibleId))"
+            _ = try db?.executeV1(sql: create3, values: [])
         }
         return db!
     }
