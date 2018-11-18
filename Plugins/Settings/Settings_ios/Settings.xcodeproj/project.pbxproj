@@ -197,7 +197,6 @@
 			isa = PBXGroup;
 			children = (
 				E4B7B356219E7E210057E838 /* WKWebViewExtension.swift */,
-				E4C2E987211B712C00B71CC5 /* ReaderViewNavigator.swift */,
 				E40D60622182013300A06B54 /* AppViewController.swift */,
 				E4480A2D2187D3DD00C019B0 /* ReaderPagesController.swift */,
 				E404A3B92176BAA100340395 /* ReaderViewController.swift */,
@@ -294,6 +293,7 @@
 			isa = PBXGroup;
 			children = (
 				E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */,
+				E4C2E987211B712C00B71CC5 /* ReaderViewNavigator.swift */,
 				E4A4B326219FCE2500F70888 /* ViewControllers */,
 				E4A4B327219FCF3800F70888 /* ToolBars */,
 				E4A4B328219FCFA300F70888 /* Models */,

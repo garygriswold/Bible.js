@@ -62,8 +62,17 @@ extension WKWebView {
         print("highlight clicked")
     }
     
-    @objc func bookmarkHandler(sender: UIMenuItem) {
+    @objc func bookmarkHandler(sender: UIMenuController) {
         print("bookmark clicked")
+        // I need to execute JS from here that will return the selection.
+        // And it must also find the verse number.  i.e. look for a containing or preceeing record that
+        // I already know the bible, book and chapter
+        // Then I must add a bookmark by dom
+        // Then I must store the bookmark in Notes.
+        // Do I need to write insert/update methods,
+        
+        // when I present a chapter, I shoud retrieve notes for the chapter,
+        //I think I should always retrieve the Notes record, and insert icons
     }
     
     @objc func noteHandler(sender: UIMenuItem) {
@@ -76,5 +85,15 @@ extension WKWebView {
     
     @objc func shareHandler(sender: UIMenuItem) {
         print("share clicked")
+    }
+    
+    private func findSelectionAndVerse() {
+        // start out with hello world
+       // This method makes a call to get the selection
+        // And it makes a call to
+    }
+    
+    private func insertBookmark(verse: Int) {
+        // insert a bookmark into the text
     }
 }
