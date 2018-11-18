@@ -80,20 +80,17 @@ extension WKWebView {
     }
     
     private func selectionVerseStart() {
-        let query = "function selectionVerseStart() {\n"
-            + "  var clas = '';\n"
-            + "  var select = window.getSelection();\n"
-            + "  if (select != null) {\n"
-            + "    var range = select.getRangeAt(0);\n"
-            + "    var startNode = range.startContainer;\n"
-            + "    if (startNode.nodeType != 1) {\n"
-            + "      startNode = startNode.parentElement;\n"
-            + "    }\n"
-            + "    clas = startNode.className;\n"
+        let query = "var clas = '';\n"
+            + "var select = window.getSelection();\n"
+            + "if (select != null) {\n"
+            + "  var range = select.getRangeAt(0);\n"
+            + "  var startNode = range.startContainer;\n"
+            + "  if (startNode.nodeType != 1) {\n"
+            + "    startNode = startNode.parentElement;\n"
             + "  }\n"
-            + "  return(clas);\n"
-            + "} selectionVerseStart();"
-        print(query)
+            + "  clas = startNode.className;\n"
+            + "}\n"
+            + "clas;\n"
         self.evaluateJavaScript(query, completionHandler: { data, error in
             if let err = error {
                 print("ERROR: selectionVerseStart \(err)")
@@ -108,7 +105,6 @@ extension WKWebView {
             } else {
                 print("ERROR: selectionVerseStart returns non-string \(String(describing: data))")
             }
-            
         })
     }
     
@@ -116,14 +112,11 @@ extension WKWebView {
         let commands = "var node = document.getElementsByClassName('verse\(verse)')[0];\n"
             + "var item = document.createElement('p');\n"
             + "item.innerHTML = 'WOWEE';\n"
-            + "node.parentElement.insertBefore(item, node);\n"
+            + "var result = node.parentElement.insertBefore(item, node);\n"
         print(commands)
         self.evaluateJavaScript(commands, completionHandler: { data, error in
             if let err = error {
                 print("ERROR: insertBookmark \(err)")
-            }
-            if let resp = data {
-                print("RESP \(resp)")
             }
         })
     }
