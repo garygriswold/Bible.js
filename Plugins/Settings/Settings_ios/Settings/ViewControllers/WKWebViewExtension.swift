@@ -64,15 +64,7 @@ extension WKWebView {
     
     @objc func bookmarkHandler(sender: UIMenuController) {
         print("bookmark clicked")
-        // I need to execute JS from here that will return the selection.
-        // And it must also find the verse number.  i.e. look for a containing or preceeing record that
-        // I already know the bible, book and chapter
-        // Then I must add a bookmark by dom
-        // Then I must store the bookmark in Notes.
-        // Do I need to write insert/update methods,
-        
-        // when I present a chapter, I shoud retrieve notes for the chapter,
-        //I think I should always retrieve the Notes record, and insert icons
+        self.selectionVerseStart()
     }
     
     @objc func noteHandler(sender: UIMenuItem) {
@@ -87,13 +79,52 @@ extension WKWebView {
         print("share clicked")
     }
     
-    private func findSelectionAndVerse() {
-        // start out with hello world
-       // This method makes a call to get the selection
-        // And it makes a call to
+    private func selectionVerseStart() {
+        let query = "function selectionVerseStart() {\n"
+            + "  var clas = '';\n"
+            + "  var select = window.getSelection();\n"
+            + "  if (select != null) {\n"
+            + "    var range = select.getRangeAt(0);\n"
+            + "    var startNode = range.startContainer;\n"
+            + "    if (startNode.nodeType != 1) {\n"
+            + "      startNode = startNode.parentElement;\n"
+            + "    }\n"
+            + "    clas = startNode.className;\n"
+            + "  }\n"
+            + "  return(clas);\n"
+            + "} selectionVerseStart();"
+        print(query)
+        self.evaluateJavaScript(query, completionHandler: { data, error in
+            if let err = error {
+                print("ERROR: selectionVerseStart \(err)")
+            }
+            if let resp = data as? String {
+                print("jsCallback has a response \(resp)")
+                let resp2 = resp.replacingOccurrences(of: "-", with: "_")
+                let parts = resp2.split(separator: "_")
+                let verse = String(parts.last!)
+                print(verse)
+                self.insertBookmark(verse: verse)
+            } else {
+                print("ERROR: selectionVerseStart returns non-string \(String(describing: data))")
+            }
+            
+        })
     }
     
-    private func insertBookmark(verse: Int) {
-        // insert a bookmark into the text
+    private func insertBookmark(verse: String) {
+        let commands = "var node = document.getElementsByClassName('verse\(verse)')[0];\n"
+            + "var item = document.createElement('p');\n"
+            + "item.innerHTML = 'WOWEE';\n"
+            + "node.parentElement.insertBefore(item, node);\n"
+        print(commands)
+        self.evaluateJavaScript(commands, completionHandler: { data, error in
+            if let err = error {
+                print("ERROR: insertBookmark \(err)")
+            }
+            if let resp = data {
+                print("RESP \(resp)")
+            }
+        })
     }
 }
