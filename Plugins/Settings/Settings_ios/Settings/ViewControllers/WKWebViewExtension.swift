@@ -102,6 +102,8 @@ extension WKWebView {
                 let verse = String(parts.last!)
                 print(verse)
                 self.insertBookmark(verse: verse)
+                // How do we get the rest of reference so that we can create a note
+                //SettingsDB.shared.storeNote(note: note)
             } else {
                 print("ERROR: selectionVerseStart returns non-string \(String(describing: data))")
             }
@@ -110,10 +112,13 @@ extension WKWebView {
     
     private func insertBookmark(verse: String) {
         let commands = "var node = document.getElementsByClassName('verse\(verse)')[0];\n"
+            // Keep the following in case I am able to load images
             //+ "node = node.nextSibling;\n"
-            + "var item = document.createElement('img');\n"
-            + "item.setAttribute('src', 'images/gen-bookmark.png');\n"
-            + "item.setAttribute('class', 'bookmark');\n"
+            //+ "var item = document.createElement('img');\n"
+            //+ "item.setAttribute('src', 'images/gen-bookmark.png');\n"
+            //+ "item.setAttribute('class', 'bookmark');\n"
+            + "var item = document.createElement('span');\n"
+            + "item.innerHTML = '&#x1F516; '\n"   /// NotePad &#x1F5D2;
             + "var result = node.parentElement.insertBefore(item, node);\n"
         print(commands)
         self.evaluateJavaScript(commands, completionHandler: { data, error in
@@ -123,3 +128,4 @@ extension WKWebView {
         })
     }
 }
+

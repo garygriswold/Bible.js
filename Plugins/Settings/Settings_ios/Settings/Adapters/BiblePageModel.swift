@@ -33,14 +33,14 @@ struct BiblePageModel {
                 complete: { error, data in
                     self.removeProgressIndicator(indicator: progress)
                     if let data1 = data {
-                        webView.loadHTMLString(DynamicCSS.shared.getCSS() + data1, baseURL: DynamicCSS.shared.baseURL)
+                        webView.loadHTMLString(DynamicCSS.shared.getCSS() + data1, baseURL: nil)
                         print("AWS Load \(reference.toString())")
                         _ = BibleDB.shared.storeBiblePage(reference: reference, html: data1)
                         print("*** BiblePage.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
                     }
             })
         } else {
-            webView.loadHTMLString(DynamicCSS.shared.getCSS() + html!, baseURL: DynamicCSS.shared.baseURL)
+            webView.loadHTMLString(DynamicCSS.shared.getCSS() + html!, baseURL: nil)
             print("DB Load \(reference.toString())")
         }
     }
