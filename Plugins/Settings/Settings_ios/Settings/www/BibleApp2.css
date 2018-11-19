@@ -236,6 +236,10 @@ header .location,
 }
 */
 
+img.bookmark {
+    padding-right: 5px;
+}
+
 /* document */
 .section-document .name,
 .section-document .location {

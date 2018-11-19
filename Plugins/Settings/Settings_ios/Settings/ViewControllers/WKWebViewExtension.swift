@@ -110,8 +110,10 @@ extension WKWebView {
     
     private func insertBookmark(verse: String) {
         let commands = "var node = document.getElementsByClassName('verse\(verse)')[0];\n"
-            + "var item = document.createElement('p');\n"
-            + "item.innerHTML = 'WOWEE';\n"
+            //+ "node = node.nextSibling;\n"
+            + "var item = document.createElement('img');\n"
+            + "item.setAttribute('src', 'images/gen-bookmark.png');\n"
+            + "item.setAttribute('class', 'bookmark');\n"
             + "var result = node.parentElement.insertBefore(item, node);\n"
         print(commands)
         self.evaluateJavaScript(commands, completionHandler: { data, error in

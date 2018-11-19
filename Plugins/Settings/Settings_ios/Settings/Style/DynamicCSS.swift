@@ -26,13 +26,14 @@ struct DynamicCSS {
     }
     
     private let cssFile: String
+    let baseURL: URL
     
     init() {
         let bundle: Bundle = Bundle.main
-        let path = bundle.path(forResource: "www/mobile", ofType: "css")
-        let url = URL(fileURLWithPath: path!)
+        let path = bundle.path(forResource: "www/BibleApp2", ofType: "css")
+        self.baseURL = URL(fileURLWithPath: path!)
         do {
-            self.cssFile = try String(contentsOf: url)
+            self.cssFile = try String(contentsOf: self.baseURL)
         } catch let err {
             print("ERROR: DynamicCSS.init() Loading CSS \(err)")
             self.cssFile = ""

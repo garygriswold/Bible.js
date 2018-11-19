@@ -140,6 +140,7 @@ struct ReaderViewQueue {
         guard let readController = controller as? ReaderViewController
             else { fatalError("ReaderViewQueue.findController must receive ReaderViewController") }
         let reference = readController.reference!
+        print("Request Reference \(reference)")
         for index in 0..<self.queue.count {
             if self.queue[index].reference == reference {
                 return index
