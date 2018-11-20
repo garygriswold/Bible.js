@@ -133,6 +133,7 @@ struct ReaderViewQueue {
     }
     
     mutating private func addUnused(controller: ReaderViewController) {
+        controller.view.removeFromSuperview()
         self.unused.insert(controller)
     }
     

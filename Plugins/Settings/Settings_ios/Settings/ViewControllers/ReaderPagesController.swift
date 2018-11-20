@@ -8,25 +8,14 @@
 
 import UIKit
 
-class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
     static let NEW_REFERENCE = NSNotification.Name("new-reference")
     static let WEB_LOAD_DONE = NSNotification.Name("web-load-done")
     
-    private var readerViewQueue: ReaderViewQueue
+    private var readerViewQueue: ReaderViewQueue = ReaderViewQueue()
+    private var pageViewController: UIPageViewController!
     private var toolBar: ReaderToolbar!
-
-    init() {
-        self.readerViewQueue = ReaderViewQueue()
-        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(loadBiblePage(note:)),
-                                               name: ReaderPagesController.NEW_REFERENCE, object: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        self.readerViewQueue = ReaderViewQueue()
-        super.init(coder: coder)
-    }
     
     override var prefersStatusBarHidden: Bool { get { return true } }
 
@@ -36,10 +25,8 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         self.view.backgroundColor = AppFont.backgroundColor
         self.toolBar = ReaderToolbar(controller: self)
         
-        self.dataSource = self
-        self.delegate = self
-        
-        // set gesture recognizers here as well
+        NotificationCenter.default.addObserver(self, selector: #selector(loadBiblePage(note:)),
+                                               name: ReaderPagesController.NEW_REFERENCE, object: nil)
 
         // Load the starting page
         NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
@@ -49,7 +36,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        if let pageControl = self.view.subviews[1] as? UIPageControl {
+        if let pageControl = self.findPageControl(view: self.pageViewController.view) {
             pageControl.backgroundColor = AppFont.backgroundColor
             pageControl.pageIndicatorTintColor = .lightGray
             pageControl.currentPageIndicatorTintColor = AppFont.nightMode ? .white : .black
@@ -63,13 +50,47 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
         self.toolBar.refresh()
     }
     
+    private func findPageControl(view: UIView) -> UIPageControl? {
+        print("background \(AppFont.backgroundColor)")
+        print("view \(type(of: view))")
+        for vue in view.subviews {
+            print("sub-view \(type(of: vue))")
+            if vue is UIPageControl {
+                return (vue as! UIPageControl)
+            }
+        }
+        return nil
+    }
+    
     @objc func loadBiblePage(note: NSNotification) {
         let reference = note.object as! Reference
         self.toolBar.loadBiblePage(reference: reference)
         
+        if self.pageViewController != nil {
+            self.pageViewController.view.removeFromSuperview()
+            self.pageViewController.removeFromParent()
+        }
+        self.pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        self.pageViewController.view.backgroundColor = AppFont.backgroundColor
+        self.addChild(self.pageViewController)
+        self.view.addSubview(self.pageViewController.view)
+        
+        
+        self.pageViewController.dataSource = self
+        self.pageViewController.delegate = self
+        
         let page1 = self.readerViewQueue.first(reference: reference)
-        self.setViewControllers([page1], direction: .forward, animated: true, completion: nil)
+        self.pageViewController.setViewControllers([page1], direction: .forward, animated: true, completion: nil)
         print("Doing setViewController \(reference.toString())")
+        
+        self.pageViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        let margins = self.view.safeAreaLayoutGuide
+        self.pageViewController.view.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
+        self.pageViewController.view.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+        self.pageViewController.view.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+        self.pageViewController.view.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
+        
         // listen for completion of webView set with content in ReaderViewController
         NotificationCenter.default.addObserver(self, selector: #selector(setViewControllerComplete),
                                                name: ReaderPagesController.WEB_LOAD_DONE, object: nil)
@@ -133,7 +154,7 @@ class ReaderPagesController : UIPageViewController, UIPageViewControllerDataSour
                             didFinishAnimating finished: Bool,
                             previousViewControllers: [UIViewController],
                             transitionCompleted completed: Bool) {
-        let page = self.viewControllers![0] as! ReaderViewController
+        let page = self.pageViewController.viewControllers![0] as! ReaderViewController
         print("Display \(page.reference.toString())")
         self.toolBar.loadBiblePage(reference: page.reference)
         HistoryModel.shared.changeReference(reference: page.reference)
