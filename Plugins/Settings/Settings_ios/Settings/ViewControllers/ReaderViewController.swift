@@ -81,6 +81,7 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
     func webView(_: WKWebView, didFinish: WKNavigation!) {
         print("Web page loaded \(_reference.toString())")
         NotificationCenter.default.post(name: ReaderPagesController.WEB_LOAD_DONE, object: nil)
+        self.webView.addNotes(reference: _reference)
     }
     
     func webView(_: WKWebView, didFail: WKNavigation!, withError: Error) {

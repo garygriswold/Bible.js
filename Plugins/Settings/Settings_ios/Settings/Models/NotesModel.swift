@@ -62,11 +62,11 @@ struct NotesModel {
         SettingsDB.shared.storeNote(note: note2)
         //6. inspect DB
         //7. queryDB for all
-        let notes = SettingsDB.shared.getNotes(bookId: "JHN", chapter: 0, verse: 0, bibleId: "0")
+        let notes = SettingsDB.shared.getNotes(bookId: "JHN", chapter: 0, bibleId: "0")
         //8. view results with print
         print("NOTES \(notes)")
         //9. queryDB for one
-        let notes1 = SettingsDB.shared.getNotes(bookId: "JHN", chapter: 3, verse: 3, bibleId: "ENGWEB")
+        let notes1 = SettingsDB.shared.getNotes(bookId: "JHN", chapter: 3, bibleId: "ENGWEB")
         //10. view results with print
         print("NOTE \(notes1)")
     }

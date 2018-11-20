@@ -132,22 +132,21 @@ struct SettingsDB {
     //
     // Notes Table
     //
-    func getNotes(bookId: String, chapter: Int, verse: Int, bibleId: String) -> [Any] {
+    func getNotes(bookId: String, chapter: Int, bibleId: String) -> [Note] {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "SELECT bookmark, highlightColor, startChar, endChar, note" +
+            let sql = "SELECT verse, bookmark, highlightColor, startChar, endChar, note" +
                 " FROM Notes" +
                 " WHERE bookId = ?" +
                 " AND chapter = ?" +
-                " AND verse = ?" +
-                " AND bibleId = ?"
-            let values: [Any] = [bookId, chapter, verse, bibleId]
+                " AND (bibleId = ? OR bibleId = '0')"
+            let values: [Any] = [bookId, chapter, bibleId]
             let resultSet = try db.queryV1(sql: sql, values: values)
             let notes = resultSet.map {
-                Note(bookId: bookId, chapter: chapter, verse: verse, bibleId: bibleId,
-                     bookmark: $0[0] == "T", highlightColor: $0[1],
-                     startChar: toInt($0[2]), endChar: toInt($0[3]), note: $0[4])
+                Note(bookId: bookId, chapter: chapter, verse: Int($0[0]!)!, bibleId: bibleId,
+                     bookmark: $0[1] == "T", highlightColor: $0[2],
+                     startChar: toInt($0[3]), endChar: toInt($0[4]), note: $0[5])
             }
             return notes
         } catch let err {

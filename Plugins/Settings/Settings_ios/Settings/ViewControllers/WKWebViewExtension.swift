@@ -128,5 +128,16 @@ extension WKWebView {
             }
         })
     }
+    
+    func addNotes(reference: Reference) {
+        let notes: [Note] = SettingsDB.shared.getNotes(bookId: reference.bookId, chapter: reference.chapter,
+                                                       bibleId: reference.bibleId)
+        for note in notes {
+            if note.bookmark {
+                self.insertBookmark(verse: String(note.verse))
+            }
+        }
+        
+    }
 }
 
