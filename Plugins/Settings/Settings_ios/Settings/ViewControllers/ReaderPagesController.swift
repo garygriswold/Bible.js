@@ -14,7 +14,7 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
     static let WEB_LOAD_DONE = NSNotification.Name("web-load-done")
     
     private var readerViewQueue: ReaderViewQueue = ReaderViewQueue()
-    private var pageViewController: UIPageViewController!
+    private var pageViewController: PageViewController!
     private var toolBar: ReaderToolbar!
     
     override var prefersStatusBarHidden: Bool { get { return true } }
@@ -22,7 +22,6 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
     override func loadView() {
         super.loadView()
         
-        self.view.backgroundColor = AppFont.backgroundColor
         self.toolBar = ReaderToolbar(controller: self)
         
         NotificationCenter.default.addObserver(self, selector: #selector(loadBiblePage(note:)),
@@ -33,35 +32,6 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
                                         object: HistoryModel.shared.current())
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        if let pageControl = self.findPageControl(view: self.pageViewController.view) {
-            pageControl.backgroundColor = AppFont.backgroundColor
-            pageControl.pageIndicatorTintColor = .lightGray
-            pageControl.currentPageIndicatorTintColor = AppFont.nightMode ? .white : .black
-            
-            let layer = CALayer()
-            layer.borderColor = UIColor.lightGray.cgColor
-            layer.borderWidth = 0.3
-            layer.frame = CGRect(x: 0, y: 0, width: pageControl.frame.width, height: 0.3)
-            pageControl.layer.addSublayer(layer)
-        }
-        self.toolBar.refresh()
-    }
-    
-    private func findPageControl(view: UIView) -> UIPageControl? {
-        print("background \(AppFont.backgroundColor)")
-        print("view \(type(of: view))")
-        for vue in view.subviews {
-            print("sub-view \(type(of: vue))")
-            if vue is UIPageControl {
-                return (vue as! UIPageControl)
-            }
-        }
-        return nil
-    }
-    
     @objc func loadBiblePage(note: NSNotification) {
         let reference = note.object as! Reference
         self.toolBar.loadBiblePage(reference: reference)
@@ -70,11 +40,9 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
             self.pageViewController.view.removeFromSuperview()
             self.pageViewController.removeFromParent()
         }
-        self.pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        self.pageViewController.view.backgroundColor = AppFont.backgroundColor
+        self.pageViewController = PageViewController()
         self.addChild(self.pageViewController)
         self.view.addSubview(self.pageViewController.view)
-        
         
         self.pageViewController.dataSource = self
         self.pageViewController.delegate = self
@@ -102,6 +70,10 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        self.view.backgroundColor = AppFont.backgroundColor
+        
+        self.toolBar.refresh()
         
         //let hideNavBar = (AppFont.nightMode) ? false : true
         let hideNavBar = true
