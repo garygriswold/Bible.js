@@ -7,15 +7,40 @@
 //
 
 struct Note {
-    let bookId: String
-    let chapter: Int            // 0 means any chapter in book
-    let verse: Int              // 0 means any verse in chapter
-    let bibleId: String         // 0 means any version
+    var bookId: String
+    var chapter: Int            // 0 means any chapter in book
+    var verse: Int              // 0 means any verse in chapter
+    var bibleId: String         // 0 means any version
     var bookmark: Bool
     var highlightColor: String? // color name, presence indicates highlight
     var startChar: Int?         // optional for highlight
     var endChar: Int?           // optional for highlight
     var note: String?
+    
+    init(bookId: String, chapter: Int, verse: Int, bibleId: String, bookmark: Bool,
+         highlightColor: String?, startChar: Int?, endChar: Int?, note: String?) {
+        self.bookId = bookId
+        self.chapter = chapter
+        self.verse = verse
+        self.bibleId = "0"
+        self.bookmark = true
+        self.highlightColor = highlightColor
+        self.startChar = startChar
+        self.endChar = endChar
+        self.note = note
+    }
+    
+    init(bookId: String, chapter: Int, verse: Int) {
+        self.bookId = bookId
+        self.chapter = chapter
+        self.verse = verse
+        self.bibleId = "0"
+        self.bookmark = true
+        self.highlightColor = nil
+        self.startChar = nil
+        self.endChar = nil
+        self.note = nil
+    }
 }
 
 struct NotesModel {

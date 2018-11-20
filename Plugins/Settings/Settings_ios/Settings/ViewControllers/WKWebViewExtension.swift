@@ -102,8 +102,9 @@ extension WKWebView {
                 let verse = String(parts.last!)
                 print(verse)
                 self.insertBookmark(verse: verse)
-                // How do we get the rest of reference so that we can create a note
-                //SettingsDB.shared.storeNote(note: note)
+                let ref = HistoryModel.shared.current()
+                let bookmark = Note(bookId: ref.bookId, chapter: ref.chapter, verse: Int(verse) ?? 0)
+                SettingsDB.shared.storeNote(note: bookmark)
             } else {
                 print("ERROR: selectionVerseStart returns non-string \(String(describing: data))")
             }
