@@ -59,11 +59,11 @@ extension WKWebView {
     }
     
     @objc func highlightHandler(sender: UIMenuItem) {
-        print("highlight clicked")
+        let colorPicker = ColorPicker()
+        self.addSubview(colorPicker)
     }
     
     @objc func bookmarkHandler(sender: UIMenuController) {
-        print("bookmark clicked")
         self.selectionVerseStart()
     }
     
@@ -121,7 +121,6 @@ extension WKWebView {
             + "var item = document.createElement('span');\n"
             + "item.innerHTML = '&#x1F516; '\n"   /// NotePad &#x1F5D2;
             + "var result = node.parentElement.insertBefore(item, node);\n"
-        print(commands)
         self.evaluateJavaScript(commands, completionHandler: { data, error in
             if let err = error {
                 print("ERROR: insertBookmark \(err)")
