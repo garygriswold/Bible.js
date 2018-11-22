@@ -39,6 +39,7 @@
 		E4AFAC6C2144C047008EE537 /* www in Resources */ = {isa = PBXBuildFile; fileRef = E4AFAC6B2144C047008EE537 /* www */; };
 		E4B4433921A3BBA3007A266B /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B4433821A3BBA3007A266B /* PageViewController.swift */; };
 		E4B4433B21A46999007A266B /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B4433A21A46999007A266B /* ColorPicker.swift */; };
+		E4B4433D21A67D36007A266B /* SelectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B4433C21A67D36007A266B /* SelectionModel.swift */; };
 		E4B7B357219E7E210057E838 /* WKWebViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B7B356219E7E210057E838 /* WKWebViewExtension.swift */; };
 		E4C2E978211B70F500B71CC5 /* AppFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E977211B70F500B71CC5 /* AppFont.swift */; };
 		E4C2E97E211B711C00B71CC5 /* BibleDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */; };
@@ -149,6 +150,7 @@
 		E4AFAC6B2144C047008EE537 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = Settings/www; sourceTree = "<group>"; };
 		E4B4433821A3BBA3007A266B /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		E4B4433A21A46999007A266B /* ColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
+		E4B4433C21A67D36007A266B /* SelectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionModel.swift; sourceTree = "<group>"; };
 		E4B7B356219E7E210057E838 /* WKWebViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKWebViewExtension.swift; sourceTree = "<group>"; };
 		E4C2E977211B70F500B71CC5 /* AppFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFont.swift; sourceTree = "<group>"; };
 		E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BibleDetailViewController.swift; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 				E402BCB4217B80BA0026E1DE /* TableContentsModel.swift */,
 				E4A4B324219F5D5700F70888 /* NotesModel.swift */,
 				E469080C2196650F00155F2A /* ReaderViewQueue.swift */,
+				E4B4433C21A67D36007A266B /* SelectionModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -424,6 +427,7 @@
 			files = (
 				E40D605F217FC70700A06B54 /* HistoryViewController.swift in Sources */,
 				E4480A2E2187D3DD00C019B0 /* ReaderPagesController.swift in Sources */,
+				E4B4433D21A67D36007A266B /* SelectionModel.swift in Sources */,
 				E40D60632182013300A06B54 /* AppViewController.swift in Sources */,
 				E4C2E98D211B712D00B71CC5 /* SettingsViewDataSource.swift in Sources */,
 				E40D6065218252CA00A06B54 /* BiblePageModel.swift in Sources */,

@@ -9,6 +9,14 @@
 import UIKit
 import WebKit
 
+enum SelectionUse {
+    case highlight
+    case bookmark
+    case note
+    case compare
+    case share
+}
+
 extension WKWebView {
     
     override open func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
@@ -24,8 +32,6 @@ extension WKWebView {
             return true
         case #selector(shareHandler):
             return true
-        //case #selector(_lookup):
-        //    return true
         default:
             return false
         }
@@ -59,8 +65,7 @@ extension WKWebView {
     }
     
     @objc func highlightHandler(sender: UIMenuItem) {
-        let colorPicker = ColorPicker()
-        self.addSubview(colorPicker)
+        self.findSelection(selectionUse: .highlight)
     }
     
     @objc func bookmarkHandler(sender: UIMenuController) {
@@ -91,6 +96,7 @@ extension WKWebView {
             + "  clas = startNode.className;\n"
             + "}\n"
             + "clas;\n"
+        print(query)
         self.evaluateJavaScript(query, completionHandler: { data, error in
             if let err = error {
                 print("ERROR: selectionVerseStart \(err)")
@@ -109,6 +115,63 @@ extension WKWebView {
                 print("ERROR: selectionVerseStart returns non-string \(String(describing: data))")
             }
         })
+    }
+    
+    private func findSelection(selectionUse: SelectionUse) {
+        let query = "var select = window.getSelection();\n"
+            + "var range = select.getRangeAt(0);\n"
+            + "var start = findNode(range.startContainer);\n"
+            + "var end = start\n;"
+            + "if (range.endContainer != range.startContainer) {\n"
+            + "  end = findNode(range.endContainer);\n"
+            + "}\n"
+            + "var result = start + ':' + range.startOffset + '/' + end + ':' + range.endOffset;\n"
+            + "result;\n"
+            + "function findNode(node) {\n"
+            + "  if (node.nodeType != 1) {\n"
+            + "    node = node.parentNode;\n"
+            + "  }\n"
+            + "  var clas = node.className;\n"
+            + "  var list = document.getElementsByClassName(clas);\n"
+            + "  for (var i=0; i<list.length; i++) {\n"
+            + "    var item = list[i];\n"
+            + "    if (item == node) {\n"
+            + "      return(clas + ':' + i);\n"
+            + "    }\n"
+            + "  }\n"
+            + "  return null;\n"
+            + "}\n"
+        self.evaluateJavaScript(query, completionHandler: { data, error in
+            if let resp = data as? String {
+                print(resp)
+                let selection = Selection(selection: resp)
+                switch selectionUse {
+                case .highlight:
+                    let colorPicker = ColorPicker(webView: self)
+                    self.addSubview(colorPicker)
+                case .bookmark:
+                    _ = 2
+                case .note:
+                    _ = 3
+                case .compare:
+                    _ = 4
+                case .share:
+                    _ = 5
+                }
+                print(selection)
+            }
+            if let err = error {
+                print("ERROR: findSelection \(err)")
+            }
+        })
+    }
+    
+    @objc public func touchHandler(sender: UITapGestureRecognizer) {
+        let it = sender.view?.backgroundColor
+        sender.view?.superview?.removeFromSuperview()
+        print("tapped colored dot \(it)")
+        // have selection respond to user selection by inserting selection.
+        // Use History to get reference
     }
     
     private func insertBookmark(verse: String) {

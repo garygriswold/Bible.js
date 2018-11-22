@@ -6,7 +6,7 @@
 //  Copyright © 2018 ShortSands. All rights reserved.
 //
 
-import UIKit
+import WebKit
 
 class ColorPicker : UIView {
     
@@ -18,7 +18,10 @@ class ColorPicker : UIView {
     private static let purple = UIColor(displayP3Red: 0.57031, green: 0.32421, blue: 0.58593, alpha: 1.0) // 92 53 96
     private static let salmon = UIColor(displayP3Red: 0.76953, green: 0.37890, blue: 0.42578, alpha: 1.0) // C5 61 6D
     
-    init() {
+    private let webView: WKWebView
+    
+    init(webView: WKWebView) {
+        self.webView = webView
         super.init(frame: .zero)
         self.frame = computeFrame()
         self.layer.cornerRadius = 10
@@ -64,7 +67,7 @@ class ColorPicker : UIView {
         label.backgroundColor = color
         label.layer.cornerRadius = frame.width / 2.0
         label.layer.masksToBounds = true
-        let tapGesture = UITapGestureRecognizer(target: self, action:  #selector(touchHandler))
+        let tapGesture = UITapGestureRecognizer(target: self.webView, action:  #selector(self.webView.touchHandler))
         tapGesture.numberOfTapsRequired = 1
         label.addGestureRecognizer(tapGesture)
         label.isUserInteractionEnabled = true
@@ -72,11 +75,8 @@ class ColorPicker : UIView {
     }
     
     required init(coder: NSCoder) {
+        self.webView = WKWebView()
+        //self.selection = Selection(selection: "startNode:1:2/endNode:1:2")
         super.init(coder: coder)!
-    }
-    
-    @objc func touchHandler(sender: UITapGestureRecognizer) {
-        let it = sender.view?.backgroundColor
-        print("tapped colored dot \(sender)")
     }
 }
