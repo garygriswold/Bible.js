@@ -8,43 +8,31 @@
 import UIKit
 
 struct Selection {
+    
+    static var current: Selection?
+    
     let startClass: String
     let startClassPos: Int
     let startCharPos: Int
-    let endClass: String
-    let endClassPos: Int
+    let endClass: String? // nil if same as start
+    let endClassPos: Int? // nil if same as start
     let endCharPos: Int
     let midSelection: String?
     
-    //init(startClass: String, startClassPos: Int, startCharPos: Int,
-    //     endClass: String, endClassPos: Int, endCharPos: Int) {
-    //    self.startClass = startClass
-    //    self.startClassPos = startClassPos
-    //    self.startCharPos = startCharPos
-    //    self.endClass = endClass
-    //    self.endClassPos = endClassPos
-    //    self.endCharPos = endCharPos
-    //}
-    
-    init(selection: String) {
+    static func factory(selection: String) -> Selection {
         var parts: [Substring] = selection.split(separator: "/")
-        self.startCharPos = Int(parts.remove(at: 0)) ?? 0
-        self.endCharPos = Int(parts.remove(at: 0)) ?? 0
+        let startCharPos = Int(parts.remove(at: 0)) ?? 0
+        let endCharPos = Int(parts.remove(at: 0)) ?? 0
         let start = parts.remove(at: 0).split(separator: ":")
-        self.startClass = String(start[0])
-        self.startClassPos = Int(start[1]) ?? 0
-        if parts.count > 0 {
-            let end = parts.remove(at: parts.count - 1).split(separator: ":")
-            self.endClass = String(end[0])
-            self.endClassPos = Int(end[1]) ?? 0
-        } else {
-            self.endClass = self.startClass
-            self.endClassPos = self.startClassPos
-        }
-        if parts.count > 0 {
-            self.midSelection = parts.joined(separator: "/")
-        } else {
-            self.midSelection = nil
-        }
+        let startClass = String(start[0])
+        let startClassPos = Int(start[1]) ?? 0
+        let end = (parts.count > 0) ? parts.remove(at: parts.count - 1).split(separator: ":") : nil
+        let endClass = (end != nil) ? String(end![0]) : nil
+        let endClassPos = (end != nil) ? Int(end![1]) ?? 0 : nil
+        let midSelection = (parts.count > 0) ? parts.joined(separator: "/") : nil
+        Selection.current = Selection(startClass: startClass, startClassPos:
+            startClassPos, startCharPos: startCharPos, endClass: endClass, endClassPos: endClassPos,
+                           endCharPos: endCharPos, midSelection: midSelection)
+        return Selection.current!
     }
 }

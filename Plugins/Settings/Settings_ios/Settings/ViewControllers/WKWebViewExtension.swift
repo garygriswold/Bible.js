@@ -41,13 +41,13 @@ extension WKWebView {
         
         var menuItems = [UIMenuItem]()
         
+        let shareTitle = NSLocalizedString("Share", comment: "Menu option to share verse with others")
+        let share = UIMenuItem(title: shareTitle, action: #selector(shareHandler))
+        menuItems.append(share)
+        
         let highlightTitle = NSLocalizedString("Highlight", comment: "Menu option Highlight Text")
         let highlight = UIMenuItem(title: highlightTitle, action: #selector(highlightHandler))
         menuItems.append(highlight)
-        
-        let bookmarkTitle = NSLocalizedString("Bookmark", comment: "Menu option to Bookmark verse")
-        let bookmark = UIMenuItem(title: bookmarkTitle, action: #selector(bookmarkHandler))
-        menuItems.append(bookmark)
         
         let noteTitle = NSLocalizedString("Note", comment: "Menu option to write note")
         let note = UIMenuItem(title: noteTitle, action: #selector(noteHandler))
@@ -57,9 +57,9 @@ extension WKWebView {
         let compare = UIMenuItem(title: compareTitle, action: #selector(compareHandler))
         menuItems.append(compare)
         
-        let shareTitle = NSLocalizedString("Share", comment: "Menu option to share verse with others")
-        let share = UIMenuItem(title: shareTitle, action: #selector(shareHandler))
-        menuItems.append(share)
+        let bookmarkTitle = NSLocalizedString("Bookmark", comment: "Menu option to Bookmark verse")
+        let bookmark = UIMenuItem(title: bookmarkTitle, action: #selector(bookmarkHandler))
+        menuItems.append(bookmark)
         
         UIMenuController.shared.menuItems = menuItems
     }
@@ -81,7 +81,7 @@ extension WKWebView {
     }
     
     @objc func shareHandler(sender: UIMenuItem) {
-        print("share clicked")
+        self.findSelection(selectionUse: .share)
     }
     
     private func selectionVerseStart() {
@@ -163,7 +163,7 @@ extension WKWebView {
         self.evaluateJavaScript(query, completionHandler: { data, error in
             if let resp = data as? String {
                 print(resp)
-                let selection = Selection(selection: resp)
+                _ = Selection.factory(selection: resp)
                 switch selectionUse {
                 case .highlight:
                     let colorPicker = ColorPicker(webView: self)
@@ -172,12 +172,25 @@ extension WKWebView {
                     _ = 2
                 case .note:
                     _ = 3
+                    // This one primarily needs a starting point
                 case .compare:
                     _ = 4
+                    // This one can only be whole verses.  It can be multiple,
+                    // but it cannot be part of a verse.
                 case .share:
-                    _ = 5
+                    let text = "This is some text that I want to share."
+                    let attrs = [NSAttributedString.Key.font: AppFont.serif(style: .body), NSAttributedString.Key.foregroundColor: UIColor.black]
+                    let str = NSAttributedString(string: text, attributes: attrs)
+                    let print = UISimpleTextPrintFormatter(attributedText: str)
+
+                    let textToShare: [Any] = [ print, text ]
+                    let share = UIActivityViewController(activityItems: textToShare,
+                                                         applicationActivities: nil)
+                    share.popoverPresentationController?.sourceView = self//.view // so that iPads won't crash
+                    share.excludedActivityTypes = nil
+                    let rootController = UIApplication.shared.keyWindow?.rootViewController
+                    rootController!.present(share, animated: true, completion: nil)
                 }
-                print(selection)
             }
             if let err = error {
                 print("ERROR: findSelection \(err)")
@@ -186,9 +199,14 @@ extension WKWebView {
     }
     
     @objc public func touchHandler(sender: UITapGestureRecognizer) {
-        let it = sender.view?.backgroundColor
         sender.view?.superview?.removeFromSuperview()
-        print("tapped colored dot \(it)")
+        if let color = sender.view?.backgroundColor {
+            print("tapped colored dot \(color)")
+            //print(Selection.current)
+            if let select = Selection.current {
+                self.insertHighlight(selection: select, color: color)
+            }
+        }
         // have selection respond to user selection by inserting selection.
         // Use History to get reference
     }
@@ -208,6 +226,27 @@ extension WKWebView {
                 print("ERROR: insertBookmark \(err)")
             }
         })
+    }
+    
+    private func insertHighlight(selection: Selection, color: UIColor) {
+        // convert selection to single string like what is passed up.
+        // do start node
+        //    1. get start node by className and Pos
+        //    2. extract text from start position to end Position
+        //    3. break into three pieces, part before, part inside, part after.
+        //    4. if there is an end node, the third piece is an empty string
+        //    4. remove as child of element
+        //    5. add pre-part as child
+        //    6. add span with highlight-n
+        //    7. add mid-part as child of span
+        //    add post part as child of element
+        // do end node
+        //    1. logic is just about identical to start node
+        // do mid nodes
+        //    1. split into individual nodes
+        //    2. iterate over nodes
+        //      2a. get each node by class and Pos
+        //      2b. add correct highlight tag to each
     }
     
     func addNotes(reference: Reference) {
