@@ -14,6 +14,7 @@ struct Selection {
     let endClass: String
     let endClassPos: Int
     let endCharPos: Int
+    let midSelection: String?
     
     //init(startClass: String, startClassPos: Int, startCharPos: Int,
     //     endClass: String, endClassPos: Int, endCharPos: Int) {
@@ -26,14 +27,24 @@ struct Selection {
     //}
     
     init(selection: String) {
-        let parts = selection.split(separator: "/")
-        let start = parts[0].split(separator: ":")
-        let end = parts[1].split(separator: ":")
+        var parts: [Substring] = selection.split(separator: "/")
+        self.startCharPos = Int(parts.remove(at: 0)) ?? 0
+        self.endCharPos = Int(parts.remove(at: 0)) ?? 0
+        let start = parts.remove(at: 0).split(separator: ":")
         self.startClass = String(start[0])
         self.startClassPos = Int(start[1]) ?? 0
-        self.startCharPos = Int(start[2]) ?? 0
-        self.endClass = String(end[0])
-        self.endClassPos = Int(end[1]) ?? 0
-        self.endCharPos = Int(end[2]) ?? 0
+        if parts.count > 0 {
+            let end = parts.remove(at: parts.count - 1).split(separator: ":")
+            self.endClass = String(end[0])
+            self.endClassPos = Int(end[1]) ?? 0
+        } else {
+            self.endClass = self.startClass
+            self.endClassPos = self.startClassPos
+        }
+        if parts.count > 0 {
+            self.midSelection = parts.joined(separator: "/")
+        } else {
+            self.midSelection = nil
+        }
     }
 }
