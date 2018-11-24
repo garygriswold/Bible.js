@@ -80,9 +80,7 @@ extension WKWebView {
     }
     
     @objc func shareHandler(sender: UIMenuItem) {
-        let query = "var select = window.getSelection();\n"
-        + "select.toString()"
-        print(query)
+        let query = "window.getSelection().toString();"
         self.evaluateJavaScript(query, completionHandler: { data, error in
             if let err = error {
                 print("ERROR: shareHandler \(err)")
@@ -263,7 +261,6 @@ extension WKWebView {
                 self.insertBookmark(verse: String(note.verse))
             }
         }
-        
     }
 }
 
