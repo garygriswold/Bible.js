@@ -14,7 +14,6 @@ enum SelectionUse {
     case bookmark
     case note
     case compare
-    case share
 }
 
 extension WKWebView {
@@ -81,7 +80,27 @@ extension WKWebView {
     }
     
     @objc func shareHandler(sender: UIMenuItem) {
-        self.findSelection(selectionUse: .share)
+        let query = "var select = window.getSelection();\n"
+        + "select.toString()"
+        print(query)
+        self.evaluateJavaScript(query, completionHandler: { data, error in
+            if let err = error {
+                print("ERROR: shareHandler \(err)")
+            }
+            if let text = data as? String {
+                let attrs = [NSAttributedString.Key.font: AppFont.serif(style: .body),
+                             NSAttributedString.Key.foregroundColor: UIColor.black]
+                let string = NSAttributedString(string: text, attributes: attrs)
+                let print = UISimpleTextPrintFormatter(attributedText: string)
+        
+                let share = UIActivityViewController(activityItems: [text, print],
+                                                     applicationActivities: nil)
+                share.popoverPresentationController?.sourceView = self//.view // so that iPads won't crash
+                share.excludedActivityTypes = nil
+                let rootController = UIApplication.shared.keyWindow?.rootViewController
+                rootController!.present(share, animated: true, completion: nil)
+            }
+        })
     }
     
     private func selectionVerseStart() {
@@ -177,19 +196,6 @@ extension WKWebView {
                     _ = 4
                     // This one can only be whole verses.  It can be multiple,
                     // but it cannot be part of a verse.
-                case .share:
-                    let text = "This is some text that I want to share."
-                    let attrs = [NSAttributedString.Key.font: AppFont.serif(style: .body), NSAttributedString.Key.foregroundColor: UIColor.black]
-                    let str = NSAttributedString(string: text, attributes: attrs)
-                    let print = UISimpleTextPrintFormatter(attributedText: str)
-
-                    let textToShare: [Any] = [ print, text ]
-                    let share = UIActivityViewController(activityItems: textToShare,
-                                                         applicationActivities: nil)
-                    share.popoverPresentationController?.sourceView = self//.view // so that iPads won't crash
-                    share.excludedActivityTypes = nil
-                    let rootController = UIApplication.shared.keyWindow?.rootViewController
-                    rootController!.present(share, animated: true, completion: nil)
                 }
             }
             if let err = error {
