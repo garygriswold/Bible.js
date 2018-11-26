@@ -132,7 +132,7 @@ struct SettingsDB {
     //
     // Notes Table
     //
-    func getNotes(bookId: String, chapter: Int, bibleId: String) -> [Note] {
+    func getNotes2(bookId: String, chapter: Int, bibleId: String) -> [Note] {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
@@ -143,12 +143,13 @@ struct SettingsDB {
                 " AND (bibleId = ? OR bibleId = '0')"
             let values: [Any] = [bookId, chapter, bibleId]
             let resultSet = try db.queryV1(sql: sql, values: values)
-            let notes = resultSet.map {
-                Note(bookId: bookId, chapter: chapter, verse: Int($0[0]!)!, bibleId: bibleId,
-                     bookmark: $0[1] == "T", highlightColor: $0[2],
-                     startChar: toInt($0[3]), endChar: toInt($0[4]), note: $0[5])
-            }
-            return notes
+ //           let notes = resultSet.map {
+ //               Note(bookId: bookId, chapter: chapter, verse: Int($0[0]!)!, bibleId: bibleId,
+ //                    bookmark: $0[1] == "T", highlightColor: $0[2],
+ //                    startChar: toInt($0[3]), endChar: toInt($0[4]), note: $0[5])
+ //           }
+ //           return notes
+            return []
         } catch let err {
             print("ERROR SettingsDB.getNotes \(err)")
             return []
@@ -163,18 +164,19 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "REPLACE INTO Notes (bookId, chapter, verse, bibleId," +
-                " bookmark, highlightColor, startChar, endChar, note) VALUES" +
-                " (?,?,?,?,?,?,?,?,?)"
+            let sql = "REPLACE INTO Notes (bookId, chapter, datetime, verseStart, verseEnd, bibleId," +
+                " selection, bookmark, highlight, note) VALUES" +
+                " (?,?,?,?,?,?,?,?,?,?)"
             var values = [Any?]()
             values.append(note.bookId)
             values.append(note.chapter)
-            values.append(note.verse)
+            values.append(note.datetime)
+            values.append(note.verseStart)
+            values.append(note.verseEnd)
             values.append(note.bibleId)
+            values.append(note.selection)
             values.append(note.bookmark)
-            values.append(note.highlightColor)
-            values.append(note.startChar)
-            values.append(note.endChar)
+            values.append(note.highlight)
             values.append(note.note)
             _ = try db.executeV1(sql: sql, values: values)
         } catch let err {
@@ -202,14 +204,15 @@ struct SettingsDB {
             let create3 = "CREATE TABLE IF NOT EXISTS Notes(" +
                 " bookId TEXT NOT NULL," +
                 " chapter INT NOT NULL," +
-                " verse INT NOT NULL," +
+                " datetime INT NOT NULL," +
+                " verseStart INT NOT NULL," +
+                " verseEnd INT NOT NULL," +
                 " bibleId TEXT NOT NULL," +
+                " selection TEXT NOT NULL," +
                 " bookmark TEXT check(bookmark IN ('T', 'F'))," +
-                " highlightColor TEXT NULL," +
-                " startChar INT NULL," +
-                " endChar INT NULL," +
+                " highlight TEXT NULL," +
                 " note TEXT NULL," +
-                " PRIMARY KEY (bookId, chapter, verse, bibleId))"
+                " PRIMARY KEY (bookId, chapter, datetime, verseStart))"
             _ = try db?.executeV1(sql: create3, values: [])
         }
         return db!

@@ -8,44 +8,54 @@
 import Foundation
 
 struct Note {
-    var bookId: String
-    var chapter: Int            // 0 means any chapter in book
-    var datetime: TimeInterval  // Last update time
+    let bookId: String
+    let chapter: Int            // 0 means any chapter in book
+    var datetime: Int           // Last update time
     var verseStart: Int         // 0 means any verse in chapter
     var verseEnd: Int           // 0 means any verse in chapter
     var bibleId: String         // 0 means any version
     var selection: String
     var bookmark: Bool
-    var highlightColor: String? // color name in HEX, presence indicates highlight
+    var highlight: String?      // color name in HEX, presence indicates highlight
     var note: String?
-/*
-    init(bookId: String, chapter: Int, verse: Int, bibleId: String, bookmark: Bool,
-         highlightColor: String?, selection: String, note: String?) {
+
+    // Used to instantiate after user does selection
+    init(bookId: String, chapter: Int, bibleId: String, selection: String, bookmark: Bool,
+         highlight: String?, note: String?) {
         self.bookId = bookId
         self.chapter = chapter
-        self.datetime = Date().timeIntervalSince1970
-        self.verseStart = verse
-        self.verseEnd = verse
-        self.bibleId = "0"
-        self.bookmark = true
-        self.highlightColor = highlightColor
+        self.datetime = Int(Date().timeIntervalSince1970)
+        self.bibleId = bibleId
         self.selection = selection
+        self.bookmark = bookmark
+        self.highlight = highlight
         self.note = note
+        
+        let select = selection.replacingOccurrences(of: "-", with: "_")
+        let begEnd = select.split(separator: "/")
+        let begClass = begEnd[0].split(separator: ":")[0]
+        let endClass = begEnd[1].split(separator: ":")[0]
+        let begParts = begClass.split(separator: "_")
+        let endParts = endClass.split(separator: "_")
+        self.verseStart = Int(begParts[begParts.count - 1]) ?? 0
+        self.verseEnd = Int(endParts[endParts.count - 1]) ?? 0
     }
     
-    init(bookId: String, chapter: Int, verse: Int) {
+    // Used to instantiate from selection from Notes table
+    init(bookId: String, chapter: Int, datetime: Int, verseStart: Int, verseEnd: Int, bibleId: String,
+         selection: String, bookmark: Bool, highlight: String?, note: String?) {
         self.bookId = bookId
         self.chapter = chapter
-        self.datetime = Date().timeIntervalSince1970
-        self.verseStart = verse
-        self.verseEnd = verse
-        self.bibleId = "0"
-        self.bookmark = true
-        self.highlightColor = nil
-        self.selection = "" // OK?
-        self.note = nil
+        self.datetime = datetime
+        self.verseStart = verseStart
+        self.verseEnd = verseEnd
+        self.bibleId = bibleId
+        self.selection = selection
+        self.bookmark = bookmark
+        self.highlight = highlight
+        self.note = note
     }
-*/
+
     static let installEffect = "function installEffect(range, type, color) {\n"
         + "  var startNode = range.startContainer;\n"
         + "  if (type === 'book') {\n"

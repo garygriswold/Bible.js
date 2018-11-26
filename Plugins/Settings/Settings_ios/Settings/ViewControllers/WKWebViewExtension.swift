@@ -125,13 +125,13 @@ extension WKWebView {
     }
 
     func addNotes(reference: Reference) {
-        let notes: [Note] = SettingsDB.shared.getNotes(bookId: reference.bookId, chapter: reference.chapter,
-                                                       bibleId: reference.bibleId)
-        for note in notes {
-            if note.bookmark {
+        //let notes: [Note] = SettingsDB.shared.getNotes(bookId: reference.bookId, chapter: reference.chapter,
+        //                                               bibleId: reference.bibleId)
+        //for note in notes {
+        //    if note.bookmark {
                 //self.insertBookmark(verse: String(note.verse))
-            }
-        }
+        //    }
+        //}
     }
     
     private func handleSelection(selectionUse: SelectionUse, color: String?) {
@@ -157,8 +157,15 @@ extension WKWebView {
             if let err = error {
                 print("ERROR: handleSelection \(err)")
             }
-            if let range = data {
+            if let range = data as? String {
                 print("RANGE found \(range)")
+                let bookmark = (selectionUse == .bookmark)
+                let highlight = (selectionUse == .highlight) ? color! : nil
+                let text = (selectionUse == .note) ? "Note here?" : nil
+                let ref = HistoryModel.shared.current()
+                let note = Note(bookId: ref.bookId, chapter: ref.chapter, bibleId: ref.bibleId, selection: range,
+                                bookmark: bookmark, highlight: highlight, note: text)
+                SettingsDB.shared.storeNote(note: note)
             }
         })
     }
