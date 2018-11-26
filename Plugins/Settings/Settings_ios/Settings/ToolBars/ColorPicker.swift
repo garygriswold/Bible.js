@@ -18,6 +18,16 @@ class ColorPicker : UIView {
     private static let purple = UIColor(displayP3Red: 0.57031, green: 0.32421, blue: 0.58593, alpha: 1.0) // 92 53 96
     private static let salmon = UIColor(displayP3Red: 0.76953, green: 0.37890, blue: 0.42578, alpha: 1.0) // C5 61 6D
     
+    static func toHEX(color: UIColor) -> String {
+        var r:CGFloat = 0, g:CGFloat = 0, b:CGFloat = 0, a:CGFloat = 0
+        color.getRed(&r, green: &g, blue: &b, alpha: &a)
+        let red = Int(255.0 * r)
+        let gre = Int(255.0 * g)
+        let blu = Int(255.0 * b)
+        let alf = Int(64.0 * a)
+        return String(format: "#%02x%02x%02x%02x", red, gre, blu, alf)
+    }
+    
     private let webView: WKWebView
     
     init(webView: WKWebView) {
@@ -67,7 +77,7 @@ class ColorPicker : UIView {
         label.backgroundColor = color
         label.layer.cornerRadius = frame.width / 2.0
         label.layer.masksToBounds = true
-        let tapGesture = UITapGestureRecognizer(target: self.webView, action:  #selector(self.webView.touchHandler))
+        let tapGesture = UITapGestureRecognizer(target: self.webView, action:  #selector(self.webView.colorTouchHandler))
         tapGesture.numberOfTapsRequired = 1
         label.addGestureRecognizer(tapGesture)
         label.isUserInteractionEnabled = true

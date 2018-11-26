@@ -64,15 +64,9 @@ extension WKWebView {
     }
     
     @objc func highlightHandler(sender: UIMenuItem) {
-        let query = "var select = window.getSelection();\n"
-            + "installEffect(select.getRangeAt(0), 'lite', '#FFFF00');\n"
-            + Note.installEffect
-        self.evaluateJavaScript(query, completionHandler: { data, error in
-            if let err = error {
-                print("ERROR: insertHighlight \(err)")
-            }
-        })
-        //self.findSelection(selectionUse: .highlight)
+        let colorPicker = ColorPicker(webView: self)
+        self.addSubview(colorPicker)
+        // When user clicks on the color pallet, colorTouchHandler is called
     }
     
     @objc func bookmarkHandler(sender: UIMenuController) {
@@ -123,7 +117,7 @@ extension WKWebView {
             }
         })
     }
-    
+ /*
     private func selectionVerseStart() {
         let query = "var clas = '';\n"
             + "var select = window.getSelection();\n"
@@ -156,7 +150,8 @@ extension WKWebView {
             }
         })
     }
-    
+ */
+ /*
     private func findSelection(selectionUse: SelectionUse) {
         let query = "var select = window.getSelection();\n"
             + "var range = select.getRangeAt(0);\n"
@@ -224,58 +219,31 @@ extension WKWebView {
             }
         })
     }
-    
-    @objc public func touchHandler(sender: UITapGestureRecognizer) {
+ */
+    @objc public func colorTouchHandler(sender: UITapGestureRecognizer) {
         sender.view?.superview?.removeFromSuperview()
         if let color = sender.view?.backgroundColor {
-            print("tapped colored dot \(color)")
-            //print(Selection.current)
-            if let select = Selection.current {
-                //self.insertHighlight(selection: select, color: color)
-            }
+            let hexColor = ColorPicker.toHEX(color: color)
+            print("tapped colored dot \(hexColor)")
+            let query = "var select = window.getSelection();\n"
+                + "installEffect(select.getRangeAt(0), 'lite', '\(hexColor)');\n"
+                + Note.installEffect
+            self.evaluateJavaScript(query, completionHandler: { data, error in
+                if let err = error {
+                    print("ERROR: insertHighlight \(err)")
+                }
+            })
         }
         // have selection respond to user selection by inserting selection.
         // Use History to get reference
     }
-    
-    private func insertBookmark(verse: String) {
-        let commands = "var node = document.getElementsByClassName('verse\(verse)')[0];\n"
-            // Keep the following in case I am able to load images
-            //+ "node = node.nextSibling;\n"
-            //+ "var item = document.createElement('img');\n"
-            //+ "item.setAttribute('src', 'images/gen-bookmark.png');\n"
-            //+ "item.setAttribute('class', 'bookmark');\n"
-            + "var item = document.createElement('span');\n"
-            + "item.innerHTML = '&#x1F516; '\n"   /// NotePad &#x1F5D2;
-            + "var result = node.parentElement.insertBefore(item, node);\n"
-        self.evaluateJavaScript(commands, completionHandler: { data, error in
-            if let err = error {
-                print("ERROR: insertBookmark \(err)")
-            }
-        })
-    }
-    
-    //private func insertHighlight(selection: Selection, color: UIColor) {
-    private func insertHighlight() {
-        let query = "var select = window.getSelection();\n"
-            + "var range = select.getRangeAt(0);\n"
-            + "document.designMode = 'on';\n"
-            + "var colour = '#FFFF00';\n"
-            + "document.execCommand('HiliteColor', false, colour);\n"
-            + "document.designMode = 'off';\n"
-        self.evaluateJavaScript(query, completionHandler: { data, error in
-            if let err = error {
-                print("ERROR: insertHighlight \(err)")
-            }
-        })
-    }
-    
+
     func addNotes(reference: Reference) {
         let notes: [Note] = SettingsDB.shared.getNotes(bookId: reference.bookId, chapter: reference.chapter,
                                                        bibleId: reference.bibleId)
         for note in notes {
             if note.bookmark {
-                self.insertBookmark(verse: String(note.verse))
+                //self.insertBookmark(verse: String(note.verse))
             }
         }
     }
