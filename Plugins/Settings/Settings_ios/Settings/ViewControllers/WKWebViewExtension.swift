@@ -64,15 +64,38 @@ extension WKWebView {
     }
     
     @objc func highlightHandler(sender: UIMenuItem) {
-        self.findSelection(selectionUse: .highlight)
+        let query = "var select = window.getSelection();\n"
+            + "installEffect(select.getRangeAt(0), 'lite', '#FFFF00');\n"
+            + Note.installEffect
+        self.evaluateJavaScript(query, completionHandler: { data, error in
+            if let err = error {
+                print("ERROR: insertHighlight \(err)")
+            }
+        })
+        //self.findSelection(selectionUse: .highlight)
     }
     
     @objc func bookmarkHandler(sender: UIMenuController) {
-        self.selectionVerseStart()
+        let query = "var select = window.getSelection();\n"
+            + "installEffect(select.getRangeAt(0), 'book');\n"
+            + Note.installEffect
+        self.evaluateJavaScript(query, completionHandler: { data, error in
+            if let err = error {
+                print("ERROR: insertBookmarkIcon \(err)")
+            }
+        })
+        //self.selectionVerseStart()
     }
     
     @objc func noteHandler(sender: UIMenuItem) {
-        print("note clicked")
+        let query = "var select = window.getSelection();\n"
+            + "installEffect(select.getRangeAt(0), 'note');\n"
+            + Note.installEffect
+        self.evaluateJavaScript(query, completionHandler: { data, error in
+            if let err = error {
+                print("ERROR: insertNoteIcon \(err)")
+            }
+        })
     }
     
     @objc func compareHandler(sender: UIMenuItem) {
@@ -208,7 +231,7 @@ extension WKWebView {
             print("tapped colored dot \(color)")
             //print(Selection.current)
             if let select = Selection.current {
-                self.insertHighlight(selection: select, color: color)
+                //self.insertHighlight(selection: select, color: color)
             }
         }
         // have selection respond to user selection by inserting selection.
@@ -232,25 +255,19 @@ extension WKWebView {
         })
     }
     
-    private func insertHighlight(selection: Selection, color: UIColor) {
-        // convert selection to single string like what is passed up.
-        // do start node
-        //    1. get start node by className and Pos
-        //    2. extract text from start position to end Position
-        //    3. break into three pieces, part before, part inside, part after.
-        //    4. if there is an end node, the third piece is an empty string
-        //    4. remove as child of element
-        //    5. add pre-part as child
-        //    6. add span with highlight-n
-        //    7. add mid-part as child of span
-        //    add post part as child of element
-        // do end node
-        //    1. logic is just about identical to start node
-        // do mid nodes
-        //    1. split into individual nodes
-        //    2. iterate over nodes
-        //      2a. get each node by class and Pos
-        //      2b. add correct highlight tag to each
+    //private func insertHighlight(selection: Selection, color: UIColor) {
+    private func insertHighlight() {
+        let query = "var select = window.getSelection();\n"
+            + "var range = select.getRangeAt(0);\n"
+            + "document.designMode = 'on';\n"
+            + "var colour = '#FFFF00';\n"
+            + "document.execCommand('HiliteColor', false, colour);\n"
+            + "document.designMode = 'off';\n"
+        self.evaluateJavaScript(query, completionHandler: { data, error in
+            if let err = error {
+                print("ERROR: insertHighlight \(err)")
+            }
+        })
     }
     
     func addNotes(reference: Reference) {

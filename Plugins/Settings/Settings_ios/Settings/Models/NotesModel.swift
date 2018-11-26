@@ -7,6 +7,7 @@
 //
 
 struct Note {
+    
     var bookId: String
     var chapter: Int            // 0 means any chapter in book
     var verse: Int              // 0 means any verse in chapter
@@ -41,6 +42,35 @@ struct Note {
         self.endChar = nil
         self.note = nil
     }
+    
+    static let installEffect = "function installEffect(range, type, color) {\n"
+        + "  var startNode = range.startContainer;\n"
+        + "  if (type === 'book') {\n"
+        + "    var book = document.createElement('span');\n"
+        + "    book.innerHTML = '&#x1F516; ';\n"
+        + "    startNode.parentNode.insertBefore(book, startNode);\n"
+        + "  } else if (type === 'note') {\n"
+        + "    var note = document.createElement('span');\n"
+        + "    note.innerHTML = '&#x1F5D2; ';\n"
+        + "    startNode.parentNode.insertBefore(note, startNode);\n"
+        + "  } else if (type === 'lite') {\n"
+        + "    document.designMode = 'on';\n"
+        + "    document.execCommand('HiliteColor', false, color);\n"
+        + "    document.designMode = 'off';\n"
+        + "  } else {\n"
+        + "    throw 'type \"' + type + '\" is not known.';\n"
+        + "  }\n"
+        + "}\n"
+    
+    static let encodeRange = "function encodeRange(range) {"
+    
+    //    return string
+    //}
+    
+    static let decodeRange = "function decodeRange(string) {"
+    
+    //    return range
+    //}"
 }
 
 struct NotesModel {
