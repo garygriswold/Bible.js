@@ -66,47 +66,31 @@ extension WKWebView {
     @objc func highlightHandler(sender: UIMenuItem) {
         let colorPicker = ColorPicker(webView: self)
         self.addSubview(colorPicker)
-        // When user clicks on the color pallet, colorTouchHandler is called
+        // When user clicks on the color picker, colorTouchHandler is called
     }
     
     @objc func bookmarkHandler(sender: UIMenuController) {
-        let query = "var select = window.getSelection();\n"
-            + "var range = select.getRangeAt(0);\n"
-            + "installEffect(range, 'book');\n"
-            + "window.getSelection().removeAllRanges();\n"
-            + "encodeRange(range);\n"
-            + Note.installEffect
-            + Note.encodeRange
-        self.evaluateJavaScript(query, completionHandler: { data, error in
-            if let err = error {
-                print("ERROR: insertBookmarkIcon \(err)")
-            }
-            if let range = data {
-                print("RANGE found \(range)")
-            }
-        })
+        self.handleSelection(selectionUse: .bookmark, color: nil)
     }
     
     @objc func noteHandler(sender: UIMenuItem) {
+        self.handleSelection(selectionUse: .note, color: nil)
+    }
+    
+    @objc func compareHandler(sender: UIMenuItem) {
         let query = "var select = window.getSelection();\n"
             + "var range = select.getRangeAt(0);\n"
-            + "installEffect(range, 'note');\n"
             + "window.getSelection().removeAllRanges();\n"
             + "encodeRange(range);\n"
-            + Note.installEffect
             + Note.encodeRange
         self.evaluateJavaScript(query, completionHandler: { data, error in
             if let err = error {
-                print("ERROR: insertNoteIcon \(err)")
+                print("ERROR: compareHandler \(err)")
             }
             if let range = data {
                 print("RANGE found \(range)")
             }
         })
-    }
-    
-    @objc func compareHandler(sender: UIMenuItem) {
-        print("compare clicked")
     }
     
     @objc func shareHandler(sender: UIMenuItem) {
@@ -136,21 +120,7 @@ extension WKWebView {
         if let color = sender.view?.backgroundColor {
             let hexColor = ColorPicker.toHEX(color: color)
             print("tapped colored dot \(hexColor)")
-            let query = "var select = window.getSelection();\n"
-                + "var range = select.getRangeAt(0);\n"
-                + "installEffect(range, 'lite', '\(hexColor)');\n"
-                + "window.getSelection().removeAllRanges();\n"
-                + "encodeRange(range);\n"
-                + Note.installEffect
-                + Note.encodeRange
-            self.evaluateJavaScript(query, completionHandler: { data, error in
-                if let err = error {
-                    print("ERROR: insertHighlight \(err)")
-                }
-                if let range = data {
-                    print("RANGE found \(range)")
-                }
-            })
+            self.handleSelection(selectionUse: .highlight, color: hexColor)
         }
     }
 
@@ -162,6 +132,35 @@ extension WKWebView {
                 //self.insertBookmark(verse: String(note.verse))
             }
         }
+    }
+    
+    private func handleSelection(selectionUse: SelectionUse, color: String?) {
+        var varLine1: String
+        switch selectionUse {
+        case .highlight:
+            varLine1 = "installEffect(range, 'lite', '\(color!)');\n"
+        case .bookmark:
+            varLine1 = "installEffect(range, 'book');\n"
+        case .note:
+            varLine1 = "installEffect(range, 'note');\n"
+        case .compare:
+            varLine1 = "installEffect(range, 'whoops');\n"
+        }
+        let query = "var select = window.getSelection();\n"
+            + "var range = select.getRangeAt(0);\n"
+            + varLine1
+            + "select.removeAllRanges();\n"
+            + "encodeRange(range);\n"
+            + Note.installEffect
+            + Note.encodeRange
+        self.evaluateJavaScript(query, completionHandler: { data, error in
+            if let err = error {
+                print("ERROR: handleSelection \(err)")
+            }
+            if let range = data {
+                print("RANGE found \(range)")
+            }
+        })
     }
 }
 

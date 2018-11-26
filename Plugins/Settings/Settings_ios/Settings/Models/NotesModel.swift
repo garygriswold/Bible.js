@@ -8,18 +8,17 @@
 import Foundation
 
 struct Note {
-    
     var bookId: String
     var chapter: Int            // 0 means any chapter in book
-    var datetime: TimeInterval  //
+    var datetime: TimeInterval  // Last update time
     var verseStart: Int         // 0 means any verse in chapter
     var verseEnd: Int           // 0 means any verse in chapter
     var bibleId: String         // 0 means any version
-    var bookmark: Bool
-    var highlightColor: String? // color name, presence indicates highlight
     var selection: String
+    var bookmark: Bool
+    var highlightColor: String? // color name in HEX, presence indicates highlight
     var note: String?
-    
+/*
     init(bookId: String, chapter: Int, verse: Int, bibleId: String, bookmark: Bool,
          highlightColor: String?, selection: String, note: String?) {
         self.bookId = bookId
@@ -46,7 +45,7 @@ struct Note {
         self.selection = "" // OK?
         self.note = nil
     }
-    
+*/
     static let installEffect = "function installEffect(range, type, color) {\n"
         + "  var startNode = range.startContainer;\n"
         + "  if (type === 'book') {\n"
