@@ -125,13 +125,34 @@ extension WKWebView {
     }
 
     func addNotes(reference: Reference) {
-        //let notes: [Note] = SettingsDB.shared.getNotes(bookId: reference.bookId, chapter: reference.chapter,
-        //                                               bibleId: reference.bibleId)
-        //for note in notes {
-        //    if note.bookmark {
-                //self.insertBookmark(verse: String(note.verse))
-        //    }
-        //}
+        let notes: [Note] = SettingsDB.shared.getNotes(bookId: reference.bookId, chapter: reference.chapter)
+        var varLine1: String
+        for note in notes {
+            if note.highlight != nil {
+                varLine1 = "installEffect(range, 'lite', '\(note.highlight!)');\n"
+            }
+            else if note.bookmark {
+                varLine1 = "installEffect(range, 'book');\n"
+            }
+            else if note.note != nil {
+                varLine1 = "installEffect(range, 'note');\n"
+            } else {
+                varLine1 = ""
+            }
+            let query = "var range = decodeRange('\(note.selection)');\n"
+                + varLine1
+                + Note.decodeRange
+                + Note.installEffect
+            print(query)
+            //self.evaluateJavaScript(query, completionHandler: { data, error in
+            //    if let err = error {
+            //        print("ERROR: addNote \(err)")
+            //    }
+            //    if let range = data {
+            //        print("RANGE found \(range)")
+            //    }
+            //})
+        }
     }
     
     private func handleSelection(selectionUse: SelectionUse, color: String?) {
