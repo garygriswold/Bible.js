@@ -78,21 +78,7 @@ extension WKWebView {
     }
     
     @objc func compareHandler(sender: UIMenuItem) {
-        let query = "var select = window.getSelection();\n"
-            + "var range = select.getRangeAt(0);\n"
-            + "var result = encodeRange(range);\n"
-            + "select.removeAllRanges();\n"
-            + "result;\n"
-            + Note.encodeRange
-        // This might be able to use the handle selection method.
-        self.evaluateJavaScript(query, completionHandler: { data, error in
-            if let err = error {
-                print("ERROR: compareHandler \(err)")
-            }
-            if let range = data {
-                print("RANGE found \(range)")
-            }
-        })
+        self.handleSelection(selectionUse: .compare, color: nil)
     }
     
     @objc func shareHandler(sender: UIMenuItem) {
@@ -141,19 +127,19 @@ extension WKWebView {
             } else {
                 varLine1 = ""
             }
-            let query = "var range = decodeRange('\(note.selection)');\n"
+            let query = "var range = decodeRange(\"\(note.selection)\");\n"
                 + varLine1
                 + Note.decodeRange
                 + Note.installEffect
-            //print(query)
-            //self.evaluateJavaScript(query, completionHandler: { data, error in
-            //    if let err = error {
-            //        print("ERROR: addNote \(err)")
-            //    }
-            //    if let range = data {
-            //        print("RANGE found \(range)")
-            //    }
-            //})
+            print(query)
+            self.evaluateJavaScript(query, completionHandler: { data, error in
+                if let err = error {
+                    print("ERROR: addNote \(err)")
+                }
+                if let range = data {
+                    print("RANGE found \(range)")
+                }
+            })
         }
     }
     
@@ -190,7 +176,9 @@ extension WKWebView {
                 let ref = HistoryModel.shared.current()
                 let note = Note(bookId: ref.bookId, chapter: ref.chapter, bibleId: ref.bibleId, selection: range,
                                 bookmark: bookmark, highlight: highlight, note: text)
-                SettingsDB.shared.storeNote(note: note)
+                if selectionUse != .compare {
+                    SettingsDB.shared.storeNote(note: note)
+                }
             }
         })
     }
