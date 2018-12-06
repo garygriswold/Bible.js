@@ -80,9 +80,11 @@ extension WKWebView {
     @objc func compareHandler(sender: UIMenuItem) {
         let query = "var select = window.getSelection();\n"
             + "var range = select.getRangeAt(0);\n"
-            + "window.getSelection().removeAllRanges();\n"
-            + "encodeRange(range);\n"
+            + "var result = encodeRange(range);\n"
+            + "select.removeAllRanges();\n"
+            + "result;\n"
             + Note.encodeRange
+        // This might be able to use the handle selection method.
         self.evaluateJavaScript(query, completionHandler: { data, error in
             if let err = error {
                 print("ERROR: compareHandler \(err)")
@@ -143,7 +145,7 @@ extension WKWebView {
                 + varLine1
                 + Note.decodeRange
                 + Note.installEffect
-            print(query)
+            //print(query)
             //self.evaluateJavaScript(query, completionHandler: { data, error in
             //    if let err = error {
             //        print("ERROR: addNote \(err)")
@@ -165,15 +167,17 @@ extension WKWebView {
         case .note:
             varLine1 = "installEffect(range, 'note');\n"
         case .compare:
-            varLine1 = "installEffect(range, 'whoops');\n"
+            varLine1 = ""
         }
         let query = "var select = window.getSelection();\n"
             + "var range = select.getRangeAt(0);\n"
             + varLine1
+            + "var result = encodeRange(range);\n"
             + "select.removeAllRanges();\n"
-            + "encodeRange(range);\n"
+            + "result;\n"
             + Note.installEffect
             + Note.encodeRange
+        print(query)
         self.evaluateJavaScript(query, completionHandler: { data, error in
             if let err = error {
                 print("ERROR: handleSelection \(err)")
