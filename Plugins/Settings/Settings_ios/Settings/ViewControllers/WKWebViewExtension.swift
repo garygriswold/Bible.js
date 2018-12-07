@@ -117,7 +117,7 @@ extension WKWebView {
         var varLine1: String
         for note in notes {
             if note.highlight != nil {
-                varLine1 = "installEffect(range, 'lite', '\(note.highlight!)');\n"
+                varLine1 = "installEffect(range, 'lite_saved', '\(note.highlight!)');\n"
             }
             else if note.bookmark {
                 varLine1 = "installEffect(range, 'book');\n"
@@ -131,14 +131,15 @@ extension WKWebView {
                 + varLine1
                 + Note.decodeRange
                 + Note.installEffect
-            print(query)
+            //print(query)
+            print("SAVED RANGE \(note.selection)")
             self.evaluateJavaScript(query, completionHandler: { data, error in
                 if let err = error {
                     print("ERROR: addNote \(err)")
                 }
-                if let range = data {
-                    print("RANGE found \(range)")
-                }
+                //if let range = data {
+                //    print("RANGE found \(range)")
+                //}
             })
         }
     }
@@ -147,7 +148,7 @@ extension WKWebView {
         var varLine1: String
         switch selectionUse {
         case .highlight:
-            varLine1 = "installEffect(range, 'lite', '\(color!)');\n"
+            varLine1 = "installEffect(range, 'lite_select', '\(color!)');\n"
         case .bookmark:
             varLine1 = "installEffect(range, 'book');\n"
         case .note:
@@ -163,13 +164,13 @@ extension WKWebView {
             + "result;\n"
             + Note.installEffect
             + Note.encodeRange
-        print(query)
+        //print(query)
         self.evaluateJavaScript(query, completionHandler: { data, error in
             if let err = error {
                 print("ERROR: handleSelection \(err)")
             }
             if let range = data as? String {
-                print("RANGE found \(range)")
+                print("SELECT RANGE \(range)")
                 let bookmark = (selectionUse == .bookmark)
                 let highlight = (selectionUse == .highlight) ? color! : nil
                 let text = (selectionUse == .note) ? "Note here?" : nil
