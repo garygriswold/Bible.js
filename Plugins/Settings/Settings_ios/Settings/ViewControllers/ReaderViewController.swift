@@ -29,6 +29,9 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
         
         let configuration = WKWebViewConfiguration()
         configuration.preferences.javaScriptEnabled = true
+        let js = Note.decodeRange + Note.installEffect + Note.encodeRange
+        let script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+        configuration.userContentController.addUserScript(script)
         self.webView = WKWebView(frame: self.view.bounds, configuration: configuration)
         self.webView.backgroundColor = AppFont.backgroundColor
         
@@ -80,8 +83,8 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
     //
     func webView(_: WKWebView, didFinish: WKNavigation!) {
         print("Web page loaded \(_reference.toString())")
-        NotificationCenter.default.post(name: ReaderPagesController.WEB_LOAD_DONE, object: nil)
         self.webView.addNotes(reference: _reference)
+        NotificationCenter.default.post(name: ReaderPagesController.WEB_LOAD_DONE, object: nil)
     }
     
     func webView(_: WKWebView, didFail: WKNavigation!, withError: Error) {

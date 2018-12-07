@@ -129,17 +129,12 @@ extension WKWebView {
             }
             let query = "var range = decodeRange(\"\(note.selection)\");\n"
                 + varLine1
-                + Note.decodeRange
-                + Note.installEffect
             //print(query)
             print("SAVED RANGE \(note.selection)")
             self.evaluateJavaScript(query, completionHandler: { data, error in
                 if let err = error {
                     print("ERROR: addNote \(err)")
                 }
-                //if let range = data {
-                //    print("RANGE found \(range)")
-                //}
             })
         }
     }
@@ -162,8 +157,6 @@ extension WKWebView {
             + "var result = encodeRange(range);\n"
             + "select.removeAllRanges();\n"
             + "result;\n"
-            + Note.installEffect
-            + Note.encodeRange
         //print(query)
         self.evaluateJavaScript(query, completionHandler: { data, error in
             if let err = error {
