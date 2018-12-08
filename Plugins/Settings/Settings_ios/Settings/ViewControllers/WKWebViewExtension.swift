@@ -153,8 +153,8 @@ extension WKWebView {
         }
         let query = "var select = window.getSelection();\n"
             + "var range = select.getRangeAt(0);\n"
-            + varLine1
             + "var result = encodeRange(range);\n"
+            + varLine1
             + "select.removeAllRanges();\n"
             + "result;\n"
         //print(query)
@@ -162,14 +162,15 @@ extension WKWebView {
             if let err = error {
                 print("ERROR: handleSelection \(err)")
             }
-            if let range = data as? String {
-                print("SELECT RANGE \(range)")
+            if let result = data as? String {
+                let parts = result.split(separator: "|")
+                print("SELECT RANGE \(parts[0])")
                 let bookmark = (selectionUse == .bookmark)
                 let highlight = (selectionUse == .highlight) ? color! : nil
                 let text = (selectionUse == .note) ? "Note here?" : nil
                 let ref = HistoryModel.shared.current()
-                let note = Note(bookId: ref.bookId, chapter: ref.chapter, bibleId: ref.bibleId, selection: range,
-                                bookmark: bookmark, highlight: highlight, note: text)
+                let note = Note(bookId: ref.bookId, chapter: ref.chapter, bibleId: ref.bibleId, selection: String(parts[0]),
+                                classes: String(parts[1]), bookmark: bookmark, highlight: highlight, note: text)
                 if selectionUse != .compare {
                     SettingsDB.shared.storeNote(note: note)
                 }

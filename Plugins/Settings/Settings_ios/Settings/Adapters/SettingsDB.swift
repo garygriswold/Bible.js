@@ -136,15 +136,16 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "SELECT datetime, verseStart, verseEnd, bibleId, selection, bookmark, highlight, note" +
-                " FROM Notes" +
-                " WHERE bookId = ?" +
-                " AND chapter = ?"
+            let sql = "SELECT datetime, verseStart, verseEnd, bibleId, selection, classes, bookmark, highlight, note"
+                + " FROM Notes"
+                + " WHERE bookId = ?"
+                + " AND chapter = ?"
+                + " ORDER BY datetime ASC"
             let values: [Any] = [bookId, chapter]
             let resultSet = try db.queryV1(sql: sql, values: values)
             let notes = resultSet.map {
                 Note(bookId: bookId, chapter: chapter, datetime: Int($0[0]!)!, verseStart: Int($0[1]!)!, verseEnd: Int($0[2]!)!,
-                     bibleId: $0[3]!, selection: $0[4]!, bookmark: $0[5] == "T", highlight: $0[6], note: $0[7])
+                     bibleId: $0[3]!, selection: $0[4]!, classes: $0[5]!, bookmark: $0[6] == "T", highlight: $0[7], note: $0[8])
             }
             return notes
         } catch let err {
@@ -162,8 +163,8 @@ struct SettingsDB {
         do {
             db = try self.getSettingsDB()
             let sql = "REPLACE INTO Notes (bookId, chapter, datetime, verseStart, verseEnd, bibleId," +
-                " selection, bookmark, highlight, note) VALUES" +
-                " (?,?,?,?,?,?,?,?,?,?)"
+                " selection, classes, bookmark, highlight, note) VALUES" +
+                " (?,?,?,?,?,?,?,?,?,?,?)"
             var values = [Any?]()
             values.append(note.bookId)
             values.append(note.chapter)
@@ -172,6 +173,7 @@ struct SettingsDB {
             values.append(note.verseEnd)
             values.append(note.bibleId)
             values.append(note.selection)
+            values.append(note.classes)
             values.append(note.bookmark)
             values.append(note.highlight)
             values.append(note.note)
@@ -206,6 +208,7 @@ struct SettingsDB {
                 " verseEnd INT NOT NULL," +
                 " bibleId TEXT NOT NULL," +
                 " selection TEXT NOT NULL," +
+                " classes TEXT NOT NULL," +
                 " bookmark TEXT check(bookmark IN ('T', 'F'))," +
                 " highlight TEXT NULL," +
                 " note TEXT NULL," +

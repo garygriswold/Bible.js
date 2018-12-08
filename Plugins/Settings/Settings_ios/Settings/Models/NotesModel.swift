@@ -19,13 +19,14 @@ struct Note {
     var verseEnd: Int           // 0 means any verse in chapter
     var bibleId: String         // 0 means any version
     var selection: String
+    var classes: String
     var bookmark: Bool
     var highlight: String?      // color name in HEX, presence indicates highlight
     var note: String?
 
     // Used to instantiate after user does selection
-    init(bookId: String, chapter: Int, bibleId: String, selection: String, bookmark: Bool,
-         highlight: String?, note: String?) {
+    init(bookId: String, chapter: Int, bibleId: String, selection: String, classes: String,
+         bookmark: Bool, highlight: String?, note: String?) {
         self.bookId = bookId
         self.chapter = chapter
         self.datetime = Int(Date().timeIntervalSince1970)
@@ -33,21 +34,22 @@ struct Note {
         self.verseEnd = 0
         self.bibleId = bibleId
         self.selection = selection
+        self.classes = classes
         self.bookmark = bookmark
         self.highlight = highlight
         self.note = note
         
-        let parts = selection.split(separator: "~")
-        self.verseStart = getVerseNum(xpath: String(parts[0]))
-        if parts.count > 2 {
-            self.verseEnd = getVerseNum(xpath: String(parts[2]))
+        let parts = classes.split(separator: "~")
+        self.verseStart = getVerseNum(classes: String(parts[0]))
+        if parts.count > 0 {
+            self.verseEnd = getVerseNum(classes: String(parts[1]))
         }
         print("verse: \(self.verseStart) to \(self.verseEnd)")
     }
     
     // Used to instantiate from selection from Notes table
     init(bookId: String, chapter: Int, datetime: Int, verseStart: Int, verseEnd: Int, bibleId: String,
-         selection: String, bookmark: Bool, highlight: String?, note: String?) {
+         selection: String, classes: String, bookmark: Bool, highlight: String?, note: String?) {
         self.bookId = bookId
         self.chapter = chapter
         self.datetime = datetime
@@ -55,19 +57,20 @@ struct Note {
         self.verseEnd = verseEnd
         self.bibleId = bibleId
         self.selection = selection
+        self.classes = classes
         self.bookmark = bookmark
         self.highlight = highlight
         self.note = note
     }
     
-    private func getVerseNum(xpath: String) -> Int {
-        var result = Note.regex1.matches(in: xpath, range: NSMakeRange(0, xpath.count))
+    private func getVerseNum(classes: String) -> Int {
+        var result = Note.regex1.matches(in: classes, range: NSMakeRange(0, classes.count))
         if result.count > 0 && result[0].numberOfRanges > 1 {
-            return getSubstringInt(leaf: xpath, result: result[0])
+            return getSubstringInt(leaf: classes, result: result[0])
         } else {
-            result = Note.regex2.matches(in: xpath, range: NSMakeRange(0, xpath.count))
+            result = Note.regex2.matches(in: classes, range: NSMakeRange(0, classes.count))
             if result.count > 0 && result[0].numberOfRanges > 1 {
-                return getSubstringInt(leaf: xpath, result: result[0])
+                return getSubstringInt(leaf: classes, result: result[0])
             }
         }
         return 0
@@ -110,50 +113,40 @@ struct Note {
         + "}\n"
     
     static let encodeRange = "function encodeRange(range) {\n"
-        + "  var startXPath = findPath(range.startContainer);\n"
-        + "  var endXPath = findPath(range.endContainer);\n"
-        + "  var startChar = range.startOffset + adjustCharOffset(range.startContainer);\n"
-        + "  var endChar = range.endOffset + adjustCharOffset(range.endContainer);\n"
-        + "  var result = startXPath + '~' + startChar + '~' + endXPath + '~' + endChar;\n"
-        + "  return result;\n"
+        + "  var startPath = getXPathForNode(range.startContainer);\n"
+        + "  var endPath = getXPathForNode(range.endContainer);\n"
+        + "  var paths = startPath + '~' + range.startOffset + '~' + endPath + '~' + range.endOffset;\n"
+        + "  var startClass = getClass(range.startContainer);\n"
+        + "  var endClass = getClass(range.endContainer);\n"
+        + "  var classes = startClass + '~' + endClass;\n"
+        + "  return paths + '|' + classes;\n"
         + "}\n"
-        + "function findPath(textNode) {\n"
-        + "  var node = textNode.parentNode;\n"
+        + "function getXPathForNode(node) {\n"
         + "  var xpath = '';\n"
         + "  while(node && node.nodeName !== 'BODY') {\n"
-        + "    var name = node.nodeName.toLowerCase();\n"
-        + "    var clas = node.getAttribute('class');\n"
-        + "    var position = findPosition(node, clas);\n"
-        + "    if (clas) {\n"
-        + "      name += '[@class=\\'' + clas + '\\']';\n"
+        + "    var pos = 0;\n"
+        + "    var temp = node;\n"
+        + "    while(temp) {\n"
+        + "      if (temp.nodeName === node.nodeName) {\n"
+        + "        pos += 1;\n"
+        + "      }\n"
+        + "      temp = temp.previousSibling;\n"
         + "    }\n"
-        + "    name += '[' + position + ']';\n"
-        + "    xpath = '/' + name + xpath;\n"
+        + "    var name = (node.nodeType === 3) ? 'text()' : node.nodeName.toLowerCase();\n"
+        + "    xpath = '/' + name + '[' + pos + ']' + xpath;\n"
         + "    node = node.parentNode;\n"
         + "  }\n"
         + "  return xpath;\n"
         + "}\n"
-        + "function findPosition(node, clas) {\n"
-        + "  var sibling = node;\n"
-        + "  var pos = 0;\n"
-        + "  while(sibling && sibling.nodeName === node.nodeName && sibling.getAttribute('class') === clas) {\n"
-        + "    pos += 1;\n"
-        + "    sibling = sibling.previousElementSibling;\n"
+        + "function getClass(node) {\n"
+        + "  var clas = '';\n"
+        + "  while(node && node.nodeName !== 'BODY') {\n"
+        + "    if (node.nodeType === 1) {\n"
+        + "      clas += '/' + node.nodeName + '.' + node.getAttribute('class');\n"
+        + "    }\n"
+        + "  node = node.parentNode;\n"
         + "  }\n"
-        + "  return pos;\n"
-        + "}\n"
-        + "function adjustCharOffset(node) {\n"
-        + "  var countChars = 0;\n"
-        //+ "  var element = node.parentNode;\n"
-        //+ "  for (var i=0; i<element.childNodes.length; i++) {\n"
-        //+ "    var child = element.childNodes[i];\n"
-        //+ "    if (child !== node) {\n"
-        //+ "      countChars += child.textContent.length;\n"
-        //+ "    } else {\n"
-        //+ "      return countChars;\n"
-        //+ "    }\n"
-        //+ "  }\n"
-        + "  return countChars;\n"
+        + "  return clas;\n"
         + "}\n"
     
     static let decodeRange = "function decodeRange(encoded) {\n"
@@ -162,9 +155,9 @@ struct Note {
         + "    return null;\n"
         + "  }\n"
         + "  var startPath = document.evaluate('/html/body' + parts[0], document, null, XPathResult.ANY_UNORDERED_NODE_TYPE, null);\n"
-        + "  var startText = startPath.singleNodeValue.childNodes[0];\n"
+        + "  var startText = startPath.singleNodeValue;\n"
         + "  var endPath = document.evaluate('/html/body' + parts[2], document, null, XPathResult.ANY_UNORDERED_NODE_TYPE, null);\n"
-        + "  var endText = endPath.singleNodeValue.childNodes[0];\n"
+        + "  var endText = endPath.singleNodeValue;\n"
         + "  var startOffset = parseInt(parts[1]);\n"
         + "  var endOffset = parseInt(parts[3]);\n"
         + "  var range = new Range();\n"
@@ -172,7 +165,6 @@ struct Note {
         + "  range.setEnd(endText, endOffset);\n"
         + "  return range;\n"
         + "}\n"
-    
 }
 
 struct NotesModel {
