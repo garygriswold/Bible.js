@@ -26,10 +26,7 @@ class TextSizeSliderCell : UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     required init?(coder: NSCoder) {
-        self.textSlider = UISlider(frame: CGRect.zero)
-        self.leftLabel = UILabel(frame: .zero)
-        self.rightLabel = UILabel(frame: .zero)
-        super.init(coder: coder)
+        fatalError("TextSizeSliderCell(coder:) is not implemented.")
     }
     
     deinit {

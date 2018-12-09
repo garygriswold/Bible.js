@@ -21,9 +21,7 @@ class CompareViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     required init?(coder: NSCoder) {
-        self.note = Note(bookId: "JHN", chapter: 3, bibleId: "ENGESV", selection: "", classes: "", bookmark: false, highlight: nil, note: nil)
-        self.dataModel = BibleModel(availableSection: 0, language: nil, selectedOnly: true)
-        super.init(coder: coder)
+        fatalError("CompareViewController(coder:) is not implemented.")
     }
     
     deinit {
@@ -33,7 +31,8 @@ class CompareViewController: UIViewController, UITableViewDataSource, UITableVie
     override func loadView() {
         super.loadView()
         
-        self.navigationItem.title = ""// self.note.reference How will I get book name.
+        self.view.backgroundColor = AppFont.backgroundColor
+        self.navigationItem.title = "Title Here"// self.note.reference How will I get book name.
         
         self.tableView = UITableView(frame: self.view.frame, style: UITableView.Style.plain)
         self.view.addSubview(self.tableView)
@@ -53,6 +52,14 @@ class CompareViewController: UIViewController, UITableViewDataSource, UITableVie
         let navController = self.navigationController!.topViewController
         navController!.navigationItem.rightBarButtonItem = saveButton;
         navController!.navigationItem.leftBarButtonItem = doneButton;
+        
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let margin = self.view.safeAreaLayoutGuide
+        self.tableView.topAnchor.constraint(equalTo: margin.topAnchor).isActive = true
+        self.tableView.leadingAnchor.constraint(equalTo: margin.leadingAnchor).isActive = true
+        self.tableView.trailingAnchor.constraint(equalTo: margin.trailingAnchor).isActive = true
+        self.tableView.bottomAnchor.constraint(equalTo: margin.bottomAnchor).isActive = true
     }
     
     @objc func addBibleHandler(sender: UIBarButtonItem) {

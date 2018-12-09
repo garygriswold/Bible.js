@@ -40,17 +40,12 @@ class SettingsViewController: AppViewController {
         }
     }
     
-    deinit {
-        print("**** deinit SettingsViewController \(settingsViewType) ******")
+    required init?(coder: NSCoder) {
+        fatalError("SettingsViewController(coder:) is not implemented.")
     }
     
-    // This constructor is not used
-    required init?(coder: NSCoder) {
-        self.settingsViewType = .primary
-        self.selectedSection = 0
-        self.availableSection = self.selectedSection + 1
-        self.recentContentOffset = CGPoint(x:0, y: 0)
-        super.init(coder: coder)
+    deinit {
+        print("**** deinit SettingsViewController \(settingsViewType) ******")
     }
 
     override func loadView() {

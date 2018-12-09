@@ -14,7 +14,7 @@ class LanguageCell : UITableViewCell {
         super.init(style: UITableViewCell.CellStyle.value1, reuseIdentifier: reuseIdentifier)
     }
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("Language(coder:) is not implemented.")
     }
     
     deinit {

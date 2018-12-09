@@ -15,7 +15,7 @@ class PageViewController : UIPageViewController {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     }
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("PageViewController(coder:) is not implemented.")
     }
     
     override func viewDidLayoutSubviews() {

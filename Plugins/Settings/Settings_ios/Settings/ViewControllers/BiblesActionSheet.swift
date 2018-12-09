@@ -18,7 +18,7 @@ class BiblesActionSheet : UIAlertController {
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("BiblesActionSheet(coder:) is not implemented.")
     }
     
     override var preferredStyle: UIAlertController.Style { get { return .actionSheet } }

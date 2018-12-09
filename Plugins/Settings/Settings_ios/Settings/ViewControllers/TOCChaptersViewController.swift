@@ -19,8 +19,7 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
     }
     
     required init?(coder: NSCoder) {
-        self.book = Book(bookId: "JHN", ordinal: 22, name: "John", lastChapter: 28)
-        super.init(coder: coder)
+        fatalError("TOCChaptersViewController(coder:) is not implemented.")
     }
     
     deinit {

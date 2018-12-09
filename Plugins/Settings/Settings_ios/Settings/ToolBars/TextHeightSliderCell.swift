@@ -23,8 +23,7 @@ class TextHeightSliderCell : UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     required init?(coder: NSCoder) {
-        self.textSlider = UISlider(frame: CGRect.zero)
-        super.init(coder: coder)
+        fatalError("TextHeightSliderCell(coder:) is not implemented.")
     }
     
     deinit {

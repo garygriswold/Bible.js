@@ -22,10 +22,7 @@ class BibleDetailViewController : AppViewController {
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
-        self.indexPath = IndexPath(item: 0, section: 0)
-        self.bible = Bible(bibleId: "", abbr: "", iso3: "", name: "", s3KeyPrefix: "", s3Key: "",
-        locale: Locale(identifier: "en-US"))
-        super.init(coder: coder)
+        fatalError("BibleDetailViewController(coder:) is not implemented.")
     }
     
     deinit {
