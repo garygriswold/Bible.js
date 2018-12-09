@@ -53,6 +53,7 @@
 		E4C2E990211B712D00B71CC5 /* ReaderViewNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E987211B712C00B71CC5 /* ReaderViewNavigator.swift */; };
 		E4C2E991211B712D00B71CC5 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E988211B712D00B71CC5 /* SettingsModel.swift */; };
 		E4C2E992211B712D00B71CC5 /* SettingsViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E989211B712D00B71CC5 /* SettingsViewDelegate.swift */; };
+		E4C99A8F21BC533F00691604 /* CompareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C99A8E21BC533F00691604 /* CompareViewController.swift */; };
 		E4D708D0213328E600E4A8BF /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D708CF213328E600E4A8BF /* AWS.framework */; };
 		E4D708D1213328E600E4A8BF /* AWS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4D708CF213328E600E4A8BF /* AWS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4E12B2E2133F30800CAFE78 /* UserMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */; };
@@ -163,6 +164,7 @@
 		E4C2E987211B712C00B71CC5 /* ReaderViewNavigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderViewNavigator.swift; sourceTree = "<group>"; };
 		E4C2E988211B712D00B71CC5 /* SettingsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		E4C2E989211B712D00B71CC5 /* SettingsViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewDelegate.swift; sourceTree = "<group>"; };
+		E4C99A8E21BC533F00691604 /* CompareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareViewController.swift; sourceTree = "<group>"; };
 		E4D708CF213328E600E4A8BF /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageController.swift; sourceTree = "<group>"; };
 		E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreReviewController.swift; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 				E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */,
 				E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */,
 				E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */,
+				E4C99A8E21BC533F00691604 /* CompareViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -454,6 +457,7 @@
 				E463896E21793DC0009BF5E2 /* HistoryModel.swift in Sources */,
 				E4A7130021461090009D99E2 /* SettingsSearchController.swift in Sources */,
 				E4638974217AE210009BF5E2 /* SettingsDB.swift in Sources */,
+				E4C99A8F21BC533F00691604 /* CompareViewController.swift in Sources */,
 				E402BCB5217B80BA0026E1DE /* TableContentsModel.swift in Sources */,
 				E46B2C83218E50200063E68C /* TextHeightSliderCell.swift in Sources */,
 				E4A4B325219F5D5800F70888 /* NotesModel.swift in Sources */,

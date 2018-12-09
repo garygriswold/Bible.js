@@ -171,11 +171,17 @@ extension WKWebView {
                 let ref = HistoryModel.shared.current()
                 let note = Note(bookId: ref.bookId, chapter: ref.chapter, bibleId: ref.bibleId, selection: String(parts[0]),
                                 classes: String(parts[1]), bookmark: bookmark, highlight: highlight, note: text)
-                if selectionUse != .compare {
+                if selectionUse == .compare {
+                    let compare = CompareViewController(note: note)
+                    compare.modalPresentationStyle = UIModalPresentationStyle.pageSheet
+                    compare.modalTransitionStyle = UIModalTransitionStyle.partialCurl
+                    let navController = UINavigationController(rootViewController: compare)
+                    let rootController = UIApplication.shared.keyWindow?.rootViewController
+                    rootController!.present(navController, animated: true, completion: nil)
+                } else {
                     SettingsDB.shared.storeNote(note: note)
                 }
             }
         })
     }
 }
-
