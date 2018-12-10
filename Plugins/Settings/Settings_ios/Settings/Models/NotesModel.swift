@@ -9,8 +9,8 @@ import Foundation
 
 struct Note {
     
-    private static var regex1 = try! NSRegularExpression(pattern: "SPAN\\.v .+_(\\d+)")
-    private static var regex2 = try! NSRegularExpression(pattern: "SPAN\\.verse.*\\sv-(\\d+)")
+    private static var regex1 = try! NSRegularExpression(pattern: "SPAN\\.v .+_(\\d+)\\/")
+    private static var regex2 = try! NSRegularExpression(pattern: "SPAN\\.verse.*\\sv-(\\d+)\\/")
     
     let bookId: String
     let chapter: Int            // 0 means any chapter in book

@@ -77,18 +77,14 @@ class CompareViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let bible = dataModel.getSelectedBible(row: indexPath.row)
+        let bible = dataModel.getSelectedBible(row: indexPath.row) // should I if let?
         let cell = tableView.dequeueReusableCell(withIdentifier: "compareVerseCell", for: indexPath) as! CompareVerseCell
-        let text = "You are the salt of the earth. But if the salt loses its saltiness,"
-           + " how can it be made salty again? It is no longer good for anything,"
-           + " except to be thrown out and trampled underfoot. You are the light of the world."
-           + " A town built on a hill cannot be hidden. Neither do people light a lamp and put it under a bowl."
-           + "  Instead they put it on its stand, and it gives light to everyone in the house."
         cell.title.text = bible?.name
-        cell.verse.text = text
+        let reference = Reference(bibleId: bible!.bibleId, bookId: note.bookId, chapter: note.chapter) // bible! might fail
+        let pageModel = BiblePageModel()
+        pageModel.loadCell(reference: reference, startVerse: note.verseStart, endVerse: note.verseEnd,
+                           cell: cell, table: tableView, indexPath: indexPath)
         return cell
-        
-        // must read chapter and parse verse
     }
     //
     // Delegate

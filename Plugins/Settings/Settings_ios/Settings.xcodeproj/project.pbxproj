@@ -54,6 +54,7 @@
 		E4C2E991211B712D00B71CC5 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E988211B712D00B71CC5 /* SettingsModel.swift */; };
 		E4C2E992211B712D00B71CC5 /* SettingsViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2E989211B712D00B71CC5 /* SettingsViewDelegate.swift */; };
 		E4C99A8F21BC533F00691604 /* CompareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C99A8E21BC533F00691604 /* CompareViewController.swift */; };
+		E4C99A9121BDF6B800691604 /* HTMLVerseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C99A9021BDF6B800691604 /* HTMLVerseParser.swift */; };
 		E4D708D0213328E600E4A8BF /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D708CF213328E600E4A8BF /* AWS.framework */; };
 		E4D708D1213328E600E4A8BF /* AWS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4D708CF213328E600E4A8BF /* AWS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4E12B2E2133F30800CAFE78 /* UserMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */; };
@@ -165,6 +166,7 @@
 		E4C2E988211B712D00B71CC5 /* SettingsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		E4C2E989211B712D00B71CC5 /* SettingsViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewDelegate.swift; sourceTree = "<group>"; };
 		E4C99A8E21BC533F00691604 /* CompareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareViewController.swift; sourceTree = "<group>"; };
+		E4C99A9021BDF6B800691604 /* HTMLVerseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLVerseParser.swift; sourceTree = "<group>"; };
 		E4D708CF213328E600E4A8BF /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageController.swift; sourceTree = "<group>"; };
 		E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreReviewController.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 			isa = PBXGroup;
 			children = (
 				E40D6064218252CA00A06B54 /* BiblePageModel.swift */,
+				E4C99A9021BDF6B800691604 /* HTMLVerseParser.swift */,
 				E4C2E982211B712C00B71CC5 /* SettingsAdapter.swift */,
 				E4825C412124F0B400D36620 /* BibleInitialSelect.swift */,
 				E4638973217AE210009BF5E2 /* SettingsDB.swift */,
@@ -450,6 +453,7 @@
 				E4C2E98A211B712D00B71CC5 /* SettingsViewController.swift in Sources */,
 				E4C2E990211B712D00B71CC5 /* ReaderViewNavigator.swift in Sources */,
 				E4C2E97F211B711C00B71CC5 /* BibleModel.swift in Sources */,
+				E4C99A9121BDF6B800691604 /* HTMLVerseParser.swift in Sources */,
 				E4C2E97E211B711C00B71CC5 /* BibleDetailViewController.swift in Sources */,
 				E4F66865217D85AC00E998CC /* TOCChaptersViewController.swift in Sources */,
 				E4C2E98F211B712D00B71CC5 /* LanguageCell.swift in Sources */,

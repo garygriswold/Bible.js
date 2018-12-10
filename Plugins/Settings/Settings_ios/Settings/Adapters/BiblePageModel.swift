@@ -32,7 +32,10 @@ struct BiblePageModel {
             AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
                 complete: { error, data in
                     self.removeProgressIndicator(indicator: progress)
-                    if let data1 = data {
+                    if let err = error {
+                        print("ERROR: \(err)")
+                    }
+                    else if let data1 = data {
                         webView.loadHTMLString(DynamicCSS.shared.getCSS() + data1, baseURL: nil)
                         print("AWS Load \(reference.toString())")
                         _ = BibleDB.shared.storeBiblePage(reference: reference, html: data1)
@@ -41,6 +44,35 @@ struct BiblePageModel {
             })
         } else {
             webView.loadHTMLString(DynamicCSS.shared.getCSS() + html!, baseURL: nil)
+            print("DB Load \(reference.toString())")
+        }
+    }
+    
+    func loadCell(reference: Reference, startVerse: Int, endVerse: Int,
+                  cell: CompareVerseCell, table: UITableView, indexPath: IndexPath) {
+        let start = CFAbsoluteTimeGetCurrent()
+        let html = BibleDB.shared.getBiblePage(reference: reference)
+        if html == nil {
+            //let progress = self.addProgressIndicator(webView: webView)
+            let s3Key = self.generateKey(reference: reference)
+            AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
+                complete: { error, data in
+                    //self.removeProgressIndicator(indicator: progress)
+                    if let err = error {
+                        print("ERROR: \(err)")
+                    }
+                    else if let data1 = data {
+                        let parser = HTMLVerseParser(html: data1, startVerse: startVerse, endVerse: endVerse)
+                        cell.verse.text = parser.parseVerses()
+                        table.reloadRows(at: [indexPath], with: .automatic)
+                        print("AWS Load \(reference.toString())")
+                        _ = BibleDB.shared.storeBiblePage(reference: reference, html: data1)
+                        print("*** BibleCell.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
+                    }
+            })
+        } else {
+            let parser = HTMLVerseParser(html: html!, startVerse: startVerse, endVerse: endVerse)
+            cell.verse.text = parser.parseVerses()
             print("DB Load \(reference.toString())")
         }
     }
