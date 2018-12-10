@@ -27,7 +27,7 @@ struct BiblePageModel {
         let start = CFAbsoluteTimeGetCurrent()
         let html = BibleDB.shared.getBiblePage(reference: reference)
         if html == nil {
-            let progress = self.addProgressIndicator(webView: webView)
+            let progress = self.addProgressIndicator(view: webView)
             let s3Key = self.generateKey(reference: reference)
             AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
                 complete: { error, data in
@@ -53,11 +53,11 @@ struct BiblePageModel {
         let start = CFAbsoluteTimeGetCurrent()
         let html = BibleDB.shared.getBiblePage(reference: reference)
         if html == nil {
-            //let progress = self.addProgressIndicator(webView: webView)
+            let progress = self.addProgressIndicator(view: cell.contentView)
             let s3Key = self.generateKey(reference: reference)
             AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
                 complete: { error, data in
-                    //self.removeProgressIndicator(indicator: progress)
+                    self.removeProgressIndicator(indicator: progress)
                     if let err = error {
                         print("ERROR: \(err)")
                     }
@@ -77,11 +77,11 @@ struct BiblePageModel {
         }
     }
     
-    private func addProgressIndicator(webView: WKWebView) -> UIActivityIndicatorView {
+    private func addProgressIndicator(view: UIView) -> UIActivityIndicatorView {
         let style: UIActivityIndicatorView.Style = AppFont.nightMode ? .white : .gray
         let progress = UIActivityIndicatorView(style: style)
         progress.frame = CGRect(x: 40, y: 40, width: 0, height: 0)
-        webView.addSubview(progress)
+        view.addSubview(progress)
         progress.startAnimating()
         return progress
     }
