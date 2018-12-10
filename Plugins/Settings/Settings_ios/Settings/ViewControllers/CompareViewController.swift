@@ -63,7 +63,9 @@ class CompareViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     @objc func addBibleHandler(sender: UIBarButtonItem) {
-        print("clicked add bible handler")
+        print("NOT YET IMPLEMENTED, because need to support multiple versions first.")
+        let bibleController = SettingsViewController(settingsViewType: .bible)
+        self.navigationController?.pushViewController(bibleController, animated: true)
     }
     
     @objc func doneHandler(sender: UIBarButtonItem) {
@@ -90,7 +92,7 @@ class CompareViewController: UIViewController, UITableViewDataSource, UITableVie
     // Delegate
     //
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("You tapped cell number \(indexPath.row).")
+        print("NOT YET IMPLEMENTED, because need to support multiple versions first.")
     }
 }
 
