@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CompareViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class CompareViewController: AppViewController, UITableViewDataSource, UITableViewDelegate {
     
     private let note: Note
     private var tableView: UITableView!
@@ -31,10 +31,10 @@ class CompareViewController: UIViewController, UITableViewDataSource, UITableVie
     override func loadView() {
         super.loadView()
         
-        self.view.backgroundColor = AppFont.backgroundColor
         self.navigationItem.title = "Title Here"// self.note.reference How will I get book name.
         
         self.tableView = UITableView(frame: self.view.frame, style: UITableView.Style.plain)
+        self.tableView.backgroundColor = AppFont.backgroundColor
         self.view.addSubview(self.tableView)
         
         self.tableView.register(CompareVerseCell.self, forCellReuseIdentifier: "compareVerseCell")
@@ -81,7 +81,10 @@ class CompareViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let bible = dataModel.getSelectedBible(row: indexPath.row) // should I if let?
         let cell = tableView.dequeueReusableCell(withIdentifier: "compareVerseCell", for: indexPath) as! CompareVerseCell
+        cell.contentView.backgroundColor = AppFont.backgroundColor
         cell.title.text = bible?.name
+        cell.title.textColor = AppFont.textColor
+        cell.verse.textColor = AppFont.textColor
         let reference = Reference(bibleId: bible!.bibleId, bookId: note.bookId, chapter: note.chapter) // bible! might fail
         let pageModel = BiblePageModel()
         pageModel.loadCell(reference: reference, startVerse: note.startVerse, endVerse: note.endVerse,
@@ -104,7 +107,7 @@ class CompareVerseCell : UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        self.title.font = AppFont.sansSerif(style: .headline)
+        self.title.font = AppFont.sansSerif(style: .caption1)
         self.contentView.addSubview(self.title)
         
         self.verse.numberOfLines = 0
