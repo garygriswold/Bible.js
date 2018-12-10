@@ -44,6 +44,14 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
         self.webView.navigationDelegate = self
         
         self.webView.createEditMenu() // Found in extension WKWebView
+        
+        self.webView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let margins = view.safeAreaLayoutGuide
+        self.webView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
+        self.webView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+        self.webView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+        self.webView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
     
     func loadReference(reference: Reference) {
