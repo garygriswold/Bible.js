@@ -82,7 +82,7 @@ class CompareViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.title.text = bible?.name
         let reference = Reference(bibleId: bible!.bibleId, bookId: note.bookId, chapter: note.chapter) // bible! might fail
         let pageModel = BiblePageModel()
-        pageModel.loadCell(reference: reference, startVerse: note.verseStart, endVerse: note.verseEnd,
+        pageModel.loadCell(reference: reference, startVerse: note.startVerse, endVerse: note.endVerse,
                            cell: cell, table: tableView, indexPath: indexPath)
         return cell
     }

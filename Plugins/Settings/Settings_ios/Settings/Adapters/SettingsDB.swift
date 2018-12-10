@@ -136,7 +136,7 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "SELECT datetime, verseStart, verseEnd, bibleId, selection, classes, bookmark, highlight, note"
+            let sql = "SELECT datetime, startVerse, endVerse, bibleId, selection, classes, bookmark, highlight, note"
                 + " FROM Notes"
                 + " WHERE bookId = ?"
                 + " AND chapter = ?"
@@ -144,7 +144,7 @@ struct SettingsDB {
             let values: [Any] = [bookId, chapter]
             let resultSet = try db.queryV1(sql: sql, values: values)
             let notes = resultSet.map {
-                Note(bookId: bookId, chapter: chapter, datetime: Int($0[0]!)!, verseStart: Int($0[1]!)!, verseEnd: Int($0[2]!)!,
+                Note(bookId: bookId, chapter: chapter, datetime: Int($0[0]!)!, startVerse: Int($0[1]!)!, endVerse: Int($0[2]!)!,
                      bibleId: $0[3]!, selection: $0[4]!, classes: $0[5]!, bookmark: $0[6] == "T", highlight: $0[7], note: $0[8])
             }
             return notes
@@ -162,15 +162,15 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "REPLACE INTO Notes (bookId, chapter, datetime, verseStart, verseEnd, bibleId," +
+            let sql = "REPLACE INTO Notes (bookId, chapter, datetime, startVerse, endVerse, bibleId," +
                 " selection, classes, bookmark, highlight, note) VALUES" +
                 " (?,?,?,?,?,?,?,?,?,?,?)"
             var values = [Any?]()
             values.append(note.bookId)
             values.append(note.chapter)
             values.append(note.datetime)
-            values.append(note.verseStart)
-            values.append(note.verseEnd)
+            values.append(note.startVerse)
+            values.append(note.endVerse)
             values.append(note.bibleId)
             values.append(note.selection)
             values.append(note.classes)
@@ -204,15 +204,15 @@ struct SettingsDB {
                 " bookId TEXT NOT NULL," +
                 " chapter INT NOT NULL," +
                 " datetime INT NOT NULL," +
-                " verseStart INT NOT NULL," +
-                " verseEnd INT NOT NULL," +
+                " startVerse INT NOT NULL," +
+                " endVerse INT NOT NULL," +
                 " bibleId TEXT NOT NULL," +
                 " selection TEXT NOT NULL," +
                 " classes TEXT NOT NULL," +
                 " bookmark TEXT check(bookmark IN ('T', 'F'))," +
                 " highlight TEXT NULL," +
                 " note TEXT NULL," +
-                " PRIMARY KEY (bookId, chapter, datetime, verseStart))"
+                " PRIMARY KEY (bookId, chapter, datetime, startVerse))"
             _ = try db?.executeV1(sql: create3, values: [])
         }
         return db!

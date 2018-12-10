@@ -15,8 +15,8 @@ struct Note {
     let bookId: String
     let chapter: Int            // 0 means any chapter in book
     var datetime: Int           // Last update time
-    var verseStart: Int         // 0 means any verse in chapter
-    var verseEnd: Int           // 0 means any verse in chapter
+    var startVerse: Int         // 0 means any verse in chapter
+    var endVerse: Int           // 0 means any verse in chapter
     var bibleId: String         // 0 means any version
     var selection: String
     var classes: String
@@ -30,8 +30,8 @@ struct Note {
         self.bookId = bookId
         self.chapter = chapter
         self.datetime = Int(Date().timeIntervalSince1970)
-        self.verseStart = 0
-        self.verseEnd = 0
+        self.startVerse = 0
+        self.endVerse = 0
         self.bibleId = bibleId
         self.selection = selection
         self.classes = classes
@@ -40,21 +40,21 @@ struct Note {
         self.note = note
         
         let parts = classes.split(separator: "~")
-        self.verseStart = getVerseNum(classes: String(parts[0]))
+        self.startVerse = getVerseNum(classes: String(parts[0]))
         if parts.count > 0 {
-            self.verseEnd = getVerseNum(classes: String(parts[1]))
+            self.endVerse = getVerseNum(classes: String(parts[1]))
         }
-        print("verse: \(self.verseStart) to \(self.verseEnd)")
+        print("verse: \(self.startVerse) to \(self.endVerse)")
     }
     
     // Used to instantiate from selection from Notes table
-    init(bookId: String, chapter: Int, datetime: Int, verseStart: Int, verseEnd: Int, bibleId: String,
+    init(bookId: String, chapter: Int, datetime: Int, startVerse: Int, endVerse: Int, bibleId: String,
          selection: String, classes: String, bookmark: Bool, highlight: String?, note: String?) {
         self.bookId = bookId
         self.chapter = chapter
         self.datetime = datetime
-        self.verseStart = verseStart
-        self.verseEnd = verseEnd
+        self.startVerse = startVerse
+        self.endVerse = endVerse
         self.bibleId = bibleId
         self.selection = selection
         self.classes = classes
