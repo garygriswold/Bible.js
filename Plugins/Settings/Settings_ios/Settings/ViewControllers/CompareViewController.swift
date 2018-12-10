@@ -31,7 +31,10 @@ class CompareViewController: AppViewController, UITableViewDataSource, UITableVi
     override func loadView() {
         super.loadView()
         
-        self.navigationItem.title = "Title Here"// self.note.reference How will I get book name.
+        let bibleId = HistoryModel.shared.current().bibleId
+        let reference = Reference(bibleId: bibleId, bookId: note.bookId, chapter: note.chapter)
+        let verses = (note.startVerse != note.endVerse) ? "\(note.startVerse)-\(note.endVerse)" : String(note.startVerse)
+        self.navigationItem.title = reference.description() + ":" + verses
         
         self.tableView = UITableView(frame: self.view.frame, style: UITableView.Style.plain)
         self.tableView.backgroundColor = AppFont.backgroundColor
