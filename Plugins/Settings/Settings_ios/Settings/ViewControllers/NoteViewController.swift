@@ -12,8 +12,8 @@ class NoteViewController : AppViewController, UITextViewDelegate {
     
     static func present(note: Note) {
         let notebook = NoteViewController(note: note)
-        notebook.modalPresentationStyle = UIModalPresentationStyle.pageSheet
-        notebook.modalTransitionStyle = UIModalTransitionStyle.partialCurl
+        notebook.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+        notebook.modalTransitionStyle = UIModalTransitionStyle.coverVertical
         let navController = UINavigationController(rootViewController: notebook)
         let rootController = UIApplication.shared.keyWindow?.rootViewController
         rootController!.present(navController, animated: true, completion: nil)
@@ -101,7 +101,7 @@ class NoteViewController : AppViewController, UITextViewDelegate {
         self.textView.isEditable = true
         self.textView.isSelectable = true
         self.textView.allowsEditingTextAttributes = true
-        self.textView.becomeFirstResponder()
+        //self.textView.becomeFirstResponder()
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self,
                                                                 action: #selector(cancelHandler))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self,

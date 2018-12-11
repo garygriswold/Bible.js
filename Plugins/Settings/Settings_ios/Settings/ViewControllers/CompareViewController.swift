@@ -13,7 +13,7 @@ class CompareViewController: AppViewController, UITableViewDataSource, UITableVi
     static func present(note: Note) {
         let compare = CompareViewController(note: note)
         compare.modalPresentationStyle = UIModalPresentationStyle.pageSheet
-        compare.modalTransitionStyle = UIModalTransitionStyle.partialCurl
+        compare.modalTransitionStyle = UIModalTransitionStyle.coverVertical
         let navController = UINavigationController(rootViewController: compare)
         let rootController = UIApplication.shared.keyWindow?.rootViewController
         rootController!.present(navController, animated: true, completion: nil)
