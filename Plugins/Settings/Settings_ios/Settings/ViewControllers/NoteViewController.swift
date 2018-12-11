@@ -59,12 +59,14 @@ class NoteViewController : AppViewController, UITextViewDelegate {
         self.textView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
         self.textView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
         self.textView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
+        
+        self.textView.text = note.note
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.textView.font = AppFont.sansSerif(style: .body) // Why is this here? redundant?
-    }
+    //override func viewWillAppear(_ animated: Bool) {
+    //    super.viewWillAppear(animated)
+    //    self.textView.font = AppFont.sansSerif(style: .body) // Why is this here? redundant?
+    //}
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -74,8 +76,6 @@ class NoteViewController : AppViewController, UITextViewDelegate {
                            name: UIResponder.keyboardWillShowNotification, object: nil)
         notify.addObserver(self, selector: #selector(keyboardWillHide),
                            name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        //self.textView.becomeFirstResponder()
     }
     
     @objc func keyboardWillShow(note: NSNotification) {
@@ -109,7 +109,8 @@ class NoteViewController : AppViewController, UITextViewDelegate {
     }
     
     @objc func saveHandler(sender: UIBarButtonItem) {
-        // perform save of data to Notes db
+        self.note.note = self.textView.text
+        SettingsDB.shared.storeNote(note: self.note)
         self.cancelHandler(sender: sender)
     }
     
