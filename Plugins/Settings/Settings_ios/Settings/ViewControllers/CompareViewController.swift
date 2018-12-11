@@ -10,6 +10,15 @@ import UIKit
 
 class CompareViewController: AppViewController, UITableViewDataSource, UITableViewDelegate {
     
+    static func present(note: Note) {
+        let compare = CompareViewController(note: note)
+        compare.modalPresentationStyle = UIModalPresentationStyle.pageSheet
+        compare.modalTransitionStyle = UIModalTransitionStyle.partialCurl
+        let navController = UINavigationController(rootViewController: compare)
+        let rootController = UIApplication.shared.keyWindow?.rootViewController
+        rootController!.present(navController, animated: true, completion: nil)
+    }
+    
     private let note: Note
     private var tableView: UITableView!
     private let dataModel: BibleModel
