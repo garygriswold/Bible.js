@@ -9,6 +9,10 @@ import Foundation
 
 struct Note {
     
+    static func genNoteId() -> String {
+        return UUID().uuidString
+    }
+    
     private static var regex1 = try! NSRegularExpression(pattern: "SPAN\\.v .+_(\\d+)\\/")
     private static var regex2 = try! NSRegularExpression(pattern: "SPAN\\.verse.*\\sv-(\\d+)\\/")
     
@@ -26,9 +30,9 @@ struct Note {
     var note: String?
 
     // Used to instantiate after user does selection
-    init(bookId: String, chapter: Int, bibleId: String, selection: String, classes: String,
+    init(noteId: String, bookId: String, chapter: Int, bibleId: String, selection: String, classes: String,
          bookmark: Bool, highlight: String?, note: String?) {
-        self.noteId = UUID().uuidString
+        self.noteId = noteId
         self.bookId = bookId
         self.chapter = chapter
         self.datetime = Int(Date().timeIntervalSince1970)
@@ -88,16 +92,11 @@ struct Note {
         return Int(leaf[range]) ?? 0
     }
 
-    static let installEffect = "function installEffect(range, type, color) {\n"
-        + "  var startNode = range.startContainer;\n"
+    static let installEffect = "function installEffect(range, type, noteId, color) {\n"
         + "  if (type === 'book') {\n"
-        + "    var book = document.createElement('span');\n"
-        + "    book.innerHTML = '&#x1F516; ';\n"
-        + "    startNode.parentNode.insertBefore(book, startNode);\n"
+        + "    installIcon(type, '&#x1F516;', noteId);\n"
         + "  } else if (type === 'note') {\n"
-        + "    var note = document.createElement('span');\n"
-        + "    note.innerHTML = '&#x1F5D2; ';\n"
-        + "    startNode.parentNode.insertBefore(note, startNode);\n"
+        + "    installIcon(type, '&#x1F5D2;', noteId);\n"
         + "  } else if (type === 'lite_select') {\n"
         + "    document.designMode = 'on';\n"
         + "    document.execCommand('HiliteColor', false, color);\n"
@@ -113,6 +112,15 @@ struct Note {
         + "  } else {\n"
         + "    throw 'type \"' + type + '\" is not known.';\n"
         + "  }\n"
+        + "}\n"
+        + "function installIcon(type, icon, noteId) {\n"
+        + "  var ele = document.createElement('a');\n"
+        + "  ele.setAttribute('href', 'javascript:void(0);');\n"
+        + "  var msg = 'window.webkit.messageHandlers.' + type + '.postMessage(\\'' + noteId + '\\');'\n"
+        + "  ele.setAttribute('onclick', msg);\n"
+        + "  ele.innerHTML = icon + ' ';\n"
+        + "  var startNode = range.startContainer;\n"
+        + "  startNode.parentNode.insertBefore(ele, startNode);\n"
         + "}\n"
     
     static let encodeRange = "function encodeRange(range) {\n"

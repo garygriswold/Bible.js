@@ -117,13 +117,13 @@ extension WKWebView {
         var varLine1: String
         for note in notes {
             if note.highlight != nil {
-                varLine1 = "installEffect(range, 'lite_saved', '\(note.highlight!)');\n"
+                varLine1 = "installEffect(range, 'lite_saved', '\(note.noteId)', '\(note.highlight!)');\n"
             }
             else if note.bookmark {
-                varLine1 = "installEffect(range, 'book');\n"
+                varLine1 = "installEffect(range, 'book', '\(note.noteId)');\n"
             }
             else if note.note != nil {
-                varLine1 = "installEffect(range, 'note');\n"
+                varLine1 = "installEffect(range, 'note', '\(note.noteId)');\n"
             } else {
                 varLine1 = ""
             }
@@ -140,14 +140,15 @@ extension WKWebView {
     }
     
     private func handleSelection(selectionUse: SelectionUse, color: String?) {
+        let noteId = Note.genNoteId()
         var varLine1: String
         switch selectionUse {
         case .highlight:
-            varLine1 = "installEffect(range, 'lite_select', '\(color!)');\n"
+            varLine1 = "installEffect(range, 'lite_select', '\(noteId)', '\(color!)');\n"
         case .bookmark:
-            varLine1 = "installEffect(range, 'book');\n"
+            varLine1 = "installEffect(range, 'book', '\(noteId)');\n"
         case .note:
-            varLine1 = "installEffect(range, 'note');\n"
+            varLine1 = "installEffect(range, 'note', '\(noteId)');\n"
         case .compare:
             varLine1 = ""
         }
@@ -169,8 +170,8 @@ extension WKWebView {
                 let highlight = (selectionUse == .highlight) ? color! : nil
                 let text = (selectionUse == .note) ? "Note here?" : nil
                 let ref = HistoryModel.shared.current()
-                let note = Note(bookId: ref.bookId, chapter: ref.chapter, bibleId: ref.bibleId, selection: String(parts[0]),
-                                classes: String(parts[1]), bookmark: bookmark, highlight: highlight, note: text)
+                let note = Note(noteId: noteId, bookId: ref.bookId, chapter: ref.chapter, bibleId: ref.bibleId,
+                                selection: String(parts[0]), classes: String(parts[1]), bookmark: bookmark, highlight: highlight, note: text)
                 if selectionUse == .compare {
                     CompareViewController.present(note: note)
                 } else {
