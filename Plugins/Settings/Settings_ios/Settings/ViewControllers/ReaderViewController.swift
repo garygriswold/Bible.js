@@ -10,9 +10,7 @@ import Foundation
 import UIKit
 import WebKit
 
-class ReaderViewController : AppViewController, WKNavigationDelegate {
-    
-    static var notesDelegate = NotesDelegate()
+class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMessageHandler {
     
     private var webView: WKWebView!
     private var _reference: Reference!
@@ -35,8 +33,8 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
         let script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false)
         let contentController = WKUserContentController()
         contentController.addUserScript(script)
-        contentController.add(ReaderViewController.notesDelegate, name: "book")
-        contentController.add(ReaderViewController.notesDelegate, name: "note")
+        contentController.add(self, name: "book")
+        contentController.add(self, name: "note")
         configuration.userContentController = contentController
         self.webView = WKWebView(frame: self.view.bounds, configuration: configuration)
         self.webView.backgroundColor = AppFont.backgroundColor
@@ -91,7 +89,7 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
             }
         })
     }
-    
+
     //
     // Delegate
     //
@@ -104,5 +102,45 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
     func webView(_: WKWebView, didFail: WKNavigation!, withError: Error) {
         print("ERROR: Bible page load error \(withError)")
         NotificationCenter.default.post(name: ReaderPagesController.WEB_LOAD_DONE, object: nil)
+    }
+    
+    //
+    //
+    //
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if let noteId = message.body as? String {
+            if let note = SettingsDB.shared.getNote(noteId: noteId) {
+                if message.name == "book" {
+                    self.bookmarkAlert(note: note)
+                }
+                else if message.name == "note" {
+                    NoteViewController.present(note: note)
+                }
+            }
+        }
+    }
+    
+    private func bookmarkAlert(note: Note) {
+        let reference = note.getReference()
+        let passage = reference.description(startVerse: note.startVerse, endVerse: note.endVerse)
+        let alert = UIAlertController(title: passage, message: "Bookmark", preferredStyle: .alert)
+        let okString = NSLocalizedString("OK", comment: "Default action")
+        let ok = UIAlertAction(title: okString, style: .default, handler: nil)
+        alert.addAction(ok)
+        let deleteString = NSLocalizedString("Delete", comment: "Delete bookmark action")
+        let delete = UIAlertAction(title: deleteString, style: .destructive, handler: { _ in
+            print("inside delete choice")
+            let message = "var ele = document.getElementById('\(note.noteId)');\n"
+                + "var forget = ele.parentNode.removeChild(ele);\n"
+            self.webView.evaluateJavaScript(message, completionHandler: { data, error in
+                if let err = error {
+                    print("ERROR: bookmarkAlert delete \(err)")
+                }
+            })
+        })
+        alert.addAction(delete)
+        alert.preferredAction = ok
+        let rootController = UIApplication.shared.keyWindow?.rootViewController
+        rootController!.present(alert, animated: true, completion: nil)
     }
 }
