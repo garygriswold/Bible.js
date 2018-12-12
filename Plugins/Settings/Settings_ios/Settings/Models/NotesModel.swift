@@ -12,6 +12,7 @@ struct Note {
     private static var regex1 = try! NSRegularExpression(pattern: "SPAN\\.v .+_(\\d+)\\/")
     private static var regex2 = try! NSRegularExpression(pattern: "SPAN\\.verse.*\\sv-(\\d+)\\/")
     
+    let noteId: String
     let bookId: String
     let chapter: Int            // 0 means any chapter in book
     var datetime: Int           // Last update time
@@ -27,6 +28,7 @@ struct Note {
     // Used to instantiate after user does selection
     init(bookId: String, chapter: Int, bibleId: String, selection: String, classes: String,
          bookmark: Bool, highlight: String?, note: String?) {
+        self.noteId = UUID().uuidString
         self.bookId = bookId
         self.chapter = chapter
         self.datetime = Int(Date().timeIntervalSince1970)
@@ -48,8 +50,9 @@ struct Note {
     }
     
     // Used to instantiate from selection from Notes table
-    init(bookId: String, chapter: Int, datetime: Int, startVerse: Int, endVerse: Int, bibleId: String,
+    init(noteId: String, bookId: String, chapter: Int, datetime: Int, startVerse: Int, endVerse: Int, bibleId: String,
          selection: String, classes: String, bookmark: Bool, highlight: String?, note: String?) {
+        self.noteId = noteId
         self.bookId = bookId
         self.chapter = chapter
         self.datetime = datetime

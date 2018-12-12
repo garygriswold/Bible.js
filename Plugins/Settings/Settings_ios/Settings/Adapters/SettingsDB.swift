@@ -136,7 +136,7 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "SELECT datetime, startVerse, endVerse, bibleId, selection, classes, bookmark, highlight, note"
+            let sql = "SELECT noteId, datetime, startVerse, endVerse, bibleId, selection, classes, bookmark, highlight, note"
                 + " FROM Notes"
                 + " WHERE bookId = ?"
                 + " AND chapter = ?"
@@ -144,8 +144,9 @@ struct SettingsDB {
             let values: [Any] = [bookId, chapter]
             let resultSet = try db.queryV1(sql: sql, values: values)
             let notes = resultSet.map {
-                Note(bookId: bookId, chapter: chapter, datetime: Int($0[0]!)!, startVerse: Int($0[1]!)!, endVerse: Int($0[2]!)!,
-                     bibleId: $0[3]!, selection: $0[4]!, classes: $0[5]!, bookmark: $0[6] == "T", highlight: $0[7], note: $0[8])
+                Note(noteId: $0[0]!, bookId: bookId, chapter: chapter, datetime: Int($0[1]!)!,
+                     startVerse: Int($0[2]!)!, endVerse: Int($0[3]!)!, bibleId: $0[4]!,
+                     selection: $0[5]!, classes: $0[6]!, bookmark: $0[7] == "T", highlight: $0[8], note: $0[9])
             }
             return notes
         } catch let err {
@@ -162,10 +163,11 @@ struct SettingsDB {
         let db: Sqlite3
         do {
             db = try self.getSettingsDB()
-            let sql = "REPLACE INTO Notes (bookId, chapter, datetime, startVerse, endVerse, bibleId," +
+            let sql = "REPLACE INTO Notes (noteId, bookId, chapter, datetime, startVerse, endVerse, bibleId," +
                 " selection, classes, bookmark, highlight, note) VALUES" +
-                " (?,?,?,?,?,?,?,?,?,?,?)"
+                " (?,?,?,?,?,?,?,?,?,?,?,?)"
             var values = [Any?]()
+            values.append(note.noteId)
             values.append(note.bookId)
             values.append(note.chapter)
             values.append(note.datetime)
@@ -200,20 +202,22 @@ struct SettingsDB {
                 " verse INT NULL," +
                 " datetime TEXT NOT NULL)" ///// ??? The datetime should be primary key
             _ = try db?.executeV1(sql: create2, values: [])
-            let create3 = "CREATE TABLE IF NOT EXISTS Notes(" +
-                " bookId TEXT NOT NULL," +
-                " chapter INT NOT NULL," +
-                " datetime INT NOT NULL," +
-                " startVerse INT NOT NULL," +
-                " endVerse INT NOT NULL," +
-                " bibleId TEXT NOT NULL," +
-                " selection TEXT NOT NULL," +
-                " classes TEXT NOT NULL," +
-                " bookmark TEXT check(bookmark IN ('T', 'F'))," +
-                " highlight TEXT NULL," +
-                " note TEXT NULL," +
-                " PRIMARY KEY (bookId, chapter, datetime, startVerse))"
+            let create3 = "CREATE TABLE IF NOT EXISTS Notes("
+                + " noteId TEXT PRIMARY KEY,"
+                + " bookId TEXT NOT NULL,"
+                + " chapter INT NOT NULL,"
+                + " datetime INT NOT NULL,"
+                + " startVerse INT NOT NULL,"
+                + " endVerse INT NOT NULL,"
+                + " bibleId TEXT NOT NULL,"
+                + " selection TEXT NOT NULL,"
+                + " classes TEXT NOT NULL,"
+                + " bookmark TEXT check(bookmark IN ('T', 'F')),"
+                + " highlight TEXT NULL,"
+                + " note TEXT NULL)"
             _ = try db?.executeV1(sql: create3, values: [])
+            let create4 = "CREATE INDEX book_chapter_idx on Notes (bookId, chapter, datetime)"
+            _ = try db?.executeV1(sql: create4, values: [])
         }
         return db!
     }
