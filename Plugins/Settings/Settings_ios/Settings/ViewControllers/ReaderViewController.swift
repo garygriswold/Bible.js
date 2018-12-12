@@ -1,5 +1,5 @@
 //
-//  TestController.swift
+//  ReaderViewController.swift
 //  Settings
 //
 //  Created by Gary Griswold on 10/16/18.
@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import WebKit
 
-class ReaderViewController : AppViewController, WKNavigationDelegate {
+class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMessageHandler {
     
     private var webView: WKWebView!
     private var _reference: Reference!
@@ -31,7 +31,11 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
         configuration.preferences.javaScriptEnabled = true
         let js = Note.decodeRange + Note.installEffect + Note.encodeRange
         let script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false)
-        configuration.userContentController.addUserScript(script)
+        let contentController = WKUserContentController()
+        contentController.addUserScript(script)
+        contentController.add(self, name: "book")
+        contentController.add(self, name: "note")
+        configuration.userContentController = contentController
         self.webView = WKWebView(frame: self.view.bounds, configuration: configuration)
         self.webView.backgroundColor = AppFont.backgroundColor
         
@@ -98,5 +102,19 @@ class ReaderViewController : AppViewController, WKNavigationDelegate {
     func webView(_: WKWebView, didFail: WKNavigation!, withError: Error) {
         print("ERROR: Bible page load error \(withError)")
         NotificationCenter.default.post(name: ReaderPagesController.WEB_LOAD_DONE, object: nil)
+    }
+    
+    //
+    // WKScriptMessageHandler
+    //
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if let noteId = message.body as? String {
+            if message.name == "book" {
+                print("click on book")
+            }
+            else if message.name == "note" {
+                print("click on note")
+            }
+        }
     }
 }
