@@ -70,6 +70,10 @@ struct Note {
         self.note = note
     }
     
+    func getReference() -> Reference {
+        return Reference(bibleId: self.bibleId, bookId: self.bookId, chapter: self.chapter)
+    }
+    
     private func getVerseNum(classes: String) -> Int {
         var result = Note.regex1.matches(in: classes, range: NSMakeRange(0, classes.count))
         if result.count > 0 && result[0].numberOfRanges > 1 {

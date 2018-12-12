@@ -155,6 +155,27 @@ struct SettingsDB {
         }
     }
     
+    func getNote(noteId: String) -> Note? {
+        let db: Sqlite3
+        do {
+            db = try self.getSettingsDB()
+            let sql = "SELECT bookId, chapter, datetime, startVerse, endVerse, bibleId, selection, classes, bookmark, highlight, note"
+                + " FROM Notes"
+                + " WHERE noteId = ?"
+            let values: [Any] = [noteId]
+            let resultSet = try db.queryV1(sql: sql, values: values)
+            let notes = resultSet.map {
+                Note(noteId: noteId, bookId: $0[0]!, chapter: Int($0[1]!)!, datetime: Int($0[2]!)!,
+                     startVerse: Int($0[3]!)!, endVerse: Int($0[4]!)!, bibleId: $0[5]!,
+                     selection: $0[6]!, classes: $0[7]!, bookmark: $0[8] == "T", highlight: $0[9], note: $0[10])
+            }
+            return (notes.count > 0) ? notes[0] : nil
+        } catch let err {
+            print("ERROR SettingsDB.getNote \(err)")
+            return nil
+        }
+    }
+    
     private func toInt(_ value: String?) -> Int? {
         return (value != nil) ? Int(value!) : nil
     }

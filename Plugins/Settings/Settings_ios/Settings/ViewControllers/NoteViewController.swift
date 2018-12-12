@@ -38,7 +38,9 @@ class NoteViewController : AppViewController, UITextViewDelegate {
     override func loadView() {
         super.loadView()
         
-        self.navigationItem.title = NSLocalizedString("Notes", comment: "Note book view title")
+        let reference = note.getReference()
+        let passage = reference.description(startVerse: note.startVerse, endVerse: note.endVerse)
+        self.navigationItem.title = passage
         self.cancelHandler(sender: nil) // Set buttons to initial state
         
         self.textView = UITextView(frame: self.view.bounds)
