@@ -119,6 +119,7 @@ struct Note {
         + "}\n"
         + "function installIcon(type, icon, noteId) {\n"
         + "  var ele = document.createElement('a');\n"
+        + "  ele.setAttribute('id', noteId);\n"
         + "  ele.setAttribute('href', 'javascript:void(0);');\n"
         + "  var msg = 'window.webkit.messageHandlers.' + type + '.postMessage(\\'' + noteId + '\\');'\n"
         + "  ele.setAttribute('onclick', msg);\n"
