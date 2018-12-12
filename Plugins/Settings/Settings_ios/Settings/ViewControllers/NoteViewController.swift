@@ -63,11 +63,6 @@ class NoteViewController : AppViewController, UITextViewDelegate {
         self.textView.text = note.note
     }
     
-    //override func viewWillAppear(_ animated: Bool) {
-    //    super.viewWillAppear(animated)
-    //    self.textView.font = AppFont.sansSerif(style: .body) // Why is this here? redundant?
-    //}
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         

@@ -10,7 +10,9 @@ import Foundation
 import UIKit
 import WebKit
 
-class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMessageHandler {
+class ReaderViewController : AppViewController, WKNavigationDelegate {
+    
+    static var notesDelegate = NotesDelegate()
     
     private var webView: WKWebView!
     private var _reference: Reference!
@@ -33,8 +35,8 @@ class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMe
         let script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false)
         let contentController = WKUserContentController()
         contentController.addUserScript(script)
-        contentController.add(self, name: "book")
-        contentController.add(self, name: "note")
+        contentController.add(ReaderViewController.notesDelegate, name: "book")
+        contentController.add(ReaderViewController.notesDelegate, name: "note")
         configuration.userContentController = contentController
         self.webView = WKWebView(frame: self.view.bounds, configuration: configuration)
         self.webView.backgroundColor = AppFont.backgroundColor
@@ -102,19 +104,5 @@ class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMe
     func webView(_: WKWebView, didFail: WKNavigation!, withError: Error) {
         print("ERROR: Bible page load error \(withError)")
         NotificationCenter.default.post(name: ReaderPagesController.WEB_LOAD_DONE, object: nil)
-    }
-    
-    //
-    // WKScriptMessageHandler
-    //
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if let noteId = message.body as? String {
-            if message.name == "book" {
-                print("click on book")
-            }
-            else if message.name == "note" {
-                print("click on note")
-            }
-        }
     }
 }
