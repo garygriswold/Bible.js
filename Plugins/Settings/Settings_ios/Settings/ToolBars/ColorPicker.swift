@@ -15,8 +15,9 @@ class ColorPicker : UIView {
     private static let orange = UIColor(displayP3Red: 0.77343, green: 0.48046, blue: 0.26171, alpha: 1.0) // C6 7B 43
     private static let green =  UIColor(displayP3Red: 0.51562, green: 0.69921, blue: 0.36718, alpha: 1.0) // 84 B3 5E
     private static let blue =   UIColor(displayP3Red: 0.48046, green: 0.67968, blue: 0.77734, alpha: 1.0) // 7B AE C7
-    private static let purple = UIColor(displayP3Red: 0.57031, green: 0.32421, blue: 0.58593, alpha: 1.0) // 92 53 96
+    //private static let purple = UIColor(displayP3Red: 0.57031, green: 0.32421, blue: 0.58593, alpha: 1.0) // 92 53 96
     private static let salmon = UIColor(displayP3Red: 0.76953, green: 0.37890, blue: 0.42578, alpha: 1.0) // C5 61 6D
+    private static let clear = UIColor(displayP3Red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     
     static func toHEX(color: UIColor) -> String {
         var r:CGFloat = 0, g:CGFloat = 0, b:CGFloat = 0, a:CGFloat = 0
@@ -40,7 +41,7 @@ class ColorPicker : UIView {
         self.alpha = 0.8
         
         let colors = [ColorPicker.yellow, ColorPicker.red, ColorPicker.orange, ColorPicker.green, ColorPicker.blue,
-                      ColorPicker.purple, ColorPicker.salmon]
+                      ColorPicker.salmon, ColorPicker.clear]
         let dotDiameter: CGFloat = 30.0
         let yPos = (frame.height - dotDiameter) / 2.0
         let spacer = (frame.width - (dotDiameter * CGFloat(colors.count))) / CGFloat(colors.count + 1)
