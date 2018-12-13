@@ -165,13 +165,17 @@ extension WKWebView {
             }
             if let result = data as? String {
                 let parts = result.split(separator: "|")
-                print("SELECT RANGE \(parts[0])")
+                if parts.count != 3 {
+                    print("ERROR: selection did not return 3 parts: \(result)")
+                }
+                let selection = String(parts[0])
+                let classes = (parts.count > 0) ? String(parts[1]) : ""
                 let bookmark = (selectionUse == .bookmark)
                 let highlight = (selectionUse == .highlight) ? color! : nil
-                let text = (selectionUse == .note) ? "Note here?" : nil
+                let text = (selectionUse == .note && parts.count > 1) ? String(parts[2]) : nil
                 let ref = HistoryModel.shared.current()
                 let note = Note(noteId: noteId, bookId: ref.bookId, chapter: ref.chapter, bibleId: ref.bibleId,
-                                selection: String(parts[0]), classes: String(parts[1]), bookmark: bookmark, highlight: highlight, note: text)
+                                selection: selection, classes: classes, bookmark: bookmark, highlight: highlight, note: text)
                 if selectionUse == .compare {
                     CompareViewController.present(note: note)
                 } else {

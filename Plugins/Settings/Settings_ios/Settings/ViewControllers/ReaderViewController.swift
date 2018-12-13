@@ -105,7 +105,7 @@ class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMe
     }
     
     //
-    //
+    // WKScriptMessageHandler
     //
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if let noteId = message.body as? String {

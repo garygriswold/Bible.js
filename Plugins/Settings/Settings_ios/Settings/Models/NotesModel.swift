@@ -135,7 +135,7 @@ struct Note {
         + "  var startClass = getClass(range.startContainer);\n"
         + "  var endClass = getClass(range.endContainer);\n"
         + "  var classes = startClass + '~' + endClass;\n"
-        + "  return paths + '|' + classes;\n"
+        + "  return paths + '|' + classes + '|' + range.toString();\n"
         + "}\n"
         + "function getXPathForNode(node) {\n"
         + "  var xpath = '';\n"
