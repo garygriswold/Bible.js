@@ -176,10 +176,6 @@ struct SettingsDB {
         }
     }
     
-    private func toInt(_ value: String?) -> Int? {
-        return (value != nil) ? Int(value!) : nil
-    }
-    
     func storeNote(note: Note) {
         let db: Sqlite3
         do {
@@ -203,6 +199,18 @@ struct SettingsDB {
             _ = try db.executeV1(sql: sql, values: values)
         } catch let err {
             print("ERROR SettingsDB.storeNote \(err)")
+        }
+    }
+    
+    func deleteNote(noteId: String) {
+        let db: Sqlite3
+        do {
+            db = try self.getSettingsDB()
+            let sql = "DELETE FROM Notes WHERE noteId = ?"
+            let values = [noteId]
+             _ = try db.executeV1(sql: sql, values: values)
+        } catch let err {
+           print("ERROR SettingsDB.deleteNote \(err)")
         }
     }
     

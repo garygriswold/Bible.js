@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import WebKit
 
 class NoteViewController : AppViewController, UITextViewDelegate {
     
-    static func present(note: Note) {
-        let notebook = NoteViewController(note: note)
+    static func present(note: Note, webView: WKWebView) {
+        let notebook = NoteViewController(note: note, webView: webView)
         notebook.modalPresentationStyle = UIModalPresentationStyle.fullScreen
         notebook.modalTransitionStyle = UIModalTransitionStyle.coverVertical
         let navController = UINavigationController(rootViewController: notebook)
@@ -20,10 +21,12 @@ class NoteViewController : AppViewController, UITextViewDelegate {
     }
     
     private var note: Note
+    private weak var webView: WKWebView?
     private var textView: UITextView!
     
-    init(note: Note) {
+    init(note: Note, webView: WKWebView) {
         self.note = note
+        self.webView = webView
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -90,6 +93,17 @@ class NoteViewController : AppViewController, UITextViewDelegate {
     }
     
     @objc func doneHandler(sender: UIBarButtonItem) {
+        if self.textView.text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).count == 0 {
+            let message = "var ele = document.getElementById('\(note.noteId)');\n"
+                + "var forget = ele.parentNode.removeChild(ele);\n"
+            self.webView?.evaluateJavaScript(message, completionHandler: { data, error in
+                if let err = error {
+                    print("ERROR: doneHandler note delete \(err)")
+                } else {
+                    SettingsDB.shared.deleteNote(noteId: self.note.noteId)
+                }
+            })
+        }
         self.dismiss(animated: true, completion: nil)
         //self.navigationController?.popViewController(animated: true)
     }
@@ -98,7 +112,6 @@ class NoteViewController : AppViewController, UITextViewDelegate {
         self.textView.isEditable = true
         self.textView.isSelectable = true
         self.textView.allowsEditingTextAttributes = true
-        //self.textView.becomeFirstResponder()
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self,
                                                                 action: #selector(cancelHandler))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self,

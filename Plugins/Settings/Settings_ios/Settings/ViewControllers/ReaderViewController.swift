@@ -114,7 +114,7 @@ class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMe
                     self.bookmarkAlert(note: note)
                 }
                 else if message.name == "note" {
-                    NoteViewController.present(note: note)
+                    NoteViewController.present(note: note, webView: self.webView)
                 }
             }
         }
@@ -129,7 +129,6 @@ class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMe
         alert.addAction(ok)
         let deleteString = NSLocalizedString("Delete", comment: "Delete bookmark action")
         let delete = UIAlertAction(title: deleteString, style: .destructive, handler: { _ in
-            print("inside delete choice")
             let message = "var ele = document.getElementById('\(note.noteId)');\n"
                 + "var forget = ele.parentNode.removeChild(ele);\n"
             self.webView.evaluateJavaScript(message, completionHandler: { data, error in
