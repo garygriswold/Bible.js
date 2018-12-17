@@ -11,29 +11,44 @@ import UIKit
 
 class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
     
-    private static var icloudRoot: URL?
-    
-    static func exportNotesDocument() {
-        let rootUrl = FileManager.default.temporaryDirectory
-        let url = rootUrl.appendingPathComponent("SafeNotes.txt")
-        let notes = NotesExportDocument(fileURL: url)
-        notes.save(to: url, for: .forCreating, completionHandler: { (Bool) in
-            print("file is saved \(url)")
-            notes.picker(url: url)
+    static func exportNotesDocument(name: String, notes: [Note]) {
+        let export = NotesExportDocument(name: name, notes: notes)
+        export.save(to: export.fileURL, for: .forCreating, completionHandler: { (Bool) in
+            print("file is saved \(export.fileURL)")
+            export.picker(url: export.fileURL)
         })
+    }
+    
+    private let notes: [Note]
+    
+    init(name: String, notes: [Note]) {
+        self.notes = notes
+        let rootUrl = FileManager.default.temporaryDirectory
+        let url = rootUrl.appendingPathComponent(name)
+        super.init(fileURL: url)
     }
     
     //Override this method to load the document data into the app’s data model.
     override func load(fromContents contents: Any, ofType typeName: String?) throws {
         let data: Data = contents as! Data
-        let msg = String(data: data, encoding: .utf8)
-        print("message: \(msg)")
+        if let msg = String(data: data, encoding: .utf8) {
+            print("message: \(msg)")
+        }
     }
     
     //Override this method to return the document data to be saved.
     override func contents(forType typeName: String) throws -> Any {
-        let content = "Hello World 2"
-        let data = content.data(using: .utf8)
+        var contents = [String]()
+        for note in self.notes {
+            if note.note != nil {
+                contents.append("\n")
+                let reference = note.getReference()
+                let passage = reference.description(startVerse: note.startVerse, endVerse: note.endVerse)
+                contents.append(passage)
+                contents.append(note.note!)
+            }
+        }
+        let data = contents.joined(separator: "\n").data(using: .utf8)
         return data!
     }
     

@@ -132,6 +132,32 @@ struct SettingsDB {
     //
     // Notes Table
     //
+    func getNotes(bookId: String?) -> [Note] {
+        let db: Sqlite3
+        do {
+            db = try self.getSettingsDB()
+            var sql = "SELECT noteId, bookId, chapter, datetime, startVerse, endVerse, bibleId,"
+                + " selection, classes, bookmark, highlight, note FROM Notes WHERE note is not NULL"
+            var values: [String] = []
+            if bookId != nil {
+                sql += " AND bookId = ?"
+                values = [bookId!]
+            }
+            sql += " ORDER BY chapter, startVerse"
+            let resultSet = try db.queryV1(sql: sql, values: values)
+            let notes = resultSet.map {
+                Note(noteId: $0[0]!, bookId: $0[1]!, chapter: Int($0[2]!)!, datetime: Int($0[3]!)!,
+                     startVerse: Int($0[4]!)!, endVerse: Int($0[5]!)!, bibleId: $0[6]!,
+                     selection: $0[7]!, classes: $0[8]!, bookmark: $0[9] == "T", highlight: $0[10],
+                     note: $0[11])
+            }
+            return notes
+        } catch let err {
+            print("ERROR SettingsDB.getNotes() \(err)")
+            return []
+        }
+    }
+    
     func getNotes(bookId: String, chapter: Int) -> [Note] {
         let db: Sqlite3
         do {
