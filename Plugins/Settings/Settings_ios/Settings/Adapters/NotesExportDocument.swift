@@ -7,39 +7,19 @@
 //
 // https://developer.apple.com/library/archive/documentation/DataManagement/Conceptual/DocumentBasedAppPGiOS/CreateCustomDocument/CreateCustomDocument.html
 
-import Foundation
 import UIKit
 
 class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
     
     private static var icloudRoot: URL?
     
-    static func testNotesDocument() {
-        DispatchQueue.main.async(execute: {
-            let containerID = "iCloud.com.shortsands.settings"
-            NotesExportDocument.icloudRoot = FileManager.default.url(forUbiquityContainerIdentifier: containerID)
-            if let icloud = NotesExportDocument.icloudRoot {
-                testNotesDocument2(rootUrl: icloud)
-            } else {
-                let homeDir: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
-                let docDir: URL = homeDir.appendingPathComponent("Documents")
-                testNotesDocument2(rootUrl: docDir)
-            }
-            print("**** ROOT \(NotesExportDocument.icloudRoot)")
-            guard icloudRoot != nil else { fatalError("No ICloud Root") }
-
-        })
-    }
-
-    static func testNotesDocument2(rootUrl: URL) {
-        let url = rootUrl.appendingPathComponent("NotesText.txt")
+    static func exportNotesDocument() {
+        let rootUrl = FileManager.default.temporaryDirectory
+        let url = rootUrl.appendingPathComponent("SafeNotes.txt")
         let notes = NotesExportDocument(fileURL: url)
         notes.save(to: url, for: .forCreating, completionHandler: { (Bool) in
-            print("file is saved")
-            notes.open(completionHandler: { (Bool) in
-                print("file is opened")
-                notes.picker(url: url)
-            })
+            print("file is saved \(url)")
+            notes.picker(url: url)
         })
     }
     
@@ -52,14 +32,12 @@ class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
     
     //Override this method to return the document data to be saved.
     override func contents(forType typeName: String) throws -> Any {
-        let content = "Hello World"
+        let content = "Hello World 2"
         let data = content.data(using: .utf8)
         return data!
     }
     
     func picker(url: URL) {
-        // public.item
-        //let docPicker = UIDocumentPickerViewController(documentTypes: ["public.text"], in: .open)
         let docPicker = UIDocumentPickerViewController(url: url, in: .exportToService)
         docPicker.delegate = self
         docPicker.modalPresentationStyle = UIModalPresentationStyle.formSheet // optional
@@ -76,6 +54,6 @@ class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
     }
     
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-        print("Picker Cancelled is called")
+        print("Picker is Cancelled, nothing exported")
     }
 }
