@@ -32,6 +32,7 @@
 		E469080B21964F5E00155F2A /* Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469080A21964F5E00155F2A /* Measurement.swift */; };
 		E469080D2196650F00155F2A /* ReaderViewQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469080C2196650F00155F2A /* ReaderViewQueue.swift */; };
 		E46B2C83218E50200063E68C /* TextHeightSliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */; };
+		E474FE2021C4CB1000DC11D8 /* NotesExportDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E474FE1F21C4CB1000DC11D8 /* NotesExportDocument.swift */; };
 		E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4825C412124F0B400D36620 /* BibleInitialSelect.swift */; };
 		E49F7296216AC830007D2856 /* ExternControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */; };
 		E4A3AF152138EC0F006EDEFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E62138BD7F000AB2A8 /* Localizable.strings */; };
@@ -112,6 +113,8 @@
 		E469080A21964F5E00155F2A /* Measurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Measurement.swift; sourceTree = "<group>"; };
 		E469080C2196650F00155F2A /* ReaderViewQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderViewQueue.swift; sourceTree = "<group>"; };
 		E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextHeightSliderCell.swift; sourceTree = "<group>"; };
+		E471274D21C5910D00EF27F1 /* Settings.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Settings.entitlements; sourceTree = "<group>"; };
+		E474FE1F21C4CB1000DC11D8 /* NotesExportDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExportDocument.swift; sourceTree = "<group>"; };
 		E4825C412124F0B400D36620 /* BibleInitialSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleInitialSelect.swift; sourceTree = "<group>"; };
 		E49ACDBD213B4F4E0031625C /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E49ACDBE213B4F590031625C /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -268,6 +271,7 @@
 				E4638973217AE210009BF5E2 /* SettingsDB.swift */,
 				E40D60602180EEA700A06B54 /* VersionsDB.swift */,
 				E402BCB6217B878F0026E1DE /* BibleDB.swift */,
+				E474FE1F21C4CB1000DC11D8 /* NotesExportDocument.swift */,
 			);
 			path = Adapters;
 			sourceTree = "<group>";
@@ -307,6 +311,7 @@
 		E4F720B8211B6F2A00E26B07 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				E471274D21C5910D00EF27F1 /* Settings.entitlements */,
 				E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */,
 				E4C2E987211B712C00B71CC5 /* ReaderViewNavigator.swift */,
 				E4A4B326219FCE2500F70888 /* ViewControllers */,
@@ -356,6 +361,14 @@
 					E4F720B5211B6F2A00E26B07 = {
 						CreatedOnToolsVersion = 9.4.1;
 						LastSwiftMigration = 1000;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -468,6 +481,7 @@
 				E402BCB5217B80BA0026E1DE /* TableContentsModel.swift in Sources */,
 				E46B2C83218E50200063E68C /* TextHeightSliderCell.swift in Sources */,
 				E4A4B325219F5D5800F70888 /* NotesModel.swift in Sources */,
+				E474FE2021C4CB1000DC11D8 /* NotesExportDocument.swift in Sources */,
 				E431E92A21938D7300CF609C /* DynamicCSS.swift in Sources */,
 				E463897221799013009BF5E2 /* BiblesActionSheet.swift in Sources */,
 				E4C2E992211B712D00B71CC5 /* SettingsViewDelegate.swift in Sources */,
@@ -666,6 +680,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Settings/Settings.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -688,6 +703,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Settings/Settings.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
 				FRAMEWORK_SEARCH_PATHS = (
