@@ -109,7 +109,7 @@ class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMe
     //
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if let noteId = message.body as? String {
-            if let note = SettingsDB.shared.getNote(noteId: noteId) {
+            if let note = NotesDB.shared.getNote(noteId: noteId) {
                 if message.name == "book" {
                     self.bookmarkAlert(note: note)
                 }

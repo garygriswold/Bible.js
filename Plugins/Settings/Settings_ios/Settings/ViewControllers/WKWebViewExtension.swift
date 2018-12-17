@@ -113,7 +113,7 @@ extension WKWebView {
     }
 
     func addNotes(reference: Reference) {
-        let notes: [Note] = SettingsDB.shared.getNotes(bookId: reference.bookId, chapter: reference.chapter)
+        let notes: [Note] = NotesDB.shared.getNotes(bookId: reference.bookId, chapter: reference.chapter)
         var varLine1: String
         for note in notes {
             if note.highlight != nil {
@@ -179,7 +179,7 @@ extension WKWebView {
                 if selectionUse == .compare {
                     CompareViewController.present(note: note)
                 } else {
-                    SettingsDB.shared.storeNote(note: note)
+                    NotesDB.shared.storeNote(note: note)
                 }
                 if selectionUse == .note {
                     NoteViewController.present(note: note, webView: self)

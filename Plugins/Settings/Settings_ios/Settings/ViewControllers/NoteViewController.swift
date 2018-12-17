@@ -100,7 +100,7 @@ class NoteViewController : AppViewController, UITextViewDelegate {
                 if let err = error {
                     print("ERROR: doneHandler note delete \(err)")
                 } else {
-                    SettingsDB.shared.deleteNote(noteId: self.note.noteId)
+                    NotesDB.shared.deleteNote(noteId: self.note.noteId)
                 }
             })
         }
@@ -120,7 +120,7 @@ class NoteViewController : AppViewController, UITextViewDelegate {
     
     @objc func saveHandler(sender: UIBarButtonItem) {
         self.note.note = self.textView.text
-        SettingsDB.shared.storeNote(note: self.note)
+        NotesDB.shared.storeNote(note: self.note)
         self.cancelHandler(sender: sender)
     }
     
