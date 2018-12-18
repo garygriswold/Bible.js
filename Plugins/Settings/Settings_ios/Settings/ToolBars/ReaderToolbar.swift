@@ -146,9 +146,10 @@ class ReaderToolbar {
     }
     
     @objc func composeTapHandler(sender: UIBarButtonItem) {
-        print("compose button handler")
-        let notes = NotesDB.shared.getNotes(bookId: nil)
-        NotesExportDocument.exportNotesDocument(name: "SafeNotes", notes: notes)
+        let notesListViewController = NotesListViewController()
+        self.navigationController?.pushViewController(notesListViewController, animated: true)
+        //let notes = NotesDB.shared.getNotes(bookId: nil)
+        //NotesExportDocument.exportNotesDocument(name: "SafeNotes", notes: notes)
     }
     
     @objc func searchTapHandler(sender: UIBarButtonItem) {

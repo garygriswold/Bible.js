@@ -53,7 +53,7 @@ class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
     }
     
     func picker(url: URL) {
-        let docPicker = UIDocumentPickerViewController(url: url, in: .moveToService)
+        let docPicker = UIDocumentPickerViewController(url: url, in: .exportToService)
         docPicker.delegate = self
         docPicker.modalPresentationStyle = UIModalPresentationStyle.formSheet // optional
         let rootController = UIApplication.shared.keyWindow?.rootViewController

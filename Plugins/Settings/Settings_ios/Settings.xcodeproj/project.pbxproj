@@ -59,6 +59,7 @@
 		E4C99A9121BDF6B800691604 /* HTMLVerseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C99A9021BDF6B800691604 /* HTMLVerseParser.swift */; };
 		E4D5A6CF21C8563E008476D0 /* NotesDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5A6CE21C8563E008476D0 /* NotesDB.swift */; };
 		E4D5A6D121C85AA3008476D0 /* NotesExportDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5A6D021C85AA3008476D0 /* NotesExportDatabase.swift */; };
+		E4D5A6D321C8A291008476D0 /* NotesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5A6D221C8A291008476D0 /* NotesListViewController.swift */; };
 		E4D708D0213328E600E4A8BF /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D708CF213328E600E4A8BF /* AWS.framework */; };
 		E4D708D1213328E600E4A8BF /* AWS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4D708CF213328E600E4A8BF /* AWS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4E12B2E2133F30800CAFE78 /* UserMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */; };
@@ -68,6 +69,7 @@
 		E4F720BA211B6F2A00E26B07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */; };
 		E4F720C1211B6F2C00E26B07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F720C0211B6F2C00E26B07 /* Assets.xcassets */; };
 		E4F720C4211B6F2C00E26B07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F720C2211B6F2C00E26B07 /* LaunchScreen.storyboard */; };
+		E4FCC44C21C8E42100A5FF54 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FCC44B21C8E42100A5FF54 /* NoteCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -176,6 +178,7 @@
 		E4C99A9021BDF6B800691604 /* HTMLVerseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLVerseParser.swift; sourceTree = "<group>"; };
 		E4D5A6CE21C8563E008476D0 /* NotesDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesDB.swift; sourceTree = "<group>"; };
 		E4D5A6D021C85AA3008476D0 /* NotesExportDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExportDatabase.swift; sourceTree = "<group>"; };
+		E4D5A6D221C8A291008476D0 /* NotesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesListViewController.swift; sourceTree = "<group>"; };
 		E4D708CF213328E600E4A8BF /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageController.swift; sourceTree = "<group>"; };
 		E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreReviewController.swift; sourceTree = "<group>"; };
@@ -185,6 +188,7 @@
 		E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4F720C0211B6F2C00E26B07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4F720C5211B6F2C00E26B07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4FCC44B21C8E42100A5FF54 /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,6 +236,7 @@
 				E4C2E97B211B711C00B71CC5 /* BibleDetailViewController.swift */,
 				E4C99A8E21BC533F00691604 /* CompareViewController.swift */,
 				E452C7AF21BF3C6F00553B86 /* NoteEditViewController.swift */,
+				E4D5A6D221C8A291008476D0 /* NotesListViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -243,6 +248,7 @@
 				E4A712FF21461090009D99E2 /* SettingsSearchController.swift */,
 				E4C2E985211B712C00B71CC5 /* TextSizeSliderCell.swift */,
 				E4C2E986211B712C00B71CC5 /* LanguageCell.swift */,
+				E4FCC44B21C8E42100A5FF54 /* NoteCell.swift */,
 				E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */,
 				E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */,
 				E4B4433A21A46999007A266B /* ColorPicker.swift */,
@@ -453,6 +459,7 @@
 				E40D605F217FC70700A06B54 /* HistoryViewController.swift in Sources */,
 				E4480A2E2187D3DD00C019B0 /* ReaderPagesController.swift in Sources */,
 				E40D60632182013300A06B54 /* AppViewController.swift in Sources */,
+				E4FCC44C21C8E42100A5FF54 /* NoteCell.swift in Sources */,
 				E4C2E98D211B712D00B71CC5 /* SettingsViewDataSource.swift in Sources */,
 				E40D6065218252CA00A06B54 /* BiblePageModel.swift in Sources */,
 				E4B4433B21A46999007A266B /* ColorPicker.swift in Sources */,
@@ -472,6 +479,7 @@
 				E4015258215D2DF60031654B /* InfoPageController.swift in Sources */,
 				E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */,
 				E40D60612180EEA700A06B54 /* VersionsDB.swift in Sources */,
+				E4D5A6D321C8A291008476D0 /* NotesListViewController.swift in Sources */,
 				E4C2E98A211B712D00B71CC5 /* SettingsViewController.swift in Sources */,
 				E4D5A6CF21C8563E008476D0 /* NotesDB.swift in Sources */,
 				E4C2E990211B712D00B71CC5 /* ReaderViewNavigator.swift in Sources */,

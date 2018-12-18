@@ -31,7 +31,7 @@ class NoteEditViewController : AppViewController, UITextViewDelegate {
     }
     
     required init(coder: NSCoder) {
-        fatalError("NoteViewController(coder:) is not implemented.")
+        fatalError("NoteEditViewController(coder:) is not implemented.")
     }
     
     deinit {
