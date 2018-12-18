@@ -24,7 +24,7 @@ class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
     init(name: String, notes: [Note]) {
         self.notes = notes
         let rootUrl = FileManager.default.temporaryDirectory
-        let url = rootUrl.appendingPathComponent(name)
+        let url = rootUrl.appendingPathComponent(name + ".txt")
         super.init(fileURL: url)
     }
     
@@ -53,7 +53,7 @@ class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
     }
     
     func picker(url: URL) {
-        let docPicker = UIDocumentPickerViewController(url: url, in: .exportToService)
+        let docPicker = UIDocumentPickerViewController(url: url, in: .moveToService)
         docPicker.delegate = self
         docPicker.modalPresentationStyle = UIModalPresentationStyle.formSheet // optional
         let rootController = UIApplication.shared.keyWindow?.rootViewController

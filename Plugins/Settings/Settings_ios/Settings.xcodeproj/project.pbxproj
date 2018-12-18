@@ -58,6 +58,7 @@
 		E4C99A8F21BC533F00691604 /* CompareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C99A8E21BC533F00691604 /* CompareViewController.swift */; };
 		E4C99A9121BDF6B800691604 /* HTMLVerseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C99A9021BDF6B800691604 /* HTMLVerseParser.swift */; };
 		E4D5A6CF21C8563E008476D0 /* NotesDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5A6CE21C8563E008476D0 /* NotesDB.swift */; };
+		E4D5A6D121C85AA3008476D0 /* NotesExportDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5A6D021C85AA3008476D0 /* NotesExportDatabase.swift */; };
 		E4D708D0213328E600E4A8BF /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D708CF213328E600E4A8BF /* AWS.framework */; };
 		E4D708D1213328E600E4A8BF /* AWS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4D708CF213328E600E4A8BF /* AWS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4E12B2E2133F30800CAFE78 /* UserMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */; };
@@ -174,6 +175,7 @@
 		E4C99A8E21BC533F00691604 /* CompareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareViewController.swift; sourceTree = "<group>"; };
 		E4C99A9021BDF6B800691604 /* HTMLVerseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLVerseParser.swift; sourceTree = "<group>"; };
 		E4D5A6CE21C8563E008476D0 /* NotesDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesDB.swift; sourceTree = "<group>"; };
+		E4D5A6D021C85AA3008476D0 /* NotesExportDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExportDatabase.swift; sourceTree = "<group>"; };
 		E4D708CF213328E600E4A8BF /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageController.swift; sourceTree = "<group>"; };
 		E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreReviewController.swift; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				E402BCB6217B878F0026E1DE /* BibleDB.swift */,
 				E4D5A6CE21C8563E008476D0 /* NotesDB.swift */,
 				E474FE1F21C4CB1000DC11D8 /* NotesExportDocument.swift */,
+				E4D5A6D021C85AA3008476D0 /* NotesExportDatabase.swift */,
 			);
 			path = Adapters;
 			sourceTree = "<group>";
@@ -491,6 +494,7 @@
 				E4C2E992211B712D00B71CC5 /* SettingsViewDelegate.swift in Sources */,
 				E4C2E98E211B712D00B71CC5 /* TextSizeSliderCell.swift in Sources */,
 				E4C2E991211B712D00B71CC5 /* SettingsModel.swift in Sources */,
+				E4D5A6D121C85AA3008476D0 /* NotesExportDatabase.swift in Sources */,
 				E452C7B021BF3C6F00553B86 /* NoteViewController.swift in Sources */,
 				E469080B21964F5E00155F2A /* Measurement.swift in Sources */,
 				E469080D2196650F00155F2A /* ReaderViewQueue.swift in Sources */,

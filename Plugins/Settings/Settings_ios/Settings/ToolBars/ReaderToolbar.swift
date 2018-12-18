@@ -148,11 +148,12 @@ class ReaderToolbar {
     @objc func composeTapHandler(sender: UIBarButtonItem) {
         print("compose button handler")
         let notes = NotesDB.shared.getNotes(bookId: nil)
-        NotesExportDocument.exportNotesDocument(name: "SafeNotes.txt", notes: notes)
+        NotesExportDocument.exportNotesDocument(name: "SafeNotes", notes: notes)
     }
     
     @objc func searchTapHandler(sender: UIBarButtonItem) {
         print("search button handler")
+        NotesExportDatabase.exportNotesDatabase(name: "MyNotes")
     }
     
     private func toolbarLabel(width: CGFloat, action: Selector) -> UILabel {

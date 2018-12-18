@@ -74,6 +74,10 @@ public class Sqlite3 {
         try FileManager.default.removeItem(at: fullPath)
     }
     
+    public static func pathDB(dbname: String) -> URL {
+        return Sqlite3().databaseDir.appendingPathComponent(dbname)
+    }
+    
     private var databaseDir: URL
     private var database: OpaquePointer?
     
