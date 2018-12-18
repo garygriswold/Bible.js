@@ -182,7 +182,7 @@ extension WKWebView {
                     NotesDB.shared.storeNote(note: note)
                 }
                 if selectionUse == .note {
-                    NoteViewController.present(note: note, webView: self)
+                    NoteEditViewController.present(note: note, webView: self)
                 }
             }
         })

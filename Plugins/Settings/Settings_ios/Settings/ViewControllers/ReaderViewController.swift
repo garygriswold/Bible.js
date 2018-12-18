@@ -114,7 +114,7 @@ class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMe
                     self.bookmarkAlert(note: note)
                 }
                 else if message.name == "note" {
-                    NoteViewController.present(note: note, webView: self.webView)
+                    NoteEditViewController.present(note: note, webView: self.webView)
                 }
             }
         }

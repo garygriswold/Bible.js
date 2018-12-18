@@ -9,10 +9,10 @@
 import UIKit
 import WebKit
 
-class NoteViewController : AppViewController, UITextViewDelegate {
+class NoteEditViewController : AppViewController, UITextViewDelegate {
     
     static func present(note: Note, webView: WKWebView) {
-        let notebook = NoteViewController(note: note, webView: webView)
+        let notebook = NoteEditViewController(note: note, webView: webView)
         notebook.modalPresentationStyle = UIModalPresentationStyle.fullScreen
         notebook.modalTransitionStyle = UIModalTransitionStyle.coverVertical
         let navController = UINavigationController(rootViewController: notebook)
