@@ -41,7 +41,6 @@ class NotesExportDatabase : NSObject, UIDocumentPickerDelegate {
         print("*** Picker Copy duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
         let docPicker = UIDocumentPickerViewController(url: tmpURL, in: .exportToService)
         docPicker.delegate = self
-        docPicker.modalPresentationStyle = UIModalPresentationStyle.formSheet // optional
         let rootController = UIApplication.shared.keyWindow?.rootViewController
         rootController?.present(docPicker, animated: true, completion: nil)
     }

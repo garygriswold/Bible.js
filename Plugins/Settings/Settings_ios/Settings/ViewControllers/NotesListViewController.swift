@@ -22,9 +22,14 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
     override func loadView() {
         super.loadView()
         
-        self.navigationItem.title = NSLocalizedString("Notes", comment: "Notes view page title")
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self,
-                                                                 action: #selector(addHandler))
+        self.reference = HistoryModel.shared.current()
+        self.notes = NotesDB.shared.getNotes(bookId: reference.bookId)
+        
+        let title = self.reference.book?.name ?? ""
+            + " " + NSLocalizedString("Notebook", comment: "Notes list view page title")
+        self.navigationItem.title = title
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
+                                                                 action: #selector(editHandler))
 
         // create Table view
         self.tableView = UITableView(frame: self.view.bounds, style: UITableView.Style.plain)
@@ -43,13 +48,18 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
         self.tableView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
         self.tableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
         self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
-        
-        self.reference = HistoryModel.shared.current()
-        self.notes = NotesDB.shared.getNotes(bookId: reference.bookId)
     }
     
-    @objc func addHandler(sender: UIBarButtonItem) {
-        print("add handler clicked")
+    @objc func editHandler(sender: UIBarButtonItem) {
+        print("edit handler clicked")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
+                                                                 action: #selector(doneHandler))
+    }
+    
+    @objc func doneHandler(sender: UIBarButtonItem) {
+        print("done handler clicked")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
+                                                                 action: #selector(editHandler))
     }
     
     //
@@ -88,12 +98,14 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
     // Delegate
     //
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let note = self.notes[indexPath.row]
         tableView.deselectRow(at: indexPath, animated: true)
-        // webView controller is needed to delete items
-        let webView = WKWebView() // This dummy fail if used
-        let noteEditViewController = NoteEditViewController(note: note, webView: webView)
-        self.navigationController?.pushViewController(noteEditViewController, animated: true)
+        let note = self.notes[indexPath.row]
+        if note.note != nil {
+            let noteEditViewController = NoteEditViewController(note: note, webView: nil)
+            self.navigationController?.pushViewController(noteEditViewController, animated: true)
+        } else {
+            
+        }
     }
 }
 

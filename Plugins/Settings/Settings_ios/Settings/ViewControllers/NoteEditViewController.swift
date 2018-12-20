@@ -23,10 +23,12 @@ class NoteEditViewController : AppViewController, UITextViewDelegate {
     private var note: Note
     private weak var webView: WKWebView?
     private var textView: UITextView!
+    private var isModal: Bool
     
-    init(note: Note, webView: WKWebView) {
+    init(note: Note, webView: WKWebView?) {
         self.note = note
         self.webView = webView
+        self.isModal = (webView != nil)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -96,16 +98,23 @@ class NoteEditViewController : AppViewController, UITextViewDelegate {
         if self.textView.text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).count == 0 {
             let message = "var ele = document.getElementById('\(note.noteId)');\n"
                 + "var forget = ele.parentNode.removeChild(ele);\n"
-            self.webView?.evaluateJavaScript(message, completionHandler: { data, error in
-                if let err = error {
-                    print("ERROR: doneHandler note delete \(err)")
-                } else {
-                    NotesDB.shared.deleteNote(noteId: self.note.noteId)
-                }
-            })
+            if self.webView != nil {
+                self.webView!.evaluateJavaScript(message, completionHandler: { data, error in
+                    if let err = error {
+                        print("ERROR: doneHandler note delete \(err)")
+                    } else {
+                        NotesDB.shared.deleteNote(noteId: self.note.noteId)
+                    }
+                })
+            } else {
+                NotesDB.shared.deleteNote(noteId: self.note.noteId)
+            }
         }
-        self.dismiss(animated: true, completion: nil)
-        //self.navigationController?.popViewController(animated: true)
+        if self.isModal {
+             self.dismiss(animated: true, completion: nil)
+        } else {
+            self.navigationController!.popViewController(animated: true)
+        }
     }
     
     @objc func editHandler(sender: UIBarButtonItem) {
