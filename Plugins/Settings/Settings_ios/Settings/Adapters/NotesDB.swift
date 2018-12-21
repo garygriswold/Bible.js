@@ -41,7 +41,6 @@ struct NotesDB {
                 values = [bookId!]
             }
             sql += " ORDER BY chapter, startVerse"
-            print(sql)
             let resultSet = try db.queryV1(sql: sql, values: values)
             let notes = resultSet.map {
                 Note(noteId: $0[0]!, bookId: $0[1]!, chapter: Int($0[2]!)!, datetime: Int($0[3]!)!,

@@ -65,13 +65,13 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
     }
     
     @objc func editHandler(sender: UIBarButtonItem) {
-        print("edit handler clicked")
+        self.tableView.setEditing(true, animated: true)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
                                                                  action: #selector(doneHandler))
     }
     
     @objc func doneHandler(sender: UIBarButtonItem) {
-        print("done handler clicked")
+        self.tableView.setEditing(false, animated: true)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
                                                                  action: #selector(editHandler))
     }
@@ -117,6 +117,20 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
         return cell!
     }
     
+    // Return true for each row that can be edited
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    // Commit data row change to the data source
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle,
+                   forRowAt indexPath: IndexPath) {
+        let note = self.notes[indexPath.row]
+        self.notes.remove(at: indexPath.row)
+        NotesDB.shared.deleteNote(noteId: note.noteId)
+        tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+    }
+    
     //
     // Delegate
     //
@@ -138,5 +152,14 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
             }
             self.navigationController?.popToRootViewController(animated: true)
         }
+    }
+    // Identifies Add and Delete Rows
+    func tableView(_ tableView: UITableView, editingStyleForRowAt: IndexPath) -> UITableViewCell.EditingStyle {
+        return UITableViewCell.EditingStyle.delete
+    }
+    
+    // Keeps non-editable rows from indenting
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt: IndexPath) -> Bool {
+        return true
     }
 }

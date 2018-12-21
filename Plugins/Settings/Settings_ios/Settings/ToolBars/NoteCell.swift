@@ -20,14 +20,15 @@ class NoteCell : UITableViewCell {
         self.noteText = UILabel()
         super.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: reuseIdentifier)
         
-        self.addSubview(self.iconGlyph)
-        self.addSubview(self.passage)
-        self.addSubview(self.noteText)
+        self.contentView.addSubview(self.iconGlyph)
+        self.contentView.addSubview(self.passage)
+        self.contentView.addSubview(self.noteText)
         
         self.iconGlyph.translatesAutoresizingMaskIntoConstraints = false
-        let margins = self.layoutMarginsGuide
+        let margins = self.contentView.layoutMarginsGuide
         self.iconGlyph.topAnchor.constraint(equalTo: margins.topAnchor, constant: -3.0).isActive = true
-        self.iconGlyph.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: 0.0).isActive = true
+        self.iconGlyph.leadingAnchor.constraint(equalTo: margins.leadingAnchor,
+                                                constant: 0.0).isActive = true
         
         self.passage.translatesAutoresizingMaskIntoConstraints = false
         self.passage.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
