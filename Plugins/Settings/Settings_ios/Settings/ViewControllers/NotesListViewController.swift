@@ -25,9 +25,8 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
         self.reference = HistoryModel.shared.current()
         self.notes = NotesDB.shared.getNotes(bookId: reference.bookId)
         
-        let title = self.reference.book?.name ?? ""
-            + " " + NSLocalizedString("Notebook", comment: "Notes list view page title")
-        self.navigationItem.title = title
+        let notebook = NSLocalizedString("Notebook", comment: "Notes list view page title")
+        self.navigationItem.title = (self.reference.book?.name ?? "") + " " + notebook
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
                                                                  action: #selector(editHandler))
 
@@ -72,26 +71,29 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let note = self.notes[indexPath.row]
         let noteRef = note.getReference()
-        let cell = tableView.dequeueReusableCell(withIdentifier: "notesCell", for: indexPath)
-        cell.backgroundColor = AppFont.backgroundColor
-        cell.textLabel?.font = AppFont.sansSerif(style: .subheadline)
-        cell.textLabel?.textColor = AppFont.textColor
-        cell.detailTextLabel?.font = AppFont.sansSerif(style: .footnote)
-        cell.textLabel?.text = noteRef.description(startVerse: note.startVerse, endVerse: note.endVerse)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "notesCell", for: indexPath) as? NoteCell
+        guard cell != nil else { fatalError("notesCell must be type NotesCell") }
+        cell!.backgroundColor = AppFont.backgroundColor
+        cell!.passage.font = AppFont.sansSerif(style: .subheadline)
+        cell!.passage.textColor = AppFont.textColor
+        cell!.passage.text = noteRef.description(startVerse: note.startVerse, endVerse: note.endVerse)
+        cell!.noteText.numberOfLines = 10
+        cell!.noteText.font = AppFont.sansSerif(style: .footnote)
+        cell!.noteText.textColor = AppFont.textColor
         if note.highlight != nil {
-            cell.detailTextLabel?.text = "Highlite"
+            cell!.iconGlyph.text = "\u{1F3F7}"
+            cell!.noteText.text = "Highlited text here"
         }
         else if note.bookmark {
-            cell.detailTextLabel?.text = "Bookmark"
+            cell!.iconGlyph.text = "\u{1F516}"
         }
         else if note.note != nil {
-            cell.detailTextLabel?.text = note.note
-        } else {
-            cell.detailTextLabel?.text = ""
+            cell!.iconGlyph.text = "\u{1F5D2}"
+            cell!.noteText.text = note.note
         }
-        cell.selectionStyle = .default
-        cell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
-        return cell
+        cell!.selectionStyle = .default
+        cell!.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
+        return cell!
     }
     
     //
@@ -104,9 +106,16 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
             let noteEditViewController = NoteEditViewController(note: note, webView: nil)
             self.navigationController?.pushViewController(noteEditViewController, animated: true)
         } else {
-            
+            let ref = HistoryModel.shared.current()
+            if note.bibleId != ref.bibleId || note.bookId != ref.bookId || note.chapter != ref.chapter {
+                let noteRef = note.getReference()
+                if let book = noteRef.book {
+                    HistoryModel.shared.changeReference(book: book, chapter: noteRef.chapter)
+                    NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
+                                                    object: HistoryModel.shared.current())
+                }
+            }
+            self.navigationController?.popToRootViewController(animated: true)
         }
     }
 }
-
-

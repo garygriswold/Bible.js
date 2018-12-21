@@ -19,10 +19,10 @@ struct NotesDB {
         do {
             db = try self.getNotesDB()
             var sql = "SELECT noteId, bookId, chapter, datetime, startVerse, endVerse, bibleId,"
-                + " selection, classes, bookmark, highlight, note FROM Notes WHERE note is not NULL"
+                + " selection, classes, bookmark, highlight, note FROM Notes"// WHERE note is not NULL"
             var values: [String] = []
             if bookId != nil {
-                sql += " AND bookId = ?"
+                sql += " WHERE bookId = ?"
                 values = [bookId!]
             }
             sql += " ORDER BY chapter, startVerse"
