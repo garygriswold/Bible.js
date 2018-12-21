@@ -14,6 +14,7 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
     private var tableView: UITableView!
     private var reference: Reference!
     private var notes: [Note]!
+    private var toolBar: NotesListToolbar!
     
     deinit {
         print("**** deinit NotesListViewController ******")
@@ -22,8 +23,10 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
     override func loadView() {
         super.loadView()
         
+        self.toolBar = NotesListToolbar(controller: self)
+        
         self.reference = HistoryModel.shared.current()
-        self.notes = NotesDB.shared.getNotes(bookId: reference.bookId)
+        self.notes = NotesDB.shared.getNotes(bookId: reference.bookId, note: true, lite: true, book: true)
         
         let notebook = NSLocalizedString("Notebook", comment: "Notes list view page title")
         self.navigationItem.title = (self.reference.book?.name ?? "") + " " + notebook
@@ -49,6 +52,18 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
         self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.isToolbarHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.navigationController?.isToolbarHidden = true
+    }
+    
     @objc func editHandler(sender: UIBarButtonItem) {
         print("edit handler clicked")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
@@ -59,6 +74,12 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
         print("done handler clicked")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
                                                                  action: #selector(editHandler))
+    }
+    
+    // This method is called by NotesListToolbar
+    func refresh(note: Bool, lite: Bool, book: Bool) {
+        self.notes = NotesDB.shared.getNotes(bookId: reference.bookId, note: note, lite: lite, book: book)
+        self.tableView.reloadData()
     }
     
     //
@@ -81,14 +102,14 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
         cell!.noteText.font = AppFont.sansSerif(style: .footnote)
         cell!.noteText.textColor = AppFont.textColor
         if note.highlight != nil {
-            cell!.iconGlyph.text = "\u{1F3F7}"
+            cell!.iconGlyph.text = Note.liteIcon//"\u{1F58C}"//    "\u{1F3F7}"
             cell!.noteText.text = "Highlited text here"
         }
         else if note.bookmark {
-            cell!.iconGlyph.text = "\u{1F516}"
+            cell!.iconGlyph.text = Note.bookIcon//"\u{1F516}"
         }
         else if note.note != nil {
-            cell!.iconGlyph.text = "\u{1F5D2}"
+            cell!.iconGlyph.text = Note.noteIcon//"\u{1F5D2}"
             cell!.noteText.text = note.note
         }
         cell!.selectionStyle = .default

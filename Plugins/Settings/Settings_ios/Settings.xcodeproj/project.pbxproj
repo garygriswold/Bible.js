@@ -70,6 +70,7 @@
 		E4F720C1211B6F2C00E26B07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F720C0211B6F2C00E26B07 /* Assets.xcassets */; };
 		E4F720C4211B6F2C00E26B07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F720C2211B6F2C00E26B07 /* LaunchScreen.storyboard */; };
 		E4FCC44C21C8E42100A5FF54 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FCC44B21C8E42100A5FF54 /* NoteCell.swift */; };
+		E4FD140621CCC8800033F94B /* NotesListToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FD140521CCC8800033F94B /* NotesListToolbar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -189,6 +190,7 @@
 		E4F720C0211B6F2C00E26B07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4F720C5211B6F2C00E26B07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4FCC44B21C8E42100A5FF54 /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
+		E4FD140521CCC8800033F94B /* NotesListToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesListToolbar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,6 +254,7 @@
 				E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */,
 				E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */,
 				E4B4433A21A46999007A266B /* ColorPicker.swift */,
+				E4FD140521CCC8800033F94B /* NotesListToolbar.swift */,
 			);
 			path = ToolBars;
 			sourceTree = "<group>";
@@ -489,6 +492,7 @@
 				E4F66865217D85AC00E998CC /* TOCChaptersViewController.swift in Sources */,
 				E4C2E98F211B712D00B71CC5 /* LanguageCell.swift in Sources */,
 				E4B7B357219E7E210057E838 /* WKWebViewExtension.swift in Sources */,
+				E4FD140621CCC8800033F94B /* NotesListToolbar.swift in Sources */,
 				E463896E21793DC0009BF5E2 /* HistoryModel.swift in Sources */,
 				E4A7130021461090009D99E2 /* SettingsSearchController.swift in Sources */,
 				E4638974217AE210009BF5E2 /* SettingsDB.swift in Sources */,

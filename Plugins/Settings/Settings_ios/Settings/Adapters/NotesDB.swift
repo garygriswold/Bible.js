@@ -14,18 +14,34 @@ struct NotesDB {
     
     private init() {}
     
-    func getNotes(bookId: String?) -> [Note] {
+    func getNotes(bookId: String?, note: Bool, lite: Bool, book: Bool) -> [Note] {
         let db: Sqlite3
         do {
             db = try self.getNotesDB()
             var sql = "SELECT noteId, bookId, chapter, datetime, startVerse, endVerse, bibleId,"
-                + " selection, classes, bookmark, highlight, note FROM Notes"// WHERE note is not NULL"
+                + " selection, classes, bookmark, highlight, note FROM Notes"
             var values: [String] = []
+            var orPredicates = [String]()
+            if note {
+                orPredicates.append("note is not NULL")
+            }
+            if lite {
+                orPredicates.append("highlight is not NULL")
+            }
+            if book {
+                orPredicates.append("bookmark = 'T'")
+            }
+            if orPredicates.count > 0 {
+                sql += " WHERE (" + orPredicates.joined(separator: " OR ") + ")"
+            } else {
+                sql += " WHERE 1=2"
+            }
             if bookId != nil {
-                sql += " WHERE bookId = ?"
+                sql += " AND bookId = ?"
                 values = [bookId!]
             }
             sql += " ORDER BY chapter, startVerse"
+            print(sql)
             let resultSet = try db.queryV1(sql: sql, values: values)
             let notes = resultSet.map {
                 Note(noteId: $0[0]!, bookId: $0[1]!, chapter: Int($0[2]!)!, datetime: Int($0[3]!)!,

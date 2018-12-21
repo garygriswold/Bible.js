@@ -9,6 +9,10 @@ import Foundation
 
 struct Note {
     
+    static let noteIcon = "\u{1F5D2}"
+    static let bookIcon = "\u{1F516}"
+    static let liteIcon = "\u{1F58C}"
+    
     static func genNoteId() -> String {
         return UUID().uuidString
     }
