@@ -10,6 +10,11 @@ import UIKit
 
 class InfoPageController : AppViewController {
     
+    static func push(controller: UIViewController?) {
+        let infoPageController = InfoPageController()
+        controller?.navigationController?.pushViewController(infoPageController, animated: true)
+    }
+    
     private var textView: UITextView!
     
     deinit {

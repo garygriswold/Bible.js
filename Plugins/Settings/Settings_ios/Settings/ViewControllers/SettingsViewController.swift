@@ -14,6 +14,12 @@ enum SettingsViewType {
 
 class SettingsViewController: AppViewController {
     
+    static func push(settingsViewType: SettingsViewType, controller: UIViewController?, language: Language?) {
+        let bibleController = SettingsViewController(settingsViewType: settingsViewType)
+        bibleController.oneLanguage = language
+        controller?.navigationController?.pushViewController(bibleController, animated: true)
+    }
+    
     let settingsViewType: SettingsViewType
     var searchController: SettingsSearchController?
     var dataModel: SettingsModel!

@@ -41,14 +41,14 @@ class NotesExportActionSheet : UIAlertController {
         let notes2TextTitle = "'\(self.book.name)' \(notebook2Text)"
         let notes2Text = UIAlertAction(title: notes2TextTitle, style: .default, handler: { _ in
             let notes = NotesDB.shared.getNotes(bookId: self.book.bookId, note: true, lite: true, book: true)
-            NotesExportDocument.exportNotesDocument(name: self.book.name, notes: notes)
+            NotesExportDocument.export(name: self.book.name, notes: notes)
         })
         self.addAction(notes2Text)
         
         let notebooks2Text = NSLocalizedString("All Notebooks to Text", comment: "Option on action sheet")
         let all2Text = UIAlertAction(title: notebooks2Text, style: .default, handler: { _ in
             let notes = NotesDB.shared.getNotes(bookId: nil, note: true, lite: true, book: true)
-            NotesExportDocument.exportNotesDocument(name: "AllMine", notes: notes)
+            NotesExportDocument.export(name: "AllMine", notes: notes)
         })
         self.addAction(all2Text)
         
@@ -56,13 +56,13 @@ class NotesExportActionSheet : UIAlertController {
         let notes2ShareTitle = "'\(self.book.name)' \(notebook2Share)"
         let notes2Share = UIAlertAction(title: notes2ShareTitle, style: .default, handler: { _ in
             print("clicked on notes 2 share")
-            //NotesExportDatabase.exportNotesDatabase(name: self.book.name)
+            //NotesExportDatabase.export(name: self.book.name)
         })
         self.addAction(notes2Share)
         
         let notebooks2Share = NSLocalizedString("All Notebooks to Share", comment: "Option on action sheet")
         let all2Share = UIAlertAction(title: notebooks2Share, style: .default, handler: { _ in
-            NotesExportDatabase.exportNotesDatabase(name: self.book.name)
+            NotesExportDatabase.export(name: self.book.name)
         })
         self.addAction(all2Share)
         

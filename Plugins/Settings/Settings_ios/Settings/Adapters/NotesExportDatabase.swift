@@ -11,7 +11,7 @@ import Utility
 
 class NotesExportDatabase : NSObject, UIDocumentPickerDelegate {
     
-    static func exportNotesDatabase(name: String) {
+    static func export(name: String) {
         let export = NotesExportDatabase(name: name)
         export.picker(url: export.srcFileURL)
     }

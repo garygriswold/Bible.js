@@ -11,7 +11,7 @@ import UIKit
 
 class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
     
-    static func exportNotesDocument(name: String, notes: [Note]) {
+    static func export(name: String, notes: [Note]) {
         let export = NotesExportDocument(name: name, notes: notes)
         export.save(to: export.fileURL, for: .forCreating, completionHandler: { (Bool) in
             print("file is saved \(export.fileURL)")

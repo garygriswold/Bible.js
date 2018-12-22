@@ -9,6 +9,11 @@
 import UIKit
 
 class TOCBooksViewController : AppViewController, UITableViewDataSource, UITableViewDelegate {
+    
+    static func push(controller: UIViewController?) {
+        let tableContents = TOCBooksViewController()
+        controller?.navigationController?.pushViewController(tableContents, animated: true)
+    }
 
     private var dataModel: TableContentsModel!
     private var tableView: UITableView!
@@ -75,8 +80,7 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
     }
     
     @objc func historyHandler(sender: UIBarButtonItem) {
-        let historyController = HistoryViewController()
-        self.navigationController?.pushViewController(historyController, animated: true)
+        HistoryViewController.push(controller: self)
     }
     
     private func createToolbar() {
@@ -154,8 +158,7 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let book = self.dataModel.getBook(row: indexPath.row) {
             tableView.deselectRow(at: indexPath, animated: true)
-            let chaptersController = TOCChaptersViewController(book: book)
-            self.navigationController?.pushViewController(chaptersController, animated: true)
+            TOCChaptersViewController.push(book: book, controller: self)
         }
     }
 }

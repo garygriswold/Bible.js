@@ -11,6 +11,11 @@ import WebKit
 
 class NoteEditViewController : AppViewController, UITextViewDelegate {
     
+    static func push(note: Note, controller: UIViewController) {
+        let noteEditViewController = NoteEditViewController(note: note, webView: nil)
+        controller.navigationController?.pushViewController(noteEditViewController, animated: true)
+    }
+    
     static func present(note: Note, webView: WKWebView) {
         let notebook = NoteEditViewController(note: note, webView: webView)
         notebook.modalPresentationStyle = UIModalPresentationStyle.fullScreen

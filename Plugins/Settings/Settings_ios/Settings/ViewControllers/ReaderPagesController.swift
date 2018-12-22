@@ -104,12 +104,10 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        print("presentation count called")
         return 7
     }
 
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        print("presentation Index called")
         return 1
     }
  
@@ -133,12 +131,10 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
     }
     
     func pageViewControllerSupportedInterfaceOrientations(_ pageViewController: UIPageViewController) -> UIInterfaceOrientationMask {
-        print("supported interface orientations called")
         return UIInterfaceOrientationMask.portrait
     }
     
     func pageViewControllerPreferredInterfaceOrientationForPresentation(_ pageViewController: UIPageViewController) -> UIInterfaceOrientation {
-        print("preferred interface orientations called")
         return UIInterfaceOrientation.portrait
     }
 }

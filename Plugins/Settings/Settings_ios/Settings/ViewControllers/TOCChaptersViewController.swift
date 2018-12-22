@@ -10,6 +10,11 @@ import UIKit
 
 class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
     
+    static func push(book: Book, controller: UIViewController?) {
+        let chaptersController = TOCChaptersViewController(book: book)
+        controller?.navigationController?.pushViewController(chaptersController, animated: true)
+    }
+    
     private let book: Book
     private let size: CGFloat = 50.0
     
@@ -63,8 +68,7 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
     }
     
     @objc func historyHandler(sender: UIBarButtonItem) {
-        let historyController = HistoryViewController()
-        self.navigationController?.pushViewController(historyController, animated: true)
+        HistoryViewController.push(controller: self)
     }
     
     //

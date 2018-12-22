@@ -14,6 +14,12 @@ protocol ExternControllerProtocol {
 }
 
 class ExternControllerImpl : AppViewController, ExternControllerProtocol {
+    
+    static func push(title: String, controller: UIViewController?) {
+        let videoController = ExternControllerImpl()
+        videoController.present(title: title)
+        controller?.navigationController?.pushViewController(videoController, animated: true)
+    }
 
     private var textView: UITextView!
     private var navTitle: String?

@@ -15,6 +15,11 @@ class UserMessageController : MFMessageComposeViewController, MFMessageComposeVi
         return MFMessageComposeViewController.canSendText()
     }
     
+    static func present(controller: UIViewController?) {
+        let userMessageController = UserMessageController()
+        controller?.navigationController?.present(userMessageController, animated: true, completion: nil)
+    }
+    
     override func loadView() {
         super.loadView()
         

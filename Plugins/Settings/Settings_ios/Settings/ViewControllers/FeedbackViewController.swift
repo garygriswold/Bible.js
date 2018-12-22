@@ -11,6 +11,11 @@ import AudioToolbox
 
 class FeedbackViewController: AppViewController, UITextViewDelegate {
     
+    static func push(controller: UIViewController?) {
+        let feedbackController = FeedbackViewController()
+        controller?.navigationController?.pushViewController(feedbackController, animated: true)
+    }
+    
     private var textView: UITextView!
     
     deinit {

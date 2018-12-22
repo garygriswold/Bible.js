@@ -10,9 +10,16 @@ import UIKit
 
 class BiblesActionSheet : UIAlertController {
     
-    private weak var controller: ReaderPagesController?
+    static func present(controller: UIViewController?) {
+        if let ctrl = controller {
+            let biblesAlert = BiblesActionSheet(controller: ctrl)
+            ctrl.present(biblesAlert, animated: true, completion: nil)
+        }
+    }
     
-    init(controller: ReaderPagesController) {
+    private weak var controller: UIViewController?
+    
+    init(controller: UIViewController) {
         self.controller = controller
         super.init(nibName: nil, bundle: nil)
     }
@@ -41,19 +48,14 @@ class BiblesActionSheet : UIAlertController {
         
         let moreBiblesText = NSLocalizedString("+ More Bibles", comment: "Title on action sheet")
         let moreBibles = UIAlertAction(title: moreBiblesText, style: .default, handler: { _ in
-            let biblesController = SettingsViewController(settingsViewType: .bible)
-            if let nav = self.controller?.navigationController {
-                nav.pushViewController(biblesController, animated: true)
-            }
+            SettingsViewController.push(settingsViewType: .bible, controller: self.controller, language: nil)
         })
         self.addAction(moreBibles)
         
         let moreLangText = NSLocalizedString("+ More Languages", comment: "Title on action sheet")
         let moreLang = UIAlertAction(title: moreLangText, style: .default, handler: { _ in
-            let langController = SettingsViewController(settingsViewType: .language)
-            if let nav = self.controller?.navigationController {
-                nav.pushViewController(langController, animated: true)
-            }
+            SettingsViewController.push(settingsViewType: .language, controller: self.controller,
+                                        language: nil)
         })
         self.addAction(moreLang)
         

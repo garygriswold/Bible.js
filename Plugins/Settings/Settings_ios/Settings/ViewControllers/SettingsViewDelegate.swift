@@ -68,15 +68,11 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         case 0:
             switch indexPath.row {
             case 0:
-                let tableContents = TOCBooksViewController()
-                self.navController?.pushViewController(tableContents, animated: true)
+                TOCBooksViewController.push(controller: self.controller)
             case 1:
-                let histController = HistoryViewController()
-                self.navController?.pushViewController(histController, animated: true)
+                HistoryViewController.push(controller: self.controller)
             case 2:
-                let videoController = ExternControllerImpl()
-                videoController.present(title: NSLocalizedString("Videos", comment: "View title"))
-                self.navController?.pushViewController(videoController, animated: true)
+                ExternControllerImpl.push(title: "Videos", controller: self.controller)
             default: fatalError("Unknown row \(indexPath.row) in section 0")
             }
         case 1:
@@ -84,11 +80,11 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         case 2:
             switch indexPath.row {
             case 0:
-                let bibleController = SettingsViewController(settingsViewType: .bible)
-                self.navController?.pushViewController(bibleController, animated: true)
+                SettingsViewController.push(settingsViewType: .bible, controller: self.controller,
+                                            language: nil)
             case 1:
-                let languageController = SettingsViewController(settingsViewType: .language)
-                self.navController?.pushViewController(languageController, animated: true)
+                SettingsViewController.push(settingsViewType: .language, controller: self.controller,
+                                            language: nil)
             default: fatalError("Unknown row \(indexPath.row) in section 1")
             }
         case 3:
@@ -100,14 +96,11 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
                 // I have also tried to use WKWebView to access itunes, but it requires User AppleId
                 // login credentials.
             case 1:
-                let feedbackController = FeedbackViewController()
-                self.navController?.pushViewController(feedbackController, animated: true)
+                FeedbackViewController.push(controller: self.controller)
             case 2:
-                let infoPageController = InfoPageController()
-                self.navController?.pushViewController(infoPageController, animated: true)
+                InfoPageController.push(controller: self.controller)
             case 3:
-                let userMessageController = UserMessageController()
-                self.navController?.present(userMessageController, animated: true, completion: nil)
+                UserMessageController.present(controller: self.controller)
             default:
                 print("Unknown row \(indexPath.row) in section 0 in .primary")
             }
@@ -147,9 +140,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
         } else {
             language = self.dataModel!.getAvailableLanguage(row: indexPath.row)
         }
-        let oneLang = SettingsViewController(settingsViewType: .oneLang)
-        oneLang.oneLanguage = language
-        self.controller?.navigationController?.pushViewController(oneLang, animated: true)
+        SettingsViewController.push(settingsViewType: .oneLang, controller: self.controller,
+                                    language: language)
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

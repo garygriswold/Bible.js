@@ -11,6 +11,11 @@ import WebKit
 
 class NotesListViewController : AppViewController, UITableViewDataSource, UITableViewDelegate {
     
+    static func push(controller: UIViewController?) {
+        let notesListViewController = NotesListViewController()
+        controller?.navigationController?.pushViewController(notesListViewController, animated: true)
+    }
+    
     private var tableView: UITableView!
     private var reference: Reference!
     private var notes: [Note]!
@@ -139,8 +144,7 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
         tableView.deselectRow(at: indexPath, animated: true)
         let note = self.notes[indexPath.row]
         if note.note != nil {
-            let noteEditViewController = NoteEditViewController(note: note, webView: nil)
-            self.navigationController?.pushViewController(noteEditViewController, animated: true)
+            NoteEditViewController.push(note: note, controller: self)
         } else {
             let ref = HistoryModel.shared.current()
             if note.bibleId != ref.bibleId || note.bookId != ref.bookId || note.chapter != ref.chapter {

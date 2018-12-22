@@ -44,14 +44,14 @@ class ReaderToolbar {
                                            action: #selector(priorTapHandler))
         self.historyBack.isEnabled = HistoryModel.shared.hasBack()
         items.append(self.historyBack)
-        //items.append(spacer)
-        
-        let nextImage = UIImage(named: "www/images/ios-next.png")
-        self.historyForward = UIBarButtonItem(image: nextImage, style: .plain, target: self,
-                                              action: #selector(nextTapHandler))
-        self.historyForward.isEnabled = HistoryModel.shared.hasForward()
-        items.append(self.historyForward)
         items.append(spacer)
+        
+        //let nextImage = UIImage(named: "www/images/ios-next.png")
+        //self.historyForward = UIBarButtonItem(image: nextImage, style: .plain, target: self,
+        //                                      action: #selector(nextTapHandler))
+        //self.historyForward.isEnabled = HistoryModel.shared.hasForward()
+        //items.append(self.historyForward)
+        //items.append(spacer)
         
         self.tocBookLabel = toolbarLabel(width: 80, action: #selector(tocBookHandler))
         let tocBook = UIBarButtonItem(customView: self.tocBookLabel)
@@ -104,41 +104,35 @@ class ReaderToolbar {
         self.tocChapLabel.text = String(reference.chapter)
         self.versionLabel.text = reference.abbr
         self.historyBack.isEnabled = HistoryModel.shared.hasBack()
-        self.historyForward.isEnabled = HistoryModel.shared.hasForward()
+        //self.historyForward.isEnabled = HistoryModel.shared.hasForward()
     }
     
     @objc func menuTapHandler(sender: UIBarButtonItem) {
-        let menuController = SettingsViewController(settingsViewType: .primary)
-        self.navigationController?.pushViewController(menuController, animated: true)
+        SettingsViewController.push(settingsViewType: .primary, controller: self.controller, language: nil)
     }
     
     @objc func priorTapHandler(sender: UIBarButtonItem) {
-        if let prior = HistoryModel.shared.back() {
-            NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE, object: prior)
-        }
+        HistoryViewController.push(controller: self.controller)
     }
     
-    @objc func nextTapHandler(sender: UIBarButtonItem) {
-        if let next = HistoryModel.shared.forward() {
-            NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE, object: next)
-        }
-    }
+    //@objc func nextTapHandler(sender: UIBarButtonItem) {
+    //    if let next = HistoryModel.shared.forward() {
+    //        NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE, object: next)
+    //    }
+    //}
     
     @objc func tocBookHandler(sender: UIBarButtonItem) {
-        let tableContents = TOCBooksViewController()
-        self.navigationController?.pushViewController(tableContents, animated: true)
+        TOCBooksViewController.push(controller: self.controller)
     }
     
     @objc func tocChapHandler(sender: UIBarButtonItem) {
         if let book = HistoryModel.shared.currBook {
-            let chaptersTOC = TOCChaptersViewController(book: book)
-            self.navigationController?.pushViewController(chaptersTOC, animated: true)
+            TOCChaptersViewController.push(book: book, controller: self.controller)
         }
     }
     
     @objc func versionTapHandler(sender: UIBarButtonItem) {
-        let biblesAlert = BiblesActionSheet(controller: self.controller!)
-        self.controller!.present(biblesAlert, animated: true, completion: nil)
+        BiblesActionSheet.present(controller: self.controller)
     }
     
     @objc func audioTapHandler(sender: UIBarButtonItem) {
@@ -146,15 +140,11 @@ class ReaderToolbar {
     }
     
     @objc func composeTapHandler(sender: UIBarButtonItem) {
-        let notesListViewController = NotesListViewController()
-        self.navigationController?.pushViewController(notesListViewController, animated: true)
-        //let notes = NotesDB.shared.getNotes(bookId: nil)
-        //NotesExportDocument.exportNotesDocument(name: "SafeNotes", notes: notes)
+        NotesListViewController.push(controller: self.controller)
     }
     
     @objc func searchTapHandler(sender: UIBarButtonItem) {
         print("search button handler")
-        NotesExportDatabase.exportNotesDatabase(name: "MyNotes")
     }
     
     private func toolbarLabel(width: CGFloat, action: Selector) -> UILabel {

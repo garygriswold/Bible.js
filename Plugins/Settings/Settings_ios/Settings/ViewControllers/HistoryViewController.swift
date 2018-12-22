@@ -10,6 +10,11 @@ import UIKit
 
 class HistoryViewController : AppViewController, UITableViewDataSource, UITableViewDelegate {
     
+    static func push(controller: UIViewController?) {
+        let histController = HistoryViewController()
+        controller?.navigationController?.pushViewController(histController, animated: true)
+    }
+    
     var tableView: UITableView!
     
     deinit {
