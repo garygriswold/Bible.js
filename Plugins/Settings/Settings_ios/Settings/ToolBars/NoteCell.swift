@@ -24,8 +24,8 @@ class NoteCell : UITableViewCell {
         self.contentView.addSubview(self.passage)
         self.contentView.addSubview(self.noteText)
         
-        self.iconGlyph.translatesAutoresizingMaskIntoConstraints = false
         let margins = self.contentView.layoutMarginsGuide
+        self.iconGlyph.translatesAutoresizingMaskIntoConstraints = false
         self.iconGlyph.topAnchor.constraint(equalTo: margins.topAnchor, constant: -3.0).isActive = true
         self.iconGlyph.leadingAnchor.constraint(equalTo: margins.leadingAnchor,
                                                 constant: 0.0).isActive = true

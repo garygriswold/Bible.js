@@ -13,6 +13,7 @@ class NotesListToolbar {
     private weak var controller: NotesListViewController?
     private weak var navigationController: UINavigationController?
     
+    private var book: Book
     private var files: UIBarButtonItem!
     private var export: UIBarButtonItem!
     private var selectControl: UISegmentedControl!
@@ -20,7 +21,8 @@ class NotesListToolbar {
     private var includeLites: Bool = true
     private var includeBooks: Bool = true
     
-    init(controller: NotesListViewController) {
+    init(book: Book, controller: NotesListViewController) {
+        self.book = book
         self.controller = controller
         self.navigationController = controller.navigationController
         
@@ -81,9 +83,7 @@ class NotesListToolbar {
     }
     
     @objc func exportHandler(sender: UIBarButtonItem) {
-        print("export button clicked")
-        //let menuController = SettingsViewController(settingsViewType: .primary)
-        //self.navigationController?.pushViewController(menuController, animated: true)
+        NotesExportActionSheet.present(book: book, controller: controller)
     }
     
     @objc func filesHandler(sender: UIBarButtonItem) {

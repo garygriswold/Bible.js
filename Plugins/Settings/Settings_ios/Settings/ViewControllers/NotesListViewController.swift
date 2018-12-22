@@ -23,9 +23,10 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
     override func loadView() {
         super.loadView()
         
-        self.toolBar = NotesListToolbar(controller: self)
-        
         self.reference = HistoryModel.shared.current()
+        
+        self.toolBar = NotesListToolbar(book: reference.book!, controller: self)
+        
         self.notes = NotesDB.shared.getNotes(bookId: reference.bookId, note: true, lite: true, book: true)
         
         let notebook = NSLocalizedString("Notebook", comment: "Notes list view page title")
