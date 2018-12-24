@@ -56,13 +56,13 @@ class NotesExportActionSheet : UIAlertController {
         let notes2ShareTitle = "'\(self.book.name)' \(notebook2Share)"
         let notes2Share = UIAlertAction(title: notes2ShareTitle, style: .default, handler: { _ in
             print("clicked on notes 2 share")
-            //NotesExportDatabase.export(name: self.book.name)
+            NotesExportDatabase.export(filename: self.book.name, bookId: self.book.bookId)
         })
         self.addAction(notes2Share)
         
         let notebooks2Share = NSLocalizedString("All Notebooks to Share", comment: "Option on action sheet")
         let all2Share = UIAlertAction(title: notebooks2Share, style: .default, handler: { _ in
-            NotesExportDatabase.export(name: self.book.name)
+            NotesExportDatabase.export(filename: "AllNotes", bookId: nil)
         })
         self.addAction(all2Share)
         

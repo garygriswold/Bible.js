@@ -55,5 +55,27 @@
 			<string>Settings Test</string>
 		</dict>
 	</dict>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+    		<dict>
+        		<key>UTTypeIdentifier</key>
+        		<string>com.shortsands.notes</string>
+        		<key>UTTypeReferenceURL</key>
+        		<string>http://shortsands.com</string>
+        		<key>UTTypeDescription</key>
+        		<string>SafeBible User's Notes</string>
+        		<key>UTTypeIconFile</key>
+        		<string>AppIcon</string>
+        		<key>UTTypeConformsTo</key>
+        		<string>public.database</string>
+        		<key>UTTypeTagSpecification</key>
+        		<dict>
+            			<key>public.filename-extension</key>
+            			<string>notes</string>
+            			<key>public.mime-type</key>
+            			<string>application/x-sqlite3</string>
+        		</dict>
+    		</dict>
+	</array>
 </dict>
 </plist>

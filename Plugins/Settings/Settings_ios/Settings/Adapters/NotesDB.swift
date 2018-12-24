@@ -50,7 +50,7 @@ struct NotesDB {
             }
             return notes
         } catch let err {
-            print("ERROR SettingsDB.getNotes() \(err)")
+            print("ERROR NotesDB.getNotes() \(err)")
             return []
         }
     }
@@ -73,7 +73,7 @@ struct NotesDB {
             }
             return notes
         } catch let err {
-            print("ERROR SettingsDB.getNotes \(err)")
+            print("ERROR NotesDB.getNotes \(err)")
             return []
         }
     }
@@ -94,7 +94,7 @@ struct NotesDB {
             }
             return (notes.count > 0) ? notes[0] : nil
         } catch let err {
-            print("ERROR SettingsDB.getNote \(err)")
+            print("ERROR NotesDB.getNote \(err)")
             return nil
         }
     }
@@ -121,7 +121,7 @@ struct NotesDB {
             values.append(note.note)
             _ = try db.executeV1(sql: sql, values: values)
         } catch let err {
-            print("ERROR SettingsDB.storeNote \(err)")
+            print("ERROR NotesDB.storeNote \(err)")
         }
     }
     
@@ -133,7 +133,7 @@ struct NotesDB {
             let values = [noteId]
             _ = try db.executeV1(sql: sql, values: values)
         } catch let err {
-            print("ERROR SettingsDB.deleteNote \(err)")
+            print("ERROR NotesDB.deleteNote \(err)")
         }
     }
     
@@ -158,7 +158,7 @@ struct NotesDB {
                 + " highlight TEXT NULL,"
                 + " note TEXT NULL)"
             _ = try db?.executeV1(sql: create3, values: [])
-            let create4 = "CREATE INDEX book_chapter_idx on Notes (bookId, chapter, datetime)"
+            let create4 = "CREATE INDEX IF NOT EXISTS book_chapter_idx on Notes (bookId, chapter, datetime)"
             _ = try db?.executeV1(sql: create4, values: [])
         }
         return db!

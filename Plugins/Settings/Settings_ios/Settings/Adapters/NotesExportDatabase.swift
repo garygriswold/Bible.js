@@ -11,29 +11,43 @@ import Utility
 
 class NotesExportDatabase : NSObject, UIDocumentPickerDelegate {
     
-    static func export(name: String) {
-        let export = NotesExportDatabase(name: name)
+    static func export(filename: String, bookId: String?) {
+        let export = NotesExportDatabase(filename: filename, bookId: bookId)
         export.picker(url: export.srcFileURL)
     }
     
     let destFileName: String
     let srcFileURL: URL
+    let bookId: String?
 
-    init(name: String) {
-        self.destFileName = name + ".safe_notes_db"
+    init(filename: String, bookId: String?) {
+        self.destFileName = filename + ".notes"
         self.srcFileURL = Sqlite3.pathDB(dbname: "Notes.db")
+        self.bookId = bookId
         super.init()
     }
     
-    // UTI public.database
     func picker(url: URL) {
         let start = CFAbsoluteTimeGetCurrent()
-        let tmpDir = FileManager.default.temporaryDirectory
-        let tmpURL = URL(fileURLWithPath: self.destFileName, relativeTo: tmpDir)
+        let manager = FileManager.default
+        let tmpURL = URL(fileURLWithPath: self.destFileName, relativeTo: manager.temporaryDirectory)
+        let tmpPath = tmpURL.path
+        print("TMP PATH2 \(tmpURL.path)")
         do {
-            try FileManager.default.copyItem(at: self.srcFileURL, to: tmpURL)
-            // How do I close database while in tmp
-            // What do I do about thumbnail
+            if manager.fileExists(atPath: tmpPath) {
+                try manager.removeItem(atPath: tmpPath)
+            }
+            // close notes before copy
+            //try Sqlite3.findDB(dbname: "Notes.db")
+            try manager.copyItem(at: self.srcFileURL, to: tmpURL)
+            if self.bookId != nil {
+                // open database
+                // delete where bookId is not equals to book
+                // vacuum
+                // close db
+            } else {
+                // close db if necessary
+            }
         } catch let err {
             print("ERROR copy Notes.db \(err)")
             return
@@ -50,7 +64,7 @@ class NotesExportDatabase : NSObject, UIDocumentPickerDelegate {
     //
     func documentPicker(_ controller: UIDocumentPickerViewController,
                         didPickDocumentsAt urls: [URL]) {
-        let url =
+        //let url =
         print("Picker did Pick called \(urls)")
     }
     
