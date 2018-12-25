@@ -9,51 +9,40 @@
 import UIKit
 import Utility
 
-class NotesExportDatabase : NSObject, UIDocumentPickerDelegate {
+class NotesExportDatabase : UIDocument, UIDocumentPickerDelegate {
     
     static func export(filename: String, bookId: String?) {
         let export = NotesExportDatabase(filename: filename, bookId: bookId)
-        export.picker(url: export.srcFileURL)
+        export.save(to: export.fileURL, for: .forCreating, completionHandler: { (Bool) in
+            print("file is saved \(export.fileURL)")
+            export.picker(url: export.fileURL)
+        })
     }
     
-    let destFileName: String
-    let srcFileURL: URL
     let bookId: String?
 
     init(filename: String, bookId: String?) {
-        self.destFileName = filename + ".notes"
-        self.srcFileURL = Sqlite3.pathDB(dbname: "Notes.db")
+        let rootUrl = FileManager.default.temporaryDirectory
+        let url = rootUrl.appendingPathComponent(filename + ".notes")
         self.bookId = bookId
-        super.init()
+        super.init(fileURL: url)
+    }
+    
+    //Override this method to load the document data into the app’s data model.
+    override func load(fromContents contents: Any, ofType typeName: String?) throws {
+    }
+    
+    //Override this method to return the document data to be saved.
+    override func contents(forType typeName: String) throws -> Any {
+        let measure = Measurement()
+        let dbURL = Sqlite3.pathDB(dbname: "Notes.db")
+        let data = try Data(contentsOf: dbURL)
+        measure.duration(location: "after data")
+        return data
     }
     
     func picker(url: URL) {
-        let start = CFAbsoluteTimeGetCurrent()
-        let manager = FileManager.default
-        let tmpURL = URL(fileURLWithPath: self.destFileName, relativeTo: manager.temporaryDirectory)
-        let tmpPath = tmpURL.path
-        print("TMP PATH2 \(tmpURL.path)")
-        do {
-            if manager.fileExists(atPath: tmpPath) {
-                try manager.removeItem(atPath: tmpPath)
-            }
-            // close notes before copy
-            //try Sqlite3.findDB(dbname: "Notes.db")
-            try manager.copyItem(at: self.srcFileURL, to: tmpURL)
-            if self.bookId != nil {
-                // open database
-                // delete where bookId is not equals to book
-                // vacuum
-                // close db
-            } else {
-                // close db if necessary
-            }
-        } catch let err {
-            print("ERROR copy Notes.db \(err)")
-            return
-        }
-        print("*** Picker Copy duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
-        let docPicker = UIDocumentPickerViewController(url: tmpURL, in: .exportToService)
+        let docPicker = UIDocumentPickerViewController(url: url, in: .exportToService)
         docPicker.delegate = self
         let rootController = UIApplication.shared.keyWindow?.rootViewController
         rootController?.present(docPicker, animated: true, completion: nil)
