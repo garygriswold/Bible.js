@@ -87,7 +87,8 @@ class NotesListToolbar : NSObject, UIDocumentPickerDelegate {
     }
     
     @objc func filesHandler(sender: UIBarButtonItem) {
-        let docPicker = UIDocumentPickerViewController(documentTypes: ["com.shortsands.notes"], in: .import) // .open
+        let docPicker = UIDocumentPickerViewController(documentTypes: [NotesExportDatabase.notesFileType],
+                                                       in: .import) // .open
         docPicker.delegate = self
         let rootController = UIApplication.shared.keyWindow?.rootViewController
         rootController?.present(docPicker, animated: true, completion: nil)

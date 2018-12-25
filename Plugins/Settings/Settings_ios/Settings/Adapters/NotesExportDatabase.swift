@@ -11,6 +11,8 @@ import Utility
 
 class NotesExportDatabase : UIDocument, UIDocumentPickerDelegate {
     
+    static let notesFileType = "com.shortsands.notes"
+    
     static func export(filename: String, bookId: String?) {
         let export = NotesExportDatabase(filename: filename, bookId: bookId)
         export.save(to: export.fileURL, for: .forCreating, completionHandler: { (Bool) in
@@ -28,8 +30,13 @@ class NotesExportDatabase : UIDocument, UIDocumentPickerDelegate {
         super.init(fileURL: url)
     }
     
+    override var fileType: String? {
+        get { return NotesExportDatabase.notesFileType }
+    }
+    
     //Override this method to load the document data into the app’s data model.
     override func load(fromContents contents: Any, ofType typeName: String?) throws {
+        print("NotesExportDatabase.load called")
     }
     
     //Override this method to return the document data to be saved.
