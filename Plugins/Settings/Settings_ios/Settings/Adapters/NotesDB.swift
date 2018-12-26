@@ -137,7 +137,12 @@ struct NotesDB {
         }
     }
     
+    /**
+    * This took 145ms with only one row.  The method below did not perform any better.
+    * Test again with more data.
+    */
     func copyBookNotes(url: URL, bookId: String) {
+        let measure = Measurement()
         do {
             // open target database
             let files = FileManager.default
@@ -145,18 +150,62 @@ struct NotesDB {
             if files.fileExists(atPath: path) {
                 try files.removeItem(atPath: path)
             }
+            //measure.duration(location: "delete prior database")
             let target = Sqlite3()
             try target.openLocal(path: path)
+            //measure.duration(location: "open new database")
             try self.createTable(db: target)
+            //measure.duration(location: "create new table")
             
             let db: Sqlite3
             db = try self.getNotesDB()
             let select = "SELECT * from Notes WHERE bookId = ? AND note is not null"
             let resultSet = try db.queryV1(sql: select, values: [bookId])
+            //measure.duration(location: "select notes")
 
             let insert = "INSERT INTO Notes VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
             let count = try target.bulkExecuteV1(sql: insert, values: resultSet)
+            //measure.duration(location: "insert notes")
             target.close()
+            measure.duration(location: "close target database")
+        } catch let err {
+            print("ERROR: NotesDB.copyBookNotes \(err)")
+        }
+    }
+    /*
+    * This was an attempt to improve performance, but it did not.  It also has the disadvantage
+    * that the final Notes table does not have constraints and indexes, but try again with more data.
+    */
+    func copyBookNotes1(url: URL, bookId: String) {
+        let measure = Measurement()
+        do {
+            // copy database to target database
+            let files = FileManager.default
+            let path = url.path
+            if files.fileExists(atPath: path) {
+                try files.removeItem(atPath: path)
+            }
+            measure.duration(location: "remove prior temp database")
+            let source = Sqlite3.pathDB(dbname: "Notes.db")
+            try files.copyItem(at: source, to: url)
+            measure.duration(location: "copy full database")
+            
+            // Select rows and delete original table
+            let target = Sqlite3()
+            try target.openLocal(path: path)
+            measure.duration(location: "open target database")
+            let sql = "CREATE TABLE Notes_new AS SELECT * FROM Notes WHERE bookId = ? AND note is not null"
+            let count = try target.executeV1(sql: sql, values: [bookId])
+            measure.duration(location: "create selected table")
+            print("CopyBookNotes \(count) rows copied)")
+            let drop = "DROP TABLE Notes"
+            _ = try target.executeV1(sql: drop, values: [])
+            measure.duration(location: "drop old notes")
+            let rename = "ALTER TABLE Notes_new RENAME TO Notes"
+            _ = try target.executeV1(sql: rename, values: [])
+            measure.duration(location: "rename new notes")
+            _ = try target.executeV1(sql: "vacuum", values: [])
+            measure.duration(location: "vacuum")
         } catch let err {
             print("ERROR: NotesDB.copyBookNotes \(err)")
         }

@@ -41,18 +41,15 @@ class NotesExportDatabase : UIDocument, UIDocumentPickerDelegate {
     
     //Override this method to return the document data to be saved.
     override func contents(forType typeName: String) throws -> Any {
-        let measure = Measurement()
         if self.bookId == nil {
             let dbURL = Sqlite3.pathDB(dbname: "Notes.db")
             let data = try Data(contentsOf: dbURL)
-            measure.duration(location: "after data")
             return data
         } else {
             let folderURL = self.fileURL.deletingLastPathComponent()
             let tmpURL = folderURL.appendingPathComponent("NotesTmp.db")
             NotesDB.shared.copyBookNotes(url: tmpURL, bookId: self.bookId!)
             let data = try Data(contentsOf: tmpURL)
-            measure.duration(location: "copy bookid data")
             return data
         }
     }
