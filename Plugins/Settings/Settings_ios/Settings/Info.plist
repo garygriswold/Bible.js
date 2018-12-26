@@ -6,6 +6,21 @@
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeIconFiles</key>
+			<array/>
+			<key>CFBundleTypeName</key>
+			<string>Settings</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.shortsands.notes</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleDisplayName</key>
 	<string>Settings Test</string>
 	<key>CFBundleExecutable</key>
@@ -43,7 +58,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSUbiquitousContainers</key>
+	<!-- <key>NSUbiquitousContainers</key>
 	<dict>
 		<key>iCloud.com.shortsands.settings</key>
 		<dict>
@@ -54,31 +69,34 @@
 			<key>NSUbiquitousContainerName</key>
 			<string>Settings Test</string>
 		</dict>
-	</dict>
+	</dict> -->
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
 			<key>UTTypeIdentifier</key>
 			<string>com.shortsands.notes</string>
-			<key>UTTypeReferenceURL</key>
-			<string>http://shortsands.com</string>
 			<key>UTTypeDescription</key>
 			<string>SafeBible User&apos;s Notes</string>
-			<key>UTTypeIconFile</key>
-			<string>AppIcon</string>
+			<key>UTTypeIconFiles</key>
+			<array/>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>public.database</string>
+				<!-- <string>public.database</string> -->
 				<string>public.data</string>
+				<string>public.content</string>
 			</array>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
-				<string>notes</string>
-				<key>public.mime-type</key>
-				<string>application/x-sqlite3</string>
+				<array>
+					<string>notes</string>
+				</array>
 			</dict>
 		</dict>
 	</array>
+	<!-- <key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict/>
+	</array> -->
 </dict>
 </plist>
