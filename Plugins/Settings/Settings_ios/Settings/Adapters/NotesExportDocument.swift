@@ -11,20 +11,20 @@ import UIKit
 
 class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
     
-    static func export(name: String, notes: [Note]) {
-        let export = NotesExportDocument(name: name, notes: notes)
+    static func export(filename: String, bookId: String?) {
+        let export = NotesExportDocument(filename: filename, bookId: bookId)
         export.save(to: export.fileURL, for: .forCreating, completionHandler: { (Bool) in
             print("file is saved \(export.fileURL)")
             export.picker(url: export.fileURL)
         })
     }
     
-    private let notes: [Note]
+    let bookId: String?
     
-    init(name: String, notes: [Note]) {
-        self.notes = notes
+    init(filename: String, bookId: String?) {
         let rootUrl = FileManager.default.temporaryDirectory
-        let url = rootUrl.appendingPathComponent(name + ".txt")
+        let url = rootUrl.appendingPathComponent(filename + ".txt")
+        self.bookId = bookId
         super.init(fileURL: url)
     }
     
@@ -39,7 +39,8 @@ class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
     //Override this method to return the document data to be saved.
     override func contents(forType typeName: String) throws -> Any {
         var contents = [String]()
-        for note in self.notes {
+        let notes = NotesDB.shared.getNotes(bookId: self.bookId, note: true, lite: true, book: true)
+        for note in notes {
             if note.note != nil {
                 contents.append("\n")
                 let reference = note.getReference()

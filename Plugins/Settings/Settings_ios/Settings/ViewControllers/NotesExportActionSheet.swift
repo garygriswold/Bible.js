@@ -40,15 +40,13 @@ class NotesExportActionSheet : UIAlertController {
         let notebook2Text = NSLocalizedString("Notebook to Text", comment: "Option on action sheet")
         let notes2TextTitle = "'\(self.book.name)' \(notebook2Text)"
         let notes2Text = UIAlertAction(title: notes2TextTitle, style: .default, handler: { _ in
-            let notes = NotesDB.shared.getNotes(bookId: self.book.bookId, note: true, lite: true, book: true)
-            NotesExportDocument.export(name: self.book.name, notes: notes)
+            NotesExportDocument.export(filename: self.book.name, bookId: self.book.bookId)
         })
         self.addAction(notes2Text)
         
         let notebooks2Text = NSLocalizedString("All Notebooks to Text", comment: "Option on action sheet")
         let all2Text = UIAlertAction(title: notebooks2Text, style: .default, handler: { _ in
-            let notes = NotesDB.shared.getNotes(bookId: nil, note: true, lite: true, book: true)
-            NotesExportDocument.export(name: "AllMine", notes: notes)
+            NotesExportDocument.export(filename: "AllMine", bookId: nil)
         })
         self.addAction(all2Text)
         
