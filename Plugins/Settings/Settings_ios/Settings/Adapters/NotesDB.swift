@@ -137,6 +137,31 @@ struct NotesDB {
         }
     }
     
+    func copyBookNotes(url: URL, bookId: String) {
+        do {
+            // open target database
+            let files = FileManager.default
+            let path = url.path
+            if files.fileExists(atPath: path) {
+                try files.removeItem(atPath: path)
+            }
+            let target = Sqlite3()
+            try target.openLocal(path: path)
+            try self.createTable(db: target)
+            
+            let db: Sqlite3
+            db = try self.getNotesDB()
+            let select = "SELECT * from Notes WHERE bookId = ? AND note is not null"
+            let resultSet = try db.queryV1(sql: select, values: [bookId])
+
+            let insert = "INSERT INTO Notes VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+            let count = try target.bulkExecuteV1(sql: insert, values: resultSet)
+            target.close()
+        } catch let err {
+            print("ERROR: NotesDB.copyBookNotes \(err)")
+        }
+    }
+    
     private func getNotesDB() throws -> Sqlite3 {
         var db: Sqlite3?
         let dbname = "Notes.db"
@@ -144,23 +169,27 @@ struct NotesDB {
             db = try Sqlite3.findDB(dbname: dbname)
         } catch Sqlite3Error.databaseNotOpenError {
             db = try Sqlite3.openDB(dbname: dbname, copyIfAbsent: false)
-            let create3 = "CREATE TABLE IF NOT EXISTS Notes("
-                + " noteId TEXT PRIMARY KEY,"
-                + " bookId TEXT NOT NULL,"
-                + " chapter INT NOT NULL,"
-                + " datetime INT NOT NULL,"
-                + " startVerse INT NOT NULL,"
-                + " endVerse INT NOT NULL,"
-                + " bibleId TEXT NOT NULL,"
-                + " selection TEXT NOT NULL,"
-                + " classes TEXT NOT NULL,"
-                + " bookmark TEXT check(bookmark IN ('T', 'F')),"
-                + " highlight TEXT NULL,"
-                + " note TEXT NULL)"
-            _ = try db?.executeV1(sql: create3, values: [])
-            let create4 = "CREATE INDEX IF NOT EXISTS book_chapter_idx on Notes (bookId, chapter, datetime)"
-            _ = try db?.executeV1(sql: create4, values: [])
+            try createTable(db: db!)
         }
         return db!
+    }
+        
+    private func createTable(db: Sqlite3) throws {
+        let create3 = "CREATE TABLE IF NOT EXISTS Notes("
+            + " noteId TEXT PRIMARY KEY,"
+            + " bookId TEXT NOT NULL,"
+            + " chapter INT NOT NULL,"
+            + " datetime INT NOT NULL,"
+            + " startVerse INT NOT NULL,"
+            + " endVerse INT NOT NULL,"
+            + " bibleId TEXT NOT NULL,"
+            + " selection TEXT NOT NULL,"
+            + " classes TEXT NOT NULL,"
+            + " bookmark TEXT check(bookmark IN ('T', 'F')),"
+            + " highlight TEXT NULL,"
+            + " note TEXT NULL)"
+        _ = try db.executeV1(sql: create3, values: [])
+        let create4 = "CREATE INDEX IF NOT EXISTS book_chapter_idx on Notes (bookId, chapter, datetime)"
+        _ = try db.executeV1(sql: create4, values: [])
     }
 }

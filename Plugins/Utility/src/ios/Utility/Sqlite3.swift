@@ -118,20 +118,19 @@ public class Sqlite3 {
         }
     }
     
-    /** This open method is used by command line or other programs that open the database at a
-     * specified path, not in the bundle.
+    /** This open method is used when it is needed to open or create a database at different path
      */
-    public func openLocal(dbname: String) throws {
+    public func openLocal(path: String) throws {
         self.database = nil
         var db: OpaquePointer? = nil
-        let result = sqlite3_open(dbname, &db)
+        let result = sqlite3_open(path, &db)
         if result == SQLITE_OK {
-            print("Successfully opened connection to database at \(dbname)")
+            print("Successfully opened connection to database at \(path)")
             self.database = db!
         } else {
             print("SQLITE Result Code = \(result)")
             let openMsg = String.init(cString: sqlite3_errmsg(database))
-            throw Sqlite3Error.databaseOpenError(name: dbname, sqliteError: openMsg)
+            throw Sqlite3Error.databaseOpenError(name: path, sqliteError: openMsg)
         }
     }
     
