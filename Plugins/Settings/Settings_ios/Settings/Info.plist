@@ -94,6 +94,8 @@
 			</dict>
 		</dict>
 	</array>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<!-- <key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict/>

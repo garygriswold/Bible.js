@@ -22,5 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
+    
+    // Respond to App starts from click on .notes database files.
+    func application(_ app: UIApplication, open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        print("Start App from URL \(url) with options \(options)")
+        return true
+    }
 }
 
