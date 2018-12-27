@@ -57,7 +57,9 @@ class NotesExportDatabase : UIDocument {
     func share(url: URL) {
         let share = UIActivityViewController(activityItems: [url], applicationActivities: nil)
         //share.popoverPresentationController?.sourceView = self//.view // so that iPads won't crash
-        share.excludedActivityTypes = nil
+        share.excludedActivityTypes = [.copyToPasteboard, .openInIBooks, .postToFacebook,
+                                       .postToTencentWeibo, .postToTwitter, .postToWeibo, .print,
+                                       .markupAsPDF]
         let rootController = UIApplication.shared.keyWindow?.rootViewController
         rootController!.present(share, animated: true, completion: nil)
     }
