@@ -81,7 +81,7 @@
 			<array/>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<!-- <string>public.database</string> -->
+				<string>public.database</string>
 				<string>public.data</string>
 				<string>public.content</string>
 			</array>

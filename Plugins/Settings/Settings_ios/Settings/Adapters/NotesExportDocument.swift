@@ -68,24 +68,9 @@ class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
         print("Picker did Pick called \(urls)")
         //let doc = UIDocumentInteractionController(url: urls[0])
         //doc.presentPreview(animated: true)
-        self.interaction(url: urls[0])
     }
     
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
         print("Picker is Cancelled, nothing exported")
-    }
-    
-    private func interaction(url: URL) {
-        //let attrs = [NSAttributedString.Key.font: AppFont.serif(style: .body),
-        //             NSAttributedString.Key.foregroundColor: UIColor.black]
-        //let string = NSAttributedString(string: text, attributes: attrs)
-        //let print = UISimpleTextPrintFormatter(attributedText: string)
-        
-        let share = UIActivityViewController(activityItems: [url],
-                                             applicationActivities: nil)
-        //share.popoverPresentationController?.sourceView = self//.view // so that iPads won't crash
-        share.excludedActivityTypes = nil
-        let rootController = UIApplication.shared.keyWindow?.rootViewController
-        rootController!.present(share, animated: true, completion: nil)
     }
 }

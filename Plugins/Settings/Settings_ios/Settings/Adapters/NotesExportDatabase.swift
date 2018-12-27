@@ -9,7 +9,7 @@
 import UIKit
 import Utility
 
-class NotesExportDatabase : UIDocument, UIDocumentPickerDelegate {
+class NotesExportDatabase : UIDocument {
     
     static let notesFileType = "com.shortsands.notes"
     
@@ -17,7 +17,7 @@ class NotesExportDatabase : UIDocument, UIDocumentPickerDelegate {
         let export = NotesExportDatabase(filename: filename, bookId: bookId)
         export.save(to: export.fileURL, for: .forCreating, completionHandler: { (Bool) in
             print("file is saved \(export.fileURL)")
-            export.picker(url: export.fileURL)
+            export.share(url: export.fileURL)
         })
     }
     
@@ -54,24 +54,12 @@ class NotesExportDatabase : UIDocument, UIDocumentPickerDelegate {
         }
     }
     
-    func picker(url: URL) {
-        let docPicker = UIDocumentPickerViewController(url: url, in: .exportToService)
-        docPicker.delegate = self
+    func share(url: URL) {
+        let share = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        //share.popoverPresentationController?.sourceView = self//.view // so that iPads won't crash
+        share.excludedActivityTypes = nil
         let rootController = UIApplication.shared.keyWindow?.rootViewController
-        rootController?.present(docPicker, animated: true, completion: nil)
-    }
-    
-    //
-    // UIDocumentPickerDelegate
-    //
-    func documentPicker(_ controller: UIDocumentPickerViewController,
-                        didPickDocumentsAt urls: [URL]) {
-        //let url =
-        print("Picker did Pick called \(urls)")
-    }
-    
-    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-        print("Picker is Cancelled, nothing exported")
+        rootController!.present(share, animated: true, completion: nil)
     }
 }
 
