@@ -27,6 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL,
                      options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         print("Start App from URL \(url) with options \(options)")
+        NotesDB.shared.importNotesDB(source: url)
         return true
     }
 }

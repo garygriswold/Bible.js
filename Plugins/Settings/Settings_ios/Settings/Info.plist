@@ -91,6 +91,8 @@
 				<array>
 					<string>notes</string>
 				</array>
+				<key>public.mime-type</key>
+                <string>application/vnd.sqlite3</string>
 			</dict>
 		</dict>
 	</array>

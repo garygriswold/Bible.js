@@ -186,7 +186,7 @@ struct NotesDB {
                 try files.removeItem(atPath: path)
             }
             measure.duration(location: "remove prior temp database")
-            let source = Sqlite3.pathDB(dbname: "Notes.db")
+            let source = Sqlite3.pathDB(dbname: "Notes.notes")
             try files.copyItem(at: source, to: url)
             measure.duration(location: "copy full database")
             
@@ -211,9 +211,30 @@ struct NotesDB {
         }
     }
     
+    func importNotesDB(source: URL) {
+        let files = FileManager.default
+        let filename: String = source.lastPathComponent
+        
+        let homeDir: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
+        let libDir: URL = homeDir.appendingPathComponent("Library")
+        let dbDir: URL = libDir.appendingPathComponent("LocalDatabase")
+        
+        let target: URL = URL(fileURLWithPath: filename, relativeTo: dbDir)
+        do {
+            if files.fileExists(atPath: target.path) {
+                // present alert
+                // assume overwrite
+                try files.removeItem(at: target)
+            }
+            try files.copyItem(at: source, to: target)
+        } catch let err {
+            print("ERROR: Could not copy Notes.db \(err)")
+        }
+    }
+    
     private func getNotesDB() throws -> Sqlite3 {
         var db: Sqlite3?
-        let dbname = "Notes.db"
+        let dbname = "Notes.notes"
         do {
             db = try Sqlite3.findDB(dbname: dbname)
         } catch Sqlite3Error.databaseNotOpenError {
