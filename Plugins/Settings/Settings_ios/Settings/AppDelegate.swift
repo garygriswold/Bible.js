@@ -28,6 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         print("Start App from URL \(url) with options \(options)")
         NotesDB.shared.importNotesDB(source: url)
+        print("NOTES DATABASES: \(NotesDB.shared.listDB())")
         return true
     }
 }

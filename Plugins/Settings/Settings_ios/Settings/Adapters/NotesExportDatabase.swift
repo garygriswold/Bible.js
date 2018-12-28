@@ -42,12 +42,12 @@ class NotesExportDatabase : UIDocument {
     //Override this method to return the document data to be saved.
     override func contents(forType typeName: String) throws -> Any {
         if self.bookId == nil {
-            let dbURL = Sqlite3.pathDB(dbname: "Notes.db")
+            let dbURL = Sqlite3.pathDB(dbname: "Notes.notes")
             let data = try Data(contentsOf: dbURL)
             return data
         } else {
             let folderURL = self.fileURL.deletingLastPathComponent()
-            let tmpURL = folderURL.appendingPathComponent("NotesTmp.db")
+            let tmpURL = folderURL.appendingPathComponent("NotesTmp.notes")
             NotesDB.shared.copyBookNotes(url: tmpURL, bookId: self.bookId!)
             let data = try Data(contentsOf: tmpURL)
             return data
@@ -60,8 +60,12 @@ class NotesExportDatabase : UIDocument {
         share.excludedActivityTypes = [.copyToPasteboard, .openInIBooks, .postToFacebook,
                                        .postToTencentWeibo, .postToTwitter, .postToWeibo, .print,
                                        .markupAsPDF]
+        //share.completionWithItemsHandler = #selector(complete)
         let rootController = UIApplication.shared.keyWindow?.rootViewController
         rootController!.present(share, animated: true, completion: nil)
     }
+    
+    //func complete(_ UIActivity.ActivityType?, Bool, [Any]?, Error?) -> Void) {
+    //}
 }
 

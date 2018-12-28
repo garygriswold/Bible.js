@@ -214,22 +214,53 @@ struct NotesDB {
     func importNotesDB(source: URL) {
         let files = FileManager.default
         let filename: String = source.lastPathComponent
-        
+        let dbDir = self.getDirectory()
+        var target: URL = URL(fileURLWithPath: filename, relativeTo: dbDir)
+        do {
+            if files.fileExists(atPath: target.path) {
+                target = findAvailable(url: target, directory: dbDir)
+            }
+            _ = source.startAccessingSecurityScopedResource()
+            try files.copyItem(at: source, to: target)
+            source.stopAccessingSecurityScopedResource()
+        } catch let err {
+            print("ERROR: Could not copy \(err)")
+        }
+    }
+    
+    private func getDirectory() -> URL {
         let homeDir: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
         let libDir: URL = homeDir.appendingPathComponent("Library")
         let dbDir: URL = libDir.appendingPathComponent("LocalDatabase")
-        
-        let target: URL = URL(fileURLWithPath: filename, relativeTo: dbDir)
-        do {
-            if files.fileExists(atPath: target.path) {
-                // present alert
-                // assume overwrite
-                try files.removeItem(at: target)
-            }
-            try files.copyItem(at: source, to: target)
-        } catch let err {
-            print("ERROR: Could not copy Notes.db \(err)")
+        return dbDir
+    }
+
+    private func findAvailable(url: URL, directory: URL) -> URL {
+        let filename = url.lastPathComponent.split(separator: ".")[0]
+        var count = 1
+        var resultURL = url
+        while FileManager.default.fileExists(atPath: resultURL.path) {
+            resultURL = URL(fileURLWithPath: "\(filename)-\(count).notes", relativeTo: directory)
+            count += 1
         }
+        return resultURL
+    }
+    
+    func listDB() -> [String] {
+        var results = [String]()
+        do {
+            let files = try FileManager.default.contentsOfDirectory(atPath: self.getDirectory().path)
+            for file in files {
+                if file.hasSuffix(".notes") {
+                    let url = URL(fileURLWithPath: file)
+                    let last = url.lastPathComponent
+                    results.append(last)
+                }
+            }
+        } catch let err {
+            print("ERROR NotesDB.listDB \(err)")
+        }
+        return results
     }
     
     private func getNotesDB() throws -> Sqlite3 {
