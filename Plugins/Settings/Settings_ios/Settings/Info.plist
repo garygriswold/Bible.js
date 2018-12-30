@@ -92,12 +92,23 @@
 					<string>notes</string>
 				</array>
 				<key>public.mime-type</key>
-                <string>application/vnd.sqlite3</string>
+				<string>application/vnd.sqlite3</string>
 			</dict>
 		</dict>
 	</array>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<!-- <key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.shortsands.settings</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>safenotes</string>
+			</array>
+		</dict>
+	</array> -->
 	<!-- <key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict/>
