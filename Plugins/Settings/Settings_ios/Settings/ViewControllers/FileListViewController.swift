@@ -53,17 +53,11 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
         self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
     
-    //override func viewWillAppear(_ animated: Bool) {
-    //    super.viewWillAppear(animated)
-    //
-    //    //self.navigationController?.isToolbarHidden = false
-    //}
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     
-    //override func viewWillDisappear(_ animated: Bool) {
-    //    super.viewWillDisappear(animated)
-    //
-    //    //self.navigationController?.isToolbarHidden = true
-    //}
+        self.navigationController?.isToolbarHidden = true
+    }
     
     //@objc func editHandler(sender: UIBarButtonItem) {
     //    self.tableView.setEditing(true, animated: true)

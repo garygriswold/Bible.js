@@ -47,6 +47,12 @@ class HistoryViewController : AppViewController, UITableViewDataSource, UITableV
         self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.isToolbarHidden = true
+    }
+    
     @objc func clearHandler(sender: UIBarButtonItem) {
         HistoryModel.shared.clear()
         self.tableView.reloadData()

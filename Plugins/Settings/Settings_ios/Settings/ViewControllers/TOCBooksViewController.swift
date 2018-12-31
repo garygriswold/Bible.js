@@ -64,12 +64,6 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
         self.navigationController?.isToolbarHidden = false
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    
-        self.navigationController?.isToolbarHidden = true
-    }
-    
     override func viewWillTransition(to size: CGSize,
                                      with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)

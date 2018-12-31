@@ -105,6 +105,9 @@ class SettingsViewController: AppViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        self.navigationController?.isToolbarHidden = true
+        
         // When UserMessage is dismissed, it has sometimes left behind only the top half of the screen
         self.tableView.frame = self.view.bounds
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 1.0))

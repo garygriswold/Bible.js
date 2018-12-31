@@ -88,7 +88,6 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
         super.viewWillDisappear(animated)
         
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.navigationController?.isToolbarHidden = true
     }
     //
     // DataSource

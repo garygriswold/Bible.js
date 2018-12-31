@@ -64,12 +64,6 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
         self.navigationController?.isToolbarHidden = false
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        self.navigationController?.isToolbarHidden = true
-    }
-    
     //@objc func editHandler(sender: UIBarButtonItem) {
     //    self.tableView.setEditing(true, animated: true)
     //    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,

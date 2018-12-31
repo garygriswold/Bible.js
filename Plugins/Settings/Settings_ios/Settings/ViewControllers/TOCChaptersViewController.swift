@@ -67,6 +67,12 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
         collectionView.centerXAnchor.constraint(equalTo: guide.centerXAnchor).isActive = true
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.isToolbarHidden = true
+    }
+    
     @objc func historyHandler(sender: UIBarButtonItem) {
         HistoryViewController.push(controller: self)
     }
