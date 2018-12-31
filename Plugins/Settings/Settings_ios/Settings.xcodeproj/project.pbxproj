@@ -15,9 +15,6 @@
 		E40D60612180EEA700A06B54 /* VersionsDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D60602180EEA700A06B54 /* VersionsDB.swift */; };
 		E40D60632182013300A06B54 /* AppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D60622182013300A06B54 /* AppViewController.swift */; };
 		E40D6065218252CA00A06B54 /* BiblePageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D6064218252CA00A06B54 /* BiblePageModel.swift */; };
-		E41B8DA721D964B50099A63D /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8DA621D964B50099A63D /* ShareViewController.swift */; };
-		E41B8DAA21D964B50099A63D /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E41B8DA821D964B50099A63D /* MainInterface.storyboard */; };
-		E41B8DAE21D964B50099A63D /* ShareNotes.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E41B8DA421D964B50099A63D /* ShareNotes.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E428B7E52138BD7F000AB2A8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E32138BD7F000AB2A8 /* InfoPlist.strings */; };
 		E42C151B21CD8BAE00AA42D7 /* NotesExportActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42C151A21CD8BAE00AA42D7 /* NotesExportActionSheet.swift */; };
 		E431E92A21938D7300CF609C /* DynamicCSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E431E92921938D7300CF609C /* DynamicCSS.swift */; };
@@ -76,16 +73,6 @@
 		E4FD140621CCC8800033F94B /* NotesListToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FD140521CCC8800033F94B /* NotesListToolbar.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		E41B8DAC21D964B50099A63D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4F720AE211B6F2A00E26B07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E41B8DA321D964B50099A63D;
-			remoteInfo = ShareNotes;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		E41B8DB221D964B50099A63D /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -93,7 +80,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				E41B8DAE21D964B50099A63D /* ShareNotes.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -122,7 +108,6 @@
 		E40D60602180EEA700A06B54 /* VersionsDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionsDB.swift; sourceTree = "<group>"; };
 		E40D60622182013300A06B54 /* AppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewController.swift; sourceTree = "<group>"; };
 		E40D6064218252CA00A06B54 /* BiblePageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblePageModel.swift; sourceTree = "<group>"; };
-		E41B8DA421D964B50099A63D /* ShareNotes.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareNotes.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E41B8DA621D964B50099A63D /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		E41B8DA921D964B50099A63D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		E41B8DAB21D964B50099A63D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -222,13 +207,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		E41B8DA121D964B50099A63D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E4F720B3211B6F2A00E26B07 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -365,7 +343,6 @@
 			isa = PBXGroup;
 			children = (
 				E4F720B6211B6F2A00E26B07 /* Settings.app */,
-				E41B8DA421D964B50099A63D /* ShareNotes.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -392,23 +369,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E41B8DA321D964B50099A63D /* ShareNotes */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E41B8DB121D964B50099A63D /* Build configuration list for PBXNativeTarget "ShareNotes" */;
-			buildPhases = (
-				E41B8DA021D964B50099A63D /* Sources */,
-				E41B8DA121D964B50099A63D /* Frameworks */,
-				E41B8DA221D964B50099A63D /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = ShareNotes;
-			productName = ShareNotes;
-			productReference = E41B8DA421D964B50099A63D /* ShareNotes.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		E4F720B5211B6F2A00E26B07 /* Settings */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E4F720C8211B6F2C00E26B07 /* Build configuration list for PBXNativeTarget "Settings" */;
@@ -422,7 +382,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				E41B8DAD21D964B50099A63D /* PBXTargetDependency */,
 			);
 			name = Settings;
 			productName = Settings;
@@ -439,9 +398,6 @@
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = ShortSands;
 				TargetAttributes = {
-					E41B8DA321D964B50099A63D = {
-						CreatedOnToolsVersion = 10.1;
-					};
 					E4F720B5211B6F2A00E26B07 = {
 						CreatedOnToolsVersion = 9.4.1;
 						LastSwiftMigration = 1000;
@@ -506,20 +462,11 @@
 			projectRoot = "";
 			targets = (
 				E4F720B5211B6F2A00E26B07 /* Settings */,
-				E41B8DA321D964B50099A63D /* ShareNotes */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		E41B8DA221D964B50099A63D /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E41B8DAA21D964B50099A63D /* MainInterface.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E4F720B4211B6F2A00E26B07 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -536,14 +483,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		E41B8DA021D964B50099A63D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E41B8DA721D964B50099A63D /* ShareViewController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E4F720B2211B6F2A00E26B07 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -604,14 +543,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		E41B8DAD21D964B50099A63D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E41B8DA321D964B50099A63D /* ShareNotes */;
-			targetProxy = E41B8DAC21D964B50099A63D /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		E41B8DA821D964B50099A63D /* MainInterface.storyboard */ = {
@@ -685,49 +616,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		E41B8DAF21D964B50099A63D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 95C7NX5DGM;
-				INFOPLIST_FILE = ShareNotes/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.settings.ShareNotes;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		E41B8DB021D964B50099A63D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 95C7NX5DGM;
-				INFOPLIST_FILE = ShareNotes/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.shortsands.settings.ShareNotes;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		E4F720C6211B6F2C00E26B07 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -895,15 +783,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E41B8DB121D964B50099A63D /* Build configuration list for PBXNativeTarget "ShareNotes" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E41B8DAF21D964B50099A63D /* Debug */,
-				E41B8DB021D964B50099A63D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		E4F720B1211B6F2A00E26B07 /* Build configuration list for PBXProject "Settings" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
