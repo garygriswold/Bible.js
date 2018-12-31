@@ -34,8 +34,8 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
         
         self.notes = NotesDB.shared.getNotes(bookId: reference.bookId, note: true, lite: true, book: true)
         
-        let notebook = NSLocalizedString("Notebook", comment: "Notes list view page title")
-        self.navigationItem.title = (self.reference.book?.name ?? "") + " " + notebook
+        let notes = NSLocalizedString("Notes", comment: "Notes list view page title")
+        self.navigationItem.title = (self.reference.book?.name ?? "") + " " + notes
         //self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
         //                                                         action: #selector(editHandler))
 

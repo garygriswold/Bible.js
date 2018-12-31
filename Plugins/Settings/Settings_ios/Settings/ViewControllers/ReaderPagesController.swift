@@ -23,6 +23,9 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
         super.loadView()
         
         self.toolBar = ReaderToolbar(controller: self)
+        let read = NSLocalizedString("Read", comment: "Button to return to read Bible")
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: read, style: .plain, target: nil,
+                                                                action: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(loadBiblePage(note:)),
                                                name: ReaderPagesController.NEW_REFERENCE, object: nil)
