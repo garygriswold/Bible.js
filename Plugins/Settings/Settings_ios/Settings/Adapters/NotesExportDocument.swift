@@ -15,7 +15,7 @@ class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
         let export = NotesExportDocument(filename: filename, bookId: bookId)
         export.save(to: export.fileURL, for: .forCreating, completionHandler: { (Bool) in
             print("file is saved \(export.fileURL)")
-            export.picker(url: export.fileURL)
+            export.share(url: export.fileURL)
         })
     }
     
@@ -53,24 +53,14 @@ class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
         return data!
     }
     
-    func picker(url: URL) {
-        let docPicker = UIDocumentPickerViewController(url: url, in: .exportToService)
-        docPicker.delegate = self
+    func share(url: URL) {
+        let share = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        //share.popoverPresentationController?.sourceView = self//.view // so that iPads won't crash
+        //share.excludedActivityTypes = [.copyToPasteboard, .openInIBooks, .postToFacebook,
+        //                               .postToTencentWeibo, .postToTwitter, .postToWeibo, .print,
+        //                               .markupAsPDF]
         let rootController = UIApplication.shared.keyWindow?.rootViewController
-        rootController?.present(docPicker, animated: true, completion: nil)
+        rootController!.present(share, animated: true, completion: nil)
     }
-    
-    //
-    // UIDocumentPickerDelegate
-    //
-    func documentPicker(_ controller: UIDocumentPickerViewController,
-                        didPickDocumentsAt urls: [URL]) {
-        print("Picker did Pick called \(urls)")
-        //let doc = UIDocumentInteractionController(url: urls[0])
-        //doc.presentPreview(animated: true)
-    }
-    
-    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-        print("Picker is Cancelled, nothing exported")
-    }
+
 }
