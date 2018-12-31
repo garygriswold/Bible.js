@@ -88,7 +88,6 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
         let dbname = self.dbnames[indexPath.row]
         let file = self.files[dbname]
         let cell = tableView.dequeueReusableCell(withIdentifier: "fileCell", for: indexPath)
-        cell.backgroundColor = AppFont.backgroundColor
         cell.textLabel?.font = AppFont.sansSerif(style: .subheadline)
         cell.textLabel?.textColor = AppFont.textColor
         cell.textLabel?.text = dbname
@@ -99,6 +98,12 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
             cell.detailTextLabel!.text = formatter.string(from: addedDate)
             cell.detailTextLabel!.font = AppFont.sansSerif(style: .caption1)
             cell.detailTextLabel!.textColor = AppFont.textColor
+        }
+        if NotesDB.shared.currentDB == dbname {
+            let alpha = AppFont.nightMode ? 0.2 : 1.0
+            cell.backgroundColor = UIColor(red: 0.89, green: 0.98, blue: 0.96, alpha: CGFloat(alpha))
+        } else {
+            cell.backgroundColor = AppFont.backgroundColor
         }
         return cell
     }
@@ -122,8 +127,8 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let dbname = self.dbnames[indexPath.row]
-        //NotesDB.shared.openDB(dbname: file)
-        //self.navigationController?.popViewController(animated: true)
+        NotesDB.shared.currentDB = dbname
+        self.tableView.reloadData()
     }
     // Identifies Add and Delete Rows
     func tableView(_ tableView: UITableView, editingStyleForRowAt: IndexPath) -> UITableViewCell.EditingStyle {

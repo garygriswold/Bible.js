@@ -12,6 +12,15 @@ struct NotesDB {
     
     static var shared = NotesDB()
     
+    private var _currentDB: String = "Notes"
+    var currentDB: String {
+        get { return _currentDB }
+        set {
+            Sqlite3.closeDB(dbname: _currentDB)
+            _currentDB = newValue
+        }
+    }
+    
     private init() {}
     
     func getNotes(bookId: String?, note: Bool, lite: Bool, book: Bool) -> [Note] {
@@ -279,7 +288,7 @@ struct NotesDB {
     
     private func getNotesDB() throws -> Sqlite3 {
         var db: Sqlite3?
-        let dbname = "Notes.notes"
+        let dbname = NotesDB.shared.currentDB + ".notes"
         do {
             db = try Sqlite3.findDB(dbname: dbname)
         } catch Sqlite3Error.databaseNotOpenError {
