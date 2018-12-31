@@ -31,11 +31,11 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
         
         let notebooks = NSLocalizedString("Notebooks", comment: "Notebook files in list")
         self.navigationItem.title = notebooks
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
-                                                                 action: #selector(editHandler))
+        //self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
+        //                                                         action: #selector(editHandler))
         
         // create Table view
-        self.tableView = UITableView(frame: self.view.bounds, style: UITableView.Style.plain)
+        self.tableView = UITableView(frame: self.view.bounds, style: .plain)
         self.tableView.backgroundColor = AppFont.groupTableViewBackground
         self.view.addSubview(self.tableView)
         
@@ -53,29 +53,29 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
         self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        //self.navigationController?.isToolbarHidden = false
-    }
+    //override func viewWillAppear(_ animated: Bool) {
+    //    super.viewWillAppear(animated)
+    //
+    //    //self.navigationController?.isToolbarHidden = false
+    //}
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        //self.navigationController?.isToolbarHidden = true
-    }
+    //override func viewWillDisappear(_ animated: Bool) {
+    //    super.viewWillDisappear(animated)
+    //
+    //    //self.navigationController?.isToolbarHidden = true
+    //}
     
-    @objc func editHandler(sender: UIBarButtonItem) {
-        self.tableView.setEditing(true, animated: true)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
-                                                                 action: #selector(doneHandler))
-    }
+    //@objc func editHandler(sender: UIBarButtonItem) {
+    //    self.tableView.setEditing(true, animated: true)
+    //    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
+    //                                                             action: #selector(doneHandler))
+    //}
     
-    @objc func doneHandler(sender: UIBarButtonItem) {
-        self.tableView.setEditing(false, animated: true)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
-                                                                 action: #selector(editHandler))
-    }
+    //@objc func doneHandler(sender: UIBarButtonItem) {
+    //    self.tableView.setEditing(false, animated: true)
+    //    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
+    //                                                             action: #selector(editHandler))
+    //}
     
     //
     // Data Source
@@ -110,16 +110,16 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
     
     // Return true for each row that can be edited
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+        return false
     }
     
     // Commit data row change to the data source
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle,
-                   forRowAt indexPath: IndexPath) {
-        let dbname = self.dbnames.remove(at: indexPath.row)
-        NotesDB.shared.deleteDB(dbname: dbname)
-        tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-    }
+    //func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle,
+    //               forRowAt indexPath: IndexPath) {
+    //    let dbname = self.dbnames.remove(at: indexPath.row)
+    //    NotesDB.shared.deleteDB(dbname: dbname)
+    //    tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+    //}
     
     //
     // Delegate
@@ -130,14 +130,10 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
         NotesDB.shared.currentDB = dbname
         self.tableView.reloadData()
     }
-    // Identifies Add and Delete Rows
-    func tableView(_ tableView: UITableView, editingStyleForRowAt: IndexPath) -> UITableViewCell.EditingStyle {
-        return UITableViewCell.EditingStyle.delete
-    }
     
     // Keeps non-editable rows from indenting
-    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt: IndexPath) -> Bool {
-        return true
-    }
+    //func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt: IndexPath) -> Bool {
+    //    return true
+    //}
 }
 

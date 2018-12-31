@@ -36,8 +36,8 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
         
         let notebook = NSLocalizedString("Notebook", comment: "Notes list view page title")
         self.navigationItem.title = (self.reference.book?.name ?? "") + " " + notebook
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
-                                                                 action: #selector(editHandler))
+        //self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
+        //                                                         action: #selector(editHandler))
 
         // create Table view
         self.tableView = UITableView(frame: self.view.bounds, style: UITableView.Style.plain)
@@ -70,17 +70,17 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
         self.navigationController?.isToolbarHidden = true
     }
     
-    @objc func editHandler(sender: UIBarButtonItem) {
-        self.tableView.setEditing(true, animated: true)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
-                                                                 action: #selector(doneHandler))
-    }
+    //@objc func editHandler(sender: UIBarButtonItem) {
+    //    self.tableView.setEditing(true, animated: true)
+    //    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
+    //                                                             action: #selector(doneHandler))
+    //}
     
-    @objc func doneHandler(sender: UIBarButtonItem) {
-        self.tableView.setEditing(false, animated: true)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
-                                                                 action: #selector(editHandler))
-    }
+    //@objc func doneHandler(sender: UIBarButtonItem) {
+    //    self.tableView.setEditing(false, animated: true)
+    //    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
+    //                                                             action: #selector(editHandler))
+    //}
     
     // This method is called by NotesListToolbar
     func refresh(note: Bool, lite: Bool, book: Bool) {
@@ -131,10 +131,12 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
     // Commit data row change to the data source
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle,
                    forRowAt indexPath: IndexPath) {
-        let note = self.notes[indexPath.row]
-        self.notes.remove(at: indexPath.row)
-        NotesDB.shared.deleteNote(noteId: note.noteId)
-        tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+        if editingStyle == .delete {
+            let note = self.notes[indexPath.row]
+            self.notes.remove(at: indexPath.row)
+            NotesDB.shared.deleteNote(noteId: note.noteId)
+            tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+        }
     }
     
     //
@@ -158,13 +160,9 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
             self.navigationController?.popToRootViewController(animated: true)
         }
     }
+    
     // Identifies Add and Delete Rows
     func tableView(_ tableView: UITableView, editingStyleForRowAt: IndexPath) -> UITableViewCell.EditingStyle {
         return UITableViewCell.EditingStyle.delete
-    }
-    
-    // Keeps non-editable rows from indenting
-    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt: IndexPath) -> Bool {
-        return true
     }
 }

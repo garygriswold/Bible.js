@@ -264,8 +264,8 @@
 				E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */,
 				E4C99A8E21BC533F00691604 /* CompareViewController.swift */,
 				E452C7AF21BF3C6F00553B86 /* NoteEditViewController.swift */,
-				E4D5A6D221C8A291008476D0 /* NotesListViewController.swift */,
 				E42C151A21CD8BAE00AA42D7 /* NotesExportActionSheet.swift */,
+				E4D5A6D221C8A291008476D0 /* NotesListViewController.swift */,
 				E41B8DC721D9AE4B0099A63D /* FileListViewController.swift */,
 			);
 			path = ViewControllers;
