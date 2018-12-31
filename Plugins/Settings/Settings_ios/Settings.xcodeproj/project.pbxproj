@@ -15,6 +15,7 @@
 		E40D60612180EEA700A06B54 /* VersionsDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D60602180EEA700A06B54 /* VersionsDB.swift */; };
 		E40D60632182013300A06B54 /* AppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D60622182013300A06B54 /* AppViewController.swift */; };
 		E40D6065218252CA00A06B54 /* BiblePageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D6064218252CA00A06B54 /* BiblePageModel.swift */; };
+		E41B8DC821D9AE4B0099A63D /* FileListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8DC721D9AE4B0099A63D /* FileListViewController.swift */; };
 		E428B7E52138BD7F000AB2A8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E32138BD7F000AB2A8 /* InfoPlist.strings */; };
 		E42C151B21CD8BAE00AA42D7 /* NotesExportActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42C151A21CD8BAE00AA42D7 /* NotesExportActionSheet.swift */; };
 		E431E92A21938D7300CF609C /* DynamicCSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E431E92921938D7300CF609C /* DynamicCSS.swift */; };
@@ -111,6 +112,7 @@
 		E41B8DA621D964B50099A63D /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		E41B8DA921D964B50099A63D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		E41B8DAB21D964B50099A63D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E41B8DC721D9AE4B0099A63D /* FileListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileListViewController.swift; sourceTree = "<group>"; };
 		E428B7E42138BD7F000AB2A8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E428B7E72138BD7F000AB2A8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E428B7E92138BF70000AB2A8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 				E452C7AF21BF3C6F00553B86 /* NoteEditViewController.swift */,
 				E4D5A6D221C8A291008476D0 /* NotesListViewController.swift */,
 				E42C151A21CD8BAE00AA42D7 /* NotesExportActionSheet.swift */,
+				E41B8DC721D9AE4B0099A63D /* FileListViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -503,6 +506,7 @@
 				E4EC586F215D9D4C009BAA4F /* StoreReviewController.swift in Sources */,
 				E4480A302188147200C019B0 /* ReaderToolbar.swift in Sources */,
 				E4C2E98C211B712D00B71CC5 /* LanguageModel.swift in Sources */,
+				E41B8DC821D9AE4B0099A63D /* FileListViewController.swift in Sources */,
 				E4E12B2E2133F30800CAFE78 /* UserMessageController.swift in Sources */,
 				E4C2E980211B711C00B71CC5 /* FeedbackViewController.swift in Sources */,
 				E4B4433921A3BBA3007A266B /* PageViewController.swift in Sources */,

@@ -253,14 +253,23 @@ struct NotesDB {
             for file in files {
                 if file.hasSuffix(".notes") {
                     let url = URL(fileURLWithPath: file)
-                    let last = url.lastPathComponent
+                    let last = String(url.lastPathComponent.split(separator: ".")[0])
                     results.append(last)
                 }
             }
         } catch let err {
             print("ERROR NotesDB.listDB \(err)")
         }
-        return results
+        return results.sorted()
+    }
+    
+    func deleteDB(dbname: String) {
+        let url = URL(fileURLWithPath: dbname + ".notes", relativeTo: self.getDirectory())
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch let err {
+            print("ERROR: NotesDB.deleteDB \(err)")
+        }
     }
     
     private func getNotesDB() throws -> Sqlite3 {

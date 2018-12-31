@@ -8,10 +8,9 @@
 
 import UIKit
 
-class NotesListToolbar : NSObject, UIDocumentPickerDelegate {
+class NotesListToolbar {
     
     private weak var controller: NotesListViewController?
-    private weak var navigationController: UINavigationController?
     
     private var book: Book
     private var files: UIBarButtonItem!
@@ -24,11 +23,10 @@ class NotesListToolbar : NSObject, UIDocumentPickerDelegate {
     init(book: Book, controller: NotesListViewController) {
         self.book = book
         self.controller = controller
-        self.navigationController = controller.navigationController
         
-        super.init()
+        //super.init()
 
-        if let nav = self.navigationController {
+        if let nav = self.controller?.navigationController {
             
             nav.toolbar.isTranslucent = false
             nav.toolbar.barTintColor = AppFont.backgroundColor
@@ -63,7 +61,7 @@ class NotesListToolbar : NSObject, UIDocumentPickerDelegate {
     }
     
     func refresh() {
-        if let nav = self.navigationController {
+        if let nav = self.controller?.navigationController {
             nav.toolbar.barTintColor = AppFont.backgroundColor
         }
     }
@@ -87,21 +85,6 @@ class NotesListToolbar : NSObject, UIDocumentPickerDelegate {
     }
     
     @objc func filesHandler(sender: UIBarButtonItem) {
-        let docPicker = UIDocumentPickerViewController(documentTypes: [NotesExportDatabase.notesFileType],
-                                                       in: .import) // .open
-        docPicker.delegate = self
-        let rootController = UIApplication.shared.keyWindow?.rootViewController
-        rootController?.present(docPicker, animated: true, completion: nil)
+        FileListViewController.push(controller: self.controller)
     }
-    //
-    // File Picker Delegate
-    //
-    func documentPicker(_ controller: UIDocumentPickerViewController,
-                        didPickDocumentsAt urls: [URL]) {
-        print("open/import completed \(urls)")
-    }
-    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-        print("open/import cancelled")
-    }
-    
 }
