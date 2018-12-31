@@ -246,21 +246,26 @@ struct NotesDB {
         return resultURL
     }
     
-    func listDB() -> [String] {
-        var results = [String]()
+    func listDB() -> [String: URLResourceValues] {
+        var results = [String: URLResourceValues]()
+        let manager = FileManager.default
+        let keys: [URLResourceKey] = [.nameKey, .pathKey, .creationDateKey, .contentModificationDateKey,
+                                      .contentAccessDateKey, .addedToDirectoryDateKey]
+        let keySet = Set(keys)
         do {
-            let files = try FileManager.default.contentsOfDirectory(atPath: self.getDirectory().path)
+            let files = try manager.contentsOfDirectory(at: self.getDirectory(),
+                includingPropertiesForKeys: keys, options: [])
             for file in files {
-                if file.hasSuffix(".notes") {
-                    let url = URL(fileURLWithPath: file)
-                    let last = String(url.lastPathComponent.split(separator: ".")[0])
-                    results.append(last)
-                }
+                if file.path.hasSuffix(".notes") {
+                    let meta = try file.resourceValues(forKeys: keySet)
+                    let name = String(meta.name!.split(separator: ".")[0])
+                    results[name] = meta
+               }
             }
         } catch let err {
             print("ERROR NotesDB.listDB \(err)")
         }
-        return results.sorted()
+        return results
     }
     
     func deleteDB(dbname: String) {

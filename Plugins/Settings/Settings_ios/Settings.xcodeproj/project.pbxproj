@@ -16,6 +16,7 @@
 		E40D60632182013300A06B54 /* AppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D60622182013300A06B54 /* AppViewController.swift */; };
 		E40D6065218252CA00A06B54 /* BiblePageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40D6064218252CA00A06B54 /* BiblePageModel.swift */; };
 		E41B8DC821D9AE4B0099A63D /* FileListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8DC721D9AE4B0099A63D /* FileListViewController.swift */; };
+		E41B8DCA21D9EA880099A63D /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8DC921D9EA880099A63D /* FileCell.swift */; };
 		E428B7E52138BD7F000AB2A8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E32138BD7F000AB2A8 /* InfoPlist.strings */; };
 		E42C151B21CD8BAE00AA42D7 /* NotesExportActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42C151A21CD8BAE00AA42D7 /* NotesExportActionSheet.swift */; };
 		E431E92A21938D7300CF609C /* DynamicCSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E431E92921938D7300CF609C /* DynamicCSS.swift */; };
@@ -113,6 +114,7 @@
 		E41B8DA921D964B50099A63D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		E41B8DAB21D964B50099A63D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E41B8DC721D9AE4B0099A63D /* FileListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileListViewController.swift; sourceTree = "<group>"; };
+		E41B8DC921D9EA880099A63D /* FileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
 		E428B7E42138BD7F000AB2A8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E428B7E72138BD7F000AB2A8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E428B7E92138BF70000AB2A8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 				E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */,
 				E4B4433A21A46999007A266B /* ColorPicker.swift */,
 				E4FD140521CCC8800033F94B /* NotesListToolbar.swift */,
+				E41B8DC921D9EA880099A63D /* FileCell.swift */,
 			);
 			path = ToolBars;
 			sourceTree = "<group>";
@@ -541,6 +544,7 @@
 				E4D5A6D121C85AA3008476D0 /* NotesExportDatabase.swift in Sources */,
 				E452C7B021BF3C6F00553B86 /* NoteEditViewController.swift in Sources */,
 				E469080B21964F5E00155F2A /* Measurement.swift in Sources */,
+				E41B8DCA21D9EA880099A63D /* FileCell.swift in Sources */,
 				E469080D2196650F00155F2A /* ReaderViewQueue.swift in Sources */,
 				E4F720BA211B6F2A00E26B07 /* AppDelegate.swift in Sources */,
 			);

@@ -16,7 +16,8 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
     }
     
     private var tableView: UITableView!
-    private var files: [String]!
+    private var dbnames: [String]!
+    private var files: [String: URLResourceValues]!
     
     deinit {
         print("**** deinit FileListViewController ******")
@@ -26,6 +27,7 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
         super.loadView()
         
         self.files = NotesDB.shared.listDB()
+        self.dbnames = self.files.keys.sorted()
         
         let notebooks = NSLocalizedString("Notebooks", comment: "Notebook files in list")
         self.navigationItem.title = notebooks
@@ -37,7 +39,7 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
         self.tableView.backgroundColor = AppFont.groupTableViewBackground
         self.view.addSubview(self.tableView)
         
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
+        self.tableView.register(FileCell.self, forCellReuseIdentifier: "fileCell")
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
@@ -79,17 +81,25 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
     // Data Source
     //
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.files.count
+        return self.dbnames.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let file = self.files[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
+        let dbname = self.dbnames[indexPath.row]
+        let file = self.files[dbname]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "fileCell", for: indexPath)
         cell.backgroundColor = AppFont.backgroundColor
         cell.textLabel?.font = AppFont.sansSerif(style: .subheadline)
         cell.textLabel?.textColor = AppFont.textColor
-        cell.textLabel?.text = file
-        //cell.selectionStyle = .default
+        cell.textLabel?.text = dbname
+        if let addedDate = file?.addedToDirectoryDate {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .short
+            formatter.timeStyle = .short
+            cell.detailTextLabel!.text = formatter.string(from: addedDate)
+            cell.detailTextLabel!.font = AppFont.sansSerif(style: .caption1)
+            cell.detailTextLabel!.textColor = AppFont.textColor
+        }
         return cell
     }
     
@@ -101,9 +111,8 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
     // Commit data row change to the data source
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle,
                    forRowAt indexPath: IndexPath) {
-        //let file = self.files[indexPath.row]
-        let file = self.files.remove(at: indexPath.row)
-        NotesDB.shared.deleteDB(dbname: file) // or should it be entire filename
+        let dbname = self.dbnames.remove(at: indexPath.row)
+        NotesDB.shared.deleteDB(dbname: dbname)
         tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
     }
     
@@ -112,9 +121,9 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
     //
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let file = self.files[indexPath.row]
+        let dbname = self.dbnames[indexPath.row]
         //NotesDB.shared.openDB(dbname: file)
-        self.navigationController?.popViewController(animated: true)
+        //self.navigationController?.popViewController(animated: true)
     }
     // Identifies Add and Delete Rows
     func tableView(_ tableView: UITableView, editingStyleForRowAt: IndexPath) -> UITableViewCell.EditingStyle {
