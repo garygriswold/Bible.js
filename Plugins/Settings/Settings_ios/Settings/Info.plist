@@ -98,7 +98,7 @@
 	</array>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
-	<!-- <key>CFBundleURLTypes</key>
+	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
@@ -108,7 +108,7 @@
 				<string>safenotes</string>
 			</array>
 		</dict>
-	</array> -->
+	</array>
 	<!-- <key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict/>
