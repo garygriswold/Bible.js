@@ -39,7 +39,7 @@ class NotesExportDocument : UIDocument, UIDocumentPickerDelegate {
     //Override this method to return the document data to be saved.
     override func contents(forType typeName: String) throws -> Any {
         var contents = [String]()
-        let notes = NotesDB.shared.getNotes(bookId: self.bookId, note: true, lite: true, book: true)
+        let notes = NotesDB.shared.getNotes(bookId: self.bookId, note: true, lite: false, book: false)
         for note in notes {
             if note.note != nil {
                 contents.append("\n")

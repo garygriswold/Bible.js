@@ -462,6 +462,28 @@ public class Sqlite3 {
         }
     }
     
+    public func objectExists(type: String, name: String) throws -> Bool {
+        if database != nil {
+            var result = false
+            let sql = "SELECT count(*) FROM sqlite_master WHERE type='\(type)' AND name='\(name)'"
+            var statement: OpaquePointer? = nil
+            let prepareOut = sqlite3_prepare_v2(database, sql, -1, &statement, nil)
+            defer { sqlite3_finalize(statement) }
+            if prepareOut == SQLITE_OK {
+                if (sqlite3_step(statement) == SQLITE_ROW) {
+                    let count = Int(sqlite3_column_int(statement, 0))
+                    result = count > 0
+                }
+                return result
+            } else {
+                let prepareMsg = String.init(cString: sqlite3_errmsg(database))
+                throw Sqlite3Error.statementPrepareFailed(sql: sql, sqliteError: prepareMsg)
+            }
+        } else {
+            throw Sqlite3Error.databaseNotFound(name: "unknown")
+        }
+    }
+    
     private func bindStatement(statement: OpaquePointer, values: [Any?]) throws {
         for i in 0..<values.count {
             let col = Int32(i + 1)
