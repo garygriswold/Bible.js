@@ -7,18 +7,23 @@
 //
 
 import UIKit
-import Utility
+import MessageUI
 
-class NotesExportDatabase : UIDocument {
+class NotesExportDatabase : UIDocument, MFMailComposeViewControllerDelegate {
     
     static let notesFileType = "com.shortsands.notes"
     
     static func export(filename: String, bookId: String?) {
-        let export = NotesExportDatabase(filename: filename, bookId: bookId)
-        export.save(to: export.fileURL, for: .forCreating, completionHandler: { (Bool) in
-            print("file is saved \(export.fileURL)")
-            export.share(url: export.fileURL)
-        })
+        if MFMailComposeViewController.canSendMail() {
+            let export = NotesExportDatabase(filename: filename, bookId: bookId)
+            export.save(to: export.fileURL, for: .forCreating, completionHandler: { (Bool) in
+                print("file is saved \(export.fileURL)")
+                export.share(url: export.fileURL)
+            })
+        } else {
+            print("ERROR: Mail services are not available")
+            /// Do I need an alert popup here?
+        }
     }
     
     let bookId: String?
@@ -42,7 +47,7 @@ class NotesExportDatabase : UIDocument {
     //Override this method to return the document data to be saved.
     override func contents(forType typeName: String) throws -> Any {
         if self.bookId == nil {
-            let dbURL = Sqlite3.pathDB(dbname: "Notes.notes")
+            let dbURL = NotesDB.shared.pathDB(dbname: "Notes")
             let data = try Data(contentsOf: dbURL)
             return data
         } else {
@@ -53,19 +58,29 @@ class NotesExportDatabase : UIDocument {
             return data
         }
     }
-    
+
     func share(url: URL) {
-        let share = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        //share.popoverPresentationController?.sourceView = self//.view // so that iPads won't crash
-        share.excludedActivityTypes = [.copyToPasteboard, .openInIBooks, .postToFacebook,
-                                       .postToTencentWeibo, .postToTwitter, .postToWeibo, .print,
-                                       .markupAsPDF]
-        //share.completionWithItemsHandler = #selector(complete)
-        let rootController = UIApplication.shared.keyWindow?.rootViewController
-        rootController!.present(share, animated: true, completion: nil)
+        let compose = MFMailComposeViewController()
+        compose.mailComposeDelegate = self
+        do {
+            let data = try Data(contentsOf: url)
+            compose.addAttachmentData(data,
+                                      mimeType: "application/vnd.sqlite3",
+                                      fileName: url.lastPathComponent)
+        
+            let rootController = UIApplication.shared.keyWindow?.rootViewController
+            rootController!.present(compose, animated: true, completion: nil)
+        } catch let err {
+            print("ERROR NotesExportDatabase.share \(err)")
+        }
     }
-    
-    //func complete(_ UIActivity.ActivityType?, Bool, [Any]?, Error?) -> Void) {
-    //}
+    //
+    // Delegate
+    //
+    func mailComposeController(_ controller: MFMailComposeViewController,
+                               didFinishWith result: MFMailComposeResult,
+                               error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+    }
 }
 

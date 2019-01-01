@@ -23,7 +23,7 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
         super.loadView()
         
         self.toolBar = ReaderToolbar(controller: self)
-        let read = NSLocalizedString("Read", comment: "Button to return to read Bible")
+        let read = NSLocalizedString("Bible", comment: "Button to return to read Bible")
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: read, style: .plain, target: nil,
                                                                 action: nil)
         

@@ -239,6 +239,10 @@ struct NotesDB {
         }
     }
     
+    func pathDB(dbname: String) -> URL {
+        return URL(fileURLWithPath: dbname + ".notes", relativeTo: getDirectory())
+    }
+    
     private func getDirectory() -> URL {
         let homeDir: URL = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
         let libDir: URL = homeDir.appendingPathComponent("Library")
