@@ -222,7 +222,7 @@ struct NotesDB {
         }
     }
     
-    func importNotesDB(source: URL) {
+    func importNotesDB(source: URL) -> String? {
         let files = FileManager.default
         let filename: String = source.lastPathComponent
         let dbDir = self.getDirectory()
@@ -234,8 +234,10 @@ struct NotesDB {
             _ = source.startAccessingSecurityScopedResource()
             try files.copyItem(at: source, to: target)
             source.stopAccessingSecurityScopedResource()
+            return String(target.lastPathComponent.split(separator: ".")[0])
         } catch let err {
             print("ERROR: Could not copy \(err)")
+            return nil
         }
     }
     
