@@ -36,6 +36,7 @@
 		E469080D2196650F00155F2A /* ReaderViewQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E469080C2196650F00155F2A /* ReaderViewQueue.swift */; };
 		E46B2C83218E50200063E68C /* TextHeightSliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */; };
 		E474FE2021C4CB1000DC11D8 /* NotesExportDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E474FE1F21C4CB1000DC11D8 /* NotesExportDocument.swift */; };
+		E478BFDB21DCDE490093320D /* AppTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E478BFDA21DCDE490093320D /* AppTableViewController.swift */; };
 		E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4825C412124F0B400D36620 /* BibleInitialSelect.swift */; };
 		E49F7296216AC830007D2856 /* ExternControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */; };
 		E4A3AF152138EC0F006EDEFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E62138BD7F000AB2A8 /* Localizable.strings */; };
@@ -138,6 +139,7 @@
 		E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextHeightSliderCell.swift; sourceTree = "<group>"; };
 		E471274D21C5910D00EF27F1 /* Settings.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Settings.entitlements; sourceTree = "<group>"; };
 		E474FE1F21C4CB1000DC11D8 /* NotesExportDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExportDocument.swift; sourceTree = "<group>"; };
+		E478BFDA21DCDE490093320D /* AppTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTableViewController.swift; sourceTree = "<group>"; };
 		E4825C412124F0B400D36620 /* BibleInitialSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleInitialSelect.swift; sourceTree = "<group>"; };
 		E49ACDBD213B4F4E0031625C /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E49ACDBE213B4F590031625C /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -248,6 +250,7 @@
 			children = (
 				E4B7B356219E7E210057E838 /* WKWebViewExtension.swift */,
 				E40D60622182013300A06B54 /* AppViewController.swift */,
+				E478BFDA21DCDE490093320D /* AppTableViewController.swift */,
 				E4480A2D2187D3DD00C019B0 /* ReaderPagesController.swift */,
 				E4B4433821A3BBA3007A266B /* PageViewController.swift */,
 				E404A3B92176BAA100340395 /* ReaderViewController.swift */,
@@ -498,6 +501,7 @@
 				E4480A2E2187D3DD00C019B0 /* ReaderPagesController.swift in Sources */,
 				E40D60632182013300A06B54 /* AppViewController.swift in Sources */,
 				E4FCC44C21C8E42100A5FF54 /* NoteCell.swift in Sources */,
+				E478BFDB21DCDE490093320D /* AppTableViewController.swift in Sources */,
 				E4C2E98D211B712D00B71CC5 /* SettingsViewDataSource.swift in Sources */,
 				E40D6065218252CA00A06B54 /* BiblePageModel.swift in Sources */,
 				E4B4433B21A46999007A266B /* ColorPicker.swift in Sources */,

@@ -8,14 +8,13 @@
 
 import UIKit
 
-class FileListViewController : AppViewController, UITableViewDataSource, UITableViewDelegate {
+class FileListViewController : AppTableViewController, UITableViewDataSource {
     
     static func push(controller: UIViewController?) {
         let fileListController = FileListViewController()
         controller?.navigationController?.pushViewController(fileListController, animated: true)
     }
     
-    private var tableView: UITableView!
     private var dbnames: [String]!
     private var files: [String: URLResourceValues]!
     
@@ -31,26 +30,9 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
         
         let notebooks = NSLocalizedString("Notebooks", comment: "Notebook files in list")
         self.navigationItem.title = notebooks
-        //self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
-        //                                                         action: #selector(editHandler))
-        
-        // create Table view
-        self.tableView = UITableView(frame: self.view.bounds, style: .plain)
-        self.tableView.backgroundColor = AppFont.groupTableViewBackground
-        self.view.addSubview(self.tableView)
-        
+
         self.tableView.register(FileCell.self, forCellReuseIdentifier: "fileCell")
-        
         self.tableView.dataSource = self
-        self.tableView.delegate = self
-        
-        self.tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let margins = view.safeAreaLayoutGuide
-        self.tableView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
-        self.tableView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
-        self.tableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
-        self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,18 +40,6 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
     
         self.navigationController?.isToolbarHidden = true
     }
-    
-    //@objc func editHandler(sender: UIBarButtonItem) {
-    //    self.tableView.setEditing(true, animated: true)
-    //    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
-    //                                                             action: #selector(doneHandler))
-    //}
-    
-    //@objc func doneHandler(sender: UIBarButtonItem) {
-    //    self.tableView.setEditing(false, animated: true)
-    //    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
-    //                                                             action: #selector(editHandler))
-    //}
     
     //
     // Data Source
@@ -107,14 +77,6 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
         return false
     }
     
-    // Commit data row change to the data source
-    //func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle,
-    //               forRowAt indexPath: IndexPath) {
-    //    let dbname = self.dbnames.remove(at: indexPath.row)
-    //    NotesDB.shared.deleteDB(dbname: dbname)
-    //    tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-    //}
-    
     //
     // Delegate
     //
@@ -122,12 +84,7 @@ class FileListViewController : AppViewController, UITableViewDataSource, UITable
         tableView.deselectRow(at: indexPath, animated: true)
         let dbname = self.dbnames[indexPath.row]
         NotesDB.shared.currentDB = dbname
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
-    
-    // Keeps non-editable rows from indenting
-    //func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt: IndexPath) -> Bool {
-    //    return true
-    //}
 }
 

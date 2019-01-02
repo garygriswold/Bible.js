@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CompareViewController: AppViewController, UITableViewDataSource, UITableViewDelegate {
+class CompareViewController: AppTableViewController, UITableViewDataSource {
     
     static func present(note: Note) {
         let compare = CompareViewController(note: note)
@@ -20,7 +20,6 @@ class CompareViewController: AppViewController, UITableViewDataSource, UITableVi
     }
     
     private let note: Note
-    private var tableView: UITableView!
     private let dataModel: BibleModel
     
     init(note: Note) {
@@ -45,19 +44,6 @@ class CompareViewController: AppViewController, UITableViewDataSource, UITableVi
         let verses = (note.startVerse != note.endVerse) ? "\(note.startVerse)-\(note.endVerse)" : String(note.startVerse)
         self.navigationItem.title = reference.description() + ":" + verses
         
-        self.tableView = UITableView(frame: self.view.frame, style: UITableView.Style.plain)
-        self.tableView.backgroundColor = AppFont.backgroundColor
-        self.view.addSubview(self.tableView)
-        
-        self.tableView.register(CompareVerseCell.self, forCellReuseIdentifier: "compareVerseCell")
-
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-        
-        // Along with auto layout, these are the keys for enabling variable cell height
-        self.tableView.estimatedRowHeight = 88.0
-        self.tableView.rowHeight = UITableView.automaticDimension
-        
         let saveButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBibleHandler))
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneHandler))
         
@@ -65,13 +51,12 @@ class CompareViewController: AppViewController, UITableViewDataSource, UITableVi
         navController!.navigationItem.rightBarButtonItem = saveButton;
         navController!.navigationItem.leftBarButtonItem = doneButton;
         
-        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        // Along with auto layout, these are the keys for enabling variable cell height
+        self.tableView.estimatedRowHeight = 88.0
+        self.tableView.rowHeight = UITableView.automaticDimension
         
-        let margin = self.view.safeAreaLayoutGuide
-        self.tableView.topAnchor.constraint(equalTo: margin.topAnchor).isActive = true
-        self.tableView.leadingAnchor.constraint(equalTo: margin.leadingAnchor).isActive = true
-        self.tableView.trailingAnchor.constraint(equalTo: margin.trailingAnchor).isActive = true
-        self.tableView.bottomAnchor.constraint(equalTo: margin.bottomAnchor).isActive = true
+        self.tableView.register(CompareVerseCell.self, forCellReuseIdentifier: "compareVerseCell")
+        self.tableView.dataSource = self
     }
     
     @objc func addBibleHandler(sender: UIBarButtonItem) {

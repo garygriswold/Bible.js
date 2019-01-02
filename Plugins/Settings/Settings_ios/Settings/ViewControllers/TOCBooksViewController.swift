@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TOCBooksViewController : AppViewController, UITableViewDataSource, UITableViewDelegate {
+class TOCBooksViewController : AppTableViewController, UITableViewDataSource {
     
     static func push(controller: UIViewController?) {
         let tableContents = TOCBooksViewController()
@@ -16,7 +16,6 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
     }
 
     private var dataModel: TableContentsModel!
-    private var tableView: UITableView!
     private var topAnchor: NSLayoutConstraint!
     
     deinit {
@@ -31,27 +30,15 @@ class TOCBooksViewController : AppViewController, UITableViewDataSource, UITable
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: history, style: .plain,
                                                                  target: self,
                                                                  action: #selector(historyHandler))
-        // create Table view
-        let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
-        self.tableView = UITableView(frame: frame, style: UITableView.Style.plain)
-        self.tableView.backgroundColor = AppFont.groupTableViewBackground
         self.tableView.layer.borderWidth = 0.4
         self.tableView.layer.borderColor = UIColor(white: 0.8, alpha: 1.0).cgColor
-        self.view.addSubview(self.tableView)
 
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "otherCell")
-        
         self.tableView.dataSource = self
-        self.tableView.delegate = self
-        
-        self.tableView.translatesAutoresizingMaskIntoConstraints = false
         
         let margins = view.safeAreaLayoutGuide
         self.topAnchor = self.tableView.topAnchor.constraint(equalTo: margins.topAnchor)
         self.topAnchor.isActive = true
-        self.tableView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
-        self.tableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
-        self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
         
         self.createToolbar()
     }

@@ -8,14 +8,12 @@
 
 import UIKit
 
-class HistoryViewController : AppViewController, UITableViewDataSource, UITableViewDelegate {
+class HistoryViewController : AppTableViewController, UITableViewDataSource {
     
     static func push(controller: UIViewController?) {
         let histController = HistoryViewController()
         controller?.navigationController?.pushViewController(histController, animated: true)
     }
-    
-    var tableView: UITableView!
     
     deinit {
         print("**** deinit HistoryViewController ******")
@@ -28,23 +26,9 @@ class HistoryViewController : AppViewController, UITableViewDataSource, UITableV
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Clear", style: .plain,
                                                                  target: self,
                                                                  action: #selector(clearHandler))
-        // create Table view
-        self.tableView = UITableView(frame: self.view.bounds, style: UITableView.Style.plain)
-        self.tableView.backgroundColor = AppFont.groupTableViewBackground
-        self.view.addSubview(self.tableView)
-        
+      
         self.tableView.register(LanguageCell.self, forCellReuseIdentifier: "historyCell")
-        
         self.tableView.dataSource = self
-        self.tableView.delegate = self
-        
-        self.tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let margins = view.safeAreaLayoutGuide
-        self.tableView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
-        self.tableView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
-        self.tableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
-        self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
     
     override func viewWillAppear(_ animated: Bool) {

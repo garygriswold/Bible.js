@@ -9,14 +9,13 @@
 import UIKit
 import WebKit
 
-class NotesListViewController : AppViewController, UITableViewDataSource, UITableViewDelegate {
+class NotesListViewController : AppTableViewController, UITableViewDataSource {
     
     static func push(controller: UIViewController?) {
         let notesListViewController = NotesListViewController()
         controller?.navigationController?.pushViewController(notesListViewController, animated: true)
     }
     
-    private var tableView: UITableView!
     private var reference: Reference!
     private var notes: [Note]!
     private var toolBar: NotesListToolbar!
@@ -36,26 +35,9 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
         
         let notes = NSLocalizedString("Notes", comment: "Notes list view page title")
         self.navigationItem.title = (self.reference.book?.name ?? "") + " " + notes
-        //self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
-        //                                                         action: #selector(editHandler))
-
-        // create Table view
-        self.tableView = UITableView(frame: self.view.bounds, style: UITableView.Style.plain)
-        self.tableView.backgroundColor = AppFont.groupTableViewBackground
-        self.view.addSubview(self.tableView)
         
         self.tableView.register(NoteCell.self, forCellReuseIdentifier: "notesCell")
-        
         self.tableView.dataSource = self
-        self.tableView.delegate = self
-        
-        self.tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let margins = view.safeAreaLayoutGuide
-        self.tableView.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
-        self.tableView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
-        self.tableView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
-        self.tableView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,18 +45,6 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
         
         self.navigationController?.isToolbarHidden = false
     }
-    
-    //@objc func editHandler(sender: UIBarButtonItem) {
-    //    self.tableView.setEditing(true, animated: true)
-    //    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,
-    //                                                             action: #selector(doneHandler))
-    //}
-    
-    //@objc func doneHandler(sender: UIBarButtonItem) {
-    //    self.tableView.setEditing(false, animated: true)
-    //    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self,
-    //                                                             action: #selector(editHandler))
-    //}
     
     // This method is called by NotesListToolbar
     func refresh(note: Bool, lite: Bool, book: Bool) {
