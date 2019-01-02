@@ -222,11 +222,10 @@ struct NotesDB {
         }
     }
     
-    func importNotesDB(source: URL) -> String? {
+    func importDB(source: URL, dbname: String) -> String? {
         let files = FileManager.default
-        let filename: String = source.lastPathComponent
         let dbDir = self.getDirectory()
-        var target: URL = URL(fileURLWithPath: filename, relativeTo: dbDir)
+        var target: URL = URL(fileURLWithPath: dbname + ".notes", relativeTo: dbDir)
         do {
             if files.fileExists(atPath: target.path) {
                 target = findAvailable(url: target, directory: dbDir)
@@ -283,6 +282,16 @@ struct NotesDB {
             print("ERROR NotesDB.listDB \(err)")
         }
         return results
+    }
+    
+    func renameDB(dbname: String, rename: String) {
+        let source = URL(fileURLWithPath: dbname + ".notes", relativeTo: self.getDirectory())
+        let target = URL(fileURLWithPath: rename + ".notes", relativeTo: self.getDirectory())
+        do {
+            try FileManager.default.moveItem(at: source, to: target)
+        } catch let err {
+            print("ERROR: NotesDB.renameDB \(err)")
+        }
     }
     
     func deleteDB(dbname: String) {
