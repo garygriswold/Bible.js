@@ -95,11 +95,11 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
         let cell = tableView.dequeueReusableCell(withIdentifier: "notesCell", for: indexPath) as? NoteCell
         guard cell != nil else { fatalError("notesCell must be type NotesCell") }
         cell!.backgroundColor = AppFont.backgroundColor
-        cell!.passage.font = AppFont.sansSerif(style: .subheadline)
+        cell!.passage.font = AppFont.sansSerif(style: .body)
         cell!.passage.textColor = AppFont.textColor
         cell!.passage.text = noteRef.description(startVerse: note.startVerse, endVerse: note.endVerse)
         cell!.noteText.numberOfLines = 10
-        cell!.noteText.font = AppFont.sansSerif(style: .footnote)
+        cell!.noteText.font = AppFont.sansSerif(style: .subheadline)
         cell!.noteText.textColor = AppFont.textColor
         if note.highlight != nil {
             cell!.iconGlyph.text = Note.liteIcon//"\u{1F58C}"//    "\u{1F3F7}"
