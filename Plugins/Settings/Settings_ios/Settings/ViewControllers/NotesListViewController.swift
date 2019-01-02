@@ -104,16 +104,18 @@ class NotesListViewController : AppViewController, UITableViewDataSource, UITabl
         if note.highlight != nil {
             cell!.iconGlyph.text = Note.liteIcon//"\u{1F58C}"//    "\u{1F3F7}"
             cell!.noteText.text = "Highlited text here"
+            cell!.accessoryType = .none
         }
         else if note.bookmark {
             cell!.iconGlyph.text = Note.bookIcon//"\u{1F516}"
+            cell!.accessoryType = .none
         }
         else if note.note != nil {
             cell!.iconGlyph.text = Note.noteIcon//"\u{1F5D2}"
             cell!.noteText.text = note.note
+            cell!.accessoryType = .disclosureIndicator
         }
         cell!.selectionStyle = .default
-        cell!.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
         return cell!
     }
     
