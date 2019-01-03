@@ -46,13 +46,6 @@ class ReaderToolbar {
         items.append(self.historyBack)
         items.append(spacer)
         
-        //let nextImage = UIImage(named: "www/images/ios-next.png")
-        //self.historyForward = UIBarButtonItem(image: nextImage, style: .plain, target: self,
-        //                                      action: #selector(nextTapHandler))
-        //self.historyForward.isEnabled = HistoryModel.shared.hasForward()
-        //items.append(self.historyForward)
-        //items.append(spacer)
-        
         self.tocBookLabel = toolbarLabel(width: 80, action: #selector(tocBookHandler))
         let tocBook = UIBarButtonItem(customView: self.tocBookLabel)
         items.append(tocBook)
@@ -104,7 +97,6 @@ class ReaderToolbar {
         self.tocChapLabel.text = String(reference.chapter)
         self.versionLabel.text = reference.abbr
         self.historyBack.isEnabled = HistoryModel.shared.hasBack()
-        //self.historyForward.isEnabled = HistoryModel.shared.hasForward()
     }
     
     @objc func menuTapHandler(sender: UIBarButtonItem) {
@@ -114,12 +106,6 @@ class ReaderToolbar {
     @objc func priorTapHandler(sender: UIBarButtonItem) {
         HistoryViewController.push(controller: self.controller)
     }
-    
-    //@objc func nextTapHandler(sender: UIBarButtonItem) {
-    //    if let next = HistoryModel.shared.forward() {
-    //        NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE, object: next)
-    //    }
-    //}
     
     @objc func tocBookHandler(sender: UIBarButtonItem) {
         TOCBooksViewController.push(controller: self.controller)
