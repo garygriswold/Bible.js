@@ -135,9 +135,6 @@
 		E40D60602180EEA700A06B54 /* VersionsDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionsDB.swift; sourceTree = "<group>"; };
 		E40D60622182013300A06B54 /* AppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewController.swift; sourceTree = "<group>"; };
 		E40D6064218252CA00A06B54 /* BiblePageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblePageModel.swift; sourceTree = "<group>"; };
-		E41B8DA621D964B50099A63D /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
-		E41B8DA921D964B50099A63D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
-		E41B8DAB21D964B50099A63D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E41B8DC721D9AE4B0099A63D /* FileListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileListViewController.swift; sourceTree = "<group>"; };
 		E41B8DC921D9EA880099A63D /* FileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
 		E428B7E42138BD7F000AB2A8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -252,16 +249,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E41B8DA521D964B50099A63D /* ShareNotes */ = {
-			isa = PBXGroup;
-			children = (
-				E41B8DA621D964B50099A63D /* ShareViewController.swift */,
-				E41B8DA821D964B50099A63D /* MainInterface.storyboard */,
-				E41B8DAB21D964B50099A63D /* Info.plist */,
-			);
-			path = ShareNotes;
-			sourceTree = "<group>";
-		};
 		E44C0565211B77AA00476DAD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -387,7 +374,6 @@
 				E4D708CF213328E600E4A8BF /* AWS.framework */,
 				E44C056B211B7DE700476DAD /* Versions.db */,
 				E4F720B8211B6F2A00E26B07 /* Settings */,
-				E41B8DA521D964B50099A63D /* ShareNotes */,
 				E4F720B7211B6F2A00E26B07 /* Products */,
 				E44C0565211B77AA00476DAD /* Frameworks */,
 			);
@@ -636,14 +622,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		E41B8DA821D964B50099A63D /* MainInterface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E41B8DA921D964B50099A63D /* Base */,
-			);
-			name = MainInterface.storyboard;
-			sourceTree = "<group>";
-		};
 		E428B7E32138BD7F000AB2A8 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -827,7 +805,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Settings/Settings.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
@@ -836,6 +813,7 @@
 					"$(PROJECT_DIR)/Settings",
 				);
 				INFOPLIST_FILE = Settings/Info.plist;
+				INFOPLIST_OUTPUT_FORMAT = "same-as-input";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -851,7 +829,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Settings/Settings.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
@@ -860,6 +837,7 @@
 					"$(PROJECT_DIR)/Settings",
 				);
 				INFOPLIST_FILE = Settings/Info.plist;
+				INFOPLIST_OUTPUT_FORMAT = "same-as-input";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
