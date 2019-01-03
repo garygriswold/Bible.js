@@ -7,6 +7,12 @@
 //
 import UIKit
 
+/*
+ This is no longer used.  It was used instead of using UIPageViewController directly
+ because this code was necessary to fully expose a UIPageControl
+ The other thing that is required are two delegate methods in ReaderPageController:
+ presentationCount and presentationIndex
+ */
 class PageViewController : UIPageViewController {
     
     private var pageControl: UIPageControl?

@@ -14,7 +14,8 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
     static let WEB_LOAD_DONE = NSNotification.Name("web-load-done")
     
     private var readerViewQueue: ReaderViewQueue = ReaderViewQueue()
-    private var pageViewController: PageViewController!
+    //private var pageViewController: PageViewController!
+    private var pageViewController: UIPageViewController!
     private var toolBar: ReaderToolbar!
     
     override var prefersStatusBarHidden: Bool { get { return true } }
@@ -43,7 +44,9 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
             self.pageViewController.view.removeFromSuperview()
             self.pageViewController.removeFromParent()
         }
-        self.pageViewController = PageViewController()
+        //self.pageViewController = PageViewController()
+        self.pageViewController = UIPageViewController(transitionStyle: .scroll,
+                                                       navigationOrientation: .horizontal, options: nil)
         self.addChild(self.pageViewController)
         self.view.addSubview(self.pageViewController.view)
         
@@ -105,13 +108,14 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
         return self.readerViewQueue.next(controller: viewController)
     }
     
-    func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return 7
-    }
+    // These two methods are part of what is needed for the PageControl
+    //func presentationCount(for pageViewController: UIPageViewController) -> Int {
+    //    return 7
+    //}
 
-    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        return 1
-    }
+    //func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+    //    return 1
+    //}
  
     //
     // Delegate
