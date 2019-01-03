@@ -24,8 +24,6 @@ class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMe
     
     override func loadView() {
         super.loadView()
-
-        self.navigationItem.title = NSLocalizedString("Read", comment: "Read view page title")
         
         let configuration = WKWebViewConfiguration()
         configuration.preferences.javaScriptEnabled = true

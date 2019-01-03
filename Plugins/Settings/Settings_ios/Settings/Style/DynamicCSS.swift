@@ -71,7 +71,7 @@ struct DynamicCSS {
     
     func getCSS() -> String {
         return "<style type='text/css'>" +
-            cssFile +
+            self.cssFile +
             self.fontSize.genCSS() +
             self.lineHeight.genCSS() +
             self.nightMode.genCSS() +

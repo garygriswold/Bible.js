@@ -9,15 +9,36 @@ body {
     font-size: 1.0rem; /* 16pt */
 }
 
+/* GNG Removed 1/3/19
 a {
   text-decoration: none;
   color: #333;
 }
-
+*/
 /* GNG Added 11/11/18 */
-.header, .footer {
+.footer {
     display: none;
 }
+.header .nav .home {
+    display: none;
+}
+.header .nav .next {
+    display: none;
+}
+.header .nav .prev {
+    display: none;
+}
+.header .nav .location {
+    pointer-events: none;
+    cursor: default;
+    display: block;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: #777;
+    text-align: center;
+}
+
 /* GNG remove 11/11/18, replaced by .header .footer display: none
 .header,
 header,
@@ -251,27 +272,27 @@ img.bookmark {
   font-size: 0.875rem;
   font-family: Cambria, Times;
 }
-
+/* GNG Removed 1/3/19
 .footnotes {
-  margin: 1.0rem; /* 1em */
+  margin: 1.0rem; /* 1em
   border-top: 1px solid #666;
-  padding-top: 1.0rem; /* 1em */
-  font-size: 0.8rem; /* .8em */
+  padding-top: 1.0rem; /* 1em
+  font-size: 0.8rem; /* .8em
 }
 
 .footnotes .footnote {
-  margin-bottom: 1.0rem; /* 1em */
-  padding-left: 1.1rem; /* 1.1em */
+  margin-bottom: 1.0rem; /* 1em
+  padding-left: 1.1rem; /* 1.1em
   position: relative;
   display: block;
 }
 
 .footnotes .footnote .key {
   position: absolute;
-  top: 0.25rem; /* .25em */
+  top: 0.25rem; /* .25em
   left: 0;
   width: 10px;
-  font-size: 0.6rem; /* .6em */
+  font-size: 0.6rem; /* .6em
   display: block;
   text-align: right;
 }
@@ -279,9 +300,9 @@ img.bookmark {
 .footnotes .footnote .backref {
   color: #2a85e8;
   display: inline-block;
-  padding-right: 0.5rem; /* .5em */
+  padding-right: 0.5rem; /* .5em 
 }
-
+*/
 /* GNG Added 11/11/18, because footnote data appeared incomplete */
 div.footnotes {
     display: none;
