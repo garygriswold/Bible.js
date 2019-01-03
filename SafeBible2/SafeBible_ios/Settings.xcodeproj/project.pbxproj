@@ -76,6 +76,30 @@
 		E4FD140621CCC8800033F94B /* NotesListToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FD140521CCC8800033F94B /* NotesListToolbar.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		E478BFE621DE829D0093320D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E478BFE221DE829D0093320D /* Utility.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E411B0392005504D002F888B;
+			remoteInfo = Utility;
+		};
+		E478BFED21DE82CF0093320D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E478BFE821DE82CF0093320D /* AWS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E4C23FD3202D627F00F98324;
+			remoteInfo = AWS;
+		};
+		E478BFEF21DE82CF0093320D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E478BFE821DE82CF0093320D /* AWS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E4C23FDC202D627F00F98324;
+			remoteInfo = AWSTests;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		E41B8DB221D964B50099A63D /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -140,6 +164,8 @@
 		E471274D21C5910D00EF27F1 /* Settings.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Settings.entitlements; sourceTree = "<group>"; };
 		E474FE1F21C4CB1000DC11D8 /* NotesExportDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExportDocument.swift; sourceTree = "<group>"; };
 		E478BFDA21DCDE490093320D /* AppTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTableViewController.swift; sourceTree = "<group>"; };
+		E478BFE221DE829D0093320D /* Utility.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Utility.xcodeproj; path = ../../Plugins/Utility/src/ios/Utility.xcodeproj; sourceTree = "<group>"; };
+		E478BFE821DE82CF0093320D /* AWS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AWS.xcodeproj; path = ../../Plugins/AWS/src/ios/AWS.xcodeproj; sourceTree = "<group>"; };
 		E4825C412124F0B400D36620 /* BibleInitialSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleInitialSelect.swift; sourceTree = "<group>"; };
 		E49ACDBD213B4F4E0031625C /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E49ACDBE213B4F590031625C /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -245,6 +271,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E478BFE321DE829D0093320D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E478BFE721DE829D0093320D /* Utility.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E478BFE921DE82CF0093320D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E478BFEE21DE82CF0093320D /* AWS.framework */,
+				E478BFF021DE82CF0093320D /* AWSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		E4A4B326219FCE2500F70888 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -337,6 +380,8 @@
 		E4F720AD211B6F2A00E26B07 = {
 			isa = PBXGroup;
 			children = (
+				E478BFE821DE82CF0093320D /* AWS.xcodeproj */,
+				E478BFE221DE829D0093320D /* Utility.xcodeproj */,
 				E4AFAC6B2144C047008EE537 /* www */,
 				E45C598021431934009C1F0E /* AWSCore.framework */,
 				E4D708CF213328E600E4A8BF /* AWS.framework */,
@@ -468,12 +513,46 @@
 			mainGroup = E4F720AD211B6F2A00E26B07;
 			productRefGroup = E4F720B7211B6F2A00E26B07 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = E478BFE921DE82CF0093320D /* Products */;
+					ProjectRef = E478BFE821DE82CF0093320D /* AWS.xcodeproj */;
+				},
+				{
+					ProductGroup = E478BFE321DE829D0093320D /* Products */;
+					ProjectRef = E478BFE221DE829D0093320D /* Utility.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				E4F720B5211B6F2A00E26B07 /* Settings */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		E478BFE721DE829D0093320D /* Utility.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Utility.framework;
+			remoteRef = E478BFE621DE829D0093320D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E478BFEE21DE82CF0093320D /* AWS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AWS.framework;
+			remoteRef = E478BFED21DE82CF0093320D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E478BFF021DE82CF0093320D /* AWSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AWSTests.xctest;
+			remoteRef = E478BFEF21DE82CF0093320D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		E4F720B4211B6F2A00E26B07 /* Resources */ = {
