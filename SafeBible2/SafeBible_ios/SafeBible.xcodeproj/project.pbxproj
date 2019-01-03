@@ -230,7 +230,7 @@
 		E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreReviewController.swift; sourceTree = "<group>"; };
 		E4F66862217C377600E998CC /* TOCBooksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOCBooksViewController.swift; sourceTree = "<group>"; };
 		E4F66864217D85AC00E998CC /* TOCChaptersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOCChaptersViewController.swift; sourceTree = "<group>"; };
-		E4F720B6211B6F2A00E26B07 /* Settings.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Settings.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4F720B6211B6F2A00E26B07 /* SafeBible.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SafeBible.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4F720C0211B6F2C00E26B07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4F720C5211B6F2C00E26B07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -396,7 +396,7 @@
 		E4F720B7211B6F2A00E26B07 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E4F720B6211B6F2A00E26B07 /* Settings.app */,
+				E4F720B6211B6F2A00E26B07 /* SafeBible.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -423,9 +423,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E4F720B5211B6F2A00E26B07 /* Settings */ = {
+		E4F720B5211B6F2A00E26B07 /* SafeBible */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E4F720C8211B6F2C00E26B07 /* Build configuration list for PBXNativeTarget "Settings" */;
+			buildConfigurationList = E4F720C8211B6F2C00E26B07 /* Build configuration list for PBXNativeTarget "SafeBible" */;
 			buildPhases = (
 				E4F720B2211B6F2A00E26B07 /* Sources */,
 				E4F720B3211B6F2A00E26B07 /* Frameworks */,
@@ -437,9 +437,9 @@
 			);
 			dependencies = (
 			);
-			name = Settings;
+			name = SafeBible;
 			productName = Settings;
-			productReference = E4F720B6211B6F2A00E26B07 /* Settings.app */;
+			productReference = E4F720B6211B6F2A00E26B07 /* SafeBible.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -469,7 +469,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E4F720B1211B6F2A00E26B07 /* Build configuration list for PBXProject "Settings" */;
+			buildConfigurationList = E4F720B1211B6F2A00E26B07 /* Build configuration list for PBXProject "SafeBible" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -525,7 +525,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				E4F720B5211B6F2A00E26B07 /* Settings */,
+				E4F720B5211B6F2A00E26B07 /* SafeBible */,
 			);
 		};
 /* End PBXProject section */
@@ -874,7 +874,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E4F720B1211B6F2A00E26B07 /* Build configuration list for PBXProject "Settings" */ = {
+		E4F720B1211B6F2A00E26B07 /* Build configuration list for PBXProject "SafeBible" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4F720C6211B6F2C00E26B07 /* Debug */,
@@ -883,7 +883,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4F720C8211B6F2C00E26B07 /* Build configuration list for PBXNativeTarget "Settings" */ = {
+		E4F720C8211B6F2C00E26B07 /* Build configuration list for PBXNativeTarget "SafeBible" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4F720C9211B6F2C00E26B07 /* Debug */,
