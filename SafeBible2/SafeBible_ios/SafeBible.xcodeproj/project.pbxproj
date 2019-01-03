@@ -38,6 +38,7 @@
 		E474FE2021C4CB1000DC11D8 /* NotesExportDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E474FE1F21C4CB1000DC11D8 /* NotesExportDocument.swift */; };
 		E478BFDB21DCDE490093320D /* AppTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E478BFDA21DCDE490093320D /* AppTableViewController.swift */; };
 		E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4825C412124F0B400D36620 /* BibleInitialSelect.swift */; };
+		E48BF9CD21DEBD370060392F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F720C0211B6F2C00E26B07 /* Assets.xcassets */; };
 		E49F7296216AC830007D2856 /* ExternControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */; };
 		E4A3AF152138EC0F006EDEFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E62138BD7F000AB2A8 /* Localizable.strings */; };
 		E4A4B325219F5D5800F70888 /* NotesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A4B324219F5D5700F70888 /* NotesModel.swift */; };
@@ -70,7 +71,6 @@
 		E4F66863217C377600E998CC /* TOCBooksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F66862217C377600E998CC /* TOCBooksViewController.swift */; };
 		E4F66865217D85AC00E998CC /* TOCChaptersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F66864217D85AC00E998CC /* TOCChaptersViewController.swift */; };
 		E4F720BA211B6F2A00E26B07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */; };
-		E4F720C1211B6F2C00E26B07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F720C0211B6F2C00E26B07 /* Assets.xcassets */; };
 		E4F720C4211B6F2C00E26B07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F720C2211B6F2C00E26B07 /* LaunchScreen.storyboard */; };
 		E4FCC44C21C8E42100A5FF54 /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FCC44B21C8E42100A5FF54 /* NoteCell.swift */; };
 		E4FD140621CCC8800033F94B /* NotesListToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FD140521CCC8800033F94B /* NotesListToolbar.swift */; };
@@ -545,11 +545,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E48BF9CD21DEBD370060392F /* Assets.xcassets in Resources */,
 				E4AFAC6C2144C047008EE537 /* www in Resources */,
 				E44C056C211B7DE700476DAD /* Versions.db in Resources */,
 				E4A3AF152138EC0F006EDEFE /* Localizable.strings in Resources */,
 				E4F720C4211B6F2C00E26B07 /* LaunchScreen.storyboard in Resources */,
-				E4F720C1211B6F2C00E26B07 /* Assets.xcassets in Resources */,
 				E428B7E52138BD7F000AB2A8 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -805,6 +805,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Settings/Settings.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
@@ -814,6 +816,7 @@
 				);
 				INFOPLIST_FILE = Settings/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = "same-as-input";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -829,6 +832,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Settings/Settings.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
@@ -838,6 +843,7 @@
 				);
 				INFOPLIST_FILE = Settings/Info.plist;
 				INFOPLIST_OUTPUT_FORMAT = "same-as-input";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
