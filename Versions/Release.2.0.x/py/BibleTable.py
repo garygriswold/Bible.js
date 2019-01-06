@@ -95,13 +95,13 @@ for filename in filelist:
 			elif script == 'Devanagari (Nagari)':
 				script = 'Deva'
 			elif script == 'CJK':
-				script = ''
+				script = None
 			else:
 				print "ERROR: unknown script code", script, filename
 		script = "'" + script + "'" if script != None else 'null'
 
 		country = bible.get('countryCode')
-		country = "'" + country.upper() + "'" if country != None else 'null'
+		country = "'" + country.upper() + "'" if len(country) > 0 else 'null'
 		#stylesheet = bible.get('stylesheet')
 		#stylesheet = "'" + stylesheet + "'" if stylesheet != None else 'null'
 		#redistribute = 'T' if (bible.get('redistributable', False)) else 'F'
