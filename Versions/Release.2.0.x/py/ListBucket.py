@@ -7,7 +7,7 @@
 import boto3
 #import io
 
-#out = io.open("metadata/FCBH/dbp_dev.txt", mode="w", encoding="utf-8")
+#out = io.open("metadata/FCBH/dbp_prod.txt", mode="w", encoding="utf-8")
 
 session = boto3.Session(profile_name='FCBH_Gary')
 client = session.client('s3')

@@ -10,7 +10,7 @@ out = io.open("sql/bible.sql", mode="w", encoding="utf-8")
 
 out.write(u"DROP TABLE IF EXISTS Bible;\n")
 out.write(u"CREATE TABLE Bible (\n")
-out.write(u"  bibleId TEXT NOT NULL PRIMARY KEY,\n") 					# info.json id
+out.write(u"  bibleId TEXT NOT NULL PRIMARY KEY,\n") 					# info.json filename[5:18]
 out.write(u"  abbr TEXT NOT NULL,\n")									# info.json abbr char 4-6
 out.write(u"  iso3 TEXT NOT NULL REFERENCES Language(iso3),\n")			# info.json lang
 out.write(u"  name TEXT NOT NULL,\n")									# info.json name
@@ -33,15 +33,16 @@ prefix2 = "INSERT INTO Bible (bibleId, abbr, iso3, name, englishName, direction,
 source = "/Users/garygriswold/ShortSands/DBL/FCBH_info/"
 filelist = sorted(os.listdir(source))
 for filename in filelist:
-	if len(filename) != 28:
-		print(len(filename), filename)
-	else:
-	#if filename[0] != ".":
+	#if len(filename) != 28:
+		#print(len(filename), filename)
+	#else:
+	if len(filename) == 28:
 		#print(filename)
 		input2 = io.open(source + filename, mode="r", encoding="utf-8")
 		data = input2.read()
 		bible = json.loads(data)
-		bibleId = bible['id']
+		##bibleId = bible['id']
+		bibleId = filename[5:18]
 
 		# check type to see if == bible
 		bType = bible['type']
@@ -50,19 +51,22 @@ for filename in filelist:
 
 		# check abbr to see if different from bibleId
 		abbr = bible['abbr']
-		if abbr != bibleId:
-			print "?? bibleId=", bibleId, "  abbr=", abbr
+		#if abbr != bibleId:
+		#	print "?? bibleId=", bibleId, "  abbr=", abbr
 
 		# remove lang code from abbr
 		abbr = abbr[3:]
 
 		# check that lang == first 3 letters of bibleId
 		iso3 = bible['lang']
-		if iso3.upper() != bibleId[0:3]:
-			print "?? bibleId=", bibleId, "  iso3=", iso3
+		#if iso3.upper() != bibleId[0:3]:
+		#	print "?? bibleId=", bibleId, "  iso3=", iso3
 
 		#if iso3.upper() != filename[5:8]:
 		#	print "?? filename-lang=", filename, "  iso3=", iso3
+
+		if iso3.upper() != bible['abbr'][0:3]:
+			print "?? abbr=", bible['abbr'], "  iso3=", iso3
 
 		iso3 = iso3.lower()
 		name = bible['name'].replace("'", "''")
