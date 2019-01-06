@@ -10,33 +10,34 @@ out = io.open("sql/bible.sql", mode="w", encoding="utf-8")
 
 out.write(u"DROP TABLE IF EXISTS Bible;\n")
 out.write(u"CREATE TABLE Bible (\n")
-out.write(u"  bibleId TEXT NOT NULL PRIMARY KEY,\n") 					# from id
-out.write(u"  abbr TEXT NOT NULL,\n")									# from abbr
-out.write(u"  iso3 TEXT NOT NULL REFERENCES Language(iso3),\n")			# from lang
-out.write(u"  name TEXT NOT NULL,\n")									# from name
-out.write(u"  englishName TEXT NULL,\n")								# from nameEnglish
-out.write(u"  localizedName TEXT NULL,\n")								# from Google Translate API		
-out.write(u"  direction TEXT CHECK (direction IN('ltr','rtl')) default('ltr'),\n") # from dir
-out.write(u"  fontClass TEXT NULL,\n")									# from fontClass
-out.write(u"  script TEXT NULL,\n")										# from script
-out.write(u"  country TEXT NULL REFERENCES Country(code),\n")			# from countryCode
-out.write(u"  stylesheet TEXT NULL,\n")									# from stylesheet
-out.write(u"  redistribute TEXT CHECK (redistribute IN('T', 'F')) default('F'),\n")
-out.write(u"  s3KeyPrefix TEXT NOT NULL,\n")							# from info.json filename
-out.write(u"  s3Key TEXT NULL,\n")										# populated by s3KeyTemplate.py
-out.write(u"  organizationId TEXT NULL REFERENCES Owner(ownerCode),\n")	# unknown source
-out.write(u"  ssFilename TEXT NULL,\n")									# from me
-out.write(u"  hasHistory TEXT CHECK (hasHistory IN('T','F')) default('F'),\n") # from me
-out.write(u"  copyright TEXT NULL,\n")									# from me
-# consider adding numbers, and array of numeric values in string form
-out.write(u"  introduction TEXT NULL);\n")								# about.html (should be in own table)
+out.write(u"  bibleId TEXT NOT NULL PRIMARY KEY,\n") 					# info.json id
+out.write(u"  abbr TEXT NOT NULL,\n")									# info.json abbr char 4-6
+out.write(u"  iso3 TEXT NOT NULL REFERENCES Language(iso3),\n")			# info.json lang
+out.write(u"  name TEXT NOT NULL,\n")									# info.json name
+out.write(u"  englishName TEXT NULL,\n")								# info.json nameEnglish
+out.write(u"  localizedName TEXT NULL,\n")								# Google Translate API		
+out.write(u"  direction TEXT CHECK (direction IN('ltr','rtl')) default('ltr'),\n") # info.json dir
+out.write(u"  script TEXT NULL,\n")										# info.json script
+out.write(u"  country TEXT NULL REFERENCES Country(code),\n")			# info.json countryCode
+out.write(u"  s3Bucket TEXT NOT NULL,\n")								# this program
+out.write(u"  s3KeyPrefix TEXT NOT NULL,\n")							# info.json filename
+out.write(u"  s3Key TEXT NULL,\n")										# s3KeyTemplate.py
+out.write(u"  s3CredentialId TEXT NULL,\n")								# TBD
+out.write(u"  otDamId TEXT NULL,\n")									# TBD
+out.write(u"  ntDamId TEXT NULL,\n")									# TBD
+out.write(u"  ssFilename TEXT NULL);\n")								# TBD
 
-prefix2 = "REPLACE INTO Bible (bibleId, abbr, iso3, name, englishName, direction, fontClass, script, country, stylesheet, redistribute, s3KeyPrefix) VALUES"
+prefix2 = "INSERT INTO Bible (bibleId, abbr, iso3, name, englishName, direction, script, country, s3Bucket, s3KeyPrefix) VALUES"
 
 # read and process all info.json files
 source = "/Users/garygriswold/ShortSands/DBL/FCBH_info/"
-for filename in os.listdir(source):
-	if filename[0] != ".":
+filelist = sorted(os.listdir(source))
+for filename in filelist:
+	if len(filename) != 28:
+		print(len(filename), filename)
+	else:
+	#if filename[0] != ".":
+		#print(filename)
 		input2 = io.open(source + filename, mode="r", encoding="utf-8")
 		data = input2.read()
 		bible = json.loads(data)
@@ -60,16 +61,21 @@ for filename in os.listdir(source):
 		if iso3.upper() != bibleId[0:3]:
 			print "?? bibleId=", bibleId, "  iso3=", iso3
 
+		#if iso3.upper() != filename[5:8]:
+		#	print "?? filename-lang=", filename, "  iso3=", iso3
+
 		iso3 = iso3.lower()
 		name = bible['name'].replace("'", "''")
 		englishName = bible['nameEnglish'].replace("'", "''")
 		direction = bible['dir']
-		font = bible.get('fontClass')
-		font = "'" + font + "'" if font != None else 'null'
+		#font = bible.get('fontClass')
+		#font = "'" + font + "'" if font != None else 'null'
 
 		# convert script to iso 15924 code
 		script = bible.get('script')
-		validScripts = [None, 'Arab', 'Beng', 'Cyrl', 'Deva', 'Ethi', 'Geor', 'Latn', 'Orya', 'Syrc', 'Taml', 'Thai' ]
+
+		validScripts = [None, 'Arab', 'Beng', 'Bugi', 'Cans', 'Cyrl', 'Deva', 'Ethi', 'Geor', 
+		'Hans', 'Hant', 'Java', 'Kore', 'Latn', 'Orya', 'Syrc', 'Taml', 'Thai' ]
 		#if validScripts.index(script) < 0:
 		if script in validScripts:
 			a = 1
@@ -92,12 +98,13 @@ for filename in os.listdir(source):
 
 		country = bible.get('countryCode')
 		country = "'" + country.upper() + "'" if country != None else 'null'
-		stylesheet = bible.get('stylesheet')
-		stylesheet = "'" + stylesheet + "'" if stylesheet != None else 'null'
-		redistribute = 'T' if (bible.get('redistributable', False)) else 'F'
-		objectKey = filename.replace("info.json", "").replace(":", "/")
+		#stylesheet = bible.get('stylesheet')
+		#stylesheet = "'" + stylesheet + "'" if stylesheet != None else 'null'
+		#redistribute = 'T' if (bible.get('redistributable', False)) else 'F'
+		bucket = "dbp-prod"
+		keyPrefix = filename.replace("info.json", "").replace(":", "/")
 
-		out.write("%s ('%s', '%s', '%s', '%s', '%s', '%s', %s, %s, %s, %s, '%s', '%s');\n" % 
-		(prefix2, bibleId, abbr, iso3, name, englishName, direction, font, script, country, stylesheet, redistribute, objectKey))
+		out.write("%s ('%s', '%s', '%s', '%s', '%s', '%s', %s, %s, '%s', '%s');\n" % 
+		(prefix2, bibleId, abbr, iso3, name, englishName, direction, script, country, bucket, keyPrefix))
 
 out.close()
