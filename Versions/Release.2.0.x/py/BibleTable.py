@@ -21,13 +21,14 @@ out.write(u"  script TEXT NULL,\n")										# info.json script
 out.write(u"  country TEXT NULL REFERENCES Country(code),\n")			# info.json countryCode
 out.write(u"  s3Bucket TEXT NOT NULL,\n")								# this program
 out.write(u"  s3KeyPrefix TEXT NOT NULL,\n")							# info.json filename
-out.write(u"  s3Key TEXT NULL,\n")										# s3KeyTemplate.py
+out.write(u"  s3Key TEXT NULL,\n")										# %I_%O_%B_%C.html
+# I cannot find program, which generated this template: s3KeyTemplate.py
 out.write(u"  s3CredentialId TEXT NULL,\n")								# TBD
 out.write(u"  otDamId TEXT NULL,\n")									# TBD
 out.write(u"  ntDamId TEXT NULL,\n")									# TBD
 out.write(u"  ssFilename TEXT NULL);\n")								# TBD
 
-prefix2 = "INSERT INTO Bible (bibleId, abbr, iso3, name, englishName, direction, script, country, s3Bucket, s3KeyPrefix) VALUES"
+prefix2 = "INSERT INTO Bible (bibleId, abbr, iso3, name, englishName, direction, script, country, s3Bucket, s3KeyPrefix, s3Key) VALUES"
 
 # read and process all info.json files
 source = "/Users/garygriswold/ShortSands/DBL/FCBH_info/"
@@ -107,8 +108,9 @@ for filename in filelist:
 		#redistribute = 'T' if (bible.get('redistributable', False)) else 'F'
 		bucket = "dbp-prod"
 		keyPrefix = filename.replace("info.json", "").replace(":", "/")
+		s3Key = '%I_%O_%B_%C.html'
 
-		out.write("%s ('%s', '%s', '%s', '%s', '%s', '%s', %s, %s, '%s', '%s');\n" % 
-		(prefix2, bibleId, abbr, iso3, name, englishName, direction, script, country, bucket, keyPrefix))
+		out.write("%s ('%s', '%s', '%s', '%s', '%s', '%s', %s, %s, '%s', '%s', '%s');\n" % 
+		(prefix2, bibleId, abbr, iso3, name, englishName, direction, script, country, bucket, keyPrefix, s3Key))
 
 out.close()
