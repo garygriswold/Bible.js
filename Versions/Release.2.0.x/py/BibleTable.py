@@ -11,6 +11,7 @@ out = io.open("sql/bible.sql", mode="w", encoding="utf-8")
 out.write(u"DROP TABLE IF EXISTS Bible;\n")
 out.write(u"CREATE TABLE Bible (\n")
 out.write(u"  bibleId TEXT NOT NULL PRIMARY KEY,\n") 					# info.json filename[5:18]
+out.write(u"  code TEXT NOT NULL,\n")									# info.json abbr
 out.write(u"  abbr TEXT NOT NULL,\n")									# info.json abbr char 4-6
 out.write(u"  iso3 TEXT NOT NULL REFERENCES Language(iso3),\n")			# info.json lang
 out.write(u"  name TEXT NOT NULL,\n")									# info.json name
@@ -28,7 +29,7 @@ out.write(u"  otDamId TEXT NULL,\n")									# TBD
 out.write(u"  ntDamId TEXT NULL,\n")									# TBD
 out.write(u"  ssFilename TEXT NULL);\n")								# TBD
 
-prefix2 = "INSERT INTO Bible (bibleId, abbr, iso3, name, englishName, direction, script, country, s3Bucket, s3KeyPrefix, s3Key) VALUES"
+prefix2 = "INSERT INTO Bible (bibleId, code, abbr, iso3, name, englishName, direction, script, country, s3Bucket, s3KeyPrefix, s3Key) VALUES"
 
 # read and process all info.json files
 source = "/Users/garygriswold/ShortSands/DBL/FCBH_info/"
@@ -42,7 +43,6 @@ for filename in filelist:
 		input2 = io.open(source + filename, mode="r", encoding="utf-8")
 		data = input2.read()
 		bible = json.loads(data)
-		##bibleId = bible['id']
 		bibleId = filename[5:18]
 
 		# check type to see if == bible
@@ -51,30 +51,21 @@ for filename in filelist:
 			print "?? Type = ", bType
 
 		# check abbr to see if different from bibleId
-		abbr = bible['abbr']
-		#if abbr != bibleId:
-		#	print "?? bibleId=", bibleId, "  abbr=", abbr
+		code = bible['abbr']
 
 		# remove lang code from abbr
-		abbr = abbr[3:]
+		abbr = code[3:]
 
 		# check that lang == first 3 letters of bibleId
 		iso3 = bible['lang']
-		#if iso3.upper() != bibleId[0:3]:
-		#	print "?? bibleId=", bibleId, "  iso3=", iso3
 
-		#if iso3.upper() != filename[5:8]:
-		#	print "?? filename-lang=", filename, "  iso3=", iso3
-
-		if iso3.upper() != bible['abbr'][0:3]:
-			print "?? abbr=", bible['abbr'], "  iso3=", iso3
+		if iso3.upper() != code[0:3]:
+			print "?? abbr=", code, "  iso3=", iso3
 
 		iso3 = iso3.lower()
 		name = bible['name'].replace("'", "''")
 		englishName = bible['nameEnglish'].replace("'", "''")
 		direction = bible['dir']
-		#font = bible.get('fontClass')
-		#font = "'" + font + "'" if font != None else 'null'
 
 		# convert script to iso 15924 code
 		script = bible.get('script')
@@ -103,14 +94,12 @@ for filename in filelist:
 
 		country = bible.get('countryCode')
 		country = "'" + country.upper() + "'" if len(country) > 0 else 'null'
-		#stylesheet = bible.get('stylesheet')
-		#stylesheet = "'" + stylesheet + "'" if stylesheet != None else 'null'
-		#redistribute = 'T' if (bible.get('redistributable', False)) else 'F'
+
 		bucket = "dbp-prod"
 		keyPrefix = filename.replace("info.json", "").replace(":", "/")
 		s3Key = '%I_%O_%B_%C.html'
 
-		out.write("%s ('%s', '%s', '%s', '%s', '%s', '%s', %s, %s, '%s', '%s', '%s');\n" % 
-		(prefix2, bibleId, abbr, iso3, name, englishName, direction, script, country, bucket, keyPrefix, s3Key))
+		out.write("%s ('%s', '%s', '%s', '%s', '%s', '%s', '%s', %s, %s, '%s', '%s', '%s');\n" % 
+		(prefix2, bibleId, code, abbr, iso3, name, englishName, direction, script, country, bucket, keyPrefix, s3Key))
 
 out.close()
