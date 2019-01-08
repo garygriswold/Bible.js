@@ -100,13 +100,13 @@ for key, lines in sorted(dbpAudioMap.items()):
 				else:
 					print "*******", collection
 
-		sql = "UPDATE Bible SET %s = '%s' WHERE bibleId = '%s';\n"	
+		sql = "UPDATE Bible SET %s = 'audio/%s/%s' WHERE bibleId = '%s';\n"	
 		if oldTest != None:
-			output.write(sql % ('otDamId', oldTest, bibleId))
+			output.write(sql % ('otDamId', key, oldTest, bibleId))
 		if newTest != None:
-			output.write(sql % ('ntDamId', newTest, bibleId))
+			output.write(sql % ('ntDamId', key, newTest, bibleId))
 		#if partTest != None:
-		#	output.write(sql % ('partDamId', partTest, bibleId))
+		#	output.write(sql % ('partDamId', key, partTest, bibleId))
 
 		print key, oldTest, newTest, partTest
 		output.write(u"")
