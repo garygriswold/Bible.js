@@ -27,8 +27,10 @@ for line in input:
 		dbpTextMap[key] = line
 
 	elif parts[0] == 'audio' and len(parts) > 3 and len(parts[1]) == 6 and len(parts[2]) >= 6:
-		key = parts[1]# + ":" + parts[2][0:6]
-		dbpAudioMap[key] = line
+		key = parts[1]
+		if key not in dbpAudioMap:
+			dbpAudioMap = []
+		dbpAudioMap[key].append(line)
 
 	elif parts[0] in ['app', 'fonts', 'languages', 'mp3audiobibles2', 'test.txt']:
 		# do nothing
@@ -96,11 +98,12 @@ print "Count In bible table, not in dbpText", count
 # Iterate over bibleMap, lookup in dbpAudioMap to match, and report missing
 inCount = 0
 outCount = 0
-for key, line in dbpAudioMap.items():
+for key, lines in dbpAudioMap.items():
 	if key in codeMap:
 		inCount += 1
-		parts = line.split("/")
-		print "match audio", key, parts[2]
+		for line in lines:
+			parts = line.split("/")
+			print "match audio", key, parts[2]
 	else:
 		outCount += 1
 		#print "In dbpAudio, not in Bible table", line
