@@ -29,7 +29,7 @@ for line in input:
 	elif parts[0] == 'audio' and len(parts) > 3 and len(parts[1]) == 6 and len(parts[2]) >= 6:
 		key = parts[1]
 		if key not in dbpAudioMap:
-			dbpAudioMap = []
+			dbpAudioMap[key] = []
 		dbpAudioMap[key].append(line)
 
 	elif parts[0] in ['app', 'fonts', 'languages', 'mp3audiobibles2', 'test.txt']:
