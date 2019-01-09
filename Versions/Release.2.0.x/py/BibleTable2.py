@@ -12,8 +12,6 @@ def checkNull(field):
 	else:
 		return "'" + field.replace("'", "''") + "'"
 
-
-
 out = io.open("sql/bible2.sql", mode="w", encoding="utf-8")
 
 out.write(u"DROP TABLE IF EXISTS Bible2;\n")
@@ -27,14 +25,14 @@ out.write(u"  localizedName TEXT NULL,\n")								# Google Translate API
 out.write(u"  direction TEXT NULL CHECK (direction IN('ltr','rtl')),\n")# TBD
 out.write(u"  script TEXT NULL,\n")										# TBD
 out.write(u"  country TEXT NULL REFERENCES Country(code),\n")			# TBD
-out.write(u"  s3Bucket TEXT NOT NULL,\n")								# bible.json filesets
-out.write(u"  s3KeyPrefix TEXT NULL,\n")								# TBD
+out.write(u"  s3Bucket TEXT NULL,\n")									# bible.json filesets
+out.write(u"  s3KeyPrefix TEXT NULL,\n")								# bible.json id/abbr
 out.write(u"  s3Key TEXT NOT NULL,\n")									# %I_%O_%B_%C.html
-out.write(u"  otDamId TEXT NULL,\n")									# BibleUpdateDamId.py
-out.write(u"  ntDamId TEXT NULL,\n")									# BibleUpdateDamId.py
+out.write(u"  otDamId TEXT NULL,\n")									# bible.json abbr/id
+out.write(u"  ntDamId TEXT NULL,\n")									# bible.json abbr/id
 out.write(u"  stylesheet TEXT NULL);\n")								# this program 
 
-prefix2 = "INSERT INTO Bible2 (bibleId, abbr, iso3, name, englishName, s3Bucket, s3Key, otDamId, ntDamId, stylesheet) VALUES"
+prefix2 = "INSERT INTO Bible2 (bibleId, abbr, iso3, name, englishName, s3Bucket, s3KeyPrefix, s3Key, otDamId, ntDamId, stylesheet) VALUES"
 
 # read and process bible.json file created by Bibles query from DBPv4
 input = io.open("metadata/FCBH/bible.json", mode="r", encoding="utf-8")
@@ -46,13 +44,14 @@ except Exception, err:
 input.close()
 
 for bible in bibles:
-	bibleId = checkNull(bible["abbr"])
-	abbr = checkNull(bible["abbr"][4:])
+	bibleId = bible["abbr"]
+	abbr = checkNull(bible["abbr"][3:])
 	iso3 = checkNull(bible["iso"])
 	name = checkNull(bible["vname"])
 
 	englishName = checkNull(bible["name"])
 	buckets = bible["filesets"]
+	s3KeyPrefix = "null"
 	audioOTDrama = None
 	audioNTDrama = None
 	audioOT = None
@@ -60,30 +59,40 @@ for bible in bibles:
 	for bucket, resources in buckets.items():
 		#print bucket
 		for resource in resources:
+			rid = resource["id"]
+			rtype = resource["type"]
+			rscope = resource["size"]
 
-			if len(resource["id"]) == 10:
-				if resource["size"] == "OT":
-					if resource["type"] == "audio_drama":
-						audioOTDrama = resource["id"]
-					if resource["type"] == "audio":
-						audioOT = resource["id"]
+			if rtype == "text_format":
+				s3KeyPrefix = "'text/" + rid + "/" + bibleId + "/'"
 
-				if resource["size"] == "NT":
-					if resource["type"] == "audio_drama":
-						audioNTDrama = resource["id"]
-					if resource["type"] == "audio":
-						audioNT = resource["id"]
+			if len(rid) == 10:
+				if rscope == "OT":
+					if rtype == "audio_drama":
+						audioOTDrama = rid
+					if rtype == "audio":
+						audioOT = rid
+
+				if rscope == "NT":
+					if rtype == "audio_drama":
+						audioNTDrama = rid
+					if rtype == "audio":
+						audioNT = rid
 
 	# coming back to this tab assumes there is only one bucket
-	otDamId = audioOT
 	if audioOTDrama != None:
-		otDamId = audioOTDrama
-	otDamId = checkNull(otDamId)
+		otDamId = "'audio/" + bibleId + "/" + audioOTDrama + "/'"
+	elif audioOT != None:
+		otDamId = "'audio/" + bibleId + "/" + audioOT + "/'"
+	else:
+		otDamId = "null"
 
-	ntDamId = audioNT
 	if audioNTDrama != None:
-		ntDamId = audioNTDrama 
-	ntDamId = checkNull(ntDamId)
+		ntDamId = "'audio/" + bibleId + "/" + audioNTDrama + "/'"
+	elif audioNT != None:
+		ntDamId = "'audio/" + bibleId + "/" + audioNT + "/'"
+	else:
+		ntDamId = "null"
 
 	#print bibleId, abbr, iso3, name, englishName
 
@@ -94,7 +103,7 @@ for bible in bibles:
 	else:
 		stylesheet = None
 
-	out.write("%s (%s, %s, %s, %s, %s, '%s', '%s', %s, %s, '%s');\n" % 
-	(prefix2, bibleId, abbr, iso3, name, englishName, bucket, s3Key, otDamId, ntDamId, stylesheet))
+	out.write("%s ('%s', %s, %s, %s, %s, '%s', %s, '%s', %s, %s, '%s');\n" % 
+	(prefix2, bibleId, abbr, iso3, name, englishName, bucket, s3KeyPrefix, s3Key, otDamId, ntDamId, stylesheet))
 
 out.close()
