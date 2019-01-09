@@ -37,7 +37,7 @@ out.write(u"  stylesheet TEXT NULL);\n")								# this program
 prefix2 = "INSERT INTO Bible2 (bibleId, abbr, iso3, name, englishName, s3Bucket, s3Key, otDamId, ntDamId, stylesheet) VALUES"
 
 # read and process bible.json file created by Bibles query from DBPv4
-input = io.open("metadata/FCBH/bible2.json", mode="r", encoding="utf-8")
+input = io.open("metadata/FCBH/bible.json", mode="r", encoding="utf-8")
 data = input.read()
 try:
 	bibles = json.loads(data)['data']
