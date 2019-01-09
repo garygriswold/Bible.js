@@ -82,7 +82,7 @@ for bible in bibles:
 
 	ntDamId = audioNT
 	if audioNTDrama != None:
-		ntDamId = audioOTDrama 
+		ntDamId = audioNTDrama 
 	ntDamId = checkNull(ntDamId)
 
 	#print bibleId, abbr, iso3, name, englishName
