@@ -6,99 +6,95 @@ import io
 import os
 import json
 
+def checkNull(field):
+	if field == None:
+		return "null"
+	else:
+		return "'" + field.replace("'", "''") + "'"
+
+
+
 out = io.open("sql/bible2.sql", mode="w", encoding="utf-8")
 
 out.write(u"DROP TABLE IF EXISTS Bible2;\n")
 out.write(u"CREATE TABLE Bible2 (\n")
-out.write(u"  bibleId TEXT NOT NULL PRIMARY KEY,\n") 					# info.json filename[5:18]
-out.write(u"  abbr TEXT NOT NULL,\n")									# info.json abbr char 4-6
-out.write(u"  iso3 TEXT NOT NULL REFERENCES Language(iso3),\n")			# info.json lang
-out.write(u"  name TEXT NULL,\n")										# info.json name
-out.write(u"  englishName TEXT NOT NULL,\n")							# info.json nameEnglish
+out.write(u"  bibleId TEXT NOT NULL PRIMARY KEY,\n") 					# bible.json abbr
+out.write(u"  abbr TEXT NOT NULL,\n")									# bible.json abbr char 4-6
+out.write(u"  iso3 TEXT NOT NULL REFERENCES Language(iso3),\n")			# bible.json iso
+out.write(u"  name TEXT NULL,\n")										# bible.json vname
+out.write(u"  englishName TEXT NULL,\n")								# bible.json name
 out.write(u"  localizedName TEXT NULL,\n")								# Google Translate API		
-out.write(u"  direction TEXT NULL CHECK (direction IN('ltr','rtl')),\n")# info.json dir
-out.write(u"  script TEXT NULL,\n")										# info.json script
-out.write(u"  country TEXT NULL REFERENCES Country(code),\n")			# info.json countryCode
-out.write(u"  s3Bucket TEXT NOT NULL,\n")								# this program
-out.write(u"  s3KeyPrefix TEXT NOT NULL,\n")							# info.json filename
+out.write(u"  direction TEXT NULL CHECK (direction IN('ltr','rtl')),\n")# TBD
+out.write(u"  script TEXT NULL,\n")										# TBD
+out.write(u"  country TEXT NULL REFERENCES Country(code),\n")			# TBD
+out.write(u"  s3Bucket TEXT NOT NULL,\n")								# bible.json filesets
+out.write(u"  s3KeyPrefix TEXT NULL,\n")								# TBD
 out.write(u"  s3Key TEXT NOT NULL,\n")									# %I_%O_%B_%C.html
-# I cannot find program, which generated this template: s3KeyTemplate.py
 out.write(u"  otDamId TEXT NULL,\n")									# BibleUpdateDamId.py
 out.write(u"  ntDamId TEXT NULL,\n")									# BibleUpdateDamId.py
-out.write(u"  stylesheet TEXT NOT NULL);\n")							# constant stylesheet 
+out.write(u"  stylesheet TEXT NULL);\n")								# this program 
 
-prefix2 = "INSERT INTO Bible (bibleId, abbr, iso3, name, englishName, direction, script, country, s3Bucket, s3KeyPrefix, s3Key, stylesheet) VALUES"
-stylesheet = "BibleApp2.css"
+prefix2 = "INSERT INTO Bible2 (bibleId, abbr, iso3, name, englishName, s3Bucket, s3Key, otDamId, ntDamId, stylesheet) VALUES"
 
-# read and process all info.json files
-source = "/Users/garygriswold/ShortSands/DBL/FCBH_info/"
-filelist = sorted(os.listdir(source))
-for filename in filelist:
-	#if len(filename) != 28:
-		#print(len(filename), filename)
-	#else:
-	if len(filename) == 28:
-		#print(filename)
-		input2 = io.open(source + filename, mode="r", encoding="utf-8")
-		data = input2.read()
-		bible = json.loads(data)
-		bibleId = filename[5:18]
+# read and process bible.json file created by Bibles query from DBPv4
+input = io.open("metadata/FCBH/bible2.json", mode="r", encoding="utf-8")
+data = input.read()
+try:
+	bibles = json.loads(data)['data']
+except Exception, err:
+	print "Could not parse bible.json", str(err)
+input.close()
 
-		# check type to see if == bible
-		bType = bible['type']
-		if bType != 'bible':
-			print "?? Type = ", bType
+for bible in bibles:
+	bibleId = checkNull(bible["abbr"])
+	abbr = checkNull(bible["abbr"][4:])
+	iso3 = checkNull(bible["iso"])
+	name = checkNull(bible["vname"])
 
-		# check abbr to see if different from bibleId
-		code = bible['abbr']
+	englishName = checkNull(bible["name"])
+	buckets = bible["filesets"]
+	audioOTDrama = None
+	audioNTDrama = None
+	audioOT = None
+	audioNT = None
+	for bucket, resources in buckets.items():
+		#print bucket
+		for resource in resources:
 
-		# remove lang code from abbr
-		abbr = code[3:]
+			if len(resource["id"]) == 10:
+				if resource["size"] == "OT":
+					if resource["type"] == "audio_drama":
+						audioOTDrama = resource["id"]
+					if resource["type"] == "audio":
+						audioOT = resource["id"]
 
-		# check that lang == first 3 letters of bibleId
-		iso3 = bible['lang']
+				if resource["size"] == "NT":
+					if resource["type"] == "audio_drama":
+						audioNTDrama = resource["id"]
+					if resource["type"] == "audio":
+						audioNT = resource["id"]
 
-		if iso3.upper() != code[0:3]:
-			print "?? abbr=", code, "  iso3=", iso3
+	# coming back to this tab assumes there is only one bucket
+	otDamId = audioOT
+	if audioOTDrama != None:
+		otDamId = audioOTDrama
+	otDamId = checkNull(otDamId)
 
-		iso3 = iso3.lower()
-		name = bible['name'].replace("'", "''")
-		englishName = bible['nameEnglish'].replace("'", "''")
-		direction = bible['dir']
+	ntDamId = audioNT
+	if audioNTDrama != None:
+		ntDamId = audioOTDrama 
+	ntDamId = checkNull(ntDamId)
 
-		# convert script to iso 15924 code
-		script = bible.get('script')
+	#print bibleId, abbr, iso3, name, englishName
 
-		validScripts = [None, 'Arab', 'Beng', 'Bugi', 'Cans', 'Cyrl', 'Deva', 'Ethi', 'Geor', 
-		'Hans', 'Hant', 'Java', 'Kore', 'Latn', 'Orya', 'Syrc', 'Taml', 'Thai' ]
-		#if validScripts.index(script) < 0:
-		if script in validScripts:
-			a = 1
-		else:
-			if script == 'Latin':
-				script = 'Latn'
-			elif script == 'Cyrillic':
-				script = 'Cyrl'
-			elif script == 'Arabic':
-				script = 'Arab'
-			elif script == 'Devangari':
-				script = 'Deva'
-			elif script == 'Devanagari (Nagari)':
-				script = 'Deva'
-			elif script == 'CJK':
-				script = None
-			else:
-				print "ERROR: unknown script code", script, filename
-		script = "'" + script + "'" if script != None else 'null'
+	s3Key = "%I_%O_%B_%C.html"
 
-		country = bible.get('countryCode')
-		country = "'" + country.upper() + "'" if len(country) > 0 else 'null'
+	if bucket == "dbp-prod":
+		stylesheet = "BibleApp2.css"
+	else:
+		stylesheet = None
 
-		bucket = "dbp-prod"
-		keyPrefix = filename.replace("info.json", "").replace(":", "/")
-		s3Key = '%I_%O_%B_%C.html'
-
-		out.write("%s ('%s', '%s', '%s', '%s', '%s', '%s', '%s', %s, %s, '%s', '%s', '%s', '%s');\n" % 
-		(prefix2, bibleId, code, abbr, iso3, name, englishName, direction, script, country, bucket, keyPrefix, s3Key, stylesheet))
+	out.write("%s (%s, %s, %s, %s, %s, '%s', '%s', %s, %s, '%s');\n" % 
+	(prefix2, bibleId, abbr, iso3, name, englishName, bucket, s3Key, otDamId, ntDamId, stylesheet))
 
 out.close()
