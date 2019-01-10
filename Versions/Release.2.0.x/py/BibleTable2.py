@@ -64,7 +64,7 @@ for bible in bibles:
 			rscope = resource["size"]
 
 			if rtype == "text_format":
-				s3KeyPrefix = "'text/" + rid + "/" + bibleId + "/'"
+				s3KeyPrefix = "'text/" + bibleId + "/" + rid + "/'"
 
 			if len(rid) == 10:
 				if rscope == "OT":
