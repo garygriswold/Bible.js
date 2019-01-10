@@ -48,13 +48,6 @@ FROM LanguageTemp l LEFT OUTER JOIN ISO3Priority p
 ON p.iso3=l.iso3;
 END_SQL1
 
-# Use Google Translate to improve the Bible names
-python py/TranslateBibleNames.py
-sqlite Versions.db < sql/LocalizedBibleNames.sql
-sqlite Versions.db <<END_SQL2
-UPDATE Bible SET localizedName = name WHERE localizedName is NULL;
-END_SQL2
-
 # Create A Copy of DB before Deletions
 cp Versions.db VersionsFull.db
 
@@ -87,6 +80,11 @@ select count(*) from Bible;
 vacuum;
 END_SQL3
 
+# In Bible, update direction, script, country
+python py/BibleUpdateInfo.py
+sqlite Versions.db < sql/bible_update.sql
+
+# Run a final validation to make sure that problems are removed
 python py/BibleValidate.sh
 
 # Make any needed deletions from Bible based upon errors in validation
@@ -94,5 +92,14 @@ sqlite Versions.db <<END_SQL4
 
 
 END_SQL4
+
+# Use Google Translate to improve the Bible names
+python py/TranslateBibleNames.py
+sqlite Versions.db < sql/LocalizedBibleNames.sql
+sqlite Versions.db <<END_SQL2
+UPDATE Bible SET localizedName = name WHERE localizedName is NULL;
+END_SQL2
+
+
 
 
