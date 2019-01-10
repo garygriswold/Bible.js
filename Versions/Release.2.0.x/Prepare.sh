@@ -87,3 +87,12 @@ select count(*) from Bible;
 vacuum;
 END_SQL3
 
+python py/BibleValidate.sh
+
+# Make any needed deletions from Bible based upon errors in validation
+sqlite Versions.db <<END_SQL4
+
+
+END_SQL4
+
+
