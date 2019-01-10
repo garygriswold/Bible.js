@@ -4,6 +4,10 @@
 import io
 import sqlite3
 
+BUCKET = "dbp-prod"
+PREFIX = "arn:aws:s3:::"
+output = io.open("PermissionsRequest.txt", mode="w", encoding="utf-8")
+
 textSet = set()
 audioSet = set()
 input = io.open("metadata/FCBH/dbp_prod.txt", mode="r", encoding="utf-8")
@@ -25,27 +29,42 @@ print len(textSet), len(audioSet)
 
 db = sqlite3.connect('Versions.db')
 cursor = db.cursor()
-sql = "SELECT bibleId, abbr, iso3, textId, otDamId, ntDamId FROM Bible ORDER BY bibleId"
+sql = "SELECT bibleId, textBucket, textId, audioBucket, otDamId, ntDamId FROM Bible ORDER BY bibleId"
 values = ()
 cursor.execute(sql, values)
 rows = cursor.fetchall()
 
 for row in rows:
 	bibleId = row[0]
-	textId = row[3]
-	textKey = "text/" + bibleId + "/" + textId + "/" if textId != None else None
-	otDamId = row[4]
-	otKey = "audio/" + bibleId + "/" + otDamId + "/" if otDamId != None else None
-	ntDamId = row[5]
-	ntKey = "audio/" + bibleId + "/" + ntDamId + "/" if ntDamId != None else None
+	textBucket = row[1]
+	if textBucket == BUCKET:
+		textId = row[2]
+		if textId != None:
+			textKey = "text/" + bibleId + "/" + textId + "/"
+			if textKey in textSet:
+				output.write(PREFIX + BUCKET + "/" + textKey + "*\n")
+			else:
+				print "missing text", bibleId, textKey
 
-	if textKey != None and textKey not in textSet:
-		print "missing text", bibleId, textKey
+for row in rows:
+	bibleId = row[0]
+	audioBucket = row[3]
+	if audioBucket == BUCKET:
+		otDamId = row[4]
+		if otDamId != None:
+			otKey = "audio/" + bibleId + "/" + otDamId + "/"
+			if otKey in audioSet:
+				output.write(PREFIX + BUCKET + "/" + otKey + "*\n")
+			else:
+				print "missing ot audio", bibleId, otKey
 
-	if otKey != None and otKey not in audioSet:
-		print "missing ot audio", bibleId, otKey
 
-	if ntKey != None and ntKey not in audioSet:
-		print "missing nt audio", bibleId, ntKey
+		ntDamId = row[5]
+		if ntDamId != None:
+			ntKey = "audio/" + bibleId + "/" + ntDamId + "/"
+			if ntKey in audioSet:
+				output.write(PREFIX + BUCKET + "/" + ntKey + "*\n")
+			else:
+				print "missing nt audio", bibleId, ntKey
 
 db.close()
