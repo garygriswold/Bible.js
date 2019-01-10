@@ -81,6 +81,8 @@ sqlite Versions.db <<END_SQL3
 update Bible set textBucket='inapp', textId='ENGKJV' where bibleId='ENGKJV';
 update Bible set otDamId='ENGESVO2DA', ntDamId='ENGESVN2DA' where bibleId='ENGESV';
 delete from Bible where textId is null;
+INSERT INTO Bible (bibleId, abbr, iso3, name, englishName, textBucket, textId, keyTemplate, audioBucket, otDamId, ntDamId) VALUES 
+('KMRIBT', 'IBT', 'kmr', 'Încîl Mizgînî', 'Kurmanji Kurdish New Testament (Latin)', 'dbp-prod', 'KM2IBT', '%I_%O_%B_%C.html', 'dbp-prod', null, 'KMRIBTN2DA');
 select count(*) from Bible;
 vacuum;
 END_SQL3
