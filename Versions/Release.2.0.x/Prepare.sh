@@ -1,9 +1,13 @@
 #!/bin/sh -ve
 
-# Create SQL Files to populate database
-# I think missing py/CountryTable.py
+# Create Support Tables
+python py/CountryTable.py
 python py/LanguageTable.py
-python py/ISO3PriorityTable.py 
+python py/ISO3PriorityTable.py
+
+# Create Bible Table
+python py/ListBucket.py > metadata/FCBH/dbp_prod.txt
+python py/DownloadBible.py > metadata/FCBH/bible.json
 python py/BibleTable.py
 
 sqlite Versions.db <<END_SQL
@@ -24,16 +28,12 @@ sqlite Versions.db < sql/bible.sql
 # Add Region table for AWS to know SS Regions
 sqlite Versions.db < sql/copied_region.sql
 
-# Update column s3Key
-sqlite Versions.db <<END_SQL0
-update Bible set s3Key = '%I_%O_%B_%C.html';
-END_SQL1
+# Validate Bible Table keys against dbp-prod bucket
+python py/BibleValidate.py
 
 # Merge ISO3Priority into Language
 sqlite Versions.db <<END_SQL1
-DROP TABLE IF EXISTS LanguageTemp;
-ALTER TABLE Language RENAME TO LanguageTemp;
-
+DROP TABLE IF EXISTS Language;
 CREATE TABLE Language (
   iso3 TEXT NOT NULL PRIMARY KEY,
   iso1 TEXT NULL,
@@ -46,11 +46,6 @@ INSERT INTO Language
 select l.iso3, l.iso1, l.macro, l.name, p.country, p.pop 
 FROM LanguageTemp l LEFT OUTER JOIN ISO3Priority p 
 ON p.iso3=l.iso3;
-
--- cleanup null fields
-update Bible set script=null where script = '';
-update Bible set country=null where country = '';
-vacuum;
 END_SQL1
 
 # Use Google Translate to improve the Bible names
@@ -62,10 +57,6 @@ END_SQL2
 
 # Create A Copy of DB before Deletions
 cp Versions.db VersionsFull.db
-
-# Read Bible.json and use to update Bible table
-# Removed 9/3/18 i.e. use only json.info
-#python py/UpdateBibleByBibleJson.py
 
 # Remove Languages and Bibles that are not used.
 sqlite Versions.db <<END_SQL
@@ -79,6 +70,18 @@ select count(*) AS Bibles_Count from Bible;
 
 create index language_iso1_idx on Language(iso1);
 create index bible_iso3_idx on Bible(iso3);
+
+drop table LanguageTemp;
+drop table ISO3Priority;
 vacuum;
 END_SQL
+
+# Patch some with bad entries
+sqlite Versions.db <<END_SQL3
+update Bible set textBucket='inapp', textId='ENGKJV' where bibleId='ENGKJV';
+update Bible set otDamId='ENGESVO2DA', ntDamId='ENGESVN2DA' where bibleId='ENGESV';
+delete from Bible where textId is null;
+select count(*) from Bible;
+vacuum;
+END_SQL3
 

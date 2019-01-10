@@ -47,13 +47,13 @@ input2.close()
 
 out = io.open("sql/language.sql", mode="w", encoding="utf-8")
 
-out.write(u"DROP TABLE IF EXISTS Language;\n")
-out.write(u"CREATE TABLE Language (\n")
+out.write(u"DROP TABLE IF EXISTS LanguageTemp;\n")
+out.write(u"CREATE TABLE LanguageTemp (\n")
 out.write(u"  iso3 TEXT NOT NULL PRIMARY KEY,\n")
 out.write(u"  iso1 TEXT NULL,\n")
 out.write(u"  macro TEXT NULL,\n")
 out.write(u"  name TEXT NOT NULL);\n")
-prefix = "REPLACE INTO Language (iso3, iso1, macro, name) VALUES"
+prefix = "REPLACE INTO LanguageTemp (iso3, iso1, macro, name) VALUES"
 
 # Output table, and looking ios1 for any language with a macro language
 for lang in isoTable:
