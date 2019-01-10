@@ -25,27 +25,27 @@ print len(textSet), len(audioSet)
 
 db = sqlite3.connect('Versions.db')
 cursor = db.cursor()
-sql = "SELECT bibleId, abbr, iso3, s3KeyPrefix, otDamId, ntDamId FROM Bible2 ORDER BY bibleId"
-##values = (bibleId, )
+sql = "SELECT bibleId, abbr, iso3, textId, otDamId, ntDamId FROM Bible ORDER BY bibleId"
 values = ()
 cursor.execute(sql, values)
 rows = cursor.fetchall()
 
 for row in rows:
 	bibleId = row[0]
-	s3KeyPrefix = row[3]
+	textId = row[3]
+	textKey = "text/" + bibleId + "/" + textId + "/" if textId != None else None
 	otDamId = row[4]
+	otKey = "audio/" + bibleId + "/" + otDamId + "/" if otDamId != None else None
 	ntDamId = row[5]
+	ntKey = "audio/" + bibleId + "/" + ntDamId + "/" if ntDamId != None else None
 
-	if s3KeyPrefix != None and s3KeyPrefix not in textSet:
-		print "missing text", bibleId, s3KeyPrefix
-	#else:
-	#	print "*** found", bibleId, s3KeyPrefix
+	if textKey != None and textKey not in textSet:
+		print "missing text", bibleId, textKey
 
-	if otDamId != None and otDamId not in audioSet:
-		print "missing ot audio", bibleId, otDamId
+	if otKey != None and otKey not in audioSet:
+		print "missing ot audio", bibleId, otKey
 
-	if ntDamId != None and ntDamId not in audioSet:
-		print "missing nt audio", bibleId, ntDamId
+	if ntKey != None and ntKey not in audioSet:
+		print "missing nt audio", bibleId, ntKey
 
 db.close()

@@ -6,101 +6,102 @@ import io
 import os
 import json
 
+def checkNull(field):
+	if field == None:
+		return "null"
+	else:
+		return "'" + field.replace("'", "''") + "'"
+
 out = io.open("sql/bible.sql", mode="w", encoding="utf-8")
 
 out.write(u"DROP TABLE IF EXISTS Bible;\n")
 out.write(u"CREATE TABLE Bible (\n")
-out.write(u"  bibleId TEXT NOT NULL PRIMARY KEY,\n") 					# info.json filename[5:18]
-out.write(u"  code TEXT NOT NULL,\n")									# info.json abbr
-out.write(u"  abbr TEXT NOT NULL,\n")									# info.json abbr char 4-6
-out.write(u"  iso3 TEXT NOT NULL REFERENCES Language(iso3),\n")			# info.json lang
-out.write(u"  name TEXT NOT NULL,\n")									# info.json name
-out.write(u"  englishName TEXT NULL,\n")								# info.json nameEnglish
-out.write(u"  localizedName TEXT NULL,\n")								# Google Translate API		
-out.write(u"  direction TEXT CHECK (direction IN('ltr','rtl')) default('ltr'),\n") # info.json dir
-out.write(u"  script TEXT NULL,\n")										# info.json script
-out.write(u"  country TEXT NULL REFERENCES Country(code),\n")			# info.json countryCode
-out.write(u"  s3Bucket TEXT NOT NULL,\n")								# this program
-out.write(u"  s3KeyPrefix TEXT NOT NULL,\n")							# info.json filename
-out.write(u"  s3Key TEXT NULL,\n")										# %I_%O_%B_%C.html
-# I cannot find program, which generated this template: s3KeyTemplate.py
-out.write(u"  s3CredentialId TEXT NULL,\n")								# TBD
-out.write(u"  otDamId TEXT NULL,\n")									# BibleUpdateDamId.py
-out.write(u"  ntDamId TEXT NULL,\n")									# BibleUpdateDamId.py
-out.write(u"  stylesheet TEXT NOT NULL);\n")							# constant stylesheet 
+out.write(u"  bibleId TEXT NOT NULL PRIMARY KEY,\n") 					# bible.json abbr
+out.write(u"  abbr TEXT NOT NULL,\n")									# bible.json abbr char 3-6
+out.write(u"  iso3 TEXT NOT NULL REFERENCES Language(iso3),\n")			# bible.json iso
+out.write(u"  name TEXT NULL,\n")										# bible.json vname
+out.write(u"  englishName TEXT NULL,\n")								# bible.json name
+out.write(u"  localizedName TEXT NULL,\n")								# Google Translate API
+out.write(u"  textBucket TEXT NULL,\n")									# bible.json filesets
+out.write(u"  textId TEXT NULL,\n")										# bible.json abbr/id
+out.write(u"  keyTemplate TEXT NOT NULL,\n")							# %I_%O_%B_%C.html
+out.write(u"  audioBucket TEXT NULL,\n")								# bible.json filesets
+out.write(u"  otDamId TEXT NULL,\n")									# bible.json abbr/id
+out.write(u"  ntDamId TEXT NULL,\n")									# bible.json abbr/id
+out.write(u"  direction TEXT NULL CHECK (direction IN('ltr','rtl')),\n")# TBD
+out.write(u"  script TEXT NULL,\n")										# TBD
+out.write(u"  country TEXT NULL REFERENCES Country(code));\n")			# TBD
 
-prefix2 = "INSERT INTO Bible (bibleId, code, abbr, iso3, name, englishName, direction, script, country, s3Bucket, s3KeyPrefix, s3Key, stylesheet) VALUES"
-stylesheet = "BibleApp2.css"
+prefix2 = "INSERT INTO Bible (bibleId, abbr, iso3, name, englishName, textBucket, textId, keyTemplate, audioBucket, otDamId, ntDamId) VALUES"
 
-# read and process all info.json files
-source = "/Users/garygriswold/ShortSands/DBL/FCBH_info/"
-filelist = sorted(os.listdir(source))
-for filename in filelist:
-	#if len(filename) != 28:
-		#print(len(filename), filename)
-	#else:
-	if len(filename) == 28:
-		#print(filename)
-		input2 = io.open(source + filename, mode="r", encoding="utf-8")
-		data = input2.read()
-		bible = json.loads(data)
-		bibleId = filename[5:18]
+# read and process bible.json file created by Bibles query from DBPv4
+input = io.open("metadata/FCBH/bible.json", mode="r", encoding="utf-8")
+data = input.read()
+try:
+	bibles = json.loads(data)['data']
+except Exception, err:
+	print "Could not parse bible.json", str(err)
+input.close()
 
-		# check type to see if == bible
-		bType = bible['type']
-		if bType != 'bible':
-			print "?? Type = ", bType
+for bible in bibles:
+	bibleId = bible["abbr"]
+	abbr = bible["abbr"][3:]
+	iso3 = checkNull(bible["iso"])
+	name = checkNull(bible["vname"])
 
-		# check abbr to see if different from bibleId
-		code = bible['abbr']
+	englishName = checkNull(bible["name"])
+	buckets = bible["filesets"]
+	textBucket = "null"
+	textId = "null"
+	audioBucket = "null"
+	audioOTDrama = None
+	audioNTDrama = None
+	audioOT = None
+	audioNT = None
+	for bucket, resources in buckets.items():
 
-		# remove lang code from abbr
-		abbr = code[3:]
+		for resource in resources:
+			rid = resource["id"]
+			rtype = resource["type"]
+			rscope = resource["size"]
 
-		# check that lang == first 3 letters of bibleId
-		iso3 = bible['lang']
+			if rtype == "text_format":
+				textId = "'" + rid + "'"
+				textBucket = "'" + bucket + "'"
 
-		if iso3.upper() != code[0:3]:
-			print "?? abbr=", code, "  iso3=", iso3
+			if len(rid) == 10:
+				audioBucket = "'" + bucket + "'"
+				if rscope == "OT":
+					if rtype == "audio_drama":
+						audioOTDrama = rid
+					if rtype == "audio":
+						audioOT = rid
 
-		iso3 = iso3.lower()
-		name = bible['name'].replace("'", "''")
-		englishName = bible['nameEnglish'].replace("'", "''")
-		direction = bible['dir']
+				if rscope == "NT":
+					if rtype == "audio_drama":
+						audioNTDrama = rid
+					if rtype == "audio":
+						audioNT = rid
 
-		# convert script to iso 15924 code
-		script = bible.get('script')
+	# coming back to this tab assumes there is only one bucket
+	if audioOTDrama != None:
+		otDamId = "'" + audioOTDrama + "'"
+	elif audioOT != None:
+		otDamId = "'" + audioOT + "'"
+	else:
+		otDamId = "null"
 
-		validScripts = [None, 'Arab', 'Beng', 'Bugi', 'Cans', 'Cyrl', 'Deva', 'Ethi', 'Geor', 
-		'Hans', 'Hant', 'Java', 'Kore', 'Latn', 'Orya', 'Syrc', 'Taml', 'Thai' ]
-		#if validScripts.index(script) < 0:
-		if script in validScripts:
-			a = 1
-		else:
-			if script == 'Latin':
-				script = 'Latn'
-			elif script == 'Cyrillic':
-				script = 'Cyrl'
-			elif script == 'Arabic':
-				script = 'Arab'
-			elif script == 'Devangari':
-				script = 'Deva'
-			elif script == 'Devanagari (Nagari)':
-				script = 'Deva'
-			elif script == 'CJK':
-				script = None
-			else:
-				print "ERROR: unknown script code", script, filename
-		script = "'" + script + "'" if script != None else 'null'
+	if audioNTDrama != None:
+		ntDamId = "'" + audioNTDrama + "'"
+	elif audioNT != None:
+		ntDamId = "'" + audioNT + "'"
+	else:
+		ntDamId = "null"
 
-		country = bible.get('countryCode')
-		country = "'" + country.upper() + "'" if len(country) > 0 else 'null'
+	keyTemplate = "%I_%O_%B_%C.html"
 
-		bucket = "dbp-prod"
-		keyPrefix = filename.replace("info.json", "").replace(":", "/")
-		s3Key = '%I_%O_%B_%C.html'
-
-		out.write("%s ('%s', '%s', '%s', '%s', '%s', '%s', '%s', %s, %s, '%s', '%s', '%s', '%s');\n" % 
-		(prefix2, bibleId, code, abbr, iso3, name, englishName, direction, script, country, bucket, keyPrefix, s3Key, stylesheet))
+	out.write("%s ('%s', '%s', %s, %s, %s, %s, %s, '%s', %s, %s, %s);\n" % 
+	(prefix2, bibleId, abbr, iso3, name, englishName, textBucket, textId, keyTemplate,
+		audioBucket, otDamId, ntDamId))
 
 out.close()
