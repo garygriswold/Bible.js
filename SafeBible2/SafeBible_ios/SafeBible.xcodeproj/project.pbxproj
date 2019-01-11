@@ -29,6 +29,7 @@
 		E44C056D211BE1F700476DAD /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44C0566211B77AA00476DAD /* Utility.framework */; };
 		E44C056E211BE1F700476DAD /* Utility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E44C0566211B77AA00476DAD /* Utility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E452C7B021BF3C6F00553B86 /* NoteEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E452C7AF21BF3C6F00553B86 /* NoteEditViewController.swift */; };
+		E45A606021E955A00042E3EE /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45A605F21E955A00042E3EE /* VideoModel.swift */; };
 		E463896E21793DC0009BF5E2 /* HistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463896D21793DC0009BF5E2 /* HistoryModel.swift */; };
 		E463897221799013009BF5E2 /* BiblesActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463897121799013009BF5E2 /* BiblesActionSheet.swift */; };
 		E4638974217AE210009BF5E2 /* SettingsDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4638973217AE210009BF5E2 /* SettingsDB.swift */; };
@@ -153,6 +154,7 @@
 		E44F0B53212D43F000CDB32F /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = ../../AWS/src/ios/AWS/AWSCore.framework; sourceTree = "<group>"; };
 		E452C7AF21BF3C6F00553B86 /* NoteEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEditViewController.swift; sourceTree = "<group>"; };
 		E45A605E21E952220042E3EE /* SafeBible.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SafeBible.entitlements; sourceTree = "<group>"; };
+		E45A605F21E955A00042E3EE /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 		E463896D21793DC0009BF5E2 /* HistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryModel.swift; sourceTree = "<group>"; };
 		E463897121799013009BF5E2 /* BiblesActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblesActionSheet.swift; sourceTree = "<group>"; };
 		E4638973217AE210009BF5E2 /* SettingsDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDB.swift; sourceTree = "<group>"; };
@@ -331,6 +333,7 @@
 				E402BCB4217B80BA0026E1DE /* TableContentsModel.swift */,
 				E4A4B324219F5D5700F70888 /* NotesModel.swift */,
 				E469080C2196650F00155F2A /* ReaderViewQueue.swift */,
+				E45A605F21E955A00042E3EE /* VideoModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -564,6 +567,7 @@
 				E42C151B21CD8BAE00AA42D7 /* NotesExportActionSheet.swift in Sources */,
 				E40D605F217FC70700A06B54 /* HistoryViewController.swift in Sources */,
 				E4480A2E2187D3DD00C019B0 /* ReaderPagesController.swift in Sources */,
+				E45A606021E955A00042E3EE /* VideoModel.swift in Sources */,
 				E40D60632182013300A06B54 /* AppViewController.swift in Sources */,
 				E4FCC44C21C8E42100A5FF54 /* NoteCell.swift in Sources */,
 				E478BFDB21DCDE490093320D /* AppTableViewController.swift in Sources */,
