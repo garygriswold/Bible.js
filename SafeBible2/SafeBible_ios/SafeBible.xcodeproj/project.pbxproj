@@ -18,17 +18,17 @@
 		E41B8DC821D9AE4B0099A63D /* FileListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8DC721D9AE4B0099A63D /* FileListViewController.swift */; };
 		E41B8DCA21D9EA880099A63D /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41B8DC921D9EA880099A63D /* FileCell.swift */; };
 		E428B7E52138BD7F000AB2A8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E32138BD7F000AB2A8 /* InfoPlist.strings */; };
+		E429FDB621E94F7C004A193A /* www in Resources */ = {isa = PBXBuildFile; fileRef = E429FDB521E94F7B004A193A /* www */; };
+		E429FDB821E94FAB004A193A /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E429FDB721E94FAB004A193A /* Versions.db */; };
+		E429FDBA21E9500E004A193A /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E429FDB921E9500D004A193A /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E42C151B21CD8BAE00AA42D7 /* NotesExportActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42C151A21CD8BAE00AA42D7 /* NotesExportActionSheet.swift */; };
 		E431E92A21938D7300CF609C /* DynamicCSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E431E92921938D7300CF609C /* DynamicCSS.swift */; };
 		E4480A2C21866E7F00C019B0 /* Reference.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4480A2B21866E7F00C019B0 /* Reference.swift */; };
 		E4480A2E2187D3DD00C019B0 /* ReaderPagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4480A2D2187D3DD00C019B0 /* ReaderPagesController.swift */; };
 		E4480A302188147200C019B0 /* ReaderToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4480A2F2188147200C019B0 /* ReaderToolbar.swift */; };
-		E44C056C211B7DE700476DAD /* Versions.db in Resources */ = {isa = PBXBuildFile; fileRef = E44C056B211B7DE700476DAD /* Versions.db */; };
 		E44C056D211BE1F700476DAD /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E44C0566211B77AA00476DAD /* Utility.framework */; };
 		E44C056E211BE1F700476DAD /* Utility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E44C0566211B77AA00476DAD /* Utility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E452C7B021BF3C6F00553B86 /* NoteEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E452C7AF21BF3C6F00553B86 /* NoteEditViewController.swift */; };
-		E45C598121431934009C1F0E /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45C598021431934009C1F0E /* AWSCore.framework */; };
-		E45C598221431934009C1F0E /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E45C598021431934009C1F0E /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E463896E21793DC0009BF5E2 /* HistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463896D21793DC0009BF5E2 /* HistoryModel.swift */; };
 		E463897221799013009BF5E2 /* BiblesActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463897121799013009BF5E2 /* BiblesActionSheet.swift */; };
 		E4638974217AE210009BF5E2 /* SettingsDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4638973217AE210009BF5E2 /* SettingsDB.swift */; };
@@ -43,7 +43,6 @@
 		E4A3AF152138EC0F006EDEFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E62138BD7F000AB2A8 /* Localizable.strings */; };
 		E4A4B325219F5D5800F70888 /* NotesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A4B324219F5D5700F70888 /* NotesModel.swift */; };
 		E4A7130021461090009D99E2 /* SettingsSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A712FF21461090009D99E2 /* SettingsSearchController.swift */; };
-		E4AFAC6C2144C047008EE537 /* www in Resources */ = {isa = PBXBuildFile; fileRef = E4AFAC6B2144C047008EE537 /* www */; };
 		E4B4433921A3BBA3007A266B /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B4433821A3BBA3007A266B /* PageViewController.swift */; };
 		E4B4433B21A46999007A266B /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B4433A21A46999007A266B /* ColorPicker.swift */; };
 		E4B7B357219E7E210057E838 /* WKWebViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B7B356219E7E210057E838 /* WKWebViewExtension.swift */; };
@@ -117,9 +116,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				E429FDBA21E9500E004A193A /* AWSCore.framework in Embed Frameworks */,
 				E4D708D1213328E600E4A8BF /* AWS.framework in Embed Frameworks */,
 				E44C056E211BE1F700476DAD /* Utility.framework in Embed Frameworks */,
-				E45C598221431934009C1F0E /* AWSCore.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -142,16 +141,18 @@
 		E428B7E92138BF70000AB2A8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E428B7EA2138C003000AB2A8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E428B7ED2138C297000AB2A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E429FDB521E94F7B004A193A /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = SafeBible/www; sourceTree = "<group>"; };
+		E429FDB721E94FAB004A193A /* Versions.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = Versions.db; path = SafeBible/Versions.db; sourceTree = "<group>"; };
+		E429FDB921E9500D004A193A /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = SafeBible/AWSCore.framework; sourceTree = "<group>"; };
 		E42C151A21CD8BAE00AA42D7 /* NotesExportActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExportActionSheet.swift; sourceTree = "<group>"; };
 		E431E92921938D7300CF609C /* DynamicCSS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicCSS.swift; sourceTree = "<group>"; };
 		E4480A2B21866E7F00C019B0 /* Reference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reference.swift; sourceTree = "<group>"; };
 		E4480A2D2187D3DD00C019B0 /* ReaderPagesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderPagesController.swift; sourceTree = "<group>"; };
 		E4480A2F2188147200C019B0 /* ReaderToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderToolbar.swift; sourceTree = "<group>"; };
 		E44C0566211B77AA00476DAD /* Utility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Utility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E44C056B211B7DE700476DAD /* Versions.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = Versions.db; path = Settings/Versions.db; sourceTree = "<group>"; };
 		E44F0B53212D43F000CDB32F /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = ../../AWS/src/ios/AWS/AWSCore.framework; sourceTree = "<group>"; };
 		E452C7AF21BF3C6F00553B86 /* NoteEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEditViewController.swift; sourceTree = "<group>"; };
-		E45C598021431934009C1F0E /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = Settings/AWSCore.framework; sourceTree = "<group>"; };
+		E45A605E21E952220042E3EE /* SafeBible.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SafeBible.entitlements; sourceTree = "<group>"; };
 		E463896D21793DC0009BF5E2 /* HistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryModel.swift; sourceTree = "<group>"; };
 		E463897121799013009BF5E2 /* BiblesActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblesActionSheet.swift; sourceTree = "<group>"; };
 		E4638973217AE210009BF5E2 /* SettingsDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDB.swift; sourceTree = "<group>"; };
@@ -201,7 +202,6 @@
 		E4A3AF1A2139968E006EDEFE /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4A4B324219F5D5700F70888 /* NotesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesModel.swift; sourceTree = "<group>"; };
 		E4A712FF21461090009D99E2 /* SettingsSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSearchController.swift; sourceTree = "<group>"; };
-		E4AFAC6B2144C047008EE537 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = Settings/www; sourceTree = "<group>"; };
 		E4B4433821A3BBA3007A266B /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		E4B4433A21A46999007A266B /* ColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
 		E4B7B356219E7E210057E838 /* WKWebViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKWebViewExtension.swift; sourceTree = "<group>"; };
@@ -242,7 +242,6 @@
 			files = (
 				E4D708D0213328E600E4A8BF /* AWS.framework in Frameworks */,
 				E44C056D211BE1F700476DAD /* Utility.framework in Frameworks */,
-				E45C598121431934009C1F0E /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,13 +366,13 @@
 		E4F720AD211B6F2A00E26B07 = {
 			isa = PBXGroup;
 			children = (
+				E429FDB921E9500D004A193A /* AWSCore.framework */,
+				E429FDB721E94FAB004A193A /* Versions.db */,
+				E429FDB521E94F7B004A193A /* www */,
 				E478BFE821DE82CF0093320D /* AWS.xcodeproj */,
 				E478BFE221DE829D0093320D /* Utility.xcodeproj */,
-				E4AFAC6B2144C047008EE537 /* www */,
-				E45C598021431934009C1F0E /* AWSCore.framework */,
 				E4D708CF213328E600E4A8BF /* AWS.framework */,
-				E44C056B211B7DE700476DAD /* Versions.db */,
-				E4F720B8211B6F2A00E26B07 /* Settings */,
+				E4F720B8211B6F2A00E26B07 /* SafeBible */,
 				E4F720B7211B6F2A00E26B07 /* Products */,
 				E44C0565211B77AA00476DAD /* Frameworks */,
 			);
@@ -387,9 +386,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E4F720B8211B6F2A00E26B07 /* Settings */ = {
+		E4F720B8211B6F2A00E26B07 /* SafeBible */ = {
 			isa = PBXGroup;
 			children = (
+				E45A605E21E952220042E3EE /* SafeBible.entitlements */,
 				E471274D21C5910D00EF27F1 /* Settings.entitlements */,
 				E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */,
 				E4C2E987211B712C00B71CC5 /* ReaderViewNavigator.swift */,
@@ -403,7 +403,7 @@
 				E4F720C2211B6F2C00E26B07 /* LaunchScreen.storyboard */,
 				E469080A21964F5E00155F2A /* Measurement.swift */,
 			);
-			path = Settings;
+			path = SafeBible;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -545,9 +545,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E429FDB821E94FAB004A193A /* Versions.db in Resources */,
+				E429FDB621E94F7C004A193A /* www in Resources */,
 				E48BF9CD21DEBD370060392F /* Assets.xcassets in Resources */,
-				E4AFAC6C2144C047008EE537 /* www in Resources */,
-				E44C056C211B7DE700476DAD /* Versions.db in Resources */,
 				E4A3AF152138EC0F006EDEFE /* Localizable.strings in Resources */,
 				E4F720C4211B6F2C00E26B07 /* LaunchScreen.storyboard in Resources */,
 				E428B7E52138BD7F000AB2A8 /* InfoPlist.strings in Resources */,
@@ -807,14 +807,14 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_ENTITLEMENTS = Settings/Settings.entitlements;
+				CODE_SIGN_ENTITLEMENTS = SafeBible/SafeBible.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Settings",
 				);
-				INFOPLIST_FILE = Settings/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/SafeBible/Info.plist";
 				INFOPLIST_OUTPUT_FORMAT = "same-as-input";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -834,14 +834,14 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_ENTITLEMENTS = Settings/Settings.entitlements;
+				CODE_SIGN_ENTITLEMENTS = SafeBible/SafeBible.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Settings",
 				);
-				INFOPLIST_FILE = Settings/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/SafeBible/Info.plist";
 				INFOPLIST_OUTPUT_FORMAT = "same-as-input";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
