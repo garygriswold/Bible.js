@@ -94,7 +94,7 @@ struct BiblePageModel {
     private func generateKey(reference: Reference) -> String {
         var result = [String]()
         var inItem = false
-        for char: Character in reference.s3Key {
+        for char: Character in reference.s3TextTemplate {
             if char == "%" {
                 inItem = true
             } else if !inItem {
@@ -103,7 +103,7 @@ struct BiblePageModel {
                 inItem = false
                 switch char {
                 case "I": // Id is last part of s3KeyPrefix
-                    let parts = reference.s3KeyPrefix.split(separator: "/")
+                    let parts = reference.s3TextPrefix.split(separator: "/")
                     result.append(String(parts[parts.count - 1]))
                 case "O": // ordinal 1 is GEN, 70 is MAT, not zero filled
                     if let seq = bookMap[reference.bookId]?.seq {
@@ -135,7 +135,7 @@ struct BiblePageModel {
                 }
             }
         }
-        return reference.s3KeyPrefix + result.joined()
+        return reference.s3TextPrefix + result.joined()
     }
 
     struct BookData {

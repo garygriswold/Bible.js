@@ -176,21 +176,23 @@ struct SettingsAdapter {
     }
     
     private func getBiblesSelected(locale: Locale, selectedBibles: [String]) -> [Bible] {
-        let sql = "SELECT bibleId, abbr, b.iso3, b.localizedName, b.s3KeyPrefix, b.s3Key" +
-            " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
-            " AND b.bibleId" + genQuest(array: selectedBibles) +
-            " AND l.iso1 = ?" +
-            " AND b.localizedName IS NOT null"
+        let sql = "SELECT bibleId, abbr, b.iso3, localizedName, textBucket, textId, keyTemplate,"
+            + " audioBucket, otDamId, ntDamId"
+            + " FROM Bible b, Language l WHERE b.iso3 = l.iso3"
+            + " AND b.bibleId" + genQuest(array: selectedBibles)
+            + " AND l.iso1 = ?"
+            + " AND b.localizedName IS NOT null"
         return getBibles(sql: sql, locale: locale, selectedBibles: selectedBibles)
     }
     
     func getBiblesAvailable(locale: Locale, selectedBibles: [String]) -> [Bible] {
-        let sql = "SELECT bibleId, abbr, b.iso3, b.localizedName, b.s3KeyPrefix, b.s3Key" +
-            " FROM Bible b, Language l WHERE b.iso3 = l.iso3" +
-            " AND b.bibleId NOT" + genQuest(array: selectedBibles) +
-            " AND l.iso1 = ?" +
-            " AND b.localizedName IS NOT null" +
-            " ORDER BY b.localizedName"
+        let sql = "SELECT bibleId, abbr, b.iso3, localizedName, textBucket, textId, keyTemplate,"
+            + " audioBucket, otDamId, ntDamId"
+            + " FROM Bible b, Language l WHERE b.iso3 = l.iso3"
+            + " AND b.bibleId NOT" + genQuest(array: selectedBibles)
+            + " AND l.iso1 = ?"
+            + " AND b.localizedName IS NOT null"
+            + " ORDER BY b.localizedName"
         return getBibles(sql: sql, locale: locale, selectedBibles: selectedBibles)
     }
     
@@ -202,8 +204,9 @@ struct SettingsAdapter {
             let values = selectedBibles + [iso]
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: values)
             bibles = resultSet.map {
-                Bible(bibleId: $0[0]!, abbr: $0[1]!, iso3: $0[2]!, name: $0[3]!, s3KeyPrefix: $0[4]!,
-                      s3Key: $0[5]!, locale: locale)
+                Bible(bibleId: $0[0]!, abbr: $0[1]!, iso3: $0[2]!, name: $0[3]!,
+                      textBucket: $0[4]!, textId: $0[5]!, s3TextTemplate: $0[6]!,
+                      audioBucket: $0[7], otDamId: $0[8], ntDamId: $0[9], locale: locale)
             }
         } catch let err {
             print("ERROR: SettingsAdapter.getBibles \(err)")

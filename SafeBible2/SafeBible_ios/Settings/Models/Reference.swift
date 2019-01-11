@@ -44,12 +44,12 @@ struct Reference : Equatable {
         get { return self.bible.name }
     }
     
-    var s3KeyPrefix: String {
-        get { return self.bible.s3KeyPrefix }
+    var s3TextPrefix: String {
+        get { return self.bible.s3TextPrefix }
     }
     
-    var s3Key: String {
-        get { return self.bible.s3Key }
+    var s3TextTemplate: String {
+        get { return self.bible.s3TextTemplate }
     }
     
     var bible: Bible {

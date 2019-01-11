@@ -79,7 +79,6 @@ struct BibleInitialSelectExperiment {
         }
         // How do I limit it to 3 per language
         let bibleIds = selected.map { $0.bibleId }
-        //return adapter.getBiblesSelected(locales: locales, selectedBibles: bibleIds)
         return bibleIds
     }
     
@@ -123,19 +122,16 @@ struct BibleInitialSelect {
         let name: String        // Name in the language, but sometimes in English
         let script: String?     // Optional script code of the Bible
         let country: String?    // Optional country code of the Bible
-        let s3KeyPrefix: String
-        let s3Key: String
         var score: Float
         
-        init(bibleId: String, abbr: String, iso3: String, name: String, script: String?, country: String?, s3KeyPrefix: String, s3Key: String, score: Float) {
+        init(bibleId: String, abbr: String, iso3: String, name: String, script: String?, country: String?,
+             score: Float) {
             self.bibleId = bibleId
             self.abbr = abbr
             self.iso3 = iso3
             self.name = name
             self.script = script
             self.country = country
-            self.s3KeyPrefix = s3KeyPrefix
-            self.s3Key = s3Key
             self.score = score
         }
         
@@ -162,8 +158,10 @@ struct BibleInitialSelect {
                 _ = biblesSorted.popLast()
             }
             for bb in biblesSorted {
+                // This incomplete Bible object is only used to convey a bibleId to updateSettings
                 let bible = Bible(bibleId: bb.bibleId, abbr: bb.abbr, iso3: bb.iso3, name: bb.name,
-                                  s3KeyPrefix: bb.s3KeyPrefix, s3Key: bb.s3Key, locale: locale)
+                                  textBucket: "", textId: "", s3TextTemplate: "",
+                                  audioBucket: nil, otDamId: nil, ntDamId: nil, locale: locale)
                 if !selected.contains(bible) {
                     selected.append(bible)
                 }
@@ -213,7 +211,7 @@ struct BibleInitialSelect {
         for lang in languages {
             langScore[lang.iso3] = lang.score
         }
-        let sql =  "SELECT bibleId, abbr, iso3, name, script, country, s3KeyPrefix, s3Key" +
+        let sql = "SELECT bibleId, abbr, iso3, name, script, country" +
                 " FROM Bible WHERE iso3" + self.adapter.genQuest(array: languages)
 
         var bibles = [BibleScore]()
@@ -226,7 +224,7 @@ struct BibleInitialSelect {
                 let score = (langScore[iso3] != nil) ? langScore[iso3]! : 0.10
                 bibles.append(BibleScore(bibleId: row[0]!, abbr: row[1]!, iso3: iso3, name: row[3]!,
                                          script: row[4], country: row[5],
-                                         s3KeyPrefix: row[6]!, s3Key: row[6]!, score: score))
+                                         score: score))
             }
         } catch let err {
             print("ERROR: BibleInitSelect.getBiblesSelected \(err)")

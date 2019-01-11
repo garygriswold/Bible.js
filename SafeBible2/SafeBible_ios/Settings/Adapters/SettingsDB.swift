@@ -54,7 +54,7 @@ struct SettingsDB {
         } catch let err {
             print("ERROR: SettingsDB.getSettings \(err)")
         }
-        return ""
+        return nil
     }
     
     func updateSettings(name: String, settings: [String]) {

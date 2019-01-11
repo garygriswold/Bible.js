@@ -38,7 +38,7 @@ class TableContentsModel { // class is used to permit self.contents inside closu
         self.books = BibleDB.shared.getTableContents(bibleId: bible.bibleId)
         if self.books.count < 1 {
             AwsS3Manager.findDbp().downloadData(s3Bucket: "dbp-prod",
-                                       s3Key: "\(self.bible.s3KeyPrefix)info.json",
+                                       s3Key: "\(self.bible.s3TextPrefix)info.json",
                                        complete: { error, data in
                                         if let data1 = data {
                                             print(data1)
