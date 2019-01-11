@@ -112,6 +112,9 @@ python py/VideoTable.py
 
 sqlite Versions.db < sql/video.sql
 
+# Edit VideoUpdate.sql for changes in ROCK vides
+sqlite Versions.db < sql/VideoUpdate.sql
+
 #NOTE: should delete duplicate english rows in VideoTable
 
 
