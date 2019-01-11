@@ -107,6 +107,13 @@ python py/JesusFilmImporter.js
 
 sqlite Versions.db < sql/jesus_film.sql
 
+# Create Video table by extracting data from Jesus Film Project
+python py/VideoTable.py
+
+sqlite Versions.db < sql/video.sql
+
+#NOTE: should delete duplicate english rows in VideoTable
+
 
 
 
