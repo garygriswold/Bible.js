@@ -100,6 +100,13 @@ sqlite Versions.db <<END_SQL2
 UPDATE Bible SET localizedName = name WHERE localizedName is NULL;
 END_SQL2
 
+############# Video #####################
+
+# Pulls data from JFP web service, and generates JesusFilm table
+python py/JesusFilmImporter.js
+
+sqlite Versions.db < sql/jesus_film.sql
+
 
 
 
