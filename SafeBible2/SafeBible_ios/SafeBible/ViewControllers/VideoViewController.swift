@@ -57,12 +57,18 @@ class VideoViewController: AppTableViewController, UITableViewDataSource {
         let video = self.dataModel.selected[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "videoDescriptionCell", for: indexPath) as! VideoDescriptionCell
         cell.contentView.backgroundColor = AppFont.backgroundColor
+        
+        if let image = UIImage(named: "www/images/\(video.mediaId).jpg") {
+            cell.photo.image = image
+            let aspectRatio = (image.size.height / image.size.width)
+            cell.photo.heightAnchor.constraint(equalTo: cell.photo.widthAnchor,
+                                               multiplier: aspectRatio).isActive = true
+        }
         cell.title.text = video.title
         cell.title.textColor = AppFont.textColor
         cell.descr.text = video.description
         cell.descr.textColor = AppFont.textColor
-        let image = UIImage(named: "www/images/\(video.mediaId).jpg")
-        cell.photo.image = image
+
         //cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -109,14 +115,10 @@ class VideoDescriptionCell : UITableViewCell {
         let inset = self.contentView.frame.width * 0.05
         
         let vue = self.contentView
-        //let aspectRatio = (self.imageView!.image!.size.width / self.imageView!.image!.size.height)
-        let aspectRatio: CGFloat = 0.80
         self.photo.translatesAutoresizingMaskIntoConstraints = false
         self.photo.topAnchor.constraint(equalTo: vue.topAnchor, constant: inset).isActive = true
         self.photo.leadingAnchor.constraint(equalTo: vue.leadingAnchor, constant: inset).isActive = true
         self.photo.trailingAnchor.constraint(equalTo: vue.trailingAnchor, constant: -inset).isActive = true
-        self.photo.heightAnchor.constraint(equalTo: self.photo.widthAnchor,
-                                                multiplier: aspectRatio).isActive = true
 
         self.title.translatesAutoresizingMaskIntoConstraints = false
         self.title.topAnchor.constraint(equalTo: self.photo.bottomAnchor, constant: inset).isActive = true
