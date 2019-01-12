@@ -99,7 +99,7 @@ class VideoDescriptionCell : UITableViewCell {
         
         self.contentView.addSubview(self.photo)
         
-        self.title.font = AppFont.sansSerif(style: .caption1)
+        self.title.font = AppFont.sansSerif(style: .subheadline)
         self.contentView.addSubview(self.title)
         
         self.descr.numberOfLines = 0
@@ -120,7 +120,7 @@ class VideoDescriptionCell : UITableViewCell {
 
         self.title.translatesAutoresizingMaskIntoConstraints = false
         self.title.topAnchor.constraint(equalTo: self.photo.bottomAnchor, constant: inset).isActive = true
-        self.title.leadingAnchor.constraint(equalTo: vue.leadingAnchor, constant: inset).isActive = true
+        self.title.centerXAnchor.constraint(equalTo: vue.centerXAnchor, constant: 0).isActive = true
         
         self.descr.translatesAutoresizingMaskIntoConstraints = false
         self.descr.topAnchor.constraint(equalTo: self.title.bottomAnchor, constant: inset / 2.0).isActive = true
