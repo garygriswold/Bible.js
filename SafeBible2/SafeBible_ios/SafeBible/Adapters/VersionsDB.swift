@@ -27,11 +27,11 @@ struct VersionsDB {
                 let row = resultSet[0]
                 return Bible(bibleId: row[0]!, abbr: row[1]!, iso3: row[2]!, name: row[3]!,
                              textBucket: row[4]!, textId: row[5]!, s3TextTemplate: row[6]!,
-                             audioBucket: row[7]!, otDamId: row[8]!, ntDamId: row[9]!,
+                             audioBucket: row[7], otDamId: row[8], ntDamId: row[9],
                              locale: Locale.current)
             }
         } catch let err {
-            print("ERROR: SettingsDB.getSettings \(err)")
+            print("ERROR: VersionsDB.getBible \(err)")
         }
         // Return default, because optional causes too many complexities in program
         // Failure could occur when a bibleId in user history is removed.
@@ -43,99 +43,59 @@ struct VersionsDB {
     //
     // Videos
     //
-    func getJesusFilmLanguage(iso3: String, country: String?) -> String {
-//        var that = this;
-//        var statement = 'SELECT languageId FROM JesusFilm WHERE countryCode=? AND silCode=? ORDER BY population DESC';
-//        this.database.select(statement, [ countryCode, silCode ], function(results) {
-//            if (results instanceof IOError) {
-//                console.log('SQL Error in selectJesusFilmLanguage, query 1', results);
-//                callback({});
-//            } else if (results.rows.length > 0) {
-//                callback(results.rows.item(0));
-//            } else {
-//                statement = 'SELECT languageId FROM JesusFilm WHERE silCode=? ORDER BY population DESC';
-//                that.database.select(statement, [ silCode ], function(results) {
-//                    if (results instanceof IOError) {
-//                        console.log('SQL Error in selectJesusFilmLanguage, query 2', results);
-//                        callback({});
-//                    } else if (results.rows.length > 0) {
-//                        callback(results.rows.item(0));
-//                    } else {
-//                        callback({});
-//                    }
-//                });
-//            }
-//        });
-//        return ""
+    func getJesusFilmLanguage(iso3: String, country: String?) -> String? {
+        let cntry = (country != nil) ? country : "US"
+        var sql = "SELECT languageId FROM JesusFilm WHERE country=? AND iso3=? ORDER BY population DESC"
+        do {
+            let db: Sqlite3 = try self.getVersionsDB()
+            var resultSet: [[String?]] = try db.queryV1(sql: sql, values: [cntry, iso3])
+            if resultSet.count > 0 {
+                return resultSet[0][0]
+            }
+            sql = "SELECT languageId FROM JesusFilm WHERE iso3=? ORDER BY population DESC"
+            resultSet = try db.queryV1(sql: sql, values: [iso3])
+            if resultSet.count > 0 {
+                return resultSet[0][0]
+            }
+        } catch let err {
+            print("ERROR: VersionsDB.getJesusFilmLanguage \(err)")
+        }
+        return nil
     }
     
-    func getVideos(iso3: String, languageId: String) -> [Video] {
-//        var that = this;
-//        var selectList = 'SELECT languageId, mediaId, silCode, langCode, title, lengthMS, HLS_URL,' +
-//        ' (longDescription is not NULL) AS hasDescription FROM Video';
-//        var statement = selectList + ' WHERE languageId IN (?,?)';
-//        this.database.select(statement, [ languageId, silCode ], function(results) {
-//            if (results instanceof IOError) {
-//                console.log('found Error', results);
-//                callback({});
-//            } else {
-//                if (results.rows.length > 0) {
-//                    returnVideoMap(languageId, silCode, results, callback);
-//                } else {
-//                    statement = selectList + ' WHERE langCode IN (?,?)';
-//                    that.database.select(statement, [langCode, langPrefCode], function(results) {
-//                        if (results instanceof IOError) {
-//                            callback({});
-//                        } else {
-//                            if (results.rows.length > 0) {
-//                                returnVideoMap(languageId, silCode, results, callback);
-//                            } else {
-//                                statement = selectList + ' WHERE langCode = "en"';
-//                                that.database.select(statement, [], function(results) {
-//                                    if (results instanceof IOError) {
-//                                        callback({});
-//                                    } else {
-//                                        returnVideoMap(languageId, silCode, results, callback);
-//                                    }
-//                                });
-//                            }
-//                        }
-//                    });
-//                }
-//            }
-//        });
-//
-//        function returnVideoMap(languageId, silCode, results, callback) {
-//            var videoMap = {};
-//            for (var i=0; i<results.rows.length; i++) {
-//                var row = results.rows.item(i);
-//                var meta = new VideoMetaData();
-//                meta.mediaSource = (row.mediaId.indexOf("KOG") > -1) ? "Rock" : "JFP";
-//                meta.languageId = languageId;
-//                meta.silCode = silCode;
-//                meta.langCode = row.langCode;
-//                meta.mediaId = row.mediaId;
-//                meta.title = row.title;
-//                meta.lengthInMilliseconds = row.lengthMS;
-//                meta.hasDescription = row.hasDescription;
-//                meta.mediaURL = row.HLS_URL;
-//                videoMap[row.mediaId] = meta;
-//            }
-//            callback(videoMap);
-//        }
-        
-    }
-    
-    func selectDescription = function(languageId, silCode, mediaId, callback) -> String {
-//        var that = this;
-//        var statement = "SELECT longDescription FROM Video WHERE (languageId = ? OR silCode = ?) AND mediaID = ?";
-//        this.database.selectHTML(statement, [languageId, silCode, mediaId], function(results) {
-//        if (results instanceof IOError) {
-//        callback("");
-//        } else {
-//        callback(results);
-//        }
-//        });
+    func getVideos(iso3: String, languageId: String?) -> [Video] {
+        var sql = "SELECT languageId, mediaId, mediaSource, title, lengthMS, HLS_URL,"
+            + " description FROM Video WHERE languageId IN (?,?)"
+        let langId = (languageId != nil) ? languageId : iso3
+        do {
+            let db: Sqlite3 = try self.getVersionsDB()
+            var resultSet: [[String?]] = try db.queryV1(sql: sql, values: [iso3, langId])
+            if resultSet.count > 0 {
+                var videos = resultSet.map {
+                    Video(languageId: $0[0]!, mediaId: $0[1]!, mediaSource: $0[2]!, title: $0[3]!,
+                          lengthMS: Int($0[4]!)!, HLS_URL: $0[5]!, description: $0[6])
+                }
+                // 529 is the Jesus Film language code for iso3 == eng
+                sql = "SELECT description FROM Video WHERE mediaId = ? AND languageId IN ('eng', '529')"
+                for index in 0..<videos.count {
+                    var video = videos[index]
+                    if video.description == nil {
+                        do {
+                            resultSet = try db.queryV1(sql: sql, values: [video.mediaId])
+                            if resultSet.count > 0 {
+                                video.description = resultSet[0][0]
+                            }
+                        } catch let err {
+                            print("ERROR: VersionsDB.getVideos.getDescription \(err)")
+                        }
+                    }
+                }
+                return videos
+            }
+        } catch let err {
+            print("ERROR: VersionsDB.getVideos \(err)")
+        }
+        return []
     }
     
     //

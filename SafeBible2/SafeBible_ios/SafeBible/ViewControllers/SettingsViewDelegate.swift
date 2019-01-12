@@ -72,7 +72,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             case 1:
                 HistoryViewController.push(controller: self.controller)
             case 2:
-                ExternControllerImpl.push(title: "Videos", controller: self.controller)
+                let bible = HistoryModel.shared.currBible
+                VideoViewController.push(iso3: bible.iso3, controller: self.controller)
             default: fatalError("Unknown row \(indexPath.row) in section 0")
             }
         case 1:

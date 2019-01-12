@@ -14,7 +14,7 @@ struct Video {
     let title: String
     let lengthMS: Int // could be a string
     let HLS_URL: String
-    let description: String?
+    var description: String?
 }
 
 struct VideoModel {
