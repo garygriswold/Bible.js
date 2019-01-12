@@ -59,7 +59,10 @@ class VideoViewController: AppTableViewController, UITableViewDataSource {
         cell.title.textColor = AppFont.textColor
         cell.descript.text = video.description
         cell.descript.textColor = AppFont.textColor
+        let image = UIImage(named: "www/images/\(video.mediaId).jpg")
+        cell.imageView!.image = image
         //cell.image =
+        //cell.accessoryType = .disclosureIndicator
         return cell
     }
     
@@ -75,7 +78,6 @@ class VideoDescriptionCell : UITableViewCell {
     
     let title = UILabel()
     let descript = UILabel()
-    let preview = UIImage()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -89,17 +91,27 @@ class VideoDescriptionCell : UITableViewCell {
         
         let inset = self.contentView.frame.width * 0.05
         
-        self.title.translatesAutoresizingMaskIntoConstraints = false
+        let vue = self.contentView
+        //let aspectRatio = (self.imageView!.image!.size.width / self.imageView!.image!.size.height)
+        let aspectRatio: CGFloat = 0.80
+        self.imageView!.translatesAutoresizingMaskIntoConstraints = false
+        self.imageView?.topAnchor.constraint(equalTo: vue.topAnchor, constant: inset).isActive = true
+        self.imageView!.leadingAnchor.constraint(equalTo: vue.leadingAnchor, constant: inset).isActive = true
+        self.imageView!.trailingAnchor.constraint(equalTo: vue.trailingAnchor, constant: -inset).isActive = true
+        self.imageView!.heightAnchor.constraint(equalTo: self.imageView!.widthAnchor,
+                                                multiplier: aspectRatio).isActive = true
+        // skip bottom anchor
         
-        self.title.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: inset).isActive = true
+        self.title.translatesAutoresizingMaskIntoConstraints = false
+        self.title.topAnchor.constraint(equalTo: self.imageView!.bottomAnchor, constant: inset).isActive = true
         self.title.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: inset).isActive = true
         
         self.descript.translatesAutoresizingMaskIntoConstraints = false
         
         self.descript.topAnchor.constraint(equalTo: self.title.bottomAnchor, constant: inset / 2.0).isActive = true
-        self.descript.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: inset).isActive = true
-        self.descript.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -inset).isActive = true
-        self.descript.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -inset).isActive = true
+        self.descript.leadingAnchor.constraint(equalTo: vue.leadingAnchor, constant: inset).isActive = true
+        self.descript.trailingAnchor.constraint(equalTo: vue.trailingAnchor, constant: -inset).isActive = true
+        self.descript.bottomAnchor.constraint(equalTo: vue.bottomAnchor, constant: -inset).isActive = true
     }
     required init?(coder: NSCoder) {
         fatalError("VideoDescriptionCell(coder:) is not implemented.")

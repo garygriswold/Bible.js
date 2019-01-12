@@ -175,7 +175,7 @@ struct NotesDB {
             //measure.duration(location: "select notes")
 
             let insert = "INSERT INTO Notes VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
-            let count = try target.bulkExecuteV1(sql: insert, values: resultSet)
+            _ = try target.bulkExecuteV1(sql: insert, values: resultSet)
             //measure.duration(location: "insert notes")
             target.close()
             measure.duration(location: "close target database")

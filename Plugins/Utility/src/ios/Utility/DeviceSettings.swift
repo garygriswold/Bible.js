@@ -6,7 +6,7 @@
 //  Copyright © 2018 ShortSands. All rights reserved.
 //
 import UIKit
-
+/*
 public class DeviceSettings {
     
     public static func modelName() -> String {
@@ -114,4 +114,5 @@ public class DeviceSettings {
         }
     }
 }
+ */
 

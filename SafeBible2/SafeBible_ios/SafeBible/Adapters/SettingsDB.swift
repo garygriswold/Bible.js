@@ -108,7 +108,7 @@ struct SettingsDB {
             let sql = "INSERT INTO History (bibleId, bookId, chapter, verse," +
                     " datetime) VALUES (?,?,?,?,?)"
             let datetime = Date().description
-            let values: [Any] = [reference.bibleId, reference.bookId,
+            let values: [Any?] = [reference.bibleId, reference.bookId,
                                  reference.chapter, reference.verse, datetime]
             _ = try db.executeV1(sql: sql, values: values)
         } catch let err {
