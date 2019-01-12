@@ -63,7 +63,6 @@ class VideoViewController: AppTableViewController, UITableViewDataSource {
         cell.descr.textColor = AppFont.textColor
         let image = UIImage(named: "www/images/\(video.mediaId).jpg")
         cell.photo.image = image
-        //cell.image =
         //cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -78,13 +77,14 @@ class VideoViewController: AppTableViewController, UITableViewDataSource {
                                  languageId: video.languageId,
                                  silLang: self.iso3,
                                  videoUrl: video.HLS_URL)
-        self.videoPlayer!.begin(parent: self, complete: { error in
+        self.videoPlayer!.begin(complete: { error in
             if error != nil {
                 print("ERROR: VideoViewPlayer.begin \(error!)")
             } else {
                 print("Video completed")
             }
         })
+        self.present(self.videoPlayer!.controller, animated: true, completion: nil)
     }
 }
 

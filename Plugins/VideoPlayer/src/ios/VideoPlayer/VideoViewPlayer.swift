@@ -13,7 +13,7 @@ import CoreMedia
 import Utility
 
 public class VideoViewPlayer : NSObject {
-	
+    
     public let controller = AVPlayerViewController()
     private let delegate = VideoViewControllerDelegate() // Without this delegate is lost because weak to controller
     
@@ -39,7 +39,7 @@ public class VideoViewPlayer : NSObject {
         print("VideoViewPlayer is deallocated.")
     }
 
-    public func begin(parent: UIViewController, complete: @escaping (_ error:Error?) -> Void) {
+    public func begin(complete: @escaping (_ error:Error?) -> Void) {
         print("VideoViewPlayer.BEGIN")
         let videoUrl: URL? = URL(string: self.currentState.mediaUrl)
         if let url: URL = videoUrl {
@@ -51,16 +51,12 @@ public class VideoViewPlayer : NSObject {
             }
             let player = AVPlayer(playerItem: playerItem)
         
-            delegate.completionHandler = complete
-            delegate.videoAnalytics = self.videoAnalytics
+            self.delegate.completionHandler = complete
+            self.delegate.videoAnalytics = self.videoAnalytics
             self.controller.delegate = delegate
             self.controller.showsPlaybackControls = true
             self.controller.player = player
             self.controller.player?.play()
-            
-            parent.present(self.controller, animated: true, completion: {
-                print("video completed")
-            })
         }
     }
     
