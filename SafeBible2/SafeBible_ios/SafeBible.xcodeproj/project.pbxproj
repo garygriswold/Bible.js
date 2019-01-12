@@ -31,6 +31,8 @@
 		E452C7B021BF3C6F00553B86 /* NoteEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E452C7AF21BF3C6F00553B86 /* NoteEditViewController.swift */; };
 		E45A606021E955A00042E3EE /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45A605F21E955A00042E3EE /* VideoModel.swift */; };
 		E45A606221EA31870042E3EE /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45A606121EA31870042E3EE /* VideoViewController.swift */; };
+		E45A606421EA6E720042E3EE /* VideoPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45A606321EA6E720042E3EE /* VideoPlayer.framework */; };
+		E45A606521EA6E720042E3EE /* VideoPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E45A606321EA6E720042E3EE /* VideoPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E463896E21793DC0009BF5E2 /* HistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463896D21793DC0009BF5E2 /* HistoryModel.swift */; };
 		E463897221799013009BF5E2 /* BiblesActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463897121799013009BF5E2 /* BiblesActionSheet.swift */; };
 		E4638974217AE210009BF5E2 /* SettingsDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4638973217AE210009BF5E2 /* SettingsDB.swift */; };
@@ -119,6 +121,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				E429FDBA21E9500E004A193A /* AWSCore.framework in Embed Frameworks */,
+				E45A606521EA6E720042E3EE /* VideoPlayer.framework in Embed Frameworks */,
 				E4D708D1213328E600E4A8BF /* AWS.framework in Embed Frameworks */,
 				E44C056E211BE1F700476DAD /* Utility.framework in Embed Frameworks */,
 			);
@@ -157,6 +160,7 @@
 		E45A605E21E952220042E3EE /* SafeBible.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SafeBible.entitlements; sourceTree = "<group>"; };
 		E45A605F21E955A00042E3EE /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 		E45A606121EA31870042E3EE /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
+		E45A606321EA6E720042E3EE /* VideoPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E463896D21793DC0009BF5E2 /* HistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryModel.swift; sourceTree = "<group>"; };
 		E463897121799013009BF5E2 /* BiblesActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblesActionSheet.swift; sourceTree = "<group>"; };
 		E4638973217AE210009BF5E2 /* SettingsDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDB.swift; sourceTree = "<group>"; };
@@ -246,6 +250,7 @@
 			files = (
 				E4D708D0213328E600E4A8BF /* AWS.framework in Frameworks */,
 				E44C056D211BE1F700476DAD /* Utility.framework in Frameworks */,
+				E45A606421EA6E720042E3EE /* VideoPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,6 +377,7 @@
 		E4F720AD211B6F2A00E26B07 = {
 			isa = PBXGroup;
 			children = (
+				E45A606321EA6E720042E3EE /* VideoPlayer.framework */,
 				E429FDB921E9500D004A193A /* AWSCore.framework */,
 				E429FDB721E94FAB004A193A /* Versions.db */,
 				E429FDB521E94F7B004A193A /* www */,

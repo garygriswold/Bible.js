@@ -6,6 +6,7 @@
 //  Copyright © 2019 ShortSands. All rights reserved.
 //
 import UIKit
+import VideoPlayer
 
 class VideoViewController: AppTableViewController, UITableViewDataSource {
     
@@ -16,6 +17,7 @@ class VideoViewController: AppTableViewController, UITableViewDataSource {
     
     private let iso3: String
     private let dataModel: VideoModel
+    private var videoPlayer: VideoViewPlayer?
     
     init(iso3: String) {
         self.iso3 = iso3
@@ -52,7 +54,7 @@ class VideoViewController: AppTableViewController, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let video = dataModel.selected[indexPath.row]
+        let video = self.dataModel.selected[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "videoDescriptionCell", for: indexPath) as! VideoDescriptionCell
         cell.contentView.backgroundColor = AppFont.backgroundColor
         cell.title.text = video.title
@@ -70,7 +72,19 @@ class VideoViewController: AppTableViewController, UITableViewDataSource {
     // Delegate
     //
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("NOT YET IMPLEMENTED, must play video.")
+        let video = self.dataModel.selected[indexPath.row]
+        self.videoPlayer = VideoViewPlayer(mediaSource: video.mediaSource,
+                                 videoId: video.mediaId,
+                                 languageId: video.languageId,
+                                 silLang: self.iso3,
+                                 videoUrl: video.HLS_URL)
+        self.videoPlayer!.begin(parent: self, complete: { error in
+            if error != nil {
+                print("ERROR: VideoViewPlayer.begin \(error!)")
+            } else {
+                print("Video completed")
+            }
+        })
     }
 }
 

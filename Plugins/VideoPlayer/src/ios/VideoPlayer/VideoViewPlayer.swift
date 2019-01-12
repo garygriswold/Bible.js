@@ -39,7 +39,7 @@ public class VideoViewPlayer : NSObject {
         print("VideoViewPlayer is deallocated.")
     }
 
-    public func begin(complete: @escaping (_ error:Error?) -> Void) {
+    public func begin(parent: UIViewController, complete: @escaping (_ error:Error?) -> Void) {
         print("VideoViewPlayer.BEGIN")
         let videoUrl: URL? = URL(string: self.currentState.mediaUrl)
         if let url: URL = videoUrl {
@@ -57,6 +57,10 @@ public class VideoViewPlayer : NSObject {
             self.controller.showsPlaybackControls = true
             self.controller.player = player
             self.controller.player?.play()
+            
+            parent.present(self.controller, animated: true, completion: {
+                print("video completed")
+            })
         }
     }
     
