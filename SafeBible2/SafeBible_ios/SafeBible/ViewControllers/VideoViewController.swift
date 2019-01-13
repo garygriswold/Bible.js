@@ -63,6 +63,8 @@ class VideoViewController: AppTableViewController, UITableViewDataSource {
             let aspectRatio = (image.size.height / image.size.width)
             cell.photo.heightAnchor.constraint(equalTo: cell.photo.widthAnchor,
                                                multiplier: aspectRatio).isActive = true
+        } else {
+            cell.photo.image = nil
         }
         cell.title.text = video.title
         cell.title.textColor = AppFont.textColor

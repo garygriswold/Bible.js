@@ -64,31 +64,16 @@ struct VersionsDB {
     }
     
     func getVideos(iso3: String, languageId: String?) -> [Video] {
-        var sql = "SELECT languageId, mediaId, mediaSource, title, lengthMS, HLS_URL,"
+        let sql = "SELECT languageId, mediaId, mediaSource, title, lengthMS, HLS_URL,"
             + " description FROM Video WHERE languageId IN (?,?)"
         let langId = (languageId != nil) ? languageId : iso3
         do {
             let db: Sqlite3 = try self.getVersionsDB()
-            var resultSet: [[String?]] = try db.queryV1(sql: sql, values: [iso3, langId])
+            let resultSet: [[String?]] = try db.queryV1(sql: sql, values: [iso3, langId])
             if resultSet.count > 0 {
-                var videos = resultSet.map {
+                let videos = resultSet.map {
                     Video(languageId: $0[0]!, mediaId: $0[1]!, mediaSource: $0[2]!, title: $0[3]!,
                           lengthMS: Int($0[4]!)!, HLS_URL: $0[5]!, description: $0[6])
-                }
-                // 529 is the Jesus Film language code for iso3 == eng
-                sql = "SELECT description FROM Video WHERE mediaId = ? AND languageId IN ('eng', '529')"
-                for index in 0..<videos.count {
-                    var video = videos[index]
-                    if video.description == nil {
-                        do {
-                            resultSet = try db.queryV1(sql: sql, values: [video.mediaId])
-                            if resultSet.count > 0 {
-                                video.description = resultSet[0][0]
-                            }
-                        } catch let err {
-                            print("ERROR: VersionsDB.getVideos.getDescription \(err)")
-                        }
-                    }
                 }
                 return videos
             }
