@@ -112,10 +112,17 @@ python py/VideoTable.py
 
 sqlite Versions.db < sql/video.sql
 
+# Erase video descriptions in English for non-English languages
+sqlite Versions.db <<END_SQL
+update Video set description=null where languageId != '529' and mediaId='1_jf-0-0' and description = (select description from Video where languageId='529' and mediaId='1_jf-0-0');
+update Video set description=null where languageId != '529' and mediaId='1_wl-0-0' and description = (select description from Video where languageId='529' and mediaId='1_wl-0-0');
+update Video set description=null where languageId != '529' and mediaId='1_cl-0-0' and description = (select description from Video where languageId='529' and mediaId='1_cl-0-0');
+vacuum;
+END_SQL
+
 # Edit VideoUpdate.sql for changes in ROCK vides
 sqlite Versions.db < sql/VideoUpdate.sql
 
-#NOTE: should delete duplicate english rows in VideoTable
 
 
 
