@@ -100,7 +100,7 @@ sqlite Versions.db <<END_SQL2
 UPDATE Bible SET localizedName = name WHERE localizedName is NULL;
 END_SQL2
 
-###################### Video ######################
+###################### Video Player ######################
 
 # Pulls data from JFP web service, and generates JesusFilm table
 python py/JesusFilmImporter.js
@@ -136,6 +136,8 @@ INSERT INTO VideoSeq VALUES ('1_wl-0-0', 3);
 INSERT INTO VideoSeq VALUES ('KOG_OT', 4);
 INSERT INTO VideoSeq VALUES ('KOG_NT', 5);
 END_SQL6
+
+###################### Audio Player ######################
 
 
 
