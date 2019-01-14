@@ -64,8 +64,9 @@ struct VersionsDB {
     }
     
     func getVideos(iso3: String, languageId: String?) -> [Video] {
-        let sql = "SELECT languageId, mediaId, mediaSource, title, lengthMS, HLS_URL,"
-            + " description FROM Video WHERE languageId IN (?,?)"
+        let sql = "SELECT languageId, v.mediaId, mediaSource, title, lengthMS, HLS_URL,"
+            + " description FROM Video v, VideoSeq s WHERE v.mediaId = s.mediaId"
+            + " AND languageId IN (?,?) ORDER BY s.sequence"
         let langId = (languageId != nil) ? languageId : iso3
         do {
             let db: Sqlite3 = try self.getVersionsDB()

@@ -1,7 +1,7 @@
 #!/bin/sh -ve
 
 # Create Support Tables
-python py/CountryTable.py
+#python py/CountryTable.py
 python py/LanguageTable.py
 python py/ISO3PriorityTable.py
 
@@ -15,12 +15,12 @@ DROP TABLE IF EXISTS Bible;
 DROP TABLE IF EXISTS Owner;
 DROP TABLE IF EXISTS IOS3Priority;
 DROP TABLE IF EXISTS Language;
-DROP TABLE IF EXISTS Country;
+-- DROP TABLE IF EXISTS Country;
 DROP TABLE IF EXISTS Region;
 END_SQL
 
 # Load database
-sqlite Versions.db < sql/country.sql
+#sqlite Versions.db < sql/country.sql
 sqlite Versions.db < sql/language.sql
 sqlite Versions.db < sql/iso3Priority.sql
 sqlite Versions.db < sql/copied_owner.sql
@@ -100,7 +100,7 @@ sqlite Versions.db <<END_SQL2
 UPDATE Bible SET localizedName = name WHERE localizedName is NULL;
 END_SQL2
 
-############# Video #####################
+###################### Video ######################
 
 # Pulls data from JFP web service, and generates JesusFilm table
 python py/JesusFilmImporter.js
@@ -113,15 +113,30 @@ python py/VideoTable.py
 sqlite Versions.db < sql/video.sql
 
 # Erase video descriptions in English for non-English languages
-sqlite Versions.db <<END_SQL
+sqlite Versions.db <<END_SQL5
 update Video set description=null where languageId != '529' and mediaId='1_jf-0-0' and description = (select description from Video where languageId='529' and mediaId='1_jf-0-0');
 update Video set description=null where languageId != '529' and mediaId='1_wl-0-0' and description = (select description from Video where languageId='529' and mediaId='1_wl-0-0');
 update Video set description=null where languageId != '529' and mediaId='1_cl-0-0' and description = (select description from Video where languageId='529' and mediaId='1_cl-0-0');
 vacuum;
-END_SQL
+END_SQL5
 
 # Edit VideoUpdate.sql for changes in ROCK vides
 sqlite Versions.db < sql/VideoUpdate.sql
+
+# Loads KOG Descriptions into Video table
+python py/VideoUpdate.py
+
+# Add a table that contols the sequence of Video Presentation in App
+sqlite Versions.db <<END_SQL6
+DROP TABLE IF EXISTS VideoSeq;
+CREATE TABLE VideoSeq (mediaId TEXT PRIMARY KEY, sequence INT NOT NULL);
+INSERT INTO VideoSeq VALUES ('1_jf-0-0', 1);
+INSERT INTO VideoSeq VALUES ('1_cl-0-0', 2);
+INSERT INTO VideoSeq VALUES ('1_wl-0-0', 3);
+INSERT INTO VideoSeq VALUES ('KOG_OT', 4);
+INSERT INTO VideoSeq VALUES ('KOG_NT', 5);
+END_SQL6
+
 
 
 
