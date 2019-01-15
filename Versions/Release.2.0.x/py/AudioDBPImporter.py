@@ -193,14 +193,14 @@ for version in versions:
 		abbr = version[1] + version[2]
 		abbrDict[abbr] = (version[0], version[4])
 
-versionOut = io.open("output/AudioVersionTable.sql", mode="w", encoding="utf-8")
+versionOut = io.open("sql/AudioVersionTable.sql", mode="w", encoding="utf-8")
 versionOut.write(u"DROP TABLE IF EXISTS AudioVersion;\n")
 versionOut.write(u"CREATE TABLE AudioVersion(\n")
 versionOut.write(u"  ssVersionCode TEXT NOT NULL PRIMARY KEY,\n")
 versionOut.write(u"  dbpLanguageCode TEXT NOT NULL,\n")
 versionOut.write(u"  dbpVersionCode TEXT NOT NULL);\n")
 
-audioOut = io.open("output/AudioTable.sql", mode="w", encoding="utf-8")
+audioOut = io.open("sql/AudioTable.sql", mode="w", encoding="utf-8")
 audioOut.write(u"DROP TABLE IF EXISTS Audio;\n")
 audioOut.write(u"CREATE TABLE Audio(\n")
 audioOut.write(u"  damId TEXT NOT NULL PRIMARY KEY,\n")
@@ -209,7 +209,7 @@ audioOut.write(u"  dbpVersionCode TEXT NOT NULL,\n")
 audioOut.write(u"  collectionCode TEXT NOT NULL,\n")
 audioOut.write(u"  mediaType TEXT NOT NULL);\n")
 
-bookOut = io.open("output/AudioBookTable.sql", mode="w", encoding="utf-8")
+bookOut = io.open("sql/AudioBookTable.sql", mode="w", encoding="utf-8")
 bookOut.write(u"DROP TABLE IF EXISTS AudioBook;\n")
 bookOut.write(u"CREATE TABLE AudioBook(\n")
 bookOut.write(u"  damId TEXT NOT NULL REFERENCES Audio(damId),\n")
@@ -226,7 +226,7 @@ lastDamId = None
 lastUsfm = None
 bookLine = None
 
-dbpProd = io.open("Release.1.13/metadata/FCBH/dbp_prod.txt", mode="r", encoding="utf-8")
+dbpProd = io.open("metadata/FCBH/dbp_prod.txt", mode="r", encoding="utf-8")
 for line in dbpProd:
 	line = line.strip()
 	parts = line.split("/")
