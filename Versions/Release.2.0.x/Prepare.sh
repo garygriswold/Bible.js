@@ -139,7 +139,17 @@ END_SQL6
 
 ###################### Audio Player ######################
 
+# Generate AudioBook table by parse of dbp-prod
+python py/AudioDBImporter.py
 
+sqlite Versions.db < sql/AudioBookTable.sql
+
+# Generate AudioChapter table by DBP API
+python py/AudioDBPChapter.py
+
+# add AudioChapterTable.sql
+
+# run AudioDBPValidator.py
 
 
 
