@@ -9,36 +9,29 @@ import sys
 
 # This table controls what Audio versions will be included, and what
 # text versions that are associated with
-versions = [
-	['ERV-ARB', 'ARB', 'WTC', True,	 ['ARBWTCN1DA', 'ARBWTCO1DA']],
-	['ARBVDPD', 'ARB', 'VDV', True,	 ['ARZVDVN2DA', 'ARZVDVO2DA']],
-	['ERV-AWA', 'AWA', 'WTC', True,  ['AWAWTCN2DA']],
-	['ERV-BEN', 'BEN', 'WTC', True,  ['BNGWTCN1DA', 'BNGWTCN2DA']],
-	['ERV-BUL', 'BUL', 'PRB', False, ['BLGAMBN1DA']],
-	['ERV-CMN', 'CMN', 'UNV', False, ['CHNUNVN2DA', 'CHNUNVO2DA']],
-	['ERV-ENG', 'ENG', 'ESV', False, ['ENGESVN2DA', 'ENGESVO2DA']],
-	['KJVPD', 	'ENG', 'KJV', True,  ['ENGKJVN2DA', 'ENGKJVO2DA']],
-	['WEB', 	'ENG', 'WEB', True,  ['ENGWEBN2DA', 'ENGWEBO2DA']],
-	['ERV-HRV', 'SRC', None,  False, []],
-	['ERV-HIN', 'HIN', 'WTC', True,  ['HNDWTCN2DA']],
-	['ERV-HUN', 'HUN', 'HBS', False, ['HUNHBSN1DA']],
-	['ERV-IND', 'IND', 'SHL', False, ['INZSHLN2DA']],
-	['ERV-KAN', 'KAN', 'WTC', True,	 ['ERVWTCN1DA', 'ERVWTCN2DA']],
-	['ERV-MAR', 'MAR', 'WTC', True,	 ['MARWTCN1DA', 'MARWTCN2DA']],
-	['ERV-NEP', 'NEP', None,  False, []],
-	['ERV-ORI', 'ORY', 'WTC', True,	 ['ORYWTCN1DA', 'ORYWTCN2DA']],
-	['ERV-PAN', 'PAN', None,  False, []],
-	['ERV-POR', 'POR', 'BAR', False, ['PORARAN2DA']],
-	['ERV-RUS', 'RUS', 'S76', False, ['RUSS76N2DA', 'RUSS76O2DA']],
-	['ERV-SPA', 'SPA', 'WTC', True,  ['SPNWTCN2DA']],
-	['ERV-SRP', 'SRP', None,  False, []],
-	['ERV-TAM', 'TAM', 'WTC', True,  ['TCVWTCN2DA']],
-	['ERV-THA', 'THA', None,  False, []],
-	['ERV-UKR', 'UKR', 'N39', False, ['UKRO95N2DA']],
-	['ERV-URD', 'URD', 'WTC', True,	 ['URDWTCN2DA']],
-	['ERV-VIE', 'VIE', None,  False, []],
-	['NMV', 	'PES', None,  False, []]
-]
+versions = {
+	'ARBWTC': ['ARBWTCN1DA', 'ARBWTCO1DA'],
+	'ARBVDV': ['ARZVDVN2DA', 'ARZVDVO2DA'],
+	'AWAWTC': ['AWAWTCN2DA'],
+	'BENWTC': ['BNGWTCN1DA', 'BNGWTCN2DA'],
+	'BULPRB': ['BLGAMBN1DA'],
+	'CMNUNV': ['CHNUNVN2DA', 'CHNUNVO2DA'],
+	'ENGESV': ['ENGESVN2DA', 'ENGESVO2DA'],
+	'ENGKJV': ['ENGKJVN2DA', 'ENGKJVO2DA'],
+	'ENGWEB': ['ENGWEBN2DA', 'ENGWEBO2DA'],
+	'HINWTC': ['HNDWTCN2DA'],
+	'HUNHBS': ['HUNHBSN1DA'],
+	'INDSHL': ['INZSHLN2DA'],
+	'KANWTC': ['ERVWTCN1DA', 'ERVWTCN2DA'],
+	'MARWTC': ['MARWTCN1DA', 'MARWTCN2DA'],
+	'ORYWTC': ['ORYWTCN1DA', 'ORYWTCN2DA'],
+	'PORBAR': ['PORARAN2DA'],
+	'RUSS76': ['RUSS76N2DA', 'RUSS76O2DA'],
+	'SPAWTC': ['SPNWTCN2DA'],
+	'TAMWTC': ['TCVWTCN2DA'],
+	'UKRN39': ['UKRO95N2DA'],
+	'URDWTC': ['URDWTCN2DA']
+}
 
 #for version in versions:
 #	print version
@@ -187,12 +180,6 @@ def usfmBookId(bookName):
 	result = books.get(bookName, None)
 	return result
 
-abbrDict = dict()	
-for version in versions:
-	if version[2] != None:
-		abbr = version[1] + version[2]
-		abbrDict[abbr] = (version[0], version[4])
-
 bookOut = io.open("sql/AudioBookTable.sql", mode="w", encoding="utf-8")
 bookOut.write(u"DROP TABLE IF EXISTS AudioBook;\n")
 bookOut.write(u"CREATE TABLE AudioBook(\n")
@@ -214,11 +201,10 @@ for line in dbpProd:
 	parts = line.split("/")
 	numParts = len(parts)
 	if parts[0] == 'audio' and parts[numParts -1][-4:] == ".mp3":
-		abbr = parts[1]
+		bibleId = parts[1]
 		damId = parts[2]
-		if numParts == 4 and abbr in abbrDict.keys():
-			ssVersionCode = abbrDict[abbr][0]
-			allowDamId = abbrDict[abbr][1]
+		if numParts == 4 and bibleId in versions.keys():
+			allowDamId = versions[bibleId]
 			if damId in allowDamId:
 
 				# Write AudioBookRow
@@ -247,7 +233,7 @@ for line in dbpProd:
 						checkChapter = "_" + checkChapter
 					checkName = name.replace(" ", "_")
 					checkName = checkName + "_______________"[0: 12 - len(name)]
-					generated = "audio/%s/%s/%s__%s_%s%s.mp3" % (abbr, damId, order, checkChapter, checkName, damId)
+					generated = "audio/%s/%s/%s__%s_%s%s.mp3" % (bibleId, damId, order, checkChapter, checkName, damId)
 					if line != generated:
 						print "ERROR"
 						print line
@@ -257,13 +243,4 @@ for line in dbpProd:
 dbpProd.close()
 bookOut.write(bookLine)
 bookOut.close()
-
-#for order in orderSet:
-#	print order
-
-#for chapter in chapterSet.keys():
-#	print chapter, chapterSet[chapter]
-
-#for book in bookSet:
-#	print book
 
