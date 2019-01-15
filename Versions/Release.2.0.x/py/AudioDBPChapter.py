@@ -10,6 +10,14 @@ HOST = "https://dbt.io/";
 KEY = "key=b37964021bdd346dc602421846bf5683&v=2";
 
 output = io.open("sql/AudioChapterTable.sql", mode="w", encoding="utf-8")
+output.write(u"DROP TABLE IF EXISTS AudioChapter;\n")
+output.write(u"CREATE TABLE AudioChapter(\n")
+output.write(u"  damId TEXT NOT NULL REFERENCES Audio(damId),\n")
+output.write(u"  bookId TEXT NOT NULL,\n")
+output.write(u"  chapter INTEGER NOT NULL,\n")
+output.write(u"  versePositions TEXT NOT NULL,\n")
+output.write(u"  PRIMARY KEY (damId, bookId, chapter),\n")
+output.write(u"  FOREIGN KEY (damId, bookId) REFERENCES AudioBook(damId, bookId));\n")
 
 TEST_CASES = ['CHNUNVN2DA', 'ENGESVN2DA', 'ENGESVO2DA']
 
@@ -97,10 +105,8 @@ def getVerseNumbers(damId, osisCode, chapter):
 		array = [None] * (len(verses) + 1)
 		array[0] = 0
 		for verse in verses:
-			#print verse
 			num = int(verse["verse_id"])
 			pos = float(verse["verse_start"])
-			#print "array[num] = pos", num, pos
 			array[num] = pos
 
 		for idx in range(1, len(array)):
@@ -130,6 +136,9 @@ for row in rows:
 
 		print damId, bookId, osisCode, numberOfChapters
 		ok = getVerseNumbers(damId, osisCode, 1)
+		if ok:
+			for chap in range(2, (numberOfChapters + 1)):
+				getVerseNumbers(damId, osisCode, chap)
 
 db.close()
 output.close()
