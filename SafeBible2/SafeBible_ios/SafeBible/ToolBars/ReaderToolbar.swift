@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AudioPlayer
 
 class ReaderToolbar {
     
@@ -123,6 +124,38 @@ class ReaderToolbar {
     
     @objc func audioTapHandler(sender: UIBarButtonItem) {
         print("audio button handler")
+        let ref = HistoryModel.shared.current()
+        let audioController = AudioBibleController.shared
+        audioController.present(view: self.controller!.view, book: ref.bookId, chapterNum: ref.chapter,
+            complete: { error in
+                // No error is actually being returned
+                if let err = error {
+                    print("Audio Player Error \(err)")
+                } else {
+                    print("Audio Player success")
+                }
+            }
+        )
+    }
+    
+    private func isPlayingAudioController() -> Bool {
+        let audioController = AudioBibleController.shared
+        return audioController.isPlaying()
+    }
+    
+    private func findAudioVersion() {
+        let ref = HistoryModel.shared.current()
+        let audioController = AudioBibleController.shared
+        audioController.findAudioVersion(version: ref.bookId, silLang: ref.bible.iso3,
+                                         complete: { bookIdList in
+                                            print("Find Audio \(bookIdList)")
+            }
+        )
+    }
+
+    private func stopAudioController() {
+        let audioController = AudioBibleController.shared
+        audioController.stop()
     }
     
     @objc func composeTapHandler(sender: UIBarButtonItem) {

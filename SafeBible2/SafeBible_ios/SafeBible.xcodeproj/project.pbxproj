@@ -43,6 +43,8 @@
 		E478BFDB21DCDE490093320D /* AppTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E478BFDA21DCDE490093320D /* AppTableViewController.swift */; };
 		E4825C422124F0B400D36620 /* BibleInitialSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4825C412124F0B400D36620 /* BibleInitialSelect.swift */; };
 		E48BF9CD21DEBD370060392F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F720C0211B6F2C00E26B07 /* Assets.xcassets */; };
+		E49B31D921EE7F8200936913 /* AudioPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E49B31D821EE7F8200936913 /* AudioPlayer.framework */; };
+		E49B31DA21EE7F8200936913 /* AudioPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E49B31D821EE7F8200936913 /* AudioPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E49F7296216AC830007D2856 /* ExternControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */; };
 		E4A3AF152138EC0F006EDEFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E62138BD7F000AB2A8 /* Localizable.strings */; };
 		E4A4B325219F5D5800F70888 /* NotesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A4B324219F5D5700F70888 /* NotesModel.swift */; };
@@ -122,6 +124,7 @@
 			files = (
 				E429FDBA21E9500E004A193A /* AWSCore.framework in Embed Frameworks */,
 				E45A606521EA6E720042E3EE /* VideoPlayer.framework in Embed Frameworks */,
+				E49B31DA21EE7F8200936913 /* AudioPlayer.framework in Embed Frameworks */,
 				E4D708D1213328E600E4A8BF /* AWS.framework in Embed Frameworks */,
 				E44C056E211BE1F700476DAD /* Utility.framework in Embed Frameworks */,
 			);
@@ -200,6 +203,7 @@
 		E49ACDD5213B50720031625C /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E49ACDD6213B507F0031625C /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E49ACDD7213B508B0031625C /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E49B31D821EE7F8200936913 /* AudioPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AudioPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternControllerProtocol.swift; sourceTree = "<group>"; };
 		E4A3AF132138E72D006EDEFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		E4A3AF142138EC0F006EDEFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -248,6 +252,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E49B31D921EE7F8200936913 /* AudioPlayer.framework in Frameworks */,
 				E4D708D0213328E600E4A8BF /* AWS.framework in Frameworks */,
 				E44C056D211BE1F700476DAD /* Utility.framework in Frameworks */,
 				E45A606421EA6E720042E3EE /* VideoPlayer.framework in Frameworks */,
@@ -377,6 +382,7 @@
 		E4F720AD211B6F2A00E26B07 = {
 			isa = PBXGroup;
 			children = (
+				E49B31D821EE7F8200936913 /* AudioPlayer.framework */,
 				E45A606321EA6E720042E3EE /* VideoPlayer.framework */,
 				E429FDB921E9500D004A193A /* AWSCore.framework */,
 				E429FDB721E94FAB004A193A /* Versions.db */,
