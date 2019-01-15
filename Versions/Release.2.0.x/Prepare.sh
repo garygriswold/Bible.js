@@ -147,9 +147,11 @@ sqlite Versions.db < sql/AudioBookTable.sql
 # Generate AudioChapter table by DBP API
 python py/AudioDBPChapter.py
 
-# add AudioChapterTable.sql
+sqlite Versions.db < sql/AudioChapterTable.sql
 
-# run AudioDBPValidator.py
+# Validate the generated keys
+python py/AudioDBPValidator.py
+
 
 
 
