@@ -102,7 +102,8 @@ def getVerseNumbers(damId, osisCode, chapter):
 		response = urllib2.urlopen(url)
 		data = response.read()
 		verses = json.loads(data)
-		array = [None] * (len(verses) + 1)
+		lastVerseId = int(verses[-1:][0]["verse_id"])
+		array = [None] * (lastVerseId + 1)
 		array[0] = 0
 		for verse in verses:
 			num = int(verse["verse_id"])
@@ -136,7 +137,7 @@ for row in rows:
 
 		print damId, bookId, osisCode, numberOfChapters
 		ok = getVerseNumbers(damId, osisCode, 1)
-		if ok:
+		if ok and numberOfChapters > 1:
 			for chap in range(2, (numberOfChapters + 1)):
 				getVerseNumbers(damId, osisCode, chap)
 
