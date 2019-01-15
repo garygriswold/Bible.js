@@ -3,38 +3,27 @@
 # including AudioVersion, Audio, and AudioBook.  AudioChapter is separately
 # created.
 #
-
+import sqlite3
 import io
 import sys
 
+# Build a map of bibles and damId's to collect
 # This table controls what Audio versions will be included, and what
 # text versions that are associated with
-versions = {
-	'ARBWTC': ['ARBWTCN1DA', 'ARBWTCO1DA'],
-	'ARBVDV': ['ARZVDVN2DA', 'ARZVDVO2DA'],
-	'AWAWTC': ['AWAWTCN2DA'],
-	'BENWTC': ['BNGWTCN1DA', 'BNGWTCN2DA'],
-	'BULPRB': ['BLGAMBN1DA'],
-	'CMNUNV': ['CHNUNVN2DA', 'CHNUNVO2DA'],
-	'ENGESV': ['ENGESVN2DA', 'ENGESVO2DA'],
-	'ENGKJV': ['ENGKJVN2DA', 'ENGKJVO2DA'],
-	'ENGWEB': ['ENGWEBN2DA', 'ENGWEBO2DA'],
-	'HINWTC': ['HNDWTCN2DA'],
-	'HUNHBS': ['HUNHBSN1DA'],
-	'INDSHL': ['INZSHLN2DA'],
-	'KANWTC': ['ERVWTCN1DA', 'ERVWTCN2DA'],
-	'MARWTC': ['MARWTCN1DA', 'MARWTCN2DA'],
-	'ORYWTC': ['ORYWTCN1DA', 'ORYWTCN2DA'],
-	'PORBAR': ['PORARAN2DA'],
-	'RUSS76': ['RUSS76N2DA', 'RUSS76O2DA'],
-	'SPAWTC': ['SPNWTCN2DA'],
-	'TAMWTC': ['TCVWTCN2DA'],
-	'UKRN39': ['UKRO95N2DA'],
-	'URDWTC': ['URDWTCN2DA']
-}
+versions = {}
+db = sqlite3.connect('Versions.db')
+cursor = db.cursor()
+sql = "SELECT bibleId, otDamId, ntDamId FROM Bible ORDER BY bibleId"
+values = ()
+cursor.execute(sql, values)
+rows = cursor.fetchall()
+for row in rows:
+	bibleId = row[0]
+	otDamId = row[1]
+	ntDamId = row[2]
+	versions[bibleId] = [otDamId, ntDamId]
 
-#for version in versions:
-#	print version
+db.close()
 
 def usfmBookId(bookName):
 	books = {
@@ -105,6 +94,37 @@ def usfmBookId(bookName):
 		'Jude':  		'JUD',
 		'Revelation':   'REV',
 		# Spanish
+		'Exodo': 		'EXO',
+		'Levitico': 	'LEV',
+		'Numeros': 		'NUM',
+		'Deuteronomio':	'DEU',
+		'Josue': 		'JOS',
+		'Jueces': 		'JDG',
+		'Rut': 			'RUT',
+		'1Reyes': 		'1KI',
+		'2Reyes': 		'2KI',
+		'1Cronicas': 	'1CH',
+		'2Cronicas': 	'2CH',
+		'Esdras': 		'EZR',
+		'Nehemias': 	'NEH',
+		'Ester': 		'EST',
+		'Salmos': 		'PSA',
+		'Proverbios': 	'PRO',
+		'Eclesiastes': 	'ECC',
+		'Cantaras': 	'SNG',
+		'Isaias': 		'ISA',
+		'Jeremias': 	'JER',
+		'Lamentacione': 'LAM',
+		'Ezequiel': 	'EZK',
+		'Oseas': 		'HOS',
+		'Abdias': 		'OBA',
+		'Jonas': 		'JON',
+		'Miqueas': 		'MIC',
+		'Habacuc': 		'HAB',
+		'Sofonias': 	'ZEP',
+		'Hageo': 		'HAG',
+		'Zacarias': 	'ZEC',
+		'Malaquias': 	'MAL',
 		'San Mateo':	'MAT',
 		'San Marcos':	'MRK',
 		'San Lucas':	'LUK',
@@ -175,7 +195,35 @@ def usfmBookId(bookName):
 		'2Yohanes':		'2JN',
 		'3Yohanes':		'3JN',
 		'Yudas':		'JUD',
-		'Wahyu':		'REV'
+		'Wahyu':		'REV',
+		# Maasina Fulfulde
+		'Matthieu':		'MAT',
+		'Marc':			'MRK',
+		'Luc':			'LUK',
+		'Jean':			'JHN',
+		'Actes':		'ACT',
+		'Romains':		'ROM',
+		'1Corinthiens':	'1CO',
+		'2Corinthiens':	'2CO',
+		'Galates':		'GAL',
+		'Ephesiens':	'EPH',
+		'Philippiens':	'PHP',
+		'Colossiens':	'COL',
+		'1Thess':		'1TH',
+		'2Thess':		'2TH',
+		'1Timothee':	'1TI',
+		'2Timothee':	'2TI',
+		'Tite': 		'TIT',
+		'Philemon': 	'PHM',
+		'Hebreux': 		'HEB',
+		'Jacques': 		'JAS',
+		'1Pierre': 		'1PE',
+		'2Pierre': 		'2PE',
+		'1Jean':		'1JN',
+		'2Jean':		'2JN',
+		'3Jean':		'3JN',
+		'Jude':			'JUD',
+		'Apocalypse': 	'REV'
 	}
 	result = books.get(bookName, None)
 	return result
@@ -195,6 +243,8 @@ lastDamId = None
 lastUsfm = None
 bookLine = None
 
+EXCLUDE = ['GRKAVSO1DA'] # exclude because we do not have OT text
+
 dbpProd = io.open("metadata/FCBH/dbp_prod.txt", mode="r", encoding="utf-8")
 for line in dbpProd:
 	line = line.strip()
@@ -205,7 +255,7 @@ for line in dbpProd:
 		damId = parts[2]
 		if numParts == 4 and bibleId in versions.keys():
 			allowDamId = versions[bibleId]
-			if damId in allowDamId:
+			if damId in allowDamId and damId not in EXCLUDE:
 
 				# Write AudioBookRow
 				book = parts[3]
