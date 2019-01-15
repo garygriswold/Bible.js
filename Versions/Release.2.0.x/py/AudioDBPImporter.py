@@ -193,22 +193,6 @@ for version in versions:
 		abbr = version[1] + version[2]
 		abbrDict[abbr] = (version[0], version[4])
 
-versionOut = io.open("sql/AudioVersionTable.sql", mode="w", encoding="utf-8")
-versionOut.write(u"DROP TABLE IF EXISTS AudioVersion;\n")
-versionOut.write(u"CREATE TABLE AudioVersion(\n")
-versionOut.write(u"  ssVersionCode TEXT NOT NULL PRIMARY KEY,\n")
-versionOut.write(u"  dbpLanguageCode TEXT NOT NULL,\n")
-versionOut.write(u"  dbpVersionCode TEXT NOT NULL);\n")
-
-audioOut = io.open("sql/AudioTable.sql", mode="w", encoding="utf-8")
-audioOut.write(u"DROP TABLE IF EXISTS Audio;\n")
-audioOut.write(u"CREATE TABLE Audio(\n")
-audioOut.write(u"  damId TEXT NOT NULL PRIMARY KEY,\n")
-audioOut.write(u"  dbpLanguageCode TEXT NOT NULL,\n")
-audioOut.write(u"  dbpVersionCode TEXT NOT NULL,\n")
-audioOut.write(u"  collectionCode TEXT NOT NULL,\n")
-audioOut.write(u"  mediaType TEXT NOT NULL);\n")
-
 bookOut = io.open("sql/AudioBookTable.sql", mode="w", encoding="utf-8")
 bookOut.write(u"DROP TABLE IF EXISTS AudioBook;\n")
 bookOut.write(u"CREATE TABLE AudioBook(\n")
@@ -220,8 +204,6 @@ bookOut.write(u"  numberOfChapters INTEGER NOT NULL,\n")
 bookOut.write(u"  PRIMARY KEY (damId, bookId));\n")
 
 
-versionIdSet = set()
-damIdSet = set()
 lastDamId = None
 lastUsfm = None
 bookLine = None
@@ -238,23 +220,6 @@ for line in dbpProd:
 			ssVersionCode = abbrDict[abbr][0]
 			allowDamId = abbrDict[abbr][1]
 			if damId in allowDamId:
-
-				# Write AudioVersion Row
-				if not abbr in versionIdSet:
-					versionIdSet.add(abbr)
-					versionOut.write(u"INSERT INTO AudioVersion VALUES ('%s', '%s', '%s');\n"
-					% (ssVersionCode, abbr[0:3], abbr[3:]))
-
-				# Write Audio Row
-				if not damId in damIdSet:
-					damIdSet.add(damId)
-					collectionCode = damId[6:7] + "T"
-					mType = damId[7:]
-					if mType != '1DA' and mType != '2DA':
-						print "ERROR mediaType", line
-					mediaType = 'Drama' if (mType == '2DA') else 'Non-Drama'
-					audioOut.write(u"REPLACE INTO Audio VALUES('%s', '%s', '%s', '%s', '%s');\n"
-					% (damId, abbr[0:3], abbr[3:6], collectionCode, mediaType))
 
 				# Write AudioBookRow
 				book = parts[3]
@@ -290,8 +255,6 @@ for line in dbpProd:
 
 
 dbpProd.close()
-versionOut.close()
-audioOut.close()
 bookOut.write(bookLine)
 bookOut.close()
 
