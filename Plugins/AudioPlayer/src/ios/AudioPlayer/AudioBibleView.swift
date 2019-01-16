@@ -220,9 +220,10 @@ class AudioBibleView {
     
     @objc private func stop() {
         self.audioBible.stop()
+        self.dismissPlayer()
     }
     
-    func startPlay() {
+    func presentPlayer() {
         self.isAudioViewActive = true
         self.audioPanel.center.y = self.view.bounds.height + self.audioPanel.bounds.height / 2.0
         let homeBarSafe = self.view.bounds.height * 0.03
@@ -252,7 +253,7 @@ class AudioBibleView {
         UIApplication.shared.isIdleTimerDisabled = true
     }
 
-    func stopPlay() {
+    func dismissPlayer() {
         self.isAudioViewActive = false
         UIView.animate(withDuration: 1.0, delay: 0.0,
                        options: UIViewAnimationOptions.curveEaseOut,
@@ -369,7 +370,7 @@ class AudioBibleView {
                 self.pauseButton.removeFromSuperview()
                 self.audioPanel.addSubview(self.playButton)
             } else {
-                self.startPlay()
+                self.presentPlayer()
             }
         }
     }

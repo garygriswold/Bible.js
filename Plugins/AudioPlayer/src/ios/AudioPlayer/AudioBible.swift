@@ -88,7 +88,6 @@ class AudioBible {
         self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.none
         
         self.play()
-        self.controller.playHasStarted()
         self.controlCenter.nowPlaying(player: self)
         
         self.preFetchNextChapter(reference: reference)
@@ -134,7 +133,6 @@ class AudioBible {
         if self.player != nil && self.player!.rate > 0.0 {
             self.pause()
         }
-        self.controller.playHasStopped()
     }
     
     /** This method is called by AudioControlCenter.swift when user clicks the next button. */

@@ -66,6 +66,7 @@ public class AudioBibleController {
             if let reader = self.audioTOCBible {
                 if let meta = reader.findBook(bookId: book) {
                     let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)
+                    self.audioBibleView!.presentPlayer()
                     self.audioBible!.beginReadFile(reference: ref)
                 } else { complete(nil) }
             } else { complete(nil) }
@@ -76,15 +77,6 @@ public class AudioBibleController {
     */
     public func stop() {
         self.audioBible?.stop()
-    }
-    
-    func playHasStarted() {
-        self.audioBibleView?.startPlay()
-    }
-    
-    func playHasStopped() {
-        self.audioBibleView?.stopPlay()
-        self.completionHandler?(nil)
     }
 }
 
