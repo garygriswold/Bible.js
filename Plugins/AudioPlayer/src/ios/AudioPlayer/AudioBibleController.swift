@@ -62,11 +62,14 @@ public class AudioBibleController {
         self.audioSession = AudioSession.shared(audioBibleView: self.audioBibleView!)
         self.completionHandler = complete
         
-        if !self.audioBibleView!.audioBibleActive() && !self.audioBible!.isPlaying() {
+        if !self.audioBibleView!.audioBibleActive() {
+            self.audioBibleView?.presentPlayer()
+        }
+        
+        if !self.audioBible!.isPlaying() {
             if let reader = self.audioTOCBible {
                 if let meta = reader.findBook(bookId: book) {
                     let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)
-                    self.audioBibleView!.presentPlayer()
                     self.audioBible!.beginReadFile(reference: ref)
                 } else { complete(nil) }
             } else { complete(nil) }
