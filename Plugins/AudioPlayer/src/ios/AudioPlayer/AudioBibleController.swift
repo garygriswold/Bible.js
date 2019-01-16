@@ -20,7 +20,7 @@ public class AudioBibleController {
         }
     }
  
-    var metaDataReader: AudioTOCBible?
+    var audioTOCBible: AudioTOCBible?
     private var fileType: String
     private var audioBible: AudioBible?
     private var audioBibleView: AudioBibleView?
@@ -36,20 +36,11 @@ public class AudioBibleController {
         print("***** Deinit AudioBibleController *****")
     }
     
-    public func findAudioVersion(version: String, silLang: String,
-                                 complete: @escaping (_ bookList:String) -> Void) {
-        self.metaDataReader = AudioTOCBible(versionCode: version, silLang: silLang)
-        metaDataReader!.read(complete: { oldTestament, newTestament in
-                        var bookIdList = ""
-                        if let oldTest = oldTestament {
-                            bookIdList = oldTest.getBookList()
-                        }
-                        if let newTest = newTestament {
-                            bookIdList += "," + newTest.getBookList()
-                        }
-                        complete(bookIdList)
-            }
-        )
+    public func findAudioVersion(bibleId: String, iso3: String,
+                                 audioBucket: String?, otDamId: String?, ntDamId: String?) -> String {
+        self.audioTOCBible = AudioTOCBible(source: "FCBH", bibleId: bibleId, iso3: iso3,
+                                            audioBucket: audioBucket, otDamId: otDamId, ntDamId: ntDamId)
+        return self.audioTOCBible!.read()
     }
     
     public func isPlaying() -> Bool {
@@ -66,15 +57,13 @@ public class AudioBibleController {
     * This must be set to be the WKWebView
     */
     public func present(view: UIView, book: String, chapterNum: Int, complete: @escaping (_ error:Error?) -> Void) {
-  //      view.backgroundColor = .blue // This is for Testing
-        
         self.audioBible = AudioBible.shared(controller: self)
         self.audioBibleView = AudioBibleView.shared(view: view, audioBible: self.audioBible!)
         self.audioSession = AudioSession.shared(audioBibleView: self.audioBibleView!)
         self.completionHandler = complete
         
         if !self.audioBibleView!.audioBibleActive() && !self.audioBible!.isPlaying() {
-            if let reader = metaDataReader {
+            if let reader = self.audioTOCBible {
                 if let meta = reader.findBook(bookId: book) {
                     let ref = AudioReference(book: meta, chapterNum: chapterNum, fileType: self.fileType)
                     self.audioBible!.beginReadFile(reference: ref)

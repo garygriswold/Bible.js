@@ -152,6 +152,12 @@ sqlite Versions.db < sql/AudioChapterTable.sql
 # Validate the generated keys
 python py/AudioDBPValidator.py
 
+# patch problems in damId selection
+sqlite Versions.db <<END_SQL7
+UPDATE Bible SET otDamId='ENGWEBO2DA', ntDamId='ENGWEBN2DA' WHERE bibleId='ENGWEB'
+update AudioBook set damId='ENGWEBN2DA' where damId='EN1WEBN2DA';
+update AudioBook set damId='ENGWEBO2DA' where damId='EN1WEBO2DA';
+END_SQL7
 
 
 

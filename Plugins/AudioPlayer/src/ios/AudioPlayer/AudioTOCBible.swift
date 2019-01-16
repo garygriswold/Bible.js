@@ -10,17 +10,25 @@ import Utility
 
 class AudioTOCBible {
     
-    let textVersion: String
-    let silLang: String
     let mediaSource: String
-    private var oldTestament: AudioTOCTestament?
-    private var newTestament: AudioTOCTestament?
+    let bibleId: String
+    let iso3: String
+    let audioBucket: String?
+    let otDamId: String?
+    let ntDamId: String?
+
+    var oldTestament: AudioTOCTestament?
+    var newTestament: AudioTOCTestament?
     private let database: Sqlite3
     
-    init(versionCode: String, silLang: String) {
-        self.textVersion = versionCode
-        self.silLang = silLang
-        self.mediaSource = "FCBH"
+    init(source: String, bibleId: String, iso3: String,
+         audioBucket: String?, otDamId: String?, ntDamId: String?) {
+        self.mediaSource = source
+        self.bibleId = bibleId
+        self.iso3 = iso3
+        self.audioBucket = audioBucket
+        self.otDamId = otDamId
+        self.ntDamId = ntDamId
         self.oldTestament = nil
         self.newTestament = nil
         self.database = Sqlite3()
@@ -32,56 +40,23 @@ class AudioTOCBible {
     }
     
     deinit {
-        print("***** Deinit AudioMetaDataReader *****")
+        print("***** Deinit AudioTOCBible *****")
+    }
+    
+    func read() -> String {
+        var bookIdList = ""
+        if self.otDamId != nil {
+            self.oldTestament = AudioTOCTestament(bible: self, database: self.database, damId: self.otDamId!)
+            bookIdList = self.oldTestament!.getBookList()
+        }
+        if self.ntDamId != nil {
+            self.newTestament = AudioTOCTestament(bible: self, database: self.database, damId: self.ntDamId!)
+            bookIdList += self.newTestament!.getBookList()
+        }
+        self.readBookNames()
+        return bookIdList
     }
 
-    // NOTE: I don't know why this is asynchronous.  It is only a database query.
-    func read(complete: @escaping (_ oldTest:AudioTOCTestament?, _ newTest:AudioTOCTestament?) -> Void) {
-        let query = "SELECT a.damId, a.collectionCode, a.mediaType, a.dbpLanguageCode, a.dbpVersionCode" +
-                " FROM audio a, audioVersion v" +
-                " WHERE a.dbpLanguageCode = v.dbpLanguageCode" +
-                " AND a.dbpVersionCode = v.dbpVersionCode" +
-                " AND v.ssVersionCode = ?" +
-                " ORDER BY mediaType ASC, collectionCode ASC"
-                // mediaType sequence Drama, NonDrama
-                // collectionCode sequence NT, ON, OT
-        do {
-            //try self.database.open(dbPath: "Versions.db", copyIfAbsent: true)
-            //defer { self.database.close() }
-            let resultSet = try self.database.queryV1(sql: query, values: [self.textVersion])
-            print("LENGTH \(resultSet.count)")
-            var oldTestRow: [String?]? = nil
-            var newTestRow: [String?]? = nil
-            for row in resultSet {
-                // Because of the sort sequence, the following logic prefers Drama over Non-Drama
-                // Because of the sequenc of IF's, it prefers OT and NT over ON
-                let collectionCode = row[1]!
-                if newTestRow == nil && collectionCode == "NT" {
-                    newTestRow = row
-                }
-                if newTestRow == nil && collectionCode == "ON" {
-                    newTestRow = row
-                }
-                if oldTestRow == nil && collectionCode == "OT" {
-                    oldTestRow = row
-                }
-                if oldTestRow == nil && collectionCode == "ON" {
-                    oldTestRow = row
-                }
-            }
-            if let oldRow = oldTestRow {
-                self.oldTestament = AudioTOCTestament(bible: self, database: self.database, dbRow: oldRow)
-            }
-            if let newRow = newTestRow {
-                self.newTestament = AudioTOCTestament(bible: self, database: self.database, dbRow: newRow)
-            }
-            self.readBookNames()
-            complete(self.oldTestament, self.newTestament)
-        } catch let err {
-            print("ERROR \(Sqlite3.errorDescription(error: err))")
-            complete(nil, nil)
-        }
-    }
     /**
     * This function will only return results after read has been called.
     */
@@ -98,8 +73,7 @@ class AudioTOCBible {
         return result
     }
     
-    func readVerseAudio(damid: String, bookId: String, chapter: Int,
-                        complete: @escaping (_ audioVerse: AudioTOCChapter?) -> Void) {
+    func readVerseAudio(damid: String, bookId: String, chapter: Int) -> AudioTOCChapter? {
         var metaDataVerse: AudioTOCChapter? = nil
         let query = "SELECT versePositions FROM AudioChapter WHERE damId = ? AND bookId = ? AND chapter = ?"
         do {
@@ -111,17 +85,17 @@ class AudioTOCBible {
                     metaDataVerse = AudioTOCChapter(json: verses)
                 }
             }
-            complete(metaDataVerse)
+            return metaDataVerse
         } catch let err {
             print("ERROR \(Sqlite3.errorDescription(error: err))")
-            complete(nil)
+            return nil
         }
     }
     
     private func readBookNames() {
-        let query = "SELECT code, heading FROM tableContents"
+        let query = "SELECT bookId, name from TableContents"
         do {
-            let dbName = self.textVersion + ".db"
+            let dbName = self.bibleId + ".db"
             let db = Sqlite3()
             try db.open(dbname: dbName, copyIfAbsent: true)
             defer { db.close() }
@@ -138,20 +112,5 @@ class AudioTOCBible {
             print("ERROR \(Sqlite3.errorDescription(error: err))")
         }
     }
-    
-    /*
-    * Deprecated. This was used to parse verse positions as a dictionary
-    private func parseJsonDictionary(json: String) -> NSDictionary? {
-        var result: NSDictionary? = nil
-        if let data = json.data(using: .utf8) {
-            do {
-                result = try JSONSerialization.jsonObject(with: data, options:.allowFragments) as? NSDictionary
-            } catch let jsonError {
-                print("Error parsing Meta Data json \(jsonError)")
-            }
-        }
-        return result
-    }
-    */
 }
 

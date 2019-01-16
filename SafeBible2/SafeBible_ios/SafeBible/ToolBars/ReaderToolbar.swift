@@ -14,6 +14,7 @@ class ReaderToolbar {
     private weak var controller: ReaderPagesController?
     private weak var navigationController: UINavigationController?
     
+    private var audioBookIdList: String!
     private var historyBack: UIBarButtonItem!
     private var historyForward: UIBarButtonItem!
     private var tocBookLabel: UILabel!
@@ -29,6 +30,8 @@ class ReaderToolbar {
             nav.toolbar.isTranslucent = false
             nav.toolbar.barTintColor = AppFont.backgroundColor
         }
+        
+        self.audioBookIdList = self.findAudioVersion()
         
         var items = [UIBarButtonItem]()
         
@@ -123,7 +126,6 @@ class ReaderToolbar {
     }
     
     @objc func audioTapHandler(sender: UIBarButtonItem) {
-        print("audio button handler")
         let ref = HistoryModel.shared.current()
         let audioController = AudioBibleController.shared
         audioController.present(view: self.controller!.view, book: ref.bookId, chapterNum: ref.chapter,
@@ -138,24 +140,25 @@ class ReaderToolbar {
         )
     }
     
+    // This func is a placeholder until it is properly placed
     private func isPlayingAudioController() -> Bool {
-        let audioController = AudioBibleController.shared
-        return audioController.isPlaying()
+        return AudioBibleController.shared.isPlaying()
     }
     
-    private func findAudioVersion() {
+    private func findAudioVersion() -> String {
         let ref = HistoryModel.shared.current()
         let audioController = AudioBibleController.shared
-        audioController.findAudioVersion(version: ref.bookId, silLang: ref.bible.iso3,
-                                         complete: { bookIdList in
-                                            print("Find Audio \(bookIdList)")
-            }
-        )
+        let bookIdList = audioController.findAudioVersion(bibleId: ref.bibleId, iso3: ref.bible.iso3,
+                                                          audioBucket: ref.bible.audioBucket,
+                                                          otDamId: ref.bible.otDamId,
+                                                          ntDamId: ref.bible.ntDamId)
+        print("bookIdList \(bookIdList)")
+        return bookIdList
     }
 
+    // This func is a placeholder until it is properly placed
     private func stopAudioController() {
-        let audioController = AudioBibleController.shared
-        audioController.stop()
+        AudioBibleController.shared.stop()
     }
     
     @objc func composeTapHandler(sender: UIBarButtonItem) {

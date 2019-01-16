@@ -36,15 +36,15 @@ class AudioReference {
         print("***** Deinit AudioReference ***** \(self.toString())")
     }
 
-    var textVersion: String {
+    var bibleId: String {
         get {
-            return self.tocAudioBook.testament.bible.textVersion
+            return self.tocAudioBook.testament.bible.bibleId
         }
     }
  
-    var silLang: String {
+    var iso3: String {
         get {
-            return self.tocAudioBook.testament.bible.silLang
+            return self.tocAudioBook.testament.bible.iso3
         }
     }
 
@@ -83,19 +83,7 @@ class AudioReference {
             return self.tocAudioBook.bookName + " " + String(Int(self.chapter) ?? 1)
         }
     }
-    
-    var dbpLanguageCode: String {
-        get {
-            return self.tocAudioBook.testament.dbpLanguageCode
-        }
-    }
-    
-    private var dbpVersionCode: String {
-        get {
-            return self.tocAudioBook.testament.dbpVersionCode
-        }
-    }
-    
+
     private var dbpBookName: String {
         get {
             return self.tocAudioBook.dbpBookName
@@ -111,21 +99,17 @@ class AudioReference {
     }
     
     func getS3Bucket() -> String {
-        switch (self.fileType) {
-        case "mp3": return "dbp-prod"
-            default: return "unknown bucket"
-        }
+        return self.tocAudioBook.testament.bible.audioBucket!   // Unsafe
     }
     
     func getS3Key() -> String {
-        let abbr = self.dbpLanguageCode + self.dbpVersionCode
         var chapNum = self.chapter
         if self.bookId != "PSA" {
             chapNum = "_" + String(chapNum.dropFirst(1))
         }
         var name: String = self.dbpBookName.replacingOccurrences(of: " ", with: "_")
         name = name.padding(toLength: 12, withPad: "_", startingAt: 0)
-        let key = "audio/\(abbr)/\(self.damId)/\(self.sequence)__\(chapNum)_\(name)\(self.damId).\(self.fileType)"
+        let key = "audio/\(self.bibleId)/\(self.damId)/\(self.sequence)__\(chapNum)_\(name)\(self.damId).\(self.fileType)"
         print("KEY: \(key)")
         return key
     }

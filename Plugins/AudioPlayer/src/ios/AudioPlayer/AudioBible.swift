@@ -59,9 +59,9 @@ class AudioBible {
         self.currReference = reference
         self.audioAnalytics = AudioAnalytics(mediaSource: reference.tocAudioBook.testament.bible.mediaSource,
                                              mediaId: reference.damId,
-                                             languageId: reference.dbpLanguageCode,
-                                             textVersion: reference.textVersion,
-                                             silLang: reference.silLang)
+                                             languageId: reference.iso3,
+                                             textVersion: reference.bibleId,
+                                             silLang: reference.iso3)
         self.readVerseMetaData(reference: reference)
         print("INSIDE BibleReader \(reference.damId)")
         self.mediaPlayState.retrieve(mediaId: reference.damId)
@@ -314,13 +314,8 @@ class AudioBible {
     }
     
     private func readVerseMetaData(reference: AudioReference) {
-        reference.audioChapter = nil
-        if let reader = self.controller.metaDataReader {
-            reader.readVerseAudio(damid: reference.damId, bookId: reference.bookId, chapter: reference.chapterNum,
-                                  complete: { audioChapter in
-                reference.audioChapter = audioChapter
-            })
-        }
+        reference.audioChapter = self.controller.audioTOCBible?.readVerseAudio(
+            damid: reference.damId, bookId: reference.bookId, chapter: reference.chapterNum)
     }
 }
 

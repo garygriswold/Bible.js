@@ -5,30 +5,21 @@
 //  Created by Gary Griswold on 8/8/17.
 //  Copyright © 2017 ShortSands. All rights reserved.
 //
-//#if USE_FRAMEWORK
+
 import Utility
-//#endif
 
 class AudioTOCTestament {
     
     let bible: AudioTOCBible
     let damId: String
-    let dbpLanguageCode: String
-    let dbpVersionCode: String
-    private let collectionCode: String
-    private let mediaType: String
     var booksById: Dictionary<String, AudioTOCBook>
     private var booksBySeq: Dictionary<Int, AudioTOCBook>
 
-    init(bible: AudioTOCBible, database: Sqlite3, dbRow: [String?]) {
+    init(bible: AudioTOCBible, database: Sqlite3, damId: String) {
         self.bible = bible
+        self.damId = damId
         self.booksById = Dictionary<String, AudioTOCBook>()
         self.booksBySeq = Dictionary<Int, AudioTOCBook>()
-        self.damId = dbRow[0]!
-        self.collectionCode = dbRow[1]!
-        self.mediaType = dbRow[2]!
-        self.dbpLanguageCode = dbRow[3]!
-        self.dbpVersionCode = dbRow[4]!
 
         let query = "SELECT bookId, bookOrder, bookName, numberOfChapters" +
             " FROM AudioBook" +
@@ -88,11 +79,7 @@ class AudioTOCTestament {
     }
     
     func toString() -> String {
-        let str = "damId=" + self.damId +
-                "\n languageCode=" + self.dbpLanguageCode +
-                "\n versionCode=" + self.dbpVersionCode +
-                "\n mediaType=" + self.mediaType +
-                "\n collectionCode=" + self.collectionCode
+        let str = "damId=" + self.damId
         return str
     }
 }

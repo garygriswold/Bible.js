@@ -51,7 +51,6 @@ class AudioBibleView {
     private var isAudioViewActive: Bool = false
     
     private init(view: UIView, audioBible: AudioBible) {
-        view.backgroundColor = .blue
         self.view = view
         self.audioBible = audioBible
         self.scrubSliderDuration = kCMTimeZero
