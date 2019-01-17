@@ -87,9 +87,6 @@ class AudioBible {
         self.player = AVPlayer(playerItem: playerItem)
         self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.none
         
-        self.play()
-        self.controlCenter.nowPlaying(player: self)
-        
         self.preFetchNextChapter(reference: reference)
     }
     
@@ -114,6 +111,7 @@ class AudioBible {
                 print("\n*********** PLAY *************")
                 play.play()
                 self.audioAnalytics?.playStarted(item: reference.toString(), position: play.currentTime())
+                self.controlCenter.nowPlaying(player: self)
             }
         }
     }
@@ -135,14 +133,15 @@ class AudioBible {
         }
     }
     
-    /** This method is called by AudioControlCenter.swift when user clicks the next button. */
+    /** This method is called when the prior chapter completes, and by AudioControlCenter.swift
+     * when the user clicks the next button.
+     */
     func nextChapter() {
         if let play = self.player {
             let startPlayRate = play.rate
             if let curr = self.nextReference {
                 self.currReference = curr
                 self.addNextChapter(reference: curr)
-                self.preFetchNextChapter(reference: curr)
                 if startPlayRate == 0 {
                     self.audioAnalytics?.playStarted(item: curr.toString(), position: play.currentTime())
                 }
@@ -298,12 +297,14 @@ class AudioBible {
                                         self.readVerseMetaData(reference: reference)
                                         self.controlCenter.nowPlaying(player: self)
                                     }
+                                    self.preFetchNextChapter(reference: reference)
         })
     }
     
     private func preFetchNextChapter(reference: AudioReference) {
         self.nextReference = reference.nextChapter()
         if let next = self.nextReference {
+            print("Prefetch \(next.toString())")
             AwsS3Cache.shared.readFile(s3Bucket: next.getS3Bucket(),
                                        s3Key: next.getS3Key(),
                                        expireInterval: Double.infinity,
