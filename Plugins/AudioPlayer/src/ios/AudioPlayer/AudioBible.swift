@@ -87,6 +87,7 @@ class AudioBible {
         self.player = AVPlayer(playerItem: playerItem)
         self.player?.actionAtItemEnd = AVPlayerActionAtItemEnd.none
         
+        self.controller.audioReadyToPlay(enabled: true)
         self.preFetchNextChapter(reference: reference)
     }
     

@@ -95,5 +95,11 @@ public class AudioBibleController {
     public func stop() {
         self.audioBible?.stop()
     }
+    /**
+    * This is called by AudioBible, when audio is ready to play
+    */
+    func audioReadyToPlay(enabled: Bool) {
+        self.audioBibleView?.audioReadyToPlay(enabled: enabled)
+    }
 }
 

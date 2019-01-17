@@ -96,6 +96,7 @@ class AudioBibleView {
         let playDnImg = UIImage(named: "UIPlayDNButton.png")
         playBtn.setImage(playDnImg, for: UIControlState.highlighted)
         self.playButton = playBtn
+        self.playButton.isEnabled = false
         
         let pauseBtn = UIButton(type: .custom)
         pauseBtn.frame = CGRect(x: audioPanelWidth/2-40, y: 95, width: 80, height: 80)
@@ -202,6 +203,10 @@ class AudioBibleView {
         return self.isAudioViewActive
     }
     
+    func audioReadyToPlay(enabled: Bool) {
+        self.playButton.isEnabled = enabled
+    }
+    
     @objc func play() {
         self.audioBible.play()
         if (self.isAudioViewActive) {
@@ -237,6 +242,7 @@ class AudioBibleView {
             self.audioPanel.addSubview(self.pauseButton)
         } else {
             self.audioPanel.addSubview(self.playButton)
+            self.audioReadyToPlay(enabled: false)
         }
         self.progressLink = CADisplayLink(target: self, selector: #selector(updateProgress))
         self.progressLink!.add(to: .current, forMode: .defaultRunLoopMode)
