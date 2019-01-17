@@ -36,6 +36,9 @@ public class AudioBibleController {
         print("***** Deinit AudioBibleController *****")
     }
     
+    /**
+    * This function must be called before present, because it loads the metadata from the damId
+    */
     public func findAudioVersion(bibleId: String, iso3: String,
                                  audioBucket: String?, otDamId: String?, ntDamId: String?) -> String {
         self.audioTOCBible = AudioTOCBible(source: "FCBH", bibleId: bibleId, iso3: iso3,
@@ -84,6 +87,7 @@ public class AudioBibleController {
         if self.audioBibleView!.audioBibleActive() {
             self.audioBibleView!.dismissPlayer()
         }
+        self.completionHandler!(nil)
     }
     /**
     * This is called when the Audio must be stopped externally, such as when a Video is started.
