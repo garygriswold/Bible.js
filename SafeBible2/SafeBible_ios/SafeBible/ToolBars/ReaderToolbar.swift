@@ -126,18 +126,22 @@ class ReaderToolbar {
     }
     
     @objc func audioTapHandler(sender: UIBarButtonItem) {
-        let ref = HistoryModel.shared.current()
         let audioController = AudioBibleController.shared
-        audioController.present(view: self.controller!.view, book: ref.bookId, chapterNum: ref.chapter,
-            complete: { error in
-                // No error is actually being returned
-                if let err = error {
-                    print("Audio Player Error \(err)")
-                } else {
-                    print("Audio Player success")
+        if audioController.isPlaying() {
+            audioController.dismiss()
+        } else {
+            let ref = HistoryModel.shared.current()
+            audioController.present(view: self.controller!.view, book: ref.bookId, chapterNum: ref.chapter,
+                complete: { error in
+                    // No error is actually being returned
+                    if let err = error {
+                        print("Audio Player Error \(err)")
+                    } else {
+                        print("Audio Player success")
+                    }
                 }
-            }
-        )
+            )
+        }
     }
     
     // This func is a placeholder until it is properly placed

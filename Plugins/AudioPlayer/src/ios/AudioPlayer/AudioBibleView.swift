@@ -34,7 +34,7 @@ class AudioBibleView {
     private let audioPanel: UIView
     private let playButton: UIButton
     private let pauseButton: UIButton
-    private let stopButton: UIButton
+    //private let stopButton: UIButton
     private let scrubSlider: UISlider
     private let verseLabel: CALayer
     private let verseLabelYPos: CGFloat
@@ -90,7 +90,7 @@ class AudioBibleView {
         }
         
         let playBtn = UIButton(type: .custom)
-        playBtn.frame = CGRect(x: audioPanelWidth/3-40, y: 95, width: 80, height: 80)
+        playBtn.frame = CGRect(x: audioPanelWidth/2-40, y: 95, width: 80, height: 80)
         let playUpImg = UIImage(named: "UIPlayUPButton.png")
         playBtn.setImage(playUpImg, for: UIControlState.normal)
         let playDnImg = UIImage(named: "UIPlayDNButton.png")
@@ -98,21 +98,21 @@ class AudioBibleView {
         self.playButton = playBtn
         
         let pauseBtn = UIButton(type: .custom)
-        pauseBtn.frame = CGRect(x: audioPanelWidth/3-40, y: 95, width: 80, height: 80)
+        pauseBtn.frame = CGRect(x: audioPanelWidth/2-40, y: 95, width: 80, height: 80)
         let pauseUpImg = UIImage(named: "UIPauseUPButton.png")
         pauseBtn.setImage(pauseUpImg, for: UIControlState.normal)
         let pauseDnImg = UIImage(named: "UIPauseDNButton.png")
         pauseBtn.setImage(pauseDnImg, for: UIControlState.highlighted)
         self.pauseButton = pauseBtn
         
-        let stopBtn = UIButton(type: .custom)
-        stopBtn.frame = CGRect(x: audioPanelWidth*2/3-40, y: 95, width: 80, height: 80)
-        let stopUpImg = UIImage(named: "UIStopUPButton.png")
-        stopBtn.setImage(stopUpImg, for: UIControlState.normal)
-        let stopDnImg = UIImage(named: "UIStopDNButton.png")
-        stopBtn.setImage(stopDnImg, for: UIControlState.highlighted)
-        self.audioPanel.addSubview(stopBtn)
-        self.stopButton = stopBtn
+        //let stopBtn = UIButton(type: .custom)
+        //stopBtn.frame = CGRect(x: audioPanelWidth*2/3-40, y: 95, width: 80, height: 80)
+        //let stopUpImg = UIImage(named: "UIStopUPButton.png")
+        //stopBtn.setImage(stopUpImg, for: UIControlState.normal)
+        //let stopDnImg = UIImage(named: "UIStopDNButton.png")
+        //stopBtn.setImage(stopDnImg, for: UIControlState.highlighted)
+        //self.audioPanel.addSubview(stopBtn)
+        //self.stopButton = stopBtn
         
         let scrubX = audioPanelWidth * 0.05
         let scrubWidth = audioPanelWidth * 0.9
@@ -183,8 +183,8 @@ class AudioBibleView {
         playBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
         pauseBtn.layer.shadowOpacity = 0.5
         pauseBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
-        stopBtn.layer.shadowOpacity = 0.5
-        stopBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
+        //stopBtn.layer.shadowOpacity = 0.5
+        //stopBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
         verse.shadowOpacity = 0.5
         verse.shadowOffset = CGSize(width: 1.0, height: 0.5)
         scrub.layer.shadowOpacity = 0.5
@@ -244,7 +244,7 @@ class AudioBibleView {
         
         self.playButton.addTarget(self, action: #selector(self.play), for: .touchUpInside)
         self.pauseButton.addTarget(self, action: #selector(self.pause), for: .touchUpInside)
-        self.stopButton.addTarget(self, action: #selector(self.stop), for: .touchUpInside)
+        //self.stopButton.addTarget(self, action: #selector(self.stop), for: .touchUpInside)
         self.scrubSlider.addTarget(self, action: #selector(scrubSliderChanged), for: .valueChanged)
         self.scrubSlider.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)

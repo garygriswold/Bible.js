@@ -54,7 +54,8 @@ public class AudioBibleController {
     }
     
     /**
-    * This must be set to be the WKWebView
+    * This is the entry point to start the Audio Player.  But, findAudioVersion must be called first
+    * in order to set the bucket and damId, and read in the metadata for the damId.
     */
     public func present(view: UIView, book: String, chapterNum: Int, complete: @escaping (_ error:Error?) -> Void) {
         self.audioBible = AudioBible.shared(controller: self)
@@ -63,7 +64,7 @@ public class AudioBibleController {
         self.completionHandler = complete
         
         if !self.audioBibleView!.audioBibleActive() {
-            self.audioBibleView?.presentPlayer()
+            self.audioBibleView!.presentPlayer()
         }
         
         if !self.audioBible!.isPlaying() {
@@ -74,6 +75,15 @@ public class AudioBibleController {
                 } else { complete(nil) }
             } else { complete(nil) }
         } else { complete(nil) }
+    }
+    
+    public func dismiss() {
+        if self.audioBible!.isPlaying() {
+            self.audioBible!.stop()
+        }
+        if self.audioBibleView!.audioBibleActive() {
+            self.audioBibleView!.dismissPlayer()
+        }
     }
     /**
     * This is called when the Audio must be stopped externally, such as when a Video is started.
