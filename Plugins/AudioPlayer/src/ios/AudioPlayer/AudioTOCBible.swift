@@ -51,6 +51,9 @@ class AudioTOCBible {
         }
         if self.ntDamId != nil {
             self.newTestament = AudioTOCTestament(bible: self, database: self.database, damId: self.ntDamId!)
+            if bookIdList.count > 0 {
+                bookIdList += ","
+            }
             bookIdList += self.newTestament!.getBookList()
         }
         self.readBookNames()

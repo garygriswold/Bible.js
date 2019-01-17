@@ -14,12 +14,12 @@ class ReaderToolbar {
     private weak var controller: ReaderPagesController?
     private weak var navigationController: UINavigationController?
     
-    private var audioBookIdList: String!
+    private var audioBookIdSet: Set<Substring>!
     private var historyBack: UIBarButtonItem!
-    private var historyForward: UIBarButtonItem!
     private var tocBookLabel: UILabel!
     private var tocChapLabel: UILabel!
     private var versionLabel: UILabel!
+    private var audioPlayer: UIBarButtonItem!
     
     init(controller: ReaderPagesController) {
         self.controller = controller
@@ -31,7 +31,8 @@ class ReaderToolbar {
             nav.toolbar.barTintColor = AppFont.backgroundColor
         }
         
-        self.audioBookIdList = self.findAudioVersion()
+        let reference = HistoryModel.shared.current()
+        self.audioBookIdSet = Set(self.findAudioVersion(ref: reference).split(separator: ","))
         
         var items = [UIBarButtonItem]()
         
@@ -45,7 +46,7 @@ class ReaderToolbar {
         
         let priorImage = UIImage(named: "www/images/ios-previous.png")
         self.historyBack = UIBarButtonItem(image: priorImage, style: .plain, target: self,
-                                           action: #selector(priorTapHandler))
+                                           action: #selector(historyTapHandler))
         self.historyBack.isEnabled = HistoryModel.shared.hasBack()
         items.append(self.historyBack)
         items.append(spacer)
@@ -66,9 +67,10 @@ class ReaderToolbar {
         items.append(spacer)
         
         let audioImage = UIImage(named: "www/images/mus-vol-med.png")
-        let audio = UIBarButtonItem(image: audioImage, style: .plain, target: self,
-                                    action: #selector(audioTapHandler))
-        items.append(audio)
+        self.audioPlayer = UIBarButtonItem(image: audioImage, style: .plain, target: self,
+                                           action: #selector(audioTapHandler))
+        self.audioPlayer.isEnabled = self.audioBookIdSet.contains(Substring(reference.bookId))
+        items.append(self.audioPlayer)
         items.append(spacer)
         
         let composeImage = UIImage(named: "www/images/ios-new.png")
@@ -101,13 +103,14 @@ class ReaderToolbar {
         self.tocChapLabel.text = String(reference.chapter)
         self.versionLabel.text = reference.abbr
         self.historyBack.isEnabled = HistoryModel.shared.hasBack()
+        self.audioPlayer.isEnabled = self.audioBookIdSet.contains(Substring(reference.bookId))
     }
     
     @objc func menuTapHandler(sender: UIBarButtonItem) {
         SettingsViewController.push(settingsViewType: .primary, controller: self.controller, language: nil)
     }
     
-    @objc func priorTapHandler(sender: UIBarButtonItem) {
+    @objc func historyTapHandler(sender: UIBarButtonItem) {
         HistoryViewController.push(controller: self.controller)
     }
     
@@ -149,8 +152,7 @@ class ReaderToolbar {
         return AudioBibleController.shared.isPlaying()
     }
     
-    private func findAudioVersion() -> String {
-        let ref = HistoryModel.shared.current()
+    private func findAudioVersion(ref: Reference) -> String {
         let audioController = AudioBibleController.shared
         let bookIdList = audioController.findAudioVersion(bibleId: ref.bibleId, iso3: ref.bible.iso3,
                                                           audioBucket: ref.bible.audioBucket,
