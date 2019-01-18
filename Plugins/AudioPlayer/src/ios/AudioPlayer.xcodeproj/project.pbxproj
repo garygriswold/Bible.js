@@ -133,7 +133,6 @@
 			isa = PBXGroup;
 			children = (
 				E421FDF020AB539600192E9B /* AudioPlayer.h */,
-				E48D8FC920AB55D300F59D5F /* AudioAnalyticsSessionId.swift */,
 				E48D8FC620AB55D300F59D5F /* AudioBible.swift */,
 				E48D8FB720AB55D100F59D5F /* AudioBibleController.swift */,
 				E48D8FB320AB55D100F59D5F /* AudioBibleView.swift */,
@@ -146,6 +145,7 @@
 				E48D8FB820AB55D100F59D5F /* AudioTOCChapter.swift */,
 				E48D8FC320AB55D300F59D5F /* AudioTOCTestament.swift */,
 				E48D8FC820AB55D300F59D5F /* AudioAnalytics.swift */,
+				E48D8FC920AB55D300F59D5F /* AudioAnalyticsSessionId.swift */,
 				E48D8FBB20AB55D200F59D5F /* UIPauseDNButton.png */,
 				E48D8FBF20AB55D200F59D5F /* UIPauseUPButton.png */,
 				E48D8FB520AB55D100F59D5F /* UIPlayDNButton.png */,
