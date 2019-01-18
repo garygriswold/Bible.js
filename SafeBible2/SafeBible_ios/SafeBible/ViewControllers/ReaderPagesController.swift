@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import AudioPlayer
 
 class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
+    // This event occurs when the TOC or history are used to set this controller to a new page.
     static let NEW_REFERENCE = NSNotification.Name("new-reference")
+    // This event occurs when a web page is loaded.
     static let WEB_LOAD_DONE = NSNotification.Name("web-load-done")
     
     private var readerViewQueue: ReaderViewQueue = ReaderViewQueue()
@@ -68,6 +71,7 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
         // listen for completion of webView set with content in ReaderViewController
         NotificationCenter.default.addObserver(self, selector: #selector(setViewControllerComplete),
                                                name: ReaderPagesController.WEB_LOAD_DONE, object: nil)
+        NotificationCenter.default.post(name: AudioBibleController.TEXT_PAGE_CHANGED, object: nil)
     }
     
     @objc func setViewControllerComplete(note: NSNotification) {
@@ -124,6 +128,7 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
                             willTransitionTo pendingViewControllers: [UIViewController]) {
         //let page = pendingViewControllers[0] as! ReaderViewController
         //print("will Transition To \(page.reference.toString())")
+        NotificationCenter.default.post(name: AudioBibleController.TEXT_PAGE_CHANGED, object: nil)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController,

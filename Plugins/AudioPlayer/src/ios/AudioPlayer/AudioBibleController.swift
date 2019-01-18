@@ -10,6 +10,8 @@ import UIKit
 
 public class AudioBibleController {
     
+    public static let TEXT_PAGE_CHANGED = NSNotification.Name("text-page-changed")
+    
     private static var instance: AudioBibleController?
     public static var shared: AudioBibleController {
         get {
@@ -29,6 +31,8 @@ public class AudioBibleController {
     
     private init() {
         self.fileType = "mp3"
+        NotificationCenter.default.addObserver(self, selector: #selector(biblePageChanged(note:)),
+                                               name: AudioBibleController.TEXT_PAGE_CHANGED, object: nil)
         print("***** Init AudioBibleController *****")
     }
     
@@ -86,8 +90,8 @@ public class AudioBibleController {
         }
         if self.audioBibleView!.audioBibleActive() {
             self.audioBibleView!.dismissPlayer()
+            self.completionHandler!(nil)
         }
-        self.completionHandler!(nil)
     }
     /**
     * This is called when the Audio must be stopped externally, such as when a Video is started.
@@ -100,6 +104,12 @@ public class AudioBibleController {
     */
     func audioReadyToPlay(enabled: Bool) {
         self.audioBibleView?.audioReadyToPlay(enabled: enabled)
+    }
+    
+    @objc func biblePageChanged(note: NSNotification) {
+        if self.audioBible != nil && self.audioBibleView != nil {
+            self.dismiss()
+        }
     }
 }
 
