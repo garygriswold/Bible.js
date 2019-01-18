@@ -63,8 +63,8 @@ class AudioBibleView {
         
         let panel = UIView()
         let audioPanelWidth: CGFloat = screenWidth * 0.96
-        let audioPanelHeight: CGFloat = 175.0
-        panel.frame = CGRect(x: screenWidth * 0.02, y: screenHeight - 185.0,
+        let audioPanelHeight: CGFloat = 110.0
+        panel.frame = CGRect(x: screenWidth * 0.02, y: screenHeight - 120.0,
                              width: audioPanelWidth, height: audioPanelHeight)
         panel.layer.cornerRadius = 20
         panel.layer.masksToBounds = true
@@ -90,19 +90,19 @@ class AudioBibleView {
         }
         
         let playBtn = UIButton(type: .custom)
-        playBtn.frame = CGRect(x: audioPanelWidth/2-40, y: 95, width: 80, height: 80)
-        let playUpImg = UIImage(named: "UIPlayUPButton.png")
+        playBtn.frame = CGRect(x: audioPanelWidth/2-20, y: 65, width: 40, height: 40)
+        let playUpImg = UIImage(named: "UIPlayUPButton90.png")
         playBtn.setImage(playUpImg, for: UIControlState.normal)
-        let playDnImg = UIImage(named: "UIPlayDNButton.png")
+        let playDnImg = UIImage(named: "UIPlayDNButton90.png")
         playBtn.setImage(playDnImg, for: UIControlState.highlighted)
         self.playButton = playBtn
         self.playButton.isEnabled = false
         
         let pauseBtn = UIButton(type: .custom)
-        pauseBtn.frame = CGRect(x: audioPanelWidth/2-40, y: 95, width: 80, height: 80)
-        let pauseUpImg = UIImage(named: "UIPauseUPButton.png")
+        pauseBtn.frame = CGRect(x: audioPanelWidth/2-20, y: 65, width: 40, height: 40)
+        let pauseUpImg = UIImage(named: "UIPauseUPButton90.png")
         pauseBtn.setImage(pauseUpImg, for: UIControlState.normal)
-        let pauseDnImg = UIImage(named: "UIPauseDNButton.png")
+        let pauseDnImg = UIImage(named: "UIPauseDNButton90.png")
         pauseBtn.setImage(pauseDnImg, for: UIControlState.highlighted)
         self.pauseButton = pauseBtn
         
@@ -117,25 +117,13 @@ class AudioBibleView {
         
         let scrubX = audioPanelWidth * 0.05
         let scrubWidth = audioPanelWidth * 0.9
-        let scrubRect = CGRect(x: scrubX, y: 40, width: scrubWidth, height: 60)
+        let scrubRect = CGRect(x: scrubX, y: 40, width: scrubWidth, height: 10)
         let scrub = UISlider(frame: scrubRect)
         scrub.isContinuous = true
-        let thumbUpImg = UIImage(named: "UIThumbUP.png")
+        let thumbUpImg = UIImage(named: "UIThumbUP30.png")
         scrub.setThumbImage(thumbUpImg, for: UIControlState.normal)
-        let thumbDnImg = UIImage(named: "UIThumbDN.png")
+        let thumbDnImg = UIImage(named: "UIThumbDN30.png")
         scrub.setThumbImage(thumbDnImg, for: UIControlState.highlighted)
-        
-        let sliderMinImg = UIImage(named: "UISliderMin.png")
-        let sliderMinInsets = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
-        let sliderMin = sliderMinImg?.resizableImage(withCapInsets: sliderMinInsets,
-                                                     resizingMode: UIImageResizingMode.stretch)
-        scrub.setMinimumTrackImage(sliderMin, for: UIControlState.normal)
-        
-        let sliderMaxImg = UIImage(named: "UISliderMax.png")
-        let sliderMaxInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 8.0)
-        let sliderMax = sliderMaxImg?.resizableImage(withCapInsets: sliderMaxInsets,
-                                                     resizingMode: UIImageResizingMode.stretch)
-        scrub.setMaximumTrackImage(sliderMax, for: UIControlState.normal)
         
         scrub.setValue(0.0, animated: false)
         self.audioPanel.addSubview(scrub)
@@ -231,7 +219,7 @@ class AudioBibleView {
     func presentPlayer() {
         self.isAudioViewActive = true
         self.audioPanel.center.y = self.view.bounds.height + self.audioPanel.bounds.height / 2.0
-        let homeBarSafe = self.view.bounds.height * 0.03
+        let homeBarSafe = self.view.bounds.height * 0.01
         self.view.addSubview(self.audioPanel)
         UIView.animate(withDuration: 1.0, delay: 0.0,
                        options: UIViewAnimationOptions.curveEaseOut,
