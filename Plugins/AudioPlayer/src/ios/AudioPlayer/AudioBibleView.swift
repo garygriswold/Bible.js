@@ -32,24 +32,21 @@ class AudioBibleView {
     private unowned let view: UIView
     private unowned let audioBible: AudioBible
     private let audioPanel: UIView
+    private let playUpImg: UIImage!
+    private let playDnImg: UIImage!
+    private let pauseUpImg: UIImage!
+    private let pauseDnImg: UIImage!
     private let playButton: UIButton
-    private let pauseButton: UIButton
-    //private let stopButton: UIButton
     private let scrubSlider: UISlider
     private let verseLabel: CALayer
     private let verseLabelYPos: CGFloat
     private let verseNumLabel: CATextLayer
     private var progressLink: CADisplayLink?
     // Constraints
-    //private let panelWidth: NSLayoutConstraint
     private let panelLeft: NSLayoutConstraint
     private let panelRight: NSLayoutConstraint
     private let panelHeight: NSLayoutConstraint
     private let panelBottom: NSLayoutConstraint
-    private let playTop: NSLayoutConstraint
-    private let pauseTop: NSLayoutConstraint
-    private let playCenter: NSLayoutConstraint
-    private let pauseCenter: NSLayoutConstraint
     // Precomputed for positionVersePopup
     private let sliderRange: CGFloat
     private let sliderOrigin: CGFloat
@@ -67,20 +64,12 @@ class AudioBibleView {
         self.scrubSliderDrag = false
         self.scrubSuspendedPlay = false
 
-        let screenSize = UIScreen.main.bounds
-        let screenWidth: CGFloat = screenSize.width
-        //let screenHeight: CGFloat = screenSize.height
-        
         let panel = UIView()
-        let audioPanelWidth: CGFloat = screenWidth * 0.96
-        
-        //let audioPanelHeight: CGFloat = 110.0
-        //panel.frame = CGRect(x: screenWidth * 0.02, y: screenHeight - 120.0,
-        //                     width: audioPanelWidth, height: audioPanelHeight)
         panel.layer.cornerRadius = 20
         panel.layer.masksToBounds = true
         self.audioPanel = panel
         
+        let screenSize = UIScreen.main.bounds
         let panelInsetX = screenSize.width * 0.03
         let panelInsetY = screenSize.width * 0.01
         self.audioPanel.translatesAutoresizingMaskIntoConstraints = false
@@ -102,8 +91,6 @@ class AudioBibleView {
             vibrancyView.translatesAutoresizingMaskIntoConstraints = false
             
             blurView.contentView.addSubview(vibrancyView)
-            //blurView.frame = self.audioPanel.bounds
-            blurView.translatesAutoresizingMaskIntoConstraints = false
             
             self.audioPanel.addSubview(blurView)
             blurView.translatesAutoresizingMaskIntoConstraints = false
@@ -115,27 +102,17 @@ class AudioBibleView {
             self.audioPanel.backgroundColor = .white
         }
         
-        let playBtn = UIButton(type: .custom)
-        //playBtn.frame = CGRect(x: audioPanelWidth/2-20, y: 65, width: 40, height: 40)
-        let playUpImg = UIImage(named: "UIPlayUPButton90.png")
-        playBtn.setImage(playUpImg, for: UIControlState.normal)
-        let playDnImg = UIImage(named: "UIPlayDNButton90.png")
-        playBtn.setImage(playDnImg, for: UIControlState.highlighted)
-        self.playButton = playBtn
+        self.playButton = UIButton(type: .custom)
+        self.playUpImg = UIImage(named: "UIPlayUPButton90.png")
+        self.playButton.setImage(self.playUpImg, for: UIControlState.normal)
+        self.playDnImg = UIImage(named: "UIPlayDNButton90.png")
+        self.playButton.setImage(self.playDnImg, for: UIControlState.highlighted)
         self.playButton.isEnabled = false
+        self.audioPanel.addSubview(self.playButton)
         
-        let pauseBtn = UIButton(type: .custom)
-        //pauseBtn.frame = CGRect(x: audioPanelWidth/2-20, y: 65, width: 40, height: 40)
-        let pauseUpImg = UIImage(named: "UIPauseUPButton90.png")
-        pauseBtn.setImage(pauseUpImg, for: UIControlState.normal)
-        let pauseDnImg = UIImage(named: "UIPauseDNButton90.png")
-        pauseBtn.setImage(pauseDnImg, for: UIControlState.highlighted)
-        self.pauseButton = pauseBtn
+        self.pauseUpImg = UIImage(named: "UIPauseUPButton90.png")
+        self.pauseDnImg = UIImage(named: "UIPauseDNButton90.png")
         
-        //let scrubX = audioPanelWidth * 0.05
-        //let scrubWidth = audioPanelWidth * 0.9
-        //let scrubRect = CGRect(x: scrubX, y: 40, width: scrubWidth, height: 10)
-        //let scrub = UISlider(frame: scrubRect)
         let scrub = UISlider()
         scrub.isContinuous = true
         let thumbUpImg = UIImage(named: "UIThumbUP30.png")
@@ -148,24 +125,27 @@ class AudioBibleView {
         self.scrubSlider = scrub
         
         self.scrubSlider.translatesAutoresizingMaskIntoConstraints = false
-        self.scrubSlider.topAnchor.constraint(equalTo: self.audioPanel.topAnchor).isActive = true
-        self.scrubSlider.leadingAnchor.constraint(equalTo: self.audioPanel.leadingAnchor).isActive = true
-        self.scrubSlider.trailingAnchor.constraint(equalTo: self.audioPanel.trailingAnchor).isActive = true
-        //self.scrubSlider.widthAnchor.constraint(equalTo: self.audioPanel.widthAnchor)
+        self.scrubSlider.topAnchor.constraint(equalTo: self.audioPanel.topAnchor, constant: 30.0).isActive = true
+        self.scrubSlider.leadingAnchor.constraint(equalTo: self.audioPanel.leadingAnchor,
+                                                  constant: 20.0).isActive = true
+        self.scrubSlider.trailingAnchor.constraint(equalTo: self.audioPanel.trailingAnchor,
+                                                   constant: -20.0).isActive = true
         
         self.playButton.translatesAutoresizingMaskIntoConstraints = false
-        self.playTop = self.playButton.topAnchor.constraint(equalTo: self.scrubSlider.bottomAnchor)
-        self.pauseTop = self.pauseButton.topAnchor.constraint(equalTo: self.scrubSlider.bottomAnchor)
-        self.playCenter = self.playButton.centerXAnchor.constraint(equalTo: self.audioPanel.centerXAnchor)
-        self.pauseCenter = self.pauseButton.centerXAnchor.constraint(equalTo: self.audioPanel.centerXAnchor)
+        self.playButton.topAnchor.constraint(equalTo: self.scrubSlider.bottomAnchor,
+                                             constant: 5.0).isActive = true
+        self.playButton.centerXAnchor.constraint(equalTo: self.audioPanel.centerXAnchor).isActive = true
+        self.playButton.widthAnchor.constraint(equalToConstant: 40.0).isActive = true
+        self.playButton.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
         
         // Precompute Values for positionVersePopup()
         self.sliderRange = scrub.frame.size.width - (scrub.currentThumbImage?.size.width)!
         self.sliderOrigin = scrub.frame.origin.x + ((scrub.currentThumbImage?.size.width)! / 2.0)
         
         self.verseLabelYPos = 20
+        let panelWidth = self.audioPanel.bounds.width
         let verse = CALayer()
-        verse.frame = CGRect(x: audioPanelWidth * 0.05, y: self.verseLabelYPos, width: 32, height: 32)
+        verse.frame = CGRect(x: panelWidth * 0.05, y: self.verseLabelYPos, width: 32, height: 32)
         verse.backgroundColor = UIColor.white.cgColor
         verse.contentsScale = UIScreen.main.scale
         verse.borderColor = UIColor.lightGray.cgColor
@@ -198,12 +178,8 @@ class AudioBibleView {
         self.positionLabel = position
 */
         // UI control shadows
-        playBtn.layer.shadowOpacity = 0.5
-        playBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
-        pauseBtn.layer.shadowOpacity = 0.5
-        pauseBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
-        //stopBtn.layer.shadowOpacity = 0.5
-        //stopBtn.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
+        self.playButton.layer.shadowOpacity = 0.5
+        self.playButton.layer.shadowOffset = CGSize(width: 2.0, height: 1.0)
         verse.shadowOpacity = 0.5
         verse.shadowOffset = CGSize(width: 1.0, height: 0.5)
         scrub.layer.shadowOpacity = 0.5
@@ -225,19 +201,25 @@ class AudioBibleView {
         self.playButton.isEnabled = enabled
     }
     
-    @objc func play() {
-        self.audioBible.play()
-        if (self.isAudioViewActive) {
-            self.playButton.removeFromSuperview()
-            self.audioPanel.addSubview(self.pauseButton)
+    @objc func playPause() {
+        if self.audioBible.isPlaying() {
+            self.pause()
+        } else {
+            self.play()
         }
     }
     
-    @objc func pause() {
+    func play() {
+        self.audioBible.play()
+        if (self.isAudioViewActive) {
+            self.setPlayButtonPlay(play: false)
+        }
+    }
+    
+    func pause() {
         self.audioBible.pause()
         if (self.isAudioViewActive) {
-            self.pauseButton.removeFromSuperview()
-            self.audioPanel.addSubview(self.playButton)
+            self.setPlayButtonPlay(play: true)
         }
     }
     
@@ -261,22 +243,16 @@ class AudioBibleView {
                        completion: nil
         )
         if self.audioBible.isPlaying() {
-            self.audioPanel.addSubview(self.pauseButton)
-            self.pauseTop.isActive = true
-            self.pauseCenter.isActive = true
+            self.setPlayButtonPlay(play: false)
         } else {
-            self.audioPanel.addSubview(self.playButton)
-            self.playTop.isActive = true
-            self.playCenter.isActive = true
+            self.setPlayButtonPlay(play: true)
             self.audioReadyToPlay(enabled: false)
         }
         self.progressLink = CADisplayLink(target: self, selector: #selector(updateProgress))
         self.progressLink!.add(to: .current, forMode: .defaultRunLoopMode)
         self.progressLink!.preferredFramesPerSecond = 15
         
-        self.playButton.addTarget(self, action: #selector(self.play), for: .touchUpInside)
-        self.pauseButton.addTarget(self, action: #selector(self.pause), for: .touchUpInside)
-        //self.stopButton.addTarget(self, action: #selector(self.stop), for: .touchUpInside)
+        self.playButton.addTarget(self, action: #selector(self.playPause), for: .touchUpInside)
         self.scrubSlider.addTarget(self, action: #selector(scrubSliderChanged), for: .valueChanged)
         self.scrubSlider.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.scrubSlider.addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
@@ -291,7 +267,6 @@ class AudioBibleView {
                        options: UIViewAnimationOptions.curveEaseOut,
                        animations: { self.audioPanel.center.y += self.audioPanel.bounds.height * 1.2 },
                        completion: { _ in
-                        //self.panelWidth.isActive = false
                         self.panelLeft.isActive = false
                         self.panelRight.isActive = false
                         self.panelHeight.isActive = false
@@ -403,13 +378,20 @@ class AudioBibleView {
     }
     @objc private func applicationWillEnterForeground(note: Notification) {
         print("\n****** APP WILL ENTER FOREGROUND IN VIEW \(Date().timeIntervalSince1970)")
-        if let play = self.audioBible.getPlayer() {
-            if (play.rate == 0.0) {
-                self.pauseButton.removeFromSuperview()
-                self.audioPanel.addSubview(self.playButton)
-            } else {
-                self.presentPlayer()
-            }
+        if self.audioBible.isPlaying() {
+            self.presentPlayer()
+        } else {
+            self.setPlayButtonPlay(play: true)
+        }
+    }
+    
+    private func setPlayButtonPlay(play: Bool) {
+        if play {
+            self.playButton.setImage(playUpImg, for: UIControlState.normal)
+            self.playButton.setImage(playDnImg, for: UIControlState.highlighted)
+        } else {
+            self.playButton.setImage(pauseUpImg, for: UIControlState.normal)
+            self.playButton.setImage(pauseDnImg, for: UIControlState.highlighted)
         }
     }
 }
