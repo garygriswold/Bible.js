@@ -143,6 +143,7 @@ class AudioBible {
             if let curr = self.nextReference {
                 self.currReference = curr
                 self.addNextChapter(reference: curr)
+                NotificationCenter.default.post(name: AudioBibleController.AUDIO_CHAP_CHANGED, object: 1)
                 if startPlayRate == 0 {
                     self.audioAnalytics?.playStarted(item: curr.toString(), position: play.currentTime())
                 }
@@ -163,6 +164,8 @@ class AudioBible {
                         self.nextReference = self.currReference
                         self.currReference = prior
                         self.addNextChapter(reference: prior)
+                        NotificationCenter.default.post(name: AudioBibleController.AUDIO_CHAP_CHANGED,
+                                                        object: -1)
                         if startPlayRate == 0 {
                             self.audioAnalytics?.playStarted(item: prior.toString(), position: play.currentTime())
                         }

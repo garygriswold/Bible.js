@@ -33,6 +33,9 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
         
         NotificationCenter.default.addObserver(self, selector: #selector(loadBiblePage(note:)),
                                                name: ReaderPagesController.NEW_REFERENCE, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(audioChapterChanged(note:)),
+                                               name: AudioBibleController.AUDIO_CHAP_CHANGED, object: nil)
 
         // Load the starting page
         NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
@@ -76,6 +79,18 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
     
     @objc func setViewControllerComplete(note: NSNotification) {
         self.readerViewQueue.preload()
+    }
+    
+    /**
+    * This method does not work, the second chapter auto scrolled presents blank.
+    * So, the ability to auto scroll text as audio advances is NOT implemented.
+    * Fixing this might require some rework in ReaderViewQueue or a custom UIPageViewController
+    */
+    @objc func audioChapterChanged(note: NSNotification) {
+        //let ref = HistoryModel.shared.current().nextChapter()
+        //let pageNext = self.readerViewQueue.first(reference: ref)
+        //self.pageViewController.setViewControllers([pageNext], direction: .forward, animated: true,
+        //                                            completion: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -128,7 +143,6 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
                             willTransitionTo pendingViewControllers: [UIViewController]) {
         //let page = pendingViewControllers[0] as! ReaderViewController
         //print("will Transition To \(page.reference.toString())")
-        NotificationCenter.default.post(name: AudioBibleController.TEXT_PAGE_CHANGED, object: nil)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController,
@@ -139,6 +153,8 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
         print("Display \(page.reference.toString())")
         self.toolBar.loadBiblePage(reference: page.reference)
         HistoryModel.shared.changeReference(reference: page.reference)
+        
+        NotificationCenter.default.post(name: AudioBibleController.TEXT_PAGE_CHANGED, object: nil)
     }
     
     func pageViewControllerSupportedInterfaceOrientations(_ pageViewController: UIPageViewController) -> UIInterfaceOrientationMask {

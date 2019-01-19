@@ -11,6 +11,7 @@ import UIKit
 public class AudioBibleController {
     
     public static let TEXT_PAGE_CHANGED = NSNotification.Name("text-page-changed")
+    public static let AUDIO_CHAP_CHANGED = NSNotification.Name("audio-chap-changed")
     
     private static var instance: AudioBibleController?
     public static var shared: AudioBibleController {
