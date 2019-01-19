@@ -32,7 +32,7 @@ public class AudioBibleController {
     
     private init() {
         self.fileType = "mp3"
-        NotificationCenter.default.addObserver(self, selector: #selector(biblePageChanged(note:)),
+        NotificationCenter.default.addObserver(self, selector: #selector(textPageChanged(note:)),
                                                name: AudioBibleController.TEXT_PAGE_CHANGED, object: nil)
         print("***** Init AudioBibleController *****")
     }
@@ -107,10 +107,13 @@ public class AudioBibleController {
         self.audioBibleView?.audioReadyToPlay(enabled: enabled)
     }
     
-    @objc func biblePageChanged(note: NSNotification) {
-        if self.audioBible != nil && self.audioBibleView != nil {
-            self.dismiss()
+    @objc func textPageChanged(note: NSNotification) {
+        if self.audioBibleView != nil && self.audioBibleView!.audioBibleActive() {
+            if self.audioBible == nil || !self.audioBible!.isPlaying() {
+                self.dismiss()
+            }
         }
     }
 }
+
 
