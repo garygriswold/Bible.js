@@ -134,7 +134,8 @@ class ReaderToolbar {
             audioController.dismiss()
         } else {
             let ref = HistoryModel.shared.current()
-            audioController.present(view: self.controller!.view, book: ref.bookId, chapterNum: ref.chapter,
+            let vue = self.controller!.pageViewController.view!
+            audioController.present(view: vue, book: ref.bookId, chapterNum: ref.chapter,
                 complete: { error in
                     // No error is actually being returned
                     if let err = error {

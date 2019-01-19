@@ -16,9 +16,9 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
     // This event occurs when a web page is loaded.
     static let WEB_LOAD_DONE = NSNotification.Name("web-load-done")
     
+    //var pageViewController: PageViewController!
+    var pageViewController: UIPageViewController!
     private var readerViewQueue: ReaderViewQueue = ReaderViewQueue()
-    //private var pageViewController: PageViewController!
-    private var pageViewController: UIPageViewController!
     private var toolBar: ReaderToolbar!
     
     override var prefersStatusBarHidden: Bool { get { return true } }
