@@ -25,6 +25,7 @@
 		E48D8FEA20AB581B00F59D5F /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48D8FE220AB570B00F59D5F /* AWS.framework */; };
 		E48D902C20AB5BF700F59D5F /* TOCAudioBibleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48D902920AB5BF700F59D5F /* TOCAudioBibleTest.swift */; };
 		E48D904820AB61EA00F59D5F /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48D904720AB61EA00F59D5F /* AWSCore.framework */; };
+		E4CE405221F4662200F397CD /* AudioFauxAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CE405121F4662200F397CD /* AudioFauxAnalytics.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +86,7 @@
 		E48D902920AB5BF700F59D5F /* TOCAudioBibleTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TOCAudioBibleTest.swift; sourceTree = "<group>"; };
 		E48D904320AB615800F59D5F /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = AudioPlayer_TestHarness/AudioPlayer_TestHarness/AWSCore.framework; sourceTree = "<group>"; };
 		E48D904720AB61EA00F59D5F /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = AudioPlayer/AWSCore.framework; sourceTree = "<group>"; };
+		E4CE405121F4662200F397CD /* AudioFauxAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFauxAnalytics.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +147,7 @@
 				E48D8FB820AB55D100F59D5F /* AudioTOCChapter.swift */,
 				E48D8FC320AB55D300F59D5F /* AudioTOCTestament.swift */,
 				E48D8FC820AB55D300F59D5F /* AudioAnalytics.swift */,
+				E4CE405121F4662200F397CD /* AudioFauxAnalytics.swift */,
 				E48D8FC920AB55D300F59D5F /* AudioAnalyticsSessionId.swift */,
 				E48D8FBB20AB55D200F59D5F /* UIPauseDNButton.png */,
 				E48D8FBF20AB55D200F59D5F /* UIPauseUPButton.png */,
@@ -329,6 +332,7 @@
 				E48D8FD320AB55D300F59D5F /* AudioTOCTestament.swift in Sources */,
 				E48D8FCE20AB55D300F59D5F /* AudioTOCBook.swift in Sources */,
 				E48D8FCF20AB55D300F59D5F /* AudioTOCBible.swift in Sources */,
+				E4CE405221F4662200F397CD /* AudioFauxAnalytics.swift in Sources */,
 				E48D8FCD20AB55D300F59D5F /* AudioTOCChapter.swift in Sources */,
 				E48D8FCB20AB55D300F59D5F /* AudioBibleView.swift in Sources */,
 				E48D8FCC20AB55D300F59D5F /* AudioBibleController.swift in Sources */,

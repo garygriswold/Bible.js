@@ -23,7 +23,7 @@ class AudioBible {
     private let controller: AudioBibleController
     private let mediaPlayState: MediaPlayState
     private let controlCenter: AudioControlCenter
-    private var audioAnalytics: AudioAnalytics?
+    private var audioAnalytics: AudioFauxAnalytics?
     private var player: AVPlayer?
     // Transient Variables
     private var currReference: AudioReference?
@@ -57,7 +57,7 @@ class AudioBible {
     func beginReadFile(reference: AudioReference) {
         print("BibleReader.BEGIN Read File")
         self.currReference = reference
-        self.audioAnalytics = AudioAnalytics(mediaSource: reference.tocAudioBook.testament.bible.mediaSource,
+        self.audioAnalytics = AudioFauxAnalytics(mediaSource: reference.tocAudioBook.testament.bible.mediaSource,
                                              mediaId: reference.damId,
                                              languageId: reference.iso3,
                                              textVersion: reference.bibleId,
