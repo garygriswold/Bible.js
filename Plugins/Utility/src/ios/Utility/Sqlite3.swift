@@ -111,6 +111,8 @@ public class Sqlite3 {
         if result == SQLITE_OK {
             print("Successfully opened connection to database at \(fullPath)")
             self.database = db!
+            NotificationCenter.default.addObserver(self, selector: #selector(safeClose(note:)),
+                                                name: UIApplication.willTerminateNotification, object: nil)
         } else {
             print("SQLITE Result Code = \(result)")
             let openMsg = String.init(cString: sqlite3_errmsg(database))
@@ -180,6 +182,9 @@ public class Sqlite3 {
         }
     }
     
+    @objc func safeClose(note: NSNotification) {
+        self.close()
+    }
     public func close() {
         if database != nil {
             sqlite3_close(database)

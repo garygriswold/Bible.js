@@ -101,7 +101,6 @@ class AudioTOCBible {
             let dbName = self.bibleId + ".db"
             let db = Sqlite3()
             try db.open(dbname: dbName, copyIfAbsent: true)
-            defer { db.close() }
             let resultSet = try db.queryV1(sql: query, values: [])
             for row in resultSet {
                 let bookId = row[0]!
