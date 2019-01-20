@@ -107,7 +107,7 @@ class ReaderToolbar {
     }
     
     @objc func menuTapHandler(sender: UIBarButtonItem) {
-        SettingsViewController.push(settingsViewType: .primary, controller: self.controller, language: nil)
+        MenuViewController.push(controller: self.controller)
     }
     
     @objc func historyTapHandler(sender: UIBarButtonItem) {

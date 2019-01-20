@@ -11,13 +11,12 @@ import UIKit
 
 class TextHeightSliderCell : UITableViewCell {
     
-    private static let indexPath = IndexPath(item: 1, section: 2) // Used by get cell location in table.
     private weak var tableView: UITableView?
     private let textSlider: UISlider
     private var sampleTextLabel: UILabel?
     private var pointSize: CGFloat?
     
-    init(controller: SettingsViewController, style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    init(controller: MenuViewController, style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.tableView = controller.tableView
         self.textSlider = UISlider(frame: .zero)
         super.init(style: style, reuseIdentifier: reuseIdentifier)

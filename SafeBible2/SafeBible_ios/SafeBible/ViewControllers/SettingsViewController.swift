@@ -6,7 +6,6 @@
 import UIKit
 
 enum SettingsViewType {
-    case primary
     case bible
     case language
     case oneLang
@@ -75,8 +74,6 @@ class SettingsViewController: AppViewController {
         
         let width = self.view.bounds.width
         switch self.settingsViewType {
-        case .primary:
-            self.navigationItem.title = NSLocalizedString("Menu", comment: "Menu view page title")
         case .bible:
             self.navigationItem.title = NSLocalizedString("Bibles", comment: "Bibles view page title")
             self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
@@ -116,8 +113,6 @@ class SettingsViewController: AppViewController {
         self.tableView.contentOffset = self.recentContentOffset
         
         switch self.settingsViewType {
-        case .primary:
-            self.dataModel = nil
         case .bible:
             self.dataModel = BibleModel(availableSection: self.availableSection, language: nil,
                                         selectedOnly: false)

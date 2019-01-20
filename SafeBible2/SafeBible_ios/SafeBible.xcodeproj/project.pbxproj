@@ -23,6 +23,7 @@
 		E429FDBA21E9500E004A193A /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E429FDB921E9500D004A193A /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E42C151B21CD8BAE00AA42D7 /* NotesExportActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42C151A21CD8BAE00AA42D7 /* NotesExportActionSheet.swift */; };
 		E431E92A21938D7300CF609C /* DynamicCSS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E431E92921938D7300CF609C /* DynamicCSS.swift */; };
+		E4467D7321F4290B00E60A1A /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4467D7221F4290B00E60A1A /* MenuViewController.swift */; };
 		E4480A2C21866E7F00C019B0 /* Reference.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4480A2B21866E7F00C019B0 /* Reference.swift */; };
 		E4480A2E2187D3DD00C019B0 /* ReaderPagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4480A2D2187D3DD00C019B0 /* ReaderPagesController.swift */; };
 		E4480A302188147200C019B0 /* ReaderToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4480A2F2188147200C019B0 /* ReaderToolbar.swift */; };
@@ -164,6 +165,7 @@
 		E429FDB921E9500D004A193A /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = SafeBible/AWSCore.framework; sourceTree = "<group>"; };
 		E42C151A21CD8BAE00AA42D7 /* NotesExportActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExportActionSheet.swift; sourceTree = "<group>"; };
 		E431E92921938D7300CF609C /* DynamicCSS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicCSS.swift; sourceTree = "<group>"; };
+		E4467D7221F4290B00E60A1A /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		E4480A2B21866E7F00C019B0 /* Reference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reference.swift; sourceTree = "<group>"; };
 		E4480A2D2187D3DD00C019B0 /* ReaderPagesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderPagesController.swift; sourceTree = "<group>"; };
 		E4480A2F2188147200C019B0 /* ReaderToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderToolbar.swift; sourceTree = "<group>"; };
@@ -317,6 +319,7 @@
 				E4480A2D2187D3DD00C019B0 /* ReaderPagesController.swift */,
 				E4B4433821A3BBA3007A266B /* PageViewController.swift */,
 				E404A3B92176BAA100340395 /* ReaderViewController.swift */,
+				E4467D7221F4290B00E60A1A /* MenuViewController.swift */,
 				E4C2E981211B712C00B71CC5 /* SettingsViewController.swift */,
 				E4C2E984211B712C00B71CC5 /* SettingsViewDataSource.swift */,
 				E4C2E989211B712D00B71CC5 /* SettingsViewDelegate.swift */,
@@ -628,6 +631,7 @@
 				E4FCC44C21C8E42100A5FF54 /* NoteCell.swift in Sources */,
 				E478BFDB21DCDE490093320D /* AppTableViewController.swift in Sources */,
 				E4C2E98D211B712D00B71CC5 /* SettingsViewDataSource.swift in Sources */,
+				E4467D7321F4290B00E60A1A /* MenuViewController.swift in Sources */,
 				E40D6065218252CA00A06B54 /* BiblePageModel.swift in Sources */,
 				E4B4433B21A46999007A266B /* ColorPicker.swift in Sources */,
 				E49F7296216AC830007D2856 /* ExternControllerProtocol.swift in Sources */,

@@ -37,8 +37,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch self.settingsViewType {
-        case .primary:
-            primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
         case .bible:
             bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
         case .language:
@@ -52,61 +50,12 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch self.settingsViewType {
-        case .primary:
-            primaryViewRowSelect(tableView: tableView, indexPath: indexPath)
         case .bible:
             bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
         case .language:
             languageViewRowSelect(tableView: tableView, indexPath: indexPath)
         case .oneLang:
             bibleViewRowSelect(tableView: tableView, indexPath: indexPath)
-        }
-    }
-    
-    private func primaryViewRowSelect(tableView: UITableView, indexPath: IndexPath) {
-        switch indexPath.section {
-        case 0:
-            switch indexPath.row {
-            case 0:
-                TOCBooksViewController.push(controller: self.controller)
-            case 1:
-                HistoryViewController.push(controller: self.controller)
-            case 2:
-                let bible = HistoryModel.shared.currBible
-                VideoViewController.push(iso3: bible.iso3, controller: self.controller)
-            default: fatalError("Unknown row \(indexPath.row) in section 0")
-            }
-        case 1:
-            print("Section 1 Font Size Widget.  It is not selectable.")
-        case 2:
-            switch indexPath.row {
-            case 0:
-                SettingsViewController.push(settingsViewType: .bible, controller: self.controller,
-                                            language: nil)
-            case 1:
-                SettingsViewController.push(settingsViewType: .language, controller: self.controller,
-                                            language: nil)
-            default: fatalError("Unknown row \(indexPath.row) in section 1")
-            }
-        case 3:
-            switch indexPath.row {
-            case 0:
-                guard let reviewURL = URL(string: "https://itunes.apple.com/app/id1073396349?action=write-review")
-                    else { fatalError("Expected a valid URL") }
-                UIApplication.shared.open(reviewURL, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
-                // I have also tried to use WKWebView to access itunes, but it requires User AppleId
-                // login credentials.
-            case 1:
-                FeedbackViewController.push(controller: self.controller)
-            case 2:
-                InfoPageController.push(controller: self.controller)
-            case 3:
-                UserMessageController.present(controller: self.controller)
-            default:
-                print("Unknown row \(indexPath.row) in section 0 in .primary")
-            }
-        default:
-            fatalError("Unknown section \(indexPath.section) in .primary")
         }
     }
     
@@ -162,14 +111,6 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     
     private func titleForHeaderInSection(section: Int) -> String? {
         switch self.settingsViewType {
-        case .primary:
-            switch section {
-            case 0: return nil
-            case 1: return nil
-            case 2: return NSLocalizedString("Bibles", comment: "Section heading for User selected Bibles")
-            case 3: return NSLocalizedString("About", comment: "Section heading for About")
-            default: fatalError("Unknown section \(section) in .primary")
-            }
         case .bible:
             if section == self.selectedSection {
                 return NSLocalizedString("My Bibles", comment: "Section heading for User selected Bibles")
@@ -200,18 +141,8 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if self.settingsViewType == .primary && section == 0 {
-            let font = AppFont.sansSerif(style: .subheadline)
-            return 1.0 * font.lineHeight
-        }
-        else if self.settingsViewType == .primary && section <= 1 {
-            let font = AppFont.sansSerif(style: .subheadline)
-            return 1.5 * font.lineHeight
-        }
-        else {
-            let font = AppFont.sansSerif(style: .subheadline)
-            return 3 * font.lineHeight
-        }
+        let font = AppFont.sansSerif(style: .subheadline)
+        return 3 * font.lineHeight
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -265,19 +196,4 @@ class SettingsViewDelegate : NSObject, UITableViewDelegate {
             return sourceIndexPath
         }
     }
-    
-    // Called when a cell is removed from the view
-    //func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath)
-    
-    //func tableView(_ tableView: UITableView,
-    //               leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
-    
-    //func tableView(_ tableView: UITableView,
-    //               trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
-}
-
-
-// Helper function inserted by Swift 4.2 migrator.
-fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
-	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

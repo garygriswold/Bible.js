@@ -10,7 +10,6 @@ import UIKit
 
 class TextSizeSliderCell : UITableViewCell {
     
-    private static let indexPath = IndexPath(item: 0, section: 2) // Used by get cell location in table.
     private weak var tableView: UITableView?
     private let textSlider: UISlider
     private let leftLabel: UILabel
@@ -18,7 +17,7 @@ class TextSizeSliderCell : UITableViewCell {
     private var sampleTextLabel: UILabel?
     private var serifBodyFont: UIFont?
     
-    init(controller: SettingsViewController, style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    init(controller: MenuViewController, style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.tableView = controller.tableView
         self.textSlider = UISlider(frame: .zero)
         self.leftLabel = UILabel(frame: .zero)

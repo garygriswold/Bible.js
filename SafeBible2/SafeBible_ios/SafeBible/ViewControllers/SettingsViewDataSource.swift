@@ -16,10 +16,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     private let selectedSection: Int
     private let availableSection: Int
     private let searchController: SettingsSearchController?
-    private let textSizeSliderCell: TextSizeSliderCell
-    private let textHeightSliderCell: TextHeightSliderCell
-    private let nightSwitch: UISwitch
-    private let verseSwitch: UISwitch
     
     init(controller: SettingsViewController, selectionViewSection: Int, searchController: SettingsSearchController?) {
         self.controller = controller
@@ -28,12 +24,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
         self.settingsViewType = controller.settingsViewType
         self.selectedSection = selectionViewSection
         self.availableSection = selectionViewSection + 1
-        
-        // Text Size Cell
-        self.textSizeSliderCell = TextSizeSliderCell(controller: self.controller!, style: .default, reuseIdentifier: nil)
-        self.textHeightSliderCell = TextHeightSliderCell(controller: self.controller!, style: .default, reuseIdentifier: nil)
-        self.nightSwitch = UISwitch(frame: .zero)
-        self.verseSwitch = UISwitch(frame: .zero)
        
         super.init()
     }
@@ -45,7 +35,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     // Return the number of sections
     func numberOfSections(in tableView: UITableView) -> Int {
         switch self.settingsViewType {
-        case .primary: return 4
         case .bible: return 1 + self.dataModel!.locales.count
         case .language: return 2
         case .oneLang: return 2
@@ -55,14 +44,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     // Return the number of rows for each section in your static table
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch self.settingsViewType {
-        case .primary:
-            switch section {
-            case 0: return 3
-            case 1: return 4
-            case 2: return 2
-            case 3: return (UserMessageController.isAvailable()) ? 4 : 3
-            default: fatalError("Unknown section \(section) in .primary")
-            }
         case .bible:
             switch section {
             case 0: return self.dataModel!.selectedCount
@@ -102,85 +83,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     // Return the row cell for the corresponding section and row
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch self.settingsViewType {
-        case .primary:
-            switch indexPath.section {
-            case 0:
-                switch indexPath.row {
-                case 0:
-                    let tocText = NSLocalizedString("Table of Contents", comment: "Table of Contents Title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: tocText,
-                                            accessory: true, icon: "ios-keypad.png")
-                case 1:
-                    let histText = NSLocalizedString("History", comment: "History Cell Title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: histText,
-                                            accessory: true, icon: "ios-previous.png")
-                case 2:
-                    let videoText = NSLocalizedString("Videos", comment: "Videos Cell Title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: videoText,
-                                            accessory: true, icon: "ios-films.png")
-                default: fatalError("Unknown row \(indexPath.row) in section 0")
-                }
-            case 1:
-                switch indexPath.row {
-                case 0:
-                    return self.textSizeSliderCell
-                case 1:
-                    return self.textHeightSliderCell
-                case 2:
-                    let nightText = NSLocalizedString("Night Time", comment: "Clickable cell title")
-                    let nightCell = self.genericCell(view: tableView, indexPath: indexPath, title: nightText,
-                                                    accessory: false, icon: "wea-moon.png")
-                    self.nightSwitch.setOn(AppFont.nightMode, animated: false)
-                    self.nightSwitch.addTarget(self, action: #selector(nightSwitchHandler),
-                                                for: .valueChanged)
-                    nightCell.accessoryView = self.nightSwitch
-                    return nightCell
-                case 3:
-                    let verseText = NSLocalizedString("Verse Numbers", comment: "Clickable cell title")
-                    let verseCell = self.genericCell(view: tableView, indexPath: indexPath, title: verseText,
-                                                    accessory: false, icon: "typ-bullets-numbers.png")
-                    self.verseSwitch.setOn(AppFont.verseNumbers, animated: false)
-                    self.verseSwitch.addTarget(self, action: #selector(verseSwitchHandler),
-                                                for: .valueChanged)
-                    verseCell.accessoryView = self.verseSwitch
-                    return verseCell
-                default: fatalError("Unknown row \(indexPath.row) in section 1")
-                }
-            case 2:
-                switch indexPath.row {
-                case 0:
-                    let bibleText = NSLocalizedString("More Bibles", comment: "Clickable cell title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: bibleText,
-                                            accessory: true, icon: "cel-bible.png")
-                case 1:
-                    let langText = NSLocalizedString("More Languages", comment: "Clickable cell title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: langText,
-                                            accessory: true, icon: "ios-world-times.png")
-                default: fatalError("Unknown row \(indexPath.row) in section 2")
-                }
-            case 3:
-                switch indexPath.row {
-                case 0:
-                    let reviewText = NSLocalizedString("Write A Review", comment: "Clickable cell title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: reviewText,
-                                            accessory: true, icon: "ios-new.png")
-                case 1:
-                    let commentText = NSLocalizedString("Send Us Comments", comment: "Clickable cell title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: commentText,
-                                            accessory: true, icon: "ios-reply.png")
-                case 2:
-                    let privText = NSLocalizedString("Privacy Policy", comment: "Privacy Policy cell title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: privText,
-                                            accessory: true, icon: "sec-shield-diagonal.png")
-                case 3:
-                    let shareText = NSLocalizedString("Share SafeBible", comment: "Clickable cell title")
-                    return self.genericCell(view: tableView, indexPath: indexPath, title: shareText,
-                                            accessory: true, icon: "ios-upload.png")
-                default: fatalError("Unknown row \(indexPath.row) in section 3")
-                }
-            default:
-                fatalError("Unknown section \(indexPath.section) in .primary")
-            }
         case .bible:
             switch indexPath.section {
             case 0:
@@ -212,7 +114,6 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     // Return true for each row that can be edited
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         switch self.settingsViewType {
-        case .primary: return false
         case .bible: return true
         case .language: return true
         case .oneLang: return true
@@ -258,54 +159,12 @@ class SettingsViewDataSource : NSObject, UITableViewDataSource {
     
     // Return true for each row that can be moved
     func tableView(_ tableView: UITableView, canMoveRowAt: IndexPath) -> Bool {
-        return (self.settingsViewType != .primary && canMoveRowAt.section == self.selectedSection)
+        return (canMoveRowAt.section == self.selectedSection)
     }
     
     // Commit the row move in the data source
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath,
                    to destinationIndexPath: IndexPath) {
         self.dataModel!.moveSelected(source: sourceIndexPath.row, destination: destinationIndexPath.row)
-    }
-        
-    private func genericCell(view: UITableView, indexPath: IndexPath, title: String,
-                             accessory: Bool, icon: String) -> UITableViewCell {
-        let cell = view.dequeueReusableCell(withIdentifier: "otherCell", for: indexPath)
-        cell.textLabel?.text = title
-        cell.textLabel?.font = AppFont.sansSerif(style: .subheadline)
-        cell.textLabel?.textColor = AppFont.textColor
-        cell.backgroundColor = AppFont.backgroundColor
-        cell.accessoryView = nil
-        var image = UIImage(named: "www/images/" + icon)
-        image = image?.withRenderingMode(.alwaysTemplate)
-        cell.imageView?.tintColor = UIColor.gray
-        cell.imageView?.image = image
-        if accessory {
-            cell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
-        }
-        return cell
-    }
-    
-    @objc func nightSwitchHandler(sender: UISwitch) {
-        AppFont.nightMode = sender.isOn
-        if let cell = sender.superview as? UITableViewCell {
-            if let table = cell.superview as? UITableView {
-                table.reloadData()
-                var vu: UIView? = table
-                while(vu != nil) {
-                    vu!.backgroundColor = AppFont.backgroundColor
-                    vu = vu!.superview
-                }
-            }
-        }
-        if let navBar = self.controller?.navigationController?.navigationBar {
-            // Controls Navbar background color
-            navBar.barTintColor = AppFont.backgroundColor
-            // Controls Navbar text color
-            navBar.barStyle = (AppFont.nightMode) ? .black : .default
-        }
-    }
-    
-    @objc func verseSwitchHandler(sender: UISwitch) {
-        AppFont.verseNumbers = sender.isOn
     }
 }
