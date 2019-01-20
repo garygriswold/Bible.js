@@ -1,5 +1,8 @@
 #!/bin/sh -ve
 
+# Create Credential Table
+sqlite Versions.db < sql/Credentials.sql
+
 # Create Support Tables
 #python py/CountryTable.py
 python py/LanguageTable.py
