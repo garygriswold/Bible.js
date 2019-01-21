@@ -79,13 +79,6 @@ struct DynamicCSS {
         "</style>\n"
     }
     
-    func getAllRules() -> String {
-        return self.fontSize.genRule() +
-            self.lineHeight.genRule() +
-            self.nightMode.genRule() +
-            self.verseNumbers.genRule()
-    }
-    
     func getEmptyHtml() -> String {
         return "<html><head><style type='text/css'>" + nightMode.genCSS() + "</style>"
             + "<meta name=\"viewport\" content=\"viewport-fit=cover\" />"

@@ -18,7 +18,7 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
     
     //var pageViewController: PageViewController!
     var pageViewController: UIPageViewController!
-    private var readerViewQueue: ReaderViewQueue = ReaderViewQueue()
+    private var readerViewQueue = ReaderViewQueue.shared
     private var toolBar: ReaderToolbar!
     
     override var prefersStatusBarHidden: Bool { get { return true } }
@@ -104,9 +104,6 @@ class ReaderPagesController : UIViewController, UIPageViewControllerDataSource, 
         let hideNavBar = true
         self.navigationController?.setNavigationBarHidden(hideNavBar, animated: false)
         self.navigationController?.isToolbarHidden = false
-        
-        // This only needs to be done when settings are updated, but it only takes 2ms
-        self.readerViewQueue.updateCSS()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

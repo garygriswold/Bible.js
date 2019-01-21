@@ -106,6 +106,7 @@ class TextHeightSliderCell : UITableViewCell {
     @objc func touchUpHandler(sender: UISlider) {
         print("touch up \(sender.value)")
         AppFont.bodyLineHeight = sender.value
+        ReaderViewQueue.shared.updateCSS(css: DynamicCSS.shared.lineHeight.genRule())
         self.sampleTextLabel?.removeFromSuperview()
     }
 }

@@ -169,10 +169,12 @@ class MenuViewController: AppTableViewController, UITableViewDataSource {
             // Controls Navbar text color
             navBar.barStyle = (AppFont.nightMode) ? .black : .default
         }
+        ReaderViewQueue.shared.updateCSS(css: DynamicCSS.shared.nightMode.genRule())
     }
     
     @objc func verseSwitchHandler(sender: UISwitch) {
         AppFont.verseNumbers = sender.isOn
+        ReaderViewQueue.shared.updateCSS(css: DynamicCSS.shared.verseNumbers.genRule())
     }
     
     private func genericCell(view: UITableView, indexPath: IndexPath, title: String,

@@ -126,6 +126,8 @@ class TextSizeSliderCell : UITableViewCell {
         self.tableView!.reloadData()
         AppFont.updateSearchFontSize()
         
+        ReaderViewQueue.shared.updateCSS(css: DynamicCSS.shared.fontSize.genRule())
+        
         self.sampleTextLabel?.removeFromSuperview()
     }
 }

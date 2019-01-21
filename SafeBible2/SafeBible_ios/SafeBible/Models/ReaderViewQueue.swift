@@ -7,7 +7,9 @@
 //
 import UIKit
 
-struct ReaderViewQueue {
+class ReaderViewQueue {
+    
+    static let shared = ReaderViewQueue()
     
     private enum PreviousCall {
         case first
@@ -24,13 +26,13 @@ struct ReaderViewQueue {
     private var unused: Set<ReaderViewController>
     private var previousCall: PreviousCall
     
-    init() {
+    private init() {
         self.queue = [ReaderViewController]()
         self.unused = Set<ReaderViewController>()
         self.previousCall = .first
     }
     
-    mutating func first(reference: Reference) -> ReaderViewController {
+    func first(reference: Reference) -> ReaderViewController {
         self.previousCall = .first
         for controller in self.queue {
             self.addUnused(controller: controller)
@@ -45,7 +47,7 @@ struct ReaderViewQueue {
     * The ReaderViewController is one that is already in the queue.
     * So, it is guarantteed to be found within the list.
     */
-    mutating func next(controller: UIViewController) -> ReaderViewController? {
+    func next(controller: UIViewController) -> ReaderViewController? {
         self.previousCall = .next
         if let index = self.findController(controller: controller) {
             if index < (queue.count - 1) {
@@ -58,7 +60,7 @@ struct ReaderViewQueue {
         }
     }
     
-    mutating func prior(controller: UIViewController) -> ReaderViewController? {
+    func prior(controller: UIViewController) -> ReaderViewController? {
         self.previousCall = .prior
         if let index = self.findController(controller: controller) {
             if index > 0 {
@@ -76,7 +78,7 @@ struct ReaderViewQueue {
     * but never for the initial set, and only most of the time when the page is swiped.
     * This method is called after any page is loaded to add one additional pages before and or after
     */
-    mutating func preload() {
+    func preload() {
         switch self.previousCall {
         case .first:
             _ = self.appendAfter()
@@ -91,14 +93,14 @@ struct ReaderViewQueue {
         self.previousCall = .preload
     }
     
-    mutating func updateCSS() {
-        let css = DynamicCSS.shared.getAllRules()
+    func updateCSS(css: String) {
+        print("update Rule in ReaderViewQueue: \(css)")
         for webView in self.queue {
             webView.execJavascript(message: css)
         }
     }
     
-    mutating private func appendAfter() -> ReaderViewController {
+    private func appendAfter() -> ReaderViewController {
         let reference = self.queue.last!.reference!
         let controller = self.getUnused(reference: reference.nextChapter())
         self.queue.append(controller)
@@ -110,7 +112,7 @@ struct ReaderViewQueue {
         return controller
     }
     
-    mutating private func insertBefore() -> ReaderViewController {
+    private func insertBefore() -> ReaderViewController {
         let reference = self.queue[0].reference!
         let controller = self.getUnused(reference: reference.priorChapter())
         self.queue.insert(controller, at: 0)
@@ -122,7 +124,7 @@ struct ReaderViewQueue {
         return controller
     }
     
-    mutating private func getUnused(reference: Reference) -> ReaderViewController {
+    private func getUnused(reference: Reference) -> ReaderViewController {
         var webView = self.unused.popFirst()
         if webView == nil {
             webView = ReaderViewController()
@@ -132,7 +134,7 @@ struct ReaderViewQueue {
         return webView!
     }
     
-    mutating private func addUnused(controller: ReaderViewController) {
+    private func addUnused(controller: ReaderViewController) {
         controller.view.removeFromSuperview()
         self.unused.insert(controller)
     }
