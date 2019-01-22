@@ -9,12 +9,12 @@ body {
     font-size: 1.0rem; /* 16pt */
 }
 
-/* GNG Removed 1/3/19
+/* Affects notes and bookmarks */
 a {
   text-decoration: none;
-  color: #333;
+  /* color: #333; GNG removed 1/3/19 */
 }
-*/
+
 /* GNG Added 11/11/18 */
 .footer {
     display: none;
