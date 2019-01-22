@@ -32,8 +32,6 @@
 		E452C7B021BF3C6F00553B86 /* NoteEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E452C7AF21BF3C6F00553B86 /* NoteEditViewController.swift */; };
 		E45A606021E955A00042E3EE /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45A605F21E955A00042E3EE /* VideoModel.swift */; };
 		E45A606221EA31870042E3EE /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45A606121EA31870042E3EE /* VideoViewController.swift */; };
-		E45A606421EA6E720042E3EE /* VideoPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45A606321EA6E720042E3EE /* VideoPlayer.framework */; };
-		E45A606521EA6E720042E3EE /* VideoPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E45A606321EA6E720042E3EE /* VideoPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E463896E21793DC0009BF5E2 /* HistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463896D21793DC0009BF5E2 /* HistoryModel.swift */; };
 		E463897221799013009BF5E2 /* BiblesActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463897121799013009BF5E2 /* BiblesActionSheet.swift */; };
 		E4638974217AE210009BF5E2 /* SettingsDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4638973217AE210009BF5E2 /* SettingsDB.swift */; };
@@ -54,8 +52,6 @@
 		E487F79121F1B43F000CB564 /* UIPlayDNButton90.png in Resources */ = {isa = PBXBuildFile; fileRef = E487F79021F1B43F000CB564 /* UIPlayDNButton90.png */; };
 		E487F79321F1B454000CB564 /* UIPlayUPButton90.png in Resources */ = {isa = PBXBuildFile; fileRef = E487F79221F1B454000CB564 /* UIPlayUPButton90.png */; };
 		E48BF9CD21DEBD370060392F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F720C0211B6F2C00E26B07 /* Assets.xcassets */; };
-		E49B31D921EE7F8200936913 /* AudioPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E49B31D821EE7F8200936913 /* AudioPlayer.framework */; };
-		E49B31DA21EE7F8200936913 /* AudioPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E49B31D821EE7F8200936913 /* AudioPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E49F7296216AC830007D2856 /* ExternControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */; };
 		E4A3AF152138EC0F006EDEFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E428B7E62138BD7F000AB2A8 /* Localizable.strings */; };
 		E4A4B325219F5D5800F70888 /* NotesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A4B324219F5D5700F70888 /* NotesModel.swift */; };
@@ -80,8 +76,6 @@
 		E4D5A6CF21C8563E008476D0 /* NotesDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5A6CE21C8563E008476D0 /* NotesDB.swift */; };
 		E4D5A6D121C85AA3008476D0 /* NotesExportDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5A6D021C85AA3008476D0 /* NotesExportDatabase.swift */; };
 		E4D5A6D321C8A291008476D0 /* NotesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5A6D221C8A291008476D0 /* NotesListViewController.swift */; };
-		E4D708D0213328E600E4A8BF /* AWS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D708CF213328E600E4A8BF /* AWS.framework */; };
-		E4D708D1213328E600E4A8BF /* AWS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4D708CF213328E600E4A8BF /* AWS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4E12B2E2133F30800CAFE78 /* UserMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */; };
 		E4EC586F215D9D4C009BAA4F /* StoreReviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */; };
 		E4F66863217C377600E998CC /* TOCBooksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F66862217C377600E998CC /* TOCBooksViewController.swift */; };
@@ -134,9 +128,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				E429FDBA21E9500E004A193A /* AWSCore.framework in Embed Frameworks */,
-				E45A606521EA6E720042E3EE /* VideoPlayer.framework in Embed Frameworks */,
-				E49B31DA21EE7F8200936913 /* AudioPlayer.framework in Embed Frameworks */,
-				E4D708D1213328E600E4A8BF /* AWS.framework in Embed Frameworks */,
 				E44C056E211BE1F700476DAD /* Utility.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -175,7 +166,6 @@
 		E45A605E21E952220042E3EE /* SafeBible.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SafeBible.entitlements; sourceTree = "<group>"; };
 		E45A605F21E955A00042E3EE /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 		E45A606121EA31870042E3EE /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
-		E45A606321EA6E720042E3EE /* VideoPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VideoPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E463896D21793DC0009BF5E2 /* HistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryModel.swift; sourceTree = "<group>"; };
 		E463897121799013009BF5E2 /* BiblesActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblesActionSheet.swift; sourceTree = "<group>"; };
 		E4638973217AE210009BF5E2 /* SettingsDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDB.swift; sourceTree = "<group>"; };
@@ -225,7 +215,6 @@
 		E49ACDD5213B50720031625C /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E49ACDD6213B507F0031625C /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E49ACDD7213B508B0031625C /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Localizable.strings; sourceTree = "<group>"; };
-		E49B31D821EE7F8200936913 /* AudioPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AudioPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E49F7295216AC830007D2856 /* ExternControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternControllerProtocol.swift; sourceTree = "<group>"; };
 		E4A3AF142138EC0F006EDEFE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4A3AF162138EE96006EDEFE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -254,7 +243,6 @@
 		E4D5A6CE21C8563E008476D0 /* NotesDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesDB.swift; sourceTree = "<group>"; };
 		E4D5A6D021C85AA3008476D0 /* NotesExportDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExportDatabase.swift; sourceTree = "<group>"; };
 		E4D5A6D221C8A291008476D0 /* NotesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesListViewController.swift; sourceTree = "<group>"; };
-		E4D708CF213328E600E4A8BF /* AWS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AWS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4E12B2D2133F30800CAFE78 /* UserMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageController.swift; sourceTree = "<group>"; };
 		E4EC586E215D9D4C009BAA4F /* StoreReviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreReviewController.swift; sourceTree = "<group>"; };
 		E4F66862217C377600E998CC /* TOCBooksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOCBooksViewController.swift; sourceTree = "<group>"; };
@@ -272,10 +260,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E49B31D921EE7F8200936913 /* AudioPlayer.framework in Frameworks */,
-				E4D708D0213328E600E4A8BF /* AWS.framework in Frameworks */,
 				E44C056D211BE1F700476DAD /* Utility.framework in Frameworks */,
-				E45A606421EA6E720042E3EE /* VideoPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,14 +398,11 @@
 				E487F78121F1B1BA000CB564 /* UIThumbDN30.png */,
 				E487F78021F1B1BA000CB564 /* UIThumbDN30@2x.png */,
 				E487F78221F1B1BA000CB564 /* UIThumbDN30@3x.png */,
-				E49B31D821EE7F8200936913 /* AudioPlayer.framework */,
-				E45A606321EA6E720042E3EE /* VideoPlayer.framework */,
 				E429FDB921E9500D004A193A /* AWSCore.framework */,
 				E429FDB721E94FAB004A193A /* Versions.db */,
 				E429FDB521E94F7B004A193A /* www */,
 				E478BFE821DE82CF0093320D /* AWS.xcodeproj */,
 				E478BFE221DE829D0093320D /* Utility.xcodeproj */,
-				E4D708CF213328E600E4A8BF /* AWS.framework */,
 				E4F720B8211B6F2A00E26B07 /* SafeBible */,
 				E4F720B7211B6F2A00E26B07 /* Products */,
 				E44C0565211B77AA00476DAD /* Frameworks */,
@@ -498,7 +480,7 @@
 								enabled = 0;
 							};
 							com.apple.iCloud = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -867,7 +849,6 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_ENTITLEMENTS = SafeBible/SafeBible.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -894,7 +875,6 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_ENTITLEMENTS = SafeBible/SafeBible.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 95C7NX5DGM;
 				FRAMEWORK_SEARCH_PATHS = (
