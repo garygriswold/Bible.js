@@ -172,7 +172,6 @@
 		E469080A21964F5E00155F2A /* Measurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Measurement.swift; sourceTree = "<group>"; };
 		E469080C2196650F00155F2A /* ReaderViewQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderViewQueue.swift; sourceTree = "<group>"; };
 		E46B2C82218E50200063E68C /* TextHeightSliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextHeightSliderCell.swift; sourceTree = "<group>"; };
-		E471274D21C5910D00EF27F1 /* Settings.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Settings.entitlements; sourceTree = "<group>"; };
 		E474FE1F21C4CB1000DC11D8 /* NotesExportDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExportDocument.swift; sourceTree = "<group>"; };
 		E478BFDA21DCDE490093320D /* AppTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTableViewController.swift; sourceTree = "<group>"; };
 		E478BFE221DE829D0093320D /* Utility.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Utility.xcodeproj; path = ../../Plugins/Utility/src/ios/Utility.xcodeproj; sourceTree = "<group>"; };
@@ -421,7 +420,6 @@
 			isa = PBXGroup;
 			children = (
 				E45A605E21E952220042E3EE /* SafeBible.entitlements */,
-				E471274D21C5910D00EF27F1 /* Settings.entitlements */,
 				E4F720B9211B6F2A00E26B07 /* AppDelegate.swift */,
 				E4C2E987211B712C00B71CC5 /* ReaderViewNavigator.swift */,
 				E4A4B326219FCE2500F70888 /* ViewControllers */,
