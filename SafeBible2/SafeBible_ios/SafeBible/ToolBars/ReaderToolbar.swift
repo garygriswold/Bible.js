@@ -78,11 +78,13 @@ class ReaderToolbar {
                                       action: #selector(composeTapHandler))
         items.append(compose)
         items.append(spacer)
-        
+ /*
+ Disabled until search is developed
         let searchImage = UIImage(named: "www/images/ios-search.png")
         let search = UIBarButtonItem(image: searchImage, style: .plain, target: self,
                                      action: #selector(searchTapHandler))
         items.append(search)
+ */
         self.controller!.setToolbarItems(items, animated: true)
     }
     
