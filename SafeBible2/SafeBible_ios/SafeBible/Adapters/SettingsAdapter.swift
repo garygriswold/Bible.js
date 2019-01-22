@@ -11,7 +11,6 @@ import Utility
 struct SettingsAdapter {
     
     // Changing these static values would break data stored in User settings
-    private static let SETTINGS_DB = "Settings.db"
     private static let VERSIONS_DB = "Versions.db"
     private static let LANGS_SELECTED = "langs_selected"
     private static let BIBLE_SELECTED = "bible_selected"
