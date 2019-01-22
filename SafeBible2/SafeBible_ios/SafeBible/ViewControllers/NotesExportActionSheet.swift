@@ -64,7 +64,8 @@ class NotesExportActionSheet : UIAlertController {
         })
         self.addAction(all2Share)
         
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelStr = NSLocalizedString("Cancel", comment: "Cancel option on action sheet")
+        let cancel = UIAlertAction(title: cancelStr, style: .cancel, handler: nil)
         self.addAction(cancel)
     }
 }

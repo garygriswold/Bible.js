@@ -122,10 +122,10 @@ class ReaderViewController : AppViewController, WKNavigationDelegate, WKScriptMe
         let reference = note.getReference()
         let passage = reference.description(startVerse: note.startVerse, endVerse: note.endVerse)
         let alert = UIAlertController(title: passage, message: "Bookmark", preferredStyle: .alert)
-        let okString = NSLocalizedString("OK", comment: "Default action")
+        let okString = NSLocalizedString("OK", comment: "Default action in Alert")
         let ok = UIAlertAction(title: okString, style: .default, handler: nil)
         alert.addAction(ok)
-        let deleteString = NSLocalizedString("Delete", comment: "Delete bookmark action")
+        let deleteString = NSLocalizedString("Delete", comment: "Delete bookmark action in Alert")
         let delete = UIAlertAction(title: deleteString, style: .destructive, handler: { _ in
             let message = "var ele = document.getElementById('\(note.noteId)');\n"
                 + "var forget = ele.parentNode.removeChild(ele);\n"

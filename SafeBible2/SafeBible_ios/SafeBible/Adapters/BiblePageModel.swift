@@ -21,74 +21,78 @@ import WebKit
 
 struct BiblePageModel {
     
-    private static var mobileCSS: String?
-    
     func loadPage(reference: Reference, webView: WKWebView) {
-        let start = CFAbsoluteTimeGetCurrent()
-        let html = BibleDB.shared.getBiblePage(reference: reference)
-        if html == nil {
-            let progress = self.addProgressIndicator(view: webView)
-            let s3Key = self.generateKey(reference: reference)
-            AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
-                complete: { error, data in
-                    self.removeProgressIndicator(indicator: progress)
-                    if let err = error {
-                        print("ERROR: \(err)")
-                    }
-                    else if let data1 = data {
-                        webView.loadHTMLString(DynamicCSS.shared.getCSS() + data1, baseURL: nil)
-                        print("AWS Load \(reference.toString())")
-                        _ = BibleDB.shared.storeBiblePage(reference: reference, html: data1)
-                        print("*** BiblePage.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
-                    }
-            })
-        } else {
-            webView.loadHTMLString(DynamicCSS.shared.getCSS() + html!, baseURL: nil)
-            print("DB Load \(reference.toString())")
-        }
+        self.getChapter(reference: reference, view: webView, complete: { html in
+            if html != nil {
+                webView.loadHTMLString(DynamicCSS.shared.getCSS() + html!, baseURL: nil)
+            }
+        })
     }
     
-    func loadCell(reference: Reference, startVerse: Int, endVerse: Int,
+    func loadCompareVerseCell(reference: Reference, startVerse: Int, endVerse: Int,
                   cell: CompareVerseCell, table: UITableView, indexPath: IndexPath) {
+        self.getChapter(reference: reference, view: cell.contentView, complete: { html in
+            if html != nil {
+                let parser = HTMLVerseParser(html: html!, startVerse: startVerse, endVerse: endVerse)
+                cell.verse.text = parser.parseVerses()
+                table.reloadRows(at: [indexPath], with: .automatic)
+            }
+        })
+    }
+    
+    func loadLabel(reference: Reference, startVerse: Int, endVerse: Int, label: UILabel) {
+        self.getChapter(reference: reference, view: nil, complete: { html in
+            if html != nil {
+                let parser = HTMLVerseParser(html: html!, startVerse: startVerse, endVerse: endVerse)
+                label.text = parser.parseVerses()
+            }
+        })
+    }
+    
+    private func getChapter(reference: Reference, view: UIView?, complete: @escaping (_ data:String?) -> Void) {
         let start = CFAbsoluteTimeGetCurrent()
         let html = BibleDB.shared.getBiblePage(reference: reference)
         if html == nil {
-            let progress = self.addProgressIndicator(view: cell.contentView)
+            let progress = self.addProgressIndicator(view: view)
             let s3Key = self.generateKey(reference: reference)
             AwsS3Manager.findDbp().downloadText(s3Bucket: "dbp-prod", s3Key: s3Key,
-                complete: { error, data in
-                    self.removeProgressIndicator(indicator: progress)
-                    if let err = error {
-                        print("ERROR: \(err)")
-                    }
-                    else if let data1 = data {
-                        let parser = HTMLVerseParser(html: data1, startVerse: startVerse, endVerse: endVerse)
-                        cell.verse.text = parser.parseVerses()
-                        table.reloadRows(at: [indexPath], with: .automatic)
-                        print("AWS Load \(reference.toString())")
-                        _ = BibleDB.shared.storeBiblePage(reference: reference, html: data1)
-                        print("*** BibleCell.AWS load duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
-                    }
+                                                complete: { error, data in
+                                                    self.removeProgressIndicator(indicator: progress)
+                                                    if let err = error {
+                                                        print("ERROR: \(err)")
+                                                        complete(nil)
+                                                    }
+                                                    else if let data1 = data {
+                                                        complete(data1)
+                                                        print("AWS Load \(reference.toString())")
+                                                        _ = BibleDB.shared.storeBiblePage(reference: reference, html: data1)
+                                                        print("*** BiblePageModel.getChapter duration \((CFAbsoluteTimeGetCurrent() - start) * 1000) ms")
+                                                    }
             })
         } else {
-            let parser = HTMLVerseParser(html: html!, startVerse: startVerse, endVerse: endVerse)
-            cell.verse.text = parser.parseVerses()
+            complete(html)
             print("DB Load \(reference.toString())")
         }
     }
     
-    private func addProgressIndicator(view: UIView) -> UIActivityIndicatorView {
-        let style: UIActivityIndicatorView.Style = AppFont.nightMode ? .white : .gray
-        let progress = UIActivityIndicatorView(style: style)
-        progress.frame = CGRect(x: 40, y: 40, width: 0, height: 0)
-        view.addSubview(progress)
-        progress.startAnimating()
-        return progress
+    private func addProgressIndicator(view: UIView?) -> UIActivityIndicatorView? {
+        if view != nil {
+            let style: UIActivityIndicatorView.Style = AppFont.nightMode ? .white : .gray
+            let progress = UIActivityIndicatorView(style: style)
+            progress.frame = CGRect(x: 40, y: 40, width: 0, height: 0)
+            view!.addSubview(progress)
+            progress.startAnimating()
+            return progress
+        } else {
+            return nil
+        }
     }
 
-    private func removeProgressIndicator(indicator: UIActivityIndicatorView) {
-        indicator.stopAnimating()
-        indicator.removeFromSuperview()
+    private func removeProgressIndicator(indicator: UIActivityIndicatorView?) {
+        if indicator != nil {
+            indicator!.stopAnimating()
+            indicator!.removeFromSuperview()
+        }
     }
 
     private func generateKey(reference: Reference) -> String {

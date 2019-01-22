@@ -84,8 +84,9 @@ class CompareViewController: AppTableViewController, UITableViewDataSource {
         cell.verse.textColor = AppFont.textColor
         let reference = Reference(bibleId: bible!.bibleId, bookId: note.bookId, chapter: note.chapter) // bible! might fail
         let pageModel = BiblePageModel()
-        pageModel.loadCell(reference: reference, startVerse: note.startVerse, endVerse: note.endVerse,
-                           cell: cell, table: tableView, indexPath: indexPath)
+        pageModel.loadCompareVerseCell(reference: reference, startVerse: note.startVerse,
+                                       endVerse: note.endVerse, cell: cell, table: tableView,
+                                       indexPath: indexPath)
         return cell
     }
     //

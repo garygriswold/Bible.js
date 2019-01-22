@@ -59,7 +59,8 @@ class BiblesActionSheet : UIAlertController {
         })
         self.addAction(moreLang)
         
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelStr = NSLocalizedString("Cancel", comment: "Cancel button on Action Sheet")
+        let cancel = UIAlertAction(title: cancelStr, style: .cancel, handler: nil)
         self.addAction(cancel)
     }
 }
