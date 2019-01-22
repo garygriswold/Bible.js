@@ -31,11 +31,11 @@ class AudioTOCBible {
         self.ntDamId = ntDamId
         self.oldTestament = nil
         self.newTestament = nil
-        self.database = Sqlite3()
         do {
-            try self.database.open(dbname: "Versions.db", copyIfAbsent: true)
+            self.database = try Sqlite3.openDB(dbname: "Versions.db", copyIfAbsent: true)
         } catch let err {
             print("ERROR \(Sqlite3.errorDescription(error: err))")
+            self.database = Sqlite3() // included so that database can have let
         }
     }
     

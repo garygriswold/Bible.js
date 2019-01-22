@@ -88,14 +88,7 @@ struct VersionsDB {
     // Common
     //
     func getVersionsDB() throws -> Sqlite3 {
-        var db: Sqlite3?
-        let dbname = "Versions.db"
-        do {
-            db = try Sqlite3.findDB(dbname: dbname)
-        } catch Sqlite3Error.databaseNotOpenError {
-            db = try Sqlite3.openDB(dbname: dbname, copyIfAbsent: true)
-        }
-        return db!
+        return try Sqlite3.openDB(dbname: "Versions.db", copyIfAbsent: true)
     }
 }
 
