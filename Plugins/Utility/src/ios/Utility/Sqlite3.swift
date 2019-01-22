@@ -138,7 +138,6 @@ public class Sqlite3 {
     
     private func ensureDatabase(dbname: String, copyIfAbsent: Bool) throws -> URL {
         let fullPath: URL = self.databaseDir.appendingPathComponent(dbname)
-        print("Opening Database at \(fullPath.path)")
         if FileManager.default.isReadableFile(atPath: fullPath.path) {
             return fullPath
         } else if !copyIfAbsent {

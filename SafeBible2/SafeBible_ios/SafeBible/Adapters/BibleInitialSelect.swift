@@ -183,7 +183,7 @@ struct BibleInitialSelect {
             sql = "SELECT iso3, country, pop FROM Language WHERE iso3 = ?"
         }
         do {
-            let db = try self.adapter.getVersionsDB()
+            let db: Sqlite3 = try VersionsDB.shared.getVersionsDB()
             let resultSet = try db.queryV1(sql: sql, values: [locale.languageCode])
             for row in resultSet {
                 let country = row[1]
@@ -217,7 +217,7 @@ struct BibleInitialSelect {
         var bibles = [BibleScore]()
         let iso3s = languages.map { $0.iso3 }
         do {
-            let db: Sqlite3 = try self.adapter.getVersionsDB()
+            let db: Sqlite3 = try VersionsDB.shared.getVersionsDB()
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: iso3s)
             for row in resultSet {
                 let iso3 = row[2]!

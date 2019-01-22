@@ -87,7 +87,7 @@ struct VersionsDB {
     //
     // Common
     //
-    private func getVersionsDB() throws -> Sqlite3 {
+    func getVersionsDB() throws -> Sqlite3 {
         var db: Sqlite3?
         let dbname = "Versions.db"
         do {

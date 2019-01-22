@@ -11,7 +11,6 @@ import Utility
 struct SettingsAdapter {
     
     // Changing these static values would break data stored in User settings
-    private static let VERSIONS_DB = "Versions.db"
     private static let LANGS_SELECTED = "langs_selected"
     private static let BIBLE_SELECTED = "bible_selected"
     private static let PSEUDO_USER_ID = "pseudo_user_id"
@@ -132,7 +131,7 @@ struct SettingsAdapter {
         do {
             let isos: [String] = selected.map { $0.languageCode ?? "??" }
             let currLocale = Locale.current
-            let db: Sqlite3 = try self.getVersionsDB()
+            let db: Sqlite3 = try VersionsDB.shared.getVersionsDB()
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: isos)
             for row in resultSet {
                 let iso: String = row[0]!
@@ -199,7 +198,7 @@ struct SettingsAdapter {
         var bibles = [Bible]()
         let iso: String = locale.languageCode ?? "??"
         do {
-            let db: Sqlite3 = try self.getVersionsDB()
+            let db: Sqlite3 = try VersionsDB.shared.getVersionsDB()
             let values = selectedBibles + [iso]
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: values)
             bibles = resultSet.map {
@@ -220,7 +219,7 @@ struct SettingsAdapter {
         var bibles = [BibleDetail]()
         let sql = "SELECT bibleId, b.iso3, l.iso1, b.script, b.country FROM Bible b, Language l WHERE b.iso3 = l.iso3"
         do {
-            let db: Sqlite3 = try self.getVersionsDB()
+            let db: Sqlite3 = try VersionsDB.shared.getVersionsDB()
             let resultSet: [[String?]] = try db.queryV1(sql: sql, values: [])
             bibles = resultSet.map {
                 BibleDetail(bibleId: $0[0]!, iso3: $0[1]!, iso1: $0[2], script: $0[3], country: $0[4])
@@ -229,16 +228,6 @@ struct SettingsAdapter {
             print("ERROR: SettingsAdapter.getAllBibles \(err)")
         }
         return bibles
-    }
-    
-    func getVersionsDB() throws -> Sqlite3 {
-        var db: Sqlite3?
-        do {
-            db = try Sqlite3.findDB(dbname: SettingsAdapter.VERSIONS_DB)
-        } catch Sqlite3Error.databaseNotOpenError {
-            db = try Sqlite3.openDB(dbname: SettingsAdapter.VERSIONS_DB, copyIfAbsent: true)
-        }
-        return db!
     }
     
     func genQuest(array: [Any]) -> String {
