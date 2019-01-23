@@ -10,11 +10,13 @@ import UIKit
 
 class TextSizeSliderCell : UITableViewCell {
     
+    private static var sampleTextLabel = UILabel() // This is the sampleTextPopup
+    private static var sampleText = UILabel()      // This is only a holder of the sample text
+    
     private weak var tableView: UITableView?
     private let textSlider: UISlider
     private let leftLabel: UILabel
     private let rightLabel: UILabel
-    private var sampleTextLabel: UILabel?
     private var serifBodyFont: UIFont?
     
     init(controller: MenuViewController, style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -73,29 +75,37 @@ class TextSizeSliderCell : UITableViewCell {
     }
 
     @objc func touchDownHandler(sender: UISlider) {
-        let label = UILabel()
-        label.text = "Your word is a lamp to my feet and a light to my path."
-        label.layer.borderWidth = 0.5
-        label.layer.borderColor = UIColor.gray.cgColor
-        label.layer.cornerRadius = 20
-        label.layer.masksToBounds = true
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        label.backgroundColor = AppFont.groupTableViewBackground
-        label.textColor = AppFont.textColor
-        label.alpha = 0.9
-        self.sampleTextLabel = label
-        
+        if TextSizeSliderCell.sampleTextLabel.text == nil {
+            TextSizeSliderCell.sampleText.text = "Your word is a lamp to my feet and a light to my path."
+            let label = UILabel()
+            let current = HistoryModel.shared.current()
+            let reference = Reference(bibleId: current.bookId, bookId: "PSA", chapter: 119)
+            let pageLoader = BiblePageModel()
+            pageLoader.loadLabel(reference: reference, verse: 105, label: TextSizeSliderCell.sampleText)
+            label.layer.borderWidth = 0.5
+            label.layer.borderColor = UIColor.gray.cgColor
+            label.layer.cornerRadius = 20
+            label.layer.masksToBounds = true
+            label.numberOfLines = 0
+            label.lineBreakMode = .byWordWrapping
+            label.alpha = 0.9
+            TextSizeSliderCell.sampleTextLabel = label
+        }
+        // can this line be static?
         self.serifBodyFont = AppFont.serif(ofRelativeSize: 0.9) // This is not 1.0 as a hack, reason unknown
         self.valueChangedHandler(sender: sender) // set initial size correctly
-        self.tableView?.addSubview(label)
         
-        self.sampleTextLabel!.translatesAutoresizingMaskIntoConstraints = false
+        let versePopup = TextSizeSliderCell.sampleTextLabel
+        versePopup.textColor = AppFont.textColor
+        versePopup.backgroundColor = AppFont.groupTableViewBackground
+        self.tableView?.addSubview(versePopup)
+        
+        versePopup.translatesAutoresizingMaskIntoConstraints = false
         
         let horzMargin = self.frame.width * 0.05
-        self.sampleTextLabel!.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: horzMargin).isActive = true
-        self.sampleTextLabel!.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -horzMargin).isActive = true
-        self.sampleTextLabel!.bottomAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        versePopup.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: horzMargin).isActive = true
+        versePopup.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -horzMargin).isActive = true
+        versePopup.bottomAnchor.constraint(equalTo: self.topAnchor).isActive = true
         
         self.textSlider.addTarget(self, action: #selector(valueChangedHandler), for: .valueChanged)
         self.textSlider.addTarget(self, action: #selector(touchUpHandler), for: .touchUpInside)
@@ -109,12 +119,13 @@ class TextSizeSliderCell : UITableViewCell {
             " line-height:\(AppFont.bodyLineHeight);" +
             " text-align:center;" +
             " color:\(AppFont.textColorHEX);'>" +
-            "Your word is a lamp to my feet and a light to my path." +
+            "\(TextSizeSliderCell.sampleText.text!)" +
+            //"Your word is a lamp to my feet and a light to my path." +
         "</p></body></html>"
         let data: Data? = html.data(using: .utf8)
         do {
             let attributed = try NSAttributedString(data: data!, documentAttributes: nil)
-            self.sampleTextLabel!.attributedText = attributed
+            TextSizeSliderCell.sampleTextLabel.attributedText = attributed
         } catch let err {
             print(err)
         }
@@ -128,6 +139,6 @@ class TextSizeSliderCell : UITableViewCell {
         
         ReaderViewQueue.shared.updateCSS(css: DynamicCSS.shared.fontSize.genRule())
         
-        self.sampleTextLabel?.removeFromSuperview()
+        TextSizeSliderCell.sampleTextLabel.removeFromSuperview()
     }
 }

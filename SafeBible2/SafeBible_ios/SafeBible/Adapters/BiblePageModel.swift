@@ -40,11 +40,16 @@ struct BiblePageModel {
         })
     }
     
-    func loadLabel(reference: Reference, startVerse: Int, endVerse: Int, label: UILabel) {
+    /**
+    * I guess the correct way to pass back a string is to pass in a Writable Key Path, but I don't understand it.
+    */
+    func loadLabel(reference: Reference, verse: Int, label: UILabel) {
         self.getChapter(reference: reference, view: nil, complete: { html in
             if html != nil {
-                let parser = HTMLVerseParser(html: html!, startVerse: startVerse, endVerse: endVerse)
-                label.text = parser.parseVerses()
+                let parser = HTMLVerseParser(html: html!, startVerse: verse, endVerse: verse)
+                var result = parser.parseVerses()
+                result = result.replacingOccurrences(of: String(verse), with: "")
+                label.text = result.trimmingCharacters(in: .whitespacesAndNewlines)
             }
         })
     }

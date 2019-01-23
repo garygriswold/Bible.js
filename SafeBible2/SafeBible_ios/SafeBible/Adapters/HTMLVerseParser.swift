@@ -56,7 +56,11 @@ class HTMLVerseParser : NSObject, XMLParserDelegate {
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
         if self.insideVerses {
-            self.result.append(string)
+            if string == "\u{00A0}" {
+                self.result.append(" ")
+            } else {
+                self.result.append(string)
+            }
         }
     }
     
