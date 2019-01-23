@@ -79,7 +79,7 @@ class TextSizeSliderCell : UITableViewCell {
             TextSizeSliderCell.sampleText.text = "Your word is a lamp to my feet and a light to my path."
             let label = UILabel()
             let current = HistoryModel.shared.current()
-            let reference = Reference(bibleId: current.bookId, bookId: "PSA", chapter: 119)
+            let reference = Reference(bibleId: current.bibleId, bookId: "PSA", chapter: 119)
             let pageLoader = BiblePageModel()
             pageLoader.loadLabel(reference: reference, verse: 105, label: TextSizeSliderCell.sampleText)
             label.layer.borderWidth = 0.5
