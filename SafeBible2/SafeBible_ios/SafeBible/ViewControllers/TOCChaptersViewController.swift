@@ -45,6 +45,11 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
         let frame = CGRect(x: 0, y: 0, width: width, height: rect.height)
         
         let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.itemSize = CGSize(width: self.size, height: self.size)
+        flowLayout.minimumLineSpacing = 20.0
+        flowLayout.minimumInteritemSpacing = 20.0
+        flowLayout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        
         let collectionView = UICollectionView(frame: frame, collectionViewLayout: flowLayout)
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ChapterNumCell")
         collectionView.delegate = self
@@ -60,6 +65,8 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
         guide.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         
         let height = collectionView.collectionViewLayout.collectionViewContentSize.height
+        //let sz = collectionView.collectionViewLayout.collectionViewContentSize
+        //print("content size \(sz)")
         
         collectionView.widthAnchor.constraint(equalToConstant: width).isActive = true
         collectionView.heightAnchor.constraint(equalToConstant: height).isActive = true
@@ -110,14 +117,12 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
     //
     // UICollectionViewDelegateFlowLayout
     //
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.size, height: self.size)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 50, left: 20, bottom: 20, right: 20)
-    }
-    
+    //func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: /UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    //    return CGSize(width: self.size, height: self.size)
+    //}
+    //func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    //    return UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+    //}
     //
     // UICollectionViewDelegate
     //
