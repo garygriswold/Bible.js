@@ -16,7 +16,6 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
     }
     
     private let book: Book
-    private let size: CGFloat = 50.0
     
     init(book: Book) {
         self.book = book
@@ -45,13 +44,13 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
         let frame = CGRect(x: 0, y: 0, width: width, height: rect.height)
         
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.itemSize = CGSize(width: self.size, height: self.size)
+        flowLayout.itemSize = CGSize(width: ChapterNumCell.SIZE, height: ChapterNumCell.SIZE)
         flowLayout.minimumLineSpacing = 20.0
         flowLayout.minimumInteritemSpacing = 20.0
         flowLayout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         
         let collectionView = UICollectionView(frame: frame, collectionViewLayout: flowLayout)
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ChapterNumCell")
+        collectionView.register(ChapterNumCell.self, forCellWithReuseIdentifier: "ChapterNumCell")
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = AppFont.backgroundColor
@@ -93,24 +92,15 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChapterNumCell",
-                                                      for: indexPath as IndexPath)
+                                                      for: indexPath as IndexPath) as! ChapterNumCell
         let chapter = indexPath.row + 1
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: self.size, height: self.size))
-        label.textAlignment = .center
-        label.text = String(chapter)
-        label.textColor = UIColor(red: 0.24, green: 0.5, blue: 0.96, alpha: 1.0)
-        
-        label.bounds = CGRect(x: 0.0, y: 0.0, width: self.size, height: self.size)
-        label.layer.cornerRadius = self.size / 2
-        label.layer.borderWidth = 2.0
-        label.layer.borderColor = UIColor.init(white: 0.8, alpha: 1.0).cgColor
+        cell.label.text = String(chapter)
         let lastRef = HistoryModel.shared.current()
         if lastRef.bookId == self.book.bookId && lastRef.chapter == chapter {
             let alpha = AppFont.nightMode ? 0.3 : 1.0
-            label.backgroundColor = UIColor(red: 0.89, green: 0.98, blue: 0.96, alpha: CGFloat(alpha))
-            label.layer.masksToBounds = true
+            cell.label.backgroundColor = UIColor(red: 0.89, green: 0.98, blue: 0.96, alpha: CGFloat(alpha))
+            cell.label.layer.masksToBounds = true
         }
-        cell.contentView.addSubview(label)
         return cell
     }
     
@@ -132,6 +122,31 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
         NotificationCenter.default.post(name: ReaderPagesController.NEW_REFERENCE,
                                         object: HistoryModel.shared.current())
         self.navigationController?.popToRootViewController(animated: true)
+    }
+}
+
+class ChapterNumCell : UICollectionViewCell {
+    
+    fileprivate static let SIZE: CGFloat = 50.0
+    
+    let label: UILabel
+    
+    override init(frame: CGRect) {
+        let frame = CGRect(x: 0.0, y: 0.0, width: ChapterNumCell.SIZE, height: ChapterNumCell.SIZE)
+        self.label = UILabel(frame: frame)
+        self.label.textAlignment = .center
+        //self.label.bounds = CGRect(x: 0.0, y: 0.0, width: self.size, height: self.size)
+        self.label.layer.cornerRadius = ChapterNumCell.SIZE / 2
+        self.label.layer.borderWidth = 2.0
+        self.label.layer.borderColor = UIColor.init(white: 0.8, alpha: 1.0).cgColor
+        self.label.textColor = UIColor(red: 0.24, green: 0.5, blue: 0.96, alpha: 1.0)
+
+        super.init(frame: frame)
+        self.contentView.addSubview(self.label)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
