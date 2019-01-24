@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
+class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     static func push(book: Book, controller: UIViewController?) {
         let chaptersController = TOCChaptersViewController(book: book)
@@ -16,6 +16,11 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
     }
     
     private let book: Book
+    private var collectionView: UICollectionView!
+    private var topAnchor: NSLayoutConstraint!
+    private var botAnchor: NSLayoutConstraint!
+    private var hiteAnchor: NSLayoutConstraint!
+    private var centAnchor: NSLayoutConstraint!
     
     init(book: Book) {
         self.book = book
@@ -49,38 +54,56 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
         flowLayout.minimumInteritemSpacing = 20.0
         flowLayout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         
-        let collectionView = UICollectionView(frame: frame, collectionViewLayout: flowLayout)
-        collectionView.register(ChapterNumCell.self, forCellWithReuseIdentifier: "ChapterNumCell")
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.backgroundColor = AppFont.backgroundColor
-        self.view.addSubview(collectionView)
+        self.collectionView = UICollectionView(frame: frame, collectionViewLayout: flowLayout)
+        self.collectionView.register(ChapterNumCell.self, forCellWithReuseIdentifier: "ChapterNumCell")
+        self.collectionView.delegate = self
+        self.collectionView.dataSource = self
+        self.collectionView.backgroundColor = AppFont.backgroundColor
+        self.view.addSubview(self.collectionView)
         
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        let guide = UILayoutGuide()
-        self.view.addLayoutGuide(guide)
-
-        guide.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-        guide.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         let height = collectionView.collectionViewLayout.collectionViewContentSize.height
-        //let sz = collectionView.collectionViewLayout.collectionViewContentSize
-        //print("content size \(sz)")
         
         collectionView.widthAnchor.constraint(equalToConstant: width).isActive = true
-        collectionView.heightAnchor.constraint(equalToConstant: height).isActive = true
-        collectionView.centerYAnchor.constraint(equalTo: guide.centerYAnchor).isActive = true
-        collectionView.centerXAnchor.constraint(equalTo: guide.centerXAnchor).isActive = true
+        collectionView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        
+        self.topAnchor = collectionView.topAnchor.constraint(equalTo: self.view.topAnchor)
+        self.botAnchor = collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        
+        self.hiteAnchor = collectionView.heightAnchor.constraint(equalToConstant: height)
+        self.centAnchor = collectionView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(adjustDimensions(note:)),
+                                               name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.navigationController?.isToolbarHidden = true
+        
+        self.adjustDimensions(note: nil)
     }
     
     @objc func historyHandler(sender: UIBarButtonItem) {
         HistoryViewController.push(controller: self)
+    }
+    
+    @objc func adjustDimensions(note: NSNotification?) {
+        let content = self.collectionView.collectionViewLayout.collectionViewContentSize
+        
+        if content.height > self.view.bounds.height {
+            self.topAnchor.isActive = true
+            self.botAnchor.isActive = true
+            self.hiteAnchor.isActive = false
+            self.centAnchor.isActive = false
+        } else {
+            self.topAnchor.isActive = false
+            self.botAnchor.isActive = false
+            self.hiteAnchor.isActive = true
+            self.centAnchor.isActive = true
+        }
     }
     
     //
@@ -103,16 +126,7 @@ class TOCChaptersViewController: AppViewController, UICollectionViewDataSource, 
         }
         return cell
     }
-    
-    //
-    // UICollectionViewDelegateFlowLayout
-    //
-    //func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: /UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    //    return CGSize(width: self.size, height: self.size)
-    //}
-    //func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-    //    return UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-    //}
+
     //
     // UICollectionViewDelegate
     //
@@ -135,7 +149,6 @@ class ChapterNumCell : UICollectionViewCell {
         let frame = CGRect(x: 0.0, y: 0.0, width: ChapterNumCell.SIZE, height: ChapterNumCell.SIZE)
         self.label = UILabel(frame: frame)
         self.label.textAlignment = .center
-        //self.label.bounds = CGRect(x: 0.0, y: 0.0, width: self.size, height: self.size)
         self.label.layer.cornerRadius = ChapterNumCell.SIZE / 2
         self.label.layer.borderWidth = 2.0
         self.label.layer.borderColor = UIColor.init(white: 0.8, alpha: 1.0).cgColor
