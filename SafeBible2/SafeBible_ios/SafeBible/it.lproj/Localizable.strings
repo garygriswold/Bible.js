@@ -1,3 +1,10 @@
+/* Button to display History
+   History Cell Title */
+"History" = "Italian History";
+
+/* History view page title */
+"History2" = "Italian2 History";
+
 /* Languages view page title */
 "Languages" = "Languages Italian";
 
