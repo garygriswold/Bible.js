@@ -1,123 +1,123 @@
 /* Title on action sheet */
-"+ More Bibles" = "+ Altre bibbie";
+"+ More Bibles" = "+ Weitere Bibeln";
 
 /* Title on action sheet */
-"+ More Languages" = "+ Altre lingue";
+"+ More Languages" = "+ Weitere Sprachen";
 
 /* Section heading for About */
-"About" = "Di";
+"About" = "Über";
 
 /* Option on action sheet */
-"All Notebooks to Share" = "Tutti i notebook da condividere";
+"All Notebooks to Share" = "Alle Notebooks zum Teilen";
 
 /* Option on action sheet */
-"All Notebooks to Text" = "Tutti i taccuini in testo";
+"All Notebooks to Text" = "Alle Notizbücher zum Text";
 
 /* Bible books in alphabetical sequence */
-"Alphabetical" = "Alfabetico";
+"Alphabetical" = "Alphabetisch";
 
 /* Button to return to read Bible */
-"Bible" = "Bibbia";
+"Bible" = "Bibel";
 
 /* Bibles view page title
    Section heading for User selected Bibles */
-"Bibles" = "Bibbie";
+"Bibles" = "Bibeln";
 
 /* Menu option to Bookmark verse */
-"Bookmark" = "Segnalibro";
+"Bookmark" = "Lesezeichen";
 
 /* Table Contents view page title */
-"Books" = "Libri";
+"Books" = "Bücher";
 
 /* Cancel button on Action Sheet
    Cancel option on action sheet */
-"Cancel" = "Annulla";
+"Cancel" = "Stornieren";
 
 /* Menu option to see verse in multiple versions */
-"Compare" = "Confrontare";
+"Compare" = "Vergleichen Sie";
 
 /* Delete bookmark action in Alert */
-"Delete" = "Elimina";
+"Delete" = "Löschen";
 
 /* Languages search bar */
-"Find Languages" = "Trova le lingue";
+"Find Languages" = "Sprachen suchen";
 
 /* Menu option Highlight Text */
-"Highlight" = "Evidenziare";
+"Highlight" = "Markieren";
 
 /* User text in message to other */
-"I like it!" = "Mi piace!";
+"I like it!" = "Ich mag das!";
 
 /* Clickable cell title */
-"More Bibles" = "Più bibbie";
+"More Bibles" = "Weitere Bibeln";
 
 /* Clickable cell title
    Section heading for Other languages */
-"More Languages" = "Più lingue";
+"More Languages" = "Weitere Sprachen";
 
 /* Section heading for User selected Bibles */
-"My Bibles" = "Le mie Bibbie";
+"My Bibles" = "Meine Bibeln";
 
 /* Section heading for User languages */
-"My Languages" = "Le mie lingue";
+"My Languages" = "Meine Sprachen";
 
 /* Clickable cell title */
-"Night Time" = "Notte";
+"Night Time" = "Nachtzeit";
 
 /* No option on an alert */
-"No" = "No";
+"No" = "Nein";
 
 /* Menu option to write note */
-"Note" = "Nota";
+"Note" = "Hinweis";
 
 /* Option on action sheet */
-"Notebook to Share" = "Notebook da condividere";
+"Notebook to Share" = "Notizbuch zum Teilen";
 
 /* Option on action sheet */
-"Notebook to Text" = "Notebook in testo";
+"Notebook to Text" = "Notizbuch zum Text";
 
 /* Notebook files in list */
-"Notebooks" = "I Quaderni";
+"Notebooks" = "Notebooks";
 
 /* Notes list view page title */
-"Notes" = "Gli appunti";
+"Notes" = "Anmerkungen";
 
 /* Default action in Alert */
-"OK" = "ok";
+"OK" = "OK";
 
 /* Privacy Policy cell title
    Title of Page */
-"Privacy Policy" = "politica sulla riservatezza";
+"Privacy Policy" = "Datenschutz-Bestimmungen";
 
 /* Red Delete Button text */
-"Remove" = "Rimuovere";
+"Remove" = "Löschen";
 
 /* Clickable cell title
    Feedback view title */
-"Send Us Comments" = "Inviaci commenti";
+"Send Us Comments" = "Senden Sie uns Kommentare";
 
 /* Menu option to share verse with others */
-"Share" = "Condividere";
+"Share" = "Aktie";
 
 /* Clickable cell title */
-"Share SafeBible" = "Condividi SafeBible";
+"Share SafeBible" = "Teilen Sie SafeBible";
 
 /* Table of Contents Title */
-"Table of Contents" = "Sommario";
+"Table of Contents" = "Inhaltsverzeichnis";
 
 /* Bible books in traditional sequence */
-"Traditional" = "Tradizionale";
+"Traditional" = "Traditionell";
 
 /* Clickable cell title */
-"Verse Numbers" = "Numeri in versi";
+"Verse Numbers" = "Verse Zahlen";
 
 /* Title of Videos page
    Videos Cell Title */
-"Videos" = "video";
+"Videos" = "Videos";
 
 /* Clickable cell title */
-"Write A Review" = "Scrivere una recensione";
+"Write A Review" = "Eine Rezension schreiben";
 
 /* Yes option on an alert */
-"Yes" = "sì";
+"Yes" = "Ja";
 

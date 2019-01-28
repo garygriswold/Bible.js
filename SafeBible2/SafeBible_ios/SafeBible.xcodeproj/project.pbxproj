@@ -201,6 +201,8 @@
 		E4C2E989211B712D00B71CC5 /* SettingsViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewDelegate.swift; sourceTree = "<group>"; };
 		E4C99A8E21BC533F00691604 /* CompareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareViewController.swift; sourceTree = "<group>"; };
 		E4C99A9021BDF6B800691604 /* HTMLVerseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLVerseParser.swift; sourceTree = "<group>"; };
+		E4D3AD1721FF6D98002A59F7 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		E4D3AD1821FF6D98002A59F7 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4D5A6CE21C8563E008476D0 /* NotesDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesDB.swift; sourceTree = "<group>"; };
 		E4D5A6D021C85AA3008476D0 /* NotesExportDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesExportDatabase.swift; sourceTree = "<group>"; };
 		E4D5A6D221C8A291008476D0 /* NotesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesListViewController.swift; sourceTree = "<group>"; };
@@ -452,6 +454,7 @@
 				en,
 				Base,
 				it,
+				de,
 			);
 			mainGroup = E4F720AD211B6F2A00E26B07;
 			productRefGroup = E4F720B7211B6F2A00E26B07 /* Products */;
@@ -594,6 +597,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				E437414A21FEC42B00BB4C9F /* it */,
+				E4D3AD1821FF6D98002A59F7 /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -602,6 +606,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				E428B7ED2138C297000AB2A8 /* Base */,
+				E4D3AD1721FF6D98002A59F7 /* de */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
