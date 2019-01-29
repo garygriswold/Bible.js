@@ -68,12 +68,12 @@ languages = {
 def parseXLIFF(doc):
 	parsedFile = []
 	body = doc.getElementsByTagName("body")[1]
-	for transUnit in body.childNodes:
-		if transUnit.nodeType == transUnit.ELEMENT_NODE:
-			key = transUnit.getAttribute("id")
-			sourceElems = transUnit.getElementsByTagName("source")
-			source = sourceElems[0].firstChild.nodeValue
-			parsedFile.append([key, source])
+	transUnitElems = body.getElementsByTagName("trans-unit")
+	for transUnit in transUnitElems:
+		key = transUnit.getAttribute("id")
+		sourceElems = transUnit.getElementsByTagName("source")
+		source = sourceElems[0].firstChild.nodeValue
+		parsedFile.append([key, source])
 	return parsedFile
 
 # generate a request message
@@ -100,18 +100,22 @@ def getTranslation(body):
 def updateXliff(doc, translations):
 	index = -1
 	body = doc.getElementsByTagName("body")[1]
-	for transUnit in body.childNodes:
-		if transUnit.nodeType == transUnit.ELEMENT_NODE:
-			index += 1
-			targetElems = transUnit.getElementsByTagName("target")
-			if len(targetElems) > 0:
-				targetElems[0].innerHTML = translations[index]["translatedText"]
+	transUnitElems = body.getElementsByTagName("trans-unit")
+	for transUnit in transUnitElems:
+		index += 1
+		targetElems = transUnit.getElementsByTagName("target")
+		if len(targetElems) > 0:
+			if len(targetElems[0].childNodes) > 0:
+				targetElems[0].firstChild.nodeValue = translations[index]["translatedText"]
 			else:
-				target = doc.createElement("target")
 				textNode = doc.createTextNode(translations[index]["translatedText"])
-				target.appendChild(textNode)
-				noteElems = transUnit.getElementsByTagName("note")
-				transUnit.insertBefore(target, noteElems[0])
+				targetElems[0].appendChild(textNode)
+		else:
+			target = doc.createElement("target")
+			textNode = doc.createTextNode(translations[index]["translatedText"])
+			target.appendChild(textNode)
+			noteElems = transUnit.getElementsByTagName("note")
+			transUnit.insertBefore(target, noteElems[0])
 			
 
 for langDir in os.listdir(sourceDir):

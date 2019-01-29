@@ -45,8 +45,19 @@
 /* Menu option Highlight Text */
 "Highlight" = "Markieren";
 
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "Geschichte";
+
 /* User text in message to other */
 "I like it!" = "Ich mag das!";
+
+/* Languages view page title */
+"Languages" = "Sprachen";
+
+/* Menu view page title */
+"Menu" = "Speisekarte";
 
 /* Clickable cell title */
 "More Bibles" = "Weitere Bibeln";

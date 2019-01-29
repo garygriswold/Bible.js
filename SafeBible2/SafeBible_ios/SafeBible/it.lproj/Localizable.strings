@@ -48,16 +48,16 @@
 /* Button to display History
    History Cell Title
    History view page title */
-"History" = "";
+"History" = "Storia";
 
 /* User text in message to other */
 "I like it!" = "Mi piace!";
 
 /* Languages view page title */
-"Languages" = "";
+"Languages" = "Le lingue";
 
 /* Menu view page title */
-"Menu" = "";
+"Menu" = "Menu";
 
 /* Clickable cell title */
 "More Bibles" = "Più bibbie";
