@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+ Još Biblija";
+
+/* Title on action sheet */
+"+ More Languages" = "+ Još jezika";
+
+/* Section heading for About */
+"About" = "Oko";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "Sve prijenosna računala za dijeljenje";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "Sva prijenosna računala u tekst";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "abecedni";
+
+/* Button to return to read Bible */
+"Bible" = "Biblija";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "Biblije";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "Označite";
+
+/* Table Contents view page title */
+"Books" = "knjige";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "Otkazati";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "Usporedite";
+
+/* Delete bookmark action in Alert */
+"Delete" = "Izbrisati";
+
+/* Languages search bar */
+"Find Languages" = "Pronađi jezike";
+
+/* Menu option Highlight Text */
+"Highlight" = "vrhunac";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "Povijest";
+
+/* User text in message to other */
+"I like it!" = "Sviđa mi se!";
+
+/* Languages view page title */
+"Languages" = "Jezici";
+
+/* Menu view page title */
+"Menu" = "izbornik";
+
+/* Clickable cell title */
+"More Bibles" = "Više Biblija";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "Više jezika";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "Moje Biblije";
+
+/* Section heading for User languages */
+"My Languages" = "Moji jezici";
+
+/* Clickable cell title */
+"Night Time" = "Noćno vrijeme";
+
+/* No option on an alert */
+"No" = "Ne";
+
+/* Menu option to write note */
+"Note" = "Bilješka";
+
+/* Option on action sheet */
+"Notebook to Share" = "Bilježnica za dijeljenje";
+
+/* Option on action sheet */
+"Notebook to Text" = "Bilježnica u tekst";
+
+/* Notebook files in list */
+"Notebooks" = "Prijenosna računala";
+
+/* Notes list view page title */
+"Notes" = "Bilješke";
+
+/* Default action in Alert */
+"OK" = "u redu";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "Pravila o privatnosti";
+
+/* Red Delete Button text */
+"Remove" = "Ukloniti";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "Pošaljite nam komentare";
+
+/* Menu option to share verse with others */
+"Share" = "Udio";
+
+/* Clickable cell title */
+"Share SafeBible" = "Podijeli SafeBible";
+
+/* Table of Contents Title */
+"Table of Contents" = "Sadržaj";
+
+/* Bible books in traditional sequence */
+"Traditional" = "tradicionalan";
+
+/* Clickable cell title */
+"Verse Numbers" = "Brojevi stihova";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "Video";
+
+/* Clickable cell title */
+"Write A Review" = "Napišite svoje mišljenje";
+
+/* Yes option on an alert */
+"Yes" = "Da";
+

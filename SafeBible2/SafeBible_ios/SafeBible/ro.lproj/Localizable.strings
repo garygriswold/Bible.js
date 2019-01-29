@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+ Mai multe Biblii";
+
+/* Title on action sheet */
+"+ More Languages" = "+ Mai multe limbi";
+
+/* Section heading for About */
+"About" = "Despre";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "Toate notebook-urile care trebuie trimise";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "Toate Notebook-urile pentru Text";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "Alfabetic";
+
+/* Button to return to read Bible */
+"Bible" = "Biblie";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "Biblii";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "semn de carte";
+
+/* Table Contents view page title */
+"Books" = "Cărți";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "Anulare";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "Comparaţie";
+
+/* Delete bookmark action in Alert */
+"Delete" = "Șterge";
+
+/* Languages search bar */
+"Find Languages" = "Găsiți limbi";
+
+/* Menu option Highlight Text */
+"Highlight" = "A sublinia";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "Istorie";
+
+/* User text in message to other */
+"I like it!" = "Imi place!";
+
+/* Languages view page title */
+"Languages" = "Limbile";
+
+/* Menu view page title */
+"Menu" = "Meniul";
+
+/* Clickable cell title */
+"More Bibles" = "Mai multe Biblii";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "Mai multe limbi";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "Biblia mea";
+
+/* Section heading for User languages */
+"My Languages" = "Limbile mele";
+
+/* Clickable cell title */
+"Night Time" = "Timp de noapte";
+
+/* No option on an alert */
+"No" = "Nu";
+
+/* Menu option to write note */
+"Note" = "Notă";
+
+/* Option on action sheet */
+"Notebook to Share" = "Notebook pentru a partaja";
+
+/* Option on action sheet */
+"Notebook to Text" = "Notebook pentru text";
+
+/* Notebook files in list */
+"Notebooks" = "Laptopuri";
+
+/* Notes list view page title */
+"Notes" = "notițe";
+
+/* Default action in Alert */
+"OK" = "O.K";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "Politica de confidentialitate";
+
+/* Red Delete Button text */
+"Remove" = "Elimina";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "Trimiteți-ne comentarii";
+
+/* Menu option to share verse with others */
+"Share" = "Acțiune";
+
+/* Clickable cell title */
+"Share SafeBible" = "Distribuiți SafeBible";
+
+/* Table of Contents Title */
+"Table of Contents" = "Cuprins";
+
+/* Bible books in traditional sequence */
+"Traditional" = "Tradiţional";
+
+/* Clickable cell title */
+"Verse Numbers" = "Versuri Numere";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "Videoclipuri";
+
+/* Clickable cell title */
+"Write A Review" = "Scrie o recenzie";
+
+/* Yes option on an alert */
+"Yes" = "da";
+

@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+ Daha Fazla İncil";
+
+/* Title on action sheet */
+"+ More Languages" = "+ Daha Fazla Dil";
+
+/* Section heading for About */
+"About" = "hakkında";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "Paylaşılacak Tüm Not Defterleri";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "Tüm Defterler Metin";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "Alfabetik";
+
+/* Button to return to read Bible */
+"Bible" = "Kutsal Kitap";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "İnciller";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "Yer imi";
+
+/* Table Contents view page title */
+"Books" = "Kitaplar";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "İptal etmek";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "Karşılaştırmak";
+
+/* Delete bookmark action in Alert */
+"Delete" = "silmek";
+
+/* Languages search bar */
+"Find Languages" = "Dilleri Bul";
+
+/* Menu option Highlight Text */
+"Highlight" = "Vurgulamak";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "Tarihçe";
+
+/* User text in message to other */
+"I like it!" = "Bunu sevdim!";
+
+/* Languages view page title */
+"Languages" = "duujjil";
+
+/* Menu view page title */
+"Menu" = "Menü";
+
+/* Clickable cell title */
+"More Bibles" = "Daha fazla İncil";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "Daha fazla dil";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "İncillerim";
+
+/* Section heading for User languages */
+"My Languages" = "Dillerim";
+
+/* Clickable cell title */
+"Night Time" = "Gece vakti";
+
+/* No option on an alert */
+"No" = "Yok hayır";
+
+/* Menu option to write note */
+"Note" = "Not";
+
+/* Option on action sheet */
+"Notebook to Share" = "Paylaşılacak Defter";
+
+/* Option on action sheet */
+"Notebook to Text" = "Metinden Defter";
+
+/* Notebook files in list */
+"Notebooks" = "Defterler";
+
+/* Notes list view page title */
+"Notes" = "notlar";
+
+/* Default action in Alert */
+"OK" = "tamam";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "Gizlilik Politikası";
+
+/* Red Delete Button text */
+"Remove" = "Kaldır";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "Bize Yorum Gönderin";
+
+/* Menu option to share verse with others */
+"Share" = "Pay";
+
+/* Clickable cell title */
+"Share SafeBible" = "SafeBible paylaşın";
+
+/* Table of Contents Title */
+"Table of Contents" = "İçindekiler";
+
+/* Bible books in traditional sequence */
+"Traditional" = "Geleneksel";
+
+/* Clickable cell title */
+"Verse Numbers" = "Ayet Numaraları";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "Videolar";
+
+/* Clickable cell title */
+"Write A Review" = "Bir değerlendirme yazın";
+
+/* Yes option on an alert */
+"Yes" = "Evet";
+

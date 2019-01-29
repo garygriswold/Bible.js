@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+ Περισσότερες Βιβλίες";
+
+/* Title on action sheet */
+"+ More Languages" = "+ Περισσότερες γλώσσες";
+
+/* Section heading for About */
+"About" = "Σχετικά με";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "Όλα τα σημειωματάρια για κοινή χρήση";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "Όλα τα σημειωματάρια στο κείμενο";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "Αλφαβητικός";
+
+/* Button to return to read Bible */
+"Bible" = "Αγια ΓΡΑΦΗ";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "Βίβλοι";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "Σελιδοδείκτης";
+
+/* Table Contents view page title */
+"Books" = "Βιβλία";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "Ματαίωση";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "Συγκρίνω";
+
+/* Delete bookmark action in Alert */
+"Delete" = "Διαγράφω";
+
+/* Languages search bar */
+"Find Languages" = "Βρείτε γλώσσες";
+
+/* Menu option Highlight Text */
+"Highlight" = "Αποκορύφωμα";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "Ιστορία";
+
+/* User text in message to other */
+"I like it!" = "Μου αρέσει!";
+
+/* Languages view page title */
+"Languages" = "Γλώσσες";
+
+/* Menu view page title */
+"Menu" = "Μενού";
+
+/* Clickable cell title */
+"More Bibles" = "Περισσότερες Βίβλοι";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "Περισσότερες γλώσσες";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "Οι Γραφές Μου";
+
+/* Section heading for User languages */
+"My Languages" = "Οι γλώσσες μου";
+
+/* Clickable cell title */
+"Night Time" = "Νυχτερινή ώρα";
+
+/* No option on an alert */
+"No" = "Οχι";
+
+/* Menu option to write note */
+"Note" = "Σημείωση";
+
+/* Option on action sheet */
+"Notebook to Share" = "Notebook για κοινή χρήση";
+
+/* Option on action sheet */
+"Notebook to Text" = "Notebook στο κείμενο";
+
+/* Notebook files in list */
+"Notebooks" = "Φορητοί υπολογιστές";
+
+/* Notes list view page title */
+"Notes" = "Σημειώσεις";
+
+/* Default action in Alert */
+"OK" = "Εντάξει";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "Πολιτική Απορρήτου";
+
+/* Red Delete Button text */
+"Remove" = "Αφαιρώ";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "Στείλτε μας Σχόλια";
+
+/* Menu option to share verse with others */
+"Share" = "Μερίδιο";
+
+/* Clickable cell title */
+"Share SafeBible" = "Μοιραστείτε ασφαλείς";
+
+/* Table of Contents Title */
+"Table of Contents" = "Πίνακας περιεχομένων";
+
+/* Bible books in traditional sequence */
+"Traditional" = "Παραδοσιακός";
+
+/* Clickable cell title */
+"Verse Numbers" = "Αριθμοί στίχων";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "Βίντεο";
+
+/* Clickable cell title */
+"Write A Review" = "Γράψτε μια κριτική";
+
+/* Yes option on an alert */
+"Yes" = "Ναί";
+

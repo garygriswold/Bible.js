@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+ พระคัมภีร์เพิ่มเติม";
+
+/* Title on action sheet */
+"+ More Languages" = "+ ภาษาเพิ่มเติม";
+
+/* Section heading for About */
+"About" = "เกี่ยวกับ";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "สมุดบันทึกทั้งหมดที่จะแบ่งปัน";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "สมุดบันทึกทั้งหมดเป็นข้อความ";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "ตามตัวอักษร";
+
+/* Button to return to read Bible */
+"Bible" = "คัมภีร์ไบเบิล";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "พระคัมภีร์";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "ที่คั่นหนังสือ";
+
+/* Table Contents view page title */
+"Books" = "หนังสือ";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "ยกเลิก";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "เปรียบเทียบ";
+
+/* Delete bookmark action in Alert */
+"Delete" = "ลบ";
+
+/* Languages search bar */
+"Find Languages" = "ค้นหาภาษา";
+
+/* Menu option Highlight Text */
+"Highlight" = "ไฮไลท์";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "ประวัติศาสตร์";
+
+/* User text in message to other */
+"I like it!" = "ฉันชอบมัน!";
+
+/* Languages view page title */
+"Languages" = "ภาษา";
+
+/* Menu view page title */
+"Menu" = "เมนู";
+
+/* Clickable cell title */
+"More Bibles" = "พระคัมภีร์เพิ่มเติม";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "ภาษาอื่น ๆ";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "พระคัมภีร์ของฉัน";
+
+/* Section heading for User languages */
+"My Languages" = "ภาษาของฉัน";
+
+/* Clickable cell title */
+"Night Time" = "เวลากลางคืน";
+
+/* No option on an alert */
+"No" = "ไม่";
+
+/* Menu option to write note */
+"Note" = "บันทึก";
+
+/* Option on action sheet */
+"Notebook to Share" = "โน๊ตบุ๊คที่จะแบ่งปัน";
+
+/* Option on action sheet */
+"Notebook to Text" = "โน๊ตบุ๊คเป็นข้อความ";
+
+/* Notebook files in list */
+"Notebooks" = "โน๊ตบุ๊ค";
+
+/* Notes list view page title */
+"Notes" = "หมายเหตุ";
+
+/* Default action in Alert */
+"OK" = "ตกลง";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "นโยบายความเป็นส่วนตัว";
+
+/* Red Delete Button text */
+"Remove" = "เอาออก";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "ส่งความคิดเห็นถึงเรา";
+
+/* Menu option to share verse with others */
+"Share" = "หุ้น";
+
+/* Clickable cell title */
+"Share SafeBible" = "แบ่งปัน SafeBible";
+
+/* Table of Contents Title */
+"Table of Contents" = "สารบัญ";
+
+/* Bible books in traditional sequence */
+"Traditional" = "แบบดั้งเดิม";
+
+/* Clickable cell title */
+"Verse Numbers" = "หมายเลขกลอน";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "วิดีโอ";
+
+/* Clickable cell title */
+"Write A Review" = "แสดงความคิดเห็น";
+
+/* Yes option on an alert */
+"Yes" = "ใช่";
+

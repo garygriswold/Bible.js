@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+ Більше Біблій";
+
+/* Title on action sheet */
+"+ More Languages" = "+ Інші мови";
+
+/* Section heading for About */
+"About" = "Про";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "Усі ноутбуки для обміну";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "Всі ноутбуки до тексту";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "За алфавітом";
+
+/* Button to return to read Bible */
+"Bible" = "Біблія";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "Біблії";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "Закладка";
+
+/* Table Contents view page title */
+"Books" = "Книги";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "Скасувати";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "Порівняйте";
+
+/* Delete bookmark action in Alert */
+"Delete" = "Видалити";
+
+/* Languages search bar */
+"Find Languages" = "Знайти мови";
+
+/* Menu option Highlight Text */
+"Highlight" = "Виділіть";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "Історія";
+
+/* User text in message to other */
+"I like it!" = "Мені це подобається!";
+
+/* Languages view page title */
+"Languages" = "Мови";
+
+/* Menu view page title */
+"Menu" = "Меню";
+
+/* Clickable cell title */
+"More Bibles" = "Більше Біблій";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "Інші мови";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "Мої Біблії";
+
+/* Section heading for User languages */
+"My Languages" = "Мої мови";
+
+/* Clickable cell title */
+"Night Time" = "Нічний час";
+
+/* No option on an alert */
+"No" = "Ні";
+
+/* Menu option to write note */
+"Note" = "Примітка";
+
+/* Option on action sheet */
+"Notebook to Share" = "Ноутбук для обміну";
+
+/* Option on action sheet */
+"Notebook to Text" = "Ноутбук до тексту";
+
+/* Notebook files in list */
+"Notebooks" = "Ноутбуки";
+
+/* Notes list view page title */
+"Notes" = "Примітки";
+
+/* Default action in Alert */
+"OK" = "в порядку";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "Політика конфіденційності";
+
+/* Red Delete Button text */
+"Remove" = "Видалити";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "Надішліть нам коментарі";
+
+/* Menu option to share verse with others */
+"Share" = "Частка";
+
+/* Clickable cell title */
+"Share SafeBible" = "Поділитися SafeBible";
+
+/* Table of Contents Title */
+"Table of Contents" = "Зміст";
+
+/* Bible books in traditional sequence */
+"Traditional" = "Традиційний";
+
+/* Clickable cell title */
+"Verse Numbers" = "Стихові номери";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "Відео";
+
+/* Clickable cell title */
+"Write A Review" = "Написати відгук";
+
+/* Yes option on an alert */
+"Yes" = "Так";
+

@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+ Fler biblar";
+
+/* Title on action sheet */
+"+ More Languages" = "+ Fler språk";
+
+/* Section heading for About */
+"About" = "Handla om";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "Alla bärbara datorer att dela";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "Alla anteckningsböcker till text";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "Alfabetisk";
+
+/* Button to return to read Bible */
+"Bible" = "bibel";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "biblar";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "Bokmärke";
+
+/* Table Contents view page title */
+"Books" = "Böcker";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "Annullera";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "Jämföra";
+
+/* Delete bookmark action in Alert */
+"Delete" = "Radera";
+
+/* Languages search bar */
+"Find Languages" = "Hitta språk";
+
+/* Menu option Highlight Text */
+"Highlight" = "Markera";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "Historia";
+
+/* User text in message to other */
+"I like it!" = "Jag gillar det!";
+
+/* Languages view page title */
+"Languages" = "språk";
+
+/* Menu view page title */
+"Menu" = "Meny";
+
+/* Clickable cell title */
+"More Bibles" = "Fler biblar";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "Flera språk";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "Mina biblar";
+
+/* Section heading for User languages */
+"My Languages" = "Mina språk";
+
+/* Clickable cell title */
+"Night Time" = "Nattid";
+
+/* No option on an alert */
+"No" = "Nej";
+
+/* Menu option to write note */
+"Note" = "Notera";
+
+/* Option on action sheet */
+"Notebook to Share" = "Notebook att dela";
+
+/* Option on action sheet */
+"Notebook to Text" = "Notebook till text";
+
+/* Notebook files in list */
+"Notebooks" = "Bärbara datorer";
+
+/* Notes list view page title */
+"Notes" = "anteckningar";
+
+/* Default action in Alert */
+"OK" = "ok";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "Integritetspolicy";
+
+/* Red Delete Button text */
+"Remove" = "Ta bort";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "Skicka oss kommentarer";
+
+/* Menu option to share verse with others */
+"Share" = "Dela med sig";
+
+/* Clickable cell title */
+"Share SafeBible" = "Dela SafeBible";
+
+/* Table of Contents Title */
+"Table of Contents" = "Innehållsförteckning";
+
+/* Bible books in traditional sequence */
+"Traditional" = "Traditionell";
+
+/* Clickable cell title */
+"Verse Numbers" = "Vers Numbers";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "videoklipp";
+
+/* Clickable cell title */
+"Write A Review" = "Skriva en recension";
+
+/* Yes option on an alert */
+"Yes" = "Ja";
+

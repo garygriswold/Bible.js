@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+ Plus de Bibles";
+
+/* Title on action sheet */
+"+ More Languages" = "+ Plus de langues";
+
+/* Section heading for About */
+"About" = "Sur";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "Tous les cahiers à partager";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "Tous les cahiers en texte";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "Alphabétique";
+
+/* Button to return to read Bible */
+"Bible" = "Bible";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "Bibles";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "Signet";
+
+/* Table Contents view page title */
+"Books" = "Livres";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "Annuler";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "Comparer";
+
+/* Delete bookmark action in Alert */
+"Delete" = "Effacer";
+
+/* Languages search bar */
+"Find Languages" = "Trouver des langues";
+
+/* Menu option Highlight Text */
+"Highlight" = "Surligner";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "L&#39;histoire";
+
+/* User text in message to other */
+"I like it!" = "Je l&#39;aime!";
+
+/* Languages view page title */
+"Languages" = "Les langues";
+
+/* Menu view page title */
+"Menu" = "Menu";
+
+/* Clickable cell title */
+"More Bibles" = "Plus de Bibles";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "Plus de langues";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "Mes bibles";
+
+/* Section heading for User languages */
+"My Languages" = "Mes langues";
+
+/* Clickable cell title */
+"Night Time" = "La nuit";
+
+/* No option on an alert */
+"No" = "Non";
+
+/* Menu option to write note */
+"Note" = "Remarque";
+
+/* Option on action sheet */
+"Notebook to Share" = "Carnet à partager";
+
+/* Option on action sheet */
+"Notebook to Text" = "Carnet en texte";
+
+/* Notebook files in list */
+"Notebooks" = "Des cahiers";
+
+/* Notes list view page title */
+"Notes" = "Remarques";
+
+/* Default action in Alert */
+"OK" = "D&#39;accord";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "Politique de confidentialité";
+
+/* Red Delete Button text */
+"Remove" = "Retirer";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "Envoyez-nous des commentaires";
+
+/* Menu option to share verse with others */
+"Share" = "Partager";
+
+/* Clickable cell title */
+"Share SafeBible" = "Partager SafeBible";
+
+/* Table of Contents Title */
+"Table of Contents" = "Table des matières";
+
+/* Bible books in traditional sequence */
+"Traditional" = "Traditionnel";
+
+/* Clickable cell title */
+"Verse Numbers" = "Numéros de vers";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "Vidéos";
+
+/* Clickable cell title */
+"Write A Review" = "Écrire une critique";
+
+/* Yes option on an alert */
+"Yes" = "Oui";
+

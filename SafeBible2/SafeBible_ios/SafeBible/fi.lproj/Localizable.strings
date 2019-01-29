@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+ Lisää Raamattuja";
+
+/* Title on action sheet */
+"+ More Languages" = "+ Lisää kieliä";
+
+/* Section heading for About */
+"About" = "Noin";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "Kaikki kannettavat tietokoneet";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "Kaikki muistikirjat tekstiin";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "aakkosellinen";
+
+/* Button to return to read Bible */
+"Bible" = "raamattu";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "Raamattuja";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "Kirjanmerkki";
+
+/* Table Contents view page title */
+"Books" = "Kirjat";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "Peruuttaa";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "Vertailla";
+
+/* Delete bookmark action in Alert */
+"Delete" = "Poistaa";
+
+/* Languages search bar */
+"Find Languages" = "Etsi kieliä";
+
+/* Menu option Highlight Text */
+"Highlight" = "Kohokohta";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "Historia";
+
+/* User text in message to other */
+"I like it!" = "Pidän siitä!";
+
+/* Languages view page title */
+"Languages" = "Kieli (kielet";
+
+/* Menu view page title */
+"Menu" = "valikko";
+
+/* Clickable cell title */
+"More Bibles" = "Lisää Raamattuja";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "Lisää kieliä";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "Raamatut";
+
+/* Section heading for User languages */
+"My Languages" = "Kieleni";
+
+/* Clickable cell title */
+"Night Time" = "Yöaika";
+
+/* No option on an alert */
+"No" = "Ei";
+
+/* Menu option to write note */
+"Note" = "Huomautus";
+
+/* Option on action sheet */
+"Notebook to Share" = "Jaettava kannettava tietokone";
+
+/* Option on action sheet */
+"Notebook to Text" = "Notebook teksti";
+
+/* Notebook files in list */
+"Notebooks" = "muistikirjat";
+
+/* Notes list view page title */
+"Notes" = "Huomautuksia";
+
+/* Default action in Alert */
+"OK" = "kunnossa";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "Tietosuojakäytäntö";
+
+/* Red Delete Button text */
+"Remove" = "Poistaa";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "Lähetä meille kommentteja";
+
+/* Menu option to share verse with others */
+"Share" = "Jaa";
+
+/* Clickable cell title */
+"Share SafeBible" = "Jaa SafeBible";
+
+/* Table of Contents Title */
+"Table of Contents" = "Sisällysluettelo";
+
+/* Bible books in traditional sequence */
+"Traditional" = "perinteinen";
+
+/* Clickable cell title */
+"Verse Numbers" = "Numerot";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "Videot";
+
+/* Clickable cell title */
+"Write A Review" = "Kirjoita arvostelu";
+
+/* Yes option on an alert */
+"Yes" = "Joo";
+

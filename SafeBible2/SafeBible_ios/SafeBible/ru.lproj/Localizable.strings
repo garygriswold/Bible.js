@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+ Больше Библий";
+
+/* Title on action sheet */
+"+ More Languages" = "+ Больше языков";
+
+/* Section heading for About */
+"About" = "Около";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "Все ноутбуки, чтобы поделиться";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "Все тетради в текст";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "По алфавиту";
+
+/* Button to return to read Bible */
+"Bible" = "библия";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "Библий";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "закладка";
+
+/* Table Contents view page title */
+"Books" = "книги";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "отменить";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "сравнить";
+
+/* Delete bookmark action in Alert */
+"Delete" = "удалять";
+
+/* Languages search bar */
+"Find Languages" = "Найти языки";
+
+/* Menu option Highlight Text */
+"Highlight" = "основной момент";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "история";
+
+/* User text in message to other */
+"I like it!" = "Мне это нравится!";
+
+/* Languages view page title */
+"Languages" = "Языки";
+
+/* Menu view page title */
+"Menu" = "Меню";
+
+/* Clickable cell title */
+"More Bibles" = "Больше Библий";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "Больше языков";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "Мои Библии";
+
+/* Section heading for User languages */
+"My Languages" = "Мои языки";
+
+/* Clickable cell title */
+"Night Time" = "Ночное время";
+
+/* No option on an alert */
+"No" = "нет";
+
+/* Menu option to write note */
+"Note" = "Заметка";
+
+/* Option on action sheet */
+"Notebook to Share" = "Блокнот для обмена";
+
+/* Option on action sheet */
+"Notebook to Text" = "Блокнот в текст";
+
+/* Notebook files in list */
+"Notebooks" = "Ноутбуки";
+
+/* Notes list view page title */
+"Notes" = "Заметки";
+
+/* Default action in Alert */
+"OK" = "Хорошо";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "политика конфиденциальности";
+
+/* Red Delete Button text */
+"Remove" = "Удалить";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "Отправить нам комментарии";
+
+/* Menu option to share verse with others */
+"Share" = "Поделиться";
+
+/* Clickable cell title */
+"Share SafeBible" = "Поделиться SafeBible";
+
+/* Table of Contents Title */
+"Table of Contents" = "Оглавление";
+
+/* Bible books in traditional sequence */
+"Traditional" = "традиционный";
+
+/* Clickable cell title */
+"Verse Numbers" = "Номера стихов";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "Видео";
+
+/* Clickable cell title */
+"Write A Review" = "Написать обзор";
+
+/* Yes option on an alert */
+"Yes" = "да";
+

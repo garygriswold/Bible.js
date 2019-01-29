@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+ Další Bible";
+
+/* Title on action sheet */
+"+ More Languages" = "+ Další jazyky";
+
+/* Section heading for About */
+"About" = "O";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "Všechny notebooky, které chcete sdílet";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "Všechny notebooky k textu";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "Abecední";
+
+/* Button to return to read Bible */
+"Bible" = "bible";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "Bible";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "Záložka do knihy";
+
+/* Table Contents view page title */
+"Books" = "Knihy";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "zrušení";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "Porovnejte";
+
+/* Delete bookmark action in Alert */
+"Delete" = "Odstranit";
+
+/* Languages search bar */
+"Find Languages" = "Najít jazyky";
+
+/* Menu option Highlight Text */
+"Highlight" = "Zvýraznit";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "Dějiny";
+
+/* User text in message to other */
+"I like it!" = "Líbí se mi to!";
+
+/* Languages view page title */
+"Languages" = "Jazyky";
+
+/* Menu view page title */
+"Menu" = "Jídelní lístek";
+
+/* Clickable cell title */
+"More Bibles" = "Více Bible";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "Více jazyků";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "Moje Bible";
+
+/* Section heading for User languages */
+"My Languages" = "Moje jazyky";
+
+/* Clickable cell title */
+"Night Time" = "Noční čas";
+
+/* No option on an alert */
+"No" = "Ne";
+
+/* Menu option to write note */
+"Note" = "Poznámka";
+
+/* Option on action sheet */
+"Notebook to Share" = "Notebook ke sdílení";
+
+/* Option on action sheet */
+"Notebook to Text" = "Notebook na text";
+
+/* Notebook files in list */
+"Notebooks" = "Notebooky";
+
+/* Notes list view page title */
+"Notes" = "Poznámky";
+
+/* Default action in Alert */
+"OK" = "OK";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "Zásady ochrany osobních údajů";
+
+/* Red Delete Button text */
+"Remove" = "Odstranit";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "Pošlete nám připomínky";
+
+/* Menu option to share verse with others */
+"Share" = "Podíl";
+
+/* Clickable cell title */
+"Share SafeBible" = "Sdílet SafeBible";
+
+/* Table of Contents Title */
+"Table of Contents" = "Obsah";
+
+/* Bible books in traditional sequence */
+"Traditional" = "Tradiční";
+
+/* Clickable cell title */
+"Verse Numbers" = "Čísla veršů";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "Videa";
+
+/* Clickable cell title */
+"Write A Review" = "Napsat recenzi";
+
+/* Yes option on an alert */
+"Yes" = "Ano";
+

@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+ अधिक Bibles";
+
+/* Title on action sheet */
+"+ More Languages" = "+ और भाषाएँ";
+
+/* Section heading for About */
+"About" = "के बारे में";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "साझा करने के लिए सभी नोटबुक";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "पाठ के लिए सभी नोटबुक";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "वर्णमाला";
+
+/* Button to return to read Bible */
+"Bible" = "बाइबिल";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "बाईबिल";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "बुकमार्क";
+
+/* Table Contents view page title */
+"Books" = "पुस्तकें";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "रद्द करना";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "तुलना";
+
+/* Delete bookmark action in Alert */
+"Delete" = "हटाना";
+
+/* Languages search bar */
+"Find Languages" = "भाषाएँ खोजें";
+
+/* Menu option Highlight Text */
+"Highlight" = "हाइलाइट";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "इतिहास";
+
+/* User text in message to other */
+"I like it!" = "मुझें यह पसंद है!";
+
+/* Languages view page title */
+"Languages" = "बोली";
+
+/* Menu view page title */
+"Menu" = "मेन्यू";
+
+/* Clickable cell title */
+"More Bibles" = "अधिक बाईबिल";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "अधिक भाषाएँ";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "मेरी बीबल्स";
+
+/* Section heading for User languages */
+"My Languages" = "मेरी भाषाएँ";
+
+/* Clickable cell title */
+"Night Time" = "रात का समय";
+
+/* No option on an alert */
+"No" = "नहीं";
+
+/* Menu option to write note */
+"Note" = "ध्यान दें";
+
+/* Option on action sheet */
+"Notebook to Share" = "साझा करने के लिए नोटबुक";
+
+/* Option on action sheet */
+"Notebook to Text" = "पाठ के लिए नोटबुक";
+
+/* Notebook files in list */
+"Notebooks" = "नोटबुक";
+
+/* Notes list view page title */
+"Notes" = "टिप्पणियाँ";
+
+/* Default action in Alert */
+"OK" = "ठीक";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "गोपनीयता नीति";
+
+/* Red Delete Button text */
+"Remove" = "हटाना";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "हमें टिप्पणियाँ भेजें";
+
+/* Menu option to share verse with others */
+"Share" = "शेयर";
+
+/* Clickable cell title */
+"Share SafeBible" = "सुरक्षित साझा करें";
+
+/* Table of Contents Title */
+"Table of Contents" = "विषय - सूची";
+
+/* Bible books in traditional sequence */
+"Traditional" = "परंपरागत";
+
+/* Clickable cell title */
+"Verse Numbers" = "श्लोक संख्या";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "वीडियो";
+
+/* Clickable cell title */
+"Write A Review" = "एक समीक्षा लिखे";
+
+/* Yes option on an alert */
+"Yes" = "हाँ";
+

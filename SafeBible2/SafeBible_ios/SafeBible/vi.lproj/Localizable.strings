@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+ Thêm Kinh Thánh";
+
+/* Title on action sheet */
+"+ More Languages" = "+ Thêm ngôn ngữ";
+
+/* Section heading for About */
+"About" = "Trong khoảng";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "Tất cả các Notebook để chia sẻ";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "Tất cả các Notebook để văn bản";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "Bảng chữ cái";
+
+/* Button to return to read Bible */
+"Bible" = "Kinh thánh";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "Kinh thánh";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "Đánh dấu trang";
+
+/* Table Contents view page title */
+"Books" = "Sách";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "Hủy bỏ";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "So sánh";
+
+/* Delete bookmark action in Alert */
+"Delete" = "Xóa bỏ";
+
+/* Languages search bar */
+"Find Languages" = "Tìm ngôn ngữ";
+
+/* Menu option Highlight Text */
+"Highlight" = "Điểm nổi bật";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "Lịch sử";
+
+/* User text in message to other */
+"I like it!" = "Tôi thích nó!";
+
+/* Languages view page title */
+"Languages" = "Ngôn ngữ";
+
+/* Menu view page title */
+"Menu" = "Thực đơn";
+
+/* Clickable cell title */
+"More Bibles" = "Thêm Kinh Thánh";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "Thêm ngôn ngữ";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "Kinh thánh của tôi";
+
+/* Section heading for User languages */
+"My Languages" = "Ngôn ngữ của tôi";
+
+/* Clickable cell title */
+"Night Time" = "Ban đêm";
+
+/* No option on an alert */
+"No" = "Không";
+
+/* Menu option to write note */
+"Note" = "chú thích";
+
+/* Option on action sheet */
+"Notebook to Share" = "Notebook để chia sẻ";
+
+/* Option on action sheet */
+"Notebook to Text" = "Notebook để nhắn tin";
+
+/* Notebook files in list */
+"Notebooks" = "Sổ ghi chép";
+
+/* Notes list view page title */
+"Notes" = "Ghi chú";
+
+/* Default action in Alert */
+"OK" = "được";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "Chính sách bảo mật";
+
+/* Red Delete Button text */
+"Remove" = "Tẩy";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "Gửi cho chúng tôi ý kiến";
+
+/* Menu option to share verse with others */
+"Share" = "Chia sẻ";
+
+/* Clickable cell title */
+"Share SafeBible" = "Chia sẻ SafeBible";
+
+/* Table of Contents Title */
+"Table of Contents" = "Mục lục";
+
+/* Bible books in traditional sequence */
+"Traditional" = "Truyên thông";
+
+/* Clickable cell title */
+"Verse Numbers" = "Số câu";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "Video";
+
+/* Clickable cell title */
+"Write A Review" = "Viết đánh giá";
+
+/* Yes option on an alert */
+"Yes" = "Vâng";
+

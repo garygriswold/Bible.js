@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+ Meer Bijbels";
+
+/* Title on action sheet */
+"+ More Languages" = "+ Meer talen";
+
+/* Section heading for About */
+"About" = "Wat betreft";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "Alle te delen notebooks";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "Alle notebooks op tekst";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "Alfabetisch";
+
+/* Button to return to read Bible */
+"Bible" = "Bijbel";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "Bijbels";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "Bladwijzer";
+
+/* Table Contents view page title */
+"Books" = "Boeken";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "annuleren";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "Vergelijken";
+
+/* Delete bookmark action in Alert */
+"Delete" = "Verwijder";
+
+/* Languages search bar */
+"Find Languages" = "Zoek talen";
+
+/* Menu option Highlight Text */
+"Highlight" = "highlight";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "Geschiedenis";
+
+/* User text in message to other */
+"I like it!" = "Ik vind het leuk!";
+
+/* Languages view page title */
+"Languages" = "talen";
+
+/* Menu view page title */
+"Menu" = "Menu";
+
+/* Clickable cell title */
+"More Bibles" = "Meer Bijbels";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "Meer talen";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "Mijn bijbels";
+
+/* Section heading for User languages */
+"My Languages" = "Mijn talen";
+
+/* Clickable cell title */
+"Night Time" = "Nachttijd";
+
+/* No option on an alert */
+"No" = "Nee";
+
+/* Menu option to write note */
+"Note" = "Notitie";
+
+/* Option on action sheet */
+"Notebook to Share" = "Notebook om te delen";
+
+/* Option on action sheet */
+"Notebook to Text" = "Notebook naar tekst";
+
+/* Notebook files in list */
+"Notebooks" = "notebooks";
+
+/* Notes list view page title */
+"Notes" = "Notes";
+
+/* Default action in Alert */
+"OK" = "OK";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "Privacybeleid";
+
+/* Red Delete Button text */
+"Remove" = "Verwijderen";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "Stuur ons reacties";
+
+/* Menu option to share verse with others */
+"Share" = "Delen";
+
+/* Clickable cell title */
+"Share SafeBible" = "Deel SafeBible";
+
+/* Table of Contents Title */
+"Table of Contents" = "Inhoudsopgave";
+
+/* Bible books in traditional sequence */
+"Traditional" = "traditioneel";
+
+/* Clickable cell title */
+"Verse Numbers" = "Vers nummers";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "Videos";
+
+/* Clickable cell title */
+"Write A Review" = "Schrijf een recensie";
+
+/* Yes option on an alert */
+"Yes" = "Ja";
+

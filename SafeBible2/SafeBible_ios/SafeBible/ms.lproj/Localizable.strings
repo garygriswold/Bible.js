@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+ Lebih banyak Alkitab";
+
+/* Title on action sheet */
+"+ More Languages" = "+ Lebih Banyak Bahasa";
+
+/* Section heading for About */
+"About" = "Mengenai";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "Semua Notebook Kongsi";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "Semua Notebook untuk Teks";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "Abjad";
+
+/* Button to return to read Bible */
+"Bible" = "Bible";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "Alkitab";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "Bookmark";
+
+/* Table Contents view page title */
+"Books" = "Buku";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "Batalkan";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "Bandingkan";
+
+/* Delete bookmark action in Alert */
+"Delete" = "Padam";
+
+/* Languages search bar */
+"Find Languages" = "Mencari bahasa";
+
+/* Menu option Highlight Text */
+"Highlight" = "Sorotan";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "Sejarah";
+
+/* User text in message to other */
+"I like it!" = "Saya sukakannya!";
+
+/* Languages view page title */
+"Languages" = "Bahasa";
+
+/* Menu view page title */
+"Menu" = "Menu";
+
+/* Clickable cell title */
+"More Bibles" = "Lebih banyak Alkitab";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "Lebih banyak Bahasa";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "Alkitab saya";
+
+/* Section heading for User languages */
+"My Languages" = "Bahasa saya";
+
+/* Clickable cell title */
+"Night Time" = "Waktu Malam";
+
+/* No option on an alert */
+"No" = "Tidak";
+
+/* Menu option to write note */
+"Note" = "Catatan";
+
+/* Option on action sheet */
+"Notebook to Share" = "Notebook Kongsi";
+
+/* Option on action sheet */
+"Notebook to Text" = "Notebook untuk Teks";
+
+/* Notebook files in list */
+"Notebooks" = "Notebook";
+
+/* Notes list view page title */
+"Notes" = "Nota";
+
+/* Default action in Alert */
+"OK" = "okey";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "Dasar Privasi";
+
+/* Red Delete Button text */
+"Remove" = "Keluarkan";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "Hantar Komen Kami";
+
+/* Menu option to share verse with others */
+"Share" = "Kongsi";
+
+/* Clickable cell title */
+"Share SafeBible" = "Kongsi SafeBible";
+
+/* Table of Contents Title */
+"Table of Contents" = "Isi kandungan";
+
+/* Bible books in traditional sequence */
+"Traditional" = "Tradisional";
+
+/* Clickable cell title */
+"Verse Numbers" = "Nombor Verse";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "Video";
+
+/* Clickable cell title */
+"Write A Review" = "Menulis ulasan";
+
+/* Yes option on an alert */
+"Yes" = "Ya";
+
