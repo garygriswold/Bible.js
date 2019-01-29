@@ -1,0 +1,134 @@
+/* Title on action sheet */
+"+ More Bibles" = "+更多聖經";
+
+/* Title on action sheet */
+"+ More Languages" = "+更多語言";
+
+/* Section heading for About */
+"About" = "關於";
+
+/* Option on action sheet */
+"All Notebooks to Share" = "所有筆記本分享";
+
+/* Option on action sheet */
+"All Notebooks to Text" = "所有筆記本到文本";
+
+/* Bible books in alphabetical sequence */
+"Alphabetical" = "按英文字母順序";
+
+/* Button to return to read Bible */
+"Bible" = "聖經";
+
+/* Bibles view page title
+   Section heading for User selected Bibles */
+"Bibles" = "聖經";
+
+/* Menu option to Bookmark verse */
+"Bookmark" = "書籤";
+
+/* Table Contents view page title */
+"Books" = "圖書";
+
+/* Cancel button on Action Sheet
+   Cancel option on action sheet */
+"Cancel" = "取消";
+
+/* Menu option to see verse in multiple versions */
+"Compare" = "相比";
+
+/* Delete bookmark action in Alert */
+"Delete" = "刪除";
+
+/* Languages search bar */
+"Find Languages" = "查找語言";
+
+/* Menu option Highlight Text */
+"Highlight" = "突出";
+
+/* Button to display History
+   History Cell Title
+   History view page title */
+"History" = "歷史";
+
+/* User text in message to other */
+"I like it!" = "我喜歡！";
+
+/* Languages view page title */
+"Languages" = "語言";
+
+/* Menu view page title */
+"Menu" = "菜單";
+
+/* Clickable cell title */
+"More Bibles" = "更多聖經";
+
+/* Clickable cell title
+   Section heading for Other languages */
+"More Languages" = "更多語言";
+
+/* Section heading for User selected Bibles */
+"My Bibles" = "我的聖經";
+
+/* Section heading for User languages */
+"My Languages" = "我的語言";
+
+/* Clickable cell title */
+"Night Time" = "夜晚";
+
+/* No option on an alert */
+"No" = "沒有";
+
+/* Menu option to write note */
+"Note" = "注意";
+
+/* Option on action sheet */
+"Notebook to Share" = "筆記本分享";
+
+/* Option on action sheet */
+"Notebook to Text" = "筆記本到文本";
+
+/* Notebook files in list */
+"Notebooks" = "筆記本電腦";
+
+/* Notes list view page title */
+"Notes" = "筆記";
+
+/* Default action in Alert */
+"OK" = "好";
+
+/* Privacy Policy cell title
+   Title of Page */
+"Privacy Policy" = "隱私政策";
+
+/* Red Delete Button text */
+"Remove" = "去掉";
+
+/* Clickable cell title
+   Feedback view title */
+"Send Us Comments" = "發送給我們評論";
+
+/* Menu option to share verse with others */
+"Share" = "分享";
+
+/* Clickable cell title */
+"Share SafeBible" = "分享SafeBible";
+
+/* Table of Contents Title */
+"Table of Contents" = "目錄";
+
+/* Bible books in traditional sequence */
+"Traditional" = "傳統";
+
+/* Clickable cell title */
+"Verse Numbers" = "詩歌數字";
+
+/* Title of Videos page
+   Videos Cell Title */
+"Videos" = "影片";
+
+/* Clickable cell title */
+"Write A Review" = "寫評論";
+
+/* Yes option on an alert */
+"Yes" = "是";
+

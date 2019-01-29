@@ -143,3 +143,11 @@ for langDir in os.listdir(sourceDir):
 		output.write(xmlDoc.toxml())
 		output.close()
 
+for langDir in os.listdir(sourceDir):
+	if langDir[-6:] == ".xcloc":
+		appleLang = langDir[0:-6]
+		filename = sourceDir + langDir + "/Localized Contents/" + appleLang + ".xliff"
+		saveFilename = sourceDir + langDir + "/Notes/" + appleLang + ".xliff"
+		print filename
+		os.rename(filename, saveFilename)
+		os.rename(filename + ".out", filename)
