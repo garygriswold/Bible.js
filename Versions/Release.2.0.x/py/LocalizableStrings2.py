@@ -62,14 +62,6 @@ languages = {
 	'vi': ['vi', 'Vietnamese']
 }
 
-# This function returns an array of child elements
-def getChildElements(node):
-	elements = []
-	for item in node.childNodes:
-		if item.nodeType == item.ELEMENT_NODE:
-			elements.append(item)
-	return elements
-
 # Parse an XLIFF file to extract keys, and comments to be translated
 #[ Key, Source, hasTarget]
 #def parseXLIFF(langCode):
@@ -79,15 +71,9 @@ def parseXLIFF(doc):
 	for transUnit in body.childNodes:
 		if transUnit.nodeType == transUnit.ELEMENT_NODE:
 			key = transUnit.getAttribute("id")
-			children = getChildElements(transUnit)
-			if children[0].nodeName == "source":
-				source = children[0].firstChild.nodeValue
-				print "source=", source
-			else:
-				print "source is not first child", transUnit.toxml()
-				exit()
-			hasTarget = (children[1].nodeName == "target")
-			parsedFile.append([key, source, hasTarget])
+			sourceElems = transUnit.getElementsByTagName("source")
+			source = sourceElems[0].firstChild.nodeValue
+			parsedFile.append([key, source])
 	return parsedFile
 
 # generate a request message
@@ -111,49 +97,43 @@ def getTranslation(body):
 	return translations
 
 # generate result and update the XML Document with translated text
-def updateXliff(doc, parsedFile, translations):
+def updateXliff(doc, translations):
 	index = -1
 	body = doc.getElementsByTagName("body")[1]
 	for transUnit in body.childNodes:
 		if transUnit.nodeType == transUnit.ELEMENT_NODE:
-			children = getChildElements(transUnit)
-			numChildren = len(children)
 			index += 1
-			parsedItem = parsedFile[index]
-			hasTarget = parsedItem[2]
-			if hasTarget:
-				print "NodeName", parsedItem[0]
-				#target = children[1]
-				children[1].innerHTML = translations[index]['translatedText']
+			targetElems = transUnit.getElementsByTagName("target")
+			if len(targetElems) > 0:
+				targetElems[0].innerHTML = translations[index]["translatedText"]
 			else:
 				target = doc.createElement("target")
-				target.innerHTML = translations[index]['translatedText']
-				transUnit.insertBefore(target, children[numChildren - 1])
-			#translatedText = doc.createTextNode(translations[index]['translatedText'])	
-			#target.innerHTML = translatedText
-			#target.innerHTML = translations[index]['translatedText']
+				textNode = doc.createTextNode(translations[index]["translatedText"])
+				target.appendChild(textNode)
+				noteElems = transUnit.getElementsByTagName("note")
+				transUnit.insertBefore(target, noteElems[0])
 			
 
 for langDir in os.listdir(sourceDir):
 	if langDir[-6:] == ".xcloc":
 		appleLang = langDir[0:-6]
-		print appleLang
+		#print appleLang
 		filename = sourceDir + langDir + "/Localized Contents/" + appleLang + ".xliff"
-		print filename
+		#print filename
 		xmlDoc = xml.dom.minidom.parse(filename)
 		#print xmlDoc.toxml("utf-8")
 		parsedFile = parseXLIFF(xmlDoc)
-		print parsedFile
+		#print parsedFile
 		googleLang = languages[appleLang][0]
-		print googleLang
+		#print googleLang
 		request = generateRequest(parsedFile, googleLang)
-		print request
+		#print request
 		translations = getTranslation(request)
-		print translations
+		#print translations
 		if len(translations) != len(parsedFile):
 			print("num translations not correct", len(translations), len(parsedFile))
 			sys.exit()
-		updateXliff(xmlDoc, parsedFile, translations)
+		updateXliff(xmlDoc, translations)
 		print xmlDoc.toxml("utf-8")
 		output = io.open(filename + ".out", mode="w", encoding="utf-8")
 		output.write(xmlDoc.toxml())
