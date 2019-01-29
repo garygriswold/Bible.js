@@ -48,10 +48,10 @@
 /* Button to display History
    History Cell Title
    History view page title */
-"History" = "L&#39;histoire";
+"History" = "L'histoire";
 
 /* User text in message to other */
-"I like it!" = "Je l&#39;aime!";
+"I like it!" = "Je l'aime!";
 
 /* Languages view page title */
 "Languages" = "Les langues";
@@ -94,7 +94,7 @@
 "Notes" = "Remarques";
 
 /* Default action in Alert */
-"OK" = "D&#39;accord";
+"OK" = "D'accord";
 
 /* Privacy Policy cell title
    Title of Page */

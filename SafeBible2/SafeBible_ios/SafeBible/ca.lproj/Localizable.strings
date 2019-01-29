@@ -51,7 +51,7 @@
 "History" = "Història";
 
 /* User text in message to other */
-"I like it!" = "M&#39;agrada!";
+"I like it!" = "M'agrada!";
 
 /* Languages view page title */
 "Languages" = "Llengües";
@@ -94,7 +94,7 @@
 "Notes" = "Notes";
 
 /* Default action in Alert */
-"OK" = "D&#39;acord";
+"OK" = "D'acord";
 
 /* Privacy Policy cell title
    Title of Page */
@@ -105,7 +105,7 @@
 
 /* Clickable cell title
    Feedback view title */
-"Send Us Comments" = "Envia&#39;ns comentaris";
+"Send Us Comments" = "Envia'ns comentaris";
 
 /* Menu option to share verse with others */
 "Share" = "Compartir";

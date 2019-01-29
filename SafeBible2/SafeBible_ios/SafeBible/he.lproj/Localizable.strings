@@ -1,5 +1,5 @@
 /* Title on action sheet */
-"+ More Bibles" = "+ עוד תנ&quot;ך";
+"+ More Bibles" = "+ עוד תנ\"ך";
 
 /* Title on action sheet */
 "+ More Languages" = "+ שפות נוספות";
@@ -17,11 +17,11 @@
 "Alphabetical" = "אלפביתי";
 
 /* Button to return to read Bible */
-"Bible" = "תנ&quot;ך";
+"Bible" = "תנ\"ך";
 
 /* Bibles view page title
    Section heading for User selected Bibles */
-"Bibles" = "תנ&quot;ך";
+"Bibles" = "תנ\"ך";
 
 /* Menu option to Bookmark verse */
 "Bookmark" = "הפוך";
@@ -60,14 +60,14 @@
 "Menu" = "תפריט";
 
 /* Clickable cell title */
-"More Bibles" = "עוד ספרי תנ&quot;ך";
+"More Bibles" = "עוד ספרי תנ\"ך";
 
 /* Clickable cell title
    Section heading for Other languages */
 "More Languages" = "שפות נוספות";
 
 /* Section heading for User selected Bibles */
-"My Bibles" = "ספרי התנ&quot;ך שלי";
+"My Bibles" = "ספרי התנ\"ך שלי";
 
 /* Section heading for User languages */
 "My Languages" = "השפות שלי";

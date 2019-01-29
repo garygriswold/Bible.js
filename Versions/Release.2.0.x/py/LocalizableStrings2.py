@@ -103,16 +103,19 @@ def updateXliff(doc, translations):
 	transUnitElems = body.getElementsByTagName("trans-unit")
 	for transUnit in transUnitElems:
 		index += 1
+		translation = translations[index]["translatedText"]
+		translation = translation.replace("&quot;", '"')
+		translation = translation.replace("&#39;", "'")
 		targetElems = transUnit.getElementsByTagName("target")
 		if len(targetElems) > 0:
 			if len(targetElems[0].childNodes) > 0:
-				targetElems[0].firstChild.nodeValue = translations[index]["translatedText"]
+				targetElems[0].firstChild.nodeValue = translation
 			else:
-				textNode = doc.createTextNode(translations[index]["translatedText"])
+				textNode = doc.createTextNode(translation)
 				targetElems[0].appendChild(textNode)
 		else:
 			target = doc.createElement("target")
-			textNode = doc.createTextNode(translations[index]["translatedText"])
+			textNode = doc.createTextNode(translation)
 			target.appendChild(textNode)
 			noteElems = transUnit.getElementsByTagName("note")
 			transUnit.insertBefore(target, noteElems[0])
