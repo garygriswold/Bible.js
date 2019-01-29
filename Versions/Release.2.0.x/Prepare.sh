@@ -162,6 +162,15 @@ update AudioBook set damId='ENGWEBN2DA' where damId='EN1WEBN2DA';
 update AudioBook set damId='ENGWEBO2DA' where damId='EN1WEBO2DA';
 END_SQL7
 
+###################### String Localization ######################
 
+# Make certain that all desired languages are included in xCode project
+# Make certain that py/LocalizableStrings2.py contains a google lang code for each
+# Using xCode project, Editor -> Export Localization, put into Downloads
+# Select only the languages that need work, which might be all
+
+python py/LocalizableStrings2.py
+
+# Using xCode project, Editor -> Import Localization, import each converted language
 
 
